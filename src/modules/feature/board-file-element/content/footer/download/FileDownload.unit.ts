@@ -93,7 +93,11 @@ describe("FileDownload", () => {
 
 				expect(button.emitted("click")).toBeTruthy();
 				expect(button.emitted("click")).toHaveLength(1);
-				expect(downloadFileMock).toHaveBeenCalledWith(urlProp, fileNameProp);
+				expect(downloadFileMock).toHaveBeenCalledWith(
+					urlProp,
+					fileNameProp,
+					"board-file-element-edit-menu-download"
+				);
 			});
 		});
 

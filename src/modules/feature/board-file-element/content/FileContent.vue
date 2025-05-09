@@ -37,10 +37,10 @@
 			<FileInputs
 				:file-properties="fileProperties"
 				:is-edit-mode="isEditMode"
-				@update:alternativeText="onUpdateText"
+				@update:alternative-text="onUpdateText"
 				@update:caption="onUpdateCaption"
 			/>
-			<ContentElementFooter :fileProperties="fileProperties" />
+			<ContentElementFooter :file-properties="fileProperties" />
 			<FileAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
 		</div>
 	</div>

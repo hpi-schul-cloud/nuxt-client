@@ -68,13 +68,13 @@
 		<v-row>
 			<v-col>
 				<v-file-input
+					v-model="logoFile"
 					class="school-logo"
 					:label="
 						$t(
 							'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
 						)
 					"
-					v-model="logoFile"
 					density="compact"
 					prepend-icon=""
 					prepend-inner-icon="$file"
@@ -152,15 +152,15 @@ import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { useOpeningTagValidator } from "@/utils/validation";
 
 export default {
+	components: {
+		PrivacySettings,
+	},
 	setup() {
 		const { validateOnOpeningTag } = useOpeningTagValidator();
 
 		return {
 			validateOnOpeningTag,
 		};
-	},
-	components: {
-		PrivacySettings,
 	},
 	data() {
 		return {

@@ -11,10 +11,10 @@
 				:edited-item="editedItem"
 				:is-dialog="true"
 				:ldap-source="sourceSystemName"
+				:is-nbc="isNbc"
 				@close="closeEdit"
 				@saved-match="savedMatch"
 				@saved-flag="savedFlag"
-				:is-nbc="isNbc"
 			/>
 		</VDialog>
 

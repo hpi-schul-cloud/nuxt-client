@@ -6,12 +6,12 @@
 		@cancel="closeDialog"
 	/>
 	<vCustomDialog
+		ref="start-existing-course-sync-dialog"
 		:is-open="isOpen && step === 1"
 		has-buttons
 		:buttons="['cancel', 'confirm']"
 		@dialog-confirmed="onConfirmWarning"
 		@dialog-closed="closeDialog"
-		ref="start-existing-course-sync-dialog"
 	>
 		<template #title>
 			<div class="text-h4 my-2 text-break">Synchronisation bestätigen</div>
@@ -35,7 +35,7 @@
 						"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text",
 						{
 							groupName: selectedGroup?.name || "",
-							courseName: courseName || "",
+							courseName: courseName,
 						}
 					)
 				}}
@@ -70,12 +70,15 @@ const { t } = useI18n();
 const props = defineProps({
 	courseName: {
 		type: String,
+		default: "",
 	},
 	courseId: {
 		type: String,
+		default: undefined,
 	},
 	courseTeachers: {
 		type: Array,
+		default: undefined,
 	},
 });
 

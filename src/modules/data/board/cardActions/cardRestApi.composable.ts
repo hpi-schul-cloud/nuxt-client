@@ -154,7 +154,9 @@ export const useCardRestApi = () => {
 		}
 	};
 
-	const getPreferredTools = async (contextType: ToolContextType) => {
+	const getPreferredTools = async (
+		contextType: ToolContextType
+	): Promise<PreferredToolResponse[] | undefined> => {
 		try {
 			const preferredTools: AxiosResponse<PreferredToolListResponse> =
 				await fetchPreferredTools(contextType);

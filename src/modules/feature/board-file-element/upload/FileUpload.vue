@@ -15,8 +15,8 @@
 
 			<FilePicker
 				v-else
+				v-model:is-file-picker-open="isFilePickerOpen"
 				@update:file="onFileSelect"
-				v-model:isFilePickerOpen="isFilePickerOpen"
 			/>
 		</template>
 
@@ -34,12 +34,12 @@ import FilePicker from "./file-picker/FilePicker.vue";
 
 export default defineComponent({
 	name: "FileUpload",
+	components: { FilePicker, ContentElementBar },
 	props: {
 		elementId: { type: String, required: true },
 		isEditMode: { type: Boolean },
 		isUploading: { type: Boolean },
 	},
-	components: { FilePicker, ContentElementBar },
 	emits: ["upload:file"],
 	setup(props, { emit }) {
 		const isFilePickerOpen = ref(false);

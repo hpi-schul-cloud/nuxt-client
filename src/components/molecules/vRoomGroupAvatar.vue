@@ -27,12 +27,12 @@
 						itemCount: data.groupElements.length,
 					})
 				"
+				role="button"
+				tabindex="0"
 				@click.prevent="$emit('clicked', data.id)"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 				@keypress.enter="$emit('clicked', data.id)"
-				role="button"
-				tabindex="0"
 			>
 				<room-avatar-iterator
 					ref="avatar-iterator"
@@ -81,6 +81,7 @@ export default {
 			type: Boolean,
 		},
 	},
+	emits: ["clicked", "startDrag", "dropGroupAvatar", "dragendGroupAvatar"],
 	data() {
 		return {
 			hovered: false,

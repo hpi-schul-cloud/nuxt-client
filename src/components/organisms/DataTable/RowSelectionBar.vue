@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import ContextMenu from "@/components/molecules/ContextMenu";
+import ContextMenu from "@/components/molecules/ContextMenu.vue";
 import { mdiClose } from "@icons/material";
 
 export default {
@@ -69,6 +69,7 @@ export default {
 			type: Boolean,
 		},
 	},
+	emits: ["update:allRowsOfAllPagesSelected", "fire-action"],
 	data() {
 		return {
 			actionsMenuOpen: false,

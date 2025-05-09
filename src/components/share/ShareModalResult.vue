@@ -17,7 +17,7 @@
 					data-testid="mobilePlatformAction"
 					:icon="mdiShareVariantOutline"
 					:label="$t('common.actions.share')"
-					@click.stop="onShareMobilePlatflorm(shareUrl)"
+					@click.stop="onShareMobilePlatform"
 				/>
 
 				<ExtendedIconBtn
@@ -25,7 +25,7 @@
 					data-testid="shareMailAction"
 					:icon="mdiEmailOutline"
 					:label="$t('components.molecules.share.result.mailShare')"
-					@click.stop="onMailShareUrl(shareUrl, type)"
+					@click.stop="onMailShareUrl"
 				/>
 
 				<ExtendedIconBtn
@@ -33,7 +33,7 @@
 					data-testid="copyAction"
 					:icon="mdiContentCopy"
 					:label="$t('common.actions.shareLink')"
-					@click.stop="onCopy(shareUrl)"
+					@click.stop="onCopy"
 				/>
 
 				<ExtendedIconBtn
@@ -54,10 +54,9 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { QRCode } from "@ui-qr-code";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
 	mdiContentCopy,
 	mdiEmailOutline,
@@ -67,7 +66,7 @@ import {
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-defineProps({
+const props = defineProps({
 	shareUrl: {
 		type: String,
 		required: true,
@@ -75,35 +74,33 @@ defineProps({
 	type: {
 		type: String,
 		required: true,
-		validator: (type) =>
-			Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
 	},
 });
 const emit = defineEmits(["copied", "done"]);
 const { t } = useI18n();
 
-const onMailShareUrl = (shareUrl, type) => {
+const onMailShareUrl = () => {
 	const subject = encodeURIComponent(
-		t(`components.molecules.share.${type}.mail.subject`)
+		t(`components.molecules.share.${props.type}.mail.subject`)
 	);
 	const body = encodeURIComponent(
-		t(`components.molecules.share.${type}.mail.body`) + shareUrl
+		t(`components.molecules.share.${props.type}.mail.body`) + props.shareUrl
 	);
 	window.location.assign(`mailto:?subject=${subject}&body=${body}`);
 	emit("done");
 };
 
-const onCopy = (shareUrl) => {
-	navigator.clipboard.writeText(shareUrl);
+const onCopy = () => {
+	navigator.clipboard.writeText(props.shareUrl);
 	emit("done");
 	emit("copied");
 };
 
-const onShareMobilePlatflorm = (shareUrl) => {
+const onShareMobilePlatform = () => {
 	if (navigator.share) {
 		navigator
 			.share({
-				url: shareUrl,
+				url: props.shareUrl,
 			})
 			.then(() => emit("done"))
 			.catch();

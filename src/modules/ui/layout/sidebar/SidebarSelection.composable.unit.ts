@@ -223,6 +223,60 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				});
 			});
 		});
+
+		describe("when folder details path is matched", () => {
+			const setupFolderDetailsRoute = () => {
+				return setup({
+					path: "/folder/123",
+					name: "folder-id",
+				});
+			};
+
+			describe("and folder context is a room", () => {
+				const setupIsRoom = () => {
+					mockedUseSharedBoardPageInformation.mockReturnValue({
+						createPageInformation: jest.fn(),
+						breadcrumbs: computed(() => []),
+						contextType: computed(() => BoardContextType.Room),
+						pageTitle: computed(() => "page-title"),
+						roomId: computed(() => "room-id"),
+						resetPageInformation: jest.fn(),
+					});
+
+					return setupFolderDetailsRoute();
+				};
+
+				it("should be active", () => {
+					const { roomsItem } = setupIsRoom();
+
+					const { isActive } = useSidebarSelection(roomsItem);
+
+					expect(isActive.value).toBe(true);
+				});
+			});
+
+			describe("and folder context is something else", () => {
+				const setupIsOther = () => {
+					mockedUseSharedBoardPageInformation.mockReturnValue({
+						createPageInformation: jest.fn(),
+						breadcrumbs: computed(() => []),
+						contextType: computed(() => BoardContextType.Course),
+						pageTitle: computed(() => "page-title"),
+						roomId: computed(() => "room-id"),
+						resetPageInformation: jest.fn(),
+					});
+
+					return setupFolderDetailsRoute();
+				};
+
+				it("should not be active", () => {
+					const { roomsItem } = setupIsOther();
+					const { isActive } = useSidebarSelection(roomsItem);
+
+					expect(isActive.value).toBe(false);
+				});
+			});
+		});
 	});
 
 	describe("courses item", () => {
@@ -351,6 +405,59 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 
 				it("should not be active", () => {
 					const { coursesItem } = setupUserContext();
+					const { isActive } = useSidebarSelection(coursesItem);
+
+					expect(isActive.value).toBe(false);
+				});
+			});
+		});
+
+		describe("when folder details path is matched", () => {
+			const setupFolderDetailsRoute = () => {
+				return setup({
+					path: "/folder/123",
+					name: "folder-id",
+				});
+			};
+
+			describe("and folder context is a course", () => {
+				const setupCourseContext = () => {
+					mockedUseSharedBoardPageInformation.mockReturnValue({
+						createPageInformation: jest.fn(),
+						breadcrumbs: computed(() => []),
+						contextType: computed(() => BoardContextType.Course),
+						pageTitle: computed(() => "page-title"),
+						roomId: computed(() => "room-id"),
+						resetPageInformation: jest.fn(),
+					});
+
+					return setupFolderDetailsRoute();
+				};
+
+				it("should be active", () => {
+					const { coursesItem } = setupCourseContext();
+					const { isActive } = useSidebarSelection(coursesItem);
+
+					expect(isActive.value).toBe(true);
+				});
+			});
+
+			describe("and folder context is something else", () => {
+				const setupIsOther = () => {
+					mockedUseSharedBoardPageInformation.mockReturnValue({
+						createPageInformation: jest.fn(),
+						breadcrumbs: computed(() => []),
+						contextType: computed(() => BoardContextType.User),
+						pageTitle: computed(() => "page-title"),
+						roomId: computed(() => "room-id"),
+						resetPageInformation: jest.fn(),
+					});
+
+					return setupFolderDetailsRoute();
+				};
+
+				it("should not be active", () => {
+					const { coursesItem } = setupIsOther();
 					const { isActive } = useSidebarSelection(coursesItem);
 
 					expect(isActive.value).toBe(false);

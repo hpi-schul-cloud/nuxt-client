@@ -13,7 +13,7 @@
 		</v-btn>
 
 		<div class="content" :class="{ inline: isInline }">
-			<H5PPlayerComponent :contentId="contentId" @load-error="onLoadError" />
+			<H5PPlayerComponent :content-id="contentId" @load-error="onLoadError" />
 		</div>
 	</section>
 </template>

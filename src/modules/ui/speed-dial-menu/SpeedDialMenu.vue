@@ -22,12 +22,12 @@
 			</v-btn>
 			<div
 				v-if="isMenuOpen"
+				ref="outlet"
 				class="position-absolute overflow-visible"
 				:class="classes"
-				ref="outlet"
 			>
 				<template v-for="(actionNode, i) in actions" :key="i">
-					<component :is="actionNode" :speedDialIndex="i" />
+					<component :is="actionNode" :speed-dial-index="i" />
 				</template>
 			</div>
 		</div>
@@ -64,16 +64,21 @@ import {
 } from "./injection-tokens";
 import { useDisplay } from "vuetify";
 
-const props = withDefaults(
-	defineProps<{
-		icon?: string;
-		href?: string;
-		to?: string;
-		direction?: "top" | "bottom";
-		orientation?: "left" | "right";
-	}>(),
-	{ direction: "bottom", orientation: "left" }
-);
+interface Props {
+	icon?: string;
+	href?: string;
+	to?: string;
+	direction?: "top" | "bottom";
+	orientation?: "left" | "right";
+}
+
+const props = withDefaults(defineProps<Props>(), {
+	icon: "",
+	href: "",
+	to: "",
+	direction: "bottom",
+	orientation: "right",
+});
 
 const emit = defineEmits(["fab:clicked"]);
 

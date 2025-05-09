@@ -7,7 +7,7 @@ import {
 import { envConfigModule } from "@/store";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
-import { nextTick, ref } from "vue";
+import { nextTick, Ref, ref } from "vue";
 import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload";
 
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
@@ -26,8 +26,8 @@ import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 export const useCardStore = defineStore("cardStore", () => {
-	const cards = ref<Record<string, CardResponse>>({});
-	const preferredTools = ref<PreferredToolResponse[]>();
+	const cards: Ref<Record<string, CardResponse>> = ref({});
+	const preferredTools: Ref<PreferredToolResponse[]> = ref([]);
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const restApi = useCardRestApi();
@@ -186,15 +186,16 @@ export const useCardStore = defineStore("cardStore", () => {
 				payload.elementId,
 				payload.cardId
 			);
+
 			if (!previousId) return;
 			forceFocus(previousId);
 		}
 
 		const index = card.elements.findIndex((e) => e.id === payload.elementId);
-
 		if (index !== undefined && index > -1) {
 			card.elements.splice(index, 1);
 		}
+		setEditModeId(payload.cardId);
 	};
 
 	const updateElementRequest = socketOrRest.updateElementRequest;
@@ -235,12 +236,10 @@ export const useCardStore = defineStore("cardStore", () => {
 		return previousElement.id;
 	};
 
-	const loadPreferredTools = async (contextType: ToolContextType) => {
-		preferredTools.value = await restApi.getPreferredTools(contextType);
-	};
-
-	const getPreferredTools = (): PreferredToolResponse[] | undefined => {
-		return preferredTools.value;
+	const loadPreferredTools = async (
+		contextType: ToolContextType
+	): Promise<void> => {
+		preferredTools.value = (await restApi.getPreferredTools(contextType)) || [];
 	};
 
 	return {
@@ -268,6 +267,5 @@ export const useCardStore = defineStore("cardStore", () => {
 		updateCardTitleSuccess,
 		loadPreferredTools,
 		preferredTools,
-		getPreferredTools,
 	};
 });

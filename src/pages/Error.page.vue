@@ -6,10 +6,10 @@
 			data-testid="error-content"
 		/>
 		<v-btn
+			ref="btn-back"
 			class="mt-4"
 			color="primary"
 			variant="flat"
-			ref="btn-back"
 			data-testid="btn-back"
 			@click="onBackClick"
 		>
@@ -32,7 +32,6 @@ export default defineComponent({
 	components: {
 		ErrorContent,
 	},
-	head: {},
 	setup() {
 		const storage = useStorage();
 		const permissionErrors: Array<HttpStatusCode> = [
@@ -137,6 +136,7 @@ export default defineComponent({
 			isGenericError,
 		};
 	},
+	head: {},
 });
 </script>
 

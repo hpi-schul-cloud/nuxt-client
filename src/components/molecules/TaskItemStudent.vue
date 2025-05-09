@@ -13,7 +13,7 @@
 			@keydown.tab.shift="handleFocus(false)"
 		>
 			<!-- item avatar -->
-			<template v-slot:prepend>
+			<template #prepend>
 				<v-avatar>
 					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
 				</v-avatar>
@@ -48,7 +48,7 @@
 				</div>
 			</div>
 
-			<template v-slot:append>
+			<template #append>
 				<div :id="`task-menu-${task.id}`" class="context-menu-btn">
 					<task-item-menu
 						:task-id="task.id"

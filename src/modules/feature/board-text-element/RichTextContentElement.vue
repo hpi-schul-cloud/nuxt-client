@@ -3,6 +3,7 @@
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
 			class="rich_text"
+			:data-testid="`rich-text-display-${columnIndex}-${elementIndex}`"
 			:value="element.content.text"
 		/>
 		<RichTextContentElementEdit
@@ -10,6 +11,8 @@
 			class="rich_text"
 			:autofocus="autofocus"
 			:value="modelValue.text"
+			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
+			:column-index="columnIndex"
 			@update:value="onUpdateElement"
 			@delete:element="onDeleteElement"
 			@blur="onBlur"
@@ -35,6 +38,8 @@ const props = defineProps({
 		type: Boolean,
 		required: true,
 	},
+	columnIndex: { type: Number, required: true },
+	elementIndex: { type: Number, required: true },
 });
 
 const emit = defineEmits(["delete:element"]);
@@ -89,6 +94,19 @@ const onKeyUp = () => ensurePoliteNotifications();
 		margin-bottom: var(--space-xs);
 	}
 
+	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around {
+		> .ck-widget__type-around__button_before {
+			top: 0.5rem;
+			left: 0.5rem;
+			margin-left: 0;
+		}
+
+		> .ck-widget__type-around__button_after {
+			bottom: 0.5rem;
+			right: 0.5rem;
+		}
+	}
+
 	.ck-content {
 		h4 {
 			font-family: var(--font-accent);
@@ -129,6 +147,15 @@ const onKeyUp = () => ensurePoliteNotifications();
 			overflow-x: auto;
 			overflow-y: hidden;
 			padding-right: 1px;
+		}
+
+		.ck-widget.ck-widget_with-selection-handle:hover
+			> .ck-widget__selection-handle {
+			display: none;
+		}
+
+		.math-tex {
+			font-size: large;
 		}
 	}
 }

@@ -18,7 +18,7 @@ import { PropType } from "vue";
 const { t } = useI18n();
 
 const props = defineProps({
-	name: { type: String, required: false },
+	name: { type: String, required: false, default: undefined },
 	scopeLanguageKey: {
 		type: String as PropType<keyof MessageSchema>,
 		required: true,

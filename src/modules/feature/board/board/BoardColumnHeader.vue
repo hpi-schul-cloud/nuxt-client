@@ -1,59 +1,61 @@
 <template>
-	<div class="d-flex flex-wrap mb-4 mt-2" ref="columnHeader">
-		<div class="flex-1-0">
-			<BoardColumnInteractionHandler
-				:isEditMode="isEditMode"
-				@start-edit-mode="onStartEditMode"
-				@end-edit-mode="onEndEditMode"
-				@move:column-keyboard="onMoveColumnKeyboard"
-				:id="columnId"
-			>
-				<BoardAnyTitleInput
-					:value="title.trim()"
-					:data-testid="`column-title-${index}`"
-					scope="column"
-					:isEditMode="isEditMode"
-					:placeholder="titlePlaceholder"
-					class="w-100"
-					:isFocused="isFocusedById"
-					@update:value="onUpdateTitle"
-					@blur="onEndEditMode"
-				/>
-			</BoardColumnInteractionHandler>
-		</div>
-		<div class="mt-2 mr-3">
-			<BoardMenu
-				v-if="hasDeletePermission"
-				:scope="BoardMenuScope.COLUMN"
-				:data-testid="`column-menu-btn-${index}`"
-			>
-				<KebabMenuActionRename v-if="!isEditMode" @click="onStartEditMode" />
-				<template v-if="isListBoard">
-					<KebabMenuActionMoveUp
-						v-if="isNotFirstColumn"
-						@click="onMoveColumnUp"
+	<div ref="columnHeader" class="board-column-header mb-4">
+		<div class="d-flex align-items-start">
+			<div class="flex-grow-1">
+				<BoardColumnInteractionHandler
+					:id="columnId"
+					:is-edit-mode="isEditMode"
+					@start-edit-mode="onStartEditMode"
+					@end-edit-mode="onEndEditMode"
+					@move:column-keyboard="onMoveColumnKeyboard"
+				>
+					<BoardAnyTitleInput
+						:value="title"
+						:empty-value-fallback="t('components.board.column.defaultTitle')"
+						:data-testid="`column-title-${index}`"
+						scope="column"
+						:is-edit-mode="isEditMode"
+						class="w-100"
+						:is-focused="isFocusedById"
+						@update:value="onUpdateTitle"
+						@blur="onEndEditMode"
 					/>
-					<KebabMenuActionMoveDown
-						v-if="isNotLastColumn"
-						@click="onMoveColumnDown"
+				</BoardColumnInteractionHandler>
+			</div>
+			<div class="mt-2 mr-3">
+				<BoardMenu
+					v-if="hasDeletePermission"
+					:scope="BoardMenuScope.COLUMN"
+					:data-testid="`column-menu-btn-${index}`"
+				>
+					<KebabMenuActionRename v-if="!isEditMode" @click="onStartEditMode" />
+					<template v-if="isListBoard">
+						<KebabMenuActionMoveUp
+							v-if="isNotFirstColumn"
+							@click="onMoveColumnUp"
+						/>
+						<KebabMenuActionMoveDown
+							v-if="isNotLastColumn"
+							@click="onMoveColumnDown"
+						/>
+					</template>
+					<template v-else>
+						<KebabMenuActionMoveLeft
+							v-if="isNotFirstColumn"
+							@click="onMoveColumnLeft"
+						/>
+						<KebabMenuActionMoveRight
+							v-if="isNotLastColumn"
+							@click="onMoveColumnRight"
+						/>
+					</template>
+					<KebabMenuActionDelete
+						:name="title"
+						scope-language-key="components.boardColumn"
+						@click="onDelete"
 					/>
-				</template>
-				<template v-else>
-					<KebabMenuActionMoveLeft
-						v-if="isNotFirstColumn"
-						@click="onMoveColumnLeft"
-					/>
-					<KebabMenuActionMoveRight
-						v-if="isNotLastColumn"
-						@click="onMoveColumnRight"
-					/>
-				</template>
-				<KebabMenuActionDelete
-					:name="title"
-					scope-language-key="components.boardColumn"
-					@click="onDelete"
-				/>
-			</BoardMenu>
+				</BoardMenu>
+			</div>
 		</div>
 		<VDivider role="presentation" class="flex-1-0-100 border-opacity-75" />
 	</div>
@@ -74,15 +76,15 @@ import { useCourseBoardEditMode } from "@util-board";
 import { ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	columnId: { type: String, required: true },
-	index: { type: Number },
+	index: { type: Number, required: true },
 	isListBoard: { type: Boolean, required: true },
 	isNotFirstColumn: { type: Boolean, requried: false },
 	isNotLastColumn: { type: Boolean, requried: false },
 	title: { type: String, required: true },
-	titlePlaceholder: { type: String, default: "" },
 });
 
 const emit = defineEmits([
@@ -93,6 +95,7 @@ const emit = defineEmits([
 	"move:column-up",
 	"update:title",
 ]);
+const { t } = useI18n();
 
 const columnId = toRef(props, "columnId");
 const { hasEditPermission, hasDeletePermission } = useBoardPermissions();

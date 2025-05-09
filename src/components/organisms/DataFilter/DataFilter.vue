@@ -1,7 +1,7 @@
 <template>
 	<v-menu>
-		<template v-slot:activator="{ props }">
-			<v-btn v-bind="props" variant="flat">
+		<template #activator="{ props: menuProps }">
+			<v-btn v-bind="menuProps" variant="flat">
 				<v-icon class="filter-icon mr-2" :icon="mdiTune" />
 				<span data-testid="filter-title">{{ filterTitle }}</span>
 				<v-icon class="filter-icon" :icon="mdiMenuDown" />
@@ -11,9 +11,9 @@
 		<v-list>
 			<v-list-item v-for="(item, index) in filterMenuItems" :key="index">
 				<v-list-item-title
-					@click="onFilterClick(item.value as FilterOptionsType)"
 					class="menu-text"
 					hover
+					@click="onFilterClick(item.value as FilterOptionsType)"
 				>
 					<span class="filter-menu-item">{{ item.label }}</span>
 				</v-list-item-title>
@@ -27,7 +27,7 @@
 	/>
 
 	<FilterDialog
-		:isOpen="dialogOpen"
+		:is-open="dialogOpen"
 		@dialog-closed="onCloseDialog"
 		@remove:filter="onRemoveFilter"
 	>

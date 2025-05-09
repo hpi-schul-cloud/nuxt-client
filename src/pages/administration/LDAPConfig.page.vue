@@ -172,6 +172,10 @@ export default {
 			this.systemData = { ...this.data };
 		}
 	},
+	mounted() {
+		window.scrollTo({ top: 0, behavior: "smooth" });
+		document.title = buildPageTitle(this.$t("pages.administration.ldap.title"));
+	},
 	methods: {
 		validateHandler() {
 			this.triggerValidation = !this.triggerValidation;
@@ -239,10 +243,6 @@ export default {
 				participantAttribute: undefined,
 			};
 		},
-	},
-	mounted() {
-		window.scrollTo({ top: 0, behavior: "smooth" });
-		document.title = buildPageTitle(this.$t("pages.administration.ldap.title"));
 	},
 };
 </script>

@@ -3,8 +3,8 @@
 		class="card d-flex align-items-center"
 		:aria-label="title"
 		hover
-		@click="onClick"
 		:data-testId="testId"
+		@click="onClick"
 	>
 		<div class="w-100">
 			<div class="d-flex align-content align-items-center">
@@ -45,7 +45,6 @@ import { mdiOpenInNew } from "@icons/material";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	emits: ["click"],
 	props: {
 		title: {
 			type: String,
@@ -53,14 +52,17 @@ export default defineComponent({
 		},
 		logoUrl: {
 			type: String,
+			default: undefined,
 		},
 		openInNewTab: {
 			type: Boolean,
 		},
 		testId: {
 			type: String,
+			required: true,
 		},
 	},
+	emits: ["click"],
 	setup(props, { emit }) {
 		const onClick = () => {
 			emit("click");

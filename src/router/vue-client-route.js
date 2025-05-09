@@ -36,6 +36,7 @@ const vueRoutes = [
 	`^/h5p/editor/?$`,
 	`^/h5p/editor/${h5pId}/?$`,
 	`^/imprint/?$`,
+	`^/licenses/?$`,
 	`^/migration/?$`,
 	`^/migration/success/?$`,
 	`^/migration/error/?$`,
@@ -43,6 +44,8 @@ const vueRoutes = [
 	`^/news/new/?$`,
 	`^/news/${mongoId}/edit/?$`,
 	`^/poc-files/?$`,
+	`^/folder/${mongoId}/?$`,
+	`^/rooms/invitation-link/${mongoId}?$`,
 	`^/rooms/?$`,
 	`^/rooms/new/?$`,
 	`^/rooms/${mongoId}/?$`,
@@ -57,7 +60,7 @@ const vueRoutes = [
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
 ];
 
-const isVueClient = (path) => {
+const isVueClient = (/** @type {string} */ path) => {
 	return vueRoutes.some((regex) => new RegExp(regex).exec(path));
 };
 

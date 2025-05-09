@@ -65,6 +65,7 @@ const props = defineProps({
 });
 
 const modelValue: ModelRef<string | undefined> = defineModel({
+	type: String,
 	required: true,
 });
 

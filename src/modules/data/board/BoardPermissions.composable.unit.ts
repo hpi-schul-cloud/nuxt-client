@@ -1,27 +1,24 @@
-import {
-	BoardLayout,
-	Permission,
-	ImportUserResponseRoleNamesEnum as Roles,
-} from "@/serverApi/v3";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { BoardLayout, Permission, RoleName } from "@/serverApi/v3";
+import { authModule, envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
 import { BoardContextType } from "@/types/board/BoardContext";
 import {
 	boardResponseFactory,
 	envsFactory,
+	meResponseFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
-import { mockAuthModule } from "@@/tests/test-utils/mockAuthModule";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import AuthModule from "../../../store/auth";
 import { useBoardStore } from "./Board.store";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardPermissions } from "./BoardPermissions.composable";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import EnvConfigModule from "@/store/env-config";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { envConfigModule } from "@/store";
-import { useI18n } from "vue-i18n";
 
 jest.mock("@data-board/BoardPageInformation.composable");
 const mockedUseSharedBoardPageInformation = jest.mocked(
@@ -60,16 +57,27 @@ describe("BoardPermissions.composable", () => {
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 	});
 
-	const setup = (
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
+	const setupAllStores = (
 		options?: Partial<{
-			userRoles: Roles[];
+			userRoles: RoleName[];
 			userPermissions: Permission[];
 			roomId: string;
 			contextType: BoardContextType;
+			boardPermissions: Permission[];
 		}>
 	) => {
-		const { userRoles, userPermissions, roomId, contextType } = {
-			userRoles: [Roles.Teacher],
+		const {
+			userRoles,
+			userPermissions,
+			roomId,
+			contextType,
+			boardPermissions,
+		} = {
+			userRoles: [RoleName.Teacher],
 			userPermissions: [
 				Permission.CourseEdit,
 				Permission.CourseCreate,
@@ -77,12 +85,11 @@ describe("BoardPermissions.composable", () => {
 			],
 			roomId: "room-id",
 			contextType: undefined,
-
+			boardPermissions: [],
 			...options,
 		};
-		const contextTypeRef = ref(contextType);
-		mockAuthModule(userRoles, userPermissions);
 
+		const contextTypeRef = ref(contextType);
 		mockedUseSharedBoardPageInformation.mockReturnValue({
 			createPageInformation: jest.fn(),
 			breadcrumbs: computed(() => []),
@@ -92,12 +99,21 @@ describe("BoardPermissions.composable", () => {
 			resetPageInformation: jest.fn(),
 		});
 
-		setupStores({ envConfigModule: EnvConfigModule });
+		setupStores({ envConfigModule: EnvConfigModule, authModule: AuthModule });
+
+		const userRoleEntities = userRoles.map((role: RoleName) => ({
+			id: Math.random().toString(),
+			name: role,
+		}));
+		const mockMe = meResponseFactory.build({
+			roles: userRoleEntities,
+			permissions: userPermissions,
+		});
+		authModule.setMe(mockMe);
 
 		const env = envsFactory.build({
 			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
 		});
-
 		envConfigModule.setEnvs(env);
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
@@ -107,38 +123,72 @@ describe("BoardPermissions.composable", () => {
 			isVisible: true,
 			layout: BoardLayout.Columns,
 			features: [],
-			permissions: [],
+			permissions: boardPermissions,
 		});
 		boardStore.board = board;
 
 		return { boardStore, contextTypeRef, roomId };
 	};
 
-	afterEach(() => {
-		jest.clearAllMocks();
+	describe("when the user does not have the permissions", () => {
+		it("should return false for board permissions", async () => {
+			setupAllStores({
+				userRoles: [RoleName.Student],
+				userPermissions: [],
+				boardPermissions: [],
+			});
+
+			const {
+				hasMovePermission,
+				hasCreateCardPermission,
+				hasCreateColumnPermission,
+				hasDeletePermission,
+				hasCreateToolPermission,
+				hasEditPermission,
+				isTeacher,
+				isStudent,
+			} = useBoardPermissions();
+
+			expect(hasMovePermission.value).toBe(false);
+			expect(hasCreateCardPermission.value).toBe(false);
+			expect(hasCreateColumnPermission.value).toBe(false);
+			expect(hasDeletePermission.value).toBe(false);
+			expect(hasCreateToolPermission.value).toBe(false);
+			expect(hasEditPermission.value).toBe(false);
+
+			expect(isTeacher.value).toBe(false);
+			expect(isStudent.value).toBe(true);
+		});
 	});
 
-	it("should initalize board permissions", async () => {
-		setup({ userRoles: [], userPermissions: [] });
+	describe("when the user does have the permissions", () => {
+		it("should return true for board permissions", async () => {
+			setupAllStores({
+				userRoles: [RoleName.Teacher],
+				userPermissions: [Permission.ContextToolAdmin],
+				boardPermissions: [Permission.BoardEdit],
+			});
 
-		const {
-			hasMovePermission,
-			hasCreateCardPermission,
-			hasCreateColumnPermission,
-			hasDeletePermission,
-			hasCreateToolPermission,
-			hasEditPermission,
-			isTeacher,
-			isStudent,
-		} = useBoardPermissions();
+			const {
+				hasMovePermission,
+				hasCreateCardPermission,
+				hasCreateColumnPermission,
+				hasDeletePermission,
+				hasCreateToolPermission,
+				hasEditPermission,
+				isTeacher,
+				isStudent,
+			} = useBoardPermissions();
 
-		expect(hasMovePermission.value).toBe(false);
-		expect(hasCreateCardPermission.value).toBe(false);
-		expect(hasCreateColumnPermission.value).toBe(false);
-		expect(hasDeletePermission.value).toBe(false);
-		expect(hasCreateToolPermission.value).toBe(false);
-		expect(hasEditPermission.value).toBe(false);
-		expect(isTeacher.value).toBe(false);
-		expect(isStudent.value).toBe(false);
+			expect(hasMovePermission.value).toBe(true);
+			expect(hasCreateCardPermission.value).toBe(true);
+			expect(hasCreateColumnPermission.value).toBe(true);
+			expect(hasDeletePermission.value).toBe(true);
+			expect(hasCreateToolPermission.value).toBe(true);
+			expect(hasEditPermission.value).toBe(true);
+
+			expect(isTeacher.value).toBe(true);
+			expect(isStudent.value).toBe(false);
+		});
 	});
 });

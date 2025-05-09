@@ -23,8 +23,8 @@
 				:name="`headcolumn-${columns[index].field.replace(/\./g, '-')}`"
 				:label="column.label"
 				:sortable="column.sortable"
-				:sortBy="sortBy"
-				:sortOrder="sortOrder"
+				:sort-by="sortBy"
+				:sort-order="sortOrder"
 			>
 				<span v-if="column.infobox">
 					<span class="info-slot">
@@ -45,8 +45,8 @@
 					</span>
 					<info-box
 						v-if="isConsentNecessary"
-						class="info-box"
 						v-model:active="infoBoxActive"
+						class="info-box"
 					>
 						<template #header>{{
 							$t("pages.administration.students.infobox.headline")
@@ -129,7 +129,7 @@
 							</div>
 						</template>
 					</info-box>
-					<info-box v-else class="info-box" v-model:active="infoBoxActive">
+					<info-box v-else v-model:active="infoBoxActive" class="info-box">
 						<template #header>{{
 							$t(
 								"pages.administration.students.infobox.registrationOnly.headline"
@@ -273,6 +273,12 @@ export default {
 			type: Boolean,
 		},
 	},
+	emits: [
+		"update:current-page-selection-state",
+		"update:sort",
+		"update:sort-by",
+		"update:sort-order",
+	],
 	data() {
 		return {
 			infoBoxActive: false,

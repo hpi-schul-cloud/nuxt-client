@@ -63,6 +63,7 @@ describe("BoardColumnHeader", () => {
 				titlePlaceholder: "Spalte 1",
 				columnId: "abc123",
 				isListBoard: false,
+				index: 0,
 				...props,
 			},
 		});

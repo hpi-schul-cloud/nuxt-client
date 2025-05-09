@@ -5,15 +5,25 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 describe("RichTextContentElementEdit", () => {
-	const setup = (options: { value: string; autofocus: boolean }) => {
+	const setup = ({ autofocus = true }: { autofocus: boolean }) => {
 		const wrapper = mount(RichTextContentElementEdit, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[BOARD_IS_LIST_LAYOUT as symbol]: false,
+				},
+
+				stubs: {
+					InlineEditor: true,
+				},
 			},
 			props: {
-				...options,
+				value: "test value",
+				autofocus,
+				columnIndex: 0,
 			},
 		});
 
@@ -22,32 +32,28 @@ describe("RichTextContentElementEdit", () => {
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			const { wrapper } = setup({ value: "test value", autofocus: false });
+			const { wrapper } = setup({ autofocus: false });
 			const content = wrapper.findComponent(RichTextContentElementEdit);
 			expect(content.exists()).toBe(true);
 		});
 
-		it("should pass props to ck-editor component", async () => {
-			const { wrapper } = setup({ value: "test value", autofocus: true });
-			const ckEditorComponent = wrapper.findComponent({ name: "ck-editor" });
-			await nextTick();
-			const ckEditorValue = ckEditorComponent.findComponent({
-				name: "ckeditor",
-			}).vm.modelValue;
-			expect(ckEditorValue).toStrictEqual("test value");
+		it("should render InlineEditor component", async () => {
+			const { wrapper } = setup({ autofocus: true });
+			const editor = wrapper.findComponent({ name: "InlineEditor" });
+			expect(editor.exists()).toBe(true);
 		});
 
 		it("should emit delete:element on CK editor keyboard delete event", async () => {
-			const { wrapper } = setup({ value: "test value", autofocus: true });
-			const ckEditor = wrapper.findComponent({ name: "ck-editor" });
-			ckEditor.vm.$emit("keyboard:delete");
+			const { wrapper } = setup({ autofocus: true });
+			const editor = wrapper.findComponent({ name: "InlineEditor" });
+			editor.vm.$emit("keyboard:delete");
 
 			const emitted = wrapper.emitted();
 			expect(emitted["delete:element"]).toHaveLength(1);
 		});
 
 		it("should update modalValue when prop value changes", async () => {
-			const { wrapper } = setup({ value: "test value", autofocus: true });
+			const { wrapper } = setup({ autofocus: true });
 			const newValue = "new title";
 			await wrapper.setProps({ value: newValue });
 			await nextTick();

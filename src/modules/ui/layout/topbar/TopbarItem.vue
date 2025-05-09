@@ -1,6 +1,6 @@
 <template>
 	<VMenu>
-		<template v-slot:activator="{ props }">
+		<template #activator="{ props }">
 			<VBtn
 				v-bind="props"
 				v-bind.attr="$attrs"
@@ -26,6 +26,7 @@ defineOptions({
 defineProps({
 	icon: {
 		type: String,
+		default: "",
 	},
 	color: {
 		type: String,

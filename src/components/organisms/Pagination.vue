@@ -9,7 +9,7 @@
 			item-value="value"
 			return-object
 			active
-			@update:modelValue="setPagination"
+			@update:model-value="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
 			<p class="total">
@@ -74,6 +74,7 @@ export default {
 			default: 0,
 		},
 	},
+	emits: ["update:current-page", "update:per-page"],
 	data() {
 		return {
 			mdiChevronLeft,

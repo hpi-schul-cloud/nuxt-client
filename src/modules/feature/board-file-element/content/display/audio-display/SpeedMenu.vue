@@ -1,6 +1,6 @@
 <template>
 	<v-menu max-height="120px" min-width="150px" location="bottom center">
-		<template v-slot:activator="{ props }">
+		<template #activator="{ props }">
 			<v-btn
 				data-testid="speed-menu-play-speed"
 				v-bind="props"
@@ -19,7 +19,7 @@
 				<div class="ml-3">
 					<v-list-item-title>0.25 </v-list-item-title>
 				</div>
-				<template #append v-if="0.25 === rate">
+				<template v-if="0.25 === rate" #append>
 					<v-icon>{{ mdiCheck }}</v-icon>
 				</template>
 			</v-list-item>
@@ -27,7 +27,7 @@
 				<div class="ml-3">
 					<v-list-item-title>0.5 </v-list-item-title>
 				</div>
-				<template #append v-if="0.5 === rate">
+				<template v-if="0.5 === rate" #append>
 					<v-icon>{{ mdiCheck }}</v-icon>
 				</template>
 			</v-list-item>
@@ -35,7 +35,7 @@
 				<div class="ml-3">
 					<v-list-item-title>0.75 </v-list-item-title>
 				</div>
-				<template #append v-if="0.75 === rate">
+				<template v-if="0.75 === rate" #append>
 					<v-icon>{{ mdiCheck }}</v-icon>
 				</template>
 			</v-list-item>
@@ -45,7 +45,7 @@
 						$t("component.cardElement.fileElement.audioPlayer.speed.normal")
 					}}</v-list-item-title>
 				</div>
-				<template #append v-if="1 === rate">
+				<template v-if="1 === rate" #append>
 					<v-icon>{{ mdiCheck }}</v-icon>
 				</template>
 			</v-list-item>
@@ -53,7 +53,7 @@
 				<div class="ml-3">
 					<v-list-item-title>1.25</v-list-item-title>
 				</div>
-				<template #append v-if="1.25 === rate">
+				<template v-if="1.25 === rate" #append>
 					<v-icon>{{ mdiCheck }}</v-icon>
 				</template>
 			</v-list-item>
@@ -61,7 +61,7 @@
 				<div class="ml-3">
 					<v-list-item-title>1.5</v-list-item-title>
 				</div>
-				<template #append v-if="1.5 === rate">
+				<template v-if="1.5 === rate" #append>
 					<v-icon>{{ mdiCheck }}</v-icon>
 				</template>
 			</v-list-item>
@@ -69,7 +69,7 @@
 				<div class="ml-3">
 					<v-list-item-title>1.75</v-list-item-title>
 				</div>
-				<template #append v-if="1.75 === rate">
+				<template v-if="1.75 === rate" #append>
 					<v-icon>{{ mdiCheck }}</v-icon>
 				</template>
 			</v-list-item>
@@ -77,7 +77,7 @@
 				<div class="ml-3">
 					<v-list-item-title>2</v-list-item-title>
 				</div>
-				<template #append v-if="2 === rate">
+				<template v-if="2 === rate" #append>
 					<v-icon>{{ mdiCheck }}</v-icon>
 				</template>
 			</v-list-item>
@@ -91,10 +91,10 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "SpeedMenu",
-	emits: ["updateRate"],
 	props: {
 		rate: { type: Number, required: true },
 	},
+	emits: ["updateRate"],
 	setup(props, { emit }) {
 		const onSelect = (rate: number) => {
 			emit("updateRate", rate);

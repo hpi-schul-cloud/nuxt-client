@@ -27,7 +27,15 @@ jest.mock("vue-router", () => ({
 jest.mock("./SidebarSelection.composable");
 const mockedUseSidebarSelection = jest.mocked(useSidebarSelection);
 
-const setup = (permissions?: string[]) => {
+const setup = (
+	{
+		permissions,
+		sidebarExpanded,
+	}: {
+		permissions?: string[];
+		sidebarExpanded?: boolean;
+	} = { permissions: [], sidebarExpanded: true }
+) => {
 	const authModule = createModuleMocks(AuthModule, {
 		getUserPermissions: permissions,
 	});
@@ -62,7 +70,7 @@ const setup = (permissions?: string[]) => {
 			},
 		},
 		slots: {
-			default: h(Sidebar),
+			default: h(Sidebar, { modelValue: sidebarExpanded ?? true }),
 		},
 	});
 
@@ -73,14 +81,45 @@ const setup = (permissions?: string[]) => {
 
 describe("@ui-layout/Sidebar", () => {
 	it("should render correctly", () => {
-		const { wrapper } = setup([]);
+		const { wrapper } = setup();
 
 		expect(wrapper.exists()).toBe(true);
 	});
 
+	describe("when modelValue is true", () => {
+		it("should show sidebar", () => {
+			const { wrapper } = setup();
+			const nav = wrapper.get("nav");
+			expect(nav.classes()).toContain("v-navigation-drawer--active");
+		});
+	});
+
+	describe("when modelValue is false", () => {
+		it("should not show sidebar", () => {
+			const { wrapper } = setup({ permissions: [], sidebarExpanded: false });
+			const nav = wrapper.get("nav");
+			expect(nav.classes()).not.toContain("v-navigation-drawer--active");
+		});
+	});
+
+	describe("when sidebar toggle was clicked", () => {
+		it("should hide sidebar", async () => {
+			const { wrapper } = setup();
+			const toggleBtn = wrapper.getComponent(
+				"[data-testid='sidebar-toggle-close']"
+			);
+			await toggleBtn.trigger("click");
+
+			const nav = wrapper.get("nav");
+			expect(nav.classes()).not.toContain("v-navigation-drawer--active");
+		});
+	});
+
+	// when sidebar is expanded should show
+
 	describe("when user does not have needed permission", () => {
 		it("should filter items correctly", async () => {
-			const { wrapper } = setup([]);
+			const { wrapper } = setup({ permissions: [] });
 
 			expect(wrapper.find("[data-testid='sidebar-teams']").exists()).toBe(
 				false
@@ -90,7 +129,9 @@ describe("@ui-layout/Sidebar", () => {
 
 	describe("when user does have needed permission", () => {
 		it("should display items correctly ", async () => {
-			const { wrapper } = setup(["TEAMS_ENABLED".toLowerCase()]);
+			const { wrapper } = setup({
+				permissions: ["TEAMS_ENABLED".toLowerCase()],
+			});
 			await nextTick();
 			await nextTick();
 
@@ -101,7 +142,7 @@ describe("@ui-layout/Sidebar", () => {
 	describe("when multiple permissions are applicable", () => {
 		describe("when user does not have needed permission", () => {
 			it("should filter items correctly", async () => {
-				const { wrapper } = setup([]);
+				const { wrapper } = setup({ permissions: [] });
 				await nextTick();
 				await nextTick();
 
@@ -111,7 +152,9 @@ describe("@ui-layout/Sidebar", () => {
 
 		describe("when user does have one of the needed permissions", () => {
 			it("should display items correctly ", async () => {
-				const { wrapper } = setup(["TASK_DASHBOARD_VIEW_V3".toLowerCase()]);
+				const { wrapper } = setup({
+					permissions: ["TASK_DASHBOARD_VIEW_V3".toLowerCase()],
+				});
 				await nextTick();
 				await nextTick();
 

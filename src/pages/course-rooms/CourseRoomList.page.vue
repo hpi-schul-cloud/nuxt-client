@@ -19,8 +19,8 @@
 			<v-row class="d-flex justify-center search">
 				<v-text-field
 					ref="search"
-					class="px-1"
 					v-model="searchText"
+					class="px-1"
 					variant="solo"
 					rounded
 					single-line

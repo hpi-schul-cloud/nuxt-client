@@ -24,6 +24,7 @@ export default {
 			},
 		},
 	},
+	emits: ["update:modelValue"],
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};

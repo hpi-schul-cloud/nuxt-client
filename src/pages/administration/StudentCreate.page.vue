@@ -82,6 +82,11 @@ export default {
 	created() {
 		this.$store.commit("users/resetBusinessError");
 	},
+	mounted() {
+		document.title = buildPageTitle(
+			this.$t("pages.administration.students.new.title")
+		);
+	},
 	methods: {
 		async createStudent(userData) {
 			await this.$store.dispatch("users/createStudent", {
@@ -104,11 +109,6 @@ export default {
 				});
 			}
 		},
-	},
-	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.administration.students.new.title")
-		);
 	},
 };
 </script>

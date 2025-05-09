@@ -28,10 +28,10 @@
 			@close="performAPICall"
 		/>
 		<loading-modal
+			v-model:active="loadingModal.visible"
 			:title="$t('pages.content.notification.loading')"
 			description=""
 			:btn-text="$t('common.labels.close')"
-			v-model:active="loadingModal.visible"
 		/>
 		<notification-modal
 			v-model:show-notification-modal="notificationModal.visible"
@@ -75,7 +75,7 @@ export default {
 	},
 	props: {
 		round: { type: Boolean },
-		btnColor: { type: String },
+		btnColor: { type: String, default: undefined },
 		btnLabel: { type: String, default: "" },
 		btnClass: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },

@@ -2,13 +2,13 @@
 	<div>
 		<v-text-field
 			v-model="timeValue"
+			v-time-input-mask
 			data-testid="time-input"
 			:append-inner-icon="mdiClockOutline"
 			:label="label"
 			:aria-label="ariaLabel"
 			placeholder="HH:MM"
 			:error-messages="errorMessages"
-			v-time-input-mask
 			@update:model-value="validate"
 			@keydown.up.down.stop
 		/>

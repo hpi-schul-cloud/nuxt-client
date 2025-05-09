@@ -4,8 +4,8 @@
 			<div class="toolbelt">
 				<row-selection-bar
 					ref="rowSelectionBar"
-					:actions="actions"
 					v-model:all-rows-of-all-pages-selected="allRowsOfAllPagesSelected"
+					:actions="actions"
 					:number-of-selected-items="numberOfSelectedItems"
 					:total-number-of-items="total"
 					@fire-action="fireAction"
@@ -16,11 +16,11 @@
 					<thead>
 						<component
 							:is="componentHeaderRow"
-							:all-rows-selectable="rowsSelectable"
 							v-model:current-page-selection-state="currentPageSelectionState"
-							:columns="columns"
 							v-model:sort-by="$_controllableDataSortBy"
 							v-model:sort-order="$_controllableDataSortOrder"
+							:all-rows-selectable="rowsSelectable"
+							:columns="columns"
 							data-testid="table-data-head"
 							:show-external-text="showExternalText"
 							@update:sort="onUpdateSort"
@@ -201,6 +201,13 @@ export default {
 			type: Boolean,
 		},
 	},
+	emits: [
+		"update:current-page",
+		"update:rows-per-page",
+		"update:selection",
+		"update:sort",
+		"update:selectedRowIds",
+	],
 	data() {
 		return {
 			editFilterActive: false,

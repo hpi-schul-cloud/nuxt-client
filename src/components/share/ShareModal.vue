@@ -22,8 +22,8 @@
 						{{ t(`components.molecules.share.${type}.options.infoText`) }}
 					</p>
 					<div
-						class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
 						v-if="showAlertInfo"
+						class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
 					>
 						<div class="mx-2">
 							<v-icon color="info" :icon="mdiInformation" />
@@ -32,8 +32,8 @@
 							{{ t("components.molecules.share.options.tableHeader.InfoText") }}
 							<ul class="ml-6">
 								<li
-									data-testid="share-options-personal-data-text"
 									v-if="showCourseInfo"
+									data-testid="share-options-personal-data-text"
 								>
 									{{
 										t(
@@ -83,8 +83,8 @@
 									}}
 								</li>
 								<li
-									data-testid="share-modal-coursefiles-info"
 									v-if="showCourseInfo"
+									data-testid="share-modal-coursefiles-info"
 								>
 									{{
 										t(

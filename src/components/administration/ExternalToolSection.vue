@@ -90,10 +90,10 @@
 			<template #[`item.actions`]="{ item }">
 				<external-tool-toolbar
 					class="text-no-wrap"
+					data-testid="external-tool-actions"
 					@edit="editTool(item)"
 					@datasheet="showDatasheet(item)"
 					@delete="openDeleteDialog(item)"
-					data-testid="external-tool-actions"
 				/>
 			</template>
 		</v-data-table>
@@ -111,8 +111,8 @@
 
 		<v-dialog
 			v-if="metadata"
-			data-testid="delete-dialog"
 			v-model="isDeleteDialogOpen"
+			data-testid="delete-dialog"
 			max-width="360"
 		>
 			<v-card :ripple="false">

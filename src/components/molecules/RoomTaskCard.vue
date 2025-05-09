@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining";
+import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining.vue";
 import {
 	fromNow,
 	fromNowToFuture,
@@ -135,6 +135,17 @@ export default {
 		dragInProgress: { type: Boolean, required: true },
 		taskCardIndex: { type: Number, required: true },
 	},
+	emits: [
+		"update-visibility",
+		"finish-task",
+		"restore-task",
+		"delete-task",
+		"copy-task",
+		"share-task",
+		"on-drag",
+		"move-element",
+		"tab-pressed",
+	],
 	data() {
 		return {
 			fromNow,

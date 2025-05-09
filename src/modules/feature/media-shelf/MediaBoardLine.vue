@@ -7,14 +7,14 @@
 			:title="line.title"
 			:title-placeholder="titlePlaceholder"
 			:line-id="line.id"
-			@update:title="$emit('update:line-title', $event)"
 			:data-testid="'media-board-line-header-' + index"
+			@update:title="$emit('update:line-title', $event)"
 		>
 			<template #menu>
 				<MediaBoardLineMenu
+					v-model:collapsed="collapsed"
 					:line-id="line.id"
 					:color="line.backgroundColor"
-					v-model:collapsed="collapsed"
 					@delete:line="$emit('delete:line', $event)"
 					@update:color="$emit('update:line-background-color', $event)"
 					@rename-title="onRenameTitle"

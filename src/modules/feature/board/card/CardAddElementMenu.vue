@@ -2,12 +2,12 @@
 	<VCardText>
 		<div class="d-flex justify-center w-full">
 			<VBtn
-				@click.stop="onAddElement()"
-				@dblclick.stop="() => {}"
 				elevation="0"
 				variant="outlined"
 				icon
 				data-testid="add-element-btn"
+				@click.stop="onAddElement()"
+				@dblclick.stop="() => {}"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon>
 				<span class="d-sr-only"

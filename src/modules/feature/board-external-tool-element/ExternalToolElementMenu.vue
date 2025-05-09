@@ -32,6 +32,7 @@ const { t } = useI18n();
 defineProps({
 	displayName: {
 		type: String,
+		default: undefined,
 	},
 	columnIndex: { type: Number, required: true },
 	isNotFirstElement: { type: Boolean, requried: false },

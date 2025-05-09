@@ -1,11 +1,11 @@
 <template>
-	<v-dialog fullscreen v-model="isLightBoxOpen" data-testid="light-box">
+	<v-dialog v-model="isLightBoxOpen" fullscreen data-testid="light-box">
 		<v-toolbar>
 			<v-btn
 				:aria-label="t('common.labels.close')"
 				:icon="mdiClose"
-				@click="close"
 				data-testid="light-box-close-btn"
+				@click="close"
 			/>
 
 			<v-toolbar-title v-if="lightBoxOptions.name !== ''">
@@ -16,8 +16,8 @@
 				v-if="lightBoxOptions.downloadUrl !== ''"
 				:aria-label="t('components.board.action.download')"
 				:icon="mdiTrayArrowDown"
-				@click="download"
 				data-testid="light-box-download-btn"
+				@click="download"
 			/>
 		</v-toolbar>
 		<v-row class="ma-0" style="overflow: auto" @click="close">

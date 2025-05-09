@@ -5,9 +5,9 @@
 	>
 		<BoardSectionCreationHeader
 			:label="title"
-			:isColumnActive="isColumnHovered"
-			@add-column="onAddColumn"
+			:is-column-active="isColumnHovered"
 			data-testid="add-column"
+			@add-column="onAddColumn"
 		/>
 		<!-- flex-grow-1 is set to expand the area where cards can be dragged in. -->
 		<div

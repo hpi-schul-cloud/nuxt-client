@@ -1,12 +1,13 @@
 <template>
 	<div>
 		<CardHostInteractionHandler
-			:isEditMode="isEditMode"
+			:is-edit-mode="isEditMode"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
 			@move:card-keyboard="onMoveCardKeyboard"
 		>
 			<VCard
+				:id="cardId"
 				ref="cardHost"
 				:height="isLoadingCard ? height : 'auto'"
 				class="card-host"
@@ -15,7 +16,6 @@
 				tabindex="0"
 				min-height="120px"
 				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
-				:id="cardId"
 				:ripple="false"
 				:hover="isHovered"
 				:data-testid="cardTestId"
@@ -26,13 +26,13 @@
 				</template>
 				<template v-if="card">
 					<CardTitle
-						:isEditMode="isEditMode"
+						:is-edit-mode="isEditMode"
 						:value="card.title"
 						scope="card"
-						@update:value="onUpdateCardTitle($event, cardId)"
-						:isFocused="isFocusedById"
-						@enter="onEnter"
+						:is-focused="isFocusedById"
 						class="mx-n4 mb-n2"
+						@update:value="onUpdateCardTitle($event, cardId)"
+						@enter="onEnter"
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
@@ -63,8 +63,8 @@
 					<div :class="{ 'mt-n2': hasCardTitle }">
 						<ContentElementList
 							:elements="card.elements"
-							:isEditMode="isEditMode"
-							:isDetailView="isDetailView"
+							:is-edit-mode="isEditMode"
+							:is-detail-view="isDetailView"
 							:row-index="rowIndex"
 							:column-index="columnIndex"
 							@delete:element="onDeleteElement"
@@ -72,7 +72,7 @@
 							@move-up:element="onMoveContentElementUp"
 							@move-keyboard:element="onMoveContentElementKeyboard"
 						/>
-						<CardAddElementMenu @add-element="onAddElement" v-if="isEditMode" />
+						<CardAddElementMenu v-if="isEditMode" @add-element="onAddElement" />
 					</div>
 				</template>
 			</VCard>
@@ -81,9 +81,9 @@
 		<CardHostDetailView
 			v-if="card"
 			:card="card"
-			:isOpen="isDetailView"
-			:rowIndex="rowIndex"
-			:columnIndex="columnIndex"
+			:is-open="isDetailView"
+			:row-index="rowIndex"
+			:column-index="columnIndex"
 			@delete:element="onDeleteElement"
 			@move-down:element="onMoveContentElementDown"
 			@move-up:element="onMoveContentElementUp"
@@ -126,11 +126,6 @@ import ContentElementList from "./ContentElementList.vue";
 
 export default defineComponent({
 	name: "CardHost",
-	computed: {
-		BoardMenuScope() {
-			return BoardMenuScope;
-		},
-	},
 	components: {
 		CardSkeleton,
 		CardTitle,
@@ -304,6 +299,11 @@ export default defineComponent({
 			isDetailView,
 			mdiArrowExpand,
 		};
+	},
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
 	},
 });
 </script>

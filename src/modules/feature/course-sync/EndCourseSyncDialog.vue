@@ -17,8 +17,8 @@
 			<p data-testid="end-course-sync-dialog-info-text">
 				{{
 					$t("feature-course-sync.EndCourseSyncDialog.description", {
-						courseName: courseName || "",
-						groupName: groupName || "",
+						courseName: courseName,
+						groupName: groupName,
 					})
 				}}
 			</p>
@@ -43,12 +43,15 @@ const isOpen = defineModel("isOpen", {
 const props = defineProps({
 	courseName: {
 		type: String,
+		default: "",
 	},
 	groupName: {
 		type: String,
+		default: "",
 	},
 	courseId: {
 		type: String,
+		default: undefined,
 	},
 });
 

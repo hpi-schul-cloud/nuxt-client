@@ -14,14 +14,14 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
 import { Router, useRoute, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-jest";
-import { useRoomAuthorization } from "@feature-room";
+import { useRoomAuthorization } from "@data-room";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),
 	useRouter: jest.fn(),
 }));
 
-jest.mock("@feature-room/roomAuthorization.composable");
+jest.mock("@data-room/roomAuthorization.composable");
 const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canAddRoomMembers: ref(false),
 	canChangeOwner: ref(false),
@@ -29,6 +29,7 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canViewRoom: ref(false),
 	canEditRoom: ref(false),
 	canDeleteRoom: ref(false),
+	canDuplicateRoom: ref(false),
 	canLeaveRoom: ref(false),
 	canRemoveRoomMembers: ref(false),
 	canEditRoomContent: ref(false),

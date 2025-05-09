@@ -1,9 +1,9 @@
 <template>
 	<v-list-item :title="item.name">
-		<template #prepend v-if="item.logoUrl">
+		<template v-if="item.logoUrl" #prepend>
 			<v-img
-				cover
 				v-if="item.logoUrl"
+				cover
 				:max-height="maxHeight"
 				:max-width="maxWidth"
 				:src="item.logoUrl"

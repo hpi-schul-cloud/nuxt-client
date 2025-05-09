@@ -5,8 +5,8 @@
 		:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 	>
 		<KebabMenuActionDelete
-			@click="onDelete"
 			scope-language-key="components.cardElement.deletedElement"
+			@click="onDelete"
 		/>
 	</BoardMenu>
 </template>

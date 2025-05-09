@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import InfoModalFullWidth from "@/components/molecules/InfoModalFullWidth";
+import InfoModalFullWidth from "@/components/molecules/InfoModalFullWidth.vue";
 import { mapGetters } from "vuex";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiEmailCheckOutline, mdiEmailRemoveOutline } from "@icons/material";
@@ -27,6 +27,7 @@ export default {
 	components: {
 		InfoModalFullWidth,
 	},
+	layout: "loggedOut",
 	data() {
 		return {
 			activated: false,
@@ -85,7 +86,6 @@ export default {
 				path: `/`,
 			});
 		},
-
 		async submitHandler() {
 			const { activationCode } = this.$route.params;
 			try {
@@ -98,13 +98,11 @@ export default {
 			this.showModal = true;
 		},
 	},
-	layout: "loggedOut",
 };
 </script>
 
 <style lang="scss" scoped>
 section {
-	// stylelint-disable
 	margin-top: 10%;
 }
 </style>

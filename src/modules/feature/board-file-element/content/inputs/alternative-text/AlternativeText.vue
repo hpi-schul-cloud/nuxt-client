@@ -1,9 +1,9 @@
 <template>
 	<v-textarea
+		v-model="modelValue"
 		data-testid="file-alttext-input"
 		rows="1"
 		auto-grow
-		v-model="modelValue"
 		:persistent-hint="true"
 		:hint="$t('components.cardElement.fileElement.altDescription')"
 		:label="$t('components.cardElement.fileElement.alternativeText')"
@@ -19,6 +19,7 @@ export default defineComponent({
 		alternativeText: {
 			type: String,
 			required: false,
+			default: undefined,
 		},
 		isEditMode: { type: Boolean, required: true },
 	},

@@ -53,7 +53,10 @@ import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
 
 const props = defineProps({
-	configId: String,
+	configId: {
+		type: String,
+		default: "",
+	},
 	contextId: { type: String, required: true },
 	contextType: { type: String as PropType<ToolContextType>, required: true },
 });

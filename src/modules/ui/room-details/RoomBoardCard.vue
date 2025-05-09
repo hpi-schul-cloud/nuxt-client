@@ -42,8 +42,8 @@
 			</h2>
 		</VCardText>
 		<VCardActions
-			data-testid="board-card-actions"
 			v-if="isDraft && userRole === Roles.Teacher"
+			data-testid="board-card-actions"
 		>
 			<VBtn
 				v-for="(action, index) in cardActions"

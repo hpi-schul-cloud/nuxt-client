@@ -54,9 +54,11 @@
 								v-if="isEmptyGroup(rowIndex, colIndex)"
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
-								@dropEmptyAvatar="setDropElement({ x: colIndex, y: rowIndex })"
 								data-avatar-type="vRoomEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
+								@drop-empty-avatar="
+									setDropElement({ x: colIndex, y: rowIndex })
+								"
 							/>
 							<vRoomGroupAvatar
 								v-else-if="hasGroup(rowIndex, colIndex)"
@@ -66,14 +68,14 @@
 								:size="dimensions.cellWidth"
 								:device="device"
 								:draggable="allowDragging"
-								@clicked="openDialog(getDataObject(rowIndex, colIndex).groupId)"
-								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-								@dragendGroupAvatar="onDragend"
-								@dropGroupAvatar="
-									addGroupElements({ x: colIndex, y: rowIndex })
-								"
 								data-avatar-type="vRoomGroupAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
+								@clicked="openDialog(getDataObject(rowIndex, colIndex).groupId)"
+								@start-drag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+								@dragend-group-avatar="onDragend"
+								@drop-group-avatar="
+									addGroupElements({ x: colIndex, y: rowIndex })
+								"
 							/>
 							<vRoomAvatar
 								v-else
@@ -83,11 +85,11 @@
 								:size="dimensions.cellWidth"
 								:show-badge="true"
 								:draggable="allowDragging"
-								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-								@dragendAvatar="onDragend"
-								@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
 								data-avatar-type="vRoomAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
+								@start-drag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+								@dragend-avatar="onDragend"
+								@drop-avatar="setGroupElements({ x: colIndex, y: rowIndex })"
 							/>
 						</template>
 						<template v-else>
@@ -95,9 +97,11 @@
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
 								:show-outline="dragging"
-								@dropEmptyAvatar="setDropElement({ x: colIndex, y: rowIndex })"
 								data-avatar-type="vRoomEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
+								@drop-empty-avatar="
+									setDropElement({ x: colIndex, y: rowIndex })
+								"
 							/>
 						</template>
 					</div>
@@ -106,7 +110,7 @@
 		</template>
 	</room-wrapper>
 	<room-modal
-		v-model:isOpen="groupDialog.isOpen"
+		v-model:is-open="groupDialog.isOpen"
 		aria-describedby="folder open"
 		:group-data="groupDialog.groupData"
 		:avatar-size="dimensions.cellWidth"
@@ -137,6 +141,18 @@ import { mdiCheck, mdiMagnify } from "@icons/material";
 import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
+	components: {
+		RoomWrapper,
+		vRoomAvatar,
+		vRoomGroupAvatar,
+		vRoomEmptyAvatar,
+		RoomModal,
+		ImportFlow,
+	},
+	inject: {
+		notifierModule: { from: NOTIFIER_MODULE_KEY },
+	},
+	layout: "defaultVuetify",
 	setup() {
 		const refs = reactive({});
 
@@ -150,18 +166,6 @@ export default defineComponent({
 
 		return { setElementRef, getElementNameByRef };
 	},
-	components: {
-		RoomWrapper,
-		vRoomAvatar,
-		vRoomGroupAvatar,
-		vRoomEmptyAvatar,
-		RoomModal,
-		ImportFlow,
-	},
-	inject: {
-		notifierModule: { from: NOTIFIER_MODULE_KEY },
-	},
-	layout: "defaultVuetify",
 	data() {
 		return {
 			device: "mobile",
@@ -241,6 +245,11 @@ export default defineComponent({
 		if (this.hasRoomsBeingCopied) {
 			this.initCoursePolling(new Date());
 		}
+	},
+	mounted() {
+		document.title = buildPageTitle(
+			this.$t("pages.courseRooms.index.courses.active")
+		);
 	},
 	methods: {
 		getDeviceDims() {
@@ -418,11 +427,6 @@ export default defineComponent({
 				Math.min(nextTimeout, 30000)
 			);
 		},
-	},
-	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.courseRooms.index.courses.active")
-		);
 	},
 });
 </script>

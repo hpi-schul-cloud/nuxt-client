@@ -12,7 +12,6 @@
 				{{ $t("components.molecules.copyResult.title.partial") }}
 			</div>
 		</template>
-
 		<template #content>
 			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
 				<div class="d-flex flex-row pa-2 mb-4 rounded bg-orange-lighten-5">
@@ -46,7 +45,7 @@
 </template>
 
 <script>
-import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList";
+import CopyResultModalList from "./CopyResultModalList.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
@@ -73,6 +72,7 @@ export default {
 			default: "",
 		},
 	},
+	emits: ["copy-dialog-closed"],
 	data() {
 		return {
 			mdiInformation,

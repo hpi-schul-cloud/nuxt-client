@@ -10,7 +10,7 @@
 				{{ t("pages.administration.rooms.index.title") }}
 			</h1>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs class="tabs-max-width" grow v-model="activeTab">
+				<v-tabs v-model="activeTab" class="tabs-max-width" grow>
 					<v-tab value="current" data-testid="admin-course-current-tab">
 						<span>{{ t("pages.administration.common.label.active") }}</span>
 					</v-tab>
@@ -21,9 +21,9 @@
 			</div>
 		</template>
 		<v-data-table-server
+			v-model:items-per-page="pagination.limit"
 			:headers="headers"
 			:items="courses"
-			v-model:items-per-page="pagination.limit"
 			:items-length="pagination.total"
 			:page="page"
 			:items-per-page-text="footerProps.itemsPerPageText"
@@ -32,10 +32,30 @@
 			data-testid="admin-rooms-table"
 			class="elevation-1"
 			:no-data-text="t('common.nodata')"
-			@update:sortBy="onUpdateSortBy"
-			@update:itemsPerPage="onUpdateItemsPerPage"
+			@update:sort-by="onUpdateSortBy"
+			@update:items-per-page="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
+			<template #[`item.name`]="{ item }">
+				<span data-testid="admin-rooms-table-name">
+					{{ item.name }}
+				</span>
+			</template>
+			<template #[`item.syncedGroup`]="{ item }">
+				<span data-testid="admin-rooms-table-synced-group">
+					{{ item.syncedGroup }}
+				</span>
+			</template>
+			<template #[`item.classNames`]="{ item }">
+				<span data-testid="admin-rooms-table-class-names">
+					{{ item.classNames?.join(", ") || "" }}
+				</span>
+			</template>
+			<template #[`item.teacherNames`]="{ item }">
+				<span data-testid="admin-rooms-table-teacher-names">
+					{{ item.teacherNames?.join(", ") || "" }}
+				</span>
+			</template>
 			<template #[`item.actions`]="{ item }">
 				<template v-if="showRoomAction(item)">
 					<v-btn
@@ -56,9 +76,9 @@
 						data-testid="course-table-delete-btn"
 						variant="outlined"
 						size="small"
-						@click="onClickDeleteIcon(item)"
 						class="mx-1 px-1"
 						min-width="0"
+						@click="onClickDeleteIcon(item)"
 					>
 						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
 					</v-btn>
@@ -124,8 +144,8 @@
 			:course-id="selectedItem?.id"
 			:course-name="selectedItem?.name"
 			:course-teachers="selectedItem?.teacherNames"
-			@success="onConfirmSynchronizeCourse"
 			data-testid="start-sync-dialog"
+			@success="onConfirmSynchronizeCourse"
 		/>
 
 		<EndCourseSyncDialog

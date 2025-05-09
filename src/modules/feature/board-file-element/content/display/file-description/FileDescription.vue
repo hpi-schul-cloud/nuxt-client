@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<ContentElementBar
-			:hasGreyBackground="!isEditMode"
+			:has-grey-background="!isEditMode"
 			:icon="mdiFileDocumentOutline"
 		>
-			<template #title v-if="showTitle">
+			<template v-if="showTitle" #title>
 				<a v-if="src" :href="src" target="_blank" :aria-label="ariaLabel">
 					{{ name }}
 				</a>
@@ -13,7 +13,7 @@
 			<template v-if="showMenu" #menu>
 				<slot />
 			</template>
-			<template #subtitle v-if="caption && !isEditMode">
+			<template v-if="caption && !isEditMode" #subtitle>
 				{{ caption }}
 			</template>
 		</ContentElementBar>
@@ -28,11 +28,11 @@ import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	name: { type: String, required: true },
-	caption: { type: String, required: false },
+	caption: { type: String, required: false, default: undefined },
 	showTitle: { type: Boolean, required: true },
 	showMenu: { type: Boolean, required: true },
 	isEditMode: { type: Boolean, required: true },
-	src: { type: String, required: false },
+	src: { type: String, required: false, default: undefined },
 });
 
 const { t } = useI18n();

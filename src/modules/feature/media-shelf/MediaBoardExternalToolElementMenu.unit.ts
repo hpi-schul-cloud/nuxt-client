@@ -4,6 +4,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { KebabMenuAction } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 
 describe("MediaBoardExternalToolElementMenu", () => {
@@ -37,7 +38,8 @@ describe("MediaBoardExternalToolElementMenu", () => {
 
 			const menuItem = wrapper.findComponent(KebabMenuAction);
 
-			await menuItem.trigger("click");
+			menuItem.vm.$emit("click", Promise.resolve(true));
+			await nextTick();
 
 			expect(wrapper.emitted("delete:element")).toBeDefined();
 		});

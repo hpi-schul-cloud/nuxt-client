@@ -7,12 +7,13 @@
 				max-width="full"
 				hide-border
 				main-without-padding
+				is-flex-container
 			>
 				<template #header>
 					<BoardHeader
-						:boardId="board.id"
+						:board-id="board.id"
 						:title="board.title"
-						:isDraft="!isBoardVisible"
+						:is-draft="!isBoardVisible"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
@@ -46,17 +47,18 @@
 							forceFallback: true,
 							bubbleScroll: true,
 						}"
+						@start="onDragStart"
 						@end="onDropColumn"
 					>
 						<template #item="{ element, index }">
 							<BoardColumn
+								:key="element.id"
 								:data-column-id="element.id"
 								:column="element"
 								:index="index"
-								:key="element.id"
-								:columnCount="board.columns.length"
-								:class="{ 'my-0': isListBoard }"
-								:isListBoard="isListBoard"
+								:column-count="board.columns.length"
+								:class="{ 'my-0': isListBoard, 'user-select-none': isDragging }"
+								:is-list-board="isListBoard"
 								:data-testid="`board-column-${index}`"
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
@@ -73,8 +75,8 @@
 					<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
 						<BoardColumnGhost
 							v-if="hasCreateColumnPermission"
+							:is-list-board="isListBoard"
 							@create:column="onCreateColumn"
-							:isListBoard="isListBoard"
 						/>
 					</div>
 				</div>
@@ -172,6 +174,7 @@ const board = computed(() => boardStore.board);
 const { createPageInformation, contextType, roomId, resetPageInformation } =
 	useSharedBoardPageInformation();
 const { createApplicationError } = useApplicationError();
+const isDragging = ref(false);
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -223,7 +226,12 @@ const onDeleteColumn = async (columnId: string) => {
 	if (hasDeletePermission.value) boardStore.deleteColumnRequest({ columnId });
 };
 
+const onDragStart = () => {
+	isDragging.value = true;
+};
+
 const onDropColumn = async (columnPayload: SortableEvent) => {
+	isDragging.value = false;
 	if (!hasMovePermission.value) return;
 
 	const columnId = extractDataAttribute(columnPayload.item, "columnId");
@@ -443,31 +451,10 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 
 .column-board {
 	overflow-x: auto;
+	height: 100%;
 }
 
-@supports selector(::-webkit-scrollbar) {
-	.scrollbar::-webkit-scrollbar {
-		height: 6px;
-	}
-
-	.scrollbar::-webkit-scrollbar-track {
-		background: white;
-		border: none;
-	}
-
-	.scrollbar::-webkit-scrollbar-thumb {
-		background-color: rgba(var(--v-theme-on-surface), 0.6);
-		border-radius: 5px;
-	}
-
-	.scrollbar::-webkit-scrollbar-thumb:hover {
-		background: rgba(var(--v-theme-on-surface), 0.8);
-	}
-}
-
-@supports not selector(::-webkit-scrollbar) {
-	.scrollbar {
-		scrollbar-width: thin;
-	}
+.user-select-none {
+	user-select: none;
 }
 </style>

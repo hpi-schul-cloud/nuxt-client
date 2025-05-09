@@ -7,8 +7,8 @@
 		<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 		<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 		<KebabMenuActionDelete
-			@click="onDelete"
 			scope-language-key="components.cardElement.collaborativeTextEditorElement"
+			@click="onDelete"
 		/>
 	</BoardMenu>
 </template>

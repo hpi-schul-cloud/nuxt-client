@@ -54,6 +54,7 @@ export default {
 			required: true,
 		},
 	},
+	emits: ["update:selected"],
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};

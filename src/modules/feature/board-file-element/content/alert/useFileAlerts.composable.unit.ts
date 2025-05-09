@@ -1,8 +1,5 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
-import {
-	fileRecordResponseFactory,
-	mountComposable,
-} from "@@/tests/test-utils";
+import { fileRecordFactory, mountComposable } from "@@/tests/test-utils";
 import { ref } from "vue";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
 import { useFileAlerts } from "./useFileAlerts.composable";
@@ -26,9 +23,7 @@ describe("useFileAlerts", () => {
 
 	describe("when filerecord is defined", () => {
 		const setup = (previewStatus: PreviewStatus) => {
-			const fileRecord = ref(
-				fileRecordResponseFactory.build({ previewStatus })
-			);
+			const fileRecord = ref(fileRecordFactory.build({ previewStatus }));
 			const { alerts, addAlert } = mountComposable(() =>
 				useFileAlerts(fileRecord)
 			);
@@ -81,7 +76,7 @@ describe("useFileAlerts", () => {
 					PreviewStatus.AWAITING_SCAN_STATUS
 				);
 
-				fileRecord.value = fileRecordResponseFactory.build({
+				fileRecord.value = fileRecordFactory.build({
 					previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 				});
 

@@ -30,6 +30,7 @@ const props = defineProps({
 	},
 	selectedList: {
 		type: Array<string>,
+		default: undefined,
 	},
 });
 

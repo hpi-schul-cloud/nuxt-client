@@ -11,11 +11,13 @@ const {
 	createServerProxy,
 	createFileStorageProxy,
 	createH5pEditorProxy,
+	createH5pStaticFilesProxy,
 } = require("./config/webpack/dev-server-config");
 const {
 	isServer,
 	isFileStorage,
 	isH5pEditor,
+	isH5pStaticFiles,
 } = require("./src/router/server-route");
 const { isVueClient } = require("./src/router/vue-client-route");
 
@@ -28,6 +30,7 @@ const legacyClientProxy = createLegacyClientProxy();
 const serverProxy = createServerProxy();
 const fileStorageProxy = createFileStorageProxy();
 const h5pEditorProxy = createH5pEditorProxy();
+const h5pStaticFilesProxy = createH5pStaticFilesProxy();
 
 const app = express();
 
@@ -36,6 +39,8 @@ app.use((req, res, next) => {
 
 	if (isFileStorage(path)) {
 		fileStorageProxy(req, res, next);
+	} else if (isH5pStaticFiles(path)) {
+		h5pStaticFilesProxy(req, res, next);
 	} else if (isH5pEditor(path)) {
 		h5pEditorProxy(req, res, next);
 	} else if (isServer(path)) {

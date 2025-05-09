@@ -1,12 +1,12 @@
 <template>
-	<div :class="columnClasses" :key="renderKey" class="d-flex flex-column">
+	<div :key="renderKey" :class="columnClasses" class="d-flex flex-column">
 		<BoardColumnHeader
-			:columnId="column.id"
+			:column-id="column.id"
 			:title="column.title"
 			:index="index"
-			:isListBoard="isListBoard"
-			:isNotFirstColumn="isNotFirstColumn"
-			:isNotLastColumn="isNotLastColumn"
+			:is-list-board="isListBoard"
+			:is-not-first-column="isNotFirstColumn"
+			:is-not-last-column="isNotLastColumn"
 			@delete:column="onColumnDelete"
 			@move:column-down="onMoveColumnDown"
 			@move:column-left="onMoveColumnLeft"
@@ -45,7 +45,7 @@
 				@start="onDragStart"
 				@end="onDragEnd"
 			>
-				<template #item="{ element, index }">
+				<template #item="{ element, index: elementIndex }">
 					<CardHost
 						v-if="element"
 						:data-card-id="element.cardId"
@@ -56,10 +56,10 @@
 						}"
 						:card-id="element.cardId"
 						:height="element.height"
-						:row-index="index"
+						:row-index="elementIndex"
 						:column-index="reactiveIndex"
 						@move:card-keyboard="
-							onMoveCardKeyboard(index, element.cardId, $event)
+							onMoveCardKeyboard(elementIndex, element.cardId, $event)
 						"
 						@delete:card="onDeleteCard"
 						@reload:board="onReloadBoard"
@@ -68,8 +68,8 @@
 			</Sortable>
 			<BoardAddCardButton
 				v-if="showAddButton"
-				@add-card="onCreateCard"
 				:data-testid="`column-${index}-add-card-btn`"
+				@add-card="onCreateCard"
 			/>
 		</div>
 	</div>
@@ -129,6 +129,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const boardStore = useBoardStore();
 		const reactiveIndex = toRef(props, "index");
+
 		const colWidth = ref<number>(400);
 		const {
 			hasEditPermission,
@@ -355,11 +356,6 @@ export default defineComponent({
 }
 
 .multi-column-board-column {
-	/* The last subtracted height of 10x is the height of the scrollbar. */
-	height: calc(
-		100vh - var(--topbar-height) - var(--breadcrumbs-height) -
-			var(--board-header-height) - 10px
-	);
 	width: 400px;
 }
 
@@ -367,39 +363,27 @@ export default defineComponent({
 	min-height: 100%;
 }
 
-@supports selector(::-webkit-scrollbar) {
-	.scrollable::-webkit-scrollbar {
-		width: 6px;
-	}
-
-	.scrollable::-webkit-scrollbar-track {
-		background: white;
-		border: none;
-	}
-
-	.scrollable::-webkit-scrollbar-thumb {
-		background-color: transparent;
-		border-radius: 5px;
-	}
-
-	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb {
-		background-color: rgba(var(--v-theme-on-surface), 0.6);
-		border-radius: 5px;
-	}
-
-	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb:hover {
-		background: rgba(var(--v-theme-on-surface), 0.8);
-	}
-}
-
-@supports not selector(::-webkit-scrollbar) {
+@supports (scrollbar-color: auto) {
 	.scrollable {
-		scrollbar-width: thin;
 		scrollbar-color: transparent transparent;
 	}
 
-	.column-drag-handle:hover .scrollable {
+	.scrollable:hover {
 		scrollbar-color: initial;
+	}
+}
+
+@supports selector(::-webkit-scrollbar) {
+	.scrollable::-webkit-scrollbar-thumb {
+		background-color: transparent;
+	}
+
+	.scrollable:hover::-webkit-scrollbar-thumb {
+		background-color: rgba(var(--v-theme-on-surface), 0.6);
+	}
+
+	.scrollable::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(var(--v-theme-on-surface), 0.8);
 	}
 }
 </style>

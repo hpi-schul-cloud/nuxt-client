@@ -14,6 +14,13 @@ export const createTestingI18n = (options = {}) => {
 		messages: {
 			en: {} as MessageSchema,
 		},
+		numberFormats: {
+			en: {
+				fileSize: {
+					maximumFractionDigits: 2,
+				},
+			},
+		},
 		...options,
 	});
 	return i18n;

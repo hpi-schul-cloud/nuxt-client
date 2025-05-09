@@ -1,5 +1,8 @@
 <template>
-	<MediaBoardElementDisplay :element="elementDisplayData" :isUnavailable="true">
+	<MediaBoardElementDisplay
+		:element="elementDisplayData"
+		:is-unavailable="true"
+	>
 		<template #imageOverlay>
 			<div class="d-flex ga-1 flex-column pa-3">
 				<WarningChip data-testid="warning-chip-no-longer-available">

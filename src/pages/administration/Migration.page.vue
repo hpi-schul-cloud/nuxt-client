@@ -80,8 +80,8 @@
 						v-model:is-open="isCancelDialogOpen"
 						has-buttons
 						:buttons="['cancel', 'confirm']"
-						@dialog-confirmed="confirmCancelMigration()"
 						data-testid="cancel-migration-dialog"
+						@dialog-confirmed="confirmCancelMigration()"
 					>
 						<template #title>
 							{{
@@ -105,8 +105,8 @@
 						v-model:is-open="isClearAutoMatchesDialogOpen"
 						has-buttons
 						:buttons="['cancel', 'confirm']"
-						@dialog-confirmed="clearAllAutoMatches()"
 						data-testid="clear-auto-matches-dialog"
+						@dialog-confirmed="clearAllAutoMatches()"
 					>
 						<template #title>
 							{{
@@ -170,6 +170,7 @@
 										<div class="ml-14">
 											<VSwitch
 												v-show="isNbc && isMigrationNotStarted"
+												v-model="matchByPreferredName"
 												:label="
 													t(
 														'pages.administration.migration.matchByPreferredName'
@@ -178,7 +179,6 @@
 												:disabled="isLoading"
 												:true-value="true"
 												:false-value="false"
-												v-model="matchByPreferredName"
 												data-testid="migration-preferred-name-switch"
 											/>
 										</div>
@@ -245,15 +245,15 @@
 						<div class="d-flex justify-space-between pa-3">
 							<div>
 								<VBtn
-									@click="cancelMigration()"
 									data-testid="import-users-cancel-migration-btn"
+									@click="cancelMigration()"
 								>
 									{{ t("common.actions.cancel") }}
 								</VBtn>
 								<VBtn
 									class="ml-2"
-									@click="showClearAutoMatchesDialog()"
 									data-testid="import-users-clear-auto-matches-btn"
+									@click="showClearAutoMatchesDialog()"
 								>
 									{{ t("pages.administration.migration.clearAutoMatches") }}
 								</VBtn>
@@ -265,8 +265,8 @@
 								</VBtn>
 
 								<VBtn
-									class="ml-2"
 									id="migration_importUsers_next"
+									class="ml-2"
 									color="primary"
 									:disabled="!canPerformMigration"
 									@click="migrationStep = 3"
@@ -322,8 +322,8 @@
 									<div class="d-flex justify-space-between">
 										<div>
 											<VBtn
-												@click="cancelMigration()"
 												data-testid="summary-cancel-migration-btn"
+												@click="cancelMigration()"
 											>
 												{{ t("common.actions.cancel") }}
 											</VBtn>

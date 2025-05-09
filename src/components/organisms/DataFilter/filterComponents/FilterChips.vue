@@ -7,9 +7,9 @@
 				variant="text"
 				class="ma-1 filter-chip"
 				:close-icon="mdiCloseCircle"
+				data-testid="filter-chip"
 				@click:close="onChipClose(filterItem.item)"
 				@click="onClick(filterItem.item)"
-				data-testid="filter-chip"
 			>
 				{{ filterItem.title }}
 			</v-chip>

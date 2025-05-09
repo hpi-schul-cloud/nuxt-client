@@ -39,11 +39,6 @@ import { defineComponent } from "vue";
 import { useUid } from "@/utils/uid";
 
 export default defineComponent({
-	setup() {
-		const { uid } = useUid();
-
-		return { uid };
-	},
 	components: {
 		ModalFooter,
 	},
@@ -54,6 +49,12 @@ export default defineComponent({
 		backgroundClickDisabled: {
 			type: Boolean,
 		},
+	},
+	emits: ["update:active"],
+	setup() {
+		const { uid } = useUid();
+
+		return { uid };
 	},
 	computed: {
 		isDialogOpen: {

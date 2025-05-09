@@ -43,6 +43,7 @@ export default defineComponent({
 	props: {
 		alerts: { type: Array as PropType<FileAlert[]>, required: true },
 	},
+	emits: ["on-status-reload"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 

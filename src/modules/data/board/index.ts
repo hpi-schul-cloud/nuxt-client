@@ -1,5 +1,6 @@
 import { useBoardStore } from "./Board.store";
 import * as boardActions from "./boardActions/boardActions";
+import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFeatures } from "./BoardFeatures.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useBoardInactivity } from "./boardInactivity.composable";
@@ -15,11 +16,12 @@ export * from "./cardActions/cardActionPayload";
 export {
 	boardActions,
 	cardActions,
-	useBoardStore,
+	useBoardApi,
 	useBoardFeatures,
 	useBoardFocusHandler,
 	useBoardInactivity,
 	useBoardPermissions,
+	useBoardStore,
 	useCardStore,
 	useContentElementState,
 	useForceRender,

@@ -87,6 +87,7 @@ import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
 
 export default {
 	components: { TasksList, vCustomDoublePanels, vCustomEmptyState },
+	inject: ["tasksModule", "finishedTasksModule"],
 	props: {
 		emptyState: {
 			type: Object,
@@ -97,7 +98,6 @@ export default {
 			required: true,
 		},
 	},
-	inject: ["tasksModule", "finishedTasksModule"],
 	computed: {
 		status() {
 			return this.tasksModule.getStatus;

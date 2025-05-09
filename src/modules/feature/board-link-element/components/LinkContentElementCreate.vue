@@ -1,7 +1,7 @@
 <template>
 	<div data-testid="board-link-element-create" tabindex="-1">
 		<v-card-text>
-			<v-form @submit.prevent.stop="onSubmit" ref="form" validate-on="submit">
+			<v-form ref="form" validate-on="submit" @submit.prevent.stop="onSubmit">
 				<div class="d-flex flex-row">
 					<v-textarea
 						v-model="url"
@@ -11,12 +11,12 @@
 						:autofocus="true"
 						:auto-grow="true"
 						rows="1"
-						@keydown="onKeydown"
 						class="text"
+						@keydown="onKeydown"
 					/>
 
 					<div class="align-self-center pl-2">
-						<button type="submit" ref="submit">
+						<button ref="submit" type="submit">
 							<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
 							<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
 						</button>

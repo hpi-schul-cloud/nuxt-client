@@ -35,6 +35,9 @@ export default {
 		status: () => newsModule.getStatus,
 		createdNews: () => newsModule.getCreatedNews,
 	},
+	mounted() {
+		document.title = buildPageTitle(this.$t("pages.news.new.title"));
+	},
 	methods: {
 		getNewsTarget(query, schoolId) {
 			if (query.target && query.targetmodel) {
@@ -79,9 +82,6 @@ export default {
 		async onCancel() {
 			this.$router.go(-1);
 		},
-	},
-	mounted() {
-		document.title = buildPageTitle(this.$t("pages.news.new.title"));
 	},
 };
 </script>

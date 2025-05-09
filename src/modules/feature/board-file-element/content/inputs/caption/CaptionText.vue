@@ -1,9 +1,9 @@
 <template>
 	<v-textarea
+		v-model="modelValue"
 		data-testid="file-caption-input"
 		rows="1"
 		auto-grow
-		v-model="modelValue"
 		:label="$t('components.cardElement.fileElement.caption')"
 		:hide-details="true"
 	/>
@@ -17,7 +17,7 @@ export default defineComponent({
 	props: {
 		caption: {
 			type: String,
-			required: false,
+			default: undefined,
 		},
 		isEditMode: { type: Boolean, required: true },
 	},

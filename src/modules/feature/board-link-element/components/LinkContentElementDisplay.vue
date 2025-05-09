@@ -1,7 +1,7 @@
 <template>
 	<div
-		data-testid="board-link-element"
 		ref="linkContentElementDisplay"
+		data-testid="board-link-element"
 		tabindex="-1"
 	>
 		<ContentElementBar
@@ -9,7 +9,7 @@
 			:icon="mdiLink"
 			:has-row-style="!!imageUrl && isSmallOrLargerListBoard"
 		>
-			<template #display v-if="imageUrl">
+			<template v-if="imageUrl" #display>
 				<v-img
 					:src="imageUrl"
 					alt=""
@@ -23,7 +23,7 @@
 			<template #subtitle>
 				{{ hostname }}
 			</template>
-			<template #menu v-if="isEditMode">
+			<template v-if="isEditMode" #menu>
 				<slot />
 			</template>
 		</ContentElementBar>
@@ -45,11 +45,11 @@ const props = defineProps({
 	},
 	title: {
 		type: String,
-		require: true,
+		required: true,
 	},
 	imageUrl: {
 		type: String,
-		required: false,
+		default: undefined,
 	},
 	isEditMode: { type: Boolean, required: true },
 });

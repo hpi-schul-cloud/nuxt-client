@@ -1,10 +1,10 @@
 <template>
 	<v-card
+		ref="fileContentElement"
 		class="board-file-element-card mb-4"
 		data-testid="board-file-element"
 		elevation="0"
 		:variant="isOutlined ? 'outlined' : 'elevated'"
-		ref="fileContentElement"
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
 		@keydown.up.down="onKeydownArrow"
@@ -16,15 +16,15 @@
 			:alerts="alerts"
 			:is-edit-mode="isEditMode"
 			@fetch:file="onFetchFile"
-			@update:alternativeText="onUpdateAlternativeText"
+			@update:alternative-text="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
 			@add:alert="onAddAlert"
 		>
 			<BoardMenu
+				v-if="isEditMode"
 				:scope="BoardMenuScope.FILE_ELEMENT"
 				has-background
 				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
-				v-if="isEditMode"
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
@@ -37,10 +37,10 @@
 		</FileContent>
 		<FileUpload
 			v-else
-			:elementId="element.id"
-			:isEditMode="isEditMode"
+			:element-id="element.id"
+			:is-edit-mode="isEditMode"
+			:is-uploading="isUploading"
 			@upload:file="onUploadFile"
-			:isUploading="isUploading"
 		>
 			<BoardMenu :scope="BoardMenuScope.FILE_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
@@ -63,6 +63,7 @@ import {
 	isPreviewPossible,
 } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -80,17 +81,11 @@ import {
 } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
 export default defineComponent({
 	name: "FileContentElement",
-	computed: {
-		BoardMenuScope() {
-			return BoardMenuScope;
-		},
-	},
 	components: {
 		FileUpload,
 		FileContent,
@@ -122,9 +117,12 @@ export default defineComponent({
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
-		const { fetchFile, upload, getFileRecord } = useFileStorageApi();
+		const { fetchFiles, upload, getFileRecordsByParentId } =
+			useFileStorageApi();
 
-		const fileRecord = getFileRecord(element.value.id);
+		const fileRecord = computed(
+			() => getFileRecordsByParentId(element.value.id)[0]
+		);
 
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
 
@@ -169,12 +167,12 @@ export default defineComponent({
 
 		watch(element.value, async () => {
 			isLoadingFileRecord.value = true;
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+			await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 			isLoadingFileRecord.value = false;
 		});
 
 		onMounted(async () => {
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+			await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 			isLoadingFileRecord.value = false;
 		});
 
@@ -195,7 +193,7 @@ export default defineComponent({
 		};
 
 		const onFetchFile = async (): Promise<void> => {
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+			await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 		};
 
 		const onUpdateAlternativeText = (value: string) => {
@@ -239,6 +237,11 @@ export default defineComponent({
 			onMoveUp,
 			onMoveDown,
 		};
+	},
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
 	},
 });
 </script>

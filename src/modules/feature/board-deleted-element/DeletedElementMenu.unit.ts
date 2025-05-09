@@ -4,6 +4,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { KebabMenuActionDelete } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
 
 describe("DeletedElementMenu", () => {
@@ -39,7 +40,8 @@ describe("DeletedElementMenu", () => {
 
 			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
-			await menuItem.trigger("click");
+			menuItem.vm.$emit("click", Promise.resolve(true));
+			await nextTick();
 
 			expect(wrapper.emitted("delete:element")).toBeDefined();
 		});

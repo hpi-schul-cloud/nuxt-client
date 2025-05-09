@@ -1,5 +1,7 @@
-import { useRoute } from "vue-router";
-import { SidebarSingleItem } from "../types";
+import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { useSharedBoardPageInformation } from "@data-board";
+import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { storeToRefs } from "pinia";
 import {
 	ComputedRef,
 	MaybeRefOrGetter,
@@ -8,10 +10,8 @@ import {
 	toValue,
 	watchEffect,
 } from "vue";
-import { storeToRefs } from "pinia";
-import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { useSharedBoardPageInformation } from "@data-board";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { useRoute } from "vue-router";
+import { SidebarSingleItem } from "../types";
 
 export const useSidebarSelection = (
 	sidebarItem:
@@ -57,6 +57,22 @@ export const useSidebarSelection = (
 					contextType.value === BoardExternalReferenceType.Course) ||
 				(item.to === "/rooms" &&
 					contextType.value === BoardExternalReferenceType.Room)
+			);
+		}
+
+		// Folder
+		if (route.name === "folder-id") {
+			const itemLinksToCourseOverview = item.to === "/rooms/courses-overview";
+			const itemLinksToRoomsOverview = item.to === "/rooms";
+
+			const contextOfFolderIsCourse =
+				contextType.value === BoardExternalReferenceType.Course;
+			const contextOfFolderIsRoom =
+				contextType.value === BoardExternalReferenceType.Room;
+
+			return (
+				(itemLinksToCourseOverview && contextOfFolderIsCourse) ||
+				(itemLinksToRoomsOverview && contextOfFolderIsRoom)
 			);
 		}
 

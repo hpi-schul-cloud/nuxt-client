@@ -6,10 +6,10 @@
 		has-buttons
 		:buttons="['cancel', 'confirm']"
 		confirm-btn-title-key="common.actions.import"
-		@dialog-confirmed="onConfirm"
-		@dialog-canceled="onCancel"
 		data-testid="import-modal"
 		:confirm-btn-disabled="!isTitleValid"
+		@dialog-confirmed="onConfirm"
+		@dialog-canceled="onCancel"
 	>
 		<template #title>
 			<div ref="textTitle" class="text-h4 my-2">
@@ -20,8 +20,8 @@
 		<template #content>
 			<div>
 				<div
-					class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
 					v-if="showAlertInfo"
+					class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
 				>
 					<div class="mx-2">
 						<v-icon color="info" :icon="mdiInformation" />
@@ -30,8 +30,8 @@
 						{{ t("components.molecules.import.options.tableHeader.InfoText") }}
 						<ul class="ml-6">
 							<li
-								data-testid="import-options-personal-data-text"
 								v-if="showCourseInfo"
+								data-testid="import-options-personal-data-text"
 							>
 								{{
 									t(
@@ -81,8 +81,8 @@
 								}}
 							</li>
 							<li
-								data-testid="import-modal-coursefiles-info"
 								v-if="showCourseInfo"
+								data-testid="import-modal-coursefiles-info"
 							>
 								{{
 									t(

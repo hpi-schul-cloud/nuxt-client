@@ -1,26 +1,28 @@
 <template>
-	<div class="cursor-text">
-		<ck-editor
-			v-model="modelValue"
-			:autofocus="autofocus"
-			:placeholder="$t('components.cardElement.richTextElement.placeholder')"
-			type="balloon"
-			mode="simple"
-			@update:value="onUpdateValue"
-			@focus="onFocus"
-			@blur="onBlur"
-			@keyboard:delete="onDelete"
-		/>
-	</div>
+	<InlineEditor
+		v-model="modelValue"
+		:autofocus="autofocus"
+		:placeholder="$t('components.cardElement.richTextElement.placeholder')"
+		class="cursor-text"
+		:viewport-offset-top="offsetTop"
+		@update:value="onUpdateValue"
+		@focus="onFocus"
+		@blur="onBlur"
+		@keyboard:delete="onDelete"
+	/>
 </template>
+
 <script lang="ts">
-import { CkEditor } from "@feature-editor";
+import { InlineEditor } from "@feature-editor";
 import { useEventListener } from "@vueuse/core";
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { defineComponent, onMounted, ref, watch, computed } from "vue";
+import { useViewportOffsetTop } from "@ui-layout";
+import { injectStrict } from "@/utils/inject";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
-	components: { CkEditor },
+	components: { InlineEditor },
 	props: {
 		value: {
 			type: String,
@@ -30,10 +32,20 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
+		columnIndex: {
+			type: Number,
+			required: true,
+		},
 	},
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = ref("");
+
+		const isListLayout = injectStrict(BOARD_IS_LIST_LAYOUT);
+		const offsetTop = computed(
+			() =>
+				useViewportOffsetTop(props.columnIndex, isListLayout).offsetTop.value
+		);
 
 		onMounted(() => {
 			if (props.value !== undefined) {
@@ -67,12 +79,14 @@ export default defineComponent({
 
 		const onDelete = () => emit("delete:element");
 
-		return { modelValue, onFocus, onDelete, onBlur, onUpdateValue };
+		return {
+			modelValue,
+			offsetTop,
+			onFocus,
+			onDelete,
+			onBlur,
+			onUpdateValue,
+		};
 	},
 });
 </script>
-<style scoped>
-.cursor-text {
-	cursor: text;
-}
-</style>

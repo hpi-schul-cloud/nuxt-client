@@ -1,7 +1,7 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { BoardLayout } from "@/serverApi/v3/api";
 import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	envsFactory,
 	meResponseFactory,
@@ -17,8 +17,13 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { RoomMenu, useRoomAuthorization } from "@feature-room";
+import {
+	RoomVariant,
+	useRoomDetailsStore,
+	useRoomsState,
+	useRoomAuthorization,
+} from "@data-room";
+import { RoomMenu } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -34,6 +39,7 @@ import AuthModule from "@/store/auth";
 import { RoomBoardItem } from "@/types/room/Room";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
+import NotifierModule from "@/store/notifier";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -43,7 +49,7 @@ jest.mock("vue-router", () => ({
 
 jest.mock("@data-room/Rooms.state");
 
-jest.mock("@feature-room/roomAuthorization.composable");
+jest.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = jest.mocked(useRoomAuthorization);
 
 jest.mock("@ui-confirmation-dialog");
@@ -85,6 +91,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			canLeaveRoom: ref(true),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
+			canDuplicateRoom: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
@@ -113,6 +120,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			}),
 		});
 
+		const notifierModule = createModuleMocks(NotifierModule);
+
 		const room = roomFactory.build({});
 
 		const wrapper = mount(RoomDetailsPage, {
@@ -134,6 +143,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				stubs: { LeaveRoomProhibitedDialog: true },
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 		});

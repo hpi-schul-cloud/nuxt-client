@@ -58,9 +58,9 @@
 			<template #aboveParameters="{ selectedTemplate }">
 				<v-checkbox
 					v-if="selectedTemplate"
+					v-model="isDeactivated"
 					:label="$t('pages.tool.deactivate.label')"
 					data-testId="configuration-deactivate-checkbox"
-					v-model="isDeactivated"
 				/>
 			</template>
 		</external-tool-configurator>
@@ -109,6 +109,7 @@ export default defineComponent({
 	props: {
 		configId: {
 			type: String,
+			default: "",
 		},
 	},
 	setup(props) {

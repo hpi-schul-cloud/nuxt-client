@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
 
 export default {
 	components: {
@@ -43,6 +43,7 @@ export default {
 			default: "OK",
 		},
 	},
+	emits: ["update:active"],
 	methods: {
 		close() {
 			this.$emit("update:active", false);

@@ -97,6 +97,7 @@ const props = defineProps({
 	},
 	confirmBtnIcon: {
 		type: String,
+		default: undefined,
 	},
 	confirmBtnDisabled: {
 		type: Boolean,

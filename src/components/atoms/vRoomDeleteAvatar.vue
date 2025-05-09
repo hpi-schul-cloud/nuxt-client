@@ -10,14 +10,15 @@
 		<span class="d-flex justify-center ma-3">Delete !</span>
 	</div>
 </template>
+
 <script>
 export default {
+	emits: ["deleteAvatar"],
 	data() {
 		return {
 			hovered: false,
 		};
 	},
-
 	methods: {
 		deleteAvatar() {
 			this.$emit("deleteAvatar");

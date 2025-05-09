@@ -19,8 +19,8 @@
 			id="task-action-copy"
 			class="task-action"
 			data-testId="task-copy"
-			@click="onCopyTask"
 			role="menuitem"
+			@click="onCopyTask"
 		>
 			<v-list-item-title>
 				<v-icon :icon="mdiContentCopy" class="task-action-icon" />
@@ -32,8 +32,8 @@
 			id="task-action-share"
 			class="task-action"
 			data-testId="task-share"
-			@click="onShareTask"
 			role="menuitem"
+			@click="onShareTask"
 		>
 			<v-list-item-title>
 				<v-icon :icon="mdiShareVariantOutline" class="task-action-icon" />
@@ -45,8 +45,8 @@
 			id="task-action-revert"
 			class="task-action"
 			data-testId="task-revert"
-			@click="handleRevertPublished"
 			role="menuitem"
+			@click="handleRevertPublished"
 		>
 			<v-list-item-title>
 				<v-icon :icon="mdiUndoVariant" class="task-action-icon" />
@@ -57,8 +57,8 @@
 			id="task-action-finish"
 			class="task-action"
 			data-testId="task-finish"
-			@click="handleFinish"
 			role="menuitem"
+			@click="handleFinish"
 		>
 			<v-list-item-title>
 				<template v-if="taskIsFinished">
@@ -76,8 +76,8 @@
 			id="task-action-delete"
 			class="task-action"
 			data-testId="task-delete"
-			@click="() => (confirmDeleteDialogIsOpen = true)"
 			role="menuitem"
+			@click="() => (confirmDeleteDialogIsOpen = true)"
 		>
 			<v-list-item-title>
 				<v-icon :icon="mdiTrashCanOutline" class="task-action-icon" />
@@ -86,7 +86,7 @@
 		</v-list-item>
 	</KebabMenu>
 	<v-custom-dialog
-		v-model:isOpen="confirmDeleteDialogIsOpen"
+		v-model:is-open="confirmDeleteDialogIsOpen"
 		:size="375"
 		has-buttons
 		confirm-btn-title-key="common.actions.delete"
@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import vCustomDialog from "@/components/organisms/vCustomDialog";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { envConfigModule, finishedTasksModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import {
@@ -125,8 +125,8 @@ import { defineComponent } from "vue";
 import { KebabMenu } from "@ui-kebab-menu";
 
 export default defineComponent({
-	emits: ["toggledMenu", "focusChanged", "copyTask", "shareTask"],
 	components: { vCustomDialog, KebabMenu },
+	inject: ["tasksModule"],
 	props: {
 		taskId: {
 			type: String,
@@ -154,7 +154,7 @@ export default defineComponent({
 			validator: (role) => ["student", "teacher"].includes(role),
 		},
 	},
-	inject: ["tasksModule"],
+	emits: ["copy-task", "share-task", "toggled-menu", "focus-changed"],
 	data() {
 		return {
 			confirmDeleteDialogIsOpen: false,

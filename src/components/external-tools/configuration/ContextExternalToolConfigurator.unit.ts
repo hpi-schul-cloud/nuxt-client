@@ -6,7 +6,6 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	businessErrorFactory,
 	contextExternalToolFactory,
@@ -15,6 +14,7 @@ import {
 	contextExternalToolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -124,9 +124,9 @@ describe("CourseContextExternalToolConfigurator", () => {
 				});
 
 				const { wrapper } = getWrapper({
-					configId: "configId",
-					contextId: "contextId",
-					contextType: ToolContextType.Course,
+					configId: contextExternalTool.id,
+					contextId: contextExternalTool.contextId,
+					contextType: contextExternalTool.contextType,
 				});
 
 				useContextExternalToolStateMock.contextExternalTool.value =
@@ -139,23 +139,23 @@ describe("CourseContextExternalToolConfigurator", () => {
 			};
 
 			it("should load the template", async () => {
-				const { wrapper } = await setup();
+				const { wrapper, contextExternalTool } = await setup();
 
 				await wrapper.vm.fetchData();
 
 				expect(
 					useContextExternalToolConfigurationStateMock.fetchConfigurationForContextExternalTool
-				).toHaveBeenCalledWith("configId");
+				).toHaveBeenCalledWith(contextExternalTool.id);
 			});
 
 			it("should load the configuration", async () => {
-				const { wrapper } = await setup();
+				const { wrapper, contextExternalTool } = await setup();
 
 				await wrapper.vm.fetchData();
 
 				expect(
 					useContextExternalToolStateMock.fetchContextExternalTool
-				).toHaveBeenCalledWith("configId");
+				).toHaveBeenCalledWith(contextExternalTool.id);
 			});
 		});
 
@@ -210,6 +210,8 @@ describe("CourseContextExternalToolConfigurator", () => {
 				contextType: ToolContextType.Course,
 			});
 
+			await wrapper.vm.fetchData();
+
 			wrapper.findComponent(ExternalToolConfigurator).vm.$emit("cancel");
 			await nextTick();
 
@@ -219,21 +221,23 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 	describe("onSave", () => {
 		describe("when creating a new configuration", () => {
-			const setup = () => {
+			const setup = async () => {
 				const contextId = "contextId";
 				const contextType: ToolContextType = ToolContextType.Course;
 				const template = contextExternalToolConfigurationTemplateFactory.build({
 					parameters: toolParameterFactory.buildList(1),
 				});
 
+				useContextExternalToolConfigurationStateMock.availableTools.value = [
+					template,
+				];
+
 				const { wrapper } = getWrapper({
 					contextId,
 					contextType,
 				});
 
-				useContextExternalToolConfigurationStateMock.availableTools.value = [
-					template,
-				];
+				await wrapper.vm.fetchData();
 
 				return {
 					wrapper,
@@ -244,7 +248,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			};
 
 			it("should save the tool", async () => {
-				const { wrapper, template, contextId, contextType } = setup();
+				const { wrapper, template, contextId, contextType } = await setup();
 				const testValue = "test";
 
 				wrapper
@@ -262,7 +266,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 				).toHaveBeenCalledWith<[ContextExternalToolSave]>({
 					contextId,
 					contextType,
-					displayName: template.name,
+					displayName: undefined,
 					schoolToolId: template.schoolExternalToolId,
 					parameters: [
 						{
@@ -274,7 +278,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			});
 
 			it("should should emit the success event", async () => {
-				const { wrapper, template } = setup();
+				const { wrapper, template } = await setup();
 
 				wrapper
 					.findComponent(ExternalToolConfigurator)
@@ -286,41 +290,38 @@ describe("CourseContextExternalToolConfigurator", () => {
 		});
 
 		describe("when editing a configuration", () => {
-			const setup = () => {
+			const setup = async () => {
 				const template =
 					contextExternalToolConfigurationTemplateFactory.build();
-
-				const contextId = "contextId";
-				const contextType: ToolContextType = ToolContextType.Course;
-				const contextExternalToolId = "configId";
-
-				const { wrapper } = getWrapper({
-					contextId,
-					contextType,
-					configId: contextExternalToolId,
+				const contextExternalTool = contextExternalToolFactory.build({
+					displayName: "testName",
+					contextId: "contextId",
+					contextType: ToolContextType.Course,
 				});
 
 				useContextExternalToolConfigurationStateMock.availableTools.value = [
 					template,
 				];
+				useContextExternalToolStateMock.contextExternalTool.value =
+					contextExternalTool;
+
+				const { wrapper } = getWrapper({
+					contextId: contextExternalTool.contextId,
+					contextType: contextExternalTool.contextType,
+					configId: contextExternalTool.id,
+				});
+
+				await wrapper.vm.fetchData();
 
 				return {
 					wrapper,
 					template,
-					contextExternalToolId,
-					contextId,
-					contextType,
+					contextExternalTool,
 				};
 			};
 
 			it("should save the tool", async () => {
-				const {
-					wrapper,
-					template,
-					contextExternalToolId,
-					contextId,
-					contextType,
-				} = setup();
+				const { wrapper, template, contextExternalTool } = await setup();
 
 				wrapper
 					.findComponent(ExternalToolConfigurator)
@@ -330,11 +331,11 @@ describe("CourseContextExternalToolConfigurator", () => {
 				expect(
 					useContextExternalToolStateMock.updateContextExternalTool
 				).toHaveBeenCalledWith<[string, ContextExternalToolSave]>(
-					contextExternalToolId,
+					contextExternalTool.id,
 					{
-						contextId,
-						contextType,
-						displayName: template.name,
+						contextId: contextExternalTool.contextId,
+						contextType: contextExternalTool.contextType,
+						displayName: contextExternalTool.displayName,
 						parameters: [],
 						schoolToolId: template.schoolExternalToolId,
 					}
@@ -342,7 +343,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			});
 
 			it("should redirect back to context settings page when there is no error", async () => {
-				const { wrapper, template } = setup();
+				const { wrapper, template } = await setup();
 
 				wrapper
 					.findComponent(ExternalToolConfigurator)
@@ -354,11 +355,13 @@ describe("CourseContextExternalToolConfigurator", () => {
 		});
 
 		describe("when an error occurs during saving", () => {
-			const setup = () => {
+			const setup = async () => {
 				const { wrapper } = getWrapper({
 					contextId: "contextId",
 					contextType: ToolContextType.Course,
 				});
+
+				await wrapper.vm.fetchData();
 
 				useContextExternalToolStateMock.error.value =
 					businessErrorFactory.build();
@@ -369,7 +372,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			};
 
 			it("should not emit the success event", async () => {
-				const { wrapper } = setup();
+				const { wrapper } = await setup();
 
 				wrapper
 					.findComponent(ExternalToolConfigurator)

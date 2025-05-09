@@ -97,6 +97,7 @@ const props = defineProps({
 	icon: {
 		type: String as PropType<IconProps["icon"]>,
 		required: false,
+		default: undefined,
 	},
 });
 </script>

@@ -1,5 +1,5 @@
 <template>
-	<VList role="menu" ref="menuList">
+	<VList ref="menuList" role="menu">
 		<slot />
 	</VList>
 </template>

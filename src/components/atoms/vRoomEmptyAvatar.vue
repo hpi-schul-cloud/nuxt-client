@@ -35,6 +35,7 @@ export default {
 			required: false,
 		},
 	},
+	emits: ["dropEmptyAvatar"],
 	data() {
 		return {
 			hovered: false,

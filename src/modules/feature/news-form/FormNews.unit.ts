@@ -1,4 +1,4 @@
-import { DATETIME_FORMAT } from "@/plugins/datetime";
+import { DATETIME_FORMAT, fromInputDateTime } from "@/plugins/datetime";
 import { notifierModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
@@ -8,23 +8,48 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import dayjs from "dayjs";
+import { Dayjs } from "dayjs";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
 import FormNews from "./FormNews.vue";
+import { News } from "@/store/types/news";
 
-const testDate = dayjs("2022-07-05T09:00:00.000Z");
+const date = "2022-07-05";
+const time = "11:00";
+const testDate = fromInputDateTime(date, time) as unknown as Dayjs;
 
-type News = {
+type NewsPayload = {
 	title: string;
 	content: string;
-	displayAt?: string;
+	displayAt: string;
+	date: { date: string; time: string };
+};
+
+const testNewsPayload: NewsPayload = {
+	title: "Hi",
+	content: "lalaland",
+	displayAt: testDate.toISOString(),
+	date: {
+		date: "2022-07-05",
+		time: "11:00",
+	},
 };
 
 const testNews: News = {
-	title: "Hi",
-	content: "lalaland",
-	displayAt: `${testDate.toISOString()}`,
+	...testNewsPayload,
+	id: "",
+	createdAt: "",
+	creator: {
+		id: "",
+		firstName: "",
+		lastName: "",
+	},
+	school: {
+		id: "",
+		name: "",
+	},
+	targetId: "",
+	targetModel: "",
 };
 
 const $store = createStore({
@@ -57,7 +82,11 @@ describe("FormNews", () => {
 					$route,
 					$store,
 				},
-				stubs: ["base-input", "base-dialog"],
+				stubs: {
+					"base-input": true,
+					"base-dialog": true,
+					ClassicEditor: true,
+				},
 			},
 			props: {
 				news,
@@ -98,13 +127,11 @@ describe("FormNews", () => {
 		it("emits save event on submit with correct payload", async () => {
 			const { wrapper } = setup({ ...testNews });
 
-			wrapper.find("form").trigger("submit");
-			await wrapper.vm.$nextTick();
+			await wrapper.find("form").trigger("submit");
 
 			expect(wrapper.emitted()).toHaveProperty("save");
-
-			const saveEventPayload = wrapper.emitted("save")?.at(0)?.[0];
-			expect(saveEventPayload).toMatchObject(testNews);
+			expect(wrapper.emitted().save).toHaveLength(1);
+			expect(wrapper.emitted().save[0]).toEqual([testNewsPayload]);
 		});
 
 		it("shows validation error on empty title", async () => {
@@ -112,7 +139,7 @@ describe("FormNews", () => {
 
 			const { wrapper } = setup({ ...testNews, title: "" });
 
-			wrapper.find("form").trigger("submit");
+			await wrapper.find("form").trigger("submit");
 			expect(notifierMock).toHaveBeenCalled();
 			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
 		});
@@ -122,7 +149,7 @@ describe("FormNews", () => {
 
 			const { wrapper } = setup({ ...testNews, content: "" });
 
-			wrapper.find("form").trigger("submit");
+			await wrapper.find("form").trigger("submit");
 			expect(notifierMock).toHaveBeenCalled();
 			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
 		});
@@ -130,7 +157,7 @@ describe("FormNews", () => {
 		it("does not emit save event on empty title", async () => {
 			const { wrapper } = setup({ ...testNews, title: "" });
 
-			wrapper.find("form").trigger("submit");
+			await wrapper.find("form").trigger("submit");
 
 			const emitted = wrapper.emitted();
 			expect(emitted["save"]).toBeUndefined();
@@ -139,7 +166,7 @@ describe("FormNews", () => {
 		it("does not emit save event on empty content", async () => {
 			const { wrapper } = setup({ ...testNews, content: "" });
 
-			wrapper.find("form").trigger("submit");
+			await wrapper.find("form").trigger("submit");
 
 			const emitted = wrapper.emitted();
 			expect(emitted["save"]).toBeUndefined();

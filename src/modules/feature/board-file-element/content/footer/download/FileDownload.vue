@@ -1,41 +1,33 @@
 <template>
 	<v-btn
-		@click="onDownload"
 		:aria-label="$t('components.board.action.download')"
 		:disabled="!isDownloadAllowed"
-		data-testid="board-file-element-edit-menu-download"
+		:data-testid="testId"
 		class="float-right download-button"
 		icon
 		size="small"
 		variant="text"
+		@click="onDownload"
 	>
 		<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 	</v-btn>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
 import { mdiTrayArrowDown } from "@icons/material";
-import { defineComponent } from "vue";
 
-export default defineComponent({
-	name: "FileDownload",
-	props: {
-		fileName: { type: String, required: true },
-		isDownloadAllowed: { type: Boolean, required: true },
-		url: { type: String, required: true },
-	},
-	setup(props) {
-		const onDownload = async () => {
-			await downloadFile(props.url, props.fileName);
-		};
-
-		return {
-			onDownload,
-			mdiTrayArrowDown,
-		};
-	},
+const props = defineProps({
+	fileName: { type: String, required: true },
+	isDownloadAllowed: { type: Boolean, required: true },
+	url: { type: String, required: true },
 });
+
+const testId = "board-file-element-edit-menu-download";
+
+const onDownload = async () => {
+	downloadFile(props.url, props.fileName, testId);
+};
 </script>
 
 <style type="text/scss">

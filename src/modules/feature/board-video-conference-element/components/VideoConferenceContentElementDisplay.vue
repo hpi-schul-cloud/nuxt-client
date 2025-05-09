@@ -29,7 +29,7 @@
 			<template #title>
 				{{ title }}
 			</template>
-			<template #menu v-if="isEditMode">
+			<template v-if="isEditMode" #menu>
 				<slot />
 			</template>
 			<template #statusInfo>
@@ -63,6 +63,7 @@ const props = defineProps({
 	boardParentType: {
 		type: String as PropType<BoardContextType | undefined>,
 		required: false,
+		default: undefined,
 	},
 	canStart: {
 		type: Boolean,
@@ -83,7 +84,7 @@ const props = defineProps({
 	},
 	title: {
 		type: String,
-		require: true,
+		required: true,
 	},
 });
 

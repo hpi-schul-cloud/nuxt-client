@@ -1,10 +1,10 @@
 <template>
 	<InlineEditInteractionHandler
-		:isEditMode="isEditMode"
+		:is-edit-mode="isEditMode"
+		:tabindex="0"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 		@keydown.enter="onKeydownEnter"
-		:tabindex="0"
 	>
 		<div
 			data-testid="event-handle"

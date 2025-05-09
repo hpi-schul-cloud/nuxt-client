@@ -2,16 +2,16 @@
 	<div class="d-flex justify-space-between">
 		<v-btn
 			variant="flat"
-			@click="onRemoveFilter"
 			data-testid="remove-filter-button"
+			@click="onRemoveFilter"
 		>
 			{{ t("common.actions.remove") }}
 		</v-btn>
 		<div>
 			<v-btn
 				variant="flat"
-				@click="onCancel"
 				data-testid="cancel-filter-button"
+				@click="onCancel"
 			>
 				{{ t("common.actions.cancel") }}
 			</v-btn>
@@ -20,8 +20,8 @@
 				class="ml-2"
 				variant="flat"
 				color="primary"
-				@click="onAddFilter"
 				data-testid="add-filter-button"
+				@click="onAddFilter"
 			>
 				{{ t("common.actions.add") }}
 			</v-btn>

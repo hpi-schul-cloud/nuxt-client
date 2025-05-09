@@ -1,11 +1,11 @@
 <template>
 	<VCard
 		v-show="isTeacher"
+		ref="deletedElement"
 		class="mb-4"
 		data-testid="board-deleted-element"
 		elevation="0"
 		variant="outlined"
-		ref="deletedElement"
 		:ripple="false"
 	>
 		<ContentElementBar :has-grey-background="true" :icon="mdiPuzzleOutline">

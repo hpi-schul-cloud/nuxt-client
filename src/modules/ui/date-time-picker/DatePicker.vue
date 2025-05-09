@@ -4,18 +4,18 @@
 		transition="scale-transition"
 		:close-on-content-click="false"
 	>
-		<template #activator="{ props }">
+		<template #activator="{ props: menuProps }">
 			<v-text-field
-				v-bind="props"
+				ref="inputField"
+				v-bind="menuProps"
 				v-bind.attr="$attrs"
 				v-model="dateString"
-				ref="inputField"
+				v-date-input-mask
 				:append-inner-icon="mdiCalendar"
 				:label="label"
 				:aria-label="ariaLabel"
 				:placeholder="t('common.placeholder.dateformat')"
 				:error-messages="errorMessages"
-				v-date-input-mask
 				@update:model-value="validate"
 				@keydown.space="showDateDialog = true"
 				@keydown.prevent.enter="showDateDialog = true"
@@ -23,17 +23,19 @@
 				@keydown.tab="showDateDialog = false"
 			/>
 		</template>
-		<v-date-picker
-			v-model="dateObject"
-			:aria-expanded="showDateDialog"
-			:min="minDate"
-			:max="maxDate"
-			color="primary"
-			hide-header
-			show-adjacent-months
-			elevation="6"
-			@update:modelValue="closeAndEmit"
-		/>
+		<UseFocusTrap>
+			<v-date-picker
+				v-model="dateObject"
+				:aria-expanded="showDateDialog"
+				:min="minDate"
+				:max="maxDate"
+				color="primary"
+				hide-header
+				show-adjacent-months
+				elevation="6"
+				@update:model-value="closeAndEmit"
+			/>
+		</UseFocusTrap>
 	</v-menu>
 </template>
 
@@ -48,18 +50,19 @@ import { dateInputMask as vDateInputMask } from "@util-input-masks";
 import { isValidDateFormat } from "@util-validators";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { mdiCalendar } from "@icons/material";
+import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 
 defineOptions({
 	inheritAttrs: false,
 });
 
 const props = defineProps({
-	date: { type: String }, // ISO 8601 string
+	date: { type: String, default: undefined }, // ISO 8601 string
 	label: { type: String, default: "" },
 	ariaLabel: { type: String, default: "" },
 	required: { type: Boolean },
-	minDate: { type: String },
-	maxDate: { type: String },
+	minDate: { type: String, default: undefined },
+	maxDate: { type: String, default: undefined },
 	errors: { type: Array as PropType<ErrorObject[]>, default: () => [] },
 });
 const emit = defineEmits(["update:date", "error"]);

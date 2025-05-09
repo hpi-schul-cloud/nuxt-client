@@ -115,13 +115,6 @@ export const supportedTypes = [
 ];
 
 export default defineComponent({
-	setup() {
-		const { uid } = useUid();
-
-		return {
-			uid,
-		};
-	},
 	directives: {
 		focusOnMount: {
 			mounted(el, binding) {
@@ -150,6 +143,14 @@ export default defineComponent({
 		focus: { type: Boolean },
 		birthDate: { type: Boolean },
 		validationError: { type: String, default: "" },
+	},
+	emits: ["update:modelValue", "blur", "focus"],
+	setup() {
+		const { uid } = useUid();
+
+		return {
+			uid,
+		};
 	},
 	data() {
 		return {

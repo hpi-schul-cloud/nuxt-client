@@ -8,8 +8,8 @@
 		<transition-group :name="transition">
 			<Alert
 				v-for="(notification, index) in notifierItems"
-				:notification="notification"
 				:key="index"
+				:notification="notification"
 				@remove:notification="onRemoveNotification"
 			/>
 		</transition-group>
