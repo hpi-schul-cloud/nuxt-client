@@ -3,11 +3,7 @@
 		{{ t("pages.rooms.members.tab.invitations.infoText") }}
 	</p>
 	<div class="mb-12 mt-8">
-		<InvitationTable
-			:header-bottom="headerBottom"
-			:items="invitationTableData"
-			:show-select="true"
-		/>
+		<InvitationTable :header-bottom="headerBottom" :show-select="true" />
 	</div>
 </template>
 <script setup lang="ts">
@@ -19,9 +15,7 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const roomInvitationLinkStore = useRoomInvitationLinkStore();
-const { roomInvitationLinks, invitationTableData } = storeToRefs(
-	roomInvitationLinkStore
-);
+const { roomInvitationLinks } = storeToRefs(roomInvitationLinkStore);
 
 defineProps({
 	headerBottom: {

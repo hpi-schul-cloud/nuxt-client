@@ -1931,6 +1931,10 @@ export default {
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link expires on",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Entry to the room only possible after confirmation ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Remove selected invitations from the list?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"Remove {invitation} from the list?",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

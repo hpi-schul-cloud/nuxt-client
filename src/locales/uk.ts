@@ -1966,6 +1966,10 @@ export default {
 		"Термін дії посилання закінчується",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Вхід до кімнати можливий тільки після підтвердження ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Видалити вибрані запрошення зі списку?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"Видалити {invitation} зі списку?",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

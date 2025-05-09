@@ -1,5 +1,15 @@
 <template>
-	<DataTable :table-headers="tableHeaders" :show-select="true" v-bind="$attrs">
+	<DataTable
+		:items="invitationTableData"
+		:header-bottom="headerBottom"
+		:table-headers="tableHeaders"
+		:show-select="true"
+		:external-selected-ids="selectedIds"
+		@update:model-value="updateSelectedIds"
+	>
+		<template #[`action-menu-items`]>
+			<KebabMenuActionRemoveMember @click="onRemoveLinks(selectedIds)" />
+		</template>
 		<template #[`item.actions`]="{ item }">
 			<div class="d-flex align-center">
 				<v-btn
@@ -9,10 +19,14 @@
 				/>
 				<KebabMenu>
 					<KebabMenuActionEdit />
-					<KebabMenuActionShare :text="t('common.actions.share')" />
+					<KebabMenuActionShare
+						:text="t('common.actions.share')"
+						@click="openShareModal(item.id)"
+					/>
 					<KebabMenuActionDelete
 						scope-language-key="pages.rooms.invitationLinkStatus.title"
 						:name="item.title"
+						@click="onRemoveLinks([item.id])"
 					/>
 				</KebabMenu>
 			</div>
@@ -29,16 +43,64 @@ import {
 	KebabMenuActionShare,
 	KebabMenuActionEdit,
 	KebabMenuActionDelete,
+	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
 import { mdiShareVariantOutline } from "@icons/material";
 import { storeToRefs } from "pinia";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 
 const { t } = useI18n();
 
+defineProps({
+	headerBottom: {
+		type: Number,
+		default: 0,
+	},
+	showSelect: {
+		type: Boolean,
+		default: false,
+	},
+});
+
 const roomInvitationLinkStore = useRoomInvitationLinkStore();
-const { invitationStep, isInvitationDialogOpen, sharedUrl } = storeToRefs(
-	roomInvitationLinkStore
-);
+const {
+	invitationTableData,
+	invitationStep,
+	isInvitationDialogOpen,
+	sharedUrl,
+	selectedIds,
+} = storeToRefs(roomInvitationLinkStore);
+const { askConfirmation } = useConfirmationDialog();
+
+const updateSelectedIds = (ids: string[]) => {
+	selectedIds.value = ids;
+};
+
+const confirmRemoval = async (linkIds: string[]) => {
+	let message = t(
+		"pages.rooms.members.invitationTable.multipleDelete.confirmation"
+	);
+	if (linkIds.length === 1) {
+		const invitationTitle = invitationTableData.value.find(
+			(link) => link.title === linkIds[0]
+		)?.title;
+		message = t("pages.rooms.members.invitationTable.delete.confirmation", {
+			invitation: invitationTitle,
+		});
+	}
+	const shouldRemove = await askConfirmation({
+		message,
+		confirmActionLangKey: "common.actions.remove",
+	});
+	return shouldRemove;
+};
+
+const onRemoveLinks = async (linkIds: string[]) => {
+	const shouldRemove = await confirmRemoval(linkIds);
+	if (shouldRemove) {
+		await roomInvitationLinkStore.deleteLinks(linkIds);
+	}
+};
 
 const tableHeaders = [
 	{

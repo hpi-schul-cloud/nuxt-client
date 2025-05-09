@@ -1993,6 +1993,10 @@ export default {
 		"El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"La entrada a la habitación sólo es posible previa confirmación ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"¿Quitar las invitaciones seleccionadas de la lista?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"¿Quitar {invitation} de la lista?",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

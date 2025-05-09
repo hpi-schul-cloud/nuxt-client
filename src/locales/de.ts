@@ -1965,6 +1965,10 @@ export default {
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Betreten des Raums nur nach Bestätigung möglich ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Ausgewählte Einladungen aus der Liste entfernen?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"{invitation} aus der Liste entfernen?",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
