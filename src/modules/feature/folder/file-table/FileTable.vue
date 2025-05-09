@@ -56,11 +56,17 @@
 					</span>
 				</template>
 				<template #[`item.actions`]="{ item, index }">
-					<KebabMenu :data-testid="`kebab-menu-${index}`">
+					<KebabMenu
+						:data-testid="`kebab-menu-${index}`"
+						:aria-label="buildAriaLabel(item)"
+					>
 						<KebabMenuActionDownload
 							:disabled="!item.isSelectable"
 							:file-records="fileRecords"
 							:selected-ids="[item.id]"
+							:aria-label="
+								t('pages.folder.ariaLabels.menu.action.file.download')
+							"
 						/>
 					</KebabMenu>
 				</template>
@@ -146,6 +152,12 @@ const isFileSelectable = (fileRecord: FileRecord) => {
 	const result = isDownloadAllowed(fileRecord.securityCheckStatus);
 
 	return result;
+};
+
+const buildAriaLabel = (item: FileRecord): string => {
+	return t("pages.folder.ariaLabels.actionMenu", {
+		name: item.name,
+	});
 };
 </script>
 
