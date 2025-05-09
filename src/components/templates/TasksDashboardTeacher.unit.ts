@@ -1,4 +1,3 @@
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -20,6 +19,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
+import { EmptyState } from "@ui-empty-state";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -67,12 +67,6 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		getDraftTasksForTeacher: [],
 	};
 
-	const emptyState = {
-		title: "Lorem ipsum",
-		image: "<svg></svg>",
-		subtitle: undefined,
-	};
-
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
 		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
@@ -90,7 +84,6 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 	it("Should render tasks list component, with second panel expanded per default", () => {
 		const wrapper = mountComponent({
 			propsData: {
-				emptyState,
 				tabRoutes,
 			},
 		});
@@ -116,19 +109,17 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 
 		const wrapper = mountComponent({
 			propsData: {
-				emptyState,
 				tabRoutes,
 			},
 		});
 
-		const emptyStateComponent = wrapper.findComponent(vCustomEmptyState);
+		const emptyStateComponent = wrapper.findComponent(EmptyState);
 		expect(emptyStateComponent.exists()).toBe(true);
 	});
 
 	it("Should update store when tab changes", async () => {
 		const wrapper = mountComponent({
 			propsData: {
-				emptyState,
 				tabRoutes,
 			},
 		});
@@ -141,7 +132,6 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 	it("Should handle copy-task event", async () => {
 		const wrapper = mountComponent({
 			propsData: {
-				emptyState,
 				tabRoutes,
 			},
 		});

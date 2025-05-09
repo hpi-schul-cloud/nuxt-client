@@ -36,13 +36,14 @@
 						/>
 					</template>
 				</v-custom-double-panels>
-				<v-custom-empty-state
-					v-if="openTasksForTeacherIsEmpty"
-					:image="emptyState.image"
-					:title="emptyState.title"
-					:subtitle="emptyState.subtitle"
-					class="mt-16"
-				/>
+				<VContainer>
+					<EmptyState
+						v-if="openTasksForTeacherIsEmpty"
+						:title="t('pages.tasks.teacher.open.emptyState.title')"
+					>
+						<template #media> <TasksEmptyStateSvg /></template>
+					</EmptyState>
+				</VContainer>
 			</v-window-item>
 			<v-window-item :value="tabRoutes[1]" class="padding-bottom">
 				<tasks-list
@@ -51,12 +52,14 @@
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
 				/>
-				<v-custom-empty-state
-					v-if="draftsForTeacherIsEmpty"
-					:image="emptyState.image"
-					:title="emptyState.title"
-					class="mt-16"
-				/>
+				<VContainer>
+					<EmptyState
+						v-if="draftsForTeacherIsEmpty"
+						:title="t('pages.tasks.teacher.drafts.emptyState.title')"
+					>
+						<template #media> <TasksEmptyStateSvg /></template>
+					</EmptyState>
+				</VContainer>
 			</v-window-item>
 			<v-window-item :value="tabRoutes[2]" class="padding-bottom">
 				<tasks-list
@@ -67,12 +70,14 @@
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
 				/>
-				<v-custom-empty-state
-					v-if="finishedTasksIsEmpty"
-					:image="emptyState.image"
-					:title="emptyState.title"
-					class="mt-16"
-				/>
+				<VContainer>
+					<EmptyState
+						v-if="finishedTasksIsEmpty"
+						:title="t('pages.tasks.finished.emptyState.title')"
+					>
+						<template #media> <TasksEmptyStateSvg /></template>
+					</EmptyState>
+				</VContainer>
 			</v-window-item>
 		</v-window>
 		<share-modal type="tasks" />
@@ -81,7 +86,6 @@
 
 <script>
 import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import TasksList from "@/components/organisms/TasksList";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
@@ -91,19 +95,23 @@ import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
 import { useI18n } from "vue-i18n";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
+import { EmptyState } from "@ui-empty-state";
+import TasksEmptyStateSvg from "@/assets/img/empty-state/TasksEmptyStateSvg.vue";
 
 export default defineComponent({
-	components: { vCustomEmptyState, TasksList, vCustomDoublePanels, ShareModal },
+	components: {
+		TasksList,
+		vCustomDoublePanels,
+		ShareModal,
+		EmptyState,
+		TasksEmptyStateSvg,
+	},
 	inject: {
 		tasksModule: "tasksModule",
 		finishedTasksModule: "finishedTasksModule",
 		shareModule: { from: SHARE_MODULE_KEY },
 	},
 	props: {
-		emptyState: {
-			type: Object,
-			required: true,
-		},
 		tabRoutes: {
 			type: Array,
 			required: true,
@@ -119,6 +127,7 @@ export default defineComponent({
 
 		return {
 			copy,
+			t,
 		};
 	},
 	computed: {

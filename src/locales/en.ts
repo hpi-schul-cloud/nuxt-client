@@ -1716,8 +1716,6 @@ export default {
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Topic menu",
-	"pages.room.student.emptyState":
-		"Learning content such as topics or tasks appear here.",
 	"pages.room.taskCard.label.done": "Finish",
 	"pages.room.taskCard.label.due": "Due",
 	"pages.room.taskCard.label.edit": "Edit",
@@ -1730,13 +1728,10 @@ export default {
 	"pages.room.taskCard.student.label.submitted": "Completed",
 	"pages.room.taskCard.teacher.label.overdue": "Expired",
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
-	"pages.room.teacher.emptyState":
-		"Add and sort learning content to the course.",
+	"pages.room.learningContent.emptyState":
+		"There is currently no learning content in this course",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
-	"pages.rooms.allRooms.emptyState.title":
-		"Currently, there are no courses here.",
-	"pages.rooms.currentRooms.emptyState.title":
-		"Currently, there are no courses here.",
+	"pages.rooms.emptyState.title": "There are currently no courses",
 	"pages.rooms.fab.add.course": "New course",
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
 	"pages.rooms.fab.ariaLabel": "Create new course",
@@ -1792,7 +1787,7 @@ export default {
 	"pages.rooms.tools.deleteDialog.content":
 		"Are you sure you want to remove the tool '{itemName}' from the course?",
 	"pages.rooms.tools.deleteDialog.title": "Remove tool?",
-	"pages.rooms.tools.emptyState": "There are no tools in this course yet.",
+	"pages.rooms.tools.emptyState": "There are currently no tools in this course",
 	"pages.rooms.tools.incomplete": "Configuration incomplete",
 	"pages.rooms.tools.incompleteDialog.title": "Configuration incomplete",
 	"pages.rooms.tools.logo": "Tool-Logo",
@@ -1814,6 +1809,8 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Edit room",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
 	"pages.roomDetails.board.defaultName": "Room Board",
+	"pages.roomDetails.emptyState":
+		"There is currently no learning content in this room",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.infoAlert.welcome": "Welcome to the new Rooms!",
@@ -1924,9 +1921,8 @@ export default {
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",
-	"pages.tasks.emptyStateOnFilter.title": "There are no tasks",
 	"pages.tasks.finished.emptyState.title":
-		"You currently don't have any finished tasks.",
+		"There are currently no completed tasks",
 	"pages.tasks.labels.due": "Due",
 	"pages.tasks.labels.filter": "Filter by course",
 	"pages.tasks.labels.noCourse": "No course assigned",
@@ -1936,8 +1932,6 @@ export default {
 	"pages.tasks.labels.planned": "Planned",
 	"pages.tasks.student.completed.emptyState.title":
 		"You currently don't have any completed tasks.",
-	"pages.tasks.student.open.emptyState.subtitle":
-		"You have completed all tasks. Enjoy your free time!",
 	"pages.tasks.student.open.emptyState.title": "There are no open tasks.",
 	"pages.tasks.student.openTasks": "Open Tasks",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
@@ -1947,10 +1941,9 @@ export default {
 	"pages.tasks.subtitleNotGraded": "Not graded",
 	"pages.tasks.subtitleOpen": "Open Tasks",
 	"pages.tasks.subtitleWithDue": "With Due Date",
-	"pages.tasks.teacher.drafts.emptyState.title": "There are no drafts.",
-	"pages.tasks.teacher.open.emptyState.subtitle":
-		"You have completed all assignments. Enjoy your free time!",
-	"pages.tasks.teacher.open.emptyState.title": "There are no current tasks.",
+	"pages.tasks.teacher.drafts.emptyState.title":
+		"There are currently no drafts",
+	"pages.tasks.teacher.open.emptyState.title": "There are currently no tasks",
 	"pages.tasks.teacher.subtitleOverDue": "Expired Tasks",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"pages.tool.apiError.tool_param_duplicate":
@@ -2081,7 +2074,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
 	"feature.media-shelf.title": "Media shelf",
 	"feature.media-shelf.emptyState":
-		"There are currently no media available for use.",
+		"There are currently no media available for use",
 	"feature.media-shelf.createLine": "Add line",
 	"feature.media-shelf.line.title": "Line",
 	"feature.media-shelf.availableLine.title": "Available media",

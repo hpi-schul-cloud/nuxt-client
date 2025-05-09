@@ -1769,8 +1769,6 @@ export default {
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
-	"pages.room.student.emptyState":
-		"Aquí aparecen contenidos de aprendizaje como temas o tareas.",
 	"pages.room.taskCard.label.done": "Terminar",
 	"pages.room.taskCard.label.due": "Entrega",
 	"pages.room.taskCard.label.edit": "Editar",
@@ -1783,12 +1781,10 @@ export default {
 	"pages.room.taskCard.student.label.submitted": "Completado",
 	"pages.room.taskCard.teacher.label.overdue": "Expirado",
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
-	"pages.room.teacher.emptyState":
-		"Añada y ordene contenidos de aprendizaje al curso.",
+	"pages.room.learningContent.emptyState":
+		"Actualmente no hay contenidos de aprendizaje en este curso",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
-	"pages.rooms.allRooms.emptyState.title": "Actualmente no hay cursos aquí.",
-	"pages.rooms.currentRooms.emptyState.title":
-		"Actualmente no hay cursos aquí.",
+	"pages.rooms.emptyState.title": "Actualmente no hay cursos",
 	"pages.rooms.fab.add.course": "Nuevo curso",
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
@@ -1845,7 +1841,8 @@ export default {
 	"pages.rooms.tools.deleteDialog.content":
 		"¿Está seguro de que desea eliminar la herramienta '{itemName}' del curso?",
 	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",
-	"pages.rooms.tools.emptyState": "No hay herramientas en este curso todavía.",
+	"pages.rooms.tools.emptyState":
+		"Actualmente no hay herramientas en este curso",
 	"pages.rooms.tools.incomplete": "Configuración incompleta",
 	"pages.rooms.tools.incompleteDialog.title": "Configuración incomplet",
 	"pages.rooms.tools.logo": "Logotipo de la herramienta",
@@ -1867,6 +1864,8 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar sala",
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
+	"pages.roomDetails.emptyState":
+		"Actualmente no hay contenidos de aprendizaje en esta sala",
 	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
 	"pages.rooms.fab.title": "Crear sala",
 	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
@@ -1986,9 +1985,8 @@ export default {
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
-	"pages.tasks.emptyStateOnFilter.title": "No hay tareas.",
 	"pages.tasks.finished.emptyState.title":
-		"Actualmente no tiene ninguna tarea terminada.",
+		"Actualmente no hay tareas completadas",
 	"pages.tasks.labels.due": "Entrega",
 	"pages.tasks.labels.filter": "Filtrar por curso",
 	"pages.tasks.labels.noCourse": "Sin asignación de curso",
@@ -1998,8 +1996,6 @@ export default {
 	"pages.tasks.labels.planned": "Planificada",
 	"pages.tasks.student.completed.emptyState.title":
 		"Actualmente no tiene ninguna tarea enviada.",
-	"pages.tasks.student.open.emptyState.subtitle":
-		"Has hecho todas tus tareas. ¡Disfruta de tu tiempo libre!",
 	"pages.tasks.student.open.emptyState.title": "No hay tareas abiertas.",
 	"pages.tasks.student.openTasks": "Tareas abiertas",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
@@ -2009,11 +2005,9 @@ export default {
 	"pages.tasks.subtitleNotGraded": "Sin calificar",
 	"pages.tasks.subtitleOpen": "Tareas abiertas",
 	"pages.tasks.subtitleWithDue": "Con plazo",
-	"pages.tasks.teacher.drafts.emptyState.title": "No hay borradores.",
-	"pages.tasks.teacher.open.emptyState.subtitle":
-		"Has calificado todas las tareas. ¡Disfruta de tu tiempo libre!",
-	"pages.tasks.teacher.open.emptyState.title":
-		"No tienes ninguna tarea abierta.",
+	"pages.tasks.teacher.drafts.emptyState.title":
+		"Actualmente no hay borradores",
+	"pages.tasks.teacher.open.emptyState.title": "Actualmente no hay tareas",
 	"pages.tasks.teacher.subtitleOverDue": "Tareas expiradas",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"pages.tool.apiError.tool_param_duplicate":
@@ -2150,7 +2144,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
 	"feature.media-shelf.title": "Estante multimedia",
 	"feature.media-shelf.emptyState":
-		"Actualmente no hay medios disponibles para su uso.",
+		"Actualmente no hay medios disponibles para su uso",
 	"feature.media-shelf.createLine": "Añadir línea",
 	"feature.media-shelf.line.title": "Línea",
 	"feature.media-shelf.availableLine.title": "Medios disponibles",
