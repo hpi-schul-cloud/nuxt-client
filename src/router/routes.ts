@@ -355,12 +355,12 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
-		path: `/h5p/player/:id(${REGEX_ID})`,
+		path: `/h5p/player/:contentId(${REGEX_ID})`,
 		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
 		name: "h5pPlayer",
 	},
 	{
-		path: `/h5p/editor/:id(${REGEX_ID})?`,
+		path: `/h5p/editor/:contentId(${REGEX_ID})?`,
 		component: () => import("@/pages/h5p/H5PEditor.page.vue"),
 		name: "h5pEditor",
 		beforeEnter: validateQueryParameters({
