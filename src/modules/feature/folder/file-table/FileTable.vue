@@ -86,12 +86,13 @@ import { FileRecord } from "@/types/file/File";
 import { convertFileSize, isDownloadAllowed } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
-import { KebabMenu, KebabMenuActionDownload } from "@ui-kebab-menu";
+import { KebabMenu } from "@ui-kebab-menu";
 import { computed, defineProps, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
+import KebabMenuActionDownload from "./KebabMenuActionDownload.vue";
 
 const { t, n } = useI18n();
 
