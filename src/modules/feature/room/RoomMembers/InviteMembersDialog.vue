@@ -189,7 +189,9 @@ const emit = defineEmits<{
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { createLink } = useRoomInvitationLinkStore();
-const { invitationStep, sharedUrl } = storeToRefs(useRoomInvitationLinkStore());
+const { invitationStep, sharedUrl, editedLink } = storeToRefs(
+	useRoomInvitationLinkStore()
+);
 
 const { t } = useI18n();
 const { xs } = useDisplay();
@@ -271,6 +273,22 @@ watch(isOpen, (newVal) => {
 		deactivate();
 	}
 });
+
+watch(
+	() => editedLink.value,
+
+	(newVal) => {
+		if (newVal) {
+			formData.value.title = newVal.title;
+			formData.value.restrictedToCreatorSchool =
+				newVal.restrictedToCreatorSchool;
+			formData.value.isAlsoForStudents = newVal.isOnlyForTeachers;
+			formData.value.activeUntil = new Date(newVal.activeUntil!);
+			formData.value.requiresConfirmation = newVal.requiresConfirmation;
+		}
+	},
+	{ immediate: true }
+);
 
 const informationLink = computed(() =>
 	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL

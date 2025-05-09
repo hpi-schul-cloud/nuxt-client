@@ -53,7 +53,7 @@
 					@click="openShareModal(item.id)"
 				/>
 				<KebabMenu>
-					<KebabMenuActionEdit />
+					<KebabMenuActionEdit @click="onEdit(item.id)" />
 					<KebabMenuActionShare
 						:text="t('common.actions.share')"
 						@click="openShareModal(item.id)"
@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { DataTable } from "@ui-data-table";
-import { useRoomInvitationLinkStore } from "@data-room";
+import { RoomInvitationLink, useRoomInvitationLinkStore } from "@data-room";
 import {
 	KebabMenu,
 	KebabMenuActionShare,
@@ -99,9 +99,11 @@ defineProps({
 
 const roomInvitationLinkStore = useRoomInvitationLinkStore();
 const {
+	editedLink,
 	invitationTableData,
 	invitationStep,
 	isInvitationDialogOpen,
+	roomInvitationLinks,
 	sharedUrl,
 	selectedIds,
 } = storeToRefs(roomInvitationLinkStore);
@@ -135,6 +137,14 @@ const onRemoveLinks = async (linkIds: string[]) => {
 	if (shouldRemove) {
 		await roomInvitationLinkStore.deleteLinks(linkIds);
 	}
+};
+
+const onEdit = async (linkId: string) => {
+	editedLink.value = roomInvitationLinks.value.find(
+		(link) => link.id === linkId
+	) as RoomInvitationLink;
+	invitationStep.value = "prepare";
+	isInvitationDialogOpen.value = true;
 };
 
 const tableHeaders = [
@@ -176,9 +186,3 @@ const openShareModal = (itemId: string) => {
 	isInvitationDialogOpen.value = true;
 };
 </script>
-
-<!-- <style lang="scss" scoped>
-.text-medium-emphasis {
-	opacity: var(--v-medium-emphasis-opacity);
-}
-</style> -->

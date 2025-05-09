@@ -28,6 +28,7 @@ export const useRoomInvitationLinkStore = defineStore(
 		const invitationStep = ref<"prepare" | "share">("prepare");
 		const sharedUrl = ref<string>();
 		const selectedIds = ref<string[]>([]);
+		const editedLink = ref<RoomInvitationLink | null>(null);
 
 		const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 		const api = RoomInvitationLinkApiFactory(undefined, "/v3", $axios);
@@ -173,6 +174,7 @@ export const useRoomInvitationLinkStore = defineStore(
 			updateLink,
 			deleteLinks,
 			useLink,
+			editedLink,
 			invitationStep,
 			isInvitationDialogOpen,
 			isLoading,
