@@ -2,36 +2,13 @@
 	<p data-testid="info-text">
 		{{ t("pages.rooms.members.tab.invitations.infoText") }}
 	</p>
-	<div v-for="link of roomInvitationLinks" :key="link.id">
-		<div class="d-flex flex-row">
-			<div>
-				<pre>{{ link }}</pre>
-			</div>
-			<div>
-				<VBtn
-					data-testid="update-invitation-button"
-					@click="onClickUpdate(link.id)"
-					>update</VBtn
-				>
-				<VBtn
-					data-testid="copy-invitation-link-button"
-					@click="onClickCopyLink(link.id)"
-					>copy link</VBtn
-				>
-				<VBtn
-					data-testid="delete-invitation-button"
-					@click="onClickRemove(link.id)"
-					>delete</VBtn
-				>
-			</div>
-		</div>
+	<div class="mb-12 mt-8">
+		<InvitationTable :header-bottom="headerBottom" :show-select="true" />
 	</div>
-	<VBtn data-testid="create-invitation-button" @click="onClickAdd"
-		>add random link</VBtn
-	>
 </template>
 <script setup lang="ts">
 import { useRoomInvitationLinkStore } from "@data-room";
+import { InvitationTable } from "@feature-room";
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";

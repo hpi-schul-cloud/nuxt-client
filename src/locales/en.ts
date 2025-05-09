@@ -1878,6 +1878,18 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.members.tableHeader.actions": "Actions",
+	"pages.rooms.members.tableHeader.description": "Description",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"only valid within the school",
+	"pages.rooms.members.tableHeader.validForStudents": "valid for students",
+	"pages.rooms.members.tableHeader.expirationDate": "Expiration date",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Confirmation required",
+	"pages.rooms.members.tableHeader.status": "Status",
+	"pages.rooms.members.tables.common.yes": "yes",
+	"pages.rooms.members.tables.common.no": "no",
+	"pages.rooms.members.tables.common.expired": "expired",
+	"pages.rooms.members.tables.common.active": "active",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} receives the following permissions in the room “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1919,6 +1931,10 @@ export default {
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link expires on",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Entry to the room only possible after confirmation ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Remove selected invitations from the list?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"Remove {invitation} from the list?",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

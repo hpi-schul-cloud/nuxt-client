@@ -1909,6 +1909,18 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.members.tableHeader.actions": "Дії",
+	"pages.rooms.members.tableHeader.description": "Опис",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"діє тільки в межах школи",
+	"pages.rooms.members.tableHeader.validForStudents": "дійсна для студентів",
+	"pages.rooms.members.tableHeader.expirationDate": "Термін дії",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Потрібне підтвердження",
+	"pages.rooms.members.tableHeader.status": "Статус",
+	"pages.rooms.members.tables.common.yes": "Так",
+	"pages.rooms.members.tables.common.no": "ні",
+	"pages.rooms.members.tables.common.expired": "прострочений",
+	"pages.rooms.members.tables.common.active": "активний",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} надаються наступні повноваження в приміщенні “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1954,6 +1966,10 @@ export default {
 		"Термін дії посилання закінчується",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Вхід до кімнати можливий тільки після підтвердження ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Видалити вибрані запрошення зі списку?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"Видалити {invitation} зі списку?",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

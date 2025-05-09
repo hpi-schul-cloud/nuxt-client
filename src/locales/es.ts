@@ -1937,6 +1937,18 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Autorizaciones de sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",
+	"pages.rooms.members.tableHeader.description": "Descripción",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"sólo válido dentro de la escuela",
+	"pages.rooms.members.tableHeader.validForStudents": "válido para estudiantes",
+	"pages.rooms.members.tableHeader.expirationDate": "Fecha de caducidad",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Confirmación obligatoria",
+	"pages.rooms.members.tableHeader.status": "Estado",
+	"pages.rooms.members.tables.common.yes": "sí",
+	"pages.rooms.members.tables.common.no": "no",
+	"pages.rooms.members.tables.common.expired": "caducado",
+	"pages.rooms.members.tables.common.active": "activo",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} recibe las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1981,6 +1993,10 @@ export default {
 		"El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"La entrada a la habitación sólo es posible previa confirmación ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"¿Quitar las invitaciones seleccionadas de la lista?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"¿Quitar {invitation} de la lista?",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
