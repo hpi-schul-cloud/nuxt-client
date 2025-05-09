@@ -14,11 +14,10 @@
 			/>
 		</div>
 		<div v-else class="w-100 text-center">
-			<img
-				:src="CrossedHandsBirdSvg"
-				role="presentation"
-				alt="t('pages.rooms.invitationLinkStatus.bird.alt')"
-				data-testid="bird-image"
+			<CrossedHandsSvg
+				:svg-width="$vuetify.display.xs ? 200 : undefined"
+				fill="rgba(var(--v-theme-primary))"
+				data-testid="img-crossed-hands"
 			/>
 			<div class="text-h2" data-testid="status-message">
 				{{ infoMessage }}
@@ -30,7 +29,7 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import CrossedHandsBirdSvg from "@/assets/img/crossedHands.svg";
+import CrossedHandsSvg from "@/assets/img/CrossedHandsSvg.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
