@@ -52,6 +52,7 @@
 		:show-select="showSelect"
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
+		@update:model-value="$emit('update:modelValue', selectedIds)"
 	>
 		<template
 			#[`header.data-table-select`]="{ someSelected, allSelected, selectAll }"
@@ -91,7 +92,7 @@
 
 <script setup lang="ts">
 import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
-import { computed, PropType, ref } from "vue";
+import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify/lib/framework.mjs";
 import BatchActionMenu from "./BatchActionMenu.vue";
@@ -128,7 +129,15 @@ const props = defineProps({
 		type: Number,
 		default: 0,
 	},
+	externalSelectedIds: {
+		type: Array as PropType<string[] | undefined>,
+		default: undefined,
+	},
 });
+
+defineEmits<{
+	(e: "update:modelValue", selectedIds: string[]): void;
+}>();
 
 const { t } = useI18n();
 const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
@@ -144,6 +153,14 @@ const onResetSelectedMembers = () => {
 const stickyStyle = computed(() => ({
 	top: `${props.headerBottom}px`,
 }));
+
+watch(
+	() => props.externalSelectedIds,
+	(newValue) => {
+		if (newValue) selectedIds.value = newValue;
+	},
+	{ immediate: true }
+);
 </script>
 
 <style lang="scss" scoped>
