@@ -15,7 +15,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { useSchoolYearChange } from "@data-school";
+import { useSharedSchoolYearChange } from "@data-school";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, reactive } from "vue";
@@ -35,17 +35,17 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 jest.mock("@data-school/SchoolYearChange.composable");
 
 describe("SchoolSettingsPage", () => {
-	let useSchoolYearChangeApiMock: DeepMocked<
-		ReturnType<typeof useSchoolYearChange>
+	let useSharedSchoolYearChangeApiMock: DeepMocked<
+		ReturnType<typeof useSharedSchoolYearChange>
 	>;
 
 	beforeEach(() => {
-		useSchoolYearChangeApiMock =
-			createMock<ReturnType<typeof useSchoolYearChange>>();
+		useSharedSchoolYearChangeApiMock =
+			createMock<ReturnType<typeof useSharedSchoolYearChange>>();
 
 		jest
-			.mocked(useSchoolYearChange)
-			.mockReturnValue(useSchoolYearChangeApiMock);
+			.mocked(useSharedSchoolYearChange)
+			.mockReturnValue(useSharedSchoolYearChangeApiMock);
 	});
 
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
@@ -125,7 +125,7 @@ describe("SchoolSettingsPage", () => {
 			const { wrapper } = getWrapper();
 
 			expect(
-				useSchoolYearChangeApiMock.fetchSchoolYearStatus
+				useSharedSchoolYearChangeApiMock.fetchSchoolYearStatus
 			).toHaveBeenCalledWith(mockSchool.id);
 		});
 	});
@@ -191,7 +191,7 @@ describe("SchoolSettingsPage", () => {
 	describe("school year change", () => {
 		describe("when school has an active ldap", () => {
 			const setup = () => {
-				useSchoolYearChangeApiMock.maintenanceStatus.value =
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build({ schoolUsesLdap: true });
 
 				const { wrapper } = getWrapper();
@@ -212,7 +212,7 @@ describe("SchoolSettingsPage", () => {
 
 		describe("when school does not have an active ldap", () => {
 			const setup = () => {
-				useSchoolYearChangeApiMock.maintenanceStatus.value =
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build({ schoolUsesLdap: false });
 
 				const { wrapper } = getWrapper();

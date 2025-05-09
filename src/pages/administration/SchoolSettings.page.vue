@@ -103,9 +103,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<school-year-change-section
-							:maintenanceStatus="maintenanceStatus"
-						/>
+						<school-year-change-section />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -192,7 +190,7 @@ import {
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useSchoolYearChange } from "@data-school";
+import { useSharedSchoolYearChange } from "@data-school";
 import { mdiAlertCircle, mdiMinus, mdiPlus } from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import {
@@ -230,7 +228,8 @@ export default defineComponent({
 		);
 		const pageTitle = buildPageTitle(headline.value);
 		useTitle(pageTitle);
-		const { fetchSchoolYearStatus, maintenanceStatus } = useSchoolYearChange();
+		const { fetchSchoolYearStatus, maintenanceStatus } =
+			useSharedSchoolYearChange();
 
 		const breadcrumbs: Ref<Breadcrumb[]> = ref([
 			{
@@ -319,7 +318,6 @@ export default defineComponent({
 			isFeatureSchoolTermsOfUseEnabled,
 			instituteTitle,
 			schoolUsesLdap,
-			maintenanceStatus,
 			mdiAlertCircle,
 			mdiPlus,
 			mdiMinus,

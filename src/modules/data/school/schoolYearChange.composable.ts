@@ -1,5 +1,6 @@
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { createSharedComposable } from "@vueuse/core";
 import { ref, Ref } from "vue";
 import { useSchoolApi } from "./schoolApi.composable";
 import { MaintenanceStatus } from "./types";
@@ -68,3 +69,6 @@ export const useSchoolYearChange = () => {
 		maintenanceStatus,
 	};
 };
+
+export const useSharedSchoolYearChange =
+	createSharedComposable(useSchoolYearChange);

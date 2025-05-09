@@ -8,6 +8,7 @@ import {
 import {
 	axiosErrorFactory,
 	envsFactory,
+	maintenanceStatusFactory,
 	meResponseFactory,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -15,9 +16,11 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { useSchoolYearChange } from "@data-school";
+import { useSharedSchoolYearChange } from "@data-school";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
+import { ref } from "vue";
+import { VBtn } from "vuetify/lib/components/index.mjs";
 import AuthModule from "../../store/auth";
 import EnvConfigModule from "../../store/env-config";
 import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
@@ -25,8 +28,8 @@ import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
 jest.mock("@data-school");
 
 describe("SchoolYearChangeSection", () => {
-	let useSchoolYearChangeApiMock: DeepMocked<
-		ReturnType<typeof useSchoolYearChange>
+	let useSharedSchoolYearChangeApiMock: DeepMocked<
+		ReturnType<typeof useSharedSchoolYearChange>
 	>;
 
 	const notifierModule: jest.Mocked<NotifierModule> =
@@ -60,43 +63,27 @@ describe("SchoolYearChangeSection", () => {
 	};
 
 	beforeEach(() => {
-		useSchoolYearChangeApiMock =
-			createMock<ReturnType<typeof useSchoolYearChange>>();
+		useSharedSchoolYearChangeApiMock = createMock<
+			ReturnType<typeof useSharedSchoolYearChange>
+		>({ maintenanceStatus: ref() });
 
 		jest
-			.mocked(useSchoolYearChange)
-			.mockReturnValue(useSchoolYearChangeApiMock);
+			.mocked(useSharedSchoolYearChange)
+			.mockReturnValue(useSharedSchoolYearChangeApiMock);
 	});
 
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
 
-	describe("onMounted", () => {
+	describe("when section is rendered", () => {
 		describe("when no button is pushed and it is no school year change period", () => {
 			const setup = () => {
 				jest.useFakeTimers();
-				jest.setSystemTime(new Date(2025, 1, 25));
+				jest.setSystemTime(new Date(1999, 0, 1));
 
-				useSchoolYearChangeApiMock.maintenanceStatus.value = {
-					currentYear: {
-						id: "5ebd6dc14a431f75ec9a3e7a",
-						name: "2024/25",
-						startDate: new Date(2024, 8, 1),
-						endDate: new Date(2025, 7, 31),
-					},
-					nextYear: {
-						id: "5ebd6dc14a431f75ec9a3e7b",
-						name: "2025/26",
-						startDate: new Date(2025, 8, 1),
-						endDate: new Date(2026, 7, 31),
-					},
-					schoolUsesLdap: true,
-					maintenance: {
-						active: false,
-					},
-				};
-
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
+					maintenanceStatusFactory.build();
 				const { wrapper } = getWrapper();
 
 				return {
@@ -107,7 +94,7 @@ describe("SchoolYearChangeSection", () => {
 			it("should show all buttons disabled", () => {
 				const { wrapper } = setup();
 
-				const transferStartButton = wrapper.find(
+				const transferStartButton = wrapper.findComponent<typeof VBtn>(
 					'[data-testid="start-transfer-button"]'
 				);
 				const transferStartedButton = wrapper.find(
@@ -120,32 +107,20 @@ describe("SchoolYearChangeSection", () => {
 
 				expect(transferStartButton.exists()).toBeTruthy();
 				expect(transferStartButton.isVisible).toBeTruthy();
+				expect(transferStartButton.props().disabled).toBeTruthy();
+				//expect(
+				//	transferStartButton.classes().includes("v-btn--disabled")
+				//).toBeTruthy();
 			});
 		});
 
 		describe("when no button is pushed and it is school year change period", () => {
 			const setup = () => {
 				jest.useFakeTimers();
-				jest.setSystemTime(new Date(2025, 7, 25));
+				jest.setSystemTime(new Date(2000, 11, 31));
 
-				useSchoolYearChangeApiMock.maintenanceStatus.value = {
-					currentYear: {
-						id: "5ebd6dc14a431f75ec9a3e7a",
-						name: "2024/25",
-						startDate: new Date(2024, 8, 1),
-						endDate: new Date(2025, 7, 31),
-					},
-					nextYear: {
-						id: "5ebd6dc14a431f75ec9a3e7b",
-						name: "2025/26",
-						startDate: new Date(2025, 8, 1),
-						endDate: new Date(2026, 7, 31),
-					},
-					schoolUsesLdap: true,
-					maintenance: {
-						active: false,
-					},
-				};
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
+					maintenanceStatusFactory.build();
 				const { wrapper } = getWrapper();
 
 				return {
@@ -153,10 +128,10 @@ describe("SchoolYearChangeSection", () => {
 				};
 			};
 
-			it("should show all buttons disabled", () => {
+			it("should show transferStartButton button enabled", () => {
 				const { wrapper } = setup();
 
-				const transferStartButton = wrapper.find(
+				const transferStartButton = wrapper.findComponent<typeof VBtn>(
 					'[data-testid="start-transfer-button"]'
 				);
 				const transferStartedButton = wrapper.find(
@@ -169,7 +144,7 @@ describe("SchoolYearChangeSection", () => {
 
 				expect(transferStartButton.exists()).toBeTruthy();
 				expect(transferStartButton.isVisible).toBeTruthy();
-				expect(transferStartButton.get("disabled"));
+				expect(transferStartButton.props().disabled).toBeFalsy();
 			});
 		});
 	});
@@ -191,7 +166,7 @@ describe("SchoolYearChangeSection", () => {
 				await button.trigger("click");
 
 				expect(
-					useSchoolYearChangeApiMock.setMaintenanceMode
+					useSharedSchoolYearChangeApiMock.setMaintenanceMode
 				).toHaveBeenCalledWith("schoolId", true);
 			});
 
@@ -234,7 +209,7 @@ describe("SchoolYearChangeSection", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper();
 
-				useSchoolYearChangeApiMock.setMaintenanceMode.mockRejectedValueOnce(
+				useSharedSchoolYearChangeApiMock.setMaintenanceMode.mockRejectedValueOnce(
 					axiosErrorFactory
 						.withStatusCode(HttpStatusCode.RequestTimeout)
 						.build()

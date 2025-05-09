@@ -40,16 +40,17 @@
 				class="d-flex mt-8"
 				data-testid="school-year-change-section-start-transfer"
 			>
+				fix
 				<VSpacer />
 				<VBtn
-					v-if="!schoolYearStatus?.maintenance.active"
+					v-if="!maintenanceStatus?.maintenance.active"
 					class="btn"
 					:disabled="schoolYearMode !== SchoolYearModeEnum.STANDBY"
 					color="primary"
 					variant="flat"
 					data-testid="start-transfer-button"
 					:loading="isLoading"
-					@click="startTransfer()"
+					@click="startTransfer"
 				>
 					{{
 						t(
@@ -58,13 +59,12 @@
 					}}
 				</VBtn>
 				<VBtn
-					v-if="schoolYearStatus?.maintenance.active"
+					v-if="maintenanceStatus?.maintenance.active"
 					class="btn"
-					:disabled="!schoolYearChangeEnabled"
+					:disabled="true"
 					color="success"
 					variant="flat"
 					data-testid="started-transfer-button"
-					:loading="isLoading"
 					:readonly="true"
 				>
 					{{
@@ -106,9 +106,7 @@
 					href="/administration/startldapschoolyear"
 					target="_blank"
 					:disabled="
-						schoolYearMode !== SchoolYearModeEnum.ACTIVE ||
-						!schoolYearStatus?.maintenance.active ||
-						isCheckboxConfirmed
+						!maintenanceStatus?.maintenance.active || isCheckboxConfirmed
 					"
 					color="primary"
 					variant="outlined"
@@ -213,16 +211,14 @@
 <script setup lang="ts">
 import { MeSchoolResponse } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
+import NotifierModule from "@/store/notifier";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
-import {
-	MaintenanceStatus,
-	SchoolYearModeEnum,
-	useSchoolYearChange,
-} from "@data-school";
+import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";
 import {
 	mdiNumeric1Circle,
 	mdiNumeric2Circle,
@@ -230,50 +226,23 @@ import {
 } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
 import { useErrorNotification } from "@util-error-notification";
-import { computed, ComputedRef, ref } from "vue";
+import { computed, ComputedRef, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { Ref } from "vue/dist/vue";
 import EnvConfigModule from "../../store/env-config";
 import VCustomDialog from "../organisms/vCustomDialog.vue";
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
-const props = defineProps<{
-	maintenanceStatus?: {
-		currentYear: {
-			id: string;
-			name: string;
-			startDate: Date;
-			endDate: Date;
-		};
-		nextYear: {
-			id: string;
-			name: string;
-			startDate: Date;
-			endDate: Date;
-		};
-		schoolUsesLdap: boolean;
-		maintenance: {
-			active: boolean;
-			startDate?: Date;
-		};
-	};
-}>();
-
-const { setMaintenanceMode, error } = useSchoolYearChange();
+const { setMaintenanceMode, error, maintenanceStatus } =
+	useSharedSchoolYearChange();
 
 useErrorNotification(error);
 
 const school: ComputedRef<MeSchoolResponse | undefined> = computed(() => {
 	return authModule.getSchool;
 });
-
-const schoolYearStatus: ComputedRef<MaintenanceStatus | undefined> = computed(
-	() => {
-		return props.maintenanceStatus;
-	}
-);
 
 const isCheckboxEnabled: Ref<boolean> = ref(false);
 
@@ -288,15 +257,15 @@ const schoolYearMode: ComputedRef<string> = computed(() => {
 
 	let schoolMaintenanceMode = "idle";
 
-	if (schoolYearStatus.value) {
+	if (maintenanceStatus.value) {
 		const maintenanceModeStarts = new Date(
-			schoolYearStatus.value?.currentYear.endDate
+			maintenanceStatus.value?.currentYear.endDate
 		);
 
 		const twoWeeksFromStart = new Date(maintenanceModeStarts.valueOf());
 		twoWeeksFromStart.setDate(twoWeeksFromStart.getDate() - 14);
 
-		if (schoolYearStatus.value.maintenance.active) {
+		if (maintenanceStatus.value.maintenance.active) {
 			schoolMaintenanceMode = "active";
 		} else if (maintenanceModeStarts && twoWeeksFromStart < currentTime) {
 			schoolMaintenanceMode = "standby";
@@ -308,13 +277,16 @@ const schoolYearMode: ComputedRef<string> = computed(() => {
 	return schoolMaintenanceMode;
 });
 
-const schoolYearChangeEnabled: ComputedRef<boolean> = computed(() => {
-	return schoolYearMode.value === SchoolYearModeEnum.STANDBY;
-});
-
 const finishTransfer = async () => {
 	if (school.value) {
-		await setMaintenanceMode(school.value?.id, false);
+		await setMaintenanceMode(school.value.id, false);
+
+		notifierModule.show({
+			text: t(
+				"components.administration.schoolYearChangeSection.notification.success"
+			),
+			status: "success",
+		});
 	}
 };
 
@@ -325,7 +297,9 @@ const startTransfer = () => {
 };
 
 const confirmSchoolYearChange = async () => {
-	await setMaintenanceMode(school.value!.id, true);
+	if (school.value) {
+		await setMaintenanceMode(school.value.id, true);
+	}
 };
 
 const enableCheckbox = () => {
