@@ -59,7 +59,8 @@
 					<KebabMenu :data-testid="`kebab-menu-${index}`">
 						<KebabMenuActionDownload
 							:disabled="!item.isSelectable"
-							@click="downloadSingleFile(item)"
+							:file-records="fileRecords"
+							:selected-ids="[item.id]"
 						/>
 					</KebabMenu>
 				</template>
@@ -68,8 +69,11 @@
 					<FileUploadProgress :upload-progress="uploadProgress" />
 				</template>
 
-				<template #action-menu-items>
-					<KebabMenuActionDownload @click="downloadSelectedFiles()" />
+				<template #action-menu-items="{ selectedIds }">
+					<KebabMenuActionDownload
+						:file-records="fileRecords"
+						:selected-ids="selectedIds"
+					/>
 				</template>
 			</DataTable>
 		</div>
@@ -80,7 +84,7 @@
 import { FileRecordScanStatus } from "@/fileStorageApi/v3";
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
-import { convertFileSize, downloadFile } from "@/utils/fileHelper";
+import { convertFileSize } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuActionDownload } from "@ui-kebab-menu";
@@ -136,18 +140,6 @@ const formatFileSize = (size: number) => {
 	const localizedFileSize = n(convertedSize, "fileSize");
 
 	return `${localizedFileSize} ${unit}`;
-};
-
-const testId = "folder-file-table-action-menu-download";
-
-const downloadSingleFile = async (fileRecord: FileRecord) => {
-	await downloadFile(fileRecord.url, fileRecord.name, testId);
-};
-
-const downloadSelectedFiles = () => {
-	props.fileRecords.forEach(async (fileRecord) => {
-		await downloadFile(fileRecord.url, fileRecord.name, testId);
-	});
 };
 
 const isFileSelectable = (fileRecord: FileRecord) => {

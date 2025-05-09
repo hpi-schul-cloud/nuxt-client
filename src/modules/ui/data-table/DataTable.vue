@@ -10,7 +10,7 @@
 			:selected-ids="selectedIds"
 			@reset:selected="onResetSelectedMembers"
 		>
-			<slot name="action-menu-items" />
+			<slot name="action-menu-items" v-bind="{ selectedIds }" />
 		</BatchActionMenu>
 
 		<v-spacer v-else />
