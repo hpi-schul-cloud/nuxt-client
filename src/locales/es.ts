@@ -1983,9 +1983,9 @@ export default {
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
-	"pages.tasks.emptyStateOnFilter.title": "No hay tareas.",
+	"pages.tasks.emptyStateOnFilter.title": "No hay tareas.", // todo: remove
 	"pages.tasks.finished.emptyState.title":
-		"Actualmente no tiene ninguna tarea terminada.",
+		"Actualmente no hay tareas completadas",
 	"pages.tasks.labels.due": "Entrega",
 	"pages.tasks.labels.filter": "Filtrar por curso",
 	"pages.tasks.labels.noCourse": "Sin asignación de curso",
@@ -2006,11 +2006,9 @@ export default {
 	"pages.tasks.subtitleNotGraded": "Sin calificar",
 	"pages.tasks.subtitleOpen": "Tareas abiertas",
 	"pages.tasks.subtitleWithDue": "Con plazo",
-	"pages.tasks.teacher.drafts.emptyState.title": "No hay borradores.",
-	"pages.tasks.teacher.open.emptyState.subtitle":
-		"Has calificado todas las tareas. ¡Disfruta de tu tiempo libre!",
-	"pages.tasks.teacher.open.emptyState.title":
-		"No tienes ninguna tarea abierta.",
+	"pages.tasks.teacher.drafts.emptyState.title":
+		"Actualmente no hay borradores",
+	"pages.tasks.teacher.open.emptyState.title": "Actualmente no hay tareas",
 	"pages.tasks.teacher.subtitleOverDue": "Tareas expiradas",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"pages.tool.apiError.tool_param_duplicate":

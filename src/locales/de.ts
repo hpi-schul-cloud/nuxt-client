@@ -1953,9 +1953,8 @@ export default {
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
 	"pages.taskCard.deleteElement.title": "Element löschen",
-	"pages.tasks.emptyStateOnFilter.title": "Es sind keine Aufgaben vorhanden.",
 	"pages.tasks.finished.emptyState.title":
-		"Du hast zur Zeit keine abgeschlossenen Aufgaben.",
+		"Aktuell gibt es  keine abgeschlossenen Aufgaben",
 	"pages.tasks.labels.due": "Abgabe",
 	"pages.tasks.labels.filter": "Filtern nach Kursen",
 	"pages.tasks.labels.noCourse": "Ohne Kurszuordnung",
@@ -1977,11 +1976,9 @@ export default {
 	"pages.tasks.subtitleNotGraded": "Unbewertet",
 	"pages.tasks.subtitleOpen": "Offene Aufgaben",
 	"pages.tasks.subtitleWithDue": "Mit Abgabefrist",
-	"pages.tasks.teacher.drafts.emptyState.title": "Es gibt keine Entwürfe.",
-	"pages.tasks.teacher.open.emptyState.subtitle":
-		"Du hast alle Abgaben geprüft. Genieße deine freie Zeit!",
-	"pages.tasks.teacher.open.emptyState.title":
-		"Es gibt keine aktuellen Aufgaben.",
+	"pages.tasks.teacher.drafts.emptyState.title":
+		"Aktuell gibt es  keine Entwürfe",
+	"pages.tasks.teacher.open.emptyState.title": "Aktuell gibt es keine Aufgaben",
 	"pages.tasks.teacher.subtitleOverDue": "Abgelaufene Aufgaben",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"pages.tool.apiError.tool_param_duplicate":

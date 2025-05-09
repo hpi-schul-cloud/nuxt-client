@@ -1956,9 +1956,8 @@ export default {
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",
 	"pages.taskCard.deleteElement.title": "Видалити елемент",
-	"pages.tasks.emptyStateOnFilter.title": "Немає завдань",
 	"pages.tasks.finished.emptyState.title":
-		"Наразі у вас немає завершених завдань.",
+		"Наразі немає жодного виконаного завдання",
 	"pages.tasks.labels.due": "Термін",
 	"pages.tasks.labels.filter": "Фільтрувати за курсом",
 	"pages.tasks.labels.noCourse": "Курс не призначено",
@@ -1978,10 +1977,8 @@ export default {
 	"pages.tasks.subtitleNotGraded": "Не оцінено",
 	"pages.tasks.subtitleOpen": "Відкриті завдання",
 	"pages.tasks.subtitleWithDue": "З терміном виконання",
-	"pages.tasks.teacher.drafts.emptyState.title": "Немає чернеток.",
-	"pages.tasks.teacher.open.emptyState.subtitle":
-		"Ви виконали всі завдання. Насолоджуйтеся вільним часом!",
-	"pages.tasks.teacher.open.emptyState.title": "Поточних завдань немає.",
+	"pages.tasks.teacher.drafts.emptyState.title": "Наразі немає чернеток",
+	"pages.tasks.teacher.open.emptyState.title": "Наразі завдань немає",
 	"pages.tasks.teacher.subtitleOverDue": "Завдання, термін дії яких минув",
 	"pages.termsofuse.title": "Умови використання та політика конфіденційності",
 	"pages.tool.apiError.tool_param_duplicate":

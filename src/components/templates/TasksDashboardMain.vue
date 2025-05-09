@@ -291,7 +291,7 @@ export default {
 			let subtitle = undefined;
 
 			if (this.tasksModule.hasFilterSelected) {
-				title = this.$t("pages.tasks.emptyStateOnFilter.title");
+				title = this.$t("pages.tasks.emptyStateOnFilter.title"); // todo: remove
 			} else {
 				if (this.tab === this.tabRoutes[0]) {
 					title = this.$t(`pages.tasks.${this.role}.open.emptyState.title`);
