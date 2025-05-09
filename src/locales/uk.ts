@@ -1844,6 +1844,8 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
+	"pages.roomDetails.emptyState":
+		"Наразі в цьому просторі немає навчальних матеріалів",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.infoAlert.welcome": "Ласкаво просимо до нових Кімнат!",

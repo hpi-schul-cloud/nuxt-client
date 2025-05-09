@@ -160,7 +160,7 @@
 			:title="$t(`pages.room.learningContent.emptyState`)"
 		>
 			<template #media>
-				<TopicsEmptyStateSvg />
+				<LearningContentEmptyStateSvg />
 			</template>
 		</EmptyState>
 		<share-modal type="columnBoard" />
@@ -204,7 +204,7 @@ import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import draggable from "vuedraggable";
 import { EmptyState } from "@ui-empty-state";
-import TopicsEmptyStateSvg from "@/assets/img/empty-state/TopicsEmptyStateSvg.vue";
+import LearningContentEmptyStateSvg from "@/assets/img/empty-state/LearningContentEmptyStateSvg.vue";
 
 export default {
 	components: {
@@ -215,7 +215,7 @@ export default {
 		draggable,
 		EmptyState,
 		ShareModal,
-		TopicsEmptyStateSvg,
+		LearningContentEmptyStateSvg,
 	},
 	inject: {
 		shareModule: { from: SHARE_MODULE_KEY },
