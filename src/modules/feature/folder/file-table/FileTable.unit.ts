@@ -1,5 +1,5 @@
 import { printDateFromStringUTC } from "@/plugins/datetime";
-import { FileRecord } from "@/types/file/File";
+import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -209,6 +209,70 @@ describe("FileTable", () => {
 			expect(headers[3].text()).toBe("pages.folder.columns.createdat");
 			expect(headers[4].text()).toBe("pages.folder.columns.size");
 			expect(headers[5].text()).toBe("ui.actionMenu.actions");
+		});
+	});
+
+	describe("disabled functionality", () => {
+		it("should apply the disabled class when item.isSelectable is false", () => {
+			const fileRecord = fileRecordFactory.build({
+				securityCheckStatus: FileRecordVirusScanStatus.BLOCKED,
+			});
+			const { wrapper } = setupWrapper({
+				isLoading: false,
+				isEmpty: false,
+				fileRecords: [fileRecord],
+				uploadProgress: { uploaded: 0, total: 0 },
+			});
+
+			const previewColumn = wrapper.find(
+				`[data-testid='file-preview-${fileRecord.name}']`
+			);
+			expect(previewColumn.classes()).toContain("disabled");
+
+			const nameColumn = wrapper.find(
+				`[data-testid='name-${fileRecord.name}']`
+			);
+			expect(nameColumn.classes()).toContain("disabled");
+
+			const createdAtColumn = wrapper.find(
+				`[data-testid='created-at-${fileRecord.name}']`
+			);
+			expect(createdAtColumn.classes()).toContain("disabled");
+
+			const sizeColumn = wrapper.find(
+				`[data-testid='size-${fileRecord.name}']`
+			);
+			expect(sizeColumn.classes()).toContain("disabled");
+		});
+
+		it("should not apply the disabled class when item.isSelectable is true", () => {
+			const fileRecord = fileRecordFactory.build();
+			const { wrapper } = setupWrapper({
+				isLoading: false,
+				isEmpty: false,
+				fileRecords: [fileRecord],
+				uploadProgress: { uploaded: 0, total: 0 },
+			});
+
+			const previewColumn = wrapper.find(
+				`[data-testid='file-preview-${fileRecord.name}']`
+			);
+			expect(previewColumn.classes()).not.toContain("disabled");
+
+			const nameColumn = wrapper.find(
+				`[data-testid='name-${fileRecord.name}']`
+			);
+			expect(nameColumn.classes()).not.toContain("disabled");
+
+			const createdAtColumn = wrapper.find(
+				`[data-testid='created-at-${fileRecord.name}']`
+			);
+			expect(createdAtColumn.classes()).not.toContain("disabled");
+
+			const sizeColumn = wrapper.find(
+				`[data-testid='size-${fileRecord.name}']`
+			);
+			expect(sizeColumn.classes()).not.toContain("disabled");
 		});
 	});
 });
