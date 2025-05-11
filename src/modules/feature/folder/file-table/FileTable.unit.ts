@@ -224,6 +224,11 @@ describe("FileTable", () => {
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
 
+			const checkbox = wrapper.find(
+				`[data-testid='select-checkbox-${fileRecord.name}']`
+			);
+			expect(checkbox.classes()).toContain("v-selection-control--disabled");
+
 			const previewColumn = wrapper.find(
 				`[data-testid='file-preview-${fileRecord.name}']`
 			);
@@ -253,6 +258,11 @@ describe("FileTable", () => {
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
+
+			const checkbox = wrapper.find(
+				`[data-testid='select-checkbox-${fileRecord.name}']`
+			);
+			expect(checkbox.classes()).not.toContain("v-selection-control--disabled");
 
 			const previewColumn = wrapper.find(
 				`[data-testid='file-preview-${fileRecord.name}']`
