@@ -1,3 +1,4 @@
+import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import {
@@ -10,7 +11,6 @@ import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
 import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
-import { printDateFromStringUTC } from "@/plugins/datetime";
 
 describe("FileTable", () => {
 	const setupWrapper = (props: {
@@ -166,6 +166,49 @@ describe("FileTable", () => {
 
 			const uploadProgress = wrapper.findComponent(FileUploadProgress);
 			expect(uploadProgress.exists()).toBe(true);
+		});
+	});
+
+	describe("headers", () => {
+		it("should pass the correct headers to the DataTable", () => {
+			const { wrapper } = setupWrapper({
+				isLoading: false,
+				isEmpty: false,
+				fileRecords: [],
+				uploadProgress: { uploaded: 0, total: 0 },
+			});
+
+			const dataTable = wrapper.findComponent(DataTable);
+			expect(dataTable.props("tableHeaders")).toEqual([
+				{ title: "", key: "preview", sortable: false },
+				{ title: "pages.folder.columns.name", key: "name" },
+				{ title: "pages.folder.columns.createdat", key: "createdAt" },
+				{ title: "pages.folder.columns.size", key: "size" },
+				{
+					title: "ui.actionMenu.actions",
+					key: "actions",
+					sortable: false,
+					width: 50,
+				},
+			]);
+		});
+
+		it("should render all headers correctly", () => {
+			const { wrapper } = setupWrapper({
+				isLoading: false,
+				isEmpty: false,
+				fileRecords: [],
+				uploadProgress: { uploaded: 0, total: 0 },
+			});
+
+			const headers = wrapper.findAll("th");
+			expect(headers).toHaveLength(6);
+			expect(headers[0].text()).toBe("");
+			expect(headers[1].text()).toBe("");
+			expect(headers[2].text()).toBe("pages.folder.columns.name");
+			expect(headers[3].text()).toBe("pages.folder.columns.createdat");
+			expect(headers[4].text()).toBe("pages.folder.columns.size");
+			expect(headers[5].text()).toBe("ui.actionMenu.actions");
 		});
 	});
 });
