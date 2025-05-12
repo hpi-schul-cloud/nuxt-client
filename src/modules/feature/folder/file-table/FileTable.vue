@@ -31,27 +31,27 @@
 					<FilePreview
 						:file-record="item"
 						:data-testid="`file-preview-${item.name}`"
-						:class="{ disabled: !item.isSelectable }"
+						:class="{ 'text-disabled': !item.isSelectable }"
 					/>
 				</template>
 				<template #[`item.name`]="{ item }">
 					<span
 						:data-testid="`name-${item.name}`"
-						:class="{ disabled: !item.isSelectable }"
+						:class="{ 'text-disabled': !item.isSelectable }"
 						>{{ item.name }}</span
 					>
 				</template>
 				<template #[`item.createdAt`]="{ item }">
 					<span
 						:data-testid="`created-at-${item.name}`"
-						:class="{ disabled: !item.isSelectable }"
+						:class="{ 'text-disabled': !item.isSelectable }"
 						>{{ printDateFromStringUTC(item.createdAt) }}</span
 					>
 				</template>
 				<template #[`item.size`]="{ item }">
 					<span
 						:data-testid="`size-${item.name}`"
-						:class="{ disabled: !item.isSelectable }"
+						:class="{ 'text-disabled': !item.isSelectable }"
 						>{{ formatFileSize(item.size) }}
 					</span>
 				</template>
@@ -152,7 +152,7 @@ const formatFileSize = (size: number) => {
 const isFileSelectable = (fileRecord: FileRecord) => {
 	const result = isDownloadAllowed(fileRecord.securityCheckStatus);
 
-	return result;
+	return false;
 };
 
 const buildAriaLabel = (item: FileRecord): string => {
@@ -161,9 +161,3 @@ const buildAriaLabel = (item: FileRecord): string => {
 	});
 };
 </script>
-
-<style lang="scss" scoped>
-.disabled {
-	color: var(--theme-38, rgba(15, 53, 81, 0.38));
-}
-</style>
