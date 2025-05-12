@@ -16,7 +16,7 @@ import { ComputedRef, nextTick, ref } from "vue";
 import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
 import * as DeleteFilesConfirmation from "./composables/DeleteFilesConfirmation.composable";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
-import KebabMenuActionDeleteFiles from "./file-table/KebapMenuActionDeleteFiles.vue";
+import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";
 import Folder from "./Folder.vue";
 
 describe("Folder.vue", () => {

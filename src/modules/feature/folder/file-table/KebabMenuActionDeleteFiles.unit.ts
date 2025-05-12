@@ -7,14 +7,14 @@ import {
 import { describe } from "@jest/globals";
 import { KebabMenuAction } from "@ui-kebab-menu";
 import { nextTick } from "vue";
-import KebapMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
+import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 
 describe("KebabMenuActionDeleteFiles", () => {
 	const setupWrapper = (props: {
 		fileRecords: FileRecord[];
 		selectedIds: string[];
 	}) => {
-		const wrapper = mount(KebapMenuActionDeleteFiles, {
+		const wrapper = mount(KebabMenuActionDeleteFiles, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -45,8 +45,8 @@ describe("KebabMenuActionDeleteFiles", () => {
 					selectedIds,
 				});
 
-				const kebapMenuAction = wrapper.findComponent(KebabMenuAction);
-				kebapMenuAction.trigger("click");
+				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
+				kebabMenuAction.trigger("click");
 
 				await nextTick();
 				await nextTick();
@@ -81,8 +81,8 @@ describe("KebabMenuActionDeleteFiles", () => {
 					selectedIds,
 				});
 
-				const kebapMenuAction = wrapper.findComponent(KebabMenuAction);
-				kebapMenuAction.trigger("click");
+				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
+				kebabMenuAction.trigger("click");
 
 				await nextTick();
 				await nextTick();
