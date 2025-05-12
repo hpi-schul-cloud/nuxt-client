@@ -10,6 +10,7 @@ import {
 	RoomInvitationLink,
 	UpdateRoomInvitationLinkDto,
 	UseLinkResult,
+	InvitationStep,
 } from "./types";
 import { isAxiosError } from "axios";
 import { inputDateFormat } from "@/plugins/datetime";
@@ -25,7 +26,7 @@ export const useRoomInvitationLinkStore = defineStore(
 		const roomInvitationLinks: Ref<RoomInvitationLink[]> = ref([]);
 		const isLoading = ref<boolean>(false);
 		const isInvitationDialogOpen = ref(false);
-		const invitationStep = ref<"prepare" | "edit" | "share">("prepare");
+		const invitationStep = ref<InvitationStep>(InvitationStep.PREPARE);
 		const sharedUrl = ref<string>();
 		const selectedIds = ref<string[]>([]);
 		const editedLink = ref<RoomInvitationLink | null>(null);

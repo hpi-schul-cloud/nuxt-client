@@ -171,9 +171,10 @@ import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useDisplay } from "vuetify";
 import {
-	useRoomInvitationLinkStore,
 	CreateRoomInvitationLinkDto,
+	InvitationStep,
 	UpdateRoomInvitationLinkDto,
+	useRoomInvitationLinkStore,
 } from "@data-room";
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
@@ -193,14 +194,7 @@ const isOpen = defineModel({
 
 const emit = defineEmits<{
 	(e: "close"): void;
-	(e: "update:modelValue", value: boolean): void;
 }>();
-
-enum InvitationStep {
-	PREPARE = "prepare",
-	SHARE = "share",
-	EDIT = "edit",
-}
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { createLink, updateLink } = useRoomInvitationLinkStore();

@@ -39,4 +39,10 @@ export type UseLinkResult = {
 	schoolName: string;
 };
 
+export enum InvitationStep {
+	PREPARE = "prepare",
+	SHARE = "share",
+	EDIT = "edit",
+}
+
 export { RoomInvitationLinkValidationError } from "@/serverApi/v3";
