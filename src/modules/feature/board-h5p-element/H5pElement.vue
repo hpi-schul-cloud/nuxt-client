@@ -129,12 +129,10 @@ const onEdit = () => {
 };
 
 const onClickElement = () => {
-	if (props.isEditMode) {
-		openEditorWindow();
-	} else if (hasLinkedContent.value) {
+	if (hasLinkedContent.value) {
 		openPlayerWindow();
 	} else {
-		// Element should not be visible in this case
+		openEditorWindow();
 	}
 };
 </script>
