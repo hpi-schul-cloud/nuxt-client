@@ -14,9 +14,7 @@
 			</template>
 
 			<template #text>
-				<template
-					v-if="invitationStep === 'prepare' || invitationStep === 'edit'"
-				>
+				<template v-if="invitationStep !== InvitationStep.SHARE">
 					<p>
 						{{ t("pages.rooms.members.inviteMember.firstStep.subTitle") }}
 					</p>
@@ -83,7 +81,7 @@
 								:disabled="isDatePickerDisabled"
 								:min-date="new Date().toString()"
 								:date="
-									invitationStep === 'edit'
+									invitationStep === InvitationStep.EDIT
 										? formData.activeUntil.toString()
 										: ''
 								"
@@ -128,10 +126,7 @@
 
 			<template #actions>
 				<v-spacer />
-				<div
-					v-if="invitationStep === 'prepare' || invitationStep === 'edit'"
-					class="mr-4 mb-3"
-				>
+				<div v-if="invitationStep !== InvitationStep.SHARE" class="mr-4 mb-3">
 					<v-btn
 						ref="cancelButton"
 						class="ms-auto mr-2"
@@ -201,6 +196,12 @@ const emit = defineEmits<{
 	(e: "update:modelValue", value: boolean): void;
 }>();
 
+enum InvitationStep {
+	PREPARE = "prepare",
+	SHARE = "share",
+	EDIT = "edit",
+}
+
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { createLink, updateLink } = useRoomInvitationLinkStore();
 const { invitationStep, sharedUrl, editedLink } = storeToRefs(
@@ -227,7 +228,7 @@ const isDatePickerDisabled = computed(() => {
 });
 
 const modalTitle = computed(() => {
-	return invitationStep.value === "prepare"
+	return invitationStep.value === InvitationStep.PREPARE
 		? t("pages.rooms.members.inviteMember.firstStep.title")
 		: t("pages.rooms.members.inviteMember.secondStep.title");
 });
@@ -246,7 +247,7 @@ const onClose = () => {
 };
 
 const onContinue = async () => {
-	if (invitationStep.value === "share") return;
+	if (invitationStep.value === InvitationStep.SHARE) return;
 
 	const baseParams = {
 		title: formData.value.title || "invitation link",
@@ -261,20 +262,20 @@ const onContinue = async () => {
 	const createOrUpdateLinkBodyParams:
 		| UpdateRoomInvitationLinkDto
 		| CreateRoomInvitationLinkDto =
-		invitationStep.value === "edit"
+		invitationStep.value === InvitationStep.EDIT
 			? { ...baseParams, id: formData.value.id }
 			: baseParams;
 
 	const endpointMap = {
-		prepare: () =>
+		[InvitationStep.PREPARE]: () =>
 			createLink(createOrUpdateLinkBodyParams as CreateRoomInvitationLinkDto),
-		edit: () =>
+		[InvitationStep.EDIT]: () =>
 			updateLink(createOrUpdateLinkBodyParams as UpdateRoomInvitationLinkDto),
 	};
 
 	await endpointMap[invitationStep.value]();
 
-	invitationStep.value = "share";
+	invitationStep.value = InvitationStep.SHARE;
 };
 
 const onCopyLink = () => {
