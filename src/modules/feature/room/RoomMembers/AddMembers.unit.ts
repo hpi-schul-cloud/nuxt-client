@@ -115,6 +115,12 @@ describe("AddMembers", () => {
 			expect(wrapper.exists()).toBe(true);
 		});
 
+		it("should call getPotentialMembers", () => {
+			const { roomMembersStore } = setup();
+
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+		});
+
 		describe("Autocomplete components", () => {
 			it("should render autocomplete components", () => {
 				const { wrapper } = setup();
@@ -195,7 +201,7 @@ describe("AddMembers", () => {
 
 			await schoolComponent.setValue(selectedSchool);
 
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
 			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
 				RoleName.Student,
 				selectedSchool
@@ -229,7 +235,7 @@ describe("AddMembers", () => {
 
 				await roleComponent.setValue(selectedRole);
 
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
 				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
 					selectedRole,
 					roomMembersSchools[0].id
@@ -247,7 +253,7 @@ describe("AddMembers", () => {
 
 				await roleComponent.setValue(selectedRole);
 
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
 				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
 					selectedRole,
 					roomMembersSchools[0].id

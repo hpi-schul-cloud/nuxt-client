@@ -90,7 +90,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { RoleName } from "@/serverApi/v3";
 import { useRoomMembersStore } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
@@ -167,6 +167,10 @@ const onAutocompleteToggle = () => {
 		unpause();
 	}
 };
+
+onMounted(() => {
+	getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
+});
 
 const isAutocompleteDisabled = computed(() => selectedUsers.value.length > 0);
 </script>
