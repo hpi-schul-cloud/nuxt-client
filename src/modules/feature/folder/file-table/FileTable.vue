@@ -58,7 +58,7 @@
 				<template #[`item.actions`]="{ item, index }">
 					<KebabMenu
 						:data-testid="`kebab-menu-${index}`"
-						:aria-label="buildAriaLabel(item)"
+						:aria-label="buildActionMenuAriaLabel(item)"
 					>
 						<KebabMenuActionDownloadFiles
 							:disabled="!item.isSelectable"
@@ -155,7 +155,7 @@ const isFileSelectable = (fileRecord: FileRecord) => {
 	return result;
 };
 
-const buildAriaLabel = (item: FileRecord): string => {
+const buildActionMenuAriaLabel = (item: FileRecord): string => {
 	return t("pages.folder.ariaLabels.actionMenu", {
 		name: item.name,
 	});
