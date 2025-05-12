@@ -14,7 +14,9 @@
 			</template>
 
 			<template #text>
-				<template v-if="invitationStep === 'prepare'">
+				<template
+					v-if="invitationStep === 'prepare' || invitationStep === 'edit'"
+				>
 					<p>
 						{{ t("pages.rooms.members.inviteMember.firstStep.subTitle") }}
 					</p>
@@ -203,6 +205,7 @@ const defaultFormData = {
 	activeUntilCheck: false,
 	activeUntil: new Date(),
 	requiresConfirmation: true,
+	id: "",
 };
 
 const formData = ref({ ...defaultFormData });
@@ -227,7 +230,6 @@ const onClose = () => {
 
 	setTimeout(() => {
 		formData.value = { ...defaultFormData };
-		invitationStep.value = "prepare";
 	}, 1000);
 };
 
@@ -254,6 +256,21 @@ const onCopyLink = () => {
 	});
 };
 
+watch(
+	() => editedLink.value,
+	(newVal) => {
+		if (newVal) {
+			formData.value.title = newVal.title;
+			formData.value.restrictedToCreatorSchool =
+				newVal.restrictedToCreatorSchool;
+			formData.value.isAlsoForStudents = !newVal.isOnlyForTeachers;
+			formData.value.activeUntil = new Date(newVal.activeUntil!);
+			formData.value.requiresConfirmation = newVal.requiresConfirmation;
+		}
+	},
+	{ immediate: true }
+);
+
 const inviteMembersContent = ref<VCard>();
 const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 	immediate: true,
@@ -279,10 +296,12 @@ watch(
 
 	(newVal) => {
 		if (newVal) {
+			formData.value.id = newVal.id;
 			formData.value.title = newVal.title;
 			formData.value.restrictedToCreatorSchool =
 				newVal.restrictedToCreatorSchool;
-			formData.value.isAlsoForStudents = newVal.isOnlyForTeachers;
+			formData.value.isAlsoForStudents = !newVal.isOnlyForTeachers;
+			formData.value.activeUntilCheck = newVal.activeUntil !== null;
 			formData.value.activeUntil = new Date(newVal.activeUntil!);
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
 		}

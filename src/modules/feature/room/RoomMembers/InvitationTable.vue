@@ -140,10 +140,9 @@ const onRemoveLinks = async (linkIds: string[]) => {
 };
 
 const onEdit = async (linkId: string) => {
-	editedLink.value = roomInvitationLinks.value.find(
-		(link) => link.id === linkId
-	) as RoomInvitationLink;
-	invitationStep.value = "prepare";
+	editedLink.value =
+		roomInvitationLinks.value.find((link) => link.id === linkId) || null;
+	invitationStep.value = "edit";
 	isInvitationDialogOpen.value = true;
 };
 

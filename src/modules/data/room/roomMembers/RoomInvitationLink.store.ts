@@ -25,7 +25,7 @@ export const useRoomInvitationLinkStore = defineStore(
 		const roomInvitationLinks: Ref<RoomInvitationLink[]> = ref([]);
 		const isLoading = ref<boolean>(false);
 		const isInvitationDialogOpen = ref(false);
-		const invitationStep = ref<"prepare" | "share">("prepare");
+		const invitationStep = ref<"prepare" | "edit" | "share">("prepare");
 		const sharedUrl = ref<string>();
 		const selectedIds = ref<string[]>([]);
 		const editedLink = ref<RoomInvitationLink | null>(null);
@@ -151,8 +151,8 @@ export const useRoomInvitationLinkStore = defineStore(
 				activeUntil: inputDateFormat(link.activeUntil!),
 				isExpired: isExpired(link.activeUntil!),
 				status: isExpired(link.activeUntil!)
-					? commonTranslationsMap.ACTIVE
-					: commonTranslationsMap.EXPIRED,
+					? commonTranslationsMap.EXPIRED
+					: commonTranslationsMap.ACTIVE,
 
 				restrictedToCreatorSchool: link.restrictedToCreatorSchool
 					? commonTranslationsMap.YES

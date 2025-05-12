@@ -14,6 +14,16 @@ export type RoomMember = RoomMemberResponse & {
 
 export type RoomInvitationLink = RoomInvitationLinkResponse;
 
+export type RoomInvitationFormData = {
+	activeUntil: string;
+	activeUntilChecked: boolean;
+	isAlsoForStudents: boolean;
+	requiresConfirmation: boolean;
+	restrictedToCreatorSchool: boolean;
+	title: string;
+	id: string;
+};
+
 export type CreateRoomInvitationLinkDto = Omit<
 	CreateRoomInvitationLinkBodyParams,
 	"roomId"
