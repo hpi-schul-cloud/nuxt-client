@@ -82,6 +82,11 @@
 								v-model="formData.activeUntil"
 								:disabled="isDatePickerDisabled"
 								:min-date="new Date().toString()"
+								:date="
+									invitationStep === 'edit'
+										? formData.activeUntil.toString()
+										: ''
+								"
 								class="mr-2 mt-2"
 								data-testid="date-picker-until"
 								max-width="110px"
@@ -123,7 +128,10 @@
 
 			<template #actions>
 				<v-spacer />
-				<div v-if="invitationStep === 'prepare'" class="mr-4 mb-3">
+				<div
+					v-if="invitationStep === 'prepare' || invitationStep === 'edit'"
+					class="mr-4 mb-3"
+				>
 					<v-btn
 						ref="cancelButton"
 						class="ms-auto mr-2"
@@ -139,7 +147,7 @@
 						variant="flat"
 						:text="t('common.actions.continue')"
 						data-testid="invite-participant-save-btn"
-						@click="onInviteMembers"
+						@click="onContinue"
 					/>
 				</div>
 
@@ -167,7 +175,11 @@ import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useDisplay } from "vuetify";
-import { useRoomInvitationLinkStore } from "@data-room";
+import {
+	useRoomInvitationLinkStore,
+	CreateRoomInvitationLinkDto,
+	UpdateRoomInvitationLinkDto,
+} from "@data-room";
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { storeToRefs } from "pinia";
@@ -190,7 +202,7 @@ const emit = defineEmits<{
 }>();
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const { createLink } = useRoomInvitationLinkStore();
+const { createLink, updateLink } = useRoomInvitationLinkStore();
 const { invitationStep, sharedUrl, editedLink } = storeToRefs(
 	useRoomInvitationLinkStore()
 );
@@ -233,8 +245,10 @@ const onClose = () => {
 	}, 1000);
 };
 
-const onInviteMembers = async () => {
-	const createLinkBodyParams = {
+const onContinue = async () => {
+	if (invitationStep.value === "share") return;
+
+	const baseParams = {
 		title: formData.value.title || "invitation link",
 		activeUntil: formData.value.activeUntilCheck
 			? formData.value.activeUntil.toString()
@@ -243,7 +257,22 @@ const onInviteMembers = async () => {
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
 	};
-	await createLink(createLinkBodyParams);
+
+	const createOrUpdateLinkBodyParams:
+		| UpdateRoomInvitationLinkDto
+		| CreateRoomInvitationLinkDto =
+		invitationStep.value === "edit"
+			? { ...baseParams, id: formData.value.id }
+			: baseParams;
+
+	const endpointMap = {
+		prepare: () =>
+			createLink(createOrUpdateLinkBodyParams as CreateRoomInvitationLinkDto),
+		edit: () =>
+			updateLink(createOrUpdateLinkBodyParams as UpdateRoomInvitationLinkDto),
+	};
+
+	await endpointMap[invitationStep.value]();
 
 	invitationStep.value = "share";
 };

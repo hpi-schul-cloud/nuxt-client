@@ -88,6 +88,8 @@ export const useRoomInvitationLinkStore = defineStore(
 				roomInvitationLinks.value = roomInvitationLinks.value.map((l) =>
 					l.id === link.id ? response : l
 				);
+
+				sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${response.id}`;
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.update"));
 			}
