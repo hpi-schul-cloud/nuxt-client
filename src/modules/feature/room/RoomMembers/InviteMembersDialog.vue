@@ -280,21 +280,6 @@ const onCopyLink = () => {
 	});
 };
 
-watch(
-	() => editedLink.value,
-	(newVal) => {
-		if (newVal) {
-			formData.value.title = newVal.title;
-			formData.value.restrictedToCreatorSchool =
-				newVal.restrictedToCreatorSchool;
-			formData.value.isAlsoForStudents = !newVal.isOnlyForTeachers;
-			formData.value.activeUntil = new Date(newVal.activeUntil!);
-			formData.value.requiresConfirmation = newVal.requiresConfirmation;
-		}
-	},
-	{ immediate: true }
-);
-
 const inviteMembersContent = ref<VCard>();
 const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 	immediate: true,
@@ -309,15 +294,8 @@ watch(
 	}
 );
 
-watch(isOpen, (newVal) => {
-	if (!newVal) {
-		deactivate();
-	}
-});
-
 watch(
 	() => editedLink.value,
-
 	(newVal) => {
 		if (newVal) {
 			formData.value.id = newVal.id;
@@ -329,9 +307,14 @@ watch(
 			formData.value.activeUntil = new Date(newVal.activeUntil!);
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
 		}
-	},
-	{ immediate: true }
+	}
 );
+
+watch(isOpen, (newVal) => {
+	if (!newVal) {
+		deactivate();
+	}
+});
 
 const informationLink = computed(() =>
 	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
