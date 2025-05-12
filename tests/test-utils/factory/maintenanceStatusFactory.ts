@@ -9,14 +9,14 @@ export const maintenanceStatusFactory = Factory.define<MaintenanceStatus>(
 			currentYear: {
 				id: "123",
 				name: "current school year",
-				startDate: new Date("2000-01-01"),
-				endDate: new Date("2000-31-12"),
+				startDate: new Date(2000, 0, 1),
+				endDate: new Date(2000, 11, 31),
 			},
 			nextYear: {
 				id: "456",
 				name: "next school year",
-				startDate: new Date("2001-01-01"),
-				endDate: new Date("2001-31-12"),
+				startDate: new Date(2001, 0, 1),
+				endDate: new Date(2001, 11, 31),
 			},
 		};
 	}

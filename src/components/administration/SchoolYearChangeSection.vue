@@ -40,7 +40,6 @@
 				class="d-flex mt-8"
 				data-testid="school-year-change-section-start-transfer"
 			>
-				fix
 				<VSpacer />
 				<VBtn
 					v-if="!maintenanceStatus?.maintenance.active"
@@ -283,7 +282,7 @@ const finishTransfer = async () => {
 
 		notifierModule.show({
 			text: t(
-				"components.administration.schoolYearChangeSection.notification.success"
+				"components.administration.schoolYearChangeSection.notification.finish.success"
 			),
 			status: "success",
 		});
@@ -299,6 +298,13 @@ const startTransfer = () => {
 const confirmSchoolYearChange = async () => {
 	if (school.value) {
 		await setMaintenanceMode(school.value.id, true);
+
+		notifierModule.show({
+			text: t(
+				"components.administration.schoolYearChangeSection.notification.start.success"
+			),
+			status: "success",
+		});
 	}
 };
 

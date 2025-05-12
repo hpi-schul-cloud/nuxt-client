@@ -390,6 +390,10 @@ export default {
 	"components.administration.schoolYearChangeSection.info.part.two":
 		" (Більше інформації про {0})",
 	"components.administration.schoolYearChangeSection.info.link": "Довідка",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"Фаза передачі розпочалася успішно",
+	"components.administration.schoolYearChangeSection.notification.finish.success":
+		"Навчальний рік успішно розпочався",
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Наприкінці навчального року",
 	"components.administration.schoolYearChangeSection.description.step.one":

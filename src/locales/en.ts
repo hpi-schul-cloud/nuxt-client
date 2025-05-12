@@ -383,6 +383,10 @@ export default {
 	"components.administration.schoolYearChangeSection.info.part.two":
 		" (more information on the {0})",
 	"components.administration.schoolYearChangeSection.info.link": "help page",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"Transfer phase started successfully",
+	"components.administration.schoolYearChangeSection.notification.finish.success":
+		"School year successfully started",
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"End of the school year",
 	"components.administration.schoolYearChangeSection.description.step.one":
