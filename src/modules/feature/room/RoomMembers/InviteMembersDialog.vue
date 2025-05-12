@@ -84,7 +84,7 @@
 								data-testid="date-picker-until"
 								@click.prevent="pause"
 								@keydown.space.enter.prevent="pause"
-								@update:date="onUpdateValidDate"
+								@update:date="onUpdateDate"
 							/>
 						</div>
 
@@ -230,7 +230,7 @@ const modalTitle = computed(() => {
 		: t("pages.rooms.members.inviteMember.secondStep.title");
 });
 
-const onUpdateValidDate = (date: Date | null) => {
+const onUpdateDate = (date: Date | null) => {
 	formData.value.activeUntil = date;
 	unpause();
 };
@@ -296,10 +296,6 @@ watchEffect(() => {
 	isSubmitDisabled.value =
 		formData.value.activeUntilChecked && formData.value.activeUntil === null;
 });
-
-// const onInvalidDate = () => {
-// 	isSubmitDisabled.value = true;
-// };
 
 const informationLink = computed(() =>
 	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
