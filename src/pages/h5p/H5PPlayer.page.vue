@@ -19,14 +19,13 @@
 </template>
 
 <script lang="ts">
+import H5PPlayerComponent from "@/components/h5p/H5PPlayer.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { applicationErrorModule } from "@/store";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { mdiChevronLeft } from "@icons/material";
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
-
-import H5PPlayerComponent from "@/components/h5p/H5PPlayer.vue";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
 
 export default defineComponent({
 	name: "H5PPlayer",
@@ -37,7 +36,7 @@ export default defineComponent({
 		const route = useRoute();
 		const { createApplicationError } = useApplicationError();
 
-		const contentId = route.params?.id;
+		const contentId = route.params?.contentId;
 		const isInline = !!route.query?.inline;
 
 		function goBack() {

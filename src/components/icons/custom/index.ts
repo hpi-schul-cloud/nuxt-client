@@ -54,6 +54,7 @@ const customAliases: Record<string, Component> = {
 	folder_open_teams_outline: folderOpenTeamsOutline,
 	folder_open_user_outline: folderOpenUserOutline,
 	gridOutline: gridOutline,
+	h5pOutline: h5pOutline,
 	hourglassDisabled: hourglassDisabled,
 	ic_collection: icCollection,
 	"ic_default-circle": icDefaultCircle,
@@ -88,7 +89,6 @@ const customAliases: Record<string, Component> = {
 	tasks: tasks,
 	teacher: teacher,
 	thr: thr,
-	h5pOutline,
 };
 
 // const customSet: IconSet = {
