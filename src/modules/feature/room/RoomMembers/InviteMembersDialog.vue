@@ -12,7 +12,6 @@
 					{{ modalTitle }}
 				</h2>
 			</template>
-
 			<template #text>
 				<template v-if="step === InvitationStep.PREPARE">
 					<p>
@@ -67,7 +66,7 @@
 
 						<div class="d-flex align-center justify-start my-n4">
 							<v-checkbox
-								v-model="formData.activeUntilCheck"
+								v-model="formData.activeUntilChecked"
 								:label="
 									t('pages.rooms.members.inviteMember.form.linkExpires.label')
 								"
@@ -79,10 +78,10 @@
 								ref="datePicker"
 								v-model="formData.activeUntil"
 								:disabled="isDatePickerDisabled"
+								:required="!isDatePickerDisabled"
 								:min-date="new Date().toString()"
 								class="mr-2 mt-2"
 								data-testid="date-picker-until"
-								max-width="110px"
 								@click.prevent="pause"
 								@keydown.space.enter.prevent="pause"
 								@update:date="onUpdateValidDate"
@@ -135,6 +134,7 @@
 						class="ms-auto"
 						color="primary"
 						variant="flat"
+						:disabled="isSubmitDisabled"
 						:text="t('common.actions.continue')"
 						data-testid="invite-participant-save-btn"
 						@click="onInviteMembers"
@@ -158,7 +158,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import { InfoAlert } from "@ui-alert";
@@ -211,16 +211,18 @@ const defaultFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
 	isAlsoForStudents: false,
-	activeUntilCheck: false,
-	activeUntil: new Date(),
+	activeUntilChecked: false,
+	activeUntil: null as Date | null,
 	requiresConfirmation: true,
 };
 
 const formData = ref({ ...defaultFormData });
 
 const isDatePickerDisabled = computed(() => {
-	return !formData.value.activeUntilCheck;
+	return !formData.value.activeUntilChecked;
 });
+
+const isSubmitDisabled = ref(false);
 
 const modalTitle = computed(() => {
 	return step.value === InvitationStep.PREPARE
@@ -228,7 +230,7 @@ const modalTitle = computed(() => {
 		: t("pages.rooms.members.inviteMember.secondStep.title");
 });
 
-const onUpdateValidDate = (date: Date) => {
+const onUpdateValidDate = (date: Date | null) => {
 	formData.value.activeUntil = date;
 	unpause();
 };
@@ -245,9 +247,10 @@ const onClose = () => {
 const onInviteMembers = async () => {
 	const createLinkBodyParams = {
 		title: formData.value.title || "invitation link",
-		activeUntil: formData.value.activeUntilCheck
-			? formData.value.activeUntil.toString()
-			: "2900-01-01T00:00:00.000Z",
+		activeUntil:
+			formData.value.activeUntilChecked && formData.value.activeUntil
+				? formData.value.activeUntil.toString()
+				: "2900-01-01T00:00:00.000Z",
 		isOnlyForTeachers: !formData.value.isAlsoForStudents,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
@@ -273,8 +276,8 @@ const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 
 watch(
 	() => formData.value.restrictedToCreatorSchool,
-	(newValue: boolean) => {
-		if (!newValue) {
+	(isRestrictedToCreatorSchool: boolean) => {
+		if (isRestrictedToCreatorSchool === false) {
 			formData.value.isAlsoForStudents = false;
 		}
 	}
@@ -282,12 +285,21 @@ watch(
 
 watch(
 	() => isOpen.value,
-	(newValue: boolean) => {
-		if (!newValue) {
+	(isOpen: boolean) => {
+		if (isOpen === false) {
 			deactivate();
 		}
 	}
 );
+
+watchEffect(() => {
+	isSubmitDisabled.value =
+		formData.value.activeUntilChecked && formData.value.activeUntil === null;
+});
+
+// const onInvalidDate = () => {
+// 	isSubmitDisabled.value = true;
+// };
 
 const informationLink = computed(() =>
 	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
