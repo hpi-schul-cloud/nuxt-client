@@ -152,7 +152,7 @@ const formatFileSize = (size: number) => {
 const isFileSelectable = (fileRecord: FileRecord) => {
 	const result = isDownloadAllowed(fileRecord.securityCheckStatus);
 
-	return false;
+	return result;
 };
 
 const buildAriaLabel = (item: FileRecord): string => {
