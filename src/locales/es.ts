@@ -2166,6 +2166,7 @@ export default {
 	"pages.folder.ariaLabels.menu": "Menú carpeta",
 	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",
 	"pages.folder.ariaLabels.menu.action.delete": "Borrar carpeta",
+	"pages.folder.ariaLabels.menu.action.file.rename": "Renombrar archivo",
 	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
 	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
