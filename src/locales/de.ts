@@ -1642,6 +1642,7 @@ export default {
 		"Probiere es mit weniger Suchbegriffen.",
 	"pages.content.emptyState.error.title": "Ooops, keine Ergebnisse!",
 	"pages.content.index.backToCourse": "Zurück zum Kurs",
+	"pages.content.index.backToBoard": "Zurück zum Board",
 	"pages.content.index.backToOverview": "Zurück zur Übersicht",
 	"pages.content.index.search_for": "Suche nach …",
 	"pages.content.index.search_resources": "Ressourcen",

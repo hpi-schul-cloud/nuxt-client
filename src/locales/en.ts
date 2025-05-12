@@ -523,7 +523,7 @@ export default {
 	"components.cardElement.deletedElement": "Deleted content",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",
-	"components.cardElement.h5pElement": "Interactive learning content",
+	"components.cardElement.h5pElement": "Interactive learning element",
 	"components.datePicker.validation.format": "Please use format DD.MM.YYYY",
 	"components.datePicker.validation.required": "Please enter a date.",
 	"components.dateTimePicker.messages.dateInPast":
@@ -1620,6 +1620,7 @@ export default {
 		"Try to use a shorter query.",
 	"pages.content.emptyState.error.title": "Whoops, no results!",
 	"pages.content.index.backToCourse": "Back to the Course",
+	"pages.content.index.backToBoard": "Back to the Board",
 	"pages.content.index.backToOverview": "Back to Overview",
 	"pages.content.index.search_for": "Search for...",
 	"pages.content.index.search_resources": "Resources",
