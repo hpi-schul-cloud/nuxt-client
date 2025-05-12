@@ -586,7 +586,7 @@ describe("Folder.vue", () => {
 			});
 		});
 
-		describe("when file is checked, deleted by actions menu and confirmed", () => {
+		describe("when file is checked, deleted by actions menu and not confirmed", () => {
 			const setup = async () => {
 				const folderStateMock =
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
