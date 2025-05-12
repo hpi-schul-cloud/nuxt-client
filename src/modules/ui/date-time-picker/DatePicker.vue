@@ -16,7 +16,7 @@
 				:aria-label="ariaLabel"
 				:placeholder="t('common.placeholder.dateformat')"
 				:error-messages="errorMessages"
-				@update:model-value="validate"
+				@update:model-value="onUpdateTextfield"
 				@keydown.space="showDateDialog = true"
 				@keydown.prevent.enter="showDateDialog = true"
 				@keydown.up.down.stop
@@ -33,7 +33,7 @@
 				hide-header
 				show-adjacent-months
 				elevation="6"
-				@update:model-value="closeAndEmit"
+				@update:model-value="onPickDate"
 			/>
 		</UseFocusTrap>
 	</v-menu>
@@ -119,7 +119,6 @@ const combinedErrors = computed(() => {
 
 const errorMessages = computedAsync<string[] | null>(async () => {
 	const messages = await getErrorMessages(combinedErrors.value);
-
 	return messages ?? [];
 }, null);
 
@@ -134,30 +133,36 @@ const getErrorMessages = useDebounceFn(
 	700
 );
 
-const validate = () => {
-	v$.value.dateString.$touch();
-	v$.value.$validate();
-
-	if (isValid.value) {
-		emitDate();
-	} else {
-		emit("error");
+watchEffect(async () => {
+	if (props.required === true) {
+		v$.value.dateString.$touch();
+		await v$.value.$validate();
 	}
+});
+
+const onUpdateTextfield = async () => {
+	await emitDate();
 };
 
-const emitDate = () => {
-	const date = dateString.value
-		? dayjs(dateString.value, DATETIME_FORMAT.date).toISOString()
-		: undefined;
-
-	emit("update:date", date);
-};
-
-const closeAndEmit = () => {
+const onPickDate = async () => {
 	showDateDialog.value = false;
 	inputField.value?.focus();
+	await emitDate();
+};
 
-	emitDate();
+const emitDate = async () => {
+	v$.value.dateString.$touch();
+	const isValid = await v$.value.$validate();
+	if (isValid) {
+		const formattedDate = dateString.value
+			? dayjs(dateString.value, DATETIME_FORMAT.date).toISOString()
+			: null;
+
+		emit("update:date", formattedDate);
+	} else {
+		emit("update:date", null);
+		emit("error");
+	}
 };
 </script>
 
