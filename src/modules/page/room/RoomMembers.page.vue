@@ -35,11 +35,7 @@
 			</div>
 		</template>
 
-		<VTabsWindow
-			v-model="activeTab"
-			class="room-members-tabs-window"
-			:class="isVisibleAddMemberButton ? 'mt-12' : ''"
-		>
+		<VTabsWindow v-model="activeTab" class="room-members-tabs-window mt-12">
 			<VTabsWindowItem
 				v-for="tabItem in tabs"
 				:key="tabItem.value"
@@ -67,7 +63,7 @@
 	<ConfirmationDialog />
 	<InviteMembersDialog
 		v-model="isInvitationDialogOpen"
-		:school-name="currentUser?.schoolName || ''"
+		:school-name="currentUserSchoolName"
 		@close="onDialogClose"
 	/>
 </template>
@@ -92,7 +88,6 @@ import { useRoute, useRouter } from "vue-router";
 import {
 	useRoomDetailsStore,
 	useRoomMembersStore,
-	useRoomMemberVisibilityOptions,
 	useRoomAuthorization,
 } from "@data-room";
 import { storeToRefs } from "pinia";
@@ -117,7 +112,8 @@ import {
 } from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { Tab } from "@/types/room/RoomMembers";
-import { envConfigModule } from "@/store";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { authModule } from "@/store";
 
 const props = defineProps({
 	tab: {
@@ -132,6 +128,8 @@ const route = useRoute();
 const router = useRouter();
 const { xs, mdAndUp } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const { FEATURE_ROOM_MEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
 
 const membersInfoText = ref("");
 
@@ -140,20 +138,16 @@ const isLeaveRoomProhibitedDialogOpen = ref(false);
 const isInvitationDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
-const { currentUser } = storeToRefs(roomMembersStore);
 const { fetchMembers, getSchools, leaveRoom, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
-const { canLeaveRoom } = useRoomAuthorization();
-const { isVisibleAddMemberButton, isVisibleTabNavigation } =
-	useRoomMemberVisibilityOptions(currentUser);
-const { FEATURE_ROOM_MEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
+const { canAddRoomMembers, canLeaveRoom } = useRoomAuthorization();
 
 watchEffect(() => {
-	if (isVisibleAddMemberButton.value !== undefined) {
-		membersInfoText.value = isVisibleAddMemberButton.value
+	if (canAddRoomMembers.value !== undefined) {
+		membersInfoText.value = canAddRoomMembers.value
 			? t("pages.rooms.members.management")
 			: t("pages.rooms.members.label");
 	}
@@ -173,6 +167,10 @@ const activeTab = computed<Tab>({
 			query: { ...route.query, tab: newTab },
 		});
 	},
+});
+
+const isVisibleTabNavigation = computed(() => {
+	return canAddRoomMembers.value && FEATURE_ROOM_MEMBERS_TABS_ENABLED;
 });
 
 const tabs: Array<{
@@ -218,6 +216,14 @@ const onFabClick = async () => {
 			break;
 	}
 };
+
+const currentUserSchoolName = computed(() => {
+	const currentUser = authModule.getUser;
+	if (!currentUser) return "";
+	const member = roomMembersStore.getMemberById(currentUser?.id);
+
+	return member?.schoolName || "";
+});
 
 const onDialogClose = () => {
 	isMembersDialogOpen.value = false;
@@ -279,7 +285,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const fabAction = computed(() => {
-	if (!isVisibleAddMemberButton.value) return;
+	if (!canAddRoomMembers.value) return;
 
 	if (activeTab.value === Tab.Members) {
 		return {
