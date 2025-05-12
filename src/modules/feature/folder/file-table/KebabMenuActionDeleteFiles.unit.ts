@@ -4,11 +4,12 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { describe } from "@jest/globals";
 import { KebabMenuAction } from "@ui-kebab-menu";
 import { nextTick } from "vue";
-import KebapMenuActionDeleteFiles from "./KebapMenuActionDeleteFiles.vue";
+import KebapMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 
-describe("KebapMenuActionDeleteFiles", () => {
+describe("KebabMenuActionDeleteFiles", () => {
 	const setupWrapper = (props: {
 		fileRecords: FileRecord[];
 		selectedIds: string[];

@@ -85,7 +85,7 @@ import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
-import KebabMenuActionDeleteFiles from "./KebapMenuActionDeleteFiles.vue";
+import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 
 const { t, n } = useI18n();
 
