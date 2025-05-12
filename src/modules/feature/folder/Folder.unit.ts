@@ -697,8 +697,12 @@ describe("Folder.vue", () => {
 				.spyOn(FileStorageApi, "useFileStorageApi")
 				.mockReturnValue(fileStorageApiMock);
 
-			const fileRecord = fileRecordFactory.build();
-			fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([fileRecord]);
+			const fileRecord1 = fileRecordFactory.build();
+			const fileRecord2 = fileRecordFactory.build({ isUploading: true });
+			fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+				fileRecord1,
+				fileRecord2,
+			]);
 
 			const { wrapper } = setupWrapper();
 
@@ -706,15 +710,29 @@ describe("Folder.vue", () => {
 			await nextTick();
 			await nextTick();
 
-			return { folderStateMock, wrapper, fileStorageApiMock, fileRecord };
+			return {
+				folderStateMock,
+				wrapper,
+				fileStorageApiMock,
+				fileRecord1,
+				fileRecord2,
+			};
 		};
 
 		it("should render file record name", async () => {
-			const { wrapper, fileRecord } = await setup();
+			const { wrapper, fileRecord1 } = await setup();
 
-			const includesFileRecordName = wrapper.html().includes(fileRecord.name);
+			const includesFileRecordName = wrapper.html().includes(fileRecord1.name);
 
 			expect(includesFileRecordName).toBe(true);
+		});
+
+		it("should not render file record that is still uploading", async () => {
+			const { wrapper, fileRecord2 } = await setup();
+
+			const includesFileRecordName = wrapper.html().includes(fileRecord2.name);
+
+			expect(includesFileRecordName).toBe(false);
 		});
 
 		it("should not show EmptyFolderState", async () => {

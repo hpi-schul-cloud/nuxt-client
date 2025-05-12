@@ -16,7 +16,7 @@
 		<FileTable
 			:is-loading="isLoading"
 			:is-empty="isEmpty"
-			:file-records="fileRecords"
+			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
 			@delete-files="onDeleteFiles"
 		/>
@@ -88,6 +88,10 @@ const uploadProgress = ref({
 });
 const isLoading = ref(true);
 const isEmpty = computed(() => fileRecords.value.length === 0);
+
+const uploadedFileRecords = computed(() => {
+	return fileRecords.value.filter((fileRecord) => !fileRecord.isUploading);
+});
 
 const fabClickHandler = () => {
 	if (fileInput.value) {
