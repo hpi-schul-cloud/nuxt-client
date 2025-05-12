@@ -1,6 +1,11 @@
 <template>
 	<section>
-		<v-btn variant="text" :ripple="false" @click="goBack" data-testid="player-back-button">
+		<v-btn
+			variant="text"
+			:ripple="false"
+			data-testid="player-back-button"
+			@click="goBack"
+		>
 			<v-icon>{{ mdiChevronLeft }}</v-icon>
 			{{ $t(backMenuLabel) }}
 		</v-btn>
