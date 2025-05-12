@@ -558,7 +558,7 @@ describe("Folder.vue", () => {
 					.mocked(downloadFile)
 					.mockReturnValueOnce();
 
-				const convertFileSizeMOck = jest
+				const convertFileSizeMock = jest
 					.mocked(convertFileSize)
 					.mockImplementation((size) => ({
 						convertedSize: size,
@@ -638,7 +638,7 @@ describe("Folder.vue", () => {
 			const fileRecord = fileRecordFactory.build();
 			fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([fileRecord]);
 
-			const convertFileSizeMOck = jest
+			const convertFileSizeMock = jest
 				.mocked(convertFileSize)
 				.mockImplementation((size) => ({
 					convertedSize: size,
