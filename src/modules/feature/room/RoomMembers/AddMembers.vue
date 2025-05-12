@@ -17,16 +17,16 @@
 					item-value="id"
 					:items="schools"
 					:label="t('global.sidebar.item.school')"
-					:disabled="isAutocompleteDisabled"
-					:aria-disabled="isAutocompleteDisabled"
-					@update:model-value="onSchoolChange"
-					@update:menu="onAutocompleteToggle"
+					:disabled="isItemListDisabled"
+					:aria-disabled="isItemListDisabled"
+					@update:model-value="onValueChange"
+					@update:menu="onItemListToggle"
 				/>
 			</div>
 
 			<div class="mt-4" data-testid="add-participant-role">
-				<v-autocomplete
-					ref="autoCompleteRole"
+				<v-select
+					ref="selectRole"
 					v-model="selectedSchoolRole"
 					auto-select-first="exact"
 					density="comfortable"
@@ -34,10 +34,10 @@
 					item-value="id"
 					:items="schoolRoles"
 					:label="t('pages.rooms.members.tableHeader.schoolRole')"
-					:disabled="isAutocompleteDisabled"
-					:aria-disabled="isAutocompleteDisabled"
-					@update:model-value="onRoleChange"
-					@update:menu="onAutocompleteToggle"
+					:disabled="isItemListDisabled"
+					:aria-disabled="isItemListDisabled"
+					@update:model-value="onValueChange"
+					@update:menu="onItemListToggle"
 				/>
 			</div>
 
@@ -58,7 +58,7 @@
 					:disabled="isStudentSelectionDisabled"
 					:items="potentialRoomMembers"
 					:label="t('common.labels.name')"
-					@update:menu="onAutocompleteToggle"
+					@update:menu="onItemListToggle"
 				/>
 			</div>
 		</template>
@@ -94,7 +94,11 @@ import { computed, onMounted, ref } from "vue";
 import { RoleName } from "@/serverApi/v3";
 import { useRoomMembersStore } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VAutocomplete, VCard } from "vuetify/lib/components/index.mjs";
+import {
+	VAutocomplete,
+	VCard,
+	VSelect,
+} from "vuetify/lib/components/index.mjs";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 
@@ -118,14 +122,9 @@ const schoolRoles = [
 const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
 const selectedUsers = ref<string[]>([]);
 
-const onRoleChange = async () => {
+const onValueChange = async () => {
 	selectedUsers.value = [];
 	await getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
-};
-
-const onSchoolChange = () => {
-	selectedSchoolRole.value = schoolRoles[0].id;
-	onRoleChange();
 };
 
 const onAddMembers = async () => {
@@ -147,21 +146,15 @@ const isStudentSelectionDisabled = computed(() => {
 });
 
 const autoCompleteSchool = ref<VAutocomplete>();
-const autoCompleteRole = ref<VAutocomplete>();
 const autoCompleteUsers = ref<VAutocomplete>();
+const selectRole = ref<VSelect>();
 
-const onAutocompleteToggle = () => {
-	const autocompleteRefs = [
-		autoCompleteSchool,
-		autoCompleteRole,
-		autoCompleteUsers,
-	];
+const onItemListToggle = () => {
+	const refs = [autoCompleteSchool, autoCompleteUsers, selectRole];
 
-	const isAnyAutocompleteOpen = autocompleteRefs.some(
-		(autocomplete) => autocomplete.value?.menu
-	);
+	const isAnyItemListOpen = refs.some((itemList) => itemList.value?.menu);
 
-	if (isAnyAutocompleteOpen) {
+	if (isAnyItemListOpen) {
 		pause();
 	} else {
 		unpause();
@@ -172,7 +165,7 @@ onMounted(() => {
 	getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
 });
 
-const isAutocompleteDisabled = computed(() => selectedUsers.value.length > 0);
+const isItemListDisabled = computed(() => selectedUsers.value.length > 0);
 </script>
 <style lang="scss" scoped>
 // show focus indicator for chips on safari

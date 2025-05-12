@@ -121,12 +121,16 @@ describe("AddMembers", () => {
 			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
 		});
 
-		describe("Autocomplete components", () => {
-			it("should render autocomplete components", () => {
+		describe("Item list components", () => {
+			it("should render autocomplete and select components", () => {
 				const { wrapper } = setup();
 				const autoCompleteComponents = wrapper.findAllComponents(VAutocomplete);
+				const selectComponents = wrapper.findAllComponents({
+					name: "VSelect",
+				});
 
-				expect(autoCompleteComponents).toHaveLength(3);
+				expect(autoCompleteComponents).toHaveLength(2);
+				expect(selectComponents).toHaveLength(1);
 			});
 
 			it("should have proper props for autoCompleteSchool component", () => {
@@ -143,7 +147,7 @@ describe("AddMembers", () => {
 				);
 			});
 
-			it("should have proper props for autoCompleteRole component", () => {
+			it("should have proper props for selectRole component", () => {
 				const { wrapper } = setup();
 
 				const roles = [
@@ -155,7 +159,7 @@ describe("AddMembers", () => {
 				];
 
 				const roleComponent = wrapper.getComponent({
-					ref: "autoCompleteRole",
+					ref: "selectRole",
 				});
 
 				expect(roleComponent.props("items")).toStrictEqual(roles);
@@ -177,33 +181,22 @@ describe("AddMembers", () => {
 	});
 
 	describe("when school is changed", () => {
-		it("should set the role to student", async () => {
-			const { wrapper } = setup();
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
-			});
-
-			await schoolComponent.setValue("schoolId");
-
-			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
-			});
-
-			expect(roleComponent.props("modelValue")).toBe(RoleName.Student);
-		});
-
-		it("should call getPotentialMembers for student role", async () => {
+		it("should call getPotentialMembers for set role", async () => {
 			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
 			const selectedSchool = roomMembersSchools[1].id;
 			const schoolComponent = wrapper.getComponent({
 				ref: "autoCompleteSchool",
 			});
+			const roleComponent = wrapper.getComponent({
+				ref: "selectRole",
+			});
+			const selectedRole = roleComponent.props("modelValue");
 
 			await schoolComponent.setValue(selectedSchool);
 
 			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
 			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
-				RoleName.Student,
+				selectedRole,
 				selectedSchool
 			);
 		});
@@ -230,7 +223,7 @@ describe("AddMembers", () => {
 				const { wrapper, roomMembersSchools, roomMembersStore } = setup();
 				const selectedRole = RoleName.Student;
 				const roleComponent = wrapper.getComponent({
-					ref: "autoCompleteRole",
+					ref: "selectRole",
 				});
 
 				await roleComponent.setValue(selectedRole);
@@ -248,7 +241,7 @@ describe("AddMembers", () => {
 				const { wrapper, roomMembersSchools, roomMembersStore } = setup();
 				const selectedRole = RoleName.Teacher;
 				const roleComponent = wrapper.getComponent({
-					ref: "autoCompleteRole",
+					ref: "selectRole",
 				});
 
 				await roleComponent.setValue(selectedRole);
@@ -264,7 +257,7 @@ describe("AddMembers", () => {
 		it("should reset selectedUsers", async () => {
 			const { wrapper } = setup();
 			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+				ref: "selectRole",
 			});
 
 			const userComponent = wrapper.getComponent({
@@ -296,13 +289,13 @@ describe("AddMembers", () => {
 			]);
 		});
 
-		it("should disable autocomplete for school and role selection", async () => {
+		it("should disable autocomplete school and select role selection", async () => {
 			const { wrapper, potentialRoomMembers } = setup();
 			const schoolComponent = wrapper.getComponent({
 				ref: "autoCompleteSchool",
 			});
 			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+				ref: "selectRole",
 			});
 
 			const userComponent = wrapper.getComponent({
@@ -318,13 +311,13 @@ describe("AddMembers", () => {
 			expect(roleComponent.props("disabled")).toBe(true);
 		});
 
-		it("should enable autocomplete for school and role selection when alls users are removed from selection", async () => {
+		it("should enable autocomplete school and select role selection when alls users are removed from selection", async () => {
 			const { wrapper, potentialRoomMembers } = setup();
 			const schoolComponent = wrapper.getComponent({
 				ref: "autoCompleteSchool",
 			});
 			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+				ref: "selectRole",
 			});
 			const userComponent = wrapper.getComponent({
 				ref: "autoCompleteUsers",
@@ -401,48 +394,48 @@ describe("AddMembers", () => {
 	});
 
 	describe("focus trap", () => {
-		it("should pause focus trap when any autocomplete menu is open", async () => {
+		it("should pause focus trap when any autocomplete or select menu is open", async () => {
 			const { wrapper } = setup();
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
+			const roleComponent = wrapper.getComponent({
+				ref: "selectRole",
 			});
 
-			schoolComponent.vm.menu = true;
+			roleComponent.vm.menu = true;
 
 			expect(pauseMock).toHaveBeenCalledTimes(1);
 		});
 
-		it("should unpause focus trap when all autocomplete menus are closed", async () => {
+		it("should unpause focus trap when all autocomplete and select menus are closed", async () => {
 			const { wrapper } = setup();
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
 			});
 
-			schoolComponent.vm.menu = true;
+			userComponent.vm.menu = true;
 			expect(pauseMock).toHaveBeenCalledTimes(1);
 
-			schoolComponent.vm.menu = false;
+			userComponent.vm.menu = false;
 			expect(unpauseMock).toHaveBeenCalled();
 		});
 
-		it("should not unpause focus trap when a autocomplete is closed while another one is opened", async () => {
-			// this happens when user switches between autocomplete components for brief moment both are treated as open
+		it("should not unpause focus trap when a autocomplete or select is closed while another one is opened", async () => {
+			// this happens when user switches between autocomplete or select components for brief moment both are treated as open
 			const { wrapper } = setup();
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
-			});
-
 			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+				ref: "selectRole",
 			});
 
-			schoolComponent.vm.menu = true;
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
 			roleComponent.vm.menu = true;
+			userComponent.vm.menu = true;
 
 			expect(pauseMock).toHaveBeenCalled();
 			expect(unpauseMock).not.toHaveBeenCalled();
 
-			schoolComponent.vm.menu = false;
+			roleComponent.vm.menu = false;
 			expect(unpauseMock).not.toHaveBeenCalled();
 		});
 	});
@@ -454,7 +447,7 @@ describe("AddMembers", () => {
 				ref: "autoCompleteSchool",
 			});
 			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+				ref: "selectRole",
 			});
 
 			await schoolComponent.setValue("external-school-id");
@@ -473,7 +466,7 @@ describe("AddMembers", () => {
 				ref: "autoCompleteSchool",
 			});
 			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+				ref: "selectRole",
 			});
 
 			await schoolComponent.setValue("external-school-id");
