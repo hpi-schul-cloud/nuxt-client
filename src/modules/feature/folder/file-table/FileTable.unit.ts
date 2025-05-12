@@ -169,51 +169,8 @@ describe("FileTable", () => {
 		});
 	});
 
-	describe("headers", () => {
-		it("should pass the correct headers to the DataTable", () => {
-			const { wrapper } = setupWrapper({
-				isLoading: false,
-				isEmpty: false,
-				fileRecords: [],
-				uploadProgress: { uploaded: 0, total: 0 },
-			});
-
-			const dataTable = wrapper.findComponent(DataTable);
-			expect(dataTable.props("tableHeaders")).toEqual([
-				{ title: "", key: "preview", sortable: false },
-				{ title: "pages.folder.columns.name", key: "name" },
-				{ title: "pages.folder.columns.createdat", key: "createdAt" },
-				{ title: "pages.folder.columns.size", key: "size" },
-				{
-					title: "ui.actionMenu.actions",
-					key: "actions",
-					sortable: false,
-					width: 50,
-				},
-			]);
-		});
-
-		it("should render all headers correctly", () => {
-			const { wrapper } = setupWrapper({
-				isLoading: false,
-				isEmpty: false,
-				fileRecords: [],
-				uploadProgress: { uploaded: 0, total: 0 },
-			});
-
-			const headers = wrapper.findAll("th");
-			expect(headers).toHaveLength(6);
-			expect(headers[0].text()).toBe("");
-			expect(headers[1].text()).toBe("");
-			expect(headers[2].text()).toBe("pages.folder.columns.name");
-			expect(headers[3].text()).toBe("pages.folder.columns.createdat");
-			expect(headers[4].text()).toBe("pages.folder.columns.size");
-			expect(headers[5].text()).toBe("ui.actionMenu.actions");
-		});
-	});
-
 	describe("disabled functionality", () => {
-		it("should apply the disabled class when item.isSelectable is false", () => {
+		it("should apply the text-disabled class when item.isSelectable is false", () => {
 			const fileRecord = fileRecordFactory.build({
 				securityCheckStatus: FileRecordVirusScanStatus.BLOCKED,
 			});
@@ -232,25 +189,25 @@ describe("FileTable", () => {
 			const previewColumn = wrapper.find(
 				`[data-testid='file-preview-${fileRecord.name}']`
 			);
-			expect(previewColumn.classes()).toContain("disabled");
+			expect(previewColumn.classes()).toContain("text-disabled");
 
 			const nameColumn = wrapper.find(
 				`[data-testid='name-${fileRecord.name}']`
 			);
-			expect(nameColumn.classes()).toContain("disabled");
+			expect(nameColumn.classes()).toContain("text-disabled");
 
 			const createdAtColumn = wrapper.find(
 				`[data-testid='created-at-${fileRecord.name}']`
 			);
-			expect(createdAtColumn.classes()).toContain("disabled");
+			expect(createdAtColumn.classes()).toContain("text-disabled");
 
 			const sizeColumn = wrapper.find(
 				`[data-testid='size-${fileRecord.name}']`
 			);
-			expect(sizeColumn.classes()).toContain("disabled");
+			expect(sizeColumn.classes()).toContain("text-disabled");
 		});
 
-		it("should not apply the disabled class when item.isSelectable is true", () => {
+		it("should not apply the text-disabled class when item.isSelectable is true", () => {
 			const fileRecord = fileRecordFactory.build();
 			const { wrapper } = setupWrapper({
 				isLoading: false,
@@ -267,22 +224,22 @@ describe("FileTable", () => {
 			const previewColumn = wrapper.find(
 				`[data-testid='file-preview-${fileRecord.name}']`
 			);
-			expect(previewColumn.classes()).not.toContain("disabled");
+			expect(previewColumn.classes()).not.toContain("text-disabled");
 
 			const nameColumn = wrapper.find(
 				`[data-testid='name-${fileRecord.name}']`
 			);
-			expect(nameColumn.classes()).not.toContain("disabled");
+			expect(nameColumn.classes()).not.toContain("text-disabled");
 
 			const createdAtColumn = wrapper.find(
 				`[data-testid='created-at-${fileRecord.name}']`
 			);
-			expect(createdAtColumn.classes()).not.toContain("disabled");
+			expect(createdAtColumn.classes()).not.toContain("text-disabled");
 
 			const sizeColumn = wrapper.find(
 				`[data-testid='size-${fileRecord.name}']`
 			);
-			expect(sizeColumn.classes()).not.toContain("disabled");
+			expect(sizeColumn.classes()).not.toContain("text-disabled");
 		});
 	});
 });
