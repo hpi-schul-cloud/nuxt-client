@@ -20,7 +20,7 @@ import { KebabMenuActionDelete } from "@ui-kebab-menu";
 import { ComputedRef, nextTick, ref } from "vue";
 import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
-import KebabMenuActionDownload from "./file-table/KebabMenuActionDownload.vue";
+import KebabMenuActionDownloadFiles from "./file-table/KebabMenuActionDownloadFiles.vue";
 import Folder from "./Folder.vue";
 
 jest.mock("@/utils/fileHelper");
@@ -585,7 +585,9 @@ describe("Folder.vue", () => {
 				);
 				await actionMenuButton.trigger("click");
 
-				const downloadButton = wrapper.findComponent(KebabMenuActionDownload);
+				const downloadButton = wrapper.findComponent(
+					KebabMenuActionDownloadFiles
+				);
 				await downloadButton.trigger("click");
 
 				return {

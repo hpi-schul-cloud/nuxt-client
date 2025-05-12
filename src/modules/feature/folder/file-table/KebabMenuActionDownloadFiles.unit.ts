@@ -7,11 +7,11 @@ import {
 } from "@@/tests/test-utils/setup";
 import { KebabMenuAction } from "@ui-kebab-menu";
 import { nextTick } from "vue";
-import KebabMenuActionDownload from "./KebabMenuActionDownload.vue";
+import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 
 jest.mock("@/utils/fileHelper");
 
-describe("KebabMenuActionDownload", () => {
+describe("KebabMenuActionDownloadFiles", () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
 	});
@@ -21,7 +21,7 @@ describe("KebabMenuActionDownload", () => {
 		fileRecords: FileRecord[];
 		selectedIds: string[];
 	}) => {
-		const wrapper = mount(KebabMenuActionDownload, {
+		const wrapper = mount(KebabMenuActionDownloadFiles, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

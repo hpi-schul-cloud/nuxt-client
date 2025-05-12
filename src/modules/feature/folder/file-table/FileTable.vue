@@ -60,7 +60,7 @@
 						:data-testid="`kebab-menu-${index}`"
 						:aria-label="buildAriaLabel(item)"
 					>
-						<KebabMenuActionDownload
+						<KebabMenuActionDownloadFiles
 							:disabled="!item.isSelectable"
 							:file-records="fileRecords"
 							:selected-ids="[item.id]"
@@ -76,7 +76,7 @@
 				</template>
 
 				<template #action-menu-items="{ selectedIds }">
-					<KebabMenuActionDownload
+					<KebabMenuActionDownloadFiles
 						:file-records="fileRecords"
 						:selected-ids="selectedIds"
 						:aria-label="t('pages.folder.ariaLabels.menu.action.file.download')"
@@ -99,7 +99,7 @@ import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
-import KebabMenuActionDownload from "./KebabMenuActionDownload.vue";
+import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 
 const { t, n } = useI18n();
 
