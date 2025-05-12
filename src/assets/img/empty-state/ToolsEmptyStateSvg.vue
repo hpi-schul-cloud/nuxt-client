@@ -1,6 +1,6 @@
 <template>
 	<svg
-		img-height="200"
+		height="200"
 		viewBox="0 0 676 676"
 		xmlns="http://www.w3.org/2000/svg"
 		aria-hidden="true"
