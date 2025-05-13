@@ -64,8 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { EmptyState } from "@ui-empty-state";
-import MediaShelfEmptyStateSvg from "@/assets/img/empty-state/MediaShelfEmptyStateSvg.vue";
+import { EmptyState, MediaShelfEmptyStateSvg } from "@ui-empty-state";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardLayout } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";

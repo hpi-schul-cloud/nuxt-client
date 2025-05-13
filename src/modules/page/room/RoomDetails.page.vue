@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { EmptyState } from "@ui-empty-state";
+import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { BoardLayout } from "@/serverApi/v3";
 import { authModule } from "@/store";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
@@ -79,7 +79,6 @@ import { storeToRefs } from "pinia";
 import { computed, ComputedRef, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import LearningContentEmptyStateSvg from "@/assets/img/empty-state/LearningContentEmptyStateSvg.vue";
 
 const router = useRouter();
 const { t } = useI18n();

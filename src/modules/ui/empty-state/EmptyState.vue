@@ -33,6 +33,5 @@ defineProps({
 <style scoped lang="scss">
 .text {
 	font-size: var(--text-base-size);
-	line-height: var(--line-height-lg);
 }
 </style>

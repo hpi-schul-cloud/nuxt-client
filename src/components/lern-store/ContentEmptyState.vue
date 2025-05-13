@@ -25,8 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import ContentEmptySvg from "@/assets/img/empty-state/ContentEmptySvg.vue";
-import { EmptyState } from "@ui-empty-state";
+import { EmptyState, ContentEmptySvg } from "@ui-empty-state";
 import { useI18n } from "vue-i18n";
 
 const suggestionsItems = [

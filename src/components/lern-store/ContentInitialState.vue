@@ -35,9 +35,8 @@
 </template>
 
 <script setup lang="ts">
-import { EmptyState } from "@ui-empty-state";
+import { EmptyState, ContentInitialSvg } from "@ui-empty-state";
 import { useI18n } from "vue-i18n";
-import ContentInitialSvg from "@/assets/img/empty-state/ContentInitialSvg.vue";
 
 const { t } = useI18n();
 </script>
