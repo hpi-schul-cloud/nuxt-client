@@ -1,15 +1,19 @@
 <template>
-	<VEmptyState :text="text" data-testid="empty-state" class="mt-16">
+	<VEmptyState data-testid="empty-state" class="mt-16">
 		<template #media>
 			<div aria-hidden="true">
 				<slot name="media" />
 			</div>
 		</template>
 		<template #title>
-			<!-- rename data-testid to empty-state-title-->
-			<p class="text-h4 mt-8" data-testid="emptyTaskMessage">
+			<p class="text-h4 mt-8" data-testid="empty-state-title">
 				{{ title }}
 			</p>
+		</template>
+		<template #text>
+			<span class="text">
+				<slot name="text" />
+			</span>
 		</template>
 	</VEmptyState>
 </template>
@@ -26,3 +30,9 @@ defineProps({
 	},
 });
 </script>
+<style scoped lang="scss">
+.text {
+	font-size: var(--text-base-size);
+	line-height: var(--line-height-lg);
+}
+</style>
