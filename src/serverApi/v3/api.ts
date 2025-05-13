@@ -16761,7 +16761,7 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         courseControllerImportCourse: async (file: any, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'file' is not null or undefined
             assertParamExists('courseControllerImportCourse', 'file', file)
-            const localVarPath = `/common-cartridge/import`;
+            const localVarPath = `/courses/import`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;

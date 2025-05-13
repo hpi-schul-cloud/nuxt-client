@@ -1,6 +1,7 @@
 import { CoursesApiFactory, CoursesApiInterface } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3/api";
 
 @Module({
 	name: "commonCartridgeImportModule",
@@ -28,6 +29,10 @@ export default class CommonCartridgeImportModule extends VuexModule {
 		return CoursesApiFactory(undefined, "/v3", $axios);
 	}
 
+	public get commonCartridgeApi(): CommonCartridgeApiInterface {
+		return CommonCartridgeApiFactory(undefined, "/v3", $axios);
+	}
+
 	@Mutation
 	public setFile(file: File | undefined): void {
 		this._file = file;
@@ -52,7 +57,7 @@ export default class CommonCartridgeImportModule extends VuexModule {
 		}
 
 		try {
-			await this.coursesApi.courseControllerImportCourse(file);
+			await this.commonCartridgeApi.commonCartridgeControllerImportCourse({file});
 			this.setIsSuccess(true);
 		} catch {
 			this.setIsSuccess(false);
