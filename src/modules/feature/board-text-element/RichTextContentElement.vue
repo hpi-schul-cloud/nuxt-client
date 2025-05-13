@@ -98,6 +98,19 @@ const onKeyUp = () => ensurePoliteNotifications();
 		margin-top: var(--space-md-2);
 	}
 
+	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around {
+		> .ck-widget__type-around__button_before {
+			top: 0.5rem;
+			left: 0.5rem;
+			margin-left: 0;
+		}
+
+		> .ck-widget__type-around__button_after {
+			bottom: 0.5rem;
+			right: 0.5rem;
+		}
+	}
+
 	.ck-content {
 		overflow: hidden; // prevent margin collapse
 
@@ -141,6 +154,11 @@ const onKeyUp = () => ensurePoliteNotifications();
 			overflow-y: hidden;
 			padding-right: 1px;
 			margin-bottom: var(--space-xs);
+		}
+
+		.ck-widget.ck-widget_with-selection-handle:hover
+			> .ck-widget__selection-handle {
+			display: none;
 		}
 
 		.math-tex {
