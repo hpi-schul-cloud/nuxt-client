@@ -36,12 +36,15 @@ const selectedFileRecords = computed(() => {
 	);
 });
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const onClick = async () => {
 	if (props.disabled) {
 		return;
 	}
 	for (const fileRecord of selectedFileRecords.value) {
 		await downloadFile(fileRecord.url, fileRecord.name);
+		await delay(500);
 	}
 };
 </script>
