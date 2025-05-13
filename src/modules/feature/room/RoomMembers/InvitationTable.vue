@@ -113,20 +113,19 @@ const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
 
+const prepareRemovalMessage = (linkIds: string[]) => {
+	return linkIds.length > 1
+		? t("pages.rooms.members.invitationTable.multipleDelete.confirmation")
+		: t("pages.rooms.members.invitationTable.delete.confirmation", {
+				invitation: invitationTableData.value.find(
+					(link) => link.id === linkIds[0]
+				)?.title,
+			});
+};
+
 const confirmRemoval = async (linkIds: string[]) => {
-	let message = t(
-		"pages.rooms.members.invitationTable.multipleDelete.confirmation"
-	);
-	if (linkIds.length === 1) {
-		const invitationTitle = invitationTableData.value.find(
-			(link) => link.title === linkIds[0]
-		)?.title;
-		message = t("pages.rooms.members.invitationTable.delete.confirmation", {
-			invitation: invitationTitle,
-		});
-	}
 	const shouldRemove = await askConfirmation({
-		message,
+		message: prepareRemovalMessage(linkIds),
 		confirmActionLangKey: "common.actions.remove",
 	});
 	return shouldRemove;
