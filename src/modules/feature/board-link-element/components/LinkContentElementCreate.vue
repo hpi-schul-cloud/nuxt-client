@@ -17,7 +17,7 @@
 					/>
 
 					<div class="align-self-center pl-2">
-						<button ref="submit" type="submit">
+						<button ref="submit" type="submit" data-testid="save-link-in-card">
 							<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
 							<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
 						</button>
