@@ -95,8 +95,10 @@ describe("RoomExternalToolOverview", () => {
 
 		it("should display empty state", () => {
 			const { wrapper } = setup();
+			const emptyState = wrapper.findComponent(EmptyState);
 
-			expect(wrapper.findComponent(EmptyState).exists()).toBe(true);
+			expect(emptyState.exists()).toBe(true);
+			expect(emptyState.props("title")).toEqual("pages.rooms.tools.emptyState");
 		});
 	});
 
