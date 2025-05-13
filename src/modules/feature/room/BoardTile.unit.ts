@@ -42,7 +42,7 @@ describe("@feature-room/BoardTile", () => {
 		it("should display tile in draft style", () => {
 			const { wrapper } = setup({ board: mockBoard, index: 0 });
 
-			expect(wrapper.classes()).toContain("opacity-70");
+			expect(wrapper.classes()).toContain("opacity-80");
 		});
 	});
 });
