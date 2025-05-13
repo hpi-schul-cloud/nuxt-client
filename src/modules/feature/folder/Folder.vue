@@ -87,7 +87,7 @@ const uploadProgress = ref({
 	total: 0,
 });
 const isLoading = ref(true);
-const isEmpty = computed(() => fileRecords.value.length === 0);
+const isEmpty = computed(() => uploadedFileRecords.value.length === 0);
 
 const uploadedFileRecords = computed(() => {
 	return fileRecords.value.filter((fileRecord) => !fileRecord.isUploading);

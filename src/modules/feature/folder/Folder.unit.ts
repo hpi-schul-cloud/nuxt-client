@@ -743,6 +743,63 @@ describe("Folder.vue", () => {
 		});
 	});
 
+	describe("when folder contains only one file with isUploading true", () => {
+		const setup = async () => {
+			const folderStateMock =
+				createMock<ReturnType<typeof FolderState.useFolderState>>();
+			jest
+				.spyOn(FolderState, "useFolderState")
+				.mockReturnValue(folderStateMock);
+			const parent = parentNodeInfoFactory.build();
+			folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+			const boardState = createMock<
+				ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+			>({});
+			jest
+				.spyOn(BoardApi, "useSharedBoardPageInformation")
+				.mockReturnValue(boardState);
+
+			const fileStorageApiMock =
+				createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			jest
+				.spyOn(FileStorageApi, "useFileStorageApi")
+				.mockReturnValue(fileStorageApiMock);
+
+			const fileRecord1 = fileRecordFactory.build({ isUploading: true });
+			fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+				fileRecord1,
+			]);
+
+			const { wrapper } = setupWrapper();
+
+			await nextTick();
+			await nextTick();
+			await nextTick();
+
+			return {
+				folderStateMock,
+				wrapper,
+				fileStorageApiMock,
+				fileRecord1,
+			};
+		};
+
+		it("should not show the loading spinner", async () => {
+			const { wrapper } = await setup();
+
+			const loadingSpinner = wrapper.findComponent(VSkeletonLoader);
+			expect(loadingSpinner.exists()).toBe(false);
+		});
+
+		it("should show EmptyFolderState", async () => {
+			const { wrapper } = await setup();
+
+			const emptyState = wrapper.findComponent(EmptyFolderSvg);
+			expect(emptyState.exists()).toBe(true);
+		});
+	});
+
 	describe("when breadcrumbs are present", () => {
 		const setup = () => {
 			const folderStateMock = createMock<
