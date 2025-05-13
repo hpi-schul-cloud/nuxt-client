@@ -3,7 +3,6 @@
 		<v-btn
 			variant="text"
 			:ripple="false"
-			design="none"
 			data-testid="editor-back-button"
 			@click="goBack"
 		>
