@@ -536,7 +536,7 @@ export default {
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
-	"components.cardElement.h5pElement": "Інтерактивний зміст навчання",
+	"components.cardElement.h5pElement": "Інтерактивний елемент навчання",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
 	"components.datePicker.validation.required": "Будь ласка, введіть дату.",
 	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
@@ -1652,6 +1652,7 @@ export default {
 		"Спробуйте використати коротший запит.",
 	"pages.content.emptyState.error.title": "Отакої, результатів немає!",
 	"pages.content.index.backToCourse": "Назад до курсу",
+	"pages.content.index.backToBoard": "Назад до дошки ",
 	"pages.content.index.backToOverview": "Назад до огляду",
 	"pages.content.index.search_for": "Пошук...",
 	"pages.content.index.search_resources": "Ресурси",
