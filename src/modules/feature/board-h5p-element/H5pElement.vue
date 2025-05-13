@@ -86,7 +86,25 @@ const openEditorWindow = () => {
 		},
 	});
 
-	editorWindow.value = window.open(route.href, `_blank`);
+	editorWindow.value = window.open(route.href, "_blank");
+};
+
+const openPlayerWindow = () => {
+	if (!element.value.content.contentId) {
+		return;
+	}
+
+	const route = router.resolve({
+		name: "h5pPlayer",
+		params: {
+			contentId: element.value.content.contentId,
+		},
+		query: {
+			parentType: H5PContentParentType.BOARD_ELEMENT,
+		},
+	});
+
+	editorWindow.value = window.open(route.href, "_blank");
 };
 
 const onKeydownArrow = (event: KeyboardEvent) => {
@@ -111,7 +129,9 @@ const onEdit = () => {
 };
 
 const onClickElement = () => {
-	if (props.isEditMode) {
+	if (hasLinkedContent.value) {
+		openPlayerWindow();
+	} else {
 		openEditorWindow();
 	}
 };
