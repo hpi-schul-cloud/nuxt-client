@@ -61,14 +61,11 @@ export default class CommonCartridgeImportModule extends VuexModule {
 		}
 
 		try {
-			const importParams: CommonCartridgeImportBodyParams = { file };
-			await this.commonCartridgeApi.commonCartridgeControllerImportCourse(
-				importParams
+			await this.coursesApi.courseControllerImportCourse(
+				file
 			);
-			console.log("file import succeeded");
 			this.setIsSuccess(true);
 		} catch {
-			console.log("failed to import file");
 			this.setIsSuccess(false);
 		}
 	}
