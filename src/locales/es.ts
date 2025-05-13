@@ -1866,7 +1866,7 @@ export default {
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.roomDetails.emptyState":
 		"Actualmente no hay contenidos de aprendizaje en esta sala",
-	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
+	"pages.rooms.emptyState": "Actualmente no hay salas",
 	"pages.rooms.fab.title": "Crear sala",
 	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
 	"pages.rooms.infoAlert.welcome.collaboration":
@@ -1995,8 +1995,9 @@ export default {
 	"pages.tasks.labels.overdue": "Expirada",
 	"pages.tasks.labels.planned": "Planificada",
 	"pages.tasks.student.completed.emptyState.title":
-		"Actualmente no tiene ninguna tarea enviada.",
-	"pages.tasks.student.open.emptyState.title": "No hay tareas abiertas.",
+		"Actualmente no hay tareas completadas",
+	"pages.tasks.student.open.emptyState.title":
+		"Actualmente no hay tareas abiertas",
 	"pages.tasks.student.openTasks": "Tareas abiertas",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
 	"pages.tasks.student.subtitleOverDue": "Tareas perdidas",

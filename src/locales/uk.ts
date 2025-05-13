@@ -1846,7 +1846,7 @@ export default {
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
 	"pages.roomDetails.emptyState":
 		"Наразі в цьому просторі немає навчальних матеріалів",
-	"pages.rooms.emptyState": "Зараз тут немає кімнат",
+	"pages.rooms.emptyState": "Наразі немає вільних кімнат",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.infoAlert.welcome": "Ласкаво просимо до нових Кімнат!",
 	"pages.rooms.infoAlert.welcome.collaboration":
@@ -1967,8 +1967,8 @@ export default {
 	"pages.tasks.labels.overdue": "Пропущені",
 	"pages.tasks.labels.planned": "Заплановано",
 	"pages.tasks.student.completed.emptyState.title":
-		"Наразі у вас немає виконаних завдань.",
-	"pages.tasks.student.open.emptyState.title": "Відкритих завдань немає.",
+		"Наразі немає жодного виконаного завдання",
+	"pages.tasks.student.open.emptyState.title": "Наразі немає відкритих завдань",
 	"pages.tasks.student.openTasks": "Відкриті завдання",
 	"pages.tasks.student.submittedTasks": "Виконані завдання",
 	"pages.tasks.student.subtitleOverDue": "Пропущені завдання",
@@ -2114,7 +2114,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Доступні медіа",
 	"feature.media-shelf.layout.list": "лінії",
 	"feature.media-shelf.layout.grid": "сітка",
-	"pages.folder.emptyState": "Наразі тут немає файлів.",
+	"pages.folder.emptyState": "Наразі тут немає файлів",
 	"pages.folder.fab.title": "Додати файл",
 	"pages.folder.untitled": "Папка без назви",
 	"pages.folder.title": "Папка",
