@@ -11,7 +11,7 @@
 			:selected-ids="selectedIds"
 			@reset:selected="onResetSelectedMembers"
 		>
-			<slot name="action-menu-items" />
+			<slot name="action-menu-items" v-bind="{ selectedIds }" />
 		</BatchActionMenu>
 
 		<v-spacer v-else />
@@ -143,6 +143,15 @@ const { t } = useI18n();
 const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
 
 const selectedIds = ref<string[]>([]);
+
+watch(
+	() => props.items,
+	(newItems) => {
+		selectedIds.value = selectedIds.value.filter((id) =>
+			newItems.some((item) => item[props.selectItemKey] === id)
+		);
+	}
+);
 
 const search = ref("");
 

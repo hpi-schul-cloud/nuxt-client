@@ -432,6 +432,8 @@ export default {
 		"Ya existe un archivo con este nombre.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
 		"El servicio de archivos no está disponible actualmente.",
+	"components.board.notifications.errors.fileNotDeleted":
+		"No se han podido eliminar los archivos.",
 	"components.board.notifications.errors.fileToBig":
 		"Los archivos adjuntos superan el tamaño máximo permitido de {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated":
@@ -2185,7 +2187,11 @@ export default {
 	"pages.folder.ariaLabels.menu": "Menú carpeta",
 	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",
 	"pages.folder.ariaLabels.menu.action.delete": "Borrar carpeta",
+	"pages.folder.ariaLabels.menu.action.file.delete": "Eliminar archivo",
 	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
 	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
+	"pages.folder.delete-multiple-confirmation":
+		"¿Borrar realmente todos los archivos {total}?",
+	"pages.folder.delete-confirmation": "¿Borrar realmente el archivo {name}?",
 };
