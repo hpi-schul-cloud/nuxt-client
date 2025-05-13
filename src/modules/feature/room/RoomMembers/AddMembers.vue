@@ -35,6 +35,7 @@
 					:label="t('pages.rooms.members.tableHeader.schoolRole')"
 					:disabled="isItemListDisabled"
 					:aria-disabled="isItemListDisabled"
+					:data-testid="`role-item-${selectedSchoolRole}`"
 					@update:model-value="onValueChange"
 					@update:menu="onItemListToggle"
 				/>
