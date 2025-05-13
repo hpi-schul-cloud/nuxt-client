@@ -4,6 +4,7 @@
 		viewBox="0 0 1026 642"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
+		aria-hidden="true"
 	>
 		<ellipse
 			opacity="0.78683"
