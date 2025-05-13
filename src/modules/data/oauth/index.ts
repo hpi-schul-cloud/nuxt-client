@@ -1,1 +1,1 @@
-export * from "./OAuthApi.composable";
+export * from "./oauthApi.composable";

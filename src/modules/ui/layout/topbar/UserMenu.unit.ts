@@ -1,5 +1,3 @@
-import { nextTick } from "vue";
-import { VBtn } from "vuetify/lib/components/index.mjs";
 import { envsFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
@@ -14,6 +12,8 @@ import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
+import { VBtn, VListItem } from "vuetify/lib/components/index.mjs";
 import UserMenu from "./UserMenu.vue";
 
 jest.mock("@data-system");
@@ -275,14 +275,12 @@ describe("@ui-layout/UserMenu", () => {
 
 				await nextTick();
 
-				const externalLogoutBtn = wrapper.findComponent(
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
 					"[data-testid=external-logout]"
 				);
 
 				expect(externalLogoutBtn.exists()).toBe(true);
-				expect(
-					externalLogoutBtn.classes().includes("v-list-item--disabled")
-				).toBe(false);
+				expect(externalLogoutBtn.props().disabled).toBe(false);
 			});
 		});
 
@@ -312,14 +310,12 @@ describe("@ui-layout/UserMenu", () => {
 
 				await nextTick();
 
-				const externalLogoutBtn = wrapper.findComponent(
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
 					"[data-testid=external-logout]"
 				);
 
 				expect(externalLogoutBtn.exists()).toBe(true);
-				expect(
-					externalLogoutBtn.classes().includes("v-list-item--disabled")
-				).toBe(true);
+				expect(externalLogoutBtn.props().disabled).toBe(true);
 			});
 		});
 
@@ -344,14 +340,12 @@ describe("@ui-layout/UserMenu", () => {
 
 				await nextTick();
 
-				const externalLogoutBtn = wrapper.findComponent(
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
 					"[data-testid=external-logout]"
 				);
 
 				expect(externalLogoutBtn.exists()).toBe(true);
-				expect(
-					externalLogoutBtn.classes().includes("v-list-item--disabled")
-				).toBe(true);
+				expect(externalLogoutBtn.props().disabled).toBe(true);
 			});
 		});
 	});
