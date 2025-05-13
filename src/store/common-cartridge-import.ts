@@ -5,7 +5,6 @@ import {
 	CommonCartridgeApiFactory,
 	CommonCartridgeApiInterface,
 } from "@/commonCartridgeApi/v3/api";
-import { CommonCartridgeImportBodyParams } from "@/commonCartridgeApi/v3";
 
 @Module({
 	name: "commonCartridgeImportModule",
