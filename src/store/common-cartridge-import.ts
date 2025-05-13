@@ -5,6 +5,7 @@ import {
 	CommonCartridgeApiFactory,
 	CommonCartridgeApiInterface,
 } from "@/commonCartridgeApi/v3/api";
+import { CommonCartridgeImportBodyParams } from "@/commonCartridgeApi/v3";
 
 @Module({
 	name: "commonCartridgeImportModule",
@@ -62,7 +63,7 @@ export default class CommonCartridgeImportModule extends VuexModule {
 		try {
 			await this.commonCartridgeApi.commonCartridgeControllerImportCourse({
 				file,
-			});
+			} as CommonCartridgeImportBodyParams);
 			this.setIsSuccess(true);
 		} catch {
 			this.setIsSuccess(false);
