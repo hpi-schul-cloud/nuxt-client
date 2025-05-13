@@ -56,7 +56,6 @@ export default class CommonCartridgeImportModule extends VuexModule {
 	async importCommonCartridgeFile(file: File | undefined): Promise<void> {
 		if (!file) {
 			this.setIsSuccess(false);
-			console.log(file);
 			return;
 		}
 
