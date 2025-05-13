@@ -138,7 +138,7 @@ describe("InviteMembersDialog", () => {
 				const title = card.findComponent({ name: "VCardTitle" });
 
 				expect(title.text()).toBe(
-					"pages.rooms.members.inviteMember.firstStep.title"
+					"pages.rooms.members.inviteMember.step.prepare.title"
 				);
 			});
 
@@ -200,7 +200,7 @@ describe("InviteMembersDialog", () => {
 				const title = card.findComponent({ name: "VCardTitle" });
 
 				expect(title.text()).toBe(
-					"pages.rooms.members.inviteMember.secondStep.title"
+					"pages.rooms.members.inviteMember.step.share.title"
 				);
 			});
 

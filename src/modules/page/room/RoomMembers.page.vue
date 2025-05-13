@@ -308,8 +308,8 @@ const fabAction = computed(() => {
 	if (activeTab.value === Tab.Invitations) {
 		return {
 			icon: mdiPlus,
-			title: t("pages.rooms.members.inviteMember.firstStep.title"),
-			ariaLabel: t("pages.rooms.members.inviteMember.firstStep.title"),
+			title: t("pages.rooms.members.inviteMember.step.prepare.title"),
+			ariaLabel: t("pages.rooms.members.inviteMember.step.prepare.title"),
 			dataTestId: "fab-invite-members",
 		};
 	}

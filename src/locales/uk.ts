@@ -1947,12 +1947,14 @@ export default {
 		"Якщо цей дозвіл буде передано {memberFullName}, {currentUserFullName} втратить право видаляти кімнату.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Ця дія може бути скасована лише {memberFullName}.",
-	"pages.rooms.members.inviteMember.firstStep.title":
+	"pages.rooms.members.inviteMember.step.prepare.title":
 		"Створити посилання для запрошення",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Наступним кроком буде створення посилання, за яким можна буде увійти в кімнату.",
-	"pages.rooms.members.inviteMember.secondStep.title":
+	"pages.rooms.members.inviteMember.step.share.title":
 		"Поділіться посиланням на запрошення",
+	"pages.rooms.members.inviteMember.step.edit.title":
+		"Редагувати посилання на запрошення",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Учні з інших шкіл повинні завжди супроводжуватися в кімнату супроводжуючим з їхньої школи до кімнати.",
 	"pages.rooms.members.inviteMember.form.description.label":

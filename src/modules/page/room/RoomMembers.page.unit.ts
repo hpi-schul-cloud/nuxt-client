@@ -407,8 +407,8 @@ describe("RoomMembersPage", () => {
 					activeTab: Tab.Invitations,
 					expectedFabItems: {
 						icon: mdiPlus,
-						title: "pages.rooms.members.inviteMember.firstStep.title",
-						ariaLabel: "pages.rooms.members.inviteMember.firstStep.title",
+						title: "pages.rooms.members.inviteMember.step.prepare.title",
+						ariaLabel: "pages.rooms.members.inviteMember.step.prepare.title",
 						dataTestId: "fab-invite-members",
 					},
 				},

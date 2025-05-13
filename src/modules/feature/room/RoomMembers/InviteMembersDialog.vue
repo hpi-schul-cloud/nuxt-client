@@ -55,7 +55,7 @@
 						</v-checkbox>
 
 						<v-checkbox
-							v-model="formData.isAlsoForStudents"
+							v-model="formData.validForStudents"
 							:disabled="!formData.restrictedToCreatorSchool"
 							:label="
 								t(
@@ -208,7 +208,7 @@ const { xs } = useDisplay();
 const defaultFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
-	isAlsoForStudents: false,
+	validForStudents: false,
 	activeUntilCheck: false,
 	activeUntil: new Date(),
 	requiresConfirmation: true,
@@ -222,9 +222,19 @@ const isDatePickerDisabled = computed(() => {
 });
 
 const modalTitle = computed(() => {
-	return invitationStep.value === InvitationStep.PREPARE
-		? t("pages.rooms.members.inviteMember.firstStep.title")
-		: t("pages.rooms.members.inviteMember.secondStep.title");
+	const titleMap = {
+		[InvitationStep.EDIT]: t(
+			"pages.rooms.members.inviteMember.step.edit.title"
+		),
+		[InvitationStep.SHARE]: t(
+			"pages.rooms.members.inviteMember.step.share.title"
+		),
+		[InvitationStep.PREPARE]: t(
+			"pages.rooms.members.inviteMember.step.prepare.title"
+		),
+	};
+
+	return titleMap[invitationStep.value];
 });
 
 const onUpdateValidDate = (date: Date) => {
@@ -248,7 +258,7 @@ const onContinue = async () => {
 		activeUntil: formData.value.activeUntilCheck
 			? formData.value.activeUntil.toString()
 			: "2900-01-01T00:00:00.000Z",
-		isOnlyForTeachers: !formData.value.isAlsoForStudents,
+		isOnlyForTeachers: !formData.value.validForStudents,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
 	};
@@ -289,7 +299,7 @@ watch(
 	() => formData.value.restrictedToCreatorSchool,
 	(newVal) => {
 		if (!newVal) {
-			formData.value.isAlsoForStudents = false;
+			formData.value.validForStudents = false;
 		}
 	}
 );
@@ -302,7 +312,7 @@ watch(
 			formData.value.title = newVal.title;
 			formData.value.restrictedToCreatorSchool =
 				newVal.restrictedToCreatorSchool;
-			formData.value.isAlsoForStudents = !newVal.isOnlyForTeachers;
+			formData.value.validForStudents = !newVal.isOnlyForTeachers;
 			formData.value.activeUntilCheck = newVal.activeUntil !== null;
 			formData.value.activeUntil = new Date(newVal.activeUntil!);
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;

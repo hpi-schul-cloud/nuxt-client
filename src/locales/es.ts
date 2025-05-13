@@ -1974,12 +1974,14 @@ export default {
 		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
-	"pages.rooms.members.inviteMember.firstStep.title":
+	"pages.rooms.members.inviteMember.step.prepare.title":
 		"Crear enlace de invitación",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",
-	"pages.rooms.members.inviteMember.secondStep.title":
+	"pages.rooms.members.inviteMember.step.share.title":
 		"Compartir enlace de invitación",
+	"pages.rooms.members.inviteMember.step.edit.title":
+		"Editar enlace de invitación",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un guía de aprendizaje supervisor de su escuela a la sala.",
 	"pages.rooms.members.inviteMember.form.description.label":

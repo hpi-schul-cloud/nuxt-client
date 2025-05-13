@@ -1915,10 +1915,12 @@ export default {
 		"If this permission is transferred to {memberFullName}, {currentUserFullName} loses the right to delete the room.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"This action can only be undone by {memberFullName}.",
-	"pages.rooms.members.inviteMember.firstStep.title": "Create invitation link",
+	"pages.rooms.members.inviteMember.step.prepare.title":
+		"Create invitation link",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"The next step is to create a link, which can be used to enter the room.",
-	"pages.rooms.members.inviteMember.secondStep.title": "Share invitation link",
+	"pages.rooms.members.inviteMember.step.share.title": "Share invitation link",
+	"pages.rooms.members.inviteMember.step.edit.title": "Edit invitation link",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Students from other schools must always be added to the room by a supervising learning guide from their school.",
 	"pages.rooms.members.inviteMember.form.description.label":
