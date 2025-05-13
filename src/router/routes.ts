@@ -358,6 +358,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: `/h5p/player/:contentId(${REGEX_ID})`,
 		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
 		name: "h5pPlayer",
+		beforeEnter: validateQueryParameters({
+			parentType: isEnum(H5PContentParentType),
+		}),
+		props: (to: RouteLocationNormalized) => ({
+			parentType: to.query.parentType,
+			contentId: to.params.contentId,
+		}),
 	},
 	{
 		path: `/h5p/editor/:contentId(${REGEX_ID})?`,

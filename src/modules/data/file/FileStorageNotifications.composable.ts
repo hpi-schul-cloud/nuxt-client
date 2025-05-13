@@ -39,6 +39,11 @@ export const useFileStorageNotifier = () => {
 		showFailure(message);
 	};
 
+	const showFileNotDeletedError = () => {
+		const message = t("components.board.notifications.errors.fileNotDeleted");
+		showFailure(message);
+	};
+
 	const showFileExistsError = () => {
 		const message = t("components.board.notifications.errors.fileNameExists");
 
@@ -64,5 +69,6 @@ export const useFileStorageNotifier = () => {
 		showUnauthorizedError,
 		showInternalServerError,
 		showFileExistsError,
+		showFileNotDeletedError,
 	};
 };
