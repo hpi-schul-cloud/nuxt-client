@@ -42,9 +42,9 @@
 						>{{ formatFileSize(item.size) }}
 					</span>
 				</template>
-				<template #[`item.actions`]="{ item, index }">
+				<template #[`item.actions`]="{ item }">
 					<KebabMenu
-						:data-testid="`kebab-menu-${index}`"
+						:data-testid="`kebab-menu-${item.name}`"
 						:aria-label="buildAriaLabel(item)"
 					>
 						<KebabMenuActionDeleteFiles
