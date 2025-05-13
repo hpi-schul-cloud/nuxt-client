@@ -107,12 +107,14 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	) => {
 		try {
 			const endpointMap = {
-				[RoleName.Teacher]: schoolApi.schoolControllerGetTeachers(schoolId),
-				[RoleName.Student]: schoolApi.schoolControllerGetStudents(schoolId),
+				[RoleName.Teacher]: () =>
+					schoolApi.schoolControllerGetTeachers(schoolId),
+				[RoleName.Student]: () =>
+					schoolApi.schoolControllerGetStudents(schoolId),
 			};
 
 			const result = (
-				await endpointMap[schoolRoleName as keyof typeof endpointMap]
+				await endpointMap[schoolRoleName as keyof typeof endpointMap]()
 			).data;
 
 			potentialRoomMembers.value = result.data
