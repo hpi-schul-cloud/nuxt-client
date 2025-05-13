@@ -13,9 +13,11 @@ export const toBase64 = (file: File) =>
 		reader.onerror = (error) => reject(error);
 	});
 
-export function downloadFile(url: string, fileName: string) {
+export async function downloadFile(url: string, fileName: string) {
+	const response = await fetch(url);
+	const blob = await response.blob();
 	const link = document.createElement("a");
-	link.href = url;
+	link.href = URL.createObjectURL(blob);
 	link.download = fileName;
 	link.hidden = true;
 	// This functionality adds a hidden <a> element to the page,
@@ -24,6 +26,7 @@ export function downloadFile(url: string, fileName: string) {
 	document.body.appendChild(link);
 	link.click();
 	document.body.removeChild(link);
+	URL.revokeObjectURL(link.href); // Clean up the object URL
 }
 
 export function convertFileSize(fileSize: number): {

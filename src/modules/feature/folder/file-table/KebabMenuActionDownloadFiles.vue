@@ -36,12 +36,12 @@ const selectedFileRecords = computed(() => {
 	);
 });
 
-const onClick = () => {
+const onClick = async () => {
 	if (props.disabled) {
 		return;
 	}
-	selectedFileRecords.value.forEach(async (fileRecord) => {
-		downloadFile(fileRecord.url, fileRecord.name);
-	});
+	for (const fileRecord of selectedFileRecords.value) {
+		await downloadFile(fileRecord.url, fileRecord.name);
+	}
 };
 </script>
