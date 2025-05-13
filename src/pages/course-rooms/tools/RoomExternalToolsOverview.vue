@@ -59,8 +59,7 @@ import { computed, ComputedRef, onMounted, onUnmounted, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import { EmptyState } from "@ui-empty-state";
-import ToolsEmptyStateSvg from "@/assets/img/empty-state/ToolsEmptyStateSvg.vue";
+import { EmptyState, ToolsEmptyStateSvg } from "@ui-empty-state";
 
 const props = defineProps({
 	roomId: {
