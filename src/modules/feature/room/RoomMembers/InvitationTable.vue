@@ -12,9 +12,9 @@
 		</template>
 
 		<template #[`item.title`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">{{
-				item.title
-			}}</span>
+			<span :class="{ 'text-medium-emphasis': item.isExpired }">
+				{{ item.title }}
+			</span>
 		</template>
 		<template #[`item.restrictedToCreatorSchool`]="{ item }">
 			<span :class="{ 'text-medium-emphasis': item.isExpired }"
@@ -22,24 +22,24 @@
 			</span>
 		</template>
 		<template #[`item.validForStudents`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">{{
-				item.validForStudents
-			}}</span>
+			<span :class="{ 'text-medium-emphasis': item.isExpired }">
+				{{ item.validForStudents }}
+			</span>
 		</template>
 		<template #[`item.activeUntil`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">{{
-				item.activeUntil
-			}}</span>
+			<span :class="{ 'text-medium-emphasis': item.isExpired }">
+				{{ item.activeUntil }}
+			</span>
 		</template>
 		<template #[`item.requiresConfirmation`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">{{
-				item.requiresConfirmation
-			}}</span>
+			<span :class="{ 'text-medium-emphasis': item.isExpired }">
+				{{ item.requiresConfirmation }}
+			</span>
 		</template>
 		<template #[`item.status`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">{{
-				item.status
-			}}</span>
+			<span :class="{ 'text-medium-emphasis': item.isExpired }">
+				{{ item.status }}
+			</span>
 		</template>
 
 		<template #[`item.actions`]="{ item }">
@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { DataTable } from "@ui-data-table";
-import { RoomInvitationLink, useRoomInvitationLinkStore } from "@data-room";
+import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
 import {
 	KebabMenu,
 	KebabMenuActionShare,
@@ -142,7 +142,7 @@ const onRemoveLinks = async (linkIds: string[]) => {
 const onEdit = async (linkId: string) => {
 	editedLink.value =
 		roomInvitationLinks.value.find((link) => link.id === linkId) || null;
-	invitationStep.value = "edit";
+	invitationStep.value = InvitationStep.EDIT;
 	isInvitationDialogOpen.value = true;
 };
 
@@ -180,7 +180,7 @@ const tableHeaders = [
 ];
 
 const openShareModal = (itemId: string) => {
-	invitationStep.value = "share";
+	invitationStep.value = InvitationStep.SHARE;
 	sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${itemId}`;
 	isInvitationDialogOpen.value = true;
 };
