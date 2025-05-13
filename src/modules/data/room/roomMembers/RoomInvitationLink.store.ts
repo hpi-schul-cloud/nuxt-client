@@ -148,7 +148,7 @@ export const useRoomInvitationLinkStore = defineStore(
 			return roomInvitationLinks.value.map((link) => ({
 				id: link.id,
 				title: link.title,
-				validForStudents: link.isOnlyForTeachers
+				isValidForStudents: link.isOnlyForTeachers
 					? commonTranslationsMap.NO
 					: commonTranslationsMap.YES,
 				activeUntil: inputDateFormat(link.activeUntil!),

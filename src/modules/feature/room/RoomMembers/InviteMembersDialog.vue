@@ -55,7 +55,7 @@
 						</v-checkbox>
 
 						<v-checkbox
-							v-model="formData.validForStudents"
+							v-model="formData.isValidForStudents"
 							:disabled="!formData.restrictedToCreatorSchool"
 							:label="
 								t(
@@ -208,7 +208,7 @@ const { xs } = useDisplay();
 const defaultFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
-	validForStudents: false,
+	isValidForStudents: false,
 	activeUntilCheck: false,
 	activeUntil: new Date(),
 	requiresConfirmation: true,
@@ -258,7 +258,7 @@ const onContinue = async () => {
 		activeUntil: formData.value.activeUntilCheck
 			? formData.value.activeUntil.toString()
 			: "2900-01-01T00:00:00.000Z",
-		isOnlyForTeachers: !formData.value.validForStudents,
+		isOnlyForTeachers: !formData.value.isValidForStudents,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
 	};
@@ -299,7 +299,7 @@ watch(
 	() => formData.value.restrictedToCreatorSchool,
 	(newVal) => {
 		if (!newVal) {
-			formData.value.validForStudents = false;
+			formData.value.isValidForStudents = false;
 		}
 	}
 );
@@ -312,7 +312,7 @@ watch(
 			formData.value.title = newVal.title;
 			formData.value.restrictedToCreatorSchool =
 				newVal.restrictedToCreatorSchool;
-			formData.value.validForStudents = !newVal.isOnlyForTeachers;
+			formData.value.isValidForStudents = !newVal.isOnlyForTeachers;
 			formData.value.activeUntilCheck = newVal.activeUntil !== null;
 			formData.value.activeUntil = new Date(newVal.activeUntil!);
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;

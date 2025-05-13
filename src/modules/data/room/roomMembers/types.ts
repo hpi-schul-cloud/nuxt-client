@@ -17,7 +17,7 @@ export type RoomInvitationLink = RoomInvitationLinkResponse;
 export type RoomInvitationFormData = {
 	activeUntil: string;
 	activeUntilChecked: boolean;
-	validForStudents: boolean;
+	isValidForStudents: boolean;
 	requiresConfirmation: boolean;
 	restrictedToCreatorSchool: boolean;
 	title: string;
