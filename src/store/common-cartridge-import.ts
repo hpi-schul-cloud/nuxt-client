@@ -56,14 +56,12 @@ export default class CommonCartridgeImportModule extends VuexModule {
 	async importCommonCartridgeFile(file: File | undefined): Promise<void> {
 		if (!file) {
 			this.setIsSuccess(false);
-			console.log(file)
+			console.log(file);
 			return;
 		}
 
 		try {
-			await this.coursesApi.courseControllerImportCourse(
-				file
-			);
+			await this.coursesApi.courseControllerImportCourse(file);
 			this.setIsSuccess(true);
 		} catch {
 			this.setIsSuccess(false);
