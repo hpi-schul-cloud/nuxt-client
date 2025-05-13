@@ -28,7 +28,6 @@
 				<v-select
 					ref="selectRole"
 					v-model="selectedSchoolRole"
-					auto-select-first="exact"
 					density="comfortable"
 					item-title="name"
 					item-value="id"
