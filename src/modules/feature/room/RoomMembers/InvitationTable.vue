@@ -5,7 +5,7 @@
 		:table-headers="tableHeaders"
 		:show-select="true"
 		:external-selected-ids="selectedIds"
-		@update:model-value="updateSelectedIds"
+		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
 			<KebabMenuActionRemoveMember @click="onRemoveLinks(selectedIds)" />
@@ -50,13 +50,13 @@
 				<v-btn
 					variant="text"
 					:icon="mdiShareVariantOutline"
-					@click="openShareModal(item.id)"
+					@click="onOpenShareModal(item.id)"
 				/>
 				<KebabMenu>
 					<KebabMenuActionEdit @click="onEdit(item.id)" />
 					<KebabMenuActionShare
 						:text="t('common.actions.share')"
-						@click="openShareModal(item.id)"
+						@click="onOpenShareModal(item.id)"
 					/>
 					<KebabMenuActionDelete
 						scope-language-key="pages.rooms.invitationLinkStatus.title"
@@ -109,7 +109,7 @@ const {
 } = storeToRefs(roomInvitationLinkStore);
 const { askConfirmation } = useConfirmationDialog();
 
-const updateSelectedIds = (ids: string[]) => {
+const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
 
@@ -179,7 +179,7 @@ const tableHeaders = [
 	},
 ];
 
-const openShareModal = (itemId: string) => {
+const onOpenShareModal = (itemId: string) => {
 	invitationStep.value = InvitationStep.SHARE;
 	sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${itemId}`;
 	isInvitationDialogOpen.value = true;

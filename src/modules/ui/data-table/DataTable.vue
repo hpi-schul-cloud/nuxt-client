@@ -52,7 +52,7 @@
 		:show-select="showSelect"
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
-		@update:model-value="$emit('update:modelValue', selectedIds)"
+		@update:model-value="$emit('update:selected-ids', selectedIds)"
 	>
 		<template
 			#[`header.data-table-select`]="{ someSelected, allSelected, selectAll }"
@@ -136,7 +136,7 @@ const props = defineProps({
 });
 
 defineEmits<{
-	(e: "update:modelValue", selectedIds: string[]): void;
+	(e: "update:selected-ids", selectedIds: string[]): void;
 }>();
 
 const { t } = useI18n();
