@@ -36,7 +36,7 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { useBoardNotifier } from "@util-board";
-import { nextTick, ref } from "vue";
+import { ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index.mjs";
 import RoomMembersPage from "./RoomMembers.page.vue";

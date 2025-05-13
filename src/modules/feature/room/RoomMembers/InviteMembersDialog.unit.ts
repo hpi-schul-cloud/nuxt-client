@@ -12,7 +12,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VueWrapper } from "@vue/test-utils";
-import { useRoomInvitationLinkStore } from "@data-room";
+import { useRoomInvitationLinkStore, InvitationStep } from "@data-room";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -34,11 +34,6 @@ jest.mock("@vueuse/integrations/useFocusTrap", () => {
 
 jest.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = jest.mocked(useBoardNotifier);
-
-enum InvitationStep {
-	PREPARE = "prepare",
-	SHARE = "share",
-}
 
 jest.useFakeTimers();
 describe("InviteMembersDialog", () => {
@@ -71,7 +66,7 @@ describe("InviteMembersDialog", () => {
 	});
 
 	const setup = (
-		props: {
+		options: {
 			modelValue?: boolean;
 			schoolName?: string;
 			preDefinedStep?: string;
@@ -83,6 +78,7 @@ describe("InviteMembersDialog", () => {
 	) => {
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
 		const notifierModule = createModuleMocks(NotifierModule);
+
 		wrapper = mount(InviteMembersDialog, {
 			global: {
 				plugins: [
@@ -93,6 +89,7 @@ describe("InviteMembersDialog", () => {
 							roomInvitationLinkStore: {
 								isLoading: false,
 								roomInvitationLinks,
+								invitationStep: options.preDefinedStep,
 							},
 						},
 					}),
@@ -105,15 +102,15 @@ describe("InviteMembersDialog", () => {
 				...{
 					modelValue: true,
 					schoolName: "Test School",
-					preDefinedStep: InvitationStep.PREPARE,
 				},
-				...props,
+				...options,
 			},
 		});
 
 		const roomInvitationLinkStore = mockedPiniaStoreTyping(
 			useRoomInvitationLinkStore
 		);
+
 		return { wrapper, roomInvitationLinkStore, notifierModule };
 	};
 
@@ -188,6 +185,108 @@ describe("InviteMembersDialog", () => {
 					).toBe(true);
 				});
 			});
+
+			describe("when continue button is clicked", () => {
+				it("should switch to SHARE step and call createLink method", async () => {
+					const { wrapper, roomInvitationLinkStore } = setup({
+						preDefinedStep: InvitationStep.PREPARE,
+					});
+					await nextTick();
+					const shareModalBefore = wrapper.findComponent({
+						name: "ShareModalResult",
+					});
+					expect(shareModalBefore.exists()).toBe(false);
+
+					const nextButton = wrapper.findComponent({ ref: "continueButton" });
+					await nextButton.trigger("click");
+					await nextTick();
+
+					const shareModalAfter = wrapper.findComponent({
+						name: "ShareModalResult",
+					});
+
+					const expectedFormValues = {
+						title: "invitation link",
+						activeUntil: "2900-01-01T00:00:00.000Z",
+						isOnlyForTeachers: true,
+						restrictedToCreatorSchool: true,
+						requiresConfirmation: true,
+					};
+
+					expect(shareModalAfter.exists()).toBe(true);
+
+					expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(
+						expectedFormValues
+					);
+				});
+			});
+		});
+
+		describe("when the step is EDIT", () => {
+			it("should have the correct title", async () => {
+				const { wrapper } = setup({ preDefinedStep: InvitationStep.EDIT });
+
+				await nextTick();
+
+				const card = wrapper.findComponent({ name: "VCard" });
+				const title = card.findComponent({ name: "VCardTitle" });
+
+				expect(title.text()).toBe(
+					"pages.rooms.members.inviteMember.step.edit.title"
+				);
+			});
+
+			it("should have the correct action buttons", async () => {
+				const { wrapper } = setup({ preDefinedStep: InvitationStep.EDIT });
+
+				await nextTick();
+
+				const actionButtons = wrapper.findAllComponents({ name: "VBtn" });
+
+				expect(actionButtons.length).toBe(2);
+
+				const cancelButton = actionButtons[0];
+				const nextButton = actionButtons[1];
+
+				expect(cancelButton.text()).toBe("common.actions.cancel");
+				expect(nextButton.text()).toBe("common.actions.continue");
+			});
+
+			describe("when continue button is clicked", () => {
+				it("should switch to SHARE step and call updateLink method", async () => {
+					const { wrapper, roomInvitationLinkStore } = setup({
+						preDefinedStep: InvitationStep.EDIT,
+					});
+					await nextTick();
+					const shareModalBefore = wrapper.findComponent({
+						name: "ShareModalResult",
+					});
+					expect(shareModalBefore.exists()).toBe(false);
+
+					const nextButton = wrapper.findComponent({ ref: "continueButton" });
+					await nextButton.trigger("click");
+					await nextTick();
+
+					const shareModalAfter = wrapper.findComponent({
+						name: "ShareModalResult",
+					});
+
+					const expectedFormValues = {
+						id: "",
+						title: "invitation link",
+						activeUntil: "2900-01-01T00:00:00.000Z",
+						isOnlyForTeachers: true,
+						restrictedToCreatorSchool: true,
+						requiresConfirmation: true,
+					};
+
+					expect(shareModalAfter.exists()).toBe(true);
+
+					expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(
+						expectedFormValues
+					);
+				});
+			});
 		});
 
 		describe("when the step is SHARE", () => {
@@ -198,6 +297,8 @@ describe("InviteMembersDialog", () => {
 
 				const card = wrapper.findComponent({ name: "VCard" });
 				const title = card.findComponent({ name: "VCardTitle" });
+				await nextTick();
+				await nextTick();
 
 				expect(title.text()).toBe(
 					"pages.rooms.members.inviteMember.step.share.title"
@@ -264,42 +365,6 @@ describe("InviteMembersDialog", () => {
 
 					expect(wrapper.emitted()).toHaveProperty("close");
 				});
-			});
-		});
-
-		describe("when continue button is clicked", () => {
-			it("should switch to SHARE step and call createLink method", async () => {
-				const { wrapper, roomInvitationLinkStore } = setup({
-					preDefinedStep: InvitationStep.PREPARE,
-				});
-				await nextTick();
-				const shareModalBefore = wrapper.findComponent({
-					name: "ShareModalResult",
-				});
-				expect(shareModalBefore.exists()).toBe(false);
-
-				const nextButton = wrapper.findComponent({ ref: "continueButton" });
-				await nextButton.trigger("click");
-				jest.advanceTimersByTime(1000);
-				await nextTick();
-
-				const shareModalAfter = wrapper.findComponent({
-					name: "ShareModalResult",
-				});
-
-				const expectedFormValues = {
-					title: "invitation link",
-					activeUntil: "2900-01-01T00:00:00.000Z",
-					isOnlyForTeachers: true,
-					restrictedToCreatorSchool: true,
-					requiresConfirmation: true,
-				};
-
-				expect(shareModalAfter.exists()).toBe(true);
-
-				expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(
-					expectedFormValues
-				);
 			});
 		});
 	});
