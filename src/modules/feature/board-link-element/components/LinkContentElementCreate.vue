@@ -8,6 +8,7 @@
 						:rules="rules"
 						:label="$t('components.cardElement.LinkElement.label')"
 						type="text"
+						data-testid="input-link"
 						:autofocus="true"
 						:auto-grow="true"
 						rows="1"
