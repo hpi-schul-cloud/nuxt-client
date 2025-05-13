@@ -3358,10 +3358,10 @@ export interface DrawingElementResponse {
 export interface ElementWithParentHierarchyResponse {
     /**
      * The element data
-     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse}
+     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse}
      * @memberof ElementWithParentHierarchyResponse
      */
-    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
+    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse;
     /**
      * The hierarchical path of parent elements
      * @type {Array<ParentNodeInfoResponse>}
@@ -19827,7 +19827,7 @@ export const MediumMetadataApiAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * 
-         * @summary Returns configuration metadata for media source of a medium
+         * @summary Returns configuration data of a medium
          * @param {string} mediumId The id of the medium.
          * @param {string} mediaSourceId The id of the media source.
          * @param {*} [options] Override http request option.
@@ -19879,7 +19879,7 @@ export const MediumMetadataApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Returns configuration metadata for media source of a medium
+         * @summary Returns configuration data of a medium
          * @param {string} mediumId The id of the medium.
          * @param {string} mediaSourceId The id of the media source.
          * @param {*} [options] Override http request option.
@@ -19901,7 +19901,7 @@ export const MediumMetadataApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
-         * @summary Returns configuration metadata for media source of a medium
+         * @summary Returns configuration data of a medium
          * @param {string} mediumId The id of the medium.
          * @param {string} mediaSourceId The id of the media source.
          * @param {*} [options] Override http request option.
@@ -19921,7 +19921,7 @@ export const MediumMetadataApiFactory = function (configuration?: Configuration,
 export interface MediumMetadataApiInterface {
     /**
      * 
-     * @summary Returns configuration metadata for media source of a medium
+     * @summary Returns configuration data of a medium
      * @param {string} mediumId The id of the medium.
      * @param {string} mediaSourceId The id of the media source.
      * @param {*} [options] Override http request option.
@@ -19941,7 +19941,7 @@ export interface MediumMetadataApiInterface {
 export class MediumMetadataApi extends BaseAPI implements MediumMetadataApiInterface {
     /**
      * 
-     * @summary Returns configuration metadata for media source of a medium
+     * @summary Returns configuration data of a medium
      * @param {string} mediumId The id of the medium.
      * @param {string} mediaSourceId The id of the media source.
      * @param {*} [options] Override http request option.
