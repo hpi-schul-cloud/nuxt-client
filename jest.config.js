@@ -49,7 +49,7 @@ const config = {
 		// Include
 		"<rootDir>/src/components/**/*.{js,ts,vue}",
 		"<rootDir>/src/modules/**/*.{js,ts,vue}",
-		"<rootDir>/src/pages/**/*.{js,vue}",
+		"<rootDir>/src/pages/**/*.{js,ts,vue}",
 		"<rootDir>/src/mixins/**/*.js",
 		"<rootDir>/src/plugins/**/*.(js|ts)",
 		"<rootDir>/src/store/**/*.(js|ts)",
