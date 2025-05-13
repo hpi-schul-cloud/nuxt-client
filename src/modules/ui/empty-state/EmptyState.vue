@@ -24,10 +24,6 @@ defineProps({
 		type: String,
 		required: true,
 	},
-	text: {
-		type: String,
-		default: "",
-	},
 });
 </script>
 <style scoped lang="scss">
