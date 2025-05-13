@@ -5,7 +5,6 @@
 body {
 	font-family: var(--font-primary);
 	font-size: var(--text-base-size);
-	line-height: var(--line-height-md);
 }
 
 /* heading size */
@@ -17,7 +16,6 @@ body {
 		font-family: var(--font-accent);
 		font-size: var(--heading-#{$i});
 		font-weight: var(--font-weight-normal);
-		line-height: var(--line-height-sm);
 	}
 }
 
@@ -55,7 +53,6 @@ h6,
 
 p {
 	margin-bottom: var(--space-md);
-	line-height: var(--line-height-lg);
 }
 
 b,

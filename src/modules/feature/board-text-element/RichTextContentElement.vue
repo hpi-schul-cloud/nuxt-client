@@ -112,7 +112,6 @@ const onKeyUp = () => ensurePoliteNotifications();
 			font-family: var(--font-accent);
 			font-weight: var(--font-weight-bold);
 			font-size: var(--heading-6);
-			line-height: var(--line-height-md);
 			letter-spacing: 0.01em;
 			margin-bottom: var(--space-xs);
 			margin-top: var(--space-md-2);
@@ -122,7 +121,6 @@ const onKeyUp = () => ensurePoliteNotifications();
 			font-family: var(--font-accent);
 			font-weight: var(--font-weight-bold);
 			font-size: var(--text-md);
-			line-height: var(--line-height-lg);
 			letter-spacing: 0.015em;
 			margin-bottom: var(--space-xs);
 			margin-top: var(--space-md-2);
@@ -134,7 +132,6 @@ const onKeyUp = () => ensurePoliteNotifications();
 			font-family: var(--font-primary);
 			font-weight: var(--font-weight-normal);
 			font-size: var(--text-md);
-			line-height: var(--line-height-lg);
 			margin-bottom: var(--space-xs);
 		}
 
