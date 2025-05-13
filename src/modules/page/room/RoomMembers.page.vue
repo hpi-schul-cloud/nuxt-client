@@ -86,6 +86,7 @@ import {
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import {
+	InvitationStep,
 	useRoomDetailsStore,
 	useRoomMembersStore,
 	useRoomAuthorization,
@@ -212,7 +213,7 @@ const tabs: Array<{
 const onFabClick = async () => {
 	switch (activeTab.value) {
 		case Tab.Invitations:
-			invitationStep.value = "prepare";
+			invitationStep.value = InvitationStep.PREPARE;
 			isInvitationDialogOpen.value = true;
 			break;
 

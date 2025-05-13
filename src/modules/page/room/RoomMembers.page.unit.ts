@@ -22,8 +22,10 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
+	InvitationStep,
 	useRoomAuthorization,
 	useRoomDetailsStore,
+	useRoomInvitationLinkStore,
 	useRoomMembersStore,
 } from "@data-room";
 import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
@@ -34,10 +36,11 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { useBoardNotifier } from "@util-board";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index.mjs";
 import RoomMembersPage from "./RoomMembers.page.vue";
+import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -142,6 +145,8 @@ describe("RoomMembersPage", () => {
 				displaySchoolRole: "",
 			}));
 
+		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
+
 		const wrapper = mount(RoomMembersPage, {
 			attachTo: document.body,
 			global: {
@@ -151,6 +156,11 @@ describe("RoomMembersPage", () => {
 							roomDetailsStore: {
 								isLoading: false,
 								room,
+							},
+							roomInvitationLinkStore: {
+								roomInvitationLinks,
+								isInvitationDialogOpen: false,
+								invitationStep: InvitationStep.SHARE,
 							},
 						},
 					}),
@@ -175,8 +185,18 @@ describe("RoomMembersPage", () => {
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(
+			useRoomInvitationLinkStore
+		);
 
-		return { wrapper, roomDetailsStore, roomMembersStore, members, room };
+		return {
+			wrapper,
+			roomDetailsStore,
+			roomMembersStore,
+			roomInvitationLinkStore,
+			members,
+			room,
+		};
 	};
 
 	it("should be found in the dom", () => {
@@ -490,7 +510,7 @@ describe("RoomMembersPage", () => {
 	describe("invite members fab", () => {
 		it("should open Dialog", async () => {
 			roomPermissions.canAddRoomMembers.value = true;
-			const { wrapper } = setup({
+			const { wrapper, roomInvitationLinkStore } = setup({
 				activeTab: Tab.Invitations,
 				isFeatureRoomMembersTabsEnabled: true,
 			});
@@ -500,6 +520,7 @@ describe("RoomMembersPage", () => {
 			});
 
 			expect(dialogBeforeClick.props("modelValue")).toBe(false);
+			expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
 
 			const addMemberButton = wireframe
 				.getComponent("[data-testid=fab-invite-members]")
@@ -512,6 +533,10 @@ describe("RoomMembersPage", () => {
 			});
 
 			expect(dialogAfterClick.props("modelValue")).toBe(true);
+			expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
+			expect(roomInvitationLinkStore.invitationStep).toBe(
+				InvitationStep.PREPARE
+			);
 		});
 	});
 
