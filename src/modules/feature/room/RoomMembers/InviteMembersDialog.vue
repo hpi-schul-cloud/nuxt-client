@@ -64,7 +64,7 @@
 							hide-details
 						/>
 
-						<div class="d-flex align-center justify-start my-n4">
+						<div class="d-flex align-center justify-start my-n4 pr-0">
 							<v-checkbox
 								v-model="formData.activeUntilChecked"
 								:label="
@@ -73,14 +73,13 @@
 								hide-details
 								class="mr-2"
 							/>
-
-							<date-picker
+							<DatePicker
 								ref="datePicker"
 								v-model="formData.activeUntil"
 								:disabled="isDatePickerDisabled"
 								:required="!isDatePickerDisabled"
 								:min-date="new Date().toString()"
-								class="mr-2 mt-2"
+								class="mt-1"
 								data-testid="date-picker-until"
 								@click.prevent="pause"
 								@keydown.space.enter.prevent="pause"

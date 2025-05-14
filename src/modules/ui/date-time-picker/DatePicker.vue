@@ -6,12 +6,12 @@
 	>
 		<template #activator="{ props: menuProps }">
 			<v-text-field
-				ref="inputField"
+				ref="date-text-field"
 				v-bind="menuProps"
 				v-bind.attr="$attrs"
 				v-model="dateString"
 				v-date-input-mask
-				:append-inner-icon="mdiCalendar"
+				:prepend-inner-icon="mdiCalendar"
 				:label="label"
 				:aria-label="ariaLabel"
 				:placeholder="t('common.placeholder.dateformat')"
@@ -40,7 +40,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watchEffect, unref, PropType, toRef } from "vue";
+import {
+	computed,
+	ref,
+	watchEffect,
+	unref,
+	PropType,
+	toRef,
+	useTemplateRef,
+} from "vue";
 import { useDebounceFn, computedAsync } from "@vueuse/core";
 import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
@@ -69,10 +77,9 @@ const emit = defineEmits(["update:date", "error"]);
 const { t } = useI18n();
 
 const showDateDialog = ref(false);
-const inputField = ref<HTMLInputElement | null>(null);
+const dateTextField = useTemplateRef("date-text-field");
 const dateString = ref<string>();
 const externalErrors = toRef(props, "errors");
-
 watchEffect(() => {
 	dateString.value = props.date
 		? dayjs(props.date).format(DATETIME_FORMAT.date)
@@ -145,9 +152,12 @@ const onUpdateTextfield = async () => {
 };
 
 const onPickDate = async () => {
-	showDateDialog.value = false;
-	inputField.value?.focus();
+	dateString.value = dateObject.value
+		? dayjs(dateObject.value).format(DATETIME_FORMAT.date)
+		: undefined;
 	await emitDate();
+	showDateDialog.value = false;
+	dateTextField.value?.focus();
 };
 
 const emitDate = async () => {
