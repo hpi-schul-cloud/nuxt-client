@@ -28,6 +28,7 @@
 			"@data-file": ["src/modules/data/file"],
 			"@data-folder": ["src/modules/data/folder"],
 			"@data-license": ["src/modules/data/license"],
+			"@data-oauth": ["src/modules/data/oauth"],
 			"@data-school": ["src/modules/data/school"],
 			"@feature-auto-logout": ["src/modules/feature/auto-logout"],
 			"@feature-board-file-element": ["src/modules/feature/board-file-element"],

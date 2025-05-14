@@ -1,5 +1,5 @@
 <template>
-	<v-row class="mt-4" data-testid="board-grid">
+	<v-row class="mt-4 board-grid" data-testid="board-grid">
 		<v-col
 			v-for="(board, index) in boards"
 			:key="board.id"

@@ -2,6 +2,7 @@ import {
 	BoardLayout,
 	ContentElementType,
 	ExternalToolElementResponse,
+	H5pElementResponse,
 	LayoutBodyParams,
 } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
@@ -292,6 +293,29 @@ describe("BoardApi.composable", () => {
 			);
 		});
 
+		it("should call elementControllerUpdateElement api with H5pElement", async () => {
+			const { updateElementCall } = useBoardApi();
+			const payload: H5pElementResponse = {
+				id: "external-tool-element-id",
+				type: ContentElementType.H5p,
+				content: {
+					contentId: "context-external-tool-id",
+				},
+				timestamps: timestampsResponseFactory.build(),
+			};
+			const data = {
+				content: payload.content,
+				type: ContentElementType.H5p,
+			};
+
+			await updateElementCall(payload);
+
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+				payload.id,
+				{ data }
+			);
+		});
+
 		it("should throw error for unkown element type", async () => {
 			const { updateElementCall } = useBoardApi();
 			const payload = {
@@ -569,6 +593,18 @@ describe("BoardApi.composable", () => {
 			expect(boardApi.boardControllerUpdateLayout).toHaveBeenCalledWith<
 				[string, LayoutBodyParams]
 			>("board-id", { layout: BoardLayout.List });
+		});
+	});
+
+	describe("getElementWithParentHierarchyCall", () => {
+		it("should call elementControllerGetElementWithParentHierarchy api", async () => {
+			const { getElementWithParentHierarchyCall } = useBoardApi();
+
+			await getElementWithParentHierarchyCall("element-id");
+
+			expect(
+				elementApi.elementControllerGetElementWithParentHierarchy
+			).toHaveBeenCalledWith("element-id");
 		});
 	});
 });

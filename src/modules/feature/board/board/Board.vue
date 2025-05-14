@@ -7,7 +7,7 @@
 				max-width="full"
 				hide-border
 				main-without-padding
-				is-flex-container
+				:is-flex-container="!isListBoard"
 			>
 				<template #header>
 					<BoardHeader

@@ -1,3 +1,8 @@
 .v-card--variant-outlined {
-	border-color: rgba(0, 0, 0, 0.12) !important;
+	border-color: rgba(var(--v-theme-on-surface), 0.12) !important;
+}
+
+.board-grid .v-card--variant-outlined,
+.elements .v-card--variant-outlined{
+	border-color: rgba(var(--v-theme-on-surface), 0.25) !important;
 }
