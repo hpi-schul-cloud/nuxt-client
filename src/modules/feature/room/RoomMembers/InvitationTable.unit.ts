@@ -22,10 +22,12 @@ import { useI18n } from "vue-i18n";
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+		useI18n: jest.fn().mockReturnValue({
+			t: jest.fn().mockImplementation((key: string) => key),
+		}),
 	};
 });
-const mockI18n = jest.mocked(useI18n);
+const mockI18n = jest.mocked(useI18n());
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
@@ -100,7 +102,7 @@ describe("InvitationTable", () => {
 
 			expect(wrapper.exists()).toBe(true);
 			expect(dataTable.exists()).toBe(true);
-			expect(mockI18n).toHaveBeenCalled();
+			expect(mockI18n.t).toHaveBeenCalled();
 		});
 
 		it("should pass tableHeader prop to DataTable", () => {
@@ -121,6 +123,9 @@ describe("InvitationTable", () => {
 					.props("tableHeaders")!
 					.map((header: { title: string }) => header.title)
 			).toEqual(headers);
+			headers.forEach((header) => {
+				expect(mockI18n.t).toHaveBeenCalledWith(header);
+			});
 		});
 	});
 
