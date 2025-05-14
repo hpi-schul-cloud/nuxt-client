@@ -89,6 +89,7 @@
 						@delete-files="onDeleteFiles"
 					/>
 					<KebabMenuActionDownloadFiles
+						v-if="isDesktop"
 						:file-records="fileRecords"
 						:selected-ids="selectedIds"
 						:aria-label="t('pages.folder.ariaLabels.menu.action.file.download')"
@@ -101,11 +102,13 @@
 
 <script setup lang="ts">
 import { printDateFromStringUTC } from "@/plugins/datetime";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { FileRecord } from "@/types/file/File";
 import { convertFileSize, isDownloadAllowed } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu } from "@ui-kebab-menu";
+import { useMediaQuery } from "@vueuse/core";
 import { computed, defineProps, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
@@ -152,6 +155,8 @@ const headers = [
 		width: 50,
 	},
 ];
+
+const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;
