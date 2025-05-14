@@ -7,8 +7,7 @@ import { DataTable } from "@ui-data-table";
 import { KebabMenuList } from "@ui-kebab-menu";
 import { VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
 import BatchActionMenu from "./BatchActionMenu.vue";
-import { nextTick, watch } from "vue";
-import { flushPromises } from "@vue/test-utils";
+import { nextTick } from "vue";
 
 describe("DataTable", () => {
 	const setupWrapper = (
