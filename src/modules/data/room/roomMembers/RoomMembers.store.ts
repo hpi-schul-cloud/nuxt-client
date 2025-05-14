@@ -274,6 +274,10 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		member.isSelectable = false;
 	};
 
+	const resetPotentialMembers = () => {
+		potentialRoomMembers.value = [];
+	};
+
 	const resetStore = () => {
 		isLoading.value = false;
 		roomMembers.value = [];
@@ -287,6 +291,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		isRoomOwner,
 		changeRoomOwner,
 		fetchMembers,
+		resetPotentialMembers,
 		resetStore,
 		getPotentialMembers,
 		getSchools,

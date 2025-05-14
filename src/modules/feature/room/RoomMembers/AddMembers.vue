@@ -110,7 +110,8 @@ const { t } = useI18n();
 
 const roomMembersStore = useRoomMembersStore();
 const { potentialRoomMembers, schools } = storeToRefs(roomMembersStore);
-const { addMembers, getPotentialMembers } = roomMembersStore;
+const { addMembers, getPotentialMembers, resetPotentialMembers } =
+	roomMembersStore;
 
 const selectedSchool = ref(schools.value[0].id);
 
@@ -123,6 +124,7 @@ const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
 const selectedUsers = ref<string[]>([]);
 
 const onValueChange = async () => {
+	resetPotentialMembers();
 	selectedUsers.value = [];
 	await getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
 };
