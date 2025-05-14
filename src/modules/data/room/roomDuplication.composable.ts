@@ -1,6 +1,6 @@
 import { useLoadingState } from "@/composables/loadingState";
+import { useRoomsState } from "@data-room";
 import { AlertPayload } from "@/store/types/alert-payload";
-import { delay } from "@/utils/helpers";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
@@ -17,6 +17,7 @@ export const useRoomDuplication = () => {
 	const { isLoadingDialogOpen } = useLoadingState(
 		t("data-room.duplication.loading")
 	);
+	const { duplicateRoom } = useRoomsState();
 
 	const isRoomDuplicationFeatureEnabled = computed(() => {
 		return envConfigModule.getEnv.FEATURE_ROOMS_DUPLICATION_ENABLED;
@@ -32,13 +33,14 @@ export const useRoomDuplication = () => {
 		isDuplicationInfoDialogOpen.value = false;
 	};
 
-	const duplicate = async () => {
+	const duplicate = async (roomId: string) => {
 		closeDuplicationInfoDialog();
 		isLoadingDialogOpen.value = true;
 
 		try {
-			await delay(3000);
+			const copyId = await duplicateRoom(roomId);
 			showSuccess();
+			return copyId;
 		} catch {
 			showTimeout();
 		} finally {

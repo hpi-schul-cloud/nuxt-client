@@ -49,6 +49,21 @@ export const useRoomsState = () => {
 		}
 	};
 
+	const duplicateRoom = async (roomId: string) => {
+		isLoading.value = true;
+		try {
+			const response = await roomApi.roomControllerCopyRoom(roomId);
+			const { id } = response.data;
+			return id;
+		} catch (error) {
+			const responseError = mapAxiosErrorToResponseError(error);
+
+			throw createApplicationError(responseError.code);
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
 	const isEmpty = computed(() => {
 		return rooms.value.length === 0;
 	});
@@ -60,5 +75,6 @@ export const useRoomsState = () => {
 		fetchRooms,
 		deleteRoom,
 		leaveRoom,
+		duplicateRoom,
 	};
 };

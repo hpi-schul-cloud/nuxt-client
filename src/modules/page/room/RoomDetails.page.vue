@@ -211,14 +211,16 @@ const cancelDuplication = () => {
 };
 
 const confirmDuplication = async () => {
-	await duplicate();
-
-	router.push({
-		name: "room-details",
-		params: {
-			id: room.value?.id,
-		},
-	});
+	if (!room.value) return;
+	const copyId = await duplicate(room.value.id);
+	if (copyId) {
+		router.push({
+			name: "room-details",
+			params: {
+				id: copyId,
+			},
+		});
+	}
 };
 // end - Duplication Feature
 
