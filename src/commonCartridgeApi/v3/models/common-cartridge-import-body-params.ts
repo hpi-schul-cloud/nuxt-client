@@ -25,7 +25,7 @@ export interface CommonCartridgeImportBodyParams {
      * @type {any}
      * @memberof CommonCartridgeImportBodyParams
      */
-    file: Buffer;
+    file: any;
 }
 
 

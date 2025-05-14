@@ -108,12 +108,12 @@ export const CommonCartridgeApiAxiosParamCreator = function (configuration?: Con
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/octet-stream';
+            localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(commonCartridgeImportBodyParams, localVarRequestOptions, configuration)
+            // localVarRequestOptions.data = serializeDataIfNeeded(commonCartridgeImportBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
