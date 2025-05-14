@@ -88,8 +88,13 @@ const pageTitle = computed(() =>
 );
 useTitle(pageTitle);
 
-const { canCreateRoom, canDeleteRoom, canEditRoomContent, canLeaveRoom } =
-	useRoomAuthorization();
+const {
+	canCreateRoom,
+	canDeleteRoom,
+	canEditRoomContent,
+	canLeaveRoom,
+	canDuplicateRoom,
+} = useRoomAuthorization();
 
 const visibleBoards = computed(() =>
 	roomBoards.value?.filter(
@@ -196,8 +201,7 @@ const {
 } = useRoomDuplication();
 
 const onDuplicate = async () => {
-	// TODO Permission check
-	if (!room.value) return;
+	if (!room.value || !canDuplicateRoom) return;
 
 	openDuplicationInfoDialog();
 };
