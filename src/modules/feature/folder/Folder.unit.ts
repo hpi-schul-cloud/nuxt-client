@@ -21,6 +21,13 @@ import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.
 import KebabMenuActionDownloadFiles from "./file-table/KebabMenuActionDownloadFiles.vue";
 import Folder from "./Folder.vue";
 
+jest.mock("@vueuse/core", () => {
+	return {
+		...jest.requireActual("@vueuse/core"),
+		useMediaQuery: jest.fn().mockReturnValue({ value: true }),
+	};
+});
+
 describe("Folder.vue", () => {
 	beforeEach(() => {
 		jest.restoreAllMocks();

@@ -12,6 +12,13 @@ import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 
+jest.mock("@vueuse/core", () => {
+	return {
+		...jest.requireActual("@vueuse/core"),
+		useMediaQuery: jest.fn().mockReturnValue({ value: true }),
+	};
+});
+
 describe("FileTable", () => {
 	const setupWrapper = (props: {
 		isLoading: boolean;
