@@ -31,8 +31,7 @@ export const useRoomAuthorization = () => {
 				Permission.RoomCreate.toLowerCase()
 			) && authModule.getUserRoles.includes(Roles.Teacher);
 		canDeleteRoom.value = permissions.includes(Permission.RoomDelete);
-		// To be adjusted when BE exists
-		canDuplicateRoom.value = true;
+		canDuplicateRoom.value = permissions.includes(Permission.RoomDuplicate);
 		canEditRoom.value = permissions.includes(Permission.RoomEdit);
 		canEditRoomContent.value = permissions.includes(Permission.RoomContentEdit);
 		canLeaveRoom.value = permissions.includes(Permission.RoomLeave);

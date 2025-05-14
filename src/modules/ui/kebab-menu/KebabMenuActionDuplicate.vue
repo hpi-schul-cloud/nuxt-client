@@ -8,7 +8,6 @@
 </template>
 
 <script setup lang="ts">
-// continue here
 import KebabMenuAction from "./KebabMenuAction.vue";
 import { mdiContentCopy } from "@icons/material";
 import { useI18n } from "vue-i18n";
