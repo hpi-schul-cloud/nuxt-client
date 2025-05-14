@@ -1,11 +1,7 @@
 import router from "@/router";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
-import {
-	convertFileSize,
-	downloadFile,
-	isDownloadAllowed,
-} from "@/utils/fileHelper";
+import * as FileHelper from "@/utils/fileHelper";
 import { fileRecordFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -24,8 +20,6 @@ import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./file-table/KebabMenuActionDownloadFiles.vue";
 import Folder from "./Folder.vue";
-
-jest.mock("@/utils/fileHelper");
 
 describe("Folder.vue", () => {
 	beforeEach(() => {
@@ -552,13 +546,6 @@ describe("Folder.vue", () => {
 					fileRecord,
 				]);
 
-				const convertFileSizeMock = jest
-					.mocked(convertFileSize)
-					.mockImplementation((size) => ({
-						convertedSize: size,
-						unit: "MB",
-					}));
-
 				const boardApiMock =
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
 				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
@@ -645,13 +632,6 @@ describe("Folder.vue", () => {
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
 					fileRecord,
 				]);
-
-				const convertFileSizeMock = jest
-					.mocked(convertFileSize)
-					.mockImplementation((size) => ({
-						convertedSize: size,
-						unit: "MB",
-					}));
 
 				const boardApiMock =
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
@@ -744,19 +724,7 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
 				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
 
-				const downloadFileMock = jest.mocked(downloadFile);
-				// .mockReturnValueOnce(undefined);
-
-				const convertFileSizeMock = jest
-					.mocked(convertFileSize)
-					.mockImplementation((size) => ({
-						convertedSize: size,
-						unit: "MB",
-					}));
-
-				const isDownloadAllowedMock = jest
-					.mocked(isDownloadAllowed)
-					.mockReturnValueOnce(true);
+				const downloadFileMock = jest.spyOn(FileHelper, "downloadFile");
 
 				const { wrapper } = setupWrapper();
 
@@ -830,13 +798,6 @@ describe("Folder.vue", () => {
 				fileRecord1,
 				fileRecord2,
 			]);
-
-			const convertFileSizeMock = jest
-				.mocked(convertFileSize)
-				.mockImplementation((size) => ({
-					convertedSize: size,
-					unit: "MB",
-				}));
 
 			const { wrapper } = setupWrapper();
 
