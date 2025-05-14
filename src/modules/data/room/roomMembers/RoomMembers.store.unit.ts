@@ -705,6 +705,34 @@ describe("useRoomMembers", () => {
 		});
 	});
 
+	describe("resetPotentialMembers", () => {
+		it("should reset the potential members", async () => {
+			const { roomMembersStore } = setup();
+
+			const schoolStudentList: SchoolUserListResponse = {
+				data: [
+					{
+						firstName: "Marla",
+						lastName: "Mathe",
+						id: "1",
+						schoolName: "Paul-Gerhardt-Gymnasium",
+					},
+				],
+			};
+			schoolApiMock.schoolControllerGetStudents.mockResolvedValue(
+				mockApiResponse({
+					data: schoolStudentList,
+				})
+			);
+
+			await roomMembersStore.getPotentialMembers(RoleName.Student);
+			expect(roomMembersStore.potentialRoomMembers).toHaveLength(1);
+
+			roomMembersStore.resetPotentialMembers();
+			expect(roomMembersStore.potentialRoomMembers).toHaveLength(0);
+		});
+	});
+
 	describe("isRoomOwner", () => {
 		describe("when the user is the room owner", () => {
 			it("should return true", () => {

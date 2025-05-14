@@ -181,6 +181,33 @@ describe("AddMembers", () => {
 	});
 
 	describe("when school is changed", () => {
+		it("should call resetPotentialMembers", async () => {
+			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
+			const selectedSchool = roomMembersSchools[1].id;
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			await schoolComponent.setValue(selectedSchool);
+
+			expect(roomMembersStore.resetPotentialMembers).toHaveBeenCalledTimes(1);
+		});
+
+		it("should reset selectedUsers", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
+			await schoolComponent.setValue("schoolId");
+
+			expect(userComponent.props("modelValue")).toEqual([]);
+		});
+
 		it("should call getPotentialMembers for set role", async () => {
 			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
 			const selectedSchool = roomMembersSchools[1].id;
@@ -200,24 +227,36 @@ describe("AddMembers", () => {
 				selectedSchool
 			);
 		});
+	});
+
+	describe("when userRole is changed", () => {
+		it("should call resetPotentialMembers", async () => {
+			const { wrapper, roomMembersStore } = setup();
+			const selectedRole = RoleName.Student;
+			const roleComponent = wrapper.getComponent({
+				ref: "selectRole",
+			});
+
+			await roleComponent.setValue(selectedRole);
+
+			expect(roomMembersStore.resetPotentialMembers).toHaveBeenCalledTimes(1);
+		});
 
 		it("should reset selectedUsers", async () => {
 			const { wrapper } = setup();
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
+			const roleComponent = wrapper.getComponent({
+				ref: "selectRole",
 			});
 
 			const userComponent = wrapper.getComponent({
 				ref: "autoCompleteUsers",
 			});
 
-			await schoolComponent.setValue("schoolId");
+			await roleComponent.setValue(RoleName.Roomeditor);
 
 			expect(userComponent.props("modelValue")).toEqual([]);
 		});
-	});
 
-	describe("when userRole is changed", () => {
 		describe("and the role is set to student", () => {
 			it("should call getPotentialMembers for student role", async () => {
 				const { wrapper, roomMembersSchools, roomMembersStore } = setup();
@@ -252,21 +291,6 @@ describe("AddMembers", () => {
 					roomMembersSchools[0].id
 				);
 			});
-		});
-
-		it("should reset selectedUsers", async () => {
-			const { wrapper } = setup();
-			const roleComponent = wrapper.getComponent({
-				ref: "selectRole",
-			});
-
-			const userComponent = wrapper.getComponent({
-				ref: "autoCompleteUsers",
-			});
-
-			await roleComponent.setValue(RoleName.Roomeditor);
-
-			expect(userComponent.props("modelValue")).toEqual([]);
 		});
 	});
 
