@@ -15,7 +15,6 @@ import {
 	isPreviewPossible,
 	isVideoMimeType,
 } from "./fileHelper";
-import * as Helper from "./helpers";
 
 describe("@/utils/fileHelper", () => {
 	describe("downloadFile", () => {
@@ -34,7 +33,6 @@ describe("@/utils/fileHelper", () => {
 				.mockImplementation(() => link);
 			document.body.appendChild = jest.fn();
 			document.body.removeChild = jest.fn();
-			jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
 
 			return { url, fileName, link, createElementSpy };
 		};

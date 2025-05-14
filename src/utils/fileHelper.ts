@@ -4,7 +4,6 @@ import {
 	PreviewStatus,
 	PreviewWidth,
 } from "@/fileStorageApi/v3";
-import { delay } from "./helpers";
 
 export const toBase64 = (file: File) =>
 	new Promise((resolve, reject) => {
@@ -14,7 +13,7 @@ export const toBase64 = (file: File) =>
 		reader.onerror = (error) => reject(error);
 	});
 
-export async function downloadFile(url: string, fileName: string) {
+export function downloadFile(url: string, fileName: string) {
 	const link = document.createElement("a");
 	link.href = url;
 	link.download = fileName;
@@ -24,7 +23,6 @@ export async function downloadFile(url: string, fileName: string) {
 	// no longer needed and should not clutter the page any further.
 	document.body.appendChild(link);
 	link.click();
-	await delay(100);
 	document.body.removeChild(link);
 }
 
