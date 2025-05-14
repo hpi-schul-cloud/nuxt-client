@@ -157,7 +157,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref, watch, watchEffect } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import { InfoAlert } from "@ui-alert";
@@ -221,7 +221,11 @@ const isDatePickerDisabled = computed(() => {
 	return !formData.value.activeUntilChecked;
 });
 
-const isSubmitDisabled = ref(false);
+const isSubmitDisabled = computed(() => {
+	return (
+		formData.value.activeUntilChecked && formData.value.activeUntil === null
+	);
+});
 
 const modalTitle = computed(() => {
 	return step.value === InvitationStep.PREPARE
@@ -290,11 +294,6 @@ watch(
 		}
 	}
 );
-
-watchEffect(() => {
-	isSubmitDisabled.value =
-		formData.value.activeUntilChecked && formData.value.activeUntil === null;
-});
 
 const informationLink = computed(() =>
 	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
