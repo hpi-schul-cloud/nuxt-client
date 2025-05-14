@@ -167,8 +167,7 @@ watch(
 	() => props.externalSelectedIds,
 	(newValue) => {
 		selectedIds.value = newValue!;
-	},
-	{ immediate: true }
+	}
 );
 </script>
 

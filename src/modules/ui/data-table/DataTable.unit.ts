@@ -7,6 +7,8 @@ import { DataTable } from "@ui-data-table";
 import { KebabMenuList } from "@ui-kebab-menu";
 import { VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
 import BatchActionMenu from "./BatchActionMenu.vue";
+import { nextTick, watch } from "vue";
+import { flushPromises } from "@vue/test-utils";
 
 describe("DataTable", () => {
 	const setupWrapper = (
@@ -50,6 +52,16 @@ describe("DataTable", () => {
 				ariaLabelNameKey: options?.ariaLabelNameKey ?? "",
 				headerBottom: 0,
 				externalSelectedIds: options?.externalSelectedIds ?? [],
+			},
+			stubs: {
+				DataTable: {
+					name: "DataTable",
+					watch: {
+						externalSelectedIds: {
+							immediate: true,
+						},
+					},
+				},
 			},
 		});
 
@@ -241,6 +253,8 @@ describe("DataTable", () => {
 
 			it("should render batch action menu", async () => {
 				const { wrapper } = await setup();
+				wrapper.setProps({ externalSelectedIds: ["item-1", "item-2"] });
+				await nextTick();
 
 				const actionMenu = wrapper.findComponent(BatchActionMenu);
 
@@ -249,10 +263,12 @@ describe("DataTable", () => {
 
 			it("should render amount of selected items", async () => {
 				const { wrapper } = await setup();
+				wrapper.setProps({ externalSelectedIds: ["item-1", "item-2"] });
+				await nextTick();
 
-				const actionMenuBefore = wrapper.findComponent(BatchActionMenu);
+				const actionMenu = wrapper.findComponent(BatchActionMenu);
 
-				expect(actionMenuBefore.text()).toContain(
+				expect(actionMenu.text()).toContain(
 					"2 pages.administration.selectedui.actionMenu.actions"
 				);
 			});
