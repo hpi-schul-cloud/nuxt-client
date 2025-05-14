@@ -1877,7 +1877,7 @@ export default {
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
 	"pages.rooms.members.add.role.student": "Учень",
 	"pages.rooms.members.add.students.forbidden":
-		"Lernende dürfen nicht hinzugefügt werden. Bitte an Admin wenden.",
+		"Lernende können nur hinzugefügt werden, wenn in den Schuleinstellungen die Sichtbarkeit von Lernenden für Lernbegleitende aktiviert ist. Bitte an den Schul-Admin wenden.",
 	"pages.rooms.members.add.warningText":
 		"Учнів з інших шкіл може додати до кімнати лише відповідальний(а) вчитель(ка) з їхнього навчального закладу.",
 	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberFullName}",
