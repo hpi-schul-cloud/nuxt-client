@@ -23,7 +23,7 @@ import Folder from "./Folder.vue";
 
 describe("Folder.vue", () => {
 	beforeEach(() => {
-		jest.resetAllMocks();
+		jest.restoreAllMocks();
 	});
 
 	const buildUploadStatsTranslation = (uploaded: string, total: string) => {
