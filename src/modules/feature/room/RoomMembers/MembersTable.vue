@@ -73,7 +73,7 @@
 					})
 				"
 				:disabled="item.isSelectable === false"
-				:aria-label="`${item.firstName}  ${item.lastName}`"
+				:aria-label="`${item.fullName}`"
 				@click="
 					toggleSelect({
 						value: item.userId,
