@@ -873,6 +873,10 @@ describe("Folder.vue", () => {
 			const parent = parentNodeInfoFactory.build();
 			folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
+			const folderName = "Test Folder" as unknown as ComputedRef<string>;
+			folderStateMock.folderName = folderName;
+			folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
 			const boardState = createMock<
 				ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 			>({});
