@@ -14,11 +14,19 @@
 		@keyup.enter="onClickElement"
 		@click="onClickElement"
 	>
-		<ContentElementBar :has-grey-background="true" icon="$h5pOutline">
-			<template #title> Interaktives Lernelement </template>
-			<template #description>
-				ContentId: {{ element.content.contentId }}
+		<ContentElementBar
+			:has-grey-background="true"
+			icon="$h5pOutline"
+			:has-row-style="isSmallOrLargerListBoard"
+		>
+			<template #display>
+				<v-img
+					:src="H5PImage"
+					:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
+					:cover="isSmallOrLargerListBoard"
+				/>
 			</template>
+			<template #title> {{ contentTitle }} </template>
 			<template #menu>
 				<H5pElementMenu
 					v-if="isEditMode"
@@ -39,11 +47,17 @@
 </template>
 
 <script setup lang="ts">
+import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { H5pElementResponse } from "@/serverApi/v3";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler } from "@data-board";
+import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar } from "@ui-board";
-import { computed, Ref, ref, toRef } from "vue";
+import { computed, onMounted, Ref, ref, toRef } from "vue";
+import { useDisplay } from "vuetify";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import H5pElementMenu from "./H5pElementMenu.vue";
 
@@ -64,6 +78,10 @@ const emit = defineEmits<{
 	(e: "move-keyboard:edit", event: KeyboardEvent): void;
 }>();
 
+const { t } = useI18n();
+const { smAndUp } = useDisplay();
+const { getContentTitle } = useH5PEditorApi();
+
 const element: Ref<H5pElementResponse> = toRef(props, "element");
 
 const elementCard: Ref<HTMLElement | null> = ref(null);
@@ -73,6 +91,14 @@ const hasLinkedContent = computed(() => !!element.value.content.contentId);
 
 const router = useRouter();
 const editorWindow: Ref<Window | null> = ref(null);
+
+const isListLayout: Ref<boolean> = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
+
+const isSmallOrLargerListBoard = computed(() => {
+	return smAndUp.value && isListLayout.value;
+});
+
+const contentTitle = ref<string>("");
 
 const openEditorWindow = () => {
 	const route = router.resolve({
@@ -135,4 +161,12 @@ const onClickElement = () => {
 		openEditorWindow();
 	}
 };
+
+onMounted(async () => {
+	const contentId: string | null = element.value.content.contentId;
+	if (contentId) {
+		const title = await getContentTitle(contentId);
+		contentTitle.value = title ?? t("components.cardElement.h5pElement");
+	}
+});
 </script>
