@@ -2,13 +2,11 @@
 	<div>
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
-			class="rich_text"
 			:data-testid="`rich-text-display-${columnIndex}-${elementIndex}`"
 			:value="element.content.text"
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"
-			class="rich_text"
 			:autofocus="autofocus"
 			:value="modelValue.text"
 			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
@@ -69,29 +67,18 @@ const onKeyUp = () => ensurePoliteNotifications();
 </script>
 
 <style lang="scss" scoped>
-.rich_text {
-	font-size: 1rem;
-	padding: 0.05px; // prevent margin collapse
-}
-
 :deep() {
 	.ck.ck-editor__editable_inline {
 		padding: 0;
 	}
 
-	.ck.ck-editor__editable_inline h4:first-of-type,
-	.ck.ck-editor__editable_inline h5:first-of-type {
-		margin-top: var(--space-md-2);
-	}
-
-	.ck.ck-editor__editable_inline p,
-	.ck.ck-editor__editable_inline ol,
-	.ck.ck-editor__editable_inline ul {
+	.ck.ck-editor__editable_inline > :first-child {
 		margin-top: 0;
 	}
 
-	.ck.ck-editor__editable_inline > :last-child {
-		margin-bottom: var(--space-xs);
+	.ck.ck-editor__editable_inline h4:first-of-type,
+	.ck.ck-editor__editable_inline h5:first-of-type {
+		margin-top: var(--space-md-2);
 	}
 
 	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around {
@@ -108,6 +95,8 @@ const onKeyUp = () => ensurePoliteNotifications();
 	}
 
 	.ck-content {
+		overflow: hidden; // prevent margin collapse
+
 		h4 {
 			font-family: var(--font-accent);
 			font-weight: var(--font-weight-bold);
