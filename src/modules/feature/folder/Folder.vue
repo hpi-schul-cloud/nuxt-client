@@ -19,6 +19,7 @@
 			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
 			@delete-files="onDeleteFiles"
+			@update:name="onUpdatenName"
 		/>
 	</DefaultWireframe>
 	<ConfirmationDialog />
@@ -68,7 +69,7 @@ const {
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
-const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles } =
+const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles, rename } =
 	useFileStorageApi();
 
 const folderId = toRef(props, "folderId");
@@ -135,6 +136,10 @@ const onDeleteFiles = async (
 	}
 
 	await deleteFiles(fileRecords);
+};
+
+const onUpdatenName = async (fileName: string, fileRecord: FileRecord) => {
+	await rename(fileRecord.id, { fileName });
 };
 
 const deleteAndNavigateToBoard = async (folderId: string) => {

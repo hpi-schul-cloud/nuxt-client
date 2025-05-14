@@ -55,7 +55,7 @@
 						/>
 						<KebabMenuActionRename
 							:aria-label="t('pages.folder.ariaLabels.menu.action.file.rename')"
-							@click="onRename(item)"
+							@click="onRenameButtonClick(item)"
 						/>
 					</KebabMenu>
 				</template>
@@ -73,6 +73,14 @@
 					<FileUploadProgress :upload-progress="uploadProgress" />
 				</template>
 			</DataTable>
+			<RenameDialog
+				:is-dialog-open="!!fileRecordToRename"
+				:entity-name="$t('components.cardElement.fileElement')"
+				:model-value="fileRecordToRename?.name"
+				@cancel="onRenameDialogCancel"
+				@update:is-dialog-open="onRenameDialogCancel"
+				@update:name="onRenameDialogConfirm"
+			/>
 		</div>
 	</template>
 </template>
@@ -82,9 +90,10 @@ import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
 import { convertFileSize } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
+import { RenameDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
-import { computed, defineProps, PropType } from "vue";
+import { computed, defineProps, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
@@ -115,7 +124,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["delete-files"]);
+const emit = defineEmits(["delete-files", "update:name"]);
 
 const headers = [
 	{ title: "", key: "preview", sortable: false },
@@ -124,6 +133,8 @@ const headers = [
 	{ title: t("pages.folder.columns.size"), key: "size" },
 	{ title: "", key: "actions", sortable: false },
 ];
+
+const fileRecordToRename = ref<FileRecord | undefined>(undefined);
 
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;
@@ -143,10 +154,15 @@ const onDeleteFiles = (
 	emit("delete-files", selectedFileRecords, confirmationPromise);
 };
 
-const onRename = (item: FileRecord) => {
-	// Emit an event to the parent component to handle the rename action
-	// eslint-disable-next-line no-console
-	console.log("Rename action triggered for item:", item);
+const onRenameButtonClick = (item: FileRecord) => {
+	fileRecordToRename.value = item;
+};
+const onRenameDialogCancel = () => {
+	fileRecordToRename.value = undefined;
+};
+const onRenameDialogConfirm = (newName: string) => {
+	emit("update:name", newName, fileRecordToRename.value);
+	fileRecordToRename.value = undefined;
 };
 
 const buildAriaLabel = (item: FileRecord): string => {

@@ -177,6 +177,7 @@ module.exports = {
 			"@ui-confirmation-dialog": getDir("src/modules/ui/confirmation-dialog"),
 			"@ui-data-table": getDir("src/modules/ui/data-table"),
 			"@ui-date-time-picker": getDir("src/modules/ui/date-time-picker"),
+			"@ui-dialog": getDir("src/modules/ui/dialog"),
 			"@ui-extended-icon-btn": getDir("src/modules/ui/extended-icon-btn"),
 			"@ui-kebab-menu": getDir("src/modules/ui/kebab-menu"),
 			"@ui-layout": getDir("src/modules/ui/layout"),
