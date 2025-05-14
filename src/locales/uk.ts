@@ -435,6 +435,8 @@ export default {
 		"Файл з такою назвою вже існує.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
 		"Файловий сервіс наразі недоступний.",
+	"components.board.notifications.errors.fileNotDeleted":
+		"Видалити файли не вдалося.",
 	"components.board.notifications.errors.fileToBig":
 		"Вкладені файли перевищують максимально дозволений розмір {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated":
@@ -2132,8 +2134,12 @@ export default {
 	"pages.folder.ariaLabels.menu": "Меню Папки",
 	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",
 	"pages.folder.ariaLabels.menu.action.delete": "Видалити папку",
+	"pages.folder.ariaLabels.menu.action.file.delete": "Видалити файл",
 	"pages.folder.ariaLabels.menu.action.file.download": "Завантажити файл",
 	"pages.folder.ariaLabels.filter": "	Таблиця пошуку/фільтрації",
 	"pages.folder.ariaLabels.actionMenu": "Меню дій для {name}",
 	"pages.folder.uploadstats": "{uploaded} з {total} завантажених файлів",
+	"pages.folder.delete-multiple-confirmation":
+		"Дійсно видалити всі {total} файли?",
+	"pages.folder.delete-confirmation": "Дійсно видалити файл {name}?",
 };

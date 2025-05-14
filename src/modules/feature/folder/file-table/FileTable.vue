@@ -60,6 +60,12 @@
 						:data-testid="`kebab-menu-${index}`"
 						:aria-label="buildActionMenuAriaLabel(item)"
 					>
+						<KebabMenuActionDeleteFiles
+							:file-records="fileRecords"
+							:selected-ids="[item.id]"
+							:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
+							@delete-files="onDeleteFiles"
+						/>
 						<KebabMenuActionDownloadFiles
 							:disabled="!item.isSelectable"
 							:file-records="fileRecords"
@@ -76,6 +82,12 @@
 				</template>
 
 				<template #action-menu-items="{ selectedIds }">
+					<KebabMenuActionDeleteFiles
+						:file-records="fileRecords"
+						:selected-ids="selectedIds"
+						:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
+						@delete-files="onDeleteFiles"
+					/>
 					<KebabMenuActionDownloadFiles
 						:file-records="fileRecords"
 						:selected-ids="selectedIds"
@@ -94,11 +106,12 @@ import { convertFileSize, isDownloadAllowed } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu } from "@ui-kebab-menu";
-import { computed, PropType } from "vue";
+import { computed, defineProps, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
+import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 
 const { t, n } = useI18n();
@@ -124,6 +137,8 @@ const props = defineProps({
 		required: true,
 	},
 });
+
+const emit = defineEmits(["delete-files"]);
 
 const headers = [
 	{ title: "", key: "preview", sortable: false },
@@ -153,6 +168,13 @@ const isFileSelectable = (fileRecord: FileRecord) => {
 	const result = isDownloadAllowed(fileRecord.securityCheckStatus);
 
 	return result;
+};
+
+const onDeleteFiles = (
+	selectedFileRecords: FileRecord[],
+	confirmationPromise: Promise<boolean>
+) => {
+	emit("delete-files", selectedFileRecords, confirmationPromise);
 };
 
 const buildActionMenuAriaLabel = (item: FileRecord): string => {

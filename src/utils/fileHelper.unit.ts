@@ -42,13 +42,13 @@ describe("@/utils/fileHelper", () => {
 
 			downloadFile(url, fileName);
 
-			expect(createElementSpy).toBeCalledWith("a");
+			expect(createElementSpy).toHaveBeenCalledWith("a");
 			expect(link.href).toEqual(url);
 			expect(link.download).toEqual(fileName);
 			expect(link.hidden).toBe(true);
-			expect(document.body.appendChild).toBeCalledWith(link);
+			expect(document.body.appendChild).toHaveBeenCalledWith(link);
 			expect(link.click).toHaveBeenCalledTimes(1);
-			expect(document.body.removeChild).toBeCalledWith(link);
+			expect(document.body.removeChild).toHaveBeenCalledWith(link);
 		});
 	});
 
