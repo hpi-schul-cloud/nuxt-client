@@ -95,15 +95,10 @@ describe("SchoolYearChangeSection", () => {
 				};
 
 				useSharedSchoolYearChangeApiMock.error.value = businessError;
-
-				return {
-					wrapper,
-					businessError,
-				};
 			};
 
 			it("should show a failure notification", async () => {
-				const { wrapper, businessError } = setup();
+				setup();
 
 				expect(useErrorNotification).toHaveBeenCalledWith(
 					useSharedSchoolYearChangeApiMock.error

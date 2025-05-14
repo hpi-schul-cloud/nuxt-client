@@ -15,7 +15,7 @@ import { useSchoolApi } from "./schoolApi.composable";
 import { useSchoolYearChange } from "./schoolYearChange.composable";
 import { MaintenanceStatus } from "./types";
 
-jest.mock("@data-school/SchoolApi.composable");
+jest.mock("@data-school/schoolApi.composable");
 
 describe("SchoolYearChange.composable", () => {
 	let useSchoolApiMock: DeepMocked<ReturnType<typeof useSchoolApi>>;

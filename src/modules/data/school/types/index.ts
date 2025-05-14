@@ -1,2 +1,2 @@
-export * from "./school-year-mode.enum";
-export * from "./maintenance-status";
+export { SchoolYearModeEnum } from "./school-year-mode.enum";
+export { MaintenanceStatus } from "./maintenance-status";

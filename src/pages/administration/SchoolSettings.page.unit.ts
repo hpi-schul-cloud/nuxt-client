@@ -32,7 +32,7 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-jest.mock("@data-school/SchoolYearChange.composable");
+jest.mock("@data-school/schoolYearChange.composable");
 
 describe("SchoolSettingsPage", () => {
 	let useSharedSchoolYearChangeApiMock: DeepMocked<
@@ -122,7 +122,7 @@ describe("SchoolSettingsPage", () => {
 
 	describe("onMounted", () => {
 		it("should fetch maintenance status of school", () => {
-			const { wrapper } = getWrapper();
+			getWrapper();
 
 			expect(
 				useSharedSchoolYearChangeApiMock.fetchSchoolYearStatus
