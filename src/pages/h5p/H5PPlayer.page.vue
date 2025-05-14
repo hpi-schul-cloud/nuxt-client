@@ -1,64 +1,60 @@
 <template>
-	<section :class="{ inline: isInline }">
+	<section>
 		<v-btn
-			v-if="isInline"
 			variant="text"
 			:ripple="false"
-			design="none"
-			class="arrow__back"
+			data-testid="player-back-button"
 			@click="goBack"
 		>
 			<v-icon>{{ mdiChevronLeft }}</v-icon>
-			{{ $t("pages.content.index.backToCourse") }}
+			{{ $t(backMenuLabel) }}
 		</v-btn>
 
-		<div class="content" :class="{ inline: isInline }">
-			<H5PPlayerComponent :content-id="contentId" @load-error="onLoadError" />
+		<div class="content">
+			<H5PPlayerComponent :content-id="contentId" @load-error="loadError" />
 		</div>
 	</section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import H5PPlayerComponent from "@/components/h5p/H5PPlayer.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
-import { applicationErrorModule } from "@/store";
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
+import { MessageSchema } from "@/locales/schema";
+import type ApplicationErrorModule from "@/store/application-error";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
 import { mdiChevronLeft } from "@icons/material";
-import { defineComponent } from "vue";
-import { useRoute } from "vue-router";
+import { computed } from "vue";
 
-export default defineComponent({
-	name: "H5PPlayer",
-	components: {
-		H5PPlayerComponent,
-	},
-	setup() {
-		const route = useRoute();
-		const { createApplicationError } = useApplicationError();
+const props = defineProps<{
+	parentType: H5PContentParentType;
+	contentId: string;
+}>();
 
-		const contentId = route.params?.contentId;
-		const isInline = !!route.query?.inline;
+const applicationErrorModule: ApplicationErrorModule = injectStrict(
+	APPLICATION_ERROR_KEY
+);
 
-		function goBack() {
-			window.close();
-		}
+const { createApplicationError } = useApplicationError();
 
-		function onLoadError(error: unknown) {
-			const responseError = mapAxiosErrorToResponseError(error);
+function loadError(error: unknown) {
+	const responseError = mapAxiosErrorToResponseError(error);
 
-			applicationErrorModule.setError(
-				createApplicationError(responseError.code)
-			);
-		}
+	applicationErrorModule.setError(createApplicationError(responseError.code));
+}
 
-		return {
-			contentId,
-			goBack,
-			isInline,
-			onLoadError,
-			mdiChevronLeft,
-		};
-	},
+function goBack() {
+	window.close();
+}
+
+const backLabelForScope: Record<H5PContentParentType, keyof MessageSchema> = {
+	[H5PContentParentType.LESSONS]: "pages.content.index.backToCourse",
+	[H5PContentParentType.BOARD_ELEMENT]: "pages.content.index.backToBoard",
+};
+
+const backMenuLabel = computed(() => {
+	return backLabelForScope[props.parentType];
 });
 </script>
 

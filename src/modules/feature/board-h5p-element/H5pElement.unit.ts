@@ -241,7 +241,7 @@ describe("H5pElement", () => {
 	});
 
 	describe("Editor window", () => {
-		describe("when clicking the element in edit mode", () => {
+		describe("when clicking an element without linked content", () => {
 			const setup = () => {
 				const element = h5pElementResponseFactory.build({
 					content: { contentId: null },
@@ -284,6 +284,56 @@ describe("H5pElement", () => {
 					query: {
 						parentType: H5PContentParentType.BOARD_ELEMENT,
 						parentId: element.id,
+					},
+				});
+				expect(window.open).toHaveBeenCalledWith(resolvedUrl, "_blank");
+			});
+		});
+
+		describe("when clicking an element with linked content", () => {
+			const setup = () => {
+				const contentId = "contentId";
+				const element = h5pElementResponseFactory.build({
+					content: { contentId },
+				});
+
+				const { wrapper } = getWrapper({
+					element,
+					isEditMode: false,
+				});
+				const resolvedUrl = "https://test.com";
+
+				const windowMock = createMock<Window>();
+				jest.spyOn(window, "open").mockImplementation(() => windowMock);
+
+				useRouterMock.resolve.mockReturnValue(
+					createMock<RouteLocationResolved>({
+						href: resolvedUrl,
+					})
+				);
+
+				return {
+					wrapper,
+					resolvedUrl,
+					element,
+					contentId,
+				};
+			};
+
+			it("should open the player window", async () => {
+				const { wrapper, resolvedUrl, contentId } = setup();
+
+				const card = wrapper.getComponent({ ref: "elementCard" });
+
+				await card.trigger("click");
+
+				expect(useRouterMock.resolve).toHaveBeenCalledWith({
+					name: "h5pPlayer",
+					params: {
+						contentId,
+					},
+					query: {
+						parentType: H5PContentParentType.BOARD_ELEMENT,
 					},
 				});
 				expect(window.open).toHaveBeenCalledWith(resolvedUrl, "_blank");

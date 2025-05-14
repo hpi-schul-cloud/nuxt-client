@@ -6473,6 +6473,19 @@ export enum NewsTargetModel {
 /**
  * 
  * @export
+ * @interface OAuthSessionTokenExpirationResponse
+ */
+export interface OAuthSessionTokenExpirationResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof OAuthSessionTokenExpirationResponse
+     */
+    expiresAt: string;
+}
+/**
+ * 
+ * @export
  * @interface Oauth2AuthorizationBodyParams
  */
 export interface Oauth2AuthorizationBodyParams {
@@ -20708,6 +20721,125 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
      */
     public teamNewsControllerFindAllForTeam(teamId: string, targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
         return NewsApiFp(this.configuration).teamNewsControllerFindAllForTeam(teamId, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * OAuthApi - axios parameter creator
+ * @export
+ */
+export const OAuthApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get the expiration date of the current oauth session token of the user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oAuthControllerGetSessionTokenExpiration: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/oauth/session-token/expiration`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * OAuthApi - functional programming interface
+ * @export
+ */
+export const OAuthApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = OAuthApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get the expiration date of the current oauth session token of the user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oAuthControllerGetSessionTokenExpiration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OAuthSessionTokenExpirationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oAuthControllerGetSessionTokenExpiration(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * OAuthApi - factory interface
+ * @export
+ */
+export const OAuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = OAuthApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get the expiration date of the current oauth session token of the user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oAuthControllerGetSessionTokenExpiration(options?: any): AxiosPromise<OAuthSessionTokenExpirationResponse> {
+            return localVarFp.oAuthControllerGetSessionTokenExpiration(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * OAuthApi - interface
+ * @export
+ * @interface OAuthApi
+ */
+export interface OAuthApiInterface {
+    /**
+     * 
+     * @summary Get the expiration date of the current oauth session token of the user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OAuthApiInterface
+     */
+    oAuthControllerGetSessionTokenExpiration(options?: any): AxiosPromise<OAuthSessionTokenExpirationResponse>;
+
+}
+
+/**
+ * OAuthApi - object-oriented interface
+ * @export
+ * @class OAuthApi
+ * @extends {BaseAPI}
+ */
+export class OAuthApi extends BaseAPI implements OAuthApiInterface {
+    /**
+     * 
+     * @summary Get the expiration date of the current oauth session token of the user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OAuthApi
+     */
+    public oAuthControllerGetSessionTokenExpiration(options?: any) {
+        return OAuthApiFp(this.configuration).oAuthControllerGetSessionTokenExpiration(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
