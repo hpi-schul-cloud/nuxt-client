@@ -26,7 +26,7 @@ const props = defineProps({
 const testId = "board-file-element-edit-menu-download";
 
 const onDownload = async () => {
-	downloadFile(props.url, props.fileName);
+	downloadFile(props.url, props.fileName, testId);
 };
 </script>
 
