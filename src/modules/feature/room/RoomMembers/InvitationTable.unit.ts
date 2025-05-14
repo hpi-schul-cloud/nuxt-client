@@ -16,14 +16,8 @@ import {
 	useConfirmationDialog,
 	useDeleteConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import {
-	KebabMenu,
-	KebabMenuActionShare,
-	KebabMenuActionEdit,
-	KebabMenuActionDelete,
-	KebabMenuActionRemoveMember,
-} from "@ui-kebab-menu";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
+import { useI18n } from "vue-i18n";
 
 jest.mock("vue-i18n", () => {
 	return {
@@ -31,6 +25,7 @@ jest.mock("vue-i18n", () => {
 		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
+const mockI18n = jest.mocked(useI18n);
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
@@ -105,6 +100,7 @@ describe("InvitationTable", () => {
 
 			expect(wrapper.exists()).toBe(true);
 			expect(dataTable.exists()).toBe(true);
+			expect(mockI18n).toHaveBeenCalled();
 		});
 
 		it("should pass tableHeader prop to DataTable", () => {
