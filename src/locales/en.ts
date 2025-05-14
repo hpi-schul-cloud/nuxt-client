@@ -1940,6 +1940,8 @@ export default {
 		"Remove selected invitations from the list?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Remove {invitation} from the list?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Share invitation link",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

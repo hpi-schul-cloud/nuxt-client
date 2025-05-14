@@ -48,19 +48,29 @@
 				:class="{ 'text-medium-emphasis': item.isExpired }"
 			>
 				<v-btn
+					ref="shareButton"
 					variant="text"
+					:aria-label="
+						t('pages.rooms.members.invitationTable.shareButton.ariaLabel')
+					"
+					:data-testid="`share-button-${item.id}`"
 					:icon="mdiShareVariantOutline"
 					@click="onOpenShareModal(item.id)"
 				/>
-				<KebabMenu>
-					<KebabMenuActionEdit @click="onEdit(item.id)" />
+				<KebabMenu :data-testid="`kebab-menu-${item.id}`">
+					<KebabMenuActionEdit
+						:data-testid="`menu-edit-button-${item.id}`"
+						@click="onEdit(item.id)"
+					/>
 					<KebabMenuActionShare
 						:text="t('common.actions.share')"
+						:data-testid="`menu-share-button-${item.id}`"
 						@click="onOpenShareModal(item.id)"
 					/>
 					<KebabMenuActionDelete
 						scope-language-key="pages.rooms.invitationLinkStatus.title"
 						:name="item.title"
+						:data-testid="`menu-delete-button-${item.id}`"
 						@click="onRemoveLinks([item.id])"
 					/>
 				</KebabMenu>

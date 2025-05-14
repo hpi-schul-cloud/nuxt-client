@@ -2002,6 +2002,8 @@ export default {
 		"¿Quitar las invitaciones seleccionadas de la lista?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"¿Quitar {invitation} de la lista?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Compartir enlace de invitación",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

@@ -1974,6 +1974,8 @@ export default {
 		"Ausgewählte Einladungen aus der Liste entfernen?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"{invitation} aus der Liste entfernen?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Einladungslink teilen",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":

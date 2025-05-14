@@ -1975,6 +1975,8 @@ export default {
 		"Видалити вибрані запрошення зі списку?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Видалити {invitation} зі списку?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Поділіться посиланням на запрошення",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
