@@ -13,7 +13,7 @@ export const toBase64 = (file: File) =>
 		reader.onerror = (error) => reject(error);
 	});
 
-export async function downloadFile(url: string, fileName: string) {
+export function downloadFile(url: string, fileName: string) {
 	const link = document.createElement("a");
 	link.href = url;
 	link.download = fileName;

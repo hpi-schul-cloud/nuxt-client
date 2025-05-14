@@ -43,7 +43,7 @@ const onClick = async () => {
 		return;
 	}
 	for (const fileRecord of selectedFileRecords.value) {
-		await downloadFile(fileRecord.url, fileRecord.name);
+		downloadFile(fileRecord.url, fileRecord.name);
 		await delay(500);
 	}
 };
