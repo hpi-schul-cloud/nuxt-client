@@ -552,6 +552,13 @@ describe("Folder.vue", () => {
 					fileRecord,
 				]);
 
+				const convertFileSizeMock = jest
+					.mocked(convertFileSize)
+					.mockImplementation((size) => ({
+						convertedSize: size,
+						unit: "MB",
+					}));
+
 				const boardApiMock =
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
 				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
@@ -638,6 +645,13 @@ describe("Folder.vue", () => {
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
 					fileRecord,
 				]);
+
+				const convertFileSizeMock = jest
+					.mocked(convertFileSize)
+					.mockImplementation((size) => ({
+						convertedSize: size,
+						unit: "MB",
+					}));
 
 				const boardApiMock =
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
