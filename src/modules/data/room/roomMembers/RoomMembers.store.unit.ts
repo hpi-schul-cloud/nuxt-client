@@ -148,7 +148,7 @@ describe("useRoomMembers", () => {
 					membersMock.map((member) => ({
 						...member,
 						displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
-						displaySchoolRole: "pages.roooms.members.add.role.student",
+						displaySchoolRole: "pages.rooms.members.add.role.student",
 						isSelectable: true,
 					}))
 				);
@@ -300,7 +300,7 @@ describe("useRoomMembers", () => {
 					schoolRoleNames: [RoleName.Student],
 					schoolName: "Paul-Gerhardt-Gymnasium",
 					displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
-					displaySchoolRole: "pages.roooms.members.add.role.student",
+					displaySchoolRole: "pages.rooms.members.add.role.student",
 				}))
 			);
 		});
@@ -437,7 +437,7 @@ describe("useRoomMembers", () => {
 				{
 					...firstPotentialMember,
 					displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
-					displaySchoolRole: "pages.roooms.members.add.role.student",
+					displaySchoolRole: "pages.rooms.members.add.role.student",
 				},
 			]);
 		});

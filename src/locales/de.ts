@@ -1876,9 +1876,11 @@ export default {
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
+	"pages.rooms.members.add.role.student": "Lernend",
+	"pages.rooms.members.add.students.forbidden":
+		"Lernende dürfen nicht hinzugefügt werden. Bitte an Admin wenden.",
 	"pages.rooms.members.add.warningText":
 		"Lernende anderer Schulen können nur durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
-	"pages.roooms.members.add.role.student": "Lernend",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Aktionsmenü für {memberFullName}",
 	"pages.rooms.members.actionMenu.selectedMembers":

@@ -104,6 +104,7 @@ describe("RoomMembersPage", () => {
 			canDeleteRoom: ref(false),
 			canLeaveRoom: ref(false),
 			canRemoveRoomMembers: ref(false),
+			canSeeStudents: ref(false),
 			canEditRoomContent: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);

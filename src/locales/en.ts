@@ -1843,9 +1843,11 @@ export default {
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.add.infoText":
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
+	"pages.rooms.members.add.role.student": "Student",
+	"pages.rooms.members.add.students.forbidden":
+		"Lernende dürfen nicht hinzugefügt werden. Bitte an Admin wenden.",
 	"pages.rooms.members.add.warningText":
 		"Students from other schools can only be added to the room by a supervising teacher from their school.",
-	"pages.roooms.members.add.role.student": "Student",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Action menu for {memberFullName}",
 	"pages.rooms.members.actionMenu.selectedMembers":

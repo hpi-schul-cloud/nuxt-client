@@ -45,6 +45,10 @@
 				t("pages.rooms.members.add.warningText")
 			}}</WarningAlert>
 
+			<WarningAlert v-if="!canAddStudentsToRoom">{{
+				t("pages.rooms.members.add.students.forbidden")
+			}}</WarningAlert>
+
 			<div class="mt-4" data-testid="add-participant-name">
 				<v-autocomplete
 					ref="autoCompleteUsers"
@@ -102,6 +106,13 @@ import {
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 
+const props = defineProps({
+	canAddStudentsToRoom: {
+		type: Boolean,
+		default: false,
+	},
+});
+
 const emit = defineEmits<{
 	(e: "close"): void;
 }>();
@@ -115,12 +126,18 @@ const { addMembers, getPotentialMembers, resetPotentialMembers } =
 
 const selectedSchool = ref(schools.value[0].id);
 
-const schoolRoles = [
-	{ id: RoleName.Student, name: t("pages.roooms.members.add.role.student") },
-	{ id: RoleName.Teacher, name: t("common.labels.teacher") },
-];
+const schoolRoles = computed(() => {
+	const roles = [{ id: RoleName.Teacher, name: t("common.labels.teacher") }];
+	if (props.canAddStudentsToRoom) {
+		roles.unshift({
+			id: RoleName.Student,
+			name: t("pages.rooms.members.add.role.student"),
+		});
+	}
+	return roles;
+});
 
-const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
+const selectedSchoolRole = ref<RoleName>(schoolRoles.value[0].id);
 const selectedUsers = ref<string[]>([]);
 
 const onValueChange = async () => {

@@ -295,6 +295,30 @@ describe("roomAuthorization", () => {
 		});
 	});
 
+	describe("canSeeStudents", () => {
+		describe("when the user has student list permission", () => {
+			const setup = () => {
+				return genericSetup({ userPermissions: [Permission.StudentList] });
+			};
+
+			it("should be allowed to add students as room members", () => {
+				const { canSeeStudents } = setup();
+				expect(canSeeStudents.value).toBe(true);
+			});
+		});
+
+		describe("when the user does not have student list permission", () => {
+			const setup = () => {
+				return genericSetup({ userPermissions: [] });
+			};
+
+			it("should not be allowed to add students as room members", () => {
+				const { canSeeStudents } = setup();
+				expect(canSeeStudents.value).toBe(false);
+			});
+		});
+	});
+
 	describe("canDuplicateRoom", () => {
 		describe("when the user has room duplicate permission", () => {
 			const setup = () => {
