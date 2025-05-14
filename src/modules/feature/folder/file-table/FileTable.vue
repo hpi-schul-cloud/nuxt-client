@@ -22,7 +22,6 @@
 				:items="
 					fileRecords.map((item) => ({
 						...item,
-						isSelectable: isFileSelectable(item),
 					}))
 				"
 				:show-select="true"
@@ -31,41 +30,43 @@
 					<FilePreview
 						:file-record="item"
 						:data-testid="`file-preview-${item.name}`"
-						:class="{ disabled: !item.isSelectable }"
 					/>
 				</template>
-				<template #[`item.name`]="{ item }">
-					<span
-						:data-testid="`name-${item.name}`"
-						:class="{ disabled: !item.isSelectable }"
-						>{{ item.name }}</span
-					>
-				</template>
 				<template #[`item.createdAt`]="{ item }">
-					<span
-						:data-testid="`created-at-${item.name}`"
-						:class="{ disabled: !item.isSelectable }"
-						>{{ printDateFromStringUTC(item.createdAt) }}</span
-					>
+					<span :data-testid="`created-at-${item.name}`">{{
+						printDateFromStringUTC(item.createdAt)
+					}}</span>
 				</template>
 				<template #[`item.size`]="{ item }">
-					<span
-						:data-testid="`size-${item.name}`"
-						:class="{ disabled: !item.isSelectable }"
+					<span :data-testid="`size-${item.name}`"
 						>{{ formatFileSize(item.size) }}
 					</span>
 				</template>
-				<template #[`item.actions`]="{ item, index }">
+				<template #[`item.actions`]="{ item }">
 					<KebabMenu
-						:data-testid="`kebab-menu-${index}`"
+						:data-testid="`kebab-menu-${item.name}`"
 						:aria-label="buildAriaLabel(item)"
 					>
+						<KebabMenuActionDeleteFiles
+							:file-records="fileRecords"
+							:selected-ids="[item.id]"
+							:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
+							@delete-files="onDeleteFiles"
+						/>
 						<KebabMenuActionRename
-							:disabled="!item.isSelectable"
 							:aria-label="t('pages.folder.ariaLabels.menu.action.file.rename')"
 							@click="onRename(item)"
 						/>
 					</KebabMenu>
+				</template>
+
+				<template #action-menu-items="{ selectedIds }">
+					<KebabMenuActionDeleteFiles
+						:file-records="fileRecords"
+						:selected-ids="selectedIds"
+						:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
+						@delete-files="onDeleteFiles"
+					/>
 				</template>
 
 				<template #left-of-search>
@@ -79,7 +80,7 @@
 <script setup lang="ts">
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
-import { convertFileSize, isDownloadAllowed } from "@/utils/fileHelper";
+import { convertFileSize } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
@@ -88,6 +89,7 @@ import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
+import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 
 const { t, n } = useI18n();
 
@@ -113,17 +115,14 @@ const props = defineProps({
 	},
 });
 
+const emit = defineEmits(["delete-files"]);
+
 const headers = [
 	{ title: "", key: "preview", sortable: false },
 	{ title: t("pages.folder.columns.name"), key: "name" },
 	{ title: t("pages.folder.columns.createdat"), key: "createdAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
-	{
-		title: t("ui.actionMenu.actions"),
-		key: "actions",
-		sortable: false,
-		width: 50,
-	},
+	{ title: "", key: "actions", sortable: false },
 ];
 
 const areUploadStatsVisible = computed(() => {
@@ -137,15 +136,11 @@ const formatFileSize = (size: number) => {
 	return `${localizedFileSize} ${unit}`;
 };
 
-const isFileSelectable = (fileRecord: FileRecord) => {
-	const result = isDownloadAllowed(fileRecord.securityCheckStatus);
-
-	return result;
-};
-const buildAriaLabel = (item: FileRecord): string => {
-	return t("pages.folder.ariaLabels.actionMenu", {
-		name: item.name,
-	});
+const onDeleteFiles = (
+	selectedFileRecords: FileRecord[],
+	confirmationPromise: Promise<boolean>
+) => {
+	emit("delete-files", selectedFileRecords, confirmationPromise);
 };
 
 const onRename = (item: FileRecord) => {
@@ -153,10 +148,10 @@ const onRename = (item: FileRecord) => {
 	// eslint-disable-next-line no-console
 	console.log("Rename action triggered for item:", item);
 };
-</script>
 
-<style lang="scss" scoped>
-.disabled {
-	color: var(--theme-38, rgba(15, 53, 81, 0.38));
-}
-</style>
+const buildAriaLabel = (item: FileRecord): string => {
+	return t("pages.folder.ariaLabels.actionMenu", {
+		name: item.name,
+	});
+};
+</script>

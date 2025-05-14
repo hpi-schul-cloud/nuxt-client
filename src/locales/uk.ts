@@ -434,6 +434,8 @@ export default {
 		"Файл з такою назвою вже існує.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
 		"Файловий сервіс наразі недоступний.",
+	"components.board.notifications.errors.fileNotDeleted":
+		"Видалити файли не вдалося.",
 	"components.board.notifications.errors.fileToBig":
 		"Вкладені файли перевищують максимально дозволений розмір {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated":
@@ -535,7 +537,7 @@ export default {
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
-	"components.cardElement.h5pElement": "Інтерактивний зміст навчання",
+	"components.cardElement.h5pElement": "Інтерактивний елемент навчання",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
 	"components.datePicker.validation.required": "Будь ласка, введіть дату.",
 	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
@@ -1651,6 +1653,7 @@ export default {
 		"Спробуйте використати коротший запит.",
 	"pages.content.emptyState.error.title": "Отакої, результатів немає!",
 	"pages.content.index.backToCourse": "Назад до курсу",
+	"pages.content.index.backToBoard": "Назад до дошки ",
 	"pages.content.index.backToOverview": "Назад до огляду",
 	"pages.content.index.search_for": "Пошук...",
 	"pages.content.index.search_resources": "Ресурси",
@@ -2131,7 +2134,11 @@ export default {
 	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",
 	"pages.folder.ariaLabels.menu.action.delete": "Видалити папку",
 	"pages.folder.ariaLabels.menu.action.file.rename": "Перейменувати файл",
+	"pages.folder.ariaLabels.menu.action.file.delete": "Видалити файл",
 	"pages.folder.ariaLabels.filter": "	Таблиця пошуку/фільтрації",
 	"pages.folder.ariaLabels.actionMenu": "Меню дій для {name}",
 	"pages.folder.uploadstats": "{uploaded} з {total} завантажених файлів",
+	"pages.folder.delete-multiple-confirmation":
+		"Дійсно видалити всі {total} файли?",
+	"pages.folder.delete-confirmation": "Дійсно видалити файл {name}?",
 };

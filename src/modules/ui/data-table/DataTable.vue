@@ -10,7 +10,7 @@
 			:selected-ids="selectedIds"
 			@reset:selected="onResetSelectedMembers"
 		>
-			<slot name="action-menu-items" />
+			<slot name="action-menu-items" v-bind="{ selectedIds }" />
 		</BatchActionMenu>
 
 		<v-spacer v-else />
@@ -90,12 +90,12 @@
 
 <script setup lang="ts">
 import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
-import { PropType, ref } from "vue";
+import { PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify/lib/framework.mjs";
 import BatchActionMenu from "./BatchActionMenu.vue";
 
-defineProps({
+const props = defineProps({
 	tableHeaders: {
 		type: Array as PropType<
 			{
@@ -129,6 +129,15 @@ const { t } = useI18n();
 const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
 
 const selectedIds = ref<string[]>([]);
+
+watch(
+	() => props.items,
+	(newItems) => {
+		selectedIds.value = selectedIds.value.filter((id) =>
+			newItems.some((item) => item[props.selectItemKey] === id)
+		);
+	}
+);
 
 const search = ref("");
 

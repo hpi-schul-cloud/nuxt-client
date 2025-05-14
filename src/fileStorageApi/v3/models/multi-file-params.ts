@@ -17,12 +17,15 @@
 /**
  * 
  * @export
- * @enum {string}
+ * @interface MultiFileParams
  */
-export enum H5PContentParentType {
-    LESSONS = 'lessons',
-    BOARD_ELEMENT = 'board-element'
+export interface MultiFileParams {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MultiFileParams
+     */
+    fileRecordIds: Array<string>;
 }
-
 
 
