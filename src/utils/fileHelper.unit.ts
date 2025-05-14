@@ -37,10 +37,10 @@ describe("@/utils/fileHelper", () => {
 			return { url, fileName, link, createElementSpy };
 		};
 
-		it("should download the file", async () => {
+		it("should download the file", () => {
 			const { url, fileName, link, createElementSpy } = setup();
 
-			await downloadFile(url, fileName);
+			downloadFile(url, fileName);
 
 			expect(createElementSpy).toHaveBeenCalledWith("a");
 			expect(link.href).toEqual(url);
