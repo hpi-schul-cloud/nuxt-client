@@ -76,7 +76,7 @@
 			<RenameDialog
 				:is-dialog-open="!!fileRecordToRename"
 				:entity-name="$t('components.cardElement.fileElement')"
-				:model-value="fileRecordToRename?.name"
+				:model-value="removeFileExtension(fileRecordToRename?.name || '')"
 				@cancel="onRenameDialogCancel"
 				@update:is-dialog-open="onRenameDialogCancel"
 				@update:name="onRenameDialogConfirm"
@@ -161,8 +161,29 @@ const onRenameDialogCancel = () => {
 	fileRecordToRename.value = undefined;
 };
 const onRenameDialogConfirm = (newName: string) => {
-	emit("update:name", newName, fileRecordToRename.value);
+	const fileExtension = extractFileExtension(
+		fileRecordToRename.value?.name || ""
+	);
+	const nameWithExtension = `${newName}${fileExtension}`;
+	emit("update:name", nameWithExtension, fileRecordToRename.value);
+
 	fileRecordToRename.value = undefined;
+};
+
+const removeFileExtension = (str: string): string => {
+	const lastDotIndex = str.lastIndexOf(".");
+	if (lastDotIndex === -1) {
+		return str;
+	}
+	return str.substring(0, lastDotIndex);
+};
+
+const extractFileExtension = (str: string): string => {
+	const lastDotIndex = str.lastIndexOf(".");
+	if (lastDotIndex === -1) {
+		return "";
+	}
+	return str.substring(lastDotIndex, str.length);
 };
 
 const buildAriaLabel = (item: FileRecord): string => {
