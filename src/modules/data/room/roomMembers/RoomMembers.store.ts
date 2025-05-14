@@ -135,6 +135,14 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return roomMembers.value.find((member) => member.userId === userId);
 	};
 
+	const getMemberFullName = (userId = "") => {
+		const member = getMemberById(userId);
+		if (!member) {
+			return "";
+		}
+		return `${member.lastName}, ${member.firstName}`;
+	};
+
 	const getSchools = async () => {
 		try {
 			const response =
@@ -279,6 +287,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		getPotentialMembers,
 		getSchools,
 		getMemberById,
+		getMemberFullName,
 		leaveRoom,
 		removeMembers,
 		updateMembersRole,
