@@ -1,15 +1,13 @@
 import { FileRecord } from "@/types/file/File";
-import { downloadFile } from "@/utils/fileHelper";
+import * as FileHelper from "@/utils/fileHelper";
+import * as Helper from "@/utils/helpers";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { KebabMenuAction } from "@ui-kebab-menu";
-import { nextTick } from "vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
-
-jest.mock("@/utils/fileHelper");
 
 describe("KebabMenuActionDownloadFiles", () => {
 	beforeEach(() => {
@@ -48,9 +46,8 @@ describe("KebabMenuActionDownloadFiles", () => {
 
 				const selectedIds = ["1", "2"];
 
-				const downloadFileMock = jest
-					.mocked(downloadFile)
-					.mockReturnValueOnce();
+				const downloadFileMock = jest.spyOn(FileHelper, "downloadFile");
+				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
 
 				const { wrapper } = setupWrapper({
 					fileRecords,
@@ -59,10 +56,6 @@ describe("KebabMenuActionDownloadFiles", () => {
 
 				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
 				kebabMenuAction.trigger("click");
-
-				await nextTick();
-				await nextTick();
-				await nextTick();
 
 				return { downloadFileMock, fileRecords };
 			};
@@ -98,9 +91,8 @@ describe("KebabMenuActionDownloadFiles", () => {
 
 				const selectedIds = ["2"];
 
-				const downloadFileMock = jest
-					.mocked(downloadFile)
-					.mockReturnValueOnce();
+				const downloadFileMock = jest.spyOn(FileHelper, "downloadFile");
+				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
 
 				const { wrapper } = setupWrapper({
 					fileRecords,
@@ -109,10 +101,6 @@ describe("KebabMenuActionDownloadFiles", () => {
 
 				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
 				kebabMenuAction.trigger("click");
-
-				await nextTick();
-				await nextTick();
-				await nextTick();
 
 				return { downloadFileMock, fileRecords, selectedIds };
 			};
@@ -143,9 +131,8 @@ describe("KebabMenuActionDownloadFiles", () => {
 
 				const selectedIds = ["1", "2"];
 
-				const downloadFileMock = jest
-					.mocked(downloadFile)
-					.mockReturnValueOnce();
+				const downloadFileMock = jest.spyOn(FileHelper, "downloadFile");
+				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
 
 				const { wrapper } = setupWrapper({
 					disabled: true,
@@ -155,10 +142,6 @@ describe("KebabMenuActionDownloadFiles", () => {
 
 				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
 				kebabMenuAction.trigger("click");
-
-				await nextTick();
-				await nextTick();
-				await nextTick();
 
 				return { downloadFileMock };
 			};

@@ -12,6 +12,7 @@
 <script setup lang="ts">
 import { FileRecord } from "@/types/file/File";
 import { downloadFile } from "@/utils/fileHelper";
+import { delay } from "@/utils/helpers";
 import { mdiTrayArrowDown } from "@icons/material";
 import { KebabMenuAction } from "@ui-kebab-menu";
 import { computed, PropType } from "vue";
@@ -35,8 +36,6 @@ const selectedFileRecords = computed(() => {
 		props.selectedIds.includes(fileRecord.id)
 	);
 });
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const onClick = async () => {
 	if (props.disabled) {
