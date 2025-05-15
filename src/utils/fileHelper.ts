@@ -48,9 +48,23 @@ export function convertFileSize(fileSize: number): {
 }
 
 export function getFileExtension(fileName: string): string {
-	const ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+	const extension = fileName.substring(fileName.lastIndexOf(".") + 1);
 
-	return ext;
+	return extension;
+}
+
+export function removeFileExtension(str: string): string {
+	const lastDotIndex = str.lastIndexOf(".");
+
+	const extensionNotFound = lastDotIndex === -1;
+
+	if (extensionNotFound) {
+		return str;
+	}
+
+	const stringWithoutExtension = str.substring(0, lastDotIndex);
+
+	return stringWithoutExtension;
 }
 
 export function convertDownloadToPreviewUrl(

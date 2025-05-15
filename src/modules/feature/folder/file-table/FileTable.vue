@@ -88,7 +88,11 @@
 <script setup lang="ts">
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
-import { convertFileSize } from "@/utils/fileHelper";
+import {
+	convertFileSize,
+	getFileExtension,
+	removeFileExtension,
+} from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { RenameDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
@@ -161,29 +165,11 @@ const onRenameDialogCancel = () => {
 	fileRecordToRename.value = undefined;
 };
 const onRenameDialogConfirm = (newName: string) => {
-	const fileExtension = extractFileExtension(
-		fileRecordToRename.value?.name || ""
-	);
-	const nameWithExtension = `${newName}${fileExtension}`;
+	const fileExtension = getFileExtension(fileRecordToRename.value?.name || "");
+	const nameWithExtension = `${newName}.${fileExtension}`;
 	emit("update:name", nameWithExtension, fileRecordToRename.value);
 
 	fileRecordToRename.value = undefined;
-};
-
-const removeFileExtension = (str: string): string => {
-	const lastDotIndex = str.lastIndexOf(".");
-	if (lastDotIndex === -1) {
-		return str;
-	}
-	return str.substring(0, lastDotIndex);
-};
-
-const extractFileExtension = (str: string): string => {
-	const lastDotIndex = str.lastIndexOf(".");
-	if (lastDotIndex === -1) {
-		return "";
-	}
-	return str.substring(lastDotIndex, str.length);
 };
 
 const buildAriaLabel = (item: FileRecord): string => {
