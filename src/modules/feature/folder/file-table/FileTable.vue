@@ -50,7 +50,7 @@
 							@delete-files="onDeleteFiles"
 						/>
 						<KebabMenuActionRename
-							:disabled="!item.isSelectable"
+							:disabled="item.isBlocked"
 							:aria-label="t('pages.folder.ariaLabels.menu.action.file.rename')"
 							@click="onRenameButtonClick(item)"
 						/>
