@@ -21,12 +21,19 @@
 		>
 			<template #display>
 				<v-img
+					v-if="hasLinkedContent"
 					:src="H5PImage"
 					:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
 					:cover="isSmallOrLargerListBoard"
 				/>
 			</template>
-			<template #title> {{ contentTitle }} </template>
+			<template #title>
+				{{
+					hasLinkedContent
+						? contentTitle
+						: t("components.cardElement.h5pElement.create")
+				}}
+			</template>
 			<template #menu>
 				<H5pElementMenu
 					v-if="isEditMode"

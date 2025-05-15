@@ -524,6 +524,8 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",
 	"components.cardElement.h5pElement": "Interactive learning element",
+	"components.cardElement.h5pElement.create":
+		"Create an interactive learning element",
 	"components.cardElement.h5pElement.title.error.load":
 		"The title of an interactive learning element could not be loaded.",
 	"components.datePicker.validation.format": "Please use format DD.MM.YYYY",
