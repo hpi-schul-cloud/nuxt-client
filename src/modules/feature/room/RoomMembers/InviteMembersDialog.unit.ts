@@ -187,7 +187,7 @@ describe("InviteMembersDialog", () => {
 			});
 
 			describe("when continue button is clicked", () => {
-				it("should switch to SHARE step and call createLink method", async () => {
+				it("should call createLink method", async () => {
 					const { wrapper, roomInvitationLinkStore } = setup({
 						preDefinedStep: InvitationStep.PREPARE,
 					});
@@ -201,10 +201,6 @@ describe("InviteMembersDialog", () => {
 					await nextButton.trigger("click");
 					await nextTick();
 
-					const shareModalAfter = wrapper.findComponent({
-						name: "ShareModalResult",
-					});
-
 					const expectedFormValues = {
 						title: "invitation link",
 						activeUntil: "2900-01-01T00:00:00.000Z",
@@ -212,8 +208,6 @@ describe("InviteMembersDialog", () => {
 						restrictedToCreatorSchool: true,
 						requiresConfirmation: true,
 					};
-
-					expect(shareModalAfter.exists()).toBe(true);
 
 					expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(
 						expectedFormValues
@@ -253,7 +247,7 @@ describe("InviteMembersDialog", () => {
 			});
 
 			describe("when continue button is clicked", () => {
-				it("should switch to SHARE step and call updateLink method", async () => {
+				it("should and call updateLink method", async () => {
 					const { wrapper, roomInvitationLinkStore } = setup({
 						preDefinedStep: InvitationStep.EDIT,
 					});
@@ -267,10 +261,6 @@ describe("InviteMembersDialog", () => {
 					await nextButton.trigger("click");
 					await nextTick();
 
-					const shareModalAfter = wrapper.findComponent({
-						name: "ShareModalResult",
-					});
-
 					const expectedFormValues = {
 						id: "",
 						title: "invitation link",
@@ -279,8 +269,6 @@ describe("InviteMembersDialog", () => {
 						restrictedToCreatorSchool: true,
 						requiresConfirmation: true,
 					};
-
-					expect(shareModalAfter.exists()).toBe(true);
 
 					expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(
 						expectedFormValues

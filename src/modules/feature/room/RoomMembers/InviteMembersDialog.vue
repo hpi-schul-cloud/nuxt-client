@@ -274,8 +274,7 @@ const onContinue = async () => {
 	};
 
 	await endpointMap[invitationStep.value]();
-
-	invitationStep.value = InvitationStep.SHARE;
+	formData.value = { ...defaultFormData };
 };
 
 const onCopyLink = () => {
@@ -287,7 +286,7 @@ const onCopyLink = () => {
 };
 
 const datePickerDate = computed(() => {
-	return formData.value.activeUntilCheck
+	return formData.value.activeUntilCheck && !!formData.value.activeUntil
 		? formData.value.activeUntil.toString()
 		: "";
 });

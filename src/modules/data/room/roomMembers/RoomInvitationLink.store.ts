@@ -73,8 +73,10 @@ export const useRoomInvitationLinkStore = defineStore(
 
 				roomInvitationLinks.value.push(response);
 				sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${response.id}`;
+				invitationStep.value = InvitationStep.SHARE;
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.create"));
+				isInvitationDialogOpen.value = false;
 			}
 		};
 
@@ -91,8 +93,10 @@ export const useRoomInvitationLinkStore = defineStore(
 				);
 
 				sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${response.id}`;
+				invitationStep.value = InvitationStep.SHARE;
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.update"));
+				isInvitationDialogOpen.value = false;
 			}
 		};
 
