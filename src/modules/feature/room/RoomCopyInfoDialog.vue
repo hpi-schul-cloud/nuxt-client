@@ -1,9 +1,9 @@
 <template>
 	<v-dialog v-model="isOpen" max-width="520">
-		<v-card data-testid="duplication-info-dialog">
+		<v-card data-testid="copy-info-dialog">
 			<v-card-title
 				class="text-h4 text-break px-6 pt-4"
-				data-testid="duplication-info-dialog-title"
+				data-testid="copy-info-dialog-title"
 			>
 				{{ $t("feature-room.DuplicationInfoDialog.title") }}
 			</v-card-title>
