@@ -196,7 +196,7 @@ const {
 	isRoomCopyFeatureEnabled,
 	isRoomCopyInfoDialogOpen,
 	openRoomCopyInfoDialog,
-	closeDuplicationInfoDialog,
+	closeRoomCopyInfoDialog,
 	duplicate,
 } = useRoomCopy();
 
@@ -207,7 +207,7 @@ const onDuplicate = async () => {
 };
 
 const cancelDuplication = () => {
-	closeDuplicationInfoDialog();
+	closeRoomCopyInfoDialog();
 };
 
 const confirmDuplication = async () => {
