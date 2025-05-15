@@ -147,7 +147,7 @@ describe("AddMembers", () => {
 				);
 			});
 
-			/* it("should have proper props for selectRole component", () => {
+			it("should have proper props for selectRole component", () => {
 				const { wrapper } = setup();
 
 				const roles = [
@@ -164,7 +164,7 @@ describe("AddMembers", () => {
 
 				expect(roleComponent.props("items")).toStrictEqual(roles);
 				expect(roleComponent.props("modelValue")).toBe(roles[0].id);
-			}); */
+			});
 
 			it("should have proper props for autoCompleteUsers component", () => {
 				const { wrapper, potentialRoomMembers } = setup();
