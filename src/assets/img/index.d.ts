@@ -47,3 +47,8 @@ declare module "@/assets/img/logout/Sloth_error.svg" {
 	const value: string;
 	export default value;
 }
+
+declare module "@/assets/img/h5p/default_h5p_display.svg" {
+	const value: string;
+	export default value;
+}
