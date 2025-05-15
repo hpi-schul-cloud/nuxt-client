@@ -48,6 +48,7 @@ const isEditMode = computed(() => editModeId.value !== undefined);
 	bottom: 0;
 }
 .button-background {
+	height: 4rem;
 	background: #fff;
 	background: linear-gradient(
 		0deg,
