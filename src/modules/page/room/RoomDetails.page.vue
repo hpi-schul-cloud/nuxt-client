@@ -14,7 +14,7 @@
 					:room-name="room?.name"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
-					@room:duplicate="onDuplicate"
+					@room:copy="onCopy"
 					@room:delete="onDelete"
 					@room:leave="onLeaveRoom"
 				/>
@@ -32,7 +32,7 @@
 			v-if="isRoomCopyFeatureEnabled"
 			v-model="isRoomCopyInfoDialogOpen"
 			@duplication:cancel="cancelDuplication"
-			@duplication:confirm="confirmDuplication"
+			@duplication:confirm="copyDuplication"
 		/>
 	</DefaultWireframe>
 </template>
@@ -190,17 +190,17 @@ const onManageMembers = () => {
 	});
 };
 
-// begin - Duplication Feature
+// begin - Copy Feature
 
 const {
 	isRoomCopyFeatureEnabled,
 	isRoomCopyInfoDialogOpen,
 	openRoomCopyInfoDialog,
 	closeRoomCopyInfoDialog,
-	duplicate,
+	copy,
 } = useRoomCopy();
 
-const onDuplicate = async () => {
+const onCopy = async () => {
 	if (!room.value || !canDuplicateRoom) return;
 
 	openRoomCopyInfoDialog();
@@ -210,9 +210,9 @@ const cancelDuplication = () => {
 	closeRoomCopyInfoDialog();
 };
 
-const confirmDuplication = async () => {
+const copyDuplication = async () => {
 	if (!room.value) return;
-	const copyId = await duplicate(room.value.id);
+	const copyId = await copy(room.value.id);
 	if (copyId) {
 		router.push({
 			name: "room-details",
@@ -222,7 +222,7 @@ const confirmDuplication = async () => {
 		});
 	}
 };
-// end - Duplication Feature
+// end - Copy Feature
 
 const onDelete = async () => {
 	if (!room.value || !canDeleteRoom.value) return;

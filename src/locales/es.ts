@@ -9,7 +9,7 @@ export default {
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
-	"common.actions.duplicate": "Duplicar",
+	"common.actions.copyRoom": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
 	"common.actions.finish": "Finalizar",
@@ -915,10 +915,10 @@ export default {
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
-	"data-room.duplication.alert.success": "Sala duplicada con éxito.",
-	"data-room.duplication.alert.error":
+	"data-room.copy.alert.success": "Sala duplicada con éxito.",
+	"data-room.copy.alert.error":
 		"No se pudo completar el proceso de duplicación.",
-	"data-room.duplication.loading": "La sala se está duplicando...",
+	"data-room.copy.loading": "La sala se está duplicando...",
 	"error.400": "401 – Solicitud incorrecta",
 	"error.401":
 		"401 – Lamentablemente, falta la autorización para ver este contenido.",

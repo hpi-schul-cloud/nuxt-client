@@ -9,7 +9,7 @@ export default {
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
-	"common.actions.duplicate": "Duplizieren",
+	"common.actions.copyRoom": "Duplizieren",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
 	"common.actions.import": "Importieren",
@@ -895,10 +895,10 @@ export default {
 		"Das Startdatum muss vor dem Enddatum liegen.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
-	"data-room.duplication.alert.success": "Raum erfolgreich dupliziert.",
-	"data-room.duplication.alert.error":
+	"data-room.copy.alert.success": "Raum erfolgreich dupliziert.",
+	"data-room.copy.alert.error":
 		"Der Dupliziervorgang konnte nicht abgeschlossen werden.",
-	"data-room.duplication.loading": "Raum wird dupliziert...",
+	"data-room.copy.loading": "Raum wird dupliziert...",
 	"error.400": "400 – Fehlerhafte Anfrage",
 	"error.401": "401 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
 	"error.403": "403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",

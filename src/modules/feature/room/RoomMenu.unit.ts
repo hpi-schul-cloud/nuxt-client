@@ -58,7 +58,7 @@ describe("@feature-room/RoomMenu", () => {
 			isRoomCopyInfoDialogOpen: ref(false),
 			openRoomCopyInfoDialog: jest.fn(),
 			closeRoomCopyInfoDialog: jest.fn(),
-			duplicate: jest.fn(),
+			copy: jest.fn(),
 		});
 
 		const wrapper = mount(RoomMenu, {
@@ -197,8 +197,8 @@ describe("@feature-room/RoomMenu", () => {
 		});
 	});
 
-	describe("when user has permission to duplicate", () => {
-		it("should show duplicate menu item", async () => {
+	describe("when user has permission to copy", () => {
+		it("should show copy menu item", async () => {
 			roomPermissions.canDuplicateRoom.value = true;
 
 			const { wrapper, menuBtn } = setup();

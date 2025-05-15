@@ -12,7 +12,7 @@
 		/>
 		<KebabMenuActionDuplicate
 			v-if="isRoomCopyFeatureEnabled && canDuplicateRoom"
-			@click="() => $emit('room:duplicate')"
+			@click="() => $emit('room:copy')"
 		/>
 		<KebabMenuActionDelete
 			v-if="canDeleteRoom"
@@ -45,7 +45,7 @@ const emit = defineEmits([
 	"room:edit",
 	"room:manage-members",
 	"room:delete",
-	"room:duplicate",
+	"room:copy",
 	"room:leave",
 ]);
 

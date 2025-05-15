@@ -85,7 +85,7 @@ describe("roomCopy", () => {
 			expect(isRoomCopyInfoDialogOpen.value).toBe(false);
 		});
 
-		describe("when open DuplicationInfoDialog is called", () => {
+		describe("when open RoomCopyInfoDialog is called", () => {
 			it("should open the dialog", () => {
 				const { isRoomCopyInfoDialogOpen, openRoomCopyInfoDialog } = setup();
 				openRoomCopyInfoDialog();
@@ -93,7 +93,7 @@ describe("roomCopy", () => {
 			});
 		});
 
-		describe("when close DuplicationInfoDialog is called", () => {
+		describe("when close RoomCopyInfoDialog is called", () => {
 			it("should close the dialog", () => {
 				const { isRoomCopyInfoDialogOpen, closeRoomCopyInfoDialog } = setup();
 				closeRoomCopyInfoDialog();
@@ -106,22 +106,22 @@ describe("roomCopy", () => {
 	describe("copy", () => {
 		const setup = () => {
 			const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-			const { duplicate, isRoomCopyInfoDialogOpen } = setupComposable({
+			const { copy, isRoomCopyInfoDialogOpen } = setupComposable({
 				featureFlag: true,
 				mockedLoadingState: loadingStateModuleMock,
 			});
-			return { duplicate, isRoomCopyInfoDialogOpen, loadingStateModuleMock };
+			return { copy, isRoomCopyInfoDialogOpen, loadingStateModuleMock };
 		};
 
 		it("should close CopyInfoDialog when copying", async () => {
-			const { duplicate, isRoomCopyInfoDialogOpen } = setup();
-			await duplicate("string");
+			const { copy, isRoomCopyInfoDialogOpen } = setup();
+			await copy("string");
 			expect(isRoomCopyInfoDialogOpen.value).toBe(false);
 		});
 
 		it("should open loading state when copying", async () => {
-			const { duplicate, loadingStateModuleMock } = setup();
-			await duplicate("string");
+			const { copy, loadingStateModuleMock } = setup();
+			await copy("string");
 			expect(loadingStateModuleMock.open).toHaveBeenCalledWith(
 				expect.objectContaining({
 					text: expect.any(String),
@@ -130,8 +130,8 @@ describe("roomCopy", () => {
 		});
 
 		it("should close loading state after duplicating", async () => {
-			const { duplicate, loadingStateModuleMock } = setup();
-			await duplicate("string");
+			const { copy, loadingStateModuleMock } = setup();
+			await copy("string");
 			expect(loadingStateModuleMock.close).toHaveBeenCalled();
 		});
 	});

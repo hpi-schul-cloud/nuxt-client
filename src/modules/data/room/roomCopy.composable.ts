@@ -14,9 +14,7 @@ export const useRoomCopy = () => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { t } = useI18n();
 
-	const { isLoadingDialogOpen } = useLoadingState(
-		t("data-room.duplication.loading")
-	);
+	const { isLoadingDialogOpen } = useLoadingState(t("data-room.copy.loading"));
 	const { copyRoom } = useRoomsState();
 
 	const isRoomCopyFeatureEnabled = computed(() => {
@@ -33,7 +31,7 @@ export const useRoomCopy = () => {
 		isRoomCopyInfoDialogOpen.value = false;
 	};
 
-	const duplicate = async (roomId: string) => {
+	const copy = async (roomId: string) => {
 		closeRoomCopyInfoDialog();
 		isLoadingDialogOpen.value = true;
 
@@ -50,7 +48,7 @@ export const useRoomCopy = () => {
 
 	const showSuccess = () => {
 		const notifierPayload: AlertPayload = {
-			text: t("data-room.duplication.alert.success"),
+			text: t("data-room.copy.alert.success"),
 			status: "success",
 		};
 
@@ -60,7 +58,7 @@ export const useRoomCopy = () => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const showFailure = () => {
 		notifierModule.show({
-			text: t("data-room.duplication.alert.error"),
+			text: t("data-room.copy.alert.error"),
 			status: "error",
 			autoClose: false,
 		});
@@ -79,6 +77,6 @@ export const useRoomCopy = () => {
 		isRoomCopyInfoDialogOpen,
 		openRoomCopyInfoDialog,
 		closeRoomCopyInfoDialog,
-		duplicate,
+		copy,
 	};
 };

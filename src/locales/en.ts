@@ -9,7 +9,7 @@ export default {
 	"common.actions.create": "Create",
 	"common.actions.delete": "Delete",
 	"common.actions.discard": "Discard",
-	"common.actions.duplicate": "Duplicate",
+	"common.actions.copyRoom": "Duplicate",
 	"common.actions.export": "Export",
 	"common.actions.edit": "Edit",
 	"common.actions.finish": "Finish",
@@ -887,10 +887,10 @@ export default {
 		"The start date must be before the end date.",
 	"components.timePicker.validation.format": "Please use format HH:MM",
 	"components.timePicker.validation.required": "Please enter a time.",
-	"data-room.duplication.alert.success": "Room successfully duplicated.",
-	"data-room.duplication.alert.error":
+	"data-room.copy.alert.success": "Room successfully duplicated.",
+	"data-room.copy.alert.error":
 		"The duplication process could not be completed.",
-	"data-room.duplication.loading": "Room is being duplicated...",
+	"data-room.copy.loading": "Room is being duplicated...",
 	"error.400": "401 – Bad Request",
 	"error.401":
 		"401 – Unfortunately, you do not have permission to view this content.",

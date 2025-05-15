@@ -60,7 +60,7 @@
 					data-testid="duplication-info-dialog-confirm"
 					@click="$emit('duplication:confirm')"
 				>
-					{{ $t("common.actions.duplicate") }}
+					{{ $t("common.actions.copyRoom") }}
 				</v-btn>
 			</v-card-actions>
 		</v-card>
