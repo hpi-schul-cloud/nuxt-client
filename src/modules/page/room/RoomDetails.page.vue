@@ -31,8 +31,8 @@
 		<RoomCopyInfoDialog
 			v-if="isRoomCopyFeatureEnabled"
 			v-model="isRoomCopyInfoDialogOpen"
-			@duplication:cancel="cancelDuplication"
-			@duplication:confirm="copyDuplication"
+			@duplication:cancel="cancelRoomCopy"
+			@duplication:confirm="copyRoom"
 		/>
 	</DefaultWireframe>
 </template>
@@ -93,7 +93,7 @@ const {
 	canDeleteRoom,
 	canEditRoomContent,
 	canLeaveRoom,
-	canDuplicateRoom,
+	canCopyRoom,
 } = useRoomAuthorization();
 
 const visibleBoards = computed(() =>
@@ -201,16 +201,16 @@ const {
 } = useRoomCopy();
 
 const onCopy = async () => {
-	if (!room.value || !canDuplicateRoom) return;
+	if (!room.value || !canCopyRoom) return;
 
 	openRoomCopyInfoDialog();
 };
 
-const cancelDuplication = () => {
+const cancelRoomCopy = () => {
 	closeRoomCopyInfoDialog();
 };
 
-const copyDuplication = async () => {
+const copyRoom = async () => {
 	if (!room.value) return;
 	const copyId = await copy(room.value.id);
 	if (copyId) {

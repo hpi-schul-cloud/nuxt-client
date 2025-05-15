@@ -29,7 +29,7 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canViewRoom: ref(false),
 	canEditRoom: ref(false),
 	canDeleteRoom: ref(false),
-	canDuplicateRoom: ref(false),
+	canCopyRoom: ref(false),
 	canLeaveRoom: ref(false),
 	canRemoveRoomMembers: ref(false),
 	canEditRoomContent: ref(false),

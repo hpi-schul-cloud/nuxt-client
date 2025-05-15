@@ -948,18 +948,17 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"User group successfully synchronized",
 	"feature-course-sync.startRoomSyncDialog.title": "Start synchronization",
-	"feature-room.DuplicationInfoDialog.title": "Duplicate Room",
-	"feature-room.DuplicationInfoDialog.text.nextStep":
+	"feature-room.CopyInfoDialog.title": "Duplicate Room",
+	"feature-room.CopyInfoDialog.text.nextStep":
 		"In the next step, a copy of the room will be created.",
-	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+	"feature-room.CopyInfoDialog.text.alert.followingContent":
 		"The following contents will not be copied:",
-	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Room members and permissions",
-	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
-		"Contents in Etherpads",
-	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Contents in Etherpads",
+	"feature-room.CopyInfoDialog.text.alert.whiteboard":
 		"Contents in whiteboards",
-	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+	"feature-room.CopyInfoDialog.text.alert.protectedSettings":
 		"Protected settings of external tools",
 	"format.date": "MM/DD/YYYY",
 	"format.dateLong": "dddd, MMMM DD. YYYY",

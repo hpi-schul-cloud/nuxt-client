@@ -38,7 +38,7 @@ describe("@feature-room/RoomMenu", () => {
 			canViewRoom: ref(false),
 			canEditRoom: ref(false),
 			canDeleteRoom: ref(false),
-			canDuplicateRoom: ref(false),
+			canCopyRoom: ref(false),
 			canLeaveRoom: ref(false),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
@@ -88,15 +88,13 @@ describe("@feature-room/RoomMenu", () => {
 		const kebabActionLeaveRoom = wrapper.findComponent(
 			KebabMenuActionLeaveRoom
 		);
-		const kebabActionDuplicateRoom = wrapper.findComponent(
-			KebabMenuActionRoomCopy
-		);
+		const kebabActionRoomCopy = wrapper.findComponent(KebabMenuActionRoomCopy);
 
 		return {
 			kebabActionEdit,
 			kebabActionRoomMembers,
 			kebabActionDelete,
-			kebabActionDuplicateRoom,
+			kebabActionRoomCopy,
 			kebabActionLeaveRoom,
 		};
 	};
@@ -199,14 +197,14 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user has permission to copy", () => {
 		it("should show copy menu item", async () => {
-			roomPermissions.canDuplicateRoom.value = true;
+			roomPermissions.canCopyRoom.value = true;
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
-			const { kebabActionDuplicateRoom } = findKebabActions(wrapper);
+			const { kebabActionRoomCopy } = findKebabActions(wrapper);
 
-			expect(kebabActionDuplicateRoom.exists()).toBe(true);
+			expect(kebabActionRoomCopy.exists()).toBe(true);
 		});
 	});
 

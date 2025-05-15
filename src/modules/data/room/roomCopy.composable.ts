@@ -18,7 +18,7 @@ export const useRoomCopy = () => {
 	const { copyRoom } = useRoomsState();
 
 	const isRoomCopyFeatureEnabled = computed(() => {
-		return envConfigModule.getEnv.FEATURE_ROOMS_DUPLICATION_ENABLED;
+		return envConfigModule.getEnv.FEATURE_ROOM_COPY_ENABLED;
 	});
 
 	const isRoomCopyInfoDialogOpen = ref(false);

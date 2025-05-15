@@ -14,7 +14,7 @@ describe("roomCopy", () => {
 	}) => {
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 			getEnv: envsFactory.build({
-				FEATURE_ROOMS_DUPLICATION_ENABLED: options.featureFlag,
+				FEATURE_ROOM_COPY_ENABLED: options.featureFlag,
 			}),
 		});
 		const loadingStateModuleMock =

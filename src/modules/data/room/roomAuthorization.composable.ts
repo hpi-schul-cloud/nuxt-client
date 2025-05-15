@@ -14,7 +14,7 @@ export const useRoomAuthorization = () => {
 	const canChangeOwner = ref(false);
 	const canCreateRoom = ref(false);
 	const canDeleteRoom = ref(false);
-	const canDuplicateRoom = ref(false);
+	const canCopyRoom = ref(false);
 	const canEditRoom = ref(false);
 	const canEditRoomContent = ref(false);
 	const canLeaveRoom = ref(false);
@@ -31,7 +31,7 @@ export const useRoomAuthorization = () => {
 				Permission.RoomCreate.toLowerCase()
 			) && authModule.getUserRoles.includes(Roles.Teacher);
 		canDeleteRoom.value = permissions.includes(Permission.RoomDelete);
-		canDuplicateRoom.value = permissions.includes(Permission.RoomDuplicate);
+		canCopyRoom.value = permissions.includes(Permission.RoomCopy);
 		canEditRoom.value = permissions.includes(Permission.RoomEdit);
 		canEditRoomContent.value = permissions.includes(Permission.RoomContentEdit);
 		canLeaveRoom.value = permissions.includes(Permission.RoomLeave);
@@ -46,7 +46,7 @@ export const useRoomAuthorization = () => {
 		canChangeOwner,
 		canCreateRoom,
 		canDeleteRoom,
-		canDuplicateRoom,
+		canCopyRoom,
 		canEditRoom,
 		canEditRoomContent,
 		canLeaveRoom,

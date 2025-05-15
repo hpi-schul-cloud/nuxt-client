@@ -295,15 +295,15 @@ describe("roomAuthorization", () => {
 		});
 	});
 
-	describe("canDuplicateRoom", () => {
+	describe("canCopyRoom", () => {
 		describe("when the user has room duplicate permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomDuplicate] });
+				return genericSetup({ roomPermissions: [Permission.RoomCopy] });
 			};
 
 			it("should be allowed to duplicate the room", () => {
-				const { canDuplicateRoom } = setup();
-				expect(canDuplicateRoom.value).toBe(true);
+				const { canCopyRoom } = setup();
+				expect(canCopyRoom.value).toBe(true);
 			});
 		});
 

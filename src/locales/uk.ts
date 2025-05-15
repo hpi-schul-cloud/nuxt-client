@@ -971,18 +971,16 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Групу користувачів успішно синхронізовано",
 	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
-	"feature-room.DuplicationInfoDialog.title": "Дублювати кімнату",
-	"feature-room.DuplicationInfoDialog.text.nextStep":
+	"feature-room.CopyInfoDialog.title": "Дублювати кімнату",
+	"feature-room.CopyInfoDialog.text.nextStep":
 		"На наступному кроці буде створено копію кімнати.",
-	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+	"feature-room.CopyInfoDialog.text.alert.followingContent":
 		"Наступний вміст не буде скопійовано:",
-	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Учасники кімнати та їхні дозволи",
-	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
-		"Вміст із Etherpads",
-	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
-		"Вміст із Whiteboards",
-	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Вміст із Etherpads",
+	"feature-room.CopyInfoDialog.text.alert.whiteboard": "Вміст із Whiteboards",
+	"feature-room.CopyInfoDialog.text.alert.protectedSettings":
 		"Захищені налаштування зовнішніх інструментів",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",

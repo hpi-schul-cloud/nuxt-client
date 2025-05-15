@@ -11,7 +11,7 @@
 			@click="() => $emit('room:manage-members')"
 		/>
 		<KebabMenuActionRoomCopy
-			v-if="isRoomCopyFeatureEnabled && canDuplicateRoom"
+			v-if="isRoomCopyFeatureEnabled && canCopyRoom"
 			@click="() => $emit('room:copy')"
 		/>
 		<KebabMenuActionDelete
@@ -62,7 +62,7 @@ const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 
 const {
 	canAddRoomMembers,
-	canDuplicateRoom,
+	canCopyRoom,
 	canEditRoom,
 	canDeleteRoom,
 	canViewRoom,

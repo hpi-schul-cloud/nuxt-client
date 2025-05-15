@@ -24,9 +24,9 @@ describe("@feature-room/RoomCopyInfoDialog", () => {
 		const { dialog } = setup();
 
 		expect(dialog.exists()).toBe(true);
-		expect(dialog.text()).toContain("feature-room.DuplicationInfoDialog.title");
+		expect(dialog.text()).toContain("feature-room.CopyInfoDialog.title");
 		expect(dialog.text()).toContain(
-			"feature-room.DuplicationInfoDialog.text.alert.membersPermissions"
+			"feature-room.CopyInfoDialog.text.alert.membersPermissions"
 		);
 	});
 
@@ -35,7 +35,7 @@ describe("@feature-room/RoomCopyInfoDialog", () => {
 			const { dialog, wrapper } = setup();
 
 			const cancelButton = dialog.findComponent(
-				'[data-testid="duplication-info-dialog-cancel"]'
+				'[data-testid="copy-info-dialog-cancel"]'
 			);
 			await cancelButton.trigger("click");
 
@@ -48,7 +48,7 @@ describe("@feature-room/RoomCopyInfoDialog", () => {
 			const { dialog, wrapper } = setup();
 
 			const cancelButton = dialog.findComponent(
-				'[data-testid="duplication-info-dialog-confirm"]'
+				'[data-testid="copy-info-dialog-confirm"]'
 			);
 			await cancelButton.trigger("click");
 
