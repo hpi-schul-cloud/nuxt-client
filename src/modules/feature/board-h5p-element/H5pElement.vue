@@ -30,7 +30,7 @@
 			<template #menu>
 				<H5pElementMenu
 					v-if="isEditMode"
-					:display-name="undefined /* TODO add content name */"
+					:display-name="contentTitle"
 					:column-index="columnIndex"
 					:row-index="rowIndex"
 					:element-index="elementIndex"
@@ -98,7 +98,7 @@ const isSmallOrLargerListBoard = computed(() => {
 	return smAndUp.value && isListLayout.value;
 });
 
-const contentTitle = ref<string>("");
+const contentTitle = ref<string>("components.cardElement.h5pElement");
 
 const openEditorWindow = () => {
 	const route = router.resolve({
