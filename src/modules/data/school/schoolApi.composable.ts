@@ -1,16 +1,25 @@
+import { SchoolApiFactory, SchoolApiInterface } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
 export const useSchoolApi = () => {
+	const schoolApi: SchoolApiInterface = SchoolApiFactory(
+		undefined,
+		"/v3",
+		$axios
+	);
+
 	const fetchMaintenanceStatus = async (schoolId: string) => {
-		const response = await $axios.get(`/v1/schools/${schoolId}/maintenance`);
+		const response =
+			await schoolApi.schoolControllerGetMaintenanceStatus(schoolId);
 
 		return response.data;
 	};
 
 	const setMaintenance = async (schoolId: string, maintenance: boolean) => {
-		const response = await $axios.post(`/v1/schools/${schoolId}/maintenance`, {
-			maintenance,
-		});
+		const response = await schoolApi.schoolControllerSetMaintenanceStatus(
+			schoolId,
+			{ maintenance }
+		);
 
 		return response.data;
 	};

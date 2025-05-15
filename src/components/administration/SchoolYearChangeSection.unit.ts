@@ -249,7 +249,10 @@ describe("SchoolYearChangeSection", () => {
 				() => {
 					useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 						maintenanceStatusFactory.build({
-							maintenance: { active: true, startDate: new Date(2000, 11, 31) },
+							maintenance: {
+								active: true,
+								startDate: new Date(2000, 11, 31).toString(),
+							},
 						});
 					return Promise.resolve();
 				}
@@ -398,7 +401,10 @@ describe("SchoolYearChangeSection", () => {
 
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build({
-						maintenance: { active: true, startDate: new Date(2000, 11, 31) },
+						maintenance: {
+							active: true,
+							startDate: new Date(2000, 11, 31).toString(),
+						},
 					});
 				const { wrapper } = getWrapper();
 
@@ -445,7 +451,10 @@ describe("SchoolYearChangeSection", () => {
 
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build({
-						maintenance: { active: true, startDate: new Date(2000, 11, 31) },
+						maintenance: {
+							active: true,
+							startDate: new Date(2000, 11, 31).toString(),
+						},
 					});
 				const { wrapper } = getWrapper();
 
@@ -496,7 +505,10 @@ describe("SchoolYearChangeSection", () => {
 
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build({
-						maintenance: { active: true, startDate: new Date(2000, 11, 31) },
+						maintenance: {
+							active: true,
+							startDate: new Date(2000, 11, 31).toString(),
+						},
 					});
 				const { wrapper } = getWrapper();
 
@@ -555,7 +567,10 @@ describe("SchoolYearChangeSection", () => {
 
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build({
-						maintenance: { active: true, startDate: new Date(2000, 11, 31) },
+						maintenance: {
+							active: true,
+							startDate: new Date(2000, 11, 31).toString(),
+						},
 					});
 
 				useSharedSchoolYearChangeApiMock.setMaintenanceMode.mockImplementation(

@@ -1,15 +1,14 @@
-import { initializeAxios } from "@/utils/api";
+import * as serverApi from "@/serverApi/v3/api";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { AxiosInstance } from "axios";
 import { useSchoolApi } from "./schoolApi.composable";
 
-describe("SchoolExternalToolApi.composable", () => {
-	let axiosMock: DeepMocked<AxiosInstance>;
+describe("SchoolApi.composable", () => {
+	let schoolApi: DeepMocked<serverApi.SchoolApiInterface>;
 
 	beforeEach(() => {
-		axiosMock = createMock<AxiosInstance>();
+		schoolApi = createMock<serverApi.SchoolApiInterface>();
 
-		initializeAxios(axiosMock);
+		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 	});
 
 	afterEach(() => {
@@ -20,7 +19,9 @@ describe("SchoolExternalToolApi.composable", () => {
 		it("should call the api to fetch the maintenance status", async () => {
 			await useSchoolApi().fetchMaintenanceStatus("id");
 
-			expect(axiosMock.get).toHaveBeenCalledWith("/v1/schools/id/maintenance");
+			expect(
+				schoolApi.schoolControllerGetMaintenanceStatus
+			).toHaveBeenCalledWith("id");
 		});
 	});
 
@@ -28,10 +29,9 @@ describe("SchoolExternalToolApi.composable", () => {
 		it("should call the api to set the maintenance", async () => {
 			await useSchoolApi().setMaintenance("id", true);
 
-			expect(axiosMock.post).toHaveBeenCalledWith(
-				"/v1/schools/id/maintenance",
-				{ maintenance: true }
-			);
+			expect(
+				schoolApi.schoolControllerSetMaintenanceStatus
+			).toHaveBeenCalledWith("id", { maintenance: true });
 		});
 	});
 });

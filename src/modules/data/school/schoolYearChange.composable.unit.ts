@@ -5,8 +5,8 @@ import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	axiosErrorFactory,
 	i18nMock,
+	maintenanceStatusFactory,
 	mountComposable,
-	ObjectIdMock,
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -33,22 +33,7 @@ describe("SchoolYearChange.composable", () => {
 	describe("fetchSchoolYearStatus", () => {
 		describe("when fetching the current school year status", () => {
 			const setup = () => {
-				const maintenanceStatus = {
-					currentYear: {
-						name: "2000",
-						startDate: new Date("1"),
-						endDate: new Date("2"),
-					},
-					nextYear: {
-						yearId: ObjectIdMock(),
-						startDate: new Date("3"),
-						endDate: new Date("4"),
-					},
-					schoolUsesLdap: true,
-					maintenance: {
-						active: false,
-					},
-				};
+				const maintenanceStatus = maintenanceStatusFactory.build();
 				useSchoolApiMock.fetchMaintenanceStatus.mockResolvedValue(
 					maintenanceStatus
 				);
@@ -156,23 +141,12 @@ describe("SchoolYearChange.composable", () => {
 	describe("setMaintenanceMode", () => {
 		describe("when set maintenance mode", () => {
 			const setup = () => {
-				const maintenanceStatus = {
-					currentYear: {
-						name: "2000",
-						startDate: new Date("1"),
-						endDate: new Date("2"),
-					},
-					nextYear: {
-						yearId: ObjectIdMock(),
-						startDate: new Date("3"),
-						endDate: new Date("4"),
-					},
-					schoolUsesLdap: true,
+				const maintenanceStatus = maintenanceStatusFactory.build({
 					maintenance: {
 						active: true,
-						startDate: new Date("3"),
+						startDate: new Date(2001, 0, 1).toString(),
 					},
-				};
+				});
 				useSchoolApiMock.setMaintenance.mockResolvedValue(maintenanceStatus);
 
 				const composable = mountComposable(() => useSchoolYearChange(), {
