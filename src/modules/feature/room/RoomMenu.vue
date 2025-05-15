@@ -10,7 +10,7 @@
 			:members-info-text="membersInfoText"
 			@click="() => $emit('room:manage-members')"
 		/>
-		<KebabMenuActionDuplicate
+		<KebabMenuActionRoomCopy
 			v-if="isRoomCopyFeatureEnabled && canDuplicateRoom"
 			@click="() => $emit('room:copy')"
 		/>
@@ -28,7 +28,7 @@
 import {
 	KebabMenu,
 	KebabMenuActionDelete,
-	KebabMenuActionDuplicate,
+	KebabMenuActionRoomCopy,
 	KebabMenuActionEdit,
 	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,

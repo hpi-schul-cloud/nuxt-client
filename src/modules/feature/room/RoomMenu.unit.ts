@@ -13,7 +13,7 @@ import {
 	KebabMenuActionEdit,
 	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,
-	KebabMenuActionDuplicate,
+	KebabMenuActionRoomCopy,
 } from "@ui-kebab-menu";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
@@ -89,7 +89,7 @@ describe("@feature-room/RoomMenu", () => {
 			KebabMenuActionLeaveRoom
 		);
 		const kebabActionDuplicateRoom = wrapper.findComponent(
-			KebabMenuActionDuplicate
+			KebabMenuActionRoomCopy
 		);
 
 		return {

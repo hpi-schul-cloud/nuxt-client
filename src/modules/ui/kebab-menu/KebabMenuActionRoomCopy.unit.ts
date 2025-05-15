@@ -2,11 +2,11 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import KebabMenuActionDuplicate from "./KebabMenuActionRoomCopy.vue";
+import KebabMenuActionRoomCopy from "./KebabMenuActionRoomCopy.vue";
 
-describe("KebabMenuActionDuplicate", () => {
+describe("KebabMenuActionRoomCopy", () => {
 	it("should render component with correct text", async () => {
-		const wrapper = mount(KebabMenuActionDuplicate, {
+		const wrapper = mount(KebabMenuActionRoomCopy, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
