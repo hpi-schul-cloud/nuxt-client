@@ -5,7 +5,7 @@ import {
 import { expect } from "@jest/globals";
 import { DataTable } from "@ui-data-table";
 import { KebabMenuList } from "@ui-kebab-menu";
-import { VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
+import { VDataTable, VTextField } from "vuetify/lib/components/index";
 import BatchActionMenu from "./BatchActionMenu.vue";
 
 describe("DataTable", () => {

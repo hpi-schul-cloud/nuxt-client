@@ -6,7 +6,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
-import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
+import { VSkeletonLoader } from "vuetify/lib/components/index";
 import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";

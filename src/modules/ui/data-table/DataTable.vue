@@ -92,7 +92,7 @@
 import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify/lib/framework.mjs";
+import { useDisplay } from "vuetify/lib/framework";
 import BatchActionMenu from "./BatchActionMenu.vue";
 
 const props = defineProps({

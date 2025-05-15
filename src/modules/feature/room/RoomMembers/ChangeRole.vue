@@ -124,7 +124,7 @@ import {
 	RoleName,
 } from "@/serverApi/v3";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VCard, VRadio } from "vuetify/lib/components/index.mjs";
+import { VCard, VRadio } from "vuetify/lib/components/index";
 import {
 	RoomMember,
 	useRoomDetailsStore,

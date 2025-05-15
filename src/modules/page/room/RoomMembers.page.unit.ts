@@ -36,7 +36,7 @@ import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { useBoardNotifier } from "@util-board";
 import { ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
-import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index.mjs";
+import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index";
 import RoomMembersPage from "./RoomMembers.page.vue";
 
 jest.mock("vue-router");

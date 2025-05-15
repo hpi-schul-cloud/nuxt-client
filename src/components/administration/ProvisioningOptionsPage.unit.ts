@@ -20,7 +20,7 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { Router, useRouter } from "vue-router";
-import { VCheckboxBtn } from "vuetify/lib/components/index.mjs";
+import { VCheckboxBtn } from "vuetify/lib/components/index";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 
 jest.mock("@data-provisioning-options");
