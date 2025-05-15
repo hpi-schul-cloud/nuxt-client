@@ -37,11 +37,11 @@
 </template>
 
 <script setup lang="ts">
-import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { computed } from "vue";
-import { useI18n } from "vue-i18n";
-import { VSpacer } from "vuetify/lib/components/index.mjs";
 import { useInternalConfirmationDialog } from "./Confirmation.composable";
+import { useI18n } from "vue-i18n";
+import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
+import { VSpacer } from "vuetify/lib/components/index.mjs";
 
 const { t } = useI18n();
 const { confirm, cancel, dialogOptions, isDialogOpen } =
