@@ -65,54 +65,27 @@ const onBlur = () => {
 
 const onKeyUp = () => ensurePoliteNotifications();
 </script>
-
 <style lang="scss" scoped>
-:deep() {
-	.ck.ck-editor__editable_inline {
-		padding: 0;
-	}
-
-	.ck.ck-editor__editable_inline > :first-child {
-		margin-top: 0;
-	}
-
-	.ck.ck-editor__editable_inline h4:first-of-type,
-	.ck.ck-editor__editable_inline h5:first-of-type {
-		margin-top: var(--space-md-2);
-	}
-
-	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around {
-		> .ck-widget__type-around__button_before {
-			top: 0.5rem;
-			left: 0.5rem;
-			margin-left: 0;
-		}
-
-		> .ck-widget__type-around__button_after {
-			bottom: 0.5rem;
-			right: 0.5rem;
-		}
-	}
-
+::v-deep {
 	.ck-content {
 		overflow: hidden; // prevent margin collapse
 
-		h4 {
+		h4,
+		h5 {
 			font-family: var(--font-accent);
 			font-weight: var(--font-weight-bold);
-			font-size: var(--heading-6);
-			letter-spacing: 0.01em;
 			margin-bottom: var(--space-xs);
 			margin-top: var(--space-md-2);
 		}
 
+		h4 {
+			font-size: var(--heading-6);
+			letter-spacing: 0.01em;
+		}
+
 		h5 {
-			font-family: var(--font-accent);
-			font-weight: var(--font-weight-bold);
 			font-size: var(--text-md);
 			letter-spacing: 0.015em;
-			margin-bottom: var(--space-xs);
-			margin-top: var(--space-md-2);
 		}
 
 		p,
@@ -135,14 +108,42 @@ const onKeyUp = () => ensurePoliteNotifications();
 			padding-right: 1px;
 		}
 
-		.ck-widget.ck-widget_with-selection-handle:hover
-			> .ck-widget__selection-handle {
-			display: none;
-		}
-
 		.math-tex {
 			font-size: large;
 		}
+	}
+
+	.ck.ck-editor__editable_inline {
+		padding: 0;
+
+		p,
+		ol,
+		ul {
+			margin-top: 0;
+		}
+
+		h4:first-of-type,
+		h5:first-of-type {
+			margin-top: var(--space-md-2);
+		}
+	}
+
+	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around {
+		> .ck-widget__type-around__button_before {
+			top: 0.5rem;
+			left: 0.5rem;
+			margin-left: 0;
+		}
+
+		> .ck-widget__type-around__button_after {
+			bottom: 0.5rem;
+			right: 0.5rem;
+		}
+	}
+
+	.ck-widget.ck-widget_with-selection-handle:hover
+		> .ck-widget__selection-handle {
+		display: none;
 	}
 }
 </style>
