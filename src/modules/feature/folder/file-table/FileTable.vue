@@ -155,7 +155,12 @@ const headers = [
 	},
 ];
 
-const { mdAndDown: isMobileDevice } = useDisplay();
+const {
+	platform: {
+		value: { android: isAndroid, ios: isIOs },
+	},
+} = useDisplay();
+const isMobileDevice = isAndroid || isIOs;
 
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;
