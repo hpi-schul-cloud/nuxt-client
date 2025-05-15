@@ -60,12 +60,6 @@
 						:data-testid="`kebab-menu-${index}`"
 						:aria-label="buildActionMenuAriaLabel(item)"
 					>
-						<KebabMenuActionDeleteFiles
-							:file-records="fileRecords"
-							:selected-ids="[item.id]"
-							:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
-							@delete-files="onDeleteFiles"
-						/>
 						<KebabMenuActionDownloadFiles
 							:disabled="!item.isSelectable"
 							:file-records="fileRecords"
@@ -73,6 +67,12 @@
 							:aria-label="
 								t('pages.folder.ariaLabels.menu.action.file.download')
 							"
+						/>
+						<KebabMenuActionDeleteFiles
+							:file-records="fileRecords"
+							:selected-ids="[item.id]"
+							:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
+							@delete-files="onDeleteFiles"
 						/>
 					</KebabMenu>
 				</template>
@@ -82,17 +82,17 @@
 				</template>
 
 				<template #action-menu-items="{ selectedIds }">
-					<KebabMenuActionDeleteFiles
-						:file-records="fileRecords"
-						:selected-ids="selectedIds"
-						:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
-						@delete-files="onDeleteFiles"
-					/>
 					<KebabMenuActionDownloadFiles
 						v-if="!isMobileDevice"
 						:file-records="fileRecords"
 						:selected-ids="selectedIds"
 						:aria-label="t('pages.folder.ariaLabels.menu.action.file.download')"
+					/>
+					<KebabMenuActionDeleteFiles
+						:file-records="fileRecords"
+						:selected-ids="selectedIds"
+						:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
+						@delete-files="onDeleteFiles"
 					/>
 				</template>
 			</DataTable>
