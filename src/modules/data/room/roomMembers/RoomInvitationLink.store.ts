@@ -13,7 +13,7 @@ import {
 	InvitationStep,
 } from "./types";
 import { isAxiosError } from "axios";
-import { inputDateFormat } from "@/plugins/datetime";
+import { printFromStringUtcToFullDate } from "@/plugins/datetime";
 
 export const useRoomInvitationLinkStore = defineStore(
 	"roomInvitationLinkStore",
@@ -151,7 +151,7 @@ export const useRoomInvitationLinkStore = defineStore(
 				isValidForStudents: link.isOnlyForTeachers
 					? commonTranslationsMap.NO
 					: commonTranslationsMap.YES,
-				activeUntil: inputDateFormat(link.activeUntil!),
+				activeUntil: printFromStringUtcToFullDate(link.activeUntil!),
 				isExpired: isExpired(link.activeUntil!),
 				status: isExpired(link.activeUntil!)
 					? commonTranslationsMap.EXPIRED

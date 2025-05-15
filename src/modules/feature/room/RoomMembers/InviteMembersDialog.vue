@@ -300,7 +300,9 @@ const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 watch(
 	() => formData.value.restrictedToCreatorSchool,
 	(newVal) => {
-		formData.value.isValidForStudents = newVal;
+		if (!newVal) {
+			formData.value.isValidForStudents = false;
+		}
 	}
 );
 
