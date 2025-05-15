@@ -37,7 +37,8 @@ const isDialogOpen = defineModel("is-dialog-open", {
 	default: false,
 });
 
-// Initialize nameRef and watch the name prop to set the name ref
+const emit = defineEmits(["confirm", "cancel"]);
+
 const nameRef = ref<string>("");
 
 watch(
@@ -50,14 +51,12 @@ watch(
 
 const { t } = useI18n();
 
-const emit = defineEmits(["update:name", "cancel"]);
-
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const onCancel = () => {
 	emit("cancel");
 };
 const onConfirm = () => {
-	emit("update:name", nameRef.value);
+	emit("confirm", nameRef.value);
 };
 </script>

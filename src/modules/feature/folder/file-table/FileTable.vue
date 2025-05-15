@@ -78,7 +78,7 @@
 				:name="fileRecordToRenameName"
 				:entity-name="$t('components.cardElement.fileElement')"
 				@cancel="onRenameDialogCancel"
-				@update:name="onRenameDialogConfirm"
+				@confirm="onRenameDialogConfirm"
 			/>
 		</div>
 	</template>

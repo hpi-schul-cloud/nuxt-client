@@ -1,6 +1,6 @@
 <template>
 	<VDialog
-		v-model="localDialogOpen"
+		v-model="isDialogOpen"
 		data-testid="delete-dialog-item"
 		:max-width="480"
 	>
@@ -51,17 +51,16 @@ import {
 } from "vuetify/lib/components/index.mjs";
 
 const props = defineProps({
-	isDialogOpen: { type: Boolean, required: true },
 	message: { type: String, required: false, default: "" },
 	confirmBtnLangKey: { type: String, required: false, default: "" },
 });
 
-const emit = defineEmits(["cancel", "confirm", "update:isDialogOpen"]);
-
-const localDialogOpen = computed({
-	get: () => props.isDialogOpen,
-	set: (value) => emit("update:isDialogOpen", value),
+const isDialogOpen = defineModel("is-dialog-open", {
+	type: Boolean,
+	default: false,
 });
+
+const emit = defineEmits(["cancel", "confirm"]);
 
 const { t } = useI18n();
 
