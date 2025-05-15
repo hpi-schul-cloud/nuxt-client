@@ -31,7 +31,7 @@
 					<FilePreview
 						:file-record="item"
 						:data-testid="`file-preview-${item.name}`"
-						:class="{ 'text-disabled': !item.isSelectable }"
+						:disabled="!item.isSelectable"
 					/>
 				</template>
 				<template #[`item.name`]="{ item }">
@@ -171,7 +171,7 @@ const formatFileSize = (size: number) => {
 const isFileSelectable = (fileRecord: FileRecord) => {
 	const result = isDownloadAllowed(fileRecord.securityCheckStatus);
 
-	return result;
+	return false;
 };
 
 const onDeleteFiles = (
