@@ -298,7 +298,7 @@ describe("roomAuthorization", () => {
 	describe("canDuplicateRoom", () => {
 		describe("when the user has room duplicate permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [] });
+				return genericSetup({ roomPermissions: [Permission.RoomDuplicate] });
 			};
 
 			it("should be allowed to duplicate the room", () => {
