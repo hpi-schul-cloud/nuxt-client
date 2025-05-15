@@ -28,7 +28,7 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-		<DuplicationInfoDialog
+		<RoomCopyInfoDialog
 			v-if="isRoomDuplicationFeatureEnabled"
 			v-model="isDuplicationInfoDialogOpen"
 			@duplication:cancel="cancelDuplication"
@@ -50,7 +50,7 @@ import {
 	useRoomAuthorization,
 	useRoomDuplication,
 } from "@data-room";
-import { BoardGrid, RoomMenu, DuplicationInfoDialog } from "@feature-room";
+import { BoardGrid, RoomMenu, RoomCopyInfoDialog } from "@feature-room";
 import {
 	mdiPlus,
 	mdiViewDashboardOutline,

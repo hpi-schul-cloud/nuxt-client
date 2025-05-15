@@ -2,11 +2,11 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
-import { DuplicationInfoDialog } from "@feature-room";
+import { RoomCopyInfoDialog } from "@feature-room";
 
-describe("@feature-room/DuplicationInfoDialog", () => {
+describe("@feature-room/RoomCopyInfoDialog", () => {
 	const setup = () => {
-		const wrapper = mount(DuplicationInfoDialog, {
+		const wrapper = mount(RoomCopyInfoDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
