@@ -256,6 +256,7 @@ export enum AuthorizationContextParamsActionEnum {
     * @enum {string}
     */
 export enum AuthorizationContextParamsRequiredPermissionsEnum {
+    Test = '___TEST___',
     AccountCreate = 'ACCOUNT_CREATE',
     AccountDelete = 'ACCOUNT_DELETE',
     AccountEdit = 'ACCOUNT_EDIT',
@@ -269,6 +270,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
+    CanExecuteInstanceOperations = 'CAN_EXECUTE_INSTANCE_OPERATIONS',
     ChangeTeamRoles = 'CHANGE_TEAM_ROLES',
     ClassCreate = 'CLASS_CREATE',
     ClassEdit = 'CLASS_EDIT',
@@ -329,6 +331,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     ImportUserUpdate = 'IMPORT_USER_UPDATE',
     ImportUserView = 'IMPORT_USER_VIEW',
     InstanceView = 'INSTANCE_VIEW',
+    InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
     InviteExperts = 'INVITE_EXPERTS',
     JoinMeeting = 'JOIN_MEETING',
@@ -375,7 +378,6 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
-    SchoolEditAll = 'SCHOOL_EDIT_ALL',
     SchoolLogoManage = 'SCHOOL_LOGO_MANAGE',
     SchoolNewsEdit = 'SCHOOL_NEWS_EDIT',
     SchoolPermissionChange = 'SCHOOL_PERMISSION_CHANGE',
@@ -384,6 +386,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     SchoolSystemEdit = 'SCHOOL_SYSTEM_EDIT',
     SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
     SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
+    SchoolView = 'SCHOOL_VIEW',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
     StudentCreate = 'STUDENT_CREATE',
@@ -3360,10 +3363,10 @@ export interface DrawingElementResponse {
 export interface ElementWithParentHierarchyResponse {
     /**
      * The element data
-     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse}
+     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse}
      * @memberof ElementWithParentHierarchyResponse
      */
-    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
+    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse;
     /**
      * The hierarchical path of parent elements
      * @type {Array<ParentNodeInfoResponse>}
@@ -7481,6 +7484,7 @@ export interface PeriodResponse {
  * @enum {string}
  */
 export enum Permission {
+    Test = '___TEST___',
     AccountCreate = 'ACCOUNT_CREATE',
     AccountDelete = 'ACCOUNT_DELETE',
     AccountEdit = 'ACCOUNT_EDIT',
@@ -7494,6 +7498,7 @@ export enum Permission {
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
+    CanExecuteInstanceOperations = 'CAN_EXECUTE_INSTANCE_OPERATIONS',
     ChangeTeamRoles = 'CHANGE_TEAM_ROLES',
     ClassCreate = 'CLASS_CREATE',
     ClassEdit = 'CLASS_EDIT',
@@ -7554,6 +7559,7 @@ export enum Permission {
     ImportUserUpdate = 'IMPORT_USER_UPDATE',
     ImportUserView = 'IMPORT_USER_VIEW',
     InstanceView = 'INSTANCE_VIEW',
+    InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
     InviteExperts = 'INVITE_EXPERTS',
     JoinMeeting = 'JOIN_MEETING',
@@ -7600,7 +7606,6 @@ export enum Permission {
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
-    SchoolEditAll = 'SCHOOL_EDIT_ALL',
     SchoolLogoManage = 'SCHOOL_LOGO_MANAGE',
     SchoolNewsEdit = 'SCHOOL_NEWS_EDIT',
     SchoolPermissionChange = 'SCHOOL_PERMISSION_CHANGE',
@@ -7609,6 +7614,7 @@ export enum Permission {
     SchoolSystemEdit = 'SCHOOL_SYSTEM_EDIT',
     SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
     SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
+    SchoolView = 'SCHOOL_VIEW',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
     StudentCreate = 'STUDENT_CREATE',
