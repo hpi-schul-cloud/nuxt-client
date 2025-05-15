@@ -1,14 +1,13 @@
 <template>
 	<Dialog
-		:is-dialog-open="isDialogOpen"
+		v-model:is-dialog-open="isDialogOpen"
 		:message="t('ui.rename.dialog.title', { entity: entityName })"
 		@cancel="onCancel"
-		@update:is-dialog-open="onUpdateIsDialogOpen"
 		@confirm="onConfirm"
 	>
 		<template #content>
 			<v-text-field
-				v-model="modelValue"
+				v-model="nameRef"
 				class="mt-8"
 				density="compact"
 				flat
@@ -23,21 +22,35 @@
 
 <script setup lang="ts">
 import { useOpeningTagValidator } from "@/utils/validation";
-import { ModelRef } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import Dialog from "./Dialog.vue";
 
-defineProps({
-	isDialogOpen: { type: Boolean, required: true },
+// Destructure props to avoid directly referencing `props`
+const { name } = defineProps({
+	name: { type: String, required: false, default: "" },
 	entityName: { type: String, required: false, default: "" },
 });
+
+const isDialogOpen = defineModel("is-dialog-open", {
+	type: Boolean,
+	default: false,
+});
+
+// Initialize nameRef and watch the name prop to set the name ref
+const nameRef = ref<string>("");
+
+watch(
+	() => name,
+	(newName) => {
+		nameRef.value = newName;
+	},
+	{ immediate: true }
+);
+
 const { t } = useI18n();
 
-const emit = defineEmits(["update:name", "cancel", "update:isDialogOpen"]);
-
-const modelValue: ModelRef<string | undefined> = defineModel({
-	type: String,
-});
+const emit = defineEmits(["update:name", "cancel"]);
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
@@ -45,11 +58,6 @@ const onCancel = () => {
 	emit("cancel");
 };
 const onConfirm = () => {
-	emit("update:name", modelValue.value);
-};
-const onUpdateIsDialogOpen = (value: boolean) => {
-	if (!value) {
-		emit("cancel");
-	}
+	emit("update:name", nameRef.value);
 };
 </script>

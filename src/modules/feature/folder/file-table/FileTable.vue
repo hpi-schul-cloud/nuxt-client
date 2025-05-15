@@ -74,11 +74,10 @@
 				</template>
 			</DataTable>
 			<RenameDialog
-				:is-dialog-open="!!fileRecordToRename"
+				v-model:is-dialog-open="isDialogOpen"
+				:name="fileRecordToRenameName"
 				:entity-name="$t('components.cardElement.fileElement')"
-				:model-value="removeFileExtension(fileRecordToRename?.name || '')"
 				@cancel="onRenameDialogCancel"
-				@update:is-dialog-open="onRenameDialogCancel"
 				@update:name="onRenameDialogConfirm"
 			/>
 		</div>
@@ -139,9 +138,13 @@ const headers = [
 ];
 
 const fileRecordToRename = ref<FileRecord | undefined>(undefined);
+const isDialogOpen = ref(false);
 
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;
+});
+const fileRecordToRenameName = computed(() => {
+	return removeFileExtension(fileRecordToRename.value?.name || "");
 });
 
 const formatFileSize = (size: number) => {
@@ -159,9 +162,11 @@ const onDeleteFiles = (
 };
 
 const onRenameButtonClick = (item: FileRecord) => {
+	isDialogOpen.value = true;
 	fileRecordToRename.value = item;
 };
 const onRenameDialogCancel = () => {
+	isDialogOpen.value = false;
 	fileRecordToRename.value = undefined;
 };
 const onRenameDialogConfirm = (newName: string) => {
@@ -169,6 +174,7 @@ const onRenameDialogConfirm = (newName: string) => {
 	const nameWithExtension = `${newName}.${fileExtension}`;
 	emit("update:name", nameWithExtension, fileRecordToRename.value);
 
+	isDialogOpen.value = false;
 	fileRecordToRename.value = undefined;
 };
 
