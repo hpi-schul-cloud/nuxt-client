@@ -31,8 +31,8 @@
 		<RoomCopyInfoDialog
 			v-if="isRoomCopyFeatureEnabled"
 			v-model="isRoomCopyInfoDialogOpen"
-			@duplication:cancel="cancelRoomCopy"
-			@duplication:confirm="copyRoom"
+			@copy:cancel="cancelRoomCopy"
+			@copy:confirm="copyRoom"
 		/>
 	</DefaultWireframe>
 </template>

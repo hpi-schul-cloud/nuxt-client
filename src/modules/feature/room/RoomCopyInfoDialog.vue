@@ -40,7 +40,7 @@
 				<v-btn
 					variant="text"
 					data-testid="copy-info-dialog-cancel"
-					@click="$emit('duplication:cancel')"
+					@click="$emit('copy:cancel')"
 				>
 					{{ $t("common.actions.cancel") }}
 				</v-btn>
@@ -48,7 +48,7 @@
 					variant="flat"
 					color="primary"
 					data-testid="copy-info-dialog-confirm"
-					@click="$emit('duplication:confirm')"
+					@click="$emit('copy:confirm')"
 				>
 					{{ $t("common.actions.copyRoom") }}
 				</v-btn>
@@ -65,5 +65,5 @@ const isOpen = defineModel({
 	required: true,
 });
 
-defineEmits(["duplication:cancel", "duplication:confirm"]);
+defineEmits(["copy:cancel", "copy:confirm"]);
 </script>

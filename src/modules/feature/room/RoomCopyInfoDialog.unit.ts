@@ -39,7 +39,7 @@ describe("@feature-room/RoomCopyInfoDialog", () => {
 			);
 			await cancelButton.trigger("click");
 
-			expect(wrapper.emitted()).toHaveProperty("duplication:cancel");
+			expect(wrapper.emitted()).toHaveProperty("copy:cancel");
 		});
 	});
 
@@ -52,7 +52,7 @@ describe("@feature-room/RoomCopyInfoDialog", () => {
 			);
 			await cancelButton.trigger("click");
 
-			expect(wrapper.emitted()).toHaveProperty("duplication:confirm");
+			expect(wrapper.emitted()).toHaveProperty("copy:confirm");
 		});
 	});
 });
