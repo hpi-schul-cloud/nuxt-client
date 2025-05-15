@@ -55,9 +55,9 @@ describe("@feature-room/RoomMenu", () => {
 		const roomCopy = jest.mocked(useRoomCopy);
 		roomCopy.mockReturnValue({
 			isRoomCopyFeatureEnabled: computed(() => true),
-			isDuplicationInfoDialogOpen: ref(false),
-			openDuplicationInfoDialog: jest.fn(),
-			closeDuplicationInfoDialog: jest.fn(),
+			isRoomCopyInfoDialogOpen: ref(false),
+			openRoomCopyInfoDialog: jest.fn(),
+			closeRoomCopyInfoDialog: jest.fn(),
 			duplicate: jest.fn(),
 		});
 

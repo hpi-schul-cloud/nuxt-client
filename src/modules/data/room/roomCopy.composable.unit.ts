@@ -67,61 +67,59 @@ describe("roomCopy", () => {
 	describe("duplication info dialog", () => {
 		const setup = () => {
 			const {
-				isDuplicationInfoDialogOpen,
-				openDuplicationInfoDialog,
-				closeDuplicationInfoDialog,
+				isRoomCopyInfoDialogOpen,
+				openRoomCopyInfoDialog,
+				closeRoomCopyInfoDialog,
 			} = setupComposable({
 				featureFlag: true,
 			});
 			return {
-				isDuplicationInfoDialogOpen,
-				openDuplicationInfoDialog,
-				closeDuplicationInfoDialog,
+				isRoomCopyInfoDialogOpen,
+				openRoomCopyInfoDialog,
+				closeRoomCopyInfoDialog,
 			};
 		};
 
 		it("should be closed by default", () => {
-			const { isDuplicationInfoDialogOpen } = setup();
-			expect(isDuplicationInfoDialogOpen.value).toBe(false);
+			const { isRoomCopyInfoDialogOpen } = setup();
+			expect(isRoomCopyInfoDialogOpen.value).toBe(false);
 		});
 
 		describe("when open DuplicationInfoDialog is called", () => {
 			it("should open the dialog", () => {
-				const { isDuplicationInfoDialogOpen, openDuplicationInfoDialog } =
-					setup();
-				openDuplicationInfoDialog();
-				expect(isDuplicationInfoDialogOpen.value).toBe(true);
+				const { isRoomCopyInfoDialogOpen, openRoomCopyInfoDialog } = setup();
+				openRoomCopyInfoDialog();
+				expect(isRoomCopyInfoDialogOpen.value).toBe(true);
 			});
 		});
 
 		describe("when close DuplicationInfoDialog is called", () => {
 			it("should close the dialog", () => {
-				const { isDuplicationInfoDialogOpen, closeDuplicationInfoDialog } =
-					setup();
-				closeDuplicationInfoDialog();
-				expect(isDuplicationInfoDialogOpen.value).toBe(false);
+				const { isRoomCopyInfoDialogOpen, closeRoomCopyInfoDialog } = setup();
+				closeRoomCopyInfoDialog();
+				expect(isRoomCopyInfoDialogOpen.value).toBe(false);
 			});
 		});
 	});
 
 	// TODO BC-9401: improve tests
-	describe("duplicate", () => {
+	describe("copy", () => {
 		const setup = () => {
 			const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-			const { duplicate, isDuplicationInfoDialogOpen } = setupComposable({
+			const { duplicate, isRoomCopyInfoDialogOpen } = setupComposable({
 				featureFlag: true,
 				mockedLoadingState: loadingStateModuleMock,
 			});
-			return { duplicate, isDuplicationInfoDialogOpen, loadingStateModuleMock };
+			return { duplicate, isRoomCopyInfoDialogOpen, loadingStateModuleMock };
 		};
 
-		it("should close DuplicationInfoDialog when duplicating", async () => {
-			const { duplicate, isDuplicationInfoDialogOpen } = setup();
+		it("should close CopyInfoDialog when copying", async () => {
+			const { duplicate, isRoomCopyInfoDialogOpen } = setup();
 			await duplicate("string");
-			expect(isDuplicationInfoDialogOpen.value).toBe(false);
+			expect(isRoomCopyInfoDialogOpen.value).toBe(false);
 		});
 
-		it("should open loading state when duplicating", async () => {
+		it("should open loading state when copying", async () => {
 			const { duplicate, loadingStateModuleMock } = setup();
 			await duplicate("string");
 			expect(loadingStateModuleMock.open).toHaveBeenCalledWith(

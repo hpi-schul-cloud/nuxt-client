@@ -23,18 +23,18 @@ export const useRoomCopy = () => {
 		return envConfigModule.getEnv.FEATURE_ROOMS_DUPLICATION_ENABLED;
 	});
 
-	const isDuplicationInfoDialogOpen = ref(false);
+	const isRoomCopyInfoDialogOpen = ref(false);
 
-	const openDuplicationInfoDialog = () => {
-		isDuplicationInfoDialogOpen.value = true;
+	const openRoomCopyInfoDialog = () => {
+		isRoomCopyInfoDialogOpen.value = true;
 	};
 
-	const closeDuplicationInfoDialog = () => {
-		isDuplicationInfoDialogOpen.value = false;
+	const closeRoomCopyInfoDialog = () => {
+		isRoomCopyInfoDialogOpen.value = false;
 	};
 
 	const duplicate = async (roomId: string) => {
-		closeDuplicationInfoDialog();
+		closeRoomCopyInfoDialog();
 		isLoadingDialogOpen.value = true;
 
 		try {
@@ -76,9 +76,9 @@ export const useRoomCopy = () => {
 
 	return {
 		isRoomCopyFeatureEnabled,
-		isDuplicationInfoDialogOpen,
-		openDuplicationInfoDialog,
-		closeDuplicationInfoDialog,
+		isRoomCopyInfoDialogOpen,
+		openRoomCopyInfoDialog,
+		closeRoomCopyInfoDialog,
 		duplicate,
 	};
 };
