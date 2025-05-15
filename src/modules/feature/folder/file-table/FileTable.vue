@@ -19,11 +19,7 @@
 		<div class="mt-8">
 			<DataTable
 				:table-headers="headers"
-				:items="
-					fileRecords.map((item) => ({
-						...item,
-					}))
-				"
+				:items="fileRecordItems"
 				:show-select="true"
 			>
 				<template #[`item.preview`]="{ item }">
@@ -54,6 +50,7 @@
 							@delete-files="onDeleteFiles"
 						/>
 						<KebabMenuActionRename
+							:disabled="!item.isSelectable"
 							:aria-label="t('pages.folder.ariaLabels.menu.action.file.rename')"
 							@click="onRenameButtonClick(item)"
 						/>
@@ -90,6 +87,7 @@ import { FileRecord } from "@/types/file/File";
 import {
 	convertFileSize,
 	getFileExtension,
+	isDownloadAllowed,
 	removeFileExtension,
 } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
@@ -139,6 +137,12 @@ const headers = [
 
 const fileRecordToRename = ref<FileRecord | undefined>(undefined);
 const isDialogOpen = ref(false);
+const fileRecordItems = computed(() => {
+	return props.fileRecords.map((item) => ({
+		...item,
+		isBlocked: !isDownloadAllowed(item.securityCheckStatus),
+	}));
+});
 
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;
