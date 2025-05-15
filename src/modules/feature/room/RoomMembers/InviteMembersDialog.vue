@@ -251,9 +251,10 @@ const onContinue = async () => {
 
 	const baseParams = {
 		title: formData.value.title || "invitation link",
-		activeUntil: formData.value.activeUntilCheck
-			? formData.value.activeUntil.toString()
-			: "2900-01-01T00:00:00.000Z",
+		activeUntil:
+			formData.value.activeUntilCheck && !!formData.value.activeUntil
+				? formData.value.activeUntil.toString()
+				: "2900-01-01T00:00:00.000Z",
 		isOnlyForTeachers: !formData.value.isValidForStudents,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
