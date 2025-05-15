@@ -290,6 +290,7 @@ watch(
 );
 
 const informationLink = computed(
+	// test commit to trigger CI
 	() => envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
 );
 </script>
