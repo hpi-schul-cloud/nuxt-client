@@ -166,7 +166,7 @@ const tableHeaders = [
 	},
 	{
 		title: t("pages.rooms.members.tableHeader.validForStudents"),
-		key: "validForStudents",
+		key: "isValidForStudents",
 	},
 	{
 		title: t("pages.rooms.members.tableHeader.expirationDate"),

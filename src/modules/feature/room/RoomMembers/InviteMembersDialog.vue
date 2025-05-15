@@ -80,11 +80,7 @@
 								v-model="formData.activeUntil"
 								:disabled="isDatePickerDisabled"
 								:min-date="new Date().toString()"
-								:date="
-									invitationStep === InvitationStep.EDIT
-										? formData.activeUntil.toString()
-										: ''
-								"
+								:date="datePickerDate"
 								class="mr-2 mt-2"
 								data-testid="date-picker-until"
 								max-width="110px"
@@ -290,6 +286,12 @@ const onCopyLink = () => {
 	});
 };
 
+const datePickerDate = computed(() => {
+	return formData.value.activeUntilCheck
+		? formData.value.activeUntil.toString()
+		: "";
+});
+
 const inviteMembersContent = ref<VCard>();
 const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 	immediate: true,
@@ -298,9 +300,7 @@ const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 watch(
 	() => formData.value.restrictedToCreatorSchool,
 	(newVal) => {
-		if (!newVal) {
-			formData.value.isValidForStudents = false;
-		}
+		formData.value.isValidForStudents = newVal;
 	}
 );
 
