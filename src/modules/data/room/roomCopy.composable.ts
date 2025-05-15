@@ -9,7 +9,7 @@ import {
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export const useRoomDuplication = () => {
+export const useRoomCopy = () => {
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { t } = useI18n();
@@ -17,9 +17,9 @@ export const useRoomDuplication = () => {
 	const { isLoadingDialogOpen } = useLoadingState(
 		t("data-room.duplication.loading")
 	);
-	const { duplicateRoom } = useRoomsState();
+	const { copyRoom } = useRoomsState();
 
-	const isRoomDuplicationFeatureEnabled = computed(() => {
+	const isRoomCopyFeatureEnabled = computed(() => {
 		return envConfigModule.getEnv.FEATURE_ROOMS_DUPLICATION_ENABLED;
 	});
 
@@ -38,7 +38,7 @@ export const useRoomDuplication = () => {
 		isLoadingDialogOpen.value = true;
 
 		try {
-			const copyId = await duplicateRoom(roomId);
+			const copyId = await copyRoom(roomId);
 			showSuccess();
 			return copyId;
 		} catch {
@@ -75,7 +75,7 @@ export const useRoomDuplication = () => {
 	};
 
 	return {
-		isRoomDuplicationFeatureEnabled,
+		isRoomCopyFeatureEnabled,
 		isDuplicationInfoDialogOpen,
 		openDuplicationInfoDialog,
 		closeDuplicationInfoDialog,

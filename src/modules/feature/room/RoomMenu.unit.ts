@@ -6,7 +6,7 @@ import { VueWrapper } from "@vue/test-utils";
 import RoomMenu from "./RoomMenu.vue";
 import { RouterLink } from "vue-router";
 import { computed, ref } from "vue";
-import { useRoomAuthorization, useRoomDuplication } from "@data-room";
+import { useRoomAuthorization, useRoomCopy } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionDelete,
@@ -24,7 +24,7 @@ const roomAuthorization = jest.mocked(useRoomAuthorization);
 jest.mock("@ui-confirmation-dialog");
 jest.mocked(useDeleteConfirmationDialog);
 
-jest.mock("@data-room/roomDuplication.composable");
+jest.mock("@data-room/roomCopy.composable");
 
 describe("@feature-room/RoomMenu", () => {
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
@@ -52,9 +52,9 @@ describe("@feature-room/RoomMenu", () => {
 	});
 
 	const setup = () => {
-		const roomDuplication = jest.mocked(useRoomDuplication);
-		roomDuplication.mockReturnValue({
-			isRoomDuplicationFeatureEnabled: computed(() => true),
+		const roomCopy = jest.mocked(useRoomCopy);
+		roomCopy.mockReturnValue({
+			isRoomCopyFeatureEnabled: computed(() => true),
 			isDuplicationInfoDialogOpen: ref(false),
 			openDuplicationInfoDialog: jest.fn(),
 			closeDuplicationInfoDialog: jest.fn(),

@@ -49,7 +49,7 @@ export const useRoomsState = () => {
 		}
 	};
 
-	const duplicateRoom = async (roomId: string) => {
+	const copyRoom = async (roomId: string) => {
 		isLoading.value = true;
 		try {
 			const response = await roomApi.roomControllerCopyRoom(roomId);
@@ -75,6 +75,6 @@ export const useRoomsState = () => {
 		fetchRooms,
 		deleteRoom,
 		leaveRoom,
-		duplicateRoom,
+		copyRoom,
 	};
 };

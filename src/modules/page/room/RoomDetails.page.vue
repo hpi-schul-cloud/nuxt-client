@@ -48,7 +48,7 @@ import {
 	useRoomDetailsStore,
 	useRoomsState,
 	useRoomAuthorization,
-	useRoomDuplication,
+	useRoomCopy,
 } from "@data-room";
 import { BoardGrid, RoomMenu, RoomCopyInfoDialog } from "@feature-room";
 import {
@@ -198,7 +198,7 @@ const {
 	openDuplicationInfoDialog,
 	closeDuplicationInfoDialog,
 	duplicate,
-} = useRoomDuplication();
+} = useRoomCopy();
 
 const onDuplicate = async () => {
 	if (!room.value || !canDuplicateRoom) return;

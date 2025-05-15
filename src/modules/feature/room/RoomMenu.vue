@@ -11,7 +11,7 @@
 			@click="() => $emit('room:manage-members')"
 		/>
 		<KebabMenuActionDuplicate
-			v-if="isRoomDuplicationFeatureEnabled && canDuplicateRoom"
+			v-if="isRoomCopyFeatureEnabled && canDuplicateRoom"
 			@click="() => $emit('room:duplicate')"
 		/>
 		<KebabMenuActionDelete
@@ -33,7 +33,7 @@ import {
 	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,
 } from "@ui-kebab-menu";
-import { useRoomAuthorization, useRoomDuplication } from "@data-room";
+import { useRoomAuthorization, useRoomCopy } from "@data-room";
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
 
@@ -51,7 +51,7 @@ const emit = defineEmits([
 
 const { t } = useI18n();
 
-const { isRoomDuplicationFeatureEnabled } = useRoomDuplication();
+const { isRoomCopyFeatureEnabled } = useRoomCopy();
 
 const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 	const shouldDelete = await confirmation;
