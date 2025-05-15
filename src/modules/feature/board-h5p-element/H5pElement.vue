@@ -98,7 +98,7 @@ const isSmallOrLargerListBoard = computed(() => {
 	return smAndUp.value && isListLayout.value;
 });
 
-const contentTitle = ref<string>("components.cardElement.h5pElement");
+const contentTitle = ref<string>(t("components.cardElement.h5pElement"));
 
 const openEditorWindow = () => {
 	const route = router.resolve({
