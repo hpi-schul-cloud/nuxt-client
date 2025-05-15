@@ -1980,6 +1980,10 @@ export default {
 		"{invitation} aus der Liste entfernen?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Einladungslink teilen",
+	"pages.rooms.invitationlinks.error.create":
+		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
+	"pages.rooms.invitationlinks.error.update":
+		"Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":

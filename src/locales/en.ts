@@ -1946,6 +1946,10 @@ export default {
 		"Remove {invitation} from the list?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Share invitation link",
+	"pages.rooms.invitationlinks.error.create":
+		"Creating the invitation link has failed.",
+	"pages.rooms.invitationlinks.error.update":
+		"Updating the invitation link has failed.",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

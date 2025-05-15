@@ -2008,6 +2008,10 @@ export default {
 		"¿Quitar {invitation} de la lista?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Compartir enlace de invitación",
+	"pages.rooms.invitationlinks.error.create":
+		"No se ha podido crear el enlace de invitación.",
+	"pages.rooms.invitationlinks.error.update":
+		"Se ha producido un error al actualizar el enlace de invitación.",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

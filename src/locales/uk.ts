@@ -1981,6 +1981,10 @@ export default {
 		"Видалити {invitation} зі списку?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Поділіться посиланням на запрошення",
+	"pages.rooms.invitationlinks.error.create":
+		"Не вдалося створити посилання на запрошення.",
+	"pages.rooms.invitationlinks.error.update":
+		"Не вдалося оновити посилання на запрошення.",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
