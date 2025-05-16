@@ -22,7 +22,6 @@
 			@update:name="onUpdateName"
 		/>
 	</DefaultWireframe>
-	<ConfirmationDialog />
 	<input
 		ref="fileInput"
 		type="file"
@@ -42,7 +41,6 @@ import { useBoardApi, useSharedBoardPageInformation } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
