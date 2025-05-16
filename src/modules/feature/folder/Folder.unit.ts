@@ -23,7 +23,7 @@ import Folder from "./Folder.vue";
 
 describe("Folder.vue", () => {
 	beforeEach(() => {
-		jest.resetAllMocks();
+		jest.restoreAllMocks();
 	});
 
 	const buildUploadStatsTranslation = (uploaded: string, total: string) => {
@@ -63,7 +63,7 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
 				jest
 					.spyOn(FolderState, "useFolderState")
-					.mockReturnValue(folderStateMock);
+					.mockReturnValueOnce(folderStateMock);
 
 				const parent = parentNodeInfoFactory.build({
 					type: ParentNodeType.Board,
@@ -72,21 +72,22 @@ describe("Folder.vue", () => {
 
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 				>({});
 				jest
 					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValue(boardState);
+					.mockReturnValueOnce(boardState);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				jest
 					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValue(fileStorageApiMock);
+					.mockReturnValueOnce(fileStorageApiMock);
 
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([]);
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 				const { wrapper } = setupWrapper();
 
@@ -158,7 +159,7 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
 				jest
 					.spyOn(FolderState, "useFolderState")
-					.mockReturnValue(folderStateMock);
+					.mockReturnValueOnce(folderStateMock);
 
 				const parent = parentNodeInfoFactory.build({
 					type: ParentNodeType.Course,
@@ -167,21 +168,22 @@ describe("Folder.vue", () => {
 
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 				>({});
 				jest
 					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValue(boardState);
+					.mockReturnValueOnce(boardState);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				jest
 					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValue(fileStorageApiMock);
+					.mockReturnValueOnce(fileStorageApiMock);
 
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([]);
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 				setupWrapper();
 
@@ -206,7 +208,11 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
 				jest
 					.spyOn(FolderState, "useFolderState")
-					.mockReturnValue(folderStateMock);
+					.mockReturnValueOnce(folderStateMock);
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
 				const parent = parentNodeInfoFactory.build();
 				folderStateMock.parent = ref(parent) as ComputedRef<ParentNodeInfo>;
@@ -216,25 +222,25 @@ describe("Folder.vue", () => {
 				>({});
 				jest
 					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValue(boardState);
+					.mockReturnValueOnce(boardState);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				jest
 					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValue(fileStorageApiMock);
+					.mockReturnValueOnce(fileStorageApiMock);
 
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([]);
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 				// eslint-disable-next-line @typescript-eslint/no-empty-function
 				const mockFolderPromise = new Promise<void>(() => {});
-				folderStateMock.fetchFileFolderElement.mockReturnValue(
+				folderStateMock.fetchFileFolderElement.mockReturnValueOnce(
 					mockFolderPromise
 				);
 
 				// eslint-disable-next-line @typescript-eslint/no-empty-function
 				const mockFilePromise = new Promise<void>(() => {});
-				fileStorageApiMock.fetchFiles.mockReturnValue(mockFilePromise);
+				fileStorageApiMock.fetchFiles.mockReturnValueOnce(mockFilePromise);
 
 				const { wrapper } = setupWrapper();
 
@@ -270,7 +276,7 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
 				jest
 					.spyOn(FolderState, "useFolderState")
-					.mockReturnValue(folderStateMock);
+					.mockReturnValueOnce(folderStateMock);
 
 				folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 					() => "boards"
@@ -288,19 +294,19 @@ describe("Folder.vue", () => {
 				>({});
 				jest
 					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValue(boardState);
+					.mockReturnValueOnce(boardState);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				jest
 					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValue(fileStorageApiMock);
+					.mockReturnValueOnce(fileStorageApiMock);
 
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([]);
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 				const boardApiMock =
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
+				jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
 
 				const confirmationDialogMock =
 					createMock<
@@ -308,7 +314,7 @@ describe("Folder.vue", () => {
 					>();
 				jest
 					.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog")
-					.mockReturnValue(confirmationDialogMock);
+					.mockReturnValueOnce(confirmationDialogMock);
 				confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(true);
 
 				const routerSpy = jest.spyOn(router, "replace").mockImplementation();
@@ -351,7 +357,7 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
 				jest
 					.spyOn(FolderState, "useFolderState")
-					.mockReturnValue(folderStateMock);
+					.mockReturnValueOnce(folderStateMock);
 
 				folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 					() => "boards"
@@ -371,19 +377,19 @@ describe("Folder.vue", () => {
 				>({});
 				jest
 					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValue(boardState);
+					.mockReturnValueOnce(boardState);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				jest
 					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValue(fileStorageApiMock);
+					.mockReturnValueOnce(fileStorageApiMock);
 
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([]);
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 				const boardApiMock =
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
+				jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
 
 				const confirmationDialogMock =
 					createMock<
@@ -391,7 +397,7 @@ describe("Folder.vue", () => {
 					>();
 				jest
 					.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog")
-					.mockReturnValue(confirmationDialogMock);
+					.mockReturnValueOnce(confirmationDialogMock);
 				confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(true);
 
 				const routerSpy = jest.spyOn(router, "replace").mockImplementation();
@@ -427,7 +433,7 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
 				jest
 					.spyOn(FolderState, "useFolderState")
-					.mockReturnValue(folderStateMock);
+					.mockReturnValueOnce(folderStateMock);
 
 				folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 					() => "boards"
@@ -436,8 +442,8 @@ describe("Folder.vue", () => {
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
 				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
-				const parent = parentNodeInfoFactory.build();
 
+				const parent = parentNodeInfoFactory.build();
 				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
 				const boardState = createMock<
@@ -445,19 +451,19 @@ describe("Folder.vue", () => {
 				>({});
 				jest
 					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValue(boardState);
+					.mockReturnValueOnce(boardState);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				jest
 					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValue(fileStorageApiMock);
+					.mockReturnValueOnce(fileStorageApiMock);
 
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([]);
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 				const boardApiMock =
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
+				jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
 
 				const confirmationDialogMock =
 					createMock<
@@ -465,7 +471,7 @@ describe("Folder.vue", () => {
 					>();
 				jest
 					.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog")
-					.mockReturnValue(confirmationDialogMock);
+					.mockReturnValueOnce(confirmationDialogMock);
 				confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(false);
 
 				const routerSpy = jest.spyOn(router, "replace").mockImplementation();
@@ -507,7 +513,7 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
 				jest
 					.spyOn(FolderState, "useFolderState")
-					.mockReturnValue(folderStateMock);
+					.mockReturnValueOnce(folderStateMock);
 
 				folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 					() => "boards"
@@ -527,22 +533,22 @@ describe("Folder.vue", () => {
 				>({});
 				jest
 					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValue(boardState);
+					.mockReturnValueOnce(boardState);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				jest
 					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValue(fileStorageApiMock);
+					.mockReturnValueOnce(fileStorageApiMock);
 
 				const fileRecord = fileRecordFactory.build();
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
 					fileRecord,
 				]);
 
 				const boardApiMock =
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
+				jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
 
 				const confirmationDialogMock =
 					createMock<
@@ -552,7 +558,7 @@ describe("Folder.vue", () => {
 					>();
 				jest
 					.spyOn(DeleteFilesConfirmation, "useDeleteFilesConfirmationDialog")
-					.mockReturnValue(confirmationDialogMock);
+					.mockReturnValueOnce(confirmationDialogMock);
 				confirmationDialogMock.askDeleteFilesConfirmation.mockResolvedValue(
 					true
 				);
@@ -594,7 +600,7 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
 				jest
 					.spyOn(FolderState, "useFolderState")
-					.mockReturnValue(folderStateMock);
+					.mockReturnValueOnce(folderStateMock);
 
 				folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 					() => "boards"
@@ -614,22 +620,22 @@ describe("Folder.vue", () => {
 				>({});
 				jest
 					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValue(boardState);
+					.mockReturnValueOnce(boardState);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				jest
 					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValue(fileStorageApiMock);
+					.mockReturnValueOnce(fileStorageApiMock);
 
 				const fileRecord = fileRecordFactory.build();
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
 					fileRecord,
 				]);
 
 				const boardApiMock =
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
+				jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
 
 				const confirmationDialogMock =
 					createMock<
@@ -639,7 +645,7 @@ describe("Folder.vue", () => {
 					>();
 				jest
 					.spyOn(DeleteFilesConfirmation, "useDeleteFilesConfirmationDialog")
-					.mockReturnValue(confirmationDialogMock);
+					.mockReturnValueOnce(confirmationDialogMock);
 				confirmationDialogMock.askDeleteFilesConfirmation.mockResolvedValue(
 					false
 				);
@@ -682,7 +688,12 @@ describe("Folder.vue", () => {
 				createMock<ReturnType<typeof FolderState.useFolderState>>();
 			jest
 				.spyOn(FolderState, "useFolderState")
-				.mockReturnValue(folderStateMock);
+				.mockReturnValueOnce(folderStateMock);
+
+			const folderName = "Test Folder" as unknown as ComputedRef<string>;
+			folderStateMock.folderName = folderName;
+			folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
 			const parent = parentNodeInfoFactory.build();
 			folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
@@ -691,17 +702,17 @@ describe("Folder.vue", () => {
 			>({});
 			jest
 				.spyOn(BoardApi, "useSharedBoardPageInformation")
-				.mockReturnValue(boardState);
+				.mockReturnValueOnce(boardState);
 
 			const fileStorageApiMock =
 				createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			jest
 				.spyOn(FileStorageApi, "useFileStorageApi")
-				.mockReturnValue(fileStorageApiMock);
+				.mockReturnValueOnce(fileStorageApiMock);
 
 			const fileRecord1 = fileRecordFactory.build();
 			const fileRecord2 = fileRecordFactory.build({ isUploading: true });
-			fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+			fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
 				fileRecord1,
 				fileRecord2,
 			]);
@@ -897,25 +908,29 @@ describe("Folder.vue", () => {
 				createMock<ReturnType<typeof FolderState.useFolderState>>();
 			jest
 				.spyOn(FolderState, "useFolderState")
-				.mockReturnValue(folderStateMock);
+				.mockReturnValueOnce(folderStateMock);
 			const parent = parentNodeInfoFactory.build();
 			folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+			const folderName = "Test Folder" as unknown as ComputedRef<string>;
+			folderStateMock.folderName = folderName;
+			folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
 			const boardState = createMock<
 				ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 			>({});
 			jest
 				.spyOn(BoardApi, "useSharedBoardPageInformation")
-				.mockReturnValue(boardState);
+				.mockReturnValueOnce(boardState);
 
 			const fileStorageApiMock =
 				createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			jest
 				.spyOn(FileStorageApi, "useFileStorageApi")
-				.mockReturnValue(fileStorageApiMock);
+				.mockReturnValueOnce(fileStorageApiMock);
 
 			const fileRecord1 = fileRecordFactory.build({ isUploading: true });
-			fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+			fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
 				fileRecord1,
 			]);
 
@@ -950,19 +965,21 @@ describe("Folder.vue", () => {
 
 	describe("when breadcrumbs are present", () => {
 		const setup = () => {
-			const folderStateMock = createMock<
-				ReturnType<typeof FolderState.useFolderState>
-			>({
-				breadcrumbs: ref([
-					{
-						title: "Test Folder",
-						to: "/test-folder",
-					},
-				]),
-			});
+			const folderStateMock =
+				createMock<ReturnType<typeof FolderState.useFolderState>>();
 			jest
 				.spyOn(FolderState, "useFolderState")
-				.mockReturnValue(folderStateMock);
+				.mockReturnValueOnce(folderStateMock);
+
+			const folderName = "Test Folder" as unknown as ComputedRef<string>;
+			folderStateMock.folderName = folderName;
+			folderStateMock.breadcrumbs = ref([
+				{
+					title: "Test Folder",
+					to: "/test-folder",
+				},
+			]) as unknown as ComputedRef;
+
 			const parent = parentNodeInfoFactory.build();
 			folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
@@ -971,15 +988,15 @@ describe("Folder.vue", () => {
 			>({});
 			jest
 				.spyOn(BoardApi, "useSharedBoardPageInformation")
-				.mockReturnValue(boardState);
+				.mockReturnValueOnce(boardState);
 
 			const fileStorageApiMock =
 				createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			jest
 				.spyOn(FileStorageApi, "useFileStorageApi")
-				.mockReturnValue(fileStorageApiMock);
+				.mockReturnValueOnce(fileStorageApiMock);
 
-			fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([]);
+			fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 			const { wrapper } = setupWrapper();
 
@@ -1000,10 +1017,12 @@ describe("Folder.vue", () => {
 				createMock<ReturnType<typeof FolderState.useFolderState>>();
 			jest
 				.spyOn(FolderState, "useFolderState")
-				.mockReturnValue(folderStateMock);
+				.mockReturnValueOnce(folderStateMock);
 
 			const folderName = "Test Folder" as unknown as ComputedRef<string>;
 			folderStateMock.folderName = folderName;
+			folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
 			const parent = parentNodeInfoFactory.build();
 			folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
@@ -1012,13 +1031,13 @@ describe("Folder.vue", () => {
 			>({});
 			jest
 				.spyOn(BoardApi, "useSharedBoardPageInformation")
-				.mockReturnValue(boardState);
+				.mockReturnValueOnce(boardState);
 
 			const fileStorageApiMock =
 				createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			jest
 				.spyOn(FileStorageApi, "useFileStorageApi")
-				.mockReturnValue(fileStorageApiMock);
+				.mockReturnValueOnce(fileStorageApiMock);
 
 			fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 

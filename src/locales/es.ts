@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
+	"common.actions.download": "Descargar",
 	"common.actions.duplicate": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
@@ -536,6 +537,10 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.cardElement.h5pElement": "Elemento de aprendizaje interactivo",
+	"components.cardElement.h5pElement.create":
+		"Crear un elemento de aprendizaje interactivo.",
+	"components.cardElement.h5pElement.title.error.load":
+		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",
 	"components.datePicker.validation.format":
 		"Por favor utilice el formato DD.MM.AAAA",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
@@ -1972,7 +1977,7 @@ export default {
 	"pages.rooms.members.inviteMember.secondStep.title":
 		"Compartir enlace de invitación",
 	"pages.rooms.members.inviteMember.infoAlert.text":
-		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un guía de aprendizaje supervisor de su escuela a la sala.",
+		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
 	"pages.rooms.members.inviteMember.form.description.label":
 		"Descripción (opcional)",
 	"pages.rooms.members.inviteMember.form.description.hint":
@@ -2171,7 +2176,6 @@ export default {
 	"pages.folder.ariaLabels.menu": "Menú carpeta",
 	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",
 	"pages.folder.ariaLabels.menu.action.delete": "Borrar carpeta",
-	"pages.folder.ariaLabels.menu.action.file.delete": "Eliminar archivo",
 	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
 	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
