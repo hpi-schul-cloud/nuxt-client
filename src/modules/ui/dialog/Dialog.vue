@@ -1,9 +1,5 @@
 <template>
-	<VDialog
-		v-model="isDialogOpen"
-		data-testid="delete-dialog-item"
-		:max-width="480"
-	>
+	<VDialog v-model="isDialogOpen" data-testid="dialog" :max-width="480">
 		<UseFocusTrap>
 			<VCard>
 				<div class="mx-4">
@@ -19,13 +15,14 @@
 					<div class="action-buttons mx-4">
 						<VBtn
 							data-testid="dialog-cancel"
-							aria-label=""
+							:aria-label="t('common.actions.cancel')"
 							variant="text"
 							:text="t('common.actions.cancel')"
 							@click="onCancel"
 						/>
 						<VBtn
 							data-testid="dialog-confirm"
+							:aria-label="t('common.actions.confirm')"
 							class="px-6"
 							color="primary"
 							variant="flat"

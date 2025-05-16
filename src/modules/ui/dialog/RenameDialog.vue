@@ -26,7 +26,6 @@ import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import Dialog from "./Dialog.vue";
 
-// Destructure props to avoid directly referencing `props`
 const { name } = defineProps({
 	name: { type: String, required: false, default: "" },
 	entityName: { type: String, required: false, default: "" },
