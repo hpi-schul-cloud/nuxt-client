@@ -97,6 +97,9 @@ export const useRoomInvitationLinkStore = defineStore(
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.update"));
 				isInvitationDialogOpen.value = false;
+			} finally {
+				isLoading.value = false;
+				editedLink.value = null;
 			}
 		};
 
