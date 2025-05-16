@@ -2,11 +2,11 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY, THEME_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	envsFactory,
 	provisioningOptionsDataFactory,
 } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -332,7 +332,8 @@ describe("ProvisioningOptionsPage", () => {
 					const checkBoxes = wrapper.findAllComponents(VCheckboxBtn);
 
 					const classCheckbox = checkBoxes[0];
-					await classCheckbox.vm.$emit("update:modelValue", false);
+					classCheckbox.vm.$emit("update:modelValue", false);
+					await nextTick();
 
 					return {
 						wrapper,

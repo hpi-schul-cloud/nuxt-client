@@ -108,6 +108,9 @@ import {
 	mdiMinus,
 	mdiMovieRoll,
 	mdiNewspaperVariantOutline,
+	mdiNumeric1Circle,
+	mdiNumeric2Circle,
+	mdiNumeric3Circle,
 	mdiOpenInNew,
 	mdiPalette,
 	mdiPause,
@@ -302,4 +305,7 @@ export {
 	mdiViewGridOutline,
 	mdiViewGridPlusOutline,
 	mdiViewListOutline,
+	mdiNumeric1Circle,
+	mdiNumeric2Circle,
+	mdiNumeric3Circle,
 };
