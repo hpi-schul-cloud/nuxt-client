@@ -61,9 +61,12 @@ export default class CommonCartridgeImportModule extends VuexModule {
 		}
 
 		try {
-			await this.commonCartridgeApi.commonCartridgeControllerImportCourse({
-				file,
-			});
+			const formData = new FormData();
+			formData.append("file", file);
+
+			await this.commonCartridgeApi.commonCartridgeControllerImportCourse(
+				formData
+			);
 			this.setIsSuccess(true);
 		} catch {
 			this.setIsSuccess(false);
