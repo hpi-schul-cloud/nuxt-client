@@ -3360,10 +3360,10 @@ export interface DrawingElementResponse {
 export interface ElementWithParentHierarchyResponse {
     /**
      * The element data
-     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse}
+     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse}
      * @memberof ElementWithParentHierarchyResponse
      */
-    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
+    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse;
     /**
      * The hierarchical path of parent elements
      * @type {Array<ParentNodeInfoResponse>}
@@ -3664,6 +3664,12 @@ export interface ExternalToolImportResultResponse {
  */
 export interface ExternalToolMediumParams {
     /**
+     * The status of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof ExternalToolMediumParams
+     */
+    status: ExternalToolMediumStatus;
+    /**
      * Id of the medium
      * @type {string}
      * @memberof ExternalToolMediumParams
@@ -3695,6 +3701,12 @@ export interface ExternalToolMediumParams {
  */
 export interface ExternalToolMediumResponse {
     /**
+     * The type of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof ExternalToolMediumResponse
+     */
+    status: ExternalToolMediumStatus;
+    /**
      * Id of the medium
      * @type {string}
      * @memberof ExternalToolMediumResponse
@@ -3719,6 +3731,17 @@ export interface ExternalToolMediumResponse {
      */
     modifiedAt?: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum ExternalToolMediumStatus {
+    Active = 'active',
+    Template = 'template',
+    Draft = 'draft'
+}
+
 /**
  * 
  * @export
@@ -8521,6 +8544,12 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
  * @interface SchoolExternalToolMediumResponse
  */
 export interface SchoolExternalToolMediumResponse {
+    /**
+     * The type of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof SchoolExternalToolMediumResponse
+     */
+    status: ExternalToolMediumStatus;
     /**
      * Id of the medium
      * @type {string}
