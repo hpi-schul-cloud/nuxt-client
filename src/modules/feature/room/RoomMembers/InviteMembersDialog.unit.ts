@@ -457,5 +457,27 @@ describe("InviteMembersDialog", () => {
 				expect(datePicker.classes().includes("v-input--disabled")).toBe(false);
 			});
 		});
+
+		describe("when the third checkbox value changes", () => {
+			it("should disable/enable continue button", async () => {
+				const { wrapper } = setup();
+				await nextTick();
+
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+				const thirdCheckbox = checkboxes[2];
+				await thirdCheckbox.setValue(true);
+				await nextTick();
+				const continueButton = wrapper.findComponent(
+					'[data-testid="invite-participant-save-btn"]'
+				);
+
+				expect(continueButton.classes("v-btn--disabled")).toBe(true);
+
+				await thirdCheckbox.setValue(false);
+				await nextTick();
+
+				expect(continueButton.classes("v-btn--disabled")).toBe(false);
+			});
+		});
 	});
 });
