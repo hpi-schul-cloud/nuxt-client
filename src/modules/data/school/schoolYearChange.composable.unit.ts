@@ -272,59 +272,82 @@ describe("SchoolYearChange.composable", () => {
 						autoClose: false,
 					});
 				});
+			});
 
-				describe("when error is a SCHOOL_ALREADY_IN_NEXT_YEAR", () => {
-					const setupError = () => {
-						const errorResponse = axiosErrorFactory.build();
-						const apiError = mapAxiosErrorToResponseError(errorResponse);
-						apiError.type = "SCHOOL_ALREADY_IN_NEXT_YEAR";
+			describe("when error is a SCHOOL_ALREADY_IN_NEXT_YEAR", () => {
+				const setupError = () => {
+					const errorResponse = axiosErrorFactory.build();
+					const apiError = mapAxiosErrorToResponseError(errorResponse);
+					apiError.type = "SCHOOL_ALREADY_IN_NEXT_YEAR";
 
-						const maintenanceStatus = maintenanceStatusFactory.build({
-							maintenance: {
-								active: true,
-								startDate: new Date(2000, 0, 1).toString(),
-							},
-						});
-
-						useSchoolApiMock.setMaintenance.mockRejectedValueOnce(
-							errorResponse
-						);
-
-						const { composable } = setupComposable();
-						composable.maintenanceStatus.value = maintenanceStatus;
-
-						return {
-							composable,
-						};
-					};
-
-					it("should show correct error message", async () => {
-						const { composable } = setupError();
-
-						await composable.setMaintenanceMode("id", false);
-
-						expect(notifierModule.show).toHaveBeenCalledWith({
-							status: "error",
-							text: "components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear",
-						});
+					const maintenanceStatus = maintenanceStatusFactory.build({
+						maintenance: {
+							active: true,
+							startDate: new Date(2000, 0, 1).toString(),
+						},
 					});
 
-					it("should set maintenanceStatus", async () => {
-						const { composable } = setupError();
+					useSchoolApiMock.setMaintenance.mockRejectedValueOnce(errorResponse);
 
-						await composable.setMaintenanceMode("id", false);
+					const { composable } = setupComposable();
+					composable.maintenanceStatus.value = maintenanceStatus;
 
-						expect(composable.maintenanceStatus.value).toEqual(
-							maintenanceStatusFactory.build({
-								maintenance: { active: false },
-								currentYear: {
-									id: "456",
-									name: "next school year",
-									startDate: new Date(2001, 0, 1).toString(),
-									endDate: new Date(2001, 11, 31).toString(),
-								},
-							})
-						);
+					return {
+						composable,
+					};
+				};
+
+				it("should show correct error message", async () => {
+					const { composable } = setupError();
+
+					await composable.setMaintenanceMode("id", false);
+
+					expect(notifierModule.show).toHaveBeenCalledWith({
+						status: "error",
+						text: "components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear",
+					});
+				});
+
+				it("should set maintenanceStatus", async () => {
+					const { composable } = setupError();
+
+					await composable.setMaintenanceMode("id", false);
+
+					expect(composable.maintenanceStatus.value).toEqual(
+						maintenanceStatusFactory.build({
+							maintenance: { active: false },
+							currentYear: {
+								id: "456",
+								name: "next school year",
+								startDate: new Date(2001, 0, 1).toString(),
+								endDate: new Date(2001, 11, 31).toString(),
+							},
+						})
+					);
+				});
+			});
+
+			describe("when error is something else", () => {
+				const setupError = () => {
+					const errorResponse = axiosErrorFactory.build();
+
+					useSchoolApiMock.setMaintenance.mockRejectedValueOnce(errorResponse);
+
+					const { composable } = setupComposable();
+
+					return {
+						composable,
+					};
+				};
+
+				it("should show correct error message", async () => {
+					const { composable } = setupError();
+
+					await composable.setMaintenanceMode("id", false);
+
+					expect(notifierModule.show).toHaveBeenCalledWith({
+						status: "error",
+						text: "error.generic",
 					});
 				});
 			});

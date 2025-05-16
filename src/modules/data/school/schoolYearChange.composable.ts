@@ -53,7 +53,7 @@ export const useSchoolYearChange = () => {
 					),
 					status: "success",
 				});
-			} else if (!maintenance) {
+			} else {
 				notifierModule.show({
 					text: t(
 						"components.administration.schoolYearChangeSection.notification.finish.success"
@@ -91,6 +91,11 @@ export const useSchoolYearChange = () => {
 					maintenanceStatus.value.currentYear =
 						maintenanceStatus.value.nextYear;
 				}
+			} else {
+				notifierModule.show({
+					text: t("error.generic"),
+					status: "error",
+				});
 			}
 		}
 
