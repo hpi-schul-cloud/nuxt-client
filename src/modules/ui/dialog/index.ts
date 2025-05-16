@@ -1,3 +1,4 @@
+import Dialog from "./Dialog.vue";
 import RenameDialog from "./RenameDialog.vue";
 
-export { RenameDialog };
+export { Dialog, RenameDialog };

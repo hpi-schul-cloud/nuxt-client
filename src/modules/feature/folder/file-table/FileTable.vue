@@ -71,11 +71,17 @@
 				</template>
 			</DataTable>
 			<RenameDialog
-				v-model:is-dialog-open="isDialogOpen"
+				v-model:is-dialog-open="isRenameDialogOpen"
 				:name="fileRecordToRenameName"
 				:entity-name="$t('components.cardElement.fileElement')"
 				@cancel="onRenameDialogCancel"
 				@confirm="onRenameDialogConfirm"
+			/>
+			<DeleteFileDialog
+				v-model:is-dialog-open="isDeleteFilesDialogOpen"
+				:file-records="fileRecordsToDelete"
+				@confirm="onDeleteFilesConfirm"
+				@cancel="onDeleteFilesCancel"
 			/>
 		</div>
 	</template>
@@ -96,6 +102,7 @@ import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
 import { computed, defineProps, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import DeleteFileDialog from "./DeleteFileDialog.vue";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
@@ -136,7 +143,9 @@ const headers = [
 ];
 
 const fileRecordToRename = ref<FileRecord | undefined>(undefined);
-const isDialogOpen = ref(false);
+const isRenameDialogOpen = ref(false);
+const isDeleteFilesDialogOpen = ref(false);
+const fileRecordsToDelete = ref<FileRecord[]>([]);
 const fileRecordItems = computed(() => {
 	return props.fileRecords.map((item) => ({
 		...item,
@@ -158,19 +167,27 @@ const formatFileSize = (size: number) => {
 	return `${localizedFileSize} ${unit}`;
 };
 
-const onDeleteFiles = (
-	selectedFileRecords: FileRecord[],
-	confirmationPromise: Promise<boolean>
-) => {
-	emit("delete-files", selectedFileRecords, confirmationPromise);
+const onDeleteFiles = (selectedFileRecords: FileRecord[]) => {
+	isDeleteFilesDialogOpen.value = true;
+	fileRecordsToDelete.value = selectedFileRecords;
+};
+
+const onDeleteFilesConfirm = () => {
+	emit("delete-files", fileRecordsToDelete.value);
+	fileRecordsToDelete.value = [];
+	isDeleteFilesDialogOpen.value = false;
+};
+const onDeleteFilesCancel = () => {
+	isDeleteFilesDialogOpen.value = false;
+	fileRecordsToDelete.value = [];
 };
 
 const onRenameButtonClick = (item: FileRecord) => {
-	isDialogOpen.value = true;
+	isRenameDialogOpen.value = true;
 	fileRecordToRename.value = item;
 };
 const onRenameDialogCancel = () => {
-	isDialogOpen.value = false;
+	isRenameDialogOpen.value = false;
 	fileRecordToRename.value = undefined;
 };
 const onRenameDialogConfirm = (newName: string) => {
@@ -178,7 +195,7 @@ const onRenameDialogConfirm = (newName: string) => {
 	const nameWithExtension = `${newName}.${fileExtension}`;
 	emit("update:name", nameWithExtension, fileRecordToRename.value);
 
-	isDialogOpen.value = false;
+	isRenameDialogOpen.value = false;
 	fileRecordToRename.value = undefined;
 };
 

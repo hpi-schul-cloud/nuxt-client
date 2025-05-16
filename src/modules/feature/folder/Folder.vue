@@ -126,15 +126,7 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 	}
 };
 
-const onDeleteFiles = async (
-	fileRecords: FileRecord[],
-	confirmationPromise: Promise<boolean>
-) => {
-	const shouldDelete = await confirmationPromise;
-	if (!shouldDelete) {
-		return;
-	}
-
+const onDeleteFiles = async (fileRecords: FileRecord[]) => {
 	await deleteFiles(fileRecords);
 };
 
