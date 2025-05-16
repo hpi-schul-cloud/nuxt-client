@@ -1,5 +1,6 @@
 import { CoursesApiFactory, CoursesApiInterface } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import axios from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	CommonCartridgeApiFactory,
@@ -62,14 +63,20 @@ export default class CommonCartridgeImportModule extends VuexModule {
 			const formData = new FormData();
 			formData.append("file", file);
 
-			await this.commonCartridgeApi.commonCartridgeControllerImportCourse(
+			const match = document.cookie.match(/(?:^|;\s*)jwt=([^;]*)/);
+			const token = match ? decodeURIComponent(match[1]) : null;
+
+			await axios.post(
+				`https://ew-1215.dbc.dbildungscloud.dev/api/v3/common-cartridge/import`,
 				formData,
 				{
 					headers: {
-						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${token}`,
 					},
+					withCredentials: true,
 				}
 			);
+
 			this.setIsSuccess(true);
 		} catch {
 			this.setIsSuccess(false);
