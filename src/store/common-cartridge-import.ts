@@ -5,8 +5,6 @@ import {
 	CommonCartridgeApiFactory,
 	CommonCartridgeApiInterface,
 } from "@/commonCartridgeApi/v3/api";
-import { Express } from "express";
-import { Multer } from "multer";
 
 @Module({
 	name: "commonCartridgeImportModule",
@@ -65,7 +63,12 @@ export default class CommonCartridgeImportModule extends VuexModule {
 			formData.append("file", file);
 
 			await this.commonCartridgeApi.commonCartridgeControllerImportCourse(
-				formData
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				}
 			);
 			this.setIsSuccess(true);
 		} catch {
