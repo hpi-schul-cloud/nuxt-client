@@ -11,7 +11,8 @@ import * as FileStorageApi from "@data-file";
 import * as FolderState from "@data-folder";
 import { createMock } from "@golevelup/ts-jest";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
-import { KebabMenuActionDelete } from "@ui-kebab-menu";
+import { RenameDialog } from "@ui-dialog";
+import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { flushPromises } from "@vue/test-utils";
 import { ComputedRef, nextTick, ref } from "vue";
 import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
@@ -741,6 +742,74 @@ describe("Folder.vue", () => {
 
 			const emptyState = wrapper.findComponent(EmptyFolderSvg);
 			expect(emptyState.exists()).toBe(false);
+		});
+
+		describe("when user clicks rename button in item menu", () => {
+			const setup = async () => {
+				const folderStateMock =
+					createMock<ReturnType<typeof FolderState.useFolderState>>();
+				jest
+					.spyOn(FolderState, "useFolderState")
+					.mockReturnValue(folderStateMock);
+
+				const parent = parentNodeInfoFactory.build();
+				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+				const boardState = createMock<
+					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+				>({});
+				jest
+					.spyOn(BoardApi, "useSharedBoardPageInformation")
+					.mockReturnValue(boardState);
+
+				const fileStorageApiMock =
+					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				jest
+					.spyOn(FileStorageApi, "useFileStorageApi")
+					.mockReturnValue(fileStorageApiMock);
+
+				const fileRecord1 = fileRecordFactory.build();
+				const fileRecord2 = fileRecordFactory.build();
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+					fileRecord1,
+					fileRecord2,
+				]);
+
+				const { wrapper } = setupWrapper();
+
+				await flushPromises();
+
+				const itemMenuButton = wrapper.find(
+					`[data-testid='kebab-menu-${fileRecord1.name}']`
+				);
+				await itemMenuButton.trigger("click");
+
+				const renameButton = wrapper.findComponent(KebabMenuActionRename);
+				await renameButton.trigger("click");
+
+				const renameDialog = wrapper.findComponent(RenameDialog);
+				renameDialog.vm.$emit("confirm", "new filename");
+
+				return {
+					folderStateMock,
+					wrapper,
+					fileStorageApiMock,
+					fileRecord1,
+					fileRecord2,
+				};
+			};
+
+			it("should call rename with correct parameters", async () => {
+				const { fileStorageApiMock, fileRecord1 } = await setup();
+
+				expect(fileStorageApiMock.rename).toHaveBeenCalledWith(fileRecord1.id, {
+					fileName: "new filename.txt",
+				});
+			});
 		});
 
 		describe("when user clicks delete button in item menu", () => {
