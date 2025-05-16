@@ -12,7 +12,6 @@
 					{{ modalTitle }}
 				</h2>
 			</template>
-
 			<template #text>
 				<template v-if="step === InvitationStep.PREPARE">
 					<p>
@@ -65,27 +64,26 @@
 							hide-details
 						/>
 
-						<div class="d-flex align-center justify-start my-n4">
+						<div class="d-flex align-center justify-start my-n4 pr-0">
 							<v-checkbox
-								v-model="formData.activeUntilCheck"
+								v-model="formData.activeUntilChecked"
 								:label="
 									t('pages.rooms.members.inviteMember.form.linkExpires.label')
 								"
 								hide-details
 								class="mr-2"
 							/>
-
-							<date-picker
+							<DatePicker
 								ref="datePicker"
 								v-model="formData.activeUntil"
 								:disabled="isDatePickerDisabled"
+								:required="!isDatePickerDisabled"
 								:min-date="new Date().toString()"
-								class="mr-2 mt-2"
+								class="mt-1"
 								data-testid="date-picker-until"
-								max-width="110px"
 								@click.prevent="pause"
 								@keydown.space.enter.prevent="pause"
-								@update:date="onUpdateValidDate"
+								@update:date="onUpdateDate"
 							/>
 						</div>
 
@@ -100,7 +98,7 @@
 										keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label"
 										scope="global"
 									>
-										<a :href="informationLink" target="_blank" rel="noopener">
+										<a :href="informationLink!" target="_blank" rel="noopener">
 											{{ t("pages.rooms.members.infoText.moreInformation") }}
 										</a>
 									</i18n-t>
@@ -135,6 +133,7 @@
 						class="ms-auto"
 						color="primary"
 						variant="flat"
+						:disabled="isSubmitDisabled"
 						:text="t('common.actions.continue')"
 						data-testid="invite-participant-save-btn"
 						@click="onInviteMembers"
@@ -211,15 +210,21 @@ const defaultFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
 	isAlsoForStudents: false,
-	activeUntilCheck: false,
-	activeUntil: new Date(),
+	activeUntilChecked: false,
+	activeUntil: null as Date | null,
 	requiresConfirmation: true,
 };
 
 const formData = ref({ ...defaultFormData });
 
 const isDatePickerDisabled = computed(() => {
-	return !formData.value.activeUntilCheck;
+	return !formData.value.activeUntilChecked;
+});
+
+const isSubmitDisabled = computed(() => {
+	return (
+		formData.value.activeUntilChecked && formData.value.activeUntil === null
+	);
 });
 
 const modalTitle = computed(() => {
@@ -228,7 +233,7 @@ const modalTitle = computed(() => {
 		: t("pages.rooms.members.inviteMember.secondStep.title");
 });
 
-const onUpdateValidDate = (date: Date) => {
+const onUpdateDate = (date: Date | null) => {
 	formData.value.activeUntil = date;
 	unpause();
 };
@@ -245,9 +250,10 @@ const onClose = () => {
 const onInviteMembers = async () => {
 	const createLinkBodyParams = {
 		title: formData.value.title || "invitation link",
-		activeUntil: formData.value.activeUntilCheck
-			? formData.value.activeUntil.toString()
-			: "2900-01-01T00:00:00.000Z",
+		activeUntil:
+			formData.value.activeUntilChecked && formData.value.activeUntil
+				? formData.value.activeUntil.toString()
+				: "2900-01-01T00:00:00.000Z",
 		isOnlyForTeachers: !formData.value.isAlsoForStudents,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
@@ -273,8 +279,8 @@ const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 
 watch(
 	() => formData.value.restrictedToCreatorSchool,
-	(newValue: boolean) => {
-		if (!newValue) {
+	(isRestrictedToCreatorSchool: boolean) => {
+		if (isRestrictedToCreatorSchool === false) {
 			formData.value.isAlsoForStudents = false;
 		}
 	}
@@ -282,16 +288,14 @@ watch(
 
 watch(
 	() => isOpen.value,
-	(newValue: boolean) => {
-		if (!newValue) {
+	(isOpen: boolean) => {
+		if (isOpen === false) {
 			deactivate();
 		}
 	}
 );
 
-const informationLink = computed(() =>
-	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
-		? envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
-		: "https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
+const informationLink = computed(
+	() => envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
 );
 </script>

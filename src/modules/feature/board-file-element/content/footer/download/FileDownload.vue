@@ -2,7 +2,7 @@
 	<v-btn
 		:aria-label="$t('components.board.action.download')"
 		:disabled="!isDownloadAllowed"
-		:data-testid="testId"
+		data-testid="board-file-element-edit-menu-download"
 		class="float-right download-button"
 		icon
 		size="small"
@@ -23,10 +23,8 @@ const props = defineProps({
 	url: { type: String, required: true },
 });
 
-const testId = "board-file-element-edit-menu-download";
-
 const onDownload = async () => {
-	downloadFile(props.url, props.fileName, testId);
+	downloadFile(props.url, props.fileName);
 };
 </script>
 

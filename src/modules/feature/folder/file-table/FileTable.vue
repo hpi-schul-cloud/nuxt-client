@@ -19,54 +19,68 @@
 		<div class="mt-8">
 			<DataTable
 				:table-headers="headers"
-				:items="
-					fileRecords.map((item) => ({
-						...item,
-					}))
-				"
+				:items="fileRecordItems"
 				:show-select="true"
 			>
 				<template #[`item.preview`]="{ item }">
 					<FilePreview
 						:file-record="item"
 						:data-testid="`file-preview-${item.name}`"
+						:disabled="!item.isSelectable"
 					/>
 				</template>
+				<template #[`item.name`]="{ item }">
+					<span
+						:data-testid="`name-${item.name}`"
+						:class="{ 'text-disabled': !item.isSelectable }"
+						>{{ item.name }}</span
+					>
+				</template>
 				<template #[`item.createdAt`]="{ item }">
-					<span :data-testid="`created-at-${item.name}`">{{
-						printDateFromStringUTC(item.createdAt)
-					}}</span>
+					<span
+						:data-testid="`created-at-${item.name}`"
+						:class="{ 'text-disabled': !item.isSelectable }"
+						>{{ printDateFromStringUTC(item.createdAt) }}</span
+					>
 				</template>
 				<template #[`item.size`]="{ item }">
-					<span :data-testid="`size-${item.name}`"
+					<span
+						:data-testid="`size-${item.name}`"
+						:class="{ 'text-disabled': !item.isSelectable }"
 						>{{ formatFileSize(item.size) }}
 					</span>
 				</template>
 				<template #[`item.actions`]="{ item }">
 					<KebabMenu
 						:data-testid="`kebab-menu-${item.name}`"
-						:aria-label="buildAriaLabel(item)"
+						:aria-label="buildActionMenuAriaLabel(item)"
 					>
+						<KebabMenuActionDownloadFiles
+							:disabled="!item.isSelectable"
+							:file-records="fileRecords"
+							:selected-ids="[item.id]"
+							:aria-label="t('common.actions.download')"
+						/>
 						<KebabMenuActionDeleteFiles
 							:file-records="fileRecords"
 							:selected-ids="[item.id]"
-							:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
+							:aria-label="t('common.actions.delete')"
 							@delete-files="onDeleteFiles"
 						/>
 					</KebabMenu>
+				</template>
+
+				<template #left-of-search>
+					<FileUploadProgress :upload-progress="uploadProgress" />
 				</template>
 
 				<template #action-menu-items="{ selectedIds }">
 					<KebabMenuActionDeleteFiles
 						:file-records="fileRecords"
 						:selected-ids="selectedIds"
-						:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
+						:aria-label="t('common.actions.delete')"
 						@delete-files="onDeleteFiles"
 					/>
-				</template>
-
-				<template #left-of-search>
-					<FileUploadProgress :upload-progress="uploadProgress" />
 				</template>
 			</DataTable>
 		</div>
@@ -76,7 +90,7 @@
 <script setup lang="ts">
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
-import { convertFileSize } from "@/utils/fileHelper";
+import { convertFileSize, isDownloadAllowed } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu } from "@ui-kebab-menu";
@@ -86,6 +100,7 @@ import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
+import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 
 const { t, n } = useI18n();
 
@@ -114,12 +129,24 @@ const props = defineProps({
 const emit = defineEmits(["delete-files"]);
 
 const headers = [
-	{ key: "preview", sortable: false },
+	{ title: "", key: "preview", sortable: false },
 	{ title: t("pages.folder.columns.name"), key: "name" },
 	{ title: t("pages.folder.columns.createdat"), key: "createdAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
-	{ key: "actions", sortable: false },
+	{
+		title: t("ui.actionMenu.actions"),
+		key: "actions",
+		sortable: false,
+		width: 50,
+	},
 ];
+
+const fileRecordItems = computed(() => {
+	return props.fileRecords.map((item) => ({
+		...item,
+		isSelectable: isDownloadAllowed(item.securityCheckStatus),
+	}));
+});
 
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;
@@ -139,7 +166,7 @@ const onDeleteFiles = (
 	emit("delete-files", selectedFileRecords, confirmationPromise);
 };
 
-const buildAriaLabel = (item: FileRecord): string => {
+const buildActionMenuAriaLabel = (item: FileRecord): string => {
 	return t("pages.folder.ariaLabels.actionMenu", {
 		name: item.name,
 	});

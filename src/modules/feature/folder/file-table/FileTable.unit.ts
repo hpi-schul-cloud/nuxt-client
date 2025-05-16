@@ -1,4 +1,5 @@
-import { FileRecord } from "@/types/file/File";
+import { printDateFromStringUTC } from "@/plugins/datetime";
+import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -10,7 +11,6 @@ import { VSkeletonLoader } from "vuetify/lib/components/index";
 import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
-import { printDateFromStringUTC } from "@/plugins/datetime";
 
 describe("FileTable", () => {
 	const setupWrapper = (props: {
@@ -166,6 +166,80 @@ describe("FileTable", () => {
 
 			const uploadProgress = wrapper.findComponent(FileUploadProgress);
 			expect(uploadProgress.exists()).toBe(true);
+		});
+	});
+
+	describe("disabled functionality", () => {
+		it("should apply the text-disabled class when item.isSelectable is false", () => {
+			const fileRecord = fileRecordFactory.build({
+				securityCheckStatus: FileRecordVirusScanStatus.BLOCKED,
+			});
+			const { wrapper } = setupWrapper({
+				isLoading: false,
+				isEmpty: false,
+				fileRecords: [fileRecord],
+				uploadProgress: { uploaded: 0, total: 0 },
+			});
+
+			const checkbox = wrapper.find(
+				`[data-testid='select-checkbox-${fileRecord.name}']`
+			);
+			expect(checkbox.classes()).toContain("v-selection-control--disabled");
+
+			const previewColumn = wrapper.find(
+				`[data-testid='file-preview-${fileRecord.name}']`
+			);
+			expect(previewColumn.classes()).toContain("text-disabled");
+
+			const nameColumn = wrapper.find(
+				`[data-testid='name-${fileRecord.name}']`
+			);
+			expect(nameColumn.classes()).toContain("text-disabled");
+
+			const createdAtColumn = wrapper.find(
+				`[data-testid='created-at-${fileRecord.name}']`
+			);
+			expect(createdAtColumn.classes()).toContain("text-disabled");
+
+			const sizeColumn = wrapper.find(
+				`[data-testid='size-${fileRecord.name}']`
+			);
+			expect(sizeColumn.classes()).toContain("text-disabled");
+		});
+
+		it("should not apply the text-disabled class when item.isSelectable is true", () => {
+			const fileRecord = fileRecordFactory.build();
+			const { wrapper } = setupWrapper({
+				isLoading: false,
+				isEmpty: false,
+				fileRecords: [fileRecord],
+				uploadProgress: { uploaded: 0, total: 0 },
+			});
+
+			const checkbox = wrapper.find(
+				`[data-testid='select-checkbox-${fileRecord.name}']`
+			);
+			expect(checkbox.classes()).not.toContain("v-selection-control--disabled");
+
+			const previewColumn = wrapper.find(
+				`[data-testid='file-preview-${fileRecord.name}']`
+			);
+			expect(previewColumn.classes()).not.toContain("text-disabled");
+
+			const nameColumn = wrapper.find(
+				`[data-testid='name-${fileRecord.name}']`
+			);
+			expect(nameColumn.classes()).not.toContain("text-disabled");
+
+			const createdAtColumn = wrapper.find(
+				`[data-testid='created-at-${fileRecord.name}']`
+			);
+			expect(createdAtColumn.classes()).not.toContain("text-disabled");
+
+			const sizeColumn = wrapper.find(
+				`[data-testid='size-${fileRecord.name}']`
+			);
+			expect(sizeColumn.classes()).not.toContain("text-disabled");
 		});
 	});
 });

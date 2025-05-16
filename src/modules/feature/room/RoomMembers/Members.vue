@@ -2,7 +2,7 @@
 	<div v-if="canAddRoomMembers" data-testid="info-text">
 		<i18n-t keypath="pages.rooms.members.infoText" scope="global">
 			<a
-				:href="informationLink"
+				:href="informationLink!"
 				target="_blank"
 				rel="noopener"
 				:ariaLabel="linkAriaLabel"
@@ -43,9 +43,7 @@ const linkAriaLabel = computed(
 		`${t("pages.rooms.members.infoText.moreInformation")}, ${t("common.ariaLabel.newTab")}`
 );
 
-const informationLink = computed(() =>
-	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
-		? envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
-		: "https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
+const informationLink = computed(
+	() => envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
 );
 </script>
