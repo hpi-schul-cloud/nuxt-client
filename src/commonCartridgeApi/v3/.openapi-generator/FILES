@@ -10,4 +10,3 @@ git_push.sh
 index.ts
 models/course-export-body-params.ts
 models/index.ts
-models/inline-object.ts
