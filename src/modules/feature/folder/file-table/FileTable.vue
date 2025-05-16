@@ -45,7 +45,7 @@
 					>
 						<KebabMenuActionRename
 							:disabled="!item.isSelectable"
-							:aria-label="t('pages.folder.ariaLabels.menu.action.file.rename')"
+							:aria-label="t('common.actions.rename')"
 							@click="onRenameButtonClick(item)"
 						/>
 						<KebabMenuActionDeleteFiles
