@@ -43,16 +43,16 @@
 						:data-testid="`kebab-menu-${item.name}`"
 						:aria-label="buildAriaLabel(item)"
 					>
+						<KebabMenuActionRename
+							:disabled="!item.isSelectable"
+							:aria-label="t('pages.folder.ariaLabels.menu.action.file.rename')"
+							@click="onRenameButtonClick(item)"
+						/>
 						<KebabMenuActionDeleteFiles
 							:file-records="fileRecords"
 							:selected-ids="[item.id]"
 							:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
 							@delete-files="onDeleteFiles"
-						/>
-						<KebabMenuActionRename
-							:disabled="item.isBlocked"
-							:aria-label="t('pages.folder.ariaLabels.menu.action.file.rename')"
-							@click="onRenameButtonClick(item)"
 						/>
 					</KebabMenu>
 				</template>
@@ -140,7 +140,7 @@ const isDialogOpen = ref(false);
 const fileRecordItems = computed(() => {
 	return props.fileRecords.map((item) => ({
 		...item,
-		isBlocked: !isDownloadAllowed(item.securityCheckStatus),
+		isSelectable: isDownloadAllowed(item.securityCheckStatus),
 	}));
 });
 
