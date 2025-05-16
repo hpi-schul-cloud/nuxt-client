@@ -102,13 +102,9 @@ async function onConfirm(): Promise<void> {
 		text: i18n.t("pages.rooms.ccImportCourse.loading"),
 	});
 
-	// Wrap the file in FormData
-	const formData = new FormData();
 	if (file.value) {
-		formData.append("file", file.value);
+		await commonCartridgeImportModule.importCommonCartridgeFile(file.value);
 	}
-
-	await commonCartridgeImportModule.importCommonCartridgeFile(formData);
 
 	if (commonCartridgeImportModule.isSuccess) {
 		await Promise.allSettled([

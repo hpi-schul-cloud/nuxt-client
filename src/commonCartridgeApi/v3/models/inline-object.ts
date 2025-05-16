@@ -1,3 +1,6 @@
+import { Express } from 'express';
+import { Multer } from 'multer';
+
 /* tslint:disable */
 /* eslint-disable */
 /**
@@ -17,15 +20,17 @@
 /**
  * 
  * @export
- * @interface CommonCartridgeImportBodyParams
+ * @interface InlineObject
  */
-export interface CommonCartridgeImportBodyParams {
+export interface InlineObject {
     /**
-     * The Common Cartridge file to import.
+     * 
      * @type {any}
-     * @memberof CommonCartridgeImportBodyParams
-     */
-    file: any;
+     * @memberof InlineObject
+     * **/
+    file?: File ;     
+
+    
 }
 
 
