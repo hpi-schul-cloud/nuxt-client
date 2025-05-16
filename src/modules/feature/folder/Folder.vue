@@ -19,7 +19,7 @@
 			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
 			@delete-files="onDeleteFiles"
-			@update:name="onUpdatenName"
+			@update:name="onUpdateName"
 		/>
 	</DefaultWireframe>
 	<ConfirmationDialog />
@@ -138,7 +138,7 @@ const onDeleteFiles = async (
 	await deleteFiles(fileRecords);
 };
 
-const onUpdatenName = async (fileName: string, fileRecord: FileRecord) => {
+const onUpdateName = async (fileName: string, fileRecord: FileRecord) => {
 	await rename(fileRecord.id, { fileName });
 };
 
