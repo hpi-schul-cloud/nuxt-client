@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Create",
 	"common.actions.delete": "Delete",
 	"common.actions.discard": "Discard",
+	"common.actions.download": "Download",
 	"common.actions.duplicate": "Duplicate",
 	"common.actions.export": "Export",
 	"common.actions.edit": "Edit",
@@ -1928,7 +1929,7 @@ export default {
 	"pages.rooms.members.inviteMember.step.share.title": "Share invitation link",
 	"pages.rooms.members.inviteMember.step.edit.title": "Edit invitation link",
 	"pages.rooms.members.inviteMember.infoAlert.text":
-		"Students from other schools must always be added to the room by a supervising learning guide from their school.",
+		"Students from other schools must always be added to the room by a supervising teacher from their school.",
 	"pages.rooms.members.inviteMember.form.description.label":
 		"Description (optional)",
 	"pages.rooms.members.inviteMember.form.description.hint":
@@ -2128,7 +2129,6 @@ export default {
 	"pages.folder.ariaLabels.menu": "Folder menu",
 	"pages.folder.ariaLabels.menu.action.edit": "Rename folder",
 	"pages.folder.ariaLabels.menu.action.delete": "Delete folder",
-	"pages.folder.ariaLabels.menu.action.file.delete": "Delete file",
 	"pages.folder.ariaLabels.filter": "Search/filter table",
 	"pages.folder.ariaLabels.actionMenu": "Action menu for {name}",
 	"pages.folder.uploadstats": "{uploaded} of {total} files uploaded",
