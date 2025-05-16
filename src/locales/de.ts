@@ -2141,8 +2141,6 @@ export default {
 	"pages.folder.ariaLabels.menu": "Ordner Menü",
 	"pages.folder.ariaLabels.menu.action.edit": "Ordner umbenennen",
 	"pages.folder.ariaLabels.menu.action.delete": "Ordner löschen",
-	"pages.folder.ariaLabels.menu.action.file.delete": "Datei löschen",
-	"pages.folder.ariaLabels.menu.action.file.download": "Datei herunterladen",
 	"pages.folder.ariaLabels.filter": "Tabelle durchsuchen/filtern",
 	"pages.folder.ariaLabels.actionMenu": "Aktionsmenü für {name}",
 	"pages.folder.uploadstats": "{uploaded} von {total} Dateien hochgeladen",

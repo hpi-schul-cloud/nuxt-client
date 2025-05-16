@@ -64,14 +64,12 @@
 							:disabled="!item.isSelectable"
 							:file-records="fileRecords"
 							:selected-ids="[item.id]"
-							:aria-label="
-								t('pages.folder.ariaLabels.menu.action.file.download')
-							"
+							:aria-label="t('common.actions.download')"
 						/>
 						<KebabMenuActionDeleteFiles
 							:file-records="fileRecords"
 							:selected-ids="[item.id]"
-							:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
+							:aria-label="t('common.actions.delete')"
 							@delete-files="onDeleteFiles"
 						/>
 					</KebabMenu>
@@ -85,7 +83,7 @@
 					<KebabMenuActionDeleteFiles
 						:file-records="fileRecords"
 						:selected-ids="selectedIds"
-						:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
+						:aria-label="t('common.actions.delete')"
 						@delete-files="onDeleteFiles"
 					/>
 				</template>

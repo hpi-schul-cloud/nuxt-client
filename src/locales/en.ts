@@ -2105,8 +2105,6 @@ export default {
 	"pages.folder.ariaLabels.menu": "Folder menu",
 	"pages.folder.ariaLabels.menu.action.edit": "Rename folder",
 	"pages.folder.ariaLabels.menu.action.delete": "Delete folder",
-	"pages.folder.ariaLabels.menu.action.file.delete": "Delete file",
-	"pages.folder.ariaLabels.menu.action.file.download": "Download file",
 	"pages.folder.ariaLabels.filter": "Search/filter table",
 	"pages.folder.ariaLabels.actionMenu": "Action menu for {name}",
 	"pages.folder.uploadstats": "{uploaded} of {total} files uploaded",
