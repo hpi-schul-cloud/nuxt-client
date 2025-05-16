@@ -3360,10 +3360,10 @@ export interface DrawingElementResponse {
 export interface ElementWithParentHierarchyResponse {
     /**
      * The element data
-     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse}
+     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse}
      * @memberof ElementWithParentHierarchyResponse
      */
-    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
+    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse;
     /**
      * The hierarchical path of parent elements
      * @type {Array<ParentNodeInfoResponse>}
