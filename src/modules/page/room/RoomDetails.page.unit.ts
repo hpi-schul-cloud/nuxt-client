@@ -186,7 +186,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			expect(boardGrid.exists()).toBe(true);
 		});
 
-		it("should render emptu state when no visible boards are found", () => {
+		it("should render empty state when no visible boards are found", () => {
 			const { wrapper } = setup({
 				roomBoards: [],
 			});
