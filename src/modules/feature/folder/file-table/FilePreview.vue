@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div :class="{ 'text-disabled': disabled }">
 		<v-img
 			v-if="isPreviewPossible(fileRecord.previewStatus)"
 			:src="convertDownloadToPreviewUrl(fileRecord.url, FilePreviewWidth._500)"
@@ -35,6 +35,7 @@ import {
 import { defineProps, PropType } from "vue";
 
 defineProps({
+	disabled: { type: Boolean as PropType<boolean>, default: false },
 	fileRecord: {
 		type: Object as PropType<FileRecord>,
 		required: true,

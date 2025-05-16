@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
+	"common.actions.download": "Завантажити",
 	"common.actions.duplicate": "Дублювати",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
@@ -1948,7 +1949,7 @@ export default {
 	"pages.rooms.members.inviteMember.secondStep.title":
 		"Поділіться посиланням на запрошення",
 	"pages.rooms.members.inviteMember.infoAlert.text":
-		"Учні з інших шкіл повинні завжди супроводжуватися в кімнату супроводжуючим з їхньої школи до кімнати.",
+		"Учні з інших шкіл завжди повинні бути присутніми в кімнаті під наглядом вчителя з їхньої школи.",
 	"pages.rooms.members.inviteMember.form.description.label":
 		"Опис (необов'язково)",
 	"pages.rooms.members.inviteMember.form.description.hint":
@@ -2137,7 +2138,6 @@ export default {
 	"pages.folder.ariaLabels.menu": "Меню Папки",
 	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",
 	"pages.folder.ariaLabels.menu.action.delete": "Видалити папку",
-	"pages.folder.ariaLabels.menu.action.file.delete": "Видалити файл",
 	"pages.folder.ariaLabels.filter": "	Таблиця пошуку/фільтрації",
 	"pages.folder.ariaLabels.actionMenu": "Меню дій для {name}",
 	"pages.folder.uploadstats": "{uploaded} з {total} завантажених файлів",
