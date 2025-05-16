@@ -82,12 +82,6 @@
 				</template>
 
 				<template #action-menu-items="{ selectedIds }">
-					<KebabMenuActionDownloadFiles
-						v-if="!isMobileDevice"
-						:file-records="fileRecords"
-						:selected-ids="selectedIds"
-						:aria-label="t('pages.folder.ariaLabels.menu.action.file.download')"
-					/>
 					<KebabMenuActionDeleteFiles
 						:file-records="fileRecords"
 						:selected-ids="selectedIds"
@@ -109,7 +103,6 @@ import { EmptyState } from "@ui-empty-state";
 import { KebabMenu } from "@ui-kebab-menu";
 import { computed, defineProps, PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
@@ -154,13 +147,6 @@ const headers = [
 		width: 50,
 	},
 ];
-
-const {
-	platform: {
-		value: { android: isAndroid, ios: isIOs },
-	},
-} = useDisplay();
-const isMobileDevice = isAndroid || isIOs;
 
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;

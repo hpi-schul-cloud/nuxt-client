@@ -1,7 +1,6 @@
 import router from "@/router";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
-import * as FileHelper from "@/utils/fileHelper";
 import { fileRecordFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -18,17 +17,11 @@ import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
 import * as DeleteFilesConfirmation from "./composables/DeleteFilesConfirmation.composable";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";
-import KebabMenuActionDownloadFiles from "./file-table/KebabMenuActionDownloadFiles.vue";
 import Folder from "./Folder.vue";
 
 describe("Folder.vue", () => {
 	beforeEach(() => {
 		jest.restoreAllMocks();
-		Object.defineProperty(window, "innerWidth", {
-			writable: true,
-			configurable: true,
-			value: 1024,
-		});
 	});
 
 	const buildUploadStatsTranslation = (uploaded: string, total: string) => {
@@ -683,187 +676,6 @@ describe("Folder.vue", () => {
 				const { fileStorageApiMock } = await setup();
 
 				expect(fileStorageApiMock.deleteFiles).not.toHaveBeenCalled();
-			});
-		});
-
-		describe("when file is checked", () => {
-			const setup = async () => {
-				const folderStateMock =
-					createMock<ReturnType<typeof FolderState.useFolderState>>();
-				jest
-					.spyOn(FolderState, "useFolderState")
-					.mockReturnValueOnce(folderStateMock);
-
-				folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
-					() => "boards"
-				);
-
-				const folderName = "Test Folder" as unknown as ComputedRef<string>;
-				folderStateMock.folderName = folderName;
-				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
-
-				const parent = parentNodeInfoFactory.build({
-					type: ParentNodeType.Board,
-				});
-				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
-
-				const boardState = createMock<
-					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
-				>({});
-				jest
-					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValueOnce(boardState);
-
-				const fileStorageApiMock =
-					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
-
-				const fileRecord = fileRecordFactory.build();
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
-					fileRecord,
-				]);
-
-				const boardApiMock =
-					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-				jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
-
-				jest.spyOn(FileHelper, "downloadFile");
-
-				const { wrapper } = setupWrapper();
-
-				await nextTick();
-				await nextTick();
-				await nextTick();
-
-				const checkbox = wrapper.find(
-					`[data-testid='select-checkbox-${fileRecord.name}']`
-				);
-				await checkbox.trigger("click");
-
-				const actionMenuButton = wrapper.find(
-					`[data-testid='action-menu-button']`
-				);
-				await actionMenuButton.trigger("click");
-
-				const downloadButton = wrapper.findComponent(
-					KebabMenuActionDownloadFiles
-				);
-
-				return {
-					downloadButton,
-				};
-			};
-
-			describe("when shown on Desktop", () => {
-				it("should render KebabMenuActionDownloadFiles", async () => {
-					Object.defineProperty(window, "innerWidth", {
-						writable: true,
-						configurable: true,
-						value: 1280,
-					});
-
-					const { downloadButton } = await setup();
-
-					expect(downloadButton.exists()).toBe(true);
-				});
-			});
-
-			describe("when shown on mobile phone or tablet", () => {
-				it("should not render KebabMenuActionDownloadFiles", async () => {
-					const { downloadButton } = await setup();
-
-					expect(downloadButton.exists()).toBe(false);
-				});
-			});
-		});
-
-		describe("when file is checked and downloaded by actions menu", () => {
-			const setup = async () => {
-				const folderStateMock =
-					createMock<ReturnType<typeof FolderState.useFolderState>>();
-				jest
-					.spyOn(FolderState, "useFolderState")
-					.mockReturnValueOnce(folderStateMock);
-
-				folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
-					() => "boards"
-				);
-
-				const folderName = "Test Folder" as unknown as ComputedRef<string>;
-				folderStateMock.folderName = folderName;
-				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
-
-				const parent = parentNodeInfoFactory.build({
-					type: ParentNodeType.Board,
-				});
-				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
-
-				const boardState = createMock<
-					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
-				>({});
-				jest
-					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValueOnce(boardState);
-
-				const fileStorageApiMock =
-					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
-
-				const fileRecord = fileRecordFactory.build();
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
-					fileRecord,
-				]);
-
-				const boardApiMock =
-					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-				jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
-
-				const downloadFileMock = jest.spyOn(FileHelper, "downloadFile");
-
-				const { wrapper } = setupWrapper();
-
-				await nextTick();
-				await nextTick();
-				await nextTick();
-
-				const checkbox = wrapper.find(
-					`[data-testid='select-checkbox-${fileRecord.name}']`
-				);
-				await checkbox.trigger("click");
-
-				const actionMenuButton = wrapper.find(
-					`[data-testid='action-menu-button']`
-				);
-				await actionMenuButton.trigger("click");
-
-				const downloadButton = wrapper.findComponent(
-					KebabMenuActionDownloadFiles
-				);
-				await downloadButton.trigger("click");
-
-				return {
-					downloadFileMock,
-					fileRecord,
-				};
-			};
-
-			it("should call downloadFile", async () => {
-				Object.defineProperty(window, "innerWidth", {
-					writable: true,
-					configurable: true,
-					value: 1280,
-				});
-
-				const { downloadFileMock, fileRecord } = await setup();
-
-				expect(downloadFileMock).toHaveBeenCalledWith(
-					fileRecord.url,
-					fileRecord.name
-				);
 			});
 		});
 	});
