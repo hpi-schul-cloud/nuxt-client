@@ -560,7 +560,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetContentParameters(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async h5PEditorControllerGetContentParameters(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetContentParameters(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -691,7 +691,7 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetContentParameters(id: string, options?: any): AxiosPromise<void> {
+        h5PEditorControllerGetContentParameters(id: string, options?: any): AxiosPromise<object> {
             return localVarFp.h5PEditorControllerGetContentParameters(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -814,7 +814,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetContentParameters(id: string, options?: any): AxiosPromise<void>;
+    h5PEditorControllerGetContentParameters(id: string, options?: any): AxiosPromise<object>;
 
     /**
      * 
