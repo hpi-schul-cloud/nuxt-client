@@ -19,12 +19,7 @@
 		<div class="mt-8">
 			<DataTable
 				:table-headers="headers"
-				:items="
-					fileRecords.map((item) => ({
-						...item,
-						isSelectable: isFileSelectable(item),
-					}))
-				"
+				:items="fileRecordItems"
 				:show-select="true"
 			>
 				<template #[`item.preview`]="{ item }">
@@ -146,6 +141,13 @@ const headers = [
 	},
 ];
 
+const fileRecordItems = computed(() => {
+	return props.fileRecords.map((item) => ({
+		...item,
+		isSelectable: !isDownloadAllowed(item.securityCheckStatus),
+	}));
+});
+
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;
 });
@@ -155,12 +157,6 @@ const formatFileSize = (size: number) => {
 	const localizedFileSize = n(convertedSize, "fileSize");
 
 	return `${localizedFileSize} ${unit}`;
-};
-
-const isFileSelectable = (fileRecord: FileRecord) => {
-	const result = isDownloadAllowed(fileRecord.securityCheckStatus);
-
-	return result;
 };
 
 const onDeleteFiles = (
