@@ -88,32 +88,30 @@ export const CommonCartridgeApiAxiosParamCreator = function (configuration?: Con
          * @throws {RequiredError}
          */
         commonCartridgeControllerImportCourse: async (commonCartridgeImportBodyParams: CommonCartridgeImportBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'commonCartridgeImportBodyParams' is not null or undefined
-            assertParamExists('commonCartridgeControllerImportCourse', 'commonCartridgeImportBodyParams', commonCartridgeImportBodyParams)
+            // Verify required parameter 'commonCartridgeImportBodyParams' is not null or undefined
+            assertParamExists('commonCartridgeControllerImportCourse', 'commonCartridgeImportBodyParams', commonCartridgeImportBodyParams);
+
             const localVarPath = `/common-cartridge/import`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options };
             const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
 
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+            // Authentication bearer required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+            // Use FormData to handle file upload
+            const formData = new FormData();
+            formData.append('file', commonCartridgeImportBodyParams.file);
 
-    
-            localVarHeaderParameter['Content-Type'] = 'application/octet-stream';
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(commonCartridgeImportBodyParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.headers = { ...localVarHeaderParameter, ...options.headers };
+            localVarRequestOptions.data = formData;
 
             return {
                 url: toPathString(localVarUrlObj),
