@@ -61,6 +61,11 @@
 							:selected-ids="[item.id]"
 							:aria-label="t('common.actions.download')"
 						/>
+						<KebabMenuActionRename
+							:disabled="!item.isSelectable"
+							:aria-label="t('common.actions.rename')"
+							@click="onRenameButtonClick(item)"
+						/>
 						<KebabMenuActionDeleteFiles
 							:file-records="fileRecords"
 							:selected-ids="[item.id]"
@@ -83,6 +88,19 @@
 					/>
 				</template>
 			</DataTable>
+			<RenameDialog
+				v-model:is-dialog-open="isRenameDialogOpen"
+				:name="fileRecordToRenameName"
+				:entity-name="$t('components.cardElement.fileElement')"
+				@cancel="onRenameDialogCancel"
+				@confirm="onRenameDialogConfirm"
+			/>
+			<DeleteFileDialog
+				v-model:is-dialog-open="isDeleteFilesDialogOpen"
+				:file-records="fileRecordsToDelete"
+				@confirm="onDeleteFilesConfirm"
+				@cancel="onDeleteFilesCancel"
+			/>
 		</div>
 	</template>
 </template>
@@ -90,12 +108,19 @@
 <script setup lang="ts">
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
-import { convertFileSize, isDownloadAllowed } from "@/utils/fileHelper";
+import {
+	convertFileSize,
+	getFileExtension,
+	isDownloadAllowed,
+	removeFileExtension,
+} from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
+import { RenameDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
-import { KebabMenu } from "@ui-kebab-menu";
-import { computed, defineProps, PropType } from "vue";
+import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
+import { computed, defineProps, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import DeleteFileDialog from "./DeleteFileDialog.vue";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
@@ -126,7 +151,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["delete-files"]);
+const emit = defineEmits(["delete-files", "update:name"]);
 
 const headers = [
 	{ title: "", key: "preview", sortable: false },
@@ -141,6 +166,11 @@ const headers = [
 	},
 ];
 
+const fileRecordToRename = ref<FileRecord | undefined>(undefined);
+const isRenameDialogOpen = ref(false);
+const isDeleteFilesDialogOpen = ref(false);
+const fileRecordsToDelete = ref<FileRecord[]>([]);
+
 const fileRecordItems = computed(() => {
 	return props.fileRecords.map((item) => ({
 		...item,
@@ -151,6 +181,9 @@ const fileRecordItems = computed(() => {
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;
 });
+const fileRecordToRenameName = computed(() => {
+	return removeFileExtension(fileRecordToRename.value?.name || "");
+});
 
 const formatFileSize = (size: number) => {
 	const { convertedSize, unit } = convertFileSize(size);
@@ -159,11 +192,36 @@ const formatFileSize = (size: number) => {
 	return `${localizedFileSize} ${unit}`;
 };
 
-const onDeleteFiles = (
-	selectedFileRecords: FileRecord[],
-	confirmationPromise: Promise<boolean>
-) => {
-	emit("delete-files", selectedFileRecords, confirmationPromise);
+const onDeleteFiles = (selectedFileRecords: FileRecord[]) => {
+	isDeleteFilesDialogOpen.value = true;
+	fileRecordsToDelete.value = selectedFileRecords;
+};
+
+const onDeleteFilesConfirm = () => {
+	emit("delete-files", fileRecordsToDelete.value);
+	fileRecordsToDelete.value = [];
+	isDeleteFilesDialogOpen.value = false;
+};
+const onDeleteFilesCancel = () => {
+	isDeleteFilesDialogOpen.value = false;
+	fileRecordsToDelete.value = [];
+};
+
+const onRenameButtonClick = (item: FileRecord) => {
+	isRenameDialogOpen.value = true;
+	fileRecordToRename.value = item;
+};
+const onRenameDialogCancel = () => {
+	isRenameDialogOpen.value = false;
+	fileRecordToRename.value = undefined;
+};
+const onRenameDialogConfirm = (newName: string) => {
+	const fileExtension = getFileExtension(fileRecordToRename.value?.name || "");
+	const nameWithExtension = `${newName}.${fileExtension}`;
+	emit("update:name", nameWithExtension, fileRecordToRename.value);
+
+	isRenameDialogOpen.value = false;
+	fileRecordToRename.value = undefined;
 };
 
 const buildActionMenuAriaLabel = (item: FileRecord): string => {

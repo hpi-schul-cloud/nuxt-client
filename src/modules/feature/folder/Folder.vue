@@ -19,9 +19,9 @@
 			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
 			@delete-files="onDeleteFiles"
+			@update:name="onUpdateName"
 		/>
 	</DefaultWireframe>
-	<ConfirmationDialog />
 	<input
 		ref="fileInput"
 		type="file"
@@ -41,7 +41,6 @@ import { useBoardApi, useSharedBoardPageInformation } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
@@ -68,7 +67,7 @@ const {
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
-const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles } =
+const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles, rename } =
 	useFileStorageApi();
 
 const folderId = toRef(props, "folderId");
@@ -125,16 +124,12 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 	}
 };
 
-const onDeleteFiles = async (
-	fileRecords: FileRecord[],
-	confirmationPromise: Promise<boolean>
-) => {
-	const shouldDelete = await confirmationPromise;
-	if (!shouldDelete) {
-		return;
-	}
-
+const onDeleteFiles = async (fileRecords: FileRecord[]) => {
 	await deleteFiles(fileRecords);
+};
+
+const onUpdateName = async (fileName: string, fileRecord: FileRecord) => {
+	await rename(fileRecord.id, { fileName });
 };
 
 const deleteAndNavigateToBoard = async (folderId: string) => {
