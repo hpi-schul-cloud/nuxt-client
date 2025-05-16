@@ -73,7 +73,7 @@
 					})
 				"
 				:disabled="item.isSelectable === false"
-				:aria-label="`${item.firstName}  ${item.lastName}`"
+				:aria-label="`${item.fullName}`"
 				@click="
 					toggleSelect({
 						value: item.userId,
@@ -189,12 +189,8 @@ const onRemoveMembers = async (userIds: string[]) => {
 const confirmRemoval = async (userIds: string[]) => {
 	let message = t("pages.rooms.members.multipleRemove.confirmation");
 	if (userIds.length === 1) {
-		const member = roomMembers.value.find(
-			(member) => member.userId === userIds[0]
-		);
-		message = t("pages.rooms.members.remove.confirmation", {
-			memberFullName: `${member?.firstName} ${member?.lastName}`,
-		});
+		const memberFullName = roomMembersStore.getMemberFullName(userIds[0]);
+		message = t("pages.rooms.members.remove.confirmation", { memberFullName });
 	}
 	const shouldRemove = await askConfirmation({
 		message,
@@ -213,22 +209,16 @@ const onChangePermission = (userIds: string[]) => {
 
 const getAriaLabel = (
 	member: RoomMember,
-	actionFor?: "remove" | "changeRole"
+	actionFor: "remove" | "changeRole" | "" = ""
 ) => {
-	const memberFullName = `${member.firstName} ${member.lastName}`;
-	if (actionFor === "changeRole") {
-		return t("pages.rooms.members.changePermission.ariaLabel", {
-			memberFullName,
-		});
-	}
-	if (actionFor === "remove") {
-		return t("pages.rooms.members.remove.ariaLabel", {
-			memberFullName,
-		});
-	}
-	return t("pages.rooms.members.actionMenu.ariaLabel", {
-		memberFullName,
-	});
+	const memberFullName = member.fullName;
+	const mapActionToConst = {
+		remove: "pages.rooms.members.remove.ariaLabel",
+		changeRole: "pages.rooms.members.changePermission.ariaLabel",
+		"": "pages.rooms.members.actionMenu.ariaLabel",
+	};
+	const languageKey = mapActionToConst[actionFor];
+	return t(languageKey, { memberFullName });
 };
 
 const tableHeader = computed(() => {
