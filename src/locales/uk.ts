@@ -390,10 +390,14 @@ export default {
 	"components.administration.schoolYearChangeSection.info.part.two":
 		" (Більше інформації про {0})",
 	"components.administration.schoolYearChangeSection.info.link": "Довідка",
-	"components.administration.schoolYearChangeSection.notification.start.success":
-		"Фаза передачі розпочалася успішно",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"Недостатньо шкільних років було знайдено. Будь ласка, зв'яжіться з підтримкою!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"Школа вже в наступному навчальному році",
 	"components.administration.schoolYearChangeSection.notification.finish.success":
 		"Навчальний рік успішно розпочався",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"Фаза передачі розпочалася успішно",
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Наприкінці навчального року",
 	"components.administration.schoolYearChangeSection.description.step.one":

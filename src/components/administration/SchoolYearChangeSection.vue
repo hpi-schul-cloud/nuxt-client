@@ -212,12 +212,10 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { MeSchoolResponse } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
-import NotifierModule from "@/store/notifier";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
-	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";
 import {
@@ -226,18 +224,13 @@ import {
 	mdiNumeric3Circle,
 } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
-import { useErrorNotification } from "@util-error-notification";
 import { computed, ComputedRef, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
-const { setMaintenanceMode, error, maintenanceStatus } =
-	useSharedSchoolYearChange();
-
-useErrorNotification(error);
+const { setMaintenanceMode, maintenanceStatus } = useSharedSchoolYearChange();
 
 const school: ComputedRef<MeSchoolResponse | undefined> = computed(() => {
 	return authModule.getSchool;
@@ -254,7 +247,7 @@ const isLoading = ref(false);
 const schoolYearMode: ComputedRef<string> = computed(() => {
 	const currentTime = new Date();
 
-	let schoolMaintenanceMode = "idle";
+	let schoolMaintenanceMode = SchoolYearModeEnum.IDLE.valueOf();
 
 	if (maintenanceStatus.value) {
 		const maintenanceModeStarts = new Date(
@@ -265,9 +258,9 @@ const schoolYearMode: ComputedRef<string> = computed(() => {
 		twoWeeksFromStart.setDate(twoWeeksFromStart.getDate() - 14);
 
 		if (maintenanceStatus.value.maintenance.active) {
-			schoolMaintenanceMode = "active";
+			schoolMaintenanceMode = SchoolYearModeEnum.ACTIVE.valueOf();
 		} else if (maintenanceModeStarts && twoWeeksFromStart < currentTime) {
-			schoolMaintenanceMode = "standby";
+			schoolMaintenanceMode = SchoolYearModeEnum.STANDBY.valueOf();
 		}
 
 		return schoolMaintenanceMode;
@@ -279,13 +272,6 @@ const schoolYearMode: ComputedRef<string> = computed(() => {
 const finishTransfer = async () => {
 	if (school.value) {
 		await setMaintenanceMode(school.value.id, false);
-
-		notifierModule.show({
-			text: t(
-				"components.administration.schoolYearChangeSection.notification.finish.success"
-			),
-			status: "success",
-		});
 	}
 };
 
@@ -298,13 +284,6 @@ const startTransfer = () => {
 const confirmSchoolYearChange = async () => {
 	if (school.value) {
 		await setMaintenanceMode(school.value.id, true);
-
-		notifierModule.show({
-			text: t(
-				"components.administration.schoolYearChangeSection.notification.start.success"
-			),
-			status: "success",
-		});
 	}
 };
 

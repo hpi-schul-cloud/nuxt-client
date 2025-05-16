@@ -383,10 +383,14 @@ export default {
 	"components.administration.schoolYearChangeSection.info.part.two":
 		" (more information on the {0})",
 	"components.administration.schoolYearChangeSection.info.link": "help page",
-	"components.administration.schoolYearChangeSection.notification.start.success":
-		"Transfer phase started successfully",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"Not enough school years were found. Please contact support!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"The school is already in the next school year",
 	"components.administration.schoolYearChangeSection.notification.finish.success":
 		"School year successfully started",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"Transfer phase started successfully",
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"End of the school year",
 	"components.administration.schoolYearChangeSection.description.step.one":

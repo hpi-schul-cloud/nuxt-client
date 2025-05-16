@@ -1,11 +1,4 @@
-import { useSchoolApi } from "./schoolApi.composable";
-import { useSharedSchoolYearChange } from "./schoolYearChange.composable";
+export { useSchoolApi } from "./schoolApi.composable";
+export { useSharedSchoolYearChange } from "./schoolYearChange.composable";
 
-import { MaintenanceStatus, SchoolYearModeEnum } from "./types";
-
-export {
-	useSchoolApi,
-	SchoolYearModeEnum,
-	MaintenanceStatus,
-	useSharedSchoolYearChange,
-};
+export { type MaintenanceStatus, SchoolYearModeEnum } from "./types";

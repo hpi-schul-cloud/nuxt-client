@@ -389,10 +389,14 @@ export default {
 		" (más información sobre el {0})",
 	"components.administration.schoolYearChangeSection.info.link":
 		"Ayuda del lado de la ayuda",
-	"components.administration.schoolYearChangeSection.notification.start.success":
-		"La fase de transferencia comenzó con éxito",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"No se encontraron suficientes años escolares. ¡Póngase en contacto con el soporte!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"La escuela ya está en el próximo año escolar",
 	"components.administration.schoolYearChangeSection.notification.finish.success":
 		"El año escolar comenzó con éxito",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"La fase de transferencia comenzó con éxito",
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Al final del año escolar",
 	"components.administration.schoolYearChangeSection.description.step.one":

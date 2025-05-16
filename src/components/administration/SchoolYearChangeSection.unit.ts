@@ -1,12 +1,6 @@
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
-import NotifierModule from "@/store/notifier";
-import { BusinessError } from "@/store/types/commons";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import {
 	envsFactory,
 	maintenanceStatusFactory,
@@ -19,22 +13,17 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useSharedSchoolYearChange } from "@data-school";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useErrorNotification } from "@util-error-notification";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { VBtn, VCheckbox } from "vuetify/lib/components/index.mjs";
 import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
 
 jest.mock("@data-school");
-jest.mock("@util-error-notification");
 
 describe("SchoolYearChangeSection", () => {
 	let useSharedSchoolYearChangeApiMock: DeepMocked<
 		ReturnType<typeof useSharedSchoolYearChange>
 	>;
-
-	const notifierModule: jest.Mocked<NotifierModule> =
-		createModuleMocks(NotifierModule);
 
 	const envConfigModule = createModuleMocks(EnvConfigModule, {
 		getEnv: envsFactory.build(),
@@ -51,7 +40,6 @@ describe("SchoolYearChangeSection", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
@@ -78,35 +66,7 @@ describe("SchoolYearChangeSection", () => {
 	});
 
 	describe("when section is rendered", () => {
-		describe("when the request fails", () => {
-			const setup = () => {
-				jest.useFakeTimers();
-				jest.setSystemTime(new Date(2000, 11, 31));
-
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build();
-
-				useSharedSchoolYearChangeApiMock.error.value = undefined;
-
-				const { wrapper } = getWrapper();
-				const businessError: BusinessError = {
-					statusCode: 500,
-					message: "error",
-				};
-
-				useSharedSchoolYearChangeApiMock.error.value = businessError;
-			};
-
-			it("should show a failure notification", async () => {
-				setup();
-
-				expect(useErrorNotification).toHaveBeenCalledWith(
-					useSharedSchoolYearChangeApiMock.error
-				);
-			});
-		});
-
-		describe("when no button is pushed and it is no school year change period", () => {
+		describe("when no button is pushed and it is not in the school year change period", () => {
 			const setup = () => {
 				jest.useFakeTimers();
 				jest.setSystemTime(new Date(1999, 0, 1));
@@ -334,23 +294,6 @@ describe("SchoolYearChangeSection", () => {
 				expect(
 					useSharedSchoolYearChangeApiMock.setMaintenanceMode
 				).toHaveBeenCalledWith("schoolId", true);
-			});
-
-			it("should show success message", async () => {
-				const { wrapper } = setup();
-
-				const button = wrapper.find('[data-testid="start-transfer-button"]');
-				await button.trigger("click");
-
-				const confirmBtn = wrapper.findComponent(
-					'[data-testid="dialog-confirm"]'
-				);
-				await confirmBtn.trigger("click");
-
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					status: "success",
-					text: "components.administration.schoolYearChangeSection.notification.start.success",
-				});
 			});
 
 			it("should enable the get ldap data button", async () => {
@@ -612,20 +555,6 @@ describe("SchoolYearChangeSection", () => {
 				expect(
 					useSharedSchoolYearChangeApiMock.setMaintenanceMode
 				).toHaveBeenCalledWith("schoolId", false);
-			});
-
-			it("should show success notification", async () => {
-				const { wrapper } = await setup();
-
-				const transferFinishButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="finish-transfer-button"]'
-				);
-				await transferFinishButton.trigger("click");
-
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					status: "success",
-					text: "components.administration.schoolYearChangeSection.notification.finish.success",
-				});
 			});
 
 			it("should show all buttons disabled, but checkbox enabled", async () => {

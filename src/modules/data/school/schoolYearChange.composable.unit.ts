@@ -1,4 +1,4 @@
-import { notifierModule } from "@/store";
+import NotifierModule from "@/store/notifier";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
@@ -8,17 +8,35 @@ import {
 	maintenanceStatusFactory,
 	mountComposable,
 } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { ref, Ref } from "vue";
 import { useSchoolApi } from "./schoolApi.composable";
 import { useSchoolYearChange } from "./schoolYearChange.composable";
-import { MaintenanceStatus } from "./types";
 
 jest.mock("@data-school/schoolApi.composable");
 
 describe("SchoolYearChange.composable", () => {
 	let useSchoolApiMock: DeepMocked<ReturnType<typeof useSchoolApi>>;
+
+	const notifierModule: jest.Mocked<NotifierModule> =
+		createModuleMocks(NotifierModule);
+
+	const setupComposable = () => {
+		const composable = mountComposable(() => useSchoolYearChange(), {
+			global: {
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
+				plugins: [createTestingI18n()],
+				mocks: i18nMock,
+			},
+		});
+
+		return {
+			composable,
+		};
+	};
 
 	beforeEach(() => {
 		useSchoolApiMock = createMock<ReturnType<typeof useSchoolApi>>();
@@ -38,15 +56,7 @@ describe("SchoolYearChange.composable", () => {
 					maintenanceStatus
 				);
 
-				const composable = mountComposable(() => useSchoolYearChange(), {
-					global: {
-						provide: {
-							[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						},
-						plugins: [createTestingI18n()],
-						mocks: i18nMock,
-					},
-				});
+				const { composable } = setupComposable();
 
 				return {
 					composable,
@@ -92,15 +102,7 @@ describe("SchoolYearChange.composable", () => {
 					errorResponse
 				);
 
-				const composable = mountComposable(() => useSchoolYearChange(), {
-					global: {
-						provide: {
-							[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						},
-						plugins: [createTestingI18n()],
-						mocks: i18nMock,
-					},
-				});
+				const { composable } = setupComposable();
 
 				return {
 					composable,
@@ -149,15 +151,7 @@ describe("SchoolYearChange.composable", () => {
 				});
 				useSchoolApiMock.setMaintenance.mockResolvedValue(maintenanceStatus);
 
-				const composable = mountComposable(() => useSchoolYearChange(), {
-					global: {
-						provide: {
-							[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						},
-						plugins: [createTestingI18n()],
-						mocks: i18nMock,
-					},
-				});
+				const { composable } = setupComposable();
 
 				return {
 					composable,
@@ -186,6 +180,28 @@ describe("SchoolYearChange.composable", () => {
 				);
 			});
 
+			it("should show success message for starting transfer phase", async () => {
+				const { composable } = setup();
+
+				await composable.setMaintenanceMode("id", true);
+
+				expect(notifierModule.show).toHaveBeenCalledWith({
+					status: "success",
+					text: "components.administration.schoolYearChangeSection.notification.start.success",
+				});
+			});
+
+			it("should show success message for finishing transfer phase", async () => {
+				const { composable } = setup();
+
+				await composable.setMaintenanceMode("id", false);
+
+				expect(notifierModule.show).toHaveBeenCalledWith({
+					status: "success",
+					text: "components.administration.schoolYearChangeSection.notification.finish.success",
+				});
+			});
+
 			it("should set isLoading to false", async () => {
 				const { composable } = setup();
 
@@ -199,26 +215,14 @@ describe("SchoolYearChange.composable", () => {
 			const setup = () => {
 				const errorResponse = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(errorResponse);
-				const emptyObj: Ref<MaintenanceStatus | undefined> = ref();
 
-				useSchoolApiMock.fetchMaintenanceStatus.mockRejectedValueOnce(
-					errorResponse
-				);
+				useSchoolApiMock.setMaintenance.mockRejectedValueOnce(errorResponse);
 
-				const composable = mountComposable(() => useSchoolYearChange(), {
-					global: {
-						provide: {
-							[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						},
-						plugins: [createTestingI18n()],
-						mocks: i18nMock,
-					},
-				});
+				const { composable } = setupComposable();
 
 				return {
 					composable,
 					apiError,
-					emptyObj,
 				};
 			};
 
@@ -233,12 +237,95 @@ describe("SchoolYearChange.composable", () => {
 			it("should set the error", async () => {
 				const { composable, apiError } = setup();
 
-				await composable.fetchSchoolYearStatus("id");
+				await composable.setMaintenanceMode("id", false);
 
 				expect(composable.error.value).toEqual<BusinessError>({
 					error: apiError,
 					statusCode: apiError.code,
 					message: apiError.message,
+				});
+			});
+
+			describe("when error is a MISSING_YEARS error", () => {
+				const setupError = () => {
+					const errorResponse = axiosErrorFactory.build();
+					const apiError = mapAxiosErrorToResponseError(errorResponse);
+					apiError.type = "MISSING_YEARS";
+
+					useSchoolApiMock.setMaintenance.mockRejectedValueOnce(errorResponse);
+
+					const { composable } = setupComposable();
+
+					return {
+						composable,
+					};
+				};
+
+				it("should show correct error message", async () => {
+					const { composable } = setupError();
+
+					await composable.setMaintenanceMode("id", false);
+
+					expect(notifierModule.show).toHaveBeenCalledWith({
+						status: "error",
+						text: "components.administration.schoolYearChangeSection.notification.finish.error.missingYears",
+						autoClose: false,
+					});
+				});
+
+				describe("when error is a SCHOOL_ALREADY_IN_NEXT_YEAR", () => {
+					const setupError = () => {
+						const errorResponse = axiosErrorFactory.build();
+						const apiError = mapAxiosErrorToResponseError(errorResponse);
+						apiError.type = "SCHOOL_ALREADY_IN_NEXT_YEAR";
+
+						const maintenanceStatus = maintenanceStatusFactory.build({
+							maintenance: {
+								active: true,
+								startDate: new Date(2000, 0, 1).toString(),
+							},
+						});
+
+						useSchoolApiMock.setMaintenance.mockRejectedValueOnce(
+							errorResponse
+						);
+
+						const { composable } = setupComposable();
+						composable.maintenanceStatus.value = maintenanceStatus;
+
+						return {
+							composable,
+						};
+					};
+
+					it("should show correct error message", async () => {
+						const { composable } = setupError();
+
+						await composable.setMaintenanceMode("id", false);
+
+						expect(notifierModule.show).toHaveBeenCalledWith({
+							status: "error",
+							text: "components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear",
+						});
+					});
+
+					it("should set maintenanceStatus", async () => {
+						const { composable } = setupError();
+
+						await composable.setMaintenanceMode("id", false);
+
+						expect(composable.maintenanceStatus.value).toEqual(
+							maintenanceStatusFactory.build({
+								maintenance: { active: false },
+								currentYear: {
+									id: "456",
+									name: "next school year",
+									startDate: new Date(2001, 0, 1).toString(),
+									endDate: new Date(2001, 11, 31).toString(),
+								},
+							})
+						);
+					});
 				});
 			});
 		});
