@@ -1,6 +1,6 @@
 import { useLoadingState } from "@/composables/loadingState";
+import { useRoomsState } from "@data-room";
 import { AlertPayload } from "@/store/types/alert-payload";
-import { delay } from "@/utils/helpers";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
@@ -9,36 +9,36 @@ import {
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export const useRoomDuplication = () => {
+export const useRoomCopy = () => {
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { t } = useI18n();
 
-	const { isLoadingDialogOpen } = useLoadingState(
-		t("data-room.duplication.loading")
-	);
+	const { isLoadingDialogOpen } = useLoadingState(t("data-room.copy.loading"));
+	const { copyRoom } = useRoomsState();
 
-	const isRoomDuplicationFeatureEnabled = computed(() => {
-		return envConfigModule.getEnv.FEATURE_ROOMS_DUPLICATION_ENABLED;
+	const isRoomCopyFeatureEnabled = computed(() => {
+		return envConfigModule.getEnv.FEATURE_ROOM_COPY_ENABLED;
 	});
 
-	const isDuplicationInfoDialogOpen = ref(false);
+	const isRoomCopyInfoDialogOpen = ref(false);
 
-	const openDuplicationInfoDialog = () => {
-		isDuplicationInfoDialogOpen.value = true;
+	const openRoomCopyInfoDialog = () => {
+		isRoomCopyInfoDialogOpen.value = true;
 	};
 
-	const closeDuplicationInfoDialog = () => {
-		isDuplicationInfoDialogOpen.value = false;
+	const closeRoomCopyInfoDialog = () => {
+		isRoomCopyInfoDialogOpen.value = false;
 	};
 
-	const duplicate = async () => {
-		closeDuplicationInfoDialog();
+	const copy = async (roomId: string) => {
+		closeRoomCopyInfoDialog();
 		isLoadingDialogOpen.value = true;
 
 		try {
-			await delay(3000);
+			const copyId = await copyRoom(roomId);
 			showSuccess();
+			return copyId;
 		} catch {
 			showTimeout();
 		} finally {
@@ -48,7 +48,7 @@ export const useRoomDuplication = () => {
 
 	const showSuccess = () => {
 		const notifierPayload: AlertPayload = {
-			text: t("data-room.duplication.alert.success"),
+			text: t("data-room.copy.alert.success"),
 			status: "success",
 		};
 
@@ -58,7 +58,7 @@ export const useRoomDuplication = () => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const showFailure = () => {
 		notifierModule.show({
-			text: t("data-room.duplication.alert.error"),
+			text: t("data-room.copy.alert.error"),
 			status: "error",
 			autoClose: false,
 		});
@@ -73,10 +73,10 @@ export const useRoomDuplication = () => {
 	};
 
 	return {
-		isRoomDuplicationFeatureEnabled,
-		isDuplicationInfoDialogOpen,
-		openDuplicationInfoDialog,
-		closeDuplicationInfoDialog,
-		duplicate,
+		isRoomCopyFeatureEnabled,
+		isRoomCopyInfoDialogOpen,
+		openRoomCopyInfoDialog,
+		closeRoomCopyInfoDialog,
+		copy,
 	};
 };

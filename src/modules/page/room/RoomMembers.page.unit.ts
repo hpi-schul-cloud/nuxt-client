@@ -98,7 +98,7 @@ describe("RoomMembersPage", () => {
 			canAddRoomMembers: ref(true),
 			canCreateRoom: ref(false),
 			canChangeOwner: ref(false),
-			canDuplicateRoom: ref(false),
+			canCopyRoom: ref(false),
 			canViewRoom: ref(false),
 			canEditRoom: ref(false),
 			canDeleteRoom: ref(false),

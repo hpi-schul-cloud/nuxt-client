@@ -14,7 +14,7 @@
 					:room-name="room?.name"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
-					@room:duplicate="onDuplicate"
+					@room:copy="onCopy"
 					@room:delete="onDelete"
 					@room:leave="onLeaveRoom"
 				/>
@@ -28,11 +28,11 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-		<DuplicationInfoDialog
-			v-if="isRoomDuplicationFeatureEnabled"
-			v-model="isDuplicationInfoDialogOpen"
-			@duplication:cancel="cancelDuplication"
-			@duplication:confirm="confirmDuplication"
+		<RoomCopyInfoDialog
+			v-if="isRoomCopyFeatureEnabled"
+			v-model="isRoomCopyInfoDialogOpen"
+			@copy:cancel="cancelRoomCopy"
+			@copy:confirm="copyRoom"
 		/>
 	</DefaultWireframe>
 </template>
@@ -48,9 +48,9 @@ import {
 	useRoomDetailsStore,
 	useRoomsState,
 	useRoomAuthorization,
-	useRoomDuplication,
+	useRoomCopy,
 } from "@data-room";
-import { BoardGrid, RoomMenu, DuplicationInfoDialog } from "@feature-room";
+import { BoardGrid, RoomMenu, RoomCopyInfoDialog } from "@feature-room";
 import {
 	mdiPlus,
 	mdiViewDashboardOutline,
@@ -88,8 +88,13 @@ const pageTitle = computed(() =>
 );
 useTitle(pageTitle);
 
-const { canCreateRoom, canDeleteRoom, canEditRoomContent, canLeaveRoom } =
-	useRoomAuthorization();
+const {
+	canCreateRoom,
+	canDeleteRoom,
+	canEditRoomContent,
+	canLeaveRoom,
+	canCopyRoom,
+} = useRoomAuthorization();
 
 const visibleBoards = computed(() =>
 	roomBoards.value?.filter(
@@ -185,38 +190,39 @@ const onManageMembers = () => {
 	});
 };
 
-// begin - Duplication Feature
+// begin - Copy Feature
 
 const {
-	isRoomDuplicationFeatureEnabled,
-	isDuplicationInfoDialogOpen,
-	openDuplicationInfoDialog,
-	closeDuplicationInfoDialog,
-	duplicate,
-} = useRoomDuplication();
+	isRoomCopyFeatureEnabled,
+	isRoomCopyInfoDialogOpen,
+	openRoomCopyInfoDialog,
+	closeRoomCopyInfoDialog,
+	copy,
+} = useRoomCopy();
 
-const onDuplicate = async () => {
-	// TODO Permission check
+const onCopy = async () => {
+	if (!room.value || !canCopyRoom) return;
+
+	openRoomCopyInfoDialog();
+};
+
+const cancelRoomCopy = () => {
+	closeRoomCopyInfoDialog();
+};
+
+const copyRoom = async () => {
 	if (!room.value) return;
-
-	openDuplicationInfoDialog();
+	const copyId = await copy(room.value.id);
+	if (copyId) {
+		router.push({
+			name: "room-details",
+			params: {
+				id: copyId,
+			},
+		});
+	}
 };
-
-const cancelDuplication = () => {
-	closeDuplicationInfoDialog();
-};
-
-const confirmDuplication = async () => {
-	await duplicate();
-
-	router.push({
-		name: "room-details",
-		params: {
-			id: room.value?.id,
-		},
-	});
-};
-// end - Duplication Feature
+// end - Copy Feature
 
 const onDelete = async () => {
 	if (!room.value || !canDeleteRoom.value) return;

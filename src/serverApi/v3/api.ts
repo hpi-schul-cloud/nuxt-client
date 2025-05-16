@@ -367,7 +367,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
-    RoomDuplicate = 'ROOM_DUPLICATE',
+    RoomCopy = 'ROOM_COPY',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -1752,7 +1752,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_ROOMS_DUPLICATION_ENABLED: boolean;
+    FEATURE_ROOM_COPY_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -3360,10 +3360,10 @@ export interface DrawingElementResponse {
 export interface ElementWithParentHierarchyResponse {
     /**
      * The element data
-     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse}
+     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse}
      * @memberof ElementWithParentHierarchyResponse
      */
-    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
+    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse;
     /**
      * The hierarchical path of parent elements
      * @type {Array<ParentNodeInfoResponse>}
@@ -7592,7 +7592,7 @@ export enum Permission {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
-    RoomDuplicate = 'ROOM_DUPLICATE',
+    RoomCopy = 'ROOM_COPY',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
