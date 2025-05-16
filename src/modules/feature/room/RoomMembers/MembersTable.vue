@@ -12,7 +12,7 @@
 			@reset:selected="onResetSelectedMembers"
 		>
 			<KebabMenuActionChangePermission
-				v-if="isVisibleChangeRoleButton"
+				v-if="canAddRoomMembers"
 				@click="onChangePermission(selectedIds)"
 			/>
 			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
@@ -49,7 +49,7 @@
 		:items-per-page-options="[5, 10, 25, 50, 100]"
 		:items-per-page="50"
 		:mobile="null"
-		:show-select="isVisibleSelectionColumn"
+		:show-select="canAddRoomMembers"
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
 		@update:current-items="onUpdateFilter"
@@ -73,7 +73,7 @@
 					})
 				"
 				:disabled="item.isSelectable === false"
-				:aria-label="`${item.firstName}  ${item.lastName}`"
+				:aria-label="`${item.fullName}`"
 				@click="
 					toggleSelect({
 						value: item.userId,
@@ -82,19 +82,18 @@
 				"
 			/>
 		</template>
-		<template v-if="isVisibleActionColumn" #[`item.actions`]="{ item, index }">
+		<template v-if="canAddRoomMembers" #[`item.actions`]="{ item, index }">
 			<KebabMenu
-				v-if="isVisibleActionInRow(item)"
+				v-if="isNeitherRoomOwnerNorCurrentUser(item.userId)"
 				:data-testid="`kebab-menu-${index}`"
 				:aria-label="getAriaLabel(item)"
 			>
 				<KebabMenuActionChangePermission
-					v-if="isVisibleChangeRoleButton"
 					:aria-label="getAriaLabel(item, 'changeRole')"
 					@click="onChangePermission([item.userId])"
 				/>
 				<KebabMenuActionRemoveMember
-					v-if="isVisibleRemoveMemberButton(item)"
+					v-if="!isRoomOwner(item.userId)"
 					:aria-label="getAriaLabel(item, 'remove')"
 					@click="onRemoveMembers([item.userId])"
 				/>
@@ -129,12 +128,14 @@ import {
 } from "@ui-confirmation-dialog";
 import {
 	RoomMember,
+	useRoomAuthorization,
 	useRoomMembersStore,
-	useRoomMemberVisibilityOptions,
 } from "@data-room";
 import { useDisplay } from "vuetify/lib/framework.mjs";
 import { storeToRefs } from "pinia";
 import { ChangeRole } from "@feature-room";
+import { authModule } from "@/store/store-accessor";
+const { canAddRoomMembers } = useRoomAuthorization();
 
 const props = defineProps({
 	headerBottom: {
@@ -147,8 +148,8 @@ const { t } = useI18n();
 const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
-const { currentUser, roomMembers, selectedIds } = storeToRefs(roomMembersStore);
-const { removeMembers } = roomMembersStore;
+const { roomMembers, selectedIds } = storeToRefs(roomMembersStore);
+const { isRoomOwner, removeMembers } = roomMembersStore;
 
 const { askConfirmation } = useConfirmationDialog();
 
@@ -161,14 +162,11 @@ const stickyStyle = computed(() => ({
 }));
 
 const membersFilterCount = ref(roomMembers.value?.length);
-
-const {
-	isVisibleActionColumn,
-	isVisibleChangeRoleButton,
-	isVisibleSelectionColumn,
-	isVisibleActionInRow,
-	isVisibleRemoveMemberButton,
-} = useRoomMemberVisibilityOptions(currentUser);
+const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
+	const isNotCurrentUser = userId !== authModule.getUser?.id;
+	const isNotRoomOwner = !isRoomOwner(userId);
+	return isNotCurrentUser && isNotRoomOwner;
+};
 
 const onDialogClose = () => {
 	isChangeRoleDialogOpen.value = false;
@@ -191,12 +189,8 @@ const onRemoveMembers = async (userIds: string[]) => {
 const confirmRemoval = async (userIds: string[]) => {
 	let message = t("pages.rooms.members.multipleRemove.confirmation");
 	if (userIds.length === 1) {
-		const member = roomMembers.value.find(
-			(member) => member.userId === userIds[0]
-		);
-		message = t("pages.rooms.members.remove.confirmation", {
-			memberFullName: `${member?.firstName} ${member?.lastName}`,
-		});
+		const memberFullName = roomMembersStore.getMemberFullName(userIds[0]);
+		message = t("pages.rooms.members.remove.confirmation", { memberFullName });
 	}
 	const shouldRemove = await askConfirmation({
 		message,
@@ -215,51 +209,47 @@ const onChangePermission = (userIds: string[]) => {
 
 const getAriaLabel = (
 	member: RoomMember,
-	actionFor?: "remove" | "changeRole"
+	actionFor: "remove" | "changeRole" | "" = ""
 ) => {
-	const memberFullName = `${member.firstName} ${member.lastName}`;
-	if (actionFor === "changeRole") {
-		return t("pages.rooms.members.changePermission.ariaLabel", {
-			memberFullName,
-		});
-	}
-	if (actionFor === "remove") {
-		return t("pages.rooms.members.remove.ariaLabel", {
-			memberFullName,
-		});
-	}
-	return t("pages.rooms.members.actionMenu.ariaLabel", {
-		memberFullName,
-	});
+	const memberFullName = member.fullName;
+	const mapActionToConst = {
+		remove: "pages.rooms.members.remove.ariaLabel",
+		changeRole: "pages.rooms.members.changePermission.ariaLabel",
+		"": "pages.rooms.members.actionMenu.ariaLabel",
+	};
+	const languageKey = mapActionToConst[actionFor];
+	return t(languageKey, { memberFullName });
 };
 
-const tableHeader = [
-	{
-		title: t("common.labels.firstName"),
-		key: "firstName",
-	},
-	{
-		title: t("common.labels.lastName"),
-		key: "lastName",
-	},
-	{
-		title: t("pages.rooms.members.tableHeader.roomRole"),
-		key: "displayRoomRole",
-	},
-	{
-		title: t("pages.rooms.members.tableHeader.schoolRole"),
-		key: "displaySchoolRole",
-	},
-	{ title: t("common.words.mainSchool"), key: "schoolName" },
-	{
-		title: isVisibleActionColumn.value
-			? t("pages.rooms.members.tableHeader.actions")
-			: "",
-		key: "actions",
-		sortable: false,
-		width: 50,
-	},
-];
+const tableHeader = computed(() => {
+	return [
+		{
+			title: t("common.labels.firstName"),
+			key: "firstName",
+		},
+		{
+			title: t("common.labels.lastName"),
+			key: "lastName",
+		},
+		{
+			title: t("pages.rooms.members.tableHeader.roomRole"),
+			key: "displayRoomRole",
+		},
+		{
+			title: t("pages.rooms.members.tableHeader.schoolRole"),
+			key: "displaySchoolRole",
+		},
+		{ title: t("common.words.mainSchool"), key: "schoolName" },
+		{
+			title: canAddRoomMembers.value
+				? t("pages.rooms.members.tableHeader.actions")
+				: "",
+			key: "actions",
+			sortable: false,
+			width: 50,
+		},
+	];
+});
 </script>
 
 <style lang="scss" scoped>

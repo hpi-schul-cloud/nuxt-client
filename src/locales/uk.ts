@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
+	"common.actions.download": "Завантажити",
 	"common.actions.duplicate": "Дублювати",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
@@ -434,6 +435,8 @@ export default {
 		"Файл з такою назвою вже існує.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
 		"Файловий сервіс наразі недоступний.",
+	"components.board.notifications.errors.fileNotDeleted":
+		"Видалити файли не вдалося.",
 	"components.board.notifications.errors.fileToBig":
 		"Вкладені файли перевищують максимально дозволений розмір {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated":
@@ -535,7 +538,11 @@ export default {
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
-	"components.cardElement.h5pElement": "Інтерактивний зміст навчання",
+	"components.cardElement.h5pElement": "Інтерактивний елемент навчання",
+	"components.cardElement.h5pElement.create":
+		"Створити інтерактивний навчальний елемент.",
+	"components.cardElement.h5pElement.title.error.load":
+		"Не вдалося завантажити назву інтерактивного навчального елемента.",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
 	"components.datePicker.validation.required": "Будь ласка, введіть дату.",
 	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
@@ -1651,6 +1658,7 @@ export default {
 		"Спробуйте використати коротший запит.",
 	"pages.content.emptyState.error.title": "Отакої, результатів немає!",
 	"pages.content.index.backToCourse": "Назад до курсу",
+	"pages.content.index.backToBoard": "Назад до дошки ",
 	"pages.content.index.backToOverview": "Назад до огляду",
 	"pages.content.index.search_for": "Пошук...",
 	"pages.content.index.search_resources": "Ресурси",
@@ -1940,7 +1948,7 @@ export default {
 	"pages.rooms.members.inviteMember.secondStep.title":
 		"Поділіться посиланням на запрошення",
 	"pages.rooms.members.inviteMember.infoAlert.text":
-		"Учні з інших шкіл повинні завжди супроводжуватися в кімнату супроводжуючим з їхньої школи до кімнати.",
+		"Учні з інших шкіл завжди повинні бути присутніми в кімнаті під наглядом вчителя з їхньої школи.",
 	"pages.rooms.members.inviteMember.form.description.label":
 		"Опис (необов'язково)",
 	"pages.rooms.members.inviteMember.form.description.hint":
@@ -2127,4 +2135,7 @@ export default {
 	"pages.folder.ariaLabels.filter": "	Таблиця пошуку/фільтрації",
 	"pages.folder.ariaLabels.actionMenu": "Меню дій для {name}",
 	"pages.folder.uploadstats": "{uploaded} з {total} завантажених файлів",
+	"pages.folder.delete-multiple-confirmation":
+		"Дійсно видалити всі {total} файли?",
+	"pages.folder.delete-confirmation": "Дійсно видалити файл {name}?",
 };

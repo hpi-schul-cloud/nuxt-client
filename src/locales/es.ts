@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
+	"common.actions.download": "Descargar",
 	"common.actions.duplicate": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
@@ -432,6 +433,8 @@ export default {
 		"Ya existe un archivo con este nombre.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
 		"El servicio de archivos no está disponible actualmente.",
+	"components.board.notifications.errors.fileNotDeleted":
+		"No se han podido eliminar los archivos.",
 	"components.board.notifications.errors.fileToBig":
 		"Los archivos adjuntos superan el tamaño máximo permitido de {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated":
@@ -532,7 +535,11 @@ export default {
 	"components.cardElement.deletedElement": "Contenido eliminado",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
-	"components.cardElement.h5pElement": "Contenido de aprendizaje interactivo",
+	"components.cardElement.h5pElement": "Elemento de aprendizaje interactivo",
+	"components.cardElement.h5pElement.create":
+		"Crear un elemento de aprendizaje interactivo.",
+	"components.cardElement.h5pElement.title.error.load":
+		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",
 	"components.datePicker.validation.format":
 		"Por favor utilice el formato DD.MM.AAAA",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
@@ -1667,6 +1674,7 @@ export default {
 		"Intenta usar una consulta más corta.",
 	"pages.content.emptyState.error.title": "¡Vaya, no hay resultados!",
 	"pages.content.index.backToCourse": "Volver al curso",
+	"pages.content.index.backToBoard": "Volver al tablero",
 	"pages.content.index.backToOverview": "Volver a la vista general",
 	"pages.content.index.search_for": "Buscar...",
 	"pages.content.index.search_resources": "Recursos",
@@ -1967,7 +1975,7 @@ export default {
 	"pages.rooms.members.inviteMember.secondStep.title":
 		"Compartir enlace de invitación",
 	"pages.rooms.members.inviteMember.infoAlert.text":
-		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un guía de aprendizaje supervisor de su escuela a la sala.",
+		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
 	"pages.rooms.members.inviteMember.form.description.label":
 		"Descripción (opcional)",
 	"pages.rooms.members.inviteMember.form.description.hint":
@@ -2163,4 +2171,7 @@ export default {
 	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
 	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
+	"pages.folder.delete-multiple-confirmation":
+		"¿Borrar realmente todos los archivos {total}?",
+	"pages.folder.delete-confirmation": "¿Borrar realmente el archivo {name}?",
 };

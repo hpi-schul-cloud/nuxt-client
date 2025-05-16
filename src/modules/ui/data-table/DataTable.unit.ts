@@ -256,6 +256,61 @@ describe("DataTable", () => {
 		});
 	});
 
+	describe("when all items are selected and then items are removed", () => {
+		const setup = async () => {
+			const key = "name";
+			const headers = [{ title: "name", key }];
+			const name1 = "John Doe";
+			const items = [
+				{ [key]: name1, id: 1 },
+				{ [key]: "Jane Doe", id: 2 },
+			];
+			const slotContent = "<div>Action Menu Items</div>";
+			// Mock the action menu items slot
+			const { wrapper } = setupWrapper({
+				headers,
+				items,
+				actionMenuItemsSlot: slotContent,
+				showSelect: true,
+				selectItemKey: key,
+				ariaLabelNameKey: key,
+			});
+
+			const itemCheckbox = wrapper.find(`[data-testid='select-all-checkbox']`);
+
+			itemCheckbox.trigger("click");
+			await wrapper.vm.$nextTick();
+
+			return { wrapper, name1, slotContent, items };
+		};
+
+		it("should render batch action menu", async () => {
+			const { wrapper } = await setup();
+
+			const actionMenu = wrapper.findComponent(BatchActionMenu);
+
+			expect(actionMenu.exists()).toBe(true);
+		});
+
+		it("should render amount of selected items", async () => {
+			const { wrapper, items } = await setup();
+
+			const actionMenuBefore = wrapper.findComponent(BatchActionMenu);
+
+			expect(actionMenuBefore.text()).toContain(
+				"2 pages.administration.selectedui.actionMenu.actions"
+			);
+
+			await wrapper.setProps({ items: items.slice(0, 1) });
+
+			const actionMenuAfter = wrapper.findComponent(BatchActionMenu);
+
+			expect(actionMenuAfter.text()).toContain(
+				"1 pages.administration.selectedui.actionMenu.actions"
+			);
+		});
+	});
+
 	describe("when showSelect is false", () => {
 		const setup = () => {
 			const key = "name";

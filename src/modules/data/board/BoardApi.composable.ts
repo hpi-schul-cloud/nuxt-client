@@ -13,11 +13,15 @@ import {
 	CreateContentElementBodyParams,
 	DrawingElementContentBody,
 	DrawingElementResponse,
+	ElementWithParentHierarchyResponse,
 	ExternalToolContentBody,
 	ExternalToolElementContentBody,
 	ExternalToolElementResponse,
 	FileElementContentBody,
 	FileElementResponse,
+	H5pContentBody,
+	H5pElementContentBody,
+	H5pElementResponse,
 	LinkContentBody,
 	LinkElementContentBody,
 	LinkElementResponse,
@@ -194,6 +198,22 @@ export const useBoardApi = () => {
 			return body;
 		}
 
+		const isH5pElement = (
+			element: AnyContentElement
+		): element is H5pElementResponse => {
+			return element.type === ContentElementType.H5p;
+		};
+
+		if (isH5pElement(element)) {
+			const body: H5pElementContentBody = {
+				// H5pElementContent is not type equal with H5pContentBody
+				content: element.content as H5pContentBody,
+				type: ContentElementType.H5p,
+			};
+
+			return body;
+		}
+
 		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 
@@ -310,6 +330,14 @@ export const useBoardApi = () => {
 		return boardApi.boardControllerUpdateLayout(boardId, { layout });
 	};
 
+	const getElementWithParentHierarchyCall = async (
+		elementId: string
+	): AxiosPromise<ElementWithParentHierarchyResponse> => {
+		return await elementApi.elementControllerGetElementWithParentHierarchy(
+			elementId
+		);
+	};
+
 	return {
 		fetchBoardCall,
 		createColumnCall,
@@ -329,5 +357,6 @@ export const useBoardApi = () => {
 		createCardCall,
 		getContextInfo,
 		updateBoardLayoutCall,
+		getElementWithParentHierarchyCall,
 	};
 };

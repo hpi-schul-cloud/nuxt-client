@@ -132,6 +132,7 @@ import {
 } from "@data-room";
 import { WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
+import { authModule } from "@/store";
 
 const props = defineProps({
 	members: {
@@ -149,15 +150,17 @@ const { t } = useI18n();
 const { room } = storeToRefs(useRoomDetailsStore());
 
 const roomMembersStore = useRoomMembersStore();
-const { currentUser, selectedIds } = storeToRefs(roomMembersStore);
+const { selectedIds } = storeToRefs(roomMembersStore);
 const { updateMembersRole, changeRoomOwner } = roomMembersStore;
 
 const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members")?.value;
 
 const isChangeOwnershipOptionVisible = computed(() => {
+	const currentUserId = authModule.getUser?.id;
 	return (
-		currentUser.value?.roomRoleName === RoleName.Roomowner &&
+		currentUserId &&
+		roomMembersStore.isRoomOwner(currentUserId) &&
 		memberToChangeRole.length === 1
 	);
 });
@@ -181,7 +184,7 @@ if (memberToChangeRole.length > 1) {
 }
 
 const currentUserFullName = computed(() => {
-	return `${currentUser.value?.firstName} ${currentUser.value?.lastName}`;
+	return roomMembersStore.getMemberFullName(authModule.getUser?.id);
 });
 
 const memberFullName = computed(() => {

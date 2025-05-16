@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Create",
 	"common.actions.delete": "Delete",
 	"common.actions.discard": "Discard",
+	"common.actions.download": "Download",
 	"common.actions.duplicate": "Duplicate",
 	"common.actions.export": "Export",
 	"common.actions.edit": "Edit",
@@ -421,6 +422,8 @@ export default {
 		"A file with this name already exists.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
 		"The file service is currently not available.",
+	"components.board.notifications.errors.fileNotDeleted":
+		"The files could not be deleted.",
 	"components.board.notifications.errors.fileToBig":
 		"The attached file exceeds the maximum permitted size of {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated":
@@ -521,7 +524,11 @@ export default {
 	"components.cardElement.deletedElement": "Deleted content",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",
-	"components.cardElement.h5pElement": "Interactive learning content",
+	"components.cardElement.h5pElement": "Interactive learning element",
+	"components.cardElement.h5pElement.create":
+		"Create an interactive learning element",
+	"components.cardElement.h5pElement.title.error.load":
+		"The title of an interactive learning element could not be loaded.",
 	"components.datePicker.validation.format": "Please use format DD.MM.YYYY",
 	"components.datePicker.validation.required": "Please enter a date.",
 	"components.dateTimePicker.messages.dateInPast":
@@ -1618,6 +1625,7 @@ export default {
 		"Try to use a shorter query.",
 	"pages.content.emptyState.error.title": "Whoops, no results!",
 	"pages.content.index.backToCourse": "Back to the Course",
+	"pages.content.index.backToBoard": "Back to the Board",
 	"pages.content.index.backToOverview": "Back to Overview",
 	"pages.content.index.search_for": "Search for...",
 	"pages.content.index.search_resources": "Resources",
@@ -1904,7 +1912,7 @@ export default {
 		"The next step is to create a link, which can be used to enter the room.",
 	"pages.rooms.members.inviteMember.secondStep.title": "Share invitation link",
 	"pages.rooms.members.inviteMember.infoAlert.text":
-		"Students from other schools must always be added to the room by a supervising learning guide from their school.",
+		"Students from other schools must always be added to the room by a supervising teacher from their school.",
 	"pages.rooms.members.inviteMember.form.description.label":
 		"Description (optional)",
 	"pages.rooms.members.inviteMember.form.description.hint":
@@ -2093,4 +2101,7 @@ export default {
 	"pages.folder.ariaLabels.filter": "Search/filter table",
 	"pages.folder.ariaLabels.actionMenu": "Action menu for {name}",
 	"pages.folder.uploadstats": "{uploaded} of {total} files uploaded",
+	"pages.folder.delete-multiple-confirmation": "Delete all {total} files?",
+	"pages.folder.delete-confirmation":
+		"Do you really want to delete file {name}?",
 };

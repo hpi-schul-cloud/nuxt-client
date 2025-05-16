@@ -34,11 +34,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		name: schoolsModule.getSchool.name,
 	};
 	const currentUserId = authModule.getUser?.id ?? "";
-	const currentUser = computed(() => {
-		return roomMembers.value?.find(
-			(member) => member.userId === currentUserId
-		) as RoomMember;
-	});
 	const selectedIds = ref<string[]>([]);
 
 	const roomRole: Record<string, string> = {
@@ -56,6 +51,14 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
 
+	const isRoomOwner = (userId: string) => {
+		const member = roomMembers.value.find((member) => member.userId === userId);
+		if (!member) {
+			return false;
+		}
+		return member.roomRoleName === RoleName.Roomowner;
+	};
+
 	const getRoomId = () => {
 		if (!roomId.value) {
 			throw new Error("RoomDetailStore is not initialized");
@@ -72,6 +75,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
+					fullName: `${member.lastName}, ${member.firstName}`,
 					isSelectable: !(
 						member.userId === currentUserId ||
 						member.roomRoleName === RoleName.Roomowner
@@ -126,6 +130,18 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		} catch {
 			showFailure(t("pages.rooms.members.error.load"));
 		}
+	};
+
+	const getMemberById = (userId: string) => {
+		return roomMembers.value.find((member) => member.userId === userId);
+	};
+
+	const getMemberFullName = (userId = "") => {
+		const member = getMemberById(userId);
+		if (!member) {
+			return "";
+		}
+		return member.fullName;
 	};
 
 	const getSchools = async () => {
@@ -265,15 +281,17 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	return {
 		addMembers,
+		isRoomOwner,
 		changeRoomOwner,
 		fetchMembers,
 		resetStore,
 		getPotentialMembers,
 		getSchools,
+		getMemberById,
+		getMemberFullName,
 		leaveRoom,
 		removeMembers,
 		updateMembersRole,
-		currentUser,
 		isLoading,
 		roomMembers,
 		potentialRoomMembers,
