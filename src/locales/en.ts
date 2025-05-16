@@ -1737,7 +1737,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Expired",
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
 	"pages.room.learningContent.emptyState":
-		"There is currently no learning content in this course",
+		"Currently there is no learning content in this course",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
 	"pages.rooms.emptyState.title": "There are currently no courses",
 	"pages.rooms.fab.add.course": "New course",
@@ -1795,7 +1795,7 @@ export default {
 	"pages.rooms.tools.deleteDialog.content":
 		"Are you sure you want to remove the tool '{itemName}' from the course?",
 	"pages.rooms.tools.deleteDialog.title": "Remove tool?",
-	"pages.rooms.tools.emptyState": "There are currently no tools in this course",
+	"pages.rooms.tools.emptyState": "Currently there are no tools in this course",
 	"pages.rooms.tools.incomplete": "Configuration incomplete",
 	"pages.rooms.tools.incompleteDialog.title": "Configuration incomplete",
 	"pages.rooms.tools.logo": "Tool-Logo",
@@ -1818,8 +1818,8 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
 	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.roomDetails.emptyState":
-		"There is currently no learning content in this room",
-	"pages.rooms.emptyState": "Currently there are no rooms here.",
+		"Currently there is no learning content in this room",
+	"pages.rooms.emptyState": "Currently there are no rooms",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.infoAlert.welcome": "Welcome to the new Rooms!",
 	"pages.rooms.infoAlert.welcome.collaboration":
@@ -1930,7 +1930,7 @@ export default {
 		"Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",
 	"pages.tasks.finished.emptyState.title":
-		"There are currently no completed tasks",
+		"Currently there are no completed tasks",
 	"pages.tasks.labels.due": "Due",
 	"pages.tasks.labels.filter": "Filter by course",
 	"pages.tasks.labels.noCourse": "No course assigned",
@@ -1939,8 +1939,9 @@ export default {
 	"pages.tasks.labels.overdue": "Missed",
 	"pages.tasks.labels.planned": "Planned",
 	"pages.tasks.student.completed.emptyState.title":
-		"You currently don't have any completed tasks.",
-	"pages.tasks.student.open.emptyState.title": "There are no open tasks.",
+		"Currently there are no completed tasks",
+	"pages.tasks.student.open.emptyState.title":
+		"Currently there are no open tasks",
 	"pages.tasks.student.openTasks": "Open Tasks",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
 	"pages.tasks.student.subtitleOverDue": "Missed Tasks",
@@ -1950,7 +1951,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Open Tasks",
 	"pages.tasks.subtitleWithDue": "With Due Date",
 	"pages.tasks.teacher.drafts.emptyState.title":
-		"There are currently no drafts",
+		"Currently there are no drafts",
 	"pages.tasks.teacher.open.emptyState.title": "There are currently no tasks",
 	"pages.tasks.teacher.subtitleOverDue": "Expired Tasks",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
@@ -2082,13 +2083,13 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
 	"feature.media-shelf.title": "Media shelf",
 	"feature.media-shelf.emptyState":
-		"There are currently no media available for use",
+		"Currently there are no media available for use",
 	"feature.media-shelf.createLine": "Add line",
 	"feature.media-shelf.line.title": "Line",
 	"feature.media-shelf.availableLine.title": "Available media",
 	"feature.media-shelf.layout.list": "Lines",
 	"feature.media-shelf.layout.grid": "Grid",
-	"pages.folder.emptyState": "There are currently no files here.",
+	"pages.folder.emptyState": "There are currently no files here",
 	"pages.folder.fab.title": "Add file",
 	"pages.folder.untitled": "Untitled folder",
 	"pages.folder.title": "Folder",

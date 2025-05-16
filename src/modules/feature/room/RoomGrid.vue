@@ -39,8 +39,7 @@ import { useRoomsState } from "@data-room";
 import { onMounted } from "vue";
 import RoomTile from "./RoomTile.vue";
 import { useI18n } from "vue-i18n";
-import { EmptyState } from "@ui-empty-state";
-import RoomsEmptyStateSvg from "@/assets/img/empty-state/RoomsEmptyStateSvg.vue";
+import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 
 const { t } = useI18n();
 const { rooms, isLoading, isEmpty, fetchRooms } = useRoomsState();

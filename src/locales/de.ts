@@ -1849,7 +1849,7 @@ export default {
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",
 	"pages.roomDetails.emptyState":
 		"Aktuell gibt es keine Lerninhalte in diesem Raum",
-	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
+	"pages.rooms.emptyState": "Aktuell gibt es keine Räume",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.infoAlert.welcome": "Willkommen in den neuen Räumen!",
 	"pages.rooms.infoAlert.welcome.collaboration":
@@ -1973,9 +1973,9 @@ export default {
 	"pages.tasks.labels.overdue": "Verpasst",
 	"pages.tasks.labels.planned": "Geplant",
 	"pages.tasks.student.completed.emptyState.title":
-		"Du hast zur Zeit keine erledigten Aufgaben.", // todo: Discuss wording with UX
+		"Aktuell gibt es keine erledigten Aufgaben",
 	"pages.tasks.student.open.emptyState.title":
-		"Es gibt keine offenen Aufgaben.", // todo: Discuss wording with UX
+		"Aktuell gibt es keine offenen Aufgaben",
 	"pages.tasks.student.openTasks": "Offene Aufgaben",
 	"pages.tasks.student.submittedTasks": "Erledigte Aufgaben",
 	"pages.tasks.student.subtitleOverDue": "Verpasste Aufgaben",
@@ -2123,7 +2123,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
 	"feature.media-shelf.layout.list": "Zeilen",
 	"feature.media-shelf.layout.grid": "Raster",
-	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien.",
+	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien",
 	"pages.folder.fab.title": "Datei hinzufügen",
 	"pages.folder.untitled": "Unbenannter Ordner",
 	"pages.folder.title": "Ordner",

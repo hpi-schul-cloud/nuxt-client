@@ -203,8 +203,7 @@ import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import draggable from "vuedraggable";
-import { EmptyState } from "@ui-empty-state";
-import LearningContentEmptyStateSvg from "@/assets/img/empty-state/LearningContentEmptyStateSvg.vue";
+import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 
 export default {
 	components: {

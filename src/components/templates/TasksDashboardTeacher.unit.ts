@@ -146,4 +146,65 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 
 		expect(copyModuleMock.copy).toHaveBeenCalledWith(payload);
 	});
+
+	describe("empty states", () => {
+		it("should render empty state with correct title for current tab", () => {
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
+				getActiveTab: tabRoutes[0],
+				openTasksForTeacherIsEmpty: true,
+			});
+
+			const wrapper = mountComponent({
+				propsData: {
+					tabRoutes,
+				},
+			});
+
+			const emptyStateComponent = wrapper.findComponent(EmptyState);
+			expect(emptyStateComponent.props("title")).toBe(
+				"pages.tasks.teacher.open.emptyState.title"
+			);
+		});
+		it("should render empty state with correct title for drafts tab", () => {
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
+				getActiveTab: tabRoutes[1],
+				draftsForTeacherIsEmpty: true,
+			});
+
+			const wrapper = mountComponent({
+				propsData: {
+					tabRoutes,
+				},
+			});
+
+			const emptyStateComponent = wrapper.findComponent(EmptyState);
+			expect(emptyStateComponent.props("title")).toBe(
+				"pages.tasks.teacher.drafts.emptyState.title"
+			);
+		});
+
+		it("should render empty state with correct title for finished tab", () => {
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
+				getActiveTab: tabRoutes[2],
+			});
+			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
+				getTasks: [],
+				tasksIsEmpty: true,
+			});
+
+			const wrapper = mountComponent({
+				propsData: {
+					tabRoutes,
+				},
+			});
+
+			const emptyStateComponent = wrapper.findComponent(EmptyState);
+			expect(emptyStateComponent.props("title")).toBe(
+				"pages.tasks.finished.emptyState.title"
+			);
+		});
+	});
 });

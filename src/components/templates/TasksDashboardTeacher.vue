@@ -95,8 +95,7 @@ import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
 import { useI18n } from "vue-i18n";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
-import { EmptyState } from "@ui-empty-state";
-import TasksEmptyStateSvg from "@/assets/img/empty-state/TasksEmptyStateSvg.vue";
+import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 
 export default defineComponent({
 	components: {

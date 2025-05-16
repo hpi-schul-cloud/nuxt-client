@@ -91,8 +91,7 @@
 <script>
 import TasksList from "@/components/organisms/TasksList";
 import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
-import { EmptyState } from "@ui-empty-state";
-import TasksEmptyStateSvg from "@/assets/img/empty-state/TasksEmptyStateSvg.vue";
+import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 
 export default {
 	components: {
