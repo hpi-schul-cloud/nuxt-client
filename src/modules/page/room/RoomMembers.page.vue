@@ -56,7 +56,10 @@
 			persistent
 			@keydown.esc="onDialogClose"
 		>
-			<AddMembers @close="onDialogClose" />
+			<AddMembers
+				:can-add-all-students="canAddAllStudents"
+				@close="onDialogClose"
+			/>
 		</VDialog>
 	</DefaultWireframe>
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
@@ -104,7 +107,6 @@ import {
 	InviteMembersDialog,
 	Members,
 } from "@feature-room";
-import { RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import {
@@ -139,13 +141,13 @@ const isLeaveRoomProhibitedDialogOpen = ref(false);
 const isInvitationDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
-const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
-	roomMembersStore;
+const { fetchMembers, getSchools, leaveRoom, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
-const { canAddRoomMembers, canLeaveRoom } = useRoomAuthorization();
+const { canAddRoomMembers, canLeaveRoom, canSeeAllStudents } =
+	useRoomAuthorization();
 
 watchEffect(() => {
 	if (canAddRoomMembers.value !== undefined) {
@@ -173,6 +175,10 @@ const activeTab = computed<Tab>({
 
 const isVisibleTabNavigation = computed(() => {
 	return canAddRoomMembers.value && FEATURE_ROOM_MEMBERS_TABS_ENABLED;
+});
+
+const canAddAllStudents = computed(() => {
+	return canAddRoomMembers.value && canSeeAllStudents.value;
 });
 
 const tabs: Array<{
@@ -214,7 +220,6 @@ const onFabClick = async () => {
 		case Tab.Members:
 		default:
 			await getSchools();
-			await getPotentialMembers(RoleName.Teacher);
 			isMembersDialogOpen.value = true;
 			break;
 	}

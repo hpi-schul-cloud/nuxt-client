@@ -19,6 +19,7 @@ export const useRoomAuthorization = () => {
 	const canEditRoomContent = ref(false);
 	const canLeaveRoom = ref(false);
 	const canRemoveRoomMembers = ref(false);
+	const canSeeAllStudents = ref(false);
 	const canViewRoom = ref(false);
 
 	watchEffect(() => {
@@ -39,6 +40,9 @@ export const useRoomAuthorization = () => {
 		canRemoveRoomMembers.value = permissions.includes(
 			Permission.RoomMembersRemove
 		);
+		canSeeAllStudents.value = authModule?.getUserPermissions.includes(
+			Permission.StudentList.toLowerCase()
+		);
 		canViewRoom.value = permissions.includes(Permission.RoomView);
 	});
 
@@ -52,6 +56,7 @@ export const useRoomAuthorization = () => {
 		canEditRoomContent,
 		canLeaveRoom,
 		canRemoveRoomMembers,
+		canSeeAllStudents,
 		canViewRoom,
 	};
 };

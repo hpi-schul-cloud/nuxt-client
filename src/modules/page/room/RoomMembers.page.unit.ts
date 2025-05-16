@@ -105,6 +105,7 @@ describe("RoomMembersPage", () => {
 			canLeaveRoom: ref(false),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
+			canSeeAllStudents: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 
@@ -447,7 +448,7 @@ describe("RoomMembersPage", () => {
 			expect(wireframe.props("fabItems")).toBe(null);
 		});
 
-		it("should call getSchools and getPotantialMembers method", async () => {
+		it("should call getSchools method", async () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper, roomMembersStore } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
@@ -459,9 +460,6 @@ describe("RoomMembersPage", () => {
 			await addMemberButton.trigger("click");
 
 			expect(roomMembersStore.getSchools).toHaveBeenCalled();
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
-				RoleName.Teacher
-			);
 		});
 
 		it("should open Dialog", async () => {
