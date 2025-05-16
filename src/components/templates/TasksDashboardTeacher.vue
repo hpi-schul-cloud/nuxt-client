@@ -5,8 +5,8 @@
 				<v-custom-double-panels
 					:panel-one-count="noDueDateTasks.length"
 					:panel-two-count="withDueDateTasks.length + overdueTasks.length"
-					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
-					:panel-two-title="$t('pages.tasks.subtitleWithDue')"
+					:panel-one-title="t('pages.tasks.subtitleNoDue')"
+					:panel-two-title="t('pages.tasks.subtitleWithDue')"
 					:status="status"
 					:is-empty="openTasksForTeacherIsEmpty"
 					:expanded-default="1"
@@ -22,14 +22,14 @@
 					<template #panelTwo>
 						<tasks-list
 							:tasks="overdueTasks"
-							:title="$t('pages.tasks.teacher.subtitleOverDue')"
+							:title="t('pages.tasks.teacher.subtitleOverDue')"
 							user-role="teacher"
 							@copy-task="onCopyTask"
 							@share-task="onShareTask"
 						/>
 						<tasks-list
 							:tasks="withDueDateTasks"
-							:title="$t('pages.tasks.subtitleOpen')"
+							:title="t('pages.tasks.subtitleOpen')"
 							user-role="teacher"
 							@copy-task="onCopyTask"
 							@share-task="onShareTask"
@@ -84,111 +84,88 @@
 	</section>
 </template>
 
-<script>
-import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
-import TasksList from "@/components/organisms/TasksList";
+<script setup lang="ts">
+import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels.vue";
+import TasksList from "@/components/organisms/TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
 import { useI18n } from "vue-i18n";
-import { SHARE_MODULE_KEY } from "@/utils/inject";
+import {
+	TASKS_MODULE_KEY,
+	FINISHED_TASKS_MODULE_KEY,
+	injectStrict,
+	SHARE_MODULE_KEY,
+} from "@/utils/inject";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
+import { computed } from "vue";
+import TasksModule from "@/store/tasks";
+import ShareModule from "@/store/share";
+import FinishedTasksModule from "@/store/finished-tasks";
+import { CopyParams } from "@/store/copy";
 
-export default defineComponent({
-	components: {
-		TasksList,
-		vCustomDoublePanels,
-		ShareModal,
-		EmptyState,
-		TasksEmptyStateSvg,
-	},
-	inject: {
-		tasksModule: "tasksModule",
-		finishedTasksModule: "finishedTasksModule",
-		shareModule: { from: SHARE_MODULE_KEY },
-	},
-	props: {
-		tabRoutes: {
-			type: Array,
-			required: true,
-		},
-	},
-	setup() {
-		const { t } = useI18n();
-		const { isLoadingDialogOpen } = useLoadingState(
-			t("components.molecules.copyResult.title.loading")
-		);
-
-		const { copy } = useCopy(isLoadingDialogOpen);
-
-		return {
-			copy,
-			t,
-		};
-	},
-	computed: {
-		openTasks() {
-			return this.tasksModule.getOpenTasksForTeacher;
-		},
-		draftTasks() {
-			return this.tasksModule.getDraftTasksForTeacher;
-		},
-		status() {
-			return this.tasksModule.getStatus;
-		},
-		hasTasks() {
-			return this.tasksModule.hasTasks;
-		},
-		openTasksForTeacherIsEmpty() {
-			return this.tasksModule.openTasksForTeacherIsEmpty;
-		},
-		draftsForTeacherIsEmpty() {
-			return this.tasksModule.draftsForTeacherIsEmpty;
-		},
-		finishedTasksIsEmpty() {
-			return this.finishedTasksModule.tasksIsEmpty;
-		},
-		finishedTasks() {
-			return this.finishedTasksModule.getTasks;
-		},
-		overdueTasks() {
-			return this.openTasks.overdue;
-		},
-		noDueDateTasks() {
-			return this.openTasks.noDueDate;
-		},
-		withDueDateTasks() {
-			return this.openTasks.withDueDate;
-		},
-		tab: {
-			get() {
-				return this.tasksModule.getActiveTab;
-			},
-			set(newTab) {
-				this.tasksModule.setActiveTab(newTab);
-			},
-		},
-	},
-	methods: {
-		async onCopyTask(payload) {
-			await this.copy(payload);
-
-			this.tasksModule.setActiveTab("drafts");
-			await this.tasksModule.fetchAllTasks();
-		},
-		async onShareTask(taskId) {
-			if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
-				this.shareModule.startShareFlow({
-					id: taskId,
-					type: ShareTokenBodyParamsParentTypeEnum.Tasks,
-				});
-			}
-		},
+const tasksModule: TasksModule = injectStrict(TASKS_MODULE_KEY);
+const finishedTasksModule: FinishedTasksModule = injectStrict(
+	FINISHED_TASKS_MODULE_KEY
+);
+const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
+defineProps({
+	tabRoutes: {
+		type: Array,
+		required: true,
 	},
 });
+
+const { t } = useI18n();
+const { isLoadingDialogOpen } = useLoadingState(
+	t("components.molecules.copyResult.title.loading")
+);
+
+const { copy } = useCopy(isLoadingDialogOpen);
+
+const openTasks = computed(() => tasksModule.getOpenTasksForTeacher);
+const draftTasks = computed(() => tasksModule.getDraftTasksForTeacher);
+const finishedTasks = computed(() => finishedTasksModule.getTasks);
+const overdueTasks = computed(() => openTasks.value.overdue);
+const noDueDateTasks = computed(() => openTasks.value.noDueDate);
+const withDueDateTasks = computed(() => openTasks.value.withDueDate);
+
+const status = computed(() => tasksModule.getStatus);
+
+const openTasksForTeacherIsEmpty = computed(
+	() => tasksModule.openTasksForTeacherIsEmpty
+);
+const draftsForTeacherIsEmpty = computed(
+	() => tasksModule.draftsForTeacherIsEmpty
+);
+const finishedTasksIsEmpty = computed(() => finishedTasksModule.tasksIsEmpty);
+
+const tab = computed({
+	get() {
+		return tasksModule.getActiveTab;
+	},
+	set(newTab) {
+		tasksModule.setActiveTab(newTab);
+	},
+});
+
+const onCopyTask = async (payload: CopyParams) => {
+	await copy(payload);
+
+	tasksModule.setActiveTab("drafts");
+	await tasksModule.fetchAllTasks();
+};
+
+const onShareTask = async (taskId: string) => {
+	if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+		shareModule.startShareFlow({
+			id: taskId,
+			type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+		});
+	}
+};
 </script>
 
 <style lang="scss" scoped>

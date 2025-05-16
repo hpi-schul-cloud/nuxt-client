@@ -8,8 +8,10 @@ import TasksModule from "@/store/tasks";
 import { OpenTasksForTeacher } from "@/store/types/tasks";
 import {
 	COPY_MODULE_KEY,
+	FINISHED_TASKS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
+	TASKS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
@@ -40,9 +42,12 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					tasksModule: tasksModuleMock,
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
 					loadingStateModule: loadingStateModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+					[TASKS_MODULE_KEY]: tasksModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
@@ -81,7 +86,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		});
 	});
 
-	it("Should render tasks list component, with second panel expanded per default", () => {
+	it("should render tasks list component, with second panel expanded per default", () => {
 		const wrapper = mountComponent({
 			propsData: {
 				tabRoutes,
@@ -100,7 +105,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		);
 	});
 
-	it("Should render empty state", () => {
+	it("should render empty state", () => {
 		tasksModuleMock = createModuleMocks(TasksModule, {
 			...tasksModuleGetters,
 			getActiveTab: tabRoutes[1],
@@ -117,7 +122,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		expect(emptyStateComponent.exists()).toBe(true);
 	});
 
-	it("Should update store when tab changes", async () => {
+	it("should update store when tab changes", async () => {
 		const wrapper = mountComponent({
 			propsData: {
 				tabRoutes,
@@ -129,7 +134,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		expect(tasksModuleMock.setActiveTab).toHaveBeenCalled();
 	});
 
-	it("Should handle copy-task event", async () => {
+	it("should handle copy-task event", async () => {
 		const wrapper = mountComponent({
 			propsData: {
 				tabRoutes,
@@ -148,11 +153,14 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 	});
 
 	describe("empty states", () => {
-		it("should render empty state with correct title for current tab", () => {
+		const setup = (
+			activeTab: "current" | "drafts" | "finished",
+			openTasksForTeacherIsEmpty?: boolean
+		) => {
 			tasksModuleMock = createModuleMocks(TasksModule, {
 				...tasksModuleGetters,
-				getActiveTab: tabRoutes[0],
-				openTasksForTeacherIsEmpty: true,
+				getActiveTab: activeTab,
+				openTasksForTeacherIsEmpty,
 			});
 
 			const wrapper = mountComponent({
@@ -160,24 +168,21 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 					tabRoutes,
 				},
 			});
+
+			return wrapper;
+		};
+
+		it("should render empty state with correct title for current tab", () => {
+			const wrapper = setup("current", true);
 
 			const emptyStateComponent = wrapper.findComponent(EmptyState);
 			expect(emptyStateComponent.props("title")).toBe(
 				"pages.tasks.teacher.open.emptyState.title"
 			);
 		});
-		it("should render empty state with correct title for drafts tab", () => {
-			tasksModuleMock = createModuleMocks(TasksModule, {
-				...tasksModuleGetters,
-				getActiveTab: tabRoutes[1],
-				draftsForTeacherIsEmpty: true,
-			});
 
-			const wrapper = mountComponent({
-				propsData: {
-					tabRoutes,
-				},
-			});
+		it("should render empty state with correct title for drafts tab", () => {
+			const wrapper = setup("drafts", true);
 
 			const emptyStateComponent = wrapper.findComponent(EmptyState);
 			expect(emptyStateComponent.props("title")).toBe(
@@ -186,20 +191,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		});
 
 		it("should render empty state with correct title for finished tab", () => {
-			tasksModuleMock = createModuleMocks(TasksModule, {
-				...tasksModuleGetters,
-				getActiveTab: tabRoutes[2],
-			});
-			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
-				getTasks: [],
-				tasksIsEmpty: true,
-			});
-
-			const wrapper = mountComponent({
-				propsData: {
-					tabRoutes,
-				},
-			});
+			const wrapper = setup("finished");
 
 			const emptyStateComponent = wrapper.findComponent(EmptyState);
 			expect(emptyStateComponent.props("title")).toBe(
