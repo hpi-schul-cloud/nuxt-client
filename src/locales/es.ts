@@ -1975,7 +1975,7 @@ export default {
 	"pages.rooms.members.inviteMember.secondStep.title":
 		"Compartir enlace de invitación",
 	"pages.rooms.members.inviteMember.infoAlert.text":
-		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un guía de aprendizaje supervisor de su escuela a la sala.",
+		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
 	"pages.rooms.members.inviteMember.form.description.label":
 		"Descripción (opcional)",
 	"pages.rooms.members.inviteMember.form.description.hint":
