@@ -1947,8 +1947,9 @@ export default {
 	"pages.rooms.members.tableHeader.actions": "Acciones",
 	"pages.rooms.members.tableHeader.description": "Descripción",
 	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
-		"sólo válido dentro de la escuela",
-	"pages.rooms.members.tableHeader.validForStudents": "válido para estudiantes",
+		"Sólo válido dentro de la escuela",
+	"pages.rooms.members.tableHeader.validForStudents":
+		"También válido para estudiantes",
 	"pages.rooms.members.tableHeader.expirationDate": "Fecha de caducidad",
 	"pages.rooms.members.tableHeader.confirmationRequired":
 		"Confirmación obligatoria",
@@ -1985,6 +1986,8 @@ export default {
 		"Crear enlace de invitación",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"El enlace de invitación editado se muestra en el siguiente paso.",
 	"pages.rooms.members.inviteMember.step.share.title":
 		"Compartir enlace de invitación",
 	"pages.rooms.members.inviteMember.step.edit.title":
@@ -2004,9 +2007,9 @@ export default {
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"La entrada a la habitación sólo es posible previa confirmación ({0})",
 	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
-		"¿Quitar las invitaciones seleccionadas de la lista?",
+		"¿Suprimir los enlaces de invitación seleccionados?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
-		"¿Quitar {invitation} de la lista?",
+		"¿Suprimir el enlace de invitación '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Compartir enlace de invitación",
 	"pages.rooms.invitationlinks.error.create":

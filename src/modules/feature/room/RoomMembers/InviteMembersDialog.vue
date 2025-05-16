@@ -15,7 +15,7 @@
 			<template #text>
 				<template v-if="invitationStep !== InvitationStep.SHARE">
 					<p>
-						{{ t("pages.rooms.members.inviteMember.firstStep.subTitle") }}
+						{{ subTitle }}
 					</p>
 
 					<InfoAlert>
@@ -236,6 +236,20 @@ const modalTitle = computed(() => {
 	};
 
 	return titleMap[invitationStep.value];
+});
+
+const subTitle = computed(() => {
+	if (invitationStep.value === InvitationStep.SHARE) return null;
+	const subTitleMap = {
+		[InvitationStep.EDIT]: t(
+			"pages.rooms.members.inviteMember.editStep.subTitle"
+		),
+		[InvitationStep.PREPARE]: t(
+			"pages.rooms.members.inviteMember.firstStep.subTitle"
+		),
+	};
+
+	return subTitleMap[invitationStep.value];
 });
 
 const onUpdateDate = (date: Date | null) => {

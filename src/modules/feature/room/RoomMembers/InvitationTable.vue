@@ -8,7 +8,9 @@
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionRemoveMember @click="onRemoveLinks(selectedIds)" />
+			<KebabMenuActionDeleteMemberInvitation
+				@click="onDeleteLinks(selectedIds)"
+			/>
 		</template>
 
 		<template #[`item.title`]="{ item }">
@@ -71,7 +73,7 @@
 						scope-language-key="pages.rooms.invitationLinkStatus.title"
 						:name="item.title"
 						:data-testid="`menu-delete-button-${item.id}`"
-						@click="onRemoveLinks([item.id])"
+						@click="onDeleteLinks([item.id])"
 					/>
 				</KebabMenu>
 			</div>
@@ -88,7 +90,7 @@ import {
 	KebabMenuActionShare,
 	KebabMenuActionEdit,
 	KebabMenuActionDelete,
-	KebabMenuActionRemoveMember,
+	KebabMenuActionDeleteMemberInvitation,
 } from "@ui-kebab-menu";
 import { mdiShareVariantOutline } from "@icons/material";
 import { storeToRefs } from "pinia";
@@ -133,17 +135,18 @@ const prepareRemovalMessage = (linkIds: string[]) => {
 			});
 };
 
-const confirmRemoval = async (linkIds: string[]) => {
-	const shouldRemove = await askConfirmation({
+const confirmDeletion = async (linkIds: string[]) => {
+	const shouldDelete = await askConfirmation({
 		message: prepareRemovalMessage(linkIds),
-		confirmActionLangKey: "common.actions.remove",
+		confirmActionLangKey: "common.actions.delete",
 	});
-	return shouldRemove;
+
+	return shouldDelete;
 };
 
-const onRemoveLinks = async (linkIds: string[]) => {
-	const shouldRemove = await confirmRemoval(linkIds);
-	if (shouldRemove) {
+const onDeleteLinks = async (linkIds: string[]) => {
+	const shouldDelete = await confirmDeletion(linkIds);
+	if (shouldDelete) {
 		await roomInvitationLinkStore.deleteLinks(linkIds);
 	}
 };

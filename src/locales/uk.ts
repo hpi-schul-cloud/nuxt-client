@@ -1919,8 +1919,8 @@ export default {
 	"pages.rooms.members.tableHeader.actions": "Дії",
 	"pages.rooms.members.tableHeader.description": "Опис",
 	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
-		"діє тільки в межах школи",
-	"pages.rooms.members.tableHeader.validForStudents": "дійсна для студентів",
+		"Діє тільки в межах школи",
+	"pages.rooms.members.tableHeader.validForStudents": "Діє також для студентів",
 	"pages.rooms.members.tableHeader.expirationDate": "Термін дії",
 	"pages.rooms.members.tableHeader.confirmationRequired":
 		"Потрібне підтвердження",
@@ -1958,6 +1958,8 @@ export default {
 		"Створити посилання для запрошення",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Наступним кроком буде створення посилання, за яким можна буде увійти в кімнату.",
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"Відредаговане посилання запрошення буде відображено на наступному кроці.",
 	"pages.rooms.members.inviteMember.step.share.title":
 		"Поділіться посиланням на запрошення",
 	"pages.rooms.members.inviteMember.step.edit.title":
@@ -1977,9 +1979,9 @@ export default {
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Вхід до кімнати можливий тільки після підтвердження ({0})",
 	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
-		"Видалити вибрані запрошення зі списку?",
+		"Видалити вибрані посилання на запрошення?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
-		"Видалити {invitation} зі списку?",
+		"Видалити посилання на запрошення '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Поділіться посиланням на запрошення",
 	"pages.rooms.invitationlinks.error.create":

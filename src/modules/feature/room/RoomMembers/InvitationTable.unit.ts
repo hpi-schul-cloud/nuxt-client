@@ -155,7 +155,7 @@ describe("InvitationTable", () => {
 					"pages.rooms.members.invitationTable.multipleDelete.confirmation",
 			},
 		])(
-			"should render confirmation dialog with text for $description when remove action is clicked",
+			"should render confirmation dialog with text for $description when delete action is clicked",
 			async ({ selectedLinks, expectedMessage }) => {
 				const { wrapper, roomInvitationLinkStore } = setup();
 				roomInvitationLinkStore.selectedIds = selectedLinks;
@@ -173,7 +173,7 @@ describe("InvitationTable", () => {
 					selectedLinks
 				);
 				expect(askConfirmationMock).toHaveBeenCalledWith({
-					confirmActionLangKey: "common.actions.remove",
+					confirmActionLangKey: "common.actions.delete",
 					message: expectedMessage,
 				});
 			}

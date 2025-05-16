@@ -1920,8 +1920,9 @@ export default {
 	"pages.rooms.members.tableHeader.actions": "Aktionen",
 	"pages.rooms.members.tableHeader.description": "Beschreibung",
 	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
-		"nur schulintern gültig",
-	"pages.rooms.members.tableHeader.validForStudents": "für Lernende gültig",
+		"Nur schulintern gültig",
+	"pages.rooms.members.tableHeader.validForStudents":
+		"Auch für Lernende gültig",
 	"pages.rooms.members.tableHeader.expirationDate": "Ablaufdatum",
 	"pages.rooms.members.tableHeader.confirmationRequired":
 		"Bestätigung erforderlich",
@@ -1959,6 +1960,8 @@ export default {
 		"Einladungslink erstellen",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Im nächsten Schritt wird ein Link erstellt, mit dem der Raum betreten	werden kann.",
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"Im nächsten Schritt wird der bearbeitete Einladungslink angezeigt.",
 	"pages.rooms.members.inviteMember.step.share.title": "Einladungslink teilen",
 	"pages.rooms.members.inviteMember.step.edit.title":
 		"Einladungslink bearbeiten",
@@ -1976,9 +1979,9 @@ export default {
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Betreten des Raums nur nach Bestätigung möglich ({0})",
 	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
-		"Ausgewählte Einladungen aus der Liste entfernen?",
+		"Ausgewählte Einladungslinks wirklich löschen?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
-		"{invitation} aus der Liste entfernen?",
+		"Einladungslink '{invitation}' wirklich löschen?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Einladungslink teilen",
 	"pages.rooms.invitationlinks.error.create":
