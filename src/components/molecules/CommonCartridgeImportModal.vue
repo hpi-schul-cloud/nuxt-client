@@ -97,6 +97,15 @@ function onCancel(): void {
 }
 
 async function onConfirm(): Promise<void> {
+	if (!file.value) {
+		notifierModule.show({
+			status: "error",
+			text: i18n.t("pages.rooms.ccImportCourse.noFileSelected"),
+			autoClose: true,
+		});
+		return;
+	}
+
 	commonCartridgeImportModule.setIsOpen(false);
 	loadingStateModule.open({
 		text: i18n.t("pages.rooms.ccImportCourse.loading"),
