@@ -144,7 +144,7 @@ const headers = [
 const fileRecordItems = computed(() => {
 	return props.fileRecords.map((item) => ({
 		...item,
-		isSelectable: !isDownloadAllowed(item.securityCheckStatus),
+		isSelectable: isDownloadAllowed(item.securityCheckStatus),
 	}));
 });
 
