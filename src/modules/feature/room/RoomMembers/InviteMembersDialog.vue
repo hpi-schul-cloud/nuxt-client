@@ -292,7 +292,7 @@ const onCopyLink = () => {
 };
 
 const datePickerDate = computed(() => {
-	return formData.value.activeUntilCheck && !!formData.value.activeUntil
+	return formData.value.activeUntilChecked && !!formData.value.activeUntil
 		? formData.value.activeUntil.toString()
 		: "";
 });
@@ -320,18 +320,21 @@ watch(
 			formData.value.restrictedToCreatorSchool =
 				newVal.restrictedToCreatorSchool;
 			formData.value.isValidForStudents = !newVal.isOnlyForTeachers;
-			formData.value.activeUntilCheck = newVal.activeUntil !== null;
+			formData.value.activeUntilChecked = newVal.activeUntil !== null;
 			formData.value.activeUntil = new Date(newVal.activeUntil!);
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
 		}
 	}
 );
 
-watch(() => isOpen.value, 
-  (isOpen: boolean) => {
-		deactivate();
+watch(
+	() => isOpen.value,
+	(isOpen: boolean) => {
+		if (isOpen === false) {
+			deactivate();
+		}
 	}
-});
+);
 
 const informationLink = computed(() =>
 	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
