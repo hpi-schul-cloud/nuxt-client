@@ -100,7 +100,7 @@ async function onConfirm(): Promise<void> {
 	if (!file.value) {
 		notifierModule.show({
 			status: "error",
-			text: i18n.t("pages.rooms.ccImportCourse.noFileSelected"),
+			text: "problem with file",
 			autoClose: true,
 		});
 		return;
