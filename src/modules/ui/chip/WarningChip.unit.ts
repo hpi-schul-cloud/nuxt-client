@@ -5,7 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import WarningChip from "./WarningChip.vue";
-import { VChip, VIcon } from "vuetify/lib/components/index.mjs";
+import { VChip, VIcon } from "vuetify/lib/components/index";
 
 describe("WarningChip", () => {
 	const getWrapper = () => {

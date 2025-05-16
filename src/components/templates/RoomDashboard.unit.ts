@@ -22,7 +22,7 @@ import { createMock } from "@golevelup/ts-jest";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
-import { VCard } from "vuetify/lib/components/index.mjs";
+import { VCard } from "vuetify/lib/components/index";
 import RoomDashboard from "./RoomDashboard.vue";
 
 jest.mock("vue-router");

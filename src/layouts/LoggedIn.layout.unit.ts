@@ -17,7 +17,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { h, nextTick } from "vue";
-import { VApp } from "vuetify/lib/components/index.mjs";
+import { VApp } from "vuetify/lib/components/index";
 import LoggedInLayout from "./LoggedIn.layout.vue";
 import { Topbar, Sidebar } from "@ui-layout";
 import { createTestingPinia } from "@pinia/testing";

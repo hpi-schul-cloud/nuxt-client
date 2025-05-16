@@ -13,7 +13,7 @@ import EnvConfigModule from "@/store/env-config";
 import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { VBtn, VListItem } from "vuetify/lib/components/index.mjs";
+import { VBtn, VListItem } from "vuetify/lib/components/index";
 import UserMenu from "./UserMenu.vue";
 
 jest.mock("@data-system");

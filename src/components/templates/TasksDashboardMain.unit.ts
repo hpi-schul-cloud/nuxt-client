@@ -21,7 +21,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount, VueWrapper } from "@vue/test-utils";
-import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import { VAutocomplete } from "vuetify/lib/components/index";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";

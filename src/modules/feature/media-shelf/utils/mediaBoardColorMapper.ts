@@ -1,5 +1,5 @@
 import { MediaBoardColors } from "@/serverApi/v3";
-import colors from "vuetify/lib/util/colors.mjs";
+import colors from "vuetify/lib/util/colors";
 
 export const isMediaBoardColor = (
 	colorName: string

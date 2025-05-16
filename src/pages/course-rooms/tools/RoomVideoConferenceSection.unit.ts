@@ -13,7 +13,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { VDialog } from "vuetify/lib/components/index.mjs";
+import { VDialog } from "vuetify/lib/components/index";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
