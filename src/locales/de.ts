@@ -1878,7 +1878,7 @@ export default {
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
 	"pages.rooms.members.add.role.student": "Lernend",
 	"pages.rooms.members.add.students.forbidden":
-		"Lernende können nur hinzugefügt werden, wenn in den Schuleinstellungen die Sichtbarkeit von Lernenden für Lernbegleitende aktiviert ist. Bitte an den Schul-Admin wenden.",
+		"Wenn in den Schuleinstellungen die Sichtbarkeit von Lernenden für Lernbegleitungen deaktiviert ist, können nur Lernende der eigenen Klasse hinzugefügt werden. Bitte an den Schul-Admin wenden.",
 	"pages.rooms.members.add.warningText":
 		"Lernende anderer Schulen können nur durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
 	"pages.rooms.members.actionMenu.ariaLabel":

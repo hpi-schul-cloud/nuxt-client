@@ -1845,7 +1845,7 @@ export default {
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
 	"pages.rooms.members.add.role.student": "Student",
 	"pages.rooms.members.add.students.forbidden":
-		"Lernende können nur hinzugefügt werden, wenn in den Schuleinstellungen die Sichtbarkeit von Lernenden für Lernbegleitende aktiviert ist. Bitte an den Schul-Admin wenden.",
+		"If the visibility of students for teachers is deactivated in the school settings, only students from your own class can be added. Please contact the school admin.",
 	"pages.rooms.members.add.warningText":
 		"Students from other schools can only be added to the room by a supervising teacher from their school.",
 	"pages.rooms.members.actionMenu.ariaLabel":

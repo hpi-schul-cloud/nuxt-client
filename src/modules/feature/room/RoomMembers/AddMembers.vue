@@ -41,6 +41,12 @@
 				/>
 			</div>
 
+			<InfoAlert
+				v-if="!canAddAllStudents"
+				data-testid="student-visibility-info-alert"
+				>{{ t("pages.rooms.members.add.students.forbidden") }}</InfoAlert
+			>
+
 			<WarningAlert v-if="isStudentSelectionDisabled">{{
 				t("pages.rooms.members.add.warningText")
 			}}</WarningAlert>
@@ -101,6 +107,13 @@ import {
 } from "vuetify/lib/components/index.mjs";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
+
+defineProps({
+	canAddAllStudents: {
+		type: Boolean,
+		default: false,
+	},
+});
 
 const emit = defineEmits<{
 	(e: "close"): void;

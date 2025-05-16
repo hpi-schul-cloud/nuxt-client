@@ -69,7 +69,7 @@ describe("AddMembers", () => {
 		authModule.setMe(mockMe);
 	});
 
-	const setup = () => {
+	const setup = (canAddAllStudents = true) => {
 		const potentialRoomMembers = roomMemberFactory.buildList(3);
 		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
 
@@ -91,6 +91,10 @@ describe("AddMembers", () => {
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
+			},
+
+			props: {
+				canAddAllStudents,
 			},
 		});
 
@@ -498,6 +502,24 @@ describe("AddMembers", () => {
 
 			expect(wrapper.getComponent(WarningAlert).text()).toBe(
 				"pages.rooms.members.add.warningText"
+			);
+		});
+	});
+
+	describe("when user is not allowed to see all students", () => {
+		it("should show info message", async () => {
+			const { wrapper } = setup(false);
+			const roleComponent = wrapper.getComponent({
+				ref: "selectRole",
+			});
+
+			await roleComponent.setValue(RoleName.Student);
+
+			const infoAlert = wrapper.getComponent(
+				'[data-testid="student-visibility-info-alert"]'
+			);
+			expect(infoAlert.text()).toBe(
+				"pages.rooms.members.add.students.forbidden"
 			);
 		});
 	});
