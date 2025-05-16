@@ -86,9 +86,11 @@ import {
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import {
+	InvitationStep,
 	useRoomDetailsStore,
 	useRoomMembersStore,
 	useRoomAuthorization,
+	useRoomInvitationLinkStore,
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import {
@@ -136,7 +138,6 @@ const membersInfoText = ref("");
 
 const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
-const isInvitationDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
 const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
@@ -146,6 +147,10 @@ const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
 const { canAddRoomMembers, canLeaveRoom } = useRoomAuthorization();
+
+const { isInvitationDialogOpen, invitationStep } = storeToRefs(
+	useRoomInvitationLinkStore()
+);
 
 watchEffect(() => {
 	if (canAddRoomMembers.value !== undefined) {
@@ -208,6 +213,7 @@ const tabs: Array<{
 const onFabClick = async () => {
 	switch (activeTab.value) {
 		case Tab.Invitations:
+			invitationStep.value = InvitationStep.PREPARE;
 			isInvitationDialogOpen.value = true;
 			break;
 
@@ -302,8 +308,8 @@ const fabAction = computed(() => {
 	if (activeTab.value === Tab.Invitations) {
 		return {
 			icon: mdiPlus,
-			title: t("pages.rooms.members.inviteMember.firstStep.title"),
-			ariaLabel: t("pages.rooms.members.inviteMember.firstStep.title"),
+			title: t("pages.rooms.members.inviteMember.step.prepare.title"),
+			ariaLabel: t("pages.rooms.members.inviteMember.step.prepare.title"),
 			dataTestId: "fab-invite-members",
 		};
 	}

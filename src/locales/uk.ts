@@ -1917,6 +1917,18 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.members.tableHeader.actions": "Дії",
+	"pages.rooms.members.tableHeader.description": "Опис",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"Діє тільки в межах школи",
+	"pages.rooms.members.tableHeader.validForStudents": "Діє також для студентів",
+	"pages.rooms.members.tableHeader.expirationDate": "Термін дії",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Потрібне підтвердження",
+	"pages.rooms.members.tableHeader.status": "Статус",
+	"pages.rooms.members.tables.common.yes": "Так",
+	"pages.rooms.members.tables.common.no": "ні",
+	"pages.rooms.members.tables.common.expired": "прострочений",
+	"pages.rooms.members.tables.common.active": "активний",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} надаються наступні повноваження в приміщенні “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1942,12 +1954,16 @@ export default {
 		"Якщо цей дозвіл буде передано {memberFullName}, {currentUserFullName} втратить право видаляти кімнату.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Ця дія може бути скасована лише {memberFullName}.",
-	"pages.rooms.members.inviteMember.firstStep.title":
+	"pages.rooms.members.inviteMember.step.prepare.title":
 		"Створити посилання для запрошення",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Наступним кроком буде створення посилання, за яким можна буде увійти в кімнату.",
-	"pages.rooms.members.inviteMember.secondStep.title":
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"Відредаговане посилання запрошення буде відображено на наступному кроці.",
+	"pages.rooms.members.inviteMember.step.share.title":
 		"Поділіться посиланням на запрошення",
+	"pages.rooms.members.inviteMember.step.edit.title":
+		"Редагувати посилання на запрошення",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Учні з інших шкіл завжди повинні бути присутніми в кімнаті під наглядом вчителя з їхньої школи.",
 	"pages.rooms.members.inviteMember.form.description.label":
@@ -1962,6 +1978,16 @@ export default {
 		"Термін дії посилання закінчується",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Вхід до кімнати можливий тільки після підтвердження ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Видалити вибрані посилання на запрошення?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"Видалити посилання на запрошення '{invitation}'?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Поділіться посиланням на запрошення",
+	"pages.rooms.invitationlinks.error.create":
+		"Не вдалося створити посилання на запрошення.",
+	"pages.rooms.invitationlinks.error.update":
+		"Не вдалося оновити посилання на запрошення.",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

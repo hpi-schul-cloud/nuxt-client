@@ -1886,6 +1886,18 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.members.tableHeader.actions": "Actions",
+	"pages.rooms.members.tableHeader.description": "Description",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"Only valid within the school",
+	"pages.rooms.members.tableHeader.validForStudents": "Also valid for students",
+	"pages.rooms.members.tableHeader.expirationDate": "Expiration date",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Confirmation required",
+	"pages.rooms.members.tableHeader.status": "Status",
+	"pages.rooms.members.tables.common.yes": "yes",
+	"pages.rooms.members.tables.common.no": "no",
+	"pages.rooms.members.tables.common.expired": "expired",
+	"pages.rooms.members.tables.common.active": "active",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} receives the following permissions in the room “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1910,10 +1922,14 @@ export default {
 		"If this permission is transferred to {memberFullName}, {currentUserFullName} loses the right to delete the room.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"This action can only be undone by {memberFullName}.",
-	"pages.rooms.members.inviteMember.firstStep.title": "Create invitation link",
+	"pages.rooms.members.inviteMember.step.prepare.title":
+		"Create invitation link",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"The next step is to create a link, which can be used to enter the room.",
-	"pages.rooms.members.inviteMember.secondStep.title": "Share invitation link",
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"The edited invitation link is displayed in the next step.",
+	"pages.rooms.members.inviteMember.step.share.title": "Share invitation link",
+	"pages.rooms.members.inviteMember.step.edit.title": "Edit invitation link",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Students from other schools must always be added to the room by a supervising teacher from their school.",
 	"pages.rooms.members.inviteMember.form.description.label":
@@ -1927,6 +1943,16 @@ export default {
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link expires on",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Entry to the room only possible after confirmation ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Delete selected invitation links?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"Delete the invitation link '{invitation}'?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Share invitation link",
+	"pages.rooms.invitationlinks.error.create":
+		"Creating the invitation link has failed.",
+	"pages.rooms.invitationlinks.error.update":
+		"Updating the invitation link has failed.",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
