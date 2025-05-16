@@ -20,6 +20,15 @@
 				/>
 			</div>
 		</template>
+		<EmptyState
+			v-if="visibleBoards.length === 0"
+			data-testid="empty-state-room-details"
+			:title="t('pages.roomDetails.emptyState')"
+		>
+			<template #media>
+				<LearningContentEmptyStateSvg />
+			</template>
+		</EmptyState>
 		<BoardGrid :boards="visibleBoards" />
 		<ConfirmationDialog />
 		<SelectBoardLayoutDialog
@@ -40,6 +49,7 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { BoardLayout } from "@/serverApi/v3";
 import { authModule } from "@/store";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";

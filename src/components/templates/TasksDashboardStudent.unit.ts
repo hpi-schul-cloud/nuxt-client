@@ -4,7 +4,6 @@ import TasksModule from "@/store/tasks";
 import { OpenTasksForStudent } from "@/store/types/tasks";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
 import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
 import { shallowMount } from "@vue/test-utils";
@@ -13,6 +12,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { EmptyState } from "@ui-empty-state";
 
 const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 
@@ -53,12 +53,6 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 		completedTasksForStudentIsEmpty: true,
 	};
 
-	const emptyState = {
-		title: "Lorem ipsum",
-		image: "<svg></svg>",
-		subtitle: undefined,
-	};
-
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
 		notifierModuleMock = createModuleMocks(NotifierModule);
@@ -72,7 +66,6 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 	it("Should render tasks list component", () => {
 		const wrapper = mountComponent({
 			props: {
-				emptyState,
 				tabRoutes,
 			},
 		});
@@ -89,19 +82,17 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 
 		const wrapper = mountComponent({
 			props: {
-				emptyState,
 				tabRoutes,
 			},
 		});
 
-		const emptyStateComponent = wrapper.findComponent(vCustomEmptyState);
+		const emptyStateComponent = wrapper.findComponent(EmptyState);
 		expect(emptyStateComponent.exists()).toBe(true);
 	});
 
 	it("Should update store when tab changes", () => {
 		const wrapper = mountComponent({
 			props: {
-				emptyState,
 				tabRoutes,
 			},
 		});

@@ -24,6 +24,7 @@ import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import RoomDashboard from "./RoomDashboard.vue";
+import { EmptyState } from "@ui-empty-state";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -219,13 +220,11 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomDataObject: emptyMockData,
 				role: "teacher",
 			});
-			const emptyStateComponent = wrapper.findComponent({
-				name: "v-custom-empty-state",
-			});
+
+			const emptyStateComponent = wrapper.findComponent(EmptyState);
 			expect(emptyStateComponent.exists()).toBe(true);
-			expect(emptyStateComponent.props("imgHeight")).toStrictEqual("200px");
-			expect(emptyStateComponent.props("title")).toStrictEqual(
-				wrapper.vm.$t("pages.room.teacher.emptyState")
+			expect(emptyStateComponent.props("title")).toBe(
+				"pages.room.learningContent.emptyState"
 			);
 		});
 
@@ -234,13 +233,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomDataObject: emptyMockData,
 				role: "student",
 			});
-			const emptyStateComponent = wrapper.findComponent({
-				name: "v-custom-empty-state",
-			});
-			expect(emptyStateComponent.exists()).toBe(true);
-			expect(emptyStateComponent.props("imgHeight")).toStrictEqual("200px");
-			expect(emptyStateComponent.props("title")).toStrictEqual(
-				wrapper.vm.$t("pages.room.student.emptyState")
+
+			const emptyStateComponent = wrapper.findComponent(EmptyState);
+			expect(emptyStateComponent.props("title")).toBe(
+				"pages.room.learningContent.emptyState"
 			);
 		});
 	});

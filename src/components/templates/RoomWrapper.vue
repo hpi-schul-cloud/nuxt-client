@@ -18,12 +18,11 @@
 			</VContainer>
 		</template>
 		<template v-else-if="isEmptyState">
-			<vCustomEmptyState
-				ref="rooms-empty-state"
-				image="rooms-empty-state"
-				:title="$t('pages.rooms.allRooms.emptyState.title')"
-				class="mt-16"
-			/>
+			<EmptyState :title="t('pages.rooms.emptyState.title')">
+				<template #media>
+					<RoomsEmptyStateSvg />
+				</template>
+			</EmptyState>
 		</template>
 		<template v-else>
 			<slot name="page-content" />
@@ -35,7 +34,6 @@
 
 <script setup lang="ts">
 import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
-import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
 	authModule,
@@ -48,6 +46,7 @@ import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Fab, FabAction } from "./default-wireframe.types";
+import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 
 enum RoomFabEvent {
 	COMMON_CARTRIDGE_IMPORT = "import",

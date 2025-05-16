@@ -1,9 +1,9 @@
 <template>
-	<v-custom-empty-state
-		image="content-empty"
-		:title="t('pages.content.emptyState.error.title')"
-	>
-		<template #description>
+	<EmptyState :title="t('pages.content.emptyState.error.title')">
+		<template #media>
+			<ContentEmptySvg />
+		</template>
+		<template #text>
 			<p>
 				<span class="font-weight-bold d-block mb-2">
 					{{ t("pages.content.emptyState.error.message.suggestions") }}
@@ -21,11 +21,11 @@
 				</span>
 			</p>
 		</template>
-	</v-custom-empty-state>
+	</EmptyState>
 </template>
 
 <script setup lang="ts">
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import { EmptyState, ContentEmptySvg } from "@ui-empty-state";
 import { useI18n } from "vue-i18n";
 
 const suggestionsItems = [

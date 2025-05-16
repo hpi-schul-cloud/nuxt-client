@@ -20,7 +20,7 @@
 				alt="t('pages.rooms.invitationLinkStatus.bird.alt')"
 				data-testid="bird-image"
 			/>
-			<div class="text-h2" data-testid="status-message">
+			<div class="text-h4" data-testid="status-message">
 				{{ infoMessage }}
 			</div>
 		</div>

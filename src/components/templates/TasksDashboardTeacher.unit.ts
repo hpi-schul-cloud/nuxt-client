@@ -1,4 +1,3 @@
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -9,8 +8,10 @@ import TasksModule from "@/store/tasks";
 import { OpenTasksForTeacher } from "@/store/types/tasks";
 import {
 	COPY_MODULE_KEY,
+	FINISHED_TASKS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
+	TASKS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
@@ -20,6 +21,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
+import { EmptyState } from "@ui-empty-state";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -40,9 +42,12 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					tasksModule: tasksModuleMock,
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
 					loadingStateModule: loadingStateModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+					[TASKS_MODULE_KEY]: tasksModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
@@ -67,12 +72,6 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		getDraftTasksForTeacher: [],
 	};
 
-	const emptyState = {
-		title: "Lorem ipsum",
-		image: "<svg></svg>",
-		subtitle: undefined,
-	};
-
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
 		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
@@ -87,10 +86,9 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		});
 	});
 
-	it("Should render tasks list component, with second panel expanded per default", () => {
+	it("should render tasks list component, with second panel expanded per default", () => {
 		const wrapper = mountComponent({
 			propsData: {
-				emptyState,
 				tabRoutes,
 			},
 		});
@@ -107,7 +105,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		);
 	});
 
-	it("Should render empty state", () => {
+	it("should render empty state", () => {
 		tasksModuleMock = createModuleMocks(TasksModule, {
 			...tasksModuleGetters,
 			getActiveTab: tabRoutes[1],
@@ -116,19 +114,17 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 
 		const wrapper = mountComponent({
 			propsData: {
-				emptyState,
 				tabRoutes,
 			},
 		});
 
-		const emptyStateComponent = wrapper.findComponent(vCustomEmptyState);
+		const emptyStateComponent = wrapper.findComponent(EmptyState);
 		expect(emptyStateComponent.exists()).toBe(true);
 	});
 
-	it("Should update store when tab changes", async () => {
+	it("should update store when tab changes", async () => {
 		const wrapper = mountComponent({
 			propsData: {
-				emptyState,
 				tabRoutes,
 			},
 		});
@@ -138,10 +134,9 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		expect(tasksModuleMock.setActiveTab).toHaveBeenCalled();
 	});
 
-	it("Should handle copy-task event", async () => {
+	it("should handle copy-task event", async () => {
 		const wrapper = mountComponent({
 			propsData: {
-				emptyState,
 				tabRoutes,
 			},
 		});
@@ -155,5 +150,53 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		oneTasksList.vm.$emit("copy-task", payload);
 
 		expect(copyModuleMock.copy).toHaveBeenCalledWith(payload);
+	});
+
+	describe("empty states", () => {
+		const setup = (
+			activeTab: "current" | "drafts" | "finished",
+			openTasksForTeacherIsEmpty?: boolean
+		) => {
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
+				getActiveTab: activeTab,
+				openTasksForTeacherIsEmpty,
+			});
+
+			const wrapper = mountComponent({
+				propsData: {
+					tabRoutes,
+				},
+			});
+
+			return wrapper;
+		};
+
+		it("should render empty state with correct title for current tab", () => {
+			const wrapper = setup("current", true);
+
+			const emptyStateComponent = wrapper.findComponent(EmptyState);
+			expect(emptyStateComponent.props("title")).toBe(
+				"pages.tasks.teacher.open.emptyState.title"
+			);
+		});
+
+		it("should render empty state with correct title for drafts tab", () => {
+			const wrapper = setup("drafts", true);
+
+			const emptyStateComponent = wrapper.findComponent(EmptyState);
+			expect(emptyStateComponent.props("title")).toBe(
+				"pages.tasks.teacher.drafts.emptyState.title"
+			);
+		});
+
+		it("should render empty state with correct title for finished tab", () => {
+			const wrapper = setup("finished");
+
+			const emptyStateComponent = wrapper.findComponent(EmptyState);
+			expect(emptyStateComponent.props("title")).toBe(
+				"pages.tasks.finished.emptyState.title"
+			);
+		});
 	});
 });

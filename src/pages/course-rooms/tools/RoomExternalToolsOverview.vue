@@ -5,13 +5,11 @@
 			class="mt-16 text-center"
 			data-testid="tools-empty-state"
 		>
-			<v-custom-empty-state
-				ref="tools-empty-state"
-				image="tools-empty-state"
-				:title="t('pages.rooms.tools.emptyState')"
-				class="mt-16"
-				img-height="200px"
-			/>
+			<EmptyState :title="t('pages.rooms.tools.emptyState')">
+				<template #media>
+					<ToolsEmptyStateSvg />
+				</template>
+			</EmptyState>
 		</div>
 		<v-alert
 			v-if="error && error.message"
@@ -45,7 +43,6 @@
 
 <script setup lang="ts">
 import { mdiAlertCircle } from "@icons/material";
-import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { Course, CourseFeatures } from "@/store/types/room";
@@ -62,6 +59,7 @@ import { computed, ComputedRef, onMounted, onUnmounted, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
+import { EmptyState, ToolsEmptyStateSvg } from "@ui-empty-state";
 
 const props = defineProps({
 	roomId: {
