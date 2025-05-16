@@ -367,6 +367,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
+    RoomDuplicate = 'ROOM_DUPLICATE',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -2282,6 +2283,7 @@ export interface CopyApiResponse {
     * @enum {string}
     */
 export enum CopyApiResponseTypeEnum {
+    Room = 'ROOM',
     Board = 'BOARD',
     Card = 'CARD',
     CollaborativeTextEditorElement = 'COLLABORATIVE_TEXT_EDITOR_ELEMENT',
@@ -3358,10 +3360,10 @@ export interface DrawingElementResponse {
 export interface ElementWithParentHierarchyResponse {
     /**
      * The element data
-     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse}
+     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse}
      * @memberof ElementWithParentHierarchyResponse
      */
-    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse;
+    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
     /**
      * The hierarchical path of parent elements
      * @type {Array<ParentNodeInfoResponse>}
@@ -7590,6 +7592,7 @@ export enum Permission {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
+    RoomDuplicate = 'ROOM_DUPLICATE',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -22000,7 +22003,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Add members to a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22044,7 +22047,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Change the roles that members have within the room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22088,7 +22091,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22123,6 +22126,44 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(passOwnershipBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Creates a copy of the given room. Restricted to Room Owner and Admin
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerCopyRoom: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerCopyRoom', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/copy`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -22172,7 +22213,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Delete a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22210,7 +22251,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get the list of room invitation links of a room.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22248,7 +22289,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get a list of room members.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22286,7 +22327,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get the boards of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22324,7 +22365,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get the details of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22406,7 +22447,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Leaving a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22444,7 +22485,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Remove members from a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22488,7 +22529,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Update an existing room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22542,7 +22583,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Add members to a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22554,7 +22595,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Change the roles that members have within the room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22566,13 +22607,24 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Creates a copy of the given room. Restricted to Room Owner and Admin
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerCopyRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerCopyRoom(roomId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -22589,7 +22641,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Delete a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22600,7 +22652,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get the list of room invitation links of a room.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22611,7 +22663,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get a list of room members.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22622,7 +22674,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get the boards of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22633,7 +22685,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get the details of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22656,7 +22708,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Leaving a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22667,7 +22719,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Remove members from a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22679,7 +22731,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Update an existing room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22701,7 +22753,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Add members to a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22712,7 +22764,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Change the roles that members have within the room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22723,13 +22775,23 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): AxiosPromise<string> {
             return localVarFp.roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Creates a copy of the given room. Restricted to Room Owner and Admin
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerCopyRoom(roomId: string, options?: any): AxiosPromise<CopyApiResponse> {
+            return localVarFp.roomControllerCopyRoom(roomId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -22744,7 +22806,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Delete a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22754,7 +22816,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get the list of room invitation links of a room.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22764,7 +22826,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get a list of room members.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22774,7 +22836,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get the boards of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22784,7 +22846,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get the details of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22805,7 +22867,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Leaving a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22815,7 +22877,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Remove members from a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22826,7 +22888,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Update an existing room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22846,7 +22908,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Add members to a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22857,7 +22919,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Change the roles that members have within the room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22868,13 +22930,23 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
      */
     roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @summary Creates a copy of the given room. Restricted to Room Owner and Admin
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerCopyRoom(roomId: string, options?: any): AxiosPromise<CopyApiResponse>;
 
     /**
      * 
@@ -22889,7 +22961,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Delete a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22899,7 +22971,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Get the list of room invitation links of a room.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22909,7 +22981,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Get a list of room members.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22919,7 +22991,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Get the boards of a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22929,7 +23001,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Get the details of a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22950,7 +23022,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Leaving a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22960,7 +23032,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Remove members from a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22971,7 +23043,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Update an existing room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {UpdateRoomBodyParams} updateRoomBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22991,7 +23063,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Add members to a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -23004,7 +23076,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Change the roles that members have within the room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -23017,7 +23089,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -23025,6 +23097,18 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any) {
         return RoomApiFp(this.configuration).roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Creates a copy of the given room. Restricted to Room Owner and Admin
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerCopyRoom(roomId: string, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerCopyRoom(roomId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -23042,7 +23126,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Delete a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -23054,7 +23138,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Get the list of room invitation links of a room.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -23066,7 +23150,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Get a list of room members.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -23078,7 +23162,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Get the boards of a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -23090,7 +23174,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Get the details of a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -23115,7 +23199,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Leaving a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -23127,7 +23211,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Remove members from a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -23140,7 +23224,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Update an existing room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {UpdateRoomBodyParams} updateRoomBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
