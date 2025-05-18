@@ -53,7 +53,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showForbiddenError();
 
-			expect(mockI18nModule.t).toBeCalledWith(i18nKey);
+			expect(mockI18nModule.t).toHaveBeenCalledWith(i18nKey);
 		});
 
 		it("should call showFailure with correctly props", () => {
@@ -62,7 +62,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showForbiddenError();
 
-			expect(notifierModule.show).toBeCalledWith({
+			expect(notifierModule.show).toHaveBeenCalledWith({
 				status: "error",
 				text: i18nKey,
 				timeout: 5000,
@@ -83,7 +83,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showUnauthorizedError();
 
-			expect(mockI18nModule.t).toBeCalledWith(i18nKey);
+			expect(mockI18nModule.t).toHaveBeenCalledWith(i18nKey);
 		});
 
 		it("should call showFailure with correctly props", () => {
@@ -92,7 +92,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showUnauthorizedError();
 
-			expect(notifierModule.show).toBeCalledWith({
+			expect(notifierModule.show).toHaveBeenCalledWith({
 				status: "error",
 				text: i18nKey,
 				timeout: 5000,
@@ -114,7 +114,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showInternalServerError();
 
-			expect(mockI18nModule.t).toBeCalledWith(i18nKey);
+			expect(mockI18nModule.t).toHaveBeenCalledWith(i18nKey);
 		});
 
 		it("should call showFailure with correctly props", () => {
@@ -123,7 +123,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showInternalServerError();
 
-			expect(notifierModule.show).toBeCalledWith({
+			expect(notifierModule.show).toHaveBeenCalledWith({
 				status: "error",
 				text: i18nKey,
 				timeout: 5000,
@@ -144,7 +144,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showFileExistsError();
 
-			expect(mockI18nModule.t).toBeCalledWith(i18nKey);
+			expect(mockI18nModule.t).toHaveBeenCalledWith(i18nKey);
 		});
 
 		it("should call showFailure with correctly props", () => {
@@ -153,7 +153,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showFileExistsError();
 
-			expect(notifierModule.show).toBeCalledWith({
+			expect(notifierModule.show).toHaveBeenCalledWith({
 				status: "error",
 				text: i18nKey,
 				timeout: 5000,
@@ -175,7 +175,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showFileTooBigError();
 
-			expect(mockI18nModule.t).toBeCalledWith(i18nKey, props);
+			expect(mockI18nModule.t).toHaveBeenCalledWith(i18nKey, props);
 		});
 
 		it("should call showFailure with correctly props", () => {
@@ -184,7 +184,37 @@ describe("FileStorageNotifier.composable", () => {
 
 			showFileTooBigError();
 
-			expect(notifierModule.show).toBeCalledWith({
+			expect(notifierModule.show).toHaveBeenCalledWith({
+				status: "error",
+				text: i18nKey,
+				timeout: 5000,
+			});
+		});
+	});
+
+	describe("when showFileNotDeletedError called", () => {
+		const setup = () => {
+			const i18nKey = "components.board.notifications.errors.fileNotDeleted";
+
+			return { i18nKey };
+		};
+
+		it("should call i18n.t with correctly props", () => {
+			const { showFileNotDeletedError } = setupMountComposable();
+			const { i18nKey } = setup();
+
+			showFileNotDeletedError();
+
+			expect(mockI18nModule.t).toHaveBeenCalledWith(i18nKey);
+		});
+
+		it("should call showFailure with correctly props", () => {
+			const { showFileNotDeletedError } = setupMountComposable();
+			const { i18nKey } = setup();
+
+			showFileNotDeletedError();
+
+			expect(notifierModule.show).toHaveBeenCalledWith({
 				status: "error",
 				text: i18nKey,
 				timeout: 5000,

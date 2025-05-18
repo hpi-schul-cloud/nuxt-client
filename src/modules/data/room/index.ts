@@ -12,7 +12,12 @@ export type {
 	RoomMember,
 	RoomInvitationLink,
 	UseLinkResult,
+	CreateRoomInvitationLinkDto,
+	UpdateRoomInvitationLinkDto,
 } from "./roomMembers/types";
-export { RoomInvitationLinkValidationError } from "./roomMembers/types";
+export {
+	RoomInvitationLinkValidationError,
+	InvitationStep,
+} from "./roomMembers/types";
 export { useRoomMembersStore } from "./roomMembers/RoomMembers.store";
 export { useRoomInvitationLinkStore } from "./roomMembers/RoomInvitationLink.store";

@@ -790,4 +790,17 @@ describe("useRoomMembers", () => {
 			});
 		});
 	});
+
+	describe("getMemberFullName", () => {
+		it("should return the full name of the member", async () => {
+			const member = roomMemberFactory.build({
+				roomRoleName: RoleName.Roomadmin,
+			});
+			const { roomMembersStore } = setup([member]);
+
+			const result = roomMembersStore.getMemberFullName(member.userId);
+
+			expect(result).toBe(`${member.lastName}, ${member.firstName}`);
+		});
+	});
 });

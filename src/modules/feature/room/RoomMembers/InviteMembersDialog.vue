@@ -12,11 +12,10 @@
 					{{ modalTitle }}
 				</h2>
 			</template>
-
 			<template #text>
-				<template v-if="step === InvitationStep.PREPARE">
+				<template v-if="invitationStep !== InvitationStep.SHARE">
 					<p>
-						{{ t("pages.rooms.members.inviteMember.firstStep.subTitle") }}
+						{{ subTitle }}
 					</p>
 
 					<InfoAlert>
@@ -55,7 +54,7 @@
 						</v-checkbox>
 
 						<v-checkbox
-							v-model="formData.isAlsoForStudents"
+							v-model="formData.isValidForStudents"
 							:disabled="!formData.restrictedToCreatorSchool"
 							:label="
 								t(
@@ -65,27 +64,27 @@
 							hide-details
 						/>
 
-						<div class="d-flex align-center justify-start my-n4">
+						<div class="d-flex align-center justify-start my-n4 pr-0">
 							<v-checkbox
-								v-model="formData.activeUntilCheck"
+								v-model="formData.activeUntilChecked"
 								:label="
 									t('pages.rooms.members.inviteMember.form.linkExpires.label')
 								"
 								hide-details
 								class="mr-2"
 							/>
-
-							<date-picker
+							<DatePicker
 								ref="datePicker"
 								v-model="formData.activeUntil"
 								:disabled="isDatePickerDisabled"
+								:required="!isDatePickerDisabled"
 								:min-date="new Date().toString()"
-								class="mr-2 mt-2"
+								:date="datePickerDate"
+								class="mt-1"
 								data-testid="date-picker-until"
-								max-width="110px"
 								@click.prevent="pause"
 								@keydown.space.enter.prevent="pause"
-								@update:date="onUpdateValidDate"
+								@update:date="onUpdateDate"
 							/>
 						</div>
 
@@ -100,7 +99,7 @@
 										keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label"
 										scope="global"
 									>
-										<a :href="informationLink" target="_blank" rel="noopener">
+										<a :href="informationLink!" target="_blank" rel="noopener">
 											{{ t("pages.rooms.members.infoText.moreInformation") }}
 										</a>
 									</i18n-t>
@@ -121,7 +120,7 @@
 
 			<template #actions>
 				<v-spacer />
-				<div v-if="step === InvitationStep.PREPARE" class="mr-4 mb-3">
+				<div v-if="invitationStep !== InvitationStep.SHARE" class="mr-4 mb-3">
 					<v-btn
 						ref="cancelButton"
 						class="ms-auto mr-2"
@@ -135,9 +134,10 @@
 						class="ms-auto"
 						color="primary"
 						variant="flat"
+						:disabled="isSubmitDisabled"
 						:text="t('common.actions.continue')"
 						data-testid="invite-participant-save-btn"
-						@click="onInviteMembers"
+						@click="onContinue"
 					/>
 				</div>
 
@@ -158,30 +158,27 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useDisplay } from "vuetify";
-import { useRoomInvitationLinkStore } from "@data-room";
+import {
+	CreateRoomInvitationLinkDto,
+	InvitationStep,
+	UpdateRoomInvitationLinkDto,
+	useRoomInvitationLinkStore,
+} from "@data-room";
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { storeToRefs } from "pinia";
 
-enum InvitationStep {
-	PREPARE = "prepare",
-	SHARE = "share",
-}
-
-const props = defineProps({
+defineProps({
 	schoolName: {
 		type: String,
-		required: true,
-	},
-	preDefinedStep: {
-		type: String,
-		default: "prepare",
+		default: "",
 	},
 });
 
@@ -192,43 +189,70 @@ const isOpen = defineModel({
 
 const emit = defineEmits<{
 	(e: "close"): void;
-	(e: "update:modelValue", value: boolean): void;
 }>();
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const { createLink } = useRoomInvitationLinkStore();
+const { createLink, updateLink } = useRoomInvitationLinkStore();
+const { invitationStep, sharedUrl, editedLink } = storeToRefs(
+	useRoomInvitationLinkStore()
+);
 
 const { t } = useI18n();
 const { xs } = useDisplay();
-const step = ref<string>();
-const sharedUrl = ref<string>();
-
-onMounted(() => {
-	step.value = props.preDefinedStep;
-});
 
 const defaultFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
-	isAlsoForStudents: false,
-	activeUntilCheck: false,
-	activeUntil: new Date(),
+	isValidForStudents: false,
+	activeUntilChecked: false,
+	activeUntil: null as Date | null,
 	requiresConfirmation: true,
+	id: "",
 };
 
 const formData = ref({ ...defaultFormData });
 
 const isDatePickerDisabled = computed(() => {
-	return !formData.value.activeUntilCheck;
+	return !formData.value.activeUntilChecked;
+});
+
+const isSubmitDisabled = computed(() => {
+	return (
+		formData.value.activeUntilChecked && formData.value.activeUntil === null
+	);
 });
 
 const modalTitle = computed(() => {
-	return step.value === InvitationStep.PREPARE
-		? t("pages.rooms.members.inviteMember.firstStep.title")
-		: t("pages.rooms.members.inviteMember.secondStep.title");
+	const titleMap = {
+		[InvitationStep.EDIT]: t(
+			"pages.rooms.members.inviteMember.step.edit.title"
+		),
+		[InvitationStep.SHARE]: t(
+			"pages.rooms.members.inviteMember.step.share.title"
+		),
+		[InvitationStep.PREPARE]: t(
+			"pages.rooms.members.inviteMember.step.prepare.title"
+		),
+	};
+
+	return titleMap[invitationStep.value];
 });
 
-const onUpdateValidDate = (date: Date) => {
+const subTitle = computed(() => {
+	if (invitationStep.value === InvitationStep.SHARE) return null;
+	const subTitleMap = {
+		[InvitationStep.EDIT]: t(
+			"pages.rooms.members.inviteMember.editStep.subTitle"
+		),
+		[InvitationStep.PREPARE]: t(
+			"pages.rooms.members.inviteMember.firstStep.subTitle"
+		),
+	};
+
+	return subTitleMap[invitationStep.value];
+});
+
+const onUpdateDate = (date: Date | null) => {
 	formData.value.activeUntil = date;
 	unpause();
 };
@@ -238,24 +262,39 @@ const onClose = () => {
 
 	setTimeout(() => {
 		formData.value = { ...defaultFormData };
-		step.value = InvitationStep.PREPARE;
 	}, 1000);
 };
 
-const onInviteMembers = async () => {
-	const createLinkBodyParams = {
+const onContinue = async () => {
+	if (invitationStep.value === InvitationStep.SHARE) return;
+
+	const baseParams = {
 		title: formData.value.title || "invitation link",
-		activeUntil: formData.value.activeUntilCheck
-			? formData.value.activeUntil.toString()
-			: "2900-01-01T00:00:00.000Z",
-		isOnlyForTeachers: !formData.value.isAlsoForStudents,
+		activeUntil:
+			formData.value.activeUntilChecked && !!formData.value.activeUntil
+				? formData.value.activeUntil.toString()
+				: "2900-01-01T00:00:00.000Z",
+		isOnlyForTeachers: !formData.value.isValidForStudents,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
 	};
-	const linkId = await createLink(createLinkBodyParams);
 
-	sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${linkId}`;
-	step.value = InvitationStep.SHARE;
+	const createOrUpdateLinkBodyParams:
+		| UpdateRoomInvitationLinkDto
+		| CreateRoomInvitationLinkDto =
+		invitationStep.value === InvitationStep.EDIT
+			? { ...baseParams, id: formData.value.id }
+			: baseParams;
+
+	const endpointMap = {
+		[InvitationStep.PREPARE]: () =>
+			createLink(createOrUpdateLinkBodyParams as CreateRoomInvitationLinkDto),
+		[InvitationStep.EDIT]: () =>
+			updateLink(createOrUpdateLinkBodyParams as UpdateRoomInvitationLinkDto),
+	};
+
+	await endpointMap[invitationStep.value]();
+	formData.value = { ...defaultFormData };
 };
 
 const onCopyLink = () => {
@@ -266,6 +305,12 @@ const onCopyLink = () => {
 	});
 };
 
+const datePickerDate = computed(() => {
+	return formData.value.activeUntilChecked && !!formData.value.activeUntil
+		? formData.value.activeUntil.toString()
+		: "";
+});
+
 const inviteMembersContent = ref<VCard>();
 const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 	immediate: true,
@@ -273,25 +318,39 @@ const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 
 watch(
 	() => formData.value.restrictedToCreatorSchool,
-	(newValue: boolean) => {
-		if (!newValue) {
-			formData.value.isAlsoForStudents = false;
+	(isRestrictedToCreatorSchool: boolean) => {
+		if (isRestrictedToCreatorSchool === false) {
+			formData.value.isValidForStudents = false;
+		}
+	}
+);
+
+watch(
+	() => editedLink.value,
+	(newVal) => {
+		if (newVal) {
+			formData.value.id = newVal.id;
+			formData.value.title = newVal.title;
+			formData.value.restrictedToCreatorSchool =
+				newVal.restrictedToCreatorSchool;
+			formData.value.isValidForStudents = !newVal.isOnlyForTeachers;
+			formData.value.activeUntilChecked = newVal.activeUntil !== null;
+			formData.value.activeUntil = new Date(newVal.activeUntil!);
+			formData.value.requiresConfirmation = newVal.requiresConfirmation;
 		}
 	}
 );
 
 watch(
 	() => isOpen.value,
-	(newValue: boolean) => {
-		if (!newValue) {
+	(isOpen: boolean) => {
+		if (isOpen === false) {
 			deactivate();
 		}
 	}
 );
 
-const informationLink = computed(() =>
-	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
-		? envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
-		: "https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
+const informationLink = computed(
+	() => envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
 );
 </script>

@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
+	"common.actions.download": "Descargar",
 	"common.actions.duplicate": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
@@ -432,6 +433,8 @@ export default {
 		"Ya existe un archivo con este nombre.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
 		"El servicio de archivos no está disponible actualmente.",
+	"components.board.notifications.errors.fileNotDeleted":
+		"No se han podido eliminar los archivos.",
 	"components.board.notifications.errors.fileToBig":
 		"Los archivos adjuntos superan el tamaño máximo permitido de {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated":
@@ -533,6 +536,10 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.cardElement.h5pElement": "Elemento de aprendizaje interactivo",
+	"components.cardElement.h5pElement.create":
+		"Crear un elemento de aprendizaje interactivo.",
+	"components.cardElement.h5pElement.title.error.load":
+		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",
 	"components.datePicker.validation.format":
 		"Por favor utilice el formato DD.MM.AAAA",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
@@ -1943,6 +1950,19 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Autorizaciones de sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",
+	"pages.rooms.members.tableHeader.description": "Descripción",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"Sólo válido dentro de la escuela",
+	"pages.rooms.members.tableHeader.validForStudents":
+		"También válido para estudiantes",
+	"pages.rooms.members.tableHeader.expirationDate": "Fecha de caducidad",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Confirmación obligatoria",
+	"pages.rooms.members.tableHeader.status": "Estado",
+	"pages.rooms.members.tables.common.yes": "sí",
+	"pages.rooms.members.tables.common.no": "no",
+	"pages.rooms.members.tables.common.expired": "caducado",
+	"pages.rooms.members.tables.common.active": "activo",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} recibe las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1967,14 +1987,18 @@ export default {
 		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
-	"pages.rooms.members.inviteMember.firstStep.title":
+	"pages.rooms.members.inviteMember.step.prepare.title":
 		"Crear enlace de invitación",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",
-	"pages.rooms.members.inviteMember.secondStep.title":
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"El enlace de invitación editado se muestra en el siguiente paso.",
+	"pages.rooms.members.inviteMember.step.share.title":
 		"Compartir enlace de invitación",
+	"pages.rooms.members.inviteMember.step.edit.title":
+		"Editar enlace de invitación",
 	"pages.rooms.members.inviteMember.infoAlert.text":
-		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un guía de aprendizaje supervisor de su escuela a la sala.",
+		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
 	"pages.rooms.members.inviteMember.form.description.label":
 		"Descripción (opcional)",
 	"pages.rooms.members.inviteMember.form.description.hint":
@@ -1987,6 +2011,16 @@ export default {
 		"El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"La entrada a la habitación sólo es posible previa confirmación ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"¿Suprimir los enlaces de invitación seleccionados?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"¿Suprimir el enlace de invitación '{invitation}'?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Compartir enlace de invitación",
+	"pages.rooms.invitationlinks.error.create":
+		"No se ha podido crear el enlace de invitación.",
+	"pages.rooms.invitationlinks.error.update":
+		"Se ha producido un error al actualizar el enlace de invitación.",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
@@ -2175,4 +2209,7 @@ export default {
 	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
 	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
+	"pages.folder.delete-multiple-confirmation":
+		"¿Borrar realmente todos los archivos {total}?",
+	"pages.folder.delete-confirmation": "¿Borrar realmente el archivo {name}?",
 };

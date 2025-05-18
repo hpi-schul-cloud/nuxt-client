@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
+	"common.actions.download": "Herunterladen",
 	"common.actions.duplicate": "Duplizieren",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
@@ -425,6 +426,8 @@ export default {
 		"Es existiert bereits eine Datei mit diesem Namen.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
 		"Der Dateiservice ist derzeit nicht verfügbar.",
+	"components.board.notifications.errors.fileNotDeleted":
+		"Die Datei/en konnte/n nicht gelöscht werden.",
 	"components.board.notifications.errors.fileToBig":
 		"Die angehängte Datei überschreitet die maximal zulässige Größe von {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated":
@@ -526,6 +529,10 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
 	"components.cardElement.h5pElement": "Interaktives Lernelement",
+	"components.cardElement.h5pElement.create":
+		"Interaktives Lernelement erstellen",
+	"components.cardElement.h5pElement.title.error.load":
+		"Der Titel eines interaktiven Lernelements konnte nicht geladen werden.",
 	"components.datePicker.validation.format":
 		"Bitte Format DD.MM.YYYY verwenden.",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
@@ -1916,6 +1923,19 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.members.tableHeader.actions": "Aktionen",
+	"pages.rooms.members.tableHeader.description": "Beschreibung",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"Nur schulintern gültig",
+	"pages.rooms.members.tableHeader.validForStudents":
+		"Auch für Lernende gültig",
+	"pages.rooms.members.tableHeader.expirationDate": "Ablaufdatum",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Bestätigung erforderlich",
+	"pages.rooms.members.tableHeader.status": "Status",
+	"pages.rooms.members.tables.common.yes": "ja",
+	"pages.rooms.members.tables.common.no": "nein",
+	"pages.rooms.members.tables.common.expired": "abgelaufen",
+	"pages.rooms.members.tables.common.active": "aktiv",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} erhält die folgenden Berechtigungen im Raum „{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1941,11 +1961,15 @@ export default {
 		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {currentUserFullName} das Recht, den Raum zu löschen.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
-	"pages.rooms.members.inviteMember.firstStep.title":
+	"pages.rooms.members.inviteMember.step.prepare.title":
 		"Einladungslink erstellen",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Im nächsten Schritt wird ein Link erstellt, mit dem der Raum betreten	werden kann.",
-	"pages.rooms.members.inviteMember.secondStep.title": "Einladungslink teilen",
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"Im nächsten Schritt wird der bearbeitete Einladungslink angezeigt.",
+	"pages.rooms.members.inviteMember.step.share.title": "Einladungslink teilen",
+	"pages.rooms.members.inviteMember.step.edit.title":
+		"Einladungslink bearbeiten",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
 	"pages.rooms.members.inviteMember.form.description.label":
@@ -1959,6 +1983,16 @@ export default {
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Betreten des Raums nur nach Bestätigung möglich ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Ausgewählte Einladungslinks wirklich löschen?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"Einladungslink '{invitation}' wirklich löschen?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Einladungslink teilen",
+	"pages.rooms.invitationlinks.error.create":
+		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
+	"pages.rooms.invitationlinks.error.update":
+		"Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
@@ -2142,4 +2176,7 @@ export default {
 	"pages.folder.ariaLabels.filter": "Tabelle durchsuchen/filtern",
 	"pages.folder.ariaLabels.actionMenu": "Aktionsmenü für {name}",
 	"pages.folder.uploadstats": "{uploaded} von {total} Dateien hochgeladen",
+	"pages.folder.delete-multiple-confirmation":
+		"Alle {total} Dateien wirklich löschen?",
+	"pages.folder.delete-confirmation": "Datei {name} wirklich löschen?",
 };

@@ -16,7 +16,11 @@ import { useBoardNotifier } from "@util-board";
 import { AxiosInstance, AxiosPromise } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
-import { RoomInvitationLink, UpdateRoomInvitationLinkDto } from "./types";
+import {
+	InvitationStep,
+	RoomInvitationLink,
+	UpdateRoomInvitationLinkDto,
+} from "./types";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createAxiosError } from "@util-axios-error";
 import { RoomIdResponse } from "@/serverApi/v3/api";
@@ -142,6 +146,9 @@ describe("useRoomInvitationLinkStore", () => {
 				...link,
 				roomId: roomDetailsStore.room?.id,
 			});
+			expect(roomInvitationLinkStore.invitationStep).toStrictEqual(
+				InvitationStep.SHARE
+			);
 		});
 
 		describe("when the API call fails", () => {
@@ -156,6 +163,9 @@ describe("useRoomInvitationLinkStore", () => {
 
 				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 					"pages.rooms.invitationlinks.error.create"
+				);
+				expect(roomInvitationLinkStore.invitationStep).not.toStrictEqual(
+					InvitationStep.SHARE
 				);
 			});
 		});
@@ -174,6 +184,9 @@ describe("useRoomInvitationLinkStore", () => {
 			expect(
 				roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink
 			).toHaveBeenCalledWith(firstLink.id, firstLink);
+			expect(roomInvitationLinkStore.invitationStep).toStrictEqual(
+				InvitationStep.SHARE
+			);
 		});
 
 		describe("when the API call fails", () => {
@@ -191,6 +204,9 @@ describe("useRoomInvitationLinkStore", () => {
 
 				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 					"pages.rooms.invitationlinks.error.update"
+				);
+				expect(roomInvitationLinkStore.invitationStep).not.toStrictEqual(
+					InvitationStep.SHARE
 				);
 			});
 		});

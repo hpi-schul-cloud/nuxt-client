@@ -29,10 +29,12 @@ export const useFileStorageApi = () => {
 		showForbiddenError,
 		showUnauthorizedError,
 		showInternalServerError,
+		showFileNotDeletedError,
 		showFileExistsError,
 	} = useFileStorageNotifier();
 
-	const { getFileRecordsByParentId, upsertFileRecords } = useFileRecordsStore();
+	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords } =
+		useFileRecordsStore();
 
 	const fetchFiles = async (
 		parentId: string,
@@ -125,6 +127,21 @@ export const useFileStorageApi = () => {
 		showMessageByType(message);
 	};
 
+	const deleteFiles = async (fileRecords: FileRecord[]): Promise<void> => {
+		try {
+			const fileRecordIds = fileRecords.map((fileRecord) => fileRecord.id);
+
+			deleteFileRecords(fileRecords);
+			await fileApi.deleteFiles({ fileRecordIds });
+		} catch (error) {
+			upsertFileRecords(fileRecords);
+			showError(error);
+			showFileNotDeletedError();
+
+			throw error;
+		}
+	};
+
 	const showMessageByType = (message: ErrorType | string) => {
 		switch (message) {
 			case ErrorType.FILE_TOO_BIG:
@@ -151,5 +168,6 @@ export const useFileStorageApi = () => {
 		upload,
 		uploadFromUrl,
 		getFileRecordsByParentId,
+		deleteFiles,
 	};
 };
