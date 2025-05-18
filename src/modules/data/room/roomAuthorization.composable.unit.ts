@@ -317,6 +317,19 @@ describe("roomAuthorization", () => {
 				expect(canSeeAllStudents.value).toBe(false);
 			});
 		});
+
+		describe("when the user has permission to add room members but not student list permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomMembersAdd],
+				});
+			};
+
+			it("should not be allowed to add every student of the school as room members", () => {
+				const { canSeeAllStudents } = setup();
+				expect(canSeeAllStudents.value).toBe(false);
+			});
+		});
 	});
 
 	describe("canDuplicateRoom", () => {
