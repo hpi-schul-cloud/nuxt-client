@@ -42,7 +42,7 @@
 			</div>
 
 			<InfoAlert
-				v-if="!canAddAllStudents"
+				v-if="!canAddAllStudents && selectedSchoolRole === RoleName.Student"
 				data-testid="student-visibility-info-alert"
 				>{{ t("pages.rooms.members.add.students.forbidden") }}</InfoAlert
 			>

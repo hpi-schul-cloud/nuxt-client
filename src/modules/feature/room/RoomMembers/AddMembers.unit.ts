@@ -507,20 +507,37 @@ describe("AddMembers", () => {
 	});
 
 	describe("when user is not allowed to see all students", () => {
-		it("should show info message", async () => {
-			const { wrapper } = setup(false);
-			const roleComponent = wrapper.getComponent({
-				ref: "selectRole",
+		describe("and the role is set to student", () => {
+			it("should show info message", async () => {
+				const { wrapper } = setup(false);
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(RoleName.Student);
+
+				const infoAlert = wrapper.getComponent(
+					'[data-testid="student-visibility-info-alert"]'
+				);
+				expect(infoAlert.text()).toBe(
+					"pages.rooms.members.add.students.forbidden"
+				);
 			});
+		});
+		describe("and the role is set to teacher", () => {
+			it("should not show info message", async () => {
+				const { wrapper } = setup(false);
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
 
-			await roleComponent.setValue(RoleName.Student);
+				await roleComponent.setValue(RoleName.Teacher);
 
-			const infoAlert = wrapper.getComponent(
-				'[data-testid="student-visibility-info-alert"]'
-			);
-			expect(infoAlert.text()).toBe(
-				"pages.rooms.members.add.students.forbidden"
-			);
+				const infoAlert = wrapper.findComponent(
+					'[data-testid="student-visibility-info-alert"]'
+				);
+				expect(infoAlert.exists()).toEqual(false);
+			});
 		});
 	});
 });
