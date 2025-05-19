@@ -256,7 +256,6 @@ export enum AuthorizationContextParamsActionEnum {
     * @enum {string}
     */
 export enum AuthorizationContextParamsRequiredPermissionsEnum {
-    Test = '___TEST___',
     AccountCreate = 'ACCOUNT_CREATE',
     AccountDelete = 'ACCOUNT_DELETE',
     AccountEdit = 'ACCOUNT_EDIT',
@@ -7484,7 +7483,6 @@ export interface PeriodResponse {
  * @enum {string}
  */
 export enum Permission {
-    Test = '___TEST___',
     AccountCreate = 'ACCOUNT_CREATE',
     AccountDelete = 'ACCOUNT_DELETE',
     AccountEdit = 'ACCOUNT_EDIT',
