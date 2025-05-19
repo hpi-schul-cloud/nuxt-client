@@ -1,5 +1,4 @@
 import NotifierModule from "@/store/notifier";
-import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createSharedComposable } from "@vueuse/core";
@@ -15,11 +14,9 @@ export const useSchoolYearChange = () => {
 	const { t } = useI18n();
 	const maintenanceStatus: Ref<MaintenanceStatus | undefined> = ref();
 	const isLoading: Ref<boolean> = ref(false);
-	const error: Ref<BusinessError | undefined> = ref();
 
 	const fetchSchoolYearStatus = async (schoolId: string): Promise<void> => {
 		isLoading.value = true;
-		error.value = undefined;
 
 		try {
 			maintenanceStatus.value = await fetchMaintenanceStatus(schoolId);
@@ -40,7 +37,6 @@ export const useSchoolYearChange = () => {
 		maintenance: boolean
 	): Promise<void> => {
 		isLoading.value = true;
-		error.value = undefined;
 
 		try {
 			maintenanceStatus.value = await setMaintenance(schoolId, maintenance);
@@ -97,7 +93,6 @@ export const useSchoolYearChange = () => {
 
 	return {
 		isLoading,
-		error,
 		fetchSchoolYearStatus,
 		setMaintenanceMode,
 		maintenanceStatus,
