@@ -2,11 +2,13 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
+import { enableAutoUnmount, mount } from "@vue/test-utils";
 import { VCard, VDialog } from "vuetify/lib/components/index.mjs";
 import Dialog from "./Dialog.vue";
 
 describe("Dialog", () => {
+	enableAutoUnmount(afterEach);
+
 	describe("when the dialog isDialogOpen is true", () => {
 		const setup = () => {
 			const message = "message to the user";
