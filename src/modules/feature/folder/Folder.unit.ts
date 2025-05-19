@@ -16,7 +16,7 @@ import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { flushPromises } from "@vue/test-utils";
 import { ComputedRef, nextTick, ref } from "vue";
 import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
-import * as DeleteFilesConfirmation from "./composables/DeleteFilesConfirmation.composable";
+import DeleteFileDialog from "./file-table/DeleteFileDialog.vue";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";
 import Folder from "./Folder.vue";
@@ -550,19 +550,6 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
 				jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
 
-				const confirmationDialogMock =
-					createMock<
-						ReturnType<
-							typeof DeleteFilesConfirmation.useDeleteFilesConfirmationDialog
-						>
-					>();
-				jest
-					.spyOn(DeleteFilesConfirmation, "useDeleteFilesConfirmationDialog")
-					.mockReturnValueOnce(confirmationDialogMock);
-				confirmationDialogMock.askDeleteFilesConfirmation.mockResolvedValue(
-					true
-				);
-
 				const { wrapper } = setupWrapper();
 
 				await nextTick();
@@ -581,6 +568,9 @@ describe("Folder.vue", () => {
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionDeleteFiles);
 				await deleteButton.trigger("click");
+
+				const deleteDialog = wrapper.findComponent(DeleteFileDialog);
+				deleteDialog.vm.$emit("confirm");
 
 				return {
 					fileStorageApiMock,
@@ -637,19 +627,6 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
 				jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
 
-				const confirmationDialogMock =
-					createMock<
-						ReturnType<
-							typeof DeleteFilesConfirmation.useDeleteFilesConfirmationDialog
-						>
-					>();
-				jest
-					.spyOn(DeleteFilesConfirmation, "useDeleteFilesConfirmationDialog")
-					.mockReturnValueOnce(confirmationDialogMock);
-				confirmationDialogMock.askDeleteFilesConfirmation.mockResolvedValue(
-					false
-				);
-
 				const { wrapper } = setupWrapper();
 
 				await nextTick();
@@ -668,6 +645,9 @@ describe("Folder.vue", () => {
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionDeleteFiles);
 				await deleteButton.trigger("click");
+
+				const deleteDialog = wrapper.findComponent(DeleteFileDialog);
+				deleteDialog.vm.$emit("cancel");
 
 				return {
 					fileStorageApiMock,
@@ -761,7 +741,7 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
 				jest
 					.spyOn(FolderState, "useFolderState")
-					.mockReturnValue(folderStateMock);
+					.mockReturnValueOnce(folderStateMock);
 
 				const parent = parentNodeInfoFactory.build();
 				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
@@ -775,17 +755,17 @@ describe("Folder.vue", () => {
 				>({});
 				jest
 					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValue(boardState);
+					.mockReturnValueOnce(boardState);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				jest
 					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValue(fileStorageApiMock);
+					.mockReturnValueOnce(fileStorageApiMock);
 
 				const fileRecord1 = fileRecordFactory.build();
 				const fileRecord2 = fileRecordFactory.build();
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
 					fileRecord1,
 					fileRecord2,
 				]);
@@ -799,8 +779,11 @@ describe("Folder.vue", () => {
 				);
 				await itemMenuButton.trigger("click");
 
+				// We had to emit the click event on the rename button manually,
+				// as the "normal" trigger("click") does not work, when running
+				// multiple tests at once.
 				const renameButton = wrapper.findComponent(KebabMenuActionRename);
-				await renameButton.trigger("click");
+				await renameButton.vm.$emit("click", fileRecord1);
 
 				const renameDialog = wrapper.findComponent(RenameDialog);
 				renameDialog.vm.$emit("confirm", "new filename");
@@ -829,7 +812,7 @@ describe("Folder.vue", () => {
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
 				jest
 					.spyOn(FolderState, "useFolderState")
-					.mockReturnValue(folderStateMock);
+					.mockReturnValueOnce(folderStateMock);
 
 				const parent = parentNodeInfoFactory.build();
 				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
@@ -843,33 +826,20 @@ describe("Folder.vue", () => {
 				>({});
 				jest
 					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValue(boardState);
+					.mockReturnValueOnce(boardState);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				jest
 					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValue(fileStorageApiMock);
+					.mockReturnValueOnce(fileStorageApiMock);
 
 				const fileRecord1 = fileRecordFactory.build();
 				const fileRecord2 = fileRecordFactory.build();
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
 					fileRecord1,
 					fileRecord2,
 				]);
-
-				const confirmationDialogMock =
-					createMock<
-						ReturnType<
-							typeof DeleteFilesConfirmation.useDeleteFilesConfirmationDialog
-						>
-					>();
-				jest
-					.spyOn(DeleteFilesConfirmation, "useDeleteFilesConfirmationDialog")
-					.mockReturnValue(confirmationDialogMock);
-				confirmationDialogMock.askDeleteFilesConfirmation.mockResolvedValue(
-					true
-				);
 
 				const { wrapper } = setupWrapper();
 
@@ -880,8 +850,14 @@ describe("Folder.vue", () => {
 				);
 				await itemMenuButton.trigger("click");
 
+				// We had to emit the click event on the delete button manually,
+				// as the "normal" trigger("click") does not work, when running
+				// multiple tests at once.
 				const deleteButton = wrapper.findComponent(KebabMenuActionDeleteFiles);
-				await deleteButton.trigger("click");
+				await deleteButton.vm.$emit("delete-files", [fileRecord1]);
+
+				const deleteDialog = wrapper.findComponent(DeleteFileDialog);
+				deleteDialog.vm.$emit("confirm");
 
 				return {
 					folderStateMock,
