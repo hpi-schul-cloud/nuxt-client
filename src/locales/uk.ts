@@ -385,6 +385,49 @@ export default {
 		"Ви впевнені, що бажаєте вимкнути синхронізацію для {groupTypes}?",
 	"components.administration.provisioningOptions.warning.title":
 		"Вимкнути синхронізацію",
+	"components.administration.schoolYearChangeSection.headers":
+		"Зміна навчального року",
+	"components.administration.schoolYearChangeSection.info.part.one":
+		"За допомогою фази передачі, членство в класі та персональні дані в LDAP можна скорегувати в мирі. Нарешті, всі зміни можна перенести на {instance}",
+	"components.administration.schoolYearChangeSection.info.part.two":
+		" (Більше інформації про {0})",
+	"components.administration.schoolYearChangeSection.info.link": "Довідка",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"Недостатньо шкільних років було знайдено. Будь ласка, зв'яжіться з підтримкою!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"Школа вже в наступному навчальному році",
+	"components.administration.schoolYearChangeSection.notification.finish.success":
+		"Навчальний рік успішно розпочався",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"Фаза передачі розпочалася успішно",
+	"components.administration.schoolYearChangeSection.title.step.one":
+		"Наприкінці навчального року",
+	"components.administration.schoolYearChangeSection.description.step.one":
+		"Фазу передачі можна розпочати вручну за два тижні до початку свята. Якщо до початку свята немає посібника, фаза передачі починається автоматично. Початок фази передачі не можна скасувати.",
+	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
+		"Почніть фазу передачі",
+	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
+		"Почалася фаза передачі",
+	"components.administration.schoolYearChangeSection.title.step.two":
+		"Близько літніх канікул",
+	"components.administration.schoolYearChangeSection.description.step.two":
+		"Під час фази передачі всі класи та персональні дані можуть бути оновлені в мирі. Вхід та зміни паролів все ще можливі для всіх існуючих користувачів. Нові курси можуть бути створені під час фази передачі, але без призначення занять.",
+	"components.administration.schoolYearChangeSection.info.step.two":
+		"Під час фази передачі не синхронізовані нові користувачі, класи або зміни до існуючих даних з LDAP.",
+	"components.administration.schoolYearChangeSection.step.two.button":
+		"Перевірте дані LDAP",
+	"components.administration.schoolYearChangeSection.title.step.three":
+		"Новий навчальний рік",
+	"components.administration.schoolYearChangeSection.description.step.three":
+		"Aquí la transferencia de los datos se puede iniciar al {instance}. Esto acelera en el nuevo año escolar.",
+	"components.administration.schoolYearChangeSection.step.three.button":
+		"Кінцева фаза передачі",
+	"components.administration.schoolYearChangeSection.checkbox.step.three":
+		"Класні та персональні дані (LDAP) були оновлені та перевірені",
+	"components.administration.schoolYearChangeSection.dialog.title":
+		"Дійсно закінчити навчальний рік?",
+	"components.administration.schoolYearChangeSection.dialog.content":
+		"Синхронізація головних даних LDAP переривається під час фази передачі. Це означає, що дані та класи користувачів (якщо використовуються) більше не оновлюються через LDAP. Вхід із вже синхронізованими даними входу все ще можливий. Зміни пароля в LDAP під час входу також враховуються.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "в",
 	"components.atoms.VCustomChipTimeRemaining.hintHours":
 		"година | години (годин)",
