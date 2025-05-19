@@ -1946,6 +1946,19 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Autorizaciones de sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",
+	"pages.rooms.members.tableHeader.description": "Descripción",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"Sólo válido dentro de la escuela",
+	"pages.rooms.members.tableHeader.validForStudents":
+		"También válido para estudiantes",
+	"pages.rooms.members.tableHeader.expirationDate": "Fecha de caducidad",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Confirmación obligatoria",
+	"pages.rooms.members.tableHeader.status": "Estado",
+	"pages.rooms.members.tables.common.yes": "sí",
+	"pages.rooms.members.tables.common.no": "no",
+	"pages.rooms.members.tables.common.expired": "caducado",
+	"pages.rooms.members.tables.common.active": "activo",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} recibe las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1970,12 +1983,16 @@ export default {
 		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
-	"pages.rooms.members.inviteMember.firstStep.title":
+	"pages.rooms.members.inviteMember.step.prepare.title":
 		"Crear enlace de invitación",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",
-	"pages.rooms.members.inviteMember.secondStep.title":
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"El enlace de invitación editado se muestra en el siguiente paso.",
+	"pages.rooms.members.inviteMember.step.share.title":
 		"Compartir enlace de invitación",
+	"pages.rooms.members.inviteMember.step.edit.title":
+		"Editar enlace de invitación",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
 	"pages.rooms.members.inviteMember.form.description.label":
@@ -1990,6 +2007,16 @@ export default {
 		"El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"La entrada a la habitación sólo es posible previa confirmación ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"¿Suprimir los enlaces de invitación seleccionados?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"¿Suprimir el enlace de invitación '{invitation}'?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Compartir enlace de invitación",
+	"pages.rooms.invitationlinks.error.create":
+		"No se ha podido crear el enlace de invitación.",
+	"pages.rooms.invitationlinks.error.update":
+		"Se ha producido un error al actualizar el enlace de invitación.",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
