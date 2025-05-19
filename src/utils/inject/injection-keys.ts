@@ -68,9 +68,11 @@ export const COMMON_CARTRIDGE_IMPORT_MODULE_KEY: InjectionKey<CommonCartridgeImp
 	Symbol("commonCartridgeImportModule");
 export const SHARE_MODULE_KEY: InjectionKey<ShareModule> =
 	Symbol("shareModule");
+
+// injection keys for vuex modules can not be symbols due to @module-decorator restrictions
 export const TASKS_MODULE_KEY: InjectionKey<TasksModule> =
-	Symbol("tasksModule");
+	"tasksModule" as unknown as InjectionKey<TasksModule>;
 export const FINISHED_TASKS_MODULE_KEY: InjectionKey<FinishedTasksModule> =
-	Symbol("finishedTasksModule");
+	"finishedTasksModule" as unknown as InjectionKey<FinishedTasksModule>;
 
 export const THEME_KEY: InjectionKey<{ name: string }> = Symbol("theme");
