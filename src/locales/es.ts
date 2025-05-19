@@ -382,6 +382,50 @@ export default {
 		"¿Está seguro de que desea desactivar la sincronización de {groupTypes}?",
 	"components.administration.provisioningOptions.warning.title":
 		"Deshabilitar la sincronización",
+	"components.administration.schoolYearChangeSection.headers":
+		"Cambio de año escolar",
+	"components.administration.schoolYearChangeSection.info.part.one":
+		"Con la ayuda de la fase de transferencia, la membresía de clase y los datos personales en el LDAP se pueden ajustar en paz. Finalmente, todos los cambios se pueden transferir a la {instance}.",
+	"components.administration.schoolYearChangeSection.info.part.two":
+		" (más información sobre el {0})",
+	"components.administration.schoolYearChangeSection.info.link":
+		"Ayuda del lado de la ayuda",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"No se encontraron suficientes años escolares. ¡Póngase en contacto con el soporte!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"La escuela ya está en el próximo año escolar",
+	"components.administration.schoolYearChangeSection.notification.finish.success":
+		"El año escolar comenzó con éxito",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"La fase de transferencia comenzó con éxito",
+	"components.administration.schoolYearChangeSection.title.step.one":
+		"Al final del año escolar",
+	"components.administration.schoolYearChangeSection.description.step.one":
+		"La fase de transferencia se puede comenzar manualmente dos semanas antes del inicio de las vacaciones. Si no hay ningún comienzo manual al comienzo de las vacaciones, la fase de transferencia comienza automáticamente. El inicio de la fase de transferencia no se puede deshacer.",
+	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
+		"Fase de transferencia de inicio",
+	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
+		"Fase de transferencia iniciada",
+	"components.administration.schoolYearChangeSection.title.step.two":
+		"Alrededor de las vacaciones de verano",
+	"components.administration.schoolYearChangeSection.description.step.two":
+		"Durante la fase de transferencia, todos los datos de clase y personales se pueden actualizar en paz. El inicio de sesión y los cambios en las contraseñas aún son posibles para todos los usuarios existentes. Se pueden crear nuevos cursos durante la fase de transferencia, pero sin la asignación de clases.",
+	"components.administration.schoolYearChangeSection.info.step.two":
+		"Durante la fase de transferencia, no se sincronizan nuevos usuarios, clases o cambios en los datos existentes del LDAP.",
+	"components.administration.schoolYearChangeSection.step.two.button":
+		"Verifique los datos de LDAP",
+	"components.administration.schoolYearChangeSection.title.step.three":
+		"Nuevo año escolar",
+	"components.administration.schoolYearChangeSection.description.step.three":
+		"Aquí la transferencia de los datos se puede iniciar al {instance}. Esto acelera en el nuevo año escolar.",
+	"components.administration.schoolYearChangeSection.step.three.button":
+		"Fase de transferencia final",
+	"components.administration.schoolYearChangeSection.checkbox.step.three":
+		"Los datos de clase y personales (LDAP) se han actualizado y marcado",
+	"components.administration.schoolYearChangeSection.dialog.title":
+		"¿Realmente termina el año escolar?",
+	"components.administration.schoolYearChangeSection.dialog.content":
+		"La sincronización de los datos maestros LDAP se interrumpe durante la fase de transferencia. Esto significa que los datos y clases del usuario (si se usan) ya no se actualizan a través de LDAP. Iniciar sesión con datos de inicio de sesión ya sincronizados aún es posible. También se tienen en cuenta los cambios de contraseña en el LDAP durante el inicio de sesión.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "en ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hora | horas",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
