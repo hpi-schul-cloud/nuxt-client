@@ -187,6 +187,15 @@ export const printDateTimeFromStringUTC = (date) => {
 	return dayjs(date).tz().format(DATETIME_FORMAT.dateTimeYY);
 };
 
+/**
+ * Returns formated (DD.MM.YYYY) date string based on a given dayjs object
+ * @param {datejs} date
+ * @return {String} Date string based on current timezone using locale date formating
+ */
+export const printFromStringUtcToFullDate = (date) => {
+	return dayjs(date).tz().format(DATETIME_FORMAT.date);
+};
+
 export const printTimeFromStringUTC = (date) => {
 	return dayjs(date).tz().format(DATETIME_FORMAT.time);
 };
