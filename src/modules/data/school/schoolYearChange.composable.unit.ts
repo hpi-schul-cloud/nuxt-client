@@ -95,7 +95,6 @@ describe("SchoolYearChange.composable", () => {
 		describe("when error occur during fetch", () => {
 			const setup = () => {
 				const errorResponse = axiosErrorFactory.build();
-				const apiError = mapAxiosErrorToResponseError(errorResponse);
 
 				useSchoolApiMock.fetchMaintenanceStatus.mockRejectedValueOnce(
 					errorResponse
@@ -105,7 +104,6 @@ describe("SchoolYearChange.composable", () => {
 
 				return {
 					composable,
-					apiError,
 				};
 			};
 
@@ -118,13 +116,13 @@ describe("SchoolYearChange.composable", () => {
 			});
 
 			it("should show error notification", async () => {
-				const { composable, apiError } = setup();
+				const { composable } = setup();
 
 				await composable.fetchSchoolYearStatus("id");
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					status: "error",
-					text: apiError.message,
+					text: "error.generic",
 				});
 			});
 

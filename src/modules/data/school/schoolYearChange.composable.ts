@@ -20,11 +20,9 @@ export const useSchoolYearChange = () => {
 
 		try {
 			maintenanceStatus.value = await fetchMaintenanceStatus(schoolId);
-		} catch (axiosError: unknown) {
-			const apiError = mapAxiosErrorToResponseError(axiosError);
-
+		} catch {
 			notifierModule.show({
-				text: apiError.message,
+				text: t("error.generic"),
 				status: "error",
 			});
 		}
