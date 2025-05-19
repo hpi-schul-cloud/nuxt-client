@@ -1925,6 +1925,11 @@ export default {
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
+	"pages.rooms.members.add.role.student": "Учень",
+	"pages.rooms.members.add.students.forbidden":
+		"Якщо в налаштуваннях школи вимкнено видимість учнів для вчителів, ви можете додавати лише учнів з вашого класу. Зверніться до адміністратора школи.",
+	"pages.rooms.members.add.warningText":
+		"Учнів з інших шкіл може додати до кімнати лише відповідальний(а) вчитель(ка) з їхнього навчального закладу.",
 	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberFullName}",
 	"pages.rooms.members.actionMenu.selectedMembers":
 		"Меню дій для {count} вибраних учасників",
