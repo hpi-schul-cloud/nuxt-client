@@ -13,7 +13,6 @@
 				density="compact"
 				flat
 				:aria-label="$t('common.labels.name.new')"
-				:placeholder="$t('common.labels.name.new')"
 				:label="t('common.labels.name.new')"
 				:rules="[validateOnOpeningTag]"
 			/>
