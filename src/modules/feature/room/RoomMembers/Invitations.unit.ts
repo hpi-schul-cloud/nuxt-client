@@ -8,7 +8,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { useRoomInvitationLinkStore, RoomInvitationLink } from "@data-room";
-import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { nextTick } from "vue";
 
 jest.mock("@util-board/BoardNotifier.composable");
@@ -66,56 +65,17 @@ describe("Invitations", () => {
 		);
 	});
 
-	it("should handle onClick for 'Create Invitation' button", async () => {
-		const { wrapper, roomInvitationLinkStore } = setup();
-
-		const createButton = wrapper.get("[data-testid=create-invitation-button]");
-		await createButton.trigger("click");
-
-		expect(roomInvitationLinkStore.createLink).toHaveBeenCalledTimes(1);
-	});
-
-	it("should handle onClick for 'Delete Invitation' button", async () => {
-		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
-		const { wrapper, roomInvitationLinkStore } = setup(roomInvitationLinks);
-
-		const deleteButton = wrapper.get("[data-testid=delete-invitation-button]");
-		await deleteButton.trigger("click");
-
-		expect(roomInvitationLinkStore.deleteLinks).toHaveBeenCalledTimes(1);
-	});
-
-	it("should handle onClick for 'Update Invitation' button", async () => {
-		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
-		const { wrapper, roomInvitationLinkStore } = setup(roomInvitationLinks);
-		const firstLink = roomInvitationLinks[0];
-
-		const updateButton = wrapper.get("[data-testid=update-invitation-button]");
-		await updateButton.trigger("click");
-
-		expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledTimes(1);
-		expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(
-			expect.objectContaining({
-				title: expect.stringContaining(firstLink.title),
-			})
-		);
-	});
-
-	it("should handle onClick for 'Use Invitation' button", async () => {
-		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
-
-		const { wrapper } = setup(roomInvitationLinks);
-
-		const linkId = roomInvitationLinks[0].id;
-		const clipboardMock = createMock<Clipboard>();
-		Object.assign(navigator, { clipboard: clipboardMock });
-
-		const useButton = wrapper.get("[data-testid=copy-invitation-link-button]");
-		await useButton.trigger("click");
+	it("should fetch links onMount life cycle", async () => {
+		const { roomInvitationLinkStore } = setup();
 		await nextTick();
 
-		expect(clipboardMock.writeText).toHaveBeenCalledWith(
-			expect.stringContaining(linkId)
-		);
+		expect(roomInvitationLinkStore.fetchLinks).toHaveBeenCalled();
+	});
+
+	it("should render InvitationTable component", () => {
+		const { wrapper } = setup();
+		const invitationTable = wrapper.findComponent({ name: "InvitationTable" });
+
+		expect(invitationTable.exists()).toBe(true);
 	});
 });

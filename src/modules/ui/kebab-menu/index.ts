@@ -4,6 +4,7 @@ import KebabMenuActionChangeLayout from "./KebabMenuActionChangeLayout.vue";
 import KebabMenuActionChangePermission from "./KebabMenuActionChangePermission.vue";
 import KebabMenuActionCopy from "./KebabMenuActionCopy.vue";
 import KebabMenuActionDelete from "./KebabMenuActionDelete.vue";
+import KebabMenuActionDeleteMemberInvitation from "./KebabMenuActionDeleteMemberInvitation.vue";
 import KebabMenuActionDuplicate from "./KebabMenuActionDuplicate.vue";
 import KebabMenuActionEdit from "./KebabMenuActionEdit.vue";
 import KebabMenuActionLeaveRoom from "./KebabMenuActionLeaveRoom.vue";
@@ -27,6 +28,7 @@ export {
 	KebabMenuActionChangePermission,
 	KebabMenuActionCopy,
 	KebabMenuActionDelete,
+	KebabMenuActionDeleteMemberInvitation,
 	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
 	KebabMenuActionLeaveRoom,

@@ -382,6 +382,50 @@ export default {
 		"¿Está seguro de que desea desactivar la sincronización de {groupTypes}?",
 	"components.administration.provisioningOptions.warning.title":
 		"Deshabilitar la sincronización",
+	"components.administration.schoolYearChangeSection.headers":
+		"Cambio de año escolar",
+	"components.administration.schoolYearChangeSection.info.part.one":
+		"Con la ayuda de la fase de transferencia, la membresía de clase y los datos personales en el LDAP se pueden ajustar en paz. Finalmente, todos los cambios se pueden transferir a la {instance}.",
+	"components.administration.schoolYearChangeSection.info.part.two":
+		" (más información sobre el {0})",
+	"components.administration.schoolYearChangeSection.info.link":
+		"Ayuda del lado de la ayuda",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"No se encontraron suficientes años escolares. ¡Póngase en contacto con el soporte!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"La escuela ya está en el próximo año escolar",
+	"components.administration.schoolYearChangeSection.notification.finish.success":
+		"El año escolar comenzó con éxito",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"La fase de transferencia comenzó con éxito",
+	"components.administration.schoolYearChangeSection.title.step.one":
+		"Al final del año escolar",
+	"components.administration.schoolYearChangeSection.description.step.one":
+		"La fase de transferencia se puede comenzar manualmente dos semanas antes del inicio de las vacaciones. Si no hay ningún comienzo manual al comienzo de las vacaciones, la fase de transferencia comienza automáticamente. El inicio de la fase de transferencia no se puede deshacer.",
+	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
+		"Fase de transferencia de inicio",
+	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
+		"Fase de transferencia iniciada",
+	"components.administration.schoolYearChangeSection.title.step.two":
+		"Alrededor de las vacaciones de verano",
+	"components.administration.schoolYearChangeSection.description.step.two":
+		"Durante la fase de transferencia, todos los datos de clase y personales se pueden actualizar en paz. El inicio de sesión y los cambios en las contraseñas aún son posibles para todos los usuarios existentes. Se pueden crear nuevos cursos durante la fase de transferencia, pero sin la asignación de clases.",
+	"components.administration.schoolYearChangeSection.info.step.two":
+		"Durante la fase de transferencia, no se sincronizan nuevos usuarios, clases o cambios en los datos existentes del LDAP.",
+	"components.administration.schoolYearChangeSection.step.two.button":
+		"Verifique los datos de LDAP",
+	"components.administration.schoolYearChangeSection.title.step.three":
+		"Nuevo año escolar",
+	"components.administration.schoolYearChangeSection.description.step.three":
+		"Aquí la transferencia de los datos se puede iniciar al {instance}. Esto acelera en el nuevo año escolar.",
+	"components.administration.schoolYearChangeSection.step.three.button":
+		"Fase de transferencia final",
+	"components.administration.schoolYearChangeSection.checkbox.step.three":
+		"Los datos de clase y personales (LDAP) se han actualizado y marcado",
+	"components.administration.schoolYearChangeSection.dialog.title":
+		"¿Realmente termina el año escolar?",
+	"components.administration.schoolYearChangeSection.dialog.content":
+		"La sincronización de los datos maestros LDAP se interrumpe durante la fase de transferencia. Esto significa que los datos y clases del usuario (si se usan) ya no se actualizan a través de LDAP. Iniciar sesión con datos de inicio de sesión ya sincronizados aún es posible. También se tienen en cuenta los cambios de contraseña en el LDAP durante el inicio de sesión.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "en ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hora | horas",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
@@ -1945,6 +1989,19 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Autorizaciones de sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",
+	"pages.rooms.members.tableHeader.description": "Descripción",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"Sólo válido dentro de la escuela",
+	"pages.rooms.members.tableHeader.validForStudents":
+		"También válido para estudiantes",
+	"pages.rooms.members.tableHeader.expirationDate": "Fecha de caducidad",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Confirmación obligatoria",
+	"pages.rooms.members.tableHeader.status": "Estado",
+	"pages.rooms.members.tables.common.yes": "sí",
+	"pages.rooms.members.tables.common.no": "no",
+	"pages.rooms.members.tables.common.expired": "caducado",
+	"pages.rooms.members.tables.common.active": "activo",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} recibe las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1969,12 +2026,16 @@ export default {
 		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
-	"pages.rooms.members.inviteMember.firstStep.title":
+	"pages.rooms.members.inviteMember.step.prepare.title":
 		"Crear enlace de invitación",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",
-	"pages.rooms.members.inviteMember.secondStep.title":
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"El enlace de invitación editado se muestra en el siguiente paso.",
+	"pages.rooms.members.inviteMember.step.share.title":
 		"Compartir enlace de invitación",
+	"pages.rooms.members.inviteMember.step.edit.title":
+		"Editar enlace de invitación",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
 	"pages.rooms.members.inviteMember.form.description.label":
@@ -1989,6 +2050,16 @@ export default {
 		"El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"La entrada a la habitación sólo es posible previa confirmación ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"¿Suprimir los enlaces de invitación seleccionados?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"¿Suprimir el enlace de invitación '{invitation}'?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Compartir enlace de invitación",
+	"pages.rooms.invitationlinks.error.create":
+		"No se ha podido crear el enlace de invitación.",
+	"pages.rooms.invitationlinks.error.update":
+		"Se ha producido un error al actualizar el enlace de invitación.",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

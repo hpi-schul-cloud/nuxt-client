@@ -377,6 +377,49 @@ export default {
 		"Are you sure you want to disable synchronization for {groupTypes}?",
 	"components.administration.provisioningOptions.warning.title":
 		"Disable synchronization",
+	"components.administration.schoolYearChangeSection.headers":
+		"Change of school year",
+	"components.administration.schoolYearChangeSection.info.part.one":
+		"The transfer phase allows for class membership and personal data to be adjusted in LDAP at a leisurely pace. Finally, all changes can be transferred to the {instance} at once.",
+	"components.administration.schoolYearChangeSection.info.part.two":
+		" (more information on the {0})",
+	"components.administration.schoolYearChangeSection.info.link": "help page",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"Not enough school years were found. Please contact support!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"The school is already in the next school year",
+	"components.administration.schoolYearChangeSection.notification.finish.success":
+		"School year successfully started",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"Transfer phase started successfully",
+	"components.administration.schoolYearChangeSection.title.step.one":
+		"End of the school year",
+	"components.administration.schoolYearChangeSection.description.step.one":
+		"The transfer phase can be started manually two weeks before the start of the holidays. If no manual start is made by the start of the holidays, the transfer phase begins automatically. The start of the transfer phase cannot be reversed.",
+	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
+		"Start transfer period",
+	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
+		"Transfer phase started",
+	"components.administration.schoolYearChangeSection.title.step.two":
+		"Around the summer holidays",
+	"components.administration.schoolYearChangeSection.description.step.two":
+		"During the transfer phase, all class and personal data can be updated at your leisure. Login and password changes are still possible for all existing users. New courses can be created during the transfer phase, but without class assignments.",
+	"components.administration.schoolYearChangeSection.info.step.two":
+		"During the transfer phase, no new users, classes, or changes to existing data are synchronized from the LDAP.",
+	"components.administration.schoolYearChangeSection.step.two.button":
+		"Check LDAP-data",
+	"components.administration.schoolYearChangeSection.title.step.three":
+		"New school year",
+	"components.administration.schoolYearChangeSection.description.step.three":
+		"Here, the transfer of data to the {instance} can be initiated. This marks the beginning of the new school year.",
+	"components.administration.schoolYearChangeSection.step.three.button":
+		"End transfer phase",
+	"components.administration.schoolYearChangeSection.checkbox.step.three":
+		"Class and personal data (LDAP) have been updated and verified.",
+	"components.administration.schoolYearChangeSection.dialog.title":
+		"Really finish the school year?",
+	"components.administration.schoolYearChangeSection.dialog.content":
+		"Synchronization of LDAP master data is interrupted during the transfer phase. Thus, user data and classes (if used) are no longer updated via LDAP. Login with previously synchronized login data is still possible. Password changes in LDAP during login are also taken into account.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hour | hours",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
@@ -1886,6 +1929,18 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.members.tableHeader.actions": "Actions",
+	"pages.rooms.members.tableHeader.description": "Description",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"Only valid within the school",
+	"pages.rooms.members.tableHeader.validForStudents": "Also valid for students",
+	"pages.rooms.members.tableHeader.expirationDate": "Expiration date",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Confirmation required",
+	"pages.rooms.members.tableHeader.status": "Status",
+	"pages.rooms.members.tables.common.yes": "yes",
+	"pages.rooms.members.tables.common.no": "no",
+	"pages.rooms.members.tables.common.expired": "expired",
+	"pages.rooms.members.tables.common.active": "active",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} receives the following permissions in the room “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1910,10 +1965,14 @@ export default {
 		"If this permission is transferred to {memberFullName}, {currentUserFullName} loses the right to delete the room.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"This action can only be undone by {memberFullName}.",
-	"pages.rooms.members.inviteMember.firstStep.title": "Create invitation link",
+	"pages.rooms.members.inviteMember.step.prepare.title":
+		"Create invitation link",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"The next step is to create a link, which can be used to enter the room.",
-	"pages.rooms.members.inviteMember.secondStep.title": "Share invitation link",
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"The edited invitation link is displayed in the next step.",
+	"pages.rooms.members.inviteMember.step.share.title": "Share invitation link",
+	"pages.rooms.members.inviteMember.step.edit.title": "Edit invitation link",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Students from other schools must always be added to the room by a supervising teacher from their school.",
 	"pages.rooms.members.inviteMember.form.description.label":
@@ -1927,6 +1986,16 @@ export default {
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link expires on",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Entry to the room only possible after confirmation ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Delete selected invitation links?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"Delete the invitation link '{invitation}'?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Share invitation link",
+	"pages.rooms.invitationlinks.error.create":
+		"Creating the invitation link has failed.",
+	"pages.rooms.invitationlinks.error.update":
+		"Updating the invitation link has failed.",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
