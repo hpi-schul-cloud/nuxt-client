@@ -379,6 +379,49 @@ export default {
 		"Sind Sie sich sicher, dass die Synchronisation für {groupTypes} deaktivieren möchten?",
 	"components.administration.provisioningOptions.warning.title":
 		"Synchronisation deaktivieren",
+	"components.administration.schoolYearChangeSection.headers":
+		"Schuljahreswechsel",
+	"components.administration.schoolYearChangeSection.info.part.one":
+		"Mit Hilfe der Transferphase können Klassenzugehörigkeit und Personendaten im LDAP in Ruhe angepasst werden. Abschließend können alle Änderungen mit einem Mal in die {instance} übertragen werden.",
+	"components.administration.schoolYearChangeSection.info.part.two":
+		" (mehr Infos auf der {0})",
+	"components.administration.schoolYearChangeSection.info.link": "Hilfeseite",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"Es wurden nicht genug Schuljahre gefunden. Bitte an den Support wenden!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"Die Schule befindet sich bereits im nächsten Schuljahr",
+	"components.administration.schoolYearChangeSection.notification.finish.success":
+		"Schuljahr erfolgreich gestartet",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"Transferphase erfolgreich gestartet",
+	"components.administration.schoolYearChangeSection.title.step.one":
+		"Ende des Schuljahres",
+	"components.administration.schoolYearChangeSection.description.step.one":
+		"Die Transferphase kann zwei Wochen vor Ferienbeginn manuell gestartet werden. Ist bis zum Ferienbeginn kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
+	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
+		"Transferphase starten",
+	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
+		"Transferphase gestartet",
+	"components.administration.schoolYearChangeSection.title.step.two":
+		"Rund um die Sommerferien",
+	"components.administration.schoolYearChangeSection.description.step.two":
+		"Während der Transferphase können alle Klassen- und Personendaten in Ruhe aktualisiert werden. Login und Kennwortänderungen sind für alle bestehenden Nutzenden weiterhin möglich. Während der Transferphase können neue Kurse erstellt werden, allerdings ohne die Zuordnung von Klassen. ",
+	"components.administration.schoolYearChangeSection.info.step.two":
+		"Während der Transferphase werden keine neuen Nutzenden, Klassen oder Änderungen an bestehenden Daten aus dem LDAP synchronisiert.",
+	"components.administration.schoolYearChangeSection.step.two.button":
+		"LDAP-Daten überprüfen",
+	"components.administration.schoolYearChangeSection.title.step.three":
+		"Neues Schuljahr",
+	"components.administration.schoolYearChangeSection.description.step.three":
+		"Hier kann die Übertragung der Daten in die {instance} gestartet werden. Damit wird das neue Schuljahr eingeläutet.",
+	"components.administration.schoolYearChangeSection.step.three.button":
+		"Transferphase beenden",
+	"components.administration.schoolYearChangeSection.checkbox.step.three":
+		"Klassen- und Personendaten (LDAP) wurden aktualisiert und überprüft",
+	"components.administration.schoolYearChangeSection.dialog.title":
+		"Das Schuljahr wirklich beenden?",
+	"components.administration.schoolYearChangeSection.dialog.content":
+		"Die Synchronisierung von LDAP-Stammdaten wird während der Transferphase unterbrochen. Somit werden Nutzerdaten und Klassen (sofern verwendet) nicht mehr über LDAP aktualisiert. Der Login mit bereits synchronisierten Login-Daten ist weiterhin möglich. Passwortänderungen im LDAP während des Logins werden ebenfalls berücksichtigt.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "Stunde | Stunden",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
@@ -1915,6 +1958,19 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.members.tableHeader.actions": "Aktionen",
+	"pages.rooms.members.tableHeader.description": "Beschreibung",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"Nur schulintern gültig",
+	"pages.rooms.members.tableHeader.validForStudents":
+		"Auch für Lernende gültig",
+	"pages.rooms.members.tableHeader.expirationDate": "Ablaufdatum",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Bestätigung erforderlich",
+	"pages.rooms.members.tableHeader.status": "Status",
+	"pages.rooms.members.tables.common.yes": "ja",
+	"pages.rooms.members.tables.common.no": "nein",
+	"pages.rooms.members.tables.common.expired": "abgelaufen",
+	"pages.rooms.members.tables.common.active": "aktiv",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} erhält die folgenden Berechtigungen im Raum „{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1940,11 +1996,15 @@ export default {
 		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {currentUserFullName} das Recht, den Raum zu löschen.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
-	"pages.rooms.members.inviteMember.firstStep.title":
+	"pages.rooms.members.inviteMember.step.prepare.title":
 		"Einladungslink erstellen",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Im nächsten Schritt wird ein Link erstellt, mit dem der Raum betreten	werden kann.",
-	"pages.rooms.members.inviteMember.secondStep.title": "Einladungslink teilen",
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"Im nächsten Schritt wird der bearbeitete Einladungslink angezeigt.",
+	"pages.rooms.members.inviteMember.step.share.title": "Einladungslink teilen",
+	"pages.rooms.members.inviteMember.step.edit.title":
+		"Einladungslink bearbeiten",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
 	"pages.rooms.members.inviteMember.form.description.label":
@@ -1958,6 +2018,16 @@ export default {
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Betreten des Raums nur nach Bestätigung möglich ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Ausgewählte Einladungslinks wirklich löschen?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"Einladungslink '{invitation}' wirklich löschen?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Einladungslink teilen",
+	"pages.rooms.invitationlinks.error.create":
+		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
+	"pages.rooms.invitationlinks.error.update":
+		"Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
