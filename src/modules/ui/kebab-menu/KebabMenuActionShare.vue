@@ -3,7 +3,7 @@
 		:icon="mdiShareVariantOutline"
 		data-testid="kebab-menu-action-share"
 	>
-		{{ t("common.actions.shareCopy") }}
+		{{ actionText }}
 	</KebabMenuAction>
 </template>
 
@@ -11,5 +11,14 @@
 import KebabMenuAction from "./KebabMenuAction.vue";
 import { mdiShareVariantOutline } from "@icons/material";
 import { useI18n } from "vue-i18n";
+import { computed } from "vue";
 const { t } = useI18n();
+
+const props = defineProps({
+	text: { type: String, required: false, default: undefined },
+});
+
+const actionText = computed(() => {
+	return props.text ?? t("common.actions.shareCopy");
+});
 </script>
