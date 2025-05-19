@@ -26,11 +26,10 @@ export const useSchoolYearChange = () => {
 		} catch (axiosError: unknown) {
 			const apiError = mapAxiosErrorToResponseError(axiosError);
 
-			error.value = {
-				error: apiError,
-				message: apiError.message,
-				statusCode: apiError.code,
-			};
+			notifierModule.show({
+				text: apiError.message,
+				status: "error",
+			});
 		}
 
 		isLoading.value = false;
@@ -63,12 +62,6 @@ export const useSchoolYearChange = () => {
 			}
 		} catch (axiosError: unknown) {
 			const apiError = mapAxiosErrorToResponseError(axiosError);
-
-			error.value = {
-				error: apiError,
-				message: apiError.message,
-				statusCode: apiError.code,
-			};
 
 			if (apiError.type === "MISSING_YEARS") {
 				notifierModule.show({

@@ -1,5 +1,4 @@
 import NotifierModule from "@/store/notifier";
-import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
@@ -118,15 +117,14 @@ describe("SchoolYearChange.composable", () => {
 				expect(composable.isLoading.value).toBe(false);
 			});
 
-			it("should set the error", async () => {
+			it("should show error notification", async () => {
 				const { composable, apiError } = setup();
 
 				await composable.fetchSchoolYearStatus("id");
 
-				expect(composable.error.value).toEqual<BusinessError>({
-					error: apiError,
-					statusCode: apiError.code,
-					message: apiError.message,
+				expect(notifierModule.show).toHaveBeenCalledWith({
+					status: "error",
+					text: apiError.message,
 				});
 			});
 
@@ -232,18 +230,6 @@ describe("SchoolYearChange.composable", () => {
 				await composable.setMaintenanceMode("id", false);
 
 				expect(composable.isLoading.value).toBe(false);
-			});
-
-			it("should set the error", async () => {
-				const { composable, apiError } = setup();
-
-				await composable.setMaintenanceMode("id", false);
-
-				expect(composable.error.value).toEqual<BusinessError>({
-					error: apiError,
-					statusCode: apiError.code,
-					message: apiError.message,
-				});
 			});
 
 			describe("when error is a MISSING_YEARS error", () => {
