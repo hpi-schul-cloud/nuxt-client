@@ -25,7 +25,9 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const roomId = computed(() => room.value?.id);
 
 	const roomMembers: Ref<RoomMember[]> = ref([]);
-	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName">[]> = ref([]);
+	const potentialRoomMembers: Ref<
+		Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]
+	> = ref([]);
 
 	const isLoading = ref<boolean>(false);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
@@ -125,10 +127,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
 						schoolRoleNames: [schoolRoleName],
-						displayRoomRole:
-							schoolRoleName === RoleName.Teacher
-								? roomRole[RoleName.Roomadmin]
-								: roomRole[RoleName.Roomviewer],
 						displaySchoolRole: schoolRoleMap[schoolRoleName],
 					};
 				})

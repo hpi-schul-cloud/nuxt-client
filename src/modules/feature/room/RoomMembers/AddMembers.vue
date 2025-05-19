@@ -98,7 +98,7 @@
 import { useI18n } from "vue-i18n";
 import { computed, onMounted, ref } from "vue";
 import { RoleName } from "@/serverApi/v3";
-import { useRoomMembersStore } from "@data-room";
+import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import {
 	VAutocomplete,
@@ -107,13 +107,6 @@ import {
 } from "vuetify/lib/components/index.mjs";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
-
-defineProps({
-	canAddAllStudents: {
-		type: Boolean,
-		default: false,
-	},
-});
 
 const emit = defineEmits<{
 	(e: "close"): void;
@@ -125,6 +118,12 @@ const roomMembersStore = useRoomMembersStore();
 const { potentialRoomMembers, schools } = storeToRefs(roomMembersStore);
 const { addMembers, getPotentialMembers, resetPotentialMembers } =
 	roomMembersStore;
+
+const { canAddRoomMembers, canSeeAllStudents } = useRoomAuthorization();
+
+const canAddAllStudents = computed(() => {
+	return canAddRoomMembers.value && canSeeAllStudents.value;
+});
 
 const selectedSchool = ref(schools.value[0].id);
 

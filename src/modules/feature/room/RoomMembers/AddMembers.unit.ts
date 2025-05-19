@@ -17,13 +17,14 @@ import { VueWrapper } from "@vue/test-utils";
 import { VAutocomplete } from "vuetify/lib/components/index.mjs";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { createTestingPinia } from "@pinia/testing";
-import { useRoomMembersStore } from "@data-room";
+import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { WarningAlert } from "@ui-alert";
+import { Ref, ref } from "vue";
 
 jest.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
@@ -34,6 +35,17 @@ jest.mock("@vueuse/integrations/useFocusTrap", () => {
 
 jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
+jest.mock("@data-room/roomAuthorization.composable");
+const roomAuthorizationMock = jest.mocked(useRoomAuthorization);
+
+type RefPropertiesOnly<T> = {
+	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
+};
+
+type RoomAuthorizationRefs = Partial<
+	RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>
+>;
 
 describe("AddMembers", () => {
 	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
@@ -64,14 +76,32 @@ describe("AddMembers", () => {
 				name: "Paul-Gerhardt-Gymnasium",
 			})
 		);
+	});
+
+	const setup = (customRoomAuthorization?: RoomAuthorizationRefs) => {
+		const configDefaults = {
+			canAddRoomMembers: true,
+			canSeeAllStudents: true,
+		};
+		const roomAuthorization = {
+			...configDefaults,
+			...customRoomAuthorization,
+		};
+		const potentialRoomMembers = roomMemberFactory.buildList(3);
+		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
 
 		const mockMe = meResponseFactory.build();
 		authModule.setMe(mockMe);
-	});
 
-	const setup = (canAddAllStudents = true) => {
-		const potentialRoomMembers = roomMemberFactory.buildList(3);
-		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
+		const authorizationPermissions =
+			createMock<ReturnType<typeof useRoomAuthorization>>();
+
+		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
+				value ?? false
+			);
+		}
+		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
 		wrapper = mount(AddMembers, {
 			attachTo: document.body,
@@ -91,10 +121,6 @@ describe("AddMembers", () => {
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
-			},
-
-			props: {
-				canAddAllStudents,
 			},
 		});
 
@@ -509,7 +535,8 @@ describe("AddMembers", () => {
 	describe("when user is not allowed to see all students", () => {
 		describe("and the role is set to student", () => {
 			it("should show info message", async () => {
-				const { wrapper } = setup(false);
+				const { wrapper } = setup({ canSeeAllStudents: false });
+
 				const roleComponent = wrapper.getComponent({
 					ref: "selectRole",
 				});
@@ -526,7 +553,8 @@ describe("AddMembers", () => {
 		});
 		describe("and the role is set to teacher", () => {
 			it("should not show info message", async () => {
-				const { wrapper } = setup(false);
+				const { wrapper } = setup({ canSeeAllStudents: false });
+
 				const roleComponent = wrapper.getComponent({
 					ref: "selectRole",
 				});

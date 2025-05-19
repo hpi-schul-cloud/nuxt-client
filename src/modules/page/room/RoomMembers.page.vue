@@ -56,10 +56,7 @@
 			persistent
 			@keydown.esc="onDialogClose"
 		>
-			<AddMembers
-				:can-add-all-students="canAddAllStudents"
-				@close="onDialogClose"
-			/>
+			<AddMembers @close="onDialogClose" />
 		</VDialog>
 	</DefaultWireframe>
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
@@ -147,8 +144,7 @@ const { fetchMembers, getSchools, leaveRoom, resetStore } = roomMembersStore;
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
-const { canAddRoomMembers, canLeaveRoom, canSeeAllStudents } =
-	useRoomAuthorization();
+const { canAddRoomMembers, canLeaveRoom } = useRoomAuthorization();
 
 const { isInvitationDialogOpen, invitationStep } = storeToRefs(
 	useRoomInvitationLinkStore()
@@ -180,10 +176,6 @@ const activeTab = computed<Tab>({
 
 const isVisibleTabNavigation = computed(() => {
 	return canAddRoomMembers.value && FEATURE_ROOM_MEMBERS_TABS_ENABLED;
-});
-
-const canAddAllStudents = computed(() => {
-	return canAddRoomMembers.value && canSeeAllStudents.value;
 });
 
 const tabs: Array<{
