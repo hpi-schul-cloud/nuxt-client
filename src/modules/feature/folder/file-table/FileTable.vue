@@ -216,9 +216,13 @@ const onRenameDialogCancel = () => {
 	fileRecordToRename.value = undefined;
 };
 const onRenameDialogConfirm = (newName: string) => {
-	const fileExtension = getFileExtension(fileRecordToRename.value?.name || "");
-	const nameWithExtension = `${newName}.${fileExtension}`;
-	emit("update:name", nameWithExtension, fileRecordToRename.value);
+	if (fileRecordToRename.value) {
+		const fileExtension = getFileExtension(fileRecordToRename.value.name);
+		const nameWithExtension = `${newName}.${fileExtension}`;
+		emit("update:name", nameWithExtension, fileRecordToRename.value);
+	} else {
+		throw new Error("The file record to be renamed is not defined");
+	}
 
 	isRenameDialogOpen.value = false;
 	fileRecordToRename.value = undefined;
