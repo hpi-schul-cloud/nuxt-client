@@ -54,7 +54,7 @@ describe("SchoolYearChangeSection", () => {
 	beforeEach(() => {
 		useSharedSchoolYearChangeApiMock = createMock<
 			ReturnType<typeof useSharedSchoolYearChange>
-		>({ maintenanceStatus: ref(), error: ref() });
+		>({ maintenanceStatus: ref() });
 
 		jest
 			.mocked(useSharedSchoolYearChange)
