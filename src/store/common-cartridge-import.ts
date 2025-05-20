@@ -5,6 +5,7 @@ import {
 	CommonCartridgeApiFactory,
 	CommonCartridgeApiInterface,
 } from "@/commonCartridgeApi/v3/api";
+import axios from "axios";
 
 @Module({
 	name: "commonCartridgeImportModule",
@@ -58,36 +59,33 @@ export default class CommonCartridgeImportModule extends VuexModule {
 			return;
 		}
 
-		try {
-			await this.commonCartridgeApi.commonCartridgeControllerImportCourse(file);
-			this.setIsSuccess(true);
-		} catch {
-			this.setIsSuccess(false);
-		}
-
 		// try {
-		// 	const formData = new FormData();
-		// 	formData.append("file", file);
-
-		// 	const match = document.cookie.match(/(?:^|;\s*)jwt=([^;]*)/);
-		// 	const token = match ? decodeURIComponent(match[1]) : null;
-		// 	await this.commonCartridgeApi.commonCartridgeControllerImportCourse({
-		// 		file,
-		// 	});
-		// 	await axios.post(
-		// 		`https://ew-1215.dbc.dbildungscloud.dev/api/v3/common-cartridge/import`,
-		// 		formData,
-		// 		{
-		// 			headers: {
-		// 				Authorization: `Bearer ${token}`,
-		// 			},
-		// 			withCredentials: true,
-		// 		}
-		// 	);
-
+		// 	await this.commonCartridgeApi.commonCartridgeControllerImportCourse(file);
 		// 	this.setIsSuccess(true);
 		// } catch {
 		// 	this.setIsSuccess(false);
 		// }
+
+		try {
+			const formData = new FormData();
+			formData.append("file", file);
+
+			const match = document.cookie.match(/(?:^|;\s*)jwt=([^;]*)/);
+			const token = match ? decodeURIComponent(match[1]) : null;
+			await axios.post(
+				`https://ew-1215.dbc.dbildungscloud.dev/api/v3/common-cartridge/import`,
+				formData,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+					withCredentials: true,
+				}
+			);
+
+			this.setIsSuccess(true);
+		} catch {
+			this.setIsSuccess(false);
+		}
 	}
 }
