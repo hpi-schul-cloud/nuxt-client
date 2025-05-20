@@ -1,6 +1,5 @@
 import { CoursesApiFactory, CoursesApiInterface } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import axios from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	CommonCartridgeApiFactory,
