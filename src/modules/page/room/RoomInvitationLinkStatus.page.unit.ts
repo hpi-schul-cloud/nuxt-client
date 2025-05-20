@@ -208,6 +208,17 @@ describe("RoomInvitationLinkStatusPage", () => {
 				expect(statusMessage.text()).toContain(expectedMessage);
 			});
 		});
+
+		it("should show bird image", async () => {
+			const { wrapper } = await setup({
+				roomId: "",
+				validationMessage: RoomInvitationLinkValidationError.Expired,
+				schoolName: "Beispielschule",
+			});
+
+			const statusImage = wrapper.find("[data-testid=img-crossed-hands]");
+			expect(statusImage.exists()).toBe(true);
+		});
 	});
 
 	describe("when the link store return neither roomId nor message", () => {
