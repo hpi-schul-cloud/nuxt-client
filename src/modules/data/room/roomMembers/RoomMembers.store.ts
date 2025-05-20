@@ -25,7 +25,9 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const roomId = computed(() => room.value?.id);
 
 	const roomMembers: Ref<RoomMember[]> = ref([]);
-	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName">[]> = ref([]);
+	const potentialRoomMembers: Ref<
+		Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]
+	> = ref([]);
 
 	const isLoading = ref<boolean>(false);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
@@ -45,7 +47,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const schoolRoleMap: Record<string, string> = {
 		[RoleName.Teacher]: t("common.labels.teacher"),
-		[RoleName.Student]: t("common.labels.student"),
+		[RoleName.Student]: t("pages.rooms.members.add.role.student"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -75,6 +77,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
+					fullName: `${member.lastName}, ${member.firstName}`,
 					isSelectable: !(
 						member.userId === currentUserId ||
 						member.roomRoleName === RoleName.Roomowner
@@ -93,10 +96,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const getSchoolRoleName = (schoolRoleNames: RoleName[]) => {
 		const isAdmin = schoolRoleNames.includes(RoleName.Administrator);
-		if (isAdmin) {
+		const isTeacher = schoolRoleNames.includes(RoleName.Teacher);
+		if (isAdmin || isTeacher) {
 			return schoolRoleMap[RoleName.Teacher];
 		} else {
-			return schoolRoleMap[schoolRoleNames[0]];
+			return schoolRoleMap[RoleName.Student];
 		}
 	};
 
@@ -105,8 +109,16 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		schoolId: string = ownSchool.id
 	) => {
 		try {
-			const result = (await schoolApi.schoolControllerGetTeachers(schoolId))
-				.data;
+			const endpointMap = {
+				[RoleName.Teacher]: () =>
+					schoolApi.schoolControllerGetTeachers(schoolId),
+				[RoleName.Student]: () =>
+					schoolApi.schoolControllerGetStudents(schoolId),
+			};
+
+			const result = (
+				await endpointMap[schoolRoleName as keyof typeof endpointMap]()
+			).data;
 
 			potentialRoomMembers.value = result.data
 				.map((user) => {
@@ -114,9 +126,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 						...user,
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
-						schoolRoleNames: [RoleName.Teacher],
-						displayRoomRole: roomRole[RoleName.Roomadmin],
-						displaySchoolRole: schoolRoleMap[RoleName.Teacher],
+						schoolRoleNames: [schoolRoleName],
+						displaySchoolRole: schoolRoleMap[schoolRoleName],
 					};
 				})
 				.filter((user) => {
@@ -133,6 +144,14 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const getMemberById = (userId: string) => {
 		return roomMembers.value.find((member) => member.userId === userId);
+	};
+
+	const getMemberFullName = (userId = "") => {
+		const member = getMemberById(userId);
+		if (!member) {
+			return "";
+		}
+		return member.fullName;
 	};
 
 	const getSchools = async () => {
@@ -262,6 +281,10 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		member.isSelectable = false;
 	};
 
+	const resetPotentialMembers = () => {
+		potentialRoomMembers.value = [];
+	};
+
 	const resetStore = () => {
 		isLoading.value = false;
 		roomMembers.value = [];
@@ -275,10 +298,12 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		isRoomOwner,
 		changeRoomOwner,
 		fetchMembers,
+		resetPotentialMembers,
 		resetStore,
 		getPotentialMembers,
 		getSchools,
 		getMemberById,
+		getMemberFullName,
 		leaveRoom,
 		removeMembers,
 		updateMembersRole,

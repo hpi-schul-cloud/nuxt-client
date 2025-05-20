@@ -3,7 +3,6 @@
 		<v-window v-model="tab">
 			<v-window-item :value="tabRoutes[0]">
 				<v-custom-double-panels
-					class="pb-16"
 					:panel-one-count="noDueDateTasks.length"
 					:panel-two-count="withDueDateTasks.length + overdueTasks.length"
 					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
@@ -28,17 +27,19 @@
 						/>
 					</template>
 				</v-custom-double-panels>
-				<v-custom-empty-state
-					v-if="openTasksForStudentIsEmpty"
-					:image="emptyState.image"
-					:title="emptyState.title"
-					:subtitle="emptyState.subtitle"
-					class="mt-16"
-				/>
+				<VContainer>
+					<EmptyState
+						v-if="openTasksForStudentIsEmpty"
+						:title="$t('pages.tasks.student.open.emptyState.title')"
+					>
+						<template #media>
+							<TasksEmptyStateSvg />
+						</template>
+					</EmptyState>
+				</VContainer>
 			</v-window-item>
 			<v-window-item :value="tabRoutes[1]">
 				<v-custom-double-panels
-					class="pb-16"
 					:panel-one-count="gradedTasks.length"
 					:panel-two-count="submittedTasks.length"
 					:panel-one-title="$t('pages.tasks.subtitleGraded')"
@@ -54,45 +55,53 @@
 						<tasks-list :tasks="submittedTasks" user-role="student" />
 					</template>
 				</v-custom-double-panels>
-				<v-custom-empty-state
-					v-if="completedTasksForStudentIsEmpty"
-					:image="emptyState.image"
-					:title="emptyState.title"
-					class="mt-16"
-				/>
+				<VContainer>
+					<EmptyState
+						v-if="completedTasksForStudentIsEmpty"
+						:title="$t('pages.tasks.student.completed.emptyState.title')"
+					>
+						<template #media>
+							<TasksEmptyStateSvg />
+						</template>
+					</EmptyState>
+				</VContainer>
 			</v-window-item>
 			<v-window-item :value="tabRoutes[2]">
 				<tasks-list
-					class="pb-16"
 					:tasks="finishedTasks"
 					user-role="student"
 					type="finished"
 					:has-pagination="tab === tabRoutes[2]"
 				/>
-				<v-custom-empty-state
-					v-if="finishedTasksIsEmpty"
-					:image="emptyState.image"
-					:title="emptyState.title"
-					class="mt-16"
-				/>
+				<VContainer>
+					<EmptyState
+						v-if="finishedTasksIsEmpty"
+						:title="$t('pages.tasks.finished.emptyState.title')"
+					>
+						<template #media>
+							<TasksEmptyStateSvg />
+						</template>
+					</EmptyState>
+				</VContainer>
 			</v-window-item>
 		</v-window>
 	</section>
 </template>
 
 <script>
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import TasksList from "@/components/organisms/TasksList";
 import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
+import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 
 export default {
-	components: { TasksList, vCustomDoublePanels, vCustomEmptyState },
+	components: {
+		TasksList,
+		vCustomDoublePanels,
+		EmptyState,
+		TasksEmptyStateSvg,
+	},
 	inject: ["tasksModule", "finishedTasksModule"],
 	props: {
-		emptyState: {
-			type: Object,
-			required: true,
-		},
 		tabRoutes: {
 			type: Array,
 			required: true,
