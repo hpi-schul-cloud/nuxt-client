@@ -9,8 +9,8 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useRoomsState } from "@data-room";
 import { ref } from "vue";
 import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
-import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import RoomTile from "./RoomTile.vue";
+import { EmptyState } from "@ui-empty-state";
 
 jest.mock("@data-room");
 
@@ -59,7 +59,7 @@ describe("@feature-room/RoomGrid", () => {
 
 		const { wrapper } = setup();
 
-		const emptyState = wrapper.findComponent(VCustomEmptyState);
+		const emptyState = wrapper.findComponent(EmptyState);
 		expect(emptyState.exists()).toBe(true);
 	});
 

@@ -19,6 +19,7 @@ import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { FabAction } from "./default-wireframe.types";
 import DefaultWireframe from "./DefaultWireframe.vue";
 import RoomWrapper from "./RoomWrapper.vue";
+import { EmptyState } from "@ui-empty-state";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -107,9 +108,7 @@ describe("@templates/RoomWrapper.vue", () => {
 					props: { hasRooms: false },
 				});
 
-				expect(
-					wrapper.findComponent({ ref: "rooms-empty-state" }).exists()
-				).toBe(true);
+				expect(wrapper.findComponent(EmptyState).exists()).toBe(true);
 			});
 		});
 
