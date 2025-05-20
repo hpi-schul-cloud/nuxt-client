@@ -92,6 +92,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			canLeaveRoom: ref(true),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
+			canSeeAllStudents: ref(false),
 			canDuplicateRoom: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
