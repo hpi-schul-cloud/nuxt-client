@@ -1800,8 +1800,6 @@ export default {
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
-	"pages.room.student.emptyState":
-		"Тут з’являється навчальний вміст, наприклад теми чи завдання.",
 	"pages.room.taskCard.label.done": "Завершити",
 	"pages.room.taskCard.label.due": "Термін",
 	"pages.room.taskCard.label.edit": "Редагувати",
@@ -1814,11 +1812,10 @@ export default {
 	"pages.room.taskCard.student.label.submitted": "Завершено",
 	"pages.room.taskCard.teacher.label.overdue": "Термін дії минув",
 	"pages.room.taskCard.teacher.label.submitted": "Надіслано",
-	"pages.room.teacher.emptyState":
-		"Додавайте та сортуйте навчальний контент до курсу.",
+	"pages.room.learningContent.emptyState":
+		"Наразі в цьому курсі немає навчальних матеріалів",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
-	"pages.rooms.allRooms.emptyState.title": "Наразі тут курсів немає.",
-	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
+	"pages.rooms.emptyState.title": "Наразі курсів немає",
 	"pages.rooms.fab.add.course": "Новий курс",
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
@@ -1873,7 +1870,7 @@ export default {
 	"pages.rooms.tools.deleteDialog.content":
 		"Ви впевнені, що хочете видалити інструмент '{itemName}' із курсу?",
 	"pages.rooms.tools.deleteDialog.title": "видалити інструменти?",
-	"pages.rooms.tools.emptyState": "У цьому курсі ще немає інструментів.",
+	"pages.rooms.tools.emptyState": "Наразі в цьому курсі немає інструментів",
 	"pages.rooms.tools.incomplete": "Конфігурація не завершена",
 	"pages.rooms.tools.incompleteDialog.title": "Конфігурація не завершена",
 	"pages.rooms.tools.logo": "Інструмент-логотип",
@@ -1895,7 +1892,9 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
-	"pages.rooms.emptyState": "Зараз тут немає кімнат",
+	"pages.roomDetails.emptyState":
+		"Наразі в цьому просторі немає навчальних матеріалів",
+	"pages.rooms.emptyState": "Наразі немає вільних кімнат",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.infoAlert.welcome": "Ласкаво просимо до нових Кімнат!",
 	"pages.rooms.infoAlert.welcome.collaboration":
@@ -1922,6 +1921,11 @@ export default {
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
+	"pages.rooms.members.add.role.student": "Учень",
+	"pages.rooms.members.add.students.forbidden":
+		"Якщо в налаштуваннях школи вимкнено видимість учнів для вчителів, ви можете додавати лише учнів з вашого класу. Зверніться до адміністратора школи.",
+	"pages.rooms.members.add.warningText":
+		"Учнів з інших шкіл може додати до кімнати лише відповідальний(а) вчитель(ка) з їхнього навчального закладу.",
 	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberFullName}",
 	"pages.rooms.members.actionMenu.selectedMembers":
 		"Меню дій для {count} вибраних учасників",
@@ -2033,9 +2037,8 @@ export default {
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",
 	"pages.taskCard.deleteElement.title": "Видалити елемент",
-	"pages.tasks.emptyStateOnFilter.title": "Немає завдань",
 	"pages.tasks.finished.emptyState.title":
-		"Наразі у вас немає завершених завдань.",
+		"Наразі немає жодного виконаного завдання",
 	"pages.tasks.labels.due": "Термін",
 	"pages.tasks.labels.filter": "Фільтрувати за курсом",
 	"pages.tasks.labels.noCourse": "Курс не призначено",
@@ -2043,10 +2046,8 @@ export default {
 	"pages.tasks.labels.overdue": "Пропущені",
 	"pages.tasks.labels.planned": "Заплановано",
 	"pages.tasks.student.completed.emptyState.title":
-		"Наразі у вас немає виконаних завдань.",
-	"pages.tasks.student.open.emptyState.subtitle":
-		"Ви виконали всі завдання. Насолоджуйтеся вільним часом!",
-	"pages.tasks.student.open.emptyState.title": "Відкритих завдань немає.",
+		"Наразі немає жодного виконаного завдання",
+	"pages.tasks.student.open.emptyState.title": "Наразі немає відкритих завдань",
 	"pages.tasks.student.openTasks": "Відкриті завдання",
 	"pages.tasks.student.submittedTasks": "Виконані завдання",
 	"pages.tasks.student.subtitleOverDue": "Пропущені завдання",
@@ -2055,10 +2056,8 @@ export default {
 	"pages.tasks.subtitleNotGraded": "Не оцінено",
 	"pages.tasks.subtitleOpen": "Відкриті завдання",
 	"pages.tasks.subtitleWithDue": "З терміном виконання",
-	"pages.tasks.teacher.drafts.emptyState.title": "Немає чернеток.",
-	"pages.tasks.teacher.open.emptyState.subtitle":
-		"Ви виконали всі завдання. Насолоджуйтеся вільним часом!",
-	"pages.tasks.teacher.open.emptyState.title": "Поточних завдань немає.",
+	"pages.tasks.teacher.drafts.emptyState.title": "Наразі немає чернеток",
+	"pages.tasks.teacher.open.emptyState.title": "Наразі завдань немає",
 	"pages.tasks.teacher.subtitleOverDue": "Завдання, термін дії яких минув",
 	"pages.termsofuse.title": "Умови використання та політика конфіденційності",
 	"pages.tool.apiError.tool_param_duplicate":
@@ -2188,13 +2187,13 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
 	"feature.media-shelf.title": "Полиця для медіа",
 	"feature.media-shelf.emptyState":
-		"Наразі немає медіафайлів, доступних для використання.",
+		"Наразі немає медіафайлів, доступних для використання",
 	"feature.media-shelf.createLine": "Додайте лінію",
 	"feature.media-shelf.line.title": "лінія",
 	"feature.media-shelf.availableLine.title": "Доступні медіа",
 	"feature.media-shelf.layout.list": "лінії",
 	"feature.media-shelf.layout.grid": "сітка",
-	"pages.folder.emptyState": "Наразі тут немає файлів.",
+	"pages.folder.emptyState": "Наразі тут немає файлів",
 	"pages.folder.fab.title": "Додати файл",
 	"pages.folder.untitled": "Папка без назви",
 	"pages.folder.title": "Папка",

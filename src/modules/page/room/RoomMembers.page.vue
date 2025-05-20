@@ -106,7 +106,6 @@ import {
 	InviteMembersDialog,
 	Members,
 } from "@feature-room";
-import { RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import {
@@ -140,8 +139,7 @@ const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
-const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
-	roomMembersStore;
+const { fetchMembers, getSchools, leaveRoom, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
@@ -220,7 +218,6 @@ const onFabClick = async () => {
 		case Tab.Members:
 		default:
 			await getSchools();
-			await getPotentialMembers(RoleName.Teacher);
 			isMembersDialogOpen.value = true;
 			break;
 	}
