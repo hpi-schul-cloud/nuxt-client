@@ -40,6 +40,7 @@ import { RoomBoardItem } from "@/types/room/Room";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import NotifierModule from "@/store/notifier";
+import { EmptyState } from "@ui-empty-state";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -91,6 +92,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			canLeaveRoom: ref(true),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
+			canSeeAllStudents: ref(false),
 			canDuplicateRoom: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
@@ -183,6 +185,15 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 			const boardGrid = wrapper.findComponent({ name: "BoardGrid" });
 			expect(boardGrid.exists()).toBe(true);
+		});
+
+		it("should render empty state when no visible boards are found", () => {
+			const { wrapper } = setup({
+				roomBoards: [],
+			});
+			const emptyState = wrapper.findComponent(EmptyState);
+			expect(emptyState.exists()).toBe(true);
+			expect(emptyState.props("title")).toBe("pages.roomDetails.emptyState");
 		});
 
 		describe("and room is defined", () => {

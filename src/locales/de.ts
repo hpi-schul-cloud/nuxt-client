@@ -1797,8 +1797,6 @@ export default {
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
-	"pages.room.student.emptyState":
-		"Hier erscheinen Lerninhalte wie Themen oder Aufgaben.",
 	"pages.room.taskCard.label.done": "Abschließen",
 	"pages.room.taskCard.label.due": "Abgabe",
 	"pages.room.taskCard.label.edit": "Bearbeiten",
@@ -1811,13 +1809,10 @@ export default {
 	"pages.room.taskCard.student.label.submitted": "Erledigt",
 	"pages.room.taskCard.teacher.label.overdue": "Abgelaufen",
 	"pages.room.taskCard.teacher.label.submitted": "Abgegeben",
-	"pages.room.teacher.emptyState":
-		"Lerninhalte dem Kurs hinzufügen und sortieren.",
+	"pages.room.learningContent.emptyState":
+		"Aktuell gibt es keine Lerninhalte in diesem Kurs",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",
-	"pages.rooms.allRooms.emptyState.title":
-		"Aktuell gibt es hier noch keine Kurse.",
-	"pages.rooms.currentRooms.emptyState.title":
-		"Aktuell gibt es hier noch keine Kurse.",
+	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
@@ -1874,7 +1869,7 @@ export default {
 	"pages.rooms.tools.deleteDialog.content":
 		"Möchten Sie wirklich das Tool '{itemName}' aus dem Kurs entfernen?",
 	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",
-	"pages.rooms.tools.emptyState": "Es gibt noch keine Tools in diesem Kurs.",
+	"pages.rooms.tools.emptyState": "Aktuell gibt es keine Tools in diesem Kurs",
 	"pages.rooms.tools.incomplete": "Konfiguration unvollständig",
 	"pages.rooms.tools.incompleteDialog.title": "Konfiguration unvollständig",
 	"pages.rooms.tools.logo": "Tool-Logo",
@@ -1896,7 +1891,9 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",
-	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
+	"pages.roomDetails.emptyState":
+		"Aktuell gibt es keine Lerninhalte in diesem Raum",
+	"pages.rooms.emptyState": "Aktuell gibt es keine Räume",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.infoAlert.welcome": "Willkommen in den neuen Räumen!",
 	"pages.rooms.infoAlert.welcome.collaboration":
@@ -1927,6 +1924,11 @@ export default {
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
+	"pages.rooms.members.add.role.student": "Lernend",
+	"pages.rooms.members.add.students.forbidden":
+		"Wenn in den Schuleinstellungen die Sichtbarkeit von Lernenden für Lernbegleitungen deaktiviert ist, können nur Lernende der eigenen Klasse hinzugefügt werden. Bitte an den Schul-Admin wenden.",
+	"pages.rooms.members.add.warningText":
+		"Lernende anderer Schulen können nur durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Aktionsmenü für {memberFullName}",
 	"pages.rooms.members.actionMenu.selectedMembers":
@@ -2037,9 +2039,8 @@ export default {
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
 	"pages.taskCard.deleteElement.title": "Element löschen",
-	"pages.tasks.emptyStateOnFilter.title": "Es sind keine Aufgaben vorhanden.",
 	"pages.tasks.finished.emptyState.title":
-		"Du hast zur Zeit keine abgeschlossenen Aufgaben.",
+		"Aktuell gibt es  keine abgeschlossenen Aufgaben",
 	"pages.tasks.labels.due": "Abgabe",
 	"pages.tasks.labels.filter": "Filtern nach Kursen",
 	"pages.tasks.labels.noCourse": "Ohne Kurszuordnung",
@@ -2048,11 +2049,9 @@ export default {
 	"pages.tasks.labels.overdue": "Verpasst",
 	"pages.tasks.labels.planned": "Geplant",
 	"pages.tasks.student.completed.emptyState.title":
-		"Du hast zur Zeit keine erledigten Aufgaben.",
-	"pages.tasks.student.open.emptyState.subtitle":
-		"Du hast alle Aufgaben erledigt. Genieße deine freie Zeit!",
+		"Aktuell gibt es keine erledigten Aufgaben",
 	"pages.tasks.student.open.emptyState.title":
-		"Es gibt keine offenen Aufgaben.",
+		"Aktuell gibt es keine offenen Aufgaben",
 	"pages.tasks.student.openTasks": "Offene Aufgaben",
 	"pages.tasks.student.submittedTasks": "Erledigte Aufgaben",
 	"pages.tasks.student.subtitleOverDue": "Verpasste Aufgaben",
@@ -2061,11 +2060,9 @@ export default {
 	"pages.tasks.subtitleNotGraded": "Unbewertet",
 	"pages.tasks.subtitleOpen": "Offene Aufgaben",
 	"pages.tasks.subtitleWithDue": "Mit Abgabefrist",
-	"pages.tasks.teacher.drafts.emptyState.title": "Es gibt keine Entwürfe.",
-	"pages.tasks.teacher.open.emptyState.subtitle":
-		"Du hast alle Abgaben geprüft. Genieße deine freie Zeit!",
-	"pages.tasks.teacher.open.emptyState.title":
-		"Es gibt keine aktuellen Aufgaben.",
+	"pages.tasks.teacher.drafts.emptyState.title":
+		"Aktuell gibt es  keine Entwürfe",
+	"pages.tasks.teacher.open.emptyState.title": "Aktuell gibt es keine Aufgaben",
 	"pages.tasks.teacher.subtitleOverDue": "Abgelaufene Aufgaben",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"pages.tool.apiError.tool_param_duplicate":
@@ -2197,13 +2194,13 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
 	"feature.media-shelf.title": "Medienregal",
 	"feature.media-shelf.emptyState":
-		"Aktuell sind keine Medien zur Verwendung vorhanden.",
+		"Aktuell sind keine Medien zur Verwendung vorhanden",
 	"feature.media-shelf.createLine": "Abschnitt hinzufügen",
 	"feature.media-shelf.line.title": "Abschnitt",
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
 	"feature.media-shelf.layout.list": "Zeilen",
 	"feature.media-shelf.layout.grid": "Raster",
-	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien.",
+	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien",
 	"pages.folder.fab.title": "Datei hinzufügen",
 	"pages.folder.untitled": "Unbenannter Ordner",
 	"pages.folder.title": "Ordner",

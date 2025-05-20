@@ -1,33 +1,33 @@
 <template>
-	<div class="mt-16">
-		<v-empty-state
-			:headline="headline"
-			:title="title"
-			:text="text"
-			data-testid="empty-state"
-		>
-			<template #media>
-				<div aria-hidden="true">
-					<slot name="media" />
-				</div>
-			</template>
-		</v-empty-state>
-	</div>
+	<VEmptyState data-testid="empty-state" class="mt-16">
+		<template #media>
+			<div aria-hidden="true">
+				<slot name="media" />
+			</div>
+		</template>
+		<template #title>
+			<p class="text-h4 mt-8" data-testid="empty-state-title">
+				{{ title }}
+			</p>
+		</template>
+		<template #text>
+			<span class="text">
+				<slot name="text" />
+			</span>
+		</template>
+	</VEmptyState>
 </template>
 
 <script setup lang="ts">
 defineProps({
-	headline: {
-		type: String,
-		default: "",
-	},
 	title: {
 		type: String,
-		default: "",
-	},
-	text: {
-		type: String,
-		default: "",
+		required: true,
 	},
 });
 </script>
+<style scoped lang="scss">
+.text {
+	font-size: var(--text-base-size);
+}
+</style>
