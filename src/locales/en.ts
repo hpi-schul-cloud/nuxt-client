@@ -377,6 +377,49 @@ export default {
 		"Are you sure you want to disable synchronization for {groupTypes}?",
 	"components.administration.provisioningOptions.warning.title":
 		"Disable synchronization",
+	"components.administration.schoolYearChangeSection.headers":
+		"Change of school year",
+	"components.administration.schoolYearChangeSection.info.part.one":
+		"The transfer phase allows for class membership and personal data to be adjusted in LDAP at a leisurely pace. Finally, all changes can be transferred to the {instance} at once.",
+	"components.administration.schoolYearChangeSection.info.part.two":
+		" (more information on the {0})",
+	"components.administration.schoolYearChangeSection.info.link": "help page",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"Not enough school years were found. Please contact support!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"The school is already in the next school year",
+	"components.administration.schoolYearChangeSection.notification.finish.success":
+		"School year successfully started",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"Transfer phase started successfully",
+	"components.administration.schoolYearChangeSection.title.step.one":
+		"End of the school year",
+	"components.administration.schoolYearChangeSection.description.step.one":
+		"The transfer phase can be started manually two weeks before the start of the holidays. If no manual start is made by the start of the holidays, the transfer phase begins automatically. The start of the transfer phase cannot be reversed.",
+	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
+		"Start transfer period",
+	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
+		"Transfer phase started",
+	"components.administration.schoolYearChangeSection.title.step.two":
+		"Around the summer holidays",
+	"components.administration.schoolYearChangeSection.description.step.two":
+		"During the transfer phase, all class and personal data can be updated at your leisure. Login and password changes are still possible for all existing users. New courses can be created during the transfer phase, but without class assignments.",
+	"components.administration.schoolYearChangeSection.info.step.two":
+		"During the transfer phase, no new users, classes, or changes to existing data are synchronized from the LDAP.",
+	"components.administration.schoolYearChangeSection.step.two.button":
+		"Check LDAP-data",
+	"components.administration.schoolYearChangeSection.title.step.three":
+		"New school year",
+	"components.administration.schoolYearChangeSection.description.step.three":
+		"Here, the transfer of data to the {instance} can be initiated. This marks the beginning of the new school year.",
+	"components.administration.schoolYearChangeSection.step.three.button":
+		"End transfer phase",
+	"components.administration.schoolYearChangeSection.checkbox.step.three":
+		"Class and personal data (LDAP) have been updated and verified.",
+	"components.administration.schoolYearChangeSection.dialog.title":
+		"Really finish the school year?",
+	"components.administration.schoolYearChangeSection.dialog.content":
+		"Synchronization of LDAP master data is interrupted during the transfer phase. Thus, user data and classes (if used) are no longer updated via LDAP. Login with previously synchronized login data is still possible. Password changes in LDAP during login are also taken into account.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hour | hours",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
@@ -1850,6 +1893,11 @@ export default {
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.add.infoText":
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
+	"pages.rooms.members.add.role.student": "Student",
+	"pages.rooms.members.add.students.forbidden":
+		"If the visibility of students for teachers is deactivated in the school settings, only students from your own class can be added. Please contact the school admin.",
+	"pages.rooms.members.add.warningText":
+		"Students from other schools can only be added to the room by a supervising teacher from their school.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Action menu for {memberFullName}",
 	"pages.rooms.members.actionMenu.selectedMembers":
