@@ -23,11 +23,10 @@
 				:show-select="true"
 			>
 				<template #[`item.preview`]="{ item }">
-					<FilePreview
+					<FilePreviewInteractionHandler
 						:file-record="item"
 						:data-testid="`file-preview-${item.name}`"
 						:disabled="!item.isSelectable"
-						@click="openLightBox(item)"
 					/>
 				</template>
 				<template #[`item.name`]="{ item }">
@@ -87,24 +86,18 @@
 <script setup lang="ts">
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
-import {
-	convertDownloadToPreviewUrl,
-	convertFileSize,
-	isDownloadAllowed,
-	isPreviewPossible,
-} from "@/utils/fileHelper";
+import { convertFileSize, isDownloadAllowed } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu } from "@ui-kebab-menu";
 import { computed, defineProps, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
-import FilePreview from "./FilePreview.vue";
+import FileName from "./FileName.vue";
+import FilePreviewInteractionHandler from "./FilePreviewInteractionHandler.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
-import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import FileName from "./FileName.vue";
 
 const { t, n } = useI18n();
 
@@ -174,22 +167,5 @@ const buildActionMenuAriaLabel = (item: FileRecord): string => {
 	return t("pages.folder.ariaLabels.actionMenu", {
 		name: item.name,
 	});
-};
-
-const openLightBox = (item: FileRecord) => {
-	if (isPreviewPossible(item.previewStatus)) {
-		const previewUrl = convertDownloadToPreviewUrl(item.url);
-
-		const options: LightBoxOptions = {
-			downloadUrl: item.url,
-			previewUrl: previewUrl,
-			alt: `${t("components.cardElement.fileElement.emptyAlt")}: ${item.name}`,
-			name: item.name,
-		};
-
-		const { open } = useLightBox();
-
-		open(options);
-	}
 };
 </script>
