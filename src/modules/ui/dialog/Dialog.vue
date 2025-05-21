@@ -1,13 +1,25 @@
 <template>
-	<VDialog v-model="isDialogOpen" data-testid="dialog" :max-width="480">
+	<VDialog
+		v-model="isDialogOpen"
+		data-testid="dialog"
+		:max-width="480"
+		:aria-labelledby="`modal-${uid}-title`"
+		:aria-describedby="`modal-${uid}-body`"
+	>
 		<UseFocusTrap>
 			<VCard>
 				<div class="mx-4">
-					<h2 class="text-h4 ma-2 dialog-title" data-testid="dialog-title">
+					<h2
+						:id="`modal-${uid}-title`"
+						class="text-h4 ma-2 dialog-title"
+						data-testid="dialog-title"
+					>
 						{{ message }}
 					</h2>
 
-					<slot name="content" />
+					<div :id="`modal-${uid}-body`">
+						<slot name="content" />
+					</div>
 				</div>
 
 				<template #actions>
@@ -47,6 +59,7 @@ import {
 	VDialog,
 	VSpacer,
 } from "vuetify/lib/components/index.mjs";
+import { useUid } from "@/utils/uid";
 
 const props = defineProps({
 	message: { type: String, required: false, default: "" },
@@ -62,6 +75,8 @@ const isDialogOpen = defineModel("is-dialog-open", {
 const emit = defineEmits(["cancel", "confirm"]);
 
 const { t } = useI18n();
+
+const { uid } = useUid();
 
 const confirmBtnLangKey = computed(() =>
 	props.confirmBtnLangKey ? props.confirmBtnLangKey : "common.actions.confirm"
