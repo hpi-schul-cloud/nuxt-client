@@ -53,6 +53,7 @@
 </template>
 
 <script setup lang="ts">
+import { useLoadingState } from "@/composables/loadingState";
 import { computed } from "vue";
 import { mdiTrayArrowUp } from "@icons/material";
 import { useI18n } from "vue-i18n";
@@ -71,6 +72,7 @@ const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const commonCartridgeImportModule = injectStrict(
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY
 );
+const { t } = useI18n();
 const props = withDefaults(
 	defineProps<{
 		maxWidth?: number;
@@ -98,6 +100,7 @@ function onCancel(): void {
 
 async function onConfirm(): Promise<void> {
 	commonCartridgeImportModule.setIsOpen(false);
+	useLoadingState(t("pages.rooms.ccImportCourse.loading"));
 	loadingStateModule.open({
 		text: i18n.t("pages.rooms.ccImportCourse.loading"),
 	});
