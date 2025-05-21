@@ -11,7 +11,6 @@ import * as FileStorageApi from "@data-file";
 import * as FolderState from "@data-folder";
 import { createMock } from "@golevelup/ts-jest";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
-import { RenameDialog } from "@ui-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { flushPromises } from "@vue/test-utils";
 import { ComputedRef, nextTick, ref } from "vue";
@@ -19,6 +18,7 @@ import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
 import DeleteFileDialog from "./file-table/DeleteFileDialog.vue";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";
+import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
 
 describe("Folder.vue", () => {
@@ -785,7 +785,7 @@ describe("Folder.vue", () => {
 				const renameButton = wrapper.findComponent(KebabMenuActionRename);
 				await renameButton.vm.$emit("click", fileRecord1);
 
-				const renameDialog = wrapper.findComponent(RenameDialog);
+				const renameDialog = wrapper.findComponent(RenameFileDialog);
 				renameDialog.vm.$emit("confirm", "new filename");
 
 				return {
