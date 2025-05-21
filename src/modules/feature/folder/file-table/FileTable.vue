@@ -31,12 +31,7 @@
 					/>
 				</template>
 				<template #[`item.name`]="{ item }">
-					<span
-						:data-testid="`name-${item.name}`"
-						:class="{ 'text-disabled': !item.isSelectable }"
-						@click="openLightBox(item)"
-						>{{ item.name }}</span
-					>
+					<FileName :file="item" />
 				</template>
 				<template #[`item.createdAt`]="{ item }">
 					<span
@@ -109,6 +104,7 @@ import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
+import FileName from "./FileName.vue";
 
 const { t, n } = useI18n();
 
