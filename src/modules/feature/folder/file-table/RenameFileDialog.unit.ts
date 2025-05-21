@@ -2,21 +2,22 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { VCard, VDialog, VTextField } from "vuetify/lib/components/index.mjs";
-import Dialog from "./Dialog.vue";
-import RenameDialog from "./RenameDialog.vue";
+import RenameFileDialog from "./RenameFileDialog.vue";
 
-describe("RenameDialog", () => {
+describe("RenameFileDialog", () => {
 	describe("when the dialog isDialogOpen is true", () => {
 		const setup = () => {
 			const entityName = "entity name";
 			const name = "name of item";
 
-			const wrapper = mount(RenameDialog, {
+			const wrapper = mount(RenameFileDialog, {
 				props: {
 					isDialogOpen: true,
 					entityName,
+					fileRecords: [],
 					name,
 				},
 				global: {
@@ -97,9 +98,10 @@ describe("RenameDialog", () => {
 
 	describe("when the dialog isDialogOpen is false", () => {
 		const setup = () => {
-			const wrapper = mount(RenameDialog, {
+			const wrapper = mount(RenameFileDialog, {
 				props: {
 					isDialogOpen: false,
+					fileRecords: [],
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
@@ -118,9 +120,10 @@ describe("RenameDialog", () => {
 
 	describe("when a value containing a < directly followed by a string is entered", () => {
 		const setup = () => {
-			const wrapper = mount(RenameDialog, {
+			const wrapper = mount(RenameFileDialog, {
 				props: {
 					isDialogOpen: true,
+					fileRecords: [],
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
