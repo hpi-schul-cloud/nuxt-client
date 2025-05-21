@@ -37,6 +37,8 @@ import { FileRecordResponse } from '../models';
 // @ts-ignore
 import { FileUrlParams } from '../models';
 // @ts-ignore
+import { MultiFileParams } from '../models';
+// @ts-ignore
 import { PreviewOutputMimeTypes } from '../models';
 // @ts-ignore
 import { PreviewWidth } from '../models';
@@ -202,7 +204,7 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Mark a single file for deletion. The files are permanently deleted after a certain time.
+         * @summary Mark a single file for deletion. The file is permanently deleted after a certain time.
          * @param {string} fileRecordId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -232,6 +234,46 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Mark several files for deletion. The files are permanently deleted after a certain time.
+         * @param {MultiFileParams} multiFileParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteFiles: async (multiFileParams: MultiFileParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'multiFileParams' is not null or undefined
+            assertParamExists('deleteFiles', 'multiFileParams', multiFileParams)
+            const localVarPath = `/file/delete`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(multiFileParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -714,13 +756,24 @@ export const FileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Mark a single file for deletion. The files are permanently deleted after a certain time.
+         * @summary Mark a single file for deletion. The file is permanently deleted after a certain time.
          * @param {string} fileRecordId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async deleteFile(fileRecordId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteFile(fileRecordId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Mark several files for deletion. The files are permanently deleted after a certain time.
+         * @param {MultiFileParams} multiFileParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteFiles(multiFileParams: MultiFileParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteFiles(multiFileParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -886,13 +939,23 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Mark a single file for deletion. The files are permanently deleted after a certain time.
+         * @summary Mark a single file for deletion. The file is permanently deleted after a certain time.
          * @param {string} fileRecordId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         deleteFile(fileRecordId: string, options?: any): AxiosPromise<FileRecordResponse> {
             return localVarFp.deleteFile(fileRecordId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Mark several files for deletion. The files are permanently deleted after a certain time.
+         * @param {MultiFileParams} multiFileParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordResponse> {
+            return localVarFp.deleteFiles(multiFileParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1048,13 +1111,23 @@ export interface FileApiInterface {
 
     /**
      * 
-     * @summary Mark a single file for deletion. The files are permanently deleted after a certain time.
+     * @summary Mark a single file for deletion. The file is permanently deleted after a certain time.
      * @param {string} fileRecordId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
     deleteFile(fileRecordId: string, options?: any): AxiosPromise<FileRecordResponse>;
+
+    /**
+     * 
+     * @summary Mark several files for deletion. The files are permanently deleted after a certain time.
+     * @param {MultiFileParams} multiFileParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApiInterface
+     */
+    deleteFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordResponse>;
 
     /**
      * 
@@ -1216,7 +1289,7 @@ export class FileApi extends BaseAPI implements FileApiInterface {
 
     /**
      * 
-     * @summary Mark a single file for deletion. The files are permanently deleted after a certain time.
+     * @summary Mark a single file for deletion. The file is permanently deleted after a certain time.
      * @param {string} fileRecordId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1224,6 +1297,18 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      */
     public deleteFile(fileRecordId: string, options?: any) {
         return FileApiFp(this.configuration).deleteFile(fileRecordId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Mark several files for deletion. The files are permanently deleted after a certain time.
+     * @param {MultiFileParams} multiFileParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public deleteFiles(multiFileParams: MultiFileParams, options?: any) {
+        return FileApiFp(this.configuration).deleteFiles(multiFileParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

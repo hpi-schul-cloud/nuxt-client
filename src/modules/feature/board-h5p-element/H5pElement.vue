@@ -1,6 +1,6 @@
 <template>
 	<VCard
-		v-show="isEditMode"
+		v-show="hasLinkedContent || isEditMode"
 		ref="elementCard"
 		class="mb-4"
 		data-testid="board-hp5-element"
@@ -9,16 +9,35 @@
 		:ripple="false"
 		tabindex="0"
 		role="button"
-		:loading="isLoading"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
+		@keyup.enter="onClickElement"
+		@click="onClickElement"
 	>
-		<ContentElementBar :has-grey-background="true" icon="$h5pOutline">
-			<template #title> Interaktives Lernelement </template>
+		<ContentElementBar
+			:has-grey-background="true"
+			icon="$h5pOutline"
+			:has-row-style="isSmallOrLargerListBoard"
+		>
+			<template #display>
+				<v-img
+					v-if="hasLinkedContent"
+					:src="H5PImage"
+					:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
+					:cover="isSmallOrLargerListBoard"
+				/>
+			</template>
+			<template #title>
+				{{
+					hasLinkedContent
+						? contentTitle
+						: t("components.cardElement.h5pElement.create")
+				}}
+			</template>
 			<template #menu>
 				<H5pElementMenu
 					v-if="isEditMode"
-					:display-name="undefined"
+					:display-name="contentTitle"
 					:column-index="columnIndex"
 					:row-index="rowIndex"
 					:element-index="elementIndex"
@@ -27,6 +46,7 @@
 					@move-down:element="onMoveElementDown"
 					@move-up:element="onMoveElementUp"
 					@delete:element="onDeleteElement"
+					@edit:element="onEdit"
 				/>
 			</template>
 		</ContentElementBar>
@@ -34,10 +54,18 @@
 </template>
 
 <script setup lang="ts">
+import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { H5pElementResponse } from "@/serverApi/v3";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { injectStrict } from "@/utils/inject";
+import { useBoardFocusHandler } from "@data-board";
+import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar } from "@ui-board";
-import { computed, Ref, ref, toRef } from "vue";
+import { computed, onMounted, Ref, ref, toRef } from "vue";
+import { useDisplay } from "vuetify";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import H5pElementMenu from "./H5pElementMenu.vue";
 
 const props = defineProps<{
@@ -57,15 +85,60 @@ const emit = defineEmits<{
 	(e: "move-keyboard:edit", event: KeyboardEvent): void;
 }>();
 
-const element: Ref<H5pElementResponse> = toRef(props, "element");
-useContentElementState<H5pElementResponse>(props, {
-	autoSaveDebounce: 0,
-});
+const { t } = useI18n();
+const { smAndUp } = useDisplay();
+const { getContentTitle } = useH5PEditorApi();
 
-const elementCard = ref<HTMLElement | null>(null);
+const element: Ref<H5pElementResponse> = toRef(props, "element");
+
+const elementCard: Ref<HTMLElement | null> = ref(null);
 useBoardFocusHandler(element.value.id, elementCard);
 
-const isLoading = computed(() => false);
+const hasLinkedContent = computed(() => !!element.value.content.contentId);
+
+const router = useRouter();
+const editorWindow: Ref<Window | null> = ref(null);
+
+const isListLayout: Ref<boolean> = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
+
+const isSmallOrLargerListBoard = computed(() => {
+	return smAndUp.value && isListLayout.value;
+});
+
+const contentTitle = ref<string>(t("components.cardElement.h5pElement"));
+
+const openEditorWindow = () => {
+	const route = router.resolve({
+		name: "h5pEditor",
+		params: {
+			contentId: element.value.content.contentId ?? undefined,
+		},
+		query: {
+			parentType: H5PContentParentType.BOARD_ELEMENT,
+			parentId: element.value.id,
+		},
+	});
+
+	editorWindow.value = window.open(route.href, "_blank");
+};
+
+const openPlayerWindow = () => {
+	if (!element.value.content.contentId) {
+		return;
+	}
+
+	const route = router.resolve({
+		name: "h5pPlayer",
+		params: {
+			contentId: element.value.content.contentId,
+		},
+		query: {
+			parentType: H5PContentParentType.BOARD_ELEMENT,
+		},
+	});
+
+	editorWindow.value = window.open(route.href, "_blank");
+};
 
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (props.isEditMode) {
@@ -83,4 +156,24 @@ const onMoveElementUp = () => {
 };
 
 const onDeleteElement = () => emit("delete:element", element.value.id);
+
+const onEdit = () => {
+	openEditorWindow();
+};
+
+const onClickElement = () => {
+	if (hasLinkedContent.value) {
+		openPlayerWindow();
+	} else {
+		openEditorWindow();
+	}
+};
+
+onMounted(async () => {
+	const contentId: string | null = element.value.content.contentId;
+	if (contentId) {
+		const title = await getContentTitle(contentId);
+		contentTitle.value = title ?? t("components.cardElement.h5pElement");
+	}
+});
 </script>

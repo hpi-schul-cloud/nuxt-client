@@ -367,6 +367,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
+    RoomDuplicate = 'ROOM_DUPLICATE',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -2282,6 +2283,7 @@ export interface CopyApiResponse {
     * @enum {string}
     */
 export enum CopyApiResponseTypeEnum {
+    Room = 'ROOM',
     Board = 'BOARD',
     Card = 'CARD',
     CollaborativeTextEditorElement = 'COLLABORATIVE_TEXT_EDITOR_ELEMENT',
@@ -3358,10 +3360,10 @@ export interface DrawingElementResponse {
 export interface ElementWithParentHierarchyResponse {
     /**
      * The element data
-     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse}
+     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse}
      * @memberof ElementWithParentHierarchyResponse
      */
-    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
+    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse;
     /**
      * The hierarchical path of parent elements
      * @type {Array<ParentNodeInfoResponse>}
@@ -5494,6 +5496,69 @@ export enum LtiPrivacyPermission {
 /**
  * 
  * @export
+ * @interface MaintenanceParams
+ */
+export interface MaintenanceParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MaintenanceParams
+     */
+    maintenance: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface MaintenanceResponse
+ */
+export interface MaintenanceResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MaintenanceResponse
+     */
+    schoolUsesLdap: boolean;
+    /**
+     * 
+     * @type {MaintenanceStatusResponse}
+     * @memberof MaintenanceResponse
+     */
+    maintenance: MaintenanceStatusResponse;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof MaintenanceResponse
+     */
+    currentYear: SchoolYearResponse;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof MaintenanceResponse
+     */
+    nextYear: SchoolYearResponse;
+}
+/**
+ * 
+ * @export
+ * @interface MaintenanceStatusResponse
+ */
+export interface MaintenanceStatusResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MaintenanceStatusResponse
+     */
+    active: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof MaintenanceStatusResponse
+     */
+    startDate?: string;
+}
+/**
+ * 
+ * @export
  * @interface MaterialResponse
  */
 export interface MaterialResponse {
@@ -6468,6 +6533,19 @@ export enum NewsTargetModel {
     Teams = 'teams'
 }
 
+/**
+ * 
+ * @export
+ * @interface OAuthSessionTokenExpirationResponse
+ */
+export interface OAuthSessionTokenExpirationResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof OAuthSessionTokenExpirationResponse
+     */
+    expiresAt: string;
+}
 /**
  * 
  * @export
@@ -7577,6 +7655,7 @@ export enum Permission {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
+    RoomDuplicate = 'ROOM_DUPLICATE',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -20710,6 +20789,125 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
 
 
 /**
+ * OAuthApi - axios parameter creator
+ * @export
+ */
+export const OAuthApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get the expiration date of the current oauth session token of the user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oAuthControllerGetSessionTokenExpiration: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/oauth/session-token/expiration`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * OAuthApi - functional programming interface
+ * @export
+ */
+export const OAuthApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = OAuthApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get the expiration date of the current oauth session token of the user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oAuthControllerGetSessionTokenExpiration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OAuthSessionTokenExpirationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oAuthControllerGetSessionTokenExpiration(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * OAuthApi - factory interface
+ * @export
+ */
+export const OAuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = OAuthApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get the expiration date of the current oauth session token of the user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oAuthControllerGetSessionTokenExpiration(options?: any): AxiosPromise<OAuthSessionTokenExpirationResponse> {
+            return localVarFp.oAuthControllerGetSessionTokenExpiration(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * OAuthApi - interface
+ * @export
+ * @interface OAuthApi
+ */
+export interface OAuthApiInterface {
+    /**
+     * 
+     * @summary Get the expiration date of the current oauth session token of the user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OAuthApiInterface
+     */
+    oAuthControllerGetSessionTokenExpiration(options?: any): AxiosPromise<OAuthSessionTokenExpirationResponse>;
+
+}
+
+/**
+ * OAuthApi - object-oriented interface
+ * @export
+ * @class OAuthApi
+ * @extends {BaseAPI}
+ */
+export class OAuthApi extends BaseAPI implements OAuthApiInterface {
+    /**
+     * 
+     * @summary Get the expiration date of the current oauth session token of the user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OAuthApi
+     */
+    public oAuthControllerGetSessionTokenExpiration(options?: any) {
+        return OAuthApiFp(this.configuration).oAuthControllerGetSessionTokenExpiration(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * Oauth2Api - axios parameter creator
  * @export
  */
@@ -21868,7 +22066,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Add members to a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -21912,7 +22110,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Change the roles that members have within the room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -21956,7 +22154,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -21991,6 +22189,44 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(passOwnershipBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Creates a copy of the given room. Restricted to Room Owner and Admin
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerCopyRoom: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerCopyRoom', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/copy`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -22040,7 +22276,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Delete a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22078,7 +22314,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get the list of room invitation links of a room.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22116,7 +22352,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get a list of room members.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22154,7 +22390,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get the boards of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22192,7 +22428,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get the details of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22274,7 +22510,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Leaving a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22312,7 +22548,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Remove members from a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22356,7 +22592,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Update an existing room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22410,7 +22646,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Add members to a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22422,7 +22658,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Change the roles that members have within the room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22434,13 +22670,24 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Creates a copy of the given room. Restricted to Room Owner and Admin
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerCopyRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerCopyRoom(roomId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -22457,7 +22704,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Delete a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22468,7 +22715,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get the list of room invitation links of a room.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22479,7 +22726,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get a list of room members.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22490,7 +22737,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get the boards of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22501,7 +22748,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get the details of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22524,7 +22771,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Leaving a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22535,7 +22782,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Remove members from a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22547,7 +22794,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Update an existing room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22569,7 +22816,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Add members to a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22580,7 +22827,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Change the roles that members have within the room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22591,13 +22838,23 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): AxiosPromise<string> {
             return localVarFp.roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Creates a copy of the given room. Restricted to Room Owner and Admin
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerCopyRoom(roomId: string, options?: any): AxiosPromise<CopyApiResponse> {
+            return localVarFp.roomControllerCopyRoom(roomId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -22612,7 +22869,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Delete a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22622,7 +22879,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get the list of room invitation links of a room.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22632,7 +22889,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get a list of room members.
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22642,7 +22899,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get the boards of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22652,7 +22909,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get the details of a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22673,7 +22930,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Leaving a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -22683,7 +22940,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Remove members from a room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22694,7 +22951,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Update an existing room
-         * @param {string} roomId 
+         * @param {string} roomId The id of the room.
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22714,7 +22971,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Add members to a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22725,7 +22982,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Change the roles that members have within the room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22736,13 +22993,23 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
      */
     roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @summary Creates a copy of the given room. Restricted to Room Owner and Admin
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerCopyRoom(roomId: string, options?: any): AxiosPromise<CopyApiResponse>;
 
     /**
      * 
@@ -22757,7 +23024,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Delete a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22767,7 +23034,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Get the list of room invitation links of a room.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22777,7 +23044,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Get a list of room members.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22787,7 +23054,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Get the boards of a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22797,7 +23064,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Get the details of a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22818,7 +23085,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Leaving a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -22828,7 +23095,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Remove members from a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22839,7 +23106,7 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Update an existing room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {UpdateRoomBodyParams} updateRoomBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22859,7 +23126,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Add members to a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22872,7 +23139,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Change the roles that members have within the room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22885,7 +23152,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22893,6 +23160,18 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any) {
         return RoomApiFp(this.configuration).roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Creates a copy of the given room. Restricted to Room Owner and Admin
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerCopyRoom(roomId: string, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerCopyRoom(roomId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -22910,7 +23189,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Delete a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -22922,7 +23201,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Get the list of room invitation links of a room.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -22934,7 +23213,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Get a list of room members.
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -22946,7 +23225,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Get the boards of a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -22958,7 +23237,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Get the details of a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -22983,7 +23262,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Leaving a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
@@ -22995,7 +23274,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Remove members from a room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -23008,7 +23287,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Update an existing room
-     * @param {string} roomId 
+     * @param {string} roomId The id of the room.
      * @param {UpdateRoomBodyParams} updateRoomBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -23445,6 +23724,44 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
+         * 
+         * @summary Returns the current maintenance status of the school
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetMaintenanceStatus: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerGetMaintenanceStatus', 'schoolId', schoolId)
+            const localVarPath = `/school/{schoolId}/maintenance`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Gets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -23633,6 +23950,43 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        schoolControllerGetStudents: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerGetStudents', 'schoolId', schoolId)
+            const localVarPath = `/school/{schoolId}/students`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         schoolControllerGetTeachers: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerGetTeachers', 'schoolId', schoolId)
@@ -23699,6 +24053,50 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Sets the school into maintenance or puts it into the next year
+         * @param {string} schoolId 
+         * @param {MaintenanceParams} maintenanceParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerSetMaintenanceStatus: async (schoolId: string, maintenanceParams: MaintenanceParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerSetMaintenanceStatus', 'schoolId', schoolId)
+            // verify required parameter 'maintenanceParams' is not null or undefined
+            assertParamExists('schoolControllerSetMaintenanceStatus', 'maintenanceParams', maintenanceParams)
+            const localVarPath = `/school/{schoolId}/maintenance`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(maintenanceParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -23817,6 +24215,17 @@ export const SchoolApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * 
+         * @summary Returns the current maintenance status of the school
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetMaintenanceStatus(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetMaintenanceStatus(schoolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Gets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -23873,6 +24282,16 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async schoolControllerGetStudents(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolUserListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetStudents(schoolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async schoolControllerGetTeachers(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolUserListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetTeachers(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -23886,6 +24305,18 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          */
         async schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerRemoveSystemFromSchool(schoolId, systemId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Sets the school into maintenance or puts it into the next year
+         * @param {string} schoolId 
+         * @param {MaintenanceParams} maintenanceParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetMaintenanceStatus(schoolId, maintenanceParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -23930,6 +24361,16 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          */
         schoolControllerDoesSchoolExist(schoolId: string, options?: any): AxiosPromise<SchoolExistsResponse> {
             return localVarFp.schoolControllerDoesSchoolExist(schoolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Returns the current maintenance status of the school
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetMaintenanceStatus(schoolId: string, options?: any): AxiosPromise<MaintenanceResponse> {
+            return localVarFp.schoolControllerGetMaintenanceStatus(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets all provisioning options for a system at a school
@@ -23983,6 +24424,15 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        schoolControllerGetStudents(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse> {
+            return localVarFp.schoolControllerGetStudents(schoolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         schoolControllerGetTeachers(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse> {
             return localVarFp.schoolControllerGetTeachers(schoolId, options).then((request) => request(axios, basePath));
         },
@@ -23995,6 +24445,17 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          */
         schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any): AxiosPromise<void> {
             return localVarFp.schoolControllerRemoveSystemFromSchool(schoolId, systemId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Sets the school into maintenance or puts it into the next year
+         * @param {string} schoolId 
+         * @param {MaintenanceParams} maintenanceParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any): AxiosPromise<MaintenanceResponse> {
+            return localVarFp.schoolControllerSetMaintenanceStatus(schoolId, maintenanceParams, options).then((request) => request(axios, basePath));
         },
         /**
          * Sets all provisioning options for a system at a school
@@ -24035,6 +24496,16 @@ export interface SchoolApiInterface {
      * @memberof SchoolApiInterface
      */
     schoolControllerDoesSchoolExist(schoolId: string, options?: any): AxiosPromise<SchoolExistsResponse>;
+
+    /**
+     * 
+     * @summary Returns the current maintenance status of the school
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetMaintenanceStatus(schoolId: string, options?: any): AxiosPromise<MaintenanceResponse>;
 
     /**
      * Gets all provisioning options for a system at a school
@@ -24089,6 +24560,15 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
+    schoolControllerGetStudents(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse>;
+
+    /**
+     * 
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
     schoolControllerGetTeachers(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse>;
 
     /**
@@ -24100,6 +24580,17 @@ export interface SchoolApiInterface {
      * @memberof SchoolApiInterface
      */
     schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Sets the school into maintenance or puts it into the next year
+     * @param {string} schoolId 
+     * @param {MaintenanceParams} maintenanceParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any): AxiosPromise<MaintenanceResponse>;
 
     /**
      * Sets all provisioning options for a system at a school
@@ -24141,6 +24632,18 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerDoesSchoolExist(schoolId: string, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerDoesSchoolExist(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns the current maintenance status of the school
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetMaintenanceStatus(schoolId: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetMaintenanceStatus(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -24206,6 +24709,17 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApi
      */
+    public schoolControllerGetStudents(schoolId: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetStudents(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
     public schoolControllerGetTeachers(schoolId: string, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerGetTeachers(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
@@ -24220,6 +24734,19 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerRemoveSystemFromSchool(schoolId, systemId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Sets the school into maintenance or puts it into the next year
+     * @param {string} schoolId 
+     * @param {MaintenanceParams} maintenanceParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerSetMaintenanceStatus(schoolId, maintenanceParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

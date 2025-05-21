@@ -14,7 +14,7 @@
 			@move:column-up="onMoveColumnUp"
 			@update:title="onUpdateTitle"
 		/>
-		<div class="h-100 overflow-y-auto pt-3" :class="scrollableClasses">
+		<div class="h-100 pt-3" :class="scrollableClasses">
 			<Sortable
 				:list="column.cards"
 				item-key="cardId"
@@ -285,7 +285,7 @@ export default defineComponent({
 		const scrollableClasses = computed(() => {
 			const classes = [];
 			if (!props.isListBoard) {
-				classes.push("scrollable");
+				classes.push("scrollable", "overflow-y-auto");
 			}
 			return classes;
 		});
