@@ -27,12 +27,14 @@
 						:file-record="item"
 						:data-testid="`file-preview-${item.name}`"
 						:disabled="!item.isSelectable"
+						@click="openLightBox(item)"
 					/>
 				</template>
 				<template #[`item.name`]="{ item }">
 					<span
 						:data-testid="`name-${item.name}`"
 						:class="{ 'text-disabled': !item.isSelectable }"
+						@click="openLightBox(item)"
 						>{{ item.name }}</span
 					>
 				</template>
@@ -90,7 +92,12 @@
 <script setup lang="ts">
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
-import { convertFileSize, isDownloadAllowed } from "@/utils/fileHelper";
+import {
+	convertDownloadToPreviewUrl,
+	convertFileSize,
+	isDownloadAllowed,
+	isPreviewPossible,
+} from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu } from "@ui-kebab-menu";
@@ -101,6 +108,7 @@ import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
+import { LightBoxOptions, useLightBox } from "@ui-light-box";
 
 const { t, n } = useI18n();
 
@@ -170,5 +178,22 @@ const buildActionMenuAriaLabel = (item: FileRecord): string => {
 	return t("pages.folder.ariaLabels.actionMenu", {
 		name: item.name,
 	});
+};
+
+const openLightBox = (item: FileRecord) => {
+	if (isPreviewPossible(item.previewStatus)) {
+		const previewUrl = convertDownloadToPreviewUrl(item.url);
+
+		const options: LightBoxOptions = {
+			downloadUrl: item.url,
+			previewUrl: previewUrl,
+			alt: `${t("components.cardElement.fileElement.emptyAlt")}: ${item.name}`,
+			name: item.name,
+		};
+
+		const { open } = useLightBox();
+
+		open(options);
+	}
 };
 </script>
