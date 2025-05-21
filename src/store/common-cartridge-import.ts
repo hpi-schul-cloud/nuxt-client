@@ -5,7 +5,6 @@ import {
 	CommonCartridgeApiFactory,
 	CommonCartridgeApiInterface,
 } from "@/commonCartridgeApi/v3/api";
-import axios from "axios";
 
 @Module({
 	name: "commonCartridgeImportModule",
@@ -60,7 +59,7 @@ export default class CommonCartridgeImportModule extends VuexModule {
 		}
 
 		try {
-			await this.commonCartridgeApi.commonCartridgeControllerImportCourse(file);
+			await this.coursesApi.courseControllerImportCourse(file);
 			this.setIsSuccess(true);
 		} catch {
 			this.setIsSuccess(false);
