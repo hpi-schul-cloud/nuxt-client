@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { FileRecord } from "@/types/file/File";
 import { Dialog } from "@ui-dialog";
-import { computed, defineProps, PropType } from "vue";
+import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
