@@ -15,7 +15,7 @@
 		/>
 		<div class="wireframe-header sticky">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
-			<div v-else class="breadcrumbs-placeholder" />
+			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
 			<slot name="header">
 				<h1 v-if="headline" class="text-h3" :data-testid="dataTestid">
 					{{ headline }}
@@ -24,7 +24,10 @@
 			<div v-if="fabItems" class="fab-wrapper">
 				<slot name="fab">
 					<speed-dial-menu
-						class="wireframe-fab"
+						:class="{
+							'wireframe-fab-relative': lgAndUp,
+							'wireframe-fab-fixed': mdAndDown,
+						}"
 						:direction="mdAndDown ? 'top' : 'bottom'"
 						:orientation="'right'"
 						:icon="fabItems.icon"
@@ -131,7 +134,7 @@ defineOptions({
 });
 const slots = useSlots();
 
-const { mdAndDown } = useDisplay();
+const { mdAndDown, smAndUp, lgAndUp } = useDisplay();
 
 const showDivider = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);
@@ -139,7 +142,7 @@ const showDivider = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "@/styles/settings.scss" as *;
 
 .wireframe-container-flex {
 	height: calc(100vh - var(--topbar-height));
@@ -185,10 +188,8 @@ const showDivider = computed(() => {
 	margin-left: -1.5rem;
 }
 
-@media #{map-get($display-breakpoints, 'sm-and-up')} {
-	.breadcrumbs-placeholder {
-		height: 22px;
-	}
+.breadcrumbs-placeholder {
+	height: 22px;
 }
 
 .sticky {
@@ -198,26 +199,15 @@ const showDivider = computed(() => {
 	background-color: rgb(var(--v-theme-white));
 }
 
-.fixed {
+.wireframe-fab-relative {
+	position: relative;
+	top: 0;
+}
+
+.wireframe-fab-fixed {
 	position: fixed;
-	top: var(--topbar-height);
-	width: 100%;
-	background-color: rgb(var(--v-theme-white));
-}
-
-@media #{map-get($display-breakpoints, 'lg-and-up')} {
-	.wireframe-fab {
-		position: relative;
-		top: 0;
-	}
-}
-
-@media #{map-get($display-breakpoints, 'md-and-down')} {
-	.wireframe-fab {
-		position: fixed !important;
-		bottom: 2rem;
-		right: 1rem;
-	}
+	bottom: 2rem;
+	right: 1rem;
 }
 
 $fab-wrapper-height: 80px;

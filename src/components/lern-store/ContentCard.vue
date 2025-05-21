@@ -141,8 +141,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
-@import "@/utils/multiline-ellipsis.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
+@use "@/styles/mixins" as *;
+@use "@/utils/multiline-ellipsis.scss" as *;
 
 .card-tag {
 	position: absolute;
@@ -268,7 +270,7 @@ export default {
 
 	&__separator {
 		margin: 0 var(--space-xs-4);
-		border-top: 1px solid map-get($grey, base);
+		border-top: 1px solid map.get($grey, base);
 	}
 
 	&__content {
