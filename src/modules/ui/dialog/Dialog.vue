@@ -27,6 +27,7 @@
 							color="primary"
 							variant="flat"
 							:text="t(confirmBtnLangKey)"
+							:disabled="confirmBtnDisabled"
 							@click="onConfirm"
 						/>
 					</div>
@@ -49,6 +50,7 @@ import {
 
 const props = defineProps({
 	message: { type: String, required: false, default: "" },
+	confirmBtnDisabled: { type: Boolean, required: false, default: false },
 	confirmBtnLangKey: { type: String, required: false, default: "" },
 });
 

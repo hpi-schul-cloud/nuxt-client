@@ -2,6 +2,7 @@
 	<Dialog
 		v-model:is-dialog-open="isDialogOpen"
 		:message="t('ui.rename.dialog.title', { entity: entityName })"
+		:confirm-btn-disabled="!isNameValid"
 		@cancel="onCancel"
 		@confirm="onConfirm"
 	>
@@ -14,7 +15,7 @@
 				flat
 				:aria-label="$t('common.labels.name.new')"
 				:label="t('common.labels.name.new')"
-				:rules="[validateOnOpeningTag]"
+				:rules="[rules.required, rules.validateOnOpeningTag]"
 			/>
 		</template>
 	</Dialog>
@@ -22,7 +23,7 @@
 
 <script setup lang="ts">
 import { useOpeningTagValidator } from "@/utils/validation";
-import { ref, watch } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import Dialog from "./Dialog.vue";
 
@@ -52,10 +53,26 @@ const { t } = useI18n();
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
+const rules = reactive({
+	required: (value: string) => !!value || t("common.validation.required"),
+	validateOnOpeningTag: (value: string) => {
+		return validateOnOpeningTag(value);
+	},
+});
+
+const isNameValid = computed(() => {
+	return (
+		rules.required(nameRef.value) === true &&
+		rules.validateOnOpeningTag(nameRef.value) === true
+	);
+});
+
 const onCancel = () => {
 	emit("cancel");
 };
 const onConfirm = () => {
-	emit("confirm", nameRef.value);
+	if (isNameValid.value) {
+		emit("confirm", nameRef.value);
+	}
 };
 </script>
