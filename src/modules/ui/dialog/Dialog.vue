@@ -3,9 +3,9 @@
 		<UseFocusTrap>
 			<VCard>
 				<div class="mx-4">
-					<h4 class="dialog-title" data-testid="dialog-title">
+					<h2 class="dialog-title text-h4" data-testid="dialog-title">
 						{{ message }}
-					</h4>
+					</h2>
 
 					<slot name="content" />
 				</div>
