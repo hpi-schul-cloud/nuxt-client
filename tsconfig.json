@@ -96,7 +96,6 @@
 			"@util-device-detection": ["src/modules/util/device-detection"],
 			"@util-error-notification": ["src/modules/util/error-notification"],
 			"@util-logger": ["src/modules/util/logger"],
-			"@util-files": ["src/modules/util/files"],
 			"@page-board": ["src/modules/page/board"],
 			"@page-class-members": ["src/modules/page/class-members"],
 			"@page-media-shelf": ["src/modules/page/media-shelf"],

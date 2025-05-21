@@ -202,7 +202,6 @@ module.exports = {
 			"@util-device-detection": getDir("src/modules/util/device-detection"),
 			"@util-error-notification": getDir("src/modules/util/error-notification"),
 			"@util-logger": getDir("src/modules/util/logger"),
-			"@util-files": getDir("src/modules/util/files"),
 			"@page-board": getDir("src/modules/page/board"),
 			"@page-class-members": getDir("src/modules/page/class-members"),
 			"@page-media-shelf": getDir("src/modules/page/media-shelf"),

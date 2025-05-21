@@ -8,11 +8,14 @@
 </template>
 
 <script setup lang="ts">
+import {
+	convertDownloadToPreviewUrl,
+	isPreviewPossible,
+} from "@/utils/fileHelper";
+import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { computed, PropType } from "vue";
-import { FileRecordItem } from "../types/filerecord-item";
-import { isPreviewPossible } from "@/utils/fileHelper";
-import { openImageInLightbox } from "@util-files";
 import { useI18n } from "vue-i18n";
+import { FileRecordItem } from "../types/filerecord-item";
 
 const { fileRecord } = defineProps({
 	disabled: { type: Boolean as PropType<boolean>, default: false },
@@ -29,7 +32,21 @@ const isInteractive = computed(
 );
 
 const handleClick = () => {
-	const altText = `${t("components.cardElement.fileElement.emptyAlt")} ${fileRecord.name}`;
-	openImageInLightbox(fileRecord, altText);
+	openImageInLightbox();
+};
+
+const openImageInLightbox = () => {
+	const previewUrl = convertDownloadToPreviewUrl(fileRecord.url);
+
+	const options: LightBoxOptions = {
+		downloadUrl: fileRecord.url,
+		previewUrl: previewUrl,
+		alt: `${t("components.cardElement.fileElement.emptyAlt")} ${fileRecord.name}`,
+		name: fileRecord.name,
+	};
+
+	const { open } = useLightBox();
+
+	open(options);
 };
 </script>
