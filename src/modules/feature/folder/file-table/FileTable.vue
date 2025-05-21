@@ -88,8 +88,9 @@
 					/>
 				</template>
 			</DataTable>
-			<RenameDialog
+			<RenameFileDialog
 				v-model:is-dialog-open="isRenameDialogOpen"
+				:file-records="fileRecords"
 				:name="fileRecordToRenameName"
 				:entity-name="$t('components.cardElement.fileElement')"
 				@cancel="onRenameDialogCancel"
@@ -112,10 +113,8 @@ import {
 	convertFileSize,
 	getFileExtension,
 	isDownloadAllowed,
-	removeFileExtension,
 } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
-import { RenameDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
 import { computed, defineProps, PropType, ref } from "vue";
@@ -126,6 +125,7 @@ import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
+import RenameFileDialog from "./RenameFileDialog.vue";
 
 const { t, n } = useI18n();
 
@@ -181,9 +181,9 @@ const fileRecordItems = computed(() => {
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;
 });
-const fileRecordToRenameName = computed(() => {
-	return removeFileExtension(fileRecordToRename.value?.name || "");
-});
+const fileRecordToRenameName = computed(
+	() => fileRecordToRename.value?.name || ""
+);
 
 const formatFileSize = (size: number) => {
 	const { convertedSize, unit } = convertFileSize(size);
@@ -220,7 +220,10 @@ const onRenameDialogConfirm = (newName: string) => {
 
 	const fileExtension = getFileExtension(fileRecordToRename.value.name);
 	const nameWithExtension = `${newName}.${fileExtension}`;
-	emit("update:name", nameWithExtension, fileRecordToRename.value);
+
+	if (fileRecordToRename.value.name !== nameWithExtension) {
+		emit("update:name", nameWithExtension, fileRecordToRename.value);
+	}
 
 	isRenameDialogOpen.value = false;
 	fileRecordToRename.value = undefined;
