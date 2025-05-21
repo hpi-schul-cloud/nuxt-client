@@ -23,14 +23,22 @@
 				:show-select="true"
 			>
 				<template #[`item.preview`]="{ item }">
-					<FilePreviewInteractionHandler
+					<FileInteractionHandler
 						:file-record="item"
 						:data-testid="`file-preview-${item.name}`"
 						:disabled="!item.isSelectable"
-					/>
+					>
+						<FilePreview :file-record="item" />
+					</FileInteractionHandler>
 				</template>
 				<template #[`item.name`]="{ item }">
-					<FileName :file="item" />
+					<FileInteractionHandler
+						:file-record="item"
+						:data-testid="`name-${item.name}`"
+						:disabled="!item.isSelectable"
+					>
+						{{ item.name }}
+					</FileInteractionHandler>
 				</template>
 				<template #[`item.createdAt`]="{ item }">
 					<span
@@ -93,11 +101,11 @@ import { KebabMenu } from "@ui-kebab-menu";
 import { computed, defineProps, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
-import FileName from "./FileName.vue";
-import FilePreviewInteractionHandler from "./FilePreviewInteractionHandler.vue";
+import FileInteractionHandler from "./FileInteractionHandler.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
+import FilePreview from "./FilePreview.vue";
 
 const { t, n } = useI18n();
 

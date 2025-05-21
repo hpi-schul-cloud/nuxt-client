@@ -1,9 +1,9 @@
 <template>
 	<button v-if="isInteractive" @click="handleClick">
-		<FilePreview :file-record="fileRecord" />
+		<slot />
 	</button>
 	<div v-else :class="{ 'text-disabled': disabled }">
-		<FilePreview :file-record="fileRecord" />
+		<slot />
 	</div>
 </template>
 
@@ -11,7 +11,6 @@
 import { computed, PropType } from "vue";
 import { FileRecordItem } from "../types/filerecord-item";
 import { isPreviewPossible } from "@/utils/fileHelper";
-import FilePreview from "./FilePreview.vue";
 import { openImageInLightbox } from "@util-files";
 import { useI18n } from "vue-i18n";
 
