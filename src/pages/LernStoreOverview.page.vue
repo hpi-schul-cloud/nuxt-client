@@ -272,10 +272,8 @@ watchDebounced(
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
 
-:deep {
-	.v-infinite-scroll--vertical {
-		overflow-y: visible;
-	}
+:deep(.v-infinite-scroll--vertical) {
+	overflow-y: visible;
 }
 
 .content {

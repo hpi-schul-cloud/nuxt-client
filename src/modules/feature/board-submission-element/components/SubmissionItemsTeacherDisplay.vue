@@ -223,14 +223,12 @@ export default defineComponent({
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
 
-:deep {
-	.v-expansion-panel-text__wrapper {
-		padding: 0;
-	}
+:deep(.v-expansion-panel-text__wrapper) {
+	padding: 0;
+}
 
-	.v-expansion-panel-title--active > .v-expansion-panel-title__overlay {
-		opacity: 0;
-	}
+:deep(.v-expansion-panel-title--active > .v-expansion-panel-title__overlay) {
+	opacity: 0;
 }
 
 .filter-chip--active {
