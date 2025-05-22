@@ -3676,7 +3676,7 @@ export interface ExternalToolMediumParams {
      * @type {string}
      * @memberof ExternalToolMediumParams
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * Publisher of the medium
      * @type {string}
@@ -3713,7 +3713,7 @@ export interface ExternalToolMediumResponse {
      * @type {string}
      * @memberof ExternalToolMediumResponse
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * Publisher of the medium
      * @type {string}
@@ -8622,7 +8622,7 @@ export interface SchoolExternalToolMediumResponse {
      * @type {string}
      * @memberof SchoolExternalToolMediumResponse
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * The id of the media source
      * @type {string}
