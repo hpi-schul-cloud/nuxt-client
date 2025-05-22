@@ -44,14 +44,14 @@
 			</VContainer>
 		</template>
 		<template v-else-if="isEmptyState">
-			<VCustomEmptyState
-				ref="media-shelf-empty-state"
-				image="media-shelf-empty-state"
-				:title="$t('feature.media-shelf.emptyState')"
-				class="mt-16"
-				img-height="273px"
+			<EmptyState
+				:title="t('feature.media-shelf.emptyState')"
 				data-testid="empty-state"
-			/>
+			>
+				<template #media>
+					<MediaShelfEmptyStateSvg />
+				</template>
+			</EmptyState>
 		</template>
 		<template v-else>
 			<MediaBoard
@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import { EmptyState, MediaShelfEmptyStateSvg } from "@ui-empty-state";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardLayout } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";

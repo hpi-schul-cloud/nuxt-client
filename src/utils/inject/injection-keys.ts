@@ -18,10 +18,12 @@ import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import StatusAlertsModule from "@/store/status-alerts";
 import SystemsModule from "@/store/systems";
+import TasksModule from "@/store/tasks";
 import TermsOfUseModule from "@/store/terms-of-use";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
 import { InjectionKey } from "vue";
+import FinishedTasksModule from "@/store/finished-tasks";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
@@ -66,5 +68,11 @@ export const COMMON_CARTRIDGE_IMPORT_MODULE_KEY: InjectionKey<CommonCartridgeImp
 	Symbol("commonCartridgeImportModule");
 export const SHARE_MODULE_KEY: InjectionKey<ShareModule> =
 	Symbol("shareModule");
+
+// injection keys for vuex modules can not be symbols due to @module-decorator restrictions
+export const TASKS_MODULE_KEY: InjectionKey<TasksModule> =
+	"tasksModule" as unknown as InjectionKey<TasksModule>;
+export const FINISHED_TASKS_MODULE_KEY: InjectionKey<FinishedTasksModule> =
+	"finishedTasksModule" as unknown as InjectionKey<FinishedTasksModule>;
 
 export const THEME_KEY: InjectionKey<{ name: string }> = Symbol("theme");
