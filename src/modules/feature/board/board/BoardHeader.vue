@@ -192,7 +192,7 @@ watchEffect(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "@/styles/settings.scss" as *;
 
 .v-chip {
 	cursor: default;

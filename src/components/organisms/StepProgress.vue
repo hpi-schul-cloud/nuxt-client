@@ -63,7 +63,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .wrapper {
 	position: relative;
@@ -100,7 +101,7 @@ ul.progressbar {
 		content: counter(step);
 		counter-increment: step;
 		background: rgba(var(--v-theme-white));
-		border-color: map-get($grey, darken-3);
+		border-color: map.get($grey, darken-3);
 		border-style: dotted;
 		border-radius: var(--radius-round);
 	}
@@ -113,17 +114,17 @@ ul.progressbar {
 		width: 100%;
 		height: calc(3 * var(--border-width));
 		content: "";
-		background: map-get($grey, base);
+		background: map.get($grey, base);
 	}
 }
 
 .progressbar li.active {
 	&::after {
-		background: map-get($grey, base);
+		background: map.get($grey, base);
 	}
 
 	&::before {
-		color: map-get($grey, base);
+		color: map.get($grey, base);
 		text-decoration: underline;
 		background: rgba(var(--v-theme-white));
 		border-color: rgba(var(--v-theme-primary));
@@ -142,7 +143,7 @@ ul.progressbar {
 
 	&::after {
 		color: rgba(var(--v-theme-white));
-		background: map-get($grey, base);
+		background: map.get($grey, base);
 	}
 }
 
