@@ -91,7 +91,7 @@
 			<RenameFileDialog
 				v-model:is-dialog-open="isRenameDialogOpen"
 				:file-records="fileRecords"
-				:name="fileRecordToRenameName"
+				:name="fileRecordToRename?.name"
 				:entity-name="$t('components.cardElement.fileElement')"
 				@cancel="onRenameDialogCancel"
 				@confirm="onRenameDialogConfirm"
@@ -181,9 +181,6 @@ const fileRecordItems = computed(() => {
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;
 });
-const fileRecordToRenameName = computed(
-	() => fileRecordToRename.value?.name || ""
-);
 
 const formatFileSize = (size: number) => {
 	const { convertedSize, unit } = convertFileSize(size);
