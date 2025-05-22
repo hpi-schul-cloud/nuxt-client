@@ -17,8 +17,8 @@ import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { FileRecordItem } from "../types/filerecord-item";
 
-const { fileRecord } = defineProps({
-	fileRecord: {
+const { fileRecordItem } = defineProps({
+	fileRecordItem: {
 		type: Object as PropType<FileRecordItem>,
 		required: true,
 	},
@@ -27,7 +27,9 @@ const { fileRecord } = defineProps({
 const { t } = useI18n();
 
 const isInteractive = computed(
-	() => fileRecord.isSelectable && isPreviewPossible(fileRecord.previewStatus)
+	() =>
+		fileRecordItem.isSelectable &&
+		isPreviewPossible(fileRecordItem.previewStatus)
 );
 
 const handleClick = () => {
@@ -35,13 +37,13 @@ const handleClick = () => {
 };
 
 const openImageInLightbox = () => {
-	const previewUrl = convertDownloadToPreviewUrl(fileRecord.url);
+	const previewUrl = convertDownloadToPreviewUrl(fileRecordItem.url);
 
 	const options: LightBoxOptions = {
-		downloadUrl: fileRecord.url,
+		downloadUrl: fileRecordItem.url,
 		previewUrl: previewUrl,
-		alt: `${t("components.cardElement.fileElement.emptyAlt")} ${fileRecord.name}`,
-		name: fileRecord.name,
+		alt: `${t("components.cardElement.fileElement.emptyAlt")} ${fileRecordItem.name}`,
+		name: fileRecordItem.name,
 	};
 
 	const { open } = useLightBox();

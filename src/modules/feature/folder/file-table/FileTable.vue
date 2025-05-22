@@ -23,7 +23,7 @@
 				:show-select="true"
 			>
 				<template #[`item.preview`]="{ item }">
-					<FileInteractionHandler :file-record="item">
+					<FileInteractionHandler :file-record-item="item">
 						<FilePreview
 							:file-record="item"
 							:data-testid="`file-preview-${item.name}`"
@@ -32,7 +32,7 @@
 					</FileInteractionHandler>
 				</template>
 				<template #[`item.name`]="{ item }">
-					<FileInteractionHandler :file-record="item">
+					<FileInteractionHandler :file-record-item="item">
 						<span
 							:data-testid="`name-${item.name}`"
 							:class="{ 'text-disabled': !item.isSelectable }"
