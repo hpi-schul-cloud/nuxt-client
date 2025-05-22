@@ -143,7 +143,6 @@ export default {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 @use "@/utils/multiline-ellipsis.scss" as *;
 
 .card-tag {
