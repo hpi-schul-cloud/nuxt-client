@@ -32,7 +32,7 @@ import {
 	mdiFileMusicOutline,
 	mdiFileVideoOutline,
 } from "@icons/material";
-import { defineProps, PropType } from "vue";
+import { PropType } from "vue";
 
 defineProps({
 	disabled: { type: Boolean as PropType<boolean>, default: false },
