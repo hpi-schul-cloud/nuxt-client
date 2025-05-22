@@ -667,7 +667,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
+@use "@/styles/mixins" as *;
 
 :deep(.row-highlighted.theme--light.v-btn:hover::before) {
 	opacity: 0;

@@ -335,7 +335,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .substitute-filter-placeholder {
 	min-height: 78px;
@@ -345,7 +346,7 @@ export default {
 	max-width: var(--size-content-width-max);
 }
 
-@media #{map-get($display-breakpoints, 'md-and-up')} {
+@media #{map.get($display-breakpoints, 'md-and-up')} {
 	.tabs-max-width {
 		max-width: var(--size-content-width-max);
 	}

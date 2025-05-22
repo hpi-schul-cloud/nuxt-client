@@ -360,8 +360,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
-@import "@/styles/mixins";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
+@use "@/styles/mixins" as *;
 
 .table__row {
 	font-weight: var(--font-weight-bold);
@@ -453,7 +454,7 @@ export default {
 
 .tooltip .tooltiptext {
 	visibility: hidden;
-	background-color: map-get($grey, darken-3);
+	background-color: map.get($grey, darken-3);
 	color: #fff;
 	text-align: center;
 	border-radius: 6px;

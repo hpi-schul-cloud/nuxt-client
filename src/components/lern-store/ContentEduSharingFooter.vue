@@ -12,7 +12,7 @@
 </template>
 
 <style lang="scss">
-@import "@/styles/mixins";
+@use "@/styles/mixins" as *;
 
 .edusharing-footer {
 	display: flex;
