@@ -39,6 +39,7 @@ const deleteMessage = computed(() => {
 			name: props.fileRecords[0].name,
 		});
 	} else {
+		// This should never happen, but is required for some test cases.
 		return t("");
 	}
 });
