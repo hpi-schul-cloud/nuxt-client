@@ -34,7 +34,7 @@ const deleteMessage = computed(() => {
 		return t("pages.folder.delete-multiple-confirmation", {
 			total: props.fileRecords.length,
 		});
-	} else if (props.fileRecords.length > 0) {
+	} else if (props.fileRecords.length === 1) {
 		return t("pages.folder.delete-confirmation", {
 			name: props.fileRecords[0].name,
 		});
