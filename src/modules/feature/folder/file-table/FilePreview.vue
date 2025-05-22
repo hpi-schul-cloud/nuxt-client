@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { FilePreviewWidth } from "@/types/file/File";
+import { FilePreviewWidth, FileRecord } from "@/types/file/File";
 import {
 	convertDownloadToPreviewUrl,
 	isAudioMimeType,
@@ -31,11 +31,10 @@ import {
 	mdiFileVideoOutline,
 } from "@icons/material";
 import { defineProps, PropType } from "vue";
-import { FileRecordItem } from "../types/filerecord-item";
 
 defineProps({
 	fileRecord: {
-		type: Object as PropType<FileRecordItem>,
+		type: Object as PropType<FileRecord>,
 		required: true,
 	},
 });
