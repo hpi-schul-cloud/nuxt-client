@@ -2,7 +2,7 @@
 	<button v-if="isInteractive" @click="handleClick">
 		<slot />
 	</button>
-	<div v-else :class="{ 'text-disabled': disabled }">
+	<div v-else>
 		<slot />
 	</div>
 </template>
@@ -18,7 +18,6 @@ import { useI18n } from "vue-i18n";
 import { FileRecordItem } from "../types/filerecord-item";
 
 const { fileRecord } = defineProps({
-	disabled: { type: Boolean as PropType<boolean>, default: false },
 	fileRecord: {
 		type: Object as PropType<FileRecordItem>,
 		required: true,

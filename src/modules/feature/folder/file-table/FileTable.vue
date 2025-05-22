@@ -23,21 +23,22 @@
 				:show-select="true"
 			>
 				<template #[`item.preview`]="{ item }">
-					<FileInteractionHandler
-						:file-record="item"
-						:data-testid="`file-preview-${item.name}`"
-						:disabled="!item.isSelectable"
-					>
-						<FilePreview :file-record="item" />
+					<FileInteractionHandler :file-record="item">
+						<FilePreview
+							:file-record="item"
+							:data-testid="`file-preview-${item.name}`"
+							:class="{ 'text-disabled': !item.isSelectable }"
+						/>
 					</FileInteractionHandler>
 				</template>
 				<template #[`item.name`]="{ item }">
-					<FileInteractionHandler
-						:file-record="item"
-						:data-testid="`name-${item.name}`"
-						:disabled="!item.isSelectable"
-					>
-						{{ item.name }}
+					<FileInteractionHandler :file-record="item">
+						<span
+							:data-testid="`name-${item.name}`"
+							:class="{ 'text-disabled': !item.isSelectable }"
+						>
+							{{ item.name }}
+						</span>
 					</FileInteractionHandler>
 				</template>
 				<template #[`item.createdAt`]="{ item }">

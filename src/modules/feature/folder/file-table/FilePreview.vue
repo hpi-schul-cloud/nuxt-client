@@ -34,7 +34,6 @@ import { defineProps, PropType } from "vue";
 import { FileRecordItem } from "../types/filerecord-item";
 
 defineProps({
-	disabled: { type: Boolean as PropType<boolean>, default: false },
 	fileRecord: {
 		type: Object as PropType<FileRecordItem>,
 		required: true,
