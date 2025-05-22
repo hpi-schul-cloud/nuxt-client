@@ -188,6 +188,7 @@ const tableHeaders = [
 		key: "actions",
 		sortable: false,
 		width: 100,
+		align: "center",
 	},
 ];
 
