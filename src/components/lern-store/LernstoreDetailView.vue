@@ -351,8 +351,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
-@import "@/styles/mixins";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
+@use "@/styles/mixins" as *;
 $tablet-portrait-width: 768px;
 
 .resource {
@@ -385,7 +386,7 @@ $tablet-portrait-width: 768px;
 
 		.close-icon {
 			color: rgba(var(--v-theme-white));
-			background-color: map-get($grey, darken-3);
+			background-color: map.get($grey, darken-3);
 		}
 
 		.close-transparent {

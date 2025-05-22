@@ -334,8 +334,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
-
 .subtitle-text {
 	margin-top: var(--space-xl);
 }

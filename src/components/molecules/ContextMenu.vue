@@ -213,8 +213,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
-@import "@/styles/mixins";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
+@use "@/styles/mixins" as *;
 
 .context-menu {
 	--transition-duration: var(--duration-transition-fast);
@@ -229,7 +230,7 @@ export default {
 	border-radius: var(--radius-sm);
 
 	> :hover {
-		background-color: map-get($grey, lighten-3);
+		background-color: map.get($grey, lighten-3);
 	}
 
 	&__button {
