@@ -1701,7 +1701,6 @@ export default {
 		"Спробуйте використати коротший запит.",
 	"pages.content.emptyState.error.title": "Отакої, результатів немає!",
 	"pages.content.index.backToCourse": "Назад до курсу",
-	"pages.content.index.backToBoard": "Назад до дошки ",
 	"pages.content.index.backToOverview": "Назад до огляду",
 	"pages.content.index.search_for": "Пошук...",
 	"pages.content.index.search_resources": "Ресурси",

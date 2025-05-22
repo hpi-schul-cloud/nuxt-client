@@ -1668,7 +1668,6 @@ export default {
 		"Try to use a shorter query.",
 	"pages.content.emptyState.error.title": "Whoops, no results!",
 	"pages.content.index.backToCourse": "Back to the Course",
-	"pages.content.index.backToBoard": "Back to the Board",
 	"pages.content.index.backToOverview": "Back to Overview",
 	"pages.content.index.search_for": "Search for...",
 	"pages.content.index.search_resources": "Resources",
