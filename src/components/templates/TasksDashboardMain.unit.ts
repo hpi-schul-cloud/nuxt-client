@@ -9,8 +9,10 @@ import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import {
 	COPY_MODULE_KEY,
+	FINISHED_TASKS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
+	TASKS_MODULE_KEY,
 } from "@/utils/inject";
 import { meResponseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -67,9 +69,11 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					tasksModule: tasksModuleMock,
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
 					loadingStateModule: loadingStateModuleMock,
+					[TASKS_MODULE_KEY]: tasksModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
@@ -224,7 +228,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should render add task button", () => {
-			const fabComponent = wrapper.find(".wireframe-fab");
+			const fabComponent = wrapper.find(".fab-wrapper");
 			expect(fabComponent.exists()).toEqual(true);
 		});
 

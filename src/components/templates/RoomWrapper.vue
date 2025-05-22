@@ -18,12 +18,11 @@
 			</VContainer>
 		</template>
 		<template v-else-if="isEmptyState">
-			<vCustomEmptyState
-				ref="rooms-empty-state"
-				image="rooms-empty-state"
-				:title="$t('pages.rooms.allRooms.emptyState.title')"
-				class="mt-16"
-			/>
+			<EmptyState :title="t('pages.rooms.emptyState.title')">
+				<template #media>
+					<RoomsEmptyStateSvg />
+				</template>
+			</EmptyState>
 		</template>
 		<template v-else>
 			<slot name="page-content" />
@@ -35,7 +34,6 @@
 
 <script setup lang="ts">
 import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
-import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
 	authModule,
@@ -48,6 +46,7 @@ import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Fab, FabAction } from "./default-wireframe.types";
+import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 
 enum RoomFabEvent {
 	COMMON_CARTRIDGE_IMPORT = "import",
@@ -140,7 +139,8 @@ const fabItemClickHandler = (event: RoomFabEvent): void => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 :deep(.v-skeleton-loader__date-picker-days) {
 	justify-content: space-between;
@@ -158,14 +158,14 @@ const fabItemClickHandler = (event: RoomFabEvent): void => {
 	max-width: var(--size-content-width-max);
 }
 
-@media #{map-get($display-breakpoints, 'sm-and-up')} {
+@media #{map.get($display-breakpoints, 'sm-and-up')} {
 	:deep(.v-skeleton-loader__avatar) {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin: 12px 36px;
 	}
 }
 
-@media #{map-get($display-breakpoints, 'md-and-up')} {
+@media #{map.get($display-breakpoints, 'md-and-up')} {
 	:deep(.v-skeleton-loader__avatar) {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin: 24px 36px;

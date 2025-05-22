@@ -5,10 +5,11 @@ $breakpoints: (
 );
 
 // Usage: `@include breakpoint(tablet) { ... }`
+@use "sass:map";
 @mixin breakpoint($breakpoint) {
-	@if map-has-key($breakpoints, $breakpoint) {
+	@if map.has-key($breakpoints, $breakpoint) {
 		// Get the breakpoint value.
-		$breakpoint-value: map-get($breakpoints, $breakpoint);
+		$breakpoint-value: map.get($breakpoints, $breakpoint);
 
 		// Write the media query.
 		@media (min-width: $breakpoint-value) {

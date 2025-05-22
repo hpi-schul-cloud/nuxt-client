@@ -20,7 +20,7 @@
 			data-testid="img-generic"
 		/>
 
-		<h1 class="h4 error-msg pl-4 pr-4" data-testid="err-text">
+		<h1 class="text-h4 error-msg pl-4 pr-4" data-testid="err-text">
 			{{ errorText }}
 		</h1>
 	</div>
@@ -72,18 +72,19 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .repair-image {
 	width: 75%;
 	height: auto;
 	padding: 6rem 1rem;
 
-	@media #{map-get($display-breakpoints, "sm-and-up")} {
+	@media #{map.get($display-breakpoints, "sm-and-up")} {
 		padding: 6rem 1rem;
 	}
 
-	@media #{map-get($display-breakpoints, "md-and-up")} {
+	@media #{map.get($display-breakpoints, "md-and-up")} {
 		height: 320px;
 		width: auto;
 		padding: 1rem;

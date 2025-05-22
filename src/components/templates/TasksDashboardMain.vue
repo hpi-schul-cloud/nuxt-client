@@ -75,16 +75,8 @@
 				@update:model-value="setCourseFilters"
 			/>
 			<div v-else class="course-filter-placeholder" />
-			<tasks-dashboard-student
-				v-if="isStudent"
-				:empty-state="emptyState"
-				:tab-routes="tabRoutes"
-			/>
-			<tasks-dashboard-teacher
-				v-else
-				:empty-state="emptyState"
-				:tab-routes="tabRoutes"
-			/>
+			<tasks-dashboard-student v-if="isStudent" :tab-routes="tabRoutes" />
+			<tasks-dashboard-teacher v-else :tab-routes="tabRoutes" />
 		</div>
 		<copy-result-modal
 			v-if="isTeacher"
@@ -286,35 +278,6 @@ export default {
 			}
 			return null;
 		},
-		emptyState() {
-			let title = "";
-			let subtitle = undefined;
-
-			if (this.tasksModule.hasFilterSelected) {
-				title = this.$t("pages.tasks.emptyStateOnFilter.title");
-			} else {
-				if (this.tab === this.tabRoutes[0]) {
-					title = this.$t(`pages.tasks.${this.role}.open.emptyState.title`);
-					subtitle = this.$t(
-						`pages.tasks.${this.role}.open.emptyState.subtitle`
-					);
-				}
-				if (this.tab === this.tabRoutes[1]) {
-					title = this.isStudent
-						? this.$t("pages.tasks.student.completed.emptyState.title")
-						: this.$t("pages.tasks.teacher.drafts.emptyState.title");
-				}
-				if (this.tab === this.tabRoutes[2]) {
-					title = this.$t("pages.tasks.finished.emptyState.title");
-				}
-			}
-
-			return {
-				image: "tasks-empty-state",
-				title,
-				subtitle,
-			};
-		},
 		copyResultModalItems() {
 			return this.copyModule.getCopyResultFailedItems;
 		},
@@ -372,7 +335,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .substitute-filter-placeholder {
 	min-height: 78px;
@@ -382,7 +346,7 @@ export default {
 	max-width: var(--size-content-width-max);
 }
 
-@media #{map-get($display-breakpoints, 'md-and-up')} {
+@media #{map.get($display-breakpoints, 'md-and-up')} {
 	.tabs-max-width {
 		max-width: var(--size-content-width-max);
 	}

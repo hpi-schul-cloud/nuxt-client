@@ -248,7 +248,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
+@use "@/styles/mixins" as *;
 
 .link-style {
 	color: rgba(var(--v-theme-primary));

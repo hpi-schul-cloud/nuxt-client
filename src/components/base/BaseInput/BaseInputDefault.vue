@@ -213,7 +213,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .wrapper {
 	display: block;
@@ -266,8 +267,8 @@ export default defineComponent({
 	}
 
 	&.disabled {
-		color: map-get($grey, base);
-		border-bottom-color: map-get($grey, base);
+		color: map.get($grey, base);
+		border-bottom-color: map.get($grey, base);
 	}
 
 	.info-line {
@@ -323,7 +324,7 @@ export default defineComponent({
 					background-color: transparent;
 
 					&::placeholder {
-						color: map-get($grey, base);
+						color: map.get($grey, base);
 					}
 				}
 			}
@@ -332,26 +333,26 @@ export default defineComponent({
 }
 
 .pwd-toggle {
-	color: map-get($grey, base);
+	color: map.get($grey, base);
 	border-radius: var(--radius-round);
 
 	&:hover {
-		color: map-get($grey, darken-3);
+		color: map.get($grey, darken-3);
 	}
 
 	&:focus {
-		color: map-get($grey, darken-3);
+		color: map.get($grey, darken-3);
 		outline: none;
 		box-shadow:
 			0 0 0 3px rgba(var(--v-theme-white)),
-			0 0 0 6px map-get($grey, darken-3);
+			0 0 0 6px map.get($grey, darken-3);
 	}
 }
 
 .base-input-info {
 	display: block;
 	font-size: var(--text-xs);
-	color: map-get($grey, base);
+	color: map.get($grey, base);
 }
 
 .base-input-info.base-input-error {
