@@ -1,5 +1,9 @@
 <template>
-	<button v-if="isInteractive" @click="handleClick">
+	<button
+		v-if="isInteractive"
+		:aria-label="t('common.ariaLabel.openImageInLightBox')"
+		@click="openImageInLightbox"
+	>
 		<slot />
 	</button>
 	<div v-else>
@@ -31,10 +35,6 @@ const isInteractive = computed(
 		fileRecordItem.isSelectable &&
 		isPreviewPossible(fileRecordItem.previewStatus)
 );
-
-const handleClick = () => {
-	openImageInLightbox();
-};
 
 const openImageInLightbox = () => {
 	const previewUrl = convertDownloadToPreviewUrl(fileRecordItem.url);
