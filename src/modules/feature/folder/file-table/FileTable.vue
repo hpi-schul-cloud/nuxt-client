@@ -103,10 +103,10 @@ import { computed, defineProps, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
+import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
-import FilePreview from "./FilePreview.vue";
 
 const { t, n } = useI18n();
 
