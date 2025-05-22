@@ -11,7 +11,6 @@
 				variant="text"
 				:ripple="false"
 				:icon="mdiDotsVertical"
-				size="36"
 				@click.stop.prevent
 				@dblclick.stop.prevent
 				@keydown.enter.stop
