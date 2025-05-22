@@ -95,7 +95,7 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
+@use "@/styles/mixins" as *;
 
 .wrapper {
 	width: 100%;

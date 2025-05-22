@@ -200,7 +200,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/settings.scss";
+@use "@/styles/settings.scss" as *;
 
 .error-message-width {
 	min-width: 280px;
