@@ -16,18 +16,27 @@
 
 		<template #[`item.actions`]="{ item }">
 			<div class="d-flex align-center">
-				<v-btn
+				<VBtn
 					ref="shareButton"
 					variant="text"
 					size="36"
 					:aria-label="
-						t('pages.rooms.members.invitationTable.shareButton.ariaLabel')
+						t('pages.rooms.members.invitationTable.shareButton.ariaLabel', {
+							linkTitle: item.title,
+						})
 					"
 					:data-testid="`share-button-${item.id}`"
 					:icon="mdiShareVariantOutline"
 					@click="onOpenShareModal(item.id)"
 				/>
-				<KebabMenu :data-testid="`kebab-menu-${item.id}`">
+				<KebabMenu
+					:data-testid="`kebab-menu-${item.id}`"
+					:aria-label="
+						t('pages.rooms.members.invitationTable.actionMenu.ariaLabel', {
+							linkTitle: item.title,
+						})
+					"
+				>
 					<KebabMenuActionEdit
 						:data-testid="`menu-edit-button-${item.id}`"
 						@click="onEdit(item.id)"
