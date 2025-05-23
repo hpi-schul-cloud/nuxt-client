@@ -365,6 +365,9 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			parentType: to.query.parentType,
 			contentId: to.params.contentId,
 		}),
+		meta: {
+			layout: Layouts.BORDERLESS,
+		},
 	},
 	{
 		path: `/h5p/editor/:contentId(${REGEX_ID})?`,
@@ -379,6 +382,9 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			parentType: to.query.parentType,
 			contentId: to.params.contentId || undefined,
 		}),
+		meta: {
+			layout: Layouts.BORDERLESS,
+		},
 	},
 	{
 		path: `/media-shelf`,

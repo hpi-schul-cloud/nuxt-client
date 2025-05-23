@@ -1,15 +1,5 @@
 <template>
 	<section>
-		<v-btn
-			variant="text"
-			:ripple="false"
-			data-testid="editor-back-button"
-			@click="goBack"
-		>
-			<v-icon>{{ mdiChevronLeft }}</v-icon>
-			{{ t(backMenuLabel) }}
-		</v-btn>
-
 		<div class="content">
 			<div class="column-layout">
 				<H5PEditorComponent
@@ -37,7 +27,6 @@
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { H5PContentParentType, H5PSaveResponse } from "@/h5pEditorApi/v3";
-import { MessageSchema } from "@/locales/schema";
 import type ApplicationErrorModule from "@/store/application-error";
 import type NotifierModule from "@/store/notifier";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
@@ -46,8 +35,7 @@ import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
-import { mdiChevronLeft } from "@icons/material";
-import { computed, onMounted, Ref, ref } from "vue";
+import { onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 import { H5pEditorHooks } from "./h5pEditorHooks";
@@ -128,19 +116,6 @@ const save = async () => {
 		}
 	}
 };
-
-const goBack = () => {
-	window.close();
-};
-
-const backLabelForScope: Record<H5PContentParentType, keyof MessageSchema> = {
-	[H5PContentParentType.LESSONS]: "pages.content.index.backToCourse",
-	[H5PContentParentType.BOARD_ELEMENT]: "pages.content.index.backToBoard",
-};
-
-const backMenuLabel = computed(() => {
-	return backLabelForScope[props.parentType];
-});
 </script>
 
 <style scoped>

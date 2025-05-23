@@ -582,7 +582,7 @@ export default {
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.cardElement.h5pElement": "Elemento de aprendizaje interactivo",
 	"components.cardElement.h5pElement.create":
-		"Crear un elemento de aprendizaje interactivo.",
+		"Crear elemento de aprendizaje...",
 	"components.cardElement.h5pElement.title.error.load":
 		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",
 	"components.datePicker.validation.format":
@@ -1719,7 +1719,6 @@ export default {
 		"Intenta usar una consulta más corta.",
 	"pages.content.emptyState.error.title": "¡Vaya, no hay resultados!",
 	"pages.content.index.backToCourse": "Volver al curso",
-	"pages.content.index.backToBoard": "Volver al tablero",
 	"pages.content.index.backToOverview": "Volver a la vista general",
 	"pages.content.index.search_for": "Buscar...",
 	"pages.content.index.search_resources": "Recursos",
