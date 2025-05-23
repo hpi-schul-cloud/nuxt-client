@@ -101,5 +101,20 @@ describe("CommonCartridgeImportModule", () => {
 				expect(sut.isSuccess).toBe(false);
 			});
 		});
+
+		describe("commonCartridgeApi", () => {
+			it("should call commonCartridgeControllerImportCourse with the provided file", async () => {
+				// Arrange
+				const file = new File([""], "file.txt", { type: "text/plain" });
+
+				// Act
+				await sut.importCommonCartridgeFile(file);
+
+				// Assert
+				expect(
+					commonCartridgeApiMock.commonCartridgeControllerImportCourse
+				).toHaveBeenCalledWith(file);
+			});
+		});
 	});
 });
