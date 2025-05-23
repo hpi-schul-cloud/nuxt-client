@@ -93,7 +93,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
 			canSeeAllStudents: ref(false),
-			canDuplicateRoom: ref(false),
+			canCopyRoom: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
@@ -226,6 +226,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 		});
 
+		//TODO nur weil der User die Permission hat, soll doch nicht das menü gerendert werden?
 		describe("and user has permission to edit or delete room", () => {
 			it("should render kebab menu", () => {
 				roomPermissions.canEditRoomContent.value = true;
@@ -238,7 +239,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(menu.exists()).toBe(true);
 			});
 		});
-
+		//TODO widerspricht dem Test da drüber?
 		describe("and user does not have permission to edit, leave nor to delete room", () => {
 			it("should render kebab menu", () => {
 				roomPermissions.canEditRoomContent.value = false;
@@ -310,7 +311,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("when a user clicks on leave room", () => {
-			describe("when user has permission to leave room", () => {
+			describe("and user has permission to leave room", () => {
 				it("should call leaveRoom when dialog confirmed", async () => {
 					askConfirmationMock.mockResolvedValue(true);
 					const { wrapper, useRoomsStateMock } = setup();
