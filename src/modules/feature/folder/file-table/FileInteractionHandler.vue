@@ -2,6 +2,7 @@
 	<button
 		v-if="isInteractive"
 		:aria-label="t('common.ariaLabel.openImageInLightBox')"
+		class="w-100 text-start"
 		@click="openImageInLightbox"
 	>
 		<slot />
