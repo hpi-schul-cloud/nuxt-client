@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<v-text-field
+			autofocus
 			variant="filled"
 			:model-value="shareUrl"
 			readonly
