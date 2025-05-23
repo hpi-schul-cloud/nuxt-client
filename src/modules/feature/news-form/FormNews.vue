@@ -290,20 +290,18 @@ export default defineComponent({
 }
 
 // hide default current date/time in MacOS/Safari if input date/time is indeed empty
-:deep() {
-	.hideCurrentDate {
-		input[type="date"]::-webkit-datetime-edit-day-field,
-		input[type="date"]::-webkit-datetime-edit-month-field,
-		input[type="date"]::-webkit-datetime-edit-year-field {
-			opacity: 0;
-		}
+:deep(.hideCurrentDate) {
+	input[type="date"]::-webkit-datetime-edit-day-field,
+	input[type="date"]::-webkit-datetime-edit-month-field,
+	input[type="date"]::-webkit-datetime-edit-year-field {
+		opacity: 0;
 	}
+}
 
-	.hideCurrentTime {
-		input[type="time"]::-webkit-datetime-edit-hour-field,
-		input[type="time"]::-webkit-datetime-edit-minute-field {
-			opacity: 0;
-		}
+:deep(.hideCurrentTime) {
+	input[type="time"]::-webkit-datetime-edit-hour-field,
+	input[type="time"]::-webkit-datetime-edit-minute-field {
+		opacity: 0;
 	}
 }
 </style>

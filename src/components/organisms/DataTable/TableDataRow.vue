@@ -87,14 +87,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .table__row {
 	border-top: 1px solid rgba(var(--v-theme-white));
 	border-bottom: 1px solid rgba(var(--v-theme-white));
 
 	&.highlight {
-		background-color: map-get($grey, lighten-4);
+		background-color: map.get($grey, lighten-4);
 		border-top: 1px solid rgba(var(--v-theme-white));
 		border-bottom: 1px solid rgba(var(--v-theme-white));
 	}

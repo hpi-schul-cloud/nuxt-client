@@ -85,8 +85,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
-@import "@/styles/mixins";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
+@use "@/styles/mixins" as *;
 
 .header {
 	position: sticky;
@@ -224,7 +225,7 @@ export default {
 	}
 
 	&:hover {
-		background-color: map-get($grey, lighten-3);
+		background-color: map.get($grey, lighten-3);
 		border-radius: var(--radius-sm);
 	}
 }

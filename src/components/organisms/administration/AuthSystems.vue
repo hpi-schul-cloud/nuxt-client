@@ -207,14 +207,15 @@ export default {
 		},
 		isEditable(system) {
 			return (
-				system.ldapConfig?.provider === "general" || system.alias === "SANIS"
+				system.ldapConfig?.provider === "general" ||
+				system.alias === "moin.schule"
 			);
 		},
 		isRemovable(system) {
 			return system.ldapConfig?.provider === "general";
 		},
 		redirectTo(system) {
-			if (system.alias === "SANIS") {
+			if (system.alias === "moin.schule") {
 				return `/administration/school-settings/provisioning-options?systemId=${system.id}`;
 			}
 			return `/administration/ldap/config?id=${system.id}`;
