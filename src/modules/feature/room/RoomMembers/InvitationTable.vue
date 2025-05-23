@@ -14,45 +14,12 @@
 			/>
 		</template>
 
-		<template #[`item.title`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">
-				{{ item.title }}
-			</span>
-		</template>
-		<template #[`item.restrictedToCreatorSchool`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }"
-				>{{ item.restrictedToCreatorSchool }}
-			</span>
-		</template>
-		<template #[`item.validForStudents`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">
-				{{ item.validForStudents }}
-			</span>
-		</template>
-		<template #[`item.activeUntil`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">
-				{{ item.activeUntil }}
-			</span>
-		</template>
-		<template #[`item.requiresConfirmation`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">
-				{{ item.requiresConfirmation }}
-			</span>
-		</template>
-		<template #[`item.status`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">
-				{{ item.status }}
-			</span>
-		</template>
-
 		<template #[`item.actions`]="{ item }">
-			<div
-				class="d-flex align-center"
-				:class="{ 'text-medium-emphasis': item.isExpired }"
-			>
+			<div class="d-flex align-center">
 				<v-btn
 					ref="shareButton"
 					variant="text"
+					size="36"
 					:aria-label="
 						t('pages.rooms.members.invitationTable.shareButton.ariaLabel')
 					"
