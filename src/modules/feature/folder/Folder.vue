@@ -82,10 +82,9 @@ const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles, rename } =
 	useFileStorageApi();
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-const userRoles = ref(authModule.getUserRoles);
-const isStudent = computed(() => {
-	return userRoles.value.includes("student");
-});
+const isStudent = computed(() => 
+	authModule.getUserRoles.includes("student")
+);
 
 const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
