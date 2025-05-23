@@ -81,12 +81,3 @@ const emitTime = () => {
 	emit("update:time", timeValue.value);
 };
 </script>
-
-<style lang="scss" scoped>
-:deep {
-	.v-field__append-inner .v-icon {
-		width: 20px;
-		height: 20px;
-	}
-}
-</style>

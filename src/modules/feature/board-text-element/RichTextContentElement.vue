@@ -74,89 +74,89 @@ const onKeyUp = () => ensurePoliteNotifications();
 	padding: 0.05px; // prevent margin collapse
 }
 
-:deep() {
-	.ck.ck-editor__editable_inline {
-		padding: 0;
-	}
+:deep(.ck.ck-editor__editable_inline) {
+	padding: 0;
 
-	.ck.ck-editor__editable_inline h4:first-of-type,
-	.ck.ck-editor__editable_inline h5:first-of-type {
+	h4:first-of-type,
+	h5:first-of-type {
 		margin-top: var(--space-md-2);
 	}
 
-	.ck.ck-editor__editable_inline p,
-	.ck.ck-editor__editable_inline ol,
-	.ck.ck-editor__editable_inline ul {
+	p,
+	ol,
+	ul {
 		margin-top: 0;
 	}
 
-	.ck.ck-editor__editable_inline > :last-child {
+	> :last-child {
+		margin-bottom: var(--space-xs);
+	}
+}
+
+:deep(
+		.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around
+	) {
+	> .ck-widget__type-around__button_before {
+		top: 0.5rem;
+		left: 0.5rem;
+		margin-left: 0;
+	}
+
+	> .ck-widget__type-around__button_after {
+		bottom: 0.5rem;
+		right: 0.5rem;
+	}
+}
+
+:deep(.ck-content) {
+	h4 {
+		font-family: var(--font-accent);
+		font-weight: var(--font-weight-bold);
+		font-size: var(--heading-6);
+		line-height: var(--line-height-md);
+		letter-spacing: 0.01em;
+		margin-bottom: var(--space-xs);
+		margin-top: var(--space-md-2);
+	}
+
+	h5 {
+		font-family: var(--font-accent);
+		font-weight: var(--font-weight-bold);
+		font-size: var(--text-md);
+		line-height: var(--line-height-lg);
+		letter-spacing: 0.015em;
+		margin-bottom: var(--space-xs);
+		margin-top: var(--space-md-2);
+	}
+
+	p,
+	ul,
+	ol {
+		font-family: var(--font-primary);
+		font-weight: var(--font-weight-normal);
+		font-size: var(--text-md);
+		line-height: var(--line-height-lg);
 		margin-bottom: var(--space-xs);
 	}
 
-	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around {
-		> .ck-widget__type-around__button_before {
-			top: 0.5rem;
-			left: 0.5rem;
-			margin-left: 0;
-		}
-
-		> .ck-widget__type-around__button_after {
-			bottom: 0.5rem;
-			right: 0.5rem;
-		}
+	ul {
+		list-style-type: circle;
 	}
 
-	.ck-content {
-		h4 {
-			font-family: var(--font-accent);
-			font-weight: var(--font-weight-bold);
-			font-size: var(--heading-6);
-			line-height: var(--line-height-md);
-			letter-spacing: 0.01em;
-			margin-bottom: var(--space-xs);
-			margin-top: var(--space-md-2);
-		}
+	.table {
+		display: block;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding-right: 1px;
+	}
 
-		h5 {
-			font-family: var(--font-accent);
-			font-weight: var(--font-weight-bold);
-			font-size: var(--text-md);
-			line-height: var(--line-height-lg);
-			letter-spacing: 0.015em;
-			margin-bottom: var(--space-xs);
-			margin-top: var(--space-md-2);
-		}
+	.ck-widget.ck-widget_with-selection-handle:hover
+		> .ck-widget__selection-handle {
+		display: none;
+	}
 
-		p,
-		ul,
-		ol {
-			font-family: var(--font-primary);
-			font-weight: var(--font-weight-normal);
-			font-size: var(--text-md);
-			line-height: var(--line-height-lg);
-			margin-bottom: var(--space-xs);
-		}
-
-		ul {
-			list-style-type: circle;
-		}
-
-		.table {
-			display: block;
-			overflow-x: auto;
-			overflow-y: hidden;
-			padding-right: 1px;
-		}
-
-		.ck-widget.ck-widget_with-selection-handle:hover
-			> .ck-widget__selection-handle {
-			display: none;
-		}
-
-		.math-tex {
-			font-size: large;
-		}
+	.math-tex {
+		font-size: large;
 	}
 }
 </style>
