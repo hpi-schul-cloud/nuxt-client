@@ -2,7 +2,7 @@
 	<button
 		v-if="isInteractive"
 		:aria-label="t('common.ariaLabel.openImageInLightBox')"
-		class="w-100 text-start"
+		class="interaction-area"
 		@click="openImageInLightbox"
 	>
 		<slot />
@@ -52,3 +52,16 @@ const openImageInLightbox = () => {
 	open(options);
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@/styles/settings.scss";
+
+.interaction-area {
+	width: 100%;
+	text-align: left;
+
+	@media #{map-get($display-breakpoints, 'xs')} {
+		width: initial;
+	}
+}
+</style>

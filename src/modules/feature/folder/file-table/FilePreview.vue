@@ -4,9 +4,9 @@
 		:src="convertDownloadToPreviewUrl(fileRecord.url, FilePreviewWidth._500)"
 		:alt="fileRecord.name"
 		:aria-label="fileRecord.name"
-		:aspect-ratio="1 / 1"
+		:aspect-ratio="aspectRatio"
 		cover
-		:width="24"
+		:width="previewWidth"
 	/>
 	<v-icon v-else-if="isAudioMimeType(fileRecord.mimeType)">
 		{{ mdiFileMusicOutline }}
@@ -30,7 +30,8 @@ import {
 	mdiFileMusicOutline,
 	mdiFileVideoOutline,
 } from "@icons/material";
-import { defineProps, PropType } from "vue";
+import { computed, defineProps, PropType } from "vue";
+import { useDisplay } from "vuetify";
 
 defineProps({
 	fileRecord: {
@@ -38,4 +39,9 @@ defineProps({
 		required: true,
 	},
 });
+
+const { xs } = useDisplay();
+
+const previewWidth = computed(() => (xs.value ? 96 : 24));
+const aspectRatio = computed(() => (xs.value ? undefined : 1));
 </script>
