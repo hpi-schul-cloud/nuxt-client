@@ -1,5 +1,6 @@
 <template>
 	<DataTable
+		aria-label-name-key="title"
 		:items="invitationTableData"
 		:header-bottom="headerBottom"
 		:table-headers="tableHeaders"
@@ -13,53 +14,29 @@
 			/>
 		</template>
 
-		<template #[`item.title`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">
-				{{ item.title }}
-			</span>
-		</template>
-		<template #[`item.restrictedToCreatorSchool`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }"
-				>{{ item.restrictedToCreatorSchool }}
-			</span>
-		</template>
-		<template #[`item.validForStudents`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">
-				{{ item.validForStudents }}
-			</span>
-		</template>
-		<template #[`item.activeUntil`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">
-				{{ item.activeUntil }}
-			</span>
-		</template>
-		<template #[`item.requiresConfirmation`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">
-				{{ item.requiresConfirmation }}
-			</span>
-		</template>
-		<template #[`item.status`]="{ item }">
-			<span :class="{ 'text-medium-emphasis': item.isExpired }">
-				{{ item.status }}
-			</span>
-		</template>
-
 		<template #[`item.actions`]="{ item }">
-			<div
-				class="d-flex align-center"
-				:class="{ 'text-medium-emphasis': item.isExpired }"
-			>
-				<v-btn
+			<div class="d-flex align-center">
+				<VBtn
 					ref="shareButton"
 					variant="text"
+					size="36"
 					:aria-label="
-						t('pages.rooms.members.invitationTable.shareButton.ariaLabel')
+						t('pages.rooms.members.invitationTable.shareButton.ariaLabel', {
+							linkTitle: item.title,
+						})
 					"
 					:data-testid="`share-button-${item.id}`"
 					:icon="mdiShareVariantOutline"
 					@click="onOpenShareModal(item.id)"
 				/>
-				<KebabMenu :data-testid="`kebab-menu-${item.id}`">
+				<KebabMenu
+					:data-testid="`kebab-menu-${item.id}`"
+					:aria-label="
+						t('pages.rooms.members.invitationTable.actionMenu.ariaLabel', {
+							linkTitle: item.title,
+						})
+					"
+				>
 					<KebabMenuActionEdit
 						:data-testid="`menu-edit-button-${item.id}`"
 						@click="onEdit(item.id)"
@@ -188,6 +165,7 @@ const tableHeaders = [
 		key: "actions",
 		sortable: false,
 		width: 100,
+		align: "center",
 	},
 ];
 

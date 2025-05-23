@@ -11,7 +11,15 @@
 					<h1 class="text-h3 mb-4" data-testid="room-title">
 						{{ membersInfoText }}
 					</h1>
-					<KebabMenu class="mx-2" data-testid="room-member-menu">
+					<KebabMenu
+						class="mx-2"
+						data-testid="room-member-menu"
+						:aria-label="
+							t('pages.rooms.members.menu.ariaLabel', {
+								membersInfoText: membersInfoText,
+							})
+						"
+					>
 						<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
 					</KebabMenu>
 				</div>
