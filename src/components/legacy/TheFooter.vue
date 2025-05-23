@@ -97,7 +97,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
+@use "@/styles/mixins" as *;
 
 .footer {
 	width: 100%;

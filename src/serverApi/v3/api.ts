@@ -269,6 +269,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
+    CanExecuteInstanceOperations = 'CAN_EXECUTE_INSTANCE_OPERATIONS',
     ChangeTeamRoles = 'CHANGE_TEAM_ROLES',
     ClassCreate = 'CLASS_CREATE',
     ClassEdit = 'CLASS_EDIT',
@@ -329,6 +330,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     ImportUserUpdate = 'IMPORT_USER_UPDATE',
     ImportUserView = 'IMPORT_USER_VIEW',
     InstanceView = 'INSTANCE_VIEW',
+    InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
     InviteExperts = 'INVITE_EXPERTS',
     JoinMeeting = 'JOIN_MEETING',
@@ -375,7 +377,6 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
-    SchoolEditAll = 'SCHOOL_EDIT_ALL',
     SchoolLogoManage = 'SCHOOL_LOGO_MANAGE',
     SchoolNewsEdit = 'SCHOOL_NEWS_EDIT',
     SchoolPermissionChange = 'SCHOOL_PERMISSION_CHANGE',
@@ -384,6 +385,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     SchoolSystemEdit = 'SCHOOL_SYSTEM_EDIT',
     SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
     SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
+    SchoolView = 'SCHOOL_VIEW',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
     StudentCreate = 'STUDENT_CREATE',
@@ -3664,11 +3666,17 @@ export interface ExternalToolImportResultResponse {
  */
 export interface ExternalToolMediumParams {
     /**
+     * The status of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof ExternalToolMediumParams
+     */
+    status: ExternalToolMediumStatus;
+    /**
      * Id of the medium
      * @type {string}
      * @memberof ExternalToolMediumParams
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * Publisher of the medium
      * @type {string}
@@ -3695,11 +3703,17 @@ export interface ExternalToolMediumParams {
  */
 export interface ExternalToolMediumResponse {
     /**
+     * The type of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof ExternalToolMediumResponse
+     */
+    status: ExternalToolMediumStatus;
+    /**
      * Id of the medium
      * @type {string}
      * @memberof ExternalToolMediumResponse
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * Publisher of the medium
      * @type {string}
@@ -3719,6 +3733,17 @@ export interface ExternalToolMediumResponse {
      */
     modifiedAt?: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum ExternalToolMediumStatus {
+    Active = 'active',
+    Template = 'template',
+    Draft = 'draft'
+}
+
 /**
  * 
  * @export
@@ -7557,6 +7582,7 @@ export enum Permission {
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
+    CanExecuteInstanceOperations = 'CAN_EXECUTE_INSTANCE_OPERATIONS',
     ChangeTeamRoles = 'CHANGE_TEAM_ROLES',
     ClassCreate = 'CLASS_CREATE',
     ClassEdit = 'CLASS_EDIT',
@@ -7617,6 +7643,7 @@ export enum Permission {
     ImportUserUpdate = 'IMPORT_USER_UPDATE',
     ImportUserView = 'IMPORT_USER_VIEW',
     InstanceView = 'INSTANCE_VIEW',
+    InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
     InviteExperts = 'INVITE_EXPERTS',
     JoinMeeting = 'JOIN_MEETING',
@@ -7663,7 +7690,6 @@ export enum Permission {
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
-    SchoolEditAll = 'SCHOOL_EDIT_ALL',
     SchoolLogoManage = 'SCHOOL_LOGO_MANAGE',
     SchoolNewsEdit = 'SCHOOL_NEWS_EDIT',
     SchoolPermissionChange = 'SCHOOL_PERMISSION_CHANGE',
@@ -7672,6 +7698,7 @@ export enum Permission {
     SchoolSystemEdit = 'SCHOOL_SYSTEM_EDIT',
     SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
     SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
+    SchoolView = 'SCHOOL_VIEW',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
     StudentCreate = 'STUDENT_CREATE',
@@ -8585,11 +8612,17 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
  */
 export interface SchoolExternalToolMediumResponse {
     /**
+     * The type of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof SchoolExternalToolMediumResponse
+     */
+    status: ExternalToolMediumStatus;
+    /**
      * Id of the medium
      * @type {string}
      * @memberof SchoolExternalToolMediumResponse
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * The id of the media source
      * @type {string}
