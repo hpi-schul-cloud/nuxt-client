@@ -23,18 +23,23 @@
 				:show-select="true"
 			>
 				<template #[`item.preview`]="{ item }">
-					<FilePreview
-						:file-record="item"
-						:data-testid="`file-preview-${item.name}`"
-						:disabled="!item.isSelectable"
-					/>
+					<FileInteractionHandler :file-record-item="item">
+						<FilePreview
+							:file-record="item"
+							:data-testid="`file-preview-${item.name}`"
+							:class="{ 'text-disabled': !item.isSelectable }"
+						/>
+					</FileInteractionHandler>
 				</template>
 				<template #[`item.name`]="{ item }">
-					<span
-						:data-testid="`name-${item.name}`"
-						:class="{ 'text-disabled': !item.isSelectable }"
-						>{{ item.name }}</span
-					>
+					<FileInteractionHandler :file-record-item="item">
+						<span
+							:data-testid="`name-${item.name}`"
+							:class="{ 'text-disabled': !item.isSelectable }"
+						>
+							{{ item.name }}
+						</span>
+					</FileInteractionHandler>
 				</template>
 				<template #[`item.createdAt`]="{ item }">
 					<span
@@ -124,6 +129,7 @@ import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import DeleteFileDialog from "./DeleteFileDialog.vue";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
+import FileInteractionHandler from "./FileInteractionHandler.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";

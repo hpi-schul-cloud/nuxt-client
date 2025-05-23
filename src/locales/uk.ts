@@ -29,6 +29,8 @@ export default {
 	"common.actions.shareLink": "Копіювати посилання",
 	"common.actions.update": "Оновити",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
+	"common.ariaLabel.openImageInLightBox":
+		"Показати зображення в повному розмірі",
 	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
