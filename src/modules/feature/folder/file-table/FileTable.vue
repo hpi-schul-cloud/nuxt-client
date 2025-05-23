@@ -62,11 +62,13 @@
 							:aria-label="t('common.actions.download')"
 						/>
 						<KebabMenuActionRename
+							v-if="!props.isStudent"
 							:disabled="!item.isSelectable"
 							:aria-label="t('common.actions.rename')"
 							@click="onRenameButtonClick(item)"
 						/>
 						<KebabMenuActionDeleteFiles
+							v-if="!props.isStudent"
 							:file-records="fileRecords"
 							:selected-ids="[item.id]"
 							:aria-label="t('common.actions.delete')"
@@ -81,6 +83,7 @@
 
 				<template #action-menu-items="{ selectedIds }">
 					<KebabMenuActionDeleteFiles
+						v-if="!props.isStudent"
 						:file-records="fileRecords"
 						:selected-ids="selectedIds"
 						:aria-label="t('common.actions.delete')"
@@ -135,6 +138,10 @@ const props = defineProps({
 		required: true,
 	},
 	isEmpty: {
+		type: Boolean,
+		required: true,
+	},
+	isStudent: {
 		type: Boolean,
 		required: true,
 	},

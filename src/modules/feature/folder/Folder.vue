@@ -10,12 +10,17 @@
 				<h1 class="text-h3 mb-4" data-testid="folder-title">
 					{{ folderName }}
 				</h1>
-				<FolderMenu :folder-name="folderName" @delete="onDelete" />
+				<FolderMenu
+					v-if="!isStudent"
+					:folder-name="folderName"
+					@delete="onDelete"
+				/>
 			</div>
 		</template>
 		<FileTable
 			:is-loading="isLoading"
 			:is-empty="isEmpty"
+			:is-student="isStudent"
 			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
 			@delete-files="onDeleteFiles"
@@ -36,8 +41,10 @@
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import router from "@/router";
+import AuthModule from "@/store/auth";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardApi, useSharedBoardPageInformation } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
@@ -72,16 +79,26 @@ const { createPageInformation } = useSharedBoardPageInformation();
 const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles, rename } =
 	useFileStorageApi();
 
+const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+const userRoles = ref(authModule.getUserRoles);
+const isStudent = computed(() => {
+	return userRoles.value.includes("student");
+});
+
 const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
 const fileInput = ref<HTMLInputElement | null>(null);
 
-const fabAction = {
-	icon: mdiPlus,
-	title: t("pages.folder.fab.title"),
-	ariaLabel: t("pages.folder.fab.title"),
-	dataTestId: "fab-add-files",
-};
+const fabAction = computed(() => {
+	if (isStudent.value) return undefined;
+
+	return {
+		icon: mdiPlus,
+		title: t("pages.folder.fab.title"),
+		ariaLabel: t("pages.folder.fab.title"),
+		dataTestId: "fab-add-files",
+	};
+});
 
 const uploadProgress = ref({
 	uploaded: 0,
