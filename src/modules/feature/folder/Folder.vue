@@ -30,6 +30,7 @@
 		data-testid="input-folder-fileupload"
 		aria-hidden="true"
 	/>
+	<LightBox />
 </template>
 
 <script setup lang="ts">
@@ -46,6 +47,7 @@ import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
+import { LightBox } from "@ui-light-box";
 
 const boardApi = useBoardApi();
 
