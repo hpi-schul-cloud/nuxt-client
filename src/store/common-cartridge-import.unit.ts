@@ -58,7 +58,7 @@ describe("CommonCartridgeImportModule", () => {
 
 	describe("actions", () => {
 		describe("importCommonCartridgeFile", () => {
-			it("should call courseControllerImportCourse with the given file", async () => {
+			it("should call commonCartridgeControllerImportCourse with the given file", async () => {
 				const file = new File([""], "file.txt", { type: "text/plain" });
 
 				await sut.importCommonCartridgeFile(file);

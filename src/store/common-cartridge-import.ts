@@ -28,10 +28,6 @@ export default class CommonCartridgeImportModule extends VuexModule {
 		return this._isSuccess;
 	}
 
-	public get coursesApi(): CoursesApiInterface {
-		return CoursesApiFactory(undefined, "/v3", $axios);
-	}
-
 	public get commonCartridgeApi(): CommonCartridgeApiInterface {
 		return CommonCartridgeApiFactory(undefined, "/v3", $axios);
 	}
