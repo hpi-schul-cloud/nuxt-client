@@ -7,7 +7,7 @@ import { KebabMenuAction } from "@ui-kebab-menu";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { VBtn } from "vuetify/lib/components/index.mjs";
+import { VBtn } from "vuetify/lib/components/index";
 import MediaBoardDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 

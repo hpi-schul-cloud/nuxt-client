@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { VBtn } from "vuetify/lib/components/index.mjs";
+import { VBtn } from "vuetify/lib/components/index";
 
 defineOptions({
 	inheritAttrs: false,

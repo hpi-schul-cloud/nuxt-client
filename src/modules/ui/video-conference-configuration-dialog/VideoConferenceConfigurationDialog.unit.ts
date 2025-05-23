@@ -5,7 +5,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import VideoConferenceConfigurationDialog from "./VideoConferenceConfigurationDialog.vue";
 import { ref } from "vue";
-import { VDialog } from "vuetify/lib/components/index.mjs";
+import { VDialog } from "vuetify/lib/components/index";
 import { VideoConferenceOptions } from "@/store/types/video-conference";
 
 const defaultOptions = ref<VideoConferenceOptions>({

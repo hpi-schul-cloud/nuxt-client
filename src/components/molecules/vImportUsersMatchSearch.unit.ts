@@ -17,11 +17,7 @@ import { mdiFlag, mdiFlagOutline } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import {
-	VAutocomplete,
-	VBtn,
-	VListItem,
-} from "vuetify/lib/components/index.mjs";
+import { VAutocomplete, VBtn, VListItem } from "vuetify/lib/components/index";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 
 const testProps = {

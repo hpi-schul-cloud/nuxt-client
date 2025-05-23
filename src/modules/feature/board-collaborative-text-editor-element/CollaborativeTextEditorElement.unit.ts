@@ -12,7 +12,7 @@ import { createMock } from "@golevelup/ts-jest";
 import { ContentElementBar } from "@ui-board";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { VCard } from "vuetify/lib/components/index.mjs";
+import { VCard } from "vuetify/lib/components/index";
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { setupCollaborativeTextEditorApiMock } from "./test-utils/collaborativeTextEditorApiMock";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";

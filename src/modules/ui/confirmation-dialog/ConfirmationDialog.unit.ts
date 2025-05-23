@@ -5,7 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import ConfirmationDialog from "./ConfirmationDialog.vue";
-import { VCard, VDialog } from "vuetify/lib/components/index.mjs";
+import { VCard, VDialog } from "vuetify/lib/components/index";
 import { VueWrapper } from "@vue/test-utils";
 
 jest.mock("./Confirmation.composable");

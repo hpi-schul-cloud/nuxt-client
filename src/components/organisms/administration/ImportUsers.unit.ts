@@ -15,7 +15,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { VDataTable } from "vuetify/lib/components/index.mjs";
+import { VDataTable } from "vuetify/lib/components/index";
 import ImportUsers from "./ImportUsers.vue";
 
 const mockImportUsers: ImportUserListResponse = {

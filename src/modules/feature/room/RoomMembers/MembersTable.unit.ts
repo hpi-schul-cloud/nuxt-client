@@ -17,7 +17,7 @@ import {
 	VDataTable,
 	VDialog,
 	VTextField,
-} from "vuetify/lib/components/index.mjs";
+} from "vuetify/lib/components/index";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { RoleName } from "@/serverApi/v3";

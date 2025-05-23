@@ -5,7 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { VBadge, VCard } from "vuetify/lib/components/index.mjs";
+import { VBadge, VCard } from "vuetify/lib/components/index";
 import vRoomGroupAvatar from "./vRoomGroupAvatar.vue";
 
 const mockData = {

@@ -1,15 +1,21 @@
 import { convertFileSize, getFileExtension } from "@/utils/fileHelper";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { useI18n } from "vue-i18n";
 import FileAttributes from "./FileAttributes.vue";
 
 jest.mock("@/utils/fileHelper");
 
-jest.mock("vue-i18n");
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: () => {
+			return {
+				t: (key: string) => key,
+				n: (key: string) => key,
+			};
+		},
+	};
+});
 
 describe("FileAttributes", () => {
 	const setup = () => {
@@ -23,14 +29,10 @@ describe("FileAttributes", () => {
 		const getFileExtensionMock = jest
 			.mocked(getFileExtension)
 			.mockReturnValueOnce(extension);
-		const i18nMock = jest.mocked(useI18n).mockReturnValue({
-			t: jest.fn().mockImplementation((key: string) => key),
-			n: jest.fn().mockImplementation((key: string) => key),
-		});
 
 		const wrapper = mount(FileAttributes, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [createTestingVuetify()],
 			},
 			props: {
 				fileSize,
@@ -47,7 +49,6 @@ describe("FileAttributes", () => {
 			fileName,
 			convertFileSizeMock,
 			getFileExtensionMock,
-			i18nMock,
 			unit,
 		};
 	};
