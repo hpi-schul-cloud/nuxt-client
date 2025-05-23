@@ -66,8 +66,8 @@ const formatDate = (dateTime: string) => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
-@import "@/styles/mixins";
+@use "@/styles/settings.scss" as *;
+@use "@/styles/mixins" as *;
 
 .alerts {
 	width: auto;

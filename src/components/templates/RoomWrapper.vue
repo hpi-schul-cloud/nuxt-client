@@ -139,7 +139,8 @@ const fabItemClickHandler = (event: RoomFabEvent): void => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 :deep(.v-skeleton-loader__date-picker-days) {
 	justify-content: space-between;
@@ -157,14 +158,14 @@ const fabItemClickHandler = (event: RoomFabEvent): void => {
 	max-width: var(--size-content-width-max);
 }
 
-@media #{map-get($display-breakpoints, 'sm-and-up')} {
+@media #{map.get($display-breakpoints, 'sm-and-up')} {
 	:deep(.v-skeleton-loader__avatar) {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin: 12px 36px;
 	}
 }
 
-@media #{map-get($display-breakpoints, 'md-and-up')} {
+@media #{map.get($display-breakpoints, 'md-and-up')} {
 	:deep(.v-skeleton-loader__avatar) {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin: 24px 36px;

@@ -12,13 +12,12 @@ import {
 import FilePreview from "./FilePreview.vue";
 
 describe("FilePreview", () => {
-	const setupWrapper = (fileRecord: FileRecord, disabled = false) => {
+	const setupWrapper = (fileRecord: FileRecord) => {
 		const wrapper = mount(FilePreview, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				disabled,
 				fileRecord,
 			},
 		});
@@ -35,18 +34,6 @@ describe("FilePreview", () => {
 
 			expect(wrapper.findComponent({ name: "v-img" }).exists()).toBe(true);
 		});
-
-		it("should have class text-disabled assigned to div when disabled", () => {
-			const fileRecord = fileRecordFactory.build({
-				previewStatus: FilePreviewStatus.PREVIEW_POSSIBLE,
-			});
-
-			const { wrapper } = setupWrapper(fileRecord, true);
-
-			const div = wrapper.find("div");
-
-			expect(div.classes()).toContain("text-disabled");
-		});
 	});
 
 	describe("when preview is not possible", () => {
@@ -58,18 +45,6 @@ describe("FilePreview", () => {
 			const { wrapper } = setupWrapper(fileRecord);
 
 			expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
-		});
-
-		it("should have class text-disabled assigned to div when disabled", () => {
-			const fileRecord = fileRecordFactory.build({
-				previewStatus: FilePreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
-			});
-
-			const { wrapper } = setupWrapper(fileRecord, true);
-
-			const div = wrapper.find("div");
-
-			expect(div.classes()).toContain("text-disabled");
 		});
 	});
 
@@ -85,19 +60,6 @@ describe("FilePreview", () => {
 			const includesIcon = wrapper.html().includes(mdiFileMusicOutline);
 			expect(includesIcon).toBe(true);
 		});
-
-		it("should have class text-disabled assigned to div when disabled", () => {
-			const fileRecord = fileRecordFactory.build({
-				mimeType: "audio/mpeg",
-				previewStatus: FilePreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
-			});
-
-			const { wrapper } = setupWrapper(fileRecord, true);
-
-			const div = wrapper.find("div");
-
-			expect(div.classes()).toContain("text-disabled");
-		});
 	});
 
 	describe("when mime type is video mime type", () => {
@@ -112,19 +74,6 @@ describe("FilePreview", () => {
 			const includesIcon = wrapper.html().includes(mdiFileVideoOutline);
 			expect(includesIcon).toBe(true);
 		});
-
-		it("should have class text-disabled assigned to div when disabled", () => {
-			const fileRecord = fileRecordFactory.build({
-				mimeType: "video/mp4",
-				previewStatus: FilePreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
-			});
-
-			const { wrapper } = setupWrapper(fileRecord, true);
-
-			const div = wrapper.find("div");
-
-			expect(div.classes()).toContain("text-disabled");
-		});
 	});
 
 	describe("when mime type is document mime type", () => {
@@ -138,19 +87,6 @@ describe("FilePreview", () => {
 
 			const includesIcon = wrapper.html().includes(mdiFileDocumentOutline);
 			expect(includesIcon).toBe(true);
-		});
-
-		it("should have class text-disabled assigned to div when disabled", () => {
-			const fileRecord = fileRecordFactory.build({
-				mimeType: "application/pdf",
-				previewStatus: FilePreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
-			});
-
-			const { wrapper } = setupWrapper(fileRecord, true);
-
-			const div = wrapper.find("div");
-
-			expect(div.classes()).toContain("text-disabled");
 		});
 	});
 });

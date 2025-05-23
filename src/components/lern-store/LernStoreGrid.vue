@@ -27,7 +27,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
+@use "@/styles/mixins" as *;
 
 .grid {
 	display: grid;

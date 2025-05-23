@@ -191,8 +191,9 @@ const dropAvatar = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
-@import "@/utils/multiline-ellipsis.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
+@use "@/utils/multiline-ellipsis.scss" as *;
 
 .v-avatar {
 	width: 500px;
@@ -227,7 +228,7 @@ const dropAvatar = () => {
 	);
 }
 
-@media #{map-get($display-breakpoints, 'xs')} {
+@media #{map.get($display-breakpoints, 'xs')} {
 	.subtitle {
 		margin-right: unset;
 		margin-left: unset;
