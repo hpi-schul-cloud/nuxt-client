@@ -10,7 +10,7 @@ export default {
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
 	"common.actions.download": "Herunterladen",
-	"common.actions.duplicate": "Duplizieren",
+	"common.actions.copyRoom": "Duplizieren",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
 	"common.actions.import": "Importieren",
@@ -944,10 +944,10 @@ export default {
 		"Das Startdatum muss vor dem Enddatum liegen.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
-	"data-room.duplication.alert.success": "Raum erfolgreich dupliziert.",
-	"data-room.duplication.alert.error":
+	"data-room.copy.alert.success": "Raum erfolgreich dupliziert.",
+	"data-room.copy.alert.error":
 		"Der Dupliziervorgang konnte nicht abgeschlossen werden.",
-	"data-room.duplication.loading": "Raum wird dupliziert...",
+	"data-room.copy.loading": "Raum wird dupliziert...",
 	"error.400": "400 – Fehlerhafte Anfrage",
 	"error.401": "401 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
 	"error.403": "403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
@@ -1003,18 +1003,17 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Nutzendengruppe erfolgreich synchronisiert",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
-	"feature-room.DuplicationInfoDialog.title": "Raum duplizieren",
-	"feature-room.DuplicationInfoDialog.text.nextStep":
+	"feature-room.CopyInfoDialog.title": "Raum duplizieren",
+	"feature-room.CopyInfoDialog.text.nextStep":
 		"Im nächsten Schritt wird eine Kopie des Raumes erstellt.",
-	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+	"feature-room.CopyInfoDialog.text.alert.followingContent":
 		"Folgende Inhalte werden nicht kopiert:",
-	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Raum-Mitglieder und Berechtigungen",
-	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
-		"Inhalte aus Etherpads",
-	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Inhalte aus Etherpads",
+	"feature-room.CopyInfoDialog.text.alert.whiteboard":
 		"Inhalte aus Whiteboards",
-	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+	"feature-room.CopyInfoDialog.text.alert.protectedSettings":
 		"Geschützte Einstellungen externer Tools",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",

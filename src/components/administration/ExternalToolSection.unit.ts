@@ -1,4 +1,8 @@
-import { ConfigResponse, MediaSourceLicenseType } from "@/serverApi/v3";
+import {
+	ConfigResponse,
+	ExternalToolMediumStatus,
+	MediaSourceLicenseType,
+} from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
@@ -186,6 +190,7 @@ describe("ExternalToolSection", () => {
 							}),
 							isDeactivated: false,
 							medium: {
+								status: ExternalToolMediumStatus.Active,
 								mediumId: "tool2",
 								mediaSourceId: "notLicensedSource",
 								mediaSourceName: undefined,
