@@ -54,9 +54,11 @@ describe("BorderlessLayout", () => {
 		it("should render ApplicationErrorWrapper", () => {
 			const { wrapper } = getWrapper();
 
-			const skipLink = wrapper.findComponent(ApplicationErrorWrapper);
+			const applicationErrorWrapper = wrapper.findComponent(
+				ApplicationErrorWrapper
+			);
 
-			expect(skipLink.exists()).toBe(true);
+			expect(applicationErrorWrapper.exists()).toBe(true);
 		});
 	});
 
@@ -64,9 +66,9 @@ describe("BorderlessLayout", () => {
 		it("should render RouterView", () => {
 			const { wrapper } = getWrapper();
 
-			const skipLink = wrapper.findComponent(RouterView);
+			const routerView = wrapper.findComponent(RouterView);
 
-			expect(skipLink.exists()).toBe(true);
+			expect(routerView.exists()).toBe(true);
 		});
 	});
 
@@ -74,9 +76,9 @@ describe("BorderlessLayout", () => {
 		it("should render AlertContainer", () => {
 			const { wrapper } = getWrapper();
 
-			const skipLink = wrapper.findComponent(AlertContainer);
+			const alertContainer = wrapper.findComponent(AlertContainer);
 
-			expect(skipLink.exists()).toBe(true);
+			expect(alertContainer.exists()).toBe(true);
 		});
 	});
 
