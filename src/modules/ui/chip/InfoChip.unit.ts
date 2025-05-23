@@ -5,7 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import InfoChip from "./InfoChip.vue";
-import { VChip, VIcon } from "vuetify/lib/components/index.mjs";
+import { VChip, VIcon } from "vuetify/lib/components/index";
 
 describe("InfoChip", () => {
 	const getWrapper = () => {

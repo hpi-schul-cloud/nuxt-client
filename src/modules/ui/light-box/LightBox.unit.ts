@@ -11,7 +11,7 @@ import {
 	VProgressCircular,
 	VRow,
 	VToolbarTitle,
-} from "vuetify/lib/components/index.mjs";
+} from "vuetify/lib/components/index";
 import { LightBoxOptions, useInternalLightBox } from "./LightBox.composable";
 import LightBox from "./LightBox.vue";
 

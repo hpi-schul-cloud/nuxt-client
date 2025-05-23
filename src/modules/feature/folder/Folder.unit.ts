@@ -13,7 +13,7 @@ import { createMock } from "@golevelup/ts-jest";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete } from "@ui-kebab-menu";
 import { ComputedRef, nextTick, ref } from "vue";
-import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
+import { VSkeletonLoader } from "vuetify/lib/components/index";
 import * as DeleteFilesConfirmation from "./composables/DeleteFilesConfirmation.composable";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";

@@ -4,7 +4,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { VBtn } from "vuetify/lib/components/index.mjs";
+import { VBtn } from "vuetify/lib/components/index";
 import LoadingModal from "./LoadingModal.vue";
 
 describe("@/components/molecules/LoadingModal", () => {

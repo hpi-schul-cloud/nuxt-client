@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { h, nextTick, ref } from "vue";
-import { VApp } from "vuetify/lib/components/index.mjs";
+import { VApp } from "vuetify/lib/components/index";
 import {
 	createTestingI18n,
 	createTestingVuetify,

@@ -7,8 +7,8 @@ import { mdiChevronDown, mdiChevronUp } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { VColorPicker, VListItem } from "vuetify/lib/components/index.mjs";
-import colors from "vuetify/lib/util/colors.mjs";
+import { VColorPicker, VListItem } from "vuetify/lib/components/index";
+import colors from "vuetify/lib/util/colors";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 
 describe("MediaBoardLineMenu", () => {

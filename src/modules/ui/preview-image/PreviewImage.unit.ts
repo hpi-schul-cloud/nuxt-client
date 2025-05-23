@@ -6,7 +6,7 @@ import {
 import { WarningAlert } from "@ui-alert";
 import { PreviewImage } from "@ui-preview-image";
 import { mount, shallowMount } from "@vue/test-utils";
-import { VImg } from "vuetify/lib/components/index.mjs";
+import { VImg } from "vuetify/lib/components/index";
 import { ComponentProps } from "vue-component-type-helpers";
 
 describe("PreviewImage", () => {

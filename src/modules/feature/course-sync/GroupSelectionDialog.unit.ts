@@ -9,7 +9,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
-import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import { VAutocomplete } from "vuetify/lib/components/index";
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
 jest.mock("@data-group", () => {

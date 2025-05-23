@@ -10,7 +10,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
-import { VBtn, VHover, VListItem } from "vuetify/lib/components/index.mjs";
+import { VBtn, VHover, VListItem } from "vuetify/lib/components/index";
 import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher.vue";
 import { logger } from "@util-logger";

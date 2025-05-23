@@ -99,7 +99,7 @@ import { convertFileSize, isDownloadAllowed } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu } from "@ui-kebab-menu";
-import { computed, defineProps, PropType } from "vue";
+import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FileInteractionHandler from "./FileInteractionHandler.vue";

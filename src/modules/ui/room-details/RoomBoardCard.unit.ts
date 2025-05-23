@@ -15,7 +15,7 @@ import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createMock } from "@golevelup/ts-jest";
 import { Router, useRouter } from "vue-router";
-import { VListItem, VMenu } from "vuetify/lib/components/index.mjs";
+import { VListItem, VMenu } from "vuetify/lib/components/index";
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 

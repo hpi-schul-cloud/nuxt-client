@@ -10,7 +10,7 @@ import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { nextTick } from "vue";
-import { VBtn, VSelect } from "vuetify/lib/components/index.mjs";
+import { VBtn, VSelect } from "vuetify/lib/components/index";
 import { createStore } from "vuex";
 import AddContentModal from "./AddContentModal.vue";
 

@@ -16,7 +16,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import { VBtn } from "vuetify/lib/components/index.mjs";
+import { VBtn } from "vuetify/lib/components/index";
 import TaskItemMenu from "./TaskItemMenu.vue";
 
 const { tasksTeacher } = mocks;
