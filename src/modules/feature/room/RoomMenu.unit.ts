@@ -59,7 +59,7 @@ describe("@feature-room/RoomMenu", () => {
 			isRoomCopyInfoDialogOpen: ref(false),
 			openRoomCopyInfoDialog: jest.fn(),
 			closeRoomCopyInfoDialog: jest.fn(),
-			copy: jest.fn(),
+			executeRoomCopy: jest.fn(),
 		});
 
 		const wrapper = mount(RoomMenu, {
