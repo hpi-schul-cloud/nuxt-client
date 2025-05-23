@@ -1,3 +1,5 @@
+@use "@/styles/utility/breakpoints" as *;
+
 .sidebar {
 	.logo-full {
 		@include breakpoint(desktop) {
