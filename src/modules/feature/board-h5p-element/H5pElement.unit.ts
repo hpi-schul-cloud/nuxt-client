@@ -17,7 +17,7 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { RouteLocationResolved, useRouter } from "vue-router";
-import { VImg } from "vuetify/lib/components/index.mjs";
+import { VImg } from "vuetify/lib/components/index";
 import H5pElement from "./H5pElement.vue";
 import H5pElementMenu from "./H5pElementMenu.vue";
 

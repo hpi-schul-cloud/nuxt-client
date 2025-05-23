@@ -21,7 +21,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
-import { VDataTableServer } from "vuetify/lib/components/index.mjs";
+import { VDataTableServer } from "vuetify/lib/components/index";
 import RoomsOverview from "./RoomsOverview.page.vue";
 
 jest.mock("vue-router", () => ({

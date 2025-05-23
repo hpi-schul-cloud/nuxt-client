@@ -1,8 +1,8 @@
 import { createVuetify } from "vuetify";
-import * as components from "vuetify/lib/components/index.mjs";
-import * as directives from "vuetify/lib/directives/index.mjs";
+import * as components from "vuetify/lib/components/index";
+import * as directives from "vuetify/lib/directives/index";
 import * as materialAliases from "@/components/icons/material";
-import { aliases, mdi } from "vuetify/lib/iconsets/mdi-svg.mjs";
+import { aliases, mdi } from "vuetify/lib/iconsets/mdi-svg";
 import { customAliases } from "@/components/icons/custom";
 
 export const createTestingVuetify = (options = {}) => {
