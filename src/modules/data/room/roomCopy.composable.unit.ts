@@ -5,9 +5,26 @@ import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { envsFactory, mountComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { useRoomsState } from "@data-room";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useRoomCopy } from "./roomCopy.composable";
 
+jest.mock("@data-room/Rooms.state");
+
 describe("roomCopy", () => {
+	let useRoomsStateMock: DeepMocked<ReturnType<typeof useRoomsState>>;
+
+	beforeEach(() => {
+		useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
+			copyRoom: jest.fn(),
+		});
+		jest.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
+	});
+
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
 	const setupComposable = (options: {
 		featureFlag: boolean;
 		mockedLoadingState?: jest.Mocked<LoadingStateModule>;
@@ -112,6 +129,12 @@ describe("roomCopy", () => {
 			});
 			return { copy, isRoomCopyInfoDialogOpen, loadingStateModuleMock };
 		};
+
+		it("should call copyRoom with the correct roomId", async () => {
+			const { copy } = setup();
+			await copy("roomId");
+			expect(useRoomsStateMock.copyRoom).toHaveBeenCalledWith("roomId");
+		});
 
 		it("should close CopyInfoDialog when copying", async () => {
 			const { copy, isRoomCopyInfoDialogOpen } = setup();
