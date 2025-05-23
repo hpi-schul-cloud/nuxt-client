@@ -37,11 +37,12 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-		<RoomCopyInfoDialog
-			v-if="isRoomCopyFeatureEnabled"
-			v-model="isRoomCopyInfoDialogOpen"
-			@copy:cancel="onCancelCopy"
-			@copy:confirm="onConfirmCopy"
+		<RoomCopyFlow
+			v-if="room && hasRoomCopyStarted"
+			:room="room"
+			@copy:success="onCopySuccess"
+			@copy:cancel="onCopyCancel"
+			@copy:error="onCopyError"
 		/>
 	</DefaultWireframe>
 </template>
@@ -49,18 +50,16 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { BoardLayout } from "@/serverApi/v3";
 import { authModule } from "@/store";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
+	useRoomAuthorization,
 	useRoomDetailsStore,
 	useRoomsState,
-	useRoomAuthorization,
-	useRoomCopy,
 } from "@data-room";
-import { BoardGrid, RoomMenu, RoomCopyInfoDialog } from "@feature-room";
+import { BoardGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
 import {
 	mdiPlus,
 	mdiViewDashboardOutline,
@@ -70,9 +69,10 @@ import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
+import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import {
-	SelectBoardLayoutDialog,
 	LeaveRoomProhibitedDialog,
+	SelectBoardLayoutDialog,
 } from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
@@ -200,37 +200,34 @@ const onManageMembers = () => {
 	});
 };
 
-const {
-	isRoomCopyFeatureEnabled,
-	isRoomCopyInfoDialogOpen,
-	openRoomCopyInfoDialog,
-	closeRoomCopyInfoDialog,
-	executeRoomCopy,
-} = useRoomCopy();
+const hasRoomCopyStarted = ref(false);
+const isRoomCopyFeatureEnabled = computed(() => {
+	return envConfigModule.getEnv.FEATURE_ROOM_COPY_ENABLED;
+});
 
-const onCopy = async () => {
-	if (!room.value || !canCopyRoom) return;
-
-	openRoomCopyInfoDialog();
-};
-
-const onCancelCopy = () => {
-	closeRoomCopyInfoDialog();
-};
-
-const onConfirmCopy = async () => {
-	if (!room.value) return;
-	try {
-		const copyId = await executeRoomCopy(room.value.id);
-		router.push({
-			name: "room-details",
-			params: {
-				id: copyId,
-			},
-		});
-	} catch {
-		// Handle error if needed
+const onCopy = () => {
+	if (isRoomCopyFeatureEnabled.value && canCopyRoom.value) {
+		hasRoomCopyStarted.value = true;
 	}
+};
+
+const onCopySuccess = (copyId: string) => {
+	hasRoomCopyStarted.value = false;
+
+	router.push({
+		name: "room-details",
+		params: {
+			id: copyId,
+		},
+	});
+};
+
+const onCopyCancel = () => {
+	hasRoomCopyStarted.value = false;
+};
+
+const onCopyError = () => {
+	hasRoomCopyStarted.value = false;
 };
 
 const onDelete = async () => {
