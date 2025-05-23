@@ -369,7 +369,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
-    RoomDuplicate = 'ROOM_DUPLICATE',
+    RoomCopy = 'ROOM_COPY',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -1754,7 +1754,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_ROOMS_DUPLICATION_ENABLED: boolean;
+    FEATURE_ROOM_COPY_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -7682,7 +7682,7 @@ export enum Permission {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
-    RoomDuplicate = 'ROOM_DUPLICATE',
+    RoomCopy = 'ROOM_COPY',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
