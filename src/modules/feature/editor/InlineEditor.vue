@@ -90,10 +90,15 @@ const handleReady = (editor: Editor) => {
 };
 </script>
 
-<style lang="scss">
-@import "@/styles/settings.scss";
+<style lang="css">
+/* we can't import css in scss anymore, so it is moved to this css style block */
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 @import "katex/dist/katex.min.css";
+</style>
+
+<style lang="scss">
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 :root {
 	// z-index must be less than z-index of the headers to prevent that the toolbar is shown in front of the headers when scrolling.
@@ -116,7 +121,7 @@ const handleReady = (editor: Editor) => {
 	box-shadow: none !important;
 }
 
-@media #{map-get($display-breakpoints, "sm-and-up")} {
+@media #{map.get($display-breakpoints, "sm-and-up")} {
 	.ck.ck-toolbar_floating {
 		min-width: 460px;
 	}

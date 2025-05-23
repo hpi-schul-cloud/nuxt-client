@@ -228,7 +228,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should render add task button", () => {
-			const fabComponent = wrapper.find(".wireframe-fab");
+			const fabComponent = wrapper.find(".fab-wrapper");
 			expect(fabComponent.exists()).toEqual(true);
 		});
 

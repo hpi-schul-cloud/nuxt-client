@@ -127,8 +127,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
-@import "@/utils/multiline-ellipsis.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
+@use "@/utils/multiline-ellipsis.scss" as *;
 
 .subtitle {
 	margin-right: calc(var(--space-base-vuetify) * -5);
@@ -143,7 +144,7 @@ export default {
 	);
 }
 
-@media #{map-get($display-breakpoints, 'xs')} {
+@media #{map.get($display-breakpoints, 'xs')} {
 	.subtitle {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin-right: unset;
