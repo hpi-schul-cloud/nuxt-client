@@ -1,0 +1,101 @@
+<template>
+	<RoomCopyInfoDialog
+		v-model="isRoomCopyInfoDialogOpen"
+		@copy:cancel="onCancelCopy"
+		@copy:confirm="onConfirmCopy"
+	/>
+</template>
+<script setup lang="ts">
+import { useLoadingState } from "@/composables/loadingState";
+import { CopyApiResponseStatusEnum, RoomApiFactory } from "@/serverApi/v3";
+import { RoomDetails } from "@/types/room/Room";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { RoomCopyInfoDialog } from "@feature-room";
+import { onMounted, onUnmounted, PropType, ref } from "vue";
+import { useI18n } from "vue-i18n";
+
+const props = defineProps({
+	room: {
+		type: Object as PropType<RoomDetails>,
+		required: true,
+	},
+});
+const emit = defineEmits([
+	"update:value",
+	"copy:cancel",
+	"copy:success",
+	"copy:error",
+]);
+
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+const { t } = useI18n();
+const roomApi = RoomApiFactory(undefined, "/v3", $axios);
+const isRoomCopyInfoDialogOpen = ref(false);
+const { isLoadingDialogOpen } = useLoadingState(t("data-room.copy.loading"));
+
+onMounted(() => {
+	isRoomCopyInfoDialogOpen.value = true;
+	isLoadingDialogOpen.value = false;
+});
+
+onUnmounted(() => {
+	isRoomCopyInfoDialogOpen.value = false;
+	isLoadingDialogOpen.value = false;
+});
+
+const onCancelCopy = () => {
+	isRoomCopyInfoDialogOpen.value = false;
+	emit("copy:cancel");
+};
+
+const onConfirmCopy = async () => {
+	isRoomCopyInfoDialogOpen.value = false;
+	isLoadingDialogOpen.value = true;
+
+	try {
+		const response = await roomApi.roomControllerCopyRoom(props.room.id);
+		const copyResult = response.data;
+		if (
+			copyResult.status === CopyApiResponseStatusEnum.Failure ||
+			copyResult.id === undefined
+		) {
+			showFailure();
+			emit("copy:error", copyResult.id); // maybe pass the whole copyResult?
+		} else {
+			showSuccess();
+			emit("copy:success", copyResult.id);
+		}
+	} catch (error) {
+		showTimeout();
+		const responseError = mapAxiosErrorToResponseError(error);
+		throw createApplicationError(responseError.code);
+	} finally {
+		isLoadingDialogOpen.value = false;
+	}
+};
+
+const showSuccess = () => {
+	notifierModule.show({
+		text: t("data-room.copy.alert.success"),
+		status: "success",
+	});
+};
+
+const showFailure = () => {
+	notifierModule.show({
+		text: t("data-room.copy.alert.error"),
+		status: "error",
+		autoClose: false,
+	});
+};
+
+const showTimeout = () => {
+	notifierModule.show({
+		text: t("components.molecules.copyResult.timeoutCopy"),
+		status: "info",
+		autoClose: false,
+	});
+};
+</script>
