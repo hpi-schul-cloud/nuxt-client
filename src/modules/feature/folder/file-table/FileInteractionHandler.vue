@@ -2,7 +2,7 @@
 	<button
 		v-if="isInteractive"
 		:aria-label="t('common.ariaLabel.openImageInLightBox')"
-		class="interaction-area"
+		class="interactive-area"
 		@click="openImageInLightbox"
 	>
 		<slot />
@@ -56,7 +56,7 @@ const openImageInLightbox = () => {
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
 
-.interaction-area {
+.interactive-area {
 	width: 100%;
 	text-align: left;
 
