@@ -21,6 +21,10 @@ describe("CommonCartridgeImportModule", () => {
 	});
 
 	describe("getters", () => {
+		it("commonCartridgeApi", () => {
+			expect(sut.commonCartridgeApi).toBeDefined();
+		});
+
 		it("file", () => {
 			expect(sut.file).toBeUndefined();
 		});
