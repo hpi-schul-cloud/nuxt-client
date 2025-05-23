@@ -9,6 +9,7 @@ import { useRoomsState } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useRoomCopy } from "./roomCopy.composable";
 import {
+	CopyApiResponse,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
 } from "@/serverApi/v3";
@@ -123,7 +124,6 @@ describe("roomCopy", () => {
 		});
 	});
 
-	// TODO BC-9401: improve tests
 	describe("executeRoomCopy", () => {
 		const setupCopyExecution = () => {
 			const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
@@ -145,8 +145,8 @@ describe("roomCopy", () => {
 					type: CopyApiResponseTypeEnum.Room,
 					status: CopyApiResponseStatusEnum.Success,
 				});
-				const composable = setupCopyExecution();
-				return composable;
+				const vars = setupCopyExecution();
+				return vars;
 			};
 
 			it("should call copyRoom with the correct roomId", async () => {
@@ -176,13 +176,19 @@ describe("roomCopy", () => {
 				await executeRoomCopy("roomId");
 				expect(loadingStateModuleMock.close).toHaveBeenCalled();
 			});
+
+			it("should return the copy result", async () => {
+				const { executeRoomCopy } = setup();
+				const copyResult = await executeRoomCopy("roomId");
+				expect(copyResult).toBe("copyRoomId");
+			});
 		});
 
 		describe("when copyRoom fails", () => {
 			const setup = () => {
 				useRoomsStateMock.copyRoom.mockRejectedValue(new Error("error"));
-				const composable = setupCopyExecution();
-				return composable;
+				const vars = setupCopyExecution();
+				return vars;
 			};
 
 			it("should call copyRoom with the correct roomId", async () => {
@@ -209,8 +215,8 @@ describe("roomCopy", () => {
 					type: CopyApiResponseTypeEnum.Room,
 					status: CopyApiResponseStatusEnum.Failure,
 				});
-				const composable = setupCopyExecution();
-				return composable;
+				const vars = setupCopyExecution();
+				return vars;
 			};
 
 			it("should call copyRoom with the correct roomId", async () => {
