@@ -1,7 +1,11 @@
 import router from "@/router";
+import { RoleName } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { fileRecordFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -32,6 +36,9 @@ describe("Folder.vue", () => {
 
 	const setupWrapper = () => {
 		const parentId = "123";
+		const authModule = createModuleMocks(AuthModule, {
+			getUserRoles: [RoleName.Teacher],
+		});
 		const wrapper = mount(Folder, {
 			global: {
 				plugins: [
@@ -47,6 +54,9 @@ describe("Folder.vue", () => {
 						},
 					}),
 				],
+				provide: {
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
+				},
 			},
 			props: {
 				folderId: parentId,
