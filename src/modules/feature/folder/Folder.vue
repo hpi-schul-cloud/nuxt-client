@@ -91,7 +91,7 @@ const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
 const fileInput = ref<HTMLInputElement | null>(null);
 
 const fabAction = computed(() => {
-	if (isStudent.value) return undefined;
+	if (isStudent.value) return;
 
 	return {
 		icon: mdiPlus,
