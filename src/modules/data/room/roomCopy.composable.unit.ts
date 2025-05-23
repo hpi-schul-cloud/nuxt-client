@@ -8,6 +8,10 @@ import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useRoomsState } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useRoomCopy } from "./roomCopy.composable";
+import {
+	CopyApiResponseStatusEnum,
+	CopyApiResponseTypeEnum,
+} from "@/serverApi/v3";
 
 jest.mock("@data-room/Rooms.state");
 
@@ -120,42 +124,106 @@ describe("roomCopy", () => {
 	});
 
 	// TODO BC-9401: improve tests
-	describe("copy", () => {
-		const setup = () => {
+	describe("executeRoomCopy", () => {
+		const setupCopyExecution = () => {
 			const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-			const { copy, isRoomCopyInfoDialogOpen } = setupComposable({
+			const { executeRoomCopy, isRoomCopyInfoDialogOpen } = setupComposable({
 				featureFlag: true,
 				mockedLoadingState: loadingStateModuleMock,
 			});
-			return { copy, isRoomCopyInfoDialogOpen, loadingStateModuleMock };
+			return {
+				executeRoomCopy,
+				isRoomCopyInfoDialogOpen,
+				loadingStateModuleMock,
+			};
 		};
 
-		it("should call copyRoom with the correct roomId", async () => {
-			const { copy } = setup();
-			await copy("roomId");
-			expect(useRoomsStateMock.copyRoom).toHaveBeenCalledWith("roomId");
+		describe("when copyRoom is successful", () => {
+			const setup = () => {
+				useRoomsStateMock.copyRoom.mockResolvedValue({
+					id: "copyRoomId",
+					type: CopyApiResponseTypeEnum.Room,
+					status: CopyApiResponseStatusEnum.Success,
+				});
+				const composable = setupCopyExecution();
+				return composable;
+			};
+
+			it("should call copyRoom with the correct roomId", async () => {
+				const { executeRoomCopy } = setup();
+				await executeRoomCopy("roomId");
+				expect(useRoomsStateMock.copyRoom).toHaveBeenCalledWith("roomId");
+			});
+
+			it("should close CopyInfoDialog when copying", async () => {
+				const { executeRoomCopy, isRoomCopyInfoDialogOpen } = setup();
+				await executeRoomCopy("roomId");
+				expect(isRoomCopyInfoDialogOpen.value).toBe(false);
+			});
+
+			it("should open loading state when copying", async () => {
+				const { executeRoomCopy, loadingStateModuleMock } = setup();
+				await executeRoomCopy("roomId");
+				expect(loadingStateModuleMock.open).toHaveBeenCalledWith(
+					expect.objectContaining({
+						text: expect.any(String),
+					})
+				);
+			});
+
+			it("should close loading state after copying", async () => {
+				const { executeRoomCopy, loadingStateModuleMock } = setup();
+				await executeRoomCopy("roomId");
+				expect(loadingStateModuleMock.close).toHaveBeenCalled();
+			});
 		});
 
-		it("should close CopyInfoDialog when copying", async () => {
-			const { copy, isRoomCopyInfoDialogOpen } = setup();
-			await copy("string");
-			expect(isRoomCopyInfoDialogOpen.value).toBe(false);
+		describe("when copyRoom fails", () => {
+			const setup = () => {
+				useRoomsStateMock.copyRoom.mockRejectedValue(new Error("error"));
+				const composable = setupCopyExecution();
+				return composable;
+			};
+
+			it("should call copyRoom with the correct roomId", async () => {
+				const { executeRoomCopy } = setup();
+				await expect(executeRoomCopy("roomId")).rejects.toThrow(
+					new Error("error")
+				);
+				expect(useRoomsStateMock.copyRoom).toHaveBeenCalledWith("roomId");
+			});
+
+			it("should close loading state after copying", async () => {
+				const { executeRoomCopy, loadingStateModuleMock } = setup();
+				await expect(executeRoomCopy("roomId")).rejects.toThrow(
+					new Error("error")
+				);
+				expect(loadingStateModuleMock.close).toHaveBeenCalled();
+			});
 		});
 
-		it("should open loading state when copying", async () => {
-			const { copy, loadingStateModuleMock } = setup();
-			await copy("string");
-			expect(loadingStateModuleMock.open).toHaveBeenCalledWith(
-				expect.objectContaining({
-					text: expect.any(String),
-				})
-			);
-		});
+		describe("when copyRoom returns no id", () => {
+			const setup = () => {
+				useRoomsStateMock.copyRoom.mockResolvedValue({
+					id: undefined,
+					type: CopyApiResponseTypeEnum.Room,
+					status: CopyApiResponseStatusEnum.Failure,
+				});
+				const composable = setupCopyExecution();
+				return composable;
+			};
 
-		it("should close loading state after duplicating", async () => {
-			const { copy, loadingStateModuleMock } = setup();
-			await copy("string");
-			expect(loadingStateModuleMock.close).toHaveBeenCalled();
+			it("should call copyRoom with the correct roomId", async () => {
+				const { executeRoomCopy } = setup();
+				await expect(executeRoomCopy("roomId")).rejects.toThrow();
+				expect(useRoomsStateMock.copyRoom).toHaveBeenCalledWith("roomId");
+			});
+
+			it("should close loading state after copying", async () => {
+				const { executeRoomCopy, loadingStateModuleMock } = setup();
+				await expect(executeRoomCopy("roomId")).rejects.toThrow();
+				expect(loadingStateModuleMock.close).toHaveBeenCalled();
+			});
 		});
 	});
 });

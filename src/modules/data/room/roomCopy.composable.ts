@@ -1,11 +1,13 @@
 import { useLoadingState } from "@/composables/loadingState";
-import { useRoomsState } from "@data-room";
+import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import { AlertPayload } from "@/store/types/alert-payload";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
+import { useRoomsState } from "@data-room";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -31,16 +33,26 @@ export const useRoomCopy = () => {
 		isRoomCopyInfoDialogOpen.value = false;
 	};
 
-	const copy = async (roomId: string) => {
+	const executeRoomCopy = async (roomId: string): Promise<string> => {
 		closeRoomCopyInfoDialog();
 		isLoadingDialogOpen.value = true;
 
 		try {
-			const copyId = await copyRoom(roomId);
-			showSuccess();
-			return copyId;
-		} catch {
+			const copyResult = await copyRoom(roomId);
+			if (
+				copyResult.status === CopyApiResponseStatusEnum.Failure ||
+				copyResult.id === undefined
+			) {
+				showFailure();
+				throw createApplicationError(500);
+			} else {
+				const copyId = copyResult.id;
+				showSuccess();
+				return copyId;
+			}
+		} catch (error: unknown) {
 			showTimeout();
+			throw error;
 		} finally {
 			isLoadingDialogOpen.value = false;
 		}
@@ -55,7 +67,6 @@ export const useRoomCopy = () => {
 		notifierModule.show(notifierPayload);
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const showFailure = () => {
 		notifierModule.show({
 			text: t("data-room.copy.alert.error"),
@@ -77,6 +88,6 @@ export const useRoomCopy = () => {
 		isRoomCopyInfoDialogOpen,
 		openRoomCopyInfoDialog,
 		closeRoomCopyInfoDialog,
-		copy,
+		executeRoomCopy,
 	};
 };

@@ -40,8 +40,8 @@
 		<RoomCopyInfoDialog
 			v-if="isRoomCopyFeatureEnabled"
 			v-model="isRoomCopyInfoDialogOpen"
-			@copy:cancel="cancelRoomCopy"
-			@copy:confirm="copyRoom"
+			@copy:cancel="onCancelCopy"
+			@copy:confirm="onConfirmCopy"
 		/>
 	</DefaultWireframe>
 </template>
@@ -200,14 +200,12 @@ const onManageMembers = () => {
 	});
 };
 
-// begin - Copy Feature
-
 const {
 	isRoomCopyFeatureEnabled,
 	isRoomCopyInfoDialogOpen,
 	openRoomCopyInfoDialog,
 	closeRoomCopyInfoDialog,
-	copy,
+	executeRoomCopy,
 } = useRoomCopy();
 
 const onCopy = async () => {
@@ -216,23 +214,24 @@ const onCopy = async () => {
 	openRoomCopyInfoDialog();
 };
 
-const cancelRoomCopy = () => {
+const onCancelCopy = () => {
 	closeRoomCopyInfoDialog();
 };
 
-const copyRoom = async () => {
+const onConfirmCopy = async () => {
 	if (!room.value) return;
-	const copyId = await copy(room.value.id);
-	if (copyId) {
+	try {
+		const copyId = await executeRoomCopy(room.value.id);
 		router.push({
 			name: "room-details",
 			params: {
 				id: copyId,
 			},
 		});
+	} catch {
+		// Handle error if needed
 	}
 };
-// end - Copy Feature
 
 const onDelete = async () => {
 	if (!room.value || !canDeleteRoom.value) return;

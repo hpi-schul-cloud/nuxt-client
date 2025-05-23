@@ -53,8 +53,8 @@ export const useRoomsState = () => {
 		isLoading.value = true;
 		try {
 			const response = await roomApi.roomControllerCopyRoom(roomId);
-			const { id } = response.data;
-			return id;
+			const copyStatus = response.data;
+			return copyStatus;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
