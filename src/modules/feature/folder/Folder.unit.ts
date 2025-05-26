@@ -1209,11 +1209,6 @@ describe("Folder.vue", () => {
 
 				await flushPromises();
 
-				const itemMenuButton = wrapper.find(
-					`[data-testid='kebab-menu-${fileRecord1.name}']`
-				);
-				await itemMenuButton.trigger("click");
-
 				return { wrapper };
 			};
 
