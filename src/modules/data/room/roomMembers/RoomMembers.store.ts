@@ -25,6 +25,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const roomId = computed(() => room.value?.id);
 
 	const roomMembers: Ref<RoomMember[]> = ref([]);
+	const confirmationList: Ref<Record<string, unknown>[]> = ref([]);
 	const potentialRoomMembers: Ref<
 		Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]
 	> = ref([]);
@@ -37,6 +38,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	};
 	const currentUserId = authModule.getUser?.id ?? "";
 	const selectedIds = ref<string[]>([]);
+	const confirmationSelectedIds = ref<string[]>([]);
 
 	const roomRole: Record<string, string> = {
 		[RoleName.Roomowner]: t("pages.rooms.members.roomPermissions.owner"),
@@ -74,24 +76,39 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			const { data } = (await roomApi.roomControllerGetMembers(getRoomId()))
 				.data;
 
-			roomMembers.value = data.map((member: RoomMemberResponse) => {
-				return {
-					...member,
-					fullName: `${member.lastName}, ${member.firstName}`,
-					isSelectable: !(
-						member.userId === currentUserId ||
-						member.roomRoleName === RoleName.Roomowner
-					),
-					displayRoomRole: roomRole[member.roomRoleName],
-					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
-				};
-			});
-
+			prepareMembersLists(data);
 			isLoading.value = false;
 		} catch {
 			showFailure(t("pages.rooms.members.error.load"));
 			isLoading.value = false;
 		}
+	};
+
+	const prepareMembersLists = (data: RoomMemberResponse[]): void => {
+		if (!data || !Array.isArray(data)) return;
+
+		data.forEach((member: RoomMemberResponse) => {
+			const roomMember: RoomMember = {
+				...member,
+				fullName: `${member.lastName}, ${member.firstName}`,
+				displayRoomRole: roomRole[member.roomRoleName],
+				displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
+			};
+
+			if (member.roomRoleName === RoleName.Roomapplicant) {
+				confirmationList.value.push({
+					...roomMember,
+				});
+			} else {
+				roomMembers.value.push({
+					...roomMember,
+					isSelectable: !(
+						member.userId === currentUserId ||
+						member.roomRoleName === RoleName.Roomowner
+					),
+				});
+			}
+		});
 	};
 
 	const getSchoolRoleName = (schoolRoleNames: RoleName[]) => {
@@ -307,6 +324,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		leaveRoom,
 		removeMembers,
 		updateMembersRole,
+		confirmationList,
+		confirmationSelectedIds,
 		isLoading,
 		roomMembers,
 		potentialRoomMembers,
