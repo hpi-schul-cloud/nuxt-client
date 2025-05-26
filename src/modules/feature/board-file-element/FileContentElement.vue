@@ -57,6 +57,7 @@
 <script lang="ts">
 import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
+import { FileAlert } from "@/types/file/FileAlert.enum";
 import {
 	convertDownloadToPreviewUrl,
 	isDownloadAllowed,
@@ -81,7 +82,6 @@ import {
 } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
 export default defineComponent({

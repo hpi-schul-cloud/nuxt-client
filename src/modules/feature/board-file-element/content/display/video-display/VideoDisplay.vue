@@ -18,9 +18,9 @@
 </template>
 
 <script lang="ts">
+import { FileAlert } from "@/types/file/FileAlert.enum";
 import { ContentElementBar } from "@ui-board";
 import { defineComponent } from "vue";
-import { FileAlert } from "../../../shared/types/FileAlert.enum";
 
 export default defineComponent({
 	name: "VideoDisplay",
