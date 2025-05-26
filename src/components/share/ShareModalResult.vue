@@ -64,7 +64,7 @@ import {
 	mdiQrcode,
 	mdiShareVariantOutline,
 } from "@icons/material";
-import { nextTick, onMounted, ref, useTemplateRef } from "vue";
+import { nextTick, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
