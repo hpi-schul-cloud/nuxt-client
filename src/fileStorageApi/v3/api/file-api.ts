@@ -772,7 +772,7 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteFiles(multiFileParams: MultiFileParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
+        async deleteFiles(multiFileParams: MultiFileParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteFiles(multiFileParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -954,7 +954,7 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordResponse> {
+        deleteFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordListResponse> {
             return localVarFp.deleteFiles(multiFileParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1127,7 +1127,7 @@ export interface FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    deleteFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordResponse>;
+    deleteFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordListResponse>;
 
     /**
      * 
