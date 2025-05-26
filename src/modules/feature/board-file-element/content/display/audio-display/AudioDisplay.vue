@@ -9,9 +9,7 @@
 				/>
 				<v-btn
 					v-if="playing"
-					:aria-label="
-						$t('component.cardElement.fileElement.audioPlayer.pause')
-					"
+					:aria-label="$t('components.audioPlayer.pause')"
 					color="transparent"
 					density="comfortable"
 					icon
@@ -22,7 +20,7 @@
 				</v-btn>
 				<v-btn
 					v-else
-					:aria-label="$t('component.cardElement.fileElement.audioPlayer.play')"
+					:aria-label="$t('components.audioPlayer.play')"
 					color="transparent"
 					density="comfortable"
 					icon
@@ -35,9 +33,7 @@
 					{{ durationDisplay }}
 				</div>
 				<v-slider
-					:aria-label="
-						$t('component.cardElement.fileElement.audioPlayer.slider')
-					"
+					:aria-label="$t('components.audioPlayer.slider')"
 					class="duration-slider"
 					color="white"
 					thumb-color="white"

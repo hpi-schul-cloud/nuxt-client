@@ -213,11 +213,6 @@ export default {
 	"common.words.topics": "Temas",
 	"common.words.yes": "Sí",
 	"common.words.export": "La exportación del curso se está descargando",
-	"component.cardElement.fileElement.audioPlayer.pause": "Pausa",
-	"component.cardElement.fileElement.audioPlayer.play": "Reproducir",
-	"component.cardElement.fileElement.audioPlayer.slider": "Control deslizante",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
-	"component.cardElement.fileElement.audioPlayer.speed": "Menú de velocidad",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -432,6 +427,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "minuto | minutos",
+	"components.audioPlayer.pause": "Pausa",
+	"components.audioPlayer.play": "Reproducir",
+	"components.audioPlayer.slider": "Control deslizante",
+	"components.audioPlayer.speed": "Menú de velocidad",
+	"components.audioPlayer.speed.normal": "Normal",
 	"components.base.BaseIcon.error":
 		"Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",
 	"components.base.showPassword": "Mostrar contraseña",

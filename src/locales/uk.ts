@@ -215,11 +215,6 @@ export default {
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
 	"common.words.export": "Завантажується експорт курсу",
-	"component.cardElement.fileElement.audioPlayer.pause": "пауза",
-	"component.cardElement.fileElement.audioPlayer.play": "грати",
-	"component.cardElement.fileElement.audioPlayer.slider": "повзунок",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "нормальний",
-	"component.cardElement.fileElement.audioPlayer.speed": "швидке меню",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -436,6 +431,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "хв",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes":
 		"хвилина | хвилини (хвилин)",
+	"components.audioPlayer.pause": "пауза",
+	"components.audioPlayer.play": "грати",
+	"components.audioPlayer.slider": "повзунок",
+	"components.audioPlayer.speed": "швидке меню",
+	"components.audioPlayer.speed.normal": "нормальний",
 	"components.base.BaseIcon.error":
 		"помилка завантаження значка {icon} з {source}. Можливо, він недоступний або ви використовуєте застарілий браузер Edge.",
 	"components.base.showPassword": "Показати пароль",

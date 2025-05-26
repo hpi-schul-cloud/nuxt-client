@@ -118,7 +118,7 @@ describe("AudioDisplay", () => {
 			const playIcon = wrapper.findComponent({ name: "v-icon" });
 
 			expect(playButton.attributes("aria-label")).toBe(
-				"component.cardElement.fileElement.audioPlayer.play"
+				"components.audioPlayer.play"
 			);
 			expect(playIcon.html()).toContain(mdiPlay);
 		});
@@ -236,7 +236,7 @@ describe("AudioDisplay", () => {
 			const playIcon = wrapper.findComponent({ name: "v-icon" });
 
 			expect(playButton.attributes("aria-label")).toBe(
-				"component.cardElement.fileElement.audioPlayer.pause"
+				"components.audioPlayer.pause"
 			);
 			expect(playIcon.html()).toContain(mdiPause);
 		});
