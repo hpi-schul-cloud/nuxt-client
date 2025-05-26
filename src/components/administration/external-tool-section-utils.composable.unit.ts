@@ -1,4 +1,5 @@
 import {
+	ExternalToolMediumStatus,
 	SchoolExternalToolMediumResponse,
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
@@ -117,9 +118,11 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when mediaSourceName a is undefined", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
+					status: ExternalToolMediumStatus.Active,
 					mediumId: "a",
 				};
 				const b: SchoolExternalToolMediumResponse = {
+					status: ExternalToolMediumStatus.Active,
 					mediumId: "b",
 					mediaSourceName: "b",
 				};
@@ -145,10 +148,12 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when mediaSourceName b is undefined", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
+					status: ExternalToolMediumStatus.Active,
 					mediumId: "a",
 					mediaSourceName: "a",
 				};
 				const b: SchoolExternalToolMediumResponse = {
+					status: ExternalToolMediumStatus.Active,
 					mediumId: "b",
 				};
 
@@ -173,6 +178,7 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when a is undefined", () => {
 			const setup2 = () => {
 				const b: SchoolExternalToolMediumResponse = {
+					status: ExternalToolMediumStatus.Active,
 					mediumId: "b",
 				};
 
@@ -196,6 +202,7 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when b is undefined", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
+					status: ExternalToolMediumStatus.Active,
 					mediumId: "a",
 				};
 
@@ -219,10 +226,12 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when a is before b", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
+					status: ExternalToolMediumStatus.Active,
 					mediumId: "a",
 					mediaSourceName: "a",
 				};
 				const b: SchoolExternalToolMediumResponse = {
+					status: ExternalToolMediumStatus.Active,
 					mediumId: "b",
 					mediaSourceName: "b",
 				};

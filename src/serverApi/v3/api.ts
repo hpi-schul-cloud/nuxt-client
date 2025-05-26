@@ -369,7 +369,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
-    RoomDuplicate = 'ROOM_DUPLICATE',
+    RoomCopy = 'ROOM_COPY',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -1754,7 +1754,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_ROOMS_DUPLICATION_ENABLED: boolean;
+    FEATURE_ROOM_COPY_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -3666,11 +3666,17 @@ export interface ExternalToolImportResultResponse {
  */
 export interface ExternalToolMediumParams {
     /**
+     * The status of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof ExternalToolMediumParams
+     */
+    status: ExternalToolMediumStatus;
+    /**
      * Id of the medium
      * @type {string}
      * @memberof ExternalToolMediumParams
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * Publisher of the medium
      * @type {string}
@@ -3697,11 +3703,17 @@ export interface ExternalToolMediumParams {
  */
 export interface ExternalToolMediumResponse {
     /**
+     * The type of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof ExternalToolMediumResponse
+     */
+    status: ExternalToolMediumStatus;
+    /**
      * Id of the medium
      * @type {string}
      * @memberof ExternalToolMediumResponse
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * Publisher of the medium
      * @type {string}
@@ -3721,6 +3733,17 @@ export interface ExternalToolMediumResponse {
      */
     modifiedAt?: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum ExternalToolMediumStatus {
+    Active = 'active',
+    Template = 'template',
+    Draft = 'draft'
+}
+
 /**
  * 
  * @export
@@ -7659,7 +7682,7 @@ export enum Permission {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
-    RoomDuplicate = 'ROOM_DUPLICATE',
+    RoomCopy = 'ROOM_COPY',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -8589,11 +8612,17 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
  */
 export interface SchoolExternalToolMediumResponse {
     /**
+     * The type of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof SchoolExternalToolMediumResponse
+     */
+    status: ExternalToolMediumStatus;
+    /**
      * Id of the medium
      * @type {string}
      * @memberof SchoolExternalToolMediumResponse
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * The id of the media source
      * @type {string}
