@@ -22,12 +22,13 @@ const props = defineProps({
 		required: true,
 	},
 });
-const emit = defineEmits([
-	"update:value",
-	"copy:cancel",
-	"copy:success",
-	"copy:error",
-]);
+
+const emit = defineEmits<{
+	(e: "copy:cancel"): void;
+	(e: "copy:success", id: string): void;
+	(e: "copy:error", id?: string): void;
+	(e: "copy:ended"): void;
+}>();
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
@@ -48,6 +49,7 @@ onUnmounted(() => {
 const onCancelCopy = () => {
 	isRoomCopyInfoDialogOpen.value = false;
 	emit("copy:cancel");
+	emit("copy:ended");
 };
 
 const onConfirmCopy = async () => {
@@ -63,9 +65,11 @@ const onConfirmCopy = async () => {
 		) {
 			showFailure();
 			emit("copy:error", copyResult.id); // maybe pass the whole copyResult?
+			emit("copy:ended");
 		} else {
 			showSuccess();
 			emit("copy:success", copyResult.id);
+			emit("copy:ended");
 		}
 	} catch (error) {
 		showTimeout();

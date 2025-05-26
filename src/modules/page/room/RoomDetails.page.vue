@@ -41,8 +41,7 @@
 			v-if="room && hasRoomCopyStarted"
 			:room="room"
 			@copy:success="onCopySuccess"
-			@copy:cancel="onCopyCancel"
-			@copy:error="onCopyError"
+			@copy:ended="onCopyEnded"
 		/>
 	</DefaultWireframe>
 </template>
@@ -212,8 +211,6 @@ const onCopy = () => {
 };
 
 const onCopySuccess = (copyId: string) => {
-	hasRoomCopyStarted.value = false;
-
 	router.push({
 		name: "room-details",
 		params: {
@@ -222,11 +219,7 @@ const onCopySuccess = (copyId: string) => {
 	});
 };
 
-const onCopyCancel = () => {
-	hasRoomCopyStarted.value = false;
-};
-
-const onCopyError = () => {
+const onCopyEnded = () => {
 	hasRoomCopyStarted.value = false;
 };
 
