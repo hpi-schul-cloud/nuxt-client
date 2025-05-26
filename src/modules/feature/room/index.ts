@@ -11,19 +11,21 @@ import Invitations from "./RoomMembers/Invitations.vue";
 import Confirmations from "./RoomMembers/Confirmations.vue";
 import InviteMembersDialog from "./RoomMembers/InviteMembersDialog.vue";
 import InvitationTable from "./RoomMembers/InvitationTable.vue";
+import ConfirmationTable from "./RoomMembers/ConfirmationTable.vue";
 
 export {
 	AddMembers,
 	BoardGrid,
 	ChangeRole,
-	RoomCopyInfoDialog,
 	Confirmations,
+	ConfirmationTable,
 	Invitations,
 	InvitationTable,
 	InviteMembersDialog,
 	Members,
 	MembersTable,
-	RoomForm,
+	RoomCopyInfoDialog,
 	RoomGrid,
+	RoomForm,
 	RoomMenu,
 };
