@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<v-text-field
+			ref="shareUrlTextField"
 			autofocus
 			variant="filled"
 			:model-value="shareUrl"
@@ -47,7 +48,7 @@
 			<ExtendedIconBtn
 				data-testid="qrCodeAction"
 				:icon="mdiQrcode"
-				:label="$t('components.molecules.share.result.qrCodeScan')"
+				:label="t('components.molecules.share.result.qrCodeScan')"
 				@click.stop="onShowQrCode"
 			/>
 		</div>
@@ -63,7 +64,7 @@ import {
 	mdiQrcode,
 	mdiShareVariantOutline,
 } from "@icons/material";
-import { ref } from "vue";
+import { nextTick, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
@@ -110,7 +111,13 @@ const onShareMobilePlatform = () => {
 };
 
 const isShowQrCode = ref(false);
+const shareUrlTextField = useTemplateRef("shareUrlTextField");
+
 const onShowQrCode = () => {
 	isShowQrCode.value = true;
+
+	nextTick(() => {
+		shareUrlTextField.value?.focus();
+	});
 };
 </script>
