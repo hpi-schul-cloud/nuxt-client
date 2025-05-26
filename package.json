@@ -12,8 +12,8 @@
 		"lint": "npx eslint 'src/**/*.{ts,js,vue}'",
 		"lint:fix": "npx eslint 'src/**/*.{ts,js,vue}' --fix",
 		"generate-client:server": "openapi-generator-cli generate -c ./openapitools.json --generator-key server-api",
-		"generate-client:filestorage": "node generate-client.js -u 'http://localhost:4444/api/v3/docs-json/' -p 'src/fileStorageApi/v3' -c 'openapitools-for-file-storage.json'",
-		"generate-client:h5p-editor": "node generate-client.js -u 'http://localhost:4448/api/v3/docs-json/' -p 'src/h5pEditorApi/v3' -c 'openapitools-for-h5p-editor.json'",
+		"generate-client:filestorage": "openapi-generator-cli generate -c ./openapitools.json --generator-key file-storage-api",
+		"generate-client:h5p-editor": "openapi-generator-cli generate -c ./openapitools.json --generator-key h5p-editor-api",
 		"pregenerate-client:common-cartridge": "rimraf ./src/commonCartridgeApi/v3",
 		"generate-client:common-cartridge": "openapi-generator-cli generate -c ./openapitools.json --generator-key common-cartridge-api"
 	},
