@@ -99,19 +99,12 @@ import BatchActionMenu from "./BatchActionMenu.vue";
 
 const props = defineProps({
 	tableHeaders: {
-		type: Array as PropType<
-			{
-				title: string;
-				key: string;
-			}[]
-		>,
-		isRequired: true,
-		default: () => [],
+		type: Array as PropType<Record<string, unknown>[]>,
+		required: true,
 	},
 	items: {
 		type: Array as PropType<Record<string, unknown>[]>,
-		isRequired: true,
-		default: () => [],
+		required: true,
 	},
 	showSelect: {
 		type: Boolean,
