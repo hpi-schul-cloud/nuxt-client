@@ -12,10 +12,7 @@
 		</template>
 
 		<template #[`item.actions`]="{ item }">
-			<div
-				class="d-flex align-center"
-				:class="{ 'text-medium-emphasis': item.isExpired }"
-			>
+			<div class="d-flex align-center">
 				<v-btn
 					ref="acceptButton"
 					variant="text"
@@ -113,7 +110,8 @@ const tableHeaders = [
 		title: t("pages.rooms.members.tableHeader.actions"),
 		key: "actions",
 		sortable: false,
-		width: 100,
+		width: 50,
+		align: "center",
 	},
 ];
 </script>
