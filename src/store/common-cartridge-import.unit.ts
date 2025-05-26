@@ -1,6 +1,13 @@
 import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import CommonCartridgeImportModule from "./common-cartridge-import";
-import { CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3";
+import {
+	CommonCartridgeApiInterface,
+	CommonCartridgeApiFactory,
+} from "@/commonCartridgeApi/v3";
+
+jest.mock("@/commonCartridgeApi/v3/api", () => ({
+	CommonCartridgeApiFactory: jest.fn(),
+}));
 
 describe("CommonCartridgeImportModule", () => {
 	let sut: CommonCartridgeImportModule;
@@ -22,7 +29,6 @@ describe("CommonCartridgeImportModule", () => {
 	describe("getters", () => {
 		it("should return the mocked commonCartridgeApi instance", () => {
 			const result = sut.commonCartridgeApi;
-
 			expect(result).toBe(commonCartridgeApiMock);
 		});
 
@@ -36,6 +42,28 @@ describe("CommonCartridgeImportModule", () => {
 
 		it("isSuccess", () => {
 			expect(sut.isSuccess).toBe(false);
+		});
+	});
+
+	describe("getters (real, for coverage)", () => {
+		it("should execute the real getter and call CommonCartridgeApiFactory", () => {
+			const realMock = createMock<CommonCartridgeApiInterface>();
+
+			(
+				CommonCartridgeApiFactory as jest.MockedFunction<
+					typeof CommonCartridgeApiFactory
+				>
+			).mockReturnValue(realMock);
+
+			const localSut = new CommonCartridgeImportModule({});
+			const result = localSut.commonCartridgeApi;
+
+			expect(result).toBe(realMock);
+			expect(CommonCartridgeApiFactory).toHaveBeenCalledWith(
+				undefined,
+				"/v3",
+				undefined
+			);
 		});
 	});
 
