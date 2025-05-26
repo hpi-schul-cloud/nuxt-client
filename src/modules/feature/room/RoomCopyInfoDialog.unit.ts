@@ -2,11 +2,11 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
-import { DuplicationInfoDialog } from "@feature-room";
+import { RoomCopyInfoDialog } from "@feature-room";
 
-describe("@feature-room/DuplicationInfoDialog", () => {
+describe("@feature-room/RoomCopyInfoDialog", () => {
 	const setup = () => {
-		const wrapper = mount(DuplicationInfoDialog, {
+		const wrapper = mount(RoomCopyInfoDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -24,9 +24,9 @@ describe("@feature-room/DuplicationInfoDialog", () => {
 		const { dialog } = setup();
 
 		expect(dialog.exists()).toBe(true);
-		expect(dialog.text()).toContain("feature-room.DuplicationInfoDialog.title");
+		expect(dialog.text()).toContain("feature-room.CopyInfoDialog.title");
 		expect(dialog.text()).toContain(
-			"feature-room.DuplicationInfoDialog.text.alert.membersPermissions"
+			"feature-room.CopyInfoDialog.text.alert.membersPermissions"
 		);
 	});
 
@@ -35,11 +35,11 @@ describe("@feature-room/DuplicationInfoDialog", () => {
 			const { dialog, wrapper } = setup();
 
 			const cancelButton = dialog.findComponent(
-				'[data-testid="duplication-info-dialog-cancel"]'
+				'[data-testid="copy-info-dialog-cancel"]'
 			);
 			await cancelButton.trigger("click");
 
-			expect(wrapper.emitted()).toHaveProperty("duplication:cancel");
+			expect(wrapper.emitted()).toHaveProperty("copy:cancel");
 		});
 	});
 
@@ -48,11 +48,11 @@ describe("@feature-room/DuplicationInfoDialog", () => {
 			const { dialog, wrapper } = setup();
 
 			const cancelButton = dialog.findComponent(
-				'[data-testid="duplication-info-dialog-confirm"]'
+				'[data-testid="copy-info-dialog-confirm"]'
 			);
 			await cancelButton.trigger("click");
 
-			expect(wrapper.emitted()).toHaveProperty("duplication:confirm");
+			expect(wrapper.emitted()).toHaveProperty("copy:confirm");
 		});
 	});
 });
