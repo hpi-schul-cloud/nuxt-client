@@ -103,6 +103,7 @@ import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VAutocomplete, VCard, VSelect } from "vuetify/lib/components/index";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 const emit = defineEmits<{
 	(e: "close"): void;
@@ -116,6 +117,8 @@ const { addMembers, getPotentialMembers, resetPotentialMembers } =
 	roomMembersStore;
 
 const { canAddRoomMembers, canSeeAllStudents } = useRoomAuthorization();
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const { FEATURE_ROOM_ADD_STUDENTS_ENABLED } = envConfigModule.getEnv;
 
 const canAddAllStudents = computed(() => {
 	return canAddRoomMembers.value && canSeeAllStudents.value;
@@ -124,9 +127,15 @@ const canAddAllStudents = computed(() => {
 const selectedSchool = ref(schools.value[0].id);
 
 const schoolRoles = [
-	{ id: RoleName.Student, name: t("pages.rooms.members.add.role.student") },
 	{ id: RoleName.Teacher, name: t("common.labels.teacher") },
 ];
+
+if (FEATURE_ROOM_ADD_STUDENTS_ENABLED) {
+	schoolRoles.unshift({
+		id: RoleName.Student,
+		name: t("pages.rooms.members.add.role.student"),
+	});
+}
 
 const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
 const selectedUsers = ref<string[]>([]);
