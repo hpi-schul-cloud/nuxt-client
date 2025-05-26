@@ -54,13 +54,14 @@ const openImageInLightbox = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .interactive-area {
 	width: 100%;
 	text-align: left;
 
-	@media #{map-get($display-breakpoints, 'xs')} {
+	@media #{map.get($display-breakpoints, 'xs')} {
 		width: initial;
 	}
 }
