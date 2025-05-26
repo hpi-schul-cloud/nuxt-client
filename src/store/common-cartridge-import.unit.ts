@@ -1,6 +1,5 @@
 import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import CommonCartridgeImportModule from "./common-cartridge-import";
-import { CoursesApiInterface } from "@/serverApi/v3";
 import { CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3";
 
 describe("CommonCartridgeImportModule", () => {
@@ -21,11 +20,10 @@ describe("CommonCartridgeImportModule", () => {
 	});
 
 	describe("getters", () => {
-		it("commonCartridgeApi should return an instance of CommonCartridgeApiInterface", () => {
-			const api = sut.commonCartridgeApi;
+		it("should return the mocked commonCartridgeApi instance", () => {
+			const result = sut.commonCartridgeApi;
 
-			expect(api).toBeDefined();
-			expect(api).toHaveProperty("commonCartridgeControllerImportCourse");
+			expect(result).toBe(commonCartridgeApiMock);
 		});
 
 		it("file", () => {
