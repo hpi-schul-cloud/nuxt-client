@@ -6,7 +6,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
 import { VTextField } from "vuetify/lib/components/index.mjs";
-import { nextTick } from "vue";
 
 describe("@/components/share/ShareModalResult", () => {
 	const setup = (options?: { windowWidth?: number }) => {
@@ -60,7 +59,6 @@ describe("@/components/share/ShareModalResult", () => {
 
 		const actionButton = wrapper.find("[data-testid=qrCodeAction]");
 		await actionButton.trigger("click");
-		await nextTick();
 
 		const input = wrapper.findComponent(VTextField).find("input").element;
 
