@@ -4,9 +4,10 @@ import {
 } from "@@/tests/test-utils/setup";
 import AddMembers from "./AddMembers.vue";
 import { RoleName } from "@/serverApi/v3";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { authModule, schoolsModule } from "@/store";
 import {
+	envsFactory,
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
@@ -25,6 +26,8 @@ import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { WarningAlert } from "@ui-alert";
 import { Ref, ref } from "vue";
+import EnvConfigModule from "@/store/env-config";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 
 jest.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
@@ -66,6 +69,7 @@ describe("AddMembers", () => {
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setupStores({
+			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
 			authModule: AuthModule,
 		});
@@ -78,7 +82,10 @@ describe("AddMembers", () => {
 		);
 	});
 
-	const setup = (customRoomAuthorization?: RoomAuthorizationRefs) => {
+	const setup = (
+		customRoomAuthorization?: RoomAuthorizationRefs,
+		isFeatureAddStudentsEnabled?: boolean
+	) => {
 		const configDefaults = {
 			canAddRoomMembers: true,
 			canSeeAllStudents: true,
@@ -103,6 +110,13 @@ describe("AddMembers", () => {
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {
+				...envsFactory.build(),
+				FEATURE_ROOM_ADD_STUDENTS_ENABLED: isFeatureAddStudentsEnabled ?? true,
+			},
+		});
+
 		wrapper = mount(AddMembers, {
 			attachTo: document.body,
 			global: {
@@ -120,6 +134,7 @@ describe("AddMembers", () => {
 				],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 		});
@@ -177,23 +192,42 @@ describe("AddMembers", () => {
 				);
 			});
 
-			it("should have proper props for selectRole component", () => {
-				const { wrapper } = setup();
+			describe("when feature flag FEATURE_ROOM_ADD_STUDENTS_ENABLED is false", () => {
+				it("should only offer teacher role for selectRole component", () => {
+					const { wrapper } = setup({}, false);
 
-				const roles = [
-					{
-						id: RoleName.Student,
-						name: "pages.rooms.members.add.role.student",
-					},
-					{ id: RoleName.Teacher, name: "common.labels.teacher" },
-				];
+					const roles = [
+						{ id: RoleName.Teacher, name: "common.labels.teacher" },
+					];
 
-				const roleComponent = wrapper.getComponent({
-					ref: "selectRole",
+					const roleComponent = wrapper.getComponent({
+						ref: "selectRole",
+					});
+
+					expect(roleComponent.props("items")).toStrictEqual(roles);
+					expect(roleComponent.props("modelValue")).toBe(roles[0].id);
 				});
+			});
 
-				expect(roleComponent.props("items")).toStrictEqual(roles);
-				expect(roleComponent.props("modelValue")).toBe(roles[0].id);
+			describe("when feature flag FEATURE_ROOM_ADD_STUDENTS_ENABLED is true", () => {
+				it("should offer all roles for selectRole component", () => {
+					const { wrapper } = setup({}, true);
+
+					const roles = [
+						{
+							id: RoleName.Student,
+							name: "pages.rooms.members.add.role.student",
+						},
+						{ id: RoleName.Teacher, name: "common.labels.teacher" },
+					];
+
+					const roleComponent = wrapper.getComponent({
+						ref: "selectRole",
+					});
+
+					expect(roleComponent.props("items")).toStrictEqual(roles);
+					expect(roleComponent.props("modelValue")).toBe(roles[0].id);
+				});
 			});
 
 			it("should have proper props for autoCompleteUsers component", () => {
