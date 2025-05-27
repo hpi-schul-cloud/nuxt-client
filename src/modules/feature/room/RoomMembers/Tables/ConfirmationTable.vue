@@ -1,37 +1,35 @@
 <template>
 	<DataTable
-		:items="confirmationList"
+		:items="roomApplicants"
 		:header-bottom="headerBottom"
 		:table-headers="tableHeaders"
 		:show-select="true"
+		select-item-key="userId"
 		:external-selected-ids="confirmationSelectedIds"
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionConfirmRequest />
-			<KebabMenuActionRejectRequest />
+			<KebabMenuActionConfirmRequest
+				@click="onConfirm(confirmationSelectedIds)"
+			/>
+			<KebabMenuActionRejectRequest
+				@click="onReject(confirmationSelectedIds)"
+			/>
 		</template>
 
 		<template #[`item.actions`]="{ item }">
 			<div class="d-flex align-center">
-				<v-btn
-					ref="acceptButton"
-					variant="text"
-					:aria-label="
-						t('pages.rooms.members.invitationTable.shareButton.ariaLabel')
-					"
-					:data-testid="`share-button-${item.id}`"
-					:icon="mdiAccountCheckOutline"
-				/>
-				<v-btn
-					ref="rejectButton"
-					variant="text"
-					:aria-label="
-						t('pages.rooms.members.invitationTable.shareButton.ariaLabel')
-					"
-					:data-testid="`share-button-${item.id}`"
-					:icon="mdiAccountRemoveOutline"
-				/>
+				<KebabMenu :data-testid="`kebab-menu-${item.id}`">
+					<KebabMenuActionConfirmRequest
+						:data-testid="`kebab-menu-confirm-${item.id}`"
+						@click="onConfirm([item.userId])"
+					/>
+
+					<KebabMenuActionRejectRequest
+						:data-testid="`kebab-menu-reject-${item.id}`"
+						@click="onReject([item.userId])"
+					/>
+				</KebabMenu>
 			</div>
 		</template>
 	</DataTable>
@@ -41,16 +39,13 @@
 import { useI18n } from "vue-i18n";
 import { DataTable } from "@ui-data-table";
 import { useRoomMembersStore } from "@data-room";
+import { KebabMenu } from "@ui-kebab-menu";
 import {
 	KebabMenuActionConfirmRequest,
 	KebabMenuActionRejectRequest,
 } from "../menus";
-import {
-	mdiAccountCheckOutline,
-	mdiAccountRemoveOutline,
-} from "@icons/material";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { storeToRefs } from "pinia";
+import { computed } from "vue";
 
 const { t } = useI18n();
 
@@ -65,33 +60,27 @@ defineProps({
 	},
 });
 
-const { askConfirmation } = useConfirmationDialog();
-const { confirmationList, confirmationSelectedIds } = storeToRefs(
-	useRoomMembersStore()
+const roomMembersStore = useRoomMembersStore();
+const { roomApplicants: rawRoomApplicants, confirmationSelectedIds } =
+	storeToRefs(roomMembersStore);
+
+const { confirmInvitations, rejectInvitations } = roomMembersStore;
+
+const roomApplicants = computed(() =>
+	rawRoomApplicants.value.map((applicant) => ({ ...applicant }))
 );
 
 const onUpdateSelectedIds = (ids: string[]) => {
 	confirmationSelectedIds.value = ids;
 };
 
-// const prepareRemovalMessage = (linkIds: string[]) => {
-// 	return linkIds.length > 1
-// 		? t("pages.rooms.members.invitationTable.multipleDelete.confirmation")
-// 		: t("pages.rooms.members.invitationTable.delete.confirmation", {
-// 				invitation: confirmationSelectedIds.value.find(
-// 					(link) => link.id === linkIds[0]
-// 				)?.title,
-// 			});
-// };
+const onConfirm = async (ids: string[]) => {
+	await confirmInvitations(ids);
+};
 
-// const confirmDeletion = async (linkIds: string[]) => {
-// 	const shouldDelete = await askConfirmation({
-// 		message: prepareRemovalMessage(linkIds),
-// 		confirmActionLangKey: "common.actions.delete",
-// 	});
-
-// 	return shouldDelete;
-// };
+const onReject = async (ids: string[]) => {
+	await rejectInvitations(ids);
+};
 
 const tableHeaders = [
 	{

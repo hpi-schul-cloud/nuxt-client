@@ -19,7 +19,7 @@ import { useRoomDetailsStore } from "@data-room";
 
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const { t } = useI18n();
-	const { showFailure } = useBoardNotifier();
+	const { showFailure, showSuccess } = useBoardNotifier();
 
 	const { room } = storeToRefs(useRoomDetailsStore());
 	const roomId = computed(() => room.value?.id);
@@ -29,6 +29,18 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const potentialRoomMembers: Ref<
 		Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]
 	> = ref([]);
+
+	const roomMembersWithoutApplicants = computed(() => {
+		return roomMembers.value.filter(
+			(member) => member.roomRoleName !== RoleName.Roomapplicant
+		);
+	});
+
+	const roomApplicants = computed(() => {
+		return roomMembers.value.filter(
+			(member) => member.roomRoleName === RoleName.Roomapplicant
+		);
+	});
 
 	const isLoading = ref<boolean>(false);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
@@ -75,40 +87,23 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			isLoading.value = true;
 			const { data } = (await roomApi.roomControllerGetMembers(getRoomId()))
 				.data;
-
-			prepareMembersLists(data);
+			roomMembers.value = data.map((member: RoomMemberResponse) => {
+				return {
+					...member,
+					fullName: `${member.lastName}, ${member.firstName}`,
+					isSelectable: !(
+						member.userId === currentUserId ||
+						member.roomRoleName === RoleName.Roomowner
+					),
+					displayRoomRole: roomRole[member.roomRoleName],
+					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
+				};
+			});
 			isLoading.value = false;
 		} catch {
 			showFailure(t("pages.rooms.members.error.load"));
 			isLoading.value = false;
 		}
-	};
-
-	const prepareMembersLists = (data: RoomMemberResponse[]): void => {
-		if (!data || !Array.isArray(data)) return;
-
-		data.forEach((member: RoomMemberResponse) => {
-			const roomMember: RoomMember = {
-				...member,
-				fullName: `${member.lastName}, ${member.firstName}`,
-				displayRoomRole: roomRole[member.roomRoleName],
-				displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
-			};
-
-			if (member.roomRoleName === RoleName.Roomapplicant) {
-				confirmationList.value.push({
-					...roomMember,
-				});
-			} else {
-				roomMembers.value.push({
-					...roomMember,
-					isSelectable: !(
-						member.userId === currentUserId ||
-						member.roomRoleName === RoleName.Roomowner
-					),
-				});
-			}
-		});
 	};
 
 	const getSchoolRoleName = (schoolRoleNames: RoleName[]) => {
@@ -292,10 +287,43 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		updateMemberRole(currentOwner, RoleName.Roomadmin);
 	};
 
-	const updateMemberRole = (member: RoomMember, roleName: RoleName) => {
+	const confirmInvitations = async (ids: string[]) => {
+		await roomApi.roomControllerChangeRolesOfMembers(getRoomId(), {
+			userIds: ids,
+			roleName: ChangeRoomRoleBodyParamsRoleNameEnum.Roomviewer,
+		});
+
+		roomMembers.value
+			.filter((member) => {
+				return ids.includes(member.userId);
+			})
+			.forEach((member) => {
+				updateMemberRole(member, RoleName.Roomviewer, true);
+			});
+
+		confirmationSelectedIds.value = [];
+	};
+
+	const rejectInvitations = async (ids: string[]) => {
+		await roomApi.roomControllerRemoveMembers(getRoomId(), {
+			userIds: ids,
+		});
+
+		roomMembers.value = roomMembers.value.filter((member) => {
+			return !ids.includes(member.userId);
+		});
+
+		confirmationSelectedIds.value = [];
+	};
+
+	const updateMemberRole = (
+		member: RoomMember,
+		roleName: RoleName,
+		isSelectable = false
+	) => {
 		member.roomRoleName = roleName;
 		member.displayRoomRole = roomRole[roleName];
-		member.isSelectable = false;
+		member.isSelectable = isSelectable;
 	};
 
 	const resetPotentialMembers = () => {
@@ -314,6 +342,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		addMembers,
 		isRoomOwner,
 		changeRoomOwner,
+		confirmInvitations,
 		fetchMembers,
 		resetPotentialMembers,
 		resetStore,
@@ -322,12 +351,15 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		getMemberById,
 		getMemberFullName,
 		leaveRoom,
+		rejectInvitations,
 		removeMembers,
 		updateMembersRole,
 		confirmationList,
 		confirmationSelectedIds,
 		isLoading,
 		roomMembers,
+		roomMembersWithoutApplicants,
+		roomApplicants,
 		potentialRoomMembers,
 		selectedIds,
 		schools,
