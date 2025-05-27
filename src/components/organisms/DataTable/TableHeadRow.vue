@@ -246,9 +246,7 @@ const selectionStateMap = new Map([
 ]);
 
 export default {
-	components: {
-		InfoBox,
-	},
+	components: { InfoBox },
 	props: {
 		allRowsSelectable: Boolean,
 		currentPageSelectionState: {
@@ -256,22 +254,14 @@ export default {
 			required: true,
 			validator: (value) => ["all", "some", "none"].includes(value),
 		},
-		columns: {
-			type: Array,
-			default: () => [],
-		},
-		sortBy: {
-			type: String,
-			default: "",
-		},
+		columns: { type: Array, default: () => [] },
+		sortBy: { type: String, default: "" },
 		sortOrder: {
 			type: String,
 			default: "asc",
 			validator: (val) => ["asc", "desc"].includes(val),
 		},
-		showExternalText: {
-			type: Boolean,
-		},
+		showExternalText: { type: Boolean },
 	},
 	emits: [
 		"update:current-page-selection-state",
