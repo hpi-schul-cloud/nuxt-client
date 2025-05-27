@@ -5,6 +5,8 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
+import { VTextField } from "vuetify/lib/components/index.mjs";
+import { nextTick } from "vue";
 
 describe("@/components/share/ShareModalResult", () => {
 	const setup = (options?: { windowWidth?: number }) => {
@@ -20,6 +22,7 @@ describe("@/components/share/ShareModalResult", () => {
 		const shareUrl = "http://example.com";
 
 		const wrapper = mount(ShareModalResult, {
+			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: ["QRCode"],
@@ -50,6 +53,18 @@ describe("@/components/share/ShareModalResult", () => {
 		const qrCodeComponent = wrapper.findAllComponents({ name: "QRCode" });
 		expect(qrCodeComponent).toHaveLength(1);
 		expect(qrCodeComponent[0].props("url")).toStrictEqual(shareUrl);
+	});
+
+	it("should focus input when QR code is shown", async () => {
+		const { wrapper } = setup();
+
+		const actionButton = wrapper.find("[data-testid=qrCodeAction]");
+		await actionButton.trigger("click");
+		await nextTick();
+
+		const input = wrapper.findComponent(VTextField).find("input").element;
+
+		expect(document.activeElement).toBe(input);
 	});
 
 	it.each`
