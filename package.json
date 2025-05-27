@@ -88,7 +88,6 @@
 		"resize-observer-polyfill": "^1.5.1",
 		"sass": "^1.89.0",
 		"sass-loader": "^16.0.5",
-		"tabbable": "^6.2.0",
 		"ts-jest": "^29.1.2",
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.7.3",
@@ -106,8 +105,7 @@
 		"@openapitools/openapi-generator-cli": {
 			"axios": "$axios"
 		},
-		"canvas": "^3.1.0",
-		"glob": "9.3.5"
+		"canvas": "^3.1.0"
 	},
 	"engines": {
 		"node": "22",
