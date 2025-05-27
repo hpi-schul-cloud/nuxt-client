@@ -5,8 +5,9 @@ import {
 import { expect } from "@jest/globals";
 import { DataTable } from "@ui-data-table";
 import { KebabMenuList } from "@ui-kebab-menu";
-import { VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
+import { VDataTable, VTextField } from "vuetify/lib/components/index";
 import BatchActionMenu from "./BatchActionMenu.vue";
+import { nextTick } from "vue";
 
 describe("DataTable", () => {
 	const setupWrapper = (
@@ -22,6 +23,7 @@ describe("DataTable", () => {
 			windowWidth: number;
 			actionMenuItemsSlot: string;
 			leftOfSearchSlot: string;
+			externalSelectedIds: string[];
 		}>
 	) => {
 		const windowWidth = options?.windowWidth ?? 1280;
@@ -47,6 +49,18 @@ describe("DataTable", () => {
 				showSelect: options?.showSelect ?? false,
 				selectItemKey: options?.selectItemKey ?? "",
 				ariaLabelNameKey: options?.ariaLabelNameKey ?? "",
+				headerBottom: 0,
+				externalSelectedIds: options?.externalSelectedIds ?? [],
+			},
+			stubs: {
+				DataTable: {
+					name: "DataTable",
+					watch: {
+						externalSelectedIds: {
+							immediate: true,
+						},
+					},
+				},
 			},
 		});
 
@@ -171,6 +185,7 @@ describe("DataTable", () => {
 				expect(actionMenu.html()).toContain(slotContent);
 			});
 		});
+
 		describe("when action-menu-items is not defined", () => {
 			const setup = () => {
 				const key = "name";
@@ -208,6 +223,53 @@ describe("DataTable", () => {
 				const actionMenu = wrapper.findComponent(BatchActionMenu);
 
 				expect(actionMenu.exists()).toBe(false);
+			});
+		});
+
+		describe("when externalSelectedIds prop is passed", () => {
+			const setup = async () => {
+				const key = "name";
+				const headers = [{ title: "name", key }];
+				const items = [
+					{ [key]: "John Doe", id: "item-1" },
+					{ [key]: "Jane Doe", id: "item-2" },
+					{ [key]: "Jack Doe", id: "item-3" },
+					{ [key]: "Jill Doe", id: "item-4" },
+				];
+				const slotContent = "<div>Action Menu Items</div>";
+				const { wrapper } = setupWrapper({
+					headers,
+					items,
+					actionMenuItemsSlot: slotContent,
+					showSelect: true,
+					selectItemKey: key,
+					ariaLabelNameKey: key,
+					externalSelectedIds: ["item-1", "item-2"],
+				});
+
+				return { wrapper };
+			};
+
+			it("should render batch action menu", async () => {
+				const { wrapper } = await setup();
+				wrapper.setProps({ externalSelectedIds: ["item-1", "item-2"] });
+				await nextTick();
+
+				const actionMenu = wrapper.findComponent(BatchActionMenu);
+
+				expect(actionMenu.exists()).toBe(true);
+			});
+
+			it("should render amount of selected items", async () => {
+				const { wrapper } = await setup();
+				wrapper.setProps({ externalSelectedIds: ["item-1", "item-2"] });
+				await nextTick();
+
+				const actionMenu = wrapper.findComponent(BatchActionMenu);
+
+				expect(actionMenu.text()).toContain(
+					"2 pages.administration.selectedui.actionMenu.actions"
+				);
 			});
 		});
 	});

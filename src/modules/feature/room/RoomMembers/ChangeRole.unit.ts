@@ -27,7 +27,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
-import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index.mjs";
+import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
 import { createPinia, setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
 

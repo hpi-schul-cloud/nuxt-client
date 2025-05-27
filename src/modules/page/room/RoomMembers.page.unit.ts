@@ -22,8 +22,10 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
+	InvitationStep,
 	useRoomAuthorization,
 	useRoomDetailsStore,
+	useRoomInvitationLinkStore,
 	useRoomMembersStore,
 } from "@data-room";
 import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
@@ -36,8 +38,9 @@ import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { useBoardNotifier } from "@util-board";
 import { ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
-import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index.mjs";
+import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index";
 import RoomMembersPage from "./RoomMembers.page.vue";
+import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -98,13 +101,14 @@ describe("RoomMembersPage", () => {
 			canAddRoomMembers: ref(true),
 			canCreateRoom: ref(false),
 			canChangeOwner: ref(false),
-			canDuplicateRoom: ref(false),
+			canCopyRoom: ref(false),
 			canViewRoom: ref(false),
 			canEditRoom: ref(false),
 			canDeleteRoom: ref(false),
 			canLeaveRoom: ref(false),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
+			canSeeAllStudents: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 
@@ -142,6 +146,8 @@ describe("RoomMembersPage", () => {
 				displaySchoolRole: "",
 			}));
 
+		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
+
 		const wrapper = mount(RoomMembersPage, {
 			attachTo: document.body,
 			global: {
@@ -151,6 +157,11 @@ describe("RoomMembersPage", () => {
 							roomDetailsStore: {
 								isLoading: false,
 								room,
+							},
+							roomInvitationLinkStore: {
+								roomInvitationLinks,
+								isInvitationDialogOpen: false,
+								invitationStep: InvitationStep.SHARE,
 							},
 						},
 					}),
@@ -175,8 +186,18 @@ describe("RoomMembersPage", () => {
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(
+			useRoomInvitationLinkStore
+		);
 
-		return { wrapper, roomDetailsStore, roomMembersStore, members, room };
+		return {
+			wrapper,
+			roomDetailsStore,
+			roomMembersStore,
+			roomInvitationLinkStore,
+			members,
+			room,
+		};
 	};
 
 	it("should be found in the dom", () => {
@@ -387,8 +408,8 @@ describe("RoomMembersPage", () => {
 					activeTab: Tab.Invitations,
 					expectedFabItems: {
 						icon: mdiPlus,
-						title: "pages.rooms.members.inviteMember.firstStep.title",
-						ariaLabel: "pages.rooms.members.inviteMember.firstStep.title",
+						title: "pages.rooms.members.inviteMember.step.prepare.title",
+						ariaLabel: "pages.rooms.members.inviteMember.step.prepare.title",
 						dataTestId: "fab-invite-members",
 					},
 				},
@@ -447,7 +468,7 @@ describe("RoomMembersPage", () => {
 			expect(wireframe.props("fabItems")).toBe(null);
 		});
 
-		it("should call getSchools and getPotantialMembers method", async () => {
+		it("should call getSchools method", async () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper, roomMembersStore } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
@@ -459,9 +480,6 @@ describe("RoomMembersPage", () => {
 			await addMemberButton.trigger("click");
 
 			expect(roomMembersStore.getSchools).toHaveBeenCalled();
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
-				RoleName.Teacher
-			);
 		});
 
 		it("should open Dialog", async () => {
@@ -490,7 +508,7 @@ describe("RoomMembersPage", () => {
 	describe("invite members fab", () => {
 		it("should open Dialog", async () => {
 			roomPermissions.canAddRoomMembers.value = true;
-			const { wrapper } = setup({
+			const { wrapper, roomInvitationLinkStore } = setup({
 				activeTab: Tab.Invitations,
 				isFeatureRoomMembersTabsEnabled: true,
 			});
@@ -500,6 +518,7 @@ describe("RoomMembersPage", () => {
 			});
 
 			expect(dialogBeforeClick.props("modelValue")).toBe(false);
+			expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
 
 			const addMemberButton = wireframe
 				.getComponent("[data-testid=fab-invite-members]")
@@ -512,6 +531,10 @@ describe("RoomMembersPage", () => {
 			});
 
 			expect(dialogAfterClick.props("modelValue")).toBe(true);
+			expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
+			expect(roomInvitationLinkStore.invitationStep).toBe(
+				InvitationStep.PREPARE
+			);
 		});
 	});
 

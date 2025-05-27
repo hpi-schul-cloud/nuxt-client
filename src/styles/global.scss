@@ -1,27 +1,10 @@
-@import "./utility/breakpoints";
-@import "./utility/colors";
-@import "./utility/fonts";
-@import "./utility/spacing";
-@import "./utility/typography";
-@import "./utility/body";
-@import "./utility/icons";
-@import "./utility/buttons";
-@import "./utility/cards";
-@import "./utility/links";
-@import "./utility/room-colors";
-
-@import "./css-variables/breakpoints";
-@import "./css-variables/durations";
-@import "./css-variables/layers";
-@import "./css-variables/sizes";
-@import "./css-variables/spacing";
-@import "./css-variables/typography";
-@import "./css-variables/layout-sizes";
+@use "./utility/index" as *;
+@use "./css-variables/index" as *;
 
 // we need the path alias here to enable theme override
-@import "@/styles/legacy.scss";
+@use "@/styles/legacy.scss" as *;
 
-@import "@/styles/settings.scss";
-@import "vuetify";
+@use "@/styles/settings.scss" as *;
+@use "vuetify" as *;
 
-@import "./scrollbar.scss";
+@use "./scrollbar.scss" as *;

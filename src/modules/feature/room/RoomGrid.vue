@@ -9,12 +9,11 @@
 		</VContainer>
 	</template>
 	<template v-else-if="isEmpty">
-		<VCustomEmptyState
-			ref="rooms-empty-state"
-			image="rooms-empty-state"
-			:title="t('pages.rooms.emptyState')"
-			class="mt-16"
-		/>
+		<EmptyState :title="t('pages.rooms.emptyState')">
+			<template #media>
+				<RoomsEmptyStateSvg />
+			</template>
+		</EmptyState>
 	</template>
 	<template v-else>
 		<v-row>
@@ -39,8 +38,8 @@
 import { useRoomsState } from "@data-room";
 import { onMounted } from "vue";
 import RoomTile from "./RoomTile.vue";
-import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { useI18n } from "vue-i18n";
+import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 
 const { t } = useI18n();
 const { rooms, isLoading, isEmpty, fetchRooms } = useRoomsState();

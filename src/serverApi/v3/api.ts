@@ -269,6 +269,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
+    CanExecuteInstanceOperations = 'CAN_EXECUTE_INSTANCE_OPERATIONS',
     ChangeTeamRoles = 'CHANGE_TEAM_ROLES',
     ClassCreate = 'CLASS_CREATE',
     ClassEdit = 'CLASS_EDIT',
@@ -329,6 +330,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     ImportUserUpdate = 'IMPORT_USER_UPDATE',
     ImportUserView = 'IMPORT_USER_VIEW',
     InstanceView = 'INSTANCE_VIEW',
+    InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
     InviteExperts = 'INVITE_EXPERTS',
     JoinMeeting = 'JOIN_MEETING',
@@ -367,7 +369,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
-    RoomDuplicate = 'ROOM_DUPLICATE',
+    RoomCopy = 'ROOM_COPY',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -375,7 +377,6 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
-    SchoolEditAll = 'SCHOOL_EDIT_ALL',
     SchoolLogoManage = 'SCHOOL_LOGO_MANAGE',
     SchoolNewsEdit = 'SCHOOL_NEWS_EDIT',
     SchoolPermissionChange = 'SCHOOL_PERMISSION_CHANGE',
@@ -384,6 +385,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     SchoolSystemEdit = 'SCHOOL_SYSTEM_EDIT',
     SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
     SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
+    SchoolView = 'SCHOOL_VIEW',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
     StudentCreate = 'STUDENT_CREATE',
@@ -1752,7 +1754,13 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_ROOMS_DUPLICATION_ENABLED: boolean;
+    FEATURE_ROOM_ADD_STUDENTS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_ROOM_COPY_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -3360,10 +3368,10 @@ export interface DrawingElementResponse {
 export interface ElementWithParentHierarchyResponse {
     /**
      * The element data
-     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse}
+     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse}
      * @memberof ElementWithParentHierarchyResponse
      */
-    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
+    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse;
     /**
      * The hierarchical path of parent elements
      * @type {Array<ParentNodeInfoResponse>}
@@ -3664,11 +3672,17 @@ export interface ExternalToolImportResultResponse {
  */
 export interface ExternalToolMediumParams {
     /**
+     * The status of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof ExternalToolMediumParams
+     */
+    status: ExternalToolMediumStatus;
+    /**
      * Id of the medium
      * @type {string}
      * @memberof ExternalToolMediumParams
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * Publisher of the medium
      * @type {string}
@@ -3695,11 +3709,17 @@ export interface ExternalToolMediumParams {
  */
 export interface ExternalToolMediumResponse {
     /**
+     * The type of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof ExternalToolMediumResponse
+     */
+    status: ExternalToolMediumStatus;
+    /**
      * Id of the medium
      * @type {string}
      * @memberof ExternalToolMediumResponse
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * Publisher of the medium
      * @type {string}
@@ -3719,6 +3739,17 @@ export interface ExternalToolMediumResponse {
      */
     modifiedAt?: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum ExternalToolMediumStatus {
+    Active = 'active',
+    Template = 'template',
+    Draft = 'draft'
+}
+
 /**
  * 
  * @export
@@ -5493,6 +5524,69 @@ export enum LtiPrivacyPermission {
     Pseudonymous = 'pseudonymous'
 }
 
+/**
+ * 
+ * @export
+ * @interface MaintenanceParams
+ */
+export interface MaintenanceParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MaintenanceParams
+     */
+    maintenance: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface MaintenanceResponse
+ */
+export interface MaintenanceResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MaintenanceResponse
+     */
+    schoolUsesLdap: boolean;
+    /**
+     * 
+     * @type {MaintenanceStatusResponse}
+     * @memberof MaintenanceResponse
+     */
+    maintenance: MaintenanceStatusResponse;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof MaintenanceResponse
+     */
+    currentYear: SchoolYearResponse;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof MaintenanceResponse
+     */
+    nextYear: SchoolYearResponse;
+}
+/**
+ * 
+ * @export
+ * @interface MaintenanceStatusResponse
+ */
+export interface MaintenanceStatusResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MaintenanceStatusResponse
+     */
+    active: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof MaintenanceStatusResponse
+     */
+    startDate?: string;
+}
 /**
  * 
  * @export
@@ -7494,6 +7588,7 @@ export enum Permission {
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
+    CanExecuteInstanceOperations = 'CAN_EXECUTE_INSTANCE_OPERATIONS',
     ChangeTeamRoles = 'CHANGE_TEAM_ROLES',
     ClassCreate = 'CLASS_CREATE',
     ClassEdit = 'CLASS_EDIT',
@@ -7554,6 +7649,7 @@ export enum Permission {
     ImportUserUpdate = 'IMPORT_USER_UPDATE',
     ImportUserView = 'IMPORT_USER_VIEW',
     InstanceView = 'INSTANCE_VIEW',
+    InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
     InviteExperts = 'INVITE_EXPERTS',
     JoinMeeting = 'JOIN_MEETING',
@@ -7592,7 +7688,7 @@ export enum Permission {
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
-    RoomDuplicate = 'ROOM_DUPLICATE',
+    RoomCopy = 'ROOM_COPY',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -7600,7 +7696,6 @@ export enum Permission {
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
-    SchoolEditAll = 'SCHOOL_EDIT_ALL',
     SchoolLogoManage = 'SCHOOL_LOGO_MANAGE',
     SchoolNewsEdit = 'SCHOOL_NEWS_EDIT',
     SchoolPermissionChange = 'SCHOOL_PERMISSION_CHANGE',
@@ -7609,6 +7704,7 @@ export enum Permission {
     SchoolSystemEdit = 'SCHOOL_SYSTEM_EDIT',
     SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
     SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
+    SchoolView = 'SCHOOL_VIEW',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
     StudentCreate = 'STUDENT_CREATE',
@@ -8522,11 +8618,17 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
  */
 export interface SchoolExternalToolMediumResponse {
     /**
+     * The type of the medium
+     * @type {ExternalToolMediumStatus}
+     * @memberof SchoolExternalToolMediumResponse
+     */
+    status: ExternalToolMediumStatus;
+    /**
      * Id of the medium
      * @type {string}
      * @memberof SchoolExternalToolMediumResponse
      */
-    mediumId: string;
+    mediumId?: string;
     /**
      * The id of the media source
      * @type {string}
@@ -23661,6 +23763,44 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
+         * 
+         * @summary Returns the current maintenance status of the school
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetMaintenanceStatus: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerGetMaintenanceStatus', 'schoolId', schoolId)
+            const localVarPath = `/school/{schoolId}/maintenance`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Gets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -23959,6 +24099,50 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
+         * 
+         * @summary Sets the school into maintenance or puts it into the next year
+         * @param {string} schoolId 
+         * @param {MaintenanceParams} maintenanceParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerSetMaintenanceStatus: async (schoolId: string, maintenanceParams: MaintenanceParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerSetMaintenanceStatus', 'schoolId', schoolId)
+            // verify required parameter 'maintenanceParams' is not null or undefined
+            assertParamExists('schoolControllerSetMaintenanceStatus', 'maintenanceParams', maintenanceParams)
+            const localVarPath = `/school/{schoolId}/maintenance`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(maintenanceParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -24070,6 +24254,17 @@ export const SchoolApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * 
+         * @summary Returns the current maintenance status of the school
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetMaintenanceStatus(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetMaintenanceStatus(schoolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Gets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -24152,6 +24347,18 @@ export const SchoolApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * 
+         * @summary Sets the school into maintenance or puts it into the next year
+         * @param {string} schoolId 
+         * @param {MaintenanceParams} maintenanceParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetMaintenanceStatus(schoolId, maintenanceParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -24193,6 +24400,16 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          */
         schoolControllerDoesSchoolExist(schoolId: string, options?: any): AxiosPromise<SchoolExistsResponse> {
             return localVarFp.schoolControllerDoesSchoolExist(schoolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Returns the current maintenance status of the school
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetMaintenanceStatus(schoolId: string, options?: any): AxiosPromise<MaintenanceResponse> {
+            return localVarFp.schoolControllerGetMaintenanceStatus(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets all provisioning options for a system at a school
@@ -24269,6 +24486,17 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
             return localVarFp.schoolControllerRemoveSystemFromSchool(schoolId, systemId, options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @summary Sets the school into maintenance or puts it into the next year
+         * @param {string} schoolId 
+         * @param {MaintenanceParams} maintenanceParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any): AxiosPromise<MaintenanceResponse> {
+            return localVarFp.schoolControllerSetMaintenanceStatus(schoolId, maintenanceParams, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -24307,6 +24535,16 @@ export interface SchoolApiInterface {
      * @memberof SchoolApiInterface
      */
     schoolControllerDoesSchoolExist(schoolId: string, options?: any): AxiosPromise<SchoolExistsResponse>;
+
+    /**
+     * 
+     * @summary Returns the current maintenance status of the school
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetMaintenanceStatus(schoolId: string, options?: any): AxiosPromise<MaintenanceResponse>;
 
     /**
      * Gets all provisioning options for a system at a school
@@ -24383,6 +24621,17 @@ export interface SchoolApiInterface {
     schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any): AxiosPromise<void>;
 
     /**
+     * 
+     * @summary Sets the school into maintenance or puts it into the next year
+     * @param {string} schoolId 
+     * @param {MaintenanceParams} maintenanceParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any): AxiosPromise<MaintenanceResponse>;
+
+    /**
      * Sets all provisioning options for a system at a school
      * @param {string} schoolId 
      * @param {string} systemId 
@@ -24422,6 +24671,18 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerDoesSchoolExist(schoolId: string, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerDoesSchoolExist(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns the current maintenance status of the school
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetMaintenanceStatus(schoolId: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetMaintenanceStatus(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -24512,6 +24773,19 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerRemoveSystemFromSchool(schoolId, systemId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Sets the school into maintenance or puts it into the next year
+     * @param {string} schoolId 
+     * @param {MaintenanceParams} maintenanceParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerSetMaintenanceStatus(schoolId, maintenanceParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

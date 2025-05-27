@@ -1,15 +1,15 @@
 <template>
 	<KebabMenuAction
-		:icon="mdiContentCopy"
-		data-testid="kebab-menu-action-duplicate"
+		:icon="mdiTrashCanOutline"
+		data-testid="kebab-menu-action-delete-invitation"
 	>
-		{{ t("common.actions.duplicate") }}
+		{{ t("common.actions.delete") }}
 	</KebabMenuAction>
 </template>
 
 <script setup lang="ts">
 import KebabMenuAction from "./KebabMenuAction.vue";
-import { mdiContentCopy } from "@icons/material";
+import { mdiTrashCanOutline } from "@icons/material";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 </script>

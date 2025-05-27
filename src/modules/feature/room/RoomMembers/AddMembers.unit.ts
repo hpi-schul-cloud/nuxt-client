@@ -4,9 +4,10 @@ import {
 } from "@@/tests/test-utils/setup";
 import AddMembers from "./AddMembers.vue";
 import { RoleName } from "@/serverApi/v3";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { authModule, schoolsModule } from "@/store";
 import {
+	envsFactory,
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
@@ -14,15 +15,19 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import { VueWrapper } from "@vue/test-utils";
-import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import { VAutocomplete } from "vuetify/lib/components/index";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { createTestingPinia } from "@pinia/testing";
-import { useRoomMembersStore } from "@data-room";
+import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
+import { WarningAlert } from "@ui-alert";
+import { Ref, ref } from "vue";
+import EnvConfigModule from "@/store/env-config";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 
 jest.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
@@ -33,6 +38,17 @@ jest.mock("@vueuse/integrations/useFocusTrap", () => {
 
 jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
+jest.mock("@data-room/roomAuthorization.composable");
+const roomAuthorizationMock = jest.mocked(useRoomAuthorization);
+
+type RefPropertiesOnly<T> = {
+	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
+};
+
+type RoomAuthorizationRefs = Partial<
+	RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>
+>;
 
 describe("AddMembers", () => {
 	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
@@ -53,6 +69,7 @@ describe("AddMembers", () => {
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setupStores({
+			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
 			authModule: AuthModule,
 		});
@@ -63,14 +80,42 @@ describe("AddMembers", () => {
 				name: "Paul-Gerhardt-Gymnasium",
 			})
 		);
+	});
+
+	const setup = (
+		customRoomAuthorization?: RoomAuthorizationRefs,
+		isFeatureAddStudentsEnabled?: boolean
+	) => {
+		const configDefaults = {
+			canAddRoomMembers: true,
+			canSeeAllStudents: true,
+		};
+		const roomAuthorization = {
+			...configDefaults,
+			...customRoomAuthorization,
+		};
+		const potentialRoomMembers = roomMemberFactory.buildList(3);
+		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
 
 		const mockMe = meResponseFactory.build();
 		authModule.setMe(mockMe);
-	});
 
-	const setup = () => {
-		const potentialRoomMembers = roomMemberFactory.buildList(3);
-		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
+		const authorizationPermissions =
+			createMock<ReturnType<typeof useRoomAuthorization>>();
+
+		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
+				value ?? false
+			);
+		}
+		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
+
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {
+				...envsFactory.build(),
+				FEATURE_ROOM_ADD_STUDENTS_ENABLED: isFeatureAddStudentsEnabled ?? true,
+			},
+		});
 
 		wrapper = mount(AddMembers, {
 			attachTo: document.body,
@@ -89,6 +134,7 @@ describe("AddMembers", () => {
 				],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 		});
@@ -114,12 +160,22 @@ describe("AddMembers", () => {
 			expect(wrapper.exists()).toBe(true);
 		});
 
-		describe("Autocomplete components", () => {
-			it("should render autocomplete components", () => {
+		it("should call getPotentialMembers", () => {
+			const { roomMembersStore } = setup();
+
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+		});
+
+		describe("Item list components", () => {
+			it("should render autocomplete and select components", () => {
 				const { wrapper } = setup();
 				const autoCompleteComponents = wrapper.findAllComponents(VAutocomplete);
+				const selectComponents = wrapper.findAllComponents({
+					name: "VSelect",
+				});
 
-				expect(autoCompleteComponents).toHaveLength(3);
+				expect(autoCompleteComponents).toHaveLength(2);
+				expect(selectComponents).toHaveLength(1);
 			});
 
 			it("should have proper props for autoCompleteSchool component", () => {
@@ -136,17 +192,42 @@ describe("AddMembers", () => {
 				);
 			});
 
-			it("should have proper props for autoCompleteRole component", () => {
-				const { wrapper } = setup();
+			describe("when feature flag FEATURE_ROOM_ADD_STUDENTS_ENABLED is false", () => {
+				it("should only offer teacher role for selectRole component", () => {
+					const { wrapper } = setup({}, false);
 
-				const roles = [{ id: RoleName.Teacher, name: "common.labels.teacher" }];
+					const roles = [
+						{ id: RoleName.Teacher, name: "common.labels.teacher" },
+					];
 
-				const roleComponent = wrapper.getComponent({
-					ref: "autoCompleteRole",
+					const roleComponent = wrapper.getComponent({
+						ref: "selectRole",
+					});
+
+					expect(roleComponent.props("items")).toStrictEqual(roles);
+					expect(roleComponent.props("modelValue")).toBe(roles[0].id);
 				});
+			});
 
-				expect(roleComponent.props("items")).toStrictEqual(roles);
-				expect(roleComponent.props("modelValue")).toBe(roles[0].id);
+			describe("when feature flag FEATURE_ROOM_ADD_STUDENTS_ENABLED is true", () => {
+				it("should offer all roles for selectRole component", () => {
+					const { wrapper } = setup({}, true);
+
+					const roles = [
+						{
+							id: RoleName.Student,
+							name: "pages.rooms.members.add.role.student",
+						},
+						{ id: RoleName.Teacher, name: "common.labels.teacher" },
+					];
+
+					const roleComponent = wrapper.getComponent({
+						ref: "selectRole",
+					});
+
+					expect(roleComponent.props("items")).toStrictEqual(roles);
+					expect(roleComponent.props("modelValue")).toBe(roles[0].id);
+				});
 			});
 
 			it("should have proper props for autoCompleteUsers component", () => {
@@ -164,7 +245,7 @@ describe("AddMembers", () => {
 	});
 
 	describe("when school is changed", () => {
-		it("should call getPotentialMembers", async () => {
+		it("should call resetPotentialMembers", async () => {
 			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
 			const selectedSchool = roomMembersSchools[1].id;
 			const schoolComponent = wrapper.getComponent({
@@ -173,26 +254,7 @@ describe("AddMembers", () => {
 
 			await schoolComponent.setValue(selectedSchool);
 
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
-				RoleName.Teacher,
-				selectedSchool
-			);
-		});
-
-		it("should set the role to teacher", async () => {
-			const { wrapper } = setup();
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
-			});
-
-			await schoolComponent.setValue("schoolId");
-
-			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
-			});
-
-			expect(roleComponent.props("modelValue")).toBe(RoleName.Teacher);
+			expect(roomMembersStore.resetPotentialMembers).toHaveBeenCalledTimes(1);
 		});
 
 		it("should reset selectedUsers", async () => {
@@ -209,29 +271,45 @@ describe("AddMembers", () => {
 
 			expect(userComponent.props("modelValue")).toEqual([]);
 		});
+
+		it("should call getPotentialMembers for set role", async () => {
+			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
+			const selectedSchool = roomMembersSchools[1].id;
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+			const roleComponent = wrapper.getComponent({
+				ref: "selectRole",
+			});
+			const selectedRole = roleComponent.props("modelValue");
+
+			await schoolComponent.setValue(selectedSchool);
+
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
+				selectedRole,
+				selectedSchool
+			);
+		});
 	});
 
 	describe("when userRole is changed", () => {
-		it("should call getPotentialMembers", async () => {
-			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
-			const selectedRole = RoleName.Teacher;
+		it("should call resetPotentialMembers", async () => {
+			const { wrapper, roomMembersStore } = setup();
+			const selectedRole = RoleName.Student;
 			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+				ref: "selectRole",
 			});
 
 			await roleComponent.setValue(selectedRole);
 
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
-				selectedRole,
-				roomMembersSchools[0].id
-			);
+			expect(roomMembersStore.resetPotentialMembers).toHaveBeenCalledTimes(1);
 		});
 
 		it("should reset selectedUsers", async () => {
 			const { wrapper } = setup();
 			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+				ref: "selectRole",
 			});
 
 			const userComponent = wrapper.getComponent({
@@ -241,6 +319,42 @@ describe("AddMembers", () => {
 			await roleComponent.setValue(RoleName.Roomeditor);
 
 			expect(userComponent.props("modelValue")).toEqual([]);
+		});
+
+		describe("and the role is set to student", () => {
+			it("should call getPotentialMembers for student role", async () => {
+				const { wrapper, roomMembersSchools, roomMembersStore } = setup();
+				const selectedRole = RoleName.Student;
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(selectedRole);
+
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
+					selectedRole,
+					roomMembersSchools[0].id
+				);
+			});
+		});
+
+		describe("and the role is set to teacher", () => {
+			it("should call getPotentialMembers for teacher role", async () => {
+				const { wrapper, roomMembersSchools, roomMembersStore } = setup();
+				const selectedRole = RoleName.Teacher;
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(selectedRole);
+
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
+					selectedRole,
+					roomMembersSchools[0].id
+				);
+			});
 		});
 	});
 
@@ -263,13 +377,13 @@ describe("AddMembers", () => {
 			]);
 		});
 
-		it("should disable autocomplete for school and role selection", async () => {
+		it("should disable autocomplete school and select role selection", async () => {
 			const { wrapper, potentialRoomMembers } = setup();
 			const schoolComponent = wrapper.getComponent({
 				ref: "autoCompleteSchool",
 			});
 			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+				ref: "selectRole",
 			});
 
 			const userComponent = wrapper.getComponent({
@@ -285,13 +399,13 @@ describe("AddMembers", () => {
 			expect(roleComponent.props("disabled")).toBe(true);
 		});
 
-		it("should enable autocomplete for school and role selection when alls users are removed from selection", async () => {
+		it("should enable autocomplete school and select role selection when alls users are removed from selection", async () => {
 			const { wrapper, potentialRoomMembers } = setup();
 			const schoolComponent = wrapper.getComponent({
 				ref: "autoCompleteSchool",
 			});
 			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+				ref: "selectRole",
 			});
 			const userComponent = wrapper.getComponent({
 				ref: "autoCompleteUsers",
@@ -368,49 +482,124 @@ describe("AddMembers", () => {
 	});
 
 	describe("focus trap", () => {
-		it("should pause focus trap when any autocomplete menu is open", async () => {
+		it("should pause focus trap when any autocomplete or select menu is open", async () => {
 			const { wrapper } = setup();
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
+			const roleComponent = wrapper.getComponent({
+				ref: "selectRole",
 			});
 
-			schoolComponent.vm.menu = true;
+			roleComponent.vm.menu = true;
 
 			expect(pauseMock).toHaveBeenCalledTimes(1);
 		});
 
-		it("should unpause focus trap when all autocomplete menus are closed", async () => {
+		it("should unpause focus trap when all autocomplete and select menus are closed", async () => {
 			const { wrapper } = setup();
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
 			});
 
-			schoolComponent.vm.menu = true;
+			userComponent.vm.menu = true;
 			expect(pauseMock).toHaveBeenCalledTimes(1);
 
-			schoolComponent.vm.menu = false;
+			userComponent.vm.menu = false;
 			expect(unpauseMock).toHaveBeenCalled();
 		});
 
-		it("should not unpause focus trap when a autocomplete is closed while another one is opened", async () => {
-			// this happens when user switches between autocomplete components for brief moment both are treated as open
+		it("should not unpause focus trap when a autocomplete or select is closed while another one is opened", async () => {
+			// this happens when user switches between autocomplete or select components for brief moment both are treated as open
 			const { wrapper } = setup();
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
-			});
-
 			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+				ref: "selectRole",
 			});
 
-			schoolComponent.vm.menu = true;
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
 			roleComponent.vm.menu = true;
+			userComponent.vm.menu = true;
 
 			expect(pauseMock).toHaveBeenCalled();
 			expect(unpauseMock).not.toHaveBeenCalled();
 
-			schoolComponent.vm.menu = false;
+			roleComponent.vm.menu = false;
 			expect(unpauseMock).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("when external school and student role are set", () => {
+		it("should disable the user selection", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+			const roleComponent = wrapper.getComponent({
+				ref: "selectRole",
+			});
+
+			await schoolComponent.setValue("external-school-id");
+			await roleComponent.setValue(RoleName.Student);
+
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
+			expect(userComponent.props("disabled")).toBe(true);
+		});
+
+		it("should show warning message", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+			const roleComponent = wrapper.getComponent({
+				ref: "selectRole",
+			});
+
+			await schoolComponent.setValue("external-school-id");
+			await roleComponent.setValue(RoleName.Student);
+
+			expect(wrapper.getComponent(WarningAlert).text()).toBe(
+				"pages.rooms.members.add.warningText"
+			);
+		});
+	});
+
+	describe("when user is not allowed to see all students", () => {
+		describe("and the role is set to student", () => {
+			it("should show info message", async () => {
+				const { wrapper } = setup({ canSeeAllStudents: false });
+
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(RoleName.Student);
+
+				const infoAlert = wrapper.getComponent(
+					'[data-testid="student-visibility-info-alert"]'
+				);
+				expect(infoAlert.text()).toBe(
+					"pages.rooms.members.add.students.forbidden"
+				);
+			});
+		});
+		describe("and the role is set to teacher", () => {
+			it("should not show info message", async () => {
+				const { wrapper } = setup({ canSeeAllStudents: false });
+
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(RoleName.Teacher);
+
+				const infoAlert = wrapper.findComponent(
+					'[data-testid="student-visibility-info-alert"]'
+				);
+				expect(infoAlert.exists()).toEqual(false);
+			});
 		});
 	});
 });

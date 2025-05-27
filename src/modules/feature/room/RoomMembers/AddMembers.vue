@@ -17,29 +17,39 @@
 					item-value="id"
 					:items="schools"
 					:label="t('global.sidebar.item.school')"
-					:disabled="isAutocompleteDisabled"
-					:aria-disabled="isAutocompleteDisabled"
-					@update:model-value="onSchoolChange"
-					@update:menu="onAutocompleteToggle"
+					:disabled="isItemListDisabled"
+					:aria-disabled="isItemListDisabled"
+					@update:model-value="onValueChange"
+					@update:menu="onItemListToggle"
 				/>
 			</div>
 
 			<div class="mt-4" data-testid="add-participant-role">
-				<v-autocomplete
-					ref="autoCompleteRole"
+				<v-select
+					ref="selectRole"
 					v-model="selectedSchoolRole"
-					auto-select-first="exact"
 					density="comfortable"
 					item-title="name"
 					item-value="id"
 					:items="schoolRoles"
 					:label="t('pages.rooms.members.tableHeader.schoolRole')"
-					:disabled="isAutocompleteDisabled"
-					:aria-disabled="isAutocompleteDisabled"
-					@update:model-value="onRoleChange"
-					@update:menu="onAutocompleteToggle"
+					:disabled="isItemListDisabled"
+					:aria-disabled="isItemListDisabled"
+					:data-testid="`role-item-${selectedSchoolRole}`"
+					@update:model-value="onValueChange"
+					@update:menu="onItemListToggle"
 				/>
 			</div>
+
+			<InfoAlert
+				v-if="!canAddAllStudents && selectedSchoolRole === RoleName.Student"
+				data-testid="student-visibility-info-alert"
+				>{{ t("pages.rooms.members.add.students.forbidden") }}</InfoAlert
+			>
+
+			<WarningAlert v-if="isStudentSelectionDisabled">{{
+				t("pages.rooms.members.add.warningText")
+			}}</WarningAlert>
 
 			<div class="mt-4" data-testid="add-participant-name">
 				<v-autocomplete
@@ -51,9 +61,10 @@
 					item-value="userId"
 					item-title="fullName"
 					multiple
+					:disabled="isStudentSelectionDisabled"
 					:items="potentialRoomMembers"
 					:label="t('common.labels.name')"
-					@update:menu="onAutocompleteToggle"
+					@update:menu="onItemListToggle"
 				/>
 			</div>
 		</template>
@@ -85,13 +96,14 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { RoleName } from "@/serverApi/v3";
-import { useRoomMembersStore } from "@data-room";
+import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VAutocomplete, VCard } from "vuetify/lib/components/index.mjs";
-import { InfoAlert } from "@ui-alert";
+import { VAutocomplete, VCard, VSelect } from "vuetify/lib/components/index";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 const emit = defineEmits<{
 	(e: "close"): void;
@@ -101,7 +113,16 @@ const { t } = useI18n();
 
 const roomMembersStore = useRoomMembersStore();
 const { potentialRoomMembers, schools } = storeToRefs(roomMembersStore);
-const { addMembers, getPotentialMembers } = roomMembersStore;
+const { addMembers, getPotentialMembers, resetPotentialMembers } =
+	roomMembersStore;
+
+const { canAddRoomMembers, canSeeAllStudents } = useRoomAuthorization();
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const { FEATURE_ROOM_ADD_STUDENTS_ENABLED } = envConfigModule.getEnv;
+
+const canAddAllStudents = computed(() => {
+	return canAddRoomMembers.value && canSeeAllStudents.value;
+});
 
 const selectedSchool = ref(schools.value[0].id);
 
@@ -109,17 +130,20 @@ const schoolRoles = [
 	{ id: RoleName.Teacher, name: t("common.labels.teacher") },
 ];
 
+if (FEATURE_ROOM_ADD_STUDENTS_ENABLED) {
+	schoolRoles.unshift({
+		id: RoleName.Student,
+		name: t("pages.rooms.members.add.role.student"),
+	});
+}
+
 const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
 const selectedUsers = ref<string[]>([]);
 
-const onRoleChange = async () => {
+const onValueChange = async () => {
+	resetPotentialMembers();
 	selectedUsers.value = [];
 	await getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
-};
-
-const onSchoolChange = () => {
-	selectedSchoolRole.value = schoolRoles[0].id;
-	onRoleChange();
 };
 
 const onAddMembers = async () => {
@@ -134,29 +158,33 @@ const { pause, unpause } = useFocusTrap(addMembersContent, {
 	immediate: true,
 });
 
+const isStudentSelectionDisabled = computed(() => {
+	const isExternalSchoolSelected = selectedSchool.value !== schools.value[0].id;
+	const isStudentRoleSelected = selectedSchoolRole.value === RoleName.Student;
+	return isExternalSchoolSelected && isStudentRoleSelected;
+});
+
 const autoCompleteSchool = ref<VAutocomplete>();
-const autoCompleteRole = ref<VAutocomplete>();
 const autoCompleteUsers = ref<VAutocomplete>();
+const selectRole = ref<VSelect>();
 
-const onAutocompleteToggle = () => {
-	const autocompleteRefs = [
-		autoCompleteSchool,
-		autoCompleteRole,
-		autoCompleteUsers,
-	];
+const onItemListToggle = () => {
+	const refs = [autoCompleteSchool, autoCompleteUsers, selectRole];
 
-	const isAnyAutocompleteOpen = autocompleteRefs.some(
-		(autocomplete) => autocomplete.value?.menu
-	);
+	const isAnyItemListOpen = refs.some((itemList) => itemList.value?.menu);
 
-	if (isAnyAutocompleteOpen) {
+	if (isAnyItemListOpen) {
 		pause();
 	} else {
 		unpause();
 	}
 };
 
-const isAutocompleteDisabled = computed(() => selectedUsers.value.length > 0);
+onMounted(() => {
+	getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
+});
+
+const isItemListDisabled = computed(() => selectedUsers.value.length > 0);
 </script>
 <style lang="scss" scoped>
 // show focus indicator for chips on safari

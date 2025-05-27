@@ -99,7 +99,7 @@ import { TeacherSubmission, Status } from "../types/submission";
 import { DataTableHeader } from "@/types/vuetify";
 import { useI18n } from "vue-i18n";
 import { MaybeRef } from "@vueuse/core";
-import { VExpansionPanelTitle } from "vuetify/lib/components/index.mjs";
+import { VExpansionPanelTitle } from "vuetify/lib/components/index";
 import { mdiCheck, mdiClose, mdiMinus } from "@icons/material";
 
 type StatusFilter = "all" | Status;
@@ -220,27 +220,26 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
-:deep {
-	.v-expansion-panel-text__wrapper {
-		padding: 0;
-	}
+:deep(.v-expansion-panel-text__wrapper) {
+	padding: 0;
+}
 
-	.v-expansion-panel-title--active > .v-expansion-panel-title__overlay {
-		opacity: 0;
-	}
+:deep(.v-expansion-panel-title--active > .v-expansion-panel-title__overlay) {
+	opacity: 0;
 }
 
 .filter-chip--active {
-	background-color: map-get($grey, lighten-2);
-	border: 1px solid map-get($grey, lighten-2);
+	background-color: map.get($grey, lighten-2);
+	border: 1px solid map.get($grey, lighten-2);
 }
 
 .filter-chip--disabled {
 	opacity: 1;
 	background-color: rgba(var(--v-theme-white)) !important;
-	color: rgba(map-get($grey, base), 0.9);
-	border: 1px solid rgba(map-get($grey, base), 0.4);
+	color: rgba(map.get($grey, base), 0.9);
+	border: 1px solid rgba(map.get($grey, base), 0.4);
 }
 </style>

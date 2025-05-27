@@ -32,10 +32,7 @@ const props = defineProps({
 		type: Object as PropType<RichTextElementResponse>,
 		required: true,
 	},
-	isEditMode: {
-		type: Boolean,
-		required: true,
-	},
+	isEditMode: { type: Boolean, required: true },
 	columnIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
 });
@@ -96,6 +93,9 @@ const onKeyUp = () => ensurePoliteNotifications();
 		margin-bottom: var(--space-xs);
 	}
 
+	ul {
+		list-style-type: circle;
+	}
 	ul {
 		list-style-type: circle;
 	}

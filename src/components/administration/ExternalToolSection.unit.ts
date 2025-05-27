@@ -1,4 +1,8 @@
-import { ConfigResponse, MediaSourceLicenseType } from "@/serverApi/v3";
+import {
+	ConfigResponse,
+	ExternalToolMediumStatus,
+	MediaSourceLicenseType,
+} from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
@@ -32,7 +36,7 @@ import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
-import { VCardText } from "vuetify/lib/components/index.mjs";
+import { VCardText } from "vuetify/lib/components/index";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 
@@ -186,6 +190,7 @@ describe("ExternalToolSection", () => {
 							}),
 							isDeactivated: false,
 							medium: {
+								status: ExternalToolMediumStatus.Active,
 								mediumId: "tool2",
 								mediaSourceId: "notLicensedSource",
 								mediaSourceName: undefined,

@@ -48,7 +48,7 @@ import {
 	watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
-import { VTextarea } from "vuetify/lib/components/index.mjs";
+import { VTextarea } from "vuetify/lib/components/index";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -200,7 +200,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/settings.scss";
+@use "@/styles/settings.scss" as *;
 
 .error-message-width {
 	min-width: 280px;

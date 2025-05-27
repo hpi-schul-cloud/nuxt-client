@@ -269,12 +269,11 @@ watchDebounced(
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
-:deep {
-	.v-infinite-scroll--vertical {
-		overflow-y: visible;
-	}
+:deep(.v-infinite-scroll--vertical) {
+	overflow-y: visible;
 }
 
 .content {
@@ -340,11 +339,11 @@ watchDebounced(
 			font-size: var(--text-lg);
 			text-align: center;
 
-			@media #{map-get($display-breakpoints, 'sm-and-up')} {
+			@media #{map.get($display-breakpoints, 'sm-and-up')} {
 				font-size: var(--heading-6);
 			}
 
-			@media #{map-get($display-breakpoints, 'md-and-up')} {
+			@media #{map.get($display-breakpoints, 'md-and-up')} {
 				font-size: var(--heading-4);
 			}
 		}

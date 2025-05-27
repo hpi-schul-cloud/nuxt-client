@@ -6,17 +6,17 @@
 	>
 		<template #activator="{ props: menuProps }">
 			<v-text-field
-				ref="inputField"
+				ref="date-text-field"
 				v-bind="menuProps"
 				v-bind.attr="$attrs"
 				v-model="dateString"
 				v-date-input-mask
-				:append-inner-icon="mdiCalendar"
+				:prepend-inner-icon="mdiCalendar"
 				:label="label"
 				:aria-label="ariaLabel"
 				:placeholder="t('common.placeholder.dateformat')"
 				:error-messages="errorMessages"
-				@update:model-value="validate"
+				@update:model-value="onUpdateTextfield"
 				@keydown.space="showDateDialog = true"
 				@keydown.prevent.enter="showDateDialog = true"
 				@keydown.up.down.stop
@@ -33,14 +33,22 @@
 				hide-header
 				show-adjacent-months
 				elevation="6"
-				@update:model-value="closeAndEmit"
+				@update:model-value="onPickDate"
 			/>
 		</UseFocusTrap>
 	</v-menu>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watchEffect, unref, PropType, toRef } from "vue";
+import {
+	computed,
+	ref,
+	watchEffect,
+	unref,
+	PropType,
+	toRef,
+	useTemplateRef,
+} from "vue";
 import { useDebounceFn, computedAsync } from "@vueuse/core";
 import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
@@ -69,10 +77,9 @@ const emit = defineEmits(["update:date", "error"]);
 const { t } = useI18n();
 
 const showDateDialog = ref(false);
-const inputField = ref<HTMLInputElement | null>(null);
+const dateTextField = useTemplateRef("date-text-field");
 const dateString = ref<string>();
 const externalErrors = toRef(props, "errors");
-
 watchEffect(() => {
 	dateString.value = props.date
 		? dayjs(props.date).format(DATETIME_FORMAT.date)
@@ -119,7 +126,6 @@ const combinedErrors = computed(() => {
 
 const errorMessages = computedAsync<string[] | null>(async () => {
 	const messages = await getErrorMessages(combinedErrors.value);
-
 	return messages ?? [];
 }, null);
 
@@ -134,38 +140,38 @@ const getErrorMessages = useDebounceFn(
 	700
 );
 
-const validate = () => {
-	v$.value.dateString.$touch();
-	v$.value.$validate();
+watchEffect(async () => {
+	if (props.required === true) {
+		v$.value.dateString.$touch();
+		await v$.value.$validate();
+	}
+});
 
-	if (isValid.value) {
-		emitDate();
+const onUpdateTextfield = async () => {
+	await emitDate();
+};
+
+const onPickDate = async () => {
+	dateString.value = dateObject.value
+		? dayjs(dateObject.value).format(DATETIME_FORMAT.date)
+		: undefined;
+	await emitDate();
+	showDateDialog.value = false;
+	dateTextField.value?.focus();
+};
+
+const emitDate = async () => {
+	v$.value.dateString.$touch();
+	const isValid = await v$.value.$validate();
+	if (isValid) {
+		const formattedDate = dateString.value
+			? dayjs(dateString.value, DATETIME_FORMAT.date).toISOString()
+			: null;
+
+		emit("update:date", formattedDate);
 	} else {
+		emit("update:date", null);
 		emit("error");
 	}
 };
-
-const emitDate = () => {
-	const date = dateString.value
-		? dayjs(dateString.value, DATETIME_FORMAT.date).toISOString()
-		: undefined;
-
-	emit("update:date", date);
-};
-
-const closeAndEmit = () => {
-	showDateDialog.value = false;
-	inputField.value?.focus();
-
-	emitDate();
-};
 </script>
-
-<style lang="scss" scoped>
-:deep {
-	.v-field__append-inner .v-icon {
-		width: 20px;
-		height: 20px;
-	}
-}
-</style>

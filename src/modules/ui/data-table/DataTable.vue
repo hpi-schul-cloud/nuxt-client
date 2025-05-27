@@ -2,6 +2,7 @@
 	<div
 		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
 		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
+		:style="stickyStyle"
 	>
 		<BatchActionMenu
 			v-if="$slots['action-menu-items'] && selectedIds.length"
@@ -51,6 +52,7 @@
 		:show-select="showSelect"
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
+		@update:model-value="$emit('update:selected-ids', selectedIds)"
 	>
 		<template
 			#[`header.data-table-select`]="{ someSelected, allSelected, selectAll }"
@@ -90,9 +92,9 @@
 
 <script setup lang="ts">
 import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
-import { PropType, ref, watch } from "vue";
+import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify/lib/framework.mjs";
+import { useDisplay } from "vuetify/lib/framework";
 import BatchActionMenu from "./BatchActionMenu.vue";
 
 const props = defineProps({
@@ -123,7 +125,19 @@ const props = defineProps({
 		type: String,
 		default: "name",
 	},
+	headerBottom: {
+		type: Number,
+		default: 0,
+	},
+	externalSelectedIds: {
+		type: Array as PropType<string[] | undefined>,
+		default: undefined,
+	},
 });
+
+defineEmits<{
+	(e: "update:selected-ids", selectedIds: string[]): void;
+}>();
 
 const { t } = useI18n();
 const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
@@ -144,6 +158,17 @@ const search = ref("");
 const onResetSelectedMembers = () => {
 	selectedIds.value = [];
 };
+
+const stickyStyle = computed(() => ({
+	top: `${props.headerBottom}px`,
+}));
+
+watch(
+	() => props.externalSelectedIds,
+	(newValue) => {
+		selectedIds.value = newValue!;
+	}
+);
 </script>
 
 <style lang="scss" scoped>

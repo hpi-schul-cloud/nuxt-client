@@ -124,7 +124,7 @@ import {
 	RoleName,
 } from "@/serverApi/v3";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VCard, VRadio } from "vuetify/lib/components/index.mjs";
+import { VCard, VRadio } from "vuetify/lib/components/index";
 import {
 	RoomMember,
 	useRoomDetailsStore,
@@ -184,11 +184,7 @@ if (memberToChangeRole.length > 1) {
 }
 
 const currentUserFullName = computed(() => {
-	const currentUserMember = roomMembersStore.roomMembers.find(
-		(member) => member.userId === authModule.getUser?.id
-	);
-	if (!currentUserMember) return "";
-	return `${currentUserMember.firstName} ${currentUserMember.lastName}`;
+	return roomMembersStore.getMemberFullName(authModule.getUser?.id);
 });
 
 const memberFullName = computed(() => {
