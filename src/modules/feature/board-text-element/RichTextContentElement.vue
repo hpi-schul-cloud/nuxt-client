@@ -96,9 +96,6 @@ const onKeyUp = () => ensurePoliteNotifications();
 	ul {
 		list-style-type: circle;
 	}
-	ul {
-		list-style-type: circle;
-	}
 
 	.table {
 		display: block;
