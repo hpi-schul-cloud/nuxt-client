@@ -11,8 +11,12 @@
 			@click="() => $emit('room:manage-members')"
 		/>
 		<KebabMenuActionRoomCopy
-			v-if="isRoomCopyFeatureEnabled && canCopyRoom"
+			v-if="props.isCopyEnabled && canCopyRoom"
 			@click="() => $emit('room:copy')"
+		/>
+		<KebabMenuActionShare
+			v-if="props.isShareEnabled && canShareRoom"
+			@click="() => $emit('room:share')"
 		/>
 		<KebabMenuActionDelete
 			v-if="canDeleteRoom"
@@ -29,16 +33,19 @@ import {
 	KebabMenu,
 	KebabMenuActionDelete,
 	KebabMenuActionRoomCopy,
+	KebabMenuActionShare,
 	KebabMenuActionEdit,
 	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,
 } from "@ui-kebab-menu";
-import { useRoomAuthorization, useRoomCopy } from "@data-room";
+import { useRoomAuthorization } from "@data-room";
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
 
-defineProps({
+const props = defineProps({
 	roomName: { type: String, required: false, default: undefined },
+	isCopyEnabled: { type: Boolean, required: false, default: false },
+	isShareEnabled: { type: Boolean, required: false, default: false },
 });
 
 const emit = defineEmits([
@@ -46,12 +53,11 @@ const emit = defineEmits([
 	"room:manage-members",
 	"room:delete",
 	"room:copy",
+	"room:share",
 	"room:leave",
 ]);
 
 const { t } = useI18n();
-
-const { isRoomCopyFeatureEnabled } = useRoomCopy();
 
 const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 	const shouldDelete = await confirmation;
@@ -63,6 +69,7 @@ const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 const {
 	canAddRoomMembers,
 	canCopyRoom,
+	canShareRoom,
 	canEditRoom,
 	canDeleteRoom,
 	canViewRoom,

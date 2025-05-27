@@ -15,6 +15,7 @@ export const useRoomAuthorization = () => {
 	const canCreateRoom = ref(false);
 	const canDeleteRoom = ref(false);
 	const canCopyRoom = ref(false);
+	const canShareRoom = ref(false);
 	const canEditRoom = ref(false);
 	const canEditRoomContent = ref(false);
 	const canLeaveRoom = ref(false);
@@ -33,6 +34,8 @@ export const useRoomAuthorization = () => {
 			) && authModule.getUserRoles.includes(Roles.Teacher);
 		canDeleteRoom.value = permissions.includes(Permission.RoomDelete);
 		canCopyRoom.value = permissions.includes(Permission.RoomCopy);
+		// TODO canShareRoom.value = permissions.includes(Permission.RoomShare);
+		canShareRoom.value = true; // Temporary fix, as sharing is not implemented yet
 		canEditRoom.value = permissions.includes(Permission.RoomEdit);
 		canEditRoomContent.value = permissions.includes(Permission.RoomContentEdit);
 		canLeaveRoom.value = permissions.includes(Permission.RoomLeave);
@@ -51,6 +54,7 @@ export const useRoomAuthorization = () => {
 		canCreateRoom,
 		canDeleteRoom,
 		canCopyRoom,
+		canShareRoom,
 		canEditRoom,
 		canEditRoomContent,
 		canLeaveRoom,

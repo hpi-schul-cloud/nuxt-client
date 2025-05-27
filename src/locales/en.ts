@@ -792,6 +792,8 @@ export default {
 		"Geogebra IDs",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Course groups",
+	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
+		"Room members and permissions",
 	"components.molecules.share.options.tableHeader.InfoText":
 		"The following content will not be copied:",
 	"components.molecules.share.courses.result.linkLabel": "Link course copy",
@@ -809,6 +811,9 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Link only valid within the school",
 	"components.molecules.share.options.title": "Share settings",
+	"components.molecules.share.room.options.infoText":
+		"With the following link, this room can be copied by other people. If an actively used room should be shared, please first create a duplicate and share that.",
+	"components.molecules.share.room.result.linkLabel": "Link room copy",
 	"components.molecules.share.result.mailShare": "Send as mail",
 	"components.molecules.share.result.qrCodeScan": "Scan QR code",
 	"components.molecules.share.result.title": "Share via",

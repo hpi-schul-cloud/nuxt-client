@@ -817,6 +817,8 @@ export default {
 		"Ідентифікатори Geogebra",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Групи курсів",
+	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
+		"Учасники кімнати та їхні дозволи",
 	"components.molecules.share.options.tableHeader.InfoText":
 		"Наступний вміст не буде скопійовано:",
 	"components.molecules.share.courses.result.linkLabel":
@@ -832,6 +834,9 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Посилання дійсне тільки в межах школи",
 	"components.molecules.share.options.title": "Налаштування спільного доступу",
+	"components.molecules.share.room.options.infoText":
+		"За цим посиланням цю кімнату можуть скопіювати інші користувачі. Якщо потрібно поділитися кімнатою, яка активно використовується, спочатку створіть дублікат і поділіться ним.",
+	"components.molecules.share.room.result.linkLabel": "Копія теми посилання",
 	"components.molecules.share.result.mailShare": "Надіслати поштою",
 	"components.molecules.share.result.qrCodeScan": "Відскануйте QR-код",
 	"components.molecules.share.result.title": "Поділіться через",

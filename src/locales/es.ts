@@ -818,6 +818,8 @@ export default {
 		"ID de Geogebra",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Grupos de cursos",
+	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
+		"Miembros y permisos de la sala",
 	"components.molecules.share.options.tableHeader.InfoText":
 		"No se copiará el siguiente contenido:",
 	"components.molecules.share.courses.result.linkLabel":
@@ -833,6 +835,10 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"El enlace sólo es válido dentro de la escuela",
 	"components.molecules.share.options.title": "Compartir la configuración",
+	"components.molecules.share.room.options.infoText":
+		"Con el siguiente enlace, esta sala puede ser copiada por otras personas. Si se debe compartir una sala en uso activo, por favor, primero cree un duplicado y compártalo.",
+	"components.molecules.share.room.result.linkLabel":
+		"Enlace a la copia del salón",
 	"components.molecules.share.result.mailShare": "Enviar como correo",
 	"components.molecules.share.result.qrCodeScan": "Escanear código QR",
 	"components.molecules.share.result.title": "Compartir vía",

@@ -12,9 +12,12 @@
 				</h1>
 				<RoomMenu
 					:room-name="room?.name"
+					:is-copy-enabled="isRoomCopyFeatureEnabled"
+					:is-share-enabled="isRoomShareFeatureEnabled"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
 					@room:copy="onCopy"
+					@room:share="onShare"
 					@room:delete="onDelete"
 					@room:leave="onLeaveRoom"
 				/>
@@ -38,21 +41,30 @@
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 		<RoomCopyFlow
-			v-if="room && hasRoomCopyStarted"
+			v-if="hasRoomCopyStarted"
 			:room="room"
 			@copy:success="onCopySuccess"
 			@copy:ended="onCopyEnded"
 		/>
+		<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.Room" />
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { BoardLayout } from "@/serverApi/v3";
+import ShareModal from "@/components/share/ShareModal.vue";
+import {
+	BoardLayout,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
 import { authModule } from "@/store";
 import { RoomDetails } from "@/types/room/Room";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+	SHARE_MODULE_KEY,
+} from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	useRoomAuthorization,
@@ -86,6 +98,7 @@ const room = toRef(props, "room");
 const router = useRouter();
 const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const shareModule = injectStrict(SHARE_MODULE_KEY);
 
 const { deleteRoom, leaveRoom } = useRoomsState();
 const { askConfirmation } = useConfirmationDialog();
@@ -107,6 +120,7 @@ const {
 	canEditRoomContent,
 	canLeaveRoom,
 	canCopyRoom,
+	canShareRoom,
 } = useRoomAuthorization();
 
 const visibleBoards = computed(() =>
@@ -203,6 +217,10 @@ const hasRoomCopyStarted = ref(false);
 const isRoomCopyFeatureEnabled = computed(() => {
 	return envConfigModule.getEnv.FEATURE_ROOM_COPY_ENABLED;
 });
+const isRoomShareFeatureEnabled = computed(() => {
+	// return envConfigModule.getEnv.FEATURE_ROOM_SHARE_ENABLED;
+	return true; // TODO: Remove this line when the feature is implemented
+});
 
 const onCopy = () => {
 	if (isRoomCopyFeatureEnabled.value && canCopyRoom.value) {
@@ -221,6 +239,15 @@ const onCopySuccess = (copyId: string) => {
 
 const onCopyEnded = () => {
 	hasRoomCopyStarted.value = false;
+};
+
+const onShare = () => {
+	if (isRoomShareFeatureEnabled.value && canShareRoom.value) {
+		shareModule.startShareFlow({
+			id: room.value.id,
+			type: ShareTokenBodyParamsParentTypeEnum.Room,
+		});
+	}
 };
 
 const onDelete = async () => {

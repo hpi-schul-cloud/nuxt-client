@@ -1766,6 +1766,13 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    // TODO re-generate API client after backend changes
+    FEATURE_ROOM_SHARE_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_ROOM_MEMBERS_TABS_ENABLED: boolean;
     /**
      * 
@@ -9350,7 +9357,8 @@ export enum ShareTokenBodyParamsParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
     Lessons = 'lessons',
-    ColumnBoard = 'columnBoard'
+    ColumnBoard = 'columnBoard',
+    Room = 'room',
 }
 
 /**

@@ -14,10 +14,6 @@ export interface ShareOptions {
 	hasExpiryDate: boolean;
 }
 
-export interface SharePayload extends ShareOptions {
-	id: string;
-}
-
 export interface StartFlow {
 	id: string;
 	type: ShareTokenBodyParamsParentTypeEnum;
@@ -43,7 +39,7 @@ export default class ShareModule extends VuexModule {
 
 	@Action
 	async createShareUrl(
-		payload: SharePayload
+		payload: ShareOptions
 	): Promise<ShareTokenResponse | undefined> {
 		const shareTokenPayload: ShareTokenBodyParams = {
 			parentType: this.parentType,
