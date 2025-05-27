@@ -1992,6 +1992,10 @@ export default {
 		"Delete the invitation link '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Share invitation link",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Confirm membership request",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Reject membership request",
 	"pages.rooms.invitationlinks.error.create":
 		"Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update":

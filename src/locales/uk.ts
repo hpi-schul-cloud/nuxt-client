@@ -2028,6 +2028,10 @@ export default {
 		"Видалити посилання на запрошення '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Поділіться посиланням на запрошення",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Підтвердити заявку на участь",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Відхилити запит на реєстрацію",
 	"pages.rooms.invitationlinks.error.create":
 		"Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update":

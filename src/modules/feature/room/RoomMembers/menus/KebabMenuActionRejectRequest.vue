@@ -3,7 +3,7 @@
 		:icon="mdiAccountRemoveOutline"
 		data-testid="kebab-menu-action-confirm-request"
 	>
-		Beitrittsanfrage ablehnen
+		{{ t("pages.rooms.members.confirmationTable.menus.reject.label") }}
 	</KebabMenuAction>
 </template>
 

@@ -3,7 +3,7 @@
 		:icon="mdiAccountCheckOutline"
 		data-testid="kebab-menu-action-confirm-request"
 	>
-		Beitrittsanfrage bestätigen
+		{{ t("pages.rooms.members.confirmationTable.menus.confirm.label") }}
 	</KebabMenuAction>
 </template>
 

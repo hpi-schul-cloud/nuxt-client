@@ -2060,6 +2060,10 @@ export default {
 		"¿Suprimir el enlace de invitación '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Compartir enlace de invitación",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Confirmar solicitud de afiliación",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Rechazar la solicitud de adhesión",
 	"pages.rooms.invitationlinks.error.create":
 		"No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update":

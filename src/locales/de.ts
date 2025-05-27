@@ -2027,6 +2027,10 @@ export default {
 		"Einladungslink '{invitation}' wirklich löschen?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Einladungslink teilen",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Beitrittsanfrage bestätigen",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Beitrittsanfrage ablehnen",
 	"pages.rooms.invitationlinks.error.create":
 		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update":
