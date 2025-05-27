@@ -9,9 +9,9 @@ export enum LightBoxContentType {
 export interface LightBoxOptions {
 	type: LightBoxContentType;
 	downloadUrl: string;
-	previewUrl: string;
-	alt: string;
 	name: string;
+	previewUrl?: string;
+	alt?: string;
 }
 
 export const useLightBox = createSharedComposable(() => {

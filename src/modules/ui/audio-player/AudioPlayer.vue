@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex flex-nowrap pb-0 pl-2 pr-1 fill-height align-center">
+	<div class="d-flex flex-nowrap pb-0 pl-2 pr-1 align-center">
 		<audio ref="audio" loading="lazy" data-testid="audio-thumbnail-in-card" />
 		<v-btn
 			v-if="playing"

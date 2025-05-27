@@ -3,7 +3,7 @@
 		v-if="isInteractive"
 		:aria-label="t('common.ariaLabel.openImageInLightBox')"
 		class="interactive-area"
-		@click="openImageInLightbox"
+		@click="handleClick"
 	>
 		<slot />
 	</button>
@@ -15,13 +15,10 @@
 <script setup lang="ts">
 import {
 	convertDownloadToPreviewUrl,
+	isAudioMimeType,
 	isPreviewPossible,
 } from "@/utils/fileHelper";
-import {
-	LightBoxOptions,
-	useLightBox,
-	LightBoxContentType,
-} from "@ui-light-box";
+import { LightBoxContentType, useLightBox } from "@ui-light-box";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { FileRecordItem } from "../types/filerecord-item";
@@ -38,17 +35,40 @@ const { t } = useI18n();
 const isInteractive = computed(
 	() =>
 		fileRecordItem.isSelectable &&
-		isPreviewPossible(fileRecordItem.previewStatus)
+		(isPreviewPossible(fileRecordItem.previewStatus) ||
+			isAudioMimeType(fileRecordItem.mimeType))
 );
+
+const handleClick = () => {
+	if (isPreviewPossible(fileRecordItem.previewStatus)) {
+		openImageInLightbox();
+	} else if (isAudioMimeType(fileRecordItem.mimeType)) {
+		openAudioPlayerInLightbox();
+	} else {
+		// do nothing
+	}
+};
 
 const openImageInLightbox = () => {
 	const previewUrl = convertDownloadToPreviewUrl(fileRecordItem.url);
 
-	const options: LightBoxOptions = {
+	const options = {
 		type: LightBoxContentType.IMAGE,
 		downloadUrl: fileRecordItem.url,
 		previewUrl: previewUrl,
 		alt: `${t("components.cardElement.fileElement.emptyAlt")} ${fileRecordItem.name}`,
+		name: fileRecordItem.name,
+	};
+
+	const { open } = useLightBox();
+
+	open(options);
+};
+
+const openAudioPlayerInLightbox = () => {
+	const options = {
+		type: LightBoxContentType.AUDIO,
+		downloadUrl: fileRecordItem.url,
 		name: fileRecordItem.name,
 	};
 

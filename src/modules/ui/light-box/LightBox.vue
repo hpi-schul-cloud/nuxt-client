@@ -24,8 +24,14 @@
 			<v-col class="d-flex align-items-center" style="height: 100%">
 				<PreviewImage
 					v-if="lightBoxOptions?.type === LightBoxContentType.IMAGE"
-					:src="lightBoxOptions.previewUrl"
-					:alt="lightBoxOptions.alt"
+					:src="lightBoxOptions.previewUrl!"
+					:alt="lightBoxOptions.alt!"
+				/>
+				<AudioPlayer
+					v-else-if="lightBoxOptions?.type === LightBoxContentType.AUDIO"
+					:src="lightBoxOptions?.downloadUrl"
+					class="audio-player bg-grey-darken-3"
+					@click.stop
 				/>
 			</v-col>
 		</v-row>
@@ -40,6 +46,7 @@ import { ref, watch } from "vue";
 import { LightBoxContentType, useLightBox } from "./LightBox.composable";
 import { PreviewImage } from "@ui-preview-image";
 import { useI18n } from "vue-i18n";
+import { AudioPlayer } from "@ui-audio-player";
 
 const { t } = useI18n();
 
@@ -59,3 +66,11 @@ watch(isLightBoxOpen, () => {
 	isImageLoading.value = true;
 });
 </script>
+
+<style scoped>
+.audio-player {
+	width: 320px;
+	height: 64px;
+	margin: 0 auto;
+}
+</style>
