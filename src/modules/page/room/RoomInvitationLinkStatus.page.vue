@@ -108,6 +108,11 @@ const updateInfoMessage = (validationMessage: string, schoolName: string) => {
 		case RoomInvitationLinkValidationError.InvalidLink:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.invalidLink");
 			break;
+		case RoomInvitationLinkValidationError.RoomApplicantWaiting:
+			infoMessage.value = t(
+				"pages.rooms.invitationLinkStatus.confirmationPending"
+			);
+			break;
 		default:
 			infoMessage.value = t("error.generic");
 			break;
