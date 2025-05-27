@@ -4,7 +4,11 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { LightBoxOptions, useLightBox } from "@ui-light-box";
+import {
+	LightBoxContentType,
+	LightBoxOptions,
+	useLightBox,
+} from "@ui-light-box";
 import { mount } from "@vue/test-utils";
 import { ref } from "vue";
 import ImageDisplay from "./ImageDisplay.vue";
@@ -115,6 +119,7 @@ describe("ImageDisplay", () => {
 					alternativeText,
 				});
 				const options: LightBoxOptions = {
+					type: LightBoxContentType.IMAGE,
 					downloadUrl: src,
 					previewUrl: src,
 					alt: alternativeText,
@@ -140,6 +145,7 @@ describe("ImageDisplay", () => {
 						alternativeText,
 					});
 					const options: LightBoxOptions = {
+						type: LightBoxContentType.IMAGE,
 						downloadUrl: src,
 						previewUrl: src,
 						alt: alternativeText,

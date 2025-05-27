@@ -8,12 +8,12 @@
 				@click="close"
 			/>
 
-			<v-toolbar-title v-if="lightBoxOptions.name !== ''">
+			<v-toolbar-title v-if="lightBoxOptions?.name">
 				{{ lightBoxOptions.name }}
 			</v-toolbar-title>
 			<v-spacer />
 			<v-btn
-				v-if="lightBoxOptions.downloadUrl !== ''"
+				v-if="lightBoxOptions?.downloadUrl"
 				:aria-label="t('components.board.action.download')"
 				:icon="mdiTrayArrowDown"
 				data-testid="light-box-download-btn"
@@ -23,6 +23,7 @@
 		<v-row class="ma-0" style="overflow: auto" @click="close">
 			<v-col class="d-flex align-items-center" style="height: 100%">
 				<PreviewImage
+					v-if="lightBoxOptions?.type === LightBoxContentType.IMAGE"
 					:src="lightBoxOptions.previewUrl"
 					:alt="lightBoxOptions.alt"
 				/>
@@ -36,7 +37,10 @@ import { downloadFile } from "@/utils/fileHelper";
 import { mdiClose, mdiTrayArrowDown } from "@icons/material";
 import { onKeyStroke } from "@vueuse/core";
 import { ref, watch } from "vue";
-import { useInternalLightBox } from "./LightBox.composable";
+import {
+	LightBoxContentType,
+	useInternalLightBox,
+} from "./LightBox.composable";
 import { PreviewImage } from "@ui-preview-image";
 import { useI18n } from "vue-i18n";
 
@@ -49,8 +53,8 @@ onKeyStroke("Escape", () => close(), { eventName: "keydown" });
 
 const download = async () => {
 	await downloadFile(
-		lightBoxOptions.value.downloadUrl,
-		lightBoxOptions.value.name
+		lightBoxOptions.value!.downloadUrl,
+		lightBoxOptions.value!.name
 	);
 };
 

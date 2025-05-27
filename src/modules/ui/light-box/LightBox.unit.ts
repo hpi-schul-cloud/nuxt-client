@@ -12,7 +12,11 @@ import {
 	VRow,
 	VToolbarTitle,
 } from "vuetify/lib/components/index.mjs";
-import { LightBoxOptions, useInternalLightBox } from "./LightBox.composable";
+import {
+	LightBoxOptions,
+	LightBoxContentType,
+	useInternalLightBox,
+} from "./LightBox.composable";
 import LightBox from "./LightBox.vue";
 
 jest.mock("./LightBox.composable");
@@ -34,6 +38,7 @@ describe("LightBox", () => {
 		const close = jest.fn();
 		const isLightBoxOpen = ref(true);
 		const lightBoxOptions = ref<LightBoxOptions>({
+			type: LightBoxContentType.IMAGE,
 			downloadUrl: props.downloadUrl ?? "test-downloadUrl",
 			previewUrl: props.previewUrl ?? "test-previewUrl",
 			alt: props.alt ?? "test-alt",

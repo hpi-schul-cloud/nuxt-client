@@ -17,7 +17,11 @@ import {
 	convertDownloadToPreviewUrl,
 	isPreviewPossible,
 } from "@/utils/fileHelper";
-import { LightBoxOptions, useLightBox } from "@ui-light-box";
+import {
+	LightBoxOptions,
+	useLightBox,
+	LightBoxContentType,
+} from "@ui-light-box";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { FileRecordItem } from "../types/filerecord-item";
@@ -41,6 +45,7 @@ const openImageInLightbox = () => {
 	const previewUrl = convertDownloadToPreviewUrl(fileRecordItem.url);
 
 	const options: LightBoxOptions = {
+		type: LightBoxContentType.IMAGE,
 		downloadUrl: fileRecordItem.url,
 		previewUrl: previewUrl,
 		alt: `${t("components.cardElement.fileElement.emptyAlt")} ${fileRecordItem.name}`,

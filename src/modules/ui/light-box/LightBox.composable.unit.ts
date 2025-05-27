@@ -1,17 +1,11 @@
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import {
 	LightBoxOptions,
+	LightBoxContentType,
 	useInternalLightBox,
 	useLightBox,
 } from "./LightBox.composable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-
-const defaultLightBoxOptions: LightBoxOptions = {
-	downloadUrl: "",
-	previewUrl: "",
-	alt: "",
-	name: "",
-};
 
 describe("LightBox composable", () => {
 	describe("useLightBox", () => {
@@ -38,6 +32,7 @@ describe("LightBox composable", () => {
 					expect(isLightBoxOpen.value).toBe(false);
 
 					const data: LightBoxOptions = {
+						type: LightBoxContentType.IMAGE,
 						downloadUrl: "url-string",
 						previewUrl: "previewUrl-string",
 						alt: "alt-string",
@@ -75,9 +70,9 @@ describe("LightBox composable", () => {
 				const { openInternal, isLightBoxOpen, lightBoxOptions } = setup();
 
 				isLightBoxOpen.value = false;
-				lightBoxOptions.value = defaultLightBoxOptions;
 
 				const data: LightBoxOptions = {
+					type: LightBoxContentType.IMAGE,
 					downloadUrl: "url-string",
 					previewUrl: "previewUrl-string",
 					alt: "alt-string",
@@ -96,6 +91,7 @@ describe("LightBox composable", () => {
 
 				isLightBoxOpen.value = true;
 				lightBoxOptions.value = {
+					type: LightBoxContentType.IMAGE,
 					downloadUrl: "downloadUrl-string",
 					previewUrl: "previewUrl-string",
 					alt: "alt-string",
@@ -104,7 +100,6 @@ describe("LightBox composable", () => {
 				close();
 
 				expect(isLightBoxOpen.value).toBe(false);
-				expect(lightBoxOptions.value).toStrictEqual(defaultLightBoxOptions);
 			});
 		});
 	});

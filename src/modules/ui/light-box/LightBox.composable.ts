@@ -1,7 +1,13 @@
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 
+export enum LightBoxContentType {
+	IMAGE = "image",
+	AUDIO = "audio",
+}
+
 export interface LightBoxOptions {
+	type: LightBoxContentType;
 	downloadUrl: string;
 	previewUrl: string;
 	alt: string;
@@ -23,20 +29,9 @@ export const useLightBox = () => {
 
 export const useInternalLightBox = createSharedComposable(() => {
 	const isLightBoxOpen = ref<boolean>(false);
-	const lightBoxOptions = ref<LightBoxOptions>({
-		downloadUrl: "",
-		previewUrl: "",
-		alt: "",
-		name: "",
-	});
+	const lightBoxOptions = ref<LightBoxOptions>();
 
 	const close = () => {
-		lightBoxOptions.value = {
-			downloadUrl: "",
-			previewUrl: "",
-			alt: "",
-			name: "",
-		};
 		isLightBoxOpen.value = false;
 	};
 
