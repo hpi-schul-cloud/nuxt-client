@@ -8359,7 +8359,8 @@ export enum RoomInvitationLinkValidationError {
     OnlyForTeachers = 'ONLY_FOR_TEACHERS',
     RestrictedToCreatorSchool = 'RESTRICTED_TO_CREATOR_SCHOOL',
     CantInviteStudentsFromOtherSchool = 'CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL',
-    InvalidLink = 'INVALID_LINK'
+    InvalidLink = 'INVALID_LINK',
+    RoomApplicantWaiting = 'ROOM_APPLICANT_WAITING'
 }
 
 /**
@@ -23348,7 +23349,7 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
         roomInvitationLinkControllerCreateRoomInvitationLink: async (createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'createRoomInvitationLinkBodyParams' is not null or undefined
             assertParamExists('roomInvitationLinkControllerCreateRoomInvitationLink', 'createRoomInvitationLinkBodyParams', createRoomInvitationLinkBodyParams)
-            const localVarPath = `/room-invitation-links`;
+            const localVarPath = `/rooms/invitation-link`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -23388,7 +23389,7 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
         roomInvitationLinkControllerDeleteLinks: async (roomInvitationLinkIds: Array<string>, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'roomInvitationLinkIds' is not null or undefined
             assertParamExists('roomInvitationLinkControllerDeleteLinks', 'roomInvitationLinkIds', roomInvitationLinkIds)
-            const localVarPath = `/room-invitation-links`;
+            const localVarPath = `/rooms/invitation-link`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -23432,7 +23433,7 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
             assertParamExists('roomInvitationLinkControllerUpdateLink', 'roomInvitationLinkId', roomInvitationLinkId)
             // verify required parameter 'updateRoomInvitationLinkBodyParams' is not null or undefined
             assertParamExists('roomInvitationLinkControllerUpdateLink', 'updateRoomInvitationLinkBodyParams', updateRoomInvitationLinkBodyParams)
-            const localVarPath = `/room-invitation-links/{roomInvitationLinkId}`
+            const localVarPath = `/rooms/invitation-link/{roomInvitationLinkId}`
                 .replace(`{${"roomInvitationLinkId"}}`, encodeURIComponent(String(roomInvitationLinkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -23473,7 +23474,7 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
         roomInvitationLinkControllerUseLink: async (roomInvitationLinkId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'roomInvitationLinkId' is not null or undefined
             assertParamExists('roomInvitationLinkControllerUseLink', 'roomInvitationLinkId', roomInvitationLinkId)
-            const localVarPath = `/room-invitation-links/{roomInvitationLinkId}`
+            const localVarPath = `/rooms/invitation-link/{roomInvitationLinkId}`
                 .replace(`{${"roomInvitationLinkId"}}`, encodeURIComponent(String(roomInvitationLinkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
