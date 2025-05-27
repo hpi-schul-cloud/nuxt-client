@@ -29,7 +29,7 @@ describe("LightBox composable", () => {
 		});
 
 		describe("when open is called", () => {
-			it("should open the LightBox", async () => {
+			it("should open the LightBox and set the LightBoxOptions", async () => {
 				const { open, isLightBoxOpen, lightBoxOptions } = setup();
 
 				isLightBoxOpen.value = false;
@@ -49,7 +49,7 @@ describe("LightBox composable", () => {
 		});
 
 		describe("when close is called", () => {
-			it("should close the LightBox and set lightBoxOptions to undefined", async () => {
+			it("should close the LightBox", async () => {
 				const { close, isLightBoxOpen, lightBoxOptions } = setup();
 
 				isLightBoxOpen.value = true;
