@@ -8,12 +8,11 @@
 				@click="close"
 			/>
 
-			<v-toolbar-title v-if="lightBoxOptions?.name">
-				{{ lightBoxOptions.name }}
+			<v-toolbar-title>
+				{{ lightBoxOptions!.name }}
 			</v-toolbar-title>
 			<v-spacer />
 			<v-btn
-				v-if="lightBoxOptions?.downloadUrl"
 				:aria-label="t('components.board.action.download')"
 				:icon="mdiTrayArrowDown"
 				data-testid="light-box-download-btn"
