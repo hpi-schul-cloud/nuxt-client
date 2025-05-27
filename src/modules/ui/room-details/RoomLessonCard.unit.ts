@@ -9,7 +9,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
-import { VCard } from "vuetify/lib/components/index.mjs";
+import { VCard } from "vuetify/lib/components/index";
 import RoomLessonCard from "./RoomLessonCard.vue";
 import { LessonData } from "./types";
 
