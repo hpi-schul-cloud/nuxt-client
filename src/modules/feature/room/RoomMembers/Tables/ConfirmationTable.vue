@@ -8,7 +8,8 @@
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionDeleteMemberInvitation />
+			<KebabMenuActionConfirmRequest />
+			<KebabMenuActionRejectRequest />
 		</template>
 
 		<template #[`item.actions`]="{ item }">
@@ -40,7 +41,10 @@
 import { useI18n } from "vue-i18n";
 import { DataTable } from "@ui-data-table";
 import { useRoomMembersStore } from "@data-room";
-import { KebabMenuActionDeleteMemberInvitation } from "@ui-kebab-menu";
+import {
+	KebabMenuActionConfirmRequest,
+	KebabMenuActionRejectRequest,
+} from "../menus";
 import {
 	mdiAccountCheckOutline,
 	mdiAccountRemoveOutline,
