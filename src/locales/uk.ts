@@ -1838,6 +1838,8 @@ export default {
 		"Посилання на запрошення, на жаль, дійсне лише для вчителів",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Посилання на запрошення, на жаль, дійсне лише для користувачів школи «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.confirmationPending":
+		"Заявка на приєднання до кімнати успішно подана - очікується підтвердження",
 	"pages.rooms.invitationLinkStatus.title": "Посилання на запрошення",
 	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
 	"pages.rooms.menuItems.startSync": "Почніть синхронізацію",

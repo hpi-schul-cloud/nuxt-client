@@ -1803,6 +1803,8 @@ export default {
 		"The invitation link is unfortunately only valid for teachers",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"The invitation link is unfortunately only valid for users of the school “{schoolName}”",
+	"pages.rooms.invitationLinkStatus.confirmationPending":
+		"Application to join the room successfully submitted - confirmation pending",
 	"pages.rooms.invitationLinkStatus.title": "Invitation link",
 	"pages.rooms.menuItems.endSync": "End synchronization",
 	"pages.rooms.menuItems.startSync": "Start synchronization",

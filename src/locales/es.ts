@@ -1858,6 +1858,8 @@ export default {
 		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Lamentablemente, el enlace de invitación sólo es válido para los usuarios de la escuela «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.confirmationPending":
+		"Solicitud de ingreso en la sala presentada con éxito - pendiente de confirmación",
 	"pages.rooms.invitationLinkStatus.title": "Enlace de invitación",
 	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.rooms.menuItems.startSync": "Iniciar sincronización",

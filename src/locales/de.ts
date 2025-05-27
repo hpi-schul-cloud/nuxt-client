@@ -1833,6 +1833,8 @@ export default {
 		"Der Einladungslink ist leider nur für Lernbegleitungen gültig",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Der Einladungslink ist leider nur für Nutzende der Schule “{schoolName}” gültig",
+	"pages.rooms.invitationLinkStatus.confirmationPending":
+		"Beitrittsanfrage zum Raum erfolgreich gestellt – Bestätigung ausstehend",
 	"pages.rooms.invitationLinkStatus.title": "Einladungslink",
 	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.menuItems.startSync": "Synchronisation starten",
