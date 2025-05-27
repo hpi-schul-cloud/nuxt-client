@@ -288,32 +288,62 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	};
 
 	const confirmInvitations = async (ids: string[]) => {
-		await roomApi.roomControllerChangeRolesOfMembers(getRoomId(), {
-			userIds: ids,
-			roleName: ChangeRoomRoleBodyParamsRoleNameEnum.Roomviewer,
-		});
-
-		roomMembers.value
-			.filter((member) => {
-				return ids.includes(member.userId);
-			})
-			.forEach((member) => {
-				updateMemberRole(member, RoleName.Roomviewer, true);
+		try {
+			await roomApi.roomControllerChangeRolesOfMembers(getRoomId(), {
+				userIds: ids,
+				roleName: ChangeRoomRoleBodyParamsRoleNameEnum.Roomviewer,
 			});
+
+			showNotification(ids, "confirm");
+
+			roomMembers.value
+				.filter((member) => {
+					return ids.includes(member.userId);
+				})
+				.forEach((member) => {
+					updateMemberRole(member, RoleName.Roomviewer, true);
+				});
+		} catch {
+			showFailure(t("pages.rooms.members.error.updateRole"));
+		}
 
 		confirmationSelectedIds.value = [];
 	};
 
 	const rejectInvitations = async (ids: string[]) => {
-		await roomApi.roomControllerRemoveMembers(getRoomId(), {
-			userIds: ids,
-		});
+		try {
+			await roomApi.roomControllerRemoveMembers(getRoomId(), {
+				userIds: ids,
+			});
 
-		roomMembers.value = roomMembers.value.filter((member) => {
-			return !ids.includes(member.userId);
-		});
+			showNotification(ids, "reject");
+
+			roomMembers.value = roomMembers.value.filter((member) => {
+				return !ids.includes(member.userId);
+			});
+		} catch {
+			showFailure(t("pages.rooms.members.error.remove"));
+		}
 
 		confirmationSelectedIds.value = [];
+	};
+
+	const showNotification = (
+		ids: string[],
+		actionType: "confirm" | "reject"
+	) => {
+		showSuccess(
+			ids.length > 1
+				? t(
+						`pages.rooms.members.confirmationTable.notification.${actionType}.multiple`
+					)
+				: t(
+						`pages.rooms.members.confirmationTable.notification.${actionType}`,
+						{
+							fullName: getMemberFullName(ids[0]),
+						}
+					)
+		);
 	};
 
 	const updateMemberRole = (

@@ -2032,6 +2032,14 @@ export default {
 		"Підтвердити заявку на участь",
 	"pages.rooms.members.confirmationTable.menus.reject.label":
 		"Відхилити запит на реєстрацію",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} був доданий як член кімнати.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"Запит {fullName} на приєднання було відхилено.",
+	"pages.rooms.members.invitationTable.notification.confirm.multiple":
+		"Вибрані особи були додані до кімнати як учасники.",
+	"pages.rooms.members.invitationTable.notification.multipleReject":
+		"Вибрані особи були додані до кімнати як учасники.",
 	"pages.rooms.invitationlinks.error.create":
 		"Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update":

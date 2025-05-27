@@ -3,7 +3,7 @@
 		:items="roomApplicants"
 		:header-bottom="headerBottom"
 		:table-headers="tableHeaders"
-		:show-select="true"
+		:show-select="showSelect"
 		select-item-key="userId"
 		:external-selected-ids="confirmationSelectedIds"
 		@update:selected-ids="onUpdateSelectedIds"
@@ -47,8 +47,6 @@ import {
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
-const { t } = useI18n();
-
 defineProps({
 	headerBottom: {
 		type: Number,
@@ -60,12 +58,11 @@ defineProps({
 	},
 });
 
+const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
 const { roomApplicants: rawRoomApplicants, confirmationSelectedIds } =
 	storeToRefs(roomMembersStore);
-
 const { confirmInvitations, rejectInvitations } = roomMembersStore;
-
 const roomApplicants = computed(() =>
 	rawRoomApplicants.value.map((applicant) => ({ ...applicant }))
 );

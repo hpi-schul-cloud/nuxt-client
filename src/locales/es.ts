@@ -2064,6 +2064,14 @@ export default {
 		"Confirmar solicitud de afiliación",
 	"pages.rooms.members.confirmationTable.menus.reject.label":
 		"Rechazar la solicitud de adhesión",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} ha sido añadido como miembro de la sala.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"La solicitud de {fullName} para unirse ha sido rechazada.",
+	"pages.rooms.members.invitationTable.notification.confirm.multiple":
+		"Las personas seleccionadas han sido añadidas a la sala como miembros.",
+	"pages.rooms.members.invitationTable.notification.multipleReject":
+		"Las solicitudes de adhesión de las personas seleccionadas han sido rechazadas.",
 	"pages.rooms.invitationlinks.error.create":
 		"No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update":

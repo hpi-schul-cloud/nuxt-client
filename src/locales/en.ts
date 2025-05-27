@@ -1996,6 +1996,14 @@ export default {
 		"Confirm membership request",
 	"pages.rooms.members.confirmationTable.menus.reject.label":
 		"Reject membership request",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} has been added as a room member.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"{fullName}'s request to join was rejected.",
+	"pages.rooms.members.invitationTable.notification.confirm.multiple":
+		"The selected persons have been added to the room as members.",
+	"pages.rooms.members.invitationTable.notification.multipleReject":
+		"The membership requests of the selected persons have been rejected.",
 	"pages.rooms.invitationlinks.error.create":
 		"Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update":
