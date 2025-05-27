@@ -61,6 +61,7 @@ describe("@feature-room/RoomGrid", () => {
 
 		const emptyState = wrapper.findComponent(EmptyState);
 		expect(emptyState.exists()).toBe(true);
+		expect(emptyState.props("title")).toBe("pages.rooms.emptyState");
 	});
 
 	it("should render tiles for each room", () => {
