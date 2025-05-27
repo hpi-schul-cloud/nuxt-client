@@ -11,7 +11,7 @@
 					{{ folderName }}
 				</h1>
 				<FolderMenu
-					v-if="!isStudent"
+					v-if="hasEditPermission"
 					:folder-name="folderName"
 					@delete="onDelete"
 				/>
@@ -20,7 +20,7 @@
 		<FileTable
 			:is-loading="isLoading"
 			:is-empty="isEmpty"
-			:is-student="isStudent"
+			:has-edit-permission="hasEditPermission"
 			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
 			@delete-files="onDeleteFiles"
@@ -42,20 +42,23 @@
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import router from "@/router";
-import AuthModule from "@/store/auth";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { useBoardApi, useSharedBoardPageInformation } from "@data-board";
+import {
+	useBoardApi,
+	useBoardPermissions,
+	useBoardStore,
+	useSharedBoardPageInformation,
+} from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
+import { LightBox } from "@ui-light-box";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
-import { LightBox } from "@ui-light-box";
 
 const boardApi = useBoardApi();
 
@@ -81,15 +84,16 @@ const { createPageInformation } = useSharedBoardPageInformation();
 const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles, rename } =
 	useFileStorageApi();
 
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-const isStudent = computed(() => authModule.getUserRoles.includes("student"));
+const boardStore = useBoardStore();
+
+const { hasEditPermission } = useBoardPermissions();
 
 const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
 const fileInput = ref<HTMLInputElement | null>(null);
 
 const fabAction = computed(() => {
-	if (isStudent.value) return;
+	if (!hasEditPermission.value) return;
 
 	return {
 		icon: mdiPlus,
@@ -176,6 +180,10 @@ onMounted(async () => {
 
 	await fetchFileFolderElement(props.folderId);
 	await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
+	if (!boardStore.board) {
+		await boardStore.fetchBoardRequest({ boardId: parent.value.id });
+	}
+
 	isLoading.value = false;
 });
 
