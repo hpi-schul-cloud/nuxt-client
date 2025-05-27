@@ -34,10 +34,7 @@ const props = defineProps({
 		type: Object as PropType<RichTextElementResponse>,
 		required: true,
 	},
-	isEditMode: {
-		type: Boolean,
-		required: true,
-	},
+	isEditMode: { type: Boolean, required: true },
 	columnIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
 });
