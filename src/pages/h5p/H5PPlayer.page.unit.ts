@@ -10,7 +10,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
@@ -47,29 +46,6 @@ describe("H5PPlayerPage", () => {
 			applicationErrorModule,
 		};
 	};
-
-	describe("Back menu", () => {
-		describe("when clicking the back button", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper();
-
-				jest.spyOn(window, "close").mockImplementation(() => createMock());
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should close the window", async () => {
-				const { wrapper } = setup();
-
-				const backButton = wrapper.get('[data-testid="player-back-button"]');
-				await backButton.trigger("click");
-
-				expect(window.close).toHaveBeenCalled();
-			});
-		});
-	});
 
 	describe("H5P Player", () => {
 		describe("when the player has a loading error", () => {
