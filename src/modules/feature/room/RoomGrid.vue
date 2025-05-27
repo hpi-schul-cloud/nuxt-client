@@ -9,7 +9,7 @@
 		</VContainer>
 	</template>
 	<template v-else-if="isEmpty">
-		<EmptyState :title="t('pages.rooms.emptyState.title')">
+		<EmptyState :title="t('pages.rooms.emptyState')">
 			<template #media>
 				<RoomsEmptyStateSvg />
 			</template>
