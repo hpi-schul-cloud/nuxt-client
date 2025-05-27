@@ -43,7 +43,7 @@
 		hover
 		item-value="userId"
 		mobile-breakpoint="sm"
-		:items="roomMembers"
+		:items="roomMembersWithoutApplicants"
 		item-selectable="isSelectable"
 		:headers="tableHeader"
 		:items-per-page-options="[5, 10, 25, 50, 100]"
@@ -148,7 +148,8 @@ const { t } = useI18n();
 const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
-const { roomMembers, selectedIds } = storeToRefs(roomMembersStore);
+const { roomMembersWithoutApplicants, selectedIds } =
+	storeToRefs(roomMembersStore);
 const { isRoomOwner, removeMembers } = roomMembersStore;
 
 const { askConfirmation } = useConfirmationDialog();
@@ -161,7 +162,7 @@ const stickyStyle = computed(() => ({
 	top: `${props.headerBottom}px`,
 }));
 
-const membersFilterCount = ref(roomMembers.value?.length);
+const membersFilterCount = ref(roomMembersWithoutApplicants.value?.length);
 const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
 	const isNotCurrentUser = userId !== authModule.getUser?.id;
 	const isNotRoomOwner = !isRoomOwner(userId);
@@ -174,7 +175,9 @@ const onDialogClose = () => {
 
 const onUpdateFilter = (filteredMembers: RoomMember[]) => {
 	membersFilterCount.value =
-		search.value === "" ? roomMembers.value.length : filteredMembers.length;
+		search.value === ""
+			? roomMembersWithoutApplicants.value.length
+			: filteredMembers.length;
 };
 
 const onResetSelectedMembers = () => {
@@ -200,8 +203,8 @@ const confirmRemoval = async (userIds: string[]) => {
 };
 
 const onChangePermission = (userIds: string[]) => {
-	membersToChangeRole.value = roomMembers.value.filter((member) =>
-		userIds.includes(member.userId)
+	membersToChangeRole.value = roomMembersWithoutApplicants.value.filter(
+		(member) => userIds.includes(member.userId)
 	);
 
 	isChangeRoleDialogOpen.value = true;
