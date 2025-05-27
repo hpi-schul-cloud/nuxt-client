@@ -51,6 +51,7 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardLayout } from "@/serverApi/v3";
 import { authModule } from "@/store";
+import { RoomDetails } from "@/types/room/Room";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
@@ -75,9 +76,12 @@ import {
 } from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, ComputedRef, ref } from "vue";
+import { computed, ComputedRef, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+
+const props = defineProps<{ room: RoomDetails }>();
+const room = toRef(props, "room");
 
 const router = useRouter();
 const { t } = useI18n();
@@ -87,13 +91,13 @@ const { deleteRoom, leaveRoom } = useRoomsState();
 const { askConfirmation } = useConfirmationDialog();
 
 const roomDetailsStore = useRoomDetailsStore();
-const { room, roomBoards } = storeToRefs(roomDetailsStore);
+const { roomBoards } = storeToRefs(roomDetailsStore);
 const { createBoard } = roomDetailsStore;
 
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
 const pageTitle = computed(() =>
-	buildPageTitle(`${room.value?.name} - ${t("pages.roomDetails.title")}`)
+	buildPageTitle(`${room.value.name} - ${t("pages.roomDetails.title")}`)
 );
 useTitle(pageTitle);
 
@@ -112,7 +116,7 @@ const visibleBoards = computed(() =>
 );
 
 const roomTitle = computed(() => {
-	return room.value ? room.value.name : t("pages.roomDetails.title");
+	return room.value.name;
 });
 
 const boardLayoutsEnabled = computed(
@@ -178,8 +182,6 @@ const fabItemClickHandler = (event: string) => {
 };
 
 const onEdit = () => {
-	if (!room.value) return;
-
 	router.push({
 		name: "room-edit",
 		params: {
@@ -189,8 +191,6 @@ const onEdit = () => {
 };
 
 const onManageMembers = () => {
-	if (!room.value) return;
-
 	router.push({
 		name: "room-members",
 		params: {
@@ -224,7 +224,7 @@ const onCopyEnded = () => {
 };
 
 const onDelete = async () => {
-	if (!room.value || !canDeleteRoom.value) return;
+	if (!canDeleteRoom.value) return;
 
 	await deleteRoom(room.value.id);
 	router.push({ name: "rooms" });
@@ -237,12 +237,12 @@ const onLeaveRoom = async () => {
 	}
 
 	const currentUserId = authModule.getUser?.id;
-	const roomId = room.value?.id;
-	if (!currentUserId || !roomId) return;
+	if (!currentUserId) return;
+	const roomId = room.value.id;
 
 	const shouldLeave = await askConfirmation({
 		message: t("pages.rooms.leaveRoom.confirmation", {
-			roomName: room.value?.name,
+			roomName: room.value.name,
 		}),
 		confirmActionLangKey: "common.actions.leave",
 	});
@@ -253,7 +253,7 @@ const onLeaveRoom = async () => {
 };
 
 const onCreateBoard = async (layout: BoardLayout) => {
-	if (!room.value || !canEditRoomContent.value) return;
+	if (!canEditRoomContent.value) return;
 
 	const boardId = await createBoard(
 		room.value.id,
