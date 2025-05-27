@@ -66,84 +66,86 @@ const onBlur = () => {
 const onKeyUp = () => ensurePoliteNotifications();
 </script>
 <style lang="scss" scoped>
-::v-deep {
-	.ck-content {
-		overflow: hidden; // prevent margin collapse
+:deep(.ck-content) {
+	overflow: hidden; // prevent margin collapse
 
-		h4,
-		h5 {
-			font-family: var(--font-accent);
-			font-weight: var(--font-weight-bold);
-			margin-bottom: var(--space-xs);
-			margin-top: var(--space-md-2);
-		}
-
-		h4 {
-			font-size: var(--heading-6);
-			letter-spacing: 0.01em;
-		}
-
-		h5 {
-			font-size: var(--text-md);
-			letter-spacing: 0.015em;
-		}
-
-		p,
-		ul,
-		ol {
-			font-family: var(--font-primary);
-			font-weight: var(--font-weight-normal);
-			font-size: var(--text-md);
-			margin-bottom: var(--space-xs);
-		}
-
-		ul {
-			list-style-type: circle;
-		}
-
-		.table {
-			display: block;
-			overflow-x: auto;
-			overflow-y: hidden;
-			padding-right: 1px;
-		}
-
-		.math-tex {
-			font-size: large;
-		}
+	h4,
+	h5 {
+		font-family: var(--font-accent);
+		font-weight: var(--font-weight-bold);
+		margin-bottom: var(--space-xs);
+		margin-top: var(--space-md-2);
 	}
 
-	.ck.ck-editor__editable_inline {
-		padding: 0;
-
-		p,
-		ol,
-		ul {
-			margin-top: 0;
-		}
-
-		h4:first-of-type,
-		h5:first-of-type {
-			margin-top: var(--space-md-2);
-		}
+	h4 {
+		font-size: var(--heading-6);
+		letter-spacing: 0.01em;
 	}
 
-	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around {
-		> .ck-widget__type-around__button_before {
-			top: 0.5rem;
-			left: 0.5rem;
-			margin-left: 0;
-		}
-
-		> .ck-widget__type-around__button_after {
-			bottom: 0.5rem;
-			right: 0.5rem;
-		}
+	h5 {
+		font-size: var(--text-md);
+		letter-spacing: 0.015em;
 	}
 
-	.ck-widget.ck-widget_with-selection-handle:hover
-		> .ck-widget__selection-handle {
-		display: none;
+	p,
+	ul,
+	ol {
+		font-family: var(--font-primary);
+		font-weight: var(--font-weight-normal);
+		font-size: var(--text-md);
+		margin-bottom: var(--space-xs);
 	}
+
+	ul {
+		list-style-type: circle;
+	}
+
+	.table {
+		display: block;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding-right: 1px;
+	}
+
+	.math-tex {
+		font-size: large;
+	}
+}
+
+:deep(.ck.ck-editor__editable_inline) {
+	padding: 0;
+
+	p,
+	ol,
+	ul {
+		margin-top: 0;
+	}
+
+	h4:first-of-type,
+	h5:first-of-type {
+		margin-top: var(--space-md-2);
+	}
+}
+
+:deep(
+		.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around
+	) {
+	> .ck-widget__type-around__button_before {
+		top: 0.5rem;
+		left: 0.5rem;
+		margin-left: 0;
+	}
+
+	> .ck-widget__type-around__button_after {
+		bottom: 0.5rem;
+		right: 0.5rem;
+	}
+}
+
+:deep(
+		.ck-widget.ck-widget_with-selection-handle:hover
+			> .ck-widget__selection-handle
+	) {
+	display: none;
 }
 </style>
