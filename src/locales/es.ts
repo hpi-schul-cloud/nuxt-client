@@ -10,7 +10,7 @@ export default {
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
 	"common.actions.download": "Descargar",
-	"common.actions.duplicate": "Duplicar",
+	"common.actions.copyRoom": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
 	"common.actions.finish": "Finalizar",
@@ -29,6 +29,7 @@ export default {
 	"common.actions.shareLink": "Copiar enlace",
 	"common.actions.update": "Actualizar",
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
+	"common.ariaLabel.openImageInLightBox": "Mostrar imagen en tamaño completo",
 	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
@@ -964,10 +965,10 @@ export default {
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
-	"data-room.duplication.alert.success": "Sala duplicada con éxito.",
-	"data-room.duplication.alert.error":
+	"data-room.copy.alert.success": "Sala duplicada con éxito.",
+	"data-room.copy.alert.error":
 		"No se pudo completar el proceso de duplicación.",
-	"data-room.duplication.loading": "La sala se está duplicando...",
+	"data-room.copy.loading": "La sala se está duplicando...",
 	"error.400": "401 – Solicitud incorrecta",
 	"error.401":
 		"401 – Lamentablemente, falta la autorización para ver este contenido.",
@@ -1029,18 +1030,18 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Grupo de usuarios sincronizado exitosamente",
 	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
-	"feature-room.DuplicationInfoDialog.title": "Duplicar Sala",
-	"feature-room.DuplicationInfoDialog.text.nextStep":
+	"feature-room.CopyInfoDialog.title": "Duplicar Sala",
+	"feature-room.CopyInfoDialog.text.nextStep":
 		"En el siguiente paso, se creará una copia de la sala.",
-	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+	"feature-room.CopyInfoDialog.text.alert.followingContent":
 		"Los siguientes contenidos no se copiarán:",
-	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Miembros y permisos de la sala",
-	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+	"feature-room.CopyInfoDialog.text.alert.Etherpad":
 		"Contenidos de los Etherpads",
-	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+	"feature-room.CopyInfoDialog.text.alert.whiteboard":
 		"Contenidos de las pizarras blancas",
-	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+	"feature-room.CopyInfoDialog.text.alert.protectedSettings":
 		"Configuraciones protegidas de herramientas externas",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",

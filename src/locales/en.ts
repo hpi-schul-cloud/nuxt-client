@@ -10,7 +10,7 @@ export default {
 	"common.actions.delete": "Delete",
 	"common.actions.discard": "Discard",
 	"common.actions.download": "Download",
-	"common.actions.duplicate": "Duplicate",
+	"common.actions.copyRoom": "Duplicate",
 	"common.actions.export": "Export",
 	"common.actions.edit": "Edit",
 	"common.actions.finish": "Finish",
@@ -29,6 +29,7 @@ export default {
 	"common.actions.shareLink": "Copy link",
 	"common.actions.update": "Update",
 	"common.ariaLabel.newTab": "opens in a new tab",
+	"common.ariaLabel.openImageInLightBox": "Display image in full size",
 	"common.ariaLabel.sameTab": "opens in the same tab",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
@@ -934,10 +935,10 @@ export default {
 		"The start date must be before the end date.",
 	"components.timePicker.validation.format": "Please use format HH:MM",
 	"components.timePicker.validation.required": "Please enter a time.",
-	"data-room.duplication.alert.success": "Room successfully duplicated.",
-	"data-room.duplication.alert.error":
+	"data-room.copy.alert.success": "Room successfully duplicated.",
+	"data-room.copy.alert.error":
 		"The duplication process could not be completed.",
-	"data-room.duplication.loading": "Room is being duplicated...",
+	"data-room.copy.loading": "Room is being duplicated...",
 	"error.400": "401 – Bad Request",
 	"error.401":
 		"401 – Unfortunately, you do not have permission to view this content.",
@@ -995,18 +996,17 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"User group successfully synchronized",
 	"feature-course-sync.startRoomSyncDialog.title": "Start synchronization",
-	"feature-room.DuplicationInfoDialog.title": "Duplicate Room",
-	"feature-room.DuplicationInfoDialog.text.nextStep":
+	"feature-room.CopyInfoDialog.title": "Duplicate Room",
+	"feature-room.CopyInfoDialog.text.nextStep":
 		"In the next step, a copy of the room will be created.",
-	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+	"feature-room.CopyInfoDialog.text.alert.followingContent":
 		"The following contents will not be copied:",
-	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Room members and permissions",
-	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
-		"Contents in Etherpads",
-	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Contents in Etherpads",
+	"feature-room.CopyInfoDialog.text.alert.whiteboard":
 		"Contents in whiteboards",
-	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+	"feature-room.CopyInfoDialog.text.alert.protectedSettings":
 		"Protected settings of external tools",
 	"format.date": "MM/DD/YYYY",
 	"format.dateLong": "dddd, MMMM DD. YYYY",

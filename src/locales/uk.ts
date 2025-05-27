@@ -10,7 +10,7 @@ export default {
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
 	"common.actions.download": "Завантажити",
-	"common.actions.duplicate": "Дублювати",
+	"common.actions.copyRoom": "Дублювати",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
@@ -29,6 +29,8 @@ export default {
 	"common.actions.shareLink": "Копіювати посилання",
 	"common.actions.update": "Оновити",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
+	"common.ariaLabel.openImageInLightBox":
+		"Показати зображення в повному розмірі",
 	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
@@ -958,10 +960,9 @@ export default {
 		"Дата початку повинна передувати даті закінчення.",
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
-	"data-room.duplication.alert.success": "Кімнату успішно дубльовано.",
-	"data-room.duplication.alert.error":
-		"Не вдалося завершити процес копіювання.",
-	"data-room.duplication.loading": "Кімната дублюється...",
+	"data-room.copy.alert.success": "Кімнату успішно дубльовано.",
+	"data-room.copy.alert.error": "Не вдалося завершити процес копіювання.",
+	"data-room.copy.loading": "Кімната дублюється...",
 	"error.400": "400 – Неприпустимий запит",
 	"error.401": "401 – На жаль, у вас немає дозволу на перегляд цього контенту.",
 	"error.403": "403 – На жаль, у вас немає дозволу на перегляд цього контенту.",
@@ -1019,18 +1020,16 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Групу користувачів успішно синхронізовано",
 	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
-	"feature-room.DuplicationInfoDialog.title": "Дублювати кімнату",
-	"feature-room.DuplicationInfoDialog.text.nextStep":
+	"feature-room.CopyInfoDialog.title": "Дублювати кімнату",
+	"feature-room.CopyInfoDialog.text.nextStep":
 		"На наступному кроці буде створено копію кімнати.",
-	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+	"feature-room.CopyInfoDialog.text.alert.followingContent":
 		"Наступний вміст не буде скопійовано:",
-	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Учасники кімнати та їхні дозволи",
-	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
-		"Вміст із Etherpads",
-	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
-		"Вміст із Whiteboards",
-	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Вміст із Etherpads",
+	"feature-room.CopyInfoDialog.text.alert.whiteboard": "Вміст із Whiteboards",
+	"feature-room.CopyInfoDialog.text.alert.protectedSettings":
 		"Захищені налаштування зовнішніх інструментів",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",

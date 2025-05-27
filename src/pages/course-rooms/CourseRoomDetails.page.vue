@@ -48,7 +48,12 @@
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="tabIndex" class="tabs-max-width" grow mandatory>
+				<v-tabs
+					v-model="tabIndex"
+					:class="{ 'tabs-max-width': mdAndUp }"
+					grow
+					mandatory
+				>
 					<template v-for="tabItem in tabItems" :key="tabItem.name">
 						<v-tab
 							:data-testid="tabItem.dataTestId"
@@ -158,6 +163,7 @@ import {
 } from "@/utils/inject";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
+import { useDisplay } from "vuetify";
 
 export default defineComponent({
 	components: {
@@ -181,6 +187,7 @@ export default defineComponent({
 	},
 	setup() {
 		const { t } = useI18n();
+		const { mdAndUp } = useDisplay();
 		const { isLoadingDialogOpen } = useLoadingState(
 			t("components.molecules.copyResult.title.loading")
 		);
@@ -196,6 +203,7 @@ export default defineComponent({
 			backgroundCopyProcesses,
 			isCopyProcessInBackground,
 			roomVariant,
+			mdAndUp,
 		};
 	},
 	data() {
@@ -579,7 +587,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@use "@/styles/settings.scss" as *;
 
 .course-title {
 	overflow: hidden;
@@ -590,10 +598,8 @@ export default defineComponent({
 	opacity: 0;
 }
 
-@media #{map-get($display-breakpoints, 'md-and-up')} {
-	.tabs-max-width {
-		max-width: var(--size-content-width-max);
-	}
+.tabs-max-width {
+	max-width: var(--size-content-width-max);
 }
 
 // even out border
