@@ -15,7 +15,7 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import { VueWrapper } from "@vue/test-utils";
-import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import { VAutocomplete } from "vuetify/lib/components/index";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { createTestingPinia } from "@pinia/testing";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
