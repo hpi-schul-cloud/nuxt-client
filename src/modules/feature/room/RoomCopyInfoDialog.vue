@@ -13,23 +13,23 @@
 				</p>
 				<InfoAlert>
 					<p class="mb-1">
-						{{ $t("feature-room.CopyInfoDialog.text.alert.followingContent") }}
+						{{ t("feature-room.CopyInfoDialog.text.alert.followingContent") }}
 					</p>
 					<ul class="ml-6">
 						<li>
 							{{
-								$t("feature-room.CopyInfoDialog.text.alert.membersPermissions")
+								t("feature-room.CopyInfoDialog.text.alert.membersPermissions")
 							}}
 						</li>
 						<li>
-							{{ $t("feature-room.CopyInfoDialog.text.alert.Etherpad") }}
+							{{ t("feature-room.CopyInfoDialog.text.alert.Etherpad") }}
 						</li>
 						<li>
-							{{ $t("feature-room.CopyInfoDialog.text.alert.whiteboard") }}
+							{{ t("feature-room.CopyInfoDialog.text.alert.whiteboard") }}
 						</li>
 						<li>
 							{{
-								$t("feature-room.CopyInfoDialog.text.alert.protectedSettings")
+								t("feature-room.CopyInfoDialog.text.alert.protectedSettings")
 							}}
 						</li>
 					</ul>
@@ -59,6 +59,9 @@
 
 <script setup lang="ts">
 import { InfoAlert } from "@ui-alert";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const isOpen = defineModel({
 	type: Boolean,
