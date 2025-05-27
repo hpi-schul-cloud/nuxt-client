@@ -14,36 +14,23 @@ export interface LightBoxOptions {
 	name: string;
 }
 
-export const useLightBox = () => {
-	const { isLightBoxOpen, openInternal } = useInternalLightBox();
-
-	const open = (data: LightBoxOptions) => {
-		openInternal(data);
-	};
-
-	return {
-		isLightBoxOpen,
-		open,
-	};
-};
-
-export const useInternalLightBox = createSharedComposable(() => {
+export const useLightBox = createSharedComposable(() => {
 	const isLightBoxOpen = ref<boolean>(false);
 	const lightBoxOptions = ref<LightBoxOptions>();
+
+	const open = (options: LightBoxOptions) => {
+		lightBoxOptions.value = options;
+		isLightBoxOpen.value = true;
+	};
 
 	const close = () => {
 		isLightBoxOpen.value = false;
 	};
 
-	const openInternal = (options: LightBoxOptions) => {
-		lightBoxOptions.value = options;
-		isLightBoxOpen.value = true;
-	};
-
 	return {
+		open,
 		close,
 		isLightBoxOpen,
 		lightBoxOptions,
-		openInternal,
 	};
 });

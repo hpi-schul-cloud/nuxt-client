@@ -15,14 +15,14 @@ import {
 import {
 	LightBoxOptions,
 	LightBoxContentType,
-	useInternalLightBox,
+	useLightBox,
 } from "./LightBox.composable";
 import LightBox from "./LightBox.vue";
 
 jest.mock("./LightBox.composable");
 jest.mock("@/utils/fileHelper");
 
-const mockedUseInternalLightBox = jest.mocked(useInternalLightBox);
+const useLightBoxMock = jest.mocked(useLightBox);
 
 describe("LightBox", () => {
 	beforeEach(() => {
@@ -47,11 +47,11 @@ describe("LightBox", () => {
 
 		const mockedDownloadFile = jest.mocked(downloadFile).mockReturnValueOnce();
 
-		mockedUseInternalLightBox.mockReturnValue({
+		useLightBoxMock.mockReturnValue({
 			close: close,
 			isLightBoxOpen: isLightBoxOpen,
 			lightBoxOptions: lightBoxOptions,
-			openInternal: jest.fn(),
+			open: jest.fn(),
 		});
 
 		const wrapper = shallowMount(LightBox, {

@@ -11,9 +11,12 @@ jest.mock("@ui-light-box");
 describe("FileInteractionHandler", () => {
 	const setupMocks = () => {
 		const useLightBoxMock = jest.mocked(useLightBox);
-		const isLightBoxOpen = ref(false);
-		const open = jest.fn();
-		useLightBoxMock.mockReturnValue({ isLightBoxOpen, open });
+		useLightBoxMock.mockReturnValue({
+			isLightBoxOpen: ref(false),
+			open: jest.fn(),
+			close: jest.fn(),
+			lightBoxOptions: ref(),
+		});
 
 		return { useLightBoxMock };
 	};

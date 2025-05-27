@@ -37,16 +37,13 @@ import { downloadFile } from "@/utils/fileHelper";
 import { mdiClose, mdiTrayArrowDown } from "@icons/material";
 import { onKeyStroke } from "@vueuse/core";
 import { ref, watch } from "vue";
-import {
-	LightBoxContentType,
-	useInternalLightBox,
-} from "./LightBox.composable";
+import { LightBoxContentType, useLightBox } from "./LightBox.composable";
 import { PreviewImage } from "@ui-preview-image";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const { close, isLightBoxOpen, lightBoxOptions } = useInternalLightBox();
+const { close, isLightBoxOpen, lightBoxOptions } = useLightBox();
 const isImageLoading = ref(true);
 
 onKeyStroke("Escape", () => close(), { eventName: "keydown" });
