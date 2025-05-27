@@ -13,7 +13,7 @@ import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { RoomCopyInfoDialog } from "@feature-room";
-import { onMounted, onUnmounted, PropType, ref } from "vue";
+import { nextTick, onMounted, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -41,11 +41,6 @@ onMounted(() => {
 	isLoadingDialogOpen.value = false;
 });
 
-onUnmounted(() => {
-	isRoomCopyInfoDialogOpen.value = false;
-	isLoadingDialogOpen.value = false;
-});
-
 const onCancelCopy = () => {
 	isRoomCopyInfoDialogOpen.value = false;
 	emit("copy:cancel");
@@ -65,11 +60,9 @@ const onConfirmCopy = async () => {
 		) {
 			showFailure();
 			emit("copy:error", copyResult.id); // maybe pass the whole copyResult?
-			emit("copy:ended");
 		} else {
 			showSuccess();
 			emit("copy:success", copyResult.id);
-			emit("copy:ended");
 		}
 	} catch (error) {
 		showTimeout();
@@ -77,6 +70,8 @@ const onConfirmCopy = async () => {
 		throw createApplicationError(responseError.code);
 	} finally {
 		isLoadingDialogOpen.value = false;
+		await nextTick();
+		emit("copy:ended");
 	}
 };
 
