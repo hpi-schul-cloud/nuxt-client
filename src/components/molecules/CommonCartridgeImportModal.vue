@@ -102,7 +102,9 @@ async function onConfirm(): Promise<void> {
 		text: i18n.t("pages.rooms.ccImportCourse.loading"),
 	});
 
-	await commonCartridgeImportModule.importCommonCartridgeFile(file.value);
+	if (file.value) {
+		await commonCartridgeImportModule.importCommonCartridgeFile(file.value);
+	}
 
 	if (commonCartridgeImportModule.isSuccess) {
 		loadingStateModule.close();
