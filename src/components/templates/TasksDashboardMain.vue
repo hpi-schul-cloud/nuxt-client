@@ -132,10 +132,7 @@ export default {
 		},
 	},
 	data() {
-		return {
-			mdiPlus,
-			mdiCheck,
-		};
+		return { mdiPlus, mdiCheck };
 	},
 	computed: {
 		hasTasks() {
