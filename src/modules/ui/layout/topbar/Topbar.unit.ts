@@ -15,7 +15,7 @@ import AuthModule from "@/store/auth";
 import StatusAlertsModule from "@/store/status-alerts";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import { h, nextTick } from "vue";
-import { VApp } from "vuetify/lib/components/index.mjs";
+import { VApp } from "vuetify/lib/components/index";
 import { envsFactory } from "@@/tests/test-utils";
 import EnvConfigModule from "@/store/env-config";
 import { SchulcloudTheme } from "@/serverApi/v3";
