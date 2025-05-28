@@ -2074,6 +2074,10 @@ export default {
 		"Las solicitudes de adhesión de las personas seleccionadas han sido rechazadas.",
 	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
 		"Menú de acción para {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Confirmar la solicitud de membresía de {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Rechazar la solicitud de membresía de {fullName}",
 	"pages.rooms.invitationlinks.error.create":
 		"No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update":

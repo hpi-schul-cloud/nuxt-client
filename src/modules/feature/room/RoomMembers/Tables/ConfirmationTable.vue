@@ -11,9 +11,15 @@
 	>
 		<template #[`action-menu-items`]>
 			<KebabMenuActionConfirmRequest
+				:aria-label="
+					t('pages.rooms.members.confirmationTable.menus.confirm.label')
+				"
 				@click="onConfirm(confirmationSelectedIds)"
 			/>
 			<KebabMenuActionRejectRequest
+				:aria-label="
+					t('pages.rooms.members.confirmationTable.menus.reject.label')
+				"
 				@click="onReject(confirmationSelectedIds)"
 			/>
 		</template>
@@ -30,11 +36,13 @@
 				>
 					<KebabMenuActionConfirmRequest
 						:data-testid="`kebab-menu-confirm-${item.id}`"
+						:aria-label="getAriaLabel(item, 'confirm')"
 						@click="onConfirm([item.userId])"
 					/>
 
 					<KebabMenuActionRejectRequest
 						:data-testid="`kebab-menu-reject-${item.id}`"
+						:aria-label="getAriaLabel(item, 'reject')"
 						@click="onReject([item.userId])"
 					/>
 				</KebabMenu>
@@ -85,6 +93,18 @@ const onConfirm = async (ids: string[]) => {
 
 const onReject = async (ids: string[]) => {
 	await rejectInvitations(ids);
+};
+
+const getAriaLabel = (
+	item: { fullName: string },
+	actionFor: "confirm" | "reject"
+) => {
+	return t(
+		`pages.rooms.members.confirmationTable.actionMenu.${actionFor}.ariaLabel`,
+		{
+			fullName: item.fullName,
+		}
+	);
 };
 
 const tableHeaders = [

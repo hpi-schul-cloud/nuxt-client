@@ -2042,6 +2042,10 @@ export default {
 		"Вибрані особи були додані до кімнати як учасники.",
 	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
 		"Меню дій для {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Підтвердити запит на членство для {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Відхилити запит на членство для {fullName}",
 	"pages.rooms.invitationlinks.error.create":
 		"Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update":

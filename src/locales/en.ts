@@ -2006,6 +2006,10 @@ export default {
 		"The membership requests of the selected persons have been rejected.",
 	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
 		"Action menu for {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Confirm the membership request for {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Reject the membership request for {fullName}",
 	"pages.rooms.invitationlinks.error.create":
 		"Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update":

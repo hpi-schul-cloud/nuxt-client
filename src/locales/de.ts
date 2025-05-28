@@ -2041,6 +2041,10 @@ export default {
 		"Die Beitrittsanfragen der ausgewählten Personen wurden abgelehnt.",
 	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
 		"Aktionsmenü für {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Mitgliedschaftsanfrage für {fullName} bestätigen",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Mitgliedsanfrage für {fullName} ablehnen",
 	"pages.rooms.invitationlinks.error.create":
 		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update":
