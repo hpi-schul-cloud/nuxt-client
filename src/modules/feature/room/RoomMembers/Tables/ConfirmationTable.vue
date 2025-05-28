@@ -28,11 +28,7 @@
 			<div class="d-flex align-center">
 				<KebabMenu
 					:data-testid="`kebab-menu-${item.id}`"
-					:aria-label="
-						t('pages.rooms.members.confirmationTable.actionMenu.ariaLabel', {
-							fullName: item.fullName,
-						})
-					"
+					:aria-label="getAriaLabel(item)"
 				>
 					<KebabMenuActionConfirmRequest
 						:data-testid="`kebab-menu-confirm-${item.id}`"
@@ -97,14 +93,18 @@ const onReject = async (ids: string[]) => {
 
 const getAriaLabel = (
 	item: { fullName: string },
-	actionFor: "confirm" | "reject"
+	actionFor?: "confirm" | "reject"
 ) => {
-	return t(
-		`pages.rooms.members.confirmationTable.actionMenu.${actionFor}.ariaLabel`,
-		{
-			fullName: item.fullName,
-		}
-	);
+	return actionFor
+		? t(
+				`pages.rooms.members.confirmationTable.actionMenu.${actionFor}.ariaLabel`,
+				{
+					fullName: item.fullName,
+				}
+			)
+		: t("pages.rooms.members.confirmationTable.actionMenu.ariaLabel", {
+				fullName: item.fullName,
+			});
 };
 
 const tableHeaders = [
