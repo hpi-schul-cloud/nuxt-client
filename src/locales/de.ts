@@ -1918,6 +1918,7 @@ export default {
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Mitglieder",
+	"pages.rooms.members.menu.ariaLabel": "{membersInfoText}-Menü",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
@@ -2025,8 +2026,6 @@ export default {
 		"Ausgewählte Einladungslinks wirklich löschen?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Einladungslink '{invitation}' wirklich löschen?",
-	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
-		"Einladungslink teilen",
 	"pages.rooms.members.confirmationTable.menus.confirm.label":
 		"Beitrittsanfrage bestätigen",
 	"pages.rooms.members.confirmationTable.menus.reject.label":
@@ -2045,6 +2044,10 @@ export default {
 		"Mitgliedschaftsanfrage für {fullName} bestätigen",
 	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
 		"Mitgliedsanfrage für {fullName} ablehnen",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Einladungslink „{linkTitle}“ teilen",
+	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
+		"Aktionsmenü für Einladungslink „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":
 		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update":

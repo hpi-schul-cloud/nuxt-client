@@ -1885,6 +1885,7 @@ export default {
 		"Add members to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Members",
+	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} menu",
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.add.infoText":
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
@@ -1990,8 +1991,6 @@ export default {
 		"Delete selected invitation links?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Delete the invitation link '{invitation}'?",
-	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
-		"Share invitation link",
 	"pages.rooms.members.confirmationTable.menus.confirm.label":
 		"Confirm membership request",
 	"pages.rooms.members.confirmationTable.menus.reject.label":
@@ -2010,6 +2009,10 @@ export default {
 		"Confirm the membership request for {fullName}",
 	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
 		"Reject the membership request for {fullName}",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Share invitation link “{linkTitle}”",
+	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
+		"Action menu for invitation link “{linkTitle}”",
 	"pages.rooms.invitationlinks.error.create":
 		"Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update":
