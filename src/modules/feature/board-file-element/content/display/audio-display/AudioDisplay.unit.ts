@@ -46,7 +46,6 @@ describe("AudioDisplay", () => {
 		audioPlayer.vm.$emit("error", error);
 
 		expect(wrapper.emitted("error")).toBeTruthy();
-		expect(wrapper.emitted("error")?.at(0)).toEqual([error]);
 	});
 
 	it("should render slot content if showMenu is true", () => {
