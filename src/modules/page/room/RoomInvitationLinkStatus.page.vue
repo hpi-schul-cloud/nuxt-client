@@ -15,7 +15,7 @@
 		</div>
 		<div v-else class="w-100 text-center">
 			<CrossedHandsSvg data-testid="img-crossed-hands" />
-			<div class="text-h2" data-testid="status-message">
+			<div class="text-h4" data-testid="status-message">
 				{{ infoMessage }}
 			</div>
 		</div>
@@ -107,6 +107,11 @@ const updateInfoMessage = (validationMessage: string, schoolName: string) => {
 			break;
 		case RoomInvitationLinkValidationError.InvalidLink:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.invalidLink");
+			break;
+		case RoomInvitationLinkValidationError.RoomApplicantWaiting:
+			infoMessage.value = t(
+				"pages.rooms.invitationLinkStatus.confirmationPending"
+			);
 			break;
 		default:
 			infoMessage.value = t("error.generic");
