@@ -788,6 +788,82 @@ describe("useRoomMembers", () => {
 		});
 	});
 
+	describe("showNotification", () => {
+		describe("when confirmation is successful", () => {
+			describe("with single action", () => {
+				it("should show a success notification", async () => {
+					const { roomMembersStore } = setup();
+
+					const membersMock = roomMemberFactory.buildList(3, {
+						roomRoleName: RoleName.Roomapplicant,
+					});
+					roomMembersStore.roomMembers = membersMock;
+
+					await roomMembersStore.confirmInvitations([membersMock[0].userId]);
+
+					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
+						"pages.rooms.members.confirmationTable.notification.confirm"
+					);
+				});
+			});
+			describe("with multiple actions", () => {
+				it("should show a success notification with the number of confirmed members", async () => {
+					const { roomMembersStore } = setup();
+
+					const membersMock = roomMemberFactory.buildList(3, {
+						roomRoleName: RoleName.Roomapplicant,
+					});
+					roomMembersStore.roomMembers = membersMock;
+
+					await roomMembersStore.confirmInvitations(
+						membersMock.map((member) => member.userId)
+					);
+
+					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
+						"pages.rooms.members.confirmationTable.notification.confirm.multiple"
+					);
+				});
+			});
+		});
+
+		describe("when rejection is successful", () => {
+			describe("with single action", () => {
+				it("should show a success notification", async () => {
+					const { roomMembersStore } = setup();
+
+					const membersMock = roomMemberFactory.buildList(3, {
+						roomRoleName: RoleName.Roomapplicant,
+					});
+					roomMembersStore.roomMembers = membersMock;
+
+					await roomMembersStore.rejectInvitations([membersMock[0].userId]);
+
+					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
+						"pages.rooms.members.confirmationTable.notification.reject"
+					);
+				});
+			});
+			describe("with multiple actions", () => {
+				it("should show a success notification with the number of rejected members", async () => {
+					const { roomMembersStore } = setup();
+
+					const membersMock = roomMemberFactory.buildList(3, {
+						roomRoleName: RoleName.Roomapplicant,
+					});
+					roomMembersStore.roomMembers = membersMock;
+
+					await roomMembersStore.rejectInvitations(
+						membersMock.map((member) => member.userId)
+					);
+
+					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
+						"pages.rooms.members.confirmationTable.notification.reject.multiple"
+					);
+				});
+			});
+		});
+	});
+
 	describe("resetStore", () => {
 		it("should reset the store", () => {
 			const { roomMembersStore } = setup();
