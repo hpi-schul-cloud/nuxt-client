@@ -147,8 +147,8 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 
 			await confirmBtn.trigger("click");
 
-			expect(roomsModuleMock.fetch).not.toHaveBeenCalled();
-			expect(roomsModuleMock.fetchAllElements).not.toHaveBeenCalled();
+			expect(roomsModuleMock.fetch).toHaveBeenCalled();
+			expect(roomsModuleMock.fetchAllElements).toHaveBeenCalled();
 			expect(notifierModuleMock.show).toHaveBeenCalledWith({
 				status: "error",
 				text: expect.any(String),
