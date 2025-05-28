@@ -29,6 +29,18 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]
 	> = ref([]);
 
+	const roomMembersWithoutApplicants = computed(() => {
+		return roomMembers.value.filter(
+			(member) => member.roomRoleName !== RoleName.Roomapplicant
+		);
+	});
+
+	const roomApplicants = computed(() => {
+		return roomMembers.value.filter(
+			(member) => member.roomRoleName === RoleName.Roomapplicant
+		);
+	});
+
 	const isLoading = ref<boolean>(false);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const ownSchool = {
@@ -309,6 +321,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		updateMembersRole,
 		isLoading,
 		roomMembers,
+		roomMembersWithoutApplicants,
+		roomApplicants,
 		potentialRoomMembers,
 		selectedIds,
 		schools,
