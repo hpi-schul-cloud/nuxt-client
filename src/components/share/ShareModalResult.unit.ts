@@ -5,7 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
-import { VTextField } from "vuetify/lib/components/index.mjs";
+import { VTextField } from "vuetify/lib/components/index";
 
 describe("@/components/share/ShareModalResult", () => {
 	const setup = (options?: { windowWidth?: number }) => {
