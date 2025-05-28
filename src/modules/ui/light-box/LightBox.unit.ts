@@ -3,6 +3,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { ErrorAlert } from "@ui-alert";
 import { AudioPlayer } from "@ui-audio-player";
 import { PreviewImage } from "@ui-preview-image";
 import { nextTick, ref } from "vue";
@@ -179,6 +180,25 @@ describe("LightBox", () => {
 				expect(audioPlayer.props("src")).toEqual(
 					lightBoxOptions.value.downloadUrl
 				);
+			});
+
+			describe("when audio player emits error", () => {
+				it("should render error alert", async () => {
+					const { wrapper } = setup({
+						type: LightBoxContentType.AUDIO,
+					});
+
+					const audioPlayer = wrapper.findComponent(AudioPlayer);
+
+					audioPlayer.vm.$emit("error");
+
+					await nextTick();
+
+					const errorAlert = wrapper.findComponent(ErrorAlert);
+
+					expect(errorAlert.exists()).toBe(true);
+					expect(audioPlayer.exists()).toBe(false);
+				});
 			});
 		});
 	});

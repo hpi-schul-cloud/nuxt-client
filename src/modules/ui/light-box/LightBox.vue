@@ -1,3 +1,5 @@
+<script setup lang="ts"></script>
+
 <template>
 	<v-dialog v-model="isLightBoxOpen" fullscreen data-testid="light-box">
 		<v-toolbar>
@@ -27,11 +29,19 @@
 					:alt="lightBoxOptions.alt!"
 				/>
 				<AudioPlayer
-					v-else-if="lightBoxOptions?.type === LightBoxContentType.AUDIO"
+					v-else-if="
+						lightBoxOptions?.type === LightBoxContentType.AUDIO &&
+						!hasAudioError &&
+						isLightBoxOpen
+					"
 					:src="lightBoxOptions?.downloadUrl"
 					class="audio-player bg-grey-darken-3"
 					@click.stop
+					@error="handleAudioError"
 				/>
+				<ErrorAlert v-if="hasAudioError" class="error-alert">
+					{{ t("components.cardElement.fileElement.audioFormatError") }}
+				</ErrorAlert>
 			</v-col>
 		</v-row>
 	</v-dialog>
@@ -40,19 +50,26 @@
 <script setup lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
 import { mdiClose, mdiTrayArrowDown } from "@icons/material";
+import { PreviewImage } from "@ui-preview-image";
 import { onKeyStroke } from "@vueuse/core";
 import { ref, watch } from "vue";
-import { LightBoxContentType, useLightBox } from "./LightBox.composable";
-import { PreviewImage } from "@ui-preview-image";
 import { useI18n } from "vue-i18n";
 import { AudioPlayer } from "@ui-audio-player";
+import { ErrorAlert } from "@ui-alert";
+
+import { LightBoxContentType, useLightBox } from "./LightBox.composable";
 
 const { t } = useI18n();
 
 const { close, isLightBoxOpen, lightBoxOptions } = useLightBox();
 const isImageLoading = ref(true);
+const hasAudioError = ref(false);
 
 onKeyStroke("Escape", () => close(), { eventName: "keydown" });
+
+const handleAudioError = () => {
+	hasAudioError.value = true;
+};
 
 const download = async () => {
 	await downloadFile(
@@ -63,6 +80,7 @@ const download = async () => {
 
 watch(isLightBoxOpen, () => {
 	isImageLoading.value = true;
+	hasAudioError.value = false;
 });
 </script>
 
@@ -72,5 +90,12 @@ watch(isLightBoxOpen, () => {
 	max-width: 700px;
 	height: 64px;
 	margin: 0 auto;
+}
+
+.error-alert {
+	background-color: white;
+	max-width: 663px;
+	margin-right: auto;
+	margin-left: auto;
 }
 </style>
