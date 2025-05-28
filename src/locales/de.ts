@@ -573,8 +573,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
 	"components.cardElement.h5pElement": "Interaktives Lernelement",
-	"components.cardElement.h5pElement.create":
-		"Interaktives Lernelement erstellen",
+	"components.cardElement.h5pElement.create": "Lernelement erstellen...",
 	"components.cardElement.h5pElement.title.error.load":
 		"Der Titel eines interaktiven Lernelements konnte nicht geladen werden.",
 	"components.datePicker.validation.format":
@@ -1695,7 +1694,6 @@ export default {
 		"Probiere es mit weniger Suchbegriffen.",
 	"pages.content.emptyState.error.title": "Ooops, keine Ergebnisse!",
 	"pages.content.index.backToCourse": "Zurück zum Kurs",
-	"pages.content.index.backToBoard": "Zurück zum Board",
 	"pages.content.index.backToOverview": "Zurück zur Übersicht",
 	"pages.content.index.search_for": "Suche nach …",
 	"pages.content.index.search_resources": "Ressourcen",
@@ -1925,6 +1923,7 @@ export default {
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Mitglieder",
+	"pages.rooms.members.menu.ariaLabel": "{membersInfoText}-Menü",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
@@ -2033,7 +2032,9 @@ export default {
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Einladungslink '{invitation}' wirklich löschen?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
-		"Einladungslink teilen",
+		"Einladungslink „{linkTitle}“ teilen",
+	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
+		"Aktionsmenü für Einladungslink „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":
 		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update":

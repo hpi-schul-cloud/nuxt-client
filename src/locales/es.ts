@@ -582,7 +582,7 @@ export default {
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.cardElement.h5pElement": "Elemento de aprendizaje interactivo",
 	"components.cardElement.h5pElement.create":
-		"Crear un elemento de aprendizaje interactivo.",
+		"Crear elemento de aprendizaje...",
 	"components.cardElement.h5pElement.title.error.load":
 		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",
 	"components.datePicker.validation.format":
@@ -1725,7 +1725,6 @@ export default {
 		"Intenta usar una consulta más corta.",
 	"pages.content.emptyState.error.title": "¡Vaya, no hay resultados!",
 	"pages.content.index.backToCourse": "Volver al curso",
-	"pages.content.index.backToBoard": "Volver al tablero",
 	"pages.content.index.backToOverview": "Volver a la vista general",
 	"pages.content.index.search_for": "Buscar...",
 	"pages.content.index.search_resources": "Recursos",
@@ -1951,6 +1950,7 @@ export default {
 		"Añadir miembros a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Miembros",
+	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} menú",
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.add.infoText":
 		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
@@ -2066,7 +2066,9 @@ export default {
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"¿Suprimir el enlace de invitación '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
-		"Compartir enlace de invitación",
+		"Compartir enlace de invitación „{linkTitle}“",
+	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
+		"Menú de acción para el enlace de invitación „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":
 		"No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update":

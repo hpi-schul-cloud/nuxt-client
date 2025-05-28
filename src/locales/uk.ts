@@ -584,8 +584,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
 	"components.cardElement.h5pElement": "Інтерактивний елемент навчання",
-	"components.cardElement.h5pElement.create":
-		"Створити інтерактивний навчальний елемент.",
+	"components.cardElement.h5pElement.create": "Створіть елемент навчання...",
 	"components.cardElement.h5pElement.title.error.load":
 		"Не вдалося завантажити назву інтерактивного навчального елемента.",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
@@ -1705,7 +1704,6 @@ export default {
 		"Спробуйте використати коротший запит.",
 	"pages.content.emptyState.error.title": "Отакої, результатів немає!",
 	"pages.content.index.backToCourse": "Назад до курсу",
-	"pages.content.index.backToBoard": "Назад до дошки ",
 	"pages.content.index.backToOverview": "Назад до огляду",
 	"pages.content.index.search_for": "Пошук...",
 	"pages.content.index.search_resources": "Ресурси",
@@ -1925,6 +1923,7 @@ export default {
 		"Додайте члени до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасників",
+	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} меню",
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
@@ -2034,7 +2033,9 @@ export default {
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Видалити посилання на запрошення '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
-		"Поділіться посиланням на запрошення",
+		"Поділіться посиланням на запрошення „{linkTitle}“",
+	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
+		"Меню дій для посилання-запрошення „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":
 		"Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update":

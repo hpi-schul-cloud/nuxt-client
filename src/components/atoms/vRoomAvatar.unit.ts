@@ -5,7 +5,7 @@ import {
 import { createMock } from "@golevelup/ts-jest";
 import { mdiSync } from "@icons/material";
 import { mount } from "@vue/test-utils";
-import { VBadge } from "vuetify/lib/components/index.mjs";
+import { VBadge } from "vuetify/lib/components/index";
 import vRoomAvatar from "./vRoomAvatar.vue";
 
 const mockData = {

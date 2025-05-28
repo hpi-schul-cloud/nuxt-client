@@ -36,7 +36,7 @@ import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
-import { VCardText } from "vuetify/lib/components/index.mjs";
+import { VCardText } from "vuetify/lib/components/index";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 

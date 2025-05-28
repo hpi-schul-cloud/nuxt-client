@@ -102,13 +102,11 @@ async function onConfirm(): Promise<void> {
 		text: i18n.t("pages.rooms.ccImportCourse.loading"),
 	});
 
-	await commonCartridgeImportModule.importCommonCartridgeFile(file.value);
+	if (file.value) {
+		await commonCartridgeImportModule.importCommonCartridgeFile(file.value);
+	}
 
 	if (commonCartridgeImportModule.isSuccess) {
-		await Promise.allSettled([
-			courseRoomListModule.fetch(),
-			courseRoomListModule.fetchAllElements(),
-		]);
 		loadingStateModule.close();
 		const title = courseRoomListModule.getAllElements[0]?.title;
 		notifierModule.show({
@@ -125,6 +123,10 @@ async function onConfirm(): Promise<void> {
 		});
 	}
 
+	await Promise.allSettled([
+		courseRoomListModule.fetch(),
+		courseRoomListModule.fetchAllElements(),
+	]);
 	file.value = undefined;
 }
 </script>

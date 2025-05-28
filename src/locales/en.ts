@@ -569,8 +569,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",
 	"components.cardElement.h5pElement": "Interactive learning element",
-	"components.cardElement.h5pElement.create":
-		"Create an interactive learning element",
+	"components.cardElement.h5pElement.create": "Create learning element...",
 	"components.cardElement.h5pElement.title.error.load":
 		"The title of an interactive learning element could not be loaded.",
 	"components.datePicker.validation.format": "Please use format DD.MM.YYYY",
@@ -1673,7 +1672,6 @@ export default {
 		"Try to use a shorter query.",
 	"pages.content.emptyState.error.title": "Whoops, no results!",
 	"pages.content.index.backToCourse": "Back to the Course",
-	"pages.content.index.backToBoard": "Back to the Board",
 	"pages.content.index.backToOverview": "Back to Overview",
 	"pages.content.index.search_for": "Search for...",
 	"pages.content.index.search_resources": "Resources",
@@ -1892,6 +1890,7 @@ export default {
 		"Add members to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Members",
+	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} menu",
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.add.infoText":
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
@@ -1998,7 +1997,9 @@ export default {
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Delete the invitation link '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
-		"Share invitation link",
+		"Share invitation link “{linkTitle}”",
+	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
+		"Action menu for invitation link “{linkTitle}”",
 	"pages.rooms.invitationlinks.error.create":
 		"Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update":
