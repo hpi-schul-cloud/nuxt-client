@@ -23,7 +23,7 @@ import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRoute, useRouter } from "vue-router";
-import { VBtn, VDataTableServer } from "vuetify/lib/components/index.mjs";
+import { VBtn, VDataTableServer } from "vuetify/lib/components/index";
 import ClassOverview from "./ClassOverview.page.vue";
 
 jest.mock("vue-router", () => ({

@@ -6,7 +6,7 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
-import { VSelect } from "vuetify/lib/components/index.mjs";
+import { VSelect } from "vuetify/lib/components/index";
 import courses from "@/store/courses";
 import { createStore } from "vuex";
 import ContentModule from "@/store/content";

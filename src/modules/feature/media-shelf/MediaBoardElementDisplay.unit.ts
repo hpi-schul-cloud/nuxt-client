@@ -2,7 +2,7 @@ import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ContentElementBar } from "@ui-board";
 import { mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
-import { VImg, VSkeletonLoader } from "vuetify/lib/components/index.mjs";
+import { VImg, VSkeletonLoader } from "vuetify/lib/components/index";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 
 describe("MediaBoardElementDisplay", () => {

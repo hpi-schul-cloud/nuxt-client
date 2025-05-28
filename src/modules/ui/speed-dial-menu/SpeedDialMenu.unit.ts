@@ -2,7 +2,7 @@ import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiClose } from "@icons/material";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { DefineComponent, defineComponent, nextTick } from "vue";
-import { VBtn } from "vuetify/lib/components/index.mjs";
+import { VBtn } from "vuetify/lib/components/index";
 import SpeedDialMenu from "./SpeedDialMenu.vue";
 import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 
