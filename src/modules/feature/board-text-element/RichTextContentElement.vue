@@ -68,8 +68,6 @@ const onKeyUp = () => ensurePoliteNotifications();
 
 	h4,
 	h5 {
-		font-family: var(--font-accent);
-		font-weight: var(--font-weight-bold);
 		margin-bottom: var(--space-xs);
 		margin-top: var(--space-md-2);
 	}
@@ -77,6 +75,7 @@ const onKeyUp = () => ensurePoliteNotifications();
 	h4 {
 		font-size: var(--heading-6);
 		letter-spacing: 0.01em;
+		font-weight: var(--font-weight-bold);
 	}
 
 	h5 {
@@ -87,8 +86,6 @@ const onKeyUp = () => ensurePoliteNotifications();
 	p,
 	ul,
 	ol {
-		font-family: var(--font-primary);
-		font-weight: var(--font-weight-normal);
 		font-size: var(--text-md);
 		margin-bottom: var(--space-xs);
 	}
@@ -137,12 +134,5 @@ const onKeyUp = () => ensurePoliteNotifications();
 		bottom: 0.5rem;
 		right: 0.5rem;
 	}
-}
-
-:deep(
-		.ck-widget.ck-widget_with-selection-handle:hover
-			> .ck-widget__selection-handle
-	) {
-	display: none;
 }
 </style>
