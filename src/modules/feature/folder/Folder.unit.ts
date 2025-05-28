@@ -31,7 +31,7 @@ describe("Folder.vue", () => {
 		return `${uploaded} von ${total} Dateien hochgeladen`;
 	};
 
-	describe("when user is not a student", () => {
+	describe("when user has board edit permission", () => {
 		const setupWrapper = () => {
 			const parentId = "123";
 			const wrapper = mount(Folder, {
@@ -93,6 +93,7 @@ describe("Folder.vue", () => {
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+					useBoardStoreMock.board = undefined;
 					jest
 						.spyOn(DataBoard, "useBoardStore")
 						.mockReturnValueOnce(useBoardStoreMock);
@@ -117,6 +118,7 @@ describe("Folder.vue", () => {
 						folderName,
 						boardState,
 						parent,
+						useBoardStoreMock,
 					};
 				};
 
@@ -132,6 +134,14 @@ describe("Folder.vue", () => {
 					const { fileStorageApiMock } = await setup();
 
 					expect(fileStorageApiMock.fetchFiles).toHaveBeenCalled();
+				});
+
+				it("should call fetchBoardRequest", async () => {
+					const { useBoardStoreMock, parent } = await setup();
+
+					expect(useBoardStoreMock.fetchBoardRequest).toHaveBeenCalledWith({
+						boardId: parent.id,
+					});
 				});
 
 				it("should not show the loading spinner", async () => {
@@ -1310,7 +1320,7 @@ describe("Folder.vue", () => {
 		});
 	});
 
-	describe("when user is a student", () => {
+	describe("when user has not board edit permission", () => {
 		const setupWrapper = () => {
 			const parentId = "123";
 			const wrapper = mount(Folder, {
