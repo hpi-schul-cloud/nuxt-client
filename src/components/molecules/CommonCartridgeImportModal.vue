@@ -107,10 +107,6 @@ async function onConfirm(): Promise<void> {
 	}
 
 	if (commonCartridgeImportModule.isSuccess) {
-		await Promise.allSettled([
-			courseRoomListModule.fetch(),
-			courseRoomListModule.fetchAllElements(),
-		]);
 		loadingStateModule.close();
 		const title = courseRoomListModule.getAllElements[0]?.title;
 		notifierModule.show({
@@ -127,6 +123,10 @@ async function onConfirm(): Promise<void> {
 		});
 	}
 
+	await Promise.allSettled([
+		courseRoomListModule.fetch(),
+		courseRoomListModule.fetchAllElements(),
+	]);
 	file.value = undefined;
 }
 </script>
