@@ -13,7 +13,7 @@ import { nextTick } from "vue";
 import {
 	VExpansionPanelText,
 	VExpansionPanelTitle,
-} from "vuetify/lib/components/index.mjs";
+} from "vuetify/lib/components/index";
 import LicenseListPage from "./LicenseList.page.vue";
 
 jest.mock("axios");

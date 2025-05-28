@@ -13,7 +13,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { VDialog } from "vuetify/lib/components/index.mjs";
+import { VDialog } from "vuetify/lib/components/index";
 
 describe("@/components/molecules/CommonCartridgeExportModal", () => {
 	let exportModuleMock: CommonCartridgeExportModule;

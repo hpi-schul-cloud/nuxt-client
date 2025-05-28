@@ -6,7 +6,7 @@ import {
 import { mount } from "@vue/test-utils";
 import Alert from "./Alert.vue";
 import { mdiCheckCircle } from "@icons/material";
-import { VAlert, VIcon } from "vuetify/lib/components/index.mjs";
+import { VAlert, VIcon } from "vuetify/lib/components/index";
 
 const getWrapper = (props?: AlertPayload) => {
 	const data: AlertPayload = {

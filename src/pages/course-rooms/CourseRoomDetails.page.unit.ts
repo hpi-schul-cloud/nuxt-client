@@ -34,7 +34,7 @@ import { createMock } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
-import { VBtn } from "vuetify/lib/components/index.mjs";
+import { VBtn } from "vuetify/lib/components/index";
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { nextTick } from "vue";
