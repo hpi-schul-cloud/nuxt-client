@@ -370,6 +370,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
     RoomCopy = 'ROOM_COPY',
+    RoomShare = 'ROOM_SHARE',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -1766,8 +1767,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    // TODO re-generate API client after backend changes
-    FEATURE_ROOM_SHARE_ENABLED: boolean;
+    FEATURE_ROOM_SHARE: boolean;
     /**
      * 
      * @type {boolean}
@@ -7696,6 +7696,7 @@ export enum Permission {
     RoomDelete = 'ROOM_DELETE',
     RoomLeave = 'ROOM_LEAVE',
     RoomCopy = 'ROOM_COPY',
+    RoomShare = 'ROOM_SHARE',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -9358,7 +9359,7 @@ export enum ShareTokenBodyParamsParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room',
+    Room = 'room'
 }
 
 /**
@@ -9414,7 +9415,8 @@ export enum ShareTokenInfoResponseParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
     Lessons = 'lessons',
-    ColumnBoard = 'columnBoard'
+    ColumnBoard = 'columnBoard',
+    Room = 'room'
 }
 
 /**
@@ -9445,7 +9447,8 @@ export enum ShareTokenPayloadResponseParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
     Lessons = 'lessons',
-    ColumnBoard = 'columnBoard'
+    ColumnBoard = 'columnBoard',
+    Room = 'room'
 }
 
 /**
