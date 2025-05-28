@@ -7,31 +7,16 @@ import ConfirmationTable from "./ConfirmationTable.vue";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import {
-	meResponseFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import {
-	InvitationStep,
-	RoomMember,
-	useRoomInvitationLinkStore,
-	useRoomMembersStore,
-} from "@data-room";
-import { nextTick, ref } from "vue";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import {
-	useConfirmationDialog,
-	useDeleteConfirmationDialog,
-} from "@ui-confirmation-dialog";
-import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
+import { RoomMember, useRoomMembersStore } from "@data-room";
 import { useI18n } from "vue-i18n";
 import { RoleName } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import setupStores from "@@/tests/test-utils/setupStores";
-import AuthModule from "@/store/auth";
 import { schoolsModule } from "@/store";
 
 jest.mock("vue-i18n", () => {
