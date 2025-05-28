@@ -18,7 +18,7 @@ import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { flushPromises } from "@vue/test-utils";
 import { ComputedRef, nextTick, ref } from "vue";
-import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
+import { VSkeletonLoader } from "vuetify/lib/components/index";
 import DeleteFileDialog from "./file-table/DeleteFileDialog.vue";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";

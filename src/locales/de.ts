@@ -574,8 +574,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
 	"components.cardElement.h5pElement": "Interaktives Lernelement",
-	"components.cardElement.h5pElement.create":
-		"Interaktives Lernelement erstellen",
+	"components.cardElement.h5pElement.create": "Lernelement erstellen...",
 	"components.cardElement.h5pElement.title.error.load":
 		"Der Titel eines interaktiven Lernelements konnte nicht geladen werden.",
 	"components.datePicker.validation.format":
@@ -1691,7 +1690,6 @@ export default {
 		"Probiere es mit weniger Suchbegriffen.",
 	"pages.content.emptyState.error.title": "Ooops, keine Ergebnisse!",
 	"pages.content.index.backToCourse": "Zurück zum Kurs",
-	"pages.content.index.backToBoard": "Zurück zum Board",
 	"pages.content.index.backToOverview": "Zurück zur Übersicht",
 	"pages.content.index.search_for": "Suche nach …",
 	"pages.content.index.search_resources": "Ressourcen",
