@@ -68,7 +68,8 @@ watch(isLightBoxOpen, () => {
 
 <style scoped>
 .audio-player {
-	width: 320px;
+	width: 90%;
+	max-width: 700px;
 	height: 64px;
 	margin: 0 auto;
 }
