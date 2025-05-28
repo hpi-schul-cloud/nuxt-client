@@ -5,7 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { VCard } from "vuetify/lib/components/index.mjs";
+import { VCard } from "vuetify/lib/components/index";
 import LoadingStateDialog from "./LoadingStateDialog.vue";
 
 describe("@/components/molecules/LoadingModal", () => {

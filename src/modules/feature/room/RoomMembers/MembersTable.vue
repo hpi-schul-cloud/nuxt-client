@@ -131,7 +131,7 @@ import {
 	useRoomAuthorization,
 	useRoomMembersStore,
 } from "@data-room";
-import { useDisplay } from "vuetify/lib/framework.mjs";
+import { useDisplay } from "vuetify/lib/framework";
 import { storeToRefs } from "pinia";
 import { ChangeRole } from "@feature-room";
 import { authModule } from "@/store/store-accessor";

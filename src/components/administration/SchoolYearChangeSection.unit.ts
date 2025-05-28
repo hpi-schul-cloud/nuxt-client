@@ -15,7 +15,7 @@ import { useSharedSchoolYearChange } from "@data-school";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import { VBtn, VCheckbox } from "vuetify/lib/components/index.mjs";
+import { VBtn, VCheckbox } from "vuetify/lib/components/index";
 import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
 
 jest.mock("@data-school");

@@ -10,7 +10,7 @@ import { SkipLink } from "@ui-skip-link";
 import { shallowMount } from "@vue/test-utils";
 import { KeepAlive } from "vue";
 import { RouterView } from "vue-router";
-import { VMain } from "vuetify/lib/components/index.mjs";
+import { VMain } from "vuetify/lib/components/index";
 import BorderlessLayout from "./Borderless.layout.vue";
 
 describe("BorderlessLayout", () => {

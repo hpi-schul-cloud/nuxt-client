@@ -1,4 +1,4 @@
-declare module "vuetify/lib/locale/de.mjs";
-declare module "vuetify/lib/locale/en.mjs";
-declare module "vuetify/lib/locale/es.mjs";
-declare module "vuetify/lib/locale/uk.mjs";
+declare module "vuetify/lib/locale/de";
+declare module "vuetify/lib/locale/en";
+declare module "vuetify/lib/locale/es";
+declare module "vuetify/lib/locale/uk";
