@@ -1918,6 +1918,7 @@ export default {
 		"Додайте члени до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасників",
+	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} меню",
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
@@ -2027,7 +2028,9 @@ export default {
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Видалити посилання на запрошення '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
-		"Поділіться посиланням на запрошення",
+		"Поділіться посиланням на запрошення „{linkTitle}“",
+	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
+		"Меню дій для посилання-запрошення „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":
 		"Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update":
