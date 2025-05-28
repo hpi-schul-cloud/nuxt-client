@@ -70,6 +70,7 @@ const openAudioPlayerInLightbox = () => {
 		type: LightBoxContentType.AUDIO,
 		downloadUrl: fileRecordItem.url,
 		name: fileRecordItem.name,
+		alt: `${t("components.cardElement.fileElement.emptyAlt")} ${fileRecordItem.name}`,
 	};
 
 	const { open } = useLightBox();
