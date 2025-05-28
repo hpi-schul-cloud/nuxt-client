@@ -7,7 +7,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import * as BoardApi from "@data-board";
-import * as DataBoard from "@data-board";
 import * as FileStorageApi from "@data-file";
 import * as FolderState from "@data-folder";
 import { createMock } from "@golevelup/ts-jest";
@@ -92,17 +91,17 @@ describe("Folder.vue", () => {
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const useBoardStoreMock =
-						createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					useBoardStoreMock.board = undefined;
 					jest
-						.spyOn(DataBoard, "useBoardStore")
+						.spyOn(BoardApi, "useBoardStore")
 						.mockReturnValueOnce(useBoardStoreMock);
 
 					const useBoardPermissionsMock = createMock<
-						ReturnType<typeof DataBoard.useBoardPermissions>
+						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
 					jest
-						.spyOn(DataBoard, "useBoardPermissions")
+						.spyOn(BoardApi, "useBoardPermissions")
 						.mockReturnValueOnce(useBoardPermissionsMock);
 
 					const { wrapper } = setupWrapper();
@@ -211,16 +210,16 @@ describe("Folder.vue", () => {
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const useBoardStoreMock =
-						createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					jest
-						.spyOn(DataBoard, "useBoardStore")
+						.spyOn(BoardApi, "useBoardStore")
 						.mockReturnValueOnce(useBoardStoreMock);
 
 					const useBoardPermissionsMock = createMock<
-						ReturnType<typeof DataBoard.useBoardPermissions>
+						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
 					jest
-						.spyOn(DataBoard, "useBoardPermissions")
+						.spyOn(BoardApi, "useBoardPermissions")
 						.mockReturnValueOnce(useBoardPermissionsMock);
 
 					setupWrapper();
@@ -281,16 +280,16 @@ describe("Folder.vue", () => {
 					fileStorageApiMock.fetchFiles.mockReturnValueOnce(mockFilePromise);
 
 					const useBoardStoreMock =
-						createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					jest
-						.spyOn(DataBoard, "useBoardStore")
+						.spyOn(BoardApi, "useBoardStore")
 						.mockReturnValueOnce(useBoardStoreMock);
 
 					const useBoardPermissionsMock = createMock<
-						ReturnType<typeof DataBoard.useBoardPermissions>
+						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
 					jest
-						.spyOn(DataBoard, "useBoardPermissions")
+						.spyOn(BoardApi, "useBoardPermissions")
 						.mockReturnValueOnce(useBoardPermissionsMock);
 
 					const { wrapper } = setupWrapper();
@@ -371,16 +370,16 @@ describe("Folder.vue", () => {
 					const routerSpy = jest.spyOn(router, "replace").mockImplementation();
 
 					const useBoardStoreMock =
-						createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					jest
-						.spyOn(DataBoard, "useBoardStore")
+						.spyOn(BoardApi, "useBoardStore")
 						.mockReturnValueOnce(useBoardStoreMock);
 
 					const useBoardPermissionsMock = createMock<
-						ReturnType<typeof DataBoard.useBoardPermissions>
+						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
 					jest
-						.spyOn(DataBoard, "useBoardPermissions")
+						.spyOn(BoardApi, "useBoardPermissions")
 						.mockReturnValueOnce(useBoardPermissionsMock);
 
 					const { wrapper } = setupWrapper();
@@ -467,16 +466,16 @@ describe("Folder.vue", () => {
 					const routerSpy = jest.spyOn(router, "replace").mockImplementation();
 
 					const useBoardStoreMock =
-						createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					jest
-						.spyOn(DataBoard, "useBoardStore")
+						.spyOn(BoardApi, "useBoardStore")
 						.mockReturnValueOnce(useBoardStoreMock);
 
 					const useBoardPermissionsMock = createMock<
-						ReturnType<typeof DataBoard.useBoardPermissions>
+						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
 					jest
-						.spyOn(DataBoard, "useBoardPermissions")
+						.spyOn(BoardApi, "useBoardPermissions")
 						.mockReturnValueOnce(useBoardPermissionsMock);
 
 					const { wrapper } = setupWrapper();
@@ -554,16 +553,16 @@ describe("Folder.vue", () => {
 					const routerSpy = jest.spyOn(router, "replace").mockImplementation();
 
 					const useBoardStoreMock =
-						createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					jest
-						.spyOn(DataBoard, "useBoardStore")
+						.spyOn(BoardApi, "useBoardStore")
 						.mockReturnValueOnce(useBoardStoreMock);
 
 					const useBoardPermissionsMock = createMock<
-						ReturnType<typeof DataBoard.useBoardPermissions>
+						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
 					jest
-						.spyOn(DataBoard, "useBoardPermissions")
+						.spyOn(BoardApi, "useBoardPermissions")
 						.mockReturnValueOnce(useBoardPermissionsMock);
 
 					const { wrapper } = setupWrapper();
@@ -641,16 +640,16 @@ describe("Folder.vue", () => {
 					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
 
 					const useBoardStoreMock =
-						createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					jest
-						.spyOn(DataBoard, "useBoardStore")
+						.spyOn(BoardApi, "useBoardStore")
 						.mockReturnValueOnce(useBoardStoreMock);
 
 					const useBoardPermissionsMock = createMock<
-						ReturnType<typeof DataBoard.useBoardPermissions>
+						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
 					jest
-						.spyOn(DataBoard, "useBoardPermissions")
+						.spyOn(BoardApi, "useBoardPermissions")
 						.mockReturnValueOnce(useBoardPermissionsMock);
 
 					const { wrapper } = setupWrapper();
@@ -733,16 +732,16 @@ describe("Folder.vue", () => {
 					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
 
 					const useBoardStoreMock =
-						createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					jest
-						.spyOn(DataBoard, "useBoardStore")
+						.spyOn(BoardApi, "useBoardStore")
 						.mockReturnValueOnce(useBoardStoreMock);
 
 					const useBoardPermissionsMock = createMock<
-						ReturnType<typeof DataBoard.useBoardPermissions>
+						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
 					jest
-						.spyOn(DataBoard, "useBoardPermissions")
+						.spyOn(BoardApi, "useBoardPermissions")
 						.mockReturnValueOnce(useBoardPermissionsMock);
 
 					const { wrapper } = setupWrapper();
@@ -818,16 +817,16 @@ describe("Folder.vue", () => {
 				]);
 
 				const useBoardStoreMock =
-					createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				jest
-					.spyOn(DataBoard, "useBoardStore")
+					.spyOn(BoardApi, "useBoardStore")
 					.mockReturnValueOnce(useBoardStoreMock);
 
 				const useBoardPermissionsMock = createMock<
-					ReturnType<typeof DataBoard.useBoardPermissions>
+					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(true) });
 				jest
-					.spyOn(DataBoard, "useBoardPermissions")
+					.spyOn(BoardApi, "useBoardPermissions")
 					.mockReturnValueOnce(useBoardPermissionsMock);
 
 				const { wrapper } = setupWrapper();
@@ -908,16 +907,16 @@ describe("Folder.vue", () => {
 					]);
 
 					const useBoardStoreMock =
-						createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					jest
-						.spyOn(DataBoard, "useBoardStore")
+						.spyOn(BoardApi, "useBoardStore")
 						.mockReturnValueOnce(useBoardStoreMock);
 
 					const useBoardPermissionsMock = createMock<
-						ReturnType<typeof DataBoard.useBoardPermissions>
+						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
 					jest
-						.spyOn(DataBoard, "useBoardPermissions")
+						.spyOn(BoardApi, "useBoardPermissions")
 						.mockReturnValueOnce(useBoardPermissionsMock);
 
 					const { wrapper } = setupWrapper();
@@ -995,16 +994,16 @@ describe("Folder.vue", () => {
 					]);
 
 					const useBoardStoreMock =
-						createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					jest
-						.spyOn(DataBoard, "useBoardStore")
+						.spyOn(BoardApi, "useBoardStore")
 						.mockReturnValueOnce(useBoardStoreMock);
 
 					const useBoardPermissionsMock = createMock<
-						ReturnType<typeof DataBoard.useBoardPermissions>
+						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
 					jest
-						.spyOn(DataBoard, "useBoardPermissions")
+						.spyOn(BoardApi, "useBoardPermissions")
 						.mockReturnValueOnce(useBoardPermissionsMock);
 
 					const { wrapper } = setupWrapper();
@@ -1079,16 +1078,16 @@ describe("Folder.vue", () => {
 				]);
 
 				const useBoardStoreMock =
-					createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				jest
-					.spyOn(DataBoard, "useBoardStore")
+					.spyOn(BoardApi, "useBoardStore")
 					.mockReturnValueOnce(useBoardStoreMock);
 
 				const useBoardPermissionsMock = createMock<
-					ReturnType<typeof DataBoard.useBoardPermissions>
+					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(true) });
 				jest
-					.spyOn(DataBoard, "useBoardPermissions")
+					.spyOn(BoardApi, "useBoardPermissions")
 					.mockReturnValueOnce(useBoardPermissionsMock);
 
 				const { wrapper } = setupWrapper();
@@ -1156,16 +1155,16 @@ describe("Folder.vue", () => {
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 				const useBoardStoreMock =
-					createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				jest
-					.spyOn(DataBoard, "useBoardStore")
+					.spyOn(BoardApi, "useBoardStore")
 					.mockReturnValueOnce(useBoardStoreMock);
 
 				const useBoardPermissionsMock = createMock<
-					ReturnType<typeof DataBoard.useBoardPermissions>
+					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(true) });
 				jest
-					.spyOn(DataBoard, "useBoardPermissions")
+					.spyOn(BoardApi, "useBoardPermissions")
 					.mockReturnValueOnce(useBoardPermissionsMock);
 
 				const { wrapper } = setupWrapper();
@@ -1228,16 +1227,16 @@ describe("Folder.vue", () => {
 				fileStorageApiMock.upload.mockReturnValueOnce(mockUploadPromise2);
 
 				const useBoardStoreMock =
-					createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				jest
-					.spyOn(DataBoard, "useBoardStore")
+					.spyOn(BoardApi, "useBoardStore")
 					.mockReturnValueOnce(useBoardStoreMock);
 
 				const useBoardPermissionsMock = createMock<
-					ReturnType<typeof DataBoard.useBoardPermissions>
+					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(true) });
 				jest
-					.spyOn(DataBoard, "useBoardPermissions")
+					.spyOn(BoardApi, "useBoardPermissions")
 					.mockReturnValueOnce(useBoardPermissionsMock);
 
 				const { wrapper, parentId } = setupWrapper();
@@ -1383,16 +1382,16 @@ describe("Folder.vue", () => {
 				]);
 
 				const useBoardStoreMock =
-					createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				jest
-					.spyOn(DataBoard, "useBoardStore")
+					.spyOn(BoardApi, "useBoardStore")
 					.mockReturnValueOnce(useBoardStoreMock);
 
 				const useBoardPermissionsMock = createMock<
-					ReturnType<typeof DataBoard.useBoardPermissions>
+					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(false) });
 				jest
-					.spyOn(DataBoard, "useBoardPermissions")
+					.spyOn(BoardApi, "useBoardPermissions")
 					.mockReturnValueOnce(useBoardPermissionsMock);
 
 				const { wrapper } = setupWrapper();
@@ -1455,16 +1454,16 @@ describe("Folder.vue", () => {
 				]);
 
 				const useBoardStoreMock =
-					createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				jest
-					.spyOn(DataBoard, "useBoardStore")
+					.spyOn(BoardApi, "useBoardStore")
 					.mockReturnValueOnce(useBoardStoreMock);
 
 				const useBoardPermissionsMock = createMock<
-					ReturnType<typeof DataBoard.useBoardPermissions>
+					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(false) });
 				jest
-					.spyOn(DataBoard, "useBoardPermissions")
+					.spyOn(BoardApi, "useBoardPermissions")
 					.mockReturnValueOnce(useBoardPermissionsMock);
 
 				const { wrapper } = setupWrapper();
@@ -1532,16 +1531,16 @@ describe("Folder.vue", () => {
 				]);
 
 				const useBoardStoreMock =
-					createMock<ReturnType<typeof DataBoard.useBoardStore>>();
+					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				jest
-					.spyOn(DataBoard, "useBoardStore")
+					.spyOn(BoardApi, "useBoardStore")
 					.mockReturnValueOnce(useBoardStoreMock);
 
 				const useBoardPermissionsMock = createMock<
-					ReturnType<typeof DataBoard.useBoardPermissions>
+					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(false) });
 				jest
-					.spyOn(DataBoard, "useBoardPermissions")
+					.spyOn(BoardApi, "useBoardPermissions")
 					.mockReturnValueOnce(useBoardPermissionsMock);
 
 				const { wrapper } = setupWrapper();
