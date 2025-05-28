@@ -4,7 +4,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
-import { VCard, VDialog, VTextField } from "vuetify/lib/components/index.mjs";
+import { VCard, VDialog, VTextField } from "vuetify/lib/components/index";
 import RenameFileDialog from "./RenameFileDialog.vue";
 
 describe("RenameFileDialog", () => {

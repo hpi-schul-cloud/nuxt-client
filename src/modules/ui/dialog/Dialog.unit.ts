@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { enableAutoUnmount, mount } from "@vue/test-utils";
-import { VCard, VDialog } from "vuetify/lib/components/index.mjs";
+import { VCard, VDialog } from "vuetify/lib/components/index";
 import Dialog from "./Dialog.vue";
 
 describe("Dialog", () => {

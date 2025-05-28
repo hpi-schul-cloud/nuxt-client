@@ -50,16 +50,11 @@
 </template>
 
 <script setup lang="ts">
+import { useUid } from "@/utils/uid";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import {
-	VBtn,
-	VCard,
-	VDialog,
-	VSpacer,
-} from "vuetify/lib/components/index.mjs";
-import { useUid } from "@/utils/uid";
+import { VBtn, VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
 
 const props = defineProps({
 	message: { type: String, required: false, default: "" },

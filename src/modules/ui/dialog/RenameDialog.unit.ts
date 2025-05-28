@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { VCard, VDialog, VTextField } from "vuetify/lib/components/index.mjs";
+import { VCard, VDialog, VTextField } from "vuetify/lib/components/index";
 import Dialog from "./Dialog.vue";
 import RenameDialog from "./RenameDialog.vue";
 
