@@ -11,6 +11,7 @@
 import { AudioPlayer } from "@ui-audio-player";
 import { ContentElementBar } from "@ui-board";
 import { defineComponent } from "vue";
+import { FileAlert } from "../../../shared/types/FileAlert.enum";
 
 export default defineComponent({
 	name: "AudioDisplay",
@@ -22,8 +23,8 @@ export default defineComponent({
 	emits: ["error"],
 
 	setup(props, { emit }) {
-		const handleError = (error: Error) => {
-			emit("error", error);
+		const handleError = () => {
+			emit("error", FileAlert.AUDIO_FORMAT_ERROR);
 		};
 
 		return { AudioPlayer, handleError };

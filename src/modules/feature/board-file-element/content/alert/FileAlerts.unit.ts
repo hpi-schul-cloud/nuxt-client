@@ -1,10 +1,10 @@
-import { FileAlert } from "@/types/file/FileAlert.enum";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
 import { shallowMount } from "@vue/test-utils";
+import { FileAlert } from "../../shared/types/FileAlert.enum";
 import FileAlerts from "./FileAlerts.vue";
 
 describe("FileAlerts", () => {

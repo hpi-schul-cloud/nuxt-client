@@ -47,7 +47,6 @@
 </template>
 
 <script lang="ts">
-import { FileAlert } from "@/types/file/FileAlert.enum";
 import { formatSecondsToHourMinSec } from "@/utils/fileHelper";
 import { mdiPause, mdiPlay, mdiPlaySpeed } from "@icons/material";
 import { useMediaControls } from "@vueuse/core";
@@ -75,7 +74,7 @@ export default defineComponent({
 			controls;
 
 		onSourceError(() => {
-			emit("error", FileAlert.AUDIO_FORMAT_ERROR);
+			emit("error");
 		});
 
 		const onPlay = () => {

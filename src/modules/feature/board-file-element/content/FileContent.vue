@@ -47,23 +47,23 @@
 </template>
 
 <script setup lang="ts">
-import { FileAlert } from "@/types/file/FileAlert.enum";
+import { computed, PropType, ref } from "vue";
+import FileAlerts from "./alert/FileAlerts.vue";
+import FileDisplay from "../content/display/FileDisplay.vue";
+import FileDescription from "./display/file-description/FileDescription.vue";
+import { FileProperties } from "../shared/types/file-properties";
+import FileInputs from "././inputs/FileInputs.vue";
+import ContentElementFooter from "./footer/ContentElementFooter.vue";
+import { FileAlert } from "../shared/types/FileAlert.enum";
+import { useDebounceFn } from "@vueuse/core";
+import { injectStrict } from "@/utils/inject";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { useDisplay } from "vuetify";
 import {
 	isAudioMimeType,
 	isPdfMimeType,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
-import { injectStrict } from "@/utils/inject";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { useDebounceFn } from "@vueuse/core";
-import { computed, PropType, ref } from "vue";
-import { useDisplay } from "vuetify";
-import FileDisplay from "../content/display/FileDisplay.vue";
-import { FileProperties } from "../shared/types/file-properties";
-import FileInputs from "././inputs/FileInputs.vue";
-import FileAlerts from "./alert/FileAlerts.vue";
-import FileDescription from "./display/file-description/FileDescription.vue";
-import ContentElementFooter from "./footer/ContentElementFooter.vue";
 
 const props = defineProps({
 	fileProperties: {

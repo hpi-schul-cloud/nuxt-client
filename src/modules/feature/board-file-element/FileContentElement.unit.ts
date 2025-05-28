@@ -5,7 +5,6 @@ import {
 } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import { FileAlert } from "@/types/file/FileAlert.enum";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
@@ -22,6 +21,7 @@ import { computed, nextTick } from "vue";
 import FileContentElement from "./FileContentElement.vue";
 import FileContent from "./content/FileContent.vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
+import { FileAlert } from "./shared/types/FileAlert.enum";
 import { FileProperties } from "./shared/types/file-properties";
 import FileUpload from "./upload/FileUpload.vue";
 

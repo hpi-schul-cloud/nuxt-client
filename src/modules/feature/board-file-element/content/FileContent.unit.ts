@@ -1,15 +1,15 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
-import { FileAlert } from "@/types/file/FileAlert.enum";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
+import { FileAlert } from "../shared/types/FileAlert.enum";
 import FileContent from "./FileContent.vue";
 import FileAlerts from "./alert/FileAlerts.vue";
 import FileDisplay from "./display/FileDisplay.vue";
 import FileDescription from "./display/file-description/FileDescription.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 describe("FileContent", () => {
 	beforeEach(() => {

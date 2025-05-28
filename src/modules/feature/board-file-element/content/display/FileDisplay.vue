@@ -41,18 +41,18 @@
 </template>
 
 <script setup lang="ts">
-import { FileAlert } from "@/types/file/FileAlert.enum";
+import { computed, PropType } from "vue";
+import { FileProperties } from "../../shared/types/file-properties";
+import { FileAlert } from "../../shared/types/FileAlert.enum";
+import AudioDisplay from "./audio-display/AudioDisplay.vue";
+import ImageDisplay from "./image-display/ImageDisplay.vue";
+import VideoDisplay from "./video-display/VideoDisplay.vue";
+import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 import {
 	isAudioMimeType,
 	isPdfMimeType,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
-import { computed, PropType } from "vue";
-import { FileProperties } from "../../shared/types/file-properties";
-import AudioDisplay from "./audio-display/AudioDisplay.vue";
-import ImageDisplay from "./image-display/ImageDisplay.vue";
-import PdfDisplay from "./pdf-display/PdfDisplay.vue";
-import VideoDisplay from "./video-display/VideoDisplay.vue";
 
 const props = defineProps({
 	fileProperties: {
