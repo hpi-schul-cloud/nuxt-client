@@ -742,6 +742,10 @@ export default {
 		"{name} wurde erfolgreich importiert",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"Folgende Inhalte werden nicht importiert:",
+	"components.molecules.import.room.options.title": "Raum importieren",
+	"components.molecules.import.room.rename":
+		"Bei Bedarf kann der Name des Raumes umbenannt werden: ",
+	"components.molecules.import.room.label": "Raum-Name",
 	"components.molecules.import.tasks.label": "Aufgabe",
 	"components.molecules.import.tasks.rename":
 		"Bei Bedarf kann der Name der Aufgabe umbenannt werden: ",

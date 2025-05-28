@@ -757,6 +757,10 @@ export default {
 	"components.molecules.import.options.success": "{name} importado con éxito",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"No se importará el siguiente contenido:",
+	"components.molecules.import.room.options.title": "Importar espacio",
+	"components.molecules.import.room.rename":
+		"Si es necesario, se puede cambiar el nombre del espacio: ",
+	"components.molecules.import.room.label": "Nombre del espacio",
 	"components.molecules.import.tasks.label": "Tarea",
 	"components.molecules.import.tasks.rename":
 		"Si es necesario, se puede cambiar el nombre de la tarea: ",

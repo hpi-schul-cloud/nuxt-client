@@ -34,8 +34,7 @@ export const useRoomAuthorization = () => {
 			) && authModule.getUserRoles.includes(Roles.Teacher);
 		canDeleteRoom.value = permissions.includes(Permission.RoomDelete);
 		canCopyRoom.value = permissions.includes(Permission.RoomCopy);
-		// TODO canShareRoom.value = permissions.includes(Permission.RoomShare);
-		canShareRoom.value = true; // Temporary fix, as sharing is not implemented yet
+		canShareRoom.value = permissions.includes(Permission.RoomShare);
 		canEditRoom.value = permissions.includes(Permission.RoomEdit);
 		canEditRoomContent.value = permissions.includes(Permission.RoomContentEdit);
 		canLeaveRoom.value = permissions.includes(Permission.RoomLeave);

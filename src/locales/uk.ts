@@ -754,6 +754,10 @@ export default {
 	"components.molecules.import.options.success": "{name} успішно імпортовано",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"Наступний вміст не буде імпортовано:",
+	"components.molecules.import.room.options.title": "Імпортувати кімнату",
+	"components.molecules.import.room.rename":
+		"При необхідності назву кімнати можна перейменувати: ",
+	"components.molecules.import.room.label": "Назва кімнати",
 	"components.molecules.import.tasks.label": "Завдання",
 	"components.molecules.import.tasks.rename":
 		"При необхідності назву завдання можна перейменувати: ",

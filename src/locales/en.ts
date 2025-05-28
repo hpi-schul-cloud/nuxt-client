@@ -736,6 +736,10 @@ export default {
 	"components.molecules.import.options.success": "{name} imported successfully",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"The following content will not be imported:",
+	"components.molecules.import.room.options.title": "Import room",
+	"components.molecules.import.room.rename":
+		"If necessary, the name of the room can be renamed: ",
+	"components.molecules.import.room.label": "Room name",
 	"components.molecules.import.tasks.label": "Task",
 	"components.molecules.import.tasks.rename":
 		"If necessary, the name of the task can be renamed: ",

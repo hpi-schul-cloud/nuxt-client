@@ -11,9 +11,7 @@
 					{{ roomTitle }}
 				</h1>
 				<RoomMenu
-					:room-name="room?.name"
-					:is-copy-enabled="isRoomCopyFeatureEnabled"
-					:is-share-enabled="isRoomShareFeatureEnabled"
+					:room-name="room.name"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
 					@room:copy="onCopy"
@@ -214,13 +212,12 @@ const onManageMembers = () => {
 };
 
 const hasRoomCopyStarted = ref(false);
-const isRoomCopyFeatureEnabled = computed(() => {
-	return envConfigModule.getEnv.FEATURE_ROOM_COPY_ENABLED;
-});
-const isRoomShareFeatureEnabled = computed(() => {
-	// return envConfigModule.getEnv.FEATURE_ROOM_SHARE_ENABLED;
-	return true; // TODO: Remove this line when the feature is implemented
-});
+const isRoomCopyFeatureEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_ROOM_COPY_ENABLED
+);
+const isRoomShareFeatureEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_ROOM_SHARE
+);
 
 const onCopy = () => {
 	if (isRoomCopyFeatureEnabled.value && canCopyRoom.value) {

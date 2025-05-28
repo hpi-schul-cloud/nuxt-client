@@ -20,6 +20,24 @@ export interface StartFlow {
 	destinationType?: BoardExternalReferenceType;
 }
 
+const getSharePath = (
+	parentType: ShareTokenBodyParamsParentTypeEnum,
+	destinationType: BoardExternalReferenceType
+) => {
+	if (parentType === ShareTokenBodyParamsParentTypeEnum.ColumnBoard) {
+		if (destinationType === BoardExternalReferenceType.Room) {
+			return "rooms";
+		}
+		return "rooms/courses-overview";
+	}
+
+	if (parentType === ShareTokenBodyParamsParentTypeEnum.Room) {
+		return "rooms";
+	}
+
+	return "rooms/courses-overview";
+};
+
 @Module({
 	name: "shareModule",
 	namespaced: true,
@@ -53,10 +71,7 @@ export default class ShareModule extends VuexModule {
 					shareTokenPayload
 				);
 			if (!shareTokenResult) return undefined;
-			const sharePath =
-				this.destinationType === BoardExternalReferenceType.Course
-					? "rooms/courses-overview"
-					: "rooms";
+			const sharePath = getSharePath(this.parentType, this.destinationType);
 			const shareUrl = `${window.location.origin}/${sharePath}?import=${shareTokenResult.data.token}`;
 			this.setShareUrl(shareUrl);
 			return shareTokenResult.data;

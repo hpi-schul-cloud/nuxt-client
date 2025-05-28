@@ -11,11 +11,11 @@
 			@click="() => $emit('room:manage-members')"
 		/>
 		<KebabMenuActionRoomCopy
-			v-if="props.isCopyEnabled && canCopyRoom"
+			v-if="isRoomCopyFeatureEnabled && canCopyRoom"
 			@click="() => $emit('room:copy')"
 		/>
 		<KebabMenuActionShare
-			v-if="props.isShareEnabled && canShareRoom"
+			v-if="isRoomShareFeatureEnabled && canShareRoom"
 			@click="() => $emit('room:share')"
 		/>
 		<KebabMenuActionDelete
@@ -41,11 +41,10 @@ import {
 import { useRoomAuthorization } from "@data-room";
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
-const props = defineProps({
+defineProps({
 	roomName: { type: String, required: false, default: undefined },
-	isCopyEnabled: { type: Boolean, required: false, default: false },
-	isShareEnabled: { type: Boolean, required: false, default: false },
 });
 
 const emit = defineEmits([
@@ -59,12 +58,13 @@ const emit = defineEmits([
 
 const { t } = useI18n();
 
-const onDeleteRoom = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
-	if (shouldDelete) {
-		emit("room:delete");
-	}
-};
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const isRoomCopyFeatureEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_ROOM_COPY_ENABLED
+);
+const isRoomShareFeatureEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_ROOM_SHARE
+);
 
 const {
 	canAddRoomMembers,
@@ -80,4 +80,11 @@ const membersInfoText = computed(() =>
 		? t("pages.rooms.members.manage")
 		: t("pages.rooms.members.view")
 );
+
+const onDeleteRoom = async (confirmation: Promise<boolean>) => {
+	const shouldDelete = await confirmation;
+	if (shouldDelete) {
+		emit("room:delete");
+	}
+};
 </script>

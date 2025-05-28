@@ -44,6 +44,10 @@ import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 const { t } = useI18n();
 const { rooms, isLoading, isEmpty, fetchRooms } = useRoomsState();
 
+defineExpose({
+	refetch: fetchRooms,
+});
+
 onMounted(() => {
 	fetchRooms();
 });
