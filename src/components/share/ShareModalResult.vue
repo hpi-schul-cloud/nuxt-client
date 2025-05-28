@@ -1,55 +1,56 @@
 <template>
 	<div>
 		<v-text-field
+			ref="shareUrlTextField"
+			autofocus
 			variant="filled"
 			:model-value="shareUrl"
 			readonly
 			:label="`${t(`components.molecules.share.${type}.result.linkLabel`)}`"
 			data-testid="share-course-result-url"
 		/>
-		<div class="mb-4">
-			<div
-				v-if="!isShowQrCode"
-				class="d-flex flex-row flex-wrap align-items-center justify-space-around"
-			>
-				<ExtendedIconBtn
-					class="d-sm-none d-flex"
-					data-testid="mobilePlatformAction"
-					:icon="mdiShareVariantOutline"
-					:label="$t('common.actions.share')"
-					@click.stop="onShareMobilePlatform"
-				/>
 
+		<div
+			v-if="isShowQrCode"
+			class="d-flex justify-content-center overflow-hidden mt-4"
+		>
+			<QRCode :url="shareUrl" data-testid="qrCode" />
+		</div>
+
+		<div
+			v-else
+			class="d-flex flex-row flex-wrap align-items-center justify-space-around"
+		>
+			<ExtendedIconBtn
+				v-if="isExtraSmallDisplay"
+				data-testid="mobilePlatformAction"
+				:icon="mdiShareVariantOutline"
+				:label="t('common.actions.share')"
+				@click.stop="onShareMobilePlatform"
+			/>
+
+			<template v-else>
 				<ExtendedIconBtn
-					class="d-sm-flex d-none"
 					data-testid="shareMailAction"
 					:icon="mdiEmailOutline"
-					:label="$t('components.molecules.share.result.mailShare')"
+					:label="t('components.molecules.share.result.mailShare')"
 					@click.stop="onMailShareUrl"
 				/>
 
 				<ExtendedIconBtn
-					class="d-sm-flex d-none"
 					data-testid="copyAction"
 					:icon="mdiContentCopy"
-					:label="$t('common.actions.shareLink')"
+					:label="t('common.actions.shareLink')"
 					@click.stop="onCopy"
 				/>
+			</template>
 
-				<ExtendedIconBtn
-					class="d-flex"
-					data-testid="qrCodeAction"
-					:icon="mdiQrcode"
-					:label="$t('components.molecules.share.result.qrCodeScan')"
-					@click.stop="onShowQrCode"
-				/>
-			</div>
-		</div>
-		<div
-			v-if="isShowQrCode"
-			class="d-flex justify-content-center overflow-hidden"
-		>
-			<QRCode :url="shareUrl" data-testid="qrCode" />
+			<ExtendedIconBtn
+				data-testid="qrCodeAction"
+				:icon="mdiQrcode"
+				:label="t('components.molecules.share.result.qrCodeScan')"
+				@click.stop="onShowQrCode"
+			/>
 		</div>
 	</div>
 </template>
@@ -63,8 +64,9 @@ import {
 	mdiQrcode,
 	mdiShareVariantOutline,
 } from "@icons/material";
-import { ref } from "vue";
+import { nextTick, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 
 const props = defineProps({
 	shareUrl: {
@@ -78,6 +80,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["copied", "done"]);
 const { t } = useI18n();
+const { xs: isExtraSmallDisplay } = useDisplay();
 
 const onMailShareUrl = () => {
 	const subject = encodeURIComponent(
@@ -108,7 +111,13 @@ const onShareMobilePlatform = () => {
 };
 
 const isShowQrCode = ref(false);
+const shareUrlTextField = useTemplateRef("shareUrlTextField");
+
 const onShowQrCode = () => {
 	isShowQrCode.value = true;
+
+	nextTick(() => {
+		shareUrlTextField.value?.focus();
+	});
 };
 </script>
