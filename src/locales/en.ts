@@ -2004,6 +2004,8 @@ export default {
 		"The selected persons have been added to the room as members.",
 	"pages.rooms.members.confirmationTable.notification.reject.multiple":
 		"The membership requests of the selected persons have been rejected.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Action menu for {fullName}",
 	"pages.rooms.invitationlinks.error.create":
 		"Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update":

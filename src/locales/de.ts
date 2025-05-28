@@ -2039,6 +2039,8 @@ export default {
 		"Die ausgewählten Personen wurden als Mitglieder zum Raum hinzugefügt.",
 	"pages.rooms.members.confirmationTable.notification.reject.multiple":
 		"Die Beitrittsanfragen der ausgewählten Personen wurden abgelehnt.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Aktionsmenü für {fullName}",
 	"pages.rooms.invitationlinks.error.create":
 		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update":

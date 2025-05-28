@@ -2040,6 +2040,8 @@ export default {
 		"Вибрані особи були додані до кімнати як учасники.",
 	"pages.rooms.members.confirmationTable.notification.reject.multiple":
 		"Вибрані особи були додані до кімнати як учасники.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Меню дій для {fullName}",
 	"pages.rooms.invitationlinks.error.create":
 		"Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update":

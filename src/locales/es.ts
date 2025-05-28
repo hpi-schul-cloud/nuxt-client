@@ -2072,6 +2072,8 @@ export default {
 		"Las personas seleccionadas han sido añadidas a la sala como miembros.",
 	"pages.rooms.members.confirmationTable.notification.reject.multiple":
 		"Las solicitudes de adhesión de las personas seleccionadas han sido rechazadas.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Menú de acción para {fullName}",
 	"pages.rooms.invitationlinks.error.create":
 		"No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update":

@@ -5,6 +5,7 @@
 		:table-headers="tableHeaders"
 		:show-select="showSelect"
 		select-item-key="userId"
+		aria-label-name-key="fullName"
 		:external-selected-ids="confirmationSelectedIds"
 		@update:selected-ids="onUpdateSelectedIds"
 	>
@@ -19,7 +20,14 @@
 
 		<template #[`item.actions`]="{ item }">
 			<div class="d-flex align-center">
-				<KebabMenu :data-testid="`kebab-menu-${item.id}`">
+				<KebabMenu
+					:data-testid="`kebab-menu-${item.id}`"
+					:aria-label="
+						t('pages.rooms.members.confirmationTable.actionMenu.ariaLabel', {
+							fullName: item.fullName,
+						})
+					"
+				>
 					<KebabMenuActionConfirmRequest
 						:data-testid="`kebab-menu-confirm-${item.id}`"
 						@click="onConfirm([item.userId])"
