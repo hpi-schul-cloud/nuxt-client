@@ -1946,6 +1946,7 @@ export default {
 		"Añadir miembros a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Miembros",
+	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} menú",
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.add.infoText":
 		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
@@ -2061,7 +2062,9 @@ export default {
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"¿Suprimir el enlace de invitación '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
-		"Compartir enlace de invitación",
+		"Compartir enlace de invitación „{linkTitle}“",
+	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
+		"Menú de acción para el enlace de invitación „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":
 		"No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update":
