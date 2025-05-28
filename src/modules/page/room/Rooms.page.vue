@@ -39,7 +39,7 @@
 				</li>
 			</ul>
 		</InfoAlert>
-		<RoomGrid />
+		<RoomGrid ref="roomGridRef" />
 		<ImportFlow
 			:is-active="isImportMode"
 			:token="importToken"
@@ -103,9 +103,16 @@ onMounted(() => {
 	fetchRooms();
 });
 
-const onImportSuccess = (newName: string, id: string) => {
+const roomGridRef = ref();
+
+const onImportSuccess = (newName: string, destinationId?: string) => {
 	showImportSuccess(newName);
-	router.replace({ name: "room-details", params: { id } });
+	if (destinationId) {
+		router.replace({ name: "room-details", params: { destinationId } });
+	} else {
+		router.replace({ name: "rooms" });
+		roomGridRef.value?.refetch();
+	}
 };
 
 const showImportSuccess = (newName: string) => {

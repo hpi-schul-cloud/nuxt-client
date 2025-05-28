@@ -63,7 +63,9 @@ const props = defineProps({
 		required: true,
 	},
 });
-const emit = defineEmits(["success"]);
+const emit = defineEmits<{
+	(e: "success", newName: string, destinationId?: string): void;
+}>();
 
 const { t } = useI18n();
 const copyModule = injectStrict(COPY_MODULE_KEY);
@@ -147,7 +149,8 @@ async function validateShareToken() {
 		parentName.value = validateResult.parentName;
 		parentType.value = validateResult.parentType;
 		openModal(
-			parentType.value === ShareTokenInfoResponseParentTypeEnum.Courses
+			parentType.value === ShareTokenInfoResponseParentTypeEnum.Courses ||
+				parentType.value === ShareTokenInfoResponseParentTypeEnum.Room
 				? "import"
 				: "selectCourse"
 		);
