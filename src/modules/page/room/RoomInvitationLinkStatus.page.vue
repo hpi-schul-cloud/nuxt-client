@@ -15,7 +15,7 @@
 		</div>
 		<div v-else class="w-100 text-center">
 			<CrossedHandsSvg data-testid="img-crossed-hands" />
-			<div class="text-h2" data-testid="status-message">
+			<div class="text-h4" data-testid="status-message">
 				{{ infoMessage }}
 			</div>
 		</div>
