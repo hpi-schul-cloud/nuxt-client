@@ -76,15 +76,14 @@ const props = defineProps({
 const emit = defineEmits(["update:date", "error"]);
 const { t } = useI18n();
 
+const getInitialValue = () =>
+	props.date ? dayjs(props.date).format(DATETIME_FORMAT.date) : undefined;
+
 const showDateDialog = ref(false);
 const dateTextField = useTemplateRef("date-text-field");
 const dateString = ref<string>();
 const externalErrors = toRef(props, "errors");
-watchEffect(() => {
-	dateString.value = props.date
-		? dayjs(props.date).format(DATETIME_FORMAT.date)
-		: undefined;
-});
+dateString.value = getInitialValue();
 
 const dateObject = computed({
 	get() {

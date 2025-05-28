@@ -3,16 +3,16 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { AudioPlayer } from "@ui-audio-player";
+import { PreviewImage } from "@ui-preview-image";
 import { nextTick, ref } from "vue";
-import { VRow, VToolbarTitle } from "vuetify/lib/components/index.mjs";
+import { VRow, VToolbarTitle } from "vuetify/lib/components/index";
 import {
 	LightBoxContentType,
 	LightBoxOptions,
 	useLightBox,
 } from "./LightBox.composable";
 import LightBox from "./LightBox.vue";
-import { PreviewImage } from "@ui-preview-image";
-import { AudioPlayer } from "@ui-audio-player";
 
 jest.mock("./LightBox.composable");
 jest.mock("@/utils/fileHelper");

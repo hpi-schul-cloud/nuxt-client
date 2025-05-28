@@ -8,7 +8,7 @@ import RoomGrid from "./RoomGrid.vue";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useRoomsState } from "@data-room";
 import { ref } from "vue";
-import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
+import { VSkeletonLoader } from "vuetify/lib/components/index";
 import RoomTile from "./RoomTile.vue";
 import { EmptyState } from "@ui-empty-state";
 
@@ -61,6 +61,7 @@ describe("@feature-room/RoomGrid", () => {
 
 		const emptyState = wrapper.findComponent(EmptyState);
 		expect(emptyState.exists()).toBe(true);
+		expect(emptyState.props("title")).toBe("pages.rooms.emptyState");
 	});
 
 	it("should render tiles for each room", () => {
