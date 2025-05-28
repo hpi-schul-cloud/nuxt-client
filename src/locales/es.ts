@@ -2068,9 +2068,9 @@ export default {
 		"{fullName} ha sido añadido como miembro de la sala.",
 	"pages.rooms.members.confirmationTable.notification.reject":
 		"La solicitud de {fullName} para unirse ha sido rechazada.",
-	"pages.rooms.members.invitationTable.notification.confirm.multiple":
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
 		"Las personas seleccionadas han sido añadidas a la sala como miembros.",
-	"pages.rooms.members.invitationTable.notification.multipleReject":
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
 		"Las solicitudes de adhesión de las personas seleccionadas han sido rechazadas.",
 	"pages.rooms.invitationlinks.error.create":
 		"No se ha podido crear el enlace de invitación.",

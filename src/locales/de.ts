@@ -2035,9 +2035,9 @@ export default {
 		"{fullName} wurde als Raummitglied hinzugefügt.",
 	"pages.rooms.members.confirmationTable.notification.reject":
 		"Die Beitrittsanfrage von {fullName} wurde abgelehnt.",
-	"pages.rooms.members.invitationTable.notification.confirm.multiple":
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
 		"Die ausgewählten Personen wurden als Mitglieder zum Raum hinzugefügt.",
-	"pages.rooms.members.invitationTable.notification.multipleReject":
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
 		"Die Beitrittsanfragen der ausgewählten Personen wurden abgelehnt.",
 	"pages.rooms.invitationlinks.error.create":
 		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",

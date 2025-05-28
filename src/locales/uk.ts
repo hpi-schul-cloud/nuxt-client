@@ -2036,9 +2036,9 @@ export default {
 		"{fullName} був доданий як член кімнати.",
 	"pages.rooms.members.confirmationTable.notification.reject":
 		"Запит {fullName} на приєднання було відхилено.",
-	"pages.rooms.members.invitationTable.notification.confirm.multiple":
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
 		"Вибрані особи були додані до кімнати як учасники.",
-	"pages.rooms.members.invitationTable.notification.multipleReject":
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
 		"Вибрані особи були додані до кімнати як учасники.",
 	"pages.rooms.invitationlinks.error.create":
 		"Не вдалося створити посилання на запрошення.",
