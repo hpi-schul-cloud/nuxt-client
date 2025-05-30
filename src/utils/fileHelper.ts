@@ -64,6 +64,20 @@ export function convertDownloadToPreviewUrl(
 	return previewUrl;
 }
 
+export function isScanStatusPending(scanStatus: PreviewStatus): boolean {
+	return scanStatus === PreviewStatus.AWAITING_SCAN_STATUS;
+}
+
+export function isScanStatusWontCheck(scanStatus: PreviewStatus): boolean {
+	return (
+		scanStatus === PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+	);
+}
+
+export function isScanStatusError(scanStatus: PreviewStatus): boolean {
+	return scanStatus === PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR;
+}
+
 export function isDownloadAllowed(scanStatus: FileRecordScanStatus): boolean {
 	return scanStatus !== FileRecordScanStatus.BLOCKED;
 }

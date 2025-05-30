@@ -38,6 +38,7 @@
 							:class="{ 'text-disabled': !item.isSelectable }"
 						>
 							{{ item.name }}
+							<FileStatus :file-record="item" />
 						</span>
 					</FileInteractionHandler>
 				</template>
@@ -88,6 +89,7 @@
 					/>
 				</template>
 			</DataTable>
+			<FileStatusLegend />
 		</div>
 	</template>
 </template>
@@ -104,6 +106,8 @@ import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
 import FilePreview from "./FilePreview.vue";
+import FileStatus from "./FileStatus.vue";
+import FileStatusLegend from "./FileStatusLegend.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";

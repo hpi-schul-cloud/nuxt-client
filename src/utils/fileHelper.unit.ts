@@ -13,6 +13,9 @@ import {
 	isDownloadAllowed,
 	isPdfMimeType,
 	isPreviewPossible,
+	isScanStatusError,
+	isScanStatusPending,
+	isScanStatusWontCheck,
 	isVideoMimeType,
 } from "./fileHelper";
 
@@ -233,6 +236,64 @@ describe("@/utils/fileHelper", () => {
 				expect(result).toEqual(
 					`/file/preview/233/text.txt?outputFormat=image/webp&width=1000`
 				);
+			});
+		});
+	});
+
+	describe("isScanStatusPending", () => {
+		describe("when scan status is pending", () => {
+			it("should return true", () => {
+				const result = isScanStatusPending(PreviewStatus.AWAITING_SCAN_STATUS);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is not pending", () => {
+			it("should return false", () => {
+				const result = isScanStatusPending(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isScanStatusWontCheck", () => {
+		describe("when scan status is pending", () => {
+			it("should return true", () => {
+				const result = isScanStatusWontCheck(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+				);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is not pending", () => {
+			it("should return false", () => {
+				const result = isScanStatusWontCheck(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isScanStatusError", () => {
+		describe("when scan status is pending", () => {
+			it("should return true", () => {
+				const result = isScanStatusError(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
+				);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is not pending", () => {
+			it("should return false", () => {
+				const result = isScanStatusError(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(false);
 			});
 		});
 	});
