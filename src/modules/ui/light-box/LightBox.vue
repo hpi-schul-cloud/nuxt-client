@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
 	<v-dialog v-model="isLightBoxOpen" fullscreen data-testid="light-box">
 		<v-toolbar>
@@ -50,13 +48,12 @@
 <script setup lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
 import { mdiClose, mdiTrayArrowDown } from "@icons/material";
+import { ErrorAlert } from "@ui-alert";
+import { AudioPlayer } from "@ui-audio-player";
 import { PreviewImage } from "@ui-preview-image";
 import { onKeyStroke } from "@vueuse/core";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { AudioPlayer } from "@ui-audio-player";
-import { ErrorAlert } from "@ui-alert";
-
 import { LightBoxContentType, useLightBox } from "./LightBox.composable";
 
 const { t } = useI18n();
