@@ -94,7 +94,26 @@ describe("FileInteractionHandler", () => {
 			});
 		});
 
-		describe("when preview is not possible and mimeType is not audio", () => {
+		describe("when file is a video", () => {
+			it("should render button", () => {
+				const { wrapper } = setup({ mimeType: "video/..." });
+
+				const button = wrapper.find("button");
+
+				expect(button.exists()).toBe(true);
+			});
+
+			it("should open lightbox when button is clicked", () => {
+				const { wrapper, useLightBoxMock } = setup({ mimeType: "video/..." });
+
+				const button = wrapper.find("button");
+				button.trigger("click");
+
+				expect(useLightBoxMock().open).toHaveBeenCalled();
+			});
+		});
+
+		describe("when preview is not possible and mimeType is not audio or video", () => {
 			it("should render div instead of button", () => {
 				const { wrapper } = setup({
 					previewStatus: FilePreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,

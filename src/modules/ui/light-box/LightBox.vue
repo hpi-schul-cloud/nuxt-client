@@ -41,8 +41,27 @@
 					@click.stop
 					@error="handleAudioError"
 				/>
+				<video
+					v-if="
+						lightBoxOptions?.type === LightBoxContentType.VIDEO &&
+						!hasVideoError &&
+						isLightBoxOpen
+					"
+					controls
+					controlsList="nodownload"
+					class="video"
+					loading="lazy"
+					data-testid="video-player"
+					:src="lightBoxOptions?.downloadUrl"
+					:aria-label="lightBoxOptions?.alt"
+					@error="handleVideoError"
+					@click.stop
+				/>
 				<ErrorAlert v-if="hasAudioError" class="error-alert">
 					{{ t("components.cardElement.fileElement.audioFormatError") }}
+				</ErrorAlert>
+				<ErrorAlert v-if="hasVideoError" class="error-alert">
+					{{ t("components.cardElement.fileElement.videoFormatError") }}
 				</ErrorAlert>
 			</v-col>
 		</v-row>
@@ -65,11 +84,16 @@ const { t } = useI18n();
 const { close, isLightBoxOpen, lightBoxOptions } = useLightBox();
 const isImageLoading = ref(true);
 const hasAudioError = ref(false);
+const hasVideoError = ref(false);
 
 onKeyStroke("Escape", () => close(), { eventName: "keydown" });
 
 const handleAudioError = () => {
 	hasAudioError.value = true;
+};
+
+const handleVideoError = () => {
+	hasVideoError.value = true;
 };
 
 const download = async () => {
@@ -84,6 +108,7 @@ const download = async () => {
 watch(isLightBoxOpen, () => {
 	isImageLoading.value = true;
 	hasAudioError.value = false;
+	hasVideoError.value = false;
 });
 </script>
 
@@ -100,5 +125,10 @@ watch(isLightBoxOpen, () => {
 	max-width: 663px;
 	margin-right: auto;
 	margin-left: auto;
+}
+
+.video {
+	margin-left: auto;
+	margin-right: auto;
 }
 </style>
