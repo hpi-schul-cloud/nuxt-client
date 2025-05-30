@@ -2,13 +2,11 @@
 	<div>
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
-			class="rich_text"
 			:data-testid="`rich-text-display-${columnIndex}-${elementIndex}`"
 			:value="element.content.text"
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"
-			class="rich_text"
 			:autofocus="autofocus"
 			:value="modelValue.text"
 			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
@@ -64,20 +62,52 @@ const onBlur = () => {
 
 const onKeyUp = () => ensurePoliteNotifications();
 </script>
-
 <style lang="scss" scoped>
-.rich_text {
-	font-size: 1rem;
-	padding: 0.05px; // prevent margin collapse
+:deep(.ck-content) {
+	overflow: hidden; // prevent margin collapse
+
+	h4,
+	h5 {
+		margin-bottom: var(--space-xs);
+		margin-top: var(--space-md-2);
+	}
+
+	h4 {
+		font-size: var(--heading-6);
+		letter-spacing: 0.01em;
+		font-weight: var(--font-weight-bold);
+	}
+
+	h5 {
+		font-size: var(--text-md);
+		letter-spacing: 0.015em;
+	}
+
+	p,
+	ul,
+	ol {
+		font-size: var(--text-md);
+		margin-bottom: var(--space-xs);
+	}
+
+	ul {
+		list-style-type: circle;
+	}
+
+	.table {
+		display: block;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding-right: 1px;
+	}
+
+	.math-tex {
+		font-size: large;
+	}
 }
 
 :deep(.ck.ck-editor__editable_inline) {
 	padding: 0;
-
-	h4:first-of-type,
-	h5:first-of-type {
-		margin-top: var(--space-md-2);
-	}
 
 	p,
 	ol,
@@ -85,8 +115,9 @@ const onKeyUp = () => ensurePoliteNotifications();
 		margin-top: 0;
 	}
 
-	> :last-child {
-		margin-bottom: var(--space-xs);
+	h4:first-of-type,
+	h5:first-of-type {
+		margin-top: var(--space-md-2);
 	}
 }
 
@@ -102,58 +133,6 @@ const onKeyUp = () => ensurePoliteNotifications();
 	> .ck-widget__type-around__button_after {
 		bottom: 0.5rem;
 		right: 0.5rem;
-	}
-}
-
-:deep(.ck-content) {
-	h4 {
-		font-family: var(--font-accent);
-		font-weight: var(--font-weight-bold);
-		font-size: var(--heading-6);
-		line-height: var(--line-height-md);
-		letter-spacing: 0.01em;
-		margin-bottom: var(--space-xs);
-		margin-top: var(--space-md-2);
-	}
-
-	h5 {
-		font-family: var(--font-accent);
-		font-weight: var(--font-weight-bold);
-		font-size: var(--text-md);
-		line-height: var(--line-height-lg);
-		letter-spacing: 0.015em;
-		margin-bottom: var(--space-xs);
-		margin-top: var(--space-md-2);
-	}
-
-	p,
-	ul,
-	ol {
-		font-family: var(--font-primary);
-		font-weight: var(--font-weight-normal);
-		font-size: var(--text-md);
-		line-height: var(--line-height-lg);
-		margin-bottom: var(--space-xs);
-	}
-
-	ul {
-		list-style-type: circle;
-	}
-
-	.table {
-		display: block;
-		overflow-x: auto;
-		overflow-y: hidden;
-		padding-right: 1px;
-	}
-
-	.ck-widget.ck-widget_with-selection-handle:hover
-		> .ck-widget__selection-handle {
-		display: none;
-	}
-
-	.math-tex {
-		font-size: large;
 	}
 }
 </style>

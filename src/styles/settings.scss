@@ -6,11 +6,9 @@
   $typography: (
     "h1": (
       "size": var(--heading-1),
-      "line-height": var(--line-height-sm),
     ),
     "h2": (
       "size": var(--heading-2),
-      "line-height": var(--line-height-sm),
     ),
     "h3": (
       "size": 33px,
@@ -18,16 +16,13 @@
     ),
     "h4": (
       "size": var(--heading-4),
-      "line-height": var(--line-height-sm),
     ),
     "h5": (
       "size": var(--heading-5),
-      "line-height": var(--line-height-sm),
       "weight": var(--font-weight-bold),
     ),
     "h6": (
       "size": var(--heading-6),
-      "line-height": var(--line-height-sm),
       "weight": var(--font-weight-bold),
     ),
   ),
