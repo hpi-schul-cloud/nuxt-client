@@ -20,7 +20,10 @@
 			/>
 		</v-toolbar>
 		<v-row class="ma-0" style="overflow: auto" @click="close">
-			<v-col class="d-flex align-items-center" style="height: 100%">
+			<v-col
+				class="d-flex align-items-center justify-center"
+				style="height: 100%"
+			>
 				<PreviewImage
 					v-if="
 						isLightBoxImageType() &&
@@ -130,18 +133,15 @@ const isLightBoxVideoType = () => {
 	width: 90%;
 	max-width: 700px;
 	height: 64px;
-	margin: 0 auto;
 }
 
 .error-alert {
 	background-color: white;
 	max-width: 663px;
-	margin-right: auto;
-	margin-left: auto;
 }
 
 .video {
-	margin-left: auto;
-	margin-right: auto;
+	max-width: 100vw;
+	max-height: 100vh;
 }
 </style>
