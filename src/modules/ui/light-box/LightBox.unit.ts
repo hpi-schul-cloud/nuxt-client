@@ -7,7 +7,7 @@ import { ErrorAlert } from "@ui-alert";
 import { AudioPlayer } from "@ui-audio-player";
 import { PreviewImage } from "@ui-preview-image";
 import { nextTick, ref } from "vue";
-import { VRow, VToolbarTitle } from "vuetify/lib/components/index";
+import { VCol, VRow, VToolbarTitle } from "vuetify/lib/components/index";
 import {
 	LightBoxContentType,
 	LightBoxOptions,
@@ -198,6 +198,40 @@ describe("LightBox", () => {
 
 					expect(errorAlert.exists()).toBe(true);
 					expect(audioPlayer.exists()).toBe(false);
+				});
+			});
+		});
+
+		describe("when content is a video", () => {
+			it("should render video player with correct props", () => {
+				const { wrapper } = setup({
+					type: LightBoxContentType.VIDEO,
+				});
+
+				const vCol = wrapper.findComponent(VCol);
+				const video = vCol.find("video");
+
+				expect(video.exists()).toBe(true);
+			});
+
+			describe("when video player emits error", () => {
+				it("should render error alert", async () => {
+					const { wrapper } = setup({
+						type: LightBoxContentType.VIDEO,
+					});
+
+					const vCol = wrapper.findComponent(VCol);
+					const video = vCol.find("video");
+
+					await video.trigger("error");
+
+					await nextTick();
+
+					const errorAlert = wrapper.findComponent(ErrorAlert);
+					const videoAfterError = vCol.find("video");
+
+					expect(errorAlert.exists()).toBe(true);
+					expect(videoAfterError.exists()).toBe(false);
 				});
 			});
 		});

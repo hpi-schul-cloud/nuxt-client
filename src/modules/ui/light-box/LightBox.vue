@@ -20,10 +20,14 @@
 			/>
 		</v-toolbar>
 		<v-row class="ma-0" style="overflow: auto" @click="close">
-			<v-col class="d-flex align-items-center" style="height: 100%">
+			<v-col
+				class="d-flex align-items-center justify-center"
+				style="height: 100%"
+			>
 				<PreviewImage
 					v-if="
-						lightBoxOptions?.type === LightBoxContentType.IMAGE &&
+						isLightBoxImageType() &&
+						lightBoxOptions &&
 						lightBoxOptions.previewUrl &&
 						lightBoxOptions.alt
 					"
@@ -32,7 +36,8 @@
 				/>
 				<AudioPlayer
 					v-else-if="
-						lightBoxOptions?.type === LightBoxContentType.AUDIO &&
+						isLightBoxAudioType() &&
+						lightBoxOptions &&
 						!hasAudioError &&
 						isLightBoxOpen
 					"
@@ -41,8 +46,28 @@
 					@click.stop
 					@error="handleAudioError"
 				/>
+				<video
+					v-if="
+						isLightBoxVideoType() &&
+						lightBoxOptions &&
+						!hasVideoError &&
+						isLightBoxOpen
+					"
+					controls
+					controlsList="nodownload"
+					class="video"
+					loading="lazy"
+					data-testid="video-player"
+					:src="lightBoxOptions?.downloadUrl"
+					:aria-label="lightBoxOptions?.alt"
+					@error="handleVideoError"
+					@click.stop
+				/>
 				<ErrorAlert v-if="hasAudioError" class="error-alert">
 					{{ t("components.cardElement.fileElement.audioFormatError") }}
+				</ErrorAlert>
+				<ErrorAlert v-if="hasVideoError" class="error-alert">
+					{{ t("components.cardElement.fileElement.videoFormatError") }}
 				</ErrorAlert>
 			</v-col>
 		</v-row>
@@ -65,11 +90,16 @@ const { t } = useI18n();
 const { close, isLightBoxOpen, lightBoxOptions } = useLightBox();
 const isImageLoading = ref(true);
 const hasAudioError = ref(false);
+const hasVideoError = ref(false);
 
 onKeyStroke("Escape", () => close(), { eventName: "keydown" });
 
 const handleAudioError = () => {
 	hasAudioError.value = true;
+};
+
+const handleVideoError = () => {
+	hasVideoError.value = true;
 };
 
 const download = async () => {
@@ -84,7 +114,18 @@ const download = async () => {
 watch(isLightBoxOpen, () => {
 	isImageLoading.value = true;
 	hasAudioError.value = false;
+	hasVideoError.value = false;
 });
+
+const isLightBoxImageType = () => {
+	return lightBoxOptions.value?.type === LightBoxContentType.IMAGE;
+};
+const isLightBoxAudioType = () => {
+	return lightBoxOptions.value?.type === LightBoxContentType.AUDIO;
+};
+const isLightBoxVideoType = () => {
+	return lightBoxOptions.value?.type === LightBoxContentType.VIDEO;
+};
 </script>
 
 <style scoped>
@@ -92,13 +133,15 @@ watch(isLightBoxOpen, () => {
 	width: 90%;
 	max-width: 700px;
 	height: 64px;
-	margin: 0 auto;
 }
 
 .error-alert {
 	background-color: white;
 	max-width: 663px;
-	margin-right: auto;
-	margin-left: auto;
+}
+
+.video {
+	max-width: 100%;
+	max-height: 100%;
 }
 </style>

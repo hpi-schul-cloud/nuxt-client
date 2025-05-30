@@ -4,6 +4,7 @@ import { ref } from "vue";
 export enum LightBoxContentType {
 	IMAGE = "image",
 	AUDIO = "audio",
+	VIDEO = "video",
 }
 
 export interface LightBoxOptions {
