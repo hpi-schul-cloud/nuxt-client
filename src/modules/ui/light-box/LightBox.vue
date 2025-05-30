@@ -141,7 +141,7 @@ const isLightBoxVideoType = () => {
 }
 
 .video {
-	max-width: 100vw;
-	max-height: 100vh;
+	max-width: 100%;
+	max-height: 100%;
 }
 </style>
