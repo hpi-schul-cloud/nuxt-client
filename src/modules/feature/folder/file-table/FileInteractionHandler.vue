@@ -42,15 +42,9 @@ const isInteractive = computed(
 );
 
 const handleClick = () => {
-	if (isPreviewPossible(fileRecordItem.previewStatus)) {
-		openImageInLightbox();
-	} else if (isAudioMimeType(fileRecordItem.mimeType)) {
-		openAudioPlayerInLightbox();
-	} else if (isVideoMimeType(fileRecordItem.mimeType)) {
-		openVideoInLightbox();
-	} else {
-		// do nothing
-	}
+	if (isPreviewPossible(fileRecordItem.previewStatus)) openImageInLightbox();
+	if (isAudioMimeType(fileRecordItem.mimeType)) openAudioPlayerInLightbox();
+	if (isVideoMimeType(fileRecordItem.mimeType)) openVideoInLightbox();
 };
 
 const openImageInLightbox = () => {
