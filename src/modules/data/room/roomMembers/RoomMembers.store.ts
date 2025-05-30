@@ -332,7 +332,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		ids: string[],
 		actionType: "confirm" | "reject"
 	) => {
-		showSuccess(
+		const successMessage =
 			ids.length > 1
 				? t(
 						`pages.rooms.members.confirmationTable.notification.${actionType}.multiple`
@@ -342,8 +342,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 						{
 							fullName: getMemberFullName(ids[0]),
 						}
-					)
-		);
+					);
+		showSuccess(successMessage);
 	};
 
 	const updateMemberRole = (

@@ -1,7 +1,7 @@
 <template>
 	<KebabMenuAction
 		:icon="mdiAccountRemoveOutline"
-		data-testid="kebab-menu-action-confirm-request"
+		data-testid="kebab-menu-action-reject-request"
 	>
 		{{ t("pages.rooms.members.confirmationTable.menus.reject.label") }}
 	</KebabMenuAction>
