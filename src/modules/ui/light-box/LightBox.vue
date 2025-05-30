@@ -8,8 +8,8 @@
 				@click="close"
 			/>
 
-			<v-toolbar-title>
-				{{ lightBoxOptions!.name }}
+			<v-toolbar-title v-if="lightBoxOptions">
+				{{ lightBoxOptions.name }}
 			</v-toolbar-title>
 			<v-spacer />
 			<v-btn
@@ -22,9 +22,13 @@
 		<v-row class="ma-0" style="overflow: auto" @click="close">
 			<v-col class="d-flex align-items-center" style="height: 100%">
 				<PreviewImage
-					v-if="lightBoxOptions?.type === LightBoxContentType.IMAGE"
-					:src="lightBoxOptions.previewUrl!"
-					:alt="lightBoxOptions.alt!"
+					v-if="
+						lightBoxOptions?.type === LightBoxContentType.IMAGE &&
+						lightBoxOptions.previewUrl &&
+						lightBoxOptions.alt
+					"
+					:src="lightBoxOptions.previewUrl"
+					:alt="lightBoxOptions.alt"
 				/>
 				<AudioPlayer
 					v-else-if="
@@ -69,9 +73,11 @@ const handleAudioError = () => {
 };
 
 const download = async () => {
+	if (!lightBoxOptions.value) return;
+
 	await downloadFile(
-		lightBoxOptions.value!.downloadUrl,
-		lightBoxOptions.value!.name
+		lightBoxOptions.value.downloadUrl,
+		lightBoxOptions.value.name
 	);
 };
 
