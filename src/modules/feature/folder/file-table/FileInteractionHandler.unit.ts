@@ -66,6 +66,7 @@ describe("FileInteractionHandler", () => {
 			it("should open lightbox when button is clicked", () => {
 				const { wrapper, useLightBoxMock } = setup({
 					previewStatus: FilePreviewStatus.PREVIEW_POSSIBLE,
+					mimeType: "image/png",
 				});
 
 				const button = wrapper.find("button");
