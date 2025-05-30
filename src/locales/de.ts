@@ -1897,11 +1897,11 @@ export default {
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"Räume werden zukünftig Funktionen aus Kursen und Teams vereinen, um mehr Möglichkeiten für das schulübergreifende Arbeiten zu bieten.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Teams und Kurse bleiben bestehen, bis die Inhalte in Räume überführt werden können.",
-	"pages.rooms.infoAlert.welcome.visibility":
-		"Räume sind vorerst nur für Lehrkräfte sichtbar und werden weiter ausgebaut. Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.",
-	"pages.rooms.infoAlert.welcome.visibility.help": "Hilfeseite",
-	"pages.rooms.infoAlert.welcome.visibility.feedback": "Rückmeldungen",
+		"Räume werden weiter ausgebaut. Teams und Kurse bleiben bestehen, bis die Inhalte in Räume überführt werden können.",
+	"pages.rooms.infoAlert.welcome.furtherInformation":
+		"Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.",
+	"pages.rooms.infoAlert.welcome.furtherInformation.help": "Hilfeseite",
+	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "Rückmeldungen",
 	"pages.rooms.leaveRoom.confirmation": 'Raum "{roomName}" wirklich verlassen?',
 	"pages.rooms.leaveRoom.RoomOwner.warning":
 		'Bevor der Raum verlassen werden kann, muss die Raumberechtigung "Besitzen" an ein anderes Raummitglied übertragen werden. Dies kann in der Raum-Mitglieder-Verwaltung erfolgen.',
