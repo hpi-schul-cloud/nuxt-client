@@ -211,12 +211,6 @@ export default {
 	"common.words.topic": "Thema",
 	"common.words.topics": "Themen",
 	"common.words.yes": "Ja",
-	"component.cardElement.fileElement.audioPlayer.pause": "Anhalten",
-	"component.cardElement.fileElement.audioPlayer.play": "Abspielen",
-	"component.cardElement.fileElement.audioPlayer.slider":
-		"Audio Schieberegler für Fortschritt",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
-	"component.cardElement.fileElement.audioPlayer.speed": "Geschwindigkeitsmenü",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -428,6 +422,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "Minute | Minuten",
+	"components.audioPlayer.pause": "Anhalten",
+	"components.audioPlayer.play": "Abspielen",
+	"components.audioPlayer.slider": "Audio Schieberegler für Fortschritt",
+	"components.audioPlayer.speed": "Geschwindigkeitsmenü",
+	"components.audioPlayer.speed.normal": "Normal",
 	"components.base.BaseIcon.error":
 		"Das Icon aus dieser Quelle konnte leider nicht geladen werden. Falls Sie Microsoft Edge verwenden, stellen Sie bitte sicher, dass Sie die neuste Version verwenden.",
 	"components.base.showPassword": "Passwort anzeigen",
