@@ -2027,6 +2027,24 @@ export default {
 		"Ausgewählte Einladungslinks wirklich löschen?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Einladungslink '{invitation}' wirklich löschen?",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Beitrittsanfrage bestätigen",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Beitrittsanfrage ablehnen",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} wurde als Raummitglied hinzugefügt.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"Die Beitrittsanfrage von {fullName} wurde abgelehnt.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"Die ausgewählten Personen wurden als Mitglieder zum Raum hinzugefügt.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"Die Beitrittsanfragen der ausgewählten Personen wurden abgelehnt.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Aktionsmenü für {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Mitgliedschaftsanfrage für {fullName} bestätigen",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Mitgliedsanfrage für {fullName} ablehnen",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Einladungslink „{linkTitle}“ teilen",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":

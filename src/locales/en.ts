@@ -1993,6 +1993,24 @@ export default {
 		"Delete selected invitation links?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Delete the invitation link '{invitation}'?",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Confirm membership request",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Reject membership request",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} has been added as a room member.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"{fullName}'s request to join was rejected.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"The selected persons have been added to the room as members.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"The membership requests of the selected persons have been rejected.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Action menu for {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Confirm the membership request for {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Reject the membership request for {fullName}",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Share invitation link “{linkTitle}”",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
