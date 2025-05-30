@@ -19,12 +19,13 @@ import { useRoomDetailsStore } from "@data-room";
 
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const { t } = useI18n();
-	const { showFailure } = useBoardNotifier();
+	const { showFailure, showSuccess } = useBoardNotifier();
 
 	const { room } = storeToRefs(useRoomDetailsStore());
 	const roomId = computed(() => room.value?.id);
 
 	const roomMembers: Ref<RoomMember[]> = ref([]);
+	const confirmationList: Ref<Record<string, unknown>[]> = ref([]);
 	const potentialRoomMembers: Ref<
 		Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]
 	> = ref([]);
@@ -49,6 +50,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	};
 	const currentUserId = authModule.getUser?.id ?? "";
 	const selectedIds = ref<string[]>([]);
+	const confirmationSelectedIds = ref<string[]>([]);
 
 	const roomRole: Record<string, string> = {
 		[RoleName.Roomowner]: t("pages.rooms.members.roomPermissions.owner"),
@@ -85,7 +87,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			isLoading.value = true;
 			const { data } = (await roomApi.roomControllerGetMembers(getRoomId()))
 				.data;
-
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
@@ -98,7 +99,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 				};
 			});
-
 			isLoading.value = false;
 		} catch {
 			showFailure(t("pages.rooms.members.error.load"));
@@ -287,10 +287,73 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		updateMemberRole(currentOwner, RoleName.Roomadmin);
 	};
 
-	const updateMemberRole = (member: RoomMember, roleName: RoleName) => {
+	const confirmInvitations = async (ids: string[]) => {
+		try {
+			await roomApi.roomControllerChangeRolesOfMembers(getRoomId(), {
+				userIds: ids,
+				roleName: ChangeRoomRoleBodyParamsRoleNameEnum.Roomviewer,
+			});
+
+			showNotification(ids, "confirm");
+
+			roomMembers.value
+				.filter((member) => {
+					return ids.includes(member.userId);
+				})
+				.forEach((member) => {
+					updateMemberRole(member, RoleName.Roomviewer, true);
+				});
+		} catch {
+			showFailure(t("pages.rooms.members.error.updateRole"));
+		}
+
+		confirmationSelectedIds.value = [];
+	};
+
+	const rejectInvitations = async (ids: string[]) => {
+		try {
+			await roomApi.roomControllerRemoveMembers(getRoomId(), {
+				userIds: ids,
+			});
+
+			showNotification(ids, "reject");
+
+			roomMembers.value = roomMembers.value.filter((member) => {
+				return !ids.includes(member.userId);
+			});
+		} catch {
+			showFailure(t("pages.rooms.members.error.remove"));
+		}
+
+		confirmationSelectedIds.value = [];
+	};
+
+	const showNotification = (
+		ids: string[],
+		actionType: "confirm" | "reject"
+	) => {
+		const successMessage =
+			ids.length > 1
+				? t(
+						`pages.rooms.members.confirmationTable.notification.${actionType}.multiple`
+					)
+				: t(
+						`pages.rooms.members.confirmationTable.notification.${actionType}`,
+						{
+							fullName: getMemberFullName(ids[0]),
+						}
+					);
+		showSuccess(successMessage);
+	};
+
+	const updateMemberRole = (
+		member: RoomMember,
+		roleName: RoleName,
+		isSelectable = false
+	) => {
 		member.roomRoleName = roleName;
 		member.displayRoomRole = roomRole[roleName];
-		member.isSelectable = false;
+		member.isSelectable = isSelectable;
 	};
 
 	const resetPotentialMembers = () => {
@@ -309,6 +372,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		addMembers,
 		isRoomOwner,
 		changeRoomOwner,
+		confirmInvitations,
 		fetchMembers,
 		resetPotentialMembers,
 		resetStore,
@@ -317,8 +381,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		getMemberById,
 		getMemberFullName,
 		leaveRoom,
+		rejectInvitations,
 		removeMembers,
 		updateMembersRole,
+		confirmationList,
+		confirmationSelectedIds,
 		isLoading,
 		roomMembers,
 		roomMembersWithoutApplicants,
