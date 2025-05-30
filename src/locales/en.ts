@@ -211,11 +211,6 @@ export default {
 	"common.words.topics": "Topics",
 	"common.words.yes": "Yes",
 	"common.words.export": "Course export is downloading",
-	"component.cardElement.fileElement.audioPlayer.pause": "Pause",
-	"component.cardElement.fileElement.audioPlayer.play": "Play",
-	"component.cardElement.fileElement.audioPlayer.slider": "Audio slider",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
-	"component.cardElement.fileElement.audioPlayer.speed": "Speed Menu",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"During the migration, the registration system for students and teachers is changed to moin.schule. The data belonging to the affected accounts will be preserved.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -426,6 +421,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "minute | minutes",
+	"components.audioPlayer.pause": "Pause",
+	"components.audioPlayer.play": "Play",
+	"components.audioPlayer.slider": "Audio slider",
+	"components.audioPlayer.speed": "Speed Menu",
+	"components.audioPlayer.speed.normal": "Normal",
 	"components.base.BaseIcon.error":
 		"error loading icon {icon} from {source}. It might be not available or you are using the legacy Edge browser.",
 	"components.base.showPassword": "Show password",
