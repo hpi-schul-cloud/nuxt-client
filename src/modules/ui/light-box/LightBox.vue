@@ -23,7 +23,8 @@
 			<v-col class="d-flex align-items-center" style="height: 100%">
 				<PreviewImage
 					v-if="
-						lightBoxOptions?.type === LightBoxContentType.IMAGE &&
+						isLightBoxImageType() &&
+						lightBoxOptions &&
 						lightBoxOptions.previewUrl &&
 						lightBoxOptions.alt
 					"
@@ -32,7 +33,8 @@
 				/>
 				<AudioPlayer
 					v-else-if="
-						lightBoxOptions?.type === LightBoxContentType.AUDIO &&
+						isLightBoxAudioType() &&
+						lightBoxOptions &&
 						!hasAudioError &&
 						isLightBoxOpen
 					"
@@ -43,7 +45,8 @@
 				/>
 				<video
 					v-if="
-						lightBoxOptions?.type === LightBoxContentType.VIDEO &&
+						isLightBoxVideoType() &&
+						lightBoxOptions &&
 						!hasVideoError &&
 						isLightBoxOpen
 					"
@@ -110,6 +113,16 @@ watch(isLightBoxOpen, () => {
 	hasAudioError.value = false;
 	hasVideoError.value = false;
 });
+
+const isLightBoxImageType = () => {
+	return lightBoxOptions.value?.type === LightBoxContentType.IMAGE;
+};
+const isLightBoxAudioType = () => {
+	return lightBoxOptions.value?.type === LightBoxContentType.AUDIO;
+};
+const isLightBoxVideoType = () => {
+	return lightBoxOptions.value?.type === LightBoxContentType.VIDEO;
+};
 </script>
 
 <style scoped>
