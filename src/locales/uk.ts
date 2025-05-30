@@ -2031,6 +2031,24 @@ export default {
 		"Видалити посилання на запрошення '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Поділіться посиланням на запрошення „{linkTitle}“",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Підтвердити заявку на участь",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Відхилити запит на реєстрацію",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} був доданий як член кімнати.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"Запит {fullName} на приєднання було відхилено.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"Вибрані особи були додані до кімнати як учасники.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"Вибрані особи були додані до кімнати як учасники.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Меню дій для {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Підтвердити запит на членство для {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Відхилити запит на членство для {fullName}",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
 		"Меню дій для посилання-запрошення „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":

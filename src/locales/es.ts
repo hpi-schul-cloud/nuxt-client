@@ -2063,6 +2063,24 @@ export default {
 		"¿Suprimir el enlace de invitación '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Compartir enlace de invitación „{linkTitle}“",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Confirmar solicitud de afiliación",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Rechazar la solicitud de adhesión",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} ha sido añadido como miembro de la sala.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"La solicitud de {fullName} para unirse ha sido rechazada.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"Las personas seleccionadas han sido añadidas a la sala como miembros.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"Las solicitudes de adhesión de las personas seleccionadas han sido rechazadas.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Menú de acción para {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Confirmar la solicitud de membresía de {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Rechazar la solicitud de membresía de {fullName}",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
 		"Menú de acción para el enlace de invitación „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":
