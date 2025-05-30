@@ -8,7 +8,7 @@
 				density="comfortable"
 				icon
 				variant="flat"
-				:aria-label="$t('component.cardElement.fileElement.audioPlayer.speed')"
+				:aria-label="$t('components.audioPlayer.speed')"
 			>
 				<v-icon>{{ mdiPlaySpeed }}</v-icon>
 			</v-btn>
@@ -42,7 +42,7 @@
 			<v-list-item @click="onSelect(1)">
 				<div class="ml-3">
 					<v-list-item-title>{{
-						$t("component.cardElement.fileElement.audioPlayer.speed.normal")
+						$t("components.audioPlayer.speed.normal")
 					}}</v-list-item-title>
 				</div>
 				<template v-if="1 === rate" #append>

@@ -1,54 +1,36 @@
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 
-export interface LightBoxOptions {
-	downloadUrl: string;
-	previewUrl: string;
-	alt: string;
-	name: string;
+export enum LightBoxContentType {
+	IMAGE = "image",
+	AUDIO = "audio",
 }
 
-export const useLightBox = () => {
-	const { isLightBoxOpen, openInternal } = useInternalLightBox();
+export interface LightBoxOptions {
+	type: LightBoxContentType;
+	downloadUrl: string;
+	name: string;
+	previewUrl?: string;
+	alt?: string;
+}
 
-	const open = (data: LightBoxOptions) => {
-		openInternal(data);
-	};
-
-	return {
-		isLightBoxOpen,
-		open,
-	};
-};
-
-export const useInternalLightBox = createSharedComposable(() => {
+export const useLightBox = createSharedComposable(() => {
 	const isLightBoxOpen = ref<boolean>(false);
-	const lightBoxOptions = ref<LightBoxOptions>({
-		downloadUrl: "",
-		previewUrl: "",
-		alt: "",
-		name: "",
-	});
+	const lightBoxOptions = ref<LightBoxOptions>();
 
-	const close = () => {
-		lightBoxOptions.value = {
-			downloadUrl: "",
-			previewUrl: "",
-			alt: "",
-			name: "",
-		};
-		isLightBoxOpen.value = false;
-	};
-
-	const openInternal = (options: LightBoxOptions) => {
+	const open = (options: LightBoxOptions) => {
 		lightBoxOptions.value = options;
 		isLightBoxOpen.value = true;
 	};
 
+	const close = () => {
+		isLightBoxOpen.value = false;
+	};
+
 	return {
+		open,
 		close,
 		isLightBoxOpen,
 		lightBoxOptions,
-		openInternal,
 	};
 });

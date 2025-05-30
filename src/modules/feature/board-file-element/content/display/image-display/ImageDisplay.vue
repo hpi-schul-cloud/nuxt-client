@@ -31,7 +31,11 @@
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { ContentElementBar } from "@ui-board";
-import { LightBoxOptions, useLightBox } from "@ui-light-box";
+import {
+	LightBoxOptions,
+	LightBoxContentType,
+	useLightBox,
+} from "@ui-light-box";
 import { PreviewImage } from "@ui-preview-image";
 import { PropType, computed, defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -67,6 +71,7 @@ export default defineComponent({
 			const previewUrl = convertDownloadToPreviewUrl(props.src);
 
 			const options: LightBoxOptions = {
+				type: LightBoxContentType.IMAGE,
 				downloadUrl: props.src,
 				previewUrl: previewUrl,
 				alt: alternativeText.value,
