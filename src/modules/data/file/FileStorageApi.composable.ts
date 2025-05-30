@@ -52,7 +52,6 @@ export const useFileStorageApi = () => {
 			upsertFileRecords(response.data.data);
 		} catch (error) {
 			showError(error);
-			throw error;
 		}
 	};
 
@@ -73,7 +72,6 @@ export const useFileStorageApi = () => {
 			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
-			throw error;
 		}
 	};
 
@@ -102,7 +100,6 @@ export const useFileStorageApi = () => {
 			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
-			throw error;
 		}
 	};
 
@@ -116,7 +113,6 @@ export const useFileStorageApi = () => {
 			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
-			throw error;
 		}
 	};
 
@@ -137,8 +133,6 @@ export const useFileStorageApi = () => {
 			upsertFileRecords(fileRecords);
 			showError(error);
 			showFileNotDeletedError();
-
-			throw error;
 		}
 	};
 

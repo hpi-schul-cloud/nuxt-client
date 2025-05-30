@@ -53,6 +53,7 @@ export default {
 	"common.labels.expanded": "expanded",
 	"common.labels.externalsource": "Source",
 	"common.labels.failure": "failure",
+	"common.labels.name.new": "New name",
 	"common.labels.firstName.new": "New first name",
 	"common.labels.firstName": "First Name",
 	"common.labels.fullName": "Name & Last Name",
@@ -2132,6 +2133,7 @@ export default {
 	"ui.actionMenu.actions": "Actions",
 	"ui.actionMenu.select.none": "Deselect all lines",
 	"ui.dataTable.select.all": "Select all lines",
+	"ui.rename.dialog.title": "Rename {entity}",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent.label.missing": "User created",
@@ -2182,4 +2184,6 @@ export default {
 	"pages.folder.delete-multiple-confirmation": "Delete all {total} files?",
 	"pages.folder.delete-confirmation":
 		"Do you really want to delete file {name}?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"The file name already exists.",
 };
