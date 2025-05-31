@@ -601,5 +601,25 @@ describe("AddMembers", () => {
 				expect(infoAlert.exists()).toEqual(false);
 			});
 		});
+		describe("and external school and student role are set", () => {
+			it("should not show info message", async () => {
+				const { wrapper } = setup({ canSeeAllStudents: false });
+
+				const schoolComponent = wrapper.getComponent({
+					ref: "autoCompleteSchool",
+				});
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await schoolComponent.setValue("external-school-id");
+				await roleComponent.setValue(RoleName.Student);
+
+				const infoAlert = wrapper.findComponent(
+					'[data-testid="student-visibility-info-alert"]'
+				);
+				expect(infoAlert.exists()).toEqual(false);
+			});
+		});
 	});
 });
