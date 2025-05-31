@@ -82,17 +82,17 @@ describe("AddMembers", () => {
 		);
 	});
 
-	const setup = (
-		customRoomAuthorization?: RoomAuthorizationRefs,
-		isFeatureAddStudentsEnabled?: boolean
-	) => {
+	const setup = (options?: {
+		customRoomAuthorization?: RoomAuthorizationRefs;
+		isFeatureAddStudentsEnabled?: boolean;
+	}) => {
 		const configDefaults = {
 			canAddRoomMembers: true,
 			canSeeAllStudents: true,
 		};
 		const roomAuthorization = {
 			...configDefaults,
-			...customRoomAuthorization,
+			...options?.customRoomAuthorization,
 		};
 		const potentialRoomMembers = roomMemberFactory.buildList(3);
 		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
@@ -113,7 +113,8 @@ describe("AddMembers", () => {
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 			getEnv: {
 				...envsFactory.build(),
-				FEATURE_ROOM_ADD_STUDENTS_ENABLED: isFeatureAddStudentsEnabled ?? true,
+				FEATURE_ROOM_ADD_STUDENTS_ENABLED:
+					options?.isFeatureAddStudentsEnabled ?? true,
 			},
 		});
 
@@ -194,7 +195,7 @@ describe("AddMembers", () => {
 
 			describe("when feature flag FEATURE_ROOM_ADD_STUDENTS_ENABLED is false", () => {
 				it("should only offer teacher role for selectRole component", () => {
-					const { wrapper } = setup({}, false);
+					const { wrapper } = setup({ isFeatureAddStudentsEnabled: false });
 
 					const roles = [
 						{ id: RoleName.Teacher, name: "common.labels.teacher" },
@@ -211,7 +212,7 @@ describe("AddMembers", () => {
 
 			describe("when feature flag FEATURE_ROOM_ADD_STUDENTS_ENABLED is true", () => {
 				it("should offer all roles for selectRole component", () => {
-					const { wrapper } = setup({}, true);
+					const { wrapper } = setup({ isFeatureAddStudentsEnabled: true });
 
 					const roles = [
 						{
@@ -569,7 +570,9 @@ describe("AddMembers", () => {
 	describe("when user is not allowed to see all students", () => {
 		describe("and the role is set to student", () => {
 			it("should show info message", async () => {
-				const { wrapper } = setup({ canSeeAllStudents: false });
+				const { wrapper } = setup({
+					customRoomAuthorization: { canSeeAllStudents: false },
+				});
 
 				const roleComponent = wrapper.getComponent({
 					ref: "selectRole",
@@ -587,7 +590,9 @@ describe("AddMembers", () => {
 		});
 		describe("and the role is set to teacher", () => {
 			it("should not show info message", async () => {
-				const { wrapper } = setup({ canSeeAllStudents: false });
+				const { wrapper } = setup({
+					customRoomAuthorization: { canSeeAllStudents: false },
+				});
 
 				const roleComponent = wrapper.getComponent({
 					ref: "selectRole",
@@ -603,7 +608,9 @@ describe("AddMembers", () => {
 		});
 		describe("and external school and student role are set", () => {
 			it("should not show info message", async () => {
-				const { wrapper } = setup({ canSeeAllStudents: false });
+				const { wrapper } = setup({
+					customRoomAuthorization: { canSeeAllStudents: false },
+				});
 
 				const schoolComponent = wrapper.getComponent({
 					ref: "autoCompleteSchool",
