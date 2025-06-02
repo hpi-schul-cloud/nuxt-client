@@ -32,7 +32,11 @@
 							:hint="
 								t('pages.rooms.members.inviteMember.form.description.hint')
 							"
+							:error-messages="
+								v$.formData.title.$errors.map((e) => unref(e.$message))
+							"
 							persistent-hint
+							data-testid="invite-participant-description-input"
 						/>
 
 						<v-checkbox
@@ -158,7 +162,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref, watch } from "vue";
+import { computed, ref, unref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard } from "vuetify/lib/components";
 import { InfoAlert } from "@ui-alert";
@@ -174,6 +178,9 @@ import {
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { storeToRefs } from "pinia";
+import useVuelidate from "@vuelidate/core";
+import { helpers, maxLength, required } from "@vuelidate/validators";
+import { containsOpeningTagFollowedByString } from "@/utils/validation";
 
 defineProps({
 	schoolName: {
@@ -211,6 +218,28 @@ const defaultFormData = {
 };
 
 const formData = ref({ ...defaultFormData });
+
+const validationRules = computed(() => ({
+	formData: {
+		title: {
+			maxLength: helpers.withMessage(
+				t("common.validation.tooLong"),
+				maxLength(100)
+			),
+			containsOpeningTag: helpers.withMessage(
+				t("common.validation.containsOpeningTag"),
+				(name: string) => !containsOpeningTagFollowedByString(name)
+			),
+			required: helpers.withMessage(t("common.validation.required2"), required),
+		},
+	},
+}));
+
+const v$ = useVuelidate(
+	validationRules,
+	{ formData },
+	{ $lazy: true, $autoDirty: true }
+);
 
 const isDatePickerDisabled = computed(() => {
 	return !formData.value.activeUntilChecked;
@@ -259,14 +288,15 @@ const onUpdateDate = (date: Date | null) => {
 
 const onClose = () => {
 	emit("close");
-
-	setTimeout(() => {
-		formData.value = { ...defaultFormData };
-	}, 1000);
 };
 
 const onContinue = async () => {
 	if (invitationStep.value === InvitationStep.SHARE) return;
+
+	const valid = await v$.value.$validate();
+	if (!valid) {
+		return;
+	}
 
 	const baseParams = {
 		title: formData.value.title || "invitation link",
@@ -344,7 +374,10 @@ watch(
 watch(
 	() => isOpen.value,
 	(isOpen: boolean) => {
-		if (isOpen === false) {
+		if (isOpen) {
+			formData.value = { ...defaultFormData };
+			v$.value.$reset();
+		} else {
 			deactivate();
 		}
 	}

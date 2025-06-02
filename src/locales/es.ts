@@ -2045,8 +2045,7 @@ export default {
 		"Editar enlace de invitación",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
-	"pages.rooms.members.inviteMember.form.description.label":
-		"Descripción (opcional)",
+	"pages.rooms.members.inviteMember.form.description.label": "Descripción",
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Se muestra en el resumen del enlace",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":

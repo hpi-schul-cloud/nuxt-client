@@ -1978,8 +1978,7 @@ export default {
 	"pages.rooms.members.inviteMember.step.edit.title": "Edit invitation link",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Students from other schools must always be added to the room by a supervising teacher from their school.",
-	"pages.rooms.members.inviteMember.form.description.label":
-		"Description (optional)",
+	"pages.rooms.members.inviteMember.form.description.label": "Description",
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Is displayed in the link overview",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":

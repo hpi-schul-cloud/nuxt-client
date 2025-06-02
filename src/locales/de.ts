@@ -2012,8 +2012,7 @@ export default {
 		"Einladungslink bearbeiten",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
-	"pages.rooms.members.inviteMember.form.description.label":
-		"Beschreibung (optional)",
+	"pages.rooms.members.inviteMember.form.description.label": "Beschreibung",
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Wird in der Link-Übersicht angezeigt",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
