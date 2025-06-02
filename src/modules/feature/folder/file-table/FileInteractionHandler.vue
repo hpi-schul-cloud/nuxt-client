@@ -17,6 +17,7 @@ import {
 	convertDownloadToPreviewUrl,
 	isAudioMimeType,
 	isPreviewPossible,
+	isVideoMimeType,
 } from "@/utils/fileHelper";
 import { LightBoxContentType, useLightBox } from "@ui-light-box";
 import { computed, PropType } from "vue";
@@ -36,17 +37,14 @@ const isInteractive = computed(
 	() =>
 		fileRecordItem.isSelectable &&
 		(isPreviewPossible(fileRecordItem.previewStatus) ||
-			isAudioMimeType(fileRecordItem.mimeType))
+			isAudioMimeType(fileRecordItem.mimeType) ||
+			isVideoMimeType(fileRecordItem.mimeType))
 );
 
 const handleClick = () => {
-	if (isPreviewPossible(fileRecordItem.previewStatus)) {
-		openImageInLightbox();
-	} else if (isAudioMimeType(fileRecordItem.mimeType)) {
-		openAudioPlayerInLightbox();
-	} else {
-		// do nothing
-	}
+	if (isPreviewPossible(fileRecordItem.previewStatus)) openImageInLightbox();
+	if (isAudioMimeType(fileRecordItem.mimeType)) openAudioPlayerInLightbox();
+	if (isVideoMimeType(fileRecordItem.mimeType)) openVideoInLightbox();
 };
 
 const openImageInLightbox = () => {
@@ -68,6 +66,19 @@ const openImageInLightbox = () => {
 const openAudioPlayerInLightbox = () => {
 	const options = {
 		type: LightBoxContentType.AUDIO,
+		downloadUrl: fileRecordItem.url,
+		name: fileRecordItem.name,
+		alt: `${t("components.cardElement.fileElement.emptyAlt")} ${fileRecordItem.name}`,
+	};
+
+	const { open } = useLightBox();
+
+	open(options);
+};
+
+const openVideoInLightbox = () => {
+	const options = {
+		type: LightBoxContentType.VIDEO,
 		downloadUrl: fileRecordItem.url,
 		name: fileRecordItem.name,
 		alt: `${t("components.cardElement.fileElement.emptyAlt")} ${fileRecordItem.name}`,
