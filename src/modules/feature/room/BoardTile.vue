@@ -15,7 +15,7 @@
 			{{ subtitleText }}
 		</VCardSubtitle>
 		<VCardTitle
-			class="board-tile-title text-body-1 font-weight-bold my-2"
+			class="board-tile-title text-body-1 font-weight-bold mb-2"
 			:data-testid="`board-tile-title-${index}`"
 		>
 			<LineClamp>
