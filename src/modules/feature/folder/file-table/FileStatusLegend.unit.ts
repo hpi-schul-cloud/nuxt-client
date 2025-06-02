@@ -34,7 +34,7 @@ describe("FileStatusLegend", () => {
 
 			expect(
 				wrapper.find('[data-testid="legend-file-status-scan-pending"]').text()
-			).toBe("components.cardElement.fileElement.awaitingScan");
+			).toBe("common.file.awaitingScan");
 		});
 
 		it("should have correct icon", () => {
@@ -66,7 +66,7 @@ describe("FileStatusLegend", () => {
 				wrapper
 					.find('[data-testid="legend-file-status-scan-wont-check"]')
 					.text()
-			).toBe("components.cardElement.fileElement.scanWontCheck");
+			).toBe("common.file.scanWontCheck");
 		});
 
 		it("should have correct icon", () => {
@@ -94,7 +94,7 @@ describe("FileStatusLegend", () => {
 
 			expect(
 				wrapper.find('[data-testid="legend-file-status-scan-error"]').text()
-			).toBe("components.cardElement.fileElement.scanError");
+			).toBe("common.file.scanError");
 		});
 
 		it("should have correct icon", () => {
@@ -126,7 +126,7 @@ describe("FileStatusLegend", () => {
 				wrapper
 					.find('[data-testid="legend-file-status-scan-virus-detected"]')
 					.text()
-			).toBe("components.cardElement.fileElement.virusDetected");
+			).toBe("common.file.virusDetected");
 		});
 
 		it("should have correct icon", () => {
