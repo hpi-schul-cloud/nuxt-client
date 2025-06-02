@@ -24,10 +24,10 @@
 <script setup lang="ts">
 import { useOpeningTagValidator } from "@/utils/validation";
 import { Dialog } from "@ui-dialog";
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-defineProps({
+const { name } = defineProps({
 	name: { type: String, required: false, default: "" },
 });
 
@@ -39,6 +39,14 @@ const isDialogOpen = defineModel("is-dialog-open", {
 const emit = defineEmits(["confirm", "cancel"]);
 
 const nameRef = ref<string>("");
+
+watch(
+	() => name,
+	(newName) => {
+		nameRef.value = newName;
+	},
+	{ immediate: true }
+);
 
 const { t } = useI18n();
 

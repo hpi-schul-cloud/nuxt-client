@@ -11,6 +11,7 @@
 					{{ folderName }}
 				</h1>
 				<FolderMenu
+					v-if="hasEditPermission"
 					:folder-name="folderName"
 					@delete="onDelete"
 					@rename="onRenameActionClick"
