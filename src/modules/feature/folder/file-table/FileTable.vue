@@ -97,7 +97,7 @@
 <script setup lang="ts">
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
-import { convertFileSize, isDownloadAllowed } from "@/utils/fileHelper";
+import { convertFileSize, isScanStatusBlocked } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu } from "@ui-kebab-menu";
@@ -154,7 +154,7 @@ const headers = [
 const fileRecordItems = computed(() => {
 	return props.fileRecords.map((item) => ({
 		...item,
-		isSelectable: isDownloadAllowed(item.securityCheckStatus),
+		isSelectable: isScanStatusBlocked(item.securityCheckStatus),
 	}));
 });
 

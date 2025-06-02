@@ -34,7 +34,7 @@
 		{{ t("common.file.scanError") }}
 	</v-tooltip>
 	<v-tooltip
-		v-if="!isDownloadAllowed(fileRecord.securityCheckStatus)"
+		v-if="!isScanStatusBlocked(fileRecord.securityCheckStatus)"
 		location="top"
 	>
 		<template #activator="{ props }">
@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { FileRecord } from "@/types/file/File";
 import {
-	isDownloadAllowed,
+	isScanStatusBlocked,
 	isScanStatusError,
 	isScanStatusPending,
 	isScanStatusWontCheck,

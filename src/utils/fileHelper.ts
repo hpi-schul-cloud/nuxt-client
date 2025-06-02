@@ -78,7 +78,7 @@ export function isScanStatusError(scanStatus: PreviewStatus): boolean {
 	return scanStatus === PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR;
 }
 
-export function isDownloadAllowed(scanStatus: FileRecordScanStatus): boolean {
+export function isScanStatusBlocked(scanStatus: FileRecordScanStatus): boolean {
 	return scanStatus !== FileRecordScanStatus.BLOCKED;
 }
 

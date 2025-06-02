@@ -10,9 +10,9 @@ import {
 	formatSecondsToHourMinSec,
 	getFileExtension,
 	isAudioMimeType,
-	isDownloadAllowed,
 	isPdfMimeType,
 	isPreviewPossible,
+	isScanStatusBlocked,
 	isScanStatusError,
 	isScanStatusPending,
 	isScanStatusWontCheck,
@@ -298,10 +298,10 @@ describe("@/utils/fileHelper", () => {
 		});
 	});
 
-	describe("isDownloadAllowed", () => {
+	describe("isScanStatusBlocked", () => {
 		describe("when scan status is not blocked", () => {
 			it("should return true", () => {
-				const result = isDownloadAllowed(FileRecordScanStatus.VERIFIED);
+				const result = isScanStatusBlocked(FileRecordScanStatus.VERIFIED);
 
 				expect(result).toBe(true);
 			});
@@ -309,7 +309,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is blocked", () => {
 			it("should return false", () => {
-				const result = isDownloadAllowed(FileRecordScanStatus.BLOCKED);
+				const result = isScanStatusBlocked(FileRecordScanStatus.BLOCKED);
 
 				expect(result).toBe(false);
 			});
