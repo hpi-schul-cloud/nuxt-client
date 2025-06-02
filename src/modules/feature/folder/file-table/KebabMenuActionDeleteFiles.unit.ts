@@ -6,6 +6,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { describe } from "@jest/globals";
 import { KebabMenuAction } from "@ui-kebab-menu";
+import { flushPromises } from "@vue/test-utils";
 import { nextTick } from "vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 
@@ -45,12 +46,10 @@ describe("KebabMenuActionDeleteFiles", () => {
 					selectedIds,
 				});
 
+				await flushPromises();
+
 				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
 				kebabMenuAction.trigger("click");
-
-				await nextTick();
-				await nextTick();
-				await nextTick();
 
 				return { fileRecords, selectedIds, wrapper };
 			};
@@ -58,9 +57,7 @@ describe("KebabMenuActionDeleteFiles", () => {
 			it("should emit delete-files with filerecords and promise", async () => {
 				const { fileRecords, wrapper } = await setup();
 
-				expect(wrapper.emitted("delete-files")).toEqual([
-					[fileRecords, expect.any(Promise)],
-				]);
+				expect(wrapper.emitted("delete-files")).toEqual([[fileRecords]]);
 			});
 		});
 
@@ -94,9 +91,7 @@ describe("KebabMenuActionDeleteFiles", () => {
 			it("should emit delete-files with filerecords and promise", async () => {
 				const { fileRecords, wrapper } = await setup();
 
-				expect(wrapper.emitted("delete-files")).toEqual([
-					[[fileRecords[1]], expect.any(Promise)],
-				]);
+				expect(wrapper.emitted("delete-files")).toEqual([[[fileRecords[1]]]]);
 			});
 		});
 	});

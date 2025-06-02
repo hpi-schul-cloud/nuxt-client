@@ -14,6 +14,7 @@ import {
 	isPdfMimeType,
 	isPreviewPossible,
 	isVideoMimeType,
+	removeFileExtension,
 } from "./fileHelper";
 
 describe("@/utils/fileHelper", () => {
@@ -491,6 +492,36 @@ describe("@/utils/fileHelper", () => {
 				const result = formatSecondsToHourMinSec(1555125);
 
 				expect(result).toBe("23:58:45");
+			});
+		});
+	});
+
+	describe("removeFileExtension", () => {
+		describe("when input string contains a dot", () => {
+			it("should remove the file extension", () => {
+				const result = removeFileExtension("file.name.txt");
+				expect(result).toEqual("file.name");
+			});
+		});
+
+		describe("when input string contains no dot", () => {
+			it("should return the input string unchanged", () => {
+				const result = removeFileExtension("filename");
+				expect(result).toEqual("filename");
+			});
+		});
+
+		describe("when input string ends with a dot", () => {
+			it("should remove the trailing dot", () => {
+				const result = removeFileExtension("filename.");
+				expect(result).toEqual("filename");
+			});
+		});
+
+		describe("when input string is empty", () => {
+			it("should return an empty string", () => {
+				const result = removeFileExtension("");
+				expect(result).toEqual("");
 			});
 		});
 	});

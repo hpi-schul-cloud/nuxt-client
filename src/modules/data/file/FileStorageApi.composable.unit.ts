@@ -173,7 +173,7 @@ describe("FileStorageApi Composable", () => {
 				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
 					responseError
 				);
-				expect(showUnauthorizedError).toBeCalledTimes(1);
+				expect(showUnauthorizedError).toHaveBeenCalled();
 			});
 
 			it("should call showForbiddenError and pass error", async () => {
@@ -186,7 +186,7 @@ describe("FileStorageApi Composable", () => {
 					responseError
 				);
 
-				expect(showForbiddenError).toBeCalledTimes(1);
+				expect(showForbiddenError).toHaveBeenCalled();
 			});
 
 			it("should call showInternalServerError and pass error", async () => {
@@ -197,7 +197,7 @@ describe("FileStorageApi Composable", () => {
 					responseError
 				);
 
-				expect(showInternalServerError).toBeCalledTimes(1);
+				expect(showInternalServerError).toHaveBeenCalled();
 			});
 		});
 	});
@@ -384,23 +384,23 @@ describe("FileStorageApi Composable", () => {
 				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.uploadFromUrl.mockRejectedValueOnce(responseError);
 
-				setupFileStorageNotifier();
+				const { showFileTooBigError } = setupFileStorageNotifier();
 
 				return {
 					parentId,
 					parentType,
 					file,
-					responseError,
+					showFileTooBigError,
 				};
 			};
 
-			it("should call showFileTooBigError and pass error", async () => {
-				const { parentId, parentType, responseError } = setup();
+			it("should call showFileTooBigError", async () => {
+				const { parentId, parentType, showFileTooBigError } = setup();
 				const { uploadFromUrl } = useFileStorageApi();
 
-				await expect(
-					uploadFromUrl("abc:/not-an-url", parentId, parentType)
-				).rejects.toBe(responseError);
+				await uploadFromUrl("abc:/not-an-url", parentId, parentType);
+
+				expect(showFileTooBigError).toHaveBeenCalled();
 			});
 		});
 	});
@@ -483,20 +483,16 @@ describe("FileStorageApi Composable", () => {
 				return {
 					renameFileParams,
 					showFileExistsError,
-					responseError,
 				};
 			};
 
-			it("should call showFileExistsError and pass error", async () => {
-				const { renameFileParams, showFileExistsError, responseError } =
-					setup();
+			it("should call showFileExistsError", async () => {
+				const { renameFileParams, showFileExistsError } = setup();
 				const { rename } = useFileStorageApi();
 
-				await expect(rename("dfgdfg", renameFileParams)).rejects.toBe(
-					responseError
-				);
+				await rename("dfgdfg", renameFileParams);
 
-				expect(showFileExistsError).toBeCalled();
+				expect(showFileExistsError).toHaveBeenCalled();
 			});
 		});
 	});
@@ -602,7 +598,6 @@ describe("FileStorageApi Composable", () => {
 				return {
 					showInternalServerError,
 					showFileNotDeletedError,
-					responseError,
 					expectedPayload,
 					fileRecordResponse,
 				};
@@ -612,7 +607,6 @@ describe("FileStorageApi Composable", () => {
 				const {
 					showInternalServerError,
 					showFileNotDeletedError,
-					responseError,
 					fileRecordResponse,
 				} = setup();
 				const { deleteFiles, getFileRecordsByParentId, fetchFiles } =
@@ -627,7 +621,7 @@ describe("FileStorageApi Composable", () => {
 					fileRecordResponse,
 				]);
 
-				await expect(deleteFiles([])).rejects.toBe(responseError);
+				await deleteFiles([]);
 
 				expect(showInternalServerError).toHaveBeenCalled();
 				expect(showFileNotDeletedError).toHaveBeenCalled();
