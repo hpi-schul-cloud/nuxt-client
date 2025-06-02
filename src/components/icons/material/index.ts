@@ -1,5 +1,6 @@
 import {
 	mdiAccountBoxOutline,
+	mdiAccountCheckOutline,
 	mdiAccountCircleOutline,
 	mdiAccountEditOutline,
 	mdiAccountGroupOutline,
@@ -7,6 +8,7 @@ import {
 	mdiAccountOffOutline,
 	mdiAccountOutline,
 	mdiAccountPlus,
+	mdiAccountRemoveOutline,
 	mdiAccountQuestionOutline,
 	mdiAccountSchoolOutline,
 	mdiAccountSearch,
@@ -156,6 +158,7 @@ import {
 
 export {
 	mdiAccountBoxOutline,
+	mdiAccountCheckOutline,
 	mdiAccountCircleOutline,
 	mdiAccountEditOutline,
 	mdiAccountGroupOutline,
@@ -163,6 +166,7 @@ export {
 	mdiAccountOffOutline,
 	mdiAccountOutline,
 	mdiAccountPlus,
+	mdiAccountRemoveOutline,
 	mdiAccountQuestionOutline,
 	mdiAccountSchoolOutline,
 	mdiAccountSearch,

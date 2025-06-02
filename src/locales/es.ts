@@ -213,11 +213,6 @@ export default {
 	"common.words.topics": "Temas",
 	"common.words.yes": "Sí",
 	"common.words.export": "La exportación del curso se está descargando",
-	"component.cardElement.fileElement.audioPlayer.pause": "Pausa",
-	"component.cardElement.fileElement.audioPlayer.play": "Reproducir",
-	"component.cardElement.fileElement.audioPlayer.slider": "Control deslizante",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
-	"component.cardElement.fileElement.audioPlayer.speed": "Menú de velocidad",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -432,6 +427,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "minuto | minutos",
+	"components.audioPlayer.pause": "Pausa",
+	"components.audioPlayer.play": "Reproducir",
+	"components.audioPlayer.slider": "Control deslizante",
+	"components.audioPlayer.speed": "Menú de velocidad",
+	"components.audioPlayer.speed.normal": "Normal",
 	"components.base.BaseIcon.error":
 		"Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",
 	"components.base.showPassword": "Mostrar contraseña",
@@ -1857,6 +1857,8 @@ export default {
 		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Lamentablemente, el enlace de invitación sólo es válido para los usuarios de la escuela «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.confirmationPending":
+		"Solicitud de ingreso en la sala presentada con éxito - pendiente de confirmación",
 	"pages.rooms.invitationLinkStatus.title": "Enlace de invitación",
 	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.rooms.menuItems.startSync": "Iniciar sincronización",
@@ -2061,6 +2063,24 @@ export default {
 		"¿Suprimir el enlace de invitación '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Compartir enlace de invitación „{linkTitle}“",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Confirmar solicitud de afiliación",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Rechazar la solicitud de adhesión",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} ha sido añadido como miembro de la sala.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"La solicitud de {fullName} para unirse ha sido rechazada.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"Las personas seleccionadas han sido añadidas a la sala como miembros.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"Las solicitudes de adhesión de las personas seleccionadas han sido rechazadas.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Menú de acción para {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Confirmar la solicitud de membresía de {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Rechazar la solicitud de membresía de {fullName}",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
 		"Menú de acción para el enlace de invitación „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":

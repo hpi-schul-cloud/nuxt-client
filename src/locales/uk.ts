@@ -215,11 +215,6 @@ export default {
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
 	"common.words.export": "Завантажується експорт курсу",
-	"component.cardElement.fileElement.audioPlayer.pause": "пауза",
-	"component.cardElement.fileElement.audioPlayer.play": "грати",
-	"component.cardElement.fileElement.audioPlayer.slider": "повзунок",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "нормальний",
-	"component.cardElement.fileElement.audioPlayer.speed": "швидке меню",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -436,6 +431,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "хв",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes":
 		"хвилина | хвилини (хвилин)",
+	"components.audioPlayer.pause": "пауза",
+	"components.audioPlayer.play": "грати",
+	"components.audioPlayer.slider": "повзунок",
+	"components.audioPlayer.speed": "швидке меню",
+	"components.audioPlayer.speed.normal": "нормальний",
 	"components.base.BaseIcon.error":
 		"помилка завантаження значка {icon} з {source}. Можливо, він недоступний або ви використовуєте застарілий браузер Edge.",
 	"components.base.showPassword": "Показати пароль",
@@ -1836,6 +1836,8 @@ export default {
 		"Посилання на запрошення, на жаль, дійсне лише для вчителів",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Посилання на запрошення, на жаль, дійсне лише для користувачів школи «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.confirmationPending":
+		"Заявка на приєднання до кімнати успішно подана - очікується підтвердження",
 	"pages.rooms.invitationLinkStatus.title": "Посилання на запрошення",
 	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
 	"pages.rooms.menuItems.startSync": "Почніть синхронізацію",
@@ -2029,6 +2031,24 @@ export default {
 		"Видалити посилання на запрошення '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Поділіться посиланням на запрошення „{linkTitle}“",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Підтвердити заявку на участь",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Відхилити запит на реєстрацію",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} був доданий як член кімнати.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"Запит {fullName} на приєднання було відхилено.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"Вибрані особи були додані до кімнати як учасники.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"Вибрані особи були додані до кімнати як учасники.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Меню дій для {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Підтвердити запит на членство для {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Відхилити запит на членство для {fullName}",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
 		"Меню дій для посилання-запрошення „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":

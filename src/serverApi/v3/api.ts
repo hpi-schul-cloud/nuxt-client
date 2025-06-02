@@ -8365,7 +8365,8 @@ export enum RoomInvitationLinkValidationError {
     OnlyForTeachers = 'ONLY_FOR_TEACHERS',
     RestrictedToCreatorSchool = 'RESTRICTED_TO_CREATOR_SCHOOL',
     CantInviteStudentsFromOtherSchool = 'CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL',
-    InvalidLink = 'INVALID_LINK'
+    InvalidLink = 'INVALID_LINK',
+    RoomApplicantWaiting = 'ROOM_APPLICANT_WAITING'
 }
 
 /**
@@ -23862,10 +23863,6 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     

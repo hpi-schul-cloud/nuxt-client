@@ -259,6 +259,29 @@ describe("MembersTable", () => {
 		expect(checkboxes.length).toEqual(nonSelectableMembers.length);
 	});
 
+	it("should not show room applicants", async () => {
+		const roomAdmins = roomMemberFactory.buildList(3, {
+			roomRoleName: RoleName.Roomadmin,
+			displayRoomRole: RoleName.Roomadmin,
+		});
+		const roomApplicant = roomMemberFactory.build({
+			roomRoleName: RoleName.Roomapplicant,
+			displayRoomRole: RoleName.Roomapplicant,
+		});
+		const members = [...roomAdmins, roomApplicant];
+
+		const { wrapper } = setup({
+			members,
+		});
+
+		expect(wrapper.text()).not.toEqual(
+			expect.stringContaining(roomApplicant.firstName)
+		);
+		expect(wrapper.text()).not.toEqual(
+			expect.stringContaining(roomApplicant.lastName)
+		);
+	});
+
 	describe("when selecting members", () => {
 		it("should select all members when header checkbox is clicked", async () => {
 			const { wrapper, roomMembers } = setup();
