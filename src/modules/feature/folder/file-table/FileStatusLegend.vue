@@ -3,25 +3,25 @@
 		<v-icon>
 			{{ mdiClockTimeFour }}
 		</v-icon>
-		{{ t("components.cardElement.fileElement.awaitingScan") }}
+		{{ t("common.file.awaitingScan") }}
 	</p>
 	<p data-testid="legend-file-status-scan-wont-check">
 		<v-icon>
-			{{ mdiCloseCircle }}
+			{{ mdiImageOff }}
 		</v-icon>
-		{{ t("components.cardElement.fileElement.scanWontCheck") }}
+		{{ t("common.file.scanWontCheck") }}
 	</p>
 	<p data-testid="legend-file-status-scan-error">
 		<v-icon color="warning">
 			{{ mdiAlert }}
 		</v-icon>
-		{{ t("components.cardElement.fileElement.scanError") }}
+		{{ t("common.file.scanError") }}
 	</p>
 	<p data-testid="legend-file-status-scan-virus-detected">
 		<v-icon color="error">
 			{{ mdiAlertCircle }}
 		</v-icon>
-		{{ t("components.cardElement.fileElement.virusDetected") }}
+		{{ t("common.file.virusDetected") }}
 	</p>
 </template>
 
@@ -30,7 +30,7 @@ import {
 	mdiAlert,
 	mdiAlertCircle,
 	mdiClockTimeFour,
-	mdiCloseCircle,
+	mdiImageOff,
 } from "@icons/material";
 import { useI18n } from "vue-i18n";
 
