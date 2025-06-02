@@ -1867,11 +1867,11 @@ export default {
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"Rooms will combine functions from courses and teams in the future to provide more opportunities for cross-school working.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Teams and courses will remain until the content can be transferred to rooms.",
-	"pages.rooms.infoAlert.welcome.visibility":
-		"Rooms are currently only visible to teachers and will be further developed. Further information can be found on our {helpLink}. We look forward to receiving {feedbackLink} on the current status.",
-	"pages.rooms.infoAlert.welcome.visibility.help": "help page",
-	"pages.rooms.infoAlert.welcome.visibility.feedback": "feedback",
+		"Rooms will be further developed. Teams and courses will remain until the content can be transferred to rooms.",
+	"pages.rooms.infoAlert.welcome.furtherInformation":
+		"Further information can be found on our {helpLink}. We look forward to receiving {feedbackLink} on the current status.",
+	"pages.rooms.infoAlert.welcome.furtherInformation.help": "help page",
+	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "feedback",
 	"pages.rooms.leaveRoom.confirmation": 'Leave room "{roomName}"?',
 	"pages.rooms.leaveRoom.RoomOwner.warning":
 		"Before the room can be left, the room ownership permission must be transferred to another room member. This can be done in the room member management.",
