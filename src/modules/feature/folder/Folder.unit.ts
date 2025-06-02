@@ -30,33 +30,33 @@ describe("Folder.vue", () => {
 		return `${uploaded} von ${total} Dateien hochgeladen`;
 	};
 
-	describe("when user has board edit permission", () => {
-		const setupWrapper = () => {
-			const parentId = "123";
-			const wrapper = mount(Folder, {
-				global: {
-					plugins: [
-						createTestingVuetify(),
-						createTestingI18n({
-							messages: {
-								en: {
-									"pages.folder.uploadstats": buildUploadStatsTranslation(
-										"{uploaded}",
-										"{total}"
-									),
-								},
+	const setupWrapper = () => {
+		const parentId = "123";
+		const wrapper = mount(Folder, {
+			global: {
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n({
+						messages: {
+							en: {
+								"pages.folder.uploadstats": buildUploadStatsTranslation(
+									"{uploaded}",
+									"{total}"
+								),
 							},
-						}),
-					],
-				},
-				props: {
-					folderId: parentId,
-				},
-			});
+						},
+					}),
+				],
+			},
+			props: {
+				folderId: parentId,
+			},
+		});
 
-			return { wrapper, parentId };
-		};
+		return { wrapper, parentId };
+	};
 
+	describe("when user has board edit permission", () => {
 		describe("when folder contains no files", () => {
 			describe("when component is loaded", () => {
 				const setup = async () => {
@@ -1320,32 +1320,6 @@ describe("Folder.vue", () => {
 	});
 
 	describe("when user has not board edit permission", () => {
-		const setupWrapper = () => {
-			const parentId = "123";
-			const wrapper = mount(Folder, {
-				global: {
-					plugins: [
-						createTestingVuetify(),
-						createTestingI18n({
-							messages: {
-								en: {
-									"pages.folder.uploadstats": buildUploadStatsTranslation(
-										"{uploaded}",
-										"{total}"
-									),
-								},
-							},
-						}),
-					],
-				},
-				props: {
-					folderId: parentId,
-				},
-			});
-
-			return { wrapper };
-		};
-
 		describe("check visibility of the folder menu and fab button", () => {
 			const setup = async () => {
 				const folderStateMock =
