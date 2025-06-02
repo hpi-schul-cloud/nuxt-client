@@ -100,7 +100,7 @@ import { computed, onMounted, ref } from "vue";
 import { RoleName } from "@/serverApi/v3";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VAutocomplete, VCard, VSelect } from "vuetify/lib/components/index";
+import { VAutocomplete, VCard, VSelect } from "vuetify/lib/components";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";

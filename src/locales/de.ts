@@ -212,12 +212,6 @@ export default {
 	"common.words.topic": "Thema",
 	"common.words.topics": "Themen",
 	"common.words.yes": "Ja",
-	"component.cardElement.fileElement.audioPlayer.pause": "Anhalten",
-	"component.cardElement.fileElement.audioPlayer.play": "Abspielen",
-	"component.cardElement.fileElement.audioPlayer.slider":
-		"Audio Schieberegler für Fortschritt",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
-	"component.cardElement.fileElement.audioPlayer.speed": "Geschwindigkeitsmenü",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -429,6 +423,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "Minute | Minuten",
+	"components.audioPlayer.pause": "Anhalten",
+	"components.audioPlayer.play": "Abspielen",
+	"components.audioPlayer.slider": "Audio Schieberegler für Fortschritt",
+	"components.audioPlayer.speed": "Geschwindigkeitsmenü",
+	"components.audioPlayer.speed.normal": "Normal",
 	"components.base.BaseIcon.error":
 		"Das Icon aus dieser Quelle konnte leider nicht geladen werden. Falls Sie Microsoft Edge verwenden, stellen Sie bitte sicher, dass Sie die neuste Version verwenden.",
 	"components.base.showPassword": "Passwort anzeigen",
@@ -1832,6 +1831,8 @@ export default {
 		"Der Einladungslink ist leider nur für Lernbegleitungen gültig",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Der Einladungslink ist leider nur für Nutzende der Schule “{schoolName}” gültig",
+	"pages.rooms.invitationLinkStatus.confirmationPending":
+		"Beitrittsanfrage zum Raum erfolgreich gestellt – Bestätigung ausstehend",
 	"pages.rooms.invitationLinkStatus.title": "Einladungslink",
 	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.menuItems.startSync": "Synchronisation starten",
@@ -2027,6 +2028,24 @@ export default {
 		"Ausgewählte Einladungslinks wirklich löschen?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Einladungslink '{invitation}' wirklich löschen?",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Beitrittsanfrage bestätigen",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Beitrittsanfrage ablehnen",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} wurde als Raummitglied hinzugefügt.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"Die Beitrittsanfrage von {fullName} wurde abgelehnt.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"Die ausgewählten Personen wurden als Mitglieder zum Raum hinzugefügt.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"Die Beitrittsanfragen der ausgewählten Personen wurden abgelehnt.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Aktionsmenü für {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Mitgliedschaftsanfrage für {fullName} bestätigen",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Mitgliedsanfrage für {fullName} ablehnen",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Einladungslink „{linkTitle}“ teilen",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":

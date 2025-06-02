@@ -212,11 +212,6 @@ export default {
 	"common.words.topics": "Topics",
 	"common.words.yes": "Yes",
 	"common.words.export": "Course export is downloading",
-	"component.cardElement.fileElement.audioPlayer.pause": "Pause",
-	"component.cardElement.fileElement.audioPlayer.play": "Play",
-	"component.cardElement.fileElement.audioPlayer.slider": "Audio slider",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
-	"component.cardElement.fileElement.audioPlayer.speed": "Speed Menu",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"During the migration, the registration system for students and teachers is changed to moin.schule. The data belonging to the affected accounts will be preserved.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -427,6 +422,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "minute | minutes",
+	"components.audioPlayer.pause": "Pause",
+	"components.audioPlayer.play": "Play",
+	"components.audioPlayer.slider": "Audio slider",
+	"components.audioPlayer.speed": "Speed Menu",
+	"components.audioPlayer.speed.normal": "Normal",
 	"components.base.BaseIcon.error":
 		"error loading icon {icon} from {source}. It might be not available or you are using the legacy Edge browser.",
 	"components.base.showPassword": "Show password",
@@ -1802,6 +1802,8 @@ export default {
 		"The invitation link is unfortunately only valid for teachers",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"The invitation link is unfortunately only valid for users of the school “{schoolName}”",
+	"pages.rooms.invitationLinkStatus.confirmationPending":
+		"Application to join the room successfully submitted - confirmation pending",
 	"pages.rooms.invitationLinkStatus.title": "Invitation link",
 	"pages.rooms.menuItems.endSync": "End synchronization",
 	"pages.rooms.menuItems.startSync": "Start synchronization",
@@ -1992,6 +1994,24 @@ export default {
 		"Delete selected invitation links?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Delete the invitation link '{invitation}'?",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Confirm membership request",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Reject membership request",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} has been added as a room member.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"{fullName}'s request to join was rejected.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"The selected persons have been added to the room as members.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"The membership requests of the selected persons have been rejected.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Action menu for {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Confirm the membership request for {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Reject the membership request for {fullName}",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Share invitation link “{linkTitle}”",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":

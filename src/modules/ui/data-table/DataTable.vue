@@ -94,24 +94,17 @@
 import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify/lib/framework";
+import { useDisplay } from "vuetify";
 import BatchActionMenu from "./BatchActionMenu.vue";
 
 const props = defineProps({
 	tableHeaders: {
-		type: Array as PropType<
-			{
-				title: string;
-				key: string;
-			}[]
-		>,
-		isRequired: true,
-		default: () => [],
+		type: Array as PropType<Record<string, unknown>[]>,
+		required: true,
 	},
 	items: {
 		type: Array as PropType<Record<string, unknown>[]>,
-		isRequired: true,
-		default: () => [],
+		required: true,
 	},
 	showSelect: {
 		type: Boolean,

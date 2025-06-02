@@ -173,6 +173,7 @@ module.exports = {
 			"@feature-folder": getDir("src/modules/feature/folder"),
 			"@icons": getDir("src/components/icons"),
 			"@ui-alert": getDir("src/modules/ui/alert"),
+			"@ui-audio-player": getDir("src/modules/ui/audio-player"),
 			"@ui-board": getDir("src/modules/ui/board"),
 			"@ui-breadcrumbs": getDir("src/modules/ui/breadcrumbs"),
 			"@ui-chip": getDir("src/modules/ui/chip"),
