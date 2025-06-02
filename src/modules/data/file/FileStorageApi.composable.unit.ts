@@ -157,41 +157,45 @@ describe("FileStorageApi Composable", () => {
 				return {
 					parentId,
 					parentType,
+					responseError,
 					showInternalServerError,
 					showUnauthorizedError,
 					showForbiddenError,
 				};
 			};
 
-			it("should call showUnauthorizedError", async () => {
-				const { parentId, parentType, showUnauthorizedError } = setup(
-					ErrorType.Unauthorized
-				);
+			it("should call showUnauthorizedError and pass error", async () => {
+				const { parentId, parentType, showUnauthorizedError, responseError } =
+					setup(ErrorType.Unauthorized);
 
 				const { fetchFiles } = useFileStorageApi();
 
-				await fetchFiles(parentId, parentType);
-
+				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
+					responseError
+				);
 				expect(showUnauthorizedError).toHaveBeenCalled();
 			});
 
-			it("should call showForbiddenError", async () => {
-				const { parentId, parentType, showForbiddenError } = setup(
-					ErrorType.Forbidden
-				);
+			it("should call showForbiddenError and pass error", async () => {
+				const { parentId, parentType, showForbiddenError, responseError } =
+					setup(ErrorType.Forbidden);
 
 				const { fetchFiles } = useFileStorageApi();
 
-				await fetchFiles(parentId, parentType);
+				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
+					responseError
+				);
 
 				expect(showForbiddenError).toHaveBeenCalled();
 			});
 
-			it("should call showInternalServerError", async () => {
-				const { parentId, parentType, showInternalServerError } = setup();
+			it("should call showInternalServerError and pass error", async () => {
+				const { parentId, parentType, showInternalServerError, responseError } =
+					setup();
 				const { fetchFiles } = useFileStorageApi();
-
-				await fetchFiles(parentId, parentType);
+				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
+					responseError
+				);
 
 				expect(showInternalServerError).toHaveBeenCalled();
 			});
@@ -278,16 +282,25 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					file,
 					showFileTooBigError,
+					responseError,
 				};
 			};
 
-			it("should call showFileTooBigError", async () => {
-				const { parentId, parentType, file, showFileTooBigError } = setup();
+			it("should call showFileTooBigError and pass error", async () => {
+				const {
+					parentId,
+					parentType,
+					file,
+					showFileTooBigError,
+					responseError,
+				} = setup();
 				const { upload } = useFileStorageApi();
 
-				await upload(file, parentId, parentType);
+				await expect(upload(file, parentId, parentType)).rejects.toBe(
+					responseError
+				);
 
-				expect(showFileTooBigError).toHaveBeenCalled();
+				expect(showFileTooBigError).toBeCalled();
 			});
 		});
 	});
