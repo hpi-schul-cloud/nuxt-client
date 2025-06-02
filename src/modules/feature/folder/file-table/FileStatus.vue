@@ -16,7 +16,7 @@
 	>
 		<template #activator="{ props }">
 			<v-icon v-bind="props" data-testid="file-status-scan-wont-check">
-				{{ mdiCloseCircle }}
+				{{ mdiImageOff }}
 			</v-icon>
 		</template>
 		{{ t("components.cardElement.fileElement.scanWontCheck") }}
@@ -62,7 +62,7 @@ import {
 	mdiAlert,
 	mdiAlertCircle,
 	mdiClockTimeFour,
-	mdiCloseCircle,
+	mdiImageOff,
 } from "@icons/material";
 import { defineProps, PropType } from "vue";
 import { useI18n } from "vue-i18n";
