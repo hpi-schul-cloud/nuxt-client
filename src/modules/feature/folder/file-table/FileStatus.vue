@@ -8,7 +8,7 @@
 				{{ mdiClockTimeFour }}
 			</v-icon>
 		</template>
-		{{ t("components.cardElement.fileElement.awaitingScan") }}
+		{{ t("common.file.awaitingScan") }}
 	</v-tooltip>
 	<v-tooltip
 		v-if="isScanStatusWontCheck(fileRecord.previewStatus)"
@@ -19,7 +19,7 @@
 				{{ mdiImageOff }}
 			</v-icon>
 		</template>
-		{{ t("components.cardElement.fileElement.scanWontCheck") }}
+		{{ t("common.file.scanWontCheck") }}
 	</v-tooltip>
 	<v-tooltip v-if="isScanStatusError(fileRecord.previewStatus)" location="top">
 		<template #activator="{ props }">
@@ -31,7 +31,7 @@
 				{{ mdiAlert }}
 			</v-icon>
 		</template>
-		{{ t("components.cardElement.fileElement.scanError") }}
+		{{ t("common.file.scanError") }}
 	</v-tooltip>
 	<v-tooltip
 		v-if="!isDownloadAllowed(fileRecord.securityCheckStatus)"
@@ -46,7 +46,7 @@
 				{{ mdiAlertCircle }}
 			</v-icon>
 		</template>
-		{{ t("components.cardElement.fileElement.virusDetected") }}
+		{{ t("common.file.virusDetected") }}
 	</v-tooltip>
 </template>
 

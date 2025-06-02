@@ -46,9 +46,7 @@ describe("FileAlerts", () => {
 
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toContain(
-				"components.cardElement.fileElement.awaitingScan"
-			);
+			expect(infoAlert.text()).toContain("common.file.awaitingScan");
 			expect(infoAlert.text()).toContain(
 				"components.cardElement.fileElement.reloadStatus"
 			);
@@ -61,9 +59,7 @@ describe("FileAlerts", () => {
 
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"components.cardElement.fileElement.scanWontCheck"
-			);
+			expect(infoAlert.text()).toBe("common.file.scanWontCheck");
 		});
 	});
 
@@ -73,9 +69,7 @@ describe("FileAlerts", () => {
 
 			const warningAlert = wrapper.findComponent(WarningAlert);
 
-			expect(warningAlert.text()).toBe(
-				"components.cardElement.fileElement.scanError"
-			);
+			expect(warningAlert.text()).toBe("common.file.scanError");
 		});
 	});
 
@@ -85,9 +79,7 @@ describe("FileAlerts", () => {
 
 			const errorAlert = wrapper.findComponent(ErrorAlert);
 
-			expect(errorAlert.text()).toBe(
-				"components.cardElement.fileElement.virusDetected"
-			);
+			expect(errorAlert.text()).toBe("common.file.virusDetected");
 		});
 	});
 
@@ -99,9 +91,7 @@ describe("FileAlerts", () => {
 			]);
 
 			const errorAlert = wrapper.findComponent(ErrorAlert);
-			expect(errorAlert.text()).toContain(
-				"components.cardElement.fileElement.virusDetected"
-			);
+			expect(errorAlert.text()).toContain("common.file.virusDetected");
 
 			const infoAlert = wrapper.findComponent(InfoAlert);
 			expect(infoAlert.text()).toBe(

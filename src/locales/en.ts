@@ -31,6 +31,12 @@ export default {
 	"common.ariaLabel.newTab": "opens in a new tab",
 	"common.ariaLabel.openImageInLightBox": "Display image in full size",
 	"common.ariaLabel.sameTab": "opens in the same tab",
+	"common.file.awaitingScan":
+		"Preview is displayed after a successful virus scan. The file is currently being scanned.",
+	"common.file.scanWontCheck": "Due to the size, no preview can be generated.",
+	"common.file.scanError":
+		"Error during virus check. Preview cannot be created. Please upload the file again.",
+	"common.file.virusDetected": "File has been locked due to a suspected virus.",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
@@ -526,8 +532,6 @@ export default {
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
 	"components.cardElement.fileElement.audioFormatError":
 		"The audio format is not supported by this browser/operating system.",
-	"components.cardElement.fileElement.awaitingScan":
-		"Preview is displayed after a successful virus scan. The file is currently being scanned.",
 	"components.cardElement.fileElement.caption": "Caption",
 	"components.cardElement.fileElement.emptyAlt":
 		"Here is an image with the following name",
@@ -535,14 +539,9 @@ export default {
 	"components.cardElement.fileElement.previewError":
 		"Failed to load the preview.",
 	"components.cardElement.fileElement.reloadStatus": "Update status",
-	"components.cardElement.fileElement.scanError":
-		"Error during virus check. Preview cannot be created. Please upload the file again.",
-	"components.cardElement.fileElement.scanWontCheck":
-		"Due to the size, no preview can be generated.",
 	"components.cardElement.fileElement.videoFormatError":
 		"The video format is not supported by this browser/operating system.",
-	"components.cardElement.fileElement.virusDetected":
-		"File has been locked due to a suspected virus.",
+
 	"components.cardElement.folderElement": "File folder",
 	"components.cardElement.folderElement.untitled": "Untitled folder",
 	"components.cardElement.LinkElement": "Link",
