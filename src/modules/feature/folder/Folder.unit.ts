@@ -12,16 +12,19 @@ import * as FolderState from "@data-folder";
 import { createMock } from "@golevelup/ts-jest";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
-import { flushPromises } from "@vue/test-utils";
+import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import { ComputedRef, nextTick, ref } from "vue";
-import { VSkeletonLoader } from "vuetify/lib/components/index";
+import { VCard, VSkeletonLoader } from "vuetify/lib/components/index";
 import DeleteFileDialog from "./file-table/DeleteFileDialog.vue";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";
 import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
+import FolderMenu from "./FolderMenu.vue";
 
 describe("Folder.vue", () => {
+	enableAutoUnmount(afterEach);
+
 	beforeEach(() => {
 		jest.restoreAllMocks();
 	});
@@ -593,6 +596,204 @@ describe("Folder.vue", () => {
 					const { routerSpy } = await setup();
 
 					expect(routerSpy).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when rename folder button is clicked and dialog confirmed", () => {
+				const setup = async () => {
+					const folderStateMock =
+						createMock<ReturnType<typeof FolderState.useFolderState>>();
+					jest
+						.spyOn(FolderState, "useFolderState")
+						.mockReturnValueOnce(folderStateMock);
+
+					folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
+						() => "boards"
+					);
+
+					const folderName = "Test Folder" as unknown as ComputedRef<string>;
+					folderStateMock.folderName = folderName;
+					folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+					const parent = parentNodeInfoFactory.build();
+					folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+					const boardState = createMock<
+						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+					>({});
+					jest
+						.spyOn(BoardApi, "useSharedBoardPageInformation")
+						.mockReturnValueOnce(boardState);
+
+					const fileStorageApiMock =
+						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					jest
+						.spyOn(FileStorageApi, "useFileStorageApi")
+						.mockReturnValueOnce(fileStorageApiMock);
+
+					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
+
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+
+					const routerSpy = jest.spyOn(router, "replace").mockImplementation();
+
+					const useBoardStoreMock =
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
+					jest
+						.spyOn(BoardApi, "useBoardStore")
+						.mockReturnValueOnce(useBoardStoreMock);
+
+					const useBoardPermissionsMock = createMock<
+						ReturnType<typeof BoardApi.useBoardPermissions>
+					>({ hasEditPermission: ref(true) });
+					jest
+						.spyOn(BoardApi, "useBoardPermissions")
+						.mockReturnValueOnce(useBoardPermissionsMock);
+
+					const { wrapper } = setupWrapper();
+
+					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
+					await kebabMenu.trigger("click");
+
+					const renameButton = wrapper.findComponent(KebabMenuActionRename);
+					await renameButton.trigger("click");
+
+					const renameDialog = wrapper.findComponent(VCard);
+					const confirmButton = renameDialog.find(
+						"[data-testid='dialog-confirm']"
+					);
+					await confirmButton.trigger("click");
+
+					return {
+						folderStateMock,
+						wrapper,
+						fileStorageApiMock,
+						folderName,
+						boardApiMock,
+						routerSpy,
+						parent,
+					};
+				};
+
+				it("should call rename", async () => {
+					const { folderStateMock, folderName } = await setup();
+
+					expect(folderStateMock.renameFolder).toHaveBeenCalledWith(
+						folderName,
+						"123"
+					);
+				});
+
+				it("should close the dialog", async () => {
+					const { wrapper } = await setup();
+
+					const renameDialog = wrapper.findComponent(VCard);
+					const cancelButton = renameDialog.find(
+						"[data-testid='dialog-cancel']"
+					);
+
+					expect(cancelButton.isVisible()).toBe(false);
+				});
+			});
+
+			describe("when rename folder button is clicked and dialog not confirmed", () => {
+				const setup = async () => {
+					const folderStateMock =
+						createMock<ReturnType<typeof FolderState.useFolderState>>();
+					jest
+						.spyOn(FolderState, "useFolderState")
+						.mockReturnValueOnce(folderStateMock);
+
+					folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
+						() => "boards"
+					);
+
+					const folderName = "Test Folder" as unknown as ComputedRef<string>;
+					folderStateMock.folderName = folderName;
+					folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+					const parent = parentNodeInfoFactory.build();
+					folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+					const boardState = createMock<
+						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+					>({});
+					jest
+						.spyOn(BoardApi, "useSharedBoardPageInformation")
+						.mockReturnValueOnce(boardState);
+
+					const fileStorageApiMock =
+						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					jest
+						.spyOn(FileStorageApi, "useFileStorageApi")
+						.mockReturnValueOnce(fileStorageApiMock);
+
+					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
+
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+
+					const routerSpy = jest.spyOn(router, "replace").mockImplementation();
+
+					const useBoardStoreMock =
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
+					jest
+						.spyOn(BoardApi, "useBoardStore")
+						.mockReturnValueOnce(useBoardStoreMock);
+
+					const useBoardPermissionsMock = createMock<
+						ReturnType<typeof BoardApi.useBoardPermissions>
+					>({ hasEditPermission: ref(true) });
+					jest
+						.spyOn(BoardApi, "useBoardPermissions")
+						.mockReturnValueOnce(useBoardPermissionsMock);
+
+					const { wrapper } = setupWrapper();
+
+					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
+					await kebabMenu.trigger("click");
+
+					const renameButton = wrapper.findComponent(KebabMenuActionRename);
+					await renameButton.trigger("click");
+
+					const renameDialog = wrapper.findComponent(VCard);
+					const cancelButton = renameDialog.find(
+						"[data-testid='dialog-cancel']"
+					);
+					await cancelButton.trigger("click");
+
+					return {
+						folderStateMock,
+						wrapper,
+						fileStorageApiMock,
+						folderName,
+						boardApiMock,
+						routerSpy,
+						parent,
+					};
+				};
+
+				it("should not call rename", async () => {
+					const { folderStateMock, folderName } = await setup();
+
+					expect(folderStateMock.renameFolder).not.toHaveBeenCalledWith(
+						folderName,
+						"123"
+					);
+				});
+
+				it("should close the dialog", async () => {
+					const { wrapper } = await setup();
+
+					const renameDialog = wrapper.findComponent(VCard);
+					const cancelButton = renameDialog.find(
+						"[data-testid='dialog-cancel']"
+					);
+
+					expect(cancelButton.isVisible()).toBe(false);
 				});
 			});
 
@@ -1404,7 +1605,7 @@ describe("Folder.vue", () => {
 			it("should not show folder menu", async () => {
 				const { wrapper } = await setup();
 
-				const folderMenu = wrapper.find("[data-testid='folder-menu']");
+				const folderMenu = wrapper.findComponent(FolderMenu);
 
 				expect(folderMenu.exists()).toBe(false);
 			});
