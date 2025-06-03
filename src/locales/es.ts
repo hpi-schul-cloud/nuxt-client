@@ -53,6 +53,7 @@ export default {
 	"common.labels.expanded": "expandido",
 	"common.labels.externalsource": "Fuente",
 	"common.labels.failure": "falla",
+	"common.labels.name.new": "nuevo nombre",
 	"common.labels.firstName.new": "Nuevo nombre",
 	"common.labels.firstName": "Nombre",
 	"common.labels.fullName": "Nombre y apellidos",
@@ -2221,6 +2222,7 @@ export default {
 	"ui.actionMenu.actions": "Acciones",
 	"ui.actionMenu.select.none": "Deseleccionar todas las líneas",
 	"ui.dataTable.select.all": "Seleccionar todas las líneas",
+	"ui.rename.dialog.title": "Renombrar {entity}",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",
@@ -2274,4 +2276,6 @@ export default {
 	"pages.folder.delete-multiple-confirmation":
 		"¿Borrar realmente todos los archivos {total}?",
 	"pages.folder.delete-confirmation": "¿Borrar realmente el archivo {name}?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"El nombre del archivo ya existe.",
 };
