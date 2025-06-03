@@ -61,6 +61,7 @@ export default {
 	"common.labels.expanded": "geöffnet",
 	"common.labels.externalsource": "Quelle",
 	"common.labels.failure": "fehler",
+	"common.labels.name.new": "Neuer Name",
 	"common.labels.firstName.new": "Neuer Vorname",
 	"common.labels.firstName": "Vorname",
 	"common.labels.fullName": "Vorname & Nachname",
@@ -2183,6 +2184,7 @@ export default {
 	"ui.actionMenu.actions": "Aktionen",
 	"ui.actionMenu.select.none": "Alle Zeilen abwählen",
 	"ui.dataTable.select.all": "Alle Zeilen auswählen",
+	"ui.rename.dialog.title": "{entity} umbenennen",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",
@@ -2234,4 +2236,6 @@ export default {
 	"pages.folder.delete-multiple-confirmation":
 		"Alle {total} Dateien wirklich löschen?",
 	"pages.folder.delete-confirmation": "Datei {name} wirklich löschen?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"Der Dateiname existiert bereits.",
 };

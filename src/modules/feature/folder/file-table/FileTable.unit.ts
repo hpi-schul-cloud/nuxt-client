@@ -1,6 +1,10 @@
 import { printDateFromStringUTC } from "@/plugins/datetime";
+import { RoleName } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
 import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { fileRecordFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -22,15 +26,23 @@ describe("FileTable", () => {
 			total: number;
 		};
 	}) => {
+		const authModule = createModuleMocks(AuthModule, {
+			getUserRoles: [RoleName.Teacher],
+		});
 		const wrapper = mount(FileTable, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
+				},
 			},
 			props: {
 				isLoading: props.isLoading,
 				isEmpty: props.isEmpty,
+				isStudent: false,
 				fileRecords: props.fileRecords,
 				uploadProgress: props.uploadProgress,
+				hasEditPermission: true,
 			},
 		});
 
