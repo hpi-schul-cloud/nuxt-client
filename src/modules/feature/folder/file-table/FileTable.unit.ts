@@ -42,6 +42,7 @@ describe("FileTable", () => {
 				isStudent: false,
 				fileRecords: props.fileRecords,
 				uploadProgress: props.uploadProgress,
+				hasEditPermission: true,
 			},
 		});
 

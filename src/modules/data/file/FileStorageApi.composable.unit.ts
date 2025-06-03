@@ -173,7 +173,7 @@ describe("FileStorageApi Composable", () => {
 				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
 					responseError
 				);
-				expect(showUnauthorizedError).toHaveBeenCalled();
+				expect(showUnauthorizedError).toHaveBeenCalledTimes(1);
 			});
 
 			it("should call showForbiddenError and pass error", async () => {
@@ -186,7 +186,7 @@ describe("FileStorageApi Composable", () => {
 					responseError
 				);
 
-				expect(showForbiddenError).toHaveBeenCalled();
+				expect(showForbiddenError).toHaveBeenCalledTimes(1);
 			});
 
 			it("should call showInternalServerError and pass error", async () => {
@@ -197,7 +197,7 @@ describe("FileStorageApi Composable", () => {
 					responseError
 				);
 
-				expect(showInternalServerError).toHaveBeenCalled();
+				expect(showInternalServerError).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
@@ -400,7 +400,7 @@ describe("FileStorageApi Composable", () => {
 
 				await uploadFromUrl("abc:/not-an-url", parentId, parentType);
 
-				expect(showFileTooBigError).toHaveBeenCalled();
+				expect(showFileTooBigError).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
@@ -492,7 +492,7 @@ describe("FileStorageApi Composable", () => {
 
 				await rename("dfgdfg", renameFileParams);
 
-				expect(showFileExistsError).toHaveBeenCalled();
+				expect(showFileExistsError).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
@@ -623,8 +623,8 @@ describe("FileStorageApi Composable", () => {
 
 				await deleteFiles([]);
 
-				expect(showInternalServerError).toHaveBeenCalled();
-				expect(showFileNotDeletedError).toHaveBeenCalled();
+				expect(showInternalServerError).toHaveBeenCalledTimes(1);
+				expect(showFileNotDeletedError).toHaveBeenCalledTimes(1);
 				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([
 					fileRecordResponse,
 				]);

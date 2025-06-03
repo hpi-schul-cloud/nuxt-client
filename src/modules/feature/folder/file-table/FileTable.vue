@@ -38,6 +38,7 @@
 							:class="{ 'text-disabled': !item.isSelectable }"
 						>
 							{{ item.name }}
+							<FileStatus :file-record="item" />
 						</span>
 					</FileInteractionHandler>
 				</template>
@@ -96,11 +97,12 @@
 					/>
 				</template>
 			</DataTable>
+			<FileStatusLegend />
 			<RenameFileDialog
 				v-model:is-dialog-open="isRenameDialogOpen"
 				:file-records="fileRecords"
 				:name="fileRecordToRename?.name"
-				:entity-name="$t('components.cardElement.fileElement')"
+				:entity-name="t('components.cardElement.fileElement')"
 				@cancel="onRenameDialogCancel"
 				@confirm="onRenameDialogConfirm"
 			/>
@@ -120,7 +122,7 @@ import { FileRecord } from "@/types/file/File";
 import {
 	convertFileSize,
 	getFileExtension,
-	isDownloadAllowed,
+	isScanStatusBlocked,
 } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
@@ -131,6 +133,8 @@ import DeleteFileDialog from "./DeleteFileDialog.vue";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
 import FilePreview from "./FilePreview.vue";
+import FileStatus from "./FileStatus.vue";
+import FileStatusLegend from "./FileStatusLegend.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
@@ -187,7 +191,7 @@ const fileRecordsToDelete = ref<FileRecord[]>([]);
 const fileRecordItems = computed(() => {
 	return props.fileRecords.map((item) => ({
 		...item,
-		isSelectable: isDownloadAllowed(item.securityCheckStatus),
+		isSelectable: isScanStatusBlocked(item.securityCheckStatus),
 	}));
 });
 
@@ -219,7 +223,7 @@ const onDeleteFilesCancel = () => {
 
 const onRenameButtonClick = (item: FileRecord) => {
 	isRenameDialogOpen.value = true;
-	fileRecordToRename.value = item;
+	fileRecordToRename.value = { ...item };
 };
 const onRenameDialogCancel = () => {
 	isRenameDialogOpen.value = false;

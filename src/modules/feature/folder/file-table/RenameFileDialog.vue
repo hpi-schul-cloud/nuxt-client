@@ -54,7 +54,9 @@ const nameRef = ref<string>("");
 watch(
 	() => name,
 	(newName) => {
-		nameRef.value = removeFileExtension(newName);
+		if (newName !== "") {
+			nameRef.value = removeFileExtension(newName);
+		}
 	},
 	{ immediate: true }
 );

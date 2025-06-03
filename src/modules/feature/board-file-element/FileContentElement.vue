@@ -59,8 +59,8 @@ import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import {
 	convertDownloadToPreviewUrl,
-	isDownloadAllowed,
 	isPreviewPossible,
+	isScanStatusBlocked,
 } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useFileStorageApi } from "@data-file";
@@ -145,7 +145,7 @@ export default defineComponent({
 				url: fileRecord.value.url,
 				previewUrl,
 				previewStatus: fileRecord.value.previewStatus,
-				isDownloadAllowed: isDownloadAllowed(
+				isDownloadAllowed: isScanStatusBlocked(
 					fileRecord.value.securityCheckStatus
 				),
 				mimeType: fileRecord.value.mimeType,
