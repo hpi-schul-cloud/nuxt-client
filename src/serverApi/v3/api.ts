@@ -1749,12 +1749,6 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
     FEATURE_ROOM_ADD_STUDENTS_ENABLED: boolean;
     /**
      * 

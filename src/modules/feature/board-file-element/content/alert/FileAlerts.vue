@@ -10,7 +10,7 @@
 
 		<InfoAlert v-if="alerts.includes(FileAlert.AWAITING_SCAN_STATUS)">
 			<div>
-				{{ t("components.cardElement.fileElement.awaitingScan") }}
+				{{ t("common.file.awaitingScan") }}
 				<a href="#" @click.prevent="onStatusReload">
 					{{ t("components.cardElement.fileElement.reloadStatus") }}
 				</a>
@@ -18,24 +18,24 @@
 		</InfoAlert>
 
 		<InfoAlert v-if="alerts.includes(FileAlert.SCAN_STATUS_WONT_CHECK)">
-			{{ t("components.cardElement.fileElement.scanWontCheck") }}
+			{{ t("common.file.scanWontCheck") }}
 		</InfoAlert>
 
 		<ErrorAlert v-if="alerts.includes(FileAlert.SCAN_STATUS_BLOCKED)">
-			{{ t("components.cardElement.fileElement.virusDetected") }}
+			{{ t("common.file.virusDetected") }}
 		</ErrorAlert>
 
 		<WarningAlert v-if="alerts.includes(FileAlert.SCAN_STATUS_ERROR)">
-			{{ t("components.cardElement.fileElement.scanError") }}
+			{{ t("common.file.scanError") }}
 		</WarningAlert>
 	</div>
 </template>
 
 <script lang="ts">
+import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
 import { defineComponent, PropType } from "vue";
-import { FileAlert } from "../../shared/types/FileAlert.enum";
-import { InfoAlert, ErrorAlert, WarningAlert } from "@ui-alert";
 import { useI18n } from "vue-i18n";
+import { FileAlert } from "../../shared/types/FileAlert.enum";
 
 export default defineComponent({
 	name: "FileAlerts",

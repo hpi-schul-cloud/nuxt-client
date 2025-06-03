@@ -31,6 +31,12 @@ export default {
 	"common.ariaLabel.newTab": "opens in a new tab",
 	"common.ariaLabel.openImageInLightBox": "Display image in full size",
 	"common.ariaLabel.sameTab": "opens in the same tab",
+	"common.file.awaitingScan":
+		"Preview is displayed after a successful virus scan. The file is currently being scanned.",
+	"common.file.scanWontCheck": "Due to the size, no preview can be generated.",
+	"common.file.scanError":
+		"Error during virus check. Preview cannot be created. Please upload the file again.",
+	"common.file.virusDetected": "File has been locked due to a suspected virus.",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
@@ -53,6 +59,7 @@ export default {
 	"common.labels.expanded": "expanded",
 	"common.labels.externalsource": "Source",
 	"common.labels.failure": "failure",
+	"common.labels.name.new": "New name",
 	"common.labels.firstName.new": "New first name",
 	"common.labels.firstName": "First Name",
 	"common.labels.fullName": "Name & Last Name",
@@ -211,11 +218,6 @@ export default {
 	"common.words.topics": "Topics",
 	"common.words.yes": "Yes",
 	"common.words.export": "Course export is downloading",
-	"component.cardElement.fileElement.audioPlayer.pause": "Pause",
-	"component.cardElement.fileElement.audioPlayer.play": "Play",
-	"component.cardElement.fileElement.audioPlayer.slider": "Audio slider",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
-	"component.cardElement.fileElement.audioPlayer.speed": "Speed Menu",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"During the migration, the registration system for students and teachers is changed to moin.schule. The data belonging to the affected accounts will be preserved.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -426,6 +428,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "minute | minutes",
+	"components.audioPlayer.pause": "Pause",
+	"components.audioPlayer.play": "Play",
+	"components.audioPlayer.slider": "Audio slider",
+	"components.audioPlayer.speed": "Speed Menu",
+	"components.audioPlayer.speed.normal": "Normal",
 	"components.base.BaseIcon.error":
 		"error loading icon {icon} from {source}. It might be not available or you are using the legacy Edge browser.",
 	"components.base.showPassword": "Show password",
@@ -526,8 +533,6 @@ export default {
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
 	"components.cardElement.fileElement.audioFormatError":
 		"The audio format is not supported by this browser/operating system.",
-	"components.cardElement.fileElement.awaitingScan":
-		"Preview is displayed after a successful virus scan. The file is currently being scanned.",
 	"components.cardElement.fileElement.caption": "Caption",
 	"components.cardElement.fileElement.emptyAlt":
 		"Here is an image with the following name",
@@ -535,14 +540,9 @@ export default {
 	"components.cardElement.fileElement.previewError":
 		"Failed to load the preview.",
 	"components.cardElement.fileElement.reloadStatus": "Update status",
-	"components.cardElement.fileElement.scanError":
-		"Error during virus check. Preview cannot be created. Please upload the file again.",
-	"components.cardElement.fileElement.scanWontCheck":
-		"Due to the size, no preview can be generated.",
 	"components.cardElement.fileElement.videoFormatError":
 		"The video format is not supported by this browser/operating system.",
-	"components.cardElement.fileElement.virusDetected":
-		"File has been locked due to a suspected virus.",
+
 	"components.cardElement.folderElement": "File folder",
 	"components.cardElement.folderElement.untitled": "Untitled folder",
 	"components.cardElement.LinkElement": "Link",
@@ -1877,11 +1877,11 @@ export default {
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"Rooms will combine functions from courses and teams in the future to provide more opportunities for cross-school working.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Teams and courses will remain until the content can be transferred to rooms.",
-	"pages.rooms.infoAlert.welcome.visibility":
-		"Rooms are currently only visible to teachers and will be further developed. Further information can be found on our {helpLink}. We look forward to receiving {feedbackLink} on the current status.",
-	"pages.rooms.infoAlert.welcome.visibility.help": "help page",
-	"pages.rooms.infoAlert.welcome.visibility.feedback": "feedback",
+		"Rooms will be further developed. Teams and courses will remain until the content can be transferred to rooms.",
+	"pages.rooms.infoAlert.welcome.furtherInformation":
+		"Further information can be found on our {helpLink}. We look forward to receiving {feedbackLink} on the current status.",
+	"pages.rooms.infoAlert.welcome.furtherInformation.help": "help page",
+	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "feedback",
 	"pages.rooms.leaveRoom.confirmation": 'Leave room "{roomName}"?',
 	"pages.rooms.leaveRoom.RoomOwner.warning":
 		"Before the room can be left, the room ownership permission must be transferred to another room member. This can be done in the room member management.",
@@ -2002,6 +2002,24 @@ export default {
 		"Delete selected invitation links?",
 	"pages.rooms.members.invitationTable.delete.confirmation":
 		"Delete the invitation link '{invitation}'?",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Confirm membership request",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Reject membership request",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} has been added as a room member.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"{fullName}'s request to join was rejected.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"The selected persons have been added to the room as members.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"The membership requests of the selected persons have been rejected.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Action menu for {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Confirm the membership request for {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Reject the membership request for {fullName}",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Share invitation link “{linkTitle}”",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
@@ -2141,6 +2159,7 @@ export default {
 	"ui.actionMenu.actions": "Actions",
 	"ui.actionMenu.select.none": "Deselect all lines",
 	"ui.dataTable.select.all": "Select all lines",
+	"ui.rename.dialog.title": "Rename {entity}",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent.label.missing": "User created",
@@ -2191,4 +2210,6 @@ export default {
 	"pages.folder.delete-multiple-confirmation": "Delete all {total} files?",
 	"pages.folder.delete-confirmation":
 		"Do you really want to delete file {name}?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"The file name already exists.",
 };

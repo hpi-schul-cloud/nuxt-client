@@ -32,6 +32,12 @@ export default {
 	"common.ariaLabel.openImageInLightBox":
 		"Показати зображення в повному розмірі",
 	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
+	"common.file.awaitingScan":
+		"Попередній перегляд відображається після успішної перевірки на віруси. Наразі відбувається перевірка файлу.",
+	"common.file.scanError":
+		"Помилка під час перевірки на віруси. Неможливо створити попередній перегляд. Будь ласка, завантажте файл ще раз.",
+	"common.file.scanWontCheck": "Через розмір не може бути створено прев'ю.",
+	"common.file.virusDetected": "Файл було заблоковано через підозру на вірус.",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
@@ -54,6 +60,7 @@ export default {
 	"common.labels.expanded": "розгорнуто",
 	"common.labels.externalsource": "Джерело",
 	"common.labels.failure": "невдача",
+	"common.labels.name.new": "нова назва",
 	"common.labels.firstName.new": "Нове ім'я",
 	"common.labels.firstName": "Ім'я",
 	"common.labels.fullName": "Ім'я та Прізвище",
@@ -215,11 +222,6 @@ export default {
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
 	"common.words.export": "Завантажується експорт курсу",
-	"component.cardElement.fileElement.audioPlayer.pause": "пауза",
-	"component.cardElement.fileElement.audioPlayer.play": "грати",
-	"component.cardElement.fileElement.audioPlayer.slider": "повзунок",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "нормальний",
-	"component.cardElement.fileElement.audioPlayer.speed": "швидке меню",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -436,6 +438,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "хв",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes":
 		"хвилина | хвилини (хвилин)",
+	"components.audioPlayer.pause": "пауза",
+	"components.audioPlayer.play": "грати",
+	"components.audioPlayer.slider": "повзунок",
+	"components.audioPlayer.speed": "швидке меню",
+	"components.audioPlayer.speed.normal": "нормальний",
 	"components.base.BaseIcon.error":
 		"помилка завантаження значка {icon} з {source}. Можливо, він недоступний або ви використовуєте застарілий браузер Edge.",
 	"components.base.showPassword": "Показати пароль",
@@ -540,8 +547,6 @@ export default {
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
 	"components.cardElement.fileElement.audioFormatError":
 		"Формат аудіо не підтримується цим браузером / операційною системою.",
-	"components.cardElement.fileElement.awaitingScan":
-		"Попередній перегляд відображається після успішної перевірки на віруси. Наразі відбувається перевірка файлу.",
 	"components.cardElement.fileElement.caption": "опис",
 	"components.cardElement.fileElement.emptyAlt":
 		"Ось зображення з такою назвою",
@@ -550,14 +555,8 @@ export default {
 	"components.cardElement.fileElement.previewError":
 		"Не вдалося завантажити попередній перегляд.",
 	"components.cardElement.fileElement.reloadStatus": "Статус оновлення",
-	"components.cardElement.fileElement.scanError":
-		"Помилка під час перевірки на віруси. Неможливо створити попередній перегляд. Будь ласка, завантажте файл ще раз.",
-	"components.cardElement.fileElement.scanWontCheck":
-		"Через розмір не може бути створено прев'ю.",
 	"components.cardElement.fileElement.videoFormatError":
 		"Формат відео не підтримується цим браузером / операційною системою.",
-	"components.cardElement.fileElement.virusDetected":
-		"Файл було заблоковано через підозру на вірус.",
 	"components.cardElement.folderElement": "Папка з файлами",
 	"components.cardElement.folderElement.untitled": "Папка без назви",
 	"components.cardElement.LinkElement": "Посилання",
@@ -1911,11 +1910,11 @@ export default {
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"У майбутньому кімнати об'єднають функції курсів і команд, щоб запропонувати більше можливостей для міжшкільної співпраці.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Команди та курси залишатимуться, доки вміст не буде перенесено до кімнат.",
-	"pages.rooms.infoAlert.welcome.visibility":
-		"Кімнати наразі видимі лише для вчителів і будуть далі розвиватися. Додаткову інформацію можна знайти на нашій {helpLink}. Ми будемо вдячні за ваші {feedbackLink} щодо поточного стану.",
-	"pages.rooms.infoAlert.welcome.visibility.help": "Сторінка допомоги",
-	"pages.rooms.infoAlert.welcome.visibility.feedback": "відгуки",
+		"Кімнати будуть розширюватися і надалі. Команди та курси залишатимуться на місці, доки контент не буде перенесено до кімнат.",
+	"pages.rooms.infoAlert.welcome.furtherInformation":
+		"Додаткову інформацію можна знайти на нашій {helpLink}. Ми будемо вдячні за ваші {feedbackLink} щодо поточного стану.",
+	"pages.rooms.infoAlert.welcome.furtherInformation.help": "Сторінка допомоги",
+	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "відгуки",
 	"pages.rooms.leaveRoom.confirmation": 'Дійсно залишити місце "{roomName}"?',
 	"pages.rooms.leaveRoom.RoomOwner.warning":
 		"Перш ніж залишити кімнату, дозвіл на володіння кімнатою має бути передано іншому учаснику кімнати. Це можна зробити в управлінні учасниками кімнати.",
@@ -2040,6 +2039,24 @@ export default {
 		"Видалити посилання на запрошення '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Поділіться посиланням на запрошення „{linkTitle}“",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Підтвердити заявку на участь",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Відхилити запит на реєстрацію",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} був доданий як член кімнати.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"Запит {fullName} на приєднання було відхилено.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"Вибрані особи були додані до кімнати як учасники.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"Вибрані особи були додані до кімнати як учасники.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Меню дій для {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Підтвердити запит на членство для {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Відхилити запит на членство для {fullName}",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
 		"Меню дій для посилання-запрошення „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":
@@ -2173,6 +2190,7 @@ export default {
 	"ui.actionMenu.actions": "Дії",
 	"ui.actionMenu.select.none": "Зніміть виділення з усіх рядків",
 	"ui.dataTable.select.all": "Виділити всі рядки",
+	"ui.rename.dialog.title": "Перейменувати {entity}",
 	"util-validators-invalid-url": "Ця URL-адреса є недійсною.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",
@@ -2223,4 +2241,6 @@ export default {
 	"pages.folder.delete-multiple-confirmation":
 		"Дійсно видалити всі {total} файли?",
 	"pages.folder.delete-confirmation": "Дійсно видалити файл {name}?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"Ім'я файлу вже існує.",
 };

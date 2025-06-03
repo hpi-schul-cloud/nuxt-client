@@ -30,7 +30,7 @@ import {
 	mdiFileMusicOutline,
 	mdiFileVideoOutline,
 } from "@icons/material";
-import { computed, defineProps, PropType } from "vue";
+import { computed, PropType } from "vue";
 import { useDisplay } from "vuetify";
 
 defineProps({

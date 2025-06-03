@@ -11,7 +11,7 @@
 				<li>{{ t("pages.rooms.infoAlert.welcome.teamsAndCourses") }}</li>
 				<li>
 					<i18n-t
-						keypath="pages.rooms.infoAlert.welcome.visibility"
+						keypath="pages.rooms.infoAlert.welcome.furtherInformation"
 						scope="global"
 					>
 						<template #helpLink>
@@ -22,7 +22,7 @@
 								data-testid="rooms-help-link"
 								:aria-label="helpAriaLabel"
 							>
-								{{ t("pages.rooms.infoAlert.welcome.visibility.help") }}
+								{{ t("pages.rooms.infoAlert.welcome.furtherInformation.help") }}
 							</a>
 						</template>
 						<template #feedbackLink>
@@ -32,7 +32,9 @@
 								rel="noopener"
 								:aria-label="feedbackAriaLabel"
 							>
-								{{ t("pages.rooms.infoAlert.welcome.visibility.feedback") }}
+								{{
+									t("pages.rooms.infoAlert.welcome.furtherInformation.feedback")
+								}}
 							</a>
 						</template>
 					</i18n-t>
@@ -127,11 +129,11 @@ const showImportSuccess = (newName: string) => {
 
 const helpAriaLabel = computed(
 	() =>
-		`${t("pages.rooms.infoAlert.welcome.visibility.help")}, ${t("common.ariaLabel.newTab")}`
+		`${t("pages.rooms.infoAlert.welcome.furtherInformation.help")}, ${t("common.ariaLabel.newTab")}`
 );
 
 const feedbackAriaLabel = computed(
 	() =>
-		`${t("pages.rooms.infoAlert.welcome.visibility.feedback")}, ${t("common.ariaLabel.newTab")}`
+		`${t("pages.rooms.infoAlert.welcome.furtherInformation.feedback")}, ${t("common.ariaLabel.newTab")}`
 );
 </script>

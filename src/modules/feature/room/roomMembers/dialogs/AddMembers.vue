@@ -42,7 +42,7 @@
 			</div>
 
 			<InfoAlert
-				v-if="!canAddAllStudents && selectedSchoolRole === RoleName.Student"
+				v-if="showStudentRestrictionInfo"
 				data-testid="student-visibility-info-alert"
 				>{{ t("pages.rooms.members.add.students.forbidden") }}</InfoAlert
 			>
@@ -100,7 +100,7 @@ import { computed, onMounted, ref } from "vue";
 import { RoleName } from "@/serverApi/v3";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VAutocomplete, VCard, VSelect } from "vuetify/lib/components/index";
+import { VAutocomplete, VCard, VSelect } from "vuetify/lib/components";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
@@ -162,6 +162,16 @@ const isStudentSelectionDisabled = computed(() => {
 	const isExternalSchoolSelected = selectedSchool.value !== schools.value[0].id;
 	const isStudentRoleSelected = selectedSchoolRole.value === RoleName.Student;
 	return isExternalSchoolSelected && isStudentRoleSelected;
+});
+
+const isRestrictedStudentCase = computed(() => {
+	return (
+		selectedSchoolRole.value === RoleName.Student && !canAddAllStudents.value
+	);
+});
+
+const showStudentRestrictionInfo = computed(() => {
+	return isRestrictedStudentCase.value && !isStudentSelectionDisabled.value;
 });
 
 const autoCompleteSchool = ref<VAutocomplete>();

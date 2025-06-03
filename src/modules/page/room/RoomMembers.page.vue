@@ -38,6 +38,7 @@
 						:aria-label="t(tabItem.title)"
 						:text="xs ? undefined : t(tabItem.title)"
 						:value="tabItem.value"
+						:data-testid="`room-members-tab-${tabItem.testId}`"
 					/>
 				</VTabs>
 			</div>
@@ -192,6 +193,7 @@ const tabs: Array<{
 	icon: string;
 	component: Component;
 	isVisible: ComputedRef<boolean>;
+	testId: string;
 }> = [
 	{
 		title: "pages.rooms.members.tab.members",
@@ -199,6 +201,7 @@ const tabs: Array<{
 		icon: mdiAccountMultipleOutline,
 		component: Members,
 		isVisible: computed(() => true),
+		testId: "members",
 	},
 	{
 		title: "pages.rooms.members.tab.invitations",
@@ -206,6 +209,7 @@ const tabs: Array<{
 		icon: mdiLink,
 		component: Invitations,
 		isVisible: isVisibleTabNavigation,
+		testId: "invitations",
 	},
 	{
 		title: "pages.rooms.members.tab.confirmations",
@@ -213,6 +217,7 @@ const tabs: Array<{
 		icon: mdiAccountQuestionOutline,
 		component: Confirmations,
 		isVisible: isVisibleTabNavigation,
+		testId: "confirmations",
 	},
 ];
 

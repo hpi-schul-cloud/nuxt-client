@@ -3,53 +3,52 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { mdiClose, mdiTrayArrowDown } from "@icons/material";
+import { ErrorAlert } from "@ui-alert";
+import { AudioPlayer } from "@ui-audio-player";
 import { PreviewImage } from "@ui-preview-image";
-import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
+import { VCol, VRow, VToolbarTitle } from "vuetify/lib/components/index";
 import {
-	VProgressCircular,
-	VRow,
-	VToolbarTitle,
-} from "vuetify/lib/components/index";
-import { LightBoxOptions, useInternalLightBox } from "./LightBox.composable";
+	LightBoxContentType,
+	LightBoxOptions,
+	useLightBox,
+} from "./LightBox.composable";
 import LightBox from "./LightBox.vue";
 
 jest.mock("./LightBox.composable");
 jest.mock("@/utils/fileHelper");
 
-const mockedUseInternalLightBox = jest.mocked(useInternalLightBox);
+const mockedUseLightBox = jest.mocked(useLightBox);
 
 describe("LightBox", () => {
-	beforeEach(() => {
-		jest.resetAllMocks();
-	});
-
 	const setup = (props: {
+		isLightBoxOpen?: boolean;
+		type?: LightBoxContentType;
 		downloadUrl?: string;
 		previewUrl?: string;
 		alt?: string;
 		name?: string;
 	}) => {
 		const close = jest.fn();
-		const isLightBoxOpen = ref(true);
+		const isLightBoxOpen = ref(props.isLightBoxOpen ?? true);
 		const lightBoxOptions = ref<LightBoxOptions>({
+			type: props.type ?? LightBoxContentType.IMAGE,
 			downloadUrl: props.downloadUrl ?? "test-downloadUrl",
+			name: props.name ?? "test-name",
 			previewUrl: props.previewUrl ?? "test-previewUrl",
 			alt: props.alt ?? "test-alt",
-			name: props.name ?? "test-name",
 		});
 
 		const mockedDownloadFile = jest.mocked(downloadFile).mockReturnValueOnce();
 
-		mockedUseInternalLightBox.mockReturnValue({
+		mockedUseLightBox.mockReturnValue({
 			close: close,
-			isLightBoxOpen: isLightBoxOpen,
-			lightBoxOptions: lightBoxOptions,
-			openInternal: jest.fn(),
+			isLightBoxOpen,
+			lightBoxOptions,
+			open: jest.fn(),
 		});
 
-		const wrapper = shallowMount(LightBox, {
+		const wrapper = mount(LightBox, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
@@ -62,31 +61,19 @@ describe("LightBox", () => {
 		};
 	};
 
-	describe("when component is mounted", () => {
-		it("should be found in dom", () => {
-			const { wrapper } = setup({});
+	describe("when lightbox is closed", () => {
+		it("should not render it", () => {
+			const { wrapper } = setup({ isLightBoxOpen: false });
 
-			const lightBox = wrapper.findComponent(LightBox);
+			const closeButton = wrapper.findComponent(
+				"[data-testid=light-box-close-btn]"
+			);
 
-			expect(lightBox.exists()).toBe(true);
+			expect(closeButton.exists()).toBe(false);
 		});
+	});
 
-		it("should set image src correctly", () => {
-			const { lightBoxOptions, wrapper } = setup({});
-
-			const src = wrapper.findComponent(PreviewImage).attributes("src");
-
-			expect(src).toEqual(lightBoxOptions.value.previewUrl);
-		});
-
-		it("should set image alt correctly", () => {
-			const { lightBoxOptions, wrapper } = setup({});
-
-			const alt = wrapper.findComponent(PreviewImage).attributes("alt");
-
-			expect(alt).toEqual(lightBoxOptions.value.alt);
-		});
-
+	describe("when lightbox is open", () => {
 		it("should show close button", () => {
 			const { wrapper } = setup({});
 
@@ -94,10 +81,25 @@ describe("LightBox", () => {
 				"[data-testid=light-box-close-btn]"
 			);
 
-			expect(closeButton.attributes().icon).toEqual(mdiClose);
-			expect(closeButton.attributes("aria-label")).toEqual(
-				"common.labels.close"
+			expect(closeButton.exists()).toBe(true);
+		});
+
+		it("should show file name", () => {
+			const { lightBoxOptions, wrapper } = setup({});
+
+			const title = wrapper.findComponent(VToolbarTitle);
+
+			expect(title.text()).toEqual(lightBoxOptions.value.name);
+		});
+
+		it("should show download button", () => {
+			const { wrapper } = setup({});
+
+			const downloadButton = wrapper.findComponent(
+				"[data-testid=light-box-download-btn]"
 			);
+
+			expect(downloadButton.exists()).toBe(true);
 		});
 
 		describe("when close button is clicked", () => {
@@ -109,136 +111,129 @@ describe("LightBox", () => {
 				);
 				await closeButton.trigger("click");
 
+				expect(close).toHaveBeenCalled();
+			});
+		});
+
+		describe("when download button is clicked", () => {
+			it("should call downloadFile function", async () => {
+				const { lightBoxOptions, mockedDownloadFile, wrapper } = setup({});
+
+				const downloadButton = wrapper.findComponent(
+					"[data-testid=light-box-download-btn]"
+				);
+				await downloadButton.trigger("click");
+
+				expect(mockedDownloadFile).toHaveBeenCalledWith(
+					lightBoxOptions.value.downloadUrl,
+					lightBoxOptions.value.name
+				);
+			});
+		});
+
+		describe("when Escape key is pressed", () => {
+			it("should call close function", async () => {
+				const { close } = setup({});
+
+				const event = new KeyboardEvent("keydown", { key: "Escape" });
+				window.dispatchEvent(event);
+				await nextTick();
+
+				expect(close).toHaveBeenCalled();
+			});
+		});
+
+		describe("when area outside of the image is clicked", () => {
+			it("should call close function", async () => {
+				const { close, wrapper } = setup({});
+
+				const overlay = wrapper.findComponent(VRow);
+				await overlay.vm.$emit("click");
+
 				expect(close).toBeCalled();
 			});
 		});
 
-		describe("when file name is set", () => {
-			it("should show toolbar title", () => {
-				const { wrapper } = setup({ name: "Esmeralda" });
-
-				const toolbarTitle = wrapper.findComponent(VToolbarTitle);
-
-				expect(toolbarTitle.exists()).toBe(true);
-			});
-
-			it("should show file name", () => {
-				const { wrapper } = setup({ name: "Esmeralda" });
-
-				const title = wrapper.findComponent(VToolbarTitle);
-
-				expect(title.exists()).toBe(true);
-			});
-
-			it("should set file name correctly", () => {
+		describe("when content is an image", () => {
+			it("should render preview image with correct props", () => {
 				const { lightBoxOptions, wrapper } = setup({});
 
-				const title = wrapper.findComponent(VToolbarTitle);
+				const previewImage = wrapper.findComponent(PreviewImage);
 
-				expect(title.text()).toEqual(lightBoxOptions.value.name);
+				expect(previewImage.exists()).toBe(true);
+				expect(previewImage.props("src")).toEqual(
+					lightBoxOptions.value.previewUrl
+				);
+				expect(previewImage.props("alt")).toEqual(lightBoxOptions.value.alt);
 			});
 		});
 
-		describe("when file name is empty", () => {
-			it("should not show toolbar title", () => {
-				const { wrapper } = setup({ name: "" });
+		describe("when content is an audio", () => {
+			it("should render audio player with correct props", () => {
+				const { lightBoxOptions, wrapper } = setup({
+					type: LightBoxContentType.AUDIO,
+				});
 
-				const toolbarTitle = wrapper.findComponent(VToolbarTitle);
+				const audioPlayer = wrapper.findComponent(AudioPlayer);
 
-				expect(toolbarTitle.exists()).toBe(false);
-			});
-		});
-
-		describe("when download url is set", () => {
-			it("should show download button", () => {
-				const { wrapper } = setup({});
-
-				const downloadButton = wrapper.findComponent(
-					"[data-testid=light-box-download-btn]"
-				);
-
-				expect(downloadButton.attributes().icon).toEqual(mdiTrayArrowDown);
-				expect(downloadButton.attributes("aria-label")).toEqual(
-					"components.board.action.download"
+				expect(audioPlayer.exists()).toBe(true);
+				expect(audioPlayer.props("src")).toEqual(
+					lightBoxOptions.value.downloadUrl
 				);
 			});
 
-			describe("when download button is clicked", () => {
-				it("should call downloadFile function", async () => {
-					const { lightBoxOptions, mockedDownloadFile, wrapper } = setup({});
+			describe("when audio player emits error", () => {
+				it("should render error alert", async () => {
+					const { wrapper } = setup({
+						type: LightBoxContentType.AUDIO,
+					});
 
-					const downloadButton = wrapper.findComponent(
-						"[data-testid=light-box-download-btn]"
-					);
-					await downloadButton.trigger("click");
+					const audioPlayer = wrapper.findComponent(AudioPlayer);
 
-					expect(mockedDownloadFile).toHaveBeenCalledWith(
-						lightBoxOptions.value.downloadUrl,
-						lightBoxOptions.value.name
-					);
+					audioPlayer.vm.$emit("error");
+
+					await nextTick();
+
+					const errorAlert = wrapper.findComponent(ErrorAlert);
+
+					expect(errorAlert.exists()).toBe(true);
+					expect(audioPlayer.exists()).toBe(false);
 				});
 			});
 		});
 
-		describe("when download url is empty", () => {
-			it("should not show download button", () => {
-				const { wrapper } = setup({ downloadUrl: "" });
+		describe("when content is a video", () => {
+			it("should render video player with correct props", () => {
+				const { wrapper } = setup({
+					type: LightBoxContentType.VIDEO,
+				});
 
-				const downloadButton = wrapper.findComponent(
-					"[data-testid=light-box-download-btn]"
-				);
-				expect(downloadButton.exists()).toBe(false);
+				const vCol = wrapper.findComponent(VCol);
+				const video = vCol.find("video");
+
+				expect(video.exists()).toBe(true);
 			});
-		});
 
-		describe("when image emits onLoad", () => {
-			it("should hide loading spinner", async () => {
-				const { wrapper } = setup({});
+			describe("when video player emits error", () => {
+				it("should render error alert", async () => {
+					const { wrapper } = setup({
+						type: LightBoxContentType.VIDEO,
+					});
 
-				const image = wrapper.findComponent(PreviewImage);
-				image.trigger("load");
+					const vCol = wrapper.findComponent(VCol);
+					const video = vCol.find("video");
 
-				await wrapper.vm.$nextTick();
+					await video.trigger("error");
 
-				const loadingSpinner = wrapper.findComponent(VProgressCircular);
+					await nextTick();
 
-				expect(loadingSpinner.exists()).toBe(false);
+					const errorAlert = wrapper.findComponent(ErrorAlert);
+					const videoAfterError = vCol.find("video");
+
+					expect(errorAlert.exists()).toBe(true);
+					expect(videoAfterError.exists()).toBe(false);
+				});
 			});
-		});
-	});
-
-	describe("when Escape button is pressed", () => {
-		it("should call close function", async () => {
-			const { close } = setup({});
-
-			// simulate keypress on document
-			const event = new KeyboardEvent("keydown", { key: "Escape" });
-			window.dispatchEvent(event);
-			await nextTick();
-
-			expect(close).toBeCalled();
-		});
-	});
-
-	describe("when area outside of the image is clicked", () => {
-		it("should call close function", async () => {
-			const { close, wrapper } = setup({});
-
-			const overlay = wrapper.findComponent(VRow);
-			await overlay.vm.$emit("click");
-
-			expect(close).toBeCalled();
-		});
-	});
-
-	describe("when isLightBoxOpen is set to false", () => {
-		it("should hide the LightBox", async () => {
-			const { isLightBoxOpen, wrapper } = setup({});
-
-			isLightBoxOpen.value = false;
-			const lightBox = wrapper.findComponent(LightBox);
-
-			expect(lightBox.isVisible()).toBe(true);
 		});
 	});
 });

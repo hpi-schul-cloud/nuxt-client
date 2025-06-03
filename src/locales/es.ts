@@ -31,6 +31,14 @@ export default {
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
 	"common.ariaLabel.openImageInLightBox": "Mostrar imagen en tamaño completo",
 	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
+	"common.file.awaitingScan":
+		"La vista previa se muestra después de una comprobación de virus correcta. El fichero se está analizando actualmente.",
+	"common.file.scanWontCheck":
+		"Debido al tamaño, no se puede generar una vista previa.",
+	"common.file.scanError":
+		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
+	"common.file.virusDetected":
+		"Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
@@ -53,6 +61,7 @@ export default {
 	"common.labels.expanded": "expandido",
 	"common.labels.externalsource": "Fuente",
 	"common.labels.failure": "falla",
+	"common.labels.name.new": "nuevo nombre",
 	"common.labels.firstName.new": "Nuevo nombre",
 	"common.labels.firstName": "Nombre",
 	"common.labels.fullName": "Nombre y apellidos",
@@ -213,11 +222,6 @@ export default {
 	"common.words.topics": "Temas",
 	"common.words.yes": "Sí",
 	"common.words.export": "La exportación del curso se está descargando",
-	"component.cardElement.fileElement.audioPlayer.pause": "Pausa",
-	"component.cardElement.fileElement.audioPlayer.play": "Reproducir",
-	"component.cardElement.fileElement.audioPlayer.slider": "Control deslizante",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
-	"component.cardElement.fileElement.audioPlayer.speed": "Menú de velocidad",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -432,6 +436,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "minuto | minutos",
+	"components.audioPlayer.pause": "Pausa",
+	"components.audioPlayer.play": "Reproducir",
+	"components.audioPlayer.slider": "Control deslizante",
+	"components.audioPlayer.speed": "Menú de velocidad",
+	"components.audioPlayer.speed.normal": "Normal",
 	"components.base.BaseIcon.error":
 		"Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",
 	"components.base.showPassword": "Mostrar contraseña",
@@ -538,8 +547,6 @@ export default {
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
 	"components.cardElement.fileElement.audioFormatError":
 		"El formato de audio no es compatible con este navegador / sistema operativo.",
-	"components.cardElement.fileElement.awaitingScan":
-		"La vista previa se muestra después de una comprobación de virus correcta. El fichero se está analizando actualmente.",
 	"components.cardElement.fileElement.caption": "Descripción",
 	"components.cardElement.fileElement.emptyAlt":
 		"Aquí tenéis una imagen con el siguiente nombre",
@@ -547,14 +554,8 @@ export default {
 	"components.cardElement.fileElement.previewError":
 		"No se ha podido cargar la vista previa.",
 	"components.cardElement.fileElement.reloadStatus": "Estado de actualización",
-	"components.cardElement.fileElement.scanError":
-		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
-	"components.cardElement.fileElement.scanWontCheck":
-		"Debido al tamaño, no se puede generar una vista previa.",
 	"components.cardElement.fileElement.videoFormatError":
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
-	"components.cardElement.fileElement.virusDetected":
-		"Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"components.cardElement.folderElement": "Carpeta de archivos",
 	"components.cardElement.folderElement.untitled": "Carpeta sin título",
 	"components.cardElement.LinkElement": "Enlace",
@@ -1936,11 +1937,11 @@ export default {
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"En el futuro, las salas combinarán funciones de cursos y equipos para ofrecer más oportunidades de colaboración entre escuelas.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Los equipos y cursos seguirán existiendo hasta que el contenido pueda ser transferido a las salas.",
-	"pages.rooms.infoAlert.welcome.visibility":
-		"Las salas son actualmente visibles solo para los profesores y se seguirán desarrollando. Puede encontrar más información en nuestro {helpLink}. Agradecemos sus {feedbackLink} sobre el estado actual.",
-	"pages.rooms.infoAlert.welcome.visibility.help": "página de ayuda",
-	"pages.rooms.infoAlert.welcome.visibility.feedback": "comentarios",
+		"Las salas se seguirán desarrollando. Los equipos y cursos seguirán existiendo hasta que el contenido pueda ser transferido a las salas.",
+	"pages.rooms.infoAlert.welcome.furtherInformation":
+		"Puede encontrar más información en nuestro {helpLink}. Agradecemos sus {feedbackLink} sobre el estado actual.",
+	"pages.rooms.infoAlert.welcome.furtherInformation.help": "página de ayuda",
+	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "comentarios",
 	"pages.rooms.leaveRoom.confirmation": 'Dejar la sala "{roomName}"?',
 	"pages.rooms.leaveRoom.RoomOwner.warning":
 		"Antes de que se pueda abandonar la sala, la autorización de propiedad de la sala debe transferirse a otro miembro de la sala. Esto se puede hacer en la gestión de miembros de la sala.",
@@ -2073,6 +2074,24 @@ export default {
 		"¿Suprimir el enlace de invitación '{invitation}'?",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
 		"Compartir enlace de invitación „{linkTitle}“",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Confirmar solicitud de afiliación",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Rechazar la solicitud de adhesión",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} ha sido añadido como miembro de la sala.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"La solicitud de {fullName} para unirse ha sido rechazada.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"Las personas seleccionadas han sido añadidas a la sala como miembros.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"Las solicitudes de adhesión de las personas seleccionadas han sido rechazadas.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Menú de acción para {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Confirmar la solicitud de membresía de {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Rechazar la solicitud de membresía de {fullName}",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
 		"Menú de acción para el enlace de invitación „{linkTitle}“",
 	"pages.rooms.invitationlinks.error.create":
@@ -2213,6 +2232,7 @@ export default {
 	"ui.actionMenu.actions": "Acciones",
 	"ui.actionMenu.select.none": "Deseleccionar todas las líneas",
 	"ui.dataTable.select.all": "Seleccionar todas las líneas",
+	"ui.rename.dialog.title": "Renombrar {entity}",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",
@@ -2266,4 +2286,6 @@ export default {
 	"pages.folder.delete-multiple-confirmation":
 		"¿Borrar realmente todos los archivos {total}?",
 	"pages.folder.delete-confirmation": "¿Borrar realmente el archivo {name}?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"El nombre del archivo ya existe.",
 };
