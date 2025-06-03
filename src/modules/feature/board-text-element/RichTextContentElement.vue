@@ -169,13 +169,9 @@ const onKeyUp = () => ensurePoliteNotifications();
 </style>
 
 <style>
+/* Set margin for first headings in cards */
 .v-card-text > div:first-child .ck-content h4:first-child,
 .v-card-text > div:first-child .ck-content h5:first-child {
 	margin-top: 0;
-	margin-bottom: var(--space-xs);
-}
-
-.v-card-text > div:first-child .ck-content p:first-child {
-	margin-top: calc(-1 * var(--space-xs-3));
 }
 </style>
