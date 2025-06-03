@@ -219,7 +219,7 @@ const onDeleteFilesCancel = () => {
 
 const onRenameButtonClick = (item: FileRecord) => {
 	isRenameDialogOpen.value = true;
-	fileRecordToRename.value = item;
+	fileRecordToRename.value = { ...item };
 };
 const onRenameDialogCancel = () => {
 	isRenameDialogOpen.value = false;
