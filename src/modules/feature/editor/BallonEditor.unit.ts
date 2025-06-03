@@ -2,7 +2,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { computed } from "vue";
 import { useEditorConfig } from "./EditorConfig.composable";
 import BalloonEditor from "./BalloonEditor.vue";
 

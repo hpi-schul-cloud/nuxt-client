@@ -26,7 +26,7 @@ class ResizeObserver {
 jest.mock("./EditorConfig.composable");
 
 describe("@feature-editor/InlineEditor", () => {
-	const setup = (props: CkEditorProps = {}, isEditorEmpty = true) => {
+	const setup = (props: CkEditorProps = {}) => {
 		const config: ReturnType<typeof useEditorConfig> = {
 			generalConfig: {
 				language: "",

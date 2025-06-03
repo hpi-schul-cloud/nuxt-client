@@ -12,7 +12,6 @@
 				:height="isLoadingCard ? height : 'auto'"
 				class="card-host"
 				:class="{ 'drag-disabled': isEditMode }"
-				variant="outlined"
 				tabindex="0"
 				min-height="120px"
 				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
