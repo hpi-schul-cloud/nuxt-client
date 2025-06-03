@@ -47,9 +47,23 @@ export function convertFileSize(fileSize: number): {
 }
 
 export function getFileExtension(fileName: string): string {
-	const ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+	const extension = fileName.substring(fileName.lastIndexOf(".") + 1);
 
-	return ext;
+	return extension;
+}
+
+export function removeFileExtension(str: string): string {
+	const lastDotIndex = str.lastIndexOf(".");
+
+	const extensionNotFound = lastDotIndex === -1;
+
+	if (extensionNotFound) {
+		return str;
+	}
+
+	const stringWithoutExtension = str.substring(0, lastDotIndex);
+
+	return stringWithoutExtension;
 }
 
 export function convertDownloadToPreviewUrl(
@@ -64,7 +78,21 @@ export function convertDownloadToPreviewUrl(
 	return previewUrl;
 }
 
-export function isDownloadAllowed(scanStatus: FileRecordScanStatus): boolean {
+export function isScanStatusPending(scanStatus: PreviewStatus): boolean {
+	return scanStatus === PreviewStatus.AWAITING_SCAN_STATUS;
+}
+
+export function isScanStatusWontCheck(scanStatus: PreviewStatus): boolean {
+	return (
+		scanStatus === PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+	);
+}
+
+export function isScanStatusError(scanStatus: PreviewStatus): boolean {
+	return scanStatus === PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR;
+}
+
+export function isScanStatusBlocked(scanStatus: FileRecordScanStatus): boolean {
 	return scanStatus !== FileRecordScanStatus.BLOCKED;
 }
 
