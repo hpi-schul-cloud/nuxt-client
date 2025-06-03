@@ -31,6 +31,14 @@ export default {
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
 	"common.ariaLabel.openImageInLightBox": "Mostrar imagen en tamaño completo",
 	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
+	"common.file.awaitingScan":
+		"La vista previa se muestra después de una comprobación de virus correcta. El fichero se está analizando actualmente.",
+	"common.file.scanWontCheck":
+		"Debido al tamaño, no se puede generar una vista previa.",
+	"common.file.scanError":
+		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
+	"common.file.virusDetected":
+		"Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
@@ -539,8 +547,6 @@ export default {
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
 	"components.cardElement.fileElement.audioFormatError":
 		"El formato de audio no es compatible con este navegador / sistema operativo.",
-	"components.cardElement.fileElement.awaitingScan":
-		"La vista previa se muestra después de una comprobación de virus correcta. El fichero se está analizando actualmente.",
 	"components.cardElement.fileElement.caption": "Descripción",
 	"components.cardElement.fileElement.emptyAlt":
 		"Aquí tenéis una imagen con el siguiente nombre",
@@ -548,14 +554,8 @@ export default {
 	"components.cardElement.fileElement.previewError":
 		"No se ha podido cargar la vista previa.",
 	"components.cardElement.fileElement.reloadStatus": "Estado de actualización",
-	"components.cardElement.fileElement.scanError":
-		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
-	"components.cardElement.fileElement.scanWontCheck":
-		"Debido al tamaño, no se puede generar una vista previa.",
 	"components.cardElement.fileElement.videoFormatError":
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
-	"components.cardElement.fileElement.virusDetected":
-		"Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"components.cardElement.folderElement": "Carpeta de archivos",
 	"components.cardElement.folderElement.untitled": "Carpeta sin título",
 	"components.cardElement.LinkElement": "Enlace",

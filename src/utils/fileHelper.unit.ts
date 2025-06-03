@@ -10,9 +10,12 @@ import {
 	formatSecondsToHourMinSec,
 	getFileExtension,
 	isAudioMimeType,
-	isDownloadAllowed,
 	isPdfMimeType,
 	isPreviewPossible,
+	isScanStatusBlocked,
+	isScanStatusError,
+	isScanStatusPending,
+	isScanStatusWontCheck,
 	isVideoMimeType,
 	removeFileExtension,
 } from "./fileHelper";
@@ -238,10 +241,68 @@ describe("@/utils/fileHelper", () => {
 		});
 	});
 
-	describe("isDownloadAllowed", () => {
+	describe("isScanStatusPending", () => {
+		describe("when scan status is pending", () => {
+			it("should return true", () => {
+				const result = isScanStatusPending(PreviewStatus.AWAITING_SCAN_STATUS);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is not pending", () => {
+			it("should return false", () => {
+				const result = isScanStatusPending(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isScanStatusWontCheck", () => {
+		describe("when scan status is pending", () => {
+			it("should return true", () => {
+				const result = isScanStatusWontCheck(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+				);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is not pending", () => {
+			it("should return false", () => {
+				const result = isScanStatusWontCheck(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isScanStatusError", () => {
+		describe("when scan status is pending", () => {
+			it("should return true", () => {
+				const result = isScanStatusError(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
+				);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is not pending", () => {
+			it("should return false", () => {
+				const result = isScanStatusError(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isScanStatusBlocked", () => {
 		describe("when scan status is not blocked", () => {
 			it("should return true", () => {
-				const result = isDownloadAllowed(FileRecordScanStatus.VERIFIED);
+				const result = isScanStatusBlocked(FileRecordScanStatus.VERIFIED);
 
 				expect(result).toBe(true);
 			});
@@ -249,7 +310,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is blocked", () => {
 			it("should return false", () => {
-				const result = isDownloadAllowed(FileRecordScanStatus.BLOCKED);
+				const result = isScanStatusBlocked(FileRecordScanStatus.BLOCKED);
 
 				expect(result).toBe(false);
 			});
