@@ -24,16 +24,15 @@
 
 					<div class="mt-5">
 						<v-text-field
+							ref="descriptionField"
 							v-model="formData.title"
 							class="mb-2"
+							:rules="validationRules"
 							:label="
 								t('pages.rooms.members.inviteMember.form.description.label')
 							"
 							:hint="
 								t('pages.rooms.members.inviteMember.form.description.hint')
-							"
-							:error-messages="
-								v$.formData.title.$errors.map((e) => unref(e.$message))
 							"
 							persistent-hint
 							data-testid="invite-participant-description-input"
@@ -162,9 +161,9 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref, unref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VCard } from "vuetify/lib/components";
+import { VCard, VTextField } from "vuetify/lib/components";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
@@ -178,9 +177,8 @@ import {
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { storeToRefs } from "pinia";
-import useVuelidate from "@vuelidate/core";
-import { helpers, maxLength, required } from "@vuelidate/validators";
-import { containsOpeningTagFollowedByString } from "@/utils/validation";
+import { isOfMaxLength, isRequired } from "@util-validators";
+import { useOpeningTagValidator } from "@/utils/validation";
 
 defineProps({
 	schoolName: {
@@ -203,6 +201,7 @@ const { createLink, updateLink } = useRoomInvitationLinkStore();
 const { invitationStep, sharedUrl, editedLink } = storeToRefs(
 	useRoomInvitationLinkStore()
 );
+const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
@@ -218,28 +217,13 @@ const defaultFormData = {
 };
 
 const formData = ref({ ...defaultFormData });
+const descriptionField = ref();
 
-const validationRules = computed(() => ({
-	formData: {
-		title: {
-			maxLength: helpers.withMessage(
-				t("common.validation.tooLong"),
-				maxLength(100)
-			),
-			containsOpeningTag: helpers.withMessage(
-				t("common.validation.containsOpeningTag"),
-				(name: string) => !containsOpeningTagFollowedByString(name)
-			),
-			required: helpers.withMessage(t("common.validation.required2"), required),
-		},
-	},
-}));
-
-const v$ = useVuelidate(
-	validationRules,
-	{ formData },
-	{ $lazy: true, $autoDirty: true }
-);
+const validationRules = [
+	validateOnOpeningTag,
+	isRequired(t("common.validation.required2")),
+	isOfMaxLength(100)(t("common.validation.tooLong")),
+];
 
 const isDatePickerDisabled = computed(() => {
 	return !formData.value.activeUntilChecked;
@@ -293,13 +277,11 @@ const onClose = () => {
 const onContinue = async () => {
 	if (invitationStep.value === InvitationStep.SHARE) return;
 
-	const valid = await v$.value.$validate();
-	if (!valid) {
-		return;
-	}
+	const validationResult = await descriptionField.value?.validate?.();
+	if (!validationResult?.valid) return;
 
 	const baseParams = {
-		title: formData.value.title || "invitation link",
+		title: formData.value.title,
 		activeUntil:
 			formData.value.activeUntilChecked && !!formData.value.activeUntil
 				? formData.value.activeUntil.toString()
@@ -376,7 +358,6 @@ watch(
 	(isOpen: boolean) => {
 		if (isOpen) {
 			formData.value = { ...defaultFormData };
-			v$.value.$reset();
 		} else {
 			deactivate();
 		}
