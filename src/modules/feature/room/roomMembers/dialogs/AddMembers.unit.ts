@@ -198,7 +198,7 @@ describe("AddMembers", () => {
 					const { wrapper } = setup({ isFeatureAddStudentsEnabled: false });
 
 					const roles = [
-						{ id: RoleName.Teacher, name: "common.labels.teacher" },
+						{ id: RoleName.Teacher, name: "common.labels.teacher.neutral" },
 					];
 
 					const roleComponent = wrapper.getComponent({
@@ -217,9 +217,9 @@ describe("AddMembers", () => {
 					const roles = [
 						{
 							id: RoleName.Student,
-							name: "pages.rooms.members.add.role.student",
+							name: "common.labels.student.neutral",
 						},
-						{ id: RoleName.Teacher, name: "common.labels.teacher" },
+						{ id: RoleName.Teacher, name: "common.labels.teacher.neutral" },
 					];
 
 					const roleComponent = wrapper.getComponent({
