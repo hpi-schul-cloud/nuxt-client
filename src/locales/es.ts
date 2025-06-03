@@ -1927,11 +1927,11 @@ export default {
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"En el futuro, las salas combinarán funciones de cursos y equipos para ofrecer más oportunidades de colaboración entre escuelas.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Los equipos y cursos seguirán existiendo hasta que el contenido pueda ser transferido a las salas.",
-	"pages.rooms.infoAlert.welcome.visibility":
-		"Las salas son actualmente visibles solo para los profesores y se seguirán desarrollando. Puede encontrar más información en nuestro {helpLink}. Agradecemos sus {feedbackLink} sobre el estado actual.",
-	"pages.rooms.infoAlert.welcome.visibility.help": "página de ayuda",
-	"pages.rooms.infoAlert.welcome.visibility.feedback": "comentarios",
+		"Las salas se seguirán desarrollando. Los equipos y cursos seguirán existiendo hasta que el contenido pueda ser transferido a las salas.",
+	"pages.rooms.infoAlert.welcome.furtherInformation":
+		"Puede encontrar más información en nuestro {helpLink}. Agradecemos sus {feedbackLink} sobre el estado actual.",
+	"pages.rooms.infoAlert.welcome.furtherInformation.help": "página de ayuda",
+	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "comentarios",
 	"pages.rooms.leaveRoom.confirmation": 'Dejar la sala "{roomName}"?',
 	"pages.rooms.leaveRoom.RoomOwner.warning":
 		"Antes de que se pueda abandonar la sala, la autorización de propiedad de la sala debe transferirse a otro miembro de la sala. Esto se puede hacer en la gestión de miembros de la sala.",

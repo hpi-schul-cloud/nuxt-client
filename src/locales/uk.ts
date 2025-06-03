@@ -1903,11 +1903,11 @@ export default {
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"У майбутньому кімнати об'єднають функції курсів і команд, щоб запропонувати більше можливостей для міжшкільної співпраці.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Команди та курси залишатимуться, доки вміст не буде перенесено до кімнат.",
-	"pages.rooms.infoAlert.welcome.visibility":
-		"Кімнати наразі видимі лише для вчителів і будуть далі розвиватися. Додаткову інформацію можна знайти на нашій {helpLink}. Ми будемо вдячні за ваші {feedbackLink} щодо поточного стану.",
-	"pages.rooms.infoAlert.welcome.visibility.help": "Сторінка допомоги",
-	"pages.rooms.infoAlert.welcome.visibility.feedback": "відгуки",
+		"Кімнати будуть розширюватися і надалі. Команди та курси залишатимуться на місці, доки контент не буде перенесено до кімнат.",
+	"pages.rooms.infoAlert.welcome.furtherInformation":
+		"Додаткову інформацію можна знайти на нашій {helpLink}. Ми будемо вдячні за ваші {feedbackLink} щодо поточного стану.",
+	"pages.rooms.infoAlert.welcome.furtherInformation.help": "Сторінка допомоги",
+	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "відгуки",
 	"pages.rooms.leaveRoom.confirmation": 'Дійсно залишити місце "{roomName}"?',
 	"pages.rooms.leaveRoom.RoomOwner.warning":
 		"Перш ніж залишити кімнату, дозвіл на володіння кімнатою має бути передано іншому учаснику кімнати. Це можна зробити в управлінні учасниками кімнати.",
