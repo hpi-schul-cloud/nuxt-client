@@ -94,6 +94,25 @@ describe("RenameFileDialog", () => {
 				expect(wrapper.emitted("confirm")?.[0]).toEqual(["new name"]);
 			});
 		});
+
+		describe("when name is set to undefined after the dialog is opened", () => {
+			it("should still show the latest valid name", async () => {
+				const { name, wrapper } = await setup();
+
+				const input = wrapper
+					.findComponent(VDialog)
+					.findComponent(VCard)
+					.find("input[type='text']");
+
+				expect(input.exists()).toBe(true);
+				expect(input.attributes("value")).toBe(name);
+
+				await wrapper.setProps({ name: undefined });
+
+				expect(input.exists()).toBe(true);
+				expect(input.attributes("value")).toBe(name);
+			});
+		});
 	});
 
 	describe("when the dialog isDialogOpen is false", () => {
