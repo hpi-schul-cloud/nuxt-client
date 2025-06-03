@@ -11,7 +11,15 @@
 					<h1 class="text-h3 mb-4" data-testid="room-title">
 						{{ membersInfoText }}
 					</h1>
-					<KebabMenu class="mx-2" data-testid="room-member-menu">
+					<KebabMenu
+						class="mx-2"
+						data-testid="room-member-menu"
+						:aria-label="
+							t('pages.rooms.members.menu.ariaLabel', {
+								membersInfoText: membersInfoText,
+							})
+						"
+					>
 						<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
 					</KebabMenu>
 				</div>
@@ -30,6 +38,7 @@
 						:aria-label="t(tabItem.title)"
 						:text="xs ? undefined : t(tabItem.title)"
 						:value="tabItem.value"
+						:data-testid="`room-members-tab-${tabItem.testId}`"
 					/>
 				</VTabs>
 			</div>
@@ -86,9 +95,11 @@ import {
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import {
+	InvitationStep,
 	useRoomDetailsStore,
 	useRoomMembersStore,
 	useRoomAuthorization,
+	useRoomInvitationLinkStore,
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import {
@@ -104,7 +115,6 @@ import {
 	InviteMembersDialog,
 	Members,
 } from "@feature-room";
-import { RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import {
@@ -136,16 +146,18 @@ const membersInfoText = ref("");
 
 const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
-const isInvitationDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
-const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
-	roomMembersStore;
+const { fetchMembers, getSchools, leaveRoom, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
 const { canAddRoomMembers, canLeaveRoom } = useRoomAuthorization();
+
+const { isInvitationDialogOpen, invitationStep } = storeToRefs(
+	useRoomInvitationLinkStore()
+);
 
 watchEffect(() => {
 	if (canAddRoomMembers.value !== undefined) {
@@ -181,6 +193,7 @@ const tabs: Array<{
 	icon: string;
 	component: Component;
 	isVisible: ComputedRef<boolean>;
+	testId: string;
 }> = [
 	{
 		title: "pages.rooms.members.tab.members",
@@ -188,6 +201,7 @@ const tabs: Array<{
 		icon: mdiAccountMultipleOutline,
 		component: Members,
 		isVisible: computed(() => true),
+		testId: "members",
 	},
 	{
 		title: "pages.rooms.members.tab.invitations",
@@ -195,6 +209,7 @@ const tabs: Array<{
 		icon: mdiLink,
 		component: Invitations,
 		isVisible: isVisibleTabNavigation,
+		testId: "invitations",
 	},
 	{
 		title: "pages.rooms.members.tab.confirmations",
@@ -202,19 +217,20 @@ const tabs: Array<{
 		icon: mdiAccountQuestionOutline,
 		component: Confirmations,
 		isVisible: isVisibleTabNavigation,
+		testId: "confirmations",
 	},
 ];
 
 const onFabClick = async () => {
 	switch (activeTab.value) {
 		case Tab.Invitations:
+			invitationStep.value = InvitationStep.PREPARE;
 			isInvitationDialogOpen.value = true;
 			break;
 
 		case Tab.Members:
 		default:
 			await getSchools();
-			await getPotentialMembers(RoleName.Teacher);
 			isMembersDialogOpen.value = true;
 			break;
 	}
@@ -302,8 +318,8 @@ const fabAction = computed(() => {
 	if (activeTab.value === Tab.Invitations) {
 		return {
 			icon: mdiPlus,
-			title: t("pages.rooms.members.inviteMember.firstStep.title"),
-			ariaLabel: t("pages.rooms.members.inviteMember.firstStep.title"),
+			title: t("pages.rooms.members.inviteMember.step.prepare.title"),
+			ariaLabel: t("pages.rooms.members.inviteMember.step.prepare.title"),
 			dataTestId: "fab-invite-members",
 		};
 	}

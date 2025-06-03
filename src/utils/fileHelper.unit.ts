@@ -10,10 +10,14 @@ import {
 	formatSecondsToHourMinSec,
 	getFileExtension,
 	isAudioMimeType,
-	isDownloadAllowed,
 	isPdfMimeType,
 	isPreviewPossible,
+	isScanStatusBlocked,
+	isScanStatusError,
+	isScanStatusPending,
+	isScanStatusWontCheck,
 	isVideoMimeType,
+	removeFileExtension,
 } from "./fileHelper";
 
 describe("@/utils/fileHelper", () => {
@@ -40,13 +44,12 @@ describe("@/utils/fileHelper", () => {
 		it("should download the file", () => {
 			const { url, fileName, link, createElementSpy } = setup();
 
-			downloadFile(url, fileName, "a-test-id");
+			downloadFile(url, fileName);
 
 			expect(createElementSpy).toHaveBeenCalledWith("a");
 			expect(link.href).toEqual(url);
 			expect(link.download).toEqual(fileName);
 			expect(link.hidden).toBe(true);
-			expect(link.dataset.testid).toEqual("a-test-id");
 			expect(document.body.appendChild).toHaveBeenCalledWith(link);
 			expect(link.click).toHaveBeenCalledTimes(1);
 			expect(document.body.removeChild).toHaveBeenCalledWith(link);
@@ -238,10 +241,68 @@ describe("@/utils/fileHelper", () => {
 		});
 	});
 
-	describe("isDownloadAllowed", () => {
+	describe("isScanStatusPending", () => {
+		describe("when scan status is pending", () => {
+			it("should return true", () => {
+				const result = isScanStatusPending(PreviewStatus.AWAITING_SCAN_STATUS);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is not pending", () => {
+			it("should return false", () => {
+				const result = isScanStatusPending(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isScanStatusWontCheck", () => {
+		describe("when scan status is pending", () => {
+			it("should return true", () => {
+				const result = isScanStatusWontCheck(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+				);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is not pending", () => {
+			it("should return false", () => {
+				const result = isScanStatusWontCheck(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isScanStatusError", () => {
+		describe("when scan status is pending", () => {
+			it("should return true", () => {
+				const result = isScanStatusError(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
+				);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is not pending", () => {
+			it("should return false", () => {
+				const result = isScanStatusError(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isScanStatusBlocked", () => {
 		describe("when scan status is not blocked", () => {
 			it("should return true", () => {
-				const result = isDownloadAllowed(FileRecordScanStatus.VERIFIED);
+				const result = isScanStatusBlocked(FileRecordScanStatus.VERIFIED);
 
 				expect(result).toBe(true);
 			});
@@ -249,7 +310,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is blocked", () => {
 			it("should return false", () => {
-				const result = isDownloadAllowed(FileRecordScanStatus.BLOCKED);
+				const result = isScanStatusBlocked(FileRecordScanStatus.BLOCKED);
 
 				expect(result).toBe(false);
 			});
@@ -492,6 +553,36 @@ describe("@/utils/fileHelper", () => {
 				const result = formatSecondsToHourMinSec(1555125);
 
 				expect(result).toBe("23:58:45");
+			});
+		});
+	});
+
+	describe("removeFileExtension", () => {
+		describe("when input string contains a dot", () => {
+			it("should remove the file extension", () => {
+				const result = removeFileExtension("file.name.txt");
+				expect(result).toEqual("file.name");
+			});
+		});
+
+		describe("when input string contains no dot", () => {
+			it("should return the input string unchanged", () => {
+				const result = removeFileExtension("filename");
+				expect(result).toEqual("filename");
+			});
+		});
+
+		describe("when input string ends with a dot", () => {
+			it("should remove the trailing dot", () => {
+				const result = removeFileExtension("filename.");
+				expect(result).toEqual("filename");
+			});
+		});
+
+		describe("when input string is empty", () => {
+			it("should return an empty string", () => {
+				const result = removeFileExtension("");
+				expect(result).toEqual("");
 			});
 		});
 	});

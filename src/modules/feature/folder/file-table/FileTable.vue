@@ -19,56 +19,99 @@
 		<div class="mt-8">
 			<DataTable
 				:table-headers="headers"
-				:items="
-					fileRecords.map((item) => ({
-						...item,
-					}))
-				"
+				:items="fileRecordItems"
 				:show-select="true"
 			>
 				<template #[`item.preview`]="{ item }">
-					<FilePreview
-						:file-record="item"
-						:data-testid="`file-preview-${item.name}`"
-					/>
+					<FileInteractionHandler :file-record-item="item">
+						<FilePreview
+							:file-record="item"
+							:data-testid="`file-preview-${item.name}`"
+							:class="{ 'text-disabled': !item.isSelectable }"
+						/>
+					</FileInteractionHandler>
+				</template>
+				<template #[`item.name`]="{ item }">
+					<FileInteractionHandler :file-record-item="item">
+						<span
+							:data-testid="`name-${item.name}`"
+							:class="{ 'text-disabled': !item.isSelectable }"
+						>
+							{{ item.name }}
+							<FileStatus :file-record="item" />
+						</span>
+					</FileInteractionHandler>
 				</template>
 				<template #[`item.createdAt`]="{ item }">
-					<span :data-testid="`created-at-${item.name}`">{{
-						printDateFromStringUTC(item.createdAt)
-					}}</span>
+					<span
+						:data-testid="`created-at-${item.name}`"
+						:class="{ 'text-disabled': !item.isSelectable }"
+						>{{ printDateFromStringUTC(item.createdAt) }}</span
+					>
 				</template>
 				<template #[`item.size`]="{ item }">
-					<span :data-testid="`size-${item.name}`"
+					<span
+						:data-testid="`size-${item.name}`"
+						:class="{ 'text-disabled': !item.isSelectable }"
 						>{{ formatFileSize(item.size) }}
 					</span>
 				</template>
 				<template #[`item.actions`]="{ item }">
 					<KebabMenu
 						:data-testid="`kebab-menu-${item.name}`"
-						:aria-label="buildAriaLabel(item)"
+						:aria-label="buildActionMenuAriaLabel(item)"
 					>
-						<KebabMenuActionDeleteFiles
+						<KebabMenuActionDownloadFiles
+							:disabled="!item.isSelectable"
 							:file-records="fileRecords"
 							:selected-ids="[item.id]"
-							:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
+							:aria-label="t('common.actions.download')"
+						/>
+						<KebabMenuActionRename
+							v-if="props.hasEditPermission"
+							:disabled="!item.isSelectable"
+							:aria-label="t('common.actions.rename')"
+							@click="onRenameButtonClick(item)"
+						/>
+						<KebabMenuActionDeleteFiles
+							v-if="props.hasEditPermission"
+							:file-records="fileRecords"
+							:selected-ids="[item.id]"
+							:aria-label="t('common.actions.delete')"
 							@delete-files="onDeleteFiles"
 						/>
 					</KebabMenu>
 				</template>
 
-				<template #action-menu-items="{ selectedIds }">
-					<KebabMenuActionDeleteFiles
-						:file-records="fileRecords"
-						:selected-ids="selectedIds"
-						:aria-label="t('pages.folder.ariaLabels.menu.action.file.delete')"
-						@delete-files="onDeleteFiles"
-					/>
-				</template>
-
 				<template #left-of-search>
 					<FileUploadProgress :upload-progress="uploadProgress" />
 				</template>
+
+				<template #action-menu-items="{ selectedIds }">
+					<KebabMenuActionDeleteFiles
+						v-if="props.hasEditPermission"
+						:file-records="fileRecords"
+						:selected-ids="selectedIds"
+						:aria-label="t('common.actions.delete')"
+						@delete-files="onDeleteFiles"
+					/>
+				</template>
 			</DataTable>
+			<FileStatusLegend />
+			<RenameFileDialog
+				v-model:is-dialog-open="isRenameDialogOpen"
+				:file-records="fileRecords"
+				:name="fileRecordToRename?.name"
+				:entity-name="t('components.cardElement.fileElement')"
+				@cancel="onRenameDialogCancel"
+				@confirm="onRenameDialogConfirm"
+			/>
+			<DeleteFileDialog
+				v-model:is-dialog-open="isDeleteFilesDialogOpen"
+				:file-records="fileRecordsToDelete"
+				@confirm="onDeleteFilesConfirm"
+				@cancel="onDeleteFilesCancel"
+			/>
 		</div>
 	</template>
 </template>
@@ -76,16 +119,26 @@
 <script setup lang="ts">
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
-import { convertFileSize } from "@/utils/fileHelper";
+import {
+	convertFileSize,
+	getFileExtension,
+	isScanStatusBlocked,
+} from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
-import { KebabMenu } from "@ui-kebab-menu";
-import { computed, defineProps, PropType } from "vue";
+import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
+import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import DeleteFileDialog from "./DeleteFileDialog.vue";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
+import FileInteractionHandler from "./FileInteractionHandler.vue";
 import FilePreview from "./FilePreview.vue";
+import FileStatus from "./FileStatus.vue";
+import FileStatusLegend from "./FileStatusLegend.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
+import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
+import RenameFileDialog from "./RenameFileDialog.vue";
 
 const { t, n } = useI18n();
 
@@ -95,6 +148,10 @@ const props = defineProps({
 		required: true,
 	},
 	isEmpty: {
+		type: Boolean,
+		required: true,
+	},
+	hasEditPermission: {
 		type: Boolean,
 		required: true,
 	},
@@ -111,15 +168,32 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["delete-files"]);
+const emit = defineEmits(["delete-files", "update:name"]);
 
 const headers = [
-	{ key: "preview", sortable: false },
+	{ title: "", key: "preview", sortable: false },
 	{ title: t("pages.folder.columns.name"), key: "name" },
 	{ title: t("pages.folder.columns.createdat"), key: "createdAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
-	{ key: "actions", sortable: false },
+	{
+		title: t("ui.actionMenu.actions"),
+		key: "actions",
+		sortable: false,
+		width: 50,
+	},
 ];
+
+const fileRecordToRename = ref<FileRecord | undefined>(undefined);
+const isRenameDialogOpen = ref(false);
+const isDeleteFilesDialogOpen = ref(false);
+const fileRecordsToDelete = ref<FileRecord[]>([]);
+
+const fileRecordItems = computed(() => {
+	return props.fileRecords.map((item) => ({
+		...item,
+		isSelectable: isScanStatusBlocked(item.securityCheckStatus),
+	}));
+});
 
 const areUploadStatsVisible = computed(() => {
 	return props.uploadProgress.total > 0;
@@ -132,14 +206,44 @@ const formatFileSize = (size: number) => {
 	return `${localizedFileSize} ${unit}`;
 };
 
-const onDeleteFiles = (
-	selectedFileRecords: FileRecord[],
-	confirmationPromise: Promise<boolean>
-) => {
-	emit("delete-files", selectedFileRecords, confirmationPromise);
+const onDeleteFiles = (selectedFileRecords: FileRecord[]) => {
+	isDeleteFilesDialogOpen.value = true;
+	fileRecordsToDelete.value = selectedFileRecords;
 };
 
-const buildAriaLabel = (item: FileRecord): string => {
+const onDeleteFilesConfirm = () => {
+	emit("delete-files", fileRecordsToDelete.value);
+	fileRecordsToDelete.value = [];
+	isDeleteFilesDialogOpen.value = false;
+};
+const onDeleteFilesCancel = () => {
+	isDeleteFilesDialogOpen.value = false;
+	fileRecordsToDelete.value = [];
+};
+
+const onRenameButtonClick = (item: FileRecord) => {
+	isRenameDialogOpen.value = true;
+	fileRecordToRename.value = { ...item };
+};
+const onRenameDialogCancel = () => {
+	isRenameDialogOpen.value = false;
+	fileRecordToRename.value = undefined;
+};
+const onRenameDialogConfirm = (newName: string) => {
+	if (!fileRecordToRename.value) return;
+
+	const fileExtension = getFileExtension(fileRecordToRename.value.name);
+	const nameWithExtension = `${newName}.${fileExtension}`;
+
+	if (fileRecordToRename.value.name !== nameWithExtension) {
+		emit("update:name", nameWithExtension, fileRecordToRename.value);
+	}
+
+	isRenameDialogOpen.value = false;
+	fileRecordToRename.value = undefined;
+};
+
+const buildActionMenuAriaLabel = (item: FileRecord): string => {
 	return t("pages.folder.ariaLabels.actionMenu", {
 		name: item.name,
 	});

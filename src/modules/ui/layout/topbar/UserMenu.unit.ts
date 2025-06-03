@@ -1,26 +1,32 @@
-import { mount } from "@vue/test-utils";
+import { envsFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { envsFactory } from "@@/tests/test-utils";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { System, useSystemApi } from "@data-system";
+import { useOAuthApi } from "@data-oauth";
+import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { LanguageType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
-import { LanguageType } from "@/serverApi/v3";
-import { VBtn } from "vuetify/lib/components/index.mjs";
+import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
+import { VBtn, VListItem } from "vuetify/lib/components/index";
 import UserMenu from "./UserMenu.vue";
-import { System, useSystemApi } from "@data-system";
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
 
 jest.mock("@data-system");
+jest.mock("@data-oauth");
 
 describe("@ui-layout/UserMenu", () => {
 	let useSystemApiMock: DeepMocked<ReturnType<typeof useSystemApi>>;
+	let useOAuthApiMock: DeepMocked<ReturnType<typeof useOAuthApi>>;
+
 	const setupWrapper = (
 		isExternalFeatureEnabled = false,
-		mockedSystem?: System
+		mockedSystem?: System,
+		mockedTokenExpiration?: Date
 	) => {
 		const authModule = createModuleMocks(AuthModule, {
 			getLocale: "de",
@@ -39,10 +45,15 @@ describe("@ui-layout/UserMenu", () => {
 		});
 
 		useSystemApiMock = createMock<ReturnType<typeof useSystemApi>>();
+		useOAuthApiMock = createMock<ReturnType<typeof useOAuthApi>>();
 
 		jest.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
+		jest.mocked(useOAuthApi).mockReturnValue(useOAuthApiMock);
 
 		useSystemApiMock.getSystem.mockResolvedValue(mockedSystem);
+		useOAuthApiMock.getSessionTokenExpiration.mockResolvedValue(
+			mockedTokenExpiration
+		);
 
 		const wrapper = mount(UserMenu, {
 			global: {
@@ -199,7 +210,7 @@ describe("@ui-layout/UserMenu", () => {
 			});
 		});
 
-		describe("when end session endpoint is not available for the systeme", () => {
+		describe("when end session endpoint is not available for the system", () => {
 			const setup = () => {
 				const mockedSystem: System = {
 					id: "testId",
@@ -235,6 +246,106 @@ describe("@ui-layout/UserMenu", () => {
 
 				expect(logoutBtn.exists()).toBe(true);
 				expect(logoutBtn.text()).toEqual("common.labels.logout");
+			});
+		});
+
+		describe("when the oauth session token is valid", () => {
+			const setup = () => {
+				const mockedSystem: System = {
+					id: "testId",
+					displayName: "Test System",
+					hasEndSessionEndpoint: true,
+				};
+				const mockedTokenExpiration = new Date(Date.now() + 3 * 3600 * 1000);
+
+				const { wrapper } = setupWrapper(
+					true,
+					mockedSystem,
+					mockedTokenExpiration
+				);
+
+				return { wrapper };
+			};
+
+			it("should not disable the option to do an external logout", async () => {
+				const { wrapper } = setup();
+
+				const menuBtn = wrapper.findComponent(VBtn);
+				await menuBtn.trigger("click");
+
+				await nextTick();
+
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
+					"[data-testid=external-logout]"
+				);
+
+				expect(externalLogoutBtn.exists()).toBe(true);
+				expect(externalLogoutBtn.props().disabled).toBe(false);
+			});
+		});
+
+		describe("when the oauth session token is expired", () => {
+			const setup = () => {
+				const mockedSystem: System = {
+					id: "testId",
+					displayName: "Test System",
+					hasEndSessionEndpoint: true,
+				};
+				const mockedTokenExpiration = new Date(Date.now() - 3 * 3600 * 1000);
+
+				const { wrapper } = setupWrapper(
+					true,
+					mockedSystem,
+					mockedTokenExpiration
+				);
+
+				return { wrapper };
+			};
+
+			it("should disable the option to do an external logout", async () => {
+				const { wrapper } = setup();
+
+				const menuBtn = wrapper.findComponent(VBtn);
+				await menuBtn.trigger("click");
+
+				await nextTick();
+
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
+					"[data-testid=external-logout]"
+				);
+
+				expect(externalLogoutBtn.exists()).toBe(true);
+				expect(externalLogoutBtn.props().disabled).toBe(true);
+			});
+		});
+
+		describe("when the oauth session token could not be found", () => {
+			const setup = () => {
+				const mockedSystem: System = {
+					id: "testId",
+					displayName: "Test System",
+					hasEndSessionEndpoint: true,
+				};
+
+				const { wrapper } = setupWrapper(true, mockedSystem);
+
+				return { wrapper };
+			};
+
+			it("should disable the option to do an external logout", async () => {
+				const { wrapper } = setup();
+
+				const menuBtn = wrapper.findComponent(VBtn);
+				await menuBtn.trigger("click");
+
+				await nextTick();
+
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
+					"[data-testid=external-logout]"
+				);
+
+				expect(externalLogoutBtn.exists()).toBe(true);
+				expect(externalLogoutBtn.props().disabled).toBe(true);
 			});
 		});
 	});

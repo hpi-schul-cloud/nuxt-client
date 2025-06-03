@@ -9,7 +9,8 @@ export default {
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
-	"common.actions.duplicate": "Duplicar",
+	"common.actions.download": "Descargar",
+	"common.actions.copyRoom": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
 	"common.actions.finish": "Finalizar",
@@ -28,7 +29,16 @@ export default {
 	"common.actions.shareLink": "Copiar enlace",
 	"common.actions.update": "Actualizar",
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
+	"common.ariaLabel.openImageInLightBox": "Mostrar imagen en tamaño completo",
 	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
+	"common.file.awaitingScan":
+		"La vista previa se muestra después de una comprobación de virus correcta. El fichero se está analizando actualmente.",
+	"common.file.scanWontCheck":
+		"Debido al tamaño, no se puede generar una vista previa.",
+	"common.file.scanError":
+		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
+	"common.file.virusDetected":
+		"Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
@@ -51,6 +61,7 @@ export default {
 	"common.labels.expanded": "expandido",
 	"common.labels.externalsource": "Fuente",
 	"common.labels.failure": "falla",
+	"common.labels.name.new": "nuevo nombre",
 	"common.labels.firstName.new": "Nuevo nombre",
 	"common.labels.firstName": "Nombre",
 	"common.labels.fullName": "Nombre y apellidos",
@@ -211,11 +222,6 @@ export default {
 	"common.words.topics": "Temas",
 	"common.words.yes": "Sí",
 	"common.words.export": "La exportación del curso se está descargando",
-	"component.cardElement.fileElement.audioPlayer.pause": "Pausa",
-	"component.cardElement.fileElement.audioPlayer.play": "Reproducir",
-	"component.cardElement.fileElement.audioPlayer.slider": "Control deslizante",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
-	"component.cardElement.fileElement.audioPlayer.speed": "Menú de velocidad",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -381,11 +387,60 @@ export default {
 		"¿Está seguro de que desea desactivar la sincronización de {groupTypes}?",
 	"components.administration.provisioningOptions.warning.title":
 		"Deshabilitar la sincronización",
+	"components.administration.schoolYearChangeSection.headers":
+		"Cambio de año escolar",
+	"components.administration.schoolYearChangeSection.info.part.one":
+		"Con la ayuda de la fase de transferencia, la membresía de clase y los datos personales en el LDAP se pueden ajustar en paz. Finalmente, todos los cambios se pueden transferir a la {instance}.",
+	"components.administration.schoolYearChangeSection.info.part.two":
+		" (más información sobre el {0})",
+	"components.administration.schoolYearChangeSection.info.link":
+		"Ayuda del lado de la ayuda",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"No se encontraron suficientes años escolares. ¡Póngase en contacto con el soporte!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"La escuela ya está en el próximo año escolar",
+	"components.administration.schoolYearChangeSection.notification.finish.success":
+		"El año escolar comenzó con éxito",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"La fase de transferencia comenzó con éxito",
+	"components.administration.schoolYearChangeSection.title.step.one":
+		"Al final del año escolar",
+	"components.administration.schoolYearChangeSection.description.step.one":
+		"La fase de transferencia se puede comenzar manualmente dos semanas antes del inicio de las vacaciones. Si no hay ningún comienzo manual al comienzo de las vacaciones, la fase de transferencia comienza automáticamente. El inicio de la fase de transferencia no se puede deshacer.",
+	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
+		"Fase de transferencia de inicio",
+	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
+		"Fase de transferencia iniciada",
+	"components.administration.schoolYearChangeSection.title.step.two":
+		"Alrededor de las vacaciones de verano",
+	"components.administration.schoolYearChangeSection.description.step.two":
+		"Durante la fase de transferencia, todos los datos de clase y personales se pueden actualizar en paz. El inicio de sesión y los cambios en las contraseñas aún son posibles para todos los usuarios existentes. Se pueden crear nuevos cursos durante la fase de transferencia, pero sin la asignación de clases.",
+	"components.administration.schoolYearChangeSection.info.step.two":
+		"Durante la fase de transferencia, no se sincronizan nuevos usuarios, clases o cambios en los datos existentes del LDAP.",
+	"components.administration.schoolYearChangeSection.step.two.button":
+		"Verifique los datos de LDAP",
+	"components.administration.schoolYearChangeSection.title.step.three":
+		"Nuevo año escolar",
+	"components.administration.schoolYearChangeSection.description.step.three":
+		"Aquí la transferencia de los datos se puede iniciar al {instance}. Esto acelera en el nuevo año escolar.",
+	"components.administration.schoolYearChangeSection.step.three.button":
+		"Fase de transferencia final",
+	"components.administration.schoolYearChangeSection.checkbox.step.three":
+		"Los datos de clase y personales (LDAP) se han actualizado y marcado",
+	"components.administration.schoolYearChangeSection.dialog.title":
+		"¿Realmente termina el año escolar?",
+	"components.administration.schoolYearChangeSection.dialog.content":
+		"La sincronización de los datos maestros LDAP se interrumpe durante la fase de transferencia. Esto significa que los datos y clases del usuario (si se usan) ya no se actualizan a través de LDAP. Iniciar sesión con datos de inicio de sesión ya sincronizados aún es posible. También se tienen en cuenta los cambios de contraseña en el LDAP durante el inicio de sesión.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "en ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hora | horas",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "minuto | minutos",
+	"components.audioPlayer.pause": "Pausa",
+	"components.audioPlayer.play": "Reproducir",
+	"components.audioPlayer.slider": "Control deslizante",
+	"components.audioPlayer.speed": "Menú de velocidad",
+	"components.audioPlayer.speed.normal": "Normal",
 	"components.base.BaseIcon.error":
 		"Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",
 	"components.base.showPassword": "Mostrar contraseña",
@@ -492,8 +547,6 @@ export default {
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
 	"components.cardElement.fileElement.audioFormatError":
 		"El formato de audio no es compatible con este navegador / sistema operativo.",
-	"components.cardElement.fileElement.awaitingScan":
-		"La vista previa se muestra después de una comprobación de virus correcta. El fichero se está analizando actualmente.",
 	"components.cardElement.fileElement.caption": "Descripción",
 	"components.cardElement.fileElement.emptyAlt":
 		"Aquí tenéis una imagen con el siguiente nombre",
@@ -501,14 +554,8 @@ export default {
 	"components.cardElement.fileElement.previewError":
 		"No se ha podido cargar la vista previa.",
 	"components.cardElement.fileElement.reloadStatus": "Estado de actualización",
-	"components.cardElement.fileElement.scanError":
-		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
-	"components.cardElement.fileElement.scanWontCheck":
-		"Debido al tamaño, no se puede generar una vista previa.",
 	"components.cardElement.fileElement.videoFormatError":
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
-	"components.cardElement.fileElement.virusDetected":
-		"Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"components.cardElement.folderElement": "Carpeta de archivos",
 	"components.cardElement.folderElement.untitled": "Carpeta sin título",
 	"components.cardElement.LinkElement": "Enlace",
@@ -535,6 +582,10 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.cardElement.h5pElement": "Elemento de aprendizaje interactivo",
+	"components.cardElement.h5pElement.create":
+		"Crear elemento de aprendizaje...",
+	"components.cardElement.h5pElement.title.error.load":
+		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",
 	"components.datePicker.validation.format":
 		"Por favor utilice el formato DD.MM.AAAA",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
@@ -915,10 +966,10 @@ export default {
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
-	"data-room.duplication.alert.success": "Sala duplicada con éxito.",
-	"data-room.duplication.alert.error":
+	"data-room.copy.alert.success": "Sala duplicada con éxito.",
+	"data-room.copy.alert.error":
 		"No se pudo completar el proceso de duplicación.",
-	"data-room.duplication.loading": "La sala se está duplicando...",
+	"data-room.copy.loading": "La sala se está duplicando...",
 	"error.400": "401 – Solicitud incorrecta",
 	"error.401":
 		"401 – Lamentablemente, falta la autorización para ver este contenido.",
@@ -980,18 +1031,18 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Grupo de usuarios sincronizado exitosamente",
 	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
-	"feature-room.DuplicationInfoDialog.title": "Duplicar Sala",
-	"feature-room.DuplicationInfoDialog.text.nextStep":
+	"feature-room.CopyInfoDialog.title": "Duplicar Sala",
+	"feature-room.CopyInfoDialog.text.nextStep":
 		"En el siguiente paso, se creará una copia de la sala.",
-	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+	"feature-room.CopyInfoDialog.text.alert.followingContent":
 		"Los siguientes contenidos no se copiarán:",
-	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Miembros y permisos de la sala",
-	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+	"feature-room.CopyInfoDialog.text.alert.Etherpad":
 		"Contenidos de los Etherpads",
-	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+	"feature-room.CopyInfoDialog.text.alert.whiteboard":
 		"Contenidos de las pizarras blancas",
-	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+	"feature-room.CopyInfoDialog.text.alert.protectedSettings":
 		"Configuraciones protegidas de herramientas externas",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
@@ -1669,7 +1720,6 @@ export default {
 		"Intenta usar una consulta más corta.",
 	"pages.content.emptyState.error.title": "¡Vaya, no hay resultados!",
 	"pages.content.index.backToCourse": "Volver al curso",
-	"pages.content.index.backToBoard": "Volver al tablero",
 	"pages.content.index.backToOverview": "Volver a la vista general",
 	"pages.content.index.search_for": "Buscar...",
 	"pages.content.index.search_resources": "Recursos",
@@ -1772,8 +1822,6 @@ export default {
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
-	"pages.room.student.emptyState":
-		"Aquí aparecen contenidos de aprendizaje como temas o tareas.",
 	"pages.room.taskCard.label.done": "Terminar",
 	"pages.room.taskCard.label.due": "Entrega",
 	"pages.room.taskCard.label.edit": "Editar",
@@ -1786,12 +1834,10 @@ export default {
 	"pages.room.taskCard.student.label.submitted": "Completado",
 	"pages.room.taskCard.teacher.label.overdue": "Expirado",
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
-	"pages.room.teacher.emptyState":
-		"Añada y ordene contenidos de aprendizaje al curso.",
+	"pages.room.learningContent.emptyState":
+		"Actualmente no hay contenidos de aprendizaje en este curso",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
-	"pages.rooms.allRooms.emptyState.title": "Actualmente no hay cursos aquí.",
-	"pages.rooms.currentRooms.emptyState.title":
-		"Actualmente no hay cursos aquí.",
+	"pages.rooms.emptyState.title": "Actualmente no hay cursos",
 	"pages.rooms.fab.add.course": "Nuevo curso",
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
@@ -1812,6 +1858,8 @@ export default {
 		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Lamentablemente, el enlace de invitación sólo es válido para los usuarios de la escuela «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.confirmationPending":
+		"Solicitud de ingreso en la sala presentada con éxito - pendiente de confirmación",
 	"pages.rooms.invitationLinkStatus.title": "Enlace de invitación",
 	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.rooms.menuItems.startSync": "Iniciar sincronización",
@@ -1848,7 +1896,8 @@ export default {
 	"pages.rooms.tools.deleteDialog.content":
 		"¿Está seguro de que desea eliminar la herramienta '{itemName}' del curso?",
 	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",
-	"pages.rooms.tools.emptyState": "No hay herramientas en este curso todavía.",
+	"pages.rooms.tools.emptyState":
+		"Actualmente no hay herramientas en este curso",
 	"pages.rooms.tools.incomplete": "Configuración incompleta",
 	"pages.rooms.tools.incompleteDialog.title": "Configuración incomplet",
 	"pages.rooms.tools.logo": "Logotipo de la herramienta",
@@ -1870,17 +1919,19 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar sala",
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
-	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
+	"pages.roomDetails.emptyState":
+		"Actualmente no hay contenidos de aprendizaje en esta sala",
+	"pages.rooms.emptyState": "Actualmente no hay salas",
 	"pages.rooms.fab.title": "Crear sala",
 	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"En el futuro, las salas combinarán funciones de cursos y equipos para ofrecer más oportunidades de colaboración entre escuelas.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Los equipos y cursos seguirán existiendo hasta que el contenido pueda ser transferido a las salas.",
-	"pages.rooms.infoAlert.welcome.visibility":
-		"Las salas son actualmente visibles solo para los profesores y se seguirán desarrollando. Puede encontrar más información en nuestro {helpLink}. Agradecemos sus {feedbackLink} sobre el estado actual.",
-	"pages.rooms.infoAlert.welcome.visibility.help": "página de ayuda",
-	"pages.rooms.infoAlert.welcome.visibility.feedback": "comentarios",
+		"Las salas se seguirán desarrollando. Los equipos y cursos seguirán existiendo hasta que el contenido pueda ser transferido a las salas.",
+	"pages.rooms.infoAlert.welcome.furtherInformation":
+		"Puede encontrar más información en nuestro {helpLink}. Agradecemos sus {feedbackLink} sobre el estado actual.",
+	"pages.rooms.infoAlert.welcome.furtherInformation.help": "página de ayuda",
+	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "comentarios",
 	"pages.rooms.leaveRoom.confirmation": 'Dejar la sala "{roomName}"?',
 	"pages.rooms.leaveRoom.RoomOwner.warning":
 		"Antes de que se pueda abandonar la sala, la autorización de propiedad de la sala debe transferirse a otro miembro de la sala. Esto se puede hacer en la gestión de miembros de la sala.",
@@ -1896,9 +1947,15 @@ export default {
 		"Añadir miembros a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Miembros",
+	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} menú",
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.add.infoText":
 		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
+	"pages.rooms.members.add.role.student": "Estudiante",
+	"pages.rooms.members.add.students.forbidden":
+		"Si la visibilidad de los alumnos para los profesores está desactivada en los ajustes de la escuela, sólo se podrán añadir alumnos de su propia clase. Póngase en contacto con el administrador de la escuela.",
+	"pages.rooms.members.add.warningText":
+		"Los alumnos de otras escuelas solo pueden ser añadidos al espacio por un docente responsable de su escuela.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Menú de acciones para {memberFullName}",
 	"pages.rooms.members.actionMenu.selectedMembers":
@@ -1940,6 +1997,19 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Autorizaciones de sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",
+	"pages.rooms.members.tableHeader.description": "Descripción",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"Sólo válido dentro de la escuela",
+	"pages.rooms.members.tableHeader.validForStudents":
+		"También válido para estudiantes",
+	"pages.rooms.members.tableHeader.expirationDate": "Fecha de caducidad",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Confirmación obligatoria",
+	"pages.rooms.members.tableHeader.status": "Estado",
+	"pages.rooms.members.tables.common.yes": "sí",
+	"pages.rooms.members.tables.common.no": "no",
+	"pages.rooms.members.tables.common.expired": "caducado",
+	"pages.rooms.members.tables.common.active": "activo",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} recibe las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1964,14 +2034,18 @@ export default {
 		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
-	"pages.rooms.members.inviteMember.firstStep.title":
+	"pages.rooms.members.inviteMember.step.prepare.title":
 		"Crear enlace de invitación",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",
-	"pages.rooms.members.inviteMember.secondStep.title":
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"El enlace de invitación editado se muestra en el siguiente paso.",
+	"pages.rooms.members.inviteMember.step.share.title":
 		"Compartir enlace de invitación",
+	"pages.rooms.members.inviteMember.step.edit.title":
+		"Editar enlace de invitación",
 	"pages.rooms.members.inviteMember.infoAlert.text":
-		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un guía de aprendizaje supervisor de su escuela a la sala.",
+		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
 	"pages.rooms.members.inviteMember.form.description.label":
 		"Descripción (opcional)",
 	"pages.rooms.members.inviteMember.form.description.hint":
@@ -1984,14 +2058,43 @@ export default {
 		"El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"La entrada a la habitación sólo es posible previa confirmación ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"¿Suprimir los enlaces de invitación seleccionados?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"¿Suprimir el enlace de invitación '{invitation}'?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Compartir enlace de invitación „{linkTitle}“",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Confirmar solicitud de afiliación",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Rechazar la solicitud de adhesión",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} ha sido añadido como miembro de la sala.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"La solicitud de {fullName} para unirse ha sido rechazada.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"Las personas seleccionadas han sido añadidas a la sala como miembros.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"Las solicitudes de adhesión de las personas seleccionadas han sido rechazadas.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Menú de acción para {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Confirmar la solicitud de membresía de {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Rechazar la solicitud de membresía de {fullName}",
+	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
+		"Menú de acción para el enlace de invitación „{linkTitle}“",
+	"pages.rooms.invitationlinks.error.create":
+		"No se ha podido crear el enlace de invitación.",
+	"pages.rooms.invitationlinks.error.update":
+		"Se ha producido un error al actualizar el enlace de invitación.",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
-	"pages.tasks.emptyStateOnFilter.title": "No hay tareas.",
 	"pages.tasks.finished.emptyState.title":
-		"Actualmente no tiene ninguna tarea terminada.",
+		"Actualmente no hay tareas completadas",
 	"pages.tasks.labels.due": "Entrega",
 	"pages.tasks.labels.filter": "Filtrar por curso",
 	"pages.tasks.labels.noCourse": "Sin asignación de curso",
@@ -2000,10 +2103,9 @@ export default {
 	"pages.tasks.labels.overdue": "Expirada",
 	"pages.tasks.labels.planned": "Planificada",
 	"pages.tasks.student.completed.emptyState.title":
-		"Actualmente no tiene ninguna tarea enviada.",
-	"pages.tasks.student.open.emptyState.subtitle":
-		"Has hecho todas tus tareas. ¡Disfruta de tu tiempo libre!",
-	"pages.tasks.student.open.emptyState.title": "No hay tareas abiertas.",
+		"Actualmente no hay tareas completadas",
+	"pages.tasks.student.open.emptyState.title":
+		"Actualmente no hay tareas abiertas",
 	"pages.tasks.student.openTasks": "Tareas abiertas",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
 	"pages.tasks.student.subtitleOverDue": "Tareas perdidas",
@@ -2012,11 +2114,9 @@ export default {
 	"pages.tasks.subtitleNotGraded": "Sin calificar",
 	"pages.tasks.subtitleOpen": "Tareas abiertas",
 	"pages.tasks.subtitleWithDue": "Con plazo",
-	"pages.tasks.teacher.drafts.emptyState.title": "No hay borradores.",
-	"pages.tasks.teacher.open.emptyState.subtitle":
-		"Has calificado todas las tareas. ¡Disfruta de tu tiempo libre!",
-	"pages.tasks.teacher.open.emptyState.title":
-		"No tienes ninguna tarea abierta.",
+	"pages.tasks.teacher.drafts.emptyState.title":
+		"Actualmente no hay borradores",
+	"pages.tasks.teacher.open.emptyState.title": "Actualmente no hay tareas",
 	"pages.tasks.teacher.subtitleOverDue": "Tareas expiradas",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"pages.tool.apiError.tool_param_duplicate":
@@ -2122,6 +2222,7 @@ export default {
 	"ui.actionMenu.actions": "Acciones",
 	"ui.actionMenu.select.none": "Deseleccionar todas las líneas",
 	"ui.dataTable.select.all": "Seleccionar todas las líneas",
+	"ui.rename.dialog.title": "Renombrar {entity}",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",
@@ -2153,7 +2254,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
 	"feature.media-shelf.title": "Estante multimedia",
 	"feature.media-shelf.emptyState":
-		"Actualmente no hay medios disponibles para su uso.",
+		"Actualmente no hay medios disponibles para su uso",
 	"feature.media-shelf.createLine": "Añadir línea",
 	"feature.media-shelf.line.title": "Línea",
 	"feature.media-shelf.availableLine.title": "Medios disponibles",
@@ -2169,11 +2270,12 @@ export default {
 	"pages.folder.ariaLabels.menu": "Menú carpeta",
 	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",
 	"pages.folder.ariaLabels.menu.action.delete": "Borrar carpeta",
-	"pages.folder.ariaLabels.menu.action.file.delete": "Eliminar archivo",
 	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
 	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
 	"pages.folder.delete-multiple-confirmation":
 		"¿Borrar realmente todos los archivos {total}?",
 	"pages.folder.delete-confirmation": "¿Borrar realmente el archivo {name}?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"El nombre del archivo ya existe.",
 };

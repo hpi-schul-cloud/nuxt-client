@@ -40,6 +40,7 @@ import { RoomBoardItem } from "@/types/room/Room";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import NotifierModule from "@/store/notifier";
+import { EmptyState } from "@ui-empty-state";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -91,7 +92,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			canLeaveRoom: ref(true),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
-			canDuplicateRoom: ref(false),
+			canSeeAllStudents: ref(false),
+			canCopyRoom: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
@@ -185,6 +187,15 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			expect(boardGrid.exists()).toBe(true);
 		});
 
+		it("should render empty state when no visible boards are found", () => {
+			const { wrapper } = setup({
+				roomBoards: [],
+			});
+			const emptyState = wrapper.findComponent(EmptyState);
+			expect(emptyState.exists()).toBe(true);
+			expect(emptyState.props("title")).toBe("pages.roomDetails.emptyState");
+		});
+
 		describe("and room is defined", () => {
 			it("should render breadcrumbs with room name", () => {
 				const { wrapper, room } = setup();
@@ -215,6 +226,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 		});
 
+		//TODO nur weil der User die Permission hat, soll doch nicht das menü gerendert werden?
 		describe("and user has permission to edit or delete room", () => {
 			it("should render kebab menu", () => {
 				roomPermissions.canEditRoomContent.value = true;
@@ -227,7 +239,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(menu.exists()).toBe(true);
 			});
 		});
-
+		//TODO widerspricht dem Test da drüber?
 		describe("and user does not have permission to edit, leave nor to delete room", () => {
 			it("should render kebab menu", () => {
 				roomPermissions.canEditRoomContent.value = false;
@@ -299,7 +311,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("when a user clicks on leave room", () => {
-			describe("when user has permission to leave room", () => {
+			describe("and user has permission to leave room", () => {
 				it("should call leaveRoom when dialog confirmed", async () => {
 					askConfirmationMock.mockResolvedValue(true);
 					const { wrapper, useRoomsStateMock } = setup();

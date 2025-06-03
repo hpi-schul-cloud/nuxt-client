@@ -1,16 +1,25 @@
 import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import CommonCartridgeImportModule from "./common-cartridge-import";
-import { CoursesApiInterface } from "@/serverApi/v3";
+import {
+	CommonCartridgeApiInterface,
+	CommonCartridgeApiFactory,
+} from "@/commonCartridgeApi/v3";
+
+jest.mock("@/commonCartridgeApi/v3/api", () => ({
+	CommonCartridgeApiFactory: jest.fn(),
+}));
 
 describe("CommonCartridgeImportModule", () => {
 	let sut: CommonCartridgeImportModule;
-	let coursesApiMock: DeepMocked<CoursesApiInterface>;
+	let commonCartridgeApiMock: DeepMocked<CommonCartridgeApiInterface>;
 
 	beforeAll(() => {
 		sut = new CommonCartridgeImportModule({});
-		coursesApiMock = createMock<CoursesApiInterface>();
+		commonCartridgeApiMock = createMock<CommonCartridgeApiInterface>();
 
-		jest.spyOn(sut, "coursesApi", "get").mockReturnValue(coursesApiMock);
+		jest
+			.spyOn(sut, "commonCartridgeApi", "get")
+			.mockReturnValue(commonCartridgeApiMock);
 	});
 
 	beforeEach(() => {
@@ -18,6 +27,11 @@ describe("CommonCartridgeImportModule", () => {
 	});
 
 	describe("getters", () => {
+		it("should return the mocked commonCartridgeApi instance", () => {
+			const result = sut.commonCartridgeApi;
+			expect(result).toBe(commonCartridgeApiMock);
+		});
+
 		it("file", () => {
 			expect(sut.file).toBeUndefined();
 		});
@@ -28,6 +42,28 @@ describe("CommonCartridgeImportModule", () => {
 
 		it("isSuccess", () => {
 			expect(sut.isSuccess).toBe(false);
+		});
+	});
+
+	describe("getters (real, for coverage)", () => {
+		it("should execute the real getter and call CommonCartridgeApiFactory", () => {
+			const realMock = createMock<CommonCartridgeApiInterface>();
+
+			(
+				CommonCartridgeApiFactory as jest.MockedFunction<
+					typeof CommonCartridgeApiFactory
+				>
+			).mockReturnValue(realMock);
+
+			const localSut = new CommonCartridgeImportModule({});
+			const result = localSut.commonCartridgeApi;
+
+			expect(result).toBe(realMock);
+			expect(CommonCartridgeApiFactory).toHaveBeenCalledWith(
+				undefined,
+				"/v3",
+				undefined
+			);
 		});
 	});
 
@@ -55,13 +91,13 @@ describe("CommonCartridgeImportModule", () => {
 
 	describe("actions", () => {
 		describe("importCommonCartridgeFile", () => {
-			it("should call courseControllerImportCourse with the given file", async () => {
+			it("should call commonCartridgeControllerImportCourse with the given file", async () => {
 				const file = new File([""], "file.txt", { type: "text/plain" });
 
 				await sut.importCommonCartridgeFile(file);
 
 				expect(
-					coursesApiMock.courseControllerImportCourse
+					commonCartridgeApiMock.commonCartridgeControllerImportCourse
 				).toHaveBeenCalledWith(file);
 			});
 
@@ -70,7 +106,7 @@ describe("CommonCartridgeImportModule", () => {
 
 				expect(sut.isSuccess).toBe(false);
 				expect(
-					coursesApiMock.courseControllerImportCourse
+					commonCartridgeApiMock.commonCartridgeControllerImportCourse
 				).not.toHaveBeenCalled();
 			});
 
@@ -85,7 +121,7 @@ describe("CommonCartridgeImportModule", () => {
 			it("should set isSuccess to false if the request fails", async () => {
 				const file = new File([""], "file.txt", { type: "text/plain" });
 
-				coursesApiMock.courseControllerImportCourse.mockRejectedValue(
+				commonCartridgeApiMock.commonCartridgeControllerImportCourse.mockRejectedValue(
 					new Error()
 				);
 

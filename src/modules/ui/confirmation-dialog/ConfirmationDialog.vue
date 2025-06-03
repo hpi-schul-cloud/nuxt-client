@@ -13,7 +13,7 @@
 				</template>
 
 				<template #actions>
-					<VSpacer />
+					<v-spacer />
 					<div class="action-buttons mx-4">
 						<VBtn
 							data-testid="dialog-cancel"
@@ -41,7 +41,6 @@ import { computed } from "vue";
 import { useInternalConfirmationDialog } from "./Confirmation.composable";
 import { useI18n } from "vue-i18n";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
-import { VSpacer } from "vuetify/lib/components/index.mjs";
 
 const { t } = useI18n();
 const { confirm, cancel, dialogOptions, isDialogOpen } =

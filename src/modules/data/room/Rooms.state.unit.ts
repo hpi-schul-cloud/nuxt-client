@@ -158,4 +158,26 @@ describe("useRoomsState", () => {
 			expect(isEmpty.value).toBe(false);
 		});
 	});
+
+	describe("copyRoom", () => {
+		it("should call copyRoom api", async () => {
+			const { copyRoom, isLoading } = useRoomsState();
+			expect(isLoading.value).toBe(true);
+
+			const newRoomId = await copyRoom("room-id");
+			expect(roomApiMock.roomControllerCopyRoom).toHaveBeenCalledWith(
+				"room-id"
+			);
+			expect(isLoading.value).toBe(false);
+		});
+
+		it("should throw an error when copying room fails", async () => {
+			const { copyRoom, isLoading } = useRoomsState();
+			expect(isLoading.value).toBe(true);
+			roomApiMock.roomControllerCopyRoom.mockRejectedValue({ code: 404 });
+
+			await expect(copyRoom("room-id")).rejects.toThrow();
+			expect(isLoading.value).toBe(false);
+		});
+	});
 });

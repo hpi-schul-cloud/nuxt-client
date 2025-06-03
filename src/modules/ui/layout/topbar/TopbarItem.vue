@@ -1,7 +1,7 @@
 <template>
 	<VMenu>
 		<template #activator="{ props }">
-			<VBtn
+			<v-btn
 				v-bind="props"
 				v-bind.attr="$attrs"
 				:icon="icon"
@@ -17,8 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { VBtn } from "vuetify/lib/components/index.mjs";
-
 defineOptions({
 	inheritAttrs: false,
 });

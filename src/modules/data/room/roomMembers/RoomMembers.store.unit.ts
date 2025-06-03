@@ -28,6 +28,7 @@ import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
+import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 
 jest.mock("vue-i18n");
@@ -102,11 +103,12 @@ describe("useRoomMembers", () => {
 
 	describe("fetchMembers", () => {
 		describe("when the user is not room owner", () => {
-			it("should fetch members and map members with role names", async () => {
+			it("should fetch teacher members and map members with role names", async () => {
 				const { roomMembersStore } = setup();
 
 				const membersMock = roomMemberFactory.buildList(3, {
 					roomRoleName: RoleName.Roomadmin,
+					schoolRoleNames: [RoleName.Teacher],
 				});
 
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
@@ -122,6 +124,32 @@ describe("useRoomMembers", () => {
 						...member,
 						displayRoomRole: "pages.rooms.members.roomPermissions.admin",
 						displaySchoolRole: "common.labels.teacher",
+						isSelectable: true,
+					}))
+				);
+			});
+
+			it("should fetch student members and map members with role names", async () => {
+				const { roomMembersStore } = setup();
+
+				const membersMock = roomMemberFactory.buildList(3, {
+					roomRoleName: RoleName.Roomviewer,
+					schoolRoleNames: [RoleName.Student],
+				});
+
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse({
+						data: { data: membersMock },
+					})
+				);
+
+				await roomMembersStore.fetchMembers();
+
+				expect(roomMembersStore.roomMembers).toEqual(
+					membersMock.map((member) => ({
+						...member,
+						displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
+						displaySchoolRole: "pages.rooms.members.add.role.student",
 						isSelectable: true,
 					}))
 				);
@@ -161,11 +189,8 @@ describe("useRoomMembers", () => {
 				const { roomMembersStore } = setup();
 				const membersMock = roomMemberFactory.buildList(1, {
 					roomRoleName: RoleName.Roomadmin,
+					schoolRoleNames: [RoleName.Administrator, RoleName.Teacher],
 				});
-				membersMock[0].schoolRoleNames = [
-					RoleName.Administrator,
-					RoleName.Teacher,
-				];
 
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
 					mockApiResponse({
@@ -201,7 +226,7 @@ describe("useRoomMembers", () => {
 	});
 
 	describe("getPotentialMembers", () => {
-		it("should get potential members", async () => {
+		it("should get potential teacher members", async () => {
 			const { roomMembersStore } = setup();
 
 			const schoolTeachersList: SchoolUserListResponse = {
@@ -235,8 +260,46 @@ describe("useRoomMembers", () => {
 					fullName: `${user.lastName}, ${user.firstName}`,
 					schoolRoleNames: [RoleName.Teacher],
 					schoolName: "Paul-Gerhardt-Gymnasium",
-					displayRoomRole: "pages.rooms.members.roomPermissions.admin",
 					displaySchoolRole: "common.labels.teacher",
+				}))
+			);
+		});
+
+		it("should get potential student members", async () => {
+			const { roomMembersStore } = setup();
+
+			const schoolStudentList: SchoolUserListResponse = {
+				data: [
+					{
+						firstName: "Marla",
+						lastName: "Mathe",
+						id: "1",
+						schoolName: "Paul-Gerhardt-Gymnasium",
+					},
+					{
+						firstName: "Waldemar",
+						lastName: "Wunderlich",
+						id: "2",
+						schoolName: "Paul-Gerhardt-Gymnasium",
+					},
+				],
+			};
+			schoolApiMock.schoolControllerGetStudents.mockResolvedValue(
+				mockApiResponse({
+					data: schoolStudentList,
+				})
+			);
+
+			await roomMembersStore.getPotentialMembers(RoleName.Student);
+
+			expect(roomMembersStore.potentialRoomMembers).toEqual(
+				schoolStudentList.data.map((user) => ({
+					...user,
+					userId: user.id,
+					fullName: `${user.lastName}, ${user.firstName}`,
+					schoolRoleNames: [RoleName.Student],
+					schoolName: "Paul-Gerhardt-Gymnasium",
+					displaySchoolRole: "pages.rooms.members.add.role.student",
 				}))
 			);
 		});
@@ -318,14 +381,17 @@ describe("useRoomMembers", () => {
 	});
 
 	describe("addMembers", () => {
-		it("should add members to the room", async () => {
+		it("should add teachers to the room", async () => {
 			const { roomMembersStore, roomDetailsStore } = setup();
 
 			roomApiMock.roomControllerAddMembers.mockResolvedValue(
 				mockApiResponse({ data: { roomRoleName: RoleName.Roomadmin } })
 			);
 
-			roomMembersStore.potentialRoomMembers = roomMemberFactory.buildList(3);
+			roomMembersStore.potentialRoomMembers = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomadmin,
+				schoolRoleNames: [RoleName.Teacher],
+			});
 			const firstPotentialMember = roomMembersStore.potentialRoomMembers[0];
 
 			await roomMembersStore.addMembers([firstPotentialMember.userId]);
@@ -341,6 +407,36 @@ describe("useRoomMembers", () => {
 					...firstPotentialMember,
 					displayRoomRole: "pages.rooms.members.roomPermissions.admin",
 					displaySchoolRole: "common.labels.teacher",
+				},
+			]);
+		});
+
+		it("should add students to the room", async () => {
+			const { roomMembersStore, roomDetailsStore } = setup();
+
+			roomApiMock.roomControllerAddMembers.mockResolvedValue(
+				mockApiResponse({ data: { roomRoleName: RoleName.Roomviewer } })
+			);
+
+			roomMembersStore.potentialRoomMembers = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomviewer,
+				schoolRoleNames: [RoleName.Student],
+			});
+			const firstPotentialMember = roomMembersStore.potentialRoomMembers[0];
+
+			await roomMembersStore.addMembers([firstPotentialMember.userId]);
+
+			expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(
+				roomDetailsStore.room!.id,
+				{
+					userIds: [firstPotentialMember.userId],
+				}
+			);
+			expect(roomMembersStore.roomMembers).toEqual([
+				{
+					...firstPotentialMember,
+					displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
+					displaySchoolRole: "pages.rooms.members.add.role.student",
 				},
 			]);
 		});
@@ -589,6 +685,232 @@ describe("useRoomMembers", () => {
 		});
 	});
 
+	describe("confirmInvitations", () => {
+		it("should call the 'updateMembersRole' method with 'Roomviewer' role", async () => {
+			const { roomMembersStore, roomDetailsStore } = setup();
+
+			const membersMock = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomapplicant,
+			});
+			roomMembersStore.roomMembers = membersMock;
+
+			await roomMembersStore.confirmInvitations([membersMock[0].userId]);
+
+			expect(
+				roomApiMock.roomControllerChangeRolesOfMembers
+			).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+				userIds: [membersMock[0].userId],
+				roleName: ChangeRoomRoleBodyParamsRoleNameEnum.Roomviewer,
+			});
+		});
+
+		it("should update the role of the member to 'Roomviewer'", async () => {
+			const { roomMembersStore } = setup();
+
+			const membersMock = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomapplicant,
+			});
+			roomMembersStore.roomMembers = membersMock;
+
+			expect(roomMembersStore.roomMembers[0].displayRoomRole).not.toBe(
+				"pages.rooms.members.roomPermissions.viewer"
+			);
+
+			await roomMembersStore.confirmInvitations([membersMock[0].userId]);
+
+			expect(roomMembersStore.roomMembers[0].roomRoleName).toBe(
+				RoleName.Roomviewer
+			);
+			expect(roomMembersStore.roomMembers[0].displayRoomRole).toBe(
+				"pages.rooms.members.roomPermissions.viewer"
+			);
+		});
+
+		it("should throw an error if the API call fails", async () => {
+			const { roomMembersStore } = setup();
+
+			const error = new Error("Test error");
+			roomApiMock.roomControllerChangeRolesOfMembers.mockRejectedValue(error);
+
+			await roomMembersStore.confirmInvitations(["id"]);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"pages.rooms.members.error.updateRole"
+			);
+		});
+	});
+
+	describe("rejectInvitations", () => {
+		it("should call the 'removeMembers' method", async () => {
+			const { roomMembersStore, roomDetailsStore } = setup();
+
+			const membersMock = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomapplicant,
+			});
+			roomMembersStore.roomMembers = membersMock;
+
+			await roomMembersStore.rejectInvitations([membersMock[0].userId]);
+
+			expect(roomApiMock.roomControllerRemoveMembers).toHaveBeenCalledWith(
+				roomDetailsStore.room!.id,
+				{
+					userIds: [membersMock[0].userId],
+				}
+			);
+		});
+
+		it("should remove the member from the room members", async () => {
+			const { roomMembersStore } = setup();
+
+			const membersMock = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomapplicant,
+			});
+			roomMembersStore.roomMembers = membersMock;
+
+			expect(roomMembersStore.roomMembers).toHaveLength(3);
+
+			await roomMembersStore.rejectInvitations([membersMock[0].userId]);
+
+			expect(roomMembersStore.roomMembers).toHaveLength(2);
+		});
+
+		it("should throw an error if the API call fails", async () => {
+			const { roomMembersStore } = setup();
+
+			const error = new Error("Test error");
+			roomApiMock.roomControllerRemoveMembers.mockRejectedValue(error);
+
+			await roomMembersStore.rejectInvitations(["id"]);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"pages.rooms.members.error.remove"
+			);
+		});
+	});
+
+	describe("showNotification", () => {
+		describe("when confirmation is successful", () => {
+			describe("with single action", () => {
+				it("should show a success notification", async () => {
+					const { roomMembersStore } = setup();
+
+					const membersMock = roomMemberFactory.buildList(3, {
+						roomRoleName: RoleName.Roomapplicant,
+					});
+					roomMembersStore.roomMembers = membersMock;
+
+					await roomMembersStore.confirmInvitations([membersMock[0].userId]);
+
+					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
+						"pages.rooms.members.confirmationTable.notification.confirm"
+					);
+				});
+			});
+			describe("with multiple actions", () => {
+				it("should show a success notification with the number of confirmed members", async () => {
+					const { roomMembersStore } = setup();
+
+					const membersMock = roomMemberFactory.buildList(3, {
+						roomRoleName: RoleName.Roomapplicant,
+					});
+					roomMembersStore.roomMembers = membersMock;
+
+					await roomMembersStore.confirmInvitations(
+						membersMock.map((member) => member.userId)
+					);
+
+					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
+						"pages.rooms.members.confirmationTable.notification.confirm.multiple"
+					);
+				});
+			});
+		});
+
+		describe("when rejection is successful", () => {
+			describe("with single action", () => {
+				it("should show a success notification", async () => {
+					const { roomMembersStore } = setup();
+
+					const membersMock = roomMemberFactory.buildList(3, {
+						roomRoleName: RoleName.Roomapplicant,
+					});
+					roomMembersStore.roomMembers = membersMock;
+
+					await roomMembersStore.rejectInvitations([membersMock[0].userId]);
+
+					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
+						"pages.rooms.members.confirmationTable.notification.reject"
+					);
+				});
+			});
+			describe("with multiple actions", () => {
+				it("should show a success notification with the number of rejected members", async () => {
+					const { roomMembersStore } = setup();
+
+					const membersMock = roomMemberFactory.buildList(3, {
+						roomRoleName: RoleName.Roomapplicant,
+					});
+					roomMembersStore.roomMembers = membersMock;
+
+					await roomMembersStore.rejectInvitations(
+						membersMock.map((member) => member.userId)
+					);
+
+					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
+						"pages.rooms.members.confirmationTable.notification.reject.multiple"
+					);
+				});
+			});
+		});
+	});
+
+	describe("resetStore", () => {
+		it("should reset the store", () => {
+			const { roomMembersStore } = setup();
+
+			const membersMock = roomMemberFactory.build({
+				roomRoleName: RoleName.Roomeditor,
+			});
+			roomMembersStore.roomMembers = [membersMock];
+			expect(roomMembersStore.roomMembers).toHaveLength(1);
+
+			roomMembersStore.resetStore();
+			expect(roomMembersStore.roomMembers).toHaveLength(0);
+			expect(roomMembersStore.potentialRoomMembers).toHaveLength(0);
+			expect(roomMembersStore.schools).toHaveLength(0);
+			expect(roomMembersStore.selectedIds).toHaveLength(0);
+			expect(roomMembersStore.isLoading).toBe(false);
+		});
+	});
+
+	describe("resetPotentialMembers", () => {
+		it("should reset the potential members", async () => {
+			const { roomMembersStore } = setup();
+
+			const schoolStudentList: SchoolUserListResponse = {
+				data: [
+					{
+						firstName: "Marla",
+						lastName: "Mathe",
+						id: "1",
+						schoolName: "Paul-Gerhardt-Gymnasium",
+					},
+				],
+			};
+			schoolApiMock.schoolControllerGetStudents.mockResolvedValue(
+				mockApiResponse({
+					data: schoolStudentList,
+				})
+			);
+
+			await roomMembersStore.getPotentialMembers(RoleName.Student);
+			expect(roomMembersStore.potentialRoomMembers).toHaveLength(1);
+
+			roomMembersStore.resetPotentialMembers();
+			expect(roomMembersStore.potentialRoomMembers).toHaveLength(0);
+		});
+	});
+
 	describe("isRoomOwner", () => {
 		describe("when the user is the room owner", () => {
 			it("should return true", () => {
@@ -644,6 +966,47 @@ describe("useRoomMembers", () => {
 
 				expect(member).toBeUndefined();
 			});
+		});
+	});
+
+	describe("getMemberFullName", () => {
+		it("should return the full name of the member", async () => {
+			const member = roomMemberFactory.build({
+				roomRoleName: RoleName.Roomadmin,
+			});
+			const { roomMembersStore } = setup([member]);
+
+			const result = roomMembersStore.getMemberFullName(member.userId);
+
+			expect(result).toBe(`${member.lastName}, ${member.firstName}`);
+		});
+	});
+
+	describe("roomMembers computed property", () => {
+		it("should split roomMembers into 'roomAplicants' and 'roomMembersWithoutApplicants' based on roomRoleName", async () => {
+			const { roomMembersStore } = setup();
+
+			const roomApplicants = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomapplicant,
+			});
+			const roomMembersWithoutApplicants = roomMemberFactory.buildList(2, {
+				roomRoleName: RoleName.Roomviewer,
+			});
+
+			roomMembersStore.roomMembers = [
+				...roomApplicants,
+				...roomMembersWithoutApplicants,
+			];
+
+			await nextTick();
+
+			expect(roomMembersStore.roomApplicants).toEqual(roomApplicants);
+			expect(roomMembersStore.roomApplicants.length).toEqual(3);
+			expect(roomMembersStore.roomMembersWithoutApplicants).toEqual(
+				roomMembersWithoutApplicants
+			);
+			expect(roomMembersStore.roomMembersWithoutApplicants.length).toEqual(2);
+			expect(roomMembersStore.roomMembers.length).toEqual(5);
 		});
 	});
 });

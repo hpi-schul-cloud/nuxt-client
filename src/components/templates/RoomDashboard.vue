@@ -154,14 +154,15 @@
 				/>
 			</div>
 		</div>
-		<v-custom-empty-state
+		<EmptyState
 			v-if="roomIsEmpty"
-			:image="emptyState.image"
-			:title="emptyState.title"
-			:img-height="emptyState.maxHeight"
 			data-testid="empty-state-item"
-			class="mt-16"
-		/>
+			:title="$t(`pages.room.learningContent.emptyState`)"
+		>
+			<template #media>
+				<LearningContentEmptyStateSvg />
+			</template>
+		</EmptyState>
 		<share-modal type="columnBoard" />
 		<share-modal type="lessons" />
 		<share-modal type="tasks" />
@@ -189,7 +190,6 @@
 
 <script>
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import {
@@ -203,6 +203,7 @@ import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import draggable from "vuedraggable";
+import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 
 export default {
 	components: {
@@ -211,8 +212,9 @@ export default {
 		RoomLessonCard,
 		vCustomDialog,
 		draggable,
-		vCustomEmptyState,
+		EmptyState,
 		ShareModal,
+		LearningContentEmptyStateSvg,
 	},
 	inject: {
 		shareModule: { from: SHARE_MODULE_KEY },
@@ -258,16 +260,6 @@ export default {
 			return this.isTouchDevice ? 200 : 20;
 		},
 		roomIsEmpty: () => courseRoomDetailsModule.roomIsEmpty,
-		emptyState() {
-			const image = "topics-empty-state";
-			const title = this.$t(`pages.room.${this.role}.emptyState`);
-			const maxHeight = "200px";
-			return {
-				image,
-				title,
-				maxHeight,
-			};
-		},
 		roomData() {
 			return { ...this.roomDataObject };
 		},

@@ -9,7 +9,8 @@ export default {
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
-	"common.actions.duplicate": "Дублювати",
+	"common.actions.download": "Завантажити",
+	"common.actions.copyRoom": "Дублювати",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
@@ -28,7 +29,15 @@ export default {
 	"common.actions.shareLink": "Копіювати посилання",
 	"common.actions.update": "Оновити",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
+	"common.ariaLabel.openImageInLightBox":
+		"Показати зображення в повному розмірі",
 	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
+	"common.file.awaitingScan":
+		"Попередній перегляд відображається після успішної перевірки на віруси. Наразі відбувається перевірка файлу.",
+	"common.file.scanError":
+		"Помилка під час перевірки на віруси. Неможливо створити попередній перегляд. Будь ласка, завантажте файл ще раз.",
+	"common.file.scanWontCheck": "Через розмір не може бути створено прев'ю.",
+	"common.file.virusDetected": "Файл було заблоковано через підозру на вірус.",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
@@ -51,6 +60,7 @@ export default {
 	"common.labels.expanded": "розгорнуто",
 	"common.labels.externalsource": "Джерело",
 	"common.labels.failure": "невдача",
+	"common.labels.name.new": "нова назва",
 	"common.labels.firstName.new": "Нове ім'я",
 	"common.labels.firstName": "Ім'я",
 	"common.labels.fullName": "Ім'я та Прізвище",
@@ -212,11 +222,6 @@ export default {
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
 	"common.words.export": "Завантажується експорт курсу",
-	"component.cardElement.fileElement.audioPlayer.pause": "пауза",
-	"component.cardElement.fileElement.audioPlayer.play": "грати",
-	"component.cardElement.fileElement.audioPlayer.slider": "повзунок",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "нормальний",
-	"component.cardElement.fileElement.audioPlayer.speed": "швидке меню",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -383,6 +388,49 @@ export default {
 		"Ви впевнені, що бажаєте вимкнути синхронізацію для {groupTypes}?",
 	"components.administration.provisioningOptions.warning.title":
 		"Вимкнути синхронізацію",
+	"components.administration.schoolYearChangeSection.headers":
+		"Зміна навчального року",
+	"components.administration.schoolYearChangeSection.info.part.one":
+		"За допомогою фази передачі, членство в класі та персональні дані в LDAP можна скорегувати в мирі. Нарешті, всі зміни можна перенести на {instance}",
+	"components.administration.schoolYearChangeSection.info.part.two":
+		" (Більше інформації про {0})",
+	"components.administration.schoolYearChangeSection.info.link": "Довідка",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"Недостатньо шкільних років було знайдено. Будь ласка, зв'яжіться з підтримкою!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"Школа вже в наступному навчальному році",
+	"components.administration.schoolYearChangeSection.notification.finish.success":
+		"Навчальний рік успішно розпочався",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"Фаза передачі розпочалася успішно",
+	"components.administration.schoolYearChangeSection.title.step.one":
+		"Наприкінці навчального року",
+	"components.administration.schoolYearChangeSection.description.step.one":
+		"Фазу передачі можна розпочати вручну за два тижні до початку свята. Якщо до початку свята немає посібника, фаза передачі починається автоматично. Початок фази передачі не можна скасувати.",
+	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
+		"Почніть фазу передачі",
+	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
+		"Почалася фаза передачі",
+	"components.administration.schoolYearChangeSection.title.step.two":
+		"Близько літніх канікул",
+	"components.administration.schoolYearChangeSection.description.step.two":
+		"Під час фази передачі всі класи та персональні дані можуть бути оновлені в мирі. Вхід та зміни паролів все ще можливі для всіх існуючих користувачів. Нові курси можуть бути створені під час фази передачі, але без призначення занять.",
+	"components.administration.schoolYearChangeSection.info.step.two":
+		"Під час фази передачі не синхронізовані нові користувачі, класи або зміни до існуючих даних з LDAP.",
+	"components.administration.schoolYearChangeSection.step.two.button":
+		"Перевірте дані LDAP",
+	"components.administration.schoolYearChangeSection.title.step.three":
+		"Новий навчальний рік",
+	"components.administration.schoolYearChangeSection.description.step.three":
+		"Aquí la transferencia de los datos se puede iniciar al {instance}. Esto acelera en el nuevo año escolar.",
+	"components.administration.schoolYearChangeSection.step.three.button":
+		"Кінцева фаза передачі",
+	"components.administration.schoolYearChangeSection.checkbox.step.three":
+		"Класні та персональні дані (LDAP) були оновлені та перевірені",
+	"components.administration.schoolYearChangeSection.dialog.title":
+		"Дійсно закінчити навчальний рік?",
+	"components.administration.schoolYearChangeSection.dialog.content":
+		"Синхронізація головних даних LDAP переривається під час фази передачі. Це означає, що дані та класи користувачів (якщо використовуються) більше не оновлюються через LDAP. Вхід із вже синхронізованими даними входу все ще можливий. Зміни пароля в LDAP під час входу також враховуються.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "в",
 	"components.atoms.VCustomChipTimeRemaining.hintHours":
 		"година | години (годин)",
@@ -390,6 +438,11 @@ export default {
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "хв",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes":
 		"хвилина | хвилини (хвилин)",
+	"components.audioPlayer.pause": "пауза",
+	"components.audioPlayer.play": "грати",
+	"components.audioPlayer.slider": "повзунок",
+	"components.audioPlayer.speed": "швидке меню",
+	"components.audioPlayer.speed.normal": "нормальний",
 	"components.base.BaseIcon.error":
 		"помилка завантаження значка {icon} з {source}. Можливо, він недоступний або ви використовуєте застарілий браузер Edge.",
 	"components.base.showPassword": "Показати пароль",
@@ -494,8 +547,6 @@ export default {
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
 	"components.cardElement.fileElement.audioFormatError":
 		"Формат аудіо не підтримується цим браузером / операційною системою.",
-	"components.cardElement.fileElement.awaitingScan":
-		"Попередній перегляд відображається після успішної перевірки на віруси. Наразі відбувається перевірка файлу.",
 	"components.cardElement.fileElement.caption": "опис",
 	"components.cardElement.fileElement.emptyAlt":
 		"Ось зображення з такою назвою",
@@ -504,14 +555,8 @@ export default {
 	"components.cardElement.fileElement.previewError":
 		"Не вдалося завантажити попередній перегляд.",
 	"components.cardElement.fileElement.reloadStatus": "Статус оновлення",
-	"components.cardElement.fileElement.scanError":
-		"Помилка під час перевірки на віруси. Неможливо створити попередній перегляд. Будь ласка, завантажте файл ще раз.",
-	"components.cardElement.fileElement.scanWontCheck":
-		"Через розмір не може бути створено прев'ю.",
 	"components.cardElement.fileElement.videoFormatError":
 		"Формат відео не підтримується цим браузером / операційною системою.",
-	"components.cardElement.fileElement.virusDetected":
-		"Файл було заблоковано через підозру на вірус.",
 	"components.cardElement.folderElement": "Папка з файлами",
 	"components.cardElement.folderElement.untitled": "Папка без назви",
 	"components.cardElement.LinkElement": "Посилання",
@@ -538,6 +583,9 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
 	"components.cardElement.h5pElement": "Інтерактивний елемент навчання",
+	"components.cardElement.h5pElement.create": "Створіть елемент навчання...",
+	"components.cardElement.h5pElement.title.error.load":
+		"Не вдалося завантажити назву інтерактивного навчального елемента.",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
 	"components.datePicker.validation.required": "Будь ласка, введіть дату.",
 	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
@@ -911,10 +959,9 @@ export default {
 		"Дата початку повинна передувати даті закінчення.",
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
-	"data-room.duplication.alert.success": "Кімнату успішно дубльовано.",
-	"data-room.duplication.alert.error":
-		"Не вдалося завершити процес копіювання.",
-	"data-room.duplication.loading": "Кімната дублюється...",
+	"data-room.copy.alert.success": "Кімнату успішно дубльовано.",
+	"data-room.copy.alert.error": "Не вдалося завершити процес копіювання.",
+	"data-room.copy.loading": "Кімната дублюється...",
 	"error.400": "400 – Неприпустимий запит",
 	"error.401": "401 – На жаль, у вас немає дозволу на перегляд цього контенту.",
 	"error.403": "403 – На жаль, у вас немає дозволу на перегляд цього контенту.",
@@ -972,18 +1019,16 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Групу користувачів успішно синхронізовано",
 	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
-	"feature-room.DuplicationInfoDialog.title": "Дублювати кімнату",
-	"feature-room.DuplicationInfoDialog.text.nextStep":
+	"feature-room.CopyInfoDialog.title": "Дублювати кімнату",
+	"feature-room.CopyInfoDialog.text.nextStep":
 		"На наступному кроці буде створено копію кімнати.",
-	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+	"feature-room.CopyInfoDialog.text.alert.followingContent":
 		"Наступний вміст не буде скопійовано:",
-	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Учасники кімнати та їхні дозволи",
-	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
-		"Вміст із Etherpads",
-	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
-		"Вміст із Whiteboards",
-	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Вміст із Etherpads",
+	"feature-room.CopyInfoDialog.text.alert.whiteboard": "Вміст із Whiteboards",
+	"feature-room.CopyInfoDialog.text.alert.protectedSettings":
 		"Захищені налаштування зовнішніх інструментів",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
@@ -1653,7 +1698,6 @@ export default {
 		"Спробуйте використати коротший запит.",
 	"pages.content.emptyState.error.title": "Отакої, результатів немає!",
 	"pages.content.index.backToCourse": "Назад до курсу",
-	"pages.content.index.backToBoard": "Назад до дошки ",
 	"pages.content.index.backToOverview": "Назад до огляду",
 	"pages.content.index.search_for": "Пошук...",
 	"pages.content.index.search_resources": "Ресурси",
@@ -1755,8 +1799,6 @@ export default {
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
-	"pages.room.student.emptyState":
-		"Тут з’являється навчальний вміст, наприклад теми чи завдання.",
 	"pages.room.taskCard.label.done": "Завершити",
 	"pages.room.taskCard.label.due": "Термін",
 	"pages.room.taskCard.label.edit": "Редагувати",
@@ -1769,11 +1811,10 @@ export default {
 	"pages.room.taskCard.student.label.submitted": "Завершено",
 	"pages.room.taskCard.teacher.label.overdue": "Термін дії минув",
 	"pages.room.taskCard.teacher.label.submitted": "Надіслано",
-	"pages.room.teacher.emptyState":
-		"Додавайте та сортуйте навчальний контент до курсу.",
+	"pages.room.learningContent.emptyState":
+		"Наразі в цьому курсі немає навчальних матеріалів",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
-	"pages.rooms.allRooms.emptyState.title": "Наразі тут курсів немає.",
-	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
+	"pages.rooms.emptyState.title": "Наразі курсів немає",
 	"pages.rooms.fab.add.course": "Новий курс",
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
@@ -1794,6 +1835,8 @@ export default {
 		"Посилання на запрошення, на жаль, дійсне лише для вчителів",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Посилання на запрошення, на жаль, дійсне лише для користувачів школи «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.confirmationPending":
+		"Заявка на приєднання до кімнати успішно подана - очікується підтвердження",
 	"pages.rooms.invitationLinkStatus.title": "Посилання на запрошення",
 	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
 	"pages.rooms.menuItems.startSync": "Почніть синхронізацію",
@@ -1828,7 +1871,7 @@ export default {
 	"pages.rooms.tools.deleteDialog.content":
 		"Ви впевнені, що хочете видалити інструмент '{itemName}' із курсу?",
 	"pages.rooms.tools.deleteDialog.title": "видалити інструменти?",
-	"pages.rooms.tools.emptyState": "У цьому курсі ще немає інструментів.",
+	"pages.rooms.tools.emptyState": "Наразі в цьому курсі немає інструментів",
 	"pages.rooms.tools.incomplete": "Конфігурація не завершена",
 	"pages.rooms.tools.incompleteDialog.title": "Конфігурація не завершена",
 	"pages.rooms.tools.logo": "Інструмент-логотип",
@@ -1850,17 +1893,19 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
-	"pages.rooms.emptyState": "Зараз тут немає кімнат",
+	"pages.roomDetails.emptyState":
+		"Наразі в цьому просторі немає навчальних матеріалів",
+	"pages.rooms.emptyState": "Наразі немає вільних кімнат",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.infoAlert.welcome": "Ласкаво просимо до нових Кімнат!",
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"У майбутньому кімнати об'єднають функції курсів і команд, щоб запропонувати більше можливостей для міжшкільної співпраці.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Команди та курси залишатимуться, доки вміст не буде перенесено до кімнат.",
-	"pages.rooms.infoAlert.welcome.visibility":
-		"Кімнати наразі видимі лише для вчителів і будуть далі розвиватися. Додаткову інформацію можна знайти на нашій {helpLink}. Ми будемо вдячні за ваші {feedbackLink} щодо поточного стану.",
-	"pages.rooms.infoAlert.welcome.visibility.help": "Сторінка допомоги",
-	"pages.rooms.infoAlert.welcome.visibility.feedback": "відгуки",
+		"Кімнати будуть розширюватися і надалі. Команди та курси залишатимуться на місці, доки контент не буде перенесено до кімнат.",
+	"pages.rooms.infoAlert.welcome.furtherInformation":
+		"Додаткову інформацію можна знайти на нашій {helpLink}. Ми будемо вдячні за ваші {feedbackLink} щодо поточного стану.",
+	"pages.rooms.infoAlert.welcome.furtherInformation.help": "Сторінка допомоги",
+	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "відгуки",
 	"pages.rooms.leaveRoom.confirmation": 'Дійсно залишити місце "{roomName}"?',
 	"pages.rooms.leaveRoom.RoomOwner.warning":
 		"Перш ніж залишити кімнату, дозвіл на володіння кімнатою має бути передано іншому учаснику кімнати. Це можна зробити в управлінні учасниками кімнати.",
@@ -1874,9 +1919,15 @@ export default {
 		"Додайте члени до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасників",
+	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} меню",
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
+	"pages.rooms.members.add.role.student": "Учень",
+	"pages.rooms.members.add.students.forbidden":
+		"Якщо в налаштуваннях школи вимкнено видимість учнів для вчителів, ви можете додавати лише учнів з вашого класу. Зверніться до адміністратора школи.",
+	"pages.rooms.members.add.warningText":
+		"Учнів з інших шкіл може додати до кімнати лише відповідальний(а) вчитель(ка) з їхнього навчального закладу.",
 	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberFullName}",
 	"pages.rooms.members.actionMenu.selectedMembers":
 		"Меню дій для {count} вибраних учасників",
@@ -1912,6 +1963,18 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.members.tableHeader.actions": "Дії",
+	"pages.rooms.members.tableHeader.description": "Опис",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"Діє тільки в межах школи",
+	"pages.rooms.members.tableHeader.validForStudents": "Діє також для студентів",
+	"pages.rooms.members.tableHeader.expirationDate": "Термін дії",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Потрібне підтвердження",
+	"pages.rooms.members.tableHeader.status": "Статус",
+	"pages.rooms.members.tables.common.yes": "Так",
+	"pages.rooms.members.tables.common.no": "ні",
+	"pages.rooms.members.tables.common.expired": "прострочений",
+	"pages.rooms.members.tables.common.active": "активний",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} надаються наступні повноваження в приміщенні “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1937,14 +2000,18 @@ export default {
 		"Якщо цей дозвіл буде передано {memberFullName}, {currentUserFullName} втратить право видаляти кімнату.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Ця дія може бути скасована лише {memberFullName}.",
-	"pages.rooms.members.inviteMember.firstStep.title":
+	"pages.rooms.members.inviteMember.step.prepare.title":
 		"Створити посилання для запрошення",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Наступним кроком буде створення посилання, за яким можна буде увійти в кімнату.",
-	"pages.rooms.members.inviteMember.secondStep.title":
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"Відредаговане посилання запрошення буде відображено на наступному кроці.",
+	"pages.rooms.members.inviteMember.step.share.title":
 		"Поділіться посиланням на запрошення",
+	"pages.rooms.members.inviteMember.step.edit.title":
+		"Редагувати посилання на запрошення",
 	"pages.rooms.members.inviteMember.infoAlert.text":
-		"Учні з інших шкіл повинні завжди супроводжуватися в кімнату супроводжуючим з їхньої школи до кімнати.",
+		"Учні з інших шкіл завжди повинні бути присутніми в кімнаті під наглядом вчителя з їхньої школи.",
 	"pages.rooms.members.inviteMember.form.description.label":
 		"Опис (необов'язково)",
 	"pages.rooms.members.inviteMember.form.description.hint":
@@ -1957,14 +2024,43 @@ export default {
 		"Термін дії посилання закінчується",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Вхід до кімнати можливий тільки після підтвердження ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Видалити вибрані посилання на запрошення?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"Видалити посилання на запрошення '{invitation}'?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Поділіться посиланням на запрошення „{linkTitle}“",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Підтвердити заявку на участь",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Відхилити запит на реєстрацію",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} був доданий як член кімнати.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"Запит {fullName} на приєднання було відхилено.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"Вибрані особи були додані до кімнати як учасники.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"Вибрані особи були додані до кімнати як учасники.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Меню дій для {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Підтвердити запит на членство для {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Відхилити запит на членство для {fullName}",
+	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
+		"Меню дій для посилання-запрошення „{linkTitle}“",
+	"pages.rooms.invitationlinks.error.create":
+		"Не вдалося створити посилання на запрошення.",
+	"pages.rooms.invitationlinks.error.update":
+		"Не вдалося оновити посилання на запрошення.",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",
 	"pages.taskCard.deleteElement.title": "Видалити елемент",
-	"pages.tasks.emptyStateOnFilter.title": "Немає завдань",
 	"pages.tasks.finished.emptyState.title":
-		"Наразі у вас немає завершених завдань.",
+		"Наразі немає жодного виконаного завдання",
 	"pages.tasks.labels.due": "Термін",
 	"pages.tasks.labels.filter": "Фільтрувати за курсом",
 	"pages.tasks.labels.noCourse": "Курс не призначено",
@@ -1972,10 +2068,8 @@ export default {
 	"pages.tasks.labels.overdue": "Пропущені",
 	"pages.tasks.labels.planned": "Заплановано",
 	"pages.tasks.student.completed.emptyState.title":
-		"Наразі у вас немає виконаних завдань.",
-	"pages.tasks.student.open.emptyState.subtitle":
-		"Ви виконали всі завдання. Насолоджуйтеся вільним часом!",
-	"pages.tasks.student.open.emptyState.title": "Відкритих завдань немає.",
+		"Наразі немає жодного виконаного завдання",
+	"pages.tasks.student.open.emptyState.title": "Наразі немає відкритих завдань",
 	"pages.tasks.student.openTasks": "Відкриті завдання",
 	"pages.tasks.student.submittedTasks": "Виконані завдання",
 	"pages.tasks.student.subtitleOverDue": "Пропущені завдання",
@@ -1984,10 +2078,8 @@ export default {
 	"pages.tasks.subtitleNotGraded": "Не оцінено",
 	"pages.tasks.subtitleOpen": "Відкриті завдання",
 	"pages.tasks.subtitleWithDue": "З терміном виконання",
-	"pages.tasks.teacher.drafts.emptyState.title": "Немає чернеток.",
-	"pages.tasks.teacher.open.emptyState.subtitle":
-		"Ви виконали всі завдання. Насолоджуйтеся вільним часом!",
-	"pages.tasks.teacher.open.emptyState.title": "Поточних завдань немає.",
+	"pages.tasks.teacher.drafts.emptyState.title": "Наразі немає чернеток",
+	"pages.tasks.teacher.open.emptyState.title": "Наразі завдань немає",
 	"pages.tasks.teacher.subtitleOverDue": "Завдання, термін дії яких минув",
 	"pages.termsofuse.title": "Умови використання та політика конфіденційності",
 	"pages.tool.apiError.tool_param_duplicate":
@@ -2089,6 +2181,7 @@ export default {
 	"ui.actionMenu.actions": "Дії",
 	"ui.actionMenu.select.none": "Зніміть виділення з усіх рядків",
 	"ui.dataTable.select.all": "Виділити всі рядки",
+	"ui.rename.dialog.title": "Перейменувати {entity}",
 	"util-validators-invalid-url": "Ця URL-адреса є недійсною.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",
@@ -2117,13 +2210,13 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
 	"feature.media-shelf.title": "Полиця для медіа",
 	"feature.media-shelf.emptyState":
-		"Наразі немає медіафайлів, доступних для використання.",
+		"Наразі немає медіафайлів, доступних для використання",
 	"feature.media-shelf.createLine": "Додайте лінію",
 	"feature.media-shelf.line.title": "лінія",
 	"feature.media-shelf.availableLine.title": "Доступні медіа",
 	"feature.media-shelf.layout.list": "лінії",
 	"feature.media-shelf.layout.grid": "сітка",
-	"pages.folder.emptyState": "Наразі тут немає файлів.",
+	"pages.folder.emptyState": "Наразі тут немає файлів",
 	"pages.folder.fab.title": "Додати файл",
 	"pages.folder.untitled": "Папка без назви",
 	"pages.folder.title": "Папка",
@@ -2133,11 +2226,12 @@ export default {
 	"pages.folder.ariaLabels.menu": "Меню Папки",
 	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",
 	"pages.folder.ariaLabels.menu.action.delete": "Видалити папку",
-	"pages.folder.ariaLabels.menu.action.file.delete": "Видалити файл",
 	"pages.folder.ariaLabels.filter": "	Таблиця пошуку/фільтрації",
 	"pages.folder.ariaLabels.actionMenu": "Меню дій для {name}",
 	"pages.folder.uploadstats": "{uploaded} з {total} завантажених файлів",
 	"pages.folder.delete-multiple-confirmation":
 		"Дійсно видалити всі {total} файли?",
 	"pages.folder.delete-confirmation": "Дійсно видалити файл {name}?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"Ім'я файлу вже існує.",
 };

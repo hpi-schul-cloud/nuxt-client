@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { IconProps } from "vuetify/lib/framework.mjs";
+import { IconProps } from "vuetify";
 
 export default defineComponent({
 	name: "BaseAlert",

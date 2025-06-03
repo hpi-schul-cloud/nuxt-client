@@ -295,15 +295,52 @@ describe("roomAuthorization", () => {
 		});
 	});
 
-	describe("canDuplicateRoom", () => {
+	describe("canSeeAllStudents", () => {
+		describe("when the user has student list permission", () => {
+			const setup = () => {
+				return genericSetup({ userPermissions: [Permission.StudentList] });
+			};
+
+			it("should be allowed to add every student of the school as room members", () => {
+				const { canSeeAllStudents } = setup();
+				expect(canSeeAllStudents.value).toBe(true);
+			});
+		});
+
+		describe("when the user does not have student list permission", () => {
+			const setup = () => {
+				return genericSetup({ userPermissions: [] });
+			};
+
+			it("should not be allowed to add every student of the school as room members", () => {
+				const { canSeeAllStudents } = setup();
+				expect(canSeeAllStudents.value).toBe(false);
+			});
+		});
+
+		describe("when the user has permission to add room members but not student list permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomMembersAdd],
+				});
+			};
+
+			it("should not be allowed to add every student of the school as room members", () => {
+				const { canSeeAllStudents } = setup();
+				expect(canSeeAllStudents.value).toBe(false);
+			});
+		});
+	});
+
+	describe("canCopyRoom", () => {
 		describe("when the user has room duplicate permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [] });
+				return genericSetup({ roomPermissions: [Permission.RoomCopy] });
 			};
 
 			it("should be allowed to duplicate the room", () => {
-				const { canDuplicateRoom } = setup();
-				expect(canDuplicateRoom.value).toBe(true);
+				const { canCopyRoom } = setup();
+				expect(canCopyRoom.value).toBe(true);
 			});
 		});
 

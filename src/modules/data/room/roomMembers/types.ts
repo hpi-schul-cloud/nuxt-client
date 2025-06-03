@@ -14,6 +14,16 @@ export type RoomMember = RoomMemberResponse & {
 
 export type RoomInvitationLink = RoomInvitationLinkResponse;
 
+export type RoomInvitationFormData = {
+	activeUntil: string;
+	activeUntilChecked: boolean;
+	isValidForStudents: boolean;
+	requiresConfirmation: boolean;
+	restrictedToCreatorSchool: boolean;
+	title: string;
+	id: string;
+};
+
 export type CreateRoomInvitationLinkDto = Omit<
 	CreateRoomInvitationLinkBodyParams,
 	"roomId"
@@ -28,5 +38,11 @@ export type UseLinkResult = {
 	validationMessage: string;
 	schoolName: string;
 };
+
+export enum InvitationStep {
+	PREPARE = "prepare",
+	SHARE = "share",
+	EDIT = "edit",
+}
 
 export { RoomInvitationLinkValidationError } from "@/serverApi/v3";

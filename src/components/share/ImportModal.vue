@@ -131,7 +131,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const nameInput = ref(undefined);
+const nameInput = ref<string | undefined>(undefined);
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const rules = reactive({

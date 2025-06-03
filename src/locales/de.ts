@@ -9,7 +9,8 @@ export default {
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
-	"common.actions.duplicate": "Duplizieren",
+	"common.actions.download": "Herunterladen",
+	"common.actions.copyRoom": "Duplizieren",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
 	"common.actions.import": "Importieren",
@@ -28,7 +29,16 @@ export default {
 	"common.actions.shareLink": "Link kopieren",
 	"common.actions.update": "Aktualisieren",
 	"common.ariaLabel.newTab": "öffnet in einem neuen Tab",
+	"common.ariaLabel.openImageInLightBox": "Bild in voller Größe anzeigen",
 	"common.ariaLabel.sameTab": "öffnet im selben Tab",
+	"common.file.awaitingScan":
+		"Vorschau wird nach erfolgreicher Virenprüfung angezeigt. Aktuell wird die Datei gescannt.",
+	"common.file.scanWontCheck":
+		"Aufgrund der Größe kann keine Vorschau generiert werden.",
+	"common.file.scanError":
+		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
+	"common.file.virusDetected":
+		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
@@ -51,6 +61,7 @@ export default {
 	"common.labels.expanded": "geöffnet",
 	"common.labels.externalsource": "Quelle",
 	"common.labels.failure": "fehler",
+	"common.labels.name.new": "Neuer Name",
 	"common.labels.firstName.new": "Neuer Vorname",
 	"common.labels.firstName": "Vorname",
 	"common.labels.fullName": "Vorname & Nachname",
@@ -209,12 +220,6 @@ export default {
 	"common.words.topic": "Thema",
 	"common.words.topics": "Themen",
 	"common.words.yes": "Ja",
-	"component.cardElement.fileElement.audioPlayer.pause": "Anhalten",
-	"component.cardElement.fileElement.audioPlayer.play": "Abspielen",
-	"component.cardElement.fileElement.audioPlayer.slider":
-		"Audio Schieberegler für Fortschritt",
-	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
-	"component.cardElement.fileElement.audioPlayer.speed": "Geschwindigkeitsmenü",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -378,11 +383,59 @@ export default {
 		"Sind Sie sich sicher, dass die Synchronisation für {groupTypes} deaktivieren möchten?",
 	"components.administration.provisioningOptions.warning.title":
 		"Synchronisation deaktivieren",
+	"components.administration.schoolYearChangeSection.headers":
+		"Schuljahreswechsel",
+	"components.administration.schoolYearChangeSection.info.part.one":
+		"Mit Hilfe der Transferphase können Klassenzugehörigkeit und Personendaten im LDAP in Ruhe angepasst werden. Abschließend können alle Änderungen mit einem Mal in die {instance} übertragen werden.",
+	"components.administration.schoolYearChangeSection.info.part.two":
+		" (mehr Infos auf der {0})",
+	"components.administration.schoolYearChangeSection.info.link": "Hilfeseite",
+	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
+		"Es wurden nicht genug Schuljahre gefunden. Bitte an den Support wenden!",
+	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
+		"Die Schule befindet sich bereits im nächsten Schuljahr",
+	"components.administration.schoolYearChangeSection.notification.finish.success":
+		"Schuljahr erfolgreich gestartet",
+	"components.administration.schoolYearChangeSection.notification.start.success":
+		"Transferphase erfolgreich gestartet",
+	"components.administration.schoolYearChangeSection.title.step.one":
+		"Ende des Schuljahres",
+	"components.administration.schoolYearChangeSection.description.step.one":
+		"Die Transferphase kann zwei Wochen vor Ferienbeginn manuell gestartet werden. Ist bis zum Ferienbeginn kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
+	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
+		"Transferphase starten",
+	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
+		"Transferphase gestartet",
+	"components.administration.schoolYearChangeSection.title.step.two":
+		"Rund um die Sommerferien",
+	"components.administration.schoolYearChangeSection.description.step.two":
+		"Während der Transferphase können alle Klassen- und Personendaten in Ruhe aktualisiert werden. Login und Kennwortänderungen sind für alle bestehenden Nutzenden weiterhin möglich. Während der Transferphase können neue Kurse erstellt werden, allerdings ohne die Zuordnung von Klassen. ",
+	"components.administration.schoolYearChangeSection.info.step.two":
+		"Während der Transferphase werden keine neuen Nutzenden, Klassen oder Änderungen an bestehenden Daten aus dem LDAP synchronisiert.",
+	"components.administration.schoolYearChangeSection.step.two.button":
+		"LDAP-Daten überprüfen",
+	"components.administration.schoolYearChangeSection.title.step.three":
+		"Neues Schuljahr",
+	"components.administration.schoolYearChangeSection.description.step.three":
+		"Hier kann die Übertragung der Daten in die {instance} gestartet werden. Damit wird das neue Schuljahr eingeläutet.",
+	"components.administration.schoolYearChangeSection.step.three.button":
+		"Transferphase beenden",
+	"components.administration.schoolYearChangeSection.checkbox.step.three":
+		"Klassen- und Personendaten (LDAP) wurden aktualisiert und überprüft",
+	"components.administration.schoolYearChangeSection.dialog.title":
+		"Das Schuljahr wirklich beenden?",
+	"components.administration.schoolYearChangeSection.dialog.content":
+		"Die Synchronisierung von LDAP-Stammdaten wird während der Transferphase unterbrochen. Somit werden Nutzerdaten und Klassen (sofern verwendet) nicht mehr über LDAP aktualisiert. Der Login mit bereits synchronisierten Login-Daten ist weiterhin möglich. Passwortänderungen im LDAP während des Logins werden ebenfalls berücksichtigt.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "Stunde | Stunden",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "Minute | Minuten",
+	"components.audioPlayer.pause": "Anhalten",
+	"components.audioPlayer.play": "Abspielen",
+	"components.audioPlayer.slider": "Audio Schieberegler für Fortschritt",
+	"components.audioPlayer.speed": "Geschwindigkeitsmenü",
+	"components.audioPlayer.speed.normal": "Normal",
 	"components.base.BaseIcon.error":
 		"Das Icon aus dieser Quelle konnte leider nicht geladen werden. Falls Sie Microsoft Edge verwenden, stellen Sie bitte sicher, dass Sie die neuste Version verwenden.",
 	"components.base.showPassword": "Passwort anzeigen",
@@ -485,8 +538,6 @@ export default {
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
 	"components.cardElement.fileElement.audioFormatError":
 		"Das Audioformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
-	"components.cardElement.fileElement.awaitingScan":
-		"Vorschau wird nach erfolgreicher Virenprüfung angezeigt. Aktuell wird die Datei gescannt.",
 	"components.cardElement.fileElement.caption": "Beschreibung",
 	"components.cardElement.fileElement.emptyAlt":
 		"Hier ist ein Bild mit folgendem Namen",
@@ -494,14 +545,8 @@ export default {
 	"components.cardElement.fileElement.previewError":
 		"Laden der Vorschau fehlgeschlagen.",
 	"components.cardElement.fileElement.reloadStatus": "Status aktualisieren",
-	"components.cardElement.fileElement.scanError":
-		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
-	"components.cardElement.fileElement.scanWontCheck":
-		"Aufgrund der Größe kann keine Vorschau generiert werden.",
 	"components.cardElement.fileElement.videoFormatError":
 		"Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
-	"components.cardElement.fileElement.virusDetected":
-		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
 	"components.cardElement.folderElement": "Dateiordner",
 	"components.cardElement.folderElement.untitled": "Unbenannter Ordner",
 	"components.cardElement.LinkElement": "Link",
@@ -528,6 +573,9 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
 	"components.cardElement.h5pElement": "Interaktives Lernelement",
+	"components.cardElement.h5pElement.create": "Lernelement erstellen...",
+	"components.cardElement.h5pElement.title.error.load":
+		"Der Titel eines interaktiven Lernelements konnte nicht geladen werden.",
 	"components.datePicker.validation.format":
 		"Bitte Format DD.MM.YYYY verwenden.",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
@@ -895,10 +943,10 @@ export default {
 		"Das Startdatum muss vor dem Enddatum liegen.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
-	"data-room.duplication.alert.success": "Raum erfolgreich dupliziert.",
-	"data-room.duplication.alert.error":
+	"data-room.copy.alert.success": "Raum erfolgreich dupliziert.",
+	"data-room.copy.alert.error":
 		"Der Dupliziervorgang konnte nicht abgeschlossen werden.",
-	"data-room.duplication.loading": "Raum wird dupliziert...",
+	"data-room.copy.loading": "Raum wird dupliziert...",
 	"error.400": "400 – Fehlerhafte Anfrage",
 	"error.401": "401 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
 	"error.403": "403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
@@ -954,18 +1002,17 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Nutzendengruppe erfolgreich synchronisiert",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
-	"feature-room.DuplicationInfoDialog.title": "Raum duplizieren",
-	"feature-room.DuplicationInfoDialog.text.nextStep":
+	"feature-room.CopyInfoDialog.title": "Raum duplizieren",
+	"feature-room.CopyInfoDialog.text.nextStep":
 		"Im nächsten Schritt wird eine Kopie des Raumes erstellt.",
-	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+	"feature-room.CopyInfoDialog.text.alert.followingContent":
 		"Folgende Inhalte werden nicht kopiert:",
-	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Raum-Mitglieder und Berechtigungen",
-	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
-		"Inhalte aus Etherpads",
-	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Inhalte aus Etherpads",
+	"feature-room.CopyInfoDialog.text.alert.whiteboard":
 		"Inhalte aus Whiteboards",
-	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+	"feature-room.CopyInfoDialog.text.alert.protectedSettings":
 		"Geschützte Einstellungen externer Tools",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
@@ -1642,7 +1689,6 @@ export default {
 		"Probiere es mit weniger Suchbegriffen.",
 	"pages.content.emptyState.error.title": "Ooops, keine Ergebnisse!",
 	"pages.content.index.backToCourse": "Zurück zum Kurs",
-	"pages.content.index.backToBoard": "Zurück zum Board",
 	"pages.content.index.backToOverview": "Zurück zur Übersicht",
 	"pages.content.index.search_for": "Suche nach …",
 	"pages.content.index.search_resources": "Ressourcen",
@@ -1748,8 +1794,6 @@ export default {
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
-	"pages.room.student.emptyState":
-		"Hier erscheinen Lerninhalte wie Themen oder Aufgaben.",
 	"pages.room.taskCard.label.done": "Abschließen",
 	"pages.room.taskCard.label.due": "Abgabe",
 	"pages.room.taskCard.label.edit": "Bearbeiten",
@@ -1762,13 +1806,10 @@ export default {
 	"pages.room.taskCard.student.label.submitted": "Erledigt",
 	"pages.room.taskCard.teacher.label.overdue": "Abgelaufen",
 	"pages.room.taskCard.teacher.label.submitted": "Abgegeben",
-	"pages.room.teacher.emptyState":
-		"Lerninhalte dem Kurs hinzufügen und sortieren.",
+	"pages.room.learningContent.emptyState":
+		"Aktuell gibt es keine Lerninhalte in diesem Kurs",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",
-	"pages.rooms.allRooms.emptyState.title":
-		"Aktuell gibt es hier noch keine Kurse.",
-	"pages.rooms.currentRooms.emptyState.title":
-		"Aktuell gibt es hier noch keine Kurse.",
+	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
@@ -1790,6 +1831,8 @@ export default {
 		"Der Einladungslink ist leider nur für Lernbegleitungen gültig",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Der Einladungslink ist leider nur für Nutzende der Schule “{schoolName}” gültig",
+	"pages.rooms.invitationLinkStatus.confirmationPending":
+		"Beitrittsanfrage zum Raum erfolgreich gestellt – Bestätigung ausstehend",
 	"pages.rooms.invitationLinkStatus.title": "Einladungslink",
 	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.menuItems.startSync": "Synchronisation starten",
@@ -1825,7 +1868,7 @@ export default {
 	"pages.rooms.tools.deleteDialog.content":
 		"Möchten Sie wirklich das Tool '{itemName}' aus dem Kurs entfernen?",
 	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",
-	"pages.rooms.tools.emptyState": "Es gibt noch keine Tools in diesem Kurs.",
+	"pages.rooms.tools.emptyState": "Aktuell gibt es keine Tools in diesem Kurs",
 	"pages.rooms.tools.incomplete": "Konfiguration unvollständig",
 	"pages.rooms.tools.incompleteDialog.title": "Konfiguration unvollständig",
 	"pages.rooms.tools.logo": "Tool-Logo",
@@ -1847,17 +1890,19 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",
-	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
+	"pages.roomDetails.emptyState":
+		"Aktuell gibt es keine Lerninhalte in diesem Raum",
+	"pages.rooms.emptyState": "Aktuell gibt es keine Räume",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.infoAlert.welcome": "Willkommen in den neuen Räumen!",
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"Räume werden zukünftig Funktionen aus Kursen und Teams vereinen, um mehr Möglichkeiten für das schulübergreifende Arbeiten zu bieten.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Teams und Kurse bleiben bestehen, bis die Inhalte in Räume überführt werden können.",
-	"pages.rooms.infoAlert.welcome.visibility":
-		"Räume sind vorerst nur für Lehrkräfte sichtbar und werden weiter ausgebaut. Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.",
-	"pages.rooms.infoAlert.welcome.visibility.help": "Hilfeseite",
-	"pages.rooms.infoAlert.welcome.visibility.feedback": "Rückmeldungen",
+		"Räume werden weiter ausgebaut. Teams und Kurse bleiben bestehen, bis die Inhalte in Räume überführt werden können.",
+	"pages.rooms.infoAlert.welcome.furtherInformation":
+		"Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.",
+	"pages.rooms.infoAlert.welcome.furtherInformation.help": "Hilfeseite",
+	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "Rückmeldungen",
 	"pages.rooms.leaveRoom.confirmation": 'Raum "{roomName}" wirklich verlassen?',
 	"pages.rooms.leaveRoom.RoomOwner.warning":
 		'Bevor der Raum verlassen werden kann, muss die Raumberechtigung "Besitzen" an ein anderes Raummitglied übertragen werden. Dies kann in der Raum-Mitglieder-Verwaltung erfolgen.',
@@ -1875,9 +1920,15 @@ export default {
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Mitglieder",
+	"pages.rooms.members.menu.ariaLabel": "{membersInfoText}-Menü",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
+	"pages.rooms.members.add.role.student": "Lernend",
+	"pages.rooms.members.add.students.forbidden":
+		"Wenn in den Schuleinstellungen die Sichtbarkeit von Lernenden für Lernbegleitungen deaktiviert ist, können nur Lernende der eigenen Klasse hinzugefügt werden. Bitte an den Schul-Admin wenden.",
+	"pages.rooms.members.add.warningText":
+		"Lernende anderer Schulen können nur durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Aktionsmenü für {memberFullName}",
 	"pages.rooms.members.actionMenu.selectedMembers":
@@ -1913,6 +1964,19 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.members.tableHeader.actions": "Aktionen",
+	"pages.rooms.members.tableHeader.description": "Beschreibung",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"Nur schulintern gültig",
+	"pages.rooms.members.tableHeader.validForStudents":
+		"Auch für Lernende gültig",
+	"pages.rooms.members.tableHeader.expirationDate": "Ablaufdatum",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Bestätigung erforderlich",
+	"pages.rooms.members.tableHeader.status": "Status",
+	"pages.rooms.members.tables.common.yes": "ja",
+	"pages.rooms.members.tables.common.no": "nein",
+	"pages.rooms.members.tables.common.expired": "abgelaufen",
+	"pages.rooms.members.tables.common.active": "aktiv",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} erhält die folgenden Berechtigungen im Raum „{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
@@ -1938,11 +2002,15 @@ export default {
 		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {currentUserFullName} das Recht, den Raum zu löschen.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
-	"pages.rooms.members.inviteMember.firstStep.title":
+	"pages.rooms.members.inviteMember.step.prepare.title":
 		"Einladungslink erstellen",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Im nächsten Schritt wird ein Link erstellt, mit dem der Raum betreten	werden kann.",
-	"pages.rooms.members.inviteMember.secondStep.title": "Einladungslink teilen",
+	"pages.rooms.members.inviteMember.editStep.subTitle":
+		"Im nächsten Schritt wird der bearbeitete Einladungslink angezeigt.",
+	"pages.rooms.members.inviteMember.step.share.title": "Einladungslink teilen",
+	"pages.rooms.members.inviteMember.step.edit.title":
+		"Einladungslink bearbeiten",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
 	"pages.rooms.members.inviteMember.form.description.label":
@@ -1956,14 +2024,43 @@ export default {
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Betreten des Raums nur nach Bestätigung möglich ({0})",
+	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
+		"Ausgewählte Einladungslinks wirklich löschen?",
+	"pages.rooms.members.invitationTable.delete.confirmation":
+		"Einladungslink '{invitation}' wirklich löschen?",
+	"pages.rooms.members.confirmationTable.menus.confirm.label":
+		"Beitrittsanfrage bestätigen",
+	"pages.rooms.members.confirmationTable.menus.reject.label":
+		"Beitrittsanfrage ablehnen",
+	"pages.rooms.members.confirmationTable.notification.confirm":
+		"{fullName} wurde als Raummitglied hinzugefügt.",
+	"pages.rooms.members.confirmationTable.notification.reject":
+		"Die Beitrittsanfrage von {fullName} wurde abgelehnt.",
+	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
+		"Die ausgewählten Personen wurden als Mitglieder zum Raum hinzugefügt.",
+	"pages.rooms.members.confirmationTable.notification.reject.multiple":
+		"Die Beitrittsanfragen der ausgewählten Personen wurden abgelehnt.",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
+		"Aktionsmenü für {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
+		"Mitgliedschaftsanfrage für {fullName} bestätigen",
+	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
+		"Mitgliedsanfrage für {fullName} ablehnen",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
+		"Einladungslink „{linkTitle}“ teilen",
+	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
+		"Aktionsmenü für Einladungslink „{linkTitle}“",
+	"pages.rooms.invitationlinks.error.create":
+		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
+	"pages.rooms.invitationlinks.error.update":
+		"Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
 	"pages.taskCard.deleteElement.title": "Element löschen",
-	"pages.tasks.emptyStateOnFilter.title": "Es sind keine Aufgaben vorhanden.",
 	"pages.tasks.finished.emptyState.title":
-		"Du hast zur Zeit keine abgeschlossenen Aufgaben.",
+		"Aktuell gibt es  keine abgeschlossenen Aufgaben",
 	"pages.tasks.labels.due": "Abgabe",
 	"pages.tasks.labels.filter": "Filtern nach Kursen",
 	"pages.tasks.labels.noCourse": "Ohne Kurszuordnung",
@@ -1972,11 +2069,9 @@ export default {
 	"pages.tasks.labels.overdue": "Verpasst",
 	"pages.tasks.labels.planned": "Geplant",
 	"pages.tasks.student.completed.emptyState.title":
-		"Du hast zur Zeit keine erledigten Aufgaben.",
-	"pages.tasks.student.open.emptyState.subtitle":
-		"Du hast alle Aufgaben erledigt. Genieße deine freie Zeit!",
+		"Aktuell gibt es keine erledigten Aufgaben",
 	"pages.tasks.student.open.emptyState.title":
-		"Es gibt keine offenen Aufgaben.",
+		"Aktuell gibt es keine offenen Aufgaben",
 	"pages.tasks.student.openTasks": "Offene Aufgaben",
 	"pages.tasks.student.submittedTasks": "Erledigte Aufgaben",
 	"pages.tasks.student.subtitleOverDue": "Verpasste Aufgaben",
@@ -1985,11 +2080,9 @@ export default {
 	"pages.tasks.subtitleNotGraded": "Unbewertet",
 	"pages.tasks.subtitleOpen": "Offene Aufgaben",
 	"pages.tasks.subtitleWithDue": "Mit Abgabefrist",
-	"pages.tasks.teacher.drafts.emptyState.title": "Es gibt keine Entwürfe.",
-	"pages.tasks.teacher.open.emptyState.subtitle":
-		"Du hast alle Abgaben geprüft. Genieße deine freie Zeit!",
-	"pages.tasks.teacher.open.emptyState.title":
-		"Es gibt keine aktuellen Aufgaben.",
+	"pages.tasks.teacher.drafts.emptyState.title":
+		"Aktuell gibt es  keine Entwürfe",
+	"pages.tasks.teacher.open.emptyState.title": "Aktuell gibt es keine Aufgaben",
 	"pages.tasks.teacher.subtitleOverDue": "Abgelaufene Aufgaben",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"pages.tool.apiError.tool_param_duplicate":
@@ -2091,6 +2184,7 @@ export default {
 	"ui.actionMenu.actions": "Aktionen",
 	"ui.actionMenu.select.none": "Alle Zeilen abwählen",
 	"ui.dataTable.select.all": "Alle Zeilen auswählen",
+	"ui.rename.dialog.title": "{entity} umbenennen",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",
@@ -2120,13 +2214,13 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
 	"feature.media-shelf.title": "Medienregal",
 	"feature.media-shelf.emptyState":
-		"Aktuell sind keine Medien zur Verwendung vorhanden.",
+		"Aktuell sind keine Medien zur Verwendung vorhanden",
 	"feature.media-shelf.createLine": "Abschnitt hinzufügen",
 	"feature.media-shelf.line.title": "Abschnitt",
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
 	"feature.media-shelf.layout.list": "Zeilen",
 	"feature.media-shelf.layout.grid": "Raster",
-	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien.",
+	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien",
 	"pages.folder.fab.title": "Datei hinzufügen",
 	"pages.folder.untitled": "Unbenannter Ordner",
 	"pages.folder.title": "Ordner",
@@ -2136,11 +2230,12 @@ export default {
 	"pages.folder.ariaLabels.menu": "Ordner Menü",
 	"pages.folder.ariaLabels.menu.action.edit": "Ordner umbenennen",
 	"pages.folder.ariaLabels.menu.action.delete": "Ordner löschen",
-	"pages.folder.ariaLabels.menu.action.file.delete": "Datei löschen",
 	"pages.folder.ariaLabels.filter": "Tabelle durchsuchen/filtern",
 	"pages.folder.ariaLabels.actionMenu": "Aktionsmenü für {name}",
 	"pages.folder.uploadstats": "{uploaded} von {total} Dateien hochgeladen",
 	"pages.folder.delete-multiple-confirmation":
 		"Alle {total} Dateien wirklich löschen?",
 	"pages.folder.delete-confirmation": "Datei {name} wirklich löschen?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"Der Dateiname existiert bereits.",
 };

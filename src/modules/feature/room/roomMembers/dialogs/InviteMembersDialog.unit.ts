@@ -1,0 +1,483 @@
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import InviteMembersDialog from "./InviteMembersDialog.vue";
+import { nextTick } from "vue";
+import { createTestingPinia } from "@pinia/testing";
+import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
+import { useBoardNotifier } from "@util-board";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { VueWrapper } from "@vue/test-utils";
+import { useRoomInvitationLinkStore, InvitationStep } from "@data-room";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
+
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: () => ({ t: jest.fn().mockImplementation((key) => key) }),
+	};
+});
+
+jest.mock("@vueuse/integrations/useFocusTrap", () => {
+	return {
+		...jest.requireActual("@vueuse/integrations/useFocusTrap"),
+		useFocusTrap: jest.fn(),
+	};
+});
+
+jest.mock("@util-board/BoardNotifier.composable");
+const boardNotifier = jest.mocked(useBoardNotifier);
+
+jest.useFakeTimers();
+describe("InviteMembersDialog", () => {
+	let wrapper: VueWrapper<InstanceType<typeof InviteMembersDialog>>;
+	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let pauseMock: jest.Mock;
+	let unpauseMock: jest.Mock;
+	let deactivateMock: jest.Mock;
+
+	beforeAll(() => {
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
+	});
+	beforeEach(() => {
+		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
+		boardNotifier.mockReturnValue(boardNotifierCalls);
+		pauseMock = jest.fn();
+		unpauseMock = jest.fn();
+		deactivateMock = jest.fn();
+		(useFocusTrap as jest.Mock).mockReturnValue({
+			pause: pauseMock,
+			unpause: unpauseMock,
+			deactivate: deactivateMock,
+		});
+	});
+	afterEach(() => {
+		jest.clearAllMocks();
+		jest.clearAllTimers();
+	});
+
+	const setup = (
+		options: {
+			modelValue?: boolean;
+			schoolName?: string;
+			preDefinedStep?: string;
+		} = {
+			modelValue: true,
+			schoolName: "Test School",
+			preDefinedStep: InvitationStep.PREPARE,
+		}
+	) => {
+		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
+		const notifierModule = createModuleMocks(NotifierModule);
+
+		wrapper = mount(InviteMembersDialog, {
+			global: {
+				plugins: [
+					createTestingI18n(),
+					createTestingVuetify(),
+					createTestingPinia({
+						initialState: {
+							roomInvitationLinkStore: {
+								isLoading: false,
+								roomInvitationLinks,
+								invitationStep: options.preDefinedStep,
+							},
+						},
+					}),
+				],
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
+			},
+			props: {
+				...{
+					modelValue: true,
+					schoolName: "Test School",
+				},
+				...options,
+			},
+		});
+
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(
+			useRoomInvitationLinkStore
+		);
+
+		return { wrapper, roomInvitationLinkStore, notifierModule };
+	};
+
+	it("should render correctly", () => {
+		const { wrapper } = setup();
+
+		expect(wrapper.exists()).toBe(true);
+
+		const dialog = wrapper.findComponent({ name: "VDialog" });
+
+		expect(dialog.exists()).toBe(true);
+	});
+
+	describe("steps", () => {
+		describe("when the step is PREPARE", () => {
+			it("should have the correct title", async () => {
+				const { wrapper } = setup();
+
+				await nextTick();
+
+				const card = wrapper.findComponent({ name: "VCard" });
+				const title = card.findComponent({ name: "VCardTitle" });
+
+				expect(title.text()).toBe(
+					"pages.rooms.members.inviteMember.step.prepare.title"
+				);
+			});
+
+			it("should have the correct action buttons", async () => {
+				const { wrapper } = setup();
+
+				await nextTick();
+
+				const actionButtons = wrapper.findAllComponents({ name: "VBtn" });
+
+				expect(actionButtons.length).toBe(2);
+
+				const cancelButton = actionButtons[0];
+				const nextButton = actionButtons[1];
+
+				expect(cancelButton.text()).toBe("common.actions.cancel");
+				expect(nextButton.text()).toBe("common.actions.continue");
+			});
+
+			it("should not render the ShareModalResult component", async () => {
+				const { wrapper } = setup();
+
+				await nextTick();
+
+				const shareModalResult = wrapper.findComponent({
+					name: "ShareModalResult",
+				});
+
+				expect(shareModalResult.exists()).toBe(false);
+			});
+
+			it("should have the correct checkbox labels", async () => {
+				const { wrapper } = setup();
+
+				await nextTick();
+
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+
+				[
+					"pages.rooms.members.inviteMember.form.onlySchoolMembers.label",
+					"pages.rooms.members.inviteMember.form.validForStudents.label",
+					"pages.rooms.members.inviteMember.form.linkExpires.label",
+					"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label",
+				].forEach((label) => {
+					expect(
+						checkboxes.some((checkbox) => checkbox.text().includes(label))
+					).toBe(true);
+				});
+			});
+
+			describe("when continue button is clicked", () => {
+				it("should call createLink method", async () => {
+					const { wrapper, roomInvitationLinkStore } = setup({
+						preDefinedStep: InvitationStep.PREPARE,
+					});
+					await nextTick();
+					const shareModalBefore = wrapper.findComponent({
+						name: "ShareModalResult",
+					});
+					expect(shareModalBefore.exists()).toBe(false);
+
+					const nextButton = wrapper.findComponent({ ref: "continueButton" });
+					await nextButton.trigger("click");
+					await nextTick();
+
+					const expectedFormValues = {
+						title: "invitation link",
+						activeUntil: "2900-01-01T00:00:00.000Z",
+						isOnlyForTeachers: true,
+						restrictedToCreatorSchool: true,
+						requiresConfirmation: true,
+					};
+
+					expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(
+						expectedFormValues
+					);
+				});
+			});
+		});
+
+		describe("when the step is EDIT", () => {
+			it("should have the correct title", async () => {
+				const { wrapper } = setup({ preDefinedStep: InvitationStep.EDIT });
+
+				await nextTick();
+
+				const card = wrapper.findComponent({ name: "VCard" });
+				const title = card.findComponent({ name: "VCardTitle" });
+
+				expect(title.text()).toBe(
+					"pages.rooms.members.inviteMember.step.edit.title"
+				);
+			});
+
+			it("should have the correct action buttons", async () => {
+				const { wrapper } = setup({ preDefinedStep: InvitationStep.EDIT });
+
+				await nextTick();
+
+				const actionButtons = wrapper.findAllComponents({ name: "VBtn" });
+
+				expect(actionButtons.length).toBe(2);
+
+				const cancelButton = actionButtons[0];
+				const nextButton = actionButtons[1];
+
+				expect(cancelButton.text()).toBe("common.actions.cancel");
+				expect(nextButton.text()).toBe("common.actions.continue");
+			});
+
+			describe("when continue button is clicked", () => {
+				it("should and call updateLink method", async () => {
+					const { wrapper, roomInvitationLinkStore } = setup({
+						preDefinedStep: InvitationStep.EDIT,
+					});
+					await nextTick();
+					const shareModalBefore = wrapper.findComponent({
+						name: "ShareModalResult",
+					});
+					expect(shareModalBefore.exists()).toBe(false);
+
+					const nextButton = wrapper.findComponent({ ref: "continueButton" });
+					await nextButton.trigger("click");
+					await nextTick();
+
+					const expectedFormValues = {
+						id: "",
+						title: "invitation link",
+						activeUntil: "2900-01-01T00:00:00.000Z",
+						isOnlyForTeachers: true,
+						restrictedToCreatorSchool: true,
+						requiresConfirmation: true,
+					};
+
+					expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(
+						expectedFormValues
+					);
+				});
+			});
+		});
+
+		describe("when the step is SHARE", () => {
+			it("should have the correct title", async () => {
+				const { wrapper } = setup({ preDefinedStep: InvitationStep.SHARE });
+
+				await nextTick();
+
+				const card = wrapper.findComponent({ name: "VCard" });
+				const title = card.findComponent({ name: "VCardTitle" });
+				await nextTick();
+				await nextTick();
+
+				expect(title.text()).toBe(
+					"pages.rooms.members.inviteMember.step.share.title"
+				);
+			});
+
+			it("should have the correct action button", async () => {
+				const { wrapper } = setup({ preDefinedStep: InvitationStep.SHARE });
+
+				await nextTick();
+
+				const closeButton = wrapper.findComponent({ ref: "closeButton" });
+
+				expect(closeButton.text()).toBe("common.labels.close");
+			});
+
+			it("should render the ShareModalResult component", async () => {
+				const { wrapper } = setup({ preDefinedStep: InvitationStep.SHARE });
+
+				await nextTick();
+
+				const shareModalResult = wrapper.findComponent({
+					name: "ShareModalResult",
+				});
+
+				expect(shareModalResult.exists()).toBe(true);
+			});
+
+			describe("when copy link button is clicked on ShareModalResult", () => {
+				it("should copy the link to clipboard", async () => {
+					const { wrapper, notifierModule } = setup({
+						preDefinedStep: InvitationStep.SHARE,
+					});
+
+					await nextTick();
+
+					const shareModalResult = wrapper.findComponent({
+						name: "ShareModalResult",
+					});
+
+					await shareModalResult.vm.$emit("copied");
+
+					expect(notifierModule.show).toHaveBeenCalledWith({
+						text: "common.words.copiedToClipboard",
+						status: "success",
+						timeout: 5000,
+					});
+				});
+			});
+
+			describe("when close button is clicked on ShareModalResult", () => {
+				it("should emit 'close'", async () => {
+					const { wrapper } = setup({
+						preDefinedStep: InvitationStep.SHARE,
+					});
+
+					await nextTick();
+
+					const shareModalResult = wrapper.findComponent({
+						name: "ShareModalResult",
+					});
+
+					await shareModalResult.vm.$emit("done");
+
+					expect(wrapper.emitted()).toHaveProperty("close");
+				});
+			});
+		});
+	});
+
+	describe("emits", () => {
+		it("should emit 'close' with false when cancel button is clicked", async () => {
+			const { wrapper } = setup();
+			await nextTick();
+			const cancelButton = wrapper.findComponent({ ref: "cancelButton" });
+			await cancelButton.trigger("click");
+
+			expect(wrapper.emitted()).toHaveProperty("close");
+		});
+
+		it("should emit 'close' with false when close button is clicked", async () => {
+			const { wrapper } = setup({ preDefinedStep: InvitationStep.SHARE });
+			await nextTick();
+			const closeButton = wrapper.findComponent({ ref: "closeButton" });
+			await closeButton.trigger("click");
+
+			expect(wrapper.emitted()).toHaveProperty("close");
+		});
+	});
+
+	describe("form rules", () => {
+		describe("default values of checkboxes", () => {
+			it("should have the first and fourth checkboxes checked as default", async () => {
+				const { wrapper } = setup();
+				await nextTick();
+
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+
+				expect(checkboxes[0].props("modelValue")).toBe(true);
+				expect(checkboxes[1].props("modelValue")).toBe(false);
+				expect(checkboxes[2].props("modelValue")).toBe(false);
+				expect(checkboxes[3].props("modelValue")).toBe(true);
+			});
+		});
+
+		describe("when the first checkbox is checked", () => {
+			it("should enable the second checkbox", async () => {
+				const { wrapper } = setup();
+				await nextTick();
+
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+				const firstCheckbox = checkboxes[0];
+				const secondCheckbox = checkboxes[1];
+
+				await firstCheckbox.setValue(false);
+				await nextTick();
+
+				expect(secondCheckbox.props("disabled")).toBe(true);
+			});
+		});
+
+		describe("when the first checkbox is unchecked", () => {
+			it("should disable and uncheck the second checkbox", async () => {
+				const { wrapper } = setup();
+				await nextTick();
+
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+				const firstCheckbox = checkboxes[0];
+				const secondCheckbox = checkboxes[1];
+
+				await firstCheckbox.setValue(true);
+				await secondCheckbox.setValue(true);
+				await nextTick();
+
+				expect(secondCheckbox.props("disabled")).toBe(false);
+				expect(secondCheckbox.props("modelValue")).toBe(true);
+
+				await firstCheckbox.setValue(false);
+				await nextTick();
+
+				expect(secondCheckbox.props("disabled")).toBe(true);
+				expect(secondCheckbox.props("modelValue")).toBe(false);
+			});
+		});
+
+		describe("when the third checkbox is checked", () => {
+			it("should enable date picker", async () => {
+				const { wrapper } = setup();
+				await nextTick();
+
+				const datePickerBefore = wrapper.findComponent(
+					'[data-testid="date-picker-until"]'
+				);
+				expect(datePickerBefore.classes().includes("v-input--disabled")).toBe(
+					true
+				);
+
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+				const thirdCheckbox = checkboxes[2];
+
+				await thirdCheckbox.setValue(true);
+
+				const datePicker = wrapper.findComponent(
+					'[data-testid="date-picker-until"]'
+				);
+				await nextTick();
+
+				expect(datePicker.classes().includes("v-input--disabled")).toBe(false);
+			});
+		});
+
+		describe("when the third checkbox value changes", () => {
+			it("should disable/enable continue button", async () => {
+				const { wrapper } = setup();
+				await nextTick();
+
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+				const thirdCheckbox = checkboxes[2];
+				await thirdCheckbox.setValue(true);
+				await nextTick();
+				const continueButton = wrapper.findComponent(
+					'[data-testid="invite-participant-save-btn"]'
+				);
+
+				expect(continueButton.classes("v-btn--disabled")).toBe(true);
+
+				await thirdCheckbox.setValue(false);
+				await nextTick();
+
+				expect(continueButton.classes("v-btn--disabled")).toBe(false);
+			});
+		});
+	});
+});

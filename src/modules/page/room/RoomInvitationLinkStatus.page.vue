@@ -14,13 +14,8 @@
 			/>
 		</div>
 		<div v-else class="w-100 text-center">
-			<img
-				:src="CrossedHandsBirdSvg"
-				role="presentation"
-				alt="t('pages.rooms.invitationLinkStatus.bird.alt')"
-				data-testid="bird-image"
-			/>
-			<div class="text-h2" data-testid="status-message">
+			<CrossedHandsSvg data-testid="img-crossed-hands" />
+			<div class="text-h4" data-testid="status-message">
 				{{ infoMessage }}
 			</div>
 		</div>
@@ -30,7 +25,7 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import CrossedHandsBirdSvg from "@/assets/img/crossedHands.svg";
+import CrossedHandsSvg from "@/assets/img/CrossedHandsSvg.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
@@ -112,6 +107,11 @@ const updateInfoMessage = (validationMessage: string, schoolName: string) => {
 			break;
 		case RoomInvitationLinkValidationError.InvalidLink:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.invalidLink");
+			break;
+		case RoomInvitationLinkValidationError.RoomApplicantWaiting:
+			infoMessage.value = t(
+				"pages.rooms.invitationLinkStatus.confirmationPending"
+			);
 			break;
 		default:
 			infoMessage.value = t("error.generic");
