@@ -3,6 +3,7 @@ import {
 	isRequired,
 	isValidTimeFormat,
 	isValidDateFormat,
+	isOfMaxLength,
 } from "@util-validators";
 
 describe("util-validators", () => {
@@ -12,6 +13,15 @@ describe("util-validators", () => {
 		it("should not accept empty value", () => {
 			const isValid = isRequired(ERROR);
 			expect(isValid("")).toBe(ERROR);
+		});
+	});
+
+	describe("isOfMaxLength", () => {
+		it("should not accept values of more length then parameter given", () => {
+			const maxLength = 5;
+			const tooLongValue = "123456";
+			const isValid = isOfMaxLength(maxLength)(ERROR);
+			expect(isValid(tooLongValue)).toBe(ERROR);
 		});
 	});
 

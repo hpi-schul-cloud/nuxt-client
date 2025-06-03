@@ -60,3 +60,20 @@ export const isValidDateFormat = (value: string | null) => {
 
 	return !!value.match(dateRegex);
 };
+
+/**
+ * Checks if given value is of given max length
+ */
+export const isOfMaxLength =
+	(maxLength: number): FormValidatorFn<string> =>
+	(errMsg) =>
+	(value) => {
+		if (value === null || value === undefined) {
+			return true;
+		}
+
+		if (value.length > maxLength) {
+			return errMsg;
+		}
+		return true;
+	};
