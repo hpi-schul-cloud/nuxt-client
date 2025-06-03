@@ -127,13 +127,13 @@ const canAddAllStudents = computed(() => {
 const selectedSchool = ref(schools.value[0].id);
 
 const schoolRoles = [
-	{ id: RoleName.Teacher, name: t("common.labels.teacher") },
+	{ id: RoleName.Teacher, name: t("common.labels.teacher.neutral") },
 ];
 
 if (FEATURE_ROOM_ADD_STUDENTS_ENABLED) {
 	schoolRoles.unshift({
 		id: RoleName.Student,
-		name: t("pages.rooms.members.add.role.student"),
+		name: t("common.labels.student.neutral"),
 	});
 }
 
