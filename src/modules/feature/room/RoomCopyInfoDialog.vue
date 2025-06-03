@@ -59,14 +59,12 @@
 
 <script setup lang="ts">
 import { InfoAlert } from "@ui-alert";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const isOpen = defineModel({
-	type: Boolean,
-	required: true,
-});
+const isOpen = ref(true);
 
 defineEmits(["copy:cancel", "copy:confirm"]);
 </script>

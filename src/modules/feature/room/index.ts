@@ -5,7 +5,6 @@ import BoardGrid from "./BoardGrid.vue";
 import MembersTable from "./roomMembers/tables/MembersTable.vue";
 import AddMembers from "./roomMembers/dialogs/AddMembers.vue";
 import ChangeRole from "./roomMembers/dialogs/ChangeRole.vue";
-import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
 import Members from "./roomMembers/tabs/Members.vue";
 import Invitations from "./roomMembers/tabs/Invitations.vue";
 import Confirmations from "./roomMembers/tabs/Confirmations.vue";
@@ -25,7 +24,6 @@ export {
 	InviteMembersDialog,
 	Members,
 	MembersTable,
-	RoomCopyInfoDialog,
 	RoomGrid,
 	RoomForm,
 	RoomMenu,

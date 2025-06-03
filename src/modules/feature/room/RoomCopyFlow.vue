@@ -1,6 +1,6 @@
 <template>
 	<RoomCopyInfoDialog
-		v-model="isRoomCopyInfoDialogOpen"
+		v-if="isRoomCopyInfoDialogOpen"
 		@copy:cancel="onCancelCopy"
 		@copy:confirm="onConfirmCopy"
 	/>
@@ -12,7 +12,7 @@ import { RoomDetails } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { RoomCopyInfoDialog } from "@feature-room";
+import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
 import { nextTick, onMounted, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
