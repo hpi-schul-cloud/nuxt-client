@@ -1,12 +1,22 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { BoardLayout } from "@/serverApi/v3/api";
+import { authModule } from "@/store";
+import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import NotifierModule from "@/store/notifier";
+import ShareModule from "@/store/share";
+import { RoomBoardItem } from "@/types/room/Room";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
+} from "@/utils/inject";
 import {
 	envsFactory,
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import {
 	roomBoardTileListFactory,
 	roomFactory,
@@ -19,28 +29,23 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	RoomVariant,
+	useRoomAuthorization,
 	useRoomDetailsStore,
 	useRoomsState,
-	useRoomAuthorization,
 } from "@data-room";
 import { RoomMenu } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { EmptyState } from "@ui-empty-state";
 import {
-	SelectBoardLayoutDialog,
 	LeaveRoomProhibitedDialog,
+	SelectBoardLayoutDialog,
 } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { authModule } from "@/store";
-import AuthModule from "@/store/auth";
-import { RoomBoardItem } from "@/types/room/Room";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import NotifierModule from "@/store/notifier";
-import { EmptyState } from "@ui-empty-state";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -94,6 +99,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			canEditRoomContent: ref(false),
 			canSeeAllStudents: ref(false),
 			canCopyRoom: ref(false),
+			canShareRoom: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
@@ -104,13 +110,11 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	const setup = (
 		options?: Partial<{
-			undefinedRoom: boolean;
 			envs: Partial<serverApi.ConfigResponse>;
 			roomBoards: RoomBoardItem[];
 		}>
 	) => {
-		const { undefinedRoom, envs, roomBoards } = {
-			undefinedRoom: false,
+		const { envs, roomBoards } = {
 			roomBoards: [],
 			...options,
 		};
@@ -123,6 +127,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		const notifierModule = createModuleMocks(NotifierModule);
+		const shareModule = createModuleMocks(ShareModule, {
+			getIsShareModalOpen: false,
+			getParentType: serverApi.ShareTokenBodyParamsParentTypeEnum.Room,
+		});
 
 		const room = roomFactory.build({});
 
@@ -135,7 +143,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						initialState: {
 							roomDetailsStore: {
 								isLoading: false,
-								room: undefinedRoom ? undefined : room,
+								room,
 								roomVariant: RoomVariant.ROOM,
 								roomBoards,
 							},
@@ -146,7 +154,11 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				},
+			},
+			props: {
+				room,
 			},
 		});
 
@@ -208,21 +220,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 				expect(breadcrumbItems).toHaveLength(2);
 				expect(breadcrumbItems[1].text()).toContain(room.name);
-			});
-		});
-
-		describe("and room is undefined", () => {
-			it("should render breadcrumbs with default name", () => {
-				const { wrapper } = setup({ undefinedRoom: true });
-
-				const breadcrumbs = wrapper.getComponent({ name: "Breadcrumbs" });
-
-				const breadcrumbItems = breadcrumbs.findAllComponents({
-					name: "v-breadcrumbs-item",
-				});
-
-				expect(breadcrumbItems).toHaveLength(2);
-				expect(breadcrumbItems[1].text()).toContain("pages.roomDetails.title");
 			});
 		});
 
