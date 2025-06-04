@@ -6,43 +6,55 @@
 		elevation="0"
 		variant="outlined"
 		:ripple="false"
-		:to="sanitizedUrl"
 		:tabindex="isEditMode ? 0 : undefined"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<ContentElementBar :has-grey-background="true" :icon="mdiFolderOpenOutline">
-			<template #title>
-				{{
-					element.content.title ||
-					$t("components.cardElement.folderElement.untitled")
-				}}
-			</template>
-			<template v-if="isEditMode" #menu>
-				<BoardMenu
-					:scope="BoardMenuScope.FOLDER_ELEMENT"
-					has-background
-					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
-				>
-					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-					<KebabMenuActionMoveDown
-						v-if="isNotLastElement"
-						@click="onMoveDown"
-					/>
-					<KebabMenuActionDelete
-						scope-language-key="components.cardElement.folderElement"
-						@click="onDelete"
-					/>
-				</BoardMenu>
-			</template>
-		</ContentElementBar>
+		<router-link :to="sanitizedUrl">
+			<ContentElementBar
+				:has-grey-background="true"
+				:icon="mdiFolderOpenOutline"
+				:to="sanitizedUrl"
+			>
+				<template #title>
+					{{
+						element.content.title ||
+						$t("components.cardElement.folderElement.untitled")
+					}}
+				</template>
+				<template v-if="isEditMode" #menu>
+					<BoardMenu
+						:scope="BoardMenuScope.FOLDER_ELEMENT"
+						has-background
+						:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+					>
+						<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+						<KebabMenuActionMoveDown
+							v-if="isNotLastElement"
+							@click="onMoveDown"
+						/>
+						<KebabMenuActionDelete
+							scope-language-key="components.cardElement.folderElement"
+							@click="onDelete"
+						/>
+					</BoardMenu>
+				</template>
+			</ContentElementBar>
+		</router-link>
+		<v-card-text v-if="isEditMode">
+			<FolderTitleInput
+				:data-testid="`folder-title-input-${columnIndex}-${rowIndex}-${elementIndex}`"
+				:title="title"
+				@update:title="onUpdateTitle"
+			/>
+		</v-card-text>
 	</v-card>
 </template>
 
 <script setup lang="ts">
 import { FileFolderElement } from "@/types/board/ContentElement";
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import { useBoardFocusHandler } from "@data-board";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import {
@@ -51,6 +63,7 @@ import {
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
 import { computed, PropType, ref, toRef } from "vue";
+import FolderTitleInput from "./FolderTitleInput.vue";
 
 const props = defineProps({
 	element: {
@@ -74,6 +87,13 @@ const emit = defineEmits<{
 
 const folderContentElement = ref(null);
 const element = toRef(props, "element");
+const { modelValue } = useContentElementState(props);
+
+const title = modelValue.value.title || "";
+
+const onUpdateTitle = (value: string) => {
+	modelValue.value.title = value;
+};
 
 const sanitizedUrl = computed(() => sanitizeUrl(`/folder/${element.value.id}`));
 
