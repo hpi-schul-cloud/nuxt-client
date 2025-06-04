@@ -6,7 +6,7 @@
 				:rules="rules"
 				:label="t('pages.folder.ariaLabels.menu.action.edit')"
 				type="text"
-				data-testid="input-folder-title"
+				data-testid="folder-title-textarea-in-card"
 				:autofocus="true"
 				:auto-grow="true"
 				rows="1"
@@ -15,7 +15,11 @@
 			/>
 
 			<div class="align-self-center pl-2">
-				<button ref="submit" type="submit" data-testid="save-link-in-card">
+				<button
+					ref="submit"
+					type="submit"
+					data-testid="save-folder-title-in-card"
+				>
 					<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
 					<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
 				</button>
