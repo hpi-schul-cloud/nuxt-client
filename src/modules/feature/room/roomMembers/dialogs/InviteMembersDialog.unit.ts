@@ -275,6 +275,21 @@ describe("InviteMembersDialog", () => {
 					);
 				});
 			});
+
+			describe("when close button is clicked", () => {
+				it("should set the editedLink to null", async () => {
+					const { wrapper, roomInvitationLinkStore } = setup({
+						preDefinedStep: InvitationStep.SHARE,
+					});
+					await nextTick();
+
+					const shareModalResult = wrapper.findComponent({
+						name: "ShareModalResult",
+					});
+					await shareModalResult.vm.$emit("done");
+					expect(roomInvitationLinkStore.editedLink).toBeNull();
+				});
+			});
 		});
 
 		describe("when the step is SHARE", () => {
