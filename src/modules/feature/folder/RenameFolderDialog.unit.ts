@@ -97,7 +97,7 @@ describe("RenameFolderDialog", () => {
 				},
 			});
 
-			return { wrapper, name };
+			return { wrapper };
 		};
 
 		it("should not render card", () => {
