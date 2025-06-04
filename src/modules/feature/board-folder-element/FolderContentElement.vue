@@ -14,7 +14,6 @@
 			<ContentElementBar
 				:has-grey-background="true"
 				:icon="mdiFolderOpenOutline"
-				:to="sanitizedUrl"
 			>
 				<template #title>
 					{{
@@ -44,7 +43,7 @@
 		<v-card-text v-if="isEditMode">
 			<FolderTitleInput
 				:data-testid="`folder-title-input-${columnIndex}-${rowIndex}-${elementIndex}`"
-				:title="title"
+				:title="element.content.title"
 				@update:title="onUpdateTitle"
 			/>
 		</v-card-text>
@@ -87,9 +86,7 @@ const emit = defineEmits<{
 
 const folderContentElement = ref(null);
 const element = toRef(props, "element");
-const { modelValue } = useContentElementState(props);
-
-const title = modelValue.value.title || "";
+const { modelValue } = useContentElementState(props, { autoSaveDebounce: 100 });
 
 const onUpdateTitle = (value: string) => {
 	modelValue.value.title = value;

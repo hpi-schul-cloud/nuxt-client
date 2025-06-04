@@ -1,49 +1,36 @@
 <template>
-	<v-form ref="form" validate-on="submit" @submit.prevent.stop="onSubmit">
-		<div class="d-flex flex-row">
-			<v-textarea
-				v-model="modelValue"
-				:rules="rules"
-				:label="t('pages.folder.ariaLabels.menu.action.edit')"
-				type="text"
-				data-testid="folder-title-textarea-in-card"
-				:autofocus="true"
-				:auto-grow="true"
-				rows="1"
-				class="text"
-				@keydown="onKeydown"
-			/>
+	<div class="d-flex flex-row">
+		<v-text-field
+			v-model="titleRef"
+			:rules="[rules.validateOnOpeningTag]"
+			:label="t('pages.folder.ariaLabels.menu.action.edit')"
+			type="text"
+			data-testid="folder-title-text-field-in-card"
+			:autofocus="true"
+			class="text"
+			@keydown="onKeydown"
+		/>
 
-			<div class="align-self-center pl-2">
-				<button
-					ref="submit"
-					type="submit"
-					data-testid="save-folder-title-in-card"
-				>
-					<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
-					<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
-				</button>
-			</div>
-
-			<div class="align-self-center menu">
-				<slot />
-			</div>
+		<div class="align-self-center pl-2">
+			<button data-testid="save-folder-title-in-card" @click="onConfirm">
+				<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
+				<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
+			</button>
 		</div>
-	</v-form>
+
+		<div class="align-self-center menu">
+			<slot />
+		</div>
+	</div>
 </template>
 
 <script lang="ts" setup>
+import { useOpeningTagValidator } from "@/utils/validation";
 import { mdiCheck } from "@icons/material";
-import { isRequired } from "@util-validators";
-import { onMounted, ref } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-type VuetifyFormApi = {
-	validate: () => { valid: boolean };
-	resetValidation: () => void;
-};
-
-const props = defineProps({
+const { title } = defineProps({
 	title: { type: String, required: true },
 });
 
@@ -52,32 +39,39 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { validateOnOpeningTag } = useOpeningTagValidator();
 
-const rules = [isRequired(t("common.validation.required2"))];
-const form = ref<VuetifyFormApi | null>(null);
-const modelValue = ref("");
-
-onMounted(() => {
-	if (props.title !== undefined) {
-		modelValue.value = props.title;
-	}
+const rules = reactive({
+	validateOnOpeningTag: (value: string) => {
+		return validateOnOpeningTag(value);
+	},
 });
 
-const onSubmit = async () => {
-	if (form?.value) {
-		const { valid } = await form.value.validate();
-		if (valid) {
-			emit("update:title", modelValue.value);
-		}
+const defaultTitle = t("pages.folder.untitled");
+const titleRef = ref("");
+
+watch(
+	() => title,
+	(newTitle) => {
+		titleRef.value = newTitle || defaultTitle;
+	},
+	{ immediate: true }
+);
+
+const isTitleValid = computed(() => {
+	return rules.validateOnOpeningTag(titleRef.value) === true;
+});
+
+const onConfirm = async () => {
+	if (isTitleValid.value) {
+		emit("update:title", titleRef.value);
 	}
+	titleRef.value = titleRef.value || defaultTitle;
 };
 
 const onKeydown = (e: KeyboardEvent) => {
 	if (e.key === "enter" || e.key === "Enter") {
-		e.preventDefault();
-		onSubmit();
-	} else if (form?.value) {
-		form.value.resetValidation();
+		onConfirm();
 	}
 };
 </script>
