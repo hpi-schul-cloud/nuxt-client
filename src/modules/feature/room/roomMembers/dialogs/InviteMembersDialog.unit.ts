@@ -277,16 +277,20 @@ describe("InviteMembersDialog", () => {
 			});
 
 			describe("when close button is clicked", () => {
-				it("should set the editedLink to null", async () => {
+				it("should set the editedLink value to null", async () => {
 					const { wrapper, roomInvitationLinkStore } = setup({
-						preDefinedStep: InvitationStep.SHARE,
+						preDefinedStep: InvitationStep.PREPARE,
 					});
 					await nextTick();
 
-					const shareModalResult = wrapper.findComponent({
-						name: "ShareModalResult",
-					});
-					await shareModalResult.vm.$emit("done");
+					roomInvitationLinkStore.editedLink =
+						roomInvitationLinkStore.roomInvitationLinks[0];
+
+					expect(roomInvitationLinkStore.editedLink).not.toBeNull();
+
+					const cancelButton = wrapper.findComponent({ ref: "cancelButton" });
+					await cancelButton.trigger("click");
+
 					expect(roomInvitationLinkStore.editedLink).toBeNull();
 				});
 			});
