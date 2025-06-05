@@ -42,12 +42,12 @@ app.use((req, res, next) => {
 
 	if (isFileStorage(path)) {
 		fileStorageProxy(req, res, next);
+	} else if (isCommonCartridge(path)) {
+		commonCartridgeProxy(req, res, next);
 	} else if (isH5pStaticFiles(path)) {
 		h5pStaticFilesProxy(req, res, next);
 	} else if (isH5pEditor(path)) {
 		h5pEditorProxy(req, res, next);
-	} else if (isCommonCartridge(path)) {
-		commonCartridgeProxy(req, res, next);
 	} else if (isServer(path)) {
 		serverProxy(req, res, next);
 	} else if (isVueClient(path)) {
