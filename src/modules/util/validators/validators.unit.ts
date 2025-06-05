@@ -18,12 +18,18 @@ describe("util-validators", () => {
 	});
 
 	describe("isOfMaxLength", () => {
-		it("should not accept values of more length then parameter given", () => {
+		it("should not accept string of more length than parameter given", () => {
 			const maxLength = 5;
 			const tooLongValue = "123456";
 			const isValid = isOfMaxLength(maxLength)(ERROR);
 			expect(isValid(tooLongValue)).toBe(ERROR);
 		});
+
+		it("should accept values of null or undefined", () => {
+			const maxLength = 5;
+			const isValid = isOfMaxLength(maxLength)(ERROR);
+			expect(isValid(null)).toBe(true);
+			expect(isValid(undefined)).toBe(true);
 	});
 
 	describe("isNonEmptyString", () => {

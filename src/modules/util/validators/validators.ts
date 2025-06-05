@@ -76,14 +76,14 @@ export const isValidDateFormat = (value: string | null) => {
  * Checks if given value is of given max length
  */
 export const isOfMaxLength =
-	(maxLength: number): FormValidatorFn<string> =>
+	(maxLength: number): FormValidatorFn<unknown> =>
 	(errMsg) =>
 	(value) => {
 		if (value === null || value === undefined) {
 			return true;
 		}
 
-		if (value.length > maxLength) {
+		if (typeof value === "string" && value.length > maxLength) {
 			return errMsg;
 		}
 		return true;
