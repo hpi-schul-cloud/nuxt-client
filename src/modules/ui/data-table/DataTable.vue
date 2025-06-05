@@ -180,6 +180,10 @@ watch(
 	overflow-wrap: break-word;
 }
 
+:deep(.v-data-table__tr--mobile > td) {
+	align-items: start;
+}
+
 :deep(.v-data-table__td .v-selection-control--disabled) {
 	color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity));
 }
