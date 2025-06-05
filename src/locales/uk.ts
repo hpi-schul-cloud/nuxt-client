@@ -32,6 +32,12 @@ export default {
 	"common.ariaLabel.openImageInLightBox":
 		"Показати зображення в повному розмірі",
 	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
+	"common.file.awaitingScan":
+		"Попередній перегляд відображається після успішної перевірки на віруси. Наразі відбувається перевірка файлу.",
+	"common.file.scanError":
+		"Помилка під час перевірки на віруси. Неможливо створити попередній перегляд. Будь ласка, завантажте файл ще раз.",
+	"common.file.scanWontCheck": "Через розмір не може бути створено прев'ю.",
+	"common.file.virusDetected": "Файл було заблоковано через підозру на вірус.",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
@@ -54,6 +60,7 @@ export default {
 	"common.labels.expanded": "розгорнуто",
 	"common.labels.externalsource": "Джерело",
 	"common.labels.failure": "невдача",
+	"common.labels.name.new": "нова назва",
 	"common.labels.firstName.new": "Нове ім'я",
 	"common.labels.firstName": "Ім'я",
 	"common.labels.fullName": "Ім'я та Прізвище",
@@ -540,8 +547,6 @@ export default {
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
 	"components.cardElement.fileElement.audioFormatError":
 		"Формат аудіо не підтримується цим браузером / операційною системою.",
-	"components.cardElement.fileElement.awaitingScan":
-		"Попередній перегляд відображається після успішної перевірки на віруси. Наразі відбувається перевірка файлу.",
 	"components.cardElement.fileElement.caption": "опис",
 	"components.cardElement.fileElement.emptyAlt":
 		"Ось зображення з такою назвою",
@@ -550,14 +555,8 @@ export default {
 	"components.cardElement.fileElement.previewError":
 		"Не вдалося завантажити попередній перегляд.",
 	"components.cardElement.fileElement.reloadStatus": "Статус оновлення",
-	"components.cardElement.fileElement.scanError":
-		"Помилка під час перевірки на віруси. Неможливо створити попередній перегляд. Будь ласка, завантажте файл ще раз.",
-	"components.cardElement.fileElement.scanWontCheck":
-		"Через розмір не може бути створено прев'ю.",
 	"components.cardElement.fileElement.videoFormatError":
 		"Формат відео не підтримується цим браузером / операційною системою.",
-	"components.cardElement.fileElement.virusDetected":
-		"Файл було заблоковано через підозру на вірус.",
 	"components.cardElement.folderElement": "Папка з файлами",
 	"components.cardElement.folderElement.untitled": "Папка без назви",
 	"components.cardElement.LinkElement": "Посилання",
@@ -2181,6 +2180,7 @@ export default {
 	"ui.actionMenu.actions": "Дії",
 	"ui.actionMenu.select.none": "Зніміть виділення з усіх рядків",
 	"ui.dataTable.select.all": "Виділити всі рядки",
+	"ui.rename.dialog.title": "Перейменувати {entity}",
 	"util-validators-invalid-url": "Ця URL-адреса є недійсною.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",
@@ -2231,4 +2231,6 @@ export default {
 	"pages.folder.delete-multiple-confirmation":
 		"Дійсно видалити всі {total} файли?",
 	"pages.folder.delete-confirmation": "Дійсно видалити файл {name}?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"Ім'я файлу вже існує.",
 };

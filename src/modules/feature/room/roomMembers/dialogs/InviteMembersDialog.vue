@@ -5,6 +5,7 @@
 		data-testid="dialog-invite-participants"
 		max-width="480"
 		@keydown.esc="onClose"
+		@click:outside="onClose"
 	>
 		<v-card ref="inviteMembersContent">
 			<template #title>
@@ -272,6 +273,11 @@ const onUpdateDate = (date: Date | null) => {
 
 const onClose = () => {
 	emit("close");
+	editedLink.value = null;
+
+	setTimeout(() => {
+		formData.value = { ...defaultFormData };
+	}, 1000);
 };
 
 const onContinue = async () => {

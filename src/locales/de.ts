@@ -31,6 +31,14 @@ export default {
 	"common.ariaLabel.newTab": "öffnet in einem neuen Tab",
 	"common.ariaLabel.openImageInLightBox": "Bild in voller Größe anzeigen",
 	"common.ariaLabel.sameTab": "öffnet im selben Tab",
+	"common.file.awaitingScan":
+		"Vorschau wird nach erfolgreicher Virenprüfung angezeigt. Aktuell wird die Datei gescannt.",
+	"common.file.scanWontCheck":
+		"Aufgrund der Größe kann keine Vorschau generiert werden.",
+	"common.file.scanError":
+		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
+	"common.file.virusDetected":
+		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
@@ -53,6 +61,7 @@ export default {
 	"common.labels.expanded": "geöffnet",
 	"common.labels.externalsource": "Quelle",
 	"common.labels.failure": "fehler",
+	"common.labels.name.new": "Neuer Name",
 	"common.labels.firstName.new": "Neuer Vorname",
 	"common.labels.firstName": "Vorname",
 	"common.labels.fullName": "Vorname & Nachname",
@@ -529,8 +538,6 @@ export default {
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
 	"components.cardElement.fileElement.audioFormatError":
 		"Das Audioformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
-	"components.cardElement.fileElement.awaitingScan":
-		"Vorschau wird nach erfolgreicher Virenprüfung angezeigt. Aktuell wird die Datei gescannt.",
 	"components.cardElement.fileElement.caption": "Beschreibung",
 	"components.cardElement.fileElement.emptyAlt":
 		"Hier ist ein Bild mit folgendem Namen",
@@ -538,14 +545,8 @@ export default {
 	"components.cardElement.fileElement.previewError":
 		"Laden der Vorschau fehlgeschlagen.",
 	"components.cardElement.fileElement.reloadStatus": "Status aktualisieren",
-	"components.cardElement.fileElement.scanError":
-		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
-	"components.cardElement.fileElement.scanWontCheck":
-		"Aufgrund der Größe kann keine Vorschau generiert werden.",
 	"components.cardElement.fileElement.videoFormatError":
 		"Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
-	"components.cardElement.fileElement.virusDetected":
-		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
 	"components.cardElement.folderElement": "Dateiordner",
 	"components.cardElement.folderElement.untitled": "Unbenannter Ordner",
 	"components.cardElement.LinkElement": "Link",
@@ -2182,6 +2183,7 @@ export default {
 	"ui.actionMenu.actions": "Aktionen",
 	"ui.actionMenu.select.none": "Alle Zeilen abwählen",
 	"ui.dataTable.select.all": "Alle Zeilen auswählen",
+	"ui.rename.dialog.title": "{entity} umbenennen",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",
@@ -2233,4 +2235,6 @@ export default {
 	"pages.folder.delete-multiple-confirmation":
 		"Alle {total} Dateien wirklich löschen?",
 	"pages.folder.delete-confirmation": "Datei {name} wirklich löschen?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"Der Dateiname existiert bereits.",
 };

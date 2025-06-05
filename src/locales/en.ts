@@ -31,6 +31,12 @@ export default {
 	"common.ariaLabel.newTab": "opens in a new tab",
 	"common.ariaLabel.openImageInLightBox": "Display image in full size",
 	"common.ariaLabel.sameTab": "opens in the same tab",
+	"common.file.awaitingScan":
+		"Preview is displayed after a successful virus scan. The file is currently being scanned.",
+	"common.file.scanWontCheck": "Due to the size, no preview can be generated.",
+	"common.file.scanError":
+		"Error during virus check. Preview cannot be created. Please upload the file again.",
+	"common.file.virusDetected": "File has been locked due to a suspected virus.",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
@@ -53,6 +59,7 @@ export default {
 	"common.labels.expanded": "expanded",
 	"common.labels.externalsource": "Source",
 	"common.labels.failure": "failure",
+	"common.labels.name.new": "New name",
 	"common.labels.firstName.new": "New first name",
 	"common.labels.firstName": "First Name",
 	"common.labels.fullName": "Name & Last Name",
@@ -526,8 +533,6 @@ export default {
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
 	"components.cardElement.fileElement.audioFormatError":
 		"The audio format is not supported by this browser/operating system.",
-	"components.cardElement.fileElement.awaitingScan":
-		"Preview is displayed after a successful virus scan. The file is currently being scanned.",
 	"components.cardElement.fileElement.caption": "Caption",
 	"components.cardElement.fileElement.emptyAlt":
 		"Here is an image with the following name",
@@ -535,14 +540,9 @@ export default {
 	"components.cardElement.fileElement.previewError":
 		"Failed to load the preview.",
 	"components.cardElement.fileElement.reloadStatus": "Update status",
-	"components.cardElement.fileElement.scanError":
-		"Error during virus check. Preview cannot be created. Please upload the file again.",
-	"components.cardElement.fileElement.scanWontCheck":
-		"Due to the size, no preview can be generated.",
 	"components.cardElement.fileElement.videoFormatError":
 		"The video format is not supported by this browser/operating system.",
-	"components.cardElement.fileElement.virusDetected":
-		"File has been locked due to a suspected virus.",
+
 	"components.cardElement.folderElement": "File folder",
 	"components.cardElement.folderElement.untitled": "Untitled folder",
 	"components.cardElement.LinkElement": "Link",
@@ -2149,6 +2149,7 @@ export default {
 	"ui.actionMenu.actions": "Actions",
 	"ui.actionMenu.select.none": "Deselect all lines",
 	"ui.dataTable.select.all": "Select all lines",
+	"ui.rename.dialog.title": "Rename {entity}",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent.label.missing": "User created",
@@ -2199,4 +2200,6 @@ export default {
 	"pages.folder.delete-multiple-confirmation": "Delete all {total} files?",
 	"pages.folder.delete-confirmation":
 		"Do you really want to delete file {name}?",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
+		"The file name already exists.",
 };

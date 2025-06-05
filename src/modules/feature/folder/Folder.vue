@@ -10,18 +10,31 @@
 				<h1 class="text-h3 mb-4" data-testid="folder-title">
 					{{ folderName }}
 				</h1>
-				<FolderMenu :folder-name="folderName" @delete="onDelete" />
+				<FolderMenu
+					v-if="hasEditPermission"
+					:folder-name="folderName"
+					@delete="onDelete"
+					@rename="onRenameActionClick"
+				/>
 			</div>
 		</template>
 		<FileTable
 			:is-loading="isLoading"
 			:is-empty="isEmpty"
+			:has-edit-permission="hasEditPermission"
 			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
 			@delete-files="onDeleteFiles"
+			@update:name="onUpdateName"
 		/>
 	</DefaultWireframe>
 	<ConfirmationDialog />
+	<RenameFolderDialog
+		v-model:is-dialog-open="isRenameDialogOpen"
+		:name="folderName"
+		@confirm="onRename"
+		@cancel="onRenameCancel"
+	/>
 	<input
 		ref="fileInput"
 		type="file"
@@ -38,16 +51,22 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import router from "@/router";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
-import { useBoardApi, useSharedBoardPageInformation } from "@data-board";
+import {
+	useBoardApi,
+	useBoardPermissions,
+	useBoardStore,
+	useSharedBoardPageInformation,
+} from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
+import { LightBox } from "@ui-light-box";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
-import { LightBox } from "@ui-light-box";
+import RenameFolderDialog from "./RenameFolderDialog.vue";
 
 const boardApi = useBoardApi();
 
@@ -66,23 +85,33 @@ const {
 	fetchFileFolderElement,
 	parent,
 	mapNodeTypeToPathType,
+	renameFolder,
 } = useFolderState();
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
-const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles } =
+const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles, rename } =
 	useFileStorageApi();
+
+const boardStore = useBoardStore();
+
+const { hasEditPermission } = useBoardPermissions();
 
 const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
 const fileInput = ref<HTMLInputElement | null>(null);
+const isRenameDialogOpen = ref(false);
 
-const fabAction = {
-	icon: mdiPlus,
-	title: t("pages.folder.fab.title"),
-	ariaLabel: t("pages.folder.fab.title"),
-	dataTestId: "fab-add-files",
-};
+const fabAction = computed(() => {
+	if (!hasEditPermission.value) return;
+
+	return {
+		icon: mdiPlus,
+		title: t("pages.folder.fab.title"),
+		ariaLabel: t("pages.folder.fab.title"),
+		dataTestId: "fab-add-files",
+	};
+});
 
 const uploadProgress = ref({
 	uploaded: 0,
@@ -127,16 +156,12 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 	}
 };
 
-const onDeleteFiles = async (
-	fileRecords: FileRecord[],
-	confirmationPromise: Promise<boolean>
-) => {
-	const shouldDelete = await confirmationPromise;
-	if (!shouldDelete) {
-		return;
-	}
-
+const onDeleteFiles = async (fileRecords: FileRecord[]) => {
 	await deleteFiles(fileRecords);
+};
+
+const onUpdateName = async (fileName: string, fileRecord: FileRecord) => {
+	await rename(fileRecord.id, { fileName });
 };
 
 const deleteAndNavigateToBoard = async (folderId: string) => {
@@ -144,6 +169,19 @@ const deleteAndNavigateToBoard = async (folderId: string) => {
 
 	await boardApi.deleteElementCall(folderId);
 	router.replace(`/${boardPath}/${parent.value.id}`);
+};
+
+const onRenameActionClick = () => {
+	isRenameDialogOpen.value = true;
+};
+
+const onRename = async (newName: string) => {
+	await renameFolder(newName, folderId.value);
+	isRenameDialogOpen.value = false;
+};
+
+const onRenameCancel = () => {
+	isRenameDialogOpen.value = false;
 };
 
 onMounted(async () => {
@@ -165,6 +203,10 @@ onMounted(async () => {
 
 	await fetchFileFolderElement(props.folderId);
 	await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
+	if (!boardStore.board) {
+		await boardStore.fetchBoardRequest({ boardId: parent.value.id });
+	}
+
 	isLoading.value = false;
 });
 
