@@ -168,13 +168,13 @@ describe("@feature-room/RoomCopyFlow", () => {
 		});
 
 		it("should emit 'copy:success' event", async () => {
-			const { wrapper, infoDialog } = await setupWithApiSuccess();
+			const { wrapper } = await setupWithApiSuccess();
 
 			expect(wrapper.emitted("copy:success")).toHaveLength(1);
 		});
 
 		it("should emit 'copy:ended' event", async () => {
-			const { wrapper, infoDialog } = await setupWithApiSuccess();
+			const { wrapper } = await setupWithApiSuccess();
 
 			expect(wrapper.emitted("copy:ended")).toHaveLength(1);
 		});
