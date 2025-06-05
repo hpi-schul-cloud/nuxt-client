@@ -35,7 +35,10 @@
 					<FileInteractionHandler :file-record-item="item">
 						<span
 							:data-testid="`name-${item.name}`"
-							:class="{ 'text-disabled': !item.isSelectable }"
+							:class="{
+								'text-disabled': !item.isSelectable,
+								'break-word': true,
+							}"
 						>
 							{{ item.name }}
 							<FileStatus :file-record="item" />
@@ -249,3 +252,10 @@ const buildActionMenuAriaLabel = (item: FileRecord): string => {
 	});
 };
 </script>
+
+<style scoped>
+.break-word {
+	word-break: break-word;
+	overflow-wrap: break-word;
+}
+</style>
