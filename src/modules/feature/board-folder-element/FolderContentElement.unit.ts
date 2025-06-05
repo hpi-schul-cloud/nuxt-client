@@ -4,6 +4,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useContentElementState } from "@data-board";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import {
@@ -16,6 +17,9 @@ import FolderContentElement from "./FolderContentElement.vue";
 
 jest.mock("@data-board", () => ({
 	useBoardFocusHandler: jest.fn(),
+	useContentElementState: jest.fn(() => ({
+		modelValue: { value: { title: "test" } },
+	})),
 }));
 
 describe("FolderContentElement", () => {
@@ -47,6 +51,12 @@ describe("FolderContentElement", () => {
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,
+			},
+		});
+
+		(useContentElementState as jest.Mock).mockReturnValue({
+			modelValue: {
+				value: (options.element || mockElement).content.title || "",
 			},
 		});
 
