@@ -28,6 +28,7 @@ import { WarningAlert } from "@ui-alert";
 import { Ref, ref } from "vue";
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 
 jest.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
@@ -218,8 +219,13 @@ describe("AddMembers", () => {
 						{
 							id: RoleName.Student,
 							name: "common.labels.student.neutral",
+							icon: mdiAccountOutline,
 						},
-						{ id: RoleName.Teacher, name: "common.labels.teacher.neutral" },
+						{
+							id: RoleName.Teacher,
+							name: "common.labels.teacher.neutral",
+							icon: mdiAccountSchoolOutline,
+						},
 					];
 
 					const roleComponent = wrapper.getComponent({
