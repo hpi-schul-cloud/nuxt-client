@@ -6,6 +6,7 @@
 	>
 		<KebabMenuActionRename
 			:aria-label="t('pages.folder.ariaLabels.menu.action.edit')"
+			@click="() => $emit('rename')"
 		/>
 		<KebabMenuActionDelete
 			:aria-label="t('pages.folder.ariaLabels.menu.action.delete')"
@@ -30,5 +31,5 @@ defineProps({
 	folderName: { type: String, required: false, default: undefined },
 });
 
-defineEmits(["delete"]);
+defineEmits(["delete", "rename"]);
 </script>
