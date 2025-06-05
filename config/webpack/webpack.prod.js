@@ -14,6 +14,8 @@ module.exports = merge(common, {
 			},
 		}),
 		new ESLintWebpackPlugin({
+			extensions: [".js", ".jsx", ".vue", ".ts", ".tsx"],
+			failOnWarning: false,
 			failOnError: true,
 		}),
 	],
