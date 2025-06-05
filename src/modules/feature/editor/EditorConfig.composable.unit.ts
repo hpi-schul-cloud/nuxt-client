@@ -62,7 +62,12 @@ describe("useEditorConfig", () => {
 		const setupEditor = ({
 			btnKey,
 			editorData,
-		}: { btnKey?: string; editorData?: string } = {}) => {
+			sourceElement,
+		}: {
+			btnKey?: string;
+			editorData?: string;
+			sourceElement?: HTMLElement;
+		} = {}) => {
 			const mockEditor = {
 				editing: {
 					view: {
@@ -81,6 +86,7 @@ describe("useEditorConfig", () => {
 					},
 				},
 				getData: jest.fn(() => editorData || ""),
+				sourceElement: sourceElement || document.createElement("div"),
 			} as unknown as Editor;
 
 			const onDelete = jest.fn();
@@ -128,6 +134,19 @@ describe("useEditorConfig", () => {
 					composable.registerDeletionHandler(mockEditor, onDelete);
 
 					expect(onDelete).not.toHaveBeenCalled();
+				});
+				describe("and editor contains a list element", () => {
+					it("should not call onDelete if editor contains a list", () => {
+						const sourceElement = document.createElement("div");
+						sourceElement.innerHTML = "<ul><li>Item</li></ul>";
+						const { composable, mockEditor, onDelete } = setupEditor({
+							btnKey: key,
+							editorData: "",
+							sourceElement,
+						});
+						composable.registerDeletionHandler(mockEditor, onDelete);
+						expect(onDelete).not.toHaveBeenCalled();
+					});
 				});
 			});
 		});
