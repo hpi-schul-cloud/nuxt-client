@@ -49,14 +49,18 @@ export const useEditorConfig = () => {
 		fontBackgroundColor: fontBackgroundColors(t),
 	});
 
-	function isEditorEmpty(editor: Editor): boolean {
+	function isEditorEmpty(
+		editor: Editor & { sourceElement?: HTMLElement }
+	): boolean {
 		const data = (editor as Editor & { getData: () => string }).getData();
 		const tempDiv = document.createElement("div");
 		tempDiv.innerHTML = data;
-		return (
-			!tempDiv.textContent?.trim() &&
-			!tempDiv.querySelector("*:not(.math-tex):not(.katex)")
+		const containsTextContent = !!tempDiv.textContent?.trim();
+		const containsFormula = !!tempDiv.querySelector(
+			"*:not(.math-tex):not(.katex)"
 		);
+		const containsList = !!editor.sourceElement?.querySelector("ul,ol");
+		return !containsTextContent && !containsFormula && !containsList;
 	}
 
 	const deletionHandler = (
