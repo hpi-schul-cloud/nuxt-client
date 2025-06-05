@@ -17,10 +17,6 @@
 				<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
 			</button>
 		</div>
-
-		<div class="align-self-center menu">
-			<slot />
-		</div>
 	</div>
 </template>
 
