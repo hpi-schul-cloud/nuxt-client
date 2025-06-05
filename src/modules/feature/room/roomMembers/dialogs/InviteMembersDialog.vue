@@ -162,7 +162,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref, watch } from "vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard, VTextField } from "vuetify/lib/components";
 import { InfoAlert } from "@ui-alert";
@@ -178,7 +178,11 @@ import {
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { storeToRefs } from "pinia";
-import { isOfMaxLength, isRequired } from "@util-validators";
+import {
+	isNotOnlyWhitespaces,
+	isOfMaxLength,
+	isRequired,
+} from "@util-validators";
 import { useOpeningTagValidator } from "@/utils/validation";
 
 defineProps({
@@ -218,12 +222,13 @@ const defaultFormData = {
 };
 
 const formData = ref({ ...defaultFormData });
-const descriptionField = ref();
+const descriptionField = useTemplateRef("descriptionField");
 
 const validationRules = [
-	validateOnOpeningTag,
-	isRequired(t("common.validation.required2")),
+	isNotOnlyWhitespaces(t("common.validation.notOnlyWhitespaces")),
 	isOfMaxLength(100)(t("common.validation.tooLong")),
+	isRequired(t("common.validation.required2")),
+	validateOnOpeningTag,
 ];
 
 const isDatePickerDisabled = computed(() => {
@@ -284,7 +289,9 @@ const onContinue = async () => {
 	if (invitationStep.value === InvitationStep.SHARE) return;
 
 	const validationResult = await descriptionField.value?.validate?.();
-	if (!validationResult?.valid) return;
+	if (validationResult && validationResult.length > 0) {
+		return;
+	}
 
 	const baseParams = {
 		title: formData.value.title,
@@ -362,9 +369,7 @@ watch(
 watch(
 	() => isOpen.value,
 	(isOpen: boolean) => {
-		if (isOpen) {
-			formData.value = { ...defaultFormData };
-		} else {
+		if (isOpen === false) {
 			deactivate();
 		}
 	}
