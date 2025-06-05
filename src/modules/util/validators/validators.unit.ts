@@ -4,6 +4,7 @@ import {
 	isValidTimeFormat,
 	isValidDateFormat,
 	isOfMaxLength,
+	isNotOnlyWhitespaces,
 } from "@util-validators";
 
 describe("util-validators", () => {
@@ -22,6 +23,13 @@ describe("util-validators", () => {
 			const tooLongValue = "123456";
 			const isValid = isOfMaxLength(maxLength)(ERROR);
 			expect(isValid(tooLongValue)).toBe(ERROR);
+		});
+	});
+
+	describe("isNotOnlyWhitespaces", () => {
+		it("should not accept values that are only whitespace", () => {
+			const isValid = isNotOnlyWhitespaces(ERROR);
+			expect(isValid("   ")).toBe(ERROR);
 		});
 	});
 

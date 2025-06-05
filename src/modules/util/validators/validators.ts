@@ -77,3 +77,12 @@ export const isOfMaxLength =
 		}
 		return true;
 	};
+
+/**
+ * Checks if given value is not only whitespaces
+ */
+export const isNotOnlyWhitespaces: FormValidatorFn<string> =
+	(errMsg) => (value) => {
+		if (typeof value !== "string") return errMsg;
+		return value.trim().length > 0 || errMsg;
+	};
