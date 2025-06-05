@@ -5,51 +5,41 @@ import {
 import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { VCard, VDialog, VTextField } from "vuetify/lib/components/index";
-import RenameFileDialog from "./RenameFileDialog.vue";
+import RenameFolderDialog from "./RenameFolderDialog.vue";
 
-describe("RenameFileDialog", () => {
+describe("RenameFolderDialog", () => {
 	describe("when the dialog isDialogOpen is true", () => {
 		const setup = () => {
-			const entityName = "entity name";
 			const name = "name of item";
 
-			const wrapper = mount(RenameFileDialog, {
+			const wrapper = mount(RenameFolderDialog, {
 				props: {
 					isDialogOpen: true,
-					entityName,
-					fileRecords: [],
 					name,
 				},
 				global: {
-					plugins: [
-						createTestingVuetify(),
-						createTestingI18n({
-							messages: {
-								en: {
-									"ui.rename.dialog.title": "{entity}",
-								},
-							},
-						}),
-					],
+					plugins: [createTestingVuetify(), createTestingI18n()],
 				},
 			});
-			return { wrapper, entityName, name };
+
+			return { wrapper, name };
 		};
 
 		it("should render entity name with name", () => {
-			const { wrapper, entityName } = setup();
-			const card = wrapper.findComponent(VDialog).findComponent(VCard);
+			const { wrapper } = setup();
 
-			expect(card.text()).toContain(entityName);
+			const dialog = wrapper.findComponent(VCard);
+
+			expect(dialog.text()).toContain(
+				"pages.folder.ariaLabels.menu.action.edit"
+			);
 		});
 
 		it("should render input with name", () => {
 			const { wrapper, name } = setup();
 
-			const input = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.find("input[type='text']");
+			const input = wrapper.findComponent(VCard).find("input[type='text']");
+
 			expect(input.exists()).toBe(true);
 			expect(input.attributes("value")).toBe(name);
 		});
@@ -94,38 +84,19 @@ describe("RenameFileDialog", () => {
 				expect(wrapper.emitted("confirm")?.[0]).toEqual(["new name"]);
 			});
 		});
-
-		describe("when name is set to undefined after the dialog is opened", () => {
-			it("should still show the latest valid name", async () => {
-				const { name, wrapper } = setup();
-
-				const input = wrapper
-					.findComponent(VDialog)
-					.findComponent(VCard)
-					.find("input[type='text']");
-
-				expect(input.exists()).toBe(true);
-				expect(input.attributes("value")).toBe(name);
-
-				await wrapper.setProps({ name: undefined });
-
-				expect(input.exists()).toBe(true);
-				expect(input.attributes("value")).toBe(name);
-			});
-		});
 	});
 
 	describe("when the dialog isDialogOpen is false", () => {
 		const setup = () => {
-			const wrapper = mount(RenameFileDialog, {
+			const wrapper = mount(RenameFolderDialog, {
 				props: {
 					isDialogOpen: false,
-					fileRecords: [],
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 				},
 			});
+
 			return { wrapper };
 		};
 
@@ -139,10 +110,9 @@ describe("RenameFileDialog", () => {
 
 	describe("when a value containing a < directly followed by a string is entered", () => {
 		const setup = () => {
-			const wrapper = mount(RenameFileDialog, {
+			const wrapper = mount(RenameFolderDialog, {
 				props: {
 					isDialogOpen: true,
-					fileRecords: [],
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],

@@ -33,6 +33,21 @@ export const useFolderState = () => {
 		}
 	};
 
+	const renameFolder = async (
+		title: string,
+		fileFolderElementId: string
+	): Promise<void> => {
+		try {
+			await boardElementApi.elementControllerUpdateElement(
+				fileFolderElementId,
+				{ data: { content: { title }, type: ContentElementType.FileFolder } }
+			);
+			await fetchFileFolderElement(fileFolderElementId);
+		} catch (error) {
+			throwApplicationError(error);
+		}
+	};
+
 	const folderName = computed(() => {
 		const title = fileFolderElement.value?.content.title;
 
@@ -87,6 +102,7 @@ export const useFolderState = () => {
 		fetchFileFolderElement,
 		parent,
 		mapNodeTypeToPathType,
+		renameFolder,
 	};
 };
 

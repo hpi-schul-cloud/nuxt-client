@@ -202,6 +202,28 @@ describe("BoardApi.composable", () => {
 			);
 		});
 
+		it("should call elementControllerUpdateElement api with FileFolderElement", async () => {
+			const { updateElementCall } = useBoardApi();
+			const payload = {
+				id: "file-folder-element-id",
+				type: ContentElementType.FileFolder,
+				content: {
+					title: "New Folder",
+				},
+				timestamps: timestampsResponseFactory.build(),
+			};
+			const data = {
+				content: payload.content,
+				type: ContentElementType.FileFolder,
+			};
+
+			await updateElementCall(payload);
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+				payload.id,
+				{ data }
+			);
+		});
+
 		it("should call elementControllerUpdateElement api with SubmissionContainerElement", async () => {
 			const { updateElementCall } = useBoardApi();
 			const payload = {
