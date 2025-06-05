@@ -169,8 +169,8 @@ export default {
 		"Der eingegebene Text überschreitet die Maximallänge",
 	"common.validation.containsOpeningTag":
 		"Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
-	"common.validation.notOnlyWhitespaces":
-		"Text darf nicht nur Leerzeichen enthalten",
+	"common.validation.nonEmptyString":
+		"Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.and": "und",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",

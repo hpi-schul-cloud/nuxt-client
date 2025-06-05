@@ -171,8 +171,8 @@ export default {
 		"Введений текст перевищує максимально дозволену довжину",
 	"common.validation.containsOpeningTag":
 		"Будь ласка, вставте пробіл після знаку менше.",
-	"common.validation.notOnlyWhitespaces":
-		"Текст не повинен складатися лише з пробілів",
+	"common.validation.nonEmptyString":
+		"Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.and": "і",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",

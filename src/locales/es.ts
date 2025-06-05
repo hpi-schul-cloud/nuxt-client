@@ -172,8 +172,8 @@ export default {
 		"The text you entered exceeds the maximum length",
 	"common.validation.containsOpeningTag":
 		"Inserte un espacio después del signo menos-que.",
-	"common.validation.notOnlyWhitespaces":
-		"El texto no debe contener sólo espacios",
+	"common.validation.nonEmptyString":
+		"Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.and": "y",
 	"common.words.classes": "Clases",
 	"common.words.color": "Color",

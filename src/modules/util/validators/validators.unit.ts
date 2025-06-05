@@ -4,7 +4,7 @@ import {
 	isValidTimeFormat,
 	isValidDateFormat,
 	isOfMaxLength,
-	isNotOnlyWhitespaces,
+	isNonEmptyString,
 } from "@util-validators";
 
 describe("util-validators", () => {
@@ -26,10 +26,21 @@ describe("util-validators", () => {
 		});
 	});
 
-	describe("isNotOnlyWhitespaces", () => {
-		it("should not accept values that are only whitespace", () => {
-			const isValid = isNotOnlyWhitespaces(ERROR);
+	describe("isNonEmptyString", () => {
+		it("should not accept empty string", () => {
+			const isValid = isNonEmptyString(ERROR);
+			expect(isValid("")).toBe(ERROR);
+		});
+
+		it("should not accept only whitespaces", () => {
+			const isValid = isNonEmptyString(ERROR);
 			expect(isValid("   ")).toBe(ERROR);
+		});
+
+		it("should not accept null or undefined", () => {
+			const isValid = isNonEmptyString(ERROR);
+			expect(isValid(null)).toBe(ERROR);
+			expect(isValid(undefined)).toBe(ERROR);
 		});
 	});
 

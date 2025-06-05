@@ -1,5 +1,5 @@
 import {
-	isNotOnlyWhitespaces,
+	isNonEmptyString,
 	isOfMaxLength,
 	isRequired,
 	isValidUrl,
@@ -8,7 +8,7 @@ import {
 } from "./validators";
 
 export {
-	isNotOnlyWhitespaces,
+	isNonEmptyString,
 	isOfMaxLength,
 	isRequired,
 	isValidUrl,

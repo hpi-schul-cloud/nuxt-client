@@ -9,6 +9,17 @@ export const isRequired: FormValidatorFn<unknown> = (errMsg) => (value) =>
 	!!value || errMsg;
 
 /**
+ * Checks if the input is a non-empty string containing at least one non-whitespace character
+ */
+export const isNonEmptyString: FormValidatorFn<unknown> =
+	(errMsg) => (value) => {
+		if (typeof value !== "string" || value.trim() === "") {
+			return errMsg;
+		}
+		return true;
+	};
+
+/**
  * Checks if given value is a valid URL
  */
 export const isValidUrl: FormValidatorFn<string> = (errMsg) => (value) => {
@@ -76,13 +87,4 @@ export const isOfMaxLength =
 			return errMsg;
 		}
 		return true;
-	};
-
-/**
- * Checks if given value is not only whitespaces
- */
-export const isNotOnlyWhitespaces: FormValidatorFn<string> =
-	(errMsg) => (value) => {
-		if (typeof value !== "string") return errMsg;
-		return value.trim().length > 0 || errMsg;
 	};

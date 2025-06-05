@@ -168,7 +168,8 @@ export default {
 		"The text you entered exceeds the maximum length",
 	"common.validation.containsOpeningTag":
 		"Please insert a space after the less-than sign.",
-	"common.validation.notOnlyWhitespaces": "Text must not contain only spaces",
+	"common.validation.nonEmptyString":
+		"This is a mandatory field and must not contain only spaces.",
 	"common.words.and": "and",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",

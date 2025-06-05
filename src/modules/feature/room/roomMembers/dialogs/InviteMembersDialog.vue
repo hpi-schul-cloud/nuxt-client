@@ -178,11 +178,7 @@ import {
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { storeToRefs } from "pinia";
-import {
-	isNotOnlyWhitespaces,
-	isOfMaxLength,
-	isRequired,
-} from "@util-validators";
+import { isNonEmptyString, isOfMaxLength } from "@util-validators";
 import { useOpeningTagValidator } from "@/utils/validation";
 
 defineProps({
@@ -225,9 +221,8 @@ const formData = ref({ ...defaultFormData });
 const descriptionField = useTemplateRef("descriptionField");
 
 const validationRules = [
-	isNotOnlyWhitespaces(t("common.validation.notOnlyWhitespaces")),
+	isNonEmptyString(t("common.validation.nonEmptyString")),
 	isOfMaxLength(100)(t("common.validation.tooLong")),
-	isRequired(t("common.validation.required2")),
 	validateOnOpeningTag,
 ];
 

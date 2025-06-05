@@ -3,6 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import InviteMembersDialog from "./InviteMembersDialog.vue";
+import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { nextTick } from "vue";
 import { createTestingPinia } from "@pinia/testing";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
@@ -115,11 +116,13 @@ describe("InviteMembersDialog", () => {
 			},
 		});
 
+		if (options.preDefinedStep !== InvitationStep.SHARE) {
+			setDescription(wrapper, "invitation link");
+		}
+
 		const roomInvitationLinkStore = mockedPiniaStoreTyping(
 			useRoomInvitationLinkStore
 		);
-
-		setDescription(wrapper, "invitation link");
 
 		return { wrapper, roomInvitationLinkStore, notifierModule };
 	};
@@ -170,9 +173,7 @@ describe("InviteMembersDialog", () => {
 
 				await nextTick();
 
-				const shareModalResult = wrapper.findComponent({
-					name: "ShareModalResult",
-				});
+				const shareModalResult = wrapper.findComponent(ShareModalResult);
 
 				expect(shareModalResult.exists()).toBe(false);
 			});
@@ -278,9 +279,7 @@ describe("InviteMembersDialog", () => {
 
 				await nextTick();
 
-				const shareModalResult = wrapper.findComponent({
-					name: "ShareModalResult",
-				});
+				const shareModalResult = wrapper.findComponent(ShareModalResult);
 
 				expect(shareModalResult.exists()).toBe(true);
 			});
@@ -293,9 +292,7 @@ describe("InviteMembersDialog", () => {
 
 					await nextTick();
 
-					const shareModalResult = wrapper.findComponent({
-						name: "ShareModalResult",
-					});
+					const shareModalResult = wrapper.findComponent(ShareModalResult);
 
 					await shareModalResult.vm.$emit("copied");
 
@@ -315,9 +312,7 @@ describe("InviteMembersDialog", () => {
 
 					await nextTick();
 
-					const shareModalResult = wrapper.findComponent({
-						name: "ShareModalResult",
-					});
+					const shareModalResult = wrapper.findComponent(ShareModalResult);
 
 					await shareModalResult.vm.$emit("done");
 
@@ -333,9 +328,7 @@ describe("InviteMembersDialog", () => {
 				preDefinedStep: InvitationStep.PREPARE,
 			});
 			await nextTick();
-			const shareModalBefore = wrapper.findComponent({
-				name: "ShareModalResult",
-			});
+			const shareModalBefore = wrapper.findComponent(ShareModalResult);
 			expect(shareModalBefore.exists()).toBe(false);
 
 			const nextButton = wrapper.findComponent({ ref: "continueButton" });
@@ -355,14 +348,12 @@ describe("InviteMembersDialog", () => {
 			);
 		});
 
-		it("should and call updateLink method if form is valid", async () => {
+		it("should call updateLink method if form is valid", async () => {
 			const { wrapper, roomInvitationLinkStore } = setup({
 				preDefinedStep: InvitationStep.EDIT,
 			});
 			await nextTick();
-			const shareModalBefore = wrapper.findComponent({
-				name: "ShareModalResult",
-			});
+			const shareModalBefore = wrapper.findComponent(ShareModalResult);
 			expect(shareModalBefore.exists()).toBe(false);
 
 			const nextButton = wrapper.findComponent({ ref: "continueButton" });
@@ -399,7 +390,7 @@ describe("InviteMembersDialog", () => {
 			expect(roomInvitationLinkStore.createLink).not.toHaveBeenCalled();
 			expect(roomInvitationLinkStore.updateLink).not.toHaveBeenCalled();
 			expect(descriptionField.text()).toContain(
-				"common.validation.notOnlyWhitespaces"
+				"common.validation.nonEmptyString"
 			);
 		});
 	});
@@ -431,38 +422,17 @@ describe("InviteMembersDialog", () => {
 
 			await setDescription(wrapper, "");
 
-			const descriptionField = wrapper.findComponent({
-				ref: "descriptionField",
-			});
-			expect(descriptionField.text()).toContain("common.validation.required2");
-		});
-
-		it("should show error when description contains < followed by a string", async () => {
-			const { wrapper } = setup();
+			// needed to trigger validation
+			const nextButton = wrapper.findComponent({ ref: "continueButton" });
+			await nextButton.trigger("click");
 			await nextTick();
-
-			await setDescription(wrapper, "<abc123");
 
 			const descriptionField = wrapper.findComponent({
 				ref: "descriptionField",
 			});
 			expect(descriptionField.text()).toContain(
-				"common.validation.containsOpeningTag"
+				"common.validation.nonEmptyString"
 			);
-		});
-
-		it("should show error when description is longer then 100 characters", async () => {
-			const { wrapper } = setup();
-			await nextTick();
-
-			const longDescription = "a".repeat(101);
-			await setDescription(wrapper, longDescription);
-			await nextTick();
-
-			const descriptionField = wrapper.findComponent({
-				ref: "descriptionField",
-			});
-			expect(descriptionField.text()).toContain("common.validation.tooLong");
 		});
 
 		it("should show error when description contains only whitespaces", async () => {
@@ -480,8 +450,45 @@ describe("InviteMembersDialog", () => {
 				ref: "descriptionField",
 			});
 			expect(descriptionField.text()).toContain(
-				"common.validation.notOnlyWhitespaces"
+				"common.validation.nonEmptyString"
 			);
+		});
+
+		it("should show error when description contains < followed by a string", async () => {
+			const { wrapper } = setup();
+			await nextTick();
+
+			await setDescription(wrapper, "<abc123");
+
+			// needed to trigger validation
+			const nextButton = wrapper.findComponent({ ref: "continueButton" });
+			await nextButton.trigger("click");
+			await nextTick();
+
+			const descriptionField = wrapper.findComponent({
+				ref: "descriptionField",
+			});
+			expect(descriptionField.text()).toContain(
+				"common.validation.containsOpeningTag"
+			);
+		});
+
+		it("should show error when description is longer then 100 characters", async () => {
+			const { wrapper } = setup();
+			await nextTick();
+
+			const longDescription = "a".repeat(101);
+			await setDescription(wrapper, longDescription);
+
+			// needed to trigger validation
+			const nextButton = wrapper.findComponent({ ref: "continueButton" });
+			await nextButton.trigger("click");
+			await nextTick();
+
+			const descriptionField = wrapper.findComponent({
+				ref: "descriptionField",
+			});
+			expect(descriptionField.text()).toContain("common.validation.tooLong");
 		});
 	});
 
