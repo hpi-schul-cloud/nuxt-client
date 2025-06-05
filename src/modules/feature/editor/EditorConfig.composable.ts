@@ -50,9 +50,9 @@ export const useEditorConfig = () => {
 	});
 
 	function isEditorEmpty(
-		editor: Editor & { sourceElement?: HTMLElement }
+		editor: Editor & { sourceElement?: HTMLElement; getData?: () => string }
 	): boolean {
-		const data = (editor as Editor & { getData: () => string }).getData();
+		const data = editor.getData ? editor.getData() : "";
 		const tempDiv = document.createElement("div");
 		tempDiv.innerHTML = data;
 		const containsTextContent = !!tempDiv.textContent?.trim();
