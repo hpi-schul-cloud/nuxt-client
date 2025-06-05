@@ -17,7 +17,7 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { RouteLocationResolved, useRouter } from "vue-router";
-import { VImg } from "vuetify/lib/components/index";
+import { VImg } from "vuetify/components";
 import H5pElement from "./H5pElement.vue";
 import H5pElementMenu from "./H5pElementMenu.vue";
 
@@ -496,6 +496,83 @@ describe("H5pElement", () => {
 					const { wrapper } = setup();
 
 					await nextTick();
+					await nextTick();
+
+					const titleLine = wrapper
+						.getComponent(ContentElementBar)
+						.getComponent(LineClamp);
+
+					expect(titleLine.text()).toBe("components.cardElement.h5pElement");
+				});
+			});
+		});
+
+		describe("when the content id of the h5p element is updated", () => {
+			describe("when the content title is fetched", () => {
+				const setup = () => {
+					const contentTitle = "test-title";
+
+					const { wrapper } = getWrapper({
+						element: h5pElementResponseFactory.build({
+							content: { contentId: null },
+						}),
+						contentTitle,
+						isEditMode: false,
+					});
+
+					return {
+						wrapper,
+						contentTitle,
+					};
+				};
+
+				it("should show the new content title", async () => {
+					const { wrapper, contentTitle } = setup();
+
+					await nextTick();
+					await nextTick();
+
+					await wrapper.setProps({
+						element: h5pElementResponseFactory.build({
+							content: { contentId: "test-id" },
+						}),
+					});
+					await nextTick();
+
+					const titleLine = wrapper
+						.getComponent(ContentElementBar)
+						.getComponent(LineClamp);
+
+					expect(titleLine.text()).toBe(contentTitle);
+				});
+			});
+
+			describe("when the content title could not be fetched", () => {
+				const setup = () => {
+					const { wrapper } = getWrapper({
+						element: h5pElementResponseFactory.build({
+							content: { contentId: null },
+						}),
+						isEditMode: false,
+						contentTitle: undefined,
+					});
+
+					return {
+						wrapper,
+					};
+				};
+
+				it("should show the default h5p title", async () => {
+					const { wrapper } = setup();
+
+					await nextTick();
+					await nextTick();
+
+					await wrapper.setProps({
+						element: h5pElementResponseFactory.build({
+							content: { contentId: "test-id" },
+						}),
+					});
 					await nextTick();
 
 					const titleLine = wrapper
