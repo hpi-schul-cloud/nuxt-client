@@ -84,7 +84,10 @@
 				</template>
 
 				<template #left-of-search>
-					<FileUploadProgress :upload-progress="uploadProgress" />
+					<FileUploadProgress
+						:upload-progress="uploadProgress"
+						@reset-upload-progress="() => emit('reset-upload-progress')"
+					/>
 				</template>
 
 				<template #action-menu-items="{ selectedIds }">
@@ -168,7 +171,11 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["delete-files", "update:name"]);
+const emit = defineEmits([
+	"delete-files",
+	"update:name",
+	"reset-upload-progress",
+]);
 
 const headers = [
 	{ title: "", key: "preview", sortable: false },

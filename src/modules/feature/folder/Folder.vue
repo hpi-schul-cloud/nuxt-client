@@ -26,6 +26,7 @@
 			:upload-progress="uploadProgress"
 			@delete-files="onDeleteFiles"
 			@update:name="onUpdateName"
+			@reset-upload-progress="onResetUploadProgress"
 		/>
 	</DefaultWireframe>
 	<ConfirmationDialog />
@@ -184,6 +185,10 @@ const onRenameCancel = () => {
 	isRenameDialogOpen.value = false;
 };
 
+const onResetUploadProgress = () => {
+	uploadProgress.value = { uploaded: 0, total: 0 };
+};
+
 onMounted(async () => {
 	if (fileInput.value) {
 		fileInput.value.addEventListener("change", async (event) => {
@@ -191,12 +196,9 @@ onMounted(async () => {
 
 			if (files) {
 				const fileArray = Array.from(files);
-				uploadProgress.value.total = fileArray.length;
+				uploadProgress.value.total += fileArray.length;
 
 				await uploadFiles(fileArray);
-
-				uploadProgress.value.total = 0;
-				uploadProgress.value.uploaded = 0;
 			}
 		});
 	}

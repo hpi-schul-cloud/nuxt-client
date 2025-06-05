@@ -2,7 +2,7 @@
 	<transition name="fade">
 		<div v-if="areUploadStatsVisible">
 			<v-progress-circular
-				v-if="localUploadProgress.uploaded < localUploadProgress.total"
+				v-if="uploadProgress.uploaded < uploadProgress.total"
 				indeterminate
 				class="mr-2"
 				size="20"
@@ -12,8 +12,8 @@
 			<span data-testid="upload-progress">
 				{{
 					t("pages.folder.uploadstats", {
-						uploaded: localUploadProgress.uploaded,
-						total: localUploadProgress.total,
+						uploaded: uploadProgress.uploaded,
+						total: uploadProgress.total,
 					})
 				}}
 			</span>
@@ -35,20 +35,27 @@ const props = defineProps({
 	},
 });
 
-const areUploadStatsVisible = ref(false);
+const emit = defineEmits(["reset-upload-progress"]);
 
-const localUploadProgress = ref({ uploaded: 0, total: 0 });
+const areUploadStatsVisible = ref(false);
+let timeout: NodeJS.Timeout | null = null;
 
 watch(
 	() => props.uploadProgress,
 	(newStats) => {
-		if (newStats.total > 0) {
-			localUploadProgress.value = { ...newStats };
-			areUploadStatsVisible.value = true;
-		} else if (localUploadProgress.value.total > 0 && newStats.total === 0) {
-			setTimeout(() => {
+		if (timeout) {
+			clearTimeout(timeout);
+			timeout = null;
+		}
+
+		if (newStats.total > 0 && newStats.total === newStats.uploaded) {
+			timeout = setTimeout(() => {
 				areUploadStatsVisible.value = false;
+				emit("reset-upload-progress");
+				timeout = null;
 			}, 5000);
+		} else if (newStats.total > 0) {
+			areUploadStatsVisible.value = true;
 		}
 	},
 	{ deep: true, immediate: true }
