@@ -153,7 +153,6 @@ import { mdiInformation } from "@icons/material";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-// TODO move to a shared file
 type VDialogButtonActions =
 	| "back"
 	| "edit"
