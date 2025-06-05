@@ -30,6 +30,7 @@ describe("util-validators", () => {
 			const isValid = isOfMaxLength(maxLength)(ERROR);
 			expect(isValid(null)).toBe(true);
 			expect(isValid(undefined)).toBe(true);
+		});
 	});
 
 	describe("isNonEmptyString", () => {
