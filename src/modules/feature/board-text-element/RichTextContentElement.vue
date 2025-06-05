@@ -131,14 +131,14 @@ const onKeyUp = () => ensurePoliteNotifications();
 		.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around
 	) {
 	> .ck-widget__type-around__button_before {
-		top: 0.5rem;
-		left: 0.5rem;
+		top: var(--space-xs);
+		left: ar(--space-xs);
 		margin-left: 0;
 	}
 
 	> .ck-widget__type-around__button_after {
-		bottom: 0.5rem;
-		right: 0.5rem;
+		bottom: var(--space-xs);
+		right: var(--space-xs);
 	}
 }
 </style>
