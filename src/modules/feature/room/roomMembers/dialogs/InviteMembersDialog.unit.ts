@@ -275,6 +275,25 @@ describe("InviteMembersDialog", () => {
 					);
 				});
 			});
+
+			describe("when close button is clicked", () => {
+				it("should set the editedLink value to null", async () => {
+					const { wrapper, roomInvitationLinkStore } = setup({
+						preDefinedStep: InvitationStep.PREPARE,
+					});
+					await nextTick();
+
+					roomInvitationLinkStore.editedLink =
+						roomInvitationLinkStore.roomInvitationLinks[0];
+
+					expect(roomInvitationLinkStore.editedLink).not.toBeNull();
+
+					const cancelButton = wrapper.findComponent({ ref: "cancelButton" });
+					await cancelButton.trigger("click");
+
+					expect(roomInvitationLinkStore.editedLink).toBeNull();
+				});
+			});
 		});
 
 		describe("when the step is SHARE", () => {
