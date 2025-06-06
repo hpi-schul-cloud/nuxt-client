@@ -82,6 +82,15 @@
 				"
 			/>
 		</template>
+		<template #[`item.displaySchoolRole`]="{ item }">
+			<span class="text-no-wrap">
+				<VIcon
+					v-if="getSchoolRoleIcon(item.schoolRoleNames)"
+					:icon="getSchoolRoleIcon(item.schoolRoleNames)"
+				/>
+				{{ item.displaySchoolRole }}
+			</span>
+		</template>
 		<template v-if="canAddRoomMembers" #[`item.actions`]="{ item, index }">
 			<KebabMenu
 				v-if="isNeitherRoomOwnerNorCurrentUser(item.userId)"
@@ -121,7 +130,13 @@ import {
 } from "@ui-kebab-menu";
 import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
+import {
+	mdiMenuDown,
+	mdiMenuUp,
+	mdiMagnify,
+	mdiAccountSchoolOutline,
+	mdiAccountOutline,
+} from "@icons/material";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
@@ -135,6 +150,8 @@ import { useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
 import { ChangeRole } from "@feature-room";
 import { authModule } from "@/store/store-accessor";
+import { RoleName } from "@/serverApi/v3";
+
 const { canAddRoomMembers } = useRoomAuthorization();
 
 const props = defineProps({
@@ -253,6 +270,16 @@ const tableHeader = computed(() => {
 		},
 	];
 });
+
+const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
+	if (schoolRoleNames.includes(RoleName.Teacher)) {
+		return mdiAccountSchoolOutline;
+	}
+	if (schoolRoleNames.includes(RoleName.Student)) {
+		return mdiAccountOutline;
+	}
+	return undefined;
+};
 </script>
 
 <style lang="scss" scoped>

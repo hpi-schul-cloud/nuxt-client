@@ -4,7 +4,13 @@ import {
 } from "@@/tests/test-utils/setup";
 import MembersTable from "./MembersTable.vue";
 import { nextTick, Ref, ref } from "vue";
-import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
+import {
+	mdiMenuDown,
+	mdiMenuUp,
+	mdiMagnify,
+	mdiAccountOutline,
+	mdiAccountSchoolOutline,
+} from "@icons/material";
 import {
 	meResponseFactory,
 	mockedPiniaStoreTyping,
@@ -16,6 +22,7 @@ import {
 	VBtn,
 	VDataTable,
 	VDialog,
+	VIcon,
 	VTextField,
 } from "vuetify/lib/components/index";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -97,7 +104,7 @@ describe("MembersTable", () => {
 	];
 
 	const setup = (
-		options: Partial<{
+		options?: Partial<{
 			currentUserRole: RoleName;
 			changePermissionFlag: boolean;
 			windowWidth: number;
@@ -105,7 +112,7 @@ describe("MembersTable", () => {
 			isRoomOwner: boolean;
 			currentUserId: string;
 			roomAuthorization: Partial<RoomAuthorizationRefs>;
-		}> = {}
+		}>
 	) => {
 		const members =
 			options?.members ??
@@ -117,7 +124,7 @@ describe("MembersTable", () => {
 		const authorizationPermissions =
 			createMock<ReturnType<typeof useRoomAuthorization>>();
 		for (const [key, value] of Object.entries(
-			options.roomAuthorization ?? {}
+			options?.roomAuthorization ?? {}
 		)) {
 			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
 				value ?? false
@@ -126,7 +133,7 @@ describe("MembersTable", () => {
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 		const currentUser = roomMemberFactory.build({});
 		const mockMe = meResponseFactory.build({
-			user: { id: options.currentUserId ?? currentUser.userId },
+			user: { id: options?.currentUserId ?? currentUser.userId },
 		});
 		authModule.setMe(mockMe);
 
@@ -155,7 +162,7 @@ describe("MembersTable", () => {
 		});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		roomMembersStore.isRoomOwner.mockReturnValue(options.isRoomOwner ?? false);
+		roomMembersStore.isRoomOwner.mockReturnValue(options?.isRoomOwner ?? false);
 		const roomMembers = roomMembersStore.roomMembers;
 
 		return { wrapper, roomMembersStore, roomMembers, authorizationPermissions };
@@ -220,6 +227,45 @@ describe("MembersTable", () => {
 		expect(dataTable.props("items")).toEqual(roomMembers);
 		expect(dataTable.props("sortAscIcon")).toEqual(mdiMenuDown);
 		expect(dataTable.props("sortDescIcon")).toEqual(mdiMenuUp);
+	});
+
+	describe("school role column", () => {
+		const getSchoolRoleCell = (row: DOMWrapper<Element>) =>
+			row.findAll("td")[4];
+
+		it.each([
+			{
+				description: "teacher icon for teacher",
+				schoolRoleNames: [RoleName.Teacher],
+				expectedIcon: mdiAccountSchoolOutline,
+			},
+			{
+				description: "student icon for students",
+				schoolRoleNames: [RoleName.Student],
+				expectedIcon: mdiAccountOutline,
+			},
+			{
+				description: "teacher icon if teacher and admin roles are present",
+				schoolRoleNames: [RoleName.Administrator, RoleName.Teacher],
+				expectedIcon: mdiAccountSchoolOutline,
+			},
+		])("should render $description", ({ schoolRoleNames, expectedIcon }) => {
+			const { wrapper } = setup({
+				members: [
+					roomMemberFactory.build({
+						schoolRoleNames,
+					}),
+				],
+			});
+
+			const dataTable = wrapper.getComponent(VDataTable);
+			const row = dataTable.find("tbody tr");
+
+			const schoolRoleCell = getSchoolRoleCell(row);
+			expect(schoolRoleCell.findComponent(VIcon).props("icon")).toBe(
+				expectedIcon
+			);
+		});
 	});
 
 	it("should render checkboxes if user can add members", async () => {

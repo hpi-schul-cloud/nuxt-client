@@ -123,7 +123,7 @@ describe("useRoomMembers", () => {
 					membersMock.map((member) => ({
 						...member,
 						displayRoomRole: "pages.rooms.members.roomPermissions.admin",
-						displaySchoolRole: "common.labels.teacher",
+						displaySchoolRole: "common.labels.teacher.neutral",
 						isSelectable: true,
 					}))
 				);
@@ -149,7 +149,7 @@ describe("useRoomMembers", () => {
 					membersMock.map((member) => ({
 						...member,
 						displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
-						displaySchoolRole: "pages.rooms.members.add.role.student",
+						displaySchoolRole: "common.labels.student.neutral",
 						isSelectable: true,
 					}))
 				);
@@ -177,7 +177,7 @@ describe("useRoomMembers", () => {
 					membersMock.map((member) => ({
 						...member,
 						displayRoomRole: "pages.rooms.members.roomPermissions.owner",
-						displaySchoolRole: "common.labels.teacher",
+						displaySchoolRole: "common.labels.teacher.neutral",
 						isSelectable: false,
 					}))
 				);
@@ -204,7 +204,7 @@ describe("useRoomMembers", () => {
 					membersMock.map((member) => ({
 						...member,
 						displayRoomRole: "pages.rooms.members.roomPermissions.admin",
-						displaySchoolRole: "common.labels.teacher",
+						displaySchoolRole: "common.labels.teacher.neutral",
 						isSelectable: true,
 					}))
 				);
@@ -260,7 +260,7 @@ describe("useRoomMembers", () => {
 					fullName: `${user.lastName}, ${user.firstName}`,
 					schoolRoleNames: [RoleName.Teacher],
 					schoolName: "Paul-Gerhardt-Gymnasium",
-					displaySchoolRole: "common.labels.teacher",
+					displaySchoolRole: "common.labels.teacher.neutral",
 				}))
 			);
 		});
@@ -299,7 +299,7 @@ describe("useRoomMembers", () => {
 					fullName: `${user.lastName}, ${user.firstName}`,
 					schoolRoleNames: [RoleName.Student],
 					schoolName: "Paul-Gerhardt-Gymnasium",
-					displaySchoolRole: "pages.rooms.members.add.role.student",
+					displaySchoolRole: "common.labels.student.neutral",
 				}))
 			);
 		});
@@ -406,7 +406,7 @@ describe("useRoomMembers", () => {
 				{
 					...firstPotentialMember,
 					displayRoomRole: "pages.rooms.members.roomPermissions.admin",
-					displaySchoolRole: "common.labels.teacher",
+					displaySchoolRole: "common.labels.teacher.neutral",
 				},
 			]);
 		});
@@ -436,7 +436,7 @@ describe("useRoomMembers", () => {
 				{
 					...firstPotentialMember,
 					displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
-					displaySchoolRole: "pages.rooms.members.add.role.student",
+					displaySchoolRole: "common.labels.student.neutral",
 				},
 			]);
 		});

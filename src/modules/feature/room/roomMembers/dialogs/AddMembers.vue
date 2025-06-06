@@ -31,6 +31,7 @@
 					density="comfortable"
 					item-title="name"
 					item-value="id"
+					:item-props="schoolRoleListItemProps"
 					:items="schoolRoles"
 					:label="t('pages.rooms.members.tableHeader.schoolRole')"
 					:disabled="isItemListDisabled"
@@ -38,7 +39,12 @@
 					:data-testid="`role-item-${selectedSchoolRole}`"
 					@update:model-value="onValueChange"
 					@update:menu="onItemListToggle"
-				/>
+				>
+					<template #selection="{ item }">
+						<VIcon class="mr-1" :icon="item.raw.icon" />
+						{{ item.title }}
+					</template>
+				</v-select>
 			</div>
 
 			<InfoAlert
@@ -104,6 +110,7 @@ import { VAutocomplete, VCard, VSelect } from "vuetify/lib/components";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 
 const emit = defineEmits<{
 	(e: "close"): void;
@@ -126,16 +133,32 @@ const canAddAllStudents = computed(() => {
 
 const selectedSchool = ref(schools.value[0].id);
 
-const schoolRoles = [
-	{ id: RoleName.Teacher, name: t("common.labels.teacher") },
+interface SchoolRoleItem {
+	id: RoleName;
+	name: string;
+	icon: string;
+}
+
+const schoolRoles: SchoolRoleItem[] = [
+	{
+		id: RoleName.Teacher,
+		name: t("common.labels.teacher.neutral"),
+		icon: mdiAccountSchoolOutline,
+	},
 ];
 
 if (FEATURE_ROOM_ADD_STUDENTS_ENABLED) {
 	schoolRoles.unshift({
 		id: RoleName.Student,
-		name: t("pages.rooms.members.add.role.student"),
+		name: t("common.labels.student.neutral"),
+		icon: mdiAccountOutline,
 	});
 }
+
+const schoolRoleListItemProps = (item: SchoolRoleItem) => ({
+	title: item.name,
+	prependIcon: item.icon,
+});
 
 const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
 const selectedUsers = ref<string[]>([]);
