@@ -1926,7 +1926,6 @@ export default {
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
-	"pages.rooms.members.add.role.student": "Lernend",
 	"pages.rooms.members.add.students.forbidden":
 		"Wenn in den Schuleinstellungen die Sichtbarkeit von Lernenden für Lernbegleitungen deaktiviert ist, können nur Lernende der eigenen Klasse hinzugefügt werden. Bitte an den Schul-Admin wenden.",
 	"pages.rooms.members.add.warningText":
