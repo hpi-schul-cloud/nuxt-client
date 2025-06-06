@@ -60,22 +60,32 @@ export const useEditorConfig = () => {
 		return !!sourceElement.querySelector("ul,ol");
 	};
 
-	const containsFormulaElement = (tempDiv: HTMLDivElement): boolean => {
+	const containsFormulaElement = (
+		tempDiv: HTMLDivElement | undefined
+	): boolean => {
 		if (!tempDiv) return false;
 		return !!tempDiv.querySelector("*:not(.math-tex):not(.katex)");
 	};
 
-	const containsTextContentElement = (textContent: string | null): boolean => {
+	const containsTextContentElement = (
+		textContent: string | null | undefined
+	): boolean => {
 		if (!textContent) return false;
 		return !!textContent.trim();
 	};
+	const createTempDivFromHtml = (editor: EditorWithSourceElement) => {
+		const tempDiv = document.createElement("div");
+		if (!editor.getData) {
+			return;
+		}
+		tempDiv.innerHTML = editor.getData();
+		return tempDiv;
+	};
 
 	function isEditorEmpty(editor: EditorWithSourceElement): boolean {
-		const data = editor.getData ? editor.getData() : "";
-		const tempDiv = document.createElement("div");
-		tempDiv.innerHTML = data;
+		const tempDiv = createTempDivFromHtml(editor);
 		return (
-			!containsTextContentElement(tempDiv.textContent) &&
+			!containsTextContentElement(tempDiv?.textContent) &&
 			!containsFormulaElement(tempDiv) &&
 			!containsListElement(editor.sourceElement)
 		);
