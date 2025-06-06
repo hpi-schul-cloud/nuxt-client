@@ -75,16 +75,18 @@ describe("InviteMembersDialog", () => {
 	};
 
 	const setup = (
-		options: {
-			modelValue?: boolean;
-			schoolName?: string;
-			preDefinedStep?: string;
-		} = {
+		options?: Partial<{
+			modelValue: boolean;
+			schoolName: string;
+			preDefinedStep: string;
+		}>
+	) => {
+		const { modelValue, schoolName, preDefinedStep } = {
 			modelValue: true,
 			schoolName: "Test School",
 			preDefinedStep: InvitationStep.PREPARE,
-		}
-	) => {
+			...options,
+		};
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
 		const notifierModule = createModuleMocks(NotifierModule);
 
@@ -98,7 +100,7 @@ describe("InviteMembersDialog", () => {
 							roomInvitationLinkStore: {
 								isLoading: false,
 								roomInvitationLinks,
-								invitationStep: options.preDefinedStep,
+								invitationStep: preDefinedStep,
 							},
 						},
 					}),
@@ -108,15 +110,12 @@ describe("InviteMembersDialog", () => {
 				},
 			},
 			props: {
-				...{
-					modelValue: true,
-					schoolName: "Test School",
-				},
-				...options,
+				modelValue,
+				schoolName,
 			},
 		});
 
-		if (options.preDefinedStep !== InvitationStep.SHARE) {
+		if (preDefinedStep !== InvitationStep.SHARE) {
 			setDescription(wrapper, "invitation link");
 		}
 
