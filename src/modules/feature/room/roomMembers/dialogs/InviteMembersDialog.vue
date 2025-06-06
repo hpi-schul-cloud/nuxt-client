@@ -114,7 +114,7 @@
 				</template>
 				<template v-else>
 					<ShareModalResult
-						:share-url="sharedUrl!"
+						:share-url="sharedUrl"
 						type="roomMemberInvitation"
 						@copied="onCopyLink"
 						@done="onClose"
