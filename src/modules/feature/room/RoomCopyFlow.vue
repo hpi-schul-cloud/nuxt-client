@@ -5,6 +5,7 @@
 		@copy:confirm="onConfirmCopy"
 	/>
 </template>
+
 <script setup lang="ts">
 import { useLoadingState } from "@/composables/loadingState";
 import { CopyApiResponseStatusEnum, RoomApiFactory } from "@/serverApi/v3";
@@ -59,7 +60,7 @@ const onConfirmCopy = async () => {
 			copyResult.id === undefined
 		) {
 			showFailure();
-			emit("copy:error", copyResult.id); // maybe pass the whole copyResult?
+			emit("copy:error", copyResult.id);
 		} else {
 			showSuccess();
 			emit("copy:success", copyResult.id);
