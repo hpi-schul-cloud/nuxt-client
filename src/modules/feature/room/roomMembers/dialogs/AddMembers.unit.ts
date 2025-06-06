@@ -199,7 +199,11 @@ describe("AddMembers", () => {
 					const { wrapper } = setup({ isFeatureAddStudentsEnabled: false });
 
 					const roles = [
-						{ id: RoleName.Teacher, name: "common.labels.teacher.neutral" },
+						{
+							id: RoleName.Teacher,
+							name: "common.labels.teacher.neutral",
+							icon: mdiAccountSchoolOutline,
+						},
 					];
 
 					const roleComponent = wrapper.getComponent({
