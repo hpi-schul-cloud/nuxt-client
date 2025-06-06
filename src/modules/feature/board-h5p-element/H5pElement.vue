@@ -62,7 +62,7 @@ import { injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar } from "@ui-board";
-import { computed, onMounted, Ref, ref, toRef } from "vue";
+import { computed, onMounted, Ref, ref, toRef, watch } from "vue";
 import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -169,11 +169,19 @@ const onClickElement = () => {
 	}
 };
 
-onMounted(async () => {
-	const contentId: string | null = element.value.content.contentId;
+const fetchAndSetContentTitle = async (h5pElement: H5pElementResponse) => {
+	const contentId: string | null = h5pElement.content.contentId;
 	if (contentId) {
 		const title = await getContentTitle(contentId);
 		contentTitle.value = title ?? t("components.cardElement.h5pElement");
 	}
+};
+
+onMounted(async () => {
+	await fetchAndSetContentTitle(element.value);
+});
+
+watch(element, async (newValue: H5pElementResponse) => {
+	await fetchAndSetContentTitle(newValue);
 });
 </script>
