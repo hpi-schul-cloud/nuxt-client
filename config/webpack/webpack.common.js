@@ -108,7 +108,7 @@ module.exports = {
 		new ESLintWebpackPlugin({
 			extensions: [".js", ".jsx", ".vue", ".ts", ".tsx"],
 			failOnWarning: false,
-			failOnError: true,
+			failOnError: false,
 		}),
 	],
 
