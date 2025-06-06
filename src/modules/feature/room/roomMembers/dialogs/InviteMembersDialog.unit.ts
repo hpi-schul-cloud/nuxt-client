@@ -419,12 +419,9 @@ describe("InviteMembersDialog", () => {
 			const { wrapper } = setup();
 			await nextTick();
 
+			// needed to trigger validation correctly
+			await setDescription(wrapper, "valid input");
 			await setDescription(wrapper, "");
-
-			// needed to trigger validation
-			const nextButton = wrapper.findComponent({ ref: "continueButton" });
-			await nextButton.trigger("click");
-			await nextTick();
 
 			const descriptionField = wrapper.findComponent({
 				ref: "descriptionField",
@@ -438,12 +435,9 @@ describe("InviteMembersDialog", () => {
 			const { wrapper } = setup();
 			await nextTick();
 
+			// needed to trigger validation correctly
+			await setDescription(wrapper, "valid input");
 			await setDescription(wrapper, "   ");
-
-			// needed to trigger validation
-			const nextButton = wrapper.findComponent({ ref: "continueButton" });
-			await nextButton.trigger("click");
-			await nextTick();
 
 			const descriptionField = wrapper.findComponent({
 				ref: "descriptionField",
@@ -459,11 +453,6 @@ describe("InviteMembersDialog", () => {
 
 			await setDescription(wrapper, "<abc123");
 
-			// needed to trigger validation
-			const nextButton = wrapper.findComponent({ ref: "continueButton" });
-			await nextButton.trigger("click");
-			await nextTick();
-
 			const descriptionField = wrapper.findComponent({
 				ref: "descriptionField",
 			});
@@ -478,11 +467,6 @@ describe("InviteMembersDialog", () => {
 
 			const longDescription = "a".repeat(101);
 			await setDescription(wrapper, longDescription);
-
-			// needed to trigger validation
-			const nextButton = wrapper.findComponent({ ref: "continueButton" });
-			await nextButton.trigger("click");
-			await nextTick();
 
 			const descriptionField = wrapper.findComponent({
 				ref: "descriptionField",
