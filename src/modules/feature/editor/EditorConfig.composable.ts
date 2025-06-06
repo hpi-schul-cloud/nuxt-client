@@ -33,6 +33,10 @@ interface GeneralConfig {
 	fontColor: ReturnType<typeof fontColors>;
 	fontBackgroundColor: ReturnType<typeof fontBackgroundColors>;
 }
+interface EditorWithSourceElement extends Editor {
+	sourceElement?: HTMLElement;
+	getData?: () => string;
+}
 
 export const useEditorConfig = () => {
 	const { t, locale } = useI18n();
@@ -56,18 +60,25 @@ export const useEditorConfig = () => {
 		return !!sourceElement.querySelector("ul,ol");
 	};
 
-	function isEditorEmpty(
-		editor: Editor & { sourceElement?: HTMLElement; getData?: () => string }
-	): boolean {
+	const containsFormulaElement = (tempDiv: HTMLDivElement): boolean => {
+		if (!tempDiv) return false;
+		return !!tempDiv.querySelector("*:not(.math-tex):not(.katex)");
+	};
+
+	const containsTextContentElement = (textContent: string | null): boolean => {
+		if (!textContent) return false;
+		return !!textContent.trim();
+	};
+
+	function isEditorEmpty(editor: EditorWithSourceElement): boolean {
 		const data = editor.getData ? editor.getData() : "";
 		const tempDiv = document.createElement("div");
 		tempDiv.innerHTML = data;
-		const containsTextContent = !!tempDiv.textContent?.trim();
-		const containsFormula = !!tempDiv.querySelector(
-			"*:not(.math-tex):not(.katex)"
+		return (
+			!containsTextContentElement(tempDiv.textContent) &&
+			!containsFormulaElement(tempDiv) &&
+			!containsListElement(editor.sourceElement)
 		);
-		const containsList = containsListElement(editor.sourceElement);
-		return !containsTextContent && !containsFormula && !containsList;
 	}
 
 	const deletionHandler = (
