@@ -16,8 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { BoardExternalReferenceType } from "@/serverApi/v3";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomsState } from "@data-room";
@@ -27,13 +28,11 @@ import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
-import { InfoAlert } from "@ui-alert";
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { rooms, fetchRooms } = useRoomsState();
+const { rooms, fetchRooms, isLoading, isEmpty } = useRoomsState();
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const pageTitle = computed(() => buildPageTitle(`${t("pages.rooms.title")}`));
@@ -68,15 +67,15 @@ onMounted(() => {
 	fetchRooms();
 });
 
-const roomGridRef = ref();
-
 const onImportSuccess = (newName: string, destinationId?: string) => {
 	showImportSuccess(newName);
 	if (destinationId) {
 		router.replace({ name: "room-details", params: { destinationId } });
 	} else {
 		router.replace({ name: "rooms" });
-		roomGridRef.value?.refetch();
+		fetchRooms();
+		isImportMode.value = false;
+		importToken.value = undefined;
 	}
 };
 
@@ -89,14 +88,4 @@ const showImportSuccess = (newName: string) => {
 		timeout: 5000,
 	});
 };
-
-const helpAriaLabel = computed(
-	() =>
-		`${t("pages.rooms.infoAlert.welcome.furtherInformation.help")}, ${t("common.ariaLabel.newTab")}`
-);
-
-const feedbackAriaLabel = computed(
-	() =>
-		`${t("pages.rooms.infoAlert.welcome.furtherInformation.feedback")}, ${t("common.ariaLabel.newTab")}`
-);
 </script>
