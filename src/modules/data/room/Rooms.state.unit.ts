@@ -164,7 +164,7 @@ describe("useRoomsState", () => {
 			const { copyRoom, isLoading } = useRoomsState();
 			expect(isLoading.value).toBe(true);
 
-			const newRoomId = await copyRoom("room-id");
+			await copyRoom("room-id");
 			expect(roomApiMock.roomControllerCopyRoom).toHaveBeenCalledWith(
 				"room-id"
 			);

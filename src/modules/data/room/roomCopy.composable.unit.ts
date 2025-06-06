@@ -9,7 +9,6 @@ import { useRoomsState } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useRoomCopy } from "./roomCopy.composable";
 import {
-	CopyApiResponse,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
 } from "@/serverApi/v3";

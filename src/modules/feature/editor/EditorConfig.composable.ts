@@ -33,6 +33,10 @@ interface GeneralConfig {
 	fontColor: ReturnType<typeof fontColors>;
 	fontBackgroundColor: ReturnType<typeof fontBackgroundColors>;
 }
+interface EditorWithSourceElement extends Editor {
+	sourceElement?: HTMLElement;
+	getData?: () => string;
+}
 
 export const useEditorConfig = () => {
 	const { t, locale } = useI18n();
@@ -49,15 +53,45 @@ export const useEditorConfig = () => {
 		fontBackgroundColor: fontBackgroundColors(t),
 	});
 
-	function isEditorEmpty(editor: Editor): boolean {
-		const data = (editor as Editor & { getData: () => string }).getData();
+	const containsListElement = (
+		sourceElement: HTMLElement | undefined
+	): boolean => {
+		if (!sourceElement) return false;
+		return !!sourceElement.querySelector("ul,ol");
+	};
+
+	const containsFormulaElement = (
+		tempDiv: HTMLDivElement | undefined
+	): boolean => {
+		if (!tempDiv) return false;
+		return !!tempDiv.querySelector("*:not(.math-tex):not(.katex)");
+	};
+
+	const containsTextContentElement = (
+		textContent: string | null | undefined
+	): boolean => {
+		if (!textContent) return false;
+		return !!textContent.trim();
+	};
+	const createTempDivFromHtml = (
+		editor: EditorWithSourceElement
+	): HTMLDivElement | undefined => {
 		const tempDiv = document.createElement("div");
-		tempDiv.innerHTML = data;
+		if (!editor.getData) {
+			return;
+		}
+		tempDiv.innerHTML = editor.getData();
+		return tempDiv;
+	};
+
+	const isEditorEmpty = (editor: EditorWithSourceElement): boolean => {
+		const tempDiv = createTempDivFromHtml(editor);
 		return (
-			!tempDiv.textContent?.trim() &&
-			!tempDiv.querySelector("*:not(.math-tex):not(.katex)")
+			!containsTextContentElement(tempDiv?.textContent) &&
+			!containsFormulaElement(tempDiv) &&
+			!containsListElement(editor.sourceElement)
 		);
-	}
+	};
 
 	const deletionHandler = (
 		evt: CKEditorEventInfo,
