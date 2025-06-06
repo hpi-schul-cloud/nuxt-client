@@ -135,18 +135,17 @@ describe("useEditorConfig", () => {
 
 					expect(onDelete).not.toHaveBeenCalled();
 				});
-				describe("and editor contains a list element", () => {
-					it("should not call onDelete if editor contains a list", () => {
-						const sourceElement = document.createElement("div");
-						sourceElement.innerHTML = "<ul><li>Item</li></ul>";
-						const { composable, mockEditor, onDelete } = setupEditor({
-							btnKey: key,
-							editorData: "",
-							sourceElement,
-						});
-						composable.registerDeletionHandler(mockEditor, onDelete);
-						expect(onDelete).not.toHaveBeenCalled();
+
+				it("should not call onDelete if editor contains a list", () => {
+					const sourceElement = document.createElement("div");
+					sourceElement.innerHTML = "<ul><li>Item</li></ul>";
+					const { composable, mockEditor, onDelete } = setupEditor({
+						btnKey: key,
+						editorData: "",
+						sourceElement,
 					});
+					composable.registerDeletionHandler(mockEditor, onDelete);
+					expect(onDelete).not.toHaveBeenCalled();
 				});
 			});
 		});
