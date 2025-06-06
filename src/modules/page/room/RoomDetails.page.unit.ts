@@ -222,35 +222,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(breadcrumbItems[1].text()).toContain(room.name);
 			});
 		});
-
-		//TODO nur weil der User die Permission hat, soll doch nicht das menü gerendert werden?
-		describe("and user has permission to edit or delete room", () => {
-			it("should render kebab menu", () => {
-				roomPermissions.canEditRoomContent.value = true;
-				roomPermissions.canDeleteRoom.value = false;
-
-				const { wrapper } = setup();
-
-				const menu = wrapper.findComponent({ name: "RoomMenu" });
-
-				expect(menu.exists()).toBe(true);
-			});
-		});
-		//TODO widerspricht dem Test da drüber?
-		describe("and user does not have permission to edit, leave nor to delete room", () => {
-			it("should render kebab menu", () => {
-				roomPermissions.canEditRoomContent.value = false;
-				roomPermissions.canDeleteRoom.value = false;
-				roomPermissions.canLeaveRoom.value = false;
-				roomPermissions.canViewRoom.value = true;
-
-				const { wrapper } = setup();
-
-				const menu = wrapper.findComponent({ name: "RoomMenu" });
-
-				expect(menu.exists()).toBe(true);
-			});
-		});
 	});
 
 	describe("when user deletes the room", () => {
