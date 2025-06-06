@@ -5,6 +5,7 @@ const {
 	isFileStorage,
 	isH5pEditor,
 	isH5pStaticFiles,
+	isCommonCartridge,
 } = require("../../src/router/server-route");
 const url = require("url");
 
@@ -49,12 +50,21 @@ const createH5pStaticFilesProxy = () => {
 	return h5pStaticFilesProxy;
 };
 
+const createCommonCartridgeProxy = () => {
+	const commonCartridgeProxy = createProxyMiddleware({
+		target: "http://localhost:3350",
+		changeOrigin: true,
+	});
+	return commonCartridgeProxy;
+};
+
 const createDevServerConfig = () => {
 	const legacyClientProxy = createLegacyClientProxy();
 	const serverProxy = createServerProxy();
 	const fileStorageProxy = createFileStorageProxy();
 	const h5pEditorProxy = createH5pEditorProxy();
 	const h5pStaticFilesProxy = createH5pStaticFilesProxy();
+	const commonCartridgeProxy = createCommonCartridgeProxy();
 
 	const devServerConfig = {
 		port: 4000,
@@ -76,6 +86,8 @@ const createDevServerConfig = () => {
 						h5pStaticFilesProxy(req, res, next);
 					} else if (isH5pEditor(path)) {
 						h5pEditorProxy(req, res, next);
+					} else if (isCommonCartridge(path)) {
+						commonCartridgeProxy(req, res, next);
 					} else if (isServer(path)) {
 						serverProxy(req, res, next);
 					} else if (isVueClient(path)) {
@@ -104,4 +116,5 @@ module.exports = {
 	createFileStorageProxy,
 	createH5pEditorProxy,
 	createH5pStaticFilesProxy,
+	createCommonCartridgeProxy,
 };
