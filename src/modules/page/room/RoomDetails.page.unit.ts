@@ -1,10 +1,10 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { BoardLayout } from "@/serverApi/v3/api";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
+import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import {
 	ENV_CONFIG_MODULE_KEY,

@@ -44,20 +44,18 @@
 			@copy:success="onCopySuccess"
 			@copy:ended="onCopyEnded"
 		/>
-		<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.Room" />
+		<ShareModal :type="ShareTokenParentType.Room" />
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
+import ShareModal from "@/components/share/ShareModal.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import ShareModal from "@/components/share/ShareModal.vue";
-import {
-	BoardLayout,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3";
 import { authModule } from "@/store";
+import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
+import { ShareTokenParentType } from "@/types/sharing/Token";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
@@ -242,7 +240,7 @@ const onShare = () => {
 	if (isRoomShareFeatureEnabled.value && canShareRoom.value) {
 		shareModule.startShareFlow({
 			id: room.value.id,
-			type: ShareTokenBodyParamsParentTypeEnum.Room,
+			type: ShareTokenParentType.Room,
 		});
 	}
 };
