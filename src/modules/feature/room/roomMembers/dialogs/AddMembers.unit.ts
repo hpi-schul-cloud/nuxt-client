@@ -15,7 +15,7 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import { VueWrapper } from "@vue/test-utils";
-import { VAutocomplete } from "vuetify/lib/components/index";
+import { VAutocomplete, VIcon } from "vuetify/lib/components/index";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { createTestingPinia } from "@pinia/testing";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
@@ -348,6 +348,20 @@ describe("AddMembers", () => {
 					roomMembersSchools[0].id
 				);
 			});
+
+			it("should render an icon with text for student role", async () => {
+				const { wrapper } = setup();
+
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+				await roleComponent.setValue(RoleName.Student);
+
+				const roleIcon = roleComponent.findComponent(VIcon);
+
+				expect(roleIcon.props("icon")).toBe(mdiAccountOutline);
+				expect(roleComponent.text()).toContain("common.labels.student.neutral");
+			});
 		});
 
 		describe("and the role is set to teacher", () => {
@@ -365,6 +379,20 @@ describe("AddMembers", () => {
 					selectedRole,
 					roomMembersSchools[0].id
 				);
+			});
+
+			it("should render an icon with text for teacher role", async () => {
+				const { wrapper } = setup();
+
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(RoleName.Teacher);
+				const roleIcon = roleComponent.findComponent(VIcon);
+
+				expect(roleIcon.props("icon")).toBe(mdiAccountSchoolOutline);
+				expect(roleComponent.text()).toContain("common.labels.teacher.neutral");
 			});
 		});
 	});
