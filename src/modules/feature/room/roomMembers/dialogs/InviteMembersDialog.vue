@@ -34,11 +34,13 @@
 								t('pages.rooms.members.inviteMember.form.description.hint')
 							"
 							persistent-hint
+							data-testid="input_invite-participants_description"
 						/>
 
 						<v-checkbox
 							v-model="formData.restrictedToCreatorSchool"
 							hide-details
+							data-testid="input_invite-participants_restricted-to-creator-school"
 						>
 							<template #label>
 								<div class="mt-6">
@@ -63,6 +65,7 @@
 								)
 							"
 							hide-details
+							data-testid="input_invite-participants_valid-for-students"
 						/>
 
 						<div class="d-flex align-center justify-start my-n4 pr-0">
@@ -73,6 +76,7 @@
 								"
 								hide-details
 								class="mr-2"
+								data-testid="input_invite-participants_link-expires"
 							/>
 							<DatePicker
 								ref="datePicker"
@@ -93,6 +97,7 @@
 							v-model="formData.requiresConfirmation"
 							hide-details
 							class="my-n6"
+							data-testid="input_invite-participants_requires-confirmation"
 						>
 							<template #label>
 								<div class="mt-6">
