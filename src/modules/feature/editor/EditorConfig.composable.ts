@@ -73,7 +73,9 @@ export const useEditorConfig = () => {
 		if (!textContent) return false;
 		return !!textContent.trim();
 	};
-	const createTempDivFromHtml = (editor: EditorWithSourceElement) => {
+	const createTempDivFromHtml = (
+		editor: EditorWithSourceElement
+	): HTMLDivElement | undefined => {
 		const tempDiv = document.createElement("div");
 		if (!editor.getData) {
 			return;
