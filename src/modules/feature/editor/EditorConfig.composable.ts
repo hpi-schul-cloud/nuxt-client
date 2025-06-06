@@ -82,14 +82,14 @@ export const useEditorConfig = () => {
 		return tempDiv;
 	};
 
-	function isEditorEmpty(editor: EditorWithSourceElement): boolean {
+	const isEditorEmpty = (editor: EditorWithSourceElement): boolean => {
 		const tempDiv = createTempDivFromHtml(editor);
 		return (
 			!containsTextContentElement(tempDiv?.textContent) &&
 			!containsFormulaElement(tempDiv) &&
 			!containsListElement(editor.sourceElement)
 		);
-	}
+	};
 
 	const deletionHandler = (
 		evt: CKEditorEventInfo,
