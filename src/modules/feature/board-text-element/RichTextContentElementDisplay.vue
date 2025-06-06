@@ -1,7 +1,7 @@
 <template>
 	<RenderHTML
 		v-if="value !== undefined && value !== ''"
-		class="ck-content pb-2"
+		class="ck-content mb-4"
 		:html="value"
 	/>
 </template>
