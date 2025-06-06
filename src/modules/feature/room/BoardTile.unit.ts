@@ -5,7 +5,7 @@ import {
 import { mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import BoardTile from "./BoardTile.vue";
-import { BoardLayout } from "@/serverApi/v3";
+import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 
 const mockBoard: RoomBoardItem = {

@@ -1,4 +1,4 @@
-import ShareModule, { SharePayload } from "./share";
+import ShareModule, { ShareOptions } from "./share";
 import * as serverApi from "../serverApi/v3/api";
 import {
 	ShareTokenApiInterface,
@@ -8,8 +8,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import courseRoomDetailsModule from "@/store/course-room-details";
 
-const sharePayload: SharePayload = {
-	id: "sampleCourseId",
+const shareOptions: ShareOptions = {
 	hasExpiryDate: true,
 	isSchoolInternal: true,
 };
@@ -51,7 +50,7 @@ describe("share module", () => {
 					shareModule.setParentId("sampleCourseId");
 					shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
 
-					await shareModule.createShareUrl(sharePayload);
+					await shareModule.createShareUrl(shareOptions);
 
 					expect(
 						shareTokenMockApi.shareTokenControllerCreateShareToken
@@ -67,7 +66,7 @@ describe("share module", () => {
 					shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
 					const setShareUrlMock = jest.spyOn(shareModule, "setShareUrl");
 
-					await shareModule.createShareUrl(sharePayload);
+					await shareModule.createShareUrl(shareOptions);
 					const result = setShareUrlMock.mock.calls[0][0];
 
 					expect(result).toContain("rooms/courses-overview?import=sampleToken");
@@ -89,7 +88,7 @@ describe("share module", () => {
 
 					shareModule.setParentId("sampleCourseId");
 
-					const errorResult = await shareModule.createShareUrl(sharePayload);
+					const errorResult = await shareModule.createShareUrl(shareOptions);
 					expect(errorResult).toStrictEqual(undefined);
 				});
 
@@ -107,7 +106,7 @@ describe("share module", () => {
 						);
 
 					shareModule.setParentId("sampleCourseId");
-					const errorResult = await shareModule.createShareUrl(sharePayload);
+					const errorResult = await shareModule.createShareUrl(shareOptions);
 
 					expect(errorResult).toStrictEqual(undefined);
 				});

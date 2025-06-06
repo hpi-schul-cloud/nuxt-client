@@ -10,7 +10,7 @@ import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
 } from "@@/tests/test-utils";
-import { RoomColorEnum } from "@/types/room/Room";
+import { RoomColor } from "@/types/room/Room";
 
 jest.mock("@/utils/api");
 const mockedMapAxiosErrorToResponseError = jest.mocked(
@@ -149,7 +149,7 @@ describe("useRoomsState", () => {
 				{
 					id: "1",
 					name: "Room 1",
-					color: RoomColorEnum.BlueGrey,
+					color: RoomColor.BlueGrey,
 					schoolId: "6749dd4e657d98af622e370c",
 					createdAt: "2024.11.18",
 					updatedAt: "2024.11.18",
@@ -164,7 +164,7 @@ describe("useRoomsState", () => {
 			const { copyRoom, isLoading } = useRoomsState();
 			expect(isLoading.value).toBe(true);
 
-			const newRoomId = await copyRoom("room-id");
+			await copyRoom("room-id");
 			expect(roomApiMock.roomControllerCopyRoom).toHaveBeenCalledWith(
 				"room-id"
 			);

@@ -15,6 +15,7 @@ import {
 } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
+import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -40,7 +41,6 @@ import { ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index";
 import RoomMembersPage from "./RoomMembers.page.vue";
-import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -109,6 +109,7 @@ describe("RoomMembersPage", () => {
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
 			canSeeAllStudents: ref(false),
+			canShareRoom: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 

@@ -142,7 +142,10 @@ export default class CopyModule extends VuexModule {
 	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
-		if (type === ShareTokenInfoResponseParentTypeEnum.Courses) {
+		if (
+			type === ShareTokenInfoResponseParentTypeEnum.Courses ||
+			type === ShareTokenInfoResponseParentTypeEnum.Room
+		) {
 			copyResult = await this.shareApi
 				.shareTokenControllerImportShareToken(token, { newName })
 				.then((response) => response.data);

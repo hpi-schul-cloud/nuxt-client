@@ -4,7 +4,7 @@ import {
 	RoomDetailsResponse,
 	RoomItemResponse,
 	UpdateRoomBodyParams,
-	RoomColor as RoomColorEnum,
+	RoomColor,
 } from "@/serverApi/v3";
 
 export type RoomItem = RoomItemResponse;
@@ -14,4 +14,4 @@ export type RoomBoardItem = RoomBoardItemResponse;
 export type RoomCreateParams = CreateRoomBodyParams;
 export type RoomUpdateParams = UpdateRoomBodyParams;
 
-export { RoomColorEnum };
+export { RoomColor };

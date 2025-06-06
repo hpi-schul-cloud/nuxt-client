@@ -2,16 +2,13 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
-import { RoomCopyInfoDialog } from "@feature-room";
+import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
 
 describe("@feature-room/RoomCopyInfoDialog", () => {
 	const setup = () => {
 		const wrapper = mount(RoomCopyInfoDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
-			props: {
-				modelValue: true,
 			},
 		});
 

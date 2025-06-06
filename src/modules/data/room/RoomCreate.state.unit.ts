@@ -6,7 +6,7 @@ import { useApplicationError } from "@/composables/application-error.composable"
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ApplicationErrorModule from "@/store/application-error";
-import { RoomCreateParams, RoomColorEnum } from "@/types/room/Room";
+import { RoomCreateParams, RoomColor } from "@/types/room/Room";
 import { ref } from "vue";
 import {
 	apiResponseErrorFactory,
@@ -73,7 +73,7 @@ describe("useRoomCreateState", () => {
 	describe("createRoom", () => {
 		const roomData = ref<RoomCreateParams>({
 			name: "Room 1",
-			color: RoomColorEnum.BlueGrey,
+			color: RoomColor.BlueGrey,
 			startDate: undefined,
 			endDate: undefined,
 		});
