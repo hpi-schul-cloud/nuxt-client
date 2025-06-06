@@ -19,7 +19,7 @@
 	"dependencies": {
 		"@braintree/sanitize-url": "^7.1.1",
 		"@ckeditor/ckeditor5-core": "^37.1.0",
-		"@ckeditor/ckeditor5-vue": "^5.1.0",
+		"@ckeditor/ckeditor5-vue": "^7.3.0",
 		"@hpi-schul-cloud/ckeditor": "^2.1.0",
 		"@lumieducation/h5p-webcomponents": "^10.0.4",
 		"@vuelidate/core": "^2.0.3",
