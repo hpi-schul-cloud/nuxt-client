@@ -3,45 +3,8 @@
 		<template #header>
 			<h1 class="text-h3 mb-4">{{ t("pages.rooms.title") }}</h1>
 		</template>
-		<InfoAlert class="mb-14">
-			{{ t("pages.rooms.infoAlert.welcome") }}
-
-			<ul class="mt-1 pl-4">
-				<li>{{ t("pages.rooms.infoAlert.welcome.collaboration") }}</li>
-				<li>{{ t("pages.rooms.infoAlert.welcome.teamsAndCourses") }}</li>
-				<li>
-					<i18n-t
-						keypath="pages.rooms.infoAlert.welcome.furtherInformation"
-						scope="global"
-					>
-						<template #helpLink>
-							<a
-								href="https://docs.dbildungscloud.de/x/6gthFg"
-								target="_blank"
-								rel="noopener"
-								data-testid="rooms-help-link"
-								:aria-label="helpAriaLabel"
-							>
-								{{ t("pages.rooms.infoAlert.welcome.furtherInformation.help") }}
-							</a>
-						</template>
-						<template #feedbackLink>
-							<a
-								href="/help/contact"
-								target="_blank"
-								rel="noopener"
-								:aria-label="feedbackAriaLabel"
-							>
-								{{
-									t("pages.rooms.infoAlert.welcome.furtherInformation.feedback")
-								}}
-							</a>
-						</template>
-					</i18n-t>
-				</li>
-			</ul>
-		</InfoAlert>
-		<RoomGrid ref="roomGridRef" />
+		<RoomsWelcomeInfo />
+		<RoomGrid :rooms="rooms" :is-loading="isLoading" :is-empty="isEmpty" />
 		<ImportFlow
 			:is-active="isImportMode"
 			:token="importToken"
@@ -58,7 +21,7 @@ import ImportFlow from "@/components/share/ImportFlow.vue";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomsState } from "@data-room";
-import { RoomGrid } from "@feature-room";
+import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref, watch } from "vue";
