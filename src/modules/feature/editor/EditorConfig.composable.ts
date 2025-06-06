@@ -49,6 +49,13 @@ export const useEditorConfig = () => {
 		fontBackgroundColor: fontBackgroundColors(t),
 	});
 
+	const containsListElement = (
+		sourceElement: HTMLElement | undefined
+	): boolean => {
+		if (!sourceElement) return false;
+		return !!sourceElement.querySelector("ul,ol");
+	};
+
 	function isEditorEmpty(
 		editor: Editor & { sourceElement?: HTMLElement; getData?: () => string }
 	): boolean {
@@ -59,7 +66,7 @@ export const useEditorConfig = () => {
 		const containsFormula = !!tempDiv.querySelector(
 			"*:not(.math-tex):not(.katex)"
 		);
-		const containsList = !!editor.sourceElement?.querySelector("ul,ol");
+		const containsList = containsListElement(editor.sourceElement);
 		return !containsTextContent && !containsFormula && !containsList;
 	}
 
