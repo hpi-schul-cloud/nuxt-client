@@ -160,7 +160,8 @@ const isChangeOwnershipOptionVisible = computed(() => {
 	return (
 		currentUserId &&
 		roomMembersStore.isRoomOwner(currentUserId) &&
-		memberToChangeRole.length === 1
+		memberToChangeRole.length === 1 &&
+		isMemberStudent.value === false
 	);
 });
 const isOwnershipHandoverMode = ref(false);
@@ -188,6 +189,14 @@ const currentUserFullName = computed(() => {
 
 const memberFullName = computed(() => {
 	return `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`;
+});
+
+const memberSchoolRoles = computed(() => {
+	return memberToChangeRole[0]?.schoolRoleNames;
+});
+
+const isMemberStudent = computed(() => {
+	return memberSchoolRoles.value.includes(RoleName.Student);
 });
 
 const infoText = computed(() => {
