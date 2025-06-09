@@ -163,7 +163,7 @@ describe("RoomsPage", () => {
 
 				expect(router.replace).toHaveBeenCalledWith({
 					name: "room-details",
-					params: { destinationId: "newId" },
+					params: { id: "newId" },
 				});
 			});
 		});

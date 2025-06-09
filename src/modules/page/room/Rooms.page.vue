@@ -70,7 +70,7 @@ onMounted(() => {
 const onImportSuccess = (newName: string, destinationId?: string) => {
 	showImportSuccess(newName);
 	if (destinationId) {
-		router.replace({ name: "room-details", params: { destinationId } });
+		router.replace({ name: "room-details", params: { id: destinationId } });
 	} else {
 		router.replace({ name: "rooms" });
 		fetchRooms();
