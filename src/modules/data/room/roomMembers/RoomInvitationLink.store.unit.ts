@@ -17,11 +17,7 @@ import { useBoardNotifier } from "@util-board";
 import { AxiosInstance, AxiosPromise } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
-import {
-	InvitationStep,
-	RoomInvitationLink,
-	UpdateRoomInvitationLinkDto,
-} from "./types";
+import { InvitationStep, RoomInvitationLink } from "./types";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createAxiosError } from "@util-axios-error";
 import { RoomIdResponse } from "@/serverApi/v3/api";

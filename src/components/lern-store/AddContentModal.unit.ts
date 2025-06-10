@@ -6,7 +6,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { nextTick } from "vue";
