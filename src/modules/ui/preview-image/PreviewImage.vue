@@ -1,33 +1,35 @@
 <template>
-	<WarningAlert v-if="isError">
-		{{ $t("components.cardElement.fileElement.previewError") }}
-	</WarningAlert>
-	<v-img
-		ref="imageRef"
-		class="image mx-auto"
-		loading="lazy"
-		data-testid="image-preview"
-		:src="imageSrc"
-		:alt="alt"
-		:cover="cover"
-		:aspect-ratio="aspectRatio"
-		:max-width="imageWidth"
-		:max-height="maxHeight"
-		@load="setWidth"
-		@error="setError"
-	>
-		<template #placeholder>
-			<v-row class="fill-height ma-0" align="center" justify="center">
-				<VProgressCircular color="primary" indeterminate :size="36" />
-			</v-row>
-		</template>
-	</v-img>
+	<div>
+		<WarningAlert v-if="isError" class="warning-alert">
+			{{ $t("components.cardElement.fileElement.previewError") }}
+		</WarningAlert>
+		<v-img
+			ref="imageRef"
+			class="image mx-auto"
+			loading="lazy"
+			data-testid="image-preview"
+			:src="imageSrc"
+			:alt="alt"
+			:cover="cover"
+			:aspect-ratio="aspectRatio"
+			:max-width="imageWidth"
+			:max-height="maxHeight"
+			@load="setWidth"
+			@error="setError"
+		>
+			<template #placeholder>
+				<v-row class="fill-height ma-0" align="center" justify="center">
+					<VProgressCircular color="primary" indeterminate :size="36" />
+				</v-row>
+			</template>
+		</v-img>
+	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
 import errorImage from "@/assets/img/image-not-available.svg";
 import { WarningAlert } from "@ui-alert";
+import { computed, defineComponent, ref } from "vue";
 
 export default defineComponent({
 	name: "PreviewImage",
@@ -74,3 +76,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+.warning-alert {
+	background-color: white;
+}
+</style>
