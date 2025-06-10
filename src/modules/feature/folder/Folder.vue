@@ -14,6 +14,7 @@
 					v-if="hasEditPermission"
 					:folder-name="folderName"
 					@delete="onDelete"
+					@rename="onRenameActionClick"
 				/>
 			</div>
 		</template>
@@ -28,6 +29,12 @@
 		/>
 	</DefaultWireframe>
 	<ConfirmationDialog />
+	<RenameFolderDialog
+		v-model:is-dialog-open="isRenameDialogOpen"
+		:name="folderName"
+		@confirm="onRename"
+		@cancel="onRenameCancel"
+	/>
 	<input
 		ref="fileInput"
 		type="file"
@@ -59,6 +66,7 @@ import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
+import RenameFolderDialog from "./RenameFolderDialog.vue";
 
 const boardApi = useBoardApi();
 
@@ -77,6 +85,7 @@ const {
 	fetchFileFolderElement,
 	parent,
 	mapNodeTypeToPathType,
+	renameFolder,
 } = useFolderState();
 
 const { createPageInformation } = useSharedBoardPageInformation();
@@ -91,6 +100,7 @@ const { hasEditPermission } = useBoardPermissions();
 const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
 const fileInput = ref<HTMLInputElement | null>(null);
+const isRenameDialogOpen = ref(false);
 
 const fabAction = computed(() => {
 	if (!hasEditPermission.value) return;
@@ -159,6 +169,19 @@ const deleteAndNavigateToBoard = async (folderId: string) => {
 
 	await boardApi.deleteElementCall(folderId);
 	router.replace(`/${boardPath}/${parent.value.id}`);
+};
+
+const onRenameActionClick = () => {
+	isRenameDialogOpen.value = true;
+};
+
+const onRename = async (newName: string) => {
+	await renameFolder(newName, folderId.value);
+	isRenameDialogOpen.value = false;
+};
+
+const onRenameCancel = () => {
+	isRenameDialogOpen.value = false;
 };
 
 onMounted(async () => {

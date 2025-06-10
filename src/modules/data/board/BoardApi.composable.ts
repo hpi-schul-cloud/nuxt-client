@@ -126,6 +126,20 @@ export const useBoardApi = () => {
 			return body;
 		}
 
+		const isFileFolderElement = (
+			element: AnyContentElement
+		): element is FileElementResponse => {
+			return element.type === ContentElementType.FileFolder;
+		};
+
+		if (isFileFolderElement(element)) {
+			const body: FileElementContentBody = {
+				content: element.content,
+				type: ContentElementType.FileFolder,
+			};
+			return body;
+		}
+
 		const isSubmissionContainerElement = (
 			element: AnyContentElement
 		): element is SubmissionContainerElementResponse => {
