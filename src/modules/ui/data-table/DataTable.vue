@@ -175,6 +175,11 @@ watch(
 	font-weight: bold;
 }
 
+:deep(.v-data-table__td-value) {
+	word-break: break-word;
+	overflow-wrap: break-word;
+}
+
 :deep(.v-data-table__td .v-selection-control--disabled) {
 	color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity));
 }
