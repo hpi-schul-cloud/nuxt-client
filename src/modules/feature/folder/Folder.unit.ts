@@ -610,7 +610,9 @@ describe("Folder.vue", () => {
 						() => "boards"
 					);
 
-					const folderName = "Test Folder" as unknown as ComputedRef<string>;
+					const folderName = ref(
+						"Test Folder"
+					) as unknown as ComputedRef<string>;
 					folderStateMock.folderName = folderName;
 					folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
@@ -694,6 +696,21 @@ describe("Folder.vue", () => {
 					);
 
 					expect(cancelButton.isVisible()).toBe(false);
+				});
+
+				it("should emit 'update:folder-name' event", async () => {
+					const { wrapper, folderStateMock } = await setup();
+
+					await flushPromises();
+
+					// @ts-expect-error accessing private property
+					folderStateMock.folderName.value = "New Name";
+					await flushPromises();
+
+					expect(wrapper.emitted("update:folder-name")).toEqual([
+						["Test Folder"],
+						["New Name"],
+					]);
 				});
 			});
 
