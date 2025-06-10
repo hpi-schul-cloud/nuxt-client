@@ -68,8 +68,8 @@ const onKeyUp = () => ensurePoliteNotifications();
 
 	h4,
 	h5 {
-		margin-bottom: var(--space-xs);
-		margin-top: var(--space-md-2);
+		margin-bottom: 0.5rem;
+		margin-top: 1.25rem;
 	}
 
 	h4 {
@@ -87,7 +87,7 @@ const onKeyUp = () => ensurePoliteNotifications();
 	ul,
 	ol {
 		font-size: var(--text-md);
-		margin-bottom: var(--space-xs);
+		margin-bottom: 0.5rem;
 	}
 
 	ul {
@@ -99,7 +99,7 @@ const onKeyUp = () => ensurePoliteNotifications();
 		overflow-x: auto;
 		overflow-y: hidden;
 		padding-right: 1px;
-		margin-bottom: var(--space-xs);
+		margin-bottom: 0.5rem;
 	}
 
 	.math-tex {
@@ -109,11 +109,11 @@ const onKeyUp = () => ensurePoliteNotifications();
 
 :deep(.ck.ck-editor__editable_inline) {
 	padding: 0;
-	margin-bottom: var(--space-md);
+	margin-bottom: 1rem;
 
 	h4,
 	h5 {
-		margin-top: var(--space-md-2);
+		margin-top: 1.25rem;
 	}
 
 	p,
@@ -123,7 +123,7 @@ const onKeyUp = () => ensurePoliteNotifications();
 	}
 
 	> :last-child {
-		margin-bottom: var(--space-xs);
+		margin-bottom: 0.5rem;
 	}
 }
 
@@ -131,14 +131,14 @@ const onKeyUp = () => ensurePoliteNotifications();
 		.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around
 	) {
 	> .ck-widget__type-around__button_before {
-		top: var(--space-xs);
-		left: ar(--space-xs);
+		top: 0.5rem;
+		left: 0.5rem;
 		margin-left: 0;
 	}
 
 	> .ck-widget__type-around__button_after {
-		bottom: var(--space-xs);
-		right: var(--space-xs);
+		bottom: 0.5rem;
+		right: 0.5rem;
 	}
 }
 </style>
