@@ -1,4 +1,5 @@
 import {
+	ArchiveFileParams,
 	FileRecordScanStatus,
 	PreviewOutputMimeTypes,
 	PreviewStatus,
@@ -24,6 +25,31 @@ export function downloadFile(url: string, fileName: string) {
 	document.body.appendChild(link);
 	link.click();
 	document.body.removeChild(link);
+}
+
+export function downloadFiles(params: ArchiveFileParams) {
+	const form = document.createElement("form");
+	form.method = "POST";
+	form.action = "/api/v3/file/download";
+	form.target = "_blank";
+	form.enctype = "application/json";
+
+	const fileRecordIds = document.createElement("input");
+	fileRecordIds.type = "hidden";
+	fileRecordIds.name = "fileRecordIds";
+	fileRecordIds.value = JSON.stringify(params.fileRecordIds);
+	form.appendChild(fileRecordIds);
+
+	const archiveName = document.createElement("input");
+	archiveName.type = "hidden";
+	archiveName.name = "archiveName";
+	archiveName.value = params.archiveName;
+
+	form.appendChild(archiveName);
+
+	document.body.appendChild(form);
+
+	form.submit();
 }
 
 export function convertFileSize(fileSize: number): {

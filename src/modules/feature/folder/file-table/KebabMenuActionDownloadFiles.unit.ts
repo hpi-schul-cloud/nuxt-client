@@ -1,7 +1,5 @@
-import { FileRecord } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";
 import * as Helper from "@/utils/helpers";
-import { fileRecordFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -16,7 +14,6 @@ describe("KebabMenuActionDownloadFiles", () => {
 
 	const setupWrapper = (props: {
 		disabled?: boolean;
-		fileRecords: FileRecord[];
 		selectedIds: string[];
 	}) => {
 		const wrapper = mount(KebabMenuActionDownloadFiles, {
@@ -25,8 +22,8 @@ describe("KebabMenuActionDownloadFiles", () => {
 			},
 			props: {
 				disabled: props.disabled,
-				fileRecords: props.fileRecords,
 				selectedIds: props.selectedIds,
+				archiveName: "test-archive",
 			},
 		});
 
@@ -36,84 +33,55 @@ describe("KebabMenuActionDownloadFiles", () => {
 	describe("when action is clicked", () => {
 		describe("when all file records are selected", () => {
 			const setup = async () => {
-				const fileRecord1 = fileRecordFactory.build({
-					id: "1",
-				});
-				const fileRecord2 = fileRecordFactory.build({
-					id: "2",
-				});
-				const fileRecords = [fileRecord1, fileRecord2];
-
 				const selectedIds = ["1", "2"];
 
-				const downloadFileMock = jest.spyOn(FileHelper, "downloadFile");
+				const downloadFilesMock = jest.spyOn(FileHelper, "downloadFiles");
 				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
 
 				const { wrapper } = setupWrapper({
-					fileRecords,
 					selectedIds,
 				});
 
 				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
 				kebabMenuAction.trigger("click");
 
-				return { downloadFileMock, fileRecords };
+				return { downloadFilesMock };
 			};
 
-			it("should call downloadFile with correct params", async () => {
-				const { downloadFileMock, fileRecords } = await setup();
+			it("should call downloadFiles with correct params", async () => {
+				const { downloadFilesMock } = await setup();
 
-				const firstFileRecord = fileRecords[0];
-				const secondFileRecord = fileRecords[1];
-
-				expect(downloadFileMock).toHaveBeenNthCalledWith(
-					1,
-					firstFileRecord.url,
-					firstFileRecord.name
-				);
-				expect(downloadFileMock).toHaveBeenNthCalledWith(
-					2,
-					secondFileRecord.url,
-					secondFileRecord.name
-				);
+				expect(downloadFilesMock).toHaveBeenCalledWith({
+					archiveName: "20250610_test-archive",
+					fileRecordIds: ["1", "2"],
+				});
 			});
 		});
 
 		describe("when only second filrecord is selected", () => {
 			const setup = async () => {
-				const fileRecord1 = fileRecordFactory.build({
-					id: "1",
-				});
-				const fileRecord2 = fileRecordFactory.build({
-					id: "2",
-				});
-				const fileRecords = [fileRecord1, fileRecord2];
-
 				const selectedIds = ["2"];
 
-				const downloadFileMock = jest.spyOn(FileHelper, "downloadFile");
+				const downloadFilesMock = jest.spyOn(FileHelper, "downloadFiles");
 				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
 
 				const { wrapper } = setupWrapper({
-					fileRecords,
 					selectedIds,
 				});
 
 				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
 				kebabMenuAction.trigger("click");
 
-				return { downloadFileMock, fileRecords, selectedIds };
+				return { downloadFilesMock, selectedIds };
 			};
 
-			it("should call downloadFile with correct params", async () => {
-				const { downloadFileMock, fileRecords } = await setup();
+			it("should call downloadFiles with correct params", async () => {
+				const { downloadFilesMock } = await setup();
 
-				const secondFileRecord = fileRecords[1];
-
-				expect(downloadFileMock).toHaveBeenCalledWith(
-					secondFileRecord.url,
-					secondFileRecord.name
-				);
+				expect(downloadFilesMock).toHaveBeenCalledWith({
+					archiveName: "20250610_test-archive",
+					fileRecordIds: ["2"],
+				});
 			});
 		});
 	});
@@ -121,35 +89,26 @@ describe("KebabMenuActionDownloadFiles", () => {
 	describe("when action is disabled", () => {
 		describe("when all file records are selected", () => {
 			const setup = async () => {
-				const fileRecord1 = fileRecordFactory.build({
-					id: "1",
-				});
-				const fileRecord2 = fileRecordFactory.build({
-					id: "2",
-				});
-				const fileRecords = [fileRecord1, fileRecord2];
-
 				const selectedIds = ["1", "2"];
 
-				const downloadFileMock = jest.spyOn(FileHelper, "downloadFile");
+				const downloadFilesMock = jest.spyOn(FileHelper, "downloadFile");
 				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
 
 				const { wrapper } = setupWrapper({
 					disabled: true,
-					fileRecords,
 					selectedIds,
 				});
 
 				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
 				kebabMenuAction.trigger("click");
 
-				return { downloadFileMock };
+				return { downloadFilesMock };
 			};
 
 			it("should not call downloadFile", async () => {
-				const { downloadFileMock } = await setup();
+				const { downloadFilesMock } = await setup();
 
-				expect(downloadFileMock).not.toHaveBeenCalled();
+				expect(downloadFilesMock).not.toHaveBeenCalled();
 			});
 		});
 	});

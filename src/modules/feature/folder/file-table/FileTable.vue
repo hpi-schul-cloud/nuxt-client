@@ -88,6 +88,11 @@
 				</template>
 
 				<template #action-menu-items="{ selectedIds }">
+					<KebabMenuActionDownloadFiles
+						:selected-ids="selectedIds"
+						:archive-name="folderName"
+						:aria-label="t('common.actions.download')"
+					/>
 					<KebabMenuActionDeleteFiles
 						v-if="props.hasEditPermission"
 						:file-records="fileRecords"
@@ -166,6 +171,7 @@ const props = defineProps({
 		}>,
 		required: true,
 	},
+	folderName: { type: String, required: true },
 });
 
 const emit = defineEmits(["delete-files", "update:name"]);

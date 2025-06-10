@@ -19,6 +19,7 @@
 			</div>
 		</template>
 		<FileTable
+			:folder-name="folderName"
 			:is-loading="isLoading"
 			:is-empty="isEmpty"
 			:has-edit-permission="hasEditPermission"
