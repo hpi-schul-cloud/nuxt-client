@@ -179,7 +179,7 @@ export const useRoomInvitationLinkStore = defineStore(
 					? commonTranslationsMap.NO
 					: commonTranslationsMap.YES,
 				activeUntil: link.activeUntil
-					? printFromStringUtcToFullDate(link.activeUntil!)
+					? printFromStringUtcToFullDate(link.activeUntil)
 					: "-",
 				isExpired: isExpired(link.activeUntil!),
 				status: isExpired(link.activeUntil!)
