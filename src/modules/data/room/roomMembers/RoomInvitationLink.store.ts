@@ -30,6 +30,8 @@ export const useRoomInvitationLinkStore = defineStore(
 		const sharedUrl = ref<string>();
 		const selectedIds = ref<string[]>([]);
 		const editedLink = ref<RoomInvitationLink | null>(null);
+		const DEFAULT_EXPIRED_DATE = ref<string>("2900-01-01T00:00:00.000Z");
+		const BASE_SHARED_URL = `${window.location.origin}/rooms/invitation-link/`;
 
 		const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 		const api = RoomInvitationLinkApiFactory(undefined, "/v3", $axios);
@@ -43,11 +45,25 @@ export const useRoomInvitationLinkStore = defineStore(
 			}
 		};
 
+		const checkDefaultExpiredDate = (link: RoomInvitationLink) => {
+			return {
+				...link,
+				activeUntil:
+					link.activeUntil === DEFAULT_EXPIRED_DATE.value
+						? undefined
+						: link.activeUntil,
+			};
+		};
+
 		const fetchLinksInternal = async (roomId: string) => {
 			try {
 				isLoading.value = true;
 				const response = await roomApi.roomControllerGetInvitationLinks(roomId);
-				roomInvitationLinks.value = response.data.roomInvitationLinks;
+				roomInvitationLinks.value = response.data.roomInvitationLinks.map(
+					(link) => {
+						return checkDefaultExpiredDate(link);
+					}
+				);
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.load"));
 			} finally {
@@ -63,16 +79,23 @@ export const useRoomInvitationLinkStore = defineStore(
 		};
 
 		const createLink = async (link: CreateRoomInvitationLinkDto) => {
+			const params = {
+				...link,
+				activeUntil:
+					link.activeUntil === undefined
+						? DEFAULT_EXPIRED_DATE.value
+						: link.activeUntil,
+			};
 			try {
 				const response = (
 					await api.roomInvitationLinkControllerCreateRoomInvitationLink({
-						...link,
+						...params,
 						roomId: getRoomId(),
 					})
 				).data;
 
-				roomInvitationLinks.value.push(response);
-				sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${response.id}`;
+				roomInvitationLinks.value.push(checkDefaultExpiredDate(response));
+				sharedUrl.value = BASE_SHARED_URL + response.id;
 				invitationStep.value = InvitationStep.SHARE;
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.create"));
@@ -82,17 +105,28 @@ export const useRoomInvitationLinkStore = defineStore(
 
 		const updateLink = async (link: UpdateRoomInvitationLinkDto) => {
 			try {
+				const params = {
+					...link,
+					activeUntil:
+						link.activeUntil === undefined
+							? DEFAULT_EXPIRED_DATE.value
+							: link.activeUntil,
+				};
 				const response = (
 					await api.roomInvitationLinkControllerUpdateLink(link.id, {
-						...link,
+						...params,
 					})
 				).data;
 
-				roomInvitationLinks.value = roomInvitationLinks.value.map((l) =>
-					l.id === link.id ? response : l
+				const existingLinkIndex = roomInvitationLinks.value.findIndex(
+					(l) => l.id === link.id
 				);
+				if (existingLinkIndex !== -1) {
+					roomInvitationLinks.value[existingLinkIndex] =
+						checkDefaultExpiredDate(response);
+				}
 
-				sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${response.id}`;
+				sharedUrl.value = BASE_SHARED_URL + response.id;
 				invitationStep.value = InvitationStep.SHARE;
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.update"));
@@ -158,7 +192,9 @@ export const useRoomInvitationLinkStore = defineStore(
 				isValidForStudents: link.isOnlyForTeachers
 					? commonTranslationsMap.NO
 					: commonTranslationsMap.YES,
-				activeUntil: printFromStringUtcToFullDate(link.activeUntil!),
+				activeUntil: link.activeUntil
+					? printFromStringUtcToFullDate(link.activeUntil!)
+					: "-",
 				isExpired: isExpired(link.activeUntil!),
 				status: isExpired(link.activeUntil!)
 					? commonTranslationsMap.EXPIRED

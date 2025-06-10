@@ -275,7 +275,7 @@ const onContinue = async () => {
 		activeUntil:
 			formData.value.activeUntilChecked && !!formData.value.activeUntil
 				? formData.value.activeUntil.toString()
-				: "2900-01-01T00:00:00.000Z",
+				: undefined,
 		isOnlyForTeachers: !formData.value.isValidForStudents,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
@@ -336,7 +336,7 @@ watch(
 			formData.value.restrictedToCreatorSchool =
 				newVal.restrictedToCreatorSchool;
 			formData.value.isValidForStudents = !newVal.isOnlyForTeachers;
-			formData.value.activeUntilChecked = newVal.activeUntil !== null;
+			formData.value.activeUntilChecked = newVal.activeUntil !== undefined;
 			formData.value.activeUntil = new Date(newVal.activeUntil!);
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
 		}
