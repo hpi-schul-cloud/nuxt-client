@@ -1,8 +1,17 @@
 import {
+	isNonEmptyString,
+	isOfMaxLength,
 	isRequired,
 	isValidUrl,
 	isValidTimeFormat,
 	isValidDateFormat,
 } from "./validators";
 
-export { isRequired, isValidUrl, isValidTimeFormat, isValidDateFormat };
+export {
+	isNonEmptyString,
+	isOfMaxLength,
+	isRequired,
+	isValidUrl,
+	isValidTimeFormat,
+	isValidDateFormat,
+};

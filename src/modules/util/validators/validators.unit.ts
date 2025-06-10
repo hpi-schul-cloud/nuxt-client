@@ -3,6 +3,8 @@ import {
 	isRequired,
 	isValidTimeFormat,
 	isValidDateFormat,
+	isOfMaxLength,
+	isNonEmptyString,
 } from "@util-validators";
 
 describe("util-validators", () => {
@@ -12,6 +14,40 @@ describe("util-validators", () => {
 		it("should not accept empty value", () => {
 			const isValid = isRequired(ERROR);
 			expect(isValid("")).toBe(ERROR);
+		});
+	});
+
+	describe("isOfMaxLength", () => {
+		it("should not accept string of more length than parameter given", () => {
+			const maxLength = 5;
+			const tooLongValue = "123456";
+			const isValid = isOfMaxLength(maxLength)(ERROR);
+			expect(isValid(tooLongValue)).toBe(ERROR);
+		});
+
+		it("should accept values of null or undefined", () => {
+			const maxLength = 5;
+			const isValid = isOfMaxLength(maxLength)(ERROR);
+			expect(isValid(null)).toBe(true);
+			expect(isValid(undefined)).toBe(true);
+		});
+	});
+
+	describe("isNonEmptyString", () => {
+		it("should not accept empty string", () => {
+			const isValid = isNonEmptyString(ERROR);
+			expect(isValid("")).toBe(ERROR);
+		});
+
+		it("should not accept only whitespaces", () => {
+			const isValid = isNonEmptyString(ERROR);
+			expect(isValid("   ")).toBe(ERROR);
+		});
+
+		it("should not accept null or undefined", () => {
+			const isValid = isNonEmptyString(ERROR);
+			expect(isValid(null)).toBe(ERROR);
+			expect(isValid(undefined)).toBe(ERROR);
 		});
 	});
 
