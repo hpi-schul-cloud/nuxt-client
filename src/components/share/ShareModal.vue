@@ -165,10 +165,6 @@ const props = defineProps({
 	type: {
 		type: String as PropType<ShareTokenBodyParamsParentTypeEnum>,
 		required: true,
-		validator: (type) =>
-			Object.values(ShareTokenBodyParamsParentTypeEnum).includes(
-				type as ShareTokenBodyParamsParentTypeEnum
-			),
 	},
 });
 
