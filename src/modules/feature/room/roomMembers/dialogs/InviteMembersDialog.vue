@@ -199,9 +199,8 @@ const emit = defineEmits<{
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { createLink, updateLink } = useRoomInvitationLinkStore();
-const { invitationStep, sharedUrl, editedLink } = storeToRefs(
-	useRoomInvitationLinkStore()
-);
+const { invitationStep, sharedUrl, editedLink, DEFAULT_EXPIRED_DATE } =
+	storeToRefs(useRoomInvitationLinkStore());
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
@@ -293,7 +292,7 @@ const onContinue = async () => {
 		activeUntil:
 			formData.value.activeUntilChecked && !!formData.value.activeUntil
 				? formData.value.activeUntil.toString()
-				: undefined,
+				: DEFAULT_EXPIRED_DATE.value,
 		isOnlyForTeachers: !formData.value.isValidForStudents,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,

@@ -79,17 +79,10 @@ export const useRoomInvitationLinkStore = defineStore(
 		};
 
 		const createLink = async (link: CreateRoomInvitationLinkDto) => {
-			const params = {
-				...link,
-				activeUntil:
-					link.activeUntil === undefined
-						? DEFAULT_EXPIRED_DATE.value
-						: link.activeUntil,
-			};
 			try {
 				const response = (
 					await api.roomInvitationLinkControllerCreateRoomInvitationLink({
-						...params,
+						...link,
 						roomId: getRoomId(),
 					})
 				).data;
@@ -105,16 +98,9 @@ export const useRoomInvitationLinkStore = defineStore(
 
 		const updateLink = async (link: UpdateRoomInvitationLinkDto) => {
 			try {
-				const params = {
-					...link,
-					activeUntil:
-						link.activeUntil === undefined
-							? DEFAULT_EXPIRED_DATE.value
-							: link.activeUntil,
-				};
 				const response = (
 					await api.roomInvitationLinkControllerUpdateLink(link.id, {
-						...params,
+						...link,
 					})
 				).data;
 
@@ -228,6 +214,7 @@ export const useRoomInvitationLinkStore = defineStore(
 			roomInvitationLinks,
 			selectedIds,
 			sharedUrl,
+			DEFAULT_EXPIRED_DATE,
 		};
 	}
 );
