@@ -173,6 +173,8 @@ export default {
 		"Введений текст перевищує максимально дозволену довжину",
 	"common.validation.containsOpeningTag":
 		"Будь ласка, вставте пробіл після знаку менше.",
+	"common.validation.nonEmptyString":
+		"Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.and": "і",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
@@ -2013,8 +2015,7 @@ export default {
 		"Редагувати посилання на запрошення",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Учні з інших шкіл завжди повинні бути присутніми в кімнаті під наглядом вчителя з їхньої школи.",
-	"pages.rooms.members.inviteMember.form.description.label":
-		"Опис (необов'язково)",
+	"pages.rooms.members.inviteMember.form.description.label": "Опис",
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Відображається в огляді посилань",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
