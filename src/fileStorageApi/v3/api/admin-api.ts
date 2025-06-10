@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Schulcloud-Verbund-Software Server API
- * This is v3 of Schulcloud-Verbund-Software Server. Checkout /docs for v1.
+ * Schulcloud-Verbund-Software File Storage API
+ * This is the API documentation for the Schulcloud-Verbund-Software File Storage API
  *
  * The version of the OpenAPI document: 3.0
  * 
@@ -22,8 +22,6 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
 import { ApiValidationError } from '../models';
-// @ts-ignore
-import { DeleteByStorageLocationResponse } from '../models';
 // @ts-ignore
 import { StorageLocation } from '../models';
 /**
@@ -92,7 +90,7 @@ export const AdminApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteByStorageLocationResponse>> {
+        async deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteByStorageLocation(storageLocationId, storageLocation, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -114,7 +112,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: any): AxiosPromise<DeleteByStorageLocationResponse> {
+        deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: any): AxiosPromise<void> {
             return localVarFp.deleteByStorageLocation(storageLocationId, storageLocation, options).then((request) => request(axios, basePath));
         },
     };
@@ -135,7 +133,7 @@ export interface AdminApiInterface {
      * @throws {RequiredError}
      * @memberof AdminApiInterface
      */
-    deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: any): AxiosPromise<DeleteByStorageLocationResponse>;
+    deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: any): AxiosPromise<void>;
 
 }
 
