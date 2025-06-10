@@ -80,6 +80,10 @@ const props = defineProps({
 	},
 });
 
+const emit = defineEmits<{
+	(update: "update:folder-name", folderName: string): void;
+}>();
+
 const {
 	breadcrumbs,
 	folderName,
@@ -220,6 +224,14 @@ watch(
 		} else if (newParent && newParent.type !== ParentNodeType.Board) {
 			throw new Error("Unsupported parent type");
 		}
+	},
+	{ immediate: true }
+);
+
+watch(
+	() => folderName.value,
+	(newName) => {
+		emit("update:folder-name", newName);
 	},
 	{ immediate: true }
 );
