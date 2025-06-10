@@ -97,7 +97,7 @@ describe("MembersTable", () => {
 	];
 
 	const setup = (
-		options: Partial<{
+		options?: Partial<{
 			currentUserRole: RoleName;
 			changePermissionFlag: boolean;
 			windowWidth: number;
@@ -105,7 +105,7 @@ describe("MembersTable", () => {
 			isRoomOwner: boolean;
 			currentUserId: string;
 			roomAuthorization: Partial<RoomAuthorizationRefs>;
-		}> = {}
+		}>
 	) => {
 		const members =
 			options?.members ??
@@ -114,10 +114,14 @@ describe("MembersTable", () => {
 			});
 
 		const windowWidth = options?.windowWidth ?? 1280;
+		const defaultAuth = {
+			canAddRoomMembers: ref(true),
+		};
 		const authorizationPermissions =
-			createMock<ReturnType<typeof useRoomAuthorization>>();
+			createMock<ReturnType<typeof useRoomAuthorization>>(defaultAuth);
+
 		for (const [key, value] of Object.entries(
-			options.roomAuthorization ?? {}
+			options?.roomAuthorization ?? {}
 		)) {
 			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
 				value ?? false
@@ -126,7 +130,7 @@ describe("MembersTable", () => {
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 		const currentUser = roomMemberFactory.build({});
 		const mockMe = meResponseFactory.build({
-			user: { id: options.currentUserId ?? currentUser.userId },
+			user: { id: options?.currentUserId ?? currentUser.userId },
 		});
 		authModule.setMe(mockMe);
 
@@ -155,7 +159,7 @@ describe("MembersTable", () => {
 		});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		roomMembersStore.isRoomOwner.mockReturnValue(options.isRoomOwner ?? false);
+		roomMembersStore.isRoomOwner.mockReturnValue(options?.isRoomOwner ?? false);
 		const roomMembers = roomMembersStore.roomMembers;
 
 		return { wrapper, roomMembersStore, roomMembers, authorizationPermissions };

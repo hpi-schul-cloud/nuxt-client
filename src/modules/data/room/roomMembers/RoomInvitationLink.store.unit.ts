@@ -5,6 +5,7 @@ import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
 	meResponseFactory,
+	mockApiResponse,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	schoolFactory,
@@ -138,6 +139,10 @@ describe("useRoomInvitationLinkStore", () => {
 			const { roomDetailsStore, roomInvitationLinkStore } = setup();
 			const link = roomInvitationLinkFactory.build();
 
+			roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink.mockResolvedValue(
+				mockApiResponse({ data: link })
+			);
+
 			await roomInvitationLinkStore.createLink(link);
 
 			expect(
@@ -176,8 +181,12 @@ describe("useRoomInvitationLinkStore", () => {
 			const links = roomInvitationLinkFactory.buildList(3);
 			const { roomInvitationLinkStore } = setup(links);
 
-			const firstLink: UpdateRoomInvitationLinkDto = links[0];
+			const firstLink = links[0];
 			firstLink.title = "Updated Link";
+
+			roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink.mockResolvedValue(
+				mockApiResponse({ data: firstLink })
+			);
 
 			await roomInvitationLinkStore.updateLink(firstLink);
 
