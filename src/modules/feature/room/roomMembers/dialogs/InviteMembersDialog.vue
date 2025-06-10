@@ -211,7 +211,7 @@ const defaultFormData = {
 	restrictedToCreatorSchool: true,
 	isValidForStudents: false,
 	activeUntilChecked: false,
-	activeUntil: null as Date | null,
+	activeUntil: undefined as Date | undefined,
 	requiresConfirmation: true,
 	id: "",
 };
@@ -230,9 +230,7 @@ const isDatePickerDisabled = computed(() => {
 });
 
 const isSubmitDisabled = computed(() => {
-	return (
-		formData.value.activeUntilChecked && formData.value.activeUntil === null
-	);
+	return formData.value.activeUntilChecked && !formData.value.activeUntil;
 });
 
 const modalTitle = computed(() => {
@@ -265,7 +263,7 @@ const subTitle = computed(() => {
 	return subTitleMap[invitationStep.value];
 });
 
-const onUpdateDate = (date: Date | null) => {
+const onUpdateDate = (date: Date) => {
 	formData.value.activeUntil = date;
 	unpause();
 };
@@ -354,7 +352,9 @@ watch(
 				newVal.restrictedToCreatorSchool;
 			formData.value.isValidForStudents = !newVal.isOnlyForTeachers;
 			formData.value.activeUntilChecked = newVal.activeUntil !== undefined;
-			formData.value.activeUntil = new Date(newVal.activeUntil!);
+			formData.value.activeUntil = newVal.activeUntil
+				? new Date(newVal.activeUntil)
+				: undefined;
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
 		}
 	}
