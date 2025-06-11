@@ -92,10 +92,12 @@ export default {
 	"common.labels.size": "Size",
 	"common.labels.status": "Status",
 	"common.labels.student": "Student",
+	"common.labels.student.neutral": "Student",
 	"common.labels.students": "Students",
 	"common.labels.success": "success",
 	"common.labels.teacher.plural": "Teachers",
 	"common.labels.teacher": "Teacher",
+	"common.labels.teacher.neutral": "Teacher",
 	"common.labels.time": "Time",
 	"common.labels.title": "Title",
 	"common.labels.unknown": "Unknown",
@@ -168,6 +170,8 @@ export default {
 		"The text you entered exceeds the maximum length",
 	"common.validation.containsOpeningTag":
 		"Please insert a space after the less-than sign.",
+	"common.validation.nonEmptyString":
+		"This is a mandatory field and must not contain only spaces.",
 	"common.words.and": "and",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",
@@ -1891,7 +1895,6 @@ export default {
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.add.infoText":
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
-	"pages.rooms.members.add.role.student": "Student",
 	"pages.rooms.members.add.students.forbidden":
 		"If the visibility of students for teachers is deactivated in the school settings, only students from your own class can be added. Please contact the school admin.",
 	"pages.rooms.members.add.warningText":
@@ -1978,8 +1981,7 @@ export default {
 	"pages.rooms.members.inviteMember.step.edit.title": "Edit invitation link",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Students from other schools must always be added to the room by a supervising teacher from their school.",
-	"pages.rooms.members.inviteMember.form.description.label":
-		"Description (optional)",
+	"pages.rooms.members.inviteMember.form.description.label": "Description",
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Is displayed in the link overview",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
