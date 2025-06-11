@@ -7,8 +7,9 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { ExtendedIconBtn } from "@ui-extended-icon-btn";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import { ComponentPublicInstance, nextTick } from "vue";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import AddElementDialog from "./AddElementDialog.vue";
 
@@ -26,13 +27,18 @@ describe("ElementTypeSelection", () => {
 	);
 
 	const setupMocks = () => {
-		const { closeDialog, isDialogOpen, elementTypeOptions } =
-			setupSharedElementTypeSelectionMock();
+		const {
+			closeDialog,
+			isDialogOpen,
+			isDialogLoading,
+			staticElementTypeOptions,
+			dynamicElementTypeOptions,
+		} = setupSharedElementTypeSelectionMock();
 
 		const createTextElement = jest.fn();
 		const createFileElement = jest.fn();
 
-		elementTypeOptions.value = [
+		staticElementTypeOptions.value = [
 			{
 				icon: "action1-icon",
 				label: "action1-label",
@@ -47,7 +53,13 @@ describe("ElementTypeSelection", () => {
 			},
 		];
 
-		return { isDialogOpen, elementTypeOptions, closeDialog };
+		return {
+			isDialogOpen,
+			isDialogLoading,
+			staticElementTypeOptions,
+			dynamicElementTypeOptions,
+			closeDialog,
+		};
 	};
 
 	describe("when isDialogOpen is false", () => {
@@ -79,7 +91,8 @@ describe("ElementTypeSelection", () => {
 		const setup = async () => {
 			document.body.setAttribute("data-app", "true");
 
-			const { isDialogOpen, elementTypeOptions, closeDialog } = setupMocks();
+			const { isDialogOpen, staticElementTypeOptions, closeDialog } =
+				setupMocks();
 
 			const wrapper = mount(AddElementDialog, {
 				global: {
@@ -94,7 +107,7 @@ describe("ElementTypeSelection", () => {
 			isDialogOpen.value = true;
 			await nextTick();
 
-			return { isDialogOpen, elementTypeOptions, closeDialog, wrapper };
+			return { isDialogOpen, staticElementTypeOptions, closeDialog, wrapper };
 		};
 
 		it("should make modal visible", async () => {
@@ -104,9 +117,9 @@ describe("ElementTypeSelection", () => {
 		});
 
 		it("should render buttons correctly and correct action will be called on click", async () => {
-			const { elementTypeOptions, wrapper } = await setup();
+			const { staticElementTypeOptions, wrapper } = await setup();
 
-			for (const elementTypeOption of elementTypeOptions.value) {
+			for (const elementTypeOption of staticElementTypeOptions.value) {
 				const button = wrapper.findComponent(
 					`[data-testid=${elementTypeOption.testId}]`
 				);
@@ -126,6 +139,71 @@ describe("ElementTypeSelection", () => {
 			await nextTick();
 
 			expect(closeDialog).toHaveBeenCalled();
+		});
+	});
+
+	describe("when the dynamic options had changed while the dialog is opened", () => {
+		const setup = async () => {
+			document.body.setAttribute("data-app", "true");
+
+			const { isDialogOpen, dynamicElementTypeOptions } = setupMocks();
+
+			type AddElementDialogWrapper<T> = VueWrapper<ComponentPublicInstance & T>;
+			const wrapper: AddElementDialogWrapper<Partial<{ dialogWidth: number }>> =
+				mount(AddElementDialog, {
+					attrs: {
+						width: 420,
+					},
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+
+						provide: {
+							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+						},
+					},
+				});
+
+			isDialogOpen.value = true;
+			await nextTick();
+
+			return { wrapper, dynamicElementTypeOptions };
+		};
+
+		it("should show the updated element type options", async () => {
+			const { wrapper, dynamicElementTypeOptions } = await setup();
+
+			const testId = "dynamic-action1-id";
+			dynamicElementTypeOptions.value = [
+				{
+					icon: "dynamic-action1-icon",
+					label: "dynamic-action1-label",
+					action: jest.fn(),
+					testId,
+				},
+			];
+			await flushPromises();
+
+			const option = wrapper.findComponent<typeof ExtendedIconBtn>(
+				`[data-testid="${testId}"]`
+			);
+
+			expect(option.isVisible()).toBe(true);
+		});
+
+		it("should adjust the width of the dialog", async () => {
+			const { wrapper, dynamicElementTypeOptions } = await setup();
+
+			dynamicElementTypeOptions.value = [
+				{
+					icon: "dynamic-action1-icon",
+					label: "dynamic-action1-label",
+					action: jest.fn(),
+					testId: "dynamic-action1-id",
+				},
+			];
+			await flushPromises();
+
+			expect(wrapper.vm.dialogWidth).toBe(426);
 		});
 	});
 });

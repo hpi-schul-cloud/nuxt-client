@@ -527,6 +527,8 @@ export default {
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Інший користувач змінив вигляд панелі на {layout}.",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"Не вдалося завантажити бажані інструменти.",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
