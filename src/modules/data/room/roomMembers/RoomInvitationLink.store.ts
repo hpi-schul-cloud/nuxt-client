@@ -27,7 +27,7 @@ export const useRoomInvitationLinkStore = defineStore(
 		const isLoading = ref<boolean>(false);
 		const isInvitationDialogOpen = ref(false);
 		const invitationStep = ref<InvitationStep>(InvitationStep.PREPARE);
-		const sharedUrl = ref<string>();
+		const sharedUrl = ref<string>("");
 		const selectedIds = ref<string[]>([]);
 		const editedLink = ref<RoomInvitationLink | null>(null);
 

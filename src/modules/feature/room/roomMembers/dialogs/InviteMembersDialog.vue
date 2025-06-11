@@ -25,8 +25,10 @@
 
 					<div class="mt-5">
 						<v-text-field
+							ref="descriptionField"
 							v-model="formData.title"
 							class="mb-2"
+							:rules="validationRules"
 							:label="
 								t('pages.rooms.members.inviteMember.form.description.label')
 							"
@@ -34,11 +36,13 @@
 								t('pages.rooms.members.inviteMember.form.description.hint')
 							"
 							persistent-hint
+							data-testid="invite-participant-description-input"
 						/>
 
 						<v-checkbox
 							v-model="formData.restrictedToCreatorSchool"
 							hide-details
+							data-testid="input-invite-participants-restricted-to-creator-school"
 						>
 							<template #label>
 								<div class="mt-6">
@@ -63,6 +67,7 @@
 								)
 							"
 							hide-details
+							data-testid="input-invite-participants-valid-for-students"
 						/>
 
 						<div class="d-flex align-center justify-start my-n4 pr-0">
@@ -73,6 +78,7 @@
 								"
 								hide-details
 								class="mr-2"
+								data-testid="input-invite-participants-link-expires"
 							/>
 							<DatePicker
 								ref="datePicker"
@@ -93,6 +99,7 @@
 							v-model="formData.requiresConfirmation"
 							hide-details
 							class="my-n6"
+							data-testid="input-invite-participants-requires-confirmation"
 						>
 							<template #label>
 								<div class="mt-6">
@@ -111,7 +118,7 @@
 				</template>
 				<template v-else>
 					<ShareModalResult
-						:share-url="sharedUrl!"
+						:share-url="sharedUrl"
 						type="roomMemberInvitation"
 						@copied="onCopyLink"
 						@done="onClose"
@@ -159,9 +166,9 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref, watch } from "vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VCard } from "vuetify/lib/components";
+import { VCard, VTextField } from "vuetify/lib/components";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
@@ -175,6 +182,8 @@ import {
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { storeToRefs } from "pinia";
+import { isNonEmptyString, isOfMaxLength } from "@util-validators";
+import { useOpeningTagValidator } from "@/utils/validation";
 
 defineProps({
 	schoolName: {
@@ -197,6 +206,7 @@ const { createLink, updateLink } = useRoomInvitationLinkStore();
 const { invitationStep, sharedUrl, editedLink } = storeToRefs(
 	useRoomInvitationLinkStore()
 );
+const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
@@ -212,6 +222,13 @@ const defaultFormData = {
 };
 
 const formData = ref({ ...defaultFormData });
+const descriptionField = useTemplateRef("descriptionField");
+
+const validationRules = [
+	isNonEmptyString(t("common.validation.nonEmptyString")),
+	isOfMaxLength(100)(t("common.validation.tooLong")),
+	validateOnOpeningTag,
+];
 
 const isDatePickerDisabled = computed(() => {
 	return !formData.value.activeUntilChecked;
@@ -270,8 +287,13 @@ const onClose = () => {
 const onContinue = async () => {
 	if (invitationStep.value === InvitationStep.SHARE) return;
 
+	const validationResult = await descriptionField.value?.validate?.();
+	if (validationResult && validationResult.length > 0) {
+		return;
+	}
+
 	const baseParams = {
-		title: formData.value.title || "invitation link",
+		title: formData.value.title,
 		activeUntil:
 			formData.value.activeUntilChecked && !!formData.value.activeUntil
 				? formData.value.activeUntil.toString()
