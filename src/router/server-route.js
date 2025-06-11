@@ -1,6 +1,11 @@
 const isServer = (path) => {
-	return path.startsWith("/api/v") && !isFileStorage(path);
+	return (
+		path.startsWith("/api/v") &&
+		!isFileStorage(path) &&
+		!isCommonCartridge(path)
+	);
 };
+
 const isFileStorage = (path) => {
 	return path.startsWith("/api/v3/file");
 };
@@ -19,9 +24,17 @@ const isH5pStaticFiles = (path) => {
 	return path.startsWith("/api/v3/h5p-editor/h5pstatics");
 };
 
+/**
+ * @param {string} path
+ */
+const isCommonCartridge = (path) => {
+	return path.startsWith("/api/v3/common-cartridge");
+};
+
 module.exports = {
 	isServer,
 	isFileStorage,
 	isH5pEditor,
 	isH5pStaticFiles,
+	isCommonCartridge,
 };
