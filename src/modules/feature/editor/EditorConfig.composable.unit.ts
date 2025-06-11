@@ -114,8 +114,8 @@ describe("useEditorConfig", () => {
 				});
 			});
 
-			describe("and editor is not empty", () => {
-				it("should not call onDelete if editor contains text ", () => {
+			describe("and editor contains text", () => {
+				it("should not call onDelete", () => {
 					const { composable, mockEditor, onDelete } = setupEditor({
 						btnKey: key,
 						editorData: "<p>Some content</p>",
@@ -125,27 +125,30 @@ describe("useEditorConfig", () => {
 
 					expect(onDelete).not.toHaveBeenCalled();
 				});
-				it("should not call onDelete if editor contains formula ", () => {
-					const { composable, mockEditor, onDelete } = setupEditor({
-						btnKey: key,
-						editorData: '<p><span class="math-tex"></span></p>',
+				describe("and editor contains formula", () => {
+					it("should not call onDelete", () => {
+						const { composable, mockEditor, onDelete } = setupEditor({
+							btnKey: key,
+							editorData: '<p><span class="math-tex"></span></p>',
+						});
+
+						composable.registerDeletionHandler(mockEditor, onDelete);
+
+						expect(onDelete).not.toHaveBeenCalled();
 					});
-
-					composable.registerDeletionHandler(mockEditor, onDelete);
-
-					expect(onDelete).not.toHaveBeenCalled();
 				});
-
-				it("should not call onDelete if editor contains a list", () => {
-					const sourceElement = document.createElement("div");
-					sourceElement.innerHTML = "<ul><li>Item</li></ul>";
-					const { composable, mockEditor, onDelete } = setupEditor({
-						btnKey: key,
-						editorData: "",
-						sourceElement,
+				describe("and editor contains a list", () => {
+					it("should not call onDelete", () => {
+						const sourceElement = document.createElement("div");
+						sourceElement.innerHTML = "<ul><li>Item</li></ul>";
+						const { composable, mockEditor, onDelete } = setupEditor({
+							btnKey: key,
+							editorData: "",
+							sourceElement,
+						});
+						composable.registerDeletionHandler(mockEditor, onDelete);
+						expect(onDelete).not.toHaveBeenCalled();
 					});
-					composable.registerDeletionHandler(mockEditor, onDelete);
-					expect(onDelete).not.toHaveBeenCalled();
 				});
 			});
 		});
