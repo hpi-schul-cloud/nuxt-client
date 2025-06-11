@@ -111,7 +111,7 @@ describe("MembersTable", () => {
 			members: RoomMember[];
 			isRoomOwner: boolean;
 			currentUserId: string;
-			roomAuthorization: Partial<RoomAuthorizationRefs>;
+			customRoomAuthorization: Partial<RoomAuthorizationRefs>;
 		}>
 	) => {
 		const members =
@@ -121,20 +121,25 @@ describe("MembersTable", () => {
 			});
 
 		const windowWidth = options?.windowWidth ?? 1280;
-		const defaultAuth = {
-			canAddRoomMembers: ref(true),
+
+		const roomAuthDefaults = {
+			canAddRoomMembers: true,
+		};
+
+		const roomAuthorization = {
+			...roomAuthDefaults,
+			...options?.customRoomAuthorization,
 		};
 		const authorizationPermissions =
-			createMock<ReturnType<typeof useRoomAuthorization>>(defaultAuth);
+			createMock<ReturnType<typeof useRoomAuthorization>>();
 
-		for (const [key, value] of Object.entries(
-			options?.roomAuthorization ?? {}
-		)) {
+		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
 			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
 				value ?? false
 			);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
+
 		const currentUser = roomMemberFactory.build({});
 		const mockMe = meResponseFactory.build({
 			user: { id: options?.currentUserId ?? currentUser.userId },
@@ -220,7 +225,7 @@ describe("MembersTable", () => {
 
 	it("should render data table", () => {
 		const { wrapper, roomMembers } = setup({
-			roomAuthorization: { canAddRoomMembers: true },
+			customRoomAuthorization: { canAddRoomMembers: true },
 		});
 
 		const dataTable = wrapper.getComponent(VDataTable);
@@ -274,7 +279,7 @@ describe("MembersTable", () => {
 
 	it("should render checkboxes if user can add members", async () => {
 		const { wrapper, roomMembers } = setup({
-			roomAuthorization: { canAddRoomMembers: true },
+			customRoomAuthorization: { canAddRoomMembers: true },
 		});
 
 		const dataTable = wrapper.findComponent(VDataTable);
@@ -285,7 +290,7 @@ describe("MembersTable", () => {
 
 	it("should not render checkboxes if user can not add members", async () => {
 		const { wrapper } = setup({
-			roomAuthorization: { canAddRoomMembers: false },
+			customRoomAuthorization: { canAddRoomMembers: false },
 		});
 
 		const dataTable = wrapper.findComponent(VDataTable);
@@ -600,7 +605,7 @@ describe("MembersTable", () => {
 	describe("action column", () => {
 		it("should be rendered when user can add members", () => {
 			const { wrapper } = setup({
-				roomAuthorization: { canAddRoomMembers: true },
+				customRoomAuthorization: { canAddRoomMembers: true },
 			});
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menu = dataTable.findComponent('[data-testid="kebab-menu-0');
@@ -610,7 +615,7 @@ describe("MembersTable", () => {
 
 		it("should not be rendered when user can not add members", () => {
 			const { wrapper } = setup({
-				roomAuthorization: { canAddRoomMembers: false },
+				customRoomAuthorization: { canAddRoomMembers: false },
 			});
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menu = dataTable.findComponent('[data-testid="kebab-menu-0');
@@ -625,7 +630,7 @@ describe("MembersTable", () => {
 			});
 			const { wrapper } = setup({
 				members: [roomOwner],
-				roomAuthorization: { canAddRoomMembers: true },
+				customRoomAuthorization: { canAddRoomMembers: true },
 				currentUserId: roomOwner.userId,
 			});
 			const dataTable = wrapper.getComponent(VDataTable);
@@ -637,7 +642,7 @@ describe("MembersTable", () => {
 		describe("change role button", () => {
 			it("should be rendered when user can add members", async () => {
 				const { wrapper } = setup({
-					roomAuthorization: { canAddRoomMembers: true },
+					customRoomAuthorization: { canAddRoomMembers: true },
 				});
 				const dataTable = wrapper.getComponent(VDataTable);
 
@@ -653,7 +658,7 @@ describe("MembersTable", () => {
 
 			it("should open change role dialog when clicked", async () => {
 				const { wrapper } = setup({
-					roomAuthorization: { canAddRoomMembers: true },
+					customRoomAuthorization: { canAddRoomMembers: true },
 				});
 				const dataTable = wrapper.getComponent(VDataTable);
 
