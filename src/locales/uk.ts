@@ -93,10 +93,12 @@ export default {
 	"common.labels.size": "Pозмір",
 	"common.labels.status": "Статус",
 	"common.labels.student": "Учень",
+	"common.labels.student.neutral": "Учень",
 	"common.labels.students": "Учні",
 	"common.labels.success": "успіх",
 	"common.labels.teacher.plural": "Викладачі",
 	"common.labels.teacher": "Викладач",
+	"common.labels.teacher.neutral": "Викладач",
 	"common.labels.time": "Час",
 	"common.labels.title": "Назва",
 	"common.labels.unknown": "Невідомий",
@@ -171,6 +173,8 @@ export default {
 		"Введений текст перевищує максимально дозволену довжину",
 	"common.validation.containsOpeningTag":
 		"Будь ласка, вставте пробіл після знаку менше.",
+	"common.validation.nonEmptyString":
+		"Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.and": "і",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
@@ -1925,7 +1929,6 @@ export default {
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
-	"pages.rooms.members.add.role.student": "Учень",
 	"pages.rooms.members.add.students.forbidden":
 		"Якщо в налаштуваннях школи вимкнено видимість учнів для вчителів, ви можете додавати лише учнів з вашого класу. Зверніться до адміністратора школи.",
 	"pages.rooms.members.add.warningText":
@@ -2014,8 +2017,7 @@ export default {
 		"Редагувати посилання на запрошення",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Учні з інших шкіл завжди повинні бути присутніми в кімнаті під наглядом вчителя з їхньої школи.",
-	"pages.rooms.members.inviteMember.form.description.label":
-		"Опис (необов'язково)",
+	"pages.rooms.members.inviteMember.form.description.label": "Опис",
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Відображається в огляді посилань",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":

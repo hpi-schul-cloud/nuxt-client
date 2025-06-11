@@ -94,10 +94,12 @@ export default {
 	"common.labels.size": "Tamaño",
 	"common.labels.status": "Estado",
 	"common.labels.student": "Estudiante",
+	"common.labels.student.neutral": "Estudiante",
 	"common.labels.students": "Estudiantes",
 	"common.labels.success": "éxito",
 	"common.labels.teacher.plural": "Profesora(e)s",
 	"common.labels.teacher": "Profesor",
+	"common.labels.teacher.neutral": "Profesor",
 	"common.labels.time": "Hora",
 	"common.labels.title": "Título",
 	"common.labels.unknown": "Desconocido",
@@ -172,6 +174,8 @@ export default {
 		"The text you entered exceeds the maximum length",
 	"common.validation.containsOpeningTag":
 		"Inserte un espacio después del signo menos-que.",
+	"common.validation.nonEmptyString":
+		"Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.and": "y",
 	"common.words.classes": "Clases",
 	"common.words.color": "Color",
@@ -1953,7 +1957,6 @@ export default {
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.add.infoText":
 		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
-	"pages.rooms.members.add.role.student": "Estudiante",
 	"pages.rooms.members.add.students.forbidden":
 		"Si la visibilidad de los alumnos para los profesores está desactivada en los ajustes de la escuela, sólo se podrán añadir alumnos de su propia clase. Póngase en contacto con el administrador de la escuela.",
 	"pages.rooms.members.add.warningText":
@@ -2048,8 +2051,7 @@ export default {
 		"Editar enlace de invitación",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
-	"pages.rooms.members.inviteMember.form.description.label":
-		"Descripción (opcional)",
+	"pages.rooms.members.inviteMember.form.description.label": "Descripción",
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Se muestra en el resumen del enlace",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
