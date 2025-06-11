@@ -5,7 +5,7 @@ export default {
 	"common.actions.cancel": "Cancel",
 	"common.actions.confirm": "Confirm",
 	"common.actions.continue": "Continue",
-	"common.actions.copy": "Copy",
+	"common.actions.copy": "Duplicate",
 	"common.actions.create": "Create",
 	"common.actions.delete": "Delete",
 	"common.actions.discard": "Discard",
@@ -655,7 +655,7 @@ export default {
 	"components.molecules.copyResult.etherpadCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.failedCopy":
-		"The copy process could not be completed.",
+		"The duplication could not be completed.",
 	"components.molecules.copyResult.fileCopy.error":
 		"The following files could not be copied and must be added again.",
 	"components.molecules.copyResult.geogebraCopy.info":
@@ -687,22 +687,23 @@ export default {
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.course.successfullyCopied":
-		"All elements were successfully copied.",
+		"All elements were successfully duplicated.",
 	"components.molecules.copyResult.board.successfullyCopied":
-		"Board successfully copied.",
+		"Board successfully duplicated.",
 	"components.molecules.copyResult.task.successfullyCopied":
-		"Task successfully copied.",
+		"Task successfully duplicated.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
-		"Lesson successfully copied.",
+		"Lesson successfully duplicated.",
 	"components.molecules.copyResult.timeoutCopy":
-		"The copy process may take longer for large files. The content will be available shortly.",
+		"Duplicating large files may take longer. The content will be available shortly.",
 	"components.molecules.copyResult.timeoutSuccess":
-		"The copy process has been completed.",
-	"components.molecules.copyResult.title.failure": "Error during copying",
-	"components.molecules.copyResult.title.loading": "Copying is running...",
+		"The duplication process has been completed.",
+	"components.molecules.copyResult.title.failure": "Error during duplication",
+	"components.molecules.copyResult.title.loading":
+		"Duplication is in progress...",
 	"components.molecules.copyResult.title.partial":
-		"Important copying information",
-	"components.molecules.copyResult.title.success": "Copy successful",
+		"Important duplication information",
+	"components.molecules.copyResult.title.success": "Duplication successful",
 	"components.molecules.courseheader.coursedata": "Course data",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
@@ -796,7 +797,7 @@ export default {
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Course groups",
 	"components.molecules.share.options.tableHeader.InfoText":
-		"The following content will not be copied:",
+		"The following content will not be duplicated:",
 	"components.molecules.share.courses.result.linkLabel": "Link course copy",
 	"components.molecules.share.lessons.mail.body": "Link to the topic:",
 	"components.molecules.share.lessons.mail.subject": "Topic you can import",
@@ -1757,11 +1758,12 @@ export default {
 	"pages.room.boardCard.menu.ariaLabel": "Board menu",
 	"pages.room.cards.aria": "{itemType}, link, press enter to open",
 	"pages.room.cards.label.revert": "Revert to draft",
-	"pages.room.copy.course.message.copied": "Course was successfully copied.",
+	"pages.room.copy.course.message.copied":
+		"Course was successfully duplicated.",
 	"pages.room.copy.course.message.partiallyCopied":
-		"The course could not be copied completely.",
-	"pages.room.copy.lesson.message.copied": "Topic was successfully copied.",
-	"pages.room.copy.task.message.copied": "Task was successfully copied.",
+		"The course could not be duplicated completely.",
+	"pages.room.copy.lesson.message.copied": "Topic was successfully duplicated.",
+	"pages.room.copy.task.message.copied": "Task was successfully duplicated.",
 	"pages.room.dialog.boardLayout.title": "Select view",
 	"pages.room.dialog.boardLayout.singleColumn": "single-column",
 	"pages.room.dialog.boardLayout.multiColumn": "multi-column",
