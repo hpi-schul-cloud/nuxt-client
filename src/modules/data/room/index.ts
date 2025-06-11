@@ -14,6 +14,7 @@ export type {
 	UseLinkResult,
 	CreateRoomInvitationLinkDto,
 	UpdateRoomInvitationLinkDto,
+	RoomInvitationFormData,
 } from "./roomMembers/types";
 export {
 	RoomInvitationLinkValidationError,

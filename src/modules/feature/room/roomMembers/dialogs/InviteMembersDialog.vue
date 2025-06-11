@@ -178,6 +178,7 @@ import {
 	InvitationStep,
 	UpdateRoomInvitationLinkDto,
 	useRoomInvitationLinkStore,
+	RoomInvitationFormData,
 } from "@data-room";
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
@@ -210,12 +211,12 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 const { t } = useI18n();
 const { xs } = useDisplay();
 
-const defaultFormData = {
+const defaultFormData: RoomInvitationFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
 	isValidForStudents: false,
 	activeUntilChecked: false,
-	activeUntil: undefined as Date | undefined,
+	activeUntil: undefined,
 	requiresConfirmation: true,
 	id: "",
 };
