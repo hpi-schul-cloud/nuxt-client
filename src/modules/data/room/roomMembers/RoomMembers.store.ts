@@ -60,8 +60,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	};
 
 	const schoolRoleMap: Record<string, string> = {
-		[RoleName.Teacher]: t("common.labels.teacher"),
-		[RoleName.Student]: t("pages.rooms.members.add.role.student"),
+		[RoleName.Teacher]: t("common.labels.teacher.neutral"),
+		[RoleName.Student]: t("common.labels.student.neutral"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
