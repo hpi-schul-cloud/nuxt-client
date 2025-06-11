@@ -185,7 +185,6 @@ export const useRoomInvitationLinkStore = defineStore(
 				status: isExpired(link.activeUntil!)
 					? commonTranslationsMap.EXPIRED
 					: commonTranslationsMap.ACTIVE,
-
 				restrictedToCreatorSchool: link.restrictedToCreatorSchool
 					? commonTranslationsMap.YES
 					: commonTranslationsMap.NO,
