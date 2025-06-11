@@ -1,6 +1,6 @@
 <template>
 	<transition name="fade">
-		<div v-if="areUploadStatsVisible">
+		<div v-if="internalAreUploadStatsVisible">
 			<v-progress-circular
 				v-if="uploadProgress.uploaded < uploadProgress.total"
 				indeterminate
@@ -33,29 +33,33 @@ const props = defineProps({
 		type: Object as PropType<{ uploaded: number; total: number }>,
 		required: true,
 	},
+	areUploadStatsVisible: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits(["reset-upload-progress"]);
 
-const areUploadStatsVisible = ref(false);
+const internalAreUploadStatsVisible = ref(false);
 let timeout: NodeJS.Timeout | null = null;
 
 watch(
-	() => props.uploadProgress,
-	(newStats) => {
+	() => props.areUploadStatsVisible,
+	(newIsVisible) => {
 		if (timeout) {
 			clearTimeout(timeout);
 			timeout = null;
 		}
 
-		if (newStats.total > 0 && newStats.total === newStats.uploaded) {
+		if (newIsVisible === false) {
 			timeout = setTimeout(() => {
-				areUploadStatsVisible.value = false;
+				internalAreUploadStatsVisible.value = false;
 				emit("reset-upload-progress");
 				timeout = null;
 			}, 5000);
-		} else if (newStats.total > 0) {
-			areUploadStatsVisible.value = true;
+		} else if (newIsVisible == true) {
+			internalAreUploadStatsVisible.value = true;
 		}
 	},
 	{ deep: true, immediate: true }

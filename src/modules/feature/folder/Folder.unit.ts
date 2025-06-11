@@ -682,7 +682,7 @@ describe("Folder.vue", () => {
 					const { folderStateMock, folderName } = await setup();
 
 					expect(folderStateMock.renameFolder).toHaveBeenCalledWith(
-						folderName,
+						folderName.value,
 						"123"
 					);
 				});

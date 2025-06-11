@@ -86,6 +86,7 @@
 				<template #left-of-search>
 					<FileUploadProgress
 						:upload-progress="uploadProgress"
+						:are-upload-stats-visible="areUploadStatsVisible"
 						@reset-upload-progress="() => emit('reset-upload-progress')"
 					/>
 				</template>
@@ -169,6 +170,10 @@ const props = defineProps({
 		}>,
 		required: true,
 	},
+	areUploadStatsVisible: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits([
@@ -200,10 +205,6 @@ const fileRecordItems = computed(() => {
 		...item,
 		isSelectable: isScanStatusBlocked(item.securityCheckStatus),
 	}));
-});
-
-const areUploadStatsVisible = computed(() => {
-	return props.uploadProgress.total > 0;
 });
 
 const formatFileSize = (size: number) => {

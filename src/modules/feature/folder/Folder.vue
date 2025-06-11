@@ -24,9 +24,10 @@
 			:has-edit-permission="hasEditPermission"
 			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
+			:are-upload-stats-visible="areUploadStatsVisible"
 			@delete-files="onDeleteFiles"
 			@update:name="onUpdateName"
-			@reset-upload-progress="onResetUploadProgress"
+			@reset-upload-progress="resetUploadProgress"
 		/>
 	</DefaultWireframe>
 	<ConfirmationDialog />
@@ -122,6 +123,7 @@ const uploadProgress = ref({
 	uploaded: 0,
 	total: 0,
 });
+const areUploadStatsVisible = ref(false);
 const isLoading = ref(true);
 const isEmpty = computed(() => uploadedFileRecords.value.length === 0);
 
@@ -133,16 +135,6 @@ const fabClickHandler = () => {
 	if (fileInput.value) {
 		fileInput.value.click();
 	}
-};
-
-const uploadFiles = async (files: File[]) => {
-	await Promise.all(
-		files.map(async (file) => {
-			await upload(file, props.folderId, FileRecordParent.BOARDNODES);
-
-			uploadProgress.value.uploaded += 1;
-		})
-	);
 };
 
 const onDelete = async (confirmation: Promise<boolean>) => {
@@ -189,22 +181,28 @@ const onRenameCancel = () => {
 	isRenameDialogOpen.value = false;
 };
 
-const onResetUploadProgress = () => {
+const resetUploadProgress = () => {
 	uploadProgress.value = { uploaded: 0, total: 0 };
+};
+const incrementUploadProgressTotal = (count: number) => {
+	uploadProgress.value.total += count;
+};
+const incrementUploadProgressUploaded = (count: number) => {
+	uploadProgress.value.uploaded += count;
+};
+
+const showUploadStats = () => {
+	areUploadStatsVisible.value = true;
+};
+const hideUploadStats = () => {
+	areUploadStatsVisible.value = false;
 };
 
 onMounted(async () => {
 	if (fileInput.value) {
-		fileInput.value.addEventListener("change", async (event) => {
-			const files = (event.target as HTMLInputElement).files;
-
-			if (files) {
-				const fileArray = Array.from(files);
-				uploadProgress.value.total += fileArray.length;
-
-				await uploadFiles(fileArray);
-			}
-		});
+		fileInput.value.addEventListener("change", async (event) =>
+			onFileSelection(event)
+		);
 	}
 
 	await fetchFileFolderElement(props.folderId);
@@ -215,6 +213,37 @@ onMounted(async () => {
 
 	isLoading.value = false;
 });
+
+const onFileSelection = async (event: Event) => {
+	const files = (event.target as HTMLInputElement).files;
+
+	if (!files) return;
+
+	const fileArray = Array.from(files);
+	incrementUploadProgressTotal(fileArray.length);
+	showUploadStats();
+
+	await tryUpload(fileArray);
+};
+
+const tryUpload = async (files: File[]) => {
+	try {
+		await uploadFiles(files);
+		hideUploadStats();
+	} catch (error) {
+		hideUploadStats();
+		throw error;
+	}
+};
+
+const uploadFiles = async (files: File[]) => {
+	await Promise.all(
+		files.map(async (file) => {
+			await upload(file, props.folderId, FileRecordParent.BOARDNODES);
+			incrementUploadProgressUploaded(1);
+		})
+	);
+};
 
 watch(
 	parent,
