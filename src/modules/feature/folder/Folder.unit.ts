@@ -1397,7 +1397,7 @@ describe("Folder.vue", () => {
 			});
 		});
 
-		describe("when fab button is clicked and files are selected", () => {
+		describe("when fab button is clicked, files are selected and upload succeed", () => {
 			const setup = async () => {
 				const folderStateMock =
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
@@ -1530,6 +1530,169 @@ describe("Folder.vue", () => {
 					await nextTick();
 					expect(progressBar.text()).toContain(
 						buildUploadStatsTranslation("2", "2")
+					);
+				});
+
+				it("should show upload progress", async () => {
+					const { wrapper, resolveUploadPromise1, resolveUploadPromise2 } =
+						await setup();
+
+					const progressBar = wrapper.find("[data-testid='upload-progress']");
+					expect(progressBar.exists()).toBe(true);
+					expect(progressBar.text()).toContain(
+						buildUploadStatsTranslation("0", "2")
+					);
+
+					resolveUploadPromise1();
+					await nextTick();
+					await nextTick();
+					expect(progressBar.text()).toContain(
+						buildUploadStatsTranslation("1", "2")
+					);
+
+					resolveUploadPromise2();
+					await nextTick();
+					await nextTick();
+					expect(progressBar.text()).toContain(
+						buildUploadStatsTranslation("2", "2")
+					);
+				});
+			});
+		});
+
+		describe("when fab button is clicked, files are selected and one upload fails", () => {
+			const setup = async () => {
+				const folderStateMock =
+					createMock<ReturnType<typeof FolderState.useFolderState>>();
+				jest
+					.spyOn(FolderState, "useFolderState")
+					.mockReturnValueOnce(folderStateMock);
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+				const parent = parentNodeInfoFactory.build();
+				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+				const boardState = createMock<
+					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+				>({});
+				jest
+					.spyOn(BoardApi, "useSharedBoardPageInformation")
+					.mockReturnValueOnce(boardState);
+
+				const fileStorageApiMock =
+					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				jest
+					.spyOn(FileStorageApi, "useFileStorageApi")
+					.mockReturnValueOnce(fileStorageApiMock);
+
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
+
+				const resolveUploadPromise1 = jest.fn();
+				const mockUploadPromise1 = new Promise<void>((resolve) => {
+					resolveUploadPromise1.mockImplementation(() => {
+						resolve();
+					});
+				});
+				fileStorageApiMock.upload.mockReturnValueOnce(mockUploadPromise1);
+
+				const resolveUploadPromise2 = jest.fn();
+				const mockUploadPromise2 = new Promise<void>((resolve, rejects) => {
+					resolveUploadPromise2.mockImplementation(() => {
+						rejects();
+					});
+				});
+				fileStorageApiMock.upload.mockReturnValueOnce(mockUploadPromise2);
+
+				const useBoardStoreMock =
+					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
+				jest
+					.spyOn(BoardApi, "useBoardStore")
+					.mockReturnValueOnce(useBoardStoreMock);
+
+				const useBoardPermissionsMock = createMock<
+					ReturnType<typeof BoardApi.useBoardPermissions>
+				>({ hasEditPermission: ref(true) });
+				jest
+					.spyOn(BoardApi, "useBoardPermissions")
+					.mockReturnValueOnce(useBoardPermissionsMock);
+
+				const { wrapper, parentId } = setupWrapper();
+
+				await nextTick();
+				await nextTick();
+				await nextTick();
+
+				const fabButton = wrapper.find("[data-testid='fab-add-files']");
+				await fabButton.trigger("click");
+
+				const file1 = new File(["content"], "filename.txt", {
+					type: "text/plain",
+				});
+				const file2 = new File(["content"], "filename2.txt", {
+					type: "text/plain",
+				});
+				const input = wrapper.find("input[type='file']");
+
+				Object.defineProperty(input.element, "files", {
+					value: [file1, file2],
+					writable: false,
+				});
+				await input.trigger("change");
+
+				return {
+					folderStateMock,
+					wrapper,
+					fileStorageApiMock,
+					folderName,
+					parentId,
+					file1,
+					file2,
+					resolveUploadPromise1,
+					resolveUploadPromise2,
+				};
+			};
+
+			describe("when file is selected", () => {
+				it("should call uploadFiles", async () => {
+					const { fileStorageApiMock, parentId, file1, file2 } = await setup();
+
+					expect(fileStorageApiMock.upload).toHaveBeenCalledWith(
+						file1,
+						parentId,
+						FileRecordParent.BOARDNODES
+					);
+					expect(fileStorageApiMock.upload).toHaveBeenCalledWith(
+						file2,
+						parentId,
+						FileRecordParent.BOARDNODES
+					);
+				});
+
+				it("should show upload progress", async () => {
+					const { wrapper, resolveUploadPromise1, resolveUploadPromise2 } =
+						await setup();
+
+					const progressBar = wrapper.find("[data-testid='upload-progress']");
+					expect(progressBar.exists()).toBe(true);
+					expect(progressBar.text()).toContain(
+						buildUploadStatsTranslation("0", "2")
+					);
+
+					resolveUploadPromise1();
+					await nextTick();
+					await nextTick();
+					expect(progressBar.text()).toContain(
+						buildUploadStatsTranslation("1", "2")
+					);
+
+					resolveUploadPromise2();
+					await nextTick();
+					await nextTick();
+					expect(progressBar.text()).toContain(
+						buildUploadStatsTranslation("1", "2")
 					);
 				});
 			});

@@ -126,6 +126,7 @@ const uploadProgress = ref({
 const areUploadStatsVisible = ref(false);
 const isLoading = ref(true);
 const isEmpty = computed(() => uploadedFileRecords.value.length === 0);
+const runningUploads = ref<number>(0);
 
 const uploadedFileRecords = computed(() => {
 	return fileRecords.value.filter((fileRecord) => !fileRecord.isUploading);
@@ -198,6 +199,13 @@ const hideUploadStats = () => {
 	areUploadStatsVisible.value = false;
 };
 
+const incrementRunningUploads = (count: number) => {
+	runningUploads.value += count;
+};
+const decrementRunningUploads = (count: number) => {
+	runningUploads.value -= count;
+};
+
 onMounted(async () => {
 	if (fileInput.value) {
 		fileInput.value.addEventListener("change", async (event) =>
@@ -221,23 +229,25 @@ const onFileSelection = async (event: Event) => {
 
 	const fileArray = Array.from(files);
 	incrementUploadProgressTotal(fileArray.length);
-	showUploadStats();
 
-	await tryUpload(fileArray);
+	incrementRunningUploads(fileArray.length);
+	await uploadFiles(fileArray);
+	decrementRunningUploads(fileArray.length);
 };
 
-const tryUpload = async (files: File[]) => {
-	try {
-		await uploadFiles(files);
-		hideUploadStats();
-	} catch (error) {
-		hideUploadStats();
-		throw error;
+watch(
+	() => runningUploads.value,
+	(newCount) => {
+		if (newCount === 0) {
+			hideUploadStats();
+		} else {
+			showUploadStats();
+		}
 	}
-};
+);
 
 const uploadFiles = async (files: File[]) => {
-	await Promise.all(
+	await Promise.allSettled(
 		files.map(async (file) => {
 			await upload(file, props.folderId, FileRecordParent.BOARDNODES);
 			incrementUploadProgressUploaded(1);
