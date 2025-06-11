@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
-import CKEditor from "@ckeditor/ckeditor5-vue";
+import { Ckeditor } from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { BalloonEditor } from "@hpi-schul-cloud/ckeditor";
 import { useEditorConfig } from "./EditorConfig.composable";
@@ -49,7 +49,7 @@ const emit = defineEmits([
 	"keyboard:delete",
 ]);
 
-const CKEditorVue = CKEditor.component;
+const CKEditorVue = Ckeditor;
 const { generalConfig, registerDeletionHandler } = useEditorConfig();
 
 const ck = ref(null);
