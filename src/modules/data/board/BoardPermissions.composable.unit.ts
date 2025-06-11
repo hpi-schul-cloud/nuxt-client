@@ -12,6 +12,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
+import { useBoardNotifier } from "@util-board";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -47,14 +48,22 @@ jest.mocked(useI18n());
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
+jest.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
 describe("BoardPermissions.composable", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
+
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 	});
 
 	afterEach(() => {
@@ -99,7 +108,10 @@ describe("BoardPermissions.composable", () => {
 			resetPageInformation: jest.fn(),
 		});
 
-		setupStores({ envConfigModule: EnvConfigModule, authModule: AuthModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			authModule: AuthModule,
+		});
 
 		const userRoleEntities = userRoles.map((role: RoleName) => ({
 			id: Math.random().toString(),
