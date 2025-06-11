@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { BoardLayout } from "@/serverApi/v3";
+import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import { computed, PropType, toRef } from "vue";

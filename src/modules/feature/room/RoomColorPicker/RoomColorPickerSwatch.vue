@@ -16,12 +16,12 @@
 import { computed, PropType } from "vue";
 import { mdiCheckCircleOutline } from "@icons/material";
 import { useI18n } from "vue-i18n";
-import { RoomColorEnum } from "@/types/room/Room";
+import { RoomColor } from "@/types/room/Room";
 
 const props = defineProps({
 	color: {
-		type: String as PropType<RoomColorEnum>,
-		default: RoomColorEnum.BlueGrey,
+		type: String as PropType<RoomColor>,
+		default: RoomColor.BlueGrey,
 	},
 	isSelected: {
 		type: Boolean,
