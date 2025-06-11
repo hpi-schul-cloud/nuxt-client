@@ -94,10 +94,12 @@ export default {
 	"common.labels.size": "Tamaño",
 	"common.labels.status": "Estado",
 	"common.labels.student": "Estudiante",
+	"common.labels.student.neutral": "Estudiante",
 	"common.labels.students": "Estudiantes",
 	"common.labels.success": "éxito",
 	"common.labels.teacher.plural": "Profesora(e)s",
 	"common.labels.teacher": "Profesor",
+	"common.labels.teacher.neutral": "Profesor",
 	"common.labels.time": "Hora",
 	"common.labels.title": "Título",
 	"common.labels.unknown": "Desconocido",
@@ -1963,7 +1965,6 @@ export default {
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.add.infoText":
 		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
-	"pages.rooms.members.add.role.student": "Estudiante",
 	"pages.rooms.members.add.students.forbidden":
 		"Si la visibilidad de los alumnos para los profesores está desactivada en los ajustes de la escuela, sólo se podrán añadir alumnos de su propia clase. Póngase en contacto con el administrador de la escuela.",
 	"pages.rooms.members.add.warningText":
