@@ -8,6 +8,7 @@ import {
 	mockedPiniaStoreTyping,
 	roomFactory,
 	schoolFactory,
+	mockApiResponse,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
@@ -216,11 +217,11 @@ describe("useRoomInvitationLinkStore", () => {
 			it("should set 'activeUntil' for UI after updating link", async () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
-				const firstLink: UpdateRoomInvitationLinkDto = links[0];
+				const firstLink = links[0];
 				firstLink.activeUntil = roomInvitationLinkStore.DEFAULT_EXPIRED_DATE;
 
 				roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink.mockResolvedValue(
-					{ data: firstLink } as unknown as AxiosPromise<RoomInvitationLink>
+					mockApiResponse({ data: firstLink })
 				);
 
 				await roomInvitationLinkStore.updateLink(firstLink);
@@ -237,7 +238,9 @@ describe("useRoomInvitationLinkStore", () => {
 					roomInvitationLinkStore.invitationTableData.find(
 						(l) => l.id === firstLink.id
 					);
-				expect(tableDataElement?.activeUntil).toBe("-");
+				expect(tableDataElement?.activeUntil).toBe(
+					"pages.rooms.members.tables.common.no"
+				);
 			});
 		});
 
