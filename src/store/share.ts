@@ -14,15 +14,29 @@ export interface ShareOptions {
 	hasExpiryDate: boolean;
 }
 
-export interface SharePayload extends ShareOptions {
-	id: string;
-}
-
 export interface StartFlow {
 	id: string;
 	type: ShareTokenBodyParamsParentTypeEnum;
 	destinationType?: BoardExternalReferenceType;
 }
+
+const getSharePath = (
+	parentType: ShareTokenBodyParamsParentTypeEnum,
+	destinationType: BoardExternalReferenceType
+) => {
+	if (parentType === ShareTokenBodyParamsParentTypeEnum.ColumnBoard) {
+		if (destinationType === BoardExternalReferenceType.Room) {
+			return "rooms";
+		}
+		return "rooms/courses-overview";
+	}
+
+	if (parentType === ShareTokenBodyParamsParentTypeEnum.Room) {
+		return "rooms";
+	}
+
+	return "rooms/courses-overview";
+};
 
 @Module({
 	name: "shareModule",
@@ -43,7 +57,7 @@ export default class ShareModule extends VuexModule {
 
 	@Action
 	async createShareUrl(
-		payload: SharePayload
+		payload: ShareOptions
 	): Promise<ShareTokenResponse | undefined> {
 		const shareTokenPayload: ShareTokenBodyParams = {
 			parentType: this.parentType,
@@ -57,10 +71,7 @@ export default class ShareModule extends VuexModule {
 					shareTokenPayload
 				);
 			if (!shareTokenResult) return undefined;
-			const sharePath =
-				this.destinationType === BoardExternalReferenceType.Course
-					? "rooms/courses-overview"
-					: "rooms";
+			const sharePath = getSharePath(this.parentType, this.destinationType);
 			const shareUrl = `${window.location.origin}/${sharePath}?import=${shareTokenResult.data.token}`;
 			this.setShareUrl(shareUrl);
 			return shareTokenResult.data;
