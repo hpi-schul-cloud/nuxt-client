@@ -135,7 +135,7 @@ describe("@/utils/fileHelper", () => {
 		});
 
 		it("should calls ormMock.appendChild", () => {
-			const { formMock, appendChildSpy, removeChildSpy } = setup();
+			const { formMock } = setup();
 
 			const params: ArchiveFileParams = {
 				archiveName: "test-archive",
