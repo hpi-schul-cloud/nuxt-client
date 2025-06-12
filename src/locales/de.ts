@@ -94,10 +94,12 @@ export default {
 	"common.labels.size": "Größe",
 	"common.labels.status": "Status",
 	"common.labels.student": "Schüler:in",
+	"common.labels.student.neutral": "Lernend",
 	"common.labels.students": "Schüler:innen",
 	"common.labels.success": "erfolg",
 	"common.labels.teacher.plural": "Lehrkräfte",
 	"common.labels.teacher": "Lehrkraft",
+	"common.labels.teacher.neutral": "Lernbegleitend",
 	"common.labels.time": "Uhrzeit",
 	"common.labels.title": "Titel",
 	"common.labels.unknown": "Unbekannt",
@@ -744,6 +746,10 @@ export default {
 		"{name} wurde erfolgreich importiert",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"Folgende Inhalte werden nicht importiert:",
+	"components.molecules.import.room.options.title": "Raum importieren",
+	"components.molecules.import.room.rename":
+		"Bei Bedarf kann der Name des Raumes umbenannt werden: ",
+	"components.molecules.import.room.label": "Raum-Name",
 	"components.molecules.import.tasks.label": "Aufgabe",
 	"components.molecules.import.tasks.rename":
 		"Bei Bedarf kann der Name der Aufgabe umbenannt werden: ",
@@ -810,6 +816,8 @@ export default {
 		"Geogebra IDs",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Kursgruppen",
+	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
+		"Raum-Mitglieder und Berechtigungen",
 	"components.molecules.share.options.tableHeader.InfoText":
 		"Folgende Inhalte werden nicht kopiert:",
 	"components.molecules.share.courses.result.linkLabel": "Link Kurskopie",
@@ -823,6 +831,9 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Link nur schulintern gültig",
 	"components.molecules.share.options.title": "Teilen-Einstellungen",
+	"components.molecules.share.room.options.infoText":
+		"Mit dem folgenden Link kann dieser Raum von anderen Personen kopiert werden. Wenn kein aktiv genutzter Raum geteilt werden soll, bitte zuerst ein Duplikat erstellen und dieses teilen.",
+	"components.molecules.share.room.result.linkLabel": "Link Raum-Kopie",
 	"components.molecules.share.result.mailShare": "Als Mail versenden",
 	"components.molecules.share.result.qrCodeScan": "QR-Code scannen",
 	"components.molecules.share.result.title": "Teilen über",
@@ -1039,10 +1050,10 @@ export default {
 	"global.sidebar.item.releaseNotes": "Was ist neu?",
 	"global.sidebar.item.rooms": "Räume",
 	"global.sidebar.item.school": "Schule",
-	"global.sidebar.item.student": "Schüler:innen",
+	"global.sidebar.item.student": "Lernende",
 	"global.sidebar.item.system": "System",
 	"global.sidebar.item.tasks": "Aufgaben",
-	"global.sidebar.item.teacher": "Lehrkräfte",
+	"global.sidebar.item.teacher": "Lernbegleitende",
 	"global.sidebar.item.teams": "Teams",
 	"global.sidebar.item.training": "Fortbildungen",
 	"global.sidebar.item.licenses": "Lizenzen",
@@ -1919,14 +1930,13 @@ export default {
 		"Die Änderung der Raumberechtigung ist fehlgeschlagen.",
 	"pages.rooms.members.filter": "Tabelle durchsuchen/filtern",
 	"pages.rooms.members.infoText":
-		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
+		"Füge Mitglieder zum Raum hinzu. Lernbegleitende anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Mitglieder",
 	"pages.rooms.members.menu.ariaLabel": "{membersInfoText}-Menü",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
-	"pages.rooms.members.add.role.student": "Lernend",
 	"pages.rooms.members.add.students.forbidden":
 		"Wenn in den Schuleinstellungen die Sichtbarkeit von Lernenden für Lernbegleitungen deaktiviert ist, können nur Lernende der eigenen Klasse hinzugefügt werden. Bitte an den Schul-Admin wenden.",
 	"pages.rooms.members.add.warningText":

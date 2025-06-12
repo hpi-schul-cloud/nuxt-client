@@ -93,10 +93,12 @@ export default {
 	"common.labels.size": "Pозмір",
 	"common.labels.status": "Статус",
 	"common.labels.student": "Учень",
+	"common.labels.student.neutral": "Учень",
 	"common.labels.students": "Учні",
 	"common.labels.success": "успіх",
 	"common.labels.teacher.plural": "Викладачі",
 	"common.labels.teacher": "Викладач",
+	"common.labels.teacher.neutral": "Викладач",
 	"common.labels.time": "Час",
 	"common.labels.title": "Назва",
 	"common.labels.unknown": "Невідомий",
@@ -755,6 +757,10 @@ export default {
 	"components.molecules.import.options.success": "{name} успішно імпортовано",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"Наступний вміст не буде імпортовано:",
+	"components.molecules.import.room.options.title": "Імпортувати кімнату",
+	"components.molecules.import.room.rename":
+		"При необхідності назву кімнати можна перейменувати: ",
+	"components.molecules.import.room.label": "Назва кімнати",
 	"components.molecules.import.tasks.label": "Завдання",
 	"components.molecules.import.tasks.rename":
 		"При необхідності назву завдання можна перейменувати: ",
@@ -817,6 +823,8 @@ export default {
 		"Ідентифікатори Geogebra",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Групи курсів",
+	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
+		"Учасники кімнати та їхні дозволи",
 	"components.molecules.share.options.tableHeader.InfoText":
 		"Наступний вміст не буде скопійовано:",
 	"components.molecules.share.courses.result.linkLabel":
@@ -832,6 +840,9 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Посилання дійсне тільки в межах школи",
 	"components.molecules.share.options.title": "Налаштування спільного доступу",
+	"components.molecules.share.room.options.infoText":
+		"За цим посиланням цю кімнату можуть скопіювати інші користувачі. Якщо потрібно поділитися кімнатою, яка активно використовується, спочатку створіть дублікат і поділіться ним.",
+	"components.molecules.share.room.result.linkLabel": "Копія теми посилання",
 	"components.molecules.share.result.mailShare": "Надіслати поштою",
 	"components.molecules.share.result.qrCodeScan": "Відскануйте QR-код",
 	"components.molecules.share.result.title": "Поділіться через",
@@ -1925,7 +1936,6 @@ export default {
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
-	"pages.rooms.members.add.role.student": "Учень",
 	"pages.rooms.members.add.students.forbidden":
 		"Якщо в налаштуваннях школи вимкнено видимість учнів для вчителів, ви можете додавати лише учнів з вашого класу. Зверніться до адміністратора школи.",
 	"pages.rooms.members.add.warningText":

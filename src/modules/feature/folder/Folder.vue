@@ -25,8 +25,10 @@
 			:has-edit-permission="hasEditPermission"
 			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
+			:are-upload-stats-visible="areUploadStatsVisible"
 			@delete-files="onDeleteFiles"
 			@update:name="onUpdateName"
+			@reset-upload-progress="resetUploadProgress"
 		/>
 	</DefaultWireframe>
 	<ConfirmationDialog />
@@ -80,6 +82,10 @@ const props = defineProps({
 	},
 });
 
+const emit = defineEmits<{
+	(update: "update:folder-name", folderName: string): void;
+}>();
+
 const {
 	breadcrumbs,
 	folderName,
@@ -118,8 +124,10 @@ const uploadProgress = ref({
 	uploaded: 0,
 	total: 0,
 });
+const areUploadStatsVisible = ref(false);
 const isLoading = ref(true);
 const isEmpty = computed(() => uploadedFileRecords.value.length === 0);
+const runningUploads = ref<number>(0);
 
 const uploadedFileRecords = computed(() => {
 	return fileRecords.value.filter((fileRecord) => !fileRecord.isUploading);
@@ -127,18 +135,10 @@ const uploadedFileRecords = computed(() => {
 
 const fabClickHandler = () => {
 	if (fileInput.value) {
+		// Reset the file input to allow re-uploading the same file
+		fileInput.value.value = "";
 		fileInput.value.click();
 	}
-};
-
-const uploadFiles = async (files: File[]) => {
-	await Promise.all(
-		files.map(async (file) => {
-			await upload(file, props.folderId, FileRecordParent.BOARDNODES);
-
-			uploadProgress.value.uploaded += 1;
-		})
-	);
 };
 
 const onDelete = async (confirmation: Promise<boolean>) => {
@@ -185,21 +185,35 @@ const onRenameCancel = () => {
 	isRenameDialogOpen.value = false;
 };
 
+const resetUploadProgress = () => {
+	uploadProgress.value = { uploaded: 0, total: 0 };
+};
+const incrementUploadProgressTotal = (count: number) => {
+	uploadProgress.value.total += count;
+};
+const incrementUploadProgressUploaded = (count: number) => {
+	uploadProgress.value.uploaded += count;
+};
+
+const showUploadStats = () => {
+	areUploadStatsVisible.value = true;
+};
+const hideUploadStats = () => {
+	areUploadStatsVisible.value = false;
+};
+
+const incrementRunningUploads = (count: number) => {
+	runningUploads.value += count;
+};
+const decrementRunningUploads = (count: number) => {
+	runningUploads.value -= count;
+};
+
 onMounted(async () => {
 	if (fileInput.value) {
-		fileInput.value.addEventListener("change", async (event) => {
-			const files = (event.target as HTMLInputElement).files;
-
-			if (files) {
-				const fileArray = Array.from(files);
-				uploadProgress.value.total = fileArray.length;
-
-				await uploadFiles(fileArray);
-
-				uploadProgress.value.total = 0;
-				uploadProgress.value.uploaded = 0;
-			}
-		});
+		fileInput.value.addEventListener("change", async (event) =>
+			onFileSelection(event)
+		);
 	}
 
 	await fetchFileFolderElement(props.folderId);
@@ -211,6 +225,39 @@ onMounted(async () => {
 	isLoading.value = false;
 });
 
+const onFileSelection = async (event: Event) => {
+	const files = (event.target as HTMLInputElement).files;
+
+	if (!files) return;
+
+	const fileArray = Array.from(files);
+	incrementUploadProgressTotal(fileArray.length);
+
+	incrementRunningUploads(fileArray.length);
+	await uploadFiles(fileArray);
+	decrementRunningUploads(fileArray.length);
+};
+
+watch(
+	() => runningUploads.value,
+	(newCount) => {
+		if (newCount === 0) {
+			hideUploadStats();
+		} else {
+			showUploadStats();
+		}
+	}
+);
+
+const uploadFiles = async (files: File[]) => {
+	await Promise.allSettled(
+		files.map(async (file) => {
+			await upload(file, props.folderId, FileRecordParent.BOARDNODES);
+			incrementUploadProgressUploaded(1);
+		})
+	);
+};
+
 watch(
 	parent,
 	(newParent) => {
@@ -219,6 +266,14 @@ watch(
 		} else if (newParent && newParent.type !== ParentNodeType.Board) {
 			throw new Error("Unsupported parent type");
 		}
+	},
+	{ immediate: true }
+);
+
+watch(
+	() => folderName.value,
+	(newName) => {
+		emit("update:folder-name", newName);
 	},
 	{ immediate: true }
 );

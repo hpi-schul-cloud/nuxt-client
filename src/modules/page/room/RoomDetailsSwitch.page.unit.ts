@@ -34,6 +34,7 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canRemoveRoomMembers: ref(false),
 	canEditRoomContent: ref(false),
 	canSeeAllStudents: ref(false),
+	canShareRoom: ref(false),
 };
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
@@ -147,7 +148,7 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 				});
 
 				expect(wrapper.html()).toBe(
-					"<room-details.page-stub></room-details.page-stub>"
+					'<room-details.page-stub room="[object Object]"></room-details.page-stub>'
 				);
 			});
 		});

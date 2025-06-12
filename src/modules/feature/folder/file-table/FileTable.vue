@@ -84,7 +84,11 @@
 				</template>
 
 				<template #left-of-search>
-					<FileUploadProgress :upload-progress="uploadProgress" />
+					<FileUploadProgress
+						:upload-progress="uploadProgress"
+						:are-upload-stats-visible="areUploadStatsVisible"
+						@reset-upload-progress="() => emit('reset-upload-progress')"
+					/>
 				</template>
 
 				<template #action-menu-items="{ selectedIds }">
@@ -171,10 +175,21 @@ const props = defineProps({
 		}>,
 		required: true,
 	},
+<<<<<<< BC-9723
 	folderName: { type: String, required: true },
+=======
+	areUploadStatsVisible: {
+		type: Boolean,
+		default: false,
+	},
+>>>>>>> main
 });
 
-const emit = defineEmits(["delete-files", "update:name"]);
+const emit = defineEmits([
+	"delete-files",
+	"update:name",
+	"reset-upload-progress",
+]);
 
 const headers = [
 	{ title: "", key: "preview", sortable: false },
@@ -199,10 +214,6 @@ const fileRecordItems = computed(() => {
 		...item,
 		isSelectable: isScanStatusBlocked(item.securityCheckStatus),
 	}));
-});
-
-const areUploadStatsVisible = computed(() => {
-	return props.uploadProgress.total > 0;
 });
 
 const formatFileSize = (size: number) => {
