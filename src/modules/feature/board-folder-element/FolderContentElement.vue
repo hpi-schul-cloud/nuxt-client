@@ -40,20 +40,29 @@
 				</template>
 			</ContentElementBar>
 		</router-link>
-		<v-card-text v-if="isEditMode">
+		<v-card-text>
 			<FolderTitleInput
+				v-if="isEditMode"
 				:data-testid="`folder-title-input-${columnIndex}-${rowIndex}-${elementIndex}`"
 				:title="element.content.title"
 				@update:title="onUpdateTitle"
 			/>
+			<span class="text-caption">
+				{{
+					`${fileStatistics?.fileCount} ${fileTranslation} ⋅ ${humanReadableFileSize}`
+				}}
+			</span>
 		</v-card-text>
 	</v-card>
 </template>
 
 <script setup lang="ts">
 import { FileFolderElement } from "@/types/board/ContentElement";
+import { FileRecordParent } from "@/types/file/File";
+import { convertFileSize } from "@/utils/fileHelper";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useFileStorageApi } from "@data-file";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import {
@@ -61,7 +70,8 @@ import {
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
-import { computed, PropType, ref, toRef } from "vue";
+import { computed, onMounted, PropType, ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 import FolderTitleInput from "./FolderTitleInput.vue";
 
 const props = defineProps({
@@ -88,6 +98,29 @@ const folderContentElement = ref(null);
 const element = toRef(props, "element");
 const { modelValue } = useContentElementState(props, { autoSaveDebounce: 100 });
 
+const { tryGetParentStatisticFromApi, getStatisticByParentId } =
+	useFileStorageApi();
+const fileStatistics = computed(() => {
+	return getStatisticByParentId(element.value.id);
+});
+const { n, t } = useI18n();
+const humanReadableFileSize = computed(() => {
+	const { convertedSize, unit } = convertFileSize(
+		fileStatistics.value?.totalSizeInBytes || 0
+	);
+	const localizedFileSize = n(convertedSize, "fileSize");
+	const localizedString = localizedFileSize + " " + unit;
+
+	return localizedString;
+});
+const fileTranslation = computed(() => {
+	if (fileStatistics.value?.fileCount === 1) {
+		return t("common.file");
+	} else {
+		return t("common.files");
+	}
+});
+
 const onUpdateTitle = (value: string) => {
 	modelValue.value.title = value;
 };
@@ -112,4 +145,11 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
+
+onMounted(async () => {
+	await tryGetParentStatisticFromApi(
+		element.value.id,
+		FileRecordParent.BOARDNODES
+	);
+});
 </script>
