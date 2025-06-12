@@ -4,4 +4,6 @@ import type {
 	CardSkeletonResponse as BoardSkeletonCard,
 } from "@/serverApi/v3";
 
-export { Board, BoardColumn, BoardSkeletonCard };
+import { BoardLayout } from "@/serverApi/v3";
+
+export { Board, BoardLayout, BoardColumn, BoardSkeletonCard };
