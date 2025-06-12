@@ -58,7 +58,7 @@ watch(
 				emit("reset-upload-progress");
 				timeout = null;
 			}, 5000);
-		} else if (newIsVisible == true) {
+		} else {
 			internalAreUploadStatsVisible.value = true;
 		}
 	},
