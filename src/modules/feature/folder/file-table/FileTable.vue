@@ -175,14 +175,11 @@ const props = defineProps({
 		}>,
 		required: true,
 	},
-<<<<<<< BC-9723
 	folderName: { type: String, required: true },
-=======
 	areUploadStatsVisible: {
 		type: Boolean,
 		default: false,
 	},
->>>>>>> main
 });
 
 const emit = defineEmits([
