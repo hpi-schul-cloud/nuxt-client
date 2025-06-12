@@ -10,7 +10,7 @@
 		</div>
 	</template>
 	<template v-else>
-		<RoomDetailsPage v-if="isRoom" />
+		<RoomDetailsPage v-if="isRoom && room" :room="room" />
 		<CourseRoomDetailsPage v-else />
 	</template>
 </template>
@@ -29,7 +29,7 @@ const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const route = useRoute();
 
 const roomDetailsStore = useRoomDetailsStore();
-const { isLoading, roomVariant } = storeToRefs(roomDetailsStore);
+const { isLoading, roomVariant, room } = storeToRefs(roomDetailsStore);
 const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 
 const { canCreateRoom } = useRoomAuthorization();
