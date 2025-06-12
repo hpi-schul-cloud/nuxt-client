@@ -134,6 +134,8 @@ const uploadedFileRecords = computed(() => {
 
 const fabClickHandler = () => {
 	if (fileInput.value) {
+		// Reset the file input to allow re-uploading the same file
+		fileInput.value.value = "";
 		fileInput.value.click();
 	}
 };
@@ -223,6 +225,7 @@ onMounted(async () => {
 });
 
 const onFileSelection = async (event: Event) => {
+	console.log("File selection event triggered");
 	const files = (event.target as HTMLInputElement).files;
 
 	if (!files) return;
