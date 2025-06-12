@@ -90,6 +90,7 @@ import {
 	onUnmounted,
 	PropType,
 	ref,
+	watch,
 	watchEffect,
 } from "vue";
 import { useI18n } from "vue-i18n";
@@ -283,6 +284,19 @@ onMounted(async () => {
 onUnmounted(() => {
 	resetStore();
 });
+
+watch(
+	() => room.value?.permissions,
+	() => {
+		const { tab } = router.currentRoute.value.query;
+		if (
+			(tab === "invitations" || tab === "confirmations") &&
+			!canAddRoomMembers.value
+		) {
+			router.replace({ name: "rooms" });
+		}
+	}
+);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	if (room === undefined) return [];
