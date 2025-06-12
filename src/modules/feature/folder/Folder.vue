@@ -225,7 +225,6 @@ onMounted(async () => {
 });
 
 const onFileSelection = async (event: Event) => {
-	console.log("File selection event triggered");
 	const files = (event.target as HTMLInputElement).files;
 
 	if (!files) return;
