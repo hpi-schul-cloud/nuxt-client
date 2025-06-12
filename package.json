@@ -32,7 +32,7 @@
 		"dayjs": "^1.11.10",
 		"katex": "^0.16.21",
 		"kjua": "^0.10.0",
-		"maska": "^2.1.10",
+		"maska": "^3.1.1",
 		"mobile-drag-drop": "^3.0.0-rc.0",
 		"object-hash": "^3.0.0",
 		"pinia": "^3.0.2",
