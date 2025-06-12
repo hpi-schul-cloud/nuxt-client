@@ -9,9 +9,12 @@ describe("FileUploadProgress", () => {
 		return `${uploaded} von ${total} Dateien hochgeladen`;
 	};
 
-	const setupWrapper = (uploadProgress: {
-		uploaded: number;
-		total: number;
+	const setupWrapper = (props: {
+		uploadProgress: {
+			uploaded: number;
+			total: number;
+		};
+		areUploadStatsVisible?: boolean;
 	}) => {
 		const wrapper = mount(FileUploadProgress, {
 			global: {
@@ -30,135 +33,216 @@ describe("FileUploadProgress", () => {
 				],
 			},
 			props: {
-				uploadProgress,
+				...props,
+				areUploadStatsVisible: props.areUploadStatsVisible ?? true,
 			},
 		});
 
 		return { wrapper };
 	};
 
-	describe("when upload progress total and uploaded are 0", () => {
-		it("should not show v-progress-circular", () => {
-			const { wrapper } = setupWrapper({ uploaded: 0, total: 0 });
-
+	describe("when areUploadStatsVisible is false", () => {
+		it("should not show any upload UI", () => {
+			const { wrapper } = setupWrapper({
+				uploadProgress: { uploaded: 1, total: 2 },
+				areUploadStatsVisible: false,
+			});
 			expect(
 				wrapper.findComponent({ name: "v-progress-circular" }).exists()
 			).toBe(false);
-		});
-
-		it("should not show v-icon", () => {
-			const { wrapper } = setupWrapper({ uploaded: 0, total: 0 });
-
-			expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(false);
-		});
-
-		it("should not show upload stats text", () => {
-			const { wrapper } = setupWrapper({ uploaded: 0, total: 0 });
-
 			const uploadProgressText = wrapper.find(
 				"[data-testid='upload-progress']"
 			);
 			expect(uploadProgressText.exists()).toBe(false);
 		});
-	});
 
-	describe("when upload progress total > 0 and uploaded < total", () => {
-		it("should show v-progress-circular", () => {
-			const { wrapper } = setupWrapper({ uploaded: 1, total: 2 });
+		describe("when areUploadStatsVisible changes to true", () => {
+			it("should show component", async () => {
+				jest.useFakeTimers();
+				const { wrapper } = setupWrapper({
+					uploadProgress: { uploaded: 1, total: 1 },
+					areUploadStatsVisible: false,
+				});
 
-			expect(
-				wrapper.findComponent({ name: "v-progress-circular" }).exists()
-			).toBe(true);
-		});
+				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(false);
+				const uploadProgressTextTimeA = wrapper.find(
+					"[data-testid='upload-progress']"
+				);
+				expect(uploadProgressTextTimeA.exists()).toBe(false);
 
-		it("should not show v-icon", () => {
-			const { wrapper } = setupWrapper({ uploaded: 1, total: 2 });
+				await wrapper.setProps({ areUploadStatsVisible: true });
+				jest.advanceTimersByTime(5000);
+				await wrapper.vm.$nextTick();
 
-			expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(false);
-		});
-
-		it("should show upload stats text", () => {
-			const { wrapper } = setupWrapper({ uploaded: 1, total: 2 });
-
-			const uploadProgressText = wrapper.find(
-				"[data-testid='upload-progress']"
-			);
-			expect(uploadProgressText.exists()).toBe(true);
-			expect(uploadProgressText.text()).toBe(
-				buildUploadStatsTranslation("1", "2")
-			);
+				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
+				const uploadProgressTextTimeB = wrapper.find(
+					"[data-testid='upload-progress']"
+				);
+				expect(uploadProgressTextTimeB.exists()).toBe(true);
+			});
 		});
 	});
+	describe("when areUploadStatsVisible is true", () => {
+		describe("when areUploadStatsVisible changes to true", () => {
+			it("should make the component disappear after 5 seconds", async () => {
+				jest.useFakeTimers();
+				const { wrapper } = setupWrapper({
+					uploadProgress: { uploaded: 1, total: 1 },
+					areUploadStatsVisible: true,
+				});
 
-	describe("when upload progress total > 0 and uploaded = total", () => {
-		it("should not show v-progress-circular", () => {
-			const { wrapper } = setupWrapper({ uploaded: 2, total: 2 });
+				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
+				const uploadProgressTextTimeA = wrapper.find(
+					"[data-testid='upload-progress']"
+				);
+				expect(uploadProgressTextTimeA.exists()).toBe(true);
 
-			expect(
-				wrapper.findComponent({ name: "v-progress-circular" }).exists()
-			).toBe(false);
+				await wrapper.setProps({ areUploadStatsVisible: false });
+				jest.advanceTimersByTime(5000);
+				await wrapper.vm.$nextTick();
+
+				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(false);
+				const uploadProgressTextTimeB = wrapper.find(
+					"[data-testid='upload-progress']"
+				);
+				expect(uploadProgressTextTimeB.exists()).toBe(false);
+			});
+
+			it("should still be visible after 1 second", async () => {
+				jest.useFakeTimers();
+				const { wrapper } = setupWrapper({
+					uploadProgress: { uploaded: 1, total: 1 },
+					areUploadStatsVisible: true,
+				});
+
+				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
+				const uploadProgressTextTimeA = wrapper.find(
+					"[data-testid='upload-progress']"
+				);
+				expect(uploadProgressTextTimeA.exists()).toBe(true);
+
+				await wrapper.setProps({ areUploadStatsVisible: false });
+				jest.advanceTimersByTime(1);
+				await wrapper.vm.$nextTick();
+
+				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
+				const uploadProgressTextTimeB = wrapper.find(
+					"[data-testid='upload-progress']"
+				);
+				expect(uploadProgressTextTimeB.exists()).toBe(true);
+			});
 		});
 
-		it("should show v-icon", () => {
-			const { wrapper } = setupWrapper({ uploaded: 2, total: 2 });
+		describe("when uploaded < total", () => {
+			it("should show v-progress-circular", () => {
+				const { wrapper } = setupWrapper({
+					uploadProgress: { uploaded: 1, total: 2 },
+					areUploadStatsVisible: true,
+				});
 
-			expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
+				expect(
+					wrapper.findComponent({ name: "v-progress-circular" }).exists()
+				).toBe(true);
+			});
+
+			it("should not show v-icon", () => {
+				const { wrapper } = setupWrapper({
+					uploadProgress: { uploaded: 1, total: 2 },
+					areUploadStatsVisible: true,
+				});
+
+				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(false);
+			});
+
+			it("should show upload stats text", () => {
+				const { wrapper } = setupWrapper({
+					uploadProgress: { uploaded: 1, total: 2 },
+					areUploadStatsVisible: true,
+				});
+
+				const uploadProgressText = wrapper.find(
+					"[data-testid='upload-progress']"
+				);
+				expect(uploadProgressText.exists()).toBe(true);
+				expect(uploadProgressText.text()).toBe(
+					buildUploadStatsTranslation("1", "2")
+				);
+			});
 		});
 
-		it("should show upload stats text", () => {
-			const { wrapper } = setupWrapper({ uploaded: 2, total: 2 });
+		describe("when uploaded = total", () => {
+			it("should not show v-progress-circular", () => {
+				const { wrapper } = setupWrapper({
+					uploadProgress: { uploaded: 2, total: 2 },
+					areUploadStatsVisible: true,
+				});
 
-			const uploadProgressText = wrapper.find(
-				"[data-testid='upload-progress']"
-			);
-			expect(uploadProgressText.exists()).toBe(true);
-			expect(uploadProgressText.text()).toBe(
-				buildUploadStatsTranslation("2", "2")
-			);
-		});
-	});
+				expect(
+					wrapper.findComponent({ name: "v-progress-circular" }).exists()
+				).toBe(false);
+			});
 
-	describe("when upload progress total and uploaded are initially 0 and then change to 0, 1", () => {
-		it("should show v-progress-circular", async () => {
-			const { wrapper } = setupWrapper({ uploaded: 0, total: 0 });
+			it("should show v-icon", () => {
+				const { wrapper } = setupWrapper({
+					uploadProgress: { uploaded: 2, total: 2 },
+					areUploadStatsVisible: true,
+				});
 
-			expect(
-				wrapper.findComponent({ name: "v-progress-circular" }).exists()
-			).toBe(false);
+				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
+			});
 
-			await wrapper.setProps({ uploadProgress: { uploaded: 0, total: 1 } });
+			it("should show upload stats text", () => {
+				const { wrapper } = setupWrapper({
+					uploadProgress: { uploaded: 2, total: 2 },
+					areUploadStatsVisible: true,
+				});
 
-			expect(
-				wrapper.findComponent({ name: "v-progress-circular" }).exists()
-			).toBe(true);
-		});
-	});
-
-	describe("when upload progress total and uploaded are initially 1,1 and then change to 0, 0", () => {
-		it("should show upload complete icon", async () => {
-			const { wrapper } = setupWrapper({ uploaded: 1, total: 1 });
-
-			expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
-
-			await wrapper.setProps({ uploadProgress: { uploaded: 0, total: 0 } });
-
-			expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
+				const uploadProgressText = wrapper.find(
+					"[data-testid='upload-progress']"
+				);
+				expect(uploadProgressText.exists()).toBe(true);
+				expect(uploadProgressText.text()).toBe(
+					buildUploadStatsTranslation("2", "2")
+				);
+			});
 		});
 
-		it("should make the icon disappear after 5 seconds", async () => {
-			jest.useFakeTimers();
-			const { wrapper } = setupWrapper({ uploaded: 1, total: 1 });
+		describe("when upload progress total and uploaded are initially 0, 0 and then change to 0, 1", () => {
+			it("should show v-progress-circular", async () => {
+				const { wrapper } = setupWrapper({
+					uploadProgress: { uploaded: 0, total: 0 },
+					areUploadStatsVisible: true,
+				});
 
-			expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
+				expect(
+					wrapper.findComponent({ name: "v-progress-circular" }).exists()
+				).toBe(false);
 
-			await wrapper.setProps({ uploadProgress: { uploaded: 0, total: 0 } });
+				await wrapper.setProps({ uploadProgress: { uploaded: 0, total: 1 } });
 
-			expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
+				expect(
+					wrapper.findComponent({ name: "v-progress-circular" }).exists()
+				).toBe(true);
+			});
+		});
 
-			jest.advanceTimersByTime(5000);
-			await wrapper.vm.$nextTick();
+		describe("when upload progress total and uploaded are initially 0, 1 and then change to 0, 0", () => {
+			it("should show v-progress-circular", async () => {
+				const { wrapper } = setupWrapper({
+					uploadProgress: { uploaded: 0, total: 1 },
+					areUploadStatsVisible: true,
+				});
 
-			expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(false);
+				expect(
+					wrapper.findComponent({ name: "v-progress-circular" }).exists()
+				).toBe(true);
+
+				await wrapper.setProps({ uploadProgress: { uploaded: 0, total: 0 } });
+
+				expect(
+					wrapper.findComponent({ name: "v-progress-circular" }).exists()
+				).toBe(false);
+			});
 		});
 	});
 });
