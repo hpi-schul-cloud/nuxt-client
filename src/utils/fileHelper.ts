@@ -31,25 +31,25 @@ export function downloadFiles(params: ArchiveFileParams) {
 	const form = document.createElement("form");
 	form.method = "POST";
 	form.action = "/api/v3/file/download";
-	form.target = "_blank";
 	form.enctype = "application/json";
+	form.target = "_blank";
 
-	const fileRecordIds = document.createElement("input");
-	fileRecordIds.type = "hidden";
-	fileRecordIds.name = "fileRecordIds";
-	fileRecordIds.value = JSON.stringify(params.fileRecordIds);
-	form.appendChild(fileRecordIds);
+	const archiveNameInput = document.createElement("input");
+	archiveNameInput.type = "hidden";
+	archiveNameInput.name = "archiveName";
+	archiveNameInput.value = params.archiveName;
 
-	const archiveName = document.createElement("input");
-	archiveName.type = "hidden";
-	archiveName.name = "archiveName";
-	archiveName.value = params.archiveName;
+	const fileRecordIdsInput = document.createElement("input");
+	fileRecordIdsInput.type = "hidden";
+	fileRecordIdsInput.name = "fileRecordIds";
+	fileRecordIdsInput.value = JSON.stringify(params.fileRecordIds);
 
-	form.appendChild(archiveName);
+	form.appendChild(fileRecordIdsInput);
+	form.appendChild(archiveNameInput);
 
 	document.body.appendChild(form);
-
 	form.submit();
+	document.body.removeChild(form);
 }
 
 export function convertFileSize(fileSize: number): {

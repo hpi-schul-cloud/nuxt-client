@@ -1,12 +1,15 @@
 import {
+	ArchiveFileParams,
 	FileRecordScanStatus,
 	PreviewStatus,
 	PreviewWidth,
 } from "@/fileStorageApi/v3";
+import { createMock } from "@golevelup/ts-jest";
 import {
 	convertDownloadToPreviewUrl,
 	convertFileSize,
 	downloadFile,
+	downloadFiles,
 	formatSecondsToHourMinSec,
 	getFileExtension,
 	isAudioMimeType,
@@ -53,6 +56,112 @@ describe("@/utils/fileHelper", () => {
 			expect(document.body.appendChild).toHaveBeenCalledWith(link);
 			expect(link.click).toHaveBeenCalledTimes(1);
 			expect(document.body.removeChild).toHaveBeenCalledWith(link);
+		});
+	});
+
+	describe("downloadFiles", () => {
+		const setup = () => {
+			const inputMocks = [
+				createMock<HTMLInputElement>(),
+				createMock<HTMLInputElement>(),
+			];
+			const formMock = createMock<HTMLFormElement>();
+
+			let createElementCallCount = 0;
+			jest
+				.spyOn(document, "createElement")
+				.mockImplementation((tag: string) => {
+					if (tag === "form") return formMock;
+					if (tag === "input") return inputMocks[createElementCallCount++];
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					return {} as any;
+				});
+
+			const appendChildSpy = jest
+				.spyOn(document.body, "appendChild")
+				.mockImplementation(jest.fn());
+			const removeChildSpy = jest
+				.spyOn(document.body, "removeChild")
+				.mockImplementation(jest.fn());
+
+			return {
+				formMock,
+				inputMocks,
+				appendChildSpy,
+				removeChildSpy,
+			};
+		};
+
+		afterEach(() => {
+			jest.restoreAllMocks();
+		});
+
+		it("should create a form", () => {
+			const { formMock } = setup();
+
+			const params: ArchiveFileParams = {
+				archiveName: "test-archive",
+				fileRecordIds: ["1", "2", "3"],
+			};
+
+			downloadFiles(params);
+
+			expect(formMock.method).toBe("POST");
+			expect(formMock.action).toBe("/api/v3/file/download");
+			expect(formMock.enctype).toBe("application/json");
+			expect(formMock.target).toBe("_blank");
+		});
+
+		it("should create inputs with correct attributes", () => {
+			const { inputMocks } = setup();
+
+			const params: ArchiveFileParams = {
+				archiveName: "test-archive",
+				fileRecordIds: ["1", "2", "3"],
+			};
+
+			downloadFiles(params);
+
+			// Inputs
+			expect(inputMocks[0].type).toBe("hidden");
+			expect(inputMocks[1].type).toBe("hidden");
+			const names = [inputMocks[0].name, inputMocks[1].name];
+			expect(names).toContain("archiveName");
+			expect(names).toContain("fileRecordIds");
+			const archiveInput = inputMocks.find((i) => i.name === "archiveName");
+			const idsInput = inputMocks.find((i) => i.name === "fileRecordIds");
+			expect(archiveInput?.value).toBe(params.archiveName);
+			expect(idsInput?.value).toBe(JSON.stringify(params.fileRecordIds));
+		});
+
+		it("should calls ormMock.appendChild", () => {
+			const { formMock, appendChildSpy, removeChildSpy } = setup();
+
+			const params: ArchiveFileParams = {
+				archiveName: "test-archive",
+				fileRecordIds: ["1", "2", "3"],
+			};
+
+			downloadFiles(params);
+
+			// Appending inputs to form
+			expect(formMock.appendChild).toHaveBeenCalledTimes(2);
+		});
+
+		it("should Appending/removing form to/from body", () => {
+			const { formMock, appendChildSpy, removeChildSpy } = setup();
+
+			const params: ArchiveFileParams = {
+				archiveName: "test-archive",
+				fileRecordIds: ["1", "2", "3"],
+			};
+
+			downloadFiles(params);
+
+			expect(appendChildSpy).toHaveBeenCalledWith(formMock);
+			expect(removeChildSpy).toHaveBeenCalledWith(formMock);
+
+			expect(formMock.submit).toHaveBeenCalled();
 		});
 	});
 
