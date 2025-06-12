@@ -1005,7 +1005,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"In the next step, a copy of the room will be created.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"The following contents will not be copied:",
+		"The following contents are not included:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Room members and permissions",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Contents in Etherpads",

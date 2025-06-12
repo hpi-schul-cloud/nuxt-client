@@ -1040,7 +1040,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"En el siguiente paso, se creará una copia de la sala.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"Los siguientes contenidos no se copiarán:",
+		"No se adoptan los siguientes contenidos:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Miembros y permisos de la sala",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad":
