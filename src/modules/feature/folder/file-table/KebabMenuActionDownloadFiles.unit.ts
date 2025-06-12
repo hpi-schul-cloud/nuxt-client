@@ -5,6 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { KebabMenuAction } from "@ui-kebab-menu";
+import dayjs from "dayjs";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 
 describe("KebabMenuActionDownloadFiles", () => {
@@ -50,9 +51,9 @@ describe("KebabMenuActionDownloadFiles", () => {
 
 			it("should call downloadFiles with correct params", async () => {
 				const { downloadFilesMock } = await setup();
-
+				const now = dayjs().format("YYYYMMDD");
 				expect(downloadFilesMock).toHaveBeenCalledWith({
-					archiveName: "20250610_test-archive",
+					archiveName: `${now}_test-archive`,
 					fileRecordIds: ["1", "2"],
 				});
 			});
@@ -78,8 +79,9 @@ describe("KebabMenuActionDownloadFiles", () => {
 			it("should call downloadFiles with correct params", async () => {
 				const { downloadFilesMock } = await setup();
 
+				const now = dayjs().format("YYYYMMDD");
 				expect(downloadFilesMock).toHaveBeenCalledWith({
-					archiveName: "20250610_test-archive",
+					archiveName: `${now}_test-archive`,
 					fileRecordIds: ["2"],
 				});
 			});
