@@ -5,7 +5,7 @@
 		role="radiogroup"
 		aria-labelledby="room-color-label"
 	>
-		<template v-for="swatchColor in RoomColorEnum" :key="swatchColor">
+		<template v-for="swatchColor in RoomColor" :key="swatchColor">
 			<RoomColorPickerSwatch
 				:color="swatchColor"
 				:is-selected="isSelected(swatchColor)"
@@ -19,12 +19,12 @@
 import { useVModel } from "@vueuse/core";
 import { PropType } from "vue";
 import RoomColorPickerSwatch from "./RoomColorPickerSwatch.vue";
-import { RoomColorEnum } from "@/types/room/Room";
+import { RoomColor } from "@/types/room/Room";
 
 const props = defineProps({
 	color: {
-		type: String as PropType<RoomColorEnum>,
-		default: RoomColorEnum.BlueGrey,
+		type: String as PropType<RoomColor>,
+		default: RoomColor.BlueGrey,
 	},
 	label: {
 		type: String,
@@ -36,11 +36,11 @@ const emit = defineEmits(["update:color"]);
 
 const currentColor = useVModel(props, "color", emit);
 
-const isSelected = (color: RoomColorEnum) => {
+const isSelected = (color: RoomColor) => {
 	return color === currentColor.value;
 };
 
-const onUpdateColor = (color: RoomColorEnum) => {
+const onUpdateColor = (color: RoomColor) => {
 	emit("update:color", color);
 };
 </script>

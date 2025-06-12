@@ -1,10 +1,9 @@
 <template>
-	<Folder :folder-id="folderId" />
+	<Folder :folder-id="folderId" @update:folder-name="handleFolderNameUpdate" />
 </template>
 
 <script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useFolderState } from "@data-folder";
 import { Folder } from "@feature-folder";
 import { useTitle } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
@@ -17,7 +16,11 @@ defineProps({
 });
 const { t } = useI18n();
 
-const { folderName } = useFolderState();
+const handleFolderNameUpdate = (newFolderName: string) => {
+	const pageTitle = buildPageTitle(
+		`${newFolderName} - ${t("pages.folder.title")}`
+	);
 
-useTitle(buildPageTitle(`${folderName.value} - ${t("pages.folder.title")}`));
+	useTitle(pageTitle);
+};
 </script>

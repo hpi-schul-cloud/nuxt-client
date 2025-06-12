@@ -6,7 +6,7 @@
 		has-buttons
 		:buttons="isOpen ? actionButtons : []"
 		@dialog-closed="onCloseDialog"
-		@next="onNext(shareOptions)"
+		@next="onNext()"
 	>
 		<template #title>
 			<div ref="textTitle" class="text-h4 my-2 text-break">
@@ -41,6 +41,16 @@
 										)
 									}}
 								</li>
+								<li
+									v-if="showRoomInfo"
+									data-testid="share-options-room-memberships-data-text"
+								>
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData"
+										)
+									}}
+								</li>
 								<li v-if="showCourseInfo || showLessonInfo">
 									{{
 										t(
@@ -48,14 +58,21 @@
 										)
 									}}
 								</li>
-								<li v-if="showCourseInfo || showBoardInfo || showLessonInfo">
+								<li
+									v-if="
+										showCourseInfo ||
+										showRoomInfo ||
+										showBoardInfo ||
+										showLessonInfo
+									"
+								>
 									{{
 										t(
 											"components.molecules.shareImport.options.restrictions.infoText.etherpad"
 										)
 									}}
 								</li>
-								<li v-if="showCourseInfo || showBoardInfo">
+								<li v-if="showCourseInfo || showRoomInfo || showBoardInfo">
 									{{
 										t(
 											"components.molecules.shareImport.options.restrictions.infoText.whiteboard"
@@ -63,7 +80,7 @@
 									}}
 								</li>
 								<li
-									v-if="showCtlToolsInfo"
+									v-if="showCourseInfo || showRoomInfo || showBoardInfo"
 									data-testid="share-modal-external-tools-info"
 								>
 									{{
@@ -73,7 +90,7 @@
 									}}
 								</li>
 								<li
-									v-if="showCtlToolsInfo"
+									v-if="showCourseInfo || showRoomInfo || showBoardInfo"
 									data-testid="share-modal-external-tools-protected-parameter-info"
 								>
 									{{
@@ -126,21 +143,28 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import { ShareOptions } from "@/store/share";
 import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiInformation } from "@icons/material";
-import { computed, ref } from "vue";
+import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
+
+type VDialogButtonActions =
+	| "back"
+	| "edit"
+	| "cancel"
+	| "confirm"
+	| "close"
+	| "next";
 
 const props = defineProps({
 	type: {
-		type: String,
+		type: String as PropType<ShareTokenBodyParamsParentTypeEnum>,
 		required: true,
-		validator: (type) =>
-			Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
 	},
 });
 
@@ -161,7 +185,7 @@ const step = computed<ShareModalStep>(() =>
 
 const modalOptions: Record<
 	ShareModalStep,
-	{ title: string; actionButtons: string[] }
+	{ title: string; actionButtons: VDialogButtonActions[] }
 > = {
 	firstStep: {
 		title: t("components.molecules.share.options.title"),
@@ -173,24 +197,26 @@ const modalOptions: Record<
 	},
 };
 
-const shareUrl = computed(() => shareModule.getShareUrl);
+const shareUrl = computed(() => shareModule.getShareUrl ?? "");
 
 const actionButtons = computed(() => {
 	return modalOptions[step.value].actionButtons ?? [];
 });
 
-const shareOptions = ref(undefined);
+const shareOptions = ref<ShareOptions>();
 
 const modalTitle = computed(() => modalOptions[step.value].title ?? "");
 
-const onShareOptionsChange = (newValue) => {
+const onShareOptionsChange = (newValue: ShareOptions) => {
 	shareOptions.value = newValue;
 };
 const onCloseDialog = () => {
 	shareModule.resetShareFlow();
 };
-const onNext = (newValue) => {
-	shareModule.createShareUrl(newValue);
+const onNext = () => {
+	if (shareOptions.value) {
+		shareModule.createShareUrl(shareOptions.value);
+	}
 };
 const onDone = () => {
 	shareModule.resetShareFlow();
@@ -203,15 +229,12 @@ const onCopy = () => {
 	});
 };
 
-const showCtlToolsInfo = computed(() => {
-	return props.type === "courses" || props.type === "columnBoard";
-});
-
 const showAlertInfo = computed(() => {
 	return (
 		props.type === "courses" ||
 		props.type === "columnBoard" ||
-		props.type === "lessons"
+		props.type === "lessons" ||
+		props.type === "room"
 	);
 });
 
@@ -222,7 +245,12 @@ const showCourseInfo = computed(() => {
 const showBoardInfo = computed(() => {
 	return props.type === "columnBoard";
 });
+
 const showLessonInfo = computed(() => {
 	return props.type === "lessons";
+});
+
+const showRoomInfo = computed(() => {
+	return props.type === "room";
 });
 </script>
