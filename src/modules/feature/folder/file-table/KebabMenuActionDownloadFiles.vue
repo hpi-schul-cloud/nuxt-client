@@ -2,7 +2,6 @@
 	<KebabMenuAction
 		:icon="mdiTrayArrowDown"
 		data-testid="kebab-menu-action-download"
-		:disabled="disabled"
 		@click="onClick"
 	>
 		{{ t("common.actions.download") }}
@@ -18,19 +17,13 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 interface KebabMenuActionDownloadFilesProps {
-	disabled: boolean;
 	selectedIds: string[];
 	archiveName: string;
 }
 
-const props = withDefaults(defineProps<KebabMenuActionDownloadFilesProps>(), {
-	disabled: false,
-});
+const props = defineProps<KebabMenuActionDownloadFilesProps>();
 
 const onClick = async () => {
-	if (props.disabled) {
-		return;
-	}
 	const now = dayjs().format("YYYYMMDD");
 	const archiveName = `${now}_${props.archiveName}`;
 

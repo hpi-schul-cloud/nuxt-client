@@ -13,16 +13,12 @@ describe("KebabMenuActionDownloadFiles", () => {
 		jest.resetAllMocks();
 	});
 
-	const setupWrapper = (props: {
-		disabled?: boolean;
-		selectedIds: string[];
-	}) => {
+	const setupWrapper = (props: { selectedIds: string[] }) => {
 		const wrapper = mount(KebabMenuActionDownloadFiles, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				disabled: props.disabled,
 				selectedIds: props.selectedIds,
 				archiveName: "test-archive",
 			},
@@ -95,36 +91,6 @@ describe("KebabMenuActionDownloadFiles", () => {
 					archiveName,
 					fileRecordIds: selectedIds,
 				});
-			});
-		});
-	});
-
-	describe("when action is disabled", () => {
-		describe("when all file records are selected", () => {
-			const setup = async () => {
-				const selectedIds = ["1", "2"];
-
-				const downloadFilesAsArchiveMock = jest.spyOn(
-					FileHelper,
-					"downloadFilesAsArchive"
-				);
-				jest.spyOn(Helper, "delay").mockResolvedValueOnce(undefined);
-
-				const { wrapper } = setupWrapper({
-					disabled: true,
-					selectedIds,
-				});
-
-				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
-				kebabMenuAction.trigger("click");
-
-				return { downloadFilesAsArchiveMock };
-			};
-
-			it("should not call downloadFile", async () => {
-				const { downloadFilesAsArchiveMock } = await setup();
-
-				expect(downloadFilesAsArchiveMock).not.toHaveBeenCalled();
 			});
 		});
 	});

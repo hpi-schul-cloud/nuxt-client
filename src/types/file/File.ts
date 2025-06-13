@@ -5,6 +5,7 @@ import {
 	FileRecordParentType as FileRecordParent,
 	FileRecordResponse,
 	FileRecordScanStatus as FileRecordVirusScanStatus,
+	PreviewOutputMimeTypes,
 } from "@/fileStorageApi/v3";
 
 export type FileRecord = FileRecordResponse;
@@ -15,4 +16,5 @@ export {
 	FilePreviewWidth,
 	FileRecordParent,
 	FileRecordVirusScanStatus,
+	PreviewOutputMimeTypes,
 };
