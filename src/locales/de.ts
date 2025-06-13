@@ -524,6 +524,8 @@ export default {
 		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"Bevorzugte Tools konnten nicht geladen werden.",
 	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",

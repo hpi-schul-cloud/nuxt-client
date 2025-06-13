@@ -30,7 +30,7 @@ import {
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
-import { useSharedEditMode } from "@util-board";
+import { useBoardNotifier, useSharedEditMode } from "@util-board";
 import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
@@ -58,6 +58,9 @@ const mockedSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
 jest.mock("@util-board/editMode.composable");
 const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
+jest.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
 jest.mock("../socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
@@ -83,6 +86,7 @@ describe("useCardRestApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
 		ReturnType<typeof useSocketConnection>
 	>;
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let setEditModeId: jest.Mock;
 
 	beforeEach(() => {
@@ -117,6 +121,10 @@ describe("useCardRestApi", () => {
 		mockedSharedCardRequestPool.mockReturnValue(
 			mockedSharedCardRequestPoolCalls
 		);
+
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setEditModeId = jest.fn();
 		mockedSharedEditMode.mockReturnValue({
@@ -537,7 +545,7 @@ describe("useCardRestApi", () => {
 	});
 
 	describe("getPreferredTools", () => {
-		describe("when api call is succesful", () => {
+		describe("when api call is successful", () => {
 			const setupPreferredTool = () => {
 				const { getPreferredTools } = useCardRestApi();
 
@@ -598,12 +606,14 @@ describe("useCardRestApi", () => {
 				};
 			};
 
-			it("should call handleError", async () => {
+			it("should show a failure notification", async () => {
 				const { getPreferredTools } = setupPreferredTool();
 
 				await getPreferredTools(ToolContextType.BoardElement);
 
-				expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+					"components.board.preferredTools.notification.error.notLoaded"
+				);
 			});
 		});
 	});
