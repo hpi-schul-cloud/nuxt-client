@@ -1,12 +1,9 @@
 <template>
-	<WarningAlert v-if="isError">
-		{{ $t("components.cardElement.fileElement.previewError") }}
-	</WarningAlert>
 	<v-img
 		ref="imageRef"
-		class="image mx-auto"
-		loading="lazy"
+		class="mx-auto"
 		data-testid="image-preview"
+		:class="{ 'error-image': isError }"
 		:src="imageSrc"
 		:alt="alt"
 		:cover="cover"
@@ -21,13 +18,19 @@
 				<VProgressCircular color="primary" indeterminate :size="36" />
 			</v-row>
 		</template>
+		<template #error>
+			<WarningAlert>
+				{{ $t("components.cardElement.fileElement.previewError") }}
+			</WarningAlert>
+			<v-img :src="errorImage" />
+		</template>
 	</v-img>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
 import errorImage from "@/assets/img/image-not-available.svg";
 import { WarningAlert } from "@ui-alert";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
 	name: "PreviewImage",
@@ -40,8 +43,7 @@ export default defineComponent({
 		position: { type: String, required: false, default: undefined },
 		maxHeight: { type: Number, required: false, default: undefined },
 	},
-	emits: ["error"],
-	setup(props, { emit }) {
+	setup(props) {
 		const isError = ref(false);
 		const imageRef = ref();
 		const imageWidth = ref();
@@ -50,27 +52,32 @@ export default defineComponent({
 			imageWidth.value = imageRef.value.image.naturalWidth;
 		};
 
-		const imageSrc = computed(() => {
-			if (isError.value) {
-				return errorImage;
-			}
-
-			return props.src;
-		});
-
 		const setError = () => {
 			isError.value = true;
-			emit("error");
 		};
 
 		return {
 			imageRef,
 			setWidth,
 			imageWidth,
-			imageSrc,
+			imageSrc: props.src,
 			setError,
 			isError,
+			errorImage,
 		};
 	},
 });
 </script>
+
+<style>
+.v-img__error {
+	/* For some reason .v-img__error has position: absolute normally. We override it because the image is not visible otherwise. */
+	position: static;
+	background-color: white;
+}
+
+.error-image {
+	/* We override the flex-grow value of v-img, so that the error image doesn't get stretched. */
+	flex-grow: 0;
+}
+</style>
