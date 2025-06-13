@@ -70,8 +70,10 @@ describe("CardStore", () => {
 	let mockedSocketApiHandler: DeepMocked<
 		ReturnType<typeof useSocketConnection>
 	>;
-	let mockedCardSocketApiActions: ReturnType<typeof useCardSocketApi>;
-	let mockedCardRestApiActions: ReturnType<typeof useCardRestApi>;
+	let mockedCardSocketApiActions: DeepMocked<
+		ReturnType<typeof useCardSocketApi>
+	>;
+	let mockedCardRestApiActions: DeepMocked<ReturnType<typeof useCardRestApi>>;
 	let mockedSharedLastCreatedElementActions: DeepMocked<
 		ReturnType<typeof useSharedLastCreatedElement>
 	>;
@@ -98,7 +100,9 @@ describe("CardStore", () => {
 			createMock<ReturnType<typeof useSocketConnection>>();
 		mockedUseSocketConnection.mockReturnValue(mockedSocketApiHandler);
 
-		mockedCardSocketApiActions = {
+		mockedCardSocketApiActions = createMock<
+			ReturnType<typeof useCardSocketApi>
+		>({
 			dispatch: jest.fn().mockResolvedValue(undefined),
 			fetchCardRequest: jest.fn(),
 			createElementRequest: jest.fn(),
@@ -109,10 +113,10 @@ describe("CardStore", () => {
 			updateCardTitleRequest: jest.fn(),
 			updateCardHeightRequest: jest.fn(),
 			disconnectSocketRequest: jest.fn(),
-		};
+		});
 		mockedUseCardSocketApi.mockReturnValue(mockedCardSocketApiActions);
 
-		mockedCardRestApiActions = {
+		mockedCardRestApiActions = createMock<ReturnType<typeof useCardRestApi>>({
 			fetchCardRequest: jest.fn(),
 			createElementRequest: jest.fn(),
 			createPreferredElement: jest.fn(),
@@ -124,7 +128,7 @@ describe("CardStore", () => {
 			updateCardTitleRequest: jest.fn(),
 			updateCardHeightRequest: jest.fn(),
 			disconnectSocketRequest: jest.fn(),
-		};
+		});
 		mockedUseCardRestApi.mockReturnValue(mockedCardRestApiActions);
 
 		mockedSharedLastCreatedElementActions =
