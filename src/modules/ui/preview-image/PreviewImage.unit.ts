@@ -97,15 +97,6 @@ describe("PreviewImage", () => {
 			expect(alert.exists()).toBe(true);
 		});
 
-		it("should emit error event", async () => {
-			const { wrapper } = setupWithShallowMount();
-
-			const image = wrapper.findComponent(VImg);
-			await image.trigger("error");
-
-			expect(wrapper.emitted("error")).toBeTruthy();
-		});
-
 		it("should render error slot", async () => {
 			const { wrapper } = setupWithMount();
 

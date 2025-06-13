@@ -44,8 +44,7 @@ export default defineComponent({
 		position: { type: String, required: false, default: undefined },
 		maxHeight: { type: Number, required: false, default: undefined },
 	},
-	emits: ["error"],
-	setup(props, { emit }) {
+	setup(props) {
 		const isError = ref(false);
 		const imageRef = ref();
 		const imageWidth = ref();
@@ -56,7 +55,6 @@ export default defineComponent({
 
 		const setError = () => {
 			isError.value = true;
-			emit("error");
 		};
 
 		return {
