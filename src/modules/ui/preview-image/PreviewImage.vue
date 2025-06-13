@@ -1,7 +1,6 @@
 <template>
 	<v-img
 		ref="imageRef"
-		loading="lazy"
 		class="mx-auto"
 		data-testid="image-preview"
 		:class="{ 'error-image': isError }"
