@@ -90,7 +90,6 @@ import {
 	onUnmounted,
 	PropType,
 	ref,
-	watch,
 	watchEffect,
 } from "vue";
 import { useI18n } from "vue-i18n";
@@ -167,14 +166,13 @@ watchEffect(() => {
 			: t("pages.rooms.members.label");
 	}
 	if (room.value?.permissions) {
-		const { tab } = router.currentRoute.value.query;
 		const restrictedTabsForStudents = [Tab.Invitations, Tab.Confirmations];
 
 		if (
-			restrictedTabsForStudents.includes(tab as Tab) &&
+			restrictedTabsForStudents.includes(activeTab.value) &&
 			!canAddRoomMembers.value
 		) {
-			router.replace({ name: "rooms" });
+			activeTab.value = Tab.Members;
 		}
 	}
 });
