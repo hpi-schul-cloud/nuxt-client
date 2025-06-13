@@ -111,8 +111,20 @@ describe("BoardStore", () => {
 			createMock<ReturnType<typeof useBoardRestApi>>();
 		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiActions);
 
-		mockedCardSocketApiActions =
-			createMock<ReturnType<typeof useCardSocketApi>>();
+		mockedCardSocketApiActions = createMock<
+			ReturnType<typeof useCardSocketApi>
+		>({
+			dispatch: jest.fn().mockResolvedValue(undefined),
+			fetchCardRequest: jest.fn(),
+			createElementRequest: jest.fn(),
+			deleteElementRequest: jest.fn(),
+			updateElementRequest: jest.fn(),
+			moveElementRequest: jest.fn(),
+			deleteCardRequest: jest.fn(),
+			updateCardTitleRequest: jest.fn(),
+			updateCardHeightRequest: jest.fn(),
+			disconnectSocketRequest: jest.fn(),
+		});
 		mockedUseCardSocketApi.mockReturnValue(mockedCardSocketApiActions);
 
 		setEditModeId = jest.fn();
