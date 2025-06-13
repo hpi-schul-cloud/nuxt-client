@@ -337,10 +337,10 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadFiles: async (archiveFileParams: ArchiveFileParams, range?: string, options: any = {}): Promise<RequestArgs> => {
+        downloadFilesAsArchive: async (archiveFileParams: ArchiveFileParams, range?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'archiveFileParams' is not null or undefined
-            assertParamExists('downloadFiles', 'archiveFileParams', archiveFileParams)
-            const localVarPath = `/file/download`;
+            assertParamExists('downloadFilesAsArchive', 'archiveFileParams', archiveFileParams)
+            const localVarPath = `/file/download-files-as-archive`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -844,8 +844,8 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async downloadFiles(archiveFileParams: ArchiveFileParams, range?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadFiles(archiveFileParams, range, options);
+        async downloadFilesAsArchive(archiveFileParams: ArchiveFileParams, range?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadFilesAsArchive(archiveFileParams, range, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1036,8 +1036,8 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadFiles(archiveFileParams: ArchiveFileParams, range?: string, options?: any): AxiosPromise<any> {
-            return localVarFp.downloadFiles(archiveFileParams, range, options).then((request) => request(axios, basePath));
+        downloadFilesAsArchive(archiveFileParams: ArchiveFileParams, range?: string, options?: any): AxiosPromise<any> {
+            return localVarFp.downloadFilesAsArchive(archiveFileParams, range, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1220,7 +1220,7 @@ export interface FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    downloadFiles(archiveFileParams: ArchiveFileParams, range?: string, options?: any): AxiosPromise<any>;
+    downloadFilesAsArchive(archiveFileParams: ArchiveFileParams, range?: string, options?: any): AxiosPromise<any>;
 
     /**
      * 
@@ -1415,8 +1415,8 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public downloadFiles(archiveFileParams: ArchiveFileParams, range?: string, options?: any) {
-        return FileApiFp(this.configuration).downloadFiles(archiveFileParams, range, options).then((request) => request(this.axios, this.basePath));
+    public downloadFilesAsArchive(archiveFileParams: ArchiveFileParams, range?: string, options?: any) {
+        return FileApiFp(this.configuration).downloadFilesAsArchive(archiveFileParams, range, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
