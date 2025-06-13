@@ -152,7 +152,7 @@ describe("ElementTypeSelection", () => {
 			const wrapper: AddElementDialogWrapper<Partial<{ dialogWidth: number }>> =
 				mount(AddElementDialog, {
 					attrs: {
-						width: 420,
+						width: 320,
 					},
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
