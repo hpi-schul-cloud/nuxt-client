@@ -29,9 +29,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
 import errorImage from "@/assets/img/image-not-available.svg";
 import { WarningAlert } from "@ui-alert";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
 	name: "PreviewImage",
@@ -54,8 +54,6 @@ export default defineComponent({
 			imageWidth.value = imageRef.value.image.naturalWidth;
 		};
 
-		const imageSrc = computed(() => props.src);
-
 		const setError = () => {
 			isError.value = true;
 			emit("error");
@@ -65,7 +63,7 @@ export default defineComponent({
 			imageRef,
 			setWidth,
 			imageWidth,
-			imageSrc,
+			imageSrc: props.src,
 			setError,
 			isError,
 			errorImage,
