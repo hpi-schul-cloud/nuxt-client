@@ -37,6 +37,8 @@ export default {
 	"common.file.scanError":
 		"Error during virus check. Preview cannot be created. Please upload the file again.",
 	"common.file.virusDetected": "File has been locked due to a suspected virus.",
+	"common.file": "file",
+	"common.files": "files",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
