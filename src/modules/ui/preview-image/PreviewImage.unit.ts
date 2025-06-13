@@ -86,7 +86,7 @@ describe("PreviewImage", () => {
 		expect(wrapper.html().includes("v-progress-circular")).toBe(true);
 	});
 
-	describe("when v-img emits error", () => {
+	describe("when img emits error", () => {
 		it("should display warning alert", async () => {
 			const { wrapper } = setupWithMount();
 
