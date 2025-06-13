@@ -17,15 +17,21 @@
 /**
  * 
  * @export
- * @interface RenameFileParams
+ * @interface ParentStatisticResponse
  */
-export interface RenameFileParams {
+export interface ParentStatisticResponse {
     /**
-     * 
-     * @type {string}
-     * @memberof RenameFileParams
+     * The number of files for the parent entity.
+     * @type {number}
+     * @memberof ParentStatisticResponse
      */
-    fileName: string;
+    fileCount: number;
+    /**
+     * The total size in bytes of all files for the parent entity.
+     * @type {number}
+     * @memberof ParentStatisticResponse
+     */
+    totalSizeInBytes: number;
 }
 
 

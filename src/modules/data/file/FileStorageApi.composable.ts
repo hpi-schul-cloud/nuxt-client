@@ -10,6 +10,7 @@ import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { useFileRecordsStore } from "./FileRecords.state";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
+import { useParentStatisticsStore } from "./ParentStatistics.state";
 
 export enum ErrorType {
 	FILE_IS_BLOCKED = "FILE_IS_BLOCKED",
@@ -35,6 +36,9 @@ export const useFileStorageApi = () => {
 
 	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords } =
 		useFileRecordsStore();
+
+	const { getStatisticByParentId, setStatisticForParent } =
+		useParentStatisticsStore();
 
 	const fetchFiles = async (
 		parentId: string,
@@ -138,6 +142,21 @@ export const useFileStorageApi = () => {
 		}
 	};
 
+	const fetchFileStatistic = async (
+		parentId: string,
+		parentType: FileRecordParent
+	): Promise<void> => {
+		try {
+			const response = await fileApi.getParentStatistic(parentId, parentType);
+			const newStatistic = response.data;
+
+			setStatisticForParent(parentId, newStatistic);
+		} catch (error) {
+			showError(error);
+			throw error;
+		}
+	};
+
 	const showMessageByType = (message: ErrorType | string) => {
 		switch (message) {
 			case ErrorType.FILE_TOO_BIG:
@@ -165,5 +184,7 @@ export const useFileStorageApi = () => {
 		uploadFromUrl,
 		getFileRecordsByParentId,
 		deleteFiles,
+		getStatisticByParentId,
+		tryGetParentStatisticFromApi: fetchFileStatistic,
 	};
 };
