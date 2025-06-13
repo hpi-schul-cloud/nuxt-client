@@ -1,5 +1,5 @@
 <template>
-	<span v-if="fileStatistics" class="text-caption">
+	<span v-if="fileStatistics" class="text-caption" data-testid="file-statistic">
 		{{
 			`${fileStatistics?.fileCount} ${fileTranslation} ⋅ ${humanReadableFileSize}`
 		}}
