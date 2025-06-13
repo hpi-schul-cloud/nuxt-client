@@ -68,8 +68,8 @@ const onKeyUp = () => ensurePoliteNotifications();
 
 	h4,
 	h5 {
-		margin-bottom: var(--space-xs);
-		margin-top: var(--space-md-2);
+		margin-bottom: 8px;
+		margin-top: 20px;
 	}
 
 	h4 {
@@ -87,7 +87,7 @@ const onKeyUp = () => ensurePoliteNotifications();
 	ul,
 	ol {
 		font-size: var(--text-md);
-		margin-bottom: var(--space-xs);
+		margin-bottom: 8px;
 	}
 
 	ul {
@@ -99,6 +99,7 @@ const onKeyUp = () => ensurePoliteNotifications();
 		overflow-x: auto;
 		overflow-y: hidden;
 		padding-right: 1px;
+		margin-bottom: 8px;
 	}
 
 	.math-tex {
@@ -108,6 +109,12 @@ const onKeyUp = () => ensurePoliteNotifications();
 
 :deep(.ck.ck-editor__editable_inline) {
 	padding: 0;
+	margin-bottom: 16px;
+
+	h4,
+	h5 {
+		margin-top: 20px;
+	}
 
 	p,
 	ol,
@@ -115,9 +122,8 @@ const onKeyUp = () => ensurePoliteNotifications();
 		margin-top: 0;
 	}
 
-	h4:first-of-type,
-	h5:first-of-type {
-		margin-top: var(--space-md-2);
+	> :last-child {
+		margin-bottom: 8px;
 	}
 }
 
@@ -125,14 +131,21 @@ const onKeyUp = () => ensurePoliteNotifications();
 		.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around
 	) {
 	> .ck-widget__type-around__button_before {
-		top: 0.5rem;
-		left: 0.5rem;
+		top: 8px;
+		left: 8px;
 		margin-left: 0;
 	}
 
 	> .ck-widget__type-around__button_after {
-		bottom: 0.5rem;
-		right: 0.5rem;
+		bottom: 8px;
+		right: 8px;
 	}
+}
+</style>
+<style>
+/* Set margin for first headings in cards */
+.v-card-text > div:first-child .ck-content h4:first-child,
+.v-card-text > div:first-child .ck-content h5:first-child {
+	margin-top: 0;
 }
 </style>
