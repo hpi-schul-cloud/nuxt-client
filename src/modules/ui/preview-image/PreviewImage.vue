@@ -1,12 +1,10 @@
 <template>
-	<WarningAlert v-if="isError">
-		{{ $t("components.cardElement.fileElement.previewError") }}
-	</WarningAlert>
 	<v-img
 		ref="imageRef"
-		class="image mx-auto"
 		loading="lazy"
+		class="mx-auto"
 		data-testid="image-preview"
+		:class="{ 'error-image': isError }"
 		:src="imageSrc"
 		:alt="alt"
 		:cover="cover"
@@ -20,6 +18,12 @@
 			<v-row class="fill-height ma-0" align="center" justify="center">
 				<VProgressCircular color="primary" indeterminate :size="36" />
 			</v-row>
+		</template>
+		<template #error>
+			<WarningAlert>
+				{{ $t("components.cardElement.fileElement.previewError") }}
+			</WarningAlert>
+			<v-img :src="errorImage" />
 		</template>
 	</v-img>
 </template>
@@ -50,13 +54,7 @@ export default defineComponent({
 			imageWidth.value = imageRef.value.image.naturalWidth;
 		};
 
-		const imageSrc = computed(() => {
-			if (isError.value) {
-				return errorImage;
-			}
-
-			return props.src;
-		});
+		const imageSrc = computed(() => props.src);
 
 		const setError = () => {
 			isError.value = true;
@@ -70,7 +68,21 @@ export default defineComponent({
 			imageSrc,
 			setError,
 			isError,
+			errorImage,
 		};
 	},
 });
 </script>
+
+<style>
+.v-img__error {
+	/* For some reason .v-img__error has position: absolute normally. We override it so the image is displayed. */
+	position: static;
+	background-color: white;
+}
+
+.error-image {
+	/* We override the flex-grow value of v-img, so that the error image doesn't get stretched. */
+	flex-grow: 0;
+}
+</style>
