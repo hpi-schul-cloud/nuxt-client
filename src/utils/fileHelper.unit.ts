@@ -1,15 +1,15 @@
 import {
 	ArchiveFileParams,
-	FileRecordScanStatus,
-	PreviewStatus,
-	PreviewWidth,
-} from "@/fileStorageApi/v3";
+	FilePreviewStatus,
+	FilePreviewWidth,
+	FileRecordVirusScanStatus,
+} from "@/types/file/File";
 import { createMock } from "@golevelup/ts-jest";
 import {
 	convertDownloadToPreviewUrl,
 	convertFileSize,
 	downloadFile,
-	downloadFiles,
+	downloadFilesAsArchive,
 	formatSecondsToHourMinSec,
 	getFileExtension,
 	isAudioMimeType,
@@ -104,7 +104,7 @@ describe("@/utils/fileHelper", () => {
 				fileRecordIds: ["1", "2", "3"],
 			};
 
-			downloadFiles(params);
+			downloadFilesAsArchive(params);
 
 			expect(formMock.method).toBe("POST");
 			expect(formMock.action).toBe("/api/v3/file/download");
@@ -120,7 +120,7 @@ describe("@/utils/fileHelper", () => {
 				fileRecordIds: ["1", "2", "3"],
 			};
 
-			downloadFiles(params);
+			downloadFilesAsArchive(params);
 
 			// Inputs
 			expect(inputMocks[0].type).toBe("hidden");
@@ -134,7 +134,7 @@ describe("@/utils/fileHelper", () => {
 			expect(idsInput?.value).toBe(JSON.stringify(params.fileRecordIds));
 		});
 
-		it("should calls ormMock.appendChild", () => {
+		it("should calls formMock.appendChild", () => {
 			const { formMock } = setup();
 
 			const params: ArchiveFileParams = {
@@ -142,7 +142,7 @@ describe("@/utils/fileHelper", () => {
 				fileRecordIds: ["1", "2", "3"],
 			};
 
-			downloadFiles(params);
+			downloadFilesAsArchive(params);
 
 			// Appending inputs to form
 			expect(formMock.appendChild).toHaveBeenCalledTimes(2);
@@ -156,7 +156,7 @@ describe("@/utils/fileHelper", () => {
 				fileRecordIds: ["1", "2", "3"],
 			};
 
-			downloadFiles(params);
+			downloadFilesAsArchive(params);
 
 			expect(appendChildSpy).toHaveBeenCalledWith(formMock);
 			expect(removeChildSpy).toHaveBeenCalledWith(formMock);
@@ -310,7 +310,7 @@ describe("@/utils/fileHelper", () => {
 			it("should return the preview url", () => {
 				const url = "/file/download/233/text.txt";
 
-				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
+				const result = convertDownloadToPreviewUrl(url, FilePreviewWidth._500);
 
 				expect(result).toEqual(
 					`/file/preview/233/text.txt?outputFormat=image/webp&width=500`
@@ -320,7 +320,7 @@ describe("@/utils/fileHelper", () => {
 			it("should return the preview url with two download words in source", () => {
 				const url = "/file/download/233/download";
 
-				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
+				const result = convertDownloadToPreviewUrl(url, FilePreviewWidth._500);
 
 				expect(result).toEqual(
 					`/file/preview/233/download?outputFormat=image/webp&width=500`
@@ -330,7 +330,7 @@ describe("@/utils/fileHelper", () => {
 			it("should return the preview url with two download words in source with extension", () => {
 				const url = "/file/download/233/download.txt";
 
-				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
+				const result = convertDownloadToPreviewUrl(url, FilePreviewWidth._500);
 
 				expect(result).toEqual(
 					`/file/preview/233/download.txt?outputFormat=image/webp&width=500`
@@ -353,7 +353,9 @@ describe("@/utils/fileHelper", () => {
 	describe("isScanStatusPending", () => {
 		describe("when scan status is pending", () => {
 			it("should return true", () => {
-				const result = isScanStatusPending(PreviewStatus.AWAITING_SCAN_STATUS);
+				const result = isScanStatusPending(
+					FilePreviewStatus.AWAITING_SCAN_STATUS
+				);
 
 				expect(result).toBe(true);
 			});
@@ -361,7 +363,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is not pending", () => {
 			it("should return false", () => {
-				const result = isScanStatusPending(PreviewStatus.PREVIEW_POSSIBLE);
+				const result = isScanStatusPending(FilePreviewStatus.PREVIEW_POSSIBLE);
 
 				expect(result).toBe(false);
 			});
@@ -372,7 +374,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when scan status is pending", () => {
 			it("should return true", () => {
 				const result = isScanStatusWontCheck(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
 				);
 
 				expect(result).toBe(true);
@@ -381,7 +383,9 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is not pending", () => {
 			it("should return false", () => {
-				const result = isScanStatusWontCheck(PreviewStatus.PREVIEW_POSSIBLE);
+				const result = isScanStatusWontCheck(
+					FilePreviewStatus.PREVIEW_POSSIBLE
+				);
 
 				expect(result).toBe(false);
 			});
@@ -392,7 +396,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when scan status is pending", () => {
 			it("should return true", () => {
 				const result = isScanStatusError(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
 				);
 
 				expect(result).toBe(true);
@@ -401,7 +405,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is not pending", () => {
 			it("should return false", () => {
-				const result = isScanStatusError(PreviewStatus.PREVIEW_POSSIBLE);
+				const result = isScanStatusError(FilePreviewStatus.PREVIEW_POSSIBLE);
 
 				expect(result).toBe(false);
 			});
@@ -411,7 +415,7 @@ describe("@/utils/fileHelper", () => {
 	describe("isScanStatusBlocked", () => {
 		describe("when scan status is not blocked", () => {
 			it("should return true", () => {
-				const result = isScanStatusBlocked(FileRecordScanStatus.VERIFIED);
+				const result = isScanStatusBlocked(FileRecordVirusScanStatus.VERIFIED);
 
 				expect(result).toBe(true);
 			});
@@ -419,7 +423,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is blocked", () => {
 			it("should return false", () => {
-				const result = isScanStatusBlocked(FileRecordScanStatus.BLOCKED);
+				const result = isScanStatusBlocked(FileRecordVirusScanStatus.BLOCKED);
 
 				expect(result).toBe(false);
 			});
@@ -429,7 +433,7 @@ describe("@/utils/fileHelper", () => {
 	describe("isPreviewPossible", () => {
 		describe("when preview status is possible", () => {
 			it("should return true", () => {
-				const result = isPreviewPossible(PreviewStatus.PREVIEW_POSSIBLE);
+				const result = isPreviewPossible(FilePreviewStatus.PREVIEW_POSSIBLE);
 
 				expect(result).toBe(true);
 			});
@@ -437,7 +441,9 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when preview status is AWAITING_SCAN_STATUS", () => {
 			it("should return false", () => {
-				const result = isPreviewPossible(PreviewStatus.AWAITING_SCAN_STATUS);
+				const result = isPreviewPossible(
+					FilePreviewStatus.AWAITING_SCAN_STATUS
+				);
 
 				expect(result).toBe(false);
 			});
@@ -446,7 +452,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR", () => {
 			it("should return false", () => {
 				const result = isPreviewPossible(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
 				);
 
 				expect(result).toBe(false);
@@ -456,7 +462,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK", () => {
 			it("should return false", () => {
 				const result = isPreviewPossible(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
 				);
 
 				expect(result).toBe(false);
@@ -466,7 +472,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED", () => {
 			it("should return false", () => {
 				const result = isPreviewPossible(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED
 				);
 
 				expect(result).toBe(false);
@@ -476,7 +482,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE", () => {
 			it("should return false", () => {
 				const result = isPreviewPossible(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE
 				);
 
 				expect(result).toBe(false);

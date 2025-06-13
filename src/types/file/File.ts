@@ -1,4 +1,5 @@
 import {
+	ArchiveFileParams,
 	PreviewStatus as FilePreviewStatus,
 	PreviewWidth as FilePreviewWidth,
 	FileRecordParentType as FileRecordParent,
@@ -9,6 +10,7 @@ import {
 export type FileRecord = FileRecordResponse;
 
 export {
+	ArchiveFileParams,
 	FilePreviewStatus,
 	FilePreviewWidth,
 	FileRecordParent,

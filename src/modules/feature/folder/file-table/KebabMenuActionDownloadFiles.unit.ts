@@ -35,9 +35,14 @@ describe("KebabMenuActionDownloadFiles", () => {
 		describe("when all file records are selected", () => {
 			const setup = async () => {
 				const selectedIds = ["1", "2"];
+				const now = dayjs().format("YYYYMMDD");
+				const archiveName = `${now}_test-archive`;
 
-				const downloadFilesMock = jest.spyOn(FileHelper, "downloadFiles");
-				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
+				const downloadFilesAsArchiveMock = jest.spyOn(
+					FileHelper,
+					"downloadFilesAsArchive"
+				);
+				jest.spyOn(Helper, "delay").mockResolvedValueOnce(undefined);
 
 				const { wrapper } = setupWrapper({
 					selectedIds,
@@ -46,15 +51,16 @@ describe("KebabMenuActionDownloadFiles", () => {
 				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
 				kebabMenuAction.trigger("click");
 
-				return { downloadFilesMock };
+				return { downloadFilesAsArchiveMock, selectedIds, archiveName };
 			};
 
 			it("should call downloadFiles with correct params", async () => {
-				const { downloadFilesMock } = await setup();
-				const now = dayjs().format("YYYYMMDD");
-				expect(downloadFilesMock).toHaveBeenCalledWith({
-					archiveName: `${now}_test-archive`,
-					fileRecordIds: ["1", "2"],
+				const { downloadFilesAsArchiveMock, selectedIds, archiveName } =
+					await setup();
+
+				expect(downloadFilesAsArchiveMock).toHaveBeenCalledWith({
+					archiveName,
+					fileRecordIds: selectedIds,
 				});
 			});
 		});
@@ -62,9 +68,14 @@ describe("KebabMenuActionDownloadFiles", () => {
 		describe("when only second filrecord is selected", () => {
 			const setup = async () => {
 				const selectedIds = ["2"];
+				const now = dayjs().format("YYYYMMDD");
+				const archiveName = `${now}_test-archive`;
 
-				const downloadFilesMock = jest.spyOn(FileHelper, "downloadFiles");
-				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
+				const downloadFilesAsArchiveMock = jest.spyOn(
+					FileHelper,
+					"downloadFilesAsArchive"
+				);
+				jest.spyOn(Helper, "delay").mockResolvedValueOnce(undefined);
 
 				const { wrapper } = setupWrapper({
 					selectedIds,
@@ -73,16 +84,16 @@ describe("KebabMenuActionDownloadFiles", () => {
 				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
 				kebabMenuAction.trigger("click");
 
-				return { downloadFilesMock, selectedIds };
+				return { downloadFilesAsArchiveMock, selectedIds, archiveName };
 			};
 
 			it("should call downloadFiles with correct params", async () => {
-				const { downloadFilesMock } = await setup();
+				const { downloadFilesAsArchiveMock, archiveName, selectedIds } =
+					await setup();
 
-				const now = dayjs().format("YYYYMMDD");
-				expect(downloadFilesMock).toHaveBeenCalledWith({
-					archiveName: `${now}_test-archive`,
-					fileRecordIds: ["2"],
+				expect(downloadFilesAsArchiveMock).toHaveBeenCalledWith({
+					archiveName,
+					fileRecordIds: selectedIds,
 				});
 			});
 		});
@@ -93,8 +104,11 @@ describe("KebabMenuActionDownloadFiles", () => {
 			const setup = async () => {
 				const selectedIds = ["1", "2"];
 
-				const downloadFilesMock = jest.spyOn(FileHelper, "downloadFile");
-				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
+				const downloadFilesAsArchiveMock = jest.spyOn(
+					FileHelper,
+					"downloadFilesAsArchive"
+				);
+				jest.spyOn(Helper, "delay").mockResolvedValueOnce(undefined);
 
 				const { wrapper } = setupWrapper({
 					disabled: true,
@@ -104,13 +118,13 @@ describe("KebabMenuActionDownloadFiles", () => {
 				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
 				kebabMenuAction.trigger("click");
 
-				return { downloadFilesMock };
+				return { downloadFilesAsArchiveMock };
 			};
 
 			it("should not call downloadFile", async () => {
-				const { downloadFilesMock } = await setup();
+				const { downloadFilesAsArchiveMock } = await setup();
 
-				expect(downloadFilesMock).not.toHaveBeenCalled();
+				expect(downloadFilesAsArchiveMock).not.toHaveBeenCalled();
 			});
 		});
 	});

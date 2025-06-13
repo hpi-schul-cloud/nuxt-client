@@ -27,7 +27,10 @@ export function downloadFile(url: string, fileName: string) {
 	document.body.removeChild(link);
 }
 
-export function downloadFiles(params: ArchiveFileParams) {
+// This function is used to download multiple files as a zip archive.
+// It creates a form with the necessary parameters and submits it to the server.
+// The server will then create the zip archive and return it as a file download.
+export function downloadFilesAsArchive(params: ArchiveFileParams) {
 	const form = document.createElement("form");
 	form.method = "POST";
 	form.action = "/api/v3/file/download";
