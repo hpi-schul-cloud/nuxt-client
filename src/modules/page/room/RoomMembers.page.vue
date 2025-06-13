@@ -166,6 +166,17 @@ watchEffect(() => {
 			? t("pages.rooms.members.management")
 			: t("pages.rooms.members.label");
 	}
+	if (room.value?.permissions) {
+		const { tab } = router.currentRoute.value.query;
+		const restrictedTabsForStudents = [Tab.Invitations, Tab.Confirmations];
+
+		if (
+			restrictedTabsForStudents.includes(tab as Tab) &&
+			!canAddRoomMembers.value
+		) {
+			router.replace({ name: "rooms" });
+		}
+	}
 });
 
 const pageTitle = computed(() =>
@@ -284,19 +295,6 @@ onMounted(async () => {
 onUnmounted(() => {
 	resetStore();
 });
-
-watch(
-	() => room.value?.permissions,
-	() => {
-		const { tab } = router.currentRoute.value.query;
-		if (
-			(tab === "invitations" || tab === "confirmations") &&
-			!canAddRoomMembers.value
-		) {
-			router.replace({ name: "rooms" });
-		}
-	}
-);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	if (room === undefined) return [];
