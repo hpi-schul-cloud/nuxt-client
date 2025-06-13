@@ -159,6 +159,10 @@ describe("useRoomInvitationLinkStore", () => {
 				const link = roomInvitationLinkStore.roomInvitationLinks[0];
 				link.activeUntil = roomInvitationLinkStore.DEFAULT_EXPIRED_DATE;
 
+				roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink.mockResolvedValue(
+					mockApiResponse({ data: { ...link } })
+				);
+
 				expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(3);
 				await roomInvitationLinkStore.createLink(link);
 
