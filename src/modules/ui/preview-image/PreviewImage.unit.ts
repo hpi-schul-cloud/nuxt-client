@@ -1,4 +1,3 @@
-import errorImage from "@/assets/img/image-not-available.svg";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -6,8 +5,8 @@ import {
 import { WarningAlert } from "@ui-alert";
 import { PreviewImage } from "@ui-preview-image";
 import { mount, shallowMount } from "@vue/test-utils";
-import { VImg } from "vuetify/lib/components/index";
 import { ComponentProps } from "vue-component-type-helpers";
+import { VImg } from "vuetify/lib/components/index";
 
 describe("PreviewImage", () => {
 	const setupWithShallowMount = (
@@ -89,8 +88,9 @@ describe("PreviewImage", () => {
 
 	describe("when v-img emits error", () => {
 		it("should display warning alert", async () => {
-			const { wrapper } = setupWithShallowMount();
-			const image = wrapper.findComponent(VImg);
+			const { wrapper } = setupWithMount();
+
+			const image = wrapper.find("img");
 			await image.trigger("error");
 
 			const alert = wrapper.findComponent(WarningAlert);
@@ -99,18 +99,21 @@ describe("PreviewImage", () => {
 
 		it("should emit error event", async () => {
 			const { wrapper } = setupWithShallowMount();
+
 			const image = wrapper.findComponent(VImg);
 			await image.trigger("error");
 
 			expect(wrapper.emitted("error")).toBeTruthy();
 		});
 
-		it("should pass error image to v-img", async () => {
-			const { wrapper } = setupWithShallowMount();
-			const image = wrapper.findComponent(VImg);
+		it("should render error slot", async () => {
+			const { wrapper } = setupWithMount();
+
+			const image = wrapper.find("img");
 			await image.trigger("error");
 
-			expect(image.attributes("src")).toBe(errorImage);
+			const errorSlot = wrapper.find(".v-img__error");
+			expect(errorSlot.exists()).toBe(true);
 		});
 	});
 });
