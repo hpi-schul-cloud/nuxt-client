@@ -518,11 +518,11 @@ describe("FileStorageApi Composable", () => {
 
 				fileApi.list.mockResolvedValueOnce(fetchResponse);
 
-				const response = createMock<AxiosResponse<FileRecordResponse, unknown>>(
-					{
-						data: fileRecordResponse,
-					}
-				);
+				const response = createMock<
+					AxiosResponse<FileRecordListResponse, unknown>
+				>({
+					data: { data: [fileRecordResponse] },
+				});
 
 				fileApi.deleteFiles.mockResolvedValue(response);
 

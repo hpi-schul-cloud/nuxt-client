@@ -17,15 +17,21 @@
 /**
  * 
  * @export
- * @interface RenameFileParams
+ * @interface ArchiveFileParams
  */
-export interface RenameFileParams {
+export interface ArchiveFileParams {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ArchiveFileParams
+     */
+    fileRecordIds: Array<string>;
     /**
      * 
      * @type {string}
-     * @memberof RenameFileParams
+     * @memberof ArchiveFileParams
      */
-    fileName: string;
+    archiveName: string;
 }
 
 

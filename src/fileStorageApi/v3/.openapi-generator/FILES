@@ -10,6 +10,7 @@ configuration.ts
 git_push.sh
 index.ts
 models/api-validation-error.ts
+models/archive-file-params.ts
 models/copy-file-list-response.ts
 models/copy-file-params.ts
 models/copy-file-response.ts
