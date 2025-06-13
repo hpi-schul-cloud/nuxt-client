@@ -159,6 +159,17 @@ const { isInvitationDialogOpen, invitationStep } = storeToRefs(
 	useRoomInvitationLinkStore()
 );
 
+const activeTab = computed<Tab>({
+	get() {
+		return props.tab;
+	},
+	set: async (newTab) => {
+		await router.replace({
+			query: { ...route.query, tab: newTab },
+		});
+	},
+});
+
 watchEffect(() => {
 	if (canAddRoomMembers.value !== undefined) {
 		membersInfoText.value = canAddRoomMembers.value
@@ -181,17 +192,6 @@ const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${membersInfoText.value}`)
 );
 useTitle(pageTitle);
-
-const activeTab = computed<Tab>({
-	get() {
-		return props.tab;
-	},
-	set: async (newTab) => {
-		await router.replace({
-			query: { ...route.query, tab: newTab },
-		});
-	},
-});
 
 const isVisibleTabNavigation = computed(() => {
 	return canAddRoomMembers.value && FEATURE_ROOM_MEMBERS_TABS_ENABLED;
