@@ -11,9 +11,9 @@
 		>
 			<BoardAnyTitleInput
 				ref="boardHeader"
+				:value="boardTitle"
 				class="input"
 				scope="board"
-				:value="boardTitle"
 				data-testid="board-title"
 				:is-edit-mode="isEditMode"
 				:is-focused="isFocusedById"
@@ -38,7 +38,7 @@
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 				<KebabMenuActionDelete
 					:name="title"
-					scope-language-key="components.board"
+					scope-language-key="common.words.board"
 					@click="onDeleteBoard"
 				/>
 			</BoardMenu>
@@ -106,6 +106,11 @@ const fieldWidth = ref("0px");
 onMounted(() => setTimeout(calculateWidth, 100));
 
 const boardTitle = ref("");
+const boardTitleFallback = computed(() => {
+	const translatedTitle = t("common.words.board");
+	const firstLetterInUpperCase = translatedTitle.charAt(0).toUpperCase();
+	return firstLetterInUpperCase + translatedTitle.slice(1);
+});
 
 const onStartEditMode = () => {
 	if (!hasEditPermission.value) return;
@@ -140,7 +145,7 @@ const onUnpublishBoard = () => {
 const onBoardTitleBlur = () => {
 	stopEditMode();
 	if (boardTitle.value.length < 1) {
-		updateBoardTitle(t("pages.room.boardCard.label.courseBoard"));
+		updateBoardTitle(boardTitleFallback.value);
 	}
 };
 

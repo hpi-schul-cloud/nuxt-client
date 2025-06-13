@@ -174,6 +174,7 @@ export default {
 	"common.validation.nonEmptyString":
 		"Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.and": "und",
+	"common.words.board": "Bereich",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
 	"common.words.color.blue": "Blau",
@@ -522,7 +523,6 @@ export default {
 		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
-	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
 	"components.boardElement": "Element",
