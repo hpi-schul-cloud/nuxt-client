@@ -9,6 +9,7 @@ import {
 	mockedPiniaStoreTyping,
 	roomFactory,
 	schoolFactory,
+	mockApiResponse,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
@@ -152,6 +153,29 @@ describe("useRoomInvitationLinkStore", () => {
 			);
 		});
 
+		describe("when 'activeUntil' value is DEFAULT_EXPIRED_DATE", () => {
+			it("should set 'activeUntil' for UI after creating link", async () => {
+				const links = roomInvitationLinkFactory.buildList(3);
+				const { roomDetailsStore, roomInvitationLinkStore } = setup(links);
+				const link = roomInvitationLinkStore.roomInvitationLinks[0];
+				link.activeUntil = roomInvitationLinkStore.DEFAULT_EXPIRED_DATE;
+
+				expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(3);
+				await roomInvitationLinkStore.createLink(link);
+
+				expect(
+					roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink
+				).toHaveBeenCalledWith({
+					...link,
+					roomId: roomDetailsStore.room?.id,
+				});
+
+				expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(4);
+				const createdLink = roomInvitationLinkStore.roomInvitationLinks.pop();
+				expect(createdLink?.activeUntil).toBe(undefined);
+			});
+		});
+
 		describe("when the API call fails", () => {
 			it("should show a failure message", async () => {
 				const { roomInvitationLinkStore } = setup();
@@ -192,6 +216,37 @@ describe("useRoomInvitationLinkStore", () => {
 			expect(roomInvitationLinkStore.invitationStep).toStrictEqual(
 				InvitationStep.SHARE
 			);
+		});
+
+		describe("when 'activeUntil' value is DEFAULT_EXPIRED_DATE", () => {
+			it("should set 'activeUntil' for UI after updating link", async () => {
+				const links = roomInvitationLinkFactory.buildList(3);
+				const { roomInvitationLinkStore } = setup(links);
+				const firstLink = links[0];
+				firstLink.activeUntil = roomInvitationLinkStore.DEFAULT_EXPIRED_DATE;
+
+				roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink.mockResolvedValue(
+					mockApiResponse({ data: firstLink })
+				);
+
+				await roomInvitationLinkStore.updateLink(firstLink);
+
+				expect(
+					roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink
+				).toHaveBeenCalledWith(firstLink.id, firstLink);
+
+				const updatedLinks = roomInvitationLinkStore.roomInvitationLinks;
+				expect(updatedLinks).toHaveLength(3);
+				expect(updatedLinks[0].activeUntil).toBe(undefined);
+
+				const tableDataElement =
+					roomInvitationLinkStore.invitationTableData.find(
+						(l) => l.id === firstLink.id
+					);
+				expect(tableDataElement?.activeUntil).toBe(
+					"pages.rooms.members.tables.common.no"
+				);
+			});
 		});
 
 		describe("when the API call fails", () => {

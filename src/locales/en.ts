@@ -37,6 +37,8 @@ export default {
 	"common.file.scanError":
 		"Error during virus check. Preview cannot be created. Please upload the file again.",
 	"common.file.virusDetected": "File has been locked due to a suspected virus.",
+	"common.file": "file",
+	"common.files": "files",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
@@ -517,6 +519,8 @@ export default {
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"The board's view was changed to {layout} by another user.",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"Preferred tools could not be loaded.",
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
@@ -740,6 +744,10 @@ export default {
 	"components.molecules.import.options.success": "{name} imported successfully",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"The following content will not be imported:",
+	"components.molecules.import.room.options.title": "Import room",
+	"components.molecules.import.room.rename":
+		"If necessary, the name of the room can be renamed: ",
+	"components.molecules.import.room.label": "Room name",
 	"components.molecules.import.tasks.label": "Task",
 	"components.molecules.import.tasks.rename":
 		"If necessary, the name of the task can be renamed: ",
@@ -795,6 +803,8 @@ export default {
 		"Geogebra IDs",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Course groups",
+	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
+		"Room members and permissions",
 	"components.molecules.share.options.tableHeader.InfoText":
 		"The following content will not be copied:",
 	"components.molecules.share.courses.result.linkLabel": "Link course copy",
@@ -812,6 +822,9 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Link only valid within the school",
 	"components.molecules.share.options.title": "Share settings",
+	"components.molecules.share.room.options.infoText":
+		"With the following link, this room can be copied by other people. If an actively used room should be shared, please first create a duplicate and share that.",
+	"components.molecules.share.room.result.linkLabel": "Link room copy",
 	"components.molecules.share.result.mailShare": "Send as mail",
 	"components.molecules.share.result.qrCodeScan": "Scan QR code",
 	"components.molecules.share.result.title": "Share via",

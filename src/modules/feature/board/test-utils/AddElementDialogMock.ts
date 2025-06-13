@@ -11,7 +11,7 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 	const createTextElementMock = jest.fn();
 	const createFileElementMock = jest.fn();
 
-	const elementTypeOptionsMock: Ref<
+	const staticElementTypeOptionsMock: Ref<
 		{
 			icon: string;
 			label: string;
@@ -32,6 +32,14 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 			testId: "action2-id",
 		},
 	]);
+	const dynamicElementTypeOptionsMock: Ref<
+		{
+			icon: string;
+			label: string;
+			action: () => Promise<void>;
+			testId: string;
+		}[]
+	> = ref([]);
 	const askTypeMock = props.askTypeMock || jest.fn();
 	const onFileSelectMock = jest.fn();
 	const isFilePickerOpenMock = ref(false);
@@ -40,7 +48,8 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 	const mocks = {
 		askType: askTypeMock,
 		isDialogOpen: isDialogOpenMock,
-		elementTypeOptions: elementTypeOptionsMock,
+		staticElementTypeOptions: staticElementTypeOptionsMock,
+		dynamicElementTypeOptions: dynamicElementTypeOptionsMock,
 		onElementClick: jest.fn(),
 		onFileElementClick: jest.fn(),
 		onFileSelect: onFileSelectMock,

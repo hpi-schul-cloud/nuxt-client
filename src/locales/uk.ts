@@ -38,6 +38,8 @@ export default {
 		"Помилка під час перевірки на віруси. Неможливо створити попередній перегляд. Будь ласка, завантажте файл ще раз.",
 	"common.file.scanWontCheck": "Через розмір не може бути створено прев'ю.",
 	"common.file.virusDetected": "Файл було заблоковано через підозру на вірус.",
+	"common.file": "Файл",
+	"common.files": "Файли",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
@@ -531,6 +533,8 @@ export default {
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Інший користувач змінив вигляд панелі на {layout}.",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"Не вдалося завантажити бажані інструменти.",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
@@ -757,6 +761,10 @@ export default {
 	"components.molecules.import.options.success": "{name} успішно імпортовано",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"Наступний вміст не буде імпортовано:",
+	"components.molecules.import.room.options.title": "Імпортувати кімнату",
+	"components.molecules.import.room.rename":
+		"При необхідності назву кімнати можна перейменувати: ",
+	"components.molecules.import.room.label": "Назва кімнати",
 	"components.molecules.import.tasks.label": "Завдання",
 	"components.molecules.import.tasks.rename":
 		"При необхідності назву завдання можна перейменувати: ",
@@ -819,6 +827,8 @@ export default {
 		"Ідентифікатори Geogebra",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Групи курсів",
+	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
+		"Учасники кімнати та їхні дозволи",
 	"components.molecules.share.options.tableHeader.InfoText":
 		"Наступний вміст не буде скопійовано:",
 	"components.molecules.share.courses.result.linkLabel":
@@ -834,6 +844,9 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Посилання дійсне тільки в межах школи",
 	"components.molecules.share.options.title": "Налаштування спільного доступу",
+	"components.molecules.share.room.options.infoText":
+		"За цим посиланням цю кімнату можуть скопіювати інші користувачі. Якщо потрібно поділитися кімнатою, яка активно використовується, спочатку створіть дублікат і поділіться ним.",
+	"components.molecules.share.room.result.linkLabel": "Копія теми посилання",
 	"components.molecules.share.result.mailShare": "Надіслати поштою",
 	"components.molecules.share.result.qrCodeScan": "Відскануйте QR-код",
 	"components.molecules.share.result.title": "Поділіться через",

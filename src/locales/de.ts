@@ -39,6 +39,8 @@ export default {
 		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
 	"common.file.virusDetected":
 		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
+	"common.file": "Datei",
+	"common.files": "Dateien",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
@@ -522,6 +524,8 @@ export default {
 		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"Bevorzugte Tools konnten nicht geladen werden.",
 	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
@@ -746,6 +750,10 @@ export default {
 		"{name} wurde erfolgreich importiert",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"Folgende Inhalte werden nicht importiert:",
+	"components.molecules.import.room.options.title": "Raum importieren",
+	"components.molecules.import.room.rename":
+		"Bei Bedarf kann der Name des Raumes umbenannt werden: ",
+	"components.molecules.import.room.label": "Raum-Name",
 	"components.molecules.import.tasks.label": "Aufgabe",
 	"components.molecules.import.tasks.rename":
 		"Bei Bedarf kann der Name der Aufgabe umbenannt werden: ",
@@ -812,6 +820,8 @@ export default {
 		"Geogebra IDs",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Kursgruppen",
+	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
+		"Raum-Mitglieder und Berechtigungen",
 	"components.molecules.share.options.tableHeader.InfoText":
 		"Folgende Inhalte werden nicht kopiert:",
 	"components.molecules.share.courses.result.linkLabel": "Link Kurskopie",
@@ -825,6 +835,9 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Link nur schulintern gültig",
 	"components.molecules.share.options.title": "Teilen-Einstellungen",
+	"components.molecules.share.room.options.infoText":
+		"Mit dem folgenden Link kann dieser Raum von anderen Personen kopiert werden. Wenn kein aktiv genutzter Raum geteilt werden soll, bitte zuerst ein Duplikat erstellen und dieses teilen.",
+	"components.molecules.share.room.result.linkLabel": "Link Raum-Kopie",
 	"components.molecules.share.result.mailShare": "Als Mail versenden",
 	"components.molecules.share.result.qrCodeScan": "QR-Code scannen",
 	"components.molecules.share.result.title": "Teilen über",
