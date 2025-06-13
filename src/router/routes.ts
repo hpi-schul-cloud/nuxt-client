@@ -253,7 +253,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
-		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
+		beforeEnter: [checkRoomsFeature],
 		name: "rooms",
 	},
 	{
@@ -276,7 +276,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms/:id(${REGEX_ID})/members`,
 		component: async () => (await import("@page-room")).RoomMembersPage,
-		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
+		beforeEnter: [checkRoomsFeature],
 		name: "room-members",
 		props: (route: RouteLocationNormalized) => ({
 			tab: route.query.tab,
