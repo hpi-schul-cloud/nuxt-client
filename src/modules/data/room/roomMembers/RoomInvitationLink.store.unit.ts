@@ -9,7 +9,6 @@ import {
 	mockedPiniaStoreTyping,
 	roomFactory,
 	schoolFactory,
-	mockApiResponse,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
