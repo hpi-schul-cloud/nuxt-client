@@ -13,7 +13,11 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VueWrapper } from "@vue/test-utils";
-import { useRoomInvitationLinkStore, InvitationStep } from "@data-room";
+import {
+	useRoomInvitationLinkStore,
+	InvitationStep,
+	RoomInvitationLink,
+} from "@data-room";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -35,8 +39,8 @@ jest.mock("@vueuse/integrations/useFocusTrap", () => {
 
 jest.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = jest.mocked(useBoardNotifier);
-
 jest.useFakeTimers();
+
 describe("InviteMembersDialog", () => {
 	let wrapper: VueWrapper<InstanceType<typeof InviteMembersDialog>>;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -79,6 +83,7 @@ describe("InviteMembersDialog", () => {
 			modelValue: boolean;
 			schoolName: string;
 			preDefinedStep: string;
+			editedLink: RoomInvitationLink | null;
 		}>
 	) => {
 		const { modelValue, schoolName, preDefinedStep } = {
@@ -101,6 +106,7 @@ describe("InviteMembersDialog", () => {
 								isLoading: false,
 								roomInvitationLinks,
 								invitationStep: preDefinedStep,
+								editedLink: options?.editedLink ?? null,
 							},
 						},
 					}),
@@ -227,6 +233,20 @@ describe("InviteMembersDialog", () => {
 				expect(nextButton.text()).toBe("common.actions.continue");
 			});
 
+			it("should set linkExpires-checkbox modelValue false if activeUntil value is default", async () => {
+				const { wrapper } = setup({
+					preDefinedStep: InvitationStep.EDIT,
+					editedLink: roomInvitationLinkFactory.build({
+						activeUntil: "2900-01-01T00:00:00.000Z",
+					}),
+				});
+				await nextTick();
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+
+				const linkExpiresCheckbox = checkboxes[2];
+				expect(linkExpiresCheckbox.props("modelValue")).toBe(false);
+			});
+
 			describe("when close button is clicked", () => {
 				it("should set the editedLink value to null", async () => {
 					const { wrapper, roomInvitationLinkStore } = setup({
@@ -336,7 +356,7 @@ describe("InviteMembersDialog", () => {
 
 			const expectedFormValues = {
 				title: "invitation link",
-				activeUntil: "2900-01-01T00:00:00.000Z",
+				activeUntil: roomInvitationLinkStore.DEFAULT_EXPIRED_DATE,
 				isOnlyForTeachers: true,
 				restrictedToCreatorSchool: true,
 				requiresConfirmation: true,
@@ -362,7 +382,7 @@ describe("InviteMembersDialog", () => {
 			const expectedFormValues = {
 				id: "",
 				title: "invitation link",
-				activeUntil: "2900-01-01T00:00:00.000Z",
+				activeUntil: roomInvitationLinkStore.DEFAULT_EXPIRED_DATE,
 				isOnlyForTeachers: true,
 				restrictedToCreatorSchool: true,
 				requiresConfirmation: true,
