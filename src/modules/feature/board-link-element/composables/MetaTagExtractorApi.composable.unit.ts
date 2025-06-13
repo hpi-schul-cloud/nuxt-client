@@ -107,7 +107,7 @@ describe("useMetaTagExtractorApi", () => {
 						const data = await composable?.getMetaTags(url);
 
 						expect(data.title).toEqual(
-							"components.board: Shakespear (English)"
+							"common.words.board: Shakespear (English)"
 						);
 					});
 				});
@@ -146,7 +146,7 @@ describe("useMetaTagExtractorApi", () => {
 						const data = await composable?.getMetaTags(url);
 
 						expect(data.title).toEqual(
-							"components.board: pages.room.boardCard.label.courseBoard (English)"
+							"common.words.board: pages.room.boardCard.label.courseBoard (English)"
 						);
 					});
 				});

@@ -177,6 +177,7 @@ export default {
 	"common.validation.nonEmptyString":
 		"Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.and": "y",
+	"common.words.board": "tablero",
 	"common.words.classes": "Clases",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Azul",
@@ -531,7 +532,6 @@ export default {
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Otro usuario cambió la vista del panel a {layout}.",
-	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
 	"components.boardElement": "elemento",

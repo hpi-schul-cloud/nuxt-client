@@ -176,6 +176,7 @@ export default {
 	"common.validation.nonEmptyString":
 		"Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.and": "і",
+	"common.words.board": "Дошка",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
 	"common.words.color.blue": "Синій",
@@ -531,7 +532,6 @@ export default {
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Інший користувач змінив вигляд панелі на {layout}.",
-	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
 	"components.boardElement": "Eлемент",

@@ -40,7 +40,7 @@ export const useMetaTagExtractorApi = () => {
 			[MetaDataEntityType.Course]: "common.labels.course",
 			[MetaDataEntityType.Lesson]: "common.words.topic",
 			[MetaDataEntityType.Task]: "common.words.task",
-			[MetaDataEntityType.Board]: "components.board",
+			[MetaDataEntityType.Board]: "common.words.board",
 			[MetaDataEntityType.BoardCard]: "components.boardCard",
 		};
 

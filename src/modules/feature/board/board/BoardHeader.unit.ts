@@ -215,9 +215,7 @@ describe("BoardHeader", () => {
 
 				const emitted = wrapper.emitted("update:title");
 				expect(emitted).toBeDefined();
-				expect(emitted?.[0][0]).toEqual(
-					"pages.room.boardCard.label.courseBoard"
-				);
+				expect(emitted?.[0][0]).toEqual("Common.words.board");
 			});
 		});
 
