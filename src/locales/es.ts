@@ -39,6 +39,8 @@ export default {
 		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
 	"common.file.virusDetected":
 		"Se ha bloqueado el archivo debido a un virus sospechoso.",
+	"common.file": "Archivo",
+	"common.files": "Archivos",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",

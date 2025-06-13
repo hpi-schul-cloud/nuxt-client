@@ -39,6 +39,8 @@ export default {
 		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
 	"common.file.virusDetected":
 		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
+	"common.file": "Datei",
+	"common.files": "Dateien",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
