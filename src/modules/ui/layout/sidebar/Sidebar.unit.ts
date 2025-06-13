@@ -19,6 +19,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envsFactory } from "@@/tests/test-utils";
 import { useSidebarSelection } from "./SidebarSelection.composable";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
@@ -80,6 +81,13 @@ const setup = (
 };
 
 describe("@ui-layout/Sidebar", () => {
+	beforeEach(() => {
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			authModule: AuthModule,
+		});
+	});
+
 	it("should render correctly", () => {
 		const { wrapper } = setup();
 
