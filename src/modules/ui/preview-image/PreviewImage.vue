@@ -71,7 +71,7 @@ export default defineComponent({
 
 <style>
 .v-img__error {
-	/* For some reason .v-img__error has position: absolute normally. We override it so the image is displayed. */
+	/* For some reason .v-img__error has position: absolute normally. We override it because the image is not visible otherwise. */
 	position: static;
 	background-color: white;
 }
