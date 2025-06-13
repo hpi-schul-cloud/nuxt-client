@@ -64,6 +64,7 @@ import {
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
 import { computed, ref, toRef } from "vue";
+import FileStatistic from "./FileStatistic.vue";
 import FolderTitleInput from "./FolderTitleInput.vue";
 
 interface FolderContentElementProps {
