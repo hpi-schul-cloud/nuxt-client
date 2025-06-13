@@ -2251,5 +2251,4 @@ export default {
 	"pages.folder.delete-confirmation": "Datei {name} wirklich löschen?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
 		"Der Dateiname existiert bereits.",
-	"pages.folder.files": "Dateien",
 };
