@@ -95,6 +95,7 @@ describe("SchoolSettingsPage", () => {
 				name: "School Year 3000",
 				startDate: "",
 				endDate: "",
+				courseCreationInNextYear: false,
 			},
 			...schoolGetters,
 		});

@@ -26,7 +26,8 @@ export const schoolYearResponseFactory = SchoolYearResponseFactory.define(
 		const name = `${startYear}/${(startYear + 1).toString().slice(-2)}`;
 		const startDate = new Date(`${startYear}-08-01`).toISOString();
 		const endDate = new Date(`${startYear + 1}-07-31`).toISOString();
+		const courseCreationInNextYear = false;
 
-		return { id, name, startDate, endDate };
+		return { id, name, startDate, endDate, courseCreationInNextYear };
 	}
 );

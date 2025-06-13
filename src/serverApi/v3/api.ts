@@ -9225,6 +9225,12 @@ export interface SchoolYearResponse {
      * @memberof SchoolYearResponse
      */
     endDate: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolYearResponse
+     */
+    courseCreationInNextYear: boolean;
 }
 /**
  * 
