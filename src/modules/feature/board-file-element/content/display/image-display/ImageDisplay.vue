@@ -14,7 +14,6 @@
 					<PreviewImage
 						:src="previewSrc"
 						:alt="alternativeText"
-						:cover="false"
 						:max-height="336"
 					/>
 				</div>
