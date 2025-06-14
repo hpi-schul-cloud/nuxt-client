@@ -24,6 +24,7 @@ models/file-url-params.ts
 models/files-storage-config-response.ts
 models/index.ts
 models/multi-file-params.ts
+models/parent-statistic-response.ts
 models/preview-output-mime-types.ts
 models/preview-status.ts
 models/preview-width.ts

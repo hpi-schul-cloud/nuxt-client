@@ -39,6 +39,8 @@ export default {
 		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
 	"common.file.virusDetected":
 		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
+	"common.file": "Datei",
+	"common.files": "Dateien",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
@@ -522,6 +524,8 @@ export default {
 		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"Bevorzugte Tools konnten nicht geladen werden.",
 	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",

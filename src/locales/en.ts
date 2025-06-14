@@ -37,6 +37,8 @@ export default {
 	"common.file.scanError":
 		"Error during virus check. Preview cannot be created. Please upload the file again.",
 	"common.file.virusDetected": "File has been locked due to a suspected virus.",
+	"common.file": "file",
+	"common.files": "files",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
@@ -517,6 +519,8 @@ export default {
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"The board's view was changed to {layout} by another user.",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"Preferred tools could not be loaded.",
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",

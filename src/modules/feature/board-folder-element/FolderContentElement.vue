@@ -40,12 +40,14 @@
 				</template>
 			</ContentElementBar>
 		</router-link>
-		<v-card-text v-if="isEditMode">
+		<v-card-text>
 			<FolderTitleInput
+				v-if="isEditMode"
 				:data-testid="`folder-title-input-${columnIndex}-${rowIndex}-${elementIndex}`"
 				:title="element.content.title"
 				@update:title="onUpdateTitle"
 			/>
+			<FileStatistic :element-id="element.id" />
 		</v-card-text>
 	</v-card>
 </template>
@@ -61,21 +63,21 @@ import {
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
-import { computed, PropType, ref, toRef } from "vue";
+import { computed, ref, toRef } from "vue";
+import FileStatistic from "./FileStatistic.vue";
 import FolderTitleInput from "./FolderTitleInput.vue";
 
-const props = defineProps({
-	element: {
-		type: Object as PropType<FileFolderElement>,
-		required: true,
-	},
-	isEditMode: { type: Boolean, required: true },
-	isNotFirstElement: { type: Boolean, required: false },
-	isNotLastElement: { type: Boolean, required: false },
-	columnIndex: { type: Number, required: true },
-	rowIndex: { type: Number, required: true },
-	elementIndex: { type: Number, required: true },
-});
+interface FolderContentElementProps {
+	element: FileFolderElement;
+	isEditMode: boolean;
+	isNotFirstElement?: boolean;
+	isNotLastElement?: boolean;
+	columnIndex: number;
+	rowIndex: number;
+	elementIndex: number;
+}
+
+const props = defineProps<FolderContentElementProps>();
 
 const emit = defineEmits<{
 	(e: "delete:element", elementId: string): void;
