@@ -26,9 +26,11 @@ import { mdiCheck } from "@icons/material";
 import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { title } = defineProps({
-	title: { type: String, required: true },
-});
+interface FolderTitleInputProps {
+	title: string;
+}
+
+const props = defineProps<FolderTitleInputProps>();
 
 const emit = defineEmits<{
 	(e: "update:title", title: string): void;
@@ -47,7 +49,7 @@ const defaultTitle = t("pages.folder.untitled");
 const titleRef = ref("");
 
 watch(
-	() => title,
+	() => props.title,
 	(newTitle) => {
 		titleRef.value = newTitle || defaultTitle;
 	},
@@ -62,6 +64,7 @@ const onConfirm = async () => {
 	if (isTitleValid.value) {
 		emit("update:title", titleRef.value);
 	}
+
 	titleRef.value = titleRef.value || defaultTitle;
 };
 
