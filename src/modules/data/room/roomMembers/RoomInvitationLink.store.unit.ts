@@ -5,10 +5,10 @@ import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
 	meResponseFactory,
+	mockApiResponse,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	schoolFactory,
-	mockApiResponse,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
@@ -17,11 +17,7 @@ import { useBoardNotifier } from "@util-board";
 import { AxiosInstance, AxiosPromise } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
-import {
-	InvitationStep,
-	RoomInvitationLink,
-	UpdateRoomInvitationLinkDto,
-} from "./types";
+import { InvitationStep, RoomInvitationLink } from "./types";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createAxiosError } from "@util-axios-error";
 import { RoomIdResponse } from "@/serverApi/v3/api";
@@ -139,6 +135,10 @@ describe("useRoomInvitationLinkStore", () => {
 			const { roomDetailsStore, roomInvitationLinkStore } = setup();
 			const link = roomInvitationLinkFactory.build();
 
+			roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink.mockResolvedValue(
+				mockApiResponse({ data: link })
+			);
+
 			await roomInvitationLinkStore.createLink(link);
 
 			expect(
@@ -158,6 +158,10 @@ describe("useRoomInvitationLinkStore", () => {
 				const { roomDetailsStore, roomInvitationLinkStore } = setup(links);
 				const link = roomInvitationLinkStore.roomInvitationLinks[0];
 				link.activeUntil = roomInvitationLinkStore.DEFAULT_EXPIRED_DATE;
+
+				roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink.mockResolvedValue(
+					mockApiResponse({ data: { ...link } })
+				);
 
 				expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(3);
 				await roomInvitationLinkStore.createLink(link);
@@ -200,8 +204,12 @@ describe("useRoomInvitationLinkStore", () => {
 			const links = roomInvitationLinkFactory.buildList(3);
 			const { roomInvitationLinkStore } = setup(links);
 
-			const firstLink: UpdateRoomInvitationLinkDto = links[0];
+			const firstLink = links[0];
 			firstLink.title = "Updated Link";
+
+			roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink.mockResolvedValue(
+				mockApiResponse({ data: firstLink })
+			);
 
 			await roomInvitationLinkStore.updateLink(firstLink);
 

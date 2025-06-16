@@ -30,6 +30,7 @@ export const mockSchool: School = {
 		name: "",
 		startDate: "",
 		endDate: "",
+		courseCreationInNextYear: false,
 	},
 	purpose: undefined,
 	features: [],
@@ -55,18 +56,21 @@ export const mockSchool: School = {
 			name: "",
 			startDate: "",
 			endDate: "",
+			courseCreationInNextYear: false,
 		},
 		lastYear: {
 			id: "",
 			name: "",
 			startDate: "",
 			endDate: "",
+			courseCreationInNextYear: false,
 		},
 		activeYear: {
 			id: "",
 			name: "",
 			startDate: "",
 			endDate: "",
+			courseCreationInNextYear: false,
 		},
 		schoolYears: [
 			{
@@ -74,6 +78,7 @@ export const mockSchool: School = {
 				name: "",
 				startDate: "",
 				endDate: "",
+				courseCreationInNextYear: false,
 			},
 		],
 	},
