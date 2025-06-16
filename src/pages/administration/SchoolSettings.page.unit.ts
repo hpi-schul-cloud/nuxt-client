@@ -233,6 +233,7 @@ describe("SchoolSettingsPage", () => {
 
 		describe("when maintenance status is undefined", () => {
 			it("should hide school year change panel", () => {
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = undefined;
 				const { wrapper } = getWrapper();
 
 				expect(

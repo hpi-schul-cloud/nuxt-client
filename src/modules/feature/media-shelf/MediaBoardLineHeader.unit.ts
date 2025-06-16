@@ -4,17 +4,12 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler } from "@data-board";
 import { BoardAnyTitleInput } from "@feature-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 
-jest.mock("@data-board");
+jest.mock("@data-board/BoardFocusHandler.composable");
 
 describe("MediaBoardLineHeader", () => {
-	let useBoardFocusHandlerMock: DeepMocked<
-		ReturnType<typeof useBoardFocusHandler>
-	>;
-
 	const getWrapper = () => {
 		const wrapper = shallowMount(MediaBoardLineHeader, {
 			global: {
@@ -31,10 +26,7 @@ describe("MediaBoardLineHeader", () => {
 	};
 
 	beforeEach(() => {
-		useBoardFocusHandlerMock =
-			createMock<ReturnType<typeof useBoardFocusHandler>>();
-
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		jest.mocked(useBoardFocusHandler).mockReturnValue({});
 	});
 
 	afterEach(() => {
