@@ -1,11 +1,8 @@
-import * as FileHelper from "@/utils/fileHelper";
-import * as Helper from "@/utils/helpers";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { KebabMenuAction } from "@ui-kebab-menu";
-import dayjs from "dayjs";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 
 describe("KebabMenuActionDownloadFiles", () => {
@@ -13,85 +10,58 @@ describe("KebabMenuActionDownloadFiles", () => {
 		jest.resetAllMocks();
 	});
 
-	const setupWrapper = (props: { selectedIds: string[] }) => {
+	const setupWrapper = (props: {
+		selectedIds: string[];
+		disabled: boolean;
+	}) => {
 		const wrapper = mount(KebabMenuActionDownloadFiles, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
 				selectedIds: props.selectedIds,
-				archiveName: "test-archive",
+				disabled: props.disabled,
 			},
 		});
 
 		return { wrapper };
 	};
 
-	describe("when action is clicked", () => {
-		describe("when all file records are selected", () => {
-			const setup = async () => {
-				const selectedIds = ["1", "2"];
-				const now = dayjs().format("YYYYMMDD");
-				const archiveName = `${now}_test-archive`;
-
-				const downloadFilesAsArchiveMock = jest.spyOn(
-					FileHelper,
-					"downloadFilesAsArchive"
-				);
-				jest.spyOn(Helper, "delay").mockResolvedValueOnce(undefined);
-
-				const { wrapper } = setupWrapper({
-					selectedIds,
-				});
-
-				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
-				kebabMenuAction.trigger("click");
-
-				return { downloadFilesAsArchiveMock, selectedIds, archiveName };
-			};
-
-			it("should call downloadFiles with correct params", async () => {
-				const { downloadFilesAsArchiveMock, selectedIds, archiveName } =
-					await setup();
-
-				expect(downloadFilesAsArchiveMock).toHaveBeenCalledWith({
-					archiveName,
-					fileRecordIds: selectedIds,
-				});
+	describe("when disabled is true", () => {
+		it("does not emit", async () => {
+			const { wrapper } = setupWrapper({
+				selectedIds: ["1", "2"],
+				disabled: true,
 			});
+
+			await wrapper.findComponent(KebabMenuAction).trigger("click");
+
+			expect(wrapper.emitted("download")).toBeFalsy();
 		});
+	});
 
-		describe("when only second filrecord is selected", () => {
-			const setup = async () => {
-				const selectedIds = ["2"];
-				const now = dayjs().format("YYYYMMDD");
-				const archiveName = `${now}_test-archive`;
-
-				const downloadFilesAsArchiveMock = jest.spyOn(
-					FileHelper,
-					"downloadFilesAsArchive"
-				);
-				jest.spyOn(Helper, "delay").mockResolvedValueOnce(undefined);
-
-				const { wrapper } = setupWrapper({
-					selectedIds,
-				});
-
-				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
-				kebabMenuAction.trigger("click");
-
-				return { downloadFilesAsArchiveMock, selectedIds, archiveName };
-			};
-
-			it("should call downloadFiles with correct params", async () => {
-				const { downloadFilesAsArchiveMock, archiveName, selectedIds } =
-					await setup();
-
-				expect(downloadFilesAsArchiveMock).toHaveBeenCalledWith({
-					archiveName,
-					fileRecordIds: selectedIds,
-				});
+	describe("when selectedIds is empty ", () => {
+		it("does not emit", async () => {
+			const { wrapper } = setupWrapper({
+				selectedIds: [],
+				disabled: false,
 			});
+
+			await wrapper.findComponent(KebabMenuAction).trigger("click");
+
+			expect(wrapper.emitted("download")).toBeFalsy();
+		});
+	});
+
+	describe("when disabled is false and selectedIds is not empty", () => {
+		it("emits download with selectedIds", async () => {
+			const selectedIds = ["1", "2"];
+			const { wrapper } = setupWrapper({ selectedIds, disabled: false });
+
+			await wrapper.findComponent(KebabMenuAction).trigger("click");
+
+			expect(wrapper.emitted("download")).toBeTruthy();
+			expect(wrapper.emitted("download")![0]).toEqual([selectedIds]);
 		});
 	});
 });
