@@ -176,16 +176,12 @@ const { askConfirmation } = useConfirmationDialog();
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 const header = ref<HTMLElement | null>(null);
-
 const search = ref("");
 
 const stickyStyle = computed(() => {
 	const { top } = useElementBounding(header);
 	const isDesktop = !(isExtraSmallDisplay.value || isMobileDevice.value);
-	const extraHeight =
-		isDesktop && top.value === props.headerBottom && isExtraSmallDisplay
-			? 90
-			: 0;
+	const extraHeight = isDesktop && top.value === props.headerBottom ? 100 : 0;
 
 	return {
 		top: `${props.headerBottom}px`,
