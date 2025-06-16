@@ -54,6 +54,8 @@ describe("RichTextContentElement", () => {
 	const setup = (props: {
 		element: RichTextElementResponse;
 		isEditMode: boolean;
+		columnIndex?: number;
+		elementIndex?: number;
 	}) => {
 		const wrapper = mount(RichTextContentElementComponent, {
 			global: {
@@ -67,7 +69,11 @@ describe("RichTextContentElement", () => {
 					RichTextContentElementEdit: true,
 				},
 			},
-			props,
+			props: {
+				columnIndex: props.columnIndex ?? 0,
+				elementIndex: props.elementIndex ?? 0,
+				...props,
+			},
 		});
 
 		return { wrapper };
@@ -85,6 +91,32 @@ describe("RichTextContentElement", () => {
 			);
 			expect(displayComponent.exists()).toBe(true);
 		});
+
+		it("should add first-element class when element is first element", () => {
+			const { wrapper } = setup({
+				element: mockElement,
+				isEditMode: false,
+				elementIndex: 0,
+			});
+			const displayComponent = wrapper.findComponent(
+				RichTextContentElementDisplayComponent
+			);
+
+			expect(displayComponent.classes()).toContain("first-element");
+		});
+
+		it("should not add first-element class when element is not first element", () => {
+			const { wrapper } = setup({
+				element: mockElement,
+				isEditMode: false,
+				elementIndex: 1,
+			});
+			const displayComponent = wrapper.findComponent(
+				RichTextContentElementDisplayComponent
+			);
+
+			expect(displayComponent.classes()).not.toContain("first-element");
+		});
 	});
 
 	describe("when element is in edit mode", () => {
@@ -98,6 +130,30 @@ describe("RichTextContentElement", () => {
 				RichTextContentElementEditComponent
 			);
 			expect(editComponent.exists()).toBe(true);
+		});
+
+		it("should add first-element class when element is first element", () => {
+			const { wrapper } = setup({
+				element: mockElement,
+				isEditMode: true,
+				elementIndex: 0,
+			});
+			const editComponent = wrapper.findComponent(
+				RichTextContentElementEditComponent
+			);
+
+			expect(editComponent.classes()).toContain("first-element");
+		});
+		it("should not add first-element class when element is not first element", () => {
+			const { wrapper } = setup({
+				element: mockElement,
+				isEditMode: true,
+				elementIndex: 1,
+			});
+			const editComponent = wrapper.findComponent(
+				RichTextContentElementEditComponent
+			);
+			expect(editComponent.classes()).not.toContain("first-element");
 		});
 
 		describe("and delete:element event is emitted from RichTextContentElementEdit component", () => {

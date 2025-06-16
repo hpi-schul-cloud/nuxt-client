@@ -2,12 +2,14 @@
 	<div>
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
+			:class="{ 'first-element': isFirstElement }"
 			:data-testid="`rich-text-display-${columnIndex}-${elementIndex}`"
 			:value="element.content.text"
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"
 			:autofocus="autofocus"
+			:class="{ 'first-element': isFirstElement }"
 			:value="modelValue.text"
 			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
 			:column-index="columnIndex"
@@ -22,7 +24,7 @@
 <script setup lang="ts">
 import { RichTextElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { PropType, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef } from "vue";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
@@ -61,6 +63,8 @@ const onBlur = () => {
 };
 
 const onKeyUp = () => ensurePoliteNotifications();
+
+const isFirstElement = computed(() => props.elementIndex === 0);
 </script>
 <style lang="scss" scoped>
 :deep(.ck-content) {
@@ -141,11 +145,8 @@ const onKeyUp = () => ensurePoliteNotifications();
 		right: 8px;
 	}
 }
-</style>
-<style>
-/* Set margin for first headings in cards */
-.v-card-text > div:first-child .ck-content h4:first-child,
-.v-card-text > div:first-child .ck-content h5:first-child {
+
+.first-element > :is(h4, h5):first-child {
 	margin-top: 0;
 }
 </style>
