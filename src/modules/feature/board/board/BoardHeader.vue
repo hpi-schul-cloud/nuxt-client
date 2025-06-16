@@ -66,6 +66,7 @@ import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardDraftChip from "./BoardDraftChip.vue";
+import { upperCaseFirstChar } from "@/utils/textFormatting";
 
 const props = defineProps({
 	boardId: {
@@ -108,8 +109,7 @@ onMounted(() => setTimeout(calculateWidth, 100));
 const boardTitle = ref("");
 const boardTitleFallback = computed(() => {
 	const translatedTitle = t("common.words.board");
-	const firstLetterInUpperCase = translatedTitle.charAt(0).toUpperCase();
-	return firstLetterInUpperCase + translatedTitle.slice(1);
+	return upperCaseFirstChar(translatedTitle);
 });
 
 const onStartEditMode = () => {
