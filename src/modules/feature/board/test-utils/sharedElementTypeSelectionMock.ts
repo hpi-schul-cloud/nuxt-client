@@ -20,13 +20,20 @@ export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 
 	const closeDialog = closeDialogMock ?? jest.fn();
 	const isDialogOpen = ref(false);
+	const isDialogLoading = ref(false);
 
-	const elementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);
+	const staticElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref(
+		[]
+	);
+	const dynamicElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> =
+		ref([]);
 
 	const mocks = {
 		closeDialog,
 		isDialogOpen,
-		elementTypeOptions,
+		isDialogLoading,
+		staticElementTypeOptions,
+		dynamicElementTypeOptions,
 	};
 
 	mockedSharedElementTypeSelection.mockReturnValue(mocks);

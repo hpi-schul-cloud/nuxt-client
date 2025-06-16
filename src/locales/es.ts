@@ -533,6 +533,8 @@ export default {
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Otro usuario cambió la vista del panel a {layout}.",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"No se pudieron cargar las herramientas preferidas.",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
