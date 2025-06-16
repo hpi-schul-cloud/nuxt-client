@@ -164,7 +164,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
+const { xs: isExtraSmallDisplay, lgAndUp: isDesktop } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds } =
@@ -180,12 +180,13 @@ const search = ref("");
 
 const stickyStyle = computed(() => {
 	const { top } = useElementBounding(header);
-	const isDesktop = !(isExtraSmallDisplay.value || isMobileDevice.value);
-	const extraHeight = isDesktop && top.value === props.headerBottom ? 100 : 0;
+	const extraHeight =
+		isDesktop.value && top.value === props.headerBottom ? 100 : 0;
 
 	return {
+		transition: isDesktop.value ? "ease-in-out 0.2s" : "none",
 		top: `${props.headerBottom}px`,
-		height: isDesktop ? `${extraHeight}px` : "auto",
+		height: isDesktop.value ? `${extraHeight}px` : "auto",
 	};
 });
 
