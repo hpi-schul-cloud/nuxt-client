@@ -2,7 +2,10 @@
 	<div
 		ref="header"
 		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header sticky"
-		:class="{ 'flex-column': isExtraSmallDisplay }"
+		:class="{
+			'flex-column': isExtraSmallDisplay,
+			'pt-7 pb-2': lgAndUp,
+		}"
 		:style="stickyStyle"
 	>
 		<ActionMenu
@@ -152,7 +155,6 @@ import { storeToRefs } from "pinia";
 import { ChangeRole } from "@feature-room";
 import { authModule } from "@/store/store-accessor";
 import { RoleName } from "@/serverApi/v3";
-import { useElementBounding } from "@vueuse/core";
 
 const { canAddRoomMembers } = useRoomAuthorization();
 
@@ -164,7 +166,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay, lgAndUp: isDesktop } = useDisplay();
+const { xs: isExtraSmallDisplay, lgAndUp } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds } =
@@ -178,17 +180,9 @@ const membersToChangeRole = ref<RoomMember[]>([]);
 const header = ref<HTMLElement | null>(null);
 const search = ref("");
 
-const stickyStyle = computed(() => {
-	const { top } = useElementBounding(header);
-	const extraHeight =
-		isDesktop.value && top.value === props.headerBottom ? 100 : 0;
-
-	return {
-		transition: isDesktop.value ? "ease-in-out 0.2s" : "none",
-		top: `${props.headerBottom}px`,
-		height: isDesktop.value ? `${extraHeight}px` : "auto",
-	};
-});
+const stickyStyle = computed(() => ({
+	top: `${props.headerBottom}px`,
+}));
 
 const membersFilterCount = ref(roomMembersWithoutApplicants.value?.length);
 const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {

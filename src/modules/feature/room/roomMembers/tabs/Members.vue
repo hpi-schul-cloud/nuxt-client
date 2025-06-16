@@ -12,7 +12,7 @@
 		</i18n-t>
 	</div>
 
-	<div class="mb-12 mt-8">
+	<div class="mb-12" :class="{ 'mt-8': mdAndDown }">
 		<MembersTable v-if="!isLoading" :header-bottom="headerBottom" />
 	</div>
 </template>
@@ -24,6 +24,7 @@ import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { MembersTable } from "@feature-room";
 import { envConfigModule } from "@/store";
+import { useDisplay } from "vuetify";
 
 defineProps({
 	headerBottom: {
@@ -37,6 +38,7 @@ const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
 const { isLoading } = storeToRefs(roomMembersStore);
 const { canAddRoomMembers } = useRoomAuthorization();
+const { mdAndDown } = useDisplay();
 
 const linkAriaLabel = computed(
 	() =>
