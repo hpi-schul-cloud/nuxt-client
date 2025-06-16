@@ -3,7 +3,7 @@ export const upperCaseFirstChar = (text: string) =>
 
 export const toKebabCase = (text: string) =>
 	text
-		.replace(/([\w])(?=[A-Z])/g, (match) => {
+		.replace(/(\w)(?=[A-Z])/g, (match) => {
 			return match[0] + "-";
 		})
 		.toLowerCase();
