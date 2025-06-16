@@ -42,7 +42,12 @@ describe("FolderContentElement", () => {
 		element?: FileFolderElement;
 	}) => {
 		const wrapper = mount(FolderContentElement, {
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: {
+					FileStatistic: true,
+				},
+			},
 			props: {
 				element: options.element || mockElement,
 				isEditMode: options.isEditMode ?? false,
@@ -66,6 +71,7 @@ describe("FolderContentElement", () => {
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
 			const { wrapper } = setupWrapper({});
+
 			expect(wrapper.exists()).toBe(true);
 		});
 
@@ -73,6 +79,7 @@ describe("FolderContentElement", () => {
 			it("should render folder title", () => {
 				const { wrapper } = setupWrapper({});
 				const title = wrapper.find("[data-testid='board-folder-element']");
+
 				expect(title.text()).toBe("Test Folder");
 			});
 		});
@@ -88,6 +95,7 @@ describe("FolderContentElement", () => {
 					},
 				});
 				const title = wrapper.find("[data-testid='board-folder-element']");
+
 				expect(title.text()).toBe(
 					"components.cardElement.folderElement.untitled"
 				);
@@ -97,6 +105,7 @@ describe("FolderContentElement", () => {
 		it("should render folder icon", () => {
 			const { wrapper } = setupWrapper({});
 			const contentElementBar = wrapper.findComponent(ContentElementBar);
+
 			expect(contentElementBar.props("icon")).toBe(mdiFolderOpenOutline);
 		});
 	});
@@ -106,8 +115,8 @@ describe("FolderContentElement", () => {
 			const { wrapper } = setupWrapper({
 				isEditMode: false,
 			});
-
 			const menu = wrapper.findComponent(BoardMenu);
+
 			expect(menu.exists()).toBe(false);
 		});
 
@@ -135,8 +144,8 @@ describe("FolderContentElement", () => {
 				const { wrapper } = setupWrapper({
 					isEditMode: true,
 				});
-
 				const menu = wrapper.findComponent(BoardMenu);
+
 				expect(menu.exists()).toBe(true);
 				expect(menu.props("scope")).toBe(BoardMenuScope.FOLDER_ELEMENT);
 			});

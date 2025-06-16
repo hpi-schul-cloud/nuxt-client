@@ -13,6 +13,7 @@ export * from './file-record-scan-status';
 export * from './file-url-params';
 export * from './files-storage-config-response';
 export * from './multi-file-params';
+export * from './parent-statistic-response';
 export * from './preview-output-mime-types';
 export * from './preview-status';
 export * from './preview-width';
