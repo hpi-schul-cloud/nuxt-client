@@ -16,6 +16,7 @@
 import {
 	convertDownloadToPreviewUrl,
 	isAudioMimeType,
+	isPdfMimeType,
 	isPreviewPossible,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
@@ -38,13 +39,25 @@ const isInteractive = computed(
 		fileRecordItem.isSelectable &&
 		(isPreviewPossible(fileRecordItem.previewStatus) ||
 			isAudioMimeType(fileRecordItem.mimeType) ||
-			isVideoMimeType(fileRecordItem.mimeType))
+			isVideoMimeType(fileRecordItem.mimeType) ||
+			isPdfMimeType(fileRecordItem.mimeType))
 );
 
 const handleClick = () => {
-	if (isPreviewPossible(fileRecordItem.previewStatus)) openImageInLightbox();
-	if (isAudioMimeType(fileRecordItem.mimeType)) openAudioPlayerInLightbox();
-	if (isVideoMimeType(fileRecordItem.mimeType)) openVideoInLightbox();
+	const hasPreview = isPreviewPossible(fileRecordItem.previewStatus);
+	const isAudio = isAudioMimeType(fileRecordItem.mimeType);
+	const isVideo = isVideoMimeType(fileRecordItem.mimeType);
+	const isPdf = isPdfMimeType(fileRecordItem.mimeType);
+
+	if (isPdf) {
+		window.open(fileRecordItem.url, "_blank");
+	} else if (hasPreview) {
+		openImageInLightbox();
+	} else if (isAudio) {
+		openAudioPlayerInLightbox();
+	} else if (isVideo) {
+		openVideoInLightbox();
+	}
 };
 
 const openImageInLightbox = () => {
