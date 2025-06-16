@@ -38,6 +38,8 @@ export default {
 		"Помилка під час перевірки на віруси. Неможливо створити попередній перегляд. Будь ласка, завантажте файл ще раз.",
 	"common.file.scanWontCheck": "Через розмір не може бути створено прев'ю.",
 	"common.file.virusDetected": "Файл було заблоковано через підозру на вірус.",
+	"common.file": "Файл",
+	"common.files": "Файли",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
@@ -532,6 +534,8 @@ export default {
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Інший користувач змінив вигляд панелі на {layout}.",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"Не вдалося завантажити бажані інструменти.",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
 	"components.boardElement": "Eлемент",

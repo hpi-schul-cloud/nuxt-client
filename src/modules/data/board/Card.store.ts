@@ -28,6 +28,8 @@ import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 export const useCardStore = defineStore("cardStore", () => {
 	const cards: Ref<Record<string, CardResponse>> = ref({});
 	const preferredTools: Ref<PreferredToolResponse[]> = ref([]);
+	const isPreferredToolsLoading: Ref<boolean> = ref(false);
+
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const restApi = useCardRestApi();
@@ -239,7 +241,11 @@ export const useCardStore = defineStore("cardStore", () => {
 	const loadPreferredTools = async (
 		contextType: ToolContextType
 	): Promise<void> => {
+		isPreferredToolsLoading.value = true;
+
 		preferredTools.value = (await restApi.getPreferredTools(contextType)) || [];
+
+		isPreferredToolsLoading.value = false;
 	};
 
 	const disconnectSocketRequest = () => {
@@ -271,6 +277,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		updateCardTitleSuccess,
 		loadPreferredTools,
 		preferredTools,
+		isPreferredToolsLoading,
 		disconnectSocketRequest,
 	};
 });

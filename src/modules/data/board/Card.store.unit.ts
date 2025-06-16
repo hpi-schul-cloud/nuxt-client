@@ -100,11 +100,35 @@ describe("CardStore", () => {
 			createMock<ReturnType<typeof useSocketConnection>>();
 		mockedUseSocketConnection.mockReturnValue(mockedSocketApiHandler);
 
-		mockedCardSocketApiActions =
-			createMock<ReturnType<typeof useCardSocketApi>>();
+		mockedCardSocketApiActions = createMock<
+			ReturnType<typeof useCardSocketApi>
+		>({
+			dispatch: jest.fn().mockResolvedValue(undefined),
+			fetchCardRequest: jest.fn(),
+			createElementRequest: jest.fn(),
+			deleteElementRequest: jest.fn(),
+			updateElementRequest: jest.fn(),
+			moveElementRequest: jest.fn(),
+			deleteCardRequest: jest.fn(),
+			updateCardTitleRequest: jest.fn(),
+			updateCardHeightRequest: jest.fn(),
+			disconnectSocketRequest: jest.fn(),
+		});
 		mockedUseCardSocketApi.mockReturnValue(mockedCardSocketApiActions);
 
-		mockedCardRestApiActions = createMock<ReturnType<typeof useCardRestApi>>();
+		mockedCardRestApiActions = createMock<ReturnType<typeof useCardRestApi>>({
+			fetchCardRequest: jest.fn(),
+			createElementRequest: jest.fn(),
+			createPreferredElement: jest.fn(),
+			getPreferredTools: jest.fn(),
+			deleteElementRequest: jest.fn(),
+			updateElementRequest: jest.fn(),
+			moveElementRequest: jest.fn(),
+			deleteCardRequest: jest.fn(),
+			updateCardTitleRequest: jest.fn(),
+			updateCardHeightRequest: jest.fn(),
+			disconnectSocketRequest: jest.fn(),
+		});
 		mockedUseCardRestApi.mockReturnValue(mockedCardRestApiActions);
 
 		mockedSharedLastCreatedElementActions =
@@ -150,16 +174,9 @@ describe("CardStore", () => {
 			cardStore.cards[card.id] = card;
 		}
 
-		const preferredTools = [
-			{
-				name: "mock tool",
-				iconName: "mdiMock",
-				schoolExternalToolId: ObjectIdMock(),
-			},
-		];
-		cardStore.preferredTools = preferredTools;
+		cardStore.preferredTools = [];
 
-		return { cardStore, cardId, elements, preferredTools };
+		return { cardStore, cardId, elements };
 	};
 
 	const focusSetup = (id: string) => {
@@ -817,14 +834,52 @@ describe("CardStore", () => {
 	});
 
 	describe("loadPreferredTools", () => {
-		it("should call getPreferredTools", () => {
-			const { cardStore } = setup();
+		describe("when the api call is successful", () => {
+			const successSetup = () => {
+				const { cardStore } = setup();
 
-			cardStore.loadPreferredTools(ToolContextType.BoardElement);
+				const preferredTools = [
+					{
+						name: "mock tool",
+						iconName: "mdiMock",
+						schoolExternalToolId: ObjectIdMock(),
+					},
+				];
 
-			expect(mockedCardRestApiActions.getPreferredTools).toHaveBeenCalledWith(
-				ToolContextType.BoardElement
-			);
+				mockedCardRestApiActions.getPreferredTools.mockResolvedValueOnce(
+					preferredTools
+				);
+
+				return { cardStore, preferredTools };
+			};
+
+			it("should call getPreferredTools", async () => {
+				const { cardStore } = successSetup();
+
+				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+
+				expect(mockedCardRestApiActions.getPreferredTools).toHaveBeenCalledWith(
+					ToolContextType.BoardElement
+				);
+			});
+
+			it("should set the preferredTools ref", async () => {
+				const { cardStore, preferredTools } = successSetup();
+
+				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+
+				expect(cardStore.preferredTools).toEqual(
+					expect.arrayContaining(preferredTools)
+				);
+			});
+
+			it("should set the isPreferredToolsLoading at the end to false", async () => {
+				const { cardStore } = successSetup();
+
+				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+
+				expect(cardStore.isPreferredToolsLoading).toBe(false);
+			});
 		});
 	});
 

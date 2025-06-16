@@ -178,6 +178,7 @@ import {
 	InvitationStep,
 	UpdateRoomInvitationLinkDto,
 	useRoomInvitationLinkStore,
+	RoomInvitationFormData,
 } from "@data-room";
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
@@ -203,20 +204,19 @@ const emit = defineEmits<{
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { createLink, updateLink } = useRoomInvitationLinkStore();
-const { invitationStep, sharedUrl, editedLink } = storeToRefs(
-	useRoomInvitationLinkStore()
-);
+const { invitationStep, sharedUrl, editedLink, DEFAULT_EXPIRED_DATE } =
+	storeToRefs(useRoomInvitationLinkStore());
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
 
-const defaultFormData = {
+const defaultFormData: RoomInvitationFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
 	isValidForStudents: false,
 	activeUntilChecked: false,
-	activeUntil: null as Date | null,
+	activeUntil: undefined,
 	requiresConfirmation: true,
 	id: "",
 };
@@ -235,9 +235,7 @@ const isDatePickerDisabled = computed(() => {
 });
 
 const isSubmitDisabled = computed(() => {
-	return (
-		formData.value.activeUntilChecked && formData.value.activeUntil === null
-	);
+	return formData.value.activeUntilChecked && !formData.value.activeUntil;
 });
 
 const modalTitle = computed(() => {
@@ -270,7 +268,7 @@ const subTitle = computed(() => {
 	return subTitleMap[invitationStep.value];
 });
 
-const onUpdateDate = (date: Date | null) => {
+const onUpdateDate = (date: Date) => {
 	formData.value.activeUntil = date;
 	unpause();
 };
@@ -297,7 +295,7 @@ const onContinue = async () => {
 		activeUntil:
 			formData.value.activeUntilChecked && !!formData.value.activeUntil
 				? formData.value.activeUntil.toString()
-				: "2900-01-01T00:00:00.000Z",
+				: DEFAULT_EXPIRED_DATE.value,
 		isOnlyForTeachers: !formData.value.isValidForStudents,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
@@ -358,8 +356,10 @@ watch(
 			formData.value.restrictedToCreatorSchool =
 				newVal.restrictedToCreatorSchool;
 			formData.value.isValidForStudents = !newVal.isOnlyForTeachers;
-			formData.value.activeUntilChecked = newVal.activeUntil !== null;
-			formData.value.activeUntil = new Date(newVal.activeUntil!);
+			formData.value.activeUntilChecked = newVal.activeUntil !== undefined;
+			formData.value.activeUntil = newVal.activeUntil
+				? new Date(newVal.activeUntil)
+				: undefined;
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
 		}
 	}

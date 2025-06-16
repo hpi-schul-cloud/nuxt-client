@@ -39,6 +39,8 @@ export default {
 		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
 	"common.file.virusDetected":
 		"Se ha bloqueado el archivo debido a un virus sospechoso.",
+	"common.file": "Archivo",
+	"common.files": "Archivos",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
@@ -532,6 +534,8 @@ export default {
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Otro usuario cambió la vista del panel a {layout}.",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"No se pudieron cargar las herramientas preferidas.",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
 	"components.boardElement": "elemento",

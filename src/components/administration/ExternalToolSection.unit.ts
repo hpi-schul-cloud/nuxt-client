@@ -40,7 +40,8 @@ import { VCardText } from "vuetify/lib/components/index";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 
-jest.mock("@data-external-tool");
+jest.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
+const mockedSchoolExternalToolUsage = jest.mocked(useSchoolExternalToolUsage);
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -118,9 +119,13 @@ describe("ExternalToolSection", () => {
 		useSchoolExternalToolUsageMock =
 			createMock<ReturnType<typeof useSchoolExternalToolUsage>>();
 
-		jest
-			.mocked(useSchoolExternalToolUsage)
-			.mockReturnValue(useSchoolExternalToolUsageMock);
+		useSchoolExternalToolUsageMock.metadata = ref(
+			schoolExternalToolMetadataFactory.build()
+		);
+
+		mockedSchoolExternalToolUsage.mockReturnValue(
+			useSchoolExternalToolUsageMock
+		);
 	});
 
 	afterEach(() => {
