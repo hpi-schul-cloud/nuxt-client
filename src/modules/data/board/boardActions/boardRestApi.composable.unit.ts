@@ -22,7 +22,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
-import { useSharedEditMode } from "@util-board";
+import { useBoardNotifier, useSharedEditMode } from "@util-board";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { Router, useRouter } from "vue-router";
@@ -38,6 +38,9 @@ const mockedUseBoardApi = jest.mocked(useBoardApi);
 
 jest.mock("@util-board/editMode.composable");
 const mockedSharedEditMode = jest.mocked(useSharedEditMode);
+
+jest.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 jest.mock("../socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
@@ -62,6 +65,7 @@ describe("boardRestApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
 		ReturnType<typeof useSocketConnection>
 	>;
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let setEditModeId: jest.Mock;
 	const setErrorMock = jest.fn();
 
@@ -77,6 +81,10 @@ describe("boardRestApi", () => {
 
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
+
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setEditModeId = jest.fn();
 		mockedSharedEditMode.mockReturnValue({
