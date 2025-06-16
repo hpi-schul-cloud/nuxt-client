@@ -77,6 +77,7 @@ describe("MediaBoardExternalToolElement", () => {
 			ReturnType<typeof useExternalToolDisplayState>
 		>({
 			displayData: ref(),
+			error: ref(),
 		});
 		useExternalToolLaunchStateMock = createMock<
 			ReturnType<typeof useExternalToolLaunchState>
