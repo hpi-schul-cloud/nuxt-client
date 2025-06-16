@@ -10,36 +10,33 @@
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<router-link :to="sanitizedUrl">
-			<ContentElementBar
-				:has-grey-background="true"
-				:icon="mdiFolderOpenOutline"
-			>
-				<template #title>
+		<ContentElementBar :has-grey-background="true" :icon="mdiFolderOpenOutline">
+			<template #title>
+				<span @click="onTitleClick">
 					{{
 						element.content.title ||
 						$t("components.cardElement.folderElement.untitled")
 					}}
-				</template>
-				<template v-if="isEditMode" #menu>
-					<BoardMenu
-						:scope="BoardMenuScope.FOLDER_ELEMENT"
-						has-background
-						:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
-					>
-						<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-						<KebabMenuActionMoveDown
-							v-if="isNotLastElement"
-							@click="onMoveDown"
-						/>
-						<KebabMenuActionDelete
-							scope-language-key="components.cardElement.folderElement"
-							@click="onDelete"
-						/>
-					</BoardMenu>
-				</template>
-			</ContentElementBar>
-		</router-link>
+				</span>
+			</template>
+			<template v-if="isEditMode" #menu>
+				<BoardMenu
+					:scope="BoardMenuScope.FOLDER_ELEMENT"
+					has-background
+					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+				>
+					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<KebabMenuActionMoveDown
+						v-if="isNotLastElement"
+						@click="onMoveDown"
+					/>
+					<KebabMenuActionDelete
+						scope-language-key="components.cardElement.folderElement"
+						@click="onDelete"
+					/>
+				</BoardMenu>
+			</template>
+		</ContentElementBar>
 		<v-card-text>
 			<FolderTitleInput
 				v-if="isEditMode"
@@ -54,7 +51,6 @@
 
 <script setup lang="ts">
 import { FileFolderElement } from "@/types/board/ContentElement";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
@@ -63,7 +59,8 @@ import {
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
-import { computed, ref, toRef } from "vue";
+import { ref, toRef } from "vue";
+import { useRouter } from "vue-router";
 import FileStatistic from "./FileStatistic.vue";
 import FolderTitleInput from "./FolderTitleInput.vue";
 
@@ -94,8 +91,6 @@ const onUpdateTitle = (value: string) => {
 	modelValue.value.title = value;
 };
 
-const sanitizedUrl = computed(() => sanitizeUrl(`/folder/${element.value.id}`));
-
 useBoardFocusHandler(element.value.id, folderContentElement);
 
 const onKeydownArrow = (event: KeyboardEvent) => {
@@ -114,4 +109,11 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
+
+const router = useRouter();
+const onTitleClick = () => {
+	const folderRoute = `/folder/${element.value.id}`;
+
+	router.push(folderRoute);
+};
 </script>
