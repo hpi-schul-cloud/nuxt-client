@@ -14,9 +14,7 @@
 					<PreviewImage
 						:src="previewSrc"
 						:alt="alternativeText"
-						:cover="false"
 						:max-height="336"
-						@error="onImageError"
 					/>
 				</div>
 			</div>
@@ -32,12 +30,12 @@ import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { ContentElementBar } from "@ui-board";
 import {
-	LightBoxOptions,
 	LightBoxContentType,
+	LightBoxOptions,
 	useLightBox,
 } from "@ui-light-box";
 import { PreviewImage } from "@ui-preview-image";
-import { PropType, computed, defineComponent, ref } from "vue";
+import { PropType, computed, defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -56,7 +54,6 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { t } = useI18n();
-		const hasImageError = ref(false);
 
 		const alternativeText = computed(() => {
 			const altTranslation = t("components.cardElement.fileElement.emptyAlt");
@@ -83,15 +80,9 @@ export default defineComponent({
 			open(options);
 		};
 
-		const onImageError = () => {
-			hasImageError.value = true;
-		};
-
 		return {
 			alternativeText,
 			openLightBox,
-			onImageError,
-			hasImageError,
 		};
 	},
 });
