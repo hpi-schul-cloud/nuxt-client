@@ -16,7 +16,7 @@
 			@click="onTitleClick"
 		>
 			<template #title>
-				<span tabindex="0" @keydown.enter.space="onTitleClick">{{
+				<span tabindex="0" role="button" @keydown.enter.space="onTitleClick">{{
 					element.content.title ||
 					$t("components.cardElement.folderElement.untitled")
 				}}</span>
