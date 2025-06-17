@@ -48,7 +48,7 @@ import {
 	watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
-import { VTextarea } from "vuetify/lib/components";
+import type { VTextarea } from "vuetify/components";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
