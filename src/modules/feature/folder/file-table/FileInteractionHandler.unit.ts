@@ -50,7 +50,7 @@ describe("FileInteractionHandler", () => {
 			const { wrapper } = setupWrapper(fileRecordItem);
 			const { useLightBoxMock } = setupMocks();
 
-			return { wrapper, useLightBoxMock };
+			return { wrapper, useLightBoxMock, fileRecordItem };
 		};
 		describe("when preview is possible", () => {
 			it("should render button", () => {
@@ -111,6 +111,33 @@ describe("FileInteractionHandler", () => {
 				button.trigger("click");
 
 				expect(useLightBoxMock().open).toHaveBeenCalled();
+			});
+		});
+
+		describe("when file is a pdf", () => {
+			it("should render button", () => {
+				const { wrapper } = setup({ mimeType: "application/pdf" });
+				const button = wrapper.find("button");
+				expect(button.exists()).toBe(true);
+			});
+
+			it("should call open function", () => {
+				const { wrapper, fileRecordItem, useLightBoxMock } = setup({
+					mimeType: "application/pdf",
+				});
+
+				const windowOpenSpy = jest.fn();
+				window.open = windowOpenSpy;
+
+				const button = wrapper.find("button");
+				button.trigger("click");
+
+				expect(windowOpenSpy).toHaveBeenCalledTimes(1);
+				expect(windowOpenSpy).toHaveBeenCalledWith(
+					fileRecordItem.url,
+					"_blank"
+				);
+				expect(useLightBoxMock().open).not.toHaveBeenCalled();
 			});
 		});
 

@@ -193,9 +193,20 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.fetchMediaBoardForUser();
 
+				/**
+				 * Simulates actually calling the error handling function.
+				 * (otherwise the handler function would not be called on the mock)
+				 */
+				useErrorHandlerMock.handleAnyError.mock.calls[0][1]();
+
+				expect(useErrorHandlerMock.notifyWithTemplate).toHaveBeenCalledWith(
+					"notLoaded",
+					"board"
+				);
+
 				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalledWith(
 					"error",
-					useErrorHandlerMock.notifyWithTemplate("notLoaded", "board")
+					expect.any(Function)
 				);
 			});
 		});
@@ -278,9 +289,20 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.updateMediaBoardLayout(BoardLayout.List);
 
+				/**
+				 * Simulates actually calling the error handling function.
+				 * (otherwise the handler function would not be called on the mock)
+				 */
+				useErrorHandlerMock.handleAnyError.mock.calls[0][1]();
+
+				expect(useErrorHandlerMock.notifyWithTemplate).toHaveBeenCalledWith(
+					"notUpdated",
+					"boardRow"
+				);
+
 				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalledWith(
 					"error",
-					useErrorHandlerMock.notifyWithTemplate("notLoaded", "board")
+					expect.any(Function)
 				);
 			});
 		});

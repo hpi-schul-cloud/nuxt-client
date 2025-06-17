@@ -95,6 +95,7 @@ describe("SchoolSettingsPage", () => {
 				name: "School Year 3000",
 				startDate: "",
 				endDate: "",
+				courseCreationInNextYear: false,
 			},
 			...schoolGetters,
 		});
@@ -233,6 +234,7 @@ describe("SchoolSettingsPage", () => {
 
 		describe("when maintenance status is undefined", () => {
 			it("should hide school year change panel", () => {
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = undefined;
 				const { wrapper } = getWrapper();
 
 				expect(

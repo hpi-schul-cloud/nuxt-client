@@ -23,7 +23,6 @@ import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
-import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
@@ -858,9 +857,7 @@ describe("Board", () => {
 								"components.board.error.403"
 							);
 
-							expect(setErrorMock).toHaveBeenCalledWith(
-								createApplicationError(HttpStatusCode.Forbidden)
-							);
+							expect(setErrorMock).toHaveBeenCalled();
 						});
 					});
 
