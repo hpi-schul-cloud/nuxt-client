@@ -13,15 +13,13 @@
 		<ContentElementBar
 			:has-grey-background="true"
 			:icon="mdiFolderOpenOutline"
-			:tab-index="0"
 			@click="onTitleClick"
-			@keydown.enter.space="onTitleClick"
 		>
 			<template #title>
-				{{
+				<span tabindex="0" @keydown.enter.space="onTitleClick">{{
 					element.content.title ||
 					$t("components.cardElement.folderElement.untitled")
-				}}
+				}}</span>
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu

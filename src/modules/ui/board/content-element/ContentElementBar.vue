@@ -1,6 +1,6 @@
 <template>
 	<div
-		:tabindex="props.tabIndex"
+		tabindex="-1"
 		class="content-element-bar d-flex"
 		:class="{
 			'flex-row': hasRowStyle,
@@ -98,11 +98,6 @@ const props = defineProps({
 		type: String as PropType<IconProps["icon"]>,
 		required: false,
 		default: undefined,
-	},
-	tabIndex: {
-		type: [Number, String],
-		required: false,
-		default: -1,
 	},
 });
 </script>
