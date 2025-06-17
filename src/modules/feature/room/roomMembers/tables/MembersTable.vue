@@ -1,6 +1,5 @@
 <template>
 	<div
-		ref="header"
 		class="d-flex justify-space-between align-center ga-2 mb-2 pb-2 table-title-header sticky"
 		:class="{
 			'flex-column': isExtraSmallDisplay,
@@ -178,7 +177,6 @@ const { askConfirmation } = useConfirmationDialog();
 
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
-const header = ref<HTMLElement | null>(null);
 const search = ref("");
 
 const stickyStyle = computed(() => ({
