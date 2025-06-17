@@ -1,6 +1,6 @@
 <template>
 	<div
-		tabindex="-1"
+		:tabindex="props.tabIndex"
 		class="content-element-bar d-flex"
 		:class="{
 			'flex-row': hasRowStyle,
@@ -80,10 +80,10 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
 import { LineClamp } from "@ui-line-clamp";
-import { IconProps } from "vuetify";
 import { hasSlotContent } from "@util-vue";
+import { PropType } from "vue";
+import { IconProps } from "vuetify";
 
 const props = defineProps({
 	hasGreyBackground: {
@@ -98,6 +98,11 @@ const props = defineProps({
 		type: String as PropType<IconProps["icon"]>,
 		required: false,
 		default: undefined,
+	},
+	tabIndex: {
+		type: [Number, String],
+		required: false,
+		default: -1,
 	},
 });
 </script>

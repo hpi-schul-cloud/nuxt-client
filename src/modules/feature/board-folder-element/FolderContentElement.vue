@@ -10,14 +10,18 @@
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<ContentElementBar :has-grey-background="true" :icon="mdiFolderOpenOutline">
+		<ContentElementBar
+			:has-grey-background="true"
+			:icon="mdiFolderOpenOutline"
+			:tab-index="0"
+			@click="onTitleClick"
+			@keydown.enter.space="onTitleClick"
+		>
 			<template #title>
-				<span @click="onTitleClick">
-					{{
-						element.content.title ||
-						$t("components.cardElement.folderElement.untitled")
-					}}
-				</span>
+				{{
+					element.content.title ||
+					$t("components.cardElement.folderElement.untitled")
+				}}
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu
