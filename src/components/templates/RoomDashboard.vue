@@ -223,7 +223,6 @@ export default {
 		roomDataObject: {
 			type: Object,
 			required: true,
-			default: () => ({}),
 		},
 		role: { type: String, required: true },
 	},
