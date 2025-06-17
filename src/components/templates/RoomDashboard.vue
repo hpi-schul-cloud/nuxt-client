@@ -403,7 +403,7 @@ export default {
 					translatedItemType = this.$t("common.words.topic");
 					break;
 				case this.cardTypes.ColumnBoard:
-					translatedItemType = this.$t("components.board");
+					translatedItemType = this.$t("common.words.board");
 					break;
 			}
 

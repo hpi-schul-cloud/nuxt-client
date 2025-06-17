@@ -176,6 +176,7 @@ export default {
 	"common.validation.nonEmptyString":
 		"Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.and": "und",
+	"common.words.board": "Bereich",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
 	"common.words.color.blue": "Blau",
@@ -526,7 +527,6 @@ export default {
 		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"Bevorzugte Tools konnten nicht geladen werden.",
-	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
 	"components.boardElement": "Element",
