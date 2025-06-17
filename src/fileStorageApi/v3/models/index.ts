@@ -1,4 +1,5 @@
 export * from './api-validation-error';
+export * from './archive-file-params';
 export * from './copy-file-list-response';
 export * from './copy-file-params';
 export * from './copy-file-response';
