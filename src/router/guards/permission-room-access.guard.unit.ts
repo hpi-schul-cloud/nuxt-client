@@ -1,6 +1,9 @@
 import { roomPermissionGuard } from "@/router/guards/permission-room-access.guard";
-import { NavigationGuard, RouteLocationNormalized } from "vue-router";
-import { NavigationGuardNext } from "vue-router";
+import {
+	NavigationGuard,
+	RouteLocationNormalized,
+	NavigationGuardNext,
+} from "vue-router";
 
 import Mock = jest.Mock;
 import { authModule, envConfigModule } from "@/store";
