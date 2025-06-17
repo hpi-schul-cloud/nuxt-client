@@ -4,6 +4,7 @@ import {
 	checkFolderFeature,
 	checkRoomsFeature,
 	validateQueryParameters,
+	roomPermissionGuard,
 } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
@@ -253,7 +254,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
-		beforeEnter: [checkRoomsFeature],
+		beforeEnter: [checkRoomsFeature, roomPermissionGuard(["room_create"])],
 		name: "rooms",
 	},
 	{
@@ -276,7 +277,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms/:id(${REGEX_ID})/members`,
 		component: async () => (await import("@page-room")).RoomMembersPage,
-		beforeEnter: [checkRoomsFeature],
+		beforeEnter: [checkRoomsFeature, roomPermissionGuard(["room_create"])],
 		name: "room-members",
 		props: (route: RouteLocationNormalized) => ({
 			tab: route.query.tab,
