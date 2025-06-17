@@ -2,9 +2,8 @@
 	<div
 		class="d-flex justify-space-between align-center ga-2 mb-2 pb-2 table-title-header sticky"
 		:class="{
-			'flex-column': isExtraSmallDisplay,
+			'flex-column mt-8': isExtraSmallDisplay,
 			'pt-7': smAndUp,
-			'mt-8': isExtraSmallDisplay,
 		}"
 		:style="stickyStyle"
 	>
