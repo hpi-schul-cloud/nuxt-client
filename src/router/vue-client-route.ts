@@ -64,6 +64,4 @@ const isVueClient = (/** @type {string} */ path) => {
 	return vueRoutes.some((regex) => new RegExp(regex).exec(path));
 };
 
-module.exports = {
-	isVueClient,
-};
+export { isVueClient };
