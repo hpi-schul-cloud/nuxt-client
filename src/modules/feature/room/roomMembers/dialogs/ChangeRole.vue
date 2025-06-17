@@ -137,7 +137,6 @@ const props = defineProps({
 	members: {
 		type: Array as PropType<RoomMember[]>,
 		required: true,
-		default: () => [],
 	},
 });
 
