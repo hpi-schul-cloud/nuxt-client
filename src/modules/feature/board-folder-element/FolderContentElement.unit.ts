@@ -47,7 +47,7 @@ describe("FolderContentElement", () => {
 		isNotLastElement?: boolean;
 		element?: FileFolderElement;
 	}) => {
-		useRouterMock.mockReturnValue(router);
+		useRouterMock.mockReturnValueOnce(router);
 
 		const wrapper = mount(FolderContentElement, {
 			global: {
@@ -67,7 +67,7 @@ describe("FolderContentElement", () => {
 			},
 		});
 
-		(useContentElementState as jest.Mock).mockReturnValue({
+		(useContentElementState as jest.Mock).mockReturnValueOnce({
 			modelValue: {
 				value: (options.element || mockElement).content.title || "",
 			},
