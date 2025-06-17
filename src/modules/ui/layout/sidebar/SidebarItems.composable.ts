@@ -1,7 +1,4 @@
-import {
-	SchulcloudTheme,
-	ImportUserResponseRoleNamesEnum as Roles,
-} from "@/serverApi/v3";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
@@ -25,7 +22,6 @@ import {
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
-import { authModule } from "@/store";
 
 export const useSidebarItems = () => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -44,6 +40,9 @@ export const useSidebarItems = () => {
 			to: "/rooms",
 			icon: mdiAccountSupervisorCircleOutline,
 			feature: "FEATURE_ROOMS_ENABLED",
+			permissions: envConfigModule.getEnv.FEATURE_ROOM_ADD_STUDENTS_ENABLED
+				? undefined
+				: ["ROOM_CREATE"],
 			testId: "sidebar-rooms",
 		},
 		{
@@ -322,16 +321,6 @@ export const useSidebarItems = () => {
 			children: systemLinks,
 		},
 	]);
-
-	const isRoomsLinkEnabledForStudents =
-		envConfigModule.getEnv.FEATURE_ROOM_ADD_STUDENTS_ENABLED ?? false;
-
-	if (
-		!isRoomsLinkEnabledForStudents &&
-		authModule.getUserRoles.includes(Roles.Student)
-	) {
-		pageLinks.value.splice(1, 1);
-	}
 
 	return { pageLinks, legalLinks, metaLinks };
 };
