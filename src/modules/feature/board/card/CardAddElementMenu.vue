@@ -1,5 +1,5 @@
 <template>
-	<VCardText>
+	<VCardText class="pt-0">
 		<div class="d-flex justify-center w-full">
 			<VBtn
 				elevation="0"
