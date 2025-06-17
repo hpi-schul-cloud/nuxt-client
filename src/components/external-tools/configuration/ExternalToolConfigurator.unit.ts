@@ -61,6 +61,7 @@ describe("ExternalToolConfigurator", () => {
 				const { wrapper } = getWrapper({
 					templates: [template],
 					configuration: schoolExternalToolFactory.build(),
+					error: undefined,
 				});
 
 				return {
@@ -99,6 +100,7 @@ describe("ExternalToolConfigurator", () => {
 					templates: [template1, template2],
 					configuration: contextExternalToolFactory.build(),
 					isPreferredTool: true,
+					error: undefined,
 				});
 
 				return {
@@ -126,6 +128,8 @@ describe("ExternalToolConfigurator", () => {
 
 				const { wrapper } = getWrapper({
 					templates: [template],
+					error: undefined,
+					configuration: undefined,
 				});
 
 				clipboardMock.readText.mockResolvedValue(clipboardText);
@@ -189,6 +193,8 @@ describe("ExternalToolConfigurator", () => {
 						template,
 						schoolExternalToolConfigurationTemplateFactory.build(),
 					],
+					error: undefined,
+					configuration: undefined,
 				});
 
 				return {
@@ -243,6 +249,8 @@ describe("ExternalToolConfigurator", () => {
 				const { wrapper } = getWrapper({
 					templates:
 						schoolExternalToolConfigurationTemplateFactory.buildList(1),
+					error: undefined,
+					configuration: undefined,
 				});
 
 				await wrapper
@@ -261,6 +269,7 @@ describe("ExternalToolConfigurator", () => {
 					templates:
 						schoolExternalToolConfigurationTemplateFactory.buildList(1),
 					configuration: schoolExternalToolFactory.build(),
+					error: undefined,
 				});
 
 				await wrapper

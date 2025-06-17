@@ -139,9 +139,9 @@ const slots = useSlots();
 
 const { displaySettingsTitle = true, ...props } = defineProps<{
 	templates: T[];
-	configuration?: ConfigurationTypes;
+	configuration: ConfigurationTypes | undefined;
 	isPreferredTool?: boolean;
-	error?: BusinessError;
+	error: BusinessError | undefined;
 	loading?: boolean;
 	displaySettingsTitle?: boolean;
 }>();
