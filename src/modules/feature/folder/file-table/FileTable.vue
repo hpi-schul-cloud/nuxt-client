@@ -93,7 +93,6 @@
 
 				<template #action-menu-items="{ selectedIds }">
 					<KebabMenuActionDownloadFiles
-						:disabled="selectedIds.length === 0"
 						:selected-ids="selectedIds"
 						:aria-label="t('common.actions.download')"
 						@download="onDownloadFilesAsArchive"

@@ -2,6 +2,7 @@
 	<KebabMenuAction
 		:icon="mdiTrayArrowDown"
 		data-testid="kebab-menu-action-download"
+		:disabled="disabled"
 		@click="onClick"
 	>
 		{{ t("common.actions.download") }}
