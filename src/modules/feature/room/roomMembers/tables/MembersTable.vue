@@ -167,7 +167,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay, smAndUp, lgAndUp, mdAndDown } = useDisplay();
+const { xs: isExtraSmallDisplay, smAndUp } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds } =
