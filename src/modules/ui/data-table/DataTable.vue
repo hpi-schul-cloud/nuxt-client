@@ -1,7 +1,7 @@
 <template>
 	<div
 		ref="header"
-		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header sticky"
+		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header sticky pt-7 pb-2"
 		:class="{ 'flex-column': isExtraSmallDisplay }"
 		:style="stickyStyle"
 	>
@@ -97,7 +97,6 @@ import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import BatchActionMenu from "./BatchActionMenu.vue";
-import { useElementBounding } from "@vueuse/core";
 
 const props = defineProps({
 	tableHeaders: {
@@ -135,7 +134,7 @@ defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay, lgAndUp: isDesktop } = useDisplay();
+const { xs: isExtraSmallDisplay } = useDisplay();
 const selectedIds = ref<string[]>([]);
 const header = ref<HTMLElement | null>(null);
 const search = ref("");
@@ -153,17 +152,9 @@ const onResetSelectedMembers = () => {
 	selectedIds.value = [];
 };
 
-const stickyStyle = computed(() => {
-	const { top } = useElementBounding(header);
-	const extraHeight =
-		isDesktop.value && top.value === props.headerBottom ? 100 : 0;
-
-	return {
-		transition: isDesktop.value ? "ease-in-out 0.2s" : "none",
-		top: `${props.headerBottom}px`,
-		height: isDesktop.value ? `${extraHeight}px` : "auto",
-	};
-});
+const stickyStyle = computed(() => ({
+	top: `${props.headerBottom}px`,
+}));
 
 watch(
 	() => props.externalSelectedIds,

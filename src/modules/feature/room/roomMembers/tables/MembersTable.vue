@@ -1,10 +1,9 @@
 <template>
 	<div
 		ref="header"
-		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header sticky"
+		class="d-flex justify-space-between align-center ga-2 mb-2 pt-7 pb-2 table-title-header sticky"
 		:class="{
 			'flex-column': isExtraSmallDisplay,
-			'pt-7 pb-2': lgAndUp,
 		}"
 		:style="stickyStyle"
 	>
@@ -31,7 +30,7 @@
 			mobile-breakpoint="sm"
 			single-line
 			variant="solo-filled"
-			:class="{ 'order-1 w-100 mt-2': isExtraSmallDisplay }"
+			:class="{ 'order-1 w-100': isExtraSmallDisplay }"
 			:label="t('common.labels.search')"
 			:prepend-inner-icon="mdiMagnify"
 			:aria-label="t('pages.rooms.members.filter')"
@@ -166,7 +165,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay, lgAndUp } = useDisplay();
+const { xs: isExtraSmallDisplay } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds } =
