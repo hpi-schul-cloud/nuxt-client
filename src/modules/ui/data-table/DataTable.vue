@@ -1,8 +1,12 @@
 <template>
 	<div
 		ref="header"
-		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header sticky pt-7 pb-2"
-		:class="{ 'flex-column': isExtraSmallDisplay }"
+		class="d-flex justify-space-between align-center ga-2 mb-2 pb-2 table-title-header sticky"
+		:class="{
+			'flex-column': isExtraSmallDisplay,
+			'pt-7': smAndUp,
+			'mt-8': isExtraSmallDisplay,
+		}"
 		:style="stickyStyle"
 	>
 		<BatchActionMenu
@@ -134,7 +138,7 @@ defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay } = useDisplay();
+const { xs: isExtraSmallDisplay, smAndUp } = useDisplay();
 const selectedIds = ref<string[]>([]);
 const header = ref<HTMLElement | null>(null);
 const search = ref("");

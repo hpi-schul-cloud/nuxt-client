@@ -24,7 +24,6 @@ import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { MembersTable } from "@feature-room";
 import { envConfigModule } from "@/store";
-import { useDisplay } from "vuetify";
 
 defineProps({
 	headerBottom: {
@@ -38,7 +37,6 @@ const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
 const { isLoading } = storeToRefs(roomMembersStore);
 const { canAddRoomMembers } = useRoomAuthorization();
-const { mdAndDown } = useDisplay();
 
 const linkAriaLabel = computed(
 	() =>
