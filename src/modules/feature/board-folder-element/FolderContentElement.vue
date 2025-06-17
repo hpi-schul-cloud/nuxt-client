@@ -16,10 +16,12 @@
 			@click="onTitleClick"
 		>
 			<template #title>
-				<span tabindex="0" role="button" @keydown.enter.space="onTitleClick">{{
-					element.content.title ||
-					$t("components.cardElement.folderElement.untitled")
-				}}</span>
+				<span tabindex="0" role="button" @keydown.enter.space="onTitleClick">
+					{{
+						element.content.title ||
+						$t("components.cardElement.folderElement.untitled")
+					}}
+				</span>
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu
@@ -119,3 +121,9 @@ const onTitleClick = () => {
 	router.push(folderRoute);
 };
 </script>
+
+<style scoped>
+span:focus {
+	outline-offset: -2px;
+}
+</style>
