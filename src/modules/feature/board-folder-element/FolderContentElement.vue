@@ -7,7 +7,9 @@
 		variant="outlined"
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
-		:aria-label="element.content.title"
+		:aria-label="
+			$t('components.cardElement.folderElement') + ' ' + element.content.title
+		"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
