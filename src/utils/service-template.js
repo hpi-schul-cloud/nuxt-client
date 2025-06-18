@@ -1,6 +1,6 @@
 import { reactive } from "vue";
 import { $axios } from "@/utils/api";
-import { logger } from "@util-logger";
+import { logger } from "@/modules/util/logger";
 
 export default function (endpoint) {
 	const baseUrl = "/v1/" + endpoint;
