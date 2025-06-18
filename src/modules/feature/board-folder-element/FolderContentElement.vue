@@ -16,15 +16,20 @@
 		<ContentElementBar
 			:has-grey-background="true"
 			:icon="mdiFolderOpenOutline"
+			tabindex="0"
+			role="button"
+			class="content-element-bar"
+			:aria-label="
+				$t('components.cardElement.folderElement') + ' ' + element.content.title
+			"
 			@click="onTitleClick"
+			@keydown.enter="onTitleClick"
 		>
 			<template #title>
-				<span tabindex="0" role="button" @keydown.enter="onTitleClick">
-					{{
-						element.content.title ||
-						$t("components.cardElement.folderElement.untitled")
-					}}
-				</span>
+				{{
+					element.content.title ||
+					$t("components.cardElement.folderElement.untitled")
+				}}
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu
@@ -126,7 +131,7 @@ const onTitleClick = () => {
 </script>
 
 <style scoped>
-span:focus {
-	outline-offset: -2px;
+.content-element-bar:focus {
+	outline-offset: -10px;
 }
 </style>
