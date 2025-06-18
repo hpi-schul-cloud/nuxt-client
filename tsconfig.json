@@ -1,11 +1,11 @@
 {
 	"compilerOptions": {
 		"target": "esnext",
-		"module": "nodenext",
+		"module": "esnext",
 		"strict": true,
 		"jsx": "preserve",
 		"importHelpers": true,
-		"moduleResolution": "nodenext",
+		"moduleResolution": "bundler",
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
@@ -16,6 +16,7 @@
 		"sourceMap": true,
 		"experimentalDecorators": true,
 		"baseUrl": ".",
+		"types": ["node"],
 		"typeRoots": ["./node_modules/@types", "./types"],
 		"paths": {
 			"@data-board": ["src/modules/data/board"],
