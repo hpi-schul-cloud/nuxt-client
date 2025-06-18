@@ -164,7 +164,7 @@ describe("FolderContentElement", () => {
 					isEditMode: false,
 				});
 
-				const folderElement = wrapper.find('span[role="button"][tabindex="0"]');
+				const folderElement = wrapper.findComponent(ContentElementBar);
 				await folderElement.trigger("keydown.enter");
 
 				expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
