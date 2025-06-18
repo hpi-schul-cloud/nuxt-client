@@ -1,6 +1,7 @@
 // Plugins
 import Vue from "@vitejs/plugin-vue";
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
+import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 // Utilities
@@ -22,6 +23,10 @@ export default defineConfig({
 			styles: {
 				configFile: "src/styles/settings.scss",
 			},
+		}),
+		// https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n
+		VueI18nPlugin({
+			//options
 		}),
 		DevServerProxy(),
 	],
