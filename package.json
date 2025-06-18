@@ -55,6 +55,7 @@
 		"@eslint/js": "^9.27.0",
 		"@golevelup/ts-jest": "^0.7.0",
 		"@intlify/bundle-utils": "^8.0.0",
+		"@intlify/unplugin-vue-i18n": "^6.0.8",
 		"@mdi/js": "^7.2.96",
 		"@openapitools/openapi-generator-cli": "^2.19.1",
 		"@pinia/testing": "^1.0.1",
