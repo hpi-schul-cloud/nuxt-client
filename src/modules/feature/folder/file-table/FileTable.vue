@@ -63,9 +63,9 @@
 					>
 						<KebabMenuActionDownloadFiles
 							:disabled="!item.isSelectable"
-							:file-records="fileRecords"
 							:selected-ids="[item.id]"
 							:aria-label="t('common.actions.download')"
+							@download="onDownloadFile"
 						/>
 						<KebabMenuActionRename
 							v-if="props.hasEditPermission"
@@ -92,6 +92,11 @@
 				</template>
 
 				<template #action-menu-items="{ selectedIds }">
+					<KebabMenuActionDownloadFiles
+						:selected-ids="selectedIds"
+						:aria-label="t('common.actions.download')"
+						@download="onDownloadFilesAsArchive"
+					/>
 					<KebabMenuActionDeleteFiles
 						v-if="props.hasEditPermission"
 						:file-records="fileRecords"
@@ -180,6 +185,8 @@ const emit = defineEmits([
 	"delete-files",
 	"update:name",
 	"reset-upload-progress",
+	"download-file",
+	"download-files-as-archive",
 ]);
 
 const headers = [
@@ -212,6 +219,14 @@ const formatFileSize = (size: number) => {
 	const localizedFileSize = n(convertedSize, "fileSize");
 
 	return `${localizedFileSize} ${unit}`;
+};
+
+const onDownloadFile = (selectedIds: string[]) => {
+	emit("download-file", selectedIds);
+};
+
+const onDownloadFilesAsArchive = (selectedIds: string[]) => {
+	emit("download-files-as-archive", selectedIds);
 };
 
 const onDeleteFiles = (selectedFileRecords: FileRecord[]) => {
