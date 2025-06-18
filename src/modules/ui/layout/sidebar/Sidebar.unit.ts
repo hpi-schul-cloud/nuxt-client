@@ -84,7 +84,6 @@ describe("@ui-layout/Sidebar", () => {
 	beforeEach(() => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
-			authModule: AuthModule,
 		});
 	});
 
