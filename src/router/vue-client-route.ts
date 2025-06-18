@@ -58,6 +58,9 @@ const vueRoutes = [
 	`^/tasks/?$`,
 	`^/tools/context/tool-configuration/?$`,
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
+	`^/@`,
+	`^/src/`,
+	`^/node_modules/`,
 ];
 
 const isVueClient = (path: string) => {

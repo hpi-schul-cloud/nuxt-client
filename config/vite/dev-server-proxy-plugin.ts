@@ -1,7 +1,7 @@
 import type { Plugin } from 'vite';
 import { isCommonCartridge, isFileStorage, isH5pEditor, isH5pStaticFiles, isServer } from '../../src/router/server-route';
 import { createCommonCartridgeProxy, createFileStorageProxy, createH5pEditorProxy, createH5pStaticFilesProxy, createLegacyClientProxy, createServerProxy } from './dev-server-config';
-// import { isVueClient } from '../../src/router/vue-client-route';
+import { isVueClient } from '../../src/router/vue-client-route';
 
 const DevServerProxy = (): Plugin => {
   const legacyClientProxy = createLegacyClientProxy();
@@ -31,15 +31,11 @@ const DevServerProxy = (): Plugin => {
 						commonCartridgeProxy(req, res, next);
 					} else if (isServer(path)) {
 						serverProxy(req, res, next);
-          } else {
-            next();
-          }
-          // TODO We probably need a rule isLegacyClient(path) to handle legacy client requests 
-					// } else if (isVueClient(path)) {
-					// 	next();
-					// } else {
-					// 	legacyClientProxy(req, res, next);
-					// }
+					} else if (isVueClient(path)) {
+						next();
+					} else {
+						legacyClientProxy(req, res, next);
+					}
       });
     },
   };
