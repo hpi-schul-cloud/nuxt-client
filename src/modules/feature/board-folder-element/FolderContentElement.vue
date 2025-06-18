@@ -8,7 +8,7 @@
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
 		:aria-label="
-			$t('components.cardElement.folderElement') + ' ' + element.content.title
+			t('components.cardElement.folderElement') + ' ' + element.content.title
 		"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
@@ -20,7 +20,7 @@
 			role="button"
 			class="content-element-bar"
 			:aria-label="
-				$t('components.cardElement.folderElement') + ' ' + element.content.title
+				t('components.cardElement.folderElement') + ' ' + element.content.title
 			"
 			@click="onTitleClick"
 			@keydown.enter="onTitleClick"
@@ -28,7 +28,7 @@
 			<template #title>
 				{{
 					element.content.title ||
-					$t("components.cardElement.folderElement.untitled")
+					t("components.cardElement.folderElement.untitled")
 				}}
 			</template>
 			<template v-if="isEditMode" #menu>
@@ -72,6 +72,7 @@ import {
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
 import { ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import FileStatistic from "./FileStatistic.vue";
 import FolderTitleInput from "./FolderTitleInput.vue";
@@ -85,6 +86,8 @@ interface FolderContentElementProps {
 	rowIndex: number;
 	elementIndex: number;
 }
+
+const { t } = useI18n();
 
 const props = defineProps<FolderContentElementProps>();
 
