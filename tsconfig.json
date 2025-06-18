@@ -16,7 +16,6 @@
 		"sourceMap": true,
 		"experimentalDecorators": true,
 		"baseUrl": ".",
-		"types": ["webpack-env", "jest"],
 		"typeRoots": ["./node_modules/@types", "./types"],
 		"paths": {
 			"@data-board": ["src/modules/data/board"],
