@@ -1,7 +1,7 @@
-const { isServer } = import("./server-route");
-const { isVueClient } = import("./vue-client-route");
+import { isServer } from "./server-route";
+import { isVueClient } from "./vue-client-route";
 
-const isLegacyClient = (path) => {
+const isLegacyClient = (path: string) => {
 	return !(isServer(path) || isVueClient(path));
 };
 

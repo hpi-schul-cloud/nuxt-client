@@ -60,7 +60,7 @@ const vueRoutes = [
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
 ];
 
-const isVueClient = (/** @type {string} */ path) => {
+const isVueClient = (path: string) => {
 	return vueRoutes.some((regex) => new RegExp(regex).exec(path));
 };
 
