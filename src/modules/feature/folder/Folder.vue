@@ -28,6 +28,8 @@
 			@delete-files="onDeleteFiles"
 			@update:name="onUpdateName"
 			@reset-upload-progress="resetUploadProgress"
+			@download-file="downloadFileHandler"
+			@download-files-as-archive="downloadFilesAsArchiveHandler"
 		/>
 	</DefaultWireframe>
 	<ConfirmationDialog />
@@ -53,6 +55,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import router from "@/router";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
+import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
 import {
 	useBoardApi,
 	useBoardPermissions,
@@ -64,6 +67,7 @@ import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
+import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
@@ -158,6 +162,25 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 
 const onDeleteFiles = async (fileRecords: FileRecord[]) => {
 	await deleteFiles(fileRecords);
+};
+
+const downloadFileHandler = (selectedIds: string[]) => {
+	const fileRecord = fileRecords.value.find(
+		(file) => file.id === selectedIds[0]
+	);
+	if (fileRecord) {
+		downloadFile(fileRecord.url, fileRecord.name);
+	}
+};
+
+const downloadFilesAsArchiveHandler = async (selectedIds: string[]) => {
+	const now = dayjs().format("YYYYMMDD");
+	const archiveName = `${now}_${folderName.value}`;
+
+	downloadFilesAsArchive({
+		fileRecordIds: selectedIds,
+		archiveName,
+	});
 };
 
 const onUpdateName = async (fileName: string, fileRecord: FileRecord) => {
