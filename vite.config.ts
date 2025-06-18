@@ -6,6 +6,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 // Utilities
 import { defineConfig } from "vite";
 import { fileURLToPath, URL } from "node:url";
+import { DevServerProxy } from "./config/vite/dev-server-proxy-plugin";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -22,6 +23,7 @@ export default defineConfig({
 				configFile: "src/styles/settings.scss",
 			},
 		}),
+		DevServerProxy(),
 	],
 	optimizeDeps: {
 		exclude: [
