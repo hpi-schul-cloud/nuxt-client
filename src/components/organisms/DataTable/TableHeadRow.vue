@@ -439,11 +439,9 @@ export default {
 }
 
 :deep(
-		.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(
-				:hover
-			)
-			.v-btn__content
-	) {
+	.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover)
+		.v-btn__content
+) {
 	opacity: 1;
 }
 

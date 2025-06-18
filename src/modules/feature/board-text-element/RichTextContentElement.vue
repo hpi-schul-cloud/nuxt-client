@@ -132,8 +132,8 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 }
 
 :deep(
-		.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around
-	) {
+	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around
+) {
 	> .ck-widget__type-around__button_before {
 		top: 8px;
 		left: 8px;
