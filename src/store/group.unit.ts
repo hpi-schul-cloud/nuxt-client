@@ -15,7 +15,7 @@ import {
 } from "@@/tests/test-utils";
 import { classInfoFactory } from "@@/tests/test-utils/factory/classInfoFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance } from "axios";
 import GroupModule from "./group";
 import { ClassInfo, ClassRootType } from "./types/class-info";

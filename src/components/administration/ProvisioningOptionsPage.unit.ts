@@ -15,7 +15,7 @@ import {
 	ProvisioningOptions,
 	useProvisioningOptionsState,
 } from "@data-provisioning-options";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";

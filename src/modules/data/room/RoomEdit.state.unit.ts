@@ -1,7 +1,7 @@
 import { useRoomEditState } from "./RoomEdit.state";
 import * as serverApi from "@/serverApi/v3/api";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance } from "axios";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ApplicationErrorModule from "@/store/application-error";

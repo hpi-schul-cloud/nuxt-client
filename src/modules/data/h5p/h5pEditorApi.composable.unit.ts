@@ -11,7 +11,7 @@ import { H5pEditorApiInterface } from "@/h5pEditorApi/v3";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useH5PEditorApi } from "@data-h5p";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { HttpStatusCode } from "axios";
 
 describe("h5pEditorApi.composable", () => {

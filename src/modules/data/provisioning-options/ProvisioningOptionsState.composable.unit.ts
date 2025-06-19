@@ -11,7 +11,7 @@ import {
 	provisioningOptionsDataFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { DeepMocked, createMock } from "@golevelup/ts-vitest";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";
 import { ProvisioningOptions } from "./type/ProvisioningOptions";

@@ -12,7 +12,7 @@ import {
 } from "@/serverApi/v3/api";
 import { businessErrorFactory, envsFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { AxiosResponse } from "axios";
 import ApplicationErrorModule from "./application-error";
 import ContentModule from "./content";

@@ -23,7 +23,7 @@ import {
 	useRoomDetailsStore,
 	useRoomMembersStore,
 } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";

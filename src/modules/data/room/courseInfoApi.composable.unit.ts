@@ -5,7 +5,7 @@ import {
 	CourseStatus,
 } from "@/serverApi/v3/api";
 import { mockApiResponse } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance } from "axios";
 import { initializeAxios } from "@/utils/api";
 import { useCourseInfoApi } from "./courseInfoApi.composable";

@@ -1,6 +1,6 @@
 import { MediaSchoolLicenseListResponse } from "@/serverApi/v3";
 import { mediaSchoolLicenseResponseFactory } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { useSchoolLicenseStore } from "./SchoolLicense.store";
 import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";

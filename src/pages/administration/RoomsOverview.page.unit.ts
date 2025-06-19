@@ -17,7 +17,7 @@ import {
 	EndCourseSyncDialog,
 	StartExistingCourseSyncDialog,
 } from "@feature-course-sync";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";

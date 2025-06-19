@@ -8,7 +8,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { ref } from "vue";
 import MediaShelfPage from "./MediaShelf.page.vue";

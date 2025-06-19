@@ -22,7 +22,7 @@ import {
 	useCardStore,
 	useSocketConnection,
 } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import {
 	useBoardNotifier,
 	useSharedEditMode,

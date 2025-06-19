@@ -5,7 +5,7 @@ import {
 	axiosErrorFactory,
 	contextExternalToolConfigurationTemplateFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { useContextExternalToolConfigurationState } from "./contextExternalToolConfigurationState.composable";
 import { ContextExternalToolConfigurationTemplate } from "./types";

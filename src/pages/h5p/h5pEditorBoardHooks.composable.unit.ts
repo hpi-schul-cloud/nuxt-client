@@ -15,7 +15,7 @@ import {
 	useBoardApi,
 	useCardStore,
 } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";

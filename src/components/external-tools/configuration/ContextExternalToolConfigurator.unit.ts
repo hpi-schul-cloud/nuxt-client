@@ -24,7 +24,7 @@ import {
 	useContextExternalToolConfigurationState,
 	useContextExternalToolState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";

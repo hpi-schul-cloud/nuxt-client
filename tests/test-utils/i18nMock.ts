@@ -1,5 +1,5 @@
 import { MessageSchema } from "@/locales/schema";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 
 export const i18nMock = createMock<{
 	t: (

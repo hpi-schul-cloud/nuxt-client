@@ -11,7 +11,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { Members, MembersTable } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import SchoolsModule from "@/store/schools";

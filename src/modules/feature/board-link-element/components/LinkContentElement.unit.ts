@@ -16,7 +16,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { LinkContentElement } from "@feature-board-link-element";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { BoardMenu } from "@ui-board";
 import {
 	KebabMenuActionDelete,

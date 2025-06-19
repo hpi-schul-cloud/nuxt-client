@@ -1,4 +1,4 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 import { useSchoolExternalToolUsage } from "./SchoolExternalToolUsage.composable";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";

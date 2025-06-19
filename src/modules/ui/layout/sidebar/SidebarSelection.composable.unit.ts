@@ -1,7 +1,7 @@
 import { BoardContextType } from "@/types/board/BoardContext";
 import { useSharedBoardPageInformation } from "@data-board";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia, storeToRefs } from "pinia";
 import { computed } from "vue";

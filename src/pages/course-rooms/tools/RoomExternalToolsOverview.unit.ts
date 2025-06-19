@@ -20,7 +20,7 @@ import {
 	ExternalToolDisplayData,
 	useExternalToolDisplayListState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { ref } from "vue";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";

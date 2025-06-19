@@ -1,4 +1,4 @@
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { DeepMocked, createMock } from "@golevelup/ts-vitest";
 import CommonCartridgeImportModule from "./common-cartridge-import";
 import {
 	CommonCartridgeApiInterface,

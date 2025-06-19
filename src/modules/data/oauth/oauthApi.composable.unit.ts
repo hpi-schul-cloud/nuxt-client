@@ -4,7 +4,7 @@ import {
 	OAuthApiInterface,
 	OAuthSessionTokenExpirationResponse,
 } from "@/serverApi/v3/api";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { HttpStatusCode } from "axios";
 import { useOAuthApi } from "./oauthApi.composable";
 

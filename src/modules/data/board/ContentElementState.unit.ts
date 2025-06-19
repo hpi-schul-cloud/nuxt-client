@@ -11,7 +11,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { useContentElementState } from "./ContentElementState.composable";
 import { Router, useRouter } from "vue-router";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 
 vi.mock("@util-board/InlineEditInteractionHandler.composable");
 

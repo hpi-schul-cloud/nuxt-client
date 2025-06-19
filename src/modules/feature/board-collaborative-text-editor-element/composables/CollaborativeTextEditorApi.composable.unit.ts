@@ -5,7 +5,7 @@ import {
 	axiosErrorFactory,
 } from "@@/tests/test-utils";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { AxiosResponse } from "axios";
 import { setupCollaborativeTextEditorNotifier } from "../test-utils/collaborativeTextEditorNotifier";
 import {

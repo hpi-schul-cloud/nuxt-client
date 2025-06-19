@@ -11,7 +11,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { ExternalToolDisplayData } from "@data-external-tool";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount, MountingOptions } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";

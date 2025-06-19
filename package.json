@@ -54,6 +54,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.27.0",
+		"@golevelup/ts-vitest": "^0.5.2",
 		"@intlify/bundle-utils": "^8.0.0",
 		"@intlify/unplugin-vue-i18n": "^6.0.8",
 		"@mdi/js": "^7.2.96",

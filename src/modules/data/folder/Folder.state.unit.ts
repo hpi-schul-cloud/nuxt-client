@@ -5,7 +5,7 @@ import {
 	fileFolderElementResponseFactory,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { describe, expect, it } from "@jest/globals";
 import { AxiosPromise } from "axios";
 import { useFolderState } from "./Folder.state";

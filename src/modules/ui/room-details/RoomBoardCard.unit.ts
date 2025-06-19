@@ -13,7 +13,7 @@ import {
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { Router, useRouter } from "vue-router";
 import { VListItem, VMenu } from "vuetify/lib/components/index";
 vi.mock("vue-router");

@@ -19,7 +19,7 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useDragAndDrop } from "@util-board";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";

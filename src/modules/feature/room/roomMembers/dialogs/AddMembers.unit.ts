@@ -20,7 +20,7 @@ import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { createTestingPinia } from "@pinia/testing";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";

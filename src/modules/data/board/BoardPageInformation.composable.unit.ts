@@ -1,6 +1,6 @@
 import { BoardContextType } from "@/types/board/BoardContext";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useBoardApi } from "./BoardApi.composable";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 

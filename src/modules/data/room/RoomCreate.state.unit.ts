@@ -1,4 +1,4 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useRoomCreateState } from "./RoomCreate.state";
 import * as serverApi from "@/serverApi/v3/api";
 import { AxiosInstance } from "axios";

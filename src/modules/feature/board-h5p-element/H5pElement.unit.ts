@@ -10,7 +10,7 @@ import { H5pElementResponse } from "@/serverApi/v3";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { ContentElementBar } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";

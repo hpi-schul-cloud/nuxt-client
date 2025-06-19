@@ -33,7 +33,7 @@ import {
 	useRoomMembersStore,
 	useRoomAuthorization,
 } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import ActionMenu from "./ActionMenu.vue";
 import {
 	KebabMenuActionChangePermission,

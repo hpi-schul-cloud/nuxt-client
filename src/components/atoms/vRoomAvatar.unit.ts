@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mdiSync } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { VBadge } from "vuetify/lib/components/index";

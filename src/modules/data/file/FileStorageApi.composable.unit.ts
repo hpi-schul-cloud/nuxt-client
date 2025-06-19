@@ -10,7 +10,7 @@ import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponse
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { AxiosResponse } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";

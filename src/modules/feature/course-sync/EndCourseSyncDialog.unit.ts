@@ -6,7 +6,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useCourseApi } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import EndCourseSyncDialog from "./EndCourseSyncDialog.vue";
 

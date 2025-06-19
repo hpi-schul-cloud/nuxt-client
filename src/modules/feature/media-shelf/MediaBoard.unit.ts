@@ -8,7 +8,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { shallowMount } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";

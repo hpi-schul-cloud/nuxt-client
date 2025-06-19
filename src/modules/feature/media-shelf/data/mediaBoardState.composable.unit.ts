@@ -6,7 +6,7 @@ import {
 	mediaExternalToolElementResponseFactory,
 	mediaLineResponseFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
 import { useSharedMediaBoardState as useMediaBoardState } from "./mediaBoardState.composable";
 

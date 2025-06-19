@@ -14,7 +14,7 @@ import {
 	mountComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { BusinessError, Pagination } from "@/store/types/commons";
 import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory";
 import { mapAxiosErrorToResponseError } from "@/utils/api";

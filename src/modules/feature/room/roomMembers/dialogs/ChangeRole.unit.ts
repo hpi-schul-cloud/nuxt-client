@@ -16,7 +16,7 @@ import { RoomMember, useRoomMembersStore } from "@data-room";
 import { nextTick } from "vue";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import {
 	meResponseFactory,
 	mockedPiniaStoreTyping,

@@ -7,7 +7,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useSchoolLicenseApi } from "@data-license";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { HttpStatusCode } from "../../store/types/http-status-code.enum";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";

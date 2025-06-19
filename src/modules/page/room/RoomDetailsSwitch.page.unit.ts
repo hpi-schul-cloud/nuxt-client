@@ -13,7 +13,7 @@ import { ref } from "vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
 import { Router, useRoute, useRouter } from "vue-router";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { useRoomAuthorization } from "@data-room";
 
 vi.mock("vue-router", () => ({

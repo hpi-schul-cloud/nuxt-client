@@ -9,7 +9,7 @@ import {
 import * as BoardApi from "@data-board";
 import * as FileStorageApi from "@data-file";
 import * as FolderState from "@data-folder";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";

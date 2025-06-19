@@ -22,7 +22,7 @@ import {
 	useBoardPermissions,
 	useCardStore,
 } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";

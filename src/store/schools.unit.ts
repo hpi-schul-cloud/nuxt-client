@@ -7,7 +7,7 @@ import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolS
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosError } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";

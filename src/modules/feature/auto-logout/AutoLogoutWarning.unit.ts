@@ -9,7 +9,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { computed, ref } from "vue";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { Router, useRouter } from "vue-router";
 import BaseModal from "@/components/base/BaseModal.vue";
 import { SessionStatus } from "./types";

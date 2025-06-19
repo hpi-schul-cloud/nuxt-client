@@ -2,7 +2,7 @@ import { FileRecordParentType, PreviewStatus } from "@/fileStorageApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { defineComponent } from "vue";
 import { usePreviewGenerator } from "./PreviewGenerator.composable";

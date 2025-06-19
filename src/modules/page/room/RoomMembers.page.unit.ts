@@ -30,7 +30,7 @@ import {
 	useRoomMembersStore,
 } from "@data-room";
 import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPlus } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";

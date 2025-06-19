@@ -6,7 +6,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { System, useSystemApi } from "@data-system";
 import { useOAuthApi } from "@data-oauth";
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { DeepMocked, createMock } from "@golevelup/ts-vitest";
 import { LanguageType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";

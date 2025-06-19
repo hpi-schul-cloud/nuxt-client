@@ -13,7 +13,7 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useExternalToolLaunchState } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";

@@ -2,7 +2,7 @@ import { BoardFeature } from "@/serverApi/v3";
 import { mountComposable } from "@@/tests/test-utils";
 import { useBoardFeatures } from "./BoardFeatures.composable";
 import { useBoardStore } from "./Board.store";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 
 vi.mock("./Board.store");
 const mockedUseBoardStore = vi.mocked(useBoardStore);

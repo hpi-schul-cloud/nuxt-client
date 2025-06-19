@@ -10,7 +10,7 @@ import {
 	useContextExternalToolConfigurationStatus,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDotMenu } from "@ui-room-details";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";

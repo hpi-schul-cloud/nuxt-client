@@ -145,7 +145,7 @@ export default defineConfigWithVueTs([
 		],
 		languageOptions: {
 			globals: {
-				...globals.jest,
+				// ...globals.jest,
 				mount: "readonly",
 				shallowMount: "readonly",
 				fail: "readonly",

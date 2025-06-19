@@ -8,7 +8,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { ContentElementBar } from "@ui-board";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";

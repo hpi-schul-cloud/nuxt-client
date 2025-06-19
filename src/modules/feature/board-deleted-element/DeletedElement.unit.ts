@@ -4,7 +4,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";

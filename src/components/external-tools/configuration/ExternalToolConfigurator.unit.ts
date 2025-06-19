@@ -14,7 +14,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import { VAutocomplete, VBtn } from "vuetify/lib/components/index";

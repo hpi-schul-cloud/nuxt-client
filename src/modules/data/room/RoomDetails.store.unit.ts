@@ -1,6 +1,6 @@
 import { createPinia, setActivePinia } from "pinia";
 import { useRoomDetailsStore, RoomVariant } from "./RoomDetails.store";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance } from "axios";
 import * as serverApi from "@/serverApi/v3/api";
 import { useApplicationError } from "@/composables/application-error.composable";

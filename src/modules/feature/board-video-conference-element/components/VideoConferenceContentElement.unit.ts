@@ -16,7 +16,7 @@ import {
 	useContentElementState,
 } from "@data-board";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { BoardMenu } from "@ui-board";
 import {
 	KebabMenuActionDelete,

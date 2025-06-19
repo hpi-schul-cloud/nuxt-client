@@ -29,7 +29,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";

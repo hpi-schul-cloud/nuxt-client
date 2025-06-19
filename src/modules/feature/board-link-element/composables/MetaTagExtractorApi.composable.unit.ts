@@ -5,7 +5,7 @@ import {
 } from "@/serverApi/v3/api";
 import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
 
 describe("useMetaTagExtractorApi", () => {

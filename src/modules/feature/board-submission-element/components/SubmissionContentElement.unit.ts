@@ -8,7 +8,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useContentElementState } from "@data-board";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { shallowMount } from "@vue/test-utils";
 import { computed, ref, unref } from "vue";

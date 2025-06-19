@@ -4,7 +4,7 @@ import {
 	axiosErrorFactory,
 	contextExternalToolFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { useContextExternalToolState } from "./contextExternalToolState.composable";
 import { ContextExternalTool } from "./types";

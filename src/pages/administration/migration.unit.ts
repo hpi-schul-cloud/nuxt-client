@@ -2,7 +2,7 @@ import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import { ComponentMountingOptions, mount, shallowMount } from "@vue/test-utils";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { THEME_KEY } from "@/utils/inject";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";

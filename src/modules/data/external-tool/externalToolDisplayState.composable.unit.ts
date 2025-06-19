@@ -4,7 +4,7 @@ import {
 	axiosErrorFactory,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useExternalToolDisplayState } from "./externalToolDisplayState.composable";
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";

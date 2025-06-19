@@ -18,7 +18,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { ComponentProps } from "vue-component-type-helpers";
 import { envsFactory } from "@@/tests/test-utils";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";

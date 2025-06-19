@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import ClassMembersPage from "./ClassMembers.page.vue";
 import { Group, useGroupState } from "@data-group";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { groupFactory } from "@@/tests/test-utils/factory";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";

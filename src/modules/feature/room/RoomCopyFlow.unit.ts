@@ -14,7 +14,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { RoomCopyFlow } from "@feature-room";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { flushPromises } from "@vue/test-utils";
 import { nextTick } from "vue";
 

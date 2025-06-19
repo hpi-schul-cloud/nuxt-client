@@ -4,7 +4,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { VTextField } from "vuetify/lib/components/index";
 
 describe("@/components/share/ShareModalResult", () => {

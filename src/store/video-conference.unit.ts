@@ -17,7 +17,7 @@ import {
 	VideoConferenceState,
 } from "./types/video-conference";
 import VideoConferenceModule from "./video-conference";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 
 describe("VideoConferenceModule", () => {

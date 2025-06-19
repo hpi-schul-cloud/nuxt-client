@@ -12,7 +12,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useSharedSchoolYearChange } from "@data-school";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { VBtn, VCheckbox } from "vuetify/lib/components/index";

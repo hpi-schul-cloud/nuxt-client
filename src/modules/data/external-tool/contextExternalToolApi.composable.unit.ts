@@ -11,7 +11,7 @@ import {
 	contextExternalToolResponseFactory,
 	mockApiResponse,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import {
 	ContextExternalToolMapper,
 	ToolContextMapping,

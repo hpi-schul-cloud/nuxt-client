@@ -1,5 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSchoolApi } from "./schoolApi.composable";
 
 describe("SchoolApi.composable", () => {

@@ -10,7 +10,7 @@ import { CardResponse, DrawingElementResponse } from "@/serverApi/v3/api";
 import { ApplicationError } from "@/store/types/application-error";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosPromise } from "axios";
 import { useBoardApi } from "./BoardApi.composable";
 

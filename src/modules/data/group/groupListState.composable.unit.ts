@@ -4,7 +4,7 @@ import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { groupResponseFactory, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { GroupListFilter, useGroupApi, useGroupListState } from "./index";
 
 vi.mock("@data-group/GroupApi.composable");

@@ -1,4 +1,4 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { Group, useGroupApi, useGroupState } from "./index";
 import { groupFactory } from "@@/tests/test-utils/factory/groupFactory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";

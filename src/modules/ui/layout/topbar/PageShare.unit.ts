@@ -4,7 +4,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import PageShare from "./PageShare.vue";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 
 describe("@ui-layout/PageShare", () => {
 	const setup = (attrs = {}) => {

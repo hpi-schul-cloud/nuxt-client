@@ -2,7 +2,7 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
 import { useSystemApi } from "@data-system";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import {
 	createTestingI18n,
 	createTestingVuetify,

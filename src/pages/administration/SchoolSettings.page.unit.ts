@@ -16,7 +16,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useSharedSchoolYearChange } from "@data-school";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, reactive } from "vue";
 import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";

@@ -7,7 +7,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { useDragAndDrop } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
