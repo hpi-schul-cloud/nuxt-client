@@ -19,13 +19,13 @@ import {
 } from "@@/tests/test-utils/setup";
 import { downloadFile } from "@/utils/fileHelper";
 
-jest.mock("@/utils/fileHelper");
+vi.mock("@/utils/fileHelper");
 
 describe("SchoolPolicy", () => {
-	let authModule: jest.Mocked<AuthModule>;
-	let schoolsModule: jest.Mocked<SchoolsModule>;
-	let privacyPolicyModule: jest.Mocked<PrivacyPolicyModule>;
-	let notifierModule: jest.Mocked<NotifierModule>;
+	let authModule: vi.Mocked<AuthModule>;
+	let schoolsModule: vi.Mocked<SchoolsModule>;
+	let privacyPolicyModule: vi.Mocked<PrivacyPolicyModule>;
+	let notifierModule: vi.Mocked<NotifierModule>;
 
 	const mockPolicy: ConsentVersion = {
 		_id: "123",
@@ -187,7 +187,7 @@ describe("SchoolPolicy", () => {
 		it("should call downloadFile method", async () => {
 			const wrapper = setup();
 
-			const downloadFileMock = jest.mocked(downloadFile).mockReturnValueOnce();
+			const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
 			const policyItem = wrapper.find('[data-testid="policy-item"]');
 			await policyItem.trigger("click");
 

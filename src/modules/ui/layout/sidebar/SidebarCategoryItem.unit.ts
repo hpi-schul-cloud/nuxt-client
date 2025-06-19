@@ -31,12 +31,12 @@ const groupItem: SidebarGroupItem = {
 	],
 };
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 
-jest.mock("./SidebarSelection.composable");
-const mockedUseSidebarSelection = jest.mocked(useSidebarSelection);
+vi.mock("./SidebarSelection.composable");
+const mockedUseSidebarSelection = vi.mocked(useSidebarSelection);
 
 describe("@ui-layout/SidebarCategoryItem", () => {
 	mockedUseSidebarSelection.mockReturnValue({ isActive: ref(false) });

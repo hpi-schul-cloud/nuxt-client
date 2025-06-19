@@ -10,10 +10,10 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
 import { useSharedMediaBoardState as useMediaBoardState } from "./mediaBoardState.composable";
 
-jest.mock("./mediaBoardApi.composable");
-jest.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("./mediaBoardApi.composable");
+vi.mock("@/components/error-handling/ErrorHandler.composable");
 
-jest.mock<typeof import("@/utils/create-shared-composable")>(
+vi.mock<typeof import("@/utils/create-shared-composable")>(
 	"@/utils/create-shared-composable",
 	() => ({
 		createTestableSharedComposable: (composable) => composable,
@@ -28,12 +28,12 @@ describe("mediaBoardState.composable", () => {
 		mediaBoardApiMock = createMock<ReturnType<typeof useMediaBoardApi>>();
 		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>();
 
-		jest.mocked(useMediaBoardApi).mockReturnValue(mediaBoardApiMock);
-		jest.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
+		vi.mocked(useMediaBoardApi).mockReturnValue(mediaBoardApiMock);
+		vi.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getLineIndex", () => {

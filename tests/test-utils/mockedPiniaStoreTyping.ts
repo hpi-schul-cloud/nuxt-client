@@ -20,7 +20,7 @@ export type MockedStore<TStoreDef extends () => unknown> =
 					[K in keyof Actions]: Actions[K] extends (
 						...args: infer Args
 					) => infer ReturnT
-						? jest.Mock<ReturnT, Args>
+						? vi.Mock<ReturnT, Args>
 						: Actions[K];
 				}
 			>

@@ -40,11 +40,11 @@ import { VCardText } from "vuetify/lib/components/index";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 
-jest.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
-const mockedSchoolExternalToolUsage = jest.mocked(useSchoolExternalToolUsage);
+vi.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
+const mockedSchoolExternalToolUsage = vi.mocked(useSchoolExternalToolUsage);
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -129,7 +129,7 @@ describe("ExternalToolSection", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when component is used", () => {
@@ -222,7 +222,7 @@ describe("ExternalToolSection", () => {
 			);
 
 			const windowMock = createMock<Window>();
-			jest.spyOn(window, "open").mockImplementation(() => windowMock);
+			vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 			return {
 				wrapper,

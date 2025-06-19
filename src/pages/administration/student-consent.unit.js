@@ -61,10 +61,10 @@ const createMockStore = () => {
 			bulkConsent: {
 				namespaced: true,
 				actions: {
-					register: jest.fn(),
-					updateStudent: jest.fn(),
-					setStudents: jest.fn(),
-					findConsentUsers: jest.fn(),
+					register: vi.fn(),
+					updateStudent: vi.fn(),
+					setStudents: vi.fn(),
+					findConsentUsers: vi.fn(),
 				},
 				getters: {
 					getSelectedStudentsData: () => mockData,
@@ -75,11 +75,11 @@ const createMockStore = () => {
 				},
 
 				mutations: {
-					setSelectedStudents: jest.fn(),
-					setRegisteredStudents: jest.fn(),
-					setStudentsData: jest.fn(),
-					updateStudentData: jest.fn(),
-					setRegisterError: jest.fn(),
+					setSelectedStudents: vi.fn(),
+					setRegisteredStudents: vi.fn(),
+					setStudentsData: vi.fn(),
+					updateStudentData: vi.fn(),
+					setRegisterError: vi.fn(),
 				},
 			},
 			filePaths: {
@@ -290,7 +290,7 @@ describe("students/consent", () => {
 	});
 
 	it("should progress next step if consent is not required", async () => {
-		const notifierModuleMock = jest.spyOn(notifierModule, "show");
+		const notifierModuleMock = vi.spyOn(notifierModule, "show");
 		const envs = envsFactory.build({ FEATURE_CONSENT_NECESSARY: false });
 		envConfigModule.setEnvs(envs);
 		const { wrapper } = setup();

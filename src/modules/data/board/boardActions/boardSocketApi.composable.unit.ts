@@ -43,28 +43,28 @@ import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
 
-jest.mock("../socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("../socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("../fixSamePositionDnD.composable");
-const mockedUseForceRender = jest.mocked(useForceRender);
+vi.mock("../fixSamePositionDnD.composable");
+const mockedUseForceRender = vi.mocked(useForceRender);
 
-jest.mock("./boardRestApi.composable");
-const mockedUseBoardRestApi = jest.mocked(useBoardRestApi);
+vi.mock("./boardRestApi.composable");
+const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as vi.Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("@util-board/BoardNotifier.composable");
-jest.mock("@util-board/LastCreatedElement.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
+vi.mock("@util-board/BoardNotifier.composable");
+vi.mock("@util-board/LastCreatedElement.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+vi.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
 
 describe("useBoardSocketApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
@@ -292,7 +292,7 @@ describe("useBoardSocketApi", () => {
 
 		describe("failure actions", () => {
 			it("should call applicationErrorModule.setError for fetchBoardFailure action", () => {
-				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
+				const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
 				const { dispatch } = useBoardSocketApi();
 				dispatch(BoardActions.fetchBoardFailure({ boardId: "test" }));
 

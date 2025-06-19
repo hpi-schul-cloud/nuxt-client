@@ -31,26 +31,26 @@ import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 
-jest.mock("@data-board/ContentElementState.composable");
-jest.mock("@data-board/BoardFocusHandler.composable");
-jest.mock("@data-board/BoardPermissions.composable");
-jest.mock("../composables/VideoConference.composable");
+vi.mock("@data-board/ContentElementState.composable");
+vi.mock("@data-board/BoardFocusHandler.composable");
+vi.mock("@data-board/BoardPermissions.composable");
+vi.mock("../composables/VideoConference.composable");
 
-window.open = jest.fn();
+window.open = vi.fn();
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
-const useRouteMock = <jest.Mock>useRoute;
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
+const useRouteMock = <vi.Mock>useRoute;
 useRouteMock.mockReturnValue({ params: { id: "room-id" } });
 
-jest.mock("@data-board/BoardFeatures.composable");
-jest.mocked(useBoardFeatures).mockImplementation(() => {
+vi.mock("@data-board/BoardFeatures.composable");
+vi.mocked(useBoardFeatures).mockImplementation(() => {
 	return {
-		isFeatureEnabled: jest.fn().mockReturnValue(true),
+		isFeatureEnabled: vi.fn().mockReturnValue(true),
 	};
 });
 
-const mockedUseContentElementState = jest.mocked(useContentElementState);
+const mockedUseContentElementState = vi.mocked(useContentElementState);
 
 let defaultElement = videoConferenceElementResponseFactory.build();
 
@@ -74,13 +74,13 @@ describe("VideoConferenceContentElement", () => {
 
 		useBoardFocusHandlerMock =
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 
 		defaultElement = videoConferenceElementResponseFactory.build();
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setupWrapper = (
@@ -134,11 +134,9 @@ describe("VideoConferenceContentElement", () => {
 			ReturnType<typeof useVideoConference>
 		> = createMock<ReturnType<typeof useVideoConference>>();
 
-		jest.mocked(useVideoConference).mockReturnValue(useVideoConferenceMock);
+		vi.mocked(useVideoConference).mockReturnValue(useVideoConferenceMock);
 
-		useVideoConferenceMock.fetchVideoConferenceInfo.mockImplementation(
-			jest.fn()
-		);
+		useVideoConferenceMock.fetchVideoConferenceInfo.mockImplementation(vi.fn());
 		useVideoConferenceMock.joinVideoConference.mockImplementation(() =>
 			Promise.resolve("https://example.com")
 		);
@@ -165,7 +163,7 @@ describe("VideoConferenceContentElement", () => {
 			isStudent: ref(role === "student"),
 		});
 
-		jest.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
+		vi.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
 
 		const wrapper = mount(VideoConferenceContentElement, {
 			global: {

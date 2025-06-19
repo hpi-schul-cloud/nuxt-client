@@ -16,13 +16,13 @@ describe("VideoConferenceComposable", () => {
 	beforeEach(() => {
 		videoConferenceApi = createMock<serverApi.VideoConferenceApiInterface>();
 
-		jest
-			.spyOn(serverApi, "VideoConferenceApiFactory")
-			.mockReturnValue(videoConferenceApi);
+		vi.spyOn(serverApi, "VideoConferenceApiFactory").mockReturnValue(
+			videoConferenceApi
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchVideoConferenceInfo", () => {

@@ -112,11 +112,11 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			Object.defineProperty(window, "location", {
-				set: jest.fn(),
+				set: vi.fn(),
 				get: () => createMock<Location>(),
 			});
 
-			const locationSpy = jest.spyOn(window, "location", "set");
+			const locationSpy = vi.spyOn(window, "location", "set");
 
 			const lessonCard = wrapper.find(".lesson-card");
 			await lessonCard.trigger("click");

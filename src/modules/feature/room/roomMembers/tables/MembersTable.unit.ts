@@ -47,14 +47,14 @@ import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
 import { ChangeRole } from "@feature-room";
 
-jest.mock("@ui-confirmation-dialog");
-const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
+vi.mock("@ui-confirmation-dialog");
+const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
-jest.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const boardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorizationMock = jest.mocked(useRoomAuthorization);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
 type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
@@ -65,11 +65,11 @@ type RoomAuthorizationRefs = RefPropertiesOnly<
 >;
 
 describe("MembersTable", () => {
-	let askConfirmationMock: jest.Mock;
+	let askConfirmationMock: vi.Mock;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
-		askConfirmationMock = jest.fn();
+		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});
@@ -162,7 +162,7 @@ describe("MembersTable", () => {
 						initialState: {
 							roomMembersStore: {
 								roomMembers: [...members, currentUser],
-								isRoomOwner: jest.fn(),
+								isRoomOwner: vi.fn(),
 							},
 						},
 					}),

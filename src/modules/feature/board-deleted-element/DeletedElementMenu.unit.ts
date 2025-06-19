@@ -23,7 +23,7 @@ describe("DeletedElementMenu", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("Delete Button", () => {

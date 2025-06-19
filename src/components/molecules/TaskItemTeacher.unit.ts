@@ -37,7 +37,7 @@ let copyModuleMock: CopyModule;
 let notifierModuleMock: NotifierModule;
 
 const mockRouter = {
-	push: jest.fn(),
+	push: vi.fn(),
 };
 
 const getWrapper = (props: { task: object }) => {
@@ -77,10 +77,10 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 
 	it("should direct user to legacy task details page", () => {
 		Object.defineProperty(window, "location", {
-			set: jest.fn(),
+			set: vi.fn(),
 			get: () => createMock<Location>(),
 		});
-		const locationSpy = jest.spyOn(window, "location", "set");
+		const locationSpy = vi.spyOn(window, "location", "set");
 
 		const wrapper = getWrapper({ task: tasksTeacher[0] });
 		const taskCard = wrapper.findComponent(VListItem);

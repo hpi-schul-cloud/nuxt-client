@@ -28,15 +28,15 @@ describe("BoardApi.composable", () => {
 		elementApi = createMock<serverApi.BoardElementApiInterface>();
 		roomsApi = createMock<serverApi.CourseRoomsApiInterface>();
 
-		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
-		jest.spyOn(serverApi, "BoardColumnApiFactory").mockReturnValue(columnApi);
-		jest.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(cardApi);
-		jest.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
-		jest.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(roomsApi);
+		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
+		vi.spyOn(serverApi, "BoardColumnApiFactory").mockReturnValue(columnApi);
+		vi.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(cardApi);
+		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
+		vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(roomsApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("createColumnCall", () => {
@@ -532,7 +532,7 @@ describe("BoardApi.composable", () => {
 				},
 			};
 
-			boardApi.boardControllerGetBoardContext = jest
+			boardApi.boardControllerGetBoardContext = vi
 				.fn()
 				.mockResolvedValueOnce(FAKE_RESPONSE);
 
@@ -567,10 +567,10 @@ describe("BoardApi.composable", () => {
 				},
 			};
 
-			boardApi.boardControllerGetBoardContext = jest
+			boardApi.boardControllerGetBoardContext = vi
 				.fn()
 				.mockResolvedValueOnce(FAKE_CONTEXT_RESPONSE);
-			roomsApi.courseRoomsControllerGetRoomBoard = jest
+			roomsApi.courseRoomsControllerGetRoomBoard = vi
 				.fn()
 				.mockResolvedValueOnce(FAKE_ROOM_RESPONSE);
 

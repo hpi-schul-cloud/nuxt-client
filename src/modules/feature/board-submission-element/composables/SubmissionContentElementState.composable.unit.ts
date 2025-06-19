@@ -14,8 +14,8 @@ const notifierModule = createModuleMocks(NotifierModule);
 
 const mockedSubmissionsResponse = submissionsResponseFactory.build();
 
-jest.mock("./SubmissionItemApi.composable");
-const mockedUseSubmissionItemApi = jest.mocked(useSubmissionItemApi);
+vi.mock("./SubmissionItemApi.composable");
+const mockedUseSubmissionItemApi = vi.mocked(useSubmissionItemApi);
 
 describe("SubmissionContentElementState.composable", () => {
 	let mockedUseSubmissionItemApiCalls: DeepMocked<
@@ -29,7 +29,7 @@ describe("SubmissionContentElementState.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const setup = (

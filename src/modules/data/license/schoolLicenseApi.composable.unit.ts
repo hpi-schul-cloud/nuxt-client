@@ -13,13 +13,13 @@ describe("useSchoolLicenseApi", () => {
 	beforeEach(() => {
 		schoolLicenseApi = createMock<serverApi.SchoolLicenseApiInterface>();
 
-		jest
-			.spyOn(serverApi, "SchoolLicenseApiFactory")
-			.mockReturnValue(schoolLicenseApi);
+		vi.spyOn(serverApi, "SchoolLicenseApiFactory").mockReturnValue(
+			schoolLicenseApi
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("updateSchoolLicenses", () => {

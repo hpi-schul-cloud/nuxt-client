@@ -11,16 +11,16 @@ import {
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-jest.mock("@/composables/locale-storage.composable", () => ({
+vi.mock("@/composables/locale-storage.composable", () => ({
 	useStorage: () => ({
-		set: jest.fn(),
-		get: jest.fn(),
-		getMultiple: jest.fn().mockReturnValue([401, "de.unauthorized", false]),
-		remove: jest.fn(),
+		set: vi.fn(),
+		get: vi.fn(),
+		getMultiple: vi.fn().mockReturnValue([401, "de.unauthorized", false]),
+		remove: vi.fn(),
 	}),
 }));
 
@@ -28,15 +28,15 @@ describe("@pages/Error.page.vue", () => {
 	beforeEach(() => {
 		Object.defineProperty(window, "location", {
 			configurable: true,
-			value: { assign: jest.fn() },
+			value: { assign: vi.fn() },
 		});
 		Object.defineProperty(window, "performance", {
 			value: {
-				getEntriesByType: jest.fn(), // for reload checking (see component)
-				now: jest.fn(), // for vue metrics
+				getEntriesByType: vi.fn(), // for reload checking (see component)
+				now: vi.fn(), // for vue metrics
 			},
 		});
-		(window.performance.getEntriesByType as jest.Mock).mockReturnValue([
+		(window.performance.getEntriesByType as vi.Mock).mockReturnValue([
 			{ type: "navigate" },
 		]);
 	});

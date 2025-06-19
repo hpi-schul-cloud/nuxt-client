@@ -33,22 +33,20 @@ import BoardColumnVue from "./BoardColumn.vue";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 
-jest.mock("@data-board/BoardPermissions.composable");
-const mockedUserPermissions = jest.mocked(useBoardPermissions);
+vi.mock("@data-board/BoardPermissions.composable");
+const mockedUserPermissions = vi.mocked(useBoardPermissions);
 
-jest.mock("@util-board/BoardNotifier.composable");
-jest.mock("@util-board/LastCreatedElement.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockUseSharedLastCreatedElement = jest.mocked(
-	useSharedLastCreatedElement
-);
+vi.mock("@util-board/BoardNotifier.composable");
+vi.mock("@util-board/LastCreatedElement.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-jest.mock("@data-board/fixSamePositionDnD.composable");
-const mockedUseForceRender = jest.mocked(useForceRender);
+vi.mock("@data-board/fixSamePositionDnD.composable");
+const mockedUseForceRender = vi.mocked(useForceRender);
 
 mockUseSharedLastCreatedElement.mockReturnValue({
 	lastCreatedElementId: computed(() => "element-id"),
-	resetLastCreatedElementId: jest.fn(),
+	resetLastCreatedElementId: vi.fn(),
 });
 
 describe("BoardColumn", () => {

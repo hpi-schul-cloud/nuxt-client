@@ -5,7 +5,7 @@ describe("news store", () => {
 	describe("findNews", () => {
 		it("should request a list of news", (done) => {
 			const mockApi = {
-				newsControllerFindAll: jest.fn(() => ({
+				newsControllerFindAll: vi.fn(() => ({
 					data: {
 						data: [{ mockNews: "mock news value" }],
 						total: 3,
@@ -14,9 +14,9 @@ describe("news store", () => {
 					},
 				})),
 			};
-			jest
-				.spyOn(serverApi, "NewsApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
+			vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
+				mockApi as unknown as serverApi.NewsApiInterface
+			);
 			const newsModule = new NewsModule({});
 
 			newsModule.findNews().then(() => {
@@ -34,11 +34,11 @@ describe("news store", () => {
 		it("should handle an error", (done) => {
 			const error = { status: 418, statusText: "I'm a teapot" };
 			const mockApi = {
-				newsControllerFindAll: jest.fn(() => Promise.reject({ ...error })),
+				newsControllerFindAll: vi.fn(() => Promise.reject({ ...error })),
 			};
-			jest
-				.spyOn(serverApi, "NewsApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
+			vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
+				mockApi as unknown as serverApi.NewsApiInterface
+			);
 			const newsModule = new NewsModule({});
 
 			newsModule.findNews().then(() => {
@@ -54,13 +54,13 @@ describe("news store", () => {
 	describe("fetchNews", () => {
 		it("should request a single news", (done) => {
 			const mockApi = {
-				newsControllerFindOne: jest.fn(() => ({
+				newsControllerFindOne: vi.fn(() => ({
 					data: { mockNews: "mock news value" },
 				})),
 			};
-			jest
-				.spyOn(serverApi, "NewsApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
+			vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
+				mockApi as unknown as serverApi.NewsApiInterface
+			);
 			const newsModule = new NewsModule({});
 			const newsId = "1234";
 
@@ -77,11 +77,11 @@ describe("news store", () => {
 		it("should handle an error", (done) => {
 			const error = { status: 418, statusText: "I'm a teapot" };
 			const mockApi = {
-				newsControllerFindOne: jest.fn(() => Promise.reject({ ...error })),
+				newsControllerFindOne: vi.fn(() => Promise.reject({ ...error })),
 			};
-			jest
-				.spyOn(serverApi, "NewsApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
+			vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
+				mockApi as unknown as serverApi.NewsApiInterface
+			);
 			const newsModule = new NewsModule({});
 			const newsId = "1234";
 
@@ -98,13 +98,13 @@ describe("news store", () => {
 	describe("createNews", () => {
 		it("should request a single news", (done) => {
 			const mockApi = {
-				newsControllerCreate: jest.fn((newsToCreate) => ({
+				newsControllerCreate: vi.fn((newsToCreate) => ({
 					data: { id: 42, ...newsToCreate },
 				})),
 			};
-			jest
-				.spyOn(serverApi, "NewsApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
+			vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
+				mockApi as unknown as serverApi.NewsApiInterface
+			);
 			const newsModule = new NewsModule({});
 
 			const newsToCreate: serverApi.CreateNewsParams = {
@@ -130,11 +130,11 @@ describe("news store", () => {
 		it("should handle an error", (done) => {
 			const error = { status: 418, statusText: "I'm a teapot" };
 			const mockApi = {
-				newsControllerCreate: jest.fn(() => Promise.reject({ ...error })),
+				newsControllerCreate: vi.fn(() => Promise.reject({ ...error })),
 			};
-			jest
-				.spyOn(serverApi, "NewsApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
+			vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
+				mockApi as unknown as serverApi.NewsApiInterface
+			);
 			const newsModule = new NewsModule({});
 			const newsToCreate: serverApi.CreateNewsParams = {
 				title: "a news title",

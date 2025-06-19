@@ -26,8 +26,8 @@ import { VCard } from "vuetify/lib/components/index";
 import RoomDashboard from "./RoomDashboard.vue";
 import { EmptyState } from "@ui-empty-state";
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
 
 const mockData = {
 	roomId: "123",
@@ -307,7 +307,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should be sorted the elements by keyboard'", async () => {
-			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
+			const moveByKeyboardMock = vi.fn().mockImplementation(() => ({}));
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
@@ -325,7 +325,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should NOT be sorted the elements by keyboard for students'", async () => {
-			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
+			const moveByKeyboardMock = vi.fn().mockImplementation(() => ({}));
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "student" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
@@ -343,7 +343,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should set 'isDragging' false if 'tab' key is pressed", async () => {
-			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
+			const moveByKeyboardMock = vi.fn().mockImplementation(() => ({}));
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
@@ -408,7 +408,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		};
 
 		it("should call the openItemDeleteDialog method when lesson should be deleted", async () => {
-			const openDeleteDialogMock = jest.fn();
+			const openDeleteDialogMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
@@ -420,7 +420,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should call the openItemDeleteDialog method when task should be deleted", async () => {
-			const openDeleteDialogMock = jest.fn();
+			const openDeleteDialogMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
@@ -432,7 +432,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should call deleteItem method after modal emits 'dialog-confirmed'", async () => {
-			const deleteItemMock = jest.fn();
+			const deleteItemMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.deleteItem = deleteItemMock;
 			wrapper.vm.itemDelete.isOpen = true;
@@ -444,9 +444,9 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should call store methods after modal emits 'dialog-confirmed' when deleting task", async () => {
-			const deleteTaskMock = jest.fn();
-			const fetchContentMock = jest.fn();
-			const deleteLessonMock = jest.fn();
+			const deleteTaskMock = vi.fn();
+			const fetchContentMock = vi.fn();
+			const deleteLessonMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			courseRoomDetailsModule.deleteTask = deleteTaskMock;
 			courseRoomDetailsModule.fetchContent = fetchContentMock;
@@ -465,9 +465,9 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should call store methods after modal emits 'dialog-confirmed' when deleting lesson", async () => {
-			const deleteTaskMock = jest.fn();
-			const fetchContentMock = jest.fn();
-			const deleteLessonMock = jest.fn().mockResolvedValue(true);
+			const deleteTaskMock = vi.fn();
+			const fetchContentMock = vi.fn();
+			const deleteLessonMock = vi.fn().mockResolvedValue(true);
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			courseRoomDetailsModule.deleteTask = deleteTaskMock;
 			courseRoomDetailsModule.fetchContent = fetchContentMock;
@@ -500,7 +500,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 	describe("Finishing and Restoring Tasks", () => {
 		describe("For teachers", () => {
 			it("should call finishTask action", async () => {
-				const finishTaskMock = jest.fn();
+				const finishTaskMock = vi.fn();
 				const wrapper = getWrapper({
 					roomDataObject: mockData,
 					role: "teacher",
@@ -515,7 +515,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			});
 
 			it("should call restoreTask action", async () => {
-				const finishTaskMock = jest.fn();
+				const finishTaskMock = vi.fn();
 				const wrapper = getWrapper({
 					roomDataObject: mockData,
 					role: "teacher",
@@ -532,7 +532,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 		describe("For students", () => {
 			it("should call finishTask action", async () => {
-				const finishTaskMock = jest.fn();
+				const finishTaskMock = vi.fn();
 				const wrapper = getWrapper({
 					roomDataObject: mockData,
 					role: "student",
@@ -547,7 +547,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			});
 
 			it("should call restoreTask action", async () => {
-				const finishTaskMock = jest.fn();
+				const finishTaskMock = vi.fn();
 				const wrapper = getWrapper({
 					roomDataObject: mockData,
 					role: "student",
@@ -564,7 +564,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("Publishing and unpublishing a board", () => {
 		it("should call publishBoard action", async () => {
-			const publishCardMock = jest.fn();
+			const publishCardMock = vi.fn();
 			const wrapper = getWrapper({
 				roomDataObject: mockData,
 				role: "teacher",
@@ -588,7 +588,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
-			const copyTaskMock = jest.fn();
+			const copyTaskMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.copyTask = copyTaskMock;
 
@@ -627,7 +627,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should call the copyLesson method when a lesson component emits 'copy-lesson' custom event", async () => {
-			const copyLessonMock = jest.fn();
+			const copyLessonMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.copyLesson = copyLessonMock;
 
@@ -666,7 +666,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should call the copyBoard method when a board component emits 'copy-board' custom event", async () => {
-			const copyBoardMock = jest.fn();
+			const copyBoardMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.copyBoard = copyBoardMock;
 

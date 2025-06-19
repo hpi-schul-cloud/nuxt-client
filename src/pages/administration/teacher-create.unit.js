@@ -12,7 +12,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
 import { default as NewTeacher } from "./TeacherCreate.page.vue";
 
-jest.mock("@/utils/pageTitle", () => ({
+vi.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
@@ -45,7 +45,7 @@ describe("teachers/new", () => {
 	});
 
 	it("should call 'createTeacher' action", async () => {
-		const createTeacherStub = jest.fn();
+		const createTeacherStub = vi.fn();
 		const mockStore = createMockStore(createTeacherStub);
 		const mockMe = meResponseFactory.build();
 
@@ -84,11 +84,11 @@ describe("teachers/new", () => {
 	});
 
 	it("should call notifier successful", async () => {
-		const createTeacherStub = jest.fn();
+		const createTeacherStub = vi.fn();
 		const mockStore = createMockStore(createTeacherStub);
 		const mockMe = meResponseFactory.build();
 
-		const notifierModuleMock = jest.spyOn(notifierModule, "show");
+		const notifierModuleMock = vi.spyOn(notifierModule, "show");
 		const wrapper = mount(NewTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -123,7 +123,7 @@ describe("teachers/new", () => {
 	});
 
 	it("should show error", async () => {
-		const failingCreateAction = jest.fn(() => Promise.reject());
+		const failingCreateAction = vi.fn(() => Promise.reject());
 		const mockStore = createMockStore(failingCreateAction);
 		const mockMe = meResponseFactory.build();
 

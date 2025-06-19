@@ -20,7 +20,7 @@ describe("ProvisioningOptionsApi.composable", () => {
 	beforeAll(() => {
 		schoolApi = createMock<SchoolApiInterface>();
 
-		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
+		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -28,7 +28,7 @@ describe("ProvisioningOptionsApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getProvisioningOptions", () => {

@@ -25,12 +25,12 @@ import { RoomGrid } from "@feature-room";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import { InfoAlert } from "@ui-alert";
 
-jest.mock("vue-router");
-const useRouteMock = useRoute as jest.Mock;
-const useRouterMock = useRouter as jest.Mock;
+vi.mock("vue-router");
+const useRouteMock = useRoute as vi.Mock;
+const useRouterMock = useRouter as vi.Mock;
 
-jest.mock("@data-room/Rooms.state");
-const useRoomsStateMock = useRoomsState as jest.Mock;
+vi.mock("@data-room/Rooms.state");
+const useRoomsStateMock = useRoomsState as vi.Mock;
 
 describe("RoomsPage", () => {
 	beforeEach(() => {
@@ -57,8 +57,8 @@ describe("RoomsPage", () => {
 			rooms: ref([]),
 			isLoading: ref(false),
 			isEmpty: ref(false),
-			fetchRooms: jest.fn(),
-			deleteRoom: jest.fn(),
+			fetchRooms: vi.fn(),
+			deleteRoom: vi.fn(),
 		});
 
 		const wrapper = mount(RoomsPage, {

@@ -89,11 +89,11 @@ describe("DatePicker", () => {
 		});
 
 		it("should display error message for invalid date format", async () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			const { textField, input } = setup();
 
 			await input.setValue("");
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 			await flushPromises();
 
 			const errorElement = textField.find(".v-messages");
@@ -132,11 +132,11 @@ describe("DatePicker", () => {
 		});
 
 		it("should display error message for invalid date format", async () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			const { textField, input } = setup();
 
 			await input.setValue("22");
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 			await flushPromises();
 
 			const errorElement = textField.find(".v-messages");

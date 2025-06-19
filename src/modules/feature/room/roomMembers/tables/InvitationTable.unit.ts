@@ -19,26 +19,26 @@ import {
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { useI18n } from "vue-i18n";
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({
-			t: jest.fn().mockImplementation((key: string) => key),
+		...vi.requireActual("vue-i18n"),
+		useI18n: vi.fn().mockReturnValue({
+			t: vi.fn().mockImplementation((key: string) => key),
 		}),
 	};
 });
-const mockI18n = jest.mocked(useI18n());
+const mockI18n = vi.mocked(useI18n());
 
-jest.mock("@ui-confirmation-dialog");
-const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
-jest.mocked(useDeleteConfirmationDialog);
+vi.mock("@ui-confirmation-dialog");
+const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
+vi.mocked(useDeleteConfirmationDialog);
 
 describe("InvitationTable", () => {
-	let askConfirmationMock: jest.Mock;
-	let askDeleteConfirmationMock: jest.Mock;
+	let askConfirmationMock: vi.Mock;
+	let askDeleteConfirmationMock: vi.Mock;
 	const notifierModule = createModuleMocks(NotifierModule);
 	beforeEach(() => {
-		askConfirmationMock = jest.fn();
+		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});
@@ -47,14 +47,14 @@ describe("InvitationTable", () => {
 			isDialogOpen: ref(false),
 		});
 
-		askDeleteConfirmationMock = jest.fn();
+		askDeleteConfirmationMock = vi.fn();
 		setupDeleteConfirmationComposableMock({
 			askDeleteConfirmationMock,
 		});
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);

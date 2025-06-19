@@ -21,7 +21,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 
 const getWrapper = () => {
 	return mount(CourseRoomList, {

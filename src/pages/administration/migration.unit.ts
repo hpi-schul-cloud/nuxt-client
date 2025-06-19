@@ -19,12 +19,12 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { VCardText } from "vuetify/lib/components/index";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
 
 const router = createMock<Router>();
 
@@ -81,7 +81,7 @@ const getWrapperShallow = (
 	});
 };
 
-window.scrollTo = jest.fn();
+window.scrollTo = vi.fn();
 
 describe("User Migration / Index", () => {
 	beforeEach(() => {
@@ -235,7 +235,7 @@ describe("User Migration / Index", () => {
 		});
 
 		it("implement perform migration", async () => {
-			const performMigrationMock = jest.spyOn(
+			const performMigrationMock = vi.spyOn(
 				importUsersModule,
 				"performMigration"
 			);
@@ -293,10 +293,7 @@ describe("User Migration / Index", () => {
 		it("perform end maintenance", async () => {
 			const { wrapper } = await setup();
 
-			const endMaintenanceMock = jest.spyOn(
-				schoolsModule,
-				"migrationStartSync"
-			);
+			const endMaintenanceMock = vi.spyOn(schoolsModule, "migrationStartSync");
 			endMaintenanceMock.mockImplementation(async () => {
 				schoolsModule.setSchool({
 					...schoolsModule.getSchool,
@@ -397,7 +394,7 @@ describe("User Migration / Index", () => {
 			it("should call stores on dialog-confirm", async () => {
 				const { wrapper } = await setup();
 
-				const cancelMigrationMock = jest.spyOn(
+				const cancelMigrationMock = vi.spyOn(
 					importUsersModule,
 					"cancelMigration"
 				);
@@ -410,9 +407,9 @@ describe("User Migration / Index", () => {
 					});
 				});
 
-				jest
-					.spyOn(schoolsModule, "fetchSchool")
-					.mockResolvedValueOnce(Promise.resolve());
+				vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValueOnce(
+					Promise.resolve()
+				);
 
 				const button = wrapper.findComponent(
 					"[data-testid=import-users-cancel-migration-btn]"
@@ -436,7 +433,7 @@ describe("User Migration / Index", () => {
 			it("should redirect to school settings migration section", async () => {
 				const { wrapper } = await setup();
 
-				const cancelMigrationMock = jest.spyOn(
+				const cancelMigrationMock = vi.spyOn(
 					importUsersModule,
 					"cancelMigration"
 				);
@@ -512,7 +509,7 @@ describe("User Migration / Index", () => {
 
 			afterEach(() => {
 				document.body.innerHTML = "";
-				jest.clearAllMocks();
+				vi.clearAllMocks();
 			});
 
 			const setup = async () => {
@@ -529,11 +526,12 @@ describe("User Migration / Index", () => {
 
 				const wrapper = getWrapper();
 
-				jest
-					.spyOn(importUsersModule, "clearAllAutoMatches")
-					.mockResolvedValueOnce(Promise.resolve());
+				vi.spyOn(
+					importUsersModule,
+					"clearAllAutoMatches"
+				).mockResolvedValueOnce(Promise.resolve());
 
-				jest.spyOn(importUsersStub.methods, "reloadData");
+				vi.spyOn(importUsersStub.methods, "reloadData");
 
 				wrapper.vm.migrationStep = 2;
 				wrapper.vm.t("pages.administration.migration.title", {

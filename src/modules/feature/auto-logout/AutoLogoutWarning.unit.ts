@@ -14,32 +14,32 @@ import { Router, useRouter } from "vue-router";
 import BaseModal from "@/components/base/BaseModal.vue";
 import { SessionStatus } from "./types";
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+		...vi.requireActual("vue-i18n"),
+		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 
-jest.mock("./autoLogout.composable", () => ({
-	useAutoLogout: jest.fn(),
+vi.mock("./autoLogout.composable", () => ({
+	useAutoLogout: vi.fn(),
 }));
 
-jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
 
 describe("AutoLogoutWarning", () => {
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
-	const mockedUseAutoLogout = jest.mocked(useAutoLogout);
+	const mockedUseAutoLogout = vi.mocked(useAutoLogout);
 	const router = createMock<Router>({
 		currentRoute: ref({ path: "/" }),
 	});
-	const useRouterMock = <jest.Mock>useRouter;
+	const useRouterMock = <vi.Mock>useRouter;
 	useRouterMock.mockReturnValue(router);
 
 	const defaultVars = {
@@ -50,8 +50,8 @@ describe("AutoLogoutWarning", () => {
 		remainingTimeInSeconds: 0,
 		showWarningOnRemainingSeconds: 0,
 		sessionStatus: ref<SessionStatus | null>(null),
-		createSession: jest.fn(),
-		extendSession: jest.fn(),
+		createSession: vi.fn(),
+		extendSession: vi.fn(),
 	};
 
 	const setup = (options?: {

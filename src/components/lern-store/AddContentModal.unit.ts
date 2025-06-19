@@ -92,7 +92,7 @@ const lessons = {
 initializeAxios(createMock<AxiosInstance>());
 
 const createMockStore = () => {
-	const createStudentStub = jest.fn();
+	const createStudentStub = vi.fn();
 	const mockStore = createStore({
 		modules: {
 			courses: {

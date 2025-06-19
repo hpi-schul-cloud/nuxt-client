@@ -16,7 +16,7 @@ import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";
 import { ProvisioningOptions } from "./type/ProvisioningOptions";
 
-jest.mock("@data-provisioning-options/ProvisioningOptionsApi.composable");
+vi.mock("@data-provisioning-options/ProvisioningOptionsApi.composable");
 
 describe("ProvisioningOptionsState.composable", () => {
 	let useProvisioningOptionsApiMock: DeepMocked<
@@ -28,13 +28,13 @@ describe("ProvisioningOptionsState.composable", () => {
 		useProvisioningOptionsApiMock =
 			createMock<ReturnType<typeof useProvisioningOptionsApi>>();
 
-		jest
-			.mocked(useProvisioningOptionsApi)
-			.mockReturnValue(useProvisioningOptionsApiMock);
+		vi.mocked(useProvisioningOptionsApi).mockReturnValue(
+			useProvisioningOptionsApiMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchProvisioningOptionsData", () => {

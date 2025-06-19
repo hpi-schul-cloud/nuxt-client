@@ -8,11 +8,11 @@ describe("SchoolApi.composable", () => {
 	beforeEach(() => {
 		schoolApi = createMock<serverApi.SchoolApiInterface>();
 
-		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
+		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchMaintenanceStatus", () => {

@@ -30,17 +30,15 @@ describe("mediaBoardApi.composable", () => {
 		mediaLineApi = createMock<serverApi.MediaLineApiInterface>();
 		mediaElementApi = createMock<serverApi.MediaElementApiInterface>();
 
-		jest
-			.spyOn(serverApi, "MediaBoardApiFactory")
-			.mockReturnValue(mediaBoardApi);
-		jest.spyOn(serverApi, "MediaLineApiFactory").mockReturnValue(mediaLineApi);
-		jest
-			.spyOn(serverApi, "MediaElementApiFactory")
-			.mockReturnValue(mediaElementApi);
+		vi.spyOn(serverApi, "MediaBoardApiFactory").mockReturnValue(mediaBoardApi);
+		vi.spyOn(serverApi, "MediaLineApiFactory").mockReturnValue(mediaLineApi);
+		vi.spyOn(serverApi, "MediaElementApiFactory").mockReturnValue(
+			mediaElementApi
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getMediaBoardForUser", () => {

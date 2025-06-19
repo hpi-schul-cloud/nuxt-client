@@ -9,11 +9,11 @@ import { RouteLocationNormalized, useRoute } from "vue-router";
 import { SidebarSingleItem } from "../types";
 import { useSidebarSelection } from "./SidebarSelection.composable";
 
-jest.mock("vue-router");
-const useRouteMock = <jest.Mock>useRoute;
+vi.mock("vue-router");
+const useRouteMock = <vi.Mock>useRoute;
 
-jest.mock("@data-board/BoardPageInformation.composable");
-const mockedUseSharedBoardPageInformation = jest.mocked(
+vi.mock("@data-board/BoardPageInformation.composable");
+const mockedUseSharedBoardPageInformation = vi.mocked(
 	useSharedBoardPageInformation
 );
 
@@ -28,17 +28,17 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		);
 
 		mockedUseSharedBoardPageInformation.mockReturnValue({
-			createPageInformation: jest.fn(),
+			createPageInformation: vi.fn(),
 			breadcrumbs: computed(() => []),
 			contextType: computed(() => undefined),
 			pageTitle: computed(() => "page-title"),
 			roomId: computed(() => "room-id"),
-			resetPageInformation: jest.fn(),
+			resetPageInformation: vi.fn(),
 		});
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (routeProps: { path: string; name: string }) => {
@@ -185,12 +185,12 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			describe("and board context is a room", () => {
 				const setupIsRoom = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: jest.fn(),
+						createPageInformation: vi.fn(),
 						breadcrumbs: computed(() => []),
 						contextType: computed(() => BoardContextType.Room),
 						pageTitle: computed(() => "page-title"),
 						roomId: computed(() => "room-id"),
-						resetPageInformation: jest.fn(),
+						resetPageInformation: vi.fn(),
 					});
 
 					const { roomVariant } = storeToRefs(useRoomDetailsStore());
@@ -235,12 +235,12 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			describe("and folder context is a room", () => {
 				const setupIsRoom = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: jest.fn(),
+						createPageInformation: vi.fn(),
 						breadcrumbs: computed(() => []),
 						contextType: computed(() => BoardContextType.Room),
 						pageTitle: computed(() => "page-title"),
 						roomId: computed(() => "room-id"),
-						resetPageInformation: jest.fn(),
+						resetPageInformation: vi.fn(),
 					});
 
 					return setupFolderDetailsRoute();
@@ -258,12 +258,12 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			describe("and folder context is something else", () => {
 				const setupIsOther = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: jest.fn(),
+						createPageInformation: vi.fn(),
 						breadcrumbs: computed(() => []),
 						contextType: computed(() => BoardContextType.Course),
 						pageTitle: computed(() => "page-title"),
 						roomId: computed(() => "room-id"),
-						resetPageInformation: jest.fn(),
+						resetPageInformation: vi.fn(),
 					});
 
 					return setupFolderDetailsRoute();
@@ -364,12 +364,12 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			describe("and board context is a course", () => {
 				const setupCourseContext = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: jest.fn(),
+						createPageInformation: vi.fn(),
 						breadcrumbs: computed(() => []),
 						contextType: computed(() => BoardContextType.Course),
 						pageTitle: computed(() => "page-title"),
 						roomId: computed(() => "room-id"),
-						resetPageInformation: jest.fn(),
+						resetPageInformation: vi.fn(),
 					});
 
 					const { roomVariant } = storeToRefs(useRoomDetailsStore());
@@ -389,12 +389,12 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			describe("and board context is a user", () => {
 				const setupUserContext = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: jest.fn(),
+						createPageInformation: vi.fn(),
 						breadcrumbs: computed(() => []),
 						contextType: computed(() => BoardContextType.User),
 						pageTitle: computed(() => "page-title"),
 						roomId: computed(() => "room-id"),
-						resetPageInformation: jest.fn(),
+						resetPageInformation: vi.fn(),
 					});
 
 					const { roomVariant } = storeToRefs(useRoomDetailsStore());
@@ -423,12 +423,12 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			describe("and folder context is a course", () => {
 				const setupCourseContext = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: jest.fn(),
+						createPageInformation: vi.fn(),
 						breadcrumbs: computed(() => []),
 						contextType: computed(() => BoardContextType.Course),
 						pageTitle: computed(() => "page-title"),
 						roomId: computed(() => "room-id"),
-						resetPageInformation: jest.fn(),
+						resetPageInformation: vi.fn(),
 					});
 
 					return setupFolderDetailsRoute();
@@ -445,12 +445,12 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			describe("and folder context is something else", () => {
 				const setupIsOther = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: jest.fn(),
+						createPageInformation: vi.fn(),
 						breadcrumbs: computed(() => []),
 						contextType: computed(() => BoardContextType.User),
 						pageTitle: computed(() => "page-title"),
 						roomId: computed(() => "room-id"),
-						resetPageInformation: jest.fn(),
+						resetPageInformation: vi.fn(),
 					});
 
 					return setupFolderDetailsRoute();

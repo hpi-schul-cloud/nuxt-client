@@ -30,13 +30,13 @@ describe("@/utils/fileHelper", () => {
 				href: "",
 				download: "",
 				dataset: { testid: "" },
-				click: jest.fn(),
+				click: vi.fn(),
 			};
-			const createElementSpy = jest
+			const createElementSpy = vi
 				.spyOn(document, "createElement")
 				.mockImplementation(() => link);
-			document.body.appendChild = jest.fn();
-			document.body.removeChild = jest.fn();
+			document.body.appendChild = vi.fn();
+			document.body.removeChild = vi.fn();
 
 			return { url, fileName, link, createElementSpy };
 		};

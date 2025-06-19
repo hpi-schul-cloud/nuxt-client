@@ -16,8 +16,8 @@ import { nextTick } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
 import UserMenu from "./UserMenu.vue";
 
-jest.mock("@data-system");
-jest.mock("@data-oauth");
+vi.mock("@data-system");
+vi.mock("@data-oauth");
 
 describe("@ui-layout/UserMenu", () => {
 	let useSystemApiMock: DeepMocked<ReturnType<typeof useSystemApi>>;
@@ -30,8 +30,8 @@ describe("@ui-layout/UserMenu", () => {
 	) => {
 		const authModule = createModuleMocks(AuthModule, {
 			getLocale: "de",
-			logout: jest.fn(),
-			externalLogout: jest.fn(),
+			logout: vi.fn(),
+			externalLogout: vi.fn(),
 			get loginSystem(): string | undefined {
 				return mockedSystem?.id;
 			},
@@ -47,8 +47,8 @@ describe("@ui-layout/UserMenu", () => {
 		useSystemApiMock = createMock<ReturnType<typeof useSystemApi>>();
 		useOAuthApiMock = createMock<ReturnType<typeof useOAuthApi>>();
 
-		jest.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
-		jest.mocked(useOAuthApi).mockReturnValue(useOAuthApiMock);
+		vi.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
+		vi.mocked(useOAuthApi).mockReturnValue(useOAuthApiMock);
 
 		useSystemApiMock.getSystem.mockResolvedValue(mockedSystem);
 		useOAuthApiMock.getSessionTokenExpiration.mockResolvedValue(
@@ -77,7 +77,7 @@ describe("@ui-layout/UserMenu", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should render with correct user initials", async () => {

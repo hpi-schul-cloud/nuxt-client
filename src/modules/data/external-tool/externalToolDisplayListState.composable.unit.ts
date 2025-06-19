@@ -10,7 +10,7 @@ import { useExternalToolDisplayListState } from "./externalToolDisplayListState.
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
 
-jest.mock("@data-external-tool/externalToolReferenceApi.composable");
+vi.mock("@data-external-tool/externalToolReferenceApi.composable");
 
 describe("externalToolDisplayListState.composable", () => {
 	let useExternalToolReferenceApiMock: DeepMocked<
@@ -21,13 +21,13 @@ describe("externalToolDisplayListState.composable", () => {
 		useExternalToolReferenceApiMock =
 			createMock<ReturnType<typeof useExternalToolReferenceApi>>();
 
-		jest
-			.mocked(useExternalToolReferenceApi)
-			.mockReturnValue(useExternalToolReferenceApiMock);
+		vi.mocked(useExternalToolReferenceApi).mockReturnValue(
+			useExternalToolReferenceApiMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when no data is loaded", () => {

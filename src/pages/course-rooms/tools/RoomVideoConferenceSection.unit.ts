@@ -84,7 +84,7 @@ describe("RoomVideoConferenceSection", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the video conference is not running", () => {
@@ -626,7 +626,7 @@ describe("RoomVideoConferenceSection", () => {
 	describe("when a videoconference is started or joined", () => {
 		describe("when an error occurs", () => {
 			const setup = () => {
-				const error = jest.fn(() => {
+				const error = vi.fn(() => {
 					throw new Error();
 				});
 

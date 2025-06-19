@@ -24,7 +24,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { SkipLink } from "@ui-skip-link";
 import StatusAlertsModule from "@/store/status-alerts";
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 
@@ -94,8 +94,8 @@ const defineWindowWidth = (width = 1564) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
-const mockGetLocalStorage = jest.fn();
-const mockSetLocalStorage = jest.fn();
+const mockGetLocalStorage = vi.fn();
+const mockSetLocalStorage = vi.fn();
 Object.defineProperty(window, "localStorage", {
 	value: {
 		getItem: mockGetLocalStorage,
@@ -108,7 +108,7 @@ describe("LoggedIn.layout.vue", () => {
 		defineWindowWidth();
 	});
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should render correctly", () => {

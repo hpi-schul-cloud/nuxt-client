@@ -19,14 +19,12 @@ describe("courseInfoApi.composable", () => {
 		courseInfoApi = createMock<serverApi.CourseInfoApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
 
-		jest
-			.spyOn(serverApi, "CourseInfoApiFactory")
-			.mockReturnValue(courseInfoApi);
+		vi.spyOn(serverApi, "CourseInfoApiFactory").mockReturnValue(courseInfoApi);
 		initializeAxios(axiosMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("loadCoursesForSchool", () => {

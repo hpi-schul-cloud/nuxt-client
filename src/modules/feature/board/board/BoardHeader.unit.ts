@@ -26,13 +26,13 @@ import { computed, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 
-jest.mock("@data-board");
-jest.mock("@util-board");
-const mockedUserPermissions = jest.mocked(useBoardPermissions);
-const mockUseBoardFocusHandler = jest.mocked(useBoardFocusHandler);
+vi.mock("@data-board");
+vi.mock("@util-board");
+const mockedUserPermissions = vi.mocked(useBoardPermissions);
+const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
 describe("BoardHeader", () => {
-	const mockedUseEditMode = jest.mocked(useCourseBoardEditMode);
+	const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 
 	const setup = (
 		options?: {
@@ -42,11 +42,11 @@ describe("BoardHeader", () => {
 		props?: { isDraft: boolean }
 	) => {
 		const isEditMode = computed(() => true);
-		const mockedStartEditMode = jest.fn();
+		const mockedStartEditMode = vi.fn();
 		mockedUseEditMode.mockReturnValue({
 			isEditMode,
 			startEditMode: mockedStartEditMode,
-			stopEditMode: jest.fn(),
+			stopEditMode: vi.fn(),
 		});
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
@@ -82,7 +82,7 @@ describe("BoardHeader", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when component is mounted", () => {
@@ -169,14 +169,14 @@ describe("BoardHeader", () => {
 	describe("when the title is updated", () => {
 		describe("when the title is empty", () => {
 			it("should not emit 'update:title'", () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 
 				const { wrapper } = setup();
 
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
 				titleInput.vm.$emit("update:value", "");
 
-				jest.runAllTimers();
+				vi.runAllTimers();
 
 				const emitted = wrapper.emitted("update:title");
 				expect(emitted).toBeUndefined();
@@ -185,14 +185,14 @@ describe("BoardHeader", () => {
 
 		describe("when the title is not empty", () => {
 			it("should emit 'update:title'", () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 
 				const { wrapper } = setup();
 
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
 				titleInput.vm.$emit("update:value", "new-title");
 
-				jest.runAllTimers();
+				vi.runAllTimers();
 
 				const emitted = wrapper.emitted("update:title");
 				expect(emitted).toBeDefined();
@@ -203,7 +203,7 @@ describe("BoardHeader", () => {
 	describe("when the title loses focus", () => {
 		describe("when the title is empty", () => {
 			it("should emit 'update:title'", () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 
 				const { wrapper } = setup();
 
@@ -211,7 +211,7 @@ describe("BoardHeader", () => {
 				titleInput.vm.$emit("update:value", "");
 				titleInput.vm.$emit("blur");
 
-				jest.runAllTimers();
+				vi.runAllTimers();
 
 				const emitted = wrapper.emitted("update:title");
 				expect(emitted).toBeDefined();
@@ -223,7 +223,7 @@ describe("BoardHeader", () => {
 
 		describe("when the title is not empty", () => {
 			it("should not emit 'update:title'", () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 
 				const { wrapper } = setup();
 
@@ -231,7 +231,7 @@ describe("BoardHeader", () => {
 				titleInput.vm.$emit("update:value", "newTitle");
 				titleInput.vm.$emit("blur");
 
-				jest.runAllTimers();
+				vi.runAllTimers();
 
 				const emitted = wrapper.emitted("update:title");
 				expect(emitted?.[1]).toBeUndefined();

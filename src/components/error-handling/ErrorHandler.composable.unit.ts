@@ -10,11 +10,11 @@ import { mountComposable } from "@@/tests/test-utils";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { notifierModule } from "@/store";
 
-jest.mock("axios");
-const mockedIsAxiosError = jest.mocked(isAxiosError);
+vi.mock("axios");
+const mockedIsAxiosError = vi.mocked(isAxiosError);
 
-jest.mock("@util-board");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const keys = [
 	"components.board.notifications.errors.notCreated",
 	"components.board.notifications.errors.notLoaded",
@@ -25,10 +25,10 @@ const translationMap: Record<string, string> = {};
 
 keys.forEach((key) => (translationMap[key] = key));
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({
+		...vi.requireActual("vue-i18n"),
+		useI18n: vi.fn().mockReturnValue({
 			t: (key: string) => {
 				return translationMap[key] || "error.generic";
 			},
@@ -80,7 +80,7 @@ describe("ErrorHandler.Composable", () => {
 				mockedIsAxiosError.mockReturnValueOnce(true);
 				const errorResponse = mockErrorResponse();
 
-				const handle404Mock = jest.fn();
+				const handle404Mock = vi.fn();
 
 				handleError(errorResponse, { 404: handle404Mock });
 
@@ -90,9 +90,7 @@ describe("ErrorHandler.Composable", () => {
 
 		describe("when no errorHandler for the code of the error is defined", () => {
 			it("should fall back to console.error", async () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
+				const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation();
 				const { handleError } = setup();
 
 				mockedIsAxiosError.mockReturnValueOnce(true);
@@ -115,7 +113,7 @@ describe("ErrorHandler.Composable", () => {
 				mockedIsAxiosError.mockReturnValueOnce(true);
 				const errorResponse = mockErrorResponse();
 
-				const handleCallbackMock = jest.fn();
+				const handleCallbackMock = vi.fn();
 
 				handleAnyError(errorResponse, handleCallbackMock);
 

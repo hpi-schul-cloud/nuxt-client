@@ -25,15 +25,15 @@ import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn(),
 }));
 
-const useRouterMock = <jest.Mock>useRouter;
+const useRouterMock = <vi.Mock>useRouter;
 
 describe("SchoolExternalToolConfigurator", () => {
 	const getWrapper = (
@@ -86,7 +86,7 @@ describe("SchoolExternalToolConfigurator", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("breadcrumbs", () => {

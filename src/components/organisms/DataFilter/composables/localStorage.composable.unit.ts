@@ -15,16 +15,16 @@ const defaultState = {
 	version: 1,
 };
 
-jest.mock("@vueuse/core", () => {
+vi.mock("@vueuse/core", () => {
 	return {
-		...jest.requireActual("@vueuse/core"),
-		useStorage: jest.fn().mockReturnValue({ value: defaultState }),
+		...vi.requireActual("@vueuse/core"),
+		useStorage: vi.fn().mockReturnValue({ value: defaultState }),
 	};
 });
 
 describe("localStorage composable", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should initialize the default state", () => {

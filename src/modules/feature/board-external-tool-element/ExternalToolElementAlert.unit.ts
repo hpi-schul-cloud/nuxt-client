@@ -17,7 +17,7 @@ import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 
-jest.mock("@data-board");
+vi.mock("@data-board");
 
 describe("ExternalToolElementAlert", () => {
 	let useBoardPermissionsMock: DeepMocked<
@@ -37,11 +37,11 @@ describe("ExternalToolElementAlert", () => {
 				ReturnType<typeof useContextExternalToolConfigurationStatus>
 			>();
 
-		jest.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
+		vi.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getWrapper = (
@@ -84,7 +84,7 @@ describe("ExternalToolElementAlert", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when an error exists", () => {

@@ -28,7 +28,7 @@ describe("VideoConferenceModule", () => {
 	});
 
 	afterEach(() => {
-		jest.restoreAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	const mockApi = () => {
@@ -39,11 +39,9 @@ describe("VideoConferenceModule", () => {
 			})
 		);
 
-		jest
-			.spyOn(serverApi, "VideoConferenceApiFactory")
-			.mockReturnValue(
-				videoconferenceApi as unknown as VideoConferenceApiInterface
-			);
+		vi.spyOn(serverApi, "VideoConferenceApiFactory").mockReturnValue(
+			videoconferenceApi as unknown as VideoConferenceApiInterface
+		);
 
 		return {
 			videoconferenceApi,

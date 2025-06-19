@@ -17,17 +17,17 @@ import { HttpStatusCode } from "axios";
 describe("h5pEditorApi.composable", () => {
 	let h5pEditorApi: DeepMocked<H5pEditorApiInterface>;
 
-	const notifierModule: jest.Mocked<NotifierModule> =
+	const notifierModule: vi.Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	beforeEach(() => {
 		h5pEditorApi = createMock<H5pEditorApiInterface>();
 
-		jest.spyOn(h5pApi, "H5pEditorApiFactory").mockReturnValue(h5pEditorApi);
+		vi.spyOn(h5pApi, "H5pEditorApiFactory").mockReturnValue(h5pEditorApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getContentTitle", () => {

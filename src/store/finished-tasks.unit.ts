@@ -12,7 +12,7 @@ import { AxiosInstance } from "axios";
  * @param result the result of the task filter
  * @returns
  */
-jest.mock("axios");
+vi.mock("axios");
 initializeAxios({} as AxiosInstance);
 
 describe("finished task store", () => {
@@ -20,9 +20,9 @@ describe("finished task store", () => {
 		describe("fetchFinishedTasks", () => {
 			it("should request an initial list of tasks", (done) => {
 				const finishedTasksModule = new FinishedTasksModule({});
-				const spy = jest.spyOn(serverApi, "TaskApiFactory");
+				const spy = vi.spyOn(serverApi, "TaskApiFactory");
 				const taskApiMock = {
-					taskControllerFindAllFinished: jest.fn(() => ({
+					taskControllerFindAllFinished: vi.fn(() => ({
 						data: {
 							data: [{ mockTask: "mock task value" }],
 							total: 1,
@@ -53,7 +53,7 @@ describe("finished task store", () => {
 
 			it("should fetch the next page", (done) => {
 				const mockApi = {
-					taskControllerFindAllFinished: jest
+					taskControllerFindAllFinished: vi
 						.fn()
 						.mockResolvedValueOnce({
 							data: {
@@ -73,7 +73,7 @@ describe("finished task store", () => {
 						}),
 				};
 
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -102,10 +102,10 @@ describe("finished task store", () => {
 				finishedTasksModule.isInitialized = true;
 
 				const mockApi = {
-					taskControllerFindAllFinished: jest.fn(),
+					taskControllerFindAllFinished: vi.fn(),
 				};
 
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -126,10 +126,10 @@ describe("finished task store", () => {
 				finishedTasksModule.isInitialized = true;
 
 				const mockApi = {
-					taskControllerFindAllFinished: jest.fn(),
+					taskControllerFindAllFinished: vi.fn(),
 				};
 
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -150,11 +150,11 @@ describe("finished task store", () => {
 
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					taskControllerFindAllFinished: jest.fn(() =>
+					taskControllerFindAllFinished: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -176,7 +176,7 @@ describe("finished task store", () => {
 		describe("refetchTasks", () => {
 			it("should fetch all tasks up until current pagination", async () => {
 				const mockApi = {
-					taskControllerFindAllFinished: jest
+					taskControllerFindAllFinished: vi
 						.fn()
 						.mockReturnValueOnce({
 							data: {
@@ -204,7 +204,7 @@ describe("finished task store", () => {
 						}),
 				};
 
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -234,11 +234,11 @@ describe("finished task store", () => {
 
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					taskControllerFindAllFinished: jest.fn(() =>
+					taskControllerFindAllFinished: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -266,12 +266,12 @@ describe("finished task store", () => {
 				const task = taskFactory.build();
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					taskControllerRestore: jest.fn(() => Promise.reject({ ...error })),
+					taskControllerRestore: vi.fn(() => Promise.reject({ ...error })),
 				};
 
-				jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+				vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.TaskApiInterface
+				);
 
 				finishedTasksModule.restoreTask(task.id).then(() => {
 					expect(finishedTasksModule.getStatus).toBe("error");

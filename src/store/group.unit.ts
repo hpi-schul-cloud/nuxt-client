@@ -35,11 +35,11 @@ describe("GroupModule", () => {
 		axiosMock = createMock<AxiosInstance>();
 
 		initializeAxios(axiosMock);
-		jest.spyOn(serverApi, "GroupApiFactory").mockReturnValue(apiMock);
+		vi.spyOn(serverApi, "GroupApiFactory").mockReturnValue(apiMock);
 	});
 
 	afterEach(() => {
-		jest.restoreAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	describe("getter/setter", () => {

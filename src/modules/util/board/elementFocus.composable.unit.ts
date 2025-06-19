@@ -12,7 +12,7 @@ describe("elementFocus.composable", () => {
 			});
 
 			const domElementMock = createMock<HTMLElement>();
-			const querySelectorSpy = jest.spyOn(document, "querySelector");
+			const querySelectorSpy = vi.spyOn(document, "querySelector");
 			querySelectorSpy.mockReturnValueOnce(domElementMock);
 
 			return {

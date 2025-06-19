@@ -11,7 +11,7 @@ import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 
 describe("KebabMenuActionDownloadFiles", () => {
 	beforeEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const setupWrapper = (props: {
@@ -46,8 +46,8 @@ describe("KebabMenuActionDownloadFiles", () => {
 
 				const selectedIds = ["1", "2"];
 
-				const downloadFileMock = jest.spyOn(FileHelper, "downloadFile");
-				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
+				const downloadFileMock = vi.spyOn(FileHelper, "downloadFile");
+				vi.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
 
 				const { wrapper } = setupWrapper({
 					fileRecords,
@@ -91,8 +91,8 @@ describe("KebabMenuActionDownloadFiles", () => {
 
 				const selectedIds = ["2"];
 
-				const downloadFileMock = jest.spyOn(FileHelper, "downloadFile");
-				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
+				const downloadFileMock = vi.spyOn(FileHelper, "downloadFile");
+				vi.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
 
 				const { wrapper } = setupWrapper({
 					fileRecords,
@@ -131,8 +131,8 @@ describe("KebabMenuActionDownloadFiles", () => {
 
 				const selectedIds = ["1", "2"];
 
-				const downloadFileMock = jest.spyOn(FileHelper, "downloadFile");
-				jest.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
+				const downloadFileMock = vi.spyOn(FileHelper, "downloadFile");
+				vi.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
 
 				const { wrapper } = setupWrapper({
 					disabled: true,

@@ -33,24 +33,22 @@ import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
 import { Router, useRouter } from "vue-router";
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as vi.Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("@data-board/socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("@data-board/socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+vi.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-jest.mock("@util-board/BoardNotifier.composable");
-jest.mock("@util-board/LastCreatedElement.composable");
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("@util-board/BoardNotifier.composable");
+vi.mock("@util-board/LastCreatedElement.composable");
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
 
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockUseSharedLastCreatedElement = jest.mocked(
-	useSharedLastCreatedElement
-);
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 describe("useCardSocketApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
@@ -78,11 +76,11 @@ describe("useCardSocketApi", () => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
-			resetLastCreatedElementId: jest.fn(),
+			resetLastCreatedElementId: vi.fn(),
 		});
 
 		const router = createMock<Router>();
@@ -90,8 +88,8 @@ describe("useCardSocketApi", () => {
 	});
 
 	afterEach(() => {
-		jest.runOnlyPendingTimers();
-		jest.useRealTimers();
+		vi.runOnlyPendingTimers();
+		vi.useRealTimers();
 	});
 
 	describe("dispatch", () => {
@@ -487,7 +485,7 @@ describe("useCardSocketApi", () => {
 			const { fetchCardRequest } = useCardSocketApi();
 			fetchCardRequest(payload);
 
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"fetch-card-request",
 				payload

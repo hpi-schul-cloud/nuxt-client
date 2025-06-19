@@ -10,11 +10,11 @@ describe("GroupApi.composable", () => {
 	beforeEach(() => {
 		groupApi = createMock<serverApi.GroupApiInterface>();
 
-		jest.spyOn(serverApi, "GroupApiFactory").mockReturnValue(groupApi);
+		vi.spyOn(serverApi, "GroupApiFactory").mockReturnValue(groupApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getGroup", () => {

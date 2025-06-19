@@ -20,7 +20,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 
-jest.mock("@data-board");
+vi.mock("@data-board");
 
 describe("useH5pEditorBoardHooks", () => {
 	let useBoardApiMock: DeepMocked<ReturnType<typeof useBoardApi>>;
@@ -34,8 +34,8 @@ describe("useH5pEditorBoardHooks", () => {
 		useBoardApiMock = createMock<ReturnType<typeof useBoardApi>>();
 		useCardStoreMock = createMock<ReturnType<typeof useCardStore>>();
 
-		jest.mocked(useBoardApi).mockReturnValue(useBoardApiMock);
-		jest.mocked(useCardStore).mockReturnValue(useCardStoreMock);
+		vi.mocked(useBoardApi).mockReturnValue(useBoardApiMock);
+		vi.mocked(useCardStore).mockReturnValue(useCardStoreMock);
 	});
 
 	const getComposable = () => {
@@ -62,7 +62,7 @@ describe("useH5pEditorBoardHooks", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("onCreate", () => {

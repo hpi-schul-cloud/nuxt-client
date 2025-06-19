@@ -23,26 +23,24 @@ import {
 import { useCardStore } from "./Card.store";
 import { useSocketConnection } from "./socket/socket";
 
-jest.mock("vue-i18n", () => ({
+vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
-		t: jest.fn().mockImplementation((key) => key),
+		t: vi.fn().mockImplementation((key) => key),
 	}),
 }));
 
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("./socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("./socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
 
-jest.mock("@util-board/BoardNotifier.composable");
-jest.mock("@util-board/LastCreatedElement.composable");
-const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockUseSharedLastCreatedElement = jest.mocked(
-	useSharedLastCreatedElement
-);
+vi.mock("@util-board/BoardNotifier.composable");
+vi.mock("@util-board/LastCreatedElement.composable");
+const mockUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -54,7 +52,7 @@ const envs = envsFactory.build({
 	FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
 });
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe("pageInactivity.composable", () => {
 	setActivePinia(createTestingPinia());
@@ -64,7 +62,7 @@ describe("pageInactivity.composable", () => {
 
 	mockUseSharedLastCreatedElement.mockReturnValue({
 		lastCreatedElementId: computed(() => "element-id"),
-		resetLastCreatedElementId: jest.fn(),
+		resetLastCreatedElementId: vi.fn(),
 	});
 
 	mockBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
@@ -102,7 +100,7 @@ describe("pageInactivity.composable", () => {
 
 	describe("usePageInactivity", () => {
 		beforeEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 		it("should call the store functions when isTimeoutReached value true", async () => {
 			const { useBoardInactivityComposable, boardStore, cardStore } = setup();
@@ -135,22 +133,22 @@ describe("pageInactivity.composable", () => {
 	describe("isTimeoutReached value", () => {
 		beforeEach(() => {
 			connectionOptions.isTimeoutReached = false;
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 		afterEach(() => {
-			jest.clearAllTimers();
+			vi.clearAllTimers();
 		});
 		it("should be changed after MAX_TIMEOUT_FOR_INACTIVITY is achieved", async () => {
 			setup(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(false);
-			jest.advanceTimersByTime(3000);
+			vi.advanceTimersByTime(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(true);
 		});
 
 		it("should not be changed after MAX_TIMEOUT_FOR_INACTIVITY is not achieved", async () => {
 			setup(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(false);
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 			expect(connectionOptions.isTimeoutReached).toBe(false);
 		});
 	});

@@ -42,25 +42,25 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index";
 import RoomMembersPage from "./RoomMembers.page.vue";
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
-const useRouteMock = <jest.Mock>useRoute;
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
+const useRouteMock = <vi.Mock>useRoute;
 
-jest.mock("@vueuse/integrations"); // mock focus trap from add members because we use mount
+vi.mock("@vueuse/integrations"); // mock focus trap from add members because we use mount
 
-jest.mock("@ui-confirmation-dialog");
-const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
+vi.mock("@ui-confirmation-dialog");
+const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = jest.mocked(useRoomAuthorization);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorization = vi.mocked(useRoomAuthorization);
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
-	let askConfirmationMock: jest.Mock;
+	let askConfirmationMock: vi.Mock;
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
@@ -92,7 +92,7 @@ describe("RoomMembersPage", () => {
 		router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
-		askConfirmationMock = jest.fn();
+		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});

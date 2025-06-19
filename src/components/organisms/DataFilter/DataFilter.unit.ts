@@ -7,13 +7,13 @@ import DataFilter from "./DataFilter.vue";
 import { useDataTableFilter } from "./composables/filter.composable";
 import { computed, ref } from "vue";
 
-jest.mock("./composables/filter.composable");
+vi.mock("./composables/filter.composable");
 
-const mockedUseBoardApi = jest.mocked(useDataTableFilter);
+const mockedUseBoardApi = vi.mocked(useDataTableFilter);
 describe("@components/DataFilter/DataFilter.vue", () => {
-	const updateFilterMock = jest.fn();
-	const removeFilterMock = jest.fn();
-	const removeChipFilterMock = jest.fn();
+	const updateFilterMock = vi.fn();
+	const removeFilterMock = vi.fn();
+	const removeChipFilterMock = vi.fn();
 	const defaultFilterMenuItems = [
 		{ label: "Registration", value: "consentStatus" },
 		{ label: "Class(es)", value: "classes" },
@@ -50,7 +50,7 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 
 	describe("should render the component", () => {
 		afterEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		it("should render the component", () => {

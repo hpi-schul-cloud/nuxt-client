@@ -39,7 +39,7 @@ import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { nextTick } from "vue";
 
-jest.mock("./tools/RoomExternalToolsOverview.vue");
+vi.mock("./tools/RoomExternalToolsOverview.vue");
 
 const mockData: SingleColumnBoardResponse = {
 	roomId: "123",
@@ -110,7 +110,7 @@ const $route = {
 	},
 	path: "/rooms/",
 };
-const $router = { push: jest.fn(), resolve: jest.fn(), replace: jest.fn() };
+const $router = { push: vi.fn(), resolve: vi.fn(), replace: vi.fn() };
 
 let copyModule: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
@@ -126,7 +126,7 @@ const getWrapper = (
 ) => {
 	notifierModule = createModuleMocks(NotifierModule);
 	copyModule = createModuleMocks(CopyModule, {
-		copy: jest.fn(),
+		copy: vi.fn(),
 		getIsResultModalOpen: false,
 		getCopyResult: {
 			id: "copiedid",
@@ -142,17 +142,17 @@ const getWrapper = (
 		getTopics: [],
 		getTasks: [],
 		getColumnBoards: [],
-		startExportFlow: jest.fn(),
+		startExportFlow: vi.fn(),
 	});
 	shareModule = createModuleMocks(ShareModule, {
 		getIsShareModalOpen: true,
 		getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
-		createShareUrl: jest.fn(),
-		startShareFlow: jest.fn(),
-		resetShareFlow: jest.fn(),
+		createShareUrl: vi.fn(),
+		startShareFlow: vi.fn(),
+		resetShareFlow: vi.fn(),
 	});
 	courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
-		fetchContent: jest.fn(),
+		fetchContent: vi.fn(),
 		getRoomData: mockData,
 		getPermissionData: permissionData,
 	});
@@ -169,9 +169,7 @@ const getWrapper = (
 	// we need this because in order for useMediaQuery (vueuse) to work
 	// window.matchMedia has to return a reasonable result.
 	// https://github.com/vueuse/vueuse/blob/main/packages/core/useMediaQuery/index.ts#L44
-	jest
-		.spyOn(window, "matchMedia")
-		.mockReturnValue(createMock<MediaQueryList>());
+	vi.spyOn(window, "matchMedia").mockReturnValue(createMock<MediaQueryList>());
 
 	return mount(CourseRoomDetailsPage, {
 		global: {
@@ -214,7 +212,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	it("should fetch data", async () => {

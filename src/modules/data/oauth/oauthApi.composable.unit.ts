@@ -14,11 +14,11 @@ describe("oauthApi.composable", () => {
 	beforeEach(() => {
 		oauthApi = createMock<OAuthApiInterface>();
 
-		jest.spyOn(serverApi, "OAuthApiFactory").mockReturnValue(oauthApi);
+		vi.spyOn(serverApi, "OAuthApiFactory").mockReturnValue(oauthApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getSessionTokenExpiration", () => {

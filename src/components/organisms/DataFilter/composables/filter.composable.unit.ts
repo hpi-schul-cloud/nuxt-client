@@ -16,17 +16,17 @@ const defaultState = {
 	version: 1,
 };
 
-jest.mock("@vueuse/core", () => {
+vi.mock("@vueuse/core", () => {
 	return {
-		...jest.requireActual("@vueuse/core"),
-		useStorage: jest.fn().mockReturnValue({ value: defaultState }),
+		...vi.requireActual("@vueuse/core"),
+		useStorage: vi.fn().mockReturnValue({ value: defaultState }),
 	};
 });
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+		...vi.requireActual("vue-i18n"),
+		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 

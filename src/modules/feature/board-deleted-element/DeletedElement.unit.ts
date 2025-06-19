@@ -12,7 +12,7 @@ import { ComponentProps } from "vue-component-type-helpers";
 import DeletedElement from "./DeletedElement.vue";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
 
-jest.mock("@data-board");
+vi.mock("@data-board");
 
 describe("DeletedElement", () => {
 	let useBoardFocusHandlerMock: DeepMocked<
@@ -29,12 +29,12 @@ describe("DeletedElement", () => {
 			ReturnType<typeof useBoardPermissions>
 		>({ isTeacher: ref(true) });
 
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
-		jest.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
+		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getWrapper = (
@@ -59,7 +59,7 @@ describe("DeletedElement", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the user is not a teacher", () => {

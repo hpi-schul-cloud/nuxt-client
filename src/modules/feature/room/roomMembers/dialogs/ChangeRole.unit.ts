@@ -31,11 +31,11 @@ import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
 import { createPinia, setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as vi.Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("ChangeRole.vue", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -107,7 +107,7 @@ describe("ChangeRole.vue", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when the component is rendered", () => {

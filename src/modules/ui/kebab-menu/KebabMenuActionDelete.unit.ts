@@ -10,8 +10,8 @@ import { BoardMenuScope } from "../board/board-menu-scope";
 import KebabMenuAction from "./KebabMenuAction.vue";
 import KebabMenuActionDelete from "./KebabMenuActionDelete.vue";
 
-jest.mock("@ui-confirmation-dialog");
-const mockedUseDeleteConfirmationDialog = jest.mocked(
+vi.mock("@ui-confirmation-dialog");
+const mockedUseDeleteConfirmationDialog = vi.mocked(
 	useDeleteConfirmationDialog
 );
 
@@ -27,7 +27,7 @@ describe("KebabMenuActionMoveDown Component", () => {
 		return wrapper;
 	};
 
-	const askDeleteConfirmationMock = jest.fn();
+	const askDeleteConfirmationMock = vi.fn();
 
 	setupDeleteConfirmationComposableMock({
 		askDeleteConfirmationMock,

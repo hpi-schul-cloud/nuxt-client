@@ -7,15 +7,15 @@ const getNewWindowMock = () => {
 			get innerHTML() {
 				return content;
 			},
-			write: jest.fn().mockImplementation((...args) => {
+			write: vi.fn().mockImplementation((...args) => {
 				args.forEach((text) => (content += text));
 			}),
-			close: jest.fn(),
+			close: vi.fn(),
 		},
-		addEventListener: jest.fn().mockImplementation((event, cb) => cb()),
-		focus: jest.fn(),
-		print: jest.fn(),
-		close: jest.fn(),
+		addEventListener: vi.fn().mockImplementation((event, cb) => cb()),
+		focus: vi.fn(),
+		print: vi.fn(),
+		close: vi.fn(),
 	};
 };
 
@@ -24,8 +24,7 @@ let newWindowMock;
 describe("@/mixins/print", () => {
 	beforeEach(() => {
 		newWindowMock = getNewWindowMock();
-		jest
-			.spyOn(window, "open")
+		vi.spyOn(window, "open")
 			.mockImplementation()
 			.mockReturnValue(newWindowMock);
 	});
@@ -59,9 +58,9 @@ describe("@/mixins/print", () => {
 
 		it("closes new window after print", () => {
 			const testContent = "some plain old content";
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			method(testContent);
-			jest.runAllTimers();
+			vi.runAllTimers();
 			expect(newWindowMock.print).toHaveBeenCalled();
 			expect(newWindowMock.close).toHaveBeenCalled();
 		});

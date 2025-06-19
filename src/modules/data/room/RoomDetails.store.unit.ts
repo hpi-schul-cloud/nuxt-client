@@ -11,13 +11,13 @@ import {
 	mockApiResponse,
 } from "@@/tests/test-utils";
 
-jest.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = jest.mocked(
+vi.mock("@/utils/api");
+const mockedMapAxiosErrorToResponseError = vi.mocked(
 	mapAxiosErrorToResponseError
 );
 
-jest.mock("@/composables/application-error.composable");
-const mockedCreateApplicationError = jest.mocked(useApplicationError);
+vi.mock("@/composables/application-error.composable");
+const mockedCreateApplicationError = vi.mocked(useApplicationError);
 
 const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	const expectedPayload = apiResponseErrorFactory.build({
@@ -51,13 +51,13 @@ describe("useRoomDetailsStore", () => {
 			mockedCreateApplicationErrorCalls
 		);
 
-		jest.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
-		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApiMock);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
+		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApiMock);
 		initializeAxios(axiosMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (

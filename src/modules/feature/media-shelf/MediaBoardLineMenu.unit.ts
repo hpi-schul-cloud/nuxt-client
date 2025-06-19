@@ -34,7 +34,7 @@ describe("MediaBoardLineMenu", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when opening the menu for a line", () => {

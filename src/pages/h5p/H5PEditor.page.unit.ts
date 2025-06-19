@@ -21,7 +21,7 @@ import { ComponentProps } from "vue-component-type-helpers";
 import H5pEditorPage from "./H5PEditor.page.vue";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 
-jest.mock("./h5pEditorBoardHooks.composable");
+vi.mock("./h5pEditorBoardHooks.composable");
 
 describe("H5PEditorPage", () => {
 	let useH5pEditorBoardHooksMock: DeepMocked<
@@ -31,13 +31,13 @@ describe("H5PEditorPage", () => {
 	beforeEach(() => {
 		useH5pEditorBoardHooksMock = createMock();
 
-		jest
-			.mocked(useH5pEditorBoardHooks)
-			.mockReturnValue(useH5pEditorBoardHooksMock);
+		vi.mocked(useH5pEditorBoardHooks).mockReturnValue(
+			useH5pEditorBoardHooksMock
+		);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const getWrapper = (
@@ -50,7 +50,7 @@ describe("H5PEditorPage", () => {
 		const notifierModule = createModuleMocks(NotifierModule);
 		const applicationErrorModule = createModuleMocks(ApplicationErrorModule);
 
-		const saveFn = jest.fn();
+		const saveFn = vi.fn();
 
 		const wrapper = mount(H5pEditorPage, {
 			global: {
@@ -182,7 +182,7 @@ describe("H5PEditorPage", () => {
 					parentId: "parentId",
 				});
 
-				jest.spyOn(window, "dispatchEvent").mockImplementation(jest.fn());
+				vi.spyOn(window, "dispatchEvent").mockImplementation(vi.fn());
 				saveFn.mockResolvedValue(response);
 
 				return {
@@ -251,7 +251,7 @@ describe("H5PEditorPage", () => {
 					parentId: "parentId",
 				});
 
-				jest.spyOn(window, "dispatchEvent").mockImplementation(jest.fn());
+				vi.spyOn(window, "dispatchEvent").mockImplementation(vi.fn());
 				saveFn.mockRejectedValue(apiValidationResponseErrorFactory.build());
 
 				return {
@@ -308,7 +308,7 @@ describe("H5PEditorPage", () => {
 					parentId: "parentId",
 				});
 
-				jest.spyOn(window, "dispatchEvent").mockImplementation(jest.fn());
+				vi.spyOn(window, "dispatchEvent").mockImplementation(vi.fn());
 				saveFn.mockResolvedValue(response);
 				useH5pEditorBoardHooksMock.afterSave.mockRejectedValue(new Error());
 

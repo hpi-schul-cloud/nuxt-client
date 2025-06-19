@@ -23,18 +23,19 @@ import { Router, useRouter } from "vue-router";
 import { VCheckboxBtn } from "vuetify/lib/components/index";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 
-jest.mock("@data-provisioning-options");
+vi.mock("@data-provisioning-options");
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
 
-jest
-	.spyOn(window, "scrollTo")
-	.mockImplementation(() => ({ top: 0, behavior: "smooth" }));
+vi.spyOn(window, "scrollTo").mockImplementation(() => ({
+	top: 0,
+	behavior: "smooth",
+}));
 
 describe("ProvisioningOptionsPage", () => {
 	let useProvisioningOptionsStateMock: DeepMocked<
@@ -84,13 +85,13 @@ describe("ProvisioningOptionsPage", () => {
 			error: ref(),
 		});
 
-		jest
-			.mocked(useProvisioningOptionsState)
-			.mockReturnValue(useProvisioningOptionsStateMock);
+		vi.mocked(useProvisioningOptionsState).mockReturnValue(
+			useProvisioningOptionsStateMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("breadcrumbs", () => {
@@ -313,7 +314,7 @@ describe("ProvisioningOptionsPage", () => {
 
 			describe("when disabling options", () => {
 				beforeEach(() => {
-					jest.clearAllMocks();
+					vi.clearAllMocks();
 				});
 				const setup = async () => {
 					useProvisioningOptionsStateMock.provisioningOptionsData.value =

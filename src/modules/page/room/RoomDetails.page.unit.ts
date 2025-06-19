@@ -47,24 +47,24 @@ import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn().mockReturnValue({
-		push: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn().mockReturnValue({
+		push: vi.fn(),
 	}),
 }));
 
-jest.mock("@data-room/Rooms.state");
+vi.mock("@data-room/Rooms.state");
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = jest.mocked(useRoomAuthorization);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorization = vi.mocked(useRoomAuthorization);
 
-jest.mock("@ui-confirmation-dialog");
-jest.mocked(useConfirmationDialog);
+vi.mock("@ui-confirmation-dialog");
+vi.mocked(useConfirmationDialog);
 
 describe("@pages/RoomsDetails.page.vue", () => {
 	let useRoomsStateMock: DeepMocked<ReturnType<typeof useRoomsState>>;
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
-	let askConfirmationMock: jest.Mock;
+	let askConfirmationMock: vi.Mock;
 
 	beforeEach(() => {
 		setupStores({
@@ -77,12 +77,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			isEmpty: ref(false),
 			rooms: ref([]),
 		});
-		jest.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
+		vi.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
 
 		const mockMe = meResponseFactory.build();
 		authModule.setMe(mockMe);
 
-		askConfirmationMock = jest.fn();
+		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});
@@ -105,7 +105,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (

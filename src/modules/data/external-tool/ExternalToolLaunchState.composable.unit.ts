@@ -17,7 +17,7 @@ import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
 import { nextTick } from "vue";
 
-jest.mock("@data-external-tool/ExternalToolApi.composable");
+vi.mock("@data-external-tool/ExternalToolApi.composable");
 
 describe("ExternalToolLaunchState.composable", () => {
 	let useExternalToolApiMock: DeepMocked<ReturnType<typeof useExternalToolApi>>;
@@ -26,11 +26,11 @@ describe("ExternalToolLaunchState.composable", () => {
 		useExternalToolApiMock =
 			createMock<ReturnType<typeof useExternalToolApi>>();
 
-		jest.mocked(useExternalToolApi).mockReturnValue(useExternalToolApiMock);
+		vi.mocked(useExternalToolApi).mockReturnValue(useExternalToolApiMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchContextLaunchRequest", () => {
@@ -211,7 +211,7 @@ describe("ExternalToolLaunchState.composable", () => {
 			const setup = () => {
 				const composable = useExternalToolLaunchState();
 
-				jest.spyOn(window, "open");
+				vi.spyOn(window, "open");
 
 				return {
 					...composable,
@@ -238,7 +238,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					const composable = useExternalToolLaunchState();
 					composable.toolLaunchRequest.value = launchRequest;
 
-					jest.spyOn(window, "open");
+					vi.spyOn(window, "open");
 
 					return {
 						...composable,
@@ -265,7 +265,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					const composable = useExternalToolLaunchState();
 					composable.toolLaunchRequest.value = launchRequest;
 
-					jest.spyOn(window, "open");
+					vi.spyOn(window, "open");
 
 					return {
 						...composable,
@@ -381,7 +381,7 @@ describe("ExternalToolLaunchState.composable", () => {
 				const composable = useExternalToolLaunchState();
 				composable.toolLaunchRequest.value = launchRequest;
 
-				jest.spyOn(window, "open");
+				vi.spyOn(window, "open");
 
 				return {
 					...composable,
@@ -411,7 +411,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 		describe("when the launch is with launchType Lti11ContentItemSelection", () => {
 			const setup = () => {
-				const refreshCallback = jest.fn();
+				const refreshCallback = vi.fn();
 				const launchRequest = toolLaunchRequestFactory.build({
 					method: ToolLaunchRequestMethodEnum.Post,
 					openNewTab: true,
@@ -425,12 +425,12 @@ describe("ExternalToolLaunchState.composable", () => {
 					closed: false,
 				};
 
-				jest
-					.spyOn(window, "open")
-					.mockReturnValue(mockWindow as unknown as Window);
+				vi.spyOn(window, "open").mockReturnValue(
+					mockWindow as unknown as Window
+				);
 
-				const setInterval = jest.spyOn(window, "setInterval");
-				const clearInterval = jest.spyOn(window, "clearInterval");
+				const setInterval = vi.spyOn(window, "setInterval");
+				const clearInterval = vi.spyOn(window, "clearInterval");
 
 				return {
 					...composable,
@@ -442,12 +442,12 @@ describe("ExternalToolLaunchState.composable", () => {
 			};
 
 			afterEach(() => {
-				jest.useRealTimers();
-				jest.restoreAllMocks();
+				vi.useRealTimers();
+				vi.restoreAllMocks();
 			});
 
 			it("should call refreshCallback", async () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 				const {
 					launchTool,
 					refreshCallback,
@@ -463,7 +463,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				mockWindow.closed = true;
 
-				jest.advanceTimersByTime(1000);
+				vi.advanceTimersByTime(1000);
 				await nextTick();
 
 				expect(refreshCallback).toHaveBeenCalled();
@@ -471,7 +471,7 @@ describe("ExternalToolLaunchState.composable", () => {
 			});
 
 			it("should not call refreshCallback", async () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 				const { launchTool, refreshCallback, mockWindow } = setup();
 
 				launchTool();
@@ -480,7 +480,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				mockWindow.closed = false;
 
-				jest.advanceTimersByTime(1000);
+				vi.advanceTimersByTime(1000);
 				await nextTick();
 
 				expect(refreshCallback).not.toHaveBeenCalled();

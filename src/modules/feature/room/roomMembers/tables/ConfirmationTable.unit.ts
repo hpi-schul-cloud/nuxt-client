@@ -19,15 +19,15 @@ import SchoolsModule from "@/store/schools";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { schoolsModule } from "@/store";
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({
-			t: jest.fn().mockImplementation((key: string) => key),
+		...vi.requireActual("vue-i18n"),
+		useI18n: vi.fn().mockReturnValue({
+			t: vi.fn().mockImplementation((key: string) => key),
 		}),
 	};
 });
-const mockI18n = jest.mocked(useI18n());
+const mockI18n = vi.mocked(useI18n());
 
 describe("ConfirmationTable", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
@@ -44,7 +44,7 @@ describe("ConfirmationTable", () => {
 		);
 	});
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (
@@ -83,7 +83,7 @@ describe("ConfirmationTable", () => {
 									...roomMembersWithoutApplicants,
 									...roomApplicants,
 								],
-								isRoomOwner: jest.fn(),
+								isRoomOwner: vi.fn(),
 							},
 						},
 					}),

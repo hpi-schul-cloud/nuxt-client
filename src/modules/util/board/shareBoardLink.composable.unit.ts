@@ -8,11 +8,11 @@ import { BoardMenuScope } from "@ui-board";
 import { useShareBoardLink } from "./shareBoardLink.composable";
 
 describe("useShareBoardLink", () => {
-	const notifierModule: jest.Mocked<NotifierModule> =
+	const notifierModule: vi.Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getComposable = () => {

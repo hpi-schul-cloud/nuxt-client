@@ -25,17 +25,17 @@ import { createPinia, setActivePinia } from "pinia";
 import { flushPromises } from "@vue/test-utils";
 import { useI18n } from "vue-i18n";
 
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn().mockReturnValue({
-		push: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn().mockReturnValue({
+		push: vi.fn(),
 	}),
 }));
 
-jest.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const boardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as vi.Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("RoomInvitationLinkStatusPage", () => {
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -49,7 +49,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = async (useLinkResult: UseLinkResult) => {

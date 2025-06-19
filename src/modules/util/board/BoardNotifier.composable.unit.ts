@@ -16,7 +16,7 @@ const setup = () => {
 
 describe("BoardNotifications.composable", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("@showSuccess method", () => {

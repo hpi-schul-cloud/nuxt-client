@@ -15,9 +15,9 @@ import {
 import { flushPromises, mount } from "@vue/test-utils";
 import FolderContentElement from "./FolderContentElement.vue";
 
-jest.mock("@data-board", () => ({
-	useBoardFocusHandler: jest.fn(),
-	useContentElementState: jest.fn(() => ({
+vi.mock("@data-board", () => ({
+	useBoardFocusHandler: vi.fn(),
+	useContentElementState: vi.fn(() => ({
 		modelValue: { value: { title: "test" } },
 	})),
 }));
@@ -59,7 +59,7 @@ describe("FolderContentElement", () => {
 			},
 		});
 
-		(useContentElementState as jest.Mock).mockReturnValue({
+		(useContentElementState as vi.Mock).mockReturnValue({
 			modelValue: {
 				value: (options.element || mockElement).content.title || "",
 			},

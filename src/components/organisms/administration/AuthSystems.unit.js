@@ -54,7 +54,7 @@ const searchStrings = {
 };
 
 describe("AuthSystems", () => {
-	const RouterLinkStubMock = { ...RouterLinkStub, useLink: jest.fn() };
+	const RouterLinkStubMock = { ...RouterLinkStub, useLink: vi.fn() };
 	const createWrapper = (options = {}) => {
 		const wrapper = mount(AuthSystems, {
 			global: {
@@ -152,7 +152,7 @@ describe("AuthSystems", () => {
 						return mockElem;
 					},
 				});
-				const clipboardSpy = jest.spyOn(navigator.clipboard, "writeText");
+				const clipboardSpy = vi.spyOn(navigator.clipboard, "writeText");
 				const wrapper = createWrapper({ props: generateProps() });
 
 				const loginLinkFieldVisibility = wrapper.findAll(
@@ -311,7 +311,7 @@ describe("AuthSystems", () => {
 				permissions: ["SYSTEM_CREATE"],
 			});
 			authModule.setMe(mockMe);
-			const deleteSpy = jest.spyOn(schoolsModule, "deleteSystem");
+			const deleteSpy = vi.spyOn(schoolsModule, "deleteSystem");
 			const wrapper = createWrapper({ props: generateProps() });
 
 			expect(wrapper.findAll("tr").length).toBe(5);
@@ -330,7 +330,7 @@ describe("AuthSystems", () => {
 				permissions: ["SYSTEM_CREATE"],
 			});
 			authModule.setMe(mockMe);
-			const removeSystem = jest.spyOn(AuthSystems.methods, "removeSystem");
+			const removeSystem = vi.spyOn(AuthSystems.methods, "removeSystem");
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);

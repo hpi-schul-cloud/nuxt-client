@@ -16,16 +16,16 @@ import { createPinia, setActivePinia } from "pinia";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
 import { setupFileStorageNotifier } from "./test-utils/fileStorageNotifier";
 
-jest.mock("./FileStorageNotifications.composable");
+vi.mock("./FileStorageNotifications.composable");
 
-jest.mock("@/utils/helpers");
+vi.mock("@/utils/helpers");
 
-jest.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = jest.mocked(
+vi.mock("@/utils/api");
+const mockedMapAxiosErrorToResponseError = vi.mocked(
 	mapAxiosErrorToResponseError
 );
 
-jest.mock("@/store/store-accessor", () => ({
+vi.mock("@/store/store-accessor", () => ({
 	authModule: {
 		getSchool: { id: "schoolId" },
 	},
@@ -49,7 +49,7 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 describe("FileStorageApi Composable", () => {
 	beforeEach(() => {
 		setActivePinia(createPinia());
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getFileRecords", () => {
@@ -59,7 +59,7 @@ describe("FileStorageApi Composable", () => {
 				const parentId = ObjectIdMock();
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 
 				setupFileStorageNotifier();
 
@@ -95,7 +95,7 @@ describe("FileStorageApi Composable", () => {
 				});
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.list.mockResolvedValueOnce(response);
 
 				setupFileStorageNotifier();
@@ -145,7 +145,7 @@ describe("FileStorageApi Composable", () => {
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.list.mockRejectedValue(responseError);
 
 				const {
@@ -219,7 +219,7 @@ describe("FileStorageApi Composable", () => {
 				);
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.upload.mockResolvedValueOnce(response);
 
 				setupFileStorageNotifier();
@@ -272,7 +272,7 @@ describe("FileStorageApi Composable", () => {
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.upload.mockRejectedValue(responseError);
 
 				const { showFileTooBigError } = setupFileStorageNotifier();
@@ -324,7 +324,7 @@ describe("FileStorageApi Composable", () => {
 				);
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.uploadFromUrl.mockResolvedValueOnce(response);
 
 				setupFileStorageNotifier();
@@ -381,7 +381,7 @@ describe("FileStorageApi Composable", () => {
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.uploadFromUrl.mockRejectedValueOnce(responseError);
 
 				const { showFileTooBigError } = setupFileStorageNotifier();
@@ -426,7 +426,7 @@ describe("FileStorageApi Composable", () => {
 				);
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
 				fileApi.patchFilename.mockResolvedValueOnce(response);
 
 				setupFileStorageNotifier();
@@ -475,7 +475,7 @@ describe("FileStorageApi Composable", () => {
 				mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
 				fileApi.patchFilename.mockRejectedValue(responseError);
 
 				const { showFileExistsError } = setupFileStorageNotifier();
@@ -514,7 +514,7 @@ describe("FileStorageApi Composable", () => {
 				});
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 
 				fileApi.list.mockResolvedValueOnce(fetchResponse);
 
@@ -582,7 +582,7 @@ describe("FileStorageApi Composable", () => {
 				});
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.list.mockResolvedValueOnce(response);
 
 				const { responseError, expectedPayload } = setupErrorResponse(

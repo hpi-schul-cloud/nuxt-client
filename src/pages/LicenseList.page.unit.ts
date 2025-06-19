@@ -16,8 +16,8 @@ import {
 } from "vuetify/lib/components/index";
 import LicenseListPage from "./LicenseList.page.vue";
 
-jest.mock("axios");
-const mockAxios = jest.mocked(axios);
+vi.mock("axios");
+const mockAxios = vi.mocked(axios);
 mockAxios.get.mockResolvedValue({
 	data: {
 		"MIT-License": {

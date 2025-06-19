@@ -16,8 +16,8 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createMock } from "@golevelup/ts-jest";
 import { Router, useRouter } from "vue-router";
 import { VListItem, VMenu } from "vuetify/lib/components/index";
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
 
 type BoardData = {
 	id: string;
@@ -109,7 +109,7 @@ describe("RoomBoardCard", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when a board card is rendered", () => {

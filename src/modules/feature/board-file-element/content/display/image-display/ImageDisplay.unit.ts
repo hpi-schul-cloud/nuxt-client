@@ -13,11 +13,11 @@ import { mount } from "@vue/test-utils";
 import { ref } from "vue";
 import ImageDisplay from "./ImageDisplay.vue";
 
-jest.mock("@ui-light-box");
-jest.mock("@/utils/fileHelper");
+vi.mock("@ui-light-box");
+vi.mock("@/utils/fileHelper");
 
-const mockedUseLightBox = jest.mocked(useLightBox);
-const mockedConvertDownloadToPreviewUrl = jest.mocked(
+const mockedUseLightBox = vi.mocked(useLightBox);
+const mockedConvertDownloadToPreviewUrl = vi.mocked(
 	convertDownloadToPreviewUrl
 );
 
@@ -35,11 +35,11 @@ describe("ImageDisplay", () => {
 			showMenu: true,
 		};
 
-		const open = jest.fn();
+		const open = vi.fn();
 		mockedUseLightBox.mockReturnValue({
 			isLightBoxOpen: ref(false),
 			open,
-			close: jest.fn(),
+			close: vi.fn(),
 			lightBoxOptions: ref(),
 		});
 

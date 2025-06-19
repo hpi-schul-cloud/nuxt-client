@@ -44,22 +44,22 @@ import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import ContentElementList from "./ContentElementList.vue";
 
-jest.mock("@util-board");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
-const mockedEditMode = jest.mocked(useCourseBoardEditMode);
-const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
-const mockedUseShareBoardLink = jest.mocked(useShareBoardLink);
+vi.mock("@util-board");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
+const mockedEditMode = vi.mocked(useCourseBoardEditMode);
+const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
+const mockedUseShareBoardLink = vi.mocked(useShareBoardLink);
 
-jest.mock("@data-board/BoardFocusHandler.composable");
-const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
+vi.mock("@data-board/BoardFocusHandler.composable");
+const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
-jest.mock("@data-board/BoardPermissions.composable");
-const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
+vi.mock("@data-board/BoardPermissions.composable");
+const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
 
-jest.mock("../shared/AddElementDialog.composable");
-jest.mock("@ui-confirmation-dialog");
-const mockedUseDeleteConfirmationDialog = jest.mocked(
+vi.mock("../shared/AddElementDialog.composable");
+vi.mock("@ui-confirmation-dialog");
+const mockedUseDeleteConfirmationDialog = vi.mocked(
 	useDeleteConfirmationDialog
 );
 
@@ -87,12 +87,12 @@ describe("CardHost", () => {
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
-			setEditModeId: jest.fn(),
+			setEditModeId: vi.fn(),
 			isInEditMode: computed(() => true),
 		});
 
 		useShareBoardLinkMock = createMock<ReturnType<typeof useShareBoardLink>>({
-			getShareLinkId: jest.fn().mockReturnValue("shareLinkId"),
+			getShareLinkId: vi.fn().mockReturnValue("shareLinkId"),
 		});
 		mockedUseShareBoardLink.mockReturnValue(useShareBoardLinkMock);
 
@@ -105,8 +105,8 @@ describe("CardHost", () => {
 
 		mockedEditMode.mockReturnValue({
 			isEditMode: computed(() => true),
-			startEditMode: jest.fn(),
-			stopEditMode: jest.fn(),
+			startEditMode: vi.fn(),
+			stopEditMode: vi.fn(),
 		});
 
 		setupAddElementDialogMock();
@@ -134,7 +134,7 @@ describe("CardHost", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (options?: { hasCard?: boolean; hasElement?: boolean }) => {

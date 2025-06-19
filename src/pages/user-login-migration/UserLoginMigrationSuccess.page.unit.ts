@@ -9,12 +9,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
 describe("UserLoginMigrationSuccess", () => {
-	let systemsModule: jest.Mocked<SystemsModule>;
+	let systemsModule: vi.Mocked<SystemsModule>;
 
 	const setup = (props: { targetSystem: string }) => {
 		const systemsMock: System[] = [

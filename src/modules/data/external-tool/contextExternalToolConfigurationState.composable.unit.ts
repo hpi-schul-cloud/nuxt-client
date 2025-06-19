@@ -10,7 +10,7 @@ import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { useContextExternalToolConfigurationState } from "./contextExternalToolConfigurationState.composable";
 import { ContextExternalToolConfigurationTemplate } from "./types";
 
-jest.mock("@data-external-tool/contextExternalToolApi.composable");
+vi.mock("@data-external-tool/contextExternalToolApi.composable");
 
 describe("contextExternalToolConfigurationState.composable", () => {
 	let useContextExternalToolApiMock: DeepMocked<
@@ -21,13 +21,13 @@ describe("contextExternalToolConfigurationState.composable", () => {
 		useContextExternalToolApiMock =
 			createMock<ReturnType<typeof useContextExternalToolApi>>();
 
-		jest
-			.mocked(useContextExternalToolApi)
-			.mockReturnValue(useContextExternalToolApiMock);
+		vi.mocked(useContextExternalToolApi).mockReturnValue(
+			useContextExternalToolApiMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when no data is loaded", () => {

@@ -12,14 +12,12 @@ import FilePicker from "./file-picker/FilePicker.vue";
 const setupUseSharedLastCreatedElementMock = () => {
 	const mockedUse =
 		createMock<ReturnType<typeof utilBoard.useSharedLastCreatedElement>>();
-	jest
-		.spyOn(utilBoard, "useSharedLastCreatedElement")
-		.mockReturnValue(mockedUse);
+	vi.spyOn(utilBoard, "useSharedLastCreatedElement").mockReturnValue(mockedUse);
 };
 
 describe("FileUpload", () => {
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when isEditMode is true", () => {
@@ -69,7 +67,7 @@ describe("FileUpload", () => {
 				setup();
 
 				const beforeUnloadEvent = new Event("beforeunload");
-				const preventDefaultSpy = jest.fn();
+				const preventDefaultSpy = vi.fn();
 				preventDefaultSpy.mockClear();
 
 				beforeUnloadEvent.preventDefault = preventDefaultSpy;
@@ -157,7 +155,7 @@ describe("FileUpload", () => {
 				filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
 
 				const beforeUnloadEvent = new Event("beforeunload");
-				const preventDefaultSpy = jest.fn();
+				const preventDefaultSpy = vi.fn();
 
 				beforeUnloadEvent.preventDefault = preventDefaultSpy;
 				window.dispatchEvent(beforeUnloadEvent);
@@ -215,7 +213,7 @@ describe("FileUpload", () => {
 				setup();
 
 				const beforeUnloadEvent = new Event("beforeunload");
-				const preventDefaultSpy = jest.fn();
+				const preventDefaultSpy = vi.fn();
 
 				beforeUnloadEvent.preventDefault = preventDefaultSpy;
 				window.dispatchEvent(beforeUnloadEvent);
@@ -280,7 +278,7 @@ describe("FileUpload", () => {
 			setup();
 
 			const beforeUnloadEvent = new Event("beforeunload");
-			const preventDefaultSpy = jest.fn();
+			const preventDefaultSpy = vi.fn();
 
 			beforeUnloadEvent.preventDefault = preventDefaultSpy;
 			window.dispatchEvent(beforeUnloadEvent);

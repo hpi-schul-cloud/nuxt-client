@@ -4,8 +4,8 @@ import { useBoardFeatures } from "./BoardFeatures.composable";
 import { useBoardStore } from "./Board.store";
 import { createMock } from "@golevelup/ts-jest";
 
-jest.mock("./Board.store");
-const mockedUseBoardStore = jest.mocked(useBoardStore);
+vi.mock("./Board.store");
+const mockedUseBoardStore = vi.mocked(useBoardStore);
 
 describe("useBoardFeatures", () => {
 	const setup = (props: BoardFeature[] | []) => {

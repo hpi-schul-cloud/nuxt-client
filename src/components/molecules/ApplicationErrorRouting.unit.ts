@@ -11,16 +11,16 @@ import { ref } from "vue";
 import { Router, useRouter } from "vue-router";
 import ApplicationErrorRouting from "./ApplicationErrorRouting.vue";
 
-jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
 
 describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
 	const router = createMock<Router>({
 		currentRoute: ref({ path: "/" }),
 	});
-	const useRouterMock = <jest.Mock>useRouter;
+	const useRouterMock = <vi.Mock>useRouter;
 
 	useRouterMock.mockReturnValue(router);
 	let applicationErrorModuleMock: ApplicationErrorModule;

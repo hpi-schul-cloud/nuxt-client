@@ -11,7 +11,7 @@ describe("commonCartridgeExportModule", () => {
 		describe("startExport", () => {
 			it("should call courseRoomDetailsModule.downloadCommonCartridgeCourse with the correct version and topic", () => {
 				const commonCartridgeExportModule = new CommonCartridgeExportModule({});
-				const courseRoomDetailModuleMock = jest.spyOn(
+				const courseRoomDetailModuleMock = vi.spyOn(
 					courseRoomDetailsModule,
 					"downloadCommonCartridgeCourse"
 				);

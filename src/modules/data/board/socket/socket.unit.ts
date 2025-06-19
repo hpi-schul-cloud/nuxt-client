@@ -15,22 +15,22 @@ import * as socketModule from "socket.io-client";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as vi.Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("socket.io-client");
-const mockSocketIOClient = jest.mocked(socketModule);
+vi.mock("socket.io-client");
+const mockSocketIOClient = vi.mocked(socketModule);
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("../boardActions/boardSocketApi.composable");
-jest.mock("../boardActions/boardRestApi.composable");
+vi.mock("../boardActions/boardSocketApi.composable");
+vi.mock("../boardActions/boardRestApi.composable");
 
-jest.mock("@vueuse/shared", () => {
+vi.mock("@vueuse/shared", () => {
 	return {
-		...jest.requireActual("@vueuse/shared"),
-		useTimeoutFn: jest.fn().mockImplementation((cb: () => void) => {
+		...vi.requireActual("@vueuse/shared"),
+		useTimeoutFn: vi.fn().mockImplementation((cb: () => void) => {
 			cb();
 			return {
 				isPending: { value: false },
@@ -39,13 +39,13 @@ jest.mock("@vueuse/shared", () => {
 	};
 });
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
 
-const startMock = jest.fn();
-const stopMock = jest.fn();
+const startMock = vi.fn();
+const stopMock = vi.fn();
 const initializeTimeout = (isPending = false) => {
-	const { useTimeoutFn } = jest.requireMock("@vueuse/shared");
+	const { useTimeoutFn } = vi.requireMock("@vueuse/shared");
 	useTimeoutFn.mockImplementation((cb: () => void) => {
 		cb();
 		return {
@@ -56,11 +56,11 @@ const initializeTimeout = (isPending = false) => {
 	});
 };
 
-const dispatchMock = jest.fn();
+const dispatchMock = vi.fn();
 
 describe("socket.ts", () => {
 	let mockSocket: Partial<socketModule.Socket>;
-	let timeoutResponseMock: { emitWithAck: jest.Mock };
+	let timeoutResponseMock: { emitWithAck: vi.Mock };
 	let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	// We need to set following lines in the outmost describe level since the socket event handlers that set and use these
 	// values are created only once when the module is loaded and initially used.
@@ -77,15 +77,15 @@ describe("socket.ts", () => {
 		});
 		envConfigModule.setEnvs(envs);
 
-		timeoutResponseMock = { emitWithAck: jest.fn() };
+		timeoutResponseMock = { emitWithAck: vi.fn() };
 		mockSocket = {
 			connected: false,
-			on: jest.fn(),
-			emit: jest.fn(),
-			connect: jest.fn(),
-			disconnect: jest.fn(),
-			onAny: jest.fn(),
-			timeout: jest.fn().mockReturnValue(timeoutResponseMock),
+			on: vi.fn(),
+			emit: vi.fn(),
+			connect: vi.fn(),
+			disconnect: vi.fn(),
+			onAny: vi.fn(),
+			timeout: vi.fn().mockReturnValue(timeoutResponseMock),
 		};
 		mockSocketIOClient.io.mockReturnValue(mockSocket as socketModule.Socket);
 
@@ -101,11 +101,11 @@ describe("socket.ts", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getEventCallback = (eventName: string) => {
-		const listener = (mockSocket.on as jest.Mock).mock.calls.find(
+		const listener = (mockSocket.on as vi.Mock).mock.calls.find(
 			([event]) => event === eventName
 		);
 		return listener?.[1];

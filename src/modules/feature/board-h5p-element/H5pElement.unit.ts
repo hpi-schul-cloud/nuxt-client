@@ -21,9 +21,9 @@ import { VImg } from "vuetify/components";
 import H5pElement from "./H5pElement.vue";
 import H5pElementMenu from "./H5pElementMenu.vue";
 
-jest.mock("@data-board");
-jest.mock("@data-h5p");
-jest.mock("vue-router");
+vi.mock("@data-board");
+vi.mock("@data-h5p");
+vi.mock("vue-router");
 
 describe("H5pElement", () => {
 	let useBoardFocusHandlerMock: DeepMocked<
@@ -37,12 +37,12 @@ describe("H5pElement", () => {
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
 		useRouterMock = createMock<ReturnType<typeof useRouter>>();
 
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
-		jest.mocked(useRouter).mockReturnValue(useRouterMock);
+		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useRouter).mockReturnValue(useRouterMock);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const getWrapper = (propsData: {
@@ -52,7 +52,7 @@ describe("H5pElement", () => {
 		isListBoard?: boolean;
 	}) => {
 		useH5PEditorMock = createMock<ReturnType<typeof useH5PEditorApi>>();
-		jest.mocked(useH5PEditorApi).mockReturnValue(useH5PEditorMock);
+		vi.mocked(useH5PEditorApi).mockReturnValue(useH5PEditorMock);
 		useH5PEditorMock.getContentTitle.mockResolvedValueOnce(
 			propsData.contentTitle
 		);
@@ -79,7 +79,7 @@ describe("H5pElement", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("Visibility", () => {
@@ -276,7 +276,7 @@ describe("H5pElement", () => {
 				const resolvedUrl = "https://test.com";
 
 				const windowMock = createMock<Window>();
-				jest.spyOn(window, "open").mockImplementation(() => windowMock);
+				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 				useRouterMock.resolve.mockReturnValue(
 					createMock<RouteLocationResolved>({
@@ -326,7 +326,7 @@ describe("H5pElement", () => {
 				const resolvedUrl = "https://test.com";
 
 				const windowMock = createMock<Window>();
-				jest.spyOn(window, "open").mockImplementation(() => windowMock);
+				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 				useRouterMock.resolve.mockReturnValue(
 					createMock<RouteLocationResolved>({
@@ -375,7 +375,7 @@ describe("H5pElement", () => {
 				const resolvedUrl = "https://test.com";
 
 				const windowMock = createMock<Window>();
-				jest.spyOn(window, "open").mockImplementation(() => windowMock);
+				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 				useRouterMock.resolve.mockReturnValue(
 					createMock<RouteLocationResolved>({

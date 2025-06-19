@@ -26,25 +26,25 @@ const mockElement: RichTextElementResponse = {
 	},
 };
 
-jest.mock("@data-board", () => {
+vi.mock("@data-board", () => {
 	return {
-		useBoardFocusHandler: jest.fn(),
-		useContentElementState: jest.fn().mockImplementation(() => ({
+		useBoardFocusHandler: vi.fn(),
+		useContentElementState: vi.fn().mockImplementation(() => ({
 			modelValue: mockElement.content,
 		})),
-		useDeleteConfirmationDialog: jest.fn(),
+		useDeleteConfirmationDialog: vi.fn(),
 	};
 });
 
-jest.mock("@ui-confirmation-dialog", () => {
+vi.mock("@ui-confirmation-dialog", () => {
 	return {
-		useDeleteConfirmationDialog: jest.fn(),
+		useDeleteConfirmationDialog: vi.fn(),
 	};
 });
 
-jest.mock("@util-board", () => {
+vi.mock("@util-board", () => {
 	return {
-		useInlineEditInteractionHandler: jest.fn(),
+		useInlineEditInteractionHandler: vi.fn(),
 	};
 });
 

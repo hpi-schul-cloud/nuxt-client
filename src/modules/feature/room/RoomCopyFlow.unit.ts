@@ -18,10 +18,10 @@ import { createMock } from "@golevelup/ts-jest";
 import { flushPromises } from "@vue/test-utils";
 import { nextTick } from "vue";
 
-jest.mock("@/serverApi/v3", () => {
+vi.mock("@/serverApi/v3", () => {
 	return {
-		...jest.requireActual("@/serverApi/v3"),
-		RoomApiFactory: jest.fn(),
+		...vi.requireActual("@/serverApi/v3"),
+		RoomApiFactory: vi.fn(),
 	};
 });
 
@@ -30,10 +30,10 @@ describe("@feature-room/RoomCopyFlow", () => {
 		const notifierModuleMock = createModuleMocks(NotifierModule);
 		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		const room = roomFactory.build();
-		const errorHandler = jest.fn();
+		const errorHandler = vi.fn();
 
 		const roomApiMock = createMock<ReturnType<typeof RoomApiFactory>>();
-		(RoomApiFactory as jest.Mock).mockReturnValue(roomApiMock);
+		(RoomApiFactory as vi.Mock).mockReturnValue(roomApiMock);
 		roomApiMock.roomControllerCopyRoom.mockResolvedValue(
 			mockApiResponse({
 				data: {

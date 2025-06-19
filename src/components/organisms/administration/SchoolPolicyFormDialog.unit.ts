@@ -16,9 +16,9 @@ import {
 } from "@@/tests/test-utils/setup";
 
 describe("SchoolPolicyFormDialog", () => {
-	let notifierModule: jest.Mocked<NotifierModule>;
-	let schoolsModule: jest.Mocked<SchoolsModule>;
-	let privacyPolicyModule: jest.Mocked<PrivacyPolicyModule>;
+	let notifierModule: vi.Mocked<NotifierModule>;
+	let schoolsModule: vi.Mocked<SchoolsModule>;
+	let privacyPolicyModule: vi.Mocked<PrivacyPolicyModule>;
 
 	const mockProps = {
 		isOpen: true,

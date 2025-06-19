@@ -39,11 +39,11 @@ describe("SchoolExternalToolsModule", () => {
 
 		apiMock = createMock<ToolApiInterface>();
 
-		jest.spyOn(serverApi, "ToolApiFactory").mockReturnValue(apiMock);
+		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(apiMock);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getters", () => {
