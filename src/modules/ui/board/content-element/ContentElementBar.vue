@@ -80,10 +80,10 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
 import { LineClamp } from "@ui-line-clamp";
-import { IconProps } from "vuetify";
 import { hasSlotContent } from "@util-vue";
+import { PropType } from "vue";
+import { IconProps } from "vuetify";
 
 const props = defineProps({
 	hasGreyBackground: {

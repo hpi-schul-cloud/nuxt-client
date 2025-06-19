@@ -6,7 +6,6 @@
 			:label="t('pages.folder.ariaLabels.menu.action.edit')"
 			type="text"
 			data-testid="folder-title-text-field-in-card"
-			:autofocus="true"
 			class="text"
 			@keydown="onKeydown"
 		/>
