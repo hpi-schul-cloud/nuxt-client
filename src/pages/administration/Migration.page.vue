@@ -149,16 +149,13 @@
 								color="grey-lighten-5"
 							>
 								<VProgressLinear
-									v-if="school.inUserMigration && totalImportUsers === 0"
+									v-if="school.inUserMigration && isLoading"
 									indeterminate
 								/>
 								<VCardText>
 									<iframe class="full" :src="helpPageUri" />
 									<v-alert
-										v-if="
-											(!school.inUserMigration || totalImportUsers === 0) &&
-											!isNbc
-										"
+										v-if="(!school.inUserMigration || isLoading) && !isNbc"
 										density="compact"
 										variant="outlined"
 										type="info"
@@ -204,22 +201,19 @@
 											<VBtn
 												v-else-if="canPerformMigration"
 												data-testid="migration_tutorial_next"
-												:disabled="totalImportUsers === 0"
+												:disabled="isLoading"
 												variant="flat"
 												color="primary"
 												@click="nextStep"
 											>
 												<VProgressCircular
-													v-if="
-														totalImportUsers === 0 && school.inUserMigration
-													"
+													v-if="isLoading && school.inUserMigration"
 													:size="20"
 													indeterminate
 													class="mr-1"
 												/>
 												{{
-													totalImportUsers > 0 ||
-													school.inUserMigration === false
+													!isLoading || school.inUserMigration === false
 														? t("pages.administration.migration.next")
 														: t("pages.administration.migration.waiting")
 												}}
@@ -728,9 +722,14 @@ const summary = async () => {
 	if (!canPerformMigration.value) {
 		return;
 	}
+
+	isLoading.value = true;
+
 	await importUsersModule.fetchTotal();
 	await importUsersModule.fetchTotalMatched();
 	await importUsersModule.fetchTotalUnmatched();
+
+	isLoading.value = false;
 };
 
 const checkTotalInterval = () => {
