@@ -13,7 +13,7 @@ const CspNoncePlaceholder = (nonce: string): Plugin => {
 				/<link([^>]*rel=["']stylesheet["'][^>]*)>/gi,
 				(match) => {
 					if (/nonce=/.test(match)) return match; // Don't double-add
-					return match.replace(">", ` nonce="${nonce}">`);
+					return match.replace(/>/g, ` nonce="${nonce}">`);
 				}
 			);
 			return html;
