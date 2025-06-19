@@ -1,20 +1,28 @@
 import type { Plugin } from "vite";
 
+function setTagCspNonce(tag: string, nonce: string): string {
+	// Remove any existing nonce attribute and add the new one
+	const cleaned = tag.replace(/\snonce=["'][^"']*["']/i, "");
+	// Insert nonce after the tag name
+	return cleaned.replace(/^<(\w+)/, `<$1 nonce="${nonce}"`);
+}
+
 const CspNoncePlaceholder = (nonce: string): Plugin => {
 	return {
 		name: "csp-nonce-placeholder",
 		transformIndexHtml(html) {
-			// Add nonce to <script> tags
-			html = html.replace(/<script(\s|>)/gi, `<script nonce="${nonce}"$1`);
-			// Add nonce to <style> tags
-			html = html.replace(/<style(\s|>)/gi, `<style nonce="${nonce}"$1`);
-			// Add nonce to <link rel="stylesheet"> tags
+			// Set nonce in <script> tags
+			html = html.replace(/<script[^>]*>/gi, (match) =>
+				setTagCspNonce(match, nonce)
+			);
+			// Set nonce in <style> tags
+			html = html.replace(/<style[^>]*>/gi, (match) =>
+				setTagCspNonce(match, nonce)
+			);
+			// Set nonce in <link rel="stylesheet"> tags
 			html = html.replace(
 				/<link([^>]*rel=["']stylesheet["'][^>]*)>/gi,
-				(match) => {
-					if (/nonce=/.test(match)) return match; // Don't double-add
-					return match.replace(/>/g, ` nonce="${nonce}">`);
-				}
+				(match) => setTagCspNonce(match, nonce)
 			);
 			return html;
 		},
