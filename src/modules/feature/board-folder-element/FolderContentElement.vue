@@ -7,21 +7,29 @@
 		variant="outlined"
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
+		:aria-label="
+			t('components.cardElement.folderElement') + ' ' + element.content.title
+		"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
 		<ContentElementBar
 			:has-grey-background="true"
 			:icon="mdiFolderOpenOutline"
+			tabindex="0"
+			role="button"
+			class="content-element-bar"
+			:aria-label="
+				t('components.cardElement.folderElement') + ' ' + element.content.title
+			"
 			@click="onTitleClick"
+			@keydown.enter="onTitleClick"
 		>
 			<template #title>
-				<span tabindex="0" role="button" @keydown.enter="onTitleClick">
-					{{
-						element.content.title ||
-						$t("components.cardElement.folderElement.untitled")
-					}}
-				</span>
+				{{
+					element.content.title ||
+					t("components.cardElement.folderElement.untitled")
+				}}
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu
@@ -64,6 +72,7 @@ import {
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
 import { ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import FileStatistic from "./FileStatistic.vue";
 import FolderTitleInput from "./FolderTitleInput.vue";
@@ -77,6 +86,8 @@ interface FolderContentElementProps {
 	rowIndex: number;
 	elementIndex: number;
 }
+
+const { t } = useI18n();
 
 const props = defineProps<FolderContentElementProps>();
 
@@ -123,7 +134,7 @@ const onTitleClick = () => {
 </script>
 
 <style scoped>
-span:focus {
-	outline-offset: -2px;
+.content-element-bar:focus {
+	outline-offset: -10px;
 }
 </style>
