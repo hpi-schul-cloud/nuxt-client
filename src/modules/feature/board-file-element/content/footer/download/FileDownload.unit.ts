@@ -67,9 +67,7 @@ describe("FileDownload", () => {
 					isDownloadAllowed: true,
 				};
 
-				const downloadFileMock = jest
-					.mocked(downloadFile)
-					.mockReturnValueOnce();
+				const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
 
 				const wrapper = shallowMount(FileDownload, {
 					global: { plugins: [createTestingVuetify(), createTestingI18n()] },

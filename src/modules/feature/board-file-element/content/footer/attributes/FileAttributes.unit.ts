@@ -23,10 +23,10 @@ describe("FileAttributes", () => {
 		const fileName = "pic.jpeg";
 		const unit = "KB";
 		const extension = "ext";
-		const convertFileSizeMock = jest
+		const convertFileSizeMock = vi
 			.mocked(convertFileSize)
 			.mockReturnValueOnce({ convertedSize: fileSize, unit });
-		const getFileExtensionMock = jest
+		const getFileExtensionMock = vi
 			.mocked(getFileExtension)
 			.mockReturnValueOnce(extension);
 

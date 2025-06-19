@@ -375,7 +375,7 @@ describe("@components/share/ImportFlow", () => {
 								url: "http://abc.de",
 							},
 						];
-						copyModuleMock.copyByShareToken = jest
+						copyModuleMock.copyByShareToken = vi
 							.fn()
 							.mockResolvedValue(copyResults);
 
@@ -587,7 +587,7 @@ describe("@components/share/ImportFlow", () => {
 								url: "http://abc.de",
 							},
 						];
-						copyModuleMock.copyByShareToken = jest
+						copyModuleMock.copyByShareToken = vi
 							.fn()
 							.mockResolvedValue(copyResults);
 

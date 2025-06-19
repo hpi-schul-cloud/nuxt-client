@@ -90,7 +90,7 @@ describe("ChangeRole.vue", () => {
 		roomMembersStore.selectedIds = membersForRoleChange.map(
 			(member) => member.userId
 		);
-		roomMembersStore.isRoomOwner = jest
+		roomMembersStore.isRoomOwner = vi
 			.fn()
 			.mockReturnValue(options.isRoomOwner ?? false);
 
