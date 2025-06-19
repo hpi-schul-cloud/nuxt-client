@@ -204,7 +204,6 @@ const onEndEditMode = async () => {
 	});
 };
 
-const onOpenDetailView = () => (isDetailView.value = true);
 const onCloseDetailView = () => (isDetailView.value = false);
 
 const onMoveContentElementDown = async ({

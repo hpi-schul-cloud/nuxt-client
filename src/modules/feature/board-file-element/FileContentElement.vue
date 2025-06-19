@@ -137,10 +137,6 @@ const fileProperties = computed(() => {
 	};
 });
 
-const hasFileRecord = computed(() => {
-	return fileRecord.value !== undefined;
-});
-
 const isOutlined = computed(() => {
 	const { isEditMode } = props;
 	const isUploadingInViewMode =

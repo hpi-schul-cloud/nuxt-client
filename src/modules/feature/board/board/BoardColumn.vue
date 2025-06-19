@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
+import { BoardColumn } from "@/types/board/Board";
 import { DragAndDropKey } from "@/types/board/DragAndDrop";
 import {
 	useBoardPermissions,
@@ -87,7 +87,7 @@ import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, ref, toRef } from "vue";
+import { computed, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
@@ -116,13 +116,8 @@ const emit = defineEmits<{
 const boardStore = useBoardStore();
 const reactiveIndex = toRef(props, "index");
 
-const colWidth = ref<number>(400);
-const {
-	hasEditPermission,
-	hasMovePermission,
-	hasCreateColumnPermission,
-	hasCreateCardPermission,
-} = useBoardPermissions();
+const { hasEditPermission, hasMovePermission, hasCreateColumnPermission } =
+	useBoardPermissions();
 
 const columnClasses = computed(() => {
 	const classes = ["column-drag-handle", "bg-white"];
@@ -261,10 +256,6 @@ const onReloadBoard = () => {
 const onUpdateTitle = useDebounceFn((newTitle: string) => {
 	emit("update:column-title", newTitle);
 }, 1000);
-
-const getChildPayload = (index: number): BoardSkeletonCard => {
-	return props.column.cards[index];
-};
 
 const scrollableClasses = computed(() => {
 	const classes = [];

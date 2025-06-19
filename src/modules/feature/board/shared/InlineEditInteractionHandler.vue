@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, provide, shallowRef } from "vue";
+import { provide, shallowRef } from "vue";
 import { OnClickOutside } from "@vueuse/components";
 import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
 
