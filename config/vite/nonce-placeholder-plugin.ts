@@ -5,12 +5,12 @@ const CspNoncePlaceholder = (nonce: string): Plugin => {
 		name: "csp-nonce-placeholder",
 		transformIndexHtml(html) {
 			// Add nonce to <script> tags
-			html = html.replace(/<script(\s|>)/g, `<script nonce="${nonce}"$1`);
+			html = html.replace(/<script(\s|>)/gi, `<script nonce="${nonce}"$1`);
 			// Add nonce to <style> tags
-			html = html.replace(/<style(\s|>)/g, `<style nonce="${nonce}"$1`);
+			html = html.replace(/<style(\s|>)/gi, `<style nonce="${nonce}"$1`);
 			// Add nonce to <link rel="stylesheet"> tags
 			html = html.replace(
-				/<link([^>]*rel=["']stylesheet["'][^>]*)>/g,
+				/<link([^>]*rel=["']stylesheet["'][^>]*)>/gi,
 				(match) => {
 					if (/nonce=/.test(match)) return match; // Don't double-add
 					return match.replace(">", ` nonce="${nonce}">`);
