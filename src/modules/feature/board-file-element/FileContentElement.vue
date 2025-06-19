@@ -70,7 +70,7 @@ import {
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
-import { computed, onMounted, PropType, ref, toRef, watch } from "vue";
+import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { FileAlert } from "./shared/types/FileAlert.enum";
