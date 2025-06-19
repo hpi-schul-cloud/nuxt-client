@@ -53,6 +53,9 @@ export default defineConfig(
 				},
 				extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
 			},
+			build: {
+				assetsDir: "_nuxt",
+			},
 			server: {
 				port: 4000,
 			},

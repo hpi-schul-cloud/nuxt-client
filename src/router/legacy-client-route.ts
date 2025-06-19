@@ -1,5 +1,5 @@
-import { isServer } from "./server-route";
-import { isVueClient } from "./vue-client-route";
+import { isServer } from "./server-route.mjs";
+import { isVueClient } from "./vue-client-route.mjs";
 
 const isLegacyClient = (path: string) => {
 	return !(isServer(path) || isVueClient(path));

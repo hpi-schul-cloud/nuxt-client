@@ -63,7 +63,7 @@ const vueRoutes = [
 	`^/node_modules/`,
 ];
 
-const isVueClient = (path: string) => {
+const isVueClient = (path) => {
 	return vueRoutes.some((regex) => new RegExp(regex).exec(path));
 };
 

@@ -1,27 +1,26 @@
-const url = require("url");
-
 /*
   Note: This app is for testing purposes only,
   e.g. in order to run the vue client in a docker container on localhost
 */
-const express = require("express");
-const { createProxyMiddleware } = require("http-proxy-middleware");
-const {
+import connect from "connect";
+import http from "http";
+import { createProxyMiddleware } from "http-proxy-middleware";
+import {
 	createLegacyClientProxy,
 	createServerProxy,
 	createFileStorageProxy,
 	createH5pEditorProxy,
 	createH5pStaticFilesProxy,
 	createCommonCartridgeProxy,
-} = require("./config/webpack/dev-server-config");
-const {
+} from "./config/vite/dev-server-config.mjs";
+import {
 	isServer,
 	isFileStorage,
 	isH5pEditor,
 	isH5pStaticFiles,
 	isCommonCartridge,
-} = require("./src/router/server-route");
-const { isVueClient } = require("./src/router/vue-client-route");
+} from "./src/router/server-route.mjs";
+import { isVueClient } from "./src/router/vue-client-route.mjs";
 
 const vueClientProxy = createProxyMiddleware({
 	target: "http://localhost:4000",
@@ -35,10 +34,14 @@ const h5pEditorProxy = createH5pEditorProxy();
 const h5pStaticFilesProxy = createH5pStaticFilesProxy();
 const commonCartridgeProxy = createCommonCartridgeProxy();
 
-const app = express();
+const app = connect();
 
 app.use((req, res, next) => {
-	const path = url.parse(req.originalUrl).pathname;
+	const url = req.originalUrl || req.url;
+	if (!url) return next();
+
+	const path = url.split("?")[0];
+	console.log("--- Path:", path);
 
 	if (isFileStorage(path)) {
 		fileStorageProxy(req, res, next);
@@ -56,4 +59,4 @@ app.use((req, res, next) => {
 		legacyClientProxy(req, res, next);
 	}
 });
-app.listen(4242);
+http.createServer(app).listen(4242);
