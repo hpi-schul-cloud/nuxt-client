@@ -10,7 +10,8 @@
 		"build-only": "vite build",
 		"type-check": "vue-tsc --build --force",
 		"test": "cross-env NODE_ENV=test npm run test:unit",
-		"test:unit": "npx jest",
+		"test:unit": "vitest run",
+		"test:unit:watch": "vitest watch",
 		"test:unit:ci": "npm run test:unit -- --coverage --ci --maxWorkers=4",
 		"lint": "npx eslint 'src/**/*.{ts,js,vue}'",
 		"lint:fix": "npx eslint 'src/**/*.{ts,js,vue}' --fix",
@@ -84,6 +85,7 @@
 		"vite": "^6.2.2",
 		"vite-plugin-vuetify": "^2.1.1",
 		"vite-tsconfig-paths": "^5.1.4",
+		"vitest": "^3.2.4",
 		"vue-tsc": "^2.2.8",
 		"vuex-module-decorators": "^1.2.0"
 	},
