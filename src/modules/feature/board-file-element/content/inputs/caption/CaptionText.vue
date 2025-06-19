@@ -12,12 +12,13 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 
-const props = defineProps({
-	caption: {
-		type: String,
-		default: undefined,
-	},
-	isEditMode: { type: Boolean, required: true },
+type Props = {
+	caption?: string;
+	isEditMode: boolean;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+	caption: undefined,
 });
 
 const emit = defineEmits<{

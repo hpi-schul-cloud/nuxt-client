@@ -16,15 +16,13 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import FileAttributes from "./attributes/FileAttributes.vue";
 import FileDownload from "./download/FileDownload.vue";
 
-defineProps({
-	fileProperties: {
-		type: Object as PropType<FileProperties>,
-		required: true,
-	},
-});
+type Props = {
+	fileProperties: FileProperties;
+};
+
+defineProps<Props>();
 </script>

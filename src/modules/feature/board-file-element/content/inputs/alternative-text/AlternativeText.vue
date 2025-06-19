@@ -13,14 +13,15 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 
-const props = defineProps({
-	alternativeText: {
-		type: String,
-		required: false,
-		default: undefined,
-	},
-	isEditMode: { type: Boolean, required: true },
+type Props = {
+	alternativeText?: string;
+	isEditMode: boolean;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+	alternativeText: undefined,
 });
+
 const emit = defineEmits<{
 	(e: "update:alternativeText", alternativeText: string): void;
 }>();

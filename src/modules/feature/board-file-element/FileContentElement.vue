@@ -76,15 +76,17 @@ import FileContent from "./content/FileContent.vue";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
-const props = defineProps({
-	element: { type: Object as PropType<FileElementResponse>, required: true },
-	isEditMode: { type: Boolean, required: true },
-	isNotFirstElement: { type: Boolean, required: false },
-	isNotLastElement: { type: Boolean, required: false },
-	columnIndex: { type: Number, required: true },
-	rowIndex: { type: Number, required: true },
-	elementIndex: { type: Number, required: true },
-});
+type Props = {
+	element: FileElementResponse;
+	isEditMode: boolean;
+	isNotFirstElement?: boolean;
+	isNotLastElement?: boolean;
+	columnIndex: number;
+	rowIndex: number;
+	elementIndex: number;
+};
+
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
 	(e: "delete:element", elementId: string): void;
