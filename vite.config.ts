@@ -5,6 +5,7 @@ import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { DevServerProxy } from "./config/vite/dev-server-proxy-plugin";
 import { ThemeResolver } from "./config/vite/theme-resolver-plugin";
+import { CspNoncePlaceholder } from "./config/vite/nonce-placeholder-plugin";
 
 // Utilities
 import { defineConfig } from "vite";
@@ -36,6 +37,7 @@ export default defineConfig(
 				}),
 				DevServerProxy(),
 				ThemeResolver(replacements),
+				CspNoncePlaceholder("**CSP_NONCE**"),
 			],
 			optimizeDeps: {
 				exclude: [
