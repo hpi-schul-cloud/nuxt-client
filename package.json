@@ -54,7 +54,6 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.27.0",
-		"@golevelup/ts-jest": "^0.7.0",
 		"@intlify/bundle-utils": "^8.0.0",
 		"@intlify/unplugin-vue-i18n": "^6.0.8",
 		"@mdi/js": "^7.2.96",
@@ -76,6 +75,7 @@
 		"fishery": "^2.3.1",
 		"globals": "^15.9.0",
 		"http-proxy-middleware": "^3.0.5",
+		"jsdom": "^26.1.0",
 		"npm-run-all2": "^7.0.2",
 		"prettier": "^3.3.3",
 		"resize-observer-polyfill": "^1.5.1",

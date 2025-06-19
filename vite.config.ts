@@ -1,4 +1,5 @@
-// Plugins
+/// <reference types="vitest" />
+// // Plugins
 import Vue from "@vitejs/plugin-vue";
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
@@ -65,6 +66,12 @@ export default defineConfig(
 						api: "modern-compiler",
 					},
 				},
+			},
+			// vitest
+			test: {
+				globals: true,
+				environment: "jsdom",
+				include: ["**/*.unit.{j,t}s?(x)"],
 			},
 		};
 	})()
