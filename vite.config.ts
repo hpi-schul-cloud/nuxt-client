@@ -72,6 +72,12 @@ export default defineConfig(
 				globals: true,
 				environment: "jsdom",
 				include: ["**/*.unit.{j,t}s?(x)"],
+				setupFiles: ["./tests/setup.js"],
+				server: {
+					deps: {
+						inline: ["vuetify"],
+					},
+				},
 			},
 		};
 	})()
