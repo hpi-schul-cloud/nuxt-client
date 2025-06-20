@@ -1,7 +1,10 @@
 <template>
 	<div
-		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
-		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
+		class="d-flex justify-space-between align-center ga-2 mb-2 pb-2 table-title-header sticky"
+		:class="{
+			'flex-column mt-8': isExtraSmallDisplay,
+			'pt-7': smAndUp,
+		}"
 		:style="stickyStyle"
 	>
 		<ActionMenu
@@ -162,7 +165,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
+const { xs: isExtraSmallDisplay, smAndUp } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds } =
@@ -173,8 +176,8 @@ const { askConfirmation } = useConfirmationDialog();
 
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
-
 const search = ref("");
+
 const stickyStyle = computed(() => ({
 	top: `${props.headerBottom}px`,
 }));
