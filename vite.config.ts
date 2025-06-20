@@ -57,6 +57,10 @@ export default defineConfig(
 			resolve: {
 				alias: [
 					{
+						find: "@",
+						replacement: fileURLToPath(new URL("src", import.meta.url)),
+					},
+					{
 						find: /\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$/,
 						replacement: fileURLToPath(
 							new URL("tests/test-utils/mediaFileMock.js", import.meta.url)
@@ -97,10 +101,6 @@ export default defineConfig(
 						replacement: fileURLToPath(
 							new URL("src/components/icons/$1", import.meta.url)
 						),
-					},
-					{
-						find: /^@\/*(.*)$/,
-						replacement: fileURLToPath(new URL("src/$1", import.meta.url)),
 					},
 					{
 						find: /^@@\/(.*)$/,
