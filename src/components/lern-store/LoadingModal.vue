@@ -18,7 +18,7 @@
 				<v-btn
 					color="primary"
 					variant="flat"
-					@click="$emit('update:active', false)"
+					@click="emit('update:active', false)"
 				>
 					{{ $t(btnText) }}
 				</v-btn>
@@ -27,37 +27,23 @@
 	</base-modal>
 </template>
 
-<script>
+<script setup lang="ts">
 import BaseModal from "../base/BaseModal.vue";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-	components: {
-		ModalBodyInfo,
-		BaseModal,
-	},
-	props: {
-		color: {
-			type: String,
-			default: "rgba(var(--v-theme-primary))",
-		},
-		title: {
-			type: String,
-			required: true,
-		},
-		description: {
-			type: String,
-			required: true,
-		},
-		btnText: {
-			type: String,
-			default: "common.actions.cancel",
-		},
-	},
-	emits: ["update:active"],
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
+
+type Props = {
+	color?: string;
+	title: string;
+	description: string;
+	btnText?: string;
+};
+
+withDefaults(defineProps<Props>(), {
+	color: "rgba(var(--v-theme-primary))",
+	btnText: "common.actions.cancel",
 });
+
+const emit = defineEmits<{
+	(e: "update:active", value: boolean): void;
+}>();
 </script>

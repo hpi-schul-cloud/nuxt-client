@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import BaseModal from "./BaseModal";
+import BaseModal from "./BaseModal.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("@/components/base/BaseModal", () => {
@@ -10,7 +10,6 @@ describe("@/components/base/BaseModal", () => {
 			},
 			...options,
 		});
-
 		return { wrapper };
 	};
 
@@ -18,9 +17,7 @@ describe("@/components/base/BaseModal", () => {
 		const { wrapper } = setup();
 
 		expect(wrapper.findComponent({ name: "v-card" }).exists()).toBe(false);
-
 		await wrapper.setProps({ active: true });
-
 		expect(wrapper.findComponent({ name: "v-card" }).exists()).toBe(true);
 	});
 });

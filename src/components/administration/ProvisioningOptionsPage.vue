@@ -161,7 +161,7 @@
 	</DefaultWireframe>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
@@ -173,16 +173,15 @@ import {
 	useProvisioningOptionsState,
 } from "@data-provisioning-options";
 import { useTitle } from "@vueuse/core";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	Ref,
-	ref,
-} from "vue";
+import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+
+type Props = {
+	systemId: string;
+};
+
+const props = defineProps<Props>();
 
 const provisioningOptionTranslations = {
 	[ProvisioningOptionsEnum.COURSE]: "common.words.courses",
@@ -191,146 +190,123 @@ const provisioningOptionTranslations = {
 	[ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS]: "common.words.externalTools",
 };
 
-export default defineComponent({
-	name: "ProvisioningOptionsPage",
-	components: { VCustomDialog, DefaultWireframe },
-	props: {
-		systemId: { type: String, required: true },
+const { t } = useI18n();
+const {
+	fetchProvisioningOptionsData,
+	updateProvisioningOptionsData,
+	provisioningOptionsData,
+	isLoading,
+	error,
+} = useProvisioningOptionsState();
+const router = useRouter();
+const theme = injectStrict(THEME_KEY);
+
+const pageTitle = buildPageTitle(
+	t("components.administration.provisioningOptions.page.title")
+);
+useTitle(pageTitle);
+
+const schoolSettingsPage: Breadcrumb = {
+	title: t("pages.administration.school.index.title"),
+	to: "/administration/school-settings",
+};
+const breadcrumbs: Breadcrumb[] = [
+	{
+		title: t("pages.administration.index.title"),
+		href: "/administration/",
 	},
-	setup(props) {
-		const { t } = useI18n();
-		const {
-			fetchProvisioningOptionsData,
-			updateProvisioningOptionsData,
-			provisioningOptionsData,
-			isLoading,
-			error,
-		} = useProvisioningOptionsState();
-		const router = useRouter();
-		const theme = injectStrict(THEME_KEY);
-
-		const pageTitle = buildPageTitle(
-			t("components.administration.provisioningOptions.page.title")
-		);
-		useTitle(pageTitle);
-
-		const schoolSettingsPage: Breadcrumb = {
-			title: t("pages.administration.school.index.title"),
-			to: "/administration/school-settings",
-		};
-		const breadcrumbs: Breadcrumb[] = [
-			{
-				title: t("pages.administration.index.title"),
-				href: "/administration/",
-			},
-			schoolSettingsPage,
-			{
-				title: t("components.administration.provisioningOptions.page.title"),
-				disabled: true,
-			},
-		];
-
-		const provisioningOptions: ComputedRef<ProvisioningOptions> = computed(
-			() => provisioningOptionsData.value
-		);
-
-		const initialProvisioningOptions: Ref<ProvisioningOptions> = ref({
-			...provisioningOptionsData.value,
-		});
-
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-		const isMediaLicensingEnabled =
-			envConfigModule.getEnv.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED;
-
-		const wasOptionTurnedOff = (
-			provisioningOption: ProvisioningOptionsEnum
-		): boolean => {
-			const wasTurnedOff =
-				initialProvisioningOptions.value[provisioningOption] &&
-				!provisioningOptions.value[provisioningOption];
-
-			return wasTurnedOff;
-		};
-
-		const newlyTurnedOffOptions: ComputedRef<ProvisioningOptionsEnum[]> =
-			computed(() => {
-				const options: ProvisioningOptionsEnum[] = Object.values(
-					ProvisioningOptionsEnum
-				);
-
-				return options.filter((option: ProvisioningOptionsEnum): boolean =>
-					wasOptionTurnedOff(option)
-				);
-			});
-
-		const translateProvisioningOption = (option: ProvisioningOptionsEnum) => {
-			if (option === ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS) {
-				return;
-			}
-			return t(provisioningOptionTranslations[option]);
-		};
-
-		const isWarningDialogOpen: Ref<boolean> = ref(false);
-
-		onMounted(async () => {
-			window.scrollTo({ top: 0, behavior: "smooth" });
-			await fetchProvisioningOptionsData(props.systemId);
-
-			initialProvisioningOptions.value = { ...provisioningOptionsData.value };
-		});
-
-		const onSaveButtonClick = async () => {
-			if (newlyTurnedOffOptions.value.length) {
-				if (
-					newlyTurnedOffOptions.value.length === 1 &&
-					newlyTurnedOffOptions.value[0] ===
-						ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS
-				) {
-					await saveOptions();
-				}
-
-				isWarningDialogOpen.value = true;
-			} else {
-				await saveOptions();
-			}
-		};
-
-		const saveOptions = async () => {
-			await updateProvisioningOptionsData(
-				props.systemId,
-				provisioningOptions.value
-			);
-
-			if (!error.value) {
-				await redirectToAdminPage();
-			}
-		};
-
-		const onCancel = async () => {
-			await redirectToAdminPage();
-		};
-
-		const redirectToAdminPage = async () => {
-			await router.push({
-				path: schoolSettingsPage.to,
-				query: { openPanels: "authentication" },
-			});
-		};
-
-		return {
-			t,
-			isLoading,
-			breadcrumbs,
-			provisioningOptions,
-			isWarningDialogOpen,
-			saveOptions,
-			onCancel,
-			theme,
-			onSaveButtonClick,
-			newlyTurnedOffOptions,
-			translateProvisioningOption,
-			isMediaLicensingEnabled,
-		};
+	schoolSettingsPage,
+	{
+		title: t("components.administration.provisioningOptions.page.title"),
+		disabled: true,
 	},
+];
+
+const provisioningOptions: ComputedRef<ProvisioningOptions> = computed(
+	() => provisioningOptionsData.value
+);
+
+const initialProvisioningOptions: Ref<ProvisioningOptions> = ref({
+	...provisioningOptionsData.value,
 });
+
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const isMediaLicensingEnabled =
+	envConfigModule.getEnv.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED;
+
+const wasOptionTurnedOff = (
+	provisioningOption: ProvisioningOptionsEnum
+): boolean => {
+	const wasTurnedOff =
+		initialProvisioningOptions.value[provisioningOption] &&
+		!provisioningOptions.value[provisioningOption];
+
+	return wasTurnedOff;
+};
+
+const newlyTurnedOffOptions: ComputedRef<ProvisioningOptionsEnum[]> = computed(
+	() => {
+		const options: ProvisioningOptionsEnum[] = Object.values(
+			ProvisioningOptionsEnum
+		);
+
+		return options.filter((option: ProvisioningOptionsEnum): boolean =>
+			wasOptionTurnedOff(option)
+		);
+	}
+);
+
+const translateProvisioningOption = (option: ProvisioningOptionsEnum) => {
+	if (option === ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS) {
+		return;
+	}
+	return t(provisioningOptionTranslations[option]);
+};
+
+const isWarningDialogOpen: Ref<boolean> = ref(false);
+
+onMounted(async () => {
+	window.scrollTo({ top: 0, behavior: "smooth" });
+	await fetchProvisioningOptionsData(props.systemId);
+
+	initialProvisioningOptions.value = { ...provisioningOptionsData.value };
+});
+
+const onSaveButtonClick = async () => {
+	if (newlyTurnedOffOptions.value.length) {
+		if (
+			newlyTurnedOffOptions.value.length === 1 &&
+			newlyTurnedOffOptions.value[0] ===
+				ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS
+		) {
+			await saveOptions();
+		}
+
+		isWarningDialogOpen.value = true;
+	} else {
+		await saveOptions();
+	}
+};
+
+const saveOptions = async () => {
+	await updateProvisioningOptionsData(
+		props.systemId,
+		provisioningOptions.value
+	);
+
+	if (!error.value) {
+		await redirectToAdminPage();
+	}
+};
+
+const onCancel = async () => {
+	await redirectToAdminPage();
+};
+
+const redirectToAdminPage = async () => {
+	await router.push({
+		path: schoolSettingsPage.to,
+		query: { openPanels: "authentication" },
+	});
+};
 </script>
