@@ -14,7 +14,7 @@ import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
 vi.mock("@data-group", () => {
 	return {
-		...vi.requireActual("@data-group"),
+		...vi.importActual("@data-group"),
 		useGroupListState: vi.fn(),
 	};
 });

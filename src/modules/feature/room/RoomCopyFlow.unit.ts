@@ -20,7 +20,7 @@ import { nextTick } from "vue";
 
 vi.mock("@/serverApi/v3", () => {
 	return {
-		...vi.requireActual("@/serverApi/v3"),
+		...vi.importActual("@/serverApi/v3"),
 		RoomApiFactory: vi.fn(),
 	};
 });

@@ -29,7 +29,7 @@ vi.mock("../boardActions/boardRestApi.composable");
 
 vi.mock("@vueuse/shared", () => {
 	return {
-		...vi.requireActual("@vueuse/shared"),
+		...vi.importActual("@vueuse/shared"),
 		useTimeoutFn: vi.fn().mockImplementation((cb: () => void) => {
 			cb();
 			return {

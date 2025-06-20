@@ -31,7 +31,7 @@ vi.mock("vue-router", () => ({
 
 vi.mock("@data-room", () => {
 	return {
-		...vi.requireActual("@data-room"),
+		...vi.importActual("@data-room"),
 		useCourseList: vi.fn(),
 		useCourseApi: vi.fn(),
 	};

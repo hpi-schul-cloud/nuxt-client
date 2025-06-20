@@ -69,7 +69,7 @@ const useRouterMock = <vi.Mock>useRouter;
 
 vi.mock("vue-i18n", () => {
 	return {
-		...vi.requireActual("vue-i18n"),
+		...vi.importActual("vue-i18n"),
 		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });

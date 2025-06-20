@@ -13,7 +13,7 @@ global.shallowMount = shallowMount;
  * @see https://github.com/focus-trap/tabbable?tab=readme-ov-file#testing-in-jsdom
  */
 vi.mock("tabbable", () => {
-	const lib = vi.requireActual("tabbable");
+	const lib = vi.importActual("tabbable");
 	return {
 		...lib,
 		tabbable: (node, options) =>

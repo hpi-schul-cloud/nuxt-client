@@ -32,7 +32,7 @@ import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 
 vi.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
-		...vi.requireActual("@vueuse/integrations/useFocusTrap"),
+		...vi.importActual("@vueuse/integrations/useFocusTrap"),
 		useFocusTrap: vi.fn(),
 	};
 });

@@ -21,7 +21,7 @@ import { useI18n } from "vue-i18n";
 
 vi.mock("vue-i18n", () => {
 	return {
-		...vi.requireActual("vue-i18n"),
+		...vi.importActual("vue-i18n"),
 		useI18n: vi.fn().mockReturnValue({
 			t: vi.fn().mockImplementation((key: string) => key),
 		}),

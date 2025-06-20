@@ -15,7 +15,7 @@ import MediaShelfPage from "./MediaShelf.page.vue";
 
 vi.mock("@feature-media-shelf", () => {
 	return {
-		...vi.requireActual("@feature-media-shelf"),
+		...vi.importActual("@feature-media-shelf"),
 		useSharedMediaBoardState: vi.fn(),
 	};
 });

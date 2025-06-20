@@ -16,7 +16,7 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 vi.mock("@data-group", () => {
 	return {
-		...vi.requireActual("@data-group"),
+		...vi.importActual("@data-group"),
 		useGroupState: vi.fn(),
 	};
 });

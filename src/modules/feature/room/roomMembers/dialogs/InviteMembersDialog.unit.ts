@@ -25,14 +25,14 @@ import NotifierModule from "@/store/notifier";
 
 vi.mock("vue-i18n", () => {
 	return {
-		...vi.requireActual("vue-i18n"),
+		...vi.importActual("vue-i18n"),
 		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });
 
 vi.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
-		...vi.requireActual("@vueuse/integrations/useFocusTrap"),
+		...vi.importActual("@vueuse/integrations/useFocusTrap"),
 		useFocusTrap: vi.fn(),
 	};
 });

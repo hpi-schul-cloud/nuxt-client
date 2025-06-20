@@ -31,7 +31,7 @@ const TEST_ELEMENT: RichTextElementResponse = {
 
 vi.mock("vue-i18n", () => {
 	return {
-		...vi.requireActual("@vueuse/core"),
+		...vi.importActual("@vueuse/core"),
 		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });

@@ -16,7 +16,7 @@ import { SessionStatus } from "./types";
 
 vi.mock("vue-i18n", () => {
 	return {
-		...vi.requireActual("vue-i18n"),
+		...vi.importActual("vue-i18n"),
 		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });

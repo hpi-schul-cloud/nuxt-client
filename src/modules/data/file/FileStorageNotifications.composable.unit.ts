@@ -8,7 +8,7 @@ import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
 vi.mock("vue-i18n", () => {
 	return {
-		...vi.requireActual("vue-i18n"),
+		...vi.importActual("vue-i18n"),
 		useI18n: vi.fn().mockReturnValue({
 			t: vi.fn().mockImplementation((key: string) => key),
 			n: vi.fn().mockImplementation((key: string) => key),
