@@ -48,7 +48,7 @@ import {
 	watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
-import type { VTextarea } from "vuetify/components";
+import { VTextarea } from "vuetify/components";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -128,8 +128,10 @@ export default defineComponent({
 					props.scope !== "column" &&
 					props.scope !== "board" &&
 					!props.isFocused
-				)
+				) {
 					return;
+				}
+
 				if (newVal && !oldVal) {
 					if (
 						modelValue.value.trim().length < 1 &&
@@ -137,6 +139,7 @@ export default defineComponent({
 					) {
 						modelValue.value = props.emptyValueFallback;
 					}
+
 					await nextTick();
 					await setFocusOnEdit();
 				}

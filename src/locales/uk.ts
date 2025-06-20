@@ -178,6 +178,7 @@ export default {
 	"common.validation.nonEmptyString":
 		"Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.and": "і",
+	"common.words.board": "Дошка",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
 	"common.words.color.blue": "Синій",
@@ -535,7 +536,6 @@ export default {
 		"Інший користувач змінив вигляд панелі на {layout}.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"Не вдалося завантажити бажані інструменти.",
-	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
 	"components.boardElement": "Eлемент",

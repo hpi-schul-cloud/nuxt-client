@@ -5,6 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useContentElementState } from "@data-board";
+import { createMock } from "@golevelup/ts-jest";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import {
@@ -13,6 +14,7 @@ import {
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
 import { flushPromises, mount } from "@vue/test-utils";
+import { Router, useRouter } from "vue-router";
 import FolderContentElement from "./FolderContentElement.vue";
 
 vi.mock("@data-board", () => ({
@@ -21,6 +23,9 @@ vi.mock("@data-board", () => ({
 		modelValue: { value: { title: "test" } },
 	})),
 }));
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 describe("FolderContentElement", () => {
 	const mockElement: FileFolderElement = {
@@ -34,6 +39,7 @@ describe("FolderContentElement", () => {
 			lastUpdatedAt: "2024-01-01T00:00:00Z",
 		},
 	};
+	const router = createMock<Router>();
 
 	const setupWrapper = (options: {
 		isEditMode?: boolean;
@@ -41,6 +47,8 @@ describe("FolderContentElement", () => {
 		isNotLastElement?: boolean;
 		element?: FileFolderElement;
 	}) => {
+		useRouterMock.mockReturnValueOnce(router);
+
 		const wrapper = mount(FolderContentElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -65,7 +73,7 @@ describe("FolderContentElement", () => {
 			},
 		});
 
-		return { wrapper };
+		return { wrapper, router, mockElement };
 	};
 
 	describe("when component is mounted", () => {
@@ -136,6 +144,32 @@ describe("FolderContentElement", () => {
 				expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
 			}
 		);
+
+		describe("when contentelementbar is clicked", () => {
+			it("should push folder route to router", async () => {
+				const { wrapper, mockElement } = setupWrapper({
+					isEditMode: false,
+				});
+
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
+				await contentElementBar.trigger("click");
+
+				expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
+			});
+		});
+
+		describe("when folder element title is focused and enter is pressed", () => {
+			it("should push folder route to router", async () => {
+				const { wrapper, mockElement } = setupWrapper({
+					isEditMode: false,
+				});
+
+				const folderElement = wrapper.findComponent(ContentElementBar);
+				await folderElement.trigger("keydown.enter");
+
+				expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
+			});
+		});
 	});
 
 	describe("when element is in edit mode", () => {

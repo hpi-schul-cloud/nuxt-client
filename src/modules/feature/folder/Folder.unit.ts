@@ -1,6 +1,7 @@
 import router from "@/router";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
+import * as FileHelper from "@/utils/fileHelper";
 import { fileRecordFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -13,14 +14,26 @@ import { createMock } from "@golevelup/ts-vitest";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
+import dayjs from "dayjs";
 import { ComputedRef, nextTick, ref } from "vue";
 import { VCard, VSkeletonLoader } from "vuetify/lib/components/index";
 import DeleteFileDialog from "./file-table/DeleteFileDialog.vue";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";
+import KebabMenuActionDownloadFiles from "./file-table/KebabMenuActionDownloadFiles.vue";
 import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
+
+jest.mock("@/utils/fileHelper", () => {
+	const actual = jest.requireActual("@/utils/fileHelper");
+
+	return {
+		...actual,
+		downloadFilesAsArchive: jest.fn(),
+		downloadFile: jest.fn(),
+	};
+});
 
 describe("Folder.vue", () => {
 	enableAutoUnmount(afterEach);
@@ -1862,6 +1875,16 @@ describe("Folder.vue", () => {
 
 				expect(deleteButton.exists()).toBe(false);
 			});
+
+			it("should show download button in item menu", async () => {
+				const { wrapper } = await setup();
+
+				const downloadButton = wrapper.findComponent(
+					KebabMenuActionDownloadFiles
+				);
+
+				expect(downloadButton.exists()).toBe(true);
+			});
 		});
 
 		describe("check visibility of actions in the action menu", () => {
@@ -1935,6 +1958,204 @@ describe("Folder.vue", () => {
 				const deleteButton = wrapper.findComponent(KebabMenuActionDeleteFiles);
 
 				expect(deleteButton.exists()).toBe(false);
+			});
+
+			it("should show download button in action menu", async () => {
+				const { wrapper } = await setup();
+
+				const downloadButton = wrapper.findComponent(
+					KebabMenuActionDownloadFiles
+				);
+
+				expect(downloadButton.exists()).toBe(true);
+			});
+		});
+
+		describe("download handlers", () => {
+			describe("when user clicks download button in action menu", () => {
+				const setup = async () => {
+					const folderStateMock =
+						createMock<ReturnType<typeof FolderState.useFolderState>>();
+					jest
+						.spyOn(FolderState, "useFolderState")
+						.mockReturnValueOnce(folderStateMock);
+
+					folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
+						() => "boards"
+					);
+
+					const folderName = "Test Folder" as unknown as ComputedRef<string>;
+					folderStateMock.folderName = ref(folderName);
+					folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+					const parent = parentNodeInfoFactory.build({
+						type: ParentNodeType.Board,
+					});
+					folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+					const boardState = createMock<
+						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+					>({});
+					jest
+						.spyOn(BoardApi, "useSharedBoardPageInformation")
+						.mockReturnValueOnce(boardState);
+
+					const fileStorageApiMock =
+						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					jest
+						.spyOn(FileStorageApi, "useFileStorageApi")
+						.mockReturnValueOnce(fileStorageApiMock);
+
+					const fileRecord = fileRecordFactory.build();
+					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
+						fileRecord,
+					]);
+
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+
+					const useBoardStoreMock =
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
+					jest
+						.spyOn(BoardApi, "useBoardStore")
+						.mockReturnValueOnce(useBoardStoreMock);
+
+					const useBoardPermissionsMock = createMock<
+						ReturnType<typeof BoardApi.useBoardPermissions>
+					>({ hasEditPermission: ref(true) });
+					jest
+						.spyOn(BoardApi, "useBoardPermissions")
+						.mockReturnValueOnce(useBoardPermissionsMock);
+
+					const { wrapper } = setupWrapper();
+
+					await nextTick();
+					await nextTick();
+					await nextTick();
+
+					const checkbox = wrapper.find(
+						`[data-testid='select-checkbox-${fileRecord.name}']`
+					);
+					await checkbox.trigger("click");
+
+					const actionMenuButton = wrapper.find(
+						`[data-testid='action-menu-button']`
+					);
+					await actionMenuButton.trigger("click");
+
+					const downloadButton = wrapper.findComponent(
+						KebabMenuActionDownloadFiles
+					);
+					await downloadButton.trigger("click");
+
+					const spyDownloadFilesAsArchive = jest.spyOn(
+						FileHelper,
+						"downloadFilesAsArchive"
+					);
+
+					const now = dayjs().format("YYYYMMDD");
+					const expectedResult = {
+						archiveName: `${now}_${folderName}`,
+						fileRecordIds: [fileRecord.id],
+					};
+
+					return {
+						spyDownloadFilesAsArchive,
+						expectedResult,
+					};
+				};
+
+				it("should call downloadFilesAsArchive", async () => {
+					const { spyDownloadFilesAsArchive, expectedResult } = await setup();
+
+					expect(spyDownloadFilesAsArchive).toHaveBeenCalledWith(
+						expectedResult
+					);
+				});
+			});
+
+			describe("when user clicks download button in item menu", () => {
+				const setup = async () => {
+					const folderStateMock =
+						createMock<ReturnType<typeof FolderState.useFolderState>>();
+					jest
+						.spyOn(FolderState, "useFolderState")
+						.mockReturnValueOnce(folderStateMock);
+
+					const parent = parentNodeInfoFactory.build();
+					folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+					const folderName = "Test Folder" as unknown as ComputedRef<string>;
+					folderStateMock.folderName = folderName;
+					folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+					const boardState = createMock<
+						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+					>({});
+					jest
+						.spyOn(BoardApi, "useSharedBoardPageInformation")
+						.mockReturnValueOnce(boardState);
+
+					const fileStorageApiMock =
+						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					jest
+						.spyOn(FileStorageApi, "useFileStorageApi")
+						.mockReturnValueOnce(fileStorageApiMock);
+
+					const fileRecord1 = fileRecordFactory.build();
+					const fileRecord2 = fileRecordFactory.build();
+					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
+						fileRecord1,
+						fileRecord2,
+					]);
+
+					const useBoardStoreMock =
+						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
+					jest
+						.spyOn(BoardApi, "useBoardStore")
+						.mockReturnValueOnce(useBoardStoreMock);
+
+					const useBoardPermissionsMock = createMock<
+						ReturnType<typeof BoardApi.useBoardPermissions>
+					>({ hasEditPermission: ref(false) });
+					jest
+						.spyOn(BoardApi, "useBoardPermissions")
+						.mockReturnValueOnce(useBoardPermissionsMock);
+
+					const { wrapper } = setupWrapper();
+
+					await flushPromises();
+
+					const itemMenuButton = wrapper.find(
+						`[data-testid='kebab-menu-${fileRecord1.name}']`
+					);
+					await itemMenuButton.trigger("click");
+
+					const itemDownloadButton = wrapper.findComponent(
+						KebabMenuActionDownloadFiles
+					);
+					await itemDownloadButton.trigger("click");
+
+					const spyDownloadFile = jest.spyOn(FileHelper, "downloadFile");
+
+					const expectedResult = [
+						`${fileRecord1.id}/${fileRecord1.name}`,
+						`${fileRecord1.name}`,
+					];
+
+					return {
+						spyDownloadFile,
+						expectedResult,
+						wrapper,
+					};
+				};
+
+				it("should call downloadFile", async () => {
+					const { spyDownloadFile, expectedResult } = await setup();
+
+					expect(spyDownloadFile).toHaveBeenCalledWith(...expectedResult);
+				});
 			});
 		});
 	});

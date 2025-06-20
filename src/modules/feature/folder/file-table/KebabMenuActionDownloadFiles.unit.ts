@@ -1,7 +1,3 @@
-import { FileRecord } from "@/types/file/File";
-import * as FileHelper from "@/utils/fileHelper";
-import * as Helper from "@/utils/helpers";
-import { fileRecordFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -15,142 +11,57 @@ describe("KebabMenuActionDownloadFiles", () => {
 	});
 
 	const setupWrapper = (props: {
-		disabled?: boolean;
-		fileRecords: FileRecord[];
 		selectedIds: string[];
+		disabled: boolean;
 	}) => {
 		const wrapper = mount(KebabMenuActionDownloadFiles, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				disabled: props.disabled,
-				fileRecords: props.fileRecords,
 				selectedIds: props.selectedIds,
+				disabled: props.disabled,
 			},
 		});
 
 		return { wrapper };
 	};
 
-	describe("when action is clicked", () => {
-		describe("when all file records are selected", () => {
-			const setup = async () => {
-				const fileRecord1 = fileRecordFactory.build({
-					id: "1",
-				});
-				const fileRecord2 = fileRecordFactory.build({
-					id: "2",
-				});
-				const fileRecords = [fileRecord1, fileRecord2];
-
-				const selectedIds = ["1", "2"];
-
-				const downloadFileMock = vi.spyOn(FileHelper, "downloadFile");
-				vi.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
-
-				const { wrapper } = setupWrapper({
-					fileRecords,
-					selectedIds,
-				});
-
-				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
-				kebabMenuAction.trigger("click");
-
-				return { downloadFileMock, fileRecords };
-			};
-
-			it("should call downloadFile with correct params", async () => {
-				const { downloadFileMock, fileRecords } = await setup();
-
-				const firstFileRecord = fileRecords[0];
-				const secondFileRecord = fileRecords[1];
-
-				expect(downloadFileMock).toHaveBeenNthCalledWith(
-					1,
-					firstFileRecord.url,
-					firstFileRecord.name
-				);
-				expect(downloadFileMock).toHaveBeenNthCalledWith(
-					2,
-					secondFileRecord.url,
-					secondFileRecord.name
-				);
+	describe("when disabled is true", () => {
+		it("does not emit", async () => {
+			const { wrapper } = setupWrapper({
+				selectedIds: ["1", "2"],
+				disabled: true,
 			});
-		});
 
-		describe("when only second filrecord is selected", () => {
-			const setup = async () => {
-				const fileRecord1 = fileRecordFactory.build({
-					id: "1",
-				});
-				const fileRecord2 = fileRecordFactory.build({
-					id: "2",
-				});
-				const fileRecords = [fileRecord1, fileRecord2];
+			await wrapper.findComponent(KebabMenuAction).trigger("click");
 
-				const selectedIds = ["2"];
-
-				const downloadFileMock = vi.spyOn(FileHelper, "downloadFile");
-				vi.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
-
-				const { wrapper } = setupWrapper({
-					fileRecords,
-					selectedIds,
-				});
-
-				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
-				kebabMenuAction.trigger("click");
-
-				return { downloadFileMock, fileRecords, selectedIds };
-			};
-
-			it("should call downloadFile with correct params", async () => {
-				const { downloadFileMock, fileRecords } = await setup();
-
-				const secondFileRecord = fileRecords[1];
-
-				expect(downloadFileMock).toHaveBeenCalledWith(
-					secondFileRecord.url,
-					secondFileRecord.name
-				);
-			});
+			expect(wrapper.emitted("download")).toBeFalsy();
 		});
 	});
 
-	describe("when action is disabled", () => {
-		describe("when all file records are selected", () => {
-			const setup = async () => {
-				const fileRecord1 = fileRecordFactory.build({
-					id: "1",
-				});
-				const fileRecord2 = fileRecordFactory.build({
-					id: "2",
-				});
-				const fileRecords = [fileRecord1, fileRecord2];
-
-				const selectedIds = ["1", "2"];
-
-				const downloadFileMock = vi.spyOn(FileHelper, "downloadFile");
-				vi.spyOn(Helper, "delay").mockImplementation(() => Promise.resolve());
-
-				const { wrapper } = setupWrapper({
-					disabled: true,
-					fileRecords,
-					selectedIds,
-				});
-
-				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
-				kebabMenuAction.trigger("click");
-
-				return { downloadFileMock };
-			};
-
-			it("should not call downloadFile", async () => {
-				const { downloadFileMock } = await setup();
-
-				expect(downloadFileMock).not.toHaveBeenCalled();
+	describe("when selectedIds is empty ", () => {
+		it("does not emit", async () => {
+			const { wrapper } = setupWrapper({
+				selectedIds: [],
+				disabled: false,
 			});
+
+			await wrapper.findComponent(KebabMenuAction).trigger("click");
+
+			expect(wrapper.emitted("download")).toBeFalsy();
+		});
+	});
+
+	describe("when disabled is false and selectedIds is not empty", () => {
+		it("emits download with selectedIds", async () => {
+			const selectedIds = ["1", "2"];
+			const { wrapper } = setupWrapper({ selectedIds, disabled: false });
+
+			await wrapper.findComponent(KebabMenuAction).trigger("click");
+
+			expect(wrapper.emitted("download")).toBeTruthy();
+			expect(wrapper.emitted("download")![0]).toEqual([selectedIds]);
 		});
 	});
 });
