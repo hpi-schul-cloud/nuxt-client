@@ -23,15 +23,6 @@ const {
 	noDueDateTasksTeacher,
 } = mocks;
 
-const defineWindowWidth = (width: number) => {
-	Object.defineProperty(window, "innerWidth", {
-		writable: true,
-		configurable: true,
-		value: width,
-	});
-	window.dispatchEvent(new Event("resize"));
-};
-
 let tasksModuleMock: TasksModule;
 let copyModuleMock: CopyModule;
 let notifierModuleMock: NotifierModule;
@@ -58,6 +49,15 @@ const getWrapper = (props: { task: object }) => {
 };
 
 describe("@/components/molecules/TaskItemTeacher", () => {
+	const defineWindowWidth = (width: number) => {
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: width,
+		});
+		window.dispatchEvent(new Event("resize"));
+	};
+
 	defineWindowWidth(1264);
 
 	beforeEach(() => {

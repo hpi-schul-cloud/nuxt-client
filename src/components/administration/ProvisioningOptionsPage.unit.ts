@@ -33,12 +33,12 @@ vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
-vi.spyOn(window, "scrollTo").mockImplementation(() => ({
-	top: 0,
-	behavior: "smooth",
-}));
-
 describe("ProvisioningOptionsPage", () => {
+	vi.spyOn(window, "scrollTo").mockImplementation(() => ({
+		top: 0,
+		behavior: "smooth",
+	}));
+
 	let useProvisioningOptionsStateMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsState>
 	>;

@@ -24,14 +24,14 @@ const testProps = {
 	resource: Collection,
 };
 
-vi.spyOn(window, "scrollTo").mockImplementation();
-
 setupStores({
 	contentModule: ContentModule,
 	notifierModule: NotifierModule,
 });
 
 describe("@/components/organisms/LernstoreCollectionDetailView", () => {
+	vi.spyOn(window, "scrollTo").mockImplementation();
+
 	let wrapper;
 
 	beforeEach(() => {

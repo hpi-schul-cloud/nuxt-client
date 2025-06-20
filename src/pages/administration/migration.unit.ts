@@ -82,9 +82,9 @@ const getWrapperShallow = (
 	});
 };
 
-window.scrollTo = vi.fn();
-
 describe("User Migration / Index", () => {
+	window.scrollTo = vi.fn();
+
 	beforeEach(() => {
 		setupStores({
 			envConfigModule: EnvConfigModule,

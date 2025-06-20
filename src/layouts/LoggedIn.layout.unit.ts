@@ -85,25 +85,25 @@ const setup = () => {
 	};
 };
 
-const defineWindowWidth = (width = 1564) => {
-	Object.defineProperty(window, "innerWidth", {
-		writable: true,
-		configurable: true,
-		value: width,
-	});
-	window.dispatchEvent(new Event("resize"));
-};
-
-const mockGetLocalStorage = vi.fn();
-const mockSetLocalStorage = vi.fn();
-Object.defineProperty(window, "localStorage", {
-	value: {
-		getItem: mockGetLocalStorage,
-		setItem: mockSetLocalStorage,
-	},
-});
-
 describe("LoggedIn.layout.vue", () => {
+	const defineWindowWidth = (width = 1564) => {
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: width,
+		});
+		window.dispatchEvent(new Event("resize"));
+	};
+
+	const mockGetLocalStorage = vi.fn();
+	const mockSetLocalStorage = vi.fn();
+	Object.defineProperty(window, "localStorage", {
+		value: {
+			getItem: mockGetLocalStorage,
+			setItem: mockSetLocalStorage,
+		},
+	});
+
 	beforeEach(() => {
 		defineWindowWidth();
 	});

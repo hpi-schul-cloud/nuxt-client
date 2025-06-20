@@ -37,8 +37,6 @@ vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("@data-board/BoardPermissions.composable");
 vi.mock("../composables/VideoConference.composable");
 
-window.open = vi.fn();
-
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 const useRouteMock = <Mock>useRoute;
@@ -56,6 +54,8 @@ const mockedUseContentElementState = vi.mocked(useContentElementState);
 let defaultElement = videoConferenceElementResponseFactory.build();
 
 describe("VideoConferenceContentElement", () => {
+	window.open = vi.fn();
+
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let useBoardFocusHandlerMock: DeepMocked<

@@ -1,18 +1,19 @@
 import infiniteScrolling from "./infiniteScrolling";
 
-const getInstance = () => {
-	vi.spyOn(window, "scrollTo").mockImplementation();
-
-	return mount(
-		{
-			template: "<div/>",
-		},
-		{
-			mixins: [infiniteScrolling],
-		}
-	);
-};
 describe("@/mixins/infiniteScrolling", () => {
+	const getInstance = () => {
+		vi.spyOn(window, "scrollTo").mockImplementation();
+
+		return mount(
+			{
+				template: "<div/>",
+			},
+			{
+				mixins: [infiniteScrolling],
+			}
+		);
+	};
+
 	it("can be used as a mixin", () => {
 		expect(getInstance).not.toThrow();
 	});
