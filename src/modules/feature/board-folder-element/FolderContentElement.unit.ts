@@ -5,7 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useContentElementState } from "@data-board";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import {

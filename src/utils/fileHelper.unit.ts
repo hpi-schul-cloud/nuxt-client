@@ -4,7 +4,7 @@ import {
 	FilePreviewWidth,
 	FileRecordVirusScanStatus,
 } from "@/types/file/File";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import {
 	convertDownloadToPreviewUrl,
 	convertFileSize,
