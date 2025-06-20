@@ -1,7 +1,15 @@
-import { nextTick } from "vue";
+import { ComponentPublicInstance, nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { NamedValue } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
-import { ComponentMountingOptions, mount, shallowMount } from "@vue/test-utils";
+import { VCardText } from "vuetify/components";
+import {
+	ComponentMountingOptions,
+	flushPromises,
+	mount,
+	shallowMount,
+	VueWrapper,
+} from "@vue/test-utils";
 import { createMock } from "@golevelup/ts-jest";
 import { THEME_KEY } from "@/utils/inject";
 import { SchulcloudTheme } from "@/serverApi/v3";
@@ -17,7 +25,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { VCardText } from "vuetify/lib/components/index";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -39,9 +46,25 @@ const importUsersStub = {
 	},
 };
 
+type MigrationPageWrapperType = Partial<{
+	t: (key: string, named?: NamedValue) => string;
+	isLoading: boolean;
+	migrationStep: number;
+	isMigrationConfirm: boolean;
+	isCancelDialogOpen: boolean;
+	isClearAutoMatchesDialogOpen: boolean;
+	school: { inUserMigration: boolean; inMaintenance: boolean };
+}>;
+
+type DialogWrapperType = Partial<{
+	confirmDialog: () => void;
+	cancelDialog: () => void;
+	isOpen: boolean;
+}>;
+
 const getWrapper = (
 	options: ComponentMountingOptions<typeof MigrationWizard> = {}
-) => {
+): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> => {
 	document.body.setAttribute("data-app", "true");
 
 	useRouterMock.mockReturnValue(router);
@@ -67,7 +90,7 @@ const getWrapper = (
 
 const getWrapperShallow = (
 	options: ComponentMountingOptions<typeof MigrationWizard> = {}
-) => {
+): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> => {
 	document.body.setAttribute("data-app", "true");
 
 	return shallowMount(MigrationWizard, {
@@ -107,7 +130,7 @@ describe("User Migration / Index", () => {
 	it("should set page title", () => {
 		const wrapper = getWrapperShallow();
 
-		const title = wrapper.vm.t("pages.administration.migration.title", {
+		const title = wrapper.vm.t?.("pages.administration.migration.title", {
 			source: "LDAP",
 			instance: $theme.name,
 		});
@@ -121,7 +144,7 @@ describe("User Migration / Index", () => {
 		});
 		const wrapper = getWrapperShallow();
 		const findText = wrapper.find('[data-testid="error-dialog"]');
-		const errorMsg = wrapper.vm.t("pages.administration.migration.error");
+		const errorMsg = wrapper.vm.t?.("pages.administration.migration.error");
 		expect(findText.text()).toContain(errorMsg);
 	});
 
@@ -146,9 +169,13 @@ describe("User Migration / Index", () => {
 			importUsersModule.setTotal(0);
 		});
 
-		it("should show hint text that sync can take some time", () => {
+		it("should show hint text that sync can take some time", async () => {
 			const wrapper = getWrapperShallow();
-			const tutorialWait = wrapper.vm.t(
+
+			wrapper.vm.isLoading = true;
+			await flushPromises();
+
+			const tutorialWait = wrapper.vm.t?.(
 				"pages.administration.migration.tutorialWait"
 			);
 			const findText = wrapper.find("[data-testid=migration_tutorial]");
@@ -204,7 +231,10 @@ describe("User Migration / Index", () => {
 			const wrapper = getWrapperShallow();
 
 			wrapper.vm.migrationStep = 3;
-			await nextTick();
+			await flushPromises();
+
+			wrapper.vm.isLoading = false;
+			await flushPromises();
 
 			const findText = wrapper
 				.find("[data-testid=migration_summary]")
@@ -226,6 +256,9 @@ describe("User Migration / Index", () => {
 			wrapper.vm.migrationStep = 3;
 			await nextTick();
 
+			wrapper.vm.isLoading = false;
+			await flushPromises();
+
 			const btn = wrapper.find("[data-testid=migration_performMigration]");
 			expect(btn.attributes("disabled")).toBeDefined();
 
@@ -244,22 +277,25 @@ describe("User Migration / Index", () => {
 			});
 
 			const wrapper = getWrapper();
+
 			wrapper.vm.migrationStep = 3;
 			wrapper.vm.isMigrationConfirm = true;
-			await nextTick();
-			await nextTick();
+			await flushPromises();
+
+			wrapper.vm.isLoading = false;
+			await flushPromises();
+
 			const btn = wrapper.find("[data-testid=migration_performMigration]");
 			expect(btn.attributes("disabled")).toBeUndefined();
 
 			await btn.trigger("click");
+			await flushPromises();
 
-			await nextTick();
-			await nextTick();
 			// TODO after implementing of backend and store, mock store response and expect to be called with
 			expect(performMigrationMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(4);
 			expect(schoolsModule.getSchool.inUserMigration).toBe(false);
-			expect(wrapper.vm.school.inUserMigration).toBe(false);
+			expect(wrapper.vm.school?.inUserMigration).toBe(false);
 		});
 	});
 
@@ -283,7 +319,7 @@ describe("User Migration / Index", () => {
 			);
 
 			expect(stepperContent.text()).toContain(
-				wrapper.vm.t("pages.administration.migration.step4.linkingFinished", {
+				wrapper.vm.t?.("pages.administration.migration.step4.linkingFinished", {
 					source: "LDAP",
 					instance: $theme.name,
 				})
@@ -308,12 +344,11 @@ describe("User Migration / Index", () => {
 			const btn = wrapper.find("[data-testid=migration_endMaintenance]");
 			await btn.trigger("click");
 
-			await nextTick();
-			await nextTick();
+			await flushPromises();
 
 			expect(endMaintenanceMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(5);
-			expect(wrapper.vm.school.inMaintenance).toBe(false);
+			expect(wrapper.vm.school?.inMaintenance).toBe(false);
 		});
 	});
 
@@ -334,7 +369,7 @@ describe("User Migration / Index", () => {
 				const wrapper = getWrapper();
 
 				wrapper.vm.migrationStep = 2;
-				wrapper.vm.t("pages.administration.migration.title", {
+				wrapper.vm.t?.("pages.administration.migration.title", {
 					source: "LDAP",
 					instance: $theme.name,
 				});
@@ -482,8 +517,10 @@ describe("User Migration / Index", () => {
 				const wrapper = getWrapper();
 
 				wrapper.vm.migrationStep = 3;
-
 				await nextTick();
+
+				wrapper.vm.isLoading = false;
+				await flushPromises();
 
 				return {
 					wrapper,
@@ -536,7 +573,7 @@ describe("User Migration / Index", () => {
 				jest.spyOn(importUsersStub.methods, "reloadData");
 
 				wrapper.vm.migrationStep = 2;
-				wrapper.vm.t("pages.administration.migration.title", {
+				wrapper.vm.t?.("pages.administration.migration.title", {
 					source: "LDAP",
 					instance: $theme.name,
 				});
@@ -612,9 +649,10 @@ describe("User Migration / Index", () => {
 				const dialogParent = wrapper.find(
 					'[data-testid="clear-auto-matches-dialog-wrapper"]'
 				);
-				const dialog = dialogParent.findComponent(VCustomDialog);
+				const dialog: VueWrapper<ComponentPublicInstance & DialogWrapperType> =
+					dialogParent.findComponent(VCustomDialog);
 
-				dialog.vm.cancelDialog();
+				dialog.vm.cancelDialog?.();
 				await nextTick();
 
 				expect(wrapper.vm.isClearAutoMatchesDialogOpen).toBe(false);
@@ -634,9 +672,10 @@ describe("User Migration / Index", () => {
 				const dialogParent = wrapper.find(
 					'[data-testid="clear-auto-matches-dialog-wrapper"]'
 				);
-				const dialog = dialogParent.findComponent(VCustomDialog);
+				const dialog: VueWrapper<ComponentPublicInstance & DialogWrapperType> =
+					dialogParent.findComponent(VCustomDialog);
 
-				dialog.vm.confirmDialog();
+				dialog.vm.confirmDialog?.();
 				await nextTick();
 
 				expect(importUsersModule.clearAllAutoMatches).toHaveBeenCalled();
