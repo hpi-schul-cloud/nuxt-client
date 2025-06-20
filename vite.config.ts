@@ -19,7 +19,12 @@ export default defineConfig(
 			plugins: [
 				tsconfigPaths({ loose: true }),
 				Vue({
-					template: { transformAssetUrls },
+					template: {
+						transformAssetUrls,
+						compilerOptions: {
+							isCustomElement: (tag) => tag.startsWith("h5p-"),
+						},
+					},
 				}),
 				VueDevTools(),
 				Vuetify({
