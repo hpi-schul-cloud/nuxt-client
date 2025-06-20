@@ -5,7 +5,7 @@ export default {
 	"common.actions.cancel": "Скасувати",
 	"common.actions.confirm": "Підтвердити",
 	"common.actions.continue": "Продовжити",
-	"common.actions.copy": "Копіювати",
+	"common.actions.copy": "Дублювати",
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
