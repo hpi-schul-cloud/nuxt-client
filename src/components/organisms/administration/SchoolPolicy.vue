@@ -122,7 +122,6 @@ import SchoolPolicyFormDialog from "@/components/organisms/administration/School
 import { computed, ComputedRef, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
-import { BusinessError } from "@/store/types/commons";
 import { useI18n } from "vue-i18n";
 import {
 	AUTH_MODULE_KEY,
@@ -166,9 +165,6 @@ const privacyPolicy: ComputedRef<ConsentVersion | null> = computed(
 );
 const status: ComputedRef<string> = computed(
 	() => privacyPolicyModule.getStatus
-);
-const error: ComputedRef<BusinessError> = computed(
-	() => privacyPolicyModule.getBusinessError
 );
 
 const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);

@@ -116,7 +116,6 @@ import SchoolTermsFormDialog from "@/components/organisms/administration/SchoolT
 import { computed, ComputedRef, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
-import { BusinessError } from "@/store/types/commons";
 import { useI18n } from "vue-i18n";
 import {
 	injectStrict,
@@ -159,9 +158,6 @@ const termsOfUse: ComputedRef<ConsentVersion | null> = computed(
 	() => termsOfUseModule.getTermsOfUse
 );
 const status: ComputedRef<string> = computed(() => termsOfUseModule.getStatus);
-const error: ComputedRef<BusinessError> = computed(
-	() => termsOfUseModule.getBusinessError
-);
 
 const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
 
