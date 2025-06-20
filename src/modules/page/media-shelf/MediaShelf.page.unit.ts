@@ -13,15 +13,16 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { ref } from "vue";
 import MediaShelfPage from "./MediaShelf.page.vue";
 
-vi.mock("@feature-media-shelf", () => {
+vi.mock("@feature-media-shelf", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@feature-media-shelf")>();
 	return {
-		...vi.importActual("@feature-media-shelf"),
+		...actual,
 		useSharedMediaBoardState: vi.fn(),
 	};
 });
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
+vi.mock("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
 }));
 
 describe("MediaShelfPage", () => {

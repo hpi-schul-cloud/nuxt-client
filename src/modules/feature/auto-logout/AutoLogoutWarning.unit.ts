@@ -15,9 +15,10 @@ import BaseModal from "@/components/base/BaseModal.vue";
 import { SessionStatus } from "./types";
 import { Mock } from "vitest";
 
-vi.mock("vue-i18n", () => {
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
 	return {
-		...vi.importActual("vue-i18n"),
+		...actual,
 		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });

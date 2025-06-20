@@ -20,9 +20,10 @@ import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composabl
 import { useI18n } from "vue-i18n";
 import { Mock } from "vitest";
 
-vi.mock("vue-i18n", () => {
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
 	return {
-		...vi.importActual("vue-i18n"),
+		...actual,
 		useI18n: vi.fn().mockReturnValue({
 			t: vi.fn().mockImplementation((key: string) => key),
 		}),

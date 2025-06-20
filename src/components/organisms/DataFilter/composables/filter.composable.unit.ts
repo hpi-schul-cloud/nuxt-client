@@ -2,23 +2,24 @@ import { mountComposable } from "@@/tests/test-utils";
 import { useDataTableFilter } from "./filter.composable";
 import { FilterOption, Registration, UpdateFilterParamType } from "../types";
 
-const defaultState = {
-	pagination: {},
-	filter: {
-		"pages.administration.students.index": {
-			query: {},
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const defaultState = {
+		pagination: {},
+		filter: {
+			"pages.administration.students.index": {
+				query: {},
+			},
+			"pages.administration.teachers.index": {
+				query: {},
+			},
 		},
-		"pages.administration.teachers.index": {
-			query: {},
-		},
-	},
-	sorting: {},
-	version: 1,
-};
+		sorting: {},
+		version: 1,
+	};
 
-vi.mock("@vueuse/core", () => {
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
 	return {
-		...vi.importActual("@vueuse/core"),
+		...actual,
 		useStorage: vi.fn().mockReturnValue({ value: defaultState }),
 	};
 });

@@ -19,9 +19,10 @@ import SchoolsModule from "@/store/schools";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { schoolsModule } from "@/store";
 
-vi.mock("vue-i18n", () => {
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
 	return {
-		...vi.importActual("vue-i18n"),
+		...actual,
 		useI18n: vi.fn().mockReturnValue({
 			t: vi.fn().mockImplementation((key: string) => key),
 		}),

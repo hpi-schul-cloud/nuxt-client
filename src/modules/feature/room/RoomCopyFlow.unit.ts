@@ -19,9 +19,10 @@ import { flushPromises } from "@vue/test-utils";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
 
-vi.mock("@/serverApi/v3", () => {
+vi.mock("@/serverApi/v3", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@/serverApi/v3")>();
 	return {
-		...vi.importActual("@/serverApi/v3"),
+		...actual,
 		RoomApiFactory: vi.fn(),
 	};
 });

@@ -15,9 +15,24 @@ const defaultState = {
 	version: 1,
 };
 
-vi.mock("@vueuse/core", () => {
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const defaultState = {
+		pagination: {},
+		filter: {
+			"pages.administration.students.index": {
+				query: {},
+			},
+			"pages.administration.teachers.index": {
+				query: {},
+			},
+		},
+		sorting: {},
+		version: 1,
+	};
+
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
 	return {
-		...vi.importActual("@vueuse/core"),
+		...actual,
 		useStorage: vi.fn().mockReturnValue({ value: defaultState }),
 	};
 });

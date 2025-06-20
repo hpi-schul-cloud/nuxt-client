@@ -13,18 +13,6 @@ import {
 	useBoardAriaNotification,
 } from "./ariaLiveNotificationHandler";
 
-const card = {
-	elements: [
-		{
-			content: { caption: "", alternativeText: "" },
-			id: "elementId",
-		},
-	],
-	id: "cardId",
-	title: "",
-	visibilitySettings: {},
-};
-
 vi.mock("vue-i18n", () => {
 	return {
 		...vi.importActual("vue-i18n"),
@@ -39,19 +27,38 @@ vi.mock("../Board.store", () => ({
 	}),
 }));
 
-vi.mock("../Card.store", () => ({
-	useCardStore: vi.fn().mockReturnValue({
-		cards: [card],
-	}),
-}));
+vi.mock("../Card.store", () => {
+	const card = {
+		elements: [
+			{
+				content: { caption: "", alternativeText: "" },
+				id: "elementId",
+			},
+		],
+		id: "cardId",
+		title: "",
+		visibilitySettings: {},
+	};
+	return {
+		useCardStore: vi.fn().mockReturnValue({
+			cards: [card],
+		}),
+	};
+});
 
 describe("useBoardAriaNotification", () => {
 	vi.useFakeTimers();
 
 	const mockNotifyOnScreenReader = vi.fn();
-	vi.mock("@/composables/ariaLiveNotifier", () => ({
-		notifyOnScreenReader: () => mockNotifyOnScreenReader,
-	}));
+	vi.mock("@/composables/ariaLiveNotifier", async (importOriginal) => {
+		const actual =
+			await importOriginal<typeof import("@/composables/ariaLiveNotifier")>();
+		return {
+			...actual,
+
+			notifyOnScreenReader: () => mockNotifyOnScreenReader,
+		};
+	});
 
 	beforeEach(() => {
 		document.body.innerHTML = `

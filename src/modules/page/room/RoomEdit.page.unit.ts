@@ -30,7 +30,7 @@ vi.mock("vue-router", () => ({
 	}),
 	useRoute: vi.fn().mockReturnValue({
 		params: {
-			id: roomIdMock,
+			id: "test-1234",
 		},
 	}),
 }));
@@ -38,14 +38,20 @@ vi.mock("vue-router", () => ({
 vi.mock("@data-room", () => ({
 	useRoomEditState: vi.fn().mockReturnValue({
 		isLoading: false,
-		roomData: roomDataMock,
+		roomData: {
+			value: {
+				id: "test-1234",
+				name: "test",
+				color: "blue",
+			},
+		},
 		updateRoom: vi.fn(),
 		fetchRoom: vi.fn(),
 	}),
 }));
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
+vi.mock("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
 }));
 
 const roomParams: RoomUpdateParams = {

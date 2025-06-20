@@ -24,9 +24,10 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 import { Mock } from "vitest";
 
-vi.mock("vue-i18n", () => {
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
 	return {
-		...vi.importActual("vue-i18n"),
+		...actual,
 		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });
