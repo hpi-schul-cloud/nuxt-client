@@ -5,7 +5,7 @@
 		"strict": true,
 		"jsx": "preserve",
 		"importHelpers": true,
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
@@ -16,7 +16,7 @@
 		"sourceMap": true,
 		"experimentalDecorators": true,
 		"baseUrl": ".",
-		"types": ["webpack-env", "jest"],
+		"types": ["node"],
 		"typeRoots": ["./node_modules/@types", "./types"],
 		"paths": {
 			"@data-board": ["src/modules/data/board"],

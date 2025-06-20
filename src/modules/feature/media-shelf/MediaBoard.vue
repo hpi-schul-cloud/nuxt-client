@@ -60,7 +60,9 @@
 <script setup lang="ts">
 import { MediaAvailableLineResponse, MediaBoardResponse } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { extractDataAttribute, useSharedEditMode } from "@util-board";
+import { extractDataAttribute } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";

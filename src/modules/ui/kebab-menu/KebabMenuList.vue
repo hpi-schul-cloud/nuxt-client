@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import type { VList } from "vuetify/lib/components";
+import type { VList } from "vuetify/components";
 
 const menuList = ref<VList>();
 

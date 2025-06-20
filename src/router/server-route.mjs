@@ -31,7 +31,7 @@ const isCommonCartridge = (path) => {
 	return path.startsWith("/api/v3/common-cartridge");
 };
 
-module.exports = {
+export {
 	isServer,
 	isFileStorage,
 	isH5pEditor,

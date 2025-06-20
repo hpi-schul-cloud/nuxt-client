@@ -126,10 +126,11 @@ import {
 import {
 	useBoardInactivity,
 	useBoardPermissions,
-	useBoardStore,
 	useCardStore,
 	useSharedBoardPageInformation,
 } from "@data-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -138,8 +139,9 @@ import {
 	extractDataAttribute,
 	useBoardNotifier,
 	useElementFocus,
-	useSharedEditMode,
 } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import {

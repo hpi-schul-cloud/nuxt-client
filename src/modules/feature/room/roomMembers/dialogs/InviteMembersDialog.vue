@@ -168,7 +168,7 @@
 import { useI18n } from "vue-i18n";
 import { computed, ref, useTemplateRef, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VCard, VTextField } from "vuetify/lib/components";
+import type { VCard, VTextField } from "vuetify/components";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
