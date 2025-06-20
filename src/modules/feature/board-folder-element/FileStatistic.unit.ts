@@ -5,7 +5,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
-import { describe, expect, it, jest } from "@jest/globals";
 import { mount } from "@vue/test-utils";
 import FileStatistic from "./FileStatistic.vue";
 

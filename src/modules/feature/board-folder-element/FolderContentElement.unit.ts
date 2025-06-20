@@ -24,8 +24,8 @@ vi.mock("@data-board", () => ({
 	})),
 }));
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <vi.Mock>useRouter;
 
 describe("FolderContentElement", () => {
 	const mockElement: FileFolderElement = {

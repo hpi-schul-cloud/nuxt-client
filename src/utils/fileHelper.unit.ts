@@ -68,21 +68,19 @@ describe("@/utils/fileHelper", () => {
 			const formMock = createMock<HTMLFormElement>();
 
 			let createElementCallCount = 0;
-			jest
-				.spyOn(document, "createElement")
-				.mockImplementation((tag: string) => {
-					if (tag === "form") return formMock;
-					if (tag === "input") return inputMocks[createElementCallCount++];
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					return {} as any;
-				});
+			vi.spyOn(document, "createElement").mockImplementation((tag: string) => {
+				if (tag === "form") return formMock;
+				if (tag === "input") return inputMocks[createElementCallCount++];
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				return {} as any;
+			});
 
-			const appendChildSpy = jest
+			const appendChildSpy = vi
 				.spyOn(document.body, "appendChild")
-				.mockImplementation(jest.fn());
-			const removeChildSpy = jest
+				.mockImplementation(vi.fn());
+			const removeChildSpy = vi
 				.spyOn(document.body, "removeChild")
-				.mockImplementation(jest.fn());
+				.mockImplementation(vi.fn());
 
 			return {
 				formMock,
@@ -93,7 +91,7 @@ describe("@/utils/fileHelper", () => {
 		};
 
 		afterEach(() => {
-			jest.restoreAllMocks();
+			vi.restoreAllMocks();
 		});
 
 		it("should create a form", () => {

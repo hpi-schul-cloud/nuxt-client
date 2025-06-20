@@ -1,4 +1,3 @@
-import { jest } from "@jest/globals";
 import { useCollaborativeTextEditorNotifier } from "../composables/CollaborativeTextEditorNotifications.composable";
 
 interface Props {
