@@ -16,7 +16,7 @@
 					<span
 						:key="link.text"
 						:aria-label="
-							$t('components.legacy.footer.ariaLabel', {
+							t('components.legacy.footer.ariaLabel', {
 								itemName: link.text,
 							})
 						"
