@@ -49,9 +49,58 @@ export default defineConfig(
 			},
 			define: { "process.env": {} },
 			resolve: {
-				alias: {
-					"@": fileURLToPath(new URL("src", import.meta.url)),
-				},
+				alias: [
+					{
+						find: /\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$/,
+						replacement: fileURLToPath(
+							new URL("tests/test-utils/mediaFileMock.js", import.meta.url)
+						),
+					},
+					{
+						find: /^@data-(.*)$/,
+						replacement: fileURLToPath(
+							new URL("src/modules/data/$1", import.meta.url)
+						),
+					},
+					{
+						find: /^@feature-(.*)$/,
+						replacement: fileURLToPath(
+							new URL("src/modules/feature/$1", import.meta.url)
+						),
+					},
+					{
+						find: /^@page-(.*)$/,
+						replacement: fileURLToPath(
+							new URL("src/modules/page/$1", import.meta.url)
+						),
+					},
+					{
+						find: /^@ui-(.*)$/,
+						replacement: fileURLToPath(
+							new URL("src/modules/ui/$1", import.meta.url)
+						),
+					},
+					{
+						find: /^@util-(.*)$/,
+						replacement: fileURLToPath(
+							new URL("src/modules/util/$1", import.meta.url)
+						),
+					},
+					{
+						find: /^@icons(.*)$/,
+						replacement: fileURLToPath(
+							new URL("src/components/icons/$1", import.meta.url)
+						),
+					},
+					{
+						find: /^@\/*(.*)$/,
+						replacement: fileURLToPath(new URL("src/$1", import.meta.url)),
+					},
+					{
+						find: /^@@\/(.*)$/,
+						replacement: fileURLToPath(new URL("$1", import.meta.url)),
+					},
+				],
 				extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
 			},
 			server: {
