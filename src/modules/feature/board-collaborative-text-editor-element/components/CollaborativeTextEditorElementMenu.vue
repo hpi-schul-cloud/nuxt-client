@@ -14,7 +14,8 @@
 </template>
 
 <script setup lang="ts">
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { BoardMenuScope } from "@ui-board";
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
