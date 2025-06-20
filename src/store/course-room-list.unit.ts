@@ -270,27 +270,28 @@ describe("rooms module", () => {
 				).toStrictEqual(100); // $limit: 100
 			});
 
-			it("handle error", (done) => {
-				const mockApi = {
-					courseControllerFindForUser: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
-				};
-				vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.CoursesApiInterface
-				);
-				const courseRoomListModule = new CourseRoomListModule({});
-
-				courseRoomListModule.fetchAllElements().then(() => {
-					expect(courseRoomListModule.getLoading).toBe(false);
-					expect(courseRoomListModule.getBusinessError).toStrictEqual(
-						businessError
+			it("handle error", () =>
+				new Promise<void>((done) => {
+					const mockApi = {
+						courseControllerFindForUser: vi.fn(() =>
+							Promise.reject(badRequestError)
+						),
+					};
+					vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(
+						mockApi as unknown as serverApi.CoursesApiInterface
 					);
-					done();
-				});
+					const courseRoomListModule = new CourseRoomListModule({});
 
-				expect(courseRoomListModule.getLoading).toBe(true);
-			});
+					courseRoomListModule.fetchAllElements().then(() => {
+						expect(courseRoomListModule.getLoading).toBe(false);
+						expect(courseRoomListModule.getBusinessError).toStrictEqual(
+							businessError
+						);
+						done();
+					});
+
+					expect(courseRoomListModule.getLoading).toBe(true);
+				}));
 		});
 
 		describe("confirmSharedCourseData", () => {
