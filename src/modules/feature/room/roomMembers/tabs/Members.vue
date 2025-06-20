@@ -12,7 +12,7 @@
 		</i18n-t>
 	</div>
 
-	<div class="mb-12 mt-8">
+	<div class="mb-12">
 		<MembersTable v-if="!isLoading" :header-bottom="headerBottom" />
 	</div>
 </template>
