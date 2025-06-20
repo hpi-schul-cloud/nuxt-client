@@ -20,6 +20,11 @@ RUN NODE_ENV=production npm run build-only
 
 COPY .git ./.git
 RUN echo "{\"sha\": \"$(git rev-parse HEAD)\", \"version\": \"$(git describe --tags --abbrev=0)\", \"commitDate\": \"$(git log -1 --format=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ')\", \"birthdate\": \"$(date +%Y-%m-%dT%H:%M:%SZ)\"}" > ./dist/nuxtversion
+RUN if [ -f "public/themes/${SC_THEME}/favicon.png" ]; then \
+      cp "public/themes/${SC_THEME}/favicon.png" ./dist/favicon.png; \
+    else \
+      echo "File public/themes/${SC_THEME}/favicon.png does not exist, skipping."; \
+    fi
 RUN if [ -f "public/themes/${SC_THEME}/bbb/presentation.pdf" ]; then \
       cp "public/themes/${SC_THEME}/bbb/presentation.pdf" ./dist/bbb-presentation.pdf; \
     else \
