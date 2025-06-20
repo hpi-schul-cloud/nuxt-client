@@ -16,7 +16,7 @@
 					<span
 						:key="link.text"
 						:aria-label="
-							$t('components.legacy.footer.ariaLabel', {
+							t('components.legacy.footer.ariaLabel', {
 								itemName: link.text,
 							})
 						"
@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { authModule, envConfigModule, filePathsModule } from "@/store";
+import { envConfigModule, filePathsModule } from "@/store";
 
 const { t } = useI18n();
 
