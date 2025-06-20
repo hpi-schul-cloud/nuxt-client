@@ -2104,6 +2104,8 @@ export default {
 		"No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update":
 		"Se ha producido un error al actualizar el enlace de invitación.",
+	"pages.rooms.invitationlinks.error.load":
+		"No se pudo cargar la lista de invitados.",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

@@ -2069,6 +2069,8 @@ export default {
 		"Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update":
 		"Не вдалося оновити посилання на запрошення.",
+	"pages.rooms.invitationlinks.error.load":
+		"Не вдалося завантажити список запрошень.",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

@@ -267,6 +267,26 @@ describe("ChangeRole.vue", () => {
 				expect(ownRadioButton.exists()).toBe(false);
 				expect(radioButtons.length).toBe(3);
 			});
+
+			it("should not render the 'Own' option if any member has the roomViewer role", () => {
+				const { wrapper } = setup({
+					membersForRoleChange: [
+						roomAdminFactory.build(),
+						roomViewerFactory.build(),
+					],
+					isRoomOwner: true,
+				});
+
+				const radioGroup = wrapper.getComponent(VRadioGroup);
+				const ownRadioButton = radioGroup.find(
+					'[data-testid="change-role-option-owner"]'
+				);
+
+				expect(ownRadioButton.exists()).toBe(false);
+
+				const radioButtons = radioGroup.findAllComponents(VRadio);
+				expect(radioButtons).toHaveLength(3);
+			});
 		});
 	});
 
