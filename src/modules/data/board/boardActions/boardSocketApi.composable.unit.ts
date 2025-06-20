@@ -42,6 +42,7 @@ import {
 import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
+import { Mock } from "vitest";
 
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
@@ -53,7 +54,7 @@ vi.mock("./boardRestApi.composable");
 const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 
 vi.mock("vue-i18n");
-(useI18n as vi.Mock).mockReturnValue({ t: (key: string) => key });
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 vi.mock("@util-board/BoardNotifier.composable");
 vi.mock("@util-board/LastCreatedElement.composable");
@@ -64,7 +65,7 @@ vi.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 describe("useBoardSocketApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<

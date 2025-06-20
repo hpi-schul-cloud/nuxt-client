@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import {
 	ConfigResponse,
 	ExternalToolMediumStatus,
@@ -44,7 +45,7 @@ vi.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
 const mockedSchoolExternalToolUsage = vi.mocked(useSchoolExternalToolUsage);
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;

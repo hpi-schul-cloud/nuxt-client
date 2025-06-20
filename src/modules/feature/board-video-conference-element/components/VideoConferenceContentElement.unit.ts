@@ -30,6 +30,7 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
+import { Mock } from "vitest";
 
 vi.mock("@data-board/ContentElementState.composable");
 vi.mock("@data-board/BoardFocusHandler.composable");
@@ -39,8 +40,8 @@ vi.mock("../composables/VideoConference.composable");
 window.open = vi.fn();
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
-const useRouteMock = <vi.Mock>useRoute;
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 useRouteMock.mockReturnValue({ params: { id: "room-id" } });
 
 vi.mock("@data-board/BoardFeatures.composable");

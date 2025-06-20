@@ -32,9 +32,10 @@ import {
 import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
 import { Router, useRouter } from "vue-router";
+import { Mock } from "vitest";
 
 vi.mock("vue-i18n");
-(useI18n as vi.Mock).mockReturnValue({ t: (key: string) => key });
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 vi.mock("@data-board/socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
@@ -45,7 +46,7 @@ const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 vi.mock("@util-board/BoardNotifier.composable");
 vi.mock("@util-board/LastCreatedElement.composable");
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);

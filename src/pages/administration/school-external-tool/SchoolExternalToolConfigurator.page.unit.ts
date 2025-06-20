@@ -24,6 +24,7 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
+import { Mock } from "vitest";
 
 vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -33,7 +34,7 @@ vi.mock("vue-router", () => ({
 	useRouter: vi.fn(),
 }));
 
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 describe("SchoolExternalToolConfigurator", () => {
 	const getWrapper = (

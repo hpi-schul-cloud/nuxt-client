@@ -3,6 +3,7 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useDeleteConfirmationDialog } from "./DeleteConfirmation.composable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useI18n } from "vue-i18n";
+import { Mock } from "vitest";
 vi.mock("./Confirmation.composable");
 
 vi.mock("vue-i18n", () => {
@@ -11,7 +12,7 @@ vi.mock("vue-i18n", () => {
 		useI18n: vi.fn(),
 	};
 });
-const useI18nMock = <vi.Mock>useI18n;
+const useI18nMock = <Mock>useI18n;
 
 describe("DeleteConfirmation composable", () => {
 	describe("askDeleteConfirmation", () => {

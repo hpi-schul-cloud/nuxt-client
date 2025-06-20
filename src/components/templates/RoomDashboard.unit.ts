@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { courseRoomDetailsModule, envConfigModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
@@ -27,7 +28,7 @@ import RoomDashboard from "./RoomDashboard.vue";
 import { EmptyState } from "@ui-empty-state";
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 const mockData = {
 	roomId: "123",

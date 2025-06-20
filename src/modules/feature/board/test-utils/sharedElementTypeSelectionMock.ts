@@ -1,8 +1,9 @@
 import { Ref, ref } from "vue";
 import { useSharedElementTypeSelection } from "../shared/SharedElementTypeSelection.composable";
+import { Mock } from "vitest";
 
 interface Props {
-	closeDialogMock?: vi.Mock;
+	closeDialogMock?: Mock;
 }
 
 interface ElementTypeSelectionOptions {

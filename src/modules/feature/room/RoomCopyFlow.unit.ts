@@ -16,6 +16,7 @@ import {
 import { RoomCopyFlow } from "@feature-room";
 import { createMock } from "@golevelup/ts-vitest";
 import { flushPromises } from "@vue/test-utils";
+import { Mock } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock("@/serverApi/v3", () => {
@@ -33,7 +34,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 		const errorHandler = vi.fn();
 
 		const roomApiMock = createMock<ReturnType<typeof RoomApiFactory>>();
-		(RoomApiFactory as vi.Mock).mockReturnValue(roomApiMock);
+		(RoomApiFactory as Mock).mockReturnValue(roomApiMock);
 		roomApiMock.roomControllerCopyRoom.mockResolvedValue(
 			mockApiResponse({
 				data: {

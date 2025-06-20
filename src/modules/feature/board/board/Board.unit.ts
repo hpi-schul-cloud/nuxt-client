@@ -67,6 +67,7 @@ import { Router, useRoute, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
+import { Mock } from "vitest";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -97,11 +98,11 @@ vi.mock("@/composables/copy");
 const mockUseCopy = vi.mocked(useCopy);
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
-const useRouteMock = <vi.Mock>useRoute;
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 
 vi.mock("@data-board/boardInactivity.composable");
-const mockUseBoardInactivity = <vi.Mock>useBoardInactivity;
+const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
 vi.mock("@/composables/application-error.composable");
 const mockedCreateApplicationError = vi.mocked(useApplicationError);
@@ -976,7 +977,7 @@ describe("Board", () => {
 		});
 
 		describe("when the 'delete' menu button is clicked", () => {
-			let openDeleteBoardDialogMock: vi.Mock;
+			let openDeleteBoardDialogMock: Mock;
 			beforeEach(() => {
 				openDeleteBoardDialogMock = vi.fn();
 			});

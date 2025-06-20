@@ -1,7 +1,8 @@
+import { Mock } from "vitest";
 import { useCollaborativeTextEditorApi } from "../composables/CollaborativeTextEditorApi.composable";
 
 interface Props {
-	getUrlMock?: vi.Mock;
+	getUrlMock?: Mock;
 }
 
 export const setupCollaborativeTextEditorApiMock = (props: Props = {}) => {

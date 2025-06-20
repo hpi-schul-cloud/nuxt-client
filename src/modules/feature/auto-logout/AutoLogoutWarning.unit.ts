@@ -13,6 +13,7 @@ import { createMock } from "@golevelup/ts-vitest";
 import { Router, useRouter } from "vue-router";
 import BaseModal from "@/components/base/BaseModal.vue";
 import { SessionStatus } from "./types";
+import { Mock } from "vitest";
 
 vi.mock("vue-i18n", () => {
 	return {
@@ -39,7 +40,7 @@ describe("AutoLogoutWarning", () => {
 	const router = createMock<Router>({
 		currentRoute: ref({ path: "/" }),
 	});
-	const useRouterMock = <vi.Mock>useRouter;
+	const useRouterMock = <Mock>useRouter;
 	useRouterMock.mockReturnValue(router);
 
 	const defaultVars = {

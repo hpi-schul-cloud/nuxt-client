@@ -18,6 +18,7 @@ import {
 } from "@ui-confirmation-dialog";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { useI18n } from "vue-i18n";
+import { Mock } from "vitest";
 
 vi.mock("vue-i18n", () => {
 	return {
@@ -34,8 +35,8 @@ const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 vi.mocked(useDeleteConfirmationDialog);
 
 describe("InvitationTable", () => {
-	let askConfirmationMock: vi.Mock;
-	let askDeleteConfirmationMock: vi.Mock;
+	let askConfirmationMock: Mock;
+	let askDeleteConfirmationMock: Mock;
 	const notifierModule = createModuleMocks(NotifierModule);
 	beforeEach(() => {
 		askConfirmationMock = vi.fn();

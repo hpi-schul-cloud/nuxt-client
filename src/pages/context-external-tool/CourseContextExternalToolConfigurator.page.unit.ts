@@ -18,13 +18,14 @@ import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { Router, useRouter } from "vue-router";
 import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
+import { Mock } from "vitest";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
 	useRouter: vi.fn(),
 }));
 
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 const router = createMock<Router>();
 useRouterMock.mockReturnValue(router);
 

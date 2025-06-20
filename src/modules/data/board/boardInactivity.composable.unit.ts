@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
@@ -35,7 +36,7 @@ vi.mock("./socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 vi.mock("@util-board/BoardNotifier.composable");
 vi.mock("@util-board/LastCreatedElement.composable");

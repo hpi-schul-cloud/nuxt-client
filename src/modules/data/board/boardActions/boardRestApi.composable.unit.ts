@@ -29,6 +29,7 @@ import { Router, useRouter } from "vue-router";
 import { BoardLayout } from "@/serverApi/v3/api";
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
+import { Mock } from "vitest";
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
@@ -46,7 +47,7 @@ vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 vi.mock("vue-i18n", () => {
 	return {
@@ -66,7 +67,7 @@ describe("boardRestApi", () => {
 		ReturnType<typeof useSocketConnection>
 	>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	let setEditModeId: vi.Mock;
+	let setEditModeId: Mock;
 	const setErrorMock = vi.fn();
 
 	beforeEach(() => {

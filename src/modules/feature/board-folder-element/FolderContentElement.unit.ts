@@ -16,6 +16,7 @@ import {
 import { flushPromises, mount } from "@vue/test-utils";
 import { Router, useRouter } from "vue-router";
 import FolderContentElement from "./FolderContentElement.vue";
+import { Mock } from "vitest";
 
 vi.mock("@data-board", () => ({
 	useBoardFocusHandler: vi.fn(),
@@ -25,7 +26,7 @@ vi.mock("@data-board", () => ({
 }));
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 describe("FolderContentElement", () => {
 	const mockElement: FileFolderElement = {
@@ -67,7 +68,7 @@ describe("FolderContentElement", () => {
 			},
 		});
 
-		(useContentElementState as vi.Mock).mockReturnValue({
+		(useContentElementState as Mock).mockReturnValue({
 			modelValue: {
 				value: (options.element || mockElement).content.title || "",
 			},

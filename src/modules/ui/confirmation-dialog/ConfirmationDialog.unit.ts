@@ -7,6 +7,7 @@ import {
 import ConfirmationDialog from "./ConfirmationDialog.vue";
 import { VCard, VDialog } from "vuetify/lib/components/index";
 import { VueWrapper } from "@vue/test-utils";
+import { Mock } from "vitest";
 
 vi.mock("./Confirmation.composable");
 const useInternalConfirmationDialogMock = vi.mocked(
@@ -14,8 +15,8 @@ const useInternalConfirmationDialogMock = vi.mocked(
 );
 
 describe("ConfirmationDialog", () => {
-	let cancelMock: vi.Mock;
-	let confirmMock: vi.Mock;
+	let cancelMock: Mock;
+	let confirmMock: Mock;
 	let wrapper: VueWrapper<InstanceType<typeof ConfirmationDialog>>;
 
 	beforeEach(() => {

@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
@@ -30,7 +31,7 @@ vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 }));
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 vi.spyOn(window, "scrollTo").mockImplementation(() => ({
 	top: 0,

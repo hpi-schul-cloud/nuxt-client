@@ -23,6 +23,7 @@ import { nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VDataTableServer } from "vuetify/lib/components/index";
 import RoomsOverview from "./RoomsOverview.page.vue";
+import { Mock } from "vitest";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
@@ -37,8 +38,8 @@ vi.mock("@data-room", () => {
 	};
 });
 
-const useRouteMock = <vi.Mock>useRoute;
-const useRouterMock = <vi.Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
+const useRouterMock = <Mock>useRouter;
 
 vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",

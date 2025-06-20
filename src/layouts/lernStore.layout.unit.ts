@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import ContentModule from "@/store/content";
 import EnvConfigModule from "@/store/env-config";
 import { envsFactory } from "@@/tests/test-utils";
@@ -22,7 +23,7 @@ vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
 }));
 
-const useRouteMock = <vi.Mock>useRoute;
+const useRouteMock = <Mock>useRoute;
 
 const setup = (options?: {
 	collectionEnabled: boolean;

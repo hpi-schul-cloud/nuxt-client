@@ -12,11 +12,12 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { setActivePinia } from "pinia";
 import * as socketModule from "socket.io-client";
+import { Mock } from "vitest";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
 
 vi.mock("vue-i18n");
-(useI18n as vi.Mock).mockReturnValue({ t: (key: string) => key });
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 vi.mock("socket.io-client");
 const mockSocketIOClient = vi.mocked(socketModule);
@@ -40,7 +41,7 @@ vi.mock("@vueuse/shared", () => {
 });
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 const startMock = vi.fn();
 const stopMock = vi.fn();
@@ -60,7 +61,7 @@ const dispatchMock = vi.fn();
 
 describe("socket.ts", () => {
 	let mockSocket: Partial<socketModule.Socket>;
-	let timeoutResponseMock: { emitWithAck: vi.Mock };
+	let timeoutResponseMock: { emitWithAck: Mock };
 	let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	// We need to set following lines in the outmost describe level since the socket event handlers that set and use these
 	// values are created only once when the module is loaded and initially used.
@@ -105,7 +106,7 @@ describe("socket.ts", () => {
 	});
 
 	const getEventCallback = (eventName: string) => {
-		const listener = (mockSocket.on as vi.Mock).mock.calls.find(
+		const listener = (mockSocket.on as Mock).mock.calls.find(
 			([event]) => event === eventName
 		);
 		return listener?.[1];

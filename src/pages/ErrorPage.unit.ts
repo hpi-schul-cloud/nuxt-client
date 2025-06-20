@@ -10,6 +10,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
+import { Mock } from "vitest";
 
 vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -36,7 +37,7 @@ describe("@pages/Error.page.vue", () => {
 				now: vi.fn(), // for vue metrics
 			},
 		});
-		(window.performance.getEntriesByType as vi.Mock).mockReturnValue([
+		(window.performance.getEntriesByType as Mock).mockReturnValue([
 			{ type: "navigate" },
 		]);
 	});

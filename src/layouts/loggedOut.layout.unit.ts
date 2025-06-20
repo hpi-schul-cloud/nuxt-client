@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
@@ -16,7 +17,7 @@ import { useRouter } from "vue-router";
 import loggedOut from "./loggedOut.layout.vue";
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 describe("loggedOutLayout", () => {
 	const mountComponent = () => {

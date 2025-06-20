@@ -4,6 +4,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useEditorConfig } from "./EditorConfig.composable";
 import BalloonEditor from "./BalloonEditor.vue";
+import { Mock } from "vitest";
 
 type CkEditorProps = {
 	value?: string;
@@ -44,7 +45,7 @@ describe("@feature-editor/BalloonEditor", () => {
 			registerDeletionHandler: vi.fn(),
 		};
 
-		const useEditorConfigMock = <vi.Mock>useEditorConfig;
+		const useEditorConfigMock = <Mock>useEditorConfig;
 		useEditorConfigMock.mockReturnValue(config);
 
 		const wrapper = mount(BalloonEditor, {

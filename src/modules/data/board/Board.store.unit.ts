@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { applicationErrorModule, envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
@@ -56,8 +57,8 @@ vi.mock("./BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
-const useRouteMock = <vi.Mock>useRoute;
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 
 vi.mock("vue-i18n", () => {
 	return {
@@ -77,7 +78,7 @@ describe("BoardStore", () => {
 	let mockedCardSocketApiActions: DeepMocked<
 		ReturnType<typeof useCardSocketApi>
 	>;
-	let setEditModeId: vi.Mock;
+	let setEditModeId: Mock;
 	let mockedBoardFocusCalls: DeepMocked<
 		ReturnType<typeof useBoardFocusHandler>
 	>;

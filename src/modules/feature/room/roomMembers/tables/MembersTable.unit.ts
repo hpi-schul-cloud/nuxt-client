@@ -46,6 +46,7 @@ import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
 import { ChangeRole } from "@feature-room";
+import { Mock } from "vitest";
 
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
@@ -65,7 +66,7 @@ type RoomAuthorizationRefs = RefPropertiesOnly<
 >;
 
 describe("MembersTable", () => {
-	let askConfirmationMock: vi.Mock;
+	let askConfirmationMock: Mock;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {

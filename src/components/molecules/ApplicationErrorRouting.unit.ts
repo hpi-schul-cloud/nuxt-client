@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import ApplicationErrorModule from "@/store/application-error";
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -20,7 +21,7 @@ describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
 	const router = createMock<Router>({
 		currentRoute: ref({ path: "/" }),
 	});
-	const useRouterMock = <vi.Mock>useRouter;
+	const useRouterMock = <Mock>useRouter;
 
 	useRouterMock.mockReturnValue(router);
 	let applicationErrorModuleMock: ApplicationErrorModule;

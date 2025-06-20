@@ -41,10 +41,11 @@ import { ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index";
 import RoomMembersPage from "./RoomMembers.page.vue";
+import { Mock } from "vitest";
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
-const useRouteMock = <vi.Mock>useRoute;
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 
 vi.mock("@vueuse/integrations"); // mock focus trap from add members because we use mount
 
@@ -60,7 +61,7 @@ const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
-	let askConfirmationMock: vi.Mock;
+	let askConfirmationMock: Mock;
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 

@@ -8,9 +8,10 @@ import { computed } from "vue";
 import { RouteLocationNormalized, useRoute } from "vue-router";
 import { SidebarSingleItem } from "../types";
 import { useSidebarSelection } from "./SidebarSelection.composable";
+import { Mock } from "vitest";
 
 vi.mock("vue-router");
-const useRouteMock = <vi.Mock>useRoute;
+const useRouteMock = <Mock>useRoute;
 
 vi.mock("@data-board/BoardPageInformation.composable");
 const mockedUseSharedBoardPageInformation = vi.mocked(

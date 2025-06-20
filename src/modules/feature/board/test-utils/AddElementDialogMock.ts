@@ -1,8 +1,9 @@
 import { Ref, ref } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
+import { Mock } from "vitest";
 
 interface Props {
-	askTypeMock?: vi.Mock;
+	askTypeMock?: Mock;
 }
 
 export const setupAddElementDialogMock = (props: Props = {}) => {

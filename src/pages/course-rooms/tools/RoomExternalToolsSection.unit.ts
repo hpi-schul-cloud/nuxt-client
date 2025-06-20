@@ -17,12 +17,13 @@ import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
+import { Mock } from "vitest";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
 	useRouter: vi.fn(),
 }));
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 describe("RoomExternalToolsSection", () => {
 	const getWrapper = (props: {

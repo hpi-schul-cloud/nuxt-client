@@ -21,9 +21,10 @@ import { InvitationStep, RoomInvitationLink } from "./types";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createAxiosError } from "@util-axios-error";
 import { RoomIdResponse } from "@/serverApi/v3/api";
+import { Mock } from "vitest";
 
 vi.mock("vue-i18n");
-(useI18n as vi.Mock).mockReturnValue({ t: (key: string) => key });
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);

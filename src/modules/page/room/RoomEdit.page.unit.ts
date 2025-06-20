@@ -12,6 +12,7 @@ import { nextTick } from "vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { Mock } from "vitest";
 
 const roomIdMock = "test-1234";
 
@@ -133,7 +134,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 	});
 
 	it("should render roomForm as component is not loading  ", async () => {
-		(useRoomEditState as vi.Mock).mockReturnValueOnce({
+		(useRoomEditState as Mock).mockReturnValueOnce({
 			isLoading: false,
 			roomData: roomDataMock,
 			updateRoom: vi.fn(),
@@ -145,7 +146,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 	});
 
 	it("should not render roomForm as component is loading  ", async () => {
-		(useRoomEditState as vi.Mock).mockReturnValueOnce({
+		(useRoomEditState as Mock).mockReturnValueOnce({
 			isLoading: true,
 			roomData: roomDataMock,
 			updateRoom: vi.fn(),

@@ -22,6 +22,7 @@ import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { Mock } from "vitest";
 
 vi.mock("vue-i18n", () => {
 	return {
@@ -44,9 +45,9 @@ vi.useFakeTimers();
 describe("InviteMembersDialog", () => {
 	let wrapper: VueWrapper<InstanceType<typeof InviteMembersDialog>>;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	let pauseMock: vi.Mock;
-	let unpauseMock: vi.Mock;
-	let deactivateMock: vi.Mock;
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
+	let deactivateMock: Mock;
 
 	beforeAll(() => {
 		setupStores({
@@ -59,7 +60,7 @@ describe("InviteMembersDialog", () => {
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
 		deactivateMock = vi.fn();
-		(useFocusTrap as vi.Mock).mockReturnValue({
+		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
 			unpause: unpauseMock,
 			deactivate: deactivateMock,

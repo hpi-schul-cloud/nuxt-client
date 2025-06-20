@@ -15,6 +15,7 @@ import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
 import { Router, useRoute, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-vitest";
 import { useRoomAuthorization } from "@data-room";
+import { Mock } from "vitest";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
@@ -36,13 +37,13 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canSeeAllStudents: ref(false),
 	canShareRoom: ref(false),
 };
-(useRoomAuthorization as vi.Mock).mockReturnValue(roomPermissions);
+(useRoomAuthorization as Mock).mockReturnValue(roomPermissions);
 
 describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 	const router = createMock<Router>();
-	const useRouteMock = <vi.Mock>useRoute;
+	const useRouteMock = <Mock>useRoute;
 	useRouteMock.mockReturnValue({ params: { id: "room-id" }, push: vi.fn() });
-	const useRouterMock = <vi.Mock>useRouter;
+	const useRouterMock = <Mock>useRouter;
 
 	beforeEach(() => {
 		useRouterMock.mockReturnValue(router);

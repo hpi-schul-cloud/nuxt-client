@@ -12,6 +12,7 @@ import { setActivePinia } from "pinia";
 import { useContentElementState } from "./ContentElementState.composable";
 import { Router, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-vitest";
+import { Mock } from "vitest";
 
 vi.mock("@util-board/InlineEditInteractionHandler.composable");
 
@@ -37,7 +38,7 @@ vi.mock("vue-i18n", () => {
 });
 
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 describe("useContentElementState composable", () => {
 	beforeEach(() => {

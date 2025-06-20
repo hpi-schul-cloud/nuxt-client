@@ -24,13 +24,14 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomGrid } from "@feature-room";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import { InfoAlert } from "@ui-alert";
+import { Mock } from "vitest";
 
 vi.mock("vue-router");
-const useRouteMock = useRoute as vi.Mock;
-const useRouterMock = useRouter as vi.Mock;
+const useRouteMock = useRoute as Mock;
+const useRouterMock = useRouter as Mock;
 
 vi.mock("@data-room/Rooms.state");
-const useRoomsStateMock = useRoomsState as vi.Mock;
+const useRoomsStateMock = useRoomsState as Mock;
 
 describe("RoomsPage", () => {
 	beforeEach(() => {

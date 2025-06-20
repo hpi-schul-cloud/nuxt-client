@@ -29,6 +29,7 @@ import { Ref, ref } from "vue";
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { Mock } from "vitest";
 
 vi.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
@@ -53,14 +54,14 @@ type RoomAuthorizationRefs = Partial<
 
 describe("AddMembers", () => {
 	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
-	let pauseMock: vi.Mock;
-	let unpauseMock: vi.Mock;
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
-		(useFocusTrap as vi.Mock).mockReturnValue({
+		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
 			unpause: unpauseMock,
 		});

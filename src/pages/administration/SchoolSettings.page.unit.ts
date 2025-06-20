@@ -21,10 +21,11 @@ import { shallowMount } from "@vue/test-utils";
 import { nextTick, reactive } from "vue";
 import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
 import SchoolSettings from "./SchoolSettings.page.vue";
+import { Mock } from "vitest";
 
 vi.mock("vue-router");
 
-const useRouteMock = <vi.Mock<Partial<RouteLocationNormalizedLoaded>>>useRoute;
+const useRouteMock = <Mock<Partial<RouteLocationNormalizedLoaded>>>useRoute;
 
 vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",

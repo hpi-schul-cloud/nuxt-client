@@ -16,8 +16,9 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createMock } from "@golevelup/ts-vitest";
 import { Router, useRouter } from "vue-router";
 import { VListItem, VMenu } from "vuetify/lib/components/index";
+import { Mock } from "vitest";
 vi.mock("vue-router");
-const useRouterMock = <vi.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 type BoardData = {
 	id: string;

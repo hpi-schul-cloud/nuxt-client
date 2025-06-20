@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	ContentElementType,
@@ -38,7 +39,7 @@ import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 vi.mock("vue-i18n");
-(useI18n as vi.Mock).mockReturnValue({ t: (key: string) => key });
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 vi.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(useBoardApi);
@@ -77,7 +78,7 @@ describe("CardStore", () => {
 	let mockedSharedLastCreatedElementActions: DeepMocked<
 		ReturnType<typeof useSharedLastCreatedElement>
 	>;
-	let setEditModeId: vi.Mock;
+	let setEditModeId: Mock;
 	let editModeId: Ref<string | undefined>;
 	let mockedBoardFocusCalls: DeepMocked<
 		ReturnType<typeof useBoardFocusHandler>

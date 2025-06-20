@@ -44,6 +44,7 @@ import {
 	SelectBoardLayoutDialog,
 } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
+import { Mock } from "vitest";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -64,7 +65,7 @@ vi.mocked(useConfirmationDialog);
 describe("@pages/RoomsDetails.page.vue", () => {
 	let useRoomsStateMock: DeepMocked<ReturnType<typeof useRoomsState>>;
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
-	let askConfirmationMock: vi.Mock;
+	let askConfirmationMock: Mock;
 
 	beforeEach(() => {
 		setupStores({

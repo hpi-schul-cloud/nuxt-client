@@ -4,6 +4,7 @@ In order to get the correct type, we must implement a custom type-wrapper that a
 See Pinia's documentation: https://pinia.vuejs.org/cookbook/testing.html#Mocking-the-returned-value-of-an-action;
 */
 import type { Store, StoreDefinition } from "pinia";
+import { Mock } from "vitest";
 
 export type MockedStore<TStoreDef extends () => unknown> =
 	TStoreDef extends StoreDefinition<
@@ -20,7 +21,7 @@ export type MockedStore<TStoreDef extends () => unknown> =
 					[K in keyof Actions]: Actions[K] extends (
 						...args: infer Args
 					) => infer ReturnT
-						? vi.Mock<ReturnT, Args>
+						? Mock<ReturnT, Args>
 						: Actions[K];
 				}
 			>

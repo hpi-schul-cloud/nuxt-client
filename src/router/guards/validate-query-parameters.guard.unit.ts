@@ -3,7 +3,7 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 import { validateQueryParameters } from "@/router/guards/validate-query-parameters.guard";
 import { isMongoId } from "@/utils/validation";
-import Mock = vi.Mock;
+import { Mock } from "vitest";
 
 vi.mock("@/store", () => ({
 	applicationErrorModule: {

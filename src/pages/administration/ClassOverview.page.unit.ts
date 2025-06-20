@@ -25,13 +25,14 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDataTableServer } from "vuetify/lib/components/index";
 import ClassOverview from "./ClassOverview.page.vue";
+import { Mock } from "vitest";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
 	useRouter: vi.fn(),
 }));
-const useRouteMock = <vi.Mock>useRoute;
-const useRouterMock = <vi.Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
+const useRouterMock = <Mock>useRouter;
 
 vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",

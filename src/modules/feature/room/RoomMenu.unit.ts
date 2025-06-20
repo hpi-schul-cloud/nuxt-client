@@ -23,6 +23,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { ConfigResponse } from "@/serverApi/v3";
+import { Mock } from "vitest";
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
@@ -32,7 +33,7 @@ vi.mocked(useDeleteConfirmationDialog);
 
 describe("@feature-room/RoomMenu", () => {
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
-	let askDeleteConfirmationMock: vi.Mock;
+	let askDeleteConfirmationMock: Mock;
 
 	beforeEach(() => {
 		roomPermissions = {
