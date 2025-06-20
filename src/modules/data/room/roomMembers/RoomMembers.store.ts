@@ -171,7 +171,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			const response =
 				await schoolApi.schoolControllerGetSchoolListForExternalInvite();
 
-			schools.value = response.data.filter(
+			schools.value = response.data.data.filter(
 				(school) => school.id !== ownSchool.id
 			);
 			schools.value.unshift(ownSchool);

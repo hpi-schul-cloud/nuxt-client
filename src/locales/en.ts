@@ -2034,6 +2034,8 @@ export default {
 		"Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update":
 		"Updating the invitation link has failed.",
+	"pages.rooms.invitationlinks.error.load":
+		"The invitation list could not be loaded.",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
