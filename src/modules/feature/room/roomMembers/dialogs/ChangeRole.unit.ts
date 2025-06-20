@@ -16,7 +16,7 @@ import { RoomMember, useRoomMembersStore } from "@data-room";
 import { nextTick } from "vue";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import {
 	meResponseFactory,
 	mockedPiniaStoreTyping,
@@ -30,12 +30,13 @@ import { authModule, schoolsModule } from "@/store";
 import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
 import { createPinia, setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
+import { Mock } from "vitest";
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("ChangeRole.vue", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -90,7 +91,7 @@ describe("ChangeRole.vue", () => {
 		roomMembersStore.selectedIds = membersForRoleChange.map(
 			(member) => member.userId
 		);
-		roomMembersStore.isRoomOwner = jest
+		roomMembersStore.isRoomOwner = vi
 			.fn()
 			.mockReturnValue(options.isRoomOwner ?? false);
 
@@ -107,7 +108,7 @@ describe("ChangeRole.vue", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when the component is rendered", () => {

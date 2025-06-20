@@ -3,9 +3,9 @@ import * as serverApi from "@/serverApi/v3/api";
 import { PublicSystemResponse, SystemsApiInterface } from "@/serverApi/v3/api";
 import { mockApiResponse } from "@@/tests/test-utils";
 import { useSystemApi } from "@data-system";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@/components/error-handling/ErrorHandler.composable");
 
 describe("SystemApi.composable", () => {
 	let systemApi: DeepMocked<SystemsApiInterface>;
@@ -15,12 +15,12 @@ describe("SystemApi.composable", () => {
 		systemApi = createMock<SystemsApiInterface>();
 		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>();
 
-		jest.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemApi);
-		jest.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
+		vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemApi);
+		vi.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getSystem", () => {

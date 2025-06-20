@@ -5,7 +5,7 @@ import {
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
 
-jest.mock("@/utils/pageTitle", () => ({
+vi.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 

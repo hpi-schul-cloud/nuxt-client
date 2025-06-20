@@ -14,7 +14,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import { VAutocomplete, VBtn } from "vuetify/lib/components/index";
@@ -22,12 +22,13 @@ import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 
 describe("ExternalToolConfigurator", () => {
-	jest
-		.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
-		.mockReturnValue({
-			...useExternalToolUtilsComposable.useExternalToolMappings(),
-			getBusinessErrorTranslationKey: () => "",
-		});
+	vi.spyOn(
+		useExternalToolUtilsComposable,
+		"useExternalToolMappings"
+	).mockReturnValue({
+		...useExternalToolUtilsComposable.useExternalToolMappings(),
+		getBusinessErrorTranslationKey: () => "",
+	});
 
 	const getWrapper = (
 		props: ComponentProps<typeof ExternalToolConfigurator>
@@ -50,7 +51,7 @@ describe("ExternalToolConfigurator", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("Search box", () => {

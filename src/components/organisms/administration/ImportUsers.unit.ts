@@ -209,7 +209,7 @@ describe("@/components/molecules/importUsers", () => {
 		const setup = () => {
 			const wrapper = getWrapper(mockData);
 
-			const getDataFromApiSpy = jest.spyOn(wrapper.vm, "getDataFromApi");
+			const getDataFromApiSpy = vi.spyOn(wrapper.vm, "getDataFromApi");
 
 			return {
 				wrapper,
@@ -218,7 +218,7 @@ describe("@/components/molecules/importUsers", () => {
 		};
 
 		afterEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		it("should set search data properties when search first name changes", async () => {
@@ -329,7 +329,7 @@ describe("@/components/molecules/importUsers", () => {
 	});
 
 	describe("should sort by column", () => {
-		const getDataFromApiSpy = jest.fn();
+		const getDataFromApiSpy = vi.fn();
 
 		const setup = (mockData: ImportUsersInstance["$data"]) => {
 			const wrapper = getWrapper(mockData);

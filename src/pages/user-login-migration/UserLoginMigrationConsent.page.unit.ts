@@ -15,13 +15,13 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
 describe("UserLoginMigrationConsent", () => {
-	let systemsModule: jest.Mocked<SystemsModule>;
-	let userLoginMigrationModule: jest.Mocked<UserLoginMigrationModule>;
+	let systemsModule: vi.Mocked<SystemsModule>;
+	let userLoginMigrationModule: vi.Mocked<UserLoginMigrationModule>;
 
 	const setup = async (userLoginMigration?: Partial<UserLoginMigration>) => {
 		const systemsMock: System[] = [

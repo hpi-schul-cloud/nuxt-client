@@ -60,9 +60,9 @@ describe("filePaths module", () => {
 				DOCUMENT_BASE_DIR: mockURL,
 			});
 			envConfigModule.setEnvs(envs);
-			const spyBaseDir = jest.fn();
-			const spySpecificFiles = jest.fn();
-			const spyGlobalFiles = jest.fn();
+			const spyBaseDir = vi.fn();
+			const spySpecificFiles = vi.fn();
+			const spyGlobalFiles = vi.fn();
 
 			filePathsModule.setDocumentBaseDir = spyBaseDir;
 			filePathsModule.setSpecificFiles = spySpecificFiles;

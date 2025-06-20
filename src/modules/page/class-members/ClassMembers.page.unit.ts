@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import ClassMembersPage from "./ClassMembers.page.vue";
 import { Group, useGroupState } from "@data-group";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { groupFactory } from "@@/tests/test-utils/factory";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -14,10 +14,11 @@ import {
 } from "@@/tests/test-utils/setup";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
-jest.mock("@data-group", () => {
+vi.mock("@data-group", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@data-group")>();
 	return {
-		...jest.requireActual("@data-group"),
-		useGroupState: jest.fn(),
+		...actual,
+		useGroupState: vi.fn(),
 	};
 });
 
@@ -55,11 +56,11 @@ describe("@pages/ClassMembers.page.vue", () => {
 	beforeEach(() => {
 		useGroupStateMock = createMock<ReturnType<typeof useGroupState>>();
 
-		jest.mocked(useGroupState).mockReturnValue(useGroupStateMock);
+		vi.mocked(useGroupState).mockReturnValue(useGroupStateMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("title", () => {

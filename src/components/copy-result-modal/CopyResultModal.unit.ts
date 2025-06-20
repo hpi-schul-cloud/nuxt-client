@@ -71,7 +71,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("basic functions", () => {

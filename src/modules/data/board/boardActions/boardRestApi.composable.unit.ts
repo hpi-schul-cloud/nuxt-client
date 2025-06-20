@@ -20,7 +20,7 @@ import {
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardStore, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedEditMode } from "@util-board";
 import { setActivePinia } from "pinia";
@@ -29,28 +29,29 @@ import { Router, useRouter } from "vue-router";
 import { BoardLayout } from "@/serverApi/v3/api";
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
+import { Mock } from "vitest";
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+vi.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-jest.mock("../BoardApi.composable");
-const mockedUseBoardApi = jest.mocked(useBoardApi);
+vi.mock("../BoardApi.composable");
+const mockedUseBoardApi = vi.mocked(useBoardApi);
 
-jest.mock("@util-board/editMode.composable");
-const mockedSharedEditMode = jest.mocked(useSharedEditMode);
+vi.mock("@util-board/editMode.composable");
+const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("../socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("../socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
+		...vi.importActual("vue-i18n"),
 		useI18n: () => {
 			return {
 				t: (key: string) => key,
@@ -66,8 +67,8 @@ describe("boardRestApi", () => {
 		ReturnType<typeof useSocketConnection>
 	>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	let setEditModeId: jest.Mock;
-	const setErrorMock = jest.fn();
+	let setEditModeId: Mock;
+	const setErrorMock = vi.fn();
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -86,7 +87,7 @@ describe("boardRestApi", () => {
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-		setEditModeId = jest.fn();
+		setEditModeId = vi.fn();
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
@@ -213,7 +214,7 @@ describe("boardRestApi", () => {
 
 	describe("@deleteBoardRequest", () => {
 		it("should call 'deleteBoardSuccess'", async () => {
-			const deleteBoardMock = jest.fn();
+			const deleteBoardMock = vi.fn();
 			const { boardStore } = setup();
 			const { deleteBoardRequest } = useBoardRestApi();
 			const boardId = boardStore.board!.id;
@@ -229,7 +230,7 @@ describe("boardRestApi", () => {
 			});
 		});
 		it("should call handleError if the API call fails", async () => {
-			const deleteBoardMock = jest.fn().mockRejectedValue({});
+			const deleteBoardMock = vi.fn().mockRejectedValue({});
 			const { boardStore } = setup();
 			const { deleteBoardRequest } = useBoardRestApi();
 			const boardId = boardStore.board!.id;
@@ -766,7 +767,7 @@ describe("boardRestApi", () => {
 			const { updateBoardTitleRequest } = useBoardRestApi();
 
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
-			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
+			mockedErrorHandler.notifyWithTemplate.mockReturnValue(vi.fn());
 
 			await updateBoardTitleRequest({
 				boardId: "boardId",
@@ -782,7 +783,7 @@ describe("boardRestApi", () => {
 			const { updateBoardTitleRequest } = useBoardRestApi();
 
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
-			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
+			mockedErrorHandler.notifyWithTemplate.mockReturnValue(vi.fn());
 
 			await updateBoardTitleRequest({
 				boardId: "boardId",

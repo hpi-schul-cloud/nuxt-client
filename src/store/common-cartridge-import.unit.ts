@@ -1,12 +1,12 @@
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { DeepMocked, createMock } from "@golevelup/ts-vitest";
 import CommonCartridgeImportModule from "./common-cartridge-import";
 import {
 	CommonCartridgeApiInterface,
 	CommonCartridgeApiFactory,
 } from "@/commonCartridgeApi/v3";
 
-jest.mock("@/commonCartridgeApi/v3/api", () => ({
-	CommonCartridgeApiFactory: jest.fn(),
+vi.mock("@/commonCartridgeApi/v3/api", () => ({
+	CommonCartridgeApiFactory: vi.fn(),
 }));
 
 describe("CommonCartridgeImportModule", () => {
@@ -17,13 +17,13 @@ describe("CommonCartridgeImportModule", () => {
 		sut = new CommonCartridgeImportModule({});
 		commonCartridgeApiMock = createMock<CommonCartridgeApiInterface>();
 
-		jest
-			.spyOn(sut, "commonCartridgeApi", "get")
-			.mockReturnValue(commonCartridgeApiMock);
+		vi.spyOn(sut, "commonCartridgeApi", "get").mockReturnValue(
+			commonCartridgeApiMock
+		);
 	});
 
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getters", () => {
@@ -50,7 +50,7 @@ describe("CommonCartridgeImportModule", () => {
 			const realMock = createMock<CommonCartridgeApiInterface>();
 
 			(
-				CommonCartridgeApiFactory as jest.MockedFunction<
+				CommonCartridgeApiFactory as vi.MockedFunction<
 					typeof CommonCartridgeApiFactory
 				>
 			).mockReturnValue(realMock);

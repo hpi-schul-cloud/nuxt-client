@@ -7,20 +7,21 @@ import {
 import ConfirmationDialog from "./ConfirmationDialog.vue";
 import { VCard, VDialog } from "vuetify/lib/components/index";
 import { VueWrapper } from "@vue/test-utils";
+import { Mock } from "vitest";
 
-jest.mock("./Confirmation.composable");
-const useInternalConfirmationDialogMock = jest.mocked(
+vi.mock("./Confirmation.composable");
+const useInternalConfirmationDialogMock = vi.mocked(
 	useInternalConfirmationDialog
 );
 
 describe("ConfirmationDialog", () => {
-	let cancelMock: jest.Mock;
-	let confirmMock: jest.Mock;
+	let cancelMock: Mock;
+	let confirmMock: Mock;
 	let wrapper: VueWrapper<InstanceType<typeof ConfirmationDialog>>;
 
 	beforeEach(() => {
-		cancelMock = jest.fn();
-		confirmMock = jest.fn();
+		cancelMock = vi.fn();
+		confirmMock = vi.fn();
 	});
 
 	const setup = (options?: {
@@ -41,7 +42,7 @@ describe("ConfirmationDialog", () => {
 			isDialogOpen: ref(true),
 			confirm: confirmMock,
 			cancel: cancelMock,
-			askInternal: jest.fn(),
+			askInternal: vi.fn(),
 		});
 
 		wrapper = mount(ConfirmationDialog, {

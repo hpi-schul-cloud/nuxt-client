@@ -20,19 +20,17 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
 describe("AdminMigrationSection", () => {
-	let schoolsModule: jest.Mocked<SchoolsModule>;
-	let userLoginMigrationModule: jest.Mocked<UserLoginMigrationModule>;
-	let envConfigModule: jest.Mocked<EnvConfigModule>;
+	let schoolsModule: vi.Mocked<SchoolsModule>;
+	let userLoginMigrationModule: vi.Mocked<UserLoginMigrationModule>;
+	let envConfigModule: vi.Mocked<EnvConfigModule>;
 
-	jest
-		.spyOn(
-			useUserLoginMigrationMappingsComposable,
-			"useUserLoginMigrationMappings"
-		)
-		.mockReturnValue({
-			...useUserLoginMigrationMappingsComposable.useUserLoginMigrationMappings(),
-			getBusinessErrorTranslationKey: () => "",
-		});
+	vi.spyOn(
+		useUserLoginMigrationMappingsComposable,
+		"useUserLoginMigrationMappings"
+	).mockReturnValue({
+		...useUserLoginMigrationMappingsComposable.useUserLoginMigrationMappings(),
+		getBusinessErrorTranslationKey: () => "",
+	});
 
 	const setup = (
 		schoolGetters: Partial<SchoolsModule> = {},
@@ -124,8 +122,8 @@ describe("AdminMigrationSection", () => {
 
 	describe("Migration Control Section", () => {
 		it("should render migration control section when grace period is not expired", () => {
-			jest.useFakeTimers();
-			jest.setSystemTime(new Date(2023, 1, 3));
+			vi.useFakeTimers();
+			vi.setSystemTime(new Date(2023, 1, 3));
 			const { wrapper } = setup(
 				{},
 				{
@@ -159,8 +157,8 @@ describe("AdminMigrationSection", () => {
 					},
 				}
 			);
-			jest.useFakeTimers();
-			jest.setSystemTime(new Date(2023, 1, 3));
+			vi.useFakeTimers();
+			vi.setSystemTime(new Date(2023, 1, 3));
 
 			expect(
 				wrapper.find('[data-testId="migration-control-section"]').exists()
@@ -351,8 +349,8 @@ describe("AdminMigrationSection", () => {
 					},
 				}
 			);
-			jest.useFakeTimers();
-			jest.setSystemTime(new Date(2023, 1, 3));
+			vi.useFakeTimers();
+			vi.setSystemTime(new Date(2023, 1, 3));
 
 			const buttonComponent = wrapper.find(
 				"[data-testId=migration-start-button]"
@@ -630,8 +628,8 @@ describe("AdminMigrationSection", () => {
 
 	describe("Date paragraph", () => {
 		it("should exist when migration has been completed", async () => {
-			jest.useFakeTimers();
-			jest.setSystemTime(new Date(2023, 1, 2));
+			vi.useFakeTimers();
+			vi.setSystemTime(new Date(2023, 1, 2));
 			const { wrapper } = setup(
 				{
 					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
@@ -663,8 +661,8 @@ describe("AdminMigrationSection", () => {
 		});
 
 		it("should show finalFinish text when migration grace period has expired", async () => {
-			jest.useFakeTimers();
-			jest.setSystemTime(new Date(2023, 1, 4));
+			vi.useFakeTimers();
+			vi.setSystemTime(new Date(2023, 1, 4));
 			const { wrapper } = setup(
 				{
 					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },

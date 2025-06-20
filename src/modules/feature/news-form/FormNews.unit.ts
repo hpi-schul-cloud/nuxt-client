@@ -135,7 +135,7 @@ describe("FormNews", () => {
 		});
 
 		it("shows validation error on empty title", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const notifierMock = vi.spyOn(notifierModule, "show");
 
 			const { wrapper } = setup({ ...testNews, title: "" });
 
@@ -145,7 +145,7 @@ describe("FormNews", () => {
 		});
 
 		it("shows validation error on empty content", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const notifierMock = vi.spyOn(notifierModule, "show");
 
 			const { wrapper } = setup({ ...testNews, content: "" });
 

@@ -6,12 +6,12 @@ import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
 describe("TaskOverview", () => {
-	const fetchAllTasksSpy = jest.fn();
+	const fetchAllTasksSpy = vi.fn();
 	const getWrapper = (userRole: string) => {
 		return shallowMount(TaskOverview, {
 			global: {
@@ -29,7 +29,7 @@ describe("TaskOverview", () => {
 	};
 
 	beforeEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 		setupStores({
 			envConfigModule: EnvConfigModule,
 		});

@@ -70,7 +70,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 	});
 
 	it("should set 'flagged' property true when flag-button clicked", async () => {
-		const saveFlagMock = jest.spyOn(importUsersModule, "saveFlag");
+		const saveFlagMock = vi.spyOn(importUsersModule, "saveFlag");
 		saveFlagMock.mockResolvedValue({ ...testProps.editedItem, flagged: true });
 
 		const wrapper = getWrapper(testProps);
@@ -117,7 +117,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 			roleNames: [UserMatchResponseRoleNamesEnum.Teacher],
 		};
 
-		const saveMatchMock = jest.spyOn(importUsersModule, "saveMatch");
+		const saveMatchMock = vi.spyOn(importUsersModule, "saveMatch");
 		saveMatchMock.mockResolvedValue({ ...testProps.editedItem, match });
 
 		const wrapper = getWrapper(testProps);
@@ -162,7 +162,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 			ldapSource: "LDAP",
 		});
 
-		const deleteMatchMock = jest.spyOn(importUsersModule, "deleteMatch");
+		const deleteMatchMock = vi.spyOn(importUsersModule, "deleteMatch");
 		deleteMatchMock.mockImplementation(async () => {
 			return Promise.resolve(importUser);
 		});

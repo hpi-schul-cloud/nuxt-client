@@ -15,10 +15,10 @@ import {
 } from "./LightBox.composable";
 import LightBox from "./LightBox.vue";
 
-jest.mock("./LightBox.composable");
-jest.mock("@/utils/fileHelper");
+vi.mock("./LightBox.composable");
+vi.mock("@/utils/fileHelper");
 
-const mockedUseLightBox = jest.mocked(useLightBox);
+const mockedUseLightBox = vi.mocked(useLightBox);
 
 describe("LightBox", () => {
 	const setup = (props: {
@@ -29,7 +29,7 @@ describe("LightBox", () => {
 		alt?: string;
 		name?: string;
 	}) => {
-		const close = jest.fn();
+		const close = vi.fn();
 		const isLightBoxOpen = ref(props.isLightBoxOpen ?? true);
 		const lightBoxOptions = ref<LightBoxOptions>({
 			type: props.type ?? LightBoxContentType.IMAGE,
@@ -39,13 +39,13 @@ describe("LightBox", () => {
 			alt: props.alt ?? "test-alt",
 		});
 
-		const mockedDownloadFile = jest.mocked(downloadFile).mockReturnValueOnce();
+		const mockedDownloadFile = vi.mocked(downloadFile).mockReturnValueOnce();
 
 		mockedUseLightBox.mockReturnValue({
 			close: close,
 			isLightBoxOpen,
 			lightBoxOptions,
-			open: jest.fn(),
+			open: vi.fn(),
 		});
 
 		const wrapper = mount(LightBox, {

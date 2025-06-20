@@ -2,19 +2,19 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mdiPause, mdiPlay } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { useMediaControls } from "@vueuse/core";
 import { nextTick, ref } from "vue";
 import AudioPlayer from "./AudioPlayer.vue";
 
-jest.mock("@vueuse/core", () => {
-	const original = jest.requireActual("@vueuse/core");
+vi.mock("@vueuse/core", () => {
+	const original = vi.importActual("@vueuse/core");
 
 	return {
 		...original,
-		useMediaControls: jest.fn(),
+		useMediaControls: vi.fn(),
 	};
 });
 
@@ -28,7 +28,7 @@ describe("AudioPlayer", () => {
 			const durationRef = ref(50);
 			const rateRef = ref(1);
 			const playingRef = ref(false);
-			const onSourceErrorMock = jest.fn();
+			const onSourceErrorMock = vi.fn();
 
 			const useMediaControlsMock = createMock<
 				ReturnType<typeof useMediaControls>
@@ -39,7 +39,7 @@ describe("AudioPlayer", () => {
 				rate: rateRef,
 				onSourceError: onSourceErrorMock,
 			});
-			jest.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
+			vi.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
 
 			const wrapper = mount(AudioPlayer, {
 				props,
@@ -179,7 +179,7 @@ describe("AudioPlayer", () => {
 				duration: durationRef,
 				rate: rateRef,
 			});
-			jest.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
+			vi.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
 
 			const wrapper = mount(AudioPlayer, {
 				props,

@@ -3,7 +3,7 @@ import { useViewportOffsetTop } from "./ViewportOffsetCalculation.composable";
 
 describe("ViewportOffsetCalculation.composable", () => {
 	beforeEach(() => {
-		jest.spyOn(window, "getComputedStyle").mockImplementation((element) => {
+		vi.spyOn(window, "getComputedStyle").mockImplementation((element) => {
 			if (element === document.documentElement) {
 				return {
 					getPropertyValue: (property: string) => {
@@ -46,7 +46,7 @@ describe("ViewportOffsetCalculation.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 		document.body.innerHTML = "";
 	});
 

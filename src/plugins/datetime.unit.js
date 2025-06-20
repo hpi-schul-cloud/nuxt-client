@@ -213,7 +213,7 @@ describe("@/plugins/datetime", () => {
 
 	const mockApp = {
 		$cookies: {
-			get: jest
+			get: vi
 				.fn()
 				.mockReturnValueOnce(null)
 				.mockReturnValueOnce(TEST_USER_TIMEZONE)

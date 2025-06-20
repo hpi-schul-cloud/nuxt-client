@@ -4,7 +4,7 @@ import {
 	mediaSchoolLicenseResponseFactory,
 	mockApiResponse,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";
 
 describe("useSchoolLicenseApi", () => {
@@ -13,13 +13,13 @@ describe("useSchoolLicenseApi", () => {
 	beforeEach(() => {
 		schoolLicenseApi = createMock<serverApi.SchoolLicenseApiInterface>();
 
-		jest
-			.spyOn(serverApi, "SchoolLicenseApiFactory")
-			.mockReturnValue(schoolLicenseApi);
+		vi.spyOn(serverApi, "SchoolLicenseApiFactory").mockReturnValue(
+			schoolLicenseApi
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("updateSchoolLicenses", () => {

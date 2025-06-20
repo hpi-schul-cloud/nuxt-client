@@ -8,7 +8,7 @@ import { useErrorNotification } from "./error-notification.composable";
 
 describe("useErrorNotification.composable", () => {
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setupComposable = () => {

@@ -17,30 +17,31 @@ import {
 	EndCourseSyncDialog,
 	StartExistingCourseSyncDialog,
 } from "@feature-course-sync";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VDataTableServer } from "vuetify/lib/components/index";
 import RoomsOverview from "./RoomsOverview.page.vue";
+import { Mock } from "vitest";
 
-jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
 
-jest.mock("@data-room", () => {
+vi.mock("@data-room", () => {
 	return {
-		...jest.requireActual("@data-room"),
-		useCourseList: jest.fn(),
-		useCourseApi: jest.fn(),
+		...vi.importActual("@data-room"),
+		useCourseList: vi.fn(),
+		useCourseApi: vi.fn(),
 	};
 });
 
-const useRouteMock = <jest.Mock>useRoute;
-const useRouterMock = <jest.Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
+const useRouterMock = <Mock>useRouter;
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
@@ -112,16 +113,16 @@ describe("RoomsOverview", () => {
 		});
 
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>({
-			startSynchronization: jest.fn(),
-			stopSynchronization: jest.fn(),
+			startSynchronization: vi.fn(),
+			stopSynchronization: vi.fn(),
 		});
 
-		jest.mocked(useCourseList).mockReturnValue(useCourseListMock);
-		jest.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
+		vi.mocked(useCourseList).mockReturnValue(useCourseListMock);
+		vi.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("general", () => {

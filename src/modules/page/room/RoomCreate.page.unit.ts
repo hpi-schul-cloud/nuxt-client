@@ -12,15 +12,15 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 import { flushPromises } from "@vue/test-utils";
 
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn().mockReturnValue({
-		push: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn().mockReturnValue({
+		push: vi.fn(),
 	}),
 }));
 
-jest.mock("@data-room/RoomCreate.state.ts", () => ({
-	useRoomCreateState: jest.fn().mockReturnValue({
-		createRoom: jest.fn().mockResolvedValue({
+vi.mock("@data-room/RoomCreate.state.ts", () => ({
+	useRoomCreateState: vi.fn().mockReturnValue({
+		createRoom: vi.fn().mockResolvedValue({
 			id: "123",
 			name: "test",
 			color: "blue",
@@ -32,7 +32,7 @@ jest.mock("@data-room/RoomCreate.state.ts", () => ({
 	}),
 }));
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 

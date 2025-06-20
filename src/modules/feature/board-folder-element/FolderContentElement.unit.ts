@@ -5,7 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useContentElementState } from "@data-board";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import {
@@ -16,16 +16,17 @@ import {
 import { flushPromises, mount } from "@vue/test-utils";
 import { Router, useRouter } from "vue-router";
 import FolderContentElement from "./FolderContentElement.vue";
+import { Mock } from "vitest";
 
-jest.mock("@data-board", () => ({
-	useBoardFocusHandler: jest.fn(),
-	useContentElementState: jest.fn(() => ({
+vi.mock("@data-board", () => ({
+	useBoardFocusHandler: vi.fn(),
+	useContentElementState: vi.fn(() => ({
 		modelValue: { value: { title: "test" } },
 	})),
 }));
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
 describe("FolderContentElement", () => {
 	const mockElement: FileFolderElement = {
@@ -67,7 +68,7 @@ describe("FolderContentElement", () => {
 			},
 		});
 
-		(useContentElementState as jest.Mock).mockReturnValueOnce({
+		(useContentElementState as Mock).mockReturnValue({
 			modelValue: {
 				value: (options.element || mockElement).content.title || "",
 			},

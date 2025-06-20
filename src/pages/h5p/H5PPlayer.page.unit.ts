@@ -15,7 +15,7 @@ import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import H5pPlayerPage from "./H5PPlayer.page.vue";
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRoute: () => ({ params: { id: "test-id" }, query: {} }),
 }));
 

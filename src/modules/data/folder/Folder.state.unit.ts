@@ -5,15 +5,14 @@ import {
 	fileFolderElementResponseFactory,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
-import { createMock } from "@golevelup/ts-jest";
-import { describe, expect, it } from "@jest/globals";
+import { createMock } from "@golevelup/ts-vitest";
 import { AxiosPromise } from "axios";
 import { useFolderState } from "./Folder.state";
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+		...vi.importActual("vue-i18n"),
+		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 
@@ -35,7 +34,7 @@ describe("useFolderState", () => {
 			} as unknown as AxiosPromise
 		);
 
-		jest.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
+		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
 
 		return {
 			testId: folderElement.id,

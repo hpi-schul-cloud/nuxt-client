@@ -5,7 +5,7 @@ import {
 	axiosErrorFactory,
 } from "@@/tests/test-utils";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { AxiosResponse } from "axios";
 import { setupCollaborativeTextEditorNotifier } from "../test-utils/collaborativeTextEditorNotifier";
 import {
@@ -13,14 +13,14 @@ import {
 	useCollaborativeTextEditorApi,
 } from "./CollaborativeTextEditorApi.composable";
 
-jest.mock("./CollaborativeTextEditorNotifications.composable");
+vi.mock("./CollaborativeTextEditorNotifications.composable");
 
-jest.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = jest.mocked(
+vi.mock("@/utils/api");
+const mockedMapAxiosErrorToResponseError = vi.mocked(
 	mapAxiosErrorToResponseError
 );
 
-jest.mock<typeof import("@/utils/create-global-state")>(
+vi.mock<typeof import("@/utils/create-global-state")>(
 	"@/utils/create-global-state",
 	() => ({
 		createTestableGlobaleState: (composable) => composable,
@@ -44,7 +44,7 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 
 describe("CollaborativeTextEditorApi Composable", () => {
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getUrl", () => {
@@ -62,9 +62,10 @@ describe("CollaborativeTextEditorApi Composable", () => {
 
 				const collaborativeTextEditorApi =
 					createMock<serverApi.CollaborativeTextEditorApiInterface>();
-				jest
-					.spyOn(serverApi, "CollaborativeTextEditorApiFactory")
-					.mockReturnValue(collaborativeTextEditorApi);
+				vi.spyOn(
+					serverApi,
+					"CollaborativeTextEditorApiFactory"
+				).mockReturnValue(collaborativeTextEditorApi);
 				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockResolvedValueOnce(
 					response
 				);
@@ -114,9 +115,10 @@ describe("CollaborativeTextEditorApi Composable", () => {
 
 				const collaborativeTextEditorApi =
 					createMock<serverApi.CollaborativeTextEditorApiInterface>();
-				jest
-					.spyOn(serverApi, "CollaborativeTextEditorApiFactory")
-					.mockReturnValue(collaborativeTextEditorApi);
+				vi.spyOn(
+					serverApi,
+					"CollaborativeTextEditorApiFactory"
+				).mockReturnValue(collaborativeTextEditorApi);
 				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockRejectedValue(
 					responseError
 				);

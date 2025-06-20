@@ -40,8 +40,8 @@ describe("@/components/share/ShareModal", () => {
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
 			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
-			createShareUrl: jest.fn(),
-			resetShareFlow: jest.fn(),
+			createShareUrl: vi.fn(),
+			resetShareFlow: vi.fn(),
 		});
 
 		notifierModuleMock = createModuleMocks(NotifierModule);

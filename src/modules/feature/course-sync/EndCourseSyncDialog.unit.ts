@@ -6,11 +6,11 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useCourseApi } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import EndCourseSyncDialog from "./EndCourseSyncDialog.vue";
 
-jest.mock("@data-room");
+vi.mock("@data-room");
 
 describe("EndCourseSyncDialog", () => {
 	let courseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
@@ -42,11 +42,11 @@ describe("EndCourseSyncDialog", () => {
 	beforeEach(() => {
 		courseApiMock = createMock<ReturnType<typeof useCourseApi>>();
 
-		jest.mocked(useCourseApi).mockReturnValue(courseApiMock);
+		vi.mocked(useCourseApi).mockReturnValue(courseApiMock);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when clicking on cancel", () => {
