@@ -16,7 +16,7 @@
 		</EmptyState>
 	</template>
 	<template v-else>
-		<div class="mt-8">
+		<div class="mt-2">
 			<DataTable
 				:table-headers="headers"
 				:items="fileRecordItems"
