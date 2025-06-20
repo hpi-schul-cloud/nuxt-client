@@ -2,7 +2,7 @@ import { ComponentPublicInstance, nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { NamedValue } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
-import { VCardText } from "vuetify/components";
+import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
 import {
 	ComponentMountingOptions,
 	flushPromises,
@@ -541,14 +541,7 @@ describe("User Migration / Index", () => {
 
 	describe("clear auto matches", () => {
 		describe("when in step migration_importUsers", () => {
-			beforeEach(() => {
-				const dialogTeleportDiv = document.createElement("div");
-				dialogTeleportDiv.className = "v-overlay-container";
-				document.body.appendChild(dialogTeleportDiv);
-			});
-
 			afterEach(() => {
-				document.body.innerHTML = "";
 				jest.clearAllMocks();
 			});
 
@@ -681,6 +674,158 @@ describe("User Migration / Index", () => {
 				expect(importUsersModule.clearAllAutoMatches).toHaveBeenCalled();
 				expect(importUsersStub.methods.reloadData).toHaveBeenCalled();
 				expect(dialog.vm.isOpen).toBeFalsy();
+			});
+		});
+	});
+
+	describe("when loading for populating import users", () => {
+		describe("when the loading has ended", () => {
+			const setup = async () => {
+				const wrapper = getWrapper();
+
+				importUsersModule.setTotal(10);
+				importUsersModule.setTotalUnmatched(5);
+				importUsersModule.setTotalMatched(5);
+
+				wrapper.vm.isLoading = false;
+				await flushPromises();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should not disable the start user migration button", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent<VBtn>(
+					'[data-testid="start_user_migration"]'
+				);
+
+				expect(button.vm.disabled).toBe(false);
+			});
+
+			describe("when the migration has started", () => {
+				const migrationStartedSetup = async () => {
+					const { wrapper } = await setup();
+
+					schoolsModule.setSchool(
+						schoolFactory.build({
+							inUserMigration: true,
+							inMaintenance: true,
+						})
+					);
+					await flushPromises();
+
+					return {
+						wrapper,
+					};
+				};
+
+				it("should not disable the next step button", async () => {
+					const { wrapper } = await migrationStartedSetup();
+
+					const button = wrapper.findComponent<VBtn>(
+						'[data-testid="migration_tutorial_next"]'
+					);
+
+					expect(button.vm.disabled).toBe(false);
+				});
+
+				it("should not show the loading circle in the next step button", async () => {
+					const { wrapper } = await migrationStartedSetup();
+
+					const loadingCircle = wrapper
+						.findComponent('[data-testid="migration_tutorial_next"]')
+						.findComponent(VProgressCircular);
+
+					expect(loadingCircle.exists()).toBe(false);
+				});
+
+				it("should show the next step text in the next step button", async () => {
+					const { wrapper } = await migrationStartedSetup();
+
+					const button = wrapper.findComponent<VBtn>(
+						'[data-testid="migration_tutorial_next"]'
+					);
+
+					expect(button.text()).toBe("pages.administration.migration.next");
+				});
+			});
+		});
+
+		describe("when the loading has not ended", () => {
+			const setup = async () => {
+				const wrapper = getWrapper();
+
+				importUsersModule.setTotal(0);
+				importUsersModule.setTotalUnmatched(0);
+				importUsersModule.setTotalMatched(0);
+
+				wrapper.vm.isLoading = true;
+				await flushPromises();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should disable the start user migration button", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent<VBtn>(
+					'[data-testid="start_user_migration"]'
+				);
+
+				expect(button.vm.disabled).toBe(true);
+			});
+
+			describe("when the migration has started", () => {
+				const migrationStartedSetup = async () => {
+					const { wrapper } = await setup();
+
+					schoolsModule.setSchool(
+						schoolFactory.build({
+							inUserMigration: true,
+							inMaintenance: true,
+						})
+					);
+					await flushPromises();
+
+					return {
+						wrapper,
+					};
+				};
+
+				it("should disable the next step button", async () => {
+					const { wrapper } = await migrationStartedSetup();
+
+					const button = wrapper.findComponent<VBtn>(
+						'[data-testid="migration_tutorial_next"]'
+					);
+
+					expect(button.vm.disabled).toBe(true);
+				});
+
+				it("should show the loading circle in the next step button", async () => {
+					const { wrapper } = await migrationStartedSetup();
+
+					const loadingCircle = wrapper
+						.findComponent('[data-testid="migration_tutorial_next"]')
+						.findComponent(VProgressCircular);
+
+					expect(loadingCircle.isVisible()).toBe(true);
+				});
+
+				it("should show the loading text in the next step button", async () => {
+					const { wrapper } = await migrationStartedSetup();
+
+					const button = wrapper.findComponent<VBtn>(
+						'[data-testid="migration_tutorial_next"]'
+					);
+
+					expect(button.text()).toBe("pages.administration.migration.waiting");
+				});
 			});
 		});
 	});
