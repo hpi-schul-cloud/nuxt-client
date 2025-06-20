@@ -67,8 +67,12 @@ Object.defineProperty(window, "visualViewport", {
 		offsetTop: 0,
 		pageLeft: 0,
 		pageTop: 0,
-		addEventListener: () => {},
-		removeEventListener: () => {},
+		addEventListener: () => {
+			return;
+		},
+		removeEventListener: () => {
+			return;
+		},
 	},
 	writable: true,
 });
