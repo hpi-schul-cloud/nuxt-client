@@ -34,7 +34,7 @@ export default defineConfig(
 					},
 				}),
 				VueI18nPlugin({
-					//options
+					include: "src/locales/!(schema).ts",
 				}),
 				DevServerProxy(),
 				ThemeResolver(replacements),
