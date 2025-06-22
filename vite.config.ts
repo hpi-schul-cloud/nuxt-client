@@ -71,6 +71,7 @@ export default defineConfig(
 					"@vuelidate/validators",
 				],
 				exclude: ["vuetify"],
+				entries: ["./src/main.ts"],
 			},
 			define: { "process.env": {} },
 			resolve: {
