@@ -3,7 +3,6 @@ import Vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 import VueDevTools from "vite-plugin-vue-devtools";
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { DevServerProxy } from "./config/vite/dev-server-proxy-plugin";
 import { CspNoncePlaceholder } from "./config/vite/nonce-placeholder-plugin";
 import { generateAliases } from "./config/vite/theme-aliases";
@@ -18,7 +17,6 @@ export default defineConfig(
 
 		return {
 			plugins: [
-				tsconfigPaths({ loose: true }),
 				Vue({
 					template: {
 						transformAssetUrls,
