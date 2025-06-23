@@ -1,4 +1,3 @@
-import router from "@/router";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";
@@ -10,7 +9,7 @@ import {
 import * as BoardApi from "@data-board";
 import * as FileStorageApi from "@data-file";
 import * as FolderState from "@data-folder";
-import { createMock } from "@golevelup/ts-vitest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
@@ -24,9 +23,14 @@ import KebabMenuActionDownloadFiles from "./file-table/KebabMenuActionDownloadFi
 import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
+import { Mock } from "vitest";
+import { Router, useRouter } from "vue-router";
 
-vi.mock("@/utils/fileHelper", () => {
-	const actual = vi.importActual("@/utils/fileHelper");
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
+
+vi.mock("@/utils/fileHelper", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@/utils/fileHelper")>();
 
 	return {
 		...actual,
@@ -46,6 +50,9 @@ describe("Folder.vue", () => {
 		return `${uploaded} von ${total} Dateien hochgeladen`;
 	};
 	const setupWrapper = () => {
+		const router: DeepMocked<Router> = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
+
 		const parentId = "123";
 		const wrapper = mount(Folder, {
 			global: {
@@ -62,14 +69,14 @@ describe("Folder.vue", () => {
 						},
 					}),
 				],
-				stubs: { ConfirmationDialog: true },
+				stubs: { ConfirmationDialog: true, UseFocusTrap: true },
 			},
 			props: {
 				folderId: parentId,
 			},
 		});
 
-		return { wrapper, parentId };
+		return { wrapper, parentId, router };
 	};
 
 	describe("when user has board edit permission", () => {
@@ -388,8 +395,6 @@ describe("Folder.vue", () => {
 					).mockReturnValueOnce(confirmationDialogMock);
 					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(true);
 
-					const routerSpy = vi.spyOn(router, "replace").mockImplementation();
-
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
@@ -403,7 +408,7 @@ describe("Folder.vue", () => {
 						useBoardPermissionsMock
 					);
 
-					const { wrapper } = setupWrapper();
+					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
 					await kebabMenu.trigger("click");
@@ -417,7 +422,7 @@ describe("Folder.vue", () => {
 						fileStorageApiMock,
 						folderName,
 						boardApiMock,
-						routerSpy,
+						router,
 						parent,
 					};
 				};
@@ -429,9 +434,9 @@ describe("Folder.vue", () => {
 				});
 
 				it("should call router replace", async () => {
-					const { routerSpy, parent } = await setup();
+					const { router, parent } = await setup();
 
-					expect(routerSpy).toHaveBeenCalledWith(`/boards/${parent.id}`);
+					expect(router.replace).toHaveBeenCalledWith(`/boards/${parent.id}`);
 				});
 			});
 
@@ -486,8 +491,6 @@ describe("Folder.vue", () => {
 					).mockReturnValueOnce(confirmationDialogMock);
 					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(true);
 
-					const routerSpy = vi.spyOn(router, "replace").mockImplementation();
-
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
@@ -501,7 +504,7 @@ describe("Folder.vue", () => {
 						useBoardPermissionsMock
 					);
 
-					const { wrapper } = setupWrapper();
+					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
 					await kebabMenu.trigger("click");
@@ -515,7 +518,7 @@ describe("Folder.vue", () => {
 						fileStorageApiMock,
 						folderName,
 						boardApiMock,
-						routerSpy,
+						router,
 						parent,
 					};
 				};
@@ -575,8 +578,6 @@ describe("Folder.vue", () => {
 					).mockReturnValueOnce(confirmationDialogMock);
 					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(false);
 
-					const routerSpy = vi.spyOn(router, "replace").mockImplementation();
-
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
@@ -590,7 +591,7 @@ describe("Folder.vue", () => {
 						useBoardPermissionsMock
 					);
 
-					const { wrapper } = setupWrapper();
+					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
 					await kebabMenu.trigger("click");
@@ -604,7 +605,7 @@ describe("Folder.vue", () => {
 						fileStorageApiMock,
 						folderName,
 						boardApiMock,
-						routerSpy,
+						router,
 					};
 				};
 
@@ -615,9 +616,9 @@ describe("Folder.vue", () => {
 				});
 
 				it("should not call router replace", async () => {
-					const { routerSpy } = await setup();
+					const { router } = await setup();
 
-					expect(routerSpy).not.toHaveBeenCalled();
+					expect(router.replace).not.toHaveBeenCalled();
 				});
 			});
 
@@ -662,8 +663,6 @@ describe("Folder.vue", () => {
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
 					vi.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
 
-					const routerSpy = vi.spyOn(router, "replace").mockImplementation();
-
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
@@ -677,7 +676,7 @@ describe("Folder.vue", () => {
 						useBoardPermissionsMock
 					);
 
-					const { wrapper } = setupWrapper();
+					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
 					await kebabMenu.trigger("click");
@@ -697,7 +696,7 @@ describe("Folder.vue", () => {
 						fileStorageApiMock,
 						folderName,
 						boardApiMock,
-						routerSpy,
+						router,
 						parent,
 					};
 				};
@@ -777,8 +776,6 @@ describe("Folder.vue", () => {
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
 					vi.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
 
-					const routerSpy = vi.spyOn(router, "replace").mockImplementation();
-
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
@@ -792,7 +789,7 @@ describe("Folder.vue", () => {
 						useBoardPermissionsMock
 					);
 
-					const { wrapper } = setupWrapper();
+					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
 					await kebabMenu.trigger("click");
@@ -812,7 +809,7 @@ describe("Folder.vue", () => {
 						fileStorageApiMock,
 						folderName,
 						boardApiMock,
-						routerSpy,
+						router,
 						parent,
 					};
 				};

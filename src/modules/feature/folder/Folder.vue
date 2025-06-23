@@ -52,7 +52,6 @@
 
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import router from "@/router";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
@@ -73,10 +72,12 @@ import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
+import { useRouter } from "vue-router";
 
 const boardApi = useBoardApi();
 
 const { t } = useI18n();
+const router = useRouter();
 
 const props = defineProps({
 	folderId: {
