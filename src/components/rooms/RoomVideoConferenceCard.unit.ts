@@ -5,10 +5,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
 
-vi.mock("@/assets/img/bbb/no_permission.png", () => "noPermissionImagePath");
-vi.mock("@/assets/img/bbb/not_started.png", () => "notStartetImagePath");
-vi.mock("@/assets/img/bbb/available.png", () => "availableImagePath");
-
 describe("RoomVideoConferenceCard", () => {
 	const getWrapper = (propsData: {
 		isRunning: boolean;
