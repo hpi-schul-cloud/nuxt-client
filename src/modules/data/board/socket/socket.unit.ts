@@ -45,16 +45,21 @@ const useRouterMock = <Mock>useRouter;
 
 const startMock = vi.fn();
 const stopMock = vi.fn();
-const initializeTimeout = (isPending = false) => {
-	const { useTimeoutFn } = vi.requireMock("@vueuse/shared");
-	useTimeoutFn.mockImplementation((cb: () => void) => {
+let isPending = false;
+
+vi.mock("@vueuse/shared", () => ({
+	useTimeoutFn: vi.fn().mockImplementation((cb: () => void) => {
 		cb();
 		return {
 			isPending: { value: isPending },
 			start: startMock,
 			stop: stopMock,
 		};
-	});
+	}),
+}));
+
+const initializeTimeout = (pending = false) => {
+	isPending = pending;
 };
 
 const dispatchMock = vi.fn();
