@@ -8,7 +8,7 @@
 		@click="handleClick"
 	>
 		<template #under-title>
-			<LineClamp class="pr-10" data-testId="tool-card-domain">
+			<LineClamp class="pr-10" data-testid="tool-card-domain">
 				{{ tool.domain }}
 			</LineClamp>
 			<div class="d-flex ga-1">
