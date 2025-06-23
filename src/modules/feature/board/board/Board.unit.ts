@@ -90,9 +90,13 @@ const mockedUseSharedBoardPageInformation = vi.mocked(
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 vi.mock("@/composables/copy");
 const mockUseCopy = vi.mocked(useCopy);
@@ -200,12 +204,9 @@ describe("Board", () => {
 			...envs,
 		});
 		envConfigModule.setEnvs(envsMock);
-		const envConfigModuleMock: vi.Mocked<EnvConfigModule> = createModuleMocks(
-			EnvConfigModule,
-			{
-				getEnv: envsMock,
-			}
-		);
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: envsMock,
+		});
 
 		return envConfigModuleMock;
 	};
