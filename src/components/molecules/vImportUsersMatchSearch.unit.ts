@@ -39,6 +39,7 @@ const getWrapper = (
 	props: ComponentProps<typeof vImportUsersMatchSearch>,
 	options?: object
 ) => {
+	vi.spyOn(importUsersModule, "fetchAllUsers").mockResolvedValue();
 	return mount(vImportUsersMatchSearch, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
