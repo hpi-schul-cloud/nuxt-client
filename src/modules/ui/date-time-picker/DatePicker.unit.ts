@@ -20,7 +20,7 @@ describe("DatePicker", () => {
 					"transition-group": false,
 					UseFocusTrap: true,
 				},
-				renderStubDefaultSlot: true,
+				renderStubDefaultSlot: true, // to access content inside focus trap
 			},
 			...options,
 			attachTo: document.body,

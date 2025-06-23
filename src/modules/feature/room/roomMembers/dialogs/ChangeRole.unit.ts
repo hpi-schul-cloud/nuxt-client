@@ -35,6 +35,8 @@ import { Mock } from "vitest";
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
+vi.mock("@vueuse/integrations/useFocusTrap");
+
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 

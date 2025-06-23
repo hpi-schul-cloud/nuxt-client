@@ -23,7 +23,7 @@ describe("VideoConferenceConfigurationDialog", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { UseFocusTrap: true },
-				renderStubDefaultSlot: true,
+				renderStubDefaultSlot: true, // to access content inside focus trap
 			},
 			props: {
 				options: defaultOptions.value,

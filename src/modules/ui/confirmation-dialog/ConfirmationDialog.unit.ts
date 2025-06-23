@@ -48,14 +48,12 @@ describe("ConfirmationDialog", () => {
 		wrapper = mount(ConfirmationDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { UseFocusTrap: true },
+				renderStubDefaultSlot: true, // to access content inside focus trap
 			},
 		});
 		return { wrapper, message, confirmActionLangKey };
 	};
-
-	afterEach(() => {
-		wrapper.unmount(); // otherwise tests break when running all tests, necessary due focus trap
-	});
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
