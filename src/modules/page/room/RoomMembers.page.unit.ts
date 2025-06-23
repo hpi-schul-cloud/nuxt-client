@@ -47,8 +47,6 @@ vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 const useRouteMock = <Mock>useRoute;
 
-vi.mock("@vueuse/integrations"); // mock focus trap from add members because we use mount
-
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
@@ -178,6 +176,7 @@ describe("RoomMembersPage", () => {
 					LeaveRoomProhibitedDialog: true,
 					AddMembers: true,
 					Members: true,
+					InviteMembersDialog: true,
 				},
 			},
 
@@ -236,6 +235,13 @@ describe("RoomMembersPage", () => {
 			);
 		});
 	});
+
+	// describe("tabbable mock is applied", () => {
+	// 	const node = document.createElement("div");
+	// 	const result = tabbable(node, {});
+	// 	// If the mock is applied, this should not throw or should return an array
+	// 	expect(Array.isArray(result)).toBe(true);
+	// });
 
 	describe("heading", () => {
 		it("should set the correct heading when user can add members", () => {

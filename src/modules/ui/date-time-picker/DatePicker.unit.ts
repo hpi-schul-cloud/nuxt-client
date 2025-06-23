@@ -18,7 +18,9 @@ describe("DatePicker", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
 					"transition-group": false,
+					UseFocusTrap: true,
 				},
+				renderStubDefaultSlot: true,
 			},
 			...options,
 			attachTo: document.body,

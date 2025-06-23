@@ -62,6 +62,7 @@ describe("Folder.vue", () => {
 						},
 					}),
 				],
+				stubs: { ConfirmationDialog: true },
 			},
 			props: {
 				folderId: parentId,

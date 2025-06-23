@@ -31,12 +31,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { Mock } from "vitest";
 
-vi.mock("@vueuse/integrations/useFocusTrap", () => {
-	return {
-		...vi.importActual("@vueuse/integrations/useFocusTrap"),
-		useFocusTrap: vi.fn(),
-	};
-});
+vi.mock("@vueuse/integrations/useFocusTrap");
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);

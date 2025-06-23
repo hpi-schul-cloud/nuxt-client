@@ -13,6 +13,7 @@ global.shallowMount = shallowMount;
  * this resolves the error "Your focus-trap must have at least one container with at least one tabbable node in it at all times"
  * @see https://github.com/focus-trap/tabbable?tab=readme-ov-file#testing-in-jsdom
  */
+// TODO VITE: this mock does not work at the moment, discuss if we want to have this mock at all
 vi.mock("tabbable", () => {
 	const lib = vi.importActual("tabbable");
 	return {
