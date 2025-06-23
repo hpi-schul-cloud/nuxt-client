@@ -2935,7 +2935,8 @@ export interface CustomParameterEntryResponse {
 export enum CustomParameterLocationParams {
     Path = 'path',
     Body = 'body',
-    Query = 'query'
+    Query = 'query',
+    Fragment = 'fragment'
 }
 
 /**
@@ -8786,6 +8787,37 @@ export enum SchoolFeature {
     AiTutor = 'aiTutor'
 }
 
+/**
+ * 
+ * @export
+ * @interface SchoolForExternalInviteListResponse
+ */
+export interface SchoolForExternalInviteListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<SchoolForExternalInviteResponse>}
+     * @memberof SchoolForExternalInviteListResponse
+     */
+    data: Array<SchoolForExternalInviteResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof SchoolForExternalInviteListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof SchoolForExternalInviteListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof SchoolForExternalInviteListResponse
+     */
+    limit: number;
+}
 /**
  * 
  * @export
@@ -23892,11 +23924,13 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {number} [skip] Schools to skip from the beginning (for pagination)
+         * @param {number} [limit] Page limit.
          * @param {string} [federalStateId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolListForExternalInvite: async (federalStateId?: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetSchoolListForExternalInvite: async (skip?: number, limit?: number, federalStateId?: string, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/school/list-for-external-invite`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -23912,6 +23946,14 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
 
             if (federalStateId !== undefined) {
                 localVarQueryParameter['federalStateId'] = federalStateId;
@@ -24299,12 +24341,14 @@ export const SchoolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} [skip] Schools to skip from the beginning (for pagination)
+         * @param {number} [limit] Page limit.
          * @param {string} [federalStateId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolForExternalInviteResponse>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolListForExternalInvite(federalStateId, options);
+        async schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolForExternalInviteListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolListForExternalInvite(skip, limit, federalStateId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -24444,12 +24488,14 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
+         * @param {number} [skip] Schools to skip from the beginning (for pagination)
+         * @param {number} [limit] Page limit.
          * @param {string} [federalStateId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>> {
-            return localVarFp.schoolControllerGetSchoolListForExternalInvite(federalStateId, options).then((request) => request(axios, basePath));
+        schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<SchoolForExternalInviteListResponse> {
+            return localVarFp.schoolControllerGetSchoolListForExternalInvite(skip, limit, federalStateId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -24579,12 +24625,14 @@ export interface SchoolApiInterface {
 
     /**
      * 
+     * @param {number} [skip] Schools to skip from the beginning (for pagination)
+     * @param {number} [limit] Page limit.
      * @param {string} [federalStateId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>>;
+    schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<SchoolForExternalInviteListResponse>;
 
     /**
      * 
@@ -24722,13 +24770,15 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
 
     /**
      * 
+     * @param {number} [skip] Schools to skip from the beginning (for pagination)
+     * @param {number} [limit] Page limit.
      * @param {string} [federalStateId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SchoolApi
      */
-    public schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any) {
-        return SchoolApiFp(this.configuration).schoolControllerGetSchoolListForExternalInvite(federalStateId, options).then((request) => request(this.axios, this.basePath));
+    public schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetSchoolListForExternalInvite(skip, limit, federalStateId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
