@@ -1,4 +1,4 @@
-import { upperCaseFirstChar, toKebabCase } from "@/utils/formatting";
+import { upperCaseFirstChar, toKebabCase } from "@/utils/textFormatting";
 
 // can not start with $ or _ because of Vue restrictions
 export const localDataPrefix = "#component";

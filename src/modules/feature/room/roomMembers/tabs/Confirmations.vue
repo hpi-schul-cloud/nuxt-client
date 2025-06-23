@@ -2,7 +2,7 @@
 	<p data-testid="info-text">
 		{{ t("pages.rooms.members.tab.confirmations.infoText") }}
 	</p>
-	<div class="mb-12 mt-8">
+	<div class="mb-12">
 		<ConfirmationTable :header-bottom="headerBottom" :show-select="true" />
 	</div>
 </template>

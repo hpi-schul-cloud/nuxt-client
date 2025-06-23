@@ -7,39 +7,48 @@
 		variant="outlined"
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
+		:aria-label="
+			t('components.cardElement.folderElement') + ' ' + element.content.title
+		"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<router-link :to="sanitizedUrl">
-			<ContentElementBar
-				:has-grey-background="true"
-				:icon="mdiFolderOpenOutline"
-			>
-				<template #title>
-					{{
-						element.content.title ||
-						$t("components.cardElement.folderElement.untitled")
-					}}
-				</template>
-				<template v-if="isEditMode" #menu>
-					<BoardMenu
-						:scope="BoardMenuScope.FOLDER_ELEMENT"
-						has-background
-						:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
-					>
-						<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-						<KebabMenuActionMoveDown
-							v-if="isNotLastElement"
-							@click="onMoveDown"
-						/>
-						<KebabMenuActionDelete
-							scope-language-key="components.cardElement.folderElement"
-							@click="onDelete"
-						/>
-					</BoardMenu>
-				</template>
-			</ContentElementBar>
-		</router-link>
+		<ContentElementBar
+			:has-grey-background="true"
+			:icon="mdiFolderOpenOutline"
+			tabindex="0"
+			role="button"
+			class="content-element-bar"
+			:aria-label="
+				t('components.cardElement.folderElement') + ' ' + element.content.title
+			"
+			@click="onTitleClick"
+			@keydown.enter="onTitleClick"
+		>
+			<template #title>
+				{{
+					element.content.title ||
+					t("components.cardElement.folderElement.untitled")
+				}}
+			</template>
+			<template v-if="isEditMode" #menu>
+				<BoardMenu
+					:scope="BoardMenuScope.FOLDER_ELEMENT"
+					has-background
+					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+				>
+					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<KebabMenuActionMoveDown
+						v-if="isNotLastElement"
+						@click="onMoveDown"
+					/>
+					<KebabMenuActionDelete
+						scope-language-key="components.cardElement.folderElement"
+						@click="onDelete"
+					/>
+				</BoardMenu>
+			</template>
+		</ContentElementBar>
 		<v-card-text>
 			<FolderTitleInput
 				v-if="isEditMode"
@@ -54,7 +63,6 @@
 
 <script setup lang="ts">
 import { FileFolderElement } from "@/types/board/ContentElement";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
@@ -63,7 +71,9 @@ import {
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
-import { computed, ref, toRef } from "vue";
+import { ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import FileStatistic from "./FileStatistic.vue";
 import FolderTitleInput from "./FolderTitleInput.vue";
 
@@ -76,6 +86,8 @@ interface FolderContentElementProps {
 	rowIndex: number;
 	elementIndex: number;
 }
+
+const { t } = useI18n();
 
 const props = defineProps<FolderContentElementProps>();
 
@@ -93,8 +105,6 @@ const { modelValue } = useContentElementState(props, { autoSaveDebounce: 100 });
 const onUpdateTitle = (value: string) => {
 	modelValue.value.title = value;
 };
-
-const sanitizedUrl = computed(() => sanitizeUrl(`/folder/${element.value.id}`));
 
 useBoardFocusHandler(element.value.id, folderContentElement);
 
@@ -114,4 +124,17 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
+
+const router = useRouter();
+const onTitleClick = () => {
+	const folderRoute = `/folder/${element.value.id}`;
+
+	router.push(folderRoute);
+};
 </script>
+
+<style scoped>
+.content-element-bar:focus {
+	outline-offset: -10px;
+}
+</style>

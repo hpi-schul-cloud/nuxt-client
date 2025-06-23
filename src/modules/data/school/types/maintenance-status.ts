@@ -1,6 +1,18 @@
 export interface MaintenanceStatus {
-	currentYear: { id: string; name: string; startDate: string; endDate: string };
-	nextYear: { id: string; name: string; startDate: string; endDate: string };
+	currentYear: {
+		id: string;
+		name: string;
+		startDate: string;
+		endDate: string;
+		courseCreationInNextYear: boolean;
+	};
+	nextYear: {
+		id: string;
+		name: string;
+		startDate: string;
+		endDate: string;
+		courseCreationInNextYear: boolean;
+	};
 	schoolUsesLdap: boolean;
 	maintenance: {
 		active: boolean;

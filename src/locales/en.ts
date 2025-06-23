@@ -176,6 +176,7 @@ export default {
 	"common.validation.nonEmptyString":
 		"This is a mandatory field and must not contain only spaces.",
 	"common.words.and": "and",
+	"common.words.board": "board",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Blue",
@@ -522,7 +523,6 @@ export default {
 		"The board's view was changed to {layout} by another user.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"Preferred tools could not be loaded.",
-	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
 	"components.boardElement": "element",

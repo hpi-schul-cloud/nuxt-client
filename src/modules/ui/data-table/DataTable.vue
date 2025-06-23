@@ -1,7 +1,10 @@
 <template>
 	<div
-		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
-		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
+		class="d-flex justify-space-between align-center ga-2 mb-2 pb-2 table-title-header sticky"
+		:class="{
+			'flex-column mt-8': isExtraSmallDisplay,
+			'pt-7': smAndUp,
+		}"
 		:style="stickyStyle"
 	>
 		<BatchActionMenu
@@ -133,9 +136,9 @@ defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
-
+const { xs: isExtraSmallDisplay, smAndUp } = useDisplay();
 const selectedIds = ref<string[]>([]);
+const search = ref("");
 
 watch(
 	() => props.items,
@@ -145,8 +148,6 @@ watch(
 		);
 	}
 );
-
-const search = ref("");
 
 const onResetSelectedMembers = () => {
 	selectedIds.value = [];

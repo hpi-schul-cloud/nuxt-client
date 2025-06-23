@@ -22,7 +22,6 @@ defineProps({
 	item: {
 		type: Object as PropType<ExternalToolConfigurationTemplate>,
 		required: true,
-		default: () => ({}),
 	},
 	maxHeight: {
 		type: [Number, String],
