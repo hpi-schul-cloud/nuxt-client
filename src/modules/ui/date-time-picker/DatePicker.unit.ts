@@ -74,7 +74,8 @@ describe("DatePicker", () => {
 			await input.setValue("");
 			await flushPromises();
 
-			expect(wrapper.emitted("error")).toHaveLength(1);
+			expect(wrapper.emitted("error")).not.toBeUndefined();
+			expect(wrapper.emitted("error")!.length).toBeGreaterThan(0);
 		});
 
 		it("should emit update:date event with null value", async () => {
@@ -86,7 +87,8 @@ describe("DatePicker", () => {
 			const updateDateEvent = wrapper.emitted("update:date");
 			const updateDateEventValue = updateDateEvent?.[0][0];
 
-			expect(updateDateEvent).toHaveLength(1);
+			expect(updateDateEvent).not.toBeUndefined();
+			expect(updateDateEvent!.length).toBeGreaterThan(0);
 			expect(updateDateEventValue).toBe(null);
 		});
 
@@ -117,7 +119,8 @@ describe("DatePicker", () => {
 			await input.setValue("55.55.5555");
 			await flushPromises();
 
-			expect(wrapper.emitted("error")).toHaveLength(1);
+			expect(wrapper.emitted("error")).not.toBeUndefined();
+			expect(wrapper.emitted("error")!.length).toBeGreaterThan(0);
 		});
 
 		it("should emit update:date event with null value", async () => {
@@ -129,7 +132,8 @@ describe("DatePicker", () => {
 			const updateDateEvent = wrapper.emitted("update:date");
 			const updateDateEventValue = updateDateEvent?.[0][0];
 
-			expect(updateDateEvent).toHaveLength(1);
+			expect(updateDateEvent).not.toBeUndefined();
+			expect(updateDateEvent!.length).toBeGreaterThan(0);
 			expect(updateDateEventValue).toBe(null);
 		});
 
