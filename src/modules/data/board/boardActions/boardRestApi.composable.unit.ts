@@ -201,12 +201,15 @@ describe("boardRestApi", () => {
 			await fetchBoardRequest({ boardId: boardStore.board!.id });
 
 			expect(setErrorMock).toHaveBeenCalledWith(
-				createApplicationError(HttpStatusCode.NotFound)
+				createApplicationError(
+					HttpStatusCode.NotFound,
+					"components.board.error.404"
+				)
 			);
-			expect(setErrorMock.mock.lastCall[0].statusCode).toStrictEqual(
+			expect(setErrorMock.mock.lastCall![0].statusCode).toStrictEqual(
 				HttpStatusCode.NotFound
 			);
-			expect(setErrorMock.mock.lastCall[0].translationKey).toStrictEqual(
+			expect(setErrorMock.mock.lastCall![0].translationKey).toStrictEqual(
 				"components.board.error.404"
 			);
 		});
