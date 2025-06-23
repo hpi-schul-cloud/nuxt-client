@@ -22,6 +22,8 @@ describe("VideoConferenceConfigurationDialog", () => {
 		wrapper = mount(VideoConferenceConfigurationDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { UseFocusTrap: true },
+				renderStubDefaultSlot: true,
 			},
 			props: {
 				options: defaultOptions.value,
