@@ -41,7 +41,29 @@
 			@save="onSave"
 		>
 			<template #aboveSettings="{ selectedTemplate }">
-				<div v-if="selectedTemplate && selectedTemplate.medium" class="mb-10">
+				<div
+					v-if="
+						selectedTemplate && selectedTemplate.medium?.status === 'template'
+					"
+					class="mb-10"
+				>
+					<h2 class="text-h4">Template</h2>
+					<v-text-field
+						v-model="selectedTemplate.medium.mediaSourceId"
+						:label="$t('pages.tool.medium.mediumSourceId')"
+						readonly
+					>
+						<template #append>
+							<VIcon tabindex="-1" aria-hidden="true" @click="() => {}">
+								{{ mdiContentCopy }}
+							</VIcon>
+						</template>
+					</v-text-field>
+				</div>
+				<div
+					v-else-if="selectedTemplate && selectedTemplate.medium"
+					class="mb-10"
+				>
 					<h2 class="text-h4">
 						{{ $t("pages.tool.medium") }}
 					</h2>
@@ -89,6 +111,7 @@ import {
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
+import { mdiContentCopy } from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import {
 	computed,
@@ -245,6 +268,7 @@ export default defineComponent({
 			onSave,
 			configuration,
 			isDeactivated,
+			mdiContentCopy,
 		};
 	},
 });
