@@ -6,6 +6,7 @@ import {
 	SchoolApiFactory,
 	RoomMemberResponse,
 	SchoolForExternalInviteResponse,
+	SchoolForExternalInviteListResponse,
 	ChangeRoomRoleBodyParamsRoleNameEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
@@ -175,8 +176,34 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 				(school) => school.id !== ownSchool.id
 			);
 			schools.value.unshift(ownSchool);
+			if (response.data.total > response.data.data.length) {
+				await getNextSchools(response.data);
+			}
 		} catch (error) {
 			logger.error(error);
+		}
+	};
+
+	const getNextSchools = async (
+		lastResponse: SchoolForExternalInviteListResponse
+	) => {
+		try {
+			const response =
+				await schoolApi.schoolControllerGetSchoolListForExternalInvite(
+					(lastResponse.skip ?? 0) + lastResponse.limit
+				);
+			if (response.data.data.length === 0) {
+				return;
+			}
+			schools.value = [...schools.value, ...response.data.data];
+			if (schools.value.length === lastResponse.total) {
+				return;
+			}
+			await getNextSchools(response.data);
+		} catch (error) {
+			logger.error(error);
+			showFailure(t("pages.rooms.members.error.load"));
+			return null;
 		}
 	};
 
