@@ -6,6 +6,7 @@ import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
+
 import {
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -68,6 +69,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	let askConfirmationMock: Mock;
 
 	beforeEach(() => {
+		vi.useFakeTimers();
 		setupStores({
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
@@ -325,6 +327,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		const openSpeedDialMenu = async (wrapper: VueWrapper) => {
 			const speedDialMenu = wrapper.getComponent({ name: "speed-dial-menu" });
 			await speedDialMenu.getComponent({ name: "v-btn" }).trigger("click");
+			vi.advanceTimersByTime(1000); // speed dial renders items delayed
 			await flushPromises();
 		};
 
