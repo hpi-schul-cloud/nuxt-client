@@ -8,6 +8,9 @@
 		@click="handleClick"
 	>
 		<template #under-title>
+			<LineClamp class="pr-10" data-testId="tool-card-domain">
+				{{ tool.domain }}
+			</LineClamp>
 			<div class="d-flex ga-1">
 				<WarningChip
 					v-if="isToolDeactivated"
@@ -57,6 +60,7 @@ import {
 } from "@data-external-tool";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
 import { InfoChip, WarningChip } from "@ui-chip";
+import { LineClamp } from "@ui-line-clamp";
 import { RoomDotMenu } from "@ui-room-details";
 import { computed, ComputedRef, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -78,6 +82,7 @@ const emit = defineEmits(["edit", "delete", "error", "refresh"]);
 const { t } = useI18n();
 
 const {
+	toolLaunchRequest,
 	fetchContextLaunchRequest,
 	launchTool,
 	error: launchError,
@@ -139,6 +144,14 @@ const toolName: ComputedRef = computed(() => {
 	}
 
 	return props.tool.name;
+});
+
+const toolDomain: ComputedRef<string | undefined> = computed(() => {
+	if (!toolLaunchRequest.value?.url) {
+		return undefined;
+	}
+
+	return new URL(toolLaunchRequest.value.url).hostname;
 });
 
 const showTool: ComputedRef = computed(
