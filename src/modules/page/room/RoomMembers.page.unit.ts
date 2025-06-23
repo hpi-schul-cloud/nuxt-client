@@ -236,13 +236,6 @@ describe("RoomMembersPage", () => {
 		});
 	});
 
-	// describe("tabbable mock is applied", () => {
-	// 	const node = document.createElement("div");
-	// 	const result = tabbable(node, {});
-	// 	// If the mock is applied, this should not throw or should return an array
-	// 	expect(Array.isArray(result)).toBe(true);
-	// });
-
 	describe("heading", () => {
 		it("should set the correct heading when user can add members", () => {
 			roomPermissions.canAddRoomMembers.value = true;

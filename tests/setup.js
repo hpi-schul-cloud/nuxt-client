@@ -8,27 +8,6 @@ config.global.renderStubDefaultSlot = true;
 global.mount = mount;
 global.shallowMount = shallowMount;
 
-/**
- * mock needed for useFocusTrap in combination with jsdom
- * this resolves the error "Your focus-trap must have at least one container with at least one tabbable node in it at all times"
- * @see https://github.com/focus-trap/tabbable?tab=readme-ov-file#testing-in-jsdom
- */
-// TODO VITE: this mock does not work at the moment, discuss if we want to have this mock at all
-vi.mock("tabbable", () => {
-	const lib = vi.importActual("tabbable");
-	return {
-		...lib,
-		tabbable: (node, options) =>
-			lib.tabbable(node, { ...options, displayCheck: "none" }),
-		focusable: (node, options) =>
-			lib.focusable(node, { ...options, displayCheck: "none" }),
-		isFocusable: (node, options) =>
-			lib.isFocusable(node, { ...options, displayCheck: "none" }),
-		isTabbable: (node, options) =>
-			lib.isTabbable(node, { ...options, displayCheck: "none" }),
-	};
-});
-
 beforeAll(() => {
 	/**
 	 * matchMedia is used by
