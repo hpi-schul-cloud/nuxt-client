@@ -69,8 +69,6 @@ const getWrapper = (
 const getWrapperShallow = (
 	options: ComponentMountingOptions<typeof MigrationWizard> = {}
 ) => {
-	document.body.setAttribute("data-app", "true");
-
 	return shallowMount(MigrationWizard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -144,6 +142,7 @@ describe("User Migration / Index", () => {
 
 	describe("Start user migration", () => {
 		beforeEach(() => {
+			vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
 			importUsersModule.setTotal(0);
 		});
 
@@ -158,6 +157,10 @@ describe("User Migration / Index", () => {
 		});
 
 		it("should show button for start inUserMigration", async () => {
+			vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValue();
+			vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+
 			const wrapper = getWrapper();
 
 			const btn = wrapper.find("[data-testid=start_user_migration]");
@@ -185,6 +188,10 @@ describe("User Migration / Index", () => {
 
 	describe("show summary", () => {
 		beforeEach(() => {
+			vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+
 			schoolsModule.setSchool(
 				schoolFactory.build({
 					inUserMigration: true,
@@ -317,6 +324,12 @@ describe("User Migration / Index", () => {
 
 	describe("cancel migration", () => {
 		describe("in step migration_importUsers", () => {
+			beforeEach(() => {
+				vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+			});
 			const setup = async () => {
 				schoolsModule.setSchool(
 					schoolFactory.build({
@@ -489,6 +502,9 @@ describe("User Migration / Index", () => {
 			};
 
 			it("should show cancel button", async () => {
+				vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(
@@ -506,6 +522,10 @@ describe("User Migration / Index", () => {
 				const dialogTeleportDiv = document.createElement("div");
 				dialogTeleportDiv.className = "v-overlay-container";
 				document.body.appendChild(dialogTeleportDiv);
+
+				vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
 			});
 
 			afterEach(() => {
