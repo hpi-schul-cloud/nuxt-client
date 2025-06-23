@@ -44,11 +44,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	});
 
 	const isLoading = ref<boolean>(false);
-	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const ownSchool = {
 		id: schoolsModule.getSchool.id,
 		name: schoolsModule.getSchool.name,
 	};
+	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([ownSchool]);
 	const currentUserId = authModule.getUser?.id ?? "";
 	const selectedIds = ref<string[]>([]);
 	const confirmationSelectedIds = ref<string[]>([]);
@@ -167,39 +167,30 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return member.fullName;
 	};
 
-	const getSchools = async () => {
-		try {
-			const response =
-				await schoolApi.schoolControllerGetSchoolListForExternalInvite();
-
-			schools.value = response.data.filter(
-				(school) => school.id !== ownSchool.id
-			);
-			schools.value.unshift(ownSchool);
-			if (response.data.total > response.data.data.length) {
-				await getNextSchools(response.data);
-			}
-		} catch (error) {
-			logger.error(error);
+	const getAllSchools = async () => {
+		const areSchoolsLoaded = schools.value.length > 1;
+		if (!areSchoolsLoaded) {
+			await getSchools();
 		}
 	};
 
-	const getNextSchools = async (
-		lastResponse: SchoolForExternalInviteListResponse
-	) => {
+	const getSchools = async (skip = 0, limit = 1000) => {
 		try {
 			const response =
 				await schoolApi.schoolControllerGetSchoolListForExternalInvite(
-					(lastResponse.skip ?? 0) + lastResponse.limit
+					skip,
+					limit
 				);
 			if (response.data.data.length === 0) {
 				return;
 			}
-			schools.value = [...schools.value, ...response.data.data];
-			if (schools.value.length === lastResponse.total) {
-				return;
+			const additionalSchools = response.data.data.filter(
+				(school) => school.id !== ownSchool.id
+			);
+			schools.value = [...schools.value, ...additionalSchools];
+			if (schools.value.length < response.data.total) {
+				await getSchools(skip + limit, limit);
 			}
-			await getNextSchools(response.data);
 		} catch (error) {
 			logger.error(error);
 			showFailure(t("pages.rooms.members.error.load"));
@@ -404,6 +395,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		resetPotentialMembers,
 		resetStore,
 		getPotentialMembers,
+		getAllSchools
 		getSchools,
 		getMemberById,
 		getMemberFullName,
