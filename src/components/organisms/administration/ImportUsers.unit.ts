@@ -98,6 +98,7 @@ const mockData: ImportUsersInstance["$data"] = {
 type ImportUsersInstance = InstanceType<typeof ImportUsers>;
 
 const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
+	vi.spyOn(importUsersModule, "fetchAllImportUsers").mockResolvedValue();
 	return mount(ImportUsers, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -118,7 +119,6 @@ const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
 
 describe("@/components/molecules/importUsers", () => {
 	beforeEach(() => {
-		document.body.setAttribute("data-app", "true");
 		setupStores({
 			schoolsModule: SchoolsModule,
 			importUsersModule: ImportUsersModule,

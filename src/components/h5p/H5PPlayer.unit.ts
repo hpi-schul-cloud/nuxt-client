@@ -7,6 +7,14 @@ import {
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
 
+vi.mock(import("@lumieducation/h5p-webcomponents"), async (importOriginal) => {
+	const actual = await importOriginal();
+	return {
+		...actual,
+		defineElements: vi.fn(),
+	};
+});
+
 describe("H5PPlayer", () => {
 	const contentId = "test-content-id";
 
