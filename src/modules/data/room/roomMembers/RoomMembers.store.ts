@@ -395,7 +395,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		resetPotentialMembers,
 		resetStore,
 		getPotentialMembers,
-		getAllSchools
+		getAllSchools,
 		getSchools,
 		getMemberById,
 		getMemberFullName,
