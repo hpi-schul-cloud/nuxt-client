@@ -254,9 +254,12 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should set 'touchDelay' and 'isTouchDevice' values if device is NOT mobile", () => {
+			const tempOntouchstart = window.ontouchstart;
+			window.ontouchstart = undefined;
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			expect(wrapper.vm.isTouchDevice).toBe(false);
 			expect(wrapper.vm.touchDelay).toStrictEqual(20);
+			window.ontouchstart = tempOntouchstart;
 		});
 
 		it("should set 'touchDelay' and 'isTouchDevice' values if device is mobile", () => {
