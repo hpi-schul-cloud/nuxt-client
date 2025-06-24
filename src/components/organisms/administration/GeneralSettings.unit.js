@@ -97,6 +97,7 @@ const searchStrings = {
 	formButton: ".form-button",
 	timezone: ".timezone-input",
 	saveButton: ".button-save",
+	schoolYear: ".school-year",
 };
 
 const mockData = {
@@ -207,6 +208,22 @@ describe("GeneralSettings", () => {
 
 			const ele = wrapper.findComponent(searchStrings.schoolName);
 			expect(ele.vm.disabled).toBeFalsy();
+		});
+
+		it("should show current school year", async () => {
+			const wrapper = getWrapper();
+			await wrapper.setData(mockData);
+
+			const ele = wrapper.findComponent(searchStrings.schoolYear);
+			expect(ele.vm.value).toStrictEqual("2021/22");
+		});
+
+		it("should show current school year as disabled", async () => {
+			const wrapper = getWrapper();
+			await wrapper.setData(mockData);
+
+			const ele = wrapper.findComponent(searchStrings.schoolYear);
+			expect(ele.vm.disabled).toBeTruthy();
 		});
 
 		it("school number text should be disabled if the number is set", async () => {

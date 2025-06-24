@@ -18,6 +18,27 @@
 				/>
 			</v-col>
 		</v-row>
+		<v-row>
+			<v-col>
+				<v-text-field
+					v-model="localSchool.currentYear.name"
+					class="school-year"
+					:label="
+						$t(
+							'pages.administration.school.index.generalSettings.labels.schoolYear'
+						)
+					"
+					density="compact"
+					:readonly="!hasSchoolEditPermission"
+					:disabled="true"
+					:hint="
+						$t('pages.administration.school.index.generalSettings.disabledHint')
+					"
+					persistent-hint
+					data-testid="school-year"
+				/>
+			</v-col>
+		</v-row>
 		<v-row class="mb-2">
 			<v-col>
 				<v-text-field
@@ -173,6 +194,9 @@ export default {
 				language: "",
 				permissions: {},
 				features: {},
+				currentYear: {
+					name: "",
+				},
 			},
 			logoFile: [],
 			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],

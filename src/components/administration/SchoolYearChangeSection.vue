@@ -170,7 +170,7 @@
 					variant="flat"
 					data-testid="finish-transfer-button"
 					:loading="isLoading"
-					@click="finishTransfer"
+					@click="finishTransferDialog"
 				>
 					{{
 						t(
@@ -181,7 +181,7 @@
 			</div>
 			<div data-testid="cancel-school-year-change-dialog-wrapper">
 				<VCustomDialog
-					v-model:is-open="isDialogOpen"
+					v-model:is-open="isStartDialogOpen"
 					has-buttons
 					:buttons="['cancel', 'confirm']"
 					data-testid="cancel-school-year-change-dialog"
@@ -190,14 +190,38 @@
 					<template #title>
 						{{
 							t(
-								"components.administration.schoolYearChangeSection.dialog.title"
+								"components.administration.schoolYearChangeSection.dialog.start.title"
 							)
 						}}
 					</template>
 					<template #content>
 						{{
 							t(
-								"components.administration.schoolYearChangeSection.dialog.content"
+								"components.administration.schoolYearChangeSection.dialog.start.content"
+							)
+						}}
+					</template>
+				</VCustomDialog>
+			</div>
+			<div data-testid="finish-school-year-change-dialog-wrapper">
+				<VCustomDialog
+					v-model:is-open="isFinishDialogOpen"
+					has-buttons
+					:buttons="['cancel', 'confirm']"
+					data-testid="finish-school-year-change-dialog"
+					@dialog-confirmed="finishTransfer"
+				>
+					<template #title>
+						{{
+							t(
+								"components.administration.schoolYearChangeSection.dialog.finish.title"
+							)
+						}}
+					</template>
+					<template #content>
+						{{
+							t(
+								"components.administration.schoolYearChangeSection.dialog.finish.content"
 							)
 						}}
 					</template>
@@ -269,16 +293,22 @@ const schoolYearMode: ComputedRef<string> = computed(() => {
 	return schoolMaintenanceMode;
 });
 
+const isFinishDialogOpen: Ref<boolean> = ref(false);
+
+const finishTransferDialog = () => {
+	isFinishDialogOpen.value = true;
+};
+
 const finishTransfer = async () => {
 	if (school.value) {
 		await setMaintenanceMode(school.value.id, false);
 	}
 };
 
-const isDialogOpen: Ref<boolean> = ref(false);
+const isStartDialogOpen: Ref<boolean> = ref(false);
 
 const startTransfer = () => {
-	isDialogOpen.value = true;
+	isStartDialogOpen.value = true;
 };
 
 const confirmSchoolYearChange = async () => {
