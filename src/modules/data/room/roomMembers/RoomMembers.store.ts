@@ -6,7 +6,6 @@ import {
 	SchoolApiFactory,
 	RoomMemberResponse,
 	SchoolForExternalInviteResponse,
-	SchoolForExternalInviteListResponse,
 	ChangeRoomRoleBodyParamsRoleNameEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
