@@ -8,6 +8,7 @@ import { APPLICATION_ERROR_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	apiResponseErrorFactory,
 	apiValidationResponseErrorFactory,
+	axiosErrorFactory,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
@@ -20,6 +21,8 @@ import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import H5pEditorPage from "./H5PEditor.page.vue";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
+import { th } from "vuetify/locale";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 
 vi.mock("./h5pEditorBoardHooks.composable");
 
@@ -108,10 +111,11 @@ describe("H5PEditorPage", () => {
 			describe("when onCreate hook fails", () => {
 				const setup = () => {
 					const error = createApplicationError(HttpStatusCode.NotFound);
+					const axiosError = axiosErrorFactory
+						.withStatusCode(error.statusCode)
+						.build();
 
-					useH5pEditorBoardHooksMock.onCreate.mockRejectedValueOnce(
-						apiResponseErrorFactory.build({ code: error.statusCode })
-					);
+					useH5pEditorBoardHooksMock.onCreate.mockRejectedValueOnce(axiosError);
 
 					const { applicationErrorModule } = getWrapper({
 						parentType: H5PContentParentType.BOARD_ELEMENT,
@@ -138,13 +142,16 @@ describe("H5PEditorPage", () => {
 	describe("H5P Editor", () => {
 		describe("when the editor has a loading error", () => {
 			const setup = () => {
+				const error = createApplicationError(HttpStatusCode.BadRequest);
+				const axiosError = axiosErrorFactory
+					.withStatusCode(error.statusCode)
+					.build();
+
+				useH5pEditorBoardHooksMock.onCreate.mockRejectedValueOnce(axiosError);
+
 				const { wrapper, applicationErrorModule } = getWrapper({
 					parentType: H5PContentParentType.BOARD_ELEMENT,
 					parentId: "parentId",
-				});
-
-				const error = apiResponseErrorFactory.build({
-					code: HttpStatusCode.BadRequest,
 				});
 
 				return {
@@ -161,9 +168,7 @@ describe("H5PEditorPage", () => {
 				h5pEditor.vm.$emit("load-error", error);
 				await nextTick();
 
-				expect(applicationErrorModule.setError).toHaveBeenCalledWith(
-					createApplicationError(error.code)
-				);
+				expect(applicationErrorModule.setError).toHaveBeenCalledWith(error);
 			});
 		});
 
