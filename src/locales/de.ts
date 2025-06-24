@@ -1961,7 +1961,7 @@ export default {
 		"Mit einem Einladungslink können Lernende und Lernbegleitungen der eigenen Schule sowie Lernbegleitungen anderer Schulen in den Raum eingeladen werden. Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden. Ist in den Link-Einstellungen „Betreten des Raums nur nach Bestätigung möglich” aktiviert worden, kann diese Bestätigung im Tab Beitrittsanfragen vorgenommen werden.",
 	"pages.rooms.members.tab.confirmations": "Beitrittsanfragen",
 	"pages.rooms.members.tab.confirmations.infoText":
-		"Würde bei der Erstellung eines Einladungslinks die Option „Betreten des Raums nur nach Bestätigung möglich” aktiviert, erzeugt der Klick auf den Link zunächst eine Beitrittsanfrage. Diese kann hier bestätigt oder abgelehnt werden. Wird die Beitrittsanfrage bestätigt, erhält die Person Zugriff auf alle Rauminhalte und wird in der Mitgliederliste aufgeführt.",
+		"Wurde bei der Erstellung eines Einladungslinks die Option „Betreten des Raums nur nach Bestätigung möglich” aktiviert, erzeugt der Klick auf den Link zunächst eine Beitrittsanfrage. Diese kann hier bestätigt oder abgelehnt werden. Wird die Beitrittsanfrage bestätigt, erhält die Person Zugriff auf alle Rauminhalte und wird in der Mitgliederliste aufgeführt.",
 	"pages.rooms.members.remove.ariaLabel": "{memberFullName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Ausgewählte Mitglieder aus der Liste zurücksetzen",
