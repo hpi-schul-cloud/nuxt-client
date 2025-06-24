@@ -2,12 +2,14 @@ import * as serverApi from "@/serverApi/v3/api";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
+	axiosErrorFactory,
 	fileFolderElementResponseFactory,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
 import { createMock } from "@golevelup/ts-vitest";
 import { AxiosPromise } from "axios";
 import { useFolderState } from "./Folder.state";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 vi.mock("vue-i18n", () => {
 	return {
@@ -72,20 +74,32 @@ describe("useFolderState", () => {
 			});
 
 			describe("when element is not a file folder element", () => {
+				const setupWithError = (statusCode: HttpStatusCode) => {
+					const boardApi = createMock<serverApi.BoardElementApiInterface>();
+
+					const axiosError = axiosErrorFactory
+						.withStatusCode(statusCode)
+						.build();
+
+					boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(
+						axiosError
+					);
+
+					vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(
+						boardApi
+					);
+				};
+
 				it("should throw an error", async () => {
-					const error = createApplicationError(404);
-					const invalidElement = {
-						id: "invalid-id",
-						content: { title: "Invalid Element" },
-						type: "invalidType",
-					};
-					const { testId } = setup({
-						element: invalidElement,
-					});
+					const expectedError = createApplicationError(HttpStatusCode.NotFound);
+
+					setupWithError(expectedError.statusCode);
 
 					const { fetchFileFolderElement } = useFolderState();
 
-					await expect(fetchFileFolderElement(testId)).rejects.toThrow(error);
+					await expect(fetchFileFolderElement("invalid-id")).rejects.toThrow(
+						expectedError
+					);
 				});
 			});
 
