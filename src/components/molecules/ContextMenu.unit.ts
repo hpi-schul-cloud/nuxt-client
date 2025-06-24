@@ -86,17 +86,26 @@ describe("@/components/molecules/ContextMenu", () => {
 		it("triggers event on click outside d", async () => {
 			// Mount Menu wrapper to have something to click outside
 			const emptyNode = "<!--v-if-->";
-			const wrapper = mount({
-				data: () => ({ show: true, actions }),
-				template: `
+			const wrapper = mount(
+				{
+					template: `
 					<div id="container">
 						<div data-testid="outside" class="outside">Outside</div>
 						<ContextMenu data-testid="testid" class="ctxmenu" :actions="actions" :show.sync="show"></ContextMenu>
 					</div>
 				`,
-				components: { ContextMenu },
-				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-			});
+				},
+				{
+					data() {
+						return { show: true, actions };
+					},
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						components: { ContextMenu },
+					},
+					...getAttachToOptions(),
+				}
+			);
 
 			const outsideElement = wrapper.find(".outside");
 			await outsideElement.trigger("click");
@@ -109,17 +118,23 @@ describe("@/components/molecules/ContextMenu", () => {
 			// Mount Menu wrapper to have something to click outside
 			const wrapper = mount(
 				{
-					data: () => ({ show: true, actions }),
 					template: `
 					<div>
 					<div class="outside">Outside</div>
 					<ContextMenu class="ctxmenu" :actions="actions" :show.sync="show" :noClose="true"></ContextMenu>
 					</div>
 				`,
-					components: { ContextMenu },
-					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				},
-				getAttachToOptions()
+				{
+					data() {
+						return { show: true, actions };
+					},
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						components: { ContextMenu },
+					},
+					...getAttachToOptions(),
+				}
 			);
 			const menu = wrapper.findComponent(ContextMenu);
 			const outsideElement = wrapper.find(".outside");
