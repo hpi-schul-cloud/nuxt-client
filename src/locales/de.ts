@@ -193,6 +193,8 @@ export default {
 	"common.words.color.turquoise": "Türkis",
 	"common.words.color.yellow": "Gelb",
 	"common.words.copiedToClipboard": "In die Zwischenablage kopiert",
+	"common.words.copiedToClipboard.failure":
+		"Das Kopieren in die Zwischenablage ist fehlgeschlagen. Bitte versuchen Sie es manuell.",
 	"common.words.copyLinkToClipboard.success":
 		"Link in die Zwischenablage kopiert",
 	"common.words.copyLinkToClipboard.failure":
@@ -2139,6 +2141,7 @@ export default {
 	"pages.tool.medium.mediumId": "Medium-Id",
 	"pages.tool.medium.mediumSourceId": "Medien-Katalog-Id",
 	"pages.tool.medium.noMediaSource": "Ohne Medien-Katalog",
+	"pages.tool.medium.template": "Template",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.button.startMigration": "Umzug starten",

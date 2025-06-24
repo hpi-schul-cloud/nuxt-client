@@ -41,41 +41,10 @@
 			@save="onSave"
 		>
 			<template #aboveSettings="{ selectedTemplate }">
-				<div
-					v-if="
-						selectedTemplate && selectedTemplate.medium?.status === 'template'
-					"
-					class="mb-10"
-				>
-					<h2 class="text-h4">Template</h2>
-					<v-text-field
-						v-model="selectedTemplate.medium.mediaSourceId"
-						:label="$t('pages.tool.medium.mediumSourceId')"
-						readonly
-					>
-						<template #append>
-							<VIcon tabindex="-1" aria-hidden="true" @click="() => {}">
-								{{ mdiContentCopy }}
-							</VIcon>
-						</template>
-					</v-text-field>
-				</div>
-				<div
-					v-else-if="selectedTemplate && selectedTemplate.medium"
-					class="mb-10"
-				>
-					<h2 class="text-h4">
-						{{ $t("pages.tool.medium") }}
-					</h2>
-					<p>
-						{{ $t("pages.tool.medium.mediumId") }}:
-						{{ selectedTemplate.medium.mediumId }}
-					</p>
-					<p>
-						{{ $t("pages.tool.medium.mediumSourceId") }}:
-						{{ selectedTemplate.medium.mediaSourceId }}
-					</p>
-				</div>
+				<ExternalToolMediumDetails
+					v-if="selectedTemplate && selectedTemplate.medium"
+					:selected-template-medium="selectedTemplate.medium"
+				/>
 			</template>
 			<template #aboveParameters="{ selectedTemplate }">
 				<v-checkbox
@@ -123,9 +92,11 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import ExternalToolMediumDetails from "@/components/external-tools/configuration/ExternalToolMediumDetails.vue";
 
 export default defineComponent({
 	components: {
+		ExternalToolMediumDetails,
 		ExternalToolConfigurator,
 		DefaultWireframe,
 	},
