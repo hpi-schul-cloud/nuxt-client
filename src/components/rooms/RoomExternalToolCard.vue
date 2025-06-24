@@ -82,7 +82,6 @@ const emit = defineEmits(["edit", "delete", "error", "refresh"]);
 const { t } = useI18n();
 
 const {
-	toolLaunchRequest,
 	fetchContextLaunchRequest,
 	launchTool,
 	error: launchError,
@@ -144,14 +143,6 @@ const toolName: ComputedRef = computed(() => {
 	}
 
 	return props.tool.name;
-});
-
-const toolDomain: ComputedRef<string | undefined> = computed(() => {
-	if (!toolLaunchRequest.value?.url) {
-		return undefined;
-	}
-
-	return new URL(toolLaunchRequest.value.url).hostname;
 });
 
 const showTool: ComputedRef = computed(
