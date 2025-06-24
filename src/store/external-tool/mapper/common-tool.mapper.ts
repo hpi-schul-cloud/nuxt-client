@@ -21,6 +21,7 @@ export const ToolParamLocationMapping: Record<
 	[CustomParameterLocationParams.Path]: ToolParameterLocation.PATH,
 	[CustomParameterLocationParams.Query]: ToolParameterLocation.QUERY,
 	[CustomParameterLocationParams.Body]: ToolParameterLocation.BODY,
+	[CustomParameterLocationParams.Fragment]: ToolParameterLocation.FRAGMENT,
 };
 
 export const ToolParamTypeMapping: Record<
