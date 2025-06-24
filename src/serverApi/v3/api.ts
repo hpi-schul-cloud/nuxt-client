@@ -1792,6 +1792,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     ROOM_MEMBER_INFO_URL: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_HIDE_OLD_ADMIN_PAGE_LINK: boolean;
 }
 /**
  * 
