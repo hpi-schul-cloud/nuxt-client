@@ -19,7 +19,7 @@
 			:validation-messages="userPathValidationMessage"
 			datatest-id="ldapDataUsersUserPath"
 			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, userPath: $event })
+				emit('update:modelValue', { ...modelValue, userPath: $event })
 			"
 		>
 			<template #icon>
@@ -39,11 +39,11 @@
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFirstName"
 			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, firstName: $event })
+				emit('update:modelValue', { ...modelValue, firstName: $event })
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor" :icon="mdiAccountCircleOutline" />
+				<v-icon :icon="mdiAccountCircleOutline" />
 			</template>
 		</base-input>
 		<base-input
@@ -56,7 +56,7 @@
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFamilyName"
 			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, familyName: $event })
+				emit('update:modelValue', { ...modelValue, familyName: $event })
 			"
 		>
 			<template #icon>
@@ -73,7 +73,7 @@
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersEmail"
 			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, email: $event })
+				emit('update:modelValue', { ...modelValue, email: $event })
 			"
 		>
 			<template #icon>
@@ -91,7 +91,7 @@
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUid"
 			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, uid: $event })
+				emit('update:modelValue', { ...modelValue, uid: $event })
 			"
 		>
 			<template #icon>
@@ -109,7 +109,7 @@
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUuid"
 			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, uuid: $event })
+				emit('update:modelValue', { ...modelValue, uuid: $event })
 			"
 		>
 			<template #icon>
@@ -119,10 +119,10 @@
 	</div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
-import { defineComponent } from "vue";
+import { watch, computed } from "vue";
 import useVuelidate from "@vuelidate/core";
 import {
 	mdiAccountBoxOutline,
@@ -131,61 +131,63 @@ import {
 	mdiEmailOutline,
 	mdiFileTreeOutline,
 } from "@icons/material";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	props: {
-		modelValue: {
-			type: Object,
-			default() {
-				return {};
-			},
-		},
-		validate: {
-			type: Boolean,
-		},
-	},
-	emits: ["update:modelValue", "update:errors"],
-	setup() {
-		return { v$: useVuelidate() };
-	},
-	data() {
-		return {
-			mdiAccountBoxOutline,
-			mdiAccountCircleOutline,
-			mdiCardAccountDetailsOutline,
-			mdiEmailOutline,
-			mdiFileTreeOutline,
-			usersValidationMessage: [
-				{ key: "required", message: this.$t("common.validation.required") },
-			],
-			userPathValidationMessage: [
-				{
-					key: "ldapPathRegexValidator",
-					message: this.$t("pages.administration.ldapEdit.validation.path"),
-				},
-				{ key: "required", message: this.$t("common.validation.required") },
-			],
-		};
-	},
-	watch: {
-		validate: function () {
-			this.v$.$touch();
-			this.$emit("update:errors", this.v$.$invalid, "users");
-		},
-	},
-	validations() {
-		return {
-			modelValue: {
-				userPath: { required, ldapPathRegexValidator },
-				firstName: { required },
-				familyName: { required },
-				email: { required },
-				uid: { required },
-				uuid: { required },
-			},
-		};
-	},
+const { t } = useI18n();
+
+type Props = {
+	modelValue?: {
+		userPath?: string;
+		firstName?: string;
+		familyName?: string;
+		email?: string;
+		uid?: string;
+		uuid?: string;
+	};
+	validate?: boolean;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+	modelValue: () => ({}),
 });
+
+const emit = defineEmits<{
+	(e: "update:modelValue", value: Props["modelValue"]): void;
+	(e: "update:errors", invalid: boolean, type: string): void;
+}>();
+
+const usersValidationMessage = [
+	{ key: "required", message: t("common.validation.required") },
+];
+
+const userPathValidationMessage = [
+	{
+		key: "ldapPathRegexValidator",
+		message: t("pages.administration.ldapEdit.validation.path"),
+	},
+	{ key: "required", message: t("common.validation.required") },
+];
+
+const rules = computed(() => ({
+	modelValue: {
+		userPath: { required, ldapPathRegexValidator },
+		firstName: { required },
+		familyName: { required },
+		email: { required },
+		uid: { required },
+		uuid: { required },
+	},
+}));
+
+const v$ = useVuelidate(rules, props);
+
+watch(
+	() => props.validate,
+	() => {
+		v$.value.$touch();
+		emit("update:errors", v$.value.$invalid, "users");
+	}
+);
 </script>
 
 <style lang="scss" scoped>
