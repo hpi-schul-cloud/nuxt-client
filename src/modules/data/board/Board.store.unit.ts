@@ -62,7 +62,6 @@ const useRouteMock = <Mock>useRoute;
 
 vi.mock("vue-i18n", () => {
 	return {
-		...vi.importActual("vue-i18n"),
 		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });
@@ -1282,7 +1281,10 @@ describe("BoardStore", () => {
 				});
 
 				expect(setErrorSpy).toHaveBeenCalledWith(
-					createApplicationError(HttpStatusCode.NotFound)
+					createApplicationError(
+						HttpStatusCode.NotFound,
+						"components.board.error.404"
+					)
 				);
 			});
 		});
