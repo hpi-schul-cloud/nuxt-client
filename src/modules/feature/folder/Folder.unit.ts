@@ -29,16 +29,6 @@ import { Router, useRouter } from "vue-router";
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
-vi.mock("@/utils/fileHelper", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("@/utils/fileHelper")>();
-
-	return {
-		...actual,
-		downloadFilesAsArchive: vi.fn(),
-		downloadFile: vi.fn(),
-	};
-});
-
 describe("Folder.vue", () => {
 	enableAutoUnmount(afterEach);
 
@@ -52,6 +42,9 @@ describe("Folder.vue", () => {
 	const setupWrapper = () => {
 		const router: DeepMocked<Router> = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
+
+		vi.spyOn(FileHelper, "downloadFilesAsArchive");
+		vi.spyOn(FileHelper, "downloadFile");
 
 		const parentId = "123";
 		const wrapper = mount(Folder, {
@@ -2029,9 +2022,7 @@ describe("Folder.vue", () => {
 
 					const { wrapper } = setupWrapper();
 
-					await nextTick();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					const checkbox = wrapper.find(
 						`[data-testid='select-checkbox-${fileRecord.name}']`
@@ -2048,11 +2039,6 @@ describe("Folder.vue", () => {
 					);
 					await downloadButton.trigger("click");
 
-					const spyDownloadFilesAsArchive = vi.spyOn(
-						FileHelper,
-						"downloadFilesAsArchive"
-					);
-
 					const now = dayjs().format("YYYYMMDD");
 					const expectedResult = {
 						archiveName: `${now}_${folderName}`,
@@ -2060,15 +2046,14 @@ describe("Folder.vue", () => {
 					};
 
 					return {
-						spyDownloadFilesAsArchive,
 						expectedResult,
 					};
 				};
 
 				it("should call downloadFilesAsArchive", async () => {
-					const { spyDownloadFilesAsArchive, expectedResult } = await setup();
+					const { expectedResult } = await setup();
 
-					expect(spyDownloadFilesAsArchive).toHaveBeenCalledWith(
+					expect(FileHelper.downloadFilesAsArchive).toHaveBeenCalledWith(
 						expectedResult
 					);
 				});
@@ -2137,24 +2122,23 @@ describe("Folder.vue", () => {
 					);
 					await itemDownloadButton.trigger("click");
 
-					const spyDownloadFile = vi.spyOn(FileHelper, "downloadFile");
-
 					const expectedResult = [
 						`${fileRecord1.id}/${fileRecord1.name}`,
 						`${fileRecord1.name}`,
 					];
 
 					return {
-						spyDownloadFile,
 						expectedResult,
 						wrapper,
 					};
 				};
 
 				it("should call downloadFile", async () => {
-					const { spyDownloadFile, expectedResult } = await setup();
+					const { expectedResult } = await setup();
 
-					expect(spyDownloadFile).toHaveBeenCalledWith(...expectedResult);
+					expect(FileHelper.downloadFile).toHaveBeenCalledWith(
+						...expectedResult
+					);
 				});
 			});
 		});
