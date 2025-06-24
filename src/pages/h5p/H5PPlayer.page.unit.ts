@@ -4,7 +4,7 @@ import ApplicationErrorModule from "@/store/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";
-import { apiResponseErrorFactory } from "@@/tests/test-utils";
+import { axiosErrorFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -50,29 +50,29 @@ describe("H5PPlayerPage", () => {
 	describe("H5P Player", () => {
 		describe("when the player has a loading error", () => {
 			const setup = () => {
-				const { wrapper, applicationErrorModule } = getWrapper();
+				const error = createApplicationError(HttpStatusCode.BadRequest);
+				const axiosError = axiosErrorFactory
+					.withStatusCode(HttpStatusCode.BadRequest)
+					.build();
 
-				const error = apiResponseErrorFactory.build({
-					code: HttpStatusCode.BadRequest,
-				});
+				const { wrapper, applicationErrorModule } = getWrapper();
 
 				return {
 					wrapper,
 					applicationErrorModule,
+					axiosError,
 					error,
 				};
 			};
 
 			it("should set an application error", async () => {
-				const { wrapper, applicationErrorModule, error } = setup();
+				const { wrapper, applicationErrorModule, axiosError, error } = setup();
 
 				const h5pEditor = wrapper.getComponent(H5PPlayerComponent);
-				h5pEditor.vm.$emit("load-error", error);
+				h5pEditor.vm.$emit("load-error", axiosError);
 				await nextTick();
 
-				expect(applicationErrorModule.setError).toHaveBeenCalledWith(
-					createApplicationError(error.code)
-				);
+				expect(applicationErrorModule.setError).toHaveBeenCalledWith(error);
 			});
 		});
 	});
