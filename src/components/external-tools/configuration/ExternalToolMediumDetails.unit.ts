@@ -153,7 +153,7 @@ describe("ExternalToolMediumDetails", () => {
 				});
 			});
 
-			describe("when the copy fails", () => {
+			describe("when the medium id fails to copy", () => {
 				const setup = () => {
 					const { wrapper, notifierModule } = getWrapper({
 						status: ExternalToolMediumStatus.Active,
@@ -290,7 +290,7 @@ describe("ExternalToolMediumDetails", () => {
 				});
 			});
 
-			describe("when the copy fails", () => {
+			describe("when the media source id fails to copy", () => {
 				const setup = () => {
 					const { wrapper, notifierModule } = getWrapper({
 						status: ExternalToolMediumStatus.Active,
