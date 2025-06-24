@@ -1,5 +1,9 @@
 import { Factory } from "fishery";
-import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
+import {
+	RoleName,
+	SchoolForExternalInviteResponse,
+	SchoolForExternalInviteListResponse,
+} from "@/serverApi/v3";
 import { RoomMember } from "@data-room";
 
 export const roomMemberFactory = Factory.define<RoomMember>(({ sequence }) => ({
@@ -20,6 +24,18 @@ export const roomMemberSchoolResponseFactory =
 		id: `school${sequence}`,
 		name: `schoolName${sequence}`,
 	}));
+
+export const roomMemberSchoolListResponseFactory =
+	Factory.define<SchoolForExternalInviteListResponse>(({ associations }) => {
+		const totalCount = associations.total || 1;
+		const data = roomMemberSchoolResponseFactory.buildList(totalCount);
+		return {
+			data,
+			total: totalCount,
+			limit: totalCount,
+			skip: 0,
+		};
+	});
 
 export const roomOwnerFactory = roomMemberFactory.params({
 	roomRoleName: RoleName.Roomowner,

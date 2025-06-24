@@ -14,7 +14,7 @@ import {
 	mockedPiniaStoreTyping,
 	roomFactory,
 	roomMemberFactory,
-	roomMemberSchoolResponseFactory,
+	roomMemberSchoolListResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -348,18 +348,20 @@ describe("useRoomMembers", () => {
 		});
 	});
 
-	describe("getSchools", () => {
+	describe("getAllSchools", () => {
 		it("should get schools", async () => {
 			const { roomMembersStore } = setup();
-			const schoolList = roomMemberSchoolResponseFactory.buildList(3);
+			const schoolList = roomMemberSchoolListResponseFactory.build({
+				total: 3,
+			});
 			schoolApiMock.schoolControllerGetSchoolListForExternalInvite.mockResolvedValue(
 				mockApiResponse({
 					data: schoolList,
 				})
 			);
-			await roomMembersStore.getSchools();
+			await roomMembersStore.getAllSchools();
 
-			expect(roomMembersStore.schools).toHaveLength(schoolList.length + 1);
+			expect(roomMembersStore.schools).toHaveLength(schoolList.total);
 			expect(roomMembersStore.schools[0]).toStrictEqual({
 				id: "school-id",
 				name: "Paul-Gerhardt-Gymnasium",
@@ -374,7 +376,7 @@ describe("useRoomMembers", () => {
 				error
 			);
 
-			await roomMembersStore.getSchools();
+			await roomMembersStore.getAllSchools();
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
 		});

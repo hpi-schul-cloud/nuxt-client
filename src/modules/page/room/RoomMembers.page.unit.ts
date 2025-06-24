@@ -469,7 +469,7 @@ describe("RoomMembersPage", () => {
 			expect(wireframe.props("fabItems")).toBe(null);
 		});
 
-		it("should call getSchools method", async () => {
+		it("should call getAllSchools method", async () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper, roomMembersStore } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
@@ -480,7 +480,7 @@ describe("RoomMembersPage", () => {
 
 			await addMemberButton.trigger("click");
 
-			expect(roomMembersStore.getSchools).toHaveBeenCalled();
+			expect(roomMembersStore.getAllSchools).toHaveBeenCalled();
 		});
 
 		it("should open Dialog", async () => {
