@@ -185,8 +185,12 @@ describe("UserLoginMigrationModule", () => {
 							limit: 2,
 						};
 
-						apiMock.userLoginMigrationControllerGetMigrations.mockResolvedValue(
-							mockApiResponse({ data: listResponse })
+						const axiosError = axiosErrorFactory
+							.withStatusCode(HttpStatusCode.BadRequest)
+							.build();
+
+						apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValueOnce(
+							axiosError
 						);
 
 						vi.spyOn(module, "setUserLoginMigration");
@@ -280,7 +284,9 @@ describe("UserLoginMigrationModule", () => {
 					const mockMe = meResponseFactory.build({ user: { id: "userId" } });
 					authModule.setMe(mockMe);
 
-					const error = axiosErrorFactory.build();
+					const error = axiosErrorFactory
+						.withStatusCode(HttpStatusCode.BadRequest)
+						.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
 					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValue(
@@ -323,8 +329,12 @@ describe("UserLoginMigrationModule", () => {
 					const mockMe = meResponseFactory.build({ user: { id: "userId" } });
 					authModule.setMe(mockMe);
 
-					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValue(
-						createApplicationError(HttpStatusCode.BadRequest)
+					const axiosError = axiosErrorFactory
+						.withStatusCode(HttpStatusCode.BadRequest)
+						.build();
+
+					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValueOnce(
+						axiosError
 					);
 				};
 
@@ -448,7 +458,9 @@ describe("UserLoginMigrationModule", () => {
 					const mockMe = meResponseFactory.build();
 					authModule.setMe(mockMe);
 
-					const error = axiosErrorFactory.build();
+					const error = axiosErrorFactory
+						.withStatusCode(HttpStatusCode.BadRequest)
+						.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
 					apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockRejectedValue(
