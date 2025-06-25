@@ -192,6 +192,8 @@ export default {
 	"common.words.color.turquoise": "Turquoise",
 	"common.words.color.yellow": "Yellow",
 	"common.words.copiedToClipboard": "Copied to the clipboard",
+	"common.words.copiedToClipboard.failure":
+		"Failed to copy to the clipboard. Please try it manually.",
 	"common.words.copyLinkToClipboard.success": "Link copied to clipboard",
 	"common.words.copyLinkToClipboard.failure":
 		"Link could not be copied to clipboard",
@@ -2104,6 +2106,7 @@ export default {
 	"pages.tool.medium.mediumId": "Medium Id",
 	"pages.tool.medium.mediumSourceId": "Media catalog Id",
 	"pages.tool.medium.noMediaSource": "Without media catalog",
+	"pages.tool.medium.template": "Template",
 	"pages.userMigration.backToLogin": "Return to login page",
 	"pages.userMigration.button.skip": "Not now",
 	"pages.userMigration.button.startMigration": "Start",
