@@ -160,16 +160,6 @@ describe("ExternalToolConfigurator", () => {
 		});
 
 		describe("when pasting a url for an existing tool into the search box", () => {
-			beforeEach(() => {
-				const vueTeleportDiv = document.createElement("div");
-				vueTeleportDiv.className = "v-overlay-container";
-				document.body.appendChild(vueTeleportDiv);
-			});
-
-			afterEach(() => {
-				document.body.innerHTML = "";
-			});
-
 			const setup = () => {
 				const template = schoolExternalToolConfigurationTemplateFactory.build({
 					baseUrl: "https://test.com/:pathParam1/spacer/:pathParam2",
@@ -207,12 +197,11 @@ describe("ExternalToolConfigurator", () => {
 			it("should only show the matched tool in the selection list", async () => {
 				const { wrapper, template } = setup();
 
-				await wrapper.find(".v-field__input").trigger("click");
+				const autocomplete = wrapper.findComponent(VAutocomplete);
 
-				const searchInput = wrapper
-					.find('[data-testId="configuration-select"]')
-					.find("input");
-				await searchInput.setValue(
+				const input = autocomplete.find("input");
+				await input.trigger("focus");
+				await input.setValue(
 					"https://test.com/pathParamValue1/spacer/pathParamValue2?queryParam1=queryParamValue1"
 				);
 
