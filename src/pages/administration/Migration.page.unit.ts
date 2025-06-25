@@ -1,16 +1,9 @@
-import { ComponentPublicInstance, nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import { NamedValue } from "vue-i18n";
-import { Router, useRouter } from "vue-router";
-import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
+import { schoolFactory } from "@@/tests/test-utils";
 import {
-	ComponentMountingOptions,
-	flushPromises,
-	mount,
-	shallowMount,
-	VueWrapper,
-} from "@vue/test-utils";
-import { createMock } from "@golevelup/ts-jest";
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { THEME_KEY } from "@/utils/inject";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
@@ -19,12 +12,19 @@ import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
 import MigrationWizard from "@/pages/administration/Migration.page.vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { schoolFactory } from "@@/tests/test-utils";
 import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
+	ComponentMountingOptions,
+	flushPromises,
+	mount,
+	shallowMount,
+	VueWrapper,
+} from "@vue/test-utils";
+import { createMock } from "@golevelup/ts-jest";
+import { ComponentPublicInstance, nextTick } from "vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { NamedValue } from "vue-i18n";
+import { Router, useRouter } from "vue-router";
+import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -54,12 +54,6 @@ type MigrationPageWrapperType = Partial<{
 	isCancelDialogOpen: boolean;
 	isClearAutoMatchesDialogOpen: boolean;
 	school: { inUserMigration: boolean; inMaintenance: boolean };
-}>;
-
-type DialogWrapperType = Partial<{
-	confirmDialog: () => void;
-	cancelDialog: () => void;
-	isOpen: boolean;
 }>;
 
 const getWrapper = (
@@ -418,10 +412,9 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialogParent = wrapper.find(
-					'[data-testid="cancel-migration-dialog-wrapper"]'
-				);
-				const dialog = dialogParent.findComponent(VCustomDialog);
+				const dialog = wrapper.findComponent({
+					ref: "cancelMigrationDialog",
+				});
 
 				dialog.vm.$emit("update:isOpen", false);
 				await nextTick();
@@ -455,10 +448,9 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialogParent = wrapper.find(
-					'[data-testid="cancel-migration-dialog-wrapper"]'
-				);
-				const dialog = dialogParent.findComponent(VCustomDialog);
+				const dialog = wrapper.findComponent({
+					ref: "cancelMigrationDialog",
+				});
 
 				dialog.vm.$emit("dialog-confirmed");
 
@@ -490,10 +482,9 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialogParent = wrapper.find(
-					'[data-testid="cancel-migration-dialog-wrapper"]'
-				);
-				const dialog = dialogParent.findComponent(VCustomDialog);
+				const dialog = wrapper.findComponent({
+					ref: "cancelMigrationDialog",
+				});
 
 				dialog.vm.$emit("dialog-confirmed");
 				await nextTick();
@@ -600,10 +591,9 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialogParent = wrapper.find(
-					'[data-testid="clear-auto-matches-dialog-wrapper"]'
-				);
-				const dialog = dialogParent.findComponent(VCustomDialog);
+				const dialog = wrapper.findComponent({
+					ref: "clearAutoMatchesDialog",
+				});
 
 				expect(wrapper.vm.isClearAutoMatchesDialogOpen).toBe(true);
 				expect(dialog.exists()).toBe(true);
@@ -639,11 +629,9 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialogParent = wrapper.find(
-					'[data-testid="clear-auto-matches-dialog-wrapper"]'
-				);
-				const dialog: VueWrapper<ComponentPublicInstance & DialogWrapperType> =
-					dialogParent.findComponent(VCustomDialog);
+				const dialog = wrapper.findComponent<typeof VCustomDialog>({
+					ref: "clearAutoMatchesDialog",
+				});
 
 				dialog.vm.cancelDialog?.();
 				await nextTick();
@@ -662,11 +650,9 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialogParent = wrapper.find(
-					'[data-testid="clear-auto-matches-dialog-wrapper"]'
-				);
-				const dialog: VueWrapper<ComponentPublicInstance & DialogWrapperType> =
-					dialogParent.findComponent(VCustomDialog);
+				const dialog = wrapper.findComponent<typeof VCustomDialog>({
+					ref: "clearAutoMatchesDialog",
+				});
 
 				dialog.vm.confirmDialog?.();
 				await nextTick();

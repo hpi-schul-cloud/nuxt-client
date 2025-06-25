@@ -75,33 +75,33 @@
 					</VStepperItem>
 				</VStepperHeader>
 
-				<div data-testid="cancel-migration-dialog-wrapper">
-					<VCustomDialog
-						v-model:is-open="isCancelDialogOpen"
-						has-buttons
-						:buttons="['cancel', 'confirm']"
-						data-testid="cancel-migration-dialog"
-						@dialog-confirmed="confirmCancelMigration()"
-					>
-						<template #title>
-							{{
-								t(
-									"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
-								)
-							}}
-						</template>
-						<template #content>
-							{{
-								t(
-									"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
-								)
-							}}
-						</template>
-					</VCustomDialog>
-				</div>
+				<VCustomDialog
+					ref="cancelMigrationDialog"
+					v-model:is-open="isCancelDialogOpen"
+					has-buttons
+					:buttons="['cancel', 'confirm']"
+					data-testid="cancel-migration-dialog"
+					@dialog-confirmed="confirmCancelMigration()"
+				>
+					<template #title>
+						{{
+							t(
+								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
+							)
+						}}
+					</template>
+					<template #content>
+						{{
+							t(
+								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
+							)
+						}}
+					</template>
+				</VCustomDialog>
 
 				<div data-testid="clear-auto-matches-dialog-wrapper">
 					<VCustomDialog
+						ref="clearAutoMatchesDialog"
 						v-model:is-open="isClearAutoMatchesDialogOpen"
 						has-buttons
 						:buttons="['cancel', 'confirm']"
