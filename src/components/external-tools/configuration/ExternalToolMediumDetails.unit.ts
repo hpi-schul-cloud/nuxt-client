@@ -249,7 +249,7 @@ describe("ExternalToolMediumDetails", () => {
 					};
 				};
 
-				it("should copy the medium id to the clipboard", async () => {
+				it("should copy the media source id to the clipboard", async () => {
 					const { wrapper, clipboardWriteTextMock, mediaSourceId } = setup();
 
 					const copyIcon = wrapper
