@@ -52,7 +52,7 @@ import NotifierModule from "@/store/notifier";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiContentCopy } from "@icons/material";
 import { useI18n } from "vue-i18n";
-import { Ref, toRef } from "vue";
+import { computed, ComputedRef, Ref, toRef } from "vue";
 
 const props = defineProps<{
 	selectedTemplateMedium: ExternalToolMediumResponse;
@@ -67,8 +67,9 @@ const medium: Ref<ExternalToolMediumResponse> = toRef(
 	"selectedTemplateMedium"
 );
 
-const isMediumTemplate =
-	medium.value.status === ExternalToolMediumStatus.Template;
+const isMediumTemplate: ComputedRef<boolean> = computed(
+	() => medium.value.status === ExternalToolMediumStatus.Template
+);
 
 const copyDetailToClipboard = (text: string | undefined) => {
 	try {

@@ -74,7 +74,7 @@ describe("ExternalToolMediumDetails", () => {
 					mediaSourceId: "media-source-id",
 				});
 
-				const mediumIdText = wrapper.findComponent<VTextField>(
+				const mediumIdText = wrapper.findComponent<typeof VTextField>(
 					'[data-testid="medium-details-medium-id"]'
 				);
 
@@ -90,15 +90,12 @@ describe("ExternalToolMediumDetails", () => {
 					mediaSourceId: "media-source-id",
 				});
 
-				const mediumIdText = wrapper
-					.findAllComponents(VTextField)
-					.find(
-						(component) =>
-							component.attributes("data-testid") === "medium-details-medium-id"
-					);
+				const mediumIdText = wrapper.findComponent<typeof VTextField>(
+					'[data-testid="medium-details-medium-id"]'
+				);
 
-				expect(mediumIdText?.isVisible()).toBe(true);
-				expect(mediumIdText?.props().modelValue).toEqual("medium-id");
+				expect(mediumIdText.isVisible()).toBe(true);
+				expect(mediumIdText.props().modelValue).toEqual("medium-id");
 			});
 		});
 
@@ -200,16 +197,12 @@ describe("ExternalToolMediumDetails", () => {
 					mediaSourceId: "media-source-id-1",
 				});
 
-				const mediumIdText = wrapper
-					.findAllComponents(VTextField)
-					.find(
-						(component) =>
-							component.attributes("data-testid") ===
-							"medium-details-media-source-id"
-					);
+				const sourceIdText = wrapper.findComponent<typeof VTextField>(
+					'[data-testid="medium-details-media-source-id"]'
+				);
 
-				expect(mediumIdText?.isVisible()).toBe(true);
-				expect(mediumIdText?.props().modelValue).toEqual("media-source-id-1");
+				expect(sourceIdText.isVisible()).toBe(true);
+				expect(sourceIdText.props().modelValue).toEqual("media-source-id-1");
 			});
 		});
 
@@ -221,16 +214,12 @@ describe("ExternalToolMediumDetails", () => {
 					mediaSourceId: "media-source-id-2",
 				});
 
-				const mediumIdText = wrapper
-					.findAllComponents(VTextField)
-					.find(
-						(component) =>
-							component.attributes("data-testid") ===
-							"medium-details-media-source-id"
-					);
+				const sourceIdText = wrapper.findComponent<typeof VTextField>(
+					'[data-testid="medium-details-media-source-id"]'
+				);
 
-				expect(mediumIdText?.isVisible()).toBe(true);
-				expect(mediumIdText?.props().modelValue).toEqual("media-source-id-2");
+				expect(sourceIdText.isVisible()).toBe(true);
+				expect(sourceIdText.props().modelValue).toEqual("media-source-id-2");
 			});
 		});
 
