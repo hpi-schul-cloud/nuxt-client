@@ -189,6 +189,36 @@ describe("SchoolSettingsPage", () => {
 		});
 	});
 
+	describe("old administration page link", () => {
+		describe("when the hiding feature is disabled", () => {
+			it("should render the link to the old admin page", () => {
+				const { wrapper } = getWrapper({
+					FEATURE_HIDE_OLD_ADMIN_PAGE_LINK: false,
+				});
+
+				const oldAdminPageLink = wrapper.find(
+					"[data-testid=old-admin-page-link]"
+				);
+
+				expect(oldAdminPageLink.exists()).toBe(true);
+			});
+		});
+
+		describe("when the hiding feature is enabled", () => {
+			it("should not render the link to the old admin page", () => {
+				const { wrapper } = getWrapper({
+					FEATURE_HIDE_OLD_ADMIN_PAGE_LINK: true,
+				});
+
+				const oldAdminPageLink = wrapper.find(
+					"[data-testid=old-admin-page-link]"
+				);
+
+				expect(oldAdminPageLink.exists()).toBe(false);
+			});
+		});
+	});
+
 	describe("school year change", () => {
 		describe("when school has an active ldap", () => {
 			const setup = () => {
