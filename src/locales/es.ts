@@ -409,7 +409,7 @@ export default {
 	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
 		"La escuela ya está en el próximo año escolar",
 	"components.administration.schoolYearChangeSection.notification.finish.success":
-		"El año escolar comenzó con éxito",
+		"Fase de transferencia completada con éxito. escuela transferida al próximo año.",
 	"components.administration.schoolYearChangeSection.notification.start.success":
 		"La fase de transferencia comenzó con éxito",
 	"components.administration.schoolYearChangeSection.title.step.one":
@@ -436,10 +436,14 @@ export default {
 		"Fase de transferencia final",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
 		"Los datos de clase y personales (LDAP) se han actualizado y marcado",
-	"components.administration.schoolYearChangeSection.dialog.title":
-		"¿Realmente termina el año escolar?",
-	"components.administration.schoolYearChangeSection.dialog.content":
+	"components.administration.schoolYearChangeSection.dialog.start.title":
+		"¿Realmente comienza la fase de transferencia?",
+	"components.administration.schoolYearChangeSection.dialog.start.content":
 		"La sincronización de los datos maestros LDAP se interrumpe durante la fase de transferencia. Esto significa que los datos y clases del usuario (si se usan) ya no se actualizan a través de LDAP. Iniciar sesión con datos de inicio de sesión ya sincronizados aún es posible. También se tienen en cuenta los cambios de contraseña en el LDAP durante el inicio de sesión.",
+	"components.administration.schoolYearChangeSection.dialog.finish.title":
+		"¿Realmente final de la fase de transferencia?",
+	"components.administration.schoolYearChangeSection.dialog.finish.content":
+		"Se inicia la sincronización de los datos LDAP. Se actualizan los datos y clases de los usuarios. El nuevo año escolar se establece automáticamente.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "en ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hora | horas",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
@@ -1410,6 +1414,8 @@ export default {
 		"Ocurrió un error al cargar la escuela",
 	"pages.administration.school.index.generalSettings.changeSchoolValueWarning":
 		"¡Una vez configurado no puedrá ser cambiado!",
+	"pages.administration.school.index.generalSettings.disabledHint":
+		"No se puede editar aquí, más información en el cambio de año escolar de la sección",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Por favor, seleccione el distrito al que pertenece la escuela",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider":
@@ -1417,6 +1423,8 @@ export default {
 	"pages.administration.school.index.generalSettings.labels.language": "Idioma",
 	"pages.administration.school.index.generalSettings.labels.nameOfSchool":
 		"Nombre de la escuela",
+	"pages.administration.school.index.generalSettings.labels.schoolYear":
+		"Año escolar",
 	"pages.administration.school.index.generalSettings.labels.schoolNumber":
 		"Numero de la escuela",
 	"pages.administration.school.index.generalSettings.labels.timezone":
