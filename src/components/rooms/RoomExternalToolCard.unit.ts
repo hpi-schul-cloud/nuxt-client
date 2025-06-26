@@ -83,6 +83,32 @@ describe("RoomExternalToolCard", () => {
 		});
 	});
 
+	describe("tool domain", () => {
+		const setup = () => {
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build({
+					status: contextExternalToolConfigurationStatusFactory.build({
+						isDeactivated: true,
+					}),
+				});
+
+			const { wrapper } = getWrapper(tool, false);
+
+			return {
+				wrapper,
+				tool,
+			};
+		};
+
+		it("should display the tool domain", () => {
+			const { wrapper, tool } = setup();
+
+			const domain = wrapper.find("[data-testId=tool-card-domain]");
+
+			expect(domain.text()).toEqual(tool.domain);
+		});
+	});
+
 	describe("tool status", () => {
 		describe("when tool status is deactivated", () => {
 			const setup = () => {

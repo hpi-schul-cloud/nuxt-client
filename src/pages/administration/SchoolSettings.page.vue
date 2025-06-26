@@ -15,7 +15,12 @@
 			</div>
 		</v-alert>
 		<div data-testid="no-error">
-			<v-alert type="info" class="mb-4">
+			<v-alert
+				v-if="!isFeatureHideOldAdminPageLinkEnabled"
+				type="info"
+				class="mb-4"
+				data-testid="old-admin-page-link"
+			>
 				<div class="alert-text">
 					{{ $t("pages.administration.school.index.back") }}
 					<a href="/administration/school/">
@@ -282,6 +287,10 @@ export default defineComponent({
 			computed(
 				() => envConfigModule.getEnv.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED
 			);
+		const isFeatureHideOldAdminPageLinkEnabled: ComputedRef<boolean> = computed(
+			() => envConfigModule.getEnv.FEATURE_HIDE_OLD_ADMIN_PAGE_LINK
+		);
+
 		const instituteTitle: ComputedRef<string> = computed(() => {
 			switch (envConfigModule.getEnv.SC_THEME) {
 				case SchulcloudTheme.N21:
@@ -316,6 +325,7 @@ export default defineComponent({
 			isFeatureOauthMigrationEnabled,
 			isFeatureSchoolPolicyEnabled,
 			isFeatureSchoolTermsOfUseEnabled,
+			isFeatureHideOldAdminPageLinkEnabled,
 			instituteTitle,
 			schoolUsesLdap,
 			mdiAlertCircle,

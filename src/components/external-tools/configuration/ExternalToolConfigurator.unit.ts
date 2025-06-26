@@ -17,7 +17,7 @@ import {
 import { createMock } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
-import { VAutocomplete, VBtn } from "vuetify/lib/components/index";
+import { VAutocomplete, VBtn } from "vuetify/components";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 

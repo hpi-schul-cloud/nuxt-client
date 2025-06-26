@@ -1,10 +1,10 @@
 /// <reference types="vitest" />
+import { defineConfig } from "vite";
 
 import Vue from "@vitejs/plugin-vue";
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
 import { fileURLToPath, URL } from "node:url";
-import { defineConfig } from "vitest/config";
 import { getTsconfigAliases } from "./config/vite/tsconfig-aliases";
 
 export default defineConfig(() => {

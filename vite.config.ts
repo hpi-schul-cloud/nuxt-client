@@ -67,10 +67,10 @@ export default defineConfig(
 			},
 			define: { "process.env": {} },
 			resolve: {
-				alias: {
+				alias: [
 					...tsconfigAliases,
 					// any additional aliases
-				},
+				],
 				extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
 			},
 			build: {

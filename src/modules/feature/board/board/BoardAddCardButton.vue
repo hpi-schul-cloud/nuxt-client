@@ -22,7 +22,8 @@
 
 <script setup lang="ts">
 import { mdiPlus } from "@icons/material";
-import { useSharedEditMode } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { computed } from "vue";
 
 defineProps({

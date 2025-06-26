@@ -1,51 +1,58 @@
 <template>
-	<div ref="textElement" class="line-clamp">
-		<v-tooltip
-			v-if="isOverflowingLongText"
+	<div>
+		<VTooltip
+			:open-on-hover="isOverflowingLongText"
 			location="top"
 			origin="auto"
 			transition="fade"
 			:max-width="tooltipWidth"
 		>
 			<template #activator="{ props }">
-				<div v-bind="props" class="text-truncate">
+				<div v-bind="props" ref="textElement" class="fit-content text-truncate">
 					<slot />
 				</div>
 			</template>
 			<div class="overflow-hidden base-2">
 				{{ tooltipText }}
 			</div>
-		</v-tooltip>
-		<template v-else>
-			<slot />
-		</template>
+		</VTooltip>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { useResizeObserver } from "@vueuse/core";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
 
-const textElement = ref<HTMLDivElement | undefined>(undefined);
+const textElement = useTemplateRef<HTMLDivElement>("textElement");
+
 const isOverflowingLongText = ref<boolean>(false);
+
 let tooltipWidth = "320px";
 const tooltipText = computed<string>(() => textElement.value?.innerText ?? "");
 
-onMounted(() => {
+const checkOverflow = () => {
 	if (textElement.value) {
 		isOverflowingLongText.value =
 			textElement.value.offsetWidth < textElement.value.scrollWidth;
 		tooltipWidth = `${textElement.value.offsetWidth * 0.8}px`;
 	}
+};
+
+useResizeObserver(textElement, () => {
+	checkOverflow();
+});
+
+onMounted(() => {
+	checkOverflow();
 });
 </script>
 
 <style lang="scss" scoped>
-.line-clamp {
-	overflow: hidden;
-	white-space: nowrap;
-}
-
 .overflow-hidden {
 	overflow: hidden;
+}
+
+.fit-content {
+	max-width: fit-content;
 }
 </style>

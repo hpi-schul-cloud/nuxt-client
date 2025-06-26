@@ -59,6 +59,7 @@ describe("externalToolReferenceApi.composable", () => {
 			expect(result).toEqual<ExternalToolDisplayData>({
 				contextExternalToolId: displayData.contextToolId,
 				name: displayData.displayName,
+				domain: displayData.domain,
 				logoUrl: displayData.logoUrl,
 				status: contextExternalToolConfigurationStatusFactory.build(),
 				openInNewTab: displayData.openInNewTab,
@@ -107,6 +108,7 @@ describe("externalToolReferenceApi.composable", () => {
 				{
 					contextExternalToolId: displayData.contextToolId,
 					name: displayData.displayName,
+					domain: displayData.domain,
 					logoUrl: displayData.logoUrl,
 					status: contextExternalToolConfigurationStatusFactory.build(),
 					openInNewTab: displayData.openInNewTab,

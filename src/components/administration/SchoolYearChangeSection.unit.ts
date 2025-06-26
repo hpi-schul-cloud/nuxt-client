@@ -516,16 +516,6 @@ describe("SchoolYearChangeSection", () => {
 						},
 					});
 
-				useSharedSchoolYearChangeApiMock.setMaintenanceMode.mockImplementation(
-					() => {
-						useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-							maintenanceStatusFactory.build({
-								maintenance: { active: false, startDate: undefined },
-							});
-						return Promise.resolve();
-					}
-				);
-
 				const { wrapper } = getWrapper();
 
 				const ldapButton = wrapper.findComponent<typeof VBtn>(
@@ -544,13 +534,134 @@ describe("SchoolYearChangeSection", () => {
 				};
 			};
 
-			it("should finish transfer phase", async () => {
+			it("should open dialog", async () => {
 				const { wrapper } = await setup();
 
-				const transferFinishButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="finish-transfer-button"]'
+				const button = wrapper.find('[data-testid="finish-transfer-button"]');
+				await button.trigger("click");
+
+				const title = wrapper.findComponent('[data-testid="dialog-title"]');
+				const cancelBtn = wrapper.findComponent(
+					'[data-testid="dialog-cancel"]'
 				);
-				await transferFinishButton.trigger("click");
+				const confirmBtn = wrapper.findComponent(
+					'[data-testid="dialog-confirm"]'
+				);
+
+				expect(title.isVisible()).toBeTruthy();
+				expect(cancelBtn.isVisible()).toBeTruthy();
+				expect(confirmBtn.isVisible()).toBeTruthy();
+			});
+		});
+	});
+
+	describe("Finish transfer Dialog", () => {
+		const setup = async () => {
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2000, 11, 31));
+
+			useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
+				maintenanceStatusFactory.build({
+					maintenance: {
+						active: true,
+						startDate: new Date(2000, 11, 31).toString(),
+					},
+				});
+
+			useSharedSchoolYearChangeApiMock.setMaintenanceMode.mockImplementation(
+				() => {
+					useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
+						maintenanceStatusFactory.build({
+							maintenance: { active: false, startDate: undefined },
+						});
+					return Promise.resolve();
+				}
+			);
+
+			const { wrapper } = getWrapper();
+
+			const ldapButton = wrapper.findComponent<typeof VBtn>(
+				'[data-testid="ldap-data-button"]'
+			);
+			await ldapButton.trigger("click");
+
+			const checkBox = wrapper.findComponent<typeof VCheckbox>(
+				'[data-testid="checkbox-update-data"]'
+			);
+			checkBox.vm.$emit("update:modelValue", true);
+			await nextTick();
+
+			return {
+				wrapper,
+			};
+		};
+
+		describe("when cancel button is clicked", () => {
+			it("should not call setMaintenance", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.find('[data-testid="finish-transfer-button"]');
+				await button.trigger("click");
+
+				const cancelBtn = wrapper.findComponent(
+					'[data-testid="dialog-cancel"]'
+				);
+				await cancelBtn.trigger("click");
+				expect(
+					useSharedSchoolYearChangeApiMock.setMaintenanceMode
+				).not.toHaveBeenCalled();
+			});
+
+			it("should not show the dialog", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.find('[data-testid="finish-transfer-button"]');
+				await button.trigger("click");
+
+				const title = wrapper.findComponent('[data-testid="dialog-title"]');
+				const cancelBtn = wrapper.findComponent(
+					'[data-testid="dialog-cancel"]'
+				);
+				await cancelBtn.trigger("click");
+
+				expect(title.isVisible()).toBeFalsy();
+			});
+
+			it("should show the finish transfer button", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.find('[data-testid="finish-transfer-button"]');
+
+				expect(button.isVisible()).toBeTruthy();
+			});
+		});
+
+		describe("when confirm button is clicked", () => {
+			it("should not show the dialog", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.find('[data-testid="finish-transfer-button"]');
+				await button.trigger("click");
+
+				const title = wrapper.findComponent('[data-testid="dialog-title"]');
+				const confirmBtn = wrapper.findComponent(
+					'[data-testid="dialog-confirm"]'
+				);
+				await confirmBtn.trigger("click");
+
+				expect(title.isVisible()).toBeFalsy();
+			});
+
+			it("should call setMaintenance", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.find('[data-testid="finish-transfer-button"]');
+				await button.trigger("click");
+
+				const confirmBtn = wrapper.findComponent(
+					'[data-testid="dialog-confirm"]'
+				);
+				await confirmBtn.trigger("click");
 
 				expect(
 					useSharedSchoolYearChangeApiMock.setMaintenanceMode
@@ -576,7 +687,14 @@ describe("SchoolYearChangeSection", () => {
 				const transferFinishButton = wrapper.findComponent<typeof VBtn>(
 					'[data-testid="finish-transfer-button"]'
 				);
-				await transferFinishButton.trigger("click");
+
+				const button = wrapper.find('[data-testid="finish-transfer-button"]');
+				await button.trigger("click");
+
+				const confirmBtn = wrapper.findComponent(
+					'[data-testid="dialog-confirm"]'
+				);
+				await confirmBtn.trigger("click");
 
 				expect(transferStartButton.exists()).toBeFalsy();
 

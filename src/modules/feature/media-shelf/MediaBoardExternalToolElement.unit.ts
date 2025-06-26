@@ -2,7 +2,6 @@ import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { AlertPayload } from "@/store/types/alert-payload";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	businessErrorFactory,
 	contextExternalToolConfigurationStatusFactory,
@@ -10,6 +9,7 @@ import {
 	externalToolDisplayDataFactory,
 	mediaExternalToolElementResponseFactory,
 } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -161,6 +161,7 @@ describe("MediaBoardExternalToolElement", () => {
 
 				expect(displayComponent.props().element).toEqual<MediaElementDisplay>({
 					title: displayDataResponse.name,
+					domain: displayDataResponse.domain,
 					description: displayDataResponse.description,
 					thumbnail: displayDataResponse.logoUrl,
 				});

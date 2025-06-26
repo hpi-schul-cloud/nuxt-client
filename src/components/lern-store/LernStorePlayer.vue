@@ -12,11 +12,21 @@
 	</div>
 </template>
 
-<script :src="scriptSrc" charset="UTF-8"></script>
-
 <script lang="ts">
 import { defineComponent, ref, watch, onMounted } from "vue";
 import { $axios } from "@/utils/api";
+
+function loadScript(scriptSrc: string): Promise<void> {
+	return new Promise((resolve, reject) => {
+		const script = document.createElement("script");
+		script.src = scriptSrc;
+		script.async = true;
+		script.onload = () => resolve();
+		script.onerror = () =>
+			reject(new Error(`Failed to load script: ${scriptSrc}`));
+		document.body.appendChild(script);
+	});
+}
 
 export default defineComponent({
 	name: "LernStorePlayer",
@@ -33,16 +43,11 @@ export default defineComponent({
 			type: String,
 			default: "",
 		},
-		scriptSrc: {
-			type: String,
-			default: "",
-		},
 	},
 	setup(props) {
 		const model = ref(props.nodeId);
 		const loading = ref(props.loading);
 		const iframeSrc = ref(props.iframeSrc);
-		const scriptSrc = ref(props.scriptSrc);
 
 		watch(
 			() => props.nodeId,
@@ -56,7 +61,7 @@ export default defineComponent({
 				.get(`/v1/edu-sharing/player/${model.value}`)
 				.then((response) => {
 					iframeSrc.value = response.data.iframe_src;
-					scriptSrc.value = response.data.script_src;
+					loadScript(response.data.script_src);
 				});
 			loading.value = false;
 		});
@@ -64,7 +69,6 @@ export default defineComponent({
 		return {
 			loading,
 			iframeSrc,
-			scriptSrc,
 		};
 	},
 });

@@ -81,11 +81,9 @@ import {
 	cardDropPlaceholderOptions,
 	DragAndDropKey,
 } from "@/types/board/DragAndDrop";
-import {
-	useBoardPermissions,
-	useBoardStore,
-	useForceRender,
-} from "@data-board";
+import { useBoardPermissions, useForceRender } from "@data-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
