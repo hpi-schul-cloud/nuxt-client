@@ -1,24 +1,22 @@
-/// <reference types="vitest" />
 import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 import Vue from "@vitejs/plugin-vue";
-import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import VueDevTools from "vite-plugin-vue-devtools";
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { DevServerProxy } from "./config/vite/dev-server-proxy-plugin";
 import { CspNoncePlaceholder } from "./config/vite/nonce-placeholder-plugin";
 import { generateAliases } from "./config/vite/theme-aliases";
 import { ThemeResolver } from "./config/vite/theme-resolver-plugin";
+import { getTsconfigAliases } from "./config/vite/tsconfig-aliases";
 // import Checker from "vite-plugin-checker";
 
 export default defineConfig(
 	(async () => {
 		const replacements = await generateAliases(__dirname);
+		const tsconfigAliases = getTsconfigAliases();
 
 		return {
 			plugins: [
-				tsconfigPaths({ loose: true }),
 				Vue({
 					template: {
 						transformAssetUrls,
@@ -35,7 +33,7 @@ export default defineConfig(
 					},
 				}),
 				VueI18nPlugin({
-					//options
+					include: "src/locales/!(schema).ts",
 				}),
 				DevServerProxy(),
 				ThemeResolver(replacements),
@@ -50,68 +48,29 @@ export default defineConfig(
 				// }),
 			],
 			optimizeDeps: {
-				exclude: [
-					"vuetify",
-					"vue-router",
-					"unplugin-vue-router/runtime",
-					"unplugin-vue-router/data-loaders",
-					"unplugin-vue-router/data-loaders/basic",
+				include: [
+					"axios",
+					"dayjs",
+					"object-hash",
+					"sortablejs",
+					"socket.io-client",
+					"focus-trap",
+					"maska",
+					"vuedraggable",
+					"@vueuse/core",
+					"@vueuse/integrations",
+					"@vueuse/components",
+					"@vuelidate/core",
+					"@vuelidate/validators",
 				],
+				exclude: ["vuetify"],
 			},
 			define: { "process.env": {} },
 			resolve: {
-				alias: [
-					{
-						find: "@",
-						replacement: fileURLToPath(new URL("src", import.meta.url)),
-					},
-					{
-						find: /\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$/,
-						replacement: fileURLToPath(
-							new URL("tests/test-utils/mediaFileMock.js", import.meta.url)
-						),
-					},
-					{
-						find: /^@data-(.*)$/,
-						replacement: fileURLToPath(
-							new URL("src/modules/data/$1", import.meta.url)
-						),
-					},
-					{
-						find: /^@feature-(.*)$/,
-						replacement: fileURLToPath(
-							new URL("src/modules/feature/$1", import.meta.url)
-						),
-					},
-					{
-						find: /^@page-(.*)$/,
-						replacement: fileURLToPath(
-							new URL("src/modules/page/$1", import.meta.url)
-						),
-					},
-					{
-						find: /^@ui-(.*)$/,
-						replacement: fileURLToPath(
-							new URL("src/modules/ui/$1", import.meta.url)
-						),
-					},
-					{
-						find: /^@util-(.*)$/,
-						replacement: fileURLToPath(
-							new URL("src/modules/util/$1", import.meta.url)
-						),
-					},
-					{
-						find: /^@icons(.*)$/,
-						replacement: fileURLToPath(
-							new URL("src/components/icons/$1", import.meta.url)
-						),
-					},
-					{
-						find: /^@@\/(.*)$/,
-						replacement: fileURLToPath(new URL("$1", import.meta.url)),
-					},
-				],
+				alias: {
+					...tsconfigAliases,
+					// any additional aliases
+				},
 				extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
 			},
 			build: {
@@ -127,18 +86,6 @@ export default defineConfig(
 					},
 					scss: {
 						api: "modern-compiler",
-					},
-				},
-			},
-			// vitest
-			test: {
-				globals: true,
-				environment: "jsdom",
-				include: ["**/*.unit.{j,t}s?(x)"],
-				setupFiles: ["./tests/setup.js"],
-				server: {
-					deps: {
-						inline: ["vuetify"],
 					},
 				},
 			},
