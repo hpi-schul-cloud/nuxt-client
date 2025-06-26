@@ -196,6 +196,8 @@ export default {
 	"common.words.color.turquoise": "Turquesa",
 	"common.words.color.yellow": "Amarillo",
 	"common.words.copiedToClipboard": "Copiado en el portapapeles",
+	"common.words.copiedToClipboard.failure":
+		"No se pudo copiar al portapapeles. Inténtelo manualmente.",
 	"common.words.copyLinkToClipboard.success": "Enlace copiado al portapapeles",
 	"common.words.copyLinkToClipboard.failure":
 		"El enlace no se pudo copiar al portapapeles",
@@ -2174,6 +2176,7 @@ export default {
 	"pages.tool.medium.mediumId": "ID medio",
 	"pages.tool.medium.mediumSourceId": "ID de catálogo de medios",
 	"pages.tool.medium.noMediaSource": "Sin catálogo de medios",
+	"pages.tool.medium.template": "Plantilla",
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",
 	"pages.userMigration.button.skip": "Ahora no",
 	"pages.userMigration.button.startMigration": "Empieza a moverte",
