@@ -429,11 +429,11 @@ export default {
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
 		"Class and personal data (LDAP) have been updated and verified.",
 	"components.administration.schoolYearChangeSection.dialog.start.title":
-		"Really start transfer phase?",
+		"Really start the transfer phase?",
 	"components.administration.schoolYearChangeSection.dialog.start.content":
 		"Synchronization of LDAP master data is interrupted during the transfer phase. Thus, user data and classes (if used) are no longer updated via LDAP. Login with previously synchronized login data is still possible. Password changes in LDAP during login are also taken into account.",
 	"components.administration.schoolYearChangeSection.dialog.finish.title":
-		"Really end transfer phase?",
+		"Really end the transfer phase?",
 	"components.administration.schoolYearChangeSection.dialog.finish.content":
 		"The synchronization of the LDAP data is started. User data and classes are updated. The new school year is automatically set.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",

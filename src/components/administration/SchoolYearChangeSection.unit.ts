@@ -627,7 +627,7 @@ describe("SchoolYearChangeSection", () => {
 				expect(title.isVisible()).toBeFalsy();
 			});
 
-			it("should show the start transfer button", async () => {
+			it("should show the finish transfer button", async () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.find('[data-testid="finish-transfer-button"]');
@@ -653,22 +653,6 @@ describe("SchoolYearChangeSection", () => {
 			});
 
 			it("should call setMaintenance", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.find('[data-testid="finish-transfer-button"]');
-				await button.trigger("click");
-
-				const confirmBtn = wrapper.findComponent(
-					'[data-testid="dialog-confirm"]'
-				);
-				await confirmBtn.trigger("click");
-
-				expect(
-					useSharedSchoolYearChangeApiMock.setMaintenanceMode
-				).toHaveBeenCalledWith("schoolId", false);
-			});
-
-			it("should finish transfer phase", async () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.find('[data-testid="finish-transfer-button"]');
