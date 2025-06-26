@@ -29,8 +29,7 @@
 						)
 					"
 					density="compact"
-					:readonly="!hasSchoolEditPermission"
-					:disabled="true"
+					readonly
 					:hint="
 						$t('pages.administration.school.index.generalSettings.disabledHint')
 					"

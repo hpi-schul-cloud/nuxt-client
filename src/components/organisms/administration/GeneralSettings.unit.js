@@ -223,7 +223,7 @@ describe("GeneralSettings", () => {
 			await wrapper.setData(mockData);
 
 			const ele = wrapper.findComponent(searchStrings.schoolYear);
-			expect(ele.vm.disabled).toBeTruthy();
+			expect(ele.vm.readonly).toBeTruthy();
 		});
 
 		it("school number text should be disabled if the number is set", async () => {
