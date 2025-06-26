@@ -51,6 +51,7 @@ export class ExternalToolMapper {
 		const mapped: ExternalToolDisplayData = {
 			contextExternalToolId: response.contextToolId,
 			name: response.displayName,
+			domain: response.domain,
 			description: response.description,
 			status: CommonToolMapper.mapContextExternalToolConfigurationStatus(
 				response.status

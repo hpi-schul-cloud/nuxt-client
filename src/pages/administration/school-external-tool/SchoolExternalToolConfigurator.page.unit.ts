@@ -1,4 +1,5 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
+import ExternalToolMediumDetails from "@/components/external-tools/configuration/ExternalToolMediumDetails.vue";
 import AuthModule from "@/store/auth";
 import { SchoolExternalToolSave } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
@@ -19,6 +20,8 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { ExternalToolMediumStatus } from "@/serverApi/v3";
+import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
@@ -391,6 +394,58 @@ describe("SchoolExternalToolConfigurator", () => {
 				await nextTick();
 
 				expect(router.push).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("ExternalToolMediumDetails", () => {
+		const setup = async (
+			selectedTemplate: SchoolExternalToolConfigurationTemplate
+		) => {
+			const { wrapper } = getWrapper({});
+
+			wrapper.findComponent(ExternalToolConfigurator).vm.selectedTemplate =
+				selectedTemplate;
+			await nextTick();
+
+			return { wrapper };
+		};
+
+		describe("when the selected template has medium", () => {
+			it("should show the external tool medium details", async () => {
+				const { wrapper } = await setup({
+					externalToolId: "",
+					name: "School External Tool",
+					baseUrl: "https://test.com",
+					parameters: [],
+					medium: {
+						status: ExternalToolMediumStatus.Active,
+						mediaSourceId: "media-source-id",
+						mediumId: "medium-id",
+					},
+					isDeactivated: false,
+				});
+
+				const mediumDetails = wrapper.findComponent(ExternalToolMediumDetails);
+
+				expect(mediumDetails.isVisible()).toBe(true);
+			});
+		});
+
+		describe("when the selected template has no medium", () => {
+			it("should not show the external tool medium details", async () => {
+				const { wrapper } = await setup({
+					externalToolId: "",
+					name: "School External Tool",
+					baseUrl: "https://test.com",
+					parameters: [],
+					medium: undefined,
+					isDeactivated: false,
+				});
+
+				const mediumDetails = wrapper.findComponent(ExternalToolMediumDetails);
+
+				expect(mediumDetails.exists()).toBe(false);
 			});
 		});
 	});

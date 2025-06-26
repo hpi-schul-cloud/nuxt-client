@@ -5825,6 +5825,12 @@ export interface MediaAvailableLineElementResponse {
      */
     name: string;
     /**
+     * Domain of the tool url
+     * @type {string}
+     * @memberof MediaAvailableLineElementResponse
+     */
+    domain: string;
+    /**
      * Description of the media available line element
      * @type {string}
      * @memberof MediaAvailableLineElementResponse
@@ -10241,6 +10247,12 @@ export interface ToolReferenceResponse {
      * @memberof ToolReferenceResponse
      */
     displayName: string;
+    /**
+     * The domain of the tool url
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    domain: string;
     /**
      * Whether the tool should be opened in a new tab
      * @type {boolean}
