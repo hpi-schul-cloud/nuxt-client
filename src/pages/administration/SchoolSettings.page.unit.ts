@@ -17,7 +17,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useSharedSchoolYearChange } from "@data-school";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { flushPromises, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { nextTick, reactive } from "vue";
 import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
 import SchoolSettings from "./SchoolSettings.page.vue";
@@ -37,7 +37,6 @@ describe("SchoolSettingsPage", () => {
 	let useSharedSchoolYearChangeApiMock: DeepMocked<
 		ReturnType<typeof useSharedSchoolYearChange>
 	>;
-	let fetchSystemsSpy: Mock;
 
 	beforeEach(() => {
 		useSharedSchoolYearChangeApiMock =
