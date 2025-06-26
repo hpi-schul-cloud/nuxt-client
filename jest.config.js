@@ -69,7 +69,6 @@ const config = {
 		"!<rootDir>/src/pages/NewsEdit.page.vue",
 		"!<rootDir>/src/pages/ProxyError.page.vue",
 		"!<rootDir>/src/components/organisms/administration/ImportUsers.vue",
-		"!<rootDir>/src/pages/administration/Migration.page.vue",
 	],
 
 	globals: {
