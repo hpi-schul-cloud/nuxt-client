@@ -1,3 +1,4 @@
+import type { Mocked } from "vitest";
 import { GetterTree, ActionTree, Module as Mod, MutationTree } from "vuex";
 import { VuexModule } from "vuex-module-decorators";
 
@@ -45,7 +46,7 @@ const mockActions = <M>(
 export function createModuleMocks<M extends VuexModule>(
 	moduleClass: ConstructorOf<M>,
 	getters: Partial<M> = {}
-): vi.Mocked<M> {
+): Mocked<M> {
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/no-explicit-any
 	const module: Function & Mod<M, any> = moduleClass;
 
@@ -65,5 +66,5 @@ export function createModuleMocks<M extends VuexModule>(
 		mockActions(module, statics);
 	}
 
-	return statics as vi.Mocked<M>;
+	return statics as Mocked<M>;
 }

@@ -18,11 +18,12 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import type { Mocked } from "vitest";
 
 describe("AdminMigrationSection", () => {
-	let schoolsModule: vi.Mocked<SchoolsModule>;
-	let userLoginMigrationModule: vi.Mocked<UserLoginMigrationModule>;
-	let envConfigModule: vi.Mocked<EnvConfigModule>;
+	let schoolsModule: Mocked<SchoolsModule>;
+	let userLoginMigrationModule: Mocked<UserLoginMigrationModule>;
+	let envConfigModule: Mocked<EnvConfigModule>;
 
 	vi.spyOn(
 		useUserLoginMigrationMappingsComposable,
