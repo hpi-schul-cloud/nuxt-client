@@ -195,6 +195,8 @@ export default {
 	"common.words.color.turquoise": "Бірюза",
 	"common.words.color.yellow": "Жовтий",
 	"common.words.copiedToClipboard": "Скопійовано в буфер обміну",
+	"common.words.copiedToClipboard.failure":
+		"Не вдалося скопіювати в буфер обміну. Спробуйте вручну.",
 	"common.words.copyLinkToClipboard.success":
 		"Посилання скопійовано в буфер обміну",
 	"common.words.copyLinkToClipboard.failure":
@@ -2144,6 +2146,7 @@ export default {
 	"pages.tool.medium.mediumId": "Середній",
 	"pages.tool.medium.mediumSourceId": "Ідентифікатор медіа каталогу",
 	"pages.tool.medium.noMediaSource": "Без медіа -каталогу",
+	"pages.tool.medium.template": "Шаблон",
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",
 	"pages.userMigration.button.skip": "Не зараз",
 	"pages.userMigration.button.startMigration": "почати рухатися",
