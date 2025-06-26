@@ -99,41 +99,39 @@
 					</template>
 				</VCustomDialog>
 
-				<div data-testid="clear-auto-matches-dialog-wrapper">
-					<VCustomDialog
-						ref="clearAutoMatchesDialog"
-						v-model:is-open="isClearAutoMatchesDialogOpen"
-						has-buttons
-						:buttons="['cancel', 'confirm']"
-						data-testid="clear-auto-matches-dialog"
-						@dialog-confirmed="clearAllAutoMatches()"
-					>
-						<template #title>
+				<VCustomDialog
+					ref="clearAutoMatchesDialog"
+					v-model:is-open="isClearAutoMatchesDialogOpen"
+					has-buttons
+					:buttons="['cancel', 'confirm']"
+					data-testid="clear-auto-matches-dialog"
+					@dialog-confirmed="clearAllAutoMatches()"
+				>
+					<template #title>
+						{{
+							t(
+								"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
+							)
+						}}
+					</template>
+					<template #content>
+						<p>
 							{{
 								t(
-									"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
+									"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph"
 								)
 							}}
-						</template>
-						<template #content>
-							<p>
-								{{
-									t(
-										"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph"
-									)
-								}}
-							</p>
-							<p>
-								{{
-									t(
-										"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph"
-									)
-								}}
-								>
-							</p>
-						</template>
-					</VCustomDialog>
-				</div>
+						</p>
+						<p>
+							{{
+								t(
+									"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph"
+								)
+							}}
+							>
+						</p>
+					</template>
+				</VCustomDialog>
 			</VStepper>
 		</template>
 
