@@ -96,6 +96,7 @@ describe("SchoolSettingsPage", () => {
 				endDate: "",
 				courseCreationInNextYear: false,
 			},
+			fetchSystems: vi.fn(),
 			...schoolGetters,
 		});
 
@@ -321,11 +322,9 @@ describe("SchoolSettingsPage", () => {
 	});
 
 	it("should load needed data from server", async () => {
-		const fetchSystemsSpy = vi.spyOn(schoolsModule, "fetchSystems");
-
 		getWrapper();
 		await nextTick();
 
-		expect(fetchSystemsSpy).toHaveBeenCalled();
+		expect(schoolsModule.fetchSystems).toHaveBeenCalled();
 	});
 });
