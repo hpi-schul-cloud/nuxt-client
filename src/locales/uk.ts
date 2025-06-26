@@ -195,6 +195,8 @@ export default {
 	"common.words.color.turquoise": "Бірюза",
 	"common.words.color.yellow": "Жовтий",
 	"common.words.copiedToClipboard": "Скопійовано в буфер обміну",
+	"common.words.copiedToClipboard.failure":
+		"Не вдалося скопіювати в буфер обміну. Спробуйте вручну.",
 	"common.words.copyLinkToClipboard.success":
 		"Посилання скопійовано в буфер обміну",
 	"common.words.copyLinkToClipboard.failure":
@@ -407,7 +409,7 @@ export default {
 	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
 		"Школа вже в наступному навчальному році",
 	"components.administration.schoolYearChangeSection.notification.finish.success":
-		"Навчальний рік успішно розпочався",
+		"Фаза передачі успішно завершена. Школа перенесена до наступного року.",
 	"components.administration.schoolYearChangeSection.notification.start.success":
 		"Фаза передачі розпочалася успішно",
 	"components.administration.schoolYearChangeSection.title.step.one":
@@ -434,10 +436,14 @@ export default {
 		"Кінцева фаза передачі",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
 		"Класні та персональні дані (LDAP) були оновлені та перевірені",
-	"components.administration.schoolYearChangeSection.dialog.title":
-		"Дійсно закінчити навчальний рік?",
-	"components.administration.schoolYearChangeSection.dialog.content":
+	"components.administration.schoolYearChangeSection.dialog.start.title":
+		"Дійсно почати фазу передачі?",
+	"components.administration.schoolYearChangeSection.dialog.start.content":
 		"Синхронізація головних даних LDAP переривається під час фази передачі. Це означає, що дані та класи користувачів (якщо використовуються) більше не оновлюються через LDAP. Вхід із вже синхронізованими даними входу все ще можливий. Зміни пароля в LDAP під час входу також враховуються.",
+	"components.administration.schoolYearChangeSection.dialog.finish.title":
+		"Дійсно фаза кінцевої передачі?",
+	"components.administration.schoolYearChangeSection.dialog.finish.content":
+		"Запускається синхронізація даних LDAP. Дані користувачів та класи оновлюються. Новий навчальний рік автоматично встановлюється.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "в",
 	"components.atoms.VCustomChipTimeRemaining.hintHours":
 		"година | години (годин)",
@@ -1387,6 +1393,8 @@ export default {
 		"Під час завантаження школи сталася помилка",
 	"pages.administration.school.index.generalSettings.changeSchoolValueWarning":
 		"Після налаштування цей параметр буде неможливо змінити!",
+	"pages.administration.school.index.generalSettings.disabledHint":
+		"Не можна редагувати тут, більше інформації у зміні навчального року розділу",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Виберіть округ, до якого належить ваша школа",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider":
@@ -1394,6 +1402,8 @@ export default {
 	"pages.administration.school.index.generalSettings.labels.language": "Мова",
 	"pages.administration.school.index.generalSettings.labels.nameOfSchool":
 		"Назва школи",
+	"pages.administration.school.index.generalSettings.labels.schoolYear":
+		"Навчальний рік",
 	"pages.administration.school.index.generalSettings.labels.schoolNumber":
 		"Номер школи",
 	"pages.administration.school.index.generalSettings.labels.timezone":
@@ -2136,6 +2146,7 @@ export default {
 	"pages.tool.medium.mediumId": "Середній",
 	"pages.tool.medium.mediumSourceId": "Ідентифікатор медіа каталогу",
 	"pages.tool.medium.noMediaSource": "Без медіа -каталогу",
+	"pages.tool.medium.template": "Шаблон",
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",
 	"pages.userMigration.button.skip": "Не зараз",
 	"pages.userMigration.button.startMigration": "почати рухатися",

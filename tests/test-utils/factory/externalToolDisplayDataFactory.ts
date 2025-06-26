@@ -7,6 +7,7 @@ export const externalToolDisplayDataFactory =
 		contextExternalToolId: `schoolExternalTool${sequence}`,
 		title: "title",
 		name: `name${sequence}`,
+		domain: "example.com",
 		openInNewTab: false,
 		status: contextExternalToolConfigurationStatusFactory.build(),
 		logoUrl: "https://example.com/logo.png",

@@ -18,10 +18,20 @@
 	>
 		<ContentElementBar :has-grey-background="true" :icon="getIcon">
 			<template v-if="displayData && displayData.logoUrl" #logo>
-				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" />
+				<VImg
+					data-testid="board-external-tool-element-logo"
+					height="100%"
+					class="mx-auto"
+					:src="displayData.logoUrl"
+				/>
 			</template>
 			<template #title>
 				{{ toolTitle }}
+			</template>
+			<template v-if="displayData" #subtitle>
+				<LineClamp data-testid="board-external-tool-element-domain">
+					{{ displayData.domain }}
+				</LineClamp>
 			</template>
 			<template #menu>
 				<ExternalToolElementMenu
@@ -69,6 +79,7 @@ import {
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
+import { LineClamp } from "@ui-line-clamp";
 import { useSharedLastCreatedElement } from "@util-board";
 import {
 	computed,
