@@ -6,7 +6,6 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { APPLICATION_ERROR_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
-	apiResponseErrorFactory,
 	apiValidationResponseErrorFactory,
 	axiosErrorFactory,
 } from "@@/tests/test-utils";
@@ -21,8 +20,6 @@ import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import H5pEditorPage from "./H5PEditor.page.vue";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
-import { th } from "vuetify/locale";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
 
 vi.mock("./h5pEditorBoardHooks.composable");
 

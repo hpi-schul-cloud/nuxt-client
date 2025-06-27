@@ -175,16 +175,6 @@ describe("UserLoginMigrationModule", () => {
 						const mockMe = meResponseFactory.build({ user: { id: "userId" } });
 						authModule.setMe(mockMe);
 
-						const listResponse: UserLoginMigrationSearchListResponse = {
-							data: [
-								userLoginMigrationResponseFactory.build(),
-								userLoginMigrationResponseFactory.build(),
-							],
-							total: 2,
-							skip: 0,
-							limit: 2,
-						};
-
 						const axiosError = axiosErrorFactory
 							.withStatusCode(HttpStatusCode.BadRequest)
 							.build();
