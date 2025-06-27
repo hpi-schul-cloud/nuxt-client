@@ -173,13 +173,12 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
-	const getSchools = async (skip = 0, limit = 1000) => {
+	const getSchools = async (skip = 0, limit = 2) => {
 		try {
-			const response =
-				await schoolApi.schoolControllerGetSchoolListForExternalInvite(
-					skip,
-					limit
-				);
+			const response = await schoolApi.schoolControllerGetSchoolList(
+				skip,
+				limit
+			);
 			if (response.data.data.length === 0) {
 				return;
 			}

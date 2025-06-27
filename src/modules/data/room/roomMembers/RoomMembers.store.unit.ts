@@ -354,7 +354,7 @@ describe("useRoomMembers", () => {
 			const schoolList = roomMemberSchoolListResponseFactory.build({
 				total: 3,
 			});
-			schoolApiMock.schoolControllerGetSchoolListForExternalInvite.mockResolvedValue(
+			schoolApiMock.schoolControllerGetSchoolList.mockResolvedValue(
 				mockApiResponse({
 					data: schoolList,
 				})
@@ -372,9 +372,7 @@ describe("useRoomMembers", () => {
 			const { roomMembersStore } = setup();
 
 			const error = new Error("Test error");
-			schoolApiMock.schoolControllerGetSchoolListForExternalInvite.mockRejectedValue(
-				error
-			);
+			schoolApiMock.schoolControllerGetSchoolList.mockRejectedValue(error);
 
 			await roomMembersStore.getAllSchools();
 
