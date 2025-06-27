@@ -47,7 +47,7 @@ const getTableRowsContent = async (wrapper) => {
 
 describe("@/components/organisms/DataTable/BackendDataTable", () => {
 	beforeEach(() => {
-		jest.spyOn(window, "scrollTo").mockImplementation();
+		vi.spyOn(window, "scrollTo").mockImplementation();
 	});
 
 	describe("rendering", () => {
@@ -416,7 +416,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			it("can trigger on selected rows", async () => {
 				const totalSelections = testData.length;
 				const selection = [...Array(totalSelections).keys()].map(String);
-				const testAction = jest.fn();
+				const testAction = vi.fn();
 				const actionLabel = "TestAction";
 				const wrapper = getWrapper({
 					rowsSelectable: true,

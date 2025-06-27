@@ -3,16 +3,17 @@ import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mountComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { BoardMenuScope } from "@ui-board";
 import { useShareBoardLink } from "./shareBoardLink.composable";
+import type { Mocked } from "vitest";
 
 describe("useShareBoardLink", () => {
-	const notifierModule: jest.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getComposable = () => {

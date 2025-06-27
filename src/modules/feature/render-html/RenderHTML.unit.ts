@@ -74,7 +74,7 @@ describe("RenderHTML", () => {
 					config: "richText",
 				});
 				expect(wrapper.html()).toEqual(
-					'<div><span class="someclass" style="font-color: green;">test value</span></div>'
+					'<div><span style="font-color: green;" class="someclass">test value</span></div>'
 				);
 			});
 
@@ -85,7 +85,7 @@ describe("RenderHTML", () => {
 					config: "richText",
 				});
 				expect(wrapper.html()).toEqual(
-					'<div><span class="someclass" style="font-color: green;">test value</span></div>'
+					'<div><span style="font-color: green;" class="someclass">test value</span></div>'
 				);
 			});
 		});

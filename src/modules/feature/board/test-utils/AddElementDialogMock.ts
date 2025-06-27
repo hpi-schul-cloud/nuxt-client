@@ -1,15 +1,16 @@
 import { Ref, ref } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
+import { Mock } from "vitest";
 
 interface Props {
-	askTypeMock?: jest.Mock;
+	askTypeMock?: Mock;
 }
 
 export const setupAddElementDialogMock = (props: Props = {}) => {
-	const mockedUseAddElementDialog = jest.mocked(useAddElementDialog);
+	const mockedUseAddElementDialog = vi.mocked(useAddElementDialog);
 
-	const createTextElementMock = jest.fn();
-	const createFileElementMock = jest.fn();
+	const createTextElementMock = vi.fn();
+	const createFileElementMock = vi.fn();
 
 	const staticElementTypeOptionsMock: Ref<
 		{
@@ -40,8 +41,8 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 			testId: string;
 		}[]
 	> = ref([]);
-	const askTypeMock = props.askTypeMock || jest.fn();
-	const onFileSelectMock = jest.fn();
+	const askTypeMock = props.askTypeMock || vi.fn();
+	const onFileSelectMock = vi.fn();
 	const isFilePickerOpenMock = ref(false);
 	const isDialogOpenMock = ref(false);
 
@@ -50,8 +51,8 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 		isDialogOpen: isDialogOpenMock,
 		staticElementTypeOptions: staticElementTypeOptionsMock,
 		dynamicElementTypeOptions: dynamicElementTypeOptionsMock,
-		onElementClick: jest.fn(),
-		onFileElementClick: jest.fn(),
+		onElementClick: vi.fn(),
+		onFileElementClick: vi.fn(),
 		onFileSelect: onFileSelectMock,
 		isFilePickerOpen: isFilePickerOpenMock,
 	};

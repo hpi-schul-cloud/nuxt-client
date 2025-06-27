@@ -4,7 +4,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { describe } from "@jest/globals";
 import { KebabMenuAction } from "@ui-kebab-menu";
 import { flushPromises } from "@vue/test-utils";
 import { nextTick } from "vue";

@@ -7,19 +7,20 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useSchoolLicenseApi } from "@data-license";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { HttpStatusCode } from "../../store/types/http-status-code.enum";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
+import type { Mocked } from "vitest";
 
-jest.mock("@data-license");
+vi.mock("@data-license");
 
 describe("VidisMediaSyncSection", () => {
 	let useSchoolLicenseApiMock: DeepMocked<
 		ReturnType<typeof useSchoolLicenseApi>
 	>;
 
-	const notifierModule: jest.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	const getWrapper = () => {
@@ -41,11 +42,11 @@ describe("VidisMediaSyncSection", () => {
 		useSchoolLicenseApiMock =
 			createMock<ReturnType<typeof useSchoolLicenseApi>>();
 
-		jest.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
+		vi.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("Sync button", () => {

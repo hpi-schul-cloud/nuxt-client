@@ -31,6 +31,8 @@ describe("RenameFileDialog", () => {
 							},
 						}),
 					],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 			return { wrapper, entityName, name };
@@ -124,6 +126,8 @@ describe("RenameFileDialog", () => {
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 			return { wrapper };
@@ -146,6 +150,8 @@ describe("RenameFileDialog", () => {
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 			return { wrapper };

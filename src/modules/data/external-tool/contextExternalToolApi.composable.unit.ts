@@ -11,7 +11,7 @@ import {
 	contextExternalToolResponseFactory,
 	mockApiResponse,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import {
 	ContextExternalToolMapper,
 	ToolContextMapping,
@@ -29,11 +29,11 @@ describe("contextExternalToolApi.composable", () => {
 	beforeEach(() => {
 		toolApi = createMock<serverApi.ToolApiInterface>();
 
-		jest.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
+		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchContextExternalToolCall", () => {

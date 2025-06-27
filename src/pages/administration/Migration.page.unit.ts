@@ -1,9 +1,8 @@
+import { nextTick } from "vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Router, useRouter } from "vue-router";
+import { createMock } from "@golevelup/ts-vitest";
 import { schoolFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { THEME_KEY } from "@/utils/inject";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
@@ -13,25 +12,32 @@ import SchoolsModule from "@/store/schools";
 import MigrationWizard from "@/pages/administration/Migration.page.vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { Mock } from "vitest";
+import {
 	ComponentMountingOptions,
 	flushPromises,
 	mount,
 	shallowMount,
 	VueWrapper,
 } from "@vue/test-utils";
-import { createMock } from "@golevelup/ts-jest";
-import { ComponentPublicInstance, nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { ComponentPublicInstance } from "vue";
 import { NamedValue } from "vue-i18n";
-import { Router, useRouter } from "vue-router";
 import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
 const router = createMock<Router>();
 
@@ -85,8 +91,6 @@ const getWrapper = (
 const getWrapperShallow = (
 	options: ComponentMountingOptions<typeof MigrationWizard> = {}
 ): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> => {
-	document.body.setAttribute("data-app", "true");
-
 	return shallowMount(MigrationWizard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -98,9 +102,9 @@ const getWrapperShallow = (
 	});
 };
 
-window.scrollTo = jest.fn();
-
 describe("User Migration / Index", () => {
+	window.scrollTo = vi.fn();
+
 	beforeEach(() => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
@@ -160,6 +164,7 @@ describe("User Migration / Index", () => {
 
 	describe("Start user migration", () => {
 		beforeEach(() => {
+			vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
 			importUsersModule.setTotal(0);
 		});
 
@@ -178,6 +183,10 @@ describe("User Migration / Index", () => {
 		});
 
 		it("should show button for start inUserMigration", async () => {
+			vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValue();
+			vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+
 			const wrapper = getWrapper();
 
 			const btn = wrapper.find("[data-testid=start_user_migration]");
@@ -205,6 +214,10 @@ describe("User Migration / Index", () => {
 
 	describe("show summary", () => {
 		beforeEach(() => {
+			vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+
 			schoolsModule.setSchool(
 				schoolFactory.build({
 					inUserMigration: true,
@@ -262,7 +275,7 @@ describe("User Migration / Index", () => {
 		});
 
 		it("implement perform migration", async () => {
-			const performMigrationMock = jest.spyOn(
+			const performMigrationMock = vi.spyOn(
 				importUsersModule,
 				"performMigration"
 			);
@@ -323,10 +336,7 @@ describe("User Migration / Index", () => {
 		it("perform end maintenance", async () => {
 			const { wrapper } = await setup();
 
-			const endMaintenanceMock = jest.spyOn(
-				schoolsModule,
-				"migrationStartSync"
-			);
+			const endMaintenanceMock = vi.spyOn(schoolsModule, "migrationStartSync");
 			endMaintenanceMock.mockImplementation(async () => {
 				schoolsModule.setSchool({
 					...schoolsModule.getSchool,
@@ -348,6 +358,12 @@ describe("User Migration / Index", () => {
 
 	describe("cancel migration", () => {
 		describe("in step migration_importUsers", () => {
+			beforeEach(() => {
+				vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+			});
 			const setup = async () => {
 				schoolsModule.setSchool(
 					schoolFactory.build({
@@ -425,7 +441,7 @@ describe("User Migration / Index", () => {
 			it("should call stores on dialog-confirm", async () => {
 				const { wrapper } = await setup();
 
-				const cancelMigrationMock = jest.spyOn(
+				const cancelMigrationMock = vi.spyOn(
 					importUsersModule,
 					"cancelMigration"
 				);
@@ -438,9 +454,9 @@ describe("User Migration / Index", () => {
 					});
 				});
 
-				jest
-					.spyOn(schoolsModule, "fetchSchool")
-					.mockResolvedValueOnce(Promise.resolve());
+				vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValueOnce(
+					Promise.resolve()
+				);
 
 				const button = wrapper.findComponent(
 					"[data-testid=import-users-cancel-migration-btn]"
@@ -463,7 +479,7 @@ describe("User Migration / Index", () => {
 			it("should redirect to school settings migration section", async () => {
 				const { wrapper } = await setup();
 
-				const cancelMigrationMock = jest.spyOn(
+				const cancelMigrationMock = vi.spyOn(
 					importUsersModule,
 					"cancelMigration"
 				);
@@ -519,6 +535,9 @@ describe("User Migration / Index", () => {
 			};
 
 			it("should show cancel button", async () => {
+				vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(
@@ -532,8 +551,19 @@ describe("User Migration / Index", () => {
 
 	describe("clear auto matches", () => {
 		describe("when in step migration_importUsers", () => {
+			beforeEach(() => {
+				const dialogTeleportDiv = document.createElement("div");
+				dialogTeleportDiv.className = "v-overlay-container";
+				document.body.appendChild(dialogTeleportDiv);
+
+				vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
+				vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+			});
+
 			afterEach(() => {
-				jest.clearAllMocks();
+				document.body.innerHTML = "";
+				vi.clearAllMocks();
 			});
 
 			const setup = async () => {
@@ -550,11 +580,12 @@ describe("User Migration / Index", () => {
 
 				const wrapper = getWrapper();
 
-				jest
-					.spyOn(importUsersModule, "clearAllAutoMatches")
-					.mockResolvedValueOnce(Promise.resolve());
+				vi.spyOn(
+					importUsersModule,
+					"clearAllAutoMatches"
+				).mockResolvedValueOnce(Promise.resolve());
 
-				jest.spyOn(importUsersStub.methods, "reloadData");
+				vi.spyOn(importUsersStub.methods, "reloadData");
 
 				wrapper.vm.migrationStep = 2;
 				wrapper.vm.t?.("pages.administration.migration.title", {

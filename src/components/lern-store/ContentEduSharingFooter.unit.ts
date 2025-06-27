@@ -4,7 +4,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import ContentEduSharingFooter from "./ContentEduSharingFooter.vue";
-import mediaFileMock from "@@/tests/test-utils/mediaFileMock.js";
 
 describe("@/components/molecules/ContentEduSharingFooter", () => {
 	const wrapper = mount(ContentEduSharingFooter, {
@@ -22,7 +21,7 @@ describe("@/components/molecules/ContentEduSharingFooter", () => {
 		);
 
 		expect(wrapper.find(".edusharing-footer__logo").attributes("src")).toBe(
-			mediaFileMock
+			"/src/assets/img/edusharing/edusharing-logo.svg"
 		);
 	});
 

@@ -6,8 +6,8 @@ import {
 } from "./editMode.composable";
 import { ref, Ref } from "vue";
 
-jest.mock("@data-board");
-const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
+vi.mock("@data-board");
+const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
 
 describe("editMode.composable", () => {
 	describe("when using edit mode for course boards", () => {

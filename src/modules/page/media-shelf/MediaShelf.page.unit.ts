@@ -8,20 +8,21 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { ref } from "vue";
 import MediaShelfPage from "./MediaShelf.page.vue";
 
-jest.mock("@feature-media-shelf", () => {
+vi.mock("@feature-media-shelf", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@feature-media-shelf")>();
 	return {
-		...jest.requireActual("@feature-media-shelf"),
-		useSharedMediaBoardState: jest.fn(),
+		...actual,
+		useSharedMediaBoardState: vi.fn(),
 	};
 });
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
+vi.mock("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
 }));
 
 describe("MediaShelfPage", () => {
@@ -55,13 +56,13 @@ describe("MediaShelfPage", () => {
 			availableMediaLine: ref(mediaAvailableLineResponseFactory.build()),
 		});
 
-		jest
-			.mocked(useSharedMediaBoardState)
-			.mockReturnValue(useSharedMediaBoardStateMock);
+		vi.mocked(useSharedMediaBoardState).mockReturnValue(
+			useSharedMediaBoardStateMock
+		);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the page is loading", () => {

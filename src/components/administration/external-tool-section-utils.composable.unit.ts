@@ -18,7 +18,7 @@ import { SchoolExternalToolItem } from "./school-external-tool-item";
 describe("useSchoolExternalToolUtils", () => {
 	const setup = (schoolExternalTool: SchoolExternalTool) => {
 		const expectedTranslation = "translated";
-		const tMock = jest.fn().mockReturnValue(expectedTranslation);
+		const tMock = vi.fn().mockReturnValue(expectedTranslation);
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(tMock, true);
 
@@ -48,7 +48,7 @@ describe("useSchoolExternalToolUtils", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getHeaders is called", () => {
@@ -127,7 +127,7 @@ describe("useSchoolExternalToolUtils", () => {
 					mediaSourceName: "b",
 				};
 
-				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+				const { mediumSortFn } = useExternalToolsSectionUtils(vi.fn(), true);
 
 				return {
 					mediumSortFn,
@@ -157,7 +157,7 @@ describe("useSchoolExternalToolUtils", () => {
 					mediumId: "b",
 				};
 
-				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+				const { mediumSortFn } = useExternalToolsSectionUtils(vi.fn(), true);
 
 				return {
 					mediumSortFn,
@@ -182,7 +182,7 @@ describe("useSchoolExternalToolUtils", () => {
 					mediumId: "b",
 				};
 
-				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+				const { mediumSortFn } = useExternalToolsSectionUtils(vi.fn(), true);
 
 				return {
 					mediumSortFn,
@@ -206,7 +206,7 @@ describe("useSchoolExternalToolUtils", () => {
 					mediumId: "a",
 				};
 
-				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+				const { mediumSortFn } = useExternalToolsSectionUtils(vi.fn(), true);
 
 				return {
 					mediumSortFn,
@@ -236,7 +236,7 @@ describe("useSchoolExternalToolUtils", () => {
 					mediaSourceName: "b",
 				};
 
-				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+				const { mediumSortFn } = useExternalToolsSectionUtils(vi.fn(), true);
 
 				return {
 					mediumSortFn,

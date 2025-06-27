@@ -3,20 +3,20 @@ import { logger } from "./logger";
 
 describe("logger", () => {
 	beforeEach(() => {
-		jest.resetAllMocks();
-		jest.spyOn(console, "log").mockImplementation(() => {
+		vi.resetAllMocks();
+		vi.spyOn(console, "log").mockImplementation(() => {
 			// Intentionally left empty
 		});
-		jest.spyOn(console, "warn").mockImplementation(() => {
+		vi.spyOn(console, "warn").mockImplementation(() => {
 			// Intentionally left empty
 		});
-		jest.spyOn(console, "error").mockImplementation(() => {
+		vi.spyOn(console, "error").mockImplementation(() => {
 			// Intentionally left empty
 		});
 	});
 
 	afterEach(() => {
-		jest.restoreAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	it("should log info messages with optionalParams", () => {

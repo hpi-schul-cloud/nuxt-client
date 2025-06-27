@@ -37,7 +37,7 @@ describe("@ui-layout/LanguageMenu", () => {
 	beforeEach(() => {
 		Object.defineProperty(window, "location", {
 			configurable: true,
-			value: { reload: jest.fn() },
+			value: { reload: vi.fn() },
 		});
 	});
 

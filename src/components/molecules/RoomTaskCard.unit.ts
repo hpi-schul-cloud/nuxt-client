@@ -8,9 +8,10 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import RoomTaskCard from "./RoomTaskCard.vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 const testTask = {
 	id: "123",
@@ -181,7 +182,7 @@ const studentTestTask = {
 };
 
 const mockRouter = {
-	push: jest.fn(),
+	push: vi.fn(),
 };
 
 const getWrapper = (
@@ -195,7 +196,14 @@ const getWrapper = (
 ) => {
 	return mount(RoomTaskCard, {
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
+			plugins: [
+				createTestingVuetify(),
+				createTestingI18n(),
+				vueDompurifyHTMLPlugin,
+			],
+			mocks: {
+				$router: mockRouter,
+			},
 		},
 		props: {
 			room: {
@@ -209,9 +217,6 @@ const getWrapper = (
 			userRole: props.userRole,
 		},
 		...options,
-		mocks: {
-			$router: mockRouter,
-		},
 	});
 };
 
@@ -232,10 +237,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 		it("should redirect to homework page", async () => {
 			Object.defineProperty(window, "location", {
-				set: jest.fn(),
+				set: vi.fn(),
 				get: () => createMock<Location>(),
 			});
-			const locationSpy = jest.spyOn(window, "location", "set");
+			const locationSpy = vi.spyOn(window, "location", "set");
 
 			const wrapper = getWrapper({ task: testTask, userRole });
 			const taskCard = wrapper.find(".task-card");
@@ -247,10 +252,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 		it("should NOT redirect to homework page if dragging is in progress", async () => {
 			Object.defineProperty(window, "location", {
-				set: jest.fn(),
+				set: vi.fn(),
 				get: () => createMock<Location>(),
 			});
-			const locationSpy = jest.spyOn(window, "location", "set");
+			const locationSpy = vi.spyOn(window, "location", "set");
 
 			const wrapper = getWrapper({
 				task: testTask,
@@ -402,7 +407,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'redirectAction' method when 'more action' edit button is clicked", async () => {
-				const redirectAction = jest.fn();
+				const redirectAction = vi.fn();
 				const wrapper = getWrapper({ task: testTask, userRole });
 				wrapper.vm.redirectAction = redirectAction;
 
@@ -421,7 +426,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'unPublishCard' method when 'more action' unpublish button is clicked", async () => {
-				const unPublishCardMock = jest.fn();
+				const unPublishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: testTask, userRole });
 				wrapper.vm.unPublishCard = unPublishCardMock;
 
@@ -437,7 +442,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
-				const restoreCardMock = jest.fn();
+				const restoreCardMock = vi.fn();
 				const wrapper = getWrapper({ task: finishedTestTask, userRole });
 				wrapper.vm.restoreCard = restoreCardMock;
 
@@ -467,7 +472,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'publishCard' method when 'Publish' button is clicked on a draft", async () => {
-				const publishCardMock = jest.fn();
+				const publishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: draftTestTask, userRole });
 				wrapper.vm.publishCard = publishCardMock;
 
@@ -480,7 +485,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'publishCard' method when 'Publish' button is clicked on a planned task", async () => {
-				const publishCardMock = jest.fn();
+				const publishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: plannedTestTask, userRole });
 				wrapper.vm.publishCard = publishCardMock;
 
@@ -493,7 +498,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'finishCard' method when 'Finish' button is clicked", async () => {
-				const finishCardMock = jest.fn();
+				const finishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: testTask, userRole });
 				wrapper.vm.finishCard = finishCardMock;
 
@@ -543,7 +548,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should return true value after calculated isPlanned() method", () => {
-				jest.useFakeTimers().setSystemTime(new Date()); // this line sets a permanent fake time
+				vi.useFakeTimers().setSystemTime(new Date()); // this line sets a permanent fake time
 				const inFutureDate = new Date(Date.now() + 5001);
 				const localProps = {
 					...testTask,
@@ -579,7 +584,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 							FEATURE_COPY_SERVICE_ENABLED: true,
 						});
 						envConfigModule.setEnvs(envs);
-						const copyCard = jest.fn();
+						const copyCard = vi.fn();
 						const wrapper = getWrapper({ task: testTask, userRole });
 						wrapper.vm.copyCard = copyCard;
 
@@ -626,7 +631,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should have finish button if task is not marked as finished", async () => {
-				const finishCardMock = jest.fn();
+				const finishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: studentTestTask, userRole });
 				wrapper.vm.finishCard = finishCardMock;
 				const actionButton = wrapper.findComponent(
@@ -642,7 +647,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
-				const restoreCardMock = jest.fn();
+				const restoreCardMock = vi.fn();
 				const wrapper = getWrapper({ task: studentFinishedTestTask, userRole });
 				wrapper.vm.restoreCard = restoreCardMock;
 
@@ -805,11 +810,11 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			const wrapper = getWrapper({ task: testTask, userRole });
 
 			Object.defineProperty(window, "location", {
-				set: jest.fn(),
+				set: vi.fn(),
 				get: () => createMock<Location>(),
 			});
 
-			const locationSpy = jest.spyOn(window, "location", "set");
+			const locationSpy = vi.spyOn(window, "location", "set");
 
 			await wrapper.trigger("keydown.enter");
 

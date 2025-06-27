@@ -1,9 +1,9 @@
 <template>
 	<iframe
-		v-if="!loading"
+		v-if="!isLoading"
 		:src="iframeSrc"
 		class="player-iframe"
-		allowfullscreen="allowfullscreen"
+		allowfullscreen="true"
 		frameborder="0"
 		scrolling="yes"
 	/>
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, onMounted } from "vue";
+import { defineComponent, watch, onMounted, toRef, ref } from "vue";
 import { $axios } from "@/utils/api";
 
 function loadScript(scriptSrc: string): Promise<void> {
@@ -35,19 +35,11 @@ export default defineComponent({
 			type: String,
 			default: "",
 		},
-		loading: {
-			type: Boolean,
-			default: true,
-		},
-		iframeSrc: {
-			type: String,
-			default: "",
-		},
 	},
 	setup(props) {
-		const model = ref(props.nodeId);
-		const loading = ref(props.loading);
-		const iframeSrc = ref(props.iframeSrc);
+		const model = toRef(props, "nodeId");
+		const isLoading = ref(true);
+		const iframeSrc = ref("");
 
 		watch(
 			() => props.nodeId,
@@ -63,11 +55,11 @@ export default defineComponent({
 					iframeSrc.value = response.data.iframe_src;
 					loadScript(response.data.script_src);
 				});
-			loading.value = false;
+			isLoading.value = false;
 		});
 
 		return {
-			loading,
+			isLoading,
 			iframeSrc,
 		};
 	},

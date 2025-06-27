@@ -13,12 +13,12 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 describe("FileContent", () => {
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {
-		jest.runOnlyPendingTimers();
-		jest.useRealTimers();
+		vi.runOnlyPendingTimers();
+		vi.useRealTimers();
 	});
 
 	const setup = (options?: {
@@ -554,7 +554,7 @@ describe("FileContent", () => {
 			const fileInputs = wrapper.findComponent(FileInputs);
 
 			fileInputs.vm.$emit("update:alternativeText");
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
 		});
@@ -565,7 +565,7 @@ describe("FileContent", () => {
 			const fileInputs = wrapper.findComponent(FileInputs);
 
 			fileInputs.vm.$emit("update:caption");
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(wrapper.emitted("update:caption")).toHaveLength(1);
 		});
