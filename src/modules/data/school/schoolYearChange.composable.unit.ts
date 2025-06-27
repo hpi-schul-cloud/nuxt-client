@@ -12,13 +12,14 @@ import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSchoolApi } from "./schoolApi.composable";
 import { useSchoolYearChange } from "./schoolYearChange.composable";
+import type { Mocked } from "vitest";
 
 vi.mock("@data-school/schoolApi.composable");
 
 describe("SchoolYearChange.composable", () => {
 	let useSchoolApiMock: DeepMocked<ReturnType<typeof useSchoolApi>>;
 
-	const notifierModule: vi.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	const setupComposable = () => {

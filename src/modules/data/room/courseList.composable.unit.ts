@@ -21,6 +21,7 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
 import { useCourseApi } from "./courseApi.composable";
 import { useCourseList } from "./courseList.composable";
+import type { Mocked } from "vitest";
 
 vi.mock("./courseApi.composable");
 vi.mock("./courseInfoApi.composable");
@@ -29,7 +30,7 @@ describe("courseList.composable", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
 	let useCourseInfoApiMock: DeepMocked<ReturnType<typeof useCourseInfoApi>>;
 
-	const notifierModule: vi.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	beforeEach(() => {

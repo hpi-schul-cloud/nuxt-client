@@ -13,11 +13,12 @@ import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useH5PEditorApi } from "@data-h5p";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { HttpStatusCode } from "axios";
+import type { Mocked } from "vitest";
 
 describe("h5pEditorApi.composable", () => {
 	let h5pEditorApi: DeepMocked<H5pEditorApiInterface>;
 
-	const notifierModule: vi.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	beforeEach(() => {

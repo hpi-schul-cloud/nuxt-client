@@ -12,11 +12,12 @@ import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { ComponentPublicInstance, nextTick } from "vue";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import AddElementDialog from "./AddElementDialog.vue";
+import type { Mocked } from "vitest";
 
 vi.mock("./SharedElementTypeSelection.composable");
 
 describe("ElementTypeSelection", () => {
-	const envConfigModule: vi.Mocked<EnvConfigModule> = createModuleMocks(
+	const envConfigModule: Mocked<EnvConfigModule> = createModuleMocks(
 		EnvConfigModule,
 		{
 			getEnv: envsFactory.build({

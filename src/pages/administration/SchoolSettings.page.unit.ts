@@ -19,17 +19,21 @@ import { useSharedSchoolYearChange } from "@data-school";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, reactive } from "vue";
-import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import SchoolSettings from "./SchoolSettings.page.vue";
-import { Mock } from "vitest";
+import type { Mock, Mocked } from "vitest";
 
 vi.mock("vue-router");
 
-const useRouteMock = <Mock<Partial<RouteLocationNormalizedLoaded>>>useRoute;
+const useRouteMock = <Mock>useRoute;
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 vi.mock("@data-school/schoolYearChange.composable");
 
@@ -47,8 +51,8 @@ describe("SchoolSettingsPage", () => {
 		);
 	});
 
-	let envConfigModule: vi.Mocked<EnvConfigModule>;
-	let schoolsModule: vi.Mocked<SchoolsModule>;
+	let envConfigModule: Mocked<EnvConfigModule>;
+	let schoolsModule: Mocked<SchoolsModule>;
 
 	const mockFederalState: FederalState = {
 		id: "00001234597947823",

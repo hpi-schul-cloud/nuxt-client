@@ -18,14 +18,15 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import type { Mocked } from "vitest";
 
 vi.mock("@/utils/fileHelper");
 
 describe("SchoolTerms", () => {
-	let authModule: vi.Mocked<AuthModule>;
-	let schoolsModule: vi.Mocked<SchoolsModule>;
-	let termsOfUseModule: vi.Mocked<TermsOfUseModule>;
-	let notifierModule: vi.Mocked<NotifierModule>;
+	let authModule: Mocked<AuthModule>;
+	let schoolsModule: Mocked<SchoolsModule>;
+	let termsOfUseModule: Mocked<TermsOfUseModule>;
+	let notifierModule: Mocked<NotifierModule>;
 
 	const mockTerms: ConsentVersion = {
 		_id: "123",

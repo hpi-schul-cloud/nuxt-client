@@ -5,10 +5,11 @@ import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { Editor } from "@ckeditor/ckeditor5-core";
+import type { Mocked } from "vitest";
 
 describe("useEditorConfig", () => {
 	const setup = () => {
-		const envConfigModule: vi.Mocked<EnvConfigModule> = createModuleMocks(
+		const envConfigModule: Mocked<EnvConfigModule> = createModuleMocks(
 			EnvConfigModule,
 			{
 				getFallbackLanguage: "en",

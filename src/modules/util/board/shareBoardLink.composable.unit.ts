@@ -6,9 +6,10 @@ import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { BoardMenuScope } from "@ui-board";
 import { useShareBoardLink } from "./shareBoardLink.composable";
+import type { Mocked } from "vitest";
 
 describe("useShareBoardLink", () => {
-	const notifierModule: vi.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	afterEach(() => {

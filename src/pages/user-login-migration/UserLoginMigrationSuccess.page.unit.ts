@@ -8,13 +8,14 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import type { Mocked } from "vitest";
 
 vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
 describe("UserLoginMigrationSuccess", () => {
-	let systemsModule: vi.Mocked<SystemsModule>;
+	let systemsModule: Mocked<SystemsModule>;
 
 	const setup = (props: { targetSystem: string }) => {
 		const systemsMock: System[] = [

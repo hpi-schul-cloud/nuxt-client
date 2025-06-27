@@ -6,12 +6,13 @@ import { groupResponseFactory, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { GroupListFilter, useGroupApi, useGroupListState } from "./index";
+import type { Mocked } from "vitest";
 
 vi.mock("@data-group/GroupApi.composable");
 
 describe("groupListState.composable", () => {
 	let useGroupApiMock: DeepMocked<ReturnType<typeof useGroupApi>>;
-	const notifierModule: vi.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	beforeEach(() => {

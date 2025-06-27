@@ -11,6 +11,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { HttpStatusCode } from "../../store/types/http-status-code.enum";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
+import type { Mocked } from "vitest";
 
 vi.mock("@data-license");
 
@@ -19,7 +20,7 @@ describe("VidisMediaSyncSection", () => {
 		ReturnType<typeof useSchoolLicenseApi>
 	>;
 
-	const notifierModule: vi.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	const getWrapper = () => {

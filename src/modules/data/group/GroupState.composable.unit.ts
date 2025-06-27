@@ -6,12 +6,13 @@ import NotifierModule from "@/store/notifier";
 import { mountComposable } from "@@/tests/test-utils";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import type { Mocked } from "vitest";
 
 vi.mock("@data-group/GroupApi.composable");
 
 describe("GroupState.composable", () => {
 	let useGroupApiMock: DeepMocked<ReturnType<typeof useGroupApi>>;
-	const notifierModule: vi.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	beforeEach(() => {

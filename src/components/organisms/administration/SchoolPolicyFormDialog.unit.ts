@@ -14,11 +14,12 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import type { Mocked } from "vitest";
 
 describe("SchoolPolicyFormDialog", () => {
-	let notifierModule: vi.Mocked<NotifierModule>;
-	let schoolsModule: vi.Mocked<SchoolsModule>;
-	let privacyPolicyModule: vi.Mocked<PrivacyPolicyModule>;
+	let notifierModule: Mocked<NotifierModule>;
+	let schoolsModule: Mocked<SchoolsModule>;
+	let privacyPolicyModule: Mocked<PrivacyPolicyModule>;
 
 	const mockProps = {
 		isOpen: true,

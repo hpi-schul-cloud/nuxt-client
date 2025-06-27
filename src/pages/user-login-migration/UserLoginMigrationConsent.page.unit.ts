@@ -14,14 +14,15 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import type { Mocked } from "vitest";
 
 vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
 describe("UserLoginMigrationConsent", () => {
-	let systemsModule: vi.Mocked<SystemsModule>;
-	let userLoginMigrationModule: vi.Mocked<UserLoginMigrationModule>;
+	let systemsModule: Mocked<SystemsModule>;
+	let userLoginMigrationModule: Mocked<UserLoginMigrationModule>;
 
 	const setup = async (userLoginMigration?: Partial<UserLoginMigration>) => {
 		const systemsMock: System[] = [

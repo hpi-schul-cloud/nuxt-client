@@ -16,15 +16,16 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import type { Mocked } from "vitest";
 
 vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
 describe("UserLoginMigrationError", () => {
-	let systemsModule: vi.Mocked<SystemsModule>;
-	let envConfigModule: vi.Mocked<EnvConfigModule>;
-	let userLoginMigrationModule: vi.Mocked<UserLoginMigrationModule>;
+	let systemsModule: Mocked<SystemsModule>;
+	let envConfigModule: Mocked<EnvConfigModule>;
+	let userLoginMigrationModule: Mocked<UserLoginMigrationModule>;
 
 	const setup = (props: {
 		sourceSchoolNumber?: string;
