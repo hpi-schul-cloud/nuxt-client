@@ -44,6 +44,8 @@ import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import ContentElementList from "./ContentElementList.vue";
 
+vi.mock("vue-router");
+
 vi.mock("@util-board");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);

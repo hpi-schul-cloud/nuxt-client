@@ -6,7 +6,6 @@ import {
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import { BoardMenuScope } from "../board/board-menu-scope";
 import KebabMenuAction from "./KebabMenuAction.vue";
 import KebabMenuActionDelete from "./KebabMenuActionDelete.vue";
 
@@ -16,12 +15,14 @@ const mockedUseDeleteConfirmationDialog = vi.mocked(
 );
 
 describe("KebabMenuActionMoveDown Component", () => {
-	const setup = (props: { scope: BoardMenuScope }) => {
+	const setup = () => {
 		const wrapper = mount(KebabMenuActionDelete, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			propsData: props,
+			props: {
+				scopeLanguageKey: "components.board.action.delete",
+			},
 		});
 
 		return wrapper;
@@ -40,13 +41,13 @@ describe("KebabMenuActionMoveDown Component", () => {
 
 	describe("when component is mounted", () => {
 		it("should render", () => {
-			const wrapper = setup({ scope: BoardMenuScope.BOARD });
+			const wrapper = setup();
 			const action = wrapper.findComponent(KebabMenuAction);
 			expect(action.exists()).toBe(true);
 		});
 
 		it("should open askConfirmationDialog on click", () => {
-			const wrapper = setup({ scope: BoardMenuScope.BOARD });
+			const wrapper = setup();
 
 			const action = wrapper.findComponent(KebabMenuAction);
 			action.vm.$emit("click");
@@ -55,7 +56,7 @@ describe("KebabMenuActionMoveDown Component", () => {
 		});
 
 		it("should emit click on taskConfirmationDialog confirmation (its a Promise)", async () => {
-			const wrapper = setup({ scope: BoardMenuScope.BOARD });
+			const wrapper = setup();
 			askDeleteConfirmationMock.mockResolvedValue(true);
 
 			const action = wrapper.findComponent(KebabMenuAction);
@@ -66,7 +67,7 @@ describe("KebabMenuActionMoveDown Component", () => {
 		});
 
 		it("should emit click on taskConfirmationDialog cancel, too (its a Promise)", async () => {
-			const wrapper = setup({ scope: BoardMenuScope.BOARD });
+			const wrapper = setup();
 			askDeleteConfirmationMock.mockResolvedValue(false);
 
 			const action = wrapper.findComponent(KebabMenuAction);
