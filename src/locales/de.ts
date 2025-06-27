@@ -2079,6 +2079,8 @@ export default {
 		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update":
 		"Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
+	"pages.rooms.invitationlinks.error.load":
+		"Die Einladungsliste konnte nicht geladen werden.",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
