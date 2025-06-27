@@ -22,13 +22,16 @@ import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import { BoardColumnInteractionHandler } from "@feature-board";
 
-vi.mock("@data-board");
-vi.mock("@util-board");
+vi.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = vi.mocked(useBoardPermissions);
+
+vi.mock("@data-board/BoardFocusHandler.composable");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
+vi.mock("@util-board/editMode.composable");
+const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
+
 describe("BoardColumnHeader", () => {
-	const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 	const mockedStartEditMode = vi.fn();
 	const mockedStopEditMode = vi.fn();
 

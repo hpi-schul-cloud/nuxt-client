@@ -26,14 +26,16 @@ import { computed, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 
-vi.mock("@data-board");
-vi.mock("@util-board");
+vi.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = vi.mocked(useBoardPermissions);
+
+vi.mock("@data-board/BoardFocusHandler.composable");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
-describe("BoardHeader", () => {
-	const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
+vi.mock("@util-board/editMode.composable");
+const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 
+describe("BoardHeader", () => {
 	const setup = (
 		options?: {
 			permissions?: Partial<BoardPermissionChecks>;
@@ -162,7 +164,7 @@ describe("BoardHeader", () => {
 			const editButton = wrapper.findComponent(KebabMenuActionRename);
 			await editButton.trigger("click");
 
-			expect(startEditMode).toBeCalled();
+			expect(startEditMode).toHaveBeenCalled();
 		});
 	});
 
