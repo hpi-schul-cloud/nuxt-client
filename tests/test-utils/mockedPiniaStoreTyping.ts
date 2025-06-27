@@ -20,9 +20,9 @@ export type MockedStore<TStoreDef extends () => unknown> =
 				Record<string, never>,
 				{
 					[K in keyof Actions]: Actions[K] extends (
-						...args: unknown[]
-					) => unknown
-						? Mock<Actions[K]>
+						...args: infer Args
+					) => infer ReturnT
+						? Mock<(...args: Args) => ReturnT>
 						: Actions[K];
 				}
 			> & {
