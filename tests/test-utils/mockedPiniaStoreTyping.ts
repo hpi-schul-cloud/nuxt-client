@@ -5,6 +5,7 @@ See Pinia's documentation: https://pinia.vuejs.org/cookbook/testing.html#Mocking
 */
 import type { Store, StoreDefinition } from "pinia";
 import { Mock } from "vitest";
+import { UnwrapRef } from "vue";
 
 export type MockedStore<TStoreDef extends () => unknown> =
 	TStoreDef extends StoreDefinition<
@@ -16,20 +17,21 @@ export type MockedStore<TStoreDef extends () => unknown> =
 		? Store<
 				Id,
 				State,
-				Getters,
+				Record<string, never>,
 				{
 					[K in keyof Actions]: Actions[K] extends (
-						...args: infer Args
-					) => infer ReturnT
-						? Mock<ReturnT, Args>
+						...args: unknown[]
+					) => unknown
+						? Mock<Actions[K]>
 						: Actions[K];
 				}
-			>
+			> & {
+				[K in keyof Getters]: UnwrapRef<Getters[K]>;
+			}
 		: ReturnType<TStoreDef>;
 
 export function mockedPiniaStoreTyping<TStoreDef extends () => unknown>(
 	useStore: TStoreDef
 ): MockedStore<TStoreDef> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	return useStore() as any;
+	return useStore() as MockedStore<TStoreDef>;
 }
