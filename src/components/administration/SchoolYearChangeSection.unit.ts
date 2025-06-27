@@ -557,8 +557,8 @@ describe("SchoolYearChangeSection", () => {
 
 	describe("Finish transfer Dialog", () => {
 		const setup = async () => {
-			jest.useFakeTimers();
-			jest.setSystemTime(new Date(2000, 11, 31));
+			vi.useFakeTimers();
+			vi.setSystemTime(new Date(2000, 11, 31));
 
 			useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 				maintenanceStatusFactory.build({
