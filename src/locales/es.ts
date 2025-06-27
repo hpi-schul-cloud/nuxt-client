@@ -1199,7 +1199,7 @@ export default {
 	"pages.administration.ldap.classes.path.info":
 		"Ruta relativa desde la ruta base",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Aquí hay que definir dónde encontramos las clases y cómo están estructuradas. Con la ayuda de dos puntos y coma (;;) tiene la posibilidad de almacenar varias rutas de usuari{'@'} por separado.",
+		"Aquí hay que definir dónde encontramos las clases y cómo están estructuradas.",
 	"pages.administration.ldap.classes.path.title": "Ruta de clase",
 	"pages.administration.ldap.classes.subtitle":
 		"Especifique el atributo de clase en el que está disponible la siguiente información en su LDAP.",

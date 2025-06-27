@@ -1161,8 +1161,8 @@ export default {
 		"Attribute participant",
 	"pages.administration.ldap.classes.path.info": "Relative path from base path",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Here you need to define, where we find classes and how they are structured. By adding two semicolons (;;) you can add multiple user paths separately.",
-	"pages.administration.ldap.classes.path.title": "Class path(s)",
+		"Here you need to define, where we find classes and how they are structured.",
+	"pages.administration.ldap.classes.path.title": "Class path",
 	"pages.administration.ldap.classes.subtitle":
 		"Specify the class attribute where the following information is available in your LDAP.",
 	"pages.administration.ldap.classes.title": "Classes (optional)",
