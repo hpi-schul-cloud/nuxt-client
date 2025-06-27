@@ -1167,8 +1167,8 @@ export default {
 	"pages.administration.ldap.classes.path.info":
 		"Relativer Pfad vom Basis-Pfad",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind. Durch das Hinzufügen von zwei Semikolons (;;) können mehrere Nutzerpfade getrennt voneinander hinterlegt werden.",
-	"pages.administration.ldap.classes.path.title": "Klassen-Pfad(e)",
+		"Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind.",
+	"pages.administration.ldap.classes.path.title": "Klassen-Pfad",
 	"pages.administration.ldap.classes.subtitle":
 		"Geben Sie das Klassenattribut an, in dem die folgenden Informationen in Ihrem LDAP verfügbar sind.",
 	"pages.administration.ldap.classes.title": "Klassen (optional)",
