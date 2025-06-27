@@ -8,6 +8,8 @@ import { mount } from "@vue/test-utils";
 import { VBadge, VCard } from "vuetify/lib/components/index";
 import vRoomGroupAvatar from "./vRoomGroupAvatar.vue";
 
+vi.mock("vue-router");
+
 const mockData = {
 	id: "4",
 	title: "Fourth",
@@ -69,10 +71,20 @@ const propsData = {
 	maxItems: 4,
 };
 
-const getWrapper = (props: object, options?: object) => {
+const getWrapper = (
+	props: {
+		data: object;
+		size: string;
+		maxItems: number;
+		draggable?: boolean;
+	} = propsData,
+	options?: object
+) => {
 	return mount(vRoomGroupAvatar, {
-		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-		propsData: props,
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+		},
+		props,
 		...options,
 	});
 };

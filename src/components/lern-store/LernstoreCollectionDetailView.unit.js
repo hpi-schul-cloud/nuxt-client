@@ -30,8 +30,7 @@ setupStores({
 });
 
 describe("@/components/organisms/LernstoreCollectionDetailView", () => {
-	vi.spyOn(window, "scrollTo").mockImplementation();
-
+	window.scrollTo = vi.fn();
 	let wrapper;
 
 	beforeEach(() => {
@@ -48,6 +47,7 @@ describe("@/components/organisms/LernstoreCollectionDetailView", () => {
 				},
 				stubs: {
 					RouterLink: RouterLinkStub,
+					LernStoreGrid: true,
 				},
 				computed: {
 					loading: () => vi.fn(),

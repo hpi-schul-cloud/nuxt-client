@@ -29,16 +29,21 @@ import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
 import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
 import { createPinia, setActivePinia } from "pinia";
-import { useI18n } from "vue-i18n";
-import { Mock } from "vitest";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("@vueuse/integrations/useFocusTrap");
 
-vi.mock("vue-i18n");
-(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
+	return {
+		...actual,
+		useI18n: vi.fn().mockReturnValue({
+			t: vi.fn().mockImplementation((key: string) => key),
+		}),
+	};
+});
 
 describe("ChangeRole.vue", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;

@@ -2,7 +2,7 @@ import infiniteScrolling from "./infiniteScrolling";
 
 describe("@/mixins/infiniteScrolling", () => {
 	const getInstance = () => {
-		vi.spyOn(window, "scrollTo").mockImplementation();
+		window.scrollTo = vi.fn();
 
 		return mount(
 			{

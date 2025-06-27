@@ -40,7 +40,7 @@ describe("@/components/organisms/TasksList", () => {
 	};
 
 	const tasksModuleGetters: Partial<TasksModule> = {
-		getTasks: tasks as Task[],
+		getTasks: tasks,
 		getStatus: "completed",
 		hasTasks: true,
 	};
