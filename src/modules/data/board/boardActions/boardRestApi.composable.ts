@@ -4,8 +4,8 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { isApplicationError } from "@/utils/errorGuard";
 import { useSharedEditMode } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useBoardStore } from "../Board.store";
@@ -70,15 +70,21 @@ export const useBoardRestApi = () => {
 		try {
 			const board = await fetchBoardCall(payload.boardId);
 			boardStore.fetchBoardSuccess(board);
-		} catch {
-			applicationErrorModule.setError(
-				createApplicationError(
-					HttpStatusCode.NotFound,
-					t("components.board.error.404")
-				)
-			);
+		} catch (error) {
+			handleFetchBoardError(error);
 		}
+
 		boardStore.setLoading(false);
+	};
+
+	const handleFetchBoardError = (error: unknown) => {
+		if (isApplicationError(error)) {
+			applicationErrorModule.setError(error);
+		} else {
+			const genericError = createApplicationError(500, t("error.generic"));
+
+			applicationErrorModule.setError(genericError);
+		}
 	};
 
 	const deleteBoardRequest = async (payload: DeleteBoardRequestPayload) => {
