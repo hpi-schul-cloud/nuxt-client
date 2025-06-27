@@ -33,6 +33,8 @@ import BoardColumnVue from "./BoardColumn.vue";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 
+vi.mock("vue-router");
+
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = vi.mocked(useBoardPermissions);
 
