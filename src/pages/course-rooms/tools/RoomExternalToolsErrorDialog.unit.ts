@@ -1,16 +1,16 @@
 import RoomExternalToolsErrorDialog from "@/pages/course-rooms/tools/RoomExternalToolsErrorDialog.vue";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
+import {
+	contextExternalToolConfigurationStatusFactory,
+	externalToolDisplayDataFactory,
+} from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import {
-	ContextExternalToolConfigurationStatus,
-	ExternalToolDisplayData,
-} from "@data-external-tool";
+import { ExternalToolDisplayData } from "@data-external-tool";
 import { mount } from "@vue/test-utils";
 
 describe("RoomExternalToolsErrorDialog", () => {
@@ -41,27 +41,15 @@ describe("RoomExternalToolsErrorDialog", () => {
 		};
 	};
 
-	const createSelectedItem = (
-		status: ContextExternalToolConfigurationStatus
-	): ExternalToolDisplayData => {
-		return {
-			status,
-			name: "Test Tool",
-			openInNewTab: false,
-			contextExternalToolId: "contextExternalToolId",
-			isLtiDeepLinkingTool: false,
-		};
-	};
-
 	describe("when dialog is rendered", () => {
 		describe("when status is outdated", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					selectedItem: createSelectedItem(
-						contextExternalToolConfigurationStatusFactory.build({
+					selectedItem: externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
-						})
-					),
+						}),
+					}),
 				});
 
 				return {
@@ -91,11 +79,11 @@ describe("RoomExternalToolsErrorDialog", () => {
 		describe("when status is incomplete", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					selectedItem: createSelectedItem(
-						contextExternalToolConfigurationStatusFactory.build({
+					selectedItem: externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOnScopeContext: true,
-						})
-					),
+						}),
+					}),
 				});
 
 				return {
@@ -127,11 +115,11 @@ describe("RoomExternalToolsErrorDialog", () => {
 		describe("when status is incomplete operational", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					selectedItem: createSelectedItem(
-						contextExternalToolConfigurationStatusFactory.build({
+					selectedItem: externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOperationalOnScopeContext: true,
-						})
-					),
+						}),
+					}),
 				});
 
 				return {
@@ -161,11 +149,11 @@ describe("RoomExternalToolsErrorDialog", () => {
 		describe("when status is deactivated", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					selectedItem: createSelectedItem(
-						contextExternalToolConfigurationStatusFactory.build({
+					selectedItem: externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isDeactivated: true,
-						})
-					),
+						}),
+					}),
 				});
 
 				return {
@@ -197,11 +185,11 @@ describe("RoomExternalToolsErrorDialog", () => {
 		describe("when status is not licensed", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					selectedItem: createSelectedItem(
-						contextExternalToolConfigurationStatusFactory.build({
+					selectedItem: externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isNotLicensed: true,
-						})
-					),
+						}),
+					}),
 				});
 
 				return {

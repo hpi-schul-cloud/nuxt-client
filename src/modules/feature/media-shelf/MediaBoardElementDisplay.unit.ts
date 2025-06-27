@@ -44,10 +44,12 @@ describe("MediaBoardElementDisplay", () => {
 	describe("when the display data has a title and description", () => {
 		const setup = () => {
 			const title = "title";
+			const domain = "domain.com";
 			const description = "description";
 
 			const { wrapper } = getWrapper({
 				element: {
+					domain,
 					title,
 					description,
 				},
@@ -56,6 +58,7 @@ describe("MediaBoardElementDisplay", () => {
 			return {
 				wrapper,
 				title,
+				domain,
 				description,
 			};
 		};
@@ -66,6 +69,14 @@ describe("MediaBoardElementDisplay", () => {
 			const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 			expect(contentElementBar.text()).toContain(title);
+		});
+
+		it("should display the domain", () => {
+			const { wrapper, domain } = setup();
+
+			const contentElementBar = wrapper.findComponent(ContentElementBar);
+
+			expect(contentElementBar.text()).toContain(domain);
 		});
 
 		it("should display the description", () => {
@@ -83,6 +94,7 @@ describe("MediaBoardElementDisplay", () => {
 			const { wrapper } = getWrapper({
 				element: {
 					title: "title",
+					domain: "domain.com",
 					thumbnail: thumbnailUrl,
 				},
 			});
@@ -110,6 +122,7 @@ describe("MediaBoardElementDisplay", () => {
 			const { wrapper } = getWrapper({
 				element: {
 					title: "title",
+					domain: "domain.com",
 					thumbnail: undefined,
 				},
 			});

@@ -1,8 +1,7 @@
 export interface MediaElementDisplay {
 	title: string;
-
+	domain: string;
 	description?: string;
-
 	thumbnail?: string;
 }
 

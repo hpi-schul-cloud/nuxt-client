@@ -47,6 +47,7 @@ useErrorNotification(launchError);
 
 const displayData: ComputedRef<MediaElementDisplay> = computed(() => ({
 	title: props.element.name,
+	domain: props.element.domain,
 	description: props.element.description,
 	thumbnail: props.element.thumbnailUrl || props.element.logoUrl,
 }));
