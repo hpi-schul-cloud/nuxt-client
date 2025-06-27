@@ -401,7 +401,7 @@ export default {
 	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
 		"The school is already in the next school year",
 	"components.administration.schoolYearChangeSection.notification.finish.success":
-		"School year successfully started",
+		"Transfer phase successfully completed. School transferred to the next year.",
 	"components.administration.schoolYearChangeSection.notification.start.success":
 		"Transfer phase started successfully",
 	"components.administration.schoolYearChangeSection.title.step.one":
@@ -428,10 +428,14 @@ export default {
 		"End transfer phase",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
 		"Class and personal data (LDAP) have been updated and verified.",
-	"components.administration.schoolYearChangeSection.dialog.title":
-		"Really finish the school year?",
-	"components.administration.schoolYearChangeSection.dialog.content":
+	"components.administration.schoolYearChangeSection.dialog.start.title":
+		"Really start the transfer phase?",
+	"components.administration.schoolYearChangeSection.dialog.start.content":
 		"Synchronization of LDAP master data is interrupted during the transfer phase. Thus, user data and classes (if used) are no longer updated via LDAP. Login with previously synchronized login data is still possible. Password changes in LDAP during login are also taken into account.",
+	"components.administration.schoolYearChangeSection.dialog.finish.title":
+		"Really end the transfer phase?",
+	"components.administration.schoolYearChangeSection.dialog.finish.content":
+		"The synchronization of the LDAP data is started. User data and classes are updated. The new school year is automatically set.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hour | hours",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
@@ -1365,6 +1369,8 @@ export default {
 		"An error occured while loading the school",
 	"pages.administration.school.index.generalSettings.changeSchoolValueWarning":
 		"Once set, it cannot be changed!",
+	"pages.administration.school.index.generalSettings.disabledHint":
+		"Cannot be edited here, more information in the section school year change",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Please choose the county your school belongs to",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider":
@@ -1373,6 +1379,8 @@ export default {
 		"Language",
 	"pages.administration.school.index.generalSettings.labels.nameOfSchool":
 		"Name of the school",
+	"pages.administration.school.index.generalSettings.labels.schoolYear":
+		"School year",
 	"pages.administration.school.index.generalSettings.labels.schoolNumber":
 		"School number",
 	"pages.administration.school.index.generalSettings.labels.timezone":
