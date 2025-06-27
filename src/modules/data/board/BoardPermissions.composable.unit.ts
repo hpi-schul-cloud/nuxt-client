@@ -34,6 +34,15 @@ vi.mock(
 		}) as typeof import("@/utils/create-shared-composable")
 );
 
+vi.mock("vue-i18n", () => {
+	return {
+		useI18n: vi.fn().mockReturnValue({
+			t: vi.fn().mockImplementation((key: string) => key),
+			n: vi.fn().mockImplementation((key: string) => key),
+		}),
+	};
+});
+
 vi.mocked(useI18n());
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
