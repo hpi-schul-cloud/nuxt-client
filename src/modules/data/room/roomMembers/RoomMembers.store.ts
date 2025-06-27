@@ -166,14 +166,14 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return member.fullName;
 	};
 
-	const getAllSchools = async () => {
+	const loadSchoolList = async () => {
 		const areSchoolsLoaded = schools.value.length > 1;
 		if (!areSchoolsLoaded) {
-			await getSchools();
+			await loadSchoolListPage();
 		}
 	};
 
-	const getSchools = async (skip = 0, limit = 1000) => {
+	const loadSchoolListPage = async (skip = 0, limit = 1000) => {
 		try {
 			const response = await schoolApi.schoolControllerGetSchoolList(
 				skip,
@@ -187,12 +187,10 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			);
 			schools.value = [...schools.value, ...additionalSchools];
 			if (schools.value.length < response.data.total) {
-				await getSchools(skip + limit, limit);
+				await loadSchoolListPage(skip + limit, limit);
 			}
 		} catch (error) {
 			logger.error(error);
-			showFailure(t("pages.rooms.members.error.load"));
-			return null;
 		}
 	};
 
@@ -393,8 +391,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		resetPotentialMembers,
 		resetStore,
 		getPotentialMembers,
-		getAllSchools,
-		getSchools,
+		loadSchoolList,
 		getMemberById,
 		getMemberFullName,
 		leaveRoom,

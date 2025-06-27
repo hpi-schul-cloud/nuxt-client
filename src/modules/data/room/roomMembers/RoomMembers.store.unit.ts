@@ -348,7 +348,7 @@ describe("useRoomMembers", () => {
 		});
 	});
 
-	describe("getAllSchools", () => {
+	describe("loadSchoolList", () => {
 		it("should get schools", async () => {
 			const { roomMembersStore } = setup();
 			const schoolList = roomMemberSchoolListResponseFactory.build({
@@ -359,7 +359,7 @@ describe("useRoomMembers", () => {
 					data: schoolList,
 				})
 			);
-			await roomMembersStore.getAllSchools();
+			await roomMembersStore.loadSchoolList();
 
 			expect(roomMembersStore.schools).toHaveLength(schoolList.total);
 			expect(roomMembersStore.schools[0]).toStrictEqual({
@@ -374,7 +374,7 @@ describe("useRoomMembers", () => {
 			const error = new Error("Test error");
 			schoolApiMock.schoolControllerGetSchoolList.mockRejectedValue(error);
 
-			await roomMembersStore.getAllSchools();
+			await roomMembersStore.loadSchoolList();
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
 		});

@@ -148,7 +148,8 @@ const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
-const { fetchMembers, getAllSchools, leaveRoom, resetStore } = roomMembersStore;
+const { fetchMembers, loadSchoolList, leaveRoom, resetStore } =
+	roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
@@ -230,7 +231,7 @@ const onFabClick = async () => {
 
 		case Tab.Members:
 		default:
-			getAllSchools();
+			loadSchoolList();
 			isMembersDialogOpen.value = true;
 			break;
 	}
