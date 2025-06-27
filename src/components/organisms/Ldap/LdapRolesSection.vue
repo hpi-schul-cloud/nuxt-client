@@ -13,7 +13,9 @@
 				inline
 				name="group"
 				:model-value="groupOption"
-				@update:model-value="onGroupOptionChange"
+				@update:model-value="
+					$emit('update:modelValue', { ...modelValue, groupOption: $event })
+				"
 			>
 				<v-radio
 					:label="
@@ -44,7 +46,9 @@
 			:validation-model="v$.modelValue.member"
 			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesMember"
-			@update:model-value="onInputChange('member', $event)"
+			@update:model-value="
+				$emit('update:modelValue', { ...modelValue, member: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :icon="mdiAccountOutline" />
@@ -62,7 +66,9 @@
 			:validation-model="v$.modelValue.student"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesStudent"
-			@update:model-value="onInputChange('student', $event)"
+			@update:model-value="
+				$emit('update:modelValue', { ...modelValue, student: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :icon="mdiAccountSchoolOutline" />
@@ -79,7 +85,9 @@
 			:validation-model="v$.modelValue.teacher"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesTeacher"
-			@update:model-value="onInputChange('teacher', $event)"
+			@update:model-value="
+				$emit('update:modelValue', { ...modelValue, teacher: $event })
+			"
 		>
 			<template #icon>
 				<v-icon class="custom-icon">$teacher</v-icon>
@@ -94,7 +102,9 @@
 			:validation-model="v$.modelValue.admin"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesAdmin"
-			@update:model-value="onInputChange('admin', $event)"
+			@update:model-value="
+				$emit('update:modelValue', { ...modelValue, admin: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :icon="mdiShieldAccountVariantOutline" />
@@ -107,7 +117,9 @@
 			:placeholder="$t('pages.administration.ldapEdit.roles.placeholder.user')"
 			:info="$t('pages.administration.ldapEdit.roles.info.user')"
 			data-testid="ldapDataRolesUser"
-			@update:model-value="onInputChange('user', $event)"
+			@update:model-value="
+				$emit('update:modelValue', { ...modelValue, user: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :icon="mdiAccountOffOutline" />
@@ -116,82 +128,82 @@
 	</div>
 </template>
 
-<script setup lang="ts">
-import { computed, watch } from "vue";
-import { useVuelidate } from "@vuelidate/core";
+<script>
 import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
+import { defineComponent } from "vue";
+import useVuelidate from "@vuelidate/core";
 import {
 	mdiAccountOffOutline,
 	mdiAccountOutline,
 	mdiAccountSchoolOutline,
 	mdiShieldAccountVariantOutline,
 } from "@icons/material";
-import { useI18n } from "vue-i18n";
 
-type Props = {
-	modelValue?: Record<string, string>;
-	validate?: boolean;
-};
-
-const { t } = useI18n();
-
-const props = withDefaults(defineProps<Props>(), {
-	modelValue: () => ({}),
-});
-
-const emit = defineEmits([
-	"update:modelValue",
-	"update:errors",
-	"update:inputs",
-]);
-
-const groupOption = computed(() => props.modelValue.groupOption || "undefined");
-
-const memberValidationMessages = [
-	{ key: "required", message: t("common.validation.required") },
-];
-const rolesValidationMessages = [
-	{
-		key: "ldapPathRegexValidator",
-		message: t("pages.administration.ldapEdit.validation.path"),
-	},
-];
-
-const rules = computed(() => {
-	if (groupOption.value === "group") {
-		return {
-			modelValue: {
-				member: { required },
-				student: { ldapPathRegexValidator },
-				teacher: { ldapPathRegexValidator },
-				admin: { ldapPathRegexValidator },
+export default defineComponent({
+	props: {
+		modelValue: {
+			type: Object,
+			default() {
+				return {};
 			},
+		},
+		validate: {
+			type: Boolean,
+		},
+	},
+	emits: ["update:modelValue", "update:errors", "update:inputs"],
+	setup() {
+		const v$ = useVuelidate();
+
+		return { v$ };
+	},
+	data() {
+		return {
+			mdiAccountOffOutline,
+			mdiAccountOutline,
+			mdiAccountSchoolOutline,
+			mdiShieldAccountVariantOutline,
+			memberValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+			],
+			rolesValidationMessages: [
+				{
+					key: "ldapPathRegexValidator",
+					message: this.$t("pages.administration.ldapEdit.validation.path"),
+				},
+			],
 		};
-	}
-	return { modelValue: {} };
-});
-
-const v$ = useVuelidate(rules, props);
-
-const onInputChange = (field: string, value: Props["modelValue"]) => {
-	emit("update:modelValue", { ...props.modelValue, [field]: value });
-};
-
-const onGroupOptionChange = (value: string | null) => {
-	emit("update:modelValue", { ...props.modelValue, groupOption: value });
-};
-
-watch(
-	() => props.validate,
-	() => {
-		v$.value.$touch();
-		emit("update:errors", v$.value.$invalid, "roles");
-	}
-);
-
-watch(groupOption, () => {
-	emit("update:errors", v$.value.$invalid, "roles");
+	},
+	computed: {
+		groupOption() {
+			return this.modelValue.groupOption || "undefined";
+		},
+	},
+	watch: {
+		validate: function () {
+			this.v$.$touch();
+			this.$emit("update:errors", this.v$.$invalid, "roles");
+		},
+		groupOption: function () {
+			this.$emit("update:errors", this.v$.$invalid, "roles");
+		},
+	},
+	validations() {
+		if (this.groupOption === "group") {
+			return {
+				modelValue: {
+					member: { required },
+					student: { ldapPathRegexValidator },
+					teacher: { ldapPathRegexValidator },
+					admin: { ldapPathRegexValidator },
+				},
+			};
+		}
+		return {
+			modelValue: {},
+		};
+	},
 });
 </script>
 
