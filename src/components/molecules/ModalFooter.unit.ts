@@ -1,4 +1,4 @@
-import ModalFooter from "./ModalFooter";
+import ModalFooter from "./ModalFooter.vue";
 import { shallowMount } from "@vue/test-utils";
 
 describe("@/components/molecules/ModalFooter", () => {

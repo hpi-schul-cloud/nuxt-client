@@ -6,22 +6,16 @@
 	</div>
 </template>
 
-<script>
-export default {
-	inheritAttrs: false,
-	props: {
-		isError: {
-			type: Boolean,
-		},
-		text: {
-			type: String,
-			default: "Ok",
-		},
-	},
-	data() {
-		return {};
-	},
+<script setup lang="ts">
+type Props = {
+	isError?: boolean;
+	text?: string;
 };
+
+withDefaults(defineProps<Props>(), {
+	isError: false,
+	text: "Ok",
+});
 </script>
 
 <style lang="scss" scoped>

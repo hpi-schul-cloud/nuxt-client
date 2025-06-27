@@ -46,65 +46,46 @@
 	</room-base-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import noPermissionImg from "@/assets/img/bbb/no_permission.png";
 import availableImg from "@/assets/img/bbb/available.png";
 import notStartedImg from "@/assets/img/bbb/not_started.png";
 import { mdiReload } from "@icons/material";
-import { computed, ComputedRef, defineComponent } from "vue";
+import { computed, ComputedRef } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	components: { RoomBaseCard },
-	props: {
-		isRunning: {
-			type: Boolean,
-			required: true,
-		},
-		hasPermission: {
-			type: Boolean,
-			required: true,
-		},
-		canStart: {
-			type: Boolean,
-			required: true,
-		},
-		isRefreshing: {
-			type: Boolean,
-			required: true,
-		},
-	},
-	emits: ["click", "refresh"],
-	setup(props, { emit }) {
-		const { t } = useI18n();
+type Props = {
+	isRunning: boolean;
+	hasPermission: boolean;
+	canStart: boolean;
+	isRefreshing: boolean;
+};
 
-		const refreshVideoConferenceStatus = () => {
-			emit("refresh");
-		};
+const props = defineProps<Props>();
+const emit = defineEmits<{
+	(e: "click"): void;
+	(e: "refresh"): void;
+}>();
 
-		const onClick = () => {
-			emit("click");
-		};
+const { t } = useI18n();
 
-		const logoUrl: ComputedRef<string> = computed(() => {
-			if (!props.hasPermission) {
-				return noPermissionImg;
-			} else if (props.isRunning) {
-				return availableImg;
-			}
+const refreshVideoConferenceStatus = () => {
+	emit("refresh");
+};
 
-			return notStartedImg;
-		});
+const onClick = () => {
+	emit("click");
+};
 
-		return {
-			t,
-			onClick,
-			mdiReload,
-			logoUrl,
-			refreshVideoConferenceStatus,
-		};
-	},
+const logoUrl: ComputedRef<string> = computed(() => {
+	if (!props.hasPermission) {
+		return noPermissionImg;
+	} else if (props.isRunning) {
+		return availableImg;
+	}
+
+	return notStartedImg;
 });
 </script>
 

@@ -43,45 +43,33 @@
 	</div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-export default {
-	props: {
-		icons: {
-			type: Array,
-			required: true,
-		},
-		showExternalSyncHint: {
-			type: Boolean,
-		},
-		showIcons: {
-			type: Boolean,
-			required: true,
-		},
-	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return { theme: envConfigModule.getTheme };
-	},
-	computed: {
-		setInstituteTitle() {
-			switch (envConfigModule.getTheme) {
-				case SchulcloudTheme.N21:
-					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
-				case SchulcloudTheme.Thr:
-					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-				case SchulcloudTheme.Brb:
-					return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
-				default:
-					return "Dataport";
-			}
-		},
-		isThr() {
-			return this.theme === SchulcloudTheme.Thr;
-		},
-	},
+import { computed } from "vue";
+
+type Props = {
+	icons: { icon: string; color: string; label: string }[];
+	showExternalSyncHint?: boolean;
+	showIcons: boolean;
 };
+
+defineProps<Props>();
+
+const setInstituteTitle = computed(() => {
+	switch (envConfigModule.getTheme) {
+		case SchulcloudTheme.N21:
+			return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+		case SchulcloudTheme.Thr:
+			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
+		case SchulcloudTheme.Brb:
+			return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
+		default:
+			return "Dataport";
+	}
+});
+
+const isThr = computed(() => envConfigModule.getTheme === SchulcloudTheme.Thr);
 </script>
 
 <style lang="scss" scoped>

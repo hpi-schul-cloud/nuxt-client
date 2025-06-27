@@ -117,12 +117,11 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import SchoolPolicyFormDialog from "@/components/organisms/administration/SchoolPolicyFormDialog.vue";
-import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
+import { computed, ComputedRef, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
-import { BusinessError } from "@/store/types/commons";
 import { useI18n } from "vue-i18n";
 import {
 	AUTH_MODULE_KEY,
@@ -140,89 +139,58 @@ import {
 	mdiTrayArrowUp,
 } from "@icons/material";
 
-export default defineComponent({
-	name: "SchoolPolicy",
-	components: {
-		vCustomDialog,
-		SchoolPolicyFormDialog,
+const { t } = useI18n();
+const authModule = injectStrict(AUTH_MODULE_KEY);
+const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
+const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+
+const isSchoolPolicyFormDialogOpen: Ref<boolean> = ref(false);
+const isDeletePolicyDialogOpen: Ref<boolean> = ref(false);
+
+const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+watch(
+	school,
+	async (newValue) => {
+		await privacyPolicyModule.fetchPrivacyPolicy(newValue.id);
 	},
-	setup() {
-		const { t } = useI18n();
-		const authModule = injectStrict(AUTH_MODULE_KEY);
-		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
-		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+	{ immediate: true }
+);
 
-		const isSchoolPolicyFormDialogOpen: Ref<boolean> = ref(false);
-		const isDeletePolicyDialogOpen: Ref<boolean> = ref(false);
+const hasSchoolEditPermission: ComputedRef<boolean> = computed(() =>
+	authModule.getUserPermissions.includes("school_edit")
+);
+const privacyPolicy: ComputedRef<ConsentVersion | null> = computed(
+	() => privacyPolicyModule.getPrivacyPolicy
+);
+const status: ComputedRef<string> = computed(
+	() => privacyPolicyModule.getStatus
+);
 
-		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
-		watch(
-			school,
-			async (newValue) => {
-				await privacyPolicyModule.fetchPrivacyPolicy(newValue.id);
-			},
-			{ immediate: true }
+const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
+
+const downloadPolicy = () => {
+	if (privacyPolicy.value) {
+		downloadFile(
+			privacyPolicy.value.consentData.data,
+			t("pages.administration.school.index.schoolPolicy.fileName")
 		);
+	}
+};
 
-		const hasSchoolEditPermission: ComputedRef<boolean> = computed(() =>
-			authModule.getUserPermissions.includes("school_edit")
-		);
-		const privacyPolicy: ComputedRef<ConsentVersion | null> = computed(
-			() => privacyPolicyModule.getPrivacyPolicy
-		);
-		const status: ComputedRef<string> = computed(
-			() => privacyPolicyModule.getStatus
-		);
-		const error: ComputedRef<BusinessError> = computed(
-			() => privacyPolicyModule.getBusinessError
-		);
+const deleteFile = async () => {
+	await privacyPolicyModule.deletePrivacyPolicy();
 
-		const formatDate = (dateTime: string) =>
-			formatDateForAlerts(dateTime, true);
+	notifierModule.show({
+		text: t("pages.administration.school.index.schoolPolicy.delete.success"),
+		status: "success",
+		timeout: 5000,
+	});
+};
 
-		const downloadPolicy = () => {
-			if (privacyPolicy.value) {
-				downloadFile(
-					privacyPolicy.value.consentData.data,
-					t("pages.administration.school.index.schoolPolicy.fileName")
-				);
-			}
-		};
-
-		const deleteFile = async () => {
-			await privacyPolicyModule.deletePrivacyPolicy();
-
-			notifierModule.show({
-				text: t(
-					"pages.administration.school.index.schoolPolicy.delete.success"
-				),
-				status: "success",
-				timeout: 5000,
-			});
-		};
-
-		const closeDialog = () => {
-			isSchoolPolicyFormDialogOpen.value = false;
-		};
-
-		return {
-			isSchoolPolicyFormDialogOpen,
-			isDeletePolicyDialogOpen,
-			hasSchoolEditPermission,
-			privacyPolicy,
-			status,
-			error,
-			downloadPolicy,
-			deleteFile,
-			formatDate,
-			closeDialog,
-			mdiAlertCircle,
-			mdiTrashCanOutline,
-			mdiTrayArrowUp,
-		};
-	},
-});
+const closeDialog = () => {
+	isSchoolPolicyFormDialogOpen.value = false;
+};
 </script>
 
 <style lang="scss" scoped>

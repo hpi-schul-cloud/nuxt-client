@@ -31,31 +31,24 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
-import { defineComponent, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
 
-export default defineComponent({
-	name: "FileAlerts",
-	components: { InfoAlert, ErrorAlert, WarningAlert },
-	props: {
-		alerts: { type: Array as PropType<FileAlert[]>, required: true },
-	},
-	emits: ["on-status-reload"],
-	setup(props, { emit }) {
-		const { t } = useI18n();
+type Props = {
+	alerts: FileAlert[];
+};
 
-		const onStatusReload = () => {
-			emit("on-status-reload");
-		};
+defineProps<Props>();
 
-		return {
-			FileAlert,
-			onStatusReload,
-			t,
-		};
-	},
-});
+const emit = defineEmits<{
+	(e: "on-status-reload"): void;
+}>();
+
+const { t } = useI18n();
+
+const onStatusReload = () => {
+	emit("on-status-reload");
+};
 </script>
