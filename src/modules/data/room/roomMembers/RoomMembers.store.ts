@@ -173,7 +173,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
-	const getSchools = async (skip = 0, limit = 2) => {
+	const getSchools = async (skip = 0, limit = 1000) => {
 		try {
 			const response = await schoolApi.schoolControllerGetSchoolList(
 				skip,
