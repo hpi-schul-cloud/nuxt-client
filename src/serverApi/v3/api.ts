@@ -8800,37 +8800,6 @@ export enum SchoolFeature {
 /**
  * 
  * @export
- * @interface SchoolForExternalInviteListResponse
- */
-export interface SchoolForExternalInviteListResponse {
-    /**
-     * The items for the current page.
-     * @type {Array<SchoolForExternalInviteResponse>}
-     * @memberof SchoolForExternalInviteListResponse
-     */
-    data: Array<SchoolForExternalInviteResponse>;
-    /**
-     * The total amount of items.
-     * @type {number}
-     * @memberof SchoolForExternalInviteListResponse
-     */
-    total: number;
-    /**
-     * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof SchoolForExternalInviteListResponse
-     */
-    skip: number;
-    /**
-     * The page size of the response.
-     * @type {number}
-     * @memberof SchoolForExternalInviteListResponse
-     */
-    limit: number;
-}
-/**
- * 
- * @export
  * @interface SchoolForExternalInviteResponse
  */
 export interface SchoolForExternalInviteResponse {
@@ -8890,6 +8859,56 @@ export interface SchoolInfoResponse {
      * @memberof SchoolInfoResponse
      */
     name: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolItemResponse
+ */
+export interface SchoolItemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolItemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolItemResponse
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolListResponse
+ */
+export interface SchoolListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<SchoolItemResponse>}
+     * @memberof SchoolListResponse
+     */
+    data: Array<SchoolItemResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof SchoolListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof SchoolListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof SchoolListResponse
+     */
+    limit: number;
 }
 /**
  * 
@@ -24411,7 +24430,7 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolForExternalInviteListResponse>> {
+        async schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolList(skip, limit, federalStateId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -24570,7 +24589,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<SchoolForExternalInviteListResponse> {
+        schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<SchoolListResponse> {
             return localVarFp.schoolControllerGetSchoolList(skip, limit, federalStateId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -24719,7 +24738,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<SchoolForExternalInviteListResponse>;
+    schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<SchoolListResponse>;
 
     /**
      * 

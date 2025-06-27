@@ -2,7 +2,7 @@ import { Factory } from "fishery";
 import {
 	RoleName,
 	SchoolForExternalInviteResponse,
-	SchoolForExternalInviteListResponse,
+	SchoolListResponse,
 } from "@/serverApi/v3";
 import { RoomMember } from "@data-room";
 
@@ -26,7 +26,7 @@ export const roomMemberSchoolResponseFactory =
 	}));
 
 export const roomMemberSchoolListResponseFactory =
-	Factory.define<SchoolForExternalInviteListResponse>(({ associations }) => {
+	Factory.define<SchoolListResponse>(({ associations }) => {
 		const totalCount = associations.total || 1;
 		const data = roomMemberSchoolResponseFactory.buildList(totalCount);
 		return {
