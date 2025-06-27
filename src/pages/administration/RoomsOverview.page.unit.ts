@@ -32,7 +32,6 @@ vi.mock("vue-router", () => ({
 
 vi.mock("@data-room", () => {
 	return {
-		...vi.importActual("@data-room"),
 		useCourseList: vi.fn(),
 		useCourseApi: vi.fn(),
 	};
@@ -41,9 +40,13 @@ vi.mock("@data-room", () => {
 const useRouteMock = <Mock>useRoute;
 const useRouterMock = <Mock>useRouter;
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 describe("RoomsOverview", () => {
 	let useCourseListMock: DeepMocked<ReturnType<typeof useCourseList>>;

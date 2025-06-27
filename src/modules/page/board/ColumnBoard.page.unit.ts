@@ -5,9 +5,13 @@ import {
 import { shallowMount } from "@vue/test-utils";
 import ColumnBoardPage from "./ColumnBoard.page.vue";
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 describe("@pages/ColumnBoard.page.vue", () => {
 	const setup = () => {

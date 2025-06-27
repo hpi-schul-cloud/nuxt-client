@@ -12,9 +12,13 @@ import {
 import { nextTick } from "vue";
 import { Mock } from "vitest";
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 vi.mock("@/composables/locale-storage.composable", () => ({
 	useStorage: () => ({

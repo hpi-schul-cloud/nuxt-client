@@ -34,7 +34,6 @@ vi.mock("vue-i18n", async (importOriginal) => {
 
 vi.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
-		...vi.importActual("@vueuse/integrations/useFocusTrap"),
 		useFocusTrap: vi.fn(),
 	};
 });

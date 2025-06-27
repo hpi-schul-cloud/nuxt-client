@@ -20,11 +20,12 @@ const mockedMapAxiosErrorToResponseError = vi.mocked(
 	mapAxiosErrorToResponseError
 );
 
-vi.mock<typeof import("@/utils/create-global-state")>(
+vi.mock(
 	"@/utils/create-global-state",
-	() => ({
-		createTestableGlobaleState: (composable) => composable,
-	})
+	() =>
+		({
+			createTestableGlobaleState: (composable) => composable,
+		}) as typeof import("@/utils/create-global-state")
 );
 
 const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {

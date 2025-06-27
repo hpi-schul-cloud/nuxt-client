@@ -7,7 +7,6 @@ vi.mock("@/utils/fileHelper");
 
 vi.mock("vue-i18n", () => {
 	return {
-		...vi.importActual("vue-i18n"),
 		useI18n: () => {
 			return {
 				t: (key: string) => key,

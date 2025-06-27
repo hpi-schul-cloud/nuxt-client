@@ -13,7 +13,6 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 vi.mock("vue-i18n", () => {
 	return {
-		...vi.importActual("vue-i18n"),
 		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });

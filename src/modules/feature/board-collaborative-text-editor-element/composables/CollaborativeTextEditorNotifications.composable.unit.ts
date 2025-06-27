@@ -7,7 +7,6 @@ import { useCollaborativeTextEditorNotifier } from "./CollaborativeTextEditorNot
 
 vi.mock("vue-i18n", () => {
 	return {
-		...vi.importActual("vue-i18n"),
 		useI18n: vi.fn().mockReturnValue({
 			t: vi
 				.fn()
@@ -15,7 +14,6 @@ vi.mock("vue-i18n", () => {
 					(key: string, dynamic?: object): string =>
 						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
 				),
-			n: vi.fn().mockImplementation((key: string) => key),
 		}),
 	};
 });

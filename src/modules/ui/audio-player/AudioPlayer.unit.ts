@@ -10,10 +10,7 @@ import { nextTick, ref } from "vue";
 import AudioPlayer from "./AudioPlayer.vue";
 
 vi.mock("@vueuse/core", () => {
-	const original = vi.importActual("@vueuse/core");
-
 	return {
-		...original,
 		useMediaControls: vi.fn(),
 	};
 });

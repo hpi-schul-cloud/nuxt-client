@@ -34,9 +34,13 @@ vi.mock("vue-router", () => ({
 const useRouteMock = <Mock>useRoute;
 const useRouterMock = <Mock>useRouter;
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 const createWrapper = (
 	groupModuleGetters: Partial<GroupModule> = {},

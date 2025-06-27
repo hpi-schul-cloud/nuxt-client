@@ -32,9 +32,13 @@ vi.mock("@data-room/RoomCreate.state.ts", () => ({
 	}),
 }));
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 const roomParams: RoomCreateParams = {
 	name: "test",

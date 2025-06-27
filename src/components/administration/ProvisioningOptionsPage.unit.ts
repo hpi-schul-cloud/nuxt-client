@@ -26,9 +26,13 @@ import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 
 vi.mock("@data-provisioning-options");
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;

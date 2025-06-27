@@ -10,9 +10,13 @@ import {
 } from "@@/tests/test-utils/setup";
 import type { Mocked } from "vitest";
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 describe("UserLoginMigrationSuccess", () => {
 	let systemsModule: Mocked<SystemsModule>;

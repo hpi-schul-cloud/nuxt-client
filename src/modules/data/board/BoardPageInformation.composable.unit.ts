@@ -7,24 +7,27 @@ import { useSharedBoardPageInformation } from "./BoardPageInformation.composable
 vi.mock("./BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(useBoardApi);
 
-vi.mock<typeof import("@/utils/create-shared-composable")>(
+vi.mock(
 	"@/utils/create-shared-composable",
-	() => ({
-		createTestableSharedComposable: (composable) => composable,
-	})
+	() =>
+		({
+			createTestableSharedComposable: (composable) => composable,
+		}) as typeof import("@/utils/create-shared-composable")
 );
 
 vi.mock("vue-i18n", () => {
 	return {
-		...vi.importActual("vue-i18n"),
 		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 
-vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
-
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 describe("BoardPageInformation.composable", () => {
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 

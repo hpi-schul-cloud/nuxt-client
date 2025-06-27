@@ -26,22 +26,13 @@ const mockedUseSharedBoardPageInformation = vi.mocked(
 	useSharedBoardPageInformation
 );
 
-vi.mock<typeof import("@/utils/create-shared-composable")>(
+vi.mock(
 	"@/utils/create-shared-composable",
-	() => ({
-		createTestableSharedComposable: (composable) => composable,
-	})
+	() =>
+		({
+			createTestableSharedComposable: (composable) => composable,
+		}) as typeof import("@/utils/create-shared-composable")
 );
-
-vi.mock("vue-i18n", () => {
-	return {
-		...vi.importActual("vue-i18n"),
-		useI18n: vi.fn().mockReturnValue({
-			t: vi.fn().mockImplementation((key: string) => key),
-			n: vi.fn().mockImplementation((key: string) => key),
-		}),
-	};
-});
 
 vi.mocked(useI18n());
 
