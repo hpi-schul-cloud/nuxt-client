@@ -17,7 +17,9 @@
 
 <script setup lang="ts">
 import { mdiTrashCanOutline } from "@icons/material";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { BoardMenuScope } from "@ui-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import { KebabMenuAction } from "@ui-kebab-menu";
 
 defineEmits<{

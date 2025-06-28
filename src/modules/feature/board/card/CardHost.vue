@@ -105,13 +105,17 @@ import {
 	useCardStore,
 } from "@data-board";
 import { mdiArrowExpand } from "@icons/material";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { BoardMenuScope } from "@ui-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionEdit,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
-import { useCourseBoardEditMode, useShareBoardLink } from "@util-board";
+import { useShareBoardLink } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";

@@ -63,7 +63,9 @@
 
 <script setup lang="ts">
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { BoardMenuScope } from "@ui-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionRename,
@@ -72,7 +74,8 @@ import {
 	KebabMenuActionMoveLeft,
 	KebabMenuActionMoveRight,
 } from "@ui-kebab-menu";
-import { useCourseBoardEditMode } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
