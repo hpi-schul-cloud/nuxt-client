@@ -41,6 +41,9 @@ import setupStores from "@@/tests/test-utils/setupStores";
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
+vi.mock("@data-board/BoardApi.composable");
+const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
+
 describe("Folder.vue", () => {
 	enableAutoUnmount(afterEach);
 
@@ -120,6 +123,10 @@ describe("Folder.vue", () => {
 						BoardApi,
 						"useSharedBoardPageInformation"
 					).mockReturnValueOnce(boardState);
+
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
@@ -235,6 +242,10 @@ describe("Folder.vue", () => {
 						"useSharedBoardPageInformation"
 					).mockReturnValueOnce(boardState);
 
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
+
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
@@ -269,7 +280,7 @@ describe("Folder.vue", () => {
 
 				it("should throw error", async () => {
 					const error = new Error("Unsupported parent type");
-					expect(async () => await setup()).rejects.toThrow(error);
+					await expect(async () => await setup()).rejects.toThrow(error);
 				});
 			});
 
@@ -295,6 +306,9 @@ describe("Folder.vue", () => {
 						BoardApi,
 						"useSharedBoardPageInformation"
 					).mockReturnValueOnce(boardState);
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
@@ -355,7 +369,7 @@ describe("Folder.vue", () => {
 				});
 			});
 
-			describe.only("when delete folder button is clicked and dialog confirmed", () => {
+			describe("when delete folder button is clicked and dialog confirmed", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
@@ -392,7 +406,7 @@ describe("Folder.vue", () => {
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					vi.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const confirmationDialogMock =
 						createMock<
@@ -488,7 +502,7 @@ describe("Folder.vue", () => {
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					vi.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const confirmationDialogMock =
 						createMock<
@@ -534,7 +548,7 @@ describe("Folder.vue", () => {
 
 				it("should throw", async () => {
 					const error = new Error("Unsupported parent type");
-					expect(async () => await setup()).rejects.toThrow(error);
+					await expect(async () => await setup()).rejects.toThrow(error);
 				});
 			});
 
@@ -575,7 +589,7 @@ describe("Folder.vue", () => {
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					vi.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const confirmationDialogMock =
 						createMock<
@@ -670,7 +684,7 @@ describe("Folder.vue", () => {
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					vi.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
@@ -783,7 +797,7 @@ describe("Folder.vue", () => {
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					vi.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
@@ -886,7 +900,7 @@ describe("Folder.vue", () => {
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					vi.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
@@ -903,9 +917,7 @@ describe("Folder.vue", () => {
 
 					const { wrapper } = setupWrapper();
 
-					await nextTick();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					const checkbox = wrapper.find(
 						`[data-testid='select-checkbox-${fileRecord.name}']`
@@ -979,7 +991,7 @@ describe("Folder.vue", () => {
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					vi.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
@@ -996,9 +1008,7 @@ describe("Folder.vue", () => {
 
 					const { wrapper } = setupWrapper();
 
-					await nextTick();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					const checkbox = wrapper.find(
 						`[data-testid='select-checkbox-${fileRecord.name}']`
@@ -1052,6 +1062,10 @@ describe("Folder.vue", () => {
 				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(
 					boardState
 				);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
@@ -1144,6 +1158,10 @@ describe("Folder.vue", () => {
 						"useSharedBoardPageInformation"
 					).mockReturnValueOnce(boardState);
 
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
+
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
@@ -1232,6 +1250,10 @@ describe("Folder.vue", () => {
 						"useSharedBoardPageInformation"
 					).mockReturnValueOnce(boardState);
 
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
+
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
@@ -1317,6 +1339,10 @@ describe("Folder.vue", () => {
 				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(
 					boardState
 				);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
@@ -1412,6 +1438,10 @@ describe("Folder.vue", () => {
 					useBoardStoreMock
 				);
 
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
+
 				const useBoardPermissionsMock = createMock<
 					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(true) });
@@ -1453,6 +1483,10 @@ describe("Folder.vue", () => {
 				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(
 					boardState
 				);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
@@ -1617,6 +1651,10 @@ describe("Folder.vue", () => {
 					boardState
 				);
 
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
+
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
@@ -1770,6 +1808,10 @@ describe("Folder.vue", () => {
 					fileRecord2,
 				]);
 
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
+
 				const useBoardStoreMock =
 					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
@@ -1842,6 +1884,10 @@ describe("Folder.vue", () => {
 					fileRecord2,
 				]);
 
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
+
 				const useBoardStoreMock =
 					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
@@ -1909,12 +1955,9 @@ describe("Folder.vue", () => {
 				folderStateMock.folderName = folderName;
 				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
-				const boardState = createMock<
-					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
-				>({});
-				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(
-					boardState
-				);
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
@@ -1981,6 +2024,7 @@ describe("Folder.vue", () => {
 		describe("download handlers", () => {
 			describe("when user clicks download button in action menu", () => {
 				const setup = async () => {
+					HTMLFormElement.prototype.submit = vi.fn();
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
 					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
@@ -2021,7 +2065,7 @@ describe("Folder.vue", () => {
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					vi.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
@@ -2077,6 +2121,8 @@ describe("Folder.vue", () => {
 
 			describe("when user clicks download button in item menu", () => {
 				const setup = async () => {
+					HTMLAnchorElement.prototype.click = vi.fn();
+
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
 					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
@@ -2123,6 +2169,10 @@ describe("Folder.vue", () => {
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
 						useBoardPermissionsMock
 					);
+
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const { wrapper } = setupWrapper();
 
