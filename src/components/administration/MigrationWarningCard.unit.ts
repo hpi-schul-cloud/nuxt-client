@@ -132,7 +132,7 @@ describe("MigrationWarningCard", () => {
 
 				const checkbox = wrapper.findComponent({ name: "v-checkbox" });
 
-				await checkbox.vm.$emit("update:modelValue", true);
+				await checkbox.setValue(true);
 
 				expect(buttons[1].props("disabled")).toBeFalsy();
 			});
@@ -142,9 +142,12 @@ describe("MigrationWarningCard", () => {
 			it("should emit 2 events", async () => {
 				const { wrapper } = setup("end");
 
-				const buttons = wrapper.findAllComponents({ name: "VBtn" });
+				// Checkbox needs to be checked before agree-button can be clicked
+				const checkbox = wrapper.findComponent({ name: "v-checkbox" });
+				await checkbox.setValue(true);
 
-				await buttons[1].vm.$emit("click");
+				const cardButtonAgree = wrapper.find("[data-testid=agree-btn]");
+				await cardButtonAgree.trigger("click");
 
 				expect(wrapper.emitted("end")).toHaveLength(1);
 				expect(wrapper.emitted("set")).toHaveLength(1);
