@@ -415,7 +415,7 @@ export default {
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Al final del año escolar",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"La fase de transferencia se puede comenzar manualmente dos semanas antes del inicio de las vacaciones. Si no hay ningún comienzo manual al comienzo de las vacaciones, la fase de transferencia comienza automáticamente. El inicio de la fase de transferencia no se puede deshacer.",
+		"La fase de transferencia se puede comenzar manualmente dos semanas antes del final del año escolar. Una vez que no se ha producido ningún inicio manual, la fase de transferencia comienza automáticamente. El inicio de la fase de transferencia no se puede deshacer.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Fase de transferencia de inicio",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":

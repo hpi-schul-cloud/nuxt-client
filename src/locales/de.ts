@@ -410,7 +410,7 @@ export default {
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Ende des Schuljahres",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"Die Transferphase kann zwei Wochen vor Ferienbeginn manuell gestartet werden. Ist bis zum Ferienbeginn kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
+		"Die Transferphase kann zwei Wochen vor Schuljahresende manuell gestartet werden. Ist kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Transferphase starten",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
