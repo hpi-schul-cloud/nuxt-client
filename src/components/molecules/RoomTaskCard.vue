@@ -93,28 +93,20 @@
 
 <script setup lang="ts">
 import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining.vue";
-import {
-	fromNow,
-	fromNowToFuture,
-	printDateFromStringUTC,
-} from "@/plugins/datetime";
+import { fromNowToFuture, printDateFromStringUTC } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { RenderHTML } from "@feature-render-html";
 import {
 	mdiContentCopy,
-	mdiFormatListChecks,
 	mdiPencilOutline,
 	mdiShareVariantOutline,
-	mdiTextBoxCheckOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@icons/material";
 import { RoomDotMenu } from "@ui-room-details";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-
-const taskRequiredKeys = ["createdAt", "id", "name"];
 
 const props = defineProps({
 	task: {
