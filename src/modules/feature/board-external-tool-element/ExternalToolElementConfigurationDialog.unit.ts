@@ -31,7 +31,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 		props: ComponentProps<typeof ExternalToolElementConfigurationDialog> = {
 			isOpen: true,
 			contextId: "contextId",
-			configId: "configId",
+			configId: null,
 		}
 	) => {
 		const wrapper = mount(ExternalToolElementConfigurationDialog, {
