@@ -19,6 +19,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envsFactory } from "@@/tests/test-utils";
 import { useSidebarSelection } from "./SidebarSelection.composable";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
@@ -80,6 +81,12 @@ const setup = (
 };
 
 describe("@ui-layout/Sidebar", () => {
+	beforeEach(() => {
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
+	});
+
 	it("should render correctly", () => {
 		const { wrapper } = setup();
 
