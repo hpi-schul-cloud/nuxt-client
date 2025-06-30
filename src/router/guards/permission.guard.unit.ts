@@ -1,7 +1,9 @@
 import { createPermissionGuard } from "@/router/guards/permission.guard";
-import { NavigationGuard, RouteLocationNormalized } from "vue-router";
-import { NavigationGuardNext } from "vue-router";
-import { Mock } from "vitest";
+import {
+	NavigationGuard,
+	NavigationGuardNext,
+	RouteLocationNormalized,
+} from "vue-router";
 
 const mockError = vi.fn();
 
@@ -21,7 +23,7 @@ describe("PermissionGuard", () => {
 
 	function setup() {
 		const route: RouteLocationNormalized = {} as RouteLocationNormalized;
-		const next: Mock<NavigationGuardNext> = vi.fn();
+		const next: NavigationGuardNext = vi.fn();
 		return { to: route, from: route, next };
 	}
 
