@@ -209,6 +209,7 @@ export default {
 		"update:selectedRowIds",
 		"update:sort-by",
 		"update:sort-order",
+		"update:selection-type",
 	],
 	data() {
 		return {

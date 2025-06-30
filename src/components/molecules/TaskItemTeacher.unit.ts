@@ -10,10 +10,9 @@ import {
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
-import { VBtn, VHover, VListItem } from "vuetify/lib/components/index";
+import { VBtn, VListItem } from "vuetify/lib/components/index";
 import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher.vue";
-import { logger } from "@util-logger";
 
 const {
 	tasksTeacher,
@@ -356,10 +355,6 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const hover = wrapper.findComponent(VHover);
-
-				logger.log(hover.vm.$props);
-
 				expect(
 					wrapper.findComponent(`[data-testid="task-edit"]`).isVisible()
 				).toBe(true);
@@ -388,7 +383,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				});
 
 				const vListItem = wrapper.findComponent(VListItem);
-				await vListItem.vm.$emit("focus");
+				await vListItem.trigger("focus");
 
 				expect(wrapper.vm.isActive).toBe(true);
 				const menuBtn = wrapper.findComponent(`[data-testid=task-menu]`);

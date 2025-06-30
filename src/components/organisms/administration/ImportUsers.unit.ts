@@ -17,6 +17,15 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VDataTable } from "vuetify/lib/components/index";
 import ImportUsers from "./ImportUsers.vue";
+import {
+	mdiAccountPlus,
+	mdiAccountSwitch,
+	mdiAccountSwitchOutline,
+	mdiAlertCircle,
+	mdiFlag,
+	mdiFlagOutline,
+	mdiPencilOutline,
+} from "@icons/material";
 
 const mockImportUsers: ImportUserListResponse = {
 	total: 3,
@@ -71,12 +80,12 @@ const mockData: ImportUsersInstance["$data"] = {
 	dialogEdit: false,
 	editedIndex: -1,
 	loading: false,
-	mdiAccountPlus: "mdiAccountPlus",
-	mdiAccountSwitch: "mdiAccountSwitch",
-	mdiAccountSwitchOutline: "mdiAccountSwitchOutline",
-	mdiFlag: "mdiFlag",
-	mdiFlagOutline: "mdiFlagOutline",
-	mdiPencilOutline: "mdiPencilOutline",
+	mdiAccountPlus,
+	mdiAccountSwitch,
+	mdiAccountSwitchOutline,
+	mdiFlag,
+	mdiFlagOutline,
+	mdiPencilOutline,
 	roles: [
 		{ text: "Schüler/-in", value: ImportUserResponseRoleNamesEnum.Student },
 		{ text: "Lehrer/-in", value: ImportUserResponseRoleNamesEnum.Teacher },
@@ -89,7 +98,7 @@ const mockData: ImportUsersInstance["$data"] = {
 	searchLoginName: "",
 	searchMatchedBy: [],
 	searchRole: null,
-	mdiAlertCircle: "",
+	mdiAlertCircle,
 	options: {
 		itemsPerPage: 25,
 	},

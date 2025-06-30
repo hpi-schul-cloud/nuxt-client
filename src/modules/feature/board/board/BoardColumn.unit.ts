@@ -242,7 +242,7 @@ describe("BoardColumn", () => {
 					willAcceptDrop: false,
 				};
 				const containerComponent = wrapper.findComponent({ name: "Sortable" });
-				containerComponent.vm.$emit("drag-start", emitObject);
+				containerComponent.trigger("drag-start", emitObject);
 
 				expect(isDragging.value).toBe(false);
 			});
