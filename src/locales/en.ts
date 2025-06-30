@@ -407,7 +407,7 @@ export default {
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"End of the school year",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"The transfer phase can be started manually two weeks before the start of the holidays. If no manual start is made by the start of the holidays, the transfer phase begins automatically. The start of the transfer phase cannot be reversed.",
+		"The transfer phase can be started manually two weeks before the end of the school year. Once no manual start has taken place, the transfer phase begins automatically. The start of the transfer phase cannot be reversed.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Start transfer period",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":

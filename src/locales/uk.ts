@@ -415,7 +415,7 @@ export default {
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Наприкінці навчального року",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"Фазу передачі можна розпочати вручну за два тижні до початку свята. Якщо до початку свята немає посібника, фаза передачі починається автоматично. Початок фази передачі не можна скасувати.",
+		"Фазу передачі можна розпочати вручну за два тижні до кінця навчального року. Після того, як не відбулося жодного ручного початку, фаза передачі починається автоматично. Початок фази передачі не можна скасувати.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Почніть фазу передачі",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
