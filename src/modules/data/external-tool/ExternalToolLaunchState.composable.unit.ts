@@ -10,7 +10,7 @@ import {
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { axiosErrorFactory } from "@@/tests/test-utils";
+import { axiosErrorFactory, mountComposable } from "@@/tests/test-utils";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
@@ -42,8 +42,13 @@ describe("ExternalToolLaunchState.composable", () => {
 					response
 				);
 
+				const { fetchContextLaunchRequest, toolLaunchRequest, error } =
+					mountComposable(() => useExternalToolLaunchState());
+
 				return {
-					...useExternalToolLaunchState(),
+					fetchContextLaunchRequest,
+					toolLaunchRequest,
+					error,
 					response,
 				};
 			};
@@ -91,8 +96,13 @@ describe("ExternalToolLaunchState.composable", () => {
 					axiosError
 				);
 
+				const { fetchContextLaunchRequest, error } = mountComposable(() =>
+					useExternalToolLaunchState()
+				);
+
 				return {
-					...useExternalToolLaunchState(),
+					fetchContextLaunchRequest,
+					error,
 					apiError,
 				};
 			};
@@ -125,8 +135,18 @@ describe("ExternalToolLaunchState.composable", () => {
 					response
 				);
 
+				const {
+					fetchContextLaunchRequest,
+					fetchSchoolLaunchRequest,
+					toolLaunchRequest,
+					error,
+				} = mountComposable(() => useExternalToolLaunchState());
+
 				return {
-					...useExternalToolLaunchState(),
+					fetchContextLaunchRequest,
+					fetchSchoolLaunchRequest,
+					toolLaunchRequest,
+					error,
 					response,
 					bodyParams,
 				};
@@ -184,8 +204,13 @@ describe("ExternalToolLaunchState.composable", () => {
 					axiosError
 				);
 
+				const { fetchSchoolLaunchRequest, error } = mountComposable(() =>
+					useExternalToolLaunchState()
+				);
+
 				return {
-					...useExternalToolLaunchState(),
+					fetchSchoolLaunchRequest,
+					error,
 					apiError,
 					bodyParams,
 				};
@@ -209,12 +234,14 @@ describe("ExternalToolLaunchState.composable", () => {
 	describe("launchTool", () => {
 		describe("when launching without loading", () => {
 			const setup = () => {
-				const composable = useExternalToolLaunchState();
+				window.open = vi.fn();
 
-				vi.spyOn(window, "open");
+				const { launchTool } = mountComposable(() =>
+					useExternalToolLaunchState()
+				);
 
 				return {
-					...composable,
+					launchTool,
 				};
 			};
 
@@ -235,14 +262,17 @@ describe("ExternalToolLaunchState.composable", () => {
 						openNewTab: false,
 					});
 
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
+					const { toolLaunchRequest, launchTool } = mountComposable(() =>
+						useExternalToolLaunchState()
+					);
 
-					vi.spyOn(window, "open");
+					toolLaunchRequest.value = launchRequest;
 
+					window.open = vi.fn();
 					return {
-						...composable,
+						toolLaunchRequest,
 						launchRequest,
+						launchTool,
 					};
 				};
 
@@ -262,13 +292,16 @@ describe("ExternalToolLaunchState.composable", () => {
 						openNewTab: true,
 					});
 
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
+					const { toolLaunchRequest, launchTool } = mountComposable(() =>
+						useExternalToolLaunchState()
+					);
 
-					vi.spyOn(window, "open");
+					toolLaunchRequest.value = launchRequest;
+
+					window.open = vi.fn();
 
 					return {
-						...composable,
+						launchTool,
 						launchRequest,
 					};
 				};
@@ -286,17 +319,22 @@ describe("ExternalToolLaunchState.composable", () => {
 		describe("when launching a tool with post method", () => {
 			describe("when opening in a new tab", () => {
 				const setup = () => {
+					HTMLFormElement.prototype.submit = vi.fn();
+					window.open = vi.fn();
+
 					const launchRequest = toolLaunchRequestFactory.build({
 						method: ToolLaunchRequestMethodEnum.Post,
 						openNewTab: true,
 						payload: "",
 					});
 
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
+					const { toolLaunchRequest, launchTool } = mountComposable(() =>
+						useExternalToolLaunchState()
+					);
+					toolLaunchRequest.value = launchRequest;
 
 					return {
-						...composable,
+						launchTool,
 						launchRequest,
 					};
 				};
@@ -316,16 +354,21 @@ describe("ExternalToolLaunchState.composable", () => {
 
 			describe("when opening in the same tab", () => {
 				const setup = () => {
+					HTMLFormElement.prototype.submit = vi.fn();
+					window.open = vi.fn();
+
 					const launchRequest = toolLaunchRequestFactory.build({
 						method: ToolLaunchRequestMethodEnum.Post,
 						openNewTab: false,
 					});
 
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
+					const { launchTool, toolLaunchRequest } = mountComposable(() =>
+						useExternalToolLaunchState()
+					);
+					toolLaunchRequest.value = launchRequest;
 
 					return {
-						...composable,
+						launchTool,
 						launchRequest,
 					};
 				};
@@ -345,16 +388,22 @@ describe("ExternalToolLaunchState.composable", () => {
 
 			describe("when opening a tool multiple times", () => {
 				const setup = () => {
+					HTMLFormElement.prototype.submit = vi.fn();
+					window.open = vi.fn();
+
 					const launchRequest = toolLaunchRequestFactory.build({
 						method: ToolLaunchRequestMethodEnum.Post,
 						openNewTab: false,
 					});
 
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
+					const { launchTool, toolLaunchRequest } = mountComposable(() =>
+						useExternalToolLaunchState()
+					);
+					toolLaunchRequest.value = launchRequest;
 
 					return {
-						...composable,
+						toolLaunchRequest,
+						launchTool,
 						launchRequest,
 					};
 				};
@@ -378,13 +427,16 @@ describe("ExternalToolLaunchState.composable", () => {
 					method: "unknown" as unknown as ToolLaunchRequestMethodEnum,
 				});
 
-				const composable = useExternalToolLaunchState();
-				composable.toolLaunchRequest.value = launchRequest;
+				const { launchTool, toolLaunchRequest, error } = mountComposable(() =>
+					useExternalToolLaunchState()
+				);
+				toolLaunchRequest.value = launchRequest;
 
-				vi.spyOn(window, "open");
+				window.open = vi.fn();
 
 				return {
-					...composable,
+					error,
+					launchTool,
 					launchRequest,
 				};
 			};
@@ -418,13 +470,16 @@ describe("ExternalToolLaunchState.composable", () => {
 					launchType: LaunchType.Lti11ContentItemSelection,
 				});
 
-				const composable = useExternalToolLaunchState(refreshCallback);
-				composable.toolLaunchRequest.value = launchRequest;
+				const { launchTool, toolLaunchRequest } = mountComposable(() =>
+					useExternalToolLaunchState(refreshCallback)
+				);
+				toolLaunchRequest.value = launchRequest;
 
 				const mockWindow = {
 					closed: false,
 				};
 
+				HTMLFormElement.prototype.submit = vi.fn();
 				vi.spyOn(window, "open").mockReturnValue(
 					mockWindow as unknown as Window
 				);
@@ -433,7 +488,7 @@ describe("ExternalToolLaunchState.composable", () => {
 				const clearInterval = vi.spyOn(window, "clearInterval");
 
 				return {
-					...composable,
+					launchTool,
 					refreshCallback,
 					setInterval,
 					clearInterval,
