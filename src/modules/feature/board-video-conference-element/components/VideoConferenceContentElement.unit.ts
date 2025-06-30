@@ -173,7 +173,10 @@ describe("VideoConferenceContentElement", () => {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[BOARD_IS_LIST_LAYOUT as symbol]: false,
 				},
-				stubs: { VideoConferenceConfigurationDialog: true },
+				stubs: {
+					VideoConferenceConfigurationDialog: true,
+					VideoConferenceContentElementDisplay: true,
+				},
 			},
 			props: {
 				element,
