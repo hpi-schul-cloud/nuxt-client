@@ -160,19 +160,6 @@ const { isInvitationDialogOpen, invitationStep } = storeToRefs(
 	useRoomInvitationLinkStore()
 );
 
-watchEffect(() => {
-	if (canAddRoomMembers.value !== undefined) {
-		membersInfoText.value = canAddRoomMembers.value
-			? t("pages.rooms.members.management")
-			: t("pages.rooms.members.label");
-	}
-});
-
-const pageTitle = computed(() =>
-	buildPageTitle(`${room.value?.name} - ${membersInfoText.value}`)
-);
-useTitle(pageTitle);
-
 const activeTab = computed<Tab>({
 	get() {
 		return props.tab;
@@ -183,6 +170,29 @@ const activeTab = computed<Tab>({
 		});
 	},
 });
+
+watchEffect(() => {
+	if (canAddRoomMembers.value !== undefined) {
+		membersInfoText.value = canAddRoomMembers.value
+			? t("pages.rooms.members.management")
+			: t("pages.rooms.members.label");
+	}
+	if (room.value?.permissions) {
+		const restrictedTabsForStudents = [Tab.Invitations, Tab.Confirmations];
+
+		if (
+			restrictedTabsForStudents.includes(activeTab.value) &&
+			!canAddRoomMembers.value
+		) {
+			activeTab.value = Tab.Members;
+		}
+	}
+});
+
+const pageTitle = computed(() =>
+	buildPageTitle(`${room.value?.name} - ${membersInfoText.value}`)
+);
+useTitle(pageTitle);
 
 const isVisibleTabNavigation = computed(() => {
 	return canAddRoomMembers.value && FEATURE_ROOM_MEMBERS_TABS_ENABLED;
