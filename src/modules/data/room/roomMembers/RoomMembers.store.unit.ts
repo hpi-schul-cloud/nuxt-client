@@ -374,12 +374,10 @@ describe("useRoomMembers", () => {
 
 			const totalCount = 3600;
 			let skip = 0;
-			const schoolList = [];
 			while (skip < totalCount) {
 				const schools = roomMemberSchoolResponseFactory.buildList(
 					Math.min(1000, totalCount - skip)
 				);
-				schoolList.push(...schools);
 
 				schoolApiMock.schoolControllerGetSchoolList.mockResolvedValueOnce(
 					mockApiResponse({
