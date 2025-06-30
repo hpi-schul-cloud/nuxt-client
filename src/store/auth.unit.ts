@@ -12,11 +12,12 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
+import { MockInstance } from "vitest";
 
 vi.useFakeTimers();
 
 describe("auth store module", () => {
-	let consoleErrorSpy: vi.SpyInstance;
+	let consoleErrorSpy: MockInstance;
 	let meApi: DeepMocked<serverApi.MeApiInterface>;
 
 	beforeAll(() => {
@@ -25,7 +26,7 @@ describe("auth store module", () => {
 	});
 
 	beforeEach(() => {
-		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation();
+		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 	});
 
 	afterEach(() => {
