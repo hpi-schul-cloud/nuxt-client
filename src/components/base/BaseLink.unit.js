@@ -86,6 +86,9 @@ describe("@/components/base/BaseLink", () => {
 
 	it("log warning for insecure external urls", () => {
 		// use .mockImplementation() to prevent output to console
+		const consoleWarnSpy = vi
+			.spyOn(console, "warn")
+			.mockImplementation(vi.fn());
 		const loggerWarn = vi.spyOn(logger, "warn").mockImplementation();
 		createWrapper({
 			props: {
@@ -95,10 +98,15 @@ describe("@/components/base/BaseLink", () => {
 		expect(loggerWarn).toHaveBeenCalledWith(
 			expect.stringContaining("Insecure href")
 		);
+
+		consoleWarnSpy.mockRestore();
 	});
 
 	it("log warning for invalid props", () => {
 		// use .mockImplementation() to prevent output to console
+		const consoleWarnSpy = vi
+			.spyOn(console, "warn")
+			.mockImplementation(vi.fn());
 		const loggerWarn = vi.spyOn(logger, "warn").mockImplementation();
 
 		createWrapper();
@@ -106,5 +114,7 @@ describe("@/components/base/BaseLink", () => {
 		expect(loggerWarn).toHaveBeenCalledWith(
 			expect.stringContaining("Invalid props")
 		);
+
+		consoleWarnSpy.mockRestore();
 	});
 });
