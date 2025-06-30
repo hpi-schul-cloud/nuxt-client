@@ -407,7 +407,7 @@ export default {
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"End of the school year",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"The transfer phase can be started manually two weeks before the start of the holidays. If no manual start is made by the start of the holidays, the transfer phase begins automatically. The start of the transfer phase cannot be reversed.",
+		"The transfer phase can be started manually two weeks before the end of the school year. Once no manual start has taken place, the transfer phase begins automatically. The start of the transfer phase cannot be reversed.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Start transfer period",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
@@ -1161,8 +1161,8 @@ export default {
 		"Attribute participant",
 	"pages.administration.ldap.classes.path.info": "Relative path from base path",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Here you need to define, where we find classes and how they are structured. By adding two semicolons (;;) you can add multiple user paths separately.",
-	"pages.administration.ldap.classes.path.title": "Class path(s)",
+		"Here you need to define, where we find classes and how they are structured.",
+	"pages.administration.ldap.classes.path.title": "Class path",
 	"pages.administration.ldap.classes.subtitle":
 		"Specify the class attribute where the following information is available in your LDAP.",
 	"pages.administration.ldap.classes.title": "Classes (optional)",
@@ -2044,6 +2044,8 @@ export default {
 		"Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update":
 		"Updating the invitation link has failed.",
+	"pages.rooms.invitationlinks.error.load":
+		"The invitation list could not be loaded.",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
