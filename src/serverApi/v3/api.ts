@@ -1792,6 +1792,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     ROOM_MEMBER_INFO_URL: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_HIDE_OLD_ADMIN_PAGE_LINK: boolean;
 }
 /**
  * 
@@ -2935,7 +2941,8 @@ export interface CustomParameterEntryResponse {
 export enum CustomParameterLocationParams {
     Path = 'path',
     Body = 'body',
-    Query = 'query'
+    Query = 'query',
+    Fragment = 'fragment'
 }
 
 /**
@@ -5817,6 +5824,12 @@ export interface MediaAvailableLineElementResponse {
      * @memberof MediaAvailableLineElementResponse
      */
     name: string;
+    /**
+     * Domain of the tool url
+     * @type {string}
+     * @memberof MediaAvailableLineElementResponse
+     */
+    domain: string;
     /**
      * Description of the media available line element
      * @type {string}
@@ -10203,6 +10216,12 @@ export interface ToolReferenceResponse {
      * @memberof ToolReferenceResponse
      */
     displayName: string;
+    /**
+     * The domain of the tool url
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    domain: string;
     /**
      * Whether the tool should be opened in a new tab
      * @type {boolean}

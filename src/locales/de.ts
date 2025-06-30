@@ -193,6 +193,8 @@ export default {
 	"common.words.color.turquoise": "Türkis",
 	"common.words.color.yellow": "Gelb",
 	"common.words.copiedToClipboard": "In die Zwischenablage kopiert",
+	"common.words.copiedToClipboard.failure":
+		"Das Kopieren in die Zwischenablage ist fehlgeschlagen. Bitte versuchen Sie es manuell.",
 	"common.words.copyLinkToClipboard.success":
 		"Link in die Zwischenablage kopiert",
 	"common.words.copyLinkToClipboard.failure":
@@ -402,7 +404,7 @@ export default {
 	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
 		"Die Schule befindet sich bereits im nächsten Schuljahr",
 	"components.administration.schoolYearChangeSection.notification.finish.success":
-		"Schuljahr erfolgreich gestartet",
+		"Transferphase erfolgreich beendet. Schule ins nächste Jahr überführt.",
 	"components.administration.schoolYearChangeSection.notification.start.success":
 		"Transferphase erfolgreich gestartet",
 	"components.administration.schoolYearChangeSection.title.step.one":
@@ -429,10 +431,14 @@ export default {
 		"Transferphase beenden",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
 		"Klassen- und Personendaten (LDAP) wurden aktualisiert und überprüft",
-	"components.administration.schoolYearChangeSection.dialog.title":
-		"Das Schuljahr wirklich beenden?",
-	"components.administration.schoolYearChangeSection.dialog.content":
+	"components.administration.schoolYearChangeSection.dialog.start.title":
+		"Transferphase wirklich starten?",
+	"components.administration.schoolYearChangeSection.dialog.start.content":
 		"Die Synchronisierung von LDAP-Stammdaten wird während der Transferphase unterbrochen. Somit werden Nutzerdaten und Klassen (sofern verwendet) nicht mehr über LDAP aktualisiert. Der Login mit bereits synchronisierten Login-Daten ist weiterhin möglich. Passwortänderungen im LDAP während des Logins werden ebenfalls berücksichtigt.",
+	"components.administration.schoolYearChangeSection.dialog.finish.title":
+		"Transferphase wirklich beenden?",
+	"components.administration.schoolYearChangeSection.dialog.finish.content":
+		"Die Synchronisierung der LDAP-Daten wird gestartet. Nutzerdaten und Klassen werden aktualisiert. Das neue Schuljahr wird automatisch gesetzt.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "Stunde | Stunden",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
@@ -1161,8 +1167,8 @@ export default {
 	"pages.administration.ldap.classes.path.info":
 		"Relativer Pfad vom Basis-Pfad",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind. Durch das Hinzufügen von zwei Semikolons (;;) können mehrere Nutzerpfade getrennt voneinander hinterlegt werden.",
-	"pages.administration.ldap.classes.path.title": "Klassen-Pfad(e)",
+		"Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind.",
+	"pages.administration.ldap.classes.path.title": "Klassen-Pfad",
 	"pages.administration.ldap.classes.subtitle":
 		"Geben Sie das Klassenattribut an, in dem die folgenden Informationen in Ihrem LDAP verfügbar sind.",
 	"pages.administration.ldap.classes.title": "Klassen (optional)",
@@ -1370,6 +1376,8 @@ export default {
 		"Beim Laden der Schule ist ein Fehler aufgetreten",
 	"pages.administration.school.index.generalSettings.changeSchoolValueWarning":
 		"Kann nur einmal gesetzt werden und wird danach deaktiviert!",
+	"pages.administration.school.index.generalSettings.disabledHint":
+		"Kann hier nicht bearbeitet werden, weitere Informationen im Abschnitt Schuljahreswechsel",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Bitte wählen Sie den Kreis, zu dem die Schule gehört",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider":
@@ -1378,6 +1386,8 @@ export default {
 		"Sprache",
 	"pages.administration.school.index.generalSettings.labels.nameOfSchool":
 		"Name der Schule",
+	"pages.administration.school.index.generalSettings.labels.schoolYear":
+		"Schuljahr",
 	"pages.administration.school.index.generalSettings.labels.schoolNumber":
 		"Schulnummer",
 	"pages.administration.school.index.generalSettings.labels.timezone":
@@ -2069,6 +2079,8 @@ export default {
 		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update":
 		"Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
+	"pages.rooms.invitationlinks.error.load":
+		"Die Einladungsliste konnte nicht geladen werden.",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
@@ -2139,6 +2151,7 @@ export default {
 	"pages.tool.medium.mediumId": "Medium-Id",
 	"pages.tool.medium.mediumSourceId": "Medien-Katalog-Id",
 	"pages.tool.medium.noMediaSource": "Ohne Medien-Katalog",
+	"pages.tool.medium.template": "Template",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.button.startMigration": "Umzug starten",
