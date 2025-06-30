@@ -6,6 +6,8 @@ export type ExternalToolDisplayData = {
 
 	name: string;
 
+	domain: string;
+
 	description?: string;
 
 	logoUrl?: string;

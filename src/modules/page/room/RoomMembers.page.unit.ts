@@ -87,9 +87,13 @@ describe("RoomMembersPage", () => {
 
 		route = createMock<ReturnType<typeof useRoute>>();
 		useRouteMock.mockReturnValue(route);
-		useRouteMock.mockReturnValue({ params: { id: routeRoomId } });
+		useRouteMock.mockReturnValue({
+			params: { id: routeRoomId },
+		});
 
-		router = createMock<Router>();
+		router = createMock<Router>({
+			currentRoute: ref({ query: { tab: "" } }),
+		});
 		useRouterMock.mockReturnValue(router);
 
 		askConfirmationMock = jest.fn();

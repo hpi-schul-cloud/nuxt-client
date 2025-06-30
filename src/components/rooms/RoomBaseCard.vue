@@ -17,7 +17,7 @@
 						:alt="$t('pages.rooms.tools.logo')"
 					/>
 				</div>
-				<div class="d-flex flex-column w-100">
+				<div class="d-flex flex-column w-100 min-width-0">
 					<div class="d-flex">
 						<h2 class="text-h5 my-auto">
 							{{ title }}
@@ -105,5 +105,9 @@ $logo-height: 80px;
 
 .no-wrap {
 	flex-shrink: 0;
+}
+
+.min-width-0 {
+	min-width: 0;
 }
 </style>
