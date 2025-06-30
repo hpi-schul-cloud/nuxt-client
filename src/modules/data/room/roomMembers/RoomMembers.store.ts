@@ -120,6 +120,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		schoolRoleName: RoleName,
 		schoolId: string = ownSchool.id
 	) => {
+		if (schoolId === null) return;
+
 		try {
 			const endpointMap = {
 				[RoleName.Teacher]: () =>
