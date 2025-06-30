@@ -446,8 +446,13 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 			it("should redirect the page when 'Edit/Delete' menu clicked", async () => {
 				Object.defineProperty(window, "location", {
-					value: { href: "" },
-					writable: true,
+					configurable: true,
+					value: {
+						...window.location,
+						assign: vi.fn(),
+						replace: vi.fn(),
+						href: "",
+					},
 				});
 
 				const wrapper = getWrapper();
