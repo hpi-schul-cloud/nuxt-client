@@ -21,7 +21,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardExternalReferenceType } from "@/serverApi/v3";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useRoomsState } from "@data-room";
+import { useRoomAuthorization, useRoomsState } from "@data-room";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { useTitle } from "@vueuse/core";
@@ -34,17 +34,22 @@ const route = useRoute();
 const router = useRouter();
 const { rooms, fetchRooms, isLoading, isEmpty } = useRoomsState();
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+const { canCreateRoom } = useRoomAuthorization();
 
 const pageTitle = computed(() => buildPageTitle(`${t("pages.rooms.title")}`));
 useTitle(pageTitle);
 
-const fabAction = {
-	icon: mdiPlus,
-	title: t("common.actions.create"),
-	to: "/rooms/new",
-	ariaLabel: t("pages.rooms.fab.title"),
-	dataTestId: "fab-add-room",
-};
+const fabAction = computed(() => {
+	if (!canCreateRoom.value) return;
+
+	return {
+		icon: mdiPlus,
+		title: t("common.actions.create"),
+		to: "/rooms/new",
+		ariaLabel: t("pages.rooms.fab.title"),
+		dataTestId: "fab-add-room",
+	};
+});
 
 const isImportMode = ref(false);
 const importToken = ref<string>();
