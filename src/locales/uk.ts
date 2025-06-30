@@ -1184,8 +1184,8 @@ export default {
 	"pages.administration.ldap.classes.path.info":
 		"Відносний шлях від базового шляху",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind. Mit Hilfe von zwei Semikolons (;;) hast du die Möglichkeit, mehrere Nutzerpfade getrennt voneinander zu hinterlegen.",
-	"pages.administration.ldap.classes.path.title": "Шлях(и) класу",
+		"Тут ви повинні визначити, де ми знаходимо класи і як вони структуровані.",
+	"pages.administration.ldap.classes.path.title": "Шлях класу",
 	"pages.administration.ldap.classes.subtitle": "",
 	"pages.administration.ldap.classes.title": "",
 	"pages.administration.ldap.connection.basis.path.info":
