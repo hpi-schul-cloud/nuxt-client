@@ -106,7 +106,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update");
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");
@@ -141,7 +143,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update");
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");
@@ -167,7 +171,9 @@ describe("RoomModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update");
+				const storeRoomUpdateMock = vi
+					.spyOn(courseRoomListModule, "update")
+					.mockImplementation(vi.fn());
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
@@ -209,7 +215,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update");
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");
@@ -242,7 +250,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update");
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");

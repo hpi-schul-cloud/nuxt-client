@@ -93,6 +93,7 @@ describe("@/pages/CourseRoomListPage", () => {
 			envConfigModule: EnvConfigModule,
 		});
 		courseRoomListModule.setAllElements(mockData);
+		courseRoomListModule.fetchAllElements = vi.fn();
 	});
 
 	describe("when data is not loaded yet", () => {

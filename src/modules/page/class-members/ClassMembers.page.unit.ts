@@ -14,13 +14,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
-vi.mock("@data-group", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("@data-group")>();
-	return {
-		...actual,
-		useGroupState: vi.fn(),
-	};
-});
+vi.mock("@data-group/GroupState.composable");
 
 describe("@pages/ClassMembers.page.vue", () => {
 	let useGroupStateMock: DeepMocked<ReturnType<typeof useGroupState>>;
@@ -44,6 +38,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
+				stubs: { ClassMembersInfoBox: true },
 			},
 		});
 
