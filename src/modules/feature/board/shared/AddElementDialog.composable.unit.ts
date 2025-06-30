@@ -20,6 +20,7 @@ import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElement
 import { useAddElementDialog } from "./AddElementDialog.composable";
 import { ElementTypeSelectionOptions } from "./SharedElementTypeSelection.composable";
 
+vi.mock("vue-router");
 vi.mock("./SharedElementTypeSelection.composable");
 
 vi.mock("@/utils/inject");

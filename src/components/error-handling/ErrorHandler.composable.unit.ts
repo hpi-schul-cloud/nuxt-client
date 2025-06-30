@@ -89,7 +89,9 @@ describe("ErrorHandler.Composable", () => {
 
 		describe("when no errorHandler for the code of the error is defined", () => {
 			it("should fall back to console.error", async () => {
-				const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation();
+				const consoleErrorSpy = vi
+					.spyOn(console, "error")
+					.mockImplementation(vi.fn());
 				const { handleError } = setup();
 
 				mockedIsAxiosError.mockReturnValueOnce(true);

@@ -62,10 +62,21 @@ describe("@/components/base/BaseInput", () => {
 	});
 
 	it("writes an error to the console on unsupported types", () => {
+		const consoleErrorSpy = vi
+			.spyOn(console, "error")
+			.mockImplementation(vi.fn());
+		const consoleWarnSpy = vi
+			.spyOn(console, "warn")
+			.mockImplementation(vi.fn());
+
 		vi.spyOn(logger, "error");
 		createWrapper({
 			type: "unsupported",
 		});
+
 		expect(logger.error).toHaveBeenCalled();
+
+		consoleErrorSpy.mockRestore();
+		consoleWarnSpy.mockRestore();
 	});
 });

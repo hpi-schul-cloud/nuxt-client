@@ -18,6 +18,7 @@ import ApplicationErrorModule from "./application-error";
 import ContentModule from "./content";
 import EnvConfigModule from "./env-config";
 import FilePathsModule from "./filePaths";
+import { MockInstance } from "vitest";
 
 const mockFileEnvs: FilesStorageConfigResponse = {
 	MAX_FILE_SIZE: 10,
@@ -26,12 +27,12 @@ const mockFileEnvs: FilesStorageConfigResponse = {
 vi.useFakeTimers();
 
 describe("env-config module", () => {
-	let consoleWarnSpy: vi.SpyInstance;
-	let consoleErrorSpy: vi.SpyInstance;
+	let consoleWarnSpy: MockInstance;
+	let consoleErrorSpy: MockInstance;
 
 	beforeEach(() => {
-		consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation();
-		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation();
+		consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(vi.fn());
+		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 		vi.resetAllMocks();
 	});
 
@@ -315,6 +316,7 @@ describe("env-config module", () => {
 					setupStores({
 						contentModule: contentModuleMock,
 						filePathsModule: filePathsModuleMock,
+						applicationErrorModule: { ...ApplicationErrorModule },
 					});
 
 					return {

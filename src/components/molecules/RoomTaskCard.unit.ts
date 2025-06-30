@@ -11,6 +11,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import RoomTaskCard from "./RoomTaskCard.vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 const testTask = {
 	id: "123",
@@ -195,7 +196,14 @@ const getWrapper = (
 ) => {
 	return mount(RoomTaskCard, {
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
+			plugins: [
+				createTestingVuetify(),
+				createTestingI18n(),
+				vueDompurifyHTMLPlugin,
+			],
+			mocks: {
+				$router: mockRouter,
+			},
 		},
 		props: {
 			room: {
@@ -209,9 +217,6 @@ const getWrapper = (
 			userRole: props.userRole,
 		},
 		...options,
-		mocks: {
-			$router: mockRouter,
-		},
 	});
 };
 

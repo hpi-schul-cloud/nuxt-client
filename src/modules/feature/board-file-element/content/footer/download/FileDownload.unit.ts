@@ -18,6 +18,11 @@ describe("FileDownload", () => {
 	const setup = () => {
 		const wrapper = shallowMount(FileDownload, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			props: {
+				fileName: "file-record #1.txt",
+				url: "1/file-record #1.txt",
+				isDownloadAllowed: true,
+			},
 		});
 
 		return {

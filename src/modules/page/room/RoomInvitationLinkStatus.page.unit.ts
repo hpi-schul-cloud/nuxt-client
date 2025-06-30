@@ -23,8 +23,6 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useBoardNotifier } from "@util-board";
 import { createPinia, setActivePinia } from "pinia";
 import { flushPromises } from "@vue/test-utils";
-import { useI18n } from "vue-i18n";
-import { Mock } from "vitest";
 
 vi.mock("vue-router", () => ({
 	useRouter: vi.fn().mockReturnValue({
@@ -35,8 +33,15 @@ vi.mock("vue-router", () => ({
 vi.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = vi.mocked(useBoardNotifier);
 
-vi.mock("vue-i18n");
-(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
+	return {
+		...actual,
+		useI18n: vi.fn().mockReturnValue({
+			t: vi.fn().mockImplementation((key: string) => key),
+		}),
+	};
+});
 
 describe("RoomInvitationLinkStatusPage", () => {
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;

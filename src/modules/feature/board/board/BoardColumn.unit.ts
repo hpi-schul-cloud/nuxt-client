@@ -33,6 +33,8 @@ import BoardColumnVue from "./BoardColumn.vue";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 
+vi.mock("vue-router");
+
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = vi.mocked(useBoardPermissions);
 
@@ -240,7 +242,7 @@ describe("BoardColumn", () => {
 					willAcceptDrop: false,
 				};
 				const containerComponent = wrapper.findComponent({ name: "Sortable" });
-				containerComponent.vm.$emit("drag-start", emitObject);
+				containerComponent.trigger("drag-start", emitObject);
 
 				expect(isDragging.value).toBe(false);
 			});

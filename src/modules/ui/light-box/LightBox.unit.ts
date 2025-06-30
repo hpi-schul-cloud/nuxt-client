@@ -148,7 +148,7 @@ describe("LightBox", () => {
 				const { close, wrapper } = setup({});
 
 				const overlay = wrapper.findComponent(VRow);
-				await overlay.vm.$emit("click");
+				await overlay.trigger("click");
 
 				expect(close).toBeCalled();
 			});
@@ -170,6 +170,7 @@ describe("LightBox", () => {
 
 		describe("when content is an audio", () => {
 			it("should render audio player with correct props", () => {
+				window.HTMLMediaElement.prototype.load = vi.fn();
 				const { lightBoxOptions, wrapper } = setup({
 					type: LightBoxContentType.AUDIO,
 				});

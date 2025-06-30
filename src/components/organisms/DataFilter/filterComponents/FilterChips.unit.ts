@@ -14,6 +14,9 @@ describe("@components/DataFilter/filterComponents/FilterChips.vue", () => {
 			global: {
 				plugins: [createTestingVuetify()],
 			},
+			props: {
+				filters: [],
+			},
 			...options,
 		});
 	};

@@ -43,6 +43,9 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 		return mount(DataFilter, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: {
+					FilterDialog: true,
+				},
 			},
 			...options,
 		});

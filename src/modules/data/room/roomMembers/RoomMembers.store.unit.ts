@@ -28,7 +28,7 @@ import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mock, MockInstance } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -42,7 +42,7 @@ describe("useRoomMembers", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
-	let consoleErrorSpy: vi.SpyInstance;
+	let consoleErrorSpy: MockInstance;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
@@ -51,7 +51,7 @@ describe("useRoomMembers", () => {
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
-		consoleErrorSpy = vi.spyOn(logger, "error").mockImplementation();
+		consoleErrorSpy = vi.spyOn(logger, "error").mockImplementation(vi.fn());
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
