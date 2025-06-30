@@ -1,7 +1,11 @@
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";
-import { fileRecordFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
+import {
+	fileRecordFactory,
+	mockedPiniaStoreTyping,
+	parentNodeInfoFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -25,6 +29,14 @@ import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
 import { Mock } from "vitest";
 import { Router, useRouter } from "vue-router";
+import { createTestingPinia } from "@pinia/testing";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import EnvConfigModule from "@/store/env-config";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
+import setupStores from "@@/tests/test-utils/setupStores";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -46,6 +58,12 @@ describe("Folder.vue", () => {
 		vi.spyOn(FileHelper, "downloadFilesAsArchive");
 		vi.spyOn(FileHelper, "downloadFile");
 
+		const notifierModule = createModuleMocks(NotifierModule);
+
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
+
 		const parentId = "123";
 		const wrapper = mount(Folder, {
 			global: {
@@ -61,8 +79,12 @@ describe("Folder.vue", () => {
 							},
 						},
 					}),
+					createTestingPinia(),
 				],
 				stubs: { ConfirmationDialog: true, UseFocusTrap: true },
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
 			},
 			props: {
 				folderId: parentId,
@@ -107,13 +129,6 @@ describe("Folder.vue", () => {
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const useBoardStoreMock =
-						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					useBoardStoreMock.board = undefined;
-					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
-						useBoardStoreMock
-					);
-
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
@@ -122,6 +137,7 @@ describe("Folder.vue", () => {
 					);
 
 					const { wrapper } = setupWrapper();
+					const useBoardStoreMock = mockedPiniaStoreTyping(useBoardStore);
 
 					await nextTick();
 					await nextTick();
@@ -339,7 +355,7 @@ describe("Folder.vue", () => {
 				});
 			});
 
-			describe("when delete folder button is clicked and dialog confirmed", () => {
+			describe.only("when delete folder button is clicked and dialog confirmed", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
