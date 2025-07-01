@@ -19,7 +19,7 @@ describe("Confirmation composable", () => {
 		};
 
 		beforeEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		describe("when askConfirmation is called", () => {

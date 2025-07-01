@@ -5,7 +5,7 @@ import {
 import { Folder } from "@feature-folder";
 import { FolderPage } from "@page-folder";
 
-jest.mock("@/store", () => ({
+vi.mock("@/store", () => ({
 	envConfigModule: {
 		getEnv: { SC_TITLE: "Test Title" },
 	},

@@ -24,16 +24,14 @@ import {
 	useContextExternalToolConfigurationState,
 	useContextExternalToolState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.vue";
 
-jest.mock(
-	"@data-external-tool/contextExternalToolConfigurationState.composable"
-);
-jest.mock("@data-external-tool/contextExternalToolState.composable");
+vi.mock("@data-external-tool/contextExternalToolConfigurationState.composable");
+vi.mock("@data-external-tool/contextExternalToolState.composable");
 
 describe("CourseContextExternalToolConfigurator", () => {
 	let useContextExternalToolConfigurationStateMock: DeepMocked<
@@ -89,16 +87,16 @@ describe("CourseContextExternalToolConfigurator", () => {
 			contextExternalTool: ref(),
 		});
 
-		jest
-			.mocked(useContextExternalToolConfigurationState)
-			.mockReturnValue(useContextExternalToolConfigurationStateMock);
-		jest
-			.mocked(useContextExternalToolState)
-			.mockReturnValue(useContextExternalToolStateMock);
+		vi.mocked(useContextExternalToolConfigurationState).mockReturnValue(
+			useContextExternalToolConfigurationStateMock
+		);
+		vi.mocked(useContextExternalToolState).mockReturnValue(
+			useContextExternalToolStateMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchData", () => {

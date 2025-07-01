@@ -4,6 +4,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { BoardExternalReferenceType } from "@/serverApi/v3";
 
 describe("@components/share/SelectDestinationModal", () => {
 	const course = {
@@ -17,6 +18,8 @@ describe("@components/share/SelectDestinationModal", () => {
 		parentName: "TestParentName",
 		parentType: "lesson",
 		courses: [course],
+		destinations: [],
+		destinationType: BoardExternalReferenceType.Course,
 	};
 
 	const setup = () => {

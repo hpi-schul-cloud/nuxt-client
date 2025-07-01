@@ -19,7 +19,7 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useDragAndDrop } from "@util-board";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
@@ -29,7 +29,7 @@ import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 
-jest.mock("@data-external-tool");
+vi.mock("@data-external-tool");
 
 describe("MediaBoardExternalToolElement", () => {
 	let useExternalToolDisplayStateMock: DeepMocked<
@@ -89,21 +89,21 @@ describe("MediaBoardExternalToolElement", () => {
 				ReturnType<typeof useContextExternalToolConfigurationStatus>
 			>();
 
-		jest
-			.mocked(useExternalToolDisplayState)
-			.mockReturnValue(useExternalToolDisplayStateMock);
-		jest
-			.mocked(useExternalToolLaunchState)
-			.mockReturnValue(useExternalToolLaunchStateMock);
-		jest
-			.mocked(useContextExternalToolConfigurationStatus)
-			.mockReturnValue(useContextExternalToolConfigurationStatusMock);
+		vi.mocked(useExternalToolDisplayState).mockReturnValue(
+			useExternalToolDisplayStateMock
+		);
+		vi.mocked(useExternalToolLaunchState).mockReturnValue(
+			useExternalToolLaunchStateMock
+		);
+		vi.mocked(useContextExternalToolConfigurationStatus).mockReturnValue(
+			useContextExternalToolConfigurationStatusMock
+		);
 
-		jest.useFakeTimers({ legacyFakeTimers: true });
+		vi.useFakeTimers({ legacyFakeTimers: true });
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when loading external tool data", () => {
@@ -195,7 +195,7 @@ describe("MediaBoardExternalToolElement", () => {
 				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalledTimes(1);
 
-			jest.advanceTimersByTime(refreshTime + 1000);
+			vi.advanceTimersByTime(refreshTime + 1000);
 			await nextTick();
 
 			expect(

@@ -17,6 +17,15 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VDataTable } from "vuetify/lib/components/index";
 import ImportUsers from "./ImportUsers.vue";
+import {
+	mdiAccountPlus,
+	mdiAccountSwitch,
+	mdiAccountSwitchOutline,
+	mdiAlertCircle,
+	mdiFlag,
+	mdiFlagOutline,
+	mdiPencilOutline,
+} from "@icons/material";
 
 const mockImportUsers: ImportUserListResponse = {
 	total: 3,
@@ -71,12 +80,12 @@ const mockData: ImportUsersInstance["$data"] = {
 	dialogEdit: false,
 	editedIndex: -1,
 	loading: false,
-	mdiAccountPlus: "mdiAccountPlus",
-	mdiAccountSwitch: "mdiAccountSwitch",
-	mdiAccountSwitchOutline: "mdiAccountSwitchOutline",
-	mdiFlag: "mdiFlag",
-	mdiFlagOutline: "mdiFlagOutline",
-	mdiPencilOutline: "mdiPencilOutline",
+	mdiAccountPlus,
+	mdiAccountSwitch,
+	mdiAccountSwitchOutline,
+	mdiFlag,
+	mdiFlagOutline,
+	mdiPencilOutline,
 	roles: [
 		{ text: "Schüler/-in", value: ImportUserResponseRoleNamesEnum.Student },
 		{ text: "Lehrer/-in", value: ImportUserResponseRoleNamesEnum.Teacher },
@@ -89,7 +98,7 @@ const mockData: ImportUsersInstance["$data"] = {
 	searchLoginName: "",
 	searchMatchedBy: [],
 	searchRole: null,
-	mdiAlertCircle: "",
+	mdiAlertCircle,
 	options: {
 		itemsPerPage: 25,
 	},
@@ -98,6 +107,7 @@ const mockData: ImportUsersInstance["$data"] = {
 type ImportUsersInstance = InstanceType<typeof ImportUsers>;
 
 const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
+	vi.spyOn(importUsersModule, "fetchAllImportUsers").mockResolvedValue();
 	return mount(ImportUsers, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -118,7 +128,6 @@ const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
 
 describe("@/components/molecules/importUsers", () => {
 	beforeEach(() => {
-		document.body.setAttribute("data-app", "true");
 		setupStores({
 			schoolsModule: SchoolsModule,
 			importUsersModule: ImportUsersModule,
@@ -209,7 +218,7 @@ describe("@/components/molecules/importUsers", () => {
 		const setup = () => {
 			const wrapper = getWrapper(mockData);
 
-			const getDataFromApiSpy = jest.spyOn(wrapper.vm, "getDataFromApi");
+			const getDataFromApiSpy = vi.spyOn(wrapper.vm, "getDataFromApi");
 
 			return {
 				wrapper,
@@ -218,7 +227,7 @@ describe("@/components/molecules/importUsers", () => {
 		};
 
 		afterEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		it("should set search data properties when search first name changes", async () => {
@@ -329,7 +338,7 @@ describe("@/components/molecules/importUsers", () => {
 	});
 
 	describe("should sort by column", () => {
-		const getDataFromApiSpy = jest.fn();
+		const getDataFromApiSpy = vi.fn();
 
 		const setup = (mockData: ImportUsersInstance["$data"]) => {
 			const wrapper = getWrapper(mockData);

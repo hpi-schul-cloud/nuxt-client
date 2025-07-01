@@ -89,7 +89,7 @@ export default {
 			validator: (values) => values.every((value) => value.text && value.event),
 		},
 	},
-	emits: ["update:show", "event"],
+	emits: ["update:show", "event", "action"],
 	data() {
 		return {
 			shouldHandleClickOutside: false,

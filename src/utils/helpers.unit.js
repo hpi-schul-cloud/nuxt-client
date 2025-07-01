@@ -3,17 +3,17 @@ import { delay } from "./helpers";
 describe("helpers", () => {
 	describe("delay", () => {
 		test("should not resolve until timeout has passed", async () => {
-			jest.useFakeTimers();
-			const spy = jest.fn();
+			vi.useFakeTimers();
+			const spy = vi.fn();
 			delay(100).then(spy);
 
 			// not resolved after half time
-			jest.advanceTimersByTime(50);
+			vi.advanceTimersByTime(50);
 			await Promise.resolve();
 			expect(spy).not.toHaveBeenCalled();
 
 			// resolved after full time
-			jest.advanceTimersByTime(50);
+			vi.advanceTimersByTime(50);
 			await Promise.resolve();
 			expect(spy).toHaveBeenCalled();
 		});

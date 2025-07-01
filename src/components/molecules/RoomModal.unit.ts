@@ -27,7 +27,7 @@ describe("RoomModal", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when modal is not open", () => {
@@ -106,10 +106,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = jest.spyOn(
-						courseRoomListModule,
-						"update"
-					);
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");
@@ -144,10 +143,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = jest.spyOn(
-						courseRoomListModule,
-						"update"
-					);
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");
@@ -173,7 +171,9 @@ describe("RoomModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(courseRoomListModule, "update");
+				const storeRoomUpdateMock = vi
+					.spyOn(courseRoomListModule, "update")
+					.mockImplementation(vi.fn());
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
@@ -215,10 +215,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = jest.spyOn(
-						courseRoomListModule,
-						"update"
-					);
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");
@@ -251,10 +250,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = jest.spyOn(
-						courseRoomListModule,
-						"update"
-					);
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");

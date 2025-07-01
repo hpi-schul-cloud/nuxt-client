@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import ContentModule from "@/store/content";
 import EnvConfigModule from "@/store/env-config";
 import { envsFactory } from "@@/tests/test-utils";
@@ -18,11 +19,11 @@ const query = {
 	isCollection: "true",
 };
 
-jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
 }));
 
-const useRouteMock = <jest.Mock>useRoute;
+const useRouteMock = <Mock>useRoute;
 
 const setup = (options?: {
 	collectionEnabled: boolean;

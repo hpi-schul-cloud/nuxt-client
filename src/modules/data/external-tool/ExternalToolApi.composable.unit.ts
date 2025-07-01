@@ -13,7 +13,7 @@ import {
 	mockApiResponse,
 	toolLaunchRequestResponseFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 
 describe("ExternalToolApi.composable", () => {
@@ -22,11 +22,11 @@ describe("ExternalToolApi.composable", () => {
 	beforeEach(() => {
 		toolApi = createMock<serverApi.ToolApiInterface>();
 
-		jest.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
+		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchContextLaunchDataCall", () => {

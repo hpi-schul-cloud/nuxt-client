@@ -13,11 +13,12 @@ import {
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { Router, useRouter } from "vue-router";
 import { VListItem, VMenu } from "vuetify/lib/components/index";
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+import { Mock } from "vitest";
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
 type BoardData = {
 	id: string;
@@ -109,7 +110,7 @@ describe("RoomBoardCard", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when a board card is rendered", () => {

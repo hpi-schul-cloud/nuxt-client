@@ -17,8 +17,8 @@ const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
 	elements: [fileElementResponseFactory.build()],
 });
 
-jest.mock("@data-board/BoardPermissions.composable");
-const boardPermissions = jest.mocked(useBoardPermissions);
+vi.mock("@data-board/BoardPermissions.composable");
+const boardPermissions = vi.mocked(useBoardPermissions);
 
 describe("CardHostDetailView", () => {
 	const setup = (props: ComponentProps<typeof CardHostDetailView>) => {

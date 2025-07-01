@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import ApplicationErrorModule from "@/store/application-error";
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -5,22 +6,22 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { ref } from "vue";
 import { Router, useRouter } from "vue-router";
 import ApplicationErrorRouting from "./ApplicationErrorRouting.vue";
 
-jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
 
 describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
 	const router = createMock<Router>({
 		currentRoute: ref({ path: "/" }),
 	});
-	const useRouterMock = <jest.Mock>useRouter;
+	const useRouterMock = <Mock>useRouter;
 
 	useRouterMock.mockReturnValue(router);
 	let applicationErrorModuleMock: ApplicationErrorModule;

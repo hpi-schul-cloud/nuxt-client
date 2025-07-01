@@ -21,15 +21,6 @@ import TaskItemMenu from "./TaskItemMenu.vue";
 
 const { tasksTeacher } = mocks;
 
-const defineWindowWidth = (width: number) => {
-	Object.defineProperty(window, "innerWidth", {
-		writable: true,
-		configurable: true,
-		value: width,
-	});
-	window.dispatchEvent(new Event("resize"));
-};
-
 let tasksModuleMock: TasksModule;
 let copyModuleMock: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
@@ -61,6 +52,15 @@ const getWrapper = (
 };
 
 describe("@/components/molecules/TaskItemMenu", () => {
+	const defineWindowWidth = (width: number) => {
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: width,
+		});
+		window.dispatchEvent(new Event("resize"));
+	};
+
 	beforeEach(() => {
 		setupStores({
 			finishedTasksModule: FinishedTasksModule,
@@ -176,7 +176,9 @@ describe("@/components/molecules/TaskItemMenu", () => {
 
 	describe("when restoring a task", () => {
 		it("should call restoreTask of FinishedTasksModule", async () => {
-			const restoreTaskMock = jest.spyOn(finishedTasksModule, "restoreTask");
+			const restoreTaskMock = vi
+				.spyOn(finishedTasksModule, "restoreTask")
+				.mockImplementation(vi.fn());
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,

@@ -22,21 +22,26 @@ import {
 } from "@@/tests/test-utils/setup";
 import { ExternalToolMediumStatus } from "@/serverApi/v3";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
+import { Mock } from "vitest";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
+
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn(),
 }));
 
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn(),
-}));
-
-const useRouterMock = <jest.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 describe("SchoolExternalToolConfigurator", () => {
 	const getWrapper = (
@@ -89,7 +94,7 @@ describe("SchoolExternalToolConfigurator", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("breadcrumbs", () => {

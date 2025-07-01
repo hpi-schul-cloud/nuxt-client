@@ -18,7 +18,7 @@ import {
 	userLoginMigrationResponseFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { UserLoginMigration } from "./user-login-migration";
@@ -34,9 +34,9 @@ describe("UserLoginMigrationModule", () => {
 
 		apiMock = createMock<UserLoginMigrationApiInterface>();
 
-		jest
-			.spyOn(serverApi, "UserLoginMigrationApiFactory")
-			.mockReturnValue(apiMock);
+		vi.spyOn(serverApi, "UserLoginMigrationApiFactory").mockReturnValue(
+			apiMock
+		);
 
 		setupStores({
 			authModule: AuthModule,
@@ -44,7 +44,7 @@ describe("UserLoginMigrationModule", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getter/setter", () => {
@@ -158,7 +158,7 @@ describe("UserLoginMigrationModule", () => {
 							mockApiResponse({ data: listResponse })
 						);
 
-						jest.spyOn(module, "setUserLoginMigration");
+						vi.spyOn(module, "setUserLoginMigration");
 					};
 
 					it("should not set the user login migration", async () => {
@@ -175,21 +175,15 @@ describe("UserLoginMigrationModule", () => {
 						const mockMe = meResponseFactory.build({ user: { id: "userId" } });
 						authModule.setMe(mockMe);
 
-						const listResponse: UserLoginMigrationSearchListResponse = {
-							data: [
-								userLoginMigrationResponseFactory.build(),
-								userLoginMigrationResponseFactory.build(),
-							],
-							total: 2,
-							skip: 0,
-							limit: 2,
-						};
+						const axiosError = axiosErrorFactory
+							.withStatusCode(HttpStatusCode.BadRequest)
+							.build();
 
-						apiMock.userLoginMigrationControllerGetMigrations.mockResolvedValue(
-							mockApiResponse({ data: listResponse })
+						apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValueOnce(
+							axiosError
 						);
 
-						jest.spyOn(module, "setUserLoginMigration");
+						vi.spyOn(module, "setUserLoginMigration");
 					};
 
 					it("should not set user login migration", async () => {
@@ -280,7 +274,9 @@ describe("UserLoginMigrationModule", () => {
 					const mockMe = meResponseFactory.build({ user: { id: "userId" } });
 					authModule.setMe(mockMe);
 
-					const error = axiosErrorFactory.build();
+					const error = axiosErrorFactory
+						.withStatusCode(HttpStatusCode.BadRequest)
+						.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
 					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValue(
@@ -323,8 +319,12 @@ describe("UserLoginMigrationModule", () => {
 					const mockMe = meResponseFactory.build({ user: { id: "userId" } });
 					authModule.setMe(mockMe);
 
-					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValue(
-						createApplicationError(HttpStatusCode.BadRequest)
+					const axiosError = axiosErrorFactory
+						.withStatusCode(HttpStatusCode.BadRequest)
+						.build();
+
+					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValueOnce(
+						axiosError
 					);
 				};
 
@@ -448,7 +448,9 @@ describe("UserLoginMigrationModule", () => {
 					const mockMe = meResponseFactory.build();
 					authModule.setMe(mockMe);
 
-					const error = axiosErrorFactory.build();
+					const error = axiosErrorFactory
+						.withStatusCode(HttpStatusCode.BadRequest)
+						.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
 					apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockRejectedValue(
@@ -494,7 +496,7 @@ describe("UserLoginMigrationModule", () => {
 					apiMock.userLoginMigrationControllerStartMigration.mockResolvedValue(
 						mockApiResponse({ data: userLoginMigrationResponse })
 					);
-					jest.spyOn(module, "setLoading");
+					vi.spyOn(module, "setLoading");
 
 					const userLoginMigration = userLoginMigrationFactory.build({
 						startedAt: new Date(2000, 1, 1, 0, 0),
@@ -595,7 +597,7 @@ describe("UserLoginMigrationModule", () => {
 					apiMock.userLoginMigrationControllerSetMigrationMandatory.mockResolvedValue(
 						mockApiResponse({ data: userLoginMigrationResponse })
 					);
-					jest.spyOn(module, "setLoading");
+					vi.spyOn(module, "setLoading");
 
 					return {
 						userLoginMigration,
@@ -685,7 +687,7 @@ describe("UserLoginMigrationModule", () => {
 					apiMock.userLoginMigrationControllerRestartMigration.mockResolvedValue(
 						mockApiResponse({ data: userLoginMigrationResponse })
 					);
-					jest.spyOn(module, "setLoading");
+					vi.spyOn(module, "setLoading");
 
 					return {
 						userLoginMigration,
@@ -775,7 +777,7 @@ describe("UserLoginMigrationModule", () => {
 					apiMock.userLoginMigrationControllerCloseMigration.mockResolvedValue(
 						mockApiResponse({ data: userLoginMigrationResponse })
 					);
-					jest.spyOn(module, "setLoading");
+					vi.spyOn(module, "setLoading");
 
 					return {
 						userLoginMigration,

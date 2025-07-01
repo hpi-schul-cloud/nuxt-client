@@ -1,11 +1,13 @@
 import { createPermissionGuard } from "@/router/guards/permission.guard";
-import { NavigationGuard, RouteLocationNormalized } from "vue-router";
-import { NavigationGuardNext } from "vue-router";
-import Mock = jest.Mock;
+import {
+	NavigationGuard,
+	NavigationGuardNext,
+	RouteLocationNormalized,
+} from "vue-router";
 
-const mockError = jest.fn();
+const mockError = vi.fn();
 
-jest.mock("@/store", () => ({
+vi.mock("@/store", () => ({
 	authModule: {
 		getUserPermissions: ["validPermission_1", "validPermission_2"],
 	},
@@ -16,12 +18,12 @@ jest.mock("@/store", () => ({
 
 describe("PermissionGuard", () => {
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	function setup() {
 		const route: RouteLocationNormalized = {} as RouteLocationNormalized;
-		const next: Mock<NavigationGuardNext> = jest.fn();
+		const next: NavigationGuardNext = vi.fn();
 		return { to: route, from: route, next };
 	}
 

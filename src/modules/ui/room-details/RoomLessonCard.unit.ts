@@ -7,7 +7,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { VCard } from "vuetify/lib/components/index";
 import RoomLessonCard from "./RoomLessonCard.vue";
@@ -112,11 +112,11 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			Object.defineProperty(window, "location", {
-				set: jest.fn(),
+				set: vi.fn(),
 				get: () => createMock<Location>(),
 			});
 
-			const locationSpy = jest.spyOn(window, "location", "set");
+			const locationSpy = vi.spyOn(window, "location", "set");
 
 			const lessonCard = wrapper.find(".lesson-card");
 			await lessonCard.trigger("click");

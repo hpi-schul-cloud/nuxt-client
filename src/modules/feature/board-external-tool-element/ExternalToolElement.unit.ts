@@ -23,7 +23,7 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPuzzleOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { useSharedLastCreatedElement } from "@util-board";
@@ -34,9 +34,9 @@ import ExternalToolElement from "./ExternalToolElement.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 
-jest.mock("@data-board");
-jest.mock("@data-external-tool");
-jest.mock("@util-board");
+vi.mock("@data-board");
+vi.mock("@data-external-tool");
+vi.mock("@util-board");
 
 describe("ExternalToolElement", () => {
 	let useContentElementStateMock: DeepMocked<
@@ -78,26 +78,26 @@ describe("ExternalToolElement", () => {
 				ReturnType<typeof useContextExternalToolConfigurationStatus>
 			>();
 
-		jest
-			.mocked(useContentElementState)
-			.mockReturnValue(useContentElementStateMock);
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
-		jest
-			.mocked(useExternalToolDisplayState)
-			.mockReturnValue(useExternalToolElementDisplayStateMock);
-		jest
-			.mocked(useExternalToolLaunchState)
-			.mockReturnValue(useExternalToolLaunchStateMock);
-		jest
-			.mocked(useSharedLastCreatedElement)
-			.mockReturnValue(useSharedLastCreatedElementMock);
-		jest
-			.mocked(useContextExternalToolConfigurationStatus)
-			.mockReturnValue(useToolConfigurationStatusMock);
+		vi.mocked(useContentElementState).mockReturnValue(
+			useContentElementStateMock
+		);
+		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useExternalToolDisplayState).mockReturnValue(
+			useExternalToolElementDisplayStateMock
+		);
+		vi.mocked(useExternalToolLaunchState).mockReturnValue(
+			useExternalToolLaunchStateMock
+		);
+		vi.mocked(useSharedLastCreatedElement).mockReturnValue(
+			useSharedLastCreatedElementMock
+		);
+		vi.mocked(useContextExternalToolConfigurationStatus).mockReturnValue(
+			useToolConfigurationStatusMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getWrapper = (
@@ -142,7 +142,7 @@ describe("ExternalToolElement", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the element is mounted", () => {
@@ -976,7 +976,7 @@ describe("ExternalToolElement", () => {
 
 	describe("when refresh time is over", () => {
 		const setup = () => {
-			jest.useFakeTimers({ legacyFakeTimers: true });
+			vi.useFakeTimers({ legacyFakeTimers: true });
 			const { wrapper, refreshTime } = getWrapper(
 				{
 					element: externalToolElementResponseFactory.build({
@@ -1003,7 +1003,7 @@ describe("ExternalToolElement", () => {
 				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalledTimes(1);
 
-			jest.advanceTimersByTime(refreshTime + 1000);
+			vi.advanceTimersByTime(refreshTime + 1000);
 			await nextTick();
 
 			expect(
