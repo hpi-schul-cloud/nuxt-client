@@ -16,6 +16,7 @@
 			<v-card-text class="text--primary">
 				<v-file-input
 					v-model="file"
+					class="truncate-file-input"
 					:label="$t('pages.rooms.ccImportCourse.fileInputLabel')"
 					:prepend-icon="mdiTrayArrowUp"
 					accept=".imscc, .zip"
@@ -139,5 +140,13 @@ async function onConfirm(): Promise<void> {
 .button-section > button {
 	margin-left: calc(var(--space-base-vuetify) * 2);
 	margin-right: calc(var(--space-base-vuetify) * 2);
+}
+
+:deep(.truncate-file-input .v-field__input) {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	max-width: 100%;
 }
 </style>
