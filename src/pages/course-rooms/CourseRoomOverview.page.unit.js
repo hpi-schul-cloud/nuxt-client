@@ -114,6 +114,9 @@ const spyMocks = {
 	storeModuleFetchAllMock: vi
 		.spyOn(courseRoomListModule, "fetchAllElements")
 		.mockImplementation(async () => ({})),
+	storeModuleUpdateMock: vi
+		.spyOn(courseRoomListModule, "update")
+		.mockImplementation(async () => ({})),
 };
 
 let copyModuleMock;
