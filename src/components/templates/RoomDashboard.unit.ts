@@ -284,6 +284,9 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should sort elements after Drag&Drop", async () => {
+			courseRoomDetailsModule.sortElements = vi
+				.fn()
+				.mockImplementation(vi.fn());
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			const items = JSON.parse(JSON.stringify(wrapper.vm.roomData.elements));
 			items.splice(1, 0, items.splice(0, 1)[0]);

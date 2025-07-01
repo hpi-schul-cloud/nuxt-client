@@ -9,19 +9,18 @@ describe("commonCartridgeExportModule", () => {
 			setupStores({ courseRoomDetailsModule: CourseRoomDetailsModule });
 		});
 		describe("startExport", () => {
-			it("should call courseRoomDetailsModule.downloadCommonCartridgeCourse with the correct version and topic", () => {
+			it("should call courseRoomDetailsModule.downloadCommonCartridgeCourse with the correct version and topic", async () => {
 				const commonCartridgeExportModule = new CommonCartridgeExportModule({});
-				const courseRoomDetailModuleMock = vi.spyOn(
-					courseRoomDetailsModule,
-					"downloadCommonCartridgeCourse"
-				);
+				const courseRoomDetailModuleMock = vi
+					.spyOn(courseRoomDetailsModule, "downloadCommonCartridgeCourse")
+					.mockResolvedValue();
 
 				commonCartridgeExportModule.setVersion("1.1.0");
 				commonCartridgeExportModule.setTopics(["topic"]);
 				commonCartridgeExportModule.setTasks(["task"]);
 				commonCartridgeExportModule.setColumnBoards(["columnBoard"]);
 
-				commonCartridgeExportModule.startExport();
+				await commonCartridgeExportModule.startExport();
 
 				expect(courseRoomDetailModuleMock).toHaveBeenCalledWith({
 					version: "1.1.0",
