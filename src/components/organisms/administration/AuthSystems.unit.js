@@ -311,7 +311,9 @@ describe("AuthSystems", () => {
 				permissions: ["SYSTEM_CREATE"],
 			});
 			authModule.setMe(mockMe);
-			const deleteSpy = vi.spyOn(schoolsModule, "deleteSystem");
+			const deleteSpy = vi
+				.spyOn(schoolsModule, "deleteSystem")
+				.mockImplementation(vi.fn());
 			const wrapper = createWrapper({ props: generateProps() });
 
 			expect(wrapper.findAll("tr").length).toBe(5);
@@ -330,7 +332,10 @@ describe("AuthSystems", () => {
 				permissions: ["SYSTEM_CREATE"],
 			});
 			authModule.setMe(mockMe);
-			const removeSystem = vi.spyOn(AuthSystems.methods, "removeSystem");
+			const removeSystem = vi
+				.spyOn(AuthSystems.methods, "removeSystem")
+				.mockImplementation(vi.fn());
+			authModule.setMe(mockMe);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);
