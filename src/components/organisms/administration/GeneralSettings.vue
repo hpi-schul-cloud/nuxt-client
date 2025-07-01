@@ -89,7 +89,7 @@
 			<v-col>
 				<v-file-input
 					v-model="logoFile"
-					class="school-logo"
+					class="school-logo truncate-file-input"
 					:label="
 						$t(
 							'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
@@ -330,5 +330,13 @@ export default {
 <style lang="scss" scoped>
 :deep(.v-list-item__prepend > .v-icon) {
 	opacity: 1;
+}
+
+:deep(.truncate-file-input .v-field__input) {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	max-width: 100%;
 }
 </style>

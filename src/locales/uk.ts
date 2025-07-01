@@ -416,7 +416,7 @@ export default {
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Наприкінці навчального року",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"Фазу передачі можна розпочати вручну за два тижні до початку свята. Якщо до початку свята немає посібника, фаза передачі починається автоматично. Початок фази передачі не можна скасувати.",
+		"Фазу передачі можна розпочати вручну за два тижні до кінця навчального року. Після того, як не відбулося жодного ручного початку, фаза передачі починається автоматично. Початок фази передачі не можна скасувати.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Почніть фазу передачі",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
@@ -1185,8 +1185,8 @@ export default {
 	"pages.administration.ldap.classes.path.info":
 		"Відносний шлях від базового шляху",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind. Mit Hilfe von zwei Semikolons (;;) hast du die Möglichkeit, mehrere Nutzerpfade getrennt voneinander zu hinterlegen.",
-	"pages.administration.ldap.classes.path.title": "Шлях(и) класу",
+		"Тут ви повинні визначити, де ми знаходимо класи і як вони структуровані.",
+	"pages.administration.ldap.classes.path.title": "Шлях класу",
 	"pages.administration.ldap.classes.subtitle": "",
 	"pages.administration.ldap.classes.title": "",
 	"pages.administration.ldap.connection.basis.path.info":
@@ -2080,6 +2080,8 @@ export default {
 		"Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update":
 		"Не вдалося оновити посилання на запрошення.",
+	"pages.rooms.invitationlinks.error.load":
+		"Не вдалося завантажити список запрошень.",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

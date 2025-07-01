@@ -416,7 +416,7 @@ export default {
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Al final del año escolar",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"La fase de transferencia se puede comenzar manualmente dos semanas antes del inicio de las vacaciones. Si no hay ningún comienzo manual al comienzo de las vacaciones, la fase de transferencia comienza automáticamente. El inicio de la fase de transferencia no se puede deshacer.",
+		"La fase de transferencia se puede comenzar manualmente dos semanas antes del final del año escolar. Una vez que no se ha producido ningún inicio manual, la fase de transferencia comienza automáticamente. El inicio de la fase de transferencia no se puede deshacer.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Fase de transferencia de inicio",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
@@ -1201,7 +1201,7 @@ export default {
 	"pages.administration.ldap.classes.path.info":
 		"Ruta relativa desde la ruta base",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Aquí hay que definir dónde encontramos las clases y cómo están estructuradas. Con la ayuda de dos puntos y coma (;;) tiene la posibilidad de almacenar varias rutas de usuari{'@'} por separado.",
+		"Aquí hay que definir dónde encontramos las clases y cómo están estructuradas.",
 	"pages.administration.ldap.classes.path.title": "Ruta de clase",
 	"pages.administration.ldap.classes.subtitle":
 		"Especifique el atributo de clase en el que está disponible la siguiente información en su LDAP.",
@@ -2116,6 +2116,8 @@ export default {
 		"No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update":
 		"Se ha producido un error al actualizar el enlace de invitación.",
+	"pages.rooms.invitationlinks.error.load":
+		"No se pudo cargar la lista de invitados.",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

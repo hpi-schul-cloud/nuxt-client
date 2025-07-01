@@ -411,7 +411,7 @@ export default {
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Ende des Schuljahres",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"Die Transferphase kann zwei Wochen vor Ferienbeginn manuell gestartet werden. Ist bis zum Ferienbeginn kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
+		"Die Transferphase kann zwei Wochen vor Schuljahresende manuell gestartet werden. Ist kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Transferphase starten",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
@@ -1168,8 +1168,8 @@ export default {
 	"pages.administration.ldap.classes.path.info":
 		"Relativer Pfad vom Basis-Pfad",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind. Durch das Hinzufügen von zwei Semikolons (;;) können mehrere Nutzerpfade getrennt voneinander hinterlegt werden.",
-	"pages.administration.ldap.classes.path.title": "Klassen-Pfad(e)",
+		"Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind.",
+	"pages.administration.ldap.classes.path.title": "Klassen-Pfad",
 	"pages.administration.ldap.classes.subtitle":
 		"Geben Sie das Klassenattribut an, in dem die folgenden Informationen in Ihrem LDAP verfügbar sind.",
 	"pages.administration.ldap.classes.title": "Klassen (optional)",
@@ -2080,6 +2080,8 @@ export default {
 		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update":
 		"Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
+	"pages.rooms.invitationlinks.error.load":
+		"Die Einladungsliste konnte nicht geladen werden.",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
