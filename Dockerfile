@@ -24,7 +24,7 @@ RUN if [ -f "public/themes/${SC_THEME}/bbb/presentation.pdf" ]; then \
     fi
 
 # run stage
-FROM docker.io/nginx:1.27
+FROM docker.io/nginx:1.29
 RUN mkdir /etc/nginx/templates
 COPY config/docker/nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build-stage /app/dist /usr/share/nginx/html/frontend
