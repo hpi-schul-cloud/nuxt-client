@@ -137,7 +137,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					return {
 						...user,
 						userId: user.id,
-						fullName: `${user.firstName} ${user.lastName}`,
+						fullName: `${user.lastName}, ${user.firstName}`,
 						schoolRoleNames: [schoolRoleName],
 						displaySchoolRole: schoolRoleMap[schoolRoleName],
 					};

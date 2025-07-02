@@ -257,7 +257,7 @@ describe("useRoomMembers", () => {
 				schoolTeachersList.data.map((user) => ({
 					...user,
 					userId: user.id,
-					fullName: `${user.firstName} ${user.lastName}`,
+					fullName: `${user.lastName}, ${user.firstName}`,
 					schoolRoleNames: [RoleName.Teacher],
 					schoolName: "Paul-Gerhardt-Gymnasium",
 					displaySchoolRole: "common.labels.teacher.neutral",
@@ -296,7 +296,7 @@ describe("useRoomMembers", () => {
 				schoolStudentList.data.map((user) => ({
 					...user,
 					userId: user.id,
-					fullName: `${user.firstName} ${user.lastName}`,
+					fullName: `${user.lastName}, ${user.firstName}`,
 					schoolRoleNames: [RoleName.Student],
 					schoolName: "Paul-Gerhardt-Gymnasium",
 					displaySchoolRole: "common.labels.student.neutral",
