@@ -400,7 +400,7 @@ export default defineComponent({
 				items.push({
 					icon: this.icons.mdiContentCopy,
 					action: () => this.onCopyRoom(this.roomData.roomId),
-					name: this.$t("common.actions.copy"),
+					name: this.$t("common.actions.duplicate"),
 					dataTestId: "room-menu-copy",
 				});
 			}

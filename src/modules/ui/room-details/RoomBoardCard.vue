@@ -198,7 +198,7 @@ const actionsMenuItems = computed(() => {
 	actions.push({
 		icon: mdiContentCopy,
 		action: () => emit("copy-board"),
-		name: t("common.actions.copy"),
+		name: t("common.actions.duplicate"),
 		dataTestId: `board-card-menu-action-copy-${
 			toRef(props, "boardCardIndex").value
 		}`,

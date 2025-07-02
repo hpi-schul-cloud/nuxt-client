@@ -323,7 +323,7 @@ export default {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiContentCopy,
 						action: () => this.copyCard(),
-						name: this.$t("common.actions.copy"),
+						name: this.$t("common.actions.duplicate"),
 						dataTestId: `room-task-card-menu-copy-${this.taskCardIndex}`,
 					});
 				}
