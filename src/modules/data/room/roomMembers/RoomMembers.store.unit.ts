@@ -257,7 +257,7 @@ describe("useRoomMembers", () => {
 				schoolTeachersList.data.map((user) => ({
 					...user,
 					userId: user.id,
-					fullName: `${user.lastName}, ${user.firstName}`,
+					fullName: `${user.firstName} ${user.lastName}`,
 					schoolRoleNames: [RoleName.Teacher],
 					schoolName: "Paul-Gerhardt-Gymnasium",
 					displaySchoolRole: "common.labels.teacher.neutral",
@@ -296,7 +296,7 @@ describe("useRoomMembers", () => {
 				schoolStudentList.data.map((user) => ({
 					...user,
 					userId: user.id,
-					fullName: `${user.lastName}, ${user.firstName}`,
+					fullName: `${user.firstName} ${user.lastName}`,
 					schoolRoleNames: [RoleName.Student],
 					schoolName: "Paul-Gerhardt-Gymnasium",
 					displaySchoolRole: "common.labels.student.neutral",
@@ -978,7 +978,7 @@ describe("useRoomMembers", () => {
 
 			const result = roomMembersStore.getMemberFullName(member.userId);
 
-			expect(result).toBe(`${member.lastName}, ${member.firstName}`);
+			expect(result).toBe(`${member.firstName} ${member.lastName}`);
 		});
 	});
 

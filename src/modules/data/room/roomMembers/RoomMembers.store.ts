@@ -90,7 +90,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
-					fullName: `${member.lastName}, ${member.firstName}`,
+					fullName: `${member.firstName} ${member.lastName}`,
 					isSelectable: !(
 						member.userId === currentUserId ||
 						member.roomRoleName === RoleName.Roomowner
@@ -137,7 +137,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					return {
 						...user,
 						userId: user.id,
-						fullName: `${user.lastName}, ${user.firstName}`,
+						fullName: `${user.firstName} ${user.lastName}`,
 						schoolRoleNames: [schoolRoleName],
 						displaySchoolRole: schoolRoleMap[schoolRoleName],
 					};
