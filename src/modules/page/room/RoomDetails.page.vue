@@ -33,7 +33,7 @@
 		<BoardGrid :boards="visibleBoards" />
 		<ConfirmationDialog />
 		<SelectBoardLayoutDialog
-			v-if="boardLayoutsEnabled && canCreateRoom"
+			v-if="boardLayoutsEnabled && canEditRoomContent"
 			v-model="boardLayoutDialogIsOpen"
 			@select="onCreateBoard"
 		/>
@@ -111,7 +111,6 @@ const pageTitle = computed(() =>
 useTitle(pageTitle);
 
 const {
-	canCreateRoom,
 	canDeleteRoom,
 	canEditRoomContent,
 	canLeaveRoom,
@@ -149,7 +148,6 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const fabItems = computed(() => {
-	if (!canCreateRoom.value) return undefined;
 	if (!canEditRoomContent.value) return undefined;
 
 	const actions = [];
