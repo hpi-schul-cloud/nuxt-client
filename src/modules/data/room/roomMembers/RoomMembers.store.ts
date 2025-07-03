@@ -368,30 +368,39 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		selectedIds.value = [];
 	};
 
+	const canBeRoomOwner = (userId: string) => {
+		const member = roomMembers.value.find((member) => member.userId === userId);
+		if (!member) {
+			return false;
+		}
+		return member.permissions.includes("CAN_BE_ROOMOWNER");
+	};
+
 	return {
 		addMembers,
-		isRoomOwner,
+		canBeRoomOwner,
 		changeRoomOwner,
 		confirmInvitations,
 		fetchMembers,
-		resetPotentialMembers,
-		resetStore,
 		getPotentialMembers,
 		getSchools,
 		getMemberById,
 		getMemberFullName,
+		isRoomOwner,
 		leaveRoom,
 		rejectInvitations,
 		removeMembers,
+		resetPotentialMembers,
+		resetStore,
 		updateMembersRole,
 		confirmationList,
 		confirmationSelectedIds,
 		isLoading,
+		potentialRoomMembers,
 		roomMembers,
 		roomMembersWithoutApplicants,
 		roomApplicants,
-		potentialRoomMembers,
-		selectedIds,
 		schools,
+		selectedIds,
 	};
 });

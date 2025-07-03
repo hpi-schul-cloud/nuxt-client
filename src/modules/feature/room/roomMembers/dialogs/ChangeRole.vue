@@ -163,6 +163,7 @@ const isChangeOwnershipOptionVisible = computed(() => {
 		isMemberStudent.value === false
 	);
 });
+
 const isOwnershipHandoverMode = ref(false);
 const dialogTitle = computed(() =>
 	isOwnershipHandoverMode.value
