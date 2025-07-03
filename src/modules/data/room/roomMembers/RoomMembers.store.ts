@@ -194,6 +194,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
 					...member,
+					fullName: `${member.firstName} ${member.lastName}`,
 					roomRoleName: roomRoleName as RoleName,
 					displayRoomRole: roomRole[roomRoleName],
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
