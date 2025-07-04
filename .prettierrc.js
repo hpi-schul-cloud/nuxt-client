@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	printWidth: 80,
 	useTabs: true,
 	trailingComma: "es5",
