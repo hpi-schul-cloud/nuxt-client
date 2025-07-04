@@ -39,7 +39,7 @@ import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { useBoardNotifier } from "@util-board";
 import { ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
-import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index";
+import { VBtn, VDialog, VTab, VTabs } from "vuetify/components";
 import RoomMembersPage from "./RoomMembers.page.vue";
 
 jest.mock("vue-router");
@@ -473,7 +473,7 @@ describe("RoomMembersPage", () => {
 			expect(wireframe.props("fabItems")).toBe(null);
 		});
 
-		it("should call getSchools method", async () => {
+		it("should call loadSchoolList method", async () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper, roomMembersStore } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
@@ -484,7 +484,7 @@ describe("RoomMembersPage", () => {
 
 			await addMemberButton.trigger("click");
 
-			expect(roomMembersStore.getSchools).toHaveBeenCalled();
+			expect(roomMembersStore.loadSchoolList).toHaveBeenCalled();
 		});
 
 		it("should open Dialog", async () => {
