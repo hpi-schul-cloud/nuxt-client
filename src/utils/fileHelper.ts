@@ -150,6 +150,39 @@ export function isAudioMimeType(mimeType: string): boolean {
 	return mimeType.startsWith("audio/");
 }
 
+export function isCollaboraMimeType(mimeType: string): boolean {
+	const textMimeTypes = [
+		"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+		"application/msword",
+		"application/vnd.oasis.opendocument.text",
+		"application/rtf",
+		"text/plain",
+	];
+
+	const spreadsheetMimeTypes = [
+		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+		"application/vnd.ms-excel",
+		"application/vnd.oasis.opendocument.spreadsheet",
+		"text/csv",
+	];
+
+	const presentationMimeTypes = [
+		"application/vnd.openxmlformats-officedocument.presentationml.presentation",
+		"application/vnd.ms-powerpoint",
+		"application/vnd.oasis.opendocument.presentation",
+	];
+
+	const collaboraMimeTypes = [
+		...textMimeTypes,
+		...spreadsheetMimeTypes,
+		...presentationMimeTypes,
+	];
+
+	const isCollaboraMimeType = collaboraMimeTypes.includes(mimeType);
+
+	return isCollaboraMimeType;
+}
+
 export function formatSecondsToHourMinSec(seconds: number) {
 	const isoString = new Date(1000 * seconds).toISOString();
 	let formattedString = isoString.slice(14, 19);
