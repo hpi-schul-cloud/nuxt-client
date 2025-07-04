@@ -133,18 +133,17 @@
 		</svg>
 	</div>
 </template>
-<script>
-export default {
-	name: "PermissionErrorSvg",
-	props: {
-		fill: {
-			type: String,
-			default: "none",
-		},
-		svgWidth: {
-			type: Number,
-			default: 295,
-		},
+<script setup lang="ts">
+import { defineProps } from "vue";
+
+defineProps({
+	fill: {
+		type: String,
+		default: "none",
 	},
-};
+	svgWidth: {
+		type: Number,
+		default: 295,
+	},
+});
 </script>

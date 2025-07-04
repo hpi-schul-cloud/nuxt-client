@@ -58,7 +58,7 @@
 	</v-custom-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { currentDate } from "@/plugins/datetime";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
@@ -71,104 +71,79 @@ import {
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
-import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
+import { computed, ComputedRef, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "SchoolPolicyFormDialog",
-	components: {
-		vCustomDialog,
-	},
-	props: {
-		isOpen: {
-			type: Boolean,
-			required: true,
-		},
-	},
-	emits: ["close"],
-	setup(props, { emit }) {
-		const { t } = useI18n();
-		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
-		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+type Props = {
+	isOpen: boolean;
+};
+defineProps<Props>();
+const emit = defineEmits<{
+	(e: "close"): void;
+}>();
 
-		const policyForm: Ref<File[]> = ref([]);
-		const isValid: Ref<boolean> = ref(false);
-		const isTouched: Ref<boolean> = ref(false);
-		const file: Ref<File | null> = ref(null);
+const { t } = useI18n();
+const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
-		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+const policyForm: Ref<File[]> = ref([]);
+const isValid: Ref<boolean> = ref(false);
+const isTouched: Ref<boolean> = ref(false);
+const file: Ref<File | null> = ref(null);
 
-		const maxFileUploadSizeInKb = 4194304;
-		const rules = {
-			required: (value: File | null) =>
-				!!value || t("common.validation.required"),
-			mustBePdf: (value: File | null) =>
-				value?.type === "application/pdf" ||
-				t("pages.administration.school.index.schoolPolicy.validation.notPdf"),
-			maxSize: (value: File | null) =>
-				(!!value && value.size <= maxFileUploadSizeInKb) ||
-				t(
-					"pages.administration.school.index.schoolPolicy.validation.fileTooBig"
-				),
+const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+
+const maxFileUploadSizeInKb = 4194304;
+const rules = {
+	required: (value: File | null) => !!value || t("common.validation.required"),
+	mustBePdf: (value: File | null) =>
+		value?.type === "application/pdf" ||
+		t("pages.administration.school.index.schoolPolicy.validation.notPdf"),
+	maxSize: (value: File | null) =>
+		(!!value && value.size <= maxFileUploadSizeInKb) ||
+		t("pages.administration.school.index.schoolPolicy.validation.fileTooBig"),
+};
+
+const onBlur = () => {
+	isTouched.value = true;
+};
+
+const resetForm = () => {
+	policyForm.value = [];
+	isValid.value = false;
+	isTouched.value = false;
+	file.value = null;
+};
+
+const cancel = () => {
+	resetForm();
+	emit("close");
+};
+
+const submit = async () => {
+	if (isValid.value && file.value) {
+		const newConsentVersion: CreateConsentVersionPayload = {
+			schoolId: school.value.id,
+			title: t("pages.administration.school.index.schoolPolicy.fileName"),
+			consentText: "",
+			consentTypes: ["privacy"],
+			publishedAt: currentDate().toString(),
+			consentData: (await toBase64(file.value)) as string,
 		};
 
-		const onBlur = () => {
-			isTouched.value = true;
-		};
+		emit("close");
+		await privacyPolicyModule.createPrivacyPolicy(newConsentVersion);
 
-		const resetForm = () => {
-			policyForm.value = [];
-			isValid.value = false;
-			isTouched.value = false;
-			file.value = null;
-		};
+		notifierModule.show({
+			text: t("pages.administration.school.index.schoolPolicy.success"),
+			status: "success",
+			timeout: 5000,
+		});
 
-		const cancel = () => {
-			resetForm();
-			emit("close");
-		};
-
-		const submit = async () => {
-			if (isValid.value && file.value) {
-				const newConsentVersion: CreateConsentVersionPayload = {
-					schoolId: school.value.id,
-					title: t("pages.administration.school.index.schoolPolicy.fileName"),
-					consentText: "",
-					consentTypes: ["privacy"],
-					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(file.value)) as string,
-				};
-
-				emit("close");
-				await privacyPolicyModule.createPrivacyPolicy(newConsentVersion);
-
-				notifierModule.show({
-					text: t("pages.administration.school.index.schoolPolicy.success"),
-					status: "success",
-					timeout: 5000,
-				});
-
-				resetForm();
-			}
-		};
-
-		return {
-			t,
-			rules,
-			cancel,
-			submit,
-			onBlur,
-			isValid,
-			isTouched,
-			policyForm,
-			school,
-			mdiAlert,
-			mdiFileReplaceOutline,
-			file,
-		};
-	},
-});
+		resetForm();
+	}
+};
 </script>
 
 <style lang="scss" scoped>

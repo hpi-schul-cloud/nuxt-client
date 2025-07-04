@@ -1,4 +1,4 @@
-import ModalFooterBorder from "./ModalFooterBorder";
+import ModalFooterBorder from "./ModalFooterBorder.vue";
 import { mount } from "@vue/test-utils";
 
 describe("@/components/molecules/ModalFooterBorder", () => {

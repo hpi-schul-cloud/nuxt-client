@@ -18,37 +18,29 @@
 	</base-modal>
 </template>
 
-<script>
+<script setup lang="ts">
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
 
-export default {
-	components: {
-		ModalBodyInfo,
-	},
-	props: {
-		design: {
-			type: String,
-			default: "info",
-		},
-		title: {
-			type: String,
-			default: "",
-		},
-		description: {
-			type: String,
-			default: "",
-		},
-		btn: {
-			type: String,
-			default: "OK",
-		},
-	},
-	emits: ["update:active"],
-	methods: {
-		close() {
-			this.$emit("update:active", false);
-		},
-	},
+type Props = {
+	design?: string;
+	title?: string;
+	description?: string;
+	btn?: string;
+};
+
+withDefaults(defineProps<Props>(), {
+	design: "info",
+	title: "",
+	description: "",
+	btn: "OK",
+});
+
+const emit = defineEmits<{
+	(e: "update:active", value: boolean): void;
+}>();
+
+const close = () => {
+	emit("update:active", false);
 };
 </script>
 

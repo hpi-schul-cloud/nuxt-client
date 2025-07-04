@@ -15,31 +15,23 @@
 	</ContentElementBar>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
 import { ContentElementBar } from "@ui-board";
 import { PreviewImage } from "@ui-preview-image";
-import { PropType, defineComponent } from "vue";
 
-export default defineComponent({
-	name: "PdfDisplay",
-	components: { ContentElementBar, PreviewImage },
-	props: {
-		element: { type: Object as PropType<FileElementResponse>, required: true },
-		isEditMode: { type: Boolean, required: true },
-		name: { type: String, required: true },
-		previewSrc: { type: String, required: true },
-		src: { type: String, required: true },
-		showMenu: { type: Boolean, required: true },
-	},
-	setup(props) {
-		const openPdf = () => {
-			window.open(props.src, "_blank");
-		};
+type Props = {
+	element: FileElementResponse;
+	isEditMode: boolean;
+	name: string;
+	previewSrc: string;
+	src: string;
+	showMenu: boolean;
+};
 
-		return {
-			openPdf,
-		};
-	},
-});
+const props = defineProps<Props>();
+
+const openPdf = () => {
+	window.open(props.src, "_blank");
+};
 </script>

@@ -26,8 +26,8 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import NotFoundSvg from "@/assets/img/NotFoundSvg.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -35,41 +35,33 @@ import { useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "ErrorContent",
-	components: { PermissionErrorSvg, NotFoundSvg },
-	props: {
-		errorText: { type: String, default: "" },
-		statusCode: {
-			type: Number,
-			default: HttpStatusCode.InternalServerError,
-		},
-	},
-	setup(props) {
-		const { t } = useI18n();
+type Props = {
+	errorText?: string;
+	statusCode?: HttpStatusCode;
+};
 
-		const pageTitle = buildPageTitle(t("error.generic"));
-		useTitle(pageTitle);
-
-		const permissionErrorStatusCodes: HttpStatusCode[] = [
-			HttpStatusCode.Unauthorized,
-			HttpStatusCode.Forbidden,
-		];
-
-		const isPermissionError = computed(() =>
-			permissionErrorStatusCodes.includes(props.statusCode)
-		);
-
-		const isNotFoundError = computed(
-			() => props.statusCode === HttpStatusCode.NotFound
-		);
-
-		return {
-			isPermissionError,
-			isNotFoundError,
-		};
-	},
+const props = withDefaults(defineProps<Props>(), {
+	errorText: "",
+	statusCode: HttpStatusCode.InternalServerError,
 });
+
+const { t } = useI18n();
+
+const pageTitle = buildPageTitle(t("error.generic"));
+useTitle(pageTitle);
+
+const permissionErrorStatusCodes: HttpStatusCode[] = [
+	HttpStatusCode.Unauthorized,
+	HttpStatusCode.Forbidden,
+];
+
+const isPermissionError = computed(() =>
+	permissionErrorStatusCodes.includes(props.statusCode)
+);
+
+const isNotFoundError = computed(
+	() => props.statusCode === HttpStatusCode.NotFound
+);
 </script>
 <style lang="scss" scoped>
 @use "sass:map";

@@ -30,7 +30,7 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { BusinessError } from "@/store/types/commons";
 import { useBoardPermissions } from "@data-board";
 import {
@@ -38,83 +38,59 @@ import {
 	useContextExternalToolConfigurationStatus,
 } from "@data-external-tool";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { computed, ComputedRef, defineComponent, PropType } from "vue";
+import { computed, ComputedRef } from "vue";
 
-export default defineComponent({
-	components: {
-		InfoAlert,
-		WarningAlert,
-	},
-	props: {
-		toolDisplayName: {
-			type: String,
-			required: true,
-		},
-		error: {
-			type: Object as PropType<BusinessError>,
-			default: undefined,
-		},
-		toolStatus: {
-			type: Object as PropType<ContextExternalToolConfigurationStatus>,
-			required: true,
-		},
-	},
-	setup(props) {
-		const {
-			determineToolStatusTranslationKey,
-			determineDeactivatedTranslationKey,
-			determineNotLicensedTranslationKey,
-		} = useContextExternalToolConfigurationStatus();
+type Props = {
+	toolDisplayName: string;
+	error?: BusinessError;
+	toolStatus: ContextExternalToolConfigurationStatus;
+};
 
-		const { isTeacher } = useBoardPermissions();
+const props = withDefaults(defineProps<Props>(), {
+	error: undefined,
+});
 
-		const isToolNotLaunchable: ComputedRef<boolean> = computed(
-			() =>
-				props.toolStatus.isOutdatedOnScopeSchool ||
-				props.toolStatus.isOutdatedOnScopeContext ||
-				props.toolStatus.isIncompleteOnScopeContext
-		);
+const {
+	determineToolStatusTranslationKey,
+	determineDeactivatedTranslationKey,
+	determineNotLicensedTranslationKey,
+} = useContextExternalToolConfigurationStatus();
 
-		const isToolIncompleteOperational: ComputedRef<boolean> = computed(
-			() =>
-				props.toolStatus.isIncompleteOperationalOnScopeContext &&
-				isTeacher.value
-		);
+const { isTeacher } = useBoardPermissions();
 
-		const errorMessage: ComputedRef<string> = computed(() =>
-			isTeacher.value
-				? "feature-board-external-tool-element.alert.error.teacher"
-				: "feature-board-external-tool-element.alert.error.student"
-		);
+const isToolNotLaunchable: ComputedRef<boolean> = computed(
+	() =>
+		props.toolStatus.isOutdatedOnScopeSchool ||
+		props.toolStatus.isOutdatedOnScopeContext ||
+		props.toolStatus.isIncompleteOnScopeContext
+);
 
-		const toolStatusMessage: ComputedRef<string> = computed(() => {
-			const translationKey = determineToolStatusTranslationKey(
-				props.toolStatus
-			);
+const isToolIncompleteOperational: ComputedRef<boolean> = computed(
+	() =>
+		props.toolStatus.isIncompleteOperationalOnScopeContext && isTeacher.value
+);
 
-			return translationKey;
-		});
+const errorMessage: ComputedRef<string> = computed(() =>
+	isTeacher.value
+		? "feature-board-external-tool-element.alert.error.teacher"
+		: "feature-board-external-tool-element.alert.error.student"
+);
 
-		const toolDeactivatedMessage: ComputedRef<string> = computed(() => {
-			const translationKey = determineDeactivatedTranslationKey();
+const toolStatusMessage: ComputedRef<string> = computed(() => {
+	const translationKey = determineToolStatusTranslationKey(props.toolStatus);
 
-			return translationKey;
-		});
+	return translationKey;
+});
 
-		const toolNotLicensedMessage: ComputedRef<string> = computed(() => {
-			const translationKey = determineNotLicensedTranslationKey();
+const toolDeactivatedMessage: ComputedRef<string> = computed(() => {
+	const translationKey = determineDeactivatedTranslationKey();
 
-			return translationKey;
-		});
+	return translationKey;
+});
 
-		return {
-			errorMessage,
-			toolStatusMessage,
-			isToolNotLaunchable,
-			isToolIncompleteOperational,
-			toolDeactivatedMessage,
-			toolNotLicensedMessage,
-		};
-	},
+const toolNotLicensedMessage: ComputedRef<string> = computed(() => {
+	const translationKey = determineNotLicensedTranslationKey();
+
+	return translationKey;
 });
 </script>
