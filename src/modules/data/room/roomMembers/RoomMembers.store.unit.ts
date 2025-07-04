@@ -1014,7 +1014,7 @@ describe("useRoomMembers", () => {
 
 			const result = roomMembersStore.getMemberFullName(member.userId);
 
-			expect(result).toBe(`${member.lastName}, ${member.firstName}`);
+			expect(result).toBe(`${member.firstName} ${member.lastName}`);
 		});
 	});
 
