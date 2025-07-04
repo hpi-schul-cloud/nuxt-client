@@ -209,6 +209,7 @@ module.exports = {
 			"@page-media-shelf": getDir("src/modules/page/media-shelf"),
 			"@page-room": getDir("src/modules/page/room"),
 			"@page-folder": getDir("src/modules/page/folder"),
+			"@page-collabora": getDir("src/modules/page/collabora"),
 		},
 		extensions: [".tsx", ".ts", ".mjs", ".js", ".jsx", ".vue", ".json"],
 		plugins: [new ThemeResolverPlugin(__base, replacements)],

@@ -9,6 +9,8 @@
 		:tabindex="isEditMode ? 0 : undefined"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
+		@click="onCardInteraction"
+		@keydown.enter="onCardInteraction"
 	>
 		<FileContent
 			v-if="fileProperties && isUploading !== true"
@@ -56,9 +58,11 @@
 
 <script lang="ts">
 import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
+import router from "@/router";
 import { FileElementResponse } from "@/serverApi/v3";
 import {
 	convertDownloadToPreviewUrl,
+	isCollaboraMimeType,
 	isPreviewPossible,
 	isScanStatusBlocked,
 } from "@/utils/fileHelper";
@@ -218,6 +222,23 @@ export default defineComponent({
 		const onMoveUp = () => emit("move-up:edit");
 		const onMoveDown = () => emit("move-down:edit");
 
+		const hasCollaboraMimeType = computed(() => {
+			return isCollaboraMimeType(fileRecord.value.mimeType);
+		});
+
+		const onCardInteraction = () => {
+			if (hasCollaboraMimeType.value) openCollabora();
+		};
+
+		const openCollabora = () => {
+			router.push({
+				name: "collabora",
+				params: {
+					id: fileRecord.value.id,
+				},
+			});
+		};
+
 		return {
 			fileContentElement,
 			fileProperties,
@@ -236,6 +257,7 @@ export default defineComponent({
 			onDelete,
 			onMoveUp,
 			onMoveDown,
+			onCardInteraction,
 		};
 	},
 	computed: {
