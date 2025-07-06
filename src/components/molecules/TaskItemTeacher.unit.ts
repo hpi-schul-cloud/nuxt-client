@@ -8,12 +8,11 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
-import { VBtn, VHover, VListItem } from "vuetify/lib/components/index";
+import { VBtn, VListItem } from "vuetify/lib/components/index";
 import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher.vue";
-import { logger } from "@util-logger";
 
 const {
 	tasksTeacher,
@@ -23,21 +22,12 @@ const {
 	noDueDateTasksTeacher,
 } = mocks;
 
-const defineWindowWidth = (width: number) => {
-	Object.defineProperty(window, "innerWidth", {
-		writable: true,
-		configurable: true,
-		value: width,
-	});
-	window.dispatchEvent(new Event("resize"));
-};
-
 let tasksModuleMock: TasksModule;
 let copyModuleMock: CopyModule;
 let notifierModuleMock: NotifierModule;
 
 const mockRouter = {
-	push: jest.fn(),
+	push: vi.fn(),
 };
 
 const getWrapper = (props: { task: object }) => {
@@ -58,6 +48,15 @@ const getWrapper = (props: { task: object }) => {
 };
 
 describe("@/components/molecules/TaskItemTeacher", () => {
+	const defineWindowWidth = (width: number) => {
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: width,
+		});
+		window.dispatchEvent(new Event("resize"));
+	};
+
 	defineWindowWidth(1264);
 
 	beforeEach(() => {
@@ -77,10 +76,10 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 
 	it("should direct user to legacy task details page", () => {
 		Object.defineProperty(window, "location", {
-			set: jest.fn(),
+			set: vi.fn(),
 			get: () => createMock<Location>(),
 		});
-		const locationSpy = jest.spyOn(window, "location", "set");
+		const locationSpy = vi.spyOn(window, "location", "set");
 
 		const wrapper = getWrapper({ task: tasksTeacher[0] });
 		const taskCard = wrapper.findComponent(VListItem);
@@ -356,10 +355,6 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const hover = wrapper.findComponent(VHover);
-
-				logger.log(hover.vm.$props);
-
 				expect(
 					wrapper.findComponent(`[data-testid="task-edit"]`).isVisible()
 				).toBe(true);
@@ -388,7 +383,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				});
 
 				const vListItem = wrapper.findComponent(VListItem);
-				await vListItem.vm.$emit("focus");
+				await vListItem.trigger("focus");
 
 				expect(wrapper.vm.isActive).toBe(true);
 				const menuBtn = wrapper.findComponent(`[data-testid=task-menu]`);

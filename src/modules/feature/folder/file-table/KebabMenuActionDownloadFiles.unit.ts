@@ -7,7 +7,7 @@ import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 
 describe("KebabMenuActionDownloadFiles", () => {
 	beforeEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const setupWrapper = (props: {

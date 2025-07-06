@@ -7,7 +7,7 @@ import { BoardAnyTitleInput } from "@feature-board";
 import { shallowMount } from "@vue/test-utils";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 
-jest.mock("@data-board/BoardFocusHandler.composable");
+vi.mock("@data-board/BoardFocusHandler.composable");
 
 describe("MediaBoardLineHeader", () => {
 	const getWrapper = () => {
@@ -26,11 +26,11 @@ describe("MediaBoardLineHeader", () => {
 	};
 
 	beforeEach(() => {
-		jest.mocked(useBoardFocusHandler).mockReturnValue({});
+		vi.mocked(useBoardFocusHandler).mockReturnValue({});
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the title updated", () => {

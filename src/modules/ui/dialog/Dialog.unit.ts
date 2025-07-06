@@ -26,6 +26,8 @@ describe("Dialog", () => {
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 			return { wrapper, slotContent, message, confirmBtnLangKey };
@@ -114,6 +116,8 @@ describe("Dialog", () => {
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 			return { wrapper, confirmBtnLangKey };
@@ -136,6 +140,8 @@ describe("Dialog", () => {
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 			return { wrapper };

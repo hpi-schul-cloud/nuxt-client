@@ -106,7 +106,7 @@ describe("SpeedDialMenu", () => {
 	])(
 		"should open and close menu on click with $type",
 		async ({ component }) => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			const { wrapper } = setup({ component });
 
 			// --- Open
@@ -129,7 +129,7 @@ describe("SpeedDialMenu", () => {
 	])(
 		"should provide incremental index to actions with $type",
 		async ({ component }) => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			const { wrapper } = setup({ component });
 
 			// --- Open
@@ -149,7 +149,7 @@ describe("SpeedDialMenu", () => {
 	])(
 		"should render labels in default slots for menu-button with $type",
 		async ({ component }) => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			const { wrapper } = setup({ component });
 
 			const menu = wrapper.findComponent(SpeedDialMenu);

@@ -1,4 +1,7 @@
-import { createTestingI18n } from "@@/tests/test-utils/setup";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import AudioDisplay from "./AudioDisplay.vue";
 
@@ -16,7 +19,12 @@ describe("AudioDisplay", () => {
 			slots: {
 				default: slotContent,
 			},
-			global: { plugins: [createTestingI18n()] },
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+				stubs: {
+					AudioPlayer: true,
+				},
+			},
 		});
 
 		const contentElementBar = wrapper.findComponent({

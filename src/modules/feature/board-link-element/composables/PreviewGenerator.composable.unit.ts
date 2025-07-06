@@ -2,16 +2,16 @@ import { FileRecordParentType, PreviewStatus } from "@/fileStorageApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { defineComponent } from "vue";
 import { usePreviewGenerator } from "./PreviewGenerator.composable";
 
-jest.mock("@feature-board-file-element");
+vi.mock("@feature-board-file-element");
 
 describe("usePreviewGenerator", () => {
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getWrapper = (elementId: string) => {
@@ -39,9 +39,9 @@ describe("usePreviewGenerator", () => {
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
 						fileRecord,
 					]);
@@ -99,9 +99,9 @@ describe("usePreviewGenerator", () => {
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 					fileStorageApiMock.uploadFromUrl.mockRejectedValueOnce(error);
 
 					const { wrapper, composable } = getWrapper(elementId);
@@ -132,9 +132,9 @@ describe("usePreviewGenerator", () => {
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const { wrapper, composable } = getWrapper(elementId);

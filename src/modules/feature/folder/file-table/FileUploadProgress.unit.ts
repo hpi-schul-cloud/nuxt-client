@@ -58,7 +58,7 @@ describe("FileUploadProgress", () => {
 
 		describe("when areUploadStatsVisible changes to true", () => {
 			it("should show component", async () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 				const { wrapper } = setupWrapper({
 					uploadProgress: { uploaded: 1, total: 1 },
 					areUploadStatsVisible: false,
@@ -71,7 +71,7 @@ describe("FileUploadProgress", () => {
 				expect(uploadProgressTextTimeA.exists()).toBe(false);
 
 				await wrapper.setProps({ areUploadStatsVisible: true });
-				jest.advanceTimersByTime(5000);
+				vi.advanceTimersByTime(5000);
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
@@ -85,7 +85,7 @@ describe("FileUploadProgress", () => {
 	describe("when areUploadStatsVisible is true", () => {
 		describe("when areUploadStatsVisible changes to true", () => {
 			it("should make the component disappear after 5 seconds", async () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 				const { wrapper } = setupWrapper({
 					uploadProgress: { uploaded: 1, total: 1 },
 					areUploadStatsVisible: true,
@@ -98,7 +98,7 @@ describe("FileUploadProgress", () => {
 				expect(uploadProgressTextTimeA.exists()).toBe(true);
 
 				await wrapper.setProps({ areUploadStatsVisible: false });
-				jest.advanceTimersByTime(5000);
+				vi.advanceTimersByTime(5000);
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(false);
@@ -109,7 +109,7 @@ describe("FileUploadProgress", () => {
 			});
 
 			it("should still be visible after 1 second", async () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 				const { wrapper } = setupWrapper({
 					uploadProgress: { uploaded: 1, total: 1 },
 					areUploadStatsVisible: true,
@@ -122,7 +122,7 @@ describe("FileUploadProgress", () => {
 				expect(uploadProgressTextTimeA.exists()).toBe(true);
 
 				await wrapper.setProps({ areUploadStatsVisible: false });
-				jest.advanceTimersByTime(1);
+				vi.advanceTimersByTime(1);
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);

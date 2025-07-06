@@ -15,15 +15,13 @@ describe("ConfirmationDialog", () => {
 		wrapper = mount(LeaveRoomProhibitedDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { UseFocusTrap: true },
+				renderStubDefaultSlot: true, // to access content inside focus trap
 			},
 			props: { modelValue: true },
 		});
 		return { wrapper };
 	};
-
-	afterEach(() => {
-		wrapper.unmount(); // otherwise tests break when running all tests, necessary due focus trap
-	});
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {

@@ -9,7 +9,7 @@ import { ref, watch } from "vue";
 import { useCopy } from "./copy";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 
-jest.mock("./loadingState");
+vi.mock("./loadingState");
 
 describe("copy composable", () => {
 	const setup = () => {
@@ -47,7 +47,7 @@ describe("copy composable", () => {
 
 	it("should call copyModule.copy()", async () => {
 		const { copy, copyModuleMock, payload } = setup();
-		copyModuleMock.copy = jest
+		copyModuleMock.copy = vi
 			.fn()
 			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
@@ -59,7 +59,7 @@ describe("copy composable", () => {
 
 	it("should open and close loading dialog", async () => {
 		const { copy, copyModuleMock, payload, isLoadingDialogOpen } = setup();
-		copyModuleMock.copy = jest
+		copyModuleMock.copy = vi
 			.fn()
 			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
@@ -81,7 +81,7 @@ describe("copy composable", () => {
 				id: "testId",
 				type: copyParamsType,
 			};
-			copyModuleMock.copy = jest
+			copyModuleMock.copy = vi
 				.fn()
 				.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
@@ -100,7 +100,7 @@ describe("copy composable", () => {
 			type: CopyParamsTypeEnum.Course,
 		};
 
-		copyModuleMock.copy = jest
+		copyModuleMock.copy = vi
 			.fn()
 			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
@@ -111,7 +111,7 @@ describe("copy composable", () => {
 
 	it("should open failure alert notification on failed copy", async () => {
 		const { copy, copyModuleMock, notifierModuleMock, payload } = setup();
-		copyModuleMock.copy = jest
+		copyModuleMock.copy = vi
 			.fn()
 			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Failure });
 
@@ -124,7 +124,7 @@ describe("copy composable", () => {
 
 	it("should open copyResultModal notification on partially failed copy", async () => {
 		const { copy, copyModuleMock, payload } = setup();
-		copyModuleMock.copy = jest
+		copyModuleMock.copy = vi
 			.fn()
 			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Partial });
 
@@ -135,7 +135,7 @@ describe("copy composable", () => {
 
 	it("should open failure alert notification on server error", async () => {
 		const { copy, copyModuleMock, notifierModuleMock, payload } = setup();
-		copyModuleMock.copy = jest.fn().mockRejectedValue(false);
+		copyModuleMock.copy = vi.fn().mockRejectedValue(false);
 
 		await copy(payload);
 

@@ -6,7 +6,7 @@ import { mount, shallowMount } from "@vue/test-utils";
 import { VBtn, VIcon, VListItem, VMenu } from "vuetify/lib/components/index";
 import RoomDotMenu from "./RoomDotMenu.vue";
 
-const action = jest.fn();
+const action = vi.fn();
 const testProps = {
 	menuItems: [
 		{

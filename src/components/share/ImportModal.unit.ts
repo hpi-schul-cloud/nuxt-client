@@ -21,7 +21,7 @@ describe("@components/share/ImportModal", () => {
 	};
 
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should render with props", () => {

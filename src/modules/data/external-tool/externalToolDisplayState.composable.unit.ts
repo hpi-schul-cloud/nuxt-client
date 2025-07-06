@@ -4,12 +4,12 @@ import {
 	axiosErrorFactory,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useExternalToolDisplayState } from "./externalToolDisplayState.composable";
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
 
-jest.mock("@data-external-tool/externalToolReferenceApi.composable");
+vi.mock("@data-external-tool/externalToolReferenceApi.composable");
 
 describe("externalToolDisplayState.composable", () => {
 	let useExternalToolReferenceApiMock: DeepMocked<
@@ -20,13 +20,13 @@ describe("externalToolDisplayState.composable", () => {
 		useExternalToolReferenceApiMock =
 			createMock<ReturnType<typeof useExternalToolReferenceApi>>();
 
-		jest
-			.mocked(useExternalToolReferenceApi)
-			.mockReturnValue(useExternalToolReferenceApiMock);
+		vi.mocked(useExternalToolReferenceApi).mockReturnValue(
+			useExternalToolReferenceApiMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when no data is loaded", () => {

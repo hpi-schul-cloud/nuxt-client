@@ -19,6 +19,8 @@ describe("RenameFolderDialog", () => {
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 
@@ -94,6 +96,8 @@ describe("RenameFolderDialog", () => {
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 
@@ -116,6 +120,8 @@ describe("RenameFolderDialog", () => {
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 			return { wrapper };

@@ -14,11 +14,12 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import type { Mocked } from "vitest";
 
 describe("SchoolPolicyFormDialog", () => {
-	let notifierModule: jest.Mocked<NotifierModule>;
-	let schoolsModule: jest.Mocked<SchoolsModule>;
-	let privacyPolicyModule: jest.Mocked<PrivacyPolicyModule>;
+	let notifierModule: Mocked<NotifierModule>;
+	let schoolsModule: Mocked<SchoolsModule>;
+	let privacyPolicyModule: Mocked<PrivacyPolicyModule>;
 
 	const mockProps = {
 		isOpen: true,

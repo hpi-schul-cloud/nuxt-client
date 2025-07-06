@@ -44,6 +44,11 @@ describe("@/components/molecules/ContextMenu", () => {
 	});
 
 	it("Emits defined event when clicked", () => {
+		// avoid vue warn that test events are not declared
+		const consoleWarnSpy = vi
+			.spyOn(console, "warn")
+			.mockImplementation(vi.fn());
+
 		const wrapper = getWrapper();
 
 		expect.assertions(2 * actions.length);
@@ -58,18 +63,27 @@ describe("@/components/molecules/ContextMenu", () => {
 			expect(wrapper.emitted(event ?? "")).toHaveLength(1);
 			expect(wrapper.emitted(event ?? "")?.[0][0]).toBeUndefined();
 		}
+
+		consoleWarnSpy.mockRestore();
 	});
 
 	it("emits (update:show false) event when button gets clicked", async () => {
-		jest.useFakeTimers();
+		// avoid vue warn that test event is not declared
+		const consoleWarnSpy = vi
+			.spyOn(console, "warn")
+			.mockImplementation(vi.fn());
+
+		vi.useFakeTimers();
 		const wrapper = getWrapper();
 		await wrapper.find(".context-menu__button").trigger("click");
 
-		jest.runAllTimers();
+		vi.runAllTimers();
 
-		const emitted = await wrapper.emitted("update:show");
+		const emitted = wrapper.emitted("update:show");
 		expect(emitted).toHaveLength(1);
 		expect(emitted).toStrictEqual([[false]]);
+
+		consoleWarnSpy.mockRestore();
 	});
 
 	it("emits (update:show false) event when ESC Keys gets pressed", async () => {
@@ -86,17 +100,26 @@ describe("@/components/molecules/ContextMenu", () => {
 		it("triggers event on click outside d", async () => {
 			// Mount Menu wrapper to have something to click outside
 			const emptyNode = "<!--v-if-->";
-			const wrapper = mount({
-				data: () => ({ show: true, actions }),
-				template: `
+			const wrapper = mount(
+				{
+					template: `
 					<div id="container">
 						<div data-testid="outside" class="outside">Outside</div>
 						<ContextMenu data-testid="testid" class="ctxmenu" :actions="actions" :show.sync="show"></ContextMenu>
 					</div>
 				`,
-				components: { ContextMenu },
-				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-			});
+				},
+				{
+					data() {
+						return { show: true, actions };
+					},
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						components: { ContextMenu },
+					},
+					...getAttachToOptions(),
+				}
+			);
 
 			const outsideElement = wrapper.find(".outside");
 			await outsideElement.trigger("click");
@@ -109,17 +132,23 @@ describe("@/components/molecules/ContextMenu", () => {
 			// Mount Menu wrapper to have something to click outside
 			const wrapper = mount(
 				{
-					data: () => ({ show: true, actions }),
 					template: `
 					<div>
 					<div class="outside">Outside</div>
 					<ContextMenu class="ctxmenu" :actions="actions" :show.sync="show" :noClose="true"></ContextMenu>
 					</div>
 				`,
-					components: { ContextMenu },
-					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				},
-				getAttachToOptions()
+				{
+					data() {
+						return { show: true, actions };
+					},
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						components: { ContextMenu },
+					},
+					...getAttachToOptions(),
+				}
 			);
 			const menu = wrapper.findComponent(ContextMenu);
 			const outsideElement = wrapper.find(".outside");
@@ -140,7 +169,7 @@ describe("@/components/molecules/ContextMenu", () => {
 				const wrapper = getWrapper({
 					additionalProps: { anchor },
 				});
-				const menuElement = await wrapper.find(".context-menu").element;
+				const menuElement = wrapper.find(".context-menu").element;
 				const menuStyles = window.getComputedStyle(menuElement);
 
 				expect(menuStyles.top).toContain(top);
@@ -151,11 +180,17 @@ describe("@/components/molecules/ContextMenu", () => {
 		);
 
 		it("should throw an error for invalid anchor positions", async () => {
+			const consoleWarnSpy = vi
+				.spyOn(console, "warn")
+				.mockImplementation(vi.fn());
+
 			expect(() => {
 				getWrapper({
 					additionalProps: { anchor: "top-bottom" },
 				});
 			}).toThrow(new Error("anchor is not defined"));
+
+			consoleWarnSpy.mockRestore();
 		});
 	});
 

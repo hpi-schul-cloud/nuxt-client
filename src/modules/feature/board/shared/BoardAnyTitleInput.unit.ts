@@ -6,7 +6,7 @@ import { mount } from "@vue/test-utils";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import { VTextarea } from "vuetify/lib/components/index";
 
-jest.mock("@util-board");
+vi.mock("@util-board");
 
 const defaultProps = {
 	value: "props value",

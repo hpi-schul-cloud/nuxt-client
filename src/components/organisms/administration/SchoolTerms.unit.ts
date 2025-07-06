@@ -18,14 +18,15 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import type { Mocked } from "vitest";
 
-jest.mock("@/utils/fileHelper");
+vi.mock("@/utils/fileHelper");
 
 describe("SchoolTerms", () => {
-	let authModule: jest.Mocked<AuthModule>;
-	let schoolsModule: jest.Mocked<SchoolsModule>;
-	let termsOfUseModule: jest.Mocked<TermsOfUseModule>;
-	let notifierModule: jest.Mocked<NotifierModule>;
+	let authModule: Mocked<AuthModule>;
+	let schoolsModule: Mocked<SchoolsModule>;
+	let termsOfUseModule: Mocked<TermsOfUseModule>;
+	let notifierModule: Mocked<NotifierModule>;
 
 	const mockTerms: ConsentVersion = {
 		_id: "123",
@@ -187,7 +188,7 @@ describe("SchoolTerms", () => {
 		it("should call downloadFile method", () => {
 			const wrapper = setup();
 
-			const downloadFileMock = jest.mocked(downloadFile).mockReturnValueOnce();
+			const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
 			const termsItem = wrapper.findComponent(
 				'[data-testid="terms-item"]'
 			) as VueWrapper<typeof SchoolTerms>;

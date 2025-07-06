@@ -21,12 +21,12 @@ const childItem: SidebarSingleItem = {
 	to: "/link",
 };
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 
-jest.mock("./SidebarSelection.composable");
-const mockedUseSidebarSelection = jest.mocked(useSidebarSelection);
+vi.mock("./SidebarSelection.composable");
+const mockedUseSidebarSelection = vi.mocked(useSidebarSelection);
 
 describe("@ui-layout/SidebarItem", () => {
 	const setup = (sidebarItem: SidebarSingleItem) => {

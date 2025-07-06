@@ -293,7 +293,7 @@ describe("GeneralSettings", () => {
 
 	describe("events", () => {
 		it("update button should trigger save method", async () => {
-			const updateSpy = jest.spyOn(schoolsModule, "update");
+			const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
 			const wrapper = getWrapper();
 			await wrapper.setData(mockData);
 
@@ -303,7 +303,7 @@ describe("GeneralSettings", () => {
 		});
 
 		it("update works without county", async () => {
-			const updateSpy = jest.spyOn(schoolsModule, "update");
+			const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
 			const wrapper = getWrapper();
 			const localMockData = {
 				localSchool: { ...mockData.localSchool, county: null },

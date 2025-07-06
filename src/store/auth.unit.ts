@@ -8,24 +8,25 @@ import {
 	mockApiResponse,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
+import { MockInstance } from "vitest";
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe("auth store module", () => {
-	let consoleErrorSpy: jest.SpyInstance;
+	let consoleErrorSpy: MockInstance;
 	let meApi: DeepMocked<serverApi.MeApiInterface>;
 
 	beforeAll(() => {
 		meApi = createMock<serverApi.MeApiInterface>();
-		jest.spyOn(serverApi, "MeApiFactory").mockReturnValue(meApi);
+		vi.spyOn(serverApi, "MeApiFactory").mockReturnValue(meApi);
 	});
 
 	beforeEach(() => {
-		consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 	});
 
 	afterEach(() => {
@@ -277,18 +278,18 @@ describe("auth store module", () => {
 
 		describe("updateUserLanguage", () => {
 			afterEach(() => {
-				jest.clearAllMocks();
+				vi.clearAllMocks();
 			});
 
 			it("should call backend succesfully", () => {
 				const mockApi = {
-					userControllerChangeLanguage: jest.fn().mockReturnValue({
+					userControllerChangeLanguage: vi.fn().mockReturnValue({
 						data: { successful: true },
 					}),
 				};
-				jest
-					.spyOn(serverApi, "UserApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
+				vi.spyOn(serverApi, "UserApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.UserApiInterface
+				);
 				const authModule = new AuthModule({});
 
 				authModule.updateUserLanguage(LanguageType.De);
@@ -298,13 +299,13 @@ describe("auth store module", () => {
 
 			it("should catch error", () => {
 				const mockApi = {
-					userControllerChangeLanguage: jest.fn().mockImplementation(() => {
+					userControllerChangeLanguage: vi.fn().mockImplementation(() => {
 						throw new AxiosError("I'm an error");
 					}),
 				};
-				jest
-					.spyOn(serverApi, "UserApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
+				vi.spyOn(serverApi, "UserApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.UserApiInterface
+				);
 				const authModule = new AuthModule({});
 
 				authModule.updateUserLanguage(LanguageType.De);
@@ -327,7 +328,7 @@ describe("auth store module", () => {
 
 				const authModule = new AuthModule({});
 
-				const mockReplace = jest.fn();
+				const mockReplace = vi.fn();
 				Object.defineProperty(window, "location", {
 					configurable: true,
 					value: { replace: mockReplace },
@@ -363,7 +364,7 @@ describe("auth store module", () => {
 
 				const authModule = new AuthModule({});
 
-				const mockReplace = jest.fn();
+				const mockReplace = vi.fn();
 				Object.defineProperty(window, "location", {
 					configurable: true,
 					value: { replace: mockReplace },

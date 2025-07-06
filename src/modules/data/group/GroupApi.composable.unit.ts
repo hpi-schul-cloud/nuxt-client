@@ -2,7 +2,7 @@ import * as serverApi from "@/serverApi/v3/api";
 import { GroupListResponse, GroupResponse } from "@/serverApi/v3/api";
 import { groupResponseFactory, mockApiResponse } from "@@/tests/test-utils";
 import { Group, GroupType, GroupUserRole, useGroupApi } from "@data-group";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 
 describe("GroupApi.composable", () => {
 	let groupApi: DeepMocked<serverApi.GroupApiInterface>;
@@ -10,11 +10,11 @@ describe("GroupApi.composable", () => {
 	beforeEach(() => {
 		groupApi = createMock<serverApi.GroupApiInterface>();
 
-		jest.spyOn(serverApi, "GroupApiFactory").mockReturnValue(groupApi);
+		vi.spyOn(serverApi, "GroupApiFactory").mockReturnValue(groupApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getGroup", () => {

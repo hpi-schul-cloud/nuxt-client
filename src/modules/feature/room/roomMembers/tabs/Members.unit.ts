@@ -11,7 +11,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { Members, MembersTable } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import SchoolsModule from "@/store/schools";
@@ -20,11 +20,11 @@ import { authModule, schoolsModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import { Ref, ref } from "vue";
 
-jest.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const boardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorizationMock = jest.mocked(useRoomAuthorization);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
 type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;

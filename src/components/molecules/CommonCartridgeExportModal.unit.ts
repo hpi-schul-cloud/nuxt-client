@@ -26,8 +26,8 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			getTopics: ["topic"],
 			getTasks: ["task"],
 			getColumnBoards: ["columnBoards"],
-			startExport: jest.fn(),
-			resetExportFlow: jest.fn(),
+			startExport: vi.fn(),
+			resetExportFlow: vi.fn(),
 		});
 		courseRoomDetailsModuleMock = createModuleMocks(courseRoomDetailsModule, {
 			getRoomData: {

@@ -8,8 +8,9 @@ describe("@/components/base/BaseInputHidden", () => {
 		supportedTypes.forEach(() => {
 			const wrapper = mount(BaseInput, {
 				props: {
-					type: "hidden",
+					type: "text",
 					vmodel: mockText,
+					label: "Label",
 				},
 			});
 			expect(wrapper.findComponent(BaseInputHidden)).toBeTruthy();

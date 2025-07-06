@@ -4,23 +4,23 @@ import * as serverApi from "@/serverApi/v3/api";
 
 let mockReturnData: { data: { data: { id: string }[] } };
 const cardsApiFactoryMock = {
-	cardControllerGetCards: jest.fn().mockImplementation(() => mockReturnData),
+	cardControllerGetCards: vi.fn().mockImplementation(() => mockReturnData),
 };
 
 const setup = (...cardIds: string[]) => {
 	const returnedCards = cardIds.map((id) => ({ id }));
 	mockReturnData = { data: { data: returnedCards } };
 
-	jest
-		.spyOn(serverApi, "BoardCardApiFactory")
-		.mockReturnValue(cardsApiFactoryMock as unknown as BoardCardApiInterface);
+	vi.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(
+		cardsApiFactoryMock as unknown as BoardCardApiInterface
+	);
 
 	return { cardsApiFactoryMock };
 };
 
 describe("card-request-pool.composable", () => {
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should return Card data", async () => {

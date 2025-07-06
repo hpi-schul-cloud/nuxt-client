@@ -12,6 +12,7 @@ import { nextTick } from "vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { Mock } from "vitest";
 
 const roomIdMock = "test-1234";
 
@@ -23,28 +24,34 @@ const roomDataMock = {
 	},
 };
 
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn().mockReturnValue({
-		push: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn().mockReturnValue({
+		push: vi.fn(),
 	}),
-	useRoute: jest.fn().mockReturnValue({
+	useRoute: vi.fn().mockReturnValue({
 		params: {
-			id: roomIdMock,
+			id: "test-1234",
 		},
 	}),
 }));
 
-jest.mock("@data-room", () => ({
-	useRoomEditState: jest.fn().mockReturnValue({
+vi.mock("@data-room", () => ({
+	useRoomEditState: vi.fn().mockReturnValue({
 		isLoading: false,
-		roomData: roomDataMock,
-		updateRoom: jest.fn(),
-		fetchRoom: jest.fn(),
+		roomData: {
+			value: {
+				id: "test-1234",
+				name: "test",
+				color: "blue",
+			},
+		},
+		updateRoom: vi.fn(),
+		fetchRoom: vi.fn(),
 	}),
 }));
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
+vi.mock("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
 }));
 
 const roomParams: RoomUpdateParams = {
@@ -133,11 +140,11 @@ describe("@pages/RoomEdit.page.vue", () => {
 	});
 
 	it("should render roomForm as component is not loading  ", async () => {
-		(useRoomEditState as jest.Mock).mockReturnValueOnce({
+		(useRoomEditState as Mock).mockReturnValueOnce({
 			isLoading: false,
 			roomData: roomDataMock,
-			updateRoom: jest.fn(),
-			fetchRoom: jest.fn(),
+			updateRoom: vi.fn(),
+			fetchRoom: vi.fn(),
 		});
 
 		const { roomFormComponent } = setup();
@@ -145,11 +152,11 @@ describe("@pages/RoomEdit.page.vue", () => {
 	});
 
 	it("should not render roomForm as component is loading  ", async () => {
-		(useRoomEditState as jest.Mock).mockReturnValueOnce({
+		(useRoomEditState as Mock).mockReturnValueOnce({
 			isLoading: true,
 			roomData: roomDataMock,
-			updateRoom: jest.fn(),
-			fetchRoom: jest.fn(),
+			updateRoom: vi.fn(),
+			fetchRoom: vi.fn(),
 		});
 
 		const { roomFormComponent } = setup();

@@ -5,7 +5,7 @@ import {
 	mockApiResponse,
 	schoolExternalToolMetadataResponseFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 
 describe("SchoolExternalToolApi.composable", () => {
@@ -14,11 +14,11 @@ describe("SchoolExternalToolApi.composable", () => {
 	beforeEach(() => {
 		toolApi = createMock<serverApi.ToolApiInterface>();
 
-		jest.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
+		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchSchoolExternalToolMetadata", () => {

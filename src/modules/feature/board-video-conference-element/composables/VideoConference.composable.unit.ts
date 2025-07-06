@@ -1,4 +1,4 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosPromise } from "axios";
 import * as serverApi from "@/serverApi/v3/api";
 import { useVideoConference } from "./VideoConference.composable";
@@ -16,13 +16,13 @@ describe("VideoConferenceComposable", () => {
 	beforeEach(() => {
 		videoConferenceApi = createMock<serverApi.VideoConferenceApiInterface>();
 
-		jest
-			.spyOn(serverApi, "VideoConferenceApiFactory")
-			.mockReturnValue(videoConferenceApi);
+		vi.spyOn(serverApi, "VideoConferenceApiFactory").mockReturnValue(
+			videoConferenceApi
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchVideoConferenceInfo", () => {

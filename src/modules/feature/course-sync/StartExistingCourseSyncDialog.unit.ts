@@ -10,7 +10,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useCourseApi } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
@@ -18,7 +18,7 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
 
-jest.mock("@data-room");
+vi.mock("@data-room");
 
 describe("StartExistingCourseSyncDialog", () => {
 	let courseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
@@ -67,11 +67,11 @@ describe("StartExistingCourseSyncDialog", () => {
 	beforeEach(() => {
 		courseApiMock = createMock<ReturnType<typeof useCourseApi>>();
 
-		jest.mocked(useCourseApi).mockReturnValue(courseApiMock);
+		vi.mocked(useCourseApi).mockReturnValue(courseApiMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when the dialog is open", () => {
