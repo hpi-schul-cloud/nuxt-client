@@ -29,7 +29,9 @@ import {
 	BoardAnyTitleInput,
 	BoardColumnInteractionHandler,
 } from "@feature-board";
-import { useMediaBoardEditMode } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useMediaBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
+
 import { ref, toRef } from "vue";
 
 const props = defineProps({

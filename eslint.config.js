@@ -1,13 +1,13 @@
-const js = require("@eslint/js");
-const pluginVue = require("eslint-plugin-vue");
-const {
+import js from "@eslint/js";
+import pluginVue from "eslint-plugin-vue";
+import {
 	defineConfigWithVueTs,
 	vueTsConfigs,
 	configureVueProject,
-} = require("@vue/eslint-config-typescript");
-const schulcloud = require("./lib/eslint-plugin-schulcloud");
-const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended");
-const globals = require("globals");
+} from "@vue/eslint-config-typescript";
+import schulcloud from "./lib/eslint-plugin-schulcloud/index.js";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import globals from "globals";
 
 configureVueProject({
 	scriptLangs: [
@@ -22,7 +22,7 @@ configureVueProject({
 	],
 });
 
-module.exports = defineConfigWithVueTs([
+export default defineConfigWithVueTs([
 	...pluginVue.configs["flat/recommended"],
 	js.configs.recommended,
 	vueTsConfigs.recommended,

@@ -176,7 +176,7 @@
 <script>
 import UserHasRole from "@/components/helpers/UserHasRole.vue";
 import AddContentButton from "@/components/lern-store/AddContentButton.vue";
-import LernStorePlayer from "@/components/lern-store/LernStorePlayer";
+import LernStorePlayer from "@/components/lern-store/LernStorePlayer.vue";
 import contentMeta from "@/mixins/contentMeta";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import { SchulcloudTheme } from "@/serverApi/v3";

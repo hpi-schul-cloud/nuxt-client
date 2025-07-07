@@ -58,12 +58,13 @@ const vueRoutes = [
 	`^/tasks/?$`,
 	`^/tools/context/tool-configuration/?$`,
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
+	`^/@`,
+	`^/src/`,
+	`^/node_modules/`,
 ];
 
-const isVueClient = (/** @type {string} */ path) => {
+const isVueClient = (path) => {
 	return vueRoutes.some((regex) => new RegExp(regex).exec(path));
 };
 
-module.exports = {
-	isVueClient,
-};
+export { isVueClient };
