@@ -1167,6 +1167,9 @@ export default {
 		'¿Realmente quieres este curso? "{itemName}" borrar?',
 	"pages.administration.courses.index.add": "Agregar curso",
 	"pages.administration.courses.edit": "Editar curso",
+	"pages.administration.courses.withoutTeacher":
+		"Mostrar sólo los cursos sin profesor",
+	"pages.administration.courses.noTeacher": "no disponible",
 	"pages.administration.index.title": "Administración",
 	"pages.administration.ldap.activate.breadcrumb": "Sincronización",
 	"pages.administration.ldap.activate.className": "Nombre",

@@ -9,6 +9,16 @@
 			<h1 class="text-h3 pl-2">
 				{{ t("pages.administration.rooms.index.title") }}
 			</h1>
+			<div class="mt-n6 mb-n3">
+				<v-switch
+					:label="t('pages.administration.courses.withoutTeacher')"
+					:area-label="t('pages.administration.courses.withoutTeacher')"
+					:true-icon="mdiCheck"
+					data-testid="admin-course-without-teacher-checkbox"
+					value="true"
+					hide-details
+				/>
+			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="activeTab" class="tabs-max-width" grow>
 					<v-tab value="current" data-testid="admin-course-current-tab">
@@ -52,8 +62,17 @@
 				</span>
 			</template>
 			<template #[`item.teacherNames`]="{ item }">
-				<span data-testid="admin-rooms-table-teacher-names">
+				<span
+					v-if="item.teacherNames.length > 0"
+					data-testid="admin-rooms-table-teacher-names"
+				>
 					{{ item.teacherNames?.join(", ") || "" }}
+				</span>
+				<span v-else data-testid="admin-rooms-table-teacher-names-empty">
+					<v-icon color="warning" start>
+						{{ mdiAlert }}
+					</v-icon>
+					{{ t("pages.administration.courses.noTeacher") }}
 				</span>
 			</template>
 			<template #[`item.actions`]="{ item }">
@@ -201,6 +220,8 @@ import {
 	StartExistingCourseSyncDialog,
 } from "@feature-course-sync";
 import {
+	mdiAlert,
+	mdiCheck,
 	mdiPencilOutline,
 	mdiSync,
 	mdiSyncOff,
