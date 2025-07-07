@@ -7,6 +7,7 @@
 		:variant="isOutlined ? 'outlined' : 'elevated'"
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
+		:aria-label="cardAriaLabel"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		@click="onCardInteraction"
@@ -83,6 +84,7 @@ import {
 	toRef,
 	watch,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { FileAlert } from "./shared/types/FileAlert.enum";
@@ -114,6 +116,8 @@ export default defineComponent({
 		"move-keyboard:edit",
 	],
 	setup(props, { emit }) {
+		const { t } = useI18n();
+
 		const fileContentElement = ref(null);
 		const isLoadingFileRecord = ref(true);
 
@@ -228,6 +232,14 @@ export default defineComponent({
 			return isCollaboraMimeType(fileRecord.value.mimeType);
 		});
 
+		const cardAriaLabel = computed(() => {
+			if (hasCollaboraMimeType.value) {
+				return t("components.cardElement.fileElement.openOfficeDocument");
+			}
+
+			return undefined;
+		});
+
 		const onCardInteraction = () => {
 			if (hasCollaboraMimeType.value) openCollabora();
 		};
@@ -250,6 +262,7 @@ export default defineComponent({
 			modelValue,
 			alerts,
 			isUploading,
+			cardAriaLabel,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,

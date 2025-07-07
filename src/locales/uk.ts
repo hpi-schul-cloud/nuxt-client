@@ -571,6 +571,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Статус оновлення",
 	"components.cardElement.fileElement.videoFormatError":
 		"Формат відео не підтримується цим браузером / операційною системою.",
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Документ у форматі Open Office",
 	"components.cardElement.folderElement": "Папка з файлами",
 	"components.cardElement.folderElement.untitled": "Папка без назви",
 	"components.cardElement.LinkElement": "Посилання",
