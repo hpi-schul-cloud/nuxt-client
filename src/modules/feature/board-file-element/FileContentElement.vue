@@ -223,6 +223,8 @@ export default defineComponent({
 		const onMoveDown = () => emit("move-down:edit");
 
 		const hasCollaboraMimeType = computed(() => {
+			if (!fileRecord.value) return false;
+
 			return isCollaboraMimeType(fileRecord.value.mimeType);
 		});
 
