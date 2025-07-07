@@ -38,7 +38,10 @@
 	>
 		<slot />
 	</AudioDisplay>
-	<CollaboraDisplay v-else-if="hasCollaboraMimeType" :show-menu="showMenu">
+	<CollaboraDisplay
+		v-else-if="hasCollaboraMimeType && isCollaboraEnabled"
+		:show-menu="showMenu"
+	>
 		<slot />
 	</CollaboraDisplay>
 </template>
@@ -50,6 +53,7 @@ import {
 	isPdfMimeType,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
@@ -73,6 +77,8 @@ interface Emits {
 }
 const emit = defineEmits<Emits>();
 
+const envConfig = injectStrict(ENV_CONFIG_MODULE_KEY);
+
 const hasVideoMimeType = computed(() => {
 	return isVideoMimeType(props.fileProperties.mimeType);
 });
@@ -84,6 +90,10 @@ const hasAudioMimeType = computed(() => {
 });
 const hasCollaboraMimeType = computed(() => {
 	return isCollaboraMimeType(props.fileProperties.mimeType);
+});
+
+const isCollaboraEnabled = computed(() => {
+	return envConfig.getEnv.FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED;
 });
 
 const onAddAlert = (alert: FileAlert) => {

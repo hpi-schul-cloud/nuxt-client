@@ -67,6 +67,7 @@ import {
 	isPreviewPossible,
 	isScanStatusBlocked,
 } from "@/utils/fileHelper";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
@@ -117,6 +118,7 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const { t } = useI18n();
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 		const fileContentElement = ref(null);
 		const isLoadingFileRecord = ref(true);
@@ -231,9 +233,15 @@ export default defineComponent({
 
 			return isCollaboraMimeType(fileRecord.value.mimeType);
 		});
+		const isCollaboraEnabled = computed(() => {
+			return (
+				envConfigModule.getEnv
+					.FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED === true
+			);
+		});
 
 		const cardAriaLabel = computed(() => {
-			if (hasCollaboraMimeType.value) {
+			if (isCollaboraEnabled.value && hasCollaboraMimeType.value) {
 				return t("components.cardElement.fileElement.openOfficeDocument");
 			}
 
@@ -241,7 +249,8 @@ export default defineComponent({
 		});
 
 		const onCardInteraction = () => {
-			if (hasCollaboraMimeType.value) openCollabora();
+			if (isCollaboraEnabled.value && hasCollaboraMimeType.value)
+				openCollabora();
 		};
 
 		const openCollabora = () => {
