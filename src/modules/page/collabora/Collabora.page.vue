@@ -16,6 +16,8 @@ interface Props {
 const props = defineProps<Props>();
 
 const url = computed(() => {
-	return `http://localhost:9980/browser/e724e42045/cool.html?WOPISrc=http://localhost:4444/api/v3/wopi/files/${props.fileRecordId}`;
+	const url = `http://localhost:3030/api/v3/collabora-proxy/document?fileRecordId=${props.fileRecordId}&WOPISrc=http://localhost:4444/api/v3/wopi/files/${props.fileRecordId}`;
+
+	return url;
 });
 </script>
