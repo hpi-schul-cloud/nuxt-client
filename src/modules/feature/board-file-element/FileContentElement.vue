@@ -254,12 +254,13 @@ export default defineComponent({
 		};
 
 		const openCollabora = () => {
-			router.push({
+			const url = router.resolve({
 				name: "collabora",
 				params: {
 					id: fileRecord.value.id,
 				},
-			});
+			}).href;
+			window.open(url, "_blank");
 		};
 
 		return {
