@@ -11,7 +11,6 @@ export default {
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
 	"common.actions.download": "Завантажити",
-	"common.actions.copyRoom": "Дублювати",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",

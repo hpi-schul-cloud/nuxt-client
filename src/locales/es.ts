@@ -11,7 +11,6 @@ export default {
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
 	"common.actions.download": "Descargar",
-	"common.actions.copyRoom": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
 	"common.actions.finish": "Finalizar",
@@ -677,7 +676,7 @@ export default {
 	"components.molecules.copyResult.etherpadCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.failedCopy":
-		"NNo se pudo completar la duplicación.",
+		"No se pudo completar la duplicación.",
 	"components.molecules.copyResult.fileCopy.error":
 		"Los siguientes archivos no han podido ser copiados y deben ser añadidos de nuevo.",
 	"components.molecules.copyResult.geogebraCopy.info":

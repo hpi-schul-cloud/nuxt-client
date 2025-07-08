@@ -11,7 +11,6 @@ export default {
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
 	"common.actions.download": "Herunterladen",
-	"common.actions.copyRoom": "Duplizieren",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
 	"common.actions.import": "Importieren",
