@@ -20,41 +20,23 @@
 		<slot v-else />
 	</div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import { injectStrict, APPLICATION_ERROR_KEY } from "@/utils/inject";
-import { computed, defineComponent } from "vue";
+import { computed } from "vue";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "ApplicationErrorRouting",
-	components: {
-		ErrorContent,
-	},
-	setup() {
-		const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
-		const { t } = useI18n();
+const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
+const { t } = useI18n();
 
-		const hasError = computed(
-			() => applicationErrorModule.getStatusCode !== null
-		);
+const hasError = computed(() => applicationErrorModule.getStatusCode !== null);
 
-		const appErrorStatusCode = computed(() =>
-			Number(applicationErrorModule.getStatusCode)
-		);
-		const translatedErrorMessage = computed(() =>
-			hasError.value
-				? t(applicationErrorModule.getTranslationKey).toString()
-				: ""
-		);
-
-		return {
-			hasError,
-			appErrorStatusCode,
-			translatedErrorMessage,
-		};
-	},
-});
+const appErrorStatusCode = computed(() =>
+	Number(applicationErrorModule.getStatusCode)
+);
+const translatedErrorMessage = computed(() =>
+	hasError.value ? t(applicationErrorModule.getTranslationKey).toString() : ""
+);
 </script>
 <style lang="scss" scoped>
 .text-centered {
