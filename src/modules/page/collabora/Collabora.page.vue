@@ -16,7 +16,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const url = computed(() => {
-	const url = `/api/v3/collabora-proxy/document?fileRecordId=${props.fileRecordId}`;
+	const url = `/api/v3/wopi/discovery-editor-url/${props.fileRecordId}`;
 
 	return url;
 });
