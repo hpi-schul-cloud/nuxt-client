@@ -421,7 +421,6 @@ describe("useRoomMembers", () => {
 					roles: [{ id: "student-id", name: RoleName.Student }],
 				});
 				authModule.setMe(currentUser);
-
 				const { roomMembersStore } = setup();
 
 				const roomMembers = roomMemberFactory.buildList(2, {
@@ -430,12 +429,12 @@ describe("useRoomMembers", () => {
 
 				roomMembers[0].schoolRoleNames = [RoleName.Student];
 				roomMembers[0].userId = currentUser.user.id;
-
 				roomMembersStore.roomMembers = [...roomMembers];
+
+				await roomMembersStore.loadSchoolList();
 
 				const schoolList = roomMembersStore.schools;
 
-				await roomMembersStore.loadSchoolList();
 				expect(
 					schoolApiMock.schoolControllerGetSchoolList
 				).not.toHaveBeenCalled();

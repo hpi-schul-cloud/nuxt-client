@@ -168,7 +168,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return member.fullName;
 	};
 
-	const isUserStudent = computed(() => {
+	const isCurrentUserStudent = computed(() => {
 		const member = roomMembers.value.find(
 			(member) => member.userId === currentUserId
 		);
@@ -177,7 +177,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	});
 
 	const loadSchoolList = async () => {
-		if (isUserStudent.value) {
+		if (isCurrentUserStudent.value) {
 			schools.value = [ownSchool];
 			return;
 		}
