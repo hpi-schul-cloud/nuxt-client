@@ -6,7 +6,6 @@
 		elevation="0"
 		:variant="isOutlined ? 'outlined' : 'elevated'"
 		:ripple="false"
-		:tabindex="isEditMode ? 0 : undefined"
 		:aria-label="cardAriaLabel"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
