@@ -2,7 +2,6 @@ import { ConfigResponse, ExternalToolElementResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import { BusinessError } from "@/store/types/commons";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,
@@ -11,6 +10,7 @@ import {
 	ltiDeepLinkResponseFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -25,9 +25,11 @@ import {
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiPuzzleOutline } from "@icons/material";
+import { ContentElementBar } from "@ui-board";
 import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
+import { VImg } from "vuetify/lib/components/index";
 import ExternalToolElement from "./ExternalToolElement.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
@@ -117,6 +119,9 @@ describe("ExternalToolElement", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock },
+				stubs: {
+					ContentElementBar: false,
+				},
 			},
 			props: {
 				isFirstElement: false,
@@ -516,8 +521,43 @@ describe("ExternalToolElement", () => {
 		});
 	});
 
+	describe("Domain", () => {
+		const setup = () => {
+			const contextExternalToolId = "context-external-tool-id";
+			const displayData = externalToolDisplayDataFactory.build({
+				contextExternalToolId,
+				logoUrl: undefined,
+			});
+
+			const { wrapper } = getWrapper(
+				{
+					element: externalToolElementResponseFactory.build({
+						content: { contextExternalToolId },
+					}),
+					isEditMode: false,
+				},
+				displayData
+			);
+
+			return {
+				wrapper,
+				displayData,
+			};
+		};
+
+		it("should display the tool domain", () => {
+			const { wrapper, displayData } = setup();
+
+			const domain = wrapper.find(
+				"[data-testid=board-external-tool-element-domain]"
+			);
+
+			expect(domain.text()).toEqual(displayData.domain);
+		});
+	});
+
 	describe("Logo", () => {
-		describe("when not logo is defined", () => {
+		describe("when no logo is defined", () => {
 			const setup = () => {
 				const contextExternalToolId = "context-external-tool-id";
 
@@ -539,14 +579,22 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
+			it("should not show a custom icon", () => {
+				const { wrapper } = setup();
+
+				const icon = wrapper.findComponent(
+					"[data-testid=board-external-tool-element-logo]"
+				);
+
+				expect(icon.exists()).toEqual(false);
+			});
+
 			it("should show the default icon", () => {
 				const { wrapper } = setup();
 
-				const icon = wrapper
-					.findComponent({ name: "ContentElementBar" })
-					.attributes().icon;
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
-				expect(icon).toEqual(mdiPuzzleOutline);
+				expect(contentElementBar.props().icon).toEqual(mdiPuzzleOutline);
 			});
 		});
 
@@ -572,14 +620,22 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
+			it("should show a custom icon", () => {
+				const { wrapper } = setup();
+
+				const icon = wrapper.findComponent<typeof VImg>(
+					"[data-testid=board-external-tool-element-logo]"
+				);
+
+				expect(icon.props().src).toEqual("logo-url");
+			});
+
 			it("should not show the default icon", () => {
 				const { wrapper } = setup();
 
-				const icon = wrapper
-					.findComponent({ name: "ContentElementBar" })
-					.attributes().icon;
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
-				expect(icon).toBeUndefined();
+				expect(contentElementBar.props().icon).toEqual(undefined);
 			});
 		});
 	});

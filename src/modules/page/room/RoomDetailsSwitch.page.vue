@@ -19,11 +19,14 @@
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { RoomDetailsPage } from "@page-room";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import {
+	RoomVariant,
+	useRoomAuthorization,
+	useRoomDetailsStore,
+} from "@data-room";
 import { storeToRefs } from "pinia";
 import { computed, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
-import { useRoomAuthorization } from "@data-room";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const route = useRoute();
@@ -31,11 +34,13 @@ const route = useRoute();
 const roomDetailsStore = useRoomDetailsStore();
 const { isLoading, roomVariant, room } = storeToRefs(roomDetailsStore);
 const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
-
 const { canCreateRoom } = useRoomAuthorization();
 
 const canAccessRoom = computed(() => {
-	return envConfigModule.getEnv.FEATURE_ROOMS_ENABLED && canCreateRoom.value;
+	return (
+		(envConfigModule.getEnv.FEATURE_ROOMS_ENABLED && canCreateRoom.value) ||
+		envConfigModule.getEnv.FEATURE_ROOM_ADD_STUDENTS_ENABLED
+	);
 });
 
 watch(

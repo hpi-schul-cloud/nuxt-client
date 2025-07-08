@@ -18,6 +18,26 @@
 				/>
 			</v-col>
 		</v-row>
+		<v-row>
+			<v-col>
+				<v-text-field
+					v-model="localSchool.currentYear.name"
+					class="school-year"
+					:label="
+						$t(
+							'pages.administration.school.index.generalSettings.labels.schoolYear'
+						)
+					"
+					density="compact"
+					readonly
+					:hint="
+						$t('pages.administration.school.index.generalSettings.disabledHint')
+					"
+					persistent-hint
+					data-testid="school-year"
+				/>
+			</v-col>
+		</v-row>
 		<v-row class="mb-2">
 			<v-col>
 				<v-text-field
@@ -69,7 +89,7 @@
 			<v-col>
 				<v-file-input
 					v-model="logoFile"
-					class="school-logo"
+					class="school-logo truncate-file-input"
 					:label="
 						$t(
 							'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
@@ -173,6 +193,9 @@ export default {
 				language: "",
 				permissions: {},
 				features: {},
+				currentYear: {
+					name: "",
+				},
 			},
 			logoFile: [],
 			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
@@ -307,5 +330,13 @@ export default {
 <style lang="scss" scoped>
 :deep(.v-list-item__prepend > .v-icon) {
 	opacity: 1;
+}
+
+:deep(.truncate-file-input .v-field__input) {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	max-width: 100%;
 }
 </style>

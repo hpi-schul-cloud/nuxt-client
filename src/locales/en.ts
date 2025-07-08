@@ -192,6 +192,8 @@ export default {
 	"common.words.color.turquoise": "Turquoise",
 	"common.words.color.yellow": "Yellow",
 	"common.words.copiedToClipboard": "Copied to the clipboard",
+	"common.words.copiedToClipboard.failure":
+		"Failed to copy to the clipboard. Please try it manually.",
 	"common.words.copyLinkToClipboard.success": "Link copied to clipboard",
 	"common.words.copyLinkToClipboard.failure":
 		"Link could not be copied to clipboard",
@@ -399,13 +401,13 @@ export default {
 	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
 		"The school is already in the next school year",
 	"components.administration.schoolYearChangeSection.notification.finish.success":
-		"School year successfully started",
+		"Transfer phase successfully completed. School transferred to the next year.",
 	"components.administration.schoolYearChangeSection.notification.start.success":
 		"Transfer phase started successfully",
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"End of the school year",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"The transfer phase can be started manually two weeks before the start of the holidays. If no manual start is made by the start of the holidays, the transfer phase begins automatically. The start of the transfer phase cannot be reversed.",
+		"The transfer phase can be started manually two weeks before the end of the school year. Once no manual start has taken place, the transfer phase begins automatically. The start of the transfer phase cannot be reversed.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Start transfer period",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
@@ -426,10 +428,14 @@ export default {
 		"End transfer phase",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
 		"Class and personal data (LDAP) have been updated and verified.",
-	"components.administration.schoolYearChangeSection.dialog.title":
-		"Really finish the school year?",
-	"components.administration.schoolYearChangeSection.dialog.content":
+	"components.administration.schoolYearChangeSection.dialog.start.title":
+		"Really start the transfer phase?",
+	"components.administration.schoolYearChangeSection.dialog.start.content":
 		"Synchronization of LDAP master data is interrupted during the transfer phase. Thus, user data and classes (if used) are no longer updated via LDAP. Login with previously synchronized login data is still possible. Password changes in LDAP during login are also taken into account.",
+	"components.administration.schoolYearChangeSection.dialog.finish.title":
+		"Really end the transfer phase?",
+	"components.administration.schoolYearChangeSection.dialog.finish.content":
+		"The synchronization of the LDAP data is started. User data and classes are updated. The new school year is automatically set.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hour | hours",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
@@ -1156,8 +1162,8 @@ export default {
 		"Attribute participant",
 	"pages.administration.ldap.classes.path.info": "Relative path from base path",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Here you need to define, where we find classes and how they are structured. By adding two semicolons (;;) you can add multiple user paths separately.",
-	"pages.administration.ldap.classes.path.title": "Class path(s)",
+		"Here you need to define, where we find classes and how they are structured.",
+	"pages.administration.ldap.classes.path.title": "Class path",
 	"pages.administration.ldap.classes.subtitle":
 		"Specify the class attribute where the following information is available in your LDAP.",
 	"pages.administration.ldap.classes.title": "Classes (optional)",
@@ -1364,6 +1370,8 @@ export default {
 		"An error occured while loading the school",
 	"pages.administration.school.index.generalSettings.changeSchoolValueWarning":
 		"Once set, it cannot be changed!",
+	"pages.administration.school.index.generalSettings.disabledHint":
+		"Cannot be edited here, more information in the section school year change",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Please choose the county your school belongs to",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider":
@@ -1372,6 +1380,8 @@ export default {
 		"Language",
 	"pages.administration.school.index.generalSettings.labels.nameOfSchool":
 		"Name of the school",
+	"pages.administration.school.index.generalSettings.labels.schoolYear":
+		"School year",
 	"pages.administration.school.index.generalSettings.labels.schoolNumber":
 		"School number",
 	"pages.administration.school.index.generalSettings.labels.timezone":
@@ -2036,6 +2046,8 @@ export default {
 		"Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update":
 		"Updating the invitation link has failed.",
+	"pages.rooms.invitationlinks.error.load":
+		"The invitation list could not be loaded.",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
@@ -2106,6 +2118,7 @@ export default {
 	"pages.tool.medium.mediumId": "Medium Id",
 	"pages.tool.medium.mediumSourceId": "Media catalog Id",
 	"pages.tool.medium.noMediaSource": "Without media catalog",
+	"pages.tool.medium.template": "Template",
 	"pages.userMigration.backToLogin": "Return to login page",
 	"pages.userMigration.button.skip": "Not now",
 	"pages.userMigration.button.startMigration": "Start",

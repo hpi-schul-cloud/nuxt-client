@@ -75,65 +75,63 @@
 					</VStepperItem>
 				</VStepperHeader>
 
-				<div data-testid="cancel-migration-dialog-wrapper">
-					<VCustomDialog
-						v-model:is-open="isCancelDialogOpen"
-						has-buttons
-						:buttons="['cancel', 'confirm']"
-						data-testid="cancel-migration-dialog"
-						@dialog-confirmed="confirmCancelMigration()"
-					>
-						<template #title>
-							{{
-								t(
-									"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
-								)
-							}}
-						</template>
-						<template #content>
-							{{
-								t(
-									"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
-								)
-							}}
-						</template>
-					</VCustomDialog>
-				</div>
+				<VCustomDialog
+					ref="cancelMigrationDialog"
+					v-model:is-open="isCancelDialogOpen"
+					has-buttons
+					:buttons="['cancel', 'confirm']"
+					data-testid="cancel-migration-dialog"
+					@dialog-confirmed="confirmCancelMigration()"
+				>
+					<template #title>
+						{{
+							t(
+								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
+							)
+						}}
+					</template>
+					<template #content>
+						{{
+							t(
+								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
+							)
+						}}
+					</template>
+				</VCustomDialog>
 
-				<div data-testid="clear-auto-matches-dialog-wrapper">
-					<VCustomDialog
-						v-model:is-open="isClearAutoMatchesDialogOpen"
-						has-buttons
-						:buttons="['cancel', 'confirm']"
-						data-testid="clear-auto-matches-dialog"
-						@dialog-confirmed="clearAllAutoMatches()"
-					>
-						<template #title>
+				<VCustomDialog
+					ref="clearAutoMatchesDialog"
+					v-model:is-open="isClearAutoMatchesDialogOpen"
+					has-buttons
+					:buttons="['cancel', 'confirm']"
+					data-testid="clear-auto-matches-dialog"
+					@dialog-confirmed="clearAllAutoMatches()"
+				>
+					<template #title>
+						{{
+							t(
+								"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
+							)
+						}}
+					</template>
+					<template #content>
+						<p>
 							{{
 								t(
-									"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
+									"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph"
 								)
 							}}
-						</template>
-						<template #content>
-							<p>
-								{{
-									t(
-										"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph"
-									)
-								}}
-							</p>
-							<p>
-								{{
-									t(
-										"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph"
-									)
-								}}
-								>
-							</p>
-						</template>
-					</VCustomDialog>
-				</div>
+						</p>
+						<p>
+							{{
+								t(
+									"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph"
+								)
+							}}
+							>
+						</p>
+					</template>
+				</VCustomDialog>
 			</VStepper>
 		</template>
 
@@ -149,16 +147,13 @@
 								color="grey-lighten-5"
 							>
 								<VProgressLinear
-									v-if="school.inUserMigration && totalImportUsers === 0"
+									v-if="school.inUserMigration && isLoading"
 									indeterminate
 								/>
 								<VCardText>
 									<iframe class="full" :src="helpPageUri" />
 									<v-alert
-										v-if="
-											(!school.inUserMigration || totalImportUsers === 0) &&
-											!isNbc
-										"
+										v-if="(!school.inUserMigration || isLoading) && !isNbc"
 										density="compact"
 										variant="outlined"
 										type="info"
@@ -204,22 +199,19 @@
 											<VBtn
 												v-else-if="canPerformMigration"
 												data-testid="migration_tutorial_next"
-												:disabled="totalImportUsers === 0"
+												:disabled="isLoading"
 												variant="flat"
 												color="primary"
 												@click="nextStep"
 											>
 												<VProgressCircular
-													v-if="
-														totalImportUsers === 0 && school.inUserMigration
-													"
+													v-if="isLoading && school.inUserMigration"
 													:size="20"
 													indeterminate
 													class="mr-1"
 												/>
 												{{
-													totalImportUsers > 0 ||
-													school.inUserMigration === false
+													!isLoading || school.inUserMigration === false
 														? t("pages.administration.migration.next")
 														: t("pages.administration.migration.waiting")
 												}}
@@ -728,9 +720,14 @@ const summary = async () => {
 	if (!canPerformMigration.value) {
 		return;
 	}
+
+	isLoading.value = true;
+
 	await importUsersModule.fetchTotal();
 	await importUsersModule.fetchTotalMatched();
 	await importUsersModule.fetchTotalUnmatched();
+
+	isLoading.value = false;
 };
 
 const checkTotalInterval = () => {
