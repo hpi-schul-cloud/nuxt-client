@@ -1,4 +1,4 @@
-import Pagination from "./Pagination";
+import Pagination from "./Pagination.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,

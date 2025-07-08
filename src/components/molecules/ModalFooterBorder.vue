@@ -9,17 +9,8 @@
 	</div>
 </template>
 
-<script>
-import DefaultModalFooter from "@/components/molecules/ModalFooter";
-export default {
-	components: {
-		DefaultModalFooter,
-	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
-};
+<script setup lang="ts">
+import DefaultModalFooter from "@/components/molecules/ModalFooter.vue";
 </script>
 
 <style lang="scss" scoped>
