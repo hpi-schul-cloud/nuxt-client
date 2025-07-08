@@ -10,6 +10,7 @@ export const useCourseInfoApi = () => {
 
 	const loadCoursesForSchool = async (
 		courseStatusQueryType: CourseStatus,
+		withoutTeachers: boolean,
 		limit: number,
 		skip: number,
 		key: CourseSortProps | undefined,
@@ -20,7 +21,8 @@ export const useCourseInfoApi = () => {
 			limit,
 			order,
 			key,
-			courseStatusQueryType
+			courseStatusQueryType,
+			withoutTeachers
 		);
 
 		return response;

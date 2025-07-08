@@ -15,8 +15,10 @@
 					:area-label="t('pages.administration.courses.withoutTeacher')"
 					:true-icon="mdiCheck"
 					data-testid="admin-course-without-teacher-checkbox"
-					value="true"
 					hide-details
+					:true-value="true"
+					:false-value="false"
+					@update:model-value="onUpdateWithoutTeacherFilter"
 				/>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
@@ -265,6 +267,7 @@ const {
 	setPage,
 	setPagination,
 	deleteCourse,
+	setWithoutTeachers,
 } = useCourseList();
 
 const activeTab = computed({
@@ -275,6 +278,11 @@ const activeTab = computed({
 		onTabsChange(newTab);
 	},
 });
+
+const onUpdateWithoutTeacherFilter = (withoutTeacher: boolean) => {
+	setWithoutTeachers(withoutTeacher);
+	loadCourseList();
+};
 
 const footerProps = {
 	itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),

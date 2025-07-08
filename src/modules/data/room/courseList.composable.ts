@@ -23,6 +23,7 @@ export const useCourseList = () => {
 	const page: Ref<number> = ref(1);
 	const key: Ref<CourseSortProps | undefined> = ref();
 	const sortOrder: Ref<"asc" | "desc"> = ref("asc");
+	const withoutTeachers: Ref<boolean> = ref(false);
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
@@ -43,6 +44,10 @@ export const useCourseList = () => {
 		pagination.value = paginationData;
 	};
 
+	const setWithoutTeachers = (withoutTeacherValue: boolean) => {
+		withoutTeachers.value = withoutTeacherValue;
+	};
+
 	const fetchCourses = async (
 		courseStatusQueryType: CourseStatus
 	): Promise<void> => {
@@ -51,6 +56,7 @@ export const useCourseList = () => {
 		try {
 			const response = await loadCoursesForSchool(
 				courseStatusQueryType,
+				withoutTeachers.value,
 				pagination.value.limit,
 				pagination.value.skip,
 				key.value,
@@ -112,5 +118,6 @@ export const useCourseList = () => {
 		setSortOrder,
 		fetchCourses,
 		deleteCourse,
+		setWithoutTeachers,
 	};
 };
