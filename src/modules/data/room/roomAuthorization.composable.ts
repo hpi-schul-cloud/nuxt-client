@@ -70,5 +70,8 @@ export const useRoomAuthorization = () => {
 		canRemoveRoomMembers,
 		canSeeAllStudents,
 		canViewRoom,
+		canManageInvitationLinks,
+		canListDrafts,
+		canManageVideoconferences,
 	};
 };
