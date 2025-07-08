@@ -38,49 +38,42 @@
 		</div>
 	</div>
 </template>
-<script>
+<script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { mdiLogin } from "@icons/material";
+import { computed, ref } from "vue";
 
-export default {
-	props: {
-		logoLink: {
-			type: String,
-			default: "/",
-			required: false,
-		},
-		img: {
-			type: String,
-			required: true,
-		},
-		links: {
-			type: Array,
-			default: () => [],
-			required: false,
-		},
-	},
-	data() {
-		return {
-			mdiLogin,
-			activeLink: window.location.pathname,
-		};
-	},
-	computed: {
-		hasButtons() {
-			return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default;
-		},
-		linksToDisplay() {
-			return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default
-				? this.links
-				: [];
-		},
-	},
-	methods: {
-		setActive(idx) {
-			this.activeLink = idx;
-		},
-	},
+type Props = {
+	logoLink?: string;
+	img: string;
+	links?: Array<{
+		title: string;
+		href: string;
+		to?: string;
+		target?: string;
+	}>;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+	logoLink: "/",
+	links: () => [],
+});
+
+const activeLink = ref(window.location.pathname);
+
+const hasButtons = computed(() => {
+	return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default;
+});
+
+const linksToDisplay = computed(() => {
+	return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default
+		? props.links
+		: [];
+});
+
+const setActive = (idx: number) => {
+	activeLink.value = props.links[idx].href;
 };
 </script>
 

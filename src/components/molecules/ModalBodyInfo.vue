@@ -16,23 +16,16 @@
 	</div>
 </template>
 
-<script>
-export default {
-	props: {
-		title: {
-			type: String,
-			default: "",
-		},
-		description: {
-			type: String,
-			default: "",
-		},
-	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
+<script setup lang="ts">
+type Props = {
+	title?: string;
+	description?: string;
 };
+
+withDefaults(defineProps<Props>(), {
+	title: "",
+	description: "",
+});
 </script>
 
 <style lang="scss" scoped>

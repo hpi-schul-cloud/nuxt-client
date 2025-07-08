@@ -11,27 +11,26 @@
 	</div>
 </template>
 
-<script>
-export default {
-	emits: ["deleteAvatar"],
-	data() {
-		return {
-			hovered: false,
-		};
-	},
-	methods: {
-		deleteAvatar() {
-			this.$emit("deleteAvatar");
-		},
-		dragLeave() {
-			this.hovered = false;
-		},
-		dragEnter() {
-			this.hovered = true;
-		},
-	},
+<script setup lang="ts">
+const emit = defineEmits<{
+	(e: "deleteAvatar"): void;
+}>();
+import { ref } from "vue";
+
+const hovered = ref(false);
+
+const deleteAvatar = () => {
+	emit("deleteAvatar");
+};
+
+const dragLeave = () => {
+	hovered.value = false;
+};
+const dragEnter = () => {
+	hovered.value = true;
 };
 </script>
+
 <style scoped>
 .delete-avatar {
 	position: absolute;

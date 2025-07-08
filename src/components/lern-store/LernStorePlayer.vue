@@ -14,59 +14,42 @@
 
 <script :src="scriptSrc" charset="UTF-8"></script>
 
-<script lang="ts">
-import { defineComponent, ref, watch, onMounted } from "vue";
+<script setup lang="ts">
+import { watch, onMounted, toRef } from "vue";
 import { $axios } from "@/utils/api";
 
-export default defineComponent({
-	name: "LernStorePlayer",
-	props: {
-		nodeId: {
-			type: String,
-			default: "",
-		},
-		loading: {
-			type: Boolean,
-			default: true,
-		},
-		iframeSrc: {
-			type: String,
-			default: "",
-		},
-		scriptSrc: {
-			type: String,
-			default: "",
-		},
-	},
-	setup(props) {
-		const model = ref(props.nodeId);
-		const loading = ref(props.loading);
-		const iframeSrc = ref(props.iframeSrc);
-		const scriptSrc = ref(props.scriptSrc);
+type Props = {
+	nodeId?: string;
+	loading?: boolean;
+	iframeSrc?: string;
+	scriptSrc?: string;
+};
 
-		watch(
-			() => props.nodeId,
-			(newValue: string) => {
-				model.value = newValue;
-			}
-		);
+const props = withDefaults(defineProps<Props>(), {
+	nodeId: "",
+	loading: true,
+	iframeSrc: "",
+	scriptSrc: "",
+});
 
-		onMounted(async () => {
-			await $axios
-				.get(`/v1/edu-sharing/player/${model.value}`)
-				.then((response) => {
-					iframeSrc.value = response.data.iframe_src;
-					scriptSrc.value = response.data.script_src;
-				});
-			loading.value = false;
-		});
+const model = toRef(props, "nodeId");
+const loading = toRef(props, "loading");
+const iframeSrc = toRef(props, "iframeSrc");
+const scriptSrc = toRef(props, "scriptSrc");
 
-		return {
-			loading,
-			iframeSrc,
-			scriptSrc,
-		};
-	},
+watch(
+	() => props.nodeId,
+	(newValue: string) => {
+		model.value = newValue;
+	}
+);
+
+onMounted(async () => {
+	await $axios.get(`/v1/edu-sharing/player/${model.value}`).then((response) => {
+		iframeSrc.value = response.data.iframe_src;
+		scriptSrc.value = response.data.script_src;
+	});
+	loading.value = false;
 });
 </script>
 

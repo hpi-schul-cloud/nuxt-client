@@ -7,29 +7,25 @@
 	</ContentElementBar>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { AudioPlayer } from "@ui-audio-player";
 import { ContentElementBar } from "@ui-board";
-import { defineComponent } from "vue";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
 
-export default defineComponent({
-	name: "AudioDisplay",
-	components: { ContentElementBar, AudioPlayer },
-	props: {
-		src: { type: String, required: true },
-		showMenu: { type: Boolean, required: true },
-	},
-	emits: ["error"],
+type Props = {
+	src: string;
+	showMenu: boolean;
+};
 
-	setup(props, { emit }) {
-		const handleError = () => {
-			emit("error", FileAlert.AUDIO_FORMAT_ERROR);
-		};
+defineProps<Props>();
 
-		return { AudioPlayer, handleError };
-	},
-});
+const emit = defineEmits<{
+	(e: "error", fileAlert: FileAlert): void;
+}>();
+
+const handleError = () => {
+	emit("error", FileAlert.AUDIO_FORMAT_ERROR);
+};
 </script>
 
 <style scoped>

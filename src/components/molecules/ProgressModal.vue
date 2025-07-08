@@ -11,34 +11,17 @@
 		</template>
 	</base-modal>
 </template>
-<script>
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+<script setup lang="ts">
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
 import BaseModal from "../base/BaseModal.vue";
 
-export default {
-	components: {
-		ModalBodyInfo,
-		BaseModal,
-	},
-	props: {
-		title: {
-			type: String,
-			required: true,
-		},
-		description: {
-			type: String,
-			required: true,
-		},
-		percent: {
-			type: Number,
-			required: true,
-		},
-	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
+type Props = {
+	title: string;
+	description: string;
+	percent: number;
 };
+
+defineProps<Props>();
 </script>
 
 <style lang="scss" scoped>

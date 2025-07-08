@@ -17,30 +17,25 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ContentElementBar } from "@ui-board";
-import { defineComponent } from "vue";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
 
-export default defineComponent({
-	name: "VideoDisplay",
-	components: { ContentElementBar },
-	props: {
-		src: { type: String, required: true },
-		name: { type: String, required: true },
-		showMenu: { type: Boolean, required: true },
-	},
-	emits: ["error"],
-	setup(props, { emit }) {
-		const onError = () => {
-			emit("error", FileAlert.VIDEO_FORMAT_ERROR);
-		};
+type Props = {
+	src: string;
+	name: string;
+	showMenu: boolean;
+};
 
-		return {
-			onError,
-		};
-	},
-});
+defineProps<Props>();
+
+const emit = defineEmits<{
+	(e: "error", fileAlert: FileAlert): void;
+}>();
+
+const onError = () => {
+	emit("error", FileAlert.VIDEO_FORMAT_ERROR);
+};
 </script>
 <style lang="scss" scoped>
 .video {
