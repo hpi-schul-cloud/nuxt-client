@@ -175,6 +175,14 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
+	const isUserStudent = computed(() => {
+		const member = roomMembers.value.find(
+			(member) => member.userId === currentUserId
+		);
+		if (!member) return false;
+		return member.schoolRoleNames.includes(RoleName.Student);
+	});
+
 	const loadSchoolListPage = async (skip = 0, limit = 1000) => {
 		try {
 			const response = await schoolApi.schoolControllerGetSchoolList(
@@ -404,6 +412,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		confirmationList,
 		confirmationSelectedIds,
 		isLoading,
+		isUserStudent,
 		roomMembers,
 		roomMembersWithoutApplicants,
 		roomApplicants,
