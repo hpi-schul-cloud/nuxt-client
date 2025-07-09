@@ -6,6 +6,8 @@ import { shallowMount } from "@vue/test-utils";
 import FileAttributes from "./attributes/FileAttributes.vue";
 import ContentElementFooter from "./ContentElementFooter.vue";
 import FileDownload from "./download/FileDownload.vue";
+import { PreviewStatus } from "@/fileStorageApi/v3";
+import { ContentElementType } from "@/serverApi/v3";
 
 describe("ContentElementFooter", () => {
 	const setup = () => {
@@ -14,9 +16,24 @@ describe("ContentElementFooter", () => {
 		const propsData = {
 			fileProperties: {
 				name: "file-record #1.txt",
-				url: "1/file-record #1.txt",
-				isDownloadAllowed: true,
 				size: 3800,
+				url: "1/file-record #1.txt",
+				previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
+				isDownloadAllowed: true,
+				mimeType: "text/plain",
+				element: {
+					id: "1",
+					type: ContentElementType.File,
+					content: {
+						caption: "File caption",
+						alternativeText: "File alternative text",
+					},
+					timestamps: {
+						createdAt: new Date().toISOString(),
+						updatedAt: new Date().toISOString(),
+						lastUpdatedAt: new Date().toISOString(),
+					},
+				},
 			},
 		};
 

@@ -10,38 +10,33 @@
 	/>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue";
+<script setup lang="ts">
+import { onMounted, ref, watch } from "vue";
 
-export default defineComponent({
-	name: "AlternativeText",
-	props: {
-		alternativeText: {
-			type: String,
-			required: false,
-			default: undefined,
-		},
-		isEditMode: { type: Boolean, required: true },
-	},
-	emits: ["update:alternativeText"],
-	setup(props, { emit }) {
-		const modelValue = ref("");
+type Props = {
+	alternativeText?: string;
+	isEditMode: boolean;
+};
 
-		onMounted(() => {
-			if (props.alternativeText !== undefined) {
-				modelValue.value = props.alternativeText;
-			}
-		});
+const props = withDefaults(defineProps<Props>(), {
+	alternativeText: undefined,
+});
 
-		watch(modelValue, (newValue) => {
-			if (newValue !== props.alternativeText) {
-				emit("update:alternativeText", newValue);
-			}
-		});
+const emit = defineEmits<{
+	(e: "update:alternativeText", alternativeText: string): void;
+}>();
 
-		return {
-			modelValue,
-		};
-	},
+const modelValue = ref("");
+
+onMounted(() => {
+	if (props.alternativeText !== undefined) {
+		modelValue.value = props.alternativeText;
+	}
+});
+
+watch(modelValue, (newValue) => {
+	if (newValue !== props.alternativeText) {
+		emit("update:alternativeText", newValue);
+	}
 });
 </script>
