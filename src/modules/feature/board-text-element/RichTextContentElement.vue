@@ -1,15 +1,13 @@
 <template>
-	<div>
+	<div :class="{ 'first-element': isFirstElement }">
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
-			:class="{ 'first-element': isFirstElement }"
 			:data-testid="`rich-text-display-${columnIndex}-${elementIndex}`"
 			:value="element.content.text"
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"
 			:autofocus="autofocus"
-			:class="{ 'first-element': isFirstElement }"
 			:value="modelValue.text"
 			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
 			:column-index="columnIndex"
@@ -146,7 +144,7 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	}
 }
 
-.first-element > :is(h4, h5):first-child {
+.first-element :is(h4, h5):first-child {
 	margin-top: 0;
 }
 </style>
