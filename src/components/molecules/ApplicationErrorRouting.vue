@@ -2,37 +2,33 @@
 	<div />
 </template>
 
-<script lang="ts">
-import { defineComponent, watch } from "vue";
+<script setup lang="ts">
+import { watch } from "vue";
 import { useRouter } from "vue-router";
 import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
 
 /**
  * This component handles the routing to "/error" whenever a global Error is set in ApplicationErrorModule
  */
-export default defineComponent({
-	name: "ApplicationErrorRouting",
-	setup() {
-		const router = useRouter();
 
-		const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
+const router = useRouter();
 
-		const routeToErrorPage = () => {
-			// prevent NavigationDuplicated error: "navigationduplicated avoided redundant navigation to current location"
-			if (router.currentRoute.value.path !== "/error") {
-				router.replace("/error");
-			}
-		};
+const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
 
-		watch(
-			() => applicationErrorModule.getStatusCode,
-			(to) => {
-				if (to !== null) {
-					routeToErrorPage();
-				}
-			},
-			{ immediate: true }
-		);
+const routeToErrorPage = () => {
+	// prevent NavigationDuplicated error: "navigationduplicated avoided redundant navigation to current location"
+	if (router.currentRoute.value.path !== "/error") {
+		router.replace("/error");
+	}
+};
+
+watch(
+	() => applicationErrorModule.getStatusCode,
+	(to) => {
+		if (to !== null) {
+			routeToErrorPage();
+		}
 	},
-});
+	{ immediate: true }
+);
 </script>

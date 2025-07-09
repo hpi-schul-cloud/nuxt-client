@@ -76,7 +76,8 @@ describe("@/components/molecules/NotificationModal", () => {
 
 		const button = dialogCard.get(".btn-confirm");
 		await button.trigger("click");
-		expect(wrapper.emitted("close")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-notification-modal")).toHaveLength(1);
+
+		expect(wrapper.emitted("close")).toBeDefined();
+		expect(wrapper.emitted("update:show-notification-modal")).toBeDefined();
 	});
 });

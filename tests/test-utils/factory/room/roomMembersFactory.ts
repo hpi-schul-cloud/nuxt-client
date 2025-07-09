@@ -1,12 +1,16 @@
 import { Factory } from "fishery";
-import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
+import {
+	RoleName,
+	SchoolForExternalInviteResponse,
+	SchoolListResponse,
+} from "@/serverApi/v3";
 import { RoomMember } from "@data-room";
 
 export const roomMemberFactory = Factory.define<RoomMember>(({ sequence }) => ({
 	userId: `member${sequence}`,
 	firstName: `firstName${sequence}`,
 	lastName: `lastName${sequence}`,
-	fullName: `lastName${sequence}, firstName${sequence}`,
+	fullName: `firstName${sequence} lastName${sequence}`,
 	roomRoleName: RoleName.Roomadmin,
 	schoolRoleNames: [RoleName.Teacher],
 	schoolName: "Paul-Gerhardt-Gymnasium",
@@ -20,6 +24,18 @@ export const roomMemberSchoolResponseFactory =
 		id: `school${sequence}`,
 		name: `schoolName${sequence}`,
 	}));
+
+export const roomMemberSchoolListResponseFactory =
+	Factory.define<SchoolListResponse>(({ associations }) => {
+		const totalCount = associations.total || 1;
+		const data = roomMemberSchoolResponseFactory.buildList(totalCount);
+		return {
+			data,
+			total: totalCount,
+			limit: totalCount,
+			skip: 0,
+		};
+	});
 
 export const roomOwnerFactory = roomMemberFactory.params({
 	roomRoleName: RoleName.Roomowner,
