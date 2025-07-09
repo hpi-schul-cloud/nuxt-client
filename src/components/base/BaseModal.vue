@@ -33,39 +33,30 @@
 	</v-dialog>
 </template>
 
-<script>
-import ModalFooter from "@/components/molecules/ModalFooter";
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import { computed } from "vue";
 import { useUid } from "@/utils/uid";
 
-export default defineComponent({
-	components: {
-		ModalFooter,
-	},
-	props: {
-		active: {
-			type: Boolean,
-		},
-		backgroundClickDisabled: {
-			type: Boolean,
-		},
-	},
-	emits: ["update:active"],
-	setup() {
-		const { uid } = useUid();
+type Props = {
+	active?: boolean;
+	backgroundClickDisabled?: boolean;
+};
 
-		return { uid };
-	},
-	computed: {
-		isDialogOpen: {
-			get() {
-				return this.active;
-			},
-			set(newValue) {
-				this.$emit("update:active", newValue);
-			},
-		},
-	},
+const props = withDefaults(defineProps<Props>(), {
+	active: false,
+	backgroundClickDisabled: false,
+});
+
+const emits = defineEmits<{
+	(e: "update:active", value: boolean): void;
+}>();
+
+const { uid } = useUid();
+
+const isDialogOpen = computed({
+	get: () => props.active,
+	set: (newValue: boolean) => emits("update:active", newValue),
 });
 </script>
 

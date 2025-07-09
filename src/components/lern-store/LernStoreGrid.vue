@@ -4,25 +4,18 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
 
-export default defineComponent({
-	props: {
-		columnWidth: {
-			type: String,
-			default: "15rem",
-		},
-	},
-	setup(props) {
-		const col = computed(() => {
-			return `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`;
-		});
+type Props = {
+	columnWidth?: string;
+};
+const props = withDefaults(defineProps<Props>(), {
+	columnWidth: "15rem",
+});
 
-		return {
-			col,
-		};
-	},
+const col = computed(() => {
+	return `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`;
 });
 </script>
 

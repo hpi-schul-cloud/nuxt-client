@@ -40,40 +40,28 @@
 	</v-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiOpenInNew } from "@icons/material";
-import { defineComponent } from "vue";
 
-export default defineComponent({
-	props: {
-		title: {
-			type: String,
-			required: true,
-		},
-		logoUrl: {
-			type: String,
-			default: undefined,
-		},
-		openInNewTab: {
-			type: Boolean,
-		},
-		testId: {
-			type: String,
-			required: true,
-		},
-	},
-	emits: ["click"],
-	setup(props, { emit }) {
-		const onClick = () => {
-			emit("click");
-		};
+type Props = {
+	title: string;
+	logoUrl?: string;
+	openInNewTab?: boolean;
+	testId: string;
+};
 
-		return {
-			onClick,
-			mdiOpenInNew,
-		};
-	},
+withDefaults(defineProps<Props>(), {
+	logoUrl: undefined,
+	openInNewTab: false,
 });
+
+const emit = defineEmits<{
+	(e: "click"): void;
+}>();
+
+const onClick = () => {
+	emit("click");
+};
 </script>
 
 <style lang="scss" scoped>
