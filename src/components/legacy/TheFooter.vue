@@ -41,12 +41,11 @@
 </template>
 
 <script setup lang="ts">
-import { authModule, envConfigModule } from "@/store";
+import { envConfigModule } from "@/store";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const school = computed(() => authModule.getSchool);
 const currentYear = computed(() => new Date().getFullYear());
 const links = computed(() => {
 	const baseLinks = [
