@@ -328,14 +328,10 @@ watch(
 	() => focusNodeFromHash()
 );
 
-// TODO-BC-9734: needs to be adjusted
 watch(
-	() => isBoardVisible.value,
+	() => isBoardVisible,
 	() => {
-		console.log("edit Permission", hasEditPermission.value);
-		// const canAccessBoard = isBoardVisible.value || isTeacher.value;
-		const canAccessBoard = isBoardVisible.value || hasEditPermission.value;
-		console.log("canAccessBoard", canAccessBoard);
+		const canAccessBoard = isBoardVisible.value || isTeacher.value;
 		if (!canAccessBoard) {
 			router.replace({ name: "room-details", params: { id: roomId.value } });
 			applicationErrorModule.setError(
