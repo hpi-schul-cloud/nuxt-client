@@ -363,18 +363,20 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoleCreate = 'ROLE_CREATE',
     RoleEdit = 'ROLE_EDIT',
     RoleView = 'ROLE_VIEW',
-    RoomContentEdit = 'ROOM_CONTENT_EDIT',
-    RoomCreate = 'ROOM_CREATE',
-    RoomEdit = 'ROOM_EDIT',
-    RoomView = 'ROOM_VIEW',
-    RoomDelete = 'ROOM_DELETE',
-    RoomLeave = 'ROOM_LEAVE',
-    RoomCopy = 'ROOM_COPY',
-    RoomShare = 'ROOM_SHARE',
-    RoomMembersAdd = 'ROOM_MEMBERS_ADD',
-    RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
-    RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
+    RoomEditContent = 'ROOM_EDIT_CONTENT',
+    RoomEditRoom = 'ROOM_EDIT_ROOM',
+    RoomListContent = 'ROOM_LIST_CONTENT',
+    RoomDeleteRoom = 'ROOM_DELETE_ROOM',
+    RoomLeaveRoom = 'ROOM_LEAVE_ROOM',
+    RoomCopyRoom = 'ROOM_COPY_ROOM',
+    RoomShareRoom = 'ROOM_SHARE_ROOM',
+    RoomAddMembers = 'ROOM_ADD_MEMBERS',
+    RoomRemoveMembers = 'ROOM_REMOVE_MEMBERS',
+    RoomChangeRoles = 'ROOM_CHANGE_ROLES',
     RoomChangeOwner = 'ROOM_CHANGE_OWNER',
+    RoomManageInvitationlinks = 'ROOM_MANAGE_INVITATIONLINKS',
+    RoomListDrafts = 'ROOM_LIST_DRAFTS',
+    RoomManageVideoconferences = 'ROOM_MANAGE_VIDEOCONFERENCES',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -387,6 +389,12 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
     SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
     SchoolView = 'SCHOOL_VIEW',
+    SchoolBecomeRoomowner = 'SCHOOL_BECOME_ROOMOWNER',
+    SchoolCreateRoom = 'SCHOOL_CREATE_ROOM',
+    SchoolEditRoom = 'SCHOOL_EDIT_ROOM',
+    SchoolDeleteRoom = 'SCHOOL_DELETE_ROOM',
+    SchoolListDiscoverableTeachers = 'SCHOOL_LIST_DISCOVERABLE_TEACHERS',
+    SchoolManageRoomInvitationlinks = 'SCHOOL_MANAGE_ROOM_INVITATIONLINKS',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
     StudentCreate = 'STUDENT_CREATE',
@@ -1126,9 +1134,7 @@ export interface ClassResponse {
 export enum ClassSortQueryType {
     Name = 'name',
     ExternalSourceName = 'externalSourceName',
-    SynchronizedCourses = 'synchronizedCourses',
-    StudentCount = 'studentCount',
-    TeacherNames = 'teacherNames'
+    StudentCount = 'studentCount'
 }
 
 /**
@@ -7696,18 +7702,20 @@ export enum Permission {
     RoleCreate = 'ROLE_CREATE',
     RoleEdit = 'ROLE_EDIT',
     RoleView = 'ROLE_VIEW',
-    RoomContentEdit = 'ROOM_CONTENT_EDIT',
-    RoomCreate = 'ROOM_CREATE',
-    RoomEdit = 'ROOM_EDIT',
-    RoomView = 'ROOM_VIEW',
-    RoomDelete = 'ROOM_DELETE',
-    RoomLeave = 'ROOM_LEAVE',
-    RoomCopy = 'ROOM_COPY',
-    RoomShare = 'ROOM_SHARE',
-    RoomMembersAdd = 'ROOM_MEMBERS_ADD',
-    RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
-    RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
+    RoomEditContent = 'ROOM_EDIT_CONTENT',
+    RoomEditRoom = 'ROOM_EDIT_ROOM',
+    RoomListContent = 'ROOM_LIST_CONTENT',
+    RoomDeleteRoom = 'ROOM_DELETE_ROOM',
+    RoomLeaveRoom = 'ROOM_LEAVE_ROOM',
+    RoomCopyRoom = 'ROOM_COPY_ROOM',
+    RoomShareRoom = 'ROOM_SHARE_ROOM',
+    RoomAddMembers = 'ROOM_ADD_MEMBERS',
+    RoomRemoveMembers = 'ROOM_REMOVE_MEMBERS',
+    RoomChangeRoles = 'ROOM_CHANGE_ROLES',
     RoomChangeOwner = 'ROOM_CHANGE_OWNER',
+    RoomManageInvitationlinks = 'ROOM_MANAGE_INVITATIONLINKS',
+    RoomListDrafts = 'ROOM_LIST_DRAFTS',
+    RoomManageVideoconferences = 'ROOM_MANAGE_VIDEOCONFERENCES',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -7720,6 +7728,12 @@ export enum Permission {
     SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
     SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
     SchoolView = 'SCHOOL_VIEW',
+    SchoolBecomeRoomowner = 'SCHOOL_BECOME_ROOMOWNER',
+    SchoolCreateRoom = 'SCHOOL_CREATE_ROOM',
+    SchoolEditRoom = 'SCHOOL_EDIT_ROOM',
+    SchoolDeleteRoom = 'SCHOOL_DELETE_ROOM',
+    SchoolListDiscoverableTeachers = 'SCHOOL_LIST_DISCOVERABLE_TEACHERS',
+    SchoolManageRoomInvitationlinks = 'SCHOOL_MANAGE_ROOM_INVITATIONLINKS',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
     StudentCreate = 'STUDENT_CREATE',
@@ -8861,6 +8875,56 @@ export interface SchoolInfoResponse {
      * @memberof SchoolInfoResponse
      */
     name: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolItemResponse
+ */
+export interface SchoolItemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolItemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolItemResponse
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolListResponse
+ */
+export interface SchoolListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<SchoolItemResponse>}
+     * @memberof SchoolListResponse
+     */
+    data: Array<SchoolItemResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof SchoolListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof SchoolListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof SchoolListResponse
+     */
+    limit: number;
 }
 /**
  * 
@@ -23911,11 +23975,61 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {number} [skip] Schools to skip from the beginning (for pagination)
+         * @param {number} [limit] Page limit.
          * @param {string} [federalStateId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolListForExternalInvite: async (federalStateId?: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetSchoolList: async (skip?: number, limit?: number, federalStateId?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/school`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (federalStateId !== undefined) {
+                localVarQueryParameter['federalStateId'] = federalStateId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} [skip] Schools to skip from the beginning (for pagination)
+         * @param {number} [limit] Page limit.
+         * @param {string} [federalStateId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolListForExternalInvite: async (skip?: number, limit?: number, federalStateId?: string, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/school/list-for-external-invite`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -23931,6 +24045,14 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
 
             if (federalStateId !== undefined) {
                 localVarQueryParameter['federalStateId'] = federalStateId;
@@ -24318,12 +24440,26 @@ export const SchoolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} [skip] Schools to skip from the beginning (for pagination)
+         * @param {number} [limit] Page limit.
          * @param {string} [federalStateId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolForExternalInviteResponse>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolListForExternalInvite(federalStateId, options);
+        async schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolList(skip, limit, federalStateId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} [skip] Schools to skip from the beginning (for pagination)
+         * @param {number} [limit] Page limit.
+         * @param {string} [federalStateId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolForExternalInviteResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolListForExternalInvite(skip, limit, federalStateId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -24463,12 +24599,25 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
+         * @param {number} [skip] Schools to skip from the beginning (for pagination)
+         * @param {number} [limit] Page limit.
          * @param {string} [federalStateId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>> {
-            return localVarFp.schoolControllerGetSchoolListForExternalInvite(federalStateId, options).then((request) => request(axios, basePath));
+        schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<SchoolListResponse> {
+            return localVarFp.schoolControllerGetSchoolList(skip, limit, federalStateId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} [skip] Schools to skip from the beginning (for pagination)
+         * @param {number} [limit] Page limit.
+         * @param {string} [federalStateId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>> {
+            return localVarFp.schoolControllerGetSchoolListForExternalInvite(skip, limit, federalStateId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -24598,12 +24747,25 @@ export interface SchoolApiInterface {
 
     /**
      * 
+     * @param {number} [skip] Schools to skip from the beginning (for pagination)
+     * @param {number} [limit] Page limit.
      * @param {string} [federalStateId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>>;
+    schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<SchoolListResponse>;
+
+    /**
+     * 
+     * @param {number} [skip] Schools to skip from the beginning (for pagination)
+     * @param {number} [limit] Page limit.
+     * @param {string} [federalStateId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>>;
 
     /**
      * 
@@ -24741,13 +24903,28 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
 
     /**
      * 
+     * @param {number} [skip] Schools to skip from the beginning (for pagination)
+     * @param {number} [limit] Page limit.
      * @param {string} [federalStateId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SchoolApi
      */
-    public schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any) {
-        return SchoolApiFp(this.configuration).schoolControllerGetSchoolListForExternalInvite(federalStateId, options).then((request) => request(this.axios, this.basePath));
+    public schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetSchoolList(skip, limit, federalStateId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} [skip] Schools to skip from the beginning (for pagination)
+     * @param {number} [limit] Page limit.
+     * @param {string} [federalStateId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetSchoolListForExternalInvite(skip, limit, federalStateId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
