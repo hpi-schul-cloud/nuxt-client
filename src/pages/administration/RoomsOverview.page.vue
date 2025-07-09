@@ -232,6 +232,7 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
+import type { DataTableHeader } from "vuetify";
 
 type Tab = "current" | "archive";
 
@@ -369,7 +370,7 @@ const courseSyncEnabled = computed(
 );
 
 const headers = computed(() => {
-	const headerList: unknown[] = [
+	const headerList: DataTableHeader<CourseInfoDataResponse>[] = [
 		{
 			value: "name",
 			title: t("common.labels.course"),
