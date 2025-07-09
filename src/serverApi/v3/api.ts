@@ -16169,11 +16169,11 @@ export const CourseInfoApiAxiosParamCreator = function (configuration?: Configur
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {CourseSortProps} [sortBy] 
          * @param {CourseStatus} [status] 
-         * @param {boolean} [withoutTeachers] 
+         * @param {boolean} [withoutTeacher] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseInfoControllerGetCourseInfo: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeachers?: boolean, options: any = {}): Promise<RequestArgs> => {
+        courseInfoControllerGetCourseInfo: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeacher?: boolean, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/course-info`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -16210,8 +16210,8 @@ export const CourseInfoApiAxiosParamCreator = function (configuration?: Configur
                 localVarQueryParameter['status'] = status;
             }
 
-            if (withoutTeachers !== undefined) {
-                localVarQueryParameter['withoutTeachers'] = withoutTeachers;
+            if (withoutTeacher !== undefined) {
+                localVarQueryParameter['withoutTeacher'] = withoutTeacher;
             }
 
 
@@ -16243,12 +16243,12 @@ export const CourseInfoApiFp = function(configuration?: Configuration) {
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {CourseSortProps} [sortBy] 
          * @param {CourseStatus} [status] 
-         * @param {boolean} [withoutTeachers] 
+         * @param {boolean} [withoutTeacher] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeachers?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseInfoListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, withoutTeachers, options);
+        async courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeacher?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseInfoListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, withoutTeacher, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -16269,12 +16269,12 @@ export const CourseInfoApiFactory = function (configuration?: Configuration, bas
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {CourseSortProps} [sortBy] 
          * @param {CourseStatus} [status] 
-         * @param {boolean} [withoutTeachers] 
+         * @param {boolean} [withoutTeacher] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeachers?: boolean, options?: any): AxiosPromise<CourseInfoListResponse> {
-            return localVarFp.courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, withoutTeachers, options).then((request) => request(axios, basePath));
+        courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeacher?: boolean, options?: any): AxiosPromise<CourseInfoListResponse> {
+            return localVarFp.courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, withoutTeacher, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -16293,12 +16293,12 @@ export interface CourseInfoApiInterface {
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {CourseSortProps} [sortBy] 
      * @param {CourseStatus} [status] 
-     * @param {boolean} [withoutTeachers] 
+     * @param {boolean} [withoutTeacher] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CourseInfoApiInterface
      */
-    courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeachers?: boolean, options?: any): AxiosPromise<CourseInfoListResponse>;
+    courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeacher?: boolean, options?: any): AxiosPromise<CourseInfoListResponse>;
 
 }
 
@@ -16317,13 +16317,13 @@ export class CourseInfoApi extends BaseAPI implements CourseInfoApiInterface {
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {CourseSortProps} [sortBy] 
      * @param {CourseStatus} [status] 
-     * @param {boolean} [withoutTeachers] 
+     * @param {boolean} [withoutTeacher] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CourseInfoApi
      */
-    public courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeachers?: boolean, options?: any) {
-        return CourseInfoApiFp(this.configuration).courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, withoutTeachers, options).then((request) => request(this.axios, this.basePath));
+    public courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeacher?: boolean, options?: any) {
+        return CourseInfoApiFp(this.configuration).courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, withoutTeacher, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
