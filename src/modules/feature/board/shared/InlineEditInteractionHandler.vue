@@ -11,81 +11,66 @@
 	</OnClickOutside>
 </template>
 
-<script lang="ts">
-import { defineComponent, provide, shallowRef } from "vue";
+<script setup lang="ts">
+import { provide, shallowRef } from "vue";
 import { OnClickOutside } from "@vueuse/components";
 import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
 
-export default defineComponent({
-	name: "InlineEditInteractionHandler",
-	components: {
-		OnClickOutside,
-	},
-	props: {
-		isEditMode: {
-			type: Boolean,
-			required: true,
-		},
-	},
-	emits: ["start-edit-mode", "end-edit-mode"],
-	setup(props, { emit }) {
-		const interactionEvent = shallowRef<{ x: number; y: number } | undefined>();
-		provide(InlineEditInteractionEvent, interactionEvent);
+type Props = {
+	isEditMode: boolean;
+};
+const props = defineProps<Props>();
+const emit = defineEmits<{
+	(e: "start-edit-mode"): void;
+	(e: "end-edit-mode"): void;
+}>();
 
-		const isDatePicker = (target: HTMLElement | SVGElement): boolean | void => {
-			return !!target.closest(".v-date-picker");
-		};
+const interactionEvent = shallowRef<{ x: number; y: number } | undefined>();
+provide(InlineEditInteractionEvent, interactionEvent);
 
-		const isFileElementLink = (target: HTMLElement | SVGElement): boolean => {
-			const linkTestId = target
-				.closest("a")
-				?.attributes.getNamedItem("data-testid")?.value;
+const isDatePicker = (target: HTMLElement | SVGElement): boolean | void => {
+	return !!target.closest(".v-date-picker");
+};
 
-			return linkTestId === "board-file-element-edit-menu-download";
-		};
+const isFileElementLink = (target: HTMLElement | SVGElement): boolean => {
+	const linkTestId = target
+		.closest("a")
+		?.attributes.getNamedItem("data-testid")?.value;
 
-		const isListItem = (target: HTMLElement | SVGElement): boolean => {
-			if (target instanceof SVGElement) return false;
+	return linkTestId === "board-file-element-edit-menu-download";
+};
 
-			return target.className?.includes("v-list-item");
-		};
+const isListItem = (target: HTMLElement | SVGElement): boolean => {
+	if (target instanceof SVGElement) return false;
 
-		const isAllowedTarget = (event: MouseEvent): boolean => {
-			const target = event.target as HTMLElement | SVGElement;
-			if (!(target instanceof HTMLElement) && !(target instanceof SVGElement))
-				return true;
+	return target.className?.includes("v-list-item");
+};
 
-			const disallowedConditions = [
-				isListItem,
-				isDatePicker,
-				isFileElementLink,
-			];
+const isAllowedTarget = (event: MouseEvent): boolean => {
+	const target = event.target as HTMLElement | SVGElement;
+	if (!(target instanceof HTMLElement) && !(target instanceof SVGElement))
+		return true;
 
-			return target && disallowedConditions.every((fn) => !fn(target));
-		};
+	const disallowedConditions = [isListItem, isDatePicker, isFileElementLink];
 
-		const onClickOutside = (event: MouseEvent) => {
-			if (props.isEditMode && isAllowedTarget(event)) {
-				emit("end-edit-mode");
-			}
-		};
+	return target && disallowedConditions.every((fn) => !fn(target));
+};
 
-		const onDoubleClick = (event: MouseEvent) => {
-			if (!props.isEditMode) {
-				interactionEvent.value = { x: event.x, y: event.y };
-				emit("start-edit-mode");
-			}
-		};
-		const onKeydownEscape = () => {
-			if (props.isEditMode) {
-				emit("end-edit-mode");
-			}
-		};
-		return {
-			onClickOutside,
-			onDoubleClick,
-			onKeydownEscape,
-		};
-	},
-});
+const onClickOutside = (event: MouseEvent) => {
+	if (props.isEditMode && isAllowedTarget(event)) {
+		emit("end-edit-mode");
+	}
+};
+
+const onDoubleClick = (event: MouseEvent) => {
+	if (!props.isEditMode) {
+		interactionEvent.value = { x: event.x, y: event.y };
+		emit("start-edit-mode");
+	}
+};
+const onKeydownEscape = () => {
+	if (props.isEditMode) {
+		emit("end-edit-mode");
+	}
+};
 </script>

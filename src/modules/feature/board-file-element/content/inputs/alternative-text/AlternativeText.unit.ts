@@ -8,10 +8,10 @@ import AlternativeText from "./AlternativeText.vue";
 
 describe("AlternativeText", () => {
 	const mountSetup = () => {
-		const alternativeText = "test text";
+		const alternativeText: string | undefined = "test text";
 
 		const wrapper = mount(AlternativeText, {
-			props: { alternativeText },
+			props: { alternativeText, isEditMode: true },
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
@@ -24,7 +24,7 @@ describe("AlternativeText", () => {
 		const alternativeText = "test text";
 
 		const wrapper = shallowMount(AlternativeText, {
-			props: { alternativeText },
+			props: { alternativeText, isEditMode: true },
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 

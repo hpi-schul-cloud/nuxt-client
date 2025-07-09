@@ -159,18 +159,15 @@
 		</svg>
 	</div>
 </template>
-<script>
-export default {
-	name: "NotFoundSvg",
-	props: {
-		fill: {
-			type: String,
-			default: "none",
-		},
-		svgWidth: {
-			type: Number,
-			default: 320,
-		},
+<script setup lang="ts">
+defineProps({
+	fill: {
+		type: String,
+		default: "none",
 	},
-};
+	svgWidth: {
+		type: Number,
+		default: 320,
+	},
+});
 </script>
