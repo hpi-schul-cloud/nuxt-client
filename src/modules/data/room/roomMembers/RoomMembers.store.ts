@@ -172,8 +172,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		const member = roomMembers.value.find(
 			(member) => member.userId === currentUserId
 		);
-		if (!member) return false;
-		return member.schoolRoleNames.includes(RoleName.Student);
+
+		return member?.schoolRoleNames.includes(RoleName.Student);
 	});
 
 	const loadSchoolList = async () => {
