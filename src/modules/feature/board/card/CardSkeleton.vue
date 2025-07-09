@@ -7,16 +7,9 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-	name: "CardSkeleton",
-	props: {
-		height: { type: Number, required: true },
-	},
-	setup() {
-		return {};
-	},
-});
+<script setup lang="ts">
+type Props = {
+	height: number;
+};
+defineProps<Props>();
 </script>

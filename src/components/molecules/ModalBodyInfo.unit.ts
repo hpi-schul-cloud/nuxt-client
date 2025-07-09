@@ -1,4 +1,4 @@
-import ModalBodyInfo from "./ModalBodyInfo";
+import ModalBodyInfo from "./ModalBodyInfo.vue";
 import { shallowMount } from "@vue/test-utils";
 
 describe("@/components/molecules/ModalBodyInfo", () => {
