@@ -37,7 +37,7 @@ export const useRoomAuthorization = () => {
 		canCopyRoom.value =
 			authModule?.getUserPermissions.includes(
 				Permission.SchoolCreateRoom.toLowerCase()
-			) && permissions.includes(Permission.RoomCopyRoom); // TODO-BC-9734: SCHOOL_CREATE_ROOM , ROOM_SHARE_ROOM (according to permission table ROOM_SHARE_ROOM, ROOM_COPY_ROOM needed?)
+			) && permissions.includes(Permission.RoomCopyRoom);
 		canShareRoom.value =
 			authModule?.getUserPermissions.includes(
 				Permission.SchoolCreateRoom.toLowerCase()

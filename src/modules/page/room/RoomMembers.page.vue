@@ -44,7 +44,6 @@
 			</div>
 		</template>
 
-		<!-- TODO-9743: discuss if we want this, this would fix the issue that permissions are not ready when mounting (-> invitations/confirmation tables shortly shown without having permission) -->
 		<VContainer v-if="isLoading">
 			<VSkeletonLoader type="table" class="mt-6" />
 		</VContainer>

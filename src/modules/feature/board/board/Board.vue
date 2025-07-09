@@ -328,11 +328,15 @@ watch(
 	() => focusNodeFromHash()
 );
 
-// TODO-BC-9734: needs to be adjusted, ROOM_LIST_DRAFTS for rooms
+// TODO-BC-9734: needs to be adjusted
 watch(
 	() => isBoardVisible.value,
 	() => {
-		if (!(isBoardVisible.value || isTeacher.value)) {
+		console.log("edit Permission", hasEditPermission.value);
+		// const canAccessBoard = isBoardVisible.value || isTeacher.value;
+		const canAccessBoard = isBoardVisible.value || hasEditPermission.value;
+		console.log("canAccessBoard", canAccessBoard);
+		if (!canAccessBoard) {
 			router.replace({ name: "room-details", params: { id: roomId.value } });
 			applicationErrorModule.setError(
 				createApplicationError(
