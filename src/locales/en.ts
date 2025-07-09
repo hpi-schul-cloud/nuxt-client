@@ -1131,7 +1131,7 @@ export default {
 	"pages.administration.courses.index.add": "Add course",
 	"pages.administration.courses.edit": "Edit course",
 	"pages.administration.courses.withoutTeacher":
-		"Show only courses without teachers",
+		"Only show courses without teachers",
 	"pages.administration.courses.noTeacher": "not available",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronization",

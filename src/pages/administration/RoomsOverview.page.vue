@@ -12,13 +12,12 @@
 			<div class="mt-n6 mb-n3">
 				<v-switch
 					:label="t('pages.administration.courses.withoutTeacher')"
-					:area-label="t('pages.administration.courses.withoutTeacher')"
 					:true-icon="mdiCheck"
 					data-testid="admin-course-without-teacher-checkbox"
 					hide-details
 					:true-value="true"
 					:false-value="false"
-					@update:model-value="onUpdateWithoutTeacherFilter"
+					@update:model-value="() => onUpdateWithoutTeacherFilter"
 				/>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
@@ -60,7 +59,7 @@
 			</template>
 			<template #[`item.classNames`]="{ item }">
 				<span data-testid="admin-rooms-table-class-names">
-					{{ item.classNames?.join(", ") || "" }}
+					{{ joinNamesList(item.classNames) || "" }}
 				</span>
 			</template>
 			<template #[`item.teacherNames`]="{ item }">
@@ -68,7 +67,7 @@
 					v-if="item.teacherNames.length > 0"
 					data-testid="admin-rooms-table-teacher-names"
 				>
-					{{ item.teacherNames?.join(", ") || "" }}
+					{{ joinNamesList(item.teacherNames) }}
 				</span>
 				<span v-else data-testid="admin-rooms-table-teacher-names-empty">
 					<v-icon color="warning" start>
@@ -255,6 +254,7 @@ const route = useRoute();
 const router = useRouter();
 
 const { t } = useI18n();
+useTitle(buildPageTitle(t("pages.administration.rooms.index.title")));
 
 const {
 	fetchCourses,
@@ -279,9 +279,9 @@ const activeTab = computed({
 	},
 });
 
-const onUpdateWithoutTeacherFilter = (withoutTeacher: boolean) => {
+const onUpdateWithoutTeacherFilter = async (withoutTeacher: boolean) => {
 	setWithoutTeachers(withoutTeacher);
-	loadCourseList();
+	await loadCourseList();
 };
 
 const footerProps = {
@@ -299,8 +299,6 @@ const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
 		disabled: true,
 	},
 ]);
-
-useTitle(buildPageTitle(t("pages.administration.rooms.index.title")));
 
 const courseStatus: ComputedRef<CourseStatus> = computed(() => {
 	switch (props.tab) {
@@ -339,6 +337,11 @@ const selectedItem: Ref<CourseInfoDataResponse | undefined> = ref();
 const selectedItemName: ComputedRef<string> = computed(
 	() => selectedItem.value?.name || "???"
 );
+
+const joinNamesList = (names: string[]) => {
+	if (!names || names.length === 0) return;
+	return names.join(", ");
+};
 
 const onClickStartSyncIcon = (selectedCourse: CourseInfoDataResponse) => {
 	selectedItem.value = selectedCourse;
