@@ -116,11 +116,14 @@ const {
 	canLeaveRoom,
 	canCopyRoom,
 	canShareRoom,
+	canListDrafts,
+	canViewRoom,
 } = useRoomAuthorization();
 
+// TODO-BC-9734: Check ROOM_LIST_CONTENT, ROOM_LIST_DRAFTS ?
 const visibleBoards = computed(() =>
-	roomBoards.value?.filter(
-		(board) => board.isVisible || canEditRoomContent.value
+	roomBoards.value?.filter((board) =>
+		board.isVisible ? canViewRoom.value : canListDrafts.value
 	)
 );
 
