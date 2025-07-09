@@ -328,6 +328,7 @@ watch(
 	() => focusNodeFromHash()
 );
 
+// TODO-BC-9734: needs to be adjusted, ROOM_LIST_DRAFTS for rooms
 watch(
 	() => isBoardVisible.value,
 	() => {

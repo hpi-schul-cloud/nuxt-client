@@ -128,6 +128,7 @@ const onCopyBoard = () => {
 };
 
 const onShareBoard = () => {
+	// TODO-BC-9734: Check BOARD_SHARE_BOARD? (hasShareBoardPermission)
 	if (!hasEditPermission.value) return;
 	emit("share:board");
 };
@@ -186,6 +187,8 @@ const calculateWidth = () => {
 };
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
+// TODO-BC-9734: Check BOARD_SHARE_BOARD? (hasShareBoardPermission)
 const isShareEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE
 );
