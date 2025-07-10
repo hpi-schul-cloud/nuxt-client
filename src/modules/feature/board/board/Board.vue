@@ -202,7 +202,7 @@ const {
 	hasCreateToolPermission,
 	hasDeletePermission,
 	hasEditPermission,
-	isTeacher,
+	arePermissionsLoaded,
 } = useBoardPermissions();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
@@ -328,22 +328,19 @@ watch(
 	() => focusNodeFromHash()
 );
 
-// TODO-BC-9734: needs adjustments, at the moment students can't access draft boards
-watch(
-	() => isBoardVisible.value,
-	() => {
-		const canAccessBoard = isBoardVisible.value || isTeacher.value;
-		if (!canAccessBoard) {
-			router.replace({ name: "room-details", params: { id: roomId.value } });
-			applicationErrorModule.setError(
-				createApplicationError(
-					HttpStatusCode.Forbidden,
-					t("components.board.error.403")
-				)
-			);
-		}
+watch([isBoardVisible, arePermissionsLoaded], () => {
+	const canAccessBoard = isBoardVisible.value || hasEditPermission.value;
+
+	if (arePermissionsLoaded?.value && !canAccessBoard) {
+		router.replace({ name: "room-details", params: { id: roomId.value } });
+		applicationErrorModule.setError(
+			createApplicationError(
+				HttpStatusCode.Forbidden,
+				t("components.board.error.403")
+			)
+		);
 	}
-);
+});
 
 const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.copyResult.title.loading")

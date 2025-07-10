@@ -9,6 +9,7 @@ export type BoardPermissionChecks = {
 	hasDeletePermission: Ref<boolean>;
 	isTeacher: Ref<boolean>;
 	isStudent: Ref<boolean>;
+	arePermissionsLoaded: Ref<boolean>;
 };
 
 export const defaultPermissions: BoardPermissionChecks = {
@@ -20,4 +21,5 @@ export const defaultPermissions: BoardPermissionChecks = {
 	hasEditPermission: ref(true),
 	isTeacher: ref(true),
 	isStudent: ref(false),
+	arePermissionsLoaded: ref(false),
 };
