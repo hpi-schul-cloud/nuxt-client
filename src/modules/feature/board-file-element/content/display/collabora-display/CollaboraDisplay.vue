@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import image from "@/assets/img/tldraw.svg";
+import image from "@/assets/img/collabora.svg";
 import { ContentElementBar } from "@ui-board";
 
 const imageSrc = image;

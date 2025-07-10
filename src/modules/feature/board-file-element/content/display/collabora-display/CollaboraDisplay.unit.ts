@@ -1,8 +1,14 @@
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { VImg } from "vuetify/components";
 import CollaboraDisplay from "./CollaboraDisplay.vue";
 
 describe("CollaboraDisplay", () => {
 	const setup = () => {
-		const wrapper = mount(CollaboraDisplay);
+		const wrapper = mount(CollaboraDisplay, {
+			global: {
+				plugins: [createTestingVuetify()],
+			},
+		});
 
 		return { wrapper };
 	};
@@ -13,11 +19,11 @@ describe("CollaboraDisplay", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should render svg", () => {
+	it("should render image", () => {
 		const { wrapper } = setup();
 
-		const svg = wrapper.find("svg");
-		expect(svg.exists()).toBe(true);
-		expect(svg.html()).toContain("svg content to be defined");
+		const vImage = wrapper.findComponent(VImg);
+		expect(vImage.exists()).toBe(true);
+		expect(vImage.props("src")).toBe("Mocked media file");
 	});
 });
