@@ -12,6 +12,7 @@ import {
 } from "@@/tests/test-utils";
 import { RoomColor } from "@/types/room/Room";
 
+// TODO-BC-9734: remove this file, we use the RoomDetails store , so move tests to RoomDetails.state.unit.ts
 jest.mock("@/utils/api");
 const mockedMapAxiosErrorToResponseError = jest.mocked(
 	mapAxiosErrorToResponseError

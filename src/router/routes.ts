@@ -257,7 +257,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: [
 			checkRoomsFeature,
 			roomPermissionGuard(["school_create_room"]),
-		], // TODO-BC-9734: SCHOOL_CREATE_ROOM ?
+		],
 		name: "rooms",
 	},
 	{
@@ -266,7 +266,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: [
 			checkRoomsFeature,
 			createPermissionGuard(["school_create_room"]),
-		], // TODO-BC-9734: SCHOOL_CREATE_ROOM ?
+		],
 		name: "rooms-new",
 	},
 	{
@@ -277,7 +277,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms/:id(${REGEX_ID})/edit`,
 		component: async () => (await import("@page-room")).RoomEditPage,
-		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])], // TODO-BC-9734: SCHOOL_EDIT_ROOM ? ROOM_EDIT_ROOM ?
+		beforeEnter: [checkRoomsFeature],
 		name: "room-edit",
 	},
 	{
@@ -285,7 +285,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: async () => (await import("@page-room")).RoomMembersPage,
 		beforeEnter: [
 			checkRoomsFeature,
-			roomPermissionGuard(["school_create_room"]), // TODO-BC-9734: SCHOOL_CREATE_ROOM ?
+			roomPermissionGuard(["school_create_room"]),
 		],
 		name: "room-members",
 		props: (route: RouteLocationNormalized) => ({

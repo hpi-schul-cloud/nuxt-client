@@ -42,10 +42,7 @@ export const useRoomAuthorization = () => {
 			authModule?.getUserPermissions.includes(
 				Permission.SchoolCreateRoom.toLowerCase()
 			) && permissions.includes(Permission.RoomShareRoom);
-		canEditRoom.value =
-			authModule?.getUserPermissions.includes(
-				Permission.SchoolEditRoom.toLowerCase()
-			) && permissions.includes(Permission.RoomEditRoom);
+		canEditRoom.value = permissions.includes(Permission.RoomEditRoom);
 		canEditRoomContent.value = permissions.includes(Permission.RoomEditContent);
 		canLeaveRoom.value = permissions.includes(Permission.RoomLeaveRoom);
 		canRemoveRoomMembers.value = permissions.includes(
@@ -59,7 +56,7 @@ export const useRoomAuthorization = () => {
 			Permission.StudentList.toLowerCase()
 		);
 		canListDrafts.value = permissions.includes(Permission.RoomListDrafts);
-		canViewRoom.value = permissions.includes(Permission.RoomListContent); // TODO-BC-9734 ROOM_LIST_CONTENT , canViewRoom still good var name?
+		canViewRoom.value = permissions.includes(Permission.RoomListContent);
 	});
 
 	return {

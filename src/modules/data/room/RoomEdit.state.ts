@@ -4,6 +4,7 @@ import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { ref } from "vue";
 
+// TODO-BC-9734: remove this file, we use the RoomDetails store now
 export const useRoomEditState = () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const isLoading = ref(true);

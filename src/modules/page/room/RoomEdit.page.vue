@@ -1,12 +1,15 @@
 <template>
-	<DefaultWireframe max-width="short" :breadcrumbs="breadcrumbs">
+	<DefaultWireframe
+		v-if="!isLoading && canEditRoom"
+		max-width="short"
+		:breadcrumbs="breadcrumbs"
+	>
 		<template #header>
 			<h1 class="text-h3 mb-4" data-testid="page-title">
 				{{ $t("pages.roomDetails.ariaLabels.menu.action.edit") }}
 			</h1>
 		</template>
-		<div v-if="isLoading" />
-		<div v-else>
+		<div>
 			<RoomForm :room="roomData" @save="onSave" @cancel="onCancel" />
 		</div>
 	</DefaultWireframe>
@@ -15,41 +18,54 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { RoomUpdateParams } from "@/types/room/Room";
+import { RoomColor, RoomUpdateParams } from "@/types/room/Room";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useRoomEditState } from "@data-room";
+import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, watch, ref } from "vue";
+import { computed, ComputedRef, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ApiResponseError } from "@/store/types/commons";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { storeToRefs } from "pinia";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
-const { fetchRoom, isLoading, roomData, updateRoom } = useRoomEditState();
+
+const roomDetailsStore = useRoomDetailsStore();
+const { room, isLoading } = storeToRefs(roomDetailsStore);
+const { fetchRoom, updateRoom } = roomDetailsStore;
+const { canEditRoom } = useRoomAuthorization();
+
+const roomData = computed(() => {
+	return {
+		name: room.value?.name ?? "",
+		color: room.value?.color ?? RoomColor.BlueGrey,
+		startDate: room.value?.startDate ?? undefined,
+		endDate: room.value?.endDate ?? undefined,
+	};
+});
 
 const pageTitle = computed(() =>
 	buildPageTitle(`${t("pages.roomEdit.title")}`)
 );
 useTitle(pageTitle);
 
-const initialRoomName = ref("");
+onMounted(async () => {
+	await fetchRoom(route.params.id as string);
 
-watch(
-	() => route.params.id,
-	async () => {
-		await fetchRoom(route.params.id as string);
-
-		initialRoomName.value = roomData.value.name;
-	},
-	{ immediate: true }
-);
+	if (!canEditRoom.value) {
+		router.replace({
+			name: "room-details",
+			params: { id: route.params.id as string },
+		});
+	}
+});
 
 const onSave = async (payload: { room: RoomUpdateParams }) => {
 	try {
@@ -91,7 +107,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 				to: "/rooms",
 			},
 			{
-				title: initialRoomName.value,
+				title: roomData.value.name,
 				to: `/rooms/${route.params.id}`,
 			},
 			{
