@@ -1,5 +1,4 @@
 import {
-	ArchiveFileParams,
 	PreviewStatus as FilePreviewStatus,
 	PreviewWidth as FilePreviewWidth,
 	FileRecordParentType as FileRecordParent,
@@ -8,6 +7,7 @@ import {
 	ParentStatisticResponse,
 	PreviewOutputMimeTypes,
 } from "@/fileStorageApi/v3";
+import type { ArchiveFileParams } from "@/fileStorageApi/v3/models";
 
 export type FileRecord = FileRecordResponse;
 export type ParentStatistic = ParentStatisticResponse;
