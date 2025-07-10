@@ -328,8 +328,9 @@ watch(
 	() => focusNodeFromHash()
 );
 
+// TODO-BC-9734: needs adjustments, at the moment students can't access draft boards
 watch(
-	() => isBoardVisible,
+	() => isBoardVisible.value,
 	() => {
 		const canAccessBoard = isBoardVisible.value || isTeacher.value;
 		if (!canAccessBoard) {
