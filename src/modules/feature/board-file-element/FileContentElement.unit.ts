@@ -4,9 +4,11 @@ import {
 	PreviewWidth,
 } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { envsFactory } from "@@/tests/test-utils";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -18,6 +20,7 @@ import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
 import { computed, nextTick } from "vue";
+import { VCard } from "vuetify/components";
 import FileContentElement from "./FileContentElement.vue";
 import FileContent from "./content/FileContent.vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
@@ -35,13 +38,13 @@ jest.mock("@feature-board");
 jest.mock("./content/alert/useFileAlerts.composable");
 
 describe("FileContentElement", () => {
-	const notifierModule = createModuleMocks(NotifierModule);
 	const getWrapper = (props: {
 		element: FileElementResponse;
 		isEditMode: boolean;
 		columnIndex: number;
 		rowIndex: number;
 		elementIndex: number;
+		isCollaboraEnabled?: boolean;
 	}) => {
 		const menu = "slot-menu";
 
@@ -51,10 +54,22 @@ describe("FileContentElement", () => {
 			alerts: computed(() => []),
 		});
 
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {
+				...envsFactory.build(),
+				FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED:
+					props.isCollaboraEnabled ?? false,
+			},
+		});
+		const notifierModule = createModuleMocks(NotifierModule);
+
 		const wrapper = shallowMount(FileContentElement, {
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-			provide: {
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
 			},
 			props,
 			slots: {
@@ -139,6 +154,8 @@ describe("FileContentElement", () => {
 				scanStatus?: FileRecordScanStatus;
 				previewStatus?: PreviewStatus;
 				isUploading?: boolean;
+				isCollaboraEnabled?: boolean;
+				mimeType?: string;
 			}) => {
 				const element = fileElementResponseFactory.build();
 				const fileRecordResponse = fileRecordFactory.build({
@@ -146,6 +163,7 @@ describe("FileContentElement", () => {
 						props?.scanStatus ?? FileRecordScanStatus.PENDING,
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
 					isUploading: props?.isUploading,
+					mimeType: props?.mimeType ?? "application/pdf",
 				});
 
 				const fileStorageApiMock =
@@ -177,6 +195,7 @@ describe("FileContentElement", () => {
 					columnIndex: 0,
 					rowIndex: 1,
 					elementIndex: 2,
+					isCollaboraEnabled: props?.isCollaboraEnabled,
 				});
 
 				return {
@@ -354,6 +373,244 @@ describe("FileContentElement", () => {
 					expect(fileProperties).toEqual(expectedFileProperties);
 				});
 			});
+
+			describe("when collabora feature is enabled and mime typ is collabora type", () => {
+				it("should add aria label to v-card", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: true,
+						mimeType: "application/vnd.oasis.opendocument.text",
+					});
+
+					const card = wrapper.findComponent(VCard);
+
+					expect(card.attributes("aria-label")).toBe(
+						"components.cardElement.fileElement.openOfficeDocument"
+					);
+				});
+
+				describe("when card is clicked", () => {
+					it("should open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: true,
+							mimeType: "application/vnd.oasis.opendocument.text",
+						});
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						card.trigger("click");
+
+						expect(windowOpenSpy).toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+						windowOpenSpy.mockRestore();
+					});
+				});
+
+				describe("when card is focused and enter is pressed", () => {
+					it("should open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: true,
+							mimeType: "application/vnd.oasis.opendocument.text",
+						});
+
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						await card.trigger("keydown.enter");
+
+						expect(windowOpenSpy).toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+
+						windowOpenSpy.mockRestore();
+					});
+				});
+			});
+
+			describe("when collabora feature is not enabled and mime typ is collabora type", () => {
+				it("should not add aria label to v-card", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "application/vnd.oasis.opendocument.text",
+					});
+
+					const card = wrapper.findComponent(VCard);
+
+					expect(card.attributes("aria-label")).toBe(undefined);
+				});
+
+				describe("when card is clicked", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: false,
+							mimeType: "application/vnd.oasis.opendocument.text",
+						});
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						card.trigger("click");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+						windowOpenSpy.mockRestore();
+					});
+				});
+
+				describe("when card is focused and enter is pressed", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: false,
+							mimeType: "application/vnd.oasis.opendocument.text",
+						});
+
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						await card.trigger("keydown.enter");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+
+						windowOpenSpy.mockRestore();
+					});
+				});
+			});
+
+			describe("when collabora feature is enabled and mime typ is not collabora type", () => {
+				it("should not add aria label to v-card", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: true,
+						mimeType: "application/pdf",
+					});
+
+					const card = wrapper.findComponent(VCard);
+
+					expect(card.attributes("aria-label")).toBe(undefined);
+				});
+
+				describe("when card is clicked", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: true,
+							mimeType: "application/pdf",
+						});
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						card.trigger("click");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+						windowOpenSpy.mockRestore();
+					});
+				});
+
+				describe("when card is focused and enter is pressed", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: true,
+							mimeType: "application/pdf",
+						});
+
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						await card.trigger("keydown.enter");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+
+						windowOpenSpy.mockRestore();
+					});
+				});
+			});
+
+			describe("when collabora feature is not enabled and mime typ is not collabora type", () => {
+				it("should not add aria label to v-card", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "application/pdf",
+					});
+
+					const card = wrapper.findComponent(VCard);
+
+					expect(card.attributes("aria-label")).toBe(undefined);
+				});
+
+				describe("when card is clicked", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: false,
+							mimeType: "application/pdf",
+						});
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						card.trigger("click");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+						windowOpenSpy.mockRestore();
+					});
+				});
+
+				describe("when card is focused and enter is pressed", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: false,
+							mimeType: "application/pdf",
+						});
+
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						await card.trigger("keydown.enter");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+
+						windowOpenSpy.mockRestore();
+					});
+				});
+			});
 		});
 	});
 
@@ -506,6 +763,8 @@ describe("FileContentElement", () => {
 				scanStatus?: FileRecordScanStatus;
 				previewStatus?: PreviewStatus;
 				isUploading?: boolean;
+				isCollaboraEnabled?: boolean;
+				mimeType?: string;
 			}) => {
 				const element = fileElementResponseFactory.build();
 				document.body.setAttribute("data-app", "true");
@@ -515,6 +774,7 @@ describe("FileContentElement", () => {
 						props?.scanStatus ?? FileRecordScanStatus.PENDING,
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
 					isUploading: props?.isUploading,
+					mimeType: props?.mimeType ?? "application/pdf",
 				});
 
 				const fileStorageApiMock =
@@ -546,6 +806,7 @@ describe("FileContentElement", () => {
 					columnIndex: 0,
 					rowIndex: 1,
 					elementIndex: 2,
+					isCollaboraEnabled: props?.isCollaboraEnabled,
 				});
 
 				return {
@@ -706,6 +967,244 @@ describe("FileContentElement", () => {
 					expectedFileProperties.isDownloadAllowed = false;
 					expectedFileProperties.previewUrl = undefined;
 					expect(fileProperties).toEqual(expectedFileProperties);
+				});
+			});
+
+			describe("when collabora feature is enabled and mime typ is collabora type", () => {
+				it("should add aria label to v-card", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: true,
+						mimeType: "application/vnd.oasis.opendocument.text",
+					});
+
+					const card = wrapper.findComponent(VCard);
+
+					expect(card.attributes("aria-label")).toBe(
+						"components.cardElement.fileElement.openOfficeDocument"
+					);
+				});
+
+				describe("when card is clicked", () => {
+					it("should open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: true,
+							mimeType: "application/vnd.oasis.opendocument.text",
+						});
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						card.trigger("click");
+
+						expect(windowOpenSpy).toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+						windowOpenSpy.mockRestore();
+					});
+				});
+
+				describe("when card is focused and enter is pressed", () => {
+					it("should open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: true,
+							mimeType: "application/vnd.oasis.opendocument.text",
+						});
+
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						await card.trigger("keydown.enter");
+
+						expect(windowOpenSpy).toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+
+						windowOpenSpy.mockRestore();
+					});
+				});
+			});
+
+			describe("when collabora feature is not enabled and mime typ is collabora type", () => {
+				it("should not add aria label to v-card", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "application/vnd.oasis.opendocument.text",
+					});
+
+					const card = wrapper.findComponent(VCard);
+
+					expect(card.attributes("aria-label")).toBe(undefined);
+				});
+
+				describe("when card is clicked", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: false,
+							mimeType: "application/vnd.oasis.opendocument.text",
+						});
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						card.trigger("click");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+						windowOpenSpy.mockRestore();
+					});
+				});
+
+				describe("when card is focused and enter is pressed", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: false,
+							mimeType: "application/vnd.oasis.opendocument.text",
+						});
+
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						await card.trigger("keydown.enter");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+
+						windowOpenSpy.mockRestore();
+					});
+				});
+			});
+
+			describe("when collabora feature is enabled and mime typ is not collabora type", () => {
+				it("should not add aria label to v-card", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: true,
+						mimeType: "application/pdf",
+					});
+
+					const card = wrapper.findComponent(VCard);
+
+					expect(card.attributes("aria-label")).toBe(undefined);
+				});
+
+				describe("when card is clicked", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: true,
+							mimeType: "application/pdf",
+						});
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						card.trigger("click");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+						windowOpenSpy.mockRestore();
+					});
+				});
+
+				describe("when card is focused and enter is pressed", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: true,
+							mimeType: "application/pdf",
+						});
+
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						await card.trigger("keydown.enter");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+
+						windowOpenSpy.mockRestore();
+					});
+				});
+			});
+
+			describe("when collabora feature is not enabled and mime typ is not collabora type", () => {
+				it("should not add aria label to v-card", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "application/pdf",
+					});
+
+					const card = wrapper.findComponent(VCard);
+
+					expect(card.attributes("aria-label")).toBe(undefined);
+				});
+
+				describe("when card is clicked", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: false,
+							mimeType: "application/pdf",
+						});
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						card.trigger("click");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+						windowOpenSpy.mockRestore();
+					});
+				});
+
+				describe("when card is focused and enter is pressed", () => {
+					it("should not open collabora url in new tab", async () => {
+						const { wrapper, fileRecordResponse } = setup({
+							isCollaboraEnabled: false,
+							mimeType: "application/pdf",
+						});
+
+						const card = wrapper.findComponent(VCard);
+
+						const windowOpenSpy = jest
+							.spyOn(window, "open")
+							.mockImplementation();
+
+						await card.trigger("keydown.enter");
+
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(
+							`/collabora/${fileRecordResponse.id}`,
+							"_blank"
+						);
+
+						windowOpenSpy.mockRestore();
+					});
 				});
 			});
 		});
