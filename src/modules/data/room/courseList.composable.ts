@@ -44,7 +44,7 @@ export const useCourseList = () => {
 		pagination.value = paginationData;
 	};
 
-	const setwithoutTeacher = (withoutTeacherValue: boolean) => {
+	const setWithoutTeacher = (withoutTeacherValue: boolean) => {
 		withoutTeacher.value = withoutTeacherValue;
 	};
 
@@ -112,12 +112,13 @@ export const useCourseList = () => {
 		error,
 		key,
 		sortOrder,
+		withoutTeacher,
 		setPagination,
 		setPage,
 		setSortBy,
 		setSortOrder,
 		fetchCourses,
 		deleteCourse,
-		setwithoutTeacher,
+		setWithoutTeacher,
 	};
 };

@@ -268,7 +268,7 @@ const {
 	setPage,
 	setPagination,
 	deleteCourse,
-	setwithoutTeacher,
+	setWithoutTeacher,
 } = useCourseList();
 
 const activeTab = computed({
@@ -281,7 +281,7 @@ const activeTab = computed({
 });
 
 const onUpdateWithoutTeacherFilter = async (withoutTeacher: boolean) => {
-	setwithoutTeacher(withoutTeacher);
+	setWithoutTeacher(withoutTeacher);
 	await loadCourseList();
 };
 
