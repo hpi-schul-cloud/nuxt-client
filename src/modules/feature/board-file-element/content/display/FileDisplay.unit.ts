@@ -38,7 +38,7 @@ describe("FileDisplay", () => {
 				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 					getEnv: {
 						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED: false,
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
 					},
 				});
 
@@ -101,7 +101,7 @@ describe("FileDisplay", () => {
 				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 					getEnv: {
 						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED: false,
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
 					},
 				});
 
@@ -165,7 +165,7 @@ describe("FileDisplay", () => {
 				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 					getEnv: {
 						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED: false,
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
 					},
 				});
 
@@ -223,7 +223,7 @@ describe("FileDisplay", () => {
 				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 					getEnv: {
 						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED: false,
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
 					},
 				});
 
@@ -283,7 +283,7 @@ describe("FileDisplay", () => {
 				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 					getEnv: {
 						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED: false,
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
 					},
 				});
 
@@ -342,7 +342,7 @@ describe("FileDisplay", () => {
 				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 					getEnv: {
 						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED: false,
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
 					},
 				});
 
@@ -396,7 +396,7 @@ describe("FileDisplay", () => {
 				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 					getEnv: {
 						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED: true,
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: true,
 					},
 				});
 
@@ -446,7 +446,7 @@ describe("FileDisplay", () => {
 				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 					getEnv: {
 						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED: false,
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
 					},
 				});
 
@@ -495,7 +495,7 @@ describe("FileDisplay", () => {
 				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 					getEnv: {
 						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED: false,
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
 					},
 				});
 

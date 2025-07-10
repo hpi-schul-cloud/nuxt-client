@@ -212,10 +212,7 @@ const hasCollaboraMimeType = computed(() => {
 	return isCollaboraMimeType(fileRecord.value.mimeType);
 });
 const isCollaboraEnabled = computed(() => {
-	return (
-		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED ===
-		true
-	);
+	return envConfigModule.getEnv.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED;
 });
 const cardAriaLabel = computed(() => {
 	if (isCollaboraEnabled.value && hasCollaboraMimeType.value) {

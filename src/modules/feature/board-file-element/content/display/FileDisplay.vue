@@ -93,7 +93,7 @@ const hasCollaboraMimeType = computed(() => {
 });
 
 const isCollaboraEnabled = computed(() => {
-	return envConfig.getEnv.FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED;
+	return envConfig.getEnv.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED;
 });
 
 const onAddAlert = (alert: FileAlert) => {

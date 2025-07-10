@@ -1549,7 +1549,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_COLUMN_BOARD_OFFICE_DOCUMENT_EDIT_ENABLED: boolean;
+    FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
