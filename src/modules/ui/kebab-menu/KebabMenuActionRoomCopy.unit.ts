@@ -13,6 +13,6 @@ describe("KebabMenuActionRoomCopy", () => {
 		});
 
 		expect(wrapper.exists()).toBe(true);
-		expect(wrapper.text()).toBe("common.actions.copyRoom");
+		expect(wrapper.text()).toBe("common.actions.duplicate");
 	});
 });
