@@ -6,11 +6,11 @@ export default {
 	"common.actions.confirm": "Bestätigen",
 	"common.actions.continue": "Weiter",
 	"common.actions.copy": "Kopieren",
+	"common.actions.duplicate": "Duplizieren",
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
 	"common.actions.download": "Herunterladen",
-	"common.actions.copyRoom": "Duplizieren",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
 	"common.actions.import": "Importieren",
@@ -670,7 +670,7 @@ export default {
 	"components.molecules.copyResult.etherpadCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.failedCopy":
-		"Der Kopiervorgang konnte nicht abgeschlossen werden.",
+		"Das Duplizieren konnte nicht abgeschlossen werden.",
 	"components.molecules.copyResult.fileCopy.error":
 		"Folgende Dateien konnten nicht kopiert werden und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.geogebraCopy.info":
@@ -702,22 +702,22 @@ export default {
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.course.successfullyCopied":
-		"Alle Elemente wurden erfolgreich kopiert.",
+		"Alle Elemente wurden erfolgreich dupliziert.",
 	"components.molecules.copyResult.board.successfullyCopied":
-		"Bereich erfolgreich kopiert.",
+		"Bereich erfolgreich dupliziert.",
 	"components.molecules.copyResult.task.successfullyCopied":
-		"Aufgabe erfolgreich kopiert.",
+		"Aufgabe erfolgreich dupliziert.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
-		"Thema erfolgreich kopiert.",
+		"Thema erfolgreich dupliziert.",
 	"components.molecules.copyResult.timeoutCopy":
-		"Der Kopiervorgang kann bei großen Dateien länger dauern. Die Inhalte werden in Kürze verfügbar sein.",
+		"Das Duplizieren kann bei großen Dateien länger dauern. Die Inhalte werden in Kürze verfügbar sein.",
 	"components.molecules.copyResult.timeoutSuccess":
-		"Der Kopiervorgang wurde abgeschlossen.",
-	"components.molecules.copyResult.title.failure": "Kopieren fehlgeschlagen",
-	"components.molecules.copyResult.title.loading": "Kopiervorgang läuft...",
+		"Das Duplizieren wurde abgeschlossen.",
+	"components.molecules.copyResult.title.failure": "Duplizieren fehlgeschlagen",
+	"components.molecules.copyResult.title.loading": "Duplizieren läuft...",
 	"components.molecules.copyResult.title.partial":
 		"Wichtige Kopier-Informationen",
-	"components.molecules.copyResult.title.success": "Kopieren erfolgreich",
+	"components.molecules.copyResult.title.success": "Duplizieren erfolgreich",
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
@@ -1029,7 +1029,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"Im nächsten Schritt wird eine Kopie des Raumes erstellt.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"Folgende Inhalte werden nicht kopiert:",
+		"Folgende Inhalte werden nicht übernommen:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Raum-Mitglieder und Berechtigungen",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Inhalte aus Etherpads",
@@ -1807,13 +1807,13 @@ export default {
 		"{itemType}, Link, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.copy.course.message.copied":
-		"Der Kurs wurde erfolgreich kopiert.",
+		"Der Kurs wurde erfolgreich dupliziert.",
 	"pages.room.copy.course.message.partiallyCopied":
-		"Der Kurs konnte nicht vollständig kopiert werden.",
+		"Der Kurs konnte nicht vollständig dupliziert werden.",
 	"pages.room.copy.lesson.message.copied":
-		"Das Thema wurde erfolgreich kopiert.",
+		"Das Thema wurde erfolgreich dupliziert.",
 	"pages.room.copy.task.message.copied":
-		"Die Aufgabe wurde erfolgreich kopiert.",
+		"Die Aufgabe wurde erfolgreich dupliziert.",
 	"pages.room.dialog.boardLayout.title": "Ansicht wählen",
 	"pages.room.dialog.boardLayout.singleColumn": "einspaltig",
 	"pages.room.dialog.boardLayout.multiColumn": "mehrspaltig",
