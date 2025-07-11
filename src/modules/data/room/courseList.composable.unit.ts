@@ -44,32 +44,6 @@ describe("courseList.composable", () => {
 		jest.clearAllMocks();
 	});
 
-	describe("setWithoutTeacher", () => {
-		const setup = () => {
-			const composable = mountComposable(() => useCourseList(), {
-				global: {
-					provide: {
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					},
-					plugins: [createTestingI18n()],
-					mocks: i18nMock,
-				},
-			});
-
-			return {
-				composable,
-			};
-		};
-
-		it("should set value", () => {
-			const { composable } = setup();
-
-			composable.setWithoutTeacher(true);
-
-			expect(composable.withoutTeacher.value).toEqual(true);
-		});
-	});
-
 	describe("setSortBy", () => {
 		const setup = () => {
 			const composable = mountComposable(() => useCourseList(), {
