@@ -228,6 +228,7 @@ describe("courseList.composable", () => {
 
 				expect(useCourseInfoApiMock.loadCoursesForSchool).toHaveBeenCalledWith(
 					"current",
+					false,
 					10,
 					0,
 					undefined,

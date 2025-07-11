@@ -1,5 +1,5 @@
 import {
-	ArchiveFileParams,
+	type ArchiveFileParams,
 	PreviewStatus as FilePreviewStatus,
 	PreviewWidth as FilePreviewWidth,
 	FileRecordParentType as FileRecordParent,

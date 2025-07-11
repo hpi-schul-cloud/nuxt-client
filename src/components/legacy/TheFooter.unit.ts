@@ -4,7 +4,8 @@ import FilePathsModule from "@/store/filePaths";
 import { envsFactory } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import TheFooter from "./TheFooter";
+import TheFooter from "./TheFooter.vue";
+import { THEME_KEY } from "@/utils/inject";
 
 describe("@/components/legacy/TheFooter.vue", () => {
 	beforeEach(() => {
@@ -15,19 +16,23 @@ describe("@/components/legacy/TheFooter.vue", () => {
 	});
 
 	const setup = () => {
+		const theme = {
+			name: "instance name",
+		};
+
 		const wrapper = shallowMount(TheFooter, {
 			global: {
 				plugins: [createTestingI18n()],
-				mocks: { $theme },
+				provide: {
+					[THEME_KEY.valueOf()]: {
+						name: theme.name,
+					},
+				},
 				stubs: ["base-link"],
 			},
 		});
 
-		return { wrapper };
-	};
-
-	const $theme = {
-		name: "test",
+		return { wrapper, theme };
 	};
 
 	it.skip("Link to accessibility statement is set correctly", () => {
@@ -40,7 +45,7 @@ describe("@/components/legacy/TheFooter.vue", () => {
 
 		const { wrapper } = setup();
 
-		expect(wrapper.vm.links[5].href).toStrictEqual("dummy-url.org");
+		expect(wrapper.html()).toContain("dummy-url.org");
 	});
 
 	it.skip("Env-Variable sets the report accessibility email correctly", () => {
@@ -54,11 +59,12 @@ describe("@/components/legacy/TheFooter.vue", () => {
 		});
 		envConfigModule.setEnvs(envs);
 
-		const { wrapper } = setup();
+		const { wrapper, theme } = setup();
+		const links = wrapper.findAllComponents("base-link-stub");
 
-		expect(wrapper.vm.links).toHaveLength(7);
+		expect(links).toHaveLength(7);
 		expect(wrapper.find(".bottom-line span").text()).toBe(
-			"©" + new Date().getFullYear() + " " + $theme.name
+			"©" + new Date().getFullYear() + " " + theme.name
 		);
 	});
 });

@@ -23,6 +23,7 @@ export const useCourseList = () => {
 	const page: Ref<number> = ref(1);
 	const key: Ref<CourseSortProps | undefined> = ref();
 	const sortOrder: Ref<"asc" | "desc"> = ref("asc");
+	const withoutTeacher: Ref<boolean> = ref(false);
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
@@ -51,6 +52,7 @@ export const useCourseList = () => {
 		try {
 			const response = await loadCoursesForSchool(
 				courseStatusQueryType,
+				withoutTeacher.value,
 				pagination.value.limit,
 				pagination.value.skip,
 				key.value,
@@ -106,6 +108,7 @@ export const useCourseList = () => {
 		error,
 		key,
 		sortOrder,
+		withoutTeacher,
 		setPagination,
 		setPage,
 		setSortBy,

@@ -1,52 +1,39 @@
 <template>
-	<!-- HINT for Devs – dBildungscloud (default theme) footer is the only one with he link 'Secuurity'; the other instances are not using this link.  -->
+	<!-- HINT for Devs – dBildungscloud (default theme) footer is the only one with he link 'Security'; the other instances are not using this link.  -->
 	<footer class="footer">
 		<div>
-			<template v-for="(link, index) in links">
-				<span v-if="index !== 0" :key="index"> - </span>
-				<template v-if="!link.innerlinks">
-					<base-link :key="link.text" class="footer-link" v-bind="link">{{
-						link.text
-					}}</base-link>
-				</template>
-				<template v-else>
-					<span :key="link.text">{{ link.text }}: </span>
-					<template
-						v-for="(innerlink, innerindex) in link.innerlinks"
-						:key="innerlink.text"
-					>
-						<span v-if="innerindex !== 0" :key="`${index}-${innerindex}`">
-							/
-						</span>
-						<base-link v-bind="innerlink" class="footer-link">{{
-							innerlink.text
-						}}</base-link>
-					</template>
-				</template>
+			<template v-for="(link, index) in links" :key="link.text">
+				<span v-if="index !== 0"> - </span>
+				<base-link class="footer-link" v-bind="link">
+					{{ link.text }}
+				</base-link>
 			</template>
 		</div>
 		<p class="bottom-line">
-			<span>©{{ currentYear }} {{ $theme.name }}</span>
+			<span>©{{ currentYear }} {{ theme.name }}</span>
 			| Made with
 			<span class="heart">❤</span> in Potsdam |
 			{{ $t("components.legacy.footer.powered_by") }}
-			<base-link href="https://lokalise.com" target="_blank" :no-styles="true"
-				><img
+			<a href="https://lokalise.com" target="_blank">
+				<img
 					class="poweredby-logo"
 					src="@/assets/img/lokalise_logo.svg"
 					:alt="$t('components.legacy.footer.lokalise_logo_alt')"
-			/></base-link>
+				/>
+			</a>
 		</p>
 	</footer>
 </template>
 
 <script setup lang="ts">
-import { authModule, envConfigModule } from "@/store";
+import { envConfigModule } from "@/store";
+import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const school = computed(() => authModule.getSchool);
+const theme = injectStrict(THEME_KEY);
+
 const currentYear = computed(() => new Date().getFullYear());
 const links = computed(() => {
 	const baseLinks = [
@@ -94,21 +81,11 @@ const links = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
-
 .footer {
 	width: 100%;
 	padding: 0 var(--space-md);
 	margin: var(--space-lg) 0 var(--space-md);
 	text-align: center;
-
-	@include breakpoint(tablet) {
-		max-width: calc(100vw - var(--sidebar-width-tablet));
-	}
-
-	@include breakpoint(desktop) {
-		max-width: calc(100vw - var(--sidebar-width));
-	}
 }
 
 .top-line {
