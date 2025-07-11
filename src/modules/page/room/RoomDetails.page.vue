@@ -33,7 +33,7 @@
 		<BoardGrid :boards="visibleBoards" />
 		<ConfirmationDialog />
 		<SelectBoardLayoutDialog
-			v-if="boardLayoutsEnabled && canCreateRoom"
+			v-if="boardLayoutsEnabled && canEditRoomContent"
 			v-model="boardLayoutDialogIsOpen"
 			@select="onCreateBoard"
 		/>
@@ -111,17 +111,18 @@ const pageTitle = computed(() =>
 useTitle(pageTitle);
 
 const {
-	canCreateRoom,
 	canDeleteRoom,
 	canEditRoomContent,
 	canLeaveRoom,
 	canCopyRoom,
 	canShareRoom,
+	canListDrafts,
+	canViewRoom,
 } = useRoomAuthorization();
 
 const visibleBoards = computed(() =>
-	roomBoards.value?.filter(
-		(board) => board.isVisible || canEditRoomContent.value
+	roomBoards.value?.filter((board) =>
+		board.isVisible ? canViewRoom.value : canListDrafts.value
 	)
 );
 
@@ -149,7 +150,6 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const fabItems = computed(() => {
-	if (!canCreateRoom.value) return undefined;
 	if (!canEditRoomContent.value) return undefined;
 
 	const actions = [];

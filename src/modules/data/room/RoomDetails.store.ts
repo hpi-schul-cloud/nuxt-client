@@ -1,4 +1,8 @@
-import { RoomBoardItem, RoomDetails } from "@/types/room/Room";
+import {
+	RoomBoardItem,
+	RoomDetails,
+	RoomUpdateParams,
+} from "@/types/room/Room";
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import {
@@ -61,6 +65,23 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		return boardId;
 	};
 
+	/**
+	 * @throws ApiResponseError | ApiValidationError
+	 */
+	const updateRoom = async (
+		id: string,
+		params: RoomUpdateParams
+	): Promise<void> => {
+		isLoading.value = true;
+		try {
+			await roomApi.roomControllerUpdateRoom(id, params);
+		} catch (error) {
+			throw mapAxiosErrorToResponseError(error);
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
 	const resetState = () => {
 		isLoading.value = true;
 		room.value = undefined;
@@ -80,5 +101,6 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		room,
 		roomVariant,
 		roomBoards,
+		updateRoom,
 	};
 });
