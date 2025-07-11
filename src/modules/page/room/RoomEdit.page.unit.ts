@@ -2,46 +2,26 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { useRoomEditState } from "@data-room";
 import { RoomEditPage } from "@page-room";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { useRoute, useRouter } from "vue-router";
 import { RoomUpdateParams, RoomColor } from "@/types/room/Room";
 import { RoomForm } from "@feature-room";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createTestingPinia } from "@pinia/testing";
+import { mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 
-const roomIdMock = "test-1234";
+jest.mock("vue-router");
+const useRouteMock = useRoute as jest.Mock;
 
-const roomDataMock = {
-	value: {
-		id: roomIdMock,
-		name: "test",
-		color: "blue",
-	},
-};
-
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn().mockReturnValue({
-		push: jest.fn(),
-	}),
-	useRoute: jest.fn().mockReturnValue({
-		params: {
-			id: roomIdMock,
-		},
-	}),
-}));
-
-jest.mock("@data-room", () => ({
-	useRoomEditState: jest.fn().mockReturnValue({
-		isLoading: false,
-		roomData: roomDataMock,
-		updateRoom: jest.fn(),
-		fetchRoom: jest.fn(),
-	}),
-}));
+jest.mock("@data-room/roomAuthorization.composable");
+const roomAuthorization = jest.mocked(useRoomAuthorization);
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -53,106 +33,169 @@ const roomParams: RoomUpdateParams = {
 };
 
 describe("@pages/RoomEdit.page.vue", () => {
-	const setup = () => {
+	let roomPermissions: DeepMocked<ReturnType<typeof useRoomAuthorization>>;
+	let useRouterMock: DeepMocked<ReturnType<typeof useRouter>>;
+
+	beforeEach(() => {
+		roomPermissions = createMock<ReturnType<typeof useRoomAuthorization>>();
+		roomAuthorization.mockReturnValue(roomPermissions);
+
+		useRouterMock = createMock<ReturnType<typeof useRouter>>();
+		jest.mocked(useRouter).mockReturnValue(useRouterMock);
+		useRouterMock.replace = jest.fn();
+	});
+
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
+	const setup = (
+		options?: Partial<{
+			isLoading: boolean;
+		}>
+	) => {
 		const notifierModule = createModuleMocks(NotifierModule);
+		const room = roomFactory.build();
+
+		useRouteMock.mockImplementation(() => ({
+			params: {
+				id: room.id,
+			},
+		}));
+
 		const wrapper = mount(RoomEditPage, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					createTestingPinia({
+						initialState: {
+							roomDetailsStore: {
+								isLoading: options?.isLoading ?? false,
+								room,
+							},
+						},
+					}),
+				],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 		});
 
-		const { isLoading, updateRoom } = useRoomEditState();
+		const { isLoading, updateRoom } =
+			mockedPiniaStoreTyping(useRoomDetailsStore);
 		const roomFormComponent = wrapper.findComponent(RoomForm);
 
 		return {
 			wrapper,
 			isLoading,
 			useRoute,
-			router: useRouter(),
 			updateRoom,
 			roomFormComponent,
+			room,
 		};
 	};
 
 	it("should be rendered in DOM", () => {
 		const { wrapper } = setup();
+
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should have roomFormComponent", () => {
-		const { roomFormComponent } = setup();
-		expect(roomFormComponent).toBeDefined();
-	});
+	describe("while loading", () => {
+		it("should not render DefaultWireframe", () => {
+			const { wrapper } = setup({ isLoading: true });
 
-	it("should have breadcrumbs prop in DefaultWireframe component", async () => {
-		const { wrapper } = setup();
-
-		await nextTick();
-		const defaultWireframe = wrapper.findComponent({
-			name: "DefaultWireframe",
-		});
-		const breadcrumbsProp: Breadcrumb[] = defaultWireframe.props().breadcrumbs;
-		const breadcrumb = breadcrumbsProp.find(
-			(breadcrumb: Breadcrumb) => breadcrumb.title === roomDataMock.value.name
-		);
-
-		expect(breadcrumb?.to).toContain(roomIdMock);
-	});
-
-	it("should call updateRoom with correct parameters on save event", async () => {
-		const { updateRoom, roomFormComponent } = setup();
-
-		roomFormComponent.vm.$emit("save", { room: roomParams });
-
-		expect(updateRoom).toHaveBeenCalledWith(roomIdMock, roomParams);
-	});
-
-	it("should navigate to 'room-details' with correct room id on save", async () => {
-		const { roomFormComponent, router } = setup();
-
-		roomFormComponent.vm.$emit("save", roomParams);
-
-		expect(router.push).toHaveBeenCalledWith({
-			name: "room-details",
-			params: { id: roomIdMock },
+			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+			expect(defaultWireframe.exists()).toBe(false);
 		});
 	});
 
-	it("should navigate to 'rooms' on cancel", async () => {
-		const { roomFormComponent, router } = setup();
+	describe("loading is done", () => {
+		describe("when user has no edit room permissions", () => {
+			it("should not render DefaultWireframe", () => {
+				roomPermissions.canEditRoom = ref(false);
+				const { wrapper } = setup({ isLoading: false });
+				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 
-		roomFormComponent.vm.$emit("cancel", roomParams);
+				expect(defaultWireframe.exists()).toBe(false);
+			});
 
-		expect(router.push).toHaveBeenCalledWith({
-			name: "room-details",
-			params: { id: roomIdMock },
-		});
-	});
+			it("should navigate to room details page", async () => {
+				roomPermissions.canEditRoom = ref(false);
 
-	it("should render roomForm as component is not loading  ", async () => {
-		(useRoomEditState as jest.Mock).mockReturnValueOnce({
-			isLoading: false,
-			roomData: roomDataMock,
-			updateRoom: jest.fn(),
-			fetchRoom: jest.fn(),
-		});
+				const { room } = setup({ isLoading: false });
+				await nextTick();
 
-		const { roomFormComponent } = setup();
-		expect(roomFormComponent).toBeDefined();
-	});
-
-	it("should not render roomForm as component is loading  ", async () => {
-		(useRoomEditState as jest.Mock).mockReturnValueOnce({
-			isLoading: true,
-			roomData: roomDataMock,
-			updateRoom: jest.fn(),
-			fetchRoom: jest.fn(),
+				expect(useRouterMock.replace).toHaveBeenCalledWith({
+					name: "room-details",
+					params: { id: room.id },
+				});
+			});
 		});
 
-		const { roomFormComponent } = setup();
-		expect(roomFormComponent.exists()).toEqual(false);
+		describe("when user has edit room permissions ", () => {
+			beforeEach(() => {
+				roomPermissions.canEditRoom = ref(true);
+			});
+			it("should render DefaultWireframe", () => {
+				const { wrapper } = setup();
+				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+				expect(defaultWireframe.exists()).toBe(true);
+			});
+
+			it("should have roomFormComponent", () => {
+				const { roomFormComponent } = setup();
+				expect(roomFormComponent.exists()).toBe(true);
+			});
+
+			it("should have breadcrumbs prop in DefaultWireframe component", async () => {
+				const { wrapper, room } = setup();
+
+				await nextTick();
+				const defaultWireframe = wrapper.findComponent({
+					name: "DefaultWireframe",
+				});
+				const breadcrumbsProp: Breadcrumb[] =
+					defaultWireframe.props().breadcrumbs;
+				const breadcrumb = breadcrumbsProp.find(
+					(breadcrumb: Breadcrumb) => breadcrumb.title === room.name
+				);
+
+				expect(breadcrumb?.to).toContain(room.id);
+			});
+
+			it("should call updateRoom with correct parameters on save event", async () => {
+				const { updateRoom, roomFormComponent, room } = setup();
+
+				roomFormComponent.vm.$emit("save", { room: roomParams });
+
+				expect(updateRoom).toHaveBeenCalledWith(room.id, roomParams);
+			});
+
+			it("should navigate to 'room-details' with correct room id on save", async () => {
+				const { roomFormComponent, room } = setup();
+
+				roomFormComponent.vm.$emit("save", { room: roomParams });
+				await nextTick();
+
+				expect(useRouterMock.push).toHaveBeenCalledWith({
+					name: "room-details",
+					params: { id: room.id },
+				});
+			});
+
+			it("should navigate to 'rooms' on cancel", async () => {
+				const { roomFormComponent, room } = setup();
+
+				roomFormComponent.vm.$emit("cancel");
+
+				expect(useRouterMock.push).toHaveBeenCalledWith({
+					name: "room-details",
+					params: { id: room.id },
+				});
+			});
+		});
 	});
 });

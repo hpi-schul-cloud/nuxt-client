@@ -23,7 +23,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, watch } from "vue";
+import { computed, ComputedRef, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
