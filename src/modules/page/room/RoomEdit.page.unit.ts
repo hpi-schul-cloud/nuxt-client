@@ -83,7 +83,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			},
 		});
 
-		const { isLoading, updateRoom } =
+		const { isLoading, updateRoom, fetchRoom } =
 			mockedPiniaStoreTyping(useRoomDetailsStore);
 		const roomFormComponent = wrapper.findComponent(RoomForm);
 
@@ -92,6 +92,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			isLoading,
 			useRoute,
 			updateRoom,
+			fetchRoom,
 			roomFormComponent,
 			room,
 		};
@@ -101,6 +102,12 @@ describe("@pages/RoomEdit.page.vue", () => {
 		const { wrapper } = setup();
 
 		expect(wrapper.exists()).toBe(true);
+	});
+
+	it("should fetch room details on mount", () => {
+		const { fetchRoom, room } = setup();
+
+		expect(fetchRoom).toHaveBeenCalledWith(room.id);
 	});
 
 	describe("while loading", () => {
