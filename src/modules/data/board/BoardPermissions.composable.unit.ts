@@ -181,7 +181,7 @@ describe("BoardPermissions.composable", () => {
 			setupAllStores({
 				userRoles: [RoleName.Teacher],
 				userPermissions: [Permission.ContextToolAdmin],
-				boardPermissions: [Permission.BoardEdit], // TODO-BC-9734: add BOARD_SHARE_BOARD permission when backend is ready
+				boardPermissions: [Permission.BoardEdit, Permission.BoardShareBoard],
 			});
 
 			const {

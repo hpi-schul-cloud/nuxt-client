@@ -39,7 +39,9 @@ const boardPermissions = (): BoardPermissionChecks => {
 		);
 		hasEditPermission.value = permissions.includes(Permission.BoardEdit);
 		hasDeletePermission.value = permissions.includes(Permission.BoardEdit);
-		hasShareBoardPermission.value = true; // TODO-BC-9734: add BOARD_SHARE_BOARD when backend is ready
+		hasShareBoardPermission.value = permissions.includes(
+			Permission.BoardShareBoard
+		);
 	});
 
 	return {
