@@ -19,6 +19,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 	const hasCreateToolPermission = ref(false);
 	const hasEditPermission = ref(false);
 	const hasDeletePermission = ref(false);
+	const hasShareBoardPermission = ref(false);
 
 	watchEffect(() => {
 		const boardPermissions = toValue(board)?.permissions ?? [];
@@ -38,7 +39,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 		);
 		hasEditPermission.value = permissions.includes(Permission.BoardEdit);
 		hasDeletePermission.value = permissions.includes(Permission.BoardEdit);
-		// hasShareBoardPermission.value = permissions.includes(Permission.BoardShare); // TODO-BC-9734: BOARD_SHARE_BOARD
+		hasShareBoardPermission.value = true; // TODO-BC-9734: add BOARD_SHARE_BOARD when backend is ready
 	});
 
 	return {
@@ -48,6 +49,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasCreateToolPermission,
 		hasEditPermission,
 		hasDeletePermission,
+		hasShareBoardPermission,
 		isTeacher,
 		isStudent,
 		arePermissionsLoaded,

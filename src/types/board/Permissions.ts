@@ -7,6 +7,7 @@ export type BoardPermissionChecks = {
 	hasCreateToolPermission: Ref<boolean>;
 	hasEditPermission: Ref<boolean>;
 	hasDeletePermission: Ref<boolean>;
+	hasShareBoardPermission: Ref<boolean>;
 	isTeacher: Ref<boolean>;
 	isStudent: Ref<boolean>;
 	arePermissionsLoaded: Ref<boolean>;
@@ -19,6 +20,7 @@ export const defaultPermissions: BoardPermissionChecks = {
 	hasCreateToolPermission: ref(true),
 	hasDeletePermission: ref(true),
 	hasEditPermission: ref(true),
+	hasShareBoardPermission: ref(true),
 	isTeacher: ref(true),
 	isStudent: ref(false),
 	arePermissionsLoaded: ref(false),
