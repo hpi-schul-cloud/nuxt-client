@@ -44,10 +44,6 @@ export const useCourseList = () => {
 		pagination.value = paginationData;
 	};
 
-	const setWithoutTeacher = (withoutTeacherValue: boolean) => {
-		withoutTeacher.value = withoutTeacherValue;
-	};
-
 	const fetchCourses = async (
 		courseStatusQueryType: CourseStatus
 	): Promise<void> => {
@@ -119,6 +115,5 @@ export const useCourseList = () => {
 		setSortOrder,
 		fetchCourses,
 		deleteCourse,
-		setWithoutTeacher,
 	};
 };

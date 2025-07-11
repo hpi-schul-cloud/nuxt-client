@@ -11,13 +11,14 @@
 			</h1>
 			<div class="mt-n6 mb-n3">
 				<v-switch
+					v-model="withoutTeacher"
 					:label="t('pages.administration.courses.withoutTeacher')"
 					:true-icon="mdiCheck"
 					data-testid="admin-course-without-teacher-checkbox"
 					hide-details
 					:true-value="true"
 					:false-value="false"
-					@update:model-value="() => onUpdateWithoutTeacherFilter"
+					@update:model-value="onUpdateWithoutTeacherFilter"
 				/>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
@@ -263,12 +264,12 @@ const {
 	page,
 	isLoading,
 	courses,
+	withoutTeacher,
 	setSortBy,
 	setSortOrder,
 	setPage,
 	setPagination,
 	deleteCourse,
-	setWithoutTeacher,
 } = useCourseList();
 
 const activeTab = computed({
@@ -280,8 +281,7 @@ const activeTab = computed({
 	},
 });
 
-const onUpdateWithoutTeacherFilter = async (withoutTeacher: boolean) => {
-	setWithoutTeacher(withoutTeacher);
+const onUpdateWithoutTeacherFilter = async () => {
 	await loadCourseList();
 };
 
