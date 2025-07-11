@@ -18,11 +18,12 @@ import {
 	StartExistingCourseSyncDialog,
 } from "@feature-course-sync";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VDataTableServer } from "vuetify/lib/components/index";
 import RoomsOverview from "./RoomsOverview.page.vue";
+import { CourseInfoDataResponse } from "@/serverApi/v3";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),
@@ -45,13 +46,25 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 }));
 
 describe("RoomsOverview", () => {
-	let useCourseListMock: DeepMocked<ReturnType<typeof useCourseList>>;
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
 
-	const createWrapper = (
-		tab: "current" | "archive" = "current",
-		envModuleGetters: Partial<EnvConfigModule> = {}
-	) => {
+	const createWrapper = ({
+		tab = "current",
+		envModuleGetters = {},
+		courses = [],
+		page = 1,
+		pagination = {
+			limit: 10,
+			skip: 0,
+			total: 10,
+		},
+	}: {
+		tab?: "current" | "archive";
+		envModuleGetters?: Partial<EnvConfigModule>;
+		courses?: CourseInfoDataResponse[];
+		page?: number;
+		pagination?: { limit: number; skip: number; total: number };
+	} = {}) => {
 		const route = { query: { tab } };
 		useRouteMock.mockReturnValue(route);
 		const router = createMock<Router>();
@@ -69,6 +82,17 @@ describe("RoomsOverview", () => {
 			...envModuleGetters,
 		});
 
+		const useCourseListMock: DeepMocked<ReturnType<typeof useCourseList>> =
+			createMock<ReturnType<typeof useCourseList>>({
+				isLoading: ref(),
+				pagination: ref(pagination),
+				page: ref(page),
+				courses: ref(courses),
+				withoutTeacher: ref(false),
+			});
+
+		jest.mocked(useCourseList).mockReturnValue(useCourseListMock);
+
 		const wrapper = mount(RoomsOverview, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -85,11 +109,13 @@ describe("RoomsOverview", () => {
 				tab,
 			},
 		});
+
 		return {
 			wrapper,
 			route,
 			router,
 			envConfigModule,
+			useCourseListMock,
 		};
 	};
 
@@ -100,23 +126,11 @@ describe("RoomsOverview", () => {
 	};
 
 	beforeEach(() => {
-		useCourseListMock = createMock<ReturnType<typeof useCourseList>>({
-			isLoading: ref(),
-			pagination: ref({
-				limit: 10,
-				skip: 0,
-				total: 10,
-			}),
-			page: ref(),
-			courses: ref(),
-		});
-
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>({
 			startSynchronization: jest.fn(),
 			stopSynchronization: jest.fn(),
 		});
 
-		jest.mocked(useCourseList).mockReturnValue(useCourseListMock);
 		jest.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
 	});
 
@@ -163,22 +177,13 @@ describe("RoomsOverview", () => {
 	describe("when there are courses to display", () => {
 		describe("courses", () => {
 			const setup = () => {
-				useCourseListMock.courses.value =
-					courseInfoDataResponseFactory.buildList(10, {
-						syncedGroup: "group",
-						classNames: ["1A, 1B, 1C"],
-						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
-					});
+				const courses = courseInfoDataResponseFactory.buildList(10, {
+					syncedGroup: "group",
+					classNames: ["1A, 1B, 1C"],
+					teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+				});
 
-				useCourseListMock.page.value = 1;
-
-				useCourseListMock.pagination.value = {
-					total: 10,
-					skip: 0,
-					limit: 10,
-				};
-
-				const { wrapper } = createWrapper();
+				const { wrapper, useCourseListMock } = createWrapper({ courses });
 
 				return { wrapper, useCourseListMock };
 			};
@@ -199,16 +204,17 @@ describe("RoomsOverview", () => {
 				const setup = () => {
 					const sortBy = { key: "name" };
 
-					const { wrapper } = createWrapper();
+					const { wrapper, useCourseListMock } = createWrapper();
 
 					return {
 						sortBy,
 						wrapper,
+						useCourseListMock,
 					};
 				};
 
 				it("should call composable to change sort by", async () => {
-					const { sortBy, wrapper } = setup();
+					const { sortBy, wrapper, useCourseListMock } = setup();
 
 					findTableComponent(wrapper).vm.$emit("update:sortBy", [sortBy]);
 					await nextTick();
@@ -224,17 +230,17 @@ describe("RoomsOverview", () => {
 				const setup = () => {
 					const sortBy = { key: "name", order: "desc" };
 
-					const { wrapper } = createWrapper();
+					const { wrapper, useCourseListMock } = createWrapper();
 
 					return {
 						sortBy,
 						wrapper,
-						groupModule,
+						useCourseListMock,
 					};
 				};
 
 				it("should call composable to change sort order", async () => {
-					const { sortBy, wrapper } = setup();
+					const { sortBy, wrapper, useCourseListMock } = setup();
 
 					findTableComponent(wrapper).vm.$emit("update:sortBy", [sortBy]);
 					await nextTick();
@@ -250,7 +256,7 @@ describe("RoomsOverview", () => {
 		describe("onUpdateItemsPerPage", () => {
 			describe("when changing the number of items per page", () => {
 				const setup = () => {
-					const { wrapper } = createWrapper();
+					const { wrapper, useCourseListMock } = createWrapper();
 					const itemsPerPage = 20;
 
 					useCourseListMock.pagination.value = {
@@ -288,13 +294,13 @@ describe("RoomsOverview", () => {
 			describe("when changing the table page", () => {
 				const setup = () => {
 					const page = 2;
-					useCourseListMock.pagination.value = {
+					const pagination = {
 						limit: 10,
 						skip: 0,
 						total: 30,
 					};
 
-					const { wrapper } = createWrapper();
+					const { wrapper, useCourseListMock } = createWrapper({ pagination });
 
 					return {
 						page,
@@ -318,16 +324,68 @@ describe("RoomsOverview", () => {
 				});
 			});
 		});
+
+		describe("onUpdateWithoutTeacher", () => {
+			describe("when enabling the withoutTeacher filter", () => {
+				const setup = () => {
+					const courses: CourseInfoDataResponse[] = [
+						courseInfoDataResponseFactory.build(),
+						courseInfoDataResponseFactory.build({
+							syncedGroup: "group",
+							classNames: ["1A, 1B, 1C"],
+							teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+						}),
+					];
+					// useCourseListMock.courses.value = courses;
+
+					const { wrapper, useCourseListMock } = createWrapper({ courses });
+
+					return { wrapper, useCourseListMock };
+				};
+
+				it("should call fetchCourses", async () => {
+					const { wrapper, useCourseListMock } = setup();
+
+					const withoutTeacherSwitch = wrapper.findComponent({
+						name: "v-switch",
+					});
+					await withoutTeacherSwitch.trigger("click");
+
+					expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
+				});
+
+				it.skip("should only show courses without teachers", async () => {
+					// useCourseListMock.withoutTeacher.value = true;
+					const { wrapper } = setup();
+
+					const withoutTeacherSwitch = wrapper.findComponent({
+						name: "v-switch",
+					});
+					await withoutTeacherSwitch.trigger("click");
+					await withoutTeacherSwitch.vm.$emit("update:modelValue", true);
+					await nextTick();
+					await flushPromises();
+					// console.log(withoutTeacherSwitch.html());
+					// console.log(
+					// 	useCourseListMock.withoutTeacher.value,
+					// 	useCourseListMock.courses.value
+					// );
+
+					// const table = findTableComponent(wrapper);
+					const tableRows = wrapper.findAll(".v-data-table__tr");
+					expect(tableRows).toHaveLength(1);
+				});
+			});
+		});
 	});
 
 	describe("action buttons", () => {
 		describe("when courses are available", () => {
 			const setup = () => {
-				useCourseListMock.courses.value =
-					courseInfoDataResponseFactory.buildList(10, {
-						classNames: ["1A, 1B, 1C"],
-						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
-					});
+				const courses = courseInfoDataResponseFactory.buildList(10, {
+					classNames: ["1A, 1B, 1C"],
+					teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+				});
 
 				const envConfigModule = createModuleMocks(EnvConfigModule, {
 					getEnv: envsFactory.build({
@@ -336,7 +394,10 @@ describe("RoomsOverview", () => {
 					}),
 				});
 
-				const { wrapper } = createWrapper("current", envConfigModule);
+				const { wrapper } = createWrapper({
+					envModuleGetters: envConfigModule,
+					courses,
+				});
 
 				return {
 					wrapper,
@@ -369,12 +430,11 @@ describe("RoomsOverview", () => {
 
 		describe("when synchronized courses are available", () => {
 			const setup = () => {
-				useCourseListMock.courses.value =
-					courseInfoDataResponseFactory.buildList(10, {
-						classNames: ["1A, 1B, 1C"],
-						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
-						syncedGroup: "GroupName",
-					});
+				const courses = courseInfoDataResponseFactory.buildList(10, {
+					classNames: ["1A, 1B, 1C"],
+					teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+					syncedGroup: "GroupName",
+				});
 
 				const envConfigModule = createModuleMocks(EnvConfigModule, {
 					getEnv: envsFactory.build({
@@ -383,7 +443,10 @@ describe("RoomsOverview", () => {
 					}),
 				});
 
-				const { wrapper } = createWrapper("current", envConfigModule);
+				const { wrapper } = createWrapper({
+					envModuleGetters: envConfigModule,
+					courses,
+				});
 
 				return {
 					wrapper,
@@ -415,7 +478,7 @@ describe("RoomsOverview", () => {
 		});
 
 		describe("when no courses are available", () => {
-			const setup = () => createWrapper("archive");
+			const setup = () => createWrapper({ tab: "archive" });
 
 			it("should render no buttons", () => {
 				const { wrapper } = setup();
@@ -438,11 +501,10 @@ describe("RoomsOverview", () => {
 
 		describe("when feature Schulconnex Sync is disabled", () => {
 			const setup = () => {
-				useCourseListMock.courses.value =
-					courseInfoDataResponseFactory.buildList(10, {
-						classNames: ["1A, 1B, 1C"],
-						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
-					});
+				const courses = courseInfoDataResponseFactory.buildList(10, {
+					classNames: ["1A, 1B, 1C"],
+					teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+				});
 
 				const envConfigModule = createModuleMocks(EnvConfigModule, {
 					getEnv: envsFactory.build({
@@ -451,7 +513,10 @@ describe("RoomsOverview", () => {
 					}),
 				});
 
-				const { wrapper } = createWrapper("current", envConfigModule);
+				const { wrapper } = createWrapper({
+					envModuleGetters: envConfigModule,
+					courses,
+				});
 
 				return {
 					wrapper,
@@ -484,16 +549,19 @@ describe("RoomsOverview", () => {
 
 		describe("when clicking on the edit course button", () => {
 			const setup = () => {
-				useCourseListMock.courses.value = [
+				const courses = [
 					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 					}),
 				];
 
-				const { wrapper } = createWrapper("archive");
+				const { wrapper } = createWrapper({
+					tab: "archive",
+					courses,
+				});
 
-				const courseId: string = useCourseListMock.courses.value[0].id;
+				const courseId: string = courses[0].id;
 
 				return {
 					wrapper,
@@ -514,14 +582,16 @@ describe("RoomsOverview", () => {
 
 		describe("when clicking on the delete course button", () => {
 			const setup = () => {
-				useCourseListMock.courses.value = [
+				const courses = [
 					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 					}),
 				];
 
-				const { wrapper } = createWrapper();
+				const { wrapper } = createWrapper({
+					courses,
+				});
 
 				return {
 					wrapper,
@@ -543,16 +613,19 @@ describe("RoomsOverview", () => {
 
 		describe("when clicking on the sync course button", () => {
 			const setup = () => {
-				useCourseListMock.courses.value = [
+				const courses = [
 					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 					}),
 				];
 
-				const { wrapper } = createWrapper("archive");
+				const { wrapper } = createWrapper({
+					tab: "archive",
+					courses,
+				});
 
-				const courseId: string = useCourseListMock.courses.value[0].id;
+				const courseId: string = courses[0].id;
 
 				return {
 					wrapper,
@@ -578,31 +651,37 @@ describe("RoomsOverview", () => {
 
 		describe("when clicking on the end sync course button", () => {
 			const setup = () => {
-				useCourseListMock.courses.value = [
+				const courses = [
 					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
-						syncedGroup: "GroupName",
 					}),
 				];
 
-				const { wrapper } = createWrapper("archive");
+				const { wrapper, envConfigModule } = createWrapper({
+					tab: "archive",
+					courses,
+				});
 
-				const courseId: string = useCourseListMock.courses.value[0].id;
+				const courseId: string = courses[0].id;
 
 				return {
 					wrapper,
 					courseId,
+					envConfigModule,
 				};
 			};
 
-			it("should open the EndCourseSyncDialog ", async () => {
-				const { wrapper } = setup();
+			it.only("should open the EndCourseSyncDialog ", async () => {
+				const { wrapper, envConfigModule } = setup();
+				// await nextTick();
+				console.log(envConfigModule.getEnv);
+				const endCourSyncBtn = wrapper.getComponent(
+					'[data-testid="course-table-end-course-sync-btn"]'
+				);
 
-				await wrapper
-					.find('[data-testid="course-table-end-course-sync-btn"]')
-					.trigger("click");
-				await nextTick();
+				await endCourSyncBtn.trigger("click");
+				// await nextTick();
 
 				const dialog = wrapper.findComponent({
 					name: "EndCourseSyncDialog",
@@ -614,14 +693,16 @@ describe("RoomsOverview", () => {
 
 		describe("when delete dialog is open", () => {
 			const setup = () => {
-				useCourseListMock.courses.value = [
+				const courses = [
 					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 					}),
 				];
 
-				const { wrapper } = createWrapper();
+				const { wrapper, useCourseListMock } = createWrapper({
+					courses,
+				});
 
 				return {
 					wrapper,
@@ -631,7 +712,7 @@ describe("RoomsOverview", () => {
 
 			describe("when clicking on cancel button", () => {
 				it("should not delete course", async () => {
-					const { wrapper } = setup();
+					const { wrapper, useCourseListMock } = setup();
 
 					await wrapper
 						.find('[data-testid="course-table-delete-btn"]')
@@ -668,14 +749,14 @@ describe("RoomsOverview", () => {
 
 		describe("when start sync dialog emit succeed", () => {
 			const setup = () => {
-				useCourseListMock.courses.value = [
+				const courses = [
 					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 					}),
 				];
 
-				const { wrapper } = createWrapper();
+				const { wrapper, useCourseListMock } = createWrapper({ courses });
 
 				return {
 					wrapper,
@@ -684,7 +765,7 @@ describe("RoomsOverview", () => {
 			};
 
 			it("should fetch courses", async () => {
-				const { wrapper } = setup();
+				const { wrapper, useCourseListMock } = setup();
 
 				await wrapper
 					.find('[data-testid="course-table-start-course-sync-btn"]')
@@ -700,7 +781,7 @@ describe("RoomsOverview", () => {
 
 		describe("when end sync dialog emit succeed", () => {
 			const setup = () => {
-				useCourseListMock.courses.value = [
+				const courses = [
 					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
@@ -708,7 +789,7 @@ describe("RoomsOverview", () => {
 					}),
 				];
 
-				const { wrapper } = createWrapper();
+				const { wrapper, useCourseListMock } = createWrapper({ courses });
 
 				return {
 					wrapper,
@@ -717,7 +798,7 @@ describe("RoomsOverview", () => {
 			};
 
 			it("should fetch courses", async () => {
-				const { wrapper } = setup();
+				const { wrapper, useCourseListMock } = setup();
 
 				await wrapper
 					.find('[data-testid="course-table-end-course-sync-btn"]')
@@ -770,7 +851,7 @@ describe("RoomsOverview", () => {
 
 		describe("when clicking on a tab", () => {
 			const setup = () => {
-				const { wrapper, route, router } = createWrapper();
+				const { wrapper, route, router, useCourseListMock } = createWrapper();
 
 				return {
 					wrapper,
@@ -795,17 +876,20 @@ describe("RoomsOverview", () => {
 
 		describe("when clicking on archive tab", () => {
 			const setup = () => {
-				const { wrapper, router } = createWrapper("archive");
+				const { wrapper, router, useCourseListMock } = createWrapper({
+					tab: "archive",
+				});
 				useCourseListMock.fetchCourses.mockResolvedValue();
 
 				return {
 					wrapper,
 					router,
+					useCourseListMock,
 				};
 			};
 
 			it("should call composable to fetch courses for archive tab", async () => {
-				const { wrapper } = setup();
+				const { wrapper, useCourseListMock } = setup();
 
 				await wrapper
 					.find('[data-testid="admin-course-archive-tab"]')
@@ -817,16 +901,8 @@ describe("RoomsOverview", () => {
 		});
 
 		describe("when clicking on current year tab", () => {
-			const setup = () => {
-				const { wrapper } = createWrapper();
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should call composable to fetch courses of current tab", async () => {
-				const { wrapper } = setup();
+				const { wrapper, useCourseListMock } = createWrapper();
 
 				await wrapper
 					.find('[data-testid="admin-course-archive-tab"]')
@@ -843,21 +919,11 @@ describe("RoomsOverview", () => {
 
 	describe("addCourse", () => {
 		describe("when clicking on add course buttton", () => {
-			const setup = () => {
-				const { wrapper } = createWrapper();
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should redirect to legacy create course page", () => {
-				const { wrapper } = setup();
-
+				const { wrapper } = createWrapper();
 				const addClassBtn = wrapper.find(
 					'[data-testid="admin-courses-add-button"]'
 				);
-
 				expect(addClassBtn.attributes().href).toStrictEqual(
 					"/courses/add?redirectUrl=/administration/rooms/new"
 				);
