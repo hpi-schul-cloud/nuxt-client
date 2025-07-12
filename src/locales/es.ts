@@ -984,6 +984,11 @@ export default {
 	"components.roomForm.labels.timePeriod": "Periodo de tiempo",
 	"components.roomForm.labels.timePeriod.from": "Periodo de tiempo desde",
 	"components.roomForm.labels.timePeriod.to": "Periodo de tiempo hasta",
+	"components.roomForm.labels.videoConference.title": "Videoconferencias",
+	"components.roomForm.labels.videoConference.label":
+		"Permitir videoconferencias para editores",
+	"components.roomForm.labels.videoConference.helperText":
+		"Los miembros de la sala con autorización para «Editar» pueden añadir e iniciar videoconferencias.",
 	"components.roomForm.validation.generalSaveError":
 		"Se ha producido un error al guardar. Por favor, compruebe sus entradas e inténtelo de nuevo.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":

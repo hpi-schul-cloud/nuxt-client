@@ -14,6 +14,7 @@ export const useRoomEditState = () => {
 			color: room.color,
 			startDate: room.startDate,
 			endDate: room.endDate,
+			features: room.features,
 		};
 	};
 
@@ -22,6 +23,7 @@ export const useRoomEditState = () => {
 		color: RoomColor.BlueGrey,
 		startDate: undefined,
 		endDate: undefined,
+		features: [],
 	});
 
 	const fetchRoom = async (id: string) => {

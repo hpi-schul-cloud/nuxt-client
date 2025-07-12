@@ -266,6 +266,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     BaseView = 'BASE_VIEW',
     BoardView = 'BOARD_VIEW',
     BoardEdit = 'BOARD_EDIT',
+    BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -2836,6 +2837,12 @@ export interface CreateRoomBodyParams {
      * @memberof CreateRoomBodyParams
      */
     endDate?: string;
+    /**
+     * The features of the room
+     * @type {Array<RoomFeatures>}
+     * @memberof CreateRoomBodyParams
+     */
+    features: Array<RoomFeatures>;
 }
 /**
  * 
@@ -7597,6 +7604,7 @@ export enum Permission {
     BaseView = 'BASE_VIEW',
     BoardView = 'BOARD_VIEW',
     BoardEdit = 'BOARD_EDIT',
+    BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -8243,7 +8251,22 @@ export interface RoomDetailsResponse {
      * @memberof RoomDetailsResponse
      */
     permissions: Array<Permission>;
+    /**
+     * 
+     * @type {Array<RoomFeatures>}
+     * @memberof RoomDetailsResponse
+     */
+    features: Array<RoomFeatures>;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum RoomFeatures {
+    EditorManageVideoconference = 'editor_manage_videoconference'
+}
+
 /**
  * 
  * @export
@@ -10402,6 +10425,12 @@ export interface UpdateRoomBodyParams {
      * @memberof UpdateRoomBodyParams
      */
     endDate?: string;
+    /**
+     * The features of the room
+     * @type {Array<RoomFeatures>}
+     * @memberof UpdateRoomBodyParams
+     */
+    features: Array<RoomFeatures>;
 }
 /**
  * 
