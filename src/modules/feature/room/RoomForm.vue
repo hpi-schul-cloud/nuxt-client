@@ -49,6 +49,7 @@
 						roomData.features.includes(RoomFeatures.EditorManageVideoconference)
 					"
 					class="video-conference-checkbox"
+					data-testid="room-video-conference-checkbox"
 					:label="t('components.roomForm.labels.videoConference.label')"
 					:hide-details="true"
 					@click="onToggleVideoConferenceFeature"
