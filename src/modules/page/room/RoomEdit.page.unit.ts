@@ -21,6 +21,7 @@ const roomDataMock = {
 		name: "test",
 		color: "blue",
 	},
+	features: [],
 };
 
 jest.mock("vue-router", () => ({

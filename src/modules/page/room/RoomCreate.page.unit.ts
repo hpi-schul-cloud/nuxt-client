@@ -24,10 +24,12 @@ jest.mock("@data-room/RoomCreate.state.ts", () => ({
 			id: "123",
 			name: "test",
 			color: "blue",
+			features: [],
 		}),
 		roomData: {
 			name: "test-room-data",
 			color: "blue",
+			features: [],
 		},
 	}),
 }));
