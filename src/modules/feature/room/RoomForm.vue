@@ -40,7 +40,7 @@
 					/>
 				</div>
 			</div>
-			<div v-if="canCreateRoom" class="mb-16">
+			<div class="mb-16">
 				<label class="mb-2">
 					{{ t("components.roomForm.labels.videoConference.title") }}
 				</label>
@@ -97,7 +97,6 @@ import { computed, PropType, unref } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { RoomFeatures } from "@/serverApi/v3";
-import { useRoomAuthorization } from "@data-room";
 
 const props = defineProps({
 	room: {
@@ -109,8 +108,6 @@ const emit = defineEmits(["save", "cancel"]);
 
 const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
-
-const { canCreateRoom } = useRoomAuthorization();
 
 const roomData = computed(() => props.room);
 const todayISO = computed(() =>
