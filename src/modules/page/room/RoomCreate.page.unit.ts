@@ -39,6 +39,7 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 const roomParams: RoomCreateParams = {
 	name: "test",
 	color: RoomColor.Blue,
+	features: [],
 };
 
 describe("@pages/RoomCreate.page.vue", () => {
