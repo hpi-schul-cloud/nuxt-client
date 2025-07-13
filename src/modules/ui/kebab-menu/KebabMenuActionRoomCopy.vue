@@ -3,7 +3,7 @@
 		:icon="mdiContentCopy"
 		data-testid="kebab-menu-action-room-copy"
 	>
-		{{ t("common.actions.copyRoom") }}
+		{{ t("common.actions.duplicate") }}
 	</KebabMenuAction>
 </template>
 

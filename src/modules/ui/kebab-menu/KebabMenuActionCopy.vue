@@ -1,6 +1,6 @@
 <template>
 	<KebabMenuAction :icon="mdiContentCopy" data-testid="kebab-menu-action-copy">
-		{{ t("common.actions.copy") }}
+		{{ t("common.actions.duplicate") }}
 	</KebabMenuAction>
 </template>
 
