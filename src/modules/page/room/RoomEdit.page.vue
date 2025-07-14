@@ -23,7 +23,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted } from "vue";
+import { computed, ComputedRef, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
@@ -42,13 +42,11 @@ const { room, isLoading } = storeToRefs(roomDetailsStore);
 const { fetchRoom, updateRoom } = roomDetailsStore;
 const { canEditRoom } = useRoomAuthorization();
 
-const roomData = computed(() => {
-	return {
-		name: room.value?.name ?? "",
-		color: room.value?.color ?? RoomColor.BlueGrey,
-		startDate: room.value?.startDate ?? undefined,
-		endDate: room.value?.endDate ?? undefined,
-	};
+const roomData = ref<RoomUpdateParams>({
+	name: room.value?.name ?? "",
+	color: room.value?.color ?? RoomColor.BlueGrey,
+	startDate: room.value?.startDate ?? undefined,
+	endDate: room.value?.endDate ?? undefined,
 });
 
 const pageTitle = computed(() =>
@@ -58,6 +56,15 @@ useTitle(pageTitle);
 
 onMounted(async () => {
 	await fetchRoom(route.params.id as string);
+
+	if (room.value) {
+		roomData.value = {
+			name: room.value.name,
+			color: room.value.color,
+			startDate: room.value.startDate,
+			endDate: room.value.endDate,
+		};
+	}
 
 	if (!canEditRoom.value) {
 		router.replace({
