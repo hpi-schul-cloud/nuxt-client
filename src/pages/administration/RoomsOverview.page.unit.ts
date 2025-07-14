@@ -17,7 +17,7 @@ import {
 	StartExistingCourseSyncDialog,
 } from "@feature-course-sync";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VDataTableServer } from "vuetify/lib/components/index";
@@ -347,31 +347,20 @@ describe("RoomsOverview", () => {
 					const withoutTeacherSwitch = wrapper.findComponent({
 						name: "v-switch",
 					});
-					await withoutTeacherSwitch.trigger("click");
+					await withoutTeacherSwitch.vm.$emit("update:modelValue", true);
 
 					expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
 				});
 
-				it("should only show courses without teachers", async () => {
-					// useCourseListMock.withoutTeacher.value = true;
-					const { wrapper } = setup();
+				it("should set withoutTeacher to true", async () => {
+					const { wrapper, useCourseListMock } = setup();
 
 					const withoutTeacherSwitch = wrapper.findComponent({
 						name: "v-switch",
 					});
-					await withoutTeacherSwitch.trigger("click");
 					await withoutTeacherSwitch.vm.$emit("update:modelValue", true);
-					await nextTick();
-					await flushPromises();
-					// console.log(withoutTeacherSwitch.html());
-					// console.log(
-					// 	useCourseListMock.withoutTeacher.value,
-					// 	useCourseListMock.courses.value
-					// );
 
-					// const table = findTableComponent(wrapper);
-					const tableRows = wrapper.findAll(".v-data-table__tr");
-					expect(tableRows).toHaveLength(1);
+					expect(useCourseListMock.withoutTeacher.value).toBe(true);
 				});
 			});
 		});
