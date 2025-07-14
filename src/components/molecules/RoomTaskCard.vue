@@ -309,7 +309,7 @@ const moreActionsMenuItems = computed(() => {
 			roleBasedMoreActions[Roles.Teacher].push({
 				icon: mdiContentCopy,
 				action: () => copyCard(),
-				name: t("common.actions.copy"),
+				name: t("common.actions.duplicate"),
 				dataTestId: `room-task-card-menu-copy-${props.taskCardIndex}`,
 			});
 		}

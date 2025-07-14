@@ -6,11 +6,11 @@ export default {
 	"common.actions.confirm": "Підтвердити",
 	"common.actions.continue": "Продовжити",
 	"common.actions.copy": "Копіювати",
+	"common.actions.duplicate": "Дублювати",
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
 	"common.actions.download": "Завантажити",
-	"common.actions.copyRoom": "Дублювати",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
@@ -680,7 +680,7 @@ export default {
 	"components.molecules.copyResult.etherpadCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.failedCopy":
-		"Не вдалося завершити процес копіювання.",
+		"Дублювання не вдалося завершити.",
 	"components.molecules.copyResult.fileCopy.error":
 		"Наступні файли не вдалося скопіювати і їх необхідно додати заново.",
 	"components.molecules.copyResult.geogebraCopy.info":
@@ -713,22 +713,22 @@ export default {
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.course.successfullyCopied":
-		"Усі елементи успішно скопійовано.",
+		"Всі елементи були успішно продубльовані.",
 	"components.molecules.copyResult.board.successfullyCopied":
-		"Дошка успішно скопійована.",
+		"Дошка успішно продубльована.",
 	"components.molecules.copyResult.task.successfullyCopied":
-		"Задачу успішно скопійовано.",
+		"Завдання успішно продубльовано.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
-		"Тему успішно скопійовано.",
+		"Тему успішно продубльовано.",
 	"components.molecules.copyResult.timeoutCopy":
-		"Для великих файлів процес копіювання може зайняти більше часу. Вміст буде доступний найближчим часом.",
+		"Дублювання великих файлів може зайняти більше часу. Вміст буде доступний найближчим часом.",
 	"components.molecules.copyResult.timeoutSuccess":
-		"Процес копіювання завершено.",
-	"components.molecules.copyResult.title.failure": "Помилка під час копіювання",
-	"components.molecules.copyResult.title.loading": "Виконується копіювання...",
+		"Процес дублювання завершено.",
+	"components.molecules.copyResult.title.failure": "Помилка при дублюванні",
+	"components.molecules.copyResult.title.loading": "Триває тиражування...",
 	"components.molecules.copyResult.title.partial":
-		"Важлива інформація щодо копіювання",
-	"components.molecules.copyResult.title.success": "Копіювання успішне",
+		"Важлива інформація про дублювання",
+	"components.molecules.copyResult.title.success": "Дублювання успішне",
 	"components.molecules.courseheader.coursedata": "Дані курсу",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
@@ -838,7 +838,7 @@ export default {
 	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
 		"Учасники кімнати та їхні дозволи",
 	"components.molecules.share.options.tableHeader.InfoText":
-		"Наступний вміст не буде скопійовано:",
+		"Наступний контент не буде дублюватися:",
 	"components.molecules.share.courses.result.linkLabel":
 		"Посилання на копію курсу",
 	"components.molecules.share.lessons.mail.body": "Посилання на курс:",
@@ -1048,7 +1048,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"На наступному кроці буде створено копію кімнати.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"Наступний вміст не буде скопійовано:",
+		"Наступний вміст не включено:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Учасники кімнати та їхні дозволи",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Вміст із Etherpads",
@@ -1815,11 +1815,11 @@ export default {
 	"pages.room.cards.aria":
 		"{itemType}, посилання, натисніть Enter, щоб відкрити",
 	"pages.room.cards.label.revert": "Повернути до стану чернетки",
-	"pages.room.copy.course.message.copied": "Курс успішно скопійовано.",
+	"pages.room.copy.course.message.copied": "Курс був успішно продубльований.",
 	"pages.room.copy.course.message.partiallyCopied":
 		"Повністю скопіювати курс не вдалося.",
-	"pages.room.copy.lesson.message.copied": "Тему успішно скопійовано.",
-	"pages.room.copy.task.message.copied": "Завдання успішно скопійовано.",
+	"pages.room.copy.lesson.message.copied": "Тема була успішно продубльована.",
+	"pages.room.copy.task.message.copied": "Завдання було успішно продубльовано.",
 	"pages.room.dialog.boardLayout.title": "Виберіть вид",
 	"pages.room.dialog.boardLayout.singleColumn": "одноколонкові",
 	"pages.room.dialog.boardLayout.multiColumn": "багатоколонкові",
