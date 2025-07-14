@@ -1,4 +1,3 @@
-import { groupModule } from "@/store";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { SortOrder } from "@/store/types/sort-order.enum";
@@ -336,7 +335,6 @@ describe("RoomsOverview", () => {
 							teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 						}),
 					];
-					// useCourseListMock.courses.value = courses;
 
 					const { wrapper, useCourseListMock } = createWrapper({ courses });
 
@@ -354,7 +352,7 @@ describe("RoomsOverview", () => {
 					expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
 				});
 
-				it.skip("should only show courses without teachers", async () => {
+				it("should only show courses without teachers", async () => {
 					// useCourseListMock.withoutTeacher.value = true;
 					const { wrapper } = setup();
 
@@ -655,6 +653,7 @@ describe("RoomsOverview", () => {
 					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+						syncedGroup: "GroupName",
 					}),
 				];
 
@@ -672,16 +671,14 @@ describe("RoomsOverview", () => {
 				};
 			};
 
-			it.only("should open the EndCourseSyncDialog ", async () => {
-				const { wrapper, envConfigModule } = setup();
-				// await nextTick();
-				console.log(envConfigModule.getEnv);
+			it("should open the EndCourseSyncDialog ", async () => {
+				const { wrapper } = setup();
+
 				const endCourSyncBtn = wrapper.getComponent(
 					'[data-testid="course-table-end-course-sync-btn"]'
 				);
 
 				await endCourSyncBtn.trigger("click");
-				// await nextTick();
 
 				const dialog = wrapper.findComponent({
 					name: "EndCourseSyncDialog",
