@@ -43,10 +43,10 @@ const { fetchRoom, updateRoom } = roomDetailsStore;
 const { canEditRoom } = useRoomAuthorization();
 
 const roomData = ref<RoomUpdateParams>({
-	name: room.value?.name ?? "",
-	color: room.value?.color ?? RoomColor.BlueGrey,
-	startDate: room.value?.startDate ?? undefined,
-	endDate: room.value?.endDate ?? undefined,
+	name: "",
+	color: RoomColor.BlueGrey,
+	startDate: undefined,
+	endDate: undefined,
 });
 
 const pageTitle = computed(() =>
@@ -55,7 +55,9 @@ const pageTitle = computed(() =>
 useTitle(pageTitle);
 
 onMounted(async () => {
-	await fetchRoom(route.params.id as string);
+	if (!room.value) {
+		await fetchRoom(route.params.id as string);
+	}
 
 	if (room.value) {
 		roomData.value = {
