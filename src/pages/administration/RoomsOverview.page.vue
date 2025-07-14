@@ -340,7 +340,7 @@ const selectedItemName: ComputedRef<string> = computed(
 );
 
 const joinNamesList = (names: string[]) => {
-	if (!names || names.length === 0) return;
+	if (names.length === 0) return;
 	return names.join(", ");
 };
 
