@@ -52,14 +52,17 @@ describe("@pages/RoomEdit.page.vue", () => {
 	const setup = (
 		options?: Partial<{
 			isLoading: boolean;
+			isRoomDefined: boolean;
 		}>
 	) => {
+		const { isRoomDefined } = { isRoomDefined: true, ...options };
 		const notifierModule = createModuleMocks(NotifierModule);
-		const room = roomFactory.build();
+		const room = isRoomDefined ? roomFactory.build() : undefined;
+		const roomId = room ? room.id : "test-room-id";
 
 		useRouteMock.mockImplementation(() => ({
 			params: {
-				id: room.id,
+				id: roomId,
 			},
 		}));
 
@@ -95,6 +98,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			fetchRoom,
 			roomFormComponent,
 			room,
+			roomId,
 		};
 	};
 
@@ -104,10 +108,12 @@ describe("@pages/RoomEdit.page.vue", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should fetch room details on mount", () => {
-		const { fetchRoom, room } = setup();
+	describe("is room undefined", () => {
+		it("should fetch room details on mount", () => {
+			const { fetchRoom, roomId } = setup({ isRoomDefined: false });
 
-		expect(fetchRoom).toHaveBeenCalledWith(room.id);
+			expect(fetchRoom).toHaveBeenCalledWith(roomId);
+		});
 	});
 
 	describe("while loading", () => {
@@ -132,12 +138,12 @@ describe("@pages/RoomEdit.page.vue", () => {
 			it("should navigate to room details page", async () => {
 				roomPermissions.canEditRoom = ref(false);
 
-				const { room } = setup({ isLoading: false });
+				const { roomId } = setup({ isLoading: false });
 				await nextTick();
 
 				expect(useRouterMock.replace).toHaveBeenCalledWith({
 					name: "room-details",
-					params: { id: room.id },
+					params: { id: roomId },
 				});
 			});
 		});
@@ -157,8 +163,21 @@ describe("@pages/RoomEdit.page.vue", () => {
 				expect(roomFormComponent.exists()).toBe(true);
 			});
 
+			it("should render roomFormComponent with correct props", async () => {
+				const { roomFormComponent, room } = setup();
+
+				await nextTick();
+
+				expect(roomFormComponent.props().room).toMatchObject({
+					name: room?.name,
+					color: room?.color,
+					startDate: room?.startDate,
+					endDate: room?.endDate,
+				});
+			});
+
 			it("should have breadcrumbs prop in DefaultWireframe component", async () => {
-				const { wrapper, room } = setup();
+				const { wrapper, roomId, room } = setup();
 
 				await nextTick();
 				const defaultWireframe = wrapper.findComponent({
@@ -167,40 +186,42 @@ describe("@pages/RoomEdit.page.vue", () => {
 				const breadcrumbsProp: Breadcrumb[] =
 					defaultWireframe.props().breadcrumbs;
 				const breadcrumb = breadcrumbsProp.find(
-					(breadcrumb: Breadcrumb) => breadcrumb.title === room.name
+					(breadcrumb: Breadcrumb) => breadcrumb.title === room?.name
 				);
 
-				expect(breadcrumb?.to).toContain(room.id);
+				expect(breadcrumb?.to).toContain(roomId);
 			});
 
-			it("should call updateRoom with correct parameters on save event", async () => {
-				const { updateRoom, roomFormComponent, room } = setup();
+			describe("when roomFormComponent emits save event", () => {
+				it("should call updateRoom with correct parameters on save event", async () => {
+					const { updateRoom, roomFormComponent, roomId } = setup();
 
-				roomFormComponent.vm.$emit("save", { room: roomParams });
+					roomFormComponent.vm.$emit("save", { room: roomParams });
 
-				expect(updateRoom).toHaveBeenCalledWith(room.id, roomParams);
-			});
+					expect(updateRoom).toHaveBeenCalledWith(roomId, roomParams);
+				});
 
-			it("should navigate to 'room-details' with correct room id on save", async () => {
-				const { roomFormComponent, room } = setup();
+				it("should navigate to 'room-details' with correct room id on save", async () => {
+					const { roomFormComponent, roomId } = setup();
 
-				roomFormComponent.vm.$emit("save", { room: roomParams });
-				await nextTick();
+					roomFormComponent.vm.$emit("save", { room: roomParams });
+					await nextTick();
 
-				expect(useRouterMock.push).toHaveBeenCalledWith({
-					name: "room-details",
-					params: { id: room.id },
+					expect(useRouterMock.push).toHaveBeenCalledWith({
+						name: "room-details",
+						params: { id: roomId },
+					});
 				});
 			});
 
 			it("should navigate to 'rooms' on cancel", async () => {
-				const { roomFormComponent, room } = setup();
+				const { roomFormComponent, roomId } = setup();
 
 				roomFormComponent.vm.$emit("cancel");
 
 				expect(useRouterMock.push).toHaveBeenCalledWith({
 					name: "room-details",
-					params: { id: room.id },
+					params: { id: roomId },
 				});
 			});
 		});
