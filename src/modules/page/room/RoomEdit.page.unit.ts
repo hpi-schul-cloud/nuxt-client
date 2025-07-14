@@ -17,10 +17,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import setupStores from "@@/tests/test-utils/setupStores";
-import ApplicationErrorModule from "@/store/application-error";
-import { useApplicationError } from "@/composables/application-error.composable";
-import { create } from "lodash";
 import { ApplicationError } from "@/store/types/application-error";
 
 jest.mock("vue-router");
