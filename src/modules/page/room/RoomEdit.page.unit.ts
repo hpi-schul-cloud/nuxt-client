@@ -20,6 +20,8 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ApplicationErrorModule from "@/store/application-error";
 import { useApplicationError } from "@/composables/application-error.composable";
+import { create } from "lodash";
+import { ApplicationError } from "@/store/types/application-error";
 
 jest.mock("vue-router");
 const useRouteMock = useRoute as jest.Mock;
@@ -31,9 +33,6 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-jest.mock("@/composables/application-error.composable");
-const applicationError = jest.mocked(useApplicationError);
-
 const roomParams: RoomUpdateParams = {
 	name: "test",
 	color: RoomColor.Blue,
@@ -42,7 +41,6 @@ const roomParams: RoomUpdateParams = {
 describe("@pages/RoomEdit.page.vue", () => {
 	let roomPermissions: DeepMocked<ReturnType<typeof useRoomAuthorization>>;
 	let useRouterMock: DeepMocked<ReturnType<typeof useRouter>>;
-	let createApplicationErrorCalls: ReturnType<typeof useApplicationError>;
 
 	beforeEach(() => {
 		roomPermissions = createMock<ReturnType<typeof useRoomAuthorization>>();
@@ -51,13 +49,6 @@ describe("@pages/RoomEdit.page.vue", () => {
 		useRouterMock = createMock<ReturnType<typeof useRouter>>();
 		jest.mocked(useRouter).mockReturnValue(useRouterMock);
 		useRouterMock.replace = jest.fn();
-
-		createApplicationErrorCalls =
-			createMock<ReturnType<typeof useApplicationError>>();
-		applicationError.mockReturnValue(createApplicationErrorCalls);
-		setupStores({
-			applicationErrorModule: ApplicationErrorModule,
-		});
 	});
 
 	afterEach(() => {
@@ -254,7 +245,9 @@ describe("@pages/RoomEdit.page.vue", () => {
 						(wrapper.vm as unknown as typeof RoomEditPage).onSave({
 							room: roomParams,
 						})
-					).rejects.toThrow();
+					).rejects.toThrow(
+						new ApplicationError(HttpStatusCode.Unauthorized, "error.401")
+					);
 				});
 			});
 
