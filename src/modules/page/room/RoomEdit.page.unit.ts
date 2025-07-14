@@ -16,6 +16,10 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
 import { mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import setupStores from "@@/tests/test-utils/setupStores";
+import ApplicationErrorModule from "@/store/application-error";
+import { useApplicationError } from "@/composables/application-error.composable";
 
 jest.mock("vue-router");
 const useRouteMock = useRoute as jest.Mock;
@@ -27,6 +31,9 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
+jest.mock("@/composables/application-error.composable");
+const applicationError = jest.mocked(useApplicationError);
+
 const roomParams: RoomUpdateParams = {
 	name: "test",
 	color: RoomColor.Blue,
@@ -35,6 +42,7 @@ const roomParams: RoomUpdateParams = {
 describe("@pages/RoomEdit.page.vue", () => {
 	let roomPermissions: DeepMocked<ReturnType<typeof useRoomAuthorization>>;
 	let useRouterMock: DeepMocked<ReturnType<typeof useRouter>>;
+	let createApplicationErrorCalls: ReturnType<typeof useApplicationError>;
 
 	beforeEach(() => {
 		roomPermissions = createMock<ReturnType<typeof useRoomAuthorization>>();
@@ -43,6 +51,13 @@ describe("@pages/RoomEdit.page.vue", () => {
 		useRouterMock = createMock<ReturnType<typeof useRouter>>();
 		jest.mocked(useRouter).mockReturnValue(useRouterMock);
 		useRouterMock.replace = jest.fn();
+
+		createApplicationErrorCalls =
+			createMock<ReturnType<typeof useApplicationError>>();
+		applicationError.mockReturnValue(createApplicationErrorCalls);
+		setupStores({
+			applicationErrorModule: ApplicationErrorModule,
+		});
 	});
 
 	afterEach(() => {
@@ -99,6 +114,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			roomFormComponent,
 			room,
 			roomId,
+			notifierModule,
 		};
 	};
 
@@ -211,6 +227,34 @@ describe("@pages/RoomEdit.page.vue", () => {
 						name: "room-details",
 						params: { id: roomId },
 					});
+				});
+
+				it("should show error notification on invalid request error", async () => {
+					const { roomFormComponent, notifierModule, updateRoom } = setup();
+					const apiError = {
+						code: HttpStatusCode.BadRequest,
+						message: "Bad Request",
+					};
+					updateRoom.mockRejectedValue(apiError);
+
+					roomFormComponent.vm.$emit("save", { room: roomParams });
+					await nextTick();
+
+					expect(notifierModule.show).toHaveBeenCalledWith({
+						status: "error",
+						text: "components.roomForm.validation.generalSaveError",
+					});
+				});
+
+				it("should throw application error if not due to invalid request", async () => {
+					const { updateRoom, wrapper } = setup();
+					updateRoom.mockRejectedValue({ code: HttpStatusCode.Unauthorized });
+
+					await expect(() =>
+						(wrapper.vm as unknown as typeof RoomEditPage).onSave({
+							room: roomParams,
+						})
+					).rejects.toThrow();
 				});
 			});
 

@@ -30,6 +30,7 @@ import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ApiResponseError } from "@/store/types/commons";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { storeToRefs } from "pinia";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
@@ -98,7 +99,7 @@ const onSave = async (payload: { room: RoomUpdateParams }) => {
 
 const isInvalidRequestError = (error: unknown): boolean => {
 	const apiError = error as ApiResponseError;
-	return apiError.code === 400;
+	return apiError.code === HttpStatusCode.BadRequest;
 };
 
 const onCancel = () => {
