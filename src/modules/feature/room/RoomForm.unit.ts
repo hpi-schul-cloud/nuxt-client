@@ -6,12 +6,14 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import RoomForm from "./RoomForm.vue";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
+import { RoomFeatures } from "@/serverApi/v3";
 
 const mockRoom: RoomCreateParams = {
 	name: "A11Y for Beginners",
 	color: RoomColor.Magenta,
 	startDate: "",
 	endDate: "",
+	features: [],
 };
 
 const emptyMockRoom: RoomCreateParams = {
@@ -19,6 +21,15 @@ const emptyMockRoom: RoomCreateParams = {
 	color: RoomColor.Magenta,
 	startDate: undefined,
 	endDate: undefined,
+	features: [],
+};
+
+const mockRoomWithVideoConference: RoomCreateParams = {
+	name: "A11Y for Beginners",
+	color: RoomColor.Magenta,
+	startDate: "",
+	endDate: "",
+	features: [RoomFeatures.EditorManageVideoconference],
 };
 
 describe("@feature-room/RoomForm", () => {
@@ -41,6 +52,7 @@ describe("@feature-room/RoomForm", () => {
 				color: RoomColor.Magenta,
 				startDate: "",
 				endDate: "",
+				features: [],
 			};
 		};
 
@@ -116,12 +128,32 @@ describe("@feature-room/RoomForm", () => {
 				expect(wrapper.vm.room.name).toEqual("New Name");
 
 				const cancelButton = wrapper.get(
-					'[data-testId="room-form-cancel-btn"]'
+					'[data-testid="room-form-cancel-btn"]'
 				);
 				await cancelButton.trigger("click");
 
 				expect(wrapper.emitted("cancel")).toBeUndefined();
 			});
+		});
+	});
+
+	describe("checkbox for video conference feature", () => {
+		it("should not check the video conference checkbox if the feature is not enabled", () => {
+			const { wrapper } = setup({ room: mockRoom });
+
+			const checkbox = wrapper.get(
+				'[data-testid="room-video-conference-checkbox"]'
+			);
+			expect(checkbox.get("input").element.checked).toBe(false);
+		});
+
+		it("should check the video conference checkbox if the feature is enabled", () => {
+			const { wrapper } = setup({ room: mockRoomWithVideoConference });
+
+			const checkbox = wrapper.get(
+				'[data-testid="room-video-conference-checkbox"]'
+			);
+			expect(checkbox.get("input").element.checked).toBe(true);
 		});
 	});
 });

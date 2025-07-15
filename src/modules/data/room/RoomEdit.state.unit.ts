@@ -107,6 +107,7 @@ describe("useRoomEditState", () => {
 			const params = {
 				name: "room-name",
 				color: RoomColor.BlueGrey,
+				features: [],
 			};
 
 			await updateRoom("room-id", params);
@@ -125,6 +126,7 @@ describe("useRoomEditState", () => {
 		const params = {
 			name: "room-name",
 			color: RoomColor.BlueGrey,
+			features: [],
 		};
 		roomApiMock.roomControllerUpdateRoom.mockRejectedValue({ code: 404 });
 
