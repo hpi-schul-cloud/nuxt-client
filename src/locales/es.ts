@@ -6,11 +6,11 @@ export default {
 	"common.actions.confirm": "Confirmar",
 	"common.actions.continue": "Continuar",
 	"common.actions.copy": "Copiar",
+	"common.actions.duplicate": "Duplicar",
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
 	"common.actions.download": "Descargar",
-	"common.actions.copyRoom": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
 	"common.actions.finish": "Finalizar",
@@ -682,7 +682,7 @@ export default {
 	"components.molecules.copyResult.etherpadCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.failedCopy":
-		"No se pudo completar el proceso de copia.",
+		"No se pudo completar la duplicación.",
 	"components.molecules.copyResult.fileCopy.error":
 		"Los siguientes archivos no han podido ser copiados y deben ser añadidos de nuevo.",
 	"components.molecules.copyResult.geogebraCopy.info":
@@ -717,22 +717,23 @@ export default {
 	"components.molecules.copyResult.tldrawCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.course.successfullyCopied":
-		"Todos los elementos se copiaron con éxito.",
+		"Todos los elementos fueron duplicados exitosamente.",
 	"components.molecules.copyResult.board.successfullyCopied":
-		"Tablero copiado con éxito.",
+		"Tablero duplicado con éxito.",
 	"components.molecules.copyResult.task.successfullyCopied":
-		"Tarea copiada con éxito.",
+		"Tarea duplicada con éxito.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
-		"Tema copiado con éxito.",
+		"Tema duplicado con éxito.",
 	"components.molecules.copyResult.timeoutCopy":
-		"El proceso de copia puede tardar más en el caso de archivos de gran tamaño. El contenido estará disponible en breve.",
+		"El proceso de duplicación puede tardar más en el caso de archivos de gran tamaño. El contenido estará disponible en breve.",
 	"components.molecules.copyResult.timeoutSuccess":
-		"El proceso de copia ha finalizado.",
-	"components.molecules.copyResult.title.failure": "Error durante la copia",
-	"components.molecules.copyResult.title.loading": "Copiando en proceso...",
+		"El proceso de duplicación ha finalizado.",
+	"components.molecules.copyResult.title.failure":
+		"Error durante la duplicación",
+	"components.molecules.copyResult.title.loading": "Duplicando en proceso...",
 	"components.molecules.copyResult.title.partial":
-		"Información importante sobre la copia",
-	"components.molecules.copyResult.title.success": "Copia exitosa",
+		"Información importante sobre la duplicación",
+	"components.molecules.copyResult.title.success": "Duplicación exitosa",
 	"components.molecules.courseheader.coursedata": "Archivos del curso",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
@@ -1059,7 +1060,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"En el siguiente paso, se creará una copia de la sala.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"Los siguientes contenidos no se copiarán:",
+		"No se adoptan los siguientes contenidos:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Miembros y permisos de la sala",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad":
@@ -1840,12 +1841,12 @@ export default {
 	"pages.room.cards.aria": "{itemType}, enlace, presione Intro para abrir",
 	"pages.room.cards.label.revert": "Volver al borrador",
 	"pages.room.copy.course.message.copied":
-		"El curso se ha copiado correctamente.",
+		"El curso se ha duplicado correctamente.",
 	"pages.room.copy.course.message.partiallyCopied":
-		"El curso no se pudo copiar completamente.",
+		"El curso no se pudo duplicar completamente.",
 	"pages.room.copy.lesson.message.copied":
-		"El tema se ha copiado correctamente.",
-	"pages.room.copy.task.message.copied": "La tarea se copió con éxito.",
+		"El tema se ha duplicado correctamente.",
+	"pages.room.copy.task.message.copied": "La tarea se duplicó con éxito.",
 	"pages.room.dialog.boardLayout.title": "Seleccionar vista",
 	"pages.room.dialog.boardLayout.singleColumn": "monocolumna",
 	"pages.room.dialog.boardLayout.multiColumn": "multicolumna",
