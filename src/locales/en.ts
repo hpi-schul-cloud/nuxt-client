@@ -1758,6 +1758,8 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Groups",
 	"pages.courseRooms.tabLabel.tools": "Tools",
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
+	"pages.courseRooms.course-locked":
+		"The course is locked because there is no teacher assigned. Please refer to the School Administrator.",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",

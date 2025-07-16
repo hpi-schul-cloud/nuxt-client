@@ -23,6 +23,7 @@ import {
 	CommonCartridgeApiFactory,
 	CommonCartridgeApiInterface,
 } from "@/commonCartridgeApi/v3";
+import { isAxiosError } from "axios";
 
 @Module({
 	name: "courseRoomDetailsModule",
@@ -88,7 +89,20 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			this.setRoomData(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
-			this.setError(error);
+			if (isAxiosError(error)) {
+				const errorType = error?.response?.data?.type;
+				if (errorType === "LOCKED_COURSE") {
+					applicationErrorModule.setError(
+						createApplicationError(
+							HttpStatusCode.Forbidden,
+							"pages.courseRooms.course-locked",
+							"TODO no teacher error message"
+						)
+					);
+				}
+			} else {
+				this.setError(error);
+			}
 			this.setLoading(false);
 		}
 	}

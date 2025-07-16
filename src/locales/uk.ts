@@ -1788,6 +1788,8 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Групи",
 	"pages.courseRooms.tabLabel.tools": "Інструмент",
 	"pages.courseRooms.tabLabel.toolsOld": "Інструмент",
+	"pages.courseRooms.course-locked":
+		"Курс заблоковано, оскільки на нього не призначено викладача. Будь ласка, зверніться до адміністратора школи.",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",
