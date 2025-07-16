@@ -4,36 +4,33 @@
 		<div class="message">{{ message }}</div>
 	</div>
 </template>
-<script>
+
+<script setup lang="ts">
 import { mdiAlert } from "@icons/material";
-export default {
-	props: {
-		message: {
-			type: String,
-			required: true,
-		},
-		type: {
-			type: String,
-			required: false,
-			default: "bc-info",
-			validator: (type) =>
-				["bc-info", "bc-success", "bc-warning", "bc-error"].includes(type),
-		},
-	},
-	computed: {
-		icon() {
-			if (this.type === "bc-error") {
-				return mdiAlert;
-			}
-			return this.type.substring(3);
-		},
-		iconColor() {
-			const typeStr = this.type.substring(3);
-			return `rgba(var(--v-theme-${typeStr}))`;
-		},
-	},
+import { computed } from "vue";
+
+type Props = {
+	message: string;
+	type?: "bc-info" | "bc-success" | "bc-warning" | "bc-error";
 };
+
+const props = withDefaults(defineProps<Props>(), {
+	type: "bc-info",
+});
+
+const icon = computed(() => {
+	if (props.type === "bc-error") {
+		return mdiAlert;
+	}
+	return props.type.substring(3);
+});
+
+const iconColor = computed(() => {
+	const typeStr = props.type.substring(3);
+	return `rgba(var(--v-theme-${typeStr}))`;
+});
 </script>
+
 <style lang="scss" scoped>
 .info-message {
 	display: flex;

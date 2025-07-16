@@ -111,12 +111,11 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import SchoolTermsFormDialog from "@/components/organisms/administration/SchoolTermsFormDialog.vue";
-import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
+import { computed, ComputedRef, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
-import { BusinessError } from "@/store/types/commons";
 import { useI18n } from "vue-i18n";
 import {
 	injectStrict,
@@ -134,88 +133,56 @@ import {
 	mdiTrayArrowUp,
 } from "@icons/material";
 
-export default defineComponent({
-	name: "SchoolTerms",
-	components: {
-		vCustomDialog,
-		SchoolTermsFormDialog,
+const { t } = useI18n();
+const authModule = injectStrict(AUTH_MODULE_KEY);
+const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
+const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+
+const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
+const isDeleteTermsDialogOpen: Ref<boolean> = ref(false);
+
+const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+watch(
+	school,
+	async (newValue) => {
+		await termsOfUseModule.fetchTermsOfUse(newValue.id);
 	},
-	setup() {
-		const { t } = useI18n();
-		const authModule = injectStrict(AUTH_MODULE_KEY);
-		const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
-		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+	{ immediate: true }
+);
 
-		const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
-		const isDeleteTermsDialogOpen: Ref<boolean> = ref(false);
+const hasSchoolEditPermission: ComputedRef<boolean> = computed(() =>
+	authModule.getUserPermissions.includes("school_edit")
+);
+const termsOfUse: ComputedRef<ConsentVersion | null> = computed(
+	() => termsOfUseModule.getTermsOfUse
+);
+const status: ComputedRef<string> = computed(() => termsOfUseModule.getStatus);
 
-		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
-		watch(
-			school,
-			async (newValue) => {
-				await termsOfUseModule.fetchTermsOfUse(newValue.id);
-			},
-			{ immediate: true }
+const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
+
+const downloadTerms = () => {
+	if (termsOfUse.value) {
+		downloadFile(
+			termsOfUse.value.consentData.data,
+			t("pages.administration.school.index.termsOfUse.fileName")
 		);
+	}
+};
 
-		const hasSchoolEditPermission: ComputedRef<boolean> = computed(() =>
-			authModule.getUserPermissions.includes("school_edit")
-		);
-		const termsOfUse: ComputedRef<ConsentVersion | null> = computed(
-			() => termsOfUseModule.getTermsOfUse
-		);
-		const status: ComputedRef<string> = computed(
-			() => termsOfUseModule.getStatus
-		);
-		const error: ComputedRef<BusinessError> = computed(
-			() => termsOfUseModule.getBusinessError
-		);
+const deleteFile = async () => {
+	await termsOfUseModule.deleteTermsOfUse();
 
-		const formatDate = (dateTime: string) =>
-			formatDateForAlerts(dateTime, true);
+	notifierModule.show({
+		text: t("pages.administration.school.index.termsOfUse.delete.success"),
+		status: "success",
+		timeout: 5000,
+	});
+};
 
-		const downloadTerms = () => {
-			if (termsOfUse.value) {
-				downloadFile(
-					termsOfUse.value.consentData.data,
-					t("pages.administration.school.index.termsOfUse.fileName")
-				);
-			}
-		};
-
-		const deleteFile = async () => {
-			await termsOfUseModule.deleteTermsOfUse();
-
-			notifierModule.show({
-				text: t("pages.administration.school.index.termsOfUse.delete.success"),
-				status: "success",
-				timeout: 5000,
-			});
-		};
-
-		const closeDialog = () => {
-			isSchoolTermsFormDialogOpen.value = false;
-		};
-
-		return {
-			t,
-			isSchoolTermsFormDialogOpen,
-			isDeleteTermsDialogOpen,
-			hasSchoolEditPermission,
-			termsOfUse,
-			status,
-			error,
-			downloadTerms,
-			deleteFile,
-			formatDate,
-			closeDialog,
-			mdiAlertCircle,
-			mdiTrashCanOutline,
-			mdiTrayArrowUp,
-		};
-	},
-});
+const closeDialog = () => {
+	isSchoolTermsFormDialogOpen.value = false;
+};
 </script>
 
 <style lang="scss" scoped>

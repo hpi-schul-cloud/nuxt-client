@@ -43,11 +43,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	});
 
 	const isLoading = ref<boolean>(false);
-	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const ownSchool = {
 		id: schoolsModule.getSchool.id,
 		name: schoolsModule.getSchool.name,
 	};
+	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([ownSchool]);
 	const currentUserId = authModule.getUser?.id ?? "";
 	const selectedIds = ref<string[]>([]);
 	const confirmationSelectedIds = ref<string[]>([]);
@@ -90,7 +90,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
-					fullName: `${member.lastName}, ${member.firstName}`,
+					fullName: `${member.firstName} ${member.lastName}`,
 					isSelectable: !(
 						member.userId === currentUserId ||
 						member.roomRoleName === RoleName.Roomowner
@@ -120,6 +120,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		schoolRoleName: RoleName,
 		schoolId: string = ownSchool.id
 	) => {
+		if (schoolId === null) return;
+
 		try {
 			const endpointMap = {
 				[RoleName.Teacher]: () =>
@@ -166,15 +168,29 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return member.fullName;
 	};
 
-	const getSchools = async () => {
-		try {
-			const response =
-				await schoolApi.schoolControllerGetSchoolListForExternalInvite();
+	const loadSchoolList = async () => {
+		const areSchoolsLoaded = schools.value.length > 1;
+		if (!areSchoolsLoaded) {
+			await loadSchoolListPage();
+		}
+	};
 
-			schools.value = response.data.filter(
+	const loadSchoolListPage = async (skip = 0, limit = 1000) => {
+		try {
+			const response = await schoolApi.schoolControllerGetSchoolList(
+				skip,
+				limit
+			);
+			if (response.data.data.length === 0) {
+				return;
+			}
+			const additionalSchools = response.data.data.filter(
 				(school) => school.id !== ownSchool.id
 			);
-			schools.value.unshift(ownSchool);
+			schools.value = [...schools.value, ...additionalSchools];
+			if (schools.value.length < response.data.total) {
+				await loadSchoolListPage(skip + limit, limit);
+			}
 		} catch (error) {
 			logger.error(error);
 		}
@@ -194,6 +210,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
 					...member,
+					fullName: `${member.firstName} ${member.lastName}`,
 					roomRoleName: roomRoleName as RoleName,
 					displayRoomRole: roomRole[roomRoleName],
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
@@ -377,7 +394,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		resetPotentialMembers,
 		resetStore,
 		getPotentialMembers,
-		getSchools,
+		loadSchoolList,
 		getMemberById,
 		getMemberFullName,
 		leaveRoom,

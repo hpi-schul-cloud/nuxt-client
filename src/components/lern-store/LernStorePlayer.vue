@@ -3,7 +3,7 @@
 		v-if="!loading"
 		:src="iframeSrc"
 		class="player-iframe"
-		allowfullscreen="allowfullscreen"
+		allowfullscreen
 		frameborder="0"
 		scrolling="yes"
 	/>
@@ -12,65 +12,44 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch, onMounted } from "vue";
+<script :src="scriptSrc" charset="UTF-8"></script>
+
+<script setup lang="ts">
+import { watch, onMounted, toRef } from "vue";
 import { $axios } from "@/utils/api";
 
-function loadScript(scriptSrc: string): Promise<void> {
-	return new Promise((resolve, reject) => {
-		const script = document.createElement("script");
-		script.src = scriptSrc;
-		script.async = true;
-		script.onload = () => resolve();
-		script.onerror = () =>
-			reject(new Error(`Failed to load script: ${scriptSrc}`));
-		document.body.appendChild(script);
+type Props = {
+	nodeId?: string;
+	loading?: boolean;
+	iframeSrc?: string;
+	scriptSrc?: string;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+	nodeId: "",
+	loading: true,
+	iframeSrc: "",
+	scriptSrc: "",
+});
+
+const model = toRef(props, "nodeId");
+const loading = toRef(props, "loading");
+const iframeSrc = toRef(props, "iframeSrc");
+const scriptSrc = toRef(props, "scriptSrc");
+
+watch(
+	() => props.nodeId,
+	(newValue: string) => {
+		model.value = newValue;
+	}
+);
+
+onMounted(async () => {
+	await $axios.get(`/v1/edu-sharing/player/${model.value}`).then((response) => {
+		iframeSrc.value = response.data.iframe_src;
+		scriptSrc.value = response.data.script_src;
 	});
-}
-
-export default defineComponent({
-	name: "LernStorePlayer",
-	props: {
-		nodeId: {
-			type: String,
-			default: "",
-		},
-		loading: {
-			type: Boolean,
-			default: true,
-		},
-		iframeSrc: {
-			type: String,
-			default: "",
-		},
-	},
-	setup(props) {
-		const model = ref(props.nodeId);
-		const loading = ref(props.loading);
-		const iframeSrc = ref(props.iframeSrc);
-
-		watch(
-			() => props.nodeId,
-			(newValue: string) => {
-				model.value = newValue;
-			}
-		);
-
-		onMounted(async () => {
-			await $axios
-				.get(`/v1/edu-sharing/player/${model.value}`)
-				.then((response) => {
-					iframeSrc.value = response.data.iframe_src;
-					loadScript(response.data.script_src);
-				});
-			loading.value = false;
-		});
-
-		return {
-			loading,
-			iframeSrc,
-		};
-	},
+	loading.value = false;
 });
 </script>
 

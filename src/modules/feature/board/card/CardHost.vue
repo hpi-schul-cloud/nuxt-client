@@ -96,7 +96,7 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
 import {
@@ -104,7 +104,6 @@ import {
 	useBoardPermissions,
 	useCardStore,
 } from "@data-board";
-import { mdiArrowExpand } from "@icons/material";
 import { BoardMenuScope } from "@ui-board";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
@@ -117,7 +116,7 @@ import { useShareBoardLink } from "@util-board";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
-import { computed, defineComponent, onMounted, ref, toRef } from "vue";
+import { computed, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostDetailView from "./CardHostDetailView.vue";
@@ -127,187 +126,139 @@ import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 
-export default defineComponent({
-	name: "CardHost",
-	components: {
-		CardSkeleton,
-		CardTitle,
-		BoardMenu,
-		KebabMenuActionEdit,
-		ContentElementList,
-		CardAddElementMenu,
-		CardHostInteractionHandler,
-		KebabMenuActionDelete,
-		CardHostDetailView,
-		KebabMenuActionShareLink,
-	},
-	props: {
-		height: { type: Number, required: true },
-		cardId: { type: String, required: true },
-		rowIndex: { type: Number, required: true },
-		columnIndex: { type: Number, required: true },
-	},
-	emits: ["move:card-keyboard", "delete:card", "reload:board"],
-	setup(props, { emit }) {
-		const cardHost = ref(null);
-		const cardId = toRef(props, "cardId");
-		const { isFocusContained, isFocusedById } = useBoardFocusHandler(
-			cardId.value,
-			cardHost
-		);
+type Props = {
+	height: number;
+	cardId: string;
+	rowIndex: number;
+	columnIndex: number;
+};
 
-		const isHovered = useElementHover(cardHost);
-		const isDetailView = ref(false);
+const props = defineProps<Props>();
+const emit = defineEmits<{
+	(e: "move:card-keyboard", event: string): void;
+	(e: "delete:card", cardId: string): void;
+	(e: "reload:board"): void;
+}>();
 
-		const cardStore = useCardStore();
+const cardHost = ref(null);
+const cardId = toRef(props, "cardId");
+const { isFocusContained, isFocusedById } = useBoardFocusHandler(
+	cardId.value,
+	cardHost
+);
 
-		const card = computed(() => cardStore.getCard(cardId.value));
-		const isLoadingCard = computed(() => card.value === undefined);
+const isHovered = useElementHover(cardHost);
+const isDetailView = ref(false);
 
-		const hasCardTitle = computed(() => card.value?.title);
+const cardStore = useCardStore();
 
-		const boardMenuTestId = computed(
-			() => `card-menu-btn-${props.columnIndex}-${props.rowIndex}`
-		);
-		const cardTestId = computed(
-			() => `board-card-${props.columnIndex}-${props.rowIndex}`
-		);
+const card = computed(() => cardStore.getCard(cardId.value));
+const isLoadingCard = computed(() => card.value === undefined);
 
-		const { height: cardHostHeight } = useElementSize(cardHost);
-		const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
-			cardId.value
-		);
-		const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
+const hasCardTitle = computed(() => card.value?.title);
 
-		const { askType } = useAddElementDialog(
-			cardStore.createElementRequest,
-			cardId.value
-		);
+const boardMenuTestId = computed(
+	() => `card-menu-btn-${props.columnIndex}-${props.rowIndex}`
+);
+const cardTestId = computed(
+	() => `board-card-${props.columnIndex}-${props.rowIndex}`
+);
 
-		const onMoveCardKeyboard = (event: KeyboardEvent) =>
-			emit("move:card-keyboard", event.code);
+const { height: cardHostHeight } = useElementSize(cardHost);
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
+	cardId.value
+);
+const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 
-		const _updateCardTitle = (newTitle: string, cardId: string) => {
-			cardStore.updateCardTitleRequest({ newTitle, cardId });
-		};
+const { askType } = useAddElementDialog(
+	cardStore.createElementRequest,
+	cardId.value
+);
 
-		const onUpdateCardTitle = useDebounceFn(_updateCardTitle, 600);
+const onMoveCardKeyboard = (event: KeyboardEvent) =>
+	emit("move:card-keyboard", event.code);
 
-		const onDeleteCard = async (confirmation: Promise<boolean>) => {
-			stopEditMode();
-			const shouldDelete = await confirmation;
-			if (shouldDelete) {
-				emit("delete:card", card.value?.id);
-			}
-		};
+const _updateCardTitle = (newTitle: string, cardId: string) => {
+	cardStore.updateCardTitleRequest({ newTitle, cardId });
+};
 
-		const onAddElement = () => askType();
+const onUpdateCardTitle = useDebounceFn(_updateCardTitle, 600);
 
-		const onDeleteElement = (elementId: string) =>
-			cardStore.deleteElementRequest({ cardId: cardId.value, elementId });
+const onDeleteCard = async (confirmation: Promise<boolean>) => {
+	stopEditMode();
+	const shouldDelete = await confirmation;
+	if (shouldDelete && card.value?.id) {
+		emit("delete:card", card.value.id);
+	}
+};
 
-		const onStartEditMode = () => startEditMode();
+const onAddElement = () => askType();
 
-		const onEndEditMode = async () => {
-			stopEditMode();
-			await delay(300);
-			cardStore.updateCardHeightRequest({
-				cardId: cardId.value,
-				newHeight: Math.round(cardHostHeight.value),
-			});
-		};
+const onDeleteElement = (elementId: string) =>
+	cardStore.deleteElementRequest({ cardId: cardId.value, elementId });
 
-		const onOpenDetailView = () => (isDetailView.value = true);
-		const onCloseDetailView = () => (isDetailView.value = false);
+const onStartEditMode = () => startEditMode();
 
-		const onMoveContentElementDown = async ({
-			payload: elementId,
-			elementIndex,
-		}: ElementMove) =>
-			cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
+const onEndEditMode = async () => {
+	stopEditMode();
+	await delay(300);
+	cardStore.updateCardHeightRequest({
+		cardId: cardId.value,
+		newHeight: Math.round(cardHostHeight.value),
+	});
+};
 
-		const onMoveContentElementUp = async ({
-			payload: elementId,
-			elementIndex,
-		}: ElementMove) =>
-			cardStore.moveElementRequest(props.cardId, elementId, elementIndex, -1);
+const onCloseDetailView = () => (isDetailView.value = false);
 
-		const onMoveContentElementKeyboard = async (
-			{ payload: elementId, elementIndex }: ElementMove,
-			key: string
-		) => {
-			if (!verticalCursorKeys.includes(key)) return;
+const onMoveContentElementDown = async ({
+	payload: elementId,
+	elementIndex,
+}: ElementMove) =>
+	cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
 
-			const delta = key === "ArrowUp" ? -1 : 1;
+const onMoveContentElementUp = async ({
+	payload: elementId,
+	elementIndex,
+}: ElementMove) =>
+	cardStore.moveElementRequest(props.cardId, elementId, elementIndex, -1);
 
-			await cardStore.moveElementRequest(
-				props.cardId,
-				elementId,
-				elementIndex,
-				delta
-			);
-		};
+const onMoveContentElementKeyboard = async (
+	{ payload: elementId, elementIndex }: ElementMove,
+	key: string
+) => {
+	if (!verticalCursorKeys.includes(key)) return;
 
-		const onEnter = () => {
-			cardStore.addTextAfterTitle(props.cardId);
-		};
+	const delta = key === "ArrowUp" ? -1 : 1;
 
-		const { copyShareLink, getShareLinkId } = useShareBoardLink();
+	await cardStore.moveElementRequest(
+		props.cardId,
+		elementId,
+		elementIndex,
+		delta
+	);
+};
 
-		const onCopyShareLink = async () => {
-			await copyShareLink(props.cardId, BoardMenuScope.CARD);
-		};
+const onEnter = () => {
+	cardStore.addTextAfterTitle(props.cardId);
+};
 
-		const boardMenuClasses = computed(() => {
-			if (isFocusContained.value === true || isHovered.value === true) {
-				return "";
-			}
-			return "hidden";
-		});
+const { copyShareLink, getShareLinkId } = useShareBoardLink();
 
-		onMounted(async () => {
-			if (card.value === undefined) {
-				await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
-			}
-		});
+const onCopyShareLink = async () => {
+	await copyShareLink(props.cardId, BoardMenuScope.CARD);
+};
 
-		return {
-			boardMenuClasses,
-			card,
-			hasEditPermission,
-			hasDeletePermission,
-			hasCardTitle,
-			isLoadingCard,
-			isHovered,
-			isFocusedById,
-			boardMenuTestId,
-			cardTestId,
-			onMoveCardKeyboard,
-			onUpdateCardTitle,
-			onDeleteCard,
-			onAddElement,
-			onDeleteElement,
-			onStartEditMode,
-			onEndEditMode,
-			onMoveContentElementDown,
-			onMoveContentElementUp,
-			onMoveContentElementKeyboard,
-			cardHost,
-			isEditMode,
-			onEnter,
-			onOpenDetailView,
-			onCloseDetailView,
-			onCopyShareLink,
-			getShareLinkId,
-			isDetailView,
-			mdiArrowExpand,
-		};
-	},
-	computed: {
-		BoardMenuScope() {
-			return BoardMenuScope;
-		},
-	},
+const boardMenuClasses = computed(() => {
+	if (isFocusContained.value === true || isHovered.value === true) {
+		return "";
+	}
+	return "hidden";
+});
+
+onMounted(async () => {
+	if (card.value === undefined) {
+		await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
+	}
 });
 </script>
 
