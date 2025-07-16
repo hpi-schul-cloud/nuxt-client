@@ -1142,6 +1142,9 @@ export default {
 		'Möchten Sie wirklich diesen Kurs "{itemName}" löschen?',
 	"pages.administration.courses.index.add": "Kurs hinzufügen",
 	"pages.administration.courses.edit": "Kurs bearbeiten",
+	"pages.administration.courses.withoutTeacher":
+		"Nur Kurse ohne Lehrkraft anzeigen",
+	"pages.administration.courses.noTeacher": "nicht vorhanden",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronisation",
 	"pages.administration.ldap.activate.className": "Name",

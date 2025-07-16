@@ -1158,6 +1158,9 @@ export default {
 		'Ви впевнені, що хочете видалити цей курс "{itemName}" ?',
 	"pages.administration.courses.index.add": "Додати курс",
 	"pages.administration.courses.edit": "Редагувати курс",
+	"pages.administration.courses.withoutTeacher":
+		"Відображати тільки курси без викладача",
+	"pages.administration.courses.noTeacher": "недоступно",
 	"pages.administration.index.title": "Адміністрування",
 	"pages.administration.ldap.activate.breadcrumb": "Cинхронізація",
 	"pages.administration.ldap.activate.className": "Ім'я",
