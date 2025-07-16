@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const useRoomsManagementStore = defineStore(
-	"roomsManagementStore",
+export const AdministrationRoomStore = defineStore(
+	"administrationRoomStore",
 	() => {
-		interface Room {
+		type Room = {
 			name: string;
 			owner: string;
 			mainSchool: string;
@@ -12,7 +12,7 @@ export const useRoomsManagementStore = defineStore(
 			totalMembers: number;
 			internalMembers: number;
 			externalMembers: number;
-		}
+		};
 
 		const mockRoomsData: Room[] = [
 			{

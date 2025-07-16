@@ -322,8 +322,9 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: `/administration/rooms/manage`,
-		component: async () => (await import("@page-room")).RoomManagePage,
+		component: async () => (await import("@page-room")).AdministrationRoomsPage,
 		name: "rooms",
+		beforeEnter: createPermissionGuard(["admin_view"]),
 	},
 	{
 		path: "/tasks",

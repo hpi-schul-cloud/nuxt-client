@@ -6,6 +6,7 @@ export { useCourseList } from "./courseList.composable";
 export { useRoomCreateState } from "./RoomCreate.state";
 export { useRoomEditState } from "./RoomEdit.state";
 export { useRoomAuthorization } from "./roomAuthorization.composable";
+export { AdministrationRoomStore } from "./manageRoom/AdministrationRoom.store";
 
 export type {
 	RoomMember,
