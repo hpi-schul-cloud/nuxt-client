@@ -48,6 +48,7 @@ const roomData = ref<RoomUpdateParams>({
 	color: RoomColor.BlueGrey,
 	startDate: undefined,
 	endDate: undefined,
+	features: [],
 });
 
 const pageTitle = computed(() =>
@@ -66,6 +67,7 @@ onMounted(async () => {
 			color: room.value.color,
 			startDate: room.value.startDate,
 			endDate: room.value.endDate,
+			features: room.value.features,
 		};
 	}
 
