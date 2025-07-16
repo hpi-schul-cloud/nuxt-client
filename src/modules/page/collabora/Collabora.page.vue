@@ -14,13 +14,26 @@ import {
 	WopiApiInterface,
 } from "@/fileStorageApi/v3";
 import { $axios } from "@/utils/api";
-import { onMounted, ref } from "vue";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { computed, onMounted, ref } from "vue";
 
 interface Props {
 	fileRecordId: string;
 }
 const props = defineProps<Props>();
 const url = ref<string>("");
+const authModule = injectStrict(AUTH_MODULE_KEY);
+
+const userName = computed(() => {
+	const firstName = authModule.getUser?.firstName;
+	const lastName = authModule.getUser?.lastName;
+
+	if (firstName && lastName) {
+		return `${firstName} ${lastName}`;
+	}
+
+	return "User Name";
+});
 
 onMounted(async () => {
 	const fileRecordId = props.fileRecordId;
@@ -33,7 +46,7 @@ onMounted(async () => {
 	const result = await fileApi.discoveryAccessUrl({
 		fileRecordId,
 		editorMode: EditorMode.EDIT,
-		userDisplayName: "Collabora User",
+		userDisplayName: userName.value,
 	});
 
 	//@ts-expect-error temporary fix for missing type
