@@ -22,6 +22,7 @@ const roomDataMock = {
 		name: "test",
 		color: "blue",
 	},
+	features: [],
 };
 
 vi.mock("vue-router", () => ({
@@ -57,6 +58,7 @@ vi.mock("@/utils/pageTitle", () => ({
 const roomParams: RoomUpdateParams = {
 	name: "test",
 	color: RoomColor.Blue,
+	features: [],
 };
 
 describe("@pages/RoomEdit.page.vue", () => {

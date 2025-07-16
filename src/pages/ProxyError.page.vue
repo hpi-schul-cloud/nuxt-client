@@ -2,41 +2,41 @@
 	<error-page :error="error">
 		<template #action>
 			<v-btn color="primary" variant="flat" @click="retryPageload">
-				{{ $t("error.proxy.action") }}
+				{{ t("error.proxy.action") }}
 			</v-btn>
 		</template>
 	</error-page>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 import ErrorPage from "@/pages/Error.page.vue";
-export default {
-	components: {
-		ErrorPage,
-	},
-	layout: "loggedOut",
-	data() {
-		return {
-			error: {
-				statusCode: 500,
-				message: this.$t("error.proxy.description"),
-			},
-			url: "",
-		};
-	},
-	created() {
-		const { redirect } = this.$route.query;
-		if (redirect) {
-			this.url = redirect;
-			setTimeout(() => {
-				this.retryPageload();
-			}, 10000);
-		}
-	},
-	methods: {
-		retryPageload() {
-			location.href = this.url;
-		},
-	},
+
+const error = ref({
+	statusCode: 500,
+	message: "",
+});
+const url = ref("");
+
+const { t } = useI18n();
+
+const route = useRoute();
+
+error.value.message = t("error.proxy.description");
+
+const retryPageload = () => {
+	location.href = url.value;
 };
+
+onMounted(() => {
+	const redirect = route.query.redirect as string | undefined;
+	if (redirect) {
+		url.value = redirect;
+		setTimeout(() => {
+			retryPageload();
+		}, 10000);
+	}
+});
 </script>

@@ -76,6 +76,7 @@ describe("useRoomCreateState", () => {
 			color: RoomColor.BlueGrey,
 			startDate: undefined,
 			endDate: undefined,
+			features: [],
 		});
 
 		it("should call roomApi.roomControllerCreateRoom with the provided params", async () => {

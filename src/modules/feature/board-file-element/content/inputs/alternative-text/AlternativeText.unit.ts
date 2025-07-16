@@ -9,7 +9,7 @@ import { VTextarea } from "vuetify/components";
 
 describe("AlternativeText", () => {
 	const mountSetup = () => {
-		const alternativeText = "test text";
+		const alternativeText: string | undefined = "test text";
 
 		const wrapper = mount(AlternativeText, {
 			props: { alternativeText, isEditMode: true },

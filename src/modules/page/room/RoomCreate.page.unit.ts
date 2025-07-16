@@ -24,10 +24,12 @@ vi.mock("@data-room/RoomCreate.state.ts", () => ({
 			id: "123",
 			name: "test",
 			color: "blue",
+			features: [],
 		}),
 		roomData: {
 			name: "test-room-data",
 			color: "blue",
+			features: [],
 		},
 	}),
 }));
@@ -43,6 +45,7 @@ vi.mock(
 const roomParams: RoomCreateParams = {
 	name: "test",
 	color: RoomColor.Blue,
+	features: [],
 };
 
 describe("@pages/RoomCreate.page.vue", () => {

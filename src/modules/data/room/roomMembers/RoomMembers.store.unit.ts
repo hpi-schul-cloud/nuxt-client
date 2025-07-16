@@ -15,6 +15,7 @@ import {
 	roomFactory,
 	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
+	roomMemberSchoolListResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -349,33 +350,68 @@ describe("useRoomMembers", () => {
 		});
 	});
 
-	describe("getSchools", () => {
+	describe("loadSchoolList", () => {
 		it("should get schools", async () => {
 			const { roomMembersStore } = setup();
-			const schoolList = roomMemberSchoolResponseFactory.buildList(3);
-			schoolApiMock.schoolControllerGetSchoolListForExternalInvite.mockResolvedValue(
+			const schoolList = roomMemberSchoolListResponseFactory.build({
+				total: 3,
+			});
+			schoolApiMock.schoolControllerGetSchoolList.mockResolvedValue(
 				mockApiResponse({
 					data: schoolList,
 				})
 			);
-			await roomMembersStore.getSchools();
+			await roomMembersStore.loadSchoolList();
 
-			expect(roomMembersStore.schools).toHaveLength(schoolList.length + 1);
+			expect(roomMembersStore.schools).toHaveLength(schoolList.total);
 			expect(roomMembersStore.schools[0]).toStrictEqual({
 				id: "school-id",
 				name: "Paul-Gerhardt-Gymnasium",
 			});
 		});
 
+		it("should get schools pagewise if more than 1000 schools", async () => {
+			const { roomMembersStore } = setup();
+
+			const totalCount = 3600;
+			let skip = 0;
+			while (skip < totalCount) {
+				const schools = roomMemberSchoolResponseFactory.buildList(
+					Math.min(1000, totalCount - skip)
+				);
+
+				schoolApiMock.schoolControllerGetSchoolList.mockResolvedValueOnce(
+					mockApiResponse({
+						data: {
+							data: schools,
+							total: totalCount,
+							skip,
+							limit: 1000,
+						},
+					})
+				);
+				skip += 1000;
+			}
+
+			await roomMembersStore.loadSchoolList();
+
+			expect(roomMembersStore.schools).toHaveLength(totalCount + 1);
+			expect(roomMembersStore.schools[0]).toStrictEqual({
+				id: "school-id",
+				name: "Paul-Gerhardt-Gymnasium",
+			});
+			expect(schoolApiMock.schoolControllerGetSchoolList).toHaveBeenCalledTimes(
+				4
+			);
+		});
+
 		it("should throw an error if the API call fails", async () => {
 			const { roomMembersStore } = setup();
 
 			const error = new Error("Test error");
-			schoolApiMock.schoolControllerGetSchoolListForExternalInvite.mockRejectedValue(
-				error
-			);
+			schoolApiMock.schoolControllerGetSchoolList.mockRejectedValue(error);
 
-			await roomMembersStore.getSchools();
+			await roomMembersStore.loadSchoolList();
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
 		});
@@ -979,7 +1015,7 @@ describe("useRoomMembers", () => {
 
 			const result = roomMembersStore.getMemberFullName(member.userId);
 
-			expect(result).toBe(`${member.lastName}, ${member.firstName}`);
+			expect(result).toBe(`${member.firstName} ${member.lastName}`);
 		});
 	});
 

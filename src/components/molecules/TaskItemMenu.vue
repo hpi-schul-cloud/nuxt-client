@@ -24,7 +24,7 @@
 		>
 			<v-list-item-title>
 				<v-icon :icon="mdiContentCopy" class="task-action-icon" />
-				{{ $t("common.actions.copy") }}
+				{{ $t("common.actions.duplicate") }}
 			</v-list-item-title>
 		</v-list-item>
 		<v-list-item

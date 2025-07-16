@@ -1,9 +1,9 @@
 <template>
 	<iframe
-		v-if="!isLoading"
+		v-if="!loading"
 		:src="iframeSrc"
 		class="player-iframe"
-		allowfullscreen="true"
+		allowfullscreen
 		frameborder="0"
 		scrolling="yes"
 	/>
@@ -12,57 +12,44 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, watch, onMounted, toRef, ref } from "vue";
+<script :src="scriptSrc" charset="UTF-8"></script>
+
+<script setup lang="ts">
+import { watch, onMounted, toRef } from "vue";
 import { $axios } from "@/utils/api";
 
-function loadScript(scriptSrc: string): Promise<void> {
-	return new Promise((resolve, reject) => {
-		const script = document.createElement("script");
-		script.src = scriptSrc;
-		script.async = true;
-		script.onload = () => resolve();
-		script.onerror = () =>
-			reject(new Error(`Failed to load script: ${scriptSrc}`));
-		document.body.appendChild(script);
+type Props = {
+	nodeId?: string;
+	loading?: boolean;
+	iframeSrc?: string;
+	scriptSrc?: string;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+	nodeId: "",
+	loading: true,
+	iframeSrc: "",
+	scriptSrc: "",
+});
+
+const model = toRef(props, "nodeId");
+const loading = toRef(props, "loading");
+const iframeSrc = toRef(props, "iframeSrc");
+const scriptSrc = toRef(props, "scriptSrc");
+
+watch(
+	() => props.nodeId,
+	(newValue: string) => {
+		model.value = newValue;
+	}
+);
+
+onMounted(async () => {
+	await $axios.get(`/v1/edu-sharing/player/${model.value}`).then((response) => {
+		iframeSrc.value = response.data.iframe_src;
+		scriptSrc.value = response.data.script_src;
 	});
-}
-
-export default defineComponent({
-	name: "LernStorePlayer",
-	props: {
-		nodeId: {
-			type: String,
-			default: "",
-		},
-	},
-	setup(props) {
-		const model = toRef(props, "nodeId");
-		const isLoading = ref(true);
-		const iframeSrc = ref("");
-
-		watch(
-			() => props.nodeId,
-			(newValue: string) => {
-				model.value = newValue;
-			}
-		);
-
-		onMounted(async () => {
-			await $axios
-				.get(`/v1/edu-sharing/player/${model.value}`)
-				.then((response) => {
-					iframeSrc.value = response.data.iframe_src;
-					loadScript(response.data.script_src);
-				});
-			isLoading.value = false;
-		});
-
-		return {
-			isLoading,
-			iframeSrc,
-		};
-	},
+	loading.value = false;
 });
 </script>
 

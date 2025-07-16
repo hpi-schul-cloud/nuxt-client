@@ -40,60 +40,56 @@
 	</footer>
 </template>
 
-<script>
-import { authModule, envConfigModule } from "@/store";
+<script setup lang="ts">
+import { envConfigModule } from "@/store";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
-	computed: {
-		school() {
-			return authModule.getSchool;
+const { t } = useI18n();
+const currentYear = computed(() => new Date().getFullYear());
+const links = computed(() => {
+	const baseLinks = [
+		{
+			to: "/imprint",
+			text: t("components.legacy.footer.imprint"),
 		},
-		currentYear() {
-			return new Date().getFullYear();
+		{
+			href: "/termsofuse",
+			text: t("components.legacy.footer.terms"),
+			target: "_blank",
+			rel: "noopener",
 		},
-		links() {
-			const links = [
-				{
-					to: "/imprint",
-					text: this.$t("components.legacy.footer.imprint"),
-				},
-				{
-					href: "/termsofuse",
-					text: this.$t("components.legacy.footer.terms"),
-					target: "_blank",
-					rel: "noopener",
-				},
-				{
-					to: "/privacypolicy",
-					text: this.$t("components.legacy.footer.privacy_policy"),
-					target: "_blank",
-					rel: "noopener",
-				},
-				{
-					href: "mailto:support@dbildungscloud.de?subject=dBildungscloud%20Anfrage",
-					text: this.$t("components.legacy.footer.contact"),
-				},
-				{
-					href: "https://github.com/hpi-schul-cloud",
-					text: this.$t("components.legacy.footer.github"),
-				},
-			];
-			if (envConfigModule.getEnv.ALERT_STATUS_URL) {
-				links.push({
-					href: envConfigModule.getEnv.ALERT_STATUS_URL,
-					text: this.$t("components.legacy.footer.status"),
-					target: "_blank",
-					rel: "noopener",
-				});
-			}
-			links.push({
-				to: "/security",
-				text: this.$t("components.legacy.footer.security"),
-			});
-			return links;
+		{
+			to: "/privacypolicy",
+			text: t("components.legacy.footer.privacy_policy"),
+			target: "_blank",
+			rel: "noopener",
 		},
-	},
-};
+		{
+			href: "mailto:support@dbildungscloud.de?subject=dBildungscloud%20Anfrage",
+			text: t("components.legacy.footer.contact"),
+		},
+		{
+			href: "https://github.com/hpi-schul-cloud",
+			text: t("components.legacy.footer.github"),
+		},
+	];
+
+	if (envConfigModule.getEnv.ALERT_STATUS_URL) {
+		baseLinks.push({
+			href: envConfigModule.getEnv.ALERT_STATUS_URL,
+			text: t("components.legacy.footer.status"),
+			target: "_blank",
+			rel: "noopener",
+		});
+	}
+	baseLinks.push({
+		to: "/security",
+		text: t("components.legacy.footer.security"),
+	});
+
+	return baseLinks;
+});
 </script>
 
 <style lang="scss" scoped>

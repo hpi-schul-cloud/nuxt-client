@@ -99,11 +99,8 @@ describe("RichTextContentElement", () => {
 					isEditMode: false,
 					elementIndex: 0,
 				});
-				const displayComponent = wrapper.findComponent(
-					RichTextContentElementDisplayComponent
-				);
-
-				expect(displayComponent.classes()).toContain("first-element");
+				const parentDiv = wrapper.find("div");
+				expect(parentDiv.classes()).toContain("first-element");
 			});
 		});
 
@@ -114,11 +111,8 @@ describe("RichTextContentElement", () => {
 					isEditMode: false,
 					elementIndex: 1,
 				});
-				const displayComponent = wrapper.findComponent(
-					RichTextContentElementDisplayComponent
-				);
-
-				expect(displayComponent.classes()).not.toContain("first-element");
+				const parentDiv = wrapper.find("div");
+				expect(parentDiv.classes()).not.toContain("first-element");
 			});
 		});
 	});
@@ -143,11 +137,8 @@ describe("RichTextContentElement", () => {
 					isEditMode: true,
 					elementIndex: 0,
 				});
-				const editComponent = wrapper.findComponent(
-					RichTextContentElementEditComponent
-				);
-
-				expect(editComponent.classes()).toContain("first-element");
+				const parentDiv = wrapper.find("div");
+				expect(parentDiv.classes()).toContain("first-element");
 			});
 		});
 
@@ -158,10 +149,8 @@ describe("RichTextContentElement", () => {
 					isEditMode: true,
 					elementIndex: 1,
 				});
-				const editComponent = wrapper.findComponent(
-					RichTextContentElementEditComponent
-				);
-				expect(editComponent.classes()).not.toContain("first-element");
+				const parentDiv = wrapper.find("div");
+				expect(parentDiv.classes()).not.toContain("first-element");
 			});
 		});
 
