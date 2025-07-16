@@ -2054,6 +2054,15 @@ export default {
 	"pages.rooms.invitationlinks.error.load":
 		"The invitation list could not be loaded.",
 	"pages.rooms.title": "Rooms",
+	"pages.rooms.administration.title": "Room administration",
+	"pages.rooms.administration.table.header.roomName": "Room name",
+	"pages.rooms.administration.table.header.roomOwner": "Room owner",
+	"pages.rooms.administration.table.header.totalMember": "Total members",
+	"pages.rooms.administration.table.header.internalMember": "Internal members",
+	"pages.rooms.administration.table.header.externalMember": "External members",
+	"pages.rooms.administration.table.header.creationDate": "Creation date",
+	"pages.rooms.administration.table.header.mainSchool": "Main school",
+	"pages.rooms.administration.table.header.actions": "Actions",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",

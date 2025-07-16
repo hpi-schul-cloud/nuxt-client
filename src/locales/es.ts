@@ -2123,6 +2123,15 @@ export default {
 	"pages.rooms.invitationlinks.error.load":
 		"No se pudo cargar la lista de invitados.",
 	"pages.rooms.title": "Salas",
+	"pages.rooms.administration.title": "Administración de salas",
+	"pages.rooms.administration.table.header.roomName": "Nombre de la sala",
+	"pages.rooms.administration.table.header.roomOwner": "Propietario de la sala",
+	"pages.rooms.administration.table.header.totalMember": "Miembros totales",
+	"pages.rooms.administration.table.header.internalMember": "Miembros internos",
+	"pages.rooms.administration.table.header.externalMember": "Miembros externos",
+	"pages.rooms.administration.table.header.creationDate": "Fecha de creación",
+	"pages.rooms.administration.table.header.mainSchool": "Escuela principal",
+	"pages.rooms.administration.table.header.actions": "Acciones",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
