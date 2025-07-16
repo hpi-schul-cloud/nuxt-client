@@ -954,6 +954,11 @@ export default {
 	"components.roomForm.labels.timePeriod": "Time period",
 	"components.roomForm.labels.timePeriod.from": "Time period from",
 	"components.roomForm.labels.timePeriod.to": "Time period to",
+	"components.roomForm.labels.videoConference.title": "Video conferences",
+	"components.roomForm.labels.videoConference.label":
+		"Allow video conferences for editors",
+	"components.roomForm.labels.videoConference.helperText":
+		"Room members with 'Edit' authorization can add and start video conferences.",
 	"components.roomForm.validation.generalSaveError":
 		"An error occurred while saving. Please check your inputs and try again.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":

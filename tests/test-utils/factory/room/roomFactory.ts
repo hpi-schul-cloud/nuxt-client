@@ -11,4 +11,5 @@ export const roomFactory = Factory.define<RoomDetails>(({ sequence }) => ({
 	permissions: [],
 	createdAt: new Date().toISOString(),
 	updatedAt: new Date().toISOString(),
+	features: [],
 }));
