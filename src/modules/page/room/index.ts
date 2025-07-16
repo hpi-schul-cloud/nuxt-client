@@ -5,6 +5,7 @@ import RoomEditPage from "./RoomEdit.page.vue";
 import RoomInvitationLinkStatusPage from "./RoomInvitationLinkStatus.page.vue";
 import RoomMembersPage from "./RoomMembers.page.vue";
 import RoomsPage from "./Rooms.page.vue";
+import RoomManagePage from "./RoomManage.page.vue";
 
 export {
 	RoomCreatePage,
@@ -12,6 +13,7 @@ export {
 	RoomDetailsSwitchPage,
 	RoomEditPage,
 	RoomInvitationLinkStatusPage,
+	RoomManagePage,
 	RoomMembersPage,
 	RoomsPage,
 };
