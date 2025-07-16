@@ -1135,8 +1135,10 @@ export default {
 	"pages.administration.courses.deleteDialog.content":
 		'Do you really want this course "{itemName}" to delete?',
 	"pages.administration.courses.index.add": "Add course",
-
 	"pages.administration.courses.edit": "Edit course",
+	"pages.administration.courses.withoutTeacher":
+		"Only show courses without teachers",
+	"pages.administration.courses.noTeacher": "not available",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronization",
 	"pages.administration.ldap.activate.className": "Name",
