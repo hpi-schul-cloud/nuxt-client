@@ -8,7 +8,7 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { useRoute, useRouter } from "vue-router";
 import { RoomUpdateParams, RoomColor } from "@/types/room/Room";
 import { RoomForm } from "@feature-room";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
@@ -36,20 +36,8 @@ vi.mock("vue-router", () => ({
 	}),
 }));
 
-vi.mock("@data-room", () => ({
-	useRoomEditState: vi.fn().mockReturnValue({
-		isLoading: false,
-		roomData: {
-			value: {
-				id: "test-1234",
-				name: "test",
-				color: "blue",
-			},
-		},
-		updateRoom: vi.fn(),
-		fetchRoom: vi.fn(),
-	}),
-}));
+vi.mock("@data-room");
+const useRoomEditStateMock = vi.mocked(useRoomEditState);
 
 vi.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
@@ -64,6 +52,19 @@ const roomParams: RoomUpdateParams = {
 describe("@pages/RoomEdit.page.vue", () => {
 	const setup = () => {
 		const notifierModule = createModuleMocks(NotifierModule);
+
+		useRoomEditStateMock.mockReturnValue({
+			isLoading: ref(false),
+			roomData: ref({
+				id: roomIdMock,
+				name: "test",
+				color: RoomColor.Blue,
+				features: [],
+			}),
+			updateRoom: vi.fn(),
+			fetchRoom: vi.fn(),
+		});
+
 		const wrapper = mount(RoomEditPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -87,6 +88,13 @@ describe("@pages/RoomEdit.page.vue", () => {
 	};
 
 	it("should be rendered in DOM", () => {
+		(useRoomEditState as Mock).mockReturnValueOnce({
+			isLoading: false,
+			roomData: roomDataMock,
+			updateRoom: vi.fn(),
+			fetchRoom: vi.fn(),
+		});
+
 		const { wrapper } = setup();
 		expect(wrapper.exists()).toBe(true);
 	});
