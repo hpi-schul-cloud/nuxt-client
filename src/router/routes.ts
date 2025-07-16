@@ -321,6 +321,11 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		path: `/administration/rooms/manage`,
+		component: async () => (await import("@page-room")).RoomManagePage,
+		name: "rooms",
+	},
+	{
 		path: "/tasks",
 		component: () => import("@/pages/tasks/TaskOverview.page.vue"),
 		name: "tasks",
