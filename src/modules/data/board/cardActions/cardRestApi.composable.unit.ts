@@ -40,7 +40,7 @@ import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import {
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
-} from "./cardActionPayload";
+} from "./cardActionPayload.types";
 import { useCardRestApi } from "./cardRestApi.composable";
 import { Mock } from "vitest";
 

@@ -27,7 +27,7 @@ import { computed, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { BoardLayout } from "@/serverApi/v3/api";
 import { useBoardStore } from "./Board.store";
-import { UpdateBoardLayoutRequestPayload } from "./boardActions/boardActionPayload";
+import { UpdateBoardLayoutRequestPayload } from "./boardActions/boardActionPayload.types";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";

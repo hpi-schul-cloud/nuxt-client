@@ -7,7 +7,7 @@ import {
 import {
 	CreateCardSuccessPayload,
 	CreateColumnSuccessPayload,
-} from "../boardActions/boardActionPayload";
+} from "../boardActions/boardActionPayload.types";
 import {
 	SR_I18N_KEYS_MAP,
 	useBoardAriaNotification,

@@ -24,7 +24,7 @@ import { setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
 import { BoardLayout } from "@/serverApi/v3/api";
-import { DeleteCardFailurePayload } from "../cardActions/cardActionPayload";
+import { DeleteCardFailurePayload } from "../cardActions/cardActionPayload.types";
 import * as CardActions from "../cardActions/cardActions";
 import {
 	CreateCardFailurePayload,
@@ -38,7 +38,7 @@ import {
 	UpdateBoardTitleFailurePayload,
 	UpdateBoardVisibilityFailurePayload,
 	UpdateColumnTitleFailurePayload,
-} from "./boardActionPayload";
+} from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";

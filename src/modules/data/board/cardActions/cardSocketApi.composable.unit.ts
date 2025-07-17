@@ -28,7 +28,7 @@ import {
 	UpdateCardHeightFailurePayload,
 	UpdateCardTitleFailurePayload,
 	UpdateElementFailurePayload,
-} from "./cardActionPayload";
+} from "./cardActionPayload.types";
 import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
 import { Router, useRouter } from "vue-router";
