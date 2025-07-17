@@ -11,6 +11,7 @@ import {
 	mockApiResponse,
 } from "@@/tests/test-utils";
 import { RoomColor } from "@/serverApi/v3/api";
+import { RoomUpdateParams } from "@/types/room/Room";
 
 jest.mock("@/utils/api");
 const mockedMapAxiosErrorToResponseError = jest.mocked(
@@ -171,9 +172,10 @@ describe("useRoomDetailsStore", () => {
 		it("should call updateRoom api", async () => {
 			const { store } = setup();
 			expect(store.isLoading).toBe(true);
-			const params = {
+			const params: RoomUpdateParams = {
 				name: "room-name",
 				color: RoomColor.BlueGrey,
+				features: [],
 			};
 
 			await store.updateRoom("room-id", params);
@@ -189,9 +191,10 @@ describe("useRoomDetailsStore", () => {
 
 	it("should throw an error when updating room data fails", async () => {
 		const { store } = setup();
-		const params = {
+		const params: RoomUpdateParams = {
 			name: "room-name",
 			color: RoomColor.BlueGrey,
+			features: [],
 		};
 		roomApiMock.roomControllerUpdateRoom.mockRejectedValue({ code: 404 });
 
