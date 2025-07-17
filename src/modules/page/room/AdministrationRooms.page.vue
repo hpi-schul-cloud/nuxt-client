@@ -17,17 +17,10 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
-import { computed, ComputedRef, onMounted } from "vue";
+import { computed, ComputedRef } from "vue";
 import { RoomAdminTable } from "@feature-room";
-import { useAdministrationRoomStore } from "@data-room";
 
 const { t } = useI18n();
-const administrationRoomStore = useAdministrationRoomStore();
-const { fetchRooms } = administrationRoomStore;
-
-onMounted(async () => {
-	await fetchRooms();
-});
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	return [

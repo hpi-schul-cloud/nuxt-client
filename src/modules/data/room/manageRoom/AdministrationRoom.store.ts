@@ -4,7 +4,7 @@ import { ref } from "vue";
 export type Room = {
 	id: string;
 	name: string;
-	owner: string;
+	owner: string | undefined;
 	mainSchool: string;
 	creationDate: string;
 	totalMembers: number;
@@ -39,7 +39,7 @@ export const useAdministrationRoomStore = defineStore(
 			{
 				id: "64b8f9c1e1a2f1a2b3c4d5e8",
 				name: "Math Workshop",
-				owner: "Prof. Lee",
+				owner: undefined,
 				mainSchool: "Mathematics Institute",
 				creationDate: "2023-03-05",
 				totalMembers: 40,
@@ -50,7 +50,7 @@ export const useAdministrationRoomStore = defineStore(
 				id: "64b8f9c1e1a2f1a2b3c4d5e9",
 				name: "History Hall",
 				owner: "Dr. Brown",
-				mainSchool: "Humanities College",
+				mainSchool: "Paul-Gerhardt-Gymnasium",
 				creationDate: "2022-09-20",
 				totalMembers: 30,
 				internalMembers: 25,
@@ -59,13 +59,37 @@ export const useAdministrationRoomStore = defineStore(
 		];
 
 		const isLoading = ref(true);
-		const rooms = ref<Room[]>([]);
+		const roomList = ref<Room[]>([]);
 		const selectedIds = ref<string[]>([]);
+
+		const userMainSchool = "Paul-Gerhardt-Gymnasium";
+
+		const sortList = (list: Room[]) => {
+			return list
+				.sort((a, b) => {
+					return a.mainSchool.localeCompare(b.mainSchool);
+				})
+				.sort((a, b) => {
+					return a.mainSchool === userMainSchool
+						? -1
+						: b.mainSchool === userMainSchool
+							? 1
+							: 0;
+				})
+				.sort((a, b) => {
+					return a.owner === undefined ? -1 : b.owner === undefined ? 1 : 0;
+				});
+		};
 
 		const fetchRooms = async () => {
 			try {
-				await new Promise((resolve) => setTimeout(resolve, 100));
-				rooms.value = mockRoomsData;
+				isLoading.value = true;
+				const response = await new Promise<Room[]>((resolve) =>
+					setTimeout(() => {
+						resolve(sortList(mockRoomsData));
+					}, 100)
+				);
+				roomList.value = response;
 			} catch {
 				// Handle error
 			} finally {
@@ -75,7 +99,7 @@ export const useAdministrationRoomStore = defineStore(
 
 		return {
 			isLoading,
-			rooms,
+			roomList,
 			selectedIds,
 			fetchRooms,
 		};

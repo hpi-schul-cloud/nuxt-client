@@ -1,7 +1,7 @@
 <template>
 	<DataTable
 		aria-label-name-key="title"
-		:items="rooms"
+		:items="roomList"
 		:header-bottom="headerBottom"
 		:table-headers="tableHeaders"
 		:show-select="true"
@@ -10,6 +10,13 @@
 	>
 		<template #[`action-menu-items`]>
 			<KebabMenuActionDeleteMemberInvitation />
+		</template>
+
+		<template #[`item.owner`]="{ item }">
+			<span>
+				<v-icon v-if="!item.owner" :icon="mdiAlertOutline" />
+				{{ item.owner || "Nicht vorhanden" }}
+			</span>
 		</template>
 
 		<template #[`item.actions`]="{ item }">
@@ -37,7 +44,7 @@ import {
 } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
-import KebabMenuActionConfirmRequest from "../../roomMembers/menus/KebabMenuActionConfirmRequest.vue";
+import { mdiAlertOutline } from "@icons/material";
 
 type Props = {
 	headerBottom?: number;
@@ -51,7 +58,7 @@ withDefaults(defineProps<Props>(), {
 const { t } = useI18n();
 const administrationRoomStore = useAdministrationRoomStore();
 const { fetchRooms } = administrationRoomStore;
-const { rooms, selectedIds } = storeToRefs(administrationRoomStore);
+const { roomList, selectedIds } = storeToRefs(administrationRoomStore);
 
 const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
