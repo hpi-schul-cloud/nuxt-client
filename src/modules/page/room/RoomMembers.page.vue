@@ -44,7 +44,11 @@
 			</div>
 		</template>
 
-		<VTabsWindow v-model="activeTab" class="room-members-tabs-window mt-12">
+		<VTabsWindow
+			v-model="activeTab"
+			class="room-members-tabs-window"
+			:class="{ 'mt-12': canAddRoomMembers }"
+		>
 			<VTabsWindowItem
 				v-for="tabItem in tabs"
 				:key="tabItem.value"
