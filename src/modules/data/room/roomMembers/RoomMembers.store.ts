@@ -415,6 +415,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		updateMembersRole,
 		confirmationList,
 		confirmationSelectedIds,
+		isCurrentUserStudent,
 		isLoading,
 		roomMembers,
 		roomMembersWithoutApplicants,
