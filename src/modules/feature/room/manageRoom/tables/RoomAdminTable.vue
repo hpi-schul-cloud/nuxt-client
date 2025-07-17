@@ -13,16 +13,16 @@
 		</template>
 
 		<template #[`item.actions`]="{ item }">
-			<div class="d-flex align-center">
-				<KebabMenu
-					:data-testid="`kebab-menu-${item.id}`"
-					:aria-label="
-						t('pages.rooms.members.invitationTable.actionMenu.ariaLabel', {
-							linkTitle: item.title,
-						})
-					"
-				/>
-			</div>
+			<KebabMenu
+				:data-testid="`kebab-menu-${item.id}`"
+				:aria-label="
+					t('pages.rooms.administration.table.row.actionMenu.ariaLabel', {
+						roomName: item.name,
+					})
+				"
+			>
+				&nbsp;
+			</KebabMenu>
 		</template>
 	</DataTable>
 </template>
@@ -37,6 +37,7 @@ import {
 } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
+import KebabMenuActionConfirmRequest from "../../roomMembers/menus/KebabMenuActionConfirmRequest.vue";
 
 type Props = {
 	headerBottom?: number;

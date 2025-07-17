@@ -2099,6 +2099,8 @@ export default {
 	"pages.rooms.administration.table.header.creationDate": "Erstellt am",
 	"pages.rooms.administration.table.header.mainSchool": "Stammschule des Raums",
 	"pages.rooms.administration.table.header.actions": "Aktionen",
+	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
+		"Aktionsmenü für den Raum “{linkTitle}”",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",

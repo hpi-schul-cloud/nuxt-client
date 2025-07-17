@@ -2101,6 +2101,8 @@ export default {
 	"pages.rooms.administration.table.header.creationDate": "Дата створення",
 	"pages.rooms.administration.table.header.mainSchool": "Головна школа",
 	"pages.rooms.administration.table.header.actions": "Дії",
+	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
+		"Меню дій для кімнати “{roomName}”",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

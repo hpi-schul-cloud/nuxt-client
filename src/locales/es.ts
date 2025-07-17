@@ -2135,6 +2135,8 @@ export default {
 	"pages.rooms.administration.table.header.creationDate": "Fecha de creación",
 	"pages.rooms.administration.table.header.mainSchool": "Escuela principal",
 	"pages.rooms.administration.table.header.actions": "Acciones",
+	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
+		"Menú de acciones para la sala “{roomName}”",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
