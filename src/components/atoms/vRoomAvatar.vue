@@ -13,7 +13,7 @@
 		<v-badge
 			class="ma-0 badge-component rounded avatar-badge"
 			bordered
-			color="rgba(var(--v-theme-primary))"
+			color="rgba(var(--v-theme-surface-variant))"
 			:model-value="!!badgeIcon"
 			:icon="badgeIcon"
 		>
@@ -247,7 +247,6 @@ const dropAvatar = () => {
 
 .avatar-badge {
 	max-width: 100%;
-	background-color: rgba(var(--v-theme-primary));
 }
 
 .dragging {
