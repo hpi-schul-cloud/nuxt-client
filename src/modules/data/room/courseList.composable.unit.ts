@@ -185,6 +185,7 @@ describe("courseList.composable", () => {
 				expect(composable.courses.value).toEqual([]);
 				expect(composable.page.value).toEqual(1);
 				expect(composable.isLoading.value).toEqual(false);
+				expect(composable.withoutTeacher.value).toBe(false);
 			});
 		});
 
@@ -229,6 +230,7 @@ describe("courseList.composable", () => {
 
 				expect(useCourseInfoApiMock.loadCoursesForSchool).toHaveBeenCalledWith(
 					"current",
+					false,
 					10,
 					0,
 					undefined,
@@ -266,6 +268,18 @@ describe("courseList.composable", () => {
 				expect(composable.courses.value).toEqual<CourseInfoDataResponse[]>([
 					courseInfo,
 				]);
+			});
+
+			describe("and withoutTeacher is set to true", () => {
+				it("should call the api with withoutTeacher set to true", async () => {
+					const { composable } = setup();
+					composable.withoutTeacher.value = true;
+					await composable.fetchCourses(CourseStatus.Current);
+
+					expect(
+						useCourseInfoApiMock.loadCoursesForSchool
+					).toHaveBeenCalledWith("current", true, 10, 0, undefined, "asc");
+				});
 			});
 		});
 

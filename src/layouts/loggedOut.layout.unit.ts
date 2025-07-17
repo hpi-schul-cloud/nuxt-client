@@ -4,7 +4,11 @@ import { envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
-import { APPLICATION_ERROR_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import {
+	APPLICATION_ERROR_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	THEME_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { envsFactory } from "@@/tests/test-utils";
 import {
@@ -48,15 +52,13 @@ describe("loggedOutLayout", () => {
 
 		const wrapper = mount(loggedOut, {
 			global: {
-				mocks: {
-					$theme: {
-						name: "instance name",
-					},
-				},
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModuleMock,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[THEME_KEY.valueOf()]: {
+						name: "instance name",
+					},
 				},
 				stubs: ["base-link"],
 			},

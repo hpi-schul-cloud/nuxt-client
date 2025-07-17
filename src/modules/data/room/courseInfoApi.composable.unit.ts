@@ -51,6 +51,7 @@ describe("courseInfoApi.composable", () => {
 
 			await useCourseInfoApi().loadCoursesForSchool(
 				CourseStatus.Current,
+				true,
 				10,
 				0,
 				CourseSortProps.Name,
@@ -59,7 +60,7 @@ describe("courseInfoApi.composable", () => {
 
 			expect(
 				courseInfoApi.courseInfoControllerGetCourseInfo
-			).toHaveBeenCalledWith(0, 10, "asc", "name", "current");
+			).toHaveBeenCalledWith(0, 10, "asc", "name", "current", true);
 		});
 	});
 });
