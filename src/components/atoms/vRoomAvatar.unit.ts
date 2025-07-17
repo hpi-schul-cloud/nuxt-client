@@ -175,7 +175,9 @@ describe("vRoomAvatar", () => {
 			await avatarComponent.trigger("dragstart");
 			const startDragEvent = wrapper.emitted("startDrag");
 
-			expect(wrapper.vm.isDragging).toBe(true);
+			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(
+				true
+			);
 			expect(startDragEvent).toHaveLength(1);
 			expect(startDragEvent && startDragEvent[0][0]).toStrictEqual(mockData);
 		});
@@ -205,7 +207,9 @@ describe("vRoomAvatar", () => {
 
 			await avatarComponent.trigger("dragenter");
 
-			expect(wrapper.vm.isDragging).toBe(false);
+			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(
+				false
+			);
 		});
 
 		it("should emit 'dragend' event when draging ended", async () => {
@@ -214,7 +218,9 @@ describe("vRoomAvatar", () => {
 
 			await avatarComponent.trigger("dragend");
 
-			expect(wrapper.vm.isDragging).toBe(false);
+			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(
+				false
+			);
 			expect(wrapper.emitted()).toHaveProperty("dragend");
 		});
 	});

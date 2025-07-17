@@ -367,7 +367,11 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					expect(wrapper.findComponent({ name: "v-dialog" })).toBeDefined();
-					expect(wrapper.vm.isDeleteDialogOpen).toBeTruthy();
+
+					expect(
+						(wrapper.vm as unknown as typeof ExternalToolSection)
+							.isDeleteDialogOpen
+					).toBeTruthy();
 				});
 
 				describe("when dialog is rendered", () => {
@@ -460,8 +464,9 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = getWrapper();
 
 				const expectedName = "Name";
+				const wrapperVm = wrapper.vm as unknown as typeof ExternalToolSection;
 
-				wrapper.vm.itemToDelete = {
+				wrapperVm.itemToDelete = {
 					id: "id",
 					name: expectedName,
 					externalToolId: "externalToolId",
@@ -471,7 +476,7 @@ describe("ExternalToolSection", () => {
 					restrictToContexts: "",
 				};
 
-				const itemName: string = wrapper.vm.getItemName;
+				const itemName: string = wrapperVm.getItemName;
 
 				expect(itemName).toEqual(expectedName);
 			});
@@ -481,9 +486,11 @@ describe("ExternalToolSection", () => {
 			it("should return an empty string", () => {
 				const { wrapper } = getWrapper();
 
-				wrapper.vm.itemToDelete = undefined;
+				const wrapperVm = wrapper.vm as unknown as typeof ExternalToolSection;
 
-				const itemName: string = wrapper.vm.getItemName;
+				wrapperVm.itemToDelete = undefined;
+
+				const itemName: string = wrapperVm.getItemName;
 
 				expect(itemName).toEqual("");
 			});

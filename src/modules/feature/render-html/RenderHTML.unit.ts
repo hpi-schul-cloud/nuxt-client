@@ -7,7 +7,7 @@ describe("RenderHTML", () => {
 	const setup = (props: {
 		html: string;
 		component?: string;
-		config?: string;
+		config?: "richText";
 	}) => {
 		const wrapper = mount(RenderHTML, {
 			global: {
