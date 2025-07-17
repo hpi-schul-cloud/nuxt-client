@@ -177,7 +177,8 @@ describe("@/components/molecules/AddContentModal", () => {
 		it("create lessonsOptions", async () => {
 			const { wrapper } = setup(testProps);
 			contentModule.setLessons(lessons);
-			const lo = wrapper.vm.lessonsOptions;
+			const lo = (wrapper.vm as unknown as typeof AddContentModal)
+				.lessonsOptions;
 
 			expect(lo).toHaveLength(1);
 			expect(lo[0]._id).toBe(lessonsMock[0]._id);

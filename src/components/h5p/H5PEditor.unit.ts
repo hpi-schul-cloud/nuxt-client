@@ -3,6 +3,7 @@ import H5PEditor from "./H5PEditor.vue";
 import { H5PEditorComponent } from "@lumieducation/h5p-webcomponents";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 vi.mock(import("@lumieducation/h5p-webcomponents"), async (importOriginal) => {
 	const actual = await importOriginal();
@@ -14,7 +15,7 @@ vi.mock(import("@lumieducation/h5p-webcomponents"), async (importOriginal) => {
 
 describe("H5PEditor", () => {
 	const contentId = "test-content-id";
-	const parentType = "test-parent-type";
+	const parentType = H5PContentParentType.BOARD_ELEMENT;
 	const parentId = "test-parent-id";
 
 	const createWrapper = (props = {}) => {

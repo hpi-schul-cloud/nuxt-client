@@ -8,7 +8,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import RoomTaskCard from "./RoomTaskCard.vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
@@ -303,7 +302,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 		it("should show or hide description area", async () => {
 			const wrapper = getWrapper({ task: testTask, userRole });
-			wrapper.vm.canShowDescription = true;
+			(wrapper.vm as unknown as typeof RoomTaskCard).canShowDescription = true;
 			const descElement = wrapper.findAll(".text-description");
 
 			expect(descElement.length).toStrictEqual(0);
@@ -452,7 +451,8 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
 				const restoreCardMock = vi.fn();
 				const wrapper = getWrapper({ task: finishedTestTask, userRole });
-				wrapper.vm.restoreCard = restoreCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).restoreCard =
+					restoreCardMock;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
@@ -482,7 +482,8 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should trigger the 'publishCard' method when 'Publish' button is clicked on a draft", async () => {
 				const publishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: draftTestTask, userRole });
-				wrapper.vm.publishCard = publishCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).publishCard =
+					publishCardMock;
 
 				const actionButton = wrapper.findComponent(
 					`[data-testid="task-card-action-publish-0"]`
@@ -497,7 +498,8 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should trigger the 'publishCard' method when 'Publish' button is clicked on a planned task", async () => {
 				const publishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: plannedTestTask, userRole });
-				wrapper.vm.publishCard = publishCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).publishCard =
+					publishCardMock;
 
 				const actionButton = wrapper.find(
 					`[data-testid="task-card-action-publish-0"]`
@@ -554,8 +556,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 					},
 				};
 				const wrapper = getWrapper({ ...localProps, userRole });
-				const { vm } = wrapper;
-				expect(vm.isPlanned).toBe(false);
+
+				expect((wrapper.vm as unknown as typeof RoomTaskCard).isPlanned).toBe(
+					false
+				);
 			});
 
 			it("should return true value after calculated isPlanned() method", () => {
@@ -584,8 +588,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 					},
 				};
 				const wrapper = getWrapper({ ...localProps, userRole });
-				const { vm } = wrapper;
-				expect(vm.isPlanned).toBe(true);
+
+				expect((wrapper.vm as unknown as typeof RoomTaskCard).isPlanned).toBe(
+					true
+				);
 			});
 
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
@@ -597,7 +603,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						envConfigModule.setEnvs(envs);
 						const copyCard = vi.fn();
 						const wrapper = getWrapper({ task: testTask, userRole });
-						wrapper.vm.copyCard = copyCard;
+						(wrapper.vm as unknown as typeof RoomTaskCard).copyCard = copyCard;
 
 						const threeDotButton = wrapper.find(".three-dot-button");
 						await threeDotButton.trigger("click");
@@ -647,7 +653,8 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should have finish button if task is not marked as finished", async () => {
 				const finishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: studentTestTask, userRole });
-				wrapper.vm.finishCard = finishCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).finishCard =
+					finishCardMock;
 				const actionButton = wrapper.findComponent(
 					`[data-testid="task-card-action-done-0"]`
 				);
@@ -663,7 +670,8 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
 				const restoreCardMock = vi.fn();
 				const wrapper = getWrapper({ task: studentFinishedTestTask, userRole });
-				wrapper.vm.restoreCard = restoreCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).restoreCard =
+					restoreCardMock;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
