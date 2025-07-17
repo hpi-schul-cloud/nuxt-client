@@ -1,21 +1,23 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const AdministrationRoomStore = defineStore(
+export type Room = {
+	id: string;
+	name: string;
+	owner: string;
+	mainSchool: string;
+	creationDate: string;
+	totalMembers: number;
+	internalMembers: number;
+	externalMembers: number;
+};
+
+export const useAdministrationRoomStore = defineStore(
 	"administrationRoomStore",
 	() => {
-		type Room = {
-			name: string;
-			owner: string;
-			mainSchool: string;
-			creationDate: string;
-			totalMembers: number;
-			internalMembers: number;
-			externalMembers: number;
-		};
-
 		const mockRoomsData: Room[] = [
 			{
+				id: "64b8f9c1e1a2f1a2b3c4d5e6",
 				name: "Physics Lab",
 				owner: "Dr. Smith",
 				mainSchool: "Science Academy",
@@ -25,6 +27,7 @@ export const AdministrationRoomStore = defineStore(
 				externalMembers: 20,
 			},
 			{
+				id: "64b8f9c1e1a2f1a2b3c4d5e7",
 				name: "Art Studio",
 				owner: "Ms. Johnson",
 				mainSchool: "Creative Arts School",
@@ -34,6 +37,7 @@ export const AdministrationRoomStore = defineStore(
 				externalMembers: 5,
 			},
 			{
+				id: "64b8f9c1e1a2f1a2b3c4d5e8",
 				name: "Math Workshop",
 				owner: "Prof. Lee",
 				mainSchool: "Mathematics Institute",
@@ -43,6 +47,7 @@ export const AdministrationRoomStore = defineStore(
 				externalMembers: 5,
 			},
 			{
+				id: "64b8f9c1e1a2f1a2b3c4d5e9",
 				name: "History Hall",
 				owner: "Dr. Brown",
 				mainSchool: "Humanities College",
@@ -55,13 +60,14 @@ export const AdministrationRoomStore = defineStore(
 
 		const isLoading = ref(true);
 		const rooms = ref<Room[]>([]);
+		const selectedIds = ref<string[]>([]);
 
 		const fetchRooms = async () => {
 			try {
 				await new Promise((resolve) => setTimeout(resolve, 100));
 				rooms.value = mockRoomsData;
 			} catch {
-				// Handle error appropriately
+				// Handle error
 			} finally {
 				isLoading.value = false;
 			}
@@ -70,6 +76,7 @@ export const AdministrationRoomStore = defineStore(
 		return {
 			isLoading,
 			rooms,
+			selectedIds,
 			fetchRooms,
 		};
 	}

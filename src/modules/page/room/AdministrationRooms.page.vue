@@ -3,7 +3,9 @@
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-items-center">
-					<h1 class="text-h3 mb-4" data-testid="room-title">Räume verwalten</h1>
+					<h1 class="text-h3 mb-4" data-testid="admin-room-title">
+						{{ t("pages.rooms.administration.title") }}
+					</h1>
 				</div>
 			</div>
 		</template>
@@ -15,19 +17,26 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
-import { computed, ComputedRef } from "vue";
+import { computed, ComputedRef, onMounted } from "vue";
 import { RoomAdminTable } from "@feature-room";
+import { useAdministrationRoomStore } from "@data-room";
 
 const { t } = useI18n();
+const administrationRoomStore = useAdministrationRoomStore();
+const { fetchRooms } = administrationRoomStore;
+
+onMounted(async () => {
+	await fetchRooms();
+});
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	return [
 		{
 			title: t("global.sidebar.item.management"),
-			to: "/rooms",
+			to: "/administration",
 		},
 		{
-			title: "Räume verwalten",
+			title: t("pages.rooms.administration.title"),
 			disabled: true,
 		},
 	];
