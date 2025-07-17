@@ -24,7 +24,7 @@ describe("store/bulkConsent", () => {
 	describe("actions", () => {
 		describe("register", () => {
 			it("'register' action should commit mutation", async () => {
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 
 				await actions.register({ commit: spyCommit }, consentDataMock);
 
@@ -32,7 +32,7 @@ describe("store/bulkConsent", () => {
 			});
 
 			it("'setStudents' action should commit mutation", async () => {
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 
 				const userData = {
 					_id: "60c8689dfa9e25030445595c",
@@ -54,7 +54,7 @@ describe("store/bulkConsent", () => {
 			});
 
 			it("'updateStudents' action should commit mutation", async () => {
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 
 				const userData = {
 					_id: "60c8689dfa9e25030445595c",

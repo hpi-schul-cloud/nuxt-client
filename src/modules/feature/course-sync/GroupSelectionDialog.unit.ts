@@ -5,17 +5,16 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { GroupListFilter, useGroupListState } from "@data-group";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 import { VAutocomplete } from "vuetify/lib/components/index";
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
-jest.mock("@data-group", () => {
+vi.mock("@data-group", () => {
 	return {
-		...jest.requireActual("@data-group"),
-		useGroupListState: jest.fn(),
+		useGroupListState: vi.fn(),
 	};
 });
 
@@ -49,11 +48,11 @@ describe("GroupSelectionDialog", () => {
 	beforeEach(() => {
 		useGroupListStateMock = createMock<ReturnType<typeof useGroupListState>>();
 
-		jest.mocked(useGroupListState).mockReturnValue(useGroupListStateMock);
+		vi.mocked(useGroupListState).mockReturnValue(useGroupListStateMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when the dialog is open", () => {
@@ -86,12 +85,12 @@ describe("GroupSelectionDialog", () => {
 
 	describe("when searching for a specific group name", () => {
 		it("should load only groups with that name", async () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			const { wrapper } = getWrapper();
 
 			const autocomplete = wrapper.findComponent(VAutocomplete);
 			await autocomplete.setValue("testGroup", "search");
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<
 				[GroupListFilter, { append: boolean }?]

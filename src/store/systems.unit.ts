@@ -10,7 +10,7 @@ describe("SystemsModule", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getter/setter", () => {
@@ -75,7 +75,7 @@ describe("SystemsModule", () => {
 				};
 
 				const mockApi = {
-					systemControllerFind: jest.fn().mockResolvedValue({
+					systemControllerFind: vi.fn().mockResolvedValue({
 						data: {
 							data: [
 								{
@@ -87,9 +87,9 @@ describe("SystemsModule", () => {
 					}),
 				};
 
-				jest
-					.spyOn(serverApi, "SystemsApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.SystemsApiInterface);
+				vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.SystemsApiInterface
+				);
 
 				return {
 					apiMock: mockApi,

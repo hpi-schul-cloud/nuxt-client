@@ -6,34 +6,47 @@ import {
 	mediaExternalToolElementResponseFactory,
 	mediaLineResponseFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
 import { useSharedMediaBoardState as useMediaBoardState } from "./mediaBoardState.composable";
+import { useBoardNotifier } from "@util-board";
 
-jest.mock("./mediaBoardApi.composable");
-jest.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("./mediaBoardApi.composable");
+vi.mock("@/components/error-handling/ErrorHandler.composable");
 
-jest.mock<typeof import("@/utils/create-shared-composable")>(
+vi.mock("@util-board");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+
+vi.mock(
 	"@/utils/create-shared-composable",
-	() => ({
-		createTestableSharedComposable: (composable) => composable,
-	})
+	() =>
+		({
+			createTestableSharedComposable: (composable) => composable,
+		}) as typeof import("@/utils/create-shared-composable")
 );
 
 describe("mediaBoardState.composable", () => {
 	let mediaBoardApiMock: DeepMocked<ReturnType<typeof useMediaBoardApi>>;
 	let useErrorHandlerMock: DeepMocked<ReturnType<typeof useErrorHandler>>;
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
 		mediaBoardApiMock = createMock<ReturnType<typeof useMediaBoardApi>>();
-		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>();
+		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>({
+			notifyWithTemplate: vi.fn().mockReturnValue(() => {
+				Promise.resolve();
+			}),
+		});
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-		jest.mocked(useMediaBoardApi).mockReturnValue(mediaBoardApiMock);
-		jest.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
+		vi.mocked(useMediaBoardApi).mockReturnValue(mediaBoardApiMock);
+		vi.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getLineIndex", () => {

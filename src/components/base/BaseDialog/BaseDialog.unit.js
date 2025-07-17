@@ -84,7 +84,7 @@ describe("@/components/base/BaseDialog", () => {
 		});
 
 		it("should call onConfirm prop on primary action click", async () => {
-			const callbackStub = jest.fn();
+			const callbackStub = vi.fn();
 			const wrapper = mountDialog({
 				props: {
 					active: true,
@@ -99,7 +99,7 @@ describe("@/components/base/BaseDialog", () => {
 		});
 
 		it("should call onCancel prop on secondary action click", async () => {
-			const callbackStub = jest.fn();
+			const callbackStub = vi.fn();
 			const wrapper = mountDialog({
 				props: {
 					active: true,

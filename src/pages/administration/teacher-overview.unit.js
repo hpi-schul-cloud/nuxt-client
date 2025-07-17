@@ -79,10 +79,10 @@ const createMockStore = () => {
 			users: {
 				namespaced: true,
 				actions: {
-					findTeachers: jest.fn(),
-					deleteUsers: jest.fn(),
-					getQrRegistrationLinks: jest.fn(),
-					sendRegistrationLink: jest.fn(),
+					findTeachers: vi.fn(),
+					deleteUsers: vi.fn(),
+					getQrRegistrationLinks: vi.fn(),
+					sendRegistrationLink: vi.fn(),
 				},
 				getters: {
 					getList: () => mockData,
@@ -103,7 +103,7 @@ const createMockStore = () => {
 					get: () => () => ({ page: 1 }),
 				},
 				mutations: {
-					set: jest.fn(),
+					set: vi.fn(),
 				},
 			},
 		},
@@ -120,9 +120,9 @@ describe("teachers/index", () => {
 	const OLD_ENV = process.env;
 
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 
-		jest.resetModules(); // reset module registry to avoid conflicts
+		vi.resetModules(); // reset module registry to avoid conflicts
 		process.env = { ...OLD_ENV }; // make a copy
 
 		setupStores({
@@ -245,7 +245,7 @@ describe("teachers/index", () => {
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
 		await dataRow.vm.$emit("update:selected", true);
-		jest.runAllTimers();
+		vi.runAllTimers();
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
@@ -260,14 +260,14 @@ describe("teachers/index", () => {
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		// delete button action is rendered in contextMenu
 		const deleteActionButton = wrapper.find(`[data-testid="delete_action"]`);
 		expect(deleteActionButton.exists()).toBe(true);
 		// delete button is clicked
 		await deleteActionButton.trigger("click");
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		// delete action is emitted
 		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
@@ -286,7 +286,7 @@ describe("teachers/index", () => {
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
 		await dataRow.vm.$emit("update:selected", true);
-		jest.runAllTimers();
+		vi.runAllTimers();
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
@@ -301,7 +301,7 @@ describe("teachers/index", () => {
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		// registration_link button action is rendered in contextMenu
 		const registrationButton = wrapper.find(
@@ -310,7 +310,7 @@ describe("teachers/index", () => {
 		expect(registrationButton.exists()).toBe(true);
 		// registration_link button is clicked
 		await registrationButton.trigger("click");
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		// registration_link action is emitted
 		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
@@ -329,7 +329,7 @@ describe("teachers/index", () => {
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
 		await dataRow.vm.$emit("update:selected", true);
-		jest.runAllTimers();
+		vi.runAllTimers();
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
@@ -344,14 +344,14 @@ describe("teachers/index", () => {
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		// qr_code button action is rendered in contextMenu
 		const registrationButton = wrapper.find(`[data-testid="qr_code"]`);
 		expect(registrationButton.exists()).toBe(true);
 		// qr_code button is clicked
 		await registrationButton.trigger("click");
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		// qr_code action is emitted
 		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
@@ -472,7 +472,7 @@ describe("teachers/index", () => {
 		const { wrapper, usersActionsStubs, uiStateMutationsStubs } = setup();
 
 		// run all existing timers
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		const searchBarInput = wrapper
 			.find(`[data-testid="searchbar"]`)
@@ -482,7 +482,7 @@ describe("teachers/index", () => {
 		searchBarInput.setValue("abc");
 
 		//run new timer from updating the value
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		expect(uiStateMutationsStubs.set).toHaveBeenCalled();
 		expect(usersActionsStubs.findTeachers).toHaveBeenCalled();
@@ -492,7 +492,7 @@ describe("teachers/index", () => {
 	it.skip("should table filter options call uiState after passing props", () => {
 		const { wrapper, uiStateMutationsStubs } = setup();
 
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		const filterComponent = wrapper.findComponent(
 			`[data-testid="data_filter"]`
@@ -501,7 +501,7 @@ describe("teachers/index", () => {
 
 		filterComponent.setProps({ activeFilters: { classes: ["mockclassname"] } });
 
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		expect(uiStateMutationsStubs.set).toHaveBeenCalled();
 	});

@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mdiSync } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { VBadge } from "vuetify/lib/components/index";
@@ -22,7 +22,7 @@ const mockData = {
 	isSynchronized: false,
 };
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 
 describe("vRoomAvatar", () => {
 	const setup = (optionalProps: object = {}) => {
@@ -131,10 +131,10 @@ describe("vRoomAvatar", () => {
 
 	it("should not redirect to room page if condenseLayout props is true", async () => {
 		Object.defineProperty(window, "location", {
-			set: jest.fn(),
+			set: vi.fn(),
 			get: () => createMock<Location>(),
 		});
-		const locationSpy = jest.spyOn(window, "location", "set");
+		const locationSpy = vi.spyOn(window, "location", "set");
 		const { wrapper } = setup({ condenseLayout: true });
 
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });

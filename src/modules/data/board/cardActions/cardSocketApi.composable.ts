@@ -13,7 +13,7 @@ import {
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
-} from "./cardActionPayload";
+} from "./cardActionPayload.types";
 import { useDebounceFn } from "@vueuse/core";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 

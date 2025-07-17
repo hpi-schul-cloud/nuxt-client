@@ -52,7 +52,6 @@
 
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import router from "@/router";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
@@ -75,10 +74,13 @@ import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
+import { useRouter } from "vue-router";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
 const boardApi = useBoardApi();
 
 const { t } = useI18n();
+const router = useRouter();
 
 const props = defineProps({
 	folderId: {
@@ -108,6 +110,7 @@ const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles, rename } =
 const boardStore = useBoardStore();
 
 const { hasEditPermission } = useBoardPermissions();
+const { handleError, notifyWithTemplate } = useErrorHandler();
 
 const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
@@ -192,7 +195,13 @@ const onUpdateName = async (fileName: string, fileRecord: FileRecord) => {
 const deleteAndNavigateToBoard = async (folderId: string) => {
 	const boardPath = mapNodeTypeToPathType(parent.value.type);
 
-	await boardApi.deleteElementCall(folderId);
+	try {
+		await boardApi.deleteElementCall(folderId);
+	} catch (error) {
+		handleError(error, {
+			404: notifyWithTemplate("notDeleted", "boardElement"),
+		});
+	}
 	router.replace(`/${boardPath}/${parent.value.id}`);
 };
 

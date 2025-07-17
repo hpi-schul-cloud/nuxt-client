@@ -12,11 +12,12 @@ import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { ComponentPublicInstance, nextTick } from "vue";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import AddElementDialog from "./AddElementDialog.vue";
+import type { Mocked } from "vitest";
 
-jest.mock("./SharedElementTypeSelection.composable");
+vi.mock("./SharedElementTypeSelection.composable");
 
 describe("ElementTypeSelection", () => {
-	const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
+	const envConfigModule: Mocked<EnvConfigModule> = createModuleMocks(
 		EnvConfigModule,
 		{
 			getEnv: envsFactory.build({
@@ -35,8 +36,8 @@ describe("ElementTypeSelection", () => {
 			dynamicElementTypeOptions,
 		} = setupSharedElementTypeSelectionMock();
 
-		const createTextElement = jest.fn();
-		const createFileElement = jest.fn();
+		const createTextElement = vi.fn();
+		const createFileElement = vi.fn();
 
 		staticElementTypeOptions.value = [
 			{
@@ -177,7 +178,7 @@ describe("ElementTypeSelection", () => {
 				{
 					icon: "dynamic-action1-icon",
 					label: "dynamic-action1-label",
-					action: jest.fn(),
+					action: vi.fn(),
 					testId,
 				},
 			];
@@ -197,7 +198,7 @@ describe("ElementTypeSelection", () => {
 				{
 					icon: "dynamic-action1-icon",
 					label: "dynamic-action1-label",
-					action: jest.fn(),
+					action: vi.fn(),
 					testId: "dynamic-action1-id",
 				},
 			];

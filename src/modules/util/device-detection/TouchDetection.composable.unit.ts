@@ -24,7 +24,7 @@ describe(useTouchDetection.name, () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("isTouchEvent", () => {

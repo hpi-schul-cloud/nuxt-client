@@ -25,7 +25,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 
 const mockRoomStoreData = [
 	{
@@ -105,14 +105,17 @@ setupStores({
 });
 
 const spyMocks = {
-	storeRoomAlignMock: jest
+	storeRoomAlignMock: vi
 		.spyOn(courseRoomListModule, "align")
 		.mockImplementation(async () => ({})),
-	storeModuleFetchMock: jest
+	storeModuleFetchMock: vi
 		.spyOn(courseRoomListModule, "fetch")
 		.mockImplementation(async () => ({})),
-	storeModuleFetchAllMock: jest
+	storeModuleFetchAllMock: vi
 		.spyOn(courseRoomListModule, "fetchAllElements")
+		.mockImplementation(async () => ({})),
+	storeModuleUpdateMock: vi
+		.spyOn(courseRoomListModule, "update")
 		.mockImplementation(async () => ({})),
 };
 
@@ -122,7 +125,7 @@ let notifierModuleMock;
 
 const defaultMocks = {
 	$route: { query: {} },
-	$router: { replace: jest.fn() },
+	$router: { replace: vi.fn() },
 };
 
 const getWrapper = () => {
@@ -162,7 +165,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should fetch the room data", async () => {

@@ -6,7 +6,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { nextTick } from "vue";
@@ -92,7 +92,7 @@ const lessons = {
 initializeAxios(createMock<AxiosInstance>());
 
 const createMockStore = () => {
-	const createStudentStub = jest.fn();
+	const createStudentStub = vi.fn();
 	const mockStore = createStore({
 		modules: {
 			courses: {

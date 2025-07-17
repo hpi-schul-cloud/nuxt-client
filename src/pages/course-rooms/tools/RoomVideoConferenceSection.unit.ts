@@ -71,6 +71,9 @@ describe("RoomVideoConferenceSection", () => {
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
+				stubs: {
+					VideoConferenceConfigurationDialog: true,
+				},
 			},
 			props,
 		});
@@ -84,7 +87,7 @@ describe("RoomVideoConferenceSection", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the video conference is not running", () => {
@@ -482,15 +485,11 @@ describe("RoomVideoConferenceSection", () => {
 				const card = wrapper.findComponent(RoomVideoConferenceCard);
 				await card.trigger("click");
 
-				const configurationDialog = wrapper.findComponent<typeof VDialog>(
+				const configurationDialog = wrapper.findComponent(
 					VideoConferenceConfigurationDialog
 				);
 
-				const dialogContent = configurationDialog.findComponent({
-					name: "VCard",
-				});
-
-				expect(dialogContent.exists()).toBe(true);
+				expect(configurationDialog.props("isOpen")).toBe(true);
 			});
 		});
 	});
@@ -626,7 +625,7 @@ describe("RoomVideoConferenceSection", () => {
 	describe("when a videoconference is started or joined", () => {
 		describe("when an error occurs", () => {
 			const setup = () => {
-				const error = jest.fn(() => {
+				const error = vi.fn(() => {
 					throw new Error();
 				});
 

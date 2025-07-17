@@ -15,7 +15,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { shallowMount } from "@vue/test-utils";
 import { computed, nextTick } from "vue";
 import FileContentElement from "./FileContentElement.vue";
@@ -25,14 +25,14 @@ import { FileAlert } from "./shared/types/FileAlert.enum";
 import { FileProperties } from "./shared/types/file-properties";
 import FileUpload from "./upload/FileUpload.vue";
 
-jest.mock("@data-board", () => {
+vi.mock("@data-board", () => {
 	return {
-		useBoardFocusHandler: jest.fn(),
-		useContentElementState: jest.fn(() => ({ modelValue: {} })),
+		useBoardFocusHandler: vi.fn(),
+		useContentElementState: vi.fn(() => ({ modelValue: {} })),
 	};
 });
-jest.mock("@feature-board");
-jest.mock("./content/alert/useFileAlerts.composable");
+vi.mock("@feature-board");
+vi.mock("./content/alert/useFileAlerts.composable");
 
 describe("FileContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
@@ -45,8 +45,8 @@ describe("FileContentElement", () => {
 	}) => {
 		const menu = "slot-menu";
 
-		const addAlertMock = jest.fn();
-		jest.mocked(useFileAlerts).mockReturnValue({
+		const addAlertMock = vi.fn();
+		vi.mocked(useFileAlerts).mockReturnValue({
 			addAlert: addAlertMock,
 			alerts: computed(() => []),
 		});
@@ -72,9 +72,9 @@ describe("FileContentElement", () => {
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+					fileStorageApiMock
+				);
 
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
@@ -150,9 +150,9 @@ describe("FileContentElement", () => {
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+					fileStorageApiMock
+				);
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
 					fileRecordResponse,
 				]);
@@ -366,9 +366,9 @@ describe("FileContentElement", () => {
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const elementPositionProps = {
@@ -457,9 +457,9 @@ describe("FileContentElement", () => {
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 					fileStorageApiMock.upload.mockRejectedValueOnce(new Error("test"));
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
@@ -519,9 +519,9 @@ describe("FileContentElement", () => {
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+					fileStorageApiMock
+				);
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
 					fileRecordResponse,
 				]);

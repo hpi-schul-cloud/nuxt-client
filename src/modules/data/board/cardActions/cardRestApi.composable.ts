@@ -35,7 +35,7 @@ import {
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
-} from "./cardActionPayload";
+} from "./cardActionPayload.types";
 import { useI18n } from "vue-i18n";
 
 export const useCardRestApi = () => {

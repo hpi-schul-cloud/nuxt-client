@@ -11,7 +11,7 @@ import { VSkeletonLoader } from "vuetify/lib/components/index";
 import RoomGrid from "./RoomGrid.vue";
 import RoomTile from "./RoomTile.vue";
 
-jest.mock("@data-room");
+vi.mock("@data-room");
 
 describe("@feature-room/RoomGrid", () => {
 	const setup = (props?: ComponentProps<typeof RoomGrid>) => {
@@ -29,7 +29,7 @@ describe("@feature-room/RoomGrid", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should render loading state when rooms are loading", () => {

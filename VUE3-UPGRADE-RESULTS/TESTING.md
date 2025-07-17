@@ -42,7 +42,7 @@ const mockRoute = {
   }
 }
 const mockRouter = {
-  push: jest.fn()
+  push: vi.fn()
 }
 
 const wrapper = mount(Component, {

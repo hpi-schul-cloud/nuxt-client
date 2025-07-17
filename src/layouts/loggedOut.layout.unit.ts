@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
@@ -15,8 +16,8 @@ import { mount } from "@vue/test-utils";
 import { useRouter } from "vue-router";
 import loggedOut from "./loggedOut.layout.vue";
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
 describe("loggedOutLayout", () => {
 	const mountComponent = () => {
@@ -38,10 +39,10 @@ describe("loggedOutLayout", () => {
 
 		const $route = { path: "home" };
 		const $router = {
-			push: jest.fn(),
+			push: vi.fn(),
 			currentRoute: { value: $route },
-			replace: jest.fn(),
-			afterEach: jest.fn(),
+			replace: vi.fn(),
+			afterEach: vi.fn(),
 		};
 		useRouterMock.mockReturnValue($router);
 

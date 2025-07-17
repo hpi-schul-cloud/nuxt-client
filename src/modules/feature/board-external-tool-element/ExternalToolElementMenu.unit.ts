@@ -31,7 +31,7 @@ describe("ExternalToolElementMenu", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("Edit Button", () => {

@@ -4,24 +4,25 @@ import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { groupResponseFactory, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { GroupListFilter, useGroupApi, useGroupListState } from "./index";
+import type { Mocked } from "vitest";
 
-jest.mock("@data-group/GroupApi.composable");
+vi.mock("@data-group/GroupApi.composable");
 
 describe("groupListState.composable", () => {
 	let useGroupApiMock: DeepMocked<ReturnType<typeof useGroupApi>>;
-	const notifierModule: jest.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	beforeEach(() => {
 		useGroupApiMock = createMock<ReturnType<typeof useGroupApi>>();
 
-		jest.mocked(useGroupApi).mockReturnValue(useGroupApiMock);
+		vi.mocked(useGroupApi).mockReturnValue(useGroupApiMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getComposable = () => {
