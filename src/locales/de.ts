@@ -960,6 +960,11 @@ export default {
 	"components.roomForm.labels.timePeriod": "Zeitraum",
 	"components.roomForm.labels.timePeriod.from": "Zeitraum von",
 	"components.roomForm.labels.timePeriod.to": "Zeitraum bis",
+	"components.roomForm.labels.videoConference.title": "Videokonferenzen",
+	"components.roomForm.labels.videoConference.label":
+		"Videokonferenzen für Bearbeitende erlauben",
+	"components.roomForm.labels.videoConference.helperText":
+		"Raum-Mitglieder mit der Berechtigung 'Bearbeiten' dürfen Videokonferenzen hinzufügen und starten.",
 	"components.roomForm.validation.generalSaveError":
 		"Beim Speichern ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -1137,6 +1142,9 @@ export default {
 		'Möchten Sie wirklich diesen Kurs "{itemName}" löschen?',
 	"pages.administration.courses.index.add": "Kurs hinzufügen",
 	"pages.administration.courses.edit": "Kurs bearbeiten",
+	"pages.administration.courses.withoutTeacher":
+		"Nur Kurse ohne Lehrkraft anzeigen",
+	"pages.administration.courses.noTeacher": "nicht vorhanden",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronisation",
 	"pages.administration.ldap.activate.className": "Name",

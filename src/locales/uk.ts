@@ -976,6 +976,11 @@ export default {
 	"components.roomForm.labels.timePeriod": "Період часу",
 	"components.roomForm.labels.timePeriod.from": "Період від",
 	"components.roomForm.labels.timePeriod.to": "Період до",
+	"components.roomForm.labels.videoConference.title": "Відеоконференції",
+	"components.roomForm.labels.videoConference.label":
+		"Дозволити відеоконференції для редакторів",
+	"components.roomForm.labels.videoConference.helperText":
+		"Учасники кімнати з правами «Редагувати» можуть додавати і починати відеоконференції.",
 	"components.roomForm.validation.generalSaveError":
 		"Виникла помилка при збереженні. Будь ласка, перевірте свої записи та спробуйте ще раз.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -1153,6 +1158,9 @@ export default {
 		'Ви впевнені, що хочете видалити цей курс "{itemName}" ?',
 	"pages.administration.courses.index.add": "Додати курс",
 	"pages.administration.courses.edit": "Редагувати курс",
+	"pages.administration.courses.withoutTeacher":
+		"Відображати тільки курси без викладача",
+	"pages.administration.courses.noTeacher": "недоступно",
 	"pages.administration.index.title": "Адміністрування",
 	"pages.administration.ldap.activate.breadcrumb": "Cинхронізація",
 	"pages.administration.ldap.activate.className": "Ім'я",

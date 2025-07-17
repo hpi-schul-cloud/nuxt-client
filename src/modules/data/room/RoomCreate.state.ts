@@ -12,6 +12,7 @@ export const useRoomCreateState = () => {
 		color: RoomColor.BlueGrey,
 		startDate: undefined,
 		endDate: undefined,
+		features: [],
 	});
 
 	/**

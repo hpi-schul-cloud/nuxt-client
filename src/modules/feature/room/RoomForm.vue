@@ -4,7 +4,7 @@
 			<VTextField
 				v-model="roomData.name"
 				class="mb-8"
-				:label="$t('components.roomForm.labels.roomName')"
+				:label="t('components.roomForm.labels.roomName')"
 				:error-messages="
 					v$.roomData.name.$errors.map((e: ErrorObject) => unref(e.$message))
 				"
@@ -18,7 +18,7 @@
 			</div>
 			<div class="mb-8">
 				<label class="d-flex mb-2">
-					{{ $t("components.roomForm.labels.timePeriod") }}
+					{{ t("components.roomForm.labels.timePeriod") }}
 				</label>
 				<div class="d-flex">
 					<DatePicker
@@ -27,7 +27,7 @@
 						:errors="startDateErrors"
 						class="w-50 mr-4"
 						data-testid="room-start-date-input"
-						:aria-label="$t('components.roomForm.labels.timePeriod.from')"
+						:aria-label="t('components.roomForm.labels.timePeriod.from')"
 						@update:date="onUpdateStartDate"
 					/>
 					<DatePicker
@@ -35,9 +35,27 @@
 						:min-date="todayISO"
 						class="w-50 ml-4"
 						data-testid="room-end-date-input"
-						:aria-label="$t('components.roomForm.labels.timePeriod.to')"
+						:aria-label="t('components.roomForm.labels.timePeriod.to')"
 						@update:date="onUpdateEndDate"
 					/>
+				</div>
+			</div>
+			<div class="mb-16">
+				<label class="mb-2">
+					{{ t("components.roomForm.labels.videoConference.title") }}
+				</label>
+				<v-checkbox
+					:model-value="
+						roomData.features.includes(RoomFeatures.EditorManageVideoconference)
+					"
+					class="video-conference-checkbox"
+					data-testid="room-video-conference-checkbox"
+					:label="t('components.roomForm.labels.videoConference.label')"
+					:hide-details="true"
+					@click="onToggleVideoConferenceFeature"
+				/>
+				<div class="text-grey-darken-1 ms-8 helper-text">
+					{{ t("components.roomForm.labels.videoConference.helperText") }}
 				</div>
 			</div>
 		</div>
@@ -49,7 +67,7 @@
 				data-testid="room-form-cancel-btn"
 				@click="onCancel"
 			>
-				{{ $t("common.actions.cancel") }}
+				{{ t("common.actions.cancel") }}
 			</VBtn>
 			<VBtn
 				variant="flat"
@@ -57,7 +75,7 @@
 				type="submit"
 				data-testid="room-form-save-btn"
 			>
-				{{ $t("common.actions.save") }}
+				{{ t("common.actions.save") }}
 			</VBtn>
 		</div>
 		<ConfirmationDialog />
@@ -79,6 +97,7 @@ import dayjs from "dayjs";
 import { computed, PropType, unref } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
+import { RoomFeatures } from "@/serverApi/v3";
 
 const props = defineProps({
 	room: {
@@ -178,6 +197,17 @@ const onUpdateEndDate = (newDate: string) => {
 	roomData.value.endDate = newDate;
 };
 
+const onToggleVideoConferenceFeature = () => {
+	const features = roomData.value.features;
+
+	const index = features.indexOf(RoomFeatures.EditorManageVideoconference);
+	if (index > -1) {
+		features.splice(index, 1);
+	} else {
+		features.push(RoomFeatures.EditorManageVideoconference);
+	}
+};
+
 const onSave = async () => {
 	const valid = await v$.value.$validate();
 	if (valid) {
@@ -199,3 +229,14 @@ const onCancel = async () => {
 	}
 };
 </script>
+
+<style lang="scss" scoped>
+.helper-text {
+	font-size: var(--text-sm);
+	margin-top: -12px;
+}
+
+.video-conference-checkbox {
+	margin-left: -8px;
+}
+</style>
