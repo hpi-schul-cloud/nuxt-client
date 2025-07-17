@@ -83,7 +83,7 @@ const { t } = useI18n();
 const router = useRouter();
 
 const badgeIcon = computed(() => {
-	if (props.showBadge && props.item.notification === true) {
+	if (props.showBadge) {
 		return mdiLock;
 	}
 
@@ -247,9 +247,14 @@ const dropAvatar = () => {
 
 .avatar-badge {
 	max-width: 100%;
+	background-color: rgba(var(--v-theme-primary));
 }
 
 .dragging {
 	opacity: 0.5;
+}
+
+.v-badge__badge {
+	background-color: black !important;
 }
 </style>
