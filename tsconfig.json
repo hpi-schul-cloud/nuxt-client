@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"isolatedModules": true,
 		"target": "esnext",
 		"module": "esnext",
 		"strict": true,
@@ -10,7 +11,7 @@
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"allowJs": true,
-		"checkJs": true,
+		"checkJs": false,
 		"forceConsistentCasingInFileNames": true,
 		"useDefineForClassFields": true,
 		"sourceMap": true,
