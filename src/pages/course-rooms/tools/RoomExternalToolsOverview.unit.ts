@@ -194,7 +194,7 @@ describe("RoomExternalToolOverview", () => {
 			vi.useRealTimers();
 		});
 		const setup = () => {
-			vi.useFakeTimers({ legacyFakeTimers: true });
+			vi.useFakeTimers();
 			const { refreshTime } = getWrapper();
 
 			return {
