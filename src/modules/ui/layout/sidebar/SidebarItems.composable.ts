@@ -236,6 +236,7 @@ export const useSidebarItems = () => {
 				{
 					title: "pages.rooms.title",
 					to: "/administration/rooms/manage",
+					feature: "FEATURE_ROOMS_ENABLED",
 					permissions: ["ADMIN_VIEW"],
 					testId: "sidebar-room-management",
 				},
