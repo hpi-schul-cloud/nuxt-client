@@ -2563,6 +2563,12 @@ export interface CourseMetadataResponse {
      */
     displayColor: string;
     /**
+     * Indicates if the course is locked and cannot be accessed.
+     * @type {boolean}
+     * @memberof CourseMetadataResponse
+     */
+    isLocked: boolean;
+    /**
      * Start date of the course
      * @type {string}
      * @memberof CourseMetadataResponse

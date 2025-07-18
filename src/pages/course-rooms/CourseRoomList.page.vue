@@ -48,7 +48,7 @@
 								class="room-avatar"
 								:item="room"
 								size="5em"
-								:show-badge="true"
+								:show-badge="room.isLocked"
 							/>
 						</v-col>
 					</v-row>

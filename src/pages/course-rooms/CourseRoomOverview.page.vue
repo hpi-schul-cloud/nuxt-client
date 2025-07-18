@@ -83,7 +83,7 @@
 								class="room-avatar"
 								:item="getDataObject(rowIndex, colIndex)"
 								:size="dimensions.cellWidth"
-								:show-badge="true"
+								:show-badge="getDataObject(rowIndex, colIndex).isLocked"
 								:draggable="allowDragging"
 								data-avatar-type="vRoomAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
