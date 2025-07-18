@@ -834,8 +834,11 @@ describe("Board", () => {
 
 			describe("@createApplicationError", () => {
 				describe("when board is in draft mode", () => {
-					describe("when the user is not a teacher", () => {
+					describe("when the user has not edit permission", () => {
 						it("should call 'createApplicationError' method", async () => {
+							mockedBoardPermissions.hasEditPermission = ref(false);
+							mockedBoardPermissions.arePermissionsLoaded = ref(true);
+
 							const mockRoomId =
 								mockedUseSharedBoardPageInformation().roomId.value;
 							mockedBoardPermissions.isTeacher = ref(false);
@@ -880,9 +883,9 @@ describe("Board", () => {
 				});
 
 				describe("when board is published mode", () => {
-					describe("when the user is not a teacher", () => {
+					describe("when the user has not edit permission", () => {
 						it("should not call 'createApplicationError' method", async () => {
-							mockedBoardPermissions.isTeacher = ref(false);
+							mockedBoardPermissions.hasEditPermission = ref(false);
 							const { boardStore, wrapperVM } = setup();
 							expect(wrapperVM.isBoardVisible).toBe(true);
 
@@ -897,9 +900,9 @@ describe("Board", () => {
 						});
 					});
 
-					describe("when the user is a teacher", () => {
+					describe("when the user has edit permission", () => {
 						it("should not call 'createApplicationError' method", async () => {
-							mockedBoardPermissions.isTeacher = ref(true);
+							mockedBoardPermissions.hasEditPermission = ref(true);
 							const { boardStore, wrapperVM } = setup();
 							expect(wrapperVM.isBoardVisible).toBe(true);
 
