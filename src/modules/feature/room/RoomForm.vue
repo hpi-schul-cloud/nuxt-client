@@ -54,7 +54,7 @@
 					:hide-details="true"
 					@click="onToggleVideoConferenceFeature"
 				/>
-				<div class="text-grey-darken-1 ms-8 helper-text">
+				<div class="text-medium-emphasis ms-8 helper-text">
 					{{ t("components.roomForm.labels.videoConference.helperText") }}
 				</div>
 			</div>
