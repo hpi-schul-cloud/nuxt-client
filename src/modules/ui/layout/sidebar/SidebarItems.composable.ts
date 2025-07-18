@@ -234,6 +234,13 @@ export const useSidebarItems = () => {
 					testId: "sidebar-management-teachers",
 				},
 				{
+					title: "pages.rooms.title",
+					to: "/administration/rooms/manage",
+					feature: "FEATURE_ROOMS_ENABLED",
+					permissions: ["ADMIN_VIEW"],
+					testId: "sidebar-room-management",
+				},
+				{
 					title: "global.sidebar.item.courses",
 					to: "/administration/rooms/new",
 					testId: "sidebar-management-courses",

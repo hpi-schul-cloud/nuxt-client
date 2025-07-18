@@ -118,6 +118,12 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: createPermissionGuard(["teacher_create"]),
 	},
 	{
+		path: `/administration/rooms/manage`,
+		component: async () => (await import("@page-room")).AdministrationRoomsPage,
+		name: "administration-rooms-manage",
+		beforeEnter: createPermissionGuard(["admin_view"]),
+	},
+	{
 		path: "/administration/rooms/new",
 		component: () => import("@/pages/administration/RoomsOverview.page.vue"),
 		name: "administration-rooms-new",
