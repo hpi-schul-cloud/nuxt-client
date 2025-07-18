@@ -4,6 +4,7 @@ import {
 	CommonCartridgeApiInterface,
 	CommonCartridgeApiFactory,
 } from "@/commonCartridgeApi/v3";
+import { MockedFunction } from "vitest";
 
 vi.mock("@/commonCartridgeApi/v3/api", () => ({
 	CommonCartridgeApiFactory: vi.fn(),
@@ -50,7 +51,7 @@ describe("CommonCartridgeImportModule", () => {
 			const realMock = createMock<CommonCartridgeApiInterface>();
 
 			(
-				CommonCartridgeApiFactory as vi.MockedFunction<
+				CommonCartridgeApiFactory as MockedFunction<
 					typeof CommonCartridgeApiFactory
 				>
 			).mockReturnValue(realMock);

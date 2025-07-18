@@ -42,10 +42,12 @@ vi.mock(
 		}) as typeof import("@/utils/pageTitle")
 );
 
+type Tab = "current" | "next" | "archive";
+
 const createWrapper = (
 	groupModuleGetters: Partial<GroupModule> = {},
 	schoolsModuleGetters: Partial<SchoolsModule> = {},
-	props: { tab: string } = { tab: "current" }
+	props: { tab: Tab } = { tab: "current" }
 ) => {
 	const route = { query: { tab: "current" } };
 	useRouteMock.mockReturnValue(route);

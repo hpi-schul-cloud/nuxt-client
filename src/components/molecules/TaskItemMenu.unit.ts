@@ -28,10 +28,10 @@ let notifierModuleMock: NotifierModule;
 
 const getWrapper = (
 	props: {
-		taskId?: string;
-		taskIsFinished?: boolean;
-		taskIsPublished?: boolean;
-		userRole?: string;
+		taskId: string;
+		taskIsFinished: boolean;
+		taskIsPublished: boolean;
+		userRole: string;
 		courseId?: string;
 	},
 	options = {}

@@ -99,7 +99,7 @@ describe("MediaBoardExternalToolElement", () => {
 			useContextExternalToolConfigurationStatusMock
 		);
 
-		vi.useFakeTimers({ legacyFakeTimers: true });
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {
