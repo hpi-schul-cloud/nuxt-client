@@ -9,7 +9,11 @@ import {
 	ObjectIdMock,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useBoardFeatures, useCardStore } from "@data-board";
+import {
+	useBoardFeatures,
+	useBoardPermissions,
+	useCardStore,
+} from "@data-board";
 import { createMock } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
@@ -19,7 +23,6 @@ import { ref } from "vue";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
 import { ElementTypeSelectionOptions } from "./SharedElementTypeSelection.composable";
-import { useBoardPermissions } from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
