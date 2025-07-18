@@ -2065,6 +2065,7 @@ export default {
 	"pages.rooms.administration.table.header.creationDate": "Creation date",
 	"pages.rooms.administration.table.header.mainSchool": "Main school",
 	"pages.rooms.administration.table.header.actions": "Actions",
+	"pages.rooms.administration.table.row.owner.notExist": "Not existing",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Action menu for room “{roomName}”",
 	"pages.taskCard.addElement": "Add element",
