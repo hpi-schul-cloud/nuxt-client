@@ -1,4 +1,3 @@
-import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-vitest";
@@ -24,7 +23,7 @@ import {
 	shallowMount,
 	VueWrapper,
 } from "@vue/test-utils";
-import { ComponentPublicInstance } from "vue";
+import { ComponentPublicInstance, nextTick } from "vue";
 import { NamedValue } from "vue-i18n";
 import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
 
@@ -455,7 +454,7 @@ describe("User Migration / Index", () => {
 				});
 
 				vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValueOnce(
-					Promise.resolve()
+					await Promise.resolve()
 				);
 
 				const button = wrapper.findComponent(
@@ -583,7 +582,7 @@ describe("User Migration / Index", () => {
 				vi.spyOn(
 					importUsersModule,
 					"clearAllAutoMatches"
-				).mockResolvedValueOnce(Promise.resolve());
+				).mockResolvedValueOnce(await Promise.resolve());
 
 				vi.spyOn(importUsersStub.methods, "reloadData");
 

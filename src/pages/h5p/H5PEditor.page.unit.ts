@@ -87,7 +87,9 @@ describe("H5PEditorPage", () => {
 					parentId: "parentId",
 				});
 
-				expect(wrapper.vm.hooks).toBeUndefined();
+				expect(
+					(wrapper.vm as unknown as typeof H5pEditorPage).hooks
+				).toBeUndefined();
 			});
 		});
 

@@ -17,7 +17,7 @@ import {
 import LicenseListPage from "./LicenseList.page.vue";
 
 vi.mock("axios");
-const mockAxios = vi.mocked(axios);
+const mockAxios = vi.mocked(axios, true);
 mockAxios.get.mockResolvedValue({
 	data: {
 		"MIT-License": {

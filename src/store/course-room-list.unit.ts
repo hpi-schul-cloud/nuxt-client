@@ -307,7 +307,7 @@ describe("rooms module", () => {
 					courseRoomListModule,
 					"confirmSharedCourseData"
 				);
-				getSharedCourseDataSpy.mockImplementation();
+				getSharedCourseDataSpy.mockImplementation(vi.fn());
 
 				await courseRoomListModule.confirmSharedCourseData(sharedCourseData);
 				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(

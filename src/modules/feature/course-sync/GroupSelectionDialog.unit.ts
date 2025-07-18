@@ -170,7 +170,8 @@ describe("GroupSelectionDialog", () => {
 
 			useGroupListStateMock.groups.value = [group];
 
-			wrapper.vm.selectedGroup = group;
+			(wrapper.vm as unknown as typeof GroupSelectionDialog).selectedGroup =
+				group;
 			await nextTick();
 
 			return {

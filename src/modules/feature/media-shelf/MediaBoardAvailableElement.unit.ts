@@ -85,7 +85,7 @@ describe("MediaBoardAvailableElement", () => {
 			useSharedMediaBoardStateMock
 		);
 
-		vi.useFakeTimers({ legacyFakeTimers: true });
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {

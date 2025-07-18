@@ -355,17 +355,18 @@ describe("@/components/molecules/importUsers", () => {
 
 		it("should sort by first name", async () => {
 			const { wrapper } = setup(mockData);
+			const wrapperVm = wrapper.vm as unknown as typeof ImportUsers;
 
 			const sortFirstNameElement = wrapper.find(
 				'[data-testid="head-first-name"]'
 			);
 			await sortFirstNameElement.trigger("click");
 
-			expect(wrapper.vm.options.sortBy[0].key).toEqual("firstName");
-			expect(wrapper.vm.options.sortBy[0].order).toEqual("asc");
+			expect(wrapperVm.options.sortBy[0].key).toEqual("firstName");
+			expect(wrapperVm.options.sortBy[0].order).toEqual("asc");
 
 			await sortFirstNameElement.trigger("click");
-			expect(wrapper.vm.options.sortBy[0].order).toEqual("desc");
+			expect(wrapperVm.options.sortBy[0].order).toEqual("desc");
 
 			getDataFromApiSpy.mockClear();
 		});
@@ -378,11 +379,13 @@ describe("@/components/molecules/importUsers", () => {
 			);
 			await sortLastNameElement.trigger("click");
 
-			expect(wrapper.vm.options.sortBy[0].key).toBe("lastName");
-			expect(wrapper.vm.options.sortBy[0].order).toBe("asc");
+			const wrapperVm = wrapper.vm as unknown as typeof ImportUsers;
+
+			expect(wrapperVm.options.sortBy[0].key).toBe("lastName");
+			expect(wrapperVm.options.sortBy[0].order).toBe("asc");
 
 			await sortLastNameElement.trigger("click");
-			expect(wrapper.vm.options.sortBy[0].order).toBe("desc");
+			expect(wrapperVm.options.sortBy[0].order).toBe("desc");
 
 			getDataFromApiSpy.mockClear();
 		});
