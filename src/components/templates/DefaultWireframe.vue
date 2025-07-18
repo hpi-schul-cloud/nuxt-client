@@ -120,7 +120,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits({
-	onFabItemClick: (event: string) => (event ? true : false),
+	onFabItemClick: (event: string | undefined) => !!event,
 	"fab:clicked": () => true,
 });
 
