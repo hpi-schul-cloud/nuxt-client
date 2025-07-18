@@ -209,7 +209,7 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
-	ClassSortBy,
+	ClassSortQueryType,
 	SchoolYearQueryType,
 	SchulcloudTheme,
 } from "@/serverApi/v3";
@@ -243,7 +243,10 @@ import { useRoute, useRouter } from "vue-router";
 
 type Tab = "current" | "next" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
-type ClassSortItem = { key: ClassSortBy; order?: boolean | "asc" | "desc" };
+type ClassSortItem = {
+	key: ClassSortQueryType;
+	order?: boolean | "asc" | "desc";
+};
 
 const props = defineProps({
 	tab: {
@@ -446,7 +449,7 @@ const onTabsChange = async (tab: string) => {
 
 const onUpdateSortBy = async (sortBy: ClassSortItem[]) => {
 	const fieldToSortBy: ClassSortItem = sortBy[0];
-	const key: ClassSortBy | undefined = fieldToSortBy
+	const key: ClassSortQueryType | undefined = fieldToSortBy
 		? fieldToSortBy.key
 		: undefined;
 	groupModule.setSortBy(key);
