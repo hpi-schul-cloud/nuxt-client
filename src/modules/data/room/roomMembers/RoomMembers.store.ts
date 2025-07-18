@@ -168,7 +168,19 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return member.fullName;
 	};
 
+	const isCurrentUserStudent = computed(() => {
+		const member = roomMembers.value.find(
+			(member) => member.userId === currentUserId
+		);
+
+		return member?.schoolRoleNames.includes(RoleName.Student);
+	});
+
 	const loadSchoolList = async () => {
+		if (isCurrentUserStudent.value) {
+			schools.value = [ownSchool];
+			return;
+		}
 		const areSchoolsLoaded = schools.value.length > 1;
 		if (!areSchoolsLoaded) {
 			await loadSchoolListPage();
@@ -403,6 +415,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		updateMembersRole,
 		confirmationList,
 		confirmationSelectedIds,
+		isCurrentUserStudent,
 		isLoading,
 		roomMembers,
 		roomMembersWithoutApplicants,

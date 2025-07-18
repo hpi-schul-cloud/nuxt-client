@@ -55,7 +55,7 @@ describe("roomAuthorization", () => {
 				return genericSetup({
 					userRoles: [RoleName.Teacher],
 					userPermissions: [
-						Permission.RoomCreate.toLocaleLowerCase() as Permission,
+						Permission.SchoolCreateRoom.toLocaleLowerCase() as Permission,
 					],
 				});
 			};
@@ -70,7 +70,7 @@ describe("roomAuthorization", () => {
 			const setup = () => {
 				return genericSetup({
 					userRoles: [RoleName.Student],
-					roomPermissions: [Permission.RoomEdit],
+					roomPermissions: [Permission.RoomEditRoom],
 				});
 			};
 
@@ -84,7 +84,7 @@ describe("roomAuthorization", () => {
 			const setup = () => {
 				return genericSetup({
 					userRoles: [RoleName.Teacher],
-					roomPermissions: [Permission.RoomView],
+					roomPermissions: [Permission.RoomListContent],
 				});
 			};
 
@@ -98,7 +98,7 @@ describe("roomAuthorization", () => {
 	describe("canViewRoom", () => {
 		describe("when the user has room view permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomView] });
+				return genericSetup({ roomPermissions: [Permission.RoomListContent] });
 			};
 
 			it("should be allowed to view the room", () => {
@@ -122,7 +122,7 @@ describe("roomAuthorization", () => {
 	describe("canEditRoom", () => {
 		describe("when the user has room edit permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomEdit] });
+				return genericSetup({ roomPermissions: [Permission.RoomEditRoom] });
 			};
 
 			it("should be allowed to edit the room", () => {
@@ -147,7 +147,7 @@ describe("roomAuthorization", () => {
 		describe("when the user has room content edit permission", () => {
 			const setup = () => {
 				return genericSetup({
-					roomPermissions: [Permission.RoomContentEdit],
+					roomPermissions: [Permission.RoomEditContent],
 				});
 			};
 
@@ -172,7 +172,7 @@ describe("roomAuthorization", () => {
 	describe("canDeleteRoom", () => {
 		describe("when the user has room delete permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomDelete] });
+				return genericSetup({ roomPermissions: [Permission.RoomDeleteRoom] });
 			};
 
 			it("should be allowed to delete the room", () => {
@@ -197,7 +197,7 @@ describe("roomAuthorization", () => {
 		describe("when the user has room members add permission", () => {
 			const setup = () => {
 				return genericSetup({
-					roomPermissions: [Permission.RoomMembersAdd],
+					roomPermissions: [Permission.RoomAddMembers],
 				});
 			};
 
@@ -223,7 +223,7 @@ describe("roomAuthorization", () => {
 		describe("when the user has room members remove permission", () => {
 			const setup = () => {
 				return genericSetup({
-					roomPermissions: [Permission.RoomMembersRemove],
+					roomPermissions: [Permission.RoomRemoveMembers],
 				});
 			};
 
@@ -274,7 +274,7 @@ describe("roomAuthorization", () => {
 	describe("canLeaveRoom", () => {
 		describe("when the user has room leave permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomLeave] });
+				return genericSetup({ roomPermissions: [Permission.RoomLeaveRoom] });
 			};
 
 			it("should be allowed to leave the room", () => {
@@ -321,7 +321,7 @@ describe("roomAuthorization", () => {
 		describe("when the user has permission to add room members but not student list permission", () => {
 			const setup = () => {
 				return genericSetup({
-					roomPermissions: [Permission.RoomMembersAdd],
+					roomPermissions: [Permission.RoomAddMembers],
 				});
 			};
 
@@ -335,7 +335,7 @@ describe("roomAuthorization", () => {
 	describe("canCopyRoom", () => {
 		describe("when the user has room duplicate permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomCopy] });
+				return genericSetup({ roomPermissions: [Permission.RoomCopyRoom] });
 			};
 
 			it("should be allowed to duplicate the room", () => {
