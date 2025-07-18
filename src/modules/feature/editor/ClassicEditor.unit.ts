@@ -4,6 +4,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useEditorConfig } from "./EditorConfig.composable";
 import ClassicEditor from "./ClassicEditor.vue";
+import { Mock } from "vitest";
 
 type CkEditorProps = {
 	value?: string;
@@ -23,7 +24,7 @@ class ResizeObserver {
 	}
 }
 
-jest.mock("./EditorConfig.composable");
+vi.mock("./EditorConfig.composable");
 
 describe("@feature-editor/ClassicEditor", () => {
 	const setup = (props: CkEditorProps = {}) => {
@@ -41,10 +42,10 @@ describe("@feature-editor/ClassicEditor", () => {
 					colors: [],
 				},
 			},
-			registerDeletionHandler: jest.fn(),
+			registerDeletionHandler: vi.fn(),
 		};
 
-		const useEditorConfigMock = <jest.Mock>useEditorConfig;
+		const useEditorConfigMock = <Mock>useEditorConfig;
 		useEditorConfigMock.mockReturnValue(config);
 
 		const wrapper = mount(ClassicEditor, {
@@ -57,7 +58,7 @@ describe("@feature-editor/ClassicEditor", () => {
 			props,
 		});
 
-		const editorMock = { editing: { view: { document: { on: jest.fn() } } } };
+		const editorMock = { editing: { view: { document: { on: vi.fn() } } } };
 
 		return { wrapper, editorMock };
 	};

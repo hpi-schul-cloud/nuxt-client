@@ -2,7 +2,7 @@ import { createInputMask } from "./InputMask.factory";
 import { DirectiveBinding, FunctionDirective, VNode } from "vue";
 import { vMaska, MaskInputOptions } from "maska";
 
-jest.mock("maska");
+vi.mock("maska");
 
 const maskaDirectiveMock = {
 	element: {} as unknown as HTMLElement,
@@ -13,7 +13,7 @@ const maskaDirectiveMock = {
 
 describe("InputMask.factory", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should bind maska when directive function is called", () => {

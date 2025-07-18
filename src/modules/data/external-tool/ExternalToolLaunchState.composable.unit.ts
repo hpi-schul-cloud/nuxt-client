@@ -10,14 +10,14 @@ import {
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { axiosErrorFactory } from "@@/tests/test-utils";
+import { axiosErrorFactory, mountComposable } from "@@/tests/test-utils";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
 import { nextTick } from "vue";
 
-jest.mock("@data-external-tool/ExternalToolApi.composable");
+vi.mock("@data-external-tool/ExternalToolApi.composable");
 
 describe("ExternalToolLaunchState.composable", () => {
 	let useExternalToolApiMock: DeepMocked<ReturnType<typeof useExternalToolApi>>;
@@ -26,11 +26,11 @@ describe("ExternalToolLaunchState.composable", () => {
 		useExternalToolApiMock =
 			createMock<ReturnType<typeof useExternalToolApi>>();
 
-		jest.mocked(useExternalToolApi).mockReturnValue(useExternalToolApiMock);
+		vi.mocked(useExternalToolApi).mockReturnValue(useExternalToolApiMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchContextLaunchRequest", () => {
@@ -42,8 +42,13 @@ describe("ExternalToolLaunchState.composable", () => {
 					response
 				);
 
+				const { fetchContextLaunchRequest, toolLaunchRequest, error } =
+					mountComposable(() => useExternalToolLaunchState());
+
 				return {
-					...useExternalToolLaunchState(),
+					fetchContextLaunchRequest,
+					toolLaunchRequest,
+					error,
 					response,
 				};
 			};
@@ -91,8 +96,13 @@ describe("ExternalToolLaunchState.composable", () => {
 					axiosError
 				);
 
+				const { fetchContextLaunchRequest, error } = mountComposable(() =>
+					useExternalToolLaunchState()
+				);
+
 				return {
-					...useExternalToolLaunchState(),
+					fetchContextLaunchRequest,
+					error,
 					apiError,
 				};
 			};
@@ -125,8 +135,18 @@ describe("ExternalToolLaunchState.composable", () => {
 					response
 				);
 
+				const {
+					fetchContextLaunchRequest,
+					fetchSchoolLaunchRequest,
+					toolLaunchRequest,
+					error,
+				} = mountComposable(() => useExternalToolLaunchState());
+
 				return {
-					...useExternalToolLaunchState(),
+					fetchContextLaunchRequest,
+					fetchSchoolLaunchRequest,
+					toolLaunchRequest,
+					error,
 					response,
 					bodyParams,
 				};
@@ -184,8 +204,13 @@ describe("ExternalToolLaunchState.composable", () => {
 					axiosError
 				);
 
+				const { fetchSchoolLaunchRequest, error } = mountComposable(() =>
+					useExternalToolLaunchState()
+				);
+
 				return {
-					...useExternalToolLaunchState(),
+					fetchSchoolLaunchRequest,
+					error,
 					apiError,
 					bodyParams,
 				};
@@ -209,12 +234,14 @@ describe("ExternalToolLaunchState.composable", () => {
 	describe("launchTool", () => {
 		describe("when launching without loading", () => {
 			const setup = () => {
-				const composable = useExternalToolLaunchState();
+				window.open = vi.fn();
 
-				jest.spyOn(window, "open");
+				const { launchTool } = mountComposable(() =>
+					useExternalToolLaunchState()
+				);
 
 				return {
-					...composable,
+					launchTool,
 				};
 			};
 
@@ -235,14 +262,17 @@ describe("ExternalToolLaunchState.composable", () => {
 						openNewTab: false,
 					});
 
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
+					const { toolLaunchRequest, launchTool } = mountComposable(() =>
+						useExternalToolLaunchState()
+					);
 
-					jest.spyOn(window, "open");
+					toolLaunchRequest.value = launchRequest;
 
+					window.open = vi.fn();
 					return {
-						...composable,
+						toolLaunchRequest,
 						launchRequest,
+						launchTool,
 					};
 				};
 
@@ -262,13 +292,16 @@ describe("ExternalToolLaunchState.composable", () => {
 						openNewTab: true,
 					});
 
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
+					const { toolLaunchRequest, launchTool } = mountComposable(() =>
+						useExternalToolLaunchState()
+					);
 
-					jest.spyOn(window, "open");
+					toolLaunchRequest.value = launchRequest;
+
+					window.open = vi.fn();
 
 					return {
-						...composable,
+						launchTool,
 						launchRequest,
 					};
 				};
@@ -286,17 +319,22 @@ describe("ExternalToolLaunchState.composable", () => {
 		describe("when launching a tool with post method", () => {
 			describe("when opening in a new tab", () => {
 				const setup = () => {
+					HTMLFormElement.prototype.submit = vi.fn();
+					window.open = vi.fn();
+
 					const launchRequest = toolLaunchRequestFactory.build({
 						method: ToolLaunchRequestMethodEnum.Post,
 						openNewTab: true,
 						payload: "",
 					});
 
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
+					const { toolLaunchRequest, launchTool } = mountComposable(() =>
+						useExternalToolLaunchState()
+					);
+					toolLaunchRequest.value = launchRequest;
 
 					return {
-						...composable,
+						launchTool,
 						launchRequest,
 					};
 				};
@@ -316,16 +354,21 @@ describe("ExternalToolLaunchState.composable", () => {
 
 			describe("when opening in the same tab", () => {
 				const setup = () => {
+					HTMLFormElement.prototype.submit = vi.fn();
+					window.open = vi.fn();
+
 					const launchRequest = toolLaunchRequestFactory.build({
 						method: ToolLaunchRequestMethodEnum.Post,
 						openNewTab: false,
 					});
 
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
+					const { launchTool, toolLaunchRequest } = mountComposable(() =>
+						useExternalToolLaunchState()
+					);
+					toolLaunchRequest.value = launchRequest;
 
 					return {
-						...composable,
+						launchTool,
 						launchRequest,
 					};
 				};
@@ -345,16 +388,22 @@ describe("ExternalToolLaunchState.composable", () => {
 
 			describe("when opening a tool multiple times", () => {
 				const setup = () => {
+					HTMLFormElement.prototype.submit = vi.fn();
+					window.open = vi.fn();
+
 					const launchRequest = toolLaunchRequestFactory.build({
 						method: ToolLaunchRequestMethodEnum.Post,
 						openNewTab: false,
 					});
 
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
+					const { launchTool, toolLaunchRequest } = mountComposable(() =>
+						useExternalToolLaunchState()
+					);
+					toolLaunchRequest.value = launchRequest;
 
 					return {
-						...composable,
+						toolLaunchRequest,
+						launchTool,
 						launchRequest,
 					};
 				};
@@ -378,13 +427,16 @@ describe("ExternalToolLaunchState.composable", () => {
 					method: "unknown" as unknown as ToolLaunchRequestMethodEnum,
 				});
 
-				const composable = useExternalToolLaunchState();
-				composable.toolLaunchRequest.value = launchRequest;
+				const { launchTool, toolLaunchRequest, error } = mountComposable(() =>
+					useExternalToolLaunchState()
+				);
+				toolLaunchRequest.value = launchRequest;
 
-				jest.spyOn(window, "open");
+				window.open = vi.fn();
 
 				return {
-					...composable,
+					error,
+					launchTool,
 					launchRequest,
 				};
 			};
@@ -411,29 +463,32 @@ describe("ExternalToolLaunchState.composable", () => {
 
 		describe("when the launch is with launchType Lti11ContentItemSelection", () => {
 			const setup = () => {
-				const refreshCallback = jest.fn();
+				const refreshCallback = vi.fn();
 				const launchRequest = toolLaunchRequestFactory.build({
 					method: ToolLaunchRequestMethodEnum.Post,
 					openNewTab: true,
 					launchType: LaunchType.Lti11ContentItemSelection,
 				});
 
-				const composable = useExternalToolLaunchState(refreshCallback);
-				composable.toolLaunchRequest.value = launchRequest;
+				const { launchTool, toolLaunchRequest } = mountComposable(() =>
+					useExternalToolLaunchState(refreshCallback)
+				);
+				toolLaunchRequest.value = launchRequest;
 
 				const mockWindow = {
 					closed: false,
 				};
 
-				jest
-					.spyOn(window, "open")
-					.mockReturnValue(mockWindow as unknown as Window);
+				HTMLFormElement.prototype.submit = vi.fn();
+				vi.spyOn(window, "open").mockReturnValue(
+					mockWindow as unknown as Window
+				);
 
-				const setInterval = jest.spyOn(window, "setInterval");
-				const clearInterval = jest.spyOn(window, "clearInterval");
+				const setInterval = vi.spyOn(window, "setInterval");
+				const clearInterval = vi.spyOn(window, "clearInterval");
 
 				return {
-					...composable,
+					launchTool,
 					refreshCallback,
 					setInterval,
 					clearInterval,
@@ -442,12 +497,12 @@ describe("ExternalToolLaunchState.composable", () => {
 			};
 
 			afterEach(() => {
-				jest.useRealTimers();
-				jest.restoreAllMocks();
+				vi.useRealTimers();
+				vi.restoreAllMocks();
 			});
 
 			it("should call refreshCallback", async () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 				const {
 					launchTool,
 					refreshCallback,
@@ -463,7 +518,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				mockWindow.closed = true;
 
-				jest.advanceTimersByTime(1000);
+				vi.advanceTimersByTime(1000);
 				await nextTick();
 
 				expect(refreshCallback).toHaveBeenCalled();
@@ -471,7 +526,7 @@ describe("ExternalToolLaunchState.composable", () => {
 			});
 
 			it("should not call refreshCallback", async () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 				const { launchTool, refreshCallback, mockWindow } = setup();
 
 				launchTool();
@@ -480,7 +535,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				mockWindow.closed = false;
 
-				jest.advanceTimersByTime(1000);
+				vi.advanceTimersByTime(1000);
 				await nextTick();
 
 				expect(refreshCallback).not.toHaveBeenCalled();

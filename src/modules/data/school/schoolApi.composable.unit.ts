@@ -1,5 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSchoolApi } from "./schoolApi.composable";
 
 describe("SchoolApi.composable", () => {
@@ -8,11 +8,11 @@ describe("SchoolApi.composable", () => {
 	beforeEach(() => {
 		schoolApi = createMock<serverApi.SchoolApiInterface>();
 
-		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
+		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchMaintenanceStatus", () => {

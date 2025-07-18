@@ -183,7 +183,7 @@ const fabItems = computed(() => {
 	return items;
 });
 
-const fabItemClickHandler = (event: string) => {
+const fabItemClickHandler = (event: string | undefined) => {
 	if (event === "board-type-dialog-open") {
 		boardLayoutDialogIsOpen.value = true;
 	} else if (event === "board-create") {

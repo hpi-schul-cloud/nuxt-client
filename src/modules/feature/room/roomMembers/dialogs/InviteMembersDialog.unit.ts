@@ -8,7 +8,7 @@ import { nextTick } from "vue";
 import { createTestingPinia } from "@pinia/testing";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
@@ -22,31 +22,32 @@ import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { Mock } from "vitest";
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: () => ({ t: jest.fn().mockImplementation((key) => key) }),
+		...actual,
+		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });
 
-jest.mock("@vueuse/integrations/useFocusTrap", () => {
+vi.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
-		...jest.requireActual("@vueuse/integrations/useFocusTrap"),
-		useFocusTrap: jest.fn(),
+		useFocusTrap: vi.fn(),
 	};
 });
 
-jest.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = jest.mocked(useBoardNotifier);
-jest.useFakeTimers();
+vi.mock("@util-board/BoardNotifier.composable");
+const boardNotifier = vi.mocked(useBoardNotifier);
+vi.useFakeTimers();
 
 describe("InviteMembersDialog", () => {
 	let wrapper: VueWrapper<InstanceType<typeof InviteMembersDialog>>;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	let pauseMock: jest.Mock;
-	let unpauseMock: jest.Mock;
-	let deactivateMock: jest.Mock;
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
+	let deactivateMock: Mock;
 
 	beforeAll(() => {
 		setupStores({
@@ -56,18 +57,18 @@ describe("InviteMembersDialog", () => {
 	beforeEach(() => {
 		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		boardNotifier.mockReturnValue(boardNotifierCalls);
-		pauseMock = jest.fn();
-		unpauseMock = jest.fn();
-		deactivateMock = jest.fn();
-		(useFocusTrap as jest.Mock).mockReturnValue({
+		pauseMock = vi.fn();
+		unpauseMock = vi.fn();
+		deactivateMock = vi.fn();
+		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
 			unpause: unpauseMock,
 			deactivate: deactivateMock,
 		});
 	});
 	afterEach(() => {
-		jest.clearAllMocks();
-		jest.clearAllTimers();
+		vi.clearAllMocks();
+		vi.clearAllTimers();
 	});
 
 	const setDescription = async (wrapper: VueWrapper, value: string) => {

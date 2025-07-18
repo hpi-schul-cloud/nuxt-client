@@ -76,7 +76,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	];
 
 	if (courseTitle.value) {
-		crumbs.push({ title: courseTitle.value, to: contextRoute });
+		crumbs.push({ title: courseTitle.value, to: contextRoute.value });
 	}
 
 	return crumbs;

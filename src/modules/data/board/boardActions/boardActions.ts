@@ -35,7 +35,7 @@ import {
 	UpdateColumnTitleFailurePayload,
 	UpdateColumnTitleRequestPayload,
 	UpdateColumnTitleSuccessPayload,
-} from "./boardActionPayload";
+} from "./boardActionPayload.types";
 
 export const disconnectSocket = createAction(
 	"disconnect-socket",

@@ -3,7 +3,7 @@
 		v-if="!loading"
 		:src="iframeSrc"
 		class="player-iframe"
-		allowfullscreen="allowfullscreen"
+		allowfullscreen
 		frameborder="0"
 		scrolling="yes"
 	/>
@@ -12,43 +12,40 @@
 	</div>
 </template>
 
-<script :src="scriptSrc" charset="UTF-8"></script>
-
 <script setup lang="ts">
-import { watch, onMounted, toRef } from "vue";
 import { $axios } from "@/utils/api";
+import { onMounted, ref } from "vue";
 
 type Props = {
 	nodeId?: string;
-	loading?: boolean;
-	iframeSrc?: string;
-	scriptSrc?: string;
 };
 
 const props = withDefaults(defineProps<Props>(), {
 	nodeId: "",
-	loading: true,
-	iframeSrc: "",
-	scriptSrc: "",
 });
 
-const model = toRef(props, "nodeId");
-const loading = toRef(props, "loading");
-const iframeSrc = toRef(props, "iframeSrc");
-const scriptSrc = toRef(props, "scriptSrc");
+const loading = ref(true);
+const iframeSrc = ref("");
 
-watch(
-	() => props.nodeId,
-	(newValue: string) => {
-		model.value = newValue;
-	}
-);
+function loadScript(scriptSrc: string): Promise<void> {
+	return new Promise((resolve, reject) => {
+		const script = document.createElement("script");
+		script.src = scriptSrc;
+		script.async = true;
+		script.onload = () => resolve();
+		script.onerror = () =>
+			reject(new Error(`Failed to load script: ${scriptSrc}`));
+		document.body.appendChild(script);
+	});
+}
 
 onMounted(async () => {
-	await $axios.get(`/v1/edu-sharing/player/${model.value}`).then((response) => {
-		iframeSrc.value = response.data.iframe_src;
-		scriptSrc.value = response.data.script_src;
-	});
+	await $axios
+		.get(`/v1/edu-sharing/player/${props.nodeId}`)
+		.then((response) => {
+			iframeSrc.value = response.data.iframe_src;
+			loadScript(response.data.script_src);
+		});
 	loading.value = false;
 });
 </script>

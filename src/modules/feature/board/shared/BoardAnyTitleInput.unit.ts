@@ -5,8 +5,9 @@ import {
 import { mount } from "@vue/test-utils";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import { VTextarea } from "vuetify/lib/components/index";
+import { nextTick } from "vue";
 
-jest.mock("@util-board");
+vi.mock("@util-board");
 
 const defaultProps = {
 	value: "props value",
@@ -105,9 +106,11 @@ describe("BoardAnyTitleInput", () => {
 			const { wrapper } = setup({ isEditMode: true, scope: "card" });
 			const newValue = "new title";
 			await wrapper.setProps({ value: newValue });
-			await wrapper.vm.$nextTick();
+			await nextTick();
 
-			expect(wrapper.vm.modelValue).toBe(newValue);
+			expect(
+				(wrapper.vm as unknown as typeof BoardAnyTitleInput).modelValue
+			).toBe(newValue);
 		});
 	});
 

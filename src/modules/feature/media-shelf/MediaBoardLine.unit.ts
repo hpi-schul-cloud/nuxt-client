@@ -8,7 +8,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { useDragAndDrop, useMediaBoardEditMode } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
@@ -47,7 +47,7 @@ describe("MediaBoardLine", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when rendering the line", () => {

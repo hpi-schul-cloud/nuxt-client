@@ -12,7 +12,7 @@ import {
 	UpdateBoardTitleSuccessPayload,
 	UpdateBoardVisibilitySuccessPayload,
 	UpdateColumnTitleSuccessPayload,
-} from "../boardActions/boardActionPayload";
+} from "../boardActions/boardActionPayload.types";
 import { useCardStore } from "../Card.store";
 
 import {
@@ -22,7 +22,7 @@ import {
 	MoveElementSuccessPayload,
 	UpdateCardTitleSuccessPayload,
 	UpdateElementSuccessPayload,
-} from "../cardActions/cardActionPayload";
+} from "../cardActions/cardActionPayload.types";
 
 const { notifyOnScreenReader } = useAriaLiveNotifier();
 

@@ -28,7 +28,7 @@ import {
 	ContextExternalToolSave,
 	useContextExternalToolApi,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedEditMode } from "@util-board";
 import { AxiosResponse } from "axios";
@@ -40,37 +40,37 @@ import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import {
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
-} from "./cardActionPayload";
+} from "./cardActionPayload.types";
 import { useCardRestApi } from "./cardRestApi.composable";
+import { Mock } from "vitest";
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+vi.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-jest.mock("../BoardApi.composable");
-const mockedUseBoardApi = jest.mocked(useBoardApi);
+vi.mock("../BoardApi.composable");
+const mockedUseBoardApi = vi.mocked(useBoardApi);
 
-jest.mock("@data-external-tool/contextExternalToolApi.composable");
-const mockedUseContextExternalToolApi = jest.mocked(useContextExternalToolApi);
+vi.mock("@data-external-tool/contextExternalToolApi.composable");
+const mockedUseContextExternalToolApi = vi.mocked(useContextExternalToolApi);
 
-jest.mock("../CardRequestPool.composable");
-const mockedSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
+vi.mock("../CardRequestPool.composable");
+const mockedSharedCardRequestPool = vi.mocked(useSharedCardRequestPool);
 
-jest.mock("@util-board/editMode.composable");
-const mockedSharedEditMode = jest.mocked(useSharedEditMode);
+vi.mock("@util-board/editMode.composable");
+const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("../socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("../socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: () => ({ t: jest.fn().mockImplementation((key) => key) }),
+		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });
 
@@ -87,7 +87,7 @@ describe("useCardRestApi", () => {
 		ReturnType<typeof useSocketConnection>
 	>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	let setEditModeId: jest.Mock;
+	let setEditModeId: Mock;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({}));
@@ -126,7 +126,7 @@ describe("useCardRestApi", () => {
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-		setEditModeId = jest.fn();
+		setEditModeId = vi.fn();
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
@@ -365,7 +365,7 @@ describe("useCardRestApi", () => {
 					[availableTool]
 				);
 
-				const setTemplateSpy = jest.spyOn(
+				const setTemplateSpy = vi.spyOn(
 					schoolExternalToolsModule,
 					"setContextExternalToolConfigurationTemplate"
 				);
@@ -955,7 +955,7 @@ describe("useCardRestApi", () => {
 			cardStore.getCard.mockReturnValue(card);
 
 			mockedBoardApiCalls.updateCardTitle.mockRejectedValue({});
-			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
+			mockedErrorHandler.notifyWithTemplate.mockReturnValue(vi.fn());
 
 			await updateCardTitleRequest({
 				cardId: card.id,

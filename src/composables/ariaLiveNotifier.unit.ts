@@ -8,7 +8,7 @@ describe("useAriaLiveNotifier", () => {
 					<div id="notify-screen-reader-assertive"></div>
 				</div>`;
 
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 	});
 
 	it("should notify on screen reader on 'aria-live=assertive' mode", () => {
@@ -17,7 +17,7 @@ describe("useAriaLiveNotifier", () => {
 		const message = "Assertive screen reader message";
 		notifyOnScreenReader(message, "assertive");
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toBe(`<span>${message}</span>`);
 	});
 
@@ -27,7 +27,7 @@ describe("useAriaLiveNotifier", () => {
 		const message = "Polite screen reader message";
 		notifyOnScreenReader(message, "polite");
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toBe(`<span>${message}</span>`);
 	});
 
@@ -46,7 +46,7 @@ describe("useAriaLiveNotifier", () => {
 
 				expect(element?.innerHTML).toBe("");
 
-				jest.advanceTimersByTime(3000);
+				vi.advanceTimersByTime(3000);
 
 				expect(element?.innerHTML).toBe(
 					`<span>${message1}</span><span>${message2}</span>`

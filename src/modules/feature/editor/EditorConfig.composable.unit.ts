@@ -5,10 +5,11 @@ import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { Editor } from "@ckeditor/ckeditor5-core";
+import type { Mocked } from "vitest";
 
 describe("useEditorConfig", () => {
 	const setup = () => {
-		const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
+		const envConfigModule: Mocked<EnvConfigModule> = createModuleMocks(
 			EnvConfigModule,
 			{
 				getFallbackLanguage: "en",
@@ -72,7 +73,7 @@ describe("useEditorConfig", () => {
 				editing: {
 					view: {
 						document: {
-							on: jest.fn((event, callback) => {
+							on: vi.fn((event, callback) => {
 								// Simulate the keydown event
 								if (event === "keydown") {
 									const mockEventInfo = { name: "keydown" };
@@ -85,11 +86,11 @@ describe("useEditorConfig", () => {
 						},
 					},
 				},
-				getData: jest.fn(() => editorData || ""),
+				getData: vi.fn(() => editorData || ""),
 				sourceElement: sourceElement || document.createElement("div"),
 			} as unknown as Editor;
 
-			const onDelete = jest.fn();
+			const onDelete = vi.fn();
 
 			const { composable } = setup();
 

@@ -24,7 +24,7 @@ import {
 	UpdateElementRequestPayload,
 	UpdateElementSuccessPayload,
 	UpdateElementFailurePayload,
-} from "./cardActionPayload";
+} from "./cardActionPayload.types";
 import { createAction, props } from "@/types/board/ActionFactory";
 
 export const disconnectSocket = createAction(

@@ -4,7 +4,8 @@ import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { useForceRender, useSocketConnection } from "@data-board";
+import { useForceRender } from "../fixSamePositionDnD.composable";
+import { useSocketConnection } from "../socket/socket";
 import { useI18n } from "vue-i18n";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { useBoardStore } from "../Board.store";
@@ -22,7 +23,7 @@ import {
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
-} from "./boardActionPayload";
+} from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
 
 export const useBoardSocketApi = () => {

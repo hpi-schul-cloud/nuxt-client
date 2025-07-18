@@ -134,8 +134,6 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { defineProps } from "vue";
-
 defineProps({
 	fill: {
 		type: String,

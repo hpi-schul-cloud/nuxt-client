@@ -18,14 +18,15 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { downloadFile } from "@/utils/fileHelper";
+import type { Mocked } from "vitest";
 
-jest.mock("@/utils/fileHelper");
+vi.mock("@/utils/fileHelper");
 
 describe("SchoolPolicy", () => {
-	let authModule: jest.Mocked<AuthModule>;
-	let schoolsModule: jest.Mocked<SchoolsModule>;
-	let privacyPolicyModule: jest.Mocked<PrivacyPolicyModule>;
-	let notifierModule: jest.Mocked<NotifierModule>;
+	let authModule: Mocked<AuthModule>;
+	let schoolsModule: Mocked<SchoolsModule>;
+	let privacyPolicyModule: Mocked<PrivacyPolicyModule>;
+	let notifierModule: Mocked<NotifierModule>;
 
 	const mockPolicy: ConsentVersion = {
 		_id: "123",
@@ -166,20 +167,22 @@ describe("SchoolPolicy", () => {
 	describe("when user clicks edit button", () => {
 		it("should change isSchoolPolicyFormDialogOpen to true", () => {
 			const wrapper = setup();
+			const wrapperVm = wrapper.vm as unknown as typeof SchoolPolicy;
 
-			expect(wrapper.vm.isSchoolPolicyFormDialogOpen).toBe(false);
+			expect(wrapperVm.isSchoolPolicyFormDialogOpen).toBe(false);
 			wrapper.find('[data-testid="edit-button"]').trigger("click");
-			expect(wrapper.vm.isSchoolPolicyFormDialogOpen).toBe(true);
+			expect(wrapperVm.isSchoolPolicyFormDialogOpen).toBe(true);
 		});
 	});
 
 	describe("when user clicks delete button", () => {
 		it("should change isDeletePolicyDialogOpen to true", () => {
 			const wrapper = setup();
+			const wrapperVm = wrapper.vm as unknown as typeof SchoolPolicy;
 
-			expect(wrapper.vm.isDeletePolicyDialogOpen).toBe(false);
+			expect(wrapperVm.isDeletePolicyDialogOpen).toBe(false);
 			wrapper.find('[data-testid="delete-button"]').trigger("click");
-			expect(wrapper.vm.isDeletePolicyDialogOpen).toBe(true);
+			expect(wrapperVm.isDeletePolicyDialogOpen).toBe(true);
 		});
 	});
 
@@ -187,7 +190,7 @@ describe("SchoolPolicy", () => {
 		it("should call downloadFile method", async () => {
 			const wrapper = setup();
 
-			const downloadFileMock = jest.mocked(downloadFile).mockReturnValueOnce();
+			const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
 			const policyItem = wrapper.find('[data-testid="policy-item"]');
 			await policyItem.trigger("click");
 

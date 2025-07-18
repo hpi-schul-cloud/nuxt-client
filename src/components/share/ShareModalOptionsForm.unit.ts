@@ -4,6 +4,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 describe("@/components/share/ShareModalOptionsForm", () => {
 	const setup = () => {
@@ -12,7 +13,7 @@ describe("@/components/share/ShareModalOptionsForm", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				type: "courses",
+				type: ShareTokenBodyParamsParentTypeEnum.Courses,
 			},
 		});
 		return { wrapper };

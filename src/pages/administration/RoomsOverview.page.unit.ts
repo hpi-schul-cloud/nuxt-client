@@ -16,33 +16,37 @@ import {
 	EndCourseSyncDialog,
 	StartExistingCourseSyncDialog,
 } from "@feature-course-sync";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VDataTableServer } from "vuetify/lib/components/index";
 import RoomsOverview from "./RoomsOverview.page.vue";
+import { Mock } from "vitest";
 import { CourseInfoDataResponse } from "@/serverApi/v3";
 
-jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
 
-jest.mock("@data-room", () => {
+vi.mock("@data-room", () => {
 	return {
-		...jest.requireActual("@data-room"),
-		useCourseList: jest.fn(),
-		useCourseApi: jest.fn(),
+		useCourseList: vi.fn(),
+		useCourseApi: vi.fn(),
 	};
 });
 
-const useRouteMock = <jest.Mock>useRoute;
-const useRouterMock = <jest.Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
+const useRouterMock = <Mock>useRouter;
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 describe("RoomsOverview", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
@@ -90,7 +94,7 @@ describe("RoomsOverview", () => {
 				withoutTeacher: ref(false),
 			});
 
-		jest.mocked(useCourseList).mockReturnValue(useCourseListMock);
+		vi.mocked(useCourseList).mockReturnValue(useCourseListMock);
 
 		const wrapper = mount(RoomsOverview, {
 			global: {
@@ -126,15 +130,15 @@ describe("RoomsOverview", () => {
 
 	beforeEach(() => {
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>({
-			startSynchronization: jest.fn(),
-			stopSynchronization: jest.fn(),
+			startSynchronization: vi.fn(),
+			stopSynchronization: vi.fn(),
 		});
 
-		jest.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
+		vi.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("general", () => {

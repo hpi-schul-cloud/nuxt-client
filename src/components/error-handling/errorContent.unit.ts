@@ -7,9 +7,13 @@ import {
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 describe("@/components/error-handling/ErrorContent.vue", () => {
 	const getWrapper = (errorText: string, statusCode: HttpStatusCode) => {

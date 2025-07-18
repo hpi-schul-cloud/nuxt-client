@@ -84,10 +84,10 @@ const createMockStore = () => {
 			users: {
 				namespaced: true,
 				actions: {
-					findStudents: jest.fn(),
-					deleteUsers: jest.fn(),
-					getQrRegistrationLinks: jest.fn(),
-					sendRegistrationLink: jest.fn(),
+					findStudents: vi.fn(),
+					deleteUsers: vi.fn(),
+					getQrRegistrationLinks: vi.fn(),
+					sendRegistrationLink: vi.fn(),
 				},
 				getters: {
 					getList: () => mockData,
@@ -109,7 +109,7 @@ const createMockStore = () => {
 					get: () => () => ({ page: 1 }),
 				},
 				mutations: {
-					set: jest.fn(),
+					set: vi.fn(),
 				},
 			},
 		},
@@ -126,9 +126,9 @@ describe("students/index", () => {
 	const OLD_ENV = process.env;
 
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 
-		jest.resetModules(); // reset module registry to avoid conflicts
+		vi.resetModules(); // reset module registry to avoid conflicts
 		process.env = { ...OLD_ENV }; // make a copy
 
 		setupStores({
@@ -245,7 +245,7 @@ describe("students/index", () => {
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
 		await dataRow.vm.$emit("update:selected", true);
-		jest.runAllTimers();
+		vi.runAllTimers();
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
@@ -260,14 +260,14 @@ describe("students/index", () => {
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		// delete button action is rendered in contextMenu
 		const deleteActionButton = wrapper.find(`[data-testid="delete_action"]`);
 		expect(deleteActionButton.exists()).toBe(true);
 		// delete button is clicked
 		await deleteActionButton.trigger("click");
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		// delete action is emitted
 		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
@@ -484,7 +484,7 @@ describe("students/index", () => {
 		const { wrapper, usersActionsStubs, uiStateMutationsStubs } = setup();
 
 		//run all existing timers
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		const searchBarInput = wrapper.find(`input[data-testid="searchbar"]`);
 		expect(searchBarInput.exists()).toBe(true);
@@ -492,7 +492,7 @@ describe("students/index", () => {
 		searchBarInput.setValue("abc");
 
 		//run new timer from updating the value
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		expect(uiStateMutationsStubs.set).toHaveBeenCalled();
 

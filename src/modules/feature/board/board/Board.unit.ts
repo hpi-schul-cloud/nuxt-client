@@ -51,7 +51,7 @@ import {
 	useCardStore,
 	useSharedBoardPageInformation,
 } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import {
@@ -67,46 +67,49 @@ import { Router, useRoute, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
+import { Mock } from "vitest";
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("@util-board/LastCreatedElement.composable");
-const mockUseSharedLastCreatedElement = jest.mocked(
-	useSharedLastCreatedElement
-);
+vi.mock("@util-board/LastCreatedElement.composable");
+const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-jest.mock("@util-board/extractDataAttribute.util");
-const mockExtractDataAttribute = jest.mocked(extractDataAttribute);
+vi.mock("@util-board/extractDataAttribute.util");
+const mockExtractDataAttribute = vi.mocked(extractDataAttribute);
 
-jest.mock("@util-board/editMode.composable");
-const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
-const mockedUseEditMode = jest.mocked(useCourseBoardEditMode);
+vi.mock("@util-board/editMode.composable");
+const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
+const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 
-jest.mock("@data-board/BoardPageInformation.composable");
-const mockedUseSharedBoardPageInformation = jest.mocked(
+vi.mock("@data-board/BoardPageInformation.composable");
+const mockedUseSharedBoardPageInformation = vi.mocked(
 	useSharedBoardPageInformation
 );
 
-jest.mock("@data-board/BoardPermissions.composable");
-const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
+vi.mock("@data-board/BoardPermissions.composable");
+const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
-jest.mock("@/composables/copy");
-const mockUseCopy = jest.mocked(useCopy);
+vi.mock("@/composables/copy");
+const mockUseCopy = vi.mocked(useCopy);
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
-const useRouteMock = <jest.Mock>useRoute;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 
-jest.mock("@data-board/boardInactivity.composable");
-const mockUseBoardInactivity = <jest.Mock>useBoardInactivity;
+vi.mock("@data-board/boardInactivity.composable");
+const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
-jest.mock("@/composables/application-error.composable");
-const mockedCreateApplicationError = jest.mocked(useApplicationError);
+vi.mock("@/composables/application-error.composable");
+const mockedCreateApplicationError = vi.mocked(useApplicationError);
 
 describe("Board", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -121,7 +124,7 @@ describe("Board", () => {
 	>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
-	const setErrorMock = jest.fn();
+	const setErrorMock = vi.fn();
 	const hash = "";
 
 	beforeEach(() => {
@@ -144,28 +147,28 @@ describe("Board", () => {
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
-			setEditModeId: jest.fn(),
+			setEditModeId: vi.fn(),
 			isInEditMode: computed(() => true),
 		});
 
 		mockedUseSharedBoardPageInformation.mockReturnValue({
-			createPageInformation: jest.fn(),
+			createPageInformation: vi.fn(),
 			breadcrumbs: computed(() => []),
 			contextType: computed(() => undefined),
 			pageTitle: computed(() => "page-title"),
 			roomId: computed(() => "room-id"),
-			resetPageInformation: jest.fn(),
+			resetPageInformation: vi.fn(),
 		});
 
 		mockedUseEditMode.mockReturnValue({
 			isEditMode: computed(() => false),
-			startEditMode: jest.fn(),
-			stopEditMode: jest.fn(),
+			startEditMode: vi.fn(),
+			stopEditMode: vi.fn(),
 		});
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
-			resetLastCreatedElementId: jest.fn(),
+			resetLastCreatedElementId: vi.fn(),
 		});
 		mockExtractDataAttribute.mockReturnValue("column-id");
 
@@ -185,7 +188,7 @@ describe("Board", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const mockEnvConfigModule = (envs: Partial<ConfigResponse> | undefined) => {
@@ -201,12 +204,9 @@ describe("Board", () => {
 			...envs,
 		});
 		envConfigModule.setEnvs(envsMock);
-		const envConfigModuleMock: jest.Mocked<EnvConfigModule> = createModuleMocks(
-			EnvConfigModule,
-			{
-				getEnv: envsMock,
-			}
-		);
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: envsMock,
+		});
 
 		return envConfigModuleMock;
 	};
@@ -402,7 +402,7 @@ describe("Board", () => {
 				});
 
 				const domElementMock = createMock<HTMLElement>();
-				const querySelectorSpy = jest.spyOn(document, "querySelector");
+				const querySelectorSpy = vi.spyOn(document, "querySelector");
 				querySelectorSpy.mockReturnValueOnce(domElementMock);
 
 				setup();
@@ -978,9 +978,9 @@ describe("Board", () => {
 		});
 
 		describe("when the 'delete' menu button is clicked", () => {
-			let openDeleteBoardDialogMock: jest.Mock;
+			let openDeleteBoardDialogMock: Mock;
 			beforeEach(() => {
-				openDeleteBoardDialogMock = jest.fn();
+				openDeleteBoardDialogMock = vi.fn();
 			});
 
 			it("should call openDeleteBoardDialog method when board should be deleted", async () => {

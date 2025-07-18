@@ -10,7 +10,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { RouterLinkStub } from "@vue/test-utils";
 
-jest.mock("@/utils/pageTitle", () => ({
+vi.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
@@ -24,14 +24,13 @@ const testProps = {
 	resource: Collection,
 };
 
-jest.spyOn(window, "scrollTo").mockImplementation();
-
 setupStores({
 	contentModule: ContentModule,
 	notifierModule: NotifierModule,
 });
 
 describe("@/components/organisms/LernstoreCollectionDetailView", () => {
+	window.scrollTo = vi.fn();
 	let wrapper;
 
 	beforeEach(() => {
@@ -48,11 +47,12 @@ describe("@/components/organisms/LernstoreCollectionDetailView", () => {
 				},
 				stubs: {
 					RouterLink: RouterLinkStub,
+					LernStoreGrid: true,
 				},
 				computed: {
-					loading: () => jest.fn(),
-					elements: () => jest.fn(),
-					selected: () => jest.fn(),
+					loading: () => vi.fn(),
+					elements: () => vi.fn(),
+					selected: () => vi.fn(),
 				},
 				state: {
 					loading: true,

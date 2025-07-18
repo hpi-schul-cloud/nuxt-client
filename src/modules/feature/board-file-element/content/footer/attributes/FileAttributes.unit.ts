@@ -3,11 +3,10 @@ import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import FileAttributes from "./FileAttributes.vue";
 
-jest.mock("@/utils/fileHelper");
+vi.mock("@/utils/fileHelper");
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
 		useI18n: () => {
 			return {
 				t: (key: string) => key,
@@ -23,10 +22,10 @@ describe("FileAttributes", () => {
 		const fileName = "pic.jpeg";
 		const unit = "KB";
 		const extension = "ext";
-		const convertFileSizeMock = jest
+		const convertFileSizeMock = vi
 			.mocked(convertFileSize)
 			.mockReturnValueOnce({ convertedSize: fileSize, unit });
-		const getFileExtensionMock = jest
+		const getFileExtensionMock = vi
 			.mocked(getFileExtension)
 			.mockReturnValueOnce(extension);
 
@@ -54,7 +53,7 @@ describe("FileAttributes", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	it("should be found in dom", () => {

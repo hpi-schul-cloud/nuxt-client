@@ -1,7 +1,7 @@
 import { PublicSystemResponse, SystemsApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
-import { System } from "./type";
+import { System } from "./types";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
 export const useSystemApi = () => {

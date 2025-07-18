@@ -21,7 +21,7 @@ import {
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
-} from "./boardActionPayload";
+} from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
 
 export const useBoardRestApi = () => {

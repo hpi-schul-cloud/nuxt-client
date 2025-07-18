@@ -4,14 +4,14 @@ import {
 } from "@/serverApi/v3";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { DataTableHeader } from "@/types/vuetify";
+import { DataTableHeader } from "vuetify";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 
 export function useExternalToolsSectionUtils(
 	t: (key: string) => string = () => "",
 	mediaLicenseEnabled = false
 ) {
-	const getHeaders: DataTableHeader<SchoolExternalToolMediumResponse>[] = [
+	const getHeaders: DataTableHeader<SchoolExternalToolItem>[] = [
 		{
 			title: t("common.labels.name"),
 			value: "name",

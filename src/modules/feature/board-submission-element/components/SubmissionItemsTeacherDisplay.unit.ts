@@ -5,10 +5,13 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { TeacherSubmission } from "../types/submission";
 
 describe("SubmissionItemsTeacherDisplay", () => {
 	const setup = (
-		submissions = [{ firstName: "Max", lastName: "Meyer", status: "open" }],
+		submissions: TeacherSubmission[] = [
+			{ firstName: "Max", lastName: "Meyer", status: "open" },
+		],
 		loading = false,
 		isOverdue = false
 	) => {
@@ -39,7 +42,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 	describe("while loading", () => {
 		it("should show loading skeleton", () => {
-			const submissions = [
+			const submissions: TeacherSubmission[] = [
 				{ firstName: "Max", lastName: "Meyer", status: "open" },
 			];
 			const loading = true;
@@ -50,7 +53,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should not show submissionItems", () => {
-			const submissions = [
+			const submissions: TeacherSubmission[] = [
 				{ firstName: "Max", lastName: "Meyer", status: "open" },
 			];
 			const loading = true;
@@ -88,7 +91,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show one submissionItem per student", async () => {
-			const submissions = [
+			const submissions: TeacherSubmission[] = [
 				{ firstName: "Max", lastName: "Meyer", status: "open" },
 			];
 			const { wrapper } = setup(submissions);
@@ -111,9 +114,13 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 	describe("if dueDate has not expired yet", () => {
 		const setupNotExpired = () => {
-			const submissions = [
+			const submissions: TeacherSubmission[] = [
 				{ firstName: "Max", lastName: "Meyer", status: "open" },
-				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
+				{
+					firstName: "Sabrina",
+					lastName: "Schulz",
+					status: "completed",
+				},
 			];
 			const wrapper = setup(submissions).wrapper;
 
@@ -149,9 +156,13 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		const setupExpired = () => {
 			const loading = false;
 			const isOverdue = true;
-			const submissions = [
+			const submissions: TeacherSubmission[] = [
 				{ firstName: "Max", lastName: "Meyer", status: "expired" },
-				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
+				{
+					firstName: "Sabrina",
+					lastName: "Schulz",
+					status: "completed",
+				},
 			];
 			const wrapper = setup(submissions, loading, isOverdue).wrapper;
 
@@ -185,9 +196,13 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 	describe("when a filter is clicked", () => {
 		const setupWithFilter = () => {
-			const submissions = [
+			const submissions: TeacherSubmission[] = [
 				{ firstName: "Max", lastName: "Meyer", status: "open" },
-				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
+				{
+					firstName: "Sabrina",
+					lastName: "Schulz",
+					status: "completed",
+				},
 			];
 			const wrapper = setup(submissions).wrapper;
 

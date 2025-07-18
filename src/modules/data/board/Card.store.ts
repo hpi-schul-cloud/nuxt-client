@@ -8,7 +8,7 @@ import { envConfigModule } from "@/store";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
-import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload";
+import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload.types";
 
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import {
@@ -21,7 +21,7 @@ import {
 	UpdateCardHeightSuccessPayload,
 	UpdateCardTitleSuccessPayload,
 	UpdateElementSuccessPayload,
-} from "./cardActions/cardActionPayload";
+} from "./cardActions/cardActionPayload.types";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 

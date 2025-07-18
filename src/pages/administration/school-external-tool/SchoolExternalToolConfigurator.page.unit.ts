@@ -22,21 +22,26 @@ import {
 } from "@@/tests/test-utils/setup";
 import { ExternalToolMediumStatus } from "@/serverApi/v3";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { Component, nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
+import { Mock } from "vitest";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
+
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn(),
 }));
 
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn(),
-}));
-
-const useRouterMock = <jest.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 describe("SchoolExternalToolConfigurator", () => {
 	const getWrapper = (
@@ -89,7 +94,7 @@ describe("SchoolExternalToolConfigurator", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("breadcrumbs", () => {
@@ -160,7 +165,9 @@ describe("SchoolExternalToolConfigurator", () => {
 		it("should change page when cancel button was clicked", async () => {
 			const { wrapper, router } = getWrapper({});
 
-			wrapper.findComponent(ExternalToolConfigurator).vm.$emit("cancel");
+			wrapper
+				.findComponent(ExternalToolConfigurator as Component)
+				.vm.$emit("cancel");
 			await nextTick();
 
 			expect(router.push).toHaveBeenCalledWith({
@@ -205,7 +212,7 @@ describe("SchoolExternalToolConfigurator", () => {
 				const testValue = "test";
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, [
 						{
 							name: template.parameters[0].name,
@@ -233,7 +240,7 @@ describe("SchoolExternalToolConfigurator", () => {
 				const { wrapper, router, template } = setup();
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, []);
 				await nextTick();
 
@@ -247,7 +254,7 @@ describe("SchoolExternalToolConfigurator", () => {
 				const { wrapper, notifierModule, template } = setup();
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, []);
 				await nextTick();
 
@@ -298,7 +305,7 @@ describe("SchoolExternalToolConfigurator", () => {
 				} = setup();
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, []);
 				await nextTick();
 
@@ -326,7 +333,7 @@ describe("SchoolExternalToolConfigurator", () => {
 				const { wrapper, router, template } = setup();
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, []);
 				await nextTick();
 
@@ -340,7 +347,7 @@ describe("SchoolExternalToolConfigurator", () => {
 				const { wrapper, notifierModule, template } = setup();
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, []);
 				await nextTick();
 
@@ -370,7 +377,7 @@ describe("SchoolExternalToolConfigurator", () => {
 				const { wrapper } = setup();
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit(
 						"save",
 						schoolExternalToolConfigurationTemplateFactory.build(),
@@ -385,7 +392,7 @@ describe("SchoolExternalToolConfigurator", () => {
 				const { wrapper, router } = setup();
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit(
 						"save",
 						schoolExternalToolConfigurationTemplateFactory.build(),
@@ -404,8 +411,13 @@ describe("SchoolExternalToolConfigurator", () => {
 		) => {
 			const { wrapper } = getWrapper({});
 
-			wrapper.findComponent(ExternalToolConfigurator).vm.selectedTemplate =
-				selectedTemplate;
+			const externalToolConfigurator = wrapper.findComponent(
+				ExternalToolConfigurator as Component
+			);
+
+			(
+				externalToolConfigurator.vm as unknown as typeof SchoolExternalToolConfigurator
+			).selectedTemplate = selectedTemplate;
 			await nextTick();
 
 			return { wrapper };

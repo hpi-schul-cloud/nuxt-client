@@ -7,7 +7,7 @@ import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolS
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosError } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
@@ -21,14 +21,14 @@ describe("schools module", () => {
 		schoolApi = createMock<serverApi.SchoolApiInterface>();
 		systemsApi = createMock<SystemsApiInterface>();
 
-		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
-		jest.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemsApi);
+		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
+		vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemsApi);
 
 		setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("actions", () => {
@@ -42,8 +42,8 @@ describe("schools module", () => {
 				);
 				const schoolsModule = new SchoolsModule({});
 
-				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				const setSchoolSpy = vi.spyOn(schoolsModule, "setSchool");
+				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
 
 				await schoolsModule.fetchSchool();
 
@@ -92,8 +92,8 @@ describe("schools module", () => {
 				);
 
 				const schoolsModule = new SchoolsModule({});
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
+				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
 				const mockMe = meResponseFactory.build({
 					school: { id: "4711" },
 				});
@@ -122,8 +122,8 @@ describe("schools module", () => {
 					mockApiResponse({ data: mockSchoolSystemResponse })
 				);
 
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
+				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
+				const setSystemsSpy = vi.spyOn(schoolsModule, "setSystems");
 
 				await schoolsModule.fetchSystems();
 
@@ -147,8 +147,8 @@ describe("schools module", () => {
 					systemIds: ["mockSystemId"],
 				});
 
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
+				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
 
 				await schoolsModule.fetchSystems();
 
@@ -173,8 +173,8 @@ describe("schools module", () => {
 
 				const schoolsModule = new SchoolsModule({});
 
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
+				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
+				const setSchoolSpy = vi.spyOn(schoolsModule, "setSchool");
 
 				await schoolsModule.update({ id: "111", props: uploadData });
 
@@ -202,8 +202,8 @@ describe("schools module", () => {
 					new AxiosError()
 				);
 
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
+				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
 
 				await schoolsModule.update({ id: "111", props: uploadData });
 
@@ -225,9 +225,9 @@ describe("schools module", () => {
 					const school = schoolResponseFactory.build();
 					schoolsModule.setSchool(school);
 
-					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-					const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
-					const fetchSystemsSpy = jest.spyOn(schoolsModule, "fetchSystems");
+					const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
+					const fetchSchoolSpy = vi.spyOn(schoolsModule, "fetchSchool");
+					const fetchSystemsSpy = vi.spyOn(schoolsModule, "fetchSystems");
 
 					await schoolsModule.deleteSystem(systemId);
 					expect(
@@ -246,8 +246,8 @@ describe("schools module", () => {
 					);
 					const schoolsModule = new SchoolsModule({});
 
-					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-					const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+					const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
+					const setErrorSpy = vi.spyOn(schoolsModule, "setError");
 
 					await schoolsModule.deleteSystem(systemId);
 
@@ -264,16 +264,16 @@ describe("schools module", () => {
 		describe("endMaintenance", () => {
 			const setup = () => {
 				const schoolsModule = new SchoolsModule({});
-				const spy = jest.spyOn(serverApi, "UserImportApiFactory");
+				const spy = vi.spyOn(serverApi, "UserImportApiFactory");
 				const mockApi = {
-					importUserControllerEndSchoolInMaintenance: jest.fn(() => ({})),
+					importUserControllerEndSchoolInMaintenance: vi.fn(() => ({})),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
 				);
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
-				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
+				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
+				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
+				const setSchoolSpy = vi.spyOn(schoolsModule, "setSchool");
 
 				return {
 					schoolsModule,
@@ -329,7 +329,7 @@ describe("schools module", () => {
 					JSON.stringify({ statusCode: "500", message: "foo" })
 				);
 				const mockApi = {
-					importUserControllerEndSchoolInMaintenance: jest.fn(() =>
+					importUserControllerEndSchoolInMaintenance: vi.fn(() =>
 						Promise.reject(error)
 					),
 				};
@@ -357,16 +357,16 @@ describe("schools module", () => {
 		describe("Set school in user migration mode", () => {
 			const setupSchoolInMigrationMode = () => {
 				const schoolsModule = new SchoolsModule({});
-				const spy = jest.spyOn(serverApi, "UserImportApiFactory");
+				const spy = vi.spyOn(serverApi, "UserImportApiFactory");
 				const mockApi = {
-					importUserControllerStartSchoolInUserMigration: jest.fn(() => ({})),
+					importUserControllerStartSchoolInUserMigration: vi.fn(() => ({})),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
 				);
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
-				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
+				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
+				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
+				const setSchoolSpy = vi.spyOn(schoolsModule, "setSchool");
 
 				return {
 					schoolsModule,
@@ -425,7 +425,7 @@ describe("schools module", () => {
 				const error = { statusCode: "500", message: "foo" };
 
 				const mockApi = {
-					importUserControllerStartSchoolInUserMigration: jest.fn(() =>
+					importUserControllerStartSchoolInUserMigration: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};

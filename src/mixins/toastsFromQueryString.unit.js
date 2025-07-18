@@ -14,7 +14,7 @@ describe("@/mixins/toastsFromQueryString", () => {
 		["success", "successMessage", 5000],
 		["info", "infoMessage", undefined],
 	])("can show an toast of type %p", (type, message, duration) => {
-		const notifierMock = jest.spyOn(notifierModule, "show");
+		const notifierMock = vi.spyOn(notifierModule, "show");
 
 		shallowMount({
 			template: "<div/>",
@@ -52,7 +52,7 @@ describe("@/mixins/toastsFromQueryString", () => {
 	it.each([[""], ["http://another.adress/abc/def"]])(
 		"does not show a toast if request is coming from origin %p",
 		(ref) => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const notifierMock = vi.spyOn(notifierModule, "show");
 
 			shallowMount({
 				template: "<div/>",

@@ -129,7 +129,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 			},
 		});
 
-		wrapper.vm.tab = tabRoutes[1];
+		(wrapper.vm as unknown as typeof TasksDashboardTeacher).tab = tabRoutes[1];
 
 		expect(tasksModuleMock.setActiveTab).toHaveBeenCalled();
 	});

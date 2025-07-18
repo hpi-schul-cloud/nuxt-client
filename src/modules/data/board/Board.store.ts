@@ -28,12 +28,12 @@ import {
 	UpdateBoardVisibilitySuccessPayload,
 	UpdateColumnTitleRequestPayload,
 	UpdateColumnTitleSuccessPayload,
-} from "./boardActions/boardActionPayload";
+} from "./boardActions/boardActionPayload.types";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardStore } from "./Card.store";
-import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
+import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload.types";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 

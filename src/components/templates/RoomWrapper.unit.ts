@@ -209,7 +209,9 @@ describe("@templates/RoomWrapper.vue", () => {
 			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 			defaultWireframe.vm.$emit("onFabItemClick", "syncedCourse");
 
-			expect(wrapper.vm.isCourseSyncDialogOpen).toEqual(true);
+			expect(
+				(wrapper.vm as unknown as typeof RoomWrapper).isCourseSyncDialogOpen
+			).toEqual(true);
 		});
 	});
 

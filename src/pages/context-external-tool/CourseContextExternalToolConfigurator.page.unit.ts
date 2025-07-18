@@ -12,19 +12,20 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { Router, useRouter } from "vue-router";
 import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
+import { Mock } from "vitest";
 
-jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
 
-const useRouterMock = <jest.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 const router = createMock<Router>();
 useRouterMock.mockReturnValue(router);
 
@@ -58,7 +59,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 						template: "<div></div>",
 						setup() {
 							return {
-								fetchData: jest.fn(),
+								fetchData: vi.fn(),
 							};
 						},
 					},
@@ -78,7 +79,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("breadcrumbs", () => {

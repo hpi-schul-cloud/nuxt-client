@@ -65,7 +65,9 @@
 import { FileFolderElement } from "@/types/board/ContentElement";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { mdiFolderOpenOutline } from "@icons/material";
-import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
+import { BoardMenuScope, ContentElementBar } from "@ui-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,

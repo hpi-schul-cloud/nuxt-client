@@ -18,14 +18,15 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import type { Mocked } from "vitest";
 
-jest.mock("@/utils/fileHelper");
+vi.mock("@/utils/fileHelper");
 
 describe("SchoolTerms", () => {
-	let authModule: jest.Mocked<AuthModule>;
-	let schoolsModule: jest.Mocked<SchoolsModule>;
-	let termsOfUseModule: jest.Mocked<TermsOfUseModule>;
-	let notifierModule: jest.Mocked<NotifierModule>;
+	let authModule: Mocked<AuthModule>;
+	let schoolsModule: Mocked<SchoolsModule>;
+	let termsOfUseModule: Mocked<TermsOfUseModule>;
+	let notifierModule: Mocked<NotifierModule>;
 
 	const mockTerms: ConsentVersion = {
 		_id: "123",
@@ -164,22 +165,24 @@ describe("SchoolTerms", () => {
 	describe("when user clicks edit button", () => {
 		it("should change isSchoolTermsFormDialogOpen to true", () => {
 			const wrapper = setup();
+			const wrapperVm = wrapper.vm as unknown as typeof SchoolTerms;
 
-			expect(wrapper.vm.isSchoolTermsFormDialogOpen).toBe(false);
+			expect(wrapperVm.isSchoolTermsFormDialogOpen).toBe(false);
 			wrapper.find('[data-testid="edit-button"]').trigger("click");
-			expect(wrapper.vm.isSchoolTermsFormDialogOpen).toBe(true);
+			expect(wrapperVm.isSchoolTermsFormDialogOpen).toBe(true);
 		});
 	});
 
 	describe("when user clicks delete button", () => {
 		it("should change isDeleteTermsDialogOpen to true", async () => {
 			const wrapper = setup();
+			const wrapperVm = wrapper.vm as unknown as typeof SchoolTerms;
 
-			expect(wrapper.vm.isDeleteTermsDialogOpen).toBe(false);
+			expect(wrapperVm.isDeleteTermsDialogOpen).toBe(false);
 			await wrapper
 				.findComponent('[data-testid="delete-button"]')
 				.trigger("click");
-			expect(wrapper.vm.isDeleteTermsDialogOpen).toBe(true);
+			expect(wrapperVm.isDeleteTermsDialogOpen).toBe(true);
 		});
 	});
 
@@ -187,7 +190,7 @@ describe("SchoolTerms", () => {
 		it("should call downloadFile method", () => {
 			const wrapper = setup();
 
-			const downloadFileMock = jest.mocked(downloadFile).mockReturnValueOnce();
+			const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
 			const termsItem = wrapper.findComponent(
 				'[data-testid="terms-item"]'
 			) as VueWrapper<typeof SchoolTerms>;

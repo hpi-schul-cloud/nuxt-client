@@ -82,11 +82,8 @@ describe("privacy policy module", () => {
 					},
 				};
 
-				const setPrivacyPolicySpy = jest.spyOn(
-					policyModule,
-					"setPrivacyPolicy"
-				);
-				const setStatusSpy = jest.spyOn(policyModule, "setStatus");
+				const setPrivacyPolicySpy = vi.spyOn(policyModule, "setPrivacyPolicy");
+				const setStatusSpy = vi.spyOn(policyModule, "setStatus");
 
 				await policyModule.fetchPrivacyPolicy("schoolid");
 
@@ -156,11 +153,8 @@ describe("privacy policy module", () => {
 					},
 				};
 
-				const setPrivacyPolicySpy = jest.spyOn(
-					policyModule,
-					"setPrivacyPolicy"
-				);
-				const setStatusSpy = jest.spyOn(policyModule, "setStatus");
+				const setPrivacyPolicySpy = vi.spyOn(policyModule, "setPrivacyPolicy");
+				const setStatusSpy = vi.spyOn(policyModule, "setStatus");
 
 				await policyModule.createPrivacyPolicy(createPolicyPayload);
 
@@ -198,11 +192,8 @@ describe("privacy policy module", () => {
 					},
 				};
 
-				const setPrivacyPolicySpy = jest.spyOn(
-					policyModule,
-					"setPrivacyPolicy"
-				);
-				const setStatusSpy = jest.spyOn(policyModule, "setStatus");
+				const setPrivacyPolicySpy = vi.spyOn(policyModule, "setPrivacyPolicy");
+				const setStatusSpy = vi.spyOn(policyModule, "setStatus");
 
 				await policyModule.deletePrivacyPolicy();
 

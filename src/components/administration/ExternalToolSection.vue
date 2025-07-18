@@ -6,7 +6,7 @@
 		<v-data-table
 			data-testid="external-tool-section-table"
 			:items="items"
-			:headers="headers"
+			:headers="getHeaders"
 			:loading="isLoading"
 			:loading-text="t('common.loading.text')"
 			:no-data-text="t('common.nodata')"
@@ -203,7 +203,6 @@ import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { DataTableHeader } from "@/types/vuetify";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -248,8 +247,6 @@ const { getHeaders, getItems } = useExternalToolsSectionUtils(
 	envConfigModule.getEnv.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED
 );
 const { fetchSchoolExternalToolUsage, metadata } = useSchoolExternalToolUsage();
-
-const headers: DataTableHeader[] = getHeaders;
 
 const items: ComputedRef<SchoolExternalToolItem[]> = computed(() => {
 	return getItems(schoolExternalToolsModule);

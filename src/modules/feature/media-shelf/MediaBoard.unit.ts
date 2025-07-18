@@ -8,7 +8,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { shallowMount } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
@@ -26,7 +26,7 @@ import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
 
-jest.mock("./data/mediaBoardState.composable");
+vi.mock("./data/mediaBoardState.composable");
 
 describe("MediaBoard", () => {
 	let useSharedMediaBoardStateMock: DeepMocked<
@@ -58,13 +58,13 @@ describe("MediaBoard", () => {
 		useSharedMediaBoardStateMock =
 			createMock<ReturnType<typeof useSharedMediaBoardState>>();
 
-		jest
-			.mocked(useSharedMediaBoardState)
-			.mockReturnValue(useSharedMediaBoardStateMock);
+		vi.mocked(useSharedMediaBoardState).mockReturnValue(
+			useSharedMediaBoardStateMock
+		);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the available line creates a new element on the board", () => {

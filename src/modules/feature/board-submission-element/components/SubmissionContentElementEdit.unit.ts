@@ -1,14 +1,20 @@
 import { shallowMount } from "@vue/test-utils";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
-import { submissionsResponseFactory } from "@@/tests/test-utils";
 import { DateTimePicker } from "@ui-date-time-picker";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { TeacherSubmission } from "../types/submission";
 
-const mockedSubmissions = submissionsResponseFactory.buildList(1);
+const mockedSubmissions: TeacherSubmission[] = [
+	{
+		status: "completed",
+		firstName: "Cord",
+		lastName: "Carl",
+	},
+];
 
 describe("SubmissionContentElementEdit", () => {
 	const setup = () => {

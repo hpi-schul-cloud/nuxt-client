@@ -4,7 +4,9 @@ import InfoMessage from "./InfoMessage.vue";
 
 describe("@/components/atoms/InfoMessage", () => {
 	const expectedMessage = "This is some useful information";
-	const setup = (type?: string) => {
+	const setup = (
+		type?: "bc-info" | "bc-success" | "bc-warning" | "bc-error"
+	) => {
 		const wrapper = mount(InfoMessage, {
 			global: {
 				plugins: [createTestingVuetify()],

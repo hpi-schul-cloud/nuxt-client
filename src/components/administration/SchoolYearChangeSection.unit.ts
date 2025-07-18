@@ -12,13 +12,13 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useSharedSchoolYearChange } from "@data-school";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { VBtn, VCheckbox } from "vuetify/lib/components/index";
 import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
 
-jest.mock("@data-school");
+vi.mock("@data-school");
 
 describe("SchoolYearChangeSection", () => {
 	let useSharedSchoolYearChangeApiMock: DeepMocked<
@@ -56,20 +56,20 @@ describe("SchoolYearChangeSection", () => {
 			ReturnType<typeof useSharedSchoolYearChange>
 		>({ maintenanceStatus: ref() });
 
-		jest
-			.mocked(useSharedSchoolYearChange)
-			.mockReturnValue(useSharedSchoolYearChangeApiMock);
+		vi.mocked(useSharedSchoolYearChange).mockReturnValue(
+			useSharedSchoolYearChangeApiMock
+		);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when section is rendered", () => {
 		describe("when no button is pushed and it is not in the school year change period", () => {
 			const setup = () => {
-				jest.useFakeTimers();
-				jest.setSystemTime(new Date(1999, 0, 1));
+				vi.useFakeTimers();
+				vi.setSystemTime(new Date(1999, 0, 1));
 
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build();
@@ -115,8 +115,8 @@ describe("SchoolYearChangeSection", () => {
 
 		describe("when no button is pushed and it is school year change period", () => {
 			const setup = () => {
-				jest.useFakeTimers();
-				jest.setSystemTime(new Date(2000, 11, 31));
+				vi.useFakeTimers();
+				vi.setSystemTime(new Date(2000, 11, 31));
 
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build();
@@ -164,8 +164,8 @@ describe("SchoolYearChangeSection", () => {
 	describe("StartTransferButton", () => {
 		describe("when transfer button is clicked", () => {
 			const setup = () => {
-				jest.useFakeTimers();
-				jest.setSystemTime(new Date(2000, 11, 31));
+				vi.useFakeTimers();
+				vi.setSystemTime(new Date(2000, 11, 31));
 
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build();
@@ -199,8 +199,8 @@ describe("SchoolYearChangeSection", () => {
 
 	describe("Start transfer Dialog", () => {
 		const setup = () => {
-			jest.useFakeTimers();
-			jest.setSystemTime(new Date(2000, 11, 31));
+			vi.useFakeTimers();
+			vi.setSystemTime(new Date(2000, 11, 31));
 
 			useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 				maintenanceStatusFactory.build();
@@ -339,8 +339,8 @@ describe("SchoolYearChangeSection", () => {
 	describe("ldap button", () => {
 		describe("when ldap button is clicked", () => {
 			const setup = () => {
-				jest.useFakeTimers();
-				jest.setSystemTime(new Date(2000, 11, 31));
+				vi.useFakeTimers();
+				vi.setSystemTime(new Date(2000, 11, 31));
 
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build({
@@ -389,8 +389,8 @@ describe("SchoolYearChangeSection", () => {
 	describe("checkbox", () => {
 		describe("when checkbox is checked", () => {
 			const setup = async () => {
-				jest.useFakeTimers();
-				jest.setSystemTime(new Date(2000, 11, 31));
+				vi.useFakeTimers();
+				vi.setSystemTime(new Date(2000, 11, 31));
 
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build({
@@ -443,8 +443,8 @@ describe("SchoolYearChangeSection", () => {
 
 		describe("when checkbox is unchecked", () => {
 			const setup = async () => {
-				jest.useFakeTimers();
-				jest.setSystemTime(new Date(2000, 11, 31));
+				vi.useFakeTimers();
+				vi.setSystemTime(new Date(2000, 11, 31));
 
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build({
@@ -505,8 +505,8 @@ describe("SchoolYearChangeSection", () => {
 	describe("transfer finish button", () => {
 		describe("when transfer finish button is clicked", () => {
 			const setup = async () => {
-				jest.useFakeTimers();
-				jest.setSystemTime(new Date(2000, 11, 31));
+				vi.useFakeTimers();
+				vi.setSystemTime(new Date(2000, 11, 31));
 
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 					maintenanceStatusFactory.build({
@@ -557,8 +557,8 @@ describe("SchoolYearChangeSection", () => {
 
 	describe("Finish transfer Dialog", () => {
 		const setup = async () => {
-			jest.useFakeTimers();
-			jest.setSystemTime(new Date(2000, 11, 31));
+			vi.useFakeTimers();
+			vi.setSystemTime(new Date(2000, 11, 31));
 
 			useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
 				maintenanceStatusFactory.build({

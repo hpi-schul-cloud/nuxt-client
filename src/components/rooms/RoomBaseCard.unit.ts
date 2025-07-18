@@ -32,7 +32,7 @@ describe("RoomBaseCard", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when a logoUrl is provided", () => {

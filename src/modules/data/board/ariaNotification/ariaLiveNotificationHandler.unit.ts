@@ -7,51 +7,57 @@ import {
 import {
 	CreateCardSuccessPayload,
 	CreateColumnSuccessPayload,
-} from "../boardActions/boardActionPayload";
+} from "../boardActions/boardActionPayload.types";
 import {
 	SR_I18N_KEYS_MAP,
 	useBoardAriaNotification,
 } from "./ariaLiveNotificationHandler";
 
-const card = {
-	elements: [
-		{
-			content: { caption: "", alternativeText: "" },
-			id: "elementId",
-		},
-	],
-	id: "cardId",
-	title: "",
-	visibilitySettings: {},
-};
-
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 
-jest.mock("../Board.store", () => ({
-	useBoardStore: jest.fn().mockReturnValue({
-		getColumnIndex: jest.fn().mockReturnValue(10),
-		getCardLocation: jest.fn().mockReturnValue(1),
+vi.mock("../Board.store", () => ({
+	useBoardStore: vi.fn().mockReturnValue({
+		getColumnIndex: vi.fn().mockReturnValue(10),
+		getCardLocation: vi.fn().mockReturnValue(1),
 	}),
 }));
 
-jest.mock("../Card.store", () => ({
-	useCardStore: jest.fn().mockReturnValue({
-		cards: [card],
-	}),
-}));
+vi.mock("../Card.store", () => {
+	const card = {
+		elements: [
+			{
+				content: { caption: "", alternativeText: "" },
+				id: "elementId",
+			},
+		],
+		id: "cardId",
+		title: "",
+		visibilitySettings: {},
+	};
+	return {
+		useCardStore: vi.fn().mockReturnValue({
+			cards: [card],
+		}),
+	};
+});
 
 describe("useBoardAriaNotification", () => {
-	jest.useFakeTimers();
+	vi.useFakeTimers();
 
-	const mockNotifyOnScreenReader = jest.fn();
-	jest.mock("@/composables/ariaLiveNotifier", () => ({
-		notifyOnScreenReader: () => mockNotifyOnScreenReader,
-	}));
+	const mockNotifyOnScreenReader = vi.fn();
+	vi.mock("@/composables/ariaLiveNotifier", async (importOriginal) => {
+		const actual =
+			await importOriginal<typeof import("@/composables/ariaLiveNotifier")>();
+		return {
+			...actual,
+
+			notifyOnScreenReader: () => mockNotifyOnScreenReader,
+		};
+	});
 
 	beforeEach(() => {
 		document.body.innerHTML = `
@@ -71,7 +77,7 @@ describe("useBoardAriaNotification", () => {
 		const element = document.getElementById("notify-screen-reader-polite");
 
 		notifyCreateCardSuccess(payload);
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_CREATED_SUCCESS);
 	});
 
@@ -84,7 +90,7 @@ describe("useBoardAriaNotification", () => {
 		const element = document.getElementById("notify-screen-reader-polite");
 
 		notifyCreateColumnSuccess(payload);
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS
 		);
@@ -95,7 +101,7 @@ describe("useBoardAriaNotification", () => {
 		const element = document.getElementById("notify-screen-reader-polite");
 
 		notifyDeleteCardSuccess({ cardId: "cardId", isOwnAction: false });
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_DELETED_SUCCESS);
 	});
 
@@ -108,7 +114,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS
 		);
@@ -129,7 +135,7 @@ describe("useBoardAriaNotification", () => {
 			toColumnIndex: 0,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.CARD_MOVED_IN_SAME_COLUMN_SUCCESS
 		);
@@ -150,7 +156,7 @@ describe("useBoardAriaNotification", () => {
 			toColumnIndex: 1,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS
 		);
@@ -170,7 +176,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS);
 	});
 
@@ -184,7 +190,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS
 		);
@@ -200,7 +206,7 @@ describe("useBoardAriaNotification", () => {
 				isOwnAction: false,
 			});
 
-			jest.advanceTimersByTime(3000);
+			vi.advanceTimersByTime(3000);
 			expect(element?.innerHTML).toContain(
 				SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS
 			);
@@ -215,7 +221,7 @@ describe("useBoardAriaNotification", () => {
 				isOwnAction: false,
 			});
 
-			jest.advanceTimersByTime(3000);
+			vi.advanceTimersByTime(3000);
 			expect(element?.innerHTML).toContain(
 				SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS
 			);
@@ -232,7 +238,7 @@ describe("useBoardAriaNotification", () => {
 				isOwnAction: false,
 			});
 
-			jest.advanceTimersByTime(3000);
+			vi.advanceTimersByTime(3000);
 			expect(element?.innerHTML).toContain(
 				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
 			);
@@ -247,7 +253,7 @@ describe("useBoardAriaNotification", () => {
 				isOwnAction: false,
 			});
 
-			jest.advanceTimersByTime(3000);
+			vi.advanceTimersByTime(3000);
 			expect(element?.innerHTML).toContain(
 				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
 			);
@@ -262,7 +268,7 @@ describe("useBoardAriaNotification", () => {
 				isOwnAction: false,
 			});
 
-			jest.advanceTimersByTime(3000);
+			vi.advanceTimersByTime(3000);
 			expect(element?.innerHTML).toContain(
 				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
 			);
@@ -279,7 +285,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.COLUMN_TITLE_UPDATED_SUCCESS
 		);
@@ -295,7 +301,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS
 		);
@@ -314,7 +320,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
@@ -328,7 +334,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
@@ -343,7 +349,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
@@ -358,7 +364,7 @@ describe("useBoardAriaNotification", () => {
 			const element = document.getElementById("notify-screen-reader-polite");
 
 			notifyCreateCardSuccess(payload);
-			jest.advanceTimersByTime(3000);
+			vi.advanceTimersByTime(3000);
 			expect(element?.innerHTML).toBe("");
 		});
 	});

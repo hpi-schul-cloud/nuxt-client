@@ -104,13 +104,17 @@ import {
 	useBoardPermissions,
 	useCardStore,
 } from "@data-board";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { BoardMenuScope } from "@ui-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionEdit,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
-import { useCourseBoardEditMode, useShareBoardLink } from "@util-board";
+import { useShareBoardLink } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
@@ -131,7 +135,7 @@ type Props = {
 
 const props = defineProps<Props>();
 const emit = defineEmits<{
-	(e: "move:card-keyboard", event: string): void;
+	(e: "move:card-keyboard", keycode: string): void;
 	(e: "delete:card", cardId: string): void;
 	(e: "reload:board"): void;
 }>();
