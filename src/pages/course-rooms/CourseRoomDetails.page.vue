@@ -1,5 +1,7 @@
 <template>
+	<CourseRoomLockedPage v-if="isLocked" :title="roomData.title" />
 	<default-wireframe
+		v-else
 		ref="main"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
@@ -113,6 +115,7 @@
 
 <script>
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
+import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
@@ -177,6 +180,7 @@ export default defineComponent({
 		ShareModal,
 		commonCartridgeExportModal,
 		SelectBoardLayoutDialog,
+		CourseRoomLockedPage,
 	},
 	inject: {
 		copyModule: { from: COPY_MODULE_KEY },
@@ -231,6 +235,7 @@ export default defineComponent({
 			isStartSyncDialogOpen: false,
 			tabIndex: 0,
 			boardLayoutDialogIsOpen: false,
+			isLocked: false,
 		};
 	},
 	computed: {
@@ -491,7 +496,14 @@ export default defineComponent({
 			this.setActiveTab(activeTab);
 			this.courseId = courseId;
 
-			await this.courseRoomDetailsModule.fetchContent(courseId);
+			const lockedRoom =
+				await this.courseRoomDetailsModule.fetchContent(courseId);
+
+			if (lockedRoom) {
+				this.isLocked = true;
+				this.roomData.title = lockedRoom.title;
+				return;
+			}
 
 			if (this.roomData.roomId) {
 				this.roomVariant = RoomVariant.COURSE_ROOM;

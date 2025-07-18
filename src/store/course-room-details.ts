@@ -81,7 +81,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async fetchContent(id: string): Promise<void> {
+	async fetchContent(id: string) {
 		this.setLoading(true);
 		try {
 			const { data } =
@@ -92,13 +92,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			if (isAxiosError(error)) {
 				const errorType = error?.response?.data?.type;
 				if (errorType === "LOCKED_COURSE") {
-					applicationErrorModule.setError(
-						createApplicationError(
-							HttpStatusCode.Forbidden,
-							"pages.courseRooms.course-locked",
-							"TODO no teacher error message"
-						)
-					);
+					return { locked: true, title: error?.response?.data?.message };
 				}
 			} else {
 				this.setError(error);
