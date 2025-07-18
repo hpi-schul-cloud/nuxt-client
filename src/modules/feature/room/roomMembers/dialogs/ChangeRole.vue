@@ -88,7 +88,6 @@
 			<div class="mr-4 mb-3">
 				<v-btn
 					class="ms-auto mr-2"
-					color="primary"
 					:text="t('common.actions.cancel')"
 					data-testid="change-role-cancel-btn"
 					@click="onCancel"

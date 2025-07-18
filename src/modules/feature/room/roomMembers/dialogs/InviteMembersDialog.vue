@@ -132,7 +132,6 @@
 					<v-btn
 						ref="cancelButton"
 						class="ms-auto mr-2"
-						color="primary"
 						:text="t('common.actions.cancel')"
 						data-testid="invite-participant-cancel-btn"
 						@click="onClose"

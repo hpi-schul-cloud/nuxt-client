@@ -19,6 +19,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 	const hasCreateToolPermission = ref(false);
 	const hasEditPermission = ref(false);
 	const hasDeletePermission = ref(false);
+	const hasManageVideoConferencePermission = ref(false);
 
 	watchEffect(() => {
 		const boardPermissions = toValue(board)?.permissions ?? [];
@@ -37,6 +38,9 @@ const boardPermissions = (): BoardPermissionChecks => {
 		);
 		hasEditPermission.value = permissions.includes(Permission.BoardEdit);
 		hasDeletePermission.value = permissions.includes(Permission.BoardEdit);
+		hasManageVideoConferencePermission.value = permissions.includes(
+			Permission.BoardManageVideoconference
+		);
 	});
 
 	return {
@@ -46,6 +50,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasCreateToolPermission,
 		hasEditPermission,
 		hasDeletePermission,
+		hasManageVideoConferencePermission,
 		isTeacher,
 		isStudent,
 	};
