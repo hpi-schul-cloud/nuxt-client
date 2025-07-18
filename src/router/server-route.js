@@ -7,7 +7,7 @@ const isServer = (path) => {
 };
 
 const isFileStorage = (path) => {
-	return path.startsWith("/api/v3/file");
+	return path.startsWith("/api/v3/file") || path.startsWith("/api/v3/wopi");
 };
 
 /**

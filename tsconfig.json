@@ -103,6 +103,7 @@
 			"@page-media-shelf": ["src/modules/page/media-shelf"],
 			"@page-room": ["src/modules/page/room"],
 			"@page-folder": ["src/modules/page/folder"],
+			"@page-collabora": ["src/modules/page/collabora"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},

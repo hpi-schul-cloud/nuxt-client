@@ -38,21 +38,30 @@
 	>
 		<slot />
 	</AudioDisplay>
+	<CollaboraDisplay
+		v-else-if="hasCollaboraMimeType && isCollaboraEnabled"
+		:show-menu="showMenu"
+	>
+		<slot />
+	</CollaboraDisplay>
 </template>
 
 <script setup lang="ts">
+import {
+	isAudioMimeType,
+	isCollaboraMimeType,
+	isPdfMimeType,
+	isVideoMimeType,
+} from "@/utils/fileHelper";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
 import AudioDisplay from "./audio-display/AudioDisplay.vue";
+import CollaboraDisplay from "./collabora-display/CollaboraDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
-import VideoDisplay from "./video-display/VideoDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
-import {
-	isAudioMimeType,
-	isPdfMimeType,
-	isVideoMimeType,
-} from "@/utils/fileHelper";
+import VideoDisplay from "./video-display/VideoDisplay.vue";
 
 const props = defineProps({
 	fileProperties: {
@@ -62,7 +71,13 @@ const props = defineProps({
 	isEditMode: { type: Boolean, required: true },
 	showMenu: { type: Boolean, required: true },
 });
-const emit = defineEmits(["video-error", "add:alert"]);
+
+interface Emits {
+	(e: "add:alert", alert: FileAlert): void;
+}
+const emit = defineEmits<Emits>();
+
+const envConfig = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const hasVideoMimeType = computed(() => {
 	return isVideoMimeType(props.fileProperties.mimeType);
@@ -72,6 +87,13 @@ const hasPdfMimeType = computed(() =>
 );
 const hasAudioMimeType = computed(() => {
 	return isAudioMimeType(props.fileProperties.mimeType);
+});
+const hasCollaboraMimeType = computed(() => {
+	return isCollaboraMimeType(props.fileProperties.mimeType);
+});
+
+const isCollaboraEnabled = computed(() => {
+	return envConfig.getEnv.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED;
 });
 
 const onAddAlert = (alert: FileAlert) => {

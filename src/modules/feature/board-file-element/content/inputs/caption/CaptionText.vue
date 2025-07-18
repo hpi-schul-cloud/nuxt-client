@@ -6,6 +6,7 @@
 		auto-grow
 		:label="$t('components.cardElement.fileElement.caption')"
 		:hide-details="true"
+		@click.stop
 	/>
 </template>
 

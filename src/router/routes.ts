@@ -3,8 +3,8 @@ import { Layouts } from "@/layouts/types";
 import {
 	checkFolderFeature,
 	checkRoomsFeature,
-	validateQueryParameters,
 	roomPermissionGuard,
+	validateQueryParameters,
 } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
@@ -144,6 +144,17 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		props: (to: RouteLocationNormalized) => ({
 			groupId: to.params.groupId,
 		}),
+	},
+	{
+		path: `/collabora/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-collabora")).CollaboraPage,
+		name: "collabora",
+		props: (route: RouteLocationNormalized) => ({
+			fileRecordId: route.params.id,
+		}),
+		meta: {
+			layout: Layouts.BORDERLESS,
+		},
 	},
 	{
 		path: "/content",

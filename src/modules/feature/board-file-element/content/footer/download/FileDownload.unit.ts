@@ -4,8 +4,9 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mdiTrayArrowDown } from "@icons/material";
-import { shallowMount } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { VIcon } from "vuetify/components";
 import FileDownload from "./FileDownload.vue";
 
 jest.mock("@/utils/fileHelper");
@@ -94,6 +95,59 @@ describe("FileDownload", () => {
 				expect(button.emitted("click")).toBeTruthy();
 				expect(button.emitted("click")).toHaveLength(1);
 				expect(downloadFileMock).toHaveBeenCalledWith(urlProp, fileNameProp);
+			});
+		});
+
+		describe("when download icon is focused and enter is pressed", () => {
+			const setup = () => {
+				const parentKeydownHandler = jest.fn();
+				const parent = {
+					template: `<div @keydown="onKeydown"><FileDownload v-bind="props" /></div>`,
+					components: { FileDownload },
+					methods: { onKeydown: parentKeydownHandler },
+				};
+
+				const props = {
+					fileName: "file-record #1.txt",
+					url: "1/file-record #1.txt",
+					isDownloadAllowed: true,
+				};
+
+				const downloadFileMock = jest
+					.mocked(downloadFile)
+					.mockReturnValueOnce();
+
+				const wrapper = mount(parent, {
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					props,
+				});
+
+				return {
+					wrapper,
+					fileNameProp: props.fileName,
+					urlProp: props.url,
+					downloadFileMock,
+					parentKeydownHandler,
+				};
+			};
+
+			it("should download file", async () => {
+				const { wrapper, urlProp, fileNameProp, downloadFileMock } = setup();
+
+				const icon = wrapper.find("v-icon-stub");
+				icon.trigger("keydown.enter");
+				await nextTick();
+
+				expect(downloadFileMock).toHaveBeenCalledWith(urlProp, fileNameProp);
+			});
+
+			it("should not propagate the event", async () => {
+				const { wrapper, parentKeydownHandler } = setup();
+
+				const icon = wrapper.findComponent(FileDownload).findComponent(VIcon);
+				await icon.trigger("keydown.enter");
+
+				expect(parentKeydownHandler).not.toHaveBeenCalled();
 			});
 		});
 
