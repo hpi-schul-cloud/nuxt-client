@@ -7,7 +7,7 @@
 			</template>
 		</div>
 		<p class="bottom-line">
-			<span>©{{ currentYear }} {{ $theme.name }}</span>
+			<span>©{{ currentYear }} {{ theme.name }}</span>
 			| Made with
 			<span class="heart">❤</span> in Potsdam |
 			{{ t("components.legacy.footer.powered_by") }}
@@ -25,8 +25,10 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { filePathsModule, envConfigModule } from "@/store";
+import { injectStrict, THEME_KEY } from "@/utils/inject";
 
 const { t } = useI18n();
+const theme = injectStrict(THEME_KEY);
 
 const currentYear = computed(() => new Date().getFullYear());
 const links = computed(() => {
@@ -80,7 +82,7 @@ const links = computed(() => {
 	}
 
 	linksArr.push({
-		href: filePathsModule.getSpecificFiles.accessibilityStatement,
+		href: filePathsModule.getSpecificFiles.accessibilityStatement.toString(),
 		text: t("components.legacy.footer.accessibility.statement"),
 		target: "_blank",
 		rel: "noopener",

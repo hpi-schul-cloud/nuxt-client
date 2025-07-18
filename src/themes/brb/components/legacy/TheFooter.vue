@@ -1,7 +1,7 @@
 <template>
 	<footer class="footer">
 		<div class="top-line">
-			<span class="current-year">© {{ currentYear }} {{ $theme.name }}</span>
+			<span class="current-year">© {{ currentYear }} {{ theme.name }}</span>
 		</div>
 
 		<div>
@@ -15,11 +15,12 @@
 
 <script setup lang="ts">
 import { filePathsModule, envConfigModule } from "@/store";
-
+import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
+const theme = injectStrict(THEME_KEY);
 
 const currentYear = computed(() => new Date().getFullYear());
 
@@ -72,7 +73,7 @@ const links = computed(() => {
 	}
 	links.push({
 		href: filePathsModule.getSpecificFiles.accessibilityStatement,
-		text: t("components.legacy.footer.accessibility.statement"),
+		text: t("components.legacy.footer.accessibility.statement").toString(),
 		target: "_blank",
 		rel: "noopener",
 	});
