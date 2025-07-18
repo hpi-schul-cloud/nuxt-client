@@ -135,7 +135,7 @@ type Props = {
 
 const props = defineProps<Props>();
 const emit = defineEmits<{
-	(e: "move:card-keyboard", event: string): void;
+	(e: "move:card-keyboard", keycode: string): void;
 	(e: "delete:card", cardId: string): void;
 	(e: "reload:board"): void;
 }>();
