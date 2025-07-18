@@ -4,8 +4,8 @@ import {
 	PreferredToolResponse,
 } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import type { CreateElementRequestPayload } from "@data-board";
 import {
+	type CreateElementRequestPayload,
 	useBoardFeatures,
 	useBoardPermissions,
 	useCardStore,
