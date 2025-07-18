@@ -72,8 +72,8 @@ const links = computed(() => {
 		});
 	}
 	links.push({
-		href: filePathsModule.getSpecificFiles.accessibilityStatement,
-		text: t("components.legacy.footer.accessibility.statement").toString(),
+		href: filePathsModule.getSpecificFiles.accessibilityStatement.toString(),
+		text: t("components.legacy.footer.accessibility.statement"),
 		target: "_blank",
 		rel: "noopener",
 	});
