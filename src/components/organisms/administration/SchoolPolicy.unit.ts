@@ -167,20 +167,22 @@ describe("SchoolPolicy", () => {
 	describe("when user clicks edit button", () => {
 		it("should change isSchoolPolicyFormDialogOpen to true", () => {
 			const wrapper = setup();
+			const wrapperVm = wrapper.vm as unknown as typeof SchoolPolicy;
 
-			expect(wrapper.vm.isSchoolPolicyFormDialogOpen).toBe(false);
+			expect(wrapperVm.isSchoolPolicyFormDialogOpen).toBe(false);
 			wrapper.find('[data-testid="edit-button"]').trigger("click");
-			expect(wrapper.vm.isSchoolPolicyFormDialogOpen).toBe(true);
+			expect(wrapperVm.isSchoolPolicyFormDialogOpen).toBe(true);
 		});
 	});
 
 	describe("when user clicks delete button", () => {
 		it("should change isDeletePolicyDialogOpen to true", () => {
 			const wrapper = setup();
+			const wrapperVm = wrapper.vm as unknown as typeof SchoolPolicy;
 
-			expect(wrapper.vm.isDeletePolicyDialogOpen).toBe(false);
+			expect(wrapperVm.isDeletePolicyDialogOpen).toBe(false);
 			wrapper.find('[data-testid="delete-button"]').trigger("click");
-			expect(wrapper.vm.isDeletePolicyDialogOpen).toBe(true);
+			expect(wrapperVm.isDeletePolicyDialogOpen).toBe(true);
 		});
 	});
 

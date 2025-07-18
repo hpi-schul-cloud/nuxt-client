@@ -87,7 +87,9 @@ describe("@components/share/ImportFlow", () => {
 			rooms: CourseRoomListModule,
 			envConfigModule: EnvConfigModule,
 		});
-		vi.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation();
+		vi.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation(
+			vi.fn()
+		);
 	});
 
 	describe("token is provided", () => {

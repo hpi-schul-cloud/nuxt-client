@@ -165,22 +165,24 @@ describe("SchoolTerms", () => {
 	describe("when user clicks edit button", () => {
 		it("should change isSchoolTermsFormDialogOpen to true", () => {
 			const wrapper = setup();
+			const wrapperVm = wrapper.vm as unknown as typeof SchoolTerms;
 
-			expect(wrapper.vm.isSchoolTermsFormDialogOpen).toBe(false);
+			expect(wrapperVm.isSchoolTermsFormDialogOpen).toBe(false);
 			wrapper.find('[data-testid="edit-button"]').trigger("click");
-			expect(wrapper.vm.isSchoolTermsFormDialogOpen).toBe(true);
+			expect(wrapperVm.isSchoolTermsFormDialogOpen).toBe(true);
 		});
 	});
 
 	describe("when user clicks delete button", () => {
 		it("should change isDeleteTermsDialogOpen to true", async () => {
 			const wrapper = setup();
+			const wrapperVm = wrapper.vm as unknown as typeof SchoolTerms;
 
-			expect(wrapper.vm.isDeleteTermsDialogOpen).toBe(false);
+			expect(wrapperVm.isDeleteTermsDialogOpen).toBe(false);
 			await wrapper
 				.findComponent('[data-testid="delete-button"]')
 				.trigger("click");
-			expect(wrapper.vm.isDeleteTermsDialogOpen).toBe(true);
+			expect(wrapperVm.isDeleteTermsDialogOpen).toBe(true);
 		});
 	});
 

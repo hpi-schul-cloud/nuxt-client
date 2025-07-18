@@ -976,7 +976,7 @@ describe("ExternalToolElement", () => {
 
 	describe("when refresh time is over", () => {
 		const setup = () => {
-			vi.useFakeTimers({ legacyFakeTimers: true });
+			vi.useFakeTimers();
 			const { wrapper, refreshTime } = getWrapper(
 				{
 					element: externalToolElementResponseFactory.build({
