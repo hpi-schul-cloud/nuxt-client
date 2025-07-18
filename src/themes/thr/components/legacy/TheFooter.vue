@@ -1,27 +1,9 @@
 <template>
 	<footer class="footer">
 		<div>
-			<template v-for="(link, index) in links">
-				<span v-if="index !== 0" :key="index"> - </span>
-				<template v-if="!link.innerlinks">
-					<base-link :key="link.text" class="footer-link" v-bind="link">{{
-						link.text
-					}}</base-link>
-				</template>
-				<template v-else>
-					<span :key="link.text">{{ link.text }}: </span>
-					<template
-						v-for="(innerlink, innerindex) in link.innerlinks"
-						:key="innerlink.text"
-					>
-						<span v-if="innerindex !== 0" :key="`${index}-${innerindex}`">
-							/
-						</span>
-						<base-link v-bind="innerlink" class="footer-link">{{
-							innerlink.text
-						}}</base-link>
-					</template>
-				</template>
+			<template v-for="(link, index) in links" :key="link.text">
+				<span v-if="index !== 0" :key="index" aria-hidden="true"> - </span>
+				<base-link class="footer-link" v-bind="link">{{ link.text }}</base-link>
 			</template>
 		</div>
 		<p class="bottom-line">
