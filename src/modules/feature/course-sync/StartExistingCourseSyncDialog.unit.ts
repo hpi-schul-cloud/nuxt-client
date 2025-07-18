@@ -95,7 +95,9 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			expect(groupSelectionDialog.props().isOpen).toEqual(false);
 			expect(confirmationDialog.props().isOpen).toEqual(false);
-			expect(wrapper.vm.step).toEqual(0);
+			expect(
+				(wrapper.vm as unknown as typeof StartExistingCourseSyncDialog).step
+			).toEqual(0);
 		});
 	});
 

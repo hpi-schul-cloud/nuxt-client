@@ -1,4 +1,7 @@
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import {
+	ApiErrorHandler,
+	useErrorHandler,
+} from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout, MediaBoardColors } from "@/serverApi/v3";
 import {
 	mediaAvailableLineResponseFactory,
@@ -396,7 +399,7 @@ describe("mediaBoardState.composable", () => {
 
 				mediaBoardApiMock.getAvailableMedia.mockRejectedValueOnce("error");
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -508,7 +511,7 @@ describe("mediaBoardState.composable", () => {
 
 				mediaBoardApiMock.createLine.mockRejectedValueOnce("error");
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -641,7 +644,7 @@ describe("mediaBoardState.composable", () => {
 
 				mediaBoardApiMock.deleteLine.mockRejectedValueOnce("error");
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -830,7 +833,7 @@ describe("mediaBoardState.composable", () => {
 
 				mediaBoardApiMock.moveLine.mockRejectedValueOnce("error");
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -959,7 +962,7 @@ describe("mediaBoardState.composable", () => {
 
 				mediaBoardApiMock.updateLineTitle.mockRejectedValueOnce("error");
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -1097,7 +1100,7 @@ describe("mediaBoardState.composable", () => {
 
 				mediaBoardApiMock.updateLineColor.mockRejectedValueOnce("error");
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -1242,7 +1245,7 @@ describe("mediaBoardState.composable", () => {
 					"error"
 				);
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -1371,7 +1374,7 @@ describe("mediaBoardState.composable", () => {
 
 				mediaBoardApiMock.updateLineCollapsed.mockRejectedValueOnce("error");
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -1499,7 +1502,7 @@ describe("mediaBoardState.composable", () => {
 					"error"
 				);
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -1655,7 +1658,7 @@ describe("mediaBoardState.composable", () => {
 
 					mediaBoardApiMock.createLine.mockRejectedValueOnce("error");
 					useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-						(_error, handler) => handler()
+						(_error: unknown, handler: ApiErrorHandler) => handler()
 					);
 					useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 						Promise.resolve();
@@ -1770,7 +1773,7 @@ describe("mediaBoardState.composable", () => {
 
 					mediaBoardApiMock.createElement.mockRejectedValueOnce("error");
 					useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-						(_error, handler) => handler()
+						(_error: unknown, handler: ApiErrorHandler) => handler()
 					);
 					useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 						Promise.resolve();
@@ -1915,7 +1918,7 @@ describe("mediaBoardState.composable", () => {
 
 				mediaBoardApiMock.deleteElement.mockRejectedValueOnce("error");
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -2138,7 +2141,7 @@ describe("mediaBoardState.composable", () => {
 
 				mediaBoardApiMock.createLine.mockRejectedValueOnce("error");
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -2191,7 +2194,7 @@ describe("mediaBoardState.composable", () => {
 
 				mediaBoardApiMock.moveElement.mockRejectedValueOnce("error");
 				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error, handler) => handler()
+					(_error: unknown, handler: ApiErrorHandler) => handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
