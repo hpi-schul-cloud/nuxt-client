@@ -52,18 +52,20 @@
 					determineStudentAlertType === StudentAlertTypeEnum.StudentVisibility
 				"
 				data-testid="student-visibility-info-alert"
-				>{{ t("pages.rooms.members.add.students.forbidden") }}</InfoAlert
 			>
+				{{ t("pages.rooms.members.add.students.forbidden") }}
+			</InfoAlert>
 
 			<InfoAlert
 				v-if="determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin"
 				data-testid="student-admin-info-alert"
-				>{{ t("pages.rooms.members.add.students.studentAdmins") }}</InfoAlert
 			>
+				{{ t("pages.rooms.members.add.students.studentAdmins") }}
+			</InfoAlert>
 
-			<WarningAlert v-if="isStudentSelectionDisabled">{{
-				t("pages.rooms.members.add.warningText")
-			}}</WarningAlert>
+			<WarningAlert v-if="isStudentSelectionDisabled">
+				{{ t("pages.rooms.members.add.warningText") }}
+			</WarningAlert>
 
 			<div class="mt-4" data-testid="add-participant-name">
 				<v-autocomplete
