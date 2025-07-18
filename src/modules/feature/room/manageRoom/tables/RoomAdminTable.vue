@@ -8,14 +8,18 @@
 		:external-selected-ids="selectedIds"
 		@update:selected-ids="onUpdateSelectedIds"
 	>
-		<template #[`action-menu-items`]>
-			<KebabMenuActionDeleteMemberInvitation />
-		</template>
+		<template #[`action-menu-items`]> &nbsp; </template>
 
 		<template #[`item.owner`]="{ item }">
 			<span>
-				<v-icon v-if="!item.owner" :icon="mdiAlertOutline" />
-				{{ item.owner || "Nicht vorhanden" }}
+				<v-icon
+					v-if="!item.owner"
+					:icon="mdiAlertOutline"
+					class="text-medium-emphasis"
+				/>
+				{{
+					item.owner || t("pages.rooms.administration.table.row.owner.notExist")
+				}}
 			</span>
 		</template>
 
@@ -38,10 +42,7 @@
 import { useI18n } from "vue-i18n";
 import { DataTable } from "@ui-data-table";
 import { useAdministrationRoomStore } from "@data-room";
-import {
-	KebabMenu,
-	KebabMenuActionDeleteMemberInvitation,
-} from "@ui-kebab-menu";
+import { KebabMenu } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
 import { mdiAlertOutline } from "@icons/material";
@@ -98,7 +99,7 @@ const tableHeaders = [
 		key: "mainSchool",
 	},
 	{
-		title: t("pages.rooms.members.tableHeader.actions"),
+		title: t("pages.rooms.administration.table.header.actions"),
 		key: "actions",
 		sortable: false,
 		width: 100,

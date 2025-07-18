@@ -29,7 +29,7 @@ export const useAdministrationRoomStore = defineStore(
 			{
 				id: "64b8f9c1e1a2f1a2b3c4d5e7",
 				name: "Art Studio",
-				owner: "Ms. Johnson",
+				owner: undefined,
 				mainSchool: "Creative Arts School",
 				creationDate: "2022-11-10",
 				totalMembers: 25,
