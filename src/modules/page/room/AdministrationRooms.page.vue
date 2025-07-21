@@ -9,7 +9,7 @@
 				</div>
 			</div>
 		</template>
-		<template v-if="isNoRooms">
+		<template v-if="isEmptyList">
 			<EmptyState :title="t('pages.rooms.emptyState')">
 				<template #media>
 					<RoomsEmptyStateSvg />
@@ -26,7 +26,7 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
-import { computed, ComputedRef, watch, ref } from "vue";
+import { computed, ComputedRef, watch, ref, onMounted } from "vue";
 import { RoomAdminTable } from "@feature-room";
 import { useAdministrationRoomStore } from "@data-room";
 import { storeToRefs } from "pinia";
@@ -35,12 +35,11 @@ import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 const { t } = useI18n();
 
 const adminRoomStore = useAdministrationRoomStore();
-const { roomList } = storeToRefs(adminRoomStore);
+const { isEmptyList } = storeToRefs(adminRoomStore);
+const { fetchRooms } = adminRoomStore;
 
-const isNoRooms = ref<boolean>(false);
-
-watch(roomList, () => {
-	isNoRooms.value = roomList.value.length === 0;
+onMounted(async () => {
+	await fetchRooms();
 });
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {

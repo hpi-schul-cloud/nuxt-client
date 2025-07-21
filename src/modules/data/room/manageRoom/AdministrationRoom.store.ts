@@ -61,6 +61,7 @@ export const useAdministrationRoomStore = defineStore(
 		const isLoading = ref(true);
 		const roomList = ref<Room[]>([]);
 		const selectedIds = ref<string[]>([]);
+		const isEmptyList = ref(false);
 
 		const userMainSchool = "Paul-Gerhardt-Gymnasium";
 
@@ -82,6 +83,8 @@ export const useAdministrationRoomStore = defineStore(
 		};
 
 		const fetchRooms = async () => {
+			// roomList.value = [];
+			// isEmptyList.value = roomList.value.length === 0;
 			try {
 				isLoading.value = true;
 				const response = await new Promise<Room[]>((resolve) =>
@@ -90,6 +93,8 @@ export const useAdministrationRoomStore = defineStore(
 					}, 100)
 				);
 				roomList.value = response;
+
+				isEmptyList.value = roomList.value.length === 0;
 			} catch {
 				// Handle error
 			} finally {
@@ -99,6 +104,7 @@ export const useAdministrationRoomStore = defineStore(
 
 		return {
 			isLoading,
+			isEmptyList,
 			roomList,
 			selectedIds,
 			fetchRooms,

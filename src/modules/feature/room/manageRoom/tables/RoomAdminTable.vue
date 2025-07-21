@@ -44,7 +44,6 @@ import { DataTable } from "@ui-data-table";
 import { useAdministrationRoomStore } from "@data-room";
 import { KebabMenu } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
 import { mdiAlertOutline } from "@icons/material";
 
 type Props = {
@@ -58,16 +57,12 @@ withDefaults(defineProps<Props>(), {
 });
 const { t } = useI18n();
 const administrationRoomStore = useAdministrationRoomStore();
-const { fetchRooms } = administrationRoomStore;
+
 const { roomList, selectedIds } = storeToRefs(administrationRoomStore);
 
 const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
-
-onMounted(async () => {
-	await fetchRooms();
-});
 
 const tableHeaders = [
 	{
