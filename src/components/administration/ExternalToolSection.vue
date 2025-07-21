@@ -332,7 +332,7 @@ const isVidisEnabled: ComputedRef<boolean> = computed(() => {
 });
 
 const isLicensedToSchool = (
-	mediumId: string,
+	mediumId?: string,
 	mediaSourceId?: string
 ): boolean => {
 	return schoolLicenseStore.isLicensed(mediumId, mediaSourceId);
