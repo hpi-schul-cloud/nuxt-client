@@ -22,6 +22,5 @@ export type {
 export {
 	RoomInvitationLinkValidationError,
 	InvitationStep,
+	AdminRoom,
 } from "./roomMembers/types";
-
-export type { Room } from "./manageRoom/AdministrationRoom.store";

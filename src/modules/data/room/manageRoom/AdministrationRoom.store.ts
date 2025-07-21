@@ -1,21 +1,11 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-
-export type Room = {
-	id: string;
-	name: string;
-	owner: string | undefined;
-	mainSchool: string;
-	creationDate: string;
-	totalMembers: number;
-	internalMembers: number;
-	externalMembers: number;
-};
+import { AdminRoom } from "../roomMembers/types";
 
 export const useAdministrationRoomStore = defineStore(
 	"administrationRoomStore",
 	() => {
-		const mockRoomsData: Room[] = [
+		const mockRoomsData: AdminRoom[] = [
 			{
 				id: "64b8f9c1e1a2f1a2b3c4d5e6",
 				name: "Physics Lab",
@@ -159,13 +149,13 @@ export const useAdministrationRoomStore = defineStore(
 		];
 
 		const isLoading = ref(true);
-		const roomList = ref<Room[]>([]);
+		const roomList = ref<AdminRoom[]>([]);
 		const selectedIds = ref<string[]>([]);
 		const isEmptyList = ref(false);
 
 		const userMainSchool = "Paul-Gerhardt-Gymnasium";
 
-		const sortList = (list: Room[]) => {
+		const sortList = (list: AdminRoom[]) => {
 			return list
 				.sort((a, b) => {
 					return a.mainSchool.localeCompare(b.mainSchool);
@@ -187,7 +177,7 @@ export const useAdministrationRoomStore = defineStore(
 			// isEmptyList.value = roomList.value.length === 0;
 			try {
 				isLoading.value = true;
-				const response = await new Promise<Room[]>((resolve) =>
+				const response = await new Promise<AdminRoom[]>((resolve) =>
 					setTimeout(() => {
 						resolve(sortList(mockRoomsData));
 					}, 100)
