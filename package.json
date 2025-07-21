@@ -18,7 +18,8 @@
 		"generate-client:server": "openapi-generator-cli generate -c ./openapitools.json --generator-key server-api",
 		"generate-client:filestorage": "openapi-generator-cli generate -c ./openapitools.json --generator-key file-storage-api",
 		"generate-client:h5p-editor": "openapi-generator-cli generate -c ./openapitools.json --generator-key h5p-editor-api",
-		"generate-client:common-cartridge": "openapi-generator-cli generate -c ./openapitools.json --generator-key common-cartridge-api"
+		"generate-client:common-cartridge": "openapi-generator-cli generate -c ./openapitools.json --generator-key common-cartridge-api",
+		"postinstall": "node scripts/installRollupBinaries.js"
 	},
 	"dependencies": {
 		"@braintree/sanitize-url": "^7.1.1",
