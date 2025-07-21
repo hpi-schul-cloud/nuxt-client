@@ -164,12 +164,12 @@
 </template>
 
 <script lang="ts">
-import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
 import { printDate } from "@/plugins/datetime";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
-import { toBase64 } from "@/utils/fileHelper.ts";
+import { toBase64 } from "@/utils/fileHelper";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { useOpeningTagValidator } from "@/utils/validation";
+import PrivacySettings from "./PrivacySettings.vue";
 
 export default {
 	components: {
