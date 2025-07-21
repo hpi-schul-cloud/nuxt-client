@@ -349,6 +349,49 @@ describe("useRoomMembers", () => {
 		});
 	});
 
+	describe("isCurrentUserStudent", () => {
+		describe("when the current user is a student", () => {
+			it("should return true", () => {
+				const currentUser = meResponseFactory.build({
+					roles: [{ id: "student-id", name: RoleName.Student }],
+				});
+				authModule.setMe(currentUser);
+
+				const { roomMembersStore } = setup();
+
+				const roomMembers = roomMemberFactory.buildList(2, {
+					roomRoleName: RoleName.Roomviewer,
+				});
+
+				roomMembers[0].schoolRoleNames = [RoleName.Student];
+				roomMembers[0].userId = currentUser.user.id;
+				roomMembersStore.roomMembers = [...roomMembers];
+
+				expect(roomMembersStore.isCurrentUserStudent).toBe(true);
+			});
+		});
+		describe("when the current user is not a student", () => {
+			it("should return false", () => {
+				const currentUser = meResponseFactory.build({
+					roles: [{ id: "teacher-id", name: RoleName.Teacher }],
+				});
+				authModule.setMe(currentUser);
+
+				const { roomMembersStore } = setup();
+
+				const roomMembers = roomMemberFactory.buildList(2, {
+					roomRoleName: RoleName.Roomviewer,
+				});
+
+				roomMembers[0].schoolRoleNames = [RoleName.Teacher];
+				roomMembers[0].userId = currentUser.user.id;
+				roomMembersStore.roomMembers = [...roomMembers];
+
+				expect(roomMembersStore.isCurrentUserStudent).toBe(false);
+			});
+		});
+	});
+
 	describe("loadSchoolList", () => {
 		it("should get schools", async () => {
 			const { roomMembersStore } = setup();
@@ -413,6 +456,37 @@ describe("useRoomMembers", () => {
 			await roomMembersStore.loadSchoolList();
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+		});
+
+		describe("when the current user is a student", () => {
+			it("should not fetch the school list", async () => {
+				const currentUser = meResponseFactory.build({
+					roles: [{ id: "student-id", name: RoleName.Student }],
+				});
+				authModule.setMe(currentUser);
+				const { roomMembersStore } = setup();
+
+				const roomMembers = roomMemberFactory.buildList(2, {
+					roomRoleName: RoleName.Roomviewer,
+				});
+
+				roomMembers[0].schoolRoleNames = [RoleName.Student];
+				roomMembers[0].userId = currentUser.user.id;
+				roomMembersStore.roomMembers = [...roomMembers];
+
+				await roomMembersStore.loadSchoolList();
+
+				const schoolList = roomMembersStore.schools;
+
+				expect(
+					schoolApiMock.schoolControllerGetSchoolList
+				).not.toHaveBeenCalled();
+				expect(schoolList).toHaveLength(1);
+				expect(schoolList[0]).toStrictEqual({
+					id: "school-id",
+					name: "Paul-Gerhardt-Gymnasium",
+				});
+			});
 		});
 	});
 
