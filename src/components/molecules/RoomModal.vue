@@ -33,77 +33,99 @@
 		</template>
 	</vCustomDialog>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { courseRoomListModule } from "@/store";
 import { useOpeningTagValidator } from "@/utils/validation";
-import { mdiKeyboardReturn, mdiPencilOutline } from "@icons/material";
-import { defineComponent } from "vue";
+import { PropType, ref, watch } from "vue";
 
-export default defineComponent({
-	components: {
-		vCustomDialog,
-		RoomAvatarIterator,
-	},
-	props: {
-		isOpen: {
-			type: Boolean,
-			required: true,
-		},
-		groupData: {
-			type: Object,
-			default: () => ({}),
-		},
-		itemSize: {
-			type: String,
-			default: "5em",
-		},
-		draggable: {
-			type: Boolean,
-		},
-	},
-	emits: ["update:isOpen", "drag-from-group"],
-	setup() {
-		const { validateOnOpeningTag } = useOpeningTagValidator();
+type ItemType = {
+	id: string;
+	title: string;
+	shortTitle: string;
+	displayColor: string;
+	xPosition: number;
+	yPosition: number;
+	to: string;
+};
 
-		return {
-			validateOnOpeningTag,
-		};
+type GroupDataType = {
+	title: string;
+	shortTitle: string;
+	displayColor: string;
+	xPosition: number;
+	yPosition: number;
+	groupId: string;
+	groupElements: ItemType[];
+	isSynchronized: boolean;
+	to: string;
+};
+
+const props = defineProps({
+	isOpen: {
+		type: Boolean,
+		required: true,
 	},
-	data() {
-		return {
-			mdiPencilOutline,
-			mdiKeyboardReturn,
-			data: {
-				id: "",
-				title: "",
-				shortTitle: "",
-				displayColor: "",
-				xPosition: -1,
-				yPosition: -1,
-			},
-		};
+	groupData: {
+		type: Object as PropType<GroupDataType>,
+		required: true,
 	},
-	watch: {
-		groupData() {
-			this.data = { ...this.groupData };
-		},
+	itemSize: {
+		type: String,
+		default: "5em",
 	},
-	methods: {
-		async updateCourseGroupName() {
-			if (this.validateOnOpeningTag(this.data.title) === true) {
-				await courseRoomListModule.update(this.data);
-			}
-		},
-		async onBlur() {
-			await this.updateCourseGroupName();
-		},
-		async onEnterInput() {
-			await this.updateCourseGroupName();
-		},
+	draggable: {
+		type: Boolean,
+		default: false,
 	},
 });
+
+defineEmits(["update:isOpen", "drag-from-group"]);
+
+const { validateOnOpeningTag } = useOpeningTagValidator();
+
+const data = ref<GroupDataType>({
+	title: "",
+	shortTitle: "",
+	displayColor: "",
+	xPosition: -1,
+	yPosition: -1,
+	groupId: "",
+	groupElements: [],
+	isSynchronized: false,
+	to: "",
+});
+
+const updateCourseGroupName = async () => {
+	if (validateOnOpeningTag(data.value.title) === true) {
+		await courseRoomListModule.update({
+			id: data.value.groupId,
+			title: data.value.title,
+			shortTitle: data.value.shortTitle,
+			displayColor: data.value.displayColor,
+			xPosition: data.value.xPosition,
+			yPosition: data.value.yPosition,
+			isSynchronized: data.value.isSynchronized,
+		});
+	}
+};
+
+const onBlur = async () => {
+	await updateCourseGroupName();
+};
+
+const onEnterInput = async () => {
+	await updateCourseGroupName();
+};
+
+watch(
+	() => props.groupData,
+	(newVal: GroupDataType) => {
+		data.value = { ...newVal };
+	},
+	{ deep: true }
+);
 </script>
 
 <style lang="scss" scoped>
