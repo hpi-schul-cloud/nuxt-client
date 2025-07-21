@@ -73,15 +73,15 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary WOPI Discovery Access Url to Editor Server
+         * @summary Get Collabora access URL with permission check and access token creation
          * @param {DiscoveryAccessUrlParams} discoveryAccessUrlParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        discoveryAccessUrl: async (discoveryAccessUrlParams: DiscoveryAccessUrlParams, options: any = {}): Promise<RequestArgs> => {
+        getAuthorizedCollaboraAccessUrl: async (discoveryAccessUrlParams: DiscoveryAccessUrlParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'discoveryAccessUrlParams' is not null or undefined
-            assertParamExists('discoveryAccessUrl', 'discoveryAccessUrlParams', discoveryAccessUrlParams)
-            const localVarPath = `/wopi/discovery-access-url`;
+            assertParamExists('getAuthorizedCollaboraAccessUrl', 'discoveryAccessUrlParams', discoveryAccessUrlParams)
+            const localVarPath = `/wopi/authorized-collabora-access-url`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -176,13 +176,13 @@ export const WopiApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary WOPI Discovery Access Url to Editor Server
+         * @summary Get Collabora access URL with permission check and access token creation
          * @param {DiscoveryAccessUrlParams} discoveryAccessUrlParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async discoveryAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.discoveryAccessUrl(discoveryAccessUrlParams, options);
+        async getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -220,13 +220,13 @@ export const WopiApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary WOPI Discovery Access Url to Editor Server
+         * @summary Get Collabora access URL with permission check and access token creation
          * @param {DiscoveryAccessUrlParams} discoveryAccessUrlParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        discoveryAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any): AxiosPromise<void> {
-            return localVarFp.discoveryAccessUrl(discoveryAccessUrlParams, options).then((request) => request(axios, basePath));
+        getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any): AxiosPromise<void> {
+            return localVarFp.getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -261,13 +261,13 @@ export interface WopiApiInterface {
 
     /**
      * 
-     * @summary WOPI Discovery Access Url to Editor Server
+     * @summary Get Collabora access URL with permission check and access token creation
      * @param {DiscoveryAccessUrlParams} discoveryAccessUrlParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WopiApiInterface
      */
-    discoveryAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any): AxiosPromise<void>;
+    getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -304,14 +304,14 @@ export class WopiApi extends BaseAPI implements WopiApiInterface {
 
     /**
      * 
-     * @summary WOPI Discovery Access Url to Editor Server
+     * @summary Get Collabora access URL with permission check and access token creation
      * @param {DiscoveryAccessUrlParams} discoveryAccessUrlParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WopiApi
      */
-    public discoveryAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any) {
-        return WopiApiFp(this.configuration).discoveryAccessUrl(discoveryAccessUrlParams, options).then((request) => request(this.axios, this.basePath));
+    public getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any) {
+        return WopiApiFp(this.configuration).getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

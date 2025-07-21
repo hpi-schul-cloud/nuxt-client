@@ -39,7 +39,7 @@ const userName = computed(() => {
 onMounted(async () => {
 	const fileApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
 
-	const result = await fileApi.discoveryAccessUrl({
+	const result = await fileApi.getAuthorizedCollaboraAccessUrl({
 		fileRecordId: props.fileRecordId,
 		editorMode: props.editorMode,
 		userDisplayName: userName.value,
