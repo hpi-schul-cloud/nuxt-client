@@ -65,41 +65,20 @@ const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
 
-const tableHeaders = [
-	{
-		title: t("pages.rooms.administration.table.header.roomName"),
-		key: "name",
-	},
-	{
-		title: t("pages.rooms.administration.table.header.roomOwner"),
-		key: "owner",
-	},
-	{
-		title: t("pages.rooms.administration.table.header.totalMember"),
-		key: "totalMembers",
-	},
-	{
-		title: t("pages.rooms.administration.table.header.internalMember"),
-		key: "internalMembers",
-	},
-	{
-		title: t("pages.rooms.administration.table.header.externalMember"),
-		key: "externalMembers",
-	},
-	{
-		title: t("pages.rooms.administration.table.header.creationDate"),
-		key: "creationDate",
-	},
-	{
-		title: t("pages.rooms.administration.table.header.mainSchool"),
-		key: "mainSchool",
-	},
-	{
-		title: t("pages.rooms.administration.table.header.actions"),
-		key: "actions",
-		sortable: false,
-		width: 100,
-		align: "center",
-	},
+const headerKeys = [
+	{ key: "name", sortable: true },
+	{ key: "owner", sortable: true },
+	{ key: "totalMembers", sortable: true },
+	{ key: "internalMembers", sortable: true },
+	{ key: "externalMembers", sortable: true },
+	{ key: "creationDate", sortable: true },
+	{ key: "mainSchool", sortable: true },
+	{ key: "actions", sortable: false, width: 100, align: "center" },
 ];
+
+const tableHeaders = headerKeys.map(({ key, ...rest }) => ({
+	title: t(`pages.rooms.administration.table.header.${key}`),
+	key,
+	...rest,
+}));
 </script>

@@ -9,8 +9,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { nextTick } from "vue";
 
 describe("AdministrationRooms.page", () => {
-	const setup = (options?: { createList?: boolean; isEmptyList?: boolean }) => {
-		const createList = options?.createList ?? true;
+	const setup = (options?: { isEmptyList?: boolean }) => {
 		const isEmptyList = options?.isEmptyList ?? false;
 
 		const wrapper = mount(AdministrationRoomsPage, {
