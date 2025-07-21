@@ -13,7 +13,7 @@ COPY config/vite ./config/vite
 ARG SC_THEME=default
 ENV SC_THEME=${SC_THEME}
 # TODO use build instead of build-only to also run the type check
-RUN npm run build-only 
+RUN npm run build 
 
 COPY .git ./.git
 RUN echo "{\"sha\": \"$(git rev-parse HEAD)\", \"version\": \"$(git describe --tags --abbrev=0)\", \"commitDate\": \"$(git log -1 --format=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ')\", \"birthdate\": \"$(date +%Y-%m-%dT%H:%M:%SZ)\"}" > ./dist/nuxtversion
