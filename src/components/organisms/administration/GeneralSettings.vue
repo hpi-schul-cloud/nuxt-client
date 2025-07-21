@@ -1,12 +1,12 @@
 <template>
-	<v-form>
+	<v-form v-if="localSchool">
 		<v-row>
 			<v-col>
 				<v-text-field
 					v-model="localSchool.name"
 					class="school-name"
 					:label="
-						$t(
+						t(
 							'pages.administration.school.index.generalSettings.labels.nameOfSchool'
 						)
 					"
@@ -21,17 +21,17 @@
 		<v-row>
 			<v-col>
 				<v-text-field
-					v-model="localSchool.currentYear.name"
+					:model-value="localSchool.currentYear?.name"
 					class="school-year"
 					:label="
-						$t(
+						t(
 							'pages.administration.school.index.generalSettings.labels.schoolYear'
 						)
 					"
 					density="compact"
 					readonly
 					:hint="
-						$t('pages.administration.school.index.generalSettings.disabledHint')
+						t('pages.administration.school.index.generalSettings.disabledHint')
 					"
 					persistent-hint
 					data-testid="school-year"
@@ -45,14 +45,14 @@
 					class="school-number"
 					data-testid="school-number"
 					:label="
-						$t(
+						t(
 							'pages.administration.school.index.generalSettings.labels.schoolNumber'
 						)
 					"
 					density="compact"
 					:disabled="!!school.officialSchoolNumber"
 					:hint="
-						$t(
+						t(
 							'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
 						)
 					"
@@ -67,17 +67,17 @@
 					v-model="localSchool.county"
 					class="school-counties"
 					:label="
-						$t(
+						t(
 							'pages.administration.school.index.generalSettings.labels.chooseACounty'
 						)
 					"
-					:items="federalState.counties"
+					:items="federalState?.counties"
 					item-title="name"
 					item-value="id"
 					return-object
 					:disabled="!!localSchool.county"
 					:hint="
-						$t(
+						t(
 							'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
 						)
 					"
@@ -91,7 +91,7 @@
 					v-model="logoFile"
 					class="school-logo truncate-file-input"
 					:label="
-						$t(
+						t(
 							'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
 						)
 					"
@@ -107,14 +107,14 @@
 					v-model="localSchool.timezone"
 					class="timezone-input"
 					:label="
-						$t(
+						t(
 							'pages.administration.school.index.generalSettings.labels.timezone'
 						)
 					"
 					density="compact"
 					disabled
 					:hint="
-						$t('pages.administration.school.index.generalSettings.timezoneHint')
+						t('pages.administration.school.index.generalSettings.timezoneHint')
 					"
 					persistent-hint
 				/>
@@ -126,7 +126,7 @@
 					v-model="localSchool.language"
 					class="language-select"
 					:label="
-						$t(
+						t(
 							'pages.administration.school.index.generalSettings.labels.language'
 						)
 					"
@@ -145,8 +145,8 @@
 			</v-col>
 		</v-row>
 		<privacy-settings
-			:permissions="localSchool.permissions || {}"
-			:features="localSchool.featureObject || {}"
+			:permissions="localSchool?.permissions ?? {}"
+			:features="localSchool?.featureObject ?? {}"
 			@update-privacy-settings="onUpdatePrivacySettings"
 			@update-feature-settings="onUpdateFeatureSettings"
 		/>
@@ -163,168 +163,150 @@
 	</v-form>
 </template>
 
-<script lang="ts">
-import { printDate } from "@/plugins/datetime";
+<script setup lang="ts">
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { toBase64 } from "@/utils/fileHelper";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { useOpeningTagValidator } from "@/utils/validation";
 import PrivacySettings from "./PrivacySettings.vue";
+import {
+	LanguageType,
+	SchoolFeature,
+	SchoolUpdateBodyParams,
+} from "@/serverApi/v3";
+import { School } from "@/store/types/schools";
+import { computed, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
-	components: {
-		PrivacySettings,
-	},
-	setup() {
-		const { validateOnOpeningTag } = useOpeningTagValidator();
+const { validateOnOpeningTag } = useOpeningTagValidator();
+const { t } = useI18n();
 
-		return {
-			validateOnOpeningTag,
-		};
-	},
-	data() {
-		return {
-			localSchool: {
-				name: "",
-				officialSchoolNumber: "",
-				logo: null,
-				county: {},
-				timezone: "",
-				language: "",
-				permissions: {},
-				features: {},
-				currentYear: {
-					name: "",
-				},
-			},
-			logoFile: [],
-			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
-		};
-	},
-	computed: {
-		availableLanguages: () => envConfigModule.getAvailableLanguages,
-		federalState() {
-			return schoolsModule.getFederalState;
-		},
-		isSyncedSchool() {
-			return schoolsModule.schoolIsSynced;
-		},
-		school() {
-			return schoolsModule.getSchool;
-		},
-		loading() {
-			return schoolsModule.getLoading;
-		},
-		languages() {
-			return this.availableLanguages.map((lang) => {
-				const name = this.$t(`common.words.languages.${lang}`);
-				const flagIcon =
-					"$langIcon" + lang.charAt(0).toUpperCase() + lang.slice(1);
-				return { name, abbreviation: lang, flagIcon };
-			});
-		},
-		hasSchoolEditPermission: () => {
-			return authModule.getUserPermissions.includes("school_edit");
-		},
-	},
-	watch: {
-		school: {
-			handler: async function (newSchool) {
-				if (newSchool?.id) {
-					this.logoFile = newSchool.logo?.dataUrl
-						? [
-								this.convertDataUrlToFile(
-									newSchool.logo?.dataUrl,
-									newSchool.logo?.name
-								),
-							]
-						: [];
+const localSchool = ref<School>();
 
-					await this.copyToLocalSchool();
-				}
-			},
-			immediate: true,
-		},
-	},
-	async created() {
-		await this.copyToLocalSchool();
-	},
-	methods: {
-		convertDataUrlToFile(dataURL, fileName) {
-			const dataUrlParts = dataURL.split(",");
-			const mimeType = (dataUrlParts[0].match(/^data:(.*?);/) || [])[1];
-			const binaryString = window.atob(dataUrlParts[1]);
-			let binaryStringLength = binaryString.length;
-			const uint8Array = new Uint8Array(binaryStringLength);
-			while (binaryStringLength--) {
-				uint8Array[binaryStringLength] =
-					binaryString.charCodeAt(binaryStringLength);
-			}
-			const logoFile = new File([uint8Array], fileName, {
-				type: mimeType,
-			});
-			return logoFile;
-		},
-		async copyToLocalSchool() {
-			if (!this.school) {
-				return;
-			}
-			const schoolCopy = JSON.parse(JSON.stringify(this.school)); // create a deep copy
-			if (this.school.logo?.dataUrl) {
-				schoolCopy.logo = this.school.logo?.dataUrl;
-			}
-			this.localSchool = schoolCopy;
+const logoFile = ref<File[]>([]);
 
-			if (!this.localSchool.language) {
-				this.localSchool.language = "de";
-			}
-		},
-		printDate,
-		toBase64,
-		onUpdatePrivacySettings(value, settingName) {
-			const keys = settingName.split(".");
-			const newPermissions = {
-				...this.localSchool.permissions,
-				[keys[0]]: {
-					[keys[1]]: value,
-				},
-			};
-			this.localSchool.permissions = newPermissions;
-		},
-		onUpdateFeatureSettings(value, settingName) {
-			this.localSchool.featureObject[settingName] = value;
-		},
-		async save() {
-			const updatedSchool = {
-				id: this.localSchool.id,
-				name: this.localSchool.name,
-				language: this.localSchool.language,
-				permissions: this.localSchool.permissions,
-				features: mapSchoolFeatureObjectToArray(this.localSchool.featureObject),
-				logo: {
-					dataUrl: this.localSchool.logo?.dataUrl,
-					name: this.localSchool.logo?.name,
-				},
-			};
-			if (
-				!this.school.officialSchoolNumber &&
-				this.localSchool.officialSchoolNumber
-			) {
-				updatedSchool.officialSchoolNumber =
-					this.localSchool.officialSchoolNumber;
-			}
-			if (!this.school.county && this.localSchool?.county?.id) {
-				updatedSchool.countyId = this.localSchool.county.id;
-			}
+const availableLanguages = computed(
+	() => envConfigModule.getAvailableLanguages
+);
+const federalState = computed(() => schoolsModule.getFederalState);
+const isSyncedSchool = computed(() => schoolsModule.schoolIsSynced);
+const school = computed(() => schoolsModule.getSchool);
+const loading = computed(() => schoolsModule.getLoading);
+const languages = computed(() => {
+	return availableLanguages.value.map((lang) => {
+		const name = t(`common.words.languages.${lang}`);
+		const flagIcon = "$langIcon" + lang.charAt(0).toUpperCase() + lang.slice(1);
+		return { name, abbreviation: lang, flagIcon };
+	});
+});
 
-			updatedSchool.logo.dataUrl =
-				this.logoFile.length > 0 ? await toBase64(this.logoFile[0]) : "";
-			updatedSchool.logo.name =
-				this.logoFile.length > 0 ? this.logoFile[0].name : "";
+const hasSchoolEditPermission = computed(() => {
+	return authModule.getUserPermissions.includes("school_edit");
+});
 
-			schoolsModule.update({ id: this.localSchool.id, props: updatedSchool });
-		},
+const convertDataUrlToFile = (dataURL: string, fileName: string) => {
+	const dataUrlParts = dataURL.split(",");
+	const mimeType = (dataUrlParts[0].match(/^data:(.*?);/) || [])[1];
+	const binaryString = window.atob(dataUrlParts[1]);
+	let binaryStringLength = binaryString.length;
+	const uint8Array = new Uint8Array(binaryStringLength);
+	while (binaryStringLength--) {
+		uint8Array[binaryStringLength] =
+			binaryString.charCodeAt(binaryStringLength);
+	}
+	const logoFile = new File([uint8Array], fileName, {
+		type: mimeType,
+	});
+	return logoFile;
+};
+
+const copyToLocalSchool = async () => {
+	if (!school.value) {
+		return;
+	}
+	const schoolCopy = JSON.parse(JSON.stringify(school.value)); // create a deep copy
+	if (school.value.logo?.dataUrl) {
+		schoolCopy.logo = school.value.logo?.dataUrl;
+	}
+	localSchool.value = schoolCopy;
+
+	if (localSchool.value && !localSchool.value.language) {
+		localSchool.value.language = LanguageType.De;
+	}
+};
+
+watch(
+	school,
+	async (newSchool) => {
+		if (newSchool?.id) {
+			logoFile.value =
+				newSchool.logo?.dataUrl && newSchool.logo?.name
+					? [convertDataUrlToFile(newSchool.logo.dataUrl, newSchool.logo.name)]
+					: [];
+			await copyToLocalSchool();
+		}
 	},
+	{ immediate: true }
+);
+
+onMounted(async () => {
+	await copyToLocalSchool();
+});
+
+const onUpdateFeatureSettings = (
+	value: boolean,
+	settingName: SchoolFeature
+) => {
+	if (!localSchool.value) {
+		return;
+	}
+	localSchool.value.featureObject[settingName] = value;
+};
+
+const onUpdatePrivacySettings = (value: boolean, settingName: string) => {
+	if (!localSchool.value) {
+		return;
+	}
+	const keys = settingName.split(".");
+	const newPermissions = {
+		...localSchool.value.permissions,
+		[keys[0]]: {
+			[keys[1]]: value,
+		},
+	};
+	localSchool.value.permissions = newPermissions;
+};
+
+const save = async () => {
+	if (!localSchool.value) {
+		return;
+	}
+
+	const updatedSchool: SchoolUpdateBodyParams = {
+		name: localSchool.value.name,
+		language: localSchool.value.language as LanguageType, // Should this be changed in the backend SchoolResponse?
+		permissions: localSchool.value.permissions,
+		features: mapSchoolFeatureObjectToArray(localSchool.value.featureObject),
+		logo: {
+			dataUrl:
+				logoFile.value.length > 0
+					? ((await toBase64(logoFile.value[0])) as string)
+					: "",
+			name: logoFile.value.length > 0 ? logoFile.value[0].name : "",
+		},
+	};
+
+	if (
+		!school.value.officialSchoolNumber &&
+		localSchool.value.officialSchoolNumber
+	) {
+		updatedSchool.officialSchoolNumber = localSchool.value.officialSchoolNumber;
+	}
+	if (!school.value.county && localSchool.value.county?.id) {
+		updatedSchool.countyId = localSchool.value.county.id;
+	}
+
+	schoolsModule.update({ id: localSchool.value.id, props: updatedSchool });
 };
 </script>
 <style lang="scss" scoped>
