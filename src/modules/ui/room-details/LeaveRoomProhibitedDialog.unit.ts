@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import ConfirmationDialog from "./ConfirmationDialog.vue";
+import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { VCard, VDialog } from "vuetify/lib/components/index";
 import { VueWrapper } from "@vue/test-utils";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
