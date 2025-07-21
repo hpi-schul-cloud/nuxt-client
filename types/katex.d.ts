@@ -13,3 +13,11 @@ declare module "katex/dist/contrib/auto-render.js" {
 
 	export default renderMathInElement;
 }
+
+import katex from "katex";
+
+declare global {
+	interface Window {
+		katex: typeof katex;
+	}
+}
