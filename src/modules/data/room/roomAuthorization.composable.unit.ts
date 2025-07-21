@@ -167,7 +167,7 @@ describe("roomAuthorization", () => {
 	});
 
 	describe("canDeleteRoom", () => {
-		describe("when the user has room delete and school delete room permission", () => {
+		describe("when the user has room delete permission", () => {
 			const setup = () => {
 				return genericSetup({ roomPermissions: [Permission.RoomDeleteRoom] });
 			};
@@ -175,20 +175,6 @@ describe("roomAuthorization", () => {
 			it("should be allowed to delete the room", () => {
 				const { canDeleteRoom } = setup();
 				expect(canDeleteRoom.value).toBe(true);
-			});
-		});
-
-		describe("when the user has room delete permission but no school delete room permission", () => {
-			const setup = () => {
-				return genericSetup({
-					roomPermissions: [Permission.RoomDeleteRoom],
-					userPermissions: [],
-				});
-			};
-
-			it("should not be allowed to delete the room", () => {
-				const { canDeleteRoom } = setup();
-				expect(canDeleteRoom.value).toBe(false);
 			});
 		});
 
