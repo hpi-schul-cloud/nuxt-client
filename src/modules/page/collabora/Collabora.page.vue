@@ -19,6 +19,7 @@ import { computed, onMounted, ref } from "vue";
 
 interface Props {
 	fileRecordId: string;
+	editorMode: EditorMode;
 }
 const props = defineProps<Props>();
 const url = ref<string>("");
@@ -36,16 +37,11 @@ const userName = computed(() => {
 });
 
 onMounted(async () => {
-	const fileRecordId = props.fileRecordId;
-	if (!props.fileRecordId) {
-		throw new Error("fileRecordId is required");
-	}
-
 	const fileApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
 
 	const result = await fileApi.discoveryAccessUrl({
-		fileRecordId,
-		editorMode: EditorMode.EDIT,
+		fileRecordId: props.fileRecordId,
+		editorMode: props.editorMode,
 		userDisplayName: userName.value,
 	});
 

@@ -1,5 +1,6 @@
 import {
 	ArchiveFileParams,
+	EditorMode,
 	PreviewStatus as FilePreviewStatus,
 	PreviewWidth as FilePreviewWidth,
 	FileRecordParentType as FileRecordParent,
@@ -14,6 +15,7 @@ export type ParentStatistic = ParentStatisticResponse;
 
 export {
 	ArchiveFileParams,
+	EditorMode,
 	FilePreviewStatus,
 	FilePreviewWidth,
 	FileRecordParent,

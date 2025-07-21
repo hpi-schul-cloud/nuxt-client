@@ -67,7 +67,11 @@ import {
 	isScanStatusBlocked,
 } from "@/utils/fileHelper";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import {
+	useBoardFocusHandler,
+	useBoardPermissions,
+	useContentElementState,
+} from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
@@ -79,6 +83,7 @@ import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
+import { mapEditBoardPermissionToEditorMode } from "./mapper";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
@@ -112,6 +117,7 @@ useBoardFocusHandler(element.value.id, fileContentElement);
 
 const { modelValue } = useContentElementState(props);
 const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
+const { hasEditPermission } = useBoardPermissions();
 
 const fileRecord = computed(
 	() => getFileRecordsByParentId(element.value.id)[0]
@@ -224,12 +230,20 @@ const onCardInteraction = () => {
 	if (isCollaboraEnabled.value && hasCollaboraMimeType.value) openCollabora();
 };
 const openCollabora = () => {
+	const editorMode = mapEditBoardPermissionToEditorMode(
+		hasEditPermission.value
+	);
+
 	const url = router.resolve({
 		name: "collabora",
 		params: {
 			id: fileRecord.value.id,
 		},
+		query: {
+			editorMode,
+		},
 	}).href;
+
 	window.open(url, "_blank");
 };
 </script>
