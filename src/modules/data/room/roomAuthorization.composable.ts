@@ -53,7 +53,6 @@ export const useRoomAuthorization = () => {
 		canSeeAllStudents.value = authModule?.getUserPermissions.includes(
 			Permission.StudentList.toLowerCase()
 		);
-		canListDrafts.value = permissions.includes(Permission.RoomListDrafts);
 		canViewRoom.value = permissions.includes(Permission.RoomListContent);
 		canListDrafts.value = permissions.includes(Permission.RoomListDrafts);
 		canManageVideoconferences.value = permissions.includes(
