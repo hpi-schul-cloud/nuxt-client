@@ -102,6 +102,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			canShareRoom: ref(false),
 			canManageRoomInvitationLinks: ref(false),
 			canListDrafts: ref(false),
+			canManageVideoconferences: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});

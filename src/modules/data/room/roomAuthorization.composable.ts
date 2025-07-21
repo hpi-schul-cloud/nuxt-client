@@ -21,6 +21,7 @@ export const useRoomAuthorization = () => {
 	const canViewRoom = ref(false);
 	const canManageRoomInvitationLinks = ref(false);
 	const canListDrafts = ref(false);
+	const canManageVideoconferences = ref(false);
 
 	watchEffect(() => {
 		const permissions = toValue(room)?.permissions ?? [];
@@ -30,10 +31,7 @@ export const useRoomAuthorization = () => {
 		canCreateRoom.value = authModule?.getUserPermissions.includes(
 			Permission.SchoolCreateRoom.toLowerCase()
 		);
-		canDeleteRoom.value =
-			authModule?.getUserPermissions.includes(
-				Permission.SchoolDeleteRoom.toLowerCase()
-			) && permissions.includes(Permission.RoomDeleteRoom);
+		canDeleteRoom.value = permissions.includes(Permission.RoomDeleteRoom);
 		canCopyRoom.value =
 			authModule?.getUserPermissions.includes(
 				Permission.SchoolCreateRoom.toLowerCase()
@@ -57,6 +55,10 @@ export const useRoomAuthorization = () => {
 		);
 		canListDrafts.value = permissions.includes(Permission.RoomListDrafts);
 		canViewRoom.value = permissions.includes(Permission.RoomListContent);
+		canListDrafts.value = permissions.includes(Permission.RoomListDrafts);
+		canManageVideoconferences.value = permissions.includes(
+			Permission.RoomManageVideoconferences
+		);
 	});
 
 	return {
@@ -74,5 +76,6 @@ export const useRoomAuthorization = () => {
 		canViewRoom,
 		canManageRoomInvitationLinks,
 		canListDrafts,
+		canManageVideoconferences,
 	};
 };

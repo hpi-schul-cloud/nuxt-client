@@ -50,6 +50,7 @@ describe("@feature-room/RoomMenu", () => {
 			canShareRoom: ref(false),
 			canListDrafts: ref(false),
 			canManageRoomInvitationLinks: ref(false),
+			canManageVideoconferences: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 

@@ -40,6 +40,7 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canShareRoom: ref(false),
 	canListDrafts: ref(false),
 	canManageRoomInvitationLinks: ref(false),
+	canManageVideoconferences: ref(false),
 };
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 

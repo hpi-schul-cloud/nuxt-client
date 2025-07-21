@@ -169,12 +169,7 @@ describe("roomAuthorization", () => {
 	describe("canDeleteRoom", () => {
 		describe("when the user has room delete and school delete room permission", () => {
 			const setup = () => {
-				return genericSetup({
-					roomPermissions: [Permission.RoomDeleteRoom],
-					userPermissions: [
-						Permission.SchoolDeleteRoom.toLocaleLowerCase() as Permission,
-					],
-				});
+				return genericSetup({ roomPermissions: [Permission.RoomDeleteRoom] });
 			};
 
 			it("should be allowed to delete the room", () => {
