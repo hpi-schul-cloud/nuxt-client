@@ -103,6 +103,9 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			canSeeAllStudents: ref(false),
 			canCopyRoom: ref(false),
 			canShareRoom: ref(false),
+			canManageInvitationLinks: ref(false),
+			canListDrafts: ref(false),
+			canManageVideoconferences: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});

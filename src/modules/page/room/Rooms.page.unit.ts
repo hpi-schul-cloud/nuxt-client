@@ -60,6 +60,9 @@ describe("RoomsPage", () => {
 			canEditRoomContent: ref(false),
 			canSeeAllStudents: ref(false),
 			canShareRoom: ref(false),
+			canManageInvitationLinks: ref(false),
+			canListDrafts: ref(false),
+			canManageVideoconferences: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});

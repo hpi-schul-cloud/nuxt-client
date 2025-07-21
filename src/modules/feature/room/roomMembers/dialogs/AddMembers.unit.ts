@@ -82,6 +82,7 @@ describe("AddMembers", () => {
 	const setup = (options?: {
 		customRoomAuthorization?: RoomAuthorizationRefs;
 		isFeatureAddStudentsEnabled?: boolean;
+		schoolRole?: RoleName.Teacher | RoleName.Student;
 	}) => {
 		const configDefaults = {
 			canAddRoomMembers: true,
@@ -93,9 +94,18 @@ describe("AddMembers", () => {
 		};
 		const potentialRoomMembers = roomMemberFactory.buildList(3);
 		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
+		const roomMembers = roomMemberFactory.buildList(2, {
+			roomRoleName: RoleName.Roomadmin,
+		});
 
-		const mockMe = meResponseFactory.build();
+		const mockMe = meResponseFactory.build({
+			roles: [{ id: "user-id", name: options?.schoolRole ?? RoleName.Teacher }],
+		});
 		authModule.setMe(mockMe);
+
+		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.Teacher];
+		roomMembers[0].userId = mockMe.user.id;
+		roomMembersSchools[0].id = mockMe.school.id;
 
 		const authorizationPermissions =
 			createMock<ReturnType<typeof useRoomAuthorization>>();
@@ -126,6 +136,7 @@ describe("AddMembers", () => {
 							roomMembersStore: {
 								potentialRoomMembers,
 								schools: roomMembersSchools,
+								roomMembers,
 							},
 						},
 					}),
@@ -141,6 +152,7 @@ describe("AddMembers", () => {
 
 		return {
 			wrapper,
+			mockMe,
 			potentialRoomMembers,
 			roomMembersSchools,
 			roomMembersStore,
@@ -661,6 +673,76 @@ describe("AddMembers", () => {
 				);
 				expect(infoAlert.exists()).toEqual(false);
 			});
+		});
+		describe("and the current user is a student and student role is set", () => {
+			it("should not show info message", async () => {
+				const { wrapper } = setup({
+					customRoomAuthorization: { canSeeAllStudents: false },
+					schoolRole: RoleName.Student,
+				});
+
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(RoleName.Student);
+
+				const infoAlert = wrapper.findComponent(
+					'[data-testid="student-visibility-info-alert"]'
+				);
+				expect(infoAlert.exists()).toEqual(false);
+			});
+
+			it("should show specific student admin info message", async () => {
+				const { wrapper } = setup({
+					customRoomAuthorization: { canSeeAllStudents: false },
+					schoolRole: RoleName.Student,
+				});
+
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(RoleName.Student);
+
+				const infoAlert = wrapper.findComponent(
+					'[data-testid="student-admin-info-alert"]'
+				);
+				expect(infoAlert.text()).toBe(
+					"pages.rooms.members.add.students.studentAdmins"
+				);
+			});
+		});
+	});
+
+	describe("when current user is a student admin", () => {
+		it("should disable the school selection with current users school selected", async () => {
+			const { mockMe, wrapper } = setup({ schoolRole: RoleName.Student });
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			expect(schoolComponent.props("disabled")).toBe(true);
+			expect(schoolComponent.props("modelValue")).toBe(mockMe.school.id);
+		});
+
+		it("should show specific student admin info message", async () => {
+			const { wrapper } = setup({
+				schoolRole: RoleName.Student,
+			});
+
+			const roleComponent = wrapper.getComponent({
+				ref: "selectRole",
+			});
+
+			await roleComponent.setValue(RoleName.Student);
+
+			const infoAlert = wrapper.findComponent(
+				'[data-testid="student-admin-info-alert"]'
+			);
+			expect(infoAlert.text()).toBe(
+				"pages.rooms.members.add.students.studentAdmins"
+			);
 		});
 	});
 });
