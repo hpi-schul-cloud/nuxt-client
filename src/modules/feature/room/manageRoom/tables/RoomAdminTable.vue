@@ -1,6 +1,7 @@
 <template>
 	<DataTable
 		aria-label-name-key="title"
+		select-item-key="id"
 		:items="roomList"
 		:header-bottom="headerBottom"
 		:table-headers="tableHeaders"

@@ -17,7 +17,7 @@
 			</EmptyState>
 		</template>
 		<template v-else>
-			<RoomAdminTable />
+			<RoomAdminTable :show-select="false" :header-bottom="0" />
 		</template>
 	</DefaultWireframe>
 </template>
@@ -26,7 +26,7 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
-import { computed, ComputedRef, watch, ref, onMounted } from "vue";
+import { computed, ComputedRef, onMounted } from "vue";
 import { RoomAdminTable } from "@feature-room";
 import { useAdministrationRoomStore } from "@data-room";
 import { storeToRefs } from "pinia";
