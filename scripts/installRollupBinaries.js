@@ -21,7 +21,7 @@ if (platform === "linux") {
 if (platform === "linux" && arch === "x64" && libc === "musl") {
 	execSync("npm install @rollup/rollup-linux-x64-musl --no-save");
 } else if (platform === "linux" && arch === "x64" && libc === "glibc") {
-	execSync("npm install @rollup/rollup-linux-x64-glibc --no-save");
+	execSync("npm install @rollup/rollup-linux-x64-gnu --no-save");
 } else if (platform === "darwin" && arch === "arm64") {
 	execSync("npm install @rollup/rollup-darwin-arm64 --no-save");
 } else if (platform === "win32" && arch === "x64") {
