@@ -267,7 +267,7 @@ const onStartVideoConference = async () => {
 
 const onContentEnter = async () => {
 	if (!props.isEditMode) {
-		onContentClick();
+		await onContentClick();
 	}
 };
 

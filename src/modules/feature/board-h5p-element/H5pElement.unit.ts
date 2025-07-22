@@ -97,7 +97,7 @@ describe("H5pElement", () => {
 				};
 			};
 
-			it("should show the card", async () => {
+			it("should show the card", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.getComponent({ ref: "elementCard" });
@@ -120,7 +120,7 @@ describe("H5pElement", () => {
 				};
 			};
 
-			it("should show the card", async () => {
+			it("should show the card", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.getComponent({ ref: "elementCard" });
@@ -143,7 +143,7 @@ describe("H5pElement", () => {
 				};
 			};
 
-			it("should hide the card", async () => {
+			it("should hide the card", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.getComponent({ ref: "elementCard" });
