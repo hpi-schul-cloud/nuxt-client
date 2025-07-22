@@ -511,7 +511,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				describe("when user can see drafts", () => {
 					it("should render board tiles in draft mode", () => {
 						roomPermissions.canListDrafts.value = true;
-
 						const { wrapper, totalCount } = setupWithBoards();
 
 						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });

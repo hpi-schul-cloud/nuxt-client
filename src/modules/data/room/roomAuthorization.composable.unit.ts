@@ -357,7 +357,7 @@ describe("roomAuthorization", () => {
 			});
 		});
 
-		describe("when the user does not have room copy  and school create permission", () => {
+		describe("when the user does not have room copy and school create permission", () => {
 			const setup = () => {
 				return genericSetup({ roomPermissions: [] });
 			};

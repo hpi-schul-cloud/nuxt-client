@@ -864,9 +864,10 @@ describe("Board", () => {
 						});
 					});
 
-					describe("when the user is a teacher", () => {
+					describe("when the user has edit permissions", () => {
 						it("should not call 'createApplicationError' method", async () => {
-							mockedBoardPermissions.isTeacher = ref(true);
+							mockedBoardPermissions.hasEditPermission = ref(true);
+							mockedBoardPermissions.arePermissionsLoaded = ref(true);
 							const { boardStore, wrapperVM } = setup();
 							expect(wrapperVM.isBoardVisible).toBe(true);
 
@@ -886,6 +887,7 @@ describe("Board", () => {
 					describe("when the user has not edit permission", () => {
 						it("should not call 'createApplicationError' method", async () => {
 							mockedBoardPermissions.hasEditPermission = ref(false);
+							mockedBoardPermissions.arePermissionsLoaded = ref(true);
 							const { boardStore, wrapperVM } = setup();
 							expect(wrapperVM.isBoardVisible).toBe(true);
 
@@ -903,6 +905,7 @@ describe("Board", () => {
 					describe("when the user has edit permission", () => {
 						it("should not call 'createApplicationError' method", async () => {
 							mockedBoardPermissions.hasEditPermission = ref(true);
+							mockedBoardPermissions.arePermissionsLoaded = ref(true);
 							const { boardStore, wrapperVM } = setup();
 							expect(wrapperVM.isBoardVisible).toBe(true);
 
