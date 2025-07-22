@@ -21,6 +21,7 @@ import { useBoardStore } from "./Board.store";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardPermissions } from "./BoardPermissions.composable";
 
+jest.mock("vue-router");
 jest.mock("@data-board/BoardPageInformation.composable");
 const mockedUseSharedBoardPageInformation = jest.mocked(
 	useSharedBoardPageInformation
@@ -158,6 +159,7 @@ describe("BoardPermissions.composable", () => {
 				hasCreateToolPermission,
 				hasEditPermission,
 				hasManageVideoConferencePermission,
+				hasShareBoardPermission,
 				isTeacher,
 				isStudent,
 			} = useBoardPermissions();
@@ -169,6 +171,7 @@ describe("BoardPermissions.composable", () => {
 			expect(hasCreateToolPermission.value).toBe(false);
 			expect(hasEditPermission.value).toBe(false);
 			expect(hasManageVideoConferencePermission.value).toBe(false);
+			expect(hasShareBoardPermission.value).toBe(false);
 
 			expect(isTeacher.value).toBe(false);
 			expect(isStudent.value).toBe(true);
@@ -183,6 +186,7 @@ describe("BoardPermissions.composable", () => {
 				boardPermissions: [
 					Permission.BoardEdit,
 					Permission.BoardManageVideoconference,
+					Permission.BoardShareBoard,
 				],
 			});
 
@@ -196,6 +200,7 @@ describe("BoardPermissions.composable", () => {
 				hasManageVideoConferencePermission,
 				isTeacher,
 				isStudent,
+				hasShareBoardPermission,
 			} = useBoardPermissions();
 
 			expect(hasMovePermission.value).toBe(true);
@@ -205,6 +210,7 @@ describe("BoardPermissions.composable", () => {
 			expect(hasCreateToolPermission.value).toBe(true);
 			expect(hasEditPermission.value).toBe(true);
 			expect(hasManageVideoConferencePermission.value).toBe(true);
+			expect(hasShareBoardPermission.value).toBe(true);
 
 			expect(isTeacher.value).toBe(true);
 			expect(isStudent.value).toBe(false);

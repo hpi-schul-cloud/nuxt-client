@@ -6,7 +6,11 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import {
+	RoomVariant,
+	useRoomDetailsStore,
+	useRoomAuthorization,
+} from "@data-room";
 import { RoomDetailsSwitchPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { ref } from "vue";
@@ -14,7 +18,6 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
 import { Router, useRoute, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-jest";
-import { useRoomAuthorization } from "@data-room";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),
@@ -35,8 +38,8 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canEditRoomContent: ref(false),
 	canSeeAllStudents: ref(false),
 	canShareRoom: ref(false),
-	canManageInvitationLinks: ref(false),
 	canListDrafts: ref(false),
+	canManageRoomInvitationLinks: ref(false),
 	canManageVideoconferences: ref(false),
 };
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);

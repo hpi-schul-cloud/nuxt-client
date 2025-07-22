@@ -12,7 +12,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 	const isStudent: Ref<boolean> = ref(userRoles.includes(RoleName.Student));
 
 	const { board } = storeToRefs(useBoardStore());
-
+	const arePermissionsLoaded = ref(false);
 	const hasMovePermission = ref(false);
 	const hasCreateCardPermission = ref(false);
 	const hasCreateColumnPermission = ref(false);
@@ -20,9 +20,11 @@ const boardPermissions = (): BoardPermissionChecks => {
 	const hasEditPermission = ref(false);
 	const hasDeletePermission = ref(false);
 	const hasManageVideoConferencePermission = ref(false);
+	const hasShareBoardPermission = ref(false);
 
 	watchEffect(() => {
 		const boardPermissions = toValue(board)?.permissions ?? [];
+		arePermissionsLoaded.value = boardPermissions.length > 0;
 		const schoolRolePermissions = authModule?.getUserPermissions || [];
 		// boardPermissions are upper case, schoolRolePermissions are lower case
 		const permissions = [...boardPermissions, ...schoolRolePermissions];
@@ -41,6 +43,9 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasManageVideoConferencePermission.value = permissions.includes(
 			Permission.BoardManageVideoconference
 		);
+		hasShareBoardPermission.value = permissions.includes(
+			Permission.BoardShareBoard
+		);
 	});
 
 	return {
@@ -51,8 +56,10 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasEditPermission,
 		hasDeletePermission,
 		hasManageVideoConferencePermission,
+		hasShareBoardPermission,
 		isTeacher,
 		isStudent,
+		arePermissionsLoaded,
 	};
 };
 
