@@ -4,12 +4,14 @@ FROM docker.io/node:22 AS build-stage
 WORKDIR /app
 
 COPY package.json package-lock.json ./
+COPY scripts/installRollupBinaries.mjs ./scripts/
 RUN npm ci
 
 COPY vite.config.ts index.html LICENSE.md tsconfig.json ./
 COPY public ./public
 COPY src ./src
 COPY config/vite ./config/vite
+COPY types ./types
 ARG SC_THEME=default
 ENV SC_THEME=${SC_THEME}
 # TODO use build instead of build-only to also run the type check
