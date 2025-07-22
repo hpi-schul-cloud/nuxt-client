@@ -388,8 +388,7 @@ describe("VideoConferenceComposable", () => {
 
 		it("should return false when moderatorMustApproveJoinRequests is false", () => {
 			const { isWaitingRoomActive, videoConferenceInfo } = setup();
-			videoConferenceInfo.value.options.moderatorMustApproveJoinRequests =
-				false;
+			videoConferenceInfo.value.options.moderatorMustApproveJoinRequests = false;
 
 			expect(isWaitingRoomActive.value).toBe(false);
 		});

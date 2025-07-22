@@ -493,8 +493,7 @@ describe("env-config module", () => {
 			describe("when FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED and FEATURE_LERNSTORE_ENABLED are true", () => {
 				it("should return true", () => {
 					const envConfigModule = new EnvConfigModule({});
-					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED =
-						true;
+					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED = true;
 					envConfigModule.env.FEATURE_LERNSTORE_ENABLED = true;
 
 					expect(
@@ -506,8 +505,7 @@ describe("env-config module", () => {
 			describe("when FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED is false", () => {
 				it("should return false", () => {
 					const envConfigModule = new EnvConfigModule({});
-					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED =
-						false;
+					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED = false;
 					envConfigModule.env.FEATURE_LERNSTORE_ENABLED = true;
 
 					expect(
@@ -519,8 +517,7 @@ describe("env-config module", () => {
 			describe("when FEATURE_LERNSTORE_ENABLED is false", () => {
 				it("should return false", () => {
 					const envConfigModule = new EnvConfigModule({});
-					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED =
-						true;
+					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED = true;
 					envConfigModule.env.FEATURE_LERNSTORE_ENABLED = false;
 
 					expect(

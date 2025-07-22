@@ -414,7 +414,6 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'redirectAction' method when 'more action' edit button is clicked", async () => {
-				const redirectAction = vi.fn();
 				const wrapper = getWrapper({ task: testTask, userRole });
 
 				const threeDotButton = wrapper.find(".three-dot-button");
@@ -431,7 +430,6 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'unPublishCard' method when 'more action' unpublish button is clicked", async () => {
-				const unPublishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: testTask, userRole });
 
 				const threeDotButton = wrapper.find(".three-dot-button");
@@ -512,7 +510,6 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'finishCard' method when 'Finish' button is clicked", async () => {
-				const finishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: testTask, userRole });
 
 				const actionButton = wrapper.find(
