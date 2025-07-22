@@ -3,6 +3,7 @@ import Vue from "@vitejs/plugin-vue";
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import { fileURLToPath, URL } from "node:url";
 import { getTsconfigAliases } from "./config/vite/tsconfig-aliases";
+import AutoImport from "unplugin-auto-import/vite";
 
 export default defineConfig({
 	plugins: [
@@ -16,6 +17,13 @@ export default defineConfig({
 		}),
 		Vuetify({
 			autoImport: true,
+		}),
+		AutoImport({
+			imports: [
+				{
+					"@vue/test-utils": ["mount", "shallowMount"],
+				},
+			],
 		}),
 	],
 	resolve: {
@@ -38,7 +46,7 @@ export default defineConfig({
 		globals: true,
 		environment: "jsdom",
 		include: ["**/*.unit.{j,t}s?(x)"],
-		setupFiles: ["./tests/setup.js"],
+		setupFiles: ["./tests/setup.ts"],
 		server: {
 			deps: {
 				inline: ["vuetify"],

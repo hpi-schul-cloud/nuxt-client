@@ -1,12 +1,9 @@
-import { config, mount, shallowMount } from "@vue/test-utils";
+import { config } from "@vue/test-utils";
 import { beforeAll } from "vitest";
 
 // enable rendering of default slot on stubbed components
 // see https://test-utils.vuejs.org/migration/#shallowMount-and-renderStubDefaultSlot
 config.global.renderStubDefaultSlot = true;
-
-global.mount = mount;
-global.shallowMount = shallowMount;
 
 beforeAll(() => {
 	/**
@@ -18,7 +15,7 @@ beforeAll(() => {
 	 */
 	Object.defineProperty(window, "matchMedia", {
 		writable: true,
-		value: (query) => ({
+		value: (query: string) => ({
 			matches: false,
 			media: query,
 			onchange: null,
