@@ -4,8 +4,24 @@ import { execSync } from "child_process";
 const platform = os.platform();
 const arch = os.arch();
 
-if (platform === "linux" && arch === "x64") {
+let libc = "unknown";
+if (platform === "linux") {
+	try {
+		const lddVersion = execSync("ldd --version").toString();
+		if (lddVersion.toLowerCase().includes("musl")) {
+			libc = "musl";
+		} else if (lddVersion.toLowerCase().includes("glibc")) {
+			libc = "glibc";
+		}
+	} catch {
+		// fallback or unknown
+	}
+}
+
+if (platform === "linux" && arch === "x64" && libc === "musl") {
 	execSync("npm install @rollup/rollup-linux-x64-musl --no-save");
+} else if (platform === "linux" && arch === "x64" && libc === "glibc") {
+	execSync("npm install @rollup/rollup-linux-x64-glibc --no-save");
 } else if (platform === "darwin" && arch === "arm64") {
 	execSync("npm install @rollup/rollup-darwin-arm64 --no-save");
 } else if (platform === "win32" && arch === "x64") {
