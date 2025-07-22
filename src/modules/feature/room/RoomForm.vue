@@ -49,12 +49,20 @@
 						roomData.features.includes(RoomFeatures.EditorManageVideoconference)
 					"
 					class="video-conference-checkbox"
+					:class="{
+						'video-conference-checkbox--sm': !smAndUp,
+					}"
 					data-testid="room-video-conference-checkbox"
 					:label="t('components.roomForm.labels.videoConference.label')"
 					:hide-details="true"
 					@click="onToggleVideoConferenceFeature"
 				/>
-				<div class="text-medium-emphasis ms-8 helper-text">
+				<div
+					class="text-medium-emphasis ms-8 helper-text"
+					:class="{
+						'helper-text--lg': smAndUp,
+					}"
+				>
 					{{ t("components.roomForm.labels.videoConference.helperText") }}
 				</div>
 			</div>
@@ -98,6 +106,7 @@ import { computed, PropType, unref } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { RoomFeatures } from "@/serverApi/v3";
+import { useDisplay } from "vuetify";
 
 const props = defineProps({
 	room: {
@@ -106,6 +115,8 @@ const props = defineProps({
 	},
 });
 const emit = defineEmits(["save", "cancel"]);
+
+const { smAndUp } = useDisplay();
 
 const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
@@ -233,10 +244,27 @@ const onCancel = async () => {
 <style lang="scss" scoped>
 .helper-text {
 	font-size: var(--text-sm);
+}
+
+.helper-text--lg {
+	font-size: var(--text-sm);
 	margin-top: -12px;
 }
 
 .video-conference-checkbox {
 	margin-left: -8px;
+}
+
+.video-conference-checkbox--sm {
+	margin-left: -8px;
+	margin-top: 12px;
+
+	::v-deep(.v-selection-control) {
+		align-items: flex-start;
+	}
+
+	::v-deep(.v-selection-control__input) {
+		margin-top: -6px;
+	}
 }
 </style>
