@@ -86,7 +86,7 @@
 		"jest-transform-stub": "^2.0.0",
 		"prettier": "^3.3.3",
 		"resize-observer-polyfill": "^1.5.1",
-		"sass": "^1.89.0",
+		"sass": "^1.89.2",
 		"sass-loader": "^16.0.5",
 		"ts-jest": "^29.1.2",
 		"ts-loader": "^9.5.1",
