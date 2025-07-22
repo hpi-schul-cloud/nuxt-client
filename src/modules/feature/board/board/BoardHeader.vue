@@ -32,7 +32,10 @@
 			>
 				<KebabMenuActionRename @click="onStartEditMode" />
 				<KebabMenuActionCopy @click="onCopyBoard" />
-				<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
+				<KebabMenuActionShare
+					v-if="isShareEnabled && hasShareBoardPermission"
+					@click="onShareBoard"
+				/>
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
@@ -102,7 +105,7 @@ const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
 );
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
-const { hasEditPermission } = useBoardPermissions();
+const { hasEditPermission, hasShareBoardPermission } = useBoardPermissions();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
@@ -131,7 +134,7 @@ const onCopyBoard = () => {
 };
 
 const onShareBoard = () => {
-	if (!hasEditPermission.value) return;
+	if (!hasShareBoardPermission.value) return;
 	emit("share:board");
 };
 
@@ -189,6 +192,7 @@ const calculateWidth = () => {
 };
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
 const isShareEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE
 );

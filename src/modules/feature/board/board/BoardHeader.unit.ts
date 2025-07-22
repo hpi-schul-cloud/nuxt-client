@@ -253,7 +253,7 @@ describe("BoardHeader", () => {
 	describe("when the 'share' menu button is clicked", () => {
 		it("should emit 'share:board'", async () => {
 			const { wrapper } = setup({
-				permissions: { hasEditPermission: ref(true) },
+				permissions: { hasShareBoardPermission: ref(true) },
 				envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 			});
 

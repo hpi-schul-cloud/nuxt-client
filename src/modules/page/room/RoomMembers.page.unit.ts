@@ -39,7 +39,13 @@ import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { useBoardNotifier } from "@util-board";
 import { ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
-import { VBtn, VDialog, VTab, VTabs } from "vuetify/components";
+import {
+	VBtn,
+	VDialog,
+	VSkeletonLoader,
+	VTab,
+	VTabs,
+} from "vuetify/components";
 import RoomMembersPage from "./RoomMembers.page.vue";
 import { Mock } from "vitest";
 
@@ -113,7 +119,7 @@ describe("RoomMembersPage", () => {
 			canEditRoomContent: ref(false),
 			canSeeAllStudents: ref(false),
 			canShareRoom: ref(false),
-			canManageInvitationLinks: ref(false),
+			canManageRoomInvitationLinks: ref(false),
 			canListDrafts: ref(false),
 			canManageVideoconferences: ref(false),
 		};
@@ -127,11 +133,18 @@ describe("RoomMembersPage", () => {
 		createRoom?: boolean;
 		isFeatureRoomMembersTabsEnabled?: boolean;
 		activeTab?: Tab;
+		isLoading?: boolean;
 	}) => {
-		const { createRoom, isFeatureRoomMembersTabsEnabled, activeTab } = {
+		const {
+			createRoom,
+			isFeatureRoomMembersTabsEnabled,
+			activeTab,
+			isLoading,
+		} = {
 			createRoom: true,
 			isFeatureRoomMembersTabsEnabled: true,
 			activeTab: Tab.Members,
+			isLoading: false,
 
 			...options,
 		};
@@ -162,7 +175,7 @@ describe("RoomMembersPage", () => {
 					createTestingPinia({
 						initialState: {
 							roomDetailsStore: {
-								isLoading: false,
+								isLoading,
 								room,
 							},
 							roomInvitationLinkStore: {
@@ -577,7 +590,7 @@ describe("RoomMembersPage", () => {
 
 	describe("Tabnavigation", () => {
 		it("should not render tabs when isVisibleTabNavigation is false", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canManageRoomInvitationLinks.value = true;
 			const { wrapper } = setup({ isFeatureRoomMembersTabsEnabled: false });
 
 			const tabs = wrapper.findComponent(VTabs);
@@ -586,7 +599,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should render all tabs when isVisibleTabNavigation is true", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canManageRoomInvitationLinks.value = true;
 			const { wrapper } = setup({
 				isFeatureRoomMembersTabsEnabled: true,
 			});
@@ -627,7 +640,7 @@ describe("RoomMembersPage", () => {
 		it.each(Object.values(Tab))(
 			"should default to members tab if the feature is not enabled, regardless of the active tab (%s)",
 			(activeTab) => {
-				roomPermissions.canAddRoomMembers.value = true;
+				roomPermissions.canManageRoomInvitationLinks.value = true;
 				setup({
 					isFeatureRoomMembersTabsEnabled: false,
 					activeTab,
@@ -640,13 +653,29 @@ describe("RoomMembersPage", () => {
 		);
 
 		it("should set the active tab to the one passed in props if the feature is enabled", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canManageRoomInvitationLinks.value = true;
 			const { wrapper } = setup({
 				activeTab: Tab.Invitations,
 			});
 
 			const tabs = wrapper.findComponent(VTabs);
 			expect(tabs.props("modelValue")).toBe(Tab.Invitations);
+		});
+	});
+
+	describe("skeleton loader", () => {
+		it("should show skeleton loader when room is loading", () => {
+			const { wrapper } = setup({ isLoading: true });
+
+			const skeletonLoader = wrapper.findComponent(VSkeletonLoader);
+			expect(skeletonLoader.exists()).toBe(true);
+		});
+
+		it("should not show skeleton loader when room is loaded", () => {
+			const { wrapper } = setup({ isLoading: false });
+
+			const skeletonLoader = wrapper.findComponent(VSkeletonLoader);
+			expect(skeletonLoader.exists()).toBe(false);
 		});
 	});
 });
