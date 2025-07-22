@@ -66,6 +66,7 @@
 				<v-select
 					v-model="localSchool.county"
 					class="school-counties"
+					data-testid="school-counties"
 					:label="
 						t(
 							'pages.administration.school.index.generalSettings.labels.chooseACounty'
@@ -106,6 +107,7 @@
 				<v-text-field
 					v-model="localSchool.timezone"
 					class="timezone-input"
+					data-testid="timezone-input"
 					:label="
 						t(
 							'pages.administration.school.index.generalSettings.labels.timezone'
@@ -125,6 +127,7 @@
 				<v-select
 					v-model="localSchool.language"
 					class="language-select"
+					data-testid="language-select"
 					:label="
 						t(
 							'pages.administration.school.index.generalSettings.labels.language'
