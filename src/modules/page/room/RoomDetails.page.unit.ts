@@ -100,7 +100,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			canSeeAllStudents: ref(false),
 			canCopyRoom: ref(false),
 			canShareRoom: ref(false),
-			canManageInvitationLinks: ref(false),
+			canManageRoomInvitationLinks: ref(false),
 			canListDrafts: ref(false),
 			canManageVideoconferences: ref(false),
 		};
@@ -330,9 +330,9 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			await flushPromises();
 		};
 
-		describe("and user does not have 'room_create' permission", () => {
+		describe("and user does not have permission to edit room content", () => {
 			it("should not render speed dial menu", () => {
-				roomPermissions.canCreateRoom.value = false;
+				roomPermissions.canEditRoomContent.value = false;
 				const { wrapper } = setup();
 
 				const fabButton = wrapper.findComponent(
@@ -345,7 +345,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and multiple board layouts are enabled", () => {
 			beforeEach(() => {
-				roomPermissions.canCreateRoom.value = true;
 				roomPermissions.canEditRoomContent.value = true;
 			});
 
@@ -422,7 +421,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and only column board is enabled", () => {
 			beforeEach(() => {
-				roomPermissions.canCreateRoom.value = true;
 				roomPermissions.canEditRoomContent.value = true;
 			});
 
@@ -476,42 +474,74 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 	});
 
-	describe("when some boards are in draft mode", () => {
-		const setupWithBoards = (totalCount = 3, inDraftMode = 1) => {
-			const visibleCount = totalCount - inDraftMode;
-			const visibleBoards = roomBoardTileListFactory.buildList(visibleCount);
-			const draftBoards = roomBoardTileListFactory.buildList(inDraftMode, {
-				isVisible: false,
+	describe("room boards", () => {
+		describe("when user can view room", () => {
+			beforeEach(() => {
+				roomPermissions.canViewRoom.value = true;
 			});
-			const roomBoards = [...visibleBoards, ...draftBoards];
-			const { wrapper } = setup({ roomBoards });
-			return {
-				wrapper,
-				visibleCount,
-				draftCount: draftBoards.length,
-				totalCount,
-			};
-		};
 
-		describe("when user canEditRoomContent", () => {
-			it("should render board tiles in draft mode", () => {
-				roomPermissions.canEditRoomContent.value = true;
-				const { wrapper, totalCount } = setupWithBoards();
+			it("should render room boards", () => {
+				const { wrapper } = setup({
+					roomBoards: roomBoardTileListFactory.buildList(3),
+				});
 
 				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
 
-				expect(boardTiles.length).toStrictEqual(totalCount);
+				expect(boardTiles.length).toBe(3);
+			});
+
+			describe("when some boards are in draft mode", () => {
+				const setupWithBoards = (totalCount = 3, inDraftMode = 1) => {
+					const visibleCount = totalCount - inDraftMode;
+					const visibleBoards =
+						roomBoardTileListFactory.buildList(visibleCount);
+					const draftBoards = roomBoardTileListFactory.buildList(inDraftMode, {
+						isVisible: false,
+					});
+					const roomBoards = [...visibleBoards, ...draftBoards];
+					const { wrapper } = setup({ roomBoards });
+					return {
+						wrapper,
+						visibleCount,
+						draftCount: draftBoards.length,
+						totalCount,
+					};
+				};
+
+				describe("when user can see drafts", () => {
+					it("should render board tiles in draft mode", () => {
+						roomPermissions.canListDrafts.value = true;
+						const { wrapper, totalCount } = setupWithBoards();
+
+						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
+
+						expect(boardTiles.length).toStrictEqual(totalCount);
+					});
+				});
+
+				describe("when user cannot see draft content", () => {
+					it("should not render board tiles in draft mode", () => {
+						roomPermissions.canListDrafts.value = false;
+						const { wrapper, visibleCount } = setupWithBoards();
+
+						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
+
+						expect(boardTiles.length).toStrictEqual(visibleCount);
+					});
+				});
 			});
 		});
 
-		describe("when user can not edit room content", () => {
-			it("should not render board tiles in draft mode", () => {
-				roomPermissions.canEditRoomContent.value = false;
-				const { wrapper, visibleCount } = setupWithBoards();
+		describe("when user cannot view room", () => {
+			it("should not render room boards", () => {
+				roomPermissions.canViewRoom.value = false;
+				const { wrapper } = setup({
+					roomBoards: roomBoardTileListFactory.buildList(3),
+				});
 
 				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
 
-				expect(boardTiles.length).toStrictEqual(visibleCount);
+				expect(boardTiles.length).toBe(0);
 			});
 		});
 	});
