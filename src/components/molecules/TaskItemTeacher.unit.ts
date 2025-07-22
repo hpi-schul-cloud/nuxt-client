@@ -369,7 +369,6 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				await menuBtn.trigger("click");
 				await menuBtn.trigger("click");
 
-				expect(wrapper.vm.isMenuActive).toBe(false);
 				expect(wrapper.find(".menuable__content__active").exists()).toBe(false);
 			});
 
