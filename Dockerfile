@@ -4,8 +4,7 @@ FROM docker.io/node:22 AS build-stage
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-COPY scripts/installRollupBinaries.mjs ./scripts/
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 COPY vite.config.ts index.html LICENSE.md tsconfig.json ./
 COPY public ./public
