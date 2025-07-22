@@ -4,7 +4,7 @@ FROM docker.io/node:22 AS build-stage
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+RUN npm ci
 
 COPY vite.config.ts index.html LICENSE.md tsconfig.json ./
 COPY public ./public
