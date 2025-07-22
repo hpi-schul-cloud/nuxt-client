@@ -1136,8 +1136,10 @@ export default {
 	"pages.administration.courses.deleteDialog.content":
 		'Do you really want this course "{itemName}" to delete?',
 	"pages.administration.courses.index.add": "Add course",
-
 	"pages.administration.courses.edit": "Edit course",
+	"pages.administration.courses.withoutTeacher":
+		"Only show courses without teachers",
+	"pages.administration.courses.noTeacher": "not available",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronization",
 	"pages.administration.ldap.activate.className": "Name",
@@ -1928,6 +1930,8 @@ export default {
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
 	"pages.rooms.members.add.students.forbidden":
 		"If the visibility of students for teachers is deactivated in the school settings, only students from your own class can be added. Please contact the school admin.",
+	"pages.rooms.members.add.students.studentAdmins":
+		"Students can only add students from their own class to a room.",
 	"pages.rooms.members.add.warningText":
 		"Students from other schools can only be added to the room by a supervising teacher from their school.",
 	"pages.rooms.members.actionMenu.ariaLabel":

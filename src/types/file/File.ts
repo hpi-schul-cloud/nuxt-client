@@ -1,5 +1,4 @@
 import {
-	ArchiveFileParams,
 	EditorMode,
 	PreviewStatus as FilePreviewStatus,
 	PreviewWidth as FilePreviewWidth,
@@ -8,6 +7,7 @@ import {
 	FileRecordScanStatus as FileRecordVirusScanStatus,
 	ParentStatisticResponse,
 	PreviewOutputMimeTypes,
+	type ArchiveFileParams,
 } from "@/fileStorageApi/v3";
 
 export type FileRecord = FileRecordResponse;

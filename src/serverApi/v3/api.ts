@@ -266,6 +266,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     BaseView = 'BASE_VIEW',
     BoardView = 'BOARD_VIEW',
     BoardEdit = 'BOARD_EDIT',
+    BoardShareBoard = 'BOARD_SHARE_BOARD',
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
@@ -364,18 +365,20 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoleCreate = 'ROLE_CREATE',
     RoleEdit = 'ROLE_EDIT',
     RoleView = 'ROLE_VIEW',
-    RoomContentEdit = 'ROOM_CONTENT_EDIT',
-    RoomCreate = 'ROOM_CREATE',
-    RoomEdit = 'ROOM_EDIT',
-    RoomView = 'ROOM_VIEW',
-    RoomDelete = 'ROOM_DELETE',
-    RoomLeave = 'ROOM_LEAVE',
-    RoomCopy = 'ROOM_COPY',
-    RoomShare = 'ROOM_SHARE',
-    RoomMembersAdd = 'ROOM_MEMBERS_ADD',
-    RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
-    RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
+    RoomEditContent = 'ROOM_EDIT_CONTENT',
+    RoomEditRoom = 'ROOM_EDIT_ROOM',
+    RoomListContent = 'ROOM_LIST_CONTENT',
+    RoomDeleteRoom = 'ROOM_DELETE_ROOM',
+    RoomLeaveRoom = 'ROOM_LEAVE_ROOM',
+    RoomCopyRoom = 'ROOM_COPY_ROOM',
+    RoomShareRoom = 'ROOM_SHARE_ROOM',
+    RoomAddMembers = 'ROOM_ADD_MEMBERS',
+    RoomRemoveMembers = 'ROOM_REMOVE_MEMBERS',
+    RoomChangeRoles = 'ROOM_CHANGE_ROLES',
     RoomChangeOwner = 'ROOM_CHANGE_OWNER',
+    RoomManageInvitationlinks = 'ROOM_MANAGE_INVITATIONLINKS',
+    RoomListDrafts = 'ROOM_LIST_DRAFTS',
+    RoomManageVideoconferences = 'ROOM_MANAGE_VIDEOCONFERENCES',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -388,6 +391,12 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
     SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
     SchoolView = 'SCHOOL_VIEW',
+    SchoolBecomeRoomowner = 'SCHOOL_BECOME_ROOMOWNER',
+    SchoolCreateRoom = 'SCHOOL_CREATE_ROOM',
+    SchoolEditRoom = 'SCHOOL_EDIT_ROOM',
+    SchoolDeleteRoom = 'SCHOOL_DELETE_ROOM',
+    SchoolListDiscoverableTeachers = 'SCHOOL_LIST_DISCOVERABLE_TEACHERS',
+    SchoolManageRoomInvitationlinks = 'SCHOOL_MANAGE_ROOM_INVITATIONLINKS',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
     StudentCreate = 'STUDENT_CREATE',
@@ -7610,6 +7619,7 @@ export enum Permission {
     BaseView = 'BASE_VIEW',
     BoardView = 'BOARD_VIEW',
     BoardEdit = 'BOARD_EDIT',
+    BoardShareBoard = 'BOARD_SHARE_BOARD',
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
@@ -7708,18 +7718,20 @@ export enum Permission {
     RoleCreate = 'ROLE_CREATE',
     RoleEdit = 'ROLE_EDIT',
     RoleView = 'ROLE_VIEW',
-    RoomContentEdit = 'ROOM_CONTENT_EDIT',
-    RoomCreate = 'ROOM_CREATE',
-    RoomEdit = 'ROOM_EDIT',
-    RoomView = 'ROOM_VIEW',
-    RoomDelete = 'ROOM_DELETE',
-    RoomLeave = 'ROOM_LEAVE',
-    RoomCopy = 'ROOM_COPY',
-    RoomShare = 'ROOM_SHARE',
-    RoomMembersAdd = 'ROOM_MEMBERS_ADD',
-    RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
-    RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
+    RoomEditContent = 'ROOM_EDIT_CONTENT',
+    RoomEditRoom = 'ROOM_EDIT_ROOM',
+    RoomListContent = 'ROOM_LIST_CONTENT',
+    RoomDeleteRoom = 'ROOM_DELETE_ROOM',
+    RoomLeaveRoom = 'ROOM_LEAVE_ROOM',
+    RoomCopyRoom = 'ROOM_COPY_ROOM',
+    RoomShareRoom = 'ROOM_SHARE_ROOM',
+    RoomAddMembers = 'ROOM_ADD_MEMBERS',
+    RoomRemoveMembers = 'ROOM_REMOVE_MEMBERS',
+    RoomChangeRoles = 'ROOM_CHANGE_ROLES',
     RoomChangeOwner = 'ROOM_CHANGE_OWNER',
+    RoomManageInvitationlinks = 'ROOM_MANAGE_INVITATIONLINKS',
+    RoomListDrafts = 'ROOM_LIST_DRAFTS',
+    RoomManageVideoconferences = 'ROOM_MANAGE_VIDEOCONFERENCES',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -7732,6 +7744,12 @@ export enum Permission {
     SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
     SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
     SchoolView = 'SCHOOL_VIEW',
+    SchoolBecomeRoomowner = 'SCHOOL_BECOME_ROOMOWNER',
+    SchoolCreateRoom = 'SCHOOL_CREATE_ROOM',
+    SchoolEditRoom = 'SCHOOL_EDIT_ROOM',
+    SchoolDeleteRoom = 'SCHOOL_DELETE_ROOM',
+    SchoolListDiscoverableTeachers = 'SCHOOL_LIST_DISCOVERABLE_TEACHERS',
+    SchoolManageRoomInvitationlinks = 'SCHOOL_MANAGE_ROOM_INVITATIONLINKS',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
     StudentCreate = 'STUDENT_CREATE',
@@ -16204,10 +16222,11 @@ export const CourseInfoApiAxiosParamCreator = function (configuration?: Configur
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {CourseSortProps} [sortBy] 
          * @param {CourseStatus} [status] 
+         * @param {boolean} [withoutTeacher] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseInfoControllerGetCourseInfo: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, options: any = {}): Promise<RequestArgs> => {
+        courseInfoControllerGetCourseInfo: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeacher?: boolean, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/course-info`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -16244,6 +16263,10 @@ export const CourseInfoApiAxiosParamCreator = function (configuration?: Configur
                 localVarQueryParameter['status'] = status;
             }
 
+            if (withoutTeacher !== undefined) {
+                localVarQueryParameter['withoutTeacher'] = withoutTeacher;
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -16273,11 +16296,12 @@ export const CourseInfoApiFp = function(configuration?: Configuration) {
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {CourseSortProps} [sortBy] 
          * @param {CourseStatus} [status] 
+         * @param {boolean} [withoutTeacher] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseInfoListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, options);
+        async courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeacher?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseInfoListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, withoutTeacher, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -16298,11 +16322,12 @@ export const CourseInfoApiFactory = function (configuration?: Configuration, bas
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {CourseSortProps} [sortBy] 
          * @param {CourseStatus} [status] 
+         * @param {boolean} [withoutTeacher] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, options?: any): AxiosPromise<CourseInfoListResponse> {
-            return localVarFp.courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, options).then((request) => request(axios, basePath));
+        courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeacher?: boolean, options?: any): AxiosPromise<CourseInfoListResponse> {
+            return localVarFp.courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, withoutTeacher, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -16321,11 +16346,12 @@ export interface CourseInfoApiInterface {
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {CourseSortProps} [sortBy] 
      * @param {CourseStatus} [status] 
+     * @param {boolean} [withoutTeacher] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CourseInfoApiInterface
      */
-    courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, options?: any): AxiosPromise<CourseInfoListResponse>;
+    courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeacher?: boolean, options?: any): AxiosPromise<CourseInfoListResponse>;
 
 }
 
@@ -16344,12 +16370,13 @@ export class CourseInfoApi extends BaseAPI implements CourseInfoApiInterface {
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {CourseSortProps} [sortBy] 
      * @param {CourseStatus} [status] 
+     * @param {boolean} [withoutTeacher] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CourseInfoApi
      */
-    public courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, options?: any) {
-        return CourseInfoApiFp(this.configuration).courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, options).then((request) => request(this.axios, this.basePath));
+    public courseInfoControllerGetCourseInfo(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortProps, status?: CourseStatus, withoutTeacher?: boolean, options?: any) {
+        return CourseInfoApiFp(this.configuration).courseInfoControllerGetCourseInfo(skip, limit, sortOrder, sortBy, status, withoutTeacher, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -16985,51 +17012,6 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Imports a course from a Common Cartridge file.
-         * @param {any} file The Common Cartridge file to import.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        courseControllerImportCourse: async (file: any, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'file' is not null or undefined
-            assertParamExists('courseControllerImportCourse', 'file', file)
-            const localVarPath = `/courses/import`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-            if (file !== undefined) { 
-                localVarFormParams.append('file', file as any);
-            }
-    
-    
-            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = localVarFormParams;
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Start the synchronization of a course with a group.
          * @param {string} courseId The id of the course
          * @param {CourseSyncBodyParams} courseSyncBodyParams 
@@ -17166,17 +17148,6 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Imports a course from a Common Cartridge file.
-         * @param {any} file The Common Cartridge file to import.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async courseControllerImportCourse(file: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerImportCourse(file, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Start the synchronization of a course with a group.
          * @param {string} courseId The id of the course
          * @param {CourseSyncBodyParams} courseSyncBodyParams 
@@ -17250,16 +17221,6 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Imports a course from a Common Cartridge file.
-         * @param {any} file The Common Cartridge file to import.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        courseControllerImportCourse(file: any, options?: any): AxiosPromise<void> {
-            return localVarFp.courseControllerImportCourse(file, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Start the synchronization of a course with a group.
          * @param {string} courseId The id of the course
          * @param {CourseSyncBodyParams} courseSyncBodyParams 
@@ -17327,16 +17288,6 @@ export interface CoursesApiInterface {
      * @memberof CoursesApiInterface
      */
     courseControllerGetUserPermissions(courseId: string, options?: any): AxiosPromise<void>;
-
-    /**
-     * 
-     * @summary Imports a course from a Common Cartridge file.
-     * @param {any} file The Common Cartridge file to import.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CoursesApiInterface
-     */
-    courseControllerImportCourse(file: any, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -17414,18 +17365,6 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      */
     public courseControllerGetUserPermissions(courseId: string, options?: any) {
         return CoursesApiFp(this.configuration).courseControllerGetUserPermissions(courseId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Imports a course from a Common Cartridge file.
-     * @param {any} file The Common Cartridge file to import.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CoursesApi
-     */
-    public courseControllerImportCourse(file: any, options?: any) {
-        return CoursesApiFp(this.configuration).courseControllerImportCourse(file, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

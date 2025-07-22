@@ -1144,6 +1144,9 @@ export default {
 		'Möchten Sie wirklich diesen Kurs "{itemName}" löschen?',
 	"pages.administration.courses.index.add": "Kurs hinzufügen",
 	"pages.administration.courses.edit": "Kurs bearbeiten",
+	"pages.administration.courses.withoutTeacher":
+		"Nur Kurse ohne Lehrkraft anzeigen",
+	"pages.administration.courses.noTeacher": "nicht vorhanden",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronisation",
 	"pages.administration.ldap.activate.className": "Name",
@@ -1960,6 +1963,8 @@ export default {
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
 	"pages.rooms.members.add.students.forbidden":
 		"Wenn in den Schuleinstellungen die Sichtbarkeit von Lernenden für Lernbegleitungen deaktiviert ist, können nur Lernende der eigenen Klasse hinzugefügt werden. Bitte an den Schul-Admin wenden.",
+	"pages.rooms.members.add.students.studentAdmins":
+		"Lernende können nur Lernende ihrer eigenen Klasse zu einem Raum hinzufügen.",
 	"pages.rooms.members.add.warningText":
 		"Lernende anderer Schulen können nur durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
 	"pages.rooms.members.actionMenu.ariaLabel":

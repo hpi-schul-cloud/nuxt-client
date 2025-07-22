@@ -1160,6 +1160,9 @@ export default {
 		'Ви впевнені, що хочете видалити цей курс "{itemName}" ?',
 	"pages.administration.courses.index.add": "Додати курс",
 	"pages.administration.courses.edit": "Редагувати курс",
+	"pages.administration.courses.withoutTeacher":
+		"Відображати тільки курси без викладача",
+	"pages.administration.courses.noTeacher": "недоступно",
 	"pages.administration.index.title": "Адміністрування",
 	"pages.administration.ldap.activate.breadcrumb": "Cинхронізація",
 	"pages.administration.ldap.activate.className": "Ім'я",
@@ -1959,6 +1962,8 @@ export default {
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
 	"pages.rooms.members.add.students.forbidden":
 		"Якщо в налаштуваннях школи вимкнено видимість учнів для вчителів, ви можете додавати лише учнів з вашого класу. Зверніться до адміністратора школи.",
+	"pages.rooms.members.add.students.studentAdmins":
+		"Учні можуть додавати до кімнати лише учнів зі свого класу.",
 	"pages.rooms.members.add.warningText":
 		"Учнів з інших шкіл може додати до кімнати лише відповідальний(а) вчитель(ка) з їхнього навчального закладу.",
 	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberFullName}",
