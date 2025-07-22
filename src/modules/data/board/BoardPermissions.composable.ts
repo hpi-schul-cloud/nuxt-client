@@ -49,6 +49,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 	});
 
 	return {
+		arePermissionsLoaded,
 		hasMovePermission,
 		hasCreateCardPermission,
 		hasCreateColumnPermission,
@@ -59,7 +60,6 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasShareBoardPermission,
 		isTeacher,
 		isStudent,
-		arePermissionsLoaded,
 	};
 };
 
