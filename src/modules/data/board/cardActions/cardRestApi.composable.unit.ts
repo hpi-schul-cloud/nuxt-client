@@ -43,6 +43,7 @@ import {
 } from "./cardActionPayload.types";
 import { useCardRestApi } from "./cardRestApi.composable";
 import { Mock } from "vitest";
+import { flushPromises } from "@vue/test-utils";
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);

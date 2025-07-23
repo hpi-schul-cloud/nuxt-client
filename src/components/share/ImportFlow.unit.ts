@@ -394,7 +394,7 @@ describe("@components/share/ImportFlow", () => {
 							.findComponent(ImportModal)
 							.findComponent(vCustomDialog);
 						dialog.vm.$emit("dialog-confirmed");
-						await new Promise((time) => setTimeout(time, 1000));
+						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
 						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(
@@ -621,7 +621,7 @@ describe("@components/share/ImportFlow", () => {
 							.findComponent(ImportModal)
 							.findComponent(vCustomDialog);
 						dialog.vm.$emit("dialog-confirmed");
-						await new Promise((time) => setTimeout(time, 1000));
+						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
 						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(
