@@ -88,11 +88,11 @@ const tableHeaders = [
 	},
 	{
 		title: t("pages.rooms.administration.table.header.creationDate"),
-		key: "creationDate",
+		key: "createdAt",
 	},
 	{
 		title: t("pages.rooms.administration.table.header.mainSchool"),
-		key: "mainSchool",
+		key: "schoolName",
 	},
 	{
 		title: t("pages.rooms.administration.table.header.actions"),

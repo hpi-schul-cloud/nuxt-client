@@ -24,6 +24,32 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface AccessTokenPayloadResponse
+ */
+export interface AccessTokenPayloadResponse {
+    /**
+     * 
+     * @type {object}
+     * @memberof AccessTokenPayloadResponse
+     */
+    payload: object;
+}
+/**
+ * 
+ * @export
+ * @interface AccessTokenResponse
+ */
+export interface AccessTokenResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof AccessTokenResponse
+     */
+    token: string;
+}
+/**
+ * 
+ * @export
  * @interface AccountByIdBodyParams
  */
 export interface AccountByIdBodyParams {
@@ -379,6 +405,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomManageInvitationlinks = 'ROOM_MANAGE_INVITATIONLINKS',
     RoomListDrafts = 'ROOM_LIST_DRAFTS',
     RoomManageVideoconferences = 'ROOM_MANAGE_VIDEOCONFERENCES',
+    SchoolAdministrateRooms = 'SCHOOL_ADMINISTRATE_ROOMS',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -451,19 +478,19 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
 /**
  * 
  * @export
- * @interface AuthorizedReponse
+ * @interface AuthorizedResponse
  */
-export interface AuthorizedReponse {
+export interface AuthorizedResponse {
     /**
      * 
      * @type {string}
-     * @memberof AuthorizedReponse
+     * @memberof AuthorizedResponse
      */
     userId: string;
     /**
      * 
      * @type {boolean}
-     * @memberof AuthorizedReponse
+     * @memberof AuthorizedResponse
      */
     isAuthorized: boolean;
 }
@@ -2625,6 +2652,64 @@ export interface CourseSyncBodyParams {
 /**
  * 
  * @export
+ * @interface CreateAccessTokenParams
+ */
+export interface CreateAccessTokenParams {
+    /**
+     * 
+     * @type {AuthorizationContextParams}
+     * @memberof CreateAccessTokenParams
+     */
+    context: AuthorizationContextParams;
+    /**
+     * The entity or domain object the operation should be performed on.
+     * @type {string}
+     * @memberof CreateAccessTokenParams
+     */
+    referenceType: CreateAccessTokenParamsReferenceTypeEnum;
+    /**
+     * The id of the entity/domain object of the defined referenceType.
+     * @type {string}
+     * @memberof CreateAccessTokenParams
+     */
+    referenceId: string;
+    /**
+     * Lifetime of token
+     * @type {number}
+     * @memberof CreateAccessTokenParams
+     */
+    tokenTtlInSeconds: number;
+    /**
+     * The payload of the access token.
+     * @type {object}
+     * @memberof CreateAccessTokenParams
+     */
+    payload: object;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CreateAccessTokenParamsReferenceTypeEnum {
+    Users = 'users',
+    Schools = 'schools',
+    Courses = 'courses',
+    Coursegroups = 'coursegroups',
+    Tasks = 'tasks',
+    Lessons = 'lessons',
+    Teams = 'teams',
+    Submissions = 'submissions',
+    SchoolExternalTools = 'school-external-tools',
+    Boardnodes = 'boardnodes',
+    ContextExternalTools = 'context-external-tools',
+    ExternalTools = 'external-tools',
+    Instances = 'instances'
+}
+
+/**
+ * 
+ * @export
  * @interface CreateBoardBodyParams
  */
 export interface CreateBoardBodyParams {
@@ -2724,11 +2809,17 @@ export interface CreateContentElementBodyParams {
  */
 export interface CreateCourseBodyParams {
     /**
-     * The title of the course
+     * The name of the course
      * @type {string}
      * @memberof CreateCourseBodyParams
      */
-    title: string;
+    name: string;
+    /**
+     * The color of the course icon
+     * @type {string}
+     * @memberof CreateCourseBodyParams
+     */
+    color?: string;
 }
 /**
  * 
@@ -7726,6 +7817,7 @@ export enum Permission {
     RoomManageInvitationlinks = 'ROOM_MANAGE_INVITATIONLINKS',
     RoomListDrafts = 'ROOM_LIST_DRAFTS',
     RoomManageVideoconferences = 'ROOM_MANAGE_VIDEOCONFERENCES',
+    SchoolAdministrateRooms = 'SCHOOL_ADMINISTRATE_ROOMS',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -8577,6 +8669,98 @@ export interface RoomRoleResponse {
      * @memberof RoomRoleResponse
      */
     roomRoleName: string;
+}
+/**
+ * 
+ * @export
+ * @interface RoomStatsItemResponse
+ */
+export interface RoomStatsItemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    roomId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    owner: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    schoolName: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoomStatsItemResponse
+     */
+    totalMembers: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoomStatsItemResponse
+     */
+    internalMembers: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoomStatsItemResponse
+     */
+    externalMembers: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface RoomStatsListResponse
+ */
+export interface RoomStatsListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<RoomStatsItemResponse>}
+     * @memberof RoomStatsListResponse
+     */
+    data: Array<RoomStatsItemResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof RoomStatsListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof RoomStatsListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof RoomStatsListResponse
+     */
+    limit: number;
 }
 /**
  * 
@@ -13034,6 +13218,82 @@ export const AuthorizationApiAxiosParamCreator = function (configuration?: Confi
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {CreateAccessTokenParams} createAccessTokenParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authorizationReferenceControllerCreateToken: async (createAccessTokenParams: CreateAccessTokenParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createAccessTokenParams' is not null or undefined
+            assertParamExists('authorizationReferenceControllerCreateToken', 'createAccessTokenParams', createAccessTokenParams)
+            const localVarPath = `/authorization/create-token`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createAccessTokenParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} token The access token to be resolved.
+         * @param {number} tokenTtlInSeconds Lifetime of token
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authorizationReferenceControllerResolveToken: async (token: string, tokenTtlInSeconds: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'token' is not null or undefined
+            assertParamExists('authorizationReferenceControllerResolveToken', 'token', token)
+            // verify required parameter 'tokenTtlInSeconds' is not null or undefined
+            assertParamExists('authorizationReferenceControllerResolveToken', 'tokenTtlInSeconds', tokenTtlInSeconds)
+            const localVarPath = `/authorization/resolve-token/{token}/ttl/{tokenTtlInSeconds}`
+                .replace(`{${"token"}}`, encodeURIComponent(String(token)))
+                .replace(`{${"tokenTtlInSeconds"}}`, encodeURIComponent(String(tokenTtlInSeconds)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -13051,8 +13311,29 @@ export const AuthorizationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams: AuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthorizedReponse>> {
+        async authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams: AuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthorizedResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {CreateAccessTokenParams} createAccessTokenParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authorizationReferenceControllerCreateToken(createAccessTokenParams: CreateAccessTokenParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccessTokenResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authorizationReferenceControllerCreateToken(createAccessTokenParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} token The access token to be resolved.
+         * @param {number} tokenTtlInSeconds Lifetime of token
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authorizationReferenceControllerResolveToken(token: string, tokenTtlInSeconds: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccessTokenPayloadResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authorizationReferenceControllerResolveToken(token, tokenTtlInSeconds, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -13072,8 +13353,27 @@ export const AuthorizationApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams: AuthorizationBodyParams, options?: any): AxiosPromise<AuthorizedReponse> {
+        authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams: AuthorizationBodyParams, options?: any): AxiosPromise<AuthorizedResponse> {
             return localVarFp.authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {CreateAccessTokenParams} createAccessTokenParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authorizationReferenceControllerCreateToken(createAccessTokenParams: CreateAccessTokenParams, options?: any): AxiosPromise<AccessTokenResponse> {
+            return localVarFp.authorizationReferenceControllerCreateToken(createAccessTokenParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} token The access token to be resolved.
+         * @param {number} tokenTtlInSeconds Lifetime of token
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authorizationReferenceControllerResolveToken(token: string, tokenTtlInSeconds: number, options?: any): AxiosPromise<AccessTokenPayloadResponse> {
+            return localVarFp.authorizationReferenceControllerResolveToken(token, tokenTtlInSeconds, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -13092,7 +13392,26 @@ export interface AuthorizationApiInterface {
      * @throws {RequiredError}
      * @memberof AuthorizationApiInterface
      */
-    authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams: AuthorizationBodyParams, options?: any): AxiosPromise<AuthorizedReponse>;
+    authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams: AuthorizationBodyParams, options?: any): AxiosPromise<AuthorizedResponse>;
+
+    /**
+     * 
+     * @param {CreateAccessTokenParams} createAccessTokenParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthorizationApiInterface
+     */
+    authorizationReferenceControllerCreateToken(createAccessTokenParams: CreateAccessTokenParams, options?: any): AxiosPromise<AccessTokenResponse>;
+
+    /**
+     * 
+     * @param {string} token The access token to be resolved.
+     * @param {number} tokenTtlInSeconds Lifetime of token
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthorizationApiInterface
+     */
+    authorizationReferenceControllerResolveToken(token: string, tokenTtlInSeconds: number, options?: any): AxiosPromise<AccessTokenPayloadResponse>;
 
 }
 
@@ -13113,6 +13432,29 @@ export class AuthorizationApi extends BaseAPI implements AuthorizationApiInterfa
      */
     public authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams: AuthorizationBodyParams, options?: any) {
         return AuthorizationApiFp(this.configuration).authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {CreateAccessTokenParams} createAccessTokenParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthorizationApi
+     */
+    public authorizationReferenceControllerCreateToken(createAccessTokenParams: CreateAccessTokenParams, options?: any) {
+        return AuthorizationApiFp(this.configuration).authorizationReferenceControllerCreateToken(createAccessTokenParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} token The access token to be resolved.
+     * @param {number} tokenTtlInSeconds Lifetime of token
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthorizationApi
+     */
+    public authorizationReferenceControllerResolveToken(token: string, tokenTtlInSeconds: number, options?: any) {
+        return AuthorizationApiFp(this.configuration).authorizationReferenceControllerResolveToken(token, tokenTtlInSeconds, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -22551,6 +22893,50 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Get a list of room statistics.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 1000.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetRoomStats: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/rooms/stats`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 1000.
@@ -22844,6 +23230,18 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get a list of room statistics.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 1000.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerGetRoomStats(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomStatsListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetRoomStats(skip, limit, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 1000.
@@ -23004,6 +23402,17 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Get a list of room statistics.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 1000.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetRoomStats(skip?: number, limit?: number, options?: any): AxiosPromise<RoomStatsListResponse> {
+            return localVarFp.roomControllerGetRoomStats(skip, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 1000.
@@ -23156,6 +23565,17 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerGetRoomDetails(roomId: string, options?: any): AxiosPromise<RoomDetailsResponse>;
+
+    /**
+     * 
+     * @summary Get a list of room statistics.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 1000.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerGetRoomStats(skip?: number, limit?: number, options?: any): AxiosPromise<RoomStatsListResponse>;
 
     /**
      * 
@@ -23330,6 +23750,19 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerGetRoomDetails(roomId: string, options?: any) {
         return RoomApiFp(this.configuration).roomControllerGetRoomDetails(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a list of room statistics.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 1000.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerGetRoomStats(skip?: number, limit?: number, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerGetRoomStats(skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
