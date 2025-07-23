@@ -17,7 +17,7 @@
 			</EmptyState>
 		</template>
 		<template v-else>
-			<RoomAdminTable :show-select="false" :header-bottom="0" />
+			<RoomAdminTable :show-select="false" :header-bottom="headerBottom" />
 		</template>
 	</DefaultWireframe>
 </template>
@@ -26,17 +26,21 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
-import { computed, ComputedRef, onMounted } from "vue";
+import { computed, ComputedRef, onMounted, ref } from "vue";
 import { RoomAdminTable } from "@feature-room";
 import { useAdministrationRoomStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
+import { useElementBounding } from "@vueuse/core";
 
 const { t } = useI18n();
 
 const adminRoomStore = useAdministrationRoomStore();
 const { isEmptyList } = storeToRefs(adminRoomStore);
 const { fetchRooms } = adminRoomStore;
+
+const header = ref<HTMLElement | null>(null);
+const { bottom: headerBottom } = useElementBounding(header);
 
 onMounted(async () => {
 	await fetchRooms();

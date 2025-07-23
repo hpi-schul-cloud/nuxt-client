@@ -1,11 +1,11 @@
 <template>
 	<DataTable
-		aria-label-name-key="title"
-		select-item-key="userId"
 		:items="roomList"
 		:header-bottom="headerBottom"
 		:table-headers="tableHeaders"
 		:show-select="true"
+		aria-label-name-key="name"
+		select-item-key="userId"
 		:external-selected-ids="selectedIds"
 		@update:selected-ids="onUpdateSelectedIds"
 	>
