@@ -50,6 +50,10 @@ const serverDataSuccess: CopyApiResponse = {
 };
 
 describe("copy module", () => {
+	beforeEach(() => {
+		vi.stubGlobal("setTimeout", (fn: () => unknown) => fn());
+	});
+
 	describe("actions", () => {
 		afterEach(() => {
 			vi.clearAllMocks();
@@ -78,15 +82,21 @@ describe("copy module", () => {
 
 			describe("copy a task", () => {
 				describe("should make a 'POST' request to the backend", () => {
-					const taskMockApi = {
-						taskControllerCopyTask: vi.fn(async () => ({ data: {} })),
+					const setup = () => {
+						const taskMockApi = {
+							taskControllerCopyTask: vi.fn(async () => ({ data: {} })),
+						};
+						vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
+							taskMockApi as unknown as serverApi.TaskApiInterface
+						);
+						const copyModule = new CopyModule({});
+
+						return { copyModule, taskMockApi };
 					};
-					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
-						taskMockApi as unknown as serverApi.TaskApiInterface
-					);
-					const copyModule = new CopyModule({});
 
 					it("should send with courseId", async () => {
+						const { copyModule, taskMockApi } = setup();
+
 						const payload: CopyParams = {
 							id: "taskId",
 							type: CopyParamsTypeEnum.Task,
@@ -101,6 +111,8 @@ describe("copy module", () => {
 					});
 
 					it("should send with NO courseId", async () => {
+						const { copyModule, taskMockApi } = setup();
+
 						const payload: CopyParams = {
 							id: "taskId",
 							type: CopyParamsTypeEnum.Task,
