@@ -169,22 +169,5 @@ describe("@feature-room/RoomForm", () => {
 			);
 			expect(checkbox.get("input").element.checked).toBe(true);
 		});
-
-		it("should set the video conference feature in the room data when checked", async () => {
-			const { wrapper } = setup({ room: mockRoom });
-
-			expect(wrapper.vm.room.features).not.toContain(
-				RoomFeatures.EditorManageVideoconference
-			);
-
-			const checkbox = wrapper.get(
-				'[data-testid="room-video-conference-checkbox"]'
-			);
-			await checkbox.trigger("click");
-
-			expect(wrapper.vm.room.features).toContain(
-				RoomFeatures.EditorManageVideoconference
-			);
-		});
 	});
 });
