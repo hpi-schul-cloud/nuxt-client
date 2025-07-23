@@ -392,7 +392,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const resetStore = () => {
 		isLoading.value = false;
 		roomMembers.value = [];
-		schools.value = [];
+		schools.value = [ownSchool];
 		potentialRoomMembers.value = [];
 		selectedIds.value = [];
 	};
