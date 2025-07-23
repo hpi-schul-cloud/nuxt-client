@@ -3,6 +3,7 @@ import Vue from "@vitejs/plugin-vue";
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import { fileURLToPath, URL } from "node:url";
 import { getTsconfigAliases } from "./config/vite/tsconfig-aliases";
+import { StripVueStyles } from "./config/vite/strip-vue-styles-plugin";
 
 export default defineConfig({
 	plugins: [
@@ -17,6 +18,7 @@ export default defineConfig({
 		Vuetify({
 			autoImport: true,
 		}),
+		StripVueStyles(),
 	],
 	resolve: {
 		alias: [
