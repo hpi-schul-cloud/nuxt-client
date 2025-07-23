@@ -260,13 +260,19 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
-		beforeEnter: [checkRoomsFeature, roomPermissionGuard(["room_create"])],
+		beforeEnter: [
+			checkRoomsFeature,
+			roomPermissionGuard(["school_create_room"]),
+		],
 		name: "rooms",
 	},
 	{
 		path: `/rooms/new`,
 		component: async () => (await import("@page-room")).RoomCreatePage,
-		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
+		beforeEnter: [
+			checkRoomsFeature,
+			createPermissionGuard(["school_create_room"]),
+		],
 		name: "rooms-new",
 	},
 	{
@@ -277,13 +283,16 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms/:id(${REGEX_ID})/edit`,
 		component: async () => (await import("@page-room")).RoomEditPage,
-		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
+		beforeEnter: [checkRoomsFeature],
 		name: "room-edit",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/members`,
 		component: async () => (await import("@page-room")).RoomMembersPage,
-		beforeEnter: [checkRoomsFeature, roomPermissionGuard(["room_create"])],
+		beforeEnter: [
+			checkRoomsFeature,
+			roomPermissionGuard(["school_create_room"]),
+		],
 		name: "room-members",
 		props: (route: RouteLocationNormalized) => ({
 			tab: route.query.tab,

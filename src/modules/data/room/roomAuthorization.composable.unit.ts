@@ -50,10 +50,9 @@ describe("roomAuthorization", () => {
 	};
 
 	describe("canCreateRoom", () => {
-		describe("when the user has room edit permission and is a teacher", () => {
+		describe("when the user has school create room permission", () => {
 			const setup = () => {
 				return genericSetup({
-					userRoles: [RoleName.Teacher],
 					userPermissions: [
 						Permission.SchoolCreateRoom.toLocaleLowerCase() as Permission,
 					],
@@ -66,10 +65,9 @@ describe("roomAuthorization", () => {
 			});
 		});
 
-		describe("when the user has room edit permission but is not a teacher", () => {
+		describe("when the user has no room create permission", () => {
 			const setup = () => {
 				return genericSetup({
-					userRoles: [RoleName.Student],
 					roomPermissions: [Permission.RoomEditRoom],
 				});
 			};
@@ -80,10 +78,9 @@ describe("roomAuthorization", () => {
 			});
 		});
 
-		describe("when the user has room view permission and is a teacher", () => {
+		describe("when the user has room view permission", () => {
 			const setup = () => {
 				return genericSetup({
-					userRoles: [RoleName.Teacher],
 					roomPermissions: [Permission.RoomListContent],
 				});
 			};
@@ -333,19 +330,147 @@ describe("roomAuthorization", () => {
 	});
 
 	describe("canCopyRoom", () => {
-		describe("when the user has room duplicate permission", () => {
+		describe("when the user has school create room and room copy permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomCopyRoom] });
+				return genericSetup({
+					roomPermissions: [Permission.RoomCopyRoom],
+					userPermissions: [Permission.SchoolCreateRoom],
+				});
 			};
 
-			it("should be allowed to duplicate the room", () => {
+			it("should be allowed to copy the room", () => {
 				const { canCopyRoom } = setup();
 				expect(canCopyRoom.value).toBe(true);
 			});
 		});
 
-		describe("when the user does not have room duplicate permission", () => {
-			it.todo("should not be allowed to duplicate the room");
+		describe("when the user has room copy permission but not school create room permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomCopyRoom],
+					userPermissions: [],
+				});
+			};
+			it("should not be allowed to copy the room", () => {
+				const { canCopyRoom } = setup();
+				expect(canCopyRoom.value).toBe(false);
+			});
+		});
+
+		describe("when the user does not have room copy and school create permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+			it("should not be allowed to copy the room", () => {
+				const { canCopyRoom } = setup();
+				expect(canCopyRoom.value).toBe(false);
+			});
+		});
+	});
+
+	describe("canShareRoom", () => {
+		describe("when the user has school create room and room share permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomShareRoom],
+					userPermissions: [Permission.SchoolCreateRoom],
+				});
+			};
+
+			it("should be allowed to share the room", () => {
+				const { canShareRoom } = setup();
+				expect(canShareRoom.value).toBe(true);
+			});
+		});
+
+		describe("when the user has room share permission but not school create room permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomShareRoom],
+					userPermissions: [],
+				});
+			};
+
+			it("should not be allowed to share the room", () => {
+				const { canShareRoom } = setup();
+				expect(canShareRoom.value).toBe(false);
+			});
+		});
+
+		describe("when the user does not have room share and school create permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should not be allowed to share the room", () => {
+				const { canShareRoom } = setup();
+				expect(canShareRoom.value).toBe(false);
+			});
+		});
+	});
+
+	describe("canManageRoomInvitationLinks", () => {
+		describe("when the user has school manage room invitation links and room manage invitation links permissions", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomManageInvitationlinks],
+					userPermissions: [Permission.SchoolManageRoomInvitationlinks],
+				});
+			};
+
+			it("should be allowed to manage room invitation links", () => {
+				const { canManageRoomInvitationLinks } = setup();
+				expect(canManageRoomInvitationLinks.value).toBe(true);
+			});
+		});
+
+		describe("when the user has room manage invitation links permission but not school manage room invitation links permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomManageInvitationlinks],
+					userPermissions: [],
+				});
+			};
+
+			it("should not be allowed to manage room invitation links", () => {
+				const { canManageRoomInvitationLinks } = setup();
+				expect(canManageRoomInvitationLinks.value).toBe(false);
+			});
+		});
+
+		describe("when the user does not have room manage invitation links and school manage room invitation links permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should not be allowed to manage room invitation links", () => {
+				const { canManageRoomInvitationLinks } = setup();
+				expect(canManageRoomInvitationLinks.value).toBe(false);
+			});
+		});
+	});
+
+	describe("canListDrafts", () => {
+		describe("when the user has room list drafts permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [Permission.RoomListDrafts] });
+			};
+
+			it("should be allowed to list drafts", () => {
+				const { canListDrafts } = setup();
+				expect(canListDrafts.value).toBe(true);
+			});
+		});
+
+		describe("when the user does not have room list drafts permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should not be allowed to list drafts", () => {
+				const { canListDrafts } = setup();
+				expect(canListDrafts.value).toBe(false);
+			});
 		});
 	});
 });
