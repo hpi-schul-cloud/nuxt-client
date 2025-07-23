@@ -23,14 +23,12 @@
 					"
 					value="group"
 					class="ml-n2"
-					color="primary"
 				/>
 				<v-radio
 					:label="
 						$t('pages.administration.ldapEdit.roles.labels.radio.userAttribute')
 					"
 					value="user_attribute"
-					color="primary"
 				/>
 			</v-radio-group>
 			<p class="text-sm" style="margin-top: var(--space-xs)">

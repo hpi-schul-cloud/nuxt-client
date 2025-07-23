@@ -21,7 +21,6 @@
 						v-for="option in radioOptions"
 						:key="option.role"
 						:value="option.role"
-						color="primary"
 						class="align-start mb-2"
 						:data-testid="option.dataTestid"
 					>
