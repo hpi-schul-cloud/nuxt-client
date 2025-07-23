@@ -13,7 +13,6 @@ COPY config/vite ./config/vite
 COPY types ./types
 ARG SC_THEME=default
 ENV SC_THEME=${SC_THEME}
-# TODO use build instead of build-only to also run the type check
 RUN npm run build 
 
 COPY .git ./.git
