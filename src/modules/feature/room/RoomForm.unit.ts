@@ -138,6 +138,20 @@ describe("@feature-room/RoomForm", () => {
 	});
 
 	describe("checkbox for video conference feature", () => {
+		it("should render the checkbox", () => {
+			const { wrapper } = setup({ room: mockRoom });
+			const checkbox = wrapper.find(
+				'[data-testid="room-video-conference-checkbox"]'
+			);
+			expect(checkbox.exists()).toBe(true);
+			expect(checkbox.text()).toContain(
+				"components.roomForm.labels.videoConference.label"
+			);
+			expect(checkbox.text()).toContain(
+				"components.roomForm.labels.videoConference.helperText"
+			);
+		});
+
 		it("should not check the video conference checkbox if the feature is not enabled", () => {
 			const { wrapper } = setup({ room: mockRoom });
 
@@ -154,6 +168,23 @@ describe("@feature-room/RoomForm", () => {
 				'[data-testid="room-video-conference-checkbox"]'
 			);
 			expect(checkbox.get("input").element.checked).toBe(true);
+		});
+
+		it("should set the video conference feature in the room data when checked", async () => {
+			const { wrapper } = setup({ room: mockRoom });
+
+			expect(wrapper.vm.room.features).not.toContain(
+				RoomFeatures.EditorManageVideoconference
+			);
+
+			const checkbox = wrapper.get(
+				'[data-testid="room-video-conference-checkbox"]'
+			);
+			await checkbox.trigger("click");
+
+			expect(wrapper.vm.room.features).toContain(
+				RoomFeatures.EditorManageVideoconference
+			);
 		});
 	});
 });

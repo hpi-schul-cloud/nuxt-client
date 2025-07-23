@@ -44,7 +44,7 @@
 				<label class="mb-2">
 					{{ t("components.roomForm.labels.videoConference.title") }}
 				</label>
-				<v-checkbox-group class="d-flex ml-n2 mt-1">
+				<div class="d-flex ml-n2 mt-1">
 					<v-checkbox
 						:model-value="
 							roomData.features.includes(
@@ -66,7 +66,7 @@
 							</div>
 						</template>
 					</v-checkbox>
-				</v-checkbox-group>
+				</div>
 			</div>
 		</div>
 		<div class="d-flex">
