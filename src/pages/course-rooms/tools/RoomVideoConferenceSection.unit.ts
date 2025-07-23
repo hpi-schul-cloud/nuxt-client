@@ -17,6 +17,7 @@ import { VDialog } from "vuetify/lib/components/index";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
+import { nextTick } from "vue";
 
 describe("RoomVideoConferenceSection", () => {
 	const mockUrl = "https://mock.com";
@@ -556,7 +557,8 @@ describe("RoomVideoConferenceSection", () => {
 			const configurationDialog = wrapper.findComponent<typeof VDialog>(
 				VideoConferenceConfigurationDialog
 			);
-			await configurationDialog.vm.$emit("start-video-conference");
+			configurationDialog.vm.$emit("start-video-conference");
+			await nextTick();
 
 			const dialogContent = configurationDialog.findComponent({
 				name: "VCard",
@@ -610,7 +612,8 @@ describe("RoomVideoConferenceSection", () => {
 			const configurationDialog = wrapper.findComponent<typeof VDialog>(
 				VideoConferenceConfigurationDialog
 			);
-			await configurationDialog.vm.$emit("close");
+			configurationDialog.vm.$emit("close");
+			await nextTick();
 
 			const dialogContent = configurationDialog.findComponent({
 				name: "VCard",

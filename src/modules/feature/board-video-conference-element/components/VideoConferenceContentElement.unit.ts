@@ -255,7 +255,7 @@ describe("VideoConferenceContentElement", () => {
 			});
 
 			describe("when user has edit board permission", () => {
-				it("should have the permission to join the conference", async () => {
+				it("should have the permission to join the conference", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
@@ -271,7 +271,7 @@ describe("VideoConferenceContentElement", () => {
 					).toEqual(true);
 				});
 
-				it("should have the permission to start the conference", async () => {
+				it("should have the permission to start the conference", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
@@ -300,7 +300,7 @@ describe("VideoConferenceContentElement", () => {
 			});
 
 			describe("when the user has not edit board permissions", () => {
-				it("should have the permission to join the conference", async () => {
+				it("should have the permission to join the conference", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
@@ -316,7 +316,7 @@ describe("VideoConferenceContentElement", () => {
 					).toEqual(true);
 				});
 
-				it("should not have the permission to start the conference", async () => {
+				it("should not have the permission to start the conference", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
@@ -377,7 +377,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("when element is first element", () => {
 					describe("and move up menu item is clicked", () => {
-						it("should emit 'move-up:edit' event", async () => {
+						it("should emit 'move-up:edit' event", () => {
 							const videoConferenceElementContent =
 								videoConferenceElementContentFactory.build();
 							const { wrapper } = setupWrapper({
@@ -419,7 +419,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("when element is last element", () => {
 					describe("and move down menu item is clicked", () => {
-						it("should emit 'move-down:edit' event ", async () => {
+						it("should emit 'move-down:edit' event ", () => {
 							const videoConferenceElementContent =
 								videoConferenceElementContentFactory.build();
 							const { wrapper } = setupWrapper({
@@ -624,7 +624,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				describe("and element is first element", () => {
-					it("should hide 'move-up' menu item", async () => {
+					it("should hide 'move-up' menu item", () => {
 						const { wrapper } = setupWrapper({
 							isEditMode: true,
 							isNotFirstElement: false,
@@ -659,7 +659,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("and element is last element", () => {
 					describe("and move down menu item is clicked", () => {
-						it("should emit 'move-down:edit' event", async () => {
+						it("should emit 'move-down:edit' event", () => {
 							const { wrapper } = setupWrapper({
 								isEditMode: true,
 								isNotLastElement: false,
@@ -716,7 +716,7 @@ describe("VideoConferenceContentElement", () => {
 
 		describe("onCreateTitle", () => {
 			describe("and title was provided", () => {
-				it("should display the title ", async () => {
+				it("should display the title ", () => {
 					const videoConferenceTitle = "Very specific vc title";
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build({

@@ -276,7 +276,7 @@ describe("RoomVideoConferenceCard", () => {
 			};
 		};
 
-		it("should disable the refresh button", async () => {
+		it("should disable the refresh button", () => {
 			const { wrapper } = setup();
 
 			const button = wrapper.findComponent('[data-testId="refresh-btn"]');
