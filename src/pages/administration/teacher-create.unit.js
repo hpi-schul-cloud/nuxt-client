@@ -1,7 +1,6 @@
 import { notifierModule } from "@/store";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
-import { delay } from "@/utils/helpers";
 import { meResponseFactory } from "@@/tests/test-utils";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
@@ -11,6 +10,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
 import { default as NewTeacher } from "./TeacherCreate.page.vue";
+import { flushPromises } from "@vue/test-utils";
 
 vi.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -78,7 +78,7 @@ describe("teachers/new", () => {
 			.trigger("click");
 
 		// we need to wait until everything is settled
-		await delay(10);
+		await flushPromises();
 
 		expect(createTeacherStub).toHaveBeenCalled();
 	});
@@ -117,7 +117,7 @@ describe("teachers/new", () => {
 			.trigger("click");
 
 		// we need to wait until everything is settled
-		await delay(10);
+		await flushPromises();
 
 		expect(notifierModuleMock).toHaveBeenCalled();
 	});
@@ -163,7 +163,7 @@ describe("teachers/new", () => {
 			.trigger("click");
 
 		// we need to wait until everything is settled
-		await delay(10);
+		await flushPromises();
 
 		errorMessageComponent = wrapper.find(".info-message.bc-error");
 		expect(errorMessageComponent.exists()).toBeTruthy();
