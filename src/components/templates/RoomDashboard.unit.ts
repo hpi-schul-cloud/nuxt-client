@@ -279,7 +279,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			element.vm.$emit("start");
 			expect(wrapper.vm.dragInProgress).toBe(true);
 			element.vm.$emit("end");
-			await new Promise((time) => setTimeout(time, timeDuration));
+			vi.advanceTimersByTime(timeDuration);
 			expect(wrapper.vm.dragInProgress).toBe(false);
 		});
 

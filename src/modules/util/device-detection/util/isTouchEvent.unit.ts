@@ -1,3 +1,4 @@
+import { flushPromises } from "@vue/test-utils";
 import { isTouchEvent } from "./isTouchEvent";
 
 const createTouchEvent = (force: number) => ({
@@ -14,10 +15,6 @@ const createTouchEvent = (force: number) => ({
 	force,
 	target: new EventTarget(),
 });
-
-const sleep = (milliseconds: number) => {
-	return new Promise((resolve) => setTimeout(resolve, milliseconds));
-};
 
 describe(isTouchEvent.name, () => {
 	describe("when mouse click event is fired", () => {
@@ -40,7 +37,8 @@ describe(isTouchEvent.name, () => {
 
 	describe("when touch event is fired with non touch device", () => {
 		it("should return false", async () => {
-			await sleep(300);
+			vi.advanceTimersByTime(300);
+
 			const touchEvent = new TouchEvent("touchstart", {
 				touches: [createTouchEvent(1)],
 			});
