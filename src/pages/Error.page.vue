@@ -41,9 +41,8 @@ export default defineComponent({
 		];
 		const { t } = useI18n();
 		const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
-		const performanceNavigation = window.performance.getEntriesByType(
-			"navigation"
-		)[0] as PerformanceNavigationTiming;
+		const performanceNavigation =
+			window.performance.getEntriesByType("navigation")[0];
 
 		const getError = () => {
 			const [statusCode, translationKey, isTldrawError] = storage.getMultiple([
@@ -53,8 +52,8 @@ export default defineComponent({
 			]);
 
 			if (
-				performanceNavigation.type === "reload" ||
-				(performanceNavigation.type === "navigate" && isTldrawError)
+				performanceNavigation.entryType === "reload" ||
+				(performanceNavigation.entryType === "navigate" && isTldrawError)
 			) {
 				return {
 					statusCode: Number(statusCode),

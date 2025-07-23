@@ -30,26 +30,30 @@ vi.mock("@/composables/locale-storage.composable", () => ({
 }));
 
 describe("@pages/Error.page.vue", () => {
-	beforeEach(() => {
-		Object.defineProperty(window, "location", {
-			configurable: true,
-			value: { assign: vi.fn() },
-		});
-		Object.defineProperty(window, "performance", {
-			value: {
-				getEntriesByType: vi.fn(), // for reload checking (see component)
-				now: vi.fn(), // for vue metrics
-			},
-		});
-		(window.performance.getEntriesByType as Mock).mockReturnValue([
-			{ type: "navigate" },
-		]);
-	});
-
 	const mountComponent = (
 		statusCode: HttpStatusCode | null = 400,
 		translationKey = "error.400"
 	) => {
+		vi.spyOn(window.performance, "getEntriesByType").mockReturnValue([
+			{
+				entryType: "navigate",
+				duration: 0,
+				name: "",
+				startTime: 0,
+				toJSON: function () {
+					throw new Error("Function not implemented.");
+				},
+			},
+		]);
+
+		Object.defineProperty(window, "location", {
+			configurable: true,
+			value: {
+				...window.location,
+				assign: vi.fn(),
+			},
+		});
+
 		return mount(ErrorPage, {
 			global: {
 				plugins: [
