@@ -44,27 +44,29 @@
 				<label class="mb-2">
 					{{ t("components.roomForm.labels.videoConference.title") }}
 				</label>
-				<v-checkbox
-					:model-value="
-						roomData.features.includes(RoomFeatures.EditorManageVideoconference)
-					"
-					class="video-conference-checkbox"
-					:class="{
-						'video-conference-checkbox--sm': !smAndUp,
-					}"
-					data-testid="room-video-conference-checkbox"
-					:label="t('components.roomForm.labels.videoConference.label')"
-					:hide-details="true"
-					@click="onToggleVideoConferenceFeature"
-				/>
-				<div
-					class="text-medium-emphasis ms-8 helper-text"
-					:class="{
-						'helper-text--lg': smAndUp,
-					}"
-				>
-					{{ t("components.roomForm.labels.videoConference.helperText") }}
-				</div>
+				<v-checkbox-group class="d-flex ml-n2 mt-1">
+					<v-checkbox
+						:model-value="
+							roomData.features.includes(
+								RoomFeatures.EditorManageVideoconference
+							)
+						"
+						class="align-start video-conference-checkbox"
+						data-testid="room-video-conference-checkbox"
+						@click="onToggleVideoConferenceFeature"
+					>
+						<template #label>
+							<div class="d-flex flex-column mt-2">
+								{{ t("components.roomForm.labels.videoConference.label") }}
+								<span class="checkbox-label mb-1">
+									{{
+										t("components.roomForm.labels.videoConference.helperText")
+									}}
+								</span>
+							</div>
+						</template>
+					</v-checkbox>
+				</v-checkbox-group>
 			</div>
 		</div>
 		<div class="d-flex">
@@ -106,7 +108,6 @@ import { computed, PropType, unref } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { RoomFeatures } from "@/serverApi/v3";
-import { useDisplay } from "vuetify";
 
 const props = defineProps({
 	room: {
@@ -115,8 +116,6 @@ const props = defineProps({
 	},
 });
 const emit = defineEmits(["save", "cancel"]);
-
-const { smAndUp } = useDisplay();
 
 const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
@@ -242,29 +241,14 @@ const onCancel = async () => {
 </script>
 
 <style lang="scss" scoped>
-.helper-text {
+.checkbox-label {
 	font-size: var(--text-sm);
-}
-
-.helper-text--lg {
-	font-size: var(--text-sm);
-	margin-top: -12px;
+	opacity: var(--v-medium-emphasis-opacity);
 }
 
 .video-conference-checkbox {
-	margin-left: -8px;
-}
-
-.video-conference-checkbox--sm {
-	margin-left: -8px;
-	margin-top: 12px;
-
 	::v-deep(.v-selection-control) {
 		align-items: flex-start;
-	}
-
-	::v-deep(.v-selection-control__input) {
-		margin-top: -6px;
 	}
 }
 </style>
