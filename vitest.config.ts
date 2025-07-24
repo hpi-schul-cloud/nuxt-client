@@ -69,6 +69,7 @@ export default defineConfig({
 				"**/*.types.{js,ts}",
 				"**/types.ts",
 				"**/index.{js,ts}",
+				"src/utils/insights/**/*",
 			],
 		},
 	},
