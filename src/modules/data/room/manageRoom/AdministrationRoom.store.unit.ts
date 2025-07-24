@@ -53,10 +53,6 @@ describe("useAdministrationRoomStore", () => {
 			const mockRooms: RoomStatsListResponse =
 				roomAdministrationFactory.build();
 
-			const { log } = console;
-
-			log(mockRooms);
-
 			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
 				data: mockRooms,
 			} as unknown as AxiosPromise<RoomStatsListResponse>);
@@ -86,6 +82,67 @@ describe("useAdministrationRoomStore", () => {
 			expect(roomAdminStore.isEmptyList).toBe(true);
 			expect(roomAdminStore.roomList).toEqual([]);
 			expect(roomAdminStore.isLoading).toBe(false);
+		});
+	});
+
+	describe("sortAndFormatList", () => {
+		it("should sort and format the room list correctly", async () => {
+			const mockRoomList = {
+				data: [
+					{
+						roomId: "1",
+						name: "Room 1",
+						owner: "Owner 1",
+						schoolName: "a School",
+						createdAt: "2025-07-24T14:21:35.425Z",
+						updatedAt: "2025-07-24T14:21:35.426Z",
+						totalMembers: 10,
+						internalMembers: 5,
+						externalMembers: 5,
+					},
+					{
+						roomId: "2",
+						name: "Room 2",
+						owner: undefined,
+						schoolName: "b School",
+						createdAt: "2025-07-24T14:21:35.426Z",
+						updatedAt: "2025-07-24T14:21:35.426Z",
+						totalMembers: 10,
+						internalMembers: 5,
+						externalMembers: 5,
+					},
+					{
+						roomId: "3",
+						name: "Room 3",
+						owner: undefined,
+						schoolName: "c School",
+						createdAt: "2025-07-24T14:21:35.426Z",
+						updatedAt: "2025-07-24T14:21:35.426Z",
+						totalMembers: 10,
+						internalMembers: 5,
+						externalMembers: 5,
+					},
+				],
+				limit: 10,
+				skip: 0,
+				total: 5,
+			};
+
+			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
+				data: mockRoomList,
+			} as unknown as AxiosPromise<RoomStatsListResponse>);
+
+			const roomAdminStore = setup();
+
+			await roomAdminStore.fetchRooms();
+
+			expect(roomAdminStore.roomList).toEqual(mockRoomList.data);
+			expect(roomAdminStore.roomList[0].owner).toStrictEqual(undefined);
+			expect(roomAdminStore.roomList[0].createdAt).toStrictEqual("24.07.2025");
+			const sortedSchoolNameIndex = roomAdminStore.roomList.findIndex(
+				(room) => room.schoolName === "a School"
+			);
+			expect(sortedSchoolNameIndex).toBe(2);
 		});
 	});
 });
