@@ -46,15 +46,3 @@ export enum InvitationStep {
 }
 
 export { RoomInvitationLinkValidationError } from "@/serverApi/v3";
-
-export type AdminRoom = {
-	roomId: string;
-	name: string;
-	owner: string | undefined;
-	schoolName: string;
-	createdAt: string;
-	updatedAt: string;
-	totalMembers: number;
-	internalMembers: number;
-	externalMembers: number;
-};
