@@ -2,10 +2,14 @@ import { createTestingPinia } from "@pinia/testing";
 import { createTestingVuetify } from "./../../../../../../tests/test-utils/setup/createTestingVuetify";
 import { createTestingI18n } from "./../../../../../../tests/test-utils/setup/createTestingI18n";
 import { useAdministrationRoomStore } from "@data-room";
-import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import RoomAdminTable from "./RoomAdminTable.vue";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { useBoardNotifier } from "@util-board";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+
+jest.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 jest.mock("vue-i18n", () => {
 	return {
@@ -18,6 +22,17 @@ jest.mock("vue-i18n", () => {
 const mockI18n = jest.mocked(useI18n());
 
 describe("RoomAdminTable", () => {
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
+	beforeEach(() => {
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+	});
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
 	const setup = () => {
 		const wrapper = mount(RoomAdminTable, {
 			global: {

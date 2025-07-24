@@ -7,8 +7,24 @@ import {
 import { useAdministrationRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { nextTick } from "vue";
+import { useBoardNotifier } from "@util-board";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+
+jest.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("AdministrationRooms.page", () => {
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
+	beforeEach(() => {
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+	});
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
 	const setup = (options?: { isEmptyList?: boolean }) => {
 		const isEmptyList = options?.isEmptyList ?? false;
 
