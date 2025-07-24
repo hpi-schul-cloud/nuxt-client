@@ -41,9 +41,9 @@
 				</div>
 			</div>
 			<div class="mb-16">
-				<label class="mb-2">
+				<h2 class="mb-1 text-subtitle-1">
 					{{ t("components.roomForm.labels.videoConference.title") }}
-				</label>
+				</h2>
 				<div class="d-flex ml-n2 mt-1">
 					<v-checkbox
 						:model-value="
