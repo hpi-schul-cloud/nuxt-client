@@ -11,7 +11,10 @@ import {
 	RoomStatsItemResponse,
 	RoomStatsListResponse,
 } from "@/serverApi/v3/api";
-import { roomAdministrationFactory } from "@@/tests/test-utils";
+import { roomAdministrationFactory, schoolFactory } from "@@/tests/test-utils";
+import setupStores from "@@/tests/test-utils/setupStores";
+import SchoolsModule from "@/store/schools";
+import { schoolsModule } from "@/store";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -23,6 +26,10 @@ describe("useAdministrationRoomStore", () => {
 	let roomAdministrationApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	const ownSchool = {
+		id: "school-id",
+		name: "Paul-Gerhardt-Gymnasium",
+	};
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -36,6 +43,12 @@ describe("useAdministrationRoomStore", () => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+		setupStores({
+			schoolsModule: SchoolsModule,
+		});
+
+		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});
 
 	afterEach(() => {
@@ -93,7 +106,7 @@ describe("useAdministrationRoomStore", () => {
 						roomId: "1",
 						name: "Room 1",
 						owner: "Owner 1",
-						schoolName: "a School",
+						schoolName: "z School",
 						createdAt: "2025-07-24T14:21:35.425Z",
 						updatedAt: "2025-07-24T14:21:35.426Z",
 						totalMembers: 10,
@@ -114,8 +127,8 @@ describe("useAdministrationRoomStore", () => {
 					{
 						roomId: "3",
 						name: "Room 3",
-						owner: undefined,
-						schoolName: "c School",
+						owner: "Owner 3",
+						schoolName: ownSchool.name,
 						createdAt: "2025-07-24T14:21:35.426Z",
 						updatedAt: "2025-07-24T14:21:35.426Z",
 						totalMembers: 10,
@@ -139,9 +152,21 @@ describe("useAdministrationRoomStore", () => {
 			expect(roomAdminStore.roomList).toEqual(mockRoomList.data);
 			expect(roomAdminStore.roomList[0].owner).toStrictEqual(undefined);
 			expect(roomAdminStore.roomList[0].createdAt).toStrictEqual("24.07.2025");
-			const sortedSchoolNameIndex = roomAdminStore.roomList.findIndex(
-				(room) => room.schoolName === "a School"
+
+			const undefinedOwnerIndex = roomAdminStore.roomList.findIndex(
+				(room) => room.owner === undefined
 			);
+
+			const sameAsOwnerSchoolIndex = roomAdminStore.roomList.findIndex(
+				(room) => room.schoolName === ownSchool.name
+			);
+
+			const sortedSchoolNameIndex = roomAdminStore.roomList.findIndex(
+				(room) => room.schoolName === "z School"
+			);
+
+			expect(undefinedOwnerIndex).toBe(0);
+			expect(sameAsOwnerSchoolIndex).toBe(1);
 			expect(sortedSchoolNameIndex).toBe(2);
 		});
 	});

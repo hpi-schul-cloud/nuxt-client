@@ -4,9 +4,12 @@ import { createTestingI18n } from "./../../../../../../tests/test-utils/setup/cr
 import { useAdministrationRoomStore } from "@data-room";
 import { useI18n } from "vue-i18n";
 import RoomAdminTable from "./RoomAdminTable.vue";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import SchoolsModule from "@/store/schools";
+import { schoolsModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -23,11 +26,20 @@ const mockI18n = jest.mocked(useI18n());
 
 describe("RoomAdminTable", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	const ownSchool = {
+		id: "school-id",
+		name: "Paul-Gerhardt-Gymnasium",
+	};
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+		setupStores({
+			schoolsModule: SchoolsModule,
+		});
+
+		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});
 	afterEach(() => {
 		jest.clearAllMocks();

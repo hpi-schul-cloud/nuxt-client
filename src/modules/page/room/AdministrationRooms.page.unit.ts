@@ -1,5 +1,5 @@
 import AdministrationRoomsPage from "./AdministrationRooms.page.vue";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -9,17 +9,29 @@ import { createTestingPinia } from "@pinia/testing";
 import { nextTick } from "vue";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import SchoolsModule from "@/store/schools";
+import { schoolsModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("AdministrationRooms.page", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	const ownSchool = {
+		id: "school-id",
+		name: "Paul-Gerhardt-Gymnasium",
+	};
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+		setupStores({
+			schoolsModule: SchoolsModule,
+		});
+
+		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});
 	afterEach(() => {
 		jest.clearAllMocks();

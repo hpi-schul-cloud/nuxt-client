@@ -5,6 +5,7 @@ import { $axios } from "@/utils/api";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
+import { schoolsModule } from "@/store/store-accessor";
 
 export const useAdministrationRoomStore = defineStore(
 	"administrationRoomStore",
@@ -18,7 +19,7 @@ export const useAdministrationRoomStore = defineStore(
 		const selectedIds = ref<string[]>([]);
 		const isEmptyList = ref(false);
 
-		const userSchoolName = "Paul-Gerhardt-Gymnasium";
+		const userSchoolName = schoolsModule.getSchool.name;
 
 		const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
 			list.forEach((room) => {
