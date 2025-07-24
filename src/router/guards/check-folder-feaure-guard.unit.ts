@@ -2,8 +2,8 @@ import { checkFolderFeature } from "@/router/guards/check-folder-feature.guard";
 import { injectStrict } from "@/utils/inject";
 import { RouteLocationNormalized } from "vue-router";
 
-jest.mock("@/utils/inject");
-const mockedInjectStrict = jest.mocked(injectStrict);
+vi.mock("@/utils/inject");
+const mockedInjectStrict = vi.mocked(injectStrict);
 
 describe("checkFolderFeature Guard", () => {
 	describe("when FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED is true", () => {
@@ -22,7 +22,7 @@ describe("checkFolderFeature Guard", () => {
 
 			const to = {} as RouteLocationNormalized;
 			const from = {} as RouteLocationNormalized;
-			const next = jest.fn();
+			const next = vi.fn();
 
 			checkFolderFeature(to, from, next);
 			expect(next).toHaveBeenCalledWith();
@@ -45,7 +45,7 @@ describe("checkFolderFeature Guard", () => {
 
 			const to = {} as RouteLocationNormalized;
 			const from = {} as RouteLocationNormalized;
-			const next = jest.fn();
+			const next = vi.fn();
 
 			checkFolderFeature(to, from, next);
 			expect(next).toHaveBeenCalledWith("/");

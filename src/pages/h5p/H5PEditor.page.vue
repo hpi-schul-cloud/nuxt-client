@@ -38,7 +38,7 @@ import {
 import { onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
-import { H5pEditorHooks } from "./h5pEditorHooks";
+import { H5pEditorHooks } from "./types/h5pEditorHooks";
 
 const props = defineProps<{
 	parentType: H5PContentParentType;

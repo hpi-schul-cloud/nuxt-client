@@ -22,15 +22,18 @@ import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import { BoardColumnInteractionHandler } from "@feature-board";
 
-jest.mock("@data-board");
-jest.mock("@util-board");
-const mockedUserPermissions = jest.mocked(useBoardPermissions);
-const mockUseBoardFocusHandler = jest.mocked(useBoardFocusHandler);
+vi.mock("@data-board/BoardPermissions.composable");
+const mockedUserPermissions = vi.mocked(useBoardPermissions);
+
+vi.mock("@data-board/BoardFocusHandler.composable");
+const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
+
+vi.mock("@util-board/editMode.composable");
+const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 
 describe("BoardColumnHeader", () => {
-	const mockedUseEditMode = jest.mocked(useCourseBoardEditMode);
-	const mockedStartEditMode = jest.fn();
-	const mockedStopEditMode = jest.fn();
+	const mockedStartEditMode = vi.fn();
+	const mockedStopEditMode = vi.fn();
 
 	const setup = (
 		options: {
@@ -71,7 +74,7 @@ describe("BoardColumnHeader", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when component is mounted", () => {

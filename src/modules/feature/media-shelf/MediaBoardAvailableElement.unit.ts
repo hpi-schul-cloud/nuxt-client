@@ -12,7 +12,7 @@ import {
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useExternalToolLaunchState } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useDragAndDrop } from "@util-board";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
@@ -21,8 +21,8 @@ import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 
-jest.mock("@data-external-tool");
-jest.mock("./data");
+vi.mock("@data-external-tool");
+vi.mock("./data");
 
 describe("MediaBoardAvailableElement", () => {
 	let useExternalToolLaunchStateMock: DeepMocked<
@@ -77,19 +77,19 @@ describe("MediaBoardAvailableElement", () => {
 			mediaBoard: ref(),
 		});
 
-		jest
-			.mocked(useExternalToolLaunchState)
-			.mockReturnValue(useExternalToolLaunchStateMock);
+		vi.mocked(useExternalToolLaunchState).mockReturnValue(
+			useExternalToolLaunchStateMock
+		);
 
-		jest
-			.mocked(useSharedMediaBoardState)
-			.mockReturnValue(useSharedMediaBoardStateMock);
+		vi.mocked(useSharedMediaBoardState).mockReturnValue(
+			useSharedMediaBoardStateMock
+		);
 
-		jest.useFakeTimers({ legacyFakeTimers: true });
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when loading external tool data", () => {
@@ -163,7 +163,7 @@ describe("MediaBoardAvailableElement", () => {
 				useExternalToolLaunchStateMock.fetchSchoolLaunchRequest
 			).toHaveBeenCalledTimes(1);
 
-			jest.advanceTimersByTime(refreshTime + 1000);
+			vi.advanceTimersByTime(refreshTime + 1000);
 			await nextTick();
 
 			expect(

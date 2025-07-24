@@ -27,7 +27,7 @@ describe("@/components/share/ShareModal", () => {
 				},
 			},
 			props: {
-				type: "courses",
+				type: ShareTokenBodyParamsParentTypeEnum.Courses,
 			},
 		});
 
@@ -40,8 +40,8 @@ describe("@/components/share/ShareModal", () => {
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
 			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
-			createShareUrl: jest.fn(),
-			resetShareFlow: jest.fn(),
+			createShareUrl: vi.fn(),
+			resetShareFlow: vi.fn(),
 		});
 
 		notifierModuleMock = createModuleMocks(NotifierModule);
@@ -103,7 +103,9 @@ describe("@/components/share/ShareModal", () => {
 
 		form.vm.$emit("share-options-change", payload);
 
-		expect(wrapper.vm.shareOptions).toStrictEqual(payload);
+		expect(
+			(wrapper.vm as unknown as typeof ShareModal).shareOptions
+		).toStrictEqual(payload);
 	});
 
 	it("should call 'onCopy' method when sub component emits 'copied'", async () => {

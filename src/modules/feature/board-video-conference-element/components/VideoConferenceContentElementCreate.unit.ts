@@ -23,7 +23,7 @@ const title = "video conference title";
 
 describe("VideoConferenceContentElementCreate", () => {
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when a valid title is entered", () => {

@@ -19,7 +19,7 @@ import {
 	toolParameterEntryFactory,
 } from "@@/tests/test-utils";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import {
 	SchoolExternalTool,
 	ToolParameterLocation,
@@ -39,11 +39,11 @@ describe("SchoolExternalToolsModule", () => {
 
 		apiMock = createMock<ToolApiInterface>();
 
-		jest.spyOn(serverApi, "ToolApiFactory").mockReturnValue(apiMock);
+		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(apiMock);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getters", () => {

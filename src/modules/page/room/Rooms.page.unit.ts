@@ -15,7 +15,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomsState, useRoomAuthorization } from "@data-room";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { ref } from "vue";
 import { RouteLocation, Router, useRoute, useRouter } from "vue-router";
 import RoomsPage from "./Rooms.page.vue";
@@ -24,18 +24,19 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomGrid } from "@feature-room";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import { InfoAlert } from "@ui-alert";
+import { Mock } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
 import AuthModule from "@/store/auth";
 
-jest.mock("vue-router");
-const useRouteMock = useRoute as jest.Mock;
-const useRouterMock = useRouter as jest.Mock;
+vi.mock("vue-router");
+const useRouteMock = useRoute as Mock;
+const useRouterMock = useRouter as Mock;
 
-jest.mock("@data-room/Rooms.state");
-const useRoomsStateMock = useRoomsState as jest.Mock;
+vi.mock("@data-room/Rooms.state");
+const useRoomsStateMock = useRoomsState as Mock;
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = jest.mocked(useRoomAuthorization);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorization = vi.mocked(useRoomAuthorization);
 
 describe("RoomsPage", () => {
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
@@ -84,8 +85,8 @@ describe("RoomsPage", () => {
 			rooms: ref([]),
 			isLoading: ref(false),
 			isEmpty: ref(false),
-			fetchRooms: jest.fn(),
-			deleteRoom: jest.fn(),
+			fetchRooms: vi.fn(),
+			deleteRoom: vi.fn(),
 		});
 
 		const wrapper = mount(RoomsPage, {

@@ -44,6 +44,7 @@ const elementDisplayData: Ref<MediaElementDisplay> = computed(() => {
 		title: props.element?.content.title,
 		description: props.element?.content.description,
 		thumbnail: undefined,
+		domain: "",
 	};
 });
 </script>

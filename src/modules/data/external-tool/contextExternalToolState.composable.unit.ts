@@ -4,12 +4,12 @@ import {
 	axiosErrorFactory,
 	contextExternalToolFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { useContextExternalToolState } from "./contextExternalToolState.composable";
 import { ContextExternalTool } from "./types";
 
-jest.mock("@data-external-tool/contextExternalToolApi.composable");
+vi.mock("@data-external-tool/contextExternalToolApi.composable");
 
 describe("contextExternalToolState.composable", () => {
 	let useContextExternalToolApiMock: DeepMocked<
@@ -20,13 +20,13 @@ describe("contextExternalToolState.composable", () => {
 		useContextExternalToolApiMock =
 			createMock<ReturnType<typeof useContextExternalToolApi>>();
 
-		jest
-			.mocked(useContextExternalToolApi)
-			.mockReturnValue(useContextExternalToolApiMock);
+		vi.mocked(useContextExternalToolApi).mockReturnValue(
+			useContextExternalToolApiMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when no data is loaded", () => {

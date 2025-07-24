@@ -11,12 +11,12 @@ import { nextTick } from "vue";
 import { createStore } from "vuex";
 import NewStudent from "./StudentCreate.page.vue";
 
-jest.mock("@/utils/pageTitle", () => ({
+vi.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
 const createMockStore = () => {
-	const createStudentStub = jest.fn();
+	const createStudentStub = vi.fn();
 	const mockStore = createStore({
 		modules: {
 			auth: {
@@ -31,13 +31,13 @@ const createMockStore = () => {
 				namespaced: true,
 				actions: {
 					createStudent: createStudentStub,
-					businessError: jest.fn(),
+					businessError: vi.fn(),
 				},
 				getters: {
-					getBusinessError: jest.fn(),
+					getBusinessError: vi.fn(),
 				},
 				mutations: {
-					resetBusinessError: jest.fn(),
+					resetBusinessError: vi.fn(),
 				},
 				state: () => ({
 					businessError: "null",

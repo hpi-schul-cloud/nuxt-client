@@ -5,10 +5,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
 
-jest.mock("@/assets/img/bbb/no_permission.png", () => "noPermissionImagePath");
-jest.mock("@/assets/img/bbb/not_started.png", () => "notStartetImagePath");
-jest.mock("@/assets/img/bbb/available.png", () => "availableImagePath");
-
 describe("RoomVideoConferenceCard", () => {
 	const getWrapper = (propsData: {
 		isRunning: boolean;
@@ -29,7 +25,7 @@ describe("RoomVideoConferenceCard", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("Title", () => {
@@ -280,7 +276,7 @@ describe("RoomVideoConferenceCard", () => {
 			};
 		};
 
-		it("should disable the refresh button", async () => {
+		it("should disable the refresh button", () => {
 			const { wrapper } = setup();
 
 			const button = wrapper.findComponent('[data-testId="refresh-btn"]');

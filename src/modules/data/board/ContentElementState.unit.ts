@@ -11,9 +11,10 @@ import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { useContentElementState } from "./ContentElementState.composable";
 import { Router, useRouter } from "vue-router";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
+import { Mock } from "vitest";
 
-jest.mock("@util-board/InlineEditInteractionHandler.composable");
+vi.mock("@util-board/InlineEditInteractionHandler.composable");
 
 const notifierModule = createModuleMocks(NotifierModule);
 const TEST_ELEMENT: RichTextElementResponse = {
@@ -29,15 +30,14 @@ const TEST_ELEMENT: RichTextElementResponse = {
 	},
 };
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("@vueuse/core"),
-		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
 describe("useContentElementState composable", () => {
 	beforeEach(() => {
@@ -67,7 +67,7 @@ describe("useContentElementState composable", () => {
 	});
 
 	it("should call saving function after debounced change of modelValue", async () => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 		const { modelValue } = setup({ isEditMode: true, element: TEST_ELEMENT });
 
 		const updatedModel: RichTextElementResponse["content"] = {

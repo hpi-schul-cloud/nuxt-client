@@ -12,7 +12,7 @@ import {
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useBoardNotifier } from "@util-board";
 import { AxiosInstance, AxiosPromise } from "axios";
 import { createPinia, setActivePinia } from "pinia";
@@ -21,12 +21,13 @@ import { InvitationStep, RoomInvitationLink } from "./types";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createAxiosError } from "@util-axios-error";
 import { RoomIdResponse } from "@/serverApi/v3/api";
+import { Mock } from "vitest";
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("useRoomInvitationLinkStore", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
@@ -44,11 +45,11 @@ describe("useRoomInvitationLinkStore", () => {
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
 
-		jest.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
-		jest
-			.spyOn(serverApi, "RoomInvitationLinkApiFactory")
-			.mockReturnValue(roomInvitationLinkApiMock);
-		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
+		vi.spyOn(serverApi, "RoomInvitationLinkApiFactory").mockReturnValue(
+			roomInvitationLinkApiMock
+		);
+		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
 		initializeAxios(axiosMock);
 
 		mockedBoardNotifierCalls =
@@ -84,7 +85,7 @@ describe("useRoomInvitationLinkStore", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchLinks", () => {

@@ -8,7 +8,7 @@ import FilePicker from "./FilePicker.vue";
 
 describe("FilePicker", () => {
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when isFilePickerOpen is false", () => {

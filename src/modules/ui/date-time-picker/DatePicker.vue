@@ -49,7 +49,6 @@ import {
 	toRef,
 	useTemplateRef,
 } from "vue";
-import { useDebounceFn, computedAsync } from "@vueuse/core";
 import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
 import { useVuelidate, ErrorObject } from "@vuelidate/core";
@@ -126,21 +125,18 @@ const combinedErrors = computed(() => {
 	return v$.value.dateString.$errors.concat(externalErrors.value);
 });
 
-const errorMessages = computedAsync<string[] | null>(async () => {
-	const messages = await getErrorMessages(combinedErrors.value);
+const errorMessages = computed(() => {
+	const messages = getErrorMessages(combinedErrors.value);
 	return messages ?? [];
-}, null);
+});
 
-const getErrorMessages = useDebounceFn(
-	async (errors: ErrorObject[] | undefined) => {
-		const messages = errors?.map((e: ErrorObject) => {
-			return unref(e.$message);
-		});
+const getErrorMessages = (errors: ErrorObject[] | undefined) => {
+	const messages = errors?.map((e: ErrorObject) => {
+		return unref(e.$message);
+	});
 
-		return messages;
-	},
-	700
-);
+	return messages;
+};
 
 watchEffect(async () => {
 	if (props.required === true) {
