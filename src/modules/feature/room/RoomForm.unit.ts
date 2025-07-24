@@ -2,15 +2,13 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
-import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import RoomForm from "./RoomForm.vue";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { RoomFeatures } from "@/serverApi/v3";
 import { roomFactory } from "@@/tests/test-utils";
 
 describe("@feature-room/RoomForm", () => {
-	let wrapper: VueWrapper<InstanceType<typeof RoomForm>>;
-
 	const setup = (roomOverrides: Partial<RoomCreateParams> = {}) => {
 		const defaultRoom: RoomCreateParams = {
 			name: "A11Y for Beginners",
@@ -24,7 +22,7 @@ describe("@feature-room/RoomForm", () => {
 			...roomOverrides,
 		});
 
-		wrapper = mount(RoomForm, {
+		const wrapper = mount(RoomForm, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -33,10 +31,6 @@ describe("@feature-room/RoomForm", () => {
 		});
 		return { wrapper, room };
 	};
-
-	afterEach(() => {
-		wrapper.unmount();
-	});
 
 	describe("when room name contains < followed by a string", () => {
 		it("should show error message", async () => {
@@ -157,14 +151,10 @@ describe("@feature-room/RoomForm", () => {
 		it("should add video conference feature", async () => {
 			const { room, wrapper } = setup();
 
-			console.log("roomBefore", room);
-
 			const checkbox = wrapper.getComponent(
 				'[data-testid="room-video-conference-checkbox"]'
 			);
-			await checkbox.trigger("click");
-
-			console.log("roomAfter", room);
+			await checkbox.setValue(true);
 
 			expect(room.features).toEqual([RoomFeatures.EditorManageVideoconference]);
 		});
@@ -177,7 +167,7 @@ describe("@feature-room/RoomForm", () => {
 			const checkbox = wrapper.getComponent(
 				'[data-testid="room-video-conference-checkbox"]'
 			);
-			await checkbox.trigger("click");
+			await checkbox.setValue(false);
 
 			expect(room.features).toEqual([]);
 		});

@@ -53,7 +53,7 @@
 						"
 						class="align-start video-conference-checkbox"
 						data-testid="room-video-conference-checkbox"
-						@click="onToggleVideoConferenceFeature"
+						@update:model-value="onToggleVideoConferenceFeature"
 					>
 						<template #label>
 							<div class="d-flex flex-column mt-2">
@@ -207,14 +207,15 @@ const onUpdateEndDate = (newDate: string) => {
 	roomData.value.endDate = newDate;
 };
 
-const onToggleVideoConferenceFeature = () => {
+const onToggleVideoConferenceFeature = (isChecked: boolean | null) => {
 	const features = roomData.value.features;
 
 	const index = features.indexOf(RoomFeatures.EditorManageVideoconference);
-	if (index > -1) {
-		features.splice(index, 1);
-	} else {
+	if (isChecked && index === -1) {
 		features.push(RoomFeatures.EditorManageVideoconference);
+	}
+	if (!isChecked && index > -1) {
+		features.splice(index, 1);
 	}
 };
 
