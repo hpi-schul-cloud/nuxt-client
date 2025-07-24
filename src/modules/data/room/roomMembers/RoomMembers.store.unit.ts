@@ -45,6 +45,10 @@ describe("useRoomMembers", () => {
 	let axiosMock: DeepMocked<AxiosInstance>;
 	let consoleErrorSpy: MockInstance;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	const ownSchool = {
+		id: "school-id",
+		name: "Paul-Gerhardt-Gymnasium",
+	};
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -67,12 +71,7 @@ describe("useRoomMembers", () => {
 			authModule: AuthModule,
 		});
 
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			})
-		);
+		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 
 		const mockMe = meResponseFactory.build();
 		authModule.setMe(mockMe);
@@ -407,10 +406,7 @@ describe("useRoomMembers", () => {
 			await roomMembersStore.loadSchoolList();
 
 			expect(roomMembersStore.schools).toHaveLength(schoolList.total);
-			expect(roomMembersStore.schools[0]).toStrictEqual({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			});
+			expect(roomMembersStore.schools[0]).toStrictEqual(ownSchool);
 		});
 
 		it("should get schools pagewise if more than 1000 schools", async () => {
@@ -439,10 +435,7 @@ describe("useRoomMembers", () => {
 			await roomMembersStore.loadSchoolList();
 
 			expect(roomMembersStore.schools).toHaveLength(totalCount + 1);
-			expect(roomMembersStore.schools[0]).toStrictEqual({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			});
+			expect(roomMembersStore.schools[0]).toStrictEqual(ownSchool);
 			expect(schoolApiMock.schoolControllerGetSchoolList).toHaveBeenCalledTimes(
 				4
 			);
@@ -483,10 +476,7 @@ describe("useRoomMembers", () => {
 					schoolApiMock.schoolControllerGetSchoolList
 				).not.toHaveBeenCalled();
 				expect(schoolList).toHaveLength(1);
-				expect(schoolList[0]).toStrictEqual({
-					id: "school-id",
-					name: "Paul-Gerhardt-Gymnasium",
-				});
+				expect(schoolList[0]).toStrictEqual(ownSchool);
 			});
 		});
 	});
@@ -988,7 +978,8 @@ describe("useRoomMembers", () => {
 			roomMembersStore.resetStore();
 			expect(roomMembersStore.roomMembers).toHaveLength(0);
 			expect(roomMembersStore.potentialRoomMembers).toHaveLength(0);
-			expect(roomMembersStore.schools).toHaveLength(0);
+			expect(roomMembersStore.schools).toHaveLength(1);
+			expect(roomMembersStore.schools[0]).toStrictEqual(ownSchool);
 			expect(roomMembersStore.selectedIds).toHaveLength(0);
 			expect(roomMembersStore.isLoading).toBe(false);
 		});
