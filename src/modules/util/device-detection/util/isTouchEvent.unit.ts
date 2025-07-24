@@ -1,4 +1,3 @@
-import { flushPromises } from "@vue/test-utils";
 import { isTouchEvent } from "./isTouchEvent";
 
 const createTouchEvent = (force: number) => ({
