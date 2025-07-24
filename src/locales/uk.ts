@@ -2106,6 +2106,8 @@ export default {
 	"pages.rooms.administration.table.row.owner.notExist": "Не існує",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Меню дій для кімнати “{roomName}”",
+	"pages.rooms.administration.error.load":
+		"Не вдалося завантажити список кімнат.",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

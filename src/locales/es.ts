@@ -2140,6 +2140,8 @@ export default {
 	"pages.rooms.administration.table.row.owner.notExist": "No existe",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Menú de acciones para la sala “{roomName}”",
+	"pages.rooms.administration.error.load":
+		"No se pudo cargar la lista de salas.",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",

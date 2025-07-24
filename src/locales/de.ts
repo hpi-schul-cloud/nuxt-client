@@ -2104,6 +2104,8 @@ export default {
 	"pages.rooms.administration.table.row.owner.notExist": "Nicht vorhanden",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Aktionsmenü für den Raum “{linkTitle}”",
+	"pages.rooms.administration.error.load":
+		"Die Raumliste konnte nicht geladen werden.",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
