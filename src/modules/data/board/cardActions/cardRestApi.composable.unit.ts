@@ -43,7 +43,6 @@ import {
 } from "./cardActionPayload.types";
 import { useCardRestApi } from "./cardRestApi.composable";
 import { Mock } from "vitest";
-import { flushPromises } from "@vue/test-utils";
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
@@ -809,6 +808,8 @@ describe("useCardRestApi", () => {
 
 	describe("fetchCardRequest", () => {
 		it("should call fetchCardSuccess action if the API call is successful", async () => {
+			vi.useFakeTimers();
+
 			const { cardStore } = setup();
 			const { fetchCardRequest } = useCardRestApi();
 
@@ -820,7 +821,10 @@ describe("useCardRestApi", () => {
 				.mockResolvedValueOnce(cards[2]);
 			const cardIds = cards.map((card) => card.id);
 
-			await fetchCardRequest({ cardIds });
+			const promise = fetchCardRequest({ cardIds });
+
+			await vi.advanceTimersByTimeAsync(500);
+			await promise;
 
 			expect(cardStore.fetchCardSuccess).toHaveBeenCalledWith({
 				cards,
@@ -829,12 +833,17 @@ describe("useCardRestApi", () => {
 		});
 
 		it("should call handleError if the API call fails", async () => {
+			vi.useFakeTimers();
+
 			setup();
 			const { fetchCardRequest } = useCardRestApi();
 
 			mockedSharedCardRequestPoolCalls.fetchCard.mockRejectedValue({});
 
-			await fetchCardRequest({ cardIds: ["temp"] });
+			const promise = fetchCardRequest({ cardIds: ["temp"] });
+
+			await vi.advanceTimersByTimeAsync(500);
+			await promise;
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
