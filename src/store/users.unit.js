@@ -2,6 +2,10 @@ import { actions, mutations } from "./users";
 import { initializeAxios } from "@/utils/api";
 
 describe("store/users", () => {
+	beforeEach(() => {
+		vi.stubGlobal("setTimeout", (fn) => fn());
+	});
+
 	describe("actions", () => {
 		describe("findStudents", () => {
 			it("calls backend and sets state correctly", async () => {
