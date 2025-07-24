@@ -97,7 +97,6 @@ useBoardFocusHandler(element.value.id, elementCard);
 const hasLinkedContent = computed(() => !!element.value.content.contentId);
 
 const router = useRouter();
-const editorWindow: Ref<Window | null> = ref(null);
 
 const isListLayout: Ref<boolean> = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 
@@ -119,7 +118,7 @@ const openEditorWindow = () => {
 		},
 	});
 
-	editorWindow.value = window.open(route.href, "_blank");
+	window.location.href = route.href;
 };
 
 const openPlayerWindow = () => {
@@ -137,7 +136,7 @@ const openPlayerWindow = () => {
 		},
 	});
 
-	editorWindow.value = window.open(route.href, "_blank");
+	window.location.href = route.href;
 };
 
 const onKeydownArrow = (event: KeyboardEvent) => {
