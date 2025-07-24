@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { AdminRoom } from "../roomMembers/types";
 import { RoomApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { printFromStringUtcToFullDate } from "@/plugins/datetime";
 
 export const useAdministrationRoomStore = defineStore(
 	"administrationRoomStore",
@@ -159,7 +160,10 @@ export const useAdministrationRoomStore = defineStore(
 
 		const userSchoolName = "Paul-Gerhardt-Gymnasium";
 
-		const sortList = (list: AdminRoom[]) => {
+		const sortAndFormatList = (list: AdminRoom[]) => {
+			list.forEach((room) => {
+				room.createdAt = printFromStringUtcToFullDate(room.createdAt);
+			});
 			return list
 				.sort((a, b) => {
 					return a.schoolName.localeCompare(b.schoolName);
@@ -177,18 +181,11 @@ export const useAdministrationRoomStore = defineStore(
 		};
 
 		const fetchRooms = async () => {
-			// roomList.value = [];
-			// isEmptyList.value = roomList.value.length === 0;
-
 			try {
 				isLoading.value = true;
 				const { data } = (await roomApi.roomControllerGetRoomStats()).data;
-				const response = await new Promise<AdminRoom[]>((resolve) =>
-					setTimeout(() => {
-						resolve(sortList(data));
-					}, 100)
-				);
-				roomList.value = response;
+
+				roomList.value = sortAndFormatList(data);
 
 				isEmptyList.value = roomList.value.length === 0;
 			} catch {
