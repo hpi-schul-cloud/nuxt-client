@@ -16,6 +16,10 @@ vi.mock("axios");
 initializeAxios({} as AxiosInstance);
 
 describe("finished task store", () => {
+	beforeEach(() => {
+		vi.stubGlobal("setTimeout", (fn: () => unknown) => fn());
+	});
+
 	describe("actions", () => {
 		describe("fetchFinishedTasks", () => {
 			it("should request an initial list of tasks", () =>
