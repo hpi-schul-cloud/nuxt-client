@@ -13,6 +13,7 @@ import InvitationTable from "./roomMembers/tables/InvitationTable.vue";
 import ConfirmationTable from "./roomMembers/tables/ConfirmationTable.vue";
 import RoomCopyFlow from "./RoomCopyFlow.vue";
 import RoomsWelcomeInfo from "./RoomsWelcomeInfo.vue";
+import RoomAdminTable from "./manageRoom/tables/RoomAdminTable.vue";
 
 export {
 	AddMembers,
@@ -25,6 +26,7 @@ export {
 	InviteMembersDialog,
 	Members,
 	MembersTable,
+	RoomAdminTable,
 	RoomGrid,
 	RoomForm,
 	RoomMenu,

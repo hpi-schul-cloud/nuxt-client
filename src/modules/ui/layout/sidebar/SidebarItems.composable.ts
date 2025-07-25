@@ -234,6 +234,15 @@ export const useSidebarItems = () => {
 					testId: "sidebar-management-teachers",
 				},
 				{
+					title: "pages.rooms.title",
+					to: "/administration/rooms/manage",
+					feature: "FEATURE_ADMINISTRATE_ROOMS_ENABLED",
+					permissions: envConfigModule.getEnv.FEATURE_ADMINISTRATE_ROOMS_ENABLED
+						? ["SCHOOL_ADMINISTRATE_ROOMS"]
+						: undefined,
+					testId: "sidebar-room-management",
+				},
+				{
 					title: "global.sidebar.item.courses",
 					to: "/administration/rooms/new",
 					testId: "sidebar-management-courses",
