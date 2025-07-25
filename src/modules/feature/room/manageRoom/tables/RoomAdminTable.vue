@@ -5,7 +5,7 @@
 		:table-headers="tableHeaders"
 		:show-select="true"
 		aria-label-name-key="name"
-		select-item-key="userId"
+		select-item-key="roomId"
 		:external-selected-ids="selectedIds"
 		@update:selected-ids="onUpdateSelectedIds"
 	>
