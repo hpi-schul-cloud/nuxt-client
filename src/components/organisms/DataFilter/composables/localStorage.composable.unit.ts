@@ -15,16 +15,31 @@ const defaultState = {
 	version: 1,
 };
 
-jest.mock("@vueuse/core", () => {
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const defaultState = {
+		pagination: {},
+		filter: {
+			"pages.administration.students.index": {
+				query: {},
+			},
+			"pages.administration.teachers.index": {
+				query: {},
+			},
+		},
+		sorting: {},
+		version: 1,
+	};
+
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
 	return {
-		...jest.requireActual("@vueuse/core"),
-		useStorage: jest.fn().mockReturnValue({ value: defaultState }),
+		...actual,
+		useStorage: vi.fn().mockReturnValue({ value: defaultState }),
 	};
 });
 
 describe("localStorage composable", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should initialize the default state", () => {

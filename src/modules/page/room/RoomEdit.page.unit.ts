@@ -3,7 +3,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { RoomEditPage } from "@page-room";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { useRoute, useRouter } from "vue-router";
 import { RoomUpdateParams, RoomColor } from "@/types/room/Room";
 import { RoomForm } from "@feature-room";
@@ -11,22 +10,24 @@ import { nextTick, ref } from "vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { Mock } from "vitest";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ApplicationError } from "@/store/types/application-error";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
-jest.mock("vue-router");
-const useRouteMock = useRoute as jest.Mock;
+vi.mock("vue-router");
+const useRouteMock = useRoute as Mock;
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = jest.mocked(useRoomAuthorization);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorization = vi.mocked(useRoomAuthorization);
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
+vi.mock("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
 }));
 
 const roomParams: RoomUpdateParams = {
@@ -44,12 +45,12 @@ describe("@pages/RoomEdit.page.vue", () => {
 		roomAuthorization.mockReturnValue(roomPermissions);
 
 		useRouterMock = createMock<ReturnType<typeof useRouter>>();
-		jest.mocked(useRouter).mockReturnValue(useRouterMock);
-		useRouterMock.replace = jest.fn();
+		vi.mocked(useRouter).mockReturnValue(useRouterMock);
+		useRouterMock.replace = vi.fn();
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (

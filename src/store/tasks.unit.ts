@@ -26,7 +26,7 @@ function mockTaskFilter(
 	method: FunctionPropertyNames<Required<TaskFilter>>,
 	result: Task[]
 ) {
-	return jest
+	return vi
 		.spyOn(TaskFilter.prototype, method)
 		.mockReturnValue(new TaskFilter(result));
 }
@@ -36,104 +36,107 @@ initializeAxios({} as AxiosInstance);
 describe("task store", () => {
 	describe("actions", () => {
 		describe("fetchAllTasks", () => {
-			it("should request a list of tasks", (done) => {
-				const mockApi = {
-					taskControllerFindAll: jest.fn(() => ({
-						data: {
-							data: [{ mockTask: "mock task value" }],
-							total: 3,
-							skip: 0,
-							limit: 10,
-						},
-					})),
-				};
-				const spy = jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const tasksModule = new TasksModule({});
-
-				tasksModule.fetchAllTasks().then(() => {
-					expect(tasksModule.getTasks).toStrictEqual([
-						{
-							mockTask: "mock task value",
-						},
-					]);
-					expect(tasksModule.getStatus).toBe("completed");
-					expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
-					done();
-				});
-				expect(tasksModule.getStatus).toBe("pending");
-
-				spy.mockRestore();
-			});
-
-			it("should fetch all pages", (done) => {
-				const mockApi = {
-					taskControllerFindAll: jest
-						.fn()
-						.mockReturnValueOnce({
+			it("should request a list of tasks", () =>
+				new Promise<void>((done) => {
+					const mockApi = {
+						taskControllerFindAll: vi.fn(() => ({
 							data: {
-								data: [{ mockTask: "mock task #1" }],
-								total: 26,
+								data: [{ mockTask: "mock task value" }],
+								total: 3,
 								skip: 0,
 								limit: 10,
 							},
-						})
-						.mockReturnValueOnce({
-							data: {
-								data: [{ mockTask: "mock task #2" }],
-								total: 26,
-								skip: 10,
-								limit: 10,
+						})),
+					};
+					const spy = vi
+						.spyOn(serverApi, "TaskApiFactory")
+						.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+					const tasksModule = new TasksModule({});
+
+					tasksModule.fetchAllTasks().then(() => {
+						expect(tasksModule.getTasks).toStrictEqual([
+							{
+								mockTask: "mock task value",
 							},
-						})
-						.mockReturnValueOnce({
-							data: {
-								data: [{ mockTask: "mock task #3" }],
-								total: 26,
-								skip: 20,
-								limit: 10,
-							},
-						}),
-				};
+						]);
+						expect(tasksModule.getStatus).toBe("completed");
+						expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
+						done();
+					});
+					expect(tasksModule.getStatus).toBe("pending");
 
-				jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const tasksModule = new TasksModule({});
+					spy.mockRestore();
+				}));
 
-				tasksModule.fetchAllTasks().then(() => {
-					expect(tasksModule.getTasks).toStrictEqual([
-						{ mockTask: "mock task #1" },
-						{ mockTask: "mock task #2" },
-						{ mockTask: "mock task #3" },
-					]);
-					expect(tasksModule.getStatus).toBe("completed");
-					expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(3);
-					done();
-				});
-				expect(tasksModule.getStatus).toBe("pending");
-			});
+			it("should fetch all pages", () =>
+				new Promise<void>((done) => {
+					const mockApi = {
+						taskControllerFindAll: vi
+							.fn()
+							.mockReturnValueOnce({
+								data: {
+									data: [{ mockTask: "mock task #1" }],
+									total: 26,
+									skip: 0,
+									limit: 10,
+								},
+							})
+							.mockReturnValueOnce({
+								data: {
+									data: [{ mockTask: "mock task #2" }],
+									total: 26,
+									skip: 10,
+									limit: 10,
+								},
+							})
+							.mockReturnValueOnce({
+								data: {
+									data: [{ mockTask: "mock task #3" }],
+									total: 26,
+									skip: 20,
+									limit: 10,
+								},
+							}),
+					};
 
-			it("should handle an error", (done) => {
-				const error = { status: 418, statusText: "I'm a teapot" };
-				const mockApi = {
-					taskControllerFindAll: jest.fn(() => Promise.reject({ ...error })),
-				};
-				jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const tasksModule = new TasksModule({});
+					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
+						mockApi as unknown as serverApi.TaskApiInterface
+					);
+					const tasksModule = new TasksModule({});
 
-				tasksModule.fetchAllTasks().then(() => {
-					expect(tasksModule.getTasks).toStrictEqual([]);
-					expect(tasksModule.getStatus).toBe("error");
-					expect(tasksModule.businessError).toStrictEqual(error);
-					done();
-				});
-				expect(tasksModule.getStatus).toBe("pending");
-				expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
-			});
+					tasksModule.fetchAllTasks().then(() => {
+						expect(tasksModule.getTasks).toStrictEqual([
+							{ mockTask: "mock task #1" },
+							{ mockTask: "mock task #2" },
+							{ mockTask: "mock task #3" },
+						]);
+						expect(tasksModule.getStatus).toBe("completed");
+						expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(3);
+						done();
+					});
+					expect(tasksModule.getStatus).toBe("pending");
+				}));
+
+			it("should handle an error", () =>
+				new Promise<void>((done) => {
+					const error = { status: 418, statusText: "I'm a teapot" };
+					const mockApi = {
+						taskControllerFindAll: vi.fn(() => Promise.reject({ ...error })),
+					};
+					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
+						mockApi as unknown as serverApi.TaskApiInterface
+					);
+					const tasksModule = new TasksModule({});
+
+					tasksModule.fetchAllTasks().then(() => {
+						expect(tasksModule.getTasks).toStrictEqual([]);
+						expect(tasksModule.getStatus).toBe("error");
+						expect(tasksModule.businessError).toStrictEqual(error);
+						done();
+					});
+					expect(tasksModule.getStatus).toBe("pending");
+					expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
+				}));
 		});
 
 		describe("revertPublishedTask", () => {
@@ -143,57 +146,59 @@ describe("task store", () => {
 				});
 			});
 
-			it("should call api to revert a published task", (done) => {
-				const mockApi = {
-					taskControllerRevertPublished: jest.fn(),
-				};
-				const spy = jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+			it("should call api to revert a published task", () =>
+				new Promise<void>((done) => {
+					const mockApi = {
+						taskControllerRevertPublished: vi.fn(),
+					};
+					const spy = vi
+						.spyOn(serverApi, "TaskApiFactory")
+						.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				const tasksModule = new TasksModule({});
-				const tasks = taskFactory.buildList(3);
-				tasksModule.setTasks(tasks);
-				const fetchAllTasksSpy = jest.spyOn(tasksModule, "fetchAllTasks");
+					const tasksModule = new TasksModule({});
+					const tasks = taskFactory.buildList(3);
+					tasksModule.setTasks(tasks);
+					const fetchAllTasksSpy = vi.spyOn(tasksModule, "fetchAllTasks");
 
-				tasksModule.revertPublishedTask(tasks[0].id).then(() => {
-					expect(tasksModule.getStatus).toBe("completed");
-					expect(mockApi.taskControllerRevertPublished).toHaveBeenCalledTimes(
-						1
-					);
-					expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
-					done();
-				});
-				expect(tasksModule.getStatus).toBe("pending");
+					tasksModule.revertPublishedTask(tasks[0].id).then(() => {
+						expect(tasksModule.getStatus).toBe("completed");
+						expect(mockApi.taskControllerRevertPublished).toHaveBeenCalledTimes(
+							1
+						);
+						expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
+						done();
+					});
+					expect(tasksModule.getStatus).toBe("pending");
 
-				spy.mockRestore();
-			});
+					spy.mockRestore();
+				}));
 		});
 
 		// TODO - implement when we figured out how to correctly mock stores
 		describe("finishTask", () => {
 			it.todo("should call finish task api and refetch all tasks");
 
-			it("should handle an error", (done) => {
-				const task = taskFactory.build();
-				const error = { status: 418, statusText: "I'm a teapot" };
-				const mockApi = {
-					taskControllerFinish: jest.fn(() => Promise.reject({ ...error })),
-				};
+			it("should handle an error", () =>
+				new Promise<void>((done) => {
+					const task = taskFactory.build();
+					const error = { status: 418, statusText: "I'm a teapot" };
+					const mockApi = {
+						taskControllerFinish: vi.fn(() => Promise.reject({ ...error })),
+					};
 
-				jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const tasksModule = new TasksModule({});
+					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
+						mockApi as unknown as serverApi.TaskApiInterface
+					);
+					const tasksModule = new TasksModule({});
 
-				tasksModule.finishTask(task.id).then(() => {
-					expect(tasksModule.getStatus).toBe("error");
-					expect(tasksModule.businessError).toStrictEqual(error);
-					done();
-				});
-				expect(tasksModule.getStatus).toBe("pending");
-				expect(mockApi.taskControllerFinish).toHaveBeenCalledTimes(1);
-			});
+					tasksModule.finishTask(task.id).then(() => {
+						expect(tasksModule.getStatus).toBe("error");
+						expect(tasksModule.businessError).toStrictEqual(error);
+						done();
+					});
+					expect(tasksModule.getStatus).toBe("pending");
+					expect(mockApi.taskControllerFinish).toHaveBeenCalledTimes(1);
+				}));
 		});
 
 		describe("deleteTask", () => {
@@ -203,29 +208,30 @@ describe("task store", () => {
 				});
 			});
 
-			it("should call api to delete a task", (done) => {
-				const mockApi = {
-					taskControllerDelete: jest.fn(),
-				};
-				const spy = jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+			it("should call api to delete a task", () =>
+				new Promise<void>((done) => {
+					const mockApi = {
+						taskControllerDelete: vi.fn(),
+					};
+					const spy = vi
+						.spyOn(serverApi, "TaskApiFactory")
+						.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				const tasksModule = new TasksModule({});
-				const tasks = taskFactory.buildList(3);
-				tasksModule.setTasks(tasks);
-				const fetchAllTasksSpy = jest.spyOn(tasksModule, "fetchAllTasks");
+					const tasksModule = new TasksModule({});
+					const tasks = taskFactory.buildList(3);
+					tasksModule.setTasks(tasks);
+					const fetchAllTasksSpy = vi.spyOn(tasksModule, "fetchAllTasks");
 
-				tasksModule.deleteTask(tasks[0].id).then(() => {
-					expect(tasksModule.getStatus).toBe("completed");
-					expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
-					expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
-					done();
-				});
-				expect(tasksModule.getStatus).toBe("pending");
+					tasksModule.deleteTask(tasks[0].id).then(() => {
+						expect(tasksModule.getStatus).toBe("completed");
+						expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
+						expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
+						done();
+					});
+					expect(tasksModule.getStatus).toBe("pending");
 
-				spy.mockRestore();
-			});
+					spy.mockRestore();
+				}));
 		});
 	});
 

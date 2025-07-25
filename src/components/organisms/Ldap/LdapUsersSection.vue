@@ -43,7 +43,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor" :icon="mdiAccountCircleOutline" />
+				<v-icon :icon="mdiAccountCircleOutline" />
 			</template>
 		</base-input>
 		<base-input

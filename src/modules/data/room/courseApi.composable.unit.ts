@@ -1,6 +1,6 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { envsFactory, mockApiResponse } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useCourseApi } from "./courseApi.composable";
 import { AxiosInstance } from "axios";
 import EnvConfigModule from "@/store/env-config";
@@ -16,12 +16,12 @@ describe("courseApi.composable", () => {
 		courseApi = createMock<serverApi.CoursesApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
 
-		jest.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(courseApi);
+		vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(courseApi);
 		initializeAxios(axiosMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("stopSynchronization", () => {

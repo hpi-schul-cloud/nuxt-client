@@ -15,10 +15,6 @@ const createTouchEvent = (force: number) => ({
 	target: new EventTarget(),
 });
 
-const sleep = (milliseconds: number) => {
-	return new Promise((resolve) => setTimeout(resolve, milliseconds));
-};
-
 describe(isTouchEvent.name, () => {
 	describe("when mouse click event is fired", () => {
 		it("should return false", async () => {
@@ -40,7 +36,8 @@ describe(isTouchEvent.name, () => {
 
 	describe("when touch event is fired with non touch device", () => {
 		it("should return false", async () => {
-			await sleep(300);
+			vi.advanceTimersByTime(300);
+
 			const touchEvent = new TouchEvent("touchstart", {
 				touches: [createTouchEvent(1)],
 			});

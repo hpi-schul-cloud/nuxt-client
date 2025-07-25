@@ -10,9 +10,9 @@ import { nextTick } from "vue";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { flushPromises } from "@vue/test-utils";
 
-jest.mock("vue-i18n", () => ({
+vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
-		t: jest.fn().mockImplementation((key) => key),
+		t: vi.fn().mockImplementation((key) => key),
 	}),
 }));
 
@@ -39,14 +39,14 @@ const envs = envsFactory.build({
 	JWT_TIMEOUT_SECONDS: jwtTimerResponse.timeout,
 });
 
-jest.mock("@/utils/api", () => ({
+vi.mock("@/utils/api", () => ({
 	$axios: {
-		get: jest.fn((url: string) => {
+		get: vi.fn((url: string) => {
 			if (url === "/v1/accounts/jwtTimer") {
 				return mockEndpointResponse();
 			}
 		}),
-		post: jest.fn((url: string) => {
+		post: vi.fn((url: string) => {
 			if (url === "/v1/accounts/jwtTimer") {
 				return mockEndpointResponse();
 			}
@@ -54,24 +54,24 @@ jest.mock("@/utils/api", () => ({
 	},
 }));
 
-jest.useFakeTimers();
-jest.spyOn(global, "setInterval");
-jest.spyOn(global, "clearInterval");
-jest.spyOn(global, "setTimeout");
-jest.spyOn(global, "clearTimeout");
+vi.useFakeTimers();
+vi.spyOn(global, "setInterval");
+vi.spyOn(global, "clearInterval");
+vi.spyOn(global, "setTimeout");
+vi.spyOn(global, "clearTimeout");
 
 describe("useAutoLogout", () => {
 	beforeEach(() => {
 		jwtTimerResponse.ttl = 60;
 		jwtTimerResponse.showTimeoutValue = 30;
 		jwtTimerResponse.timeout = 60;
-		jest.clearAllMocks();
-		jest.clearAllTimers();
+		vi.clearAllMocks();
+		vi.clearAllTimers();
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
-		jest.clearAllTimers();
+		vi.clearAllMocks();
+		vi.clearAllTimers();
 	});
 
 	setupStores({
@@ -117,7 +117,7 @@ describe("useAutoLogout", () => {
 					1000;
 				const { showDialog } = setup();
 
-				jest.advanceTimersByTime(timeToAdvance);
+				vi.advanceTimersByTime(timeToAdvance);
 				await nextTick();
 
 				expect(showDialog.value).toBe(true);
@@ -137,7 +137,7 @@ describe("useAutoLogout", () => {
 					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) *
 					1000;
 				const { isTTLUpdated } = setup();
-				jest.advanceTimersByTime(timeToAdvance);
+				vi.advanceTimersByTime(timeToAdvance);
 				await nextTick();
 
 				expect(isTTLUpdated.value).toBe(true);
@@ -152,7 +152,7 @@ describe("useAutoLogout", () => {
 					1000;
 				const { showDialog } = setup();
 
-				jest.advanceTimersByTime(timeToAdvance);
+				vi.advanceTimersByTime(timeToAdvance);
 				await flushPromises();
 
 				expect(showDialog.value).toBe(false);
@@ -204,7 +204,7 @@ describe("useAutoLogout", () => {
 				JWT_TIMEOUT_SECONDS: jwtTimerResponse.ttl,
 			});
 			const { sessionStatus } = setup();
-			jest.advanceTimersByTime(jwtTimerResponse.ttl * 1000);
+			vi.advanceTimersByTime(jwtTimerResponse.ttl * 1000);
 			await flushPromises();
 
 			expect(sessionStatus.value).toBe(SessionStatus.Ended);

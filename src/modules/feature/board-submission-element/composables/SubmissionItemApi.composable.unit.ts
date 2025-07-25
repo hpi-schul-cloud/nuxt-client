@@ -1,5 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 
 let elementApi: DeepMocked<serverApi.BoardElementApiInterface>;
@@ -10,14 +10,14 @@ describe("SubmissionItemApi.composable", () => {
 		elementApi = createMock<serverApi.BoardElementApiInterface>();
 		submissionItemApi = createMock<serverApi.BoardSubmissionApiInterface>();
 
-		jest.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
-		jest
-			.spyOn(serverApi, "BoardSubmissionApiFactory")
-			.mockReturnValue(submissionItemApi);
+		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
+		vi.spyOn(serverApi, "BoardSubmissionApiFactory").mockReturnValue(
+			submissionItemApi
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("create submissionItem", () => {

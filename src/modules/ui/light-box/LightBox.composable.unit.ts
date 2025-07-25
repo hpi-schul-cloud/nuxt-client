@@ -25,7 +25,7 @@ describe("LightBox composable", () => {
 		};
 
 		beforeEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		describe("when open is called", () => {

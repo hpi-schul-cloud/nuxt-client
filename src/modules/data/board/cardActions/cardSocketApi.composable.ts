@@ -1,6 +1,6 @@
 import { chunk } from "lodash";
 import * as CardActions from "./cardActions";
-import { useSocketConnection } from "@data-board";
+import { useSocketConnection } from "../socket/socket";
 import { useCardStore } from "../Card.store";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
@@ -13,7 +13,7 @@ import {
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
-} from "./cardActionPayload";
+} from "./cardActionPayload.types";
 import { useDebounceFn } from "@vueuse/core";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 

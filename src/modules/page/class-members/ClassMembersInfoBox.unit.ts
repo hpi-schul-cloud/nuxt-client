@@ -2,13 +2,13 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
 import { useSystemApi } from "@data-system";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 
-jest.mock("@data-system");
+vi.mock("@data-system");
 
 describe("ClassMembersInfoBox", () => {
 	let useSystemApiMock: DeepMocked<ReturnType<typeof useSystemApi>>;
@@ -33,7 +33,7 @@ describe("ClassMembersInfoBox", () => {
 	beforeEach(() => {
 		useSystemApiMock = createMock<ReturnType<typeof useSystemApi>>();
 
-		jest.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
+		vi.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
 
 		useSystemApiMock.getSystem.mockResolvedValue({
 			id: "systemId",
@@ -43,7 +43,7 @@ describe("ClassMembersInfoBox", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("alert", () => {

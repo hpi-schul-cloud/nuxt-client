@@ -1,7 +1,8 @@
 import { useDocumentVisibility } from "@vueuse/core";
 import { useTimeoutFn } from "@vueuse/shared";
 import { nextTick, ref, watch } from "vue";
-import { useBoardStore, useCardStore } from "@data-board";
+import { useBoardStore } from "./Board.store";
+import { useCardStore } from "./Card.store";
 
 export const connectionOptions = {
 	isTimeoutReached: false,

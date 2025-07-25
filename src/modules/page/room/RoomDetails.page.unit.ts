@@ -6,6 +6,7 @@ import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
+
 import {
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -34,7 +35,7 @@ import {
 	useRoomsState,
 } from "@data-room";
 import { RoomMenu } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -44,29 +45,31 @@ import {
 	SelectBoardLayoutDialog,
 } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
+import { Mock } from "vitest";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn().mockReturnValue({
-		push: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn().mockReturnValue({
+		push: vi.fn(),
 	}),
 }));
 
-jest.mock("@data-room/Rooms.state");
+vi.mock("@data-room/Rooms.state");
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = jest.mocked(useRoomAuthorization);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorization = vi.mocked(useRoomAuthorization);
 
-jest.mock("@ui-confirmation-dialog");
-jest.mocked(useConfirmationDialog);
+vi.mock("@ui-confirmation-dialog");
+vi.mocked(useConfirmationDialog);
 
 describe("@pages/RoomsDetails.page.vue", () => {
 	let useRoomsStateMock: DeepMocked<ReturnType<typeof useRoomsState>>;
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
-	let askConfirmationMock: jest.Mock;
+	let askConfirmationMock: Mock;
 
 	beforeEach(() => {
+		vi.useFakeTimers();
 		setupStores({
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
@@ -77,12 +80,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			isEmpty: ref(false),
 			rooms: ref([]),
 		});
-		jest.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
+		vi.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
 
 		const mockMe = meResponseFactory.build();
 		authModule.setMe(mockMe);
 
-		askConfirmationMock = jest.fn();
+		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});
@@ -108,7 +111,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (
@@ -327,6 +330,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		const openSpeedDialMenu = async (wrapper: VueWrapper) => {
 			const speedDialMenu = wrapper.getComponent({ name: "speed-dial-menu" });
 			await speedDialMenu.getComponent({ name: "v-btn" }).trigger("click");
+			vi.advanceTimersByTime(1000); // speed dial renders items delayed
 			await flushPromises();
 		};
 

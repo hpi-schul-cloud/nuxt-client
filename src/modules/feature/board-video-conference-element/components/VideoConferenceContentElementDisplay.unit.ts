@@ -10,10 +10,10 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardFeatures } from "@data-board";
 import { BoardContextType } from "@/types/board/BoardContext";
 
-jest.mock("@data-board/BoardFeatures.composable");
-jest.mocked(useBoardFeatures).mockImplementation(() => {
+vi.mock("@data-board/BoardFeatures.composable");
+vi.mocked(useBoardFeatures).mockImplementation(() => {
 	return {
-		isFeatureEnabled: jest.fn().mockReturnValue(true),
+		isFeatureEnabled: vi.fn().mockReturnValue(true),
 	};
 });
 
@@ -49,7 +49,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("Title", () => {
