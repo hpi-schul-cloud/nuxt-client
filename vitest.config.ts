@@ -49,6 +49,7 @@ export default defineConfig({
 		coverage: {
 			provider: "v8",
 			reportOnFailure: true,
+			reporter: ["text", "lcov"],
 			include: [
 				"src/components/**/*.{js,ts,vue}",
 				"src/modules/**/*.{js,ts,vue}",
