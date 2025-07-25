@@ -8,6 +8,7 @@
 		size="small"
 		variant="text"
 		@click="onDownload"
+		@keydown.enter="onDownload"
 	>
 		<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 	</v-btn>
@@ -23,7 +24,8 @@ const props = defineProps({
 	url: { type: String, required: true },
 });
 
-const onDownload = async () => {
+const onDownload = async (event: Event) => {
+	event.stopPropagation();
 	downloadFile(props.url, props.fileName);
 };
 </script>
