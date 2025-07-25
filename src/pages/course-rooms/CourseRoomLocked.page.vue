@@ -1,15 +1,27 @@
 <template>
 	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs">
-		<div class="d-flex mt-3">
-			<h1
-				class="text-h3 pb-2 ma-0 course-title"
-				data-testid="courses-course-title"
-			>
-				{{ title }}
-			</h1>
-		</div>
-		<div class="d-flex justify-center align-center" style="min-height: 40vh">
-			<strong class="ml-4">Dieser Kurs ist momentan gesperrt</strong>
+		<template #header>
+			<div class="d-flex mt-3">
+				<h1
+					class="text-h3 pb-2 ma-0 course-title"
+					data-testid="courses-course-title"
+				>
+					{{ title }}
+				</h1>
+			</div>
+			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center" />
+		</template>
+		<div class="text-center mt-8">
+			<permission-error-svg
+				:svg-width="$vuetify.display.xs ? 200 : undefined"
+				fill="rgba(var(--v-theme-primary))"
+				data-testid="img-permission"
+			/>
+			<div>
+				<h3 class="ml-4 text-center text-h4 error-msg pl-4 pr-4">
+					{{ $t("pages.courseRooms.course-locked") }}
+				</h3>
+			</div>
 		</div>
 	</DefaultWireframe>
 </template>
@@ -17,6 +29,7 @@
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
+import PermissionErrorSvg from "../../assets/img/PermissionErrorSvg.vue";
 
 interface Props {
 	title: string;
