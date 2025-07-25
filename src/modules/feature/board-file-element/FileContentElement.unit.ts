@@ -396,9 +396,10 @@ describe("FileContentElement", () => {
 						});
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
@@ -419,9 +420,10 @@ describe("FileContentElement", () => {
 
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
@@ -455,9 +457,10 @@ describe("FileContentElement", () => {
 						});
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
@@ -478,9 +481,10 @@ describe("FileContentElement", () => {
 
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
@@ -514,9 +518,10 @@ describe("FileContentElement", () => {
 						});
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
@@ -537,9 +542,10 @@ describe("FileContentElement", () => {
 
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
@@ -573,9 +579,10 @@ describe("FileContentElement", () => {
 						});
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
@@ -596,9 +603,10 @@ describe("FileContentElement", () => {
 
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
@@ -992,9 +1000,10 @@ describe("FileContentElement", () => {
 						});
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
@@ -1015,9 +1024,10 @@ describe("FileContentElement", () => {
 
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
@@ -1051,9 +1061,10 @@ describe("FileContentElement", () => {
 						});
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
@@ -1074,9 +1085,10 @@ describe("FileContentElement", () => {
 
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
@@ -1110,9 +1122,10 @@ describe("FileContentElement", () => {
 						});
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
@@ -1133,9 +1146,10 @@ describe("FileContentElement", () => {
 
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
@@ -1169,9 +1183,10 @@ describe("FileContentElement", () => {
 						});
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
@@ -1192,9 +1207,10 @@ describe("FileContentElement", () => {
 
 						const card = wrapper.findComponent(VCard);
 
-						const windowOpenSpy = jest
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi
 							.spyOn(window, "open")
-							.mockImplementation();
+							.mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
