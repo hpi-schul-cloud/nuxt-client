@@ -11,23 +11,24 @@ import { H5pEditorApiInterface } from "@/h5pEditorApi/v3";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useH5PEditorApi } from "@data-h5p";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { HttpStatusCode } from "axios";
+import type { Mocked } from "vitest";
 
 describe("h5pEditorApi.composable", () => {
 	let h5pEditorApi: DeepMocked<H5pEditorApiInterface>;
 
-	const notifierModule: jest.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	beforeEach(() => {
 		h5pEditorApi = createMock<H5pEditorApiInterface>();
 
-		jest.spyOn(h5pApi, "H5pEditorApiFactory").mockReturnValue(h5pEditorApi);
+		vi.spyOn(h5pApi, "H5pEditorApiFactory").mockReturnValue(h5pEditorApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getContentTitle", () => {

@@ -96,10 +96,10 @@ import {
 	unref,
 } from "vue";
 import { TeacherSubmission, Status } from "../types/submission";
-import { DataTableHeader } from "@/types/vuetify";
+import { DataTableHeader } from "vuetify";
 import { useI18n } from "vue-i18n";
 import { MaybeRef } from "@vueuse/core";
-import { VExpansionPanelTitle } from "vuetify/lib/components";
+import { VExpansionPanelTitle } from "vuetify/components";
 import { mdiCheck, mdiClose, mdiMinus } from "@icons/material";
 
 type StatusFilter = "all" | Status;

@@ -12,22 +12,22 @@ describe("status alerts module", () => {
 		describe("fetchStatusAlerts", () => {
 			it("should call api and set the alerts corectly", async () => {
 				const mockApi = {
-					alertControllerFind: jest.fn(() => ({
+					alertControllerFind: vi.fn(() => ({
 						data: {
 							data: mockStatusAlerts,
 						},
 					})),
 				};
-				jest
-					.spyOn(serverApi, "AlertApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.AlertApiInterface);
+				vi.spyOn(serverApi, "AlertApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.AlertApiInterface
+				);
 				const statusAlertsModule = new StatusAlertsModule({});
-				const setStatusAlertsSpy = jest.spyOn(
+				const setStatusAlertsSpy = vi.spyOn(
 					statusAlertsModule,
 					"setStatusAlerts"
 				);
-				const setStatusSpy = jest.spyOn(statusAlertsModule, "setStatus");
-				const resetBusinessErrorSpy = jest.spyOn(
+				const setStatusSpy = vi.spyOn(statusAlertsModule, "setStatus");
+				const resetBusinessErrorSpy = vi.spyOn(
 					statusAlertsModule,
 					"resetBusinessError"
 				);
@@ -41,13 +41,13 @@ describe("status alerts module", () => {
 			it("should handle exception", async () => {
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					alertControllerFind: jest.fn(() => Promise.reject({ ...error })),
+					alertControllerFind: vi.fn(() => Promise.reject({ ...error })),
 				};
-				jest
-					.spyOn(serverApi, "AlertApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.AlertApiInterface);
+				vi.spyOn(serverApi, "AlertApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.AlertApiInterface
+				);
 				const statusAlertsModule = new StatusAlertsModule({});
-				const setBusinessErrorSpy = jest.spyOn(
+				const setBusinessErrorSpy = vi.spyOn(
 					statusAlertsModule,
 					"setBusinessError"
 				);

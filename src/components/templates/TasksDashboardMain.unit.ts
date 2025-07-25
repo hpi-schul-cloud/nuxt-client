@@ -34,7 +34,7 @@ const $route = {
 	},
 };
 
-const $router = { replace: jest.fn(), resolve: jest.fn() };
+const $router = { replace: vi.fn(), resolve: vi.fn() };
 
 const defaultTasksModuleGetters: Partial<TasksModule> = {
 	getStatus: "completed",

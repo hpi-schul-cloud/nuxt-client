@@ -25,6 +25,7 @@ describe("@feature-room/RoomForm", () => {
 		const wrapper = mount(RoomForm, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { DatePicker: true, ConfirmationDialog: true },
 			},
 			props: { room },
 			attachTo: document.body,

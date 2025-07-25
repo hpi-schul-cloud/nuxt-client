@@ -86,17 +86,17 @@ const businessError = businessErrorFactory.build({
 describe("import-users store actions", () => {
 	const setup = () => {
 		const importUserModule = new ImportUsersModule({});
-		const spy = jest.spyOn(serverApi, "UserImportApiFactory");
+		const spy = vi.spyOn(serverApi, "UserImportApiFactory");
 
 		const mockApi = {
-			importUserControllerFindAllUnmatchedUsers: jest.fn(() => mockResponse),
-			importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
-			importUserControllerRemoveMatch: jest.fn(() => mockResponse),
-			importUserControllerSetMatch: jest.fn(() => mockResponse),
-			importUserControllerUpdateFlag: jest.fn(() => mockResponse),
-			importUserControllerPopulateImportUsers: jest.fn(),
-			importUserControllerCancelMigration: jest.fn(),
-			importUserControllerClearAllAutoMatches: jest.fn(),
+			importUserControllerFindAllUnmatchedUsers: vi.fn(() => mockResponse),
+			importUserControllerFindAllImportUsers: vi.fn(() => mockResponse),
+			importUserControllerRemoveMatch: vi.fn(() => mockResponse),
+			importUserControllerSetMatch: vi.fn(() => mockResponse),
+			importUserControllerUpdateFlag: vi.fn(() => mockResponse),
+			importUserControllerPopulateImportUsers: vi.fn(),
+			importUserControllerCancelMigration: vi.fn(),
+			importUserControllerClearAllAutoMatches: vi.fn(),
 		};
 
 		importUserModule.setImportUsersList(userListTestData);
@@ -171,7 +171,7 @@ describe("import-users store actions", () => {
 				const { importUserModule, spy } = setup();
 
 				const mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(() =>
+					importUserControllerFindAllUnmatchedUsers: vi.fn(() =>
 						Promise.reject(badRequestError)
 					),
 				};
@@ -206,7 +206,7 @@ describe("import-users store actions", () => {
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(() =>
+					importUserControllerFindAllUnmatchedUsers: vi.fn(() =>
 						Promise.reject(badRequestError)
 					),
 				};
@@ -398,7 +398,7 @@ describe("import-users store actions", () => {
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() =>
+					importUserControllerFindAllImportUsers: vi.fn(() =>
 						Promise.reject(badRequestError)
 					),
 				};
@@ -445,7 +445,7 @@ describe("import-users store actions", () => {
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() =>
+					importUserControllerFindAllImportUsers: vi.fn(() =>
 						Promise.reject(badRequestError)
 					),
 				};
@@ -492,7 +492,7 @@ describe("import-users store actions", () => {
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() =>
+					importUserControllerFindAllImportUsers: vi.fn(() =>
 						Promise.reject(badRequestError)
 					),
 				};
@@ -527,7 +527,7 @@ describe("import-users store actions", () => {
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerRemoveMatch: jest.fn(() =>
+					importUserControllerRemoveMatch: vi.fn(() =>
 						Promise.reject(badRequestError)
 					),
 				};
@@ -563,7 +563,7 @@ describe("import-users store actions", () => {
 			it("should handle error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerSetMatch: jest.fn(() =>
+					importUserControllerSetMatch: vi.fn(() =>
 						Promise.reject(badRequestError)
 					),
 				};
@@ -660,7 +660,7 @@ describe("import-users store actions", () => {
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerUpdateFlag: jest.fn(() =>
+					importUserControllerUpdateFlag: vi.fn(() =>
 						Promise.reject(badRequestError)
 					),
 				};
@@ -705,7 +705,7 @@ describe("import-users store actions", () => {
 				it("should set a business error", async () => {
 					const { importUserModule, spy } = setup();
 					const mockApi = {
-						importUserControllerPopulateImportUsers: jest.fn(() =>
+						importUserControllerPopulateImportUsers: vi.fn(() =>
 							Promise.reject(badRequestError)
 						),
 					};
@@ -739,7 +739,7 @@ describe("import-users store actions", () => {
 				it("should set a business error", async () => {
 					const { importUserModule, spy } = setup();
 					const mockApi = {
-						importUserControllerCancelMigration: jest.fn(() =>
+						importUserControllerCancelMigration: vi.fn(() =>
 							Promise.reject(badRequestError)
 						),
 					};
@@ -775,7 +775,7 @@ describe("import-users store actions", () => {
 					const { importUserModule, spy } = setup();
 
 					const mockApi = {
-						importUserControllerClearAllAutoMatches: jest.fn(() =>
+						importUserControllerClearAllAutoMatches: vi.fn(() =>
 							Promise.reject(badRequestError)
 						),
 					};

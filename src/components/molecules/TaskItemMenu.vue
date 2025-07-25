@@ -154,7 +154,7 @@ export default defineComponent({
 			validator: (role) => ["student", "teacher"].includes(role),
 		},
 	},
-	emits: ["copy-task", "share-task", "toggled-menu", "focus-changed"],
+	emits: ["copy-task", "share-task"],
 	data() {
 		return {
 			confirmDeleteDialogIsOpen: false,

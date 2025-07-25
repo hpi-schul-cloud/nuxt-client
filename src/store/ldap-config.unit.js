@@ -90,7 +90,7 @@ describe("store/ldap-config", () => {
 					},
 				});
 
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 				await actions.getData({ commit: spyCommit }, "id");
 				expect(receivedUrl).toBe("/v1/ldap-config/id");
 				expect(spyCommit.mock.calls).toHaveLength(3);
@@ -108,7 +108,7 @@ describe("store/ldap-config", () => {
 					},
 				});
 
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 				await actions.verifyData({ commit: spyCommit }, clientMockData);
 				expect(receivedUrl).toBe("/v1/ldap-config?verifyOnly=true");
 				expect(spyCommit.mock.calls).toHaveLength(4);
@@ -125,7 +125,7 @@ describe("store/ldap-config", () => {
 					},
 				});
 
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 				await actions.verifyData({ commit: spyCommit }, clientMockData);
 				expect(receivedUrl).toBe("/v1/ldap-config?verifyOnly=true");
 				expect(spyCommit.mock.calls).toHaveLength(4);
@@ -143,7 +143,7 @@ describe("store/ldap-config", () => {
 					},
 				});
 
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 				await actions.verifyExisting(
 					{ commit: spyCommit },
 					{ systemId: "systemId", systemData: clientMockData }
@@ -163,7 +163,7 @@ describe("store/ldap-config", () => {
 					},
 				});
 
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 				await actions.verifyExisting(
 					{ commit: spyCommit },
 					{ systemId: "systemId", systemData: clientMockData }
@@ -183,7 +183,7 @@ describe("store/ldap-config", () => {
 						return Promise.resolve({ data: clientMockData });
 					},
 				});
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 				await actions.submitData({ commit: spyCommit }, clientMockData);
 				expect(receivedUrl).toBe(
 					"/v1/ldap-config?verifyOnly=false&activate=true"
@@ -202,7 +202,7 @@ describe("store/ldap-config", () => {
 						return Promise.resolve({ data: clientMockData });
 					},
 				});
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 				await actions.patchData(
 					{ commit: spyCommit },
 					{ systemId: "systemId", systemData: clientMockData }

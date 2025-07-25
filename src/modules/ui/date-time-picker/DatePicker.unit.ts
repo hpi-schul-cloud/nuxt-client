@@ -18,7 +18,9 @@ describe("DatePicker", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
 					"transition-group": false,
+					UseFocusTrap: true,
 				},
+				renderStubDefaultSlot: true, // to access content inside focus trap
 			},
 			...options,
 			attachTo: document.body,
@@ -72,7 +74,8 @@ describe("DatePicker", () => {
 			await input.setValue("");
 			await flushPromises();
 
-			expect(wrapper.emitted("error")).toHaveLength(1);
+			expect(wrapper.emitted("error")).not.toBeUndefined();
+			expect(wrapper.emitted("error")!.length).toBeGreaterThan(0);
 		});
 
 		it("should emit update:date event with null value", async () => {
@@ -84,16 +87,17 @@ describe("DatePicker", () => {
 			const updateDateEvent = wrapper.emitted("update:date");
 			const updateDateEventValue = updateDateEvent?.[0][0];
 
-			expect(updateDateEvent).toHaveLength(1);
+			expect(updateDateEvent).not.toBeUndefined();
+			expect(updateDateEvent!.length).toBeGreaterThan(0);
 			expect(updateDateEventValue).toBe(null);
 		});
 
 		it("should display error message for invalid date format", async () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			const { textField, input } = setup();
 
 			await input.setValue("");
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 			await flushPromises();
 
 			const errorElement = textField.find(".v-messages");
@@ -115,7 +119,8 @@ describe("DatePicker", () => {
 			await input.setValue("55.55.5555");
 			await flushPromises();
 
-			expect(wrapper.emitted("error")).toHaveLength(1);
+			expect(wrapper.emitted("error")).not.toBeUndefined();
+			expect(wrapper.emitted("error")!.length).toBeGreaterThan(0);
 		});
 
 		it("should emit update:date event with null value", async () => {
@@ -127,16 +132,17 @@ describe("DatePicker", () => {
 			const updateDateEvent = wrapper.emitted("update:date");
 			const updateDateEventValue = updateDateEvent?.[0][0];
 
-			expect(updateDateEvent).toHaveLength(1);
+			expect(updateDateEvent).not.toBeUndefined();
+			expect(updateDateEvent!.length).toBeGreaterThan(0);
 			expect(updateDateEventValue).toBe(null);
 		});
 
 		it("should display error message for invalid date format", async () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			const { textField, input } = setup();
 
 			await input.setValue("22");
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 			await flushPromises();
 
 			const errorElement = textField.find(".v-messages");

@@ -1,4 +1,4 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useRoomCreateState } from "./RoomCreate.state";
 import * as serverApi from "@/serverApi/v3/api";
 import { AxiosInstance } from "axios";
@@ -13,13 +13,13 @@ import {
 	axiosErrorFactory,
 } from "@@/tests/test-utils";
 
-jest.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = jest.mocked(
+vi.mock("@/utils/api");
+const mockedMapAxiosErrorToResponseError = vi.mocked(
 	mapAxiosErrorToResponseError
 );
 
-jest.mock("@/composables/application-error.composable");
-const mockedCreateApplicationError = jest.mocked(useApplicationError);
+vi.mock("@/composables/application-error.composable");
+const mockedCreateApplicationError = vi.mocked(useApplicationError);
 
 const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	const expectedPayload = apiResponseErrorFactory.build({
@@ -45,7 +45,7 @@ describe("useRoomCreateState", () => {
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
 
-		jest.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		initializeAxios(axiosMock);
 
 		mockedCreateApplicationErrorCalls =
@@ -60,7 +60,7 @@ describe("useRoomCreateState", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const setup = () => {

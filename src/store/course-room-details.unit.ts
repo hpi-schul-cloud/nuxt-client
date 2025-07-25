@@ -86,12 +86,12 @@ describe("course-room module", () => {
 
 	describe("actions", () => {
 		afterEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 		const mockApi = {
-			courseRoomsControllerGetRoomBoard: jest.fn(),
-			courseRoomsControllerPatchElementVisibility: jest.fn(),
-			courseRoomsControllerPatchOrderingOfElements: jest.fn(),
+			courseRoomsControllerGetRoomBoard: vi.fn(),
+			courseRoomsControllerPatchElementVisibility: vi.fn(),
+			courseRoomsControllerPatchOrderingOfElements: vi.fn(),
 		};
 
 		describe("fetchCourse", () => {
@@ -164,11 +164,9 @@ describe("course-room module", () => {
 
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
-				jest
-					.spyOn(serverApi, "CourseRoomsApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.CourseRoomsApiInterface
-					);
+				vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.CourseRoomsApiInterface
+				);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				await courseRoomDetailsModule.fetchContent("123");
@@ -183,11 +181,9 @@ describe("course-room module", () => {
 
 		describe("publishCard", () => {
 			it("'publishCard' action should call backend and 'fetchContent' method", async () => {
-				jest
-					.spyOn(serverApi, "CourseRoomsApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.CourseRoomsApiInterface
-					);
+				vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.CourseRoomsApiInterface
+				);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				await courseRoomDetailsModule.publishCard({
@@ -208,11 +204,9 @@ describe("course-room module", () => {
 
 		describe("sortElements", () => {
 			it("'sortElements' action should call backend and 'fetchContent' method", async () => {
-				jest
-					.spyOn(serverApi, "CourseRoomsApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.CourseRoomsApiInterface
-					);
+				vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.CourseRoomsApiInterface
+				);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const payload = {
@@ -234,9 +228,9 @@ describe("course-room module", () => {
 		describe("deleteLesson", () => {
 			it("should call api to delete a lesson", async () => {
 				const mockApi = {
-					lessonControllerDelete: jest.fn(),
+					lessonControllerDelete: vi.fn(),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "LessonApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.LessonApiInterface);
 
@@ -252,11 +246,9 @@ describe("course-room module", () => {
 
 			it("should catch error in catch block", async () => {
 				const mockApi = {
-					lessonControllerDelete: jest.fn(() =>
-						Promise.reject(badRequestError)
-					),
+					lessonControllerDelete: vi.fn(() => Promise.reject(badRequestError)),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "LessonApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.LessonApiInterface);
 
@@ -275,9 +267,9 @@ describe("course-room module", () => {
 		describe("deleteTask", () => {
 			it("should call api to delete a lesson", async () => {
 				const mockApi = {
-					taskControllerDelete: jest.fn(),
+					taskControllerDelete: vi.fn(),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -293,9 +285,9 @@ describe("course-room module", () => {
 
 			it("should catch error in catch block", async () => {
 				const mockApi = {
-					taskControllerDelete: jest.fn(() => Promise.reject(badRequestError)),
+					taskControllerDelete: vi.fn(() => Promise.reject(badRequestError)),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -314,9 +306,9 @@ describe("course-room module", () => {
 		describe("createBoard", () => {
 			it("should call api to create a column board", async () => {
 				const mockApi = {
-					boardControllerCreateBoard: jest.fn(),
+					boardControllerCreateBoard: vi.fn(),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "BoardApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 
@@ -337,9 +329,9 @@ describe("course-room module", () => {
 
 			it("should call api to create a list board", async () => {
 				const mockApi = {
-					boardControllerCreateBoard: jest.fn(),
+					boardControllerCreateBoard: vi.fn(),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "BoardApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 
@@ -360,11 +352,11 @@ describe("course-room module", () => {
 
 			it("should catch error in catch block", async () => {
 				const mockApi = {
-					boardControllerCreateBoard: jest
+					boardControllerCreateBoard: vi
 						.fn()
 						.mockRejectedValue(badRequestError),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "BoardApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 
@@ -389,9 +381,9 @@ describe("course-room module", () => {
 		describe("deleteBoard", () => {
 			it("should call api to delete a board", async () => {
 				const mockApi = {
-					boardControllerDeleteBoard: jest.fn(),
+					boardControllerDeleteBoard: vi.fn(),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "BoardApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 
@@ -407,11 +399,11 @@ describe("course-room module", () => {
 
 			it("should catch error in catch block", async () => {
 				const mockApi = {
-					boardControllerDeleteBoard: jest
+					boardControllerDeleteBoard: vi
 						.fn()
 						.mockRejectedValue(badRequestError),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "BoardApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 
@@ -431,14 +423,14 @@ describe("course-room module", () => {
 			it("should call backend api", async () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const mockApi: CommonCartridgeApiInterface = {
-					commonCartridgeControllerExportCourse: jest.fn(
+					commonCartridgeControllerExportCourse: vi.fn(
 						() => Promise.resolve() as unknown as AxiosPromise<void>
 					),
-					commonCartridgeControllerImportCourse: jest.fn(
+					commonCartridgeControllerImportCourse: vi.fn(
 						() => Promise.resolve() as unknown as AxiosPromise<void>
 					),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(commonCartridgeApi, "CommonCartridgeApiFactory")
 					.mockReturnValue(mockApi);
 
@@ -461,14 +453,14 @@ describe("course-room module", () => {
 			it("should catch error in catch block", async () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const mockApi: CommonCartridgeApiInterface = {
-					commonCartridgeControllerExportCourse: jest.fn(() =>
+					commonCartridgeControllerExportCourse: vi.fn(() =>
 						Promise.reject(badRequestError)
 					),
-					commonCartridgeControllerImportCourse: jest.fn(() =>
+					commonCartridgeControllerImportCourse: vi.fn(() =>
 						Promise.reject(badRequestError)
 					),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(commonCartridgeApi, "CommonCartridgeApiFactory")
 					.mockReturnValue(mockApi);
 
@@ -507,18 +499,18 @@ describe("course-room module", () => {
 					} as AxiosInstance);
 				})();
 				const mockApi = {
-					taskControllerFinish: jest.fn(),
+					taskControllerFinish: vi.fn(),
 				};
-				jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+				vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.TaskApiInterface
+				);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const setBusinessErrorSpy = jest.spyOn(
+				const setBusinessErrorSpy = vi.spyOn(
 					courseRoomDetailsModule,
 					"setBusinessError"
 				);
-				const resetBusinessErrorSpy = jest.spyOn(
+				const resetBusinessErrorSpy = vi.spyOn(
 					courseRoomDetailsModule,
 					"resetBusinessError"
 				);
@@ -550,17 +542,17 @@ describe("course-room module", () => {
 						throw badRequestError;
 					},
 				};
-				jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+				vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.TaskApiInterface
+				);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const finishTaskSpy = jest.spyOn(courseRoomDetailsModule, "finishTask");
-				const setBusinessErrorSpy = jest.spyOn(
+				const finishTaskSpy = vi.spyOn(courseRoomDetailsModule, "finishTask");
+				const setBusinessErrorSpy = vi.spyOn(
 					courseRoomDetailsModule,
 					"setBusinessError"
 				);
-				const resetBusinessErrorSpy = jest.spyOn(
+				const resetBusinessErrorSpy = vi.spyOn(
 					courseRoomDetailsModule,
 					"resetBusinessError"
 				);
@@ -602,7 +594,7 @@ describe("course-room module", () => {
 					} as AxiosInstance);
 				})();
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const fetchScopePermissionSpy = jest.spyOn(
+				const fetchScopePermissionSpy = vi.spyOn(
 					courseRoomDetailsModule,
 					"fetchScopePermission"
 				);
@@ -695,7 +687,7 @@ describe("course-room module", () => {
 			])(
 				"should create an application-error for http-error(%p)",
 				async (code) => {
-					const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
+					const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
 					const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 
 					const errorData = axiosErrorFactory.build({

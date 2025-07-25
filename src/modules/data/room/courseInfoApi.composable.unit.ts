@@ -5,7 +5,7 @@ import {
 	CourseStatus,
 } from "@/serverApi/v3/api";
 import { mockApiResponse } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance } from "axios";
 import { initializeAxios } from "@/utils/api";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
@@ -19,14 +19,12 @@ describe("courseInfoApi.composable", () => {
 		courseInfoApi = createMock<serverApi.CourseInfoApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
 
-		jest
-			.spyOn(serverApi, "CourseInfoApiFactory")
-			.mockReturnValue(courseInfoApi);
+		vi.spyOn(serverApi, "CourseInfoApiFactory").mockReturnValue(courseInfoApi);
 		initializeAxios(axiosMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("loadCoursesForSchool", () => {

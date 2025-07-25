@@ -77,12 +77,9 @@
 
 <script setup lang="ts">
 import { BoardColumn } from "@/types/board/Board";
-import { DragAndDropKey } from "@/types/board/DragAndDrop";
-import {
-	useBoardPermissions,
-	useBoardStore,
-	useForceRender,
-} from "@data-board";
+import { useBoardPermissions, useForceRender } from "@data-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
@@ -183,7 +180,7 @@ const onDragEnd = async (event: SortableEvent) => {
 const onMoveCardKeyboard = (
 	cardIndex: number,
 	cardId: string | undefined,
-	keyString: DragAndDropKey
+	keyString: string
 ) => {
 	if (cardId === undefined) return;
 	if (!hasEditPermission.value) return;

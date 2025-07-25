@@ -1,7 +1,6 @@
 import { notifierModule } from "@/store";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
-import { delay } from "@/utils/helpers";
 import { meResponseFactory } from "@@/tests/test-utils";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
@@ -11,8 +10,9 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
 import { default as NewTeacher } from "./TeacherCreate.page.vue";
+import { flushPromises } from "@vue/test-utils";
 
-jest.mock("@/utils/pageTitle", () => ({
+vi.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
@@ -45,7 +45,7 @@ describe("teachers/new", () => {
 	});
 
 	it("should call 'createTeacher' action", async () => {
-		const createTeacherStub = jest.fn();
+		const createTeacherStub = vi.fn();
 		const mockStore = createMockStore(createTeacherStub);
 		const mockMe = meResponseFactory.build();
 
@@ -78,17 +78,17 @@ describe("teachers/new", () => {
 			.trigger("click");
 
 		// we need to wait until everything is settled
-		await delay(10);
+		await flushPromises();
 
 		expect(createTeacherStub).toHaveBeenCalled();
 	});
 
 	it("should call notifier successful", async () => {
-		const createTeacherStub = jest.fn();
+		const createTeacherStub = vi.fn();
 		const mockStore = createMockStore(createTeacherStub);
 		const mockMe = meResponseFactory.build();
 
-		const notifierModuleMock = jest.spyOn(notifierModule, "show");
+		const notifierModuleMock = vi.spyOn(notifierModule, "show");
 		const wrapper = mount(NewTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -117,13 +117,13 @@ describe("teachers/new", () => {
 			.trigger("click");
 
 		// we need to wait until everything is settled
-		await delay(10);
+		await flushPromises();
 
 		expect(notifierModuleMock).toHaveBeenCalled();
 	});
 
 	it("should show error", async () => {
-		const failingCreateAction = jest.fn(() => Promise.reject());
+		const failingCreateAction = vi.fn(() => Promise.reject());
 		const mockStore = createMockStore(failingCreateAction);
 		const mockMe = meResponseFactory.build();
 
@@ -163,7 +163,7 @@ describe("teachers/new", () => {
 			.trigger("click");
 
 		// we need to wait until everything is settled
-		await delay(10);
+		await flushPromises();
 
 		errorMessageComponent = wrapper.find(".info-message.bc-error");
 		expect(errorMessageComponent.exists()).toBeTruthy();

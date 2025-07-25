@@ -4,13 +4,11 @@ import {
 	RouteLocationNormalized,
 	NavigationGuardNext,
 } from "vue-router";
-
-import Mock = jest.Mock;
 import { authModule, envConfigModule } from "@/store";
 
-const mockError = jest.fn();
+const mockError = vi.fn();
 
-jest.mock("@/store", () => ({
+vi.mock("@/store", () => ({
 	authModule: {
 		getUserPermissions: [],
 	},
@@ -24,7 +22,7 @@ jest.mock("@/store", () => ({
 
 describe("roomPermissionGuard", () => {
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (
@@ -34,7 +32,7 @@ describe("roomPermissionGuard", () => {
 		}
 	) => {
 		const route: RouteLocationNormalized = {} as RouteLocationNormalized;
-		const next: Mock<NavigationGuardNext> = jest.fn();
+		const next: NavigationGuardNext = vi.fn();
 
 		envConfigModule.getEnv.FEATURE_ROOM_ADD_STUDENTS_ENABLED =
 			options.featureFlag ?? true;

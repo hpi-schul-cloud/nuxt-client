@@ -6,22 +6,22 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { APPLICATION_ERROR_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
-	apiResponseErrorFactory,
 	apiValidationResponseErrorFactory,
+	axiosErrorFactory,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import H5pEditorPage from "./H5PEditor.page.vue";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 
-jest.mock("./h5pEditorBoardHooks.composable");
+vi.mock("./h5pEditorBoardHooks.composable");
 
 describe("H5PEditorPage", () => {
 	let useH5pEditorBoardHooksMock: DeepMocked<
@@ -31,13 +31,13 @@ describe("H5PEditorPage", () => {
 	beforeEach(() => {
 		useH5pEditorBoardHooksMock = createMock();
 
-		jest
-			.mocked(useH5pEditorBoardHooks)
-			.mockReturnValue(useH5pEditorBoardHooksMock);
+		vi.mocked(useH5pEditorBoardHooks).mockReturnValue(
+			useH5pEditorBoardHooksMock
+		);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const getWrapper = (
@@ -50,7 +50,7 @@ describe("H5PEditorPage", () => {
 		const notifierModule = createModuleMocks(NotifierModule);
 		const applicationErrorModule = createModuleMocks(ApplicationErrorModule);
 
-		const saveFn = jest.fn();
+		const saveFn = vi.fn();
 
 		const wrapper = mount(H5pEditorPage, {
 			global: {
@@ -87,7 +87,9 @@ describe("H5PEditorPage", () => {
 					parentId: "parentId",
 				});
 
-				expect(wrapper.vm.hooks).toBeUndefined();
+				expect(
+					(wrapper.vm as unknown as typeof H5pEditorPage).hooks
+				).toBeUndefined();
 			});
 		});
 
@@ -108,10 +110,11 @@ describe("H5PEditorPage", () => {
 			describe("when onCreate hook fails", () => {
 				const setup = () => {
 					const error = createApplicationError(HttpStatusCode.NotFound);
+					const axiosError = axiosErrorFactory
+						.withStatusCode(error.statusCode)
+						.build();
 
-					useH5pEditorBoardHooksMock.onCreate.mockRejectedValueOnce(
-						apiResponseErrorFactory.build({ code: error.statusCode })
-					);
+					useH5pEditorBoardHooksMock.onCreate.mockRejectedValueOnce(axiosError);
 
 					const { applicationErrorModule } = getWrapper({
 						parentType: H5PContentParentType.BOARD_ELEMENT,
@@ -138,13 +141,16 @@ describe("H5PEditorPage", () => {
 	describe("H5P Editor", () => {
 		describe("when the editor has a loading error", () => {
 			const setup = () => {
+				const error = createApplicationError(HttpStatusCode.BadRequest);
+				const axiosError = axiosErrorFactory
+					.withStatusCode(error.statusCode)
+					.build();
+
+				useH5pEditorBoardHooksMock.onCreate.mockRejectedValueOnce(axiosError);
+
 				const { wrapper, applicationErrorModule } = getWrapper({
 					parentType: H5PContentParentType.BOARD_ELEMENT,
 					parentId: "parentId",
-				});
-
-				const error = apiResponseErrorFactory.build({
-					code: HttpStatusCode.BadRequest,
 				});
 
 				return {
@@ -161,9 +167,7 @@ describe("H5PEditorPage", () => {
 				h5pEditor.vm.$emit("load-error", error);
 				await nextTick();
 
-				expect(applicationErrorModule.setError).toHaveBeenCalledWith(
-					createApplicationError(error.code)
-				);
+				expect(applicationErrorModule.setError).toHaveBeenCalledWith(error);
 			});
 		});
 
@@ -182,7 +186,7 @@ describe("H5PEditorPage", () => {
 					parentId: "parentId",
 				});
 
-				jest.spyOn(window, "dispatchEvent").mockImplementation(jest.fn());
+				vi.spyOn(window, "dispatchEvent").mockImplementation(vi.fn());
 				saveFn.mockResolvedValue(response);
 
 				return {
@@ -251,7 +255,7 @@ describe("H5PEditorPage", () => {
 					parentId: "parentId",
 				});
 
-				jest.spyOn(window, "dispatchEvent").mockImplementation(jest.fn());
+				vi.spyOn(window, "dispatchEvent").mockImplementation(vi.fn());
 				saveFn.mockRejectedValue(apiValidationResponseErrorFactory.build());
 
 				return {
@@ -308,7 +312,7 @@ describe("H5PEditorPage", () => {
 					parentId: "parentId",
 				});
 
-				jest.spyOn(window, "dispatchEvent").mockImplementation(jest.fn());
+				vi.spyOn(window, "dispatchEvent").mockImplementation(vi.fn());
 				saveFn.mockResolvedValue(response);
 				useH5pEditorBoardHooksMock.afterSave.mockRejectedValue(new Error());
 

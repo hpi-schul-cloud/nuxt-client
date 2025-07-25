@@ -14,7 +14,7 @@ export const useSchoolLicenseStore = defineStore("schoolLicenseStore", () => {
 	const isLoading: Ref<boolean> = ref(false);
 
 	const getLicenseIdentifier = (
-		mediumId: string,
+		mediumId?: string,
 		mediaSourceId?: string
 	): string => `${mediumId} ${mediaSourceId}`;
 
@@ -34,7 +34,7 @@ export const useSchoolLicenseStore = defineStore("schoolLicenseStore", () => {
 		isLoading.value = false;
 	};
 
-	const isLicensed = (mediumId: string, mediaSourceId?: string): boolean => {
+	const isLicensed = (mediumId?: string, mediaSourceId?: string): boolean => {
 		const hasLicense: boolean = mediaSchoolLicenses.value.has(
 			getLicenseIdentifier(mediumId, mediaSourceId)
 		);
