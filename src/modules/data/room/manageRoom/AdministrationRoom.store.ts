@@ -46,12 +46,13 @@ export const useAdministrationRoomStore = defineStore(
 				isLoading.value = true;
 				const { data } = (await roomApi.roomControllerGetRoomStats()).data;
 
-				if (data && data.length !== 0) {
-					isEmptyList.value = false;
-					roomList.value = sortAndFormatList(data);
+				if (data && data.length === 0) {
+					isEmptyList.value = true;
 					return;
 				}
+
 				isEmptyList.value = false;
+				roomList.value = sortAndFormatList(data);
 			} catch {
 				showFailure(t("pages.rooms.administration.error.load"));
 				isEmptyList.value = true;

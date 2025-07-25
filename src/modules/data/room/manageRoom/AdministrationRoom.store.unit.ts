@@ -1,6 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { useAdministrationRoomStore } from "@data-room";
-
 import { useI18n } from "vue-i18n";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
