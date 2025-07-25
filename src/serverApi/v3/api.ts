@@ -1808,6 +1808,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_ADMINISTRATE_ROOMS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: boolean;
     /**
      * 
