@@ -3,7 +3,7 @@ import { useAdministrationRoomStore } from "@data-room";
 
 import { useI18n } from "vue-i18n";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance, AxiosPromise } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { initializeAxios } from "@/utils/api";
@@ -15,12 +15,13 @@ import { roomAdministrationFactory, schoolFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
+import { Mock } from "vitest";
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("useAdministrationRoomStore", () => {
 	let roomAdministrationApiMock: DeepMocked<serverApi.RoomApiInterface>;
@@ -34,9 +35,9 @@ describe("useAdministrationRoomStore", () => {
 	beforeEach(() => {
 		setActivePinia(createPinia());
 		roomAdministrationApiMock = createMock<serverApi.RoomApiInterface>();
-		jest
-			.spyOn(serverApi, "RoomApiFactory")
-			.mockReturnValue(roomAdministrationApiMock);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(
+			roomAdministrationApiMock
+		);
 		axiosMock = createMock<AxiosInstance>();
 		initializeAxios(axiosMock);
 
@@ -52,7 +53,7 @@ describe("useAdministrationRoomStore", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (roomList: RoomStatsItemResponse[] = []) => {

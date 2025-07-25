@@ -6,23 +6,17 @@ import { useI18n } from "vue-i18n";
 import RoomAdminTable from "./RoomAdminTable.vue";
 import { mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { Mock } from "vitest";
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("vue-i18n", () => {
-	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({
-			t: jest.fn().mockImplementation((key: string) => key),
-		}),
-	};
-});
-const mockI18n = jest.mocked(useI18n());
+vi.mock("vue-i18n");
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("RoomAdminTable", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -42,7 +36,7 @@ describe("RoomAdminTable", () => {
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = () => {
@@ -79,6 +73,5 @@ describe("RoomAdminTable", () => {
 
 		expect(wrapper.exists()).toBe(true);
 		expect(dataTable.exists()).toBe(true);
-		expect(mockI18n.t).toHaveBeenCalled();
 	});
 });

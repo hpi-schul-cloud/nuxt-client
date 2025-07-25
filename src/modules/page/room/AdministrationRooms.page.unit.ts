@@ -6,15 +6,14 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useAdministrationRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
-import { nextTick } from "vue";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("AdministrationRooms.page", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -34,7 +33,7 @@ describe("AdministrationRooms.page", () => {
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (options?: { isEmptyList?: boolean }) => {
@@ -68,7 +67,7 @@ describe("AdministrationRooms.page", () => {
 	};
 
 	describe("rendering", () => {
-		it("renders the page and Table components ", async () => {
+		it("should render the page and Table components ", async () => {
 			const { wrapper } = setup();
 			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
 			const emptyStateComponent = wrapper.findComponent({ name: "EmptyState" });
@@ -78,7 +77,7 @@ describe("AdministrationRooms.page", () => {
 			expect(emptyStateComponent.exists()).toBe(false);
 		});
 
-		it("renders the EmptyState component when isEmptyList is true", async () => {
+		it("should render the EmptyState component when isEmptyList is true", async () => {
 			const { wrapper } = setup({ isEmptyList: true });
 			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
 			const emptyStateComponent = wrapper.findComponent({ name: "EmptyState" });
@@ -88,12 +87,11 @@ describe("AdministrationRooms.page", () => {
 			expect(emptyStateComponent.exists()).toBe(true);
 		});
 
-		it("calls fetchRooms on mount", async () => {
-			const { adminRoomStore } = setup();
-			const fetchRoomsSpy = jest.spyOn(adminRoomStore, "fetchRooms");
-			await nextTick();
+		it("should call fetchRooms on mount", async () => {
+			const { adminRoomStore, wrapper } = setup();
+			await wrapper.vm.$nextTick();
 
-			expect(fetchRoomsSpy).toHaveBeenCalled();
+			expect(adminRoomStore.fetchRooms).toHaveBeenCalled();
 		});
 
 		it("should pass the correct breadcrumbs to the page", () => {
