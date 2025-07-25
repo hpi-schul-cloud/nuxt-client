@@ -2071,6 +2071,7 @@ export default {
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Action menu for room “{roomName}”",
 	"pages.rooms.administration.error.load": "The room list could not be loaded.",
+	"pages.rooms.administration.pageTitle": "Manage rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",

@@ -31,7 +31,8 @@ import { RoomAdminTable } from "@feature-room";
 import { useAdministrationRoomStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
-import { useElementBounding } from "@vueuse/core";
+import { useElementBounding, useTitle } from "@vueuse/core";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 const { t } = useI18n();
 
@@ -45,6 +46,11 @@ const { bottom: headerBottom } = useElementBounding(header);
 onMounted(async () => {
 	await fetchRooms();
 });
+
+const pageTitle = computed(() =>
+	buildPageTitle(t("pages.rooms.administration.pageTitle"))
+);
+useTitle(pageTitle);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	return [

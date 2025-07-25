@@ -2142,6 +2142,7 @@ export default {
 		"Menú de acciones para la sala “{roomName}”",
 	"pages.rooms.administration.error.load":
 		"No se pudo cargar la lista de salas.",
+	"pages.rooms.administration.pageTitle": "Administrar salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",

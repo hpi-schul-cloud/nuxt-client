@@ -2106,6 +2106,7 @@ export default {
 		"Aktionsmenü für den Raum “{linkTitle}”",
 	"pages.rooms.administration.error.load":
 		"Die Raumliste konnte nicht geladen werden.",
+	"pages.rooms.administration.pageTitle": "Räume verwalten",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",

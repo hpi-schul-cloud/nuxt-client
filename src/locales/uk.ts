@@ -2108,6 +2108,7 @@ export default {
 		"Меню дій для кімнати “{roomName}”",
 	"pages.rooms.administration.error.load":
 		"Не вдалося завантажити список кімнат.",
+	"pages.rooms.administration.pageTitle": "Керування кімнатами",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",
