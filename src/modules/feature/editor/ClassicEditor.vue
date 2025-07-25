@@ -85,7 +85,7 @@ const handleReady = (editor: Editor) => {
 .ck-content {
 	ul,
 	ol {
-		padding-left: revert;
+		padding-left: revert !important;
 	}
 }
 
@@ -98,7 +98,10 @@ const handleReady = (editor: Editor) => {
 	box-shadow: none !important;
 }
 
+// TODO - remove important when CKEditor 5 is updated or adjusted to a version that supports custom styles with vite
+// https://github.com/ckeditor/ckeditor5/issues/13709
+// https://ckeditor.com/docs/ckeditor5/latest/getting-started/legacy/advanced/alternative-setups/integrating-from-source-vite.html
 .ck.ck-toolbar {
-	border: none;
+	border: none !important;
 }
 </style>

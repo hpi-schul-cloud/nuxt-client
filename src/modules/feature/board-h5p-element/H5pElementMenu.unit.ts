@@ -28,7 +28,7 @@ describe("H5pElementMenu", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("Move Up Button", () => {

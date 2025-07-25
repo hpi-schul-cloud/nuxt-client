@@ -24,26 +24,31 @@ import {
 	useRoomDetailsStore,
 	useRoomMembersStore,
 } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
+import { Mock, MockInstance } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("useRoomMembers", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
-	let consoleErrorSpy: jest.SpyInstance;
+	let consoleErrorSpy: MockInstance;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	const ownSchool = {
+		id: "school-id",
+		name: "Paul-Gerhardt-Gymnasium",
+	};
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -51,10 +56,10 @@ describe("useRoomMembers", () => {
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
-		consoleErrorSpy = jest.spyOn(logger, "error").mockImplementation();
+		consoleErrorSpy = vi.spyOn(logger, "error").mockImplementation(vi.fn());
 
-		jest.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
-		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
+		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
 		initializeAxios(axiosMock);
 
 		mockedBoardNotifierCalls =
@@ -66,12 +71,7 @@ describe("useRoomMembers", () => {
 			authModule: AuthModule,
 		});
 
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			})
-		);
+		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 
 		const mockMe = meResponseFactory.build();
 		authModule.setMe(mockMe);
@@ -88,7 +88,7 @@ describe("useRoomMembers", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 		consoleErrorSpy.mockRestore();
 	});
 
@@ -349,6 +349,49 @@ describe("useRoomMembers", () => {
 		});
 	});
 
+	describe("isCurrentUserStudent", () => {
+		describe("when the current user is a student", () => {
+			it("should return true", () => {
+				const currentUser = meResponseFactory.build({
+					roles: [{ id: "student-id", name: RoleName.Student }],
+				});
+				authModule.setMe(currentUser);
+
+				const { roomMembersStore } = setup();
+
+				const roomMembers = roomMemberFactory.buildList(2, {
+					roomRoleName: RoleName.Roomviewer,
+				});
+
+				roomMembers[0].schoolRoleNames = [RoleName.Student];
+				roomMembers[0].userId = currentUser.user.id;
+				roomMembersStore.roomMembers = [...roomMembers];
+
+				expect(roomMembersStore.isCurrentUserStudent).toBe(true);
+			});
+		});
+		describe("when the current user is not a student", () => {
+			it("should return false", () => {
+				const currentUser = meResponseFactory.build({
+					roles: [{ id: "teacher-id", name: RoleName.Teacher }],
+				});
+				authModule.setMe(currentUser);
+
+				const { roomMembersStore } = setup();
+
+				const roomMembers = roomMemberFactory.buildList(2, {
+					roomRoleName: RoleName.Roomviewer,
+				});
+
+				roomMembers[0].schoolRoleNames = [RoleName.Teacher];
+				roomMembers[0].userId = currentUser.user.id;
+				roomMembersStore.roomMembers = [...roomMembers];
+
+				expect(roomMembersStore.isCurrentUserStudent).toBe(false);
+			});
+		});
+	});
+
 	describe("loadSchoolList", () => {
 		it("should get schools", async () => {
 			const { roomMembersStore } = setup();
@@ -363,10 +406,7 @@ describe("useRoomMembers", () => {
 			await roomMembersStore.loadSchoolList();
 
 			expect(roomMembersStore.schools).toHaveLength(schoolList.total);
-			expect(roomMembersStore.schools[0]).toStrictEqual({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			});
+			expect(roomMembersStore.schools[0]).toStrictEqual(ownSchool);
 		});
 
 		it("should get schools pagewise if more than 1000 schools", async () => {
@@ -395,10 +435,7 @@ describe("useRoomMembers", () => {
 			await roomMembersStore.loadSchoolList();
 
 			expect(roomMembersStore.schools).toHaveLength(totalCount + 1);
-			expect(roomMembersStore.schools[0]).toStrictEqual({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			});
+			expect(roomMembersStore.schools[0]).toStrictEqual(ownSchool);
 			expect(schoolApiMock.schoolControllerGetSchoolList).toHaveBeenCalledTimes(
 				4
 			);
@@ -413,6 +450,34 @@ describe("useRoomMembers", () => {
 			await roomMembersStore.loadSchoolList();
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+		});
+
+		describe("when the current user is a student", () => {
+			it("should not fetch the school list", async () => {
+				const currentUser = meResponseFactory.build({
+					roles: [{ id: "student-id", name: RoleName.Student }],
+				});
+				authModule.setMe(currentUser);
+				const { roomMembersStore } = setup();
+
+				const roomMembers = roomMemberFactory.buildList(2, {
+					roomRoleName: RoleName.Roomviewer,
+				});
+
+				roomMembers[0].schoolRoleNames = [RoleName.Student];
+				roomMembers[0].userId = currentUser.user.id;
+				roomMembersStore.roomMembers = [...roomMembers];
+
+				await roomMembersStore.loadSchoolList();
+
+				const schoolList = roomMembersStore.schools;
+
+				expect(
+					schoolApiMock.schoolControllerGetSchoolList
+				).not.toHaveBeenCalled();
+				expect(schoolList).toHaveLength(1);
+				expect(schoolList[0]).toStrictEqual(ownSchool);
+			});
 		});
 	});
 
@@ -913,7 +978,8 @@ describe("useRoomMembers", () => {
 			roomMembersStore.resetStore();
 			expect(roomMembersStore.roomMembers).toHaveLength(0);
 			expect(roomMembersStore.potentialRoomMembers).toHaveLength(0);
-			expect(roomMembersStore.schools).toHaveLength(0);
+			expect(roomMembersStore.schools).toHaveLength(1);
+			expect(roomMembersStore.schools[0]).toStrictEqual(ownSchool);
 			expect(roomMembersStore.selectedIds).toHaveLength(0);
 			expect(roomMembersStore.isLoading).toBe(false);
 		});

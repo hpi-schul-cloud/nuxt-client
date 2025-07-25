@@ -126,10 +126,11 @@ import {
 import {
 	useBoardInactivity,
 	useBoardPermissions,
-	useBoardStore,
 	useCardStore,
 	useSharedBoardPageInformation,
 } from "@data-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -138,8 +139,9 @@ import {
 	extractDataAttribute,
 	useBoardNotifier,
 	useElementFocus,
-	useSharedEditMode,
 } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import {
@@ -202,7 +204,7 @@ const {
 	hasCreateToolPermission,
 	hasDeletePermission,
 	hasEditPermission,
-	isTeacher,
+	arePermissionsLoaded,
 } = useBoardPermissions();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
@@ -328,20 +330,19 @@ watch(
 	() => focusNodeFromHash()
 );
 
-watch(
-	() => isBoardVisible.value,
-	() => {
-		if (!(isBoardVisible.value || isTeacher.value)) {
-			router.replace({ name: "room-details", params: { id: roomId.value } });
-			applicationErrorModule.setError(
-				createApplicationError(
-					HttpStatusCode.Forbidden,
-					t("components.board.error.403")
-				)
-			);
-		}
+watch([isBoardVisible, arePermissionsLoaded], () => {
+	const canAccessBoard = isBoardVisible.value || hasEditPermission.value;
+
+	if (arePermissionsLoaded?.value && !canAccessBoard) {
+		router.replace({ name: "room-details", params: { id: roomId.value } });
+		applicationErrorModule.setError(
+			createApplicationError(
+				HttpStatusCode.Forbidden,
+				t("components.board.error.403")
+			)
+		);
 	}
-);
+});
 
 const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.copyResult.title.loading")

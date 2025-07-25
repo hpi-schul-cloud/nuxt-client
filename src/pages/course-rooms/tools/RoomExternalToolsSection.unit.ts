@@ -11,18 +11,19 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { ExternalToolDisplayData } from "@data-external-tool";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount, MountingOptions } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
+import { Mock } from "vitest";
 
-jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
-const useRouterMock = <jest.Mock>useRouter;
+const useRouterMock = <Mock>useRouter;
 
 describe("RoomExternalToolsSection", () => {
 	const getWrapper = (props: {
@@ -62,7 +63,7 @@ describe("RoomExternalToolsSection", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when there are tools in the list", () => {

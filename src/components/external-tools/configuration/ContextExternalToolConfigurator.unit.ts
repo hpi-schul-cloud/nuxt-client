@@ -24,16 +24,14 @@ import {
 	useContextExternalToolConfigurationState,
 	useContextExternalToolState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
-import { nextTick, ref } from "vue";
+import { Component, nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.vue";
 
-jest.mock(
-	"@data-external-tool/contextExternalToolConfigurationState.composable"
-);
-jest.mock("@data-external-tool/contextExternalToolState.composable");
+vi.mock("@data-external-tool/contextExternalToolConfigurationState.composable");
+vi.mock("@data-external-tool/contextExternalToolState.composable");
 
 describe("CourseContextExternalToolConfigurator", () => {
 	let useContextExternalToolConfigurationStateMock: DeepMocked<
@@ -89,16 +87,16 @@ describe("CourseContextExternalToolConfigurator", () => {
 			contextExternalTool: ref(),
 		});
 
-		jest
-			.mocked(useContextExternalToolConfigurationState)
-			.mockReturnValue(useContextExternalToolConfigurationStateMock);
-		jest
-			.mocked(useContextExternalToolState)
-			.mockReturnValue(useContextExternalToolStateMock);
+		vi.mocked(useContextExternalToolConfigurationState).mockReturnValue(
+			useContextExternalToolConfigurationStateMock
+		);
+		vi.mocked(useContextExternalToolState).mockReturnValue(
+			useContextExternalToolStateMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchData", () => {
@@ -212,7 +210,9 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 			await wrapper.vm.fetchData();
 
-			wrapper.findComponent(ExternalToolConfigurator).vm.$emit("cancel");
+			wrapper
+				.findComponent(ExternalToolConfigurator as Component)
+				.vm.$emit("cancel");
 			await nextTick();
 
 			expect(wrapper.emitted("cancel")).toBeDefined();
@@ -252,7 +252,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 				const testValue = "test";
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, [
 						{
 							name: template.parameters[0].name,
@@ -281,7 +281,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 				const { wrapper, template } = await setup();
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, []);
 				await nextTick();
 
@@ -324,7 +324,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 				const { wrapper, template, contextExternalTool } = await setup();
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, []);
 				await nextTick();
 
@@ -346,7 +346,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 				const { wrapper, template } = await setup();
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, []);
 				await nextTick();
 
@@ -375,7 +375,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 				const { wrapper } = await setup();
 
 				wrapper
-					.findComponent(ExternalToolConfigurator)
+					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit(
 						"save",
 						contextExternalToolConfigurationTemplateFactory.build(),

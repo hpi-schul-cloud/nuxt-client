@@ -21,7 +21,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 
 const getWrapper = () => {
 	return mount(CourseRoomList, {
@@ -93,6 +93,7 @@ describe("@/pages/CourseRoomListPage", () => {
 			envConfigModule: EnvConfigModule,
 		});
 		courseRoomListModule.setAllElements(mockData);
+		courseRoomListModule.fetchAllElements = vi.fn();
 	});
 
 	describe("when data is not loaded yet", () => {

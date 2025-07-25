@@ -22,9 +22,9 @@ import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { useStorage } from "@/composables/locale-storage.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { computed, defineComponent, onUnmounted } from "vue";
-import { buildPageTitle } from "@/utils/pageTitle";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -41,9 +41,8 @@ export default defineComponent({
 		];
 		const { t } = useI18n();
 		const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
-		const performanceNavigation = window.performance.getEntriesByType(
-			"navigation"
-		)[0] as PerformanceNavigationTiming;
+		const performanceNavigation =
+			window.performance.getEntriesByType("navigation")[0];
 
 		const getError = () => {
 			const [statusCode, translationKey, isTldrawError] = storage.getMultiple([
@@ -53,8 +52,8 @@ export default defineComponent({
 			]);
 
 			if (
-				performanceNavigation.type === "reload" ||
-				(performanceNavigation.type === "navigate" && isTldrawError)
+				performanceNavigation.entryType === "reload" ||
+				(performanceNavigation.entryType === "navigate" && isTldrawError)
 			) {
 				return {
 					statusCode: Number(statusCode),

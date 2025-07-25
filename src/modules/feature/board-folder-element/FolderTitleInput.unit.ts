@@ -19,7 +19,7 @@ describe("FolderTitleInput.vue", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = () => {

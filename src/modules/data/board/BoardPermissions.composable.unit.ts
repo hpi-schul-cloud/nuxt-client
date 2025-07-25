@@ -10,7 +10,7 @@ import {
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { setActivePinia } from "pinia";
@@ -21,35 +21,36 @@ import { useBoardStore } from "./Board.store";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardPermissions } from "./BoardPermissions.composable";
 
-jest.mock("@data-board/BoardPageInformation.composable");
-const mockedUseSharedBoardPageInformation = jest.mocked(
+vi.mock("vue-router");
+vi.mock("@data-board/BoardPageInformation.composable");
+const mockedUseSharedBoardPageInformation = vi.mocked(
 	useSharedBoardPageInformation
 );
 
-jest.mock<typeof import("@/utils/create-shared-composable")>(
+vi.mock(
 	"@/utils/create-shared-composable",
-	() => ({
-		createTestableSharedComposable: (composable) => composable,
-	})
+	() =>
+		({
+			createTestableSharedComposable: (composable) => composable,
+		}) as typeof import("@/utils/create-shared-composable")
 );
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({
-			t: jest.fn().mockImplementation((key: string) => key),
-			n: jest.fn().mockImplementation((key: string) => key),
+		useI18n: vi.fn().mockReturnValue({
+			t: vi.fn().mockImplementation((key: string) => key),
+			n: vi.fn().mockImplementation((key: string) => key),
 		}),
 	};
 });
 
-jest.mocked(useI18n());
+vi.mocked(useI18n());
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+vi.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("BoardPermissions.composable", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
@@ -67,7 +68,7 @@ describe("BoardPermissions.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setupAllStores = (
@@ -100,12 +101,12 @@ describe("BoardPermissions.composable", () => {
 
 		const contextTypeRef = ref(contextType);
 		mockedUseSharedBoardPageInformation.mockReturnValue({
-			createPageInformation: jest.fn(),
+			createPageInformation: vi.fn(),
 			breadcrumbs: computed(() => []),
 			contextType: computed(() => contextTypeRef.value),
 			pageTitle: computed(() => "page-title"),
 			roomId: computed(() => roomId),
-			resetPageInformation: jest.fn(),
+			resetPageInformation: vi.fn(),
 		});
 
 		setupStores({
@@ -157,6 +158,7 @@ describe("BoardPermissions.composable", () => {
 				hasDeletePermission,
 				hasCreateToolPermission,
 				hasEditPermission,
+				hasShareBoardPermission,
 				isTeacher,
 				isStudent,
 			} = useBoardPermissions();
@@ -167,6 +169,7 @@ describe("BoardPermissions.composable", () => {
 			expect(hasDeletePermission.value).toBe(false);
 			expect(hasCreateToolPermission.value).toBe(false);
 			expect(hasEditPermission.value).toBe(false);
+			expect(hasShareBoardPermission.value).toBe(false);
 
 			expect(isTeacher.value).toBe(false);
 			expect(isStudent.value).toBe(true);
@@ -178,7 +181,7 @@ describe("BoardPermissions.composable", () => {
 			setupAllStores({
 				userRoles: [RoleName.Teacher],
 				userPermissions: [Permission.ContextToolAdmin],
-				boardPermissions: [Permission.BoardEdit],
+				boardPermissions: [Permission.BoardEdit, Permission.BoardShareBoard],
 			});
 
 			const {
@@ -190,6 +193,7 @@ describe("BoardPermissions.composable", () => {
 				hasEditPermission,
 				isTeacher,
 				isStudent,
+				hasShareBoardPermission,
 			} = useBoardPermissions();
 
 			expect(hasMovePermission.value).toBe(true);
@@ -198,6 +202,7 @@ describe("BoardPermissions.composable", () => {
 			expect(hasDeletePermission.value).toBe(true);
 			expect(hasCreateToolPermission.value).toBe(true);
 			expect(hasEditPermission.value).toBe(true);
+			expect(hasShareBoardPermission.value).toBe(true);
 
 			expect(isTeacher.value).toBe(true);
 			expect(isStudent.value).toBe(false);

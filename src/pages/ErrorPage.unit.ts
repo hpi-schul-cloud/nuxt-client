@@ -1,50 +1,58 @@
-import ErrorPage from "./Error.page.vue";
-import { mount } from "@vue/test-utils";
-import ApplicationErrorModule from "@/store/application-error";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
+import ApplicationErrorModule from "@/store/application-error";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import ErrorPage from "./Error.page.vue";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
-jest.mock("@/composables/locale-storage.composable", () => ({
+vi.mock("@/composables/locale-storage.composable", () => ({
 	useStorage: () => ({
-		set: jest.fn(),
-		get: jest.fn(),
-		getMultiple: jest.fn().mockReturnValue([401, "de.unauthorized", false]),
-		remove: jest.fn(),
+		set: vi.fn(),
+		get: vi.fn(),
+		getMultiple: vi.fn().mockReturnValue([401, "de.unauthorized", false]),
+		remove: vi.fn(),
 	}),
 }));
 
 describe("@pages/Error.page.vue", () => {
-	beforeEach(() => {
-		Object.defineProperty(window, "location", {
-			configurable: true,
-			value: { assign: jest.fn() },
-		});
-		Object.defineProperty(window, "performance", {
-			value: {
-				getEntriesByType: jest.fn(), // for reload checking (see component)
-				now: jest.fn(), // for vue metrics
-			},
-		});
-		(window.performance.getEntriesByType as jest.Mock).mockReturnValue([
-			{ type: "navigate" },
-		]);
-	});
-
 	const mountComponent = (
 		statusCode: HttpStatusCode | null = 400,
 		translationKey = "error.400"
 	) => {
+		vi.spyOn(window.performance, "getEntriesByType").mockReturnValue([
+			{
+				entryType: "navigate",
+				duration: 0,
+				name: "",
+				startTime: 0,
+				toJSON: function () {
+					throw new Error("Function not implemented.");
+				},
+			},
+		]);
+
+		Object.defineProperty(window, "location", {
+			configurable: true,
+			value: {
+				...window.location,
+				assign: vi.fn(),
+			},
+		});
+
 		return mount(ErrorPage, {
 			global: {
 				plugins: [

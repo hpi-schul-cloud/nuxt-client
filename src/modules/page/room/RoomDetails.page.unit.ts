@@ -6,6 +6,7 @@ import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
+
 import {
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -34,7 +35,7 @@ import {
 	useRoomsState,
 } from "@data-room";
 import { RoomMenu } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -44,29 +45,31 @@ import {
 	SelectBoardLayoutDialog,
 } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
+import { Mock } from "vitest";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn().mockReturnValue({
-		push: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn().mockReturnValue({
+		push: vi.fn(),
 	}),
 }));
 
-jest.mock("@data-room/Rooms.state");
+vi.mock("@data-room/Rooms.state");
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = jest.mocked(useRoomAuthorization);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorization = vi.mocked(useRoomAuthorization);
 
-jest.mock("@ui-confirmation-dialog");
-jest.mocked(useConfirmationDialog);
+vi.mock("@ui-confirmation-dialog");
+vi.mocked(useConfirmationDialog);
 
 describe("@pages/RoomsDetails.page.vue", () => {
 	let useRoomsStateMock: DeepMocked<ReturnType<typeof useRoomsState>>;
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
-	let askConfirmationMock: jest.Mock;
+	let askConfirmationMock: Mock;
 
 	beforeEach(() => {
+		vi.useFakeTimers();
 		setupStores({
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
@@ -77,12 +80,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			isEmpty: ref(false),
 			rooms: ref([]),
 		});
-		jest.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
+		vi.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
 
 		const mockMe = meResponseFactory.build();
 		authModule.setMe(mockMe);
 
-		askConfirmationMock = jest.fn();
+		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});
@@ -100,12 +103,15 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			canSeeAllStudents: ref(false),
 			canCopyRoom: ref(false),
 			canShareRoom: ref(false),
+			canManageRoomInvitationLinks: ref(false),
+			canListDrafts: ref(false),
+			canManageVideoconferences: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (
@@ -324,12 +330,13 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		const openSpeedDialMenu = async (wrapper: VueWrapper) => {
 			const speedDialMenu = wrapper.getComponent({ name: "speed-dial-menu" });
 			await speedDialMenu.getComponent({ name: "v-btn" }).trigger("click");
+			vi.advanceTimersByTime(1000); // speed dial renders items delayed
 			await flushPromises();
 		};
 
-		describe("and user does not have 'room_create' permission", () => {
+		describe("and user does not have permission to edit room content", () => {
 			it("should not render speed dial menu", () => {
-				roomPermissions.canCreateRoom.value = false;
+				roomPermissions.canEditRoomContent.value = false;
 				const { wrapper } = setup();
 
 				const fabButton = wrapper.findComponent(
@@ -342,7 +349,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and multiple board layouts are enabled", () => {
 			beforeEach(() => {
-				roomPermissions.canCreateRoom.value = true;
 				roomPermissions.canEditRoomContent.value = true;
 			});
 
@@ -419,7 +425,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and only column board is enabled", () => {
 			beforeEach(() => {
-				roomPermissions.canCreateRoom.value = true;
 				roomPermissions.canEditRoomContent.value = true;
 			});
 
@@ -473,42 +478,74 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 	});
 
-	describe("when some boards are in draft mode", () => {
-		const setupWithBoards = (totalCount = 3, inDraftMode = 1) => {
-			const visibleCount = totalCount - inDraftMode;
-			const visibleBoards = roomBoardTileListFactory.buildList(visibleCount);
-			const draftBoards = roomBoardTileListFactory.buildList(inDraftMode, {
-				isVisible: false,
+	describe("room boards", () => {
+		describe("when user can view room", () => {
+			beforeEach(() => {
+				roomPermissions.canViewRoom.value = true;
 			});
-			const roomBoards = [...visibleBoards, ...draftBoards];
-			const { wrapper } = setup({ roomBoards });
-			return {
-				wrapper,
-				visibleCount,
-				draftCount: draftBoards.length,
-				totalCount,
-			};
-		};
 
-		describe("when user canEditRoomContent", () => {
-			it("should render board tiles in draft mode", () => {
-				roomPermissions.canEditRoomContent.value = true;
-				const { wrapper, totalCount } = setupWithBoards();
+			it("should render room boards", () => {
+				const { wrapper } = setup({
+					roomBoards: roomBoardTileListFactory.buildList(3),
+				});
 
 				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
 
-				expect(boardTiles.length).toStrictEqual(totalCount);
+				expect(boardTiles.length).toBe(3);
+			});
+
+			describe("when some boards are in draft mode", () => {
+				const setupWithBoards = (totalCount = 3, inDraftMode = 1) => {
+					const visibleCount = totalCount - inDraftMode;
+					const visibleBoards =
+						roomBoardTileListFactory.buildList(visibleCount);
+					const draftBoards = roomBoardTileListFactory.buildList(inDraftMode, {
+						isVisible: false,
+					});
+					const roomBoards = [...visibleBoards, ...draftBoards];
+					const { wrapper } = setup({ roomBoards });
+					return {
+						wrapper,
+						visibleCount,
+						draftCount: draftBoards.length,
+						totalCount,
+					};
+				};
+
+				describe("when user can see drafts", () => {
+					it("should render board tiles in draft mode", () => {
+						roomPermissions.canListDrafts.value = true;
+						const { wrapper, totalCount } = setupWithBoards();
+
+						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
+
+						expect(boardTiles.length).toStrictEqual(totalCount);
+					});
+				});
+
+				describe("when user cannot see draft content", () => {
+					it("should not render board tiles in draft mode", () => {
+						roomPermissions.canListDrafts.value = false;
+						const { wrapper, visibleCount } = setupWithBoards();
+
+						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
+
+						expect(boardTiles.length).toStrictEqual(visibleCount);
+					});
+				});
 			});
 		});
 
-		describe("when user can not edit room content", () => {
-			it("should not render board tiles in draft mode", () => {
-				roomPermissions.canEditRoomContent.value = false;
-				const { wrapper, visibleCount } = setupWithBoards();
+		describe("when user cannot view room", () => {
+			it("should not render room boards", () => {
+				roomPermissions.canViewRoom.value = false;
+				const { wrapper } = setup({
+					roomBoards: roomBoardTileListFactory.buildList(3),
+				});
 
 				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
 
-				expect(boardTiles.length).toStrictEqual(visibleCount);
+				expect(boardTiles.length).toBe(0);
 			});
 		});
 	});

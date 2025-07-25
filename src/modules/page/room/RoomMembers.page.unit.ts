@@ -30,7 +30,7 @@ import {
 	useRoomMembersStore,
 } from "@data-room";
 import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPlus } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -39,28 +39,33 @@ import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { useBoardNotifier } from "@util-board";
 import { ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
-import { VBtn, VDialog, VTab, VTabs } from "vuetify/components";
+import {
+	VBtn,
+	VDialog,
+	VSkeletonLoader,
+	VTab,
+	VTabs,
+} from "vuetify/components";
 import RoomMembersPage from "./RoomMembers.page.vue";
+import { Mock } from "vitest";
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
-const useRouteMock = <jest.Mock>useRoute;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 
-jest.mock("@vueuse/integrations"); // mock focus trap from add members because we use mount
+vi.mock("@ui-confirmation-dialog");
+const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
-jest.mock("@ui-confirmation-dialog");
-const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorization = vi.mocked(useRoomAuthorization);
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = jest.mocked(useRoomAuthorization);
-
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
-	let askConfirmationMock: jest.Mock;
+	let askConfirmationMock: Mock;
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
@@ -96,7 +101,7 @@ describe("RoomMembersPage", () => {
 		});
 		useRouterMock.mockReturnValue(router);
 
-		askConfirmationMock = jest.fn();
+		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});
@@ -114,6 +119,9 @@ describe("RoomMembersPage", () => {
 			canEditRoomContent: ref(false),
 			canSeeAllStudents: ref(false),
 			canShareRoom: ref(false),
+			canManageRoomInvitationLinks: ref(false),
+			canListDrafts: ref(false),
+			canManageVideoconferences: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 
@@ -125,11 +133,18 @@ describe("RoomMembersPage", () => {
 		createRoom?: boolean;
 		isFeatureRoomMembersTabsEnabled?: boolean;
 		activeTab?: Tab;
+		isLoading?: boolean;
 	}) => {
-		const { createRoom, isFeatureRoomMembersTabsEnabled, activeTab } = {
+		const {
+			createRoom,
+			isFeatureRoomMembersTabsEnabled,
+			activeTab,
+			isLoading,
+		} = {
 			createRoom: true,
 			isFeatureRoomMembersTabsEnabled: true,
 			activeTab: Tab.Members,
+			isLoading: false,
 
 			...options,
 		};
@@ -160,7 +175,7 @@ describe("RoomMembersPage", () => {
 					createTestingPinia({
 						initialState: {
 							roomDetailsStore: {
-								isLoading: false,
+								isLoading,
 								room,
 							},
 							roomInvitationLinkStore: {
@@ -181,6 +196,7 @@ describe("RoomMembersPage", () => {
 					LeaveRoomProhibitedDialog: true,
 					AddMembers: true,
 					Members: true,
+					InviteMembersDialog: true,
 				},
 			},
 
@@ -574,7 +590,7 @@ describe("RoomMembersPage", () => {
 
 	describe("Tabnavigation", () => {
 		it("should not render tabs when isVisibleTabNavigation is false", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canManageRoomInvitationLinks.value = true;
 			const { wrapper } = setup({ isFeatureRoomMembersTabsEnabled: false });
 
 			const tabs = wrapper.findComponent(VTabs);
@@ -583,7 +599,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should render all tabs when isVisibleTabNavigation is true", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canManageRoomInvitationLinks.value = true;
 			const { wrapper } = setup({
 				isFeatureRoomMembersTabsEnabled: true,
 			});
@@ -624,7 +640,7 @@ describe("RoomMembersPage", () => {
 		it.each(Object.values(Tab))(
 			"should default to members tab if the feature is not enabled, regardless of the active tab (%s)",
 			(activeTab) => {
-				roomPermissions.canAddRoomMembers.value = true;
+				roomPermissions.canManageRoomInvitationLinks.value = true;
 				setup({
 					isFeatureRoomMembersTabsEnabled: false,
 					activeTab,
@@ -637,13 +653,29 @@ describe("RoomMembersPage", () => {
 		);
 
 		it("should set the active tab to the one passed in props if the feature is enabled", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canManageRoomInvitationLinks.value = true;
 			const { wrapper } = setup({
 				activeTab: Tab.Invitations,
 			});
 
 			const tabs = wrapper.findComponent(VTabs);
 			expect(tabs.props("modelValue")).toBe(Tab.Invitations);
+		});
+	});
+
+	describe("skeleton loader", () => {
+		it("should show skeleton loader when room is loading", () => {
+			const { wrapper } = setup({ isLoading: true });
+
+			const skeletonLoader = wrapper.findComponent(VSkeletonLoader);
+			expect(skeletonLoader.exists()).toBe(true);
+		});
+
+		it("should not show skeleton loader when room is loaded", () => {
+			const { wrapper } = setup({ isLoading: false });
+
+			const skeletonLoader = wrapper.findComponent(VSkeletonLoader);
+			expect(skeletonLoader.exists()).toBe(false);
 		});
 	});
 });

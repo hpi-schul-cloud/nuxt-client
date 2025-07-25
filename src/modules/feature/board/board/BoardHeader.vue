@@ -32,7 +32,10 @@
 			>
 				<KebabMenuActionRename @click="onStartEditMode" />
 				<KebabMenuActionCopy @click="onCopyBoard" />
-				<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
+				<KebabMenuActionShare
+					v-if="isShareEnabled && hasShareBoardPermission"
+					@click="onShareBoard"
+				/>
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
@@ -49,7 +52,9 @@
 <script setup lang="ts">
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { BoardMenuScope } from "@ui-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import {
 	KebabMenuActionCopy,
 	KebabMenuActionDelete,
@@ -59,7 +64,8 @@ import {
 	KebabMenuActionShare,
 	KebabMenuActionChangeLayout,
 } from "@ui-kebab-menu";
-import { useCourseBoardEditMode } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
@@ -99,7 +105,7 @@ const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
 );
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
-const { hasEditPermission } = useBoardPermissions();
+const { hasEditPermission, hasShareBoardPermission } = useBoardPermissions();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
@@ -128,7 +134,7 @@ const onCopyBoard = () => {
 };
 
 const onShareBoard = () => {
-	if (!hasEditPermission.value) return;
+	if (!hasShareBoardPermission.value) return;
 	emit("share:board");
 };
 
@@ -186,6 +192,7 @@ const calculateWidth = () => {
 };
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
 const isShareEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE
 );

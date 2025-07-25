@@ -18,14 +18,6 @@ export interface DragObject {
 	willAcceptDrop: boolean;
 }
 
-export type DragAndDropKey =
-	| "ArrowUp"
-	| "ArrowDown"
-	| "ArrowLeft"
-	| "ArrowRight"
-	| " "
-	| "Enter";
-
 export const cardDropPlaceholderOptions = {
 	className: "rounded-sm grey lighten-1 my-3 mx-3",
 	animationDuration: "150",
@@ -38,7 +30,4 @@ export const columnDropPlaceholderOptions = {
 	showOnTop: true,
 };
 
-export const verticalCursorKeys: (DragAndDropKey | string)[] = [
-	"ArrowUp",
-	"ArrowDown",
-];
+export const verticalCursorKeys: string[] = ["ArrowUp", "ArrowDown"];

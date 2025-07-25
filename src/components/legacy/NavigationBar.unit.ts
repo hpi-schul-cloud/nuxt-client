@@ -54,14 +54,16 @@ describe("@/components/legacy/NavigationBar", () => {
 		envConfigModule.setEnvs(envs);
 		const { wrapper, img } = getWrapper();
 
+		const wrapperVm = wrapper.vm as unknown as typeof NavigationBar;
+
 		expect(wrapper.find(".logo.logo-full").exists()).toBe(true);
 		expect(wrapper.find(".logo.logo-full").attributes("src")).toBe(img);
 
 		expect(wrapper.find(".link-container").exists()).toBe(true);
-		expect(wrapper.vm.linksToDisplay).toHaveLength(3);
+		expect(wrapperVm.linksToDisplay).toHaveLength(3);
 
 		expect(wrapper.find(".buttons-container").exists()).toBe(true);
-		expect(wrapper.vm.hasButtons).toBe(true);
+		expect(wrapperVm.hasButtons).toBe(true);
 	});
 
 	it.each([SchulcloudTheme.N21, SchulcloudTheme.Brb])(
@@ -70,15 +72,16 @@ describe("@/components/legacy/NavigationBar", () => {
 			const envs = envsFactory.build({ SC_THEME: theme });
 			envConfigModule.setEnvs(envs);
 			const { wrapper, img } = getWrapper();
+			const wrapperVm = wrapper.vm as unknown as typeof NavigationBar;
 
 			expect(wrapper.find(".logo.logo-full").exists()).toBe(true);
 			expect(wrapper.find(".logo.logo-full").attributes("src")).toBe(img);
 
 			expect(wrapper.find(".link-container").exists()).toBe(false);
-			expect(wrapper.vm.linksToDisplay).toHaveLength(0);
+			expect(wrapperVm.linksToDisplay).toHaveLength(0);
 
 			expect(wrapper.find(".buttons-container").exists()).toBe(false);
-			expect(wrapper.vm.hasButtons).toBe(false);
+			expect(wrapperVm.hasButtons).toBe(false);
 		}
 	);
 });

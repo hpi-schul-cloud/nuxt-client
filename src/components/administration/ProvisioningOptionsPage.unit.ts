@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
@@ -15,7 +16,7 @@ import {
 	ProvisioningOptions,
 	useProvisioningOptionsState,
 } from "@data-provisioning-options";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
@@ -23,20 +24,25 @@ import { Router, useRouter } from "vue-router";
 import { VCheckboxBtn } from "vuetify/lib/components/index";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 
-jest.mock("@data-provisioning-options");
+vi.mock("@data-provisioning-options");
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
-
-jest
-	.spyOn(window, "scrollTo")
-	.mockImplementation(() => ({ top: 0, behavior: "smooth" }));
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
 describe("ProvisioningOptionsPage", () => {
+	vi.spyOn(window, "scrollTo").mockImplementation(() => ({
+		top: 0,
+		behavior: "smooth",
+	}));
+
 	let useProvisioningOptionsStateMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsState>
 	>;
@@ -84,13 +90,13 @@ describe("ProvisioningOptionsPage", () => {
 			error: ref(),
 		});
 
-		jest
-			.mocked(useProvisioningOptionsState)
-			.mockReturnValue(useProvisioningOptionsStateMock);
+		vi.mocked(useProvisioningOptionsState).mockReturnValue(
+			useProvisioningOptionsStateMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("breadcrumbs", () => {
@@ -313,7 +319,7 @@ describe("ProvisioningOptionsPage", () => {
 
 			describe("when disabling options", () => {
 				beforeEach(() => {
-					jest.clearAllMocks();
+					vi.clearAllMocks();
 				});
 				const setup = async () => {
 					useProvisioningOptionsStateMock.provisioningOptionsData.value =

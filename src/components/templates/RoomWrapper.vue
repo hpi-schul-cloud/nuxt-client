@@ -129,7 +129,7 @@ const isEmptyState: ComputedRef<boolean> = computed(() => {
 	);
 });
 
-const fabItemClickHandler = (event: RoomFabEvent): void => {
+const fabItemClickHandler = (event: string | undefined): void => {
 	if (event === RoomFabEvent.SYNCHRONIZED_COURSE) {
 		isCourseSyncDialogOpen.value = true;
 	} else if (event === RoomFabEvent.COMMON_CARTRIDGE_IMPORT) {

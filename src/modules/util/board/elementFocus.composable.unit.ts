@@ -1,4 +1,4 @@
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { useElementFocus } from "./elementFocus.composable";
 
 describe("elementFocus.composable", () => {
@@ -12,7 +12,7 @@ describe("elementFocus.composable", () => {
 			});
 
 			const domElementMock = createMock<HTMLElement>();
-			const querySelectorSpy = jest.spyOn(document, "querySelector");
+			const querySelectorSpy = vi.spyOn(document, "querySelector");
 			querySelectorSpy.mockReturnValueOnce(domElementMock);
 
 			return {

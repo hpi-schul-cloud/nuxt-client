@@ -10,6 +10,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import RoomTaskCard from "./RoomTaskCard.vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { nextTick } from "vue";
 
 const testTask = {
@@ -181,7 +182,7 @@ const studentTestTask = {
 };
 
 const mockRouter = {
-	push: jest.fn(),
+	push: vi.fn(),
 };
 
 const getWrapper = (
@@ -195,12 +196,19 @@ const getWrapper = (
 ) => {
 	Object.defineProperty(window, "location", {
 		configurable: true,
-		value: { assign: jest.fn() },
+		value: { assign: vi.fn() },
 	});
 
 	return mount(RoomTaskCard, {
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
+			plugins: [
+				createTestingVuetify(),
+				createTestingI18n(),
+				vueDompurifyHTMLPlugin,
+			],
+			mocks: {
+				$router: mockRouter,
+			},
 		},
 		props: {
 			room: {
@@ -214,9 +222,6 @@ const getWrapper = (
 			userRole: props.userRole,
 		},
 		...options,
-		mocks: {
-			$router: mockRouter,
-		},
 	});
 };
 
@@ -237,11 +242,12 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 		it("should redirect to homework page", async () => {
 			const wrapper = getWrapper({ task: testTask, userRole });
+			const locationSpy = vi.spyOn(window.location, "assign");
 			const taskCard = wrapper.find(".task-card");
 
 			await taskCard.trigger("click");
 
-			expect(window.location.assign).toHaveBeenCalledWith("/homework/123");
+			expect(locationSpy).toHaveBeenCalledWith("/homework/123");
 		});
 
 		it("should NOT redirect to homework page if dragging is in progress", async () => {
@@ -250,11 +256,12 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				userRole,
 				dragInProgress: true,
 			});
+			const locationSpy = vi.spyOn(window.location, "assign");
 			const taskCard = wrapper.find(".task-card");
 
 			await taskCard.trigger("click");
 
-			expect(window.location.assign).toHaveBeenCalledTimes(0);
+			expect(locationSpy).toHaveBeenCalledTimes(0);
 		});
 
 		it("should have correct combined title for published task with due date ", () => {
@@ -295,12 +302,12 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 		it("should show or hide description area", async () => {
 			const wrapper = getWrapper({ task: testTask, userRole });
-			wrapper.vm.canShowDescription = true;
+			(wrapper.vm as unknown as typeof RoomTaskCard).canShowDescription = true;
 			const descElement = wrapper.findAll(".text-description");
 
 			expect(descElement.length).toStrictEqual(0);
 
-			await wrapper.vm.$nextTick();
+			await nextTick();
 
 			const descElementAfter = wrapper.findAll(".text-description");
 			expect(descElementAfter.length).toStrictEqual(1);
@@ -440,10 +447,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
-				const wrapper = getWrapper({
-					task: finishedTestTask,
-					userRole,
-				});
+				const restoreCardMock = vi.fn();
+				const wrapper = getWrapper({ task: finishedTestTask, userRole });
+				(wrapper.vm as unknown as typeof RoomTaskCard).restoreCard =
+					restoreCardMock;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
@@ -471,10 +478,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'publishCard' method when 'Publish' button is clicked on a draft", async () => {
-				const wrapper = getWrapper({
-					task: draftTestTask,
-					userRole,
-				});
+				const publishCardMock = vi.fn();
+				const wrapper = getWrapper({ task: draftTestTask, userRole });
+				(wrapper.vm as unknown as typeof RoomTaskCard).publishCard =
+					publishCardMock;
 
 				const actionButton = wrapper.findComponent(
 					`[data-testid="task-card-action-publish-0"]`
@@ -487,10 +494,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'publishCard' method when 'Publish' button is clicked on a planned task", async () => {
-				const wrapper = getWrapper({
-					task: plannedTestTask,
-					userRole,
-				});
+				const publishCardMock = vi.fn();
+				const wrapper = getWrapper({ task: plannedTestTask, userRole });
+				(wrapper.vm as unknown as typeof RoomTaskCard).publishCard =
+					publishCardMock;
 
 				const actionButton = wrapper.find(
 					`[data-testid="task-card-action-publish-0"]`
@@ -546,12 +553,14 @@ describe("@/components/molecules/RoomTaskCard", () => {
 					},
 				};
 				const wrapper = getWrapper({ ...localProps, userRole });
-				const { vm } = wrapper;
-				expect(vm.isPlanned).toBe(false);
+
+				expect((wrapper.vm as unknown as typeof RoomTaskCard).isPlanned).toBe(
+					false
+				);
 			});
 
 			it("should return true value after calculated isPlanned() method", () => {
-				jest.useFakeTimers().setSystemTime(new Date()); // this line sets a permanent fake time
+				vi.useFakeTimers().setSystemTime(new Date()); // this line sets a permanent fake time
 				const inFutureDate = new Date(Date.now() + 5001);
 				const localProps = {
 					...testTask,
@@ -576,8 +585,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 					},
 				};
 				const wrapper = getWrapper({ ...localProps, userRole });
-				const { vm } = wrapper;
-				expect(vm.isPlanned).toBe(true);
+
+				expect((wrapper.vm as unknown as typeof RoomTaskCard).isPlanned).toBe(
+					true
+				);
 			});
 
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
@@ -587,10 +598,9 @@ describe("@/components/molecules/RoomTaskCard", () => {
 							FEATURE_COPY_SERVICE_ENABLED: true,
 						});
 						envConfigModule.setEnvs(envs);
-						const wrapper = getWrapper({
-							task: testTask,
-							userRole,
-						});
+						const copyCard = vi.fn();
+						const wrapper = getWrapper({ task: testTask, userRole });
+						(wrapper.vm as unknown as typeof RoomTaskCard).copyCard = copyCard;
 
 						const threeDotButton = wrapper.find(".three-dot-button");
 						await threeDotButton.trigger("click");
@@ -638,11 +648,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should have finish button if task is not marked as finished", async () => {
-				const wrapper = getWrapper({
-					task: studentTestTask,
-					userRole,
-				});
-
+				const finishCardMock = vi.fn();
+				const wrapper = getWrapper({ task: studentTestTask, userRole });
+				(wrapper.vm as unknown as typeof RoomTaskCard).finishCard =
+					finishCardMock;
 				const actionButton = wrapper.findComponent(
 					`[data-testid="task-card-action-done-0"]`
 				);
@@ -656,10 +665,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
-				const wrapper = getWrapper({
-					task: studentFinishedTestTask,
-					userRole,
-				});
+				const restoreCardMock = vi.fn();
+				const wrapper = getWrapper({ task: studentFinishedTestTask, userRole });
+				(wrapper.vm as unknown as typeof RoomTaskCard).restoreCard =
+					restoreCardMock;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
@@ -819,10 +828,12 @@ describe("@/components/molecules/RoomTaskCard", () => {
 		it("should call 'handleClick' event when 'enter' key is pressed", async () => {
 			const wrapper = getWrapper({ task: testTask, userRole });
 
+			const locationSpy = vi.spyOn(window.location, "assign");
+
 			await wrapper.trigger("keydown.enter");
 			await nextTick();
 
-			expect(window.location.assign).toHaveBeenCalledWith("/homework/123");
+			expect(locationSpy).toHaveBeenCalledWith("/homework/123");
 		});
 
 		it("should call 'onKeyPress' event when 'up, down, space' keys are pressed", async () => {

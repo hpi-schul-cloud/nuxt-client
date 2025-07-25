@@ -35,7 +35,7 @@ const mockItems: CopyResultItem[] = [
 	},
 ];
 
-const createWrapper = (props: object) => {
+const createWrapper = (props: { items: CopyResultItem[] }) => {
 	return mount(CopyResultModalList, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],

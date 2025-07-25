@@ -1,6 +1,6 @@
 import { createPinia, setActivePinia } from "pinia";
 import { useRoomDetailsStore, RoomVariant } from "./RoomDetails.store";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance } from "axios";
 import * as serverApi from "@/serverApi/v3/api";
 import { useApplicationError } from "@/composables/application-error.composable";
@@ -10,14 +10,16 @@ import {
 	axiosErrorFactory,
 	mockApiResponse,
 } from "@@/tests/test-utils";
+import { RoomColor } from "@/serverApi/v3/api";
+import { RoomUpdateParams } from "@/types/room/Room";
 
-jest.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = jest.mocked(
+vi.mock("@/utils/api");
+const mockedMapAxiosErrorToResponseError = vi.mocked(
 	mapAxiosErrorToResponseError
 );
 
-jest.mock("@/composables/application-error.composable");
-const mockedCreateApplicationError = jest.mocked(useApplicationError);
+vi.mock("@/composables/application-error.composable");
+const mockedCreateApplicationError = vi.mocked(useApplicationError);
 
 const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	const expectedPayload = apiResponseErrorFactory.build({
@@ -51,13 +53,13 @@ describe("useRoomDetailsStore", () => {
 			mockedCreateApplicationErrorCalls
 		);
 
-		jest.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
-		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApiMock);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
+		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApiMock);
 		initializeAxios(axiosMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (
@@ -164,5 +166,48 @@ describe("useRoomDetailsStore", () => {
 				layout,
 			});
 		});
+	});
+
+	describe("updateRoom", () => {
+		it("should call updateRoom api", async () => {
+			const { store } = setup();
+			expect(store.isLoading).toBe(true);
+			const params: RoomUpdateParams = {
+				name: "room-name",
+				color: RoomColor.BlueGrey,
+				features: [],
+			};
+
+			await store.updateRoom("room-id", params);
+
+			expect(roomApiMock.roomControllerUpdateRoom).toHaveBeenCalledWith(
+				"room-id",
+				params
+			);
+
+			expect(store.isLoading).toBe(false);
+		});
+	});
+
+	it("should throw an error when updating room data fails", async () => {
+		const { store } = setup();
+		const params: RoomUpdateParams = {
+			name: "room-name",
+			color: RoomColor.BlueGrey,
+			features: [],
+		};
+		roomApiMock.roomControllerUpdateRoom.mockRejectedValue({ code: 404 });
+
+		expect(roomApiMock.roomControllerUpdateRoom).not.toHaveBeenCalledWith(
+			"room-id",
+			params
+		);
+
+		await store.updateRoom("room-id", params).catch(() => {
+			expect(mockedMapAxiosErrorToResponseError).toHaveBeenCalledWith({
+				code: 404,
+			});
+		});
+		expect(store.isLoading).toBe(false);
 	});
 });

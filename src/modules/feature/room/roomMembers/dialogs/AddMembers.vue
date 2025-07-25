@@ -17,7 +17,7 @@
 					item-value="id"
 					:items="schools"
 					:label="t('global.sidebar.item.school')"
-					:disabled="isItemListDisabled"
+					:disabled="isItemListDisabled || (isSchoolSelectionDisabled ?? false)"
 					:aria-disabled="isItemListDisabled"
 					@update:model-value="onValueChange"
 					@update:menu="onItemListToggle"
@@ -48,14 +48,24 @@
 			</div>
 
 			<InfoAlert
-				v-if="showStudentRestrictionInfo"
+				v-if="
+					determineStudentAlertType === StudentAlertTypeEnum.StudentVisibility
+				"
 				data-testid="student-visibility-info-alert"
-				>{{ t("pages.rooms.members.add.students.forbidden") }}</InfoAlert
 			>
+				{{ t("pages.rooms.members.add.students.forbidden") }}
+			</InfoAlert>
 
-			<WarningAlert v-if="isStudentSelectionDisabled">{{
-				t("pages.rooms.members.add.warningText")
-			}}</WarningAlert>
+			<InfoAlert
+				v-if="determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin"
+				data-testid="student-admin-info-alert"
+			>
+				{{ t("pages.rooms.members.add.students.studentAdmins") }}
+			</InfoAlert>
+
+			<WarningAlert v-if="isStudentSelectionDisabled">
+				{{ t("pages.rooms.members.add.warningText") }}
+			</WarningAlert>
 
 			<div class="mt-4" data-testid="add-participant-name">
 				<v-autocomplete
@@ -106,11 +116,22 @@ import { computed, onMounted, ref } from "vue";
 import { RoleName } from "@/serverApi/v3";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VAutocomplete, VCard, VSelect } from "vuetify/lib/components";
+import type { VAutocomplete, VCard, VSelect } from "vuetify/components";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+
+interface SchoolRoleItem {
+	id: RoleName;
+	name: string;
+	icon: string;
+}
+
+enum StudentAlertTypeEnum {
+	StudentAdmin = "STUDENT_ADMIN",
+	StudentVisibility = "STUDENT_VISIBILITY",
+}
 
 const emit = defineEmits<{
 	(e: "close"): void;
@@ -119,7 +140,8 @@ const emit = defineEmits<{
 const { t } = useI18n();
 
 const roomMembersStore = useRoomMembersStore();
-const { potentialRoomMembers, schools } = storeToRefs(roomMembersStore);
+const { isCurrentUserStudent, potentialRoomMembers, schools } =
+	storeToRefs(roomMembersStore);
 const { addMembers, getPotentialMembers, resetPotentialMembers } =
 	roomMembersStore;
 
@@ -132,12 +154,6 @@ const canAddAllStudents = computed(() => {
 });
 
 const selectedSchool = ref(schools.value[0].id);
-
-interface SchoolRoleItem {
-	id: RoleName;
-	name: string;
-	icon: string;
-}
 
 const schoolRoles: SchoolRoleItem[] = [
 	{
@@ -181,20 +197,38 @@ const { pause, unpause } = useFocusTrap(addMembersContent, {
 	immediate: true,
 });
 
+const isSchoolSelectionDisabled = computed(() => {
+	return isCurrentUserStudent.value;
+});
+
 const isStudentSelectionDisabled = computed(() => {
 	const isExternalSchoolSelected = selectedSchool.value !== schools.value[0].id;
 	const isStudentRoleSelected = selectedSchoolRole.value === RoleName.Student;
 	return isExternalSchoolSelected && isStudentRoleSelected;
 });
 
-const isRestrictedStudentCase = computed(() => {
+const isRestrictedStudentVisibilityCase = computed(() => {
 	return (
 		selectedSchoolRole.value === RoleName.Student && !canAddAllStudents.value
 	);
 });
 
-const showStudentRestrictionInfo = computed(() => {
-	return isRestrictedStudentCase.value && !isStudentSelectionDisabled.value;
+const determineStudentAlertType = computed<StudentAlertTypeEnum | null>(() => {
+	if (
+		selectedSchoolRole.value === RoleName.Student &&
+		isCurrentUserStudent.value
+	) {
+		return StudentAlertTypeEnum.StudentAdmin;
+	}
+
+	if (
+		isRestrictedStudentVisibilityCase.value &&
+		!isStudentSelectionDisabled.value
+	) {
+		return StudentAlertTypeEnum.StudentVisibility;
+	}
+
+	return null;
 });
 
 const autoCompleteSchool = ref<VAutocomplete>();

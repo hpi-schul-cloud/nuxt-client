@@ -5,22 +5,20 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useI18n } from "vue-i18n";
 import { useCollaborativeTextEditorNotifier } from "./CollaborativeTextEditorNotifications.composable";
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({
-			t: jest
+		useI18n: vi.fn().mockReturnValue({
+			t: vi
 				.fn()
 				.mockImplementation(
 					(key: string, dynamic?: object): string =>
 						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
 				),
-			n: jest.fn().mockImplementation((key: string) => key),
 		}),
 	};
 });
 
-const mockI18nModule = jest.mocked(useI18n());
+const mockI18nModule = vi.mocked(useI18n());
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -36,7 +34,7 @@ const setupMountComposable = () => {
 
 describe("CollaborativeTextEditorNotifications.composable", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when showForbiddenError called", () => {

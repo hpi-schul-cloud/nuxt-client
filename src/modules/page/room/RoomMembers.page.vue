@@ -44,7 +44,16 @@
 			</div>
 		</template>
 
-		<VTabsWindow v-model="activeTab" class="room-members-tabs-window mt-12">
+		<VContainer v-if="isLoading">
+			<VSkeletonLoader type="table" class="mt-6" />
+		</VContainer>
+
+		<VTabsWindow
+			v-else
+			v-model="activeTab"
+			class="room-members-tabs-window"
+			:class="{ 'mt-12': canAddRoomMembers }"
+		>
 			<VTabsWindowItem
 				v-for="tabItem in tabs"
 				:key="tabItem.value"
@@ -138,7 +147,7 @@ const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { xs, mdAndUp } = useDisplay();
-const { room } = storeToRefs(useRoomDetailsStore());
+const { room, isLoading } = storeToRefs(useRoomDetailsStore());
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const { FEATURE_ROOM_MEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
 
@@ -154,7 +163,8 @@ const { fetchMembers, loadSchoolList, leaveRoom, resetStore } =
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
-const { canAddRoomMembers, canLeaveRoom } = useRoomAuthorization();
+const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks } =
+	useRoomAuthorization();
 
 const { isInvitationDialogOpen, invitationStep } = storeToRefs(
 	useRoomInvitationLinkStore()
@@ -177,12 +187,13 @@ watchEffect(() => {
 			? t("pages.rooms.members.management")
 			: t("pages.rooms.members.label");
 	}
+
 	if (room.value?.permissions) {
-		const restrictedTabsForStudents = [Tab.Invitations, Tab.Confirmations];
+		const permissionRestrictedTabs = [Tab.Invitations, Tab.Confirmations];
 
 		if (
-			restrictedTabsForStudents.includes(activeTab.value) &&
-			!canAddRoomMembers.value
+			permissionRestrictedTabs.includes(activeTab.value) &&
+			!canManageRoomInvitationLinks.value
 		) {
 			activeTab.value = Tab.Members;
 		}
@@ -195,7 +206,9 @@ const pageTitle = computed(() =>
 useTitle(pageTitle);
 
 const isVisibleTabNavigation = computed(() => {
-	return canAddRoomMembers.value && FEATURE_ROOM_MEMBERS_TABS_ENABLED;
+	return (
+		canManageRoomInvitationLinks.value && FEATURE_ROOM_MEMBERS_TABS_ENABLED
+	);
 });
 
 const tabs: Array<{
