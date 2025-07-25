@@ -41,21 +41,31 @@
 				</div>
 			</div>
 			<div class="mb-16">
-				<label class="mb-2">
+				<h2 class="mb-1 text-subtitle-1">
 					{{ t("components.roomForm.labels.videoConference.title") }}
-				</label>
-				<v-checkbox
-					:model-value="
-						roomData.features.includes(RoomFeatures.EditorManageVideoconference)
-					"
-					class="video-conference-checkbox"
-					data-testid="room-video-conference-checkbox"
-					:label="t('components.roomForm.labels.videoConference.label')"
-					:hide-details="true"
-					@click="onToggleVideoConferenceFeature"
-				/>
-				<div class="text-grey-darken-1 ms-8 helper-text">
-					{{ t("components.roomForm.labels.videoConference.helperText") }}
+				</h2>
+				<div class="d-flex mt-1">
+					<v-checkbox
+						:model-value="
+							roomData.features.includes(
+								RoomFeatures.EditorManageVideoconference
+							)
+						"
+						class="align-start video-conference-checkbox"
+						data-testid="room-video-conference-checkbox"
+						@update:model-value="onToggleVideoConferenceFeature"
+					>
+						<template #label>
+							<div class="d-flex flex-column mt-2">
+								{{ t("components.roomForm.labels.videoConference.label") }}
+								<span class="checkbox-label mb-1">
+									{{
+										t("components.roomForm.labels.videoConference.helperText")
+									}}
+								</span>
+							</div>
+						</template>
+					</v-checkbox>
 				</div>
 			</div>
 		</div>
@@ -197,14 +207,15 @@ const onUpdateEndDate = (newDate: string) => {
 	roomData.value.endDate = newDate;
 };
 
-const onToggleVideoConferenceFeature = () => {
+const onToggleVideoConferenceFeature = (isChecked: boolean | null) => {
 	const features = roomData.value.features;
 
 	const index = features.indexOf(RoomFeatures.EditorManageVideoconference);
-	if (index > -1) {
-		features.splice(index, 1);
-	} else {
+	if (isChecked && index === -1) {
 		features.push(RoomFeatures.EditorManageVideoconference);
+	}
+	if (!isChecked && index > -1) {
+		features.splice(index, 1);
 	}
 };
 
@@ -231,12 +242,14 @@ const onCancel = async () => {
 </script>
 
 <style lang="scss" scoped>
-.helper-text {
+.checkbox-label {
 	font-size: var(--text-sm);
-	margin-top: -12px;
+	opacity: var(--v-medium-emphasis-opacity);
 }
 
 .video-conference-checkbox {
-	margin-left: -8px;
+	::v-deep(.v-selection-control) {
+		align-items: flex-start;
+	}
 }
 </style>

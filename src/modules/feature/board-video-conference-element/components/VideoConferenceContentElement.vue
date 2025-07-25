@@ -184,7 +184,8 @@ const { modelValue, computedElement } = useContentElementState(props, {
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const route = useRoute();
 const boardId = route.params.id;
-const { isTeacher, isStudent } = useBoardPermissions();
+const { hasManageVideoConferencePermission, isTeacher, isStudent } =
+	useBoardPermissions();
 const { t } = useI18n();
 
 const isHidden = computed(
@@ -211,8 +212,7 @@ const canJoin = computed(
 			isWaitingRoomActive.value)
 );
 
-const { hasEditPermission } = useBoardPermissions();
-const canStart = computed(() => hasEditPermission.value);
+const canStart = computed(() => hasManageVideoConferencePermission.value);
 const isCreating = computed(
 	() => props.isEditMode && !computedElement.value.content.title
 );

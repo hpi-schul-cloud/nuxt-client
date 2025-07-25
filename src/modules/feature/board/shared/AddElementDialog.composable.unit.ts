@@ -9,7 +9,11 @@ import {
 	ObjectIdMock,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useBoardFeatures, useCardStore } from "@data-board";
+import {
+	useBoardFeatures,
+	useBoardPermissions,
+	useCardStore,
+} from "@data-board";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
@@ -19,9 +23,19 @@ import { ref } from "vue";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
 import { ElementTypeSelectionOptions } from "./SharedElementTypeSelection.composable";
+import {
+	BoardPermissionChecks,
+	defaultPermissions,
+} from "@/types/board/Permissions";
 
 vi.mock("vue-router");
 vi.mock("./SharedElementTypeSelection.composable");
+
+vi.mock("@data-board/BoardPermissions.composable");
+const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
+mockedUseBoardPermissions.mockReturnValue({
+	...defaultPermissions,
+});
 
 vi.mock("@/utils/inject");
 const mockedInjectStrict = vi.mocked(injectStrict);
@@ -318,7 +332,7 @@ describe("ElementTypeSelection Composable", () => {
 			expect(isDialogOpen.value).toBe(true);
 		});
 
-		it("should set staticElementTypeOptions", () => {
+		it("should set staticElementTypeOptions with all permissions true", () => {
 			const { askType, staticElementTypeOptions } = setup();
 
 			askType();
@@ -432,24 +446,40 @@ describe("ElementTypeSelection Composable", () => {
 	});
 
 	describe("staticElementTypeOptions actions", () => {
-		const setup = (
-			env: Partial<ConfigResponse> = {
-				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-				FEATURE_TLDRAW_ENABLED: true,
-				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
-				FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
-				FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
-				FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
-				FEATURE_COLUMN_BOARD_H5P_ENABLED: true,
-			}
-		) => {
+		const defaultEnv: Partial<ConfigResponse> = {
+			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+			FEATURE_TLDRAW_ENABLED: true,
+			FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
+			FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
+			FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
+			FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
+			FEATURE_COLUMN_BOARD_H5P_ENABLED: true,
+		};
+
+		const defaultHasManageVideoConferencePermission = false;
+
+		const setup = (options?: {
+			env?: Partial<ConfigResponse>;
+			hasManageVideoConferencePermission?: boolean;
+		}) => {
+			const mergedEnv = { ...defaultEnv, ...options?.env };
+			const hasManageVideoConferencePermission =
+				options?.hasManageVideoConferencePermission ??
+				defaultHasManageVideoConferencePermission;
+
 			const cardId = "cardId";
 			const addElementMock = vi.fn();
 			const closeDialogMock = vi.fn();
 			const { staticElementTypeOptions } = setupSharedElementTypeSelectionMock({
 				closeDialogMock,
 			});
+
+			mockedUseBoardPermissions.mockReturnValue({
+				hasManageVideoConferencePermission: ref(
+					hasManageVideoConferencePermission
+				),
+			} as BoardPermissionChecks);
 
 			const mockedBoardNotifierCalls =
 				createMock<ReturnType<typeof useBoardNotifier>>();
@@ -459,7 +489,7 @@ describe("ElementTypeSelection Composable", () => {
 
 			mockedInjectStrict.mockImplementation(() => {
 				return {
-					getEnv: env,
+					getEnv: mergedEnv,
 				};
 			});
 
@@ -472,14 +502,16 @@ describe("ElementTypeSelection Composable", () => {
 		};
 
 		describe("when the RichTextElement action is called", () => {
-			it("should call add element function with right argument", async () => {
+			it("should call add element function with right argument", () => {
 				const { elementTypeOptions, addElementMock, cardId } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
-				const action = elementTypeOptions.value[0].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-text"
+				);
+				option?.action();
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
@@ -488,28 +520,33 @@ describe("ElementTypeSelection Composable", () => {
 				});
 			});
 
-			it("should set isDialogOpen to false", async () => {
+			it("should set isDialogOpen to false", () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
 					setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
+
 				askType();
 
-				const action = elementTypeOptions.value[0].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-text"
+				);
+				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 
 		describe("when the FileElement action is called", () => {
-			it("should call add element function with right argument", async () => {
+			it("should call add element function with right argument", () => {
 				const { elementTypeOptions, addElementMock, cardId } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
-				const action = elementTypeOptions.value[1].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-file"
+				);
+				option?.action();
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
@@ -518,28 +555,33 @@ describe("ElementTypeSelection Composable", () => {
 				});
 			});
 
-			it("should set isDialogOpen to false", async () => {
+			it("should set isDialogOpen to false", () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
 					setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
-				const action = elementTypeOptions.value[1].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-file"
+				);
+				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 
 		describe("when the SubmissionElement action is called", () => {
-			it("should call add element function with right argument", async () => {
+			it("should call add element function with right argument", () => {
 				const { elementTypeOptions, addElementMock, cardId } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
+
 				askType();
 
-				const action = elementTypeOptions.value[2].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-submission-container"
+				);
+				option?.action();
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
@@ -548,28 +590,33 @@ describe("ElementTypeSelection Composable", () => {
 				});
 			});
 
-			it("should set isDialogOpen to false", async () => {
+			it("should set isDialogOpen to false", () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
 					setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
+
 				askType();
 
-				const action = elementTypeOptions.value[2].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-submission-container"
+				);
+				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 
 		describe("when the ExternalTool action is called", () => {
-			it("should call add element function with right argument", async () => {
+			it("should call add element function with right argument", () => {
 				const { elementTypeOptions, addElementMock, cardId } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
-				const action = elementTypeOptions.value[3].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-external-tool-container"
+				);
+				option?.action();
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
@@ -578,29 +625,33 @@ describe("ElementTypeSelection Composable", () => {
 				});
 			});
 
-			it("should set isDialogOpen to false", async () => {
+			it("should set isDialogOpen to false", () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
 					setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
-				const action = elementTypeOptions.value[3].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-external-tool-container"
+				);
+				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 
 		describe("when the DrawingElement action is called", () => {
-			it("should call drawing element function with right argument", async () => {
+			it("should call drawing element function with right argument", () => {
 				const { elementTypeOptions, addElementMock, cardId } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
-				const action = elementTypeOptions.value[4].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-drawing-element"
+				);
+				option?.action();
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
@@ -609,29 +660,33 @@ describe("ElementTypeSelection Composable", () => {
 				});
 			});
 
-			it("should set isDialogOpen to false", async () => {
+			it("should set isDialogOpen to false", () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
 					setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
-				const action = elementTypeOptions.value[4].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-drawing-element"
+				);
+				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 
 		describe("when the CollaborativeTextEditorElement action is called", () => {
-			it("should call collaborative text editor element function with right argument", async () => {
+			it("should call collaborative text editor element function with right argument", () => {
 				const { elementTypeOptions, addElementMock, cardId } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
-				const action = elementTypeOptions.value[5].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-collaborative-text-editor"
+				);
+				option?.action();
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
@@ -640,59 +695,92 @@ describe("ElementTypeSelection Composable", () => {
 				});
 			});
 
-			it("should set isDialogOpen to false", async () => {
+			it("should set isDialogOpen to false", () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
 					setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
-				const action = elementTypeOptions.value[5].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-collaborative-text-editor"
+				);
+				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 
-		describe("when the VideoConference action is called", () => {
-			it("should call video conference element function with right argument", async () => {
-				const { elementTypeOptions, addElementMock, cardId } = setup();
-				const { askType } = useAddElementDialog(addElementMock, cardId);
+		describe("VideoConference action", () => {
+			describe("when permission for VideoConference is granted", () => {
+				it("should call video conference element function with right argument", () => {
+					const { elementTypeOptions, addElementMock, cardId } = setup({
+						hasManageVideoConferencePermission: true,
+					});
+					const { askType } = useAddElementDialog(addElementMock, cardId);
 
-				askType();
+					askType();
 
-				const action = elementTypeOptions.value[6].action;
-				action();
+					const option = elementTypeOptions.value.find(
+						(opt) => opt.testId === "create-element-video-conference"
+					);
+					option?.action();
 
-				expect(addElementMock).toHaveBeenCalledTimes(1);
-				expect(addElementMock).toHaveBeenCalledWith({
-					type: ContentElementType.VideoConference,
-					cardId,
+					expect(addElementMock).toHaveBeenCalledTimes(1);
+					expect(addElementMock).toHaveBeenCalledWith({
+						type: ContentElementType.VideoConference,
+						cardId,
+					});
+				});
+
+				it("should set isDialogOpen to false", () => {
+					const {
+						elementTypeOptions,
+						addElementMock,
+						closeDialogMock,
+						cardId,
+					} = setup({
+						hasManageVideoConferencePermission: true,
+					});
+					const { askType } = useAddElementDialog(addElementMock, cardId);
+
+					askType();
+
+					const option = elementTypeOptions.value.find(
+						(opt) => opt.testId === "create-element-video-conference"
+					);
+					option?.action();
+
+					expect(closeDialogMock).toHaveBeenCalledTimes(1);
 				});
 			});
 
-			it("should set isDialogOpen to false", async () => {
-				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
-					setup();
-				const { askType } = useAddElementDialog(addElementMock, cardId);
+			describe("when permission for VideoConference is NOT granted", () => {
+				it("should NOT include VideoConference option if permission is false", () => {
+					const { elementTypeOptions, addElementMock, cardId } = setup();
+					const { askType } = useAddElementDialog(addElementMock, cardId);
 
-				askType();
+					askType();
 
-				const action = elementTypeOptions.value[6].action;
-				action();
-
-				expect(closeDialogMock).toHaveBeenCalledTimes(1);
+					const option = elementTypeOptions.value.find(
+						(opt) => opt.testId === "create-element-video-conference"
+					);
+					expect(option).toBeUndefined();
+				});
 			});
 		});
 
 		describe("when the FileFolderElement action is called", () => {
-			it("should call add element function with right argument", async () => {
+			it("should call add element function with right argument", () => {
 				const { elementTypeOptions, addElementMock, cardId } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
-				const action = elementTypeOptions.value[7].action;
-				action();
+
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-file-folder"
+				);
+				option?.action();
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
@@ -701,28 +789,33 @@ describe("ElementTypeSelection Composable", () => {
 				});
 			});
 
-			it("should set isDialogOpen to false", async () => {
+			it("should set isDialogOpen to false", () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
 					setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
-				const action = elementTypeOptions.value[7].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-file-folder"
+				);
+				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 
 		describe("when the H5pElement action is called", () => {
-			it("should call add element function with right argument", async () => {
+			it("should call add element function with right argument", () => {
 				const { elementTypeOptions, addElementMock, cardId } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
-				const action = elementTypeOptions.value[8].action;
-				action();
+
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-h5p"
+				);
+				option?.action();
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
@@ -731,15 +824,17 @@ describe("ElementTypeSelection Composable", () => {
 				});
 			});
 
-			it("should set isDialogOpen to false", async () => {
+			it("should set isDialogOpen to false", () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
 					setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
-				const action = elementTypeOptions.value[8].action;
-				action();
+				const option = elementTypeOptions.value.find(
+					(opt) => opt.testId === "create-element-h5p"
+				);
+				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
@@ -793,12 +888,17 @@ describe("ElementTypeSelection Composable", () => {
 			};
 
 			it("should set isDialogOpen to false", async () => {
-				const { elementTypeOptions, askType, closeDialogMock } = setup();
+				const { elementTypeOptions, askType, closeDialogMock, preferredTool } =
+					setup();
 
 				askType();
 
-				const action = elementTypeOptions.value[0].action;
-				await action();
+				const option = elementTypeOptions.value.find(
+					(opt) =>
+						opt.testId ===
+						`create-element-preferred-element-${preferredTool.name}`
+				);
+				await option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
@@ -814,8 +914,12 @@ describe("ElementTypeSelection Composable", () => {
 
 				askType();
 
-				const action = elementTypeOptions.value[0].action;
-				await action();
+				const option = elementTypeOptions.value.find(
+					(opt) =>
+						opt.testId ===
+						`create-element-preferred-element-${preferredTool.name}`
+				);
+				await option?.action();
 
 				expect(cardStore.createPreferredElement).toHaveBeenCalledWith(
 					{
