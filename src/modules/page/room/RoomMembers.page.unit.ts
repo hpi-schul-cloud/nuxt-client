@@ -30,7 +30,7 @@ import {
 	useRoomMembersStore,
 } from "@data-room";
 import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPlus } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -47,26 +47,25 @@ import {
 	VTabs,
 } from "vuetify/components";
 import RoomMembersPage from "./RoomMembers.page.vue";
+import { Mock } from "vitest";
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
-const useRouteMock = <jest.Mock>useRoute;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 
-jest.mock("@vueuse/integrations"); // mock focus trap from add members because we use mount
+vi.mock("@ui-confirmation-dialog");
+const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
-jest.mock("@ui-confirmation-dialog");
-const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorization = vi.mocked(useRoomAuthorization);
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = jest.mocked(useRoomAuthorization);
-
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
-	let askConfirmationMock: jest.Mock;
+	let askConfirmationMock: Mock;
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
@@ -102,7 +101,7 @@ describe("RoomMembersPage", () => {
 		});
 		useRouterMock.mockReturnValue(router);
 
-		askConfirmationMock = jest.fn();
+		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});
@@ -197,6 +196,7 @@ describe("RoomMembersPage", () => {
 					LeaveRoomProhibitedDialog: true,
 					AddMembers: true,
 					Members: true,
+					InviteMembersDialog: true,
 				},
 			},
 

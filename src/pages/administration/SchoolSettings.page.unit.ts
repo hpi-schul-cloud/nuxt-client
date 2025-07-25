@@ -16,23 +16,26 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useSharedSchoolYearChange } from "@data-school";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, reactive } from "vue";
-import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import SchoolSettings from "./SchoolSettings.page.vue";
+import type { Mock, Mocked } from "vitest";
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 
-const useRouteMock = <jest.Mock<Partial<RouteLocationNormalizedLoaded>>>(
-	useRoute
+const useRouteMock = <Mock>useRoute;
+
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
 );
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
-
-jest.mock("@data-school/schoolYearChange.composable");
+vi.mock("@data-school/schoolYearChange.composable");
 
 describe("SchoolSettingsPage", () => {
 	let useSharedSchoolYearChangeApiMock: DeepMocked<
@@ -43,13 +46,13 @@ describe("SchoolSettingsPage", () => {
 		useSharedSchoolYearChangeApiMock =
 			createMock<ReturnType<typeof useSharedSchoolYearChange>>();
 
-		jest
-			.mocked(useSharedSchoolYearChange)
-			.mockReturnValue(useSharedSchoolYearChangeApiMock);
+		vi.mocked(useSharedSchoolYearChange).mockReturnValue(
+			useSharedSchoolYearChangeApiMock
+		);
 	});
 
-	let envConfigModule: jest.Mocked<EnvConfigModule>;
-	let schoolsModule: jest.Mocked<SchoolsModule>;
+	let envConfigModule: Mocked<EnvConfigModule>;
+	let schoolsModule: Mocked<SchoolsModule>;
 
 	const mockFederalState: FederalState = {
 		id: "00001234597947823",
@@ -97,6 +100,7 @@ describe("SchoolSettingsPage", () => {
 				endDate: "",
 				courseCreationInNextYear: false,
 			},
+			fetchSystems: vi.fn(),
 			...schoolGetters,
 		});
 
@@ -352,11 +356,9 @@ describe("SchoolSettingsPage", () => {
 	});
 
 	it("should load needed data from server", async () => {
-		const fetchSystemsSpy = jest.spyOn(schoolsModule, "fetchSystems");
-
 		getWrapper();
 		await nextTick();
 
-		expect(fetchSystemsSpy).toHaveBeenCalled();
+		expect(schoolsModule.fetchSystems).toHaveBeenCalled();
 	});
 });

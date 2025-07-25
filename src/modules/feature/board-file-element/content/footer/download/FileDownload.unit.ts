@@ -9,16 +9,21 @@ import { nextTick } from "vue";
 import { VIcon } from "vuetify/components";
 import FileDownload from "./FileDownload.vue";
 
-jest.mock("@/utils/fileHelper");
+vi.mock("@/utils/fileHelper");
 
 describe("FileDownload", () => {
 	beforeEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const setup = () => {
 		const wrapper = shallowMount(FileDownload, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			props: {
+				fileName: "file-record #1.txt",
+				url: "1/file-record #1.txt",
+				isDownloadAllowed: true,
+			},
 		});
 
 		return {
@@ -68,9 +73,7 @@ describe("FileDownload", () => {
 					isDownloadAllowed: true,
 				};
 
-				const downloadFileMock = jest
-					.mocked(downloadFile)
-					.mockReturnValueOnce();
+				const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
 
 				const wrapper = shallowMount(FileDownload, {
 					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
@@ -171,7 +174,7 @@ describe("FileDownload", () => {
 				isDownloadAllowed: false,
 			};
 
-			const downloadFileMock = jest.mocked(downloadFile).mockReturnValueOnce();
+			const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
 
 			const wrapper = shallowMount(FileDownload, {
 				global: { plugins: [createTestingVuetify(), createTestingI18n()] },

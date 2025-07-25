@@ -9,7 +9,7 @@ import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { ProvisioningOptions } from "./type/ProvisioningOptions";
 
@@ -20,7 +20,7 @@ describe("ProvisioningOptionsApi.composable", () => {
 	beforeAll(() => {
 		schoolApi = createMock<SchoolApiInterface>();
 
-		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
+		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -28,7 +28,7 @@ describe("ProvisioningOptionsApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getProvisioningOptions", () => {

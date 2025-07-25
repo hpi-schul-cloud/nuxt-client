@@ -14,9 +14,9 @@ import { nextTick, ref } from "vue";
 import CollaborativeTextEditorElementMenu from "./CollaborativeTextEditorElementMenu.vue";
 
 // Mocks
-jest.mock("@ui-confirmation-dialog");
+vi.mock("@ui-confirmation-dialog");
 
-const mockedUseDeleteConfirmationDialog = jest.mocked(
+const mockedUseDeleteConfirmationDialog = vi.mocked(
 	useDeleteConfirmationDialog
 );
 
@@ -53,7 +53,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const setup = () => {

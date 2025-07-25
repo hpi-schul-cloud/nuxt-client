@@ -5,18 +5,18 @@ import setupStores from "@@/tests/test-utils/setupStores";
 
 describe("courses store", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 		setupStores({ notifierModule: NotifierModule });
 	});
 	describe("removeCourseItem action", () => {
-		const dispatch = jest.fn();
+		const dispatch = vi.fn();
 
 		const storeContext = {
 			dispatch,
 		};
 		coursesStore.actions.app = {
 			i18n: {
-				t: jest.fn(),
+				t: vi.fn(),
 			},
 		};
 
@@ -135,7 +135,7 @@ describe("courses store", () => {
 		});
 
 		it("should call toast successful if no error is thrown when courseItem is a homework", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const notifierMock = vi.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "homework",
@@ -151,7 +151,7 @@ describe("courses store", () => {
 		});
 
 		it("should call toast successful if no error is thrown when courseItem is a lesson", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const notifierMock = vi.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "lesson",
@@ -167,7 +167,7 @@ describe("courses store", () => {
 		});
 
 		it("should call toast error if error is thrown from dispatched action when courseItem is a homework", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const notifierMock = vi.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "homework",
@@ -183,7 +183,7 @@ describe("courses store", () => {
 		});
 
 		it("should call toast error if error is thrown from dispatched action when courseItem is a lesson", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const notifierMock = vi.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "lesson",

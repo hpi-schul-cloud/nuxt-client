@@ -5,7 +5,7 @@ import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ref } from "vue";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { SubmissionsResponse } from "@/serverApi/v3";
 import { submissionsResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
@@ -14,8 +14,8 @@ const notifierModule = createModuleMocks(NotifierModule);
 
 const mockedSubmissionsResponse = submissionsResponseFactory.build();
 
-jest.mock("./SubmissionItemApi.composable");
-const mockedUseSubmissionItemApi = jest.mocked(useSubmissionItemApi);
+vi.mock("./SubmissionItemApi.composable");
+const mockedUseSubmissionItemApi = vi.mocked(useSubmissionItemApi);
 
 describe("SubmissionContentElementState.composable", () => {
 	let mockedUseSubmissionItemApiCalls: DeepMocked<
@@ -29,7 +29,7 @@ describe("SubmissionContentElementState.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const setup = (

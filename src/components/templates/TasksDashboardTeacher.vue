@@ -80,7 +80,7 @@
 				</VContainer>
 			</v-window-item>
 		</v-window>
-		<share-modal type="tasks" />
+		<share-modal :type="ShareTokenBodyParamsParentTypeEnum.Tasks" />
 	</section>
 </template>
 

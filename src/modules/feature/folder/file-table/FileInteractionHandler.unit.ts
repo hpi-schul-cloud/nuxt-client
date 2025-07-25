@@ -6,15 +6,15 @@ import { ref } from "vue";
 import { FileRecordItem } from "../types/filerecord-item";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
 
-jest.mock("@ui-light-box");
+vi.mock("@ui-light-box");
 
 describe("FileInteractionHandler", () => {
 	const setupMocks = () => {
-		const useLightBoxMock = jest.mocked(useLightBox);
+		const useLightBoxMock = vi.mocked(useLightBox);
 		useLightBoxMock.mockReturnValue({
 			isLightBoxOpen: ref(false),
-			open: jest.fn(),
-			close: jest.fn(),
+			open: vi.fn(),
+			close: vi.fn(),
 			lightBoxOptions: ref(),
 		});
 
@@ -126,7 +126,7 @@ describe("FileInteractionHandler", () => {
 					mimeType: "application/pdf",
 				});
 
-				const windowOpenSpy = jest.fn();
+				const windowOpenSpy = vi.fn();
 				window.open = windowOpenSpy;
 
 				const button = wrapper.find("button");

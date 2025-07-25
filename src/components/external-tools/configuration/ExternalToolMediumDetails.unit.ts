@@ -34,7 +34,7 @@ describe("ExternalToolMediumDetails", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("Title", () => {
@@ -110,7 +110,7 @@ describe("ExternalToolMediumDetails", () => {
 						mediumId,
 					});
 
-					const clipboardWriteTextMock = jest.fn();
+					const clipboardWriteTextMock = vi.fn();
 					Object.assign(navigator, {
 						clipboard: {
 							writeText: clipboardWriteTextMock,
@@ -158,7 +158,7 @@ describe("ExternalToolMediumDetails", () => {
 						mediaSourceId: "media-source-id",
 					});
 
-					const clipboardWriteTextMock = jest.fn().mockImplementation(() => {
+					const clipboardWriteTextMock = vi.fn().mockImplementation(() => {
 						throw new Error();
 					});
 					Object.assign(navigator, {
@@ -234,7 +234,7 @@ describe("ExternalToolMediumDetails", () => {
 						mediaSourceId,
 					});
 
-					const clipboardWriteTextMock = jest.fn();
+					const clipboardWriteTextMock = vi.fn();
 					Object.assign(navigator, {
 						clipboard: {
 							writeText: clipboardWriteTextMock,
@@ -287,7 +287,7 @@ describe("ExternalToolMediumDetails", () => {
 						mediaSourceId: "media-source-id",
 					});
 
-					const clipboardWriteTextMock = jest.fn().mockImplementation(() => {
+					const clipboardWriteTextMock = vi.fn().mockImplementation(() => {
 						throw new Error();
 					});
 					Object.assign(navigator, {

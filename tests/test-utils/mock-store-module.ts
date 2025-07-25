@@ -1,3 +1,4 @@
+import type { Mocked } from "vitest";
 import { GetterTree, ActionTree, Module as Mod, MutationTree } from "vuex";
 import { VuexModule } from "vuex-module-decorators";
 
@@ -27,7 +28,7 @@ const mockMutations = <M>(
 	statics: StaticsType
 ) => {
 	Object.keys(module.mutations as MutationTree<M>).forEach((key) => {
-		statics[key] = jest.fn();
+		statics[key] = vi.fn();
 	});
 };
 
@@ -38,14 +39,14 @@ const mockActions = <M>(
 ) => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	Object.keys(module.actions as ActionTree<M, any>).forEach((key) => {
-		statics[key] = jest.fn();
+		statics[key] = vi.fn();
 	});
 };
 
 export function createModuleMocks<M extends VuexModule>(
 	moduleClass: ConstructorOf<M>,
 	getters: Partial<M> = {}
-): jest.Mocked<M> {
+): Mocked<M> {
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/no-explicit-any
 	const module: Function & Mod<M, any> = moduleClass;
 
@@ -65,5 +66,5 @@ export function createModuleMocks<M extends VuexModule>(
 		mockActions(module, statics);
 	}
 
-	return statics as jest.Mocked<M>;
+	return statics as Mocked<M>;
 }

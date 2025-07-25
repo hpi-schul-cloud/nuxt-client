@@ -1,30 +1,33 @@
 import { BoardContextType } from "@/types/board/BoardContext";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useBoardApi } from "./BoardApi.composable";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 
-jest.mock("./BoardApi.composable");
-const mockedUseBoardApi = jest.mocked(useBoardApi);
+vi.mock("./BoardApi.composable");
+const mockedUseBoardApi = vi.mocked(useBoardApi);
 
-jest.mock<typeof import("@/utils/create-shared-composable")>(
+vi.mock(
 	"@/utils/create-shared-composable",
-	() => ({
-		createTestableSharedComposable: (composable) => composable,
-	})
+	() =>
+		({
+			createTestableSharedComposable: (composable) => composable,
+		}) as typeof import("@/utils/create-shared-composable")
 );
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
-
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 describe("BoardPageInformation.composable", () => {
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 
@@ -34,7 +37,7 @@ describe("BoardPageInformation.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when board context exists", () => {

@@ -12,27 +12,28 @@ import {
 } from "@/serverApi/v3/api";
 import { businessErrorFactory, envsFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { AxiosResponse } from "axios";
 import ApplicationErrorModule from "./application-error";
 import ContentModule from "./content";
 import EnvConfigModule from "./env-config";
 import FilePathsModule from "./filePaths";
+import { MockInstance } from "vitest";
 
 const mockFileEnvs: FilesStorageConfigResponse = {
 	MAX_FILE_SIZE: 10,
 };
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe("env-config module", () => {
-	let consoleWarnSpy: jest.SpyInstance;
-	let consoleErrorSpy: jest.SpyInstance;
+	let consoleWarnSpy: MockInstance;
+	let consoleErrorSpy: MockInstance;
 
 	beforeEach(() => {
-		consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
-		consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-		jest.resetAllMocks();
+		consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(vi.fn());
+		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+		vi.resetAllMocks();
 	});
 
 	afterEach(() => {
@@ -56,20 +57,20 @@ describe("env-config module", () => {
 					});
 
 					const defaultApi = createMock<serverApi.ServerConfigApiInterface>();
-					jest
-						.spyOn(serverApi, "ServerConfigApiFactory")
-						.mockReturnValue(defaultApi);
+					vi.spyOn(serverApi, "ServerConfigApiFactory").mockReturnValue(
+						defaultApi
+					);
 					defaultApi.serverConfigControllerPublicConfig.mockResolvedValueOnce(
 						serverConfigresponse
 					);
 
 					const fileApi = createMock<FileConfigApiInterface>();
-					jest
-						.spyOn(fileConfigApi, "FileConfigApiFactory")
-						.mockReturnValue(fileApi);
+					vi.spyOn(fileConfigApi, "FileConfigApiFactory").mockReturnValue(
+						fileApi
+					);
 					fileApi.publicConfig.mockResolvedValueOnce(fileStorageConfigResponse);
 
-					const contentInitMock = jest.fn();
+					const contentInitMock = vi.fn();
 					const contentModuleMock = {
 						...ContentModule,
 						actions: {
@@ -78,7 +79,7 @@ describe("env-config module", () => {
 						},
 					};
 
-					const filePathsInitMock = jest.fn();
+					const filePathsInitMock = vi.fn();
 					const filePathsModuleMock = {
 						...FilePathsModule,
 						actions: {
@@ -110,7 +111,7 @@ describe("env-config module", () => {
 				it("should handle status", async () => {
 					setup();
 					const envConfigModule = new EnvConfigModule({});
-					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+					const setStatusSpy = vi.spyOn(envConfigModule, "setStatus");
 
 					await envConfigModule.loadConfiguration();
 
@@ -161,20 +162,20 @@ describe("env-config module", () => {
 					const error = new Error("testError");
 
 					const defaultApi = createMock<serverApi.ServerConfigApiInterface>();
-					jest
-						.spyOn(serverApi, "ServerConfigApiFactory")
-						.mockReturnValue(defaultApi);
+					vi.spyOn(serverApi, "ServerConfigApiFactory").mockReturnValue(
+						defaultApi
+					);
 					defaultApi.serverConfigControllerPublicConfig.mockResolvedValueOnce(
 						serverConfigresponse
 					);
 
 					const fileApi = createMock<FileConfigApiInterface>();
-					jest
-						.spyOn(fileConfigApi, "FileConfigApiFactory")
-						.mockReturnValue(fileApi);
+					vi.spyOn(fileConfigApi, "FileConfigApiFactory").mockReturnValue(
+						fileApi
+					);
 					fileApi.publicConfig.mockRejectedValueOnce(error);
 
-					const contentModuleInitMock = jest.fn();
+					const contentModuleInitMock = vi.fn();
 					const contentModuleMock = {
 						...ContentModule,
 						actions: {
@@ -183,7 +184,7 @@ describe("env-config module", () => {
 						},
 					};
 
-					const filePathsModuleInitMock = jest.fn();
+					const filePathsModuleInitMock = vi.fn();
 					const filePathsModuleMock = {
 						...FilePathsModule,
 						actions: {
@@ -192,7 +193,7 @@ describe("env-config module", () => {
 						},
 					};
 
-					const setErrorMock = jest.fn();
+					const setErrorMock = vi.fn();
 					const applicationErrorModuleMock = {
 						...ApplicationErrorModule,
 						actions: {
@@ -231,7 +232,7 @@ describe("env-config module", () => {
 				it("should handle status", async () => {
 					setup();
 					const envConfigModule = new EnvConfigModule({});
-					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+					const setStatusSpy = vi.spyOn(envConfigModule, "setStatus");
 
 					await envConfigModule.loadConfiguration();
 
@@ -281,20 +282,20 @@ describe("env-config module", () => {
 					const error = new Error("testError");
 
 					const defaultApi = createMock<serverApi.ServerConfigApiInterface>();
-					jest
-						.spyOn(serverApi, "ServerConfigApiFactory")
-						.mockReturnValue(defaultApi);
+					vi.spyOn(serverApi, "ServerConfigApiFactory").mockReturnValue(
+						defaultApi
+					);
 					defaultApi.serverConfigControllerPublicConfig.mockRejectedValueOnce(
 						error
 					);
 
 					const fileApi = createMock<FileConfigApiInterface>();
-					jest
-						.spyOn(fileConfigApi, "FileConfigApiFactory")
-						.mockReturnValue(fileApi);
+					vi.spyOn(fileConfigApi, "FileConfigApiFactory").mockReturnValue(
+						fileApi
+					);
 					fileApi.publicConfig.mockResolvedValueOnce(fileStorageConfigResponse);
 
-					const contentInitMock = jest.fn();
+					const contentInitMock = vi.fn();
 					const contentModuleMock = {
 						...ContentModule,
 						actions: {
@@ -303,7 +304,7 @@ describe("env-config module", () => {
 						},
 					};
 
-					const filePathsInitMock = jest.fn();
+					const filePathsInitMock = vi.fn();
 					const filePathsModuleMock = {
 						...FilePathsModule,
 						actions: {
@@ -315,6 +316,7 @@ describe("env-config module", () => {
 					setupStores({
 						contentModule: contentModuleMock,
 						filePathsModule: filePathsModuleMock,
+						applicationErrorModule: { ...ApplicationErrorModule },
 					});
 
 					return {
@@ -329,7 +331,7 @@ describe("env-config module", () => {
 				it("should not set status to completed", async () => {
 					setup();
 					const envConfigModule = new EnvConfigModule({});
-					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+					const setStatusSpy = vi.spyOn(envConfigModule, "setStatus");
 
 					await envConfigModule.loadConfiguration();
 
@@ -375,7 +377,7 @@ describe("env-config module", () => {
 				it("should call setStatus with error", async () => {
 					setup();
 					const envConfigModule = new EnvConfigModule({});
-					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+					const setStatusSpy = vi.spyOn(envConfigModule, "setStatus");
 
 					await envConfigModule.loadConfiguration();
 
@@ -491,8 +493,7 @@ describe("env-config module", () => {
 			describe("when FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED and FEATURE_LERNSTORE_ENABLED are true", () => {
 				it("should return true", () => {
 					const envConfigModule = new EnvConfigModule({});
-					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED =
-						true;
+					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED = true;
 					envConfigModule.env.FEATURE_LERNSTORE_ENABLED = true;
 
 					expect(
@@ -504,8 +505,7 @@ describe("env-config module", () => {
 			describe("when FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED is false", () => {
 				it("should return false", () => {
 					const envConfigModule = new EnvConfigModule({});
-					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED =
-						false;
+					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED = false;
 					envConfigModule.env.FEATURE_LERNSTORE_ENABLED = true;
 
 					expect(
@@ -517,8 +517,7 @@ describe("env-config module", () => {
 			describe("when FEATURE_LERNSTORE_ENABLED is false", () => {
 				it("should return false", () => {
 					const envConfigModule = new EnvConfigModule({});
-					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED =
-						true;
+					envConfigModule.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED = true;
 					envConfigModule.env.FEATURE_LERNSTORE_ENABLED = false;
 
 					expect(

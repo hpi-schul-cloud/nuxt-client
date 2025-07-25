@@ -5,21 +5,21 @@ import {
 import { mount, shallowMount } from "@vue/test-utils";
 import { VBtn, VIcon, VListItem, VMenu } from "vuetify/lib/components/index";
 import RoomDotMenu from "./RoomDotMenu.vue";
+import { MenuItem } from "./types";
 
-const action = jest.fn();
-const testProps = {
+const action = vi.fn();
+const testProps: { menuItems: MenuItem[] } = {
 	menuItems: [
 		{
 			icon: "mdiPencilOutline",
 			action: action,
 			name: "Edit",
-			ariaLabel: "Edit",
+			dataTestId: "Edit",
 		},
 	],
-	ariaLabel: "Menu",
 };
 
-const getWrapper = (props: object, options?: object) => {
+const getWrapper = (props: { menuItems: MenuItem[] }, options?: object) => {
 	return mount(RoomDotMenu, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		props,
@@ -27,7 +27,10 @@ const getWrapper = (props: object, options?: object) => {
 	});
 };
 
-const getShallowWrapper = (props: object, options?: object) => {
+const getShallowWrapper = (
+	props: { menuItems: MenuItem[] },
+	options?: object
+) => {
 	return shallowMount(RoomDotMenu, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		props,

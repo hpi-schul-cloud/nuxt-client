@@ -87,7 +87,9 @@ describe("@components/share/ImportFlow", () => {
 			rooms: CourseRoomListModule,
 			envConfigModule: EnvConfigModule,
 		});
-		jest.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation();
+		vi.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation(
+			vi.fn()
+		);
 	});
 
 	describe("token is provided", () => {
@@ -375,7 +377,7 @@ describe("@components/share/ImportFlow", () => {
 								url: "http://abc.de",
 							},
 						];
-						copyModuleMock.copyByShareToken = jest
+						copyModuleMock.copyByShareToken = vi
 							.fn()
 							.mockResolvedValue(copyResults);
 
@@ -392,7 +394,7 @@ describe("@components/share/ImportFlow", () => {
 							.findComponent(ImportModal)
 							.findComponent(vCustomDialog);
 						dialog.vm.$emit("dialog-confirmed");
-						await new Promise((time) => setTimeout(time, 1000));
+						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
 						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(
@@ -587,7 +589,7 @@ describe("@components/share/ImportFlow", () => {
 								url: "http://abc.de",
 							},
 						];
-						copyModuleMock.copyByShareToken = jest
+						copyModuleMock.copyByShareToken = vi
 							.fn()
 							.mockResolvedValue(copyResults);
 
@@ -619,7 +621,7 @@ describe("@components/share/ImportFlow", () => {
 							.findComponent(ImportModal)
 							.findComponent(vCustomDialog);
 						dialog.vm.$emit("dialog-confirmed");
-						await new Promise((time) => setTimeout(time, 1000));
+						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
 						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(

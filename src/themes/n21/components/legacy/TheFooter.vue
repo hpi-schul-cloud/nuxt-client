@@ -1,28 +1,13 @@
 <template>
 	<footer class="footer">
 		<div class="top-line">
-			<span class="current-year">© {{ currentYear }} {{ $theme.name }}</span>
+			<span class="current-year">© {{ currentYear }} {{ theme.name }}</span>
 		</div>
 
 		<div>
-			<template v-for="(link, index) in links">
-				<span v-if="index !== 0" :key="index"> - </span>
-				<template v-if="!link.innerlinks">
-					<base-link :key="link.text" class="footer-link" v-bind="link">{{
-						link.text
-					}}</base-link>
-				</template>
-				<template v-else>
-					<span
-						:key="link.text"
-						:aria-label="
-							t('components.legacy.footer.ariaLabel', {
-								itemName: link.text,
-							})
-						"
-						>{{ link.text }}</span
-					>
-				</template>
+			<template v-for="(link, index) in links" :key="link.text">
+				<span v-if="index !== 0" :key="index" aria-hidden="true"> - </span>
+				<base-link class="footer-link" v-bind="link">{{ link.text }}</base-link>
 			</template>
 		</div>
 	</footer>
@@ -32,8 +17,10 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { envConfigModule, filePathsModule } from "@/store";
+import { injectStrict, THEME_KEY } from "@/utils/inject";
 
 const { t } = useI18n();
+const theme = injectStrict(THEME_KEY);
 
 const currentYear = computed(() => new Date().getFullYear());
 
@@ -84,7 +71,7 @@ const links = computed(() => {
 		});
 	}
 	linksArr.push({
-		href: filePathsModule.getSpecificFiles.accessibilityStatement,
+		href: filePathsModule.getSpecificFiles.accessibilityStatement.toString(),
 		text: t("components.legacy.footer.accessibility.statement"),
 		target: "_blank",
 		rel: "noopener",

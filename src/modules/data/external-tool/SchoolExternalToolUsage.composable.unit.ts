@@ -1,4 +1,4 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 import { useSchoolExternalToolUsage } from "./SchoolExternalToolUsage.composable";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
@@ -9,7 +9,7 @@ import {
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { BusinessError } from "@/store/types/commons";
 
-jest.mock("@data-external-tool/SchoolExternalToolApi.composable");
+vi.mock("@data-external-tool/SchoolExternalToolApi.composable");
 
 describe("SchoolExternalToolUsage.composable", () => {
 	let useSchoolExternalToolApiMock: DeepMocked<
@@ -20,13 +20,13 @@ describe("SchoolExternalToolUsage.composable", () => {
 		useSchoolExternalToolApiMock =
 			createMock<ReturnType<typeof useSchoolExternalToolApi>>();
 
-		jest
-			.mocked(useSchoolExternalToolApi)
-			.mockReturnValue(useSchoolExternalToolApiMock);
+		vi.mocked(useSchoolExternalToolApi).mockReturnValue(
+			useSchoolExternalToolApiMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchSchoolExternalToolMetadata", () => {

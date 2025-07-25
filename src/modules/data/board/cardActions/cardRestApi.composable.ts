@@ -14,7 +14,7 @@ import {
 import { schoolExternalToolsModule } from "@/store";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
-import { useBoardStore } from "@data-board";
+import { useBoardStore } from "../Board.store";
 import {
 	ContextExternalTool,
 	ContextExternalToolConfigurationTemplate,
@@ -35,7 +35,7 @@ import {
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
-} from "./cardActionPayload";
+} from "./cardActionPayload.types";
 import { useI18n } from "vue-i18n";
 
 export const useCardRestApi = () => {
