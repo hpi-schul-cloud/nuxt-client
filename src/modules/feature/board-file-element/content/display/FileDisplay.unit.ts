@@ -9,7 +9,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 import AudioDisplay from "./audio-display/AudioDisplay.vue";
-import CollaboraDisplay from "./CollaboraDisplay.vue";
+import CollaboraDisplay from "./collabora-display/CollaboraDisplay.vue";
 import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
