@@ -67,11 +67,23 @@ describe("RoomAdminTable", () => {
 		};
 	};
 
-	it("renders the component", () => {
+	it("should render the component", () => {
 		const { wrapper } = setup();
 		const dataTable = wrapper.findComponent({ name: "DataTable" });
 
 		expect(wrapper.exists()).toBe(true);
 		expect(dataTable.exists()).toBe(true);
+	});
+
+	describe("when DataTable component emits 'update:selectedIds'", () => {
+		it("should update selectedIds in the store", async () => {
+			const { wrapper, adminRoomStore } = setup();
+			const dataTable = wrapper.findComponent({ name: "DataTable" });
+			const selectedIds = ["room1", "room2"];
+
+			await dataTable.vm.$emit("update:selectedIds", selectedIds);
+
+			expect(adminRoomStore.selectedIds).toEqual(selectedIds);
+		});
 	});
 });
