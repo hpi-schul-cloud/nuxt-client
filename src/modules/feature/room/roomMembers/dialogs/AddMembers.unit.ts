@@ -20,7 +20,7 @@ import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { createTestingPinia } from "@pinia/testing";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
@@ -29,19 +29,15 @@ import { Ref, ref } from "vue";
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { Mock } from "vitest";
 
-jest.mock("@vueuse/integrations/useFocusTrap", () => {
-	return {
-		...jest.requireActual("@vueuse/integrations/useFocusTrap"),
-		useFocusTrap: jest.fn(),
-	};
-});
+vi.mock("@vueuse/integrations/useFocusTrap");
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorizationMock = jest.mocked(useRoomAuthorization);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
 type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
@@ -53,14 +49,14 @@ type RoomAuthorizationRefs = Partial<
 
 describe("AddMembers", () => {
 	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
-	let pauseMock: jest.Mock;
-	let unpauseMock: jest.Mock;
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
-		pauseMock = jest.fn();
-		unpauseMock = jest.fn();
-		(useFocusTrap as jest.Mock).mockReturnValue({
+		pauseMock = vi.fn();
+		unpauseMock = vi.fn();
+		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
 			unpause: unpauseMock,
 		});

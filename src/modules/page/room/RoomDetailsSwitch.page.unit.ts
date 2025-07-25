@@ -17,14 +17,15 @@ import { ref } from "vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
 import { Router, useRoute, useRouter } from "vue-router";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
+import { Mock } from "vitest";
 
-jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
 
-jest.mock("@data-room/roomAuthorization.composable");
+vi.mock("@data-room/roomAuthorization.composable");
 const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canAddRoomMembers: ref(false),
 	canChangeOwner: ref(false),
@@ -42,13 +43,13 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canManageRoomInvitationLinks: ref(false),
 	canManageVideoconferences: ref(false),
 };
-(useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
+(useRoomAuthorization as Mock).mockReturnValue(roomPermissions);
 
 describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 	const router = createMock<Router>();
-	const useRouteMock = <jest.Mock>useRoute;
-	useRouteMock.mockReturnValue({ params: { id: "room-id" }, push: jest.fn() });
-	const useRouterMock = <jest.Mock>useRouter;
+	const useRouteMock = <Mock>useRoute;
+	useRouteMock.mockReturnValue({ params: { id: "room-id" }, push: vi.fn() });
+	const useRouterMock = <Mock>useRouter;
 
 	beforeEach(() => {
 		useRouterMock.mockReturnValue(router);

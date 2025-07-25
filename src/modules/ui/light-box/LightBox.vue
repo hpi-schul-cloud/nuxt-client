@@ -102,13 +102,10 @@ const handleVideoError = () => {
 	hasVideoError.value = true;
 };
 
-const download = async () => {
+const download = () => {
 	if (!lightBoxOptions.value) return;
 
-	await downloadFile(
-		lightBoxOptions.value.downloadUrl,
-		lightBoxOptions.value.name
-	);
+	downloadFile(lightBoxOptions.value.downloadUrl, lightBoxOptions.value.name);
 };
 
 watch(isLightBoxOpen, () => {

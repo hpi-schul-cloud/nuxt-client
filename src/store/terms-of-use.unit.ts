@@ -79,8 +79,8 @@ describe("terms of use module", () => {
 					],
 				};
 				axiosInitializer(mockApiResponse);
-				const setTermsOfUseSpy = jest.spyOn(termsOfUseModule, "setTermsOfUse");
-				const setStatusSpy = jest.spyOn(termsOfUseModule, "setStatus");
+				const setTermsOfUseSpy = vi.spyOn(termsOfUseModule, "setTermsOfUse");
+				const setStatusSpy = vi.spyOn(termsOfUseModule, "setStatus");
 
 				await termsOfUseModule.fetchTermsOfUse("schoolid");
 
@@ -139,8 +139,8 @@ describe("terms of use module", () => {
 					},
 				};
 				axiosInitializer(mockApiResponse);
-				const setTermsOfUseSpy = jest.spyOn(termsOfUseModule, "setTermsOfUse");
-				const setStatusSpy = jest.spyOn(termsOfUseModule, "setStatus");
+				const setTermsOfUseSpy = vi.spyOn(termsOfUseModule, "setTermsOfUse");
+				const setStatusSpy = vi.spyOn(termsOfUseModule, "setStatus");
 
 				await termsOfUseModule.createTermsOfUse(createPolicyPayload);
 
@@ -178,8 +178,8 @@ describe("terms of use module", () => {
 					},
 				};
 				axiosInitializer(mockApiResponse);
-				const setTermsOfUseSpy = jest.spyOn(termsOfUseModule, "setTermsOfUse");
-				const setStatusSpy = jest.spyOn(termsOfUseModule, "setStatus");
+				const setTermsOfUseSpy = vi.spyOn(termsOfUseModule, "setTermsOfUse");
+				const setStatusSpy = vi.spyOn(termsOfUseModule, "setStatus");
 
 				await termsOfUseModule.deleteTermsOfUse();
 

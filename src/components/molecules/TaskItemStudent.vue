@@ -1,66 +1,58 @@
 <template>
-	<v-hover v-model="isHovering" :disabled="isMenuActive">
-		<v-list-item
-			:key="task.id"
-			v-outside-click="() => handleFocus(false)"
-			class="px-xxl-4 px-xl-4 px-lg-4 px-md-4 px-sm-4 px-0"
-			v-bind="$attrs"
-			:aria-label="ariaLabel"
-			role="article"
-			:ripple="false"
-			@click="handleClick"
-			@focus="handleFocus(true)"
-			@keydown.tab.shift="handleFocus(false)"
+	<v-list-item
+		:key="task.id"
+		v-outside-click="() => handleFocus(false)"
+		class="px-xxl-4 px-xl-4 px-lg-4 px-md-4 px-sm-4 px-0"
+		v-bind="$attrs"
+		:aria-label="ariaLabel"
+		role="article"
+		:ripple="false"
+		@click="handleClick"
+		@focus="handleFocus(true)"
+		@keydown.tab.shift="handleFocus(false)"
+	>
+		<!-- item avatar -->
+		<template #prepend>
+			<v-avatar>
+				<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
+			</v-avatar>
+		</template>
+		<!-- item main info -->
+		<div
+			class="d-flex align-center justify-space-between flex-wrap flex-sm-nowrap"
 		>
-			<!-- item avatar -->
-			<template #prepend>
-				<v-avatar>
-					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
-				</v-avatar>
-			</template>
-			<!-- item main info -->
-			<div
-				class="d-flex align-center justify-space-between flex-wrap flex-sm-nowrap"
-			>
-				<!-- item title -->
-				<div class="task-item__main-info w-65" :style="conditionalWidth">
-					<v-list-item-subtitle data-testid="taskSubtitle">
-						{{ taskLabel }}
-					</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle" class="text-truncate">
-						{{ task.name }}
-					</v-list-item-title>
-					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
-				</div>
-				<div class="d-sm-block mr-sm-4 d-flex">
-					<div
-						class="text-subtitle-2 due-date-label"
-						data-test-id="dueDateLabel"
-					>
-						{{ dueDateLabel }}
-					</div>
-					<v-custom-chip-time-remaining
-						v-if="taskState === 'warning'"
-						class="ml-2 ml-sm-0 float-sm-right"
-						:type="taskState"
-						:due-date="task.dueDate"
-					/>
-				</div>
+			<!-- item title -->
+			<div class="task-item__main-info w-65" :style="conditionalWidth">
+				<v-list-item-subtitle data-testid="taskSubtitle">
+					{{ taskLabel }}
+				</v-list-item-subtitle>
+				<v-list-item-title data-testid="taskTitle" class="text-truncate">
+					{{ task.name }}
+				</v-list-item-title>
+				<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
 			</div>
-
-			<template #append>
-				<div :id="`task-menu-${task.id}`" class="context-menu-btn">
-					<task-item-menu
-						:task-id="task.id"
-						:task-is-finished="task.status.isFinished"
-						user-role="student"
-						@toggled-menu="toggleMenu"
-						@focus-changed="handleFocus"
-					/>
+			<div class="d-sm-block mr-sm-4 d-flex">
+				<div class="text-subtitle-2 due-date-label" data-test-id="dueDateLabel">
+					{{ dueDateLabel }}
 				</div>
-			</template>
-		</v-list-item>
-	</v-hover>
+				<v-custom-chip-time-remaining
+					v-if="taskState === 'warning'"
+					class="ml-2 ml-sm-0 float-sm-right"
+					:type="taskState"
+					:due-date="task.dueDate"
+				/>
+			</div>
+		</div>
+		<template #append>
+			<div :id="`task-menu-${task.id}`" class="context-menu-btn">
+				<task-item-menu
+					:task-id="task.id"
+					:task-is-finished="task.status.isFinished"
+					user-role="student"
+				/>
+			</div>
+		</template>
+	</v-list-item>
 </template>
 
 <script>
@@ -89,8 +81,6 @@ export default {
 	},
 	data() {
 		return {
-			isMenuActive: false,
-			isHovering: false,
 			isActive: false,
 		};
 	},
@@ -163,10 +153,6 @@ export default {
 		},
 	},
 	methods: {
-		toggleMenu(stateValue) {
-			this.isMenuActive = stateValue;
-			this.isHovering = stateValue;
-		},
 		handleClick() {
 			this.redirectAction(`/homework/${this.task.id}`);
 		},

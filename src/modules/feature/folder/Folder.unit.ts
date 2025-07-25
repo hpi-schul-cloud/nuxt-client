@@ -1,8 +1,11 @@
-import router from "@/router";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";
-import { fileRecordFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
+import {
+	fileRecordFactory,
+	mockedPiniaStoreTyping,
+	parentNodeInfoFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -10,7 +13,7 @@ import {
 import * as BoardApi from "@data-board";
 import * as FileStorageApi from "@data-file";
 import * as FolderState from "@data-folder";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
@@ -24,28 +27,46 @@ import KebabMenuActionDownloadFiles from "./file-table/KebabMenuActionDownloadFi
 import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
+import { Mock } from "vitest";
+import { Router, useRouter } from "vue-router";
+import { createTestingPinia } from "@pinia/testing";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import EnvConfigModule from "@/store/env-config";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
+import setupStores from "@@/tests/test-utils/setupStores";
 
-jest.mock("@/utils/fileHelper", () => {
-	const actual = jest.requireActual("@/utils/fileHelper");
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
-	return {
-		...actual,
-		downloadFilesAsArchive: jest.fn(),
-		downloadFile: jest.fn(),
-	};
-});
+vi.mock("@data-board/BoardApi.composable");
+const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
 
 describe("Folder.vue", () => {
 	enableAutoUnmount(afterEach);
 
 	beforeEach(() => {
-		jest.restoreAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	const buildUploadStatsTranslation = (uploaded: string, total: string) => {
 		return `${uploaded} von ${total} Dateien hochgeladen`;
 	};
 	const setupWrapper = () => {
+		const router: DeepMocked<Router> = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
+
+		vi.spyOn(FileHelper, "downloadFilesAsArchive");
+		vi.spyOn(FileHelper, "downloadFile");
+
+		const notifierModule = createModuleMocks(NotifierModule);
+
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
+
 		const parentId = "123";
 		const wrapper = mount(Folder, {
 			global: {
@@ -61,14 +82,19 @@ describe("Folder.vue", () => {
 							},
 						},
 					}),
+					createTestingPinia(),
 				],
+				stubs: { ConfirmationDialog: true, UseFocusTrap: true },
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
 			},
 			props: {
 				folderId: parentId,
 			},
 		});
 
-		return { wrapper, parentId };
+		return { wrapper, parentId, router };
 	};
 
 	describe("when user has board edit permission", () => {
@@ -77,9 +103,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					const parent = parentNodeInfoFactory.build({
 						type: ParentNodeType.Board,
@@ -93,33 +119,32 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
+
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
-
-					const useBoardStoreMock =
-						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					useBoardStoreMock.board = undefined;
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
 					const { wrapper } = setupWrapper();
+					const useBoardStoreMock = mockedPiniaStoreTyping(useBoardStore);
 
 					await nextTick();
 					await nextTick();
@@ -196,9 +221,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					const parent = parentNodeInfoFactory.build({
 						type: ParentNodeType.Course,
@@ -212,30 +237,35 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
+
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
 					setupWrapper();
 
@@ -250,7 +280,7 @@ describe("Folder.vue", () => {
 
 				it("should throw error", async () => {
 					const error = new Error("Unsupported parent type");
-					expect(async () => await setup()).rejects.toThrow(error);
+					await expect(async () => await setup()).rejects.toThrow(error);
 				});
 			});
 
@@ -258,9 +288,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					const folderName = "Test Folder" as unknown as ComputedRef<string>;
 					folderStateMock.folderName = folderName;
@@ -272,15 +302,19 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
@@ -296,16 +330,16 @@ describe("Folder.vue", () => {
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
 					const { wrapper } = setupWrapper();
 
@@ -339,9 +373,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 						() => "boards"
@@ -357,47 +391,47 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const confirmationDialogMock =
 						createMock<
 							ReturnType<typeof ConfirmationDialog.useDeleteConfirmationDialog>
 						>();
-					jest
-						.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog")
-						.mockReturnValueOnce(confirmationDialogMock);
+					vi.spyOn(
+						ConfirmationDialog,
+						"useDeleteConfirmationDialog"
+					).mockReturnValueOnce(confirmationDialogMock);
 					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(true);
-
-					const routerSpy = jest.spyOn(router, "replace").mockImplementation();
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
-					const { wrapper } = setupWrapper();
+					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
 					await kebabMenu.trigger("click");
@@ -411,7 +445,7 @@ describe("Folder.vue", () => {
 						fileStorageApiMock,
 						folderName,
 						boardApiMock,
-						routerSpy,
+						router,
 						parent,
 					};
 				};
@@ -423,9 +457,9 @@ describe("Folder.vue", () => {
 				});
 
 				it("should call router replace", async () => {
-					const { routerSpy, parent } = await setup();
+					const { router, parent } = await setup();
 
-					expect(routerSpy).toHaveBeenCalledWith(`/boards/${parent.id}`);
+					expect(router.replace).toHaveBeenCalledWith(`/boards/${parent.id}`);
 				});
 			});
 
@@ -433,9 +467,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 						() => "boards"
@@ -453,47 +487,47 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const confirmationDialogMock =
 						createMock<
 							ReturnType<typeof ConfirmationDialog.useDeleteConfirmationDialog>
 						>();
-					jest
-						.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog")
-						.mockReturnValueOnce(confirmationDialogMock);
+					vi.spyOn(
+						ConfirmationDialog,
+						"useDeleteConfirmationDialog"
+					).mockReturnValueOnce(confirmationDialogMock);
 					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(true);
-
-					const routerSpy = jest.spyOn(router, "replace").mockImplementation();
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
-					const { wrapper } = setupWrapper();
+					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
 					await kebabMenu.trigger("click");
@@ -507,14 +541,14 @@ describe("Folder.vue", () => {
 						fileStorageApiMock,
 						folderName,
 						boardApiMock,
-						routerSpy,
+						router,
 						parent,
 					};
 				};
 
 				it("should throw", async () => {
 					const error = new Error("Unsupported parent type");
-					expect(async () => await setup()).rejects.toThrow(error);
+					await expect(async () => await setup()).rejects.toThrow(error);
 				});
 			});
 
@@ -522,9 +556,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 						() => "boards"
@@ -540,47 +574,47 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const confirmationDialogMock =
 						createMock<
 							ReturnType<typeof ConfirmationDialog.useDeleteConfirmationDialog>
 						>();
-					jest
-						.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog")
-						.mockReturnValueOnce(confirmationDialogMock);
+					vi.spyOn(
+						ConfirmationDialog,
+						"useDeleteConfirmationDialog"
+					).mockReturnValueOnce(confirmationDialogMock);
 					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(false);
-
-					const routerSpy = jest.spyOn(router, "replace").mockImplementation();
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
-					const { wrapper } = setupWrapper();
+					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
 					await kebabMenu.trigger("click");
@@ -594,7 +628,7 @@ describe("Folder.vue", () => {
 						fileStorageApiMock,
 						folderName,
 						boardApiMock,
-						routerSpy,
+						router,
 					};
 				};
 
@@ -605,9 +639,9 @@ describe("Folder.vue", () => {
 				});
 
 				it("should not call router replace", async () => {
-					const { routerSpy } = await setup();
+					const { router } = await setup();
 
-					expect(routerSpy).not.toHaveBeenCalled();
+					expect(router.replace).not.toHaveBeenCalled();
 				});
 			});
 
@@ -615,9 +649,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 						() => "boards"
@@ -635,38 +669,37 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
-
-					const routerSpy = jest.spyOn(router, "replace").mockImplementation();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
-					const { wrapper } = setupWrapper();
+					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
 					await kebabMenu.trigger("click");
@@ -686,7 +719,7 @@ describe("Folder.vue", () => {
 						fileStorageApiMock,
 						folderName,
 						boardApiMock,
-						routerSpy,
+						router,
 						parent,
 					};
 				};
@@ -731,9 +764,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 						() => "boards"
@@ -749,38 +782,37 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
-
-					const routerSpy = jest.spyOn(router, "replace").mockImplementation();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
-					const { wrapper } = setupWrapper();
+					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
 					await kebabMenu.trigger("click");
@@ -800,7 +832,7 @@ describe("Folder.vue", () => {
 						fileStorageApiMock,
 						folderName,
 						boardApiMock,
-						routerSpy,
+						router,
 						parent,
 					};
 				};
@@ -830,9 +862,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 						() => "boards"
@@ -850,15 +882,16 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					const fileRecord = fileRecordFactory.build();
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
@@ -867,26 +900,24 @@ describe("Folder.vue", () => {
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
 					const { wrapper } = setupWrapper();
 
-					await nextTick();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					const checkbox = wrapper.find(
 						`[data-testid='select-checkbox-${fileRecord.name}']`
@@ -922,9 +953,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 						() => "boards"
@@ -942,15 +973,16 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					const fileRecord = fileRecordFactory.build();
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
@@ -959,26 +991,24 @@ describe("Folder.vue", () => {
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
 					const { wrapper } = setupWrapper();
 
-					await nextTick();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					const checkbox = wrapper.find(
 						`[data-testid='select-checkbox-${fileRecord.name}']`
@@ -1015,9 +1045,9 @@ describe("Folder.vue", () => {
 			const setup = async () => {
 				const folderStateMock =
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
-				jest
-					.spyOn(FolderState, "useFolderState")
-					.mockReturnValueOnce(folderStateMock);
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+					folderStateMock
+				);
 
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
@@ -1029,15 +1059,19 @@ describe("Folder.vue", () => {
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 				>({});
-				jest
-					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValueOnce(boardState);
+				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(
+					boardState
+				);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+					fileStorageApiMock
+				);
 
 				const fileRecord1 = fileRecordFactory.build();
 				const fileRecord2 = fileRecordFactory.build({ isUploading: true });
@@ -1048,16 +1082,16 @@ describe("Folder.vue", () => {
 
 				const useBoardStoreMock =
 					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-				jest
-					.spyOn(BoardApi, "useBoardStore")
-					.mockReturnValueOnce(useBoardStoreMock);
+				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+					useBoardStoreMock
+				);
 
 				const useBoardPermissionsMock = createMock<
 					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(true) });
-				jest
-					.spyOn(BoardApi, "useBoardPermissions")
-					.mockReturnValueOnce(useBoardPermissionsMock);
+				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+					useBoardPermissionsMock
+				);
 
 				const { wrapper } = setupWrapper();
 
@@ -1105,9 +1139,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					const parent = parentNodeInfoFactory.build();
 					folderStateMock.parent = ref(parent) as unknown as ComputedRef;
@@ -1119,15 +1153,20 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
+
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					const fileRecord1 = fileRecordFactory.build();
 					const fileRecord2 = fileRecordFactory.build();
@@ -1138,16 +1177,16 @@ describe("Folder.vue", () => {
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
 					const { wrapper } = setupWrapper();
 
@@ -1192,9 +1231,9 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					const parent = parentNodeInfoFactory.build();
 					folderStateMock.parent = ref(parent) as unknown as ComputedRef;
@@ -1206,15 +1245,20 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
+
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					const fileRecord1 = fileRecordFactory.build();
 					const fileRecord2 = fileRecordFactory.build();
@@ -1225,16 +1269,16 @@ describe("Folder.vue", () => {
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
 					const { wrapper } = setupWrapper();
 
@@ -1279,9 +1323,9 @@ describe("Folder.vue", () => {
 			const setup = async () => {
 				const folderStateMock =
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
-				jest
-					.spyOn(FolderState, "useFolderState")
-					.mockReturnValueOnce(folderStateMock);
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+					folderStateMock
+				);
 				const parent = parentNodeInfoFactory.build();
 				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
@@ -1292,15 +1336,19 @@ describe("Folder.vue", () => {
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 				>({});
-				jest
-					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValueOnce(boardState);
+				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(
+					boardState
+				);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+					fileStorageApiMock
+				);
 
 				const fileRecord1 = fileRecordFactory.build({ isUploading: true });
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
@@ -1309,16 +1357,16 @@ describe("Folder.vue", () => {
 
 				const useBoardStoreMock =
 					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-				jest
-					.spyOn(BoardApi, "useBoardStore")
-					.mockReturnValueOnce(useBoardStoreMock);
+				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+					useBoardStoreMock
+				);
 
 				const useBoardPermissionsMock = createMock<
 					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(true) });
-				jest
-					.spyOn(BoardApi, "useBoardPermissions")
-					.mockReturnValueOnce(useBoardPermissionsMock);
+				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+					useBoardPermissionsMock
+				);
 
 				const { wrapper } = setupWrapper();
 
@@ -1353,9 +1401,9 @@ describe("Folder.vue", () => {
 			const setup = () => {
 				const folderStateMock =
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
-				jest
-					.spyOn(FolderState, "useFolderState")
-					.mockReturnValueOnce(folderStateMock);
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+					folderStateMock
+				);
 
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
@@ -1372,30 +1420,34 @@ describe("Folder.vue", () => {
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 				>({});
-				jest
-					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValueOnce(boardState);
+				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(
+					boardState
+				);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+					fileStorageApiMock
+				);
 
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 				const useBoardStoreMock =
 					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-				jest
-					.spyOn(BoardApi, "useBoardStore")
-					.mockReturnValueOnce(useBoardStoreMock);
+				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+					useBoardStoreMock
+				);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 				const useBoardPermissionsMock = createMock<
 					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(true) });
-				jest
-					.spyOn(BoardApi, "useBoardPermissions")
-					.mockReturnValueOnce(useBoardPermissionsMock);
+				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+					useBoardPermissionsMock
+				);
 
 				const { wrapper } = setupWrapper();
 
@@ -1414,9 +1466,9 @@ describe("Folder.vue", () => {
 			const setup = async () => {
 				const folderStateMock =
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
-				jest
-					.spyOn(FolderState, "useFolderState")
-					.mockReturnValueOnce(folderStateMock);
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+					folderStateMock
+				);
 
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
@@ -1428,19 +1480,23 @@ describe("Folder.vue", () => {
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 				>({});
-				jest
-					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValueOnce(boardState);
+				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(
+					boardState
+				);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+					fileStorageApiMock
+				);
 
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-				const resolveUploadPromise1 = jest.fn();
+				const resolveUploadPromise1 = vi.fn();
 				const mockUploadPromise1 = new Promise<void>((resolve) => {
 					resolveUploadPromise1.mockImplementation(() => {
 						resolve();
@@ -1448,7 +1504,7 @@ describe("Folder.vue", () => {
 				});
 				fileStorageApiMock.upload.mockReturnValueOnce(mockUploadPromise1);
 
-				const resolveUploadPromise2 = jest.fn();
+				const resolveUploadPromise2 = vi.fn();
 				const mockUploadPromise2 = new Promise<void>((resolve) => {
 					resolveUploadPromise2.mockImplementation(() => {
 						resolve();
@@ -1458,16 +1514,16 @@ describe("Folder.vue", () => {
 
 				const useBoardStoreMock =
 					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-				jest
-					.spyOn(BoardApi, "useBoardStore")
-					.mockReturnValueOnce(useBoardStoreMock);
+				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+					useBoardStoreMock
+				);
 
 				const useBoardPermissionsMock = createMock<
 					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(true) });
-				jest
-					.spyOn(BoardApi, "useBoardPermissions")
-					.mockReturnValueOnce(useBoardPermissionsMock);
+				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+					useBoardPermissionsMock
+				);
 
 				const { wrapper, parentId } = setupWrapper();
 
@@ -1577,9 +1633,9 @@ describe("Folder.vue", () => {
 			const setup = async () => {
 				const folderStateMock =
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
-				jest
-					.spyOn(FolderState, "useFolderState")
-					.mockReturnValueOnce(folderStateMock);
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+					folderStateMock
+				);
 
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
@@ -1591,19 +1647,23 @@ describe("Folder.vue", () => {
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 				>({});
-				jest
-					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValueOnce(boardState);
+				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(
+					boardState
+				);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+					fileStorageApiMock
+				);
 
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-				const resolveUploadPromise1 = jest.fn();
+				const resolveUploadPromise1 = vi.fn();
 				const mockUploadPromise1 = new Promise<void>((resolve) => {
 					resolveUploadPromise1.mockImplementation(() => {
 						resolve();
@@ -1611,7 +1671,7 @@ describe("Folder.vue", () => {
 				});
 				fileStorageApiMock.upload.mockReturnValueOnce(mockUploadPromise1);
 
-				const resolveUploadPromise2 = jest.fn();
+				const resolveUploadPromise2 = vi.fn();
 				const mockUploadPromise2 = new Promise<void>((resolve, rejects) => {
 					resolveUploadPromise2.mockImplementation(() => {
 						rejects();
@@ -1621,16 +1681,16 @@ describe("Folder.vue", () => {
 
 				const useBoardStoreMock =
 					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-				jest
-					.spyOn(BoardApi, "useBoardStore")
-					.mockReturnValueOnce(useBoardStoreMock);
+				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+					useBoardStoreMock
+				);
 
 				const useBoardPermissionsMock = createMock<
 					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(true) });
-				jest
-					.spyOn(BoardApi, "useBoardPermissions")
-					.mockReturnValueOnce(useBoardPermissionsMock);
+				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+					useBoardPermissionsMock
+				);
 
 				const { wrapper, parentId } = setupWrapper();
 
@@ -1717,9 +1777,9 @@ describe("Folder.vue", () => {
 			const setup = async () => {
 				const folderStateMock =
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
-				jest
-					.spyOn(FolderState, "useFolderState")
-					.mockReturnValueOnce(folderStateMock);
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+					folderStateMock
+				);
 
 				const parent = parentNodeInfoFactory.build();
 				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
@@ -1731,15 +1791,15 @@ describe("Folder.vue", () => {
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 				>({});
-				jest
-					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValueOnce(boardState);
+				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(
+					boardState
+				);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+					fileStorageApiMock
+				);
 
 				const fileRecord1 = fileRecordFactory.build();
 				const fileRecord2 = fileRecordFactory.build();
@@ -1748,18 +1808,22 @@ describe("Folder.vue", () => {
 					fileRecord2,
 				]);
 
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
+
 				const useBoardStoreMock =
 					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-				jest
-					.spyOn(BoardApi, "useBoardStore")
-					.mockReturnValueOnce(useBoardStoreMock);
+				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+					useBoardStoreMock
+				);
 
 				const useBoardPermissionsMock = createMock<
 					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(false) });
-				jest
-					.spyOn(BoardApi, "useBoardPermissions")
-					.mockReturnValueOnce(useBoardPermissionsMock);
+				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+					useBoardPermissionsMock
+				);
 
 				const { wrapper } = setupWrapper();
 
@@ -1789,9 +1853,9 @@ describe("Folder.vue", () => {
 			const setup = async () => {
 				const folderStateMock =
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
-				jest
-					.spyOn(FolderState, "useFolderState")
-					.mockReturnValueOnce(folderStateMock);
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+					folderStateMock
+				);
 
 				const parent = parentNodeInfoFactory.build();
 				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
@@ -1803,15 +1867,15 @@ describe("Folder.vue", () => {
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 				>({});
-				jest
-					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValueOnce(boardState);
+				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(
+					boardState
+				);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+					fileStorageApiMock
+				);
 
 				const fileRecord1 = fileRecordFactory.build();
 				const fileRecord2 = fileRecordFactory.build();
@@ -1820,18 +1884,22 @@ describe("Folder.vue", () => {
 					fileRecord2,
 				]);
 
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
+
 				const useBoardStoreMock =
 					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-				jest
-					.spyOn(BoardApi, "useBoardStore")
-					.mockReturnValueOnce(useBoardStoreMock);
+				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+					useBoardStoreMock
+				);
 
 				const useBoardPermissionsMock = createMock<
 					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(false) });
-				jest
-					.spyOn(BoardApi, "useBoardPermissions")
-					.mockReturnValueOnce(useBoardPermissionsMock);
+				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+					useBoardPermissionsMock
+				);
 
 				const { wrapper } = setupWrapper();
 
@@ -1876,9 +1944,9 @@ describe("Folder.vue", () => {
 			const setup = async () => {
 				const folderStateMock =
 					createMock<ReturnType<typeof FolderState.useFolderState>>();
-				jest
-					.spyOn(FolderState, "useFolderState")
-					.mockReturnValueOnce(folderStateMock);
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+					folderStateMock
+				);
 
 				const parent = parentNodeInfoFactory.build();
 				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
@@ -1887,18 +1955,15 @@ describe("Folder.vue", () => {
 				folderStateMock.folderName = folderName;
 				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
-				const boardState = createMock<
-					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
-				>({});
-				jest
-					.spyOn(BoardApi, "useSharedBoardPageInformation")
-					.mockReturnValueOnce(boardState);
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				jest
-					.spyOn(FileStorageApi, "useFileStorageApi")
-					.mockReturnValueOnce(fileStorageApiMock);
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+					fileStorageApiMock
+				);
 
 				const fileRecord1 = fileRecordFactory.build();
 				const fileRecord2 = fileRecordFactory.build();
@@ -1909,16 +1974,16 @@ describe("Folder.vue", () => {
 
 				const useBoardStoreMock =
 					createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-				jest
-					.spyOn(BoardApi, "useBoardStore")
-					.mockReturnValueOnce(useBoardStoreMock);
+				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+					useBoardStoreMock
+				);
 
 				const useBoardPermissionsMock = createMock<
 					ReturnType<typeof BoardApi.useBoardPermissions>
 				>({ hasEditPermission: ref(false) });
-				jest
-					.spyOn(BoardApi, "useBoardPermissions")
-					.mockReturnValueOnce(useBoardPermissionsMock);
+				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+					useBoardPermissionsMock
+				);
 
 				const { wrapper } = setupWrapper();
 
@@ -1959,11 +2024,12 @@ describe("Folder.vue", () => {
 		describe("download handlers", () => {
 			describe("when user clicks download button in action menu", () => {
 				const setup = async () => {
+					HTMLFormElement.prototype.submit = vi.fn();
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
 						() => "boards"
@@ -1981,15 +2047,16 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					const fileRecord = fileRecordFactory.build();
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
@@ -1998,26 +2065,24 @@ describe("Folder.vue", () => {
 
 					const boardApiMock =
 						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-					jest.spyOn(BoardApi, "useBoardApi").mockReturnValueOnce(boardApiMock);
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(true) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
 
 					const { wrapper } = setupWrapper();
 
-					await nextTick();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					const checkbox = wrapper.find(
 						`[data-testid='select-checkbox-${fileRecord.name}']`
@@ -2034,11 +2099,6 @@ describe("Folder.vue", () => {
 					);
 					await downloadButton.trigger("click");
 
-					const spyDownloadFilesAsArchive = jest.spyOn(
-						FileHelper,
-						"downloadFilesAsArchive"
-					);
-
 					const now = dayjs().format("YYYYMMDD");
 					const expectedResult = {
 						archiveName: `${now}_${folderName}`,
@@ -2046,15 +2106,14 @@ describe("Folder.vue", () => {
 					};
 
 					return {
-						spyDownloadFilesAsArchive,
 						expectedResult,
 					};
 				};
 
 				it("should call downloadFilesAsArchive", async () => {
-					const { spyDownloadFilesAsArchive, expectedResult } = await setup();
+					const { expectedResult } = await setup();
 
-					expect(spyDownloadFilesAsArchive).toHaveBeenCalledWith(
+					expect(FileHelper.downloadFilesAsArchive).toHaveBeenCalledWith(
 						expectedResult
 					);
 				});
@@ -2062,11 +2121,13 @@ describe("Folder.vue", () => {
 
 			describe("when user clicks download button in item menu", () => {
 				const setup = async () => {
+					HTMLAnchorElement.prototype.click = vi.fn();
+
 					const folderStateMock =
 						createMock<ReturnType<typeof FolderState.useFolderState>>();
-					jest
-						.spyOn(FolderState, "useFolderState")
-						.mockReturnValueOnce(folderStateMock);
+					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(
+						folderStateMock
+					);
 
 					const parent = parentNodeInfoFactory.build();
 					folderStateMock.parent = ref(parent) as unknown as ComputedRef;
@@ -2078,15 +2139,16 @@ describe("Folder.vue", () => {
 					const boardState = createMock<
 						ReturnType<typeof BoardApi.useSharedBoardPageInformation>
 					>({});
-					jest
-						.spyOn(BoardApi, "useSharedBoardPageInformation")
-						.mockReturnValueOnce(boardState);
+					vi.spyOn(
+						BoardApi,
+						"useSharedBoardPageInformation"
+					).mockReturnValueOnce(boardState);
 
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					jest
-						.spyOn(FileStorageApi, "useFileStorageApi")
-						.mockReturnValueOnce(fileStorageApiMock);
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
+						fileStorageApiMock
+					);
 
 					const fileRecord1 = fileRecordFactory.build();
 					const fileRecord2 = fileRecordFactory.build();
@@ -2097,16 +2159,20 @@ describe("Folder.vue", () => {
 
 					const useBoardStoreMock =
 						createMock<ReturnType<typeof BoardApi.useBoardStore>>();
-					jest
-						.spyOn(BoardApi, "useBoardStore")
-						.mockReturnValueOnce(useBoardStoreMock);
+					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(
+						useBoardStoreMock
+					);
 
 					const useBoardPermissionsMock = createMock<
 						ReturnType<typeof BoardApi.useBoardPermissions>
 					>({ hasEditPermission: ref(false) });
-					jest
-						.spyOn(BoardApi, "useBoardPermissions")
-						.mockReturnValueOnce(useBoardPermissionsMock);
+					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(
+						useBoardPermissionsMock
+					);
+
+					const boardApiMock =
+						createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
 					const { wrapper } = setupWrapper();
 
@@ -2122,24 +2188,23 @@ describe("Folder.vue", () => {
 					);
 					await itemDownloadButton.trigger("click");
 
-					const spyDownloadFile = jest.spyOn(FileHelper, "downloadFile");
-
 					const expectedResult = [
 						`${fileRecord1.id}/${fileRecord1.name}`,
 						`${fileRecord1.name}`,
 					];
 
 					return {
-						spyDownloadFile,
 						expectedResult,
 						wrapper,
 					};
 				};
 
 				it("should call downloadFile", async () => {
-					const { spyDownloadFile, expectedResult } = await setup();
+					const { expectedResult } = await setup();
 
-					expect(spyDownloadFile).toHaveBeenCalledWith(...expectedResult);
+					expect(FileHelper.downloadFile).toHaveBeenCalledWith(
+						...expectedResult
+					);
 				});
 			});
 		});

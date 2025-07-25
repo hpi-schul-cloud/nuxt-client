@@ -20,14 +20,14 @@ import {
 	ExternalToolDisplayData,
 	useExternalToolDisplayListState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { ref } from "vue";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import { EmptyState } from "@ui-empty-state";
 
-jest.mock("@data-external-tool");
+vi.mock("@data-external-tool");
 
 describe("RoomExternalToolOverview", () => {
 	let useExternalToolDisplayListStateMock: DeepMocked<
@@ -75,13 +75,13 @@ describe("RoomExternalToolOverview", () => {
 			displayData: ref([]),
 		});
 
-		jest
-			.mocked(useExternalToolDisplayListState)
-			.mockReturnValue(useExternalToolDisplayListStateMock);
+		vi.mocked(useExternalToolDisplayListState).mockReturnValue(
+			useExternalToolDisplayListStateMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when no tools or no videoconference is in the list", () => {
@@ -191,10 +191,10 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when refresh time is over", () => {
 		afterEach(() => {
-			jest.useRealTimers();
+			vi.useRealTimers();
 		});
 		const setup = () => {
-			jest.useFakeTimers({ legacyFakeTimers: true });
+			vi.useFakeTimers();
 			const { refreshTime } = getWrapper();
 
 			return {
@@ -209,7 +209,7 @@ describe("RoomExternalToolOverview", () => {
 				useExternalToolDisplayListStateMock.fetchDisplayData
 			).toHaveBeenCalledTimes(1);
 
-			jest.advanceTimersByTime(refreshTime + 1000);
+			vi.advanceTimersByTime(refreshTime + 1000);
 
 			expect(
 				useExternalToolDisplayListStateMock.fetchDisplayData

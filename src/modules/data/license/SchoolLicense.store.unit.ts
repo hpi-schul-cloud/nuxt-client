@@ -1,11 +1,11 @@
 import { MediaSchoolLicenseListResponse } from "@/serverApi/v3";
 import { mediaSchoolLicenseResponseFactory } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { useSchoolLicenseStore } from "./SchoolLicense.store";
 import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";
 
-jest.mock("./schoolLicenseApi.composable");
+vi.mock("./schoolLicenseApi.composable");
 
 describe("SchoolLicenseStore", () => {
 	let useSchoolLicenseApiMock: DeepMocked<
@@ -17,11 +17,11 @@ describe("SchoolLicenseStore", () => {
 
 		useSchoolLicenseApiMock =
 			createMock<ReturnType<typeof useSchoolLicenseApi>>();
-		jest.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
+		vi.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getLicenseIdentifier", () => {

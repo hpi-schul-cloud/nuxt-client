@@ -2,7 +2,6 @@ import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
-import { Task } from "@/store/types/tasks";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { mount } from "@vue/test-utils";
@@ -40,7 +39,7 @@ describe("@/components/organisms/TasksList", () => {
 	};
 
 	const tasksModuleGetters: Partial<TasksModule> = {
-		getTasks: tasks as Task[],
+		getTasks: tasks,
 		getStatus: "completed",
 		hasTasks: true,
 	};

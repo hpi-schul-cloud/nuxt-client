@@ -67,7 +67,7 @@ describe("PdfDisplay", () => {
 		it("should call open function", () => {
 			const { wrapper, src } = setup({ isEditMode: false });
 
-			const windowOpenSpy = jest.fn();
+			const windowOpenSpy = vi.fn();
 			window.open = windowOpenSpy;
 
 			const image = wrapper.find("preview-image-stub");
