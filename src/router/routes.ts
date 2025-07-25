@@ -121,7 +121,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: `/administration/rooms/manage`,
 		component: async () => (await import("@page-room")).AdministrationRoomsPage,
 		name: "administration-rooms-manage",
-		beforeEnter: createPermissionGuard(["admin_view"]),
+		beforeEnter: createPermissionGuard(["school_administrate_rooms"]),
 	},
 	{
 		path: "/administration/rooms/new",
