@@ -13,7 +13,7 @@
 		<v-badge
 			class="ma-0 badge-component rounded avatar-badge"
 			bordered
-			color="rgba(var(--v-theme-primary))"
+			color="rgba(var(--v-theme-surface-variant))"
 			:model-value="!!badgeIcon"
 			:icon="badgeIcon"
 		>
@@ -83,7 +83,7 @@ const { t } = useI18n();
 const router = useRouter();
 
 const badgeIcon = computed(() => {
-	if (props.showBadge && props.item.notification === true) {
+	if (props.showBadge) {
 		return mdiLock;
 	}
 
@@ -251,5 +251,9 @@ const dropAvatar = () => {
 
 .dragging {
 	opacity: 0.5;
+}
+
+.v-badge__badge {
+	background-color: black !important;
 }
 </style>

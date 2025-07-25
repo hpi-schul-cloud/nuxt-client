@@ -23,6 +23,7 @@ import {
 	CommonCartridgeApiFactory,
 	CommonCartridgeApiInterface,
 } from "@/commonCartridgeApi/v3";
+import { isAxiosError } from "axios";
 
 @Module({
 	name: "courseRoomDetailsModule",
@@ -80,7 +81,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async fetchContent(id: string): Promise<void> {
+	async fetchContent(id: string) {
 		this.setLoading(true);
 		try {
 			const { data } =
@@ -88,7 +89,14 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			this.setRoomData(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
-			this.setError(error);
+			if (isAxiosError(error)) {
+				const errorType = error?.response?.data?.type;
+				if (errorType === "LOCKED_COURSE") {
+					return { locked: true, title: error?.response?.data?.message };
+				}
+			} else {
+				this.setError(error);
+			}
 			this.setLoading(false);
 		}
 	}
