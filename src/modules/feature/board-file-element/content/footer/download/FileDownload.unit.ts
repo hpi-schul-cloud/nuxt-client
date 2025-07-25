@@ -103,7 +103,7 @@ describe("FileDownload", () => {
 
 		describe("when download icon is focused and enter is pressed", () => {
 			const setup = () => {
-				const parentKeydownHandler = jest.fn();
+				const parentKeydownHandler = vi.fn();
 				const parent = {
 					template: `<div @keydown="onKeydown"><FileDownload v-bind="props" /></div>`,
 					components: { FileDownload },
@@ -116,9 +116,7 @@ describe("FileDownload", () => {
 					isDownloadAllowed: true,
 				};
 
-				const downloadFileMock = jest
-					.mocked(downloadFile)
-					.mockReturnValueOnce();
+				const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
 
 				const wrapper = mount(parent, {
 					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
