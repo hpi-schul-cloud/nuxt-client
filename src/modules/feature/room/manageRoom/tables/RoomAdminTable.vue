@@ -46,6 +46,7 @@ import { useAdministrationRoomStore } from "@data-room";
 import { KebabMenu } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { mdiAlertOutline } from "@icons/material";
+import { computed } from "vue";
 
 type Props = {
 	headerBottom?: number;
@@ -65,7 +66,7 @@ const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
 
-const tableHeaders = [
+const tableHeaders = computed(() => [
 	{
 		title: t("pages.rooms.administration.table.header.roomName"),
 		key: "name",
@@ -101,5 +102,5 @@ const tableHeaders = [
 		width: 100,
 		align: "center",
 	},
-];
+]);
 </script>
