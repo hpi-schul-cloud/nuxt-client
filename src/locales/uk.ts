@@ -2105,7 +2105,7 @@ export default {
 	"pages.rooms.administration.table.header.actions": "Дії",
 	"pages.rooms.administration.table.row.owner.notExist": "Не існує",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
-		"Меню дій для кімнати “{roomName}”",
+		"Меню дій для кімнати “{linkTitle}”",
 	"pages.rooms.administration.error.load":
 		"Не вдалося завантажити список кімнат.",
 	"pages.rooms.administration.pageTitle": "Керування кімнатами",

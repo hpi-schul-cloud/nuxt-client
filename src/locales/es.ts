@@ -2139,7 +2139,7 @@ export default {
 	"pages.rooms.administration.table.header.actions": "Acciones",
 	"pages.rooms.administration.table.row.owner.notExist": "No existe",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
-		"Menú de acciones para la sala “{roomName}”",
+		"Menú de acciones para la sala “{linkTitle}”",
 	"pages.rooms.administration.error.load":
 		"No se pudo cargar la lista de salas.",
 	"pages.rooms.administration.pageTitle": "Administrar salas",
