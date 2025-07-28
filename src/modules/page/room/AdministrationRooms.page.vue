@@ -17,11 +17,7 @@
 			</EmptyState>
 		</template>
 		<template v-else>
-			<RoomAdminTable
-				:show-select="false"
-				:header-bottom="headerBottom"
-				data-testid="room-admin-table"
-			/>
+			<RoomAdminTable :show-select="false" :header-bottom="headerBottom" />
 		</template>
 	</DefaultWireframe>
 </template>

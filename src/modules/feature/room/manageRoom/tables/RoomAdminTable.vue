@@ -6,6 +6,7 @@
 		:show-select="true"
 		aria-label-name-key="name"
 		select-item-key="roomId"
+		data-testid="room-admin-table"
 		:external-selected-ids="selectedIds"
 		@update:selected-ids="onUpdateSelectedIds"
 	>
