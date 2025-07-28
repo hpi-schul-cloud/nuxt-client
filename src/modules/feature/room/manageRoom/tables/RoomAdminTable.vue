@@ -15,7 +15,8 @@
 			<span>
 				<v-icon
 					v-if="!item.owner"
-					:icon="mdiAlertOutline"
+					:icon="mdiAlert"
+					color="warning"
 					class="text-medium-emphasis"
 				/>
 				{{
@@ -45,7 +46,7 @@ import { DataTable } from "@ui-data-table";
 import { useAdministrationRoomStore } from "@data-room";
 import { KebabMenu } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
-import { mdiAlertOutline } from "@icons/material";
+import { mdiAlert } from "@icons/material";
 import { computed } from "vue";
 
 type Props = {
