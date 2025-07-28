@@ -3296,7 +3296,7 @@ export interface DashboardGridElementResponse {
      */
     isSynchronized: boolean;
     /**
-     * Is the course locked?
+     * Indicates if the course is locked and cannot be accessed.
      * @type {boolean}
      * @memberof DashboardGridElementResponse
      */
@@ -3332,6 +3332,12 @@ export interface DashboardGridSubElementResponse {
      * @memberof DashboardGridSubElementResponse
      */
     displayColor: string;
+    /**
+     * Indicates if the course is locked and cannot be accessed.
+     * @type {boolean}
+     * @memberof DashboardGridSubElementResponse
+     */
+    isLocked: boolean;
 }
 /**
  * 
