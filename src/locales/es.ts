@@ -475,7 +475,7 @@ export default {
 	"components.board.error.404":
 		"Error 404 – No se ha encontrado ningún tablero con este nombre",
 	"components.board.error.403":
-		"Error 403 – Lamentablemente, falta la autorización para ver este contenido",
+		"Error 403 – Lamentablemente, falta la autorización para ver este contenido ...",
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",

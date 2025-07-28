@@ -467,7 +467,7 @@ export default {
 	"components.board.error.404":
 		"Error 404 – Board with this name was not found",
 	"components.board.error.403":
-		"Error 403 – Unfortunately, you do not have permission to view this content",
+		"Error 403 – Unfortunately, you do not have permission to view this content ...",
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
@@ -1766,7 +1766,7 @@ export default {
 	"pages.courseRooms.tabLabel.tools": "Tools",
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
 	"pages.courseRooms.course-locked":
-		"The course is locked because there is no teacher assigned. Please refer to the School Administrator.",
+		"The course is locked because there is no teacher assigned. Please refer to the school administrator.",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",
