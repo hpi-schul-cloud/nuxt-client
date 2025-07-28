@@ -85,7 +85,7 @@
 		"typescript-eslint": "^8.33.1",
 		"vite": "^6.2.2",
 		"vite-plugin-checker": "^0.9.3",
-		"vite-plugin-vue-devtools": "^7.7.7",
+		"vite-plugin-vue-devtools": "^8.0.0",
 		"vite-plugin-vuetify": "^2.1.1",
 		"vite-tsconfig-paths": "^5.1.4",
 		"vitest": "^3.2.4",
