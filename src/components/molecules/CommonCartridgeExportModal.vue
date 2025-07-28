@@ -21,13 +21,11 @@
 								id="1.1.0"
 								:label="$t('pages.room.modal.course.export.version1.1')"
 								value="1.1.0"
-								color="primary"
 							/>
 							<v-radio
 								id="1.3.0"
 								:label="$t('pages.room.modal.course.export.version1.3')"
 								value="1.3.0"
-								color="primary"
 							/>
 						</v-radio-group>
 					</div>

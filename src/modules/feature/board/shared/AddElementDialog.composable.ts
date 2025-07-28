@@ -4,8 +4,12 @@ import {
 	PreferredToolResponse,
 } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import type { CreateElementRequestPayload } from "@data-board";
-import { useBoardFeatures, useCardStore } from "@data-board";
+import {
+	type CreateElementRequestPayload,
+	useBoardFeatures,
+	useBoardPermissions,
+	useCardStore,
+} from "@data-board";
 import {
 	mdiFolderOpenOutline,
 	mdiFormatText,
@@ -35,6 +39,8 @@ export const useAddElementDialog = (
 	const isVideoConferenceEnabled = computed(() =>
 		isFeatureEnabled(BoardFeature.Videoconference)
 	);
+
+	const { hasManageVideoConferencePermission } = useBoardPermissions();
 
 	const cardStore = useCardStore();
 
@@ -164,7 +170,8 @@ export const useAddElementDialog = (
 
 		if (
 			envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
-			isVideoConferenceEnabled.value
+			isVideoConferenceEnabled.value &&
+			hasManageVideoConferencePermission.value
 		) {
 			options.push({
 				icon: mdiVideoOutline,
