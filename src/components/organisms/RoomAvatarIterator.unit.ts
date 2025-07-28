@@ -6,6 +6,7 @@ import { createTestingVuetify } from "@@/tests/test-utils/setup";
 const propsData = {
 	itemSize: "4em",
 	maxItems: 2,
+	showBadge: true,
 	avatars: [
 		{
 			id: "123",

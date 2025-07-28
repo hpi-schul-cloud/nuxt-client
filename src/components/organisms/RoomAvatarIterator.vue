@@ -20,6 +20,7 @@
 							:item="item.raw"
 							:size="itemSize"
 							:condense-layout="condenseLayout"
+							:show-badge="showBadge"
 							@start-drag="$emit('startDrag', $event)"
 						/>
 					</v-col>
@@ -64,6 +65,10 @@ defineProps({
 	},
 	canDraggable: {
 		type: Boolean,
+	},
+	showBadge: {
+		type: Boolean,
+		default: true,
 	},
 });
 defineEmits(["startDrag"]);

@@ -15,6 +15,7 @@
 			bordered
 			:model-value="!!badgeIcon"
 			:icon="badgeIcon"
+			:data-testid="badgeType"
 		>
 			<VBtn
 				:size="size"
@@ -32,6 +33,7 @@
 					:aria-label="avatarAriaLabel"
 					:size="size"
 					data-testid="course-icon"
+					:show-badge="showBadge"
 				>
 					<span :class="avatarTextClass" data-testid="course-short-title">
 						{{ item.shortTitle }}
@@ -71,6 +73,10 @@ const props = defineProps({
 	condenseLayout: {
 		type: Boolean,
 	},
+	showBadge: {
+		type: Boolean,
+		default: true,
+	},
 });
 
 const emit = defineEmits(["startDrag", "dragendAvatar", "dropAvatar"]);
@@ -78,7 +84,23 @@ const emit = defineEmits(["startDrag", "dragendAvatar", "dropAvatar"]);
 const { t } = useI18n();
 const router = useRouter();
 
+const badgeType = computed(() => {
+	if (props.item.isLocked) {
+		return "course-badge-lock";
+	}
+
+	if (props.item.isSynchronized) {
+		return "course-badge-sync";
+	}
+
+	return "course-badge";
+});
+
 const badgeIcon = computed(() => {
+	if (!props.showBadge) {
+		return undefined;
+	}
+
 	if (props.item.isLocked) {
 		return mdiLock;
 	}
