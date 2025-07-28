@@ -68,9 +68,6 @@ const props = defineProps({
 	draggable: {
 		type: Boolean,
 	},
-	showBadge: {
-		type: Boolean,
-	},
 	condenseLayout: {
 		type: Boolean,
 	},
@@ -82,7 +79,7 @@ const { t } = useI18n();
 const router = useRouter();
 
 const badgeIcon = computed(() => {
-	if (props.showBadge) {
+	if (props.item.isLocked) {
 		return mdiLock;
 	}
 

@@ -114,6 +114,7 @@ describe("@/pages/CourseRoomListPage", () => {
 				searchText: "Mathe 2019/20",
 				isArchived: true,
 				to: "/rooms/123",
+				isLocked: false,
 			};
 
 			expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
@@ -147,6 +148,7 @@ describe("@/pages/CourseRoomListPage", () => {
 					searchText: "History 2015-2018",
 					isArchived: true,
 					to: "/rooms/234",
+					isLocked: false,
 				});
 			});
 		});

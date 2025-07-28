@@ -369,6 +369,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 				];
 				expect(courseRoomListModule.getRoomsData).not.toStrictEqual(
@@ -441,6 +442,7 @@ describe("rooms module", () => {
 					groupElements: [],
 					copyingSince: "",
 					isSynchronized: false,
+					isLocked: false,
 				};
 				courseRoomListModule.setRoomData(mockData.gridElements);
 				courseRoomListModule.setPosition(draggedObject);
@@ -484,6 +486,7 @@ describe("rooms module", () => {
 						searchText: "Mathe 2019/20",
 						isArchived: true,
 						to: "/rooms/123",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -495,6 +498,7 @@ describe("rooms module", () => {
 						searchText: "History",
 						isArchived: false,
 						to: "/rooms/234",
+						isLocked: false,
 					},
 				];
 				courseRoomListModule.setAllElements(itemsToBeSet);
@@ -599,6 +603,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -612,6 +617,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 				];
 
@@ -715,6 +721,7 @@ describe("rooms module", () => {
 						searchText: "Mathe 2019/20",
 						isArchived: true,
 						to: "/rooms/123",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -727,6 +734,7 @@ describe("rooms module", () => {
 						searchText: "History 2015-2018",
 						isArchived: true,
 						to: "/rooms/234",
+						isLocked: false,
 					},
 				];
 				expect(courseRoomListModule.getAllElements).toStrictEqual([]);

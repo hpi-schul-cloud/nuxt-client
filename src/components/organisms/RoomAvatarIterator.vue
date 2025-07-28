@@ -19,7 +19,6 @@
 							class="room-avatar"
 							:item="item.raw"
 							:size="itemSize"
-							:show-badge="true"
 							:condense-layout="condenseLayout"
 							@start-drag="$emit('startDrag', $event)"
 						/>
