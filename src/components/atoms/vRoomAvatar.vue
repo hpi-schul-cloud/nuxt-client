@@ -13,7 +13,6 @@
 		<v-badge
 			class="ma-0 badge-component rounded avatar-badge"
 			bordered
-			color="rgba(var(--v-theme-surface-variant))"
 			:model-value="!!badgeIcon"
 			:icon="badgeIcon"
 		>
@@ -251,9 +250,5 @@ const dropAvatar = () => {
 
 .dragging {
 	opacity: 0.5;
-}
-
-.v-badge__badge {
-	background-color: black !important;
 }
 </style>
