@@ -21,7 +21,6 @@
 						v-for="option in radioOptions"
 						:key="option.role"
 						:value="option.role"
-						color="primary"
 						class="align-start mb-2"
 						:data-testid="option.dataTestid"
 					>
@@ -88,7 +87,6 @@
 			<div class="mr-4 mb-3">
 				<v-btn
 					class="ms-auto mr-2"
-					color="primary"
 					:text="t('common.actions.cancel')"
 					data-testid="change-role-cancel-btn"
 					@click="onCancel"

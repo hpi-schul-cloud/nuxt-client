@@ -158,6 +158,7 @@ describe("BoardPermissions.composable", () => {
 				hasDeletePermission,
 				hasCreateToolPermission,
 				hasEditPermission,
+				hasManageVideoConferencePermission,
 				hasShareBoardPermission,
 				isTeacher,
 				isStudent,
@@ -169,6 +170,7 @@ describe("BoardPermissions.composable", () => {
 			expect(hasDeletePermission.value).toBe(false);
 			expect(hasCreateToolPermission.value).toBe(false);
 			expect(hasEditPermission.value).toBe(false);
+			expect(hasManageVideoConferencePermission.value).toBe(false);
 			expect(hasShareBoardPermission.value).toBe(false);
 
 			expect(isTeacher.value).toBe(false);
@@ -181,7 +183,11 @@ describe("BoardPermissions.composable", () => {
 			setupAllStores({
 				userRoles: [RoleName.Teacher],
 				userPermissions: [Permission.ContextToolAdmin],
-				boardPermissions: [Permission.BoardEdit, Permission.BoardShareBoard],
+				boardPermissions: [
+					Permission.BoardEdit,
+					Permission.BoardManageVideoconference,
+					Permission.BoardShareBoard,
+				],
 			});
 
 			const {
@@ -191,6 +197,7 @@ describe("BoardPermissions.composable", () => {
 				hasDeletePermission,
 				hasCreateToolPermission,
 				hasEditPermission,
+				hasManageVideoConferencePermission,
 				isTeacher,
 				isStudent,
 				hasShareBoardPermission,
@@ -202,6 +209,7 @@ describe("BoardPermissions.composable", () => {
 			expect(hasDeletePermission.value).toBe(true);
 			expect(hasCreateToolPermission.value).toBe(true);
 			expect(hasEditPermission.value).toBe(true);
+			expect(hasManageVideoConferencePermission.value).toBe(true);
 			expect(hasShareBoardPermission.value).toBe(true);
 
 			expect(isTeacher.value).toBe(true);

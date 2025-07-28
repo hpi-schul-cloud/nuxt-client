@@ -966,7 +966,7 @@ export default {
 	"components.roomForm.labels.videoConference.label":
 		"Videokonferenzen für Bearbeitende erlauben",
 	"components.roomForm.labels.videoConference.helperText":
-		"Raum-Mitglieder mit der Berechtigung 'Bearbeiten' dürfen Videokonferenzen hinzufügen und starten.",
+		"Raum-Mitglieder mit der Berechtigung „Bearbeiten” dürfen Videokonferenzen hinzufügen und starten.",
 	"components.roomForm.validation.generalSaveError":
 		"Beim Speichern ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
