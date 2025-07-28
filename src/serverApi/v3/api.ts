@@ -405,6 +405,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomManageInvitationlinks = 'ROOM_MANAGE_INVITATIONLINKS',
     RoomListDrafts = 'ROOM_LIST_DRAFTS',
     RoomManageVideoconferences = 'ROOM_MANAGE_VIDEOCONFERENCES',
+    SchoolAdministrateRooms = 'SCHOOL_ADMINISTRATE_ROOMS',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -1802,6 +1803,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_ROOM_MEMBERS_TABS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_ADMINISTRATE_ROOMS_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -7834,6 +7841,7 @@ export enum Permission {
     RoomManageInvitationlinks = 'ROOM_MANAGE_INVITATIONLINKS',
     RoomListDrafts = 'ROOM_LIST_DRAFTS',
     RoomManageVideoconferences = 'ROOM_MANAGE_VIDEOCONFERENCES',
+    SchoolAdministrateRooms = 'SCHOOL_ADMINISTRATE_ROOMS',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -8685,6 +8693,98 @@ export interface RoomRoleResponse {
      * @memberof RoomRoleResponse
      */
     roomRoleName: string;
+}
+/**
+ * 
+ * @export
+ * @interface RoomStatsItemResponse
+ */
+export interface RoomStatsItemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    roomId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    owner: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    schoolName: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoomStatsItemResponse
+     */
+    totalMembers: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoomStatsItemResponse
+     */
+    internalMembers: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoomStatsItemResponse
+     */
+    externalMembers: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface RoomStatsListResponse
+ */
+export interface RoomStatsListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<RoomStatsItemResponse>}
+     * @memberof RoomStatsListResponse
+     */
+    data: Array<RoomStatsItemResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof RoomStatsListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof RoomStatsListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof RoomStatsListResponse
+     */
+    limit: number;
 }
 /**
  * 
@@ -22817,6 +22917,50 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Get a list of room statistics.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 1000.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetRoomStats: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/rooms/stats`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 1000.
@@ -23110,6 +23254,18 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get a list of room statistics.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 1000.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerGetRoomStats(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomStatsListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetRoomStats(skip, limit, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 1000.
@@ -23270,6 +23426,17 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Get a list of room statistics.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 1000.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetRoomStats(skip?: number, limit?: number, options?: any): AxiosPromise<RoomStatsListResponse> {
+            return localVarFp.roomControllerGetRoomStats(skip, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 1000.
@@ -23422,6 +23589,17 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerGetRoomDetails(roomId: string, options?: any): AxiosPromise<RoomDetailsResponse>;
+
+    /**
+     * 
+     * @summary Get a list of room statistics.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 1000.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerGetRoomStats(skip?: number, limit?: number, options?: any): AxiosPromise<RoomStatsListResponse>;
 
     /**
      * 
@@ -23596,6 +23774,19 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerGetRoomDetails(roomId: string, options?: any) {
         return RoomApiFp(this.configuration).roomControllerGetRoomDetails(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a list of room statistics.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 1000.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerGetRoomStats(skip?: number, limit?: number, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerGetRoomStats(skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
