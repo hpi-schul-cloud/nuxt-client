@@ -2092,6 +2092,21 @@ export default {
 	"pages.rooms.invitationlinks.error.load":
 		"Die Einladungsliste konnte nicht geladen werden.",
 	"pages.rooms.title": "Räume",
+	"pages.rooms.administration.title": "Räume verwalten",
+	"pages.rooms.administration.table.header.roomName": "Raumname",
+	"pages.rooms.administration.table.header.roomOwner": "Besitzend",
+	"pages.rooms.administration.table.header.totalMember": "Mitglieder gesamt",
+	"pages.rooms.administration.table.header.internalMember": "Mitglieder intern",
+	"pages.rooms.administration.table.header.externalMember": "Mitglieder extern",
+	"pages.rooms.administration.table.header.creationDate": "Erstellt am",
+	"pages.rooms.administration.table.header.mainSchool": "Stammschule des Raums",
+	"pages.rooms.administration.table.header.actions": "Aktionen",
+	"pages.rooms.administration.table.row.owner.notExist": "Nicht vorhanden",
+	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
+		"Aktionsmenü für den Raum “{roomName}”",
+	"pages.rooms.administration.error.load":
+		"Die Raumliste konnte nicht geladen werden.",
+	"pages.rooms.administration.pageTitle": "Räume verwalten",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",

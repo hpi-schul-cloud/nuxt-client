@@ -42,7 +42,7 @@
 	<v-data-table
 		v-model:search="search"
 		v-model="selectedIds"
-		data-testid="data-table"
+		:data-testid="dataTestid"
 		hover
 		:item-value="selectItemKey"
 		mobile-breakpoint="sm"
@@ -128,6 +128,10 @@ const props = defineProps({
 	externalSelectedIds: {
 		type: Array as PropType<string[] | undefined>,
 		default: undefined,
+	},
+	dataTestid: {
+		type: String,
+		default: "data-table",
 	},
 });
 
