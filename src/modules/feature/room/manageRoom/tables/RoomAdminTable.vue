@@ -29,7 +29,7 @@
 				:data-testid="`kebab-menu-${item.id}`"
 				:aria-label="
 					t('pages.rooms.administration.table.row.actionMenu.ariaLabel', {
-						linkTitle: item.name,
+						roomName: item.name,
 					})
 				"
 			>

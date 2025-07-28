@@ -2103,7 +2103,7 @@ export default {
 	"pages.rooms.administration.table.header.actions": "Aktionen",
 	"pages.rooms.administration.table.row.owner.notExist": "Nicht vorhanden",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
-		"Aktionsmenü für den Raum “{linkTitle}”",
+		"Aktionsmenü für den Raum “{roomName}”",
 	"pages.rooms.administration.error.load":
 		"Die Raumliste konnte nicht geladen werden.",
 	"pages.rooms.administration.pageTitle": "Räume verwalten",
