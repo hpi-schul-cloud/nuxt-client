@@ -14,8 +14,18 @@
 
 
 
-export * from './api/admin-api';
-export * from './api/file-api';
-export * from './api/file-config-api';
-export * from './api/wopi-api';
+/**
+ * 
+ * @export
+ * @interface AuthorizedCollaboraDocumentUrlResponse
+ */
+export interface AuthorizedCollaboraDocumentUrlResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthorizedCollaboraDocumentUrlResponse
+     */
+    authorizedCollaboraDocumentUrl: string;
+}
+
 

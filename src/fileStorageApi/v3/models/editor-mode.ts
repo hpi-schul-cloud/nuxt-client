@@ -14,8 +14,15 @@
 
 
 
-export * from './api/admin-api';
-export * from './api/file-api';
-export * from './api/file-config-api';
-export * from './api/wopi-api';
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum EditorMode {
+    EDIT = 'edit',
+    VIEW = 'view'
+}
+
+
 

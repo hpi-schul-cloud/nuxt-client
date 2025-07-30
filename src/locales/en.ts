@@ -556,7 +556,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Update status",
 	"components.cardElement.fileElement.videoFormatError":
 		"The video format is not supported by this browser/operating system.",
-
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Open office document",
 	"components.cardElement.folderElement": "File folder",
 	"components.cardElement.folderElement.untitled": "Untitled folder",
 	"components.cardElement.LinkElement": "Link",
