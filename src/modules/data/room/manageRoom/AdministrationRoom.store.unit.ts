@@ -98,6 +98,42 @@ describe("useAdministrationRoomStore", () => {
 		});
 	});
 
+	describe("deleteRoom", () => {
+		it("should delete a room and update roomList", async () => {
+			const mockRooms: RoomStatsListResponse =
+				roomAdministrationFactory.build();
+			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
+				data: mockRooms,
+			} as unknown as AxiosPromise<RoomStatsListResponse>);
+
+			const roomAdminStore = setup(mockRooms.data);
+			const roomIdToDelete = mockRooms.data[0].roomId;
+			await roomAdminStore.deleteRoom(roomIdToDelete);
+			expect(
+				roomAdministrationApiMock.roomControllerDeleteRoom
+			).toHaveBeenCalledWith(roomIdToDelete);
+			expect(roomAdminStore.roomList).toEqual(
+				mockRooms.data.filter((room) => room.roomId !== roomIdToDelete)
+			);
+			expect(roomAdminStore.isLoading).toBe(false);
+		});
+
+		it("should handle errors during room deletion", async () => {
+			const roomAdminStore = setup();
+			const roomIdToDelete = "room-id";
+			roomAdministrationApiMock.roomControllerDeleteRoom.mockRejectedValue(
+				new Error("API Error")
+			);
+
+			await roomAdminStore.deleteRoom(roomIdToDelete);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"pages.rooms.administration.error.delete"
+			);
+			expect(roomAdminStore.isLoading).toBe(false);
+		});
+	});
+
 	describe("sortAndFormatList", () => {
 		it("should sort and format the room list correctly", async () => {
 			const mockRoomList = {
