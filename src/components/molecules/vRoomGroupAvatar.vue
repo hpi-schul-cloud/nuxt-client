@@ -43,7 +43,6 @@
 					:col-count="itemSpecs.columnCount"
 					:max-items="itemSpecs.maxItem"
 					tabindex="-1"
-					:show-badge="false"
 				/>
 			</v-card>
 		</v-badge>

@@ -68,7 +68,6 @@ defineProps({
 	},
 	showBadge: {
 		type: Boolean,
-		default: true,
 	},
 });
 defineEmits(["startDrag"]);
