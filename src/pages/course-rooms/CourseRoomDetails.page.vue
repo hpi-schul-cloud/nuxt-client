@@ -228,7 +228,6 @@ export default defineComponent({
 			isStartSyncDialogOpen: false,
 			tabIndex: 0,
 			boardLayoutDialogIsOpen: false,
-			isLocked: false,
 		};
 	},
 	computed: {
@@ -478,6 +477,9 @@ export default defineComponent({
 		isCopyModalOpen() {
 			return this.copyModule.getIsResultModalOpen;
 		},
+		isLocked() {
+			return this.courseRoomDetailsModule.getIsLocked;
+		},
 	},
 	watch: {
 		tabIndex(newIndex) {
@@ -502,14 +504,7 @@ export default defineComponent({
 			this.setActiveTab(activeTab);
 			this.courseId = courseId;
 
-			const lockedRoom =
-				await this.courseRoomDetailsModule.fetchContent(courseId);
-
-			if (lockedRoom) {
-				this.isLocked = true;
-				this.roomData.title = lockedRoom.title;
-				return;
-			}
+			await this.courseRoomDetailsModule.fetchContent(courseId);
 
 			if (this.roomData.roomId) {
 				this.roomVariant = RoomVariant.COURSE_ROOM;
