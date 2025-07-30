@@ -61,11 +61,26 @@ export const useAdministrationRoomStore = defineStore(
 			}
 		};
 
+		const deleteRoom = async (roomId: string) => {
+			try {
+				isLoading.value = true;
+				await roomApi.roomControllerDeleteRoom(roomId);
+				roomList.value = roomList.value.filter(
+					(room) => room.roomId !== roomId
+				);
+			} catch {
+				showFailure(t("pages.rooms.administration.error.delete"));
+			} finally {
+				isLoading.value = false;
+			}
+		};
+
 		return {
 			isLoading,
 			isEmptyList,
 			roomList,
 			selectedIds,
+			deleteRoom,
 			fetchRooms,
 		};
 	}
