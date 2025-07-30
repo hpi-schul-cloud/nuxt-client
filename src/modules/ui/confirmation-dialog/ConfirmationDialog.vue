@@ -12,6 +12,8 @@
 					</h2>
 				</template>
 
+				<slot name="alert" />
+
 				<template #actions>
 					<v-spacer />
 					<div class="action-buttons mx-4">

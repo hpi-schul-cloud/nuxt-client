@@ -10,7 +10,14 @@
 		:external-selected-ids="selectedIds"
 		@update:selected-ids="onUpdateSelectedIds"
 	>
-		<template #[`action-menu-items`]> &nbsp; </template>
+		<template #[`action-menu-items`]>
+			<KebabMenuActionDelete
+				scope-language-key="pages.rooms.administration.title"
+				:name="'some title here'"
+				:data-testid="'menu-delete-rooms'"
+				@click="onDeleteRooms(selectedIds[0])"
+			/>
+		</template>
 
 		<template #[`item.owner`]="{ item }">
 			<span>
@@ -39,16 +46,32 @@
 			</KebabMenu>
 		</template>
 	</DataTable>
+	<ConfirmationDialog>
+		<template #alert>
+			<v-alert
+				class="mx-6 mb-4"
+				type="warning"
+				data-testid="error-alert"
+				:icon="mdiAlert"
+			>
+				<span class="alert-text">some alert text</span>
+			</v-alert>
+		</template>
+	</ConfirmationDialog>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { DataTable } from "@ui-data-table";
 import { useAdministrationRoomStore } from "@data-room";
-import { KebabMenu } from "@ui-kebab-menu";
+import { KebabMenu, KebabMenuActionDelete } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { mdiAlert } from "@icons/material";
 import { computed } from "vue";
+import {
+	useConfirmationDialog,
+	ConfirmationDialog,
+} from "@ui-confirmation-dialog";
 
 type Props = {
 	headerBottom?: number;
@@ -59,13 +82,34 @@ withDefaults(defineProps<Props>(), {
 	headerBottom: 0,
 	showSelect: true,
 });
+
 const { t } = useI18n();
+const { askConfirmation } = useConfirmationDialog();
 const administrationRoomStore = useAdministrationRoomStore();
 
 const { roomList, selectedIds } = storeToRefs(administrationRoomStore);
 
 const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
+};
+
+const confirmDeletion = async (id: string) => {
+	if (!id) {
+		return false;
+	}
+	const shouldDelete = await askConfirmation({
+		message: "some confirmation message here",
+		confirmActionLangKey: "common.actions.delete",
+	});
+
+	return shouldDelete;
+};
+
+const onDeleteRooms = async (id: string) => {
+	const shouldDelete = await confirmDeletion(id);
+	if (shouldDelete) {
+		await administrationRoomStore.deleteRoom(id);
+	}
 };
 
 const tableHeaders = computed(() => [
@@ -106,3 +150,10 @@ const tableHeaders = computed(() => [
 	},
 ]);
 </script>
+
+<style scoped>
+.alert-text {
+	color: rgba(var(--v-theme-on-background)) !important;
+	line-height: var(--line-height-lg) !important;
+}
+</style>
