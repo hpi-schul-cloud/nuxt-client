@@ -16,7 +16,6 @@ export const useAdministrationRoomStore = defineStore(
 
 		const isLoading = ref(true);
 		const roomList = ref<RoomStatsItemResponse[]>([]);
-		const selectedIds = ref<string[]>([]);
 		const isEmptyList = ref(false);
 
 		const userSchoolName = schoolsModule.getSchool.name;
@@ -79,7 +78,6 @@ export const useAdministrationRoomStore = defineStore(
 			isLoading,
 			isEmptyList,
 			roomList,
-			selectedIds,
 			deleteRoom,
 			fetchRooms,
 		};

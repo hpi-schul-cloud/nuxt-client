@@ -3,22 +3,11 @@
 		:items="roomList"
 		:header-bottom="headerBottom"
 		:table-headers="tableHeaders"
-		:show-select="true"
+		:show-select="false"
 		aria-label-name-key="name"
 		select-item-key="roomId"
 		data-testid="room-admin-table"
-		:external-selected-ids="selectedIds"
-		@update:selected-ids="onUpdateSelectedIds"
 	>
-		<template #[`action-menu-items`]>
-			<KebabMenuActionDelete
-				scope-language-key="pages.rooms.administration.title"
-				:name="'some title here'"
-				:data-testid="'menu-delete-rooms'"
-				@click="onDeleteRooms(selectedIds[0])"
-			/>
-		</template>
-
 		<template #[`item.owner`]="{ item }">
 			<span>
 				<v-icon
@@ -42,7 +31,12 @@
 					})
 				"
 			>
-				&nbsp;
+				<KebabMenuActionDelete
+					scope-language-key="pages.rooms.administration.title"
+					:name="'some title here'"
+					:data-testid="'menu-delete-rooms'"
+					@click="onDeleteRooms(item.roomId)"
+				/>
 			</KebabMenu>
 		</template>
 	</DataTable>
@@ -87,11 +81,7 @@ const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 const administrationRoomStore = useAdministrationRoomStore();
 
-const { roomList, selectedIds } = storeToRefs(administrationRoomStore);
-
-const onUpdateSelectedIds = (ids: string[]) => {
-	selectedIds.value = ids;
-};
+const { roomList } = storeToRefs(administrationRoomStore);
 
 const confirmDeletion = async (id: string) => {
 	if (!id) {
