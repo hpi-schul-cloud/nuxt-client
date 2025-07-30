@@ -222,13 +222,6 @@ export default defineComponent({
 				mdiSync,
 				mdiViewGridPlusOutline,
 			},
-			breadcrumbs: [
-				{
-					title: this.$t("common.words.courses"),
-					to: "/rooms/courses-overview",
-					disabled: false,
-				},
-			],
 			courseId: this.$route.params.id,
 			isShareModalOpen: false,
 			isEndSyncDialogOpen: false,
@@ -239,6 +232,19 @@ export default defineComponent({
 		};
 	},
 	computed: {
+		breadcrumbs() {
+			return [
+				{
+					title: this.$t("common.words.courses"),
+					to: "/rooms/courses-overview",
+					disabled: false,
+				},
+				{
+					title: this.roomData.title,
+					disabled: true,
+				},
+			];
+		},
 		boardLayoutsEnabled() {
 			return envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED;
 		},
