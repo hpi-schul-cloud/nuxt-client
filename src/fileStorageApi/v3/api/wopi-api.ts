@@ -21,9 +21,13 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
-import { DiscoveryAccessUrlParams } from '../models';
+import { ApiValidationError } from '../models';
 // @ts-ignore
-import { WopiCheckFileInfoResponse } from '../models';
+import { AuthorizedCollaboraDocumentUrlResponse } from '../models';
+// @ts-ignore
+import { EditorMode } from '../models';
+// @ts-ignore
+import { WopiFileInfoResponse } from '../models';
 /**
  * WopiApi - axios parameter creator
  * @export
@@ -74,14 +78,20 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get Collabora access URL with permission check and access token creation
-         * @param {DiscoveryAccessUrlParams} discoveryAccessUrlParams 
+         * @param {string} fileRecordId 
+         * @param {EditorMode} editorMode 
+         * @param {string} userDisplayName 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAuthorizedCollaboraAccessUrl: async (discoveryAccessUrlParams: DiscoveryAccessUrlParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'discoveryAccessUrlParams' is not null or undefined
-            assertParamExists('getAuthorizedCollaboraAccessUrl', 'discoveryAccessUrlParams', discoveryAccessUrlParams)
-            const localVarPath = `/wopi/authorized-collabora-access-url`;
+        getAuthorizedCollaboraDocumentUrl: async (fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'fileRecordId' is not null or undefined
+            assertParamExists('getAuthorizedCollaboraDocumentUrl', 'fileRecordId', fileRecordId)
+            // verify required parameter 'editorMode' is not null or undefined
+            assertParamExists('getAuthorizedCollaboraDocumentUrl', 'editorMode', editorMode)
+            // verify required parameter 'userDisplayName' is not null or undefined
+            assertParamExists('getAuthorizedCollaboraDocumentUrl', 'userDisplayName', userDisplayName)
+            const localVarPath = `/wopi/authorized-collabora-document-url`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -89,7 +99,7 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -97,14 +107,23 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            if (fileRecordId !== undefined) {
+                localVarQueryParameter['fileRecordId'] = fileRecordId;
+            }
+
+            if (editorMode !== undefined) {
+                localVarQueryParameter['editorMode'] = editorMode;
+            }
+
+            if (userDisplayName !== undefined) {
+                localVarQueryParameter['userDisplayName'] = userDisplayName;
+            }
+
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(discoveryAccessUrlParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -152,6 +171,47 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary WOPI PutFile (update file contents)
+         * @param {string} fileRecordId 
+         * @param {string} accessToken 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putFile: async (fileRecordId: string, accessToken: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'fileRecordId' is not null or undefined
+            assertParamExists('putFile', 'fileRecordId', fileRecordId)
+            // verify required parameter 'accessToken' is not null or undefined
+            assertParamExists('putFile', 'accessToken', accessToken)
+            const localVarPath = `/wopi/files/{fileRecordId}/contents`
+                .replace(`{${"fileRecordId"}}`, encodeURIComponent(String(fileRecordId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (accessToken !== undefined) {
+                localVarQueryParameter['access_token'] = accessToken;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -170,19 +230,21 @@ export const WopiApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async checkFileInfo(fileRecordId: string, accessToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WopiCheckFileInfoResponse>> {
+        async checkFileInfo(fileRecordId: string, accessToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WopiFileInfoResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.checkFileInfo(fileRecordId, accessToken, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @summary Get Collabora access URL with permission check and access token creation
-         * @param {DiscoveryAccessUrlParams} discoveryAccessUrlParams 
+         * @param {string} fileRecordId 
+         * @param {EditorMode} editorMode 
+         * @param {string} userDisplayName 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams, options);
+        async getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthorizedCollaboraDocumentUrlResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -195,6 +257,18 @@ export const WopiApiFp = function(configuration?: Configuration) {
          */
         async getFile(fileRecordId: string, accessToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getFile(fileRecordId, accessToken, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary WOPI PutFile (update file contents)
+         * @param {string} fileRecordId 
+         * @param {string} accessToken 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putFile(fileRecordId: string, accessToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putFile(fileRecordId, accessToken, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -215,18 +289,20 @@ export const WopiApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        checkFileInfo(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<WopiCheckFileInfoResponse> {
+        checkFileInfo(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<WopiFileInfoResponse> {
             return localVarFp.checkFileInfo(fileRecordId, accessToken, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get Collabora access URL with permission check and access token creation
-         * @param {DiscoveryAccessUrlParams} discoveryAccessUrlParams 
+         * @param {string} fileRecordId 
+         * @param {EditorMode} editorMode 
+         * @param {string} userDisplayName 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any): AxiosPromise<void> {
-            return localVarFp.getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams, options).then((request) => request(axios, basePath));
+        getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: any): AxiosPromise<AuthorizedCollaboraDocumentUrlResponse> {
+            return localVarFp.getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -238,6 +314,17 @@ export const WopiApiFactory = function (configuration?: Configuration, basePath?
          */
         getFile(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<void> {
             return localVarFp.getFile(fileRecordId, accessToken, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary WOPI PutFile (update file contents)
+         * @param {string} fileRecordId 
+         * @param {string} accessToken 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putFile(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<void> {
+            return localVarFp.putFile(fileRecordId, accessToken, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -257,17 +344,19 @@ export interface WopiApiInterface {
      * @throws {RequiredError}
      * @memberof WopiApiInterface
      */
-    checkFileInfo(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<WopiCheckFileInfoResponse>;
+    checkFileInfo(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<WopiFileInfoResponse>;
 
     /**
      * 
      * @summary Get Collabora access URL with permission check and access token creation
-     * @param {DiscoveryAccessUrlParams} discoveryAccessUrlParams 
+     * @param {string} fileRecordId 
+     * @param {EditorMode} editorMode 
+     * @param {string} userDisplayName 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WopiApiInterface
      */
-    getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any): AxiosPromise<void>;
+    getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: any): AxiosPromise<AuthorizedCollaboraDocumentUrlResponse>;
 
     /**
      * 
@@ -279,6 +368,17 @@ export interface WopiApiInterface {
      * @memberof WopiApiInterface
      */
     getFile(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary WOPI PutFile (update file contents)
+     * @param {string} fileRecordId 
+     * @param {string} accessToken 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WopiApiInterface
+     */
+    putFile(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<void>;
 
 }
 
@@ -305,13 +405,15 @@ export class WopiApi extends BaseAPI implements WopiApiInterface {
     /**
      * 
      * @summary Get Collabora access URL with permission check and access token creation
-     * @param {DiscoveryAccessUrlParams} discoveryAccessUrlParams 
+     * @param {string} fileRecordId 
+     * @param {EditorMode} editorMode 
+     * @param {string} userDisplayName 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WopiApi
      */
-    public getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams: DiscoveryAccessUrlParams, options?: any) {
-        return WopiApiFp(this.configuration).getAuthorizedCollaboraAccessUrl(discoveryAccessUrlParams, options).then((request) => request(this.axios, this.basePath));
+    public getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: any) {
+        return WopiApiFp(this.configuration).getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -325,5 +427,18 @@ export class WopiApi extends BaseAPI implements WopiApiInterface {
      */
     public getFile(fileRecordId: string, accessToken: string, options?: any) {
         return WopiApiFp(this.configuration).getFile(fileRecordId, accessToken, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary WOPI PutFile (update file contents)
+     * @param {string} fileRecordId 
+     * @param {string} accessToken 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WopiApi
+     */
+    public putFile(fileRecordId: string, accessToken: string, options?: any) {
+        return WopiApiFp(this.configuration).putFile(fileRecordId, accessToken, options).then((request) => request(this.axios, this.basePath));
     }
 }

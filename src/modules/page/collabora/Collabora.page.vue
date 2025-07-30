@@ -39,18 +39,17 @@ const userName = computed(() => {
 onMounted(async () => {
 	const fileApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
 
-	const result = await fileApi.getAuthorizedCollaboraAccessUrl({
-		fileRecordId: props.fileRecordId,
-		editorMode: props.editorMode,
-		userDisplayName: userName.value,
-	});
+	const result = await fileApi.getAuthorizedCollaboraDocumentUrl(
+		props.fileRecordId,
+		props.editorMode,
+		userName.value
+	);
 
-	//@ts-expect-error temporary fix for missing type
-	const { onlineUrl } = result.data;
+	const { authorizedCollaboraDocumentUrl } = result.data;
 
-	if (!onlineUrl) {
-		throw new Error("Collabora online URL is not available");
+	if (!authorizedCollaboraDocumentUrl) {
+		throw new Error("Collabora document URL is not available");
 	}
-	url.value = onlineUrl;
+	url.value = authorizedCollaboraDocumentUrl;
 });
 </script>
