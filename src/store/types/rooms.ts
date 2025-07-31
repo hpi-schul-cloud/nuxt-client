@@ -26,6 +26,7 @@ export type DroppedObject = {
 export type ListItemsObject = {
 	id: string;
 	title: string;
+	isLocked: boolean;
 	shortTitle: string;
 	displayColor: string;
 	startDate?: string;
