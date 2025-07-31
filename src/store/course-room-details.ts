@@ -23,6 +23,7 @@ import {
 	CommonCartridgeApiFactory,
 	CommonCartridgeApiInterface,
 } from "@/commonCartridgeApi/v3";
+import { isAxiosError } from "axios";
 
 @Module({
 	name: "courseRoomDetailsModule",
@@ -38,6 +39,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		isArchived: false,
 		isSynchronized: false,
 	};
+	isLocked = false;
 	scopePermissions: string[] = [];
 	loading = false;
 	error: unknown = null;
@@ -80,7 +82,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async fetchContent(id: string): Promise<void> {
+	async fetchContent(id: string) {
 		this.setLoading(true);
 		try {
 			const { data } =
@@ -88,7 +90,18 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			this.setRoomData(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
-			this.setError(error);
+			if (isAxiosError(error)) {
+				const errorType = error?.response?.data?.type;
+				if (errorType === "LOCKED_COURSE") {
+					this.setRoomData({
+						...this.roomData,
+						title: error?.response?.data?.message,
+					});
+					this.setLocked(true);
+				}
+			} else {
+				this.setError(error);
+			}
 			this.setLoading(false);
 		}
 	}
@@ -296,6 +309,11 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Mutation
+	setLocked(isLocked: boolean): void {
+		this.isLocked = isLocked;
+	}
+
+	@Mutation
 	setPermissionData(payload: string[]): void {
 		this.scopePermissions = payload;
 	}
@@ -358,6 +376,10 @@ export default class CourseRoomDetailsModule extends VuexModule {
 
 	get getRoomData(): SingleColumnBoardResponse {
 		return this.roomData;
+	}
+
+	get getIsLocked(): boolean {
+		return this.isLocked;
 	}
 
 	get getPermissionData(): string[] {

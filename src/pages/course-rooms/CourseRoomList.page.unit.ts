@@ -20,6 +20,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
+import { CourseMetadataResponse } from "@/serverApi/v3";
 
 vi.mock("vue-router");
 
@@ -41,7 +42,7 @@ const getWrapper = () => {
 	});
 };
 
-const mockData = [
+const mockData: CourseMetadataResponse[] = [
 	{
 		id: "123",
 		title: "Mathe",
@@ -49,7 +50,7 @@ const mockData = [
 		displayColor: "#54616e",
 		startDate: "2019-12-07T23:00:00.000Z",
 		untilDate: "2020-12-16T23:00:00.000Z",
-		titleDate: "2019/20",
+		isLocked: false,
 	},
 	{
 		id: "234",
@@ -58,7 +59,7 @@ const mockData = [
 		displayColor: "#EF6C00",
 		startDate: "2015-07-31T22:00:00.000Z",
 		untilDate: "2018-07-30T22:00:00.000Z",
-		titleDate: "2015-2018",
+		isLocked: false,
 	},
 	{
 		id: "345",
@@ -67,7 +68,7 @@ const mockData = [
 		displayColor: "#009688",
 		startDate: "2021-07-31T22:00:00.000Z",
 		untilDate: "2021-11-05T23:00:00.000Z",
-		titleDate: "2021",
+		isLocked: false,
 	},
 	{
 		id: "456",
@@ -76,6 +77,7 @@ const mockData = [
 		displayColor: "#EC407A",
 		startDate: "2021-07-31T22:00:00.000Z",
 		untilDate: "2022-07-30T22:00:00.000Z",
+		isLocked: false,
 	},
 ];
 
@@ -112,6 +114,7 @@ describe("@/pages/CourseRoomListPage", () => {
 				searchText: "Mathe 2019/20",
 				isArchived: true,
 				to: "/rooms/123",
+				isLocked: false,
 			};
 
 			expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
@@ -145,6 +148,7 @@ describe("@/pages/CourseRoomListPage", () => {
 					searchText: "History 2015-2018",
 					isArchived: true,
 					to: "/rooms/234",
+					isLocked: false,
 				});
 			});
 		});

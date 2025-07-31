@@ -20,6 +20,7 @@ const mockData = {
 	titleDate: "2019/20",
 	href: "/rooms/456",
 	isSynchronized: false,
+	isLocked: false,
 };
 
 vi.mock("vue-router");
@@ -68,8 +69,8 @@ describe("vRoomAvatar", () => {
 		expect(shortLabelElement.innerHTML).toStrictEqual("Bi");
 	});
 
-	it("should display the badge", async () => {
-		const { wrapper } = setup({ item: { ...mockData, notification: true } });
+	it("should display the locked badge", async () => {
+		const { wrapper } = setup({ item: { ...mockData, isLocked: true } });
 		const badgeElement = wrapper.findComponent({ name: "VBadge" });
 
 		expect(badgeElement.props().modelValue).toBe(true);

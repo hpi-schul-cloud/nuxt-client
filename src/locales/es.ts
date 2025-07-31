@@ -475,7 +475,7 @@ export default {
 	"components.board.error.404":
 		"Error 404 – No se ha encontrado ningún tablero con este nombre",
 	"components.board.error.403":
-		"Error 403 – Lamentablemente, falta la autorización para ver este contenido",
+		"Error 403 – Lamentablemente, falta la autorización para ver este contenido ...",
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
@@ -1821,6 +1821,8 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Grupos",
 	"pages.courseRooms.tabLabel.tools": "Herramientas",
 	"pages.courseRooms.tabLabel.toolsOld": "Herramientas",
+	"pages.courseRooms.course-locked":
+		"El curso está bloqueado porque no hay ningún profesor asignado para impartirlo. Póngase en contacto con la administración de la escuela.",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",

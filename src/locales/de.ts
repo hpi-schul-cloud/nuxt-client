@@ -470,7 +470,7 @@ export default {
 	"components.board.error.404":
 		"Fehler 404 – Bereich mit diesem Namen wurde nicht gefunden",
 	"components.board.error.403":
-		"Fehler 403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen",
+		"Fehler 403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen ... ",
 	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
@@ -1789,6 +1789,8 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Gruppen",
 	"pages.courseRooms.tabLabel.tools": "Tools",
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
+	"pages.courseRooms.course-locked":
+		"Der Kurs ist gesperrt, weil keine unterrichtende Lehrkraft zugeordnet ist. Bitte an den Schul-Admin wenden.",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",
