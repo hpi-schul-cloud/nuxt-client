@@ -36,7 +36,7 @@
 					:data-testid="'menu-delete-rooms'"
 					:title="t('pages.rooms.administration.table.actionMenu.delete')"
 					:aria-label="getAriaLabel(item.name, 'delete')"
-					@click="onDeleteRooms(item.roomId)"
+					@click="onDeleteRooms(item)"
 				/>
 			</KebabMenu>
 		</template>
@@ -49,7 +49,9 @@
 				data-testid="error-alert"
 				:icon="mdiAlert"
 			>
-				<span class="alert-text">some alert text</span>
+				<span class="alert-text">{{
+					t("pages.rooms.administration.table.delete.infoMessage")
+				}}</span>
 			</v-alert>
 		</template>
 	</ConfirmationDialog>
@@ -71,6 +73,7 @@ import {
 	useConfirmationDialog,
 	ConfirmationDialog,
 } from "@ui-confirmation-dialog";
+import { RoomStatsItemResponse } from "@/serverApi/v3";
 
 type Props = {
 	headerBottom?: number;
@@ -88,22 +91,22 @@ const administrationRoomStore = useAdministrationRoomStore();
 
 const { roomList } = storeToRefs(administrationRoomStore);
 
-const confirmDeletion = async (id: string) => {
-	if (!id) {
-		return false;
-	}
+const confirmDeletion = async (roomName: string) => {
 	const shouldDelete = await askConfirmation({
-		message: "some confirmation message here",
+		message: t("pages.room.itemDelete.text", {
+			itemType: t("common.labels.room"),
+			itemTitle: roomName,
+		}),
 		confirmActionLangKey: "common.actions.delete",
 	});
 
 	return shouldDelete;
 };
 
-const onDeleteRooms = async (id: string) => {
-	const shouldDelete = await confirmDeletion(id);
+const onDeleteRooms = async (item: RoomStatsItemResponse) => {
+	const shouldDelete = await confirmDeletion(item.name);
 	if (shouldDelete) {
-		await administrationRoomStore.deleteRoom(id);
+		await administrationRoomStore.deleteRoom(item.roomId);
 	}
 };
 

@@ -2104,6 +2104,8 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Головна школа",
 	"pages.rooms.administration.table.header.actions": "Дії",
 	"pages.rooms.administration.table.row.owner.notExist": "Не існує",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"Видалення кімнати також призведе до видалення всіх її вмістів. Цю дію не можна скасувати.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Меню дій для кімнати “{roomName}”",
 	"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel":

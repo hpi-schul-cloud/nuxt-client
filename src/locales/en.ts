@@ -2068,6 +2068,8 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Main school",
 	"pages.rooms.administration.table.header.actions": "Actions",
 	"pages.rooms.administration.table.row.owner.notExist": "Not existing",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"All room contents are also deleted with the room. This action cannot be undone.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Action menu for room “{roomName}”",
 	"pages.rooms.administration.table.row.actionMenu.delete.ariaLabel":

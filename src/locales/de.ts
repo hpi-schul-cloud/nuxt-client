@@ -2102,6 +2102,8 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Stammschule des Raums",
 	"pages.rooms.administration.table.header.actions": "Aktionen",
 	"pages.rooms.administration.table.row.owner.notExist": "Nicht vorhanden",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"Mit dem Raum werden auch alle Raum-Inhalte gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Aktionsmenü für den Raum “{roomName}”",
 	"pages.rooms.administration.table.row.actionMenu.delete.ariaLabel":
