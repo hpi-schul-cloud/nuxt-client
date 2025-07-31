@@ -46,6 +46,14 @@ describe("KebabMenuActionMoveDown Component", () => {
 			expect(action.exists()).toBe(true);
 		});
 
+		it("should render title if prop is provided", async () => {
+			const wrapper = setup();
+
+			wrapper.setProps({ title: "Delete room" });
+			await nextTick();
+			expect(wrapper.text()).toContain("Delete room");
+		});
+
 		it("should open askConfirmationDialog on click", () => {
 			const wrapper = setup();
 
