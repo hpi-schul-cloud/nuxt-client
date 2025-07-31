@@ -2113,6 +2113,8 @@ export default {
 	"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel":
 		"Ändere Berechtigungen für Raum “{roomName}”",
 	"pages.rooms.administration.table.actionMenu.delete": "Raum löschen",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Raum-Mitglieder verwalten",
 	"pages.rooms.administration.error.load":
 		"Die Raumliste konnte nicht geladen werden.",
 	"pages.rooms.administration.error.delete":

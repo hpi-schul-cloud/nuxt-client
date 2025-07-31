@@ -3,7 +3,6 @@
 		:items="roomList"
 		:header-bottom="headerBottom"
 		:table-headers="tableHeaders"
-		:show-select="false"
 		aria-label-name-key="name"
 		select-item-key="roomId"
 		data-testid="room-admin-table"
@@ -27,7 +26,10 @@
 				:data-testid="`kebab-menu-${item.id}`"
 				:aria-label="getAriaLabel(item.name)"
 			>
-				<KebabMenuActionChangePermission
+				<KebabMenuActionRoomMembers
+					:members-info-text="
+						t('pages.rooms.administration.table.actionMenu.manageRoom')
+					"
 					:aria-label="getAriaLabel(item.name, 'changeRole')"
 				/>
 				<KebabMenuActionDelete
@@ -64,7 +66,7 @@ import { useAdministrationRoomStore } from "@data-room";
 import {
 	KebabMenu,
 	KebabMenuActionDelete,
-	KebabMenuActionChangePermission,
+	KebabMenuActionRoomMembers,
 } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { mdiAlert } from "@icons/material";

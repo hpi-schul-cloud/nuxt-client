@@ -2079,10 +2079,11 @@ export default {
 	"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel":
 		"Change permission for room “{roomName}”",
 	"pages.rooms.administration.table.actionMenu.delete": "Delete room",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Manage room members",
 	"pages.rooms.administration.error.load": "The room list could not be loaded.",
 	"pages.rooms.administration.error.delete": "The room could not be deleted.",
 	"pages.rooms.administration.pageTitle": "Manage rooms",
-
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",

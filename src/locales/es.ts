@@ -2149,6 +2149,8 @@ export default {
 	"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel":
 		"Cambiar las autorizaciones de la sala “{roomName}”",
 	"pages.rooms.administration.table.actionMenu.delete": "Eliminar sala",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Administrar miembros de la sala",
 	"pages.rooms.administration.error.load":
 		"No se pudo cargar la lista de salas.",
 	"pages.rooms.administration.error.delete": "No se pudo eliminar la sala.",
