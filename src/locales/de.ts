@@ -2104,6 +2104,11 @@ export default {
 	"pages.rooms.administration.table.row.owner.notExist": "Nicht vorhanden",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Aktionsmenü für den Raum “{roomName}”",
+	"pages.rooms.administration.table.row.actionMenu.delete.ariaLabel":
+		"Raum “{roomName}” löschen",
+	"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel":
+		"Ändere Berechtigungen für Raum “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Raum löschen",
 	"pages.rooms.administration.error.load":
 		"Die Raumliste konnte nicht geladen werden.",
 	"pages.rooms.administration.error.delete":

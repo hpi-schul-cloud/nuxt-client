@@ -25,16 +25,17 @@
 		<template #[`item.actions`]="{ item }">
 			<KebabMenu
 				:data-testid="`kebab-menu-${item.id}`"
-				:aria-label="
-					t('pages.rooms.administration.table.row.actionMenu.ariaLabel', {
-						roomName: item.name,
-					})
-				"
+				:aria-label="getAriaLabel(item.name)"
 			>
+				<KebabMenuActionChangePermission
+					:aria-label="getAriaLabel(item.name, 'changeRole')"
+				/>
 				<KebabMenuActionDelete
-					scope-language-key="pages.rooms.administration.title"
+					scope-language-key="pages.rooms.administration.table.actionMenu.delete"
 					:name="'some title here'"
 					:data-testid="'menu-delete-rooms'"
+					:title="t('pages.rooms.administration.table.actionMenu.delete')"
+					:aria-label="getAriaLabel(item.name, 'delete')"
 					@click="onDeleteRooms(item.roomId)"
 				/>
 			</KebabMenu>
@@ -58,7 +59,11 @@
 import { useI18n } from "vue-i18n";
 import { DataTable } from "@ui-data-table";
 import { useAdministrationRoomStore } from "@data-room";
-import { KebabMenu, KebabMenuActionDelete } from "@ui-kebab-menu";
+import {
+	KebabMenu,
+	KebabMenuActionDelete,
+	KebabMenuActionChangePermission,
+} from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { mdiAlert } from "@icons/material";
 import { computed } from "vue";
@@ -100,6 +105,21 @@ const onDeleteRooms = async (id: string) => {
 	if (shouldDelete) {
 		await administrationRoomStore.deleteRoom(id);
 	}
+};
+
+const getAriaLabel = (
+	roomName: string,
+	actionFor: "delete" | "changeRole" | "" = ""
+) => {
+	const mapActionToConst = {
+		delete:
+			"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel",
+		changeRole:
+			"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel",
+		"": "pages.rooms.administration.table.row.actionMenu.ariaLabel",
+	};
+	const languageKey = mapActionToConst[actionFor];
+	return t(languageKey, { roomName });
 };
 
 const tableHeaders = computed(() => [
