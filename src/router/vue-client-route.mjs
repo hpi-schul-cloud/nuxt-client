@@ -13,6 +13,7 @@ const vueRoutes = [
 	`^/_nuxt/*`,
 	`^/runtime.config.json`,
 	`^/activation/${activationCode}/?$`,
+	`^/administration/?$`,
 	`^/administration/students/?$`,
 	`^/administration/students/new/?$`,
 	`^/administration/students/consent/?$`,

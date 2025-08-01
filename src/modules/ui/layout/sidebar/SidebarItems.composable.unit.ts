@@ -12,14 +12,11 @@ const setup = (envs?: Partial<ConfigResponse>, theme = SchulcloudTheme.Brb) => {
 		ALERT_STATUS_URL: "https://status.dbildungscloud.de",
 		ACCESSIBILITY_REPORT_EMAIL: "email",
 		TRAINING_URL: "https://lernen.dbildungscloud.de",
-		FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: true,
 		FEATURE_MEDIA_SHELF_ENABLED: true,
 	});
 
 	const envConfigModule = createModuleMocks(EnvConfigModule, {
 		getEnv: { ...defaultEnvs, ...envs },
-		getNewSchoolAdminPageAsDefault:
-			envs?.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED || false,
 		getTheme: theme,
 	});
 
