@@ -13,11 +13,9 @@ export const useAdministrationRoomStore = defineStore(
 		const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 		const { t } = useI18n();
 		const { showFailure } = useBoardNotifier();
-
 		const isLoading = ref(true);
 		const roomList = ref<RoomStatsItemResponse[]>([]);
 		const isEmptyList = ref(false);
-
 		const userSchoolName = schoolsModule.getSchool.name;
 
 		const sortAndFormatList = (list: RoomStatsItemResponse[]) => {

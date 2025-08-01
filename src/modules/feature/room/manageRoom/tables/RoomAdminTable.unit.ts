@@ -4,13 +4,18 @@ import { createTestingI18n } from "./../../../../../../tests/test-utils/setup/cr
 import { useAdministrationRoomStore } from "@data-room";
 import { useI18n } from "vue-i18n";
 import RoomAdminTable from "./RoomAdminTable.vue";
-import { mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
+import {
+	mockedPiniaStoreTyping,
+	roomAdministrationFactory,
+	schoolFactory,
+} from "@@/tests/test-utils";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { Mock } from "vitest";
+import { RoomStatsListResponse } from "@/serverApi/v3/api";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -32,7 +37,6 @@ describe("RoomAdminTable", () => {
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});
-
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});
 	afterEach(() => {
@@ -49,17 +53,26 @@ describe("RoomAdminTable", () => {
 						initialState: {
 							administrationRoomStore: {
 								roomList: [],
-								selectedIds: [],
-								loading: false,
 								isEmptyList: true,
+								isLoading: false,
+								deleteRoom: vi.fn(),
+								fetchRooms: vi.fn(),
 							},
 						},
 					}),
 				],
 			},
+			stubs: {
+				KebabMenuActionRoomMembers: true,
+				KebabMenuActionDelete: true,
+				DataTable: true,
+			},
 		});
 
+		const mockRooms: RoomStatsListResponse = roomAdministrationFactory.build();
+
 		const adminRoomStore = mockedPiniaStoreTyping(useAdministrationRoomStore);
+		adminRoomStore.roomList = mockRooms.data;
 
 		return {
 			wrapper,

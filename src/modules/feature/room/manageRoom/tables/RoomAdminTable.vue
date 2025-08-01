@@ -23,7 +23,7 @@
 
 		<template #[`item.actions`]="{ item }">
 			<KebabMenu
-				:data-testid="`kebab-menu-${item.id}`"
+				:data-testid="`kebab-menu-room-${item.id}`"
 				:aria-label="getAriaLabel(item.name)"
 			>
 				<KebabMenuActionRoomMembers
@@ -35,7 +35,7 @@
 				<KebabMenuActionDelete
 					scope-language-key="pages.rooms.administration.table.actionMenu.delete"
 					:name="'some title here'"
-					:data-testid="'menu-delete-rooms'"
+					:data-testid="`menu-delete-rooms-${item.id}`"
 					:title="t('pages.rooms.administration.table.actionMenu.delete')"
 					:aria-label="getAriaLabel(item.name, 'delete')"
 					@click="onDeleteRooms(item)"
