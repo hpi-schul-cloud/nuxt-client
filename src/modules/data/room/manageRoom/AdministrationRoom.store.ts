@@ -13,12 +13,9 @@ export const useAdministrationRoomStore = defineStore(
 		const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 		const { t } = useI18n();
 		const { showFailure } = useBoardNotifier();
-
 		const isLoading = ref(true);
 		const roomList = ref<RoomStatsItemResponse[]>([]);
-		const selectedIds = ref<string[]>([]);
 		const isEmptyList = ref(false);
-
 		const userSchoolName = schoolsModule.getSchool.name;
 
 		const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
@@ -61,11 +58,25 @@ export const useAdministrationRoomStore = defineStore(
 			}
 		};
 
+		const deleteRoom = async (roomId: string) => {
+			try {
+				isLoading.value = true;
+				await roomApi.roomControllerDeleteRoom(roomId);
+				roomList.value = roomList.value.filter(
+					(room) => room.roomId !== roomId
+				);
+			} catch {
+				showFailure(t("pages.rooms.administration.error.delete"));
+			} finally {
+				isLoading.value = false;
+			}
+		};
+
 		return {
 			isLoading,
 			isEmptyList,
 			roomList,
-			selectedIds,
+			deleteRoom,
 			fetchRooms,
 		};
 	}

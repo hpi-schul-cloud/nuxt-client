@@ -4,7 +4,7 @@
 		data-testid="kebab-menu-action-delete"
 		@click="onClick"
 	>
-		{{ t("components.board.action.delete") }}
+		{{ title ? title : t("components.board.action.delete") }}
 	</KebabMenuAction>
 </template>
 
@@ -14,18 +14,21 @@ import { mdiTrashCanOutline } from "@icons/material";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useI18n } from "vue-i18n";
 import KebabMenuAction from "./KebabMenuAction.vue";
-import { PropType } from "vue";
-const { t } = useI18n();
 
-const props = defineProps({
-	name: { type: String, required: false, default: undefined },
-	scopeLanguageKey: {
-		type: String as PropType<keyof MessageSchema>,
-		required: true,
-	},
-	skipDeleteConfirmation: { type: Boolean, default: () => false },
+type Props = {
+	name?: string | undefined;
+	scopeLanguageKey: keyof MessageSchema;
+	skipDeleteConfirmation?: boolean;
+	title?: string | undefined;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+	name: undefined,
+	skipDeleteConfirmation: false,
+	title: undefined,
 });
 
+const { t } = useI18n();
 const emit = defineEmits(["click"]);
 
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
