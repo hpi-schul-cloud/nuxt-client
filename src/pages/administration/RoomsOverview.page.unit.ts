@@ -80,7 +80,6 @@ describe("RoomsOverview", () => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: envsFactory.build({
 				FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
-				FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
 			}),
 			...envModuleGetters,
 		});
@@ -381,7 +380,6 @@ describe("RoomsOverview", () => {
 				const envConfigModule = createModuleMocks(EnvConfigModule, {
 					getEnv: envsFactory.build({
 						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
-						FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
 					}),
 				});
 
@@ -430,7 +428,6 @@ describe("RoomsOverview", () => {
 				const envConfigModule = createModuleMocks(EnvConfigModule, {
 					getEnv: envsFactory.build({
 						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
-						FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
 					}),
 				});
 
@@ -500,7 +497,6 @@ describe("RoomsOverview", () => {
 				const envConfigModule = createModuleMocks(EnvConfigModule, {
 					getEnv: envsFactory.build({
 						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: false,
-						FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
 					}),
 				});
 

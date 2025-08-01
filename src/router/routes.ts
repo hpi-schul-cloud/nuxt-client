@@ -88,6 +88,11 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		path: "/administration",
+		redirect: { name: "administration-students" },
+		name: "administration",
+	},
+	{
 		path: "/administration/students",
 		component: () => import("@/pages/administration/StudentOverview.page.vue"),
 		name: "administration-students",
