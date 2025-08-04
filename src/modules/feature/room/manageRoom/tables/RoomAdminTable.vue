@@ -9,7 +9,7 @@
 	>
 		<template #[`item.owner`]="{ item }">
 			<span>
-				<v-icon
+				<VIcon
 					v-if="!item.owner"
 					:icon="mdiAlert"
 					color="warning"
@@ -23,38 +23,33 @@
 
 		<template #[`item.actions`]="{ item }">
 			<KebabMenu
-				:data-testid="`kebab-menu-room-${item.id}`"
-				:aria-label="getAriaLabel(item.name)"
+				:data-testid="`kebab-menu-room-${item.roomId}`"
+				:aria-label="
+					t('pages.rooms.administration.table.row.actionMenu.ariaLabel', {
+						roomName: item.name,
+					})
+				"
 			>
 				<KebabMenuActionRoomMembers
 					:members-info-text="
 						t('pages.rooms.administration.table.actionMenu.manageRoom')
 					"
-					:aria-label="getAriaLabel(item.name, 'changeRole')"
 				/>
-				<KebabMenuActionDelete
-					scope-language-key="pages.rooms.administration.table.actionMenu.delete"
-					:name="'some title here'"
-					:data-testid="`menu-delete-rooms-${item.id}`"
-					:title="t('pages.rooms.administration.table.actionMenu.delete')"
-					:aria-label="getAriaLabel(item.name, 'delete')"
-					@click="onDeleteRooms(item)"
-				/>
+				<KebabMenuAction
+					:icon="mdiTrashCanOutline"
+					:data-testid="`menu-delete-room-${item.roomId}`"
+					@click="onDeleteRoom(item)"
+				>
+					{{ t("pages.rooms.administration.table.actionMenu.delete") }}
+				</KebabMenuAction>
 			</KebabMenu>
 		</template>
 	</DataTable>
 	<ConfirmationDialog>
 		<template #alert>
-			<v-alert
-				class="mx-6 mb-4"
-				type="warning"
-				data-testid="error-alert"
-				:icon="mdiAlert"
-			>
-				<span class="alert-text">{{
-					t("pages.rooms.administration.table.delete.infoMessage")
-				}}</span>
-			</v-alert>
+			<WarningAlert data-testid="warning-alert">
+				{{ t("pages.rooms.administration.table.delete.infoMessage") }}
+			</WarningAlert>
 		</template>
 	</ConfirmationDialog>
 </template>
@@ -65,17 +60,18 @@ import { DataTable } from "@ui-data-table";
 import { useAdministrationRoomStore } from "@data-room";
 import {
 	KebabMenu,
-	KebabMenuActionDelete,
+	KebabMenuAction,
 	KebabMenuActionRoomMembers,
 } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
-import { mdiAlert } from "@icons/material";
+import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
 import { computed } from "vue";
 import {
 	useConfirmationDialog,
 	ConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { RoomStatsItemResponse } from "@/serverApi/v3";
+import { WarningAlert } from "@ui-alert";
 
 type Props = {
 	headerBottom?: number;
@@ -105,26 +101,11 @@ const confirmDeletion = async (roomName: string) => {
 	return shouldDelete;
 };
 
-const onDeleteRooms = async (item: RoomStatsItemResponse) => {
+const onDeleteRoom = async (item: RoomStatsItemResponse) => {
 	const shouldDelete = await confirmDeletion(item.name);
 	if (shouldDelete) {
 		await administrationRoomStore.deleteRoom(item.roomId);
 	}
-};
-
-const getAriaLabel = (
-	roomName: string,
-	actionFor: "delete" | "changeRole" | "" = ""
-) => {
-	const mapActionToConst = {
-		delete:
-			"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel",
-		changeRole:
-			"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel",
-		"": "pages.rooms.administration.table.row.actionMenu.ariaLabel",
-	};
-	const languageKey = mapActionToConst[actionFor];
-	return t(languageKey, { roomName });
 };
 
 const tableHeaders = computed(() => [
@@ -165,10 +146,3 @@ const tableHeaders = computed(() => [
 	},
 ]);
 </script>
-
-<style scoped>
-.alert-text {
-	color: rgba(var(--v-theme-on-background)) !important;
-	line-height: var(--line-height-lg) !important;
-}
-</style>

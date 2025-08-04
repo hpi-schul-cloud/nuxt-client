@@ -2108,10 +2108,6 @@ export default {
 		"Mit dem Raum werden auch alle Raum-Inhalte gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Aktionsmenü für den Raum “{roomName}”",
-	"pages.rooms.administration.table.row.actionMenu.delete.ariaLabel":
-		"Raum “{roomName}” löschen",
-	"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel":
-		"Ändere Berechtigungen für Raum “{roomName}”",
 	"pages.rooms.administration.table.actionMenu.delete": "Raum löschen",
 	"pages.rooms.administration.table.actionMenu.manageRoom":
 		"Raum-Mitglieder verwalten",

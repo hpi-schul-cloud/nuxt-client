@@ -12,7 +12,9 @@
 					</h2>
 				</template>
 
-				<slot name="alert" />
+				<div v-if="$slots.alert" class="alert-text mx-6 mb-4">
+					<slot name="alert" />
+				</div>
 
 				<template #actions>
 					<v-spacer />
@@ -62,6 +64,10 @@ const confirmBtnLangKey = computed(
 	white-space: normal;
 	hyphens: none;
 	word-break: break-word;
+	line-height: var(--line-height-lg);
+}
+
+.alert-text {
 	line-height: var(--line-height-lg);
 }
 

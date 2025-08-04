@@ -2110,10 +2110,6 @@ export default {
 		"Видалення кімнати також призведе до видалення всіх її вмістів. Цю дію не можна скасувати.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Меню дій для кімнати “{roomName}”",
-	"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel":
-		"Змінити права доступу для кімнати “{roomName}”",
-	"pages.rooms.administration.table.row.actionMenu.delete.ariaLabel":
-		"Видалити кімнату “{roomName}”",
 	"pages.rooms.administration.table.actionMenu.delete": "Видалити кімнату",
 	"pages.rooms.administration.table.actionMenu.manageRoom":
 		"Керувати учасниками кімнати",

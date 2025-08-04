@@ -2074,10 +2074,6 @@ export default {
 		"All room contents are also deleted with the room. This action cannot be undone.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Action menu for room “{roomName}”",
-	"pages.rooms.administration.table.row.actionMenu.delete.ariaLabel":
-		"Delete room “{roomName}”",
-	"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel":
-		"Change permission for room “{roomName}”",
 	"pages.rooms.administration.table.actionMenu.delete": "Delete room",
 	"pages.rooms.administration.table.actionMenu.manageRoom":
 		"Manage room members",

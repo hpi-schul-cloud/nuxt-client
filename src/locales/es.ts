@@ -2144,10 +2144,6 @@ export default {
 		"Todos los contenidos de la sala también se eliminan con la sala. Esta acción no se puede deshacer.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Menú de acciones para la sala “{roomName}”",
-	"pages.rooms.administration.table.row.actionMenu.delete.ariaLabel":
-		"Eliminar sala “{roomName}”",
-	"pages.rooms.administration.table.row.actionMenu.changePermission.ariaLabel":
-		"Cambiar las autorizaciones de la sala “{roomName}”",
 	"pages.rooms.administration.table.actionMenu.delete": "Eliminar sala",
 	"pages.rooms.administration.table.actionMenu.manageRoom":
 		"Administrar miembros de la sala",
