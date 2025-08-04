@@ -4,7 +4,7 @@
 		data-testid="kebab-menu-action-delete"
 		@click="onClick"
 	>
-		{{ title ? title : t("components.board.action.delete") }}
+		{{ t("components.board.action.delete") }}
 	</KebabMenuAction>
 </template>
 
@@ -18,14 +18,10 @@ import KebabMenuAction from "./KebabMenuAction.vue";
 type Props = {
 	name?: string | undefined;
 	scopeLanguageKey: keyof MessageSchema;
-	skipDeleteConfirmation?: boolean;
-	title?: string | undefined;
 };
 
 const props = withDefaults(defineProps<Props>(), {
 	name: undefined,
-	skipDeleteConfirmation: false,
-	title: undefined,
 });
 
 const { t } = useI18n();
