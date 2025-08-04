@@ -631,13 +631,19 @@ export interface BoardErrorReportBodyParams {
      * @type {BoardErrorTypeEnum}
      * @memberof BoardErrorReportBodyParams
      */
-    errorType: BoardErrorTypeEnum;
+    type: BoardErrorTypeEnum;
+    /**
+     * Error message
+     * @type {string}
+     * @memberof BoardErrorReportBodyParams
+     */
+    message: string;
     /**
      * URL of the page the user was working on
      * @type {string}
      * @memberof BoardErrorReportBodyParams
      */
-    pageUrl: string;
+    url: string;
     /**
      * 
      * @type {BoardErrorContextTypeEnum}
@@ -651,29 +657,11 @@ export interface BoardErrorReportBodyParams {
      */
     contextId: string;
     /**
-     * SchoolId (EntityId)
-     * @type {string}
+     * Count of connection retries.
+     * @type {number}
      * @memberof BoardErrorReportBodyParams
      */
-    schoolId: string;
-    /**
-     * UserId (EntityId)
-     * @type {string}
-     * @memberof BoardErrorReportBodyParams
-     */
-    userId: string;
-    /**
-     * Error message
-     * @type {string}
-     * @memberof BoardErrorReportBodyParams
-     */
-    errorMessage: string;
-    /**
-     * Timestamp of the error (ISO 8601)
-     * @type {string}
-     * @memberof BoardErrorReportBodyParams
-     */
-    timestamp: string;
+    retryCount: number;
 }
 /**
  * 
