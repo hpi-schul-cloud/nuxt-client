@@ -19,22 +19,30 @@ export const useAdministrationRoomStore = defineStore(
 		const userSchoolName = schoolsModule.getSchool.name;
 
 		const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
-			list.forEach((room) => {
-				room.createdAt = printFromStringUtcToFullDate(room.createdAt);
-			});
 			return list
+				.map((room) => ({
+					...room,
+					createdAt: printFromStringUtcToFullDate(room.createdAt),
+				}))
 				.sort((a, b) => {
-					return a.schoolName.localeCompare(b.schoolName);
-				})
-				.sort((a, b) => {
-					return a.schoolName === userSchoolName
-						? -1
-						: b.schoolName === userSchoolName
-							? 1
-							: 0;
-				})
-				.sort((a, b) => {
-					return a.owner === undefined ? -1 : b.owner === undefined ? 1 : 0;
+					if (!a.owner && b.owner) return -1;
+					if (a.owner && !b.owner) return 1;
+
+					if (
+						a.schoolName === userSchoolName &&
+						b.schoolName !== userSchoolName
+					)
+						return -1;
+					if (
+						a.schoolName !== userSchoolName &&
+						b.schoolName === userSchoolName
+					)
+						return 1;
+
+					return (
+						a.schoolName.localeCompare(b.schoolName) ||
+						a.name.localeCompare(b.name)
+					);
 				});
 		};
 
