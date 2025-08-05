@@ -85,8 +85,9 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
-const administrationRoomStore = useAdministrationRoomStore();
 
+const administrationRoomStore = useAdministrationRoomStore();
+const { deleteRoom } = administrationRoomStore;
 const { roomList } = storeToRefs(administrationRoomStore);
 
 const confirmDeletion = async (roomName: string) => {
@@ -104,7 +105,7 @@ const confirmDeletion = async (roomName: string) => {
 const onDeleteRoom = async (item: RoomStatsItemResponse) => {
 	const shouldDelete = await confirmDeletion(item.name);
 	if (shouldDelete) {
-		await administrationRoomStore.deleteRoom(item.roomId);
+		await deleteRoom(item.roomId);
 	}
 };
 

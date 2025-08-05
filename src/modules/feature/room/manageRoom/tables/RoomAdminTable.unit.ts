@@ -1,29 +1,38 @@
-import { createTestingPinia } from "@pinia/testing";
-import { createTestingVuetify } from "./../../../../../../tests/test-utils/setup/createTestingVuetify";
-import { createTestingI18n } from "./../../../../../../tests/test-utils/setup/createTestingI18n";
-import { useAdministrationRoomStore } from "@data-room";
-import { useI18n } from "vue-i18n";
-import RoomAdminTable from "./RoomAdminTable.vue";
+import { RoomStatsItemResponse } from "@/serverApi/v3/api";
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
 import {
 	mockedPiniaStoreTyping,
-	roomAdministrationFactory,
+	roomStatsItemResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import SchoolsModule from "@/store/schools";
-import { schoolsModule } from "@/store";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { useAdministrationRoomStore } from "@data-room";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { mdiAlert } from "@icons/material";
+import { createTestingPinia } from "@pinia/testing";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { DataTable } from "@ui-data-table";
+import { KebabMenu } from "@ui-kebab-menu";
+import { useBoardNotifier } from "@util-board";
 import { Mock } from "vitest";
-import { RoomStatsListResponse } from "@/serverApi/v3/api";
+import { ref } from "vue";
+import { VIcon } from "vuetify/components";
+import RoomAdminTable from "./RoomAdminTable.vue";
+
+vi.mock("@ui-confirmation-dialog");
+const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-vi.mock("vue-i18n");
-(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
-
 describe("RoomAdminTable", () => {
+	let askConfirmationMock: Mock;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const ownSchool = {
 		id: "school-id",
@@ -31,6 +40,15 @@ describe("RoomAdminTable", () => {
 	};
 
 	beforeEach(() => {
+		askConfirmationMock = vi.fn();
+		setupConfirmationComposableMock({
+			askConfirmationMock,
+		});
+		mockedUseRemoveConfirmationDialog.mockReturnValue({
+			askConfirmation: askConfirmationMock,
+			isDialogOpen: ref(false),
+		});
+
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
@@ -43,8 +61,15 @@ describe("RoomAdminTable", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = () => {
+	const setup = (
+		options?: Partial<{
+			roomList: RoomStatsItemResponse[];
+		}>
+	) => {
+		const roomList =
+			options?.roomList || roomStatsItemResponseFactory.buildList(2);
 		const wrapper = mount(RoomAdminTable, {
+			attachTo: document.body,
 			global: {
 				plugins: [
 					createTestingI18n(),
@@ -52,11 +77,9 @@ describe("RoomAdminTable", () => {
 					createTestingPinia({
 						initialState: {
 							administrationRoomStore: {
-								roomList: [],
+								roomList,
 								isEmptyList: true,
 								isLoading: false,
-								deleteRoom: vi.fn(),
-								fetchRooms: vi.fn(),
 							},
 						},
 					}),
@@ -64,27 +87,170 @@ describe("RoomAdminTable", () => {
 			},
 			stubs: {
 				KebabMenuActionRoomMembers: true,
-				KebabMenuActionDelete: true,
+				KebabMenuAction: true,
 				DataTable: true,
 			},
 		});
 
-		const mockRooms: RoomStatsListResponse = roomAdministrationFactory.build();
-
 		const adminRoomStore = mockedPiniaStoreTyping(useAdministrationRoomStore);
-		adminRoomStore.roomList = mockRooms.data;
 
 		return {
 			wrapper,
 			adminRoomStore,
+			roomList,
 		};
 	};
 
 	it("should render the component", () => {
 		const { wrapper } = setup();
-		const dataTable = wrapper.findComponent({ name: "DataTable" });
 
 		expect(wrapper.exists()).toBe(true);
-		expect(dataTable.exists()).toBe(true);
+	});
+
+	describe("DataTable", () => {
+		const tableHeaders = [
+			"pages.rooms.administration.table.header.roomName",
+			"pages.rooms.administration.table.header.roomOwner",
+			"pages.rooms.administration.table.header.totalMember",
+			"pages.rooms.administration.table.header.internalMember",
+			"pages.rooms.administration.table.header.externalMember",
+			"pages.rooms.administration.table.header.creationDate",
+			"pages.rooms.administration.table.header.mainSchool",
+			"pages.rooms.administration.table.header.actions",
+		];
+
+		it("should pass the correct items and headers prop to DataTable", () => {
+			const { wrapper, roomList } = setup();
+
+			const dataTable = wrapper.getComponent(DataTable);
+			expect(dataTable.props("items")).toEqual(roomList);
+			expect(
+				dataTable.props("tableHeaders")!.map((header) => header.title)
+			).toEqual(tableHeaders);
+		});
+
+		it("should render icon with text if room has no owner", () => {
+			const roomWithoutOwner = roomStatsItemResponseFactory.build({
+				owner: "",
+			});
+			const { wrapper } = setup({
+				roomList: [roomWithoutOwner],
+			});
+
+			const dataTable = wrapper.getComponent(DataTable);
+			const warningIcon = dataTable
+				.findAllComponents(VIcon)
+				.find((icon) => icon.props("icon") === mdiAlert);
+
+			expect(warningIcon?.exists()).toBe(true);
+			expect(dataTable.text()).toContain(
+				"pages.rooms.administration.table.row.owner.notExist"
+			);
+		});
+
+		it("should only render text if room has owner", () => {
+			const roomWithOwner = roomStatsItemResponseFactory.build({
+				owner: "Elisa Esel",
+			});
+			const { wrapper } = setup({
+				roomList: [roomWithOwner],
+			});
+			const dataTable = wrapper.getComponent(DataTable);
+			const warningIcon = dataTable
+				.findAllComponents(VIcon)
+				.find((icon) => icon.props("icon") === mdiAlert);
+
+			expect(warningIcon).toBeUndefined();
+			expect(dataTable.text()).toContain(roomWithOwner.owner);
+		});
+
+		describe("kebab menu", () => {
+			it("should render kebab menu for each room", () => {
+				const rooms = roomStatsItemResponseFactory.buildList(4);
+				const { wrapper } = setup({
+					roomList: rooms,
+				});
+
+				const dataTable = wrapper.getComponent(DataTable);
+				const actionMenus = dataTable.findAllComponents(KebabMenu);
+
+				expect(actionMenus).toHaveLength(4);
+			});
+
+			describe("delete action", () => {
+				it("should render delete menu item", async () => {
+					const { wrapper, roomList } = setup();
+
+					const kebabMenu = wrapper.findComponent(
+						`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
+					);
+					await kebabMenu.trigger("click");
+					const deleteAction = wrapper.findComponent(
+						`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
+					);
+
+					expect(deleteAction.exists()).toBe(true);
+				});
+
+				it("should render confirmation dialog with correct text", async () => {
+					const { wrapper, roomList } = setup();
+
+					askConfirmationMock.mockResolvedValue(true);
+
+					const kebabMenu = wrapper.findComponent(
+						`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
+					);
+					await kebabMenu.trigger("click");
+
+					const deleteAction = wrapper.findComponent(
+						`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
+					);
+					await deleteAction.trigger("click");
+
+					expect(askConfirmationMock).toHaveBeenCalledWith({
+						confirmActionLangKey: "common.actions.delete",
+						message: "pages.room.itemDelete.text",
+					});
+				});
+
+				it("should call deleteRoom when deletion is confirmed", async () => {
+					const { wrapper, adminRoomStore, roomList } = setup();
+
+					askConfirmationMock.mockResolvedValue(true);
+
+					const kebabMenu = wrapper.findComponent(
+						`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
+					);
+					await kebabMenu.trigger("click");
+
+					const deleteAction = wrapper.findComponent(
+						`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
+					);
+					await deleteAction.trigger("click");
+
+					expect(adminRoomStore.deleteRoom).toHaveBeenCalledWith(
+						roomList[0].roomId
+					);
+				});
+
+				it("should not call deleteRoom when deletion is cancelled", async () => {
+					const { wrapper, adminRoomStore, roomList } = setup();
+
+					askConfirmationMock.mockResolvedValue(false);
+
+					const kebabMenu = wrapper.findComponent(
+						`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
+					);
+					await kebabMenu.trigger("click");
+
+					const deleteAction = wrapper.findComponent(
+						`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
+					);
+					await deleteAction.trigger("click");
+
+					expect(adminRoomStore.deleteRoom).not.toHaveBeenCalled();
+				});
+			});
+		});
 	});
 });
