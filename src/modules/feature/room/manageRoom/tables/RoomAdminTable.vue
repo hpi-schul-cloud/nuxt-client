@@ -120,14 +120,17 @@ const tableHeaders = computed(() => [
 	{
 		title: t("pages.rooms.administration.table.header.totalMember"),
 		key: "totalMembers",
+		align: "end",
 	},
 	{
 		title: t("pages.rooms.administration.table.header.internalMember"),
 		key: "internalMembers",
+		align: "end",
 	},
 	{
 		title: t("pages.rooms.administration.table.header.externalMember"),
 		key: "externalMembers",
+		align: "end",
 	},
 	{
 		title: t("pages.rooms.administration.table.header.creationDate"),
