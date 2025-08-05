@@ -10,11 +10,17 @@ import {
 	RoomStatsItemResponse,
 	RoomStatsListResponse,
 } from "@/serverApi/v3/api";
-import { roomAdministrationFactory, schoolFactory } from "@@/tests/test-utils";
+import {
+	mockedPiniaStoreTyping,
+	schoolFactory,
+	roomStatsItemResponseFactory,
+	roomStatsListResponseFactory,
+} from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import { Mock } from "vitest";
+import { printFromStringUtcToFullDate } from "@/plugins/datetime";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
@@ -55,34 +61,62 @@ describe("useAdministrationRoomStore", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (roomList: RoomStatsItemResponse[] = []) => {
-		const roomAdminStore = useAdministrationRoomStore();
-		roomAdminStore.roomList = roomList;
-		return roomAdminStore;
+	const setup = (roomList?: RoomStatsItemResponse[]) => {
+		const roomAdminStore = mockedPiniaStoreTyping(useAdministrationRoomStore);
+		roomAdminStore.roomList = roomList ?? [];
+		return { roomAdminStore };
 	};
 
 	describe("fetchRooms", () => {
-		it("should fetch rooms and update roomList", async () => {
-			const mockRooms: RoomStatsListResponse =
-				roomAdministrationFactory.build();
+		it("should fetch rooms", async () => {
+			const mockRoomList = roomStatsListResponseFactory.build();
+			const { roomAdminStore } = setup();
 
 			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
-				data: mockRooms,
+				data: mockRoomList,
 			} as unknown as AxiosPromise<RoomStatsListResponse>);
 
-			const roomAdminStore = setup();
 			await roomAdminStore.fetchRooms();
 
 			expect(
 				roomAdministrationApiMock.roomControllerGetRoomStats
 			).toHaveBeenCalled();
 			expect(roomAdminStore.isLoading).toBe(false);
-			expect(roomAdminStore.roomList).toEqual(mockRooms.data);
 			expect(roomAdminStore.isEmptyList).toBe(false);
 		});
 
+		it("should return empty list if no rooms are found", async () => {
+			const { roomAdminStore } = setup();
+
+			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
+				data: { data: [] },
+			} as unknown as AxiosPromise<RoomStatsListResponse>);
+
+			await roomAdminStore.fetchRooms();
+
+			expect(roomAdminStore.roomList).toEqual([]);
+		});
+
+		it("should update roomList", async () => {
+			const mockRoomList = roomStatsListResponseFactory.build();
+			const { roomAdminStore } = setup();
+
+			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
+				data: mockRoomList,
+			} as unknown as AxiosPromise<RoomStatsListResponse>);
+
+			await roomAdminStore.fetchRooms();
+
+			const expectedRoomList = mockRoomList.data.map((room) => ({
+				...room,
+				createdAt: printFromStringUtcToFullDate(room.createdAt),
+			}));
+
+			expect(roomAdminStore.roomList).toEqual(expectedRoomList);
+		});
+
 		it("should handle errors and show failure notification", async () => {
-			const roomAdminStore = setup();
+			const { roomAdminStore } = setup();
 			roomAdministrationApiMock.roomControllerGetRoomStats.mockRejectedValue(
 				new Error("API Error")
 			);
@@ -96,19 +130,94 @@ describe("useAdministrationRoomStore", () => {
 			expect(roomAdminStore.roomList).toEqual([]);
 			expect(roomAdminStore.isLoading).toBe(false);
 		});
+
+		describe("sortAndFormatList", () => {
+			it("should format createdAt date", async () => {
+				const mockRoomList = roomStatsListResponseFactory.build();
+				const { roomAdminStore } = setup();
+
+				roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
+					data: mockRoomList,
+				} as unknown as AxiosPromise<RoomStatsListResponse>);
+
+				await roomAdminStore.fetchRooms();
+
+				const expectedDate = printFromStringUtcToFullDate(
+					mockRoomList.data[0].createdAt
+				);
+
+				expect(roomAdminStore.roomList[0].createdAt).toBe(expectedDate);
+			});
+
+			it("should sort and format the room list correctly", async () => {
+				roomStatsItemResponseFactory.rewindSequence(); // to have rooms eunumerated from 1 to make alphabetical sorting easier
+				const { roomAdminStore } = setup();
+
+				const roomsWithoutOwner = roomStatsItemResponseFactory.buildList(2, {
+					owner: "",
+				});
+
+				const roomsFromAnotherSchool = roomStatsItemResponseFactory.buildList(
+					2,
+					{ schoolName: "C School" }
+				);
+
+				const roomsFromOwnSchool = roomStatsItemResponseFactory.buildList(2, {
+					schoolName: ownSchool.name,
+				});
+
+				const roomList = roomStatsListResponseFactory.build({
+					data: [
+						roomsFromOwnSchool[0],
+						roomsFromAnotherSchool[0],
+						roomsWithoutOwner[0],
+						roomsFromAnotherSchool[1],
+						roomsFromOwnSchool[1],
+						roomsWithoutOwner[1],
+					],
+				});
+
+				roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
+					data: roomList,
+				} as unknown as AxiosPromise<RoomStatsListResponse>);
+				await roomAdminStore.fetchRooms();
+
+				// Sorting order:
+				// 1. Ownerless rooms (sorted by school name, then room name)
+				// 2. Own school rooms (sorted by room name)
+				// 3. Other school rooms (sorted by school name, then room name)
+				const sortedList = roomStatsListResponseFactory.build({
+					data: [
+						roomsWithoutOwner[0],
+						roomsWithoutOwner[1],
+						roomsFromOwnSchool[0],
+						roomsFromOwnSchool[1],
+						roomsFromAnotherSchool[0],
+						roomsFromAnotherSchool[1],
+					],
+				});
+				const sortedAndFormattedRoomList = sortedList.data.map((room) => ({
+					...room,
+					createdAt: printFromStringUtcToFullDate(room.createdAt),
+				}));
+
+				expect(roomAdminStore.roomList).toEqual(sortedAndFormattedRoomList);
+			});
+		});
 	});
 
 	describe("deleteRoom", () => {
 		it("should delete a room and update roomList", async () => {
-			const mockRooms: RoomStatsListResponse =
-				roomAdministrationFactory.build();
+			const mockRooms = roomStatsListResponseFactory.build();
+			const { roomAdminStore } = setup(mockRooms.data);
+
 			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
 				data: mockRooms,
 			} as unknown as AxiosPromise<RoomStatsListResponse>);
 
-			const roomAdminStore = setup(mockRooms.data);
 			const roomIdToDelete = mockRooms.data[0].roomId;
 			await roomAdminStore.deleteRoom(roomIdToDelete);
+
 			expect(
 				roomAdministrationApiMock.roomControllerDeleteRoom
 			).toHaveBeenCalledWith(roomIdToDelete);
@@ -119,7 +228,8 @@ describe("useAdministrationRoomStore", () => {
 		});
 
 		it("should handle errors during room deletion", async () => {
-			const roomAdminStore = setup();
+			const { roomAdminStore } = setup();
+
 			const roomIdToDelete = "room-id";
 			roomAdministrationApiMock.roomControllerDeleteRoom.mockRejectedValue(
 				new Error("API Error")
@@ -131,79 +241,6 @@ describe("useAdministrationRoomStore", () => {
 				"pages.rooms.administration.error.delete"
 			);
 			expect(roomAdminStore.isLoading).toBe(false);
-		});
-	});
-
-	describe("sortAndFormatList", () => {
-		it("should sort and format the room list correctly", async () => {
-			const mockRoomList = {
-				data: [
-					{
-						roomId: "1",
-						name: "Room 1",
-						owner: "Owner 1",
-						schoolName: "z School",
-						createdAt: "2025-07-24T14:21:35.425Z",
-						updatedAt: "2025-07-24T14:21:35.426Z",
-						totalMembers: 10,
-						internalMembers: 5,
-						externalMembers: 5,
-					},
-					{
-						roomId: "2",
-						name: "Room 2",
-						owner: undefined,
-						schoolName: "b School",
-						createdAt: "2025-07-24T14:21:35.426Z",
-						updatedAt: "2025-07-24T14:21:35.426Z",
-						totalMembers: 10,
-						internalMembers: 5,
-						externalMembers: 5,
-					},
-					{
-						roomId: "3",
-						name: "Room 3",
-						owner: "Owner 3",
-						schoolName: ownSchool.name,
-						createdAt: "2025-07-24T14:21:35.426Z",
-						updatedAt: "2025-07-24T14:21:35.426Z",
-						totalMembers: 10,
-						internalMembers: 5,
-						externalMembers: 5,
-					},
-				],
-				limit: 10,
-				skip: 0,
-				total: 5,
-			};
-
-			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
-				data: mockRoomList,
-			} as unknown as AxiosPromise<RoomStatsListResponse>);
-
-			const roomAdminStore = setup();
-
-			await roomAdminStore.fetchRooms();
-
-			expect(roomAdminStore.roomList).toEqual(mockRoomList.data);
-			expect(roomAdminStore.roomList[0].owner).toStrictEqual(undefined);
-			expect(roomAdminStore.roomList[0].createdAt).toStrictEqual("24.07.2025");
-
-			const undefinedOwnerIndex = roomAdminStore.roomList.findIndex(
-				(room) => room.owner === undefined
-			);
-
-			const sameAsOwnerSchoolIndex = roomAdminStore.roomList.findIndex(
-				(room) => room.schoolName === ownSchool.name
-			);
-
-			const sortedSchoolNameIndex = roomAdminStore.roomList.findIndex(
-				(room) => room.schoolName === "z School"
-			);
-
-			expect(undefinedOwnerIndex).toBe(0);
-			expect(sameAsOwnerSchoolIndex).toBe(1);
-			expect(sortedSchoolNameIndex).toBe(2);
 		});
 	});
 });
