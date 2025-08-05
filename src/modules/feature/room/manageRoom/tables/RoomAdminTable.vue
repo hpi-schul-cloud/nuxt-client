@@ -65,13 +65,14 @@ import {
 } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
-import { computed } from "vue";
+import { computed, ComputedRef } from "vue";
 import {
 	useConfirmationDialog,
 	ConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { RoomStatsItemResponse } from "@/serverApi/v3";
 import { WarningAlert } from "@ui-alert";
+import { DataTableHeader } from "vuetify";
 
 type Props = {
 	headerBottom?: number;
@@ -109,7 +110,7 @@ const onDeleteRoom = async (item: RoomStatsItemResponse) => {
 	}
 };
 
-const tableHeaders = computed(() => [
+const tableHeaders = computed((): DataTableHeader[] => [
 	{
 		title: t("pages.rooms.administration.table.header.roomName"),
 		key: "name",
