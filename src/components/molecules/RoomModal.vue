@@ -28,6 +28,7 @@
 				:col-count="4"
 				:max-items="-1"
 				:can-draggable="draggable"
+				show-badge
 				@start-drag="$emit('drag-from-group', $event)"
 			/>
 		</template>

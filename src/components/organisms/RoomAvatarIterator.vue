@@ -19,8 +19,8 @@
 							class="room-avatar"
 							:item="item.raw"
 							:size="itemSize"
-							:show-badge="true"
 							:condense-layout="condenseLayout"
+							:show-badge="showBadge"
 							@start-drag="$emit('startDrag', $event)"
 						/>
 					</v-col>
@@ -64,6 +64,9 @@ defineProps({
 		default: 9,
 	},
 	canDraggable: {
+		type: Boolean,
+	},
+	showBadge: {
 		type: Boolean,
 	},
 });

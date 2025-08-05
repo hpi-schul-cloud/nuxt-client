@@ -467,7 +467,7 @@ export default {
 	"components.board.error.404":
 		"Error 404 – Board with this name was not found",
 	"components.board.error.403":
-		"Error 403 – Unfortunately, you do not have permission to view this content",
+		"Error 403 – Unfortunately, you do not have permission to view this content ...",
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
@@ -1766,6 +1766,8 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Groups",
 	"pages.courseRooms.tabLabel.tools": "Tools",
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
+	"pages.courseRooms.course-locked":
+		"The course is locked because there is no teacher assigned. Please refer to the school administrator.",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",
@@ -2059,6 +2061,20 @@ export default {
 	"pages.rooms.invitationlinks.error.load":
 		"The invitation list could not be loaded.",
 	"pages.rooms.title": "Rooms",
+	"pages.rooms.administration.title": "Room administration",
+	"pages.rooms.administration.table.header.roomName": "Room name",
+	"pages.rooms.administration.table.header.roomOwner": "Room owner",
+	"pages.rooms.administration.table.header.totalMember": "Total members",
+	"pages.rooms.administration.table.header.internalMember": "Internal members",
+	"pages.rooms.administration.table.header.externalMember": "External members",
+	"pages.rooms.administration.table.header.creationDate": "Creation date",
+	"pages.rooms.administration.table.header.mainSchool": "Main school",
+	"pages.rooms.administration.table.header.actions": "Actions",
+	"pages.rooms.administration.table.row.owner.notExist": "Not existing",
+	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
+		"Action menu for room “{roomName}”",
+	"pages.rooms.administration.error.load": "The room list could not be loaded.",
+	"pages.rooms.administration.pageTitle": "Manage rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",

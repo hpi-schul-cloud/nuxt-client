@@ -103,6 +103,7 @@ import {
 	mdiShareVariantOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
+	mdiTextBoxCheckOutline,
 } from "@icons/material";
 import { RoomDotMenu } from "@ui-room-details";
 import { computed, ref } from "vue";
@@ -261,7 +262,7 @@ const chipItems = computed(() => {
 				testid: `room-task-card-chip-submitted-${props.taskCardIndex}`,
 			});
 			roleBasedChips[Roles.Student].push({
-				icon: "mdiTextBoxCheckOutline",
+				icon: mdiTextBoxCheckOutline,
 				name: t(`pages.room.taskCard.label.graded`),
 				class: "graded",
 				testid: `room-task-card-chip-graded-${props.taskCardIndex}`,

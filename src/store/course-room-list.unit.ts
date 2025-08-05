@@ -1,7 +1,7 @@
 import * as serverApi from "../serverApi/v3/api";
 import CourseRoomListModule from "./course-room-list";
 import { AlertPayload } from "./types/alert-payload";
-import { DroppedObject, RoomsData } from "./types/rooms";
+import { DroppedObject, RoomsData, SharingCourseObject } from "./types/rooms";
 import {
 	axiosErrorFactory,
 	apiResponseErrorFactory,
@@ -42,6 +42,7 @@ const mockData: serverApi.DashboardResponse = {
 			groupElements: [],
 			copyingSince: "",
 			isSynchronized: false,
+			isLocked: false,
 		},
 		{
 			id: "456",
@@ -54,6 +55,7 @@ const mockData: serverApi.DashboardResponse = {
 			groupElements: [],
 			copyingSince: "",
 			isSynchronized: false,
+			isLocked: false,
 		},
 		{
 			id: "789",
@@ -66,18 +68,21 @@ const mockData: serverApi.DashboardResponse = {
 					title: "Biology",
 					shortTitle: "Bi",
 					displayColor: "#f23f76",
+					isLocked: false,
 				},
 				{
 					id: "645",
 					title: "Chemistry",
 					shortTitle: "Ch",
 					displayColor: "#f23f76",
+					isLocked: false,
 				},
 				{
 					id: "321",
 					title: "Physics",
 					shortTitle: "Ph",
 					displayColor: "#f23f76",
+					isLocked: false,
 				},
 			],
 			xPosition: 3,
@@ -85,6 +90,7 @@ const mockData: serverApi.DashboardResponse = {
 			groupId: "",
 			copyingSince: "",
 			isSynchronized: false,
+			isLocked: false,
 		},
 	],
 };
@@ -133,7 +139,7 @@ describe("rooms module", () => {
 
 				const courseRoomListModule = new CourseRoomListModule({});
 
-				const payload = {
+				const payload: DroppedObject = {
 					from: { x: 1, y: 1 },
 					to: { x: 2, y: 2 },
 					item: {
@@ -147,6 +153,7 @@ describe("rooms module", () => {
 						groupId: "",
 						groupElements: [],
 						copyingSince: "",
+						isLocked: false,
 					},
 				};
 				const expectedParam = {
@@ -348,6 +355,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 				];
 
@@ -364,6 +372,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 				];
 				expect(courseRoomListModule.getRoomsData).not.toStrictEqual(
@@ -420,6 +429,7 @@ describe("rooms module", () => {
 						groupId: "",
 						groupElements: [],
 						copyingSince: "",
+						isLocked: false,
 					},
 					to: { x: 5, y: 2 },
 				};
@@ -435,6 +445,7 @@ describe("rooms module", () => {
 					groupElements: [],
 					copyingSince: "",
 					isSynchronized: false,
+					isLocked: false,
 				};
 				courseRoomListModule.setRoomData(mockData.gridElements);
 				courseRoomListModule.setPosition(draggedObject);
@@ -445,7 +456,7 @@ describe("rooms module", () => {
 		describe("setAllElements", () => {
 			it("should set the all elements data", () => {
 				const courseRoomListModule = new CourseRoomListModule({});
-				const itemsToBeSet = [
+				const itemsToBeSet: serverApi.CourseMetadataResponse[] = [
 					{
 						id: "123",
 						title: "Mathe",
@@ -453,6 +464,7 @@ describe("rooms module", () => {
 						displayColor: "#54616e",
 						startDate: "2019-12-07T23:00:00.000Z",
 						untilDate: "2020-12-16T23:00:00.000Z",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -461,6 +473,7 @@ describe("rooms module", () => {
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
 						untilDate: "2300-07-30T22:00:00.000Z",
+						isLocked: false,
 					},
 				];
 
@@ -476,6 +489,7 @@ describe("rooms module", () => {
 						searchText: "Mathe 2019/20",
 						isArchived: true,
 						to: "/rooms/123",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -487,6 +501,7 @@ describe("rooms module", () => {
 						searchText: "History",
 						isArchived: false,
 						to: "/rooms/234",
+						isLocked: false,
 					},
 				];
 				courseRoomListModule.setAllElements(itemsToBeSet);
@@ -497,7 +512,7 @@ describe("rooms module", () => {
 		describe("setSharedCourseData, setImportedCourseId", () => {
 			it("should set the state and imported course id", () => {
 				const courseRoomListModule = new CourseRoomListModule({});
-				const sharedCourseData = {
+				const sharedCourseData: SharingCourseObject = {
 					code: "123",
 					courseName: "Mathe",
 					status: "success",
@@ -561,6 +576,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -573,6 +589,7 @@ describe("rooms module", () => {
 						copyingSince: "",
 						isSynchronized: false,
 						xPosition: 0,
+						isLocked: false,
 					},
 				];
 
@@ -589,6 +606,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -602,6 +620,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 				];
 
@@ -672,7 +691,7 @@ describe("rooms module", () => {
 		describe("getAllElements", () => {
 			it("should return courses-list AllElements", () => {
 				const courseRoomListModule = new CourseRoomListModule({});
-				const itemsToBeSet = [
+				const itemsToBeSet: serverApi.CourseMetadataResponse[] = [
 					{
 						id: "123",
 						title: "Mathe",
@@ -680,6 +699,7 @@ describe("rooms module", () => {
 						displayColor: "#54616e",
 						startDate: "2019-12-07T23:00:00.000Z",
 						untilDate: "2020-12-16T23:00:00.000Z",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -688,6 +708,7 @@ describe("rooms module", () => {
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
 						untilDate: "2018-07-30T22:00:00.000Z",
+						isLocked: false,
 					},
 				];
 
@@ -703,6 +724,7 @@ describe("rooms module", () => {
 						searchText: "Mathe 2019/20",
 						isArchived: true,
 						to: "/rooms/123",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -715,6 +737,7 @@ describe("rooms module", () => {
 						searchText: "History 2015-2018",
 						isArchived: true,
 						to: "/rooms/234",
+						isLocked: false,
 					},
 				];
 				expect(courseRoomListModule.getAllElements).toStrictEqual([]);
@@ -733,7 +756,7 @@ describe("rooms module", () => {
 			});
 
 			it("should return false if rooms is not empty", () => {
-				const itemsToBeSet = [
+				const itemsToBeSet: serverApi.CourseMetadataResponse[] = [
 					{
 						id: "123",
 						title: "Mathe",
@@ -741,6 +764,7 @@ describe("rooms module", () => {
 						displayColor: "#54616e",
 						startDate: "2019-12-07T23:00:00.000Z",
 						untilDate: "2020-12-16T23:00:00.000Z",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -749,6 +773,7 @@ describe("rooms module", () => {
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
 						untilDate: "2018-07-30T22:00:00.000Z",
+						isLocked: false,
 					},
 				];
 
@@ -770,7 +795,7 @@ describe("rooms module", () => {
 			});
 
 			it("should return false if rooms is not empty", () => {
-				const itemsToBeSet = [
+				const itemsToBeSet: serverApi.DashboardGridElementResponse[] = [
 					{
 						id: "123",
 						title: "Mathe",
@@ -782,6 +807,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -794,6 +820,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 				];
 

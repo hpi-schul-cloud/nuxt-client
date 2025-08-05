@@ -38,6 +38,7 @@ import { VBtn } from "vuetify/lib/components/index";
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { nextTick } from "vue";
+import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 
 vi.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -120,10 +121,17 @@ let downloadModule: CommonCartridgeExportModule;
 let courseRoomDetailsModule: CourseRoomDetailsModule;
 let authModule: AuthModule;
 
-const getWrapper = (
+type WrapperOptions = {
+	permissionData?: string[];
+	roleName?: string;
+	isLocked?: boolean;
+};
+
+const getWrapper = ({
 	permissionData = mockPermissionsCourseTeacher,
-	roleName = "teacher"
-) => {
+	roleName = "teacher",
+	isLocked = false,
+}: WrapperOptions = {}) => {
 	notifierModule = createModuleMocks(NotifierModule);
 	copyModule = createModuleMocks(CopyModule, {
 		copy: vi.fn(),
@@ -151,10 +159,12 @@ const getWrapper = (
 		startShareFlow: vi.fn(),
 		resetShareFlow: vi.fn(),
 	});
+
 	courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 		fetchContent: vi.fn(),
 		getRoomData: mockData,
 		getPermissionData: permissionData,
+		getIsLocked: isLocked,
 	});
 
 	const mockMe = meResponseFactory.build();
@@ -234,21 +244,32 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 	});
 
 	it("should not show FAB if user does not have permission to create courses", () => {
-		const wrapper = getWrapper(mockPermissionsStudent);
+		const wrapper = getWrapper({ permissionData: mockPermissionsStudent });
 		const fabComponent = wrapper.find(".wireframe-fab");
 		expect(fabComponent.exists()).toBe(false);
 	});
 
+	describe("when course is locked", () => {
+		it("should show the locked course page", async () => {
+			const wrapper = getWrapper({
+				isLocked: true,
+			});
+
+			const lockedCoursePage = wrapper.findComponent(CourseRoomLockedPage);
+			expect(lockedCoursePage.exists()).toBe(true);
+		});
+	});
+
 	describe("menu", () => {
 		it("should show FAB if user has permission to create homework", () => {
-			const wrapper = getWrapper(["homework_create"]);
+			const wrapper = getWrapper({ permissionData: ["homework_create"] });
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
 			expect(fabComponent.exists()).toBe(true);
 		});
 
 		it("'add task' button should have correct path", async () => {
-			const wrapper = getWrapper(["homework_create"]);
+			const wrapper = getWrapper({ permissionData: ["homework_create"] });
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
 			// open menu
@@ -261,7 +282,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 		});
 
 		it("'add lesson' button should have correct path", async () => {
-			const wrapper = getWrapper(["homework_create", "topic_create"]);
+			const wrapper = getWrapper({
+				permissionData: ["homework_create", "topic_create"],
+			});
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
 			// open menu
@@ -274,7 +297,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 		});
 
 		it("'add column board' button should be rendered", async () => {
-			const wrapper = getWrapper(["course_edit"]);
+			const wrapper = getWrapper({ permissionData: ["course_edit"] });
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
 			// open menu
@@ -289,7 +312,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 		describe("'add list board' button", () => {
 			describe("when user doesn't have course edit permission", () => {
 				it("should not render any board creation button", async () => {
-					const wrapper = getWrapper(["homework_create", "topic_create"]);
+					const wrapper = getWrapper({
+						permissionData: ["homework_create", "topic_create"],
+					});
 					const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
 					// open menu
@@ -311,7 +336,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 						FEATURE_BOARD_LAYOUT_ENABLED: true,
 					});
 					envConfigModule.setEnvs(envs);
-					const wrapper = getWrapper(["course_edit"]);
+					const wrapper = getWrapper({ permissionData: ["course_edit"] });
 					const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
 					// open menu
@@ -328,7 +353,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 						FEATURE_BOARD_LAYOUT_ENABLED: true,
 					});
 					envConfigModule.setEnvs(envs);
-					const wrapper = getWrapper(["course_edit"]);
+					const wrapper = getWrapper({ permissionData: ["course_edit"] });
 
 					const layoutDialog = wrapper.findComponent(
 						"[data-testid=board-layout-dialog]"
@@ -351,7 +376,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 	describe("headline menus", () => {
 		describe("students", () => {
 			it("should not have the menu button for students", () => {
-				const wrapper = getWrapper(mockPermissionsStudent);
+				const wrapper = getWrapper({ permissionData: mockPermissionsStudent });
 				const menuButton = wrapper.find('[data-testid="room-menu"]');
 
 				expect(menuButton.exists()).toBe(false);
@@ -367,7 +392,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 			});
 
 			it("should not have the menu button for substitution course teachers", () => {
-				const wrapper = getWrapper(mockPermissionsCourseSubstitutionTeacher);
+				const wrapper = getWrapper({
+					permissionData: mockPermissionsCourseSubstitutionTeacher,
+				});
 				const menuButton = wrapper.find('[data-testid="room-menu"]');
 
 				expect(menuButton.exists()).toBe(false);

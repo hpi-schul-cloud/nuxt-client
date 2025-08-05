@@ -1,5 +1,7 @@
 <template>
+	<CourseRoomLockedPage v-if="isLocked" :title="roomData.title" />
 	<default-wireframe
+		v-else
 		ref="main"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
@@ -113,6 +115,7 @@
 
 <script>
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
+import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
@@ -177,6 +180,7 @@ export default defineComponent({
 		ShareModal,
 		commonCartridgeExportModal,
 		SelectBoardLayoutDialog,
+		CourseRoomLockedPage,
 	},
 	inject: {
 		copyModule: { from: COPY_MODULE_KEY },
@@ -218,13 +222,6 @@ export default defineComponent({
 				mdiSync,
 				mdiViewGridPlusOutline,
 			},
-			breadcrumbs: [
-				{
-					title: this.$t("common.words.courses"),
-					to: "/rooms/courses-overview",
-					disabled: false,
-				},
-			],
 			courseId: this.$route.params.id,
 			isShareModalOpen: false,
 			isEndSyncDialogOpen: false,
@@ -234,6 +231,19 @@ export default defineComponent({
 		};
 	},
 	computed: {
+		breadcrumbs() {
+			return [
+				{
+					title: this.$t("common.words.courses"),
+					to: "/rooms/courses-overview",
+					disabled: false,
+				},
+				{
+					title: this.roomData.title,
+					disabled: true,
+				},
+			];
+		},
 		boardLayoutsEnabled() {
 			return envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED;
 		},
@@ -466,6 +476,9 @@ export default defineComponent({
 		},
 		isCopyModalOpen() {
 			return this.copyModule.getIsResultModalOpen;
+		},
+		isLocked() {
+			return this.courseRoomDetailsModule.getIsLocked;
 		},
 	},
 	watch: {
