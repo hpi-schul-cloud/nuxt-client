@@ -58,7 +58,6 @@
 
 <script setup lang="ts">
 import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
-import router from "@/router";
 import { FileElementResponse } from "@/serverApi/v3";
 import {
 	convertDownloadToPreviewUrl,
@@ -83,6 +82,7 @@ import {
 } from "@ui-kebab-menu";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { mapEditBoardPermissionToEditorMode } from "./mapper";
@@ -110,6 +110,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const router = useRouter();
 
 const fileContentElement = ref(null);
 const isLoadingFileRecord = ref(true);
