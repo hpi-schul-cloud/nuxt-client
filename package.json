@@ -106,7 +106,7 @@
 		"@rollup/rollup-darwin-arm64": "^4.45.1",
 		"@rollup/rollup-linux-arm64-gnu": "^4.45.1",
 		"@rollup/rollup-linux-x64-gnu": "^4.45.1",
-		"@rollup/rollup-linux-x64-musl": "^4.45.1",
+		"@rollup/rollup-linux-x64-musl": "^4.46.2",
 		"@rollup/rollup-win32-x64": "^4.45.1",
 		"sass-embedded-darwin-arm64": "^1.89.2",
 		"sass-embedded-linux-arm64": "^1.89.2",
