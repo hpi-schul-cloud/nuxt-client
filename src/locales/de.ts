@@ -1406,6 +1406,8 @@ export default {
 		"Ist keine Sprache für die Schule gesetzt, wird die Sprache der Instanz (Deutsch) angewandt.",
 	"pages.administration.school.index.generalSettings.save":
 		"Einstellungen speichern",
+	"pages.administration.school.index.generalSettings.save.success":
+		"Allgemeine Einstellungen erfolgreich gespeichert.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
 		"Um die Zeitzone für die Schule zu ändern, wenden Sie sich bitte an einen Admin.",
 	"pages.administration.school.index.generalSettings":

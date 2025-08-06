@@ -1398,6 +1398,8 @@ export default {
 	"pages.administration.school.index.generalSettings.languageHint":
 		"If no language for the school is set, the system default (German) is applied.",
 	"pages.administration.school.index.generalSettings.save": "Save settings",
+	"pages.administration.school.index.generalSettings.save.success":
+		"General settings successfully saved.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
 		"To change your timezone, please reach out to one of the admins.",
 	"pages.administration.school.index.generalSettings": "General Settings",

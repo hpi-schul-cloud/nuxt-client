@@ -1444,8 +1444,10 @@ export default {
 		"If no language for the school is set, the system default (German) is applied.",
 	"pages.administration.school.index.generalSettings.save":
 		"Guardar configuración",
+	"pages.administration.school.index.generalSettings.save.success":
+		"Ajustes generales guardados correctamente.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
-		"To change your timezone, please reach out to one of the admins.",
+		"Para cambiar su zona horaria, comuníquese con uno de los administradores.",
 	"pages.administration.school.index.generalSettings": "Configuración general",
 	"pages.administration.school.index.info":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {instituteTitle}.",

@@ -1422,6 +1422,8 @@ export default {
 		"Якщо мову школи не встановлено, застосовується системна мова за замовчуванням (німецька).",
 	"pages.administration.school.index.generalSettings.save":
 		"Зберегти налаштування",
+	"pages.administration.school.index.generalSettings.save.success":
+		"Загальні налаштування успішно збережено.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
 		"Щоб змінити часовий пояс, зверніться до одного з адміністраторів.",
 	"pages.administration.school.index.generalSettings": "Загальні параметри",
