@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { RoomApiFactory, RoomStatsItemResponse } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
@@ -17,7 +17,7 @@ export const useAdministrationRoomStore = defineStore(
 		const roomList = ref<RoomStatsItemResponse[]>([]);
 		const isEmptyList = ref(false);
 		const userSchoolName = schoolsModule.getSchool.name;
-		const userSchoolId = schoolsModule.getSchool.id;
+		const userSchoolId = computed(() => schoolsModule.getSchool.id);
 
 		const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
 			return list

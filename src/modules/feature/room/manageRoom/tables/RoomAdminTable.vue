@@ -91,8 +91,8 @@ const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 
 const administrationRoomStore = useAdministrationRoomStore();
-const { deleteRoom, userSchoolId } = administrationRoomStore;
-const { roomList } = storeToRefs(administrationRoomStore);
+const { deleteRoom } = administrationRoomStore;
+const { roomList, userSchoolId } = storeToRefs(administrationRoomStore);
 
 const confirmDeletion = async (roomName: string) => {
 	const shouldDelete = await askConfirmation({
