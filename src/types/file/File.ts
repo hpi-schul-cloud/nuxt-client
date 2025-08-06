@@ -7,7 +7,10 @@ import {
 	FileRecordScanStatus as FileRecordVirusScanStatus,
 	ParentStatisticResponse,
 	PreviewOutputMimeTypes,
+	StorageLocation,
 	type ArchiveFileParams,
+	type FileUrlParams,
+	type RenameFileParams,
 } from "@/fileStorageApi/v3";
 
 export type FileRecord = FileRecordResponse;
@@ -20,5 +23,8 @@ export {
 	FilePreviewWidth,
 	FileRecordParent,
 	FileRecordVirusScanStatus,
+	FileUrlParams,
 	PreviewOutputMimeTypes,
+	RenameFileParams,
+	StorageLocation,
 };

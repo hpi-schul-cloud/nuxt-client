@@ -1,11 +1,18 @@
 import {
+	AuthorizedCollaboraDocumentUrlResponse,
+	EditorMode,
 	FileRecordListResponse,
 	FileRecordParentType,
 	FileRecordResponse,
 	StorageLocation,
 } from "@/fileStorageApi/v3";
 import * as serverApi from "@/fileStorageApi/v3/api/file-api";
+import * as wopiApi from "@/fileStorageApi/v3/api/wopi-api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import {
+	authorizedCollaboraDocumentUrlResponseFactory,
+	AxiosResponseFactory,
+} from "@@/tests/test-utils";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
@@ -628,6 +635,160 @@ describe("FileStorageApi Composable", () => {
 				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([
 					fileRecordResponse,
 				]);
+			});
+		});
+	});
+
+	describe("getAuthorizedCollaboraDocumentUrl", () => {
+		describe("when getAuthorizedCollaboraDocumentUrl resolves", () => {
+			const setup = () => {
+				const fileRecordId = ObjectIdMock();
+				const editorMode = EditorMode.EDIT;
+				const userDisplayName = "Test User";
+
+				const response = authorizedCollaboraDocumentUrlResponseFactory.build();
+				const axiosResponse =
+					AxiosResponseFactory.create<AuthorizedCollaboraDocumentUrlResponse>(
+						response
+					);
+
+				const wopiApiMock = createMock<wopiApi.WopiApiInterface>();
+				vi.spyOn(wopiApi, "WopiApiFactory").mockReturnValueOnce(wopiApiMock);
+				wopiApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
+					axiosResponse
+				);
+
+				setupFileStorageNotifier();
+
+				return {
+					fileRecordId,
+					editorMode,
+					userDisplayName,
+					wopiApiMock,
+					response,
+				};
+			};
+
+			it("should call WopiApiFactory.getAuthorizedCollaboraDocumentUrl and return url", async () => {
+				const {
+					fileRecordId,
+					editorMode,
+					userDisplayName,
+					wopiApiMock,
+					response,
+				} = setup();
+				const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
+
+				const result = await getAuthorizedCollaboraDocumentUrl(
+					fileRecordId,
+					editorMode,
+					userDisplayName
+				);
+
+				expect(
+					wopiApiMock.getAuthorizedCollaboraDocumentUrl
+				).toHaveBeenCalledWith(fileRecordId, editorMode, userDisplayName);
+				expect(result).toBe(response.authorizedCollaboraDocumentUrl);
+			});
+		});
+
+		describe("when getAuthorizedCollaboraDocumentUrl rejects with forbidden error", () => {
+			const setup = () => {
+				const fileRecordId = ObjectIdMock();
+				const editorMode = EditorMode.EDIT;
+				const userDisplayName = "Test User";
+
+				const wopiApiMock = createMock<wopiApi.WopiApiInterface>();
+				vi.spyOn(wopiApi, "WopiApiFactory").mockReturnValueOnce(wopiApiMock);
+
+				const { responseError, expectedPayload } = setupErrorResponse(
+					ErrorType.Forbidden
+				);
+				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
+
+				wopiApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(
+					responseError
+				);
+
+				const { showForbiddenError } = setupFileStorageNotifier();
+
+				return {
+					fileRecordId,
+					editorMode,
+					userDisplayName,
+					responseError,
+					showForbiddenError,
+				};
+			};
+
+			it("should call showForbiddenError and throw error", async () => {
+				const {
+					fileRecordId,
+					editorMode,
+					userDisplayName,
+					showForbiddenError,
+				} = setup();
+				const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
+
+				await expect(
+					getAuthorizedCollaboraDocumentUrl(
+						fileRecordId,
+						editorMode,
+						userDisplayName
+					)
+				).rejects.toThrow();
+
+				expect(showForbiddenError).toHaveBeenCalledTimes(1);
+			});
+		});
+
+		describe("when getAuthorizedCollaboraDocumentUrl rejects with forbidden error", () => {
+			const setup = () => {
+				const fileRecordId = ObjectIdMock();
+				const editorMode = EditorMode.EDIT;
+				const userDisplayName = "Test User";
+
+				const wopiApiMock = createMock<wopiApi.WopiApiInterface>();
+				vi.spyOn(wopiApi, "WopiApiFactory").mockReturnValueOnce(wopiApiMock);
+
+				const { responseError, expectedPayload } = setupErrorResponse(
+					ErrorType.Unauthorized
+				);
+				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
+
+				wopiApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(
+					responseError
+				);
+
+				const { showUnauthorizedError } = setupFileStorageNotifier();
+
+				return {
+					fileRecordId,
+					editorMode,
+					userDisplayName,
+					responseError,
+					showUnauthorizedError,
+				};
+			};
+
+			it("should call showUnauthorizedError and throw error", async () => {
+				const {
+					fileRecordId,
+					editorMode,
+					userDisplayName,
+					showUnauthorizedError,
+				} = setup();
+				const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
+
+				await expect(
+					getAuthorizedCollaboraDocumentUrl(
+						fileRecordId,
+						editorMode,
+						userDisplayName
+					)
+				).rejects.toThrow();
+
+				expect(showUnauthorizedError).toHaveBeenCalledTimes(1);
 			});
 		});
 	});

@@ -8,13 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import {
-	EditorMode,
-	WopiApiFactory,
-	WopiApiInterface,
-} from "@/fileStorageApi/v3";
-import { $axios } from "@/utils/api";
+import { EditorMode } from "@/fileStorageApi/v3";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useFileStorageApi } from "@data-file";
 import { computed, onMounted, ref } from "vue";
 
 interface Props {
@@ -24,6 +20,7 @@ interface Props {
 const props = defineProps<Props>();
 const url = ref<string>("");
 const authModule = injectStrict(AUTH_MODULE_KEY);
+const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
 
 const userName = computed(() => {
 	const firstName = authModule.getUser?.firstName;
@@ -37,19 +34,12 @@ const userName = computed(() => {
 });
 
 onMounted(async () => {
-	const fileApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
-
-	const result = await fileApi.getAuthorizedCollaboraDocumentUrl(
+	const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(
 		props.fileRecordId,
 		props.editorMode,
 		userName.value
 	);
 
-	const { authorizedCollaboraDocumentUrl } = result.data;
-
-	if (!authorizedCollaboraDocumentUrl) {
-		throw new Error("Collabora document URL is not available");
-	}
-	url.value = authorizedCollaboraDocumentUrl;
+	url.value = collaboraUrl;
 });
 </script>
