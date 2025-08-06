@@ -16,10 +16,11 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useBoardPermissions, useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
 import { shallowMount } from "@vue/test-utils";
-import { computed, nextTick } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { VCard } from "vuetify/components";
 import FileContentElement from "./FileContentElement.vue";
 import FileContent from "./content/FileContent.vue";
@@ -28,12 +29,7 @@ import { FileAlert } from "./shared/types/FileAlert.enum";
 import { FileProperties } from "./shared/types/file-properties";
 import FileUpload from "./upload/FileUpload.vue";
 
-vi.mock("@data-board", () => {
-	return {
-		useBoardFocusHandler: vi.fn(),
-		useContentElementState: vi.fn(() => ({ modelValue: {} })),
-	};
-});
+vi.mock("@data-board");
 vi.mock("@feature-board");
 vi.mock("./content/alert/useFileAlerts.composable");
 
@@ -92,6 +88,23 @@ describe("FileContentElement", () => {
 				);
 
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
+
+				const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
+				const useBoardPermissionsMockReturn = createMock<
+					ReturnType<typeof useBoardPermissions>
+				>({
+					hasEditPermission: ref(true),
+				});
+				useBoardPermissionsMockFn.mockReturnValueOnce(
+					useBoardPermissionsMockReturn
+				);
+
+				const useContentElementStateMock = vi.mocked(useContentElementState);
+				const fileContentElement = fileElementResponseFactory.build();
+				useContentElementStateMock.mockReturnValueOnce({
+					modelValue: ref(fileContentElement),
+					computedElement: computed(() => fileContentElement),
+				});
 
 				const { wrapper, menu } = getWrapper({
 					element,
@@ -188,6 +201,23 @@ describe("FileContentElement", () => {
 					element,
 					mimeType: fileRecordResponse.mimeType,
 				};
+
+				const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
+				const useBoardPermissionsMockReturn = createMock<
+					ReturnType<typeof useBoardPermissions>
+				>({
+					hasEditPermission: ref(true),
+				});
+				useBoardPermissionsMockFn.mockReturnValueOnce(
+					useBoardPermissionsMockReturn
+				);
+
+				const useContentElementStateMock = vi.mocked(useContentElementState);
+				const fileContentElement = fileElementResponseFactory.build();
+				useContentElementStateMock.mockReturnValueOnce({
+					modelValue: ref(fileContentElement),
+					computedElement: computed(() => fileContentElement),
+				});
 
 				const { wrapper, menu, addAlertMock } = getWrapper({
 					element,
@@ -404,7 +434,7 @@ describe("FileContentElement", () => {
 						card.trigger("click");
 
 						expect(windowOpenSpy).toHaveBeenCalledWith(
-							`/collabora/${fileRecordResponse.id}`,
+							`/collabora/${fileRecordResponse.id}?editorMode=edit`,
 							"_blank"
 						);
 						windowOpenSpy.mockRestore();
@@ -428,7 +458,7 @@ describe("FileContentElement", () => {
 						await card.trigger("keydown.enter");
 
 						expect(windowOpenSpy).toHaveBeenCalledWith(
-							`/collabora/${fileRecordResponse.id}`,
+							`/collabora/${fileRecordResponse.id}?editorMode=edit`,
 							"_blank"
 						);
 
@@ -636,6 +666,23 @@ describe("FileContentElement", () => {
 					);
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
+					const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
+					const useBoardPermissionsMockReturn = createMock<
+						ReturnType<typeof useBoardPermissions>
+					>({
+						hasEditPermission: ref(true),
+					});
+					useBoardPermissionsMockFn.mockReturnValueOnce(
+						useBoardPermissionsMockReturn
+					);
+
+					const useContentElementStateMock = vi.mocked(useContentElementState);
+					const fileContentElement = fileElementResponseFactory.build();
+					useContentElementStateMock.mockReturnValueOnce({
+						modelValue: ref(fileContentElement),
+						computedElement: computed(() => fileContentElement),
+					});
+
 					const elementPositionProps = {
 						isFirstElement: false,
 						isLastElement: true,
@@ -728,6 +775,23 @@ describe("FileContentElement", () => {
 					fileStorageApiMock.upload.mockRejectedValueOnce(new Error("test"));
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
+					const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
+					const useBoardPermissionsMockReturn = createMock<
+						ReturnType<typeof useBoardPermissions>
+					>({
+						hasEditPermission: ref(true),
+					});
+					useBoardPermissionsMockFn.mockReturnValueOnce(
+						useBoardPermissionsMockReturn
+					);
+
+					const useContentElementStateMock = vi.mocked(useContentElementState);
+					const fileContentElement = fileElementResponseFactory.build();
+					useContentElementStateMock.mockReturnValueOnce({
+						modelValue: ref(fileContentElement),
+						computedElement: computed(() => fileContentElement),
+					});
+
 					const { wrapper } = getWrapper({
 						element,
 						isEditMode: true,
@@ -807,6 +871,23 @@ describe("FileContentElement", () => {
 					element,
 					mimeType: fileRecordResponse.mimeType,
 				};
+
+				const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
+				const useBoardPermissionsMockReturn = createMock<
+					ReturnType<typeof useBoardPermissions>
+				>({
+					hasEditPermission: ref(true),
+				});
+				useBoardPermissionsMockFn.mockReturnValueOnce(
+					useBoardPermissionsMockReturn
+				);
+
+				const useContentElementStateMock = vi.mocked(useContentElementState);
+				const fileContentElement = fileElementResponseFactory.build();
+				useContentElementStateMock.mockReturnValueOnce({
+					modelValue: ref(fileContentElement),
+					computedElement: computed(() => fileContentElement),
+				});
 
 				const { wrapper, menu } = getWrapper({
 					element,
@@ -1008,7 +1089,7 @@ describe("FileContentElement", () => {
 						card.trigger("click");
 
 						expect(windowOpenSpy).toHaveBeenCalledWith(
-							`/collabora/${fileRecordResponse.id}`,
+							`/collabora/${fileRecordResponse.id}?editorMode=edit`,
 							"_blank"
 						);
 						windowOpenSpy.mockRestore();
@@ -1032,7 +1113,7 @@ describe("FileContentElement", () => {
 						await card.trigger("keydown.enter");
 
 						expect(windowOpenSpy).toHaveBeenCalledWith(
-							`/collabora/${fileRecordResponse.id}`,
+							`/collabora/${fileRecordResponse.id}?editorMode=edit`,
 							"_blank"
 						);
 
