@@ -24,6 +24,6 @@ describe("CollaboraDisplay", () => {
 
 		const vImage = wrapper.findComponent(VImg);
 		expect(vImage.exists()).toBe(true);
-		expect(vImage.props("src")).toBe("Mocked media file");
+		expect(vImage.props("src")).toEqual("/src/assets/img/collabora.svg");
 	});
 });

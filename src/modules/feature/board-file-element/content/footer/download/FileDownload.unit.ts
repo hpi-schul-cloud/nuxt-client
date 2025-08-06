@@ -5,8 +5,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mdiTrayArrowDown } from "@icons/material";
 import { mount, shallowMount } from "@vue/test-utils";
-import { nextTick } from "vue";
-import { VIcon } from "vuetify/components";
+import { VBtn, VIcon } from "vuetify/components";
 import FileDownload from "./FileDownload.vue";
 
 vi.mock("@/utils/fileHelper");
@@ -91,12 +90,9 @@ describe("FileDownload", () => {
 			it("should download file", async () => {
 				const { wrapper, urlProp, fileNameProp, downloadFileMock } = setup();
 
-				const button = wrapper.findComponent({ name: "v-btn" });
-				button.vm.$emit("click");
-				await nextTick();
+				const button = wrapper.find("v-btn-stub");
+				await button.trigger("click");
 
-				expect(button.emitted("click")).toBeTruthy();
-				expect(button.emitted("click")).toHaveLength(1);
 				expect(downloadFileMock).toHaveBeenCalledWith(urlProp, fileNameProp);
 			});
 		});
@@ -104,23 +100,25 @@ describe("FileDownload", () => {
 		describe("when download icon is focused and enter is pressed", () => {
 			const setup = () => {
 				const parentKeydownHandler = vi.fn();
-				const parent = {
-					template: `<div @keydown="onKeydown"><FileDownload v-bind="props" /></div>`,
-					components: { FileDownload },
-					methods: { onKeydown: parentKeydownHandler },
-				};
-
 				const props = {
 					fileName: "file-record #1.txt",
 					url: "1/file-record #1.txt",
 					isDownloadAllowed: true,
 				};
 
+				const parent = {
+					template: `<div @keydown="onKeydown"><FileDownload v-bind="props" /></div>`,
+					components: { FileDownload },
+					methods: { onKeydown: parentKeydownHandler },
+					data() {
+						return { props };
+					},
+				};
+
 				const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
 
 				const wrapper = mount(parent, {
 					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-					props,
 				});
 
 				return {
@@ -135,9 +133,8 @@ describe("FileDownload", () => {
 			it("should download file", async () => {
 				const { wrapper, urlProp, fileNameProp, downloadFileMock } = setup();
 
-				const icon = wrapper.find("v-icon-stub");
-				icon.trigger("keydown.enter");
-				await nextTick();
+				const button = wrapper.findComponent(VBtn);
+				await button.trigger("keydown.enter");
 
 				expect(downloadFileMock).toHaveBeenCalledWith(urlProp, fileNameProp);
 			});
