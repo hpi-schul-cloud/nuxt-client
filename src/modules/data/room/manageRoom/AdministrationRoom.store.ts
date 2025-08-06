@@ -16,10 +16,11 @@ export const useAdministrationRoomStore = defineStore(
 		const isLoading = ref(true);
 		const roomList = ref<RoomStatsItemResponse[]>([]);
 		const isEmptyList = ref(false);
-		const userSchoolName = schoolsModule.getSchool.name;
+		const userSchoolName = computed(() => schoolsModule.getSchool.name);
 		const userSchoolId = computed(() => schoolsModule.getSchool.id);
 
 		const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
+			const currentUserSchoolName = userSchoolName.value;
 			return list
 				.map((room) => ({
 					...room,
@@ -30,13 +31,13 @@ export const useAdministrationRoomStore = defineStore(
 					if (a.owner && !b.owner) return 1;
 
 					if (
-						a.schoolName === userSchoolName &&
-						b.schoolName !== userSchoolName
+						a.schoolName === currentUserSchoolName &&
+						b.schoolName !== currentUserSchoolName
 					)
 						return -1;
 					if (
-						a.schoolName !== userSchoolName &&
-						b.schoolName === userSchoolName
+						a.schoolName !== currentUserSchoolName &&
+						b.schoolName === currentUserSchoolName
 					)
 						return 1;
 
