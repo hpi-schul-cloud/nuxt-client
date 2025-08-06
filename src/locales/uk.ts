@@ -477,7 +477,7 @@ export default {
 	"components.board.error.404":
 		"Помилка 404 – Дошки з такою назвою не знайдено",
 	"components.board.error.403":
-		"Помилка 403 – На жаль, у вас немає дозволу на перегляд цього контенту",
+		"Помилка 403 – На жаль, у вас немає дозволу на перегляд цього контенту ...",
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
@@ -1796,6 +1796,8 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Групи",
 	"pages.courseRooms.tabLabel.tools": "Інструмент",
 	"pages.courseRooms.tabLabel.toolsOld": "Інструмент",
+	"pages.courseRooms.course-locked":
+		"Курс заблоковано, оскільки на нього не призначено викладача. Будь ласка, зверніться до адміністратора школи.",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",
@@ -2092,6 +2094,23 @@ export default {
 	"pages.rooms.invitationlinks.error.load":
 		"Не вдалося завантажити список запрошень.",
 	"pages.rooms.title": "Кімнати",
+	"pages.rooms.administration.title": "Адміністрування кімнат",
+	"pages.rooms.administration.table.header.roomName": "Назва кімнати",
+	"pages.rooms.administration.table.header.roomOwner": "Власник кімнати",
+	"pages.rooms.administration.table.header.totalMember":
+		"Загальна кількість учасників",
+	"pages.rooms.administration.table.header.internalMember":
+		"Внутрішні учасники",
+	"pages.rooms.administration.table.header.externalMember": "Зовнішні учасники",
+	"pages.rooms.administration.table.header.creationDate": "Дата створення",
+	"pages.rooms.administration.table.header.mainSchool": "Головна школа",
+	"pages.rooms.administration.table.header.actions": "Дії",
+	"pages.rooms.administration.table.row.owner.notExist": "Не існує",
+	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
+		"Меню дій для кімнати “{roomName}”",
+	"pages.rooms.administration.error.load":
+		"Не вдалося завантажити список кімнат.",
+	"pages.rooms.administration.pageTitle": "Керування кімнатами",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

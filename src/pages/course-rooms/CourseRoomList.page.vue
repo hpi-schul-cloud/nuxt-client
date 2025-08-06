@@ -48,7 +48,6 @@
 								class="room-avatar"
 								:item="room"
 								size="5em"
-								:show-badge="true"
 							/>
 						</v-col>
 					</v-row>

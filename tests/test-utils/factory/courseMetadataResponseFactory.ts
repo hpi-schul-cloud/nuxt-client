@@ -10,4 +10,5 @@ export const courseMetadataResponseFactory =
 		startDate: new Date().toISOString(),
 		untilDate: new Date().toISOString(),
 		copyingSince: new Date().toISOString(),
+		isLocked: false,
 	}));

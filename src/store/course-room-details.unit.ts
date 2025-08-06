@@ -162,7 +162,7 @@ describe("course-room module", () => {
 			});
 		});
 
-		describe("fetch", () => {
+		describe("fetchContent", () => {
 			it("should call backend and sets state correctly", async () => {
 				vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(
 					mockApi as unknown as serverApi.CourseRoomsApiInterface
@@ -176,6 +176,37 @@ describe("course-room module", () => {
 				expect(
 					mockApi.courseRoomsControllerGetRoomBoard.mock.calls[0][0]
 				).toStrictEqual("123");
+			});
+
+			describe("when the course is locked", () => {
+				it("should set isLocked", async () => {
+					const lockedError = axiosErrorFactory.build({
+						response: {
+							data: {
+								type: "LOCKED_COURSE",
+								message: "Locked Course",
+							},
+						},
+					});
+
+					mockApi.courseRoomsControllerGetRoomBoard.mockRejectedValue(
+						lockedError
+					);
+					vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(
+						mockApi as unknown as serverApi.CourseRoomsApiInterface
+					);
+
+					const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+					await courseRoomDetailsModule.fetchContent("123");
+
+					expect(courseRoomDetailsModule.getLoading).toBe(false);
+					expect(mockApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalled();
+					expect(
+						mockApi.courseRoomsControllerGetRoomBoard.mock.calls[0][0]
+					).toStrictEqual("123");
+					expect(courseRoomDetailsModule.getIsLocked).toBe(true);
+					expect(courseRoomDetailsModule.roomData.title).toBe("Locked Course");
+				});
 			});
 		});
 

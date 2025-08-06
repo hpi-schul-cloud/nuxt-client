@@ -475,7 +475,7 @@ export default {
 	"components.board.error.404":
 		"Error 404 – No se ha encontrado ningún tablero con este nombre",
 	"components.board.error.403":
-		"Error 403 – Lamentablemente, falta la autorización para ver este contenido",
+		"Error 403 – Lamentablemente, falta la autorización para ver este contenido ...",
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
@@ -1821,6 +1821,8 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Grupos",
 	"pages.courseRooms.tabLabel.tools": "Herramientas",
 	"pages.courseRooms.tabLabel.toolsOld": "Herramientas",
+	"pages.courseRooms.course-locked":
+		"El curso está bloqueado porque no hay ningún profesor asignado para impartirlo. Póngase en contacto con la administración de la escuela.",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",
@@ -2128,6 +2130,21 @@ export default {
 	"pages.rooms.invitationlinks.error.load":
 		"No se pudo cargar la lista de invitados.",
 	"pages.rooms.title": "Salas",
+	"pages.rooms.administration.title": "Administración de salas",
+	"pages.rooms.administration.table.header.roomName": "Nombre de la sala",
+	"pages.rooms.administration.table.header.roomOwner": "Propietario de la sala",
+	"pages.rooms.administration.table.header.totalMember": "Miembros totales",
+	"pages.rooms.administration.table.header.internalMember": "Miembros internos",
+	"pages.rooms.administration.table.header.externalMember": "Miembros externos",
+	"pages.rooms.administration.table.header.creationDate": "Fecha de creación",
+	"pages.rooms.administration.table.header.mainSchool": "Escuela principal",
+	"pages.rooms.administration.table.header.actions": "Acciones",
+	"pages.rooms.administration.table.row.owner.notExist": "No existe",
+	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
+		"Menú de acciones para la sala “{roomName}”",
+	"pages.rooms.administration.error.load":
+		"No se pudo cargar la lista de salas.",
+	"pages.rooms.administration.pageTitle": "Administrar salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
