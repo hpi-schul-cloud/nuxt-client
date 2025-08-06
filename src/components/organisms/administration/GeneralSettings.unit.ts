@@ -4,7 +4,7 @@ import {
 	LanguageType,
 	SchoolSystemResponse,
 } from "@/serverApi/v3";
-import { envConfigModule, schoolsModule } from "@/store";
+import { envConfigModule, notifierModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
@@ -18,6 +18,8 @@ import GeneralSettings from "./GeneralSettings.vue";
 import { mount } from "@vue/test-utils";
 import { VSelect, VTextField } from "vuetify/components";
 import { schoolYearResponseFactory } from "@@/tests/test-utils/factory/schoolYearResponseFactory";
+import NotifierModule from "@/store/notifier";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 describe("GeneralSettings", () => {
 	beforeEach(() => {
@@ -25,6 +27,7 @@ describe("GeneralSettings", () => {
 			authModule: AuthModule,
 			schoolsModule: SchoolsModule,
 			envConfigModule: EnvConfigModule,
+			notifierModule: NotifierModule,
 		});
 	});
 
@@ -64,6 +67,9 @@ describe("GeneralSettings", () => {
 		const wrapper = mount(GeneralSettings, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
 			},
 		});
 		return { wrapper, school };
@@ -370,6 +376,20 @@ describe("GeneralSettings", () => {
 			await buttonElement.trigger("click");
 
 			expect(updateSpy).toHaveBeenCalled();
+		});
+
+		it("show success notification on save", async () => {
+			const notifierMock = vi.spyOn(notifierModule, "show");
+			vi.spyOn(schoolsModule, "update").mockResolvedValue();
+			const { wrapper } = setup({ county: undefined });
+
+			const buttonElement = wrapper.findComponent(
+				"[data-testid='save-general-setting']"
+			);
+			await buttonElement.trigger("click");
+
+			expect(notifierMock).toHaveBeenCalled();
+			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("success");
 		});
 	});
 
