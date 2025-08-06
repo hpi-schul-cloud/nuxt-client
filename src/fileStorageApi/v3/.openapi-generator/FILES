@@ -4,6 +4,7 @@ api.ts
 api/admin-api.ts
 api/file-api.ts
 api/file-config-api.ts
+api/wopi-api.ts
 base.ts
 common.ts
 configuration.ts
@@ -11,11 +12,13 @@ git_push.sh
 index.ts
 models/api-validation-error.ts
 models/archive-file-params.ts
+models/authorized-collabora-document-url-response.ts
 models/copy-file-list-response.ts
 models/copy-file-params.ts
 models/copy-file-response.ts
 models/copy-files-of-parent-params.ts
 models/delete-by-storage-location-response.ts
+models/editor-mode.ts
 models/file-record-list-response.ts
 models/file-record-params.ts
 models/file-record-parent-type.ts
@@ -31,3 +34,4 @@ models/preview-status.ts
 models/preview-width.ts
 models/rename-file-params.ts
 models/storage-location.ts
+models/wopi-file-info-response.ts
