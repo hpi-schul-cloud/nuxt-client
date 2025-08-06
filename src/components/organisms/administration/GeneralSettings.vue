@@ -92,6 +92,7 @@
 				<v-file-input
 					v-model="logoFile"
 					class="school-logo truncate-file-input"
+					data-testid="school-logo-input"
 					:label="
 						t(
 							'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'

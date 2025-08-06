@@ -16,10 +16,23 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import GeneralSettings from "./GeneralSettings.vue";
 import { mount } from "@vue/test-utils";
-import { VSelect, VTextField } from "vuetify/components";
+import { VFileInput, VSelect, VTextField } from "vuetify/components";
 import { schoolYearResponseFactory } from "@@/tests/test-utils/factory/schoolYearResponseFactory";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { toBase64 } from "@/utils/fileHelper";
+import { nextTick } from "vue";
+
+vi.mock("@/utils/fileHelper", async () => {
+	const original =
+		await vi.importActual<typeof import("@/utils/fileHelper")>(
+			"@/utils/fileHelper"
+		);
+	return {
+		...original,
+		toBase64: vi.fn(() => Promise.resolve("mock-base64-data")),
+	};
+});
 
 describe("GeneralSettings", () => {
 	beforeEach(() => {
@@ -55,11 +68,15 @@ describe("GeneralSettings", () => {
 		});
 		envConfigModule.setEnvs(envs);
 
+		const logoDataUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA";
+		const logoName = "logo.png";
+
 		const school = schoolFactory.build({
 			currentYear: schoolYearResponseFactory.build(),
 			officialSchoolNumber,
 			county,
 			federalState,
+			logo: { dataUrl: logoDataUrl, name: logoName },
 		});
 
 		schoolsModule.setSchool(school);
@@ -343,6 +360,80 @@ describe("GeneralSettings", () => {
 					"es"
 				);
 			});
+		});
+	});
+
+	describe("logo handling", () => {
+		it("should initialize logoFile when school has a logo", async () => {
+			const { wrapper, school } = setup();
+			await nextTick();
+
+			const fileInput = wrapper.findComponent<typeof VFileInput>(
+				'[data-testid="school-logo-input"]'
+			);
+			expect(fileInput.props("modelValue")).toBeInstanceOf(File);
+			const modelValue = fileInput.props("modelValue");
+			const file = Array.isArray(modelValue) ? modelValue[0] : modelValue;
+			expect(file?.name).toBe(school.logo?.name);
+		});
+
+		it("should include logo in the update payload", async () => {
+			const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
+			const logoSpy = vi
+				.spyOn(schoolsModule, "setSchoolLogo")
+				.mockResolvedValue();
+			const { wrapper } = setup();
+
+			const file = new File(["dummy-content"], "school-logo.png", {
+				type: "image/png",
+			});
+
+			const fileInput = wrapper.findComponent<typeof VFileInput>(
+				'[data-testid="school-logo-input"]'
+			);
+			fileInput.setValue(file);
+
+			const buttonElement = wrapper.findComponent(
+				"[data-testid='save-general-setting']"
+			);
+			await buttonElement.trigger("click");
+
+			expect(toBase64).toHaveBeenCalledWith(file);
+			expect(updateSpy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					props: expect.objectContaining({
+						logo: {
+							dataUrl: "mock-base64-data",
+							name: "school-logo.png",
+						},
+					}),
+				})
+			);
+			expect(logoSpy).toHaveBeenCalledWith({
+				dataUrl: "mock-base64-data",
+				name: "school-logo.png",
+			});
+		});
+
+		it("should not call setSchoolLogo if no logo is provided", async () => {
+			const logoSpy = vi
+				.spyOn(schoolsModule, "setSchoolLogo")
+				.mockResolvedValue();
+			const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
+			const { wrapper } = setup();
+
+			const fileInput = wrapper.findComponent<typeof VFileInput>(
+				'[data-testid="school-logo-input"]'
+			);
+			fileInput.setValue(null);
+
+			const buttonElement = wrapper.findComponent(
+				"[data-testid='save-general-setting']"
+			);
+			await buttonElement.trigger("click");
+
+			expect(logoSpy).toHaveBeenCalledWith({ dataUrl: "", name: "" });
+			expect(updateSpy).toHaveBeenCalled();
 		});
 	});
 
