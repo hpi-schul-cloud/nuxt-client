@@ -17,6 +17,7 @@ export const useAdministrationRoomStore = defineStore(
 		const roomList = ref<RoomStatsItemResponse[]>([]);
 		const isEmptyList = ref(false);
 		const userSchoolName = schoolsModule.getSchool.name;
+		const userSchoolId = schoolsModule.getSchool.id;
 
 		const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
 			return list
@@ -86,6 +87,7 @@ export const useAdministrationRoomStore = defineStore(
 			roomList,
 			deleteRoom,
 			fetchRooms,
+			userSchoolId,
 		};
 	}
 );

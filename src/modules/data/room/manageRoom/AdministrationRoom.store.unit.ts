@@ -218,12 +218,14 @@ describe("useAdministrationRoomStore", () => {
 			const roomIdToDelete = mockRooms.data[0].roomId;
 			await roomAdminStore.deleteRoom(roomIdToDelete);
 
+			const remainingRooms = mockRooms.data.filter(
+				(room) => room.roomId !== roomIdToDelete
+			);
+
 			expect(
 				roomAdministrationApiMock.roomControllerDeleteRoom
 			).toHaveBeenCalledWith(roomIdToDelete);
-			expect(roomAdminStore.roomList).toEqual(
-				mockRooms.data.filter((room) => room.roomId !== roomIdToDelete)
-			);
+			expect(roomAdminStore.roomList).toEqual(remainingRooms);
 			expect(roomAdminStore.isLoading).toBe(false);
 		});
 

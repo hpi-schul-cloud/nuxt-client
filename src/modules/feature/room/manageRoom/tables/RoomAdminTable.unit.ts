@@ -67,7 +67,10 @@ describe("RoomAdminTable", () => {
 		}>
 	) => {
 		const roomList =
-			options?.roomList || roomStatsItemResponseFactory.buildList(2);
+			options?.roomList ||
+			roomStatsItemResponseFactory.buildList(2, {
+				schoolId: ownSchool.id,
+			});
 		const wrapper = mount(RoomAdminTable, {
 			attachTo: document.body,
 			global: {
@@ -178,77 +181,98 @@ describe("RoomAdminTable", () => {
 			});
 
 			describe("delete action", () => {
-				it("should render delete menu item", async () => {
-					const { wrapper, roomList } = setup();
+				describe("when room is from own school", () => {
+					it("should render delete menu item", async () => {
+						const { wrapper, roomList } = setup();
 
-					const kebabMenu = wrapper.findComponent(
-						`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
-					);
-					await kebabMenu.trigger("click");
-					const deleteAction = wrapper.findComponent(
-						`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
-					);
+						const kebabMenu = wrapper.findComponent(
+							`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
+						);
+						await kebabMenu.trigger("click");
+						const deleteAction = wrapper.findComponent(
+							`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
+						);
 
-					expect(deleteAction.exists()).toBe(true);
-				});
+						expect(deleteAction.exists()).toBe(true);
+					});
 
-				it("should render confirmation dialog with correct text", async () => {
-					const { wrapper, roomList } = setup();
+					it("should render confirmation dialog with correct text", async () => {
+						const { wrapper, roomList } = setup();
 
-					askConfirmationMock.mockResolvedValue(true);
+						askConfirmationMock.mockResolvedValue(true);
 
-					const kebabMenu = wrapper.findComponent(
-						`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
-					);
-					await kebabMenu.trigger("click");
+						const kebabMenu = wrapper.findComponent(
+							`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
+						);
+						await kebabMenu.trigger("click");
 
-					const deleteAction = wrapper.findComponent(
-						`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
-					);
-					await deleteAction.trigger("click");
+						const deleteAction = wrapper.findComponent(
+							`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
+						);
+						await deleteAction.trigger("click");
 
-					expect(askConfirmationMock).toHaveBeenCalledWith({
-						confirmActionLangKey: "common.actions.delete",
-						message: "pages.room.itemDelete.text",
+						expect(askConfirmationMock).toHaveBeenCalledWith({
+							confirmActionLangKey: "common.actions.delete",
+							message: "pages.room.itemDelete.text",
+						});
+					});
+
+					it("should call deleteRoom when deletion is confirmed", async () => {
+						const { wrapper, adminRoomStore, roomList } = setup();
+
+						askConfirmationMock.mockResolvedValue(true);
+
+						const kebabMenu = wrapper.findComponent(
+							`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
+						);
+						await kebabMenu.trigger("click");
+
+						const deleteAction = wrapper.findComponent(
+							`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
+						);
+						await deleteAction.trigger("click");
+
+						expect(adminRoomStore.deleteRoom).toHaveBeenCalledWith(
+							roomList[0].roomId
+						);
+					});
+
+					it("should not call deleteRoom when deletion is cancelled", async () => {
+						const { wrapper, adminRoomStore, roomList } = setup();
+
+						askConfirmationMock.mockResolvedValue(false);
+
+						const kebabMenu = wrapper.findComponent(
+							`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
+						);
+						await kebabMenu.trigger("click");
+
+						const deleteAction = wrapper.findComponent(
+							`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
+						);
+						await deleteAction.trigger("click");
+
+						expect(adminRoomStore.deleteRoom).not.toHaveBeenCalled();
 					});
 				});
 
-				it("should call deleteRoom when deletion is confirmed", async () => {
-					const { wrapper, adminRoomStore, roomList } = setup();
+				describe("when room is from another school", () => {
+					it("should not render delete menu item", () => {
+						const room = roomStatsItemResponseFactory.build({
+							schoolId: "other-school-id",
+						});
+						const { wrapper, roomList } = setup({ roomList: [room] });
 
-					askConfirmationMock.mockResolvedValue(true);
+						const kebabMenu = wrapper.findComponent(
+							`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
+						);
+						expect(kebabMenu.exists()).toBe(true);
 
-					const kebabMenu = wrapper.findComponent(
-						`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
-					);
-					await kebabMenu.trigger("click");
-
-					const deleteAction = wrapper.findComponent(
-						`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
-					);
-					await deleteAction.trigger("click");
-
-					expect(adminRoomStore.deleteRoom).toHaveBeenCalledWith(
-						roomList[0].roomId
-					);
-				});
-
-				it("should not call deleteRoom when deletion is cancelled", async () => {
-					const { wrapper, adminRoomStore, roomList } = setup();
-
-					askConfirmationMock.mockResolvedValue(false);
-
-					const kebabMenu = wrapper.findComponent(
-						`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
-					);
-					await kebabMenu.trigger("click");
-
-					const deleteAction = wrapper.findComponent(
-						`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
-					);
-					await deleteAction.trigger("click");
-
-					expect(adminRoomStore.deleteRoom).not.toHaveBeenCalled();
+						const deleteAction = wrapper.findComponent(
+							`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
+						);
+						expect(deleteAction.exists()).toBe(false);
+					});
 				});
 			});
 		});

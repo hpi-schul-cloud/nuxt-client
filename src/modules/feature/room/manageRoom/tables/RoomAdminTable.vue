@@ -7,7 +7,7 @@
 		select-item-key="roomId"
 		data-testid="room-admin-table"
 	>
-		<template #[`item.owner`]="{ item }">
+		<template #[`item.owner`]="{ item }: RoomAdminTableItem">
 			<span>
 				<VIcon
 					v-if="!item.owner"
@@ -21,7 +21,7 @@
 			</span>
 		</template>
 
-		<template #[`item.actions`]="{ item }">
+		<template #[`item.actions`]="{ item }: RoomAdminTableItem">
 			<KebabMenu
 				:data-testid="`kebab-menu-room-${item.roomId}`"
 				:aria-label="
@@ -36,6 +36,7 @@
 					"
 				/>
 				<KebabMenuAction
+					v-if="userSchoolId === item.schoolId"
 					:icon="mdiTrashCanOutline"
 					:data-testid="`menu-delete-room-${item.roomId}`"
 					@click="onDeleteRoom(item)"
@@ -65,7 +66,7 @@ import {
 } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
-import { computed, ComputedRef } from "vue";
+import { computed } from "vue";
 import {
 	useConfirmationDialog,
 	ConfirmationDialog,
@@ -73,6 +74,8 @@ import {
 import { RoomStatsItemResponse } from "@/serverApi/v3";
 import { WarningAlert } from "@ui-alert";
 import { DataTableHeader } from "vuetify";
+
+type RoomAdminTableItem = { item: RoomStatsItemResponse };
 
 type Props = {
 	headerBottom?: number;
@@ -88,7 +91,7 @@ const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 
 const administrationRoomStore = useAdministrationRoomStore();
-const { deleteRoom } = administrationRoomStore;
+const { deleteRoom, userSchoolId } = administrationRoomStore;
 const { roomList } = storeToRefs(administrationRoomStore);
 
 const confirmDeletion = async (roomName: string) => {
@@ -110,7 +113,12 @@ const onDeleteRoom = async (item: RoomStatsItemResponse) => {
 	}
 };
 
-const tableHeaders = computed((): DataTableHeader[] => [
+type RoomTableHeaderKey = keyof RoomStatsItemResponse | "actions";
+type RoomTableHeader = Omit<DataTableHeader, "key"> & {
+	key: RoomTableHeaderKey;
+};
+
+const tableHeaders = computed((): RoomTableHeader[] => [
 	{
 		title: t("pages.rooms.administration.table.header.roomName"),
 		key: "name",
