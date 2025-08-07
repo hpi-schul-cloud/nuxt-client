@@ -28,7 +28,6 @@
 							'pages.administration.school.index.generalSettings.labels.schoolYear'
 						)
 					"
-					disabled
 					density="compact"
 					readonly
 					:hint="
