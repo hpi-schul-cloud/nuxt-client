@@ -2264,6 +2264,7 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
+	"pages.collabora.iframeTitle": "Editor de documentos de Office",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",
 	"error.4500":

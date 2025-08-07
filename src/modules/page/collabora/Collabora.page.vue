@@ -4,6 +4,7 @@
 		allowfullscreen
 		:src="url"
 		style="width: 100%; height: 100%; position: absolute"
+		:title="$t('pages.collabora.iframeTitle')"
 	/>
 </template>
 
