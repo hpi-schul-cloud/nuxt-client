@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { EditorMode } from "@/fileStorageApi/v3";
+import { EditorMode } from "@/types/file/File";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useFileStorageApi } from "@data-file";
 import { computed, onMounted, ref } from "vue";

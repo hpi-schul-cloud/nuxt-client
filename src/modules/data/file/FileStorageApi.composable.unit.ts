@@ -1,13 +1,13 @@
+import * as serverApi from "@/fileStorageApi/v3/api/file-api";
+import * as wopiApi from "@/fileStorageApi/v3/api/wopi-api";
 import {
 	AuthorizedCollaboraDocumentUrlResponse,
 	EditorMode,
+	FileRecord,
 	FileRecordListResponse,
-	FileRecordParentType,
-	FileRecordResponse,
+	FileRecordParent,
 	StorageLocation,
-} from "@/fileStorageApi/v3";
-import * as serverApi from "@/fileStorageApi/v3/api/file-api";
-import * as wopiApi from "@/fileStorageApi/v3/api/wopi-api";
+} from "@/types/file/File";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	authorizedCollaboraDocumentUrlResponseFactory,
@@ -90,7 +90,7 @@ describe("FileStorageApi Composable", () => {
 		describe("when file api returns list successfully", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
-				const parentType = FileRecordParentType.BOARDNODES;
+				const parentType = FileRecordParent.BOARDNODES;
 				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
@@ -146,7 +146,7 @@ describe("FileStorageApi Composable", () => {
 		describe("when file api returns error", () => {
 			const setup = (message?: string) => {
 				const parentId = ObjectIdMock();
-				const parentType = FileRecordParentType.BOARDNODES;
+				const parentType = FileRecordParent.BOARDNODES;
 
 				const { responseError, expectedPayload } = setupErrorResponse(message);
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
@@ -214,16 +214,14 @@ describe("FileStorageApi Composable", () => {
 			const setup = () => {
 				const file = new File([""], "filename");
 				const parentId = ObjectIdMock();
-				const parentType = FileRecordParentType.BOARDNODES;
+				const parentType = FileRecordParent.BOARDNODES;
 				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
 				});
-				const response = createMock<AxiosResponse<FileRecordResponse, unknown>>(
-					{
-						data: fileRecordResponse,
-					}
-				);
+				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+					data: fileRecordResponse,
+				});
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
@@ -269,7 +267,7 @@ describe("FileStorageApi Composable", () => {
 		describe("when file api returns error", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
-				const parentType = FileRecordParentType.BOARDNODES;
+				const parentType = FileRecordParent.BOARDNODES;
 				const file = new File([""], "filename");
 
 				const { responseError, expectedPayload } = setupErrorResponse(
@@ -318,17 +316,15 @@ describe("FileStorageApi Composable", () => {
 				const fileName = "example-picture.jpg";
 				const imageUrl = `https://www.example.com/${fileName}`;
 				const parentId = ObjectIdMock();
-				const parentType = FileRecordParentType.BOARDNODES;
+				const parentType = FileRecordParent.BOARDNODES;
 				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
 					name: fileName,
 				});
-				const response = createMock<AxiosResponse<FileRecordResponse, unknown>>(
-					{
-						data: fileRecordResponse,
-					}
-				);
+				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+					data: fileRecordResponse,
+				});
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
@@ -378,7 +374,7 @@ describe("FileStorageApi Composable", () => {
 		describe("when file api returns error", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
-				const parentType = FileRecordParentType.BOARDNODES;
+				const parentType = FileRecordParent.BOARDNODES;
 				const file = new File([""], "filename");
 
 				const { responseError, expectedPayload } = setupErrorResponse(
@@ -416,7 +412,7 @@ describe("FileStorageApi Composable", () => {
 		describe("when file api rename file successfully", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
-				const parentType = FileRecordParentType.BOARDNODES;
+				const parentType = FileRecordParent.BOARDNODES;
 				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
@@ -426,11 +422,9 @@ describe("FileStorageApi Composable", () => {
 					fileName: "new-file-name.txt",
 				};
 
-				const response = createMock<AxiosResponse<FileRecordResponse, unknown>>(
-					{
-						data: fileRecordResponse,
-					}
-				);
+				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+					data: fileRecordResponse,
+				});
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
@@ -508,7 +502,7 @@ describe("FileStorageApi Composable", () => {
 		describe("when file api deletes file successfully", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
-				const parentType = FileRecordParentType.BOARDNODES;
+				const parentType = FileRecordParent.BOARDNODES;
 				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
@@ -577,7 +571,7 @@ describe("FileStorageApi Composable", () => {
 		describe("when file api returns error", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
-				const parentType = FileRecordParentType.BOARDNODES;
+				const parentType = FileRecordParent.BOARDNODES;
 				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,

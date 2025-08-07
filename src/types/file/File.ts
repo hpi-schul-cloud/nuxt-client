@@ -1,7 +1,9 @@
 import {
+	AuthorizedCollaboraDocumentUrlResponse,
 	EditorMode,
 	PreviewStatus as FilePreviewStatus,
 	PreviewWidth as FilePreviewWidth,
+	FileRecordListResponse,
 	FileRecordParentType as FileRecordParent,
 	FileRecordResponse,
 	FileRecordScanStatus as FileRecordVirusScanStatus,
@@ -27,4 +29,6 @@ export {
 	PreviewOutputMimeTypes,
 	RenameFileParams,
 	StorageLocation,
+	type AuthorizedCollaboraDocumentUrlResponse,
+	type FileRecordListResponse,
 };
