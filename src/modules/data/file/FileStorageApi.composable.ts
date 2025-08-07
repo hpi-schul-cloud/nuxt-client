@@ -176,8 +176,9 @@ export const useFileStorageApi = () => {
 				editorMode,
 				userDisplayName
 			);
+			const url = response.data.authorizedCollaboraDocumentUrl;
 
-			return response.data.authorizedCollaboraDocumentUrl;
+			return url;
 		} catch (error) {
 			showError(error);
 			throw error;
