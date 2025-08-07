@@ -12,7 +12,11 @@ import {
 	GROUP_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { classInfoFactory, envsFactory } from "@@/tests/test-utils";
+import {
+	classInfoFactory,
+	courseFactory,
+	envsFactory,
+} from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -60,6 +64,7 @@ const createWrapper = (
 			classInfoFactory.build({
 				externalSourceName: undefined,
 				type: ClassRootType.Class,
+				teacherNames: ["Test Teacher"],
 				isUpgradable: true,
 			}),
 		],
@@ -761,6 +766,33 @@ describe("ClassOverview", () => {
 					"/administration/classes/create"
 				);
 			});
+		});
+	});
+
+	describe("onClickEndSyncIcon", () => {
+		const setup = () => {
+			const classes = [
+				classInfoFactory.build({
+					synchronizedCourses: [courseFactory.build()],
+				}),
+			];
+
+			const { wrapper } = createWrapper({
+				getClasses: classes,
+			});
+
+			return { wrapper, classes };
+		};
+
+		it("should open end course sync dialog", async () => {
+			const { wrapper } = setup();
+
+			await wrapper
+				.find('[data-testid="class-table-end-course-sync-btn"]')
+				.trigger("click");
+
+			const dialog = wrapper.findComponent({ name: "EndCourseSyncDialog" });
+			expect(dialog.vm.isOpen).toBe(true);
 		});
 	});
 });

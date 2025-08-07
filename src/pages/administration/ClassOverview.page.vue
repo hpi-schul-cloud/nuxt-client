@@ -177,6 +177,7 @@
 			</template>
 		</v-custom-dialog>
 		<end-course-sync-dialog
+			data-testid="end-course-sync-dialog"
 			v-model:is-open="isEndSyncDialogOpen"
 			:course-name="selectedItemForSync.courseName"
 			:group-name="selectedItemForSync.groupName"
