@@ -13,6 +13,7 @@ import {
 	formatSecondsToHourMinSec,
 	getFileExtension,
 	isAudioMimeType,
+	isCollaboraMimeType,
 	isPdfMimeType,
 	isPreviewPossible,
 	isScanStatusBlocked,
@@ -178,70 +179,82 @@ describe("@/utils/fileHelper", () => {
 				expect(result).toEqual({ convertedSize: 24.1591796875, unit: "KB" });
 			});
 		});
-	});
 
-	describe("when file size is >= 1 MB and < 1 GB", () => {
-		it("should return file size in MB and unit", () => {
-			const result = convertFileSize(2473900);
-			expect(result).toEqual({ convertedSize: 2.359294891357422, unit: "MB" });
+		describe("when file size is >= 1 MB and < 1 GB", () => {
+			it("should return file size in MB and unit", () => {
+				const result = convertFileSize(2473900);
+				expect(result).toEqual({
+					convertedSize: 2.359294891357422,
+					unit: "MB",
+				});
+			});
 		});
-	});
-	describe("when file size is >= 1 GB", () => {
-		it("should return file size in GB and unit", () => {
-			const result = convertFileSize(2473900000);
-			expect(result).toEqual({ convertedSize: 2.3039989173412323, unit: "GB" });
+		describe("when file size is >= 1 GB", () => {
+			it("should return file size in GB and unit", () => {
+				const result = convertFileSize(2473900000);
+				expect(result).toEqual({
+					convertedSize: 2.3039989173412323,
+					unit: "GB",
+				});
+			});
 		});
-	});
 
-	describe("when file size is at the limits of B range", () => {
-		it("should return file size 0 B if file size is negative", () => {
-			const result = convertFileSize(-1);
-			expect(result).toEqual({ convertedSize: 0, unit: "B" });
+		describe("when file size is at the limits of B range", () => {
+			it("should return file size 0 B if file size is negative", () => {
+				const result = convertFileSize(-1);
+				expect(result).toEqual({ convertedSize: 0, unit: "B" });
+			});
+			it("should return file size 0 B", () => {
+				const result = convertFileSize(0);
+				expect(result).toEqual({ convertedSize: 0, unit: "B" });
+			});
+			it("should return file size 1023 B", () => {
+				const result = convertFileSize(1023);
+				expect(result).toEqual({ convertedSize: 1023, unit: "B" });
+			});
 		});
-		it("should return file size 0 B", () => {
-			const result = convertFileSize(0);
-			expect(result).toEqual({ convertedSize: 0, unit: "B" });
-		});
-		it("should return file size 1023 B", () => {
-			const result = convertFileSize(1023);
-			expect(result).toEqual({ convertedSize: 1023, unit: "B" });
-		});
-	});
 
-	describe("when file size is at the limits of KB range", () => {
-		it("should return file size 1 KB", () => {
-			const result = convertFileSize(1024);
-			expect(result).toEqual({ convertedSize: 1, unit: "KB" });
+		describe("when file size is at the limits of KB range", () => {
+			it("should return file size 1 KB", () => {
+				const result = convertFileSize(1024);
+				expect(result).toEqual({ convertedSize: 1, unit: "KB" });
+			});
+			it("should return file size 1024 and unit", () => {
+				const result = convertFileSize(1048575);
+				expect(result).toEqual({ convertedSize: 1023.9990234375, unit: "KB" });
+			});
 		});
-		it("should return file size 1024 and unit", () => {
-			const result = convertFileSize(1048575);
-			expect(result).toEqual({ convertedSize: 1023.9990234375, unit: "KB" });
-		});
-	});
 
-	describe("when file size is at the limits of MB range", () => {
-		it("should return file size 1 MB", () => {
-			const result = convertFileSize(1048576);
-			expect(result).toEqual({ convertedSize: 1, unit: "MB" });
+		describe("when file size is at the limits of MB range", () => {
+			it("should return file size 1 MB", () => {
+				const result = convertFileSize(1048576);
+				expect(result).toEqual({ convertedSize: 1, unit: "MB" });
+			});
+			it("should return file size 1024 MB", () => {
+				const result = convertFileSize(1073741823);
+				expect(result).toEqual({
+					convertedSize: 1023.9999990463257,
+					unit: "MB",
+				});
+			});
 		});
-		it("should return file size 1024 MB", () => {
-			const result = convertFileSize(1073741823);
-			expect(result).toEqual({ convertedSize: 1023.9999990463257, unit: "MB" });
-		});
-	});
 
-	describe("when file size is at the limits of GB range", () => {
-		it("should return file size 1 GB", () => {
-			const result = convertFileSize(1073741824);
-			expect(result).toEqual({ convertedSize: 1, unit: "GB" });
-		});
-		it("should return file size 1024 GB", () => {
-			const result = convertFileSize(1099511627775);
-			expect(result).toEqual({ convertedSize: 1023.9999999990687, unit: "GB" });
-		});
-		it("should return file size >= 1024 GB", () => {
-			const result = convertFileSize(1099511627776);
-			expect(result).toEqual({ convertedSize: 1024, unit: "GB" });
+		describe("when file size is at the limits of GB range", () => {
+			it("should return file size 1 GB", () => {
+				const result = convertFileSize(1073741824);
+				expect(result).toEqual({ convertedSize: 1, unit: "GB" });
+			});
+			it("should return file size 1024 GB", () => {
+				const result = convertFileSize(1099511627775);
+				expect(result).toEqual({
+					convertedSize: 1023.9999999990687,
+					unit: "GB",
+				});
+			});
+			it("should return file size >= 1024 GB", () => {
+				const result = convertFileSize(1099511627776);
+				expect(result).toEqual({ convertedSize: 1024, unit: "GB" });
+			});
 		});
 	});
 
@@ -638,6 +651,135 @@ describe("@/utils/fileHelper", () => {
 
 			it("should return false", () => {
 				const result = isPdfMimeType("");
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isCollaboraMimeType", () => {
+		describe("when file has collabora mime type", () => {
+			it("should return true for .docx mime type", () => {
+				const word =
+					"application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+				const result = isCollaboraMimeType(word);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true for .doc mime type", () => {
+				const doc = "application/msword";
+
+				const result = isCollaboraMimeType(doc);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true for .odt mime type", () => {
+				const odt = "application/vnd.oasis.opendocument.text";
+
+				const result = isCollaboraMimeType(odt);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true for .rtf mime type", () => {
+				const rtf = "application/rtf";
+
+				const result = isCollaboraMimeType(rtf);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true for .txt mime type", () => {
+				const txt = "text/plain";
+
+				const result = isCollaboraMimeType(txt);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true for .xlsx mime type", () => {
+				const xlsx =
+					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+				const result = isCollaboraMimeType(xlsx);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true for .xls mime type", () => {
+				const xls = "application/vnd.ms-excel";
+
+				const result = isCollaboraMimeType(xls);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true for .ods mime type", () => {
+				const ods = "application/vnd.oasis.opendocument.spreadsheet";
+
+				const result = isCollaboraMimeType(ods);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true for .csv mime type", () => {
+				const csv = "text/csv";
+
+				const result = isCollaboraMimeType(csv);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true for .pptx mime type", () => {
+				const pptx =
+					"application/vnd.openxmlformats-officedocument.presentationml.presentation";
+
+				const result = isCollaboraMimeType(pptx);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true for .ppt mime type", () => {
+				const ppt = "application/vnd.ms-powerpoint";
+
+				const result = isCollaboraMimeType(ppt);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true for .odp mime type", () => {
+				const odp = "application/vnd.oasis.opendocument.presentation";
+
+				const result = isCollaboraMimeType(odp);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when file has no collabora mime type", () => {
+			it("should return false for image/png mime type", () => {
+				const result = isCollaboraMimeType("image/png");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false for application/ mime type", () => {
+				const result = isCollaboraMimeType("application/");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false for empty string", () => {
+				const result = isCollaboraMimeType("");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false for space string", () => {
+				const result = isCollaboraMimeType(" ");
 
 				expect(result).toBe(false);
 			});
