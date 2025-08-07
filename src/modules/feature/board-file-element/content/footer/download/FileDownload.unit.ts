@@ -4,8 +4,8 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mdiTrayArrowDown } from "@icons/material";
-import { shallowMount } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { mount, shallowMount } from "@vue/test-utils";
+import { VBtn, VIcon } from "vuetify/components";
 import FileDownload from "./FileDownload.vue";
 
 vi.mock("@/utils/fileHelper");
@@ -90,13 +90,62 @@ describe("FileDownload", () => {
 			it("should download file", async () => {
 				const { wrapper, urlProp, fileNameProp, downloadFileMock } = setup();
 
-				const button = wrapper.findComponent({ name: "v-btn" });
-				button.vm.$emit("click");
-				await nextTick();
+				const button = wrapper.find("v-btn-stub");
+				await button.trigger("click");
 
-				expect(button.emitted("click")).toBeTruthy();
-				expect(button.emitted("click")).toHaveLength(1);
 				expect(downloadFileMock).toHaveBeenCalledWith(urlProp, fileNameProp);
+			});
+		});
+
+		describe("when download icon is focused and enter is pressed", () => {
+			const setup = () => {
+				const parentKeydownHandler = vi.fn();
+				const props = {
+					fileName: "file-record #1.txt",
+					url: "1/file-record #1.txt",
+					isDownloadAllowed: true,
+				};
+
+				const parent = {
+					template: `<div @keydown="onKeydown"><FileDownload v-bind="props" /></div>`,
+					components: { FileDownload },
+					methods: { onKeydown: parentKeydownHandler },
+					data() {
+						return { props };
+					},
+				};
+
+				const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
+
+				const wrapper = mount(parent, {
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+				});
+
+				return {
+					wrapper,
+					fileNameProp: props.fileName,
+					urlProp: props.url,
+					downloadFileMock,
+					parentKeydownHandler,
+				};
+			};
+
+			it("should download file", async () => {
+				const { wrapper, urlProp, fileNameProp, downloadFileMock } = setup();
+
+				const button = wrapper.findComponent(VBtn);
+				await button.trigger("keydown.enter");
+
+				expect(downloadFileMock).toHaveBeenCalledWith(urlProp, fileNameProp);
+			});
+
+			it("should not propagate the event", async () => {
+				const { wrapper, parentKeydownHandler } = setup();
+
+				const icon = wrapper.findComponent(FileDownload).findComponent(VIcon);
+				await icon.trigger("keydown.enter");
+
+				expect(parentKeydownHandler).not.toHaveBeenCalled();
 			});
 		});
 
