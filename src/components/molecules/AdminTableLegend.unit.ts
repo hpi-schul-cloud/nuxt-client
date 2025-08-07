@@ -9,6 +9,7 @@ import EnvConfigModule from "@/store/env-config";
 import { envsFactory } from "@@/tests/test-utils/factory";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { nextTick } from "vue";
 
 const icons = [
 	{ icon: "mdi-check", color: "green", label: "Label 1" },
@@ -30,6 +31,11 @@ describe("AdminTableLegend", () => {
 		const wrapper = mount(AdminTableLegend, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$t: (key: string, placeholders: Record<string, string> = {}) => {
+						return `${key}|${Object.values(placeholders || {}).join("|")}`;
+					},
+				},
 			},
 			props: {
 				icons,
@@ -65,5 +71,27 @@ describe("AdminTableLegend", () => {
 		expect(wrapper.text()).toContain(
 			"components.molecules.admintablelegend.thr"
 		);
+	});
+
+	it.each([
+		[SchulcloudTheme.Default, "Dataport"],
+		[
+			SchulcloudTheme.Brb,
+			"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg",
+		],
+		[
+			SchulcloudTheme.N21,
+			"Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)",
+		],
+	])("uses %s-instance specific text placeholders", async (theme, expected) => {
+		const envs = envsFactory.build({
+			SC_THEME: theme,
+		});
+		envConfigModule.setEnvs(envs);
+		const { wrapper } = setup();
+
+		await nextTick();
+
+		expect(wrapper.text()).toContain(expected);
 	});
 });
