@@ -107,8 +107,14 @@ async function onConfirm(): Promise<void> {
 		await commonCartridgeImportModule.importCommonCartridgeFile(file.value);
 	}
 
+	loadingStateModule.close();
+
+	await Promise.allSettled([
+		courseRoomListModule.fetch(),
+		courseRoomListModule.fetchAllElements(),
+	]);
+
 	if (commonCartridgeImportModule.isSuccess) {
-		loadingStateModule.close();
 		const title = courseRoomListModule.getAllElements[0]?.title;
 		notifierModule.show({
 			status: "success",
@@ -116,7 +122,6 @@ async function onConfirm(): Promise<void> {
 			autoClose: true,
 		});
 	} else {
-		loadingStateModule.close();
 		notifierModule.show({
 			status: "error",
 			text: i18n.t("pages.rooms.ccImportCourse.error"),
@@ -124,10 +129,6 @@ async function onConfirm(): Promise<void> {
 		});
 	}
 
-	await Promise.allSettled([
-		courseRoomListModule.fetch(),
-		courseRoomListModule.fetchAllElements(),
-	]);
 	file.value = undefined;
 }
 </script>
