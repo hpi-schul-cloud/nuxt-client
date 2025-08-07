@@ -736,7 +736,7 @@ describe("FileStorageApi Composable", () => {
 			});
 		});
 
-		describe("when getAuthorizedCollaboraDocumentUrl rejects with forbidden error", () => {
+		describe("when getAuthorizedCollaboraDocumentUrl rejects with unauthorized error", () => {
 			const setup = () => {
 				const fileRecordId = ObjectIdMock();
 				const editorMode = EditorMode.EDIT;
