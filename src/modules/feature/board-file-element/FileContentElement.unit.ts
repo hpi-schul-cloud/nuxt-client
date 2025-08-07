@@ -20,7 +20,9 @@ import { useBoardPermissions, useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
 import { shallowMount } from "@vue/test-utils";
+import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
+import { Router, useRouter } from "vue-router";
 import { VCard } from "vuetify/components";
 import FileContentElement from "./FileContentElement.vue";
 import FileContent from "./content/FileContent.vue";
@@ -32,6 +34,7 @@ import FileUpload from "./upload/FileUpload.vue";
 vi.mock("@data-board");
 vi.mock("@feature-board");
 vi.mock("./content/alert/useFileAlerts.composable");
+vi.mock("vue-router");
 
 describe("FileContentElement", () => {
 	const getWrapper = (props: {
@@ -75,6 +78,10 @@ describe("FileContentElement", () => {
 
 		return { wrapper, menu, addAlertMock };
 	};
+
+	afterEach(() => {
+		vi.resetAllMocks();
+	});
 
 	describe("when component is in view mode", () => {
 		describe("when file record is not available", () => {
@@ -178,6 +185,13 @@ describe("FileContentElement", () => {
 					isUploading: props?.isUploading,
 					mimeType: props?.mimeType ?? "application/pdf",
 				});
+
+				const collaboraPageUrl =
+					"/collabora/" + fileRecordResponse.id + "?editorMode=edit";
+				const router = createMock<Router>();
+				const useRouterMock = <Mock>useRouter;
+				useRouterMock.mockReturnValue(router);
+				router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
@@ -659,6 +673,12 @@ describe("FileContentElement", () => {
 					const element = fileElementResponseFactory.build();
 					document.body.setAttribute("data-app", "true");
 
+					const collaboraPageUrl = "/collabora/" + "123" + "?editorMode=edit";
+					const router = createMock<Router>();
+					const useRouterMock = <Mock>useRouter;
+					useRouterMock.mockReturnValue(router);
+					router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
+
 					const fileStorageApiMock =
 						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
@@ -848,6 +868,14 @@ describe("FileContentElement", () => {
 					isUploading: props?.isUploading,
 					mimeType: props?.mimeType ?? "application/pdf",
 				});
+
+				const collaboraPageUrl =
+					"/collabora/" + fileRecordResponse.id + "?editorMode=edit";
+				const router = createMock<Router>();
+				const useRouterMock = <Mock>useRouter;
+
+				useRouterMock.mockReturnValue(router);
+				router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
