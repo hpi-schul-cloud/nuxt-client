@@ -198,7 +198,7 @@
 		<p class="text-muted">
 			{{
 				t("pages.administration.common.hint", {
-					institute_title: getInstituteTitle,
+					institute_title: instituteTitle,
 				})
 			}}
 		</p>
@@ -480,7 +480,7 @@ onMounted(() => {
 	onTabsChange(activeTab.value);
 });
 
-const getInstituteTitle: ComputedRef<string> = computed(() => {
+const instituteTitle: ComputedRef<string> = computed(() => {
 	switch (envConfigModule.getTheme) {
 		case SchulcloudTheme.N21:
 			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
