@@ -1993,7 +1993,7 @@ export default {
 	"pages.rooms.members.roleChange.Roomadmin.label":
 		'Same permissions as "Edit", plus add and remove other members, change their room permissions and edit the room',
 	"pages.rooms.members.roleChange.Roomowner.label":
-		"Same permissions as “ Administer”, additionally delete room",
+		"Same permissions as “Administer”, additionally delete room",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Attention: Only one person in the room can receive this permission!",
 	"pages.rooms.members.roleChange.dialogTitle.handOver":
