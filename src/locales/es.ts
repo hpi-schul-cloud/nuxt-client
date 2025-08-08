@@ -2142,10 +2142,16 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Escuela principal",
 	"pages.rooms.administration.table.header.actions": "Acciones",
 	"pages.rooms.administration.table.row.owner.notExist": "No existe",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"Todos los contenidos de la sala también se eliminan con la sala. Esta acción no se puede deshacer.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Menú de acciones para la sala “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Eliminar sala",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Administrar miembros de la sala",
 	"pages.rooms.administration.error.load":
 		"No se pudo cargar la lista de salas.",
+	"pages.rooms.administration.error.delete": "No se pudo eliminar la sala.",
 	"pages.rooms.administration.pageTitle": "Administrar salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
