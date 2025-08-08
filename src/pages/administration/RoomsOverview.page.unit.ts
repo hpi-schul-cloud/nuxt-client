@@ -4,8 +4,6 @@ import { SortOrder } from "@/store/types/sort-order.enum";
 import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
-	classInfoFactory,
-	courseFactory,
 	courseInfoDataResponseFactory,
 	envsFactory,
 } from "@@/tests/test-utils";
