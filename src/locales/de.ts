@@ -962,9 +962,9 @@ export default {
 	"components.roomForm.labels.timePeriod.to": "Zeitraum bis",
 	"components.roomForm.labels.videoConference.title": "Videokonferenzen",
 	"components.roomForm.labels.videoConference.label":
-		"Videokonferenzen für Bearbeitende erlauben",
+		"Auch Raum-Mitglieder mit der Berechtigung „Bearbeiten“ dürfen Videokonferenzen hinzufügen und starten.",
 	"components.roomForm.labels.videoConference.helperText":
-		"Raum-Mitglieder mit der Berechtigung „Bearbeiten” dürfen Videokonferenzen hinzufügen und starten.",
+		"Unabhängig davon können Raum-Mitglieder mit der Berechtigung „Verwalten“ oder „Besitzen“ Videokonferenzen immer hinzufügen und starten.",
 	"components.roomForm.validation.generalSaveError":
 		"Beim Speichern ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":

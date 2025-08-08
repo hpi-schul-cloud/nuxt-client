@@ -978,9 +978,9 @@ export default {
 	"components.roomForm.labels.timePeriod.to": "Період до",
 	"components.roomForm.labels.videoConference.title": "Відеоконференції",
 	"components.roomForm.labels.videoConference.label":
-		"Дозволити відеоконференції для редакторів",
+		"Члени кімнати з правом «Редагувати» також можуть додавати та запускати відеоконференці.",
 	"components.roomForm.labels.videoConference.helperText":
-		"Учасники кімнати з правами «Редагувати» можуть додавати і починати відеоконференції.",
+		"Незалежно від цього, члени кімнати з правом «Управляти» або «Володіти» завжди можуть додавати та запускати відеоконференції.",
 	"components.roomForm.validation.generalSaveError":
 		"Виникла помилка при збереженні. Будь ласка, перевірте свої записи та спробуйте ще раз.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
