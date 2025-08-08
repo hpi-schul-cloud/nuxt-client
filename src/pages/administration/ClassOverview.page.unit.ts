@@ -12,7 +12,11 @@ import {
 	GROUP_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { classInfoFactory, envsFactory } from "@@/tests/test-utils";
+import {
+	classInfoFactory,
+	courseFactory,
+	envsFactory,
+} from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -26,6 +30,9 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDataTableServer } from "vuetify/lib/components/index";
 import ClassOverview from "./ClassOverview.page.vue";
 import { Mock } from "vitest";
+import { envConfigModule } from "@/store";
+import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
@@ -47,7 +54,8 @@ type Tab = "current" | "next" | "archive";
 const createWrapper = (
 	groupModuleGetters: Partial<GroupModule> = {},
 	schoolsModuleGetters: Partial<SchoolsModule> = {},
-	props: { tab: Tab } = { tab: "current" }
+	props: { tab: Tab } = { tab: "current" },
+	envs: Partial<ConfigResponse> = {}
 ) => {
 	const route = { query: { tab: "current" } };
 	useRouteMock.mockReturnValue(route);
@@ -60,6 +68,7 @@ const createWrapper = (
 			classInfoFactory.build({
 				externalSourceName: undefined,
 				type: ClassRootType.Class,
+				teacherNames: ["Test Teacher"],
 				isUpgradable: true,
 			}),
 		],
@@ -91,11 +100,10 @@ const createWrapper = (
 		...schoolsModuleGetters,
 	});
 
-	const envConfigModule = createModuleMocks(EnvConfigModule, {
-		getEnv: envsFactory.build({
-			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
-		}),
-	});
+	envConfigModule.setEnvs({
+		FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+		...envs,
+	} as ConfigResponse);
 
 	const wrapper = mount(ClassOverview, {
 		global: {
@@ -112,6 +120,11 @@ const createWrapper = (
 			},
 			stubs: {
 				EndCourseSyncDialog: true,
+			},
+			mocks: {
+				t: (key: string, placeholders: Record<string, string> = {}) => {
+					return `${key}|${Object.values(placeholders || {}).join("|")}`;
+				},
 			},
 		},
 		props,
@@ -133,6 +146,12 @@ const findTableComponen = (wrapper: VueWrapper) => {
 };
 
 describe("ClassOverview", () => {
+	beforeAll(() => {
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
+	});
+
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
@@ -762,5 +781,78 @@ describe("ClassOverview", () => {
 				);
 			});
 		});
+	});
+
+	describe("onClickEndSyncIcon", () => {
+		const setup = () => {
+			const classes = [
+				classInfoFactory.build({
+					synchronizedCourses: [courseFactory.build()],
+				}),
+			];
+
+			const { wrapper } = createWrapper({
+				getClasses: classes,
+			});
+
+			return { wrapper, classes };
+		};
+
+		it("should open end course sync dialog", async () => {
+			const { wrapper } = setup();
+
+			await wrapper
+				.find('[data-testid="class-table-end-course-sync-btn"]')
+				.trigger("click");
+
+			const dialog = wrapper.findComponent({ name: "EndCourseSyncDialog" });
+			expect(dialog.vm.isOpen).toBe(true);
+		});
+	});
+
+	describe("when hint text is shown", () => {
+		const setup = (envs: Partial<ConfigResponse>) => {
+			const classes = [
+				classInfoFactory.build({
+					synchronizedCourses: [courseFactory.build()],
+				}),
+			];
+
+			const { wrapper } = createWrapper(
+				{
+					getClasses: classes,
+				},
+				{},
+				{ tab: "current" },
+				envs
+			);
+
+			return { wrapper, classes };
+		};
+
+		it.each([
+			[SchulcloudTheme.Default, "Dataport"],
+			[
+				SchulcloudTheme.Brb,
+				"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg",
+			],
+			[
+				SchulcloudTheme.N21,
+				"Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)",
+			],
+		])(
+			"uses %s-instance specific text placeholders",
+			async (theme, expected) => {
+				const envs = envsFactory.build({
+					SC_THEME: theme,
+				});
+
+				const { wrapper } = setup(envs);
+
+				await nextTick();
+
+				expect(wrapper.text()).toContain(expected);
+			}
+		);
 	});
 });

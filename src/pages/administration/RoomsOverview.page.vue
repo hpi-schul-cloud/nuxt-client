@@ -190,7 +190,7 @@
 		<p class="text-muted">
 			{{
 				t("pages.administration.common.hint", {
-					institute_title: getInstituteTitle,
+					institute_title: instituteTitle,
 				})
 			}}
 		</p>
@@ -463,10 +463,10 @@ onMounted(() => {
 	onTabsChange(activeTab.value);
 });
 
-const getInstituteTitle: ComputedRef<string> = computed(() => {
+const instituteTitle: ComputedRef<string> = computed(() => {
 	switch (envConfigModule.getTheme) {
 		case SchulcloudTheme.N21:
-			return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
 		case SchulcloudTheme.Thr:
 			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
 		case SchulcloudTheme.Brb:

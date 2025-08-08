@@ -35,7 +35,7 @@
 			<p class="mt-6">
 				{{
 					$t("components.molecules.admintablelegend.hint", {
-						institute_title: setInstituteTitle,
+						institute_title: instituteTitle,
 					})
 				}}
 			</p>
@@ -56,10 +56,10 @@ type Props = {
 
 defineProps<Props>();
 
-const setInstituteTitle = computed(() => {
+const instituteTitle = computed(() => {
 	switch (envConfigModule.getTheme) {
 		case SchulcloudTheme.N21:
-			return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
 		case SchulcloudTheme.Thr:
 			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
 		case SchulcloudTheme.Brb:
