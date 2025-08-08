@@ -570,6 +570,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Estado de actualización",
 	"components.cardElement.fileElement.videoFormatError":
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Abrir documento Office",
 	"components.cardElement.folderElement": "Carpeta de archivos",
 	"components.cardElement.folderElement.untitled": "Carpeta sin título",
 	"components.cardElement.LinkElement": "Enlace",
@@ -2264,6 +2266,7 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
+	"pages.collabora.iframeTitle": "Editor de documentos de Office",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",
 	"error.4500":

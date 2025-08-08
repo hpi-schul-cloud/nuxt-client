@@ -571,6 +571,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Статус оновлення",
 	"components.cardElement.fileElement.videoFormatError":
 		"Формат відео не підтримується цим браузером / операційною системою.",
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Документ у форматі Open Office",
 	"components.cardElement.folderElement": "Папка з файлами",
 	"components.cardElement.folderElement.untitled": "Папка без назви",
 	"components.cardElement.LinkElement": "Посилання",
@@ -2225,6 +2227,7 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Цей елемент більше не доступний, оскільки відеоконференції в школі вимкнено. Будь ласка, зверніться до адміністратора школи.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
+	"pages.collabora.iframeTitle": "Редактор документів Office",
 	"error.500":
 		"Є проблеми в системі. Ми працюємо над усуненням проблеми. Будь ласка, спробуйте пізніше.",
 	"error.4500":
