@@ -458,7 +458,7 @@ const getStyleClasses = () => {
 
 	.dot-menu-section {
 		text-align: right;
-		height: calc(var(--space-base-vuetify) * 9);
+		height: 36px;
 	}
 }
 

@@ -314,7 +314,7 @@ const onKeyPress = (e: KeyboardEvent) => {
 	.dot-menu-section {
 		align-self: start;
 		text-align: right;
-		height: calc(var(--space-base-vuetify) * 9);
+		height: 36px;
 	}
 }
 
