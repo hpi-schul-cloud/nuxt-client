@@ -60,7 +60,7 @@
 
 		<pagination
 			v-if="paginated"
-			class="mt--md"
+			class="mt-4"
 			:current-page="currentPage"
 			:total="total"
 			:per-page="rowsPerPage"

@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe ref="main" max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="mb--md h3">
+			<h1 class="mb-4 h3">
 				{{ title }}
 			</h1>
 			<i18n-t
@@ -28,7 +28,7 @@
 			</i18n-t>
 		</template>
 		<section class="section">
-			<div class="mt--lg">
+			<div class="mt-6">
 				<step-progress
 					id="progressbar"
 					:steps="progressSteps"
@@ -222,7 +222,7 @@
 					{{ successMessage }}
 				</h4>
 				<img
-					class="mb--md success-image mb-4"
+					class="success-image mb-4"
 					:src="image"
 					:alt="
 						$t('pages.administration.students.consent.steps.success.image.alt')

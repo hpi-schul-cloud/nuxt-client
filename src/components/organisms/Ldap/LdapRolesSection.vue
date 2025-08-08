@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1 class="mb--md h4">
+		<h1 class="mb-4 h4">
 			{{ $t("pages.administration.ldapEdit.roles.headLines.title") }}
 		</h1>
 		<p class="description-section">

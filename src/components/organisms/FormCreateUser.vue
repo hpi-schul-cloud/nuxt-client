@@ -33,14 +33,14 @@
 		<v-btn
 			color="primary"
 			variant="flat"
-			class="w-100 mt--lg"
+			class="w-100 mt-6"
 			data-testid="button_create-user_submit"
 			@click.prevent="onSubmit"
 		>
 			{{ $t("common.actions.add") }}
 		</v-btn>
 		<v-btn
-			class="w-100 mt--lg"
+			class="w-100 mt-6"
 			variant="text"
 			data-testid="button_create-user_abort"
 			@click.prevent="$router.go(-1)"

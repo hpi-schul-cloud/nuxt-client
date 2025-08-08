@@ -3,7 +3,7 @@
 		<span v-if="showIcons" data-testid="legend-icons">
 			<strong>{{ $t("components.molecules.adminfooterlegend.title") }}</strong>
 			<ul class="consent-icon">
-				<li v-for="icon in icons" :key="icon.icon" class="mb--xs">
+				<li v-for="icon in icons" :key="icon.icon" class="mb-2">
 					<v-icon class="material-icon" :color="icon.color">{{
 						icon.icon
 					}}</v-icon>
