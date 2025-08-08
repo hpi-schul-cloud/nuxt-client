@@ -1,5 +1,5 @@
 import { RoomItem } from "@/types/room/Room";
-import { roomFactory } from "@@/tests/test-utils";
+import { roomItemFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -56,7 +56,7 @@ describe("@feature-room/RoomGrid", () => {
 	});
 
 	it("should render tiles for each room", () => {
-		const mockRooms = roomFactory.buildList(2);
+		const mockRooms = roomItemFactory.buildList(2);
 
 		const { wrapper } = setup({
 			isLoading: false,
