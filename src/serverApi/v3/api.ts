@@ -614,24 +614,15 @@ export enum BoardElementResponseTypeEnum {
 /**
  * 
  * @export
- * @enum {string}
- */
-export enum BoardErrorContextTypeEnum {
-    Board = 'board'
-}
-
-/**
- * 
- * @export
  * @interface BoardErrorReportBodyParams
  */
 export interface BoardErrorReportBodyParams {
     /**
-     * 
-     * @type {BoardErrorTypeEnum}
+     * Type of the board error
+     * @type {string}
      * @memberof BoardErrorReportBodyParams
      */
-    type: BoardErrorTypeEnum;
+    type: string;
     /**
      * Error message
      * @type {string}
@@ -645,17 +636,11 @@ export interface BoardErrorReportBodyParams {
      */
     url: string;
     /**
-     * 
-     * @type {BoardErrorContextTypeEnum}
-     * @memberof BoardErrorReportBodyParams
-     */
-    contextType: BoardErrorContextTypeEnum;
-    /**
-     * EntityId (e.g. boardId)
+     * Id of the board the error occurred on
      * @type {string}
      * @memberof BoardErrorReportBodyParams
      */
-    contextId: string;
+    boardId: string;
     /**
      * Count of connection retries.
      * @type {number}
@@ -663,15 +648,6 @@ export interface BoardErrorReportBodyParams {
      */
     retryCount: number;
 }
-/**
- * 
- * @export
- * @enum {string}
- */
-export enum BoardErrorTypeEnum {
-    WebsocketUnableToConnect = 'WEBSOCKET_UNABLE_TO_CONNECT'
-}
-
 /**
  * 
  * @export
@@ -15902,7 +15878,7 @@ export const BoardErrorReportApiAxiosParamCreator = function (configuration?: Co
         boardErrorReportControllerReportError: async (boardErrorReportBodyParams: BoardErrorReportBodyParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardErrorReportBodyParams' is not null or undefined
             assertParamExists('boardErrorReportControllerReportError', 'boardErrorReportBodyParams', boardErrorReportBodyParams)
-            const localVarPath = `/boards-error-report`;
+            const localVarPath = `/report-board-error`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;

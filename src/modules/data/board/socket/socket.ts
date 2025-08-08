@@ -8,13 +8,8 @@ import { useI18n } from "vue-i18n";
 import { useTimeoutFn } from "@vueuse/shared";
 import { ref } from "vue";
 import { logger } from "@util-logger";
-import {
-	BoardErrorContextTypeEnum,
-	BoardErrorReportApiFactory,
-	BoardErrorTypeEnum,
-} from "@/serverApi/v3";
+import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { useRoute } from "vue-router";
 
 const isInitialConnection = ref(true);
 let instance: Socket | null = null;
@@ -29,8 +24,6 @@ export const useSocketConnection = (
 	const cardStore = useCardStore();
 	const { showFailure, showSuccess } = useBoardNotifier();
 	const { t } = useI18n();
-
-	const route = useRoute();
 
 	const boardErrorReportApi = BoardErrorReportApiFactory(
 		undefined,
@@ -52,6 +45,20 @@ export const useSocketConnection = (
 
 		instance.on("connect", async function () {
 			logger.log("connected");
+			if (retryCount > 0) {
+				const url = window.location.href;
+				const boardId =
+					url.match(/boards\/([0-9a-fA-F]{24})/)?.[1] ?? "unknown";
+				const data = {
+					type: "connect after retry",
+					message: "Connection restored after retry",
+					url,
+					boardId,
+					retryCount,
+				};
+				reportBoardError(data);
+			}
+
 			retryCount = 0;
 			if (isInitialConnection.value) return;
 			if (timeoutFn.isPending?.value) {
@@ -77,34 +84,26 @@ export const useSocketConnection = (
 		});
 
 		instance.on("connect_error", (error: Error) => {
-			retryCount++;
-			console.log("connect_error", typeof error, Object.keys(error));
+			const { type, description, message } = error as unknown as {
+				type: string;
+				description: string;
+				message: string;
+			};
 
-			if ("description" in error) {
-				logger.log("connect_error description", error.description);
-			}
-			if ("type" in error) {
-				logger.log("connect_error type", error.type);
-			}
-			if ("message" in error) {
-				logger.log("connect_error message", error.message);
-			}
-			const url = route.fullPath;
+			logger.log("connect_error description", type, description, message);
+			const url = window.location.href;
+			const boardId = url.match(/boards\/([0-9a-fA-F]{24})/)?.[1] ?? "unknown";
 			const data = {
-				type: BoardErrorTypeEnum.WebsocketUnableToConnect,
-				message: error.message,
+				type: "connect_error",
+				message: message ?? type,
 				url,
-				contextType: BoardErrorContextTypeEnum.Board,
-				contextId: boardStore.board?.id ?? "unknown",
+				boardId,
 				retryCount,
 			};
+			reportBoardError(data);
 			logger.log(data);
 
-			boardErrorReportApi
-				.boardErrorReportControllerReportError(data)
-				.catch((err) => {
-					logger.error("Failed to report error", err);
-				});
+			retryCount++;
 			// showFailure(t("error.4500"));
 		});
 	}
@@ -133,6 +132,14 @@ export const useSocketConnection = (
 		socket.disconnect();
 		isInitialConnection.value = true;
 		if (timeoutFn.isPending.value) timeoutFn.stop();
+	};
+
+	const reportBoardError = (data) => {
+		boardErrorReportApi
+			.boardErrorReportControllerReportError(data)
+			.catch((err) => {
+				logger.error("Failed to report error", err);
+			});
 	};
 
 	return {
