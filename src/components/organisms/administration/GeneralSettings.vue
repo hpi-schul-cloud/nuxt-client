@@ -91,6 +91,7 @@
 				<v-file-input
 					v-model="logoFile"
 					class="school-logo truncate-file-input"
+					data-testid="school-logo-input"
 					:label="
 						t(
 							'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
@@ -180,13 +181,16 @@ import {
 import { School } from "@/store/types/schools";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { t } = useI18n();
 
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+
 const localSchool = ref<School>();
 
-const logoFile = ref<File[]>([]);
+const logoFile = ref<File | null>(null);
 
 const availableLanguages = computed(
 	() => envConfigModule.getAvailableLanguages
@@ -244,8 +248,8 @@ watch(
 		if (newSchool?.id) {
 			logoFile.value =
 				newSchool.logo?.dataUrl && newSchool.logo?.name
-					? [convertDataUrlToFile(newSchool.logo.dataUrl, newSchool.logo.name)]
-					: [];
+					? convertDataUrlToFile(newSchool.logo.dataUrl, newSchool.logo.name)
+					: null;
 			await copyToLocalSchool();
 		}
 	},
@@ -285,17 +289,18 @@ const save = async () => {
 		return;
 	}
 
+	const localLanguage = localSchool.value.language as LanguageType; // Should this be changed in the backend SchoolResponse?
+
 	const updatedSchool: SchoolUpdateBodyParams = {
 		name: localSchool.value.name,
-		language: localSchool.value.language as LanguageType, // Should this be changed in the backend SchoolResponse?
+		language: localLanguage,
 		permissions: localSchool.value.permissions,
 		features: mapSchoolFeatureObjectToArray(localSchool.value.featureObject),
 		logo: {
-			dataUrl:
-				logoFile.value.length > 0
-					? ((await toBase64(logoFile.value[0])) as string)
-					: "",
-			name: logoFile.value.length > 0 ? logoFile.value[0].name : "",
+			dataUrl: logoFile.value
+				? ((await toBase64(logoFile.value)) as string)
+				: "",
+			name: logoFile.value ? logoFile.value.name : "",
 		},
 	};
 
@@ -309,7 +314,25 @@ const save = async () => {
 		updatedSchool.countyId = localSchool.value.county.id;
 	}
 
-	schoolsModule.update({ id: localSchool.value.id, props: updatedSchool });
+	await schoolsModule.update({
+		id: localSchool.value.id,
+		props: updatedSchool,
+	});
+
+	notifierModule.show({
+		text: t("pages.administration.school.index.generalSettings.save.success"),
+		status: "success",
+		timeout: 5000,
+	});
+
+	if (updatedSchool.logo) {
+		schoolsModule.setSchoolLogo({
+			dataUrl: updatedSchool.logo.dataUrl ?? "",
+			name: updatedSchool.logo.name ?? "",
+		});
+	}
+
+	await copyToLocalSchool();
 };
 </script>
 <style lang="scss" scoped>

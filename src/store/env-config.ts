@@ -120,10 +120,6 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.ROCKETCHAT_SERVICE_ENABLED;
 	}
 
-	get getNewSchoolAdminPageAsDefault(): boolean {
-		return this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED;
-	}
-
 	get getAvailableLanguages(): LanguageType[] {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
 	}
@@ -158,10 +154,6 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getMaxFileSize(): number {
 		return this.envFile.MAX_FILE_SIZE;
-	}
-
-	public get getShowNewClassViewEnabled(): boolean {
-		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED;
 	}
 
 	private get serverApi(): ServerConfigApiInterface {

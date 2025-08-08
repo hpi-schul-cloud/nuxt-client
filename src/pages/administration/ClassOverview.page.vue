@@ -318,6 +318,12 @@ const classes: ComputedRef<ClassInfo[]> = computed(
 	() => groupModule.getClasses
 );
 
+const showSourceHeader: ComputedRef<boolean> = computed(() => {
+	return classes.value.some(
+		(classItem) => classItem.externalSourceName !== undefined
+	);
+});
+
 const isLoading: ComputedRef<boolean> = computed(() => groupModule.getLoading);
 
 const hasPermission: ComputedRef<boolean> = computed(() =>
@@ -399,12 +405,14 @@ const headers = computed(() => {
 			sortable: true,
 		});
 	}
-	headerList.push(
-		{
+	if (showSourceHeader.value) {
+		headerList.push({
 			value: "externalSourceName",
 			title: t("common.labels.externalsource"),
 			sortable: true,
-		},
+		});
+	}
+	headerList.push(
 		{
 			key: "teacherNames",
 			value: (item: ClassInfo) => item.teacherNames.join(", "),

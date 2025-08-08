@@ -119,6 +119,11 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
+	setSchoolLogo(logo: { name: string; dataUrl: string }): void {
+		this.school.logo = logo;
+	}
+
+	@Mutation
 	setLoading(loading: boolean): void {
 		this.loading = loading;
 	}
