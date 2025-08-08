@@ -556,7 +556,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Update status",
 	"components.cardElement.fileElement.videoFormatError":
 		"The video format is not supported by this browser/operating system.",
-
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Open office document",
 	"components.cardElement.folderElement": "File folder",
 	"components.cardElement.folderElement.untitled": "Untitled folder",
 	"components.cardElement.LinkElement": "Link",
@@ -2190,6 +2191,7 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
+	"pages.collabora.iframeTitle": "Office document editor",
 	"error.500":
 		"There are problems in the system. We are working on fixing the issue. Please try again later.",
 	"error.4500":
