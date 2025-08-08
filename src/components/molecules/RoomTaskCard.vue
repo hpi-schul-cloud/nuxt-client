@@ -452,7 +452,7 @@ const getStyleClasses = () => {
 		text-align: left;
 
 		.v-icon {
-			padding-bottom: var(--space-xs-4);
+			padding-bottom: 2px;
 		}
 	}
 
@@ -475,11 +475,11 @@ const getStyleClasses = () => {
 }
 
 .v-chip {
-	margin-right: var(--space-xs);
+	margin-right: 8px;
 }
 
 .v-card__text {
-	padding-bottom: var(--space-xs-4);
+	padding-bottom: 2px;
 }
 
 .task-hidden {

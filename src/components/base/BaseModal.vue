@@ -67,7 +67,7 @@ const isDialogOpen = computed({
 	width: 95%;
 	min-width: var(--size-content-width-min);
 	max-width: var(--size-content-width-max);
-	max-height: calc(100vh - (2 * var(--space-lg)));
+	max-height: calc(100vh - (2 * 24px));
 	margin: 0 auto;
 	overflow: hidden;
 	background-color: rgba(var(--v-theme-white));
@@ -80,11 +80,11 @@ const isDialogOpen = computed({
 }
 
 .modal-header {
-	padding: var(--space-md);
+	padding: 16px;
 	text-align: center;
 }
 
 .modal-body {
-	padding: var(--space-md) var(--space-xl);
+	padding: 16px 32px;
 }
 </style>

@@ -190,15 +190,15 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .path-hint {
-	margin-top: var(--space-xl);
-	margin-bottom: var(--space-lg);
+	margin-top: 32px;
+	margin-bottom: 24px;
 }
 
 .users-container {
-	margin-bottom: var(--space-xl-2);
+	margin-bottom: 40px;
 }
 
 .title-class {
-	margin-bottom: var(--space-xl-2);
+	margin-bottom: 40px;
 }
 </style>

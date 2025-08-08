@@ -337,7 +337,7 @@ const onKeyPress = (e: KeyboardEvent) => {
 }
 
 .v-card__text {
-	padding-bottom: var(--space-xs-4);
+	padding-bottom: 2px;
 }
 
 .hidden-lesson {

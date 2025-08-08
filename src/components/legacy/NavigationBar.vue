@@ -101,7 +101,7 @@ const setActive = (idx: number) => {
 
 .nav-container {
 	@include breakpoint(tablet) {
-		margin: 0 calc(3.5 * var(--space-md));
+		margin: 0 calc(3.5 * 16px);
 	}
 
 	@include breakpoint(desktop) {
@@ -115,7 +115,7 @@ const setActive = (idx: number) => {
 		height: calc(45 * var(--border-width));
 
 		> a > img {
-			height: var(--space-xl-2);
+			height: 40px;
 		}
 	}
 
@@ -132,7 +132,7 @@ const setActive = (idx: number) => {
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding-bottom: var(--space-xs);
+	padding-bottom: 8px;
 
 	@include breakpoint(tablet) {
 		display: flex;
@@ -148,7 +148,7 @@ const setActive = (idx: number) => {
 	> a {
 		padding: calc(9 * var(--border-width));
 		margin-right: 0;
-		margin-bottom: var(--space-xs);
+		margin-bottom: 8px;
 
 		@include breakpoint(tablet) {
 			margin-bottom: 0;
@@ -168,7 +168,7 @@ const setActive = (idx: number) => {
 
 	.link-container > a,
 	.buttons-container > button {
-		margin-right: var(--space-xs);
+		margin-right: 8px;
 	}
 }
 
@@ -205,7 +205,7 @@ const setActive = (idx: number) => {
 .li {
 	align-items: center;
 	justify-content: center;
-	padding: var(--space-xs) var(--space-md);
+	padding: 8px 16px;
 	font-family: var(--font-primary);
 	font-size: var(--text-md);
 

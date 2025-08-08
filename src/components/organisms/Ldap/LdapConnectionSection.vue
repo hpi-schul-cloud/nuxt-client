@@ -170,10 +170,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .connection-container {
-	margin-bottom: var(--space-xl-4);
+	margin-bottom: 84px;
 }
 
 .title-class {
-	margin-bottom: var(--space-xl-2);
+	margin-bottom: 40px;
 }
 </style>

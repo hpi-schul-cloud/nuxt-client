@@ -415,7 +415,7 @@ tbody {
 
 .table {
 	width: 100%;
-	margin-bottom: var(--space-sm);
+	margin-bottom: 12px;
 	border-collapse: collapse;
 }
 </style>

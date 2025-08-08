@@ -154,7 +154,7 @@ const fabItemClickHandler = (event: string | undefined): void => {
 }
 
 .loader {
-	// padding: 0 var(--space-lg); // Desktop
+	// padding: 0 24px; // Desktop
 	max-width: var(--size-content-width-max);
 }
 

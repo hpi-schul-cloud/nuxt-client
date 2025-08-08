@@ -76,7 +76,7 @@ const isThr = computed(() => envConfigModule.getTheme === SchulcloudTheme.Thr);
 $vertically-center: auto 0;
 
 .section {
-	margin-top: var(--space-lg);
+	margin-top: 24px;
 }
 
 .consent-icon {
@@ -84,8 +84,8 @@ $vertically-center: auto 0;
 	flex-direction: column;
 	align-items: left;
 	justify-content: left;
-	margin-top: var(--space-sm);
-	margin-bottom: var(--space-xl);
+	margin-top: 12px;
+	margin-bottom: 32px;
 	padding-left: 0;
 
 	> li {
@@ -95,7 +95,7 @@ $vertically-center: auto 0;
 
 .sync-symbol {
 	width: 2.5rem;
-	margin-right: var(--space-md);
+	margin-right: 16px;
 }
 
 .wrapper {

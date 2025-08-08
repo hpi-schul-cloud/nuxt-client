@@ -47,8 +47,8 @@ const close = () => {
 <style lang="scss" scoped>
 .btn {
 	width: 100% !important;
-	margin-right: var(--space-md) !important;
-	margin-left: var(--space-md) !important;
+	margin-right: 16px !important;
+	margin-left: 16px !important;
 }
 
 .modal-mask {

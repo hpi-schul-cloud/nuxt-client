@@ -631,8 +631,8 @@ export default defineComponent({
 }
 
 .border-bottom {
-	margin-right: calc(-1 * var(--space-lg));
-	margin-left: calc(-1 * var(--space-lg));
+	margin-right: calc(-1 * 24px);
+	margin-left: calc(-1 * 24px);
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 </style>

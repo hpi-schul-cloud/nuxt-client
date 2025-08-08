@@ -447,7 +447,7 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 
 <style scoped>
 .board {
-	padding: 0 var(--space-lg);
+	padding: 0 24px;
 }
 
 .column-board {

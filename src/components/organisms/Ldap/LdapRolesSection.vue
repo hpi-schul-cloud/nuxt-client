@@ -31,7 +31,7 @@
 					value="user_attribute"
 				/>
 			</v-radio-group>
-			<p class="text-sm" style="margin-top: var(--space-xs)">
+			<p class="text-sm" style="margin-top: 8px">
 				{{ $t("pages.administration.ldapEdit.roles.labels.radio.description") }}
 			</p>
 		</div>
@@ -209,10 +209,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .section-sub-header {
-	margin-bottom: var(--space-xs);
+	margin-bottom: 8px;
 }
 
 .description-section {
-	margin-bottom: var(--space-xl);
+	margin-bottom: 32px;
 }
 </style>

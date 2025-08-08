@@ -172,7 +172,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .title-class {
-	margin-top: var(--space-xl-2);
-	margin-bottom: var(--space-xl-2);
+	margin-top: 40px;
+	margin-bottom: 40px;
 }
 </style>
