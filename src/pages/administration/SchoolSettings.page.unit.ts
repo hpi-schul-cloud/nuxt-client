@@ -290,7 +290,7 @@ describe("SchoolSettingsPage", () => {
 				});
 
 				expect(wrapper.vm.instituteTitle).toEqual(
-					"Landesinitiative n-21: Schulen in Niedersachsen online e.V."
+					"Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"
 				);
 			});
 		});

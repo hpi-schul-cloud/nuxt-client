@@ -23,7 +23,13 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { VDataTableServer } from "vuetify/lib/components/index";
 import RoomsOverview from "./RoomsOverview.page.vue";
 import { Mock } from "vitest";
-import { CourseInfoDataResponse } from "@/serverApi/v3";
+import {
+	ConfigResponse,
+	CourseInfoDataResponse,
+	SchulcloudTheme,
+} from "@/serverApi/v3";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { envConfigModule } from "@/store";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
@@ -53,9 +59,9 @@ describe("RoomsOverview", () => {
 
 	const createWrapper = ({
 		tab = "current",
-		envModuleGetters = {},
 		courses = [],
 		page = 1,
+		envs = {},
 		pagination = {
 			limit: 10,
 			skip: 0,
@@ -63,10 +69,10 @@ describe("RoomsOverview", () => {
 		},
 	}: {
 		tab?: "current" | "archive";
-		envModuleGetters?: Partial<EnvConfigModule>;
 		courses?: CourseInfoDataResponse[];
 		page?: number;
 		pagination?: { limit: number; skip: number; total: number };
+		envs?: Partial<ConfigResponse>;
 	} = {}) => {
 		const route = { query: { tab } };
 		useRouteMock.mockReturnValue(route);
@@ -77,12 +83,10 @@ describe("RoomsOverview", () => {
 			getUserPermissions: ["COURSE_ADMINISTRATION".toLowerCase()],
 		});
 
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envsFactory.build({
-				FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
-			}),
-			...envModuleGetters,
-		});
+		envConfigModule.setEnvs({
+			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+			...envs,
+		} as ConfigResponse);
 
 		const useCourseListMock: DeepMocked<ReturnType<typeof useCourseList>> =
 			createMock<ReturnType<typeof useCourseList>>({
@@ -106,6 +110,11 @@ describe("RoomsOverview", () => {
 					StartExistingCourseSyncDialog: true,
 					EndCourseSyncDialog: true,
 				},
+				mocks: {
+					t: (key: string, placeholders: Record<string, string> = {}) => {
+						return `${key}|${Object.values(placeholders || {}).join("|")}`;
+					},
+				},
 			},
 			props: {
 				tab,
@@ -116,7 +125,6 @@ describe("RoomsOverview", () => {
 			wrapper,
 			route,
 			router,
-			envConfigModule,
 			useCourseListMock,
 		};
 	};
@@ -126,6 +134,12 @@ describe("RoomsOverview", () => {
 			'[data-testid="admin-rooms-table"]'
 		);
 	};
+
+	beforeAll(() => {
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
+	});
 
 	beforeEach(() => {
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>({
@@ -377,14 +391,10 @@ describe("RoomsOverview", () => {
 					teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 				});
 
-				const envConfigModule = createModuleMocks(EnvConfigModule, {
-					getEnv: envsFactory.build({
-						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
-					}),
-				});
-
 				const { wrapper } = createWrapper({
-					envModuleGetters: envConfigModule,
+					envs: {
+						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+					},
 					courses,
 				});
 
@@ -425,14 +435,10 @@ describe("RoomsOverview", () => {
 					syncedGroup: "GroupName",
 				});
 
-				const envConfigModule = createModuleMocks(EnvConfigModule, {
-					getEnv: envsFactory.build({
-						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
-					}),
-				});
-
 				const { wrapper } = createWrapper({
-					envModuleGetters: envConfigModule,
+					envs: {
+						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+					},
 					courses,
 				});
 
@@ -494,14 +500,10 @@ describe("RoomsOverview", () => {
 					teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 				});
 
-				const envConfigModule = createModuleMocks(EnvConfigModule, {
-					getEnv: envsFactory.build({
-						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: false,
-					}),
-				});
-
 				const { wrapper } = createWrapper({
-					envModuleGetters: envConfigModule,
+					envs: {
+						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: false,
+					},
 					courses,
 				});
 
@@ -527,7 +529,7 @@ describe("RoomsOverview", () => {
 					'[data-testid="course-table-end-course-sync-btn"]'
 				);
 
-				expect(startSyncButton.element.id).toBeFalsy();
+				expect(startSyncButton.exists()).toBeFalsy();
 				expect(endSyncButton.exists()).toBeFalsy();
 				expect(editBtn.exists()).toBeTruthy();
 				expect(deleteBtn.exists()).toBeTruthy();
@@ -646,7 +648,7 @@ describe("RoomsOverview", () => {
 					}),
 				];
 
-				const { wrapper, envConfigModule } = createWrapper({
+				const { wrapper } = createWrapper({
 					tab: "archive",
 					courses,
 				});
@@ -656,7 +658,6 @@ describe("RoomsOverview", () => {
 				return {
 					wrapper,
 					courseId,
-					envConfigModule,
 				};
 			};
 
@@ -915,5 +916,38 @@ describe("RoomsOverview", () => {
 				);
 			});
 		});
+	});
+
+	describe("when hint text is shown", () => {
+		const setup = (envs: Partial<ConfigResponse>) => {
+			const { wrapper } = createWrapper({ envs });
+
+			return { wrapper };
+		};
+
+		it.each([
+			[SchulcloudTheme.Default, "Dataport"],
+			[
+				SchulcloudTheme.Brb,
+				"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg",
+			],
+			[
+				SchulcloudTheme.N21,
+				"Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)",
+			],
+		])(
+			"uses %s-instance specific text placeholders",
+			async (theme, expected) => {
+				const envs = envsFactory.build({
+					SC_THEME: theme,
+				});
+
+				const { wrapper } = setup(envs);
+
+				await nextTick();
+
+				expect(wrapper.text()).toContain(expected);
+			}
+		);
 	});
 });
