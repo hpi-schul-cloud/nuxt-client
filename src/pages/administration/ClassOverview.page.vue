@@ -94,8 +94,8 @@
 						<v-icon>{{ mdiPencilOutline }}</v-icon>
 					</v-btn>
 					<v-btn
-						:title="$t('pages.administration.classes.delete')"
-						:aria-label="$t('pages.administration.classes.delete')"
+						:title="t('pages.administration.classes.delete')"
+						:aria-label="t('pages.administration.classes.delete')"
 						data-testid="class-table-delete-btn"
 						variant="outlined"
 						size="small"
@@ -185,6 +185,7 @@
 		/>
 
 		<v-btn
+			v-if="hasCreatePermission"
 			class="my-5 button-start"
 			color="primary"
 			variant="flat"
@@ -193,6 +194,18 @@
 		>
 			{{ t("pages.administration.classes.index.add") }}
 		</v-btn>
+
+		<InfoAlert
+			v-if="!hasCreatePermission"
+			class="mb-4"
+			:class="{ 'mt-4': !hasCreatePermission }"
+			data-testid="admin-class-info-alert"
+		>
+			<p class="font-weight-bold">
+				{{ t("pages.administration.classes.thr.hint.title") }}
+			</p>
+			{{ t("pages.administration.classes.thr.hint.text") }}
+		</InfoAlert>
 
 		<p class="text-muted">
 			{{
@@ -239,6 +252,7 @@ import {
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { InfoAlert } from "@ui-alert";
 import { useRoute, useRouter } from "vue-router";
 import { DataTableHeader } from "vuetify";
 
@@ -326,15 +340,19 @@ const showSourceHeader: ComputedRef<boolean> = computed(() => {
 
 const isLoading: ComputedRef<boolean> = computed(() => groupModule.getLoading);
 
-const hasPermission: ComputedRef<boolean> = computed(() =>
+const hasEditPermission: ComputedRef<boolean> = computed(() =>
 	authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
 );
 
 const showClassAction = (item: ClassInfo) =>
-	hasPermission.value && item.type === ClassRootType.Class;
+	hasEditPermission.value && item.type === ClassRootType.Class;
 
 const showGroupAction = (item: ClassInfo) =>
-	hasPermission.value && item.type === ClassRootType.Group;
+	hasEditPermission.value && item.type === ClassRootType.Group;
+
+const hasCreatePermission: ComputedRef<boolean> = computed(() =>
+	authModule.getUserPermissions.includes("CLASS_CREATE".toLowerCase())
+);
 
 const isDeleteDialogOpen: Ref<boolean> = ref(false);
 

@@ -47,12 +47,21 @@ type Tab = "current" | "next" | "archive";
 const createWrapper = (
 	groupModuleGetters: Partial<GroupModule> = {},
 	schoolsModuleGetters: Partial<SchoolsModule> = {},
-	props: { tab: Tab } = { tab: "current" }
+	props: { tab: Tab } = { tab: "current" },
+	userPermissions?: string[]
 ) => {
 	const route = { query: { tab: "current" } };
 	useRouteMock.mockReturnValue(route);
 	const router = createMock<Router>();
 	useRouterMock.mockReturnValue(router);
+
+	const defaultPermissions = ["CLASS_EDIT", "CLASS_CREATE"].map((p) =>
+		p.toLowerCase()
+	);
+
+	const effectivePermissions = (userPermissions ?? defaultPermissions).map(
+		(p) => p.toLowerCase()
+	);
 
 	const groupModule = createModuleMocks(GroupModule, {
 		getClasses: [
@@ -72,7 +81,7 @@ const createWrapper = (
 	});
 
 	const authModule = createModuleMocks(AuthModule, {
-		getUserPermissions: ["CLASS_EDIT".toLowerCase()],
+		getUserPermissions: effectivePermissions,
 	});
 
 	const schoolModule = createModuleMocks(SchoolsModule, {
@@ -337,6 +346,43 @@ describe("ClassOverview", () => {
 	});
 
 	describe("action buttons", () => {
+		describe("when user has no edit permission", () => {
+			const setup = () => {
+				const userPermissions: string[] = [];
+				const { wrapper } = createWrapper(
+					{},
+					{},
+					{ tab: "current" },
+					userPermissions
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should not render any button", () => {
+				const { wrapper } = setup();
+
+				expect(
+					wrapper.find('[data-testid="legacy-class-table-manage-btn"]').exists()
+				).toEqual(false);
+				expect(
+					wrapper.find('[data-testid="class-table-edit-btn"]').exists()
+				).toEqual(false);
+				expect(
+					wrapper.find('[data-testid="class-table-delete-btn"]').exists()
+				).toEqual(false);
+				expect(
+					wrapper.find('[data-testid="class-table-successor-btn"]').exists()
+				).toEqual(false);
+
+				return {
+					wrapper,
+				};
+			});
+		});
+
 		describe("when legacy classes are available", () => {
 			const setup = () => createWrapper();
 
@@ -741,25 +787,85 @@ describe("ClassOverview", () => {
 	});
 
 	describe("addClass", () => {
-		describe("when clicking on add class buttton", () => {
+		describe("when create permission is present", () => {
+			const userPermissions = ["class_create"];
 			const setup = () => {
-				const { wrapper } = createWrapper();
+				const { wrapper } = createWrapper(
+					{},
+					{},
+					{
+						tab: "current",
+					},
+					userPermissions
+				);
 
 				return {
 					wrapper,
 				};
 			};
 
-			it("should redirect to legacy create class page", () => {
+			it("should render add class button", () => {
 				const { wrapper } = setup();
 
-				const addClassBtn = wrapper.find(
-					'[data-testid="admin-class-add-button"]'
+				expect(
+					wrapper.find('[data-testid="admin-class-add-button"]').exists()
+				).toEqual(true);
+			});
+
+			describe("when clicking on add class buttton", () => {
+				const setup = () => {
+					const { wrapper } = createWrapper();
+
+					return {
+						wrapper,
+					};
+				};
+
+				it("should redirect to legacy create class page", () => {
+					const { wrapper } = setup();
+
+					const addClassBtn = wrapper.find(
+						'[data-testid="admin-class-add-button"]'
+					);
+
+					expect(addClassBtn.attributes().href).toStrictEqual(
+						"/administration/classes/create"
+					);
+				});
+			});
+		});
+
+		describe("when create permission is not present", () => {
+			const userPermissions: string[] = [];
+			const setup = () => {
+				const { wrapper } = createWrapper(
+					{},
+					{},
+					{
+						tab: "current",
+					},
+					userPermissions
 				);
 
-				expect(addClassBtn.attributes().href).toStrictEqual(
-					"/administration/classes/create"
-				);
+				return {
+					wrapper,
+				};
+			};
+
+			it("should not render add class button", () => {
+				const { wrapper } = setup();
+
+				expect(
+					wrapper.find('[data-testid="admin-class-add-button"]').exists()
+				).toEqual(false);
+			});
+
+			it("should render info alert", () => {
+				const { wrapper } = setup();
+
+				expect(
+					wrapper.find('[data-testid="admin-class-info-alert"]').exists()
+				).toEqual(true);
 			});
 		});
 	});
