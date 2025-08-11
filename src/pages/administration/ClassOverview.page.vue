@@ -296,7 +296,7 @@ const footerProps = {
 const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
 	{
 		title: t("pages.administration.index.title"),
-		href: "/administration/",
+		disabled: true,
 	},
 	{
 		title: t("pages.administration.classes.index.title"),

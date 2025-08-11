@@ -262,7 +262,7 @@ export default {
 			return [
 				{
 					title: this.$t("pages.administration.index.title"),
-					href: "/administration/",
+					disabled: true,
 				},
 				{
 					title: this.$t("pages.administration.school.index.title"),

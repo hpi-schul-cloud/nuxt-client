@@ -226,7 +226,7 @@ export default defineComponent({
 		const breadcrumbs: Ref<Breadcrumb[]> = ref([
 			{
 				title: t("pages.administration.index.title"),
-				href: "/administration/",
+				disabled: true,
 			},
 			{
 				title: t("pages.administration.school.index.title"),
