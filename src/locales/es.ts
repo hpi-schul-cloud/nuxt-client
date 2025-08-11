@@ -570,6 +570,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Estado de actualización",
 	"components.cardElement.fileElement.videoFormatError":
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Abrir documento Office",
 	"components.cardElement.folderElement": "Carpeta de archivos",
 	"components.cardElement.folderElement.untitled": "Carpeta sin título",
 	"components.cardElement.LinkElement": "Enlace",
@@ -2140,10 +2142,16 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Escuela principal",
 	"pages.rooms.administration.table.header.actions": "Acciones",
 	"pages.rooms.administration.table.row.owner.notExist": "No existe",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"Todos los contenidos de la sala también se eliminan con la sala. Esta acción no se puede deshacer.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Menú de acciones para la sala “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Eliminar sala",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Administrar miembros de la sala",
 	"pages.rooms.administration.error.load":
 		"No se pudo cargar la lista de salas.",
+	"pages.rooms.administration.error.delete": "No se pudo eliminar la sala.",
 	"pages.rooms.administration.pageTitle": "Administrar salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
@@ -2262,6 +2270,7 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
+	"pages.collabora.iframeTitle": "Editor de documentos de Office",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",
 	"error.4500":

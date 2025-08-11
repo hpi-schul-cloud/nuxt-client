@@ -571,6 +571,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Статус оновлення",
 	"components.cardElement.fileElement.videoFormatError":
 		"Формат відео не підтримується цим браузером / операційною системою.",
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Документ у форматі Open Office",
 	"components.cardElement.folderElement": "Папка з файлами",
 	"components.cardElement.folderElement.untitled": "Папка без назви",
 	"components.cardElement.LinkElement": "Посилання",
@@ -2106,10 +2108,16 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Головна школа",
 	"pages.rooms.administration.table.header.actions": "Дії",
 	"pages.rooms.administration.table.row.owner.notExist": "Не існує",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"Видалення кімнати також призведе до видалення всіх її вмістів. Цю дію не можна скасувати.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Меню дій для кімнати “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Видалити кімнату",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Керувати учасниками кімнати",
 	"pages.rooms.administration.error.load":
 		"Не вдалося завантажити список кімнат.",
+	"pages.rooms.administration.error.delete": "Кімнату не вдалося видалити.",
 	"pages.rooms.administration.pageTitle": "Керування кімнатами",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
@@ -2223,6 +2231,7 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Цей елемент більше не доступний, оскільки відеоконференції в школі вимкнено. Будь ласка, зверніться до адміністратора школи.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
+	"pages.collabora.iframeTitle": "Редактор документів Office",
 	"error.500":
 		"Є проблеми в системі. Ми працюємо над усуненням проблеми. Будь ласка, спробуйте пізніше.",
 	"error.4500":

@@ -6,9 +6,11 @@
 		elevation="0"
 		:variant="isOutlined ? 'outlined' : 'elevated'"
 		:ripple="false"
-		:tabindex="isEditMode ? 0 : undefined"
+		:aria-label="cardAriaLabel"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
+		@click="onCardInteraction"
+		@keydown.enter="onCardInteraction"
 	>
 		<FileContent
 			v-if="fileProperties && isUploading !== true"
@@ -59,10 +61,16 @@ import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import {
 	convertDownloadToPreviewUrl,
+	isCollaboraMimeType,
 	isPreviewPossible,
 	isScanStatusBlocked,
 } from "@/utils/fileHelper";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	useBoardFocusHandler,
+	useBoardPermissions,
+	useContentElementState,
+} from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { BoardMenuScope } from "@ui-board";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
@@ -73,8 +81,11 @@ import {
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
 import { computed, onMounted, ref, toRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
+import { mapEditBoardPermissionToEditorMode } from "./mapper";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
@@ -97,6 +108,10 @@ const emit = defineEmits<{
 	(e: "move-keyboard:edit", event: KeyboardEvent): void;
 }>();
 
+const { t } = useI18n();
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const router = useRouter();
+
 const fileContentElement = ref(null);
 const isLoadingFileRecord = ref(true);
 
@@ -105,6 +120,7 @@ useBoardFocusHandler(element.value.id, fileContentElement);
 
 const { modelValue } = useContentElementState(props);
 const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
+const { hasEditPermission } = useBoardPermissions();
 
 const fileRecord = computed(
 	() => getFileRecordsByParentId(element.value.id)[0]
@@ -199,6 +215,40 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
+
+const hasCollaboraMimeType = computed(() => {
+	if (!fileRecord.value) return false;
+	return isCollaboraMimeType(fileRecord.value.mimeType);
+});
+const isCollaboraEnabled = computed(() => {
+	return envConfigModule.getEnv.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED;
+});
+const cardAriaLabel = computed(() => {
+	if (isCollaboraEnabled.value && hasCollaboraMimeType.value) {
+		return t("components.cardElement.fileElement.openOfficeDocument");
+	}
+	return undefined;
+});
+const onCardInteraction = () => {
+	if (isCollaboraEnabled.value && hasCollaboraMimeType.value) openCollabora();
+};
+const openCollabora = () => {
+	const editorMode = mapEditBoardPermissionToEditorMode(
+		hasEditPermission.value
+	);
+
+	const url = router.resolve({
+		name: "collabora",
+		params: {
+			id: fileRecord.value.id,
+		},
+		query: {
+			editorMode,
+		},
+	}).href;
+
+	window.open(url, "_blank");
+};
 </script>
 <style lang="scss" scoped>
 /* show focus indicatator properly on all browsers */

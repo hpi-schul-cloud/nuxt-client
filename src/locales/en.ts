@@ -556,7 +556,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Update status",
 	"components.cardElement.fileElement.videoFormatError":
 		"The video format is not supported by this browser/operating system.",
-
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Open office document",
 	"components.cardElement.folderElement": "File folder",
 	"components.cardElement.folderElement.untitled": "Untitled folder",
 	"components.cardElement.LinkElement": "Link",
@@ -2070,9 +2071,15 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Main school",
 	"pages.rooms.administration.table.header.actions": "Actions",
 	"pages.rooms.administration.table.row.owner.notExist": "Not existing",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"All room contents are also deleted with the room. This action cannot be undone.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Action menu for room “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Delete room",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Manage room members",
 	"pages.rooms.administration.error.load": "The room list could not be loaded.",
+	"pages.rooms.administration.error.delete": "The room could not be deleted.",
 	"pages.rooms.administration.pageTitle": "Manage rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
@@ -2190,6 +2197,7 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
+	"pages.collabora.iframeTitle": "Office document editor",
 	"error.500":
 		"There are problems in the system. We are working on fixing the issue. Please try again later.",
 	"error.4500":

@@ -561,6 +561,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Status aktualisieren",
 	"components.cardElement.fileElement.videoFormatError":
 		"Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Office Dokument öffnen",
 	"components.cardElement.folderElement": "Dateiordner",
 	"components.cardElement.folderElement.untitled": "Unbenannter Ordner",
 	"components.cardElement.LinkElement": "Link",
@@ -2104,10 +2106,17 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Stammschule des Raums",
 	"pages.rooms.administration.table.header.actions": "Aktionen",
 	"pages.rooms.administration.table.row.owner.notExist": "Nicht vorhanden",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"Mit dem Raum werden auch alle Raum-Inhalte gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Aktionsmenü für den Raum “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Raum löschen",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Raum-Mitglieder verwalten",
 	"pages.rooms.administration.error.load":
 		"Die Raumliste konnte nicht geladen werden.",
+	"pages.rooms.administration.error.delete":
+		"Der Raum konnte nicht gelöscht werden.",
 	"pages.rooms.administration.pageTitle": "Räume verwalten",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
@@ -2225,6 +2234,7 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Das Element ist nicht mehr verfügbar, da Videokonferenzen für die Schule deaktiviert wurden. Bitte an den Schul-Admin wenden.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
+	"pages.collabora.iframeTitle": "Office-Dokument Editor",
 	"error.500":
 		"Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",
 	"error.4500":
