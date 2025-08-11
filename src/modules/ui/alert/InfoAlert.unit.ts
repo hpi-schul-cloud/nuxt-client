@@ -4,13 +4,20 @@ import BaseAlert from "./BaseAlert.vue";
 import InfoAlert from "./InfoAlert.vue";
 
 describe("InfoAlert", () => {
-	const setup = () => {
-		document.body.setAttribute("data-app", "true");
-
+	const setup = (
+		options?: Partial<{
+			showCloseIcon: boolean;
+			alertTitle: string;
+		}>
+	) => {
 		const slot = "TestSlot";
 		const wrapper = shallowMount(InfoAlert, {
 			slots: {
 				default: slot,
+			},
+			props: {
+				showCloseIcon: options?.showCloseIcon ?? false,
+				alertTitle: options?.alertTitle ?? undefined,
 			},
 		});
 
@@ -20,7 +27,7 @@ describe("InfoAlert", () => {
 		};
 	};
 
-	it("should pass correct color to filealert", () => {
+	it("should pass correct color to basealert", () => {
 		const { wrapper } = setup();
 
 		const color = wrapper.findComponent(BaseAlert).attributes("color");
@@ -28,7 +35,7 @@ describe("InfoAlert", () => {
 		expect(color).toBe("info");
 	});
 
-	it("should pass correct icon to filealert", () => {
+	it("should pass correct icon to basealert", () => {
 		const { wrapper } = setup();
 
 		const icon = wrapper.findComponent(BaseAlert).attributes("icon");
@@ -36,7 +43,26 @@ describe("InfoAlert", () => {
 		expect(icon).toBe(mdiInformation);
 	});
 
-	it("should pass slot to filealert", () => {
+	it("should pass alertTitle to basealert", () => {
+		const alertTitleText = "Test Alert Title";
+		const { wrapper } = setup({ alertTitle: alertTitleText });
+
+		const alertTitle = wrapper.findComponent(BaseAlert).props("alertTitle");
+
+		expect(alertTitle).toBe(alertTitleText);
+	});
+
+	it("should pass show close icon to basealert", () => {
+		const { wrapper } = setup({ showCloseIcon: true });
+
+		const showCloseIcon = wrapper
+			.findComponent(BaseAlert)
+			.props("showCloseIcon");
+
+		expect(showCloseIcon).toBe(true);
+	});
+
+	it("should pass slot to basealert", () => {
 		const { wrapper, slot } = setup();
 
 		const text = wrapper.findComponent(BaseAlert).text();

@@ -201,10 +201,8 @@
 			class="mb-4"
 			:class="{ 'mt-4': !hasCreatePermission }"
 			data-testid="admin-class-info-alert"
+			alert-title="pages.administration.classes.thr.hint.title"
 		>
-			<p class="font-weight-bold">
-				{{ t("pages.administration.classes.thr.hint.title") }}
-			</p>
 			{{ t("pages.administration.classes.thr.hint.text") }}
 		</InfoAlert>
 
