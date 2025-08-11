@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { RoomApiFactory, RoomStatsItemResponse } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
@@ -13,31 +13,38 @@ export const useAdministrationRoomStore = defineStore(
 		const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 		const { t } = useI18n();
 		const { showFailure } = useBoardNotifier();
-
 		const isLoading = ref(true);
 		const roomList = ref<RoomStatsItemResponse[]>([]);
-		const selectedIds = ref<string[]>([]);
 		const isEmptyList = ref(false);
-
-		const userSchoolName = schoolsModule.getSchool.name;
+		const userSchoolName = computed(() => schoolsModule.getSchool.name);
+		const userSchoolId = computed(() => schoolsModule.getSchool.id);
 
 		const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
-			list.forEach((room) => {
-				room.createdAt = printFromStringUtcToFullDate(room.createdAt);
-			});
+			const currentUserSchoolName = userSchoolName.value;
 			return list
+				.map((room) => ({
+					...room,
+					createdAt: printFromStringUtcToFullDate(room.createdAt),
+				}))
 				.sort((a, b) => {
-					return a.schoolName.localeCompare(b.schoolName);
-				})
-				.sort((a, b) => {
-					return a.schoolName === userSchoolName
-						? -1
-						: b.schoolName === userSchoolName
-							? 1
-							: 0;
-				})
-				.sort((a, b) => {
-					return a.owner === undefined ? -1 : b.owner === undefined ? 1 : 0;
+					if (!a.owner && b.owner) return -1;
+					if (a.owner && !b.owner) return 1;
+
+					if (
+						a.schoolName === currentUserSchoolName &&
+						b.schoolName !== currentUserSchoolName
+					)
+						return -1;
+					if (
+						a.schoolName !== currentUserSchoolName &&
+						b.schoolName === currentUserSchoolName
+					)
+						return 1;
+
+					return (
+						a.schoolName.localeCompare(b.schoolName) ||
+						a.name.localeCompare(b.name)
+					);
 				});
 		};
 
@@ -61,12 +68,27 @@ export const useAdministrationRoomStore = defineStore(
 			}
 		};
 
+		const deleteRoom = async (roomId: string) => {
+			try {
+				isLoading.value = true;
+				await roomApi.roomControllerDeleteRoom(roomId);
+				roomList.value = roomList.value.filter(
+					(room) => room.roomId !== roomId
+				);
+			} catch {
+				showFailure(t("pages.rooms.administration.error.delete"));
+			} finally {
+				isLoading.value = false;
+			}
+		};
+
 		return {
 			isLoading,
 			isEmptyList,
 			roomList,
-			selectedIds,
+			deleteRoom,
 			fetchRooms,
+			userSchoolId,
 		};
 	}
 );

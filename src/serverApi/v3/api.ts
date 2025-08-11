@@ -8735,6 +8735,12 @@ export interface RoomStatsItemResponse {
      * @type {string}
      * @memberof RoomStatsItemResponse
      */
+    schoolId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
     schoolName: string;
     /**
      * 

@@ -2073,9 +2073,15 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Main school",
 	"pages.rooms.administration.table.header.actions": "Actions",
 	"pages.rooms.administration.table.row.owner.notExist": "Not existing",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"All room contents are also deleted with the room. This action cannot be undone.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Action menu for room “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Delete room",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Manage room members",
 	"pages.rooms.administration.error.load": "The room list could not be loaded.",
+	"pages.rooms.administration.error.delete": "The room could not be deleted.",
 	"pages.rooms.administration.pageTitle": "Manage rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
