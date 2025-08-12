@@ -97,6 +97,24 @@ describe("useRoomDetailsStore", () => {
 			});
 		});
 
+		describe('when fetching room fails with 403 and type "LOCKED_ROOM"', () => {
+			it("should set lockedRoomName to the error message", async () => {
+				const { store } = setup();
+				expect(store.isLoading).toBe(true);
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				mockErrorResponse({
+					code: 403,
+					type: "LOCKED_ROOM",
+					message: "Locker Room",
+				});
+
+				await store.fetchRoom("room-id");
+
+				expect(store.lockedRoomName).toBe("Locker Room");
+				expect(store.isLoading).toBe(false);
+			});
+		});
+
 		describe("when fetching room fails with other errors", () => {
 			it("should throw an error", async () => {
 				const { store } = setup();
