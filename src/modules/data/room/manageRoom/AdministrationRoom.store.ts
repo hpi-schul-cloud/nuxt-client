@@ -6,6 +6,7 @@ import { printFromStringUtcToFullDate } from "@/plugins/datetime";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { schoolsModule } from "@/store/store-accessor";
+import { useRoomMembersStore } from "@data-room";
 
 export const useAdministrationRoomStore = defineStore(
 	"administrationRoomStore",
@@ -16,8 +17,10 @@ export const useAdministrationRoomStore = defineStore(
 		const isLoading = ref(true);
 		const roomList = ref<RoomStatsItemResponse[]>([]);
 		const isEmptyList = ref(false);
+		const isRoomDetailsVisible = ref(false);
 		const userSchoolName = computed(() => schoolsModule.getSchool.name);
 		const userSchoolId = computed(() => schoolsModule.getSchool.id);
+		const { fetchMembers } = useRoomMembersStore();
 
 		const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
 			const currentUserSchoolName = userSchoolName.value;
@@ -68,6 +71,10 @@ export const useAdministrationRoomStore = defineStore(
 			}
 		};
 
+		const fetchRoomDetails = async (roomId: string) => {
+			await fetchMembers(roomId);
+		};
+
 		const deleteRoom = async (roomId: string) => {
 			try {
 				isLoading.value = true;
@@ -85,9 +92,11 @@ export const useAdministrationRoomStore = defineStore(
 		return {
 			isLoading,
 			isEmptyList,
+			isRoomDetailsVisible,
 			roomList,
 			deleteRoom,
 			fetchRooms,
+			fetchRoomDetails,
 			userSchoolId,
 		};
 	}

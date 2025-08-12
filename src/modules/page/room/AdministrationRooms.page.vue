@@ -17,7 +17,19 @@
 			</EmptyState>
 		</template>
 		<template v-else>
-			<RoomAdminTable :show-select="false" :header-bottom="headerBottom" />
+			<RoomAdminTable
+				v-if="!isRoomDetailsVisible"
+				:show-select="false"
+				:header-bottom="headerBottom"
+			/>
+			<MembersTable
+				v-else
+				:header-bottom="headerBottom"
+				:show-select="false"
+				:members-info-text="
+					t('pages.rooms.administration.table.membersInfoText')
+				"
+			/>
 		</template>
 	</DefaultWireframe>
 </template>
@@ -27,7 +39,7 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
 import { computed, ComputedRef, onMounted, ref } from "vue";
-import { RoomAdminTable } from "@feature-room";
+import { RoomAdminTable, MembersTable } from "@feature-room";
 import { useAdministrationRoomStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
@@ -37,7 +49,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 const { t } = useI18n();
 
 const adminRoomStore = useAdministrationRoomStore();
-const { isEmptyList } = storeToRefs(adminRoomStore);
+const { isEmptyList, isRoomDetailsVisible } = storeToRefs(adminRoomStore);
 const { fetchRooms } = adminRoomStore;
 
 const header = ref<HTMLElement | null>(null);
