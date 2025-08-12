@@ -266,7 +266,7 @@ export default {
 				},
 				{
 					title: this.$t("pages.administration.school.index.title"),
-					href: "/administration/school-settings",
+					to: "/administration/school-settings",
 				},
 				{
 					title: this.$t("pages.administration.ldap.index.title"),
