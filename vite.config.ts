@@ -82,10 +82,10 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
 		css: {
 			preprocessorOptions: {
 				sass: {
-					api: "modern-compiler",
+					// Add Sass options here if needed
 				},
 				scss: {
-					api: "modern-compiler",
+					// Add SCSS options here if needed
 				},
 			},
 		},
