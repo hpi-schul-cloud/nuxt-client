@@ -1,17 +1,13 @@
-import { createPinia, setActivePinia } from "pinia";
-import { useRoomDetailsStore, RoomVariant } from "./RoomDetails.store";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { AxiosInstance } from "axios";
-import * as serverApi from "@/serverApi/v3/api";
 import { useApplicationError } from "@/composables/application-error.composable";
-import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
-import {
-	apiResponseErrorFactory,
-	axiosErrorFactory,
-	mockApiResponse,
-} from "@@/tests/test-utils";
+import * as serverApi from "@/serverApi/v3/api";
 import { RoomColor } from "@/serverApi/v3/api";
 import { RoomUpdateParams } from "@/types/room/Room";
+import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { apiResponseErrorFactory, mockApiResponse } from "@@/tests/test-utils";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { AxiosInstance } from "axios";
+import { createPinia, setActivePinia } from "pinia";
+import { RoomVariant, useRoomDetailsStore } from "./RoomDetails.store";
 
 vi.mock("@/utils/api");
 const mockedMapAxiosErrorToResponseError = vi.mocked(
@@ -20,21 +16,6 @@ const mockedMapAxiosErrorToResponseError = vi.mocked(
 
 vi.mock("@/composables/application-error.composable");
 const mockedCreateApplicationError = vi.mocked(useApplicationError);
-
-const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
-	const expectedPayload = apiResponseErrorFactory.build({
-		message,
-		code,
-	});
-	const responseError = axiosErrorFactory.build({
-		response: { data: expectedPayload },
-	});
-
-	return {
-		responseError,
-		expectedPayload,
-	};
-};
 
 describe("useRoomDetailsStore", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
@@ -59,24 +40,31 @@ describe("useRoomDetailsStore", () => {
 	});
 
 	afterEach(() => {
-		vi.clearAllMocks();
+		vi.resetAllMocks();
 	});
 
-	const setup = (
-		options: { errorCode: number } = {
-			errorCode: 404,
-		}
-	) => {
+	const setup = () => {
 		const store = useRoomDetailsStore();
 
-		const { expectedPayload } = setupErrorResponse();
-		if (options.errorCode !== 404) {
-			expectedPayload.code = options.errorCode;
-		}
+		return { store };
+	};
+
+	const mockErrorResponse = ({
+		code,
+		type,
+		message,
+	}: {
+		code: number;
+		type?: string;
+		message?: string;
+	}) => {
+		const expectedPayload = apiResponseErrorFactory.build({
+			code,
+			type,
+			message,
+		});
 
 		mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
-
-		return { store };
 	};
 
 	describe("fetchRoom", () => {
@@ -99,9 +87,8 @@ describe("useRoomDetailsStore", () => {
 			it("should set roomVariant to COURSE_ROOM", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue({
-					code: 404,
-				});
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				mockErrorResponse({ code: 404 });
 
 				await store.fetchRoom("room-id");
 
@@ -112,11 +99,9 @@ describe("useRoomDetailsStore", () => {
 
 		describe("when fetching room fails with other errors", () => {
 			it("should throw an error", async () => {
-				const { store } = setup({ errorCode: 401 });
+				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue({
-					code: 401,
-				});
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
 
 				await expect(store.fetchRoom("room-id")).rejects.toThrow();
 				expect(store.isLoading).toBe(false);
