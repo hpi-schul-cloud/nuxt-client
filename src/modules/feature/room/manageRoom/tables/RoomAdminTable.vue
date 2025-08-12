@@ -3,18 +3,13 @@
 		:items="roomList"
 		:header-bottom="headerBottom"
 		:table-headers="tableHeaders"
-		:show-select="true"
 		aria-label-name-key="name"
 		select-item-key="roomId"
 		data-testid="room-admin-table"
-		:external-selected-ids="selectedIds"
-		@update:selected-ids="onUpdateSelectedIds"
 	>
-		<template #[`action-menu-items`]> &nbsp; </template>
-
-		<template #[`item.owner`]="{ item }">
+		<template #[`item.owner`]="{ item }: RoomAdminTableItem">
 			<span>
-				<v-icon
+				<VIcon
 					v-if="!item.owner"
 					:icon="mdiAlert"
 					color="warning"
@@ -26,29 +21,61 @@
 			</span>
 		</template>
 
-		<template #[`item.actions`]="{ item }">
+		<template #[`item.actions`]="{ item }: RoomAdminTableItem">
 			<KebabMenu
-				:data-testid="`kebab-menu-${item.id}`"
+				:data-testid="`kebab-menu-room-${item.roomId}`"
 				:aria-label="
 					t('pages.rooms.administration.table.row.actionMenu.ariaLabel', {
 						roomName: item.name,
 					})
 				"
 			>
-				&nbsp;
+				<KebabMenuActionRoomMembers
+					:members-info-text="
+						t('pages.rooms.administration.table.actionMenu.manageRoom')
+					"
+				/>
+				<KebabMenuAction
+					v-if="userSchoolId === item.schoolId"
+					:icon="mdiTrashCanOutline"
+					:data-testid="`menu-delete-room-${item.roomId}`"
+					@click="onDeleteRoom(item)"
+				>
+					{{ t("pages.rooms.administration.table.actionMenu.delete") }}
+				</KebabMenuAction>
 			</KebabMenu>
 		</template>
 	</DataTable>
+	<ConfirmationDialog>
+		<template #alert>
+			<WarningAlert data-testid="warning-alert">
+				{{ t("pages.rooms.administration.table.delete.infoMessage") }}
+			</WarningAlert>
+		</template>
+	</ConfirmationDialog>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { DataTable } from "@ui-data-table";
 import { useAdministrationRoomStore } from "@data-room";
-import { KebabMenu } from "@ui-kebab-menu";
+import {
+	KebabMenu,
+	KebabMenuAction,
+	KebabMenuActionRoomMembers,
+} from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
-import { mdiAlert } from "@icons/material";
+import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
 import { computed } from "vue";
+import {
+	useConfirmationDialog,
+	ConfirmationDialog,
+} from "@ui-confirmation-dialog";
+import { RoomStatsItemResponse } from "@/serverApi/v3";
+import { WarningAlert } from "@ui-alert";
+import { DataTableHeader } from "vuetify";
+
+type RoomAdminTableItem = { item: RoomStatsItemResponse };
 
 type Props = {
 	headerBottom?: number;
@@ -59,16 +86,39 @@ withDefaults(defineProps<Props>(), {
 	headerBottom: 0,
 	showSelect: true,
 });
+
 const { t } = useI18n();
+const { askConfirmation } = useConfirmationDialog();
+
 const administrationRoomStore = useAdministrationRoomStore();
+const { deleteRoom } = administrationRoomStore;
+const { roomList, userSchoolId } = storeToRefs(administrationRoomStore);
 
-const { roomList, selectedIds } = storeToRefs(administrationRoomStore);
+const confirmDeletion = async (roomName: string) => {
+	const shouldDelete = await askConfirmation({
+		message: t("pages.room.itemDelete.text", {
+			itemType: t("common.labels.room"),
+			itemTitle: roomName,
+		}),
+		confirmActionLangKey: "common.actions.delete",
+	});
 
-const onUpdateSelectedIds = (ids: string[]) => {
-	selectedIds.value = ids;
+	return shouldDelete;
 };
 
-const tableHeaders = computed(() => [
+const onDeleteRoom = async (item: RoomStatsItemResponse) => {
+	const shouldDelete = await confirmDeletion(item.name);
+	if (shouldDelete) {
+		await deleteRoom(item.roomId);
+	}
+};
+
+type RoomTableHeaderKey = keyof RoomStatsItemResponse | "actions";
+type RoomTableHeader = Omit<DataTableHeader, "key"> & {
+	key: RoomTableHeaderKey;
+};
+
+const tableHeaders = computed((): RoomTableHeader[] => [
 	{
 		title: t("pages.rooms.administration.table.header.roomName"),
 		key: "name",
@@ -80,14 +130,17 @@ const tableHeaders = computed(() => [
 	{
 		title: t("pages.rooms.administration.table.header.totalMember"),
 		key: "totalMembers",
+		align: "end",
 	},
 	{
 		title: t("pages.rooms.administration.table.header.internalMember"),
 		key: "internalMembers",
+		align: "end",
 	},
 	{
 		title: t("pages.rooms.administration.table.header.externalMember"),
 		key: "externalMembers",
+		align: "end",
 	},
 	{
 		title: t("pages.rooms.administration.table.header.creationDate"),

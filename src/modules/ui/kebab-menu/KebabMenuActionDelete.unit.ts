@@ -46,6 +46,12 @@ describe("KebabMenuActionMoveDown Component", () => {
 			expect(action.exists()).toBe(true);
 		});
 
+		it("should render title", async () => {
+			const wrapper = setup();
+
+			expect(wrapper.text()).toContain("components.board.action.delete");
+		});
+
 		it("should open askConfirmationDialog on click", () => {
 			const wrapper = setup();
 
