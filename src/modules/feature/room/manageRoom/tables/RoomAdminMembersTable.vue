@@ -71,6 +71,7 @@ import {
 	useRoomAuthorization,
 	useRoomMembersStore,
 } from "@data-room";
+import { ChangeRole } from "@feature-room";
 import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
@@ -100,12 +101,6 @@ const { askConfirmation } = useConfirmationDialog();
 
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
-
-// const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
-// 	const isNotCurrentUser = userId !== authModule.getUser?.id;
-// 	const isNotRoomOwner = !isRoomOwner(userId);
-// 	return isNotCurrentUser && isNotRoomOwner;
-// };
 
 const onDialogClose = () => {
 	isChangeRoleDialogOpen.value = false;

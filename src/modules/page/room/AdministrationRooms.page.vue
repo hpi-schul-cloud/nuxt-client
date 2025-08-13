@@ -1,5 +1,9 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs">
+	<DefaultWireframe
+		max-width="full"
+		:breadcrumbs="breadcrumbs"
+		:fab-items="fabAction"
+	>
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-items-center">
@@ -9,6 +13,11 @@
 				</div>
 			</div>
 		</template>
+
+		<div v-if="isRoomDetailsVisible" class="mt-12">
+			{{ t("pages.rooms.administration.roomDetail.infoText") }}
+		</div>
+
 		<template v-if="isEmptyList">
 			<EmptyState :title="t('pages.rooms.emptyState')">
 				<template #media>
@@ -45,6 +54,7 @@ import { storeToRefs } from "pinia";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { mdiPlus } from "@icons/material";
 
 const { t } = useI18n();
 
@@ -76,5 +86,16 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 			disabled: true,
 		},
 	];
+});
+
+const fabAction = computed(() => {
+	{
+		return {
+			icon: mdiPlus,
+			title: t("pages.rooms.members.add"),
+			ariaLabel: t("pages.rooms.members.add"),
+			dataTestId: "fab-add-members",
+		};
+	}
 });
 </script>

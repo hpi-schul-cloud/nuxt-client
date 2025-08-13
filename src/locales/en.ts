@@ -2081,6 +2081,8 @@ export default {
 	"pages.rooms.administration.error.load": "The room list could not be loaded.",
 	"pages.rooms.administration.error.delete": "The room could not be deleted.",
 	"pages.rooms.administration.pageTitle": "Manage rooms",
+	"pages.rooms.administration.roomDetail.infoText":
+		"Room members from other schools are shown anonymously for data protection reasons (exception: member with the “Own” room authorization).",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",
