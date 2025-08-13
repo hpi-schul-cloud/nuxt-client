@@ -40,26 +40,19 @@ export const useSocketConnection = (
 		instance = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
 			path: "/board-collaboration",
 			withCredentials: true,
-			transports: ["websocket"],
+			reconnectionAttempts: 20,
 		});
 
 		instance.on("connect", async function () {
 			logger.log("connected");
 			if (retryCount > 0) {
-				const url = window.location.href;
-				const boardId =
-					url.match(/boards\/([0-9a-fA-F]{24})/)?.[1] ?? "unknown";
-				const data = {
-					type: "connect after retry",
-					message: "Connection restored after retry",
-					url,
-					boardId,
-					retryCount,
-				};
-				reportBoardError(data);
+				reportBoardError(
+					"connect after retry",
+					"Connection restored after retry"
+				);
+				retryCount = 0;
 			}
 
-			retryCount = 0;
 			if (isInitialConnection.value) return;
 			if (timeoutFn.isPending?.value) {
 				timeoutFn.stop();
@@ -84,27 +77,21 @@ export const useSocketConnection = (
 		});
 
 		instance.on("connect_error", (error: Error) => {
-			const { type, description, message } = error as unknown as {
+			const { type, message } = error as unknown as {
 				type: string;
-				description: string;
 				message: string;
 			};
 
-			logger.log("connect_error description", type, description, message);
-			const url = window.location.href;
-			const boardId = url.match(/boards\/([0-9a-fA-F]{24})/)?.[1] ?? "unknown";
-			const data = {
-				type: "connect_error",
-				message: message ?? type,
-				url,
-				boardId,
-				retryCount,
-			};
-			reportBoardError(data);
-			logger.log(data);
+			reportBoardError("connect_error", message ?? type);
+
+			if (retryCount > 20) {
+				reportBoardError("connect_error", "Max reconnection attempts reached");
+				showFailure(t("error.4500"));
+				retryCount = 0;
+				return;
+			}
 
 			retryCount++;
-			// showFailure(t("error.4500"));
 		});
 	}
 
@@ -134,9 +121,19 @@ export const useSocketConnection = (
 		if (timeoutFn.isPending.value) timeoutFn.stop();
 	};
 
-	const reportBoardError = (data) => {
+	const reportBoardError = (type: string, message: string) => {
+		const url = window.location.href;
+		const boardId = url.match(/boards\/([0-9a-fA-F]{24})/)?.[1] ?? "unknown";
+		const dataWithBoardId = {
+			type,
+			message,
+			url,
+			boardId,
+			retryCount,
+		};
+
 		boardErrorReportApi
-			.boardErrorReportControllerReportError(data)
+			.boardErrorReportControllerReportError(dataWithBoardId)
 			.catch((err) => {
 				logger.error("Failed to report error", err);
 			});
