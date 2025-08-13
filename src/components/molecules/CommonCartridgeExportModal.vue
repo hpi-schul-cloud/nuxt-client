@@ -134,6 +134,7 @@
 					<v-btn
 						v-if="step === 0"
 						data-testid="dialog-next-btn"
+						class="ml-2"
 						color="primary"
 						variant="flat"
 						@click="onNext"
@@ -143,6 +144,7 @@
 					<v-btn
 						v-if="step === 1"
 						data-testid="dialog-export-btn"
+						class="ml-2"
 						color="primary"
 						variant="flat"
 						@click="onExport"
