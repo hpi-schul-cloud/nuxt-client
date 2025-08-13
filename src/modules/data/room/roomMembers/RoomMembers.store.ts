@@ -42,6 +42,22 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		);
 	});
 
+	const roomMembersForAdmins = computed(() => {
+		return roomMembersWithoutApplicants.value.map((member) => {
+			const isExternal = member.schoolName !== ownSchool.name;
+			if (!isExternal) return member;
+			const anonymizedName = "(anonymisiert)";
+
+			return {
+				...member,
+				isSelectable: !isExternal,
+				firstName: anonymizedName,
+				lastName: anonymizedName,
+				fullName: anonymizedName,
+			};
+		});
+	});
+
 	const isLoading = ref<boolean>(false);
 	const ownSchool = {
 		id: schoolsModule.getSchool.id,
@@ -91,7 +107,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					lastName: "Mathe",
 					roomRoleName: RoleName.Roomviewer,
 					schoolRoleNames: [RoleName.Student],
-					schoolName: "Paul-Gerhardt-Gymnasium",
+					schoolName: "Some other school",
 					fullName: "Marla Mathe",
 					isSelectable: true,
 					displayRoomRole: roomRole[RoleName.Roomviewer],
@@ -127,7 +143,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					lastName: "Vertretung",
 					roomRoleName: RoleName.Roomviewer,
 					schoolRoleNames: [RoleName.Teacher],
-					schoolName: "Paul-Gerhardt-Gymnasium",
+					schoolName: "Some other school",
 					fullName: "Vera Vertretung",
 					isSelectable: true,
 					displayRoomRole: roomRole[RoleName.Roomviewer],
@@ -163,7 +179,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					lastName: "Vertretung",
 					roomRoleName: RoleName.Roomviewer,
 					schoolRoleNames: [RoleName.Teacher],
-					schoolName: "Paul-Gerhardt-Gymnasium",
+					schoolName: "Some other school",
 					fullName: "Vera Vertretung",
 					isSelectable: true,
 					displayRoomRole: roomRole[RoleName.Roomviewer],
@@ -604,6 +620,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		isCurrentUserStudent,
 		isLoading,
 		roomMembers,
+		roomMembersForAdmins,
 		roomMembersWithoutApplicants,
 		roomApplicants,
 		potentialRoomMembers,

@@ -34,7 +34,7 @@
 					:members-info-text="
 						t('pages.rooms.administration.table.actionMenu.manageRoom')
 					"
-					@click="onManageRoom(item.roomId)"
+					@click="onManageRoom(item)"
 				/>
 				<KebabMenuAction
 					v-if="userSchoolId === item.schoolId"
@@ -93,9 +93,7 @@ const { askConfirmation } = useConfirmationDialog();
 
 const administrationRoomStore = useAdministrationRoomStore();
 const { deleteRoom, fetchRoomDetails } = administrationRoomStore;
-const { roomList, userSchoolId, isRoomDetailsVisible } = storeToRefs(
-	administrationRoomStore
-);
+const { roomList, userSchoolId } = storeToRefs(administrationRoomStore);
 
 const confirmDeletion = async (roomName: string) => {
 	const shouldDelete = await askConfirmation({
@@ -116,9 +114,8 @@ const onDeleteRoom = async (item: RoomStatsItemResponse) => {
 	}
 };
 
-const onManageRoom = (roomId: string) => {
-	fetchRoomDetails(roomId);
-	isRoomDetailsVisible.value = true;
+const onManageRoom = (room: RoomStatsItemResponse) => {
+	fetchRoomDetails({ roomId: room.roomId, roomName: room.name });
 };
 
 type RoomTableHeaderKey = keyof RoomStatsItemResponse | "actions";

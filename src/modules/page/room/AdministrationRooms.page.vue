@@ -22,7 +22,7 @@
 				:show-select="false"
 				:header-bottom="headerBottom"
 			/>
-			<MembersTable
+			<RoomAdminMembersTable
 				v-else
 				:header-bottom="headerBottom"
 				:show-select="false"
@@ -39,7 +39,7 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
 import { computed, ComputedRef, onMounted, ref } from "vue";
-import { RoomAdminTable, MembersTable } from "@feature-room";
+import { RoomAdminTable, RoomAdminMembersTable } from "@feature-room";
 import { useAdministrationRoomStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
@@ -49,11 +49,12 @@ import { buildPageTitle } from "@/utils/pageTitle";
 const { t } = useI18n();
 
 const adminRoomStore = useAdministrationRoomStore();
-const { isEmptyList, isRoomDetailsVisible } = storeToRefs(adminRoomStore);
+const { isEmptyList, selectedRoom } = storeToRefs(adminRoomStore);
 const { fetchRooms } = adminRoomStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
+const isRoomDetailsVisible = computed(() => selectedRoom.value !== null);
 
 onMounted(async () => {
 	await fetchRooms();
