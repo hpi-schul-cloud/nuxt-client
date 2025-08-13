@@ -377,63 +377,67 @@ describe("GeneralSettings", () => {
 			expect(file?.name).toBe(school.logo?.name);
 		});
 
-		it("should include logo in the update payload", async () => {
-			const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
-			const logoSpy = vi
-				.spyOn(schoolsModule, "setSchoolLogo")
-				.mockResolvedValue();
-			const { wrapper } = setup();
+		describe("when uploading a new logo", () => {
+			it("should include logo in the update payload", async () => {
+				const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
+				const logoSpy = vi
+					.spyOn(schoolsModule, "setSchoolLogo")
+					.mockResolvedValue();
+				const { wrapper } = setup();
 
-			const file = new File(["dummy-content"], "school-logo.png", {
-				type: "image/png",
-			});
+				const file = new File(["dummy-content"], "school-logo.png", {
+					type: "image/png",
+				});
 
-			const fileInput = wrapper.findComponent<typeof VFileInput>(
-				'[data-testid="school-logo-input"]'
-			);
-			fileInput.setValue(file);
+				const fileInput = wrapper.findComponent<typeof VFileInput>(
+					'[data-testid="school-logo-input"]'
+				);
+				fileInput.setValue(file);
 
-			const buttonElement = wrapper.findComponent(
-				"[data-testid='save-general-setting']"
-			);
-			await buttonElement.trigger("click");
+				const buttonElement = wrapper.findComponent(
+					"[data-testid='save-general-setting']"
+				);
+				await buttonElement.trigger("click");
 
-			expect(toBase64).toHaveBeenCalledWith(file);
-			expect(updateSpy).toHaveBeenCalledWith(
-				expect.objectContaining({
-					props: expect.objectContaining({
-						logo: {
-							dataUrl: "mock-base64-data",
-							name: "school-logo.png",
-						},
-					}),
-				})
-			);
-			expect(logoSpy).toHaveBeenCalledWith({
-				dataUrl: "mock-base64-data",
-				name: "school-logo.png",
+				expect(toBase64).toHaveBeenCalledWith(file);
+				expect(updateSpy).toHaveBeenCalledWith(
+					expect.objectContaining({
+						props: expect.objectContaining({
+							logo: {
+								dataUrl: "mock-base64-data",
+								name: "school-logo.png",
+							},
+						}),
+					})
+				);
+				expect(logoSpy).toHaveBeenCalledWith({
+					dataUrl: "mock-base64-data",
+					name: "school-logo.png",
+				});
 			});
 		});
 
-		it("should not call setSchoolLogo if no logo is provided", async () => {
-			const logoSpy = vi
-				.spyOn(schoolsModule, "setSchoolLogo")
-				.mockResolvedValue();
-			const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
-			const { wrapper } = setup();
+		describe("when saving without provided logo", () => {
+			it("should call setSchoolLogo with empty values", async () => {
+				const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
+				const logoSpy = vi
+					.spyOn(schoolsModule, "setSchoolLogo")
+					.mockResolvedValue();
+				const { wrapper } = setup();
 
-			const fileInput = wrapper.findComponent<typeof VFileInput>(
-				'[data-testid="school-logo-input"]'
-			);
-			fileInput.setValue(null);
+				const fileInput = wrapper.findComponent<typeof VFileInput>(
+					'[data-testid="school-logo-input"]'
+				);
+				fileInput.setValue(null);
 
-			const buttonElement = wrapper.findComponent(
-				"[data-testid='save-general-setting']"
-			);
-			await buttonElement.trigger("click");
+				const buttonElement = wrapper.findComponent(
+					"[data-testid='save-general-setting']"
+				);
+				await buttonElement.trigger("click");
 
-			expect(logoSpy).toHaveBeenCalledWith({ dataUrl: "", name: "" });
-			expect(updateSpy).toHaveBeenCalled();
+				expect(logoSpy).toHaveBeenCalledWith({ dataUrl: "", name: "" });
+				expect(updateSpy).toHaveBeenCalled();
+			});
 		});
 	});
 
