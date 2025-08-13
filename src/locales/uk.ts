@@ -980,9 +980,9 @@ export default {
 	"components.roomForm.labels.timePeriod.to": "Період до",
 	"components.roomForm.labels.videoConference.title": "Відеоконференції",
 	"components.roomForm.labels.videoConference.label":
-		"Дозволити відеоконференції для редакторів",
+		"Члени кімнати з правом «Редагувати» також можуть додавати та запускати відеоконференці.",
 	"components.roomForm.labels.videoConference.helperText":
-		"Учасники кімнати з правами «Редагувати» можуть додавати і починати відеоконференції.",
+		"Незалежно від цього, члени кімнати з правом «Управляти» або «Володіти» завжди можуть додавати та запускати відеоконференції.",
 	"components.roomForm.validation.generalSaveError":
 		"Виникла помилка при збереженні. Будь ласка, перевірте свої записи та спробуйте ще раз.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -2108,10 +2108,16 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Головна школа",
 	"pages.rooms.administration.table.header.actions": "Дії",
 	"pages.rooms.administration.table.row.owner.notExist": "Не існує",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"Видалення кімнати також призведе до видалення всіх її вмістів. Цю дію не можна скасувати.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Меню дій для кімнати “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Видалити кімнату",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Керувати учасниками кімнати",
 	"pages.rooms.administration.error.load":
 		"Не вдалося завантажити список кімнат.",
+	"pages.rooms.administration.error.delete": "Кімнату не вдалося видалити.",
 	"pages.rooms.administration.pageTitle": "Керування кімнатами",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

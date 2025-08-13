@@ -956,9 +956,9 @@ export default {
 	"components.roomForm.labels.timePeriod.to": "Time period to",
 	"components.roomForm.labels.videoConference.title": "Video conferences",
 	"components.roomForm.labels.videoConference.label":
-		"Allow video conferences for editors",
+		"Room members with ‘Edit’ room permissions can also add and start video conferences.",
 	"components.roomForm.labels.videoConference.helperText":
-		"Room members with 'Edit' authorization can add and start video conferences.",
+		"Independently of this, room members with ‘Administer’ or ‘Own’ room permissions can always add and start video conferences.",
 	"components.roomForm.validation.generalSaveError":
 		"An error occurred while saving. Please check your inputs and try again.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -1994,7 +1994,7 @@ export default {
 	"pages.rooms.members.roleChange.Roomadmin.label":
 		'Same permissions as "Edit", plus add and remove other members, change their room permissions and edit the room',
 	"pages.rooms.members.roleChange.Roomowner.label":
-		"Same permissions as “ Administer”, additionally delete room",
+		"Same permissions as “Administer”, additionally delete room",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Attention: Only one person in the room can receive this permission!",
 	"pages.rooms.members.roleChange.dialogTitle.handOver":
@@ -2071,9 +2071,15 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Main school",
 	"pages.rooms.administration.table.header.actions": "Actions",
 	"pages.rooms.administration.table.row.owner.notExist": "Not existing",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"All room contents are also deleted with the room. This action cannot be undone.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Action menu for room “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Delete room",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Manage room members",
 	"pages.rooms.administration.error.load": "The room list could not be loaded.",
+	"pages.rooms.administration.error.delete": "The room could not be deleted.",
 	"pages.rooms.administration.pageTitle": "Manage rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
