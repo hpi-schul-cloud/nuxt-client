@@ -988,9 +988,9 @@ export default {
 	"components.roomForm.labels.timePeriod.to": "Periodo de tiempo hasta",
 	"components.roomForm.labels.videoConference.title": "Videoconferencias",
 	"components.roomForm.labels.videoConference.label":
-		"Permitir videoconferencias para editores",
+		"Los miembros de la sala con permiso para «editar» también pueden añadir e iniciar videoconferencias.",
 	"components.roomForm.labels.videoConference.helperText":
-		"Los miembros de la sala con autorización para «Editar» pueden añadir e iniciar videoconferencias.",
+		"Independientemente de ello, los miembros de la sala con permiso para «administrar» o «propietario» siempre pueden añadir e iniciar videoconferencias.",
 	"components.roomForm.validation.generalSaveError":
 		"Se ha producido un error al guardar. Por favor, compruebe sus entradas e inténtelo de nuevo.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -2142,10 +2142,16 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Escuela principal",
 	"pages.rooms.administration.table.header.actions": "Acciones",
 	"pages.rooms.administration.table.row.owner.notExist": "No existe",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"Todos los contenidos de la sala también se eliminan con la sala. Esta acción no se puede deshacer.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Menú de acciones para la sala “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Eliminar sala",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Administrar miembros de la sala",
 	"pages.rooms.administration.error.load":
 		"No se pudo cargar la lista de salas.",
+	"pages.rooms.administration.error.delete": "No se pudo eliminar la sala.",
 	"pages.rooms.administration.pageTitle": "Administrar salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

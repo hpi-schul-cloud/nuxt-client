@@ -964,9 +964,9 @@ export default {
 	"components.roomForm.labels.timePeriod.to": "Zeitraum bis",
 	"components.roomForm.labels.videoConference.title": "Videokonferenzen",
 	"components.roomForm.labels.videoConference.label":
-		"Videokonferenzen für Bearbeitende erlauben",
+		"Auch Raum-Mitglieder mit der Berechtigung „Bearbeiten“ dürfen Videokonferenzen hinzufügen und starten.",
 	"components.roomForm.labels.videoConference.helperText":
-		"Raum-Mitglieder mit der Berechtigung „Bearbeiten” dürfen Videokonferenzen hinzufügen und starten.",
+		"Unabhängig davon können Raum-Mitglieder mit der Berechtigung „Verwalten“ oder „Besitzen“ Videokonferenzen immer hinzufügen und starten.",
 	"components.roomForm.validation.generalSaveError":
 		"Beim Speichern ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -2106,10 +2106,17 @@ export default {
 	"pages.rooms.administration.table.header.mainSchool": "Stammschule des Raums",
 	"pages.rooms.administration.table.header.actions": "Aktionen",
 	"pages.rooms.administration.table.row.owner.notExist": "Nicht vorhanden",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"Mit dem Raum werden auch alle Raum-Inhalte gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
 	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
 		"Aktionsmenü für den Raum “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Raum löschen",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Raum-Mitglieder verwalten",
 	"pages.rooms.administration.error.load":
 		"Die Raumliste konnte nicht geladen werden.",
+	"pages.rooms.administration.error.delete":
+		"Der Raum konnte nicht gelöscht werden.",
 	"pages.rooms.administration.pageTitle": "Räume verwalten",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
