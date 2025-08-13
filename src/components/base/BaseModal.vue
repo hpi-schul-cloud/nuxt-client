@@ -67,7 +67,7 @@ const isDialogOpen = computed({
 	width: 95%;
 	min-width: var(--size-content-width-min);
 	max-width: var(--size-content-width-max);
-	max-height: calc(100vh - (2 * 24px));
+	max-height: calc(100vh - 48px);
 	margin: 0 auto;
 	overflow: hidden;
 	background-color: rgba(var(--v-theme-white));

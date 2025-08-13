@@ -18,7 +18,7 @@
 				<div v-if="data.title">
 					<ClassicEditor
 						v-model="data.content"
-						class="mb-4 mt-13-3"
+						class="mb-4 mt-13"
 						:placeholder="
 							$t('components.organisms.FormNews.editor.placeholder')
 						"
@@ -27,7 +27,7 @@
 
 					<transition name="fade">
 						<div v-if="data.content">
-							<p class="mt-13-3">
+							<p class="mt-13">
 								{{ $t("components.organisms.FormNews.label.planned_publish") }}
 							</p>
 							<base-input
