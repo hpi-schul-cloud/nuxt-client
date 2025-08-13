@@ -1,51 +1,23 @@
 <template>
-	<form @submit.prevent="onSave">
+	<VForm ref="roomForm" @submit="onSave">
 		<div>
 			<VTextField
+				ref="roomNameInput"
 				v-model="roomData.name"
 				class="mb-8"
 				:label="t('components.roomForm.labels.roomName')"
-				:error-messages="
-					v$.roomData.name.$errors.map((e: ErrorObject) => unref(e.$message))
-				"
-				data-testid="room-name-input"
+				counter="100"
+				:rules="validationRules"
 			/>
 			<div class="mb-8">
-				<RoomColorPicker
-					v-model:color="roomData.color"
-					@update:color="onUpdateColor"
-				/>
-			</div>
-			<div class="mb-8">
-				<label class="d-flex mb-2">
-					{{ t("components.roomForm.labels.timePeriod") }}
-				</label>
-				<div class="d-flex">
-					<DatePicker
-						:date="roomData.startDate"
-						:min-date="todayISO"
-						:errors="startDateErrors"
-						class="w-50 mr-4"
-						data-testid="room-start-date-input"
-						:aria-label="t('components.roomForm.labels.timePeriod.from')"
-						@update:date="onUpdateStartDate"
-					/>
-					<DatePicker
-						:date="roomData.endDate"
-						:min-date="todayISO"
-						class="w-50 ml-4"
-						data-testid="room-end-date-input"
-						:aria-label="t('components.roomForm.labels.timePeriod.to')"
-						@update:date="onUpdateEndDate"
-					/>
-				</div>
+				<RoomColorPicker v-model:color="roomData.color" />
 			</div>
 			<div class="mb-16">
 				<h2 class="mb-1 text-subtitle-1">
 					{{ t("components.roomForm.labels.videoConference.title") }}
 				</h2>
 				<div class="d-flex mt-1">
-					<v-checkbox
+					<VCheckbox
 						:model-value="
 							roomData.features.includes(
 								RoomFeatures.EditorManageVideoconference
@@ -65,7 +37,7 @@
 								</span>
 							</div>
 						</template>
-					</v-checkbox>
+					</VCheckbox>
 				</div>
 			</div>
 		</div>
@@ -89,25 +61,22 @@
 			</VBtn>
 		</div>
 		<ConfirmationDialog />
-	</form>
+	</VForm>
 </template>
 
 <script setup lang="ts">
-import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
-import { containsOpeningTagFollowedByString } from "@/utils/validation";
+import { useOpeningTagValidator } from "@/utils/validation";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { DatePicker } from "@ui-date-time-picker";
-import { ErrorObject, useVuelidate } from "@vuelidate/core";
-import { helpers, maxLength, required } from "@vuelidate/validators";
-import dayjs from "dayjs";
-import { computed, PropType, unref } from "vue";
+import { computed, PropType, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { RoomFeatures } from "@/serverApi/v3";
+import { isNonEmptyString, isOfMaxLength } from "@util-validators";
+import { VCheckbox, VForm } from "vuetify/components";
 
 const props = defineProps({
 	room: {
@@ -121,91 +90,16 @@ const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 
 const roomData = computed(() => props.room);
-const todayISO = computed(() =>
-	dayjs.tz(new Date(), "DD.MM.YYYY", "UTC").format(DATETIME_FORMAT.inputDate)
-);
+const roomForm = useTemplateRef("roomForm");
+const roomNameInput = useTemplateRef("roomNameInput");
 
-const isStartBeforeEndDate = (
-	startDate: string | undefined,
-	endDate: string | undefined
-) => {
-	if (!startDate || !endDate) return true;
-	return new Date(startDate) <= new Date(endDate);
-};
-
-const areDatesSameDay = (
-	startDate: string | undefined,
-	endDate: string | undefined
-) => {
-	if (!startDate || !endDate) return true;
-
-	const start = new Date(startDate);
-	const end = new Date(endDate);
-	return (
-		start.getFullYear() === end.getFullYear() &&
-		start.getMonth() === end.getMonth() &&
-		start.getDate() === end.getDate()
-	);
-};
-
-const isStartBeforeOrEqualToEndDate = (
-	startDate: string | undefined,
-	endDate: string | undefined
-) => {
-	return (
-		isStartBeforeEndDate(startDate, endDate) ||
-		areDatesSameDay(startDate, endDate)
-	);
-};
-
-const startBeforeEndDateValidator = (endDate: string | undefined) => {
-	return helpers.withParams(
-		{ type: "startBeforeEndDate", value: endDate },
-		helpers.withMessage(
-			t("components.roomForm.validation.timePeriod.startBeforeEnd"),
-			(startDate: string) => isStartBeforeOrEqualToEndDate(startDate, endDate)
-		)
-	);
-};
-
-const validationRules = computed(() => ({
-	roomData: {
-		name: {
-			maxLength: helpers.withMessage(
-				t("common.validation.tooLong"),
-				maxLength(100)
-			),
-			containsOpeningTag: helpers.withMessage(
-				t("common.validation.containsOpeningTag"),
-				(name: string) => !containsOpeningTagFollowedByString(name)
-			),
-			required: helpers.withMessage(t("common.validation.required2"), required),
-		},
-		startDate: {
-			startBeforeEndDate: startBeforeEndDateValidator(roomData.value.endDate),
-		},
-	},
-}));
-
-const v$ = useVuelidate(
-	validationRules,
-	{ roomData },
-	{ $lazy: true, $autoDirty: true }
-);
-
-const startDateErrors = computed(() => v$.value.roomData.startDate.$errors);
-
-const onUpdateColor = () => {
-	v$.value.$touch();
-};
-
-const onUpdateStartDate = (newDate: string) => {
-	roomData.value.startDate = newDate;
-};
-
-const onUpdateEndDate = (newDate: string) => {
-	roomData.value.endDate = newDate;
-};
+// Todo: make error messages more clear
+const { validateOnOpeningTag } = useOpeningTagValidator();
+const validationRules = [
+	isOfMaxLength(100)(t("common.validation.tooLong")),
+	validateOnOpeningTag,
+	isNonEmptyString(t("common.validation.nonEmptyString")),
+];
 
 const onToggleVideoConferenceFeature = (isChecked: boolean | null) => {
 	const features = roomData.value.features;
@@ -220,14 +114,22 @@ const onToggleVideoConferenceFeature = (isChecked: boolean | null) => {
 };
 
 const onSave = async () => {
-	const valid = await v$.value.$validate();
+	if (roomForm.value === null) return;
+
+	const { valid, errors } = await roomForm.value.validate();
 	if (valid) {
 		emit("save", { room: roomData.value });
+		// Workaround for Vuetify 3.9.4 fast-fail inputs errors will not be announced to screen readers on submitting
+		// More Information: https://github.com/vuetifyjs/vuetify/issues/21920
+	} else {
+		console.log("errors", errors);
+		roomNameInput.value?.focus();
 	}
 };
 
 const onCancel = async () => {
-	const noChangesMade = !v$.value.$anyDirty;
+	// const noChangesMade = !v$.value.$anyDirty;
+	const noChangesMade = true; // check how to this in vuetify
 	if (noChangesMade) emit("cancel");
 
 	const shouldCancel = await askConfirmation({
