@@ -1,3 +1,4 @@
+import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import {
@@ -15,6 +16,7 @@ import * as socketModule from "socket.io-client";
 import { Mock } from "vitest";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
+vi.mock("axios");
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
@@ -27,6 +29,13 @@ const mockUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("../boardActions/boardSocketApi.composable");
 vi.mock("../boardActions/boardRestApi.composable");
+vi.mock("@/serverApi/v3", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@/serverApi/v3")>();
+	return {
+		...actual,
+		BoardErrorReportApiFactory: vi.fn(),
+	};
+});
 
 vi.mock("@vueuse/shared", () => {
 	return {
@@ -69,7 +78,8 @@ describe("socket.ts", () => {
 	let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	// We need to set following lines in the outmost describe level since the socket event handlers that set and use these
 	// values are created only once when the module is loaded and initially used.
-	let socketHandlers: Record<string, () => void> | undefined = undefined;
+	let socketHandlers: Record<string, (arg?: unknown) => void> | undefined =
+		undefined;
 	let boardStore: ReturnType<typeof useBoardStore>;
 	let cardStore: ReturnType<typeof useCardStore>;
 
@@ -119,6 +129,7 @@ describe("socket.ts", () => {
 	function getEventCallbacks() {
 		socketHandlers = socketHandlers ?? {
 			connect: getEventCallback("connect"),
+			connect_error: getEventCallback("connect_error"),
 			disconnect: getEventCallback("disconnect"),
 		};
 		return socketHandlers;
@@ -136,6 +147,15 @@ describe("socket.ts", () => {
 			doInitializeTimeout?: boolean;
 		} = {}
 	) => {
+		const boardErrorReportApiMock =
+			createMock<ReturnType<typeof BoardErrorReportApiFactory>>();
+		(BoardErrorReportApiFactory as Mock).mockReturnValue(
+			boardErrorReportApiMock
+		);
+		boardErrorReportApiMock.boardErrorReportControllerReportError.mockResolvedValue(
+			true
+		);
+
 		const { isInitialConnection, doInitializeTimeout } = {
 			isInitialConnection: true,
 			doInitializeTimeout: false,
@@ -152,7 +172,14 @@ describe("socket.ts", () => {
 		if (options.doInitializeTimeout !== undefined) {
 			initializeTimeout(doInitializeTimeout);
 		}
-		return { eventCallbacks, emitOnSocket, emitWithAck, disconnectSocket };
+
+		return {
+			eventCallbacks,
+			emitOnSocket,
+			emitWithAck,
+			disconnectSocket,
+			boardErrorReportApiMock,
+		};
 	};
 
 	describe("connect event", () => {
@@ -206,6 +233,25 @@ describe("socket.ts", () => {
 			);
 		});
 
+		it("should report successful connection restoration after retry", () => {
+			const { eventCallbacks, boardErrorReportApiMock } = setup({
+				doInitializeTimeout: true,
+			});
+
+			const mockError = { type: "connect_error", message: "Connection failed" };
+			eventCallbacks.connect_error(mockError);
+			eventCallbacks.connect();
+
+			expect(
+				boardErrorReportApiMock.boardErrorReportControllerReportError
+			).toHaveBeenCalledWith(
+				expect.objectContaining({
+					type: "connect after retry",
+					message: "Connection restored after retry",
+				})
+			);
+		});
+
 		describe("when board exists", () => {
 			it("should call reloadBoard", () => {
 				const { eventCallbacks } = setup({
@@ -235,6 +281,48 @@ describe("socket.ts", () => {
 		it("should showFailure when socket is disconnected", () => {
 			const { eventCallbacks } = setup();
 			eventCallbacks.disconnect();
+
+			expect(mockBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"error.4500"
+			);
+		});
+	});
+
+	describe("connect_error event", () => {
+		it("should report board error and show failure notification", () => {
+			const { eventCallbacks, boardErrorReportApiMock } = setup();
+			boardErrorReportApiMock.boardErrorReportControllerReportError = vi.fn();
+
+			const mockError = { type: "connect_error", message: "Connection failed" };
+			eventCallbacks.connect_error(mockError);
+
+			expect(
+				boardErrorReportApiMock.boardErrorReportControllerReportError
+			).toHaveBeenCalledWith(expect.objectContaining(mockError));
+		});
+
+		it("should retry connection up to 20 times", () => {
+			const { eventCallbacks, boardErrorReportApiMock } = setup();
+			boardErrorReportApiMock.boardErrorReportControllerReportError = vi.fn();
+
+			const mockError = { type: "connect_error", message: "Connection failed" };
+			for (let i = 0; i < 20; i++) {
+				eventCallbacks.connect_error(mockError);
+			}
+
+			expect(
+				boardErrorReportApiMock.boardErrorReportControllerReportError
+			).toHaveBeenCalledWith(expect.objectContaining(mockError));
+		});
+
+		it("should show error after 20 retries", () => {
+			const { eventCallbacks, boardErrorReportApiMock } = setup();
+			boardErrorReportApiMock.boardErrorReportControllerReportError = vi.fn();
+
+			const mockError = { type: "connect_error", message: "Connection failed" };
+			for (let i = 0; i < 22; i++) {
+				eventCallbacks.connect_error(mockError);
+			}
 
 			expect(mockBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"error.4500"
