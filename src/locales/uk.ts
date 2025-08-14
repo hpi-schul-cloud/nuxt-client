@@ -1151,6 +1151,10 @@ export default {
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",
 	"pages.administration.classes.index.add": "Додати клас",
 	"pages.administration.classes.index.title": "Керувати заняттями",
+	"pages.administration.classes.thr.hint.title":
+		"Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.text":
+		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
 	"pages.administration.common.label.archive": "Архів",
 	"pages.administration.common.label.active": "поточний",
 	"pages.administration.classes.manage": "Керувати класом",
@@ -1424,6 +1428,8 @@ export default {
 		"Якщо мову школи не встановлено, застосовується системна мова за замовчуванням (німецька).",
 	"pages.administration.school.index.generalSettings.save":
 		"Зберегти налаштування",
+	"pages.administration.school.index.generalSettings.save.success":
+		"Загальні налаштування успішно збережено.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
 		"Щоб змінити часовий пояс, зверніться до одного з адміністраторів.",
 	"pages.administration.school.index.generalSettings": "Загальні параметри",
