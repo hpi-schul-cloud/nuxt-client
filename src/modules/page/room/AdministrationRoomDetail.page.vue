@@ -30,7 +30,7 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
-import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, ComputedRef, onUnmounted, ref, watch } from "vue";
 import { RoomAdminMembersTable } from "@feature-room";
 import { useAdministrationRoomStore } from "@data-room";
 import { storeToRefs } from "pinia";
@@ -44,14 +44,9 @@ const router = useRouter();
 
 const adminRoomStore = useAdministrationRoomStore();
 const { selectedRoom } = storeToRefs(adminRoomStore);
-const { fetchRooms } = adminRoomStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
-
-onMounted(async () => {
-	await fetchRooms();
-});
 
 const pageTitle = computed(() =>
 	buildPageTitle(t("pages.rooms.administration.pageTitle"))
