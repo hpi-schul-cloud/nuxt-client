@@ -416,7 +416,7 @@ export default {
 			return [
 				{
 					title: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					disabled: true,
 				},
 				{
 					title: this.$t("pages.administration.students.index.title"),

@@ -4,27 +4,20 @@
 		:icon="mdiInformation"
 		:close-icon="mdiClose"
 		:show-close-icon="showCloseIcon"
+		:alert-title="alertTitle"
 	>
 		<slot />
 	</BaseAlert>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiInformation, mdiClose } from "@icons/material";
-import { defineComponent } from "vue";
 import BaseAlert from "./BaseAlert.vue";
 
-export default defineComponent({
-	name: "InfoAlert",
-	components: { BaseAlert },
-	props: {
-		showCloseIcon: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	setup() {
-		return { mdiInformation, mdiClose };
-	},
-});
+interface Props {
+	showCloseIcon?: boolean;
+	alertTitle?: string;
+}
+
+const { showCloseIcon = false, alertTitle = undefined } = defineProps<Props>();
 </script>

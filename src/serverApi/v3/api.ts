@@ -1373,12 +1373,6 @@ export interface ConfigResponse {
     SC_CONTACT_EMAIL: string;
     /**
      * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED: boolean;
-    /**
-     * 
      * @type {number}
      * @memberof ConfigResponse
      */
@@ -1401,18 +1395,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     CTL_TOOLS_RELOAD_TIME_MS: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -1839,12 +1821,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     ROOM_MEMBER_INFO_URL: string | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_HIDE_OLD_ADMIN_PAGE_LINK: boolean;
 }
 /**
  * 

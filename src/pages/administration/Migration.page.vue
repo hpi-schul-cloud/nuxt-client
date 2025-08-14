@@ -554,7 +554,7 @@
 									<VBtn
 										class="bg-primary"
 										data-testid="migration_backToAdministration"
-										to="/administration"
+										to="/administration/school-settings"
 									>
 										{{
 											t("pages.administration.migration.backToAdministration")
@@ -679,7 +679,7 @@ const sourceSystemName = computed(() => {
 const breadcrumbs: Ref<Breadcrumb[]> = ref([
 	{
 		title: t("pages.administration.index.title"),
-		to: "/administration/",
+		disabled: true,
 	},
 	{
 		title: t("pages.administration.migration.title", {

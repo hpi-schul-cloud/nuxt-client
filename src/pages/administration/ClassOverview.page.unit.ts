@@ -51,16 +51,33 @@ vi.mock(
 
 type Tab = "current" | "next" | "archive";
 
-const createWrapper = (
-	groupModuleGetters: Partial<GroupModule> = {},
-	schoolsModuleGetters: Partial<SchoolsModule> = {},
-	props: { tab: Tab } = { tab: "current" },
-	envs: Partial<ConfigResponse> = {}
-) => {
+type CreateWrapperOptions = {
+	groupModuleGetters?: Partial<GroupModule>;
+	schoolsModuleGetters?: Partial<SchoolsModule>;
+	props?: { tab: Tab };
+	userPermissions?: string[];
+	envs?: Partial<ConfigResponse>;
+};
+
+const createWrapper = ({
+	groupModuleGetters = {},
+	schoolsModuleGetters = {},
+	props = { tab: "current" as Tab },
+	userPermissions,
+	envs = {},
+}: CreateWrapperOptions) => {
 	const route = { query: { tab: "current" } };
 	useRouteMock.mockReturnValue(route);
 	const router = createMock<Router>();
 	useRouterMock.mockReturnValue(router);
+
+	const defaultPermissions = ["CLASS_EDIT", "CLASS_CREATE"].map((p) =>
+		p.toLowerCase()
+	);
+
+	const effectivePermissions = (userPermissions ?? defaultPermissions).map(
+		(p) => p.toLowerCase()
+	);
 
 	const groupModule = createModuleMocks(GroupModule, {
 		getClasses: [
@@ -81,7 +98,7 @@ const createWrapper = (
 	});
 
 	const authModule = createModuleMocks(AuthModule, {
-		getUserPermissions: ["CLASS_EDIT".toLowerCase()],
+		getUserPermissions: effectivePermissions,
 	});
 
 	const schoolModule = createModuleMocks(SchoolsModule, {
@@ -157,7 +174,7 @@ describe("ClassOverview", () => {
 	});
 
 	describe("general", () => {
-		const setup = () => createWrapper();
+		const setup = () => createWrapper({});
 
 		it("should mount", () => {
 			const { wrapper } = setup();
@@ -205,7 +222,9 @@ describe("ClassOverview", () => {
 				];
 
 				const { wrapper } = createWrapper({
-					getClasses: classes,
+					groupModuleGetters: {
+						getClasses: classes,
+					},
 				});
 
 				return { wrapper, classes };
@@ -227,7 +246,7 @@ describe("ClassOverview", () => {
 				const setup = () => {
 					const sortBy = { key: "externalSourceName" };
 
-					const { wrapper, groupModule } = createWrapper();
+					const { wrapper, groupModule } = createWrapper({});
 
 					return {
 						sortBy,
@@ -253,7 +272,7 @@ describe("ClassOverview", () => {
 				const setup = () => {
 					const sortBy = { key: "externalSourceName", order: "desc" };
 
-					const { wrapper, groupModule } = createWrapper();
+					const { wrapper, groupModule } = createWrapper({});
 
 					return {
 						sortBy,
@@ -286,10 +305,12 @@ describe("ClassOverview", () => {
 					};
 
 					const { wrapper, groupModule } = createWrapper({
-						getPagination: {
-							limit: 10,
-							skip: 0,
-							total: 30,
+						groupModuleGetters: {
+							getPagination: {
+								limit: 10,
+								skip: 0,
+								total: 30,
+							},
 						},
 					});
 
@@ -331,7 +352,7 @@ describe("ClassOverview", () => {
 
 					pagination.skip = (page - 1) * pagination.limit;
 
-					const { wrapper, groupModule } = createWrapper();
+					const { wrapper, groupModule } = createWrapper({});
 
 					return {
 						page,
@@ -356,8 +377,43 @@ describe("ClassOverview", () => {
 	});
 
 	describe("action buttons", () => {
+		describe("when user has no edit permission", () => {
+			const setup = () => {
+				const userPermissions: string[] = [];
+				const { wrapper } = createWrapper({
+					props: { tab: "current" },
+					userPermissions,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should not render any button", () => {
+				const { wrapper } = setup();
+
+				expect(
+					wrapper.find('[data-testid="legacy-class-table-manage-btn"]').exists()
+				).toEqual(false);
+				expect(
+					wrapper.find('[data-testid="class-table-edit-btn"]').exists()
+				).toEqual(false);
+				expect(
+					wrapper.find('[data-testid="class-table-delete-btn"]').exists()
+				).toEqual(false);
+				expect(
+					wrapper.find('[data-testid="class-table-successor-btn"]').exists()
+				).toEqual(false);
+
+				return {
+					wrapper,
+				};
+			});
+		});
+
 		describe("when legacy classes are available", () => {
-			const setup = () => createWrapper();
+			const setup = () => createWrapper({});
 
 			it("should render 4 buttons", () => {
 				const { wrapper } = setup();
@@ -386,7 +442,7 @@ describe("ClassOverview", () => {
 		describe("when no classes are available", () => {
 			const setup = () =>
 				createWrapper({
-					getClasses: [classInfoFactory.build()],
+					groupModuleGetters: { getClasses: [classInfoFactory.build()] },
 				});
 
 			it("should render only manage button which refers to members page", () => {
@@ -416,7 +472,7 @@ describe("ClassOverview", () => {
 		describe("when clicking on the manage class button", () => {
 			describe("when group class root type is class", () => {
 				const setup = () => {
-					const { wrapper, groupModule } = createWrapper();
+					const { wrapper, groupModule } = createWrapper({});
 
 					const classId: string = groupModule.getClasses[1].id;
 
@@ -444,7 +500,7 @@ describe("ClassOverview", () => {
 
 			describe("when class root type is group", () => {
 				const setup = () => {
-					const { wrapper, groupModule } = createWrapper();
+					const { wrapper, groupModule } = createWrapper({});
 
 					const classId: string = groupModule.getClasses[0].id;
 
@@ -469,7 +525,7 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on the edit class button", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = createWrapper();
+				const { wrapper, groupModule } = createWrapper({});
 
 				const classId: string = groupModule.getClasses[1].id;
 
@@ -493,7 +549,7 @@ describe("ClassOverview", () => {
 		describe("when class is upgradable", () => {
 			describe("when clicking on the upgrade class button", () => {
 				const setup = () => {
-					const { wrapper, groupModule } = createWrapper();
+					const { wrapper, groupModule } = createWrapper({});
 
 					const classId: string = groupModule.getClasses[1].id;
 
@@ -520,13 +576,15 @@ describe("ClassOverview", () => {
 		describe("when class is not upgradable", () => {
 			const setup = () => {
 				const { wrapper } = createWrapper({
-					getClasses: [
-						classInfoFactory.build({
-							externalSourceName: undefined,
-							type: ClassRootType.Class,
-							isUpgradable: false,
-						}),
-					],
+					groupModuleGetters: {
+						getClasses: [
+							classInfoFactory.build({
+								externalSourceName: undefined,
+								type: ClassRootType.Class,
+								isUpgradable: false,
+							}),
+						],
+					},
 				});
 
 				return {
@@ -547,7 +605,7 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on the delete class button", () => {
 			const setup = () => {
-				const { wrapper } = createWrapper();
+				const { wrapper } = createWrapper({});
 
 				return {
 					wrapper,
@@ -569,7 +627,7 @@ describe("ClassOverview", () => {
 
 		describe("when delete dialog is open", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = createWrapper();
+				const { wrapper, groupModule } = createWrapper({});
 
 				return {
 					wrapper,
@@ -618,7 +676,7 @@ describe("ClassOverview", () => {
 	describe("tabs", () => {
 		describe("when loading page", () => {
 			const setup = () => {
-				const { wrapper } = createWrapper();
+				const { wrapper } = createWrapper({});
 
 				return {
 					wrapper,
@@ -658,7 +716,7 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on a tab", () => {
 			const setup = () => {
-				const { wrapper, route, router, groupModule } = createWrapper();
+				const { wrapper, route, router, groupModule } = createWrapper({});
 
 				return {
 					wrapper,
@@ -683,7 +741,9 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on next year tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = createWrapper({}, {}, { tab: "next" });
+				const { wrapper, groupModule } = createWrapper({
+					props: { tab: "next" },
+				});
 
 				return {
 					wrapper,
@@ -706,11 +766,9 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on previous years tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = createWrapper(
-					{},
-					{},
-					{ tab: "archive" }
-				);
+				const { wrapper, groupModule } = createWrapper({
+					props: { tab: "archive" },
+				});
 
 				return {
 					wrapper,
@@ -733,7 +791,7 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on current year tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = createWrapper();
+				const { wrapper, groupModule } = createWrapper({});
 
 				return {
 					wrapper,
@@ -760,25 +818,81 @@ describe("ClassOverview", () => {
 	});
 
 	describe("addClass", () => {
-		describe("when clicking on add class buttton", () => {
+		describe("when create permission is present", () => {
+			const userPermissions = ["class_create"];
 			const setup = () => {
-				const { wrapper } = createWrapper();
+				const { wrapper } = createWrapper({
+					props: {
+						tab: "current",
+					},
+					userPermissions,
+				});
 
 				return {
 					wrapper,
 				};
 			};
 
-			it("should redirect to legacy create class page", () => {
+			it("should render add class button", () => {
 				const { wrapper } = setup();
 
-				const addClassBtn = wrapper.find(
-					'[data-testid="admin-class-add-button"]'
-				);
+				expect(
+					wrapper.find('[data-testid="admin-class-add-button"]').exists()
+				).toEqual(true);
+			});
 
-				expect(addClassBtn.attributes().href).toStrictEqual(
-					"/administration/classes/create"
-				);
+			describe("when clicking on add class buttton", () => {
+				const setup = () => {
+					const { wrapper } = createWrapper({});
+
+					return {
+						wrapper,
+					};
+				};
+
+				it("should redirect to legacy create class page", () => {
+					const { wrapper } = setup();
+
+					const addClassBtn = wrapper.find(
+						'[data-testid="admin-class-add-button"]'
+					);
+
+					expect(addClassBtn.attributes().href).toStrictEqual(
+						"/administration/classes/create"
+					);
+				});
+			});
+		});
+
+		describe("when create permission is not present", () => {
+			const userPermissions: string[] = [];
+			const setup = () => {
+				const { wrapper } = createWrapper({
+					props: {
+						tab: "current",
+					},
+					userPermissions,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should not render add class button", () => {
+				const { wrapper } = setup();
+
+				expect(
+					wrapper.find('[data-testid="admin-class-add-button"]').exists()
+				).toEqual(false);
+			});
+
+			it("should render info alert", () => {
+				const { wrapper } = setup();
+
+				expect(
+					wrapper.find('[data-testid="admin-class-info-alert"]').exists()
+				).toEqual(true);
 			});
 		});
 	});
@@ -792,7 +906,9 @@ describe("ClassOverview", () => {
 			];
 
 			const { wrapper } = createWrapper({
-				getClasses: classes,
+				groupModuleGetters: {
+					getClasses: classes,
+				},
 			});
 
 			return { wrapper, classes };
@@ -818,14 +934,13 @@ describe("ClassOverview", () => {
 				}),
 			];
 
-			const { wrapper } = createWrapper(
-				{
+			const { wrapper } = createWrapper({
+				groupModuleGetters: {
 					getClasses: classes,
 				},
-				{},
-				{ tab: "current" },
-				envs
-			);
+				props: { tab: "current" },
+				envs,
+			});
 
 			return { wrapper, classes };
 		};
