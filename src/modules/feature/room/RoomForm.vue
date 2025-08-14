@@ -9,9 +9,7 @@
 				counter="100"
 				:rules="validationRules"
 			/>
-			<div class="mb-8">
-				<RoomColorPicker v-model:color="roomData.color" />
-			</div>
+			<RoomColorPicker v-model:color="roomData.color" class="mb-8" />
 			<div class="mb-16">
 				<h2 class="mb-1 text-subtitle-1">
 					{{ t("components.roomForm.labels.videoConference.title") }}
@@ -91,7 +89,6 @@ const { askConfirmation } = useConfirmationDialog();
 
 const roomData = computed(() => props.room);
 const roomForm = useTemplateRef("roomForm");
-const roomNameInput = useTemplateRef("roomNameInput");
 
 // Todo: make error messages more clear
 const { validateOnOpeningTag } = useOpeningTagValidator();
@@ -119,17 +116,18 @@ const onSave = async () => {
 	const { valid, errors } = await roomForm.value.validate();
 	if (valid) {
 		emit("save", { room: roomData.value });
-	} else {
-		// Workaround for Vuetify 3.9.4 fast-fail inputs errors will not be announced to screen readers on submitting
+	} else if (errors.length > 0) {
+		// Workaround for Vuetify 3.9.4 fast-fail inputs errors will not be announced to screen readers on submitting,
+		// so we are focusing the first invalid input to announce the error.
 		// More Information: https://github.com/vuetifyjs/vuetify/issues/21920
-		console.log("errors", errors);
-		roomNameInput.value?.focus();
+		const firstErrorId = errors[0].id as string;
+		document.getElementById(firstErrorId)?.focus();
 	}
 };
 
 const onCancel = async () => {
 	// const noChangesMade = !v$.value.$anyDirty;
-	const noChangesMade = true; // check how to this in vuetify
+	const noChangesMade = true; // check how to do this in vuetify
 	if (noChangesMade) emit("cancel");
 
 	const shouldCancel = await askConfirmation({
