@@ -58,6 +58,6 @@ const iconColor = computed(() => {
 	flex: 0 0 20px;
 	width: 20px;
 	height: 20px;
-	margin-right: var(--space-xs-2);
+	margin-right: 6px;
 }
 </style>

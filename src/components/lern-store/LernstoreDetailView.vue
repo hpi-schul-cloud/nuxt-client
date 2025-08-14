@@ -382,7 +382,7 @@ $tablet-portrait-width: 768px;
 		z-index: var(--layer-modal);
 		display: flex;
 		justify-content: flex-end;
-		padding: var(--space-md);
+		padding: 16px;
 
 		.close-icon {
 			color: rgba(var(--v-theme-white));
@@ -458,7 +458,7 @@ $tablet-portrait-width: 768px;
 		border-radius: var(--radius-md);
 
 		@media (max-width: $tablet-portrait-width) {
-			padding-bottom: var(--space-xs);
+			padding-bottom: 8px;
 		}
 	}
 
@@ -470,7 +470,7 @@ $tablet-portrait-width: 768px;
 		align-items: center;
 		justify-content: space-between;
 		max-height: 100vh;
-		padding-bottom: var(--space-sm);
+		padding-bottom: 12px;
 		overflow-y: scroll;
 		background-color: rgba(var(--v-theme-white));
 
@@ -491,20 +491,20 @@ $tablet-portrait-width: 768px;
 
 		.content-container {
 			width: 80%;
-			margin-top: var(--space-md);
+			margin-top: 16px;
 		}
 
 		.external-content-warning {
 			color: rgba(var(--v-theme-error));
 
 			.external-content-title {
-				margin-top: var(--space-md);
+				margin-top: 16px;
 				font-weight: var(--font-weight-bold);
 			}
 
 			.external-content-title-mobile {
 				display: none;
-				margin-top: var(--space-md);
+				margin-top: 16px;
 				font-weight: var(--font-weight-bold);
 			}
 		}
@@ -524,7 +524,7 @@ $tablet-portrait-width: 768px;
 		}
 
 		.description {
-			margin: var(--space-xl-2) 0;
+			margin: 40px 0;
 			font-size: var(--text-md);
 		}
 
@@ -537,7 +537,7 @@ $tablet-portrait-width: 768px;
 		.title {
 			display: flex;
 			justify-content: space-between;
-			margin: var(--space-xl-2) 0 var(--space-sm) 0;
+			margin: 40px 0 12px 0;
 			font-size: var(--heading-5);
 			font-weight: var(--font-weight-bold);
 			line-height: var(--line-height-md);
@@ -552,10 +552,10 @@ $tablet-portrait-width: 768px;
 			.meta-container {
 				display: flex;
 				align-items: flex-start;
-				margin-bottom: var(--space-lg);
+				margin-bottom: 24px;
 
 				.meta-icon {
-					margin-right: var(--space-md);
+					margin-right: 16px;
 					font-size: var(--text-lg);
 
 					.icon {
@@ -564,7 +564,7 @@ $tablet-portrait-width: 768px;
 				}
 
 				.link {
-					margin-right: var(--space-xs);
+					margin-right: 8px;
 				}
 			}
 		}

@@ -27,22 +27,24 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-spacer />
-				<div class="button-section">
+				<div class="mb-2">
 					<v-btn
 						data-testid="dialog-cancel-btn"
 						variant="outlined"
+						class="ml-2 mr-2"
 						@click="onCancel"
 					>
 						{{ $t("common.labels.close") }}
 					</v-btn>
 				</div>
-				<div class="button-section">
+				<div class="mb-2">
 					<v-btn
 						type="submit"
 						variant="flat"
 						color="primary"
 						:disabled="importButtonDisabled"
 						data-testid="dialog-confirm-btn"
+						class="ml-2 mr-2"
 						@click="onConfirm"
 					>
 						{{ $t("pages.rooms.ccImportCourse.confirm") }}
@@ -134,15 +136,6 @@ async function onConfirm(): Promise<void> {
 </script>
 
 <style lang="scss" scoped>
-.button-section {
-	margin-bottom: calc(var(--space-base-vuetify) * 2);
-}
-
-.button-section > button {
-	margin-left: calc(var(--space-base-vuetify) * 2);
-	margin-right: calc(var(--space-base-vuetify) * 2);
-}
-
 :deep(.truncate-file-input .v-field__input) {
 	white-space: nowrap;
 	overflow: hidden;

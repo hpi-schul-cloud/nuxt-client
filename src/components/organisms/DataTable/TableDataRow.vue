@@ -112,7 +112,7 @@ export default {
 
 		.text-content {
 			max-width: 200px;
-			padding: var(--space-xs);
+			padding: 8px;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;

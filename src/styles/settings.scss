@@ -1,59 +1,47 @@
-@forward 'vuetify/settings' with (
-  $body-font-family: var(--font-primary),
-  $heading-font-family: var(--font-accent),
-  $line-height-root: var(--line-height-md),
+@forward "vuetify/settings" with (
+	$body-font-family: var(--font-primary),
+	$heading-font-family: var(--font-accent),
+	$line-height-root: var(--line-height-md),
+	$typography: (
+		"h1": (
+			"size": var(--heading-1),
+		),
+		"h2": (
+			"size": var(--heading-2),
+		),
+		"h3": (
+			"size": 33px,
+			"line-height": 40px,
+		),
+		"h4": (
+			"size": var(--heading-4),
+		),
+		"h5": (
+			"size": var(--heading-5),
+			"weight": var(--font-weight-bold),
+		),
+		"h6": (
+			"size": var(--heading-6),
+			"weight": var(--font-weight-bold),
+		),
+	),
 
-  $typography: (
-    "h1": (
-      "size": var(--heading-1),
-    ),
-    "h2": (
-      "size": var(--heading-2),
-    ),
-    "h3": (
-      "size": 33px,
-      "line-height": 40px,
-    ),
-    "h4": (
-      "size": var(--heading-4),
-    ),
-    "h5": (
-      "size": var(--heading-5),
-      "weight": var(--font-weight-bold),
-    ),
-    "h6": (
-      "size": var(--heading-6),
-      "weight": var(--font-weight-bold),
-    ),
-  ),
+	// v-btn
+	$button-font-size: 1rem,
+	$button-text-transform: none,
+	$button-font-weight: var(--font-weight-bold),
+	$button-text-letter-spacing: 0.044em,
 
-  // v-btn
-  $button-font-size: 1rem,
-  $button-text-transform: none,
-  $button-font-weight: var(--font-weight-bold),
-  $button-text-letter-spacing: 0.044em,
-  // $button-focus-opacity: 0,
+	// card
+	$card-text-letter-spacing: normal,
+	$card-subtitle-opacity: 1,
 
-  // tabs
-  // $tabs-item-letter-spacing: inherit,
+	// list
+	$list-item-icon-margin-start: 8px,
 
-  // table
-  // $data-table-regular-header-font-size: 1rem,
-  // $data-table-regular-row-font-size: 1rem,
+	// breadcrumbs
+	$breadcrumbs-item-padding: 0px,
 
-  // card
-  $card-text-letter-spacing: normal,
-  $card-subtitle-opacity: 1,
-
-  // list
-  $list-item-icon-margin-start: 8px,
-
-  // treeview
-  // $treeview-node-margin: 0,
-  // $treeview-node-padding: 0,
-
-  // breadcrumbs
-  $breadcrumbs-item-padding: 0px,
-  // v-label
-  $label-opacity: var(--v-high-emphasis-opacity)
+	// v-label
+	$label-opacity: var(--v-high-emphasis-opacity)
 );

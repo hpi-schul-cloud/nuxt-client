@@ -145,12 +145,12 @@ const nextPage = () => {
 }
 
 .pagination-link-wrapper .pagination-link {
-	padding: var(--space-xs);
-	margin-left: var(--space-sm);
+	padding: 8px;
+	margin-left: 12px;
 }
 
 .total {
-	margin-right: var(--space-sm);
+	margin-right: 12px;
 	margin-bottom: 0;
 }
 

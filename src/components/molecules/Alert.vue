@@ -57,7 +57,7 @@ const text = computed(() => props.notification.text);
 
 <style lang="scss" scoped>
 .alert {
-	margin: 0 var(--space-sm) var(--space-sm) 0;
+	margin: 0 12px 12px 0;
 	overflow: hidden;
 	background-color: rgba(var(--v-theme-white)) !important;
 }

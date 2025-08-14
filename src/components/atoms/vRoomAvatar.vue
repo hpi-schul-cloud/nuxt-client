@@ -233,14 +233,14 @@ const dropAvatar = () => {
 }
 
 .subtitle {
-	margin-right: calc(var(--space-base-vuetify) * -5);
-	margin-left: calc(var(--space-base-vuetify) * -5);
+	margin-right: -20px;
+	margin-left: -20px;
 	text-align: center;
 	overflow-wrap: break-word;
 	white-space: pre-wrap;
 
 	@include excerpt(
-		$font-size: calc(var(--space-base-vuetify) * 4),
+		$font-size: 16px,
 		$line-height: var(--line-height-lg),
 		$lines-to-show: 4
 	);

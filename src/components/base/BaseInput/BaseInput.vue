@@ -124,6 +124,6 @@ export default {
 
 <style lang="scss" scoped>
 .input {
-	margin-bottom: var(--space-md);
+	margin-bottom: 16px;
 }
 </style>

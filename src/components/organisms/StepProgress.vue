@@ -96,7 +96,7 @@ ul.progressbar {
 		width: 50px;
 		height: 50px;
 		margin: 0 auto;
-		margin-bottom: var(--space-xs);
+		margin-bottom: 8px;
 		font-weight: var(--font-weight-bold);
 		content: counter(step);
 		counter-increment: step;

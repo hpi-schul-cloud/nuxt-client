@@ -379,13 +379,13 @@ export default {
 			align-items: center;
 			justify-content: space-between;
 			width: 100%;
-			padding: var(--space-xs);
+			padding: 8px;
 			font-size: var(--text-md);
 			font-weight: var(--font-weight-normal);
 		}
 
 		.select-wrap {
-			padding: var(--space-xs);
+			padding: 8px;
 
 			.select {
 				margin-bottom: 0;
@@ -403,14 +403,14 @@ export default {
 	right: 0%;
 	z-index: calc(var(--layer-fab) + 1);
 	min-width: 320px;
-	margin-top: var(--space-xl-2);
-	margin-right: var(--space-lg);
-	margin-left: var(--space-lg);
+	margin-top: 40px;
+	margin-right: 24px;
+	margin-left: 24px;
 
 	@include breakpoint(tablet) {
 		min-width: 450px;
 		max-width: 50%;
-		margin-right: var(--space-xl);
+		margin-right: 32px;
 	}
 
 	.content {

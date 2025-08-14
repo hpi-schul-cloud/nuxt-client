@@ -30,7 +30,7 @@
 	flex-wrap: wrap;
 
 	> * {
-		margin: var(--space-xs) 0;
+		margin: 8px 0;
 	}
 }
 
@@ -40,7 +40,7 @@
 	grid-area: primary;
 
 	:not(:last-child) {
-		margin-left: var(--space-sm);
+		margin-left: 12px;
 	}
 }
 
@@ -53,7 +53,7 @@
 	}
 
 	> *:not(:first-child) {
-		margin-left: var(--space-sm);
+		margin-left: 12px;
 	}
 }
 </style>

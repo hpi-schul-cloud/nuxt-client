@@ -82,14 +82,14 @@ const links = computed(() => {
 
 <style lang="scss" scoped>
 .current-year {
-	margin-bottom: var(--space-xs);
+	margin-bottom: 8px;
 	font-size: var(--text-lg);
 }
 
 .footer {
 	width: 100%;
-	padding: 0 var(--space-md);
-	margin: var(--space-lg) 0 var(--space-md);
+	padding: 0 16px;
+	margin: 24px 0 16px;
 	text-align: center;
 }
 

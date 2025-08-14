@@ -9,7 +9,7 @@
 				<v-checkbox
 					v-model="sendRegistration"
 					name="switch"
-					class="mt--xl"
+					class="mt-8"
 					:label="$t('pages.administration.teachers.new.checkbox.label')"
 				/>
 			</template>

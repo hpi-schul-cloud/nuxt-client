@@ -13,8 +13,8 @@ body {
 @for $i from 1 through 6 {
 	h#{$i},
 	.h#{$i} {
-		margin-top: var(--space-xl);
-		margin-bottom: var(--space-sm);
+		margin-top: 32px;
+		margin-bottom: 12px;
 		font-family: var(--font-accent);
 		font-size: var(--heading-#{$i});
 		font-weight: var(--font-weight-normal);
@@ -24,8 +24,8 @@ body {
 h1,
 .h1 {
 	&:first-of-type {
-		margin-top: var(--space-md);
-		margin-bottom: var(--space-xl);
+		margin-top: 16px;
+		margin-bottom: 32px;
 	}
 }
 
@@ -54,7 +54,7 @@ h6,
 }
 
 p {
-	margin-bottom: var(--space-md);
+	margin-bottom: 16px;
 }
 
 b,

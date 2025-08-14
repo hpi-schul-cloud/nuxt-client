@@ -30,14 +30,14 @@
 		flex-direction: row;
 		align-items: normal;
 		justify-content: space-between;
-		padding: var(--space-sm) var(--space-xl);
+		padding: 12px 32px;
 	}
 }
 
 .right-container {
 	display: flex;
 	justify-content: space-between;
-	padding: var(--space-sm) var(--space-md);
+	padding: 12px 16px;
 	border-top: 1px solid rgba(var(--v-theme-white));
 
 	@include breakpoint(tablet) {
@@ -48,10 +48,10 @@
 
 .left-container {
 	float: left;
-	padding: var(--space-sm) var(--space-md);
+	padding: 12px 16px;
 
 	> *:not(:first-child) {
-		margin-left: var(--space-sm);
+		margin-left: 12px;
 	}
 
 	@include breakpoint(tablet) {

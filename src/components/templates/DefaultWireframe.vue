@@ -154,11 +154,11 @@ const showDivider = computed(() => {
 }
 
 .wireframe-container h1:first-of-type {
-	margin-bottom: var(--space-md);
+	margin-bottom: 16px;
 }
 
 .wireframe-header {
-	padding: 0 var(--space-lg);
+	padding: 0 24px;
 	display: flex;
 	flex-direction: column;
 }
@@ -168,8 +168,8 @@ const showDivider = computed(() => {
 }
 
 .main-content {
-	padding: 0 var(--space-lg) var(--space-lg) var(--space-lg);
-	margin-top: var(--space-xl);
+	padding: 0 24px 24px 24px;
+	margin-top: 32px;
 }
 
 .container-short-width {

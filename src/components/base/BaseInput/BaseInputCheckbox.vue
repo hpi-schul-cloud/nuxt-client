@@ -129,7 +129,7 @@ label {
 }
 
 .label {
-	margin: 0 var(--space-xs-2) 0 var(--space-xs-2);
+	margin: 0 6px;
 	vertical-align: middle;
 }
 
