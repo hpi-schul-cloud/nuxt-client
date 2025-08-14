@@ -220,6 +220,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 						fullName: `${user.lastName}, ${user.firstName}`,
 						schoolRoleNames: [schoolRoleName],
 						displaySchoolRole: schoolRoleMap[schoolRoleName],
+						schoolId,
 					};
 				})
 				.filter((user) => {

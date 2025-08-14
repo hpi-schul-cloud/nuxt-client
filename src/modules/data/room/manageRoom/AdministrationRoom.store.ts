@@ -76,12 +76,17 @@ export const useAdministrationRoomStore = defineStore(
 			}
 		};
 
-		const fetchRoomDetails = async (room: AdministrationRoom) => {
-			await fetchMembers(room.roomId);
-			selectedRoom.value = {
-				roomId: room.roomId,
-				roomName: room.roomName,
-			};
+		const fetchRoomDetails = async (roomId: string) => {
+			await fetchMembers(roomId);
+
+			const room = roomList.value.find((r) => r.roomId === roomId);
+
+			if (room) {
+				selectedRoom.value = {
+					roomId: room?.roomId,
+					roomName: room.name,
+				};
+			}
 		};
 
 		const deleteRoom = async (roomId: string) => {

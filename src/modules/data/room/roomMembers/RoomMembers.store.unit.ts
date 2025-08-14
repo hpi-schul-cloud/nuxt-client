@@ -110,6 +110,7 @@ describe("useRoomMembers", () => {
 				const membersMock = roomMemberFactory.buildList(3, {
 					roomRoleName: RoleName.Roomadmin,
 					schoolRoleNames: [RoleName.Teacher],
+					schoolId: "school-id-1",
 				});
 
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
