@@ -213,7 +213,7 @@ const schoolSettingsPage: Breadcrumb = {
 const breadcrumbs: Breadcrumb[] = [
 	{
 		title: t("pages.administration.index.title"),
-		href: "/administration/",
+		disabled: true,
 	},
 	schoolSettingsPage,
 	{

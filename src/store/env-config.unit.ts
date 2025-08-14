@@ -605,17 +605,6 @@ describe("env-config module", () => {
 			);
 		});
 
-		it("getNewSchoolAdminPageAsDefault should get FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED", () => {
-			const envConfigModule = new EnvConfigModule({});
-			const mockEnvs = envsFactory.build();
-
-			envConfigModule.env = mockEnvs;
-
-			expect(envConfigModule.getNewSchoolAdminPageAsDefault).toStrictEqual(
-				mockEnvs.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED
-			);
-		});
-
 		it("getAvailableLanguages should get I18N__AVAILABLE_LANGUAGES", () => {
 			const envConfigModule = new EnvConfigModule({});
 			const mockEnvs = envsFactory.build();
@@ -633,16 +622,6 @@ describe("env-config module", () => {
 
 			expect(envConfigModule.getGhostBaseUrl).toStrictEqual(
 				mockEnvs.GHOST_BASE_URL
-			);
-		});
-
-		it("getShowNewClassViewEnabled should get FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED", () => {
-			const envConfigModule = new EnvConfigModule({});
-			const mockEnvs = envsFactory.build();
-			envConfigModule.env = mockEnvs;
-
-			expect(envConfigModule.getShowNewClassViewEnabled).toStrictEqual(
-				mockEnvs.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED
 			);
 		});
 
