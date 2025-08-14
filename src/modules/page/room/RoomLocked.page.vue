@@ -19,8 +19,8 @@
 					{{ t("pages.room.locked") }}
 				</h3>
 			</div>
-		</div></DefaultWireframe
-	>
+		</div>
+	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
