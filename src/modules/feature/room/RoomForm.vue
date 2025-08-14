@@ -1,5 +1,5 @@
 <template>
-	<VForm ref="roomForm" @submit="onSave">
+	<VForm ref="roomForm" @submit.prevent="onSave">
 		<div>
 			<VTextField
 				ref="roomNameInput"
@@ -119,9 +119,9 @@ const onSave = async () => {
 	const { valid, errors } = await roomForm.value.validate();
 	if (valid) {
 		emit("save", { room: roomData.value });
+	} else {
 		// Workaround for Vuetify 3.9.4 fast-fail inputs errors will not be announced to screen readers on submitting
 		// More Information: https://github.com/vuetifyjs/vuetify/issues/21920
-	} else {
 		console.log("errors", errors);
 		roomNameInput.value?.focus();
 	}

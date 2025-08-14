@@ -1,46 +1,36 @@
 <template>
-	<label id="room-color-label" class="d-flex mb-2">{{ $t(label) }}</label>
+	<label id="room-color-label" class="d-flex mb-2">
+		{{ t("common.words.color") }}
+	</label>
 	<div
 		class="d-flex flex-wrap"
 		role="radiogroup"
 		aria-labelledby="room-color-label"
 	>
-		<template v-for="swatchColor in RoomColor" :key="swatchColor">
-			<RoomColorPickerSwatch
-				:color="swatchColor"
-				:is-selected="isSelected(swatchColor)"
-				@update:color="onUpdateColor($event)"
-			/>
-		</template>
+		<RoomColorPickerSwatch
+			v-for="swatchColor in RoomColor"
+			:key="swatchColor"
+			:color="swatchColor"
+			:is-selected="swatchColor === currentColor"
+			@update:color="onUpdateColor(swatchColor)"
+		/>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { useVModel } from "@vueuse/core";
 import { PropType } from "vue";
 import RoomColorPickerSwatch from "./RoomColorPickerSwatch.vue";
 import { RoomColor } from "@/types/room/Room";
+import { useI18n } from "vue-i18n";
 
-const props = defineProps({
-	color: {
-		type: String as PropType<RoomColor>,
-		default: RoomColor.BlueGrey,
-	},
-	label: {
-		type: String,
-		default: "common.words.color",
-	},
+const currentColor = defineModel("color", {
+	type: String as PropType<RoomColor>,
+	default: RoomColor.BlueGrey,
 });
 
-const emit = defineEmits(["update:color"]);
-
-const currentColor = useVModel(props, "color", emit);
-
-const isSelected = (color: RoomColor) => {
-	return color === currentColor.value;
-};
+const { t } = useI18n();
 
 const onUpdateColor = (color: RoomColor) => {
-	emit("update:color", color);
+	currentColor.value = color;
 };
 </script>

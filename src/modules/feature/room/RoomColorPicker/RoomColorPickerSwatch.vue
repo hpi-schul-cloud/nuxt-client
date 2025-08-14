@@ -1,12 +1,12 @@
 <template>
 	<VBtn
-		class="color-swatch rounded-circle elevation-3 ma-1 d-flex justify-center align-items-center cursor-pointer"
+		class="color-swatch rounded-circle elevation-3 ma-1 d-flex justify-center align-items-center"
 		:class="`room-color--${color}`"
 		:data-testid="`color-swatch-${color}`"
 		role="radio"
 		:aria-label="ariaLabel"
 		:aria-checked="isSelected"
-		@click="() => $emit('update:color', color)"
+		@click="emit('update:color', color)"
 	>
 		<VIcon v-if="isSelected" :icon="mdiCheckCircleOutline" color="white" />
 	</VBtn>
@@ -28,7 +28,9 @@ const props = defineProps({
 	},
 });
 
-defineEmits(["update:color"]);
+const emit = defineEmits<{
+	(e: "update:color", color: RoomColor): void;
+}>();
 
 const { t } = useI18n();
 
