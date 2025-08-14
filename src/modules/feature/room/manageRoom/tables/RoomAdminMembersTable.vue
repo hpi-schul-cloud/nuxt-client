@@ -12,11 +12,8 @@
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionChangePermission
-				v-if="canAddRoomMembers"
-				@click="onChangePermission(selectedIds)"
-			/>
-			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
+			<KebabMenuActionChangePermission v-if="canAddRoomMembers" />
+			<KebabMenuActionRemoveMember />
 		</template>
 
 		<template #[`item.displaySchoolRole`]="{ item }">
@@ -36,26 +33,14 @@
 			>
 				<KebabMenuActionChangePermission
 					:aria-label="getAriaLabel(item, 'changeRole')"
-					@click="onChangePermission([item.userId])"
 				/>
 				<KebabMenuActionRemoveMember
 					v-if="!isRoomOwner(item.userId)"
 					:aria-label="getAriaLabel(item, 'remove')"
-					@click="onRemoveMembers([item.userId])"
 				/>
 			</KebabMenu>
 		</template>
 	</DataTable>
-	<VDialog
-		v-model="isChangeRoleDialogOpen"
-		:width="isExtraSmallDisplay ? 'auto' : 480"
-		data-testid="dialog-change-role-participants"
-		max-width="480"
-		@keydown.esc="onDialogClose"
-	>
-		<ChangeRole :members="membersToChangeRole" @close="onDialogClose" />
-	</VDialog>
-	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -65,20 +50,16 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-// import { authModule } from "@/store";
 import {
 	RoomMember,
 	useRoomAuthorization,
 	useRoomMembersStore,
 } from "@data-room";
-import { ChangeRole } from "@feature-room";
 import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { storeToRefs } from "pinia";
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify";
 
 type Props = {
 	headerBottom?: number;
@@ -91,46 +72,10 @@ withDefaults(defineProps<Props>(), {
 });
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay } = useDisplay();
 const { canAddRoomMembers } = useRoomAuthorization();
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersForAdmins, selectedIds } = storeToRefs(roomMembersStore);
-const { isRoomOwner, removeMembers } = roomMembersStore;
-
-const { askConfirmation } = useConfirmationDialog();
-
-const isChangeRoleDialogOpen = ref(false);
-const membersToChangeRole = ref<RoomMember[]>([]);
-
-const onDialogClose = () => {
-	isChangeRoleDialogOpen.value = false;
-};
-
-const onRemoveMembers = async (userIds: string[]) => {
-	const shouldRemove = await confirmRemoval(userIds);
-	if (shouldRemove) await removeMembers(userIds);
-};
-
-const confirmRemoval = async (userIds: string[]) => {
-	let message = t("pages.rooms.members.multipleRemove.confirmation");
-	if (userIds.length === 1) {
-		const memberFullName = roomMembersStore.getMemberFullName(userIds[0]);
-		message = t("pages.rooms.members.remove.confirmation", { memberFullName });
-	}
-	const shouldRemove = await askConfirmation({
-		message,
-		confirmActionLangKey: "common.actions.remove",
-	});
-	return shouldRemove;
-};
-
-const onChangePermission = (userIds: string[]) => {
-	membersToChangeRole.value = roomMembersForAdmins.value.filter((member) =>
-		userIds.includes(member.userId)
-	);
-
-	isChangeRoleDialogOpen.value = true;
-};
+const { isRoomOwner } = roomMembersStore;
 
 const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;

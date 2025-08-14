@@ -14,20 +14,15 @@
 			</div>
 		</template>
 
-		<template v-if="isEmptyList">
-			<EmptyState :title="t('pages.rooms.emptyState')">
-				<template #media>
-					<RoomsEmptyStateSvg />
-				</template>
-			</EmptyState>
-		</template>
-		<template v-else>
-			<RoomAdminTable
-				v-if="!isRoomDetailsVisible"
-				:show-select="false"
-				:header-bottom="headerBottom"
-			/>
-		</template>
+		<div class="mt-12">
+			{{ t("pages.rooms.administration.roomDetail.infoText") }}
+		</div>
+
+		<RoomAdminMembersTable
+			:header-bottom="headerBottom"
+			:show-select="false"
+			:members-info-text="t('pages.rooms.administration.table.membersInfoText')"
+		/>
 	</DefaultWireframe>
 </template>
 
@@ -35,11 +30,10 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
-import { computed, ComputedRef, onMounted, ref, watch } from "vue";
-import { RoomAdminTable } from "@feature-room";
+import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";
+import { RoomAdminMembersTable } from "@feature-room";
 import { useAdministrationRoomStore } from "@data-room";
 import { storeToRefs } from "pinia";
-import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiPlus } from "@icons/material";
@@ -49,12 +43,11 @@ const { t } = useI18n();
 const router = useRouter();
 
 const adminRoomStore = useAdministrationRoomStore();
-const { isEmptyList, selectedRoom } = storeToRefs(adminRoomStore);
+const { selectedRoom } = storeToRefs(adminRoomStore);
 const { fetchRooms } = adminRoomStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
-const isRoomDetailsVisible = computed(() => selectedRoom.value !== null);
 
 onMounted(async () => {
 	await fetchRooms();
@@ -65,24 +58,39 @@ const pageTitle = computed(() =>
 );
 useTitle(pageTitle);
 
-watch(isRoomDetailsVisible, (visible) => {
-	if (visible) {
-		router.push({
-			name: "administration-rooms-manage-details",
-			params: { roomId: selectedRoom.value?.roomId },
-		});
-	}
+onUnmounted(() => {
+	selectedRoom.value = null;
 });
+
+watch(
+	selectedRoom,
+	(newRoom) => {
+		if (!newRoom) {
+			router.push({
+				name: "administration-rooms-manage",
+			});
+		}
+	},
+	{ immediate: true }
+);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	return [
 		{
 			title: t("global.sidebar.item.management"),
-			disabled: false,
+
 			to: "/administration",
 		},
 		{
 			title: t("pages.rooms.administration.title"),
+			to: "/administration/rooms/manage",
+		},
+
+		{
+			title: t("pages.rooms.administration.roomDetail.breadcrumb", {
+				roomName: selectedRoom.value?.roomName || "",
+			}),
+			to: "/administration/rooms/manage",
 			disabled: true,
 		},
 	];

@@ -48,7 +48,9 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 				member.schoolName !== ownSchool.name &&
 				member.roomRoleName !== RoleName.Roomowner;
 			if (!isExternalAndNotOwner) return member;
-			const anonymizedName = "(anonymisiert)";
+			const anonymizedName = t(
+				"pages.rooms.administration.roomDetail.anonymized"
+			);
 
 			return {
 				...member,
@@ -284,7 +286,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					displaySchoolRole: schoolRoleMap[RoleName.Teacher],
 				},
 			];
-			return;
+			// return;
 		}
 		try {
 			isLoading.value = true;
