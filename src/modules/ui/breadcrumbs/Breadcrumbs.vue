@@ -5,7 +5,7 @@
 		</template>
 		<template #item="{ item, index }">
 			<v-breadcrumbs-item
-				class="breadcrumbs-item"
+				class="breadcrumbs-item text-primary"
 				color="primary"
 				exact
 				:href="item.href"

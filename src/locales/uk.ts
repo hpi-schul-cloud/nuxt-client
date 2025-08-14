@@ -2121,6 +2121,9 @@ export default {
 	"pages.rooms.administration.pageTitle": "Керування кімнатами",
 	"pages.rooms.administration.roomDetail.infoText":
 		"Члени кімнати з інших шкіл показуються анонімно з причин захисту даних (виняток: член з авторизацією «Власник» кімнати).",
+	"pages.rooms.administration.roomDetail.anonymized": "(анонімізовано)",
+	"pages.rooms.administration.roomDetail.breadcrumb":
+		"Учасники кімнати {roomName}",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

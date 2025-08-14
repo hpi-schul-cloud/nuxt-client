@@ -2083,6 +2083,8 @@ export default {
 	"pages.rooms.administration.pageTitle": "Manage rooms",
 	"pages.rooms.administration.roomDetail.infoText":
 		"Room members from other schools are shown anonymously for data protection reasons (exception: member with the “Own” room authorization).",
+	"pages.rooms.administration.roomDetail.anonymized": "(anonymized)",
+	"pages.rooms.administration.roomDetail.breadcrumb": "Room members {roomName}",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",
