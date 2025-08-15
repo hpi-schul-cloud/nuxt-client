@@ -481,6 +481,20 @@ describe("schools module", () => {
 			});
 		});
 
+		describe("setSchoolLogo", () => {
+			it("should set school logo", () => {
+				const schoolsModule = new SchoolsModule({});
+				const logoFile = new File(["logo"], "logo.png", { type: "image/png" });
+				const logoObject = {
+					name: logoFile.name,
+					dataUrl: "data:image/png;base64," + btoa("logo"),
+				};
+				expect(schoolsModule.getSchool.logo).not.toStrictEqual(logoObject);
+				schoolsModule.setSchoolLogo(logoObject);
+				expect(schoolsModule.getSchool.logo).toStrictEqual(logoObject);
+			});
+		});
+
 		describe("setLoading", () => {
 			it("should set loading data", () => {
 				const schoolsModule = new SchoolsModule({});

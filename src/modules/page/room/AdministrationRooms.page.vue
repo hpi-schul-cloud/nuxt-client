@@ -56,7 +56,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	return [
 		{
 			title: t("global.sidebar.item.management"),
-			to: "/administration",
+			disabled: true,
 		},
 		{
 			title: t("pages.rooms.administration.title"),
