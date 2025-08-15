@@ -1,5 +1,5 @@
 <template>
-	<VForm ref="roomForm" @submit.prevent="onSave">
+	<VForm ref="roomForm">
 		<div>
 			<VTextField
 				ref="roomNameInput"
@@ -10,11 +10,12 @@
 				:rules="validationRules"
 				autofocus
 			/>
+
 			<RoomColorPicker v-model:color="roomData.color" class="mb-8" />
-			<div class="mb-16">
-				<h2 class="mb-1 text-subtitle-1">
+			<div class="mt-6 mb-16">
+				<div class="mb-1 text-subtitle-1">
 					{{ t("components.roomForm.labels.videoConference.title") }}
-				</h2>
+				</div>
 				<div class="d-flex mt-1">
 					<VCheckbox
 						:model-value="
@@ -53,8 +54,8 @@
 			<VBtn
 				variant="flat"
 				color="primary"
-				type="submit"
 				data-testid="room-form-save-btn"
+				@click="onSave"
 			>
 				{{ t("common.actions.save") }}
 			</VBtn>
