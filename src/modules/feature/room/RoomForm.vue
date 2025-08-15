@@ -11,8 +11,10 @@
 				autofocus
 			/>
 
-			<RoomColorPicker v-model:color="roomData.color" class="mb-8" />
-			<div class="mt-6 mb-16">
+			<div class="mb-8">
+				<RoomColorPicker v-model:color="roomData.color" />
+			</div>
+			<div class="mb-16">
 				<div class="mb-1 text-subtitle-1">
 					{{ t("components.roomForm.labels.videoConference.title") }}
 				</div>
