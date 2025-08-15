@@ -70,7 +70,7 @@ import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { computed, PropType, useTemplateRef } from "vue";
+import { computed, PropType, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { RoomFeatures } from "@/serverApi/v3";
@@ -89,9 +89,10 @@ const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 
 const roomData = computed(() => props.room);
+const initialRoomData = ref(JSON.stringify(roomData.value));
 const roomForm = useTemplateRef("roomForm");
 
-// Todo: make error messages more clear
+// Todo: make error messages more clear? Talk to UX about best practice
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const validationRules = [
 	isOfMaxLength(100)(t("common.validation.tooLong")),
@@ -127,9 +128,9 @@ const onSave = async () => {
 };
 
 const onCancel = async () => {
-	// const noChangesMade = !v$.value.$anyDirty;
-	const noChangesMade = true; // check how to do this in vuetify
-	if (noChangesMade) emit("cancel");
+	const isFormUnchanged =
+		JSON.stringify(roomData.value) === initialRoomData.value;
+	if (isFormUnchanged) emit("cancel");
 
 	const shouldCancel = await askConfirmation({
 		message: t("ui-confirmation-dialog.ask-cancel-form"),

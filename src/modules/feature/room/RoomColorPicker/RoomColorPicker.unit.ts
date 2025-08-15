@@ -91,8 +91,6 @@ describe("@feature-room/RoomColorPicker", () => {
 	});
 });
 
-
-
 // TODO: removed RoomColorPickerSwatch need to adjust tests
 // describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
 // 	const setup = (props?: ComponentProps<typeof RoomColorPickerSwatch>) => {
