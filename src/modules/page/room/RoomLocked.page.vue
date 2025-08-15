@@ -1,6 +1,6 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs"
-		><template #header>
+	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs">
+		<template #header>
 			<div class="d-flex mt-3">
 				<h1 class="text-h3 pb-2 ma-0" data-testid="locked-room-title">
 					{{ title }}
