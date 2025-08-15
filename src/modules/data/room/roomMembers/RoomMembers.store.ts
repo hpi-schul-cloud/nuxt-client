@@ -1,5 +1,5 @@
 import { computed, Ref, ref } from "vue";
-import { RoomMember } from "./types";
+import { RoomAnonymizationLabel, RoomMember } from "./types";
 import {
 	RoleName,
 	RoomApiFactory,
@@ -44,17 +44,17 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const roomMembersForAdmins = computed(() => {
 		return roomMembersWithoutApplicants.value.map((member) => {
-			const isExternalAndNotOwner =
-				member.schoolName !== ownSchool.name &&
-				member.roomRoleName !== RoleName.Roomowner;
-			if (!isExternalAndNotOwner) return member;
+			const isAnonymizedMember =
+				member.firstName === RoomAnonymizationLabel.ANONYMIZED ||
+				member.lastName === RoomAnonymizationLabel.ANONYMIZED;
+			if (!isAnonymizedMember) return member;
 			const anonymizedName = t(
 				"pages.rooms.administration.roomDetail.anonymized"
 			);
 
 			return {
 				...member,
-				isSelectable: !isExternalAndNotOwner,
+				isSelectable: !isAnonymizedMember,
 				firstName: anonymizedName,
 				lastName: anonymizedName,
 				fullName: anonymizedName,
@@ -103,63 +103,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	};
 
 	const fetchMembers = async (roomId?: string) => {
-		if (roomId) {
-			roomMembers.value = [
-				{
-					userId: "0000d224816abba584714c9c",
-					firstName: "Marla",
-					lastName: "Mathe",
-					roomRoleName: RoleName.Roomviewer,
-					schoolRoleNames: [RoleName.Student],
-					schoolId: "school-id-1",
-					schoolName: "Some other school",
-					fullName: "Marla Mathe",
-					isSelectable: true,
-					displayRoomRole: roomRole[RoleName.Roomviewer],
-					displaySchoolRole: schoolRoleMap[RoleName.Student],
-				},
-				{
-					userId: "0000d231816abba584714c9e",
-					firstName: "Cord",
-					lastName: "Carl",
-					roomRoleName: RoleName.Roomeditor,
-					schoolRoleNames: [RoleName.Teacher],
-					schoolId: "school-id-2",
-					schoolName: "Paul-Gerhardt-Gymnasium",
-					fullName: "Cord Carl",
-					isSelectable: false,
-					displayRoomRole: roomRole[RoleName.Roomeditor],
-					displaySchoolRole: schoolRoleMap[RoleName.Teacher],
-				},
-				{
-					userId: "58b40278dac20e0645353e3a",
-					firstName: "Waldemar",
-					lastName: "Wunderlich",
-					roomRoleName: RoleName.Roomviewer,
-					schoolRoleNames: [RoleName.Teacher],
-					schoolId: "school-id-2",
-					schoolName: "Paul-Gerhardt-Gymnasium",
-					fullName: "Waldemar Wunderlich",
-					isSelectable: true,
-					displayRoomRole: roomRole[RoleName.Roomviewer],
-					displaySchoolRole: schoolRoleMap[RoleName.Teacher],
-				},
-				{
-					userId: "63ce4f5610087350c4a8fbb2",
-					firstName: "Owner",
-					lastName: "Name",
-					roomRoleName: RoleName.Roomowner,
-					schoolRoleNames: [RoleName.Teacher],
-					schoolId: "school-id-1",
-					schoolName: "Some other school",
-					fullName: "Owner Name",
-					isSelectable: true,
-					displayRoomRole: roomRole[RoleName.Roomowner],
-					displaySchoolRole: schoolRoleMap[RoleName.Teacher],
-				},
-			];
-			// return;
-		}
 		try {
 			isLoading.value = true;
 			const { data } = (
