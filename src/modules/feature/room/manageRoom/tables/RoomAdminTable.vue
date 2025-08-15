@@ -8,7 +8,7 @@
 		data-testid="room-admin-table"
 	>
 		<template #[`item.owner`]="{ item }: RoomAdminTableItem">
-			<span>
+			<span data-testid="room-admin-table-owner-not-existing">
 				<VIcon
 					v-if="!item.owner"
 					:icon="mdiAlert"

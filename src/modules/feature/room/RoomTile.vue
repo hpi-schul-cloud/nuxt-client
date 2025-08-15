@@ -5,12 +5,20 @@
 		:aria-label="avatarAriaLabel"
 		draggable="false"
 	>
-		<div class="room-avatar" :class="avatarColor">
-			<span class="text-h3 text-white" data-testid="room-short-title">
-				{{ roomShortName }}
-			</span>
-		</div>
-		<div class="room-title mb-2 mt-2" data-testid="room-title">
+		<VBadge
+			class="tile-badge"
+			bordered
+			:model-value="room.isLocked === true"
+			:icon="mdiLock"
+			data-testid="room-badge-lock"
+		>
+			<div class="tile-icon" :class="avatarColor">
+				<span class="text-h3 text-white" data-testid="room-short-title">
+					{{ roomShortName }}
+				</span>
+			</div>
+		</VBadge>
+		<div class="tile-label mb-2 mt-2" data-testid="room-title">
 			{{ room.name }}
 		</div>
 	</RouterLink>
@@ -20,6 +28,7 @@
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { RoomItem } from "@/types/room/Room";
+import { mdiLock } from "@icons/material";
 
 const props = defineProps({
 	room: {
@@ -55,7 +64,7 @@ a.room-link {
 	color: unset;
 }
 
-.room-avatar {
+.tile-icon {
 	width: 5em;
 	height: 5em;
 	border-radius: 8px;
@@ -74,7 +83,7 @@ a.room-link {
 	vertical-align: middle;
 }
 
-.room-title {
+.tile-label {
 	line-height: var(--line-height-lg);
 	overflow-wrap: break-word;
 }

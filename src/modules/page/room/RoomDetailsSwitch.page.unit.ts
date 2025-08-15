@@ -62,9 +62,11 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 		{
 			isLoading,
 			roomVariant,
+			lockedRoomName,
 		}: {
 			isLoading: boolean;
 			roomVariant?: RoomVariant;
+			lockedRoomName?: string;
 		} = { isLoading: false, roomVariant: RoomVariant.ROOM }
 	) => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
@@ -88,6 +90,7 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 								room,
 								roomVariant,
 								roomBoards: [],
+								lockedRoomName,
 							},
 						},
 					}),
@@ -97,6 +100,7 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 				},
 				stubs: {
 					CourseRoomDetailsPage: true,
+					"RoomLocked.page": true,
 					"RoomDetails.page": true,
 				},
 			},
@@ -147,16 +151,33 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 		});
 
 		describe("and room variant is ROOM", () => {
-			it("should render room details page", () => {
-				roomPermissions.canCreateRoom.value = true;
-				const { wrapper } = setup({
-					isLoading: false,
-					roomVariant: RoomVariant.ROOM,
-				});
+			describe("and room is locked", () => {
+				it("should render room locked page", () => {
+					roomPermissions.canCreateRoom.value = true;
+					const { wrapper } = setup({
+						isLoading: false,
+						roomVariant: RoomVariant.ROOM,
+						lockedRoomName: "Locked Room",
+					});
 
-				expect(wrapper.html()).toBe(
-					'<room-details.page-stub room="[object Object]"></room-details.page-stub>'
-				);
+					expect(wrapper.html()).toBe(
+						'<room-locked.page-stub title="Locked Room"></room-locked.page-stub>'
+					);
+				});
+			});
+
+			describe("and room is not locked", () => {
+				it("should render room details page", () => {
+					roomPermissions.canCreateRoom.value = true;
+					const { wrapper } = setup({
+						isLoading: false,
+						roomVariant: RoomVariant.ROOM,
+					});
+
+					expect(wrapper.html()).toBe(
+						'<room-details.page-stub room="[object Object]"></room-details.page-stub>'
+					);
+				});
 			});
 		});
 

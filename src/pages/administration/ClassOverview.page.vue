@@ -47,8 +47,9 @@
 			<template #[`item.synchronizedCourses`]="{ item }">
 				<span data-testid="class-table-synced-courses">
 					{{
-						item.synchronizedCourses?.map((course) => course.name).join(", ") ||
-						""
+						(item.synchronizedCourses || [])
+							.map((course: CourseInfo) => course.name)
+							.join(", ") || ""
 					}}
 				</span>
 			</template>
