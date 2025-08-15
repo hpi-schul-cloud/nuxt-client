@@ -8655,6 +8655,12 @@ export interface RoomMemberResponse {
      * @type {string}
      * @memberof RoomMemberResponse
      */
+    schoolId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomMemberResponse
+     */
     schoolName: string;
     /**
      * 

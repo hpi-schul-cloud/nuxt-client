@@ -34,6 +34,7 @@
 					:members-info-text="
 						t('pages.rooms.administration.table.actionMenu.manageRoom')
 					"
+					@click="onManageRoom(item.roomId)"
 				/>
 				<KebabMenuAction
 					v-if="userSchoolId === item.schoolId"
@@ -66,7 +67,7 @@ import {
 } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import {
 	useConfirmationDialog,
 	ConfirmationDialog,
@@ -91,8 +92,10 @@ const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 
 const administrationRoomStore = useAdministrationRoomStore();
-const { deleteRoom } = administrationRoomStore;
-const { roomList, userSchoolId } = storeToRefs(administrationRoomStore);
+const { deleteRoom, fetchRoomDetails } = administrationRoomStore;
+const { roomList, userSchoolId, selectedRoom } = storeToRefs(
+	administrationRoomStore
+);
 
 const confirmDeletion = async (roomName: string) => {
 	const shouldDelete = await askConfirmation({
@@ -113,10 +116,18 @@ const onDeleteRoom = async (item: RoomStatsItemResponse) => {
 	}
 };
 
+const onManageRoom = async (roomId: string) => {
+	await fetchRoomDetails(roomId);
+};
+
 type RoomTableHeaderKey = keyof RoomStatsItemResponse | "actions";
 type RoomTableHeader = Omit<DataTableHeader, "key"> & {
 	key: RoomTableHeaderKey;
 };
+
+onMounted(() => {
+	selectedRoom.value = null;
+});
 
 const tableHeaders = computed((): RoomTableHeader[] => [
 	{

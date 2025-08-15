@@ -14,6 +14,7 @@ import ConfirmationTable from "./roomMembers/tables/ConfirmationTable.vue";
 import RoomCopyFlow from "./RoomCopyFlow.vue";
 import RoomsWelcomeInfo from "./RoomsWelcomeInfo.vue";
 import RoomAdminTable from "./manageRoom/tables/RoomAdminTable.vue";
+import RoomAdminMembersTable from "./manageRoom/tables/RoomAdminMembersTable.vue";
 
 export {
 	AddMembers,
@@ -27,6 +28,7 @@ export {
 	Members,
 	MembersTable,
 	RoomAdminTable,
+	RoomAdminMembersTable,
 	RoomGrid,
 	RoomForm,
 	RoomMenu,

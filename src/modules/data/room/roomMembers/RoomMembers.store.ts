@@ -42,6 +42,26 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		);
 	});
 
+	const roomMembersForAdmins = computed(() => {
+		return roomMembersWithoutApplicants.value.map((member) => {
+			const isAnonymizedMember =
+				member.firstName === "---" && member.lastName === "---";
+			if (!isAnonymizedMember) return member;
+
+			const anonymizedName = t(
+				"pages.rooms.administration.roomDetail.anonymized"
+			);
+
+			return {
+				...member,
+				isSelectable: !isAnonymizedMember,
+				firstName: anonymizedName,
+				lastName: anonymizedName,
+				fullName: anonymizedName,
+			};
+		});
+	});
+
 	const isLoading = ref<boolean>(false);
 	const ownSchool = {
 		id: schoolsModule.getSchool.id,
@@ -82,11 +102,12 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return roomId.value;
 	};
 
-	const fetchMembers = async () => {
+	const fetchMembers = async (roomId?: string) => {
 		try {
 			isLoading.value = true;
-			const { data } = (await roomApi.roomControllerGetMembers(getRoomId()))
-				.data;
+			const { data } = (
+				await roomApi.roomControllerGetMembers(roomId ?? getRoomId())
+			).data;
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
@@ -142,6 +163,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 						fullName: `${user.lastName}, ${user.firstName}`,
 						schoolRoleNames: [schoolRoleName],
 						displaySchoolRole: schoolRoleMap[schoolRoleName],
+						schoolId,
 					};
 				})
 				.filter((user) => {
@@ -226,6 +248,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					roomRoleName: roomRoleName as RoleName,
 					displayRoomRole: roomRole[roomRoleName],
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
+					schoolId: member.schoolId,
 				}))
 			);
 		} catch {
@@ -418,6 +441,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		isCurrentUserStudent,
 		isLoading,
 		roomMembers,
+		roomMembersForAdmins,
 		roomMembersWithoutApplicants,
 		roomApplicants,
 		potentialRoomMembers,

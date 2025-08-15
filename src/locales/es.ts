@@ -2159,6 +2159,11 @@ export default {
 		"No se pudo cargar la lista de salas.",
 	"pages.rooms.administration.error.delete": "No se pudo eliminar la sala.",
 	"pages.rooms.administration.pageTitle": "Administrar salas",
+	"pages.rooms.administration.roomDetail.infoText":
+		"Los miembros de la sala de otras escuelas se muestran de forma anónima por razones de protección de datos (excepción: miembro con la autorización de sala “Propietario”).",
+	"pages.rooms.administration.roomDetail.anonymized": "(anónimo)",
+	"pages.rooms.administration.roomDetail.breadcrumb":
+		"Miembros de la sala {roomName}",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
