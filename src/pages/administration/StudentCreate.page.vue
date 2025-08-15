@@ -60,7 +60,7 @@ export default {
 			breadcrumbs: [
 				{
 					title: this.$t("pages.administration.index.title"),
-					href: "/administration/",
+					disabled: true,
 				},
 				{
 					title: this.$t("pages.administration.students.index.title"),

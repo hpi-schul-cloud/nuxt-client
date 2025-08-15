@@ -112,7 +112,7 @@ describe("AdministrationRooms.page", () => {
 			const breadcrumbs = defaultWireframe.props("breadcrumbs");
 
 			expect(breadcrumbs).toEqual([
-				{ title: "global.sidebar.item.management", to: "/administration" },
+				{ title: "global.sidebar.item.management", disabled: true },
 				{ title: "pages.rooms.administration.title", disabled: true },
 			]);
 		});
