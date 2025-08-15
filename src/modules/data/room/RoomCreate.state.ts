@@ -10,8 +10,6 @@ export const useRoomCreateState = () => {
 	const roomData = ref<RoomCreateParams>({
 		name: "",
 		color: RoomColor.BlueGrey,
-		startDate: undefined,
-		endDate: undefined,
 		features: [],
 	});
 
