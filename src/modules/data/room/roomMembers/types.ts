@@ -46,3 +46,8 @@ export enum InvitationStep {
 }
 
 export { RoomInvitationLinkValidationError } from "@/serverApi/v3";
+
+// should be imported later directly from serverApi
+export enum RoomAnonymizationLabel {
+	ANONYMIZED = "anonymized",
+}
