@@ -1,5 +1,5 @@
 import { computed, Ref, ref } from "vue";
-import { RoomAnonymizationLabel, RoomMember } from "./types";
+import { RoomMember } from "./types";
 import {
 	RoleName,
 	RoomApiFactory,
@@ -45,9 +45,9 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const roomMembersForAdmins = computed(() => {
 		return roomMembersWithoutApplicants.value.map((member) => {
 			const isAnonymizedMember =
-				member.firstName === RoomAnonymizationLabel.ANONYMIZED ||
-				member.lastName === RoomAnonymizationLabel.ANONYMIZED;
+				member.firstName === "---" && member.lastName === "---";
 			if (!isAnonymizedMember) return member;
+
 			const anonymizedName = t(
 				"pages.rooms.administration.roomDetail.anonymized"
 			);
