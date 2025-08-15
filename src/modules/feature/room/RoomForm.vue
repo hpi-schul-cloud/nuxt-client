@@ -8,6 +8,7 @@
 				:label="t('components.roomForm.labels.roomName')"
 				counter="100"
 				:rules="validationRules"
+				autofocus
 			/>
 			<RoomColorPicker v-model:color="roomData.color" class="mb-8" />
 			<div class="mb-16">
