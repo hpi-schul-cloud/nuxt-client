@@ -2,12 +2,10 @@
 	<VForm ref="roomForm">
 		<div>
 			<VTextField
-				ref="roomNameInput"
 				v-model="roomData.name"
-				class="mb-8"
+				class="room-name mb-8"
 				:label="t('components.roomForm.labels.roomName')"
 				counter="100"
-				persistent-counter
 				:rules="validationRules"
 				autofocus
 			/>
@@ -96,7 +94,6 @@ const roomData = computed(() => props.room);
 const initialRoomData = ref(JSON.stringify(roomData.value));
 const roomForm = useTemplateRef("roomForm");
 
-// Todo: make error messages more clear? Talk to UX about best practice
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const validationRules = [
 	isOfMaxLength(100)(t("common.validation.tooLong")),
@@ -154,8 +151,13 @@ const onCancel = async () => {
 }
 
 .video-conference-checkbox {
-	::v-deep(.v-selection-control) {
+	:deep(.v-selection-control) {
 		align-items: flex-start;
 	}
+}
+
+.room-name :deep(.v-input__details) {
+	// Reserve space for the character counter to prevent layout shift in Firefox
+	min-height: 25px;
 }
 </style>
