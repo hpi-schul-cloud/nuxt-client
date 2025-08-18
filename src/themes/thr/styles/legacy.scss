@@ -1,8 +1,9 @@
-@use "@/styles/utility/breakpoints" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .sidebar {
 	.logo-full {
-		@include breakpoint(desktop) {
+		@media #{map.get($display-breakpoints, 'md-and-up')} {
 			padding: 0 !important;
 		}
 	}

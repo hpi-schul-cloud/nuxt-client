@@ -14,13 +14,14 @@ import DefaultModalFooter from "@/components/molecules/ModalFooter.vue";
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins";
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .border {
 	margin: 0 16px;
 	border-top: 1px solid black;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		margin: 0 32px;
 	}
 }
