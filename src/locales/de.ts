@@ -806,6 +806,9 @@ export default {
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link Bereich-Kopie",
+	"components.molecules.share.columnBoard.mail.subject":
+		"Bereich zum Importieren",
+	"components.molecules.share.columnBoard.mail.body": "Link zum Bereich: ",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.roomMemberInvitation.mail.body":
 		"Link zum Raum: ",
@@ -846,6 +849,8 @@ export default {
 	"components.molecules.share.room.options.infoText":
 		"Mit dem folgenden Link kann dieser Raum von anderen Personen kopiert werden. Wenn kein aktiv genutzter Raum geteilt werden soll, bitte zuerst ein Duplikat erstellen und dieses teilen.",
 	"components.molecules.share.room.result.linkLabel": "Link Raum-Kopie",
+	"components.molecules.share.room.mail.subject": "Raum zum Importieren",
+	"components.molecules.share.room.mail.body": "Link zum Raum: ",
 	"components.molecules.share.result.mailShare": "Als Mail versenden",
 	"components.molecules.share.result.qrCodeScan": "QR-Code scannen",
 	"components.molecules.share.result.title": "Teilen über",
