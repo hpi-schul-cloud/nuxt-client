@@ -45,7 +45,7 @@
 					<v-container class="pt-0">
 						<v-checkbox
 							v-model="allTasksSelected"
-							class="check-options"
+							class="d-flex"
 							data-testid="all-tasks-checkbox"
 							:indeterminate="someTasksSelected"
 							:disabled="allTasks.length === 0"
@@ -57,13 +57,13 @@
 							v-for="item in allTasks"
 							:key="item.id"
 							v-model="item.isSelected"
-							class="check-options ml-8"
+							class="d-flex ml-8"
 							:label="item.title"
 							density="compact"
 						/>
 						<v-checkbox
 							v-model="allTopicsSelected"
-							class="check-options"
+							class="d-flex"
 							data-testid="all-topics-checkbox"
 							:indeterminate="someTopicsSelected"
 							:disabled="allTopics.length === 0"
@@ -75,13 +75,13 @@
 							v-for="item in allTopics"
 							:key="item.id"
 							v-model="item.isSelected"
-							class="check-options ml-8"
+							class="d-flex ml-8"
 							:label="item.title"
 							density="compact"
 						/>
 						<v-checkbox
 							v-model="allColumnBoardsSelected"
-							class="check-options"
+							class="d-flex"
 							data-testid="all-column-boards-checkbox"
 							:indeterminate="someColumnBoardsSelected"
 							:disabled="allColumnBoards.length === 0"
@@ -93,7 +93,7 @@
 							v-for="item in allColumnBoards"
 							:key="item.id"
 							v-model="item.isSelected"
-							class="check-options ml-8"
+							class="d-flex ml-8"
 							:label="item.title"
 							density="compact"
 						/>
@@ -101,10 +101,11 @@
 				</div>
 			</v-card-text>
 			<v-card-actions>
-				<div class="button-section">
+				<div class="mb-2">
 					<v-btn
 						v-if="step === 1"
 						data-testid="dialog-back-btn"
+						class="ml-2"
 						depressed
 						@click="onBack"
 					>
@@ -112,10 +113,11 @@
 					</v-btn>
 				</div>
 				<v-spacer />
-				<div class="button-section">
+				<div class="mb-2">
 					<v-btn
 						v-if="step === 1"
 						data-testid="dialog-cancel-btn"
+						class="ml-2"
 						depressed
 						@click="onCloseDialog"
 					>
@@ -132,6 +134,7 @@
 					<v-btn
 						v-if="step === 0"
 						data-testid="dialog-next-btn"
+						class="ml-2"
 						color="primary"
 						variant="flat"
 						@click="onNext"
@@ -141,6 +144,7 @@
 					<v-btn
 						v-if="step === 1"
 						data-testid="dialog-export-btn"
+						class="ml-2"
 						color="primary"
 						variant="flat"
 						@click="onExport"
@@ -388,16 +392,3 @@ function toggleAllColumnBoards(): void {
 	});
 }
 </script>
-
-<style lang="scss" scoped>
-.button-section {
-	margin-bottom: calc(var(--space-base-vuetify) * 2);
-}
-
-.button-section > button {
-	margin-left: calc(var(--space-base-vuetify) * 2);
-}
-.check-options {
-	display: flex;
-}
-</style>

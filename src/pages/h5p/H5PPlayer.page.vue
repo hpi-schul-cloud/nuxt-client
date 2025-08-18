@@ -34,6 +34,6 @@ function loadError(error: unknown) {
 
 <style scoped>
 .content {
-	margin: var(--space-xl-3);
+	margin: 52px;
 }
 </style>

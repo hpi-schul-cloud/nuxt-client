@@ -50,7 +50,7 @@ const close = () => {
 }
 
 .content {
-	padding: var(--space-md);
+	padding: 16px;
 	text-align: left;
 }
 
@@ -58,7 +58,7 @@ const close = () => {
 	text-align: right;
 
 	> label {
-		margin-bottom: var(--space-md);
+		margin-bottom: 16px;
 	}
 }
 </style>

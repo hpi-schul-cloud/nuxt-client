@@ -18,15 +18,15 @@
 	display: flex;
 	justify-content: center;
 	width: 100%;
-	margin-top: var(--space-lg);
+	margin-top: 24px;
 
 	@include breakpoint(tablet) {
-		margin-top: var(--space-xl);
+		margin-top: 32px;
 	}
 
 	&__text {
-		margin-top: var(--space-xl-2);
-		margin-right: var(--space-sm);
+		margin-top: 40px;
+		margin-right: 12px;
 		font-size: var(--text-sm);
 	}
 

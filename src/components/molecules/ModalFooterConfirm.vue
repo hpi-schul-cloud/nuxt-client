@@ -28,7 +28,7 @@ withDefaults(defineProps<Props>(), {
 	width: 100%;
 
 	> *:not(:first-child) {
-		margin-left: var(--space-md);
+		margin-left: 16px;
 	}
 
 	@media only screen and (max-width: 520px) {
@@ -48,7 +48,7 @@ withDefaults(defineProps<Props>(), {
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	padding: var(--space-lg) var(--space-xl);
+	padding: 24px 32px;
 	font-family: var(--font-accent);
 	font-size: var(--text-md);
 	font-weight: var(--button-font-weight);
