@@ -11,6 +11,8 @@ describe("@ui-room-details/SelectBoardLayoutDialog", () => {
 		const wrapper = mount(SelectBoardLayoutDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { UseFocusTrap: true }, // unfortuantely it is not as straightward to test the focus trap
+				renderStubDefaultSlot: true,
 			},
 			props: {
 				modelValue: true,
@@ -23,7 +25,6 @@ describe("@ui-room-details/SelectBoardLayoutDialog", () => {
 
 	it("should be rendered correctly", async () => {
 		const { wrapper } = setup();
-
 		expect(wrapper.exists()).toBe(true);
 	});
 
