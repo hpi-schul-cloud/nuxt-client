@@ -1904,7 +1904,9 @@ export default {
 	"pages.rooms.ccImportCourse.success":
 		"Kurs {name} wurde erfolgreich importiert.",
 	"pages.rooms.ccImportCourse.error":
-		"Beim importieren des Kurses ist ein Fehler aufgetreten.",
+		"Beim Importieren des Kurses ist ein Fehler aufgetreten.",
+	"pages.rooms.ccExportCourse.error":
+		"Beim Exportieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
 	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
