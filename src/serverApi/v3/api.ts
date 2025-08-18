@@ -614,6 +614,43 @@ export enum BoardElementResponseTypeEnum {
 /**
  * 
  * @export
+ * @interface BoardErrorReportBodyParams
+ */
+export interface BoardErrorReportBodyParams {
+    /**
+     * Type of the board error
+     * @type {string}
+     * @memberof BoardErrorReportBodyParams
+     */
+    type: string;
+    /**
+     * Error message
+     * @type {string}
+     * @memberof BoardErrorReportBodyParams
+     */
+    message: string;
+    /**
+     * URL of the page the user was working on
+     * @type {string}
+     * @memberof BoardErrorReportBodyParams
+     */
+    url: string;
+    /**
+     * Id of the board the error occurred on
+     * @type {string}
+     * @memberof BoardErrorReportBodyParams
+     */
+    boardId: string;
+    /**
+     * Count of connection retries.
+     * @type {number}
+     * @memberof BoardErrorReportBodyParams
+     */
+    retryCount: number;
+}
+/**
+ * 
+ * @export
  * @enum {string}
  */
 export enum BoardExternalReferenceType {
@@ -15815,6 +15852,135 @@ export class BoardElementApi extends BaseAPI implements BoardElementApiInterface
      */
     public elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any) {
         return BoardElementApiFp(this.configuration).elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * BoardErrorReportApi - axios parameter creator
+ * @export
+ */
+export const BoardErrorReportApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Report a board related error.
+         * @param {BoardErrorReportBodyParams} boardErrorReportBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardErrorReportControllerReportError: async (boardErrorReportBodyParams: BoardErrorReportBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardErrorReportBodyParams' is not null or undefined
+            assertParamExists('boardErrorReportControllerReportError', 'boardErrorReportBodyParams', boardErrorReportBodyParams)
+            const localVarPath = `/report-board-error`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(boardErrorReportBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BoardErrorReportApi - functional programming interface
+ * @export
+ */
+export const BoardErrorReportApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BoardErrorReportApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Report a board related error.
+         * @param {BoardErrorReportBodyParams} boardErrorReportBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardErrorReportControllerReportError(boardErrorReportBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * BoardErrorReportApi - factory interface
+ * @export
+ */
+export const BoardErrorReportApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BoardErrorReportApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Report a board related error.
+         * @param {BoardErrorReportBodyParams} boardErrorReportBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.boardErrorReportControllerReportError(boardErrorReportBodyParams, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * BoardErrorReportApi - interface
+ * @export
+ * @interface BoardErrorReportApi
+ */
+export interface BoardErrorReportApiInterface {
+    /**
+     * 
+     * @summary Report a board related error.
+     * @param {BoardErrorReportBodyParams} boardErrorReportBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardErrorReportApiInterface
+     */
+    boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * BoardErrorReportApi - object-oriented interface
+ * @export
+ * @class BoardErrorReportApi
+ * @extends {BaseAPI}
+ */
+export class BoardErrorReportApi extends BaseAPI implements BoardErrorReportApiInterface {
+    /**
+     * 
+     * @summary Report a board related error.
+     * @param {BoardErrorReportBodyParams} boardErrorReportBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardErrorReportApi
+     */
+    public boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: any) {
+        return BoardErrorReportApiFp(this.configuration).boardErrorReportControllerReportError(boardErrorReportBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
