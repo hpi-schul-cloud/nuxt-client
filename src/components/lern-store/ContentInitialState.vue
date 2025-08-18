@@ -44,6 +44,6 @@ const { t } = useI18n();
 <style scoped>
 .initial-state-description {
 	text-align: left;
-	width: calc(2 * var(--size-content-width-min));
+	width: calc(2 * var(--content-min-width));
 }
 </style>
