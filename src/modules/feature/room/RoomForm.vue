@@ -7,6 +7,7 @@
 				class="mb-8"
 				:label="t('components.roomForm.labels.roomName')"
 				counter="100"
+				persistent-counter
 				:rules="validationRules"
 				autofocus
 			/>
