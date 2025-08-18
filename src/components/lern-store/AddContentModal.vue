@@ -181,7 +181,7 @@ export default {
 }
 .fade-enter-active,
 .fade-leave-active {
-	transition: opacity var(--duration-transition-slow);
+	transition: opacity 0.9s;
 }
 .fade-enter,
 .fade-leave-to {
