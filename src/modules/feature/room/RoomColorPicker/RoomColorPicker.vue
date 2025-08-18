@@ -9,7 +9,7 @@
 			:value="swatchColor"
 			:aria-label="t(`common.words.color.${swatchColor}`)"
 			:data-testid="`color-swatch-${swatchColor}`"
-			class="rounded-circle elevation-3 ma-1 d-flex justify-center align-items-center"
+			class="color-swatch-option rounded-circle elevation-3 ma-1 d-flex justify-center align-items-center"
 			:class="`room-color--${swatchColor}`"
 			color="white"
 			:true-icon="mdiCheckCircleOutline"
@@ -31,3 +31,10 @@ const currentColor = defineModel("color", {
 
 const { t } = useI18n();
 </script>
+<style lang="scss" scoped>
+.color-swatch-option:has(input:focus) {
+	outline: 5px auto Highlight; // Firefox
+	outline: 5px auto -webkit-focus-ring-color; // Chrome/Safari
+	outline-offset: 2px;
+}
+</style>
