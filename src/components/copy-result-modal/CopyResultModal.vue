@@ -203,6 +203,6 @@ const hasExternalToolElement = computed(() => {
 }
 
 .aligned-with-icon {
-	padding-top: var(--space-xs-3);
+	padding-top: 4px;
 }
 </style>

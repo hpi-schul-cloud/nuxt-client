@@ -17,11 +17,11 @@ import DefaultModalFooter from "@/components/molecules/ModalFooter.vue";
 @import "@/styles/mixins";
 
 .border {
-	margin: 0 var(--space-md);
+	margin: 0 16px;
 	border-top: 1px solid black;
 
 	@include breakpoint(tablet) {
-		margin: 0 var(--space-xl);
+		margin: 0 32px;
 	}
 }
 </style>

@@ -152,25 +152,6 @@ const submit = async () => {
 	line-height: var(--line-height-lg) !important;
 }
 
-.button-left {
-	width: 25%;
-	text-align: left;
-}
-
-.button-right {
-	display: inline-block;
-	width: 75%;
-	text-align: right;
-}
-
-.button-section {
-	margin-bottom: calc(var(--space-base-vuetify) * 2);
-}
-
-.button-section > button {
-	margin-left: calc(var(--space-base-vuetify) * 2);
-}
-
 :deep(.truncate-file-input .v-field__input) {
 	white-space: nowrap;
 	overflow: hidden;
