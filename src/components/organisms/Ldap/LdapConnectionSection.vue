@@ -8,6 +8,7 @@
 			data-testid="ldapDataConnectionUrl"
 			:model-value="modelValue.url"
 			type="text"
+			class="mt-8"
 			:label="$t('pages.administration.ldap.connection.server.url')"
 			:placeholder="$t('pages.administration.ldap.connection.server.url')"
 			:info="$t('pages.administration.ldap.connection.server.info')"
@@ -25,6 +26,7 @@
 			data-testid="ldapDataConnectionBasisPath"
 			:model-value="modelValue.basisPath"
 			type="text"
+			class="mt-8"
 			:label="$t('pages.administration.ldap.connection.basis.path')"
 			:placeholder="$t('pages.administration.ldap.connection.basis.path')"
 			:info="$t('pages.administration.ldap.connection.basis.path.info')"
@@ -42,6 +44,7 @@
 			data-testid="ldapDataConnectionSearchUser"
 			:model-value="modelValue.searchUser"
 			type="text"
+			class="mt-8"
 			:label="$t('pages.administration.ldap.connection.search.user')"
 			:placeholder="$t('pages.administration.ldap.connection.search.user')"
 			:info="$t('pages.administration.ldap.connection.search.user.info')"
@@ -59,6 +62,7 @@
 			data-testid="ldapDataConnectionSearchUserPassword"
 			:model-value="modelValue.searchUserPassword"
 			type="password"
+			class="mt-8"
 			:label="$t('pages.administration.ldap.connection.search.user.password')"
 			:placeholder="
 				$t('pages.administration.ldap.connection.search.user.password')
@@ -71,7 +75,8 @@
 					searchUserPassword: $event,
 				})
 			"
-			><template #icon>
+		>
+			<template #icon>
 				<v-icon :icon="mdiLockOutline" />
 			</template>
 		</base-input>
