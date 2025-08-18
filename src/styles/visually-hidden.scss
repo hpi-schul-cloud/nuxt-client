@@ -1,4 +1,4 @@
-@mixin visually-hidden {
+.visually-hidden {
 	/* https://snook.ca/archives/html_and_css/hiding-content-for-accessibility */
 	position: absolute !important;
 	top: 0;
@@ -8,8 +8,4 @@
 	overflow: hidden;
 	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
 	clip: rect(1px, 1px, 1px, 1px);
-}
-
-.visually-hidden {
-	@include visually-hidden;
 }
