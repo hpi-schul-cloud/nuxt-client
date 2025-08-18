@@ -154,20 +154,17 @@ const fabItemClickHandler = (event: string | undefined): void => {
 }
 
 .loader {
-	// padding: 0 var(--space-lg); // Desktop
 	max-width: var(--size-content-width-max);
 }
 
 @media #{map.get($display-breakpoints, 'sm-and-up')} {
 	:deep(.v-skeleton-loader__avatar) {
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin: 12px 36px;
 	}
 }
 
 @media #{map.get($display-breakpoints, 'md-and-up')} {
 	:deep(.v-skeleton-loader__avatar) {
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin: 24px 36px;
 	}
 }
