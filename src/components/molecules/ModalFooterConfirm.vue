@@ -28,7 +28,7 @@ withDefaults(defineProps<Props>(), {
 	width: 100%;
 
 	> *:not(:first-child) {
-		margin-left: var(--space-md);
+		margin-left: 16px;
 	}
 
 	@media only screen and (max-width: 520px) {
@@ -48,7 +48,7 @@ withDefaults(defineProps<Props>(), {
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	padding: var(--space-lg) var(--space-xl);
+	padding: 24px 32px;
 	font-family: var(--font-accent);
 	font-size: var(--text-md);
 	font-weight: var(--button-font-weight);
@@ -57,8 +57,7 @@ withDefaults(defineProps<Props>(), {
 	background: rgba(var(--v-theme-success));
 	border: none;
 	border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-	transition: all var(--duration-transition-medium)
-		cubic-bezier(0.23, 1, 0.32, 1);
+	transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 
 	&:hover,
 	&:focus {

@@ -175,13 +175,13 @@ export default {
 	&__body {
 		min-height: 300px;
 		&--select {
-			margin-top: var(--space-xl);
+			margin-top: 32px;
 		}
 	}
 }
 .fade-enter-active,
 .fade-leave-active {
-	transition: opacity var(--duration-transition-slow);
+	transition: opacity 0.9s;
 }
 .fade-enter,
 .fade-leave-to {

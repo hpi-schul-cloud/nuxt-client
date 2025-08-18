@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe ref="main" max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="mb--md h3">
+			<h1 class="mb-4 h3">
 				{{ title }}
 			</h1>
 			<i18n-t
@@ -28,7 +28,7 @@
 			</i18n-t>
 		</template>
 		<section class="section">
-			<div class="mt--lg">
+			<div class="mt-6">
 				<step-progress
 					id="progressbar"
 					:steps="progressSteps"
@@ -222,7 +222,7 @@
 					{{ successMessage }}
 				</h4>
 				<img
-					class="mb--md success-image mb-4"
+					class="success-image mb-4"
 					:src="image"
 					:alt="
 						$t('pages.administration.students.consent.steps.success.image.alt')
@@ -631,7 +631,7 @@ export default {
 <style lang="scss" scoped>
 .button {
 	float: right;
-	margin-left: var(--space-sm);
+	margin-left: 12px;
 }
 
 .centered {
@@ -640,12 +640,12 @@ export default {
 
 #progressbar {
 	display: inline-block;
-	margin-top: var(--space-md);
+	margin-top: 16px;
 }
 
 #consent-checkbox {
 	display: flex;
-	margin-bottom: var(--space-md);
+	margin-bottom: 16px;
 }
 
 .warning {
@@ -663,7 +663,7 @@ export default {
 }
 
 :deep(.table) {
-	margin-top: var(--space-lg);
+	margin-top: 24px;
 
 	.table__row {
 		height: 3rem;
@@ -691,8 +691,8 @@ export default {
 
 :deep(.base-input) {
 	max-width: 10em;
-	margin-bottom: var(--space-md);
-	margin-left: var(--space-xs);
+	margin-bottom: 16px;
+	margin-left: 8px;
 
 	.input-line {
 		.icon-behind {

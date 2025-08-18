@@ -220,12 +220,12 @@ export default defineComponent({
 	display: block;
 
 	.help {
-		padding-top: var(--space-xs-3);
+		padding-top: 4px;
 		visibility: hidden;
 	}
 
 	.label {
-		margin-right: var(--space-sm);
+		margin-right: 12px;
 	}
 
 	&:focus-within,
@@ -285,7 +285,7 @@ export default defineComponent({
 	.input-line {
 		display: flex;
 		align-items: center;
-		padding-bottom: var(--space-xs-4);
+		padding-bottom: 2px;
 
 		.icon {
 			display: flex;
@@ -294,11 +294,11 @@ export default defineComponent({
 			text-align: center;
 
 			&.icon-before {
-				margin-right: var(--space-xs-2);
+				margin-right: 6px;
 			}
 
 			&.icon-behind {
-				margin-left: var(--space-xs);
+				margin-left: 8px;
 				font-size: var(--text-lg);
 			}
 		}
@@ -310,7 +310,7 @@ export default defineComponent({
 			input {
 				width: 100%;
 				padding: 0;
-				margin: 0;
+				margin: 0 !important;
 				line-height: 100%;
 				cursor: text;
 				background: transparent;
@@ -360,7 +360,7 @@ export default defineComponent({
 }
 
 .fade-enter-active {
-	transition: opacity var(--duration-transition-medium);
+	transition: opacity 0.3s;
 }
 
 .fade-enter {
