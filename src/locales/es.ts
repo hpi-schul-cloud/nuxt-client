@@ -988,9 +988,9 @@ export default {
 	"components.roomForm.labels.timePeriod.to": "Periodo de tiempo hasta",
 	"components.roomForm.labels.videoConference.title": "Videoconferencias",
 	"components.roomForm.labels.videoConference.label":
-		"Permitir videoconferencias para editores",
+		"Los miembros de la sala con permiso para «editar» también pueden añadir e iniciar videoconferencias.",
 	"components.roomForm.labels.videoConference.helperText":
-		"Los miembros de la sala con autorización para «Editar» pueden añadir e iniciar videoconferencias.",
+		"Independientemente de ello, los miembros de la sala con permiso para «administrar» o «propietario» siempre pueden añadir e iniciar videoconferencias.",
 	"components.roomForm.validation.generalSaveError":
 		"Se ha producido un error al guardar. Por favor, compruebe sus entradas e inténtelo de nuevo.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -1166,6 +1166,10 @@ export default {
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
 	"pages.administration.classes.index.add": "Agregar clase",
 	"pages.administration.classes.index.title": "Administrar clases",
+	"pages.administration.classes.thr.hint.title":
+		"Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.text":
+		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
 	"pages.administration.common.label.archive": "Archivo",
 	"pages.administration.common.label.active": "Actual",
 	"pages.administration.classes.manage": "Administrar clase",
@@ -1446,8 +1450,10 @@ export default {
 		"If no language for the school is set, the system default (German) is applied.",
 	"pages.administration.school.index.generalSettings.save":
 		"Guardar configuración",
+	"pages.administration.school.index.generalSettings.save.success":
+		"Ajustes generales guardados correctamente.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
-		"To change your timezone, please reach out to one of the admins.",
+		"Para cambiar su zona horaria, comuníquese con uno de los administradores.",
 	"pages.administration.school.index.generalSettings": "Configuración general",
 	"pages.administration.school.index.info":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {instituteTitle}.",
