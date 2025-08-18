@@ -1,6 +1,6 @@
 <template>
 	<VBtn
-		class="color-swatch rounded-circle elevation-3 ma-1 d-flex justify-center align-items-center cursor-pointer"
+		class="color-swatch rounded-circle elevation-3 ma-1 d-flex justify-center align-center cursor-pointer"
 		:class="`room-color--${color}`"
 		:data-testid="`color-swatch-${color}`"
 		role="radio"

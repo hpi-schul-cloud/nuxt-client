@@ -1,26 +1,3 @@
-body.is-noscroll {
-	position: fixed;
-	top: 0;
-	width: 100%;
-	overflow-y: hidden;
-}
-
-textarea.v-field__input {
-	height: var(--text-base-size);
-}
-
-.justify-content-space-between {
-	justify-content: space-between;
-}
-
-.justify-content-center {
-	justify-content: center;
-}
-
-.align-items-center {
-	align-items: center;
-}
-
 @mixin visually-hidden {
 	/* https://snook.ca/archives/html_and_css/hiding-content-for-accessibility */
 	position: absolute !important;
@@ -35,10 +12,4 @@ textarea.v-field__input {
 
 .visually-hidden {
 	@include visually-hidden;
-}
-
-/* width */
-
-.w-100 {
-	width: 100%;
 }
