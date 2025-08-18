@@ -256,10 +256,6 @@ export default {
 				margin: var(--space-md);
 			}
 		}
-
-		&-close:not(:focus) {
-			@include visually-hidden;
-		}
 	}
 }
 
