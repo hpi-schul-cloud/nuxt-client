@@ -2130,6 +2130,8 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(анонімізовано)",
 	"pages.rooms.administration.roomDetail.breadcrumb":
 		"Учасники кімнати {roomName}",
+	"pages.rooms.administration.roomDetail.header.text":
+		"Учасники кімнати “{roomName}“",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

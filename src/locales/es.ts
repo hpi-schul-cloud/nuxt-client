@@ -2164,6 +2164,8 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anónimo)",
 	"pages.rooms.administration.roomDetail.breadcrumb":
 		"Miembros de la sala {roomName}",
+	"pages.rooms.administration.roomDetail.header.text":
+		"Miembros de la sala “{roomName}”",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",

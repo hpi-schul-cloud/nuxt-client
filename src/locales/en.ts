@@ -2091,6 +2091,8 @@ export default {
 		"Room members from other schools are shown anonymously for data protection reasons (exception: member with the “Own” room authorization).",
 	"pages.rooms.administration.roomDetail.anonymized": "(anonymized)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Room members {roomName}",
+	"pages.rooms.administration.roomDetail.header.text":
+		"Room members “{roomName}”",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",

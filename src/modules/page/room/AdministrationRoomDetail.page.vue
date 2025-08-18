@@ -8,7 +8,7 @@
 			<div ref="header">
 				<div class="d-flex align-items-center">
 					<h1 class="text-h3 mb-4" data-testid="admin-room-title">
-						{{ t("pages.rooms.administration.title") }}
+						{{ headerText }}
 					</h1>
 				</div>
 			</div>
@@ -48,9 +48,13 @@ const { selectedRoom } = storeToRefs(adminRoomStore);
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 
-const pageTitle = computed(() =>
-	buildPageTitle(t("pages.rooms.administration.pageTitle"))
+const headerText = computed(() =>
+	t("pages.rooms.administration.roomDetail.header.text", {
+		roomName: selectedRoom.value?.roomName || "",
+	})
 );
+
+const pageTitle = computed(() => buildPageTitle(headerText.value));
 useTitle(pageTitle);
 
 onUnmounted(() => {
