@@ -721,9 +721,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@use "@/styles/mixins" as *;
-
+<style scoped>
 :deep(.row-highlighted.theme--light.v-btn:hover::before) {
 	opacity: 0;
 }
@@ -737,22 +735,6 @@ export default {
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-}
-
-.info-box {
-	position: absolute;
-	right: 0%;
-	z-index: calc(var(--layer-fab) + 1);
-	max-width: 100%;
-	margin-top: 16px;
-	margin-right: 24px;
-	margin-left: 24px;
-
-	@include breakpoint(tablet) {
-		min-width: 450px;
-		max-width: 50%;
-		margin-right: 32px;
-	}
 }
 
 button:not(.is-none):focus {
