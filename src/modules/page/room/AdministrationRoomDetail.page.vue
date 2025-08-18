@@ -7,7 +7,7 @@
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-items-center">
-					<h1 class="text-h3 mb-4" data-testid="admin-room-title">
+					<h1 class="text-h3 mb-4" data-testid="admin-room-detail-title">
 						{{ headerText }}
 					</h1>
 				</div>
@@ -77,7 +77,6 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	return [
 		{
 			title: t("global.sidebar.item.management"),
-
 			to: "/administration",
 		},
 		{

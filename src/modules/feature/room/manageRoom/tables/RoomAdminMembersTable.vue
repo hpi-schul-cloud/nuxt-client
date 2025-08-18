@@ -12,7 +12,7 @@
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionChangePermission v-if="canAddRoomMembers" />
+			<KebabMenuActionChangePermission />
 			<KebabMenuActionRemoveMember />
 		</template>
 
@@ -50,11 +50,7 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import {
-	RoomMember,
-	useRoomAuthorization,
-	useRoomMembersStore,
-} from "@data-room";
+import { RoomMember, useRoomMembersStore } from "@data-room";
 import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { storeToRefs } from "pinia";
@@ -72,7 +68,6 @@ withDefaults(defineProps<Props>(), {
 });
 
 const { t } = useI18n();
-const { canAddRoomMembers } = useRoomAuthorization();
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersForAdmins, selectedIds } = storeToRefs(roomMembersStore);
 const { isRoomOwner } = roomMembersStore;
@@ -115,9 +110,7 @@ const tableHeader = computed(() => {
 		},
 		{ title: t("common.words.mainSchool"), key: "schoolName" },
 		{
-			title: canAddRoomMembers.value
-				? t("pages.rooms.members.tableHeader.actions")
-				: "",
+			title: t("pages.rooms.members.tableHeader.actions"),
 			key: "actions",
 			sortable: false,
 			width: 50,
