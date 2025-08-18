@@ -262,6 +262,7 @@ describe("useRoomMembers", () => {
 					fullName: `${user.lastName}, ${user.firstName}`,
 					schoolRoleNames: [RoleName.Teacher],
 					schoolName: "Paul-Gerhardt-Gymnasium",
+					schoolId: "school-id",
 					displaySchoolRole: "common.labels.teacher.neutral",
 				}))
 			);
@@ -301,6 +302,7 @@ describe("useRoomMembers", () => {
 					fullName: `${user.lastName}, ${user.firstName}`,
 					schoolRoleNames: [RoleName.Student],
 					schoolName: "Paul-Gerhardt-Gymnasium",
+					schoolId: "school-id",
 					displaySchoolRole: "common.labels.student.neutral",
 				}))
 			);
