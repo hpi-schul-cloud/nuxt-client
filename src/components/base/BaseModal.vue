@@ -72,7 +72,7 @@ const isDialogOpen = computed({
 	overflow: hidden;
 	background-color: rgba(var(--v-theme-white));
 	border-radius: var(--radius-md);
-	transition: all var(--duration-transition-medium) ease;
+	transition: all 0.3s ease;
 
 	&.white {
 		box-shadow: none;

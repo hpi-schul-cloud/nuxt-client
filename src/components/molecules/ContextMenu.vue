@@ -218,7 +218,7 @@ export default {
 @use "@/styles/mixins" as *;
 
 .context-menu {
-	--transition-duration: var(--duration-transition-fast);
+	--transition-duration: 0.15s;
 
 	position: absolute;
 	z-index: var(--layer-dropdown);

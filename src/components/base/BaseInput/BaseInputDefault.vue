@@ -360,7 +360,7 @@ export default defineComponent({
 }
 
 .fade-enter-active {
-	transition: opacity var(--duration-transition-medium);
+	transition: opacity 0.3s;
 }
 
 .fade-enter {
