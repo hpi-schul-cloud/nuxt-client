@@ -85,7 +85,6 @@ describe("RoomsOverview", () => {
 
 		envConfigModule.setEnvs({
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
-			FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
 			...envs,
 		} as ConfigResponse);
 
@@ -395,7 +394,6 @@ describe("RoomsOverview", () => {
 				const { wrapper } = createWrapper({
 					envs: {
 						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
-						FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
 					},
 					courses,
 				});
@@ -440,7 +438,6 @@ describe("RoomsOverview", () => {
 				const { wrapper } = createWrapper({
 					envs: {
 						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
-						FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
 					},
 					courses,
 				});
@@ -506,7 +503,6 @@ describe("RoomsOverview", () => {
 				const { wrapper } = createWrapper({
 					envs: {
 						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: false,
-						FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
 					},
 					courses,
 				});
