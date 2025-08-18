@@ -239,11 +239,11 @@ export default {
 		justify-content: flex-start;
 		width: 100%;
 		height: 100%;
-		padding-right: var(--space-md) !important;
+		padding-right: 16px !important;
 		cursor: pointer;
 
 		&-icon {
-			margin: var(--space-md) !important;
+			margin: 16px !important;
 		}
 
 		&-text {
@@ -253,7 +253,7 @@ export default {
 			white-space: normal;
 
 			&.no-icon {
-				margin: var(--space-md);
+				margin: 16px;
 			}
 		}
 	}
