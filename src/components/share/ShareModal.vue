@@ -1,73 +1,86 @@
 <template>
-	<v-custom-dialog
-		:is-open="isOpen"
-		data-testid="share-dialog"
-		:size="480"
-		has-buttons
-		:buttons="isOpen ? actionButtons : []"
-		@dialog-closed="onCloseDialog"
-		@next="onNext()"
+	<v-dialog
+		v-model="isOpen"
+		data-testid="sharedialog"
+		max-width="480"
+		@after-leave="onCloseDialog"
 	>
-		<template #title>
-			<div ref="textTitle" class="text-h4 my-2 text-break">
-				{{ modalTitle }}
-			</div>
-		</template>
-
-		<template #content>
-			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
-			<v-fade-transition>
-				<div v-if="step === 'firstStep'">
-					<p data-testid="share-options-info-text">
-						{{ t(`components.molecules.share.${type}.options.infoText`) }}
-					</p>
-					<div
-						v-if="showAlertInfo"
-						class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
-					>
-						<div class="mx-2">
-							<v-icon color="info" :icon="mdiInformation" />
+		<v-fade-transition>
+			<v-card data-testid="copy-info-dialog">
+				<UseFocusTrap>
+					<v-card-title class="text-h4 my-2 text-break px-6 pt-4">
+						{{ modalTitle }}
+					</v-card-title>
+					<v-card-text class="pt-2 px-6">
+						<div v-if="step === 'firstStep'">
+							<p data-testid="share-options-info-text">
+								{{ t(`components.molecules.share.${type}.options.infoText`) }}
+							</p>
+							<div
+								v-if="showAlertInfo"
+								class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
+							>
+								<div class="mx-2">
+									<v-icon color="info" :icon="mdiInformation" />
+								</div>
+								<div data-testid="share-options-table-header">
+									{{
+										t("components.molecules.share.options.tableHeader.InfoText")
+									}}
+									<ul class="ml-6">
+										<li
+											v-for="bulletPoint in listItems"
+											:key="bulletPoint.translation"
+											:data-testId="bulletPoint.testId"
+										>
+											{{ t(bulletPoint.translation) }}
+										</li>
+									</ul>
+								</div>
+							</div>
+							<share-modal-options-form
+								:type="type"
+								@share-options-change="onShareOptionsChange"
+							/>
 						</div>
-						<div data-testid="share-options-table-header">
-							{{ t("components.molecules.share.options.tableHeader.InfoText") }}
-							<ul class="ml-6">
-								<li
-									v-for="bulletPoint in listItems"
-									:key="bulletPoint.translation"
-									:data-testId="bulletPoint.testId"
-								>
-									{{ t(bulletPoint.translation) }}
-								</li>
-							</ul>
-						</div>
-					</div>
-					<share-modal-options-form
-						:type="type"
-						@share-options-change="onShareOptionsChange"
-					/>
-				</div>
 
-				<div v-else-if="step === 'secondStep'">
-					<share-modal-result
-						:share-url="shareUrl"
-						:type="type"
-						@done="onDone"
-						@copied="onCopy"
-					/>
-				</div>
-			</v-fade-transition>
-		</template>
-	</v-custom-dialog>
+						<div v-else-if="step === 'secondStep'">
+							<share-modal-result
+								:share-url="shareUrl"
+								:type="type"
+								@done="onDone"
+								@copied="onCopy"
+							/>
+						</div>
+					</v-card-text>
+					<v-card-actions class="px-6 pb-4">
+						<v-spacer />
+						<template v-if="step === 'firstStep'">
+							<v-btn variant="text" @click="onCloseDialog">
+								{{ t("common.actions.cancel") }}
+							</v-btn>
+							<v-btn variant="flat" color="primary" @click="onNext()">
+								{{ t("common.actions.continue") }}
+							</v-btn>
+						</template>
+						<template v-else-if="step === 'secondStep'">
+							<v-btn variant="flat" color="primary" @click="onCloseDialog()">
+								{{ t("common.labels.close") }}
+							</v-btn>
+						</template>
+					</v-card-actions>
+				</UseFocusTrap>
+			</v-card>
+		</v-fade-transition>
+	</v-dialog>
 </template>
 
 <script setup lang="ts">
-import VCustomDialog, {
-	VCustomDialogButton,
-} from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { ShareOptions } from "@/store/share";
+import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
@@ -98,29 +111,15 @@ const step = computed<ShareModalStep>(() =>
 	shareModule.getShareUrl === undefined ? "firstStep" : "secondStep"
 );
 
-const modalOptions: Record<
-	ShareModalStep,
-	{ title: string; actionButtons: VCustomDialogButton[] }
-> = {
-	firstStep: {
-		title: t("components.molecules.share.options.title"),
-		actionButtons: ["cancel", "next"],
-	},
-	secondStep: {
-		title: t("components.molecules.share.result.title"),
-		actionButtons: ["close"],
-	},
-};
-
 const shareUrl = computed(() => shareModule.getShareUrl ?? "");
-
-const actionButtons = computed(() => {
-	return modalOptions[step.value].actionButtons ?? [];
-});
 
 const shareOptions = ref<ShareOptions>();
 
-const modalTitle = computed(() => modalOptions[step.value].title ?? "");
+const modalTitle = computed(() =>
+	step.value === "firstStep"
+		? t("components.molecules.share.options.title")
+		: t("components.molecules.share.result.title")
+);
 
 const onShareOptionsChange = (newValue: ShareOptions) => {
 	shareOptions.value = newValue;
@@ -134,13 +133,12 @@ const onNext = () => {
 	}
 };
 const onDone = () => {
-	shareModule.resetShareFlow();
+	// shareModule.resetShareFlow();
 };
 const onCopy = () => {
 	notifier.show({
 		text: t("common.words.copiedToClipboard"),
 		status: "success",
-		timeout: 5000,
 	});
 };
 
