@@ -76,10 +76,6 @@ watch(
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	return [
 		{
-			title: t("global.sidebar.item.management"),
-			to: "/administration",
-		},
-		{
 			title: t("pages.rooms.administration.title"),
 			to: "/administration/rooms/manage",
 		},

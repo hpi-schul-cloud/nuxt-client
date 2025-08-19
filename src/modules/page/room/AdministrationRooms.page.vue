@@ -1,9 +1,5 @@
 <template>
-	<DefaultWireframe
-		max-width="full"
-		:breadcrumbs="breadcrumbs"
-		:fab-items="fabAction"
-	>
+	<DefaultWireframe max-width="full" :fab-items="fabAction">
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-items-center">
@@ -32,10 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
-import { computed, ComputedRef, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { RoomAdminTable } from "@feature-room";
 import { useAdministrationRoomStore } from "@data-room";
 import { storeToRefs } from "pinia";
@@ -72,19 +67,6 @@ watch(isRoomDetailsVisible, (visible) => {
 			params: { roomId: selectedRoom.value?.roomId },
 		});
 	}
-});
-
-const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	return [
-		{
-			title: t("global.sidebar.item.management"),
-			to: "/administration",
-		},
-		{
-			title: t("pages.rooms.administration.title"),
-			disabled: true,
-		},
-	];
 });
 
 const fabAction = computed(() => {

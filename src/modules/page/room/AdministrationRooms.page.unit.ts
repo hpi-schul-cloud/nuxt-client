@@ -101,26 +101,5 @@ describe("AdministrationRooms.page", () => {
 
 			expect(adminRoomStore.fetchRooms).toHaveBeenCalled();
 		});
-
-		it("should pass the correct breadcrumbs to the page", () => {
-			const { wrapper } = setup();
-			const defaultWireframe = wrapper.findComponent({
-				name: "DefaultWireframe",
-			});
-
-			expect(defaultWireframe.exists()).toBe(true);
-			const breadcrumbs = defaultWireframe.props("breadcrumbs");
-
-			expect(breadcrumbs).toEqual([
-				{
-					title: "global.sidebar.item.management",
-					to: "/administration",
-				},
-				{
-					title: "pages.rooms.administration.title",
-					disabled: true,
-				},
-			]);
-		});
 	});
 });

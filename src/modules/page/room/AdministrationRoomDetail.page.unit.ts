@@ -109,10 +109,6 @@ describe("AdministrationRoomDetail.page", () => {
 
 			expect(breadcrumbs).toEqual([
 				{
-					title: "global.sidebar.item.management",
-					to: "/administration",
-				},
-				{
 					title: "pages.rooms.administration.title",
 					to: "/administration/rooms/manage",
 				},
