@@ -118,22 +118,22 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
-	padding: var(--space-xs) var(--space-md);
+	padding: 8px 16px;
 	background-color: rgba(var(--v-theme-primary), 0.12);
 }
 
 .actions {
-	margin-top: var(--space-sm);
+	margin-top: 12px;
 
 	@include breakpoint(tablet) {
 		margin-top: 0;
-		margin-left: var(--space-md);
+		margin-left: 16px;
 	}
 }
 
 .content-wrapper {
 	flex-wrap: wrap;
-	margin: var(--space-xs) 0;
+	margin: 8px 0;
 }
 
 .select-all-rows {

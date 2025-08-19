@@ -816,6 +816,9 @@ export default {
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Enlace a la copia del tablón",
+	"components.molecules.share.columnBoard.mail.subject":
+		"Tablero para importar",
+	"components.molecules.share.columnBoard.mail.body": "Enlace al tablero: ",
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
 	"components.molecules.share.roomMemberInvitation.mail.body":
 		"Enlace a la Sala: ",
@@ -861,6 +864,8 @@ export default {
 		"Con el siguiente enlace, esta sala puede ser copiada por otras personas. Si se debe compartir una sala en uso activo, por favor, primero cree un duplicado y compártalo.",
 	"components.molecules.share.room.result.linkLabel":
 		"Enlace a la copia del salón",
+	"components.molecules.share.room.mail.subject": "Sala para importar",
+	"components.molecules.share.room.mail.body": "Enlace a la sala: ",
 	"components.molecules.share.result.mailShare": "Enviar como correo",
 	"components.molecules.share.result.qrCodeScan": "Escanear código QR",
 	"components.molecules.share.result.title": "Compartir vía",
@@ -1936,6 +1941,8 @@ export default {
 		"El curso {name} se ha importado correctamente.",
 	"pages.rooms.ccImportCourse.error":
 		"Se ha producido un error al importar el curso.",
+	"pages.rooms.ccExportCourse.error":
+		"Se produjo un error al exportar el curso.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
 	"pages.rooms.tools.deactivatedDialog.title":
@@ -2279,6 +2286,9 @@ export default {
 		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"pages.collabora.iframeTitle": "Editor de documentos de Office",
+	"pages.collabora.jsonError":
+		"No se pudo analizar el JSON del mensaje Collabora.",
+	"pages.collabora.messageError": "El mensaje de Collabora no es válido.",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",
 	"error.4500":

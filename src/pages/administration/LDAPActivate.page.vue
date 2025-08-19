@@ -333,37 +333,37 @@ export default {
 
 <style lang="scss" scoped>
 .subtitle-text {
-	margin-top: var(--space-xl);
+	margin-top: 32px;
 }
 
 .section {
-	margin: var(--space-xl-2);
+	margin: 40px;
 }
 
 .bottom-buttons {
 	display: flex;
 	justify-content: space-between;
-	margin-top: var(--space-xl);
-	margin-right: var(--space-xl);
-	margin-left: var(--space-lg);
+	margin-top: 32px;
+	margin-right: 32px;
+	margin-left: 24px;
 }
 
 .icon-text {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	margin-top: var(--space-xl-2);
+	margin-top: 40px;
 }
 
 .icon-text-unit {
-	margin-top: var(--space-sm);
-	margin-right: var(--space-lg);
+	margin-top: 12px;
+	margin-right: 24px;
 	font-weight: var(--font-weight-bold);
 	white-space: nowrap;
 }
 
 .category-title {
-	margin: var(--space-xl-2) 0 var(--space-lg) 0;
+	margin: 40px 0 24px 0;
 	font-weight: var(--font-weight-bold);
 }
 
@@ -374,8 +374,8 @@ table {
 
 td {
 	min-width: 200px;
-	padding: var(--space-sm);
-	margin-bottom: var(--space-md);
+	padding: 12px;
+	margin-bottom: 16px;
 	white-space: normal;
 }
 
@@ -387,11 +387,11 @@ tr:nth-child(odd) {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
-	margin: var(--space-xl-2);
+	margin: 40px;
 }
 
 .title-class {
-	margin-top: var(--space-xl-3);
-	margin-bottom: var(--space-lg);
+	margin-top: 52px;
+	margin-bottom: 24px;
 }
 </style>

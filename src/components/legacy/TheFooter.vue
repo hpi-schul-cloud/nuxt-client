@@ -83,8 +83,8 @@ const links = computed(() => {
 <style lang="scss" scoped>
 .footer {
 	width: 100%;
-	padding: 0 var(--space-md);
-	margin: var(--space-lg) 0 var(--space-md);
+	padding: 0 16px;
+	margin: 24px 0 16px;
 	text-align: center;
 }
 
@@ -101,7 +101,7 @@ const links = computed(() => {
 }
 
 .bottom-line {
-	margin-top: var(--space-xs);
+	margin-top: 8px;
 
 	.heart {
 		color: rgba(var(--v-theme-primary));

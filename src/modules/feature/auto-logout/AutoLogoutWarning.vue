@@ -121,7 +121,7 @@ watch(
 
 		@include breakpoint(tablet) {
 			width: 60%;
-			margin-top: var(--space-xl-4);
+			margin-top: 84px;
 			text-align: left;
 			vertical-align: middle;
 		}

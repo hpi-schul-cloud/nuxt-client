@@ -254,28 +254,28 @@ export default {
 }
 
 .subtitle-text {
-	margin-bottom: var(--space-xl);
+	margin-bottom: 32px;
 }
 
 .help-section {
-	margin-bottom: var(--space-xl-4);
+	margin-bottom: 84px;
 }
 
 .form-container {
 	margin: 0;
 
 	@include breakpoint(tablet) {
-		margin: 0 var(--space-xl-4);
+		margin: 0 84px;
 	}
 }
 
 .buttons-container {
 	display: flex;
 	justify-content: flex-end;
-	margin: var(--space-xl) 0 var(--space-xl-4) 0;
+	margin: 32px 0 84px 0;
 
 	@include breakpoint(tablet) {
-		margin: var(--space-xl-2) var(--space-xl-4);
+		margin: 40px 84px;
 	}
 }
 
@@ -283,10 +283,10 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
-	margin: var(--space-xl-2) 0;
+	margin: 40px 0;
 
 	@include breakpoint(tablet) {
-		margin: var(--space-xl-2) var(--space-xl-4);
+		margin: 40px 84px;
 	}
 }
 </style>

@@ -825,6 +825,8 @@ export default {
 		"With the following link, the board can be imported as a copy by other teachers.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link to Board copy",
+	"components.molecules.share.columnBoard.mail.subject": "Board you can import",
+	"components.molecules.share.columnBoard.mail.body": "Link to the board: ",
 	"components.molecules.share.options.expiresInDays":
 		"Link expires after 21 days",
 	"components.molecules.share.options.schoolInternally":
@@ -833,6 +835,8 @@ export default {
 	"components.molecules.share.room.options.infoText":
 		"With the following link, this room can be copied by other people. If an actively used room should be shared, please first create a duplicate and share that.",
 	"components.molecules.share.room.result.linkLabel": "Link room copy",
+	"components.molecules.share.room.mail.subject": "Room you can import",
+	"components.molecules.share.room.mail.body": "Link to the room: ",
 	"components.molecules.share.result.mailShare": "Send as mail",
 	"components.molecules.share.result.qrCodeScan": "Scan QR code",
 	"components.molecules.share.result.title": "Share via",
@@ -1877,6 +1881,8 @@ export default {
 		"Course {name} was successfully imported.",
 	"pages.rooms.ccImportCourse.error":
 		"An error occurred while importing the course.",
+	"pages.rooms.ccExportCourse.error":
+		"An error occurred while exporting the course.",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",
 	"pages.rooms.tools.deactivated": "Tool deactivated",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deactivated",
@@ -2206,6 +2212,8 @@ export default {
 		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
 	"pages.collabora.iframeTitle": "Office document editor",
+	"pages.collabora.jsonError": "Failed to parse JSON from Collabora message.",
+	"pages.collabora.messageError": "Collabora message is invalid.",
 	"error.500":
 		"There are problems in the system. We are working on fixing the issue. Please try again later.",
 	"error.4500":

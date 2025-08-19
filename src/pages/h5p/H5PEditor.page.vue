@@ -120,7 +120,7 @@ const save = async () => {
 
 <style scoped>
 .content {
-	margin-top: var(--space-xl-3);
+	margin-top: 52px;
 }
 
 .editor {
