@@ -1,9 +1,7 @@
 <template>
 	<DataTable
 		aria-label-name-key="fullName"
-		:items="
-			roomMembersWithoutApplicants as unknown as Record<string, unknown>[]
-		"
+		:items="tableData"
 		:header-bottom="headerBottom"
 		:table-headers="tableHeader"
 		:show-select="canAddRoomMembers"
@@ -101,9 +99,12 @@ const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds } =
 	storeToRefs(roomMembersStore);
 const { isRoomOwner, removeMembers } = roomMembersStore;
-
 const { askConfirmation } = useConfirmationDialog();
 
+const tableData = computed(
+	() =>
+		roomMembersWithoutApplicants.value as unknown as Record<string, unknown>[]
+);
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 

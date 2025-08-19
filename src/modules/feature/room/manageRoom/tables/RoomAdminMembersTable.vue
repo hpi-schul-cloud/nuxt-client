@@ -1,11 +1,9 @@
 <template>
 	<DataTable
 		aria-label-name-key="fullName"
-		:items="
-			roomMembersForAdmins as unknown as unknown as Record<string, unknown>[]
-		"
+		:items="tableData"
 		:header-bottom="headerBottom"
-		:table-headers="tableHeader"
+		:table-headers="tableHeaders"
 		:show-select="true"
 		:external-selected-ids="selectedIds"
 		select-item-key="userId"
@@ -72,6 +70,10 @@ const roomMembersStore = useRoomMembersStore();
 const { roomMembersForAdmins, selectedIds } = storeToRefs(roomMembersStore);
 const { isRoomOwner } = roomMembersStore;
 
+const tableData = computed(
+	() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]
+);
+
 const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
@@ -90,7 +92,7 @@ const getAriaLabel = (
 	return t(languageKey, { memberFullName });
 };
 
-const tableHeader = computed(() => {
+const tableHeaders = computed(() => {
 	return [
 		{
 			title: t("common.labels.firstName"),
