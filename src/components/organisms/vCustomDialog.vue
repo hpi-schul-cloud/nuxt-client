@@ -83,6 +83,14 @@
 <script setup lang="ts">
 import { ModelRef, PropType } from "vue";
 
+export type VCustomDialogButton =
+	| "back"
+	| "edit"
+	| "cancel"
+	| "confirm"
+	| "close"
+	| "next";
+
 const props = defineProps({
 	size: {
 		type: Number,
@@ -110,9 +118,7 @@ const props = defineProps({
 		type: Boolean,
 	},
 	buttons: {
-		type: Array as PropType<
-			("back" | "edit" | "cancel" | "confirm" | "close" | "next")[]
-		>,
+		type: Array as PropType<VCustomDialogButton[]>,
 		default: () => ["cancel", "confirm"],
 	},
 });

@@ -8,7 +8,7 @@
 				>
 					{{ t("feature-room.CopyInfoDialog.title") }}
 				</v-card-title>
-				<v-card-text class="pt-2">
+				<v-card-text class="pt-2 px-6">
 					<p>
 						{{ t("feature-room.CopyInfoDialog.text.nextStep") }}
 					</p>
