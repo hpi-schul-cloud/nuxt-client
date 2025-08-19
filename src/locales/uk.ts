@@ -1848,6 +1848,8 @@ export default {
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
+	"pages.room.locked":
+		"Доступ до кімнати заблоковано, оскільки жоден учасник не має права «Володіти». Зверніться до адміністратора школи.",
 	"pages.room.taskCard.label.done": "Завершити",
 	"pages.room.taskCard.label.due": "Термін",
 	"pages.room.taskCard.label.edit": "Редагувати",
@@ -1911,6 +1913,7 @@ export default {
 	"pages.rooms.ccImportCourse.loading": "Імпорт виконується...",
 	"pages.rooms.ccImportCourse.success": "Курс {name} успішно імпортовано.",
 	"pages.rooms.ccImportCourse.error": "Виникла помилка під час імпорту курсу.",
+	"pages.rooms.ccExportCourse.error": "Під час експорту курсу сталася помилка.",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",
 	"pages.rooms.tools.deactivatedDialog.title":
@@ -2242,6 +2245,9 @@ export default {
 		"Цей елемент більше не доступний, оскільки відеоконференції в школі вимкнено. Будь ласка, зверніться до адміністратора школи.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
 	"pages.collabora.iframeTitle": "Редактор документів Office",
+	"pages.collabora.jsonError":
+		"Не вдалося проаналізувати Json повідомлення Collabora.",
+	"pages.collabora.messageError": "Повідомлення Collabora недійсне.",
 	"error.500":
 		"Є проблеми в системі. Ми працюємо над усуненням проблеми. Будь ласка, спробуйте пізніше.",
 	"error.4500":
