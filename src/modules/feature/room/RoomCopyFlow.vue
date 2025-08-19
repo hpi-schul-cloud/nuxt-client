@@ -3,6 +3,7 @@
 		v-if="isRoomCopyInfoDialogOpen"
 		@copy:cancel="onCancelCopy"
 		@copy:confirm="onConfirmCopy"
+		@copy:close="onClose"
 	/>
 </template>
 
@@ -42,14 +43,18 @@ onMounted(() => {
 	isLoadingDialogOpen.value = false;
 });
 
-const onCancelCopy = () => {
+const onClose = () => {
 	isRoomCopyInfoDialogOpen.value = false;
-	emit("copy:cancel");
 	emit("copy:ended");
 };
 
+const onCancelCopy = () => {
+	emit("copy:cancel");
+	onClose();
+};
+
 const onConfirmCopy = async () => {
-	isRoomCopyInfoDialogOpen.value = false;
+	onClose();
 	isLoadingDialogOpen.value = true;
 
 	try {
