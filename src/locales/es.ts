@@ -1939,6 +1939,8 @@ export default {
 		"El curso {name} se ha importado correctamente.",
 	"pages.rooms.ccImportCourse.error":
 		"Se ha producido un error al importar el curso.",
+	"pages.rooms.ccExportCourse.error":
+		"Se produjo un error al exportar el curso.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
 	"pages.rooms.tools.deactivatedDialog.title":
