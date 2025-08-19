@@ -339,6 +339,15 @@ async function onExport(): Promise<void> {
 
 	closeDialog();
 	await commonCartridgeExportModule.startExport();
+
+	if (courseRoomDetailsModule.getBusinessError?.statusCode !== "") {
+		notifier.show({
+			status: "error",
+			text: t("pages.rooms.ccExportCourse.error"),
+			autoClose: true,
+		});
+	}
+
 	resetDialog();
 }
 
