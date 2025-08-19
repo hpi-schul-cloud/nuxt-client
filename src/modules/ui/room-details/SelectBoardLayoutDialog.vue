@@ -6,7 +6,7 @@
 					class="text-h4 text-break px-6 pt-4"
 					data-testid="board-layout-dialog-title"
 				>
-					{{ $t("pages.room.dialog.boardLayout.title") }}
+					{{ t("pages.room.dialog.boardLayout.title") }}
 				</VCardTitle>
 				<VCardText
 					class="d-flex flex-row flex-wrap align-items-center justify-space-around"
@@ -27,7 +27,7 @@
 						variant="outlined"
 						@click="$emit('update:modelValue', false)"
 					>
-						{{ $t("common.labels.close") }}
+						{{ t("common.labels.close") }}
 					</VBtn>
 				</VCardActions>
 			</VCard>
