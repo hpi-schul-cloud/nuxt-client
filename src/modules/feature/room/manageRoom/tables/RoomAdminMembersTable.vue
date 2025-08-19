@@ -23,10 +23,10 @@
 				{{ item.displaySchoolRole }}
 			</span>
 		</template>
-		<template #[`item.actions`]="{ item, index }">
+		<template #[`item.actions`]="{ item }">
 			<KebabMenu
 				v-if="item.isSelectable"
-				:data-testid="`kebab-menu-${index}`"
+				:data-testid="`kebab-menu-${item.userId}`"
 				:aria-label="getAriaLabel(item)"
 			>
 				<KebabMenuActionChangePermission
