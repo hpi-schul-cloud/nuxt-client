@@ -182,7 +182,6 @@
 			:course-name="selectedItemForSync.courseName"
 			:group-name="selectedItemForSync.groupName"
 			:course-id="selectedItemForSync.courseId"
-			data-testid="end-course-sync-dialog"
 			@success="loadClassList"
 		/>
 
