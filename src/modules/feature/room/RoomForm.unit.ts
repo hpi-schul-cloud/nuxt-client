@@ -2,13 +2,17 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
-import { flushPromises, mount } from "@vue/test-utils";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import RoomForm from "./RoomForm.vue";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { RoomFeatures } from "@/serverApi/v3";
 import { roomFactory } from "@@/tests/test-utils";
+import { VTextField } from "vuetify/components";
+import { nextTick } from "vue";
 
 describe("@feature-room/RoomForm", () => {
+	let wrapper: VueWrapper<InstanceType<typeof RoomForm>>;
+
 	const setup = (roomOverrides: Partial<RoomCreateParams> = {}) => {
 		const defaultRoom: RoomCreateParams = {
 			name: "A11Y for Beginners",
@@ -22,10 +26,10 @@ describe("@feature-room/RoomForm", () => {
 			...roomOverrides,
 		});
 
-		const wrapper = mount(RoomForm, {
+		wrapper = mount(RoomForm, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: { DatePicker: true, ConfirmationDialog: true },
+				stubs: { ConfirmationDialog: true },
 			},
 			props: { room },
 			attachTo: document.body,
@@ -33,16 +37,47 @@ describe("@feature-room/RoomForm", () => {
 		return { wrapper, room };
 	};
 
-	describe("when room name contains < followed by a string", () => {
-		it("should show error message", async () => {
+	afterEach(() => {
+		// needed because of attachTo to remove the component from the DOM
+		// and ensure a clean state for subsequent tests.
+		// More Details: https://test-utils.vuejs.org/api/#attachTo
+		wrapper.unmount();
+	});
+
+	describe("room name validation", () => {
+		it("should show error when name is empty", async () => {
 			const { wrapper } = setup();
 
-			const textField = wrapper.findComponent({ name: "VTextField" });
-			const input = textField.find("input");
+			const textField = wrapper.findComponent(VTextField);
+			await textField.setValue(" ");
+			await textField.trigger("blur");
 
-			await input.setValue("<abc");
+			expect(textField.text()).toContain("common.validation.nonEmptyString");
+		});
 
-			expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
+		it("should show error message when name contains < followed by a string", async () => {
+			const { wrapper } = setup();
+
+			const textField = wrapper.findComponent(VTextField);
+			await textField.setValue("<abc");
+			await textField.trigger("blur");
+
+			expect(textField.text()).toContain(
+				"common.validation.containsOpeningTag"
+			);
+		});
+
+		it("should show error when name exceeds max length", async () => {
+			const { wrapper } = setup();
+			await nextTick();
+
+			const exceedsMaxLengthName = "a".repeat(101);
+
+			const textField = wrapper.findComponent(VTextField);
+			await textField.setValue(exceedsMaxLengthName);
+			await textField.trigger("blur");
+
+			expect(textField.text()).toContain("common.validation.tooLong");
 		});
 	});
 
@@ -58,6 +93,24 @@ describe("@feature-room/RoomForm", () => {
 				await flushPromises();
 
 				expect(wrapper.emitted("save")).toBeUndefined();
+			});
+
+			it("should focus first invalid form field", async () => {
+				const { wrapper } = setup();
+
+				const textField = wrapper.findComponent(VTextField);
+				const invalidInput = textField.find("input");
+				await textField.setValue(" ");
+
+				expect(document.activeElement).not.toEqual(invalidInput.element);
+
+				const saveBtn = wrapper.findComponent(
+					"[data-testid='room-form-save-btn']"
+				);
+				await saveBtn.trigger("click");
+				await flushPromises();
+
+				expect(document.activeElement).toEqual(invalidInput.element);
 			});
 		});
 
