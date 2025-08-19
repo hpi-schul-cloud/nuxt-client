@@ -282,11 +282,11 @@ watchDebounced(
 	justify-content: space-between;
 	width: 100%;
 	min-height: calc(100vh - var(--sidebar-item-height));
-	padding: 0 var(--space-lg);
+	padding: 0 24px;
 	overflow-y: hidden;
 
 	.arrow__back {
-		margin-top: var(--space-xs);
+		margin-top: 8px;
 		font-weight: var(--font-weight-bold);
 		cursor: pointer;
 	}
@@ -305,8 +305,8 @@ watchDebounced(
 
 	&__searchbar {
 		width: 100%;
-		padding: var(--space-md) 0;
-		margin: var(--space-md) 0;
+		padding: 16px 0;
+		margin: 16px 0;
 		transition: margin 0.7s;
 		transform: scale(1);
 	}
@@ -316,12 +316,12 @@ watchDebounced(
 	}
 
 	&__no-results {
-		margin-top: var(--space-md);
+		margin-top: 16px;
 	}
 
 	&__footer {
 		align-self: flex-end;
-		padding-bottom: var(--space-sm);
+		padding-bottom: 12px;
 	}
 }
 .search {
@@ -357,8 +357,8 @@ watchDebounced(
 .first-search {
 	&__searchbar {
 		width: 100%;
-		padding: var(--space-md) 0;
-		margin-top: var(--space-xl-3);
+		padding: 16px 0;
+		margin-top: 52px;
 	}
 }
 
