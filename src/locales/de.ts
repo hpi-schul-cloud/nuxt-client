@@ -2235,6 +2235,9 @@ export default {
 		"Das Element ist nicht mehr verfügbar, da Videokonferenzen für die Schule deaktiviert wurden. Bitte an den Schul-Admin wenden.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
 	"pages.collabora.iframeTitle": "Office-Dokument Editor",
+	"pages.collabora.jsonError":
+		"Json der Collabora Nachricht konnte nicht geparsed werden.",
+	"pages.collabora.messageError": "Collabora Nachricht ist nicht valide.",
 	"error.500":
 		"Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",
 	"error.4500":

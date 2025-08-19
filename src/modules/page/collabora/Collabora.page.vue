@@ -18,6 +18,7 @@ import {
 import { TypeGuard } from "@/utils/type-guards";
 import { useFileStorageApi } from "@data-file";
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 interface Props {
 	fileRecordId: string;
@@ -30,6 +31,7 @@ const url = ref<string>("");
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
 const modified = ref<boolean>(false);
+const { t } = useI18n();
 
 const userName = computed(() => {
 	const firstName = authModule.getUser?.firstName;
@@ -42,6 +44,20 @@ const userName = computed(() => {
 	return "User Name";
 });
 
+window.addEventListener("message", (event) => {
+	listenForMessages(event.data);
+});
+
+const openUnloadConfirmation = (event: BeforeUnloadEvent) => {
+	if (modified.value) {
+		// Opens confirmation dialog in firefox
+		event.preventDefault();
+		// Opens confirmation dialog in chrome
+		event.returnValue = "";
+	}
+};
+window.addEventListener("beforeunload", openUnloadConfirmation);
+
 onMounted(async () => {
 	const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(
 		props.fileRecordId,
@@ -50,22 +66,7 @@ onMounted(async () => {
 	);
 
 	url.value = collaboraUrl;
-
-	window.addEventListener("message", (event) => {
-		listenForMessages(event.data);
-	});
-
-	window.addEventListener("beforeunload", openCloseTabConfirmation);
 });
-
-const openCloseTabConfirmation = (event: BeforeUnloadEvent) => {
-	if (modified.value) {
-		// Opens confirmation dialog in firefox
-		event.preventDefault();
-		// Opens confirmation dialog in chrome
-		event.returnValue = "";
-	}
-};
 
 const listenForMessages = (data: string) => {
 	const json = parseJson(data);
@@ -78,7 +79,7 @@ const listenForMessages = (data: string) => {
 		}
 	} catch {
 		notifierModule.show({
-			text: "Failed to process collabora message",
+			text: t("pages.collabora.messageError"),
 			status: "error",
 			timeout: 5000,
 		});
@@ -117,7 +118,7 @@ const parseJson = (data: string): unknown => {
 		return JSON.parse(data);
 	} catch {
 		notifierModule.show({
-			text: "Failed to parse JSON of collabora message",
+			text: t("pages.collabora.jsonError"),
 			status: "error",
 			timeout: 5000,
 		});
