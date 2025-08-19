@@ -15,10 +15,10 @@ import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
-import { TypeGuard } from "@/utils/type-guards";
 import { useFileStorageApi } from "@data-file";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { z } from "zod";
 
 interface Props {
 	fileRecordId: string;
@@ -68,49 +68,45 @@ onMounted(async () => {
 	url.value = collaboraUrl;
 });
 
+const collaboraMessageValidator = z
+	.object({
+		MessageId: z.string(),
+		Values: z.unknown(),
+	})
+	.required();
+type CollaboraMessage = z.infer<typeof collaboraMessageValidator>;
+
+const modifiedStatusValueValidator = z
+	.object({
+		Modified: z.boolean(),
+	})
+	.required();
+
 const listenForMessages = (data: string) => {
 	const json = parseJson(data);
 
 	try {
-		const message = checkIsValidMessage(json);
+		const message = collaboraMessageValidator.parse(json);
 
-		if (hasModifiedStatusMessageId(message)) {
-			modified.value = isDocumentModified(message);
-		}
+		handleModifiedStatusMessage(message);
 	} catch {
-		notifierModule.show({
-			text: t("pages.collabora.messageError"),
-			status: "error",
-			timeout: 5000,
-		});
+		showMessageError();
 	}
 };
 
-interface CollaboraMessage {
-	messageId: string;
-	values: unknown;
-}
+const showMessageError = () =>
+	notifierModule.show({
+		text: t("pages.collabora.messageError"),
+		status: "error",
+		timeout: 5000,
+	});
 
-const checkIsValidMessage = (data: unknown): CollaboraMessage => {
-	const definedObject = TypeGuard.checkDefinedObject(data);
+const handleModifiedStatusMessage = (message: CollaboraMessage) => {
+	if (hasModifiedStatusMessageId(message.MessageId)) {
+		const value = modifiedStatusValueValidator.parse(message.Values);
 
-	const messageIdValue = TypeGuard.checkKeyInObject(definedObject, "MessageId");
-	const messageIdString = TypeGuard.checkString(messageIdValue);
-
-	const values = TypeGuard.checkKeyInObject(definedObject, "Values");
-
-	return {
-		messageId: messageIdString,
-		values,
-	};
-};
-
-const isDocumentModified = (data: CollaboraMessage): boolean => {
-	const valuesObject = TypeGuard.checkDefinedObject(data.values);
-	const modifiedValue = TypeGuard.checkKeyInObject(valuesObject, "Modified");
-	const modifiedBoolean = TypeGuard.checkBoolean(modifiedValue);
-
-	return modifiedBoolean;
+		modified.value = value.Modified;
+	}
 };
 
 const parseJson = (data: string): unknown => {
@@ -125,7 +121,9 @@ const parseJson = (data: string): unknown => {
 	}
 };
 
-const hasModifiedStatusMessageId = (message: CollaboraMessage): boolean => {
-	return message.messageId === "Doc_ModifiedStatus";
+const hasModifiedStatusMessageId = (messageId: string): boolean => {
+	const isModifiedStatusMessage = messageId === "Doc_ModifiedStatus";
+
+	return isModifiedStatusMessage;
 };
 </script>
