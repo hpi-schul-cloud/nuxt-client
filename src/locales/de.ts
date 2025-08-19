@@ -806,6 +806,9 @@ export default {
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link Bereich-Kopie",
+	"components.molecules.share.columnBoard.mail.subject":
+		"Bereich zum Importieren",
+	"components.molecules.share.columnBoard.mail.body": "Link zum Bereich: ",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.roomMemberInvitation.mail.body":
 		"Link zum Raum: ",
@@ -846,6 +849,8 @@ export default {
 	"components.molecules.share.room.options.infoText":
 		"Mit dem folgenden Link kann dieser Raum von anderen Personen kopiert werden. Wenn kein aktiv genutzter Raum geteilt werden soll, bitte zuerst ein Duplikat erstellen und dieses teilen.",
 	"components.molecules.share.room.result.linkLabel": "Link Raum-Kopie",
+	"components.molecules.share.room.mail.subject": "Raum zum Importieren",
+	"components.molecules.share.room.mail.body": "Link zum Raum: ",
 	"components.molecules.share.result.mailShare": "Als Mail versenden",
 	"components.molecules.share.result.qrCodeScan": "QR-Code scannen",
 	"components.molecules.share.result.title": "Teilen über",
@@ -964,9 +969,9 @@ export default {
 	"components.roomForm.labels.timePeriod.to": "Zeitraum bis",
 	"components.roomForm.labels.videoConference.title": "Videokonferenzen",
 	"components.roomForm.labels.videoConference.label":
-		"Videokonferenzen für Bearbeitende erlauben",
+		"Auch Raum-Mitglieder mit der Berechtigung „Bearbeiten“ dürfen Videokonferenzen hinzufügen und starten.",
 	"components.roomForm.labels.videoConference.helperText":
-		"Raum-Mitglieder mit der Berechtigung „Bearbeiten” dürfen Videokonferenzen hinzufügen und starten.",
+		"Unabhängig davon können Raum-Mitglieder mit der Berechtigung „Verwalten“ oder „Besitzen“ Videokonferenzen immer hinzufügen und starten.",
 	"components.roomForm.validation.generalSaveError":
 		"Beim Speichern ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -1135,6 +1140,10 @@ export default {
 		"Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {institute_title}.",
 	"pages.administration.classes.index.add": "Klasse hinzufügen",
 	"pages.administration.classes.index.title": "Klassen verwalten",
+	"pages.administration.classes.thr.hint.title":
+		"Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.text":
+		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
 	"pages.administration.common.label.archive": "Archiv",
 	"pages.administration.common.label.active": "Aktuell",
 	"pages.administration.classes.manage": "Klasse verwalten",
@@ -1408,6 +1417,8 @@ export default {
 		"Ist keine Sprache für die Schule gesetzt, wird die Sprache der Instanz (Deutsch) angewandt.",
 	"pages.administration.school.index.generalSettings.save":
 		"Einstellungen speichern",
+	"pages.administration.school.index.generalSettings.save.success":
+		"Allgemeine Einstellungen erfolgreich gespeichert.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
 		"Um die Zeitzone für die Schule zu ändern, wenden Sie sich bitte an einen Admin.",
 	"pages.administration.school.index.generalSettings":

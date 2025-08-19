@@ -811,6 +811,8 @@ export default {
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Посилання на копію дошки",
+	"components.molecules.share.columnBoard.mail.subject": "Дошка для імпорту",
+	"components.molecules.share.columnBoard.mail.body": "Посилання на дошку: ",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
 	"components.molecules.share.roomMemberInvitation.mail.body":
 		"Посилання на кімнату: ",
@@ -855,6 +857,8 @@ export default {
 	"components.molecules.share.room.options.infoText":
 		"За цим посиланням цю кімнату можуть скопіювати інші користувачі. Якщо потрібно поділитися кімнатою, яка активно використовується, спочатку створіть дублікат і поділіться ним.",
 	"components.molecules.share.room.result.linkLabel": "Копія теми посилання",
+	"components.molecules.share.room.mail.subject": "Кімната для імпорту",
+	"components.molecules.share.room.mail.body": "Посилання на кімнату: ",
 	"components.molecules.share.result.mailShare": "Надіслати поштою",
 	"components.molecules.share.result.qrCodeScan": "Відскануйте QR-код",
 	"components.molecules.share.result.title": "Поділіться через",
@@ -980,9 +984,9 @@ export default {
 	"components.roomForm.labels.timePeriod.to": "Період до",
 	"components.roomForm.labels.videoConference.title": "Відеоконференції",
 	"components.roomForm.labels.videoConference.label":
-		"Дозволити відеоконференції для редакторів",
+		"Члени кімнати з правом «Редагувати» також можуть додавати та запускати відеоконференці.",
 	"components.roomForm.labels.videoConference.helperText":
-		"Учасники кімнати з правами «Редагувати» можуть додавати і починати відеоконференції.",
+		"Незалежно від цього, члени кімнати з правом «Управляти» або «Володіти» завжди можуть додавати та запускати відеоконференції.",
 	"components.roomForm.validation.generalSaveError":
 		"Виникла помилка при збереженні. Будь ласка, перевірте свої записи та спробуйте ще раз.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -1151,6 +1155,10 @@ export default {
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",
 	"pages.administration.classes.index.add": "Додати клас",
 	"pages.administration.classes.index.title": "Керувати заняттями",
+	"pages.administration.classes.thr.hint.title":
+		"Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.text":
+		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
 	"pages.administration.common.label.archive": "Архів",
 	"pages.administration.common.label.active": "поточний",
 	"pages.administration.classes.manage": "Керувати класом",
@@ -1424,6 +1432,8 @@ export default {
 		"Якщо мову школи не встановлено, застосовується системна мова за замовчуванням (німецька).",
 	"pages.administration.school.index.generalSettings.save":
 		"Зберегти налаштування",
+	"pages.administration.school.index.generalSettings.save.success":
+		"Загальні налаштування успішно збережено.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
 		"Щоб змінити часовий пояс, зверніться до одного з адміністраторів.",
 	"pages.administration.school.index.generalSettings": "Загальні параметри",

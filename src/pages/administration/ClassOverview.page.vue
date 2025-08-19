@@ -94,8 +94,8 @@
 						<v-icon>{{ mdiPencilOutline }}</v-icon>
 					</v-btn>
 					<v-btn
-						:title="$t('pages.administration.classes.delete')"
-						:aria-label="$t('pages.administration.classes.delete')"
+						:title="t('pages.administration.classes.delete')"
+						:aria-label="t('pages.administration.classes.delete')"
 						data-testid="class-table-delete-btn"
 						variant="outlined"
 						size="small"
@@ -182,10 +182,12 @@
 			:course-name="selectedItemForSync.courseName"
 			:group-name="selectedItemForSync.groupName"
 			:course-id="selectedItemForSync.courseId"
+			data-testid="end-course-sync-dialog"
 			@success="loadClassList"
 		/>
 
 		<v-btn
+			v-if="hasCreatePermission"
 			class="my-5 button-start"
 			color="primary"
 			variant="flat"
@@ -194,6 +196,16 @@
 		>
 			{{ t("pages.administration.classes.index.add") }}
 		</v-btn>
+
+		<InfoAlert
+			v-if="!hasCreatePermission"
+			class="mb-4"
+			:class="{ 'mt-4': !hasCreatePermission }"
+			data-testid="admin-class-info-alert"
+			alert-title="pages.administration.classes.thr.hint.title"
+		>
+			{{ t("pages.administration.classes.thr.hint.text") }}
+		</InfoAlert>
 
 		<p class="text-muted">
 			{{
@@ -240,6 +252,7 @@ import {
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { InfoAlert } from "@ui-alert";
 import { useRoute, useRouter } from "vue-router";
 import { DataTableHeader } from "vuetify";
 
@@ -284,7 +297,7 @@ const footerProps = {
 const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
 	{
 		title: t("pages.administration.index.title"),
-		href: "/administration/",
+		disabled: true,
 	},
 	{
 		title: t("pages.administration.classes.index.title"),
@@ -319,17 +332,27 @@ const classes: ComputedRef<ClassInfo[]> = computed(
 	() => groupModule.getClasses
 );
 
+const showSourceHeader: ComputedRef<boolean> = computed(() => {
+	return classes.value.some(
+		(classItem) => classItem.externalSourceName !== undefined
+	);
+});
+
 const isLoading: ComputedRef<boolean> = computed(() => groupModule.getLoading);
 
-const hasPermission: ComputedRef<boolean> = computed(() =>
+const hasEditPermission: ComputedRef<boolean> = computed(() =>
 	authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
 );
 
 const showClassAction = (item: ClassInfo) =>
-	hasPermission.value && item.type === ClassRootType.Class;
+	hasEditPermission.value && item.type === ClassRootType.Class;
 
 const showGroupAction = (item: ClassInfo) =>
-	hasPermission.value && item.type === ClassRootType.Group;
+	hasEditPermission.value && item.type === ClassRootType.Group;
+
+const hasCreatePermission: ComputedRef<boolean> = computed(() =>
+	authModule.getUserPermissions.includes("CLASS_CREATE".toLowerCase())
+);
 
 const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
@@ -400,12 +423,14 @@ const headers = computed(() => {
 			sortable: true,
 		});
 	}
-	headerList.push(
-		{
+	if (showSourceHeader.value) {
+		headerList.push({
 			value: "externalSourceName",
 			title: t("common.labels.externalsource"),
 			sortable: true,
-		},
+		});
+	}
+	headerList.push(
 		{
 			key: "teacherNames",
 			value: (item: ClassInfo) => item.teacherNames.join(", "),

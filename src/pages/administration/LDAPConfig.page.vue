@@ -94,7 +94,7 @@ import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection
 import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
 import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
 import InfoMessage from "@/components/atoms/InfoMessage";
-import { envConfigModule, notifierModule } from "@/store";
+import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
@@ -111,13 +111,11 @@ export default {
 			breadcrumbs: [
 				{
 					title: this.$t("pages.administration.index.title"),
-					href: "/administration/",
+					disabled: true,
 				},
 				{
 					title: this.$t("pages.administration.school.index.title"),
-					href: envConfigModule.getNewSchoolAdminPageAsDefault
-						? "/administration/school-settings"
-						: "/administration/school",
+					to: "/administration/school-settings",
 				},
 				{
 					title: this.$t("pages.administration.ldap.index.title"),
@@ -256,28 +254,28 @@ export default {
 }
 
 .subtitle-text {
-	margin-bottom: var(--space-xl);
+	margin-bottom: 32px;
 }
 
 .help-section {
-	margin-bottom: var(--space-xl-4);
+	margin-bottom: 84px;
 }
 
 .form-container {
 	margin: 0;
 
 	@include breakpoint(tablet) {
-		margin: 0 var(--space-xl-4);
+		margin: 0 84px;
 	}
 }
 
 .buttons-container {
 	display: flex;
 	justify-content: flex-end;
-	margin: var(--space-xl) 0 var(--space-xl-4) 0;
+	margin: 32px 0 84px 0;
 
 	@include breakpoint(tablet) {
-		margin: var(--space-xl-2) var(--space-xl-4);
+		margin: 40px 84px;
 	}
 }
 
@@ -285,10 +283,10 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
-	margin: var(--space-xl-2) 0;
+	margin: 40px 0;
 
 	@include breakpoint(tablet) {
-		margin: var(--space-xl-2) var(--space-xl-4);
+		margin: 40px 84px;
 	}
 }
 </style>
