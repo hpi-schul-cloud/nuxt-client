@@ -13,7 +13,7 @@
 			:class="`room-color--${swatchColor}`"
 			color="white"
 			:true-icon="mdiCheckCircleOutline"
-			false-icon="false"
+			false-icon=""
 		/>
 	</VRadioGroup>
 </template>

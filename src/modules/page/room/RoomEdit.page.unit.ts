@@ -89,11 +89,9 @@ describe("@pages/RoomEdit.page.vue", () => {
 				},
 			},
 		});
-		console.log(wrapper.html());
 
 		const { isLoading, updateRoom, fetchRoom } =
 			mockedPiniaStoreTyping(useRoomDetailsStore);
-		console.log(room);
 
 		return {
 			wrapper,
