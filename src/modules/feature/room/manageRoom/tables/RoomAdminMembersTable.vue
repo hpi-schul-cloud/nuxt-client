@@ -67,7 +67,8 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersForAdmins, selectedIds } = storeToRefs(roomMembersStore);
+const { roomMembersForAdmins, selectedIds, baseTableHeaders } =
+	storeToRefs(roomMembersStore);
 const { isRoomOwner } = roomMembersStore;
 
 const tableData = computed(
@@ -94,23 +95,7 @@ const getAriaLabel = (
 
 const tableHeaders = computed(() => {
 	return [
-		{
-			title: t("common.labels.firstName"),
-			key: "firstName",
-		},
-		{
-			title: t("common.labels.lastName"),
-			key: "lastName",
-		},
-		{
-			title: t("pages.rooms.members.tableHeader.roomRole"),
-			key: "displayRoomRole",
-		},
-		{
-			title: t("pages.rooms.members.tableHeader.schoolRole"),
-			key: "displaySchoolRole",
-		},
-		{ title: t("common.words.mainSchool"), key: "schoolName" },
+		...baseTableHeaders.value,
 		{
 			title: t("pages.rooms.members.tableHeader.actions"),
 			key: "actions",

@@ -420,6 +420,28 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		selectedIds.value = [];
 	};
 
+	const baseTableHeaders = computed(() => {
+		return [
+			{
+				title: t("common.labels.firstName"),
+				key: "firstName",
+			},
+			{
+				title: t("common.labels.lastName"),
+				key: "lastName",
+			},
+			{
+				title: t("pages.rooms.members.tableHeader.roomRole"),
+				key: "displayRoomRole",
+			},
+			{
+				title: t("pages.rooms.members.tableHeader.schoolRole"),
+				key: "displaySchoolRole",
+			},
+			{ title: t("common.words.mainSchool"), key: "schoolName" },
+		];
+	});
+
 	return {
 		addMembers,
 		isRoomOwner,
@@ -436,6 +458,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		rejectInvitations,
 		removeMembers,
 		updateMembersRole,
+		baseTableHeaders,
 		confirmationList,
 		confirmationSelectedIds,
 		isCurrentUserStudent,
