@@ -5,7 +5,7 @@
 		:fab-items="fabAction"
 	>
 		<template #header>
-			<div class="d-flex align-items-center">
+			<div ref="header" class="d-flex align-items-center">
 				<h1 class="text-h3 mb-4" data-testid="admin-room-detail-title">
 					{{ headerText }}
 				</h1>
