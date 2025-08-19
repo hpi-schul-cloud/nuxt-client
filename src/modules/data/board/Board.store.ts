@@ -36,6 +36,7 @@ import { useCardStore } from "./Card.store";
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload.types";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { ColumnResponse } from "@/serverApi/v3";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
@@ -292,12 +293,32 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 
 		const {
+			cardId,
 			newIndex,
 			oldIndex,
 			forceNextTick,
 			fromColumnIndex,
 			toColumnIndex,
+			toColumnId,
 		} = payload;
+
+		let toColumn: ColumnResponse | undefined =
+			board.value.columns[toColumnIndex];
+		if (toColumn === undefined) {
+			toColumn = board.value.columns.find((column) => column.id === toColumnId);
+			if (toColumn === undefined) {
+				// cancel execution if target column does not exist
+				return;
+			}
+		}
+
+		const doesCardExist = board.value.columns[fromColumnIndex].cards.some(
+			(card) => card.cardId === cardId
+		);
+		if (!doesCardExist) {
+			// cancel execution if card does not exist
+			return;
+		}
 
 		const item = board.value.columns[fromColumnIndex].cards.splice(
 			oldIndex,
@@ -312,7 +333,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 			await nextTick();
 		}
 
-		const toColumn = board.value.columns[toColumnIndex];
 		toColumn.cards.splice(newIndex, 0, item);
 	};
 
