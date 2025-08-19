@@ -956,9 +956,9 @@ export default {
 	"components.roomForm.labels.timePeriod.to": "Time period to",
 	"components.roomForm.labels.videoConference.title": "Video conferences",
 	"components.roomForm.labels.videoConference.label":
-		"Allow video conferences for editors",
+		"Room members with ‘Edit’ room permissions can also add and start video conferences.",
 	"components.roomForm.labels.videoConference.helperText":
-		"Room members with 'Edit' authorization can add and start video conferences.",
+		"Independently of this, room members with ‘Administer’ or ‘Own’ room permissions can always add and start video conferences.",
 	"components.roomForm.validation.generalSaveError":
 		"An error occurred while saving. Please check your inputs and try again.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -1128,6 +1128,10 @@ export default {
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {institute_title}.",
 	"pages.administration.classes.index.add": "Add class",
 	"pages.administration.classes.index.title": "Manage classes",
+	"pages.administration.classes.thr.hint.title":
+		"Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.text":
+		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
 	"pages.administration.common.label.archive": "Archive",
 	"pages.administration.common.label.active": "Current",
 	"pages.administration.classes.manage": "Manage class",
@@ -1399,6 +1403,8 @@ export default {
 	"pages.administration.school.index.generalSettings.languageHint":
 		"If no language for the school is set, the system default (German) is applied.",
 	"pages.administration.school.index.generalSettings.save": "Save settings",
+	"pages.administration.school.index.generalSettings.save.success":
+		"General settings successfully saved.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
 		"To change your timezone, please reach out to one of the admins.",
 	"pages.administration.school.index.generalSettings": "General Settings",
@@ -1994,7 +2000,7 @@ export default {
 	"pages.rooms.members.roleChange.Roomadmin.label":
 		'Same permissions as "Edit", plus add and remove other members, change their room permissions and edit the room',
 	"pages.rooms.members.roleChange.Roomowner.label":
-		"Same permissions as “ Administer”, additionally delete room",
+		"Same permissions as “Administer”, additionally delete room",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Attention: Only one person in the room can receive this permission!",
 	"pages.rooms.members.roleChange.dialogTitle.handOver":
