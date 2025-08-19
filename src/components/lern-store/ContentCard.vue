@@ -150,8 +150,8 @@ export default {
 	top: 0;
 	left: 0;
 	z-index: var(--layer-page);
-	padding: var(--space-xs);
-	margin: var(--space-sm);
+	padding: 8px;
+	margin: 12px;
 	font-size: var(--text-xs);
 	color: rgba(var(--v-theme-on-surface));
 	background: rgba(var(--v-theme-white));
@@ -177,8 +177,8 @@ export default {
 .img-container > span {
 	position: absolute;
 	right: 0;
-	margin-top: var(--space-xs);
-	margin-right: var(--space-xs);
+	margin-top: 8px;
+	margin-right: 8px;
 	background-color: rgba(var(--v-theme-on-surface));
 	border-radius: var(--radius-round);
 	opacity: 0.7;
@@ -221,7 +221,7 @@ export default {
 			top: 50%;
 			left: 50%;
 			z-index: var(--layer-page);
-			font-size: var(--space-xl-3) !important;
+			font-size: 52px !important;
 			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 1));
 			opacity: 0.9;
 			transform: translate(-50%, -50%);
@@ -239,7 +239,7 @@ export default {
 
 	&__title {
 		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
-		margin: var(--space-xs) var(--space-sm);
+		margin: 8px 12px;
 		color: rgba(var(--v-theme-on-surface));
 
 		@include excerpt(
@@ -250,8 +250,8 @@ export default {
 	}
 
 	&__description {
-		padding: 0 var(--space-xs);
-		margin-bottom: var(--space-xs);
+		padding: 0 8px;
+		margin-bottom: 8px;
 
 		@include excerpt(
 			$font-size: var(--text-sm),
@@ -265,10 +265,10 @@ export default {
 	display: flex;
 	flex-direction: column;
 	height: 13%;
-	padding: 0 var(--space-xs);
+	padding: 0 8px;
 
 	&__separator {
-		margin: 0 var(--space-xs-4);
+		margin: 0 2px;
 		border-top: 1px solid map.get($grey, base);
 	}
 
@@ -277,7 +277,7 @@ export default {
 		align-items: center;
 		justify-content: space-between;
 		height: 100%;
-		padding: var(--space-xs-4) 0;
+		padding: 2px 0;
 	}
 
 	&_more {

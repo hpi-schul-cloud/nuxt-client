@@ -31,7 +31,7 @@ withDefaults(defineProps<Props>(), {
 <style lang="scss" scoped>
 .icon {
 	font-size: var(--sidebar-item-height);
-	margin-bottom: var(--space-md);
+	margin-bottom: 16px;
 }
 
 .body-container {
@@ -47,7 +47,7 @@ withDefaults(defineProps<Props>(), {
 	}
 
 	.modal-description {
-		margin-top: var(--space-md);
+		margin-top: 16px;
 	}
 }
 </style>

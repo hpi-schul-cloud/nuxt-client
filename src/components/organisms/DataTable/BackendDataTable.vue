@@ -60,7 +60,7 @@
 
 		<pagination
 			v-if="paginated"
-			class="mt--md"
+			class="mt-4"
 			:current-page="currentPage"
 			:total="total"
 			:per-page="rowsPerPage"
@@ -415,7 +415,7 @@ tbody {
 
 .table {
 	width: 100%;
-	margin-bottom: var(--space-sm);
+	margin-bottom: 12px;
 	border-collapse: collapse;
 }
 </style>
