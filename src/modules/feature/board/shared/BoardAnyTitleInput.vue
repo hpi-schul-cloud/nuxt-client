@@ -188,7 +188,7 @@ const cursorToEnd = () => {
 	&.board-title-input :deep(textarea) {
 		font-size: var(--heading-3);
 		line-height: var(--line-height-md);
-		padding-top: var(--space-md);
+		padding-top: 16px;
 		overflow: hidden; // prevent scrollbar in board title
 	}
 

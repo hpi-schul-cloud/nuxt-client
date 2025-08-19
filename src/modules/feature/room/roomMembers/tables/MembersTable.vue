@@ -233,7 +233,7 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	position: sticky;
 	z-index: 1;
 	background: rgb(var(--v-theme-white));
-	$space-left-right: calc(var(--space-base-vuetify) * 6);
+	$space-left-right: 24px;
 	right: $space-left-right;
 	left: $space-left-right;
 	width: 100%;
