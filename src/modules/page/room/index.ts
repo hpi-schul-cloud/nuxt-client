@@ -6,10 +6,10 @@ import RoomInvitationLinkStatusPage from "./RoomInvitationLinkStatus.page.vue";
 import RoomMembersPage from "./RoomMembers.page.vue";
 import RoomsPage from "./Rooms.page.vue";
 import AdministrationRoomsPage from "./AdministrationRooms.page.vue";
-import AdministrationRoomDetailPage from "./AdministrationRoomDetail.page.vue";
+import AdministrationRoomDetailsPage from "./AdministrationRoomDetails.page.vue";
 
 export {
-	AdministrationRoomDetailPage,
+	AdministrationRoomDetailsPage,
 	AdministrationRoomsPage,
 	RoomCreatePage,
 	RoomDetailsPage,

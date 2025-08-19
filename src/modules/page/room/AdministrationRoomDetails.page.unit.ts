@@ -1,4 +1,4 @@
-import AdministrationRoomDetailPage from "./AdministrationRoomDetail.page.vue";
+import AdministrationRoomDetailPage from "./AdministrationRoomDetails.page.vue";
 import { mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -29,7 +29,7 @@ vi.mock(
 		}) as typeof import("@/utils/pageTitle")
 );
 
-describe("AdministrationRoomDetail.page", () => {
+describe("AdministrationRoomDetails.page", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const ownSchool = {
 		id: "school-id",
