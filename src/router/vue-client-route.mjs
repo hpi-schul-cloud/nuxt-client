@@ -63,6 +63,7 @@ const vueRoutes = [
 	`^/@`,
 	`^/src/`,
 	`^/node_modules/`,
+	`^/vendor/`,
 ];
 
 const isVueClient = (path) => {
