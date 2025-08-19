@@ -9,6 +9,7 @@ RUN npm ci --ignore-scripts
 COPY vite.config.ts index.html LICENSE.md tsconfig.json ./
 COPY public ./public
 COPY src ./src
+COPY vendor ./vendor
 COPY config/vite ./config/vite
 COPY types ./types
 ARG SC_THEME=default
