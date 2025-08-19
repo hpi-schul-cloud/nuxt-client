@@ -726,17 +726,6 @@ export default {
 	opacity: 0;
 }
 
-.list {
-	padding: 24px;
-}
-
-.th-slot {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-}
-
 button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;

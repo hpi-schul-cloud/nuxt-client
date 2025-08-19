@@ -80,7 +80,7 @@ button {
 	white-space: nowrap;
 }
 
-@media #{map.get($display-breakpoints, 'sm-and-up')} {
+@media #{map.get($display-breakpoints, 'sm')} {
 	:root {
 		--text-base-size: calc(1rem * var(--text-device-scale-ratio));
 	}

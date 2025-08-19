@@ -675,23 +675,6 @@ span {
 	font-weight: var(--font-weight-normal);
 }
 
-.content {
-	max-height: 35vh;
-	overflow-y: scroll;
-	font-weight: var(--font-weight-normal);
-}
-
-.list {
-	padding: 24px;
-}
-
-.th-slot {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-}
-
 button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
