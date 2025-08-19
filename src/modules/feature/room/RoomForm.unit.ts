@@ -48,7 +48,7 @@ describe("@feature-room/RoomForm", () => {
 		it("should show error when name is empty", async () => {
 			const { wrapper } = setup();
 
-			const textField = wrapper.findComponent(VTextField);
+			const textField = wrapper.getComponent(VTextField);
 			await textField.setValue(" ");
 			await textField.trigger("blur");
 
@@ -58,7 +58,7 @@ describe("@feature-room/RoomForm", () => {
 		it("should show error message when name contains < followed by a string", async () => {
 			const { wrapper } = setup();
 
-			const textField = wrapper.findComponent(VTextField);
+			const textField = wrapper.getComponent(VTextField);
 			await textField.setValue("<abc");
 			await textField.trigger("blur");
 
@@ -73,7 +73,7 @@ describe("@feature-room/RoomForm", () => {
 
 			const exceedsMaxLengthName = "a".repeat(101);
 
-			const textField = wrapper.findComponent(VTextField);
+			const textField = wrapper.getComponent(VTextField);
 			await textField.setValue(exceedsMaxLengthName);
 			await textField.trigger("blur");
 
@@ -98,13 +98,13 @@ describe("@feature-room/RoomForm", () => {
 			it("should focus first invalid form field", async () => {
 				const { wrapper } = setup();
 
-				const textField = wrapper.findComponent(VTextField);
+				const textField = wrapper.getComponent(VTextField);
 				const invalidInput = textField.find("input");
 				await textField.setValue(" ");
 
 				expect(document.activeElement).not.toEqual(invalidInput.element);
 
-				const saveBtn = wrapper.findComponent(
+				const saveBtn = wrapper.getComponent(
 					"[data-testid='room-form-save-btn']"
 				);
 				await saveBtn.trigger("click");
@@ -118,7 +118,7 @@ describe("@feature-room/RoomForm", () => {
 			it("should emit 'save' event", async () => {
 				const { room, wrapper } = setup();
 
-				const saveBtn = wrapper.findComponent(
+				const saveBtn = wrapper.getComponent(
 					"[data-testid='room-form-save-btn']"
 				);
 				await saveBtn.trigger("click");
@@ -150,12 +150,12 @@ describe("@feature-room/RoomForm", () => {
 			it("should not directly emit cancel", async () => {
 				const { wrapper } = setup();
 
-				const textField = wrapper.findComponent({ name: "VTextField" });
+				const textField = wrapper.getComponent(VTextField);
 				const input = textField.find("input");
 
 				await input.setValue("New Name");
 
-				expect(wrapper.vm.room.name).toEqual("New Name");
+				expect(textField.props().modelValue).toEqual("New Name");
 
 				const cancelButton = wrapper.get(
 					'[data-testid="room-form-cancel-btn"]'

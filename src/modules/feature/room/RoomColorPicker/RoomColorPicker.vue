@@ -1,8 +1,12 @@
 <template>
-	<div id="room-color-label" class="d-flex mb-2">
+	<div :id="roomColorLabelId" class="d-flex mb-2">
 		{{ t("common.words.color") }}
 	</div>
-	<VRadioGroup v-model="currentColor" aria-labelledby="room-color-label" inline>
+	<VRadioGroup
+		v-model="currentColor"
+		:aria-labelledby="roomColorLabelId"
+		inline
+	>
 		<VRadio
 			v-for="swatchColor in RoomColor"
 			:key="swatchColor"
@@ -24,6 +28,8 @@ import { RoomColor } from "@/types/room/Room";
 import { useI18n } from "vue-i18n";
 import { mdiCheckCircleOutline } from "@icons/material";
 
+const roomColorLabelId = "room-color-label";
+
 const currentColor = defineModel("color", {
 	type: String as PropType<RoomColor>,
 	default: RoomColor.BlueGrey,
@@ -31,6 +37,7 @@ const currentColor = defineModel("color", {
 
 const { t } = useI18n();
 </script>
+
 <style lang="scss" scoped>
 .color-swatch-option:has(input:focus) {
 	outline: 5px auto Highlight; // Firefox

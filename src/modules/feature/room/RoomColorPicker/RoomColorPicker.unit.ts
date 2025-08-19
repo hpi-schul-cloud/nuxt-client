@@ -6,6 +6,9 @@ import { mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import RoomColorPicker from "./RoomColorPicker.vue";
 import { RoomColor } from "@/types/room/Room";
+import { VIcon, VRadio, VRadioGroup } from "vuetify/components";
+import { mdiCheckCircleOutline } from "@icons/material";
+import { nextTick } from "vue";
 
 describe("@feature-room/RoomColorPicker", () => {
 	const setup = (props?: ComponentProps<typeof RoomColorPicker>) => {
@@ -25,18 +28,40 @@ describe("@feature-room/RoomColorPicker", () => {
 		expect(wrapper.exists()).toStrictEqual(true);
 	});
 
+	it("should render color options", () => {
+		const { wrapper } = setup();
+
+		const radioGroup = wrapper.getComponent(VRadioGroup);
+		const colorOptions = radioGroup.findAllComponents(VRadio);
+
+		expect(colorOptions).toHaveLength(Object.keys(RoomColor).length);
+	});
+
+	it("should render room color label", async () => {
+		const { wrapper } = setup();
+		await nextTick();
+
+		const roomColorLabelId = "room-color-label";
+
+		const label = wrapper.find(`#${roomColorLabelId}`);
+		expect(label.exists()).toBe(true);
+		expect(label.text()).toBe("common.words.color");
+
+		const radioGroup = wrapper.getComponent(VRadioGroup);
+		const radioGroupAriaLabelledElement = radioGroup.get("[aria-labelledby]");
+
+		expect(radioGroupAriaLabelledElement.attributes("aria-labelledby")).toBe(
+			roomColorLabelId
+		);
+	});
+
 	describe("when no color is given", () => {
 		it("should render default color BLUE_GREY as selected", () => {
 			const { wrapper } = setup();
 
-			const selectedColor = wrapper.findComponent(
-				"[data-testid=color-swatch-blue-grey]"
-			);
+			const radioGroup = wrapper.getComponent(VRadioGroup);
 
-			expect(selectedColor.exists()).toStrictEqual(true);
-
-			const selectedIcon = wrapper.findComponent({ name: "VIcon" });
-			expect(selectedIcon.exists()).toStrictEqual(true);
+			expect(radioGroup.props().modelValue).toBe(RoomColor.BlueGrey);
 		});
 	});
 
@@ -44,120 +69,44 @@ describe("@feature-room/RoomColorPicker", () => {
 		it("should render given color as selected", () => {
 			const { wrapper } = setup({ color: RoomColor.Red });
 
-			const selectedColor = wrapper.findComponent(
-				"[data-testid=color-swatch-red]"
+			const radioGroup = wrapper.getComponent(VRadioGroup);
+
+			expect(radioGroup.props().modelValue).toBe(RoomColor.Red);
+		});
+
+		it("should render true icon when color is selected", () => {
+			const { wrapper } = setup({ color: RoomColor.Red });
+
+			const radioGroup = wrapper.getComponent(VRadioGroup);
+			const redRadioButton = radioGroup.getComponent(
+				`[data-testid=color-swatch-${RoomColor.Red}]`
 			);
-			expect(selectedColor.exists()).toStrictEqual(true);
+			const trueIcon = redRadioButton.getComponent(VIcon);
 
-			const selectedIcon = selectedColor.findComponent({ name: "VIcon" });
-			expect(selectedIcon.exists()).toStrictEqual(true);
+			expect(trueIcon.props("icon")).toEqual(mdiCheckCircleOutline);
+		});
 
-			const defaultColor = wrapper.findComponent(
-				"[data-testid=color-swatch-blue-grey]"
+		it("should not render true icon when color is not selected", () => {
+			const { wrapper } = setup({ color: RoomColor.Orange });
+
+			const radioGroup = wrapper.getComponent(VRadioGroup);
+			const redRadioButton = radioGroup.getComponent(
+				`[data-testid=color-swatch-${RoomColor.Red}]`
 			);
-			expect(defaultColor.exists()).toStrictEqual(true);
+			const trueIcon = redRadioButton.findComponent(VIcon);
 
-			const selectedIcon2 = defaultColor.findComponent({ name: "VIcon" });
-			expect(selectedIcon2.exists()).toStrictEqual(false);
+			expect(trueIcon.exists()).toBe(false);
 		});
 	});
 
 	describe("when selecting a new color", () => {
-		it("should render current color as selected", () => {
+		it("should render newly selected color as selected", async () => {
 			const { wrapper } = setup();
 
-			const selectedColor = wrapper.findComponent(
-				"[data-testid=color-swatch-blue-grey]"
-			);
-			expect(selectedColor.exists()).toStrictEqual(true);
+			const radioGroup = wrapper.getComponent(VRadioGroup);
+			await radioGroup.setValue(RoomColor.Orange);
 
-			const selectedIcon = wrapper.findComponent({ name: "VIcon" });
-			expect(selectedIcon.exists()).toStrictEqual(true);
-		});
-
-		it("should emit update:color event", async () => {
-			const { wrapper } = setup();
-
-			const newColor = wrapper.findComponent(
-				"[data-testid=color-swatch-green]"
-			);
-
-			await newColor.trigger("click");
-
-			expect(wrapper.emitted()).toHaveProperty("update:color");
-			expect(wrapper.emitted()["update:color"]).toHaveLength(1);
-			expect(wrapper.emitted()["update:color"][0]).toEqual(["green"]);
+			expect(radioGroup.props().modelValue).toBe(RoomColor.Orange);
 		});
 	});
 });
-
-// TODO: removed RoomColorPickerSwatch need to adjust tests
-// describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
-// 	const setup = (props?: ComponentProps<typeof RoomColorPickerSwatch>) => {
-// 		const wrapper = mount(RoomColorPickerSwatch, {
-// 			global: {
-// 				plugins: [createTestingVuetify(), createTestingI18n()],
-// 			},
-// 			props,
-// 		});
-
-// 		return { wrapper };
-// 	};
-
-// 	describe("when color prop is not set", () => {
-// 		it("should render default color", () => {
-// 			const { wrapper } = setup();
-
-// 			const selectedColor = wrapper.findComponent(
-// 				"[data-testid=color-swatch-blue-grey]"
-// 			);
-// 			const otherColor = wrapper.findComponent(
-// 				"[data-testid=color-swatch-red]"
-// 			);
-
-// 			expect(selectedColor.exists()).toStrictEqual(true);
-// 			expect(otherColor.exists()).toStrictEqual(false);
-// 		});
-// 	});
-
-// 	describe("when color is set", () => {
-// 		it("should render with given color", () => {
-// 			const { wrapper } = setup({ color: RoomColor.Red, isSelected: true });
-
-// 			const selectedColor = wrapper.findComponent(
-// 				"[data-testid=color-swatch-red]"
-// 			);
-
-// 			expect(selectedColor.exists()).toStrictEqual(true);
-// 		});
-
-// 		it("should render selected icon", () => {
-// 			const { wrapper } = setup({ color: RoomColor.Red, isSelected: true });
-
-// 			const selectedColor = wrapper.findComponent(
-// 				"[data-testid=color-swatch-red]"
-// 			);
-
-// 			expect(selectedColor.exists()).toStrictEqual(true);
-
-// 			const selectedIcon = wrapper.findComponent({ name: "VIcon" });
-// 			expect(selectedIcon.exists()).toStrictEqual(true);
-// 		});
-// 	});
-
-// 	describe("when selecting this color", () => {
-// 		it("should emit update:color event", async () => {
-// 			const { wrapper } = setup();
-
-// 			const selectedColor = wrapper.findComponent(
-// 				"[data-testid=color-swatch-blue-grey]"
-// 			);
-
-// 			await selectedColor.trigger("click");
-
-// 			expect(wrapper.emitted()).toHaveProperty("update:color");
-// 			expect(wrapper.emitted()["update:color"]).toHaveLength(1);
-// 			expect(wrapper.emitted()["update:color"][0]).toEqual(["blue-grey"]);
-// 		});
-// 	});
-// });
