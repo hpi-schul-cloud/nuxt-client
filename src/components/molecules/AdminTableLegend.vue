@@ -3,7 +3,7 @@
 		<span v-if="showIcons" data-testid="legend-icons">
 			<strong>{{ $t("components.molecules.adminfooterlegend.title") }}</strong>
 			<ul class="consent-icon">
-				<li v-for="icon in icons" :key="icon.icon" class="mb--xs">
+				<li v-for="icon in icons" :key="icon.icon" class="mb-2">
 					<v-icon class="material-icon" :color="icon.color">{{
 						icon.icon
 					}}</v-icon>
@@ -76,7 +76,7 @@ const isThr = computed(() => envConfigModule.getTheme === SchulcloudTheme.Thr);
 $vertically-center: auto 0;
 
 .section {
-	margin-top: var(--space-lg);
+	margin-top: 24px;
 }
 
 .consent-icon {
@@ -84,8 +84,8 @@ $vertically-center: auto 0;
 	flex-direction: column;
 	align-items: left;
 	justify-content: left;
-	margin-top: var(--space-sm);
-	margin-bottom: var(--space-xl);
+	margin-top: 12px;
+	margin-bottom: 32px;
 	padding-left: 0;
 
 	> li {
@@ -95,7 +95,7 @@ $vertically-center: auto 0;
 
 .sync-symbol {
 	width: 2.5rem;
-	margin-right: var(--space-md);
+	margin-right: 16px;
 }
 
 .wrapper {

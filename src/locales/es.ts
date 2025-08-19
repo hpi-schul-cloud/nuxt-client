@@ -816,6 +816,9 @@ export default {
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Enlace a la copia del tablón",
+	"components.molecules.share.columnBoard.mail.subject":
+		"Tablero para importar",
+	"components.molecules.share.columnBoard.mail.body": "Enlace al tablero: ",
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
 	"components.molecules.share.roomMemberInvitation.mail.body":
 		"Enlace a la Sala: ",
@@ -861,6 +864,8 @@ export default {
 		"Con el siguiente enlace, esta sala puede ser copiada por otras personas. Si se debe compartir una sala en uso activo, por favor, primero cree un duplicado y compártalo.",
 	"components.molecules.share.room.result.linkLabel":
 		"Enlace a la copia del salón",
+	"components.molecules.share.room.mail.subject": "Sala para importar",
+	"components.molecules.share.room.mail.body": "Enlace a la sala: ",
 	"components.molecules.share.result.mailShare": "Enviar como correo",
 	"components.molecules.share.result.qrCodeScan": "Escanear código QR",
 	"components.molecules.share.result.title": "Compartir vía",
@@ -2164,6 +2169,8 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anónimo)",
 	"pages.rooms.administration.roomDetail.breadcrumb":
 		"Miembros de la sala {roomName}",
+	"pages.rooms.administration.roomDetail.header.text":
+		"Miembros de la sala “{roomName}”",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",

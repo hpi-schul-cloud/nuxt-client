@@ -811,6 +811,8 @@ export default {
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Посилання на копію дошки",
+	"components.molecules.share.columnBoard.mail.subject": "Дошка для імпорту",
+	"components.molecules.share.columnBoard.mail.body": "Посилання на дошку: ",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
 	"components.molecules.share.roomMemberInvitation.mail.body":
 		"Посилання на кімнату: ",
@@ -855,6 +857,8 @@ export default {
 	"components.molecules.share.room.options.infoText":
 		"За цим посиланням цю кімнату можуть скопіювати інші користувачі. Якщо потрібно поділитися кімнатою, яка активно використовується, спочатку створіть дублікат і поділіться ним.",
 	"components.molecules.share.room.result.linkLabel": "Копія теми посилання",
+	"components.molecules.share.room.mail.subject": "Кімната для імпорту",
+	"components.molecules.share.room.mail.body": "Посилання на кімнату: ",
 	"components.molecules.share.result.mailShare": "Надіслати поштою",
 	"components.molecules.share.result.qrCodeScan": "Відскануйте QR-код",
 	"components.molecules.share.result.title": "Поділіться через",
@@ -2130,6 +2134,8 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(анонімізовано)",
 	"pages.rooms.administration.roomDetail.breadcrumb":
 		"Учасники кімнати {roomName}",
+	"pages.rooms.administration.roomDetail.header.text":
+		"Учасники кімнати “{roomName}“",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

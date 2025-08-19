@@ -301,10 +301,10 @@ $tablet-portrait-width: 768px;
 .resource {
 	width: 100%;
 	min-height: calc(100vh - var(--sidebar-item-height));
-	margin-top: var(--space-xs);
+	margin-top: 8px;
 
 	.arrow__back {
-		margin-top: var(--space-xs);
+		margin-top: 8px;
 		font-weight: var(--font-weight-bold);
 		text-decoration: none;
 		cursor: pointer;
@@ -316,7 +316,7 @@ $tablet-portrait-width: 768px;
 		flex-direction: column;
 		justify-content: space-between;
 		width: 100%;
-		padding: 0 var(--space-lg);
+		padding: 0 24px;
 		height: calc(100vh - 122px);
 
 		.wrapper {
@@ -329,18 +329,18 @@ $tablet-portrait-width: 768px;
 			.buttons {
 				grid-area: buttons;
 				max-width: 350px;
-				margin-top: var(--space-md);
+				margin-top: 16px;
 
 				.floating-buttons {
 					position: -webkit-sticky;
 					position: sticky;
-					top: var(--space-xl);
+					top: 32px;
 					z-index: var(--layer-fab);
-					margin-top: var(--space-xl);
+					margin-top: 32px;
 					border-radius: var(--radius-md);
 
 					@media (max-width: $tablet-portrait-width) {
-						padding-bottom: var(--space-xs);
+						padding-bottom: 8px;
 					}
 				}
 			}
@@ -349,15 +349,15 @@ $tablet-portrait-width: 768px;
 		.content-container {
 			grid-area: cards;
 			width: 100%;
-			margin-top: var(--space-md);
-			margin-bottom: var(--space-lg);
+			margin-top: 16px;
+			margin-bottom: 24px;
 		}
 
 		.external-content-warning {
 			color: rgba(var(--v-theme-error));
 
 			.external-content-title {
-				margin-top: var(--space-md);
+				margin-top: 16px;
 				font-weight: var(--font-weight-bold);
 			}
 		}
@@ -385,7 +385,7 @@ $tablet-portrait-width: 768px;
 		}
 
 		.description {
-			margin: var(--space-xl-2) 0;
+			margin: 40px 0;
 			font-size: var(--text-md);
 		}
 
@@ -399,17 +399,16 @@ $tablet-portrait-width: 768px;
 	.metadata {
 		display: flex;
 		flex-direction: column;
-		padding-bottom: var(--space-sm-2);
 		font-size: var(--text-sm);
 		line-height: var(--line-height-lg);
 
 		.meta-container {
 			display: flex;
 			align-items: flex-start;
-			margin-bottom: var(--space-lg);
+			margin-bottom: 24px;
 
 			.meta-icon {
-				margin-right: var(--space-md);
+				margin-right: 16px;
 				font-size: var(--text-lg);
 
 				.icon {
@@ -418,14 +417,14 @@ $tablet-portrait-width: 768px;
 			}
 
 			.link {
-				margin-right: var(--space-xs);
+				margin-right: 8px;
 			}
 		}
 	}
 
 	.element-cards {
 		.content__container {
-			margin-top: var(--space-lg);
+			margin-top: 24px;
 		}
 	}
 }

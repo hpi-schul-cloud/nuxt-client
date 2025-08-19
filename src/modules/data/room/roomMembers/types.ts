@@ -8,6 +8,7 @@ import {
 export type RoomMember = RoomMemberResponse & {
 	isSelectable?: boolean;
 	fullName?: string;
+	isRoomOwner?: boolean;
 	displayRoomRole: string;
 	displaySchoolRole: string;
 };
@@ -46,8 +47,3 @@ export enum InvitationStep {
 }
 
 export { RoomInvitationLinkValidationError } from "@/serverApi/v3";
-
-// should be imported later directly from serverApi
-export enum RoomAnonymizationLabel {
-	ANONYMIZED = "anonymized",
-}

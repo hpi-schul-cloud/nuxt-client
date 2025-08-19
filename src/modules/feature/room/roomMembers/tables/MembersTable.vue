@@ -1,9 +1,7 @@
 <template>
 	<DataTable
 		aria-label-name-key="fullName"
-		:items="
-			roomMembersWithoutApplicants as unknown as Record<string, unknown>[]
-		"
+		:items="tableData"
 		:header-bottom="headerBottom"
 		:table-headers="tableHeader"
 		:show-select="canAddRoomMembers"
@@ -98,12 +96,15 @@ const { xs: isExtraSmallDisplay } = useDisplay();
 const { canAddRoomMembers } = useRoomAuthorization();
 
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersWithoutApplicants, selectedIds } =
+const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } =
 	storeToRefs(roomMembersStore);
 const { isRoomOwner, removeMembers } = roomMembersStore;
-
 const { askConfirmation } = useConfirmationDialog();
 
+const tableData = computed(
+	() =>
+		roomMembersWithoutApplicants.value as unknown as Record<string, unknown>[]
+);
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 
@@ -163,23 +164,7 @@ const getAriaLabel = (
 
 const tableHeader = computed(() => {
 	return [
-		{
-			title: t("common.labels.firstName"),
-			key: "firstName",
-		},
-		{
-			title: t("common.labels.lastName"),
-			key: "lastName",
-		},
-		{
-			title: t("pages.rooms.members.tableHeader.roomRole"),
-			key: "displayRoomRole",
-		},
-		{
-			title: t("pages.rooms.members.tableHeader.schoolRole"),
-			key: "displaySchoolRole",
-		},
-		{ title: t("common.words.mainSchool"), key: "schoolName" },
+		...baseTableHeaders.value,
 		{
 			title: canAddRoomMembers.value
 				? t("pages.rooms.members.tableHeader.actions")
@@ -233,7 +218,7 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	position: sticky;
 	z-index: 1;
 	background: rgb(var(--v-theme-white));
-	$space-left-right: calc(var(--space-base-vuetify) * 6);
+	$space-left-right: 24px;
 	right: $space-left-right;
 	left: $space-left-right;
 	width: 100%;

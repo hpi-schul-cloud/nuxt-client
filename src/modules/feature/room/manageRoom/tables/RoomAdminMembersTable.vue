@@ -1,18 +1,16 @@
 <template>
 	<DataTable
 		aria-label-name-key="fullName"
-		:items="
-			roomMembersForAdmins as unknown as unknown as Record<string, unknown>[]
-		"
+		:items="tableData"
 		:header-bottom="headerBottom"
-		:table-headers="tableHeader"
+		:table-headers="tableHeaders"
 		:show-select="true"
 		:external-selected-ids="selectedIds"
 		select-item-key="userId"
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionChangePermission v-if="canAddRoomMembers" />
+			<KebabMenuActionChangePermission />
 			<KebabMenuActionRemoveMember />
 		</template>
 
@@ -50,11 +48,7 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import {
-	RoomMember,
-	useRoomAuthorization,
-	useRoomMembersStore,
-} from "@data-room";
+import { RoomMember, useRoomMembersStore } from "@data-room";
 import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { storeToRefs } from "pinia";
@@ -72,10 +66,14 @@ withDefaults(defineProps<Props>(), {
 });
 
 const { t } = useI18n();
-const { canAddRoomMembers } = useRoomAuthorization();
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersForAdmins, selectedIds } = storeToRefs(roomMembersStore);
+const { roomMembersForAdmins, selectedIds, baseTableHeaders } =
+	storeToRefs(roomMembersStore);
 const { isRoomOwner } = roomMembersStore;
+
+const tableData = computed(
+	() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]
+);
 
 const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
@@ -95,29 +93,11 @@ const getAriaLabel = (
 	return t(languageKey, { memberFullName });
 };
 
-const tableHeader = computed(() => {
+const tableHeaders = computed(() => {
 	return [
+		...baseTableHeaders.value,
 		{
-			title: t("common.labels.firstName"),
-			key: "firstName",
-		},
-		{
-			title: t("common.labels.lastName"),
-			key: "lastName",
-		},
-		{
-			title: t("pages.rooms.members.tableHeader.roomRole"),
-			key: "displayRoomRole",
-		},
-		{
-			title: t("pages.rooms.members.tableHeader.schoolRole"),
-			key: "displaySchoolRole",
-		},
-		{ title: t("common.words.mainSchool"), key: "schoolName" },
-		{
-			title: canAddRoomMembers.value
-				? t("pages.rooms.members.tableHeader.actions")
-				: "",
+			title: t("pages.rooms.members.tableHeader.actions"),
 			key: "actions",
 			sortable: false,
 			width: 50,

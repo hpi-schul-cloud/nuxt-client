@@ -8,11 +8,6 @@ import { useI18n } from "vue-i18n";
 import { schoolsModule } from "@/store/store-accessor";
 import { useRoomMembersStore } from "@data-room";
 
-export type AdministrationRoom = {
-	roomId: string;
-	roomName: string;
-};
-
 export const useAdministrationRoomStore = defineStore(
 	"administrationRoomStore",
 	() => {
@@ -77,6 +72,7 @@ export const useAdministrationRoomStore = defineStore(
 		};
 
 		const fetchRoomDetails = async (roomId: string) => {
+			selectedRoom.value = null;
 			await fetchMembers(roomId);
 
 			const room = roomList.value.find((r) => r.roomId === roomId);
