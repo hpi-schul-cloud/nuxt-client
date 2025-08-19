@@ -1844,6 +1844,8 @@ export default {
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
+	"pages.room.locked":
+		"Der Raum ist gesperrt, weil kein Mitglied die Berechtigung “Besitzen” hat. Bitte an den Schul-Admin wenden.",
 	"pages.room.taskCard.label.done": "Abschließen",
 	"pages.room.taskCard.label.due": "Abgabe",
 	"pages.room.taskCard.label.edit": "Bearbeiten",
