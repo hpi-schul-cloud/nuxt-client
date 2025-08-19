@@ -7,7 +7,7 @@
 			:checked="modelValue === value"
 			:value="value"
 			type="radio"
-			class="visually-hidden"
+			class="d-sr-only"
 			@change="$emit('update:modelValue', $event.target.value)"
 			@blur="$emit('blur', $event)"
 			@focus="$emit('focus', $event)"
