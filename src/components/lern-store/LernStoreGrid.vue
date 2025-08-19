@@ -24,7 +24,7 @@ const col = computed(() => {
 
 .grid {
 	display: grid;
-	grid-gap: var(--space-md);
+	grid-gap: 16px;
 	width: 100%;
 
 	@include breakpoint(tablet) {
@@ -32,7 +32,7 @@ const col = computed(() => {
 	}
 
 	@include breakpoint(desktop) {
-		grid-gap: var(--space-lg);
+		grid-gap: 24px;
 	}
 }
 

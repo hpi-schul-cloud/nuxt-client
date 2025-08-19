@@ -27,8 +27,8 @@
 			right: 0;
 			bottom: 0;
 			float: right;
-			width: var(--space-sm);
-			margin-left: calc(-1 * var(--space-sm));
+			width: 12px;
+			margin-left: -12px;
 			content: "";
 			background: $excerpt-bg;
 		}

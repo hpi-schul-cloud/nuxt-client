@@ -8612,6 +8612,12 @@ export interface RoomItemResponse {
      * @memberof RoomItemResponse
      */
     updatedAt: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponse
+     */
+    isLocked: boolean;
 }
 /**
  * 

@@ -175,7 +175,7 @@ export default {
 	&__body {
 		min-height: 300px;
 		&--select {
-			margin-top: var(--space-xl);
+			margin-top: 32px;
 		}
 	}
 }

@@ -806,6 +806,9 @@ export default {
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link Bereich-Kopie",
+	"components.molecules.share.columnBoard.mail.subject":
+		"Bereich zum Importieren",
+	"components.molecules.share.columnBoard.mail.body": "Link zum Bereich: ",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.roomMemberInvitation.mail.body":
 		"Link zum Raum: ",
@@ -846,6 +849,8 @@ export default {
 	"components.molecules.share.room.options.infoText":
 		"Mit dem folgenden Link kann dieser Raum von anderen Personen kopiert werden. Wenn kein aktiv genutzter Raum geteilt werden soll, bitte zuerst ein Duplikat erstellen und dieses teilen.",
 	"components.molecules.share.room.result.linkLabel": "Link Raum-Kopie",
+	"components.molecules.share.room.mail.subject": "Raum zum Importieren",
+	"components.molecules.share.room.mail.body": "Link zum Raum: ",
 	"components.molecules.share.result.mailShare": "Als Mail versenden",
 	"components.molecules.share.result.qrCodeScan": "QR-Code scannen",
 	"components.molecules.share.result.title": "Teilen über",
@@ -1839,6 +1844,8 @@ export default {
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
+	"pages.room.locked":
+		"Der Raum ist gesperrt, weil kein Mitglied die Berechtigung “Besitzen” hat. Bitte an den Schul-Admin wenden.",
 	"pages.room.taskCard.label.done": "Abschließen",
 	"pages.room.taskCard.label.due": "Abgabe",
 	"pages.room.taskCard.label.edit": "Bearbeiten",
@@ -1904,7 +1911,9 @@ export default {
 	"pages.rooms.ccImportCourse.success":
 		"Kurs {name} wurde erfolgreich importiert.",
 	"pages.rooms.ccImportCourse.error":
-		"Beim importieren des Kurses ist ein Fehler aufgetreten.",
+		"Beim Importieren des Kurses ist ein Fehler aufgetreten.",
+	"pages.rooms.ccExportCourse.error":
+		"Beim Exportieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
 	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
@@ -2241,6 +2250,9 @@ export default {
 		"Das Element ist nicht mehr verfügbar, da Videokonferenzen für die Schule deaktiviert wurden. Bitte an den Schul-Admin wenden.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
 	"pages.collabora.iframeTitle": "Office-Dokument Editor",
+	"pages.collabora.jsonError":
+		"Json der Collabora Nachricht konnte nicht geparsed werden.",
+	"pages.collabora.messageError": "Collabora Nachricht ist nicht valide.",
 	"error.500":
 		"Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",
 	"error.4500":
