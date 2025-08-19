@@ -1814,6 +1814,8 @@ export default {
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Topic menu",
+	"pages.room.locked":
+		"The room is locked because no member has “Own” permission. Please contact the school administrator.",
 	"pages.room.taskCard.label.done": "Finish",
 	"pages.room.taskCard.label.due": "Due",
 	"pages.room.taskCard.label.edit": "Edit",
@@ -2216,6 +2218,8 @@ export default {
 		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
 	"pages.collabora.iframeTitle": "Office document editor",
+	"pages.collabora.jsonError": "Failed to parse JSON from Collabora message.",
+	"pages.collabora.messageError": "Collabora message is invalid.",
 	"error.500":
 		"There are problems in the system. We are working on fixing the issue. Please try again later.",
 	"error.4500":

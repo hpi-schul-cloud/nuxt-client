@@ -1874,6 +1874,8 @@ export default {
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
+	"pages.room.locked":
+		"La sala está bloqueada porque ningún miembro tiene permiso de «Propietario». Ponte en contacto con el administrador de la escuela.",
 	"pages.room.taskCard.label.done": "Terminar",
 	"pages.room.taskCard.label.due": "Entrega",
 	"pages.room.taskCard.label.edit": "Editar",
@@ -2291,6 +2293,9 @@ export default {
 		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"pages.collabora.iframeTitle": "Editor de documentos de Office",
+	"pages.collabora.jsonError":
+		"No se pudo analizar el JSON del mensaje Collabora.",
+	"pages.collabora.messageError": "El mensaje de Collabora no es válido.",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",
 	"error.4500":
