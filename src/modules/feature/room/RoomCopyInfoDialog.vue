@@ -17,21 +17,8 @@
 							{{ t("feature-room.CopyInfoDialog.text.alert.followingContent") }}
 						</p>
 						<ul class="ml-6">
-							<li>
-								{{
-									t("feature-room.CopyInfoDialog.text.alert.membersPermissions")
-								}}
-							</li>
-							<li>
-								{{ t("feature-room.CopyInfoDialog.text.alert.Etherpad") }}
-							</li>
-							<li>
-								{{ t("feature-room.CopyInfoDialog.text.alert.whiteboard") }}
-							</li>
-							<li>
-								{{
-									t("feature-room.CopyInfoDialog.text.alert.protectedSettings")
-								}}
+							<li v-for="bulletPoint in infoListItems" :key="bulletPoint">
+								{{ bulletPoint }}
 							</li>
 						</ul>
 					</InfoAlert>
@@ -51,7 +38,7 @@
 						data-testid="copy-info-dialog-confirm"
 						@click="$emit('copy:confirm')"
 					>
-						{{ $t("common.actions.duplicate") }}
+						{{ t("common.actions.duplicate") }}
 					</v-btn>
 				</v-card-actions>
 			</UseFocusTrap>
@@ -68,6 +55,13 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 const isOpen = ref(true);
+
+const infoListItems = [
+	"feature-room.CopyInfoDialog.text.alert.membersPermissions",
+	"feature-room.CopyInfoDialog.text.alert.Etherpad",
+	"feature-room.CopyInfoDialog.text.alert.whiteboard",
+	"feature-room.CopyInfoDialog.text.alert.protectedSettings",
+].map(t);
 
 defineEmits(["copy:cancel", "copy:confirm", "copy:close"]);
 </script>
