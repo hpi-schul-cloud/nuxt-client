@@ -65,7 +65,9 @@ onMounted(async () => {
 		userName.value
 	);
 
-	url.value = collaboraUrl;
+	const locale = authModule.getLocale;
+
+	url.value = collaboraUrl + `&lang=${locale}`;
 });
 
 const listenForMessages = (data: string) => {

@@ -1874,6 +1874,8 @@ export default {
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
+	"pages.room.locked":
+		"La sala está bloqueada porque ningún miembro tiene permiso de «Propietario». Ponte en contacto con el administrador de la escuela.",
 	"pages.room.taskCard.label.done": "Terminar",
 	"pages.room.taskCard.label.due": "Entrega",
 	"pages.room.taskCard.label.edit": "Editar",

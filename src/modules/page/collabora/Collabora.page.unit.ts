@@ -25,8 +25,10 @@ describe("Collabora.page", () => {
 		const authorizedCollaboraDocumentUrlResponse =
 			authorizedCollaboraDocumentUrlResponseFactory.build();
 
+		const locale = "de";
 		const authModule = createModuleMocks(AuthModule, {
 			getUser: meUserResponse,
+			getLocale: locale,
 		});
 
 		const fileStorageApiMock =
@@ -62,6 +64,7 @@ describe("Collabora.page", () => {
 			fileRecordId,
 			meUserResponse,
 			notifierModule,
+			locale,
 		};
 	};
 
@@ -83,13 +86,14 @@ describe("Collabora.page", () => {
 	});
 
 	it("should render Collabora editor iframe", async () => {
-		const { wrapper, authorizedCollaboraDocumentUrlResponse } = setup();
+		const { wrapper, authorizedCollaboraDocumentUrlResponse, locale } = setup();
 
 		await flushPromises();
 
 		expect(wrapper.find("iframe").exists()).toBe(true);
 		expect(wrapper.find("iframe").attributes("src")).toEqual(
-			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl
+			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl +
+				`&lang=${locale}`
 		);
 	});
 

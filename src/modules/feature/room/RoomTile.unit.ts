@@ -14,6 +14,7 @@ const mockRoom: RoomItem = {
 	schoolId: "123",
 	createdAt: "2024-10-11T16:36:06.434Z",
 	updatedAt: "2024-10-11T16:36:06.434Z",
+	isLocked: false,
 };
 
 describe("@feature-room/RoomTile", () => {
