@@ -176,6 +176,7 @@ describe("FileContentElement", () => {
 				isUploading?: boolean;
 				isCollaboraEnabled?: boolean;
 				mimeType?: string;
+				isCollaboraEditable?: boolean;
 			}) => {
 				const element = fileElementResponseFactory.build();
 				const fileRecordResponse = fileRecordFactory.build({
@@ -184,6 +185,7 @@ describe("FileContentElement", () => {
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
 					isUploading: props?.isUploading,
 					mimeType: props?.mimeType ?? "application/pdf",
+					isCollaboraEditable: props?.isCollaboraEditable ?? false,
 				});
 
 				const collaboraPageUrl =
@@ -214,6 +216,7 @@ describe("FileContentElement", () => {
 					previewStatus: fileRecordResponse.previewStatus,
 					element,
 					mimeType: fileRecordResponse.mimeType,
+					isCollaboraEditable: fileRecordResponse.isCollaboraEditable,
 				};
 
 				const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
@@ -423,6 +426,7 @@ describe("FileContentElement", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: true,
 						mimeType: "application/vnd.oasis.opendocument.text",
+						isCollaboraEditable: true,
 					});
 
 					const card = wrapper.findComponent(VCard);
@@ -437,6 +441,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
+							isCollaboraEditable: true,
 						});
 						const card = wrapper.findComponent(VCard);
 
@@ -460,6 +465,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
+							isCollaboraEditable: true,
 						});
 
 						const card = wrapper.findComponent(VCard);
@@ -486,6 +492,7 @@ describe("FileContentElement", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: false,
 						mimeType: "application/vnd.oasis.opendocument.text",
+						isCollaboraEditable: true,
 					});
 
 					const card = wrapper.findComponent(VCard);
@@ -498,6 +505,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/vnd.oasis.opendocument.text",
+							isCollaboraEditable: true,
 						});
 						const card = wrapper.findComponent(VCard);
 
@@ -521,6 +529,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/vnd.oasis.opendocument.text",
+							isCollaboraEditable: true,
 						});
 
 						const card = wrapper.findComponent(VCard);
@@ -547,6 +556,7 @@ describe("FileContentElement", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: true,
 						mimeType: "application/pdf",
+						isCollaboraEditable: false,
 					});
 
 					const card = wrapper.findComponent(VCard);
@@ -559,6 +569,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/pdf",
+							isCollaboraEditable: false,
 						});
 						const card = wrapper.findComponent(VCard);
 
@@ -582,6 +593,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/pdf",
+							isCollaboraEditable: false,
 						});
 
 						const card = wrapper.findComponent(VCard);
@@ -608,6 +620,7 @@ describe("FileContentElement", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: false,
 						mimeType: "application/pdf",
+						isCollaboraEditable: false,
 					});
 
 					const card = wrapper.findComponent(VCard);
@@ -620,6 +633,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/pdf",
+							isCollaboraEditable: false,
 						});
 						const card = wrapper.findComponent(VCard);
 
@@ -643,6 +657,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/pdf",
+							isCollaboraEditable: false,
 						});
 
 						const card = wrapper.findComponent(VCard);
@@ -857,6 +872,7 @@ describe("FileContentElement", () => {
 				isUploading?: boolean;
 				isCollaboraEnabled?: boolean;
 				mimeType?: string;
+				isCollaboraEditable?: boolean;
 			}) => {
 				const element = fileElementResponseFactory.build();
 				document.body.setAttribute("data-app", "true");
@@ -867,6 +883,7 @@ describe("FileContentElement", () => {
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
 					isUploading: props?.isUploading,
 					mimeType: props?.mimeType ?? "application/pdf",
+					isCollaboraEditable: props?.isCollaboraEditable ?? false,
 				});
 
 				const collaboraPageUrl =
@@ -898,6 +915,7 @@ describe("FileContentElement", () => {
 					previewStatus: fileRecordResponse.previewStatus,
 					element,
 					mimeType: fileRecordResponse.mimeType,
+					isCollaboraEditable: fileRecordResponse.isCollaboraEditable,
 				};
 
 				const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
@@ -1092,6 +1110,7 @@ describe("FileContentElement", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: true,
 						mimeType: "application/vnd.oasis.opendocument.text",
+						isCollaboraEditable: true,
 					});
 
 					const card = wrapper.findComponent(VCard);
@@ -1106,6 +1125,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
+							isCollaboraEditable: true,
 						});
 						const card = wrapper.findComponent(VCard);
 
@@ -1129,6 +1149,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
+							isCollaboraEditable: true,
 						});
 
 						const card = wrapper.findComponent(VCard);
@@ -1155,6 +1176,7 @@ describe("FileContentElement", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: false,
 						mimeType: "application/vnd.oasis.opendocument.text",
+						isCollaboraEditable: true,
 					});
 
 					const card = wrapper.findComponent(VCard);
@@ -1167,6 +1189,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/vnd.oasis.opendocument.text",
+							isCollaboraEditable: true,
 						});
 						const card = wrapper.findComponent(VCard);
 
@@ -1190,6 +1213,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/vnd.oasis.opendocument.text",
+							isCollaboraEditable: true,
 						});
 
 						const card = wrapper.findComponent(VCard);
@@ -1216,6 +1240,7 @@ describe("FileContentElement", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: true,
 						mimeType: "application/pdf",
+						isCollaboraEditable: false,
 					});
 
 					const card = wrapper.findComponent(VCard);
@@ -1228,6 +1253,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/pdf",
+							isCollaboraEditable: false,
 						});
 						const card = wrapper.findComponent(VCard);
 
@@ -1251,6 +1277,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/pdf",
+							isCollaboraEditable: false,
 						});
 
 						const card = wrapper.findComponent(VCard);
@@ -1277,6 +1304,7 @@ describe("FileContentElement", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: false,
 						mimeType: "application/pdf",
+						isCollaboraEditable: false,
 					});
 
 					const card = wrapper.findComponent(VCard);
@@ -1289,6 +1317,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/pdf",
+							isCollaboraEditable: false,
 						});
 						const card = wrapper.findComponent(VCard);
 
@@ -1312,6 +1341,7 @@ describe("FileContentElement", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/pdf",
+							isCollaboraEditable: false,
 						});
 
 						const card = wrapper.findComponent(VCard);
