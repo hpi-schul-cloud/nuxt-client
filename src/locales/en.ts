@@ -2210,6 +2210,8 @@ export default {
 		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
 	"pages.collabora.iframeTitle": "Office document editor",
+	"pages.collabora.jsonError": "Failed to parse JSON from Collabora message.",
+	"pages.collabora.messageError": "Collabora message is invalid.",
 	"error.500":
 		"There are problems in the system. We are working on fixing the issue. Please try again later.",
 	"error.4500":
