@@ -21,7 +21,7 @@ import { DataTable } from "@ui-data-table";
 import { KebabMenu } from "@ui-kebab-menu";
 import { useBoardNotifier } from "@util-board";
 import { Mock } from "vitest";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { VIcon } from "vuetify/components";
 import RoomAdminTable from "./RoomAdminTable.vue";
 
@@ -272,6 +272,31 @@ describe("RoomAdminTable", () => {
 							`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
 						);
 						expect(deleteAction.exists()).toBe(false);
+					});
+				});
+			});
+
+			describe("manage room members", () => {
+				describe("when manage room members menu clicked", () => {
+					it("should call 'fetchRoomDetails' method", async () => {
+						const { wrapper, roomList, adminRoomStore } = setup();
+
+						await nextTick();
+
+						const kebabMenu = wrapper.findComponent(
+							`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
+						);
+						await kebabMenu.trigger("click");
+
+						const manageMenu = wrapper.findComponent(
+							`[data-testid="menu-manage-room-${roomList[0].roomId}"]`
+						);
+
+						await manageMenu.trigger("click");
+
+						expect(adminRoomStore.fetchRoomDetails).toHaveBeenCalledWith(
+							roomList[0].roomId
+						);
 					});
 				});
 			});

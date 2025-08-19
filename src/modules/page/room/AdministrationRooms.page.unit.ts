@@ -11,6 +11,8 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { Router, useRouter } from "vue-router";
+import { Mock } from "vitest";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -22,6 +24,12 @@ vi.mock(
 			buildPageTitle: (pageTitle) => pageTitle ?? "",
 		}) as typeof import("@/utils/pageTitle")
 );
+
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
+}));
+const useRouterMock = <Mock>useRouter;
 
 describe("AdministrationRooms.page", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -46,6 +54,8 @@ describe("AdministrationRooms.page", () => {
 
 	const setup = (options?: { isEmptyList?: boolean }) => {
 		const isEmptyList = options?.isEmptyList ?? false;
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 
 		const wrapper = mount(AdministrationRoomsPage, {
 			global: {
@@ -71,6 +81,7 @@ describe("AdministrationRooms.page", () => {
 		return {
 			wrapper,
 			adminRoomStore,
+			router,
 		};
 	};
 
@@ -100,6 +111,26 @@ describe("AdministrationRooms.page", () => {
 			await wrapper.vm.$nextTick();
 
 			expect(adminRoomStore.fetchRooms).toHaveBeenCalled();
+		});
+	});
+
+	describe("routing", () => {
+		it("should navigate to room details on room click", async () => {
+			const { wrapper, adminRoomStore, router } = setup();
+			const roomId = "room-id";
+
+			adminRoomStore.selectedRoom = {
+				roomId,
+				roomName: "Room Name",
+			};
+			await wrapper.vm.$nextTick();
+
+			const expectedRoute = {
+				name: "administration-rooms-manage-details",
+				params: { roomId },
+			};
+
+			expect(router.push).toHaveBeenCalledWith(expectedRoute);
 		});
 	});
 });

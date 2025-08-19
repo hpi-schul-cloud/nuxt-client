@@ -34,6 +34,7 @@
 					:members-info-text="
 						t('pages.rooms.administration.table.actionMenu.manageRoom')
 					"
+					:data-testid="`menu-manage-room-${item.roomId}`"
 					@click="onManageRoom(item.roomId)"
 				/>
 				<KebabMenuAction
