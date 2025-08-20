@@ -109,9 +109,8 @@ ul.progressbar {
 	&::after {
 		position: absolute;
 		top: 25px;
-		left: -50%;
-		z-index: -1;
-		width: 100%;
+		left: -30%;
+		width: 60%;
 		height: calc(3 * var(--border-width));
 		content: "";
 		background: map.get($grey, base);
