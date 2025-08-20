@@ -91,6 +91,12 @@ export interface FileRecordResponse {
     previewStatus: PreviewStatus;
     /**
      * 
+     * @type {boolean}
+     * @memberof FileRecordResponse
+     */
+    isCollaboraEditable: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof FileRecordResponse
      */
