@@ -39,6 +39,7 @@ import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiPlus } from "@icons/material";
 import { useRouter } from "vue-router";
+import { envConfigModule } from "@/store";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -52,6 +53,14 @@ const { bottom: headerBottom } = useElementBounding(header);
 const isRoomDetailsVisible = computed(() => selectedRoom.value !== null);
 
 onMounted(async () => {
+	const isFeatureEnabled =
+		envConfigModule.getEnv.FEATURE_ADMINISTRATE_ROOMS_ENABLED;
+
+	if (!isFeatureEnabled) {
+		window.location.replace("/dashboard");
+		return;
+	}
+
 	await fetchRooms();
 });
 
