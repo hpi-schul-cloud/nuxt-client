@@ -19,8 +19,6 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { DataTable } from "@ui-data-table";
 
-const { log } = console;
-
 vi.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = vi.mocked(useBoardNotifier);
 
@@ -187,7 +185,6 @@ describe("RoomAdminMembersTable", () => {
 		it("should render kebab menu for same school members", () => {
 			const { wrapper, roomMembersForAdmins } = setup();
 
-			log("roomMembersForAdmins", roomMembersForAdmins);
 			const sameSchoolMembers = roomMembersForAdmins.filter(
 				(member) => member.schoolName === "Paul-Gerhardt-Gymnasium"
 			);
@@ -206,6 +203,21 @@ describe("RoomAdminMembersTable", () => {
 				expect(checkBox.attributes()).not.toHaveProperty("disabled");
 				expect(kebabMenu.exists()).toBe(true);
 			});
+		});
+	});
+
+	describe("selection", () => {
+		it("should update 'selectedIds' value when a member is selected", async () => {
+			const { wrapper, roomMembersStore } = setup();
+
+			const dataTable = wrapper.getComponent(DataTable);
+			const emittedIds = ["123", "456"];
+			dataTable.vm.$emit("update:selected-ids", emittedIds);
+			await nextTick();
+
+			expect(roomMembersStore.selectedIds).toEqual(
+				expect.arrayContaining(emittedIds)
+			);
 		});
 	});
 });
