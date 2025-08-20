@@ -23,5 +23,6 @@ export const fileRecordFactory = Factory.define<FileRecord>(({ sequence }) => {
 		schoolId: `schoolId${sequence}`,
 		previewStatus: FilePreviewStatus.AWAITING_SCAN_STATUS,
 		createdAt: new Date().toISOString(),
+		isCollaboraEditable: false,
 	};
 });

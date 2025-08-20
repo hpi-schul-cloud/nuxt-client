@@ -9,5 +9,6 @@ export interface FileProperties {
 	previewStatus: PreviewStatus;
 	isDownloadAllowed: boolean;
 	mimeType: string;
+	isCollaboraEditable: boolean;
 	element: FileElementResponse;
 }
