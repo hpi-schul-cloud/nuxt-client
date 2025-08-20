@@ -3,14 +3,14 @@
 		v-model="isOpen"
 		data-testid="sharedialog"
 		max-width="480"
-		@after-leave="onCloseDialog"
+		@after-leave="onCleanUp"
 	>
-		<v-fade-transition>
-			<v-card data-testid="copy-info-dialog">
-				<UseFocusTrap>
-					<v-card-title class="text-h4 my-2 text-break px-6 pt-4">
-						{{ modalTitle }}
-					</v-card-title>
+		<v-card data-testid="copy-info-dialog">
+			<UseFocusTrap>
+				<v-card-title class="text-h4 my-2 text-break px-6 pt-4">
+					{{ modalTitle }}
+				</v-card-title>
+				<v-fade-transition>
 					<v-card-text class="pt-2 px-6">
 						<div v-if="step === 'firstStep'">
 							<p data-testid="share-options-info-text">
@@ -48,30 +48,30 @@
 							<share-modal-result
 								:share-url="shareUrl"
 								:type="type"
-								@done="onDone"
+								@done="onCloseDialogOrDone"
 								@copied="onCopy"
 							/>
 						</div>
 					</v-card-text>
-					<v-card-actions class="px-6 pb-4">
-						<v-spacer />
-						<template v-if="step === 'firstStep'">
-							<v-btn variant="text" @click="onCloseDialog">
-								{{ t("common.actions.cancel") }}
-							</v-btn>
-							<v-btn variant="flat" color="primary" @click="onNext()">
-								{{ t("common.actions.continue") }}
-							</v-btn>
-						</template>
-						<template v-else-if="step === 'secondStep'">
-							<v-btn variant="flat" color="primary" @click="onCloseDialog()">
-								{{ t("common.labels.close") }}
-							</v-btn>
-						</template>
-					</v-card-actions>
-				</UseFocusTrap>
-			</v-card>
-		</v-fade-transition>
+				</v-fade-transition>
+				<v-card-actions class="px-6 pb-4">
+					<v-spacer />
+					<template v-if="step === 'firstStep'">
+						<v-btn variant="text" @click="onCloseDialogOrDone">
+							{{ t("common.actions.cancel") }}
+						</v-btn>
+						<v-btn variant="flat" color="primary" @click="onNext">
+							{{ t("common.actions.continue") }}
+						</v-btn>
+					</template>
+					<template v-else-if="step === 'secondStep'">
+						<v-btn variant="flat" color="primary" @click="onCloseDialogOrDone">
+							{{ t("common.labels.close") }}
+						</v-btn>
+					</template>
+				</v-card-actions>
+			</UseFocusTrap>
+		</v-card>
 	</v-dialog>
 </template>
 
@@ -107,12 +107,8 @@ const isOpen = computed(
 
 type ShareModalStep = "firstStep" | "secondStep";
 
-const step = computed<ShareModalStep>(() =>
-	shareModule.getShareUrl === undefined ? "firstStep" : "secondStep"
-);
-
+const step = ref<ShareModalStep>("firstStep");
 const shareUrl = computed(() => shareModule.getShareUrl ?? "");
-
 const shareOptions = ref<ShareOptions>();
 
 const modalTitle = computed(() =>
@@ -124,17 +120,21 @@ const modalTitle = computed(() =>
 const onShareOptionsChange = (newValue: ShareOptions) => {
 	shareOptions.value = newValue;
 };
-const onCloseDialog = () => {
+const onCloseDialogOrDone = () => {
 	shareModule.resetShareFlow();
 };
+
+const onCleanUp = () => {
+	step.value = "firstStep";
+};
+
 const onNext = () => {
 	if (shareOptions.value) {
 		shareModule.createShareUrl(shareOptions.value);
+		step.value = "secondStep";
 	}
 };
-const onDone = () => {
-	// shareModule.resetShareFlow();
-};
+
 const onCopy = () => {
 	notifier.show({
 		text: t("common.words.copiedToClipboard"),
