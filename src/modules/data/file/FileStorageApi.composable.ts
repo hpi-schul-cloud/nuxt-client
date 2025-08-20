@@ -96,11 +96,12 @@ export const useFileStorageApi = () => {
 	): Promise<void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
-			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
+			const fileName =
+				pathname.substring(pathname.lastIndexOf("/") + 1) ?? "name.docx";
 			const schoolId = authModule.getSchool?.id as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
-				fileName,
+				fileName: "name.docx",
 				headers: { "User-Agent": "Embed Request User Agent" },
 			};
 			const response = await fileApi.uploadFromUrl(
