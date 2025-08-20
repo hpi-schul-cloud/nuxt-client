@@ -13,11 +13,10 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
-import { schoolsModule } from "@/store";
+import { schoolsModule, envConfigModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { Router, useRouter } from "vue-router";
 import { Mock } from "vitest";
-import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import { nextTick } from "vue";
 
