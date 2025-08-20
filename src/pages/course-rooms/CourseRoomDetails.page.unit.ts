@@ -34,7 +34,7 @@ import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
-import { VBtn } from "vuetify/lib/components/index";
+import { VBtn, VDialog } from "vuetify/lib/components/index";
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { nextTick } from "vue";
@@ -612,15 +612,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 			const modalView = wrapper.findComponent({
 				name: "share-modal",
 			});
-			const shareDialog = modalView.findComponent("[data-testid=sharedialog]");
-			// const shareDialog = modalView.findComponent({ name: "v-dialog" });
-			// const shareDialog = modalView.findComponent({ name: "v-dialog" });
-			// const shareDialog = modalView.get("[data-testid=sharedialog]");
-			expect(shareDialog).toBeTruthy(); // TODO how to select the dialog properly now...
-			shareDialog.isVisible()
-			// expect(shareDialog.isVisible()).toBeTruthy();
+			const shareDialog = modalView.findComponent(VDialog);
 
-			//expect(shareDialog.props("isOpen")).toBe(true);
+			expect(shareDialog.isVisible()).toBeTruthy();
 		});
 	});
 
