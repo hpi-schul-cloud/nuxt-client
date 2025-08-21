@@ -379,7 +379,7 @@ $tablet-portrait-width: 768px;
 		position: fixed;
 		top: 0;
 		right: 0;
-		z-index: var(--layer-modal);
+		z-index: 1000;
 		display: flex;
 		justify-content: flex-end;
 		padding: 16px;
