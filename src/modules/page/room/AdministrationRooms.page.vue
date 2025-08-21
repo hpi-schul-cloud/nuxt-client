@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe max-width="full" :fab-items="fabAction">
+	<DefaultWireframe max-width="full">
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-items-center">
@@ -37,7 +37,6 @@ import { storeToRefs } from "pinia";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { mdiPlus } from "@icons/material";
 import { useRouter } from "vue-router";
 import { envConfigModule } from "@/store";
 
@@ -74,15 +73,4 @@ const manageRoom = (roomId: string) => {
 		params: { roomId },
 	});
 };
-
-const fabAction = computed(() => {
-	{
-		return {
-			icon: mdiPlus,
-			title: t("pages.rooms.members.add"),
-			ariaLabel: t("pages.rooms.members.add"),
-			dataTestId: "fab-add-members",
-		};
-	}
-});
 </script>

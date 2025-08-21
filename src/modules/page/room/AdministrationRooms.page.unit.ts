@@ -100,7 +100,7 @@ describe("AdministrationRooms.page", () => {
 	};
 
 	describe("rendering", () => {
-		it("should render the page and Table components ", async () => {
+		it("should render the page and Table component ", async () => {
 			const { wrapper } = setup();
 			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
 			const emptyStateComponent = wrapper.findComponent({ name: "EmptyState" });
