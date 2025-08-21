@@ -8,7 +8,6 @@ import {
 export type RoomMember = RoomMemberResponse & {
 	isSelectable?: boolean;
 	fullName?: string;
-	isRoomOwner?: boolean;
 	displayRoomRole: string;
 	displaySchoolRole: string;
 };

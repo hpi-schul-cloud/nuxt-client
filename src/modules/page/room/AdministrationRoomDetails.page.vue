@@ -35,12 +35,14 @@ import { storeToRefs } from "pinia";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiPlus } from "@icons/material";
-import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+import { envConfigModule } from "@/store";
 
 const { t } = useI18n();
-const router = useRouter();
+const route = useRoute();
 
 const adminRoomStore = useAdministrationRoomStore();
+const { fetchRoomDetails } = adminRoomStore;
 const { selectedRoom } = storeToRefs(adminRoomStore);
 
 const header = ref<HTMLElement | null>(null);
@@ -60,13 +62,17 @@ onUnmounted(() => {
 });
 
 watch(
-	selectedRoom,
-	(newRoom) => {
-		if (!newRoom) {
-			router.push({
-				name: "administration-rooms-manage",
-			});
+	() => route.params.roomId,
+	async () => {
+		const isFeatureEnabled =
+			envConfigModule.getEnv.FEATURE_ADMINISTRATE_ROOMS_ENABLED;
+
+		if (!isFeatureEnabled) {
+			window.location.replace("/dashboard");
+			return;
 		}
+
+		await fetchRoomDetails(route.params.roomId as string);
 	},
 	{ immediate: true }
 );

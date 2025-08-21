@@ -19,9 +19,9 @@
 		</template>
 		<template v-else>
 			<RoomAdminTable
-				v-if="!isRoomDetailsVisible"
 				:show-select="false"
 				:header-bottom="headerBottom"
+				@manage:room="manageRoom"
 			/>
 		</template>
 	</DefaultWireframe>
@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { RoomAdminTable } from "@feature-room";
 import { useAdministrationRoomStore } from "@data-room";
 import { storeToRefs } from "pinia";
@@ -45,12 +45,11 @@ const { t } = useI18n();
 const router = useRouter();
 
 const adminRoomStore = useAdministrationRoomStore();
-const { isEmptyList, selectedRoom } = storeToRefs(adminRoomStore);
+const { isEmptyList } = storeToRefs(adminRoomStore);
 const { fetchRooms } = adminRoomStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
-const isRoomDetailsVisible = computed(() => selectedRoom.value !== null);
 
 onMounted(async () => {
 	const isFeatureEnabled =
@@ -69,14 +68,12 @@ const pageTitle = computed(() =>
 );
 useTitle(pageTitle);
 
-watch(isRoomDetailsVisible, (visible) => {
-	if (visible) {
-		router.push({
-			name: "administration-rooms-manage-details",
-			params: { roomId: selectedRoom.value?.roomId },
-		});
-	}
-});
+const manageRoom = (roomId: string) => {
+	router.push({
+		name: "administration-rooms-manage-details",
+		params: { roomId },
+	});
+};
 
 const fabAction = computed(() => {
 	{

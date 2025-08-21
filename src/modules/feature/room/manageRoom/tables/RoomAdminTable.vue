@@ -68,7 +68,7 @@ import {
 } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import {
 	useConfirmationDialog,
 	ConfirmationDialog,
@@ -89,14 +89,16 @@ withDefaults(defineProps<Props>(), {
 	showSelect: true,
 });
 
+const emit = defineEmits<{
+	(e: "manage:room", value: string): void;
+}>();
+
 const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 
 const administrationRoomStore = useAdministrationRoomStore();
-const { deleteRoom, fetchRoomDetails } = administrationRoomStore;
-const { roomList, userSchoolId, selectedRoom } = storeToRefs(
-	administrationRoomStore
-);
+const { deleteRoom } = administrationRoomStore;
+const { roomList, userSchoolId } = storeToRefs(administrationRoomStore);
 
 const confirmDeletion = async (roomName: string) => {
 	const shouldDelete = await askConfirmation({
@@ -118,17 +120,13 @@ const onDeleteRoom = async (item: RoomStatsItemResponse) => {
 };
 
 const onManageRoom = async (roomId: string) => {
-	await fetchRoomDetails(roomId);
+	emit("manage:room", roomId);
 };
 
 type RoomTableHeaderKey = keyof RoomStatsItemResponse | "actions";
 type RoomTableHeader = Omit<DataTableHeader, "key"> & {
 	key: RoomTableHeaderKey;
 };
-
-onMounted(() => {
-	selectedRoom.value = null;
-});
 
 const tableHeaders = computed((): RoomTableHeader[] => [
 	{

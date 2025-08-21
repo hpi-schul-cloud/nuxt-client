@@ -75,6 +75,10 @@ export const useAdministrationRoomStore = defineStore(
 			selectedRoom.value = null;
 			await fetchMembers(roomId);
 
+			if (roomList.value.length === 0) {
+				await fetchRooms();
+			}
+
 			const room = roomList.value.find((r) => r.roomId === roomId);
 
 			if (room) {
