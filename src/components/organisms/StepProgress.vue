@@ -113,14 +113,11 @@ ul.progressbar {
 		width: 60%;
 		height: calc(3 * var(--border-width));
 		content: "";
+		background: map.get($grey, base);
 	}
 }
 
 .progressbar li.active {
-	&::after {
-		background: map.get($grey, base);
-	}
-
 	&::before {
 		color: map.get($grey, base);
 		text-decoration: underline;
