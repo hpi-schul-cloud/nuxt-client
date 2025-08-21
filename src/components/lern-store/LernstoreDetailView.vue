@@ -431,7 +431,7 @@ $tablet-portrait-width: 768px;
 				right: 0;
 				bottom: 0;
 				left: 0;
-				z-index: var(--layer-page);
+				z-index: 1;
 				filter: blur(0.7rem);
 				background-repeat: no-repeat;
 				background-position: center;
@@ -440,7 +440,7 @@ $tablet-portrait-width: 768px;
 			}
 
 			img {
-				z-index: var(--layer-page);
+				z-index: 1;
 				object-position: center;
 				object-fit: contain;
 
@@ -454,7 +454,7 @@ $tablet-portrait-width: 768px;
 	.floating-buttons {
 		position: sticky;
 		bottom: 0;
-		z-index: var(--layer-page);
+		z-index: 1;
 		border-radius: var(--radius-md);
 
 		@media (max-width: $tablet-portrait-width) {
