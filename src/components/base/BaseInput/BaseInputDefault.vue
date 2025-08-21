@@ -334,7 +334,7 @@ export default defineComponent({
 
 .pwd-toggle {
 	color: map.get($grey, base);
-	border-radius: var(--radius-round);
+	border-radius: 100vmax;
 
 	&:hover {
 		color: map.get($grey, darken-3);

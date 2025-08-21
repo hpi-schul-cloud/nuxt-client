@@ -103,7 +103,7 @@ ul.progressbar {
 		background: rgba(var(--v-theme-white));
 		border-color: map.get($grey, darken-3);
 		border-style: dotted;
-		border-radius: var(--radius-round);
+		border-radius: 100vmax;
 	}
 
 	&::after {
@@ -138,7 +138,7 @@ ul.progressbar {
 		background: rgba(var(--v-theme-success));
 		border-color: rgba(var(--v-theme-success));
 		border-style: solid;
-		border-radius: var(--radius-round);
+		border-radius: 100vmax;
 	}
 
 	&::after {

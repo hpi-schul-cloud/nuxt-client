@@ -156,7 +156,7 @@ export default {
 	color: rgba(var(--v-theme-on-surface));
 	background: rgba(var(--v-theme-white));
 	filter: drop-shadow(0 2px 4px black);
-	border-radius: var(--radius-xs);
+	border-radius: 2px;
 	opacity: 0.9;
 }
 
@@ -171,7 +171,7 @@ export default {
 	height: 200px;
 	color: rgba(var(--v-theme-white));
 	background-color: rgba(var(--v-theme-on-surface));
-	border-radius: var(--radius-md) var(--radius-md) 0 0;
+	border-radius: 8px 8px 0 0;
 }
 
 .img-container > span {
@@ -180,7 +180,7 @@ export default {
 	margin-top: 8px;
 	margin-right: 8px;
 	background-color: rgba(var(--v-theme-on-surface));
-	border-radius: var(--radius-round);
+	border-radius: 100vmax;
 	opacity: 0.7;
 	// stylelint-disable
 	z-index: calc(var(--layer-page) + 1);
@@ -197,7 +197,7 @@ export default {
 			width: 100%;
 			height: 200px;
 			background-color: rgba(var(--v-theme-white));
-			border-radius: var(--radius-md) var(--radius-md) 0 0;
+			border-radius: 8px 8px 0 0;
 			opacity: 0.8;
 			object-fit: cover;
 		}
@@ -212,7 +212,7 @@ export default {
 				rgba(0, 0, 0, 0.9) 0%,
 				rgba(0, 0, 0, 0) 50%
 			);
-			border-radius: var(--radius-md) var(--radius-md) 0 0;
+			border-radius: 8px 8px 0 0;
 			opacity: 0.8;
 		}
 

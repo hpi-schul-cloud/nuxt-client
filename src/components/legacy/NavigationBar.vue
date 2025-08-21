@@ -157,7 +157,7 @@ const setActive = (idx: number) => {
 }
 
 .icon {
-	font-size: var(--radius-lg);
+	font-size: 16px;
 }
 
 @media (min-width: 576px) {
@@ -219,7 +219,7 @@ const setActive = (idx: number) => {
 
 	&:hover {
 		background-color: map.get($grey, lighten-3);
-		border-radius: var(--radius-sm);
+		border-radius: 4px;
 	}
 }
 
@@ -227,12 +227,12 @@ a.active {
 	font-weight: var(--font-weight-bold);
 	color: rgba(var(--v-theme-white));
 	background-color: rgba(var(--v-theme-accent));
-	border-radius: var(--radius-sm);
+	border-radius: 4px;
 
 	&:hover {
 		color: rgba(var(--v-theme-white));
 		background-color: rgba(var(--v-theme-accent));
-		border-radius: var(--radius-sm);
+		border-radius: 4px;
 	}
 }
 </style>

@@ -337,7 +337,7 @@ $tablet-portrait-width: 768px;
 					top: 32px;
 					z-index: var(--layer-fab);
 					margin-top: 32px;
-					border-radius: var(--radius-md);
+					border-radius: 8px;
 
 					@media (max-width: $tablet-portrait-width) {
 						padding-bottom: 8px;

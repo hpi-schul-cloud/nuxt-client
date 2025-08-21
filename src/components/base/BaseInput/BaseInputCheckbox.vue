@@ -136,10 +136,6 @@ label {
 .icon-wrapper {
 	display: inline-block;
 	user-select: none;
-
-	svg {
-		border-radius: var(--radius-xs);
-	}
 }
 
 input:focus + .icon-wrapper svg {

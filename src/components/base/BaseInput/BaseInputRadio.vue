@@ -67,7 +67,7 @@ label {
 	width: 0.7em;
 	height: 0.7em;
 	border: 2px solid rgba(var(--v-theme-on-background));
-	border-radius: var(--radius-round);
+	border-radius: 100vmax;
 }
 
 input {
@@ -84,7 +84,7 @@ input:checked + .radio {
 		/* stylelint-enable */
 		content: "";
 		background: rgba(var(--v-theme-on-background));
-		border-radius: var(--radius-round);
+		border-radius: 100vmax;
 	}
 }
 

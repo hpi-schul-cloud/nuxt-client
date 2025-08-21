@@ -227,7 +227,7 @@ export default {
 	min-width: 150px;
 	max-width: 350px;
 	background-color: rgba(var(--v-theme-white));
-	border-radius: var(--radius-sm);
+	border-radius: 4px;
 
 	> :hover {
 		background-color: map.get($grey, lighten-3);
