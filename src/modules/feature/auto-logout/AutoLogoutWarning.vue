@@ -110,7 +110,7 @@ watch(
 		vertical-align: top;
 		opacity: 0.9;
 
-		@media #{map.get($display-breakpoints, 'sm-and-up')} {
+		@media #{map.get($display-breakpoints, 'md-and-up')} {
 			float: right;
 		}
 	}
@@ -120,7 +120,7 @@ watch(
 		width: 100%;
 		font-size: var(--text-lg);
 
-		@media #{map.get($display-breakpoints, 'sm-and-up')} {
+		@media #{map.get($display-breakpoints, 'md-and-up')} {
 			width: 60%;
 			margin-top: 84px;
 			text-align: left;
