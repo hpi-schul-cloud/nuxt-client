@@ -71,7 +71,7 @@ export const useAdministrationRoomStore = defineStore(
 			}
 		};
 
-		const fetchRoomDetails = async (roomId: string) => {
+		const selectRoomAndLoadMembers = async (roomId: string) => {
 			selectedRoom.value = null;
 			await fetchMembers(roomId);
 
@@ -111,7 +111,7 @@ export const useAdministrationRoomStore = defineStore(
 			userSchoolId,
 			deleteRoom,
 			fetchRooms,
-			fetchRoomDetails,
+			selectRoomAndLoadMembers,
 		};
 	}
 );

@@ -1,12 +1,12 @@
 <template>
 	<DataTable
-		aria-label-name-key="fullName"
 		:items="tableData"
-		:header-bottom="headerBottom"
 		:table-headers="tableHeader"
 		:show-select="canAddRoomMembers"
 		:external-selected-ids="selectedIds"
+		:header-bottom="headerBottom"
 		select-item-key="userId"
+		aria-label-name-key="fullName"
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
@@ -16,7 +16,6 @@
 			/>
 			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
 		</template>
-
 		<template #[`item.displaySchoolRole`]="{ item }">
 			<span class="text-no-wrap">
 				<VIcon

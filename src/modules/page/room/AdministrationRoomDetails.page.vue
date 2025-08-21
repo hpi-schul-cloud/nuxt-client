@@ -42,7 +42,7 @@ const { t } = useI18n();
 const route = useRoute();
 
 const adminRoomStore = useAdministrationRoomStore();
-const { fetchRoomDetails } = adminRoomStore;
+const { selectRoomAndLoadMembers } = adminRoomStore;
 const { selectedRoom } = storeToRefs(adminRoomStore);
 
 const header = ref<HTMLElement | null>(null);
@@ -72,7 +72,7 @@ watch(
 			return;
 		}
 
-		await fetchRoomDetails(route.params.roomId as string);
+		await selectRoomAndLoadMembers(route.params.roomId as string);
 	},
 	{ immediate: true }
 );

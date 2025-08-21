@@ -1,19 +1,18 @@
 <template>
 	<DataTable
-		aria-label-name-key="fullName"
 		:items="tableData"
-		:header-bottom="headerBottom"
 		:table-headers="tableHeaders"
 		:show-select="true"
 		:external-selected-ids="selectedIds"
+		:header-bottom="headerBottom"
 		select-item-key="userId"
+		aria-label-name-key="fullName"
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
 			<KebabMenuActionChangePermission />
 			<KebabMenuActionRemoveMember />
 		</template>
-
 		<template #[`item.displaySchoolRole`]="{ item }">
 			<span class="text-no-wrap">
 				<VIcon
