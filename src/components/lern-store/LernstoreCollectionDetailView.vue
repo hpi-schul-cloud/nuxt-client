@@ -300,7 +300,7 @@ $tablet-portrait-width: 768px;
 
 .resource {
 	width: 100%;
-	min-height: calc(100vh - var(--sidebar-item-height));
+	min-height: calc(100vh - 60px);
 	margin-top: 8px;
 
 	.arrow__back {

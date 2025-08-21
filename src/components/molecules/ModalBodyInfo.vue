@@ -30,7 +30,7 @@ withDefaults(defineProps<Props>(), {
 
 <style lang="scss" scoped>
 .icon {
-	font-size: var(--sidebar-item-height);
+	font-size: 60px;
 	margin-bottom: 16px;
 }
 

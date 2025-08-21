@@ -367,7 +367,7 @@ export default {
 	font-weight: var(--font-weight-bold);
 
 	th {
-		border-bottom: calc(2 * var(--border-width)) solid;
+		border-bottom: 2px solid;
 
 		&.is-current-sort {
 			opacity: 1;

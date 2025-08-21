@@ -112,7 +112,7 @@ ul.progressbar {
 		left: -50%;
 		z-index: var(--layer-behind);
 		width: 100%;
-		height: calc(3 * var(--border-width));
+		height: 3px;
 		content: "";
 		background: map.get($grey, base);
 	}

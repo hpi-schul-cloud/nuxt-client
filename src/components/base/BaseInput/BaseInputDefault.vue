@@ -245,20 +245,20 @@ export default defineComponent({
 }
 
 .bottom-line {
-	border-bottom: var(--border-width-bold) solid;
+	border-bottom: 2px solid;
 }
 
 .top {
 	width: 100%;
-	border-bottom: var(--border-width) solid rgba(var(--v-theme-on-background));
+	border-bottom: 1px solid rgba(var(--v-theme-on-background));
 
 	&:focus-within,
 	&:hover:not(.disabled) {
-		border-bottom: var(--border-width-bold) solid rgba(var(--v-theme-primary));
+		border-bottom: 2px solid rgba(var(--v-theme-primary));
 		outline: none;
 
 		~ .bottom-line {
-			border-bottom: var(--border-width) solid;
+			border-bottom: 1px solid;
 		}
 	}
 
