@@ -206,8 +206,8 @@ describe("useAdministrationRoomStore", () => {
 		});
 	});
 
-	describe("fetchRoomDetails", () => {
-		it("should fetch members", async () => {
+	describe("selectRoomAndLoadMembers", () => {
+		it("should select room and load members", async () => {
 			const mockRoomList = roomStatsListResponseFactory.build();
 			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
 				data: mockRoomList,
@@ -215,11 +215,11 @@ describe("useAdministrationRoomStore", () => {
 
 			const { roomAdminStore } = setup();
 
-			const { fetchRoomDetails, fetchRooms } = roomAdminStore;
+			const { selectRoomAndLoadMembers, fetchRooms } = roomAdminStore;
 
 			await fetchRooms();
 
-			await fetchRoomDetails(mockRoomList.data[0].roomId);
+			await selectRoomAndLoadMembers(mockRoomList.data[0].roomId);
 
 			expect(
 				roomAdministrationApiMock.roomControllerGetMembers
