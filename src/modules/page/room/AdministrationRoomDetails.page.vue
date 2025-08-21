@@ -11,11 +11,9 @@
 				</h1>
 			</div>
 		</template>
-
 		<div class="mt-12">
 			{{ t("pages.rooms.administration.roomDetail.infoText") }}
 		</div>
-
 		<RoomAdminMembersTable
 			:header-bottom="headerBottom"
 			:show-select="false"
