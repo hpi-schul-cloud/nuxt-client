@@ -1,6 +1,6 @@
 <template>
 	<div class="application-error-wrapper">
-		<div v-if="hasError" class="text-centered mt-8">
+		<div v-if="!hasError" class="text-centered mt-8">
 			<error-content
 				:status-code="appErrorStatusCode"
 				:error-text="translatedErrorMessage"
