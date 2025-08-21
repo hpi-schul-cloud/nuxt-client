@@ -142,6 +142,13 @@ label {
 	}
 }
 
+.icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	vertical-align: baseline;
+}
+
 input:focus + .icon-wrapper svg {
 	box-shadow: 0 0 0 3px currentColor;
 }

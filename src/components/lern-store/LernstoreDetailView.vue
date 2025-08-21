@@ -562,6 +562,23 @@ $tablet-portrait-width: 768px;
 					}
 				}
 
+				.material-icon {
+					width: calc(1em + 4px);
+					height: calc(1em + 4px);
+				}
+
+				.custom-icon {
+					width: 1em;
+					font-size: calc(1em + 4px);
+					line-height: 100%;
+					vertical-align: middle;
+					fill: currentColor;
+
+					svg {
+						fill: currentColor;
+					}
+				}
+
 				.link {
 					margin-right: 8px;
 				}
