@@ -95,7 +95,8 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .wrapper {
 	width: 100%;
@@ -109,7 +110,7 @@ watch(
 		vertical-align: top;
 		opacity: 0.9;
 
-		@include breakpoint(tablet) {
+		@media #{map.get($display-breakpoints, 'md-and-up')} {
 			float: right;
 		}
 	}
@@ -119,7 +120,7 @@ watch(
 		width: 100%;
 		font-size: var(--text-lg);
 
-		@include breakpoint(tablet) {
+		@media #{map.get($display-breakpoints, 'md-and-up')} {
 			width: 60%;
 			margin-top: 84px;
 			text-align: left;
