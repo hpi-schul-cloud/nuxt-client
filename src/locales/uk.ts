@@ -1848,6 +1848,8 @@ export default {
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
+	"pages.room.locked":
+		"Доступ до кімнати заблоковано, оскільки жоден учасник не має права «Володіти». Зверніться до адміністратора школи.",
 	"pages.room.taskCard.label.done": "Завершити",
 	"pages.room.taskCard.label.due": "Термін",
 	"pages.room.taskCard.label.edit": "Редагувати",
