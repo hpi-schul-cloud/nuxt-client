@@ -697,7 +697,7 @@ span {
 .info-box {
 	position: absolute;
 	right: 0%;
-	z-index: calc(var(--layer-fab) + 1);
+	z-index: 101;
 	max-width: 100%;
 	margin-top: 16px;
 	margin-right: 24px;
@@ -711,7 +711,7 @@ span {
 }
 
 button:not(.is-none):focus {
-	z-index: var(--layer-fab);
+	z-index: 100;
 	outline: none;
 	box-shadow:
 		0 0 0 0 rgba(var(--v-theme-white)),
