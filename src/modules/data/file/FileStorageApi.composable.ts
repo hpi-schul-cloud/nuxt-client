@@ -101,7 +101,7 @@ export const useFileStorageApi = () => {
 			const schoolId = authModule.getSchool?.id as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
-				fileName: "name.docx",
+				fileName: fileName === "" ? "file" : fileName,
 				headers: { "User-Agent": "Embed Request User Agent" },
 			};
 			const response = await fileApi.uploadFromUrl(

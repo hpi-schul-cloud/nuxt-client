@@ -14,6 +14,7 @@ import {
 } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import {
+	mdiFileDocumentOutline,
 	mdiFolderOpenOutline,
 	mdiFormatText,
 	mdiLightbulbOnOutline,
@@ -32,11 +33,9 @@ import {
 	useSharedElementTypeSelection,
 } from "./SharedElementTypeSelection.composable";
 
-type CreateElementRequestFn =
-	| ((payload: CreateElementRequestPayload) => Promise<void>)
-	| ((
-			payload: CreateElementRequestPayload
-	  ) => Promise<AnyContentElement | undefined>);
+type CreateElementRequestFn = (
+	payload: CreateElementRequestPayload
+) => Promise<AnyContentElement | undefined>;
 
 export const useAddElementDialog = (
 	createElementRequestFn: CreateElementRequestFn,
@@ -216,8 +215,8 @@ export const useAddElementDialog = (
 
 		if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED) {
 			options.push({
-				icon: "$h5pOutline",
-				label: t("Neues Wordo Document"),
+				icon: mdiFileDocumentOutline,
+				label: t("Textdokument"),
 				action: async () => {
 					const element = await createElementRequestFn({
 						type: ContentElementType.File,

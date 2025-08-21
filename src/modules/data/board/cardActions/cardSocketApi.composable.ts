@@ -1,9 +1,15 @@
-import { chunk } from "lodash";
-import * as CardActions from "./cardActions";
-import { useSocketConnection } from "../socket/socket";
-import { useCardStore } from "../Card.store";
-import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
+import {
+	AnyContentElement,
+	ContentElementType,
+} from "@/types/board/ContentElement";
+import { useDebounceFn } from "@vueuse/core";
+import { chunk } from "lodash";
+import { z } from "zod";
+import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
+import { useCardStore } from "../Card.store";
+import { useSocketConnection } from "../socket/socket";
 import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
@@ -14,8 +20,7 @@ import {
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
 } from "./cardActionPayload.types";
-import { useDebounceFn } from "@vueuse/core";
-import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
+import * as CardActions from "./cardActions";
 
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
@@ -78,7 +83,8 @@ export const useCardSocketApi = () => {
 		);
 	};
 
-	const { emitOnSocket, disconnectSocket } = useSocketConnection(dispatch);
+	const { emitOnSocket, disconnectSocket, emitWithAck } =
+		useSocketConnection(dispatch);
 
 	const disconnectSocketRequest = () => {
 		disconnectSocket();
@@ -101,8 +107,67 @@ export const useCardSocketApi = () => {
 		{ maxWait: MAX_WAIT_BEFORE_FIRST_CALL_IN_MS }
 	);
 
-	const createElementRequest = async (payload: CreateElementRequestPayload) => {
-		emitOnSocket("create-element-request", payload);
+	const ExternalToolElementContentSchema = z.object({
+		contextExternalToolId: z.string().nullable(),
+	});
+
+	const FileElementContentSchema = z.object({
+		caption: z.string(),
+		alternativeText: z.string(),
+	});
+
+	const FileFolderElementContentSchema = z.object({
+		title: z.string(),
+	});
+
+	const H5pElementContentSchema = z.object({
+		contentId: z.string().nullable(),
+	});
+
+	const LinkElementContentSchema = z.object({
+		url: z.string(),
+		title: z.string(),
+		description: z.string().optional(),
+	});
+
+	const RichTextElementContentSchema = z.object({
+		text: z.string(),
+		inputFormat: z.string(),
+	});
+
+	const SubmissionContainerElementContentSchema = z.object({
+		dueDate: z.string(),
+	});
+
+	const AnyContentElement = z.object({
+		id: z.string(),
+		type: z.enum(ContentElementType),
+		timestamps: z.object({
+			createdAt: z.string(),
+			lastUpdatedAt: z.string(),
+		}),
+		content: z.union([
+			ExternalToolElementContentSchema,
+			FileElementContentSchema,
+			FileFolderElementContentSchema,
+			H5pElementContentSchema,
+			LinkElementContentSchema,
+			RichTextElementContentSchema,
+			SubmissionContainerElementContentSchema,
+		]),
+	});
+
+	const createElementRequest = async (
+		payload: CreateElementRequestPayload
+	): Promise<AnyContentElement | undefined> => {
+		const response = (await emitWithAck(
+			"create-element-request",
+			payload
+		)) as unknown;
+
+		const anyContentElement = AnyContentElement.parse(response);
+
+		return anyContentElement;
 	};
 
 	const deleteElementRequest = async (payload: DeleteElementRequestPayload) => {
