@@ -21,7 +21,7 @@
 			<RoomAdminTable
 				:show-select="false"
 				:header-bottom="headerBottom"
-				@manage:room="manageRoom"
+				@manage-room-members="manageRoom"
 			/>
 		</template>
 	</DefaultWireframe>

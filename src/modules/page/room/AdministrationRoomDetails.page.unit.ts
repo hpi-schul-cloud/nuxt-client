@@ -1,5 +1,9 @@
 import AdministrationRoomDetailPage from "./AdministrationRoomDetails.page.vue";
-import { mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
+import {
+	envsFactory,
+	mockedPiniaStoreTyping,
+	schoolFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -9,17 +13,18 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
-import { schoolsModule } from "@/store";
+import { envConfigModule, schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { Mock } from "vitest";
-import { Router, useRouter } from "vue-router";
-import { nextTick } from "vue-demi";
+import { Router, useRoute } from "vue-router";
+import { nextTick } from "vue";
+import EnvConfigModule from "@/store/env-config";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -42,10 +47,11 @@ describe("AdministrationRoomDetails.page", () => {
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-		useRouterMock.mockReturnValue(router);
+		useRouteMock.mockReturnValue(router);
 
 		setupStores({
 			schoolsModule: SchoolsModule,
+			envConfigModule: EnvConfigModule,
 		});
 
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
@@ -54,7 +60,14 @@ describe("AdministrationRoomDetails.page", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: { isEmptyList?: boolean }) => {
+	const setup = (options?: {
+		isEmptyList?: boolean;
+		featureFlag?: boolean;
+	}) => {
+		const envs = envsFactory.build({
+			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,
+		});
+		envConfigModule.setEnvs(envs);
 		const isEmptyList = options?.isEmptyList ?? false;
 
 		const wrapper = mount(AdministrationRoomDetailPage, {
@@ -146,16 +159,18 @@ describe("AdministrationRoomDetails.page", () => {
 
 			expect(adminRoomStore.selectedRoom).toBeNull();
 		});
-	});
 
-	it("should redirect to main rooms page when no room is selected", async () => {
-		const { adminRoomStore } = setup();
+		it("should navigate to dashboard if feature is disabled", async () => {
+			const mockReplace = vi.fn();
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: { replace: mockReplace },
+			});
 
-		adminRoomStore.selectedRoom = null;
-		await nextTick();
+			setup({ featureFlag: false });
+			await nextTick();
 
-		expect(router.push).toHaveBeenCalledWith({
-			name: "administration-rooms-manage",
+			expect(mockReplace).toHaveBeenCalledWith("/dashboard");
 		});
 	});
 });

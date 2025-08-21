@@ -34,6 +34,7 @@ const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 describe("RoomAdminTable", () => {
 	let askConfirmationMock: Mock;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
@@ -71,6 +72,7 @@ describe("RoomAdminTable", () => {
 			roomStatsItemResponseFactory.buildList(2, {
 				schoolId: ownSchool.id,
 			});
+
 		const wrapper = mount(RoomAdminTable, {
 			attachTo: document.body,
 			global: {
@@ -278,8 +280,8 @@ describe("RoomAdminTable", () => {
 
 			describe("manage room members", () => {
 				describe("when manage room members menu clicked", () => {
-					it("should call 'fetchRoomDetails' method", async () => {
-						const { wrapper, roomList, adminRoomStore } = setup();
+					it("should emit 'manage-room-members' event", async () => {
+						const { wrapper, roomList } = setup();
 
 						await nextTick();
 
@@ -293,10 +295,13 @@ describe("RoomAdminTable", () => {
 						);
 
 						await manageMenu.trigger("click");
+						await nextTick();
 
-						expect(adminRoomStore.fetchRoomDetails).toHaveBeenCalledWith(
-							roomList[0].roomId
-						);
+						const emitted = wrapper.emitted();
+
+						expect(emitted["manage-room-members"]![0]).toStrictEqual([
+							roomList[0].roomId,
+						]);
 					});
 				});
 			});

@@ -130,14 +130,11 @@ describe("AdministrationRooms.page", () => {
 
 	describe("routing", () => {
 		it("should navigate to room details on room click", async () => {
-			const { adminRoomStore, router } = setup();
+			const { wrapper, router } = setup({ featureFlag: true });
 			const roomId = "room-id";
 
-			adminRoomStore.selectedRoom = {
-				roomId,
-				roomName: "Room Name",
-			};
-			await nextTick();
+			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
+			await roomAdminTable.vm.$emit("manage-room-members", roomId);
 
 			const expectedRoute = {
 				name: "administration-rooms-manage-details",

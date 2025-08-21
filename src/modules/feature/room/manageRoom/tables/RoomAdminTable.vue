@@ -90,7 +90,7 @@ withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-	(e: "manage:room", value: string): void;
+	(e: "manage-room-members", value: string): void;
 }>();
 
 const { t } = useI18n();
@@ -120,7 +120,7 @@ const onDeleteRoom = async (item: RoomStatsItemResponse) => {
 };
 
 const onManageRoom = async (roomId: string) => {
-	emit("manage:room", roomId);
+	emit("manage-room-members", roomId);
 };
 
 type RoomTableHeaderKey = keyof RoomStatsItemResponse | "actions";
