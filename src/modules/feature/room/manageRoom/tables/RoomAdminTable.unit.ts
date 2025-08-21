@@ -297,7 +297,7 @@ describe("RoomAdminTable", () => {
 						await manageMenu.trigger("click");
 						await nextTick();
 
-						expect(wrapper.emitted()["manage-room-members"]![0]).toStrictEqual([
+						expect(wrapper.emitted()["manage-room-members"][0]).toStrictEqual([
 							roomList[0].roomId,
 						]);
 					});
