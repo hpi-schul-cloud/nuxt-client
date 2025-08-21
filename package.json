@@ -50,7 +50,8 @@
 		"vue-router": "^4.5.1",
 		"vuedraggable": "^4.1.0",
 		"vuetify": "^3.9.3",
-		"vuex": "^4.0.2"
+		"vuex": "^4.0.2",
+		"zod": "^4.0.17"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.27.0",
