@@ -49,7 +49,6 @@
 <script setup lang="ts">
 import {
 	isAudioMimeType,
-	isCollaboraMimeType,
 	isPdfMimeType,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
@@ -89,7 +88,7 @@ const hasAudioMimeType = computed(() => {
 	return isAudioMimeType(props.fileProperties.mimeType);
 });
 const hasCollaboraMimeType = computed(() => {
-	return isCollaboraMimeType(props.fileProperties.mimeType);
+	return props.fileProperties.isCollaboraEditable;
 });
 
 const isCollaboraEnabled = computed(() => {

@@ -1,3 +1,5 @@
+import { PreviewStatus } from "@/fileStorageApi/v3";
+import { ContentElementType } from "@/serverApi/v3";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -6,8 +8,6 @@ import { shallowMount } from "@vue/test-utils";
 import FileAttributes from "./attributes/FileAttributes.vue";
 import ContentElementFooter from "./ContentElementFooter.vue";
 import FileDownload from "./download/FileDownload.vue";
-import { PreviewStatus } from "@/fileStorageApi/v3";
-import { ContentElementType } from "@/serverApi/v3";
 
 describe("ContentElementFooter", () => {
 	const setup = () => {
@@ -21,6 +21,7 @@ describe("ContentElementFooter", () => {
 				previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 				isDownloadAllowed: true,
 				mimeType: "text/plain",
+				isCollaboraEditable: false,
 				element: {
 					id: "1",
 					type: ContentElementType.File,
