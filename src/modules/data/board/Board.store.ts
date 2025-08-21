@@ -268,7 +268,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const moveCardToNewColumn = async (cardId: string) => {
 		const cardLocation = getCardLocation(cardId);
-		if (cardLocation === undefined) return;
+		if (cardLocation?.columnId === undefined) return;
 
 		const {
 			columnIndex: fromColumnIndex,

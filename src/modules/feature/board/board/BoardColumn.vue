@@ -166,15 +166,20 @@ const onDragEnd = async (event: SortableEvent) => {
 		return;
 	}
 
-	boardStore.moveCardRequest({
-		cardId,
-		oldIndex: oldIndex!,
-		newIndex: newIndex!,
-		fromColumnId,
-		fromColumnIndex: boardStore.getColumnIndex(fromColumnId),
-		toColumnId,
-		toColumnIndex,
-	});
+	if (toColumnId === undefined) {
+		boardStore.moveCardToNewColumn(cardId);
+		// maybe add undo parameters here, too?!?
+	} else {
+		boardStore.moveCardRequest({
+			cardId,
+			oldIndex: oldIndex!,
+			newIndex: newIndex!,
+			fromColumnId,
+			fromColumnIndex: boardStore.getColumnIndex(fromColumnId),
+			toColumnId,
+			toColumnIndex,
+		});
+	}
 };
 
 const onMoveCardKeyboard = (

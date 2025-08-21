@@ -1,12 +1,7 @@
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
-import { createApplicationError } from "@/utils/create-application-error.factory";
 import { useForceRender } from "../fixSamePositionDnD.composable";
 import { useSocketConnection } from "../socket/socket";
-import { useI18n } from "vue-i18n";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { useBoardStore } from "../Board.store";
 import * as CardActions from "../cardActions/cardActions";
@@ -28,7 +23,6 @@ import * as BoardActions from "./boardActions";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
-	const { notifySocketError } = useErrorHandler();
 	const {
 		notifyCreateCardSuccess,
 		notifyCreateColumnSuccess,
@@ -41,7 +35,6 @@ export const useBoardSocketApi = () => {
 		notifyUpdateColumnTitleSuccess,
 		notifyUpdateBoardLayoutSuccess,
 	} = useBoardAriaNotification();
-	const { t } = useI18n();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
@@ -74,20 +67,17 @@ export const useBoardSocketApi = () => {
 		];
 
 		const failureActions = [
-			on(BoardActions.createCardFailure, createCardFailure),
-			on(BoardActions.createColumnFailure, createColumnFailure),
-			on(CardActions.deleteCardFailure, deleteCardFailure),
-			on(BoardActions.deleteColumnFailure, deleteColumnFailure),
-			on(BoardActions.fetchBoardFailure, fetchBoardFailure),
-			on(BoardActions.moveCardFailure, moveCardFailure),
-			on(BoardActions.moveColumnFailure, moveColumnFailure),
-			on(BoardActions.updateColumnTitleFailure, updateColumnTitleFailure),
-			on(BoardActions.updateBoardTitleFailure, updateBoardTitleFailure),
-			on(
-				BoardActions.updateBoardVisibilityFailure,
-				updateBoardVisibilityFailure
-			),
-			on(BoardActions.updateBoardLayoutFailure, updateBoardLayoutFailure),
+			on(BoardActions.createCardFailure, resetBoard),
+			on(BoardActions.createColumnFailure, resetBoard),
+			on(CardActions.deleteCardFailure, resetBoard),
+			on(BoardActions.deleteColumnFailure, resetBoard),
+			on(BoardActions.fetchBoardFailure, resetBoard),
+			on(BoardActions.moveCardFailure, resetBoard),
+			on(BoardActions.moveColumnFailure, resetBoard),
+			on(BoardActions.updateColumnTitleFailure, resetBoard),
+			on(BoardActions.updateBoardTitleFailure, resetBoard),
+			on(BoardActions.updateBoardVisibilityFailure, resetBoard),
+			on(BoardActions.updateBoardLayoutFailure, resetBoard),
 		];
 
 		const ariaLiveNotifications = [
@@ -129,9 +119,10 @@ export const useBoardSocketApi = () => {
 	};
 
 	const fetchBoardRequest = async (
-		payload: FetchBoardRequestPayload
+		payload: FetchBoardRequestPayload,
+		loading = true
 	): Promise<void> => {
-		boardStore.setLoading(true);
+		boardStore.setLoading(loading);
 		emitOnSocket("fetch-board-request", payload);
 	};
 
@@ -165,7 +156,7 @@ export const useBoardSocketApi = () => {
 			}
 			emitOnSocket("move-card-request", payload);
 		} catch {
-			moveCardFailure();
+			resetBoard();
 		}
 	};
 
@@ -202,31 +193,17 @@ export const useBoardSocketApi = () => {
 		generateRenderKey();
 	};
 
-	const createCardFailure = () => notifySocketError("notCreated", "boardCard");
-	const createColumnFailure = () =>
-		notifySocketError("notCreated", "boardColumn");
-	const deleteCardFailure = () => notifySocketError("notDeleted", "boardCard");
-	const deleteColumnFailure = () =>
-		notifySocketError("notDeleted", "boardColumn");
-	const fetchBoardFailure = () => {
-		applicationErrorModule.setError(
-			createApplicationError(
-				HttpStatusCode.NotFound,
-				t("components.board.error.404")
-			)
-		);
+	const resetBoard = () => {
+		if (boardStore.board?.id) {
+			const boardId = boardStore.board.id;
+			boardStore.fetchBoardSuccess({
+				...boardStore.board,
+				id: "temp",
+				columns: [],
+			});
+			fetchBoardRequest({ boardId }, false);
+		}
 	};
-	const moveCardFailure = () => notifySocketError("notUpdated", "boardCard");
-	const moveColumnFailure = () =>
-		notifySocketError("notUpdated", "boardColumn");
-	const updateColumnTitleFailure = () =>
-		notifySocketError("notUpdated", "boardColumn");
-	const updateBoardTitleFailure = () =>
-		notifySocketError("notUpdated", "board");
-	const updateBoardVisibilityFailure = () =>
-		notifySocketError("notUpdated", "board");
-	const updateBoardLayoutFailure = () =>
-		notifySocketError("notUpdated", "board");
 
 	return {
 		dispatch,
