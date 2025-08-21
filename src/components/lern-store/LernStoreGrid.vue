@@ -20,18 +20,19 @@ const col = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .grid {
 	display: grid;
 	grid-gap: 16px;
 	width: 100%;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm')} {
 		grid-gap: calc(9 * var(--border-width-bold)); /* 18px */
 	}
 
-	@include breakpoint(desktop) {
+	@media #{map.get($display-breakpoints, 'md-and-up')} {
 		grid-gap: 24px;
 	}
 }
