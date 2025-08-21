@@ -1,12 +1,9 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
-import {
-	AnyContentElement,
-	ContentElementType,
-} from "@/types/board/ContentElement";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { AnyContentElementSchema } from "@/types/board/ContentElement.schema";
 import { useDebounceFn } from "@vueuse/core";
 import { chunk } from "lodash";
-import { z } from "zod";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { useCardStore } from "../Card.store";
 import { useSocketConnection } from "../socket/socket";
@@ -107,56 +104,6 @@ export const useCardSocketApi = () => {
 		{ maxWait: MAX_WAIT_BEFORE_FIRST_CALL_IN_MS }
 	);
 
-	const ExternalToolElementContentSchema = z.object({
-		contextExternalToolId: z.string().nullable(),
-	});
-
-	const FileElementContentSchema = z.object({
-		caption: z.string(),
-		alternativeText: z.string(),
-	});
-
-	const FileFolderElementContentSchema = z.object({
-		title: z.string(),
-	});
-
-	const H5pElementContentSchema = z.object({
-		contentId: z.string().nullable(),
-	});
-
-	const LinkElementContentSchema = z.object({
-		url: z.string(),
-		title: z.string(),
-		description: z.string().optional(),
-	});
-
-	const RichTextElementContentSchema = z.object({
-		text: z.string(),
-		inputFormat: z.string(),
-	});
-
-	const SubmissionContainerElementContentSchema = z.object({
-		dueDate: z.string(),
-	});
-
-	const AnyContentElement = z.object({
-		id: z.string(),
-		type: z.enum(ContentElementType),
-		timestamps: z.object({
-			createdAt: z.string(),
-			lastUpdatedAt: z.string(),
-		}),
-		content: z.union([
-			ExternalToolElementContentSchema,
-			FileElementContentSchema,
-			FileFolderElementContentSchema,
-			H5pElementContentSchema,
-			LinkElementContentSchema,
-			RichTextElementContentSchema,
-			SubmissionContainerElementContentSchema,
-		]),
-	});
-
 	const createElementRequest = async (
 		payload: CreateElementRequestPayload
 	): Promise<AnyContentElement | undefined> => {
@@ -165,7 +112,7 @@ export const useCardSocketApi = () => {
 			payload
 		)) as unknown;
 
-		const anyContentElement = AnyContentElement.parse(response);
+		const anyContentElement = AnyContentElementSchema.parse(response);
 
 		return anyContentElement;
 	};
