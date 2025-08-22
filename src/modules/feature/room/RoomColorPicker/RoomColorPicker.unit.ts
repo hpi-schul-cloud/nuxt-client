@@ -74,7 +74,7 @@ describe("@feature-room/RoomColorPicker", () => {
 			expect(radioGroup.props().modelValue).toBe(RoomColor.Red);
 		});
 
-		it("should render true icon when color is selected", () => {
+		it("should render true-icon when color is selected", () => {
 			const { wrapper } = setup({ color: RoomColor.Red });
 
 			const radioGroup = wrapper.getComponent(VRadioGroup);
@@ -86,7 +86,7 @@ describe("@feature-room/RoomColorPicker", () => {
 			expect(trueIcon.props("icon")).toEqual(mdiCheckCircleOutline);
 		});
 
-		it("should not render true icon when color is not selected", () => {
+		it("should not render true-icon when color is not selected", () => {
 			const { wrapper } = setup({ color: RoomColor.Orange });
 
 			const radioGroup = wrapper.getComponent(VRadioGroup);

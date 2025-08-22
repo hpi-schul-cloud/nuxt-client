@@ -96,9 +96,9 @@ const roomForm = useTemplateRef("roomForm");
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const validationRules = [
+	isNonEmptyString(t("common.validation.nonEmptyString")),
 	isOfMaxLength(100)(t("common.validation.tooLong")),
 	validateOnOpeningTag,
-	isNonEmptyString(t("common.validation.nonEmptyString")),
 ];
 
 const onToggleVideoConferenceFeature = (isChecked: boolean | null) => {
