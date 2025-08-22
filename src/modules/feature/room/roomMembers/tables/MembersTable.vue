@@ -5,6 +5,7 @@
 		:show-select="canAddRoomMembers"
 		:external-selected-ids="selectedIds"
 		:header-bottom="headerBottom"
+		data-testid="participants-table"
 		select-item-key="userId"
 		aria-label-name-key="fullName"
 		@update:selected-ids="onUpdateSelectedIds"

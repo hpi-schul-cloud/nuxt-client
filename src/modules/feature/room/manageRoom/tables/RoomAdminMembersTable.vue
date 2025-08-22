@@ -5,6 +5,7 @@
 		:show-select="true"
 		:external-selected-ids="selectedIds"
 		:header-bottom="headerBottom"
+		:data-testid="'room-admin-members-table'"
 		select-item-key="userId"
 		aria-label-name-key="fullName"
 		@update:selected-ids="onUpdateSelectedIds"
