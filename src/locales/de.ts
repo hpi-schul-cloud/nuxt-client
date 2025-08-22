@@ -1844,6 +1844,8 @@ export default {
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
+	"pages.room.locked":
+		"Der Raum ist gesperrt, weil kein Mitglied die Berechtigung “Besitzen” hat. Bitte an den Schul-Admin wenden.",
 	"pages.room.taskCard.label.done": "Abschließen",
 	"pages.room.taskCard.label.due": "Abgabe",
 	"pages.room.taskCard.label.edit": "Bearbeiten",
@@ -1909,7 +1911,9 @@ export default {
 	"pages.rooms.ccImportCourse.success":
 		"Kurs {name} wurde erfolgreich importiert.",
 	"pages.rooms.ccImportCourse.error":
-		"Beim importieren des Kurses ist ein Fehler aufgetreten.",
+		"Beim Importieren des Kurses ist ein Fehler aufgetreten.",
+	"pages.rooms.ccExportCourse.error":
+		"Beim Exportieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
 	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
@@ -2246,6 +2250,9 @@ export default {
 		"Das Element ist nicht mehr verfügbar, da Videokonferenzen für die Schule deaktiviert wurden. Bitte an den Schul-Admin wenden.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
 	"pages.collabora.iframeTitle": "Office-Dokument Editor",
+	"pages.collabora.jsonError":
+		"Json der Collabora Nachricht konnte nicht geparsed werden.",
+	"pages.collabora.messageError": "Collabora Nachricht ist nicht valide.",
 	"error.500":
 		"Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",
 	"error.4500":

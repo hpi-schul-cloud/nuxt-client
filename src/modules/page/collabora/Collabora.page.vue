@@ -13,15 +13,18 @@ import { EditorMode } from "@/types/file/File";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useFileStorageApi } from "@data-file";
 import { computed, onMounted, ref } from "vue";
+import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
 
 interface Props {
 	fileRecordId: string;
 	editorMode: EditorMode;
 }
+
 const props = defineProps<Props>();
 const url = ref<string>("");
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
+const { documentHasUnsavedChanges } = useCollaboraPostMessageApi();
 
 const userName = computed(() => {
 	const firstName = authModule.getUser?.firstName;
@@ -41,6 +44,20 @@ onMounted(async () => {
 		userName.value
 	);
 
-	url.value = collaboraUrl;
+	const locale = authModule.getLocale;
+
+	url.value = collaboraUrl + `&lang=${locale}`;
 });
+
+window.addEventListener("beforeunload", (event) =>
+	openUnloadConfirmation(event)
+);
+const openUnloadConfirmation = (event: BeforeUnloadEvent) => {
+	if (documentHasUnsavedChanges.value) {
+		// Opens confirmation dialog in firefox
+		event.preventDefault();
+		// Opens confirmation dialog in chrome
+		event.returnValue = "";
+	}
+};
 </script>

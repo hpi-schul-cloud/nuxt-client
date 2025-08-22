@@ -342,12 +342,12 @@ export default {
 }
 
 .content-max-width {
-	max-width: var(--size-content-width-max);
+	max-width: var(--content-max-width);
 }
 
 @media #{map.get($display-breakpoints, 'md-and-up')} {
 	.tabs-max-width {
-		max-width: var(--size-content-width-max);
+		max-width: var(--content-max-width);
 	}
 }
 

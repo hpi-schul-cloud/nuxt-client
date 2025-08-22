@@ -173,7 +173,7 @@ const showDivider = computed(() => {
 }
 
 .container-short-width {
-	max-width: var(--size-content-width-max);
+	max-width: var(--content-max-width);
 }
 
 .container-full-width {

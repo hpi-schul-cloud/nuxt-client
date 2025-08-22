@@ -154,7 +154,7 @@ const fabItemClickHandler = (event: string | undefined): void => {
 }
 
 .loader {
-	max-width: var(--size-content-width-max);
+	max-width: var(--content-max-width);
 }
 
 @media #{map.get($display-breakpoints, 'sm-and-up')} {

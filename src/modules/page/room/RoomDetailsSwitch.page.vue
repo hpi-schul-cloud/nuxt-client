@@ -10,14 +10,15 @@
 		</div>
 	</template>
 	<template v-else>
-		<RoomDetailsPage v-if="isRoom && room" :room="room" />
+		<RoomLockedPage v-if="isRoom && lockedRoomName" :title="lockedRoomName" />
+		<RoomDetailsPage v-else-if="isRoom && room" :room="room" />
 		<CourseRoomDetailsPage v-else />
 	</template>
 </template>
 
 <script setup lang="ts">
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
-import { RoomDetailsPage } from "@page-room";
+import { RoomDetailsPage, RoomLockedPage } from "@page-room";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	RoomVariant,
@@ -32,7 +33,8 @@ const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const route = useRoute();
 
 const roomDetailsStore = useRoomDetailsStore();
-const { isLoading, roomVariant, room } = storeToRefs(roomDetailsStore);
+const { isLoading, roomVariant, room, lockedRoomName } =
+	storeToRefs(roomDetailsStore);
 const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 const { canCreateRoom } = useRoomAuthorization();
 
