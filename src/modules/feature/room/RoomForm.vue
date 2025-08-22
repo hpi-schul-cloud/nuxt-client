@@ -8,6 +8,7 @@
 				counter="100"
 				:rules="validationRules"
 				autofocus
+				data-testid="room-name-input"
 			/>
 
 			<div class="mb-8">
