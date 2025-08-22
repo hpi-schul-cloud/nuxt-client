@@ -1,10 +1,14 @@
 import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
+import { applicationErrorModule } from "@/store";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
-import { useForceRender } from "../fixSamePositionDnD.composable";
-import { useSocketConnection } from "../socket/socket";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useI18n } from "vue-i18n";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { useBoardStore } from "../Board.store";
 import * as CardActions from "../cardActions/cardActions";
+import { useForceRender } from "../fixSamePositionDnD.composable";
+import { useSocketConnection } from "../socket/socket";
 import {
 	CreateCardRequestPayload,
 	CreateColumnRequestPayload,
@@ -35,6 +39,7 @@ export const useBoardSocketApi = () => {
 		notifyUpdateColumnTitleSuccess,
 		notifyUpdateBoardLayoutSuccess,
 	} = useBoardAriaNotification();
+	const { t } = useI18n();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
@@ -67,17 +72,17 @@ export const useBoardSocketApi = () => {
 		];
 
 		const failureActions = [
-			on(BoardActions.createCardFailure, resetBoard),
-			on(BoardActions.createColumnFailure, resetBoard),
-			on(CardActions.deleteCardFailure, resetBoard),
-			on(BoardActions.deleteColumnFailure, resetBoard),
-			on(BoardActions.fetchBoardFailure, resetBoard),
-			on(BoardActions.moveCardFailure, resetBoard),
-			on(BoardActions.moveColumnFailure, resetBoard),
-			on(BoardActions.updateColumnTitleFailure, resetBoard),
-			on(BoardActions.updateBoardTitleFailure, resetBoard),
-			on(BoardActions.updateBoardVisibilityFailure, resetBoard),
-			on(BoardActions.updateBoardLayoutFailure, resetBoard),
+			on(BoardActions.fetchBoardFailure, fetchBoardFailure),
+			on(BoardActions.createCardFailure, reloadBoard),
+			on(BoardActions.createColumnFailure, reloadBoard),
+			on(CardActions.deleteCardFailure, reloadBoard),
+			on(BoardActions.deleteColumnFailure, reloadBoard),
+			on(BoardActions.moveCardFailure, reloadBoard),
+			on(BoardActions.moveColumnFailure, reloadBoard),
+			on(BoardActions.updateColumnTitleFailure, reloadBoard),
+			on(BoardActions.updateBoardTitleFailure, reloadBoard),
+			on(BoardActions.updateBoardVisibilityFailure, reloadBoard),
+			on(BoardActions.updateBoardLayoutFailure, reloadBoard),
 		];
 
 		const ariaLiveNotifications = [
@@ -193,15 +198,30 @@ export const useBoardSocketApi = () => {
 		generateRenderKey();
 	};
 
+	const fetchBoardFailure = () => {
+		applicationErrorModule.setError(
+			createApplicationError(
+				HttpStatusCode.NotFound,
+				t("components.board.error.404")
+			)
+		);
+	};
+
+	const reloadBoard = () => {
+		const boardId = boardStore.board?.id;
+		if (boardId) {
+			resetBoard();
+			fetchBoardRequest({ boardId }, false);
+		}
+	};
+
 	const resetBoard = () => {
-		if (boardStore.board?.id) {
-			const boardId = boardStore.board.id;
+		if (boardStore.board) {
 			boardStore.fetchBoardSuccess({
 				...boardStore.board,
 				id: "temp",
 				columns: [],
 			});
-			fetchBoardRequest({ boardId }, false);
 		}
 	};
 
