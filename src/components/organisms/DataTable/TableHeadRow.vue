@@ -362,7 +362,6 @@ export default {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 
 .table__row {
 	font-weight: var(--font-weight-bold);
@@ -407,7 +406,7 @@ export default {
 	margin-right: 24px;
 	margin-left: 24px;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		min-width: 450px;
 		max-width: 50%;
 		margin-right: 32px;

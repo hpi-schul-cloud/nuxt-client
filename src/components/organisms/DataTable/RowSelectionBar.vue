@@ -110,7 +110,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .row-selection-info {
 	display: flex;
@@ -125,7 +126,7 @@ export default {
 .actions {
 	margin-top: 12px;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		margin-top: 0;
 		margin-left: 16px;
 	}

@@ -56,6 +56,6 @@ const close = () => {
 }
 
 .modal-container {
-	max-width: calc(0.6 * var(--size-content-width-max)) !important;
+	max-width: calc(0.6 * var(--content-max-width)) !important;
 }
 </style>

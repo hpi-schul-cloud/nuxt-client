@@ -353,7 +353,6 @@ export default {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 $tablet-portrait-width: 768px;
 
 .resource {
@@ -444,7 +443,7 @@ $tablet-portrait-width: 768px;
 				object-position: center;
 				object-fit: contain;
 
-				@include breakpoint(tablet) {
+				@media #{map.get($display-breakpoints, 'sm-and-up')} {
 					min-height: auto;
 				}
 			}

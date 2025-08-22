@@ -2,9 +2,9 @@
 	<div class="header elevation-2">
 		<div class="nav-container">
 			<div class="logo-container">
-				<base-link :href="logoLink">
+				<a :href="logoLink">
 					<img class="logo logo-full" :src="img" alt="Schulcloud Logo" />
-				</base-link>
+				</a>
 			</div>
 			<div v-if="linksToDisplay.length || hasButtons" class="link-container">
 				<v-btn
@@ -38,6 +38,7 @@
 		</div>
 	</div>
 </template>
+
 <script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
@@ -80,7 +81,6 @@ const setActive = (idx: number) => {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 
 .header {
 	position: sticky;
@@ -100,18 +100,18 @@ const setActive = (idx: number) => {
 }
 
 .nav-container {
-	@include breakpoint(tablet) {
+	@media (min-width: 750px) {
 		margin: 0 calc(3.5 * 16px);
 	}
 
-	@include breakpoint(desktop) {
+	@media (min-width: 991px) {
 		padding: 0 calc(5 * var(--border-width));
 		margin: auto;
 	}
 }
 
 .logo-container {
-	@include breakpoint(tablet) {
+	@media (min-width: 750px) {
 		height: calc(45 * var(--border-width));
 
 		> a > img {
@@ -119,7 +119,7 @@ const setActive = (idx: number) => {
 		}
 	}
 
-	@include breakpoint(desktop) {
+	@media (min-width: 991px) {
 		height: var(--legacy-topbar-height);
 
 		> a > img {
@@ -134,13 +134,13 @@ const setActive = (idx: number) => {
 	justify-content: center;
 	padding-bottom: 8px;
 
-	@include breakpoint(tablet) {
+	@media (min-width: 750px) {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
-	@include breakpoint(desktop) {
+	@media (min-width: 991px) {
 		justify-content: right;
 		padding-bottom: 0;
 	}
@@ -150,7 +150,7 @@ const setActive = (idx: number) => {
 		margin-right: 0;
 		margin-bottom: 8px;
 
-		@include breakpoint(tablet) {
+		@media (min-width: 750px) {
 			margin-bottom: 0;
 		}
 	}
@@ -209,11 +209,11 @@ const setActive = (idx: number) => {
 	font-family: var(--font-primary);
 	font-size: var(--text-md);
 
-	@include breakpoint(tablet) {
+	@media (min-width: 750px) {
 		display: flex;
 	}
 
-	@include breakpoint(desktop) {
+	@media (min-width: 991px) {
 		font-size: var(--text-md);
 	}
 
