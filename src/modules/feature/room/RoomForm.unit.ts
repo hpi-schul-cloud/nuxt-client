@@ -49,7 +49,10 @@ describe("@feature-room/RoomForm", () => {
 			const { wrapper } = setup();
 
 			const textField = wrapper.getComponent(VTextField);
-			await textField.setValue(" ");
+
+			// needed to trigger validation for empty value correctly
+			await textField.setValue("valid input");
+			await textField.setValue("");
 			await textField.trigger("blur");
 
 			expect(textField.text()).toContain("common.validation.nonEmptyString");
