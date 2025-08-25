@@ -1,17 +1,31 @@
 <template>
-	<v-textarea
-		v-model="modelValue"
-		data-testid="file-alttext-input"
-		rows="1"
-		auto-grow
-		:persistent-hint="true"
-		:hint="$t('components.cardElement.fileElement.altDescription')"
-		:label="$t('components.cardElement.fileElement.alternativeText')"
-	/>
+	<div class="d-flex flex-row">
+		<v-textarea
+			v-model="modelValue"
+			data-testid="file-alttext-input"
+			rows="1"
+			auto-grow
+			:persistent-hint="true"
+			:hint="$t('components.cardElement.fileElement.altDescription')"
+			:label="$t('components.cardElement.fileElement.alternativeText')"
+			:rules="[rules.validateOnOpeningTag]"
+		/>
+		<div class="align-self-center pl-2">
+			<button
+				data-testid="save-folder-title-in-card"
+				@click.prevent.stop="onConfirm"
+			>
+				<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
+				<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
+			</button>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { useOpeningTagValidator } from "@/utils/validation";
+import { mdiCheck } from "@icons/material";
+import { onMounted, reactive, ref } from "vue";
 
 type Props = {
 	alternativeText?: string;
@@ -26,6 +40,8 @@ const emit = defineEmits<{
 	(e: "update:alternativeText", alternativeText: string): void;
 }>();
 
+const { validateOnOpeningTag } = useOpeningTagValidator();
+
 const modelValue = ref("");
 
 onMounted(() => {
@@ -34,9 +50,17 @@ onMounted(() => {
 	}
 });
 
-watch(modelValue, (newValue) => {
-	if (newValue !== props.alternativeText) {
-		emit("update:alternativeText", newValue);
-	}
+const rules = reactive({
+	validateOnOpeningTag: (value: string) => {
+		return validateOnOpeningTag(value);
+	},
 });
+
+const onConfirm = () => {
+	const isValid = rules.validateOnOpeningTag(modelValue.value) === true;
+
+	if (isValid) {
+		emit("update:alternativeText", modelValue.value);
+	}
+};
 </script>

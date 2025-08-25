@@ -1,5 +1,10 @@
 <template>
 	<div v-if="isEditMode" class="px-4 pt-4">
+		<Name
+			:is-edit-mode="isEditMode"
+			:name="fileProperties.name"
+			@update:name="onUpdateName"
+		/>
 		<CaptionText
 			:caption="fileProperties.element.content.caption"
 			:is-edit-mode="isEditMode"
@@ -10,11 +15,6 @@
 			:alternative-text="fileProperties.element.content.alternativeText"
 			:is-edit-mode="isEditMode"
 			@update:alternative-text="onUpdateText"
-		/>
-		<Name
-			:is-edit-mode="isEditMode"
-			:name="fileProperties.name"
-			@update:name="onUpdateName"
 		/>
 	</div>
 </template>

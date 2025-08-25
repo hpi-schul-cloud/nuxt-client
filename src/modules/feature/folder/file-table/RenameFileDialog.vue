@@ -68,7 +68,10 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
 	validateOnOpeningTag: (value: string) => {
-		return validateOnOpeningTag(value);
+		const fileExtension = getFileExtension(name);
+		const nameWithExtension = `${value}.${fileExtension}`;
+
+		return validateOnOpeningTag(nameWithExtension);
 	},
 	checkDuplicatedNames: (value: string) => {
 		const fileExtension = getFileExtension(name);

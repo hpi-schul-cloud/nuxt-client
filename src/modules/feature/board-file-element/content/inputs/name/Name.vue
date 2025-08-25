@@ -1,19 +1,30 @@
 <template>
-	<v-textarea
-		v-model="nameRef"
-		data-testid="file-name-input"
-		rows="1"
-		auto-grow
-		:label="$t('components.cardElement.fileElement.caption')"
-		:hide-details="true"
-		:rules="[rules.required, rules.validateOnOpeningTag]"
-		@click.stop
-	/>
+	<div class="d-flex flex-row">
+		<v-textarea
+			v-model="nameRef"
+			data-testid="file-name-input"
+			rows="1"
+			auto-grow
+			:label="$t('common.labels.fileName')"
+			:rules="[rules.required, rules.validateOnOpeningTag]"
+			@click.stop
+		/>
+		<div class="align-self-center pl-2">
+			<button
+				data-testid="save-folder-title-in-card"
+				@click.prevent.stop="onConfirm"
+			>
+				<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
+				<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
+			</button>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
 import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
 import { useOpeningTagValidator } from "@/utils/validation";
+import { mdiCheck } from "@icons/material";
 import { onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -54,23 +65,32 @@ onMounted(() => {
 	}
 });
 
-watch(nameRef, (newValue) => {
-	const fileExtension = getFileExtension(props.name);
-	const nameWithExtension = `${newValue}.${fileExtension}`;
-
-	const isNameValid =
-		rules.validateOnOpeningTag(nameWithExtension) &&
-		rules.required(nameRef.value);
-
-	if (newValue !== props.name && isNameValid) {
-		emit("update:name", nameWithExtension);
-	}
-});
-
 const rules = reactive({
 	validateOnOpeningTag: (value: string) => {
-		return validateOnOpeningTag(value);
+		const fileExtension = getFileExtension(props.name);
+		const nameWithExtension = `${value}.${fileExtension}`;
+
+		return validateOnOpeningTag(nameWithExtension);
 	},
 	required: (value: string) => !!value || t("common.validation.required"),
 });
+
+const addFileExtension = (name: string) => {
+	const fileExtension = getFileExtension(props.name);
+	const nameWithExtension = `${name}.${fileExtension}`;
+
+	return nameWithExtension;
+};
+
+const onConfirm = () => {
+	const nameWithExtension = addFileExtension(nameRef.value);
+
+	const isNameValid =
+		rules.validateOnOpeningTag(nameWithExtension) === true &&
+		rules.required(nameRef.value) === true;
+
+	if (isNameValid) {
+		emit("update:name", nameWithExtension);
+	}
+};
 </script>

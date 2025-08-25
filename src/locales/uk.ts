@@ -107,6 +107,7 @@ export default {
 	"common.labels.updateAt": "Оновлено:",
 	"common.labels.visibility": "Видимість",
 	"common.labels.visible": "Видимий",
+	"common.labels.fileName": "Ім'я файлу",
 	"common.loading.text": "Дані завантажуються...",
 	"common.medium.alert.deactivated": "Медіа вимкнено.",
 	"common.medium.alert.notLicensed": "Середній не уповноважений.",
