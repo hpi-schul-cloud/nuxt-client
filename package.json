@@ -37,7 +37,7 @@
 		"focus-trap": "^7.6.5",
 		"katex": "^0.16.21",
 		"kjua": "^0.10.0",
-		"maska": "^2.1.10",
+		"maska": "^3.2.0",
 		"mobile-drag-drop": "^3.0.0-rc.0",
 		"object-hash": "^3.0.0",
 		"pinia": "^3.0.2",
