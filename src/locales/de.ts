@@ -2133,6 +2133,13 @@ export default {
 	"pages.rooms.administration.error.delete":
 		"Der Raum konnte nicht gelöscht werden.",
 	"pages.rooms.administration.pageTitle": "Räume verwalten",
+	"pages.rooms.administration.roomDetail.infoText":
+		"Raum-Mitglieder anderer Schulen werden aus Datenschutzgründen anonymisiert dargestellt (Ausnahme: Mitglied mit der Raumberechtigung „Besitzen“).",
+	"pages.rooms.administration.roomDetail.anonymized": "(anonymisiert)",
+	"pages.rooms.administration.roomDetail.breadcrumb":
+		"Raum-Mitglieder {roomName}",
+	"pages.rooms.administration.roomDetail.header.text":
+		"Raum-Mitglieder „{roomName}“",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
