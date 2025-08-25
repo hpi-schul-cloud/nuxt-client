@@ -1,8 +1,10 @@
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 import {
 	BoardFeature,
 	ContentElementType,
 	PreferredToolResponse,
 } from "@/serverApi/v3";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	type CreateElementRequestPayload,
@@ -10,7 +12,9 @@ import {
 	useBoardPermissions,
 	useCardStore,
 } from "@data-board";
+import { useFileStorageApi } from "@data-file";
 import {
+	mdiFileDocumentOutline,
 	mdiFolderOpenOutline,
 	mdiFormatText,
 	mdiLightbulbOnOutline,
@@ -29,7 +33,9 @@ import {
 	useSharedElementTypeSelection,
 } from "./SharedElementTypeSelection.composable";
 
-type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
+type CreateElementRequestFn = (
+	payload: CreateElementRequestPayload
+) => Promise<AnyContentElement | undefined>;
 
 export const useAddElementDialog = (
 	createElementRequestFn: CreateElementRequestFn,
@@ -47,6 +53,8 @@ export const useAddElementDialog = (
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { showCustomNotifier } = useBoardNotifier();
 	const { t } = useI18n();
+
+	const { uploadFromUrl } = useFileStorageApi();
 
 	const {
 		isDialogOpen,
@@ -202,6 +210,28 @@ export const useAddElementDialog = (
 				),
 				action: () => onElementClick(ContentElementType.H5p),
 				testId: "create-element-h5p",
+			});
+		}
+
+		if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED) {
+			options.push({
+				icon: mdiFileDocumentOutline,
+				label: t("Textdokument"),
+				action: async () => {
+					const element = await createElementRequestFn({
+						type: ContentElementType.File,
+						cardId,
+					});
+
+					if (element) {
+						uploadFromUrl(
+							"https://www.dsv.org/downloads/musterausschreibung/",
+							element.id,
+							FileRecordParentType.BOARDNODES
+						);
+					}
+				},
+				testId: "create-element-collabora",
 			});
 		}
 
