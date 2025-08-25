@@ -1,13 +1,13 @@
 <template>
 	<v-card
-		class="card d-flex align-items-center"
+		class="card d-flex align-center"
 		:aria-label="title"
 		hover
 		:data-testId="testId"
 		@click="onClick"
 	>
 		<div class="w-100">
-			<div class="d-flex align-content align-items-center">
+			<div class="d-flex align-content align-center">
 				<div v-if="logoUrl" class="logo-container my-auto mr-4">
 					<v-img
 						height="100%"
