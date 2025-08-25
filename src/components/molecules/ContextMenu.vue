@@ -287,6 +287,11 @@ export default {
 	font-weight: var(--font-weight-normal) !important;
 	font-family: var(--font-accent);
 }
+
+.material-icon {
+	width: 24px;
+	height: 24px;
+}
 </style>
 
 <style lang="scss">
