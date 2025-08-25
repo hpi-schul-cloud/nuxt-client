@@ -10,50 +10,48 @@
 				<v-card-title class="text-h4 my-2 text-break px-6 pt-4">
 					{{ modalTitle }}
 				</v-card-title>
-				<v-fade-transition>
-					<v-card-text class="pt-2 px-6">
-						<div v-if="step === 'firstStep'">
-							<p data-testid="share-options-info-text">
-								{{ t(`components.molecules.share.${type}.options.infoText`) }}
-							</p>
-							<div
-								v-if="showAlertInfo"
-								class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
-							>
-								<div class="mx-2">
-									<v-icon color="info" :icon="mdiInformation" />
-								</div>
-								<div data-testid="share-options-table-header">
-									{{
-										t("components.molecules.share.options.tableHeader.InfoText")
-									}}
-									<ul class="ml-6">
-										<li
-											v-for="bulletPoint in listItems"
-											:key="bulletPoint.translation"
-											:data-testId="bulletPoint.testId"
-										>
-											{{ t(bulletPoint.translation) }}
-										</li>
-									</ul>
-								</div>
+				<v-card-text class="pt-2 px-6">
+					<div v-if="step === 'firstStep'">
+						<p data-testid="share-options-info-text">
+							{{ t(`components.molecules.share.${type}.options.infoText`) }}
+						</p>
+						<div
+							v-if="showAlertInfo"
+							class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
+						>
+							<div class="mx-2">
+								<v-icon color="info" :icon="mdiInformation" />
 							</div>
-							<share-modal-options-form
-								:type="type"
-								@share-options-change="onShareOptionsChange"
-							/>
+							<div data-testid="share-options-table-header">
+								{{
+									t("components.molecules.share.options.tableHeader.InfoText")
+								}}
+								<ul class="ml-6">
+									<li
+										v-for="bulletPoint in listItems"
+										:key="bulletPoint.translation"
+										:data-testId="bulletPoint.testId"
+									>
+										{{ t(bulletPoint.translation) }}
+									</li>
+								</ul>
+							</div>
 						</div>
+						<share-modal-options-form
+							:type="type"
+							@share-options-change="onShareOptionsChange()"
+						/>
+					</div>
 
-						<div v-else-if="step === 'secondStep'">
-							<share-modal-result
-								:share-url="shareUrl"
-								:type="type"
-								@done="onCloseDialogOrDone"
-								@copied="onCopy"
-							/>
-						</div>
-					</v-card-text>
-				</v-fade-transition>
+					<div v-else-if="step === 'secondStep'">
+						<share-modal-result
+							:share-url="shareUrl"
+							:type="type"
+							@done="onCloseDialogOrDone"
+							@copied="onCopy"
+						/>
+					</div>
+				</v-card-text>
 				<v-card-actions class="px-6 pb-4">
 					<v-spacer />
 					<template v-if="step === 'firstStep'">

@@ -1,4 +1,3 @@
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
@@ -12,6 +11,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
+import { VDialog } from "vuetify/components/VDialog";
 
 describe("@/components/share/ShareModal", () => {
 	let shareModuleMock: ShareModule;
@@ -25,6 +25,7 @@ describe("@/components/share/ShareModal", () => {
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				},
+				stubs: { UseFocusTrap: true },
 			},
 			props: {
 				type: ShareTokenBodyParamsParentTypeEnum.Courses,
@@ -57,27 +58,32 @@ describe("@/components/share/ShareModal", () => {
 
 	it("should have the correct title", () => {
 		const { wrapper } = setup();
-		const title = wrapper.vm.$refs.textTitle as HTMLElement;
+		const title = wrapper.findComponent({ name: "v-card-title" });
 
-		expect(title.textContent).toContain(
+		expect(title.text()).toContain(
 			"components.molecules.share.options.title"
 		);
 	});
 
 	it("should call 'createShareUrl' store method when next button clicked", () => {
 		const { wrapper } = setup();
-		const dialog = wrapper.findComponent(vCustomDialog);
+		const dialog = wrapper.findComponent(VDialog);
 
-		dialog.vm.$emit("next");
+		const buttons = dialog.findAllComponents({ name: "v-btn", props: {  variant: "flat" } });
+		expect(buttons.length).toBe(2);
+		expect(buttons[0].text()).toBe("common.actions.cancel");
+		expect(buttons[1].text()).toBe("common.actions.continue");
+
+		buttons[1].vm.$emit("click");
 
 		expect(shareModuleMock.createShareUrl).toHaveBeenCalled();
 	});
 
 	it("should call 'resetShareFlow' store method when dialog closed", () => {
 		const { wrapper } = setup();
-		const dialog = wrapper.findComponent(vCustomDialog);
+		const dialog = wrapper.findComponent("share-modal-result");
 
-		dialog.vm.$emit("dialog-closed");
+		dialog.vm.$emit("after-leave");
 
 		expect(shareModuleMock.resetShareFlow).toHaveBeenCalled();
 	});
@@ -125,9 +131,10 @@ describe("@/components/share/ShareModal", () => {
 		it("should have the correct title", () => {
 			const { wrapper } = setup();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
-			const cardText = dialog.findComponent({ name: "v-card-text" });
+			// const dialog = wrapper.findComponent(VDialog);
+			const cardText = wrapper.findComponent({ name: "v-card-text" });
 
+			// woher kommst du denn?
 			const infotext = cardText.find(
 				`[data-testid="share-modal-external-tools-info"]`
 			);

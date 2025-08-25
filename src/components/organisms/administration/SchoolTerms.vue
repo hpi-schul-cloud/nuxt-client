@@ -176,7 +176,6 @@ const deleteFile = async () => {
 	notifierModule.show({
 		text: t("pages.administration.school.index.termsOfUse.delete.success"),
 		status: "success",
-		timeout: 5000,
 	});
 };
 

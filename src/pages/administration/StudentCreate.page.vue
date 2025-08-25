@@ -102,7 +102,6 @@ export default {
 				notifierModule.show({
 					text: this.$t("pages.administration.students.new.success"),
 					status: "success",
-					timeout: 5000,
 				});
 				this.$router.push({
 					path: `/administration/students`,

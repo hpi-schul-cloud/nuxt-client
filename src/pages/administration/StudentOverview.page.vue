@@ -565,20 +565,17 @@ export default {
 							rowIds.length
 						),
 						status: "success",
-						timeout: 5000,
 					});
 				} else {
 					notifierModule.show({
 						text: this.$t("pages.administration.sendMail.alreadyRegistered"),
 						status: "info",
-						timeout: 5000,
 					});
 				}
 			} catch {
 				notifierModule.show({
 					text: this.$t("pages.administration.sendMail.error", rowIds.length),
 					status: "error",
-					timeout: 5000,
 				});
 			}
 		},
@@ -595,14 +592,12 @@ export default {
 					notifierModule.show({
 						text: this.$t("pages.administration.printQr.emptyUser"),
 						status: "info",
-						timeout: 5000,
 					});
 				}
 			} catch {
 				notifierModule.show({
 					text: this.$t("pages.administration.printQr.error", rowIds.length),
 					status: "error",
-					timeout: 5000,
 				});
 			}
 		},
@@ -616,14 +611,12 @@ export default {
 					notifierModule.show({
 						text: this.$t("pages.administration.remove.success"),
 						status: "success",
-						timeout: 5000,
 					});
 					this.find();
 				} catch {
 					notifierModule.show({
 						text: this.$t("pages.administration.remove.error"),
 						status: "error",
-						timeout: 5000,
 					});
 				}
 			};

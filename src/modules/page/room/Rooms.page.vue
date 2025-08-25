@@ -90,7 +90,6 @@ const showImportSuccess = (newName: string) => {
 			name: newName,
 		}),
 		status: "success",
-		timeout: 5000,
 	});
 };
 </script>

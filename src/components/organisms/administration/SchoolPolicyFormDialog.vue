@@ -138,7 +138,6 @@ const submit = async () => {
 		notifierModule.show({
 			text: t("pages.administration.school.index.schoolPolicy.success"),
 			status: "success",
-			timeout: 5000,
 		});
 
 		resetForm();

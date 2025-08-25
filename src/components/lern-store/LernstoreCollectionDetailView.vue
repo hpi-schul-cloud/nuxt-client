@@ -271,7 +271,6 @@ export default defineComponent({
 				notifierModule.show({
 					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
 					status: "error",
-					timeout: 5000,
 				});
 			}
 		},

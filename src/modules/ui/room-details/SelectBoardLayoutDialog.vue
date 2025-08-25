@@ -1,6 +1,6 @@
 <template>
 	<VDialog v-model="isOpen" width="360">
-		<UseFocusTrap :options="{ immediate: true }">
+		<UseFocusTrap>
 			<VCard data-testid="board-layout-dialog">
 				<VCardTitle
 					class="text-h4 text-break px-6 pt-4"
