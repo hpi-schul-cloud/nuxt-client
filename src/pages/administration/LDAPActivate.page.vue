@@ -7,25 +7,22 @@
 		<section class="section">
 			<div class="icon-text">
 				<div class="icon-text-unit">
-					<v-icon class="material-icon" :icon="mdiAccountSchoolOutline" />
+					<v-icon :icon="mdiAccountSchoolOutline" />
 					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ $t("common.labels.students") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon class="custom-icon">$teacher</v-icon>
+					<v-icon>$teacher</v-icon>
 					<span>{{ verified.users && verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon
-						class="material-icon"
-						:icon="mdiShieldAccountVariantOutline"
-					/>
+					<v-icon :icon="mdiShieldAccountVariantOutline" />
 					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon class="custom-icon">$class</v-icon>
+					<v-icon>$class</v-icon>
 					<span>{{ verified.classes && verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
@@ -169,7 +166,6 @@
 					<template #icon>
 						<v-icon
 							color="rgba(var(--v-theme-success))"
-							class="material-icon"
 							:icon="mdiCheckCircle"
 						/>
 					</template>

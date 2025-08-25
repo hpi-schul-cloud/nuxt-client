@@ -1,6 +1,6 @@
 <template>
 	<div v-if="numberOfSelectedItems > 0" class="row-selection-info">
-		<div class="d-flex align-items-center content-wrapper">
+		<div class="d-flex align-center content-wrapper">
 			<div v-if="allRowsOfAllPagesSelected">
 				{{ $t("pages.administration.all") }}
 				{{ totalNumberOfItems }}

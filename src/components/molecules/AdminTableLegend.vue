@@ -4,9 +4,7 @@
 			<strong>{{ $t("components.molecules.adminfooterlegend.title") }}</strong>
 			<ul class="consent-icon">
 				<li v-for="icon in icons" :key="icon.icon" class="mb-2">
-					<v-icon class="material-icon" :color="icon.color">{{
-						icon.icon
-					}}</v-icon>
+					<v-icon :color="icon.color">{{ icon.icon }}</v-icon>
 					<span>
 						{{ icon.label }}
 					</span>
