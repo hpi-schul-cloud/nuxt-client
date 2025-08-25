@@ -149,7 +149,7 @@ export default {
 	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: var(--layer-page);
+	z-index: 1;
 	padding: 8px;
 	margin: 12px;
 	font-size: var(--text-xs);
@@ -183,7 +183,7 @@ export default {
 	border-radius: var(--radius-round);
 	opacity: 0.7;
 	// stylelint-disable
-	z-index: calc(var(--layer-page) + 1);
+	z-index: 2;
 	padding: 6px 4px 2px;
 	// stylelint-enable
 }
@@ -204,7 +204,7 @@ export default {
 
 		&-background-gradient {
 			position: absolute;
-			z-index: var(--layer-page);
+			z-index: 2;
 			width: 100%;
 			height: 100%;
 			background: linear-gradient(
@@ -214,26 +214,6 @@ export default {
 			);
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
-		}
-
-		&-icon {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			z-index: var(--layer-page);
-			font-size: 52px !important;
-			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 1));
-			opacity: 0.9;
-			transform: translate(-50%, -50%);
-		}
-
-		&-checkbox {
-			position: absolute;
-			top: 5%;
-			left: 90%;
-			z-index: var(--layer-page);
-			color: rgba(var(--v-theme-white));
-			cursor: pointer;
 		}
 	}
 

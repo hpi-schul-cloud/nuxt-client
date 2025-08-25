@@ -47,7 +47,7 @@ const onRemoveNotification = (notification: AlertPayload) => {
 .alert-wrapper {
 	position: fixed;
 	right: 0;
-	z-index: var(--layer-tooltip);
+	z-index: 50;
 	overflow: visible;
 }
 
@@ -56,7 +56,7 @@ const onRemoveNotification = (notification: AlertPayload) => {
 	right: 0;
 	bottom: 5vh;
 	left: 0;
-	z-index: var(--layer-tooltip);
+	z-index: 50;
 	overflow: visible;
 }
 </style>

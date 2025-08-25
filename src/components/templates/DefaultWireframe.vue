@@ -194,7 +194,7 @@ const showDivider = computed(() => {
 .sticky {
 	position: sticky;
 	top: var(--topbar-height);
-	z-index: var(--layer-sticky-header);
+	z-index: 20;
 	background-color: rgb(var(--v-theme-white));
 }
 

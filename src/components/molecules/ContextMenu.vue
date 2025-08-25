@@ -221,7 +221,7 @@ export default {
 	--transition-duration: 0.15s;
 
 	position: absolute;
-	z-index: var(--layer-dropdown);
+	z-index: 30;
 	display: flex;
 	flex-direction: column;
 	min-width: 150px;
