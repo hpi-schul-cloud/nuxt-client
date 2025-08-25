@@ -17,6 +17,7 @@ export const roomMemberFactory = Factory.define<RoomMember>(({ sequence }) => ({
 	displayRoomRole: `displayRoomRole${sequence}`,
 	displaySchoolRole: `displaySchoolRole${sequence}`,
 	isSelectable: true,
+	schoolId: `schoolId${sequence}`,
 }));
 
 export const roomMemberSchoolResponseFactory =

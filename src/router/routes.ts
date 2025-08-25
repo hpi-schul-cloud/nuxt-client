@@ -124,6 +124,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: createPermissionGuard(["school_administrate_rooms"]),
 	},
 	{
+		path: `/administration/rooms/manage/:roomId(${REGEX_ID})`,
+		component: async () =>
+			(await import("@page-room")).AdministrationRoomDetailsPage,
+		name: "administration-rooms-manage-details",
+		beforeEnter: createPermissionGuard(["school_administrate_rooms"]),
+	},
+	{
 		path: "/administration/rooms/new",
 		component: () => import("@/pages/administration/RoomsOverview.page.vue"),
 		name: "administration-rooms-new",
