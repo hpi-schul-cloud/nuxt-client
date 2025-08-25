@@ -10,10 +10,7 @@
 			@click.stop
 		/>
 		<div class="align-self-center pl-2">
-			<button
-				data-testid="save-folder-title-in-card"
-				@click.prevent.stop="onConfirm"
-			>
+			<button data-testid="save-file-name" @click.prevent.stop="onConfirm">
 				<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
 				<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
 			</button>

@@ -1,6 +1,6 @@
 <template>
 	<div v-if="isEditMode" class="px-4 pt-4">
-		<Name
+		<FileName
 			:is-edit-mode="isEditMode"
 			:name="fileProperties.name"
 			@update:name="onUpdateName"
@@ -25,7 +25,7 @@ import { computed, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
-import Name from "./name/Name.vue";
+import FileName from "./file-name/FileName.vue";
 
 const props = defineProps({
 	fileProperties: {
