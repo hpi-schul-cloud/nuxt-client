@@ -34,6 +34,8 @@
 					:members-info-text="
 						t('pages.rooms.administration.table.actionMenu.manageRoom')
 					"
+					:data-testid="`menu-manage-room-${item.roomId}`"
+					@click="onManageRoom(item.roomId)"
 				/>
 				<KebabMenuAction
 					v-if="userSchoolId === item.schoolId"
@@ -87,6 +89,10 @@ withDefaults(defineProps<Props>(), {
 	showSelect: true,
 });
 
+const emit = defineEmits<{
+	(e: "manage-room-members", value: string): void;
+}>();
+
 const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 
@@ -111,6 +117,10 @@ const onDeleteRoom = async (item: RoomStatsItemResponse) => {
 	if (shouldDelete) {
 		await deleteRoom(item.roomId);
 	}
+};
+
+const onManageRoom = async (roomId: string) => {
+	emit("manage-room-members", roomId);
 };
 
 type RoomTableHeaderKey = keyof RoomStatsItemResponse | "actions";

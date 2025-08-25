@@ -21,7 +21,7 @@ import { DataTable } from "@ui-data-table";
 import { KebabMenu } from "@ui-kebab-menu";
 import { useBoardNotifier } from "@util-board";
 import { Mock } from "vitest";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { VIcon } from "vuetify/components";
 import RoomAdminTable from "./RoomAdminTable.vue";
 
@@ -34,6 +34,7 @@ const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 describe("RoomAdminTable", () => {
 	let askConfirmationMock: Mock;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
@@ -71,6 +72,7 @@ describe("RoomAdminTable", () => {
 			roomStatsItemResponseFactory.buildList(2, {
 				schoolId: ownSchool.id,
 			});
+
 		const wrapper = mount(RoomAdminTable, {
 			attachTo: document.body,
 			global: {
@@ -272,6 +274,32 @@ describe("RoomAdminTable", () => {
 							`[data-testid="menu-delete-room-${roomList[0].roomId}"]`
 						);
 						expect(deleteAction.exists()).toBe(false);
+					});
+				});
+			});
+
+			describe("manage room members", () => {
+				describe("when manage room members menu clicked", () => {
+					it("should emit 'manage-room-members' event", async () => {
+						const { wrapper, roomList } = setup();
+
+						await nextTick();
+
+						const kebabMenu = wrapper.findComponent(
+							`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`
+						);
+						await kebabMenu.trigger("click");
+
+						const manageMenu = wrapper.findComponent(
+							`[data-testid="menu-manage-room-${roomList[0].roomId}"]`
+						);
+
+						await manageMenu.trigger("click");
+						await nextTick();
+
+						expect(wrapper.emitted()["manage-room-members"][0]).toStrictEqual([
+							roomList[0].roomId,
+						]);
 					});
 				});
 			});
