@@ -319,7 +319,7 @@ describe("useBoardSocketApi", () => {
 				);
 			});
 
-			it("should call notifySocketError for createCardFailure action", () => {
+			it("should reload the board for createCardFailure action", () => {
 				const { dispatch } = setupWithFakeBoard();
 
 				dispatch(BoardActions.createCardFailure({ columnId: "test" }));
@@ -330,7 +330,7 @@ describe("useBoardSocketApi", () => {
 				);
 			});
 
-			it("should call notifySocketError for createColumnFailure action", () => {
+			it("should reload the board for createColumnFailure action", () => {
 				const { dispatch } = setupWithFakeBoard();
 
 				dispatch(BoardActions.createColumnFailure({ boardId: "test" }));
@@ -341,7 +341,7 @@ describe("useBoardSocketApi", () => {
 				);
 			});
 
-			it("should call notifySocketError for deleteCardFailure action", () => {
+			it("should reload the board for deleteCardFailure action", () => {
 				const { dispatch } = setupWithFakeBoard();
 
 				dispatch(CardActions.deleteCardFailure({ cardId: "test" }));
@@ -352,7 +352,7 @@ describe("useBoardSocketApi", () => {
 				);
 			});
 
-			it("should call notifySocketError for deleteColumnFailure action", () => {
+			it("should reload the board for deleteColumnFailure action", () => {
 				const { dispatch } = setupWithFakeBoard();
 
 				dispatch(BoardActions.deleteColumnFailure({ columnId: "test" }));
@@ -363,7 +363,7 @@ describe("useBoardSocketApi", () => {
 				);
 			});
 
-			it("should call notifySocketError for moveCardFailure action", () => {
+			it("should reload the board for moveCardFailure action", () => {
 				const { dispatch } = setupWithFakeBoard();
 
 				dispatch(
@@ -384,7 +384,7 @@ describe("useBoardSocketApi", () => {
 				);
 			});
 
-			it("should call notifySocketError for moveColumnFailure action", () => {
+			it("should reload the board for moveColumnFailure action", () => {
 				const { dispatch } = setupWithFakeBoard();
 
 				dispatch(
@@ -400,7 +400,7 @@ describe("useBoardSocketApi", () => {
 				);
 			});
 
-			it("should call notifySocketError for updateColumnTitleFailure action", () => {
+			it("should reload the board for updateColumnTitleFailure action", () => {
 				const { dispatch } = setupWithFakeBoard();
 
 				dispatch(
@@ -416,7 +416,7 @@ describe("useBoardSocketApi", () => {
 				);
 			});
 
-			it("should call notifySocketError for updateBoardTitleFailure action", () => {
+			it("should reload the board for updateBoardTitleFailure action", () => {
 				const { dispatch } = setupWithFakeBoard();
 
 				dispatch(
@@ -432,7 +432,7 @@ describe("useBoardSocketApi", () => {
 				);
 			});
 
-			it("should call notifySocketError for updateBoardVisibilityFailure action", () => {
+			it("should reload the board for updateBoardVisibilityFailure action", () => {
 				const { dispatch } = setupWithFakeBoard();
 
 				dispatch(
@@ -448,7 +448,7 @@ describe("useBoardSocketApi", () => {
 				);
 			});
 
-			it("should call notifySocketError for updateBoardLayoutFailure action", () => {
+			it("should reload the board for updateBoardLayoutFailure action", () => {
 				const { dispatch } = setupWithFakeBoard();
 
 				dispatch(
