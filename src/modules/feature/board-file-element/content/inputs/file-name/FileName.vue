@@ -1,10 +1,8 @@
 <template>
 	<div class="d-flex flex-row">
-		<v-textarea
+		<v-text-field
 			v-model="nameRef"
 			data-testid="file-name-input"
-			rows="1"
-			auto-grow
 			:label="$t('common.labels.fileName')"
 			:rules="[rules.required, rules.validateOnOpeningTag]"
 			@click.stop
