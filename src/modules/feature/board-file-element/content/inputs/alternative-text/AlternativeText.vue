@@ -12,7 +12,7 @@
 		/>
 		<div class="align-self-center pl-2">
 			<button
-				data-testid="save-folder-title-in-card"
+				data-testid="save-alternative-text"
 				@click.prevent.stop="onConfirm"
 			>
 				<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
