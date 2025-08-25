@@ -135,7 +135,7 @@ const props = defineProps({
 	},
 });
 
-defineEmits<{
+const emit = defineEmits<{
 	(e: "update:selected-ids", selectedIds: string[]): void;
 }>();
 
@@ -155,6 +155,7 @@ watch(
 
 const onResetSelectedMembers = () => {
 	selectedIds.value = [];
+	emit("update:selected-ids", selectedIds.value);
 };
 
 const stickyStyle = computed(() => ({

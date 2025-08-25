@@ -7,8 +7,10 @@ import RoomLockedPage from "./RoomLocked.page.vue";
 import RoomMembersPage from "./RoomMembers.page.vue";
 import RoomsPage from "./Rooms.page.vue";
 import AdministrationRoomsPage from "./AdministrationRooms.page.vue";
+import AdministrationRoomDetailsPage from "./AdministrationRoomDetails.page.vue";
 
 export {
+	AdministrationRoomDetailsPage,
 	AdministrationRoomsPage,
 	RoomCreatePage,
 	RoomDetailsPage,
