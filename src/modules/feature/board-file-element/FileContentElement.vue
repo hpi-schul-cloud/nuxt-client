@@ -20,6 +20,7 @@
 			@fetch:file="onFetchFile"
 			@update:alternative-text="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
+			@update:name="onUpdateName"
 			@add:alert="onAddAlert"
 		>
 			<BoardMenu
@@ -118,7 +119,8 @@ const element = toRef(props, "element");
 useBoardFocusHandler(element.value.id, fileContentElement);
 
 const { modelValue } = useContentElementState(props);
-const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
+const { fetchFiles, upload, getFileRecordsByParentId, rename } =
+	useFileStorageApi();
 const { hasEditPermission } = useBoardPermissions();
 
 const fileRecord = computed(
@@ -200,6 +202,10 @@ const onUpdateAlternativeText = (value: string) => {
 
 const onUpdateCaption = (value: string) => {
 	modelValue.value.caption = value;
+};
+
+const onUpdateName = (value: string) => {
+	rename(fileRecord.value.id, { fileName: value });
 };
 
 const onAddAlert = (alert: FileAlert) => {
