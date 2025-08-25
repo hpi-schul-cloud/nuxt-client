@@ -35,7 +35,7 @@ interface GeneralConfig {
 }
 interface EditorWithSourceElement extends Editor {
 	sourceElement?: HTMLElement;
-	getData?: () => string;
+	getData: () => string;
 }
 
 export const useEditorConfig = () => {
