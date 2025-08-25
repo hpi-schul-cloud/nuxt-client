@@ -1,5 +1,5 @@
 <template>
-	<div class="pa-4 d-flex flex-column align-items-center max-width">
+	<div class="pa-4 d-flex flex-column align-center max-width">
 		<div class="pb-2">
 			{{ $t("global.topbar.MenuQrCode.qrHintText") }}
 		</div>

@@ -49,7 +49,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon class="custom-icon">$class</v-icon>
+				<v-icon>$class</v-icon>
 			</template>
 		</base-input>
 		<base-input

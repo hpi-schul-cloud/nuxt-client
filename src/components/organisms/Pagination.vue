@@ -11,7 +11,7 @@
 			active
 			@update:model-value="setPagination"
 		/>
-		<div v-if="perPage > 0" class="d-flex align-items-center">
+		<div v-if="perPage > 0" class="d-flex align-center">
 			<p class="total">
 				{{
 					$t("components.organisms.Pagination.currentPage", {
