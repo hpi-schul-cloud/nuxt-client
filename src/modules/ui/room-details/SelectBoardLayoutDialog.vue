@@ -1,35 +1,37 @@
 <template>
 	<VDialog v-model="isOpen" width="360">
-		<VCard data-testid="board-layout-dialog">
-			<VCardTitle
-				class="text-h4 text-break px-6 pt-4"
-				data-testid="board-layout-dialog-title"
-			>
-				{{ $t("pages.room.dialog.boardLayout.title") }}
-			</VCardTitle>
-			<VCardText
-				class="d-flex flex-row flex-wrap align-center justify-space-around"
-			>
-				<ExtendedIconBtn
-					v-for="(item, key) in boardLayouts"
-					:key="key"
-					:data-testid="item.dataTestId"
-					:icon="item.icon"
-					:label="item.label"
-					:class="{ selected: currentLayout === item.type }"
-					@click.stop="$emit('select', item.type)"
-				/>
-			</VCardText>
-			<VCardActions class="mb-2 px-6">
-				<VBtn
-					data-testid="dialog-close"
-					variant="outlined"
-					@click="$emit('update:modelValue', false)"
+		<UseFocusTrap :options="{ immediate: true }">
+			<VCard data-testid="board-layout-dialog">
+				<VCardTitle
+					class="text-h4 text-break px-6 pt-4"
+					data-testid="board-layout-dialog-title"
 				>
-					{{ $t("common.labels.close") }}
-				</VBtn>
-			</VCardActions>
-		</VCard>
+					{{ $t("pages.room.dialog.boardLayout.title") }}
+				</VCardTitle>
+				<VCardText
+					class="d-flex flex-row flex-wrap align-center justify-space-around"
+				>
+					<ExtendedIconBtn
+						v-for="(item, key) in boardLayouts"
+						:key="key"
+						:data-testid="item.dataTestId"
+						:icon="item.icon"
+						:label="item.label"
+						:class="{ selected: currentLayout === item.type }"
+						@click.stop="$emit('select', item.type)"
+					/>
+				</VCardText>
+				<VCardActions class="mb-2 px-6">
+					<VBtn
+						data-testid="dialog-close"
+						variant="outlined"
+						@click="$emit('update:modelValue', false)"
+					>
+						{{ $t("common.labels.close") }}
+					</VBtn>
+				</VCardActions>
+			</VCard>
+		</UseFocusTrap>
 	</VDialog>
 </template>
 
