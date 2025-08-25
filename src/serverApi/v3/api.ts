@@ -8612,6 +8612,12 @@ export interface RoomItemResponse {
      * @memberof RoomItemResponse
      */
     updatedAt: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponse
+     */
+    isLocked: boolean;
 }
 /**
  * 
@@ -8687,6 +8693,12 @@ export interface RoomMemberResponse {
      * @memberof RoomMemberResponse
      */
     schoolRoleNames: Array<RoleName>;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomMemberResponse
+     */
+    schoolId: string;
     /**
      * 
      * @type {string}

@@ -61,7 +61,6 @@ import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import {
 	convertDownloadToPreviewUrl,
-	isCollaboraMimeType,
 	isPreviewPossible,
 	isScanStatusBlocked,
 } from "@/utils/fileHelper";
@@ -152,6 +151,7 @@ const fileProperties = computed(() => {
 		),
 		mimeType: fileRecord.value.mimeType,
 		element: props.element,
+		isCollaboraEditable: fileRecord.value.isCollaboraEditable,
 	};
 });
 
@@ -216,21 +216,23 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
 
-const hasCollaboraMimeType = computed(() => {
+const isCollaboraEditable = computed(() => {
 	if (!fileRecord.value) return false;
-	return isCollaboraMimeType(fileRecord.value.mimeType);
+
+	return fileRecord.value.isCollaboraEditable;
 });
+
 const isCollaboraEnabled = computed(() => {
 	return envConfigModule.getEnv.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED;
 });
 const cardAriaLabel = computed(() => {
-	if (isCollaboraEnabled.value && hasCollaboraMimeType.value) {
+	if (isCollaboraEnabled.value && isCollaboraEditable.value) {
 		return t("components.cardElement.fileElement.openOfficeDocument");
 	}
 	return undefined;
 });
 const onCardInteraction = () => {
-	if (isCollaboraEnabled.value && hasCollaboraMimeType.value) openCollabora();
+	if (isCollaboraEnabled.value && isCollaboraEditable.value) openCollabora();
 };
 const openCollabora = () => {
 	const editorMode = mapEditBoardPermissionToEditorMode(

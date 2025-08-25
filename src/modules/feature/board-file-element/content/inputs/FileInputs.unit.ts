@@ -22,6 +22,7 @@ describe("FileInputs", () => {
 			isDownloadAllowed: true,
 			element,
 			mimeType: props.isPdf ? "application/pdf" : "image/png",
+			isCollaboraEditable: false,
 		};
 
 		const wrapper = shallowMount(FileInputs, {

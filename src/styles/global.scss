@@ -1,9 +1,6 @@
 @use "./utility/index" as *;
 @use "./css-variables/index" as *;
 
-// we need the path alias here to enable theme override
-@use "@/styles/legacy.scss" as *;
-
 @use "@/styles/settings.scss" as *;
 @use "vuetify" as *;
 

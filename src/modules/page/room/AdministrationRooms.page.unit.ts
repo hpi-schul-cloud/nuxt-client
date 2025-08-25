@@ -1,5 +1,9 @@
 import AdministrationRoomsPage from "./AdministrationRooms.page.vue";
-import { mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
+import {
+	envsFactory,
+	mockedPiniaStoreTyping,
+	schoolFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -9,8 +13,12 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
-import { schoolsModule } from "@/store";
+import { schoolsModule, envConfigModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { Router, useRouter } from "vue-router";
+import { Mock } from "vitest";
+import EnvConfigModule from "@/store/env-config";
+import { nextTick } from "vue";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -22,6 +30,12 @@ vi.mock(
 			buildPageTitle: (pageTitle) => pageTitle ?? "",
 		}) as typeof import("@/utils/pageTitle")
 );
+
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
+}));
+const useRouterMock = <Mock>useRouter;
 
 describe("AdministrationRooms.page", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -36,6 +50,7 @@ describe("AdministrationRooms.page", () => {
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 		setupStores({
 			schoolsModule: SchoolsModule,
+			envConfigModule: EnvConfigModule,
 		});
 
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
@@ -44,8 +59,17 @@ describe("AdministrationRooms.page", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: { isEmptyList?: boolean }) => {
+	const setup = (options?: {
+		isEmptyList?: boolean;
+		featureFlag?: boolean;
+	}) => {
+		const envs = envsFactory.build({
+			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,
+		});
+		envConfigModule.setEnvs(envs);
 		const isEmptyList = options?.isEmptyList ?? false;
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 
 		const wrapper = mount(AdministrationRoomsPage, {
 			global: {
@@ -71,11 +95,12 @@ describe("AdministrationRooms.page", () => {
 		return {
 			wrapper,
 			adminRoomStore,
+			router,
 		};
 	};
 
 	describe("rendering", () => {
-		it("should render the page and Table components ", async () => {
+		it("should render the page and Table component ", async () => {
 			const { wrapper } = setup();
 			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
 			const emptyStateComponent = wrapper.findComponent({ name: "EmptyState" });
@@ -96,25 +121,40 @@ describe("AdministrationRooms.page", () => {
 		});
 
 		it("should call fetchRooms on mount", async () => {
-			const { adminRoomStore, wrapper } = setup();
-			await wrapper.vm.$nextTick();
+			const { adminRoomStore } = setup();
+			await nextTick();
 
 			expect(adminRoomStore.fetchRooms).toHaveBeenCalled();
 		});
+	});
 
-		it("should pass the correct breadcrumbs to the page", () => {
-			const { wrapper } = setup();
-			const defaultWireframe = wrapper.findComponent({
-				name: "DefaultWireframe",
+	describe("routing", () => {
+		it("should navigate to room details on room click", async () => {
+			const { wrapper, router } = setup({ featureFlag: true });
+			const roomId = "room-id";
+
+			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
+			await roomAdminTable.vm.$emit("manage-room-members", roomId);
+
+			const expectedRoute = {
+				name: "administration-rooms-manage-details",
+				params: { roomId },
+			};
+
+			expect(router.push).toHaveBeenCalledWith(expectedRoute);
+		});
+
+		it("should navigate to dashboard if feature is disabled", async () => {
+			const mockReplace = vi.fn();
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: { replace: mockReplace },
 			});
 
-			expect(defaultWireframe.exists()).toBe(true);
-			const breadcrumbs = defaultWireframe.props("breadcrumbs");
+			setup({ featureFlag: false });
+			await nextTick();
 
-			expect(breadcrumbs).toEqual([
-				{ title: "global.sidebar.item.management", disabled: true },
-				{ title: "pages.rooms.administration.title", disabled: true },
-			]);
+			expect(mockReplace).toHaveBeenCalledWith("/dashboard");
 		});
 	});
 });

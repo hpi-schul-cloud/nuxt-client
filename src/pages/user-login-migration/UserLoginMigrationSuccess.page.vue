@@ -81,6 +81,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .container-max-width {
-	max-width: var(--size-content-width-max);
+	max-width: var(--content-max-width);
 }
 </style>

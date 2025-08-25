@@ -612,7 +612,7 @@ export default defineComponent({
 }
 
 .tabs-max-width {
-	max-width: var(--size-content-width-max);
+	max-width: var(--content-max-width);
 }
 
 // even out border

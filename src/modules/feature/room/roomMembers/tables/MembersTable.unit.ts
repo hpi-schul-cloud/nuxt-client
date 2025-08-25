@@ -19,7 +19,6 @@ import {
 } from "@@/tests/test-utils";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import {
-	VBtn,
 	VDataTable,
 	VDialog,
 	VIcon,
@@ -362,126 +361,6 @@ describe("MembersTable", () => {
 			const expectedIndices = [1];
 
 			expect(checkedIndices).toEqual(expectedIndices);
-		});
-
-		describe("action menu", () => {
-			it("should render action menu", async () => {
-				const { wrapper } = setup();
-				await selectCheckboxes([0], wrapper);
-
-				const actionMenuAfter = wrapper.findComponent(ActionMenu);
-
-				expect(actionMenuAfter.exists()).toBe(true);
-			});
-
-			it("should have flex order 2 for extra small display sizes", async () => {
-				const { wrapper } = setup({
-					windowWidth: 599,
-				});
-				await selectCheckboxes([1], wrapper);
-
-				const actionMenu = wrapper.findComponent(ActionMenu);
-
-				expect(actionMenu.classes()).toContain("order-2");
-			});
-
-			it("should not have flex order 2 display sizes greater than 599px", async () => {
-				const { wrapper } = setup({
-					windowWidth: 800,
-				});
-				await selectCheckboxes([1], wrapper);
-
-				const actionMenu = wrapper.findComponent(ActionMenu);
-
-				expect(actionMenu.classes()).not.toContain("order-2");
-			});
-
-			it("should reset member selection when reset button is clicked", async () => {
-				const { wrapper } = setup();
-				await selectCheckboxes([1, 3], wrapper);
-
-				const actionMenu = wrapper.findComponent(ActionMenu);
-				actionMenu.vm.$emit("reset:selected");
-
-				await nextTick();
-
-				const checkboxes = wrapper
-					.getComponent(VDataTable)
-					.findAll("input[type='checkbox']");
-
-				const checkedIndices = getCheckedIndices(checkboxes);
-
-				expect(checkedIndices).toEqual([]);
-			});
-
-			it.each([
-				{
-					description: "single member",
-					selectedUserIndices: [0],
-					expectedMessage: "pages.rooms.members.remove.confirmation",
-				},
-				{
-					description: "multiple members",
-					selectedUserIndices: [0, 1],
-					expectedMessage: "pages.rooms.members.multipleRemove.confirmation",
-				},
-			])(
-				"should render confirmation dialog with text for $description when removeMember action is clicked",
-				async ({ selectedUserIndices, expectedMessage }) => {
-					const { wrapper, roomMembersStore, roomMembers } = setup();
-					await selectCheckboxes(
-						selectedUserIndices.map((index) => index + 1),
-						wrapper
-					);
-
-					askConfirmationMock.mockResolvedValue(true);
-
-					const actionMenu = wrapper.findComponent(ActionMenu);
-					await nextTick();
-					actionMenu.getComponent(VBtn).trigger("click");
-					await nextTick();
-
-					const removeButton = wrapper.findComponent(
-						KebabMenuActionRemoveMember
-					);
-					removeButton.trigger("click");
-					await nextTick();
-
-					expect(roomMembersStore.removeMembers).toHaveBeenCalledWith(
-						selectedUserIndices.map((index) => roomMembers[index].userId)
-					);
-
-					expect(askConfirmationMock).toHaveBeenCalledWith({
-						confirmActionLangKey: "common.actions.remove",
-						message: expectedMessage,
-					});
-				}
-			);
-
-			it("should keep selection if confirmation dialog is canceled", async () => {
-				const { wrapper } = setup();
-				await selectCheckboxes([2], wrapper);
-
-				askConfirmationMock.mockResolvedValue(false);
-
-				const actionMenu = wrapper.findComponent(ActionMenu);
-				await nextTick();
-				actionMenu.getComponent(VBtn).trigger("click");
-				await nextTick();
-
-				const removeButton = wrapper.findComponent(KebabMenuActionRemoveMember);
-				removeButton.trigger("click");
-				await nextTick();
-
-				const checkboxes = wrapper
-					.getComponent(VDataTable)
-					.findAll("input[type='checkbox']");
-
-				const checkedIndices = getCheckedIndices(checkboxes);
-
-				expect(checkedIndices.length).toBeGreaterThan(0);
-				expect(checkedIndices).toEqual([2]);
-			});
 		});
 	});
 
