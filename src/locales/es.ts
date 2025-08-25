@@ -108,6 +108,7 @@ export default {
 	"common.labels.updateAt": "Actualizado:",
 	"common.labels.visibility": "Visibilidad",
 	"common.labels.visible": "Visible",
+	"common.labels.fileName": "Nombre del archivo",
 	"common.loading.text": "Los datos se están cargando...",
 	"common.medium.alert.deactivated": "Los medios están deshabilitados.",
 	"common.medium.alert.notLicensed": "El medio no está autorizado.",
