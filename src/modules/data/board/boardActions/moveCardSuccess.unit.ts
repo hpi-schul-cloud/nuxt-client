@@ -60,7 +60,7 @@ vi.mock("vue-i18n", () => {
 
 type BoardSetup = Record<string, Array<string>>;
 
-describe("BoardStore", () => {
+describe("BoardStore - moveCardSuccess", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedSocketConnectionHandler: DeepMocked<
@@ -177,188 +177,186 @@ describe("BoardStore", () => {
 		return board;
 	};
 
-	describe("moveCardSuccess", () => {
-		const setup = (
-			cardId: string,
-			toColumnId: string,
-			newIndex: number,
-			boardSetup: BoardSetup
-		) => {
-			const boardStore = useBoardStore();
-			boardStore.board = createBoardResponse(boardSetup);
+	const setup = (
+		cardId: string,
+		toColumnId: string,
+		newIndex: number,
+		boardSetup: BoardSetup
+	) => {
+		const boardStore = useBoardStore();
+		boardStore.board = createBoardResponse(boardSetup);
 
-			const location = boardStore.getCardLocation(cardId) ?? {
-				columnId: "unknownColumn",
-				columnIndex: 0,
-				cardIndex: 0,
-			};
-			const toColumnIndex =
-				boardStore.board?.columns.findIndex(
-					(column) => column.id === toColumnId
-				) ?? 0;
-			const payload = {
-				cardId,
-				oldIndex: location?.cardIndex,
-				newIndex,
-				fromColumnId: location?.columnId,
-				fromColumnIndex: location?.columnIndex,
-				toColumnId,
-				toColumnIndex,
-				forceNextTick: false,
-				isOwnAction: true,
-			};
-
-			mockedPiniaStoreTyping(useCardStore);
-
-			return {
-				boardStore,
-				payload,
-			};
+		const location = boardStore.getCardLocation(cardId) ?? {
+			columnId: "unknownColumn",
+			columnIndex: 0,
+			cardIndex: 0,
+		};
+		const toColumnIndex =
+			boardStore.board?.columns.findIndex(
+				(column) => column.id === toColumnId
+			) ?? 0;
+		const payload = {
+			cardId,
+			oldIndex: location?.cardIndex,
+			newIndex,
+			fromColumnId: location?.columnId,
+			fromColumnIndex: location?.columnIndex,
+			toColumnId,
+			toColumnIndex,
+			forceNextTick: false,
+			isOwnAction: true,
 		};
 
-		describe("when moving inside a column", () => {
-			it.each`
-				cardId  | toColumnId   | newIndex | expected
-				${"A1"} | ${"columnA"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
-				${"A1"} | ${"columnA"} | ${"1"}   | ${"A2,A1,A3 + B1,B2"}
-				${"A2"} | ${"columnA"} | ${"0"}   | ${"A2,A1,A3 + B1,B2"}
-				${"A3"} | ${"columnA"} | ${"0"}   | ${"A3,A1,A2 + B1,B2"}
-				${"B1"} | ${"columnB"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
-				${"B1"} | ${"columnB"} | ${"1"}   | ${"A1,A2,A3 + B2,B1"}
-				${"B2"} | ${"columnB"} | ${"0"}   | ${"A1,A2,A3 + B2,B1"}
-			`(
-				"should move to expected position - moving $cardId to $columnId pos $newIndex results in $expected",
-				async ({ cardId, toColumnId, newIndex, expected }) => {
-					const { boardStore, payload } = setup(cardId, toColumnId, newIndex, {
-						columnA: ["A1", "A2", "A3"],
-						columnB: ["B1", "B2"],
-					});
+		mockedPiniaStoreTyping(useCardStore);
 
-					expect(boardStore.board).not.toEqual(undefined);
+		return {
+			boardStore,
+			payload,
+		};
+	};
 
-					await boardStore.moveCardSuccess({
-						...payload,
-						isOwnAction: true,
-					});
+	describe("when moving inside a column", () => {
+		it.each`
+			cardId  | toColumnId   | newIndex | expected
+			${"A1"} | ${"columnA"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
+			${"A1"} | ${"columnA"} | ${"1"}   | ${"A2,A1,A3 + B1,B2"}
+			${"A2"} | ${"columnA"} | ${"0"}   | ${"A2,A1,A3 + B1,B2"}
+			${"A3"} | ${"columnA"} | ${"0"}   | ${"A3,A1,A2 + B1,B2"}
+			${"B1"} | ${"columnB"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
+			${"B1"} | ${"columnB"} | ${"1"}   | ${"A1,A2,A3 + B2,B1"}
+			${"B2"} | ${"columnB"} | ${"0"}   | ${"A1,A2,A3 + B2,B1"}
+		`(
+			"should move to expected position - moving $cardId to $columnId pos $newIndex results in $expected",
+			async ({ cardId, toColumnId, newIndex, expected }) => {
+				const { boardStore, payload } = setup(cardId, toColumnId, newIndex, {
+					columnA: ["A1", "A2", "A3"],
+					columnB: ["B1", "B2"],
+				});
 
-					const result = encodeCardPositions(boardStore.board);
-					const expectedPositions = decodeExpectedString(expected);
-					expect(result).toEqual(expectedPositions);
-				}
-			);
-		});
+				expect(boardStore.board).not.toEqual(undefined);
 
-		describe("when moving from one column to another", () => {
-			it.each`
-				cardId  | toColumnId   | newIndex | expected
-				${"A1"} | ${"columnB"} | ${"0"}   | ${"A2,A3 + A1,B1,B2"}
-				${"A1"} | ${"columnB"} | ${"1"}   | ${"A2,A3 + B1,A1,B2"}
-				${"A2"} | ${"columnB"} | ${"0"}   | ${"A1,A3 + A2,B1,B2"}
-				${"B1"} | ${"columnA"} | ${"0"}   | ${"B1,A1,A2,A3 + B2"}
-				${"B1"} | ${"columnA"} | ${"1"}   | ${"A1,B1,A2,A3 + B2"}
-				${"B2"} | ${"columnA"} | ${"0"}   | ${"B2,A1,A2,A3 + B1"}
-				${"B2"} | ${"columnA"} | ${"2"}   | ${"A1,A2,B2,A3 + B1"}
-			`(
-				"should move to expected position - moving $cardId to $columnId pos $newIndex results in $expected",
-				async ({ cardId, toColumnId, newIndex, expected }) => {
-					const { boardStore, payload } = setup(cardId, toColumnId, newIndex, {
-						columnA: ["A1", "A2", "A3"],
-						columnB: ["B1", "B2"],
-					});
+				await boardStore.moveCardSuccess({
+					...payload,
+					isOwnAction: true,
+				});
 
-					expect(boardStore.board).not.toEqual(undefined);
+				const result = encodeCardPositions(boardStore.board);
+				const expectedPositions = decodeExpectedString(expected);
+				expect(result).toEqual(expectedPositions);
+			}
+		);
+	});
 
-					await boardStore.moveCardSuccess({
-						...payload,
-						isOwnAction: true,
-					});
+	describe("when moving from one column to another", () => {
+		it.each`
+			cardId  | toColumnId   | newIndex | expected
+			${"A1"} | ${"columnB"} | ${"0"}   | ${"A2,A3 + A1,B1,B2"}
+			${"A1"} | ${"columnB"} | ${"1"}   | ${"A2,A3 + B1,A1,B2"}
+			${"A2"} | ${"columnB"} | ${"0"}   | ${"A1,A3 + A2,B1,B2"}
+			${"B1"} | ${"columnA"} | ${"0"}   | ${"B1,A1,A2,A3 + B2"}
+			${"B1"} | ${"columnA"} | ${"1"}   | ${"A1,B1,A2,A3 + B2"}
+			${"B2"} | ${"columnA"} | ${"0"}   | ${"B2,A1,A2,A3 + B1"}
+			${"B2"} | ${"columnA"} | ${"2"}   | ${"A1,A2,B2,A3 + B1"}
+		`(
+			"should move to expected position - moving $cardId to $columnId pos $newIndex results in $expected",
+			async ({ cardId, toColumnId, newIndex, expected }) => {
+				const { boardStore, payload } = setup(cardId, toColumnId, newIndex, {
+					columnA: ["A1", "A2", "A3"],
+					columnB: ["B1", "B2"],
+				});
 
-					const result = encodeCardPositions(boardStore.board);
-					const expectedPositions = decodeExpectedString(expected);
-					expect(result).toEqual(expectedPositions);
-				}
-			);
-		});
+				expect(boardStore.board).not.toEqual(undefined);
 
-		describe("when moving to non existing index", () => {
-			it.each`
-				cardId  | toColumnId   | newIndex | expected
-				${"A3"} | ${"columnB"} | ${"4"}   | ${"A1,A2 + B1,B2,A3"}
-				${"A3"} | ${"columnB"} | ${"9"}   | ${"A1,A2 + B1,B2,A3"}
-			`(
-				"should move to last position - moving $cardId to $columnId pos $newIndex results in $expected",
-				async ({ cardId, toColumnId, newIndex, expected }) => {
-					const { boardStore, payload } = setup(cardId, toColumnId, newIndex, {
-						columnA: ["A1", "A2", "A3"],
-						columnB: ["B1", "B2"],
-					});
+				await boardStore.moveCardSuccess({
+					...payload,
+					isOwnAction: true,
+				});
 
-					expect(boardStore.board).not.toEqual(undefined);
+				const result = encodeCardPositions(boardStore.board);
+				const expectedPositions = decodeExpectedString(expected);
+				expect(result).toEqual(expectedPositions);
+			}
+		);
+	});
 
-					await boardStore.moveCardSuccess({
-						...payload,
-						isOwnAction: true,
-					});
+	describe("when moving to non existing index", () => {
+		it.each`
+			cardId  | toColumnId   | newIndex | expected
+			${"A3"} | ${"columnB"} | ${"4"}   | ${"A1,A2 + B1,B2,A3"}
+			${"A3"} | ${"columnB"} | ${"9"}   | ${"A1,A2 + B1,B2,A3"}
+		`(
+			"should move to last position - moving $cardId to $columnId pos $newIndex results in $expected",
+			async ({ cardId, toColumnId, newIndex, expected }) => {
+				const { boardStore, payload } = setup(cardId, toColumnId, newIndex, {
+					columnA: ["A1", "A2", "A3"],
+					columnB: ["B1", "B2"],
+				});
 
-					const result = encodeCardPositions(boardStore.board);
-					const expectedPositions = decodeExpectedString(expected);
-					expect(result).toEqual(expectedPositions);
-				}
-			);
-		});
+				expect(boardStore.board).not.toEqual(undefined);
 
-		describe("when moving to non existing column", () => {
-			it.each`
-				cardId  | toColumnId   | newIndex | expected
-				${"A1"} | ${"columnC"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
-				${"B1"} | ${"columnC"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
-			`(
-				"should not move anything - moving $cardId to $columnId pos $newIndex results in $expected",
-				async ({ cardId, toColumnId, newIndex, expected }) => {
-					const { boardStore, payload } = setup(cardId, toColumnId, newIndex, {
-						columnA: ["A1", "A2", "A3"],
-						columnB: ["B1", "B2"],
-					});
+				await boardStore.moveCardSuccess({
+					...payload,
+					isOwnAction: true,
+				});
 
-					expect(boardStore.board).not.toEqual(undefined);
+				const result = encodeCardPositions(boardStore.board);
+				const expectedPositions = decodeExpectedString(expected);
+				expect(result).toEqual(expectedPositions);
+			}
+		);
+	});
 
-					await boardStore.moveCardSuccess({
-						...payload,
-						isOwnAction: true,
-					});
+	describe("when moving to non existing column", () => {
+		it.each`
+			cardId  | toColumnId   | newIndex | expected
+			${"A1"} | ${"columnC"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
+			${"B1"} | ${"columnC"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
+		`(
+			"should not move anything - moving $cardId to $columnId pos $newIndex results in $expected",
+			async ({ cardId, toColumnId, newIndex, expected }) => {
+				const { boardStore, payload } = setup(cardId, toColumnId, newIndex, {
+					columnA: ["A1", "A2", "A3"],
+					columnB: ["B1", "B2"],
+				});
 
-					const result = encodeCardPositions(boardStore.board);
-					const expectedPositions = decodeExpectedString(expected);
-					expect(result).toEqual(expectedPositions);
-				}
-			);
-		});
+				expect(boardStore.board).not.toEqual(undefined);
 
-		describe("when moving a not existing card", () => {
-			it.each`
-				cardId  | toColumnId   | newIndex | expected
-				${"A4"} | ${"columnB"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
-				${"B3"} | ${"columnA"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
-			`(
-				"should not move anything - moving $cardId to $columnId pos $newIndex results in $expected",
-				async ({ cardId, toColumnId, newIndex, expected }) => {
-					const { boardStore, payload } = setup(cardId, toColumnId, newIndex, {
-						columnA: ["A1", "A2", "A3"],
-						columnB: ["B1", "B2"],
-					});
+				await boardStore.moveCardSuccess({
+					...payload,
+					isOwnAction: true,
+				});
 
-					expect(boardStore.board).not.toEqual(undefined);
+				const result = encodeCardPositions(boardStore.board);
+				const expectedPositions = decodeExpectedString(expected);
+				expect(result).toEqual(expectedPositions);
+			}
+		);
+	});
 
-					await boardStore.moveCardSuccess({
-						...payload,
-						isOwnAction: true,
-					});
+	describe("when moving a not existing card", () => {
+		it.each`
+			cardId  | toColumnId   | newIndex | expected
+			${"A4"} | ${"columnB"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
+			${"B3"} | ${"columnA"} | ${"0"}   | ${"A1,A2,A3 + B1,B2"}
+		`(
+			"should not move anything - moving $cardId to $columnId pos $newIndex results in $expected",
+			async ({ cardId, toColumnId, newIndex, expected }) => {
+				const { boardStore, payload } = setup(cardId, toColumnId, newIndex, {
+					columnA: ["A1", "A2", "A3"],
+					columnB: ["B1", "B2"],
+				});
 
-					const result = encodeCardPositions(boardStore.board);
-					const expectedPositions = decodeExpectedString(expected);
-					expect(result).toEqual(expectedPositions);
-				}
-			);
-		});
+				expect(boardStore.board).not.toEqual(undefined);
+
+				await boardStore.moveCardSuccess({
+					...payload,
+					isOwnAction: true,
+				});
+
+				const result = encodeCardPositions(boardStore.board);
+				const expectedPositions = decodeExpectedString(expected);
+				expect(result).toEqual(expectedPositions);
+			}
+		);
 	});
 });
