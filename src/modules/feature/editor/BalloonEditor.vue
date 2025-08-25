@@ -16,7 +16,8 @@ import { useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { BalloonEditor } from "@hpi-schul-cloud/ckeditor";
+import * as CKEditorBuild from "@hpi-schul-cloud/ckeditor";
+const { BalloonEditor } = CKEditorBuild;
 import { useEditorConfig } from "./EditorConfig.composable";
 import {
 	corePlugins,

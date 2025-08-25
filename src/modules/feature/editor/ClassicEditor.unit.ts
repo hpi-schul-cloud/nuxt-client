@@ -3,7 +3,8 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useEditorConfig } from "./EditorConfig.composable";
-import ClassicEditor from "./ClassicEditor.vue";
+import * as CKEditorBuild from "@hpi-schul-cloud/ckeditor";
+const { ClassicEditor } = CKEditorBuild;
 import { Mock } from "vitest";
 
 type CkEditorProps = {

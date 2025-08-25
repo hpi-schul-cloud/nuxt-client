@@ -16,7 +16,8 @@ import { useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
+import * as CKEditorBuild from "@hpi-schul-cloud/ckeditor";
+const { InlineEditor } = CKEditorBuild;
 import { useEditorConfig } from "./EditorConfig.composable";
 import {
 	advancedPlugins,
