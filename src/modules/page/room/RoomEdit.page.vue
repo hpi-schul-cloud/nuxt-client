@@ -10,7 +10,12 @@
 			</h1>
 		</template>
 		<div>
-			<RoomForm :room="roomData" @save="onSave" @cancel="onCancel" />
+			<RoomForm
+				v-if="roomData"
+				:room="roomData"
+				@save="onSave"
+				@cancel="onCancel"
+			/>
 		</div>
 	</DefaultWireframe>
 </template>
@@ -18,7 +23,7 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { RoomColor, RoomUpdateParams } from "@/types/room/Room";
+import { RoomUpdateParams } from "@/types/room/Room";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
@@ -43,13 +48,7 @@ const { room, isLoading } = storeToRefs(roomDetailsStore);
 const { fetchRoom, updateRoom } = roomDetailsStore;
 const { canEditRoom } = useRoomAuthorization();
 
-const roomData = ref<RoomUpdateParams>({
-	name: "",
-	color: RoomColor.BlueGrey,
-	startDate: undefined,
-	endDate: undefined,
-	features: [],
-});
+const roomData = ref<RoomUpdateParams>();
 
 const pageTitle = computed(() =>
 	buildPageTitle(`${t("pages.roomEdit.title")}`)
@@ -65,8 +64,6 @@ onMounted(async () => {
 		roomData.value = {
 			name: room.value.name,
 			color: room.value.color,
-			startDate: room.value.startDate,
-			endDate: room.value.endDate,
 			features: room.value.features,
 		};
 	}
