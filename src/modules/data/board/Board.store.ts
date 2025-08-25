@@ -307,7 +307,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (toColumn === undefined) {
 			toColumn = board.value.columns.find((column) => column.id === toColumnId);
 			if (toColumn === undefined) {
-				// cancel execution if target column does not exist
 				return;
 			}
 		}
@@ -316,7 +315,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 			(card) => card.cardId === cardId
 		);
 		if (!doesCardExist) {
-			// cancel execution if card does not exist
 			return;
 		}
 
