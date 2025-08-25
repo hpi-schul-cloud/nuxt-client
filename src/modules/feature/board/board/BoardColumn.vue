@@ -168,7 +168,6 @@ const onDragEnd = async (event: SortableEvent) => {
 
 	if (toColumnId === undefined) {
 		boardStore.moveCardToNewColumn(cardId);
-		// maybe add undo parameters here, too?!?
 	} else {
 		boardStore.moveCardRequest({
 			cardId,
