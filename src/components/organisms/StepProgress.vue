@@ -12,7 +12,7 @@
 			>
 				<span class="description">{{ s.name }} </span>
 				<span v-show="index < currentStep">
-					<v-icon class="material-icon" :icon="mdiCheck" />
+					<v-icon :icon="mdiCheck" />
 				</span>
 			</li>
 		</ul>
