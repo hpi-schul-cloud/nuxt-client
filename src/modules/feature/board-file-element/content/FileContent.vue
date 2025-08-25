@@ -150,10 +150,7 @@ const isMenuShownOnFileDisplay = computed(() => {
 		hasAudioMimeType.value ||
 		hasCollaboraType.value;
 
-	const isPdfOnSmallOrLargerListBoard =
-		isSmallOrLargerListBoard.value && hasSmallPreview.value;
-
-	return isFileDisplayRendered && !isPdfOnSmallOrLargerListBoard;
+	return isFileDisplayRendered && !hasRowStyle.value;
 });
 </script>
 
