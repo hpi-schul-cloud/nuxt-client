@@ -40,6 +40,8 @@ export default {
 	"common.file.virusDetected":
 		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
 	"common.file": "Datei",
+	"common.file.exceedsCollaboraEditableFileSize":
+		"Dokumente größer als 100 MB können online nicht bearbeitet werden.",
 	"common.files": "Dateien",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",

@@ -21,6 +21,12 @@
 			{{ t("common.file.scanWontCheck") }}
 		</InfoAlert>
 
+		<InfoAlert
+			v-if="alerts.includes(FileAlert.EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE)"
+		>
+			{{ t("common.file.exceedsCollaboraEditableFileSize") }}
+		</InfoAlert>
+
 		<ErrorAlert v-if="alerts.includes(FileAlert.SCAN_STATUS_BLOCKED)">
 			{{ t("common.file.virusDetected") }}
 		</ErrorAlert>
