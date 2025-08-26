@@ -188,6 +188,18 @@ export default {
 	// stylelint-enable
 }
 
+.custom-icon {
+	width: 1em;
+	font-size: calc(1em + 4px);
+	line-height: 100%;
+	vertical-align: middle;
+	fill: currentColor;
+
+	svg {
+		fill: currentColor;
+	}
+}
+
 .content {
 	display: flex;
 	flex-direction: column;

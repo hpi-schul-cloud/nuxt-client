@@ -30,6 +30,10 @@ withDefaults(defineProps<Props>(), {
 
 <style lang="scss" scoped>
 .icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	vertical-align: baseline;
 	font-size: 60px;
 	margin-bottom: 16px;
 }

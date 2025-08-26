@@ -1,6 +1,6 @@
 <template>
 	<div v-if="item !== undefined">
-		<div class="d-flex flex-row align-items-center">
+		<div class="d-flex flex-row align-center">
 			{{ elementTypeName }} &middot;&nbsp;
 			<a :href="item.url" target="_blank">{{ breadcrumbTitle }}</a>
 		</div>

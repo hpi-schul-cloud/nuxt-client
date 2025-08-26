@@ -7,7 +7,7 @@
 			:checked="isChecked"
 			:value="value"
 			type="checkbox"
-			class="visually-hidden"
+			class="d-sr-only"
 			@change="updateVModel"
 			@blur="$emit('blur', $event)"
 			@focus="$emit('focus', $event)"
@@ -136,6 +136,13 @@ label {
 .icon-wrapper {
 	display: inline-block;
 	user-select: none;
+}
+
+.icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	vertical-align: baseline;
 }
 
 input:focus + .icon-wrapper svg {
