@@ -1,25 +1,19 @@
 <template>
-	<div class="d-flex flex-row">
+	<InputWrapperWithCheckmark @confirm="onConfirm">
 		<v-text-field
 			v-model="nameRef"
 			data-testid="file-name-input"
-			:label="$t('common.labels.fileName')"
+			:label="t('common.labels.fileName')"
 			:rules="[rules.required, rules.validateOnOpeningTag]"
 			@click.stop
 		/>
-		<div class="align-self-center pl-2">
-			<button data-testid="save-file-name" @click.prevent.stop="onConfirm">
-				<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
-				<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
-			</button>
-		</div>
-	</div>
+	</InputWrapperWithCheckmark>
 </template>
 
 <script setup lang="ts">
 import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
 import { useOpeningTagValidator } from "@/utils/validation";
-import { mdiCheck } from "@icons/material";
+import { InputWrapperWithCheckmark } from "@ui-input";
 import { onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 

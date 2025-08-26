@@ -1,31 +1,23 @@
 <template>
-	<div class="d-flex flex-row">
+	<InputWrapperWithCheckmark @confirm="onConfirm">
 		<v-textarea
 			v-model="modelValue"
 			data-testid="file-alttext-input"
 			rows="1"
 			auto-grow
 			:persistent-hint="true"
-			:hint="$t('components.cardElement.fileElement.altDescription')"
-			:label="$t('components.cardElement.fileElement.alternativeText')"
+			:hint="t('components.cardElement.fileElement.altDescription')"
+			:label="t('components.cardElement.fileElement.alternativeText')"
 			:rules="[rules.validateOnOpeningTag]"
 		/>
-		<div class="align-self-center pl-2">
-			<button
-				data-testid="save-alternative-text"
-				@click.prevent.stop="onConfirm"
-			>
-				<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
-				<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
-			</button>
-		</div>
-	</div>
+	</InputWrapperWithCheckmark>
 </template>
 
 <script setup lang="ts">
 import { useOpeningTagValidator } from "@/utils/validation";
-import { mdiCheck } from "@icons/material";
+import { InputWrapperWithCheckmark } from "@ui-input";
 import { onMounted, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 type Props = {
 	alternativeText?: string;
@@ -39,6 +31,8 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
 	(e: "update:alternativeText", alternativeText: string): void;
 }>();
+
+const { t } = useI18n();
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 

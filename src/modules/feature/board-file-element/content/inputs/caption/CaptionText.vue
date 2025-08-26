@@ -1,26 +1,20 @@
 <template>
-	<div class="d-flex flex-row">
+	<InputWrapperWithCheckmark @confirm="onConfirm">
 		<v-textarea
 			v-model="modelValue"
 			data-testid="file-caption-input"
 			rows="1"
 			auto-grow
-			:label="$t('components.cardElement.fileElement.caption')"
+			:label="t('components.cardElement.fileElement.caption')"
 			:rules="[rules.validateOnOpeningTag]"
 			@click.stop
 		/>
-		<div class="align-self-center pl-2">
-			<button data-testid="save-caption" @click.prevent.stop="onConfirm">
-				<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
-				<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
-			</button>
-		</div>
-	</div>
+	</InputWrapperWithCheckmark>
 </template>
 
 <script setup lang="ts">
 import { useOpeningTagValidator } from "@/utils/validation";
-import { mdiCheck } from "@icons/material";
+import { InputWrapperWithCheckmark } from "@ui-input";
 import { onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

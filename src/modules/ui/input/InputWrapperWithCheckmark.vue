@@ -1,0 +1,26 @@
+<template>
+	<div class="d-flex flex-row">
+		<slot />
+		<div class="align-self-center pl-2">
+			<button data-testid="save-input" @click.prevent.stop="onConfirm">
+				<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
+				<span class="d-sr-only">{{ t("common.actions.save") }}</span>
+			</button>
+		</div>
+	</div>
+</template>
+
+<script setup lang="ts">
+import { mdiCheck } from "@icons/material";
+import { useI18n } from "vue-i18n";
+
+const emit = defineEmits<{
+	(e: "confirm"): void;
+}>();
+
+const { t } = useI18n();
+
+const onConfirm = () => {
+	emit("confirm");
+};
+</script>
