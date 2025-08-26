@@ -39,6 +39,7 @@
 import { BoardLayout } from "@/serverApi/v3";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
+import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { PickerOption } from "./types";
