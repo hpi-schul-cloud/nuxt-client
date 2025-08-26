@@ -39,7 +39,7 @@
 						</div>
 						<share-modal-options-form
 							:type="type"
-							@share-options-change="onShareOptionsChange()"
+							@share-options-change="onShareOptionsChange"
 						/>
 					</div>
 
@@ -116,7 +116,8 @@ const modalTitle = computed(() =>
 );
 
 const onShareOptionsChange = (newValue: ShareOptions) => {
-	shareOptions.value = newValue;
+	shareOptions.value = { hasExpiryDate: newValue.hasExpiryDate, isSchoolInternal: newValue.isSchoolInternal };
+	console.log("now we should have the new value", newValue);
 };
 const onCloseDialogOrDone = () => {
 	shareModule.resetShareFlow();
@@ -127,6 +128,8 @@ const onCleanUp = () => {
 };
 
 const onNext = () => {
+		// shareModule.createShareUrl({ isSchoolInternal: false, hasExpiryDate: false });
+		// but why is there no value available here yet?
 	if (shareOptions.value) {
 		shareModule.createShareUrl(shareOptions.value);
 		step.value = "secondStep";

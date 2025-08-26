@@ -81,7 +81,7 @@ describe("@/components/share/ShareModal", () => {
 
 	it("should call 'resetShareFlow' store method when dialog closed", () => {
 		const { wrapper } = setup();
-		const dialog = wrapper.findComponent("share-modal-result");
+		const dialog = wrapper.findComponent(VDialog);
 
 		dialog.vm.$emit("after-leave");
 
@@ -120,7 +120,21 @@ describe("@/components/share/ShareModal", () => {
 			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 			getShareUrl: "http://example.com",
 		});
+		// need to mock the step two state on the dialog
 		const { wrapper } = setup();
+		/*
+		// const stepOneForm = wrapper.findComponent(ShareModalOptionsForm);
+		const dialog = wrapper.findComponent(VDialog);
+
+		const buttons = dialog.findAllComponents({ name: "v-btn", props: {  variant: "flat" } });
+		expect(buttons.length).toBe(2);
+		expect(buttons[0].text()).toBe("common.actions.cancel");
+		expect(buttons[1].text()).toBe("common.actions.continue");
+
+		buttons[1].vm.$emit("click");
+		wrapper.vm.$nextTick();
+		// stepOneform.vm.$emit("share-options-change", payload);
+		*/
 		const form = wrapper.findComponent(ShareModalResult);
 
 		form.vm.$emit("copied");
