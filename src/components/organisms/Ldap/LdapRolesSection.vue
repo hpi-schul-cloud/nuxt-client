@@ -90,7 +90,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon class="custom-icon">$teacher</v-icon>
+				<v-icon>$teacher</v-icon>
 			</template>
 		</base-input>
 		<base-input
