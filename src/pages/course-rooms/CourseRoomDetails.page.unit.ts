@@ -206,6 +206,7 @@ const getWrapper = ({
 				RoomExternalToolsOverview: true,
 				EndCourseSyncDialog: true,
 				StartExistingCourseSyncDialog: true,
+				UseFocusTrap: true,
 			},
 		},
 	});
