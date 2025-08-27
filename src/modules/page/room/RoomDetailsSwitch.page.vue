@@ -39,10 +39,7 @@ const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 const { canCreateRoom } = useRoomAuthorization();
 
 const canAccessRoom = computed(() => {
-	return (
-		(envConfigModule.getEnv.FEATURE_ROOMS_ENABLED && canCreateRoom.value) ||
-		envConfigModule.getEnv.FEATURE_ROOM_ADD_STUDENTS_ENABLED
-	);
+	return envConfigModule.getEnv.FEATURE_ROOMS_ENABLED && canCreateRoom.value;
 });
 
 watch(

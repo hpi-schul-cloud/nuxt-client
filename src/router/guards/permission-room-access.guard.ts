@@ -1,4 +1,4 @@
-import { applicationErrorModule, authModule, envConfigModule } from "@/store";
+import { applicationErrorModule, authModule } from "@/store";
 import {
 	NavigationGuard,
 	NavigationGuardNext,
@@ -17,10 +17,7 @@ export function roomPermissionGuard(permissions: string[]): NavigationGuard {
 			authModule.getUserPermissions.includes(p)
 		);
 
-		if (
-			checkPermission ||
-			envConfigModule.getEnv.FEATURE_ROOM_ADD_STUDENTS_ENABLED
-		) {
+		if (checkPermission) {
 			return next();
 		}
 

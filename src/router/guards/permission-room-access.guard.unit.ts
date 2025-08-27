@@ -15,9 +15,6 @@ vi.mock("@/store", () => ({
 	applicationErrorModule: {
 		setError: () => mockError(),
 	},
-	envConfigModule: {
-		getEnv: {},
-	},
 }));
 
 describe("roomPermissionGuard", () => {
@@ -26,19 +23,16 @@ describe("roomPermissionGuard", () => {
 	});
 
 	const setup = (
-		options: { featureFlag?: boolean; permissions?: string[] } = {
-			featureFlag: true,
+		options: { permissions?: string[] } = {
 			permissions: ["validPermission_1", "validPermission_2"],
 		}
 	) => {
 		const route: RouteLocationNormalized = {} as RouteLocationNormalized;
 		const next: NavigationGuardNext = vi.fn();
 
-		envConfigModule.getEnv.FEATURE_ROOM_ADD_STUDENTS_ENABLED =
-			options.featureFlag ?? true;
-		if (authModule.me) {
-			authModule.me.permissions = [...(options.permissions ?? [])];
-		}
+		Object.defineProperty(authModule, "getUserPermissions", {
+			get: () => [...(options.permissions ?? [])],
+		});
 		return { to: route, from: route, next };
 	};
 
@@ -55,7 +49,7 @@ describe("roomPermissionGuard", () => {
 		});
 
 		it("should check permissions from the authModule and deny access", () => {
-			const { to, from, next } = setup({ featureFlag: false });
+			const { to, from, next } = setup();
 			const permissionGuard: NavigationGuard = roomPermissionGuard([
 				"invalidPermission",
 			]);
@@ -65,28 +59,8 @@ describe("roomPermissionGuard", () => {
 			expect(next).not.toHaveBeenCalled();
 		});
 
-		it("should check feature flag and allow access", () => {
-			const { to, from, next } = setup();
-			const permissionGuard: NavigationGuard = roomPermissionGuard([
-				"validPermission_1",
-			]);
-
-			permissionGuard(to, from, next);
-			expect(next).toHaveBeenCalledWith();
-		});
-
-		it("should check feature flag and deny access", () => {
-			const { to, from, next } = setup({ featureFlag: false });
-			const permissionGuard: NavigationGuard = roomPermissionGuard([
-				"invalidPermission",
-			]);
-
-			permissionGuard(to, from, next);
-			expect(next).not.toHaveBeenCalledWith();
-		});
-
 		it("should create a '401' error with invalid permission", () => {
-			const { to, from, next } = setup({ featureFlag: false });
+			const { to, from, next } = setup();
 			const permissionGuard: NavigationGuard = roomPermissionGuard([
 				"invalidPermission",
 			]);

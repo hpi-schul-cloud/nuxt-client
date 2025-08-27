@@ -4,10 +4,9 @@ import {
 } from "@@/tests/test-utils/setup";
 import AddMembers from "./AddMembers.vue";
 import { RoleName } from "@/serverApi/v3";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule, schoolsModule } from "@/store";
 import {
-	envsFactory,
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
@@ -26,7 +25,6 @@ import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { WarningAlert } from "@ui-alert";
 import { Ref, ref } from "vue";
-import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { Mock } from "vitest";
@@ -66,7 +64,6 @@ describe("AddMembers", () => {
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
 			authModule: AuthModule,
 		});
@@ -81,7 +78,6 @@ describe("AddMembers", () => {
 
 	const setup = (options?: {
 		customRoomAuthorization?: RoomAuthorizationRefs;
-		isFeatureAddStudentsEnabled?: boolean;
 		schoolRole?: RoleName.Teacher | RoleName.Student;
 	}) => {
 		const configDefaults = {
@@ -117,14 +113,6 @@ describe("AddMembers", () => {
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: {
-				...envsFactory.build(),
-				FEATURE_ROOM_ADD_STUDENTS_ENABLED:
-					options?.isFeatureAddStudentsEnabled ?? true,
-			},
-		});
-
 		wrapper = mount(AddMembers, {
 			attachTo: document.body,
 			global: {
@@ -143,7 +131,6 @@ describe("AddMembers", () => {
 				],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 		});
@@ -202,51 +189,28 @@ describe("AddMembers", () => {
 				);
 			});
 
-			describe("when feature flag FEATURE_ROOM_ADD_STUDENTS_ENABLED is false", () => {
-				it("should only offer teacher role for selectRole component", () => {
-					const { wrapper } = setup({ isFeatureAddStudentsEnabled: false });
+			it("should offer all roles for selectRole component", () => {
+				const { wrapper } = setup();
 
-					const roles = [
-						{
-							id: RoleName.Teacher,
-							name: "common.labels.teacher.neutral",
-							icon: mdiAccountSchoolOutline,
-						},
-					];
+				const roles = [
+					{
+						id: RoleName.Student,
+						name: "common.labels.student.neutral",
+						icon: mdiAccountOutline,
+					},
+					{
+						id: RoleName.Teacher,
+						name: "common.labels.teacher.neutral",
+						icon: mdiAccountSchoolOutline,
+					},
+				];
 
-					const roleComponent = wrapper.getComponent({
-						ref: "selectRole",
-					});
-
-					expect(roleComponent.props("items")).toStrictEqual(roles);
-					expect(roleComponent.props("modelValue")).toBe(roles[0].id);
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
 				});
-			});
 
-			describe("when feature flag FEATURE_ROOM_ADD_STUDENTS_ENABLED is true", () => {
-				it("should offer all roles for selectRole component", () => {
-					const { wrapper } = setup({ isFeatureAddStudentsEnabled: true });
-
-					const roles = [
-						{
-							id: RoleName.Student,
-							name: "common.labels.student.neutral",
-							icon: mdiAccountOutline,
-						},
-						{
-							id: RoleName.Teacher,
-							name: "common.labels.teacher.neutral",
-							icon: mdiAccountSchoolOutline,
-						},
-					];
-
-					const roleComponent = wrapper.getComponent({
-						ref: "selectRole",
-					});
-
-					expect(roleComponent.props("items")).toStrictEqual(roles);
-					expect(roleComponent.props("modelValue")).toBe(roles[0].id);
-				});
+				expect(roleComponent.props("items")).toStrictEqual(roles);
+				expect(roleComponent.props("modelValue")).toBe(roles[0].id);
 			});
 
 			it("should have proper props for autoCompleteUsers component", () => {
