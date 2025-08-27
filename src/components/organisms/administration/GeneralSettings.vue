@@ -322,7 +322,6 @@ const save = async () => {
 	notifierModule.show({
 		text: t("pages.administration.school.index.generalSettings.save.success"),
 		status: "success",
-		timeout: 5000,
 	});
 
 	if (updatedSchool.logo) {

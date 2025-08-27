@@ -322,7 +322,6 @@ const onCopyLink = () => {
 	notifierModule.show({
 		text: t("common.words.copiedToClipboard"),
 		status: "success",
-		timeout: 5000,
 	});
 };
 

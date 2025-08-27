@@ -182,7 +182,6 @@ const searchContent = useDebounceFn(async () => {
 		notifierModule.show({
 			text: t("pages.content.notification.lernstoreNotAvailable"),
 			status: "error",
-			timeout: 5000,
 		});
 	}
 }, 500);
@@ -230,7 +229,6 @@ const addContent = async () => {
 		notifierModule.show({
 			text: t("pages.content.notification.lernstoreNotAvailable"),
 			status: "error",
-			timeout: 5000,
 		});
 	}
 };

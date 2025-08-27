@@ -25,7 +25,6 @@ describe("@ui-room-details/SelectBoardLayoutDialog", () => {
 
 	it("should be rendered correctly", async () => {
 		const { wrapper } = setup();
-
 		expect(wrapper.exists()).toBe(true);
 	});
 
