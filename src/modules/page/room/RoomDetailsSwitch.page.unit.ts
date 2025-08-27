@@ -72,7 +72,6 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: envsFactory.build({
 				FEATURE_BOARD_LAYOUT_ENABLED: true,
-				FEATURE_ROOMS_ENABLED: true,
 			}),
 		});
 

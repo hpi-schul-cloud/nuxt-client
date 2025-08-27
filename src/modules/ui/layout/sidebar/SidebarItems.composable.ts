@@ -39,8 +39,6 @@ export const useSidebarItems = () => {
 			title: "global.sidebar.item.rooms",
 			to: "/rooms",
 			icon: mdiAccountSupervisorCircleOutline,
-			feature: "FEATURE_ROOMS_ENABLED",
-			permissions: undefined,
 			testId: "sidebar-rooms",
 		},
 		{
