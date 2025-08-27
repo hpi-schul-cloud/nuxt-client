@@ -380,7 +380,7 @@ export default {
 			width: 100%;
 			padding: 8px;
 			font-size: var(--text-md);
-			font-weight: var(--font-weight-normal);
+			font-weight: var(--font-weight-regular);
 		}
 
 		.select-wrap {
@@ -415,7 +415,7 @@ export default {
 	.content {
 		max-height: 35vh;
 		overflow-y: scroll;
-		font-weight: var(--font-weight-normal);
+		font-weight: var(--font-weight-regular);
 	}
 
 	button:not(.is-none):focus {

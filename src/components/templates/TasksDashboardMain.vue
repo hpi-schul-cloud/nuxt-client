@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe
+	<DefaultWireframe
 		:headline="$t('common.words.tasks')"
 		max-width="short"
 		:fab-items="fabItems"
@@ -84,7 +84,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script>
