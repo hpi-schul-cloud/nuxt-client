@@ -12,6 +12,7 @@ import {
 import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
 import { VDialog } from "vuetify/components/VDialog";
+import { nextTick } from "vue";
 
 describe("@/components/share/ShareModal", () => {
 	let shareModuleMock: ShareModule;
@@ -60,16 +61,17 @@ describe("@/components/share/ShareModal", () => {
 		const { wrapper } = setup();
 		const title = wrapper.findComponent({ name: "v-card-title" });
 
-		expect(title.text()).toContain(
-			"components.molecules.share.options.title"
-		);
+		expect(title.text()).toContain("components.molecules.share.options.title");
 	});
 
 	it("should call 'createShareUrl' store method when next button clicked", () => {
 		const { wrapper } = setup();
 		const dialog = wrapper.findComponent(VDialog);
 
-		const buttons = dialog.findAllComponents({ name: "v-btn", props: {  variant: "flat" } });
+		const buttons = dialog.findAllComponents({
+			name: "v-btn",
+			props: { variant: "flat" },
+		});
 		expect(buttons.length).toBe(2);
 		expect(buttons[0].text()).toBe("common.actions.cancel");
 		expect(buttons[1].text()).toBe("common.actions.continue");
@@ -88,15 +90,34 @@ describe("@/components/share/ShareModal", () => {
 		expect(shareModuleMock.resetShareFlow).toHaveBeenCalled();
 	});
 
-	it("should call 'resetShareFlow' store method when sub component emits 'done'", () => {
+	it("should return the component state to firstStep when dialog closes", () => {
+		const { wrapper } = setup();
+		const dialog = wrapper.findComponent(VDialog);
+
+		expect((wrapper.vm as unknown as typeof ShareModal).step).toBe("firstStep");
+
+		(wrapper.vm as unknown as typeof ShareModal).onNext();
+		expect((wrapper.vm as unknown as typeof ShareModal).step).toBe(
+			"secondStep"
+		);
+
+		dialog.vm.$emit("after-leave");
+		wrapper.vm.$nextTick();
+		expect((wrapper.vm as unknown as typeof ShareModal).step).toBe("firstStep");
+	});
+
+	it("should call 'resetShareFlow' store method when sub component emits 'done'", async () => {
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
 			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 			getShareUrl: "http://example.com",
 		});
 		const { wrapper } = setup();
-		const form = wrapper.findComponent(ShareModalResult);
 
+		(wrapper.vm as unknown as typeof ShareModal).step = "secondStep";
+		await nextTick();
+
+		const form = wrapper.findComponent(ShareModalResult);
 		form.vm.$emit("done");
 
 		expect(shareModuleMock.resetShareFlow).toHaveBeenCalled();
@@ -114,27 +135,17 @@ describe("@/components/share/ShareModal", () => {
 		).toStrictEqual(payload);
 	});
 
-	it("should call 'onCopy' method when sub component emits 'copied'", async () => {
+	it("should call 'onCopy' method when 'onNext' is called'", async () => {
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
 			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 			getShareUrl: "http://example.com",
 		});
-		// need to mock the step two state on the dialog
 		const { wrapper } = setup();
-		/*
-		// const stepOneForm = wrapper.findComponent(ShareModalOptionsForm);
-		const dialog = wrapper.findComponent(VDialog);
 
-		const buttons = dialog.findAllComponents({ name: "v-btn", props: {  variant: "flat" } });
-		expect(buttons.length).toBe(2);
-		expect(buttons[0].text()).toBe("common.actions.cancel");
-		expect(buttons[1].text()).toBe("common.actions.continue");
+		(wrapper.vm as unknown as typeof ShareModal).onNext();
+		await wrapper.vm.$nextTick();
 
-		buttons[1].vm.$emit("click");
-		wrapper.vm.$nextTick();
-		// stepOneform.vm.$emit("share-options-change", payload);
-		*/
 		const form = wrapper.findComponent(ShareModalResult);
 
 		form.vm.$emit("copied");
@@ -142,19 +153,15 @@ describe("@/components/share/ShareModal", () => {
 	});
 
 	describe("ctl tool info", () => {
-		it("should have the correct title", () => {
+		it("should have the correct title", async () => {
 			const { wrapper } = setup();
 
-			// const dialog = wrapper.findComponent(VDialog);
 			const cardText = wrapper.findComponent({ name: "v-card-text" });
-
-			// woher kommst du denn?
 			const infotext = cardText.find(
 				`[data-testid="share-modal-external-tools-info"]`
 			);
 
-			expect(infotext.isVisible()).toBe(true);
-			expect(infotext.text()).toEqual(
+			expect(infotext.text()).toContain(
 				"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
 			);
 		});

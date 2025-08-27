@@ -30,7 +30,7 @@
 									<li
 										v-for="bulletPoint in listItems"
 										:key="bulletPoint.translation"
-										:data-testId="bulletPoint.testId"
+										:data-testid="bulletPoint.testId"
 									>
 										{{ t(bulletPoint.translation) }}
 									</li>
@@ -116,20 +116,24 @@ const modalTitle = computed(() =>
 );
 
 const onShareOptionsChange = (newValue: ShareOptions) => {
-	shareOptions.value = { hasExpiryDate: newValue.hasExpiryDate, isSchoolInternal: newValue.isSchoolInternal };
-	console.log("now we should have the new value", newValue);
+	shareOptions.value = {
+		hasExpiryDate: newValue.hasExpiryDate,
+		isSchoolInternal: newValue.isSchoolInternal,
+	};
 };
+
 const onCloseDialogOrDone = () => {
 	shareModule.resetShareFlow();
 };
 
 const onCleanUp = () => {
 	step.value = "firstStep";
+	shareModule.resetShareFlow();
 };
 
 const onNext = () => {
-		// shareModule.createShareUrl({ isSchoolInternal: false, hasExpiryDate: false });
-		// but why is there no value available here yet?
+	// shareModule.createShareUrl({ isSchoolInternal: false, hasExpiryDate: false });
+	// but why is there no value available here yet?
 	if (shareOptions.value) {
 		shareModule.createShareUrl(shareOptions.value);
 		step.value = "secondStep";
@@ -144,7 +148,7 @@ const onCopy = () => {
 };
 
 const showAlertInfo = computed(() =>
-	["course", "columnBoard", "lessons", "room"].includes(props.type)
+	["courses", "columnBoard", "lessons", "room"].includes(props.type)
 );
 
 const listItems = computed(() => {
@@ -152,7 +156,7 @@ const listItems = computed(() => {
 		{
 			translation:
 				"components.molecules.shareImport.options.restrictions.infoText.personalData",
-			type: ["course"],
+			type: ["courses"],
 			testId: "share-options-personal-data-text",
 		},
 		{
@@ -164,40 +168,40 @@ const listItems = computed(() => {
 		{
 			translation:
 				"components.molecules.shareImport.options.restrictions.infoText.geogebra",
-			type: ["course", "lessons"],
+			type: ["courses", "lessons"],
 		},
 		{
 			translation:
 				"components.molecules.shareImport.options.restrictions.infoText.etherpad",
-			type: ["course", "room", "columnBoard", "lessons"],
+			type: ["courses", "room", "columnBoard", "lessons"],
 		},
 		{
 			translation:
 				"components.molecules.shareImport.options.restrictions.infoText.whiteboard",
-			type: ["course", "room", "columnBoard"],
+			type: ["courses", "room", "columnBoard"],
 		},
 		{
 			translation:
 				"components.molecules.shareImport.options.ctlTools.infoText.unavailable",
-			type: ["course", "room", "columnBoard"],
+			type: ["courses", "room", "columnBoard"],
 			testId: "share-modal-external-tools-info",
 		},
 		{
 			translation:
 				"components.molecules.shareImport.options.ctlTools.infoText.protected",
-			type: ["course", "room", "columnBoard"],
+			type: ["courses", "room", "columnBoard"],
 			testId: "share-modal-external-tools-protected-parameter-info",
 		},
 		{
 			translation:
 				"components.molecules.shareImport.options.restrictions.infoText.courseFiles",
-			type: ["course"],
+			type: ["courses"],
 			testId: "share-modal-coursefiles-info",
 		},
 		{
 			translation:
 				"components.molecules.shareImport.options.restrictions.infoText.courseGroups",
-			type: ["course"],
+			type: ["courses"],
 		},
 	].filter(({ type }) => type.includes(props.type));
 });
