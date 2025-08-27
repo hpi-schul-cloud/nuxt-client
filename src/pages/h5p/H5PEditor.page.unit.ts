@@ -243,7 +243,6 @@ describe("H5PEditorPage", () => {
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "pages.h5p.api.success.save",
 					status: "success",
-					timeout: 5000,
 				});
 			});
 		});
@@ -292,7 +291,6 @@ describe("H5PEditorPage", () => {
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "common.validation.invalid",
 					status: "error",
-					timeout: 5000,
 				});
 			});
 		});
@@ -341,7 +339,6 @@ describe("H5PEditorPage", () => {
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "common.validation.invalid",
 					status: "error",
-					timeout: 5000,
 				});
 			});
 		});

@@ -56,6 +56,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					["loadingStateModule"]: loadingStateModuleMock,
 				},
+				stubs: { UseFocusTrap: true },
 			},
 			props: {
 				room,

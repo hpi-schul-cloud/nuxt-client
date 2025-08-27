@@ -45,12 +45,12 @@ onMounted(() => {
 
 const onClose = () => {
 	isRoomCopyInfoDialogOpen.value = false;
-	emit("copy:ended");
 };
 
 const onCancelCopy = () => {
-	emit("copy:cancel");
 	onClose();
+	emit("copy:cancel");
+	emit("copy:ended");
 };
 
 const onConfirmCopy = async () => {
