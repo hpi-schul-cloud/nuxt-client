@@ -12,7 +12,7 @@
 			>
 				<span class="description">{{ s.name }} </span>
 				<span v-show="index < currentStep">
-					<v-icon class="material-icon" :icon="mdiCheck" />
+					<v-icon :icon="mdiCheck" />
 				</span>
 			</li>
 		</ul>
@@ -109,12 +109,10 @@ ul.progressbar {
 	&::after {
 		position: absolute;
 		top: 25px;
-		left: -50%;
-		z-index: var(--layer-behind);
-		width: 100%;
-		height: calc(3 * var(--border-width));
+		left: -30%;
+		width: 60%;
+		height: 1px;
 		content: "";
-		background: map.get($grey, base);
 	}
 }
 
@@ -122,7 +120,6 @@ ul.progressbar {
 	&::after {
 		background: map.get($grey, base);
 	}
-
 	&::before {
 		color: map.get($grey, base);
 		text-decoration: underline;

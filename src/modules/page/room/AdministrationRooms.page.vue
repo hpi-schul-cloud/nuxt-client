@@ -2,7 +2,7 @@
 	<DefaultWireframe max-width="full">
 		<template #header>
 			<div ref="header">
-				<div class="d-flex align-items-center">
+				<div class="d-flex align-center">
 					<h1 class="text-h3 mb-4" data-testid="admin-room-title">
 						{{ t("pages.rooms.administration.title") }}
 					</h1>

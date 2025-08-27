@@ -155,7 +155,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						},
 					}),
 				],
-				stubs: { LeaveRoomProhibitedDialog: true },
+				stubs: { LeaveRoomProhibitedDialog: true, UseFocusTrap: true },
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,

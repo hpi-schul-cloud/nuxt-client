@@ -67,13 +67,11 @@
 					<span class="text-content">
 						<v-icon
 							v-if="status === 'ok'"
-							class="material-icon"
 							color="rgba(var(--v-theme-success))"
 							:icon="mdiCheck"
 						/>
 						<v-icon
 							v-else-if="status === 'missing'"
-							class="material-icon"
 							color="rgba(var(--v-theme-error))"
 							:icon="mdiClose"
 						/>
@@ -676,7 +674,7 @@ span {
 }
 
 button:not(.is-none):focus {
-	z-index: var(--layer-fab);
+	z-index: 100;
 	outline: none;
 	box-shadow:
 		0 0 0 0 rgba(var(--v-theme-white)),
