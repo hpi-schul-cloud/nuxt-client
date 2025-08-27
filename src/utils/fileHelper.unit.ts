@@ -10,6 +10,7 @@ import {
 	convertFileSize,
 	downloadFile,
 	downloadFilesAsArchive,
+	formatFileSize,
 	formatSecondsToHourMinSec,
 	getFileExtension,
 	isAudioMimeType,
@@ -709,6 +710,28 @@ describe("@/utils/fileHelper", () => {
 				const result = removeFileExtension("");
 				expect(result).toEqual("");
 			});
+		});
+	});
+
+	describe("formatFileSize", () => {
+		it("formats bytes correctly", () => {
+			expect(formatFileSize(512)).toBe("512 B");
+		});
+
+		it("formats kilobytes correctly", () => {
+			expect(formatFileSize(2048)).toBe("2 KB");
+		});
+
+		it("formats megabytes correctly", () => {
+			expect(formatFileSize(1048576)).toBe("1 MB");
+		});
+
+		it("formats gigabytes correctly", () => {
+			expect(formatFileSize(1073741824)).toBe("1 GB");
+		});
+
+		it("formats with decimals for non-integer sizes", () => {
+			expect(formatFileSize(1536)).toBe("1,5 KB");
 		});
 	});
 });

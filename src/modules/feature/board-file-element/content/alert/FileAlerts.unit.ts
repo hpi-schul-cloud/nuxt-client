@@ -1,3 +1,6 @@
+import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -9,10 +12,29 @@ import FileAlerts from "./FileAlerts.vue";
 
 describe("FileAlerts", () => {
 	const setup = (alerts: FileAlert[]) => {
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getCollaboraMaxFileSizeInBytes: 10,
+		});
+
 		const wrapper = shallowMount(FileAlerts, {
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			global: {
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n({
+						messages: {
+							en: {
+								"common.file.exceedsCollaboraEditableFileSize": "{sizeInMb}",
+							},
+						},
+					}),
+				],
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
+			},
 			propsData: { alerts },
 		});
+
 		return { wrapper, alerts };
 	};
 
@@ -24,9 +46,7 @@ describe("FileAlerts", () => {
 
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"common.file.exceedsCollaboraEditableFileSize"
-			);
+			expect(infoAlert.text()).toBe("10 B");
 		});
 	});
 
