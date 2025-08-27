@@ -1,6 +1,6 @@
 <template>
 	<div class="info-message" :class="type">
-		<v-icon class="icon" :color="iconColor">{{ icon }}</v-icon>
+		<v-icon class="mr-1" :color="iconColor">{{ icon }}</v-icon>
 		<div class="message">{{ message }}</div>
 	</div>
 </template>
@@ -52,12 +52,5 @@ const iconColor = computed(() => {
 
 .info-message.bc-info {
 	color: rgba(var(--v-theme-info));
-}
-
-.info-message .icon {
-	flex: 0 0 20px;
-	width: 20px;
-	height: 20px;
-	margin-right: 6px;
 }
 </style>

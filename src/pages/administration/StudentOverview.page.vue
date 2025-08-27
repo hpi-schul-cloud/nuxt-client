@@ -81,19 +81,16 @@
 					<span class="text-content">
 						<v-icon
 							v-if="status === 'ok'"
-							class="material-icon"
 							color="rgba(var(--v-theme-success))"
 							:icon="mdiCheckAll"
 						/>
 						<v-icon
 							v-else-if="status === 'parentsAgreed'"
-							class="material-icon"
 							color="rgba(var(--v-theme-warning))"
 							:icon="mdiCheck"
 						/>
 						<v-icon
 							v-else-if="status === 'missing'"
-							class="material-icon"
 							color="rgba(var(--v-theme-error))"
 							:icon="mdiClose"
 						/>

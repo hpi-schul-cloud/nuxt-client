@@ -1,8 +1,9 @@
-$button-font-size: 1rem;
-.v-btn {
-  font-family: var(--font-accent);
+@use "@/styles/settings.scss" as *;
 
-  &--size-small,
+.v-btn {
+	font-family: var(--font-accent);
+
+	&--size-small,
 	&--size-default,
 	&--size-large,
 	&--size-x-large {

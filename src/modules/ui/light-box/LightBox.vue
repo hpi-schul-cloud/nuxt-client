@@ -20,10 +20,7 @@
 			/>
 		</v-toolbar>
 		<v-row class="ma-0" style="overflow: auto" @click="close">
-			<v-col
-				class="d-flex align-items-center justify-center"
-				style="height: 100%"
-			>
+			<v-col class="d-flex align-center justify-center" style="height: 100%">
 				<PreviewImage
 					v-if="
 						isLightBoxImageType() &&

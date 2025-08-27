@@ -1,4 +1,4 @@
-import AdministrationRoomsPage from "./AdministrationRooms.page.vue";
+import AdministrationRoomDetailPage from "./AdministrationRoomDetails.page.vue";
 import {
 	envsFactory,
 	mockedPiniaStoreTyping,
@@ -13,15 +13,18 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
-import { schoolsModule, envConfigModule } from "@/store";
+import { envConfigModule, schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { Router, useRouter } from "vue-router";
 import { Mock } from "vitest";
-import EnvConfigModule from "@/store/env-config";
+import { Router, useRoute } from "vue-router";
 import { nextTick } from "vue";
+import EnvConfigModule from "@/store/env-config";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+
+vi.mock("vue-router");
+const useRouteMock = <Mock>useRoute;
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -31,23 +34,21 @@ vi.mock(
 		}) as typeof import("@/utils/pageTitle")
 );
 
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
-const useRouterMock = <Mock>useRouter;
-
-describe("AdministrationRooms.page", () => {
+describe("AdministrationRoomDetails.page", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
 	};
+	const router = createMock<Router>();
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+		useRouteMock.mockReturnValue(router);
+
 		setupStores({
 			schoolsModule: SchoolsModule,
 			envConfigModule: EnvConfigModule,
@@ -68,10 +69,8 @@ describe("AdministrationRooms.page", () => {
 		});
 		envConfigModule.setEnvs(envs);
 		const isEmptyList = options?.isEmptyList ?? false;
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
 
-		const wrapper = mount(AdministrationRoomsPage, {
+		const wrapper = mount(AdministrationRoomDetailPage, {
 			global: {
 				plugins: [
 					createTestingI18n(),
@@ -80,9 +79,12 @@ describe("AdministrationRooms.page", () => {
 						initialState: {
 							administrationRoomStore: {
 								roomList: [],
-								selectedIds: [],
 								loading: false,
 								isEmptyList: isEmptyList,
+								selectedRoom: {
+									id: "room-id",
+									name: "Room Name",
+								},
 							},
 						},
 					}),
@@ -95,53 +97,67 @@ describe("AdministrationRooms.page", () => {
 		return {
 			wrapper,
 			adminRoomStore,
-			router,
 		};
 	};
 
 	describe("rendering", () => {
 		it("should render the page and Table component ", async () => {
 			const { wrapper } = setup();
-			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
-			const emptyStateComponent = wrapper.findComponent({ name: "EmptyState" });
+			const roomAdminTable = wrapper.findComponent({
+				name: "RoomAdminMembersTable",
+			});
 
 			expect(wrapper.exists()).toBe(true);
 			expect(roomAdminTable.exists()).toBe(true);
-			expect(emptyStateComponent.exists()).toBe(false);
 		});
 
-		it("should render the EmptyState component when isEmptyList is true", async () => {
-			const { wrapper } = setup({ isEmptyList: true });
-			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
-			const emptyStateComponent = wrapper.findComponent({ name: "EmptyState" });
+		it("should pass the correct breadcrumbs to the page", () => {
+			const { wrapper } = setup();
+			const defaultWireframe = wrapper.findComponent({
+				name: "DefaultWireframe",
+			});
 
-			expect(wrapper.exists()).toBe(true);
-			expect(roomAdminTable.exists()).toBe(false);
-			expect(emptyStateComponent.exists()).toBe(true);
+			expect(defaultWireframe.exists()).toBe(true);
+			const breadcrumbs = defaultWireframe.props("breadcrumbs");
+
+			expect(breadcrumbs).toEqual([
+				{
+					title: "pages.rooms.administration.title",
+					to: "/administration/rooms/manage",
+				},
+				{
+					title: "pages.rooms.administration.roomDetail.breadcrumb",
+					disabled: true,
+				},
+			]);
 		});
 
-		it("should call fetchRooms on mount", async () => {
-			const { adminRoomStore } = setup();
-			await nextTick();
+		it("should display the correct page title", () => {
+			setup();
 
-			expect(adminRoomStore.fetchRooms).toHaveBeenCalled();
+			expect(document.title).toContain(
+				"pages.rooms.administration.roomDetail.header.text"
+			);
 		});
-	});
 
-	describe("routing", () => {
-		it("should navigate to room details on room click", async () => {
-			const { wrapper, router } = setup({ featureFlag: true });
-			const roomId = "room-id";
+		it("should display the correct page header", () => {
+			const { wrapper } = setup();
 
-			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
-			await roomAdminTable.vm.$emit("manage-room-members", roomId);
+			const header = wrapper.find("[data-testid='admin-room-detail-title']");
 
-			const expectedRoute = {
-				name: "administration-rooms-manage-details",
-				params: { roomId },
-			};
+			expect(header.exists()).toBe(true);
+			expect(header.text()).toBe(
+				"pages.rooms.administration.roomDetail.header.text"
+			);
+		});
 
-			expect(router.push).toHaveBeenCalledWith(expectedRoute);
+		it("should set 'selectedRoom' value to null when unMounted", () => {
+			const { adminRoomStore, wrapper } = setup();
+
+			expect(adminRoomStore.selectedRoom).not.toBeNull();
+			wrapper.unmount();
+
+			expect(adminRoomStore.selectedRoom).toBeNull();
 		});
 
 		it("should navigate to dashboard if feature is disabled", async () => {
