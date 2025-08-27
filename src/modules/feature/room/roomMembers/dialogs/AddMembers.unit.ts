@@ -25,7 +25,6 @@ import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { WarningAlert } from "@ui-alert";
 import { Ref, ref } from "vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { Mock } from "vitest";
 

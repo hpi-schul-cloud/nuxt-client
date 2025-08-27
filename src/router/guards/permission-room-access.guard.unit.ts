@@ -4,7 +4,7 @@ import {
 	RouteLocationNormalized,
 	NavigationGuardNext,
 } from "vue-router";
-import { authModule, envConfigModule } from "@/store";
+import { authModule } from "@/store";
 
 const mockError = vi.fn();
 
