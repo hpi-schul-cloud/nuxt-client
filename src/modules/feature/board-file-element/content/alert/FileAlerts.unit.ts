@@ -16,6 +16,20 @@ describe("FileAlerts", () => {
 		return { wrapper, alerts };
 	};
 
+	describe("when alerts contains FileAlert.EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE", () => {
+		it("should render FileAlert.EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE", () => {
+			const { wrapper } = setup([
+				FileAlert.EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE,
+			]);
+
+			const infoAlert = wrapper.findComponent(InfoAlert);
+
+			expect(infoAlert.text()).toBe(
+				"common.file.exceedsCollaboraEditableFileSize"
+			);
+		});
+	});
+
 	describe("when alerts contains FileAlert.VIDEO_FORMAT_ERROR", () => {
 		it("should render FileAlert.VIDEO_FORMAT_ERROR", () => {
 			const { wrapper } = setup([FileAlert.VIDEO_FORMAT_ERROR]);
