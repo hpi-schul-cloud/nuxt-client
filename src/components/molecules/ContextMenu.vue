@@ -215,13 +215,12 @@ export default {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 
 .context-menu {
 	--transition-duration: 0.15s;
 
 	position: absolute;
-	z-index: var(--layer-dropdown);
+	z-index: 30;
 	display: flex;
 	flex-direction: column;
 	min-width: 150px;
@@ -256,10 +255,6 @@ export default {
 				margin: 16px;
 			}
 		}
-
-		&-close:not(:focus) {
-			@include visually-hidden;
-		}
 	}
 }
 
@@ -291,6 +286,11 @@ export default {
 .v-btn {
 	font-weight: var(--font-weight-normal) !important;
 	font-family: var(--font-accent);
+}
+
+.material-icon {
+	width: 24px;
+	height: 24px;
 }
 </style>
 

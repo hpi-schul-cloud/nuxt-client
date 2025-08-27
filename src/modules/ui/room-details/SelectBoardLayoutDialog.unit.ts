@@ -11,7 +11,7 @@ describe("@ui-room-details/SelectBoardLayoutDialog", () => {
 		const wrapper = mount(SelectBoardLayoutDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: { UseFocusTrap: true }, // unfortuantely it is not as straightward to test the focus trap
+				stubs: { UseFocusTrap: true },
 				renderStubDefaultSlot: true,
 			},
 			props: {

@@ -1,6 +1,7 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { FileAlert } from "../shared/types/FileAlert.enum";
 import FileContent from "./FileContent.vue";
@@ -9,7 +10,6 @@ import FileDisplay from "./display/FileDisplay.vue";
 import FileDescription from "./display/file-description/FileDescription.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 describe("FileContent", () => {
 	beforeEach(() => {
@@ -26,12 +26,20 @@ describe("FileContent", () => {
 		mimeType?: string;
 		previewUrl?: string;
 		windowWidth?: number;
+		isCollaboraEditable?: boolean;
 	}) => {
-		const { isListBoard, mimeType, previewUrl, windowWidth } = {
+		const {
+			isListBoard,
+			mimeType,
+			previewUrl,
+			windowWidth,
+			isCollaboraEditable,
+		} = {
 			isListBoard: false,
 			mimeType: "testMimeType",
 			previewUrl: "testPreviewUrl",
 			windowWidth: 1280,
+			isCollaboraEditable: false,
 			...options,
 		};
 
@@ -52,6 +60,7 @@ describe("FileContent", () => {
 			isDownloadAllowed: true,
 			element,
 			mimeType,
+			isCollaboraEditable,
 		};
 		const alerts = [FileAlert.AWAITING_SCAN_STATUS];
 
@@ -337,6 +346,7 @@ describe("FileContent", () => {
 
 				expect(props.showmenu).toBe("false");
 			});
+
 			it("should pass true when preview file is defined", () => {
 				const { wrapper } = setup();
 
@@ -391,6 +401,44 @@ describe("FileContent", () => {
 			it("should pass false when pdf file is on a listboard with small or larger screensize", () => {
 				const { wrapper } = setup({
 					mimeType: "application/pdf",
+					isListBoard: true,
+					windowWidth: 900,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
+
+			it("should pass true when collabora file is not on a listboard", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isListBoard: false,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("true");
+			});
+
+			it("should pass true when collabora file is on a listboard with a screensize smaller than 600 px", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isListBoard: true,
+					windowWidth: 599,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("true");
+			});
+
+			it("should pass false when collabora file is on a listboard with small or larger screensize", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
 					isListBoard: true,
 					windowWidth: 900,
 				});
@@ -510,6 +558,18 @@ describe("FileContent", () => {
 				const { wrapper } = setup({
 					mimeType: "application/pdf",
 					isListBoard: false,
+				});
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
+
+			it("should pass false when collabora file is not on a listboard", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isListBoard: false,
+					isCollaboraEditable: true,
 				});
 
 				const props = wrapper.findComponent(FileDescription).attributes();

@@ -1,6 +1,6 @@
 <template>
 	<VDialog v-model="isOpen" width="360">
-		<UseFocusTrap>
+		<UseFocusTrap :options="{ immediate: true }">
 			<VCard data-testid="board-layout-dialog">
 				<VCardTitle
 					class="text-h4 text-break px-6 pt-4"
@@ -9,7 +9,7 @@
 					{{ t("pages.room.dialog.boardLayout.title") }}
 				</VCardTitle>
 				<VCardText
-					class="d-flex flex-row flex-wrap align-items-center justify-space-around"
+					class="d-flex flex-row flex-wrap align-center justify-space-around"
 				>
 					<ExtendedIconBtn
 						v-for="(item, key) in boardLayouts"
@@ -39,6 +39,7 @@
 import { BoardLayout } from "@/serverApi/v3";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
+import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { PickerOption } from "./types";

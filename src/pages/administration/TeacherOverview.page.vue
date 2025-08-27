@@ -67,13 +67,11 @@
 					<span class="text-content">
 						<v-icon
 							v-if="status === 'ok'"
-							class="material-icon"
 							color="rgba(var(--v-theme-success))"
 							:icon="mdiCheck"
 						/>
 						<v-icon
 							v-else-if="status === 'missing'"
-							class="material-icon"
 							color="rgba(var(--v-theme-error))"
 							:icon="mdiClose"
 						/>
@@ -660,9 +658,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@use "@/styles/mixins" as *;
-
+<style scoped>
 :deep(.row-highlighted.theme--light.v-btn:hover::before) {
 	opacity: 0;
 }
@@ -671,41 +667,8 @@ span {
 	font-weight: var(--font-weight-normal);
 }
 
-.content {
-	max-height: 35vh;
-	overflow-y: scroll;
-	font-weight: var(--font-weight-normal);
-}
-
-.list {
-	padding: 24px;
-}
-
-.th-slot {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-}
-
-.info-box {
-	position: absolute;
-	right: 0%;
-	z-index: calc(var(--layer-fab) + 1);
-	max-width: 100%;
-	margin-top: 16px;
-	margin-right: 24px;
-	margin-left: 24px;
-
-	@include breakpoint(tablet) {
-		min-width: 450px;
-		max-width: 50%;
-		margin-right: 32px;
-	}
-}
-
 button:not(.is-none):focus {
-	z-index: var(--layer-fab);
+	z-index: 100;
 	outline: none;
 	box-shadow:
 		0 0 0 0 rgba(var(--v-theme-white)),

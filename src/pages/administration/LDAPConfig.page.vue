@@ -245,7 +245,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .link-style {
 	color: rgba(var(--v-theme-primary));
@@ -263,7 +264,7 @@ export default {
 .form-container {
 	margin: 0;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		margin: 0 84px;
 	}
 }
@@ -273,7 +274,7 @@ export default {
 	justify-content: flex-end;
 	margin: 32px 0 84px 0;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		margin: 40px 84px;
 	}
 }
@@ -284,7 +285,7 @@ export default {
 	align-items: flex-end;
 	margin: 40px 0;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		margin: 40px 84px;
 	}
 }

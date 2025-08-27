@@ -330,7 +330,7 @@ watchDebounced(
 
 	&__input-container {
 		width: calc(
-			2 * var(--size-content-width-min)
+			2 * var(--content-min-width)
 		); // keep in sync with wrapper in content (EmptyState.vue)
 
 		:deep(.v-field__input) {

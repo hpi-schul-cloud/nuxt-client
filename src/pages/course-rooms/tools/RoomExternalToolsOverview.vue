@@ -117,7 +117,7 @@ const onDeleteTool = async (displayData: ExternalToolDisplayData) => {
 
 <style lang="scss" scoped>
 .centered-container {
-	max-width: var(--size-content-width-max);
+	max-width: var(--content-max-width);
 	margin: 0 auto;
 }
 </style>

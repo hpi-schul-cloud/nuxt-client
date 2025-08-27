@@ -173,7 +173,7 @@ const showDivider = computed(() => {
 }
 
 .container-short-width {
-	max-width: var(--size-content-width-max);
+	max-width: var(--content-max-width);
 }
 
 .container-full-width {
@@ -194,7 +194,7 @@ const showDivider = computed(() => {
 .sticky {
 	position: sticky;
 	top: var(--topbar-height);
-	z-index: var(--layer-sticky-header);
+	z-index: 20;
 	background-color: rgb(var(--v-theme-white));
 }
 

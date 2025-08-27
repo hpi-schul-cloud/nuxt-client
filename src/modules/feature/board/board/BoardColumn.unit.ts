@@ -261,6 +261,39 @@ describe("BoardColumn", () => {
 		});
 	});
 
+	describe("when a card is ended dragging", () => {
+		it("should set 'isDragging' value to be false", () => {
+			const { wrapper } = setup();
+			const emitObject = {
+				isSource: false,
+				payload: { cardId: "card-id", height: 100 },
+				willAcceptDrop: false,
+			};
+			const containerComponent = wrapper.findComponent({ name: "Sortable" });
+			containerComponent.vm.$emit("end", emitObject);
+
+			expect(isDragging.value).toBe(false);
+		});
+
+		describe("when it is dropped onto ghost column (= no data-columnId) location", () => {
+			it("should call moveCardToNewColumn", () => {
+				const { wrapper, store } = setup();
+
+				const emitObject = {
+					isSource: false,
+					payload: {
+						cardId: "card-id",
+						height: 100,
+					},
+				};
+				const containerComponent = wrapper.findComponent({ name: "Sortable" });
+				containerComponent.vm.$emit("end", emitObject);
+
+				expect(store.moveCardToNewColumn).toHaveBeenCalled();
+			});
+		});
+	});
+
 	describe("user permissions", () => {
 		describe("when user is not permitted to move a column", () => {
 			it("should set drag-disabled", () => {

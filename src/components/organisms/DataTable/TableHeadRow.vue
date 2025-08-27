@@ -362,7 +362,6 @@ export default {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 
 .table__row {
 	font-weight: var(--font-weight-bold);
@@ -395,19 +394,19 @@ export default {
 }
 
 .info-button {
-	z-index: calc(var(--layer-fab) + 1);
+	z-index: 101;
 }
 
 .info-box {
 	position: absolute;
 	right: 0%;
-	z-index: calc(var(--layer-fab) + 1);
+	z-index: 101;
 	min-width: 320px;
 	margin-top: 40px;
 	margin-right: 24px;
 	margin-left: 24px;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		min-width: 450px;
 		max-width: 50%;
 		margin-right: 32px;
@@ -420,7 +419,7 @@ export default {
 	}
 
 	button:not(.is-none):focus {
-		z-index: var(--layer-fab);
+		z-index: 100;
 		outline: none;
 		box-shadow:
 			0 0 0 0 rgba(var(--v-theme-white)),

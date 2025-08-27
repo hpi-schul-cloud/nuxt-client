@@ -65,8 +65,8 @@ const isDialogOpen = computed({
 	display: flex;
 	flex-direction: column;
 	width: 95%;
-	min-width: var(--size-content-width-min);
-	max-width: var(--size-content-width-max);
+	min-width: var(--content-min-width);
+	max-width: var(--content-max-width);
 	max-height: calc(100vh - 48px);
 	margin: 0 auto;
 	overflow: hidden;

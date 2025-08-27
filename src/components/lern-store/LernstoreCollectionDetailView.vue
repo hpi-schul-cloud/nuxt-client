@@ -334,7 +334,7 @@ $tablet-portrait-width: 768px;
 					position: -webkit-sticky;
 					position: sticky;
 					top: 32px;
-					z-index: var(--layer-fab);
+					z-index: 100;
 					margin-top: 32px;
 					border-radius: var(--radius-md);
 
@@ -413,6 +413,11 @@ $tablet-portrait-width: 768px;
 				.icon {
 					max-height: var(--text-lg);
 				}
+			}
+
+			.material-icon {
+				width: calc(1em + 4px);
+				height: calc(1em + 4px);
 			}
 
 			.link {

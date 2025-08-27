@@ -1,6 +1,6 @@
 <template>
 	<div v-if="numberOfSelectedItems > 0" class="row-selection-info">
-		<div class="d-flex align-items-center content-wrapper">
+		<div class="d-flex align-center content-wrapper">
 			<div v-if="allRowsOfAllPagesSelected">
 				{{ $t("pages.administration.all") }}
 				{{ totalNumberOfItems }}
@@ -110,7 +110,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .row-selection-info {
 	display: flex;
@@ -125,7 +126,7 @@ export default {
 .actions {
 	margin-top: 12px;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		margin-top: 0;
 		margin-left: 16px;
 	}

@@ -12,14 +12,15 @@
 </template>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .actions-container {
 	display: grid;
 	grid-template-areas: "primary" "secondary";
 	width: 100%;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		grid-template-areas: "secondary primary";
 	}
 }
@@ -48,7 +49,7 @@
 	grid-area: secondary;
 	justify-content: flex-end;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		justify-content: flex-start;
 	}
 

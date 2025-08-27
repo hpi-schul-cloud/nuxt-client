@@ -1874,6 +1874,8 @@ export default {
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
+	"pages.room.locked":
+		"La sala está bloqueada porque ningún miembro tiene permiso de «Propietario». Ponte en contacto con el administrador de la escuela.",
 	"pages.room.taskCard.label.done": "Terminar",
 	"pages.room.taskCard.label.due": "Entrega",
 	"pages.room.taskCard.label.edit": "Editar",
@@ -1939,6 +1941,8 @@ export default {
 		"El curso {name} se ha importado correctamente.",
 	"pages.rooms.ccImportCourse.error":
 		"Se ha producido un error al importar el curso.",
+	"pages.rooms.ccExportCourse.error":
+		"Se produjo un error al exportar el curso.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
 	"pages.rooms.tools.deactivatedDialog.title":
@@ -2164,6 +2168,13 @@ export default {
 		"No se pudo cargar la lista de salas.",
 	"pages.rooms.administration.error.delete": "No se pudo eliminar la sala.",
 	"pages.rooms.administration.pageTitle": "Administrar salas",
+	"pages.rooms.administration.roomDetail.infoText":
+		"Los miembros de la sala de otras escuelas se muestran de forma anónima por razones de protección de datos (excepción: miembro con la autorización de sala “Propietario”).",
+	"pages.rooms.administration.roomDetail.anonymized": "(anónimo)",
+	"pages.rooms.administration.roomDetail.breadcrumb":
+		"Miembros de la sala {roomName}",
+	"pages.rooms.administration.roomDetail.header.text":
+		"Miembros de la sala “{roomName}”",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
@@ -2282,6 +2293,9 @@ export default {
 		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"pages.collabora.iframeTitle": "Editor de documentos de Office",
+	"pages.collabora.jsonError":
+		"No se pudo analizar el JSON del mensaje Collabora.",
+	"pages.collabora.messageError": "El mensaje de Collabora no es válido.",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",
 	"error.4500":
