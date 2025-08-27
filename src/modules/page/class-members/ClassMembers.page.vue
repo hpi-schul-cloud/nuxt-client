@@ -5,7 +5,7 @@
 		max-width="full"
 	>
 		<template #header>
-			<h1 class="text-h3" data-testid="admin-class-title">
+			<h1 data-testid="admin-class-title">
 				{{ title }}
 				<span v-show="isExternal" class="text-subtitle-1">
 					({{ $t("page-class-members.title.info") }})

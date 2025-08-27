@@ -5,7 +5,7 @@
 		:fab-items="fabItems"
 	>
 		<template #header>
-			<h1 class="text-h3 mb-4">{{ $t("common.words.tasks") }}</h1>
+			<h1>{{ $t("common.words.tasks") }}</h1>
 			<div v-if="isTeacher">
 				<v-switch
 					v-if="showSubstituteFilter"

@@ -6,18 +6,20 @@ $system-fonts:
 	--font-primary: "PT Sans", #{$system-fonts};
 	--font-accent: "PT Sans Narrow", #{$system-fonts};
 
+	/* heading sizes */
+	--heading-1: 33px; // 32px?
+	--heading-2: 28px;
+	--heading-3: 23px; // 24px?
+	--heading-4: 19px; // 20px?
+
+	/* font-weight */
+	--font-weight-regular: 400;
+	--font-weight-bold: 700;
+
 	/* set base values */
 	--text-base-size: 1rem;
 	--text-scale-ratio: 1.2;
 	--text-device-scale-ratio: 1.125;
-
-	/* heading sizes */
-	--heading-1: calc(var(--heading-2) * var(--text-scale-ratio));
-	--heading-2: calc(var(--heading-3) * var(--text-scale-ratio));
-	--heading-3: calc(var(--heading-4) * var(--text-scale-ratio));
-	--heading-4: calc(var(--heading-5) * var(--text-scale-ratio));
-	--heading-5: calc(var(--heading-6) * var(--text-scale-ratio));
-	--heading-6: calc(var(--text-base-size) * var(--text-scale-ratio));
 
 	/* text sizes */
 	--text-xs: calc(
@@ -31,8 +33,4 @@ $system-fonts:
 	--line-height-sm: 1.05;
 	--line-height-md: 1.2;
 	--line-height-lg: 1.4;
-
-	/* font-weight */
-	--font-weight-regular: 400;
-	--font-weight-bold: 700;
 }

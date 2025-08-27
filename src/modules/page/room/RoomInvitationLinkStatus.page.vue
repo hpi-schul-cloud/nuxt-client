@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe max-width="nativ" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="text-h3 mb-4" data-testid="page-title">
+			<h1 data-testid="page-title">
 				{{ t("pages.rooms.invitationLinkStatus.title") }}
 			</h1>
 		</template>

@@ -1,7 +1,7 @@
 <template>
 	<div class="impressum-container">
 		<div class="impressum-max-width">
-			<h1 class="h2">Impressum</h1>
+			<h1>Impressum</h1>
 			<h2 class="h4">
 				I. Allgemeine Anbieterinformationen nach § 18 Absatz 1 MStV
 			</h2>

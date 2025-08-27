@@ -19,8 +19,7 @@
 			class="repair-image"
 			data-testid="img-generic"
 		/>
-
-		<h1 class="text-h4 error-msg pl-4 pr-4" data-testid="err-text">
+		<h1 class="px-4" data-testid="err-text">
 			{{ errorText }}
 		</h1>
 	</div>
@@ -63,6 +62,7 @@ const isNotFoundError = computed(
 	() => props.statusCode === HttpStatusCode.NotFound
 );
 </script>
+
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;

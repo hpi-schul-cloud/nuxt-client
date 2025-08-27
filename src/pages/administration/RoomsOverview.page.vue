@@ -6,7 +6,7 @@
 		data-testid="admin-course-title"
 	>
 		<template #header>
-			<h1 class="text-h3 pl-2">
+			<h1 class="pl-2">
 				{{ t("pages.administration.rooms.index.title") }}
 			</h1>
 			<div class="mt-n6 mb-n3">
