@@ -724,7 +724,7 @@ export default {
 }
 
 button:not(.is-none):focus {
-	z-index: var(--layer-fab);
+	z-index: 100;
 	outline: none;
 	box-shadow:
 		0 0 0 0 rgba(var(--v-theme-white)),
