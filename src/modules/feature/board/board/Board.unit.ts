@@ -308,7 +308,8 @@ describe("Board", () => {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
 				},
-				stubs: { ShareModal: true },
+				stubs: { ShareModal: true, UseFocusTrap: true },
+				renderStubDefaultSlot: true,
 			},
 			propsData: { boardId: board.id },
 		});
