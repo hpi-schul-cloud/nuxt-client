@@ -335,7 +335,7 @@ $tablet-portrait-width: 768px;
 					position: -webkit-sticky;
 					position: sticky;
 					top: 32px;
-					z-index: var(--layer-fab);
+					z-index: 100;
 					margin-top: 32px;
 					border-radius: 8px;
 

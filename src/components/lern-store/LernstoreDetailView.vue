@@ -378,7 +378,7 @@ $tablet-portrait-width: 768px;
 		position: fixed;
 		top: 0;
 		right: 0;
-		z-index: var(--layer-modal);
+		z-index: 1000;
 		display: flex;
 		justify-content: flex-end;
 		padding: 16px;
@@ -430,7 +430,7 @@ $tablet-portrait-width: 768px;
 				right: 0;
 				bottom: 0;
 				left: 0;
-				z-index: var(--layer-page);
+				z-index: 1;
 				filter: blur(0.7rem);
 				background-repeat: no-repeat;
 				background-position: center;
@@ -439,7 +439,7 @@ $tablet-portrait-width: 768px;
 			}
 
 			img {
-				z-index: var(--layer-page);
+				z-index: 1;
 				object-position: center;
 				object-fit: contain;
 
@@ -453,7 +453,7 @@ $tablet-portrait-width: 768px;
 	.floating-buttons {
 		position: sticky;
 		bottom: 0;
-		z-index: var(--layer-page);
+		z-index: 1;
 		border-radius: 8px;
 
 		@media (max-width: $tablet-portrait-width) {
