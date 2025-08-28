@@ -58,7 +58,7 @@
 		"@golevelup/ts-vitest": "^0.5.2",
 		"@intlify/unplugin-vue-i18n": "^6.0.8",
 		"@mdi/js": "^7.2.96",
-		"@openapitools/openapi-generator-cli": "^2.19.1",
+		"@openapitools/openapi-generator-cli": "^2.23.1",
 		"@pinia/testing": "^1.0.1",
 		"@types/katex": "^0.16.7",
 		"@types/lodash": "^4.17.17",
