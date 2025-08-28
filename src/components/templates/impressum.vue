@@ -1,7 +1,7 @@
 <template>
 	<div class="impressum-container">
 		<div class="impressum-max-width">
-			<h1 class="h3">Impressum</h1>
+			<h1>Impressum</h1>
 			<h2 class="h6">
 				Dataport Bildungscloud | dBildungscloud
 				<br />

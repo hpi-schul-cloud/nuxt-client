@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe ref="main" max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="mb-4 h3">
+			<h1>
 				{{ title }}
 			</h1>
 			<i18n-t
