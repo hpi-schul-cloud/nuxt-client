@@ -34,11 +34,7 @@ const roomDetailsStore = useRoomDetailsStore();
 const { isLoading, roomVariant, room, lockedRoomName } =
 	storeToRefs(roomDetailsStore);
 const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
-const { canCreateRoom } = useRoomAuthorization();
-
-const canAccessRoom = computed(() => {
-	return canCreateRoom.value;
-});
+const { canCreateRoom: canAccessRoom } = useRoomAuthorization();
 
 watch(
 	() => route.params.id,

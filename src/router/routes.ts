@@ -295,11 +295,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms/:id(${REGEX_ID})/members`,
 		component: async () => (await import("@page-room")).RoomMembersPage,
-		// do we actually need that here? the component is also checking that
-		// beforeEnter: [
-		// 	roomPermissionGuard(["school_create_room"]),
-		// ],
-
 		name: "room-members",
 		props: (route: RouteLocationNormalized) => ({
 			tab: route.query.tab,
