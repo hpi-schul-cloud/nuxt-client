@@ -300,7 +300,7 @@ $tablet-portrait-width: 768px;
 
 .resource {
 	width: 100%;
-	min-height: calc(100vh - var(--sidebar-item-height));
+	min-height: calc(100vh - 60px);
 	margin-top: 8px;
 
 	.arrow__back {
@@ -337,7 +337,7 @@ $tablet-portrait-width: 768px;
 					top: 32px;
 					z-index: 100;
 					margin-top: 32px;
-					border-radius: var(--radius-md);
+					border-radius: 8px;
 
 					@media (max-width: $tablet-portrait-width) {
 						padding-bottom: 8px;
