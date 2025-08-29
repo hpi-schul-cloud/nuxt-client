@@ -9,10 +9,10 @@ import {
 } from "./CollaboraPostMessage.schema";
 
 export enum CollaboraEvents {
-	Doc_ModifiedStatus = "Doc_ModifiedStatus",
-	App_LoadingStatus = "App_LoadingStatus",
-	Host_PostmessageReady = "Host_PostmessageReady",
-	Remove_Button = "Remove_Button",
+	DOC_MODIFIED_STATUS = "Doc_ModifiedStatus",
+	APP_LOADING_STATUS = "App_LoadingStatus",
+	HOST_POSTMESSAGE_READY = "Host_PostmessageReady",
+	REMOVE_BUTTON = "Remove_Button",
 }
 
 export const useCollaboraPostMessageApi = () => {
@@ -65,8 +65,9 @@ export const useCollaboraPostMessageApi = () => {
 
 	const handleLoadingStatusUpdate = (message: CollaboraMessage) => {
 		const { Status } = appLoadingStatusValueSchema.parse(message.Values);
+
 		if (Status === "Initialized") {
-			postMessage(CollaboraEvents.Host_PostmessageReady);
+			postMessage(CollaboraEvents.HOST_POSTMESSAGE_READY);
 		}
 
 		if (Status === "Document_Loaded") {
@@ -99,7 +100,7 @@ export const useCollaboraPostMessageApi = () => {
 			"signature-button",
 		];
 		buttonIds.forEach((buttonId) => {
-			postMessage(CollaboraEvents.Remove_Button, { id: buttonId });
+			postMessage(CollaboraEvents.REMOVE_BUTTON, { id: buttonId });
 		});
 	};
 
@@ -117,14 +118,14 @@ export const useCollaboraPostMessageApi = () => {
 
 	const hasModifiedStatusMessageId = (messageId: string): boolean => {
 		const isModifiedStatusMessage =
-			messageId === CollaboraEvents.Doc_ModifiedStatus;
+			messageId === CollaboraEvents.DOC_MODIFIED_STATUS;
 
 		return isModifiedStatusMessage;
 	};
 
 	const hasLoadingStatusMessageId = (messageId: string): boolean => {
 		const isLoadingStatusMessage =
-			messageId === CollaboraEvents.App_LoadingStatus;
+			messageId === CollaboraEvents.APP_LOADING_STATUS;
 
 		return isLoadingStatusMessage;
 	};

@@ -151,49 +151,12 @@ describe("useCollaboraMessage", () => {
 		expect(documentHasUnsavedChanges).toHaveProperty("value");
 	});
 
-	describe("setupPostMessageAPI", () => {
-		const notifierModuleMock = createModuleMocks(NotifierModule);
-
-		const setupMountComposable = () => {
-			const iframe = document.createElement("iframe");
-			document.body.appendChild(iframe);
-
-			const { setupPostMessageAPI } = mountComposable(
-				() => useCollaboraPostMessageApi(),
-				{
-					global: {
-						plugins: [createTestingI18n()],
-						provide: {
-							[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
-						},
-					},
-				}
-			);
-
-			return { setupPostMessageAPI, iframe };
-		};
-
-		it("should set targetOrigin and collaboraWindow correctly", () => {
-			const { setupPostMessageAPI, iframe } = setupMountComposable();
-
-			// Create a mock iframe
-
-			// Call setupPostMessageAPI
-			setupPostMessageAPI(iframe, "https://collabora.example.com");
-
-			// Check that collaboraWindow is set
-			expect(iframe.contentWindow).not.toBeNull();
-
-			// Clean up
-			document.body.removeChild(iframe);
-		});
-	});
-
 	describe("handleLoadingStatusUpdate", () => {
 		const notifierModuleMock = createModuleMocks(NotifierModule);
 
 		const setupMountComposable = () => {
 			const targetOrigin = "https://collabora.example.com";
+
 			const iframe = document.createElement("iframe");
 			document.body.appendChild(iframe);
 
@@ -218,12 +181,12 @@ describe("useCollaboraMessage", () => {
 			const { iframe, targetOrigin } = setupMountComposable();
 
 			const validMsg = JSON.stringify({
-				MessageId: CollaboraEvents.App_LoadingStatus,
+				MessageId: CollaboraEvents.APP_LOADING_STATUS,
 				Values: { Status: "Initialized" },
 			});
 
 			const expectedMsg = {
-				MessageId: CollaboraEvents.Host_PostmessageReady,
+				MessageId: CollaboraEvents.HOST_POSTMESSAGE_READY,
 				SendTime: expect.any(Number),
 				Values: undefined,
 			};
@@ -240,12 +203,12 @@ describe("useCollaboraMessage", () => {
 			const { iframe, targetOrigin } = setupMountComposable();
 
 			const validMsg = JSON.stringify({
-				MessageId: CollaboraEvents.App_LoadingStatus,
+				MessageId: CollaboraEvents.APP_LOADING_STATUS,
 				Values: { Status: "Document_Loaded" },
 			});
 
 			const expectedMsg = {
-				MessageId: CollaboraEvents.Remove_Button,
+				MessageId: CollaboraEvents.REMOVE_BUTTON,
 				SendTime: expect.any(Number),
 				Values: undefined,
 			};

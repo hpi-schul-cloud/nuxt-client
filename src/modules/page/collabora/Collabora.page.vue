@@ -41,7 +41,7 @@ const userName = computed(() => {
 });
 
 onMounted(async () => {
-	const result = await getAuthorizedCollaboraDocumentUrl(
+	const responseCollaboraUrl = await getAuthorizedCollaboraDocumentUrl(
 		props.fileRecordId,
 		props.editorMode,
 		userName.value
@@ -49,7 +49,7 @@ onMounted(async () => {
 
 	const locale = authModule.getLocale;
 
-	const collaboraUrl = new URL(result);
+	const collaboraUrl = new URL(responseCollaboraUrl);
 	collaboraUrl.searchParams.set("lang", locale);
 
 	url.value = collaboraUrl.toString();
