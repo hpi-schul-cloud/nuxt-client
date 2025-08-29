@@ -26,9 +26,9 @@ export const useCollaboraPostMessageApi = () => {
 
 	const setupPostMessageAPI = (
 		iframeRef: HTMLIFrameElement,
-		postMessageOrigin: string
+		iframeOrigin: string
 	) => {
-		targetOrigin = postMessageOrigin;
+		targetOrigin = iframeOrigin;
 		collaboraWindow = iframeRef?.contentWindow;
 	};
 
