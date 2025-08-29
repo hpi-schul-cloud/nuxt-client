@@ -44,15 +44,12 @@
 			</KebabMenu>
 		</template>
 	</DataTable>
-	<VDialog
+	<ChangeRole
 		v-model="isChangeRoleDialogOpen"
-		:width="isExtraSmallDisplay ? 'auto' : 480"
-		data-testid="dialog-change-role-participants"
-		max-width="480"
-		@keydown.esc="onDialogClose"
-	>
-		<ChangeRole :members="membersToChangeRole" @close="onDialogClose" />
-	</VDialog>
+		:members="membersToChangeRole"
+		@close="onDialogClose"
+		@update:model-value="onDialogClose"
+	/>
 	<ConfirmationDialog />
 </template>
 
@@ -75,7 +72,6 @@ import {
 	useRoomAuthorization,
 	useRoomMembersStore,
 } from "@data-room";
-import { useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
 import { ChangeRole } from "@feature-room";
 import { authModule } from "@/store/store-accessor";
@@ -92,7 +88,6 @@ withDefaults(defineProps<Props>(), {
 });
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay } = useDisplay();
 const { canAddRoomMembers } = useRoomAuthorization();
 
 const roomMembersStore = useRoomMembersStore();
@@ -115,6 +110,9 @@ const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
 };
 
 const onDialogClose = () => {
+	const { log } = console;
+	log("Dialog closed");
+	membersToChangeRole.value = [];
 	isChangeRoleDialogOpen.value = false;
 };
 
