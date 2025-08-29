@@ -47,21 +47,17 @@ describe("SidebarItems Composable", () => {
 		expect(pageLinks.value).toHaveLength(11);
 	});
 
-	describe("when FEATURE_ROOM_ADD_STUDENTS_ENABLED feature is enabled", () => {
-		it("should have correct amount of page links", () => {
-			const { pageLinks } = setup({
-				FEATURE_ROOM_ADD_STUDENTS_ENABLED: true,
-			});
+	it("should have correct amount of page links", () => {
+		const { pageLinks } = setup();
 
-			expect(pageLinks.value).toHaveLength(11);
-			expect(pageLinks.value[1].permissions).toBeUndefined();
+		expect(pageLinks.value).toHaveLength(11);
+		expect(pageLinks.value[1].permissions).toBeUndefined();
 
-			const roomsLink = pageLinks.value.find(
-				(link) => link.title === "global.sidebar.item.rooms"
-			);
+		const roomsLink = pageLinks.value.find(
+			(link) => link.title === "global.sidebar.item.rooms"
+		);
 
-			expect(roomsLink?.permissions).toBeUndefined();
-		});
+		expect(roomsLink?.permissions).toBeUndefined();
 	});
 
 	it("should have correct amount of legal links", () => {

@@ -6,9 +6,8 @@ import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
-	envsFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
@@ -131,30 +130,16 @@ describe("RoomMembersPage", () => {
 
 	const setup = (options?: {
 		createRoom?: boolean;
-		isFeatureRoomMembersTabsEnabled?: boolean;
 		activeTab?: Tab;
 		isLoading?: boolean;
 	}) => {
-		const {
-			createRoom,
-			isFeatureRoomMembersTabsEnabled,
-			activeTab,
-			isLoading,
-		} = {
+		const { createRoom, activeTab, isLoading } = {
 			createRoom: true,
-			isFeatureRoomMembersTabsEnabled: true,
 			activeTab: Tab.Members,
 			isLoading: false,
 
 			...options,
 		};
-
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: {
-				...envsFactory.build(),
-				FEATURE_ROOM_MEMBERS_TABS_ENABLED: isFeatureRoomMembersTabsEnabled,
-			},
-		});
 
 		const room = createRoom ? roomFactory.build() : undefined;
 
@@ -189,7 +174,6 @@ describe("RoomMembersPage", () => {
 					createTestingVuetify(),
 				],
 				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 				},
 				stubs: {
@@ -507,7 +491,6 @@ describe("RoomMembersPage", () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper } = setup({
 				activeTab: Tab.Members,
-				isFeatureRoomMembersTabsEnabled: true,
 			});
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 			const addMemberDialogBeforeClick = wrapper.findComponent(AddMembers);
@@ -531,7 +514,6 @@ describe("RoomMembersPage", () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper, roomInvitationLinkStore } = setup({
 				activeTab: Tab.Invitations,
-				isFeatureRoomMembersTabsEnabled: true,
 			});
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 			const dialogBeforeClick = wrapper.findComponent({
@@ -590,8 +572,8 @@ describe("RoomMembersPage", () => {
 
 	describe("Tabnavigation", () => {
 		it("should not render tabs when isVisibleTabNavigation is false", () => {
-			roomPermissions.canManageRoomInvitationLinks.value = true;
-			const { wrapper } = setup({ isFeatureRoomMembersTabsEnabled: false });
+			roomPermissions.canManageRoomInvitationLinks.value = false;
+			const { wrapper } = setup();
 
 			const tabs = wrapper.findComponent(VTabs);
 
@@ -600,9 +582,7 @@ describe("RoomMembersPage", () => {
 
 		it("should render all tabs when isVisibleTabNavigation is true", () => {
 			roomPermissions.canManageRoomInvitationLinks.value = true;
-			const { wrapper } = setup({
-				isFeatureRoomMembersTabsEnabled: true,
-			});
+			const { wrapper } = setup();
 
 			const tabs = wrapper.findComponent(VTabs);
 			expect(tabs.exists()).toBe(true);
@@ -638,29 +618,17 @@ describe("RoomMembersPage", () => {
 
 	describe("active tab behaviour", () => {
 		it.each(Object.values(Tab))(
-			"should default to members tab if the feature is not enabled, regardless of the active tab (%s)",
+			"should set the active tab to the one passed in props (%s)",
 			(activeTab) => {
 				roomPermissions.canManageRoomInvitationLinks.value = true;
-				setup({
-					isFeatureRoomMembersTabsEnabled: false,
+				const { wrapper } = setup({
 					activeTab,
 				});
 
-				expect(router.replace).toHaveBeenCalledWith({
-					query: { tab: Tab.Members },
-				});
+				const tabs = wrapper.findComponent(VTabs);
+				expect(tabs.props("modelValue")).toBe(activeTab);
 			}
 		);
-
-		it("should set the active tab to the one passed in props if the feature is enabled", () => {
-			roomPermissions.canManageRoomInvitationLinks.value = true;
-			const { wrapper } = setup({
-				activeTab: Tab.Invitations,
-			});
-
-			const tabs = wrapper.findComponent(VTabs);
-			expect(tabs.props("modelValue")).toBe(Tab.Invitations);
-		});
 	});
 
 	describe("skeleton loader", () => {

@@ -1797,24 +1797,6 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_ROOMS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ROOM_INVITATION_LINKS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ROOM_ADD_STUDENTS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
     FEATURE_ROOM_COPY_ENABLED: boolean;
     /**
      * 
@@ -1822,12 +1804,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_ROOM_SHARE: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ROOM_MEMBERS_TABS_ENABLED: boolean;
     /**
      * 
      * @type {boolean}

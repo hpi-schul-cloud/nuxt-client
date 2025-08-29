@@ -22,7 +22,6 @@
 						$t('pages.administration.ldapEdit.roles.labels.radio.ldapGroup')
 					"
 					value="group"
-					class="ml-n2"
 				/>
 				<v-radio
 					:label="

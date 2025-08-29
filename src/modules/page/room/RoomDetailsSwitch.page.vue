@@ -19,7 +19,6 @@
 <script setup lang="ts">
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { RoomDetailsPage, RoomLockedPage } from "@page-room";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	RoomVariant,
 	useRoomAuthorization,
@@ -29,21 +28,13 @@ import { storeToRefs } from "pinia";
 import { computed, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const route = useRoute();
 
 const roomDetailsStore = useRoomDetailsStore();
 const { isLoading, roomVariant, room, lockedRoomName } =
 	storeToRefs(roomDetailsStore);
 const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
-const { canCreateRoom } = useRoomAuthorization();
-
-const canAccessRoom = computed(() => {
-	return (
-		(envConfigModule.getEnv.FEATURE_ROOMS_ENABLED && canCreateRoom.value) ||
-		envConfigModule.getEnv.FEATURE_ROOM_ADD_STUDENTS_ENABLED
-	);
-});
+const { canCreateRoom: canAccessRoom } = useRoomAuthorization();
 
 watch(
 	() => route.params.id,
