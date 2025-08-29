@@ -1,127 +1,140 @@
 <template>
-	<v-card ref="changeRoleContent">
-		<template #title>
-			<h2 ref="textTitle" class="text-h4 mt-2 dialog-title">
-				{{ dialogTitle }}
-			</h2>
-		</template>
+	<VDialog
+		v-model="isOpen"
+		:width="xs ? 'auto' : 480"
+		data-testid="dialog-invite-participants"
+		max-width="480"
+		@keydown.esc="onClose"
+		@click:outside.prevent="onClose"
+	>
+		<v-card ref="changeRoleContent">
+			<template #title>
+				<h2 ref="textTitle" class="text-h4 mt-2 dialog-title">
+					{{ dialogTitle }}
+				</h2>
+			</template>
 
-		<template #text>
-			<div v-if="!isOwnershipHandoverMode" class="mb-4">
-				{{ infoText }}
-			</div>
-			<div>
-				<v-radio-group
-					v-if="!isOwnershipHandoverMode"
-					v-model="selectedRole"
-					hide-details
-					class="ml-n2"
-				>
-					<v-radio
-						v-for="option in radioOptions"
-						:key="option.role"
-						:value="option.role"
-						class="align-start mb-2"
-						:data-testid="option.dataTestid"
+			<template #text>
+				<div v-if="!isOwnershipHandoverMode" class="mb-4">
+					{{ infoText }}
+				</div>
+				<div>
+					<v-radio-group
+						v-if="!isOwnershipHandoverMode"
+						v-model="selectedRole"
+						hide-details
+						class="ml-n2"
 					>
-						<template #label>
-							<div class="d-flex flex-column mt-2">
-								{{ option.labelHeader }}
-								<span
-									v-for="labelDescription in option.labelDescriptions"
-									:key="labelDescription"
-									class="radio-label"
+						<v-radio
+							v-for="option in radioOptions"
+							:key="option.role"
+							:value="option.role"
+							class="align-start mb-2"
+							:data-testid="option.dataTestid"
+						>
+							<template #label>
+								<div class="d-flex flex-column mt-2">
+									{{ option.labelHeader }}
+									<span
+										v-for="labelDescription in option.labelDescriptions"
+										:key="labelDescription"
+										class="radio-label"
+									>
+										{{ t(labelDescription) }}
+									</span>
+								</div>
+							</template>
+						</v-radio>
+					</v-radio-group>
+
+					<WarningAlert
+						v-if="selectedRole === RoleName.Roomowner"
+						:class="isOwnershipHandoverMode ? 'ml-0' : 'ml-8'"
+					>
+						<span class="alert-text">
+							<template v-if="!isOwnershipHandoverMode">
+								<i18n-t
+									keypath="pages.rooms.members.handOverAlert.label"
+									scope="global"
 								>
-									{{ t(labelDescription) }}
-								</span>
-							</div>
-						</template>
-					</v-radio>
-				</v-radio-group>
+									<template #memberFullName>{{ memberFullName }}</template>
+								</i18n-t>
+								<p class="mb-0">
+									{{
+										t("pages.rooms.members.handOverAlert.label.subText", {
+											currentUserFullName,
+										})
+									}}
+								</p>
+							</template>
+							<template v-else>
+								<i18n-t
+									keypath="pages.rooms.members.handOverAlert.confirm.label"
+									scope="global"
+								>
+									<template #currentUserFullName>
+										{{ currentUserFullName }}
+									</template>
+									<template #memberFullName>{{ memberFullName }}</template>
+								</i18n-t>
+								<p class="mb-0">
+									{{
+										t(
+											"pages.rooms.members.handOverAlert.confirm.label.subText",
+											{
+												memberFullName,
+											}
+										)
+									}}
+								</p>
+							</template>
+						</span>
+					</WarningAlert>
+				</div>
+			</template>
 
-				<WarningAlert
-					v-if="selectedRole === RoleName.Roomowner"
-					:class="isOwnershipHandoverMode ? 'ml-0' : 'ml-8'"
-				>
-					<span class="alert-text">
-						<template v-if="!isOwnershipHandoverMode">
-							<i18n-t
-								keypath="pages.rooms.members.handOverAlert.label"
-								scope="global"
-							>
-								<template #memberFullName>{{ memberFullName }}</template>
-							</i18n-t>
-							<p class="mb-0">
-								{{
-									t("pages.rooms.members.handOverAlert.label.subText", {
-										currentUserFullName,
-									})
-								}}
-							</p>
-						</template>
-						<template v-else>
-							<i18n-t
-								keypath="pages.rooms.members.handOverAlert.confirm.label"
-								scope="global"
-							>
-								<template #currentUserFullName>
-									{{ currentUserFullName }}
-								</template>
-								<template #memberFullName>{{ memberFullName }}</template>
-							</i18n-t>
-							<p class="mb-0">
-								{{
-									t("pages.rooms.members.handOverAlert.confirm.label.subText", {
-										memberFullName,
-									})
-								}}
-							</p>
-						</template>
-					</span>
-				</WarningAlert>
-			</div>
-		</template>
-
-		<template #actions>
-			<v-spacer />
-			<div class="mr-4 mb-3">
-				<v-btn
-					class="ms-auto mr-2"
-					:text="t('common.actions.cancel')"
-					data-testid="change-role-cancel-btn"
-					@click="onCancel"
-				/>
-				<v-btn
-					v-if="!isOwnershipHandoverMode"
-					class="ms-auto"
-					color="primary"
-					variant="flat"
-					:text="t('common.actions.confirm')"
-					data-testid="change-role-confirm-btn"
-					@click="onConfirm"
-				/>
-				<v-btn
-					v-else
-					class="ms-auto"
-					color="primary"
-					variant="flat"
-					:text="t('pages.rooms.members.roleChange.handOverBtn.text')"
-					data-testid="change-owner-confirm-btn"
-					@click="onChangeOwner"
-				/>
-			</div>
-		</template>
-	</v-card>
+			<template #actions>
+				<v-spacer />
+				<div class="mr-4 mb-3">
+					<v-btn
+						class="ms-auto mr-2"
+						:text="t('common.actions.cancel')"
+						data-testid="change-role-cancel-btn"
+						@click="onCancel"
+					/>
+					<v-btn
+						v-if="!isOwnershipHandoverMode"
+						class="ms-auto"
+						color="primary"
+						variant="flat"
+						:text="t('common.actions.confirm')"
+						data-testid="change-role-confirm-btn"
+						@click="onConfirm"
+					/>
+					<v-btn
+						v-else
+						class="ms-auto"
+						color="primary"
+						variant="flat"
+						:text="t('pages.rooms.members.roleChange.handOverBtn.text')"
+						data-testid="change-owner-confirm-btn"
+						@click="onChangeOwner"
+					/>
+				</div>
+			</template>
+		</v-card>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum as RoleEnum,
 	RoleName,
 } from "@/serverApi/v3";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { useDisplay } from "vuetify";
 import {
 	RoomMember,
 	useRoomDetailsStore,
@@ -138,11 +151,18 @@ const props = defineProps({
 	},
 });
 
+const isOpen = defineModel({
+	type: Boolean,
+	required: true,
+});
+
 const emit = defineEmits<{
 	(e: "close"): void;
+	(e: "update:modelValue", value: boolean): void;
 }>();
 
 const { t } = useI18n();
+const { xs } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 
 const roomMembersStore = useRoomMembersStore();
@@ -150,14 +170,14 @@ const { selectedIds } = storeToRefs(roomMembersStore);
 const { updateMembersRole, changeRoomOwner } = roomMembersStore;
 
 const selectedRole = ref<string | null>(null);
-const memberToChangeRole = toRef(props, "members")?.value;
+const memberToChangeRole = toRef(props, "members");
 
 const isChangeOwnershipOptionVisible = computed(() => {
 	const currentUserId = authModule.getUser?.id;
 	return (
 		currentUserId &&
 		roomMembersStore.isRoomOwner(currentUserId) &&
-		memberToChangeRole.length === 1 &&
+		memberToChangeRole.value.length === 1 &&
 		isMemberStudent.value === false
 	);
 });
@@ -168,8 +188,28 @@ const dialogTitle = computed(() =>
 		: t("pages.rooms.members.changePermission")
 );
 
-if (memberToChangeRole.length > 1) {
-	const roleNamesInProp = memberToChangeRole.map(
+watch(
+	memberToChangeRole,
+	() => {
+		if (memberToChangeRole.value.length > 1) {
+			const roleNamesInProp = memberToChangeRole.value.map(
+				(member) => member.roomRoleName
+			);
+
+			if (
+				roleNamesInProp.every((roleName) => roleNamesInProp[0] === roleName)
+			) {
+				selectedRole.value = roleNamesInProp[0];
+			}
+		} else {
+			selectedRole.value = memberToChangeRole.value[0]?.roomRoleName;
+		}
+	},
+	{ immediate: true }
+);
+
+if (memberToChangeRole.value.length > 1) {
+	const roleNamesInProp = memberToChangeRole.value.map(
 		(member) => member.roomRoleName
 	);
 
@@ -177,7 +217,7 @@ if (memberToChangeRole.length > 1) {
 		selectedRole.value = roleNamesInProp[0];
 	}
 } else {
-	selectedRole.value = memberToChangeRole[0]?.roomRoleName;
+	selectedRole.value = memberToChangeRole.value[0]?.roomRoleName;
 }
 
 const currentUserFullName = computed(() => {
@@ -185,11 +225,11 @@ const currentUserFullName = computed(() => {
 });
 
 const memberFullName = computed(() => {
-	return `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`;
+	return `${memberToChangeRole.value[0]?.firstName} ${memberToChangeRole.value[0]?.lastName}`;
 });
 
 const memberSchoolRoles = computed(() => {
-	return memberToChangeRole[0]?.schoolRoleNames;
+	return memberToChangeRole.value[0]?.schoolRoleNames;
 });
 
 const isMemberStudent = computed(() => {
@@ -198,7 +238,7 @@ const isMemberStudent = computed(() => {
 
 const infoText = computed(() => {
 	const roomName = room.value?.name ?? "";
-	if (memberToChangeRole.length === 1) {
+	if (memberToChangeRole.value.length === 1) {
 		return t("pages.rooms.members.roleChange.subTitle", {
 			memberFullName: memberFullName.value,
 			roomName,
@@ -217,20 +257,26 @@ const onConfirm = async () => {
 	}
 	await updateMembersRole(
 		selectedRole.value as RoleEnum,
-		props.members.length === 1 ? memberToChangeRole[0].userId : undefined
+		props.members.length === 1 ? memberToChangeRole.value[0].userId : undefined
 	);
 	selectedIds.value = [];
 	emit("close");
 };
 
 const onChangeOwner = async () => {
-	await changeRoomOwner(memberToChangeRole[0].userId);
+	await changeRoomOwner(memberToChangeRole.value[0].userId);
 	selectedIds.value = [];
 	emit("close");
 };
 
 const onCancel = () => {
 	emit("close");
+	emit("update:modelValue", false);
+};
+
+const onClose = () => {
+	emit("close");
+	emit("update:modelValue", false);
 };
 
 const radioOptions = computed(() => {

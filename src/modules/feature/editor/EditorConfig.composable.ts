@@ -100,7 +100,7 @@ export const useEditorConfig = () => {
 		onDelete: () => void
 	) => {
 		if (data.domEvent.key === "Backspace" || data.domEvent.key === "Delete") {
-			if (isEditorEmpty(editor)) {
+			if (isEditorEmpty(editor as EditorWithSourceElement)) {
 				onDelete();
 			}
 		}
