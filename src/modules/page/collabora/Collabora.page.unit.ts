@@ -93,7 +93,7 @@ describe("Collabora.page", () => {
 		expect(wrapper.find("iframe").exists()).toBe(true);
 		expect(wrapper.find("iframe").attributes("src")).toEqual(
 			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl +
-				`&lang=${locale}`
+				`?lang=${locale}`
 		);
 	});
 
