@@ -110,8 +110,6 @@ const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
 };
 
 const onDialogClose = () => {
-	const { log } = console;
-	log("Dialog closed");
 	membersToChangeRole.value = [];
 	isChangeRoleDialogOpen.value = false;
 };

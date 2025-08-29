@@ -170,6 +170,9 @@ describe("MembersTable", () => {
 					}),
 				],
 			},
+			stubs: {
+				ChangeRole: true,
+			},
 		});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
@@ -560,26 +563,40 @@ describe("MembersTable", () => {
 
 	describe("change role dialog", () => {
 		it("should close dialog on @cancel", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({
+				customRoomAuthorization: { canAddRoomMembers: true },
+			});
 
-			const changeRoleDialog = wrapper.findComponent(VDialog);
-			await changeRoleDialog.setValue(true);
+			const dataTable = wrapper.getComponent(VDataTable);
+
+			const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
+			await menuBtn.trigger("click");
+
+			const changeRoleDialog = wrapper.findComponent(ChangeRole);
+			const changeRoleButton = wrapper.findComponent(
+				KebabMenuActionChangePermission
+			);
+			await changeRoleButton.trigger("click");
 			expect(changeRoleDialog.props("modelValue")).toBe(true);
 
-			const addMemberComponent = changeRoleDialog.findComponent(ChangeRole);
-			await addMemberComponent.vm.$emit("close");
-
+			await changeRoleDialog.vm.$emit("close");
 			expect(changeRoleDialog.props("modelValue")).toBe(false);
 		});
 
 		it("should close dialog on escape key", async () => {
 			const { wrapper } = setup();
+			const dataTable = wrapper.getComponent(VDataTable);
+			const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
+			await menuBtn.trigger("click");
 
-			const changeRoleDialog = wrapper.findComponent(VDialog);
-			await changeRoleDialog.setValue(true);
+			const changeRoleButton = wrapper.findComponent(
+				KebabMenuActionChangePermission
+			);
+			await changeRoleButton.trigger("click");
 
-			const dialogContent = changeRoleDialog.getComponent(ChangeRole);
-			await dialogContent.trigger("keydown.escape");
+			const changeRoleDialog = wrapper.findComponent(ChangeRole);
+			const card = wrapper.findComponent({ name: "VCard" });
+			await card.trigger("keydown.esc");
 
 			expect(changeRoleDialog.props("modelValue")).toBe(false);
 		});
