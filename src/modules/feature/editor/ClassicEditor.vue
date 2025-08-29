@@ -101,7 +101,8 @@ const handleReady = (editor: Editor) => {
 // TODO - remove important when CKEditor 5 is updated or adjusted to a version that supports custom styles with vite
 // https://github.com/ckeditor/ckeditor5/issues/13709
 // https://ckeditor.com/docs/ckeditor5/latest/getting-started/legacy/advanced/alternative-setups/integrating-from-source-vite.html
-.ck.ck-toolbar {
+.ck.ck-toolbar,
+.ck.ck-sticky-panel__content {
 	border: none !important;
 }
 </style>
