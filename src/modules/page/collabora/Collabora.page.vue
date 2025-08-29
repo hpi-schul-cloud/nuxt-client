@@ -1,6 +1,6 @@
 <template>
 	<iframe
-		:id="iframeId"
+		ref="iframeRef"
 		allow="clipboard-read *; clipboard-write *"
 		allowfullscreen
 		:src="url"
@@ -23,7 +23,7 @@ interface Props {
 
 const props = defineProps<Props>();
 const url = ref<string>("");
-const iframeId = "collabora-iframe";
+const iframeRef = ref<HTMLIFrameElement>();
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
 const { documentHasUnsavedChanges, setupPostMessageAPI } =
@@ -54,7 +54,9 @@ onMounted(async () => {
 
 	url.value = collaboraUrl.toString();
 
-	setupPostMessageAPI(iframeId, collaboraUrl.origin);
+	if (iframeRef.value) {
+		setupPostMessageAPI(iframeRef.value, collaboraUrl.origin);
+	}
 });
 
 window.addEventListener("beforeunload", (event) =>
