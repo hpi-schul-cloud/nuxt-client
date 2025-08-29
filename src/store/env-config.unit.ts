@@ -14,14 +14,15 @@ import { businessErrorFactory, envsFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-vitest";
 import { AxiosResponse } from "axios";
+import { MockInstance } from "vitest";
 import ApplicationErrorModule from "./application-error";
 import ContentModule from "./content";
 import EnvConfigModule from "./env-config";
 import FilePathsModule from "./filePaths";
-import { MockInstance } from "vitest";
 
 const mockFileEnvs: FilesStorageConfigResponse = {
 	MAX_FILE_SIZE: 10,
+	COLLABORA_MAX_FILE_SIZE_IN_BYTES: 20,
 };
 
 vi.useFakeTimers();
@@ -682,23 +683,20 @@ describe("env-config module", () => {
 		});
 
 		describe("getMaxFileSize", () => {
-			describe("when MAX_FILE_SIZE is -1", () => {
-				it("should return defaultFileSize", () => {
-					const envConfigModule = new EnvConfigModule({});
-					const MAX_FILE_SIZE = 1;
-					envConfigModule.envFile.MAX_FILE_SIZE = MAX_FILE_SIZE;
+			it("should return MAX_FILE_SIZE", () => {
+				const envConfigModule = new EnvConfigModule({});
+				envConfigModule.envFile.MAX_FILE_SIZE = 100;
 
-					expect(envConfigModule.getMaxFileSize).toBe(MAX_FILE_SIZE);
-				});
+				expect(envConfigModule.getMaxFileSize).toBe(100);
 			});
+		});
 
-			describe("when MAX_FILE_SIZE is not -1", () => {
-				it("should return MAX_FILE_SIZE", () => {
-					const envConfigModule = new EnvConfigModule({});
-					envConfigModule.envFile.MAX_FILE_SIZE = 100;
+		describe("getCollaboraMaxFileSizeInBytes", () => {
+			it("should return COLLABORA_MAX_FILE_SIZE", () => {
+				const envConfigModule = new EnvConfigModule({});
+				envConfigModule.envFile.COLLABORA_MAX_FILE_SIZE_IN_BYTES = 200;
 
-					expect(envConfigModule.getMaxFileSize).toBe(100);
-				});
+				expect(envConfigModule.getCollaboraMaxFileSizeInBytes).toBe(200);
 			});
 		});
 	});

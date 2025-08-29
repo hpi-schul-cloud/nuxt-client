@@ -10,6 +10,7 @@ import {
 	convertFileSize,
 	downloadFile,
 	downloadFilesAsArchive,
+	formatFileSize,
 	formatSecondsToHourMinSec,
 	getFileExtension,
 	isAudioMimeType,
@@ -22,6 +23,14 @@ import {
 	isVideoMimeType,
 	removeFileExtension,
 } from "./fileHelper";
+
+vi.mock("vue-i18n", () => {
+	return {
+		useI18n: vi.fn().mockReturnValue({
+			n: vi.fn().mockImplementation((key: string) => key),
+		}),
+	};
+});
 
 describe("@/utils/fileHelper", () => {
 	describe("downloadFile", () => {
@@ -37,7 +46,7 @@ describe("@/utils/fileHelper", () => {
 			};
 			const createElementSpy = vi
 				.spyOn(document, "createElement")
-				.mockImplementation(() => link);
+				.mockImplementationOnce(() => link);
 			document.body.appendChild = vi.fn();
 			document.body.removeChild = vi.fn();
 
@@ -59,40 +68,39 @@ describe("@/utils/fileHelper", () => {
 		});
 	});
 
-	describe("downloadFiles", () => {
+	describe("downloadFilesAsArchive", () => {
 		const setup = () => {
-			const inputMocks = [
-				createMock<HTMLInputElement>(),
-				createMock<HTMLInputElement>(),
-			];
+			const inputMockArchiveName = createMock<HTMLInputElement>();
+			const inputMockFileRecordIds = createMock<HTMLInputElement>();
 			const formMock = createMock<HTMLFormElement>();
 
-			let createElementCallCount = 0;
-			vi.spyOn(document, "createElement").mockImplementation((tag: string) => {
-				if (tag === "form") return formMock;
-				if (tag === "input") return inputMocks[createElementCallCount++];
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				return {} as any;
+			vi.spyOn(document, "createElement").mockImplementationOnce(() => {
+				return formMock;
+			});
+
+			vi.spyOn(document, "createElement").mockImplementationOnce(() => {
+				return inputMockArchiveName;
+			});
+
+			vi.spyOn(document, "createElement").mockImplementationOnce(() => {
+				return inputMockFileRecordIds;
 			});
 
 			const appendChildSpy = vi
 				.spyOn(document.body, "appendChild")
-				.mockImplementation(vi.fn());
+				.mockImplementationOnce(vi.fn());
 			const removeChildSpy = vi
 				.spyOn(document.body, "removeChild")
-				.mockImplementation(vi.fn());
+				.mockImplementationOnce(vi.fn());
 
 			return {
 				formMock,
-				inputMocks,
 				appendChildSpy,
 				removeChildSpy,
+				inputMockArchiveName,
+				inputMockFileRecordIds,
 			};
 		};
-
-		afterEach(() => {
-			vi.restoreAllMocks();
-		});
 
 		it("should create a form", () => {
 			const { formMock } = setup();
@@ -111,7 +119,7 @@ describe("@/utils/fileHelper", () => {
 		});
 
 		it("should create inputs with correct attributes", () => {
-			const { inputMocks } = setup();
+			const { inputMockArchiveName, inputMockFileRecordIds } = setup();
 
 			const params: ArchiveFileParams = {
 				archiveName: "test-archive",
@@ -121,15 +129,16 @@ describe("@/utils/fileHelper", () => {
 			downloadFilesAsArchive(params);
 
 			// Inputs
-			expect(inputMocks[0].type).toBe("hidden");
-			expect(inputMocks[1].type).toBe("hidden");
-			const names = [inputMocks[0].name, inputMocks[1].name];
-			expect(names).toContain("archiveName");
-			expect(names).toContain("fileRecordIds");
-			const archiveInput = inputMocks.find((i) => i.name === "archiveName");
-			const idsInput = inputMocks.find((i) => i.name === "fileRecordIds");
-			expect(archiveInput?.value).toBe(params.archiveName);
-			expect(idsInput?.value).toBe(JSON.stringify(params.fileRecordIds));
+			expect(inputMockArchiveName.type).toBe("hidden");
+			expect(inputMockFileRecordIds.type).toBe("hidden");
+
+			expect(inputMockArchiveName.name).toBe("archiveName");
+			expect(inputMockFileRecordIds.name).toBe("fileRecordIds");
+
+			expect(inputMockArchiveName.value).toBe(params.archiveName);
+			expect(inputMockFileRecordIds.value).toBe(
+				JSON.stringify(params.fileRecordIds)
+			);
 		});
 
 		it("should calls formMock.appendChild", () => {
@@ -709,6 +718,66 @@ describe("@/utils/fileHelper", () => {
 				const result = removeFileExtension("");
 				expect(result).toEqual("");
 			});
+		});
+	});
+
+	describe("formatFileSize", () => {
+		const setup = () => {
+			const TestComponent = {
+				template: `<div>{{ formatted }}</div>`,
+				props: {
+					size: {
+						type: Number,
+						required: true,
+					},
+				},
+				computed: {
+					formatted(this: { size: number }) {
+						return formatFileSize(this.size);
+					},
+				},
+			};
+			return { TestComponent };
+		};
+
+		it("formats bytes correctly", () => {
+			const { TestComponent } = setup();
+
+			const wrapper = mount(TestComponent, { props: { size: 512 } });
+
+			expect(wrapper.text()).toBe("512 B");
+		});
+
+		it("formats kilobytes correctly", () => {
+			const { TestComponent } = setup();
+
+			const wrapper = mount(TestComponent, { props: { size: 2048 } });
+
+			expect(wrapper.text()).toBe("2 KB");
+		});
+
+		it("formats megabytes correctly", () => {
+			const { TestComponent } = setup();
+
+			const wrapper = mount(TestComponent, { props: { size: 1048576 } });
+
+			expect(wrapper.text()).toBe("1 MB");
+		});
+
+		it("formats gigabytes correctly", () => {
+			const { TestComponent } = setup();
+
+			const wrapper = mount(TestComponent, { props: { size: 1073741824 } });
+
+			expect(wrapper.text()).toBe("1 GB");
+		});
+
+		it("formats with decimals for non-integer sizes", () => {
+			const { TestComponent } = setup();
+
+			const wrapper = mount(TestComponent, { props: { size: 1536 } });
+
+			expect(wrapper.text()).toBe("1.5 KB");
 		});
 	});
 });

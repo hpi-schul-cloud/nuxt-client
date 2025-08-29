@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { FileRecordParent } from "@/types/file/File";
-import { convertFileSize } from "@/utils/fileHelper";
+import { formatFileSize } from "@/utils/fileHelper";
 import { useFileStorageApi } from "@data-file";
 import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
@@ -28,14 +28,12 @@ const fileStatistics = computed(() => {
 	return statistics;
 });
 
-const { n, t } = useI18n();
+const { t } = useI18n();
 
 const humanReadableFileSize = computed(() => {
-	const { convertedSize, unit } = convertFileSize(
+	const localizedString = formatFileSize(
 		fileStatistics.value?.totalSizeInBytes || 0
 	);
-	const localizedFileSize = n(convertedSize, "fileSize");
-	const localizedString = localizedFileSize + " " + unit;
 
 	return localizedString;
 });

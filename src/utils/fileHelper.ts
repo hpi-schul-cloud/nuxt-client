@@ -5,6 +5,7 @@ import {
 	FileRecordVirusScanStatus,
 	PreviewOutputMimeTypes,
 } from "@/types/file/File";
+import { useI18n } from "vue-i18n";
 
 export const toBase64 = (file: File) =>
 	new Promise((resolve, reject) => {
@@ -73,6 +74,14 @@ export function convertFileSize(fileSize: number): {
 	}
 
 	return { convertedSize, unit };
+}
+
+export function formatFileSize(sizeInBytes: number) {
+	const { n } = useI18n();
+	const { convertedSize, unit } = convertFileSize(sizeInBytes);
+	const localizedFileSize = n(convertedSize, "fileSize");
+
+	return `${localizedFileSize} ${unit}`;
 }
 
 export function getFileExtension(fileName: string): string {
