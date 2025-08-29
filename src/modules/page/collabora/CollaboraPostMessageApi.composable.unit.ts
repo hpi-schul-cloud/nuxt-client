@@ -24,51 +24,6 @@ describe("useCollaboraMessage", () => {
 		});
 	};
 
-	it("should set documentHasUnsavedChanges to true when receiving a valid modified message", () => {
-		const { documentHasUnsavedChanges } = setupMountComposable();
-
-		const validMsg = JSON.stringify({
-			MessageId: "Doc_ModifiedStatus",
-			Values: { Modified: true },
-		});
-		window.dispatchEvent(new MessageEvent("message", { data: validMsg }));
-
-		expect(documentHasUnsavedChanges.value).toBe(true);
-	});
-
-	it("should set documentHasUnsavedChanges to false when receiving a valid modified message with Modified false", () => {
-		const { documentHasUnsavedChanges } = setupMountComposable();
-
-		const validMsgWithTrue = JSON.stringify({
-			MessageId: "Doc_ModifiedStatus",
-			Values: { Modified: true },
-		});
-		window.dispatchEvent(
-			new MessageEvent("message", { data: validMsgWithTrue })
-		);
-
-		const validMsgWithFalse = JSON.stringify({
-			MessageId: "Doc_ModifiedStatus",
-			Values: { Modified: false },
-		});
-		window.dispatchEvent(
-			new MessageEvent("message", { data: validMsgWithFalse })
-		);
-
-		expect(documentHasUnsavedChanges.value).toBe(false);
-	});
-
-	it("should not change documentHasUnsavedChanges for unrelated messageId", () => {
-		const { documentHasUnsavedChanges } = setupMountComposable();
-		const unrelatedMsg = JSON.stringify({
-			MessageId: "Other_Message",
-			Values: {},
-		});
-		window.dispatchEvent(new MessageEvent("message", { data: unrelatedMsg }));
-
-		expect(documentHasUnsavedChanges.value).toBe(false);
-	});
-
 	it("should show error if message is invalid JSON", () => {
 		setupMountComposable();
 		const invalidMsg = "not a json";
@@ -125,30 +80,6 @@ describe("useCollaboraMessage", () => {
 			status: "error",
 			timeout: 5000,
 		});
-	});
-
-	it("should show error if Values is not valid for modifiedStatusValueSchema", () => {
-		setupMountComposable();
-
-		const invalidValuesMsg = JSON.stringify({
-			MessageId: "Doc_ModifiedStatus",
-			Values: { Modified: "notABool" },
-		});
-		window.dispatchEvent(
-			new MessageEvent("message", { data: invalidValuesMsg })
-		);
-
-		expect(notifierModuleMock.show).toHaveBeenCalledWith({
-			text: "pages.collabora.messageError",
-			status: "error",
-			timeout: 5000,
-		});
-	});
-
-	it("should export documentHasUnsavedChanges as a ref", () => {
-		const { documentHasUnsavedChanges } = setupMountComposable();
-
-		expect(documentHasUnsavedChanges).toHaveProperty("value");
 	});
 
 	describe("handleLoadingStatusUpdate", () => {
