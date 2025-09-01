@@ -52,7 +52,7 @@ import {
 	isPdfMimeType,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
-import { injectStrict } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, PropType, ref } from "vue";
@@ -80,6 +80,8 @@ const emit = defineEmits([
 	"update:caption",
 	"add:alert",
 ]);
+
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const onFetchFile = () => {
 	emit("fetch:file");
@@ -136,10 +138,14 @@ const hasRowStyle = computed(
 	() => isSmallOrLargerListBoard.value && hasSmallPreview.value
 );
 
+const isCollaboraEnabled = computed(() => {
+	return envConfigModule.env.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED;
+});
+
 const hasSmallPreview = computed(() => {
 	return (
 		(hasPdfMimeType.value && props.fileProperties.previewUrl) ||
-		hasCollaboraType.value
+		(hasCollaboraType.value && isCollaboraEnabled.value)
 	);
 });
 
@@ -148,7 +154,7 @@ const isMenuShownOnFileDisplay = computed(() => {
 		!!props.fileProperties.previewUrl ||
 		hasVideoMimeType.value ||
 		hasAudioMimeType.value ||
-		hasCollaboraType.value;
+		(hasCollaboraType.value && isCollaboraEnabled.value);
 
 	return isFileDisplayRendered && !hasRowStyle.value;
 });
