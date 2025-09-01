@@ -26,8 +26,7 @@ const url = ref<string>("");
 const iframeRef = ref<HTMLIFrameElement>();
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
-const { documentHasUnsavedChanges, setupPostMessageAPI } =
-	useCollaboraPostMessageApi();
+const { setupPostMessageAPI } = useCollaboraPostMessageApi();
 
 const userName = computed(() => {
 	const firstName = authModule.getUser?.firstName;
@@ -58,16 +57,4 @@ onMounted(async () => {
 		setupPostMessageAPI(iframeRef.value, collaboraUrl.origin);
 	}
 });
-
-window.addEventListener("beforeunload", (event) =>
-	openUnloadConfirmation(event)
-);
-const openUnloadConfirmation = (event: BeforeUnloadEvent) => {
-	if (documentHasUnsavedChanges.value) {
-		// Opens confirmation dialog in firefox
-		event.preventDefault();
-		// Opens confirmation dialog in chrome
-		event.returnValue = "";
-	}
-};
 </script>
