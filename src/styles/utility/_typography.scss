@@ -59,6 +59,10 @@ h6 {
 	margin: 32px 0 12px 0;
 }
 
+p {
+	margin-bottom: 16px;
+}
+
 /* text size */
 .text-xs {
 	font-size: var(--text-xs);
@@ -74,24 +78,4 @@ h6 {
 
 .text-lg {
 	font-size: var(--text-lg);
-}
-
-p {
-	margin-bottom: 16px;
-}
-
-/* utility classes */
-
-@media #{map.get($display-breakpoints, 'sm')} {
-	:root {
-		--text-base-size: calc(1rem * var(--text-device-scale-ratio));
-	}
-}
-
-@media #{map.get($display-breakpoints, 'md-and-up')} {
-	:root {
-		--text-base-size: calc(
-			1rem * var(--text-device-scale-ratio) * var(--text-device-scale-ratio)
-		);
-	}
 }
