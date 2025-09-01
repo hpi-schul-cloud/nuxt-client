@@ -29,7 +29,7 @@ const col = computed(() => {
 	width: 100%;
 
 	@media #{map.get($display-breakpoints, 'sm')} {
-		grid-gap: calc(9 * var(--border-width-bold)); /* 18px */
+		grid-gap: 18px;
 	}
 
 	@media #{map.get($display-breakpoints, 'md-and-up')} {

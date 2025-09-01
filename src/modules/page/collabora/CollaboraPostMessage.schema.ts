@@ -13,3 +13,9 @@ export const modifiedStatusValueSchema = z
 		Modified: z.boolean(),
 	})
 	.required();
+
+export const appLoadingStatusValueSchema = z
+	.object({
+		Status: z.string(),
+	})
+	.required();

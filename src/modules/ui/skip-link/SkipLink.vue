@@ -38,7 +38,7 @@ const skipToMainContent = () => {
 	color: rgba(var(--v-theme-primary));
 	background-color: white;
 	border: 1px solid #555;
-	border-radius: var(--radius-xs);
+	border-radius: 2px;
 	transform: translate(-50%, 0);
 	z-index: 1005;
 }

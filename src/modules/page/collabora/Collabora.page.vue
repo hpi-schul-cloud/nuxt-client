@@ -1,5 +1,6 @@
 <template>
 	<iframe
+		ref="iframeRef"
 		allow="clipboard-read *; clipboard-write *"
 		allowfullscreen
 		:src="url"
@@ -22,9 +23,11 @@ interface Props {
 
 const props = defineProps<Props>();
 const url = ref<string>("");
+const iframeRef = ref<HTMLIFrameElement>();
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
-const { documentHasUnsavedChanges } = useCollaboraPostMessageApi();
+const { documentHasUnsavedChanges, setupPostMessageAPI } =
+	useCollaboraPostMessageApi();
 
 const userName = computed(() => {
 	const firstName = authModule.getUser?.firstName;
@@ -38,7 +41,7 @@ const userName = computed(() => {
 });
 
 onMounted(async () => {
-	const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(
+	const responseCollaboraUrl = await getAuthorizedCollaboraDocumentUrl(
 		props.fileRecordId,
 		props.editorMode,
 		userName.value
@@ -46,7 +49,14 @@ onMounted(async () => {
 
 	const locale = authModule.getLocale;
 
-	url.value = collaboraUrl + `&lang=${locale}`;
+	const collaboraUrl = new URL(responseCollaboraUrl);
+	collaboraUrl.searchParams.set("lang", locale);
+
+	url.value = collaboraUrl.toString();
+
+	if (iframeRef.value) {
+		setupPostMessageAPI(iframeRef.value, collaboraUrl.origin);
+	}
 });
 
 window.addEventListener("beforeunload", (event) =>

@@ -34,7 +34,7 @@ withDefaults(defineProps<Props>(), {
 	width: 1em;
 	height: 1em;
 	vertical-align: baseline;
-	font-size: var(--sidebar-item-height);
+	font-size: 60px;
 	margin-bottom: 16px;
 }
 
