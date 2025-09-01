@@ -79,7 +79,7 @@
 						</div>
 					</div>
 					<div class="element-cards">
-						<h4 class="h4">
+						<h4>
 							{{ $t("pages.content._id.collection.selectElements") }}
 						</h4>
 						<transition name="fade">

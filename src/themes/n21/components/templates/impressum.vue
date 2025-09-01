@@ -24,7 +24,7 @@
 				}}</base-link
 				>.
 			</p>
-			<h2 class="h4">Verantwortliche</h2>
+			<h2 class="text-h4">Verantwortliche</h2>
 			<p>Vertretungsberechtigte Verantwortliche gemäß § 5 DDG und § 18 MStV:</p>
 			<p>
 				Direktorin Dr. Elke Richlick<br />
@@ -45,7 +45,7 @@
 				><br />
 				Tel.: 05121 1695-0
 			</p>
-			<h2 class="h4">Rechtliche Hinweise</h2>
+			<h2 class="text-h4">Rechtliche Hinweise</h2>
 			<p>
 				Das Landesprojekt Niedersächsische Bildungscloud wird durchgeführt durch
 				das Niedersächsische Landesinstitut für schulische Qualitätsentwicklung

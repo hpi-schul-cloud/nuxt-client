@@ -1,8 +1,8 @@
 <template>
 	<div class="impressum-container">
 		<div class="impressum-max-width">
-			<h1>Impressum</h1>
-			<h2 class="h4">
+			<h1 class="text-h2">Impressum</h1>
+			<h2 class="text-h4">
 				I. Allgemeine Anbieterinformationen nach § 18 Absatz 1 MStV
 			</h2>
 			<p>
@@ -54,8 +54,8 @@
 				Mitteilungen ohne Signatur und/oder Verschlüsselung.
 			</p>
 
-			<h2 class="h4">II. Haftungsausschluss</h2>
-			<h3 class="h6">1. Inhalt des Onlineangebotes</h3>
+			<h2 class="text-h4">II. Haftungsausschluss</h2>
+			<h3 class="text-h6">1. Inhalt des Onlineangebotes</h3>
 			<p>
 				Der Anbieter ist bemüht, auf dieser Website richtige und vollständige
 				Informationen zur Verfügung zu stellen. Der Anbieter übernimmt keinerlei
@@ -79,7 +79,7 @@
 				einzustellen.
 			</p>
 
-			<h3 class="h6">2. Verweise und Links</h3>
+			<h3 class="text-h6">2. Verweise und Links</h3>
 			<p>
 				Bei direkten oder indirekten Verweisen auf fremde Internetseiten
 				("Links"), die außerhalb des Verantwortungsbereiches des Anbieters

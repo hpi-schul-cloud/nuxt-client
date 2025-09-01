@@ -64,6 +64,7 @@ const onKeyUp = () => ensurePoliteNotifications();
 
 const isFirstElement = computed(() => props.elementIndex === 0);
 </script>
+
 <style lang="scss" scoped>
 :deep(.ck-content) {
 	overflow: hidden; // prevent margin collapse
