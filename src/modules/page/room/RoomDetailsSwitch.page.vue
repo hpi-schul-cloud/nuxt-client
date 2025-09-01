@@ -19,11 +19,7 @@
 <script setup lang="ts">
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { RoomDetailsPage, RoomLockedPage } from "@page-room";
-import {
-	RoomVariant,
-	useRoomAuthorization,
-	useRoomDetailsStore,
-} from "@data-room";
+import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { computed, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -33,17 +29,12 @@ const route = useRoute();
 const roomDetailsStore = useRoomDetailsStore();
 const { isLoading, roomVariant, room, lockedRoomName } =
 	storeToRefs(roomDetailsStore);
-const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
-const { canCreateRoom: canAccessRoom } = useRoomAuthorization();
+const { fetchRoom, resetState } = roomDetailsStore;
 
 watch(
 	() => route.params.id,
 	async () => {
-		if (canAccessRoom.value) {
-			await fetchRoom(route.params.id as string);
-		} else {
-			deactivateRoom();
-		}
+		await fetchRoom(route.params.id as string);
 	},
 	{ immediate: true }
 );
