@@ -139,7 +139,7 @@ const hasRowStyle = computed(
 );
 
 const isCollaboraEnabled = computed(() => {
-	return envConfigModule.env.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED;
+	return envConfigModule.getEnv.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED;
 });
 
 const hasSmallPreview = computed(() => {
