@@ -5,7 +5,10 @@ import { mountComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { describe, expect, it } from "vitest";
-import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
+import {
+	CollaboraEvents,
+	useCollaboraPostMessageApi,
+} from "./CollaboraPostMessageApi.composable";
 
 describe("useCollaboraMessage", () => {
 	const notifierModuleMock = createModuleMocks(NotifierModule);
@@ -20,51 +23,6 @@ describe("useCollaboraMessage", () => {
 			},
 		});
 	};
-
-	it("should set documentHasUnsavedChanges to true when receiving a valid modified message", () => {
-		const { documentHasUnsavedChanges } = setupMountComposable();
-
-		const validMsg = JSON.stringify({
-			MessageId: "Doc_ModifiedStatus",
-			Values: { Modified: true },
-		});
-		window.dispatchEvent(new MessageEvent("message", { data: validMsg }));
-
-		expect(documentHasUnsavedChanges.value).toBe(true);
-	});
-
-	it("should set documentHasUnsavedChanges to false when receiving a valid modified message with Modified false", () => {
-		const { documentHasUnsavedChanges } = setupMountComposable();
-
-		const validMsgWithTrue = JSON.stringify({
-			MessageId: "Doc_ModifiedStatus",
-			Values: { Modified: true },
-		});
-		window.dispatchEvent(
-			new MessageEvent("message", { data: validMsgWithTrue })
-		);
-
-		const validMsgWithFalse = JSON.stringify({
-			MessageId: "Doc_ModifiedStatus",
-			Values: { Modified: false },
-		});
-		window.dispatchEvent(
-			new MessageEvent("message", { data: validMsgWithFalse })
-		);
-
-		expect(documentHasUnsavedChanges.value).toBe(false);
-	});
-
-	it("should not change documentHasUnsavedChanges for unrelated messageId", () => {
-		const { documentHasUnsavedChanges } = setupMountComposable();
-		const unrelatedMsg = JSON.stringify({
-			MessageId: "Other_Message",
-			Values: {},
-		});
-		window.dispatchEvent(new MessageEvent("message", { data: unrelatedMsg }));
-
-		expect(documentHasUnsavedChanges.value).toBe(false);
-	});
 
 	it("should show error if message is invalid JSON", () => {
 		setupMountComposable();
@@ -124,27 +82,93 @@ describe("useCollaboraMessage", () => {
 		});
 	});
 
-	it("should show error if Values is not valid for modifiedStatusValueSchema", () => {
-		setupMountComposable();
+	describe("handleLoadingStatusUpdate", () => {
+		const notifierModuleMock = createModuleMocks(NotifierModule);
 
-		const invalidValuesMsg = JSON.stringify({
-			MessageId: "Doc_ModifiedStatus",
-			Values: { Modified: "notABool" },
+		const setupMountComposable = () => {
+			const targetOrigin = "https://collabora.example.com";
+
+			const iframe = document.createElement("iframe");
+			document.body.appendChild(iframe);
+
+			const { setupPostMessageAPI } = mountComposable(
+				() => useCollaboraPostMessageApi(),
+				{
+					global: {
+						plugins: [createTestingI18n()],
+						provide: {
+							[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
+						},
+					},
+				}
+			);
+
+			setupPostMessageAPI(iframe, targetOrigin);
+
+			return { setupPostMessageAPI, iframe, targetOrigin };
+		};
+
+		it("should handle App_LoadingStatus:Initialized correctly", () => {
+			const { iframe, targetOrigin } = setupMountComposable();
+
+			const validMsg = JSON.stringify({
+				MessageId: CollaboraEvents.APP_LOADING_STATUS,
+				Values: { Status: "Initialized" },
+			});
+
+			const expectedMsg = {
+				MessageId: CollaboraEvents.HOST_POSTMESSAGE_READY,
+				SendTime: expect.any(Number),
+				Values: undefined,
+			};
+
+			const spy = vi.spyOn(iframe.contentWindow as Window, "postMessage");
+			window.dispatchEvent(new MessageEvent("message", { data: validMsg }));
+
+			expect(spy).toHaveBeenCalledWith(expectedMsg, targetOrigin);
+
+			document.body.removeChild(iframe);
 		});
-		window.dispatchEvent(
-			new MessageEvent("message", { data: invalidValuesMsg })
-		);
 
-		expect(notifierModuleMock.show).toHaveBeenCalledWith({
-			text: "pages.collabora.messageError",
-			status: "error",
-			timeout: 5000,
+		it("should handle App_LoadingStatus:Document_Loaded correctly", () => {
+			const { iframe, targetOrigin } = setupMountComposable();
+
+			const validMsg = JSON.stringify({
+				MessageId: CollaboraEvents.APP_LOADING_STATUS,
+				Values: { Status: "Document_Loaded" },
+			});
+
+			const expectedMsg = {
+				MessageId: CollaboraEvents.REMOVE_BUTTON,
+				SendTime: expect.any(Number),
+				Values: undefined,
+			};
+
+			const spy = vi.spyOn(iframe.contentWindow as Window, "postMessage");
+			window.dispatchEvent(new MessageEvent("message", { data: validMsg }));
+
+			expect(spy).toHaveBeenNthCalledWith(
+				1,
+				{ ...expectedMsg, Values: { id: "feedback-button" } },
+				targetOrigin
+			);
+			expect(spy).toHaveBeenNthCalledWith(
+				2,
+				{ ...expectedMsg, Values: { id: "about-button" } },
+				targetOrigin
+			);
+			expect(spy).toHaveBeenNthCalledWith(
+				3,
+				{ ...expectedMsg, Values: { id: "latestupdates" } },
+				targetOrigin
+			);
+			expect(spy).toHaveBeenNthCalledWith(
+				4,
+				{ ...expectedMsg, Values: { id: "signature-button" } },
+				targetOrigin
+			);
+
+			document.body.removeChild(iframe);
 		});
-	});
-
-	it("should export documentHasUnsavedChanges as a ref", () => {
-		const { documentHasUnsavedChanges } = setupMountComposable();
-
-		expect(documentHasUnsavedChanges).toHaveProperty("value");
 	});
 });

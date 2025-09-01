@@ -133,7 +133,7 @@ export default {
 .base-dialog .icon {
 	margin-bottom: 24px;
 	.v-icon.v-icon {
-		font-size: var(--sidebar-item-height);
+		font-size: 60px;
 
 		svg {
 			width: 1em;

@@ -1,18 +1,32 @@
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import {
+	appLoadingStatusValueSchema,
 	CollaboraMessage,
 	collaboraMessageSchema,
-	modifiedStatusValueSchema,
 } from "./CollaboraPostMessage.schema";
 
+export enum CollaboraEvents {
+	APP_LOADING_STATUS = "App_LoadingStatus",
+	HOST_POSTMESSAGE_READY = "Host_PostmessageReady",
+	REMOVE_BUTTON = "Remove_Button",
+}
+
 export const useCollaboraPostMessageApi = () => {
-	const documentHasUnsavedChanges = ref<boolean>(false);
 	const { t } = useI18n();
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+	let collaboraWindow: Window | null = null;
+	let targetOrigin = "";
 
 	window.addEventListener("message", (event) => listenForMessages(event.data));
+
+	const setupPostMessageAPI = (
+		iframeRef: HTMLIFrameElement,
+		iframeOrigin: string
+	) => {
+		targetOrigin = iframeOrigin;
+		collaboraWindow = iframeRef?.contentWindow;
+	};
 
 	const listenForMessages = (data: string) => {
 		const json = parseJson(data);
@@ -20,7 +34,7 @@ export const useCollaboraPostMessageApi = () => {
 		try {
 			const message = collaboraMessageSchema.parse(json);
 
-			handleModifiedStatusMessage(message);
+			handleCollaboraMessages(message);
 		} catch {
 			showMessageError();
 		}
@@ -33,12 +47,51 @@ export const useCollaboraPostMessageApi = () => {
 			timeout: 5000,
 		});
 
-	const handleModifiedStatusMessage = (message: CollaboraMessage) => {
-		if (hasModifiedStatusMessageId(message.MessageId)) {
-			const value = modifiedStatusValueSchema.parse(message.Values);
-
-			documentHasUnsavedChanges.value = value.Modified;
+	const handleCollaboraMessages = (message: CollaboraMessage) => {
+		if (hasLoadingStatusMessageId(message.MessageId)) {
+			handleLoadingStatusUpdate(message);
 		}
+	};
+
+	const handleLoadingStatusUpdate = (message: CollaboraMessage) => {
+		const { Status } = appLoadingStatusValueSchema.parse(message.Values);
+
+		if (Status === "Initialized") {
+			postMessage(CollaboraEvents.HOST_POSTMESSAGE_READY);
+		}
+
+		if (Status === "Document_Loaded") {
+			sendRemoveButtonsMessage();
+		}
+	};
+
+	const postMessage = (messageId: string, values?: unknown) => {
+		if (!collaboraWindow || !targetOrigin) {
+			throw new Error(
+				"Collabora iframe not setup properly, please call setupPostMessageAPI first."
+			);
+		}
+
+		collaboraWindow.postMessage(
+			{
+				MessageId: messageId,
+				SendTime: Date.now(),
+				Values: values,
+			},
+			targetOrigin
+		);
+	};
+
+	const sendRemoveButtonsMessage = () => {
+		const buttonIds = [
+			"feedback-button",
+			"about-button",
+			"latestupdates",
+			"signature-button",
+		];
+		buttonIds.forEach((buttonId) => {
+			postMessage(CollaboraEvents.REMOVE_BUTTON, { id: buttonId });
+		});
 	};
 
 	const parseJson = (data: string): unknown => {
@@ -53,13 +106,14 @@ export const useCollaboraPostMessageApi = () => {
 		}
 	};
 
-	const hasModifiedStatusMessageId = (messageId: string): boolean => {
-		const isModifiedStatusMessage = messageId === "Doc_ModifiedStatus";
+	const hasLoadingStatusMessageId = (messageId: string): boolean => {
+		const isLoadingStatusMessage =
+			messageId === CollaboraEvents.APP_LOADING_STATUS;
 
-		return isModifiedStatusMessage;
+		return isLoadingStatusMessage;
 	};
 
 	return {
-		documentHasUnsavedChanges,
+		setupPostMessageAPI,
 	};
 };

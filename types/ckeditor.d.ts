@@ -5,9 +5,6 @@ declare module "@hpi-schul-cloud/ckeditor" {
 		create(...args: unknown[]): Promise<unknown>;
 	}
 
-	export class BalloonEditor extends Editor implements CKEditorConstructor {
-		static create(...args: unknown[]): Promise<BalloonEditor>;
-	}
 	export class ClassicEditor extends Editor implements CKEditorConstructor {
 		static create(...args: unknown[]): Promise<ClassicEditor>;
 	}

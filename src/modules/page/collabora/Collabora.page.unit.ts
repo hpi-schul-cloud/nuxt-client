@@ -93,107 +93,11 @@ describe("Collabora.page", () => {
 		expect(wrapper.find("iframe").exists()).toBe(true);
 		expect(wrapper.find("iframe").attributes("src")).toEqual(
 			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl +
-				`&lang=${locale}`
+				`?lang=${locale}`
 		);
 	});
 
 	describe("when iframe emits message", () => {
-		describe("when message is modified status message", () => {
-			describe("when modified is true", () => {
-				it("should show notification on page unload", async () => {
-					setup();
-
-					const modifiedMessage = `{
-					 	"MessageId": "Doc_ModifiedStatus",
-    				 	"SendTime": 1755591627240,
-                    	"Values": { "Modified": true }
-					}`;
-					const messageEvent = new MessageEvent("message", {
-						data: modifiedMessage,
-					});
-					window.dispatchEvent(messageEvent);
-
-					const beforeUnloadEvent = new Event("beforeunload");
-					const preventDefaultSpy = vi.fn();
-
-					beforeUnloadEvent.preventDefault = preventDefaultSpy;
-					window.dispatchEvent(beforeUnloadEvent);
-
-					expect(preventDefaultSpy).toHaveBeenCalled();
-				});
-			});
-
-			describe("when modified is false", () => {
-				it("should show notification on page unload", async () => {
-					setup();
-
-					const modifiedMessage = `{
-						"MessageId": "Doc_ModifiedStatus",
-    					"SendTime": 1755591627240,
-                    	"Values": { "Modified": false }
-					}`;
-					const messageEvent = new MessageEvent("message", {
-						data: modifiedMessage,
-					});
-					window.dispatchEvent(messageEvent);
-
-					const beforeUnloadEvent = new Event("beforeunload");
-					const preventDefaultSpy = vi.fn();
-
-					beforeUnloadEvent.preventDefault = preventDefaultSpy;
-					window.dispatchEvent(beforeUnloadEvent);
-
-					expect(preventDefaultSpy).not.toHaveBeenCalled();
-				});
-			});
-
-			describe("when modified is not a boolean", () => {
-				it("should not show notification on page unload", async () => {
-					const { notifierModule } = setup();
-
-					const modifiedMessage = `{
-					 	"MessageId": "Doc_ModifiedStatus",
-    				 	"SendTime": 1755591627240,
-                    	"Values": { "Modified": "true_string" }
-					}`;
-					const messageEvent = new MessageEvent("message", {
-						data: modifiedMessage,
-					});
-					window.dispatchEvent(messageEvent);
-
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						text: "pages.collabora.messageError",
-						status: "error",
-						timeout: 5000,
-					});
-				});
-			});
-		});
-
-		describe("when message is not a modified status message", () => {
-			it("should not show notification on page unload", async () => {
-				setup();
-
-				const message = `{
-						"MessageId": "Some_Other_Message",
-						"SendTime": 1755591627240,
-						"Values": { }
-					}`;
-				const messageEvent = new MessageEvent("message", {
-					data: message,
-				});
-				window.dispatchEvent(messageEvent);
-
-				const beforeUnloadEvent = new Event("beforeunload");
-				const preventDefaultSpy = vi.fn();
-
-				beforeUnloadEvent.preventDefault = preventDefaultSpy;
-				window.dispatchEvent(beforeUnloadEvent);
-
-				expect(preventDefaultSpy).not.toHaveBeenCalled();
-			});
-		});
-
 		describe("when message is not a collabora message", () => {
 			describe("when MessageId is missing", () => {
 				it("should show notification", async () => {

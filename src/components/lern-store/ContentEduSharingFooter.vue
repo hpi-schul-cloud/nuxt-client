@@ -34,7 +34,7 @@
 	&__logo {
 		width: 100px;
 		height: 40px;
-		margin-top: calc(15 * var(--border-width));
+		margin-top: 15px;
 	}
 }
 </style>

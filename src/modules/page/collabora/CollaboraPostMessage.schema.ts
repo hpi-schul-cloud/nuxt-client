@@ -8,8 +8,8 @@ export const collaboraMessageSchema = z
 	.required();
 export type CollaboraMessage = z.infer<typeof collaboraMessageSchema>;
 
-export const modifiedStatusValueSchema = z
+export const appLoadingStatusValueSchema = z
 	.object({
-		Modified: z.boolean(),
+		Status: z.string(),
 	})
 	.required();

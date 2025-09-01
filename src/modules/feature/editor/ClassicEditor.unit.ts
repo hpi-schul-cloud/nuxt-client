@@ -2,9 +2,9 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { useEditorConfig } from "./EditorConfig.composable";
-import ClassicEditor from "./ClassicEditor.vue";
 import { Mock } from "vitest";
+import ClassicEditor from "./ClassicEditor.vue";
+import { useEditorConfig } from "./EditorConfig.composable";
 
 type CkEditorProps = {
 	value?: string;

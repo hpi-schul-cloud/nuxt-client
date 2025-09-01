@@ -281,7 +281,7 @@ watchDebounced(
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
-	min-height: calc(100vh - var(--sidebar-item-height));
+	min-height: calc(100vh - 60px);
 	padding: 0 24px;
 	overflow-y: hidden;
 
@@ -351,7 +351,7 @@ watchDebounced(
 }
 
 .inline {
-	min-height: calc(100vh - calc(24 * var(--border-width-bold)));
+	min-height: calc(100vh - 48px);
 }
 
 .first-search {
