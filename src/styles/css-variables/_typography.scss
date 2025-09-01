@@ -11,6 +11,8 @@ $system-fonts:
 	--heading-2: 28px;
 	--heading-3: 23px; // 24px?
 	--heading-4: 19px; // 20px?
+	--heading-5: calc(var(--heading-6) * var(--text-scale-ratio));
+	--heading-6: calc(var(--text-base-size) * var(--text-scale-ratio));
 
 	/* font-weight */
 	--font-weight-regular: 400;
