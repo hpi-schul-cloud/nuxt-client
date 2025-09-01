@@ -325,7 +325,7 @@ const onKeyPress = (e: KeyboardEvent) => {
 		display: inline-block;
 		width: fit-content;
 		text-align: center;
-		border-radius: var(--radius-sm);
+		border-radius: 4px;
 		font-size: var(--text-xs);
 
 		.chip-value {

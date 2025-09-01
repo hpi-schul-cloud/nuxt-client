@@ -56,7 +56,7 @@ withDefaults(defineProps<Props>(), {
 	cursor: pointer;
 	background: rgba(var(--v-theme-success));
 	border: none;
-	border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+	border-radius: 0 0 4px 4px;
 	transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 
 	&:hover,

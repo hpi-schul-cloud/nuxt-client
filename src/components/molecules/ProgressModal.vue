@@ -27,6 +27,6 @@ defineProps<Props>();
 <style lang="scss" scoped>
 .rounded,
 :deep(.v-progress-linear__determinate) {
-	border-radius: var(--radius-round) !important;
+	border-radius: 100vmax !important;
 }
 </style>
