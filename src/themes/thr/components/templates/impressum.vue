@@ -1,8 +1,8 @@
 <template>
 	<div class="impressum-container">
 		<div class="impressum-max-width">
-			<h1>Impressum nach § 5 TMG</h1>
-			<h2 class="h4">
+			<h1 class="text-h2">Impressum nach § 5 TMG</h1>
+			<h2 class="text-h4">
 				Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien
 				(Thillm)
 			</h2>

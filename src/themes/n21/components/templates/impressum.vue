@@ -1,8 +1,8 @@
 <template>
 	<div class="impressum-container">
 		<div class="impressum-max-width pa-4">
-			<h1>Impressum</h1>
-			<h2 class="h4">
+			<h1 class="text-h2">Impressum</h1>
+			<h2 class="text-h4">
 				NIEDERSÄCHSISCHE BILDUNGSCLOUD – <br />
 				Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung
 				(NLQ), Körperschaft des öffentlichen Rechts

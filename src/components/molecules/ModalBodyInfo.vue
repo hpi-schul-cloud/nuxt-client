@@ -3,7 +3,7 @@
 		<div class="icon">
 			<slot name="icon" />
 		</div>
-		<h1 class="ma-0">
+		<h1 class="text-h4 ma-0">
 			<slot name="title">
 				{{ title }}
 			</slot>

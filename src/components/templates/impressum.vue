@@ -2,7 +2,7 @@
 	<div class="impressum-container">
 		<div class="impressum-max-width">
 			<h1>Impressum</h1>
-			<h2 class="h6">
+			<h2 class="text-h6">
 				Dataport Bildungscloud | dBildungscloud
 				<br />
 				Dataport AöR
