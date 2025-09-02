@@ -45,15 +45,13 @@ import { envConfigModule } from "@/store";
 
 const { t } = useI18n();
 const route = useRoute();
-// const room = ref<string | null>(null);
 
 const adminRoomStore = useAdministrationRoomStore();
 const { selectRoomAndLoadMembers } = adminRoomStore;
 const { selectedRoom } = storeToRefs(adminRoomStore);
 
-const { fetchRoom } = useRoomDetailsStore();
 const roomMembersStore = useRoomMembersStore();
-const { fetchMembers, resetStore } = roomMembersStore;
+const { fetchMembers, setRoomId, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
@@ -69,9 +67,12 @@ useTitle(pageTitle);
 
 onMounted(async () => {
 	console.log("Route params:", JSON.stringify(route.params));
+	if (false) {
 		const roomId = route.params.roomId.toString();
-		await fetchRoom(roomId);
-
+		selectedRoom.value = roomId;
+		// await fetchRoom(roomId);
+		setRoomId(roomId)
+	}
 	await fetchMembers();
 });
 
