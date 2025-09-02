@@ -102,12 +102,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return roomId.value;
 	};
 
-	const fetchMembers = async (roomId?: string) => {
+	const fetchMembers = async () => {
 		try {
 			isLoading.value = true;
-			const { data } = (
-				await roomApi.roomControllerGetMembers(roomId ?? getRoomId())
-			).data;
+			const { data } = (await roomApi.roomControllerGetMembers(getRoomId()))
+				.data;
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,

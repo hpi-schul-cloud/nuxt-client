@@ -3,6 +3,7 @@
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
+		@fab:clicked="onFabClick"
 	>
 		<template #header>
 			<div ref="header" class="d-flex align-items-center">
@@ -22,6 +23,17 @@
 			:show-select="false"
 			:members-info-text="t('pages.rooms.administration.table.membersInfoText')"
 		/>
+
+		<VDialog
+			v-model="isMembersDialogOpen"
+			:width="xs ? 'auto' : 480"
+			data-testid="dialog-add-participants"
+			max-width="480"
+			persistent
+			@keydown.esc="onDialogClose"
+		>
+			<AddMembers @close="onDialogClose" />
+		</VDialog>
 	</DefaultWireframe>
 </template>
 
@@ -30,7 +42,7 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
 import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";
-import { RoomAdminMembersTable } from "@feature-room";
+import { AddMembers, RoomAdminMembersTable } from "@feature-room";
 import {
 	useAdministrationRoomStore,
 	useRoomDetailsStore,
@@ -42,23 +54,27 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiPlus } from "@icons/material";
 import { useRoute } from "vue-router";
 import { envConfigModule } from "@/store";
+import { useDisplay } from "vuetify";
+const { fetchRoom } = useRoomDetailsStore();
+const { room } = storeToRefs(useRoomDetailsStore());
+const { xs } = useDisplay();
 
 const { t } = useI18n();
 const route = useRoute();
+const isMembersDialogOpen = ref(false);
 
 const adminRoomStore = useAdministrationRoomStore();
 const { selectRoomAndLoadMembers } = adminRoomStore;
-const { selectedRoom } = storeToRefs(adminRoomStore);
 
 const roomMembersStore = useRoomMembersStore();
-const { fetchMembers, setRoomId, resetStore } = roomMembersStore;
+const { fetchMembers, loadSchoolList, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 
 const headerText = computed(() =>
 	t("pages.rooms.administration.roomDetail.header.text", {
-		roomName: selectedRoom.value?.roomName || "",
+		roomName: room.value?.name || "",
 	})
 );
 
@@ -66,18 +82,12 @@ const pageTitle = computed(() => buildPageTitle(headerText.value));
 useTitle(pageTitle);
 
 onMounted(async () => {
-	console.log("Route params:", JSON.stringify(route.params));
-	if (false) {
-		const roomId = route.params.roomId.toString();
-		selectedRoom.value = roomId;
-		// await fetchRoom(roomId);
-		setRoomId(roomId)
-	}
+	const roomId = route.params.roomId.toString();
+	await fetchRoom(roomId);
 	await fetchMembers();
 });
 
 onUnmounted(() => {
-	selectedRoom.value = null;
 	resetStore();
 });
 
@@ -92,7 +102,7 @@ watch(
 			return;
 		}
 
-		await selectRoomAndLoadMembers(route.params.roomId as string);
+		await selectRoomAndLoadMembers();
 	},
 	{ immediate: true }
 );
@@ -106,7 +116,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 		{
 			title: t("pages.rooms.administration.roomDetail.breadcrumb", {
-				roomName: selectedRoom.value?.roomName,
+				roomName: room.value?.name,
 			}),
 			disabled: true,
 		},
@@ -123,4 +133,14 @@ const fabAction = computed(() => {
 		};
 	}
 });
+
+const onFabClick = async () => {
+	loadSchoolList();
+	isMembersDialogOpen.value = true;
+};
+
+const onDialogClose = () => {
+	// membersToChangeRole.value = [];
+	isMembersDialogOpen.value = false;
+};
 </script>

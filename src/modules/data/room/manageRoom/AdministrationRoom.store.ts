@@ -17,7 +17,6 @@ export const useAdministrationRoomStore = defineStore(
 		const isLoading = ref(true);
 		const roomList = ref<RoomStatsItemResponse[]>([]);
 		const isEmptyList = ref(false);
-		const selectedRoom = ref<{ roomId: string; roomName: string } | null>(null);
 		const userSchoolName = computed(() => schoolsModule.getSchool.name);
 		const userSchoolId = computed(() => schoolsModule.getSchool.id);
 		const { fetchMembers } = useRoomMembersStore();
@@ -71,21 +70,11 @@ export const useAdministrationRoomStore = defineStore(
 			}
 		};
 
-		const selectRoomAndLoadMembers = async (roomId: string) => {
-			selectedRoom.value = null;
-			await fetchMembers(roomId);
+		const selectRoomAndLoadMembers = async () => {
+			await fetchMembers();
 
 			if (roomList.value.length === 0) {
 				await fetchRooms();
-			}
-
-			const room = roomList.value.find((r) => r.roomId === roomId);
-
-			if (room) {
-				selectedRoom.value = {
-					roomId: room?.roomId,
-					roomName: room.name,
-				};
 			}
 		};
 
@@ -107,7 +96,6 @@ export const useAdministrationRoomStore = defineStore(
 			isLoading,
 			isEmptyList,
 			roomList,
-			selectedRoom,
 			userSchoolId,
 			deleteRoom,
 			fetchRooms,

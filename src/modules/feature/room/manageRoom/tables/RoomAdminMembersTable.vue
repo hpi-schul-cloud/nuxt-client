@@ -67,6 +67,7 @@ import {
 	useConfirmationDialog,
 	ConfirmationDialog,
 } from "@ui-confirmation-dialog";
+import { ChangeRole } from "@feature-room";
 
 type Props = {
 	headerBottom?: number;
@@ -155,15 +156,11 @@ const confirmRemoval = async (userIds: string[]) => {
 };
 
 const onRemoveMembers = async (ids: string[]) => {
-	console.log("Remove members with IDs:", ids);
-
 	const shouldRemove = await confirmRemoval(ids);
 	if (shouldRemove) await removeMembers(ids);
 };
 
 const onChangePermission = (ids: string[]) => {
-	console.log("Change permission for members with IDs:", ids);
-
 	membersToChangeRole.value = roomMembersWithoutApplicants.value.filter(
 		(member) => ids.includes(member.userId)
 	);
