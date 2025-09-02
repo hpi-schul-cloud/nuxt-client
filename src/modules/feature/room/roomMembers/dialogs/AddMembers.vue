@@ -15,7 +15,7 @@
 					density="comfortable"
 					item-title="name"
 					item-value="id"
-					:items="schools"
+					:items="schoolItems"
 					:label="t('global.sidebar.item.school')"
 					:disabled="isItemListDisabled || (isSchoolSelectionDisabled ?? false)"
 					:aria-disabled="isItemListDisabled"
@@ -132,6 +132,13 @@ enum StudentAlertTypeEnum {
 	StudentVisibility = "STUDENT_VISIBILITY",
 }
 
+const props = defineProps({
+	isAdminMode: {
+		type: Boolean,
+		default: false,
+	},
+});
+
 const emit = defineEmits<{
 	(e: "close"): void;
 }>();
@@ -143,6 +150,14 @@ const { isCurrentUserStudent, potentialRoomMembers, schools } =
 	storeToRefs(roomMembersStore);
 const { addMembers, getPotentialMembers, resetPotentialMembers } =
 	roomMembersStore;
+
+const schoolItems = computed(() => {
+	if (props.isAdminMode) {
+		return schools.value.slice(0, 1);
+	} else {
+		return schools.value;
+	}
+});
 
 const { canAddRoomMembers, canSeeAllStudents } = useRoomAuthorization();
 

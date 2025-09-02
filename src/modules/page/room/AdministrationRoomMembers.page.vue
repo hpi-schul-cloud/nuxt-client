@@ -32,7 +32,7 @@
 			persistent
 			@keydown.esc="onDialogClose"
 		>
-			<AddMembers @close="onDialogClose" />
+			<AddMembers :is-admin-mode="true" @close="onDialogClose" />
 		</VDialog>
 	</DefaultWireframe>
 </template>
