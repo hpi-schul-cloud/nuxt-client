@@ -6,7 +6,10 @@
 	>
 		<template #header>
 			<div ref="header" class="d-flex align-items-center">
-				<h1 class="text-h3 mb-4" data-testid="admin-room-detail-title">
+				<h1
+					class="text-h3 mb-4"
+					data-testid="administration-room-members-title"
+				>
 					{{ headerText }}
 				</h1>
 			</div>
@@ -26,9 +29,13 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useI18n } from "vue-i18n";
-import { computed, ComputedRef, onUnmounted, ref, watch } from "vue";
+import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";
 import { RoomAdminMembersTable } from "@feature-room";
-import { useAdministrationRoomStore } from "@data-room";
+import {
+	useAdministrationRoomStore,
+	useRoomDetailsStore,
+	useRoomMembersStore,
+} from "@data-room";
 import { storeToRefs } from "pinia";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -38,10 +45,15 @@ import { envConfigModule } from "@/store";
 
 const { t } = useI18n();
 const route = useRoute();
+// const room = ref<string | null>(null);
 
 const adminRoomStore = useAdministrationRoomStore();
 const { selectRoomAndLoadMembers } = adminRoomStore;
 const { selectedRoom } = storeToRefs(adminRoomStore);
+
+const { fetchRoom } = useRoomDetailsStore();
+const roomMembersStore = useRoomMembersStore();
+const { fetchMembers, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
@@ -55,8 +67,17 @@ const headerText = computed(() =>
 const pageTitle = computed(() => buildPageTitle(headerText.value));
 useTitle(pageTitle);
 
+onMounted(async () => {
+	console.log("Route params:", JSON.stringify(route.params));
+		const roomId = route.params.roomId.toString();
+		await fetchRoom(roomId);
+
+	await fetchMembers();
+});
+
 onUnmounted(() => {
 	selectedRoom.value = null;
+	resetStore();
 });
 
 watch(

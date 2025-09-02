@@ -1,4 +1,4 @@
-import AdministrationRoomDetailPage from "./AdministrationRoomDetails.page.vue";
+import AdministrationRoomDetailPage from "./AdministrationRoomMembers.page.vue";
 import {
 	envsFactory,
 	mockedPiniaStoreTyping,
@@ -34,7 +34,7 @@ vi.mock(
 		}) as typeof import("@/utils/pageTitle")
 );
 
-describe("AdministrationRoomDetails.page", () => {
+describe("AdministrationRoomMembers.page", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const ownSchool = {
 		id: "school-id",
@@ -143,7 +143,9 @@ describe("AdministrationRoomDetails.page", () => {
 		it("should display the correct page header", () => {
 			const { wrapper } = setup();
 
-			const header = wrapper.find("[data-testid='admin-room-detail-title']");
+			const header = wrapper.find(
+				"[data-testid='administration-room-members-title']"
+			);
 
 			expect(header.exists()).toBe(true);
 			expect(header.text()).toBe(

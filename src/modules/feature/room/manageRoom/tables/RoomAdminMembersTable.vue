@@ -11,8 +11,10 @@
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionChangePermission />
-			<KebabMenuActionRemoveMember />
+			<KebabMenuActionChangePermission
+				@click="onChangePermission(selectedIds)"
+			/>
+			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
 		</template>
 		<template #[`item.displaySchoolRole`]="{ item }">
 			<span class="text-no-wrap">
@@ -39,6 +41,13 @@
 			</KebabMenu>
 		</template>
 	</DataTable>
+	<ChangeRole
+		v-model="isChangeRoleDialogOpen"
+		:members="membersToChangeRole"
+		@close="onDialogClose"
+		@update:model-value="onDialogClose"
+	/>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -52,8 +61,12 @@ import { RoomMember, useRoomMembersStore } from "@data-room";
 import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import {
+	useConfirmationDialog,
+	ConfirmationDialog,
+} from "@ui-confirmation-dialog";
 
 type Props = {
 	headerBottom?: number;
@@ -67,9 +80,17 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersForAdmins, selectedIds, baseTableHeaders } =
-	storeToRefs(roomMembersStore);
-const { isRoomOwner } = roomMembersStore;
+const {
+	roomMembersWithoutApplicants,
+	roomMembersForAdmins,
+	selectedIds,
+	baseTableHeaders,
+} = storeToRefs(roomMembersStore);
+const { isRoomOwner, removeMembers } = roomMembersStore;
+const { askConfirmation } = useConfirmationDialog();
+
+const isChangeRoleDialogOpen = ref(false);
+const membersToChangeRole = ref<RoomMember[]>([]);
 
 const tableData = computed(
 	() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]
@@ -113,5 +134,40 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 		return mdiAccountOutline;
 	}
 	return undefined;
+};
+
+const onDialogClose = () => {
+	membersToChangeRole.value = [];
+	isChangeRoleDialogOpen.value = false;
+};
+
+const confirmRemoval = async (userIds: string[]) => {
+	let message = t("pages.rooms.members.multipleRemove.confirmation");
+	if (userIds.length === 1) {
+		const memberFullName = roomMembersStore.getMemberFullName(userIds[0]);
+		message = t("pages.rooms.members.remove.confirmation", { memberFullName });
+	}
+	const shouldRemove = await askConfirmation({
+		message,
+		confirmActionLangKey: "common.actions.remove",
+	});
+	return shouldRemove;
+};
+
+const onRemoveMembers = async (ids: string[]) => {
+	console.log("Remove members with IDs:", ids);
+
+	const shouldRemove = await confirmRemoval(ids);
+	if (shouldRemove) await removeMembers(ids);
+};
+
+const onChangePermission = (ids: string[]) => {
+	console.log("Change permission for members with IDs:", ids);
+
+	membersToChangeRole.value = roomMembersWithoutApplicants.value.filter(
+		(member) => ids.includes(member.userId)
+	);
+
+	isChangeRoleDialogOpen.value = true;
 };
 </script>
