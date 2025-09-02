@@ -26,6 +26,12 @@ export interface FilesStorageConfigResponse {
      * @memberof FilesStorageConfigResponse
      */
     MAX_FILE_SIZE: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FilesStorageConfigResponse
+     */
+    COLLABORA_MAX_FILE_SIZE_IN_BYTES: number;
 }
 
 

@@ -97,6 +97,12 @@ export interface FileRecordResponse {
     isCollaboraEditable: boolean;
     /**
      * 
+     * @type {boolean}
+     * @memberof FileRecordResponse
+     */
+    exceedsCollaboraEditableFileSize: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof FileRecordResponse
      */
