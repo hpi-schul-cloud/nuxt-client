@@ -148,6 +148,10 @@ const props = defineProps({
 		type: Array as PropType<RoomMember[]>,
 		required: true,
 	},
+	isAdminMode: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const isOpen = defineModel({
@@ -172,6 +176,12 @@ const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members");
 
 const isChangeOwnershipOptionVisible = computed(() => {
+	if (props.isAdminMode) {
+		return (
+			memberToChangeRole.value.length === 1 && isMemberStudent.value === false
+		);
+	}
+
 	const currentUserId = authModule.getUser?.id;
 	return (
 		currentUserId &&
@@ -279,6 +289,20 @@ const onClose = () => {
 };
 
 const radioOptions = computed(() => {
+	const roomOwnerOption = {
+		role: RoleName.Roomowner,
+		labelHeader: t("pages.rooms.members.roomPermissions.owner"),
+		labelDescriptions: [
+			"pages.rooms.members.roleChange.Roomowner.label",
+			"pages.rooms.members.roleChange.Roomowner.label.subText",
+		],
+		dataTestid: "change-role-option-owner",
+	};
+
+	if (props.isAdminMode) {
+		return [roomOwnerOption];
+	}
+
 	const baseRoles = [
 		{
 			role: RoleName.Roomviewer,
@@ -301,15 +325,7 @@ const radioOptions = computed(() => {
 	];
 
 	if (isChangeOwnershipOptionVisible.value) {
-		baseRoles.push({
-			role: RoleName.Roomowner,
-			labelHeader: t("pages.rooms.members.roomPermissions.owner"),
-			labelDescriptions: [
-				"pages.rooms.members.roleChange.Roomowner.label",
-				"pages.rooms.members.roleChange.Roomowner.label.subText",
-			],
-			dataTestid: "change-role-option-owner",
-		});
+		baseRoles.push(roomOwnerOption);
 	}
 
 	return baseRoles;
