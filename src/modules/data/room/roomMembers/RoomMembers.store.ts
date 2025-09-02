@@ -119,9 +119,9 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 				};
 			});
-			isLoading.value = false;
 		} catch {
 			showFailure(t("pages.rooms.members.error.load"));
+		} finally {
 			isLoading.value = false;
 		}
 	};

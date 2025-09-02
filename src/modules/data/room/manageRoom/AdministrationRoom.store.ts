@@ -71,11 +71,10 @@ export const useAdministrationRoomStore = defineStore(
 		};
 
 		const selectRoomAndLoadMembers = async () => {
-			await fetchMembers();
-
 			if (roomList.value.length === 0) {
 				await fetchRooms();
 			}
+			await fetchMembers();
 		};
 
 		const deleteRoom = async (roomId: string) => {

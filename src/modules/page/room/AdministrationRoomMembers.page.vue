@@ -101,8 +101,6 @@ watch(
 			window.location.replace("/dashboard");
 			return;
 		}
-
-		await selectRoomAndLoadMembers();
 	},
 	{ immediate: true }
 );
