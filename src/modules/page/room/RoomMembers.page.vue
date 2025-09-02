@@ -132,7 +132,6 @@ import {
 } from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { Tab } from "@/types/room/RoomMembers";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { authModule } from "@/store";
 
 const props = defineProps({
@@ -148,8 +147,6 @@ const route = useRoute();
 const router = useRouter();
 const { xs, mdAndUp } = useDisplay();
 const { room, isLoading } = storeToRefs(useRoomDetailsStore());
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-const { FEATURE_ROOM_MEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
 
 const membersInfoText = ref("");
 
@@ -206,9 +203,7 @@ const pageTitle = computed(() =>
 useTitle(pageTitle);
 
 const isVisibleTabNavigation = computed(() => {
-	return (
-		canManageRoomInvitationLinks.value && FEATURE_ROOM_MEMBERS_TABS_ENABLED
-	);
+	return canManageRoomInvitationLinks.value;
 });
 
 const tabs: Array<{
@@ -291,10 +286,9 @@ const onLeaveRoom = async () => {
 };
 
 onMounted(async () => {
-	activeTab.value =
-		FEATURE_ROOM_MEMBERS_TABS_ENABLED && Object.values(Tab).includes(props.tab)
-			? props.tab
-			: Tab.Members;
+	activeTab.value = Object.values(Tab).includes(props.tab)
+		? props.tab
+		: Tab.Members;
 
 	const roomId = route.params.id.toString();
 	if (room.value === undefined) {

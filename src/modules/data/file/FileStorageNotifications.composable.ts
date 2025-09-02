@@ -1,4 +1,4 @@
-import { convertFileSize } from "@/utils/fileHelper";
+import { formatFileSize } from "@/utils/fileHelper";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -7,7 +7,7 @@ import {
 import { useI18n } from "vue-i18n";
 
 export const useFileStorageNotifier = () => {
-	const { t, n } = useI18n();
+	const { t } = useI18n();
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
@@ -51,13 +51,10 @@ export const useFileStorageNotifier = () => {
 	};
 
 	const showFileTooBigError = () => {
-		const { convertedSize, unit } = convertFileSize(
-			envConfigModule.getMaxFileSize
-		);
-		const localizedFileSize = n(convertedSize, "fileSize");
+		const maxFileSizeWithUnit = formatFileSize(envConfigModule.getMaxFileSize);
 
 		const message = t("components.board.notifications.errors.fileToBig", {
-			maxFileSizeWithUnit: `${localizedFileSize} ${unit}`,
+			maxFileSizeWithUnit,
 		});
 
 		showFailure(message);

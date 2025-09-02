@@ -40,6 +40,8 @@ export default {
 	"common.file.virusDetected":
 		"Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"common.file": "Archivo",
+	"common.file.exceedsCollaboraEditableFileSize":
+		"Los documentos que superen los {sizeInMb} no se pueden editar en línea.",
 	"common.files": "Archivos",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",

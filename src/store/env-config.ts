@@ -32,6 +32,7 @@ export default class EnvConfigModule extends VuexModule {
 	env: ConfigResponse = defaultConfigEnvs;
 	envFile: FilesStorageConfigResponse = {
 		MAX_FILE_SIZE: 2684354560,
+		COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -154,6 +155,10 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getMaxFileSize(): number {
 		return this.envFile.MAX_FILE_SIZE;
+	}
+
+	get getCollaboraMaxFileSizeInBytes(): number {
+		return this.envFile.COLLABORA_MAX_FILE_SIZE_IN_BYTES;
 	}
 
 	private get serverApi(): ServerConfigApiInterface {

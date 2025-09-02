@@ -1,22 +1,18 @@
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	appLoadingStatusValueSchema,
 	CollaboraMessage,
 	collaboraMessageSchema,
-	modifiedStatusValueSchema,
 } from "./CollaboraPostMessage.schema";
 
 export enum CollaboraEvents {
-	DOC_MODIFIED_STATUS = "Doc_ModifiedStatus",
 	APP_LOADING_STATUS = "App_LoadingStatus",
 	HOST_POSTMESSAGE_READY = "Host_PostmessageReady",
 	REMOVE_BUTTON = "Remove_Button",
 }
 
 export const useCollaboraPostMessageApi = () => {
-	const documentHasUnsavedChanges = ref<boolean>(false);
 	const { t } = useI18n();
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 	let collaboraWindow: Window | null = null;
@@ -52,12 +48,6 @@ export const useCollaboraPostMessageApi = () => {
 		});
 
 	const handleCollaboraMessages = (message: CollaboraMessage) => {
-		if (hasModifiedStatusMessageId(message.MessageId)) {
-			const value = modifiedStatusValueSchema.parse(message.Values);
-
-			documentHasUnsavedChanges.value = value.Modified;
-		}
-
 		if (hasLoadingStatusMessageId(message.MessageId)) {
 			handleLoadingStatusUpdate(message);
 		}
@@ -116,13 +106,6 @@ export const useCollaboraPostMessageApi = () => {
 		}
 	};
 
-	const hasModifiedStatusMessageId = (messageId: string): boolean => {
-		const isModifiedStatusMessage =
-			messageId === CollaboraEvents.DOC_MODIFIED_STATUS;
-
-		return isModifiedStatusMessage;
-	};
-
 	const hasLoadingStatusMessageId = (messageId: string): boolean => {
 		const isLoadingStatusMessage =
 			messageId === CollaboraEvents.APP_LOADING_STATUS;
@@ -131,7 +114,6 @@ export const useCollaboraPostMessageApi = () => {
 	};
 
 	return {
-		documentHasUnsavedChanges,
 		setupPostMessageAPI,
 	};
 };

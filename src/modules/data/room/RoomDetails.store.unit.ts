@@ -136,15 +136,6 @@ describe("useRoomDetailsStore", () => {
 		});
 	});
 
-	describe("deactivateRoom", () => {
-		it("should reset the state", () => {
-			const { store } = setup();
-			store.deactivateRoom();
-			expect(store.isLoading).toBe(false);
-			expect(store.room).toBeUndefined();
-		});
-	});
-
 	describe("createBoard", () => {
 		it("should call createBoard api", async () => {
 			const { store } = setup();

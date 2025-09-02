@@ -23,7 +23,6 @@
 						v-if="!isOwnershipHandoverMode"
 						v-model="selectedRole"
 						hide-details
-						class="ml-n2"
 					>
 						<v-radio
 							v-for="option in radioOptions"

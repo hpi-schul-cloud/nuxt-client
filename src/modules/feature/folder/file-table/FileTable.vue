@@ -129,7 +129,7 @@
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
 import {
-	convertFileSize,
+	formatFileSize,
 	getFileExtension,
 	isScanStatusBlocked,
 } from "@/utils/fileHelper";
@@ -149,7 +149,7 @@ import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 import RenameFileDialog from "./RenameFileDialog.vue";
 
-const { t, n } = useI18n();
+const { t } = useI18n();
 
 const props = defineProps({
 	isLoading: {
@@ -213,13 +213,6 @@ const fileRecordItems = computed(() => {
 		isSelectable: isScanStatusBlocked(item.securityCheckStatus),
 	}));
 });
-
-const formatFileSize = (size: number) => {
-	const { convertedSize, unit } = convertFileSize(size);
-	const localizedFileSize = n(convertedSize, "fileSize");
-
-	return `${localizedFileSize} ${unit}`;
-};
 
 const onDownloadFile = (selectedIds: string[]) => {
 	emit("download-file", selectedIds);

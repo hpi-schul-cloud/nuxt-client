@@ -39,10 +39,6 @@ export const useSidebarItems = () => {
 			title: "global.sidebar.item.rooms",
 			to: "/rooms",
 			icon: mdiAccountSupervisorCircleOutline,
-			feature: "FEATURE_ROOMS_ENABLED",
-			permissions: envConfigModule.getEnv.FEATURE_ROOM_ADD_STUDENTS_ENABLED
-				? undefined
-				: ["ROOM_CREATE"],
 			testId: "sidebar-rooms",
 		},
 		{

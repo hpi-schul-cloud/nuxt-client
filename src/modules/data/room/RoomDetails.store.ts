@@ -115,13 +115,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		room.value = undefined;
 	};
 
-	const deactivateRoom = () => {
-		resetState();
-		isLoading.value = false;
-	};
-
 	return {
-		deactivateRoom,
 		fetchRoomAndBoards,
 		fetchRoom,
 		createBoard,
