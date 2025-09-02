@@ -70,13 +70,6 @@ export const useAdministrationRoomStore = defineStore(
 			}
 		};
 
-		const selectRoomAndLoadMembers = async () => {
-			if (roomList.value.length === 0) {
-				await fetchRooms();
-			}
-			await fetchMembers();
-		};
-
 		const deleteRoom = async (roomId: string) => {
 			try {
 				isLoading.value = true;
@@ -98,7 +91,6 @@ export const useAdministrationRoomStore = defineStore(
 			userSchoolId,
 			deleteRoom,
 			fetchRooms,
-			selectRoomAndLoadMembers,
 		};
 	}
 );

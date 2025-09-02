@@ -206,32 +206,6 @@ describe("useAdministrationRoomStore", () => {
 		});
 	});
 
-	describe("selectRoomAndLoadMembers", () => {
-		it("should select room and load members", async () => {
-			const mockRoomList = roomStatsListResponseFactory.build();
-			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
-				data: mockRoomList,
-			} as unknown as AxiosPromise<RoomStatsListResponse>);
-
-			const { roomAdminStore } = setup();
-
-			const { selectRoomAndLoadMembers, fetchRooms } = roomAdminStore;
-
-			await fetchRooms();
-
-			await selectRoomAndLoadMembers(mockRoomList.data[0].roomId);
-
-			expect(
-				roomAdministrationApiMock.roomControllerGetMembers
-			).toHaveBeenCalledWith(mockRoomList.data[0].roomId);
-
-			expect(roomAdminStore.selectedRoom).toEqual({
-				roomId: mockRoomList.data[0].roomId,
-				roomName: mockRoomList.data[0].name,
-			});
-		});
-	});
-
 	describe("deleteRoom", () => {
 		it("should delete a room and update roomList", async () => {
 			const mockRooms = roomStatsListResponseFactory.build();
