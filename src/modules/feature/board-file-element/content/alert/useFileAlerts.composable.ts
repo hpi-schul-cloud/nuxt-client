@@ -11,11 +11,25 @@ export const useFileAlerts = (
 		return mapPreviewStatusToFileAlert(fileRecord?.value?.previewStatus);
 	});
 
+	const exceedsCollaboraEditableFileSizeAlert = computed(() => {
+		if (!fileRecord.value) return;
+
+		const { exceedsCollaboraEditableFileSize } = fileRecord.value;
+		const alert = exceedsCollaboraEditableFileSize
+			? FileAlert.EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE
+			: undefined;
+
+		return alert;
+	});
+
 	const alerts = computed(() => {
 		const alerts = [...emittedAlerts.value];
 
 		if (previewStatusAlert.value !== undefined)
 			alerts.push(previewStatusAlert.value);
+
+		if (exceedsCollaboraEditableFileSizeAlert.value !== undefined)
+			alerts.push(exceedsCollaboraEditableFileSizeAlert.value);
 
 		return alerts;
 	});
