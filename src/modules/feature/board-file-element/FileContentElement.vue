@@ -118,7 +118,7 @@ const element = toRef(props, "element");
 useBoardFocusHandler(element.value.id, fileContentElement);
 
 const { modelValue } = useContentElementState(props);
-const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
+const { fetchFiles, getFileRecordsByParentId } = useFileStorageApi();
 const { hasEditPermission } = useBoardPermissions();
 
 const fileRecord = computed(
@@ -183,7 +183,15 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 
 const onUploadFile = async (file: File): Promise<void> => {
 	try {
-		await upload(file, element.value.id, FileRecordParentType.BOARDNODES);
+		// Direct POST request with application/octet-stream
+		const uploadUrl = `http://localhost:4000/api/v3/file/upload/school/5f2987e020834114b8efd6f8/boardnodes/${element.value.id}`; // TODO: set correct endpoint
+		await fetch(uploadUrl, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/octet-stream",
+			},
+			body: file,
+		});
 		element.value.content.caption = " ";
 	} catch {
 		emit("delete:element", element.value.id);
