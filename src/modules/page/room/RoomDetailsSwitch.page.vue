@@ -35,7 +35,7 @@ const route = useRoute();
 const roomDetailsStore = useRoomDetailsStore();
 const { isLoading, roomVariant, room, lockedRoomName } =
 	storeToRefs(roomDetailsStore);
-const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
+const { deactivateRoom, fetchRoomAndBoards, resetState } = roomDetailsStore;
 const { canCreateRoom } = useRoomAuthorization();
 
 const canAccessRoom = computed(() => {
@@ -49,7 +49,7 @@ watch(
 	() => route.params.id,
 	async () => {
 		if (canAccessRoom.value) {
-			await fetchRoom(route.params.id as string);
+			await fetchRoomAndBoards(route.params.id as string);
 		} else {
 			deactivateRoom();
 		}

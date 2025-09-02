@@ -124,11 +124,11 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 		});
 
 		describe("and user has access to rooms", () => {
-			it("should fetch room", () => {
+			it("should fetch room and boards", () => {
 				roomPermissions.canCreateRoom.value = true;
 				const { roomDetailsStore } = setup({ isLoading: true });
 
-				expect(roomDetailsStore.fetchRoom).toHaveBeenCalled();
+				expect(roomDetailsStore.fetchRoomAndBoards).toHaveBeenCalled();
 			});
 		});
 

@@ -236,7 +236,9 @@ describe("RoomMembersPage", () => {
 	it("should fetch room from room details store when room is undefined", () => {
 		const { roomDetailsStore } = setup({ createRoom: false });
 
-		expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith(routeRoomId);
+		expect(roomDetailsStore.fetchRoomAndBoards).toHaveBeenCalledWith(
+			routeRoomId
+		);
 	});
 
 	describe("page title", () => {
