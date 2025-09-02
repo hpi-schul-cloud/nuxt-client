@@ -35,6 +35,34 @@ describe("useFileAlerts", () => {
 			};
 		};
 
+		describe("when exceedsCollaboraEditableFileSize is true", () => {
+			it("should return EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE alert", () => {
+				const fileRecord = ref(
+					fileRecordFactory.build({
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
+						exceedsCollaboraEditableFileSize: true,
+					})
+				);
+				const { alerts } = mountComposable(() => useFileAlerts(fileRecord));
+				expect(alerts.value).toEqual([
+					FileAlert.EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE,
+				]);
+			});
+		});
+
+		describe("when exceedsCollaboraEditableFileSize is false", () => {
+			it("should return EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE alert", () => {
+				const fileRecord = ref(
+					fileRecordFactory.build({
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
+						exceedsCollaboraEditableFileSize: false,
+					})
+				);
+				const { alerts } = mountComposable(() => useFileAlerts(fileRecord));
+				expect(alerts.value).toEqual([]);
+			});
+		});
+
 		describe("when previewStatus is AWAITING_SCAN_STATUS", () => {
 			it("should return AWAITING_SCAN_STATUS alert", () => {
 				const { alerts } = setup(PreviewStatus.AWAITING_SCAN_STATUS);
