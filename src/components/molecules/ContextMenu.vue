@@ -284,7 +284,7 @@ export default {
 }
 
 .v-btn {
-	font-weight: var(--font-weight-regular) !important;
+	font-weight: normal !important;
 	font-family: var(--font-accent);
 }
 

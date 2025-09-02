@@ -670,7 +670,7 @@ export default {
 }
 
 span {
-	font-weight: var(--font-weight-regular);
+	font-weight: normal;
 }
 
 button:not(.is-none):focus {

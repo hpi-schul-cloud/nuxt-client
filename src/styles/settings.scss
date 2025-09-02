@@ -20,19 +20,19 @@
 		),
 		"h4": (
 			"size": var(--heading-4),
-			"weight": var(--font-weight-bold),
+			"weight": 700,
 			"line-height": 30px,
 			"letter-spacing": 0px,
 		),
 		"h5": (
 			"size": var(--heading-5),
-			"weight": var(--font-weight-bold),
+			"weight": 700,
 			"line-height": 30px,
 			"letter-spacing": 0px,
 		),
 		"h6": (
 			"size": var(--heading-6),
-			"weight": var(--font-weight-bold),
+			"weight": 700,
 			"line-height": 30px,
 			"letter-spacing": 0px,
 		),
@@ -41,7 +41,7 @@
 	// v-btn
 	$button-font-size: 1rem,
 	$button-text-transform: none,
-	$button-font-weight: var(--font-weight-bold),
+	$button-font-weight: 700,
 	$button-text-letter-spacing: 0.044em,
 
 	// card

@@ -305,7 +305,7 @@ $tablet-portrait-width: 768px;
 
 	.arrow__back {
 		margin-top: 8px;
-		font-weight: var(--font-weight-bold);
+		font-weight: bold;
 		text-decoration: none;
 		cursor: pointer;
 		border: none;
@@ -358,7 +358,7 @@ $tablet-portrait-width: 768px;
 
 			.external-content-title {
 				margin-top: 16px;
-				font-weight: var(--font-weight-bold);
+				font-weight: bold;
 			}
 		}
 
@@ -381,7 +381,7 @@ $tablet-portrait-width: 768px;
 
 		.author-provider {
 			font-size: var(--text-xs);
-			font-weight: var(--font-weight-bold);
+			font-weight: bold;
 		}
 
 		.description {

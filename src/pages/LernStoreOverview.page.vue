@@ -287,7 +287,7 @@ watchDebounced(
 
 	.arrow__back {
 		margin-top: 8px;
-		font-weight: var(--font-weight-bold);
+		font-weight: bold;
 		cursor: pointer;
 	}
 

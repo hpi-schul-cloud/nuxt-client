@@ -14,14 +14,9 @@ $system-fonts:
 	--heading-5: calc(var(--heading-6) * var(--text-scale-ratio));
 	--heading-6: calc(var(--text-base-size) * var(--text-scale-ratio));
 
-	/* font-weight */
-	--font-weight-regular: 400;
-	--font-weight-bold: 700;
-
 	/* set base values */
 	--text-base-size: 1rem;
 	--text-scale-ratio: 1.2;
-	--text-device-scale-ratio: 1.125;
 
 	/* text sizes */
 	--text-xs: calc(
