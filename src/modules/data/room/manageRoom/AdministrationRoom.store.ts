@@ -6,7 +6,6 @@ import { printFromStringUtcToFullDate } from "@/plugins/datetime";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { schoolsModule } from "@/store/store-accessor";
-import { useRoomMembersStore } from "@data-room";
 
 export const useAdministrationRoomStore = defineStore(
 	"administrationRoomStore",
@@ -19,7 +18,6 @@ export const useAdministrationRoomStore = defineStore(
 		const isEmptyList = ref(false);
 		const userSchoolName = computed(() => schoolsModule.getSchool.name);
 		const userSchoolId = computed(() => schoolsModule.getSchool.id);
-		const { fetchMembers } = useRoomMembersStore();
 
 		const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
 			const currentUserSchoolName = userSchoolName.value;
