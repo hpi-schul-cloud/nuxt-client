@@ -11,20 +11,14 @@ $system-fonts:
 	--heading-2: 28px;
 	--heading-3: 23px; // 24px?
 	--heading-4: 19px; // 20px?
-	--heading-5: calc(var(--heading-6) * var(--text-scale-ratio));
-	--heading-6: calc(var(--text-base-size) * var(--text-scale-ratio));
-
-	/* set base values */
-	--text-base-size: 1rem;
-	--text-scale-ratio: 1.2;
+	--heading-5: 23px;
+	--heading-6: 19px;
 
 	/* text sizes */
-	--text-xs: calc(
-		var(--text-base-size) / var(--text-scale-ratio) / var(--text-scale-ratio)
-	);
-	--text-sm: calc(var(--text-base-size) / var(--text-scale-ratio));
-	--text-md: var(--text-base-size);
-	--text-lg: calc(var(--text-base-size) * var(--text-scale-ratio));
+	--text-xs: 0.694rem;
+	--text-sm: 0.833rem;
+	--text-md: 1rem;
+	--text-lg: 1.2rem;
 
 	/* line-height */
 	--line-height-sm: 1.05;

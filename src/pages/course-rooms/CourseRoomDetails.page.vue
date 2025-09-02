@@ -620,11 +620,6 @@ export default defineComponent({
 	margin-bottom: -2px;
 }
 
-.v-tab {
-	font-size: var(--text-base-size);
-	text-transform: none !important;
-}
-
 :deep(.v-slide-group__prev),
 :deep(.v-slide-group__next) {
 	display: none !important;

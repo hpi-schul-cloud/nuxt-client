@@ -11,7 +11,7 @@
 			</p>
 		</template>
 		<template #text>
-			<span class="text">
+			<span class="text-body-1">
 				<slot name="text" />
 			</span>
 		</template>
@@ -26,8 +26,3 @@ defineProps({
 	},
 });
 </script>
-<style scoped lang="scss">
-.text {
-	font-size: var(--text-base-size);
-}
-</style>
