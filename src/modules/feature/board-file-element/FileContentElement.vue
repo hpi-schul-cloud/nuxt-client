@@ -189,6 +189,7 @@ const onUploadFile = async (file: File): Promise<void> => {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/octet-stream",
+				"Content-Disposition": `attachment; filename="${file.name}" mimeType="${file.type}"`,
 			},
 			body: file,
 		});
