@@ -849,7 +849,7 @@ export default {
 		"Link nur schulintern gültig",
 	"components.molecules.share.options.title": "Teilen-Einstellungen",
 	"components.molecules.share.room.options.infoText":
-		"Mit dem folgenden Link kann dieser Raum von anderen Personen kopiert werden. Wenn kein aktiv genutzter Raum geteilt werden soll, bitte zuerst ein Duplikat erstellen und dieses teilen.",
+		"Mit dem folgenden Link kann der Raum als Kopie von anderen Personen importiert werden.",
 	"components.molecules.share.room.result.linkLabel": "Link Raum-Kopie",
 	"components.molecules.share.room.mail.subject": "Raum zum Importieren",
 	"components.molecules.share.room.mail.body": "Link zum Raum: ",
@@ -863,6 +863,8 @@ export default {
 	"components.molecules.share.tasks.result.linkLabel": "Link Aufgabekopie",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel":
 		"Link Raum-Einladung",
+	"components.molecules.share.checkPrivacyAndCopyright":
+		"Bitte die Inhalte auf Urheberrecht und Datenschutz prüfen.",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Bist du dir sicher, dass du die Aufgabe "{taskTitle}" löschen möchtest?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Aufgabe löschen",

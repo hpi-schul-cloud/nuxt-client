@@ -21,13 +21,10 @@
 					<p data-testid="share-options-info-text">
 						{{ t(`components.molecules.share.${type}.options.infoText`) }}
 					</p>
-					<div
-						v-if="showAlertInfo"
-						class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
-					>
-						<div class="mx-2">
-							<v-icon color="info" :icon="mdiInformation" />
-						</div>
+					<InfoAlert class="mb-4">
+						{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
+					</InfoAlert>
+					<WarningAlert v-if="showAlertInfo">
 						<div data-testid="share-options-table-header">
 							{{ t("components.molecules.share.options.tableHeader.InfoText") }}
 							<ul class="ml-6">
@@ -118,13 +115,12 @@
 								</li>
 							</ul>
 						</div>
-					</div>
-					<share-modal-options-form
-						:type="type"
-						@share-options-change="onShareOptionsChange"
-					/>
+					</WarningAlert>
 				</div>
-
+				<share-modal-options-form
+					:type="type"
+					@share-options-change="onShareOptionsChange"
+				/>
 				<div v-if="step === 'secondStep' && isOpen">
 					<share-modal-result
 						:share-url="shareUrl"
@@ -149,7 +145,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import { mdiInformation } from "@icons/material";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
