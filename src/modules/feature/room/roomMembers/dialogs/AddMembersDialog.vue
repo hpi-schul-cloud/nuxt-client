@@ -1,113 +1,125 @@
 <template>
-	<v-card ref="addMembersContent">
-		<template #title>
-			<h2 class="text-h4 mt-2">
-				{{ t("pages.rooms.members.add") }}
-			</h2>
-		</template>
+	<VDialog
+		v-model="isOpen"
+		:width="xs ? 'auto' : 480"
+		data-testid="dialog-add-participants"
+		max-width="480"
+		persistent
+		@keydown.esc="onClose"
+		@click:outside="onClose"
+	>
+		<v-card ref="addMembersContent">
+			<template #title>
+				<h2 class="text-h4 mt-2">
+					{{ t("pages.rooms.members.add") }}
+				</h2>
+			</template>
 
-		<template #text>
-			<InfoAlert>{{ t("pages.rooms.members.add.infoText") }}</InfoAlert>
-			<div class="mt-8" data-testid="add-participant-school">
-				<v-autocomplete
-					ref="autoCompleteSchool"
-					v-model="selectedSchool"
-					density="comfortable"
-					item-title="name"
-					item-value="id"
-					:items="schoolItems"
-					:label="t('global.sidebar.item.school')"
-					:disabled="isItemListDisabled || (isSchoolSelectionDisabled ?? false)"
-					:aria-disabled="isItemListDisabled"
-					@update:model-value="onValueChange"
-					@update:menu="onItemListToggle"
-				/>
-			</div>
+			<template #text>
+				<InfoAlert>{{ t("pages.rooms.members.add.infoText") }}</InfoAlert>
+				<div class="mt-8" data-testid="add-participant-school">
+					<v-autocomplete
+						ref="autoCompleteSchool"
+						v-model="selectedSchool"
+						density="comfortable"
+						item-title="name"
+						item-value="id"
+						:items="schoolItems"
+						:label="t('global.sidebar.item.school')"
+						:disabled="
+							isItemListDisabled || (isSchoolSelectionDisabled ?? false)
+						"
+						:aria-disabled="isItemListDisabled"
+						@update:model-value="onValueChange"
+						@update:menu="onItemListToggle"
+					/>
+				</div>
 
-			<div class="mt-4" data-testid="add-participant-role">
-				<v-select
-					ref="selectRole"
-					v-model="selectedSchoolRole"
-					density="comfortable"
-					item-title="name"
-					item-value="id"
-					:item-props="schoolRoleListItemProps"
-					:items="schoolRoles"
-					:label="t('pages.rooms.members.tableHeader.schoolRole')"
-					:disabled="isItemListDisabled"
-					:aria-disabled="isItemListDisabled"
-					:data-testid="`role-item-${selectedSchoolRole}`"
-					@update:model-value="onValueChange"
-					@update:menu="onItemListToggle"
+				<div class="mt-4" data-testid="add-participant-role">
+					<v-select
+						ref="selectRole"
+						v-model="selectedSchoolRole"
+						density="comfortable"
+						item-title="name"
+						item-value="id"
+						:item-props="schoolRoleListItemProps"
+						:items="schoolRoles"
+						:label="t('pages.rooms.members.tableHeader.schoolRole')"
+						:disabled="isItemListDisabled"
+						:aria-disabled="isItemListDisabled"
+						:data-testid="`role-item-${selectedSchoolRole}`"
+						@update:model-value="onValueChange"
+						@update:menu="onItemListToggle"
+					>
+						<template #selection="{ item }">
+							<VIcon class="mr-1" :icon="item.raw.icon" />
+							{{ item.title }}
+						</template>
+					</v-select>
+				</div>
+
+				<InfoAlert
+					v-if="
+						determineStudentAlertType === StudentAlertTypeEnum.StudentVisibility
+					"
+					data-testid="student-visibility-info-alert"
 				>
-					<template #selection="{ item }">
-						<VIcon class="mr-1" :icon="item.raw.icon" />
-						{{ item.title }}
-					</template>
-				</v-select>
-			</div>
+					{{ t("pages.rooms.members.add.students.forbidden") }}
+				</InfoAlert>
 
-			<InfoAlert
-				v-if="
-					determineStudentAlertType === StudentAlertTypeEnum.StudentVisibility
-				"
-				data-testid="student-visibility-info-alert"
-			>
-				{{ t("pages.rooms.members.add.students.forbidden") }}
-			</InfoAlert>
+				<InfoAlert
+					v-if="determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin"
+					data-testid="student-admin-info-alert"
+				>
+					{{ t("pages.rooms.members.add.students.studentAdmins") }}
+				</InfoAlert>
 
-			<InfoAlert
-				v-if="determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin"
-				data-testid="student-admin-info-alert"
-			>
-				{{ t("pages.rooms.members.add.students.studentAdmins") }}
-			</InfoAlert>
+				<WarningAlert v-if="isStudentSelectionDisabled">
+					{{ t("pages.rooms.members.add.warningText") }}
+				</WarningAlert>
 
-			<WarningAlert v-if="isStudentSelectionDisabled">
-				{{ t("pages.rooms.members.add.warningText") }}
-			</WarningAlert>
+				<div class="mt-4" data-testid="add-participant-name">
+					<v-autocomplete
+						ref="autoCompleteUsers"
+						v-model="selectedUsers"
+						chips
+						clear-on-select
+						closable-chips
+						item-value="userId"
+						item-title="fullName"
+						multiple
+						:disabled="isStudentSelectionDisabled"
+						:items="potentialRoomMembers"
+						:label="t('common.labels.name')"
+						@update:menu="onItemListToggle"
+					/>
+				</div>
+			</template>
 
-			<div class="mt-4" data-testid="add-participant-name">
-				<v-autocomplete
-					ref="autoCompleteUsers"
-					v-model="selectedUsers"
-					chips
-					clear-on-select
-					closable-chips
-					item-value="userId"
-					item-title="fullName"
-					multiple
-					:disabled="isStudentSelectionDisabled"
-					:items="potentialRoomMembers"
-					:label="t('common.labels.name')"
-					@update:menu="onItemListToggle"
-				/>
-			</div>
-		</template>
-
-		<template #actions>
-			<v-spacer />
-			<div class="mr-4 mb-3">
-				<v-btn
-					ref="cancelButton"
-					class="ms-auto mr-2"
-					color="primary"
-					:text="t('common.actions.cancel')"
-					data-testid="add-participant-cancel-btn"
-					@click="onClose"
-				/>
-				<v-btn
-					ref="addButton"
-					class="ms-auto"
-					color="primary"
-					variant="flat"
-					:text="t('common.actions.add')"
-					data-testid="add-participant-save-btn"
-					@click="onAddMembers"
-				/>
-			</div>
-		</template>
-	</v-card>
+			<template #actions>
+				<v-spacer />
+				<div class="mr-4 mb-3">
+					<v-btn
+						ref="cancelButton"
+						class="ms-auto mr-2"
+						color="primary"
+						:text="t('common.actions.cancel')"
+						data-testid="add-participant-cancel-btn"
+						@click="onClose"
+					/>
+					<v-btn
+						ref="addButton"
+						class="ms-auto"
+						color="primary"
+						variant="flat"
+						:text="t('common.actions.add')"
+						data-testid="add-participant-save-btn"
+						@click="onAddMembers"
+					/>
+				</div>
+			</template>
+		</v-card>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
@@ -120,6 +132,7 @@ import type { VAutocomplete, VCard, VSelect } from "vuetify/components";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { useDisplay } from "vuetify";
 
 interface SchoolRoleItem {
 	id: RoleName;
@@ -139,11 +152,17 @@ const props = defineProps({
 	},
 });
 
+const isOpen = defineModel({
+	type: Boolean,
+	required: true,
+});
+
 const emit = defineEmits<{
 	(e: "close"): void;
 }>();
 
 const { t } = useI18n();
+const { xs } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
 const { isCurrentUserStudent, potentialRoomMembers, schools } =

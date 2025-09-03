@@ -28,7 +28,12 @@ import {
 	useRoomInvitationLinkStore,
 	useRoomMembersStore,
 } from "@data-room";
-import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
+import {
+	AddMembersDialog,
+	Confirmations,
+	Invitations,
+	Members,
+} from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPlus } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
@@ -178,9 +183,11 @@ describe("RoomMembersPage", () => {
 				},
 				stubs: {
 					LeaveRoomProhibitedDialog: true,
-					AddMembers: true,
+					// Do not stub AddMembersDialog so that VDialog is accessible in tests
+					AddMembersDialog: true,
 					Members: true,
 					InviteMembersDialog: true,
+					UseFocusTrap: true,
 				},
 			},
 
@@ -495,9 +502,10 @@ describe("RoomMembersPage", () => {
 				activeTab: Tab.Members,
 			});
 			const wireframe = wrapper.findComponent(DefaultWireframe);
-			const addMemberDialogBeforeClick = wrapper.findComponent(AddMembers);
+			const addMemberDialogBeforeClick =
+				wrapper.findComponent(AddMembersDialog);
 
-			expect(addMemberDialogBeforeClick.exists()).toBe(false);
+			expect(addMemberDialogBeforeClick.isVisible()).toBe(false);
 
 			const addMemberButton = wireframe
 				.getComponent("[data-testid=fab-add-members]")
@@ -505,7 +513,7 @@ describe("RoomMembersPage", () => {
 
 			await addMemberButton.trigger("click");
 
-			const addMemberDialogAfterClick = wrapper.findComponent(AddMembers);
+			const addMemberDialogAfterClick = wrapper.findComponent(AddMembersDialog);
 
 			expect(addMemberDialogAfterClick.exists()).toBe(true);
 		});
@@ -548,12 +556,11 @@ describe("RoomMembersPage", () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper } = setup();
 
-			const dialog = wrapper.findComponent(VDialog);
+			const dialog = wrapper.findComponent(AddMembersDialog);
 			await dialog.setValue(true);
 			expect(dialog.props("modelValue")).toBe(true);
 
-			const addMemberComponent = dialog.findComponent(AddMembers);
-			await addMemberComponent.vm.$emit("close");
+			await dialog.vm.$emit("close");
 
 			expect(dialog.props("modelValue")).toBe(false);
 		});
@@ -562,10 +569,10 @@ describe("RoomMembersPage", () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper } = setup();
 
-			const dialog = wrapper.getComponent(VDialog);
+			const dialog = wrapper.getComponent(AddMembersDialog);
 			await dialog.setValue(true);
 
-			const dialogContent = dialog.getComponent(AddMembers);
+			const dialogContent = dialog.getComponent(VDialog);
 			await dialogContent.trigger("keydown.escape");
 
 			expect(dialog.props("modelValue")).toBe(false);

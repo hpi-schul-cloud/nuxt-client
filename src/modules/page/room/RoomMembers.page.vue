@@ -66,16 +66,7 @@
 				/>
 			</VTabsWindowItem>
 		</VTabsWindow>
-		<VDialog
-			v-model="isMembersDialogOpen"
-			:width="xs ? 'auto' : 480"
-			data-testid="dialog-add-participants"
-			max-width="480"
-			persistent
-			@keydown.esc="onDialogClose"
-		>
-			<AddMembers @close="onDialogClose" />
-		</VDialog>
+		<AddMembersDialog v-model="isMembersDialogOpen" @close="onDialogClose" />
 	</DefaultWireframe>
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	<ConfirmationDialog />
@@ -118,7 +109,7 @@ import {
 	mdiAccountQuestionOutline,
 } from "@icons/material";
 import {
-	AddMembers,
+	AddMembersDialog,
 	Confirmations,
 	Invitations,
 	InviteMembersDialog,

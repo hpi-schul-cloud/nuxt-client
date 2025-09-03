@@ -3,7 +3,7 @@ import RoomForm from "./RoomForm.vue";
 import RoomMenu from "./RoomMenu.vue";
 import BoardGrid from "./BoardGrid.vue";
 import MembersTable from "./roomMembers/tables/MembersTable.vue";
-import AddMembers from "./roomMembers/dialogs/AddMembers.vue";
+import AddMembersDialog from "./roomMembers/dialogs/AddMembersDialog.vue";
 import ChangeRole from "./roomMembers/dialogs/ChangeRole.vue";
 import Members from "./roomMembers/tabs/Members.vue";
 import Invitations from "./roomMembers/tabs/Invitations.vue";
@@ -17,7 +17,7 @@ import RoomAdminTable from "./manageRoom/tables/RoomAdminTable.vue";
 import RoomAdminMembersTable from "./manageRoom/tables/RoomAdminMembersTable.vue";
 
 export {
-	AddMembers,
+	AddMembersDialog,
 	BoardGrid,
 	ChangeRole,
 	Confirmations,

@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import AddMembers from "./AddMembers.vue";
+import AddMembersDialog from "./AddMembersDialog.vue";
 import { RoleName } from "@/serverApi/v3";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule, schoolsModule } from "@/store";
@@ -44,8 +44,8 @@ type RoomAuthorizationRefs = Partial<
 	RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>
 >;
 
-describe("AddMembers", () => {
-	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
+describe("AddMembersDialog", () => {
+	let wrapper: VueWrapper<InstanceType<typeof AddMembersDialog>>;
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -112,7 +112,10 @@ describe("AddMembers", () => {
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
-		wrapper = mount(AddMembers, {
+		wrapper = mount(AddMembersDialog, {
+			props: {
+				modelValue: true,
+			},
 			attachTo: document.body,
 			global: {
 				plugins: [
