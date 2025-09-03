@@ -253,8 +253,8 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			}-${new Date().toISOString()}.imscc`;
 			document.body.appendChild(link);
 			link.click();
-			document.body.removeChild(link);
 			URL.revokeObjectURL(link.href);
+			document.body.removeChild(link);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
