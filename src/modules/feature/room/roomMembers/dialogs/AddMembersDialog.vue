@@ -206,19 +206,6 @@ const schoolRoleListItemProps = (item: SchoolRoleItem) => ({
 const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
 const selectedUsers = ref<string[]>([]);
 
-const onValueChange = async () => {
-	resetPotentialMembers();
-	selectedUsers.value = [];
-	await getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
-};
-
-const onAddMembers = async () => {
-	await addMembers(selectedUsers.value);
-	emit("close");
-};
-
-const onClose = () => emit("close");
-
 const addMembersContent = ref<VCard>();
 const { pause, unpause, deactivate } = useFocusTrap(addMembersContent, {
 	immediate: true,
@@ -281,6 +268,23 @@ const onItemListToggle = () => {
 	} else {
 		unpause();
 	}
+};
+
+const onAddMembers = async () => {
+	await addMembers(selectedUsers.value);
+	emit("close");
+};
+
+const onValueChange = async () => {
+	resetPotentialMembers();
+	selectedUsers.value = [];
+	await getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
+};
+
+const onClose = () => {
+	resetPotentialMembers();
+	selectedUsers.value = [];
+	emit("close");
 };
 
 onMounted(() => {
