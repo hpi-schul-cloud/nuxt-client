@@ -7,6 +7,8 @@ import {
 	commonCartridgeImportModule,
 	contentModule,
 	copyModule,
+	courseRoomDetailsModule,
+	courseRoomListModule,
 	envConfigModule,
 	filePathsModule,
 	finishedTasksModule,
@@ -16,8 +18,6 @@ import {
 	newsModule,
 	notifierModule,
 	privacyPolicyModule,
-	courseRoomDetailsModule,
-	courseRoomListModule,
 	schoolExternalToolsModule,
 	schoolsModule,
 	shareModule,
@@ -30,6 +30,7 @@ import {
 } from "@/store";
 import themeConfig from "@/theme.config";
 import { htmlConfig } from "@feature-render-html";
+import { logger } from "@util-logger";
 import axios from "axios";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
@@ -50,6 +51,8 @@ import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	CONTENT_MODULE_KEY,
 	COPY_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
+	COURSE_ROOM_LIST_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
@@ -57,8 +60,6 @@ import {
 	NEWS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	COURSE_ROOM_LIST_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
@@ -69,7 +70,6 @@ import {
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
-import { logger } from "@util-logger";
 
 export const app = createApp(App);
 
@@ -97,10 +97,10 @@ app.use(VueDOMPurifyHTML, {
 });
 
 (async () => {
-	const runtimeConfigJson = await axios.get(
+	/*const runtimeConfigJson = await axios.get(
 		`${window.location.origin}/runtime.config.json`
-	);
-	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
+	); */ //TODO: use when api url is fixed
+	axios.defaults.baseURL = "localhost:3030/api"; //runtimeConfigJson.data.apiURL;
 
 	initializeAxios(axios);
 

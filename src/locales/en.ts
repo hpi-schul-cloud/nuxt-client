@@ -106,6 +106,7 @@ export default {
 	"common.labels.title": "Title",
 	"common.labels.unknown": "Unknown",
 	"common.labels.updateAt": "Updated:",
+	"common.labels.username": "Username",
 	"common.labels.visibility": "Visibility",
 	"common.labels.visible": "Visible",
 	"common.loading.text": "Data is loading...",
@@ -634,6 +635,21 @@ export default {
 	"components.legacy.footer.security": "Security",
 	"components.legacy.footer.status": "Status",
 	"components.legacy.footer.terms": "Terms of Use",
+	"components.login.button.email": "Login with E-mail",
+	"components.login.button.forgotPassword": "Forgot password?",
+	"components.login.button.ldap": "Login via school Ldap",
+	"components.login.button.return": "Back to the login selection",
+	"components.login.checkbox.stayLoggedIn": "Stay logged in",
+	"components.login.label.school": "School",
+	"components.login.passwordRecovery.button.submit": "Reset password",
+	"components.login.passwordRecovery.label.emailUsername":
+		"Your Email address / Username",
+	"components.login.passwordRecovery.text1":
+		"Wenn du zusätzliche Hilfe beim Passwort zurücksetzen benötigst, wende dich bitte an deine betreuende Lehrkraft (als Schüler:in) oder an deinen Admin (als Lehrkraft).",
+	"components.login.passwordRecovery.text2":
+		"Diese können dein Passwort über die Nutzerverwaltung mit sofortiger Wirkung zurücksetzen.",
+	"components.login.passwordRecovery.title": "Reset password",
+	"components.login.title": "Login for registered users",
 	"components.molecules.AddContentModal": "Add to course",
 	"components.molecules.adminfooterlegend.title": "Legend",
 	"components.molecules.admintablelegend.externalSync":

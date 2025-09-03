@@ -204,6 +204,23 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			isPublic: true,
 		},
 	},
+	//{
+	//	path: `/`,
+	//	component: async () => await import("@/modules/page/login/home.page.vue"),
+	//	name: "HomePage",
+	//	meta: {
+	//		isPublic: true,
+	//	},
+	//},
+	{
+		path: `/login`,
+		component: async () => await import("@/modules/page/login/login.page.vue"),
+		name: "LoginPage",
+		meta: {
+			layout: Layouts.LOGGED_OUT,
+			isPublic: true,
+		},
+	},
 	{
 		path: "/migration",
 		component: () =>

@@ -108,6 +108,7 @@ export default {
 	"common.labels.title": "Título",
 	"common.labels.unknown": "Desconocido",
 	"common.labels.updateAt": "Actualizado:",
+	"common.labels.username": "Nombre de usuario",
 	"common.labels.visibility": "Visibilidad",
 	"common.labels.visible": "Visible",
 	"common.loading.text": "Los datos se están cargando...",
@@ -652,6 +653,22 @@ export default {
 	"components.legacy.footer.security": "Seguridad",
 	"components.legacy.footer.status": "Estado",
 	"components.legacy.footer.terms": "Condiciones de uso",
+	"components.login.button.email": "Iniciar sesión con correo electrónico",
+	"components.login.button.forgotPassword": "¿Se te ha olvidado la contraseña?",
+	"components.login.button.ldap": "Iniciar sesión con LDAP de la escuela",
+	"components.login.button.return": "Volver a la selección de inicio de sesión",
+	"components.login.checkbox.stayLoggedIn": "Permanecer conectado",
+	"components.login.label.school": "Escuela",
+	"components.login.passwordRecovery.button.submit":
+		"Restablecer la contraseña",
+	"components.login.passwordRecovery.label.emailUsername":
+		"Tu dirección de correo electrónico/nombre de usuario",
+	"components.login.passwordRecovery.text1":
+		"Wenn du zusätzliche Hilfe beim Passwort zurücksetzen benötigst, wende dich bitte an deine betreuende Lehrkraft (als Schüler:in) oder an deinen Admin (als Lehrkraft).",
+	"components.login.passwordRecovery.text2":
+		"Diese können dein Passwort über die Nutzerverwaltung mit sofortiger Wirkung zurücksetzen.",
+	"components.login.passwordRecovery.title": "Restablecer la contraseña",
+	"components.login.title": "Iniciar sesión para usuarios registrados",
 	"components.molecules.AddContentModal": "Agregar al curso",
 	"components.molecules.adminfooterlegend.title": "Leyenda",
 	"components.molecules.admintablelegend.externalSync":

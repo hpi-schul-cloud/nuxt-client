@@ -107,6 +107,7 @@ export default {
 	"common.labels.title": "Назва",
 	"common.labels.unknown": "Невідомий",
 	"common.labels.updateAt": "Оновлено:",
+	"common.labels.username": "Ім'я користувача",
 	"common.labels.visibility": "Видимість",
 	"common.labels.visible": "Видимий",
 	"common.loading.text": "Дані завантажуються...",
@@ -648,6 +649,21 @@ export default {
 	"components.legacy.footer.security": "Безпека",
 	"components.legacy.footer.status": "Статус",
 	"components.legacy.footer.terms": "Умови використання",
+	"components.login.button.email": "Вхід електронною поштою",
+	"components.login.button.forgotPassword": "Забули пароль?",
+	"components.login.button.ldap": "Вхід через шкільний LDAP",
+	"components.login.button.return": "Назад до вибору входу",
+	"components.login.checkbox.stayLoggedIn": "Залишайтеся в системі",
+	"components.login.label.school": "Школа",
+	"components.login.passwordRecovery.button.submit": "Скинути пароль",
+	"components.login.passwordRecovery.label.emailUsername":
+		"Ваша адреса електронної пошти / ім'я користувача",
+	"components.login.passwordRecovery.text1":
+		"Wenn du zusätzliche Hilfe beim Passwort zurücksetzen benötigst, wende dich bitte an deine betreuende Lehrkraft (als Schüler:in) oder an deinen Admin (als Lehrkraft).",
+	"components.login.passwordRecovery.text2":
+		"Diese können dein Passwort über die Nutzerverwaltung mit sofortiger Wirkung zurücksetzen.",
+	"components.login.passwordRecovery.title": "Скинути пароль",
+	"components.login.title": "Увійти для зареєстрованих користувачів",
 	"components.molecules.AddContentModal": "Додати до курсу",
 	"components.molecules.adminfooterlegend.title": "Легенда",
 	"components.molecules.admintablelegend.externalSync":
