@@ -4,9 +4,8 @@
 		:width="xs ? 'auto' : 480"
 		data-testid="dialog-add-participants"
 		max-width="480"
-		persistent
 		@keydown.esc="onClose"
-		@click:outside="onClose"
+		@click:outside.prevent="onClose"
 	>
 		<v-card ref="addMembersContent">
 			<template #title>
@@ -124,7 +123,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { RoleName } from "@/serverApi/v3";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
@@ -221,9 +220,18 @@ const onAddMembers = async () => {
 const onClose = () => emit("close");
 
 const addMembersContent = ref<VCard>();
-const { pause, unpause } = useFocusTrap(addMembersContent, {
+const { pause, unpause, deactivate } = useFocusTrap(addMembersContent, {
 	immediate: true,
 });
+
+watch(
+	() => isOpen.value,
+	(isOpen: boolean) => {
+		if (isOpen === false) {
+			deactivate();
+		}
+	}
+);
 
 const isSchoolSelectionDisabled = computed(() => {
 	return isCurrentUserStudent.value;

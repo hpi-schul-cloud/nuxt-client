@@ -33,10 +33,12 @@
 			>
 				<KebabMenuActionChangePermission
 					:aria-label="getAriaLabel(item, 'changeRole')"
+					@click="onChangePermission(item)"
 				/>
 				<KebabMenuActionRemoveMember
 					v-if="!isRoomOwner(item.userId)"
 					:aria-label="getAriaLabel(item, 'remove')"
+					@click="onRemoveMembers(item)"
 				/>
 			</KebabMenu>
 		</template>

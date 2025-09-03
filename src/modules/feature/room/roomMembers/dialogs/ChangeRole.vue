@@ -5,7 +5,7 @@
 		data-testid="dialog-invite-participants"
 		max-width="480"
 		@keydown.esc="onClose"
-		@click:outside.prevent="onClose"
+		@click:outside="onClose"
 	>
 		<v-card ref="changeRoleContent">
 			<template #title>
@@ -126,7 +126,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, toRef, watch } from "vue";
+import { computed, ModelRef, PropType, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum as RoleEnum,
@@ -142,6 +142,7 @@ import {
 import { WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 import { authModule } from "@/store";
+import { VCard } from "vuetify/components";
 
 const props = defineProps({
 	members: {
@@ -154,7 +155,7 @@ const props = defineProps({
 	},
 });
 
-const isOpen = defineModel({
+const isOpen: ModelRef<boolean> = defineModel({
 	type: Boolean,
 	required: true,
 });
@@ -332,9 +333,18 @@ const radioOptions = computed(() => {
 });
 
 const changeRoleContent = ref();
-useFocusTrap(changeRoleContent, {
+const { deactivate } = useFocusTrap(changeRoleContent, {
 	immediate: true,
 });
+
+watch(
+	() => isOpen.value,
+	(isOpen: boolean) => {
+		if (isOpen === false) {
+			deactivate();
+		}
+	}
+);
 </script>
 
 <style lang="scss" scoped>
