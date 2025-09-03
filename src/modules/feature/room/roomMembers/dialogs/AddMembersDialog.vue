@@ -113,7 +113,8 @@
 						variant="flat"
 						:text="t('common.actions.add')"
 						data-testid="add-participant-save-btn"
-						@click="onAddMembers"
+						:disabled="isLoading || selectedUsers.length === 0"
+						@click="handleWithLoading(() => onAddMembers())"
 					/>
 				</div>
 			</template>
@@ -155,6 +156,16 @@ const isOpen = defineModel({
 	type: Boolean,
 	required: true,
 });
+
+const isLoading = ref(false);
+const handleWithLoading = async (fn: () => Promise<void>) => {
+	isLoading.value = true;
+	try {
+		await fn();
+	} finally {
+		isLoading.value = false;
+	}
+};
 
 const emit = defineEmits<{
 	(e: "close"): void;

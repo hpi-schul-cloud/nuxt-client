@@ -99,7 +99,7 @@
 						class="ms-auto mr-2"
 						:text="t('common.actions.cancel')"
 						data-testid="change-role-cancel-btn"
-						@click="onCancel"
+						@click="onClose"
 					/>
 					<v-btn
 						v-if="!isOwnershipHandoverMode"
@@ -108,7 +108,8 @@
 						variant="flat"
 						:text="t('common.actions.confirm')"
 						data-testid="change-role-confirm-btn"
-						@click="onConfirm"
+						:disabled="isLoading || !selectedRole"
+						@click="handleWithLoading(() => onConfirm())"
 					/>
 					<v-btn
 						v-else
@@ -117,7 +118,8 @@
 						variant="flat"
 						:text="t('pages.rooms.members.roleChange.handOverBtn.text')"
 						data-testid="change-owner-confirm-btn"
-						@click="onChangeOwner"
+						:disabled="isLoading || !selectedRole"
+						@click="handleWithLoading(() => onChangeOwner())"
 					/>
 				</div>
 			</template>
@@ -164,6 +166,16 @@ const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "update:modelValue", value: boolean): void;
 }>();
+
+const isLoading = ref(false);
+const handleWithLoading = async (fn: () => Promise<void>) => {
+	isLoading.value = true;
+	try {
+		await fn();
+	} finally {
+		isLoading.value = false;
+	}
+};
 
 const { t } = useI18n();
 const { xs } = useDisplay();
@@ -277,11 +289,6 @@ const onChangeOwner = async () => {
 	await changeRoomOwner(memberToChangeRole.value[0].userId);
 	selectedIds.value = [];
 	emit("close");
-};
-
-const onCancel = () => {
-	emit("close");
-	emit("update:modelValue", false);
 };
 
 const onClose = () => {

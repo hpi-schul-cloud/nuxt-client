@@ -100,10 +100,6 @@ const tableData = computed(
 	() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]
 );
 
-const onUpdateSelectedIds = (ids: string[]) => {
-	selectedIds.value = ids;
-};
-
 const getAriaLabel = (
 	member: RoomMember,
 	actionFor: "remove" | "changeRole" | "" = ""
@@ -140,11 +136,6 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	return undefined;
 };
 
-const onDialogClose = () => {
-	membersToChangeRole.value = [];
-	isChangeRoleDialogOpen.value = false;
-};
-
 const confirmRemoval = async (userIds: string[]) => {
 	let message = t("pages.rooms.members.multipleRemove.confirmation");
 	if (userIds.length === 1) {
@@ -169,5 +160,14 @@ const onChangePermission = (ids: string[]) => {
 	);
 
 	isChangeRoleDialogOpen.value = true;
+};
+
+const onUpdateSelectedIds = (ids: string[]) => {
+	selectedIds.value = ids;
+};
+
+const onDialogClose = () => {
+	membersToChangeRole.value = [];
+	isChangeRoleDialogOpen.value = false;
 };
 </script>
