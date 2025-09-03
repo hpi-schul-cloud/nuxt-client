@@ -4,7 +4,6 @@
 
 <script setup lang="ts">
 import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
-import { watch } from "vue";
 import { useRouter } from "vue-router";
 
 /**
@@ -22,7 +21,7 @@ const routeToErrorPage = () => {
 	}
 };
 
-watch(
+/*watch(
 	() => applicationErrorModule.getStatusCode,
 	(to) => {
 		if (to !== null) {
@@ -30,5 +29,5 @@ watch(
 		}
 	},
 	{ immediate: true }
-);
+);*/
 </script>
