@@ -4,13 +4,21 @@ import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mountComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
 	CollaboraEvents,
 	useCollaboraPostMessageApi,
 } from "./CollaboraPostMessageApi.composable";
 
 describe("useCollaboraMessage", () => {
+	beforeEach(() => {
+		vi.useFakeTimers();
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+	});
+
 	const notifierModuleMock = createModuleMocks(NotifierModule);
 
 	const setupMountComposable = () => {
@@ -111,27 +119,39 @@ describe("useCollaboraMessage", () => {
 		it("should handle App_LoadingStatus:Initialized correctly", () => {
 			const { iframe, targetOrigin } = setupMountComposable();
 
+			const date = Date.now();
+			vi.setSystemTime(date);
+
 			const validMsg = JSON.stringify({
 				MessageId: CollaboraEvents.APP_LOADING_STATUS,
 				Values: { Status: "Initialized" },
 			});
 
-			const expectedMsg = {
+			const expectedMsg1 = JSON.stringify({
 				MessageId: CollaboraEvents.HOST_POSTMESSAGE_READY,
-				SendTime: expect.any(Number),
+				SendTime: date,
 				Values: undefined,
-			};
+			});
+			const expectedMsg2 = JSON.stringify({
+				MessageId: CollaboraEvents.FEEDBACK_NEVER,
+				SendTime: date,
+				Values: undefined,
+			});
 
 			const spy = vi.spyOn(iframe.contentWindow as Window, "postMessage");
 			window.dispatchEvent(new MessageEvent("message", { data: validMsg }));
 
-			expect(spy).toHaveBeenCalledWith(expectedMsg, targetOrigin);
+			expect(spy).toHaveBeenCalledWith(expectedMsg1, targetOrigin);
+			expect(spy).toHaveBeenCalledWith(expectedMsg2, targetOrigin);
 
 			document.body.removeChild(iframe);
 		});
 
 		it("should handle App_LoadingStatus:Document_Loaded correctly", () => {
 			const { iframe, targetOrigin } = setupMountComposable();
+
+			const date = Date.now();
+			vi.setSystemTime(date);
 
 			const validMsg = JSON.stringify({
 				MessageId: CollaboraEvents.APP_LOADING_STATUS,
@@ -140,7 +160,7 @@ describe("useCollaboraMessage", () => {
 
 			const expectedMsg = {
 				MessageId: CollaboraEvents.REMOVE_BUTTON,
-				SendTime: expect.any(Number),
+				SendTime: date,
 				Values: undefined,
 			};
 
@@ -149,22 +169,22 @@ describe("useCollaboraMessage", () => {
 
 			expect(spy).toHaveBeenNthCalledWith(
 				1,
-				{ ...expectedMsg, Values: { id: "feedback-button" } },
+				JSON.stringify({ ...expectedMsg, Values: { id: "feedback-button" } }),
 				targetOrigin
 			);
 			expect(spy).toHaveBeenNthCalledWith(
 				2,
-				{ ...expectedMsg, Values: { id: "about-button" } },
+				JSON.stringify({ ...expectedMsg, Values: { id: "about-button" } }),
 				targetOrigin
 			);
 			expect(spy).toHaveBeenNthCalledWith(
 				3,
-				{ ...expectedMsg, Values: { id: "latestupdates" } },
+				JSON.stringify({ ...expectedMsg, Values: { id: "latestupdates" } }),
 				targetOrigin
 			);
 			expect(spy).toHaveBeenNthCalledWith(
 				4,
-				{ ...expectedMsg, Values: { id: "signature-button" } },
+				JSON.stringify({ ...expectedMsg, Values: { id: "signature-button" } }),
 				targetOrigin
 			);
 
