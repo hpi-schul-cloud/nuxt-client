@@ -48,7 +48,6 @@
 		v-model="isChangeRoleDialogOpen"
 		:members="membersToChangeRole"
 		@close="onDialogClose"
-		@update:model-value="onDialogClose"
 	/>
 	<ConfirmationDialog />
 </template>

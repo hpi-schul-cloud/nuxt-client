@@ -50,7 +50,6 @@
 		:members="membersToChangeRole"
 		:is-admin-mode="true"
 		@close="onDialogClose"
-		@update:model-value="onDialogClose"
 	/>
 	<ConfirmationDialog />
 </template>

@@ -123,7 +123,6 @@ const onFabClick = async () => {
 };
 
 const onDialogClose = () => {
-	// membersToChangeRole.value = [];
 	isMembersDialogOpen.value = false;
 };
 </script>

@@ -165,7 +165,6 @@ const isOpen: ModelRef<boolean> = defineModel({
 
 const emit = defineEmits<{
 	(e: "close"): void;
-	(e: "update:modelValue", value: boolean): void;
 }>();
 
 const isLoading = ref(false);
@@ -294,7 +293,6 @@ const onChangeOwner = async () => {
 
 const onClose = () => {
 	emit("close");
-	emit("update:modelValue", false);
 };
 
 const radioOptions = computed(() => {
