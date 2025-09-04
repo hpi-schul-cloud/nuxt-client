@@ -383,6 +383,7 @@
 
 <script setup lang="ts">
 import { useLogin } from "@/modules/feature/login/login.composable";
+import router from "@/router";
 import { envConfigModule } from "@/store";
 import { System } from "@/store/types/system"; //import { System } from "@data-system"; // one of those?
 import { mdiEyeOffOutline, mdiEyeOutline } from "@icons/material";
@@ -395,7 +396,8 @@ import { useI18n } from "vue-i18n"; //TODO: implement in composable or import (c
 type AlertType = "info" | "success" | "warning" | "error";
 
 const { t } = useI18n();
-const { loginEmail, isLoading } = useLogin();
+const { loginEmail, isLoading, setCookie, loginResult, cookieDefaults } =
+	useLogin();
 
 // Alerts
 //const { initAlerts, alerts: composableAlerts } = useAlerts();
@@ -591,8 +593,13 @@ function enableDisableLdapBtn(schoolId: string) {
 }
 
 // ----- Login Submissions -----
-function submitLogin() {
-	loginEmail(email.value, password.value);
+async function submitLogin() {
+	await loginEmail(email.value, password.value);
+	if (loginResult.value) {
+		setCookie("jwt", loginResult.value?.accessToken);
+		setCookie("isLoggedIn", "true");
+	}
+	await router.push({ path: '/rooms' })
 	//TODO: implement timer
 	//setTimeout(() => {
 	//	isSubmitting.value = false;

@@ -1,4 +1,11 @@
-import { ApiValidationError, BusinessError, LoginResponse, Oauth2AuthorizationBodyParams, OauthConfigResponse, OidcLogoutBodyParams, PublicSystemListResponse, PublicSystemResponse, SystemType } from "@/serverApi/v3";
+import {
+	ApiValidationError,
+	BusinessError,
+	LoginResponse,
+	Oauth2AuthorizationBodyParams,
+	OidcLogoutBodyParams,
+	PublicSystemListResponse,
+} from "@/serverApi/v3";
 import { ApiResponseError } from "@/store/types/commons";
 import { logger } from "@util-logger";
 import { filter } from "lodash";
@@ -465,7 +472,7 @@ export interface SetCookieOptions extends Partial<CookieDefaults> {
  * Note: On the frontend, you cannot set httpOnly or hostOnly cookies.
  */
 const cookieDefaults: CookieDefaults = {
-	httpOnly: false, // Browsers do not allow setting httpOnly cookies via JS
+	httpOnly: true, // Browsers do not allow setting httpOnly cookies via JS
 	hostOnly: false, // not available in browser APIs
 	sameSite: "lax",
 	//secure: import.meta.env.MODE === "production",
@@ -519,7 +526,8 @@ export const useLogin = () => {
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref(undefined);
 	const consentCheckResult: Ref<any | undefined> = ref(undefined); //TODO: maybe something like before: Ref<ConsentCheckResult | undefined>
-	const oauthSystems: Ref<PublicSystemListResponse | undefined> = ref(undefined); //TODO: maybe something like before: Ref<Oauth2System[] | undefined>
+	const oauthSystems: Ref<PublicSystemListResponse | undefined> =
+		ref(undefined); //TODO: maybe something like before: Ref<Oauth2System[] | undefined>
 	const loginResult: Ref<LoginResponse | undefined> = ref(undefined);
 
 	//const login = async (
@@ -545,7 +553,7 @@ export const useLogin = () => {
 
 	const loginEmail = async (
 		username: string,
-		password: string,
+		password: string
 		//redirect?: string
 	): Promise<void> => {
 		isLoading.value = true;
@@ -569,18 +577,13 @@ export const useLogin = () => {
 		username: string,
 		password: string,
 		schoolId: string,
-		system: string,
+		system: string
 		//redirect?: string
 	): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
-			const result = await apiLoginLdap(
-				username,
-				password,
-				schoolId,
-				system,
-			);
+			const result = await apiLoginLdap(username, password, schoolId, system);
 			loginResult.value = result;
 		} catch (err: unknown) {
 			error.value = {
@@ -594,7 +597,9 @@ export const useLogin = () => {
 		}
 	};
 
-	const loginOAuth2 = async (payload: Oauth2AuthorizationBodyParams): Promise<void> => {
+	const loginOAuth2 = async (
+		payload: Oauth2AuthorizationBodyParams
+	): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
@@ -620,7 +625,8 @@ export const useLogin = () => {
 			oauthSystems.value = response;
 		} catch (err: unknown) {
 			error.value = {
-				message: err instanceof Error ? err.message : "Fetching Oauth2 systems failed",
+				message:
+					err instanceof Error ? err.message : "Fetching Oauth2 systems failed",
 				code: (err as ApiResponseError)?.code ?? 500,
 				type: (err as ApiResponseError)?.type,
 				title: (err as ApiResponseError)?.title,
