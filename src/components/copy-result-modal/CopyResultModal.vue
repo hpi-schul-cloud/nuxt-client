@@ -19,6 +19,9 @@
 			<WarningAlert data-testid="copy-result-notifications">
 				{{ t("components.molecules.share.options.tableHeader.InfoText") }}
 				<ul class="ml-6">
+					<li v-if="isCourse">
+						{{ t("components.molecules.copyResult.membersAndPermissions") }}
+					</li>
 					<template v-for="(warning, index) in copyResultWarnings">
 						<li v-if="warning.isShow" :key="index" data-testid="warning-title">
 							{{ warning.text }}

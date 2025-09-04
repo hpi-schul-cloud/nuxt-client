@@ -678,6 +678,8 @@ export default {
 	"components.molecules.copyResult.geogebraCopy.info": "Geogebra IDs",
 	"components.molecules.copyResult.information":
 		"Nachfolgend können die fehlenden Inhalte mit Hilfe der Quick-Links ergänzt werden. Die Links öffnen sich in einem separatem Tab.",
+	"components.molecules.copyResult.membersAndPermissions":
+		"Kursmitglieder und Berechtigungen",
 	"components.molecules.copyResult.label.columnBoard": "Bereich",
 	"components.molecules.copyResult.label.content": "Inhalt",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
