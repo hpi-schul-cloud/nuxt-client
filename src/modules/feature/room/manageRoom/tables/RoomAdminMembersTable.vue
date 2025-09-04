@@ -12,6 +12,7 @@
 	>
 		<template #[`action-menu-items`]>
 			<KebabMenuActionChangePermission
+				:disabled="selectedIds.length !== 1 || selectedIdsIncludeStudents"
 				@click="onChangePermission(selectedIds)"
 			/>
 			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
@@ -32,6 +33,7 @@
 				:aria-label="getAriaLabel(item)"
 			>
 				<KebabMenuActionChangePermission
+					:disabled="checkIsStudent(item)"
 					:aria-label="getAriaLabel(item, 'changeRole')"
 					@click="onChangePermission([item.userId])"
 				/>
@@ -98,6 +100,22 @@ const membersToChangeRole = ref<RoomMember[]>([]);
 
 const tableData = computed(
 	() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]
+);
+
+const checkIsStudent = (member?: RoomMember) => {
+	return member?.schoolRoleNames.some((role) =>
+		[RoleName.Student, RoleName.CourseStudent, RoleName.GuestStudent].includes(
+			role
+		)
+	);
+};
+
+const selectedIdsIncludeStudents = computed(() =>
+	selectedIds.value.some((id) =>
+		checkIsStudent(
+			roomMembersWithoutApplicants.value.find((member) => member.userId === id)
+		)
+	)
 );
 
 const getAriaLabel = (
@@ -168,6 +186,7 @@ const onUpdateSelectedIds = (ids: string[]) => {
 
 const onDialogClose = () => {
 	membersToChangeRole.value = [];
+	selectedIds.value = [];
 	isChangeRoleDialogOpen.value = false;
 };
 </script>
