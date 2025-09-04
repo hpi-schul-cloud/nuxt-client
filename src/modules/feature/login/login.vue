@@ -92,7 +92,7 @@
 				class="btn-login"
 				color="primary"
 				block
-				:disabled="isSubmitting"
+				:disabled="isLoading"
 				:data-timeout="loginTimeout"
 				data-testid="submit-login-email"
 				:autofocus="true"
@@ -382,6 +382,7 @@
 </template>
 
 <script setup lang="ts">
+import { useLogin } from "@/modules/feature/login/login.composable";
 import { envConfigModule } from "@/store";
 import { System } from "@/store/types/system"; //import { System } from "@data-system"; // one of those?
 import { mdiEyeOffOutline, mdiEyeOutline } from "@icons/material";
@@ -394,6 +395,7 @@ import { useI18n } from "vue-i18n"; //TODO: implement in composable or import (c
 type AlertType = "info" | "success" | "warning" | "error";
 
 const { t } = useI18n();
+const { loginEmail, isLoading } = useLogin();
 
 // Alerts
 //const { initAlerts, alerts: composableAlerts } = useAlerts();
@@ -590,7 +592,16 @@ function enableDisableLdapBtn(schoolId: string) {
 
 // ----- Login Submissions -----
 function submitLogin() {
+	loginEmail(email.value, password.value);
+	//TODO: implement timer
+	//setTimeout(() => {
+	//	isSubmitting.value = false;
+	//	submitButtonLabel.value = t("components.login.button.email");
+	//}, 1500);
+}
+function submitLdapLogin() {
 	isSubmitting.value = true;
+	ldapLoginActive.value = false;
 	// Store school/system prefs
 	if (selectedSchool.value) {
 		localStorage.setItem("loginSchool", selectedSchool.value);
@@ -602,15 +613,6 @@ function submitLogin() {
 	} else {
 		localStorage.removeItem("loginSystem");
 	}
-	// TODO: Replace with actual API login call
-	setTimeout(() => {
-		isSubmitting.value = false;
-		submitButtonLabel.value = t("components.login.button.email");
-	}, 1500);
-}
-function submitLdapLogin() {
-	isSubmitting.value = true;
-	ldapLoginActive.value = false;
 	// TODO: Replace with LDAP login API logic
 	setTimeout(() => {
 		isSubmitting.value = false;
