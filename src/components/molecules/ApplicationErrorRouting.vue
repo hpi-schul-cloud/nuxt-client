@@ -4,7 +4,6 @@
 
 <script setup lang="ts">
 import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
-import { watch } from "vue";
 import { useRouter } from "vue-router";
 
 /**

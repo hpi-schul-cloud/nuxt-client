@@ -97,10 +97,10 @@ app.use(VueDOMPurifyHTML, {
 });
 
 (async () => {
-	/*const runtimeConfigJson = await axios.get(
+	const runtimeConfigJson = await axios.get(
 		`${window.location.origin}/runtime.config.json`
-	); */ //TODO: use when api url is fixed
-	axios.defaults.baseURL = "localhost:3030/api"; //runtimeConfigJson.data.apiURL;
+	);
+	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
 
 	initializeAxios(axios);
 
