@@ -1,32 +1,29 @@
 import { $axios } from "@/utils/api";
-import type {
-	ConsentCheckResult,
-	LoginOptions,
-	LoginPayload,
-	LoginResult,
-	LogoutOptions,
-	Oauth2RedirectPayload,
-	Oauth2System,
-} from "./types/login.types";
+import { AuthenticationApiFactory, ConsentResponse, LoginResponse, Oauth2AuthorizationBodyParams, OidcLogoutBodyParams, SystemsApiFactory, PublicSystemListResponse, Oauth2ApiFactory, SystemType } from "@/serverApi/v3";
+import { types } from "sass-embedded";
 
 /**
  * API abstraction for the login composable.
  */
 export const useLoginApi = () => {
+	const authApi = AuthenticationApiFactory(undefined, "/v3", $axios);
+	const systemsApi = SystemsApiFactory(undefined, "/v3", $axios);
+	const oAuth2Api = Oauth2ApiFactory(undefined, "/v3", $axios);
+
 	/**
 	 * Standard/local login (possibly with a system/strategy).
 	 */
-	const apiLogin = async (
-		payload: LoginPayload,
-		options: LoginOptions = {}
-	): Promise<LoginResult> => {
-		// Assumes backend POST /login/
-		const response = await $axios.post("/login/", {
-			...payload,
-			...options,
-		});
-		return response.data;
-	};
+	//const apiLogin = async (
+	//	payload: LoginPayload,
+	//	options: LoginOptions = {}
+	//): Promise<LoginResult> => {
+	//	// Assumes backend POST /login/
+	//	const response = await $axios.post("/login/", {
+	//		...payload,
+	//		...options,
+	//	});
+	//	return response.data;
+	//};
 
 	/**
 	 * Email strategy login.
@@ -34,12 +31,10 @@ export const useLoginApi = () => {
 	const apiLoginEmail = async (
 		username: string,
 		password: string,
-		redirect?: string
-	): Promise<LoginResult> => {
-		const response = await $axios.post("/login/email", {
+	): Promise<LoginResponse> => {
+		const response = await authApi.loginControllerLoginLocal({
 			username,
 			password,
-			redirect,
 		});
 		return response.data;
 	};
@@ -51,15 +46,13 @@ export const useLoginApi = () => {
 		username: string,
 		password: string,
 		schoolId: string,
-		system: string,
-		redirect?: string
-	): Promise<LoginResult> => {
-		const response = await $axios.post("/login/ldap", {
+		systemId: string,
+	): Promise<LoginResponse> => {
+		const response = await authApi.loginControllerLoginLdap({
 			username,
 			password,
 			schoolId,
-			system,
-			redirect,
+			systemId,
 		});
 		return response.data;
 	};
@@ -68,41 +61,38 @@ export const useLoginApi = () => {
 	 * OAuth2 initiate login (redirect).
 	 */
 	const apiLoginOAuth2 = async (
-		payload: Oauth2RedirectPayload
-	): Promise<LoginResult> => {
+		payload: Oauth2AuthorizationBodyParams
+	): Promise<LoginResponse> => {
 		// POST to /login/oauth2 or GET /login/oauth2/:systemId if needed
-		const response = await $axios.post("/login/oauth2", payload);
+		const response = await authApi.loginControllerLoginOauth2(payload);
 		return response.data;
 	};
 
 	/**
 	 * Fetch the available OAuth2 systems.
 	 */
-	const apiGetOauthSystems = async (): Promise<Oauth2System[]> => {
-		const response = await $axios.get("/systems/public", {
-			params: { types: "oauth" },
-		});
-		return response.data?.data || [];
+	const apiGetOauthSystems = async (): Promise<PublicSystemListResponse> => {
+		const response = await systemsApi.systemControllerFind(SystemType.Oauth);
+		return response.data;
 	};
 
 	/**
 	 * Check user's consent status on login success.
 	 */
 	const apiCheckConsent = async (
-		userId: string
-	): Promise<ConsentCheckResult> => {
+		//userId: string
+		challenge: string
+	): Promise<ConsentResponse> => {
 		// Example: GET `/consents/${userId}/check/`
-		const response = await $axios.get(`/consents/${userId}/check/`, {
-			params: { simple: true },
-		});
+		const response = await oAuth2Api.oauthProviderControllerGetConsentRequest(challenge);
 		return response.data;
 	};
 
 	/**
 	 * Logout current user (local session end).
 	 */
-	const apiLogout = async (options?: LogoutOptions): Promise<void> => {
-		await $axios.post("/logout", options);
+	const apiLogout = async (options?: any): Promise<void> => {
+		await authApi.logoutControllerLogout(options);
 		// may also: await axios.delete('/collaborative-text-editor/delete-sessions');
 	};
 
@@ -110,11 +100,11 @@ export const useLoginApi = () => {
 	 * External logout (OAuth2, ...) if needed.
 	 */
 	const apiLogoutExternal = async (): Promise<void> => {
-		await $axios.post("/logout/external");
+		await authApi.logoutControllerExternalSystemLogout();
 	};
 
 	return {
-		apiLogin,
+		//apiLogin,
 		apiLoginEmail,
 		apiLoginLdap,
 		apiLoginOAuth2,

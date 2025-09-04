@@ -1,19 +1,9 @@
-import { ApiValidationError } from "@/serverApi/v3";
+import { ApiValidationError, BusinessError, LoginResponse, Oauth2AuthorizationBodyParams, OauthConfigResponse, OidcLogoutBodyParams, PublicSystemListResponse, PublicSystemResponse, SystemType } from "@/serverApi/v3";
 import { ApiResponseError } from "@/store/types/commons";
 import { logger } from "@util-logger";
 import { filter } from "lodash";
 import { ref, Ref } from "vue";
 import { useLoginApi } from "./loginApi.composable";
-import type {
-	BusinessError,
-	ConsentCheckResult,
-	LoginOptions,
-	LoginPayload,
-	LoginResult,
-	LogoutOptions,
-	Oauth2RedirectPayload,
-	Oauth2System,
-} from "./types/login.types";
 
 // --- logFilter logic migrated as a utility inside composable ---
 
@@ -21,9 +11,9 @@ import type {
  * A list of keys whose values should be filtered out (e.g. for logging,
  * storing, or sending to front).
  */
-//const MAX_LEVEL_FILTER = 12; //TODO: should be used, i guess
+const MAX_LEVEL_FILTER = 12; //TODO: should be used, i guess
 
-/*const secretDataKeys: string[] = [
+const secretDataKeys: string[] = [
 	// server list
 	"headers",
 	"password",
@@ -56,7 +46,7 @@ import type {
 	"resetId",
 	"password_control",
 	"username",
-].map((k) => k.toLocaleLowerCase()); */ //TODO: should be used, i guess
+].map((k) => k.toLocaleLowerCase());
 
 //TODO: get this filtering mess going...
 /*const filterSecretValue = (key: string, value: string): string =>
@@ -128,8 +118,8 @@ const formatError = (
 		const e: Partial<BusinessError & { stack?: string }> = {
 			//TODO: replacement for options: any needed
 			message: err.message,
-			error: err.details,
-			statusCode: err.code,
+			//error: err.details,
+			//statusCode: err.code,
 			stack: err.stack,
 		};
 		/*if (e.options) {
@@ -142,7 +132,7 @@ const formatError = (
 		// fallback: frontend log -- in original this logged on server
 		// In Vue composable: optional, could use e.g. console.error
 		logger.error(err2);
-		return { error: err2, message: "Unknown error" };
+		return { message: "Unknown error" };
 	}
 };
 
@@ -515,7 +505,7 @@ const setCookie = (
 
 export const useLogin = () => {
 	const {
-		apiLogin,
+		//apiLogin,
 		apiLoginEmail,
 		apiLoginLdap,
 		apiLoginOAuth2,
@@ -528,46 +518,47 @@ export const useLogin = () => {
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref(undefined);
-	const consentCheckResult: Ref<ConsentCheckResult | undefined> =
-		ref(undefined);
-	const oauthSystems: Ref<Oauth2System[] | undefined> = ref(undefined);
-	const loginResult: Ref<LoginResult | undefined> = ref(undefined);
+	const consentCheckResult: Ref<any | undefined> = ref(undefined); //TODO: maybe something like before: Ref<ConsentCheckResult | undefined>
+	const oauthSystems: Ref<PublicSystemListResponse | undefined> = ref(undefined); //TODO: maybe something like before: Ref<Oauth2System[] | undefined>
+	const loginResult: Ref<LoginResponse | undefined> = ref(undefined);
 
-	const login = async (
-		payload: LoginPayload,
-		options: LoginOptions = {}
-	): Promise<void> => {
-		isLoading.value = true;
-		error.value = undefined;
-		try {
-			const result = await apiLogin(payload, options);
-			loginResult.value = result;
-		} catch (err: unknown) {
-			error.value = {
-				message: err instanceof Error ? err.message : "Login failed",
-				error: err,
-				statusCode: (err as ApiResponseError)?.code ?? 400,
-			};
-		} finally {
-			isLoading.value = false;
-		}
-	};
+	//const login = async (
+	//	payload: LoginPa,
+	//	options: LoginOptions = {}
+	//): Promise<void> => {
+	//	isLoading.value = true;
+	//	error.value = undefined;
+	//	try {
+	//		const result = await apiLogin(payload, options);
+	//		loginResult.value = result;
+	//	} catch (err: unknown) {
+	//		error.value = {
+	//			message: err instanceof Error ? err.message : "Login failed",
+	//			code: (err as ApiResponseError)?.code ?? 400,
+	//			type: (err as ApiResponseError)?.type,
+	//			title: (err as ApiResponseError)?.title,
+	//		};
+	//	} finally {
+	//		isLoading.value = false;
+	//	}
+	//};
 
 	const loginEmail = async (
 		username: string,
 		password: string,
-		redirect?: string
+		//redirect?: string
 	): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
-			const result = await apiLoginEmail(username, password, redirect);
+			const result = await apiLoginEmail(username, password);
 			loginResult.value = result;
 		} catch (err: unknown) {
 			error.value = {
 				message: err instanceof Error ? err.message : "Email login failed",
-				error: err,
-				statusCode: (err as ApiResponseError)?.code ?? 400,
+				code: (err as ApiResponseError)?.code ?? 400,
+				type: (err as ApiResponseError)?.type,
+				title: (err as ApiResponseError)?.title,
 			};
 		} finally {
 			isLoading.value = false;
@@ -579,7 +570,7 @@ export const useLogin = () => {
 		password: string,
 		schoolId: string,
 		system: string,
-		redirect?: string
+		//redirect?: string
 	): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
@@ -589,21 +580,21 @@ export const useLogin = () => {
 				password,
 				schoolId,
 				system,
-				redirect
 			);
 			loginResult.value = result;
 		} catch (err: unknown) {
 			error.value = {
 				message: err instanceof Error ? err.message : "LDAP login failed",
-				error: err,
-				statusCode: (err as ApiResponseError)?.code ?? 400,
+				code: (err as ApiResponseError)?.code ?? 400,
+				type: (err as ApiResponseError)?.type,
+				title: (err as ApiResponseError)?.title,
 			};
 		} finally {
 			isLoading.value = false;
 		}
 	};
 
-	const loginOAuth2 = async (payload: Oauth2RedirectPayload): Promise<void> => {
+	const loginOAuth2 = async (payload: Oauth2AuthorizationBodyParams): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
@@ -612,8 +603,9 @@ export const useLogin = () => {
 		} catch (err: unknown) {
 			error.value = {
 				message: err instanceof Error ? err.message : "OAuth2 login failed",
-				error: err,
-				statusCode: (err as ApiResponseError)?.code ?? 400,
+				code: (err as ApiResponseError)?.code ?? 400,
+				type: (err as ApiResponseError)?.type,
+				title: (err as ApiResponseError)?.title,
 			};
 		} finally {
 			isLoading.value = false;
@@ -624,13 +616,14 @@ export const useLogin = () => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
-			oauthSystems.value = await apiGetOauthSystems();
+			const response = await apiGetOauthSystems();
+			oauthSystems.value = response;
 		} catch (err: unknown) {
 			error.value = {
-				message:
-					err instanceof Error ? err.message : "Fetching Oauth2 systems failed",
-				error: err,
-				statusCode: (err as ApiResponseError)?.code ?? 500,
+				message: err instanceof Error ? err.message : "Fetching Oauth2 systems failed",
+				code: (err as ApiResponseError)?.code ?? 500,
+				type: (err as ApiResponseError)?.type,
+				title: (err as ApiResponseError)?.title,
 			};
 		} finally {
 			isLoading.value = false;
@@ -645,15 +638,16 @@ export const useLogin = () => {
 		} catch (err: unknown) {
 			error.value = {
 				message: err instanceof Error ? err.message : "Consent check failed",
-				error: err,
-				statusCode: (err as ApiResponseError)?.code ?? 400,
+				code: (err as ApiResponseError)?.code ?? 400,
+				type: (err as ApiResponseError)?.type,
+				title: (err as ApiResponseError)?.title,
 			};
 		} finally {
 			isLoading.value = false;
 		}
 	};
 
-	const logout = async (options?: LogoutOptions): Promise<void> => {
+	const logout = async (options?: OidcLogoutBodyParams): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
@@ -661,8 +655,9 @@ export const useLogin = () => {
 		} catch (err: unknown) {
 			error.value = {
 				message: err instanceof Error ? err.message : "Logout failed",
-				error: err,
-				statusCode: (err as ApiResponseError)?.code ?? 500,
+				code: (err as ApiResponseError)?.code ?? 500,
+				type: (err as ApiResponseError)?.type,
+				title: (err as ApiResponseError)?.title,
 			};
 		} finally {
 			isLoading.value = false;
@@ -677,8 +672,9 @@ export const useLogin = () => {
 		} catch (err: unknown) {
 			error.value = {
 				message: err instanceof Error ? err.message : "External logout failed",
-				error: err,
-				statusCode: (err as ApiResponseError)?.code ?? 500,
+				code: (err as ApiResponseError)?.code ?? 500,
+				type: (err as ApiResponseError)?.type,
+				title: (err as ApiResponseError)?.title,
 			};
 		} finally {
 			isLoading.value = false;
@@ -696,7 +692,7 @@ export const useLogin = () => {
 	return {
 		isLoading,
 		error,
-		login,
+		//login,
 		loginEmail,
 		loginLdap,
 		loginOAuth2,
