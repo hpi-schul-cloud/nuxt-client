@@ -217,26 +217,26 @@ const onCopy = () => {
 
 const showAlertInfo = computed(() => {
 	return (
-		props.type === "courses" ||
-		props.type === "columnBoard" ||
-		props.type === "lessons" ||
-		props.type === "room"
+		props.type === ShareTokenBodyParamsParentTypeEnum.Courses ||
+		props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
+		props.type === ShareTokenBodyParamsParentTypeEnum.Lessons ||
+		props.type === ShareTokenBodyParamsParentTypeEnum.Room
 	);
 });
 
 const showCourseInfo = computed(() => {
-	return props.type === "courses";
+	return props.type === ShareTokenBodyParamsParentTypeEnum.Courses;
 });
 
 const showBoardInfo = computed(() => {
-	return props.type === "columnBoard";
+	return props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard;
 });
 
 const showLessonInfo = computed(() => {
-	return props.type === "lessons";
+	return props.type === ShareTokenBodyParamsParentTypeEnum.Lessons;
 });
 
 const showRoomInfo = computed(() => {
-	return props.type === "room";
+	return props.type === ShareTokenBodyParamsParentTypeEnum.Room;
 });
 </script>

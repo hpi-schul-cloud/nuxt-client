@@ -256,36 +256,6 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				);
 			}
 		);
-
-		it.each([
-			[
-				"components.molecules.copyResult.label.geogebra",
-				CopyApiResponseTypeEnum.LessonContentGeogebra,
-			],
-			[
-				"components.molecules.copyResult.label.etherpad",
-				CopyApiResponseTypeEnum.LessonContentEtherpad,
-			],
-			["common.words.courseGroups", CopyApiResponseTypeEnum.CoursegroupGroup],
-			[
-				"components.molecules.copyResult.label.files",
-				CopyApiResponseTypeEnum.File,
-			],
-		])("should render if there is a %s item", (title, type) => {
-			const copyResultItems = mockLessonResultItems();
-			copyResultItems[0].elements = [
-				{
-					title,
-					type,
-				},
-			];
-
-			const wrapper = createWrapper({ isOpen: true, copyResultItems });
-			const dialog = wrapper.findComponent(vCustomDialog);
-			const content = dialog.findComponent(".v-card-text").text();
-
-			expect(content).toContain(title);
-		});
 	});
 
 	describe("when root element is course", () => {
@@ -334,6 +304,17 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 
 			expect(content).toContain("components.molecules.copyResult.information");
 		});
+
+		it("should render members and permission information", () => {
+			const wrapper = setup();
+
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).toContain(
+				"components.molecules.copyResult.membersAndPermissions"
+			);
+		});
 	});
 
 	describe("when root element is column board", () => {
@@ -344,20 +325,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				},
 				props: {
 					isOpen: true,
-					copyResultItems: [
-						{
-							type: CopyApiResponseTypeEnum.Columnboard,
-							title: "Lesson Title",
-							elementId: "mockId",
-							elements: [
-								mockGeoGebraItem,
-								mockEtherpadItem,
-								mockCourseGroupItem,
-								mockFileItem,
-							],
-							url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
-						},
-					],
+					copyResultItems: [],
 					copyResultRootItemType: CopyApiResponseTypeEnum.Columnboard,
 				},
 			});
@@ -382,6 +350,101 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 
 			expect(content).not.toContain(
 				"components.molecules.copyResult.information"
+			);
+		});
+
+		it("should not render members and permission information", () => {
+			const wrapper = setup();
+
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).not.toContain(
+				"components.molecules.copyResult.membersAndPermissions"
+			);
+		});
+	});
+
+	describe("when root element is room", () => {
+		const setup = () => {
+			const wrapper = mount(CopyResultModal, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					isOpen: true,
+					copyResultItems: [],
+					copyResultRootItemType: CopyApiResponseTypeEnum.Room,
+				},
+			});
+
+			return wrapper;
+		};
+
+		it("should not render members and permission information", () => {
+			const wrapper = setup();
+
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).not.toContain(
+				"components.molecules.copyResult.membersAndPermissions"
+			);
+		});
+	});
+
+	describe("when root element is task", () => {
+		const setup = () => {
+			const wrapper = mount(CopyResultModal, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					isOpen: true,
+					copyResultItems: [],
+					copyResultRootItemType: CopyApiResponseTypeEnum.Task,
+				},
+			});
+
+			return wrapper;
+		};
+
+		it("should not render members and permission information", () => {
+			const wrapper = setup();
+
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).not.toContain(
+				"components.molecules.copyResult.membersAndPermissions"
+			);
+		});
+	});
+
+	describe("when root element is lesson", () => {
+		const setup = () => {
+			const wrapper = mount(CopyResultModal, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					isOpen: true,
+					copyResultItems: [],
+					copyResultRootItemType: CopyApiResponseTypeEnum.Lesson,
+				},
+			});
+
+			return wrapper;
+		};
+
+		it("should not render members and permission information", () => {
+			const wrapper = setup();
+
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).not.toContain(
+				"components.molecules.copyResult.membersAndPermissions"
 			);
 		});
 	});
