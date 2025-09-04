@@ -222,6 +222,7 @@ const { pause, unpause, deactivate } = useFocusTrap(addMembersContent, {
 	immediate: true,
 });
 
+// maybe this could be moved to a composable as the issue exists in multiple dialogs
 watch(
 	() => isOpen.value,
 	(isOpen: boolean) => {
@@ -281,15 +282,15 @@ const onItemListToggle = () => {
 	}
 };
 
-const onAddMembers = async () => {
-	await addMembers(selectedUsers.value);
-	emit("close");
-};
-
 const onValueChange = async () => {
 	resetPotentialMembers();
 	selectedUsers.value = [];
 	await getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
+};
+
+const onAddMembers = async () => {
+	await addMembers(selectedUsers.value);
+	onClose();
 };
 
 const onClose = () => {
