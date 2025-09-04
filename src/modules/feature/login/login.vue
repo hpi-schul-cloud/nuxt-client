@@ -14,7 +14,13 @@
 		class="d-flex flex-column"
 		style="min-height: 100vh; width: 100%"
 	>
-		<v-card v-if="!showEmailLoginSection && !showLdapLoginSection">
+		<v-card
+			v-if="
+				!showEmailLoginSection &&
+				!showLdapLoginSection &&
+				featureOauthLoginEnabled
+			"
+		>
 			<v-card-title class="h3 mt-3">
 				{{ t("components.login.title") }}
 			</v-card-title>
@@ -43,7 +49,7 @@
 		</v-card>
 
 		<!-- Email Login Section -->
-		<v-card v-show="showEmailLoginSection">
+		<v-card v-show="showEmailLoginSection" class="email-login-section">
 			<v-card-title class="h3 mt-3">
 				{{ t("components.login.title") }}
 			</v-card-title>
@@ -67,20 +73,6 @@
 					autocomplete="current-password"
 					data-testid="password-email"
 					@click:append="togglePassword"
-				/>
-				<v-select
-					v-if="systemOptions.length > 1"
-					v-model="selectedSystem"
-					class="system"
-					:items="systemOptions"
-					:label="$t('login.label.system')"
-					item-title="label"
-					item-value="value"
-					return-object
-					required
-					dense
-					clearable
-					data-testid="select-system"
 				/>
 				<v-checkbox
 					v-if="featureJwtExtendedTimeoutEnabled"
@@ -126,7 +118,7 @@
 			</v-btn>
 		</v-card>
 		<!-- LDAP Login Section -->
-		<v-card v-show="showLdapLoginSection" cols="12" class="ldap-login-section">
+		<v-card v-show="showLdapLoginSection" class="ldap-login-section">
 			<v-card-title class="h3 mt-3">
 				{{ t("components.login.title") }}
 			</v-card-title>
@@ -149,6 +141,18 @@
 					autocomplete="current-password"
 					required
 					@click:append="toggleLdapPassword"
+				/>
+				<v-checkbox
+					v-if="featureJwtExtendedTimeoutEnabled"
+					class="form-check mt-2"
+					id="privateDevice"
+					v-model="privateDevice"
+					:label="$t('components.login.checkbox.stayLoggedIn')"
+					name="privateDevice"
+					value="true"
+					data-testid="private-device-checkbox"
+					color="primary"
+					hide-details
 				/>
 				<v-select
 					v-model="selectedSchool"
@@ -175,18 +179,6 @@
 					dense
 					clearable
 					data-testid="select-system-ldap"
-				/>
-				<v-checkbox
-					v-if="featureJwtExtendedTimeoutEnabled"
-					class="form-check mt-2"
-					id="privateDevice"
-					v-model="privateDevice"
-					:label="$t('components.login.checkbox.stayLoggedIn')"
-					name="privateDevice"
-					value="true"
-					data-testid="private-device-checkbox"
-					color="primary"
-					hide-details
 				/>
 			</v-card-text>
 			<v-btn
@@ -218,6 +210,122 @@
 			<v-btn class="btn-return" color="tertiary" block @click="returnToMenu">
 				{{ t("components.login.button.return") }}
 			</v-btn>
+		</v-card>
+		<!-- Non-Oauth Login Section-->
+		<v-card v-if="!featureOauthLoginEnabled">
+			<v-card-title class="h3 mt-3">
+				{{ t("components.login.title") }}
+			</v-card-title>
+			<v-card-text>
+				<v-text-field
+					v-model="email"
+					:label="$t('common.labels.emailUsername')"
+					type="email"
+					required
+					autocomplete="username"
+					data-testid="username-email"
+				/>
+				<v-text-field
+					v-model="password"
+					:label="$t('common.labels.password')"
+					:append-icon="showPassword ? mdiEyeOutline : mdiEyeOffOutline"
+					:type="showPassword ? 'text' : 'password'"
+					required
+					autocomplete="current-password"
+					data-testid="password-email"
+					@click:append="togglePassword"
+				/>
+				<v-checkbox
+					v-if="featureJwtExtendedTimeoutEnabled"
+					class="form-check mt-2"
+					id="privateDevice"
+					v-model="privateDevice"
+					:label="$t('components.login.checkbox.stayLoggedIn')"
+					name="privateDevice"
+					value="true"
+					data-testid="private-device-checkbox"
+					color="primary"
+					hide-details
+				/>
+			</v-card-text>
+			<v-btn
+				v-if="!showMoreOptions"
+				id="more-options"
+				class="btn-more-options mb-4"
+				color="tertiary"
+				block
+				data-testid="btn-more-options"
+				aria-label="more-options"
+				@click="openMoreOptions"
+			>
+				{{ moreLessOptionsButtonLabel }}
+			</v-btn>
+			<v-btn
+				v-else
+				id="less-options"
+				class="btn-less-options mb-4"
+				color="tertiary"
+				block
+				data-testid="btn-less-options"
+				aria-label="less-options"
+				@click="closeMoreOptions"
+			>
+				{{ moreLessOptionsButtonLabel }}
+			</v-btn>
+			<div v-show="showMoreOptions" class="mb-4">
+				<v-select
+					v-model="selectedSchool"
+					class="school"
+					:items="schoolOptions"
+					:label="$t('components.login.label.school')"
+					placeholder="bla"
+					item-title="label"
+					item-value="value"
+					data-testid="select-school"
+					clearable
+					dense
+					required
+					@change="onSchoolChange"
+				/>
+				<v-select
+					v-if="selectedSchool && currentLdapSystems.length > 0"
+					v-model="selectedSystem"
+					class="system"
+					:items="currentLdapSystems"
+					:label="$t('login.label.system')"
+					item-title="label"
+					item-value="value"
+					dense
+					clearable
+					data-testid="select-system-ldap"
+				/>
+			</div>
+			<v-btn
+				id="submit-login"
+				class="btn-login"
+				color="primary"
+				block
+				:disabled="isSubmitting"
+				:data-timeout="loginTimeout"
+				data-testid="submit-login-email"
+				:autofocus="true"
+				aria-label="login"
+				@click="submitLogin"
+			>
+				{{ t("common.labels.login") }}
+			</v-btn>
+			<v-card-actions>
+				<v-btn
+					class="submit-pwrecovery mb-4"
+					color="default"
+					text
+					block
+					data-testid="forgot-password"
+					@click="openPwRecoveryModal"
+				>
+					{{ t("components.login.button.forgotPassword") }}
+				</v-btn>
+			</v-card-actions>
 		</v-card>
 
 		<v-row v-if="showPwRecovery">
@@ -274,9 +382,10 @@
 </template>
 
 <script setup lang="ts">
+import { envConfigModule } from "@/store";
 import { System } from "@/store/types/system"; //import { System } from "@data-system"; // one of those?
 import { mdiEyeOffOutline, mdiEyeOutline } from "@icons/material";
-import { computed, ComputedRef, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n"; //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
 //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
 //import { useAlerts } from "../../feature/login/login.composable";
@@ -305,7 +414,8 @@ const alerts = ref<
 //);
 
 // Feature Toggles
-const featureOauthLoginEnabbled: ComputedRef<boolean> = computed(() => true); //envConfigModule.getEnableLdapSyncDuringMigration);
+const featureOauthLoginEnabled: boolean =
+	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 //TODO: get env the schulcloud way, for now:
 const featureJwtExtendedTimeoutEnabled = true;
 //const featureJwtExtendedTimeoutEnabled = ref(
@@ -315,6 +425,7 @@ const featureJwtExtendedTimeoutEnabled = true;
 // Section and field states
 const showEmailLoginSection = ref(false);
 const showLdapLoginSection = ref(false);
+const showMoreOptions = ref(false);
 const isSubmitting = ref(false);
 const showPwRecovery = ref(true);
 const pwRecoveryModal = ref(false);
@@ -353,6 +464,9 @@ const loginTimeout = ref<number | null>(null);
 const ldapTimeout = ref<number | null>(null);
 const submitButtonLabel = ref(t("components.login.button.email"));
 const ldapButtonLabel = ref(t("components.login.button.ldap"));
+const moreLessOptionsButtonLabel = ref(
+	t("components.login.button.moreOptions")
+);
 const ldapLoginActive = ref(true);
 const countdownNum = ref(0); // initially let
 
@@ -435,6 +549,14 @@ function showLdap() {
 function returnToMenu() {
 	showEmailLoginSection.value = false;
 	showLdapLoginSection.value = false;
+}
+function openMoreOptions() {
+	showMoreOptions.value = true;
+	moreLessOptionsButtonLabel.value = t("components.login.button.less");
+}
+function closeMoreOptions() {
+	showMoreOptions.value = false;
+	moreLessOptionsButtonLabel.value = t("components.login.button.moreOptions");
 }
 
 // ----- School/System Option Handling -----
