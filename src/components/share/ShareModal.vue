@@ -21,23 +21,13 @@
 					<p data-testid="share-options-info-text">
 						{{ t(`components.molecules.share.${type}.options.infoText`) }}
 					</p>
-					<InfoAlert class="mb-4">
+					<InfoAlert v-if="showAlertInfo" class="mb-4">
 						{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
 					</InfoAlert>
 					<WarningAlert v-if="showAlertInfo">
 						<div data-testid="share-options-table-header">
 							{{ t("components.molecules.share.options.tableHeader.InfoText") }}
 							<ul class="ml-6">
-								<li
-									v-if="showCourseInfo"
-									data-testid="share-options-personal-data-text"
-								>
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.personalData"
-										)
-									}}
-								</li>
 								<li
 									v-if="showRoomInfo"
 									data-testid="share-options-room-memberships-data-text"

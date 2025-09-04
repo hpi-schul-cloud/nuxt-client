@@ -664,27 +664,23 @@ export default {
 		"wird noch kopiert",
 	"components.molecules.copyResult.courseCopy.info": "Kurs wird erstellt",
 	"components.molecules.copyResult.courseFiles.info":
-		"Kursdateien, die nicht Teil von Aufgaben oder Themen sind, werden nicht kopiert.",
-	"components.molecules.copyResult.courseGroupCopy.info":
-		"Gruppen und deren Inhalte werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
+		"Dateien unter Kurs-Dateien",
+	"components.molecules.copyResult.courseGroupCopy.info": "Kursgruppen",
 	"components.molecules.copyResult.ctlTools.info":
 		"Externe Tools, die dem Kurs oder Karten im Bereich zugeordnet sind, werden nicht kopiert.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
 		"In Zielschule nicht verfügbare externe tools und geschützte Teile der Tool-Konfigurationen werden nicht kopiert.",
-	"components.molecules.copyResult.etherpadCopy.info":
-		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
+	"components.molecules.copyResult.etherpadCopy.info": "Inhalte aus Etherpads",
 	"components.molecules.copyResult.failedCopy":
 		"Das Duplizieren konnte nicht abgeschlossen werden.",
 	"components.molecules.copyResult.fileCopy.error":
 		"Folgende Dateien konnten nicht kopiert werden und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.geogebraCopy.info":
-		"Material-IDs werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
+	"components.molecules.copyResult.geogebraCopy.info": "Geogebra IDs",
 	"components.molecules.copyResult.information":
 		"Nachfolgend können die fehlenden Inhalte mit Hilfe der Quick-Links ergänzt werden. Die Links öffnen sich in einem separatem Tab.",
 	"components.molecules.copyResult.label.columnBoard": "Bereich",
 	"components.molecules.copyResult.label.content": "Inhalt",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
-	"components.molecules.copyResult.label.externalTools": "Externe Tools",
 	"components.molecules.copyResult.label.file": "Datei",
 	"components.molecules.copyResult.label.files": "Dateien",
 	"components.molecules.copyResult.label.geogebra": "GeoGebra",
@@ -703,8 +699,7 @@ export default {
 	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
 	"components.molecules.copyResult.label.toolElements": "Tool-Element",
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
-	"components.molecules.copyResult.tldrawCopy.info":
-		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
+	"components.molecules.copyResult.tldrawCopy.info": "Inhalte aus Whiteboards",
 	"components.molecules.copyResult.course.successfullyCopied":
 		"Alle Elemente wurden erfolgreich dupliziert.",
 	"components.molecules.copyResult.board.successfullyCopied":
@@ -836,7 +831,7 @@ export default {
 	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
 		"Raum-Mitglieder und Berechtigungen",
 	"components.molecules.share.options.tableHeader.InfoText":
-		"Folgende Inhalte werden nicht kopiert:",
+		"Folgendes wird nicht kopiert:",
 	"components.molecules.share.courses.result.linkLabel": "Link Kurskopie",
 	"components.molecules.share.lessons.mail.body": "Link zum Thema:",
 	"components.molecules.share.lessons.mail.subject": "Thema zum Importieren",
@@ -1045,7 +1040,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"Im nächsten Schritt wird eine Kopie des Raumes erstellt.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"Folgende Inhalte werden nicht übernommen:",
+		"Folgendes wird nicht kopiert:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Raum-Mitglieder und Berechtigungen",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Inhalte aus Etherpads",

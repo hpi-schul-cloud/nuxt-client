@@ -13,27 +13,19 @@
 			</div>
 		</template>
 		<template #content>
-			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
-				<div class="d-flex flex-row pa-2 mb-4 rounded bg-orange-lighten-5">
-					<div class="mx-2">
-						<v-icon color="warning">{{ mdiAlert }}</v-icon>
-					</div>
-					<div>
-						<template v-for="(warning, index) in copyResultWarnings">
-							<p
-								v-if="warning.isShow"
-								:key="index"
-								class="mb-0 aligned-with-icon"
-								data-testid="warning-title"
-							>
-								<strong>{{ warning.title }}</strong>
-								&middot;
-								{{ warning.text }}
-							</p>
-						</template>
-					</div>
-				</div>
-			</div>
+			<InfoAlert class="mb-4">
+				{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
+			</InfoAlert>
+			<WarningAlert data-testid="copy-result-notifications">
+				{{ t("components.molecules.share.options.tableHeader.InfoText") }}
+				<ul class="ml-6">
+					<template v-for="(warning, index) in copyResultWarnings">
+						<li v-if="warning.isShow" :key="index" data-testid="warning-title">
+							{{ warning.text }}
+						</li>
+					</template>
+				</ul>
+			</WarningAlert>
 			<template v-if="hasErrors && isCourse">
 				<div>
 					<p>{{ $t("components.molecules.copyResult.information") }}</p>
@@ -45,13 +37,13 @@
 </template>
 
 <script setup lang="ts">
-import CopyResultModalList from "./CopyResultModalList.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { mdiAlert } from "@icons/material";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import CopyResultModalList from "./CopyResultModalList.vue";
 
 const { t } = useI18n();
 
@@ -99,32 +91,26 @@ const copyResultWarnings = computed(() => {
 		{
 			isShow: hasGeogebraElement.value,
 			text: t("components.molecules.copyResult.geogebraCopy.info"),
-			title: t("components.molecules.copyResult.label.geogebra"),
 		},
 		{
 			isShow: hasEtherpadElement.value,
 			text: t("components.molecules.copyResult.etherpadCopy.info"),
-			title: t("components.molecules.copyResult.label.etherpad"),
 		},
 		{
 			isShow: hasDrawingElement.value,
 			text: t("components.molecules.copyResult.tldrawCopy.info"),
-			title: t("components.molecules.copyResult.label.tldraw"),
 		},
 		{
 			isShow: hasFileElement.value || isCourse.value,
 			text: filesInfoText.value,
-			title: t("components.molecules.copyResult.label.files"),
 		},
 		{
 			isShow: hasExternalTool.value || hasExternalToolElement.value,
 			text: externalToolsInfoText.value,
-			title: t("components.molecules.copyResult.label.externalTools"),
 		},
 		{
 			isShow: hasCourseGroup.value,
 			text: t("components.molecules.copyResult.courseGroupCopy.info"),
-			title: t("common.words.courseGroups"),
 		},
 	];
 });
