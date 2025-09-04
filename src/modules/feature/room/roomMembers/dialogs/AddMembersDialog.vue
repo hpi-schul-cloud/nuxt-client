@@ -4,8 +4,8 @@
 		:width="xs ? 'auto' : 480"
 		data-testid="dialog-add-participants"
 		max-width="480"
+		persistent
 		@keydown.esc="onClose"
-		@click:outside.prevent="onClose"
 	>
 		<v-card ref="addMembersContent">
 			<template #title>
