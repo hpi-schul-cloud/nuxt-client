@@ -18,11 +18,7 @@
 		<div class="mt-12">
 			{{ t("pages.rooms.administration.roomDetail.infoText") }}
 		</div>
-		<RoomAdminMembersTable
-			:header-bottom="headerBottom"
-			:show-select="false"
-			:members-info-text="t('pages.rooms.administration.table.membersInfoText')"
-		/>
+		<RoomAdminMembersTable :header-bottom="headerBottom" :show-select="false" />
 		<AddMembersDialog
 			v-model="isMembersDialogOpen"
 			:is-admin-mode="true"
