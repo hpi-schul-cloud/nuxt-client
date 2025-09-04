@@ -248,11 +248,13 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			link.href = URL.createObjectURL(
 				new Blob([response.data as unknown as Blob])
 			);
-			link.download = `${this.roomData.title}-${new Date().toISOString()}.zip`;
+			link.download = `${
+				this.roomData.title
+			}-${new Date().toISOString()}.imscc`;
 			document.body.appendChild(link);
 			link.click();
-			//URL.revokeObjectURL(link.href);
 			document.body.removeChild(link);
+			URL.revokeObjectURL(link.href);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
