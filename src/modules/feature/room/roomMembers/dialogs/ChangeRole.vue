@@ -30,6 +30,7 @@
 							:value="option.role"
 							class="align-start mb-2"
 							:data-testid="option.dataTestid"
+							:disabled="option.disabled"
 						>
 							<template #label>
 								<div class="d-flex flex-column mt-2">
@@ -305,11 +306,8 @@ const radioOptions = computed(() => {
 			"pages.rooms.members.roleChange.Roomowner.label.subText",
 		],
 		dataTestid: "change-role-option-owner",
+		disabled: false,
 	};
-
-	if (props.isAdminMode) {
-		return [roomOwnerOption];
-	}
 
 	const baseRoles = [
 		{
@@ -317,23 +315,26 @@ const radioOptions = computed(() => {
 			labelHeader: t("pages.rooms.members.roomPermissions.viewer"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomviewer.label"],
 			dataTestid: "change-role-option-viewer",
+			disabled: props.isAdminMode,
 		},
 		{
 			role: RoleName.Roomeditor,
 			labelHeader: t("pages.rooms.members.roomPermissions.editor"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomeditor.label"],
 			dataTestid: "change-role-option-editor",
+			disabled: props.isAdminMode,
 		},
 		{
 			role: RoleName.Roomadmin,
 			labelHeader: t("pages.rooms.members.roomPermissions.admin"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomadmin.label"],
 			dataTestid: "change-role-option-admin",
+			disabled: props.isAdminMode,
 		},
 	];
 
-	if (isChangeOwnershipOptionVisible.value) {
-		baseRoles.push(roomOwnerOption);
+	if (props.isAdminMode || isChangeOwnershipOptionVisible.value) {
+		return [...baseRoles, roomOwnerOption];
 	}
 
 	return baseRoles;
