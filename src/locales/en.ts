@@ -691,7 +691,6 @@ export default {
 	"components.molecules.copyResult.title.partial":
 		"Important duplication information",
 	"components.molecules.copyResult.title.success": "Duplication successful",
-	"components.molecules.courseheader.coursedata": "Course data",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.import.columnBoard.label": "Board title",

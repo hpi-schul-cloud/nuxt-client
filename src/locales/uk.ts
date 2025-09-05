@@ -704,7 +704,6 @@ export default {
 	"components.molecules.copyResult.title.partial":
 		"Важлива інформація про дублювання",
 	"components.molecules.copyResult.title.success": "Дублювання успішне",
-	"components.molecules.courseheader.coursedata": "Дані курсу",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
 	"components.molecules.import.columnBoard.label": "Назва дошки",

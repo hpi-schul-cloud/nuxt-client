@@ -710,7 +710,6 @@ export default {
 	"components.molecules.copyResult.title.partial":
 		"Información importante sobre la duplicación",
 	"components.molecules.copyResult.title.success": "Duplicación exitosa",
-	"components.molecules.courseheader.coursedata": "Archivos del curso",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
 	"components.molecules.import.columnBoard.label": "Título del tablero",

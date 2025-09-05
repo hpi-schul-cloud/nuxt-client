@@ -693,7 +693,8 @@ export default {
 	"components.molecules.copyResult.title.partial":
 		"Wichtige Kopier-Informationen",
 	"components.molecules.copyResult.title.success": "Duplizieren erfolgreich",
-	"components.molecules.courseheader.coursedata": "Kursdateien",
+	"components.molecules.copyResult.followingNotCopied":
+		"Folgendes wurde nicht kopiert:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
