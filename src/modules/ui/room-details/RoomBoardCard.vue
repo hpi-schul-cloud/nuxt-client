@@ -35,7 +35,7 @@
 				</div>
 			</div>
 			<h2
-				class="board-title mt-2"
+				class="text-h4 board-title mt-2"
 				:data-testid="`board-title-${boardCardIndex}`"
 			>
 				{{ boardTitle }}
