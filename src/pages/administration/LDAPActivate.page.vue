@@ -108,11 +108,11 @@
 			class="section"
 			data-testid="migrateUsersSection"
 		>
-			<h3 class="title-class">
+			<h2 class="title-class">
 				{{
 					$t("pages.administration.ldap.activate.migrateExistingUsers.title")
 				}}
-			</h3>
+			</h2>
 			<base-input
 				v-model="migrateUsersCheckbox"
 				type="checkbox"

@@ -15,9 +15,9 @@
 		<div class="content">
 			<div class="wrapper">
 				<div class="content-container">
-					<h3>
+					<h1>
 						{{ resource.title || resource.name }}
-					</h3>
+					</h1>
 					<div class="author-provider">
 						<span v-if="hasAuthor">
 							<base-link :href="'/content/?q=' + author" class="content-link">

@@ -292,7 +292,7 @@
 
 			<div hidden>
 				<div id="tableStudentsForPrint">
-					<h3 class="print-title">
+					<h3 class="text-h1">
 						{{ $t("pages.administration.students.consent.print.title") }}
 					</h3>
 					<p>
