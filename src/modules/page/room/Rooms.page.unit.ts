@@ -27,7 +27,8 @@ import { InfoAlert } from "@ui-alert";
 import { Mock } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
 import AuthModule from "@/store/auth";
-import { RoomColor, RoomItem } from "../../../types/room/Room";
+import { RoomItem } from "@/types/room/Room";
+import { roomItemFactory } from "@@/tests/test-utils";
 
 vi.mock("vue-router");
 const useRouteMock = useRoute as Mock;
@@ -82,26 +83,11 @@ describe("RoomsPage", () => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
-		const roomItems: RoomItem[] = [
-			{
-				id: "1",
-				name: "Room 1",
-				schoolId: "school-1",
-				color: RoomColor.Red,
-				createdAt: "2023-01-01T00:00:00Z",
-				updatedAt: "2023-01-02T00:00:00Z",
-				isLocked: false,
-			},
-			{
-				id: "2",
-				name: "Room 2",
-				schoolId: "school-1",
-				createdAt: "2023-01-01T00:00:00Z",
-				updatedAt: "2023-01-02T00:00:00Z",
-				color: RoomColor.Red,
-				isLocked: true,
-			},
+		const roomItems = [
+			roomItemFactory.build({ isLocked: false }),
+			roomItemFactory.build({ isLocked: true }),
 		];
+
 		useRoomsStateMock.mockReturnValue({
 			rooms: ref(roomItems),
 			isLoading: ref(false),
@@ -194,12 +180,12 @@ describe("RoomsPage", () => {
 		});
 
 		it("should filter out locked rooms for the import flow", () => {
-			const { wrapper, token } = setupImportMode();
+			const { wrapper } = setupImportMode();
 			const importFLow = wrapper.findComponent(ImportFlow);
 
 			const destinations = importFLow.props().destinations as RoomItem[];
 
-			expect(destinations.length).toBe(1);
+			expect(destinations).toHaveLength(1);
 			expect(destinations.every((room) => !room.isLocked)).toBe(true);
 		});
 
