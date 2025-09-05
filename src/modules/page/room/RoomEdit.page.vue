@@ -45,7 +45,7 @@ const router = useRouter();
 
 const roomDetailsStore = useRoomDetailsStore();
 const { room, isLoading } = storeToRefs(roomDetailsStore);
-const { fetchRoom, updateRoom } = roomDetailsStore;
+const { fetchRoomAndBoards, updateRoom } = roomDetailsStore;
 const { canEditRoom } = useRoomAuthorization();
 
 const roomData = ref<RoomUpdateParams>();
@@ -57,7 +57,7 @@ useTitle(pageTitle);
 
 onMounted(async () => {
 	if (!room.value) {
-		await fetchRoom(route.params.id as string);
+		await fetchRoomAndBoards(route.params.id as string);
 	}
 
 	if (room.value) {
