@@ -30,10 +30,10 @@ import { BusinessError, Status } from "./types/commons";
 })
 export default class EnvConfigModule extends VuexModule {
 	env: ConfigResponse = defaultConfigEnvs;
-	envFile: FilesStorageConfigResponse = {
-		MAX_FILE_SIZE: 2684354560,
-		COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
-	};
+		envFile: FilesStorageConfigResponse = {
+			MAX_FILE_SIZE: 2684354560,
+			COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
+		};
 	loadingErrorCount = 0;
 	status: Status = "";
 	businessError: BusinessError = {
