@@ -1,386 +1,376 @@
 <template>
-	<!-- Alerts for login view -->
-	<v-alert
-		v-for="(alert, index) in alerts"
-		:key="index"
-		:type="alert.type"
-		:color="alert.color"
-		:dismissible="alert.dismissible"
-		class="mb-2"
-	>
-		{{ alert.message }}
-	</v-alert>
 	<v-container
 		class="d-flex flex-column"
 		style="min-height: 100vh; width: 100%"
 	>
-		<v-card
-			v-if="
-				!showEmailLoginSection &&
-				!showLdapLoginSection &&
-				featureOauthLoginEnabled
-			"
-		>
+		<v-card>
 			<v-card-title class="h3 mt-3">
 				{{ t("components.login.title") }}
 			</v-card-title>
-			<div class="login-providers mb-4">
+			<v-alert
+				v-model="showAlert"
+				:type="alert?.type"
+				:color="alert?.color"
+				:closable="alert?.dismissible"
+				class="mb-2"
+			>
+				{{ alert?.message }}
+			</v-alert>
+			<v-card
+				v-if="
+					!showEmailLoginSection &&
+					!showLdapLoginSection &&
+					featureOauthLoginEnabled
+				"
+			>
+				<div class="login-providers mb-4">
+					<v-btn
+						class="btn-cloud"
+						color="tertiary"
+						block
+						@click="showCloud"
+						variant="outlined"
+					>
+						{{ t("components.login.button.email") }}
+					</v-btn>
+				</div>
+				<div class="login-providers mb-8">
+					<v-btn
+						class="btn-ldap"
+						color="tertiary"
+						block
+						@click="showLdap"
+						variant="outlined"
+					>
+						{{ t("components.login.button.ldap") }}
+					</v-btn>
+				</div>
+			</v-card>
+
+			<!-- Email Login Section -->
+			<v-card v-show="showEmailLoginSection" class="email-login-section">
+				<v-card-text>
+					<!--:prepend-icon="mdiEmailOutline"-->
+					<v-text-field
+						v-model="email"
+						:label="$t('common.labels.email')"
+						type="email"
+						required
+						autocomplete="username"
+						data-testid="username-email"
+					/>
+					<!--:prepend-icon="mdiLockOutline"-->
+					<v-text-field
+						v-model="password"
+						:label="$t('common.labels.password')"
+						:append-icon="showPassword ? mdiEyeOutline : mdiEyeOffOutline"
+						:type="showPassword ? 'text' : 'password'"
+						required
+						autocomplete="current-password"
+						data-testid="password-email"
+						@click:append="togglePassword"
+					/>
+					<v-checkbox
+						v-if="featureJwtExtendedTimeoutEnabled"
+						class="form-check mt-2"
+						id="privateDevice"
+						v-model="privateDevice"
+						:label="$t('components.login.checkbox.stayLoggedIn')"
+						name="privateDevice"
+						value="true"
+						data-testid="private-device-checkbox"
+						color="primary"
+						hide-details
+					/>
+				</v-card-text>
 				<v-btn
-					class="btn-cloud"
+					id="submit-login"
+					class="btn-login"
+					color="primary"
+					block
+					:disabled="isLoading"
+					:data-timeout="loginTimeout"
+					data-testid="submit-login-email"
+					:autofocus="true"
+					aria-label="login"
+					@click="submitLogin"
+				>
+					{{ submitButtonLabel }}
+				</v-btn>
+				<v-card-actions>
+					<v-btn
+						class="submit-pwrecovery"
+						color="default"
+						block
+						text
+						data-testid="forgot-password"
+						@click="openPwRecoveryModal"
+					>
+						{{ t("components.login.button.forgotPassword") }}
+					</v-btn>
+				</v-card-actions>
+				<v-btn class="btn-return" color="tertiary" block @click="returnToMenu">
+					{{ t("components.login.button.return") }}
+				</v-btn>
+			</v-card>
+			<!-- LDAP Login Section -->
+			<v-card v-show="showLdapLoginSection" class="ldap-login-section">
+				<v-card-text>
+					<!--:prepend-icon="mdiAccountOutline"-->
+					<v-text-field
+						v-model="ldapUsername"
+						:label="$t('common.labels.username')"
+						required
+						autocomplete="username"
+						data-testid="username-ldap"
+					/>
+					<!--:prepend-icon="mdiLockOutline"-->
+					<v-text-field
+						v-model="ldapPassword"
+						:label="$t('common.labels.password')"
+						:append-icon="showLdapPassword ? mdiEyeOutline : mdiEyeOffOutline"
+						:type="showLdapPassword ? 'text' : 'password'"
+						data-testid="password-ldap"
+						autocomplete="current-password"
+						required
+						@click:append="toggleLdapPassword"
+					/>
+					<v-checkbox
+						v-if="featureJwtExtendedTimeoutEnabled"
+						class="form-check mt-2"
+						id="privateDevice"
+						v-model="privateDevice"
+						:label="$t('components.login.checkbox.stayLoggedIn')"
+						name="privateDevice"
+						value="true"
+						data-testid="private-device-checkbox"
+						color="primary"
+						hide-details
+					/>
+					<v-select
+						return-object
+						v-model="selectedSchool"
+						class="school"
+						:items="schoolOptions"
+						:label="$t('components.login.label.school')"
+						placeholder="Select your school"
+						item-title="label"
+						data-testid="select-school"
+						clearable
+						dense
+						required
+						@update:modelValue="onSchoolChange"
+					/>
+					<v-select
+						return-object
+						v-if="selectedSchool && currentLdapSystems.length > 1"
+						v-model="selectedSystem"
+						class="system"
+						:items="currentLdapSystems"
+						:label="$t('login.label.system')"
+						item-title="name"
+						item-value="id"
+						dense
+						clearable
+						data-testid="select-system-ldap"
+						@update:modelValue="onSystemChange"
+					/>
+				</v-card-text>
+				<v-btn
+					class="btn-login-ldap"
+					color="primary"
+					block
+					:disabled="isSubmitting || !selectedSchool"
+					aria-label="login"
+					:autofocus="true"
+					data-testid="submit-login-ldap"
+					:data-active="ldapLoginActive"
+					:data-timeout="ldapTimeout"
+					@click="submitLdapLogin"
+				>
+					{{ ldapButtonLabel }}
+				</v-btn>
+				<v-card-actions>
+					<v-btn
+						class="submit-pwrecovery"
+						color="default"
+						text
+						block
+						data-testid="forgot-password"
+						@click="openPwRecoveryModal"
+					>
+						{{ t("components.login.button.forgotPassword") }}
+					</v-btn>
+				</v-card-actions>
+				<v-btn class="btn-return" color="tertiary" block @click="returnToMenu">
+					{{ t("components.login.button.return") }}
+				</v-btn>
+			</v-card>
+			<!-- Non-Oauth Login Section-->
+			<v-card v-if="!featureOauthLoginEnabled">
+				<v-card-text>
+					<v-text-field
+						v-model="email"
+						:label="$t('common.labels.emailUsername')"
+						type="email"
+						required
+						autocomplete="username"
+						data-testid="username-email"
+					/>
+					<v-text-field
+						v-model="password"
+						:label="$t('common.labels.password')"
+						:append-icon="showPassword ? mdiEyeOutline : mdiEyeOffOutline"
+						:type="showPassword ? 'text' : 'password'"
+						required
+						autocomplete="current-password"
+						data-testid="password-email"
+						@click:append="togglePassword"
+					/>
+					<v-checkbox
+						v-if="featureJwtExtendedTimeoutEnabled"
+						class="form-check mt-2"
+						id="privateDevice"
+						v-model="privateDevice"
+						:label="$t('components.login.checkbox.stayLoggedIn')"
+						name="privateDevice"
+						value="true"
+						data-testid="private-device-checkbox"
+						color="primary"
+						hide-details
+					/>
+				</v-card-text>
+				<v-btn
+					v-if="!showMoreOptions"
+					id="more-options"
+					class="btn-more-options mb-4"
 					color="tertiary"
 					block
-					@click="showCloud"
-					variant="outlined"
+					data-testid="btn-more-options"
+					aria-label="more-options"
+					@click="openMoreOptions"
 				>
-					{{ t("components.login.button.email") }}
+					{{ moreLessOptionsButtonLabel }}
 				</v-btn>
-			</div>
-			<div class="login-providers mb-8">
 				<v-btn
-					class="btn-ldap"
+					v-else
+					id="less-options"
+					class="btn-less-options mb-4"
 					color="tertiary"
 					block
-					@click="showLdap"
-					variant="outlined"
+					data-testid="btn-less-options"
+					aria-label="less-options"
+					@click="closeMoreOptions"
 				>
-					{{ t("components.login.button.ldap") }}
+					{{ moreLessOptionsButtonLabel }}
 				</v-btn>
-			</div>
-		</v-card>
+				<div v-show="showMoreOptions" class="mb-4">
+					<v-select
+						return-object
+						v-model="selectedSchool"
+						class="school"
+						:items="schoolOptions"
+						:label="$t('components.login.label.school')"
+						placeholder="Select your school"
+						item-title="label"
+						data-testid="select-school"
+						clearable
+						dense
+						required
+						@update:modelValue="onSchoolChange"
+					/>
+					<v-select
+						return-object
+						v-if="selectedSchool && currentLdapSystems.length > 1"
+						v-model="selectedSystem"
+						class="system"
+						:items="currentLdapSystems"
+						:label="$t('login.label.system')"
+						item-title="name"
+						item-value="id"
+						dense
+						clearable
+						data-testid="select-system-ldap"@update:modelValue="onSystemChange"
+					/>
+				</div>
+				<v-btn
+					id="submit-login"
+					class="btn-login"
+					color="primary"
+					block
+					:disabled="isSubmitting"
+					:data-timeout="loginTimeout"
+					data-testid="submit-login-email"
+					:autofocus="true"
+					aria-label="login"
+					@click="submitLogin"
+				>
+					{{ t("common.labels.login") }}
+				</v-btn>
+				<v-card-actions>
+					<v-btn
+						class="submit-pwrecovery mb-4"
+						color="default"
+						text
+						block
+						data-testid="forgot-password"
+						@click="openPwRecoveryModal"
+					>
+						{{ t("components.login.button.forgotPassword") }}
+					</v-btn>
+				</v-card-actions>
+			</v-card>
 
-		<!-- Email Login Section -->
-		<v-card v-show="showEmailLoginSection" class="email-login-section">
-			<v-card-title class="h3 mt-3">
-				{{ t("components.login.title") }}
-			</v-card-title>
-			<v-card-text>
-				<!--:prepend-icon="mdiEmailOutline"-->
-				<v-text-field
-					v-model="email"
-					:label="$t('common.labels.email')"
-					type="email"
-					required
-					autocomplete="username"
-					data-testid="username-email"
-				/>
-				<!--:prepend-icon="mdiLockOutline"-->
-				<v-text-field
-					v-model="password"
-					:label="$t('common.labels.password')"
-					:append-icon="showPassword ? mdiEyeOutline : mdiEyeOffOutline"
-					:type="showPassword ? 'text' : 'password'"
-					required
-					autocomplete="current-password"
-					data-testid="password-email"
-					@click:append="togglePassword"
-				/>
-				<v-checkbox
-					v-if="featureJwtExtendedTimeoutEnabled"
-					class="form-check mt-2"
-					id="privateDevice"
-					v-model="privateDevice"
-					:label="$t('components.login.checkbox.stayLoggedIn')"
-					name="privateDevice"
-					value="true"
-					data-testid="private-device-checkbox"
-					color="primary"
-					hide-details
-				/>
-			</v-card-text>
-			<v-btn
-				id="submit-login"
-				class="btn-login"
-				color="primary"
-				block
-				:disabled="isLoading"
-				:data-timeout="loginTimeout"
-				data-testid="submit-login-email"
-				:autofocus="true"
-				aria-label="login"
-				@click="submitLogin"
-			>
-				{{ submitButtonLabel }}
-			</v-btn>
-			<v-card-actions>
-				<v-btn
-					class="submit-pwrecovery"
-					color="default"
-					block
-					text
-					data-testid="forgot-password"
-					@click="openPwRecoveryModal"
-				>
-					{{ t("components.login.button.forgotPassword") }}
-				</v-btn>
-			</v-card-actions>
-			<v-btn class="btn-return" color="tertiary" block @click="returnToMenu">
-				{{ t("components.login.button.return") }}
-			</v-btn>
+			<v-row v-if="showPwRecovery">
+				<v-col cols="12">
+					<v-dialog v-model="pwRecoveryModal" max-width="500">
+						<v-card class="pwrecovery-modal">
+							<v-card-title class="h3 mt-3">
+								{{ t("components.login.passwordRecovery.title") }}
+							</v-card-title>
+							<v-card-text>
+								<v-text-field
+									id="username"
+									v-model="pwRecoveryEmail"
+									:label="
+										$t('components.login.passwordRecovery.label.emailUsername')
+									"
+									name="username"
+									autocomplete="username"
+									size="30"
+									class="form-control"
+									data-testid="password-recovery-email"
+									required
+								/>
+								<p class="mt-2" data-testid="info-message">
+									{{ t("components.login.passwordRecovery.text1") }}
+									<br />
+									{{ t("components.login.passwordRecovery.text2") }}
+								</p>
+							</v-card-text>
+							<v-card-actions class="justify-end">
+								<v-spacer />
+								<v-btn
+									color="tertiary"
+									variant="elevated"
+									@click="closePwRecoveryModal"
+								>
+									{{ t("common.actions.cancel") }}
+								</v-btn>
+								<v-btn
+									color="primary"
+									variant="elevated"
+									data-testid="password-recovery-modal"
+									@click="submitPwRecovery"
+								>
+									{{ t("components.login.passwordRecovery.button.submit") }}
+								</v-btn>
+							</v-card-actions>
+						</v-card>
+					</v-dialog>
+				</v-col>
+			</v-row>
 		</v-card>
-		<!-- LDAP Login Section -->
-		<v-card v-show="showLdapLoginSection" class="ldap-login-section">
-			<v-card-title class="h3 mt-3">
-				{{ t("components.login.title") }}
-			</v-card-title>
-			<v-card-text>
-				<!--:prepend-icon="mdiAccountOutline"-->
-				<v-text-field
-					v-model="ldapUsername"
-					:label="$t('common.labels.username')"
-					required
-					autocomplete="username"
-					data-testid="username-ldap"
-				/>
-				<!--:prepend-icon="mdiLockOutline"-->
-				<v-text-field
-					v-model="ldapPassword"
-					:label="$t('common.labels.password')"
-					:append-icon="showLdapPassword ? mdiEyeOutline : mdiEyeOffOutline"
-					:type="showLdapPassword ? 'text' : 'password'"
-					data-testid="password-ldap"
-					autocomplete="current-password"
-					required
-					@click:append="toggleLdapPassword"
-				/>
-				<v-checkbox
-					v-if="featureJwtExtendedTimeoutEnabled"
-					class="form-check mt-2"
-					id="privateDevice"
-					v-model="privateDevice"
-					:label="$t('components.login.checkbox.stayLoggedIn')"
-					name="privateDevice"
-					value="true"
-					data-testid="private-device-checkbox"
-					color="primary"
-					hide-details
-				/>
-				<v-select
-					return-object
-					v-model="selectedSchool"
-					class="school"
-					:items="schoolOptions"
-					:label="$t('components.login.label.school')"
-					placeholder="Select your school"
-					item-title="label"
-					data-testid="select-school"
-					clearable
-					dense
-					required
-					@update:modelValue="onSchoolChange"
-				/>
-				<v-select
-					return-object
-					v-if="selectedSchool && currentLdapSystems.length > 1"
-					v-model="selectedSystem"
-					class="system"
-					:items="currentLdapSystems"
-					:label="$t('login.label.system')"
-					item-title="name"
-					item-value="id"
-					dense
-					clearable
-					data-testid="select-system-ldap"
-					@update:modelValue="onSystemChange"
-				/>
-			</v-card-text>
-			<v-btn
-				class="btn-login-ldap"
-				color="primary"
-				block
-				:disabled="isSubmitting || !selectedSchool"
-				aria-label="login"
-				:autofocus="true"
-				data-testid="submit-login-ldap"
-				:data-active="ldapLoginActive"
-				:data-timeout="ldapTimeout"
-				@click="submitLdapLogin"
-			>
-				{{ ldapButtonLabel }}
-			</v-btn>
-			<v-card-actions>
-				<v-btn
-					class="submit-pwrecovery"
-					color="default"
-					text
-					block
-					data-testid="forgot-password"
-					@click="openPwRecoveryModal"
-				>
-					{{ t("components.login.button.forgotPassword") }}
-				</v-btn>
-			</v-card-actions>
-			<v-btn class="btn-return" color="tertiary" block @click="returnToMenu">
-				{{ t("components.login.button.return") }}
-			</v-btn>
-		</v-card>
-		<!-- Non-Oauth Login Section-->
-		<v-card v-if="!featureOauthLoginEnabled">
-			<v-card-title class="h3 mt-3">
-				{{ t("components.login.title") }}
-			</v-card-title>
-			<v-card-text>
-				<v-text-field
-					v-model="email"
-					:label="$t('common.labels.emailUsername')"
-					type="email"
-					required
-					autocomplete="username"
-					data-testid="username-email"
-				/>
-				<v-text-field
-					v-model="password"
-					:label="$t('common.labels.password')"
-					:append-icon="showPassword ? mdiEyeOutline : mdiEyeOffOutline"
-					:type="showPassword ? 'text' : 'password'"
-					required
-					autocomplete="current-password"
-					data-testid="password-email"
-					@click:append="togglePassword"
-				/>
-				<v-checkbox
-					v-if="featureJwtExtendedTimeoutEnabled"
-					class="form-check mt-2"
-					id="privateDevice"
-					v-model="privateDevice"
-					:label="$t('components.login.checkbox.stayLoggedIn')"
-					name="privateDevice"
-					value="true"
-					data-testid="private-device-checkbox"
-					color="primary"
-					hide-details
-				/>
-			</v-card-text>
-			<v-btn
-				v-if="!showMoreOptions"
-				id="more-options"
-				class="btn-more-options mb-4"
-				color="tertiary"
-				block
-				data-testid="btn-more-options"
-				aria-label="more-options"
-				@click="openMoreOptions"
-			>
-				{{ moreLessOptionsButtonLabel }}
-			</v-btn>
-			<v-btn
-				v-else
-				id="less-options"
-				class="btn-less-options mb-4"
-				color="tertiary"
-				block
-				data-testid="btn-less-options"
-				aria-label="less-options"
-				@click="closeMoreOptions"
-			>
-				{{ moreLessOptionsButtonLabel }}
-			</v-btn>
-			<div v-show="showMoreOptions" class="mb-4">
-				<v-select
-					return-object
-					v-model="selectedSchool"
-					class="school"
-					:items="schoolOptions"
-					:label="$t('components.login.label.school')"
-					placeholder="Select your school"
-					item-title="label"
-					data-testid="select-school"
-					clearable
-					dense
-					required
-					@update:modelValue="onSchoolChange"
-				/>
-				<v-select
-					return-object
-					v-if="selectedSchool && currentLdapSystems.length > 1"
-					v-model="selectedSystem"
-					class="system"
-					:items="currentLdapSystems"
-					:label="$t('login.label.system')"
-					item-title="name"
-					item-value="id"
-					dense
-					clearable
-					data-testid="select-system-ldap"
-					@update:modelValue="onSystemChange"
-				/>
-			</div>
-			<v-btn
-				id="submit-login"
-				class="btn-login"
-				color="primary"
-				block
-				:disabled="isSubmitting"
-				:data-timeout="loginTimeout"
-				data-testid="submit-login-email"
-				:autofocus="true"
-				aria-label="login"
-				@click="submitLogin"
-			>
-				{{ t("common.labels.login") }}
-			</v-btn>
-			<v-card-actions>
-				<v-btn
-					class="submit-pwrecovery mb-4"
-					color="default"
-					text
-					block
-					data-testid="forgot-password"
-					@click="openPwRecoveryModal"
-				>
-					{{ t("components.login.button.forgotPassword") }}
-				</v-btn>
-			</v-card-actions>
-		</v-card>
-
-		<v-row v-if="showPwRecovery">
-			<v-col cols="12">
-				<v-dialog v-model="pwRecoveryModal" max-width="500">
-					<v-card class="pwrecovery-modal">
-						<v-card-title class="h3 mt-3">
-							{{ t("components.login.passwordRecovery.title") }}
-						</v-card-title>
-						<v-card-text>
-							<v-text-field
-								id="username"
-								v-model="pwRecoveryEmail"
-								:label="
-									$t('components.login.passwordRecovery.label.emailUsername')
-								"
-								name="username"
-								autocomplete="username"
-								size="30"
-								class="form-control"
-								data-testid="password-recovery-email"
-								required
-							/>
-							<p class="mt-2" data-testid="info-message">
-								{{ t("components.login.passwordRecovery.text1") }}
-								<br />
-								{{ t("components.login.passwordRecovery.text2") }}
-							</p>
-						</v-card-text>
-						<v-card-actions class="justify-end">
-							<v-spacer />
-							<v-btn
-								color="tertiary"
-								variant="elevated"
-								@click="closePwRecoveryModal"
-							>
-								{{ t("common.actions.cancel") }}
-							</v-btn>
-							<v-btn
-								color="primary"
-								variant="elevated"
-								data-testid="password-recovery-modal"
-								@click="submitPwRecovery"
-							>
-								{{ t("components.login.passwordRecovery.button.submit") }}
-							</v-btn>
-						</v-card-actions>
-					</v-card>
-				</v-dialog>
-			</v-col>
-		</v-row>
 		<div class="flex-grow-1" />
 	</v-container>
 </template>
@@ -389,46 +379,32 @@
 import { useLogin } from "@/modules/feature/login/login.composable";
 import router from "@/router";
 import { envConfigModule } from "@/store";
-import { System } from "@/store/types/system"; //import { System } from "@data-system"; // one of those?
+import { System } from "@/store/types/system";
 import { mdiEyeOffOutline, mdiEyeOutline } from "@icons/material";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n"; //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
 //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
-//import { useAlerts } from "../../feature/login/login.composable";
 
 // Vuetify typenames
 type AlertType = "info" | "success" | "warning" | "error";
 
 const { t } = useI18n();
-const { loginEmail, isLoading, setCookie, loginResult, cookieDefaults } =
-	useLogin();
-
+const { loginEmail, isLoading, setCookie, loginResult } = useLogin();
 // Alerts
-//const { initAlerts, alerts: composableAlerts } = useAlerts();
-const alerts = ref<
-	Array<{
-		message: string;
-		type: AlertType;
-		color?: string;
-		dismissible?: boolean;
-	}>
->([]);
-//watch(
-//composableAlerts,
-//	(val) => {
-//		alerts.value = val;
-//	},
-//	{ immediate: true }
-//);
+const alert = ref<{
+	message: string;
+	type: AlertType;
+	color: string;
+	dismissible: boolean;
+} | null>(null);
+const showAlert = ref(false);
 
 // Feature Toggles
 const featureOauthLoginEnabled: boolean =
 	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 //TODO: get env the schulcloud way, for now:
 const featureJwtExtendedTimeoutEnabled = true;
-//const featureJwtExtendedTimeoutEnabled = ref(
-//	!!import.meta.env.VITE_FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED
-//);
+//envConfigModule.getEnv.FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED
 
 // Section and field states
 const showEmailLoginSection = ref(false);
@@ -496,19 +472,19 @@ function checkCookie() {
 	}
 	// If cookies not enabled, show alert
 	if (!cookieEnabled) {
-		alerts.value.push({
+		alert.value = {
 			type: "error",
 			color: "error",
 			dismissible: true,
 			message: t("login.alert.cookiesBlocked"),
-		});
+		};
+		showAlert.value = true;
 	}
 	return cookieEnabled;
 }
 
 // ----- Local Storage Versioning -----
 onMounted(() => {
-	//initAlerts("login");
 	// Versioning
 	const newVersion = 1;
 	const currentVersion = parseInt(
@@ -606,8 +582,18 @@ async function submitLogin() {
 	if (loginResult.value) {
 		setCookie("jwt", loginResult.value?.accessToken);
 		setCookie("isLoggedIn", "true");
+		await router.push({ path: "/rooms" });
+	} else {
+		alert.value = {
+			type: "error",
+			color: "error",
+			dismissible: true,
+			message: "Login fehlgeschlagen",
+		};
+		showAlert.value = true;
+		email.value = "";
+		password.value = "";
 	}
-	await router.push({ path: '/rooms' })
 	//TODO: implement timer
 	//setTimeout(() => {
 	//	isSubmitting.value = false;
@@ -629,12 +615,21 @@ function submitLdapLogin() {
 	} else {
 		localStorage.removeItem("loginSystem");
 	}
-	// TODO: Replace with LDAP login API logic
+	// TODO: Replace with LDAP login API logic else
+	ldapUsername.value = "";
+	ldapPassword.value = "";
 	setTimeout(() => {
 		isSubmitting.value = false;
 		ldapLoginActive.value = true;
-		ldapButtonLabel.value = t("components.login.button.ldap");
+		//ldapButtonLabel.value = "Login Fehlgeschlagen";
 	}, 1500);
+	alert.value = {
+		type: "warning",
+		color: "error",
+		dismissible: true,
+		message: t("Login fehlgeschlagen"),
+	};
+	showAlert.value = true;
 }
 
 function incTimer() {
@@ -665,11 +660,12 @@ function closePwRecoveryModal() {
 function submitPwRecovery() {
 	// Simulate sending password reset link
 	pwRecoveryModal.value = false;
-	alerts.value.push({
+	alert.value = {
 		message: t("login.popup_resetPw.confirmation"),
 		type: "success",
 		color: "success",
 		dismissible: true,
-	});
+	};
+	showAlert.value = true;
 }
 </script>
