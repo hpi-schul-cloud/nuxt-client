@@ -15,9 +15,9 @@
 		<div class="content">
 			<div class="wrapper">
 				<div class="content-container">
-					<h3>
+					<h1>
 						{{ resource.title || resource.name }}
-					</h3>
+					</h1>
 					<div class="author-provider">
 						<span v-if="hasAuthor">
 							<base-link :href="'/content/?q=' + author" class="content-link">
@@ -79,7 +79,7 @@
 						</div>
 					</div>
 					<div class="element-cards">
-						<h4 class="h4">
+						<h4 class="text-h2">
 							{{ $t("pages.content._id.collection.selectElements") }}
 						</h4>
 						<transition name="fade">
@@ -305,7 +305,7 @@ $tablet-portrait-width: 768px;
 
 	.arrow__back {
 		margin-top: 8px;
-		font-weight: var(--font-weight-bold);
+		font-weight: bold;
 		text-decoration: none;
 		cursor: pointer;
 		border: none;
@@ -358,7 +358,7 @@ $tablet-portrait-width: 768px;
 
 			.external-content-title {
 				margin-top: 16px;
-				font-weight: var(--font-weight-bold);
+				font-weight: bold;
 			}
 		}
 
@@ -381,7 +381,7 @@ $tablet-portrait-width: 768px;
 
 		.author-provider {
 			font-size: var(--text-xs);
-			font-weight: var(--font-weight-bold);
+			font-weight: bold;
 		}
 
 		.description {

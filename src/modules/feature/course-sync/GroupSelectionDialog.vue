@@ -8,7 +8,7 @@
 		@dialog-canceled="$emit('cancel')"
 	>
 		<template #title>
-			<div class="text-h4 my-2 text-break">
+			<div class="text-h2 my-2 text-break">
 				{{ $t("feature-course-sync.GroupSelectionDialog.title") }}
 			</div>
 		</template>

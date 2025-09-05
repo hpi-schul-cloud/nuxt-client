@@ -160,7 +160,7 @@ const onElementDragEnd = async (event: SortableEvent) => {
 
 <style scoped>
 .title {
-	font-size: var(--heading-5) !important;
+	font-size: var(--heading-3) !important;
 	font-family: var(--font-accent);
 }
 </style>

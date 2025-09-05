@@ -12,7 +12,7 @@
 		@dialog-canceled="onCancel"
 	>
 		<template #title>
-			<div ref="textTitle" class="text-h4 my-2">
+			<div ref="textTitle" class="text-h2 my-2">
 				{{ t(`components.molecules.import.${parentType}.options.title`) }}
 			</div>
 		</template>

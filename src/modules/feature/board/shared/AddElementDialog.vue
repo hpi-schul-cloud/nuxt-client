@@ -5,7 +5,7 @@
 		:width="dialogWidth"
 	>
 		<VCard :loading="isDialogLoading">
-			<VCardTitle class="text-h4 text-break px-6 pt-4">
+			<VCardTitle class="text-h2 text-break px-6 pt-4">
 				{{ t("components.elementTypeSelection.dialog.title") }}
 			</VCardTitle>
 			<VCardText class="d-flex flex-row flex-wrap align-center">

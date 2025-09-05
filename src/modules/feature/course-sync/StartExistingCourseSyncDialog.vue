@@ -14,7 +14,7 @@
 		@dialog-closed="closeDialog"
 	>
 		<template #title>
-			<div class="text-h4 my-2 text-break">Synchronisation bestätigen</div>
+			<div class="text-h2 my-2 text-break">Synchronisation bestätigen</div>
 		</template>
 
 		<template #content>

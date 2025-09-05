@@ -287,7 +287,7 @@ watchDebounced(
 
 	.arrow__back {
 		margin-top: 8px;
-		font-weight: var(--font-weight-bold);
+		font-weight: bold;
 		cursor: pointer;
 	}
 
@@ -340,10 +340,6 @@ watchDebounced(
 			text-align: center;
 
 			@media #{map.get($display-breakpoints, 'sm-and-up')} {
-				font-size: var(--heading-6);
-			}
-
-			@media #{map.get($display-breakpoints, 'md-and-up')} {
 				font-size: var(--heading-4);
 			}
 		}

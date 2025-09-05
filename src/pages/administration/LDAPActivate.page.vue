@@ -108,11 +108,11 @@
 			class="section"
 			data-testid="migrateUsersSection"
 		>
-			<h3 class="title-class">
+			<h2 class="title-class">
 				{{
 					$t("pages.administration.ldap.activate.migrateExistingUsers.title")
 				}}
-			</h3>
+			</h2>
 			<base-input
 				v-model="migrateUsersCheckbox"
 				type="checkbox"
@@ -354,13 +354,13 @@ export default {
 .icon-text-unit {
 	margin-top: 12px;
 	margin-right: 24px;
-	font-weight: var(--font-weight-bold);
+	font-weight: bold;
 	white-space: nowrap;
 }
 
 .category-title {
 	margin: 40px 0 24px 0;
-	font-weight: var(--font-weight-bold);
+	font-weight: bold;
 }
 
 table {

@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe max-width="nativ" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="text-h3 mb-4" data-testid="page-title">
+			<h1 data-testid="page-title">
 				{{ t("pages.rooms.invitationLinkStatus.title") }}
 			</h1>
 		</template>
@@ -15,7 +15,7 @@
 		</div>
 		<div v-else class="w-100 text-center">
 			<CrossedHandsSvg data-testid="img-crossed-hands" />
-			<div class="text-h4" data-testid="status-message">
+			<div class="text-h2" data-testid="status-message">
 				{{ infoMessage }}
 			</div>
 		</div>

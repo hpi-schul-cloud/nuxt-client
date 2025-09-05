@@ -224,7 +224,7 @@ const setActive = (idx: number) => {
 }
 
 a.active {
-	font-weight: var(--font-weight-bold);
+	font-weight: bold;
 	color: rgba(var(--v-theme-white));
 	background-color: rgba(var(--v-theme-accent));
 	border-radius: 4px;

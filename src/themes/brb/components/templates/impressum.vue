@@ -1,10 +1,8 @@
 <template>
 	<div class="impressum-container">
 		<div class="impressum-max-width">
-			<h1 class="h2">Impressum</h1>
-			<h2 class="h4">
-				I. Allgemeine Anbieterinformationen nach § 18 Absatz 1 MStV
-			</h2>
+			<h1>Impressum</h1>
+			<h2>I. Allgemeine Anbieterinformationen nach § 18 Absatz 1 MStV</h2>
 			<p>
 				Ministerium für Bildung, Jugend und Sport des Landes Brandenburg<br />
 				Vertreten durch den Minister für Bildung, Jugend und Sport Steffen
@@ -54,8 +52,8 @@
 				Mitteilungen ohne Signatur und/oder Verschlüsselung.
 			</p>
 
-			<h2 class="h4">II. Haftungsausschluss</h2>
-			<h3 class="h6">1. Inhalt des Onlineangebotes</h3>
+			<h2>II. Haftungsausschluss</h2>
+			<h3>1. Inhalt des Onlineangebotes</h3>
 			<p>
 				Der Anbieter ist bemüht, auf dieser Website richtige und vollständige
 				Informationen zur Verfügung zu stellen. Der Anbieter übernimmt keinerlei
@@ -79,7 +77,7 @@
 				einzustellen.
 			</p>
 
-			<h3 class="h6">2. Verweise und Links</h3>
+			<h3>2. Verweise und Links</h3>
 			<p>
 				Bei direkten oder indirekten Verweisen auf fremde Internetseiten
 				("Links"), die außerhalb des Verantwortungsbereiches des Anbieters
@@ -115,7 +113,7 @@
 				zugegriffen werden kann.
 			</p>
 
-			<h3 class="h6">3. Urheber- und Kennzeichenrecht, Copyright</h3>
+			<h3>3. Urheber- und Kennzeichenrecht, Copyright</h3>
 			<p>
 				Das Ministerium für Bildung, Jugend und Sport des Landes Brandenburg
 				(MBJS) ist alleiniger Inhaber des Domainnamens "brandenburg.cloud". Des
@@ -156,7 +154,7 @@
 				ausdrückliche Zustimmung des Anbieters nicht gestattet.
 			</p>
 
-			<h3 class="h6">4. Rechtswirksamkeit dieses Haftungsausschlusses</h3>
+			<h3>4. Rechtswirksamkeit dieses Haftungsausschlusses</h3>
 			<p>
 				Dieser Haftungsausschluss ist als Teil des Internetangebotes zu
 				betrachten, von dem aus auf diese Seite verwiesen wurde. Sofern Teile
@@ -166,7 +164,7 @@
 				davon unberührt.
 			</p>
 
-			<h3 class="h6">5. Datenschutzhinweise</h3>
+			<h3>5. Datenschutzhinweise</h3>
 			<p>
 				Bei jedem Zugriff einer Nutzerin bzw. eines Nutzers auf eine Seite aus
 				dem Angebot werden die folgenden Daten über diesen Vorgang in einer
@@ -186,7 +184,7 @@
 				Zugriffsverhalten der Nutzerinnen und Nutzer nachzuvollziehen.
 			</p>
 
-			<h3 class="h6">6. Datenschutzerklärung</h3>
+			<h3>6. Datenschutzerklärung</h3>
 			<p>
 				Sollten Sie noch Fragen zum Datenschutz haben, so wenden Sie sich bitte
 				an den Datenschutzbeauftragten des MBJS:

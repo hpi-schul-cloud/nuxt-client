@@ -1,11 +1,11 @@
 <template>
-	<default-wireframe
+	<DefaultWireframe
 		:headline="$t('common.words.tasks')"
 		max-width="short"
 		:fab-items="fabItems"
 	>
 		<template #header>
-			<h1 class="text-h3 mb-4">{{ $t("common.words.tasks") }}</h1>
+			<h1>{{ $t("common.words.tasks") }}</h1>
 			<div v-if="isTeacher">
 				<v-switch
 					v-if="showSubstituteFilter"
@@ -84,7 +84,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script>

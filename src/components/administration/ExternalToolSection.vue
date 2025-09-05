@@ -117,7 +117,7 @@
 		>
 			<v-card :ripple="false">
 				<v-card-title data-testid="delete-dialog-title">
-					<h2 class="text-h4 my-2">
+					<h2 class="my-2">
 						{{
 							t("components.administration.externalToolsSection.dialog.title")
 						}}

@@ -175,7 +175,7 @@
 			@dialog-confirmed="deleteItem"
 		>
 			<template #title>
-				<h2 class="text-h4 my-2">
+				<h2 class="my-2">
 					{{
 						deleteDialogTitle(
 							itemDelete.itemType,
