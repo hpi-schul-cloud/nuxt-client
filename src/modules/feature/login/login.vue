@@ -155,18 +155,18 @@
 					hide-details
 				/>
 				<v-select
+					return-object
 					v-model="selectedSchool"
 					class="school"
 					:items="schoolOptions"
 					:label="$t('components.login.label.school')"
-					placeholder="bla"
+					placeholder="Select your school"
 					item-title="label"
-					item-value="value"
 					data-testid="select-school"
 					clearable
 					dense
 					required
-					@change="onSchoolChange"
+					@update:modelValue="onSchoolChange"
 				/>
 				<v-select
 					v-if="selectedSchool && currentLdapSystems.length > 0"
@@ -174,8 +174,8 @@
 					class="system"
 					:items="currentLdapSystems"
 					:label="$t('login.label.system')"
-					item-title="label"
-					item-value="value"
+					item-title="name"
+					item-value="id"
 					dense
 					clearable
 					data-testid="select-system-ldap"
@@ -274,18 +274,18 @@
 			</v-btn>
 			<div v-show="showMoreOptions" class="mb-4">
 				<v-select
+					return-object
 					v-model="selectedSchool"
 					class="school"
 					:items="schoolOptions"
 					:label="$t('components.login.label.school')"
-					placeholder="bla"
+					placeholder="Select your school"
 					item-title="label"
-					item-value="value"
 					data-testid="select-school"
 					clearable
 					dense
 					required
-					@change="onSchoolChange"
+					@update:modelValue="onSchoolChange"
 				/>
 				<v-select
 					v-if="selectedSchool && currentLdapSystems.length > 0"
@@ -293,8 +293,8 @@
 					class="system"
 					:items="currentLdapSystems"
 					:label="$t('login.label.system')"
-					item-title="label"
-					item-value="value"
+					item-title="name"
+					item-value="id"
 					dense
 					clearable
 					data-testid="select-system-ldap"
@@ -451,18 +451,20 @@ const schoolOptions = ref<
 	// Example: { label: 'School A', value: 'schoolA', systems: [{ id: 's1', type: 'local', alias: 'A1' }] },
 ]);
 schoolOptions.value = [
-	{ label: "school1", value: "school1" },
+	{ label: "school 1", value: "school1" },
 	{
-		label: "school2",
+		label: "school 2",
 		value: "school2",
-		systems: [{ id: "1", name: "LdapSystem1" }],
+		systems: [{ id: "1", name: "LdapSystem1" },
+				  { id: "2", name: "LdapSystem2" }
+		],
 	},
 	{ label: "Kleine Burg Braunschweig", value: "kBB" },
 ];
-const selectedSchool = ref();
-const systemOptions = ref<Array<{ label: string; value: string }>>([]); // For cloud/email login
-const selectedSystem = ref<{ label: string; value: string } | null>(null);
-const currentLdapSystems = ref<Array<{ label: string; value: string }>>([]);
+const selectedSchool = ref<{ label: string; value: string; systems?: System[] } | null>(null);
+const systemOptions = ref<Array<System>>([]); // For cloud/email login
+const selectedSystem = ref<System | null>(null);
+const currentLdapSystems = ref<Array<System>>([]);
 
 const loginTimeout = ref<number | null>(null);
 const ldapTimeout = ref<number | null>(null);
@@ -518,10 +520,13 @@ onMounted(() => {
 
 	// Restore previous login system/school preferences if available
 	const storedSchool = localStorage.getItem("loginSchool");
-	if (storedSchool) selectedSchool.value = storedSchool;
+	if (storedSchool) {
+		const schoolObj = schoolOptions.value.find((item) => item.value === storedSchool);
+		if (schoolObj) selectedSchool.value = schoolObj;
+	}
 	const storedSystem = localStorage.getItem("loginSystem");
 	if (storedSystem) {
-		const systemObj = systemOptions.value.find((s) => s.value === storedSystem);
+		const systemObj = systemOptions.value.find((s) => s.id === storedSystem);
 		if (systemObj) selectedSystem.value = systemObj;
 	}
 
@@ -531,7 +536,7 @@ onMounted(() => {
 			() => {
 				isSubmitting.value = false;
 				ldapLoginActive.value = true;
-				enableDisableLdapBtn(selectedSchool.value);
+				enableDisableLdapBtn(selectedSchool.value?.value ?? ""); // TODO: change value, maybe
 			},
 			(loginTimeout.value || ldapTimeout.value)! * 1000
 		);
@@ -548,7 +553,7 @@ function showCloud() {
 function showLdap() {
 	showEmailLoginSection.value = false;
 	showLdapLoginSection.value = true;
-	enableDisableLdapBtn(selectedSchool.value);
+	enableDisableLdapBtn(selectedSchool.value?.value ?? ""); // TODO: change value, maybe
 }
 function returnToMenu() {
 	showEmailLoginSection.value = false;
@@ -566,21 +571,15 @@ function closeMoreOptions() {
 // ----- School/System Option Handling -----
 //TODO: used system object of store, maybe change
 function setSystemOptions(systems: System[]) {
-	currentLdapSystems.value = systems.map((system) => {
-		const systemAlias = system.id ? ` (${system.id})` : "";
-		return {
-			label: `${system.id}${systemAlias}`,
-			value: `${system.name}//${system.name}`,
-		};
-	});
+	currentLdapSystems.value = systems;
 }
 
-function onSchoolChange(value: string) {
-	enableDisableLdapBtn("test"); // value TODO: change value
+function onSchoolChange(school: { label: string; value: string; systems?: System[] } | null) {
+	selectedSchool.value = school;
+	enableDisableLdapBtn(selectedSchool.value?.value ?? ""); // value TODO: change value, maybe
 	// Find systems in selected school
-	const schoolObj = schoolOptions.value.find((item) => item.value === value);
-	if (value && schoolObj?.systems) {
-		setSystemOptions(schoolObj.systems);
+	if (school && Array.isArray(school.systems)) {
+		setSystemOptions(school.systems);
 	} else {
 		currentLdapSystems.value = [];
 	}
@@ -613,7 +612,7 @@ function submitLdapLogin() {
 	ldapLoginActive.value = false;
 	// Store school/system prefs
 	if (selectedSchool.value) {
-		localStorage.setItem("loginSchool", selectedSchool.value);
+		localStorage.setItem("loginSchool", selectedSchool.value.value ?? "");
 	} else {
 		localStorage.removeItem("loginSchool");
 	}
