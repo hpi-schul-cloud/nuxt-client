@@ -169,7 +169,8 @@
 					@update:modelValue="onSchoolChange"
 				/>
 				<v-select
-					v-if="selectedSchool && currentLdapSystems.length > 0"
+					return-object
+					v-if="selectedSchool && currentLdapSystems.length > 1"
 					v-model="selectedSystem"
 					class="system"
 					:items="currentLdapSystems"
@@ -179,6 +180,7 @@
 					dense
 					clearable
 					data-testid="select-system-ldap"
+					@update:modelValue="onSystemChange"
 				/>
 			</v-card-text>
 			<v-btn
@@ -288,7 +290,8 @@
 					@update:modelValue="onSchoolChange"
 				/>
 				<v-select
-					v-if="selectedSchool && currentLdapSystems.length > 0"
+					return-object
+					v-if="selectedSchool && currentLdapSystems.length > 1"
 					v-model="selectedSystem"
 					class="system"
 					:items="currentLdapSystems"
@@ -298,6 +301,7 @@
 					dense
 					clearable
 					data-testid="select-system-ldap"
+					@update:modelValue="onSystemChange"
 				/>
 			</div>
 			<v-btn
@@ -583,6 +587,10 @@ function onSchoolChange(school: { label: string; value: string; systems?: System
 	} else {
 		currentLdapSystems.value = [];
 	}
+}
+
+function onSystemChange(system: System | null) {
+	selectedSystem.value = system;
 }
 
 // ----- LDAP Button State -----
