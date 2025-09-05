@@ -165,23 +165,30 @@ describe("RoomsPage", () => {
 			};
 		};
 
-		it("should activate import flow", () => {
+		it("should render import flow", () => {
 			const { wrapper } = setupImportMode();
 			const importFLow = wrapper.findComponent(ImportFlow);
+
+			expect(importFLow.exists()).toBe(true);
+		});
+
+		it("should activate import flow", () => {
+			const { wrapper } = setupImportMode();
+			const importFLow = wrapper.getComponent(ImportFlow);
 
 			expect(importFLow.props().isActive).toBe(true);
 		});
 
 		it("should pass the token to the import flow", () => {
 			const { wrapper, token } = setupImportMode();
-			const importFLow = wrapper.findComponent(ImportFlow);
+			const importFLow = wrapper.getComponent(ImportFlow);
 
 			expect(importFLow.props().token).toBe(token);
 		});
 
 		it("should filter out locked rooms for the import flow", () => {
 			const { wrapper } = setupImportMode();
-			const importFLow = wrapper.findComponent(ImportFlow);
+			const importFLow = wrapper.getComponent(ImportFlow);
 
 			const destinations = importFLow.props().destinations as RoomItem[];
 
@@ -192,7 +199,7 @@ describe("RoomsPage", () => {
 		describe("when the import flow succeeded", () => {
 			it("should notify about successful import", async () => {
 				const { wrapper, notifierModuleMock } = setupImportMode();
-				const importFlow = wrapper.findComponent(ImportFlow);
+				const importFlow = wrapper.getComponent(ImportFlow);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 
@@ -206,7 +213,7 @@ describe("RoomsPage", () => {
 
 			it("should go to the room details page", async () => {
 				const { wrapper, router } = setupImportMode();
-				const importFlow = wrapper.findComponent(ImportFlow);
+				const importFlow = wrapper.getComponent(ImportFlow);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 
