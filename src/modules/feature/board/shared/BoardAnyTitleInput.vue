@@ -181,20 +181,17 @@ const cursorToEnd = () => {
 .title {
 	cursor: pointer;
 	white-space: pre-wrap;
-
 	letter-spacing: $field-letter-spacing;
 	font-family: var(--font-accent);
 
 	&.board-title-input :deep(textarea) {
-		font-size: var(--heading-3);
-		line-height: var(--line-height-md);
 		padding-top: 16px;
 		overflow: hidden; // prevent scrollbar in board title
 	}
 
 	&.other-title-input {
 		:deep(textarea) {
-			font-size: var(--heading-5);
+			font-size: var(--heading-3);
 			line-height: var(--line-height-lg);
 			padding: 8px 16px;
 			overflow: hidden;
@@ -207,15 +204,13 @@ const cursorToEnd = () => {
 }
 
 .board-title {
-	font-size: var(--heading-3);
-	line-height: var(--line-height-md);
 	margin-bottom: 0;
 	overflow-wrap: break-word;
 	word-break: break-word;
 }
 
 .other-title {
-	font-size: var(--heading-5);
+	font-size: var(--heading-3);
 	line-height: var(--line-height-lg);
 	margin: 0;
 	padding: 8px 16px;

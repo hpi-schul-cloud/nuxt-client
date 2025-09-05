@@ -340,10 +340,6 @@ watchDebounced(
 			text-align: center;
 
 			@media #{map.get($display-breakpoints, 'sm-and-up')} {
-				font-size: var(--heading-6);
-			}
-
-			@media #{map.get($display-breakpoints, 'md-and-up')} {
 				font-size: var(--heading-4);
 			}
 		}

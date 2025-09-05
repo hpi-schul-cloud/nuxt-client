@@ -95,7 +95,7 @@ const links = computed(() => {
 
 	.hpi-logo {
 		display: block;
-		height: var(--heading-3);
+		height: var(--heading-1);
 		margin: 0;
 	}
 }

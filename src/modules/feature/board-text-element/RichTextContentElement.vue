@@ -76,7 +76,6 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	}
 
 	h4 {
-		font-size: var(--heading-6);
 		letter-spacing: 0.01em;
 		font-weight: bold;
 	}

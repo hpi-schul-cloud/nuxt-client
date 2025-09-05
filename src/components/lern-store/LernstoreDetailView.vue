@@ -537,7 +537,7 @@ $tablet-portrait-width: 768px;
 			display: flex;
 			justify-content: space-between;
 			margin: 40px 0 12px 0;
-			font-size: var(--heading-5);
+			font-size: var(--heading-3);
 			font-weight: bold;
 			line-height: var(--line-height-md);
 		}

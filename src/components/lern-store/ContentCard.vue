@@ -230,12 +230,12 @@ export default {
 	}
 
 	&__title {
-		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
+		height: calc(var(--heading-4) * var(--line-height-sm) * 3);
 		margin: 8px 12px;
 		color: rgba(var(--v-theme-on-surface));
 
 		@include excerpt(
-			$font-size: var(--heading-6),
+			$font-size: var(--heading-4),
 			$line-height: var(--line-height-sm),
 			$lines-to-show: 3
 		);
