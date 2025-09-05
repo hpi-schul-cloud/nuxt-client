@@ -319,7 +319,6 @@ describe("InviteMembersDialog", () => {
 					expect(notifierModule.show).toHaveBeenCalledWith({
 						text: "common.words.copiedToClipboard",
 						status: "success",
-						timeout: 5000,
 					});
 				});
 			});

@@ -541,7 +541,6 @@ export default {
 						"pages.administration.students.consent.steps.register.success"
 					),
 					status: "success",
-					timeout: 5000,
 				});
 				this.next();
 			}
@@ -602,7 +601,6 @@ export default {
 					notifierModule.show({
 						text: this.$t("pages.administration.students.consent.table.empty"),
 						status: "error",
-						timeout: 5000,
 					});
 
 					this.$router.push({

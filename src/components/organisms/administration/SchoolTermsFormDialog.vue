@@ -143,7 +143,6 @@ export default defineComponent({
 				notifierModule.show({
 					text: t("pages.administration.school.index.termsOfUse.success"),
 					status: "success",
-					timeout: 5000,
 				});
 
 				resetForm();
