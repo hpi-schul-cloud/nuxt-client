@@ -11,6 +11,7 @@ import { logger } from "@util-logger";
 import { filter } from "lodash";
 import { ref, Ref } from "vue";
 import { useLoginApi } from "./loginApi.composable";
+import { School } from "@/store/types/schools";
 
 // --- logFilter logic migrated as a utility inside composable ---
 
@@ -267,50 +268,13 @@ const safeBackRedirect = (referrer?: string, appendage = ""): void => {
  * Renames "id" to "_id" for school and all nested relevant entities.
  * Used when transforming school objects from API responses or for compatibility.
  */
-export interface SchoolEntity {
-	id?: string;
-	_id?: string;
-	//[key: string]: any; ////TODO: populate SchoolEntity object
-}
-
-export interface County {
-	id?: string;
-	_id?: string;
-	//[key: string]: any; //TODO: populate County object
-}
-
-export interface Year {
-	id?: string;
-	_id?: string;
-	//[key: string]: any; //TODO: populate Year object
-}
-
-export interface School {
-	id?: string;
-	_id?: string;
-	federalState?: {
-		id?: string;
-		_id?: string;
-		counties?: County[];
-		//[key: string]: any; //TODO: populate federal state
-	};
-	county?: County;
-	currentYear?: Year;
-	years?: {
-		schoolYears?: Year[];
-		activeYear?: Year;
-		lastYear?: Year;
-		nextYear?: Year;
-		//[key: string]: any; //TODO: populate years object
-	};
-	//[key: string]: any; //TODO: populate School object
-}
 
 /**
  * Transforms the ids in a school object (all tree: school, state, counties, years, etc.)
  * so that "id" is remapped to "_id" and "id" key removed, following the legacy data model compatibility.
  */
-const renameIdsInSchool = (school: School): School => {
+// TODO: function maybe useless?
+/*const renameIdsInSchool = (school: School): School => {
 	if (!school) return school;
 	if (school.id) {
 		school._id = school.id;
@@ -371,7 +335,7 @@ const renameIdsInSchool = (school: School): School => {
 	}
 
 	return school;
-};
+};*/
 
 // --- End renameIdsInSchool migration ---
 
@@ -722,7 +686,7 @@ export const useLogin = () => {
 		joinPathWithQuery,
 		safeBackRedirect,
 		// IDs renaming helper
-		renameIdsInSchool,
+		//renameIdsInSchool,
 		// schools listing for LDAP login (cache)
 		schools,
 		isLoadingSchools,

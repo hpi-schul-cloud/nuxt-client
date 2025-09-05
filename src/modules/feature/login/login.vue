@@ -564,22 +564,23 @@ function closeMoreOptions() {
 }
 
 // ----- School/System Option Handling -----
-//TODO: find the right system object
-//function setSystemOptions(systems: System[]) {
-//	currentLdapSystems.value = systems.map((system) => {
-//		const systemAlias = system.alias ? ` (${system.alias})` : "";
-//		return {
-//			label: `${system.type}${systemAlias}`,
-//			value: `${system.id}//${system.type}`,
-//		};
-//	});
-//}
+//TODO: used system object of store, maybe change
+function setSystemOptions(systems: System[]) {
+	currentLdapSystems.value = systems.map((system) => {
+		const systemAlias = system.id ? ` (${system.id})` : "";
+		return {
+			label: `${system.id}${systemAlias}`,
+			value: `${system.name}//${system.name}`,
+		};
+	});
+}
+
 function onSchoolChange(value: string) {
-	enableDisableLdapBtn("test"); // value
+	enableDisableLdapBtn("test"); // value TODO: change value
 	// Find systems in selected school
 	const schoolObj = schoolOptions.value.find((item) => item.value === value);
 	if (value && schoolObj?.systems) {
-		//setSystemOptions(schoolObj.systems);
+		setSystemOptions(schoolObj.systems);
 	} else {
 		currentLdapSystems.value = [];
 	}
@@ -606,6 +607,7 @@ async function submitLogin() {
 	//	submitButtonLabel.value = t("components.login.button.email");
 	//}, 1500);
 }
+
 function submitLdapLogin() {
 	isSubmitting.value = true;
 	ldapLoginActive.value = false;
@@ -627,6 +629,7 @@ function submitLdapLogin() {
 		ldapButtonLabel.value = t("components.login.button.ldap");
 	}, 1500);
 }
+
 function incTimer() {
 	if (countdownNum.value > 1) {
 		countdownNum.value--;
