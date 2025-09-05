@@ -28,6 +28,18 @@ export interface WopiFileInfoResponse {
     BaseFileName: string;
     /**
      * 
+     * @type {boolean}
+     * @memberof WopiFileInfoResponse
+     */
+    IsAdminUser: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof WopiFileInfoResponse
+     */
+    PostMessageOrigin: string;
+    /**
+     * 
      * @type {number}
      * @memberof WopiFileInfoResponse
      */
