@@ -183,6 +183,7 @@ const cursorToEnd = () => {
 	white-space: pre-wrap;
 	letter-spacing: $field-letter-spacing;
 	font-family: var(--font-accent);
+	font-weight: normal;
 
 	&.board-title-input :deep(textarea) {
 		padding-top: 16px;
