@@ -10,6 +10,7 @@ export enum CollaboraEvents {
 	APP_LOADING_STATUS = "App_LoadingStatus",
 	HOST_POSTMESSAGE_READY = "Host_PostmessageReady",
 	REMOVE_BUTTON = "Remove_Button",
+	FEEDBACK_NEVER = "feedback-never",
 }
 
 export const useCollaboraPostMessageApi = () => {
@@ -58,6 +59,7 @@ export const useCollaboraPostMessageApi = () => {
 
 		if (Status === "Initialized") {
 			postMessage(CollaboraEvents.HOST_POSTMESSAGE_READY);
+			postMessage(CollaboraEvents.FEEDBACK_NEVER);
 		}
 
 		if (Status === "Document_Loaded") {
@@ -73,11 +75,11 @@ export const useCollaboraPostMessageApi = () => {
 		}
 
 		collaboraWindow.postMessage(
-			{
+			JSON.stringify({
 				MessageId: messageId,
 				SendTime: Date.now(),
 				Values: values,
-			},
+			}),
 			targetOrigin
 		);
 	};
