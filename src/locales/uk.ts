@@ -203,7 +203,6 @@ export default {
 		"Посилання скопійовано в буфер обміну",
 	"common.words.copyLinkToClipboard.failure":
 		"Не вдалося скопіювати посилання в буфер обміну",
-	"common.words.courseGroups": "курсові групи",
 	"common.words.courses": "Мій курс",
 	"common.words.draft": "Чернетка",
 	"common.words.drafts": "Чернетки",
@@ -683,35 +682,9 @@ export default {
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.failedCopy":
 		"Дублювання не вдалося завершити.",
-	"components.molecules.copyResult.fileCopy.error":
-		"Наступні файли не вдалося скопіювати і їх необхідно додати заново.",
 	"components.molecules.copyResult.geogebraCopy.info":
 		"Ідентифікатори матеріалів не копіюються з технічних причин і повинні бути додані знову.",
-	"components.molecules.copyResult.information":
-		"В подальшому за допомогою швидких посилань можна доповнити відсутню інформацію. Посилання відкриваються в окремій вкладці.",
-	"components.molecules.copyResult.label.columnBoard": "Колонна дошка",
-	"components.molecules.copyResult.label.content": "Вміст",
-	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "Зовнішні інструменти",
-	"components.molecules.copyResult.label.file": "Файл",
-	"components.molecules.copyResult.label.files": "Файли",
-	"components.molecules.copyResult.label.geogebra": "GeoGebra",
-	"components.molecules.copyResult.label.leaf": "листок",
-	"components.molecules.copyResult.label.lernstoreMaterial":
-		"навчальний матеріал",
-	"components.molecules.copyResult.label.lernstoreMaterialGroup":
-		"навчальні матеріали",
-	"components.molecules.copyResult.label.lessonContentGroup": "зміст уроку",
-	"components.molecules.copyResult.label.submissions": "підпорядкування",
-	"components.molecules.copyResult.label.text": "Текст",
-	"components.molecules.copyResult.label.tldraw": "Дошка",
-	"components.molecules.copyResult.label.link": "Посилання",
-	"components.molecules.copyResult.label.timeGroup": "Група часу",
-	"components.molecules.copyResult.label.unknown": "Невідомий",
-	"components.molecules.copyResult.label.userGroup": "Група користувачів",
-	"components.molecules.copyResult.label.toolElements":
-		"Інструментальний елемент",
-	"components.molecules.copyResult.metadata": "Загальна інформація",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.course.successfullyCopied":

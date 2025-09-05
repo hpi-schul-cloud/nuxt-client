@@ -29,12 +29,6 @@
 					</template>
 				</ul>
 			</WarningAlert>
-			<template v-if="hasErrors && isCourse">
-				<div>
-					<p>{{ $t("components.molecules.copyResult.information") }}</p>
-				</div>
-				<copy-result-modal-list :items="items" />
-			</template>
 		</template>
 	</v-custom-dialog>
 </template>
@@ -46,7 +40,6 @@ import { envConfigModule } from "@/store";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import CopyResultModalList from "./CopyResultModalList.vue";
 
 const { t } = useI18n();
 
@@ -104,8 +97,8 @@ const copyResultWarnings = computed(() => {
 			text: t("components.molecules.copyResult.tldrawCopy.info"),
 		},
 		{
-			isShow: hasFileElement.value || isCourse.value,
-			text: filesInfoText.value,
+			isShow: isCourse.value,
+			text: t("components.molecules.copyResult.courseFiles.info"),
 		},
 		{
 			isShow: hasExternalTool.value || hasExternalToolElement.value,
@@ -139,10 +132,6 @@ const hasDrawingElement = computed(() => {
 	return hasElementOfType(items.value, CopyApiResponseTypeEnum.DrawingElement);
 });
 
-const hasFileElement = computed(() => {
-	return hasElementOfType(items.value, CopyApiResponseTypeEnum.File);
-});
-
 const hasCourseGroup = computed(() => {
 	return hasElementOfType(
 		items.value,
@@ -150,22 +139,8 @@ const hasCourseGroup = computed(() => {
 	);
 });
 
-const hasErrors = computed(() => {
-	return items.value.length > 0;
-});
-
 const isCourse = computed(() => {
 	return props.copyResultRootItemType === CopyApiResponseTypeEnum.Course;
-});
-
-const filesInfoText = computed(() => {
-	const courseFilesText = isCourse.value
-		? t("components.molecules.copyResult.courseFiles.info")
-		: "";
-	const fileErrorText = hasFileElement.value
-		? t("components.molecules.copyResult.fileCopy.error")
-		: "";
-	return `${courseFilesText} ${fileErrorText}`.trim();
 });
 
 const externalToolsInfoText = computed(() => {

@@ -203,7 +203,6 @@ export default {
 	"common.words.copyLinkToClipboard.success": "Enlace copiado al portapapeles",
 	"common.words.copyLinkToClipboard.failure":
 		"El enlace no se pudo copiar al portapapeles",
-	"common.words.courseGroups": "grupos de cursos",
 	"common.words.courses": "Cursos",
 	"common.words.draft": "Borrador",
 	"common.words.drafts": "Borradores",
@@ -687,37 +686,10 @@ export default {
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.failedCopy":
 		"No se pudo completar la duplicación.",
-	"components.molecules.copyResult.fileCopy.error":
-		"Los siguientes archivos no han podido ser copiados y deben ser añadidos de nuevo.",
 	"components.molecules.copyResult.geogebraCopy.info":
 		"Los ID de material no se copian por razones técnicas y deben agregarse nuevamente.",
-	"components.molecules.copyResult.information":
-		"A continuación, se pueden añadir los contenidos que faltan con la ayuda de los enlaces rápidos. Los enlaces se abren en otra pestaña.",
-	"components.molecules.copyResult.label.columnBoard": "Tablero de columna",
-	"components.molecules.copyResult.label.content": "Contenido",
-	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools":
 		"Herramientas externas",
-	"components.molecules.copyResult.label.file": "Archivar",
-	"components.molecules.copyResult.label.files": "Archivos",
-	"components.molecules.copyResult.label.geogebra": "GeoGebra",
-	"components.molecules.copyResult.label.leaf": "Hoja",
-	"components.molecules.copyResult.label.lernstoreMaterial":
-		"Material de aprendizaje",
-	"components.molecules.copyResult.label.lernstoreMaterialGroup":
-		"Materiales de aprendizaje",
-	"components.molecules.copyResult.label.lessonContentGroup":
-		"Contenidos de la lección",
-	"components.molecules.copyResult.label.submissions": "Envíos",
-	"components.molecules.copyResult.label.text": "Texto",
-	"components.molecules.copyResult.label.tldraw": "Whiteboard",
-	"components.molecules.copyResult.label.link": "Enlace",
-	"components.molecules.copyResult.label.timeGroup": "Grupo de tiempo",
-	"components.molecules.copyResult.label.unknown": "Desconocido",
-	"components.molecules.copyResult.label.userGroup": "Grupo de usuario",
-	"components.molecules.copyResult.label.toolElements":
-		"Elemento de herramienta",
-	"components.molecules.copyResult.metadata": "Información general",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.course.successfullyCopied":

@@ -199,7 +199,6 @@ export default {
 	"common.words.copyLinkToClipboard.success": "Link copied to clipboard",
 	"common.words.copyLinkToClipboard.failure":
 		"Link could not be copied to clipboard",
-	"common.words.courseGroups": "Course Groups",
 	"common.words.courses": "Courses",
 	"common.words.draft": "Draft",
 	"common.words.drafts": "Drafts",
@@ -669,34 +668,9 @@ export default {
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.failedCopy":
 		"The duplication could not be completed.",
-	"components.molecules.copyResult.fileCopy.error":
-		"The following files could not be copied and must be added again.",
 	"components.molecules.copyResult.geogebraCopy.info":
 		"Material IDs are not copied for technical reasons and must be added again.",
-	"components.molecules.copyResult.information":
-		"In the following, the missing contents can be added with the help of the quick links. The links open in a separate tab.",
-	"components.molecules.copyResult.label.columnBoard": "Column board",
-	"components.molecules.copyResult.label.content": "Content",
-	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "External tools",
-	"components.molecules.copyResult.label.file": "File",
-	"components.molecules.copyResult.label.files": "Files",
-	"components.molecules.copyResult.label.geogebra": "GeoGebra",
-	"components.molecules.copyResult.label.leaf": "Leaf",
-	"components.molecules.copyResult.label.lernstoreMaterial":
-		"Learning material",
-	"components.molecules.copyResult.label.lernstoreMaterialGroup":
-		"Learning materials",
-	"components.molecules.copyResult.label.lessonContentGroup": "Lesson contents",
-	"components.molecules.copyResult.label.submissions": "Submissions",
-	"components.molecules.copyResult.label.text": "Text",
-	"components.molecules.copyResult.label.tldraw": "Whiteboard",
-	"components.molecules.copyResult.label.link": "Link",
-	"components.molecules.copyResult.label.timeGroup": "Time Group",
-	"components.molecules.copyResult.label.unknown": "Unknown",
-	"components.molecules.copyResult.label.userGroup": "User Group",
-	"components.molecules.copyResult.label.toolElements": "Tool Element",
-	"components.molecules.copyResult.metadata": "General Information",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.course.successfullyCopied":

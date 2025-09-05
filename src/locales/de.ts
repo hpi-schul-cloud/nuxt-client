@@ -201,7 +201,6 @@ export default {
 		"Link in die Zwischenablage kopiert",
 	"common.words.copyLinkToClipboard.failure":
 		"Link konnte nicht in die Zwischenablage kopiert werden",
-	"common.words.courseGroups": "Kursgruppen",
 	"common.words.courses": "Kurse",
 	"common.words.draft": "Entwurf",
 	"common.words.drafts": "Entwürfe",
@@ -673,34 +672,9 @@ export default {
 	"components.molecules.copyResult.etherpadCopy.info": "Inhalte aus Etherpads",
 	"components.molecules.copyResult.failedCopy":
 		"Das Duplizieren konnte nicht abgeschlossen werden.",
-	"components.molecules.copyResult.fileCopy.error":
-		"Folgende Dateien konnten nicht kopiert werden und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.geogebraCopy.info": "Geogebra IDs",
-	"components.molecules.copyResult.information":
-		"Nachfolgend können die fehlenden Inhalte mit Hilfe der Quick-Links ergänzt werden. Die Links öffnen sich in einem separatem Tab.",
 	"components.molecules.copyResult.membersAndPermissions":
 		"Kursmitglieder und Berechtigungen",
-	"components.molecules.copyResult.label.columnBoard": "Bereich",
-	"components.molecules.copyResult.label.content": "Inhalt",
-	"components.molecules.copyResult.label.etherpad": "Etherpad",
-	"components.molecules.copyResult.label.file": "Datei",
-	"components.molecules.copyResult.label.files": "Dateien",
-	"components.molecules.copyResult.label.geogebra": "GeoGebra",
-	"components.molecules.copyResult.label.leaf": "Blatt",
-	"components.molecules.copyResult.label.lernstoreMaterial": "Lern-Material",
-	"components.molecules.copyResult.label.lernstoreMaterialGroup":
-		"Lern-Materialien",
-	"components.molecules.copyResult.label.lessonContentGroup":
-		"Unterrichtsinhalte",
-	"components.molecules.copyResult.label.submissions": "Abgaben",
-	"components.molecules.copyResult.label.text": "Text",
-	"components.molecules.copyResult.label.tldraw": "Whiteboard",
-	"components.molecules.copyResult.label.link": "Link",
-	"components.molecules.copyResult.label.timeGroup": "Zeitgruppe",
-	"components.molecules.copyResult.label.unknown": "Unbekannt",
-	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
-	"components.molecules.copyResult.label.toolElements": "Tool-Element",
-	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
 	"components.molecules.copyResult.tldrawCopy.info": "Inhalte aus Whiteboards",
 	"components.molecules.copyResult.course.successfullyCopied":
 		"Alle Elemente wurden erfolgreich dupliziert.",
