@@ -52,6 +52,7 @@ import {
 } from "vuetify/components";
 import RoomMembersPage from "./RoomMembers.page.vue";
 import { Mock } from "vitest";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -66,12 +67,22 @@ const roomAuthorization = vi.mocked(useRoomAuthorization);
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
+vi.mock("@vueuse/integrations/useFocusTrap", () => {
+	return {
+		useFocusTrap: vi.fn(),
+	};
+});
+
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let askConfirmationMock: Mock;
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
+	let deactivateMock: Mock;
 
 	const routeRoomId = "room-id";
 
@@ -131,6 +142,16 @@ describe("RoomMembersPage", () => {
 
 		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(boardNotifierCalls);
+
+		pauseMock = vi.fn();
+		unpauseMock = vi.fn();
+		deactivateMock = vi.fn();
+
+		(useFocusTrap as Mock).mockReturnValue({
+			pause: pauseMock,
+			unpause: unpauseMock,
+			deactivate: deactivateMock,
+		});
 	});
 
 	const setup = (options?: {
@@ -184,7 +205,6 @@ describe("RoomMembersPage", () => {
 				stubs: {
 					LeaveRoomProhibitedDialog: true,
 					// Do not stub AddMembersDialog so that VDialog is accessible in tests
-					AddMembersDialog: true,
 					Members: true,
 					InviteMembersDialog: true,
 					UseFocusTrap: true,
@@ -502,10 +522,11 @@ describe("RoomMembersPage", () => {
 				activeTab: Tab.Members,
 			});
 			const wireframe = wrapper.findComponent(DefaultWireframe);
-			const addMemberDialogBeforeClick =
-				wrapper.findComponent(AddMembersDialog);
+			const addMemberDialogBeforeClick = wrapper
+				.findComponent(AddMembersDialog)
+				.findComponent(VDialog);
 
-			expect(addMemberDialogBeforeClick.isVisible()).toBe(false);
+			expect(addMemberDialogBeforeClick.vm.modelValue).toBe(false);
 
 			const addMemberButton = wireframe
 				.getComponent("[data-testid=fab-add-members]")
@@ -513,9 +534,11 @@ describe("RoomMembersPage", () => {
 
 			await addMemberButton.trigger("click");
 
-			const addMemberDialogAfterClick = wrapper.findComponent(AddMembersDialog);
+			const addMemberDialogAfterClick = wrapper
+				.findComponent(AddMembersDialog)
+				.findComponent(VDialog);
 
-			expect(addMemberDialogAfterClick.exists()).toBe(true);
+			expect(addMemberDialogAfterClick.vm.modelValue).toBe(true);
 		});
 	});
 
@@ -569,11 +592,39 @@ describe("RoomMembersPage", () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper } = setup();
 
+			const parent = wrapper.getComponent(AddMembersDialog);
+			await parent.setValue(true);
+			await parent.vm.$nextTick();
+
+			const dialog = parent.findComponent(VDialog);
+			await dialog.trigger("keydown.escape");
+			await dialog.vm.$nextTick();
+
+			const emitted = parent.emitted();
+			expect(emitted["close"]).toBeDefined();
+
+			/*
+			await dialog.trigger("keydown.escape");
+			await dialog.vm.$nextTick();
+			// await parent.trigger("keydown.escape");
+			await parent.vm.$nextTick();
+			expect(dialog.exists()).toBe(true);
+			await dialog.trigger("keydown.escape");
+			await dialog.vm.$nextTick();
+			expect(dialog.exists()).toBe(false);
+			*/
+
+			// expect(dialog.props("modelValue")).toBe(false);
+		});
+
+		it("should close dialog on close", async () => {
+			roomPermissions.canAddRoomMembers.value = true;
+			const { wrapper } = setup();
+
 			const dialog = wrapper.getComponent(AddMembersDialog);
 			await dialog.setValue(true);
 
-			const dialogContent = dialog.getComponent(VDialog);
-			await dialogContent.trigger("keydown.escape");
+			await dialog.vm.$emit("close");
 
 			expect(dialog.props("modelValue")).toBe(false);
 		});

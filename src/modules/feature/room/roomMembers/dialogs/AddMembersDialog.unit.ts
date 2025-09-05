@@ -448,11 +448,12 @@ describe("AddMembersDialog", () => {
 				potentialRoomMembers[0].userId,
 				potentialRoomMembers[1].userId,
 			];
-			userComponent.setValue(selectedUsers);
+			await userComponent.setValue(selectedUsers);
 
 			const addButton = wrapper.getComponent({
 				ref: "addButton",
 			});
+
 			await addButton.trigger("click");
 
 			expect(roomMembersStore.addMembers).toHaveBeenCalledTimes(1);
@@ -469,7 +470,7 @@ describe("AddMembersDialog", () => {
 				potentialRoomMembers[0].userId,
 				potentialRoomMembers[1].userId,
 			];
-			userComponent.setValue(selectedUsers);
+			await userComponent.setValue(selectedUsers);
 
 			const addButton = wrapper.getComponent({
 				ref: "addButton",

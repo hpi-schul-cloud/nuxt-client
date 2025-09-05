@@ -113,8 +113,8 @@
 						variant="flat"
 						:text="t('common.actions.add')"
 						data-testid="add-participant-save-btn"
-						:disabled="isLoading || selectedUsers.length === 0"
-						@click="handleWithLoading(() => onAddMembers())"
+						:disabled="isButtonDisabled"
+						@click="withLoading(() => onAddMembers())"
 					/>
 				</div>
 			</template>
@@ -158,7 +158,7 @@ const isOpen = defineModel({
 });
 
 const isLoading = ref(false);
-const handleWithLoading = async (fn: () => Promise<void>) => {
+const withLoading = async (fn: () => Promise<void>) => {
 	isLoading.value = true;
 	try {
 		await fn();
@@ -222,7 +222,10 @@ const { pause, unpause, deactivate } = useFocusTrap(addMembersContent, {
 	immediate: true,
 });
 
-// maybe this could be moved to a composable as the issue exists in multiple dialogs
+// the focus trap does not automatically deactivate on dialog close leading to broken UI
+// TODO put as composable
+// e. g. useBetterFocusTrap<ref, boolean>(addMembersContent, isOpen);
+// should return pause, unpause, deactivate
 watch(
 	() => isOpen.value,
 	(isOpen: boolean) => {
@@ -304,6 +307,9 @@ onMounted(() => {
 });
 
 const isItemListDisabled = computed(() => selectedUsers.value.length > 0);
+const isButtonDisabled = computed(
+	() => isLoading.value || selectedUsers.value.length === 0
+);
 </script>
 <style lang="scss" scoped>
 // show focus indicator for chips on safari

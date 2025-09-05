@@ -1,11 +1,11 @@
 import AdministrationRoomDetailPage from "./AdministrationRoomMembers.page.vue";
 import {
 	envsFactory,
+	meResponseFactory,
 	mockedPiniaStoreTyping,
 	schoolFactory,
 } from "@@/tests/test-utils";
 import {
-	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useAdministrationRoomStore } from "@data-room";
@@ -13,12 +13,14 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
-import { envConfigModule, schoolsModule } from "@/store";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { Mock } from "vitest";
 import { Router, useRoute } from "vue-router";
 import { nextTick } from "vue";
 import EnvConfigModule from "@/store/env-config";
+import { useI18n } from "vue-i18n";
+import AuthModule from "@/store/auth";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -33,6 +35,16 @@ vi.mock(
 			buildPageTitle: (pageTitle) => pageTitle ?? "",
 		}) as typeof import("@/utils/pageTitle")
 );
+
+vi.mock("vue-i18n", () => {
+	return {
+		useI18n: vi.fn().mockReturnValue({
+			t: vi.fn().mockImplementation((key: string) => key),
+			n: vi.fn().mockImplementation((key: string) => key),
+		}),
+	};
+});
+vi.mocked(useI18n());
 
 describe("AdministrationRoomMembers.page", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -52,7 +64,11 @@ describe("AdministrationRoomMembers.page", () => {
 		setupStores({
 			schoolsModule: SchoolsModule,
 			envConfigModule: EnvConfigModule,
+			authModule: AuthModule,
 		});
+
+		const mockMe = meResponseFactory.build({ roles: [{ name: "admin" }] });
+		authModule.setMe(mockMe);
 
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});
@@ -73,7 +89,6 @@ describe("AdministrationRoomMembers.page", () => {
 		const wrapper = mount(AdministrationRoomDetailPage, {
 			global: {
 				plugins: [
-					createTestingI18n(),
 					createTestingVuetify(),
 					createTestingPinia({
 						initialState: {
@@ -154,6 +169,8 @@ describe("AdministrationRoomMembers.page", () => {
 		});
 
 		it("should set 'selectedRoom' value to null when unMounted", () => {
+			// there is no selectedRoom in the store, does it need to be added?
+
 			const { adminRoomStore, wrapper } = setup();
 
 			expect(adminRoomStore.selectedRoom).not.toBeNull();

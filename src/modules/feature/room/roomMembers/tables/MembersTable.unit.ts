@@ -45,6 +45,7 @@ import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
 import { ChangeRole } from "@feature-room";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
 import { Mock } from "vitest";
 
 vi.mock("@ui-confirmation-dialog");
@@ -58,6 +59,8 @@ vi.mock("@vueuse/integrations/useFocusTrap");
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
+vi.mock("@vueuse/integrations/useFocusTrap");
+
 type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
 };
@@ -70,6 +73,10 @@ describe("MembersTable", () => {
 	let askConfirmationMock: Mock;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
+	let deactivateMock: Mock;
+
 	beforeEach(() => {
 		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
@@ -78,6 +85,16 @@ describe("MembersTable", () => {
 		mockedUseRemoveConfirmationDialog.mockReturnValue({
 			askConfirmation: askConfirmationMock,
 			isDialogOpen: ref(false),
+		});
+
+		pauseMock = vi.fn();
+		unpauseMock = vi.fn();
+		deactivateMock = vi.fn();
+
+		(useFocusTrap as Mock).mockReturnValue({
+			pause: pauseMock,
+			unpause: unpauseMock,
+			deactivate: deactivateMock,
 		});
 
 		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();

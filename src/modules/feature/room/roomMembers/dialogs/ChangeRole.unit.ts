@@ -29,6 +29,8 @@ import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
 import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
 import { createPinia, setActivePinia } from "pinia";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { Mock } from "vitest";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -47,9 +49,22 @@ vi.mock("vue-i18n", async (importOriginal) => {
 
 describe("ChangeRole.vue", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
+	let deactivateMock: Mock;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
+
+		pauseMock = vi.fn();
+		unpauseMock = vi.fn();
+		deactivateMock = vi.fn();
+
+		(useFocusTrap as Mock).mockReturnValue({
+			pause: pauseMock,
+			unpause: unpauseMock,
+			deactivate: deactivateMock,
+		});
 
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
@@ -116,6 +131,7 @@ describe("ChangeRole.vue", () => {
 				modelValue,
 				members: membersForRoleChange,
 			},
+			stubs: { useFocusTrap: true },
 		});
 
 		return { wrapper, roomMembersStore };

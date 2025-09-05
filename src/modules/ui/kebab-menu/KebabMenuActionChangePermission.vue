@@ -18,10 +18,5 @@ const { t } = useI18n();
 
 defineProps({
 	disabled: { type: Boolean as PropType<boolean>, default: false },
-	click: {
-		type: Function as PropType<() => void>,
-		default: undefined,
-		required: false,
-	},
 });
 </script>

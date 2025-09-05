@@ -110,7 +110,7 @@
 						:text="t('common.actions.confirm')"
 						data-testid="change-role-confirm-btn"
 						:disabled="isLoading || !selectedRole"
-						@click="handleWithLoading(() => onConfirm())"
+						@click="withLoading(() => onConfirm())"
 					/>
 					<v-btn
 						v-else
@@ -120,7 +120,7 @@
 						:text="t('pages.rooms.members.roleChange.handOverBtn.text')"
 						data-testid="change-owner-confirm-btn"
 						:disabled="isLoading || !selectedRole"
-						@click="handleWithLoading(() => onChangeOwner())"
+						@click="withLoading(() => onChangeOwner())"
 					/>
 				</div>
 			</template>
@@ -168,7 +168,7 @@ const emit = defineEmits<{
 }>();
 
 const isLoading = ref(false);
-const handleWithLoading = async (fn: () => Promise<void>) => {
+const withLoading = async (fn: () => Promise<void>) => {
 	isLoading.value = true;
 	try {
 		await fn();
