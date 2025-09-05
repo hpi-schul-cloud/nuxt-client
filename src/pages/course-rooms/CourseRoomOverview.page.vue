@@ -120,7 +120,7 @@
 	<import-flow
 		:is-active="isImportMode"
 		:token="importToken"
-		:destinations="courses"
+		:destinations="courses.filter((course) => !course.isLocked)"
 		destination-type="course"
 		@success="onImportSuccess"
 	/>
