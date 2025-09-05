@@ -75,6 +75,7 @@ import { useI18n } from "vue-i18n";
 import { VideoConferenceOptions } from "@/store/types/video-conference";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 
+// TODO: BC-9692
 const props = defineProps({
 	options: {
 		type: Object as PropType<VideoConferenceOptions>,
