@@ -2,7 +2,7 @@
 	<v-container>
 		<v-row justify="center">
 			<v-col cols="12" md="8">
-				<login />
+				<Login />
 			</v-col>
 		</v-row>
 
@@ -116,11 +116,11 @@
 			</v-col>
 		</v-row>
 	</v-container>
-    <Login />
 </template>
 
 <script setup lang="ts">
 import Login from "@/modules/feature/login/login.vue";
+import { envConfigModule } from "@/store";
 import { logger } from "@util-logger";
 
 //import { stripHtml } from "string-strip-html";
@@ -171,16 +171,17 @@ const ghostBaseUrl = ref<string>("");
 // Simulate config system (replace with real fetch/inject in BCloud app)
 async function fetchConfig(key: string): Promise<string | null> {
 	// In real implementation, use actual API/config
-	const mockedConfigs: Record<string, string> = {
-		GHOST_BASE_URL: "https://blog.example.org/",
+	const configs: Record<string, string> = {
+		GHOST_BASE_URL: envConfigModule.getEnv.GHOST_BASE_URL,
 		GLOBAL_ANNOUNCEMENT: "",
 	};
-	return mockedConfigs[key] ?? null;
+	return configs[key] ?? null;
 }
 
 // Entry: Fetch blog feed
 async function fetchBlogs() {
 	loading.value = true;
+
 	try {
 		// Example: adjust actual API endpoint/structure as required
 		const feedRes = await fetch("/api/blogs", {
