@@ -10,7 +10,7 @@
 		@dialog-confirmed="submit"
 	>
 		<template #title>
-			<h4 class="text-h4 mt-0">
+			<h4 class="text-h2 mt-0">
 				{{ t("common.words.privacyPolicy") }}
 			</h4>
 		</template>

@@ -8,7 +8,7 @@
 		@dialog-closed="onDialogClosed"
 	>
 		<template #title>
-			<div ref="textTitle" class="text-h4 my-2 wordbreak-normal">
+			<div ref="textTitle" class="text-h2 my-2 wordbreak-normal">
 				{{ $t("components.molecules.copyResult.title.partial") }}
 			</div>
 		</template>

@@ -9,7 +9,7 @@
 		@dialog-canceled="closeDialog"
 	>
 		<template #title>
-			<h2 class="text-h4 my-2 text-break-word">
+			<h2 class="my-2 text-break-word">
 				{{ $t("feature-course-sync.EndCourseSyncDialog.title") }}
 			</h2>
 		</template>

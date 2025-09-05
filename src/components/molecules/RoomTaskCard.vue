@@ -30,7 +30,7 @@
 				</div>
 			</div>
 			<h2
-				class="text-h4 mt-1 mb-2 task-name"
+				class="mt-1 mb-2 task-name"
 				tabindex="-1"
 				:data-testid="`task-title-${taskCardIndex}`"
 			>

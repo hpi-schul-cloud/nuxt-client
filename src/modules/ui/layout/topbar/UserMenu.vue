@@ -10,7 +10,7 @@
 				size="small"
 				@click="onMenuBtnClicked"
 			>
-				<span class="text-h4">{{ initials }}</span>
+				<span class="text-h2">{{ initials }}</span>
 			</VBtn>
 		</template>
 		<VList>

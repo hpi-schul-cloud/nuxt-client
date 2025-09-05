@@ -30,7 +30,7 @@
 				</div>
 			</div>
 			<div
-				class="text-h4 text--primary mb-2 lesson-name"
+				class="text-h2 text--primary mb-2 lesson-name"
 				role="heading"
 				aria-level="2"
 				tabindex="-1"

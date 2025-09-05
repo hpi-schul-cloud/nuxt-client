@@ -9,7 +9,7 @@
 	>
 		<v-card :ripple="false">
 			<v-card-title>
-				<div ref="textTitle" class="text-h4 my-2 px-6 text-break">
+				<div ref="textTitle" class="text-h2 my-2 px-6 text-break">
 					{{ $t(title) }}
 				</div>
 			</v-card-title>

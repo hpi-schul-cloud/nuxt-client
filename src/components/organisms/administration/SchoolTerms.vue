@@ -93,7 +93,7 @@
 				@dialog-confirmed="deleteFile"
 			>
 				<template #title>
-					<h4 class="text-h4 mt-0">
+					<h4 class="text-h2 mt-0">
 						{{ t("pages.administration.school.index.termsOfUse.delete.title") }}
 					</h4>
 				</template>

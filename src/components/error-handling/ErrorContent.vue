@@ -19,7 +19,7 @@
 			class="repair-image"
 			data-testid="img-generic"
 		/>
-		<h1 class="text-h4 px-4" data-testid="err-text">
+		<h1 class="text-h2 px-4" data-testid="err-text">
 			{{ errorText }}
 		</h1>
 	</div>

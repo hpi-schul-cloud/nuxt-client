@@ -6,7 +6,7 @@
 			</div>
 		</template>
 		<template #title>
-			<p class="text-h4 mt-8" data-testid="empty-state-title">
+			<p class="text-h2 mt-8" data-testid="empty-state-title">
 				{{ title }}
 			</p>
 		</template>

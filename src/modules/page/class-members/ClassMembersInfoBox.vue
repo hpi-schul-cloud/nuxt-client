@@ -9,7 +9,7 @@
 				}}
 			</div>
 		</v-alert>
-		<h2 class="text-h4">
+		<h2>
 			{{ $t("page-class-members.classMembersInfoBox.title") }}
 		</h2>
 		<div data-testid="class-members-info-box-text">

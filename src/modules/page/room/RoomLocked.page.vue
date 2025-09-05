@@ -15,9 +15,9 @@
 				data-testid="img-permission"
 			/>
 			<div>
-				<h3 class="ml-4 text-center text-h4 error-msg pl-4 pr-4">
+				<h2 class="ml-4 text-center error-msg pl-4 pr-4">
 					{{ t("pages.room.locked") }}
-				</h3>
+				</h2>
 			</div>
 		</div>
 	</DefaultWireframe>
