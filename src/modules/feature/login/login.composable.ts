@@ -5,13 +5,13 @@ import {
 	Oauth2AuthorizationBodyParams,
 	OidcLogoutBodyParams,
 	PublicSystemListResponse,
+	SchoolForLdapLoginResponse,
 } from "@/serverApi/v3";
 import { ApiResponseError } from "@/store/types/commons";
 import { logger } from "@util-logger";
 import { filter } from "lodash";
 import { ref, Ref } from "vue";
 import { useLoginApi } from "./loginApi.composable";
-import { School } from "@/store/types/schools";
 
 // --- logFilter logic migrated as a utility inside composable ---
 
@@ -356,14 +356,11 @@ export interface LoginSchool {
 export const loginSchoolsCache = (() => {
 	// 30 minutes interval (1800 seconds)
 	// const updateIntervalSeconds = 1800; never used
-	const schools: Ref<LoginSchool[]> = ref([]);
+	const schools: Ref<SchoolForLdapLoginResponse[]> = ref([]);
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref(undefined);
 	//let lastUpdate = 0; never used
 	//let timeoutId: number | undefined = undefined; never used
-
-	//TODO: implement in loginApi
-	//const { fetchLoginSchools } = useLoginApi();
 
 	// Fetch and update schools list
 	/*const updateSchools = async (force = false): Promise<void> => {
@@ -372,7 +369,7 @@ export const loginSchoolsCache = (() => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
-			const fetchedSchools = await fetchLoginSchools();
+			const fetchedSchools = await fetchLoginSchools(); //TODO: if needed to be implemented, the call is now apiGetLdapSchools
 			// Optionally, apply renameIdsInSchool on each school
 			schools.value = Array.isArray(fetchedSchools)
 				? fetchedSchools.map((s) => renameIdsInSchool({ ...s }))
@@ -481,10 +478,10 @@ export const useLogin = () => {
 		apiLoginLdap,
 		apiLoginOAuth2,
 		apiGetOauthSystems,
+		apiGetLdapSchools,
 		apiLogout,
 		apiLogoutExternal,
 		apiCheckConsent,
-		//fetchLoginSchools,
 	} = useLoginApi();
 
 	const isLoading: Ref<boolean> = ref(false);
@@ -518,7 +515,7 @@ export const useLogin = () => {
 	const loginEmail = async (
 		username: string,
 		password: string
-		//redirect?: string
+		///redirect?: string
 	): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
@@ -600,6 +597,25 @@ export const useLogin = () => {
 		}
 	};
 
+	const fetchLdapSchools = async (): Promise<void> => {
+		isLoading.value = true;
+		error.value = undefined;
+		try {
+			const response: SchoolForLdapLoginResponse[] = await apiGetLdapSchools();
+			schools.value = response;
+		} catch (err: unknown) {
+			error.value = {
+				message:
+					err instanceof Error ? err.message : "Fetching Ldap schools failed",
+				code: (err as ApiResponseError)?.code ?? 500,
+				type: (err as ApiResponseError)?.type,
+				title: (err as ApiResponseError)?.title,
+			};
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
 	const checkConsent = async (userId: string): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
@@ -667,6 +683,7 @@ export const useLogin = () => {
 		loginLdap,
 		loginOAuth2,
 		fetchOauthSystems,
+		fetchLdapSchools,
 		oauthSystems,
 		checkConsent,
 		consentCheckResult,

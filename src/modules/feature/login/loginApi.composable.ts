@@ -1,6 +1,16 @@
+import {
+	AuthenticationApiFactory,
+	ConsentResponse,
+	LoginResponse,
+	Oauth2ApiFactory,
+	Oauth2AuthorizationBodyParams,
+	PublicSystemListResponse,
+	SchoolApiFactory,
+	SchoolForLdapLoginResponse,
+	SystemsApiFactory,
+	SystemType,
+} from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { AuthenticationApiFactory, ConsentResponse, LoginResponse, Oauth2AuthorizationBodyParams, OidcLogoutBodyParams, SystemsApiFactory, PublicSystemListResponse, Oauth2ApiFactory, SystemType } from "@/serverApi/v3";
-import { types } from "sass-embedded";
 
 /**
  * API abstraction for the login composable.
@@ -9,6 +19,7 @@ export const useLoginApi = () => {
 	const authApi = AuthenticationApiFactory(undefined, "/v3", $axios);
 	const systemsApi = SystemsApiFactory(undefined, "/v3", $axios);
 	const oAuth2Api = Oauth2ApiFactory(undefined, "/v3", $axios);
+	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
 
 	/**
 	 * Standard/local login (possibly with a system/strategy).
@@ -30,7 +41,7 @@ export const useLoginApi = () => {
 	 */
 	const apiLoginEmail = async (
 		username: string,
-		password: string,
+		password: string
 	): Promise<LoginResponse> => {
 		const response = await authApi.loginControllerLoginLocal({
 			username,
@@ -46,7 +57,7 @@ export const useLoginApi = () => {
 		username: string,
 		password: string,
 		schoolId: string,
-		systemId: string,
+		systemId: string
 	): Promise<LoginResponse> => {
 		const response = await authApi.loginControllerLoginLdap({
 			username,
@@ -76,6 +87,12 @@ export const useLoginApi = () => {
 		return response.data;
 	};
 
+	const apiGetLdapSchools = async (): Promise<SchoolForLdapLoginResponse[]> => {
+		const response =
+			await schoolApi.schoolControllerGetSchoolListForLadpLogin();
+		return response.data;
+	};
+
 	/**
 	 * Check user's consent status on login success.
 	 */
@@ -84,7 +101,8 @@ export const useLoginApi = () => {
 		challenge: string
 	): Promise<ConsentResponse> => {
 		// Example: GET `/consents/${userId}/check/`
-		const response = await oAuth2Api.oauthProviderControllerGetConsentRequest(challenge);
+		const response =
+			await oAuth2Api.oauthProviderControllerGetConsentRequest(challenge);
 		return response.data;
 	};
 
@@ -109,6 +127,7 @@ export const useLoginApi = () => {
 		apiLoginLdap,
 		apiLoginOAuth2,
 		apiGetOauthSystems,
+		apiGetLdapSchools,
 		apiCheckConsent,
 		apiLogout,
 		apiLogoutExternal,

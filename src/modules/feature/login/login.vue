@@ -151,10 +151,10 @@
 						return-object
 						v-model="selectedSchool"
 						class="school"
-						:items="schoolOptions"
+						:items="schools"
 						:label="$t('components.login.label.school')"
 						placeholder="Select your school"
-						item-title="label"
+						item-title="name"
 						data-testid="select-school"
 						clearable
 						dense
@@ -167,8 +167,8 @@
 						v-model="selectedSystem"
 						class="system"
 						:items="currentLdapSystems"
-						:label="$t('login.label.system')"
-						item-title="name"
+						:label="$t('System')"
+						item-title="alias"
 						item-value="id"
 						dense
 						clearable
@@ -269,10 +269,10 @@
 						return-object
 						v-model="selectedSchool"
 						class="school"
-						:items="schoolOptions"
+						:items="schools"
 						:label="$t('components.login.label.school')"
 						placeholder="Select your school"
-						item-title="label"
+						item-title="name"
 						data-testid="select-school"
 						clearable
 						dense
@@ -285,12 +285,13 @@
 						v-model="selectedSystem"
 						class="system"
 						:items="currentLdapSystems"
-						:label="$t('login.label.system')"
-						item-title="name"
+						:label="$t('System')"
+						item-title="alias"
 						item-value="id"
 						dense
 						clearable
-						data-testid="select-system-ldap"@update:modelValue="onSystemChange"
+						data-testid="select-system-ldap"
+						@update:modelValue="onSystemChange"
 					/>
 				</div>
 				<v-btn
@@ -378,8 +379,12 @@
 <script setup lang="ts">
 import { useLogin } from "@/modules/feature/login/login.composable";
 import router from "@/router";
+import {
+	SchoolForLdapLoginResponse,
+	SystemForLdapLoginResponse,
+} from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { System } from "@/store/types/system";
+//import { System } from "@/store/types/system";
 import { mdiEyeOffOutline, mdiEyeOutline } from "@icons/material";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n"; //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
@@ -389,7 +394,14 @@ import { useI18n } from "vue-i18n"; //TODO: implement in composable or import (c
 type AlertType = "info" | "success" | "warning" | "error";
 
 const { t } = useI18n();
-const { loginEmail, isLoading, setCookie, loginResult } = useLogin();
+const {
+	loginEmail,
+	isLoading,
+	setCookie,
+	loginResult,
+	schools,
+	fetchLdapSchools,
+} = useLogin();
 // Alerts
 const alert = ref<{
 	message: string;
@@ -424,27 +436,10 @@ const privateDevice = ref(false);
 const showPassword = ref(false);
 const showLdapPassword = ref(false);
 
-// School/System selection (dummy data for now)
-const schoolOptions = ref<
-	Array<{ label: string; value: string; systems?: System[] }>
->([
-	// Example: { label: 'School A', value: 'schoolA', systems: [{ id: 's1', type: 'local', alias: 'A1' }] },
-]);
-schoolOptions.value = [
-	{ label: "school 1", value: "school1" },
-	{
-		label: "school 2",
-		value: "school2",
-		systems: [{ id: "1", name: "LdapSystem1" },
-				  { id: "2", name: "LdapSystem2" }
-		],
-	},
-	{ label: "Kleine Burg Braunschweig", value: "kBB" },
-];
-const selectedSchool = ref<{ label: string; value: string; systems?: System[] } | null>(null);
-const systemOptions = ref<Array<System>>([]); // For cloud/email login
-const selectedSystem = ref<System | null>(null);
-const currentLdapSystems = ref<Array<System>>([]);
+const selectedSchool = ref<SchoolForLdapLoginResponse | null>(null);
+const systemOptions = ref<Array<SystemForLdapLoginResponse>>([]); // For cloud/email login
+const selectedSystem = ref<SystemForLdapLoginResponse | null>(null);
+const currentLdapSystems = ref<Array<SystemForLdapLoginResponse>>([]);
 
 const loginTimeout = ref<number | null>(null);
 const ldapTimeout = ref<number | null>(null);
@@ -497,11 +492,12 @@ onMounted(() => {
 	}
 
 	checkCookie();
-
+	fetchLdapSchools();
+	//getMockSchoolsforlogin();
 	// Restore previous login system/school preferences if available
 	const storedSchool = localStorage.getItem("loginSchool");
 	if (storedSchool) {
-		const schoolObj = schoolOptions.value.find((item) => item.value === storedSchool);
+		const schoolObj = schools.value.find((item) => item.id === storedSchool);
 		if (schoolObj) selectedSchool.value = schoolObj;
 	}
 	const storedSystem = localStorage.getItem("loginSystem");
@@ -516,7 +512,7 @@ onMounted(() => {
 			() => {
 				isSubmitting.value = false;
 				ldapLoginActive.value = true;
-				enableDisableLdapBtn(selectedSchool.value?.value ?? ""); // TODO: change value, maybe
+				enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // TODO: change value, maybe
 			},
 			(loginTimeout.value || ldapTimeout.value)! * 1000
 		);
@@ -525,6 +521,19 @@ onMounted(() => {
 	}
 });
 
+function getMockSchoolsforlogin() {
+	schools.value = [
+		{ name: "school1", id: "id1", systems: [] },
+		{
+			name: "school2",
+			id: "id2",
+			systems: [
+				{ alias: "system1", id: "sid1", type: "ldap" },
+				{ alias: "system2", id: "sid2", type: "oauth" },
+			],
+		},
+	];
+}
 // ----- Button Section Toggles -----
 function showCloud() {
 	showEmailLoginSection.value = true;
@@ -533,7 +542,7 @@ function showCloud() {
 function showLdap() {
 	showEmailLoginSection.value = false;
 	showLdapLoginSection.value = true;
-	enableDisableLdapBtn(selectedSchool.value?.value ?? ""); // TODO: change value, maybe
+	enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // TODO: change value, maybe
 }
 function returnToMenu() {
 	showEmailLoginSection.value = false;
@@ -550,13 +559,13 @@ function closeMoreOptions() {
 
 // ----- School/System Option Handling -----
 //TODO: used system object of store, maybe change
-function setSystemOptions(systems: System[]) {
+function setSystemOptions(systems: SystemForLdapLoginResponse[]) {
 	currentLdapSystems.value = systems;
 }
 
-function onSchoolChange(school: { label: string; value: string; systems?: System[] } | null) {
+function onSchoolChange(school: SchoolForLdapLoginResponse | null) {
 	selectedSchool.value = school;
-	enableDisableLdapBtn(selectedSchool.value?.value ?? ""); // value TODO: change value, maybe
+	enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // value TODO: change value, maybe
 	// Find systems in selected school
 	if (school && Array.isArray(school.systems)) {
 		setSystemOptions(school.systems);
@@ -565,7 +574,7 @@ function onSchoolChange(school: { label: string; value: string; systems?: System
 	}
 }
 
-function onSystemChange(system: System | null) {
+function onSystemChange(system: SystemForLdapLoginResponse | null) {
 	selectedSystem.value = system;
 }
 
@@ -606,7 +615,7 @@ function submitLdapLogin() {
 	ldapLoginActive.value = false;
 	// Store school/system prefs
 	if (selectedSchool.value) {
-		localStorage.setItem("loginSchool", selectedSchool.value.value ?? "");
+		localStorage.setItem("loginSchool", selectedSchool.value.id ?? "");
 	} else {
 		localStorage.removeItem("loginSchool");
 	}
