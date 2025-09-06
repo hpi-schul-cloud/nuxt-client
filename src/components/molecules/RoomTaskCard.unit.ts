@@ -8,9 +8,10 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import RoomTaskCard from "./RoomTaskCard.vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { nextTick } from "vue";
 
 const testTask = {
 	id: "123",
@@ -181,7 +182,7 @@ const studentTestTask = {
 };
 
 const mockRouter = {
-	push: jest.fn(),
+	push: vi.fn(),
 };
 
 const getWrapper = (
@@ -193,9 +194,21 @@ const getWrapper = (
 	},
 	options?: object
 ) => {
+	Object.defineProperty(window, "location", {
+		configurable: true,
+		value: { assign: vi.fn() },
+	});
+
 	return mount(RoomTaskCard, {
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
+			plugins: [
+				createTestingVuetify(),
+				createTestingI18n(),
+				vueDompurifyHTMLPlugin,
+			],
+			mocks: {
+				$router: mockRouter,
+			},
 		},
 		props: {
 			room: {
@@ -209,9 +222,6 @@ const getWrapper = (
 			userRole: props.userRole,
 		},
 		...options,
-		mocks: {
-			$router: mockRouter,
-		},
 	});
 };
 
@@ -231,13 +241,8 @@ describe("@/components/molecules/RoomTaskCard", () => {
 		});
 
 		it("should redirect to homework page", async () => {
-			Object.defineProperty(window, "location", {
-				set: jest.fn(),
-				get: () => createMock<Location>(),
-			});
-			const locationSpy = jest.spyOn(window, "location", "set");
-
 			const wrapper = getWrapper({ task: testTask, userRole });
+			const locationSpy = vi.spyOn(window.location, "assign");
 			const taskCard = wrapper.find(".task-card");
 
 			await taskCard.trigger("click");
@@ -246,17 +251,12 @@ describe("@/components/molecules/RoomTaskCard", () => {
 		});
 
 		it("should NOT redirect to homework page if dragging is in progress", async () => {
-			Object.defineProperty(window, "location", {
-				set: jest.fn(),
-				get: () => createMock<Location>(),
-			});
-			const locationSpy = jest.spyOn(window, "location", "set");
-
 			const wrapper = getWrapper({
 				task: testTask,
 				userRole,
 				dragInProgress: true,
 			});
+			const locationSpy = vi.spyOn(window.location, "assign");
 			const taskCard = wrapper.find(".task-card");
 
 			await taskCard.trigger("click");
@@ -302,19 +302,22 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 		it("should show or hide description area", async () => {
 			const wrapper = getWrapper({ task: testTask, userRole });
+			(wrapper.vm as unknown as typeof RoomTaskCard).canShowDescription = true;
 			const descElement = wrapper.findAll(".text-description");
 
 			expect(descElement.length).toStrictEqual(0);
-			wrapper.setData({ canShowDescription: true });
 
-			await wrapper.vm.$nextTick();
+			await nextTick();
 
 			const descElementAfter = wrapper.findAll(".text-description");
 			expect(descElementAfter.length).toStrictEqual(1);
 		});
 
 		it("should use hidden UI only for unfinished task draft cards and task planned cards", async () => {
-			const taskDraftWrapper = getWrapper({ task: draftTestTask, userRole });
+			const taskDraftWrapper = getWrapper({
+				task: draftTestTask,
+				userRole,
+			});
 			const taskDraftCard = taskDraftWrapper.find(".task-card");
 			expect(taskDraftCard.element.className).toContain("task-hidden");
 
@@ -325,7 +328,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			const plannedCard = plannedTaskWrapper.find(".task-card");
 			expect(plannedCard.element.className).toContain("task-hidden");
 
-			const regularTaskWrapper = getWrapper({ task: testTask, userRole });
+			const regularTaskWrapper = getWrapper({
+				task: testTask,
+				userRole,
+			});
 			const taskCard = regularTaskWrapper.find(".task-card");
 			expect(taskCard.element.className).not.toContain("task-hidden");
 		});
@@ -336,7 +342,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			const userRole = Roles.Teacher;
 
 			it("should not have submitted and graded section if task is a draft or finished or planned", () => {
-				const draftWrapper = getWrapper({ task: draftTestTask, userRole });
+				const draftWrapper = getWrapper({
+					task: draftTestTask,
+					userRole,
+				});
 				const draftSubmitSection = draftWrapper.findAll(".v-chip");
 
 				expect(draftSubmitSection).toHaveLength(0);
@@ -349,7 +358,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 				expect(finsihedSubmitSection).toHaveLength(0);
 
-				const plannedWrapper = getWrapper({ task: plannedTestTask, userRole });
+				const plannedWrapper = getWrapper({
+					task: plannedTestTask,
+					userRole,
+				});
 				const plannedSubmitSection = plannedWrapper.findAll(".v-chip");
 
 				expect(plannedSubmitSection).toHaveLength(0);
@@ -402,9 +414,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'redirectAction' method when 'more action' edit button is clicked", async () => {
-				const redirectAction = jest.fn();
 				const wrapper = getWrapper({ task: testTask, userRole });
-				wrapper.vm.redirectAction = redirectAction;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
@@ -414,16 +424,13 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				);
 				await moreActionButton.trigger("click");
 
-				expect(redirectAction).toHaveBeenCalled();
-				expect(redirectAction.mock.calls[0][0]).toStrictEqual(
+				expect(window.location.assign).toHaveBeenCalledWith(
 					"/homework/123/edit?returnUrl=rooms/456"
 				);
 			});
 
 			it("should trigger the 'unPublishCard' method when 'more action' unpublish button is clicked", async () => {
-				const unPublishCardMock = jest.fn();
 				const wrapper = getWrapper({ task: testTask, userRole });
-				wrapper.vm.unPublishCard = unPublishCardMock;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
@@ -433,13 +440,17 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				);
 				await moreActionButton.trigger("click");
 
-				expect(unPublishCardMock).toHaveBeenCalled();
+				const emitted = wrapper.emitted("update-visibility");
+
+				expect(emitted).toBeDefined();
+				expect(emitted && emitted[0][0]).toBe(false);
 			});
 
 			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
-				const restoreCardMock = jest.fn();
+				const restoreCardMock = vi.fn();
 				const wrapper = getWrapper({ task: finishedTestTask, userRole });
-				wrapper.vm.restoreCard = restoreCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).restoreCard =
+					restoreCardMock;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
@@ -449,7 +460,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				);
 				await moreActionButton.trigger("click");
 
-				expect(restoreCardMock).toHaveBeenCalled();
+				expect(wrapper.emitted("restore-task")).toBeDefined();
 			});
 
 			it("should emit 'delete-task' when 'more menu' delete action button clicked'", async () => {
@@ -467,42 +478,46 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should trigger the 'publishCard' method when 'Publish' button is clicked on a draft", async () => {
-				const publishCardMock = jest.fn();
+				const publishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: draftTestTask, userRole });
-				wrapper.vm.publishCard = publishCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).publishCard =
+					publishCardMock;
 
 				const actionButton = wrapper.findComponent(
 					`[data-testid="task-card-action-publish-0"]`
 				);
 				await actionButton.trigger("click");
 
-				expect(publishCardMock).toHaveBeenCalled();
+				const emitted = wrapper.emitted("update-visibility");
+				expect(emitted).toBeDefined();
+				expect(emitted && emitted[0][0]).toBe(true);
 			});
 
 			it("should trigger the 'publishCard' method when 'Publish' button is clicked on a planned task", async () => {
-				const publishCardMock = jest.fn();
+				const publishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: plannedTestTask, userRole });
-				wrapper.vm.publishCard = publishCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).publishCard =
+					publishCardMock;
 
 				const actionButton = wrapper.find(
 					`[data-testid="task-card-action-publish-0"]`
 				);
 				await actionButton.trigger("click");
 
-				expect(publishCardMock).toHaveBeenCalled();
+				const emitted = wrapper.emitted("update-visibility");
+				expect(emitted).toBeDefined();
+				expect(emitted && emitted[0][0]).toBe(true);
 			});
 
 			it("should trigger the 'finishCard' method when 'Finish' button is clicked", async () => {
-				const finishCardMock = jest.fn();
 				const wrapper = getWrapper({ task: testTask, userRole });
-				wrapper.vm.finishCard = finishCardMock;
 
 				const actionButton = wrapper.find(
 					`[data-testid="task-card-action-done-0"]`
 				);
 				await actionButton.trigger("click");
 
-				expect(finishCardMock).toHaveBeenCalled();
+				expect(wrapper.emitted("finish-task")).toBeDefined();
 			});
 
 			it("should overdue chip is visible if the task overdued", async () => {
@@ -538,12 +553,14 @@ describe("@/components/molecules/RoomTaskCard", () => {
 					},
 				};
 				const wrapper = getWrapper({ ...localProps, userRole });
-				const { vm } = wrapper;
-				expect(vm.isPlanned).toBe(false);
+
+				expect((wrapper.vm as unknown as typeof RoomTaskCard).isPlanned).toBe(
+					false
+				);
 			});
 
 			it("should return true value after calculated isPlanned() method", () => {
-				jest.useFakeTimers().setSystemTime(new Date()); // this line sets a permanent fake time
+				vi.useFakeTimers().setSystemTime(new Date()); // this line sets a permanent fake time
 				const inFutureDate = new Date(Date.now() + 5001);
 				const localProps = {
 					...testTask,
@@ -568,8 +585,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 					},
 				};
 				const wrapper = getWrapper({ ...localProps, userRole });
-				const { vm } = wrapper;
-				expect(vm.isPlanned).toBe(true);
+
+				expect((wrapper.vm as unknown as typeof RoomTaskCard).isPlanned).toBe(
+					true
+				);
 			});
 
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
@@ -579,9 +598,9 @@ describe("@/components/molecules/RoomTaskCard", () => {
 							FEATURE_COPY_SERVICE_ENABLED: true,
 						});
 						envConfigModule.setEnvs(envs);
-						const copyCard = jest.fn();
+						const copyCard = vi.fn();
 						const wrapper = getWrapper({ task: testTask, userRole });
-						wrapper.vm.copyCard = copyCard;
+						(wrapper.vm as unknown as typeof RoomTaskCard).copyCard = copyCard;
 
 						const threeDotButton = wrapper.find(".three-dot-button");
 						await threeDotButton.trigger("click");
@@ -590,8 +609,8 @@ describe("@/components/molecules/RoomTaskCard", () => {
 							`[data-testid="room-task-card-menu-copy-0"]`
 						);
 						await moreActionButton.trigger("click");
-
-						expect(copyCard).toHaveBeenCalled();
+						await nextTick();
+						expect(wrapper.emitted("copy-task")).toBeDefined();
 					});
 				});
 
@@ -619,16 +638,20 @@ describe("@/components/molecules/RoomTaskCard", () => {
 		describe("students", () => {
 			const userRole = Roles.Student;
 			it("should have no button if task is finished", async () => {
-				const wrapper = getWrapper({ task: studentFinishedTestTask, userRole });
+				const wrapper = getWrapper({
+					task: studentFinishedTestTask,
+					userRole,
+				});
 				const actionButtons = wrapper.findAll(".action-button");
 
 				expect(actionButtons).toHaveLength(0);
 			});
 
 			it("should have finish button if task is not marked as finished", async () => {
-				const finishCardMock = jest.fn();
+				const finishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: studentTestTask, userRole });
-				wrapper.vm.finishCard = finishCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).finishCard =
+					finishCardMock;
 				const actionButton = wrapper.findComponent(
 					`[data-testid="task-card-action-done-0"]`
 				);
@@ -638,13 +661,14 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				);
 
 				await actionButton.trigger("click");
-				expect(finishCardMock).toHaveBeenCalled();
+				expect(wrapper.emitted("finish-task")).toBeDefined();
 			});
 
 			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
-				const restoreCardMock = jest.fn();
+				const restoreCardMock = vi.fn();
 				const wrapper = getWrapper({ task: studentFinishedTestTask, userRole });
-				wrapper.vm.restoreCard = restoreCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).restoreCard =
+					restoreCardMock;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
@@ -654,7 +678,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				);
 				await moreActionButton.trigger("click");
 
-				expect(restoreCardMock).toHaveBeenCalled();
+				expect(wrapper.emitted("restore-task")).toBeDefined();
 			});
 
 			it("should have time-remaining chip if task has due date, expires in less then 24 hours and not submitted", () => {
@@ -804,14 +828,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 		it("should call 'handleClick' event when 'enter' key is pressed", async () => {
 			const wrapper = getWrapper({ task: testTask, userRole });
 
-			Object.defineProperty(window, "location", {
-				set: jest.fn(),
-				get: () => createMock<Location>(),
-			});
-
-			const locationSpy = jest.spyOn(window, "location", "set");
+			const locationSpy = vi.spyOn(window.location, "assign");
 
 			await wrapper.trigger("keydown.enter");
+			await nextTick();
 
 			expect(locationSpy).toHaveBeenCalledWith("/homework/123");
 		});

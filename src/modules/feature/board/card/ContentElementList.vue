@@ -172,7 +172,6 @@ const elementTypesWithTabindexZero = [
 	ContentElementType.Drawing,
 	ContentElementType.ExternalTool,
 	ContentElementType.File,
-	ContentElementType.FileFolder,
 	ContentElementType.Link,
 	ContentElementType.H5p,
 ];

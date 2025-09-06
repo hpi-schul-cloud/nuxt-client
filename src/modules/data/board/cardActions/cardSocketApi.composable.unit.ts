@@ -1,5 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ContentElementType } from "@/serverApi/v3";
+import { BoardLayout, ContentElementType } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import {
@@ -10,8 +10,8 @@ import {
 } from "@@/tests/test-utils";
 import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useCardStore, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
@@ -28,34 +28,31 @@ import {
 	UpdateCardHeightFailurePayload,
 	UpdateCardTitleFailurePayload,
 	UpdateElementFailurePayload,
-} from "./cardActionPayload";
+} from "./cardActionPayload.types";
 import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
 import { Router, useRouter } from "vue-router";
+import { Mock } from "vitest";
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("@data-board/socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("@data-board/socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+vi.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-jest.mock("@util-board/BoardNotifier.composable");
-jest.mock("@util-board/LastCreatedElement.composable");
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("@util-board/BoardNotifier.composable");
+vi.mock("@util-board/LastCreatedElement.composable");
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockUseSharedLastCreatedElement = jest.mocked(
-	useSharedLastCreatedElement
-);
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 describe("useCardSocketApi", () => {
-	let mockedSocketConnectionHandler: DeepMocked<
-		ReturnType<typeof useSocketConnection>
-	>;
+	let socketMock: DeepMocked<ReturnType<typeof useSocketConnection>>;
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
@@ -68,9 +65,8 @@ describe("useCardSocketApi", () => {
 		});
 		envConfigModule.setEnvs(envs);
 
-		mockedSocketConnectionHandler =
-			createMock<ReturnType<typeof useSocketConnection>>();
-		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
+		socketMock = createMock<ReturnType<typeof useSocketConnection>>();
+		mockedUseSocketConnection.mockReturnValue(socketMock);
 
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
@@ -78,11 +74,11 @@ describe("useCardSocketApi", () => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
-			resetLastCreatedElementId: jest.fn(),
+			resetLastCreatedElementId: vi.fn(),
 		});
 
 		const router = createMock<Router>();
@@ -90,8 +86,8 @@ describe("useCardSocketApi", () => {
 	});
 
 	afterEach(() => {
-		jest.runOnlyPendingTimers();
-		jest.useRealTimers();
+		vi.runOnlyPendingTimers();
+		vi.useRealTimers();
 	});
 
 	describe("dispatch", () => {
@@ -100,7 +96,7 @@ describe("useCardSocketApi", () => {
 
 			dispatch(CardActions.disconnectSocket({}));
 
-			expect(mockedSocketConnectionHandler.disconnectSocket).toHaveBeenCalled();
+			expect(socketMock.disconnectSocket).toHaveBeenCalled();
 		});
 
 		describe("success actions", () => {
@@ -222,8 +218,28 @@ describe("useCardSocketApi", () => {
 		});
 
 		describe("failure actions", () => {
-			it("should call notifySocketError for createElementFailure action", () => {
+			const setupWithFakeBoard = () => {
+				const boardStore = mockedPiniaStoreTyping(useBoardStore);
+				boardStore.board = {
+					id: "someid",
+					title: "sometitle",
+					columns: [],
+					isVisible: true,
+					layout: BoardLayout.Columns,
+					timestamps: {
+						createdAt: new Date().toISOString(),
+						lastUpdatedAt: new Date().toISOString(),
+						deletedAt: undefined,
+					},
+					features: [],
+					permissions: [],
+				};
 				const { dispatch } = useCardSocketApi();
+				return { dispatch, boardStore };
+			};
+
+			it("should reload the board for createElementFailure action", () => {
+				const { dispatch, boardStore } = setupWithFakeBoard();
 
 				const payload: CreateElementFailurePayload = {
 					cardId: "cardId",
@@ -231,14 +247,11 @@ describe("useCardSocketApi", () => {
 				};
 				dispatch(CardActions.createElementFailure(payload));
 
-				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					"notCreated",
-					"boardElement"
-				);
+				expect(boardStore.reloadBoard).toHaveBeenCalled();
 			});
 
-			it("should call notifySocketError for deleteElementFailure action", () => {
-				const { dispatch } = useCardSocketApi();
+			it("should reload the board for deleteElementFailure action", () => {
+				const { dispatch, boardStore } = setupWithFakeBoard();
 
 				const payload: DeleteElementFailurePayload = {
 					cardId: "cardId",
@@ -246,14 +259,11 @@ describe("useCardSocketApi", () => {
 				};
 				dispatch(CardActions.deleteElementFailure(payload));
 
-				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					"notDeleted",
-					"boardElement"
-				);
+				expect(boardStore.reloadBoard).toHaveBeenCalled();
 			});
 
-			it("should call notifySocketError for moveElementFailure action", () => {
-				const { dispatch } = useCardSocketApi();
+			it("should reload the board for moveElementFailure action", () => {
+				const { dispatch, boardStore } = setupWithFakeBoard();
 
 				const payload: MoveElementFailurePayload = {
 					elementId: "elementId",
@@ -262,56 +272,44 @@ describe("useCardSocketApi", () => {
 				};
 				dispatch(CardActions.moveElementFailure(payload));
 
-				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					"notUpdated",
-					"boardElement"
-				);
+				expect(boardStore.reloadBoard).toHaveBeenCalled();
 			});
 
-			it("should call notifySocketError for updateElementFailure action", () => {
-				const { dispatch } = useCardSocketApi();
+			it("should reload the board for updateElementFailure action", () => {
+				const { dispatch, boardStore } = setupWithFakeBoard();
 
 				const payload: UpdateElementFailurePayload = {
 					element: richTextElementResponseFactory.build(),
 				};
 				dispatch(CardActions.updateElementFailure(payload));
 
-				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					"notUpdated",
-					"boardElement"
-				);
+				expect(boardStore.reloadBoard).toHaveBeenCalled();
 			});
 
-			it("should call notifySocketError for deleteCardFailure action", () => {
-				const { dispatch } = useCardSocketApi();
+			it("should reload the board for deleteCardFailure action", () => {
+				const { dispatch, boardStore } = setupWithFakeBoard();
 
 				const payload: DeleteCardFailurePayload = {
 					cardId: "cardId",
 				};
 				dispatch(CardActions.deleteCardFailure(payload));
 
-				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					"notDeleted",
-					"boardCard"
-				);
+				expect(boardStore.reloadBoard).toHaveBeenCalled();
 			});
 
-			it("should call notifySocketError for fetchCardFailure action", () => {
-				const { dispatch } = useCardSocketApi();
+			it("should reload the board for fetchCardFailure action", () => {
+				const { dispatch, boardStore } = setupWithFakeBoard();
 
 				const payload: FetchCardFailurePayload = {
 					cardIds: ["cardId"],
 				};
 				dispatch(CardActions.fetchCardFailure(payload));
 
-				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					"notLoaded",
-					"boardCard"
-				);
+				expect(boardStore.reloadBoard).toHaveBeenCalled();
 			});
 
-			it("should call notifySocketError for updateCardTitleFailure action", () => {
-				const { dispatch } = useCardSocketApi();
+			it("should reload the board for updateCardTitleFailure action", () => {
+				const { dispatch, boardStore } = setupWithFakeBoard();
 
 				const payload: UpdateCardTitleFailurePayload = {
 					cardId: "cardId",
@@ -319,14 +317,11 @@ describe("useCardSocketApi", () => {
 				};
 				dispatch(CardActions.updateCardTitleFailure(payload));
 
-				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					"notUpdated",
-					"boardCard"
-				);
+				expect(boardStore.reloadBoard).toHaveBeenCalled();
 			});
 
-			it("should call notifySocketError for updateCardHeightFailure action", () => {
-				const { dispatch } = useCardSocketApi();
+			it("should do nothing on updateCardHeightFailure action", () => {
+				const { dispatch, boardStore } = setupWithFakeBoard();
 
 				const payload: UpdateCardHeightFailurePayload = {
 					cardId: "cardId",
@@ -334,10 +329,7 @@ describe("useCardSocketApi", () => {
 				};
 				dispatch(CardActions.updateCardHeightFailure(payload));
 
-				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					"notUpdated",
-					"boardCard"
-				);
+				expect(boardStore.reloadBoard).not.toHaveBeenCalled();
 			});
 		});
 	});
@@ -348,7 +340,7 @@ describe("useCardSocketApi", () => {
 
 			disconnectSocketRequest();
 
-			expect(mockedSocketConnectionHandler.disconnectSocket).toHaveBeenCalled();
+			expect(socketMock.disconnectSocket).toHaveBeenCalled();
 		});
 	});
 
@@ -363,7 +355,7 @@ describe("useCardSocketApi", () => {
 
 			createElementRequest(payload);
 
-			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
 				"create-element-request",
 				payload
 			);
@@ -381,7 +373,7 @@ describe("useCardSocketApi", () => {
 
 			deleteElementRequest(payload);
 
-			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
 				"delete-element-request",
 				payload
 			);
@@ -400,7 +392,7 @@ describe("useCardSocketApi", () => {
 
 			moveElementRequest(payload);
 
-			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
 				"move-element-request",
 				payload
 			);
@@ -415,7 +407,7 @@ describe("useCardSocketApi", () => {
 
 			updateElementRequest({ element });
 
-			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
 				"update-element-request",
 				{
 					elementId: element.id,
@@ -436,7 +428,7 @@ describe("useCardSocketApi", () => {
 
 			deleteCardRequest(payload);
 
-			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
 				"delete-card-request",
 				payload
 			);
@@ -454,7 +446,7 @@ describe("useCardSocketApi", () => {
 
 			updateCardTitleRequest(payload);
 
-			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
 				"update-card-title-request",
 				payload
 			);
@@ -472,7 +464,7 @@ describe("useCardSocketApi", () => {
 
 			updateCardHeightRequest(payload);
 
-			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
 				"update-card-height-request",
 				payload
 			);
@@ -487,8 +479,8 @@ describe("useCardSocketApi", () => {
 			const { fetchCardRequest } = useCardSocketApi();
 			fetchCardRequest(payload);
 
-			jest.advanceTimersByTime(1000);
-			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+			vi.advanceTimersByTime(1000);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
 				"fetch-card-request",
 				payload
 			);

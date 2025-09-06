@@ -1,5 +1,7 @@
 <template>
+	<CourseRoomLockedPage v-if="isLocked" :title="roomData.title" />
 	<default-wireframe
+		v-else
 		ref="main"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
@@ -113,6 +115,7 @@
 
 <script>
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
+import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
@@ -177,6 +180,7 @@ export default defineComponent({
 		ShareModal,
 		commonCartridgeExportModal,
 		SelectBoardLayoutDialog,
+		CourseRoomLockedPage,
 	},
 	inject: {
 		copyModule: { from: COPY_MODULE_KEY },
@@ -236,7 +240,7 @@ export default defineComponent({
 				},
 				{
 					title: this.roomData.title,
-					disable: true,
+					disabled: true,
 				},
 			];
 		},
@@ -406,7 +410,7 @@ export default defineComponent({
 				items.push({
 					icon: this.icons.mdiContentCopy,
 					action: () => this.onCopyRoom(this.roomData.roomId),
-					name: this.$t("common.actions.copy"),
+					name: this.$t("common.actions.duplicate"),
 					dataTestId: "room-menu-copy",
 				});
 			}
@@ -472,6 +476,9 @@ export default defineComponent({
 		},
 		isCopyModalOpen() {
 			return this.copyModule.getIsResultModalOpen;
+		},
+		isLocked() {
+			return this.courseRoomDetailsModule.getIsLocked;
 		},
 	},
 	watch: {
@@ -605,7 +612,7 @@ export default defineComponent({
 }
 
 .tabs-max-width {
-	max-width: var(--size-content-width-max);
+	max-width: var(--content-max-width);
 }
 
 // even out border
@@ -624,8 +631,8 @@ export default defineComponent({
 }
 
 .border-bottom {
-	margin-right: calc(-1 * var(--space-lg));
-	margin-left: calc(-1 * var(--space-lg));
+	margin-right: -24px;
+	margin-left: -24px;
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 </style>

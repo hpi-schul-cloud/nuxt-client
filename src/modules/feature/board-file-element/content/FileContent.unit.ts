@@ -1,6 +1,10 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
-import { fileElementResponseFactory } from "@@/tests/test-utils";
+import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject/injection-keys";
+import { envsFactory, fileElementResponseFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { FileAlert } from "../shared/types/FileAlert.enum";
 import FileContent from "./FileContent.vue";
@@ -9,16 +13,15 @@ import FileDisplay from "./display/FileDisplay.vue";
 import FileDescription from "./display/file-description/FileDescription.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 describe("FileContent", () => {
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {
-		jest.runOnlyPendingTimers();
-		jest.useRealTimers();
+		vi.runOnlyPendingTimers();
+		vi.useRealTimers();
 	});
 
 	const setup = (options?: {
@@ -26,12 +29,21 @@ describe("FileContent", () => {
 		mimeType?: string;
 		previewUrl?: string;
 		windowWidth?: number;
+		isCollaboraEditable?: boolean;
+		isCollaboraEnabled?: boolean;
 	}) => {
-		const { isListBoard, mimeType, previewUrl, windowWidth } = {
+		const {
+			isListBoard,
+			mimeType,
+			previewUrl,
+			windowWidth,
+			isCollaboraEditable,
+		} = {
 			isListBoard: false,
 			mimeType: "testMimeType",
 			previewUrl: "testPreviewUrl",
 			windowWidth: 1280,
+			isCollaboraEditable: false,
 			...options,
 		};
 
@@ -52,8 +64,17 @@ describe("FileContent", () => {
 			isDownloadAllowed: true,
 			element,
 			mimeType,
+			isCollaboraEditable,
 		};
 		const alerts = [FileAlert.AWAITING_SCAN_STATUS];
+
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {
+				...envsFactory.build(),
+				FEATURE_COLUMN_BOARD_COLLABORA_ENABLED:
+					options?.isCollaboraEnabled ?? false,
+			},
+		});
 
 		const wrapper = shallowMount(FileContent, {
 			props: {
@@ -65,6 +86,7 @@ describe("FileContent", () => {
 				plugins: [createTestingVuetify()],
 				provide: {
 					[BOARD_IS_LIST_LAYOUT as symbol]: isListBoard,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 		});
@@ -75,6 +97,10 @@ describe("FileContent", () => {
 			alerts,
 		};
 	};
+
+	afterEach(() => {
+		vi.resetAllMocks();
+	});
 
 	describe("when board is a list board", () => {
 		describe("when file content is a pdf", () => {
@@ -337,6 +363,7 @@ describe("FileContent", () => {
 
 				expect(props.showmenu).toBe("false");
 			});
+
 			it("should pass true when preview file is defined", () => {
 				const { wrapper } = setup();
 
@@ -393,6 +420,92 @@ describe("FileContent", () => {
 					mimeType: "application/pdf",
 					isListBoard: true,
 					windowWidth: 900,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
+
+			it("should pass false when collabora file is not on a listboard and collabora feature is disabled", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isListBoard: false,
+					previewUrl: undefined,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
+
+			it("should pass true when collabora file is not on a listboard and collabora feature is enabled", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isListBoard: false,
+					previewUrl: undefined,
+					isCollaboraEnabled: true,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("true");
+			});
+
+			it("should pass false when collabora file is on a listboard with a screensize smaller than 600 px and collabora feature is disabled", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isListBoard: true,
+					windowWidth: 599,
+					isCollaboraEnabled: false,
+					previewUrl: undefined,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
+
+			it("should pass true when collabora file is on a listboard with a screensize smaller than 600 px and collabora feature is enabled", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isListBoard: true,
+					windowWidth: 599,
+					isCollaboraEnabled: true,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("true");
+			});
+
+			it("should pass false when collabora file is on a listboard with small or larger screensize and collabora feature is enabled", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isListBoard: true,
+					windowWidth: 900,
+					isCollaboraEnabled: true,
+					previewUrl: undefined,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
+
+			it("should pass false when collabora file is on a listboard with small or larger screensize and collabora feature is disabled", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isListBoard: true,
+					windowWidth: 900,
+					isCollaboraEnabled: false,
+					previewUrl: undefined,
 				});
 
 				const props = wrapper.findComponent(FileDisplay).attributes();
@@ -516,6 +629,18 @@ describe("FileContent", () => {
 
 				expect(props.showmenu).toBe("false");
 			});
+
+			it("should pass false when collabora file is not on a listboard", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isListBoard: false,
+					isCollaboraEditable: true,
+				});
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
 		});
 
 		describe("file description src", () => {
@@ -554,7 +679,7 @@ describe("FileContent", () => {
 			const fileInputs = wrapper.findComponent(FileInputs);
 
 			fileInputs.vm.$emit("update:alternativeText");
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
 		});
@@ -565,7 +690,7 @@ describe("FileContent", () => {
 			const fileInputs = wrapper.findComponent(FileInputs);
 
 			fileInputs.vm.$emit("update:caption");
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(wrapper.emitted("update:caption")).toHaveLength(1);
 		});

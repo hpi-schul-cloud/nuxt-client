@@ -2,9 +2,9 @@
 	<div class="header elevation-2">
 		<div class="nav-container">
 			<div class="logo-container">
-				<base-link :href="logoLink">
+				<a :href="logoLink">
 					<img class="logo logo-full" :src="img" alt="Schulcloud Logo" />
-				</base-link>
+				</a>
 			</div>
 			<div v-if="linksToDisplay.length || hasButtons" class="link-container">
 				<v-btn
@@ -38,63 +38,56 @@
 		</div>
 	</div>
 </template>
-<script>
+
+<script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { mdiLogin } from "@icons/material";
+import { computed, ref } from "vue";
 
-export default {
-	props: {
-		logoLink: {
-			type: String,
-			default: "/",
-			required: false,
-		},
-		img: {
-			type: String,
-			required: true,
-		},
-		links: {
-			type: Array,
-			default: () => [],
-			required: false,
-		},
-	},
-	data() {
-		return {
-			mdiLogin,
-			activeLink: window.location.pathname,
-		};
-	},
-	computed: {
-		hasButtons() {
-			return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default;
-		},
-		linksToDisplay() {
-			return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default
-				? this.links
-				: [];
-		},
-	},
-	methods: {
-		setActive(idx) {
-			this.activeLink = idx;
-		},
-	},
+type Props = {
+	logoLink?: string;
+	img: string;
+	links?: Array<{
+		title: string;
+		href: string;
+		to?: string;
+		target?: string;
+	}>;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+	logoLink: "/",
+	links: () => [],
+});
+
+const activeLink = ref(window.location.pathname);
+
+const hasButtons = computed(() => {
+	return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default;
+});
+
+const linksToDisplay = computed(() => {
+	return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default
+		? props.links
+		: [];
+});
+
+const setActive = (idx: number) => {
+	activeLink.value = props.links[idx].href;
 };
 </script>
 
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 
 .header {
 	position: sticky;
 	position: -webkit-sticky;
 	top: 0;
 	left: 0;
-	z-index: var(--layer-fab);
+	z-index: 100;
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
@@ -107,26 +100,26 @@ export default {
 }
 
 .nav-container {
-	@include breakpoint(tablet) {
-		margin: 0 calc(3.5 * var(--space-md));
+	@media (min-width: 750px) {
+		margin: 0 calc(3.5 * 16px);
 	}
 
-	@include breakpoint(desktop) {
-		padding: 0 calc(5 * var(--border-width));
+	@media (min-width: 991px) {
+		padding: 0 5px;
 		margin: auto;
 	}
 }
 
 .logo-container {
-	@include breakpoint(tablet) {
-		height: calc(45 * var(--border-width));
+	@media (min-width: 750px) {
+		height: 45px;
 
 		> a > img {
-			height: var(--space-xl-2);
+			height: 40px;
 		}
 	}
 
-	@include breakpoint(desktop) {
+	@media (min-width: 991px) {
 		height: var(--legacy-topbar-height);
 
 		> a > img {
@@ -139,32 +132,32 @@ export default {
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding-bottom: var(--space-xs);
+	padding-bottom: 8px;
 
-	@include breakpoint(tablet) {
+	@media (min-width: 750px) {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
-	@include breakpoint(desktop) {
+	@media (min-width: 991px) {
 		justify-content: right;
 		padding-bottom: 0;
 	}
 
 	> a {
-		padding: calc(9 * var(--border-width));
+		padding: 9px;
 		margin-right: 0;
-		margin-bottom: var(--space-xs);
+		margin-bottom: 8px;
 
-		@include breakpoint(tablet) {
+		@media (min-width: 750px) {
 			margin-bottom: 0;
 		}
 	}
 }
 
 .icon {
-	font-size: var(--radius-lg);
+	font-size: 16px;
 }
 
 @media (min-width: 576px) {
@@ -175,7 +168,7 @@ export default {
 
 	.link-container > a,
 	.buttons-container > button {
-		margin-right: var(--space-xs);
+		margin-right: 8px;
 	}
 }
 
@@ -212,21 +205,21 @@ export default {
 .li {
 	align-items: center;
 	justify-content: center;
-	padding: var(--space-xs) var(--space-md);
+	padding: 8px 16px;
 	font-family: var(--font-primary);
 	font-size: var(--text-md);
 
-	@include breakpoint(tablet) {
+	@media (min-width: 750px) {
 		display: flex;
 	}
 
-	@include breakpoint(desktop) {
+	@media (min-width: 991px) {
 		font-size: var(--text-md);
 	}
 
 	&:hover {
 		background-color: map.get($grey, lighten-3);
-		border-radius: var(--radius-sm);
+		border-radius: 4px;
 	}
 }
 
@@ -234,12 +227,12 @@ a.active {
 	font-weight: var(--font-weight-bold);
 	color: rgba(var(--v-theme-white));
 	background-color: rgba(var(--v-theme-accent));
-	border-radius: var(--radius-sm);
+	border-radius: 4px;
 
 	&:hover {
 		color: rgba(var(--v-theme-white));
 		background-color: rgba(var(--v-theme-accent));
-		border-radius: var(--radius-sm);
+		border-radius: 4px;
 	}
 }
 </style>

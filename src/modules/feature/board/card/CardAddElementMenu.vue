@@ -1,5 +1,5 @@
 <template>
-	<VCardText>
+	<VCardText class="pt-0">
 		<div class="d-flex justify-center w-full">
 			<VBtn
 				elevation="0"
@@ -18,20 +18,12 @@
 	</VCardText>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiPlus } from "@icons/material";
-import { defineComponent } from "vue";
 
-export default defineComponent({
-	name: "CardAddElementMenu",
-	emits: ["add-element"],
-	setup(props, { emit }) {
-		const onAddElement = () => emit("add-element");
+const emit = defineEmits<{
+	(e: "add-element"): void;
+}>();
 
-		return {
-			onAddElement,
-			mdiPlus,
-		};
-	},
-});
+const onAddElement = () => emit("add-element");
 </script>

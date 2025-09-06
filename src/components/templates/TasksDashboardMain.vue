@@ -72,7 +72,6 @@
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isCourseFilterDisabled"
 				class="mb-4"
-				@update:model-value="setCourseFilters"
 			/>
 			<div v-else class="course-filter-placeholder" />
 			<tasks-dashboard-student v-if="isStudent" :tab-routes="tabRoutes" />
@@ -175,8 +174,13 @@ export default {
 				this.setActiveTab(newTab);
 			},
 		},
-		selectedCourseFilters() {
-			return this.tasksModule.getSelectedCourseFilters;
+		selectedCourseFilters: {
+			get() {
+				return this.tasksModule.getSelectedCourseFilters;
+			},
+			set(courseNames) {
+				this.tasksModule.setCourseFilters(courseNames);
+			},
 		},
 		finishedTasksIsInitialized() {
 			return this.finishedTasksModule.getIsInitialized;
@@ -299,9 +303,6 @@ export default {
 		this.initTabState();
 	},
 	methods: {
-		setCourseFilters(courseNames) {
-			this.tasksModule.setCourseFilters(courseNames);
-		},
 		getTaskCount(courseName) {
 			if (this.tab === this.tabRoutes[0]) {
 				return this.isStudent
@@ -331,6 +332,7 @@ export default {
 	},
 };
 </script>
+
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
@@ -340,12 +342,12 @@ export default {
 }
 
 .content-max-width {
-	max-width: var(--size-content-width-max);
+	max-width: var(--content-max-width);
 }
 
 @media #{map.get($display-breakpoints, 'md-and-up')} {
 	.tabs-max-width {
-		max-width: var(--size-content-width-max);
+		max-width: var(--content-max-width);
 	}
 }
 
@@ -356,9 +358,9 @@ export default {
 
 // remove background color from expansion panel title
 :deep(
-		.v-expansion-panel-title[aria-haspopup="menu"][aria-expanded="true"]
-			> .v-expansion-panel-title__overlay
-	) {
+	.v-expansion-panel-title[aria-haspopup="menu"][aria-expanded="true"]
+		> .v-expansion-panel-title__overlay
+) {
 	opacity: 0;
 }
 

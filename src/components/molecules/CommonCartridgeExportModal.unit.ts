@@ -18,16 +18,17 @@ import { VDialog } from "vuetify/lib/components/index";
 describe("@/components/molecules/CommonCartridgeExportModal", () => {
 	let exportModuleMock: CommonCartridgeExportModule;
 	let courseRoomDetailsModuleMock: courseRoomDetailsModule;
+	let notifierMock: NotifierModule;
 
-	const setup = () => {
+	const setup = (isSuccess = true) => {
 		exportModuleMock = createModuleMocks(CommonCartridgeExportModule, {
 			getIsExportModalOpen: true,
 			getVersion: "1.1.0",
 			getTopics: ["topic"],
 			getTasks: ["task"],
 			getColumnBoards: ["columnBoards"],
-			startExport: jest.fn(),
-			resetExportFlow: jest.fn(),
+			startExport: vi.fn(),
+			resetExportFlow: vi.fn(),
 		});
 		courseRoomDetailsModuleMock = createModuleMocks(courseRoomDetailsModule, {
 			getRoomData: {
@@ -38,14 +39,24 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 				isArchived: false,
 				isSynchronized: false,
 			},
+			getBusinessError: isSuccess
+				? {
+						message: "",
+						statusCode: "",
+					}
+				: {
+						message: "Error",
+						statusCode: "500",
+					},
 		});
+		notifierMock = createModuleMocks(NotifierModule);
 
 		const wrapper = mount(CommonCartridgeExportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: exportModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierMock,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]:
 						courseRoomDetailsModuleMock,
 				},
@@ -120,6 +131,29 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 
 			expect(exportBtn.exists()).toBe(false);
 			expect(exportModuleMock.startExport).toHaveBeenCalled();
+		});
+
+		it("should show error notification on error", async () => {
+			const wrapper = setup(false);
+			const nextBtn = wrapper.findComponent("[data-testid='dialog-next-btn']");
+			await nextBtn.trigger("click");
+			const exportBtn = wrapper.findComponent(
+				'[data-testid="dialog-export-btn"]'
+			);
+			await exportBtn.trigger("click");
+			const emit = wrapper.emitted();
+			expect(emit).toHaveProperty("dialog-confirmed");
+			expect(emit).toHaveProperty("dialog-closed");
+
+			exportModuleMock.startExport();
+
+			expect(exportBtn.exists()).toBe(false);
+			expect(exportModuleMock.startExport).toHaveBeenCalled();
+			expect(notifierMock.show).toHaveBeenCalledWith({
+				status: "error",
+				text: expect.any(String),
+				autoClose: true,
+			});
 		});
 	});
 

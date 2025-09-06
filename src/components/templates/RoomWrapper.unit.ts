@@ -20,6 +20,7 @@ import { FabAction } from "./default-wireframe.types";
 import DefaultWireframe from "./DefaultWireframe.vue";
 import RoomWrapper from "./RoomWrapper.vue";
 import { EmptyState } from "@ui-empty-state";
+import { CourseMetadataResponse } from "@/serverApi/v3";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -38,7 +39,7 @@ const getWrapper = (
 	});
 };
 
-const mockData = [
+const mockData: CourseMetadataResponse[] = [
 	{
 		id: "123",
 		title: "Mathe",
@@ -46,7 +47,7 @@ const mockData = [
 		displayColor: "#54616e",
 		startDate: "2019-12-07T23:00:00.000Z",
 		untilDate: "2020-12-16T23:00:00.000Z",
-		titleDate: "2019/20",
+		isLocked: false,
 	},
 	{
 		id: "234",
@@ -55,7 +56,7 @@ const mockData = [
 		displayColor: "#EF6C00",
 		startDate: "2015-07-31T22:00:00.000Z",
 		untilDate: "2018-07-30T22:00:00.000Z",
-		titleDate: "2015-2018",
+		isLocked: false,
 	},
 	{
 		id: "345",
@@ -64,7 +65,7 @@ const mockData = [
 		displayColor: "#009688",
 		startDate: "2021-07-31T22:00:00.000Z",
 		untilDate: "2021-11-05T23:00:00.000Z",
-		titleDate: "2021",
+		isLocked: false,
 	},
 	{
 		id: "456",
@@ -73,6 +74,7 @@ const mockData = [
 		displayColor: "#EC407A",
 		startDate: "2021-07-31T22:00:00.000Z",
 		untilDate: "2022-07-30T22:00:00.000Z",
+		isLocked: false,
 	},
 ];
 
@@ -209,7 +211,9 @@ describe("@templates/RoomWrapper.vue", () => {
 			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 			defaultWireframe.vm.$emit("onFabItemClick", "syncedCourse");
 
-			expect(wrapper.vm.isCourseSyncDialogOpen).toEqual(true);
+			expect(
+				(wrapper.vm as unknown as typeof RoomWrapper).isCourseSyncDialogOpen
+			).toEqual(true);
 		});
 	});
 

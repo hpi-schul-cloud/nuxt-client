@@ -2,12 +2,16 @@ import { actions, mutations } from "./users";
 import { initializeAxios } from "@/utils/api";
 
 describe("store/users", () => {
+	beforeEach(() => {
+		vi.stubGlobal("setTimeout", (fn) => fn());
+	});
+
 	describe("actions", () => {
 		describe("findStudents", () => {
 			it("calls backend and sets state correctly", async () => {
 				const receivedRequests = [];
 				const ctxMock = {
-					commit: jest.fn(),
+					commit: vi.fn(),
 				};
 				initializeAxios({
 					get: async (url, params) => {
@@ -32,7 +36,7 @@ describe("store/users", () => {
 			it("calls backend and sets state correctly", async () => {
 				const receivedRequests = [];
 				const ctxMock = {
-					commit: jest.fn(),
+					commit: vi.fn(),
 				};
 				initializeAxios({
 					get: async (url, params) => {
@@ -129,7 +133,7 @@ describe("store/users", () => {
 		describe("createStudent", () => {
 			it("should call backend", async () => {
 				const receivedRequests = [];
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 				const ctxMock = { commit: spyCommit };
 				const studentData = {
 					firstName: "Marla",
@@ -146,7 +150,7 @@ describe("store/users", () => {
 					},
 				});
 				actions.$router = {
-					push: jest.fn(),
+					push: vi.fn(),
 				};
 
 				await actions.createStudent(ctxMock, payloadMock);
@@ -157,7 +161,7 @@ describe("store/users", () => {
 			});
 
 			it("should handle backend error", async () => {
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 				const ctxMock = { commit: spyCommit };
 				const studentData = {
 					firstName: "Marla",
@@ -191,7 +195,7 @@ describe("store/users", () => {
 						receivedRequests.push({ url, params });
 					},
 				});
-				const spyCommit = jest.fn();
+				const spyCommit = vi.fn();
 				const payload = {
 					ids: ["5f2987e020834114b8efd6f1", "5f2987e020834114b8efd6f2"],
 					userType: "teacher",

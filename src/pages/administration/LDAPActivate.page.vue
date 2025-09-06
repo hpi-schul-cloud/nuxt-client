@@ -7,25 +7,22 @@
 		<section class="section">
 			<div class="icon-text">
 				<div class="icon-text-unit">
-					<v-icon class="material-icon" :icon="mdiAccountSchoolOutline" />
+					<v-icon :icon="mdiAccountSchoolOutline" />
 					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ $t("common.labels.students") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon class="custom-icon">$teacher</v-icon>
+					<v-icon>$teacher</v-icon>
 					<span>{{ verified.users && verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon
-						class="material-icon"
-						:icon="mdiShieldAccountVariantOutline"
-					/>
+					<v-icon :icon="mdiShieldAccountVariantOutline" />
 					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon class="custom-icon">$class</v-icon>
+					<v-icon>$class</v-icon>
 					<span>{{ verified.classes && verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
@@ -169,7 +166,6 @@
 					<template #icon>
 						<v-icon
 							color="rgba(var(--v-theme-success))"
-							class="material-icon"
 							:icon="mdiCheckCircle"
 						/>
 					</template>
@@ -262,13 +258,11 @@ export default {
 			return [
 				{
 					title: this.$t("pages.administration.index.title"),
-					href: "/administration/",
+					disabled: true,
 				},
 				{
 					title: this.$t("pages.administration.school.index.title"),
-					href: envConfigModule.getNewSchoolAdminPageAsDefault
-						? "/administration/school-settings"
-						: "/administration/school",
+					to: "/administration/school-settings",
 				},
 				{
 					title: this.$t("pages.administration.ldap.index.title"),
@@ -326,7 +320,7 @@ export default {
 		},
 		okButtonHandler() {
 			this.$router.push({
-				path: `/administration/school`,
+				path: `/administration/school-settings`,
 			});
 		},
 	},
@@ -335,37 +329,37 @@ export default {
 
 <style lang="scss" scoped>
 .subtitle-text {
-	margin-top: var(--space-xl);
+	margin-top: 32px;
 }
 
 .section {
-	margin: var(--space-xl-2);
+	margin: 40px;
 }
 
 .bottom-buttons {
 	display: flex;
 	justify-content: space-between;
-	margin-top: var(--space-xl);
-	margin-right: var(--space-xl);
-	margin-left: var(--space-lg);
+	margin-top: 32px;
+	margin-right: 32px;
+	margin-left: 24px;
 }
 
 .icon-text {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	margin-top: var(--space-xl-2);
+	margin-top: 40px;
 }
 
 .icon-text-unit {
-	margin-top: var(--space-sm);
-	margin-right: var(--space-lg);
+	margin-top: 12px;
+	margin-right: 24px;
 	font-weight: var(--font-weight-bold);
 	white-space: nowrap;
 }
 
 .category-title {
-	margin: var(--space-xl-2) 0 var(--space-lg) 0;
+	margin: 40px 0 24px 0;
 	font-weight: var(--font-weight-bold);
 }
 
@@ -376,8 +370,8 @@ table {
 
 td {
 	min-width: 200px;
-	padding: var(--space-sm);
-	margin-bottom: var(--space-md);
+	padding: 12px;
+	margin-bottom: 16px;
 	white-space: normal;
 }
 
@@ -389,11 +383,11 @@ tr:nth-child(odd) {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
-	margin: var(--space-xl-2);
+	margin: 40px;
 }
 
 .title-class {
-	margin-top: var(--space-xl-3);
-	margin-bottom: var(--space-lg);
+	margin-top: 52px;
+	margin-bottom: 24px;
 }
 </style>

@@ -4,10 +4,9 @@ import {
 } from "@@/tests/test-utils/setup";
 import AddMembers from "./AddMembers.vue";
 import { RoleName } from "@/serverApi/v3";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule, schoolsModule } from "@/store";
 import {
-	envsFactory,
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
@@ -15,32 +14,27 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import { VueWrapper } from "@vue/test-utils";
-import { VAutocomplete } from "vuetify/lib/components/index";
+import { VAutocomplete, VIcon } from "vuetify/lib/components/index";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { createTestingPinia } from "@pinia/testing";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { WarningAlert } from "@ui-alert";
 import { Ref, ref } from "vue";
-import EnvConfigModule from "@/store/env-config";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { Mock } from "vitest";
 
-jest.mock("@vueuse/integrations/useFocusTrap", () => {
-	return {
-		...jest.requireActual("@vueuse/integrations/useFocusTrap"),
-		useFocusTrap: jest.fn(),
-	};
-});
+vi.mock("@vueuse/integrations/useFocusTrap");
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorizationMock = jest.mocked(useRoomAuthorization);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
 type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
@@ -52,14 +46,14 @@ type RoomAuthorizationRefs = Partial<
 
 describe("AddMembers", () => {
 	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
-	let pauseMock: jest.Mock;
-	let unpauseMock: jest.Mock;
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
-		pauseMock = jest.fn();
-		unpauseMock = jest.fn();
-		(useFocusTrap as jest.Mock).mockReturnValue({
+		pauseMock = vi.fn();
+		unpauseMock = vi.fn();
+		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
 			unpause: unpauseMock,
 		});
@@ -69,7 +63,6 @@ describe("AddMembers", () => {
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
 			authModule: AuthModule,
 		});
@@ -84,7 +77,7 @@ describe("AddMembers", () => {
 
 	const setup = (options?: {
 		customRoomAuthorization?: RoomAuthorizationRefs;
-		isFeatureAddStudentsEnabled?: boolean;
+		schoolRole?: RoleName.Teacher | RoleName.Student;
 	}) => {
 		const configDefaults = {
 			canAddRoomMembers: true,
@@ -96,9 +89,18 @@ describe("AddMembers", () => {
 		};
 		const potentialRoomMembers = roomMemberFactory.buildList(3);
 		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
+		const roomMembers = roomMemberFactory.buildList(2, {
+			roomRoleName: RoleName.Roomadmin,
+		});
 
-		const mockMe = meResponseFactory.build();
+		const mockMe = meResponseFactory.build({
+			roles: [{ id: "user-id", name: options?.schoolRole ?? RoleName.Teacher }],
+		});
 		authModule.setMe(mockMe);
+
+		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.Teacher];
+		roomMembers[0].userId = mockMe.user.id;
+		roomMembersSchools[0].id = mockMe.school.id;
 
 		const authorizationPermissions =
 			createMock<ReturnType<typeof useRoomAuthorization>>();
@@ -109,14 +111,6 @@ describe("AddMembers", () => {
 			);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
-
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: {
-				...envsFactory.build(),
-				FEATURE_ROOM_ADD_STUDENTS_ENABLED:
-					options?.isFeatureAddStudentsEnabled ?? true,
-			},
-		});
 
 		wrapper = mount(AddMembers, {
 			attachTo: document.body,
@@ -129,13 +123,13 @@ describe("AddMembers", () => {
 							roomMembersStore: {
 								potentialRoomMembers,
 								schools: roomMembersSchools,
+								roomMembers,
 							},
 						},
 					}),
 				],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 		});
@@ -144,6 +138,7 @@ describe("AddMembers", () => {
 
 		return {
 			wrapper,
+			mockMe,
 			potentialRoomMembers,
 			roomMembersSchools,
 			roomMembersStore,
@@ -193,42 +188,28 @@ describe("AddMembers", () => {
 				);
 			});
 
-			describe("when feature flag FEATURE_ROOM_ADD_STUDENTS_ENABLED is false", () => {
-				it("should only offer teacher role for selectRole component", () => {
-					const { wrapper } = setup({ isFeatureAddStudentsEnabled: false });
+			it("should offer all roles for selectRole component", () => {
+				const { wrapper } = setup();
 
-					const roles = [
-						{ id: RoleName.Teacher, name: "common.labels.teacher" },
-					];
+				const roles = [
+					{
+						id: RoleName.Student,
+						name: "common.labels.student.neutral",
+						icon: mdiAccountOutline,
+					},
+					{
+						id: RoleName.Teacher,
+						name: "common.labels.teacher.neutral",
+						icon: mdiAccountSchoolOutline,
+					},
+				];
 
-					const roleComponent = wrapper.getComponent({
-						ref: "selectRole",
-					});
-
-					expect(roleComponent.props("items")).toStrictEqual(roles);
-					expect(roleComponent.props("modelValue")).toBe(roles[0].id);
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
 				});
-			});
 
-			describe("when feature flag FEATURE_ROOM_ADD_STUDENTS_ENABLED is true", () => {
-				it("should offer all roles for selectRole component", () => {
-					const { wrapper } = setup({ isFeatureAddStudentsEnabled: true });
-
-					const roles = [
-						{
-							id: RoleName.Student,
-							name: "pages.rooms.members.add.role.student",
-						},
-						{ id: RoleName.Teacher, name: "common.labels.teacher" },
-					];
-
-					const roleComponent = wrapper.getComponent({
-						ref: "selectRole",
-					});
-
-					expect(roleComponent.props("items")).toStrictEqual(roles);
-					expect(roleComponent.props("modelValue")).toBe(roles[0].id);
-				});
+				expect(roleComponent.props("items")).toStrictEqual(roles);
+				expect(roleComponent.props("modelValue")).toBe(roles[0].id);
 			});
 
 			it("should have proper props for autoCompleteUsers component", () => {
@@ -338,6 +319,20 @@ describe("AddMembers", () => {
 					roomMembersSchools[0].id
 				);
 			});
+
+			it("should render an icon with text for student role", async () => {
+				const { wrapper } = setup();
+
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+				await roleComponent.setValue(RoleName.Student);
+
+				const roleIcon = roleComponent.findComponent(VIcon);
+
+				expect(roleIcon.props("icon")).toBe(mdiAccountOutline);
+				expect(roleComponent.text()).toContain("common.labels.student.neutral");
+			});
 		});
 
 		describe("and the role is set to teacher", () => {
@@ -355,6 +350,20 @@ describe("AddMembers", () => {
 					selectedRole,
 					roomMembersSchools[0].id
 				);
+			});
+
+			it("should render an icon with text for teacher role", async () => {
+				const { wrapper } = setup();
+
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(RoleName.Teacher);
+				const roleIcon = roleComponent.findComponent(VIcon);
+
+				expect(roleIcon.props("icon")).toBe(mdiAccountSchoolOutline);
+				expect(roleComponent.text()).toContain("common.labels.teacher.neutral");
 			});
 		});
 	});
@@ -627,6 +636,76 @@ describe("AddMembers", () => {
 				);
 				expect(infoAlert.exists()).toEqual(false);
 			});
+		});
+		describe("and the current user is a student and student role is set", () => {
+			it("should not show info message", async () => {
+				const { wrapper } = setup({
+					customRoomAuthorization: { canSeeAllStudents: false },
+					schoolRole: RoleName.Student,
+				});
+
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(RoleName.Student);
+
+				const infoAlert = wrapper.findComponent(
+					'[data-testid="student-visibility-info-alert"]'
+				);
+				expect(infoAlert.exists()).toEqual(false);
+			});
+
+			it("should show specific student admin info message", async () => {
+				const { wrapper } = setup({
+					customRoomAuthorization: { canSeeAllStudents: false },
+					schoolRole: RoleName.Student,
+				});
+
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(RoleName.Student);
+
+				const infoAlert = wrapper.findComponent(
+					'[data-testid="student-admin-info-alert"]'
+				);
+				expect(infoAlert.text()).toBe(
+					"pages.rooms.members.add.students.studentAdmins"
+				);
+			});
+		});
+	});
+
+	describe("when current user is a student admin", () => {
+		it("should disable the school selection with current users school selected", async () => {
+			const { mockMe, wrapper } = setup({ schoolRole: RoleName.Student });
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			expect(schoolComponent.props("disabled")).toBe(true);
+			expect(schoolComponent.props("modelValue")).toBe(mockMe.school.id);
+		});
+
+		it("should show specific student admin info message", async () => {
+			const { wrapper } = setup({
+				schoolRole: RoleName.Student,
+			});
+
+			const roleComponent = wrapper.getComponent({
+				ref: "selectRole",
+			});
+
+			await roleComponent.setValue(RoleName.Student);
+
+			const infoAlert = wrapper.findComponent(
+				'[data-testid="student-admin-info-alert"]'
+			);
+			expect(infoAlert.text()).toBe(
+				"pages.rooms.members.add.students.studentAdmins"
+			);
 		});
 	});
 });

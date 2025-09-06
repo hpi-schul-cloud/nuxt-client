@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mdiSync } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { VBadge } from "vuetify/lib/components/index";
@@ -20,9 +20,10 @@ const mockData = {
 	titleDate: "2019/20",
 	href: "/rooms/456",
 	isSynchronized: false,
+	isLocked: false,
 };
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 
 describe("vRoomAvatar", () => {
 	const setup = (optionalProps: object = {}) => {
@@ -68,8 +69,8 @@ describe("vRoomAvatar", () => {
 		expect(shortLabelElement.innerHTML).toStrictEqual("Bi");
 	});
 
-	it("should display the badge", async () => {
-		const { wrapper } = setup({ item: { ...mockData, notification: true } });
+	it("should display the locked badge", async () => {
+		const { wrapper } = setup({ item: { ...mockData, isLocked: true } });
 		const badgeElement = wrapper.findComponent({ name: "VBadge" });
 
 		expect(badgeElement.props().modelValue).toBe(true);
@@ -131,10 +132,10 @@ describe("vRoomAvatar", () => {
 
 	it("should not redirect to room page if condenseLayout props is true", async () => {
 		Object.defineProperty(window, "location", {
-			set: jest.fn(),
+			set: vi.fn(),
 			get: () => createMock<Location>(),
 		});
-		const locationSpy = jest.spyOn(window, "location", "set");
+		const locationSpy = vi.spyOn(window, "location", "set");
 		const { wrapper } = setup({ condenseLayout: true });
 
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
@@ -175,7 +176,9 @@ describe("vRoomAvatar", () => {
 			await avatarComponent.trigger("dragstart");
 			const startDragEvent = wrapper.emitted("startDrag");
 
-			expect(wrapper.vm.isDragging).toBe(true);
+			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(
+				true
+			);
 			expect(startDragEvent).toHaveLength(1);
 			expect(startDragEvent && startDragEvent[0][0]).toStrictEqual(mockData);
 		});
@@ -205,7 +208,9 @@ describe("vRoomAvatar", () => {
 
 			await avatarComponent.trigger("dragenter");
 
-			expect(wrapper.vm.isDragging).toBe(false);
+			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(
+				false
+			);
 		});
 
 		it("should emit 'dragend' event when draging ended", async () => {
@@ -214,7 +219,9 @@ describe("vRoomAvatar", () => {
 
 			await avatarComponent.trigger("dragend");
 
-			expect(wrapper.vm.isDragging).toBe(false);
+			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(
+				false
+			);
 			expect(wrapper.emitted()).toHaveProperty("dragend");
 		});
 	});

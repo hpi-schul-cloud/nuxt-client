@@ -12,28 +12,29 @@
 </template>
 
 <style lang="scss">
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .edusharing-footer {
 	display: flex;
 	justify-content: center;
 	width: 100%;
-	margin-top: var(--space-lg);
+	margin-top: 24px;
 
-	@include breakpoint(tablet) {
-		margin-top: var(--space-xl);
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
+		margin-top: 32px;
 	}
 
 	&__text {
-		margin-top: var(--space-xl-2);
-		margin-right: var(--space-sm);
+		margin-top: 40px;
+		margin-right: 12px;
 		font-size: var(--text-sm);
 	}
 
 	&__logo {
 		width: 100px;
 		height: 40px;
-		margin-top: calc(15 * var(--border-width));
+		margin-top: 15px;
 	}
 }
 </style>

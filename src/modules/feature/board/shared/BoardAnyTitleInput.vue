@@ -32,171 +32,143 @@
 	</template>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { containsOpeningTagFollowedByString } from "@/utils/validation";
 import { useInlineEditInteractionHandler } from "@util-board";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers } from "@vuelidate/validators";
-import {
-	computed,
-	defineComponent,
-	nextTick,
-	onMounted,
-	PropType,
-	ref,
-	unref,
-	watch,
-} from "vue";
+import { computed, nextTick, onMounted, ref, unref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { VTextarea } from "vuetify/lib/components";
+import { VTextarea } from "vuetify/components";
 
-export default defineComponent({
-	name: "BoardAnyTitleInput",
-	props: {
-		isEditMode: {
-			type: Boolean,
-			required: true,
-		},
-		value: {
-			type: String,
-			required: true,
-		},
-		scope: {
-			type: String as PropType<"card" | "column" | "board">,
-			required: true,
-		},
-		isFocused: {
-			type: Boolean,
-		},
-		maxLength: {
-			type: Number,
-			default: null,
-		},
-		emptyValueFallback: {
-			type: String,
-			default: "",
-		},
-	},
-	emits: ["update:value", "enter"],
-	setup(props, { emit }) {
-		const { t } = useI18n();
-		const modelValue = ref("");
+type Props = {
+	isEditMode: boolean;
+	value: string;
+	scope: "card" | "column" | "board";
+	isFocused?: boolean;
+	maxLength?: number | null;
+	emptyValueFallback?: string;
+};
 
-		const internalIsFocused = ref(false);
-
-		const titleInput = ref<VTextarea | null>(null);
-
-		useInlineEditInteractionHandler(async () => {
-			await setFocusOnEdit();
-		});
-
-		const setFocusOnEdit = async () => {
-			await nextTick();
-			internalIsFocused.value = true;
-			if (titleInput.value) {
-				titleInput.value.focus();
-				cursorToEnd();
-			}
-		};
-
-		watch(modelValue, (newValue) => {
-			const inputIsValid = v$.value.modelValue.$errors.length === 0;
-
-			if (newValue !== props.value && inputIsValid) {
-				emit("update:value", newValue);
-			}
-		});
-
-		watch(
-			() => props.value,
-			(newVal) => {
-				if (!(props.isFocused && props.isEditMode)) {
-					modelValue.value = newVal;
-				}
-			}
-		);
-
-		onMounted(() => {
-			if (props.isFocused && props.isEditMode) setFocusOnEdit();
-			modelValue.value = props.value;
-		});
-
-		watch(
-			() => props.isEditMode,
-			async (newVal, oldVal) => {
-				if (
-					props.scope !== "column" &&
-					props.scope !== "board" &&
-					!props.isFocused
-				)
-					return;
-				if (newVal && !oldVal) {
-					if (
-						modelValue.value.trim().length < 1 &&
-						props.emptyValueFallback.length > 0
-					) {
-						modelValue.value = props.emptyValueFallback;
-					}
-					await nextTick();
-					await setFocusOnEdit();
-				}
-			}
-		);
-
-		const validationRules = computed(() => ({
-			modelValue: {
-				containsOpeningTag: helpers.withMessage(
-					t("common.validation.containsOpeningTag"),
-					(name: string) => !containsOpeningTagFollowedByString(name)
-				),
-			},
-		}));
-
-		const v$ = useVuelidate(
-			validationRules,
-			{ modelValue },
-			{ $lazy: true, $autoDirty: true }
-		);
-
-		const errorMessages = computed(() =>
-			v$.value.modelValue.$errors.map((e: ErrorObject) => unref(e.$message))
-		);
-
-		const headingLevel = computed(() => {
-			switch (props.scope) {
-				case "column":
-					return 2;
-				case "card":
-					return 3;
-				default:
-					return 1;
-			}
-		});
-
-		const onEnter = ($event: KeyboardEvent) => {
-			$event.preventDefault();
-			emit("enter");
-		};
-
-		const cursorToEnd = () => {
-			if (titleInput.value) {
-				const length = titleInput.value.value.length;
-				titleInput.value.setSelectionRange(length, length);
-			}
-		};
-
-		return {
-			t,
-			headingLevel,
-			modelValue,
-			onEnter,
-			internalIsFocused,
-			titleInput,
-			cursorToEnd,
-			errorMessages,
-		};
-	},
+const props = withDefaults(defineProps<Props>(), {
+	isFocused: false,
+	maxLength: null,
+	emptyValueFallback: "",
 });
+
+const emit = defineEmits<{
+	(e: "update:value", value: string): void;
+	(e: "enter"): void;
+}>();
+
+const { t } = useI18n();
+const modelValue = ref("");
+
+const internalIsFocused = ref(false);
+
+const titleInput = ref<VTextarea | null>(null);
+
+useInlineEditInteractionHandler(async () => {
+	await setFocusOnEdit();
+});
+
+const setFocusOnEdit = async () => {
+	await nextTick();
+	internalIsFocused.value = true;
+	if (titleInput.value) {
+		titleInput.value.focus();
+		cursorToEnd();
+	}
+};
+
+watch(modelValue, (newValue) => {
+	const inputIsValid = v$.value.modelValue.$errors.length === 0;
+
+	if (newValue !== props.value && inputIsValid) {
+		emit("update:value", newValue);
+	}
+});
+
+watch(
+	() => props.value,
+	(newVal) => {
+		if (!(props.isFocused && props.isEditMode)) {
+			modelValue.value = newVal;
+		}
+	}
+);
+
+onMounted(() => {
+	if (props.isFocused && props.isEditMode) setFocusOnEdit();
+	modelValue.value = props.value;
+});
+
+watch(
+	() => props.isEditMode,
+	async (newVal, oldVal) => {
+		if (
+			props.scope !== "column" &&
+			props.scope !== "board" &&
+			!props.isFocused
+		) {
+			return;
+		}
+
+		if (newVal && !oldVal) {
+			if (
+				modelValue.value.trim().length < 1 &&
+				props.emptyValueFallback.length > 0
+			) {
+				modelValue.value = props.emptyValueFallback;
+			}
+
+			await nextTick();
+			await setFocusOnEdit();
+		}
+	}
+);
+
+const validationRules = computed(() => ({
+	modelValue: {
+		containsOpeningTag: helpers.withMessage(
+			t("common.validation.containsOpeningTag"),
+			(name: string) => !containsOpeningTagFollowedByString(name)
+		),
+	},
+}));
+
+const v$ = useVuelidate(
+	validationRules,
+	{ modelValue },
+	{ $lazy: true, $autoDirty: true }
+);
+
+const errorMessages = computed(() =>
+	v$.value.modelValue.$errors.map((e: ErrorObject) => unref(e.$message))
+);
+
+const headingLevel = computed(() => {
+	switch (props.scope) {
+		case "column":
+			return 2;
+		case "card":
+			return 3;
+		default:
+			return 1;
+	}
+});
+
+const onEnter = ($event: KeyboardEvent) => {
+	$event.preventDefault();
+	emit("enter");
+};
+
+const cursorToEnd = () => {
+	if (titleInput.value) {
+		const length = titleInput.value.value.length;
+		titleInput.value.setSelectionRange(length, length);
+	}
+};
 </script>
 
 <style scoped lang="scss">
@@ -216,7 +188,7 @@ export default defineComponent({
 	&.board-title-input :deep(textarea) {
 		font-size: var(--heading-3);
 		line-height: var(--line-height-md);
-		padding-top: var(--space-md);
+		padding-top: 16px;
 		overflow: hidden; // prevent scrollbar in board title
 	}
 

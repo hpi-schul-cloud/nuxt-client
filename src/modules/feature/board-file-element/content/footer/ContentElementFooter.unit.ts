@@ -1,3 +1,5 @@
+import { PreviewStatus } from "@/fileStorageApi/v3";
+import { ContentElementType } from "@/serverApi/v3";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -14,9 +16,25 @@ describe("ContentElementFooter", () => {
 		const propsData = {
 			fileProperties: {
 				name: "file-record #1.txt",
-				url: "1/file-record #1.txt",
-				isDownloadAllowed: true,
 				size: 3800,
+				url: "1/file-record #1.txt",
+				previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
+				isDownloadAllowed: true,
+				mimeType: "text/plain",
+				isCollaboraEditable: false,
+				element: {
+					id: "1",
+					type: ContentElementType.File,
+					content: {
+						caption: "File caption",
+						alternativeText: "File alternative text",
+					},
+					timestamps: {
+						createdAt: new Date().toISOString(),
+						updatedAt: new Date().toISOString(),
+						lastUpdatedAt: new Date().toISOString(),
+					},
+				},
 			},
 		};
 

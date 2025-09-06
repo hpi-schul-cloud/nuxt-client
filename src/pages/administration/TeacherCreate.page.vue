@@ -9,7 +9,7 @@
 				<v-checkbox
 					v-model="sendRegistration"
 					name="switch"
-					class="mt--xl"
+					class="mt-8"
 					:label="$t('pages.administration.teachers.new.checkbox.label')"
 				/>
 			</template>
@@ -44,7 +44,7 @@ export default {
 			breadcrumbs: [
 				{
 					title: this.$t("pages.administration.index.title"),
-					href: "/administration/",
+					disabled: true,
 				},
 				{
 					title: this.$t("pages.administration.teachers.index.title"),

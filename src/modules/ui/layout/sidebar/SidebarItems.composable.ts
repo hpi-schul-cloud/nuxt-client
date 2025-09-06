@@ -39,8 +39,6 @@ export const useSidebarItems = () => {
 			title: "global.sidebar.item.rooms",
 			to: "/rooms",
 			icon: mdiAccountSupervisorCircleOutline,
-			feature: "FEATURE_ROOMS_ENABLED",
-			permissions: ["ROOM_CREATE"],
 			testId: "sidebar-rooms",
 		},
 		{
@@ -232,34 +230,25 @@ export const useSidebarItems = () => {
 					testId: "sidebar-management-teachers",
 				},
 				{
+					title: "pages.rooms.title",
+					to: "/administration/rooms/manage",
+					feature: "FEATURE_ADMINISTRATE_ROOMS_ENABLED",
+					permissions: envConfigModule.getEnv.FEATURE_ADMINISTRATE_ROOMS_ENABLED
+						? ["SCHOOL_ADMINISTRATE_ROOMS"]
+						: undefined,
+					testId: "sidebar-room-management",
+				},
+				{
 					title: "global.sidebar.item.courses",
 					to: "/administration/rooms/new",
 					testId: "sidebar-management-courses",
 					permissions: ["ADMIN_VIEW"],
-					feature: "FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED",
-				},
-				{
-					title: "global.sidebar.item.courses",
-					href: "/administration/courses",
-					testId: "sidebar-management-courses",
-					permissions: ["ADMIN_VIEW"],
-					feature: "FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED",
-					featureValue: false,
 				},
 				{
 					title: "global.sidebar.item.classes",
 					to: "/administration/groups/classes",
 					testId: "sidebar-management-classes",
 					permissions: ["ADMIN_VIEW", "TEACHER_LIST"],
-					feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
-				},
-				{
-					title: "global.sidebar.item.classes",
-					href: "/administration/classes",
-					testId: "sidebar-management-classes",
-					permissions: ["ADMIN_VIEW", "TEACHER_LIST"],
-					feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
-					featureValue: false,
 				},
 				{
 					title: "global.sidebar.item.teams",
@@ -272,15 +261,6 @@ export const useSidebarItems = () => {
 					to: "/administration/school-settings",
 					testId: "sidebar-management-school",
 					permissions: ["ADMIN_VIEW"],
-					feature: "FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED",
-				},
-				{
-					title: "global.sidebar.item.school",
-					href: "/administration/school",
-					testId: "sidebar-management-school",
-					permissions: ["ADMIN_VIEW"],
-					feature: "FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED",
-					featureValue: false,
 				},
 			],
 		},

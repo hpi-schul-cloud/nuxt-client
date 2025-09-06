@@ -1,10 +1,6 @@
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import {
-	checkFolderFeature,
-	checkRoomsFeature,
-	validateQueryParameters,
-} from "@/router/guards";
+import { checkFolderFeature, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
@@ -117,6 +113,19 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: createPermissionGuard(["teacher_create"]),
 	},
 	{
+		path: `/administration/rooms/manage`,
+		component: async () => (await import("@page-room")).AdministrationRoomsPage,
+		name: "administration-rooms-manage",
+		beforeEnter: createPermissionGuard(["school_administrate_rooms"]),
+	},
+	{
+		path: `/administration/rooms/manage/:roomId(${REGEX_ID})`,
+		component: async () =>
+			(await import("@page-room")).AdministrationRoomDetailsPage,
+		name: "administration-rooms-manage-details",
+		beforeEnter: createPermissionGuard(["school_administrate_rooms"]),
+	},
+	{
 		path: "/administration/rooms/new",
 		component: () => import("@/pages/administration/RoomsOverview.page.vue"),
 		name: "administration-rooms-new",
@@ -143,6 +152,18 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		props: (to: RouteLocationNormalized) => ({
 			groupId: to.params.groupId,
 		}),
+	},
+	{
+		path: `/collabora/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-collabora")).CollaboraPage,
+		name: "collabora",
+		props: (route: RouteLocationNormalized) => ({
+			fileRecordId: route.params.id,
+			editorMode: route.query.editorMode,
+		}),
+		meta: {
+			layout: Layouts.BORDERLESS,
+		},
 	},
 	{
 		path: "/content",
@@ -253,13 +274,12 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
-		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
 		name: "rooms",
 	},
 	{
 		path: `/rooms/new`,
 		component: async () => (await import("@page-room")).RoomCreatePage,
-		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
+		beforeEnter: [createPermissionGuard(["school_create_room"])],
 		name: "rooms-new",
 	},
 	{
@@ -270,13 +290,11 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms/:id(${REGEX_ID})/edit`,
 		component: async () => (await import("@page-room")).RoomEditPage,
-		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
 		name: "room-edit",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/members`,
 		component: async () => (await import("@page-room")).RoomMembersPage,
-		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
 		name: "room-members",
 		props: (route: RouteLocationNormalized) => ({
 			tab: route.query.tab,

@@ -6,11 +6,11 @@ export default {
 	"common.actions.confirm": "Bestätigen",
 	"common.actions.continue": "Weiter",
 	"common.actions.copy": "Kopieren",
+	"common.actions.duplicate": "Duplizieren",
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
 	"common.actions.download": "Herunterladen",
-	"common.actions.copyRoom": "Duplizieren",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
 	"common.actions.import": "Importieren",
@@ -39,6 +39,10 @@ export default {
 		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
 	"common.file.virusDetected":
 		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
+	"common.file": "Datei",
+	"common.file.exceedsCollaboraEditableFileSize":
+		"Dokumente größer als {sizeInMb} können online nicht bearbeitet werden.",
+	"common.files": "Dateien",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
@@ -94,10 +98,12 @@ export default {
 	"common.labels.size": "Größe",
 	"common.labels.status": "Status",
 	"common.labels.student": "Schüler:in",
+	"common.labels.student.neutral": "Lernend",
 	"common.labels.students": "Schüler:innen",
 	"common.labels.success": "erfolg",
 	"common.labels.teacher.plural": "Lehrkräfte",
 	"common.labels.teacher": "Lehrkraft",
+	"common.labels.teacher.neutral": "Lernbegleitend",
 	"common.labels.time": "Uhrzeit",
 	"common.labels.title": "Titel",
 	"common.labels.unknown": "Unbekannt",
@@ -169,7 +175,10 @@ export default {
 		"Der eingegebene Text überschreitet die Maximallänge",
 	"common.validation.containsOpeningTag":
 		"Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
+	"common.validation.nonEmptyString":
+		"Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.and": "und",
+	"common.words.board": "Bereich",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
 	"common.words.color.blue": "Blau",
@@ -186,6 +195,8 @@ export default {
 	"common.words.color.turquoise": "Türkis",
 	"common.words.color.yellow": "Gelb",
 	"common.words.copiedToClipboard": "In die Zwischenablage kopiert",
+	"common.words.copiedToClipboard.failure":
+		"Das Kopieren in die Zwischenablage ist fehlgeschlagen. Bitte versuchen Sie es manuell.",
 	"common.words.copyLinkToClipboard.success":
 		"Link in die Zwischenablage kopiert",
 	"common.words.copyLinkToClipboard.failure":
@@ -395,13 +406,13 @@ export default {
 	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
 		"Die Schule befindet sich bereits im nächsten Schuljahr",
 	"components.administration.schoolYearChangeSection.notification.finish.success":
-		"Schuljahr erfolgreich gestartet",
+		"Transferphase erfolgreich beendet. Schule ins nächste Jahr überführt.",
 	"components.administration.schoolYearChangeSection.notification.start.success":
 		"Transferphase erfolgreich gestartet",
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Ende des Schuljahres",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"Die Transferphase kann zwei Wochen vor Ferienbeginn manuell gestartet werden. Ist bis zum Ferienbeginn kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
+		"Die Transferphase kann zwei Wochen vor Schuljahresende manuell gestartet werden. Ist kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Transferphase starten",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
@@ -422,10 +433,14 @@ export default {
 		"Transferphase beenden",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
 		"Klassen- und Personendaten (LDAP) wurden aktualisiert und überprüft",
-	"components.administration.schoolYearChangeSection.dialog.title":
-		"Das Schuljahr wirklich beenden?",
-	"components.administration.schoolYearChangeSection.dialog.content":
+	"components.administration.schoolYearChangeSection.dialog.start.title":
+		"Transferphase wirklich starten?",
+	"components.administration.schoolYearChangeSection.dialog.start.content":
 		"Die Synchronisierung von LDAP-Stammdaten wird während der Transferphase unterbrochen. Somit werden Nutzerdaten und Klassen (sofern verwendet) nicht mehr über LDAP aktualisiert. Der Login mit bereits synchronisierten Login-Daten ist weiterhin möglich. Passwortänderungen im LDAP während des Logins werden ebenfalls berücksichtigt.",
+	"components.administration.schoolYearChangeSection.dialog.finish.title":
+		"Transferphase wirklich beenden?",
+	"components.administration.schoolYearChangeSection.dialog.finish.content":
+		"Die Synchronisierung der LDAP-Daten wird gestartet. Nutzerdaten und Klassen werden aktualisiert. Das neue Schuljahr wird automatisch gesetzt.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "Stunde | Stunden",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
@@ -457,7 +472,7 @@ export default {
 	"components.board.error.404":
 		"Fehler 404 – Bereich mit diesem Namen wurde nicht gefunden",
 	"components.board.error.403":
-		"Fehler 403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen",
+		"Fehler 403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen ... ",
 	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
@@ -518,7 +533,8 @@ export default {
 		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
-	"components.board": "Bereich",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"Bevorzugte Tools konnten nicht geladen werden.",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
 	"components.boardElement": "Element",
@@ -547,6 +563,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Status aktualisieren",
 	"components.cardElement.fileElement.videoFormatError":
 		"Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Office Dokument öffnen",
 	"components.cardElement.folderElement": "Dateiordner",
 	"components.cardElement.folderElement.untitled": "Unbenannter Ordner",
 	"components.cardElement.LinkElement": "Link",
@@ -656,7 +674,7 @@ export default {
 	"components.molecules.copyResult.etherpadCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.failedCopy":
-		"Der Kopiervorgang konnte nicht abgeschlossen werden.",
+		"Das Duplizieren konnte nicht abgeschlossen werden.",
 	"components.molecules.copyResult.fileCopy.error":
 		"Folgende Dateien konnten nicht kopiert werden und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.geogebraCopy.info":
@@ -688,22 +706,22 @@ export default {
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.course.successfullyCopied":
-		"Alle Elemente wurden erfolgreich kopiert.",
+		"Alle Elemente wurden erfolgreich dupliziert.",
 	"components.molecules.copyResult.board.successfullyCopied":
-		"Bereich erfolgreich kopiert.",
+		"Bereich erfolgreich dupliziert.",
 	"components.molecules.copyResult.task.successfullyCopied":
-		"Aufgabe erfolgreich kopiert.",
+		"Aufgabe erfolgreich dupliziert.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
-		"Thema erfolgreich kopiert.",
+		"Thema erfolgreich dupliziert.",
 	"components.molecules.copyResult.timeoutCopy":
-		"Der Kopiervorgang kann bei großen Dateien länger dauern. Die Inhalte werden in Kürze verfügbar sein.",
+		"Das Duplizieren kann bei großen Dateien länger dauern. Die Inhalte werden in Kürze verfügbar sein.",
 	"components.molecules.copyResult.timeoutSuccess":
-		"Der Kopiervorgang wurde abgeschlossen.",
-	"components.molecules.copyResult.title.failure": "Kopieren fehlgeschlagen",
-	"components.molecules.copyResult.title.loading": "Kopiervorgang läuft...",
+		"Das Duplizieren wurde abgeschlossen.",
+	"components.molecules.copyResult.title.failure": "Duplizieren fehlgeschlagen",
+	"components.molecules.copyResult.title.loading": "Duplizieren läuft...",
 	"components.molecules.copyResult.title.partial":
 		"Wichtige Kopier-Informationen",
-	"components.molecules.copyResult.title.success": "Kopieren erfolgreich",
+	"components.molecules.copyResult.title.success": "Duplizieren erfolgreich",
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
@@ -742,6 +760,10 @@ export default {
 		"{name} wurde erfolgreich importiert",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"Folgende Inhalte werden nicht importiert:",
+	"components.molecules.import.room.options.title": "Raum importieren",
+	"components.molecules.import.room.rename":
+		"Bei Bedarf kann der Name des Raumes umbenannt werden: ",
+	"components.molecules.import.room.label": "Raum-Name",
 	"components.molecules.import.tasks.label": "Aufgabe",
 	"components.molecules.import.tasks.rename":
 		"Bei Bedarf kann der Name der Aufgabe umbenannt werden: ",
@@ -786,6 +808,9 @@ export default {
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link Bereich-Kopie",
+	"components.molecules.share.columnBoard.mail.subject":
+		"Bereich zum Importieren",
+	"components.molecules.share.columnBoard.mail.body": "Link zum Bereich: ",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.roomMemberInvitation.mail.body":
 		"Link zum Raum: ",
@@ -808,6 +833,8 @@ export default {
 		"Geogebra IDs",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Kursgruppen",
+	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
+		"Raum-Mitglieder und Berechtigungen",
 	"components.molecules.share.options.tableHeader.InfoText":
 		"Folgende Inhalte werden nicht kopiert:",
 	"components.molecules.share.courses.result.linkLabel": "Link Kurskopie",
@@ -821,6 +848,11 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Link nur schulintern gültig",
 	"components.molecules.share.options.title": "Teilen-Einstellungen",
+	"components.molecules.share.room.options.infoText":
+		"Mit dem folgenden Link kann dieser Raum von anderen Personen kopiert werden. Wenn kein aktiv genutzter Raum geteilt werden soll, bitte zuerst ein Duplikat erstellen und dieses teilen.",
+	"components.molecules.share.room.result.linkLabel": "Link Raum-Kopie",
+	"components.molecules.share.room.mail.subject": "Raum zum Importieren",
+	"components.molecules.share.room.mail.body": "Link zum Raum: ",
 	"components.molecules.share.result.mailShare": "Als Mail versenden",
 	"components.molecules.share.result.qrCodeScan": "QR-Code scannen",
 	"components.molecules.share.result.title": "Teilen über",
@@ -937,6 +969,11 @@ export default {
 	"components.roomForm.labels.timePeriod": "Zeitraum",
 	"components.roomForm.labels.timePeriod.from": "Zeitraum von",
 	"components.roomForm.labels.timePeriod.to": "Zeitraum bis",
+	"components.roomForm.labels.videoConference.title": "Videokonferenzen",
+	"components.roomForm.labels.videoConference.label":
+		"Auch Raum-Mitglieder mit der Berechtigung „Bearbeiten“ dürfen Videokonferenzen hinzufügen und starten.",
+	"components.roomForm.labels.videoConference.helperText":
+		"Unabhängig davon können Raum-Mitglieder mit der Berechtigung „Verwalten“ oder „Besitzen“ Videokonferenzen immer hinzufügen und starten.",
 	"components.roomForm.validation.generalSaveError":
 		"Beim Speichern ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -1006,7 +1043,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"Im nächsten Schritt wird eine Kopie des Raumes erstellt.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"Folgende Inhalte werden nicht kopiert:",
+		"Folgende Inhalte werden nicht übernommen:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Raum-Mitglieder und Berechtigungen",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Inhalte aus Etherpads",
@@ -1037,10 +1074,10 @@ export default {
 	"global.sidebar.item.releaseNotes": "Was ist neu?",
 	"global.sidebar.item.rooms": "Räume",
 	"global.sidebar.item.school": "Schule",
-	"global.sidebar.item.student": "Schüler:innen",
+	"global.sidebar.item.student": "Lernende",
 	"global.sidebar.item.system": "System",
 	"global.sidebar.item.tasks": "Aufgaben",
-	"global.sidebar.item.teacher": "Lehrkräfte",
+	"global.sidebar.item.teacher": "Lernbegleitende",
 	"global.sidebar.item.teams": "Teams",
 	"global.sidebar.item.training": "Fortbildungen",
 	"global.sidebar.item.licenses": "Lizenzen",
@@ -1105,6 +1142,10 @@ export default {
 		"Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {institute_title}.",
 	"pages.administration.classes.index.add": "Klasse hinzufügen",
 	"pages.administration.classes.index.title": "Klassen verwalten",
+	"pages.administration.classes.thr.hint.title":
+		"Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.text":
+		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
 	"pages.administration.common.label.archive": "Archiv",
 	"pages.administration.common.label.active": "Aktuell",
 	"pages.administration.classes.manage": "Klasse verwalten",
@@ -1114,6 +1155,9 @@ export default {
 		'Möchten Sie wirklich diesen Kurs "{itemName}" löschen?',
 	"pages.administration.courses.index.add": "Kurs hinzufügen",
 	"pages.administration.courses.edit": "Kurs bearbeiten",
+	"pages.administration.courses.withoutTeacher":
+		"Nur Kurse ohne Lehrkraft anzeigen",
+	"pages.administration.courses.noTeacher": "nicht vorhanden",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronisation",
 	"pages.administration.ldap.activate.className": "Name",
@@ -1144,8 +1188,8 @@ export default {
 	"pages.administration.ldap.classes.path.info":
 		"Relativer Pfad vom Basis-Pfad",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind. Durch das Hinzufügen von zwei Semikolons (;;) können mehrere Nutzerpfade getrennt voneinander hinterlegt werden.",
-	"pages.administration.ldap.classes.path.title": "Klassen-Pfad(e)",
+		"Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind.",
+	"pages.administration.ldap.classes.path.title": "Klassen-Pfad",
 	"pages.administration.ldap.classes.subtitle":
 		"Geben Sie das Klassenattribut an, in dem die folgenden Informationen in Ihrem LDAP verfügbar sind.",
 	"pages.administration.ldap.classes.title": "Klassen (optional)",
@@ -1353,6 +1397,8 @@ export default {
 		"Beim Laden der Schule ist ein Fehler aufgetreten",
 	"pages.administration.school.index.generalSettings.changeSchoolValueWarning":
 		"Kann nur einmal gesetzt werden und wird danach deaktiviert!",
+	"pages.administration.school.index.generalSettings.disabledHint":
+		"Kann hier nicht bearbeitet werden, weitere Informationen im Abschnitt Schuljahreswechsel",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Bitte wählen Sie den Kreis, zu dem die Schule gehört",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider":
@@ -1361,6 +1407,8 @@ export default {
 		"Sprache",
 	"pages.administration.school.index.generalSettings.labels.nameOfSchool":
 		"Name der Schule",
+	"pages.administration.school.index.generalSettings.labels.schoolYear":
+		"Schuljahr",
 	"pages.administration.school.index.generalSettings.labels.schoolNumber":
 		"Schulnummer",
 	"pages.administration.school.index.generalSettings.labels.timezone":
@@ -1371,6 +1419,8 @@ export default {
 		"Ist keine Sprache für die Schule gesetzt, wird die Sprache der Instanz (Deutsch) angewandt.",
 	"pages.administration.school.index.generalSettings.save":
 		"Einstellungen speichern",
+	"pages.administration.school.index.generalSettings.save.success":
+		"Allgemeine Einstellungen erfolgreich gespeichert.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
 		"Um die Zeitzone für die Schule zu ändern, wenden Sie sich bitte an einen Admin.",
 	"pages.administration.school.index.generalSettings":
@@ -1754,6 +1804,8 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Gruppen",
 	"pages.courseRooms.tabLabel.tools": "Tools",
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
+	"pages.courseRooms.course-locked":
+		"Der Kurs ist gesperrt, weil keine unterrichtende Lehrkraft zugeordnet ist. Bitte an den Schul-Admin wenden.",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",
@@ -1780,13 +1832,13 @@ export default {
 		"{itemType}, Link, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.copy.course.message.copied":
-		"Der Kurs wurde erfolgreich kopiert.",
+		"Der Kurs wurde erfolgreich dupliziert.",
 	"pages.room.copy.course.message.partiallyCopied":
-		"Der Kurs konnte nicht vollständig kopiert werden.",
+		"Der Kurs konnte nicht vollständig dupliziert werden.",
 	"pages.room.copy.lesson.message.copied":
-		"Das Thema wurde erfolgreich kopiert.",
+		"Das Thema wurde erfolgreich dupliziert.",
 	"pages.room.copy.task.message.copied":
-		"Die Aufgabe wurde erfolgreich kopiert.",
+		"Die Aufgabe wurde erfolgreich dupliziert.",
 	"pages.room.dialog.boardLayout.title": "Ansicht wählen",
 	"pages.room.dialog.boardLayout.singleColumn": "einspaltig",
 	"pages.room.dialog.boardLayout.multiColumn": "mehrspaltig",
@@ -1794,6 +1846,8 @@ export default {
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
+	"pages.room.locked":
+		"Der Raum ist gesperrt, weil kein Mitglied die Berechtigung “Besitzen” hat. Bitte an den Schul-Admin wenden.",
 	"pages.room.taskCard.label.done": "Abschließen",
 	"pages.room.taskCard.label.due": "Abgabe",
 	"pages.room.taskCard.label.edit": "Bearbeiten",
@@ -1859,7 +1913,9 @@ export default {
 	"pages.rooms.ccImportCourse.success":
 		"Kurs {name} wurde erfolgreich importiert.",
 	"pages.rooms.ccImportCourse.error":
-		"Beim importieren des Kurses ist ein Fehler aufgetreten.",
+		"Beim Importieren des Kurses ist ein Fehler aufgetreten.",
+	"pages.rooms.ccExportCourse.error":
+		"Beim Exportieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
 	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
@@ -1917,16 +1973,17 @@ export default {
 		"Die Änderung der Raumberechtigung ist fehlgeschlagen.",
 	"pages.rooms.members.filter": "Tabelle durchsuchen/filtern",
 	"pages.rooms.members.infoText":
-		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
+		"Füge Mitglieder zum Raum hinzu. Lernbegleitende anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Mitglieder",
 	"pages.rooms.members.menu.ariaLabel": "{membersInfoText}-Menü",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
-	"pages.rooms.members.add.role.student": "Lernend",
 	"pages.rooms.members.add.students.forbidden":
 		"Wenn in den Schuleinstellungen die Sichtbarkeit von Lernenden für Lernbegleitungen deaktiviert ist, können nur Lernende der eigenen Klasse hinzugefügt werden. Bitte an den Schul-Admin wenden.",
+	"pages.rooms.members.add.students.studentAdmins":
+		"Lernende können nur Lernende ihrer eigenen Klasse zu einem Raum hinzufügen.",
 	"pages.rooms.members.add.warningText":
 		"Lernende anderer Schulen können nur durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
 	"pages.rooms.members.actionMenu.ariaLabel":
@@ -1945,7 +2002,7 @@ export default {
 		"Mit einem Einladungslink können Lernende und Lernbegleitungen der eigenen Schule sowie Lernbegleitungen anderer Schulen in den Raum eingeladen werden. Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden. Ist in den Link-Einstellungen „Betreten des Raums nur nach Bestätigung möglich” aktiviert worden, kann diese Bestätigung im Tab Beitrittsanfragen vorgenommen werden.",
 	"pages.rooms.members.tab.confirmations": "Beitrittsanfragen",
 	"pages.rooms.members.tab.confirmations.infoText":
-		"Würde bei der Erstellung eines Einladungslinks die Option „Betreten des Raums nur nach Bestätigung möglich” aktiviert, erzeugt der Klick auf den Link zunächst eine Beitrittsanfrage. Diese kann hier bestätigt oder abgelehnt werden. Wird die Beitrittsanfrage bestätigt, erhält die Person Zugriff auf alle Rauminhalte und wird in der Mitgliederliste aufgeführt.",
+		"Wurde bei der Erstellung eines Einladungslinks die Option „Betreten des Raums nur nach Bestätigung möglich” aktiviert, erzeugt der Klick auf den Link zunächst eine Beitrittsanfrage. Diese kann hier bestätigt oder abgelehnt werden. Wird die Beitrittsanfrage bestätigt, erhält die Person Zugriff auf alle Rauminhalte und wird in der Mitgliederliste aufgeführt.",
 	"pages.rooms.members.remove.ariaLabel": "{memberFullName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Ausgewählte Mitglieder aus der Liste zurücksetzen",
@@ -2013,8 +2070,7 @@ export default {
 		"Einladungslink bearbeiten",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
-	"pages.rooms.members.inviteMember.form.description.label":
-		"Beschreibung (optional)",
+	"pages.rooms.members.inviteMember.form.description.label": "Beschreibung",
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Wird in der Link-Übersicht angezeigt",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
@@ -2054,7 +2110,38 @@ export default {
 		"Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update":
 		"Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
+	"pages.rooms.invitationlinks.error.load":
+		"Die Einladungsliste konnte nicht geladen werden.",
 	"pages.rooms.title": "Räume",
+	"pages.rooms.administration.title": "Räume verwalten",
+	"pages.rooms.administration.table.header.roomName": "Raumname",
+	"pages.rooms.administration.table.header.roomOwner": "Besitzend",
+	"pages.rooms.administration.table.header.totalMember": "Mitglieder gesamt",
+	"pages.rooms.administration.table.header.internalMember": "Mitglieder intern",
+	"pages.rooms.administration.table.header.externalMember": "Mitglieder extern",
+	"pages.rooms.administration.table.header.creationDate": "Erstellt am",
+	"pages.rooms.administration.table.header.mainSchool": "Stammschule des Raums",
+	"pages.rooms.administration.table.header.actions": "Aktionen",
+	"pages.rooms.administration.table.row.owner.notExist": "Nicht vorhanden",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"Mit dem Raum werden auch alle Raum-Inhalte gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
+		"Aktionsmenü für den Raum “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Raum löschen",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Raum-Mitglieder verwalten",
+	"pages.rooms.administration.error.load":
+		"Die Raumliste konnte nicht geladen werden.",
+	"pages.rooms.administration.error.delete":
+		"Der Raum konnte nicht gelöscht werden.",
+	"pages.rooms.administration.pageTitle": "Räume verwalten",
+	"pages.rooms.administration.roomDetail.infoText":
+		"Raum-Mitglieder anderer Schulen werden aus Datenschutzgründen anonymisiert dargestellt (Ausnahme: Mitglied mit der Raumberechtigung „Besitzen“).",
+	"pages.rooms.administration.roomDetail.anonymized": "(anonymisiert)",
+	"pages.rooms.administration.roomDetail.breadcrumb":
+		"Raum-Mitglieder {roomName}",
+	"pages.rooms.administration.roomDetail.header.text":
+		"Raum-Mitglieder „{roomName}“",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
@@ -2124,6 +2211,7 @@ export default {
 	"pages.tool.medium.mediumId": "Medium-Id",
 	"pages.tool.medium.mediumSourceId": "Medien-Katalog-Id",
 	"pages.tool.medium.noMediaSource": "Ohne Medien-Katalog",
+	"pages.tool.medium.template": "Template",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.button.startMigration": "Umzug starten",
@@ -2170,6 +2258,10 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Das Element ist nicht mehr verfügbar, da Videokonferenzen für die Schule deaktiviert wurden. Bitte an den Schul-Admin wenden.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
+	"pages.collabora.iframeTitle": "Office-Dokument Editor",
+	"pages.collabora.jsonError":
+		"Json der Collabora Nachricht konnte nicht geparsed werden.",
+	"pages.collabora.messageError": "Collabora Nachricht ist nicht valide.",
 	"error.500":
 		"Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",
 	"error.4500":

@@ -9,7 +9,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { BoardMenu } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -21,12 +21,12 @@ import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";
 
 // Mocks
-jest.mock("@data-board", () => ({
-	useBoardFocusHandler: jest.fn(),
-	useContentElementState: jest.fn(() => ({ modelValue: {} })),
-	useDeleteConfirmationDialog: jest.fn(),
+vi.mock("@data-board", () => ({
+	useBoardFocusHandler: vi.fn(),
+	useContentElementState: vi.fn(() => ({ modelValue: {} })),
+	useDeleteConfirmationDialog: vi.fn(),
 }));
-jest.mock("@feature-board");
+vi.mock("@feature-board");
 
 const DRAWING_ELEMENT = drawingElementResponseFactory.build();
 
@@ -63,7 +63,7 @@ describe("DrawingContentElement", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when component is mounted", () => {

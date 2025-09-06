@@ -16,6 +16,7 @@
 			<v-card-text class="text--primary">
 				<v-file-input
 					v-model="file"
+					class="truncate-file-input"
 					:label="$t('pages.rooms.ccImportCourse.fileInputLabel')"
 					:prepend-icon="mdiTrayArrowUp"
 					accept=".imscc, .zip"
@@ -26,22 +27,24 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-spacer />
-				<div class="button-section">
+				<div class="mb-2">
 					<v-btn
 						data-testid="dialog-cancel-btn"
 						variant="outlined"
+						class="ml-2 mr-2"
 						@click="onCancel"
 					>
 						{{ $t("common.labels.close") }}
 					</v-btn>
 				</div>
-				<div class="button-section">
+				<div class="mb-2">
 					<v-btn
 						type="submit"
 						variant="flat"
 						color="primary"
 						:disabled="importButtonDisabled"
 						data-testid="dialog-confirm-btn"
+						class="ml-2 mr-2"
 						@click="onConfirm"
 					>
 						{{ $t("pages.rooms.ccImportCourse.confirm") }}
@@ -106,8 +109,14 @@ async function onConfirm(): Promise<void> {
 		await commonCartridgeImportModule.importCommonCartridgeFile(file.value);
 	}
 
+	loadingStateModule.close();
+
+	await Promise.allSettled([
+		courseRoomListModule.fetch(),
+		courseRoomListModule.fetchAllElements(),
+	]);
+
 	if (commonCartridgeImportModule.isSuccess) {
-		loadingStateModule.close();
 		const title = courseRoomListModule.getAllElements[0]?.title;
 		notifierModule.show({
 			status: "success",
@@ -115,7 +124,6 @@ async function onConfirm(): Promise<void> {
 			autoClose: true,
 		});
 	} else {
-		loadingStateModule.close();
 		notifierModule.show({
 			status: "error",
 			text: i18n.t("pages.rooms.ccImportCourse.error"),
@@ -123,21 +131,16 @@ async function onConfirm(): Promise<void> {
 		});
 	}
 
-	await Promise.allSettled([
-		courseRoomListModule.fetch(),
-		courseRoomListModule.fetchAllElements(),
-	]);
 	file.value = undefined;
 }
 </script>
 
 <style lang="scss" scoped>
-.button-section {
-	margin-bottom: calc(var(--space-base-vuetify) * 2);
-}
-
-.button-section > button {
-	margin-left: calc(var(--space-base-vuetify) * 2);
-	margin-right: calc(var(--space-base-vuetify) * 2);
+:deep(.truncate-file-input .v-field__input) {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	max-width: 100%;
 }
 </style>

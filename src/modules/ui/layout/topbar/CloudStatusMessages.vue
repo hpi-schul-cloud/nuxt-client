@@ -66,8 +66,8 @@ const formatDate = (dateTime: string) => {
 </script>
 
 <style lang="scss" scoped>
+@use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 
 .alerts {
 	width: auto;
@@ -75,7 +75,7 @@ const formatDate = (dateTime: string) => {
 	max-height: 400px;
 	overflow-y: auto;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		width: 400px;
 		max-width: 400px;
 	}

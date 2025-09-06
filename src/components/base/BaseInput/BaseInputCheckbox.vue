@@ -7,7 +7,7 @@
 			:checked="isChecked"
 			:value="value"
 			type="checkbox"
-			class="visually-hidden"
+			class="d-sr-only"
 			@change="updateVModel"
 			@blur="$emit('blur', $event)"
 			@focus="$emit('focus', $event)"
@@ -129,17 +129,20 @@ label {
 }
 
 .label {
-	margin: 0 var(--space-xs-2) 0 var(--space-xs-2);
+	margin: 0 6px;
 	vertical-align: middle;
 }
 
 .icon-wrapper {
 	display: inline-block;
 	user-select: none;
+}
 
-	svg {
-		border-radius: var(--radius-xs);
-	}
+.icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	vertical-align: baseline;
 }
 
 input:focus + .icon-wrapper svg {

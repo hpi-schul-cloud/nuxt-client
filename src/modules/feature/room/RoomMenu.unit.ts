@@ -5,8 +5,8 @@ import {
 import { VueWrapper } from "@vue/test-utils";
 import RoomMenu from "./RoomMenu.vue";
 import { RouterLink } from "vue-router";
-import { computed, ref } from "vue";
-import { useRoomAuthorization, useRoomCopy } from "@data-room";
+import { ref } from "vue";
+import { useRoomAuthorization } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionDelete,
@@ -14,21 +14,26 @@ import {
 	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,
 	KebabMenuActionRoomCopy,
+	KebabMenuActionShare,
 } from "@ui-kebab-menu";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
+import { envsFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { ConfigResponse } from "@/serverApi/v3";
+import { Mock } from "vitest";
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = jest.mocked(useRoomAuthorization);
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorization = vi.mocked(useRoomAuthorization);
 
-jest.mock("@ui-confirmation-dialog");
-jest.mocked(useDeleteConfirmationDialog);
-
-jest.mock("@data-room/roomCopy.composable");
+vi.mock("@ui-confirmation-dialog");
+vi.mocked(useDeleteConfirmationDialog);
 
 describe("@feature-room/RoomMenu", () => {
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
-	let askDeleteConfirmationMock: jest.Mock;
+	let askDeleteConfirmationMock: Mock;
 
 	beforeEach(() => {
 		roomPermissions = {
@@ -43,23 +48,27 @@ describe("@feature-room/RoomMenu", () => {
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
 			canSeeAllStudents: ref(false),
+			canShareRoom: ref(false),
+			canListDrafts: ref(false),
+			canManageRoomInvitationLinks: ref(false),
+			canManageVideoconferences: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 
-		askDeleteConfirmationMock = jest.fn();
+		askDeleteConfirmationMock = vi.fn();
 		setupDeleteConfirmationComposableMock({
 			askDeleteConfirmationMock,
 		});
 	});
 
-	const setup = () => {
-		const roomCopy = jest.mocked(useRoomCopy);
-		roomCopy.mockReturnValue({
-			isRoomCopyFeatureEnabled: computed(() => true),
-			isRoomCopyInfoDialogOpen: ref(false),
-			openRoomCopyInfoDialog: jest.fn(),
-			closeRoomCopyInfoDialog: jest.fn(),
-			executeRoomCopy: jest.fn(),
+	const setup = (envs: Partial<ConfigResponse> = {}) => {
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {
+				...envsFactory.build(),
+				FEATURE_ROOM_COPY_ENABLED: true,
+				FEATURE_ROOM_SHARE: true,
+				...envs,
+			},
 		});
 
 		const wrapper = mount(RoomMenu, {
@@ -69,6 +78,9 @@ describe("@feature-room/RoomMenu", () => {
 					createTestingI18n(),
 					createTestingPinia(),
 				],
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
 				stubs: {
 					RouterLink,
 				},
@@ -90,6 +102,7 @@ describe("@feature-room/RoomMenu", () => {
 			KebabMenuActionLeaveRoom
 		);
 		const kebabActionRoomCopy = wrapper.findComponent(KebabMenuActionRoomCopy);
+		const kebabActionRoomShare = wrapper.findComponent(KebabMenuActionShare);
 
 		return {
 			kebabActionEdit,
@@ -97,6 +110,7 @@ describe("@feature-room/RoomMenu", () => {
 			kebabActionDelete,
 			kebabActionRoomCopy,
 			kebabActionLeaveRoom,
+			kebabActionRoomShare,
 		};
 	};
 
@@ -196,16 +210,91 @@ describe("@feature-room/RoomMenu", () => {
 		});
 	});
 
-	describe("when user has permission to copy", () => {
-		it("should show copy menu item", async () => {
-			roomPermissions.canCopyRoom.value = true;
+	describe("when user can copy room", () => {
+		describe("and copy feature is enabled", () => {
+			it("should show copy menu item", async () => {
+				roomPermissions.canCopyRoom.value = true;
 
-			const { wrapper, menuBtn } = setup();
-			await menuBtn.trigger("click");
+				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_COPY_ENABLED: true });
+				await menuBtn.trigger("click");
 
-			const { kebabActionRoomCopy } = findKebabActions(wrapper);
+				const { kebabActionRoomCopy } = findKebabActions(wrapper);
 
-			expect(kebabActionRoomCopy.exists()).toBe(true);
+				expect(kebabActionRoomCopy.exists()).toBe(true);
+			});
+		});
+
+		describe("and copy feature is NOT enabled", () => {
+			it("should NOT show copy menu item", async () => {
+				roomPermissions.canCopyRoom.value = true;
+
+				const { wrapper, menuBtn } = setup({
+					FEATURE_ROOM_COPY_ENABLED: false,
+				});
+				await menuBtn.trigger("click");
+
+				const { kebabActionRoomCopy } = findKebabActions(wrapper);
+
+				expect(kebabActionRoomCopy.exists()).toBe(false);
+			});
+		});
+	});
+
+	describe("when user can NOT copy room", () => {
+		describe("and copy feature is enabled", () => {
+			it("should NOT show copy menu item", async () => {
+				roomPermissions.canCopyRoom.value = false;
+
+				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_COPY_ENABLED: true });
+				await menuBtn.trigger("click");
+
+				const { kebabActionRoomCopy } = findKebabActions(wrapper);
+
+				expect(kebabActionRoomCopy.exists()).toBe(false);
+			});
+		});
+	});
+
+	describe("when user can share room", () => {
+		describe("and share feature is enabled", () => {
+			it("should show share menu item", async () => {
+				roomPermissions.canShareRoom.value = true;
+
+				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: true });
+				await menuBtn.trigger("click");
+
+				const { kebabActionRoomShare } = findKebabActions(wrapper);
+
+				expect(kebabActionRoomShare.exists()).toBe(true);
+			});
+		});
+
+		describe("and share feature is NOT enabled", () => {
+			it("should NOT show share menu item", async () => {
+				roomPermissions.canShareRoom.value = true;
+
+				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: false });
+				await menuBtn.trigger("click");
+
+				const { kebabActionRoomShare } = findKebabActions(wrapper);
+
+				expect(kebabActionRoomShare.exists()).toBe(false);
+			});
+		});
+	});
+
+	describe("when user can NOT share room", () => {
+		describe("and share feature is enabled", () => {
+			it("should NOT show share menu item", async () => {
+				roomPermissions.canShareRoom.value = false;
+
+				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: true });
+				await menuBtn.trigger("click");
+
+				const { kebabActionRoomShare } = findKebabActions(wrapper);
+
+				expect(kebabActionRoomShare.exists()).toBe(false);
+			});
 		});
 	});
 

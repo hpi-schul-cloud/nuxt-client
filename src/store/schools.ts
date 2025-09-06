@@ -54,6 +54,7 @@ export default class SchoolsModule extends VuexModule {
 			name: "",
 			startDate: "",
 			endDate: "",
+			courseCreationInNextYear: false,
 		},
 		purpose: undefined,
 		features: [],
@@ -79,18 +80,21 @@ export default class SchoolsModule extends VuexModule {
 				name: "",
 				startDate: "",
 				endDate: "",
+				courseCreationInNextYear: false,
 			},
 			lastYear: {
 				id: "",
 				name: "",
 				startDate: "",
 				endDate: "",
+				courseCreationInNextYear: false,
 			},
 			activeYear: {
 				id: "",
 				name: "",
 				startDate: "",
 				endDate: "",
+				courseCreationInNextYear: false,
 			},
 			schoolYears: [],
 		},
@@ -112,6 +116,11 @@ export default class SchoolsModule extends VuexModule {
 	@Mutation
 	setSystems(systems: SchoolSystemResponse[]): void {
 		this.systems = systems;
+	}
+
+	@Mutation
+	setSchoolLogo(logo: { name: string; dataUrl: string }): void {
+		this.school.logo = logo;
 	}
 
 	@Mutation

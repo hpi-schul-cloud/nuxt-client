@@ -31,6 +31,8 @@ describe("RenameFileDialog", () => {
 							},
 						}),
 					],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 			return { wrapper, entityName, name };
@@ -97,7 +99,7 @@ describe("RenameFileDialog", () => {
 
 		describe("when name is set to undefined after the dialog is opened", () => {
 			it("should still show the latest valid name", async () => {
-				const { name, wrapper } = await setup();
+				const { name, wrapper } = setup();
 
 				const input = wrapper
 					.findComponent(VDialog)
@@ -124,6 +126,8 @@ describe("RenameFileDialog", () => {
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 			return { wrapper };
@@ -146,6 +150,8 @@ describe("RenameFileDialog", () => {
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 			return { wrapper };

@@ -2,7 +2,7 @@ import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import SkipLink from "./SkipLink.vue";
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRoute: () => ({ hash: "#" }),
 }));
 

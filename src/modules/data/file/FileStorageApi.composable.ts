@@ -1,15 +1,22 @@
 import {
 	FileApiFactory,
 	FileApiInterface,
+	WopiApiFactory,
+	WopiApiInterface,
+} from "@/fileStorageApi/v3";
+import { authModule } from "@/store/store-accessor";
+import {
+	EditorMode,
+	FileRecord,
+	FileRecordParent,
 	FileUrlParams,
 	RenameFileParams,
 	StorageLocation,
-} from "@/fileStorageApi/v3";
-import { authModule } from "@/store/store-accessor";
-import { FileRecord, FileRecordParent } from "@/types/file/File";
+} from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { useFileRecordsStore } from "./FileRecords.state";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
+import { useParentStatisticsStore } from "./ParentStatistics.state";
 
 export enum ErrorType {
 	FILE_IS_BLOCKED = "FILE_IS_BLOCKED",
@@ -24,6 +31,8 @@ export enum ErrorType {
 
 export const useFileStorageApi = () => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
+	const wopiApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
+
 	const {
 		showFileTooBigError,
 		showForbiddenError,
@@ -35,6 +44,9 @@ export const useFileStorageApi = () => {
 
 	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords } =
 		useFileRecordsStore();
+
+	const { getStatisticByParentId, setStatisticForParent } =
+		useParentStatisticsStore();
 
 	const fetchFiles = async (
 		parentId: string,
@@ -138,6 +150,41 @@ export const useFileStorageApi = () => {
 		}
 	};
 
+	const fetchFileStatistic = async (
+		parentId: string,
+		parentType: FileRecordParent
+	): Promise<void> => {
+		try {
+			const response = await fileApi.getParentStatistic(parentId, parentType);
+			const newStatistic = response.data;
+
+			setStatisticForParent(parentId, newStatistic);
+		} catch (error) {
+			showError(error);
+			throw error;
+		}
+	};
+
+	const getAuthorizedCollaboraDocumentUrl = async (
+		fileRecordId: string,
+		editorMode: EditorMode,
+		userDisplayName: string
+	): Promise<string> => {
+		try {
+			const response = await wopiApi.getAuthorizedCollaboraDocumentUrl(
+				fileRecordId,
+				editorMode,
+				userDisplayName
+			);
+			const url = response.data.authorizedCollaboraDocumentUrl;
+
+			return url;
+		} catch (error) {
+			showError(error);
+			throw error;
+		}
+	};
+
 	const showMessageByType = (message: ErrorType | string) => {
 		switch (message) {
 			case ErrorType.FILE_TOO_BIG:
@@ -165,5 +212,8 @@ export const useFileStorageApi = () => {
 		uploadFromUrl,
 		getFileRecordsByParentId,
 		deleteFiles,
+		getStatisticByParentId,
+		tryGetParentStatisticFromApi: fetchFileStatistic,
+		getAuthorizedCollaboraDocumentUrl,
 	};
 };

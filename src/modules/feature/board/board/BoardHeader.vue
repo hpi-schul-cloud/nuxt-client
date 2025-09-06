@@ -11,9 +11,9 @@
 		>
 			<BoardAnyTitleInput
 				ref="boardHeader"
+				:value="boardTitle"
 				class="input"
 				scope="board"
-				:value="boardTitle"
 				data-testid="board-title"
 				:is-edit-mode="isEditMode"
 				:is-focused="isFocusedById"
@@ -32,13 +32,16 @@
 			>
 				<KebabMenuActionRename @click="onStartEditMode" />
 				<KebabMenuActionCopy @click="onCopyBoard" />
-				<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
+				<KebabMenuActionShare
+					v-if="isShareEnabled && hasShareBoardPermission"
+					@click="onShareBoard"
+				/>
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 				<KebabMenuActionDelete
 					:name="title"
-					scope-language-key="components.board"
+					scope-language-key="common.words.board"
 					@click="onDeleteBoard"
 				/>
 			</BoardMenu>
@@ -49,7 +52,9 @@
 <script setup lang="ts">
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { BoardMenuScope } from "@ui-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import {
 	KebabMenuActionCopy,
 	KebabMenuActionDelete,
@@ -59,13 +64,15 @@ import {
 	KebabMenuActionShare,
 	KebabMenuActionChangeLayout,
 } from "@ui-kebab-menu";
-import { useCourseBoardEditMode } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardDraftChip from "./BoardDraftChip.vue";
+import { upperCaseFirstChar } from "@/utils/textFormatting";
 
 const props = defineProps({
 	boardId: {
@@ -98,7 +105,7 @@ const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
 );
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
-const { hasEditPermission } = useBoardPermissions();
+const { hasEditPermission, hasShareBoardPermission } = useBoardPermissions();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
@@ -106,6 +113,10 @@ const fieldWidth = ref("0px");
 onMounted(() => setTimeout(calculateWidth, 100));
 
 const boardTitle = ref("");
+const boardTitleFallback = computed(() => {
+	const translatedTitle = t("common.words.board");
+	return upperCaseFirstChar(translatedTitle);
+});
 
 const onStartEditMode = () => {
 	if (!hasEditPermission.value) return;
@@ -123,7 +134,7 @@ const onCopyBoard = () => {
 };
 
 const onShareBoard = () => {
-	if (!hasEditPermission.value) return;
+	if (!hasShareBoardPermission.value) return;
 	emit("share:board");
 };
 
@@ -140,7 +151,7 @@ const onUnpublishBoard = () => {
 const onBoardTitleBlur = () => {
 	stopEditMode();
 	if (boardTitle.value.length < 1) {
-		updateBoardTitle(t("pages.room.boardCard.label.courseBoard"));
+		updateBoardTitle(boardTitleFallback.value);
 	}
 };
 
@@ -181,6 +192,7 @@ const calculateWidth = () => {
 };
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
 const isShareEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE
 );

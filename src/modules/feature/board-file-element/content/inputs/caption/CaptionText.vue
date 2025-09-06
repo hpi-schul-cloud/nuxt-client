@@ -6,38 +6,37 @@
 		auto-grow
 		:label="$t('components.cardElement.fileElement.caption')"
 		:hide-details="true"
+		@click.stop
 	/>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue";
+<script setup lang="ts">
+import { onMounted, ref, watch } from "vue";
 
-export default defineComponent({
-	name: "CaptionText",
-	props: {
-		caption: {
-			type: String,
-			default: undefined,
-		},
-		isEditMode: { type: Boolean, required: true },
-	},
-	emits: ["update:caption"],
-	setup(props, { emit }) {
-		const modelValue = ref("");
+type Props = {
+	caption?: string;
+	isEditMode: boolean;
+};
 
-		onMounted(() => {
-			if (props.caption !== undefined) {
-				modelValue.value = props.caption;
-			}
-		});
+const props = withDefaults(defineProps<Props>(), {
+	caption: undefined,
+});
 
-		watch(modelValue, (newValue) => {
-			if (newValue !== props.caption) {
-				emit("update:caption", newValue);
-			}
-		});
+const emit = defineEmits<{
+	(e: "update:caption", caption: string): void;
+}>();
 
-		return { modelValue };
-	},
+const modelValue = ref("");
+
+onMounted(() => {
+	if (props.caption !== undefined) {
+		modelValue.value = props.caption;
+	}
+});
+
+watch(modelValue, (newValue) => {
+	if (newValue !== props.caption) {
+		emit("update:caption", newValue);
+	}
 });
 </script>

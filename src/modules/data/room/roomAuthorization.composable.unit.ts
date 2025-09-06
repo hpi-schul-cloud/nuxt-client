@@ -50,12 +50,11 @@ describe("roomAuthorization", () => {
 	};
 
 	describe("canCreateRoom", () => {
-		describe("when the user has room edit permission and is a teacher", () => {
+		describe("when the user has school create room permission", () => {
 			const setup = () => {
 				return genericSetup({
-					userRoles: [RoleName.Teacher],
 					userPermissions: [
-						Permission.RoomCreate.toLocaleLowerCase() as Permission,
+						Permission.SchoolCreateRoom.toLocaleLowerCase() as Permission,
 					],
 				});
 			};
@@ -66,11 +65,10 @@ describe("roomAuthorization", () => {
 			});
 		});
 
-		describe("when the user has room edit permission but is not a teacher", () => {
+		describe("when the user has no room create permission", () => {
 			const setup = () => {
 				return genericSetup({
-					userRoles: [RoleName.Student],
-					roomPermissions: [Permission.RoomEdit],
+					roomPermissions: [Permission.RoomEditRoom],
 				});
 			};
 
@@ -80,11 +78,10 @@ describe("roomAuthorization", () => {
 			});
 		});
 
-		describe("when the user has room view permission and is a teacher", () => {
+		describe("when the user has room view permission", () => {
 			const setup = () => {
 				return genericSetup({
-					userRoles: [RoleName.Teacher],
-					roomPermissions: [Permission.RoomView],
+					roomPermissions: [Permission.RoomListContent],
 				});
 			};
 
@@ -98,7 +95,7 @@ describe("roomAuthorization", () => {
 	describe("canViewRoom", () => {
 		describe("when the user has room view permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomView] });
+				return genericSetup({ roomPermissions: [Permission.RoomListContent] });
 			};
 
 			it("should be allowed to view the room", () => {
@@ -122,7 +119,7 @@ describe("roomAuthorization", () => {
 	describe("canEditRoom", () => {
 		describe("when the user has room edit permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomEdit] });
+				return genericSetup({ roomPermissions: [Permission.RoomEditRoom] });
 			};
 
 			it("should be allowed to edit the room", () => {
@@ -147,7 +144,7 @@ describe("roomAuthorization", () => {
 		describe("when the user has room content edit permission", () => {
 			const setup = () => {
 				return genericSetup({
-					roomPermissions: [Permission.RoomContentEdit],
+					roomPermissions: [Permission.RoomEditContent],
 				});
 			};
 
@@ -172,7 +169,7 @@ describe("roomAuthorization", () => {
 	describe("canDeleteRoom", () => {
 		describe("when the user has room delete permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomDelete] });
+				return genericSetup({ roomPermissions: [Permission.RoomDeleteRoom] });
 			};
 
 			it("should be allowed to delete the room", () => {
@@ -197,7 +194,7 @@ describe("roomAuthorization", () => {
 		describe("when the user has room members add permission", () => {
 			const setup = () => {
 				return genericSetup({
-					roomPermissions: [Permission.RoomMembersAdd],
+					roomPermissions: [Permission.RoomAddMembers],
 				});
 			};
 
@@ -223,7 +220,7 @@ describe("roomAuthorization", () => {
 		describe("when the user has room members remove permission", () => {
 			const setup = () => {
 				return genericSetup({
-					roomPermissions: [Permission.RoomMembersRemove],
+					roomPermissions: [Permission.RoomRemoveMembers],
 				});
 			};
 
@@ -274,7 +271,7 @@ describe("roomAuthorization", () => {
 	describe("canLeaveRoom", () => {
 		describe("when the user has room leave permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomLeave] });
+				return genericSetup({ roomPermissions: [Permission.RoomLeaveRoom] });
 			};
 
 			it("should be allowed to leave the room", () => {
@@ -321,7 +318,7 @@ describe("roomAuthorization", () => {
 		describe("when the user has permission to add room members but not student list permission", () => {
 			const setup = () => {
 				return genericSetup({
-					roomPermissions: [Permission.RoomMembersAdd],
+					roomPermissions: [Permission.RoomAddMembers],
 				});
 			};
 
@@ -333,19 +330,147 @@ describe("roomAuthorization", () => {
 	});
 
 	describe("canCopyRoom", () => {
-		describe("when the user has room duplicate permission", () => {
+		describe("when the user has school create room and room copy permission", () => {
 			const setup = () => {
-				return genericSetup({ roomPermissions: [Permission.RoomCopy] });
+				return genericSetup({
+					roomPermissions: [Permission.RoomCopyRoom],
+					userPermissions: [Permission.SchoolCreateRoom],
+				});
 			};
 
-			it("should be allowed to duplicate the room", () => {
+			it("should be allowed to copy the room", () => {
 				const { canCopyRoom } = setup();
 				expect(canCopyRoom.value).toBe(true);
 			});
 		});
 
-		describe("when the user does not have room duplicate permission", () => {
-			it.todo("should not be allowed to duplicate the room");
+		describe("when the user has room copy permission but not school create room permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomCopyRoom],
+					userPermissions: [],
+				});
+			};
+			it("should not be allowed to copy the room", () => {
+				const { canCopyRoom } = setup();
+				expect(canCopyRoom.value).toBe(false);
+			});
+		});
+
+		describe("when the user does not have room copy and school create permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+			it("should not be allowed to copy the room", () => {
+				const { canCopyRoom } = setup();
+				expect(canCopyRoom.value).toBe(false);
+			});
+		});
+	});
+
+	describe("canShareRoom", () => {
+		describe("when the user has school create room and room share permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomShareRoom],
+					userPermissions: [Permission.SchoolCreateRoom],
+				});
+			};
+
+			it("should be allowed to share the room", () => {
+				const { canShareRoom } = setup();
+				expect(canShareRoom.value).toBe(true);
+			});
+		});
+
+		describe("when the user has room share permission but not school create room permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomShareRoom],
+					userPermissions: [],
+				});
+			};
+
+			it("should not be allowed to share the room", () => {
+				const { canShareRoom } = setup();
+				expect(canShareRoom.value).toBe(false);
+			});
+		});
+
+		describe("when the user does not have room share and school create permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should not be allowed to share the room", () => {
+				const { canShareRoom } = setup();
+				expect(canShareRoom.value).toBe(false);
+			});
+		});
+	});
+
+	describe("canManageRoomInvitationLinks", () => {
+		describe("when the user has school manage room invitation links and room manage invitation links permissions", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomManageInvitationlinks],
+					userPermissions: [Permission.SchoolManageRoomInvitationlinks],
+				});
+			};
+
+			it("should be allowed to manage room invitation links", () => {
+				const { canManageRoomInvitationLinks } = setup();
+				expect(canManageRoomInvitationLinks.value).toBe(true);
+			});
+		});
+
+		describe("when the user has room manage invitation links permission but not school manage room invitation links permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomManageInvitationlinks],
+					userPermissions: [],
+				});
+			};
+
+			it("should not be allowed to manage room invitation links", () => {
+				const { canManageRoomInvitationLinks } = setup();
+				expect(canManageRoomInvitationLinks.value).toBe(false);
+			});
+		});
+
+		describe("when the user does not have room manage invitation links and school manage room invitation links permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should not be allowed to manage room invitation links", () => {
+				const { canManageRoomInvitationLinks } = setup();
+				expect(canManageRoomInvitationLinks.value).toBe(false);
+			});
+		});
+	});
+
+	describe("canListDrafts", () => {
+		describe("when the user has room list drafts permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [Permission.RoomListDrafts] });
+			};
+
+			it("should be allowed to list drafts", () => {
+				const { canListDrafts } = setup();
+				expect(canListDrafts.value).toBe(true);
+			});
+		});
+
+		describe("when the user does not have room list drafts permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should not be allowed to list drafts", () => {
+				const { canListDrafts } = setup();
+				expect(canListDrafts.value).toBe(false);
+			});
 		});
 	});
 });

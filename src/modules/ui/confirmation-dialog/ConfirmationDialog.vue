@@ -12,9 +12,13 @@
 					</h2>
 				</template>
 
+				<div v-if="$slots.alert" class="alert-text mx-6 mb-4">
+					<slot name="alert" />
+				</div>
+
 				<template #actions>
 					<v-spacer />
-					<div class="action-buttons mx-4">
+					<div class="d-flex mb-2 gap-2 mx-4">
 						<VBtn
 							data-testid="dialog-cancel"
 							variant="text"
@@ -63,9 +67,7 @@ const confirmBtnLangKey = computed(
 	line-height: var(--line-height-lg);
 }
 
-.action-buttons {
-	display: flex;
-	margin-bottom: calc(var(--space-base-vuetify) * 2);
-	gap: calc(var(--space-base-vuetify) * 2);
+.alert-text {
+	line-height: var(--line-height-lg);
 }
 </style>

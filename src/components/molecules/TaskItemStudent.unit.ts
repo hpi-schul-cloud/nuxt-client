@@ -12,7 +12,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import TaskItemStudent from "./TaskItemStudent.vue";
 import { ComponentProps } from "vue-component-type-helpers";
@@ -25,7 +25,7 @@ let copyModuleMock: CopyModule;
 let notifierModuleMock: NotifierModule;
 
 const mockRouter = {
-	push: jest.fn(),
+	push: vi.fn(),
 };
 
 const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) => {
@@ -54,10 +54,10 @@ describe("@/components/molecules/TaskItemStudent", () => {
 
 	it("Should direct user to legacy task details page", async () => {
 		Object.defineProperty(window, "location", {
-			set: jest.fn(),
+			set: vi.fn(),
 			get: () => createMock<Location>(),
 		});
-		const locationSpy = jest.spyOn(window, "location", "set");
+		const locationSpy = vi.spyOn(window, "location", "set");
 
 		const wrapper = getWrapper({ task: tasks[0] });
 		const taskCard = wrapper.findComponent({ name: "v-list-item" });

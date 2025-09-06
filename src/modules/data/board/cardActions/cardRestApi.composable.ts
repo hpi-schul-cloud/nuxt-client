@@ -14,14 +14,14 @@ import {
 import { schoolExternalToolsModule } from "@/store";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
-import { useBoardStore } from "@data-board";
+import { useBoardStore } from "../Board.store";
 import {
 	ContextExternalTool,
 	ContextExternalToolConfigurationTemplate,
 	ContextExternalToolSave,
 	useContextExternalToolApi,
 } from "@data-external-tool";
-import { useSharedEditMode } from "@util-board";
+import { useBoardNotifier, useSharedEditMode } from "@util-board";
 import { AxiosResponse } from "axios";
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardStore } from "../Card.store";
@@ -35,7 +35,8 @@ import {
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
-} from "./cardActionPayload";
+} from "./cardActionPayload.types";
+import { useI18n } from "vue-i18n";
 
 export const useCardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -60,6 +61,10 @@ export const useCardRestApi = () => {
 		useContextExternalToolApi();
 
 	const { setEditModeId } = useSharedEditMode();
+
+	const { t } = useI18n();
+	const { showFailure } = useBoardNotifier();
+
 	const createElementRequest = async (
 		payload: CreateElementRequestPayload
 	): Promise<AnyContentElement | undefined> => {
@@ -162,10 +167,10 @@ export const useCardRestApi = () => {
 				await fetchPreferredTools(contextType);
 
 			return preferredTools.data.data;
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
-			});
+		} catch {
+			showFailure(
+				t("components.board.preferredTools.notification.error.notLoaded")
+			);
 		}
 	};
 

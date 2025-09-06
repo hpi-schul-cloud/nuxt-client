@@ -9,39 +9,22 @@ import {
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetailsSwitchPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
-import { ref } from "vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
 import { Router, useRoute, useRouter } from "vue-router";
-import { createMock } from "@golevelup/ts-jest";
-import { useRoomAuthorization } from "@data-room";
+import { createMock } from "@golevelup/ts-vitest";
+import { Mock } from "vitest";
 
-jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
-
-jest.mock("@data-room/roomAuthorization.composable");
-const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
-	canAddRoomMembers: ref(false),
-	canChangeOwner: ref(false),
-	canCreateRoom: ref(false),
-	canViewRoom: ref(false),
-	canEditRoom: ref(false),
-	canDeleteRoom: ref(false),
-	canCopyRoom: ref(false),
-	canLeaveRoom: ref(false),
-	canRemoveRoomMembers: ref(false),
-	canEditRoomContent: ref(false),
-	canSeeAllStudents: ref(false),
-};
-(useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
 describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 	const router = createMock<Router>();
-	const useRouteMock = <jest.Mock>useRoute;
-	useRouteMock.mockReturnValue({ params: { id: "room-id" }, push: jest.fn() });
-	const useRouterMock = <jest.Mock>useRouter;
+	const useRouteMock = <Mock>useRoute;
+	useRouteMock.mockReturnValue({ params: { id: "room-id" }, push: vi.fn() });
+	const useRouterMock = <Mock>useRouter;
 
 	beforeEach(() => {
 		useRouterMock.mockReturnValue(router);
@@ -54,15 +37,16 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 		{
 			isLoading,
 			roomVariant,
+			lockedRoomName,
 		}: {
 			isLoading: boolean;
 			roomVariant?: RoomVariant;
+			lockedRoomName?: string;
 		} = { isLoading: false, roomVariant: RoomVariant.ROOM }
 	) => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: envsFactory.build({
 				FEATURE_BOARD_LAYOUT_ENABLED: true,
-				FEATURE_ROOMS_ENABLED: true,
 			}),
 		});
 
@@ -80,6 +64,7 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 								room,
 								roomVariant,
 								roomBoards: [],
+								lockedRoomName,
 							},
 						},
 					}),
@@ -89,6 +74,7 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 				},
 				stubs: {
 					CourseRoomDetailsPage: true,
+					"RoomLocked.page": true,
 					"RoomDetails.page": true,
 				},
 			},
@@ -111,22 +97,10 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 			expect(loadingState.exists()).toBe(true);
 		});
 
-		describe("and user has access to rooms", () => {
-			it("should fetch room", () => {
-				roomPermissions.canCreateRoom.value = true;
-				const { roomDetailsStore } = setup({ isLoading: true });
+		it("should fetch room", () => {
+			const { roomDetailsStore } = setup({ isLoading: true });
 
-				expect(roomDetailsStore.fetchRoom).toHaveBeenCalled();
-			});
-		});
-
-		describe("and user does not have access to rooms", () => {
-			it("should deactivate room", () => {
-				roomPermissions.canCreateRoom.value = false;
-				const { roomDetailsStore } = setup({ isLoading: true });
-
-				expect(roomDetailsStore.deactivateRoom).toHaveBeenCalled();
-			});
+			expect(roomDetailsStore.fetchRoom).toHaveBeenCalled();
 		});
 	});
 
@@ -139,22 +113,36 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 		});
 
 		describe("and room variant is ROOM", () => {
-			it("should render room details page", () => {
-				roomPermissions.canCreateRoom.value = true;
-				const { wrapper } = setup({
-					isLoading: false,
-					roomVariant: RoomVariant.ROOM,
-				});
+			describe("and room is locked", () => {
+				it("should render room locked page", () => {
+					const { wrapper } = setup({
+						isLoading: false,
+						roomVariant: RoomVariant.ROOM,
+						lockedRoomName: "Locked Room",
+					});
 
-				expect(wrapper.html()).toBe(
-					"<room-details.page-stub></room-details.page-stub>"
-				);
+					expect(wrapper.html()).toBe(
+						'<room-locked.page-stub title="Locked Room"></room-locked.page-stub>'
+					);
+				});
+			});
+
+			describe("and room is not locked", () => {
+				it("should render room details page", () => {
+					const { wrapper } = setup({
+						isLoading: false,
+						roomVariant: RoomVariant.ROOM,
+					});
+
+					expect(wrapper.html()).toBe(
+						'<room-details.page-stub room="[object Object]"></room-details.page-stub>'
+					);
+				});
 			});
 		});
 
 		describe("and room variant is COURSE_ROOM", () => {
 			it("should render course-room details page", () => {
-				roomPermissions.canCreateRoom.value = true;
 				const { wrapper } = setup({
 					isLoading: false,
 					roomVariant: RoomVariant.COURSE_ROOM,

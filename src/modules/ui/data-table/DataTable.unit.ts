@@ -2,7 +2,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { expect } from "@jest/globals";
 import { DataTable } from "@ui-data-table";
 import { KebabMenuList } from "@ui-kebab-menu";
 import { VDataTable, VTextField } from "vuetify/lib/components/index";
@@ -315,6 +314,24 @@ describe("DataTable", () => {
 			expect(actionMenu.text()).toContain(
 				"2 pages.administration.selectedui.actionMenu.actions"
 			);
+		});
+
+		describe("when selected items are removed", () => {
+			it("should emit 'update:selected-ids' with an empty array", async () => {
+				const { wrapper } = await setup();
+
+				const actionMenu = wrapper.findComponent(BatchActionMenu);
+
+				actionMenu.vm.$emit("reset:selected");
+				await nextTick();
+
+				const emitted = wrapper.emitted("update:selected-ids");
+
+				expect(emitted).toBeDefined();
+				expect(
+					emitted?.some(([e]) => Array.isArray(e) && e.length === 0)
+				).toStrictEqual(true);
+			});
 		});
 	});
 

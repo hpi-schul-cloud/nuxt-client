@@ -10,20 +10,20 @@ import { H5pElementResponse } from "@/serverApi/v3";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { ContentElementBar } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { RouteLocationResolved, useRouter } from "vue-router";
-import { VImg } from "vuetify/lib/components/index";
+import { VImg } from "vuetify/components";
 import H5pElement from "./H5pElement.vue";
 import H5pElementMenu from "./H5pElementMenu.vue";
 
-jest.mock("@data-board");
-jest.mock("@data-h5p");
-jest.mock("vue-router");
+vi.mock("@data-board");
+vi.mock("@data-h5p");
+vi.mock("vue-router");
 
 describe("H5pElement", () => {
 	let useBoardFocusHandlerMock: DeepMocked<
@@ -37,12 +37,12 @@ describe("H5pElement", () => {
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
 		useRouterMock = createMock<ReturnType<typeof useRouter>>();
 
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
-		jest.mocked(useRouter).mockReturnValue(useRouterMock);
+		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useRouter).mockReturnValue(useRouterMock);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const getWrapper = (propsData: {
@@ -52,7 +52,7 @@ describe("H5pElement", () => {
 		isListBoard?: boolean;
 	}) => {
 		useH5PEditorMock = createMock<ReturnType<typeof useH5PEditorApi>>();
-		jest.mocked(useH5PEditorApi).mockReturnValue(useH5PEditorMock);
+		vi.mocked(useH5PEditorApi).mockReturnValue(useH5PEditorMock);
 		useH5PEditorMock.getContentTitle.mockResolvedValueOnce(
 			propsData.contentTitle
 		);
@@ -79,7 +79,7 @@ describe("H5pElement", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("Visibility", () => {
@@ -97,7 +97,7 @@ describe("H5pElement", () => {
 				};
 			};
 
-			it("should show the card", async () => {
+			it("should show the card", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.getComponent({ ref: "elementCard" });
@@ -120,7 +120,7 @@ describe("H5pElement", () => {
 				};
 			};
 
-			it("should show the card", async () => {
+			it("should show the card", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.getComponent({ ref: "elementCard" });
@@ -143,7 +143,7 @@ describe("H5pElement", () => {
 				};
 			};
 
-			it("should hide the card", async () => {
+			it("should hide the card", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.getComponent({ ref: "elementCard" });
@@ -276,7 +276,7 @@ describe("H5pElement", () => {
 				const resolvedUrl = "https://test.com";
 
 				const windowMock = createMock<Window>();
-				jest.spyOn(window, "open").mockImplementation(() => windowMock);
+				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 				useRouterMock.resolve.mockReturnValue(
 					createMock<RouteLocationResolved>({
@@ -326,7 +326,7 @@ describe("H5pElement", () => {
 				const resolvedUrl = "https://test.com";
 
 				const windowMock = createMock<Window>();
-				jest.spyOn(window, "open").mockImplementation(() => windowMock);
+				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 				useRouterMock.resolve.mockReturnValue(
 					createMock<RouteLocationResolved>({
@@ -375,7 +375,7 @@ describe("H5pElement", () => {
 				const resolvedUrl = "https://test.com";
 
 				const windowMock = createMock<Window>();
-				jest.spyOn(window, "open").mockImplementation(() => windowMock);
+				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 				useRouterMock.resolve.mockReturnValue(
 					createMock<RouteLocationResolved>({
@@ -496,6 +496,83 @@ describe("H5pElement", () => {
 					const { wrapper } = setup();
 
 					await nextTick();
+					await nextTick();
+
+					const titleLine = wrapper
+						.getComponent(ContentElementBar)
+						.getComponent(LineClamp);
+
+					expect(titleLine.text()).toBe("components.cardElement.h5pElement");
+				});
+			});
+		});
+
+		describe("when the content id of the h5p element is updated", () => {
+			describe("when the content title is fetched", () => {
+				const setup = () => {
+					const contentTitle = "test-title";
+
+					const { wrapper } = getWrapper({
+						element: h5pElementResponseFactory.build({
+							content: { contentId: null },
+						}),
+						contentTitle,
+						isEditMode: false,
+					});
+
+					return {
+						wrapper,
+						contentTitle,
+					};
+				};
+
+				it("should show the new content title", async () => {
+					const { wrapper, contentTitle } = setup();
+
+					await nextTick();
+					await nextTick();
+
+					await wrapper.setProps({
+						element: h5pElementResponseFactory.build({
+							content: { contentId: "test-id" },
+						}),
+					});
+					await nextTick();
+
+					const titleLine = wrapper
+						.getComponent(ContentElementBar)
+						.getComponent(LineClamp);
+
+					expect(titleLine.text()).toBe(contentTitle);
+				});
+			});
+
+			describe("when the content title could not be fetched", () => {
+				const setup = () => {
+					const { wrapper } = getWrapper({
+						element: h5pElementResponseFactory.build({
+							content: { contentId: null },
+						}),
+						isEditMode: false,
+						contentTitle: undefined,
+					});
+
+					return {
+						wrapper,
+					};
+				};
+
+				it("should show the default h5p title", async () => {
+					const { wrapper } = setup();
+
+					await nextTick();
+					await nextTick();
+
+					await wrapper.setProps({
+						element: h5pElementResponseFactory.build({
+							content: { contentId: "test-id" },
+						}),
+					});
 					await nextTick();
 
 					const titleLine = wrapper

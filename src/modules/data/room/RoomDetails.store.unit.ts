@@ -1,38 +1,21 @@
-import { createPinia, setActivePinia } from "pinia";
-import { useRoomDetailsStore, RoomVariant } from "./RoomDetails.store";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { AxiosInstance } from "axios";
-import * as serverApi from "@/serverApi/v3/api";
 import { useApplicationError } from "@/composables/application-error.composable";
+import * as serverApi from "@/serverApi/v3/api";
+import { RoomColor } from "@/serverApi/v3/api";
+import { RoomUpdateParams } from "@/types/room/Room";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
-import {
-	apiResponseErrorFactory,
-	axiosErrorFactory,
-	mockApiResponse,
-} from "@@/tests/test-utils";
+import { apiResponseErrorFactory, mockApiResponse } from "@@/tests/test-utils";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { AxiosInstance } from "axios";
+import { createPinia, setActivePinia } from "pinia";
+import { RoomVariant, useRoomDetailsStore } from "./RoomDetails.store";
 
-jest.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = jest.mocked(
+vi.mock("@/utils/api");
+const mockedMapAxiosErrorToResponseError = vi.mocked(
 	mapAxiosErrorToResponseError
 );
 
-jest.mock("@/composables/application-error.composable");
-const mockedCreateApplicationError = jest.mocked(useApplicationError);
-
-const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
-	const expectedPayload = apiResponseErrorFactory.build({
-		message,
-		code,
-	});
-	const responseError = axiosErrorFactory.build({
-		response: { data: expectedPayload },
-	});
-
-	return {
-		responseError,
-		expectedPayload,
-	};
-};
+vi.mock("@/composables/application-error.composable");
+const mockedCreateApplicationError = vi.mocked(useApplicationError);
 
 describe("useRoomDetailsStore", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
@@ -51,30 +34,37 @@ describe("useRoomDetailsStore", () => {
 			mockedCreateApplicationErrorCalls
 		);
 
-		jest.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
-		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApiMock);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
+		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApiMock);
 		initializeAxios(axiosMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.resetAllMocks();
 	});
 
-	const setup = (
-		options: { errorCode: number } = {
-			errorCode: 404,
-		}
-	) => {
+	const setup = () => {
 		const store = useRoomDetailsStore();
 
-		const { expectedPayload } = setupErrorResponse();
-		if (options.errorCode !== 404) {
-			expectedPayload.code = options.errorCode;
-		}
+		return { store };
+	};
+
+	const mockErrorResponse = ({
+		code,
+		type,
+		message,
+	}: {
+		code: number;
+		type?: string;
+		message?: string;
+	}) => {
+		const expectedPayload = apiResponseErrorFactory.build({
+			code,
+			type,
+			message,
+		});
 
 		mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
-
-		return { store };
 	};
 
 	describe("fetchRoom", () => {
@@ -97,9 +87,8 @@ describe("useRoomDetailsStore", () => {
 			it("should set roomVariant to COURSE_ROOM", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue({
-					code: 404,
-				});
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				mockErrorResponse({ code: 404 });
 
 				await store.fetchRoom("room-id");
 
@@ -108,13 +97,29 @@ describe("useRoomDetailsStore", () => {
 			});
 		});
 
+		describe('when fetching room fails with 403 and type "LOCKED_ROOM"', () => {
+			it("should set lockedRoomName to the error message", async () => {
+				const { store } = setup();
+				expect(store.isLoading).toBe(true);
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				mockErrorResponse({
+					code: 403,
+					type: "LOCKED_ROOM",
+					message: "Locker Room",
+				});
+
+				await store.fetchRoom("room-id");
+
+				expect(store.lockedRoomName).toBe("Locker Room");
+				expect(store.isLoading).toBe(false);
+			});
+		});
+
 		describe("when fetching room fails with other errors", () => {
 			it("should throw an error", async () => {
-				const { store } = setup({ errorCode: 401 });
+				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue({
-					code: 401,
-				});
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
 
 				await expect(store.fetchRoom("room-id")).rejects.toThrow();
 				expect(store.isLoading).toBe(false);
@@ -127,15 +132,6 @@ describe("useRoomDetailsStore", () => {
 			const { store } = setup();
 			store.resetState();
 			expect(store.isLoading).toBe(true);
-			expect(store.room).toBeUndefined();
-		});
-	});
-
-	describe("deactivateRoom", () => {
-		it("should reset the state", () => {
-			const { store } = setup();
-			store.deactivateRoom();
-			expect(store.isLoading).toBe(false);
 			expect(store.room).toBeUndefined();
 		});
 	});
@@ -164,5 +160,48 @@ describe("useRoomDetailsStore", () => {
 				layout,
 			});
 		});
+	});
+
+	describe("updateRoom", () => {
+		it("should call updateRoom api", async () => {
+			const { store } = setup();
+			expect(store.isLoading).toBe(true);
+			const params: RoomUpdateParams = {
+				name: "room-name",
+				color: RoomColor.BlueGrey,
+				features: [],
+			};
+
+			await store.updateRoom("room-id", params);
+
+			expect(roomApiMock.roomControllerUpdateRoom).toHaveBeenCalledWith(
+				"room-id",
+				params
+			);
+
+			expect(store.isLoading).toBe(false);
+		});
+	});
+
+	it("should throw an error when updating room data fails", async () => {
+		const { store } = setup();
+		const params: RoomUpdateParams = {
+			name: "room-name",
+			color: RoomColor.BlueGrey,
+			features: [],
+		};
+		roomApiMock.roomControllerUpdateRoom.mockRejectedValue({ code: 404 });
+
+		expect(roomApiMock.roomControllerUpdateRoom).not.toHaveBeenCalledWith(
+			"room-id",
+			params
+		);
+
+		await store.updateRoom("room-id", params).catch(() => {
+			expect(mockedMapAxiosErrorToResponseError).toHaveBeenCalledWith({
+				code: 404,
+			});
+		});
+		expect(store.isLoading).toBe(false);
 	});
 });

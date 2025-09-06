@@ -10,7 +10,7 @@ import { CardResponse, DrawingElementResponse } from "@/serverApi/v3/api";
 import { ApplicationError } from "@/store/types/application-error";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosPromise } from "axios";
 import { useBoardApi } from "./BoardApi.composable";
 
@@ -28,15 +28,15 @@ describe("BoardApi.composable", () => {
 		elementApi = createMock<serverApi.BoardElementApiInterface>();
 		roomsApi = createMock<serverApi.CourseRoomsApiInterface>();
 
-		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
-		jest.spyOn(serverApi, "BoardColumnApiFactory").mockReturnValue(columnApi);
-		jest.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(cardApi);
-		jest.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
-		jest.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(roomsApi);
+		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
+		vi.spyOn(serverApi, "BoardColumnApiFactory").mockReturnValue(columnApi);
+		vi.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(cardApi);
+		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
+		vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(roomsApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("createColumnCall", () => {
@@ -193,6 +193,28 @@ describe("BoardApi.composable", () => {
 			const data = {
 				content: payload.content,
 				type: ContentElementType.File,
+			};
+
+			await updateElementCall(payload);
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+				payload.id,
+				{ data }
+			);
+		});
+
+		it("should call elementControllerUpdateElement api with FileFolderElement", async () => {
+			const { updateElementCall } = useBoardApi();
+			const payload = {
+				id: "file-folder-element-id",
+				type: ContentElementType.FileFolder,
+				content: {
+					title: "New Folder",
+				},
+				timestamps: timestampsResponseFactory.build(),
+			};
+			const data = {
+				content: payload.content,
+				type: ContentElementType.FileFolder,
 			};
 
 			await updateElementCall(payload);
@@ -510,7 +532,7 @@ describe("BoardApi.composable", () => {
 				},
 			};
 
-			boardApi.boardControllerGetBoardContext = jest
+			boardApi.boardControllerGetBoardContext = vi
 				.fn()
 				.mockResolvedValueOnce(FAKE_RESPONSE);
 
@@ -545,10 +567,10 @@ describe("BoardApi.composable", () => {
 				},
 			};
 
-			boardApi.boardControllerGetBoardContext = jest
+			boardApi.boardControllerGetBoardContext = vi
 				.fn()
 				.mockResolvedValueOnce(FAKE_CONTEXT_RESPONSE);
-			roomsApi.courseRoomsControllerGetRoomBoard = jest
+			roomsApi.courseRoomsControllerGetRoomBoard = vi
 				.fn()
 				.mockResolvedValueOnce(FAKE_ROOM_RESPONSE);
 

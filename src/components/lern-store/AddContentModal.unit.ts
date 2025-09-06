@@ -6,7 +6,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { nextTick } from "vue";
@@ -92,7 +92,7 @@ const lessons = {
 initializeAxios(createMock<AxiosInstance>());
 
 const createMockStore = () => {
-	const createStudentStub = jest.fn();
+	const createStudentStub = vi.fn();
 	const mockStore = createStore({
 		modules: {
 			courses: {
@@ -177,7 +177,8 @@ describe("@/components/molecules/AddContentModal", () => {
 		it("create lessonsOptions", async () => {
 			const { wrapper } = setup(testProps);
 			contentModule.setLessons(lessons);
-			const lo = wrapper.vm.lessonsOptions;
+			const lo = (wrapper.vm as unknown as typeof AddContentModal)
+				.lessonsOptions;
 
 			expect(lo).toHaveLength(1);
 			expect(lo[0]._id).toBe(lessonsMock[0]._id);
@@ -226,13 +227,13 @@ describe("@/components/molecules/AddContentModal", () => {
 			const courseSelection = wrapper.findAllComponents(VSelect)[0];
 			const lessonSelection = wrapper.findAllComponents(VSelect)[1];
 
-			courseSelection.vm.$emit("update:modelValue", courseOptions[0]);
+			courseSelection.vm.$emit("update:modelValue", courseOptions[0]._id);
 			await nextTick();
-			lessonSelection.vm.$emit("update:modelValue", lessonsMock[0]);
+			lessonSelection.vm.$emit("update:modelValue", lessonsMock[0]._id);
 			await nextTick();
 
-			expect(lessonSelection.props("modelValue")).toEqual(lessonsMock[0]);
-			expect(courseSelection.props("modelValue")).toEqual(courseOptions[0]);
+			expect(lessonSelection.props("modelValue")).toEqual(lessonsMock[0]._id);
+			expect(courseSelection.props("modelValue")).toEqual(courseOptions[0]._id);
 
 			await cancelBtn.trigger("click");
 

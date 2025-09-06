@@ -10,13 +10,13 @@ import {
 	useContextExternalToolConfigurationStatus,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDotMenu } from "@ui-room-details";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 
-jest.mock("@data-external-tool");
+vi.mock("@data-external-tool");
 
 describe("RoomExternalToolCard", () => {
 	let useExternalToolLaunchStateMock: DeepMocked<
@@ -36,18 +36,18 @@ describe("RoomExternalToolCard", () => {
 				ReturnType<typeof useContextExternalToolConfigurationStatus>
 			>();
 
-		jest
-			.mocked(useExternalToolLaunchState)
-			.mockReturnValue(useExternalToolLaunchStateMock);
+		vi.mocked(useExternalToolLaunchState).mockReturnValue(
+			useExternalToolLaunchStateMock
+		);
 
-		jest
-			.mocked(useContextExternalToolConfigurationStatus)
-			.mockReturnValue(useContextExternalToolConfigurationStatusMock);
+		vi.mocked(useContextExternalToolConfigurationStatus).mockReturnValue(
+			useContextExternalToolConfigurationStatusMock
+		);
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
-		jest.clearAllMocks();
+		vi.resetAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
@@ -80,6 +80,32 @@ describe("RoomExternalToolCard", () => {
 			expect(
 				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalled();
+		});
+	});
+
+	describe("tool domain", () => {
+		const setup = () => {
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build({
+					status: contextExternalToolConfigurationStatusFactory.build({
+						isDeactivated: true,
+					}),
+				});
+
+			const { wrapper } = getWrapper(tool, false);
+
+			return {
+				wrapper,
+				tool,
+			};
+		};
+
+		it("should display the tool domain", () => {
+			const { wrapper, tool } = setup();
+
+			const domain = wrapper.find("[data-testId=tool-card-domain]");
+
+			expect(domain.text()).toEqual(tool.domain);
 		});
 	});
 

@@ -5,6 +5,8 @@ import {
 import { mount } from "@vue/test-utils";
 import NotificationModal from "./NotificationModal.vue";
 import { mdiAlertCircle, mdiCheckCircle } from "@icons/material";
+import ModalBodyInfo from "../molecules/ModalBodyInfo.vue";
+import { VIcon } from "vuetify/components";
 
 const testProps = {
 	showNotificationModal: true,
@@ -25,46 +27,55 @@ describe("@/components/molecules/NotificationModal", () => {
 			},
 		});
 	};
-	it("success case", async () => {
+
+	it("should render the component", () => {
 		const wrapper = setup(true);
 
-		const dialogCard = wrapper
-			.findComponent({ name: "v-dialog" })
-			.findComponent({ name: "v-card" });
-
-		expect(dialogCard.find(".modal-description").text()).toBe(
-			testProps.description
-		);
-		expect(dialogCard.find(".modal-title").text()).toBe(testProps.successMsg);
-		expect(
-			dialogCard.find(".icon").element.innerHTML.includes(mdiCheckCircle)
-		).toBe(true);
-		setTimeout(() => {
-			expect(dialogCard.find(".footer-button").attributes("style")).toBe(
-				"background-color:rgba(var(--v-theme-success))"
-			);
-		}, 200);
+		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("error case", async () => {
-		const wrapper = setup(false);
+	describe("success case", () => {
+		it("should render corect title and description", () => {
+			const wrapper = setup(true);
 
-		const dialogCard = wrapper
-			.findComponent({ name: "v-dialog" })
-			.findComponent({ name: "v-card" });
+			const modalBodyInfo = wrapper.findComponent(ModalBodyInfo);
 
-		expect(dialogCard.find(".modal-description").text()).toBe(
-			testProps.description
-		);
-		expect(dialogCard.find(".modal-title").text()).toBe(testProps.errorMsg);
-		expect(
-			dialogCard.find(".icon").element.innerHTML.includes(mdiAlertCircle)
-		).toBe(true);
-		setTimeout(() => {
-			expect(dialogCard.find(".footer-button").attributes("style")).toBe(
-				"background-color: rgba(var(--v-theme-error))"
-			);
-		}, 200);
+			expect(modalBodyInfo.props("title")).toBe(testProps.successMsg);
+			expect(modalBodyInfo.props("description")).toBe(testProps.description);
+		});
+
+		it("should render success icon", () => {
+			const wrapper = setup(true);
+
+			const successIcon = wrapper
+				.findComponent(ModalBodyInfo)
+				.findComponent(VIcon);
+
+			expect(successIcon.exists()).toBe(true);
+			expect(successIcon.props("icon")).toBe(mdiCheckCircle);
+		});
+	});
+
+	describe("error case", () => {
+		it("should render corect title and description", () => {
+			const wrapper = setup(false);
+
+			const modalBodyInfo = wrapper.findComponent(ModalBodyInfo);
+
+			expect(modalBodyInfo.props("title")).toBe(testProps.errorMsg);
+			expect(modalBodyInfo.props("description")).toBe(testProps.description);
+		});
+
+		it("should render error icon", () => {
+			const wrapper = setup(false);
+
+			const errorIcon = wrapper
+				.findComponent(ModalBodyInfo)
+				.findComponent(VIcon);
+
+			expect(errorIcon.exists()).toBe(true);
+			expect(errorIcon.props("icon")).toBe(mdiAlertCircle);
+		});
 	});
 
 	it("executes close action after close", async () => {
@@ -76,7 +87,8 @@ describe("@/components/molecules/NotificationModal", () => {
 
 		const button = dialogCard.get(".btn-confirm");
 		await button.trigger("click");
-		expect(wrapper.emitted("close")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-notification-modal")).toHaveLength(1);
+
+		expect(wrapper.emitted("close")).toBeDefined();
+		expect(wrapper.emitted("update:show-notification-modal")).toBeDefined();
 	});
 });

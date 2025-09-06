@@ -5,7 +5,7 @@ import {
 import { Folder } from "@feature-folder";
 import { FolderPage } from "@page-folder";
 
-jest.mock("@/store", () => ({
+vi.mock("@/store", () => ({
 	envConfigModule: {
 		getEnv: { SC_TITLE: "Test Title" },
 	},
@@ -32,11 +32,16 @@ describe("FolderPage", () => {
 		expect(folderComponent.props().folderId).toBe("123");
 	});
 
-	it("should set the page title correctly", () => {
-		setupWrapper();
+	describe("when folder component emits 'update:folder-name'", () => {
+		it("should update the page title with the new folder name", async () => {
+			const { wrapper } = setupWrapper();
+			const folderComponent = wrapper.findComponent(Folder);
 
-		expect(document.title).toBe(
-			"pages.folder.untitled - pages.folder.title - Test Title"
-		);
+			await folderComponent.vm.$emit("update:folder-name", "Updated Folder");
+
+			expect(document.title).toBe(
+				"Updated Folder - pages.folder.title - Test Title"
+			);
+		});
 	});
 });

@@ -14,34 +14,35 @@ import {
 	mountComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { BusinessError, Pagination } from "@/store/types/commons";
 import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
 import { useCourseApi } from "./courseApi.composable";
 import { useCourseList } from "./courseList.composable";
+import type { Mocked } from "vitest";
 
-jest.mock("./courseApi.composable");
-jest.mock("./courseInfoApi.composable");
+vi.mock("./courseApi.composable");
+vi.mock("./courseInfoApi.composable");
 
 describe("courseList.composable", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
 	let useCourseInfoApiMock: DeepMocked<ReturnType<typeof useCourseInfoApi>>;
 
-	const notifierModule: jest.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	beforeEach(() => {
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>();
 		useCourseInfoApiMock = createMock<ReturnType<typeof useCourseInfoApi>>();
 
-		jest.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
-		jest.mocked(useCourseInfoApi).mockReturnValue(useCourseInfoApiMock);
+		vi.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
+		vi.mocked(useCourseInfoApi).mockReturnValue(useCourseInfoApiMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("setSortBy", () => {
@@ -184,6 +185,7 @@ describe("courseList.composable", () => {
 				expect(composable.courses.value).toEqual([]);
 				expect(composable.page.value).toEqual(1);
 				expect(composable.isLoading.value).toEqual(false);
+				expect(composable.withoutTeacher.value).toBe(false);
 			});
 		});
 
@@ -228,6 +230,7 @@ describe("courseList.composable", () => {
 
 				expect(useCourseInfoApiMock.loadCoursesForSchool).toHaveBeenCalledWith(
 					"current",
+					false,
 					10,
 					0,
 					undefined,
@@ -265,6 +268,18 @@ describe("courseList.composable", () => {
 				expect(composable.courses.value).toEqual<CourseInfoDataResponse[]>([
 					courseInfo,
 				]);
+			});
+
+			describe("and withoutTeacher is set to true", () => {
+				it("should call the api with withoutTeacher set to true", async () => {
+					const { composable } = setup();
+					composable.withoutTeacher.value = true;
+					await composable.fetchCourses(CourseStatus.Current);
+
+					expect(
+						useCourseInfoApiMock.loadCoursesForSchool
+					).toHaveBeenCalledWith("current", true, 10, 0, undefined, "asc");
+				});
 			});
 		});
 

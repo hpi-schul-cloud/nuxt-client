@@ -9,16 +9,17 @@ import {
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSchoolApi } from "./schoolApi.composable";
 import { useSchoolYearChange } from "./schoolYearChange.composable";
+import type { Mocked } from "vitest";
 
-jest.mock("@data-school/schoolApi.composable");
+vi.mock("@data-school/schoolApi.composable");
 
 describe("SchoolYearChange.composable", () => {
 	let useSchoolApiMock: DeepMocked<ReturnType<typeof useSchoolApi>>;
 
-	const notifierModule: jest.Mocked<NotifierModule> =
+	const notifierModule: Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	const setupComposable = () => {
@@ -40,11 +41,11 @@ describe("SchoolYearChange.composable", () => {
 	beforeEach(() => {
 		useSchoolApiMock = createMock<ReturnType<typeof useSchoolApi>>();
 
-		jest.mocked(useSchoolApi).mockReturnValue(useSchoolApiMock);
+		vi.mocked(useSchoolApi).mockReturnValue(useSchoolApiMock);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchSchoolYearStatus", () => {

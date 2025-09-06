@@ -5,7 +5,7 @@ import {
 	mockApiResponse,
 	toolReferenceResponseFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
 
@@ -15,11 +15,11 @@ describe("externalToolReferenceApi.composable", () => {
 	beforeEach(() => {
 		toolApi = createMock<serverApi.ToolApiInterface>();
 
-		jest.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
+		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchDisplayDataCall", () => {
@@ -59,6 +59,7 @@ describe("externalToolReferenceApi.composable", () => {
 			expect(result).toEqual<ExternalToolDisplayData>({
 				contextExternalToolId: displayData.contextToolId,
 				name: displayData.displayName,
+				domain: displayData.domain,
 				logoUrl: displayData.logoUrl,
 				status: contextExternalToolConfigurationStatusFactory.build(),
 				openInNewTab: displayData.openInNewTab,
@@ -107,6 +108,7 @@ describe("externalToolReferenceApi.composable", () => {
 				{
 					contextExternalToolId: displayData.contextToolId,
 					name: displayData.displayName,
+					domain: displayData.domain,
 					logoUrl: displayData.logoUrl,
 					status: contextExternalToolConfigurationStatusFactory.build(),
 					openInNewTab: displayData.openInNewTab,

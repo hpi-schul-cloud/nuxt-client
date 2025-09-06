@@ -14,9 +14,7 @@
 					<PreviewImage
 						:src="previewSrc"
 						:alt="alternativeText"
-						:cover="false"
 						:max-height="336"
-						@error="onImageError"
 					/>
 				</div>
 			</div>
@@ -27,74 +25,56 @@
 	</ContentElementBar>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { ContentElementBar } from "@ui-board";
 import {
-	LightBoxOptions,
 	LightBoxContentType,
+	LightBoxOptions,
 	useLightBox,
 } from "@ui-light-box";
 import { PreviewImage } from "@ui-preview-image";
-import { PropType, computed, defineComponent, ref } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "ImageDisplay",
-	components: {
-		ContentElementBar,
-		PreviewImage,
-	},
-	props: {
-		src: { type: String, required: true },
-		previewSrc: { type: String, required: true },
-		name: { type: String, required: true },
-		isEditMode: { type: Boolean, required: true },
-		element: { type: Object as PropType<FileElementResponse>, required: true },
-		showMenu: { type: Boolean, required: true },
-	},
-	setup(props) {
-		const { t } = useI18n();
-		const hasImageError = ref(false);
+type Props = {
+	src: string;
+	previewSrc: string;
+	name: string;
+	isEditMode: boolean;
+	element: FileElementResponse;
+	showMenu: boolean;
+};
 
-		const alternativeText = computed(() => {
-			const altTranslation = t("components.cardElement.fileElement.emptyAlt");
-			const altText = props.element.content.alternativeText
-				? props.element.content.alternativeText
-				: `${altTranslation} ${props.name}`;
+const props = defineProps<Props>();
 
-			return altText;
-		});
+const { t } = useI18n();
 
-		const openLightBox = () => {
-			const previewUrl = convertDownloadToPreviewUrl(props.src);
+const alternativeText = computed(() => {
+	const altTranslation = t("components.cardElement.fileElement.emptyAlt");
+	const altText = props.element.content.alternativeText
+		? props.element.content.alternativeText
+		: `${altTranslation} ${props.name}`;
 
-			const options: LightBoxOptions = {
-				type: LightBoxContentType.IMAGE,
-				downloadUrl: props.src,
-				previewUrl: previewUrl,
-				alt: alternativeText.value,
-				name: props.name,
-			};
-
-			const { open } = useLightBox();
-
-			open(options);
-		};
-
-		const onImageError = () => {
-			hasImageError.value = true;
-		};
-
-		return {
-			alternativeText,
-			openLightBox,
-			onImageError,
-			hasImageError,
-		};
-	},
+	return altText;
 });
+
+const openLightBox = () => {
+	const previewUrl = convertDownloadToPreviewUrl(props.src);
+
+	const options: LightBoxOptions = {
+		type: LightBoxContentType.IMAGE,
+		downloadUrl: props.src,
+		previewUrl: previewUrl,
+		alt: alternativeText.value,
+		name: props.name,
+	};
+
+	const { open } = useLightBox();
+
+	open(options);
+};
 </script>
 <style scoped lang="scss">
 /* show focus indicator in Safari properly */

@@ -17,6 +17,7 @@ export default (i18n: ReturnType<typeof createI18n>) =>
 			VAutocomplete: { color: "primary", variant: "underlined" },
 			VCheckbox: { color: "primary" },
 			VFileInput: { variant: "underlined", color: "primary" },
+			VRadioGroup: { color: "primary" },
 			VSelect: { variant: "underlined", color: "primary" },
 			VSwitch: { inset: true, flat: true, color: "primary" },
 			VTabs: { color: "primary" },

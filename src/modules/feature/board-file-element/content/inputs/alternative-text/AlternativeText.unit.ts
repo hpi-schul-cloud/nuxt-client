@@ -2,40 +2,27 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { mount, shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import AlternativeText from "./AlternativeText.vue";
+import { VTextarea } from "vuetify/components";
 
 describe("AlternativeText", () => {
 	const mountSetup = () => {
-		const alternativeText = "test text";
+		const alternativeText: string | undefined = "test text";
 
 		const wrapper = mount(AlternativeText, {
-			props: { alternativeText },
+			props: { alternativeText, isEditMode: true },
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
 		return {
 			wrapper,
-		};
-	};
-
-	const shallowMountSetup = () => {
-		const alternativeText = "test text";
-
-		const wrapper = shallowMount(AlternativeText, {
-			props: { alternativeText },
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-		});
-
-		return {
-			wrapper,
-			alternativeText,
 		};
 	};
 
 	it("should be found in dom", () => {
-		const { wrapper } = shallowMountSetup();
+		const { wrapper } = mountSetup();
 
 		const fileContentElement = wrapper.findComponent(AlternativeText);
 
@@ -45,7 +32,7 @@ describe("AlternativeText", () => {
 	it("should emit update:alternativeText if text changes", async () => {
 		const { wrapper } = mountSetup();
 
-		const textarea = wrapper.findComponent({ name: "v-textarea" });
+		const textarea = wrapper.findComponent(VTextarea);
 		const newText = "new text";
 		await textarea.setValue(newText);
 		await nextTick();
@@ -55,21 +42,21 @@ describe("AlternativeText", () => {
 	});
 
 	it("should have a hint translation", async () => {
-		const { wrapper } = shallowMountSetup();
+		const { wrapper } = mountSetup();
 
-		const textarea = wrapper.find("v-textarea-stub");
+		const textarea = wrapper.findComponent(VTextarea);
 
-		const hint = textarea.attributes("hint");
+		const hint = textarea.props("hint");
 
 		expect(hint).toBe("components.cardElement.fileElement.altDescription");
 	});
 
 	it("should have a label translation", async () => {
-		const { wrapper } = shallowMountSetup();
+		const { wrapper } = mountSetup();
 
-		const textarea = wrapper.find("v-textarea-stub");
+		const textarea = wrapper.findComponent(VTextarea);
 
-		const label = textarea.attributes("label");
+		const label = textarea.props("label");
 
 		expect(label).toBe("components.cardElement.fileElement.alternativeText");
 	});

@@ -3,15 +3,17 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useDeleteConfirmationDialog } from "./DeleteConfirmation.composable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useI18n } from "vue-i18n";
-jest.mock("./Confirmation.composable");
+import { Mock } from "vitest";
+vi.mock("./Confirmation.composable");
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn(),
+		...actual,
+		useI18n: vi.fn(),
 	};
 });
-const useI18nMock = <jest.Mock>useI18n;
+const useI18nMock = <Mock>useI18n;
 
 describe("DeleteConfirmation composable", () => {
 	describe("askDeleteConfirmation", () => {
@@ -27,12 +29,12 @@ describe("DeleteConfirmation composable", () => {
 				elementId: "elementId",
 				name: "name",
 			};
-			const askConfirmationMock = jest.fn().mockResolvedValueOnce(isConfirmed);
+			const askConfirmationMock = vi.fn().mockResolvedValueOnce(isConfirmed);
 			const { askConfirmation } = setupConfirmationComposableMock({
 				askConfirmationMock,
 			});
 
-			const translateMock = jest
+			const translateMock = vi
 				.fn()
 				.mockImplementation(
 					(key: string, dynamic?: object): string =>
@@ -63,7 +65,7 @@ describe("DeleteConfirmation composable", () => {
 		};
 
 		beforeEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		describe("when title is defined", () => {

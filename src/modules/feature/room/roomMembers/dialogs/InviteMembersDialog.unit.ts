@@ -3,45 +3,51 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import InviteMembersDialog from "./InviteMembersDialog.vue";
+import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { nextTick } from "vue";
 import { createTestingPinia } from "@pinia/testing";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VueWrapper } from "@vue/test-utils";
-import { useRoomInvitationLinkStore, InvitationStep } from "@data-room";
+import {
+	useRoomInvitationLinkStore,
+	InvitationStep,
+	RoomInvitationLink,
+} from "@data-room";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { Mock } from "vitest";
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: () => ({ t: jest.fn().mockImplementation((key) => key) }),
+		...actual,
+		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });
 
-jest.mock("@vueuse/integrations/useFocusTrap", () => {
+vi.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
-		...jest.requireActual("@vueuse/integrations/useFocusTrap"),
-		useFocusTrap: jest.fn(),
+		useFocusTrap: vi.fn(),
 	};
 });
 
-jest.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const boardNotifier = vi.mocked(useBoardNotifier);
+vi.useFakeTimers();
 
-jest.useFakeTimers();
 describe("InviteMembersDialog", () => {
 	let wrapper: VueWrapper<InstanceType<typeof InviteMembersDialog>>;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	let pauseMock: jest.Mock;
-	let unpauseMock: jest.Mock;
-	let deactivateMock: jest.Mock;
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
+	let deactivateMock: Mock;
 
 	beforeAll(() => {
 		setupStores({
@@ -51,31 +57,42 @@ describe("InviteMembersDialog", () => {
 	beforeEach(() => {
 		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		boardNotifier.mockReturnValue(boardNotifierCalls);
-		pauseMock = jest.fn();
-		unpauseMock = jest.fn();
-		deactivateMock = jest.fn();
-		(useFocusTrap as jest.Mock).mockReturnValue({
+		pauseMock = vi.fn();
+		unpauseMock = vi.fn();
+		deactivateMock = vi.fn();
+		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
 			unpause: unpauseMock,
 			deactivate: deactivateMock,
 		});
 	});
 	afterEach(() => {
-		jest.clearAllMocks();
-		jest.clearAllTimers();
+		vi.clearAllMocks();
+		vi.clearAllTimers();
 	});
 
+	const setDescription = async (wrapper: VueWrapper, value: string) => {
+		const descriptionField = wrapper.findComponent({
+			ref: "descriptionField",
+		});
+		await descriptionField.setValue(value);
+		await nextTick();
+	};
+
 	const setup = (
-		options: {
-			modelValue?: boolean;
-			schoolName?: string;
-			preDefinedStep?: string;
-		} = {
+		options?: Partial<{
+			modelValue: boolean;
+			schoolName: string;
+			preDefinedStep: string;
+			editedLink: RoomInvitationLink | null;
+		}>
+	) => {
+		const { modelValue, schoolName, preDefinedStep } = {
 			modelValue: true,
 			schoolName: "Test School",
 			preDefinedStep: InvitationStep.PREPARE,
-		}
-	) => {
+			...options,
+		};
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
 		const notifierModule = createModuleMocks(NotifierModule);
 
@@ -89,7 +106,8 @@ describe("InviteMembersDialog", () => {
 							roomInvitationLinkStore: {
 								isLoading: false,
 								roomInvitationLinks,
-								invitationStep: options.preDefinedStep,
+								invitationStep: preDefinedStep,
+								editedLink: options?.editedLink ?? null,
 							},
 						},
 					}),
@@ -99,13 +117,14 @@ describe("InviteMembersDialog", () => {
 				},
 			},
 			props: {
-				...{
-					modelValue: true,
-					schoolName: "Test School",
-				},
-				...options,
+				modelValue,
+				schoolName,
 			},
 		});
+
+		if (preDefinedStep !== InvitationStep.SHARE) {
+			setDescription(wrapper, "invitation link");
+		}
 
 		const roomInvitationLinkStore = mockedPiniaStoreTyping(
 			useRoomInvitationLinkStore
@@ -160,9 +179,7 @@ describe("InviteMembersDialog", () => {
 
 				await nextTick();
 
-				const shareModalResult = wrapper.findComponent({
-					name: "ShareModalResult",
-				});
+				const shareModalResult = wrapper.findComponent(ShareModalResult);
 
 				expect(shareModalResult.exists()).toBe(false);
 			});
@@ -183,35 +200,6 @@ describe("InviteMembersDialog", () => {
 					expect(
 						checkboxes.some((checkbox) => checkbox.text().includes(label))
 					).toBe(true);
-				});
-			});
-
-			describe("when continue button is clicked", () => {
-				it("should call createLink method", async () => {
-					const { wrapper, roomInvitationLinkStore } = setup({
-						preDefinedStep: InvitationStep.PREPARE,
-					});
-					await nextTick();
-					const shareModalBefore = wrapper.findComponent({
-						name: "ShareModalResult",
-					});
-					expect(shareModalBefore.exists()).toBe(false);
-
-					const nextButton = wrapper.findComponent({ ref: "continueButton" });
-					await nextButton.trigger("click");
-					await nextTick();
-
-					const expectedFormValues = {
-						title: "invitation link",
-						activeUntil: "2900-01-01T00:00:00.000Z",
-						isOnlyForTeachers: true,
-						restrictedToCreatorSchool: true,
-						requiresConfirmation: true,
-					};
-
-					expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(
-						expectedFormValues
-					);
 				});
 			});
 		});
@@ -246,33 +234,36 @@ describe("InviteMembersDialog", () => {
 				expect(nextButton.text()).toBe("common.actions.continue");
 			});
 
-			describe("when continue button is clicked", () => {
-				it("should and call updateLink method", async () => {
-					const { wrapper, roomInvitationLinkStore } = setup({
-						preDefinedStep: InvitationStep.EDIT,
-					});
-					await nextTick();
-					const shareModalBefore = wrapper.findComponent({
-						name: "ShareModalResult",
-					});
-					expect(shareModalBefore.exists()).toBe(false);
-
-					const nextButton = wrapper.findComponent({ ref: "continueButton" });
-					await nextButton.trigger("click");
-					await nextTick();
-
-					const expectedFormValues = {
-						id: "",
-						title: "invitation link",
+			it("should set linkExpires-checkbox modelValue false if activeUntil value is default", async () => {
+				const { wrapper } = setup({
+					preDefinedStep: InvitationStep.EDIT,
+					editedLink: roomInvitationLinkFactory.build({
 						activeUntil: "2900-01-01T00:00:00.000Z",
-						isOnlyForTeachers: true,
-						restrictedToCreatorSchool: true,
-						requiresConfirmation: true,
-					};
+					}),
+				});
+				await nextTick();
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
 
-					expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(
-						expectedFormValues
-					);
+				const linkExpiresCheckbox = checkboxes[2];
+				expect(linkExpiresCheckbox.props("modelValue")).toBe(false);
+			});
+
+			describe("when close button is clicked", () => {
+				it("should set the editedLink value to null", async () => {
+					const { wrapper, roomInvitationLinkStore } = setup({
+						preDefinedStep: InvitationStep.PREPARE,
+					});
+					await nextTick();
+
+					roomInvitationLinkStore.editedLink =
+						roomInvitationLinkStore.roomInvitationLinks[0];
+
+					expect(roomInvitationLinkStore.editedLink).not.toBeNull();
+
+					const cancelButton = wrapper.findComponent({ ref: "cancelButton" });
+					await cancelButton.trigger("click");
+
+					expect(roomInvitationLinkStore.editedLink).toBeNull();
 				});
 			});
 		});
@@ -308,9 +299,7 @@ describe("InviteMembersDialog", () => {
 
 				await nextTick();
 
-				const shareModalResult = wrapper.findComponent({
-					name: "ShareModalResult",
-				});
+				const shareModalResult = wrapper.findComponent(ShareModalResult);
 
 				expect(shareModalResult.exists()).toBe(true);
 			});
@@ -323,9 +312,7 @@ describe("InviteMembersDialog", () => {
 
 					await nextTick();
 
-					const shareModalResult = wrapper.findComponent({
-						name: "ShareModalResult",
-					});
+					const shareModalResult = wrapper.findComponent(ShareModalResult);
 
 					await shareModalResult.vm.$emit("copied");
 
@@ -345,15 +332,86 @@ describe("InviteMembersDialog", () => {
 
 					await nextTick();
 
-					const shareModalResult = wrapper.findComponent({
-						name: "ShareModalResult",
-					});
+					const shareModalResult = wrapper.findComponent(ShareModalResult);
 
 					await shareModalResult.vm.$emit("done");
 
 					expect(wrapper.emitted()).toHaveProperty("close");
 				});
 			});
+		});
+	});
+
+	describe("Continue button behavior", () => {
+		it("should call createLink method if form is valid", async () => {
+			const { wrapper, roomInvitationLinkStore } = setup({
+				preDefinedStep: InvitationStep.PREPARE,
+			});
+			await nextTick();
+			const shareModalBefore = wrapper.findComponent(ShareModalResult);
+			expect(shareModalBefore.exists()).toBe(false);
+
+			const nextButton = wrapper.findComponent({ ref: "continueButton" });
+			await nextButton.trigger("click");
+			await nextTick();
+
+			const expectedFormValues = {
+				title: "invitation link",
+				activeUntil: roomInvitationLinkStore.DEFAULT_EXPIRED_DATE,
+				isOnlyForTeachers: true,
+				restrictedToCreatorSchool: true,
+				requiresConfirmation: true,
+			};
+
+			expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(
+				expectedFormValues
+			);
+		});
+
+		it("should call updateLink method if form is valid", async () => {
+			const { wrapper, roomInvitationLinkStore } = setup({
+				preDefinedStep: InvitationStep.EDIT,
+			});
+			await nextTick();
+			const shareModalBefore = wrapper.findComponent(ShareModalResult);
+			expect(shareModalBefore.exists()).toBe(false);
+
+			const nextButton = wrapper.findComponent({ ref: "continueButton" });
+			await nextButton.trigger("click");
+			await nextTick();
+
+			const expectedFormValues = {
+				id: "",
+				title: "invitation link",
+				activeUntil: roomInvitationLinkStore.DEFAULT_EXPIRED_DATE,
+				isOnlyForTeachers: true,
+				restrictedToCreatorSchool: true,
+				requiresConfirmation: true,
+			};
+
+			expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(
+				expectedFormValues
+			);
+		});
+
+		it("should not call store method when form is invalid", async () => {
+			const { wrapper, roomInvitationLinkStore } = setup();
+
+			await setDescription(wrapper, "  ");
+
+			const nextButton = wrapper.findComponent({ ref: "continueButton" });
+			await nextButton.trigger("click");
+			await nextTick();
+
+			const descriptionField = wrapper.findComponent({
+				ref: "descriptionField",
+			});
+
+			expect(roomInvitationLinkStore.createLink).not.toHaveBeenCalled();
+			expect(roomInvitationLinkStore.updateLink).not.toHaveBeenCalled();
+			expect(descriptionField.text()).toContain(
+				"common.validation.nonEmptyString"
+			);
 		});
 	});
 
@@ -374,6 +432,67 @@ describe("InviteMembersDialog", () => {
 			await closeButton.trigger("click");
 
 			expect(wrapper.emitted()).toHaveProperty("close");
+		});
+	});
+
+	describe("Description field validation", () => {
+		it("should show error when description is empty", async () => {
+			const { wrapper } = setup();
+			await nextTick();
+
+			// needed to trigger validation correctly
+			await setDescription(wrapper, "valid input");
+			await setDescription(wrapper, "");
+
+			const descriptionField = wrapper.findComponent({
+				ref: "descriptionField",
+			});
+			expect(descriptionField.text()).toContain(
+				"common.validation.nonEmptyString"
+			);
+		});
+
+		it("should show error when description contains only whitespaces", async () => {
+			const { wrapper } = setup();
+			await nextTick();
+
+			// needed to trigger validation correctly
+			await setDescription(wrapper, "valid input");
+			await setDescription(wrapper, "   ");
+
+			const descriptionField = wrapper.findComponent({
+				ref: "descriptionField",
+			});
+			expect(descriptionField.text()).toContain(
+				"common.validation.nonEmptyString"
+			);
+		});
+
+		it("should show error when description contains < followed by a string", async () => {
+			const { wrapper } = setup();
+			await nextTick();
+
+			await setDescription(wrapper, "<abc123");
+
+			const descriptionField = wrapper.findComponent({
+				ref: "descriptionField",
+			});
+			expect(descriptionField.text()).toContain(
+				"common.validation.containsOpeningTag"
+			);
+		});
+
+		it("should show error when description is longer then 100 characters", async () => {
+			const { wrapper } = setup();
+			await nextTick();
+
+			const longDescription = "a".repeat(101);
+			await setDescription(wrapper, longDescription);
+
+			const descriptionField = wrapper.findComponent({
+				ref: "descriptionField",
+			});
+			expect(descriptionField.text()).toContain("common.validation.tooLong");
 		});
 	});
 

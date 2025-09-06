@@ -1,4 +1,4 @@
-import { RoomColorEnum, RoomCreateParams } from "@/types/room/Room";
+import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { useRoomCreateState } from "@data-room";
 import {
 	createTestingI18n,
@@ -12,33 +12,40 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 import { flushPromises } from "@vue/test-utils";
 
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn().mockReturnValue({
-		push: jest.fn(),
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn().mockReturnValue({
+		push: vi.fn(),
 	}),
 }));
 
-jest.mock("@data-room/RoomCreate.state.ts", () => ({
-	useRoomCreateState: jest.fn().mockReturnValue({
-		createRoom: jest.fn().mockResolvedValue({
+vi.mock("@data-room/RoomCreate.state.ts", () => ({
+	useRoomCreateState: vi.fn().mockReturnValue({
+		createRoom: vi.fn().mockResolvedValue({
 			id: "123",
 			name: "test",
 			color: "blue",
+			features: [],
 		}),
 		roomData: {
 			name: "test-room-data",
 			color: "blue",
+			features: [],
 		},
 	}),
 }));
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle) => pageTitle ?? "",
+		}) as typeof import("@/utils/pageTitle")
+);
 
 const roomParams: RoomCreateParams = {
 	name: "test",
-	color: RoomColorEnum.Blue,
+	color: RoomColor.Blue,
+	features: [],
 };
 
 describe("@pages/RoomCreate.page.vue", () => {

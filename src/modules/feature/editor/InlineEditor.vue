@@ -24,7 +24,7 @@ import {
 	compactHeadings,
 } from "./config";
 import katex from "katex";
-window.katex = katex;
+(window as Window).katex = katex;
 
 const props = defineProps({
 	value: {

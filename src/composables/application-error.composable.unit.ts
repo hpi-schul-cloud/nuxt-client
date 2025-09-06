@@ -2,7 +2,7 @@ import { useApplicationError } from "@/composables/application-error.composable"
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { HttpStatusCode } from "../store/types/http-status-code.enum";
 
-jest.mock("./loadingState");
+vi.mock("./loadingState");
 
 describe("application-error composable", () => {
 	const setup = () => {

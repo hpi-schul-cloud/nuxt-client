@@ -9,6 +9,18 @@
 			<h1 class="text-h3 pl-2">
 				{{ t("pages.administration.rooms.index.title") }}
 			</h1>
+			<div class="mt-n6 mb-n3">
+				<v-switch
+					v-model="withoutTeacher"
+					:label="t('pages.administration.courses.withoutTeacher')"
+					:true-icon="mdiCheck"
+					data-testid="admin-course-without-teacher-checkbox"
+					hide-details
+					:true-value="true"
+					:false-value="false"
+					@update:model-value="onUpdateWithoutTeacherFilter"
+				/>
+			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="activeTab" class="tabs-max-width" grow>
 					<v-tab value="current" data-testid="admin-course-current-tab">
@@ -48,12 +60,21 @@
 			</template>
 			<template #[`item.classNames`]="{ item }">
 				<span data-testid="admin-rooms-table-class-names">
-					{{ item.classNames?.join(", ") || "" }}
+					{{ joinNamesList(item.classNames) || "" }}
 				</span>
 			</template>
 			<template #[`item.teacherNames`]="{ item }">
-				<span data-testid="admin-rooms-table-teacher-names">
-					{{ item.teacherNames?.join(", ") || "" }}
+				<span
+					v-if="item.teacherNames.length > 0"
+					data-testid="admin-rooms-table-teacher-names"
+				>
+					{{ joinNamesList(item.teacherNames) }}
+				</span>
+				<span v-else data-testid="admin-rooms-table-teacher-names-empty">
+					<v-icon color="warning" start>
+						{{ mdiAlert }}
+					</v-icon>
+					{{ t("pages.administration.courses.noTeacher") }}
 				</span>
 			</template>
 			<template #[`item.actions`]="{ item }">
@@ -169,7 +190,7 @@
 		<p class="text-muted">
 			{{
 				t("pages.administration.common.hint", {
-					institute_title: getInstituteTitle,
+					institute_title: instituteTitle,
 				})
 			}}
 		</p>
@@ -201,6 +222,8 @@ import {
 	StartExistingCourseSyncDialog,
 } from "@feature-course-sync";
 import {
+	mdiAlert,
+	mdiCheck,
 	mdiPencilOutline,
 	mdiSync,
 	mdiSyncOff,
@@ -210,6 +233,7 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
+import type { DataTableHeader } from "vuetify";
 
 type Tab = "current" | "archive";
 
@@ -232,6 +256,7 @@ const route = useRoute();
 const router = useRouter();
 
 const { t } = useI18n();
+useTitle(buildPageTitle(t("pages.administration.rooms.index.title")));
 
 const {
 	fetchCourses,
@@ -239,6 +264,7 @@ const {
 	page,
 	isLoading,
 	courses,
+	withoutTeacher,
 	setSortBy,
 	setSortOrder,
 	setPage,
@@ -255,6 +281,10 @@ const activeTab = computed({
 	},
 });
 
+const onUpdateWithoutTeacherFilter = async () => {
+	await loadCourseList();
+};
+
 const footerProps = {
 	itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
 	itemsPerPageOptions: [5, 10, 25, 50, 100],
@@ -263,15 +293,13 @@ const footerProps = {
 const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
 	{
 		title: t("pages.administration.index.title"),
-		href: "/administration/",
+		disabled: true,
 	},
 	{
 		title: t("pages.administration.rooms.index.title"),
 		disabled: true,
 	},
 ]);
-
-useTitle(buildPageTitle(t("pages.administration.rooms.index.title")));
 
 const courseStatus: ComputedRef<CourseStatus> = computed(() => {
 	switch (props.tab) {
@@ -311,6 +339,11 @@ const selectedItemName: ComputedRef<string> = computed(
 	() => selectedItem.value?.name || "???"
 );
 
+const joinNamesList = (names: string[]) => {
+	if (names.length === 0) return;
+	return names.join(", ");
+};
+
 const onClickStartSyncIcon = (selectedCourse: CourseInfoDataResponse) => {
 	selectedItem.value = selectedCourse;
 	isStartSyncDialogOpen.value = true;
@@ -337,7 +370,7 @@ const courseSyncEnabled = computed(
 );
 
 const headers = computed(() => {
-	const headerList: unknown[] = [
+	const headerList: DataTableHeader<CourseInfoDataResponse>[] = [
 		{
 			value: "name",
 			title: t("common.labels.course"),
@@ -430,10 +463,10 @@ onMounted(() => {
 	onTabsChange(activeTab.value);
 });
 
-const getInstituteTitle: ComputedRef<string> = computed(() => {
+const instituteTitle: ComputedRef<string> = computed(() => {
 	switch (envConfigModule.getTheme) {
 		case SchulcloudTheme.N21:
-			return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
 		case SchulcloudTheme.Thr:
 			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
 		case SchulcloudTheme.Brb:

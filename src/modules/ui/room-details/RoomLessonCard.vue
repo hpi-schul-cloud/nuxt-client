@@ -163,7 +163,7 @@ const moreActionsMenuItems = computed(() => {
 		actions.push({
 			icon: mdiContentCopy,
 			action: () => copyCard(),
-			name: t("common.actions.copy"),
+			name: t("common.actions.duplicate"),
 			dataTestId: `lesson-card-menu-action-copy-${
 				toRef(props, "lessonCardIndex").value
 			}`,
@@ -314,7 +314,7 @@ const onKeyPress = (e: KeyboardEvent) => {
 	.dot-menu-section {
 		align-self: start;
 		text-align: right;
-		height: calc(var(--space-base-vuetify) * 9);
+		height: 36px;
 	}
 }
 
@@ -325,7 +325,7 @@ const onKeyPress = (e: KeyboardEvent) => {
 		display: inline-block;
 		width: fit-content;
 		text-align: center;
-		border-radius: var(--radius-sm);
+		border-radius: 4px;
 		font-size: var(--text-xs);
 
 		.chip-value {
@@ -337,7 +337,7 @@ const onKeyPress = (e: KeyboardEvent) => {
 }
 
 .v-card__text {
-	padding-bottom: var(--space-xs-4);
+	padding-bottom: 2px;
 }
 
 .hidden-lesson {

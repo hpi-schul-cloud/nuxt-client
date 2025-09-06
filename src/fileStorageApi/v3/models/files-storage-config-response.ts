@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Schulcloud-Verbund-Software Server API
- * This is v3 of Schulcloud-Verbund-Software Server. Checkout /docs for v1.
+ * Schulcloud-Verbund-Software File Storage API
+ * This is the API documentation for the Schulcloud-Verbund-Software File Storage API
  *
  * The version of the OpenAPI document: 3.0
  * 
@@ -26,6 +26,12 @@ export interface FilesStorageConfigResponse {
      * @memberof FilesStorageConfigResponse
      */
     MAX_FILE_SIZE: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FilesStorageConfigResponse
+     */
+    COLLABORA_MAX_FILE_SIZE_IN_BYTES: number;
 }
 
 

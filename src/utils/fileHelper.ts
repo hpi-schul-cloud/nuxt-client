@@ -1,9 +1,11 @@
 import {
-	FileRecordScanStatus,
+	ArchiveFileParams,
+	FilePreviewStatus,
+	FilePreviewWidth,
+	FileRecordVirusScanStatus,
 	PreviewOutputMimeTypes,
-	PreviewStatus,
-	PreviewWidth,
-} from "@/fileStorageApi/v3";
+} from "@/types/file/File";
+import { useI18n } from "vue-i18n";
 
 export const toBase64 = (file: File) =>
 	new Promise((resolve, reject) => {
@@ -26,6 +28,34 @@ export function downloadFile(url: string, fileName: string) {
 	document.body.removeChild(link);
 }
 
+// This function is used to download multiple files as a zip archive.
+// It creates a form with the necessary parameters and submits it to the server.
+// The server will then create the zip archive and return it as a file download.
+export function downloadFilesAsArchive(params: ArchiveFileParams) {
+	const form = document.createElement("form");
+	form.method = "POST";
+	form.action = "/api/v3/file/download-files-as-archive";
+	form.enctype = "application/json";
+	form.target = "_blank";
+
+	const archiveNameInput = document.createElement("input");
+	archiveNameInput.type = "hidden";
+	archiveNameInput.name = "archiveName";
+	archiveNameInput.value = params.archiveName;
+
+	const fileRecordIdsInput = document.createElement("input");
+	fileRecordIdsInput.type = "hidden";
+	fileRecordIdsInput.name = "fileRecordIds";
+	fileRecordIdsInput.value = JSON.stringify(params.fileRecordIds);
+
+	form.appendChild(fileRecordIdsInput);
+	form.appendChild(archiveNameInput);
+
+	document.body.appendChild(form);
+	form.submit();
+	document.body.removeChild(form);
+}
+
 export function convertFileSize(fileSize: number): {
 	convertedSize: number;
 	unit: string;
@@ -44,6 +74,14 @@ export function convertFileSize(fileSize: number): {
 	}
 
 	return { convertedSize, unit };
+}
+
+export function formatFileSize(sizeInBytes: number) {
+	const { n } = useI18n();
+	const { convertedSize, unit } = convertFileSize(sizeInBytes);
+	const localizedFileSize = n(convertedSize, "fileSize");
+
+	return `${localizedFileSize} ${unit}`;
 }
 
 export function getFileExtension(fileName: string): string {
@@ -68,7 +106,7 @@ export function removeFileExtension(str: string): string {
 
 export function convertDownloadToPreviewUrl(
 	downloadUrl: string,
-	width?: PreviewWidth
+	width?: FilePreviewWidth
 ): string {
 	const previewUrl =
 		downloadUrl.replace("download", "preview") +
@@ -78,26 +116,30 @@ export function convertDownloadToPreviewUrl(
 	return previewUrl;
 }
 
-export function isScanStatusPending(scanStatus: PreviewStatus): boolean {
-	return scanStatus === PreviewStatus.AWAITING_SCAN_STATUS;
+export function isScanStatusPending(scanStatus: FilePreviewStatus): boolean {
+	return scanStatus === FilePreviewStatus.AWAITING_SCAN_STATUS;
 }
 
-export function isScanStatusWontCheck(scanStatus: PreviewStatus): boolean {
+export function isScanStatusWontCheck(scanStatus: FilePreviewStatus): boolean {
 	return (
-		scanStatus === PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+		scanStatus === FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
 	);
 }
 
-export function isScanStatusError(scanStatus: PreviewStatus): boolean {
-	return scanStatus === PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR;
+export function isScanStatusError(scanStatus: FilePreviewStatus): boolean {
+	return (
+		scanStatus === FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
+	);
 }
 
-export function isScanStatusBlocked(scanStatus: FileRecordScanStatus): boolean {
-	return scanStatus !== FileRecordScanStatus.BLOCKED;
+export function isScanStatusBlocked(
+	scanStatus: FileRecordVirusScanStatus
+): boolean {
+	return scanStatus !== FileRecordVirusScanStatus.BLOCKED;
 }
 
-export function isPreviewPossible(previewStatus: PreviewStatus): boolean {
-	return previewStatus === PreviewStatus.PREVIEW_POSSIBLE;
+export function isPreviewPossible(previewStatus: FilePreviewStatus): boolean {
+	return previewStatus === FilePreviewStatus.PREVIEW_POSSIBLE;
 }
 
 export function isVideoMimeType(mimeType: string): boolean {

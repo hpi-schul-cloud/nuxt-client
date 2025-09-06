@@ -28,9 +28,9 @@ import {
 	ContextExternalToolSave,
 	useContextExternalToolApi,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useSharedEditMode } from "@util-board";
+import { useBoardNotifier, useSharedEditMode } from "@util-board";
 import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
@@ -40,34 +40,37 @@ import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import {
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
-} from "./cardActionPayload";
+} from "./cardActionPayload.types";
 import { useCardRestApi } from "./cardRestApi.composable";
+import { Mock } from "vitest";
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+vi.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-jest.mock("../BoardApi.composable");
-const mockedUseBoardApi = jest.mocked(useBoardApi);
+vi.mock("../BoardApi.composable");
+const mockedUseBoardApi = vi.mocked(useBoardApi);
 
-jest.mock("@data-external-tool/contextExternalToolApi.composable");
-const mockedUseContextExternalToolApi = jest.mocked(useContextExternalToolApi);
+vi.mock("@data-external-tool/contextExternalToolApi.composable");
+const mockedUseContextExternalToolApi = vi.mocked(useContextExternalToolApi);
 
-jest.mock("../CardRequestPool.composable");
-const mockedSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
+vi.mock("../CardRequestPool.composable");
+const mockedSharedCardRequestPool = vi.mocked(useSharedCardRequestPool);
 
-jest.mock("@util-board/editMode.composable");
-const mockedSharedEditMode = jest.mocked(useSharedEditMode);
+vi.mock("@util-board/editMode.composable");
+const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
-jest.mock("../socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("../socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
+
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: () => ({ t: jest.fn().mockImplementation((key) => key) }),
+		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });
 
@@ -83,7 +86,8 @@ describe("useCardRestApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
 		ReturnType<typeof useSocketConnection>
 	>;
-	let setEditModeId: jest.Mock;
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let setEditModeId: Mock;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({}));
@@ -118,7 +122,11 @@ describe("useCardRestApi", () => {
 			mockedSharedCardRequestPoolCalls
 		);
 
-		setEditModeId = jest.fn();
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+		setEditModeId = vi.fn();
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
@@ -357,7 +365,7 @@ describe("useCardRestApi", () => {
 					[availableTool]
 				);
 
-				const setTemplateSpy = jest.spyOn(
+				const setTemplateSpy = vi.spyOn(
 					schoolExternalToolsModule,
 					"setContextExternalToolConfigurationTemplate"
 				);
@@ -537,7 +545,7 @@ describe("useCardRestApi", () => {
 	});
 
 	describe("getPreferredTools", () => {
-		describe("when api call is succesful", () => {
+		describe("when api call is successful", () => {
 			const setupPreferredTool = () => {
 				const { getPreferredTools } = useCardRestApi();
 
@@ -598,12 +606,14 @@ describe("useCardRestApi", () => {
 				};
 			};
 
-			it("should call handleError", async () => {
+			it("should show a failure notification", async () => {
 				const { getPreferredTools } = setupPreferredTool();
 
 				await getPreferredTools(ToolContextType.BoardElement);
 
-				expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+					"components.board.preferredTools.notification.error.notLoaded"
+				);
 			});
 		});
 	});
@@ -798,6 +808,8 @@ describe("useCardRestApi", () => {
 
 	describe("fetchCardRequest", () => {
 		it("should call fetchCardSuccess action if the API call is successful", async () => {
+			vi.useFakeTimers();
+
 			const { cardStore } = setup();
 			const { fetchCardRequest } = useCardRestApi();
 
@@ -809,7 +821,10 @@ describe("useCardRestApi", () => {
 				.mockResolvedValueOnce(cards[2]);
 			const cardIds = cards.map((card) => card.id);
 
-			await fetchCardRequest({ cardIds });
+			const promise = fetchCardRequest({ cardIds });
+
+			await vi.advanceTimersByTimeAsync(500);
+			await promise;
 
 			expect(cardStore.fetchCardSuccess).toHaveBeenCalledWith({
 				cards,
@@ -818,12 +833,17 @@ describe("useCardRestApi", () => {
 		});
 
 		it("should call handleError if the API call fails", async () => {
+			vi.useFakeTimers();
+
 			setup();
 			const { fetchCardRequest } = useCardRestApi();
 
 			mockedSharedCardRequestPoolCalls.fetchCard.mockRejectedValue({});
 
-			await fetchCardRequest({ cardIds: ["temp"] });
+			const promise = fetchCardRequest({ cardIds: ["temp"] });
+
+			await vi.advanceTimersByTimeAsync(500);
+			await promise;
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
@@ -945,7 +965,7 @@ describe("useCardRestApi", () => {
 			cardStore.getCard.mockReturnValue(card);
 
 			mockedBoardApiCalls.updateCardTitle.mockRejectedValue({});
-			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
+			mockedErrorHandler.notifyWithTemplate.mockReturnValue(vi.fn());
 
 			await updateCardTitleRequest({
 				cardId: card.id,

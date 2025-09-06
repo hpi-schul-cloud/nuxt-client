@@ -16,7 +16,7 @@ import {
 	useContentElementState,
 } from "@data-board";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { BoardMenu } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -30,31 +30,32 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
+import { Mock } from "vitest";
 
-jest.mock("@data-board/ContentElementState.composable");
-jest.mock("@data-board/BoardFocusHandler.composable");
-jest.mock("@data-board/BoardPermissions.composable");
-jest.mock("../composables/VideoConference.composable");
+vi.mock("@data-board/ContentElementState.composable");
+vi.mock("@data-board/BoardFocusHandler.composable");
+vi.mock("@data-board/BoardPermissions.composable");
+vi.mock("../composables/VideoConference.composable");
 
-window.open = jest.fn();
-
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
-const useRouteMock = <jest.Mock>useRoute;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 useRouteMock.mockReturnValue({ params: { id: "room-id" } });
 
-jest.mock("@data-board/BoardFeatures.composable");
-jest.mocked(useBoardFeatures).mockImplementation(() => {
+vi.mock("@data-board/BoardFeatures.composable");
+vi.mocked(useBoardFeatures).mockImplementation(() => {
 	return {
-		isFeatureEnabled: jest.fn().mockReturnValue(true),
+		isFeatureEnabled: vi.fn().mockReturnValue(true),
 	};
 });
 
-const mockedUseContentElementState = jest.mocked(useContentElementState);
+const mockedUseContentElementState = vi.mocked(useContentElementState);
 
 let defaultElement = videoConferenceElementResponseFactory.build();
 
 describe("VideoConferenceContentElement", () => {
+	window.open = vi.fn();
+
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let useBoardFocusHandlerMock: DeepMocked<
@@ -74,13 +75,13 @@ describe("VideoConferenceContentElement", () => {
 
 		useBoardFocusHandlerMock =
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 
 		defaultElement = videoConferenceElementResponseFactory.build();
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setupWrapper = (
@@ -95,6 +96,7 @@ describe("VideoConferenceContentElement", () => {
 			elementIndex?: number;
 			isRunning?: boolean;
 			error?: Error | null;
+			hasManageVideoConferencePermission?: boolean;
 		} = {
 			content: undefined,
 			isEditMode: true,
@@ -102,6 +104,7 @@ describe("VideoConferenceContentElement", () => {
 			columnIndex: 0,
 			rowIndex: 1,
 			elementIndex: 2,
+			hasManageVideoConferencePermission: false,
 		}
 	) => {
 		const {
@@ -115,6 +118,7 @@ describe("VideoConferenceContentElement", () => {
 			elementIndex = 2,
 			isRunning = false,
 			error = null,
+			hasManageVideoConferencePermission = false,
 		} = options;
 
 		const element = {
@@ -134,11 +138,9 @@ describe("VideoConferenceContentElement", () => {
 			ReturnType<typeof useVideoConference>
 		> = createMock<ReturnType<typeof useVideoConference>>();
 
-		jest.mocked(useVideoConference).mockReturnValue(useVideoConferenceMock);
+		vi.mocked(useVideoConference).mockReturnValue(useVideoConferenceMock);
 
-		useVideoConferenceMock.fetchVideoConferenceInfo.mockImplementation(
-			jest.fn()
-		);
+		useVideoConferenceMock.fetchVideoConferenceInfo.mockImplementation(vi.fn());
 		useVideoConferenceMock.joinVideoConference.mockImplementation(() =>
 			Promise.resolve("https://example.com")
 		);
@@ -160,12 +162,14 @@ describe("VideoConferenceContentElement", () => {
 		useBoardPermissionsMock = createMock<
 			ReturnType<typeof useBoardPermissions>
 		>({
-			hasEditPermission: ref(role === "teacher"),
+			hasManageVideoConferencePermission: ref(
+				hasManageVideoConferencePermission
+			),
 			isTeacher: ref(role === "teacher"),
 			isStudent: ref(role === "student"),
 		});
 
-		jest.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
+		vi.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
 
 		const wrapper = mount(VideoConferenceContentElement, {
 			global: {
@@ -174,7 +178,10 @@ describe("VideoConferenceContentElement", () => {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[BOARD_IS_LIST_LAYOUT as symbol]: false,
 				},
-				stubs: { VideoConferenceConfigurationDialog: true },
+				stubs: {
+					VideoConferenceConfigurationDialog: true,
+					VideoConferenceContentElementDisplay: true,
+				},
 			},
 			props: {
 				element,
@@ -252,13 +259,26 @@ describe("VideoConferenceContentElement", () => {
 				);
 			});
 
-			describe("when user has edit board permission", () => {
-				it("should have the permission to join the conference", async () => {
-					const { wrapper } = setupWrapper({
+			describe("when user has manage video conference permission", () => {
+				const localSetup = (
+					options: {
+						content?: VideoConferenceElementContent;
+						isEditMode: boolean;
+						role: "teacher" | "student";
+						hasManageVideoConferencePermission: boolean;
+					} = {
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
 						role: "teacher",
+						hasManageVideoConferencePermission: true,
+					}
+				) => {
+					return setupWrapper({
+						...options,
 					});
+				};
+				it("should have the permission to join the conference", async () => {
+					const { wrapper } = localSetup();
 
 					const videoConferenceElement = wrapper.getComponent(
 						VideoConferenceContentElementDisplay
@@ -270,11 +290,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				it("should have the permission to start the conference", async () => {
-					const { wrapper } = setupWrapper({
-						content: videoConferenceElementContentFactory.build(),
-						isEditMode: false,
-						role: "teacher",
-					});
+					const { wrapper } = localSetup();
 
 					const videoConferenceElement = wrapper.getComponent(
 						VideoConferenceContentElementDisplay
@@ -284,11 +300,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				it("should have tabindex of 0", () => {
-					const { wrapper } = setupWrapper({
-						content: videoConferenceElementContentFactory.build(),
-						isEditMode: false,
-						role: "teacher",
-					});
+					const { wrapper } = localSetup();
 					const videoConferenceElement = wrapper.findComponent(
 						'[data-testid="video-conference-element"]'
 					);
@@ -297,12 +309,13 @@ describe("VideoConferenceContentElement", () => {
 				});
 			});
 
-			describe("when the user has not edit board permissions", () => {
+			describe("when the user does not have manage video conference permission", () => {
 				it("should have the permission to join the conference", async () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
 						role: "student",
+						hasManageVideoConferencePermission: false,
 					});
 
 					const videoConferenceElement = wrapper.getComponent(
@@ -314,11 +327,12 @@ describe("VideoConferenceContentElement", () => {
 					).toEqual(true);
 				});
 
-				it("should not have the permission to start the conference", async () => {
+				it("should not have the permission to start the conference", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
 						role: "student",
+						hasManageVideoConferencePermission: false,
 					});
 
 					const videoConferenceElement = wrapper.getComponent(
@@ -334,6 +348,7 @@ describe("VideoConferenceContentElement", () => {
 						isEditMode: false,
 						role: "student",
 						isRunning: false,
+						hasManageVideoConferencePermission: false,
 					});
 					const videoConferenceElement = wrapper.findComponent(
 						'[data-testid="video-conference-element"]'
@@ -350,6 +365,7 @@ describe("VideoConferenceContentElement", () => {
 						isEditMode: false,
 						role: "student",
 						isRunning: true,
+						hasManageVideoConferencePermission: false,
 					});
 					const videoConferenceElement = wrapper.findComponent(
 						'[data-testid="video-conference-element"]'
@@ -375,7 +391,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("when element is first element", () => {
 					describe("and move up menu item is clicked", () => {
-						it("should emit 'move-up:edit' event", async () => {
+						it("should emit 'move-up:edit' event", () => {
 							const videoConferenceElementContent =
 								videoConferenceElementContentFactory.build();
 							const { wrapper } = setupWrapper({
@@ -417,7 +433,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("when element is last element", () => {
 					describe("and move down menu item is clicked", () => {
-						it("should emit 'move-down:edit' event ", async () => {
+						it("should emit 'move-down:edit' event ", () => {
 							const videoConferenceElementContent =
 								videoConferenceElementContentFactory.build();
 							const { wrapper } = setupWrapper({
@@ -622,7 +638,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				describe("and element is first element", () => {
-					it("should hide 'move-up' menu item", async () => {
+					it("should hide 'move-up' menu item", () => {
 						const { wrapper } = setupWrapper({
 							isEditMode: true,
 							isNotFirstElement: false,
@@ -657,7 +673,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("and element is last element", () => {
 					describe("and move down menu item is clicked", () => {
-						it("should emit 'move-down:edit' event", async () => {
+						it("should emit 'move-down:edit' event", () => {
 							const { wrapper } = setupWrapper({
 								isEditMode: true,
 								isNotLastElement: false,
@@ -714,7 +730,7 @@ describe("VideoConferenceContentElement", () => {
 
 		describe("onCreateTitle", () => {
 			describe("and title was provided", () => {
-				it("should display the title ", async () => {
+				it("should display the title ", () => {
 					const videoConferenceTitle = "Very specific vc title";
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build({

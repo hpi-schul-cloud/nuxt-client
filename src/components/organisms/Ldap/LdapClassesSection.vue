@@ -16,7 +16,7 @@
 			:model-value="classPathValue"
 			:disabled="checked === false"
 			type="text"
-			class="mt--xl"
+			class="mt-8"
 			:placeholder="$t('pages.administration.ldap.classes.path.title')"
 			:label="$t('pages.administration.ldap.classes.path.title')"
 			:info="$t('pages.administration.ldap.classes.path.info')"
@@ -39,7 +39,7 @@
 			:model-value="modelValue.nameAttribute"
 			:disabled="checked === false"
 			type="text"
-			class="mt--xl"
+			class="mt-8"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
 			:validation-model="v$.modelValue.nameAttribute"
 			:validation-messages="classesValidationMessage"
@@ -49,7 +49,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon class="custom-icon">$class</v-icon>
+				<v-icon>$class</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -57,7 +57,7 @@
 			:model-value="modelValue.participantAttribute"
 			:disabled="checked === false"
 			type="text"
-			class="mt--xl"
+			class="mt-8"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
 			:validation-model="v$.modelValue.participantAttribute"
 			:validation-messages="classesValidationMessage"
@@ -172,7 +172,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .title-class {
-	margin-top: var(--space-xl-2);
-	margin-bottom: var(--space-xl-2);
+	margin-top: 40px;
+	margin-bottom: 40px;
 }
 </style>

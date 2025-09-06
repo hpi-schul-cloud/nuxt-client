@@ -44,162 +44,157 @@
 	</v-custom-dialog>
 </template>
 
-<script>
+<script setup lang="ts">
 import CopyResultModalList from "./CopyResultModalList.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import {
-	mdiAlert,
-	mdiCheckCircle,
-	mdiCloseCircle,
-	mdiInformation,
-} from "@icons/material";
+import { mdiAlert } from "@icons/material";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
-	name: "CopyResultModal",
-	components: { CopyResultModalList, vCustomDialog },
-	props: {
-		isOpen: {
-			type: Boolean,
-		},
-		copyResultItems: {
-			type: Array,
-			default: () => [],
-		},
-		copyResultRootItemType: {
-			type: String,
-			default: "",
-		},
-	},
-	emits: ["copy-dialog-closed"],
-	data() {
-		return {
-			mdiInformation,
-			mdiCheckCircle,
-			mdiCloseCircle,
-			mdiAlert,
-		};
-	},
-	computed: {
-		items() {
-			return this.copyResultItems;
-		},
+const { t } = useI18n();
 
-		copyResultWarnings() {
-			return [
-				{
-					isShow: this.hasGeogebraElement,
-					text: this.$t("components.molecules.copyResult.geogebraCopy.info"),
-					title: this.$t("components.molecules.copyResult.label.geogebra"),
-				},
-				{
-					isShow: this.hasEtherpadElement,
-					text: this.$t("components.molecules.copyResult.etherpadCopy.info"),
-					title: this.$t("components.molecules.copyResult.label.etherpad"),
-				},
-				{
-					isShow: this.hasDrawingElement,
-					text: this.$t("components.molecules.copyResult.tldrawCopy.info"),
-					title: this.$t("components.molecules.copyResult.label.tldraw"),
-				},
-				{
-					isShow: this.hasFileElement || this.isCourse,
-					text: this.filesInfoText,
-					title: this.$t("components.molecules.copyResult.label.files"),
-				},
-				{
-					isShow: this.hasExternalTool || this.hasExternalToolElement,
-					text: this.externalToolsInfoText,
-					title: this.$t("components.molecules.copyResult.label.externalTools"),
-				},
-				{
-					isShow: this.hasCourseGroup,
-					text: this.$t("components.molecules.copyResult.courseGroupCopy.info"),
-					title: this.$t("common.words.courseGroups"),
-				},
-			];
-		},
-		hasGeogebraElement() {
-			return this.hasElementOfType(
-				this.items,
-				CopyApiResponseTypeEnum.LessonContentGeogebra
-			);
-		},
-		hasEtherpadElement() {
-			return (
-				this.hasElementOfType(
-					this.items,
-					CopyApiResponseTypeEnum.CollaborativeTextEditorElement
-				) ||
-				this.hasElementOfType(
-					this.items,
-					CopyApiResponseTypeEnum.LessonContentEtherpad
-				)
-			);
-		},
-		hasDrawingElement() {
-			return this.hasElementOfType(
-				this.items,
-				CopyApiResponseTypeEnum.DrawingElement
-			);
-		},
-		hasFileElement() {
-			return this.hasElementOfType(this.items, CopyApiResponseTypeEnum.File);
-		},
-		hasCourseGroup() {
-			return this.hasElementOfType(
-				this.items,
-				CopyApiResponseTypeEnum.CoursegroupGroup
-			);
-		},
-		hasErrors() {
-			return this.items.length > 0;
-		},
-		isCourse() {
-			return this.copyResultRootItemType === CopyApiResponseTypeEnum.Course;
-		},
-		filesInfoText() {
-			const courseFilesText = this.isCourse
-				? this.$t("components.molecules.copyResult.courseFiles.info")
-				: "";
-			const fileErrorText = this.hasFileElement
-				? this.$t("components.molecules.copyResult.fileCopy.error")
-				: "";
-			return `${courseFilesText} ${fileErrorText}`.trim();
-		},
-		externalToolsInfoText() {
-			return envConfigModule.getEnv.FEATURE_CTL_TOOLS_COPY_ENABLED
-				? this.$t("components.molecules.copyResult.ctlTools.withFeature.info")
-				: this.$t("components.molecules.copyResult.ctlTools.info");
-		},
-		hasExternalTool() {
-			return this.hasElementOfType(
-				this.items,
-				CopyApiResponseTypeEnum.ExternalTool
-			);
-		},
-		hasExternalToolElement() {
-			return this.hasElementOfType(
-				this.items,
-				CopyApiResponseTypeEnum.ExternalToolElement
-			);
-		},
-	},
-	methods: {
-		hasElementOfType(items, types) {
-			let found = false;
-			items.forEach((item) => {
-				if (found) return;
-				found = item.elements.find((e) => types.includes(e.type));
-			});
-			return found;
-		},
-		onDialogClosed() {
-			this.$emit("copy-dialog-closed");
-		},
-	},
+type CopyResultItem = {
+	elements: Array<{
+		type: CopyApiResponseTypeEnum;
+	}>;
 };
+
+type Props = {
+	isOpen?: boolean;
+	copyResultItems?: Array<CopyResultItem>;
+	copyResultRootItemType?: string;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+	isOpen: false,
+	copyResultItems: () => [] as CopyResultItem[],
+	copyResultRootItemType: "",
+});
+
+const emit = defineEmits<{
+	(e: "copy-dialog-closed"): void;
+}>();
+
+const hasElementOfType = (
+	items: CopyResultItem[],
+	types: CopyApiResponseTypeEnum
+) => {
+	let found = false;
+	items.forEach((item) => {
+		if (found) return;
+		found = item.elements.find((e) => types.includes(e.type)) !== undefined;
+	});
+	return found;
+};
+
+const onDialogClosed = () => {
+	emit("copy-dialog-closed");
+};
+
+const items = computed(() => props.copyResultItems);
+const copyResultWarnings = computed(() => {
+	return [
+		{
+			isShow: hasGeogebraElement.value,
+			text: t("components.molecules.copyResult.geogebraCopy.info"),
+			title: t("components.molecules.copyResult.label.geogebra"),
+		},
+		{
+			isShow: hasEtherpadElement.value,
+			text: t("components.molecules.copyResult.etherpadCopy.info"),
+			title: t("components.molecules.copyResult.label.etherpad"),
+		},
+		{
+			isShow: hasDrawingElement.value,
+			text: t("components.molecules.copyResult.tldrawCopy.info"),
+			title: t("components.molecules.copyResult.label.tldraw"),
+		},
+		{
+			isShow: hasFileElement.value || isCourse.value,
+			text: filesInfoText.value,
+			title: t("components.molecules.copyResult.label.files"),
+		},
+		{
+			isShow: hasExternalTool.value || hasExternalToolElement.value,
+			text: externalToolsInfoText.value,
+			title: t("components.molecules.copyResult.label.externalTools"),
+		},
+		{
+			isShow: hasCourseGroup.value,
+			text: t("components.molecules.copyResult.courseGroupCopy.info"),
+			title: t("common.words.courseGroups"),
+		},
+	];
+});
+
+const hasGeogebraElement = computed(() => {
+	return hasElementOfType(
+		items.value,
+		CopyApiResponseTypeEnum.LessonContentGeogebra
+	);
+});
+
+const hasEtherpadElement = computed(() => {
+	return (
+		hasElementOfType(
+			items.value,
+			CopyApiResponseTypeEnum.CollaborativeTextEditorElement
+		) ||
+		hasElementOfType(items.value, CopyApiResponseTypeEnum.LessonContentEtherpad)
+	);
+});
+
+const hasDrawingElement = computed(() => {
+	return hasElementOfType(items.value, CopyApiResponseTypeEnum.DrawingElement);
+});
+
+const hasFileElement = computed(() => {
+	return hasElementOfType(items.value, CopyApiResponseTypeEnum.File);
+});
+
+const hasCourseGroup = computed(() => {
+	return hasElementOfType(
+		items.value,
+		CopyApiResponseTypeEnum.CoursegroupGroup
+	);
+});
+
+const hasErrors = computed(() => {
+	return items.value.length > 0;
+});
+
+const isCourse = computed(() => {
+	return props.copyResultRootItemType === CopyApiResponseTypeEnum.Course;
+});
+
+const filesInfoText = computed(() => {
+	const courseFilesText = isCourse.value
+		? t("components.molecules.copyResult.courseFiles.info")
+		: "";
+	const fileErrorText = hasFileElement.value
+		? t("components.molecules.copyResult.fileCopy.error")
+		: "";
+	return `${courseFilesText} ${fileErrorText}`.trim();
+});
+
+const externalToolsInfoText = computed(() => {
+	return envConfigModule.getEnv.FEATURE_CTL_TOOLS_COPY_ENABLED
+		? t("components.molecules.copyResult.ctlTools.withFeature.info")
+		: t("components.molecules.copyResult.ctlTools.info");
+});
+
+const hasExternalTool = computed(() => {
+	return hasElementOfType(items.value, CopyApiResponseTypeEnum.ExternalTool);
+});
+
+const hasExternalToolElement = computed(() => {
+	return hasElementOfType(
+		items.value,
+		CopyApiResponseTypeEnum.ExternalToolElement
+	);
+});
 </script>
 
 <style scoped lang="scss">
@@ -208,6 +203,6 @@ export default {
 }
 
 .aligned-with-icon {
-	padding-top: var(--space-xs-3);
+	padding-top: 4px;
 }
 </style>

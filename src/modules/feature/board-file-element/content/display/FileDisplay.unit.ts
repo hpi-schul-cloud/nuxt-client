@@ -1,15 +1,19 @@
-import { fileElementResponseFactory } from "@@/tests/test-utils";
+import { PreviewStatus } from "@/fileStorageApi/v3";
+import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { envsFactory, fileElementResponseFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 import AudioDisplay from "./audio-display/AudioDisplay.vue";
+import CollaboraDisplay from "./collabora-display/CollaboraDisplay.vue";
 import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
-import { PreviewStatus } from "@/fileStorageApi/v3";
 
 describe("FileDisplay", () => {
 	describe("when previewUrl is defined", () => {
@@ -26,14 +30,27 @@ describe("FileDisplay", () => {
 						isDownloadAllowed: true,
 						element,
 						mimeType: "test",
+						isCollaboraEditable: false,
 					},
 					isEditMode: true,
 					showMenu: true,
 				};
 
+				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+					getEnv: {
+						...envsFactory.build(),
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
+					},
+				});
+
 				const wrapper = shallowMount(FileDisplay, {
 					props,
-					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+						},
+					},
 				});
 
 				return {
@@ -77,14 +94,27 @@ describe("FileDisplay", () => {
 						isDownloadAllowed: true,
 						element,
 						mimeType: "video/mp4",
+						isCollaboraEditable: false,
 					},
 					isEditMode: true,
 					showMenu: true,
 				};
 
+				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+					getEnv: {
+						...envsFactory.build(),
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
+					},
+				});
+
 				const wrapper = shallowMount(FileDisplay, {
 					props,
-					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+						},
+					},
 				});
 
 				return {
@@ -129,14 +159,27 @@ describe("FileDisplay", () => {
 						isDownloadAllowed: true,
 						element,
 						mimeType: "application/pdf",
+						isCollaboraEditable: false,
 					},
 					isEditMode: true,
 					showMenu: true,
 				};
 
+				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+					getEnv: {
+						...envsFactory.build(),
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
+					},
+				});
+
 				const wrapper = shallowMount(FileDisplay, {
 					props,
-					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+						},
+					},
 				});
 
 				return {
@@ -175,14 +218,27 @@ describe("FileDisplay", () => {
 						isDownloadAllowed: true,
 						element,
 						mimeType: "video/mp4",
+						isCollaboraEditable: false,
 					},
 					isEditMode: true,
 					showMenu: true,
 				};
 
+				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+					getEnv: {
+						...envsFactory.build(),
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
+					},
+				});
+
 				const wrapper = shallowMount(FileDisplay, {
 					props,
-					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+						},
+					},
 				});
 
 				return {
@@ -223,14 +279,27 @@ describe("FileDisplay", () => {
 						isDownloadAllowed: true,
 						element,
 						mimeType: "audio/mp3",
+						isCollaboraEditable: false,
 					},
 					isEditMode: true,
 					showMenu: true,
 				};
 
+				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+					getEnv: {
+						...envsFactory.build(),
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
+					},
+				});
+
 				const wrapper = shallowMount(FileDisplay, {
 					props,
-					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+						},
+					},
 				});
 
 				return {
@@ -270,14 +339,27 @@ describe("FileDisplay", () => {
 						isDownloadAllowed: true,
 						element,
 						mimeType: "application/pdf",
+						isCollaboraEditable: false,
 					},
 					isEditMode: true,
 					showMenu: true,
 				};
 
+				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+					getEnv: {
+						...envsFactory.build(),
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
+					},
+				});
+
 				const wrapper = shallowMount(FileDisplay, {
 					props,
-					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+						},
+					},
 				});
 
 				return {
@@ -298,7 +380,109 @@ describe("FileDisplay", () => {
 			});
 		});
 
-		describe("when mimeType is not a video or audio type", () => {
+		describe("when mimeType is office type and collabora feaure enabled", () => {
+			const setup = () => {
+				const element = fileElementResponseFactory.build();
+				const props = {
+					fileProperties: {
+						name: "test",
+						size: 100,
+						url: "test",
+						previewUrl: undefined,
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
+						isDownloadAllowed: true,
+						element,
+						mimeType:
+							"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+						isCollaboraEditable: true,
+					},
+					isEditMode: true,
+					showMenu: true,
+				};
+
+				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+					getEnv: {
+						...envsFactory.build(),
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: true,
+					},
+				});
+
+				const wrapper = mount(FileDisplay, {
+					props,
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+						},
+					},
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render collabora display", () => {
+				const { wrapper } = setup();
+
+				const collaboraDisplay = wrapper.findComponent(CollaboraDisplay);
+
+				expect(collaboraDisplay.exists()).toBe(true);
+			});
+		});
+
+		describe("when mimeType is office type and collabora feaure disabled", () => {
+			const setup = () => {
+				const element = fileElementResponseFactory.build();
+				const props = {
+					fileProperties: {
+						name: "test",
+						size: 100,
+						url: "test",
+						previewUrl: undefined,
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
+						isDownloadAllowed: true,
+						element,
+						mimeType:
+							"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+						isCollaboraEditable: true,
+					},
+					isEditMode: true,
+					showMenu: true,
+				};
+
+				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+					getEnv: {
+						...envsFactory.build(),
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
+					},
+				});
+
+				const wrapper = mount(FileDisplay, {
+					props,
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+						},
+					},
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render collabora display", () => {
+				const { wrapper } = setup();
+
+				const collaboraDisplay = wrapper.findComponent(CollaboraDisplay);
+
+				expect(collaboraDisplay.exists()).toBe(false);
+			});
+		});
+
+		describe("when mimeType is other", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
 				const props = {
@@ -311,14 +495,27 @@ describe("FileDisplay", () => {
 						isDownloadAllowed: true,
 						element,
 						mimeType: "test",
+						isCollaboraEditable: false,
 					},
 					isEditMode: true,
 					showMenu: true,
 				};
 
+				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+					getEnv: {
+						...envsFactory.build(),
+						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
+					},
+				});
+
 				const wrapper = shallowMount(FileDisplay, {
 					props,
-					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+						},
+					},
 				});
 
 				return {
@@ -348,6 +545,22 @@ describe("FileDisplay", () => {
 				const videoDisplay = wrapper.findComponent(VideoDisplay);
 
 				expect(videoDisplay.exists()).toBe(false);
+			});
+
+			it("should not render pdf display component", () => {
+				const { wrapper } = setup();
+
+				const pdfDisplay = wrapper.findComponent(PdfDisplay);
+
+				expect(pdfDisplay.exists()).toBe(false);
+			});
+
+			it("should not render collabora display component", () => {
+				const { wrapper } = setup();
+
+				const collaboraDisplay = wrapper.findComponent(CollaboraDisplay);
+
+				expect(collaboraDisplay.exists()).toBe(false);
 			});
 		});
 	});

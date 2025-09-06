@@ -24,7 +24,7 @@
 		>
 			<v-list-item-title>
 				<v-icon :icon="mdiContentCopy" class="task-action-icon" />
-				{{ $t("common.actions.copy") }}
+				{{ $t("common.actions.duplicate") }}
 			</v-list-item-title>
 		</v-list-item>
 		<v-list-item
@@ -154,7 +154,7 @@ export default defineComponent({
 			validator: (role) => ["student", "teacher"].includes(role),
 		},
 	},
-	emits: ["copy-task", "share-task", "toggled-menu", "focus-changed"],
+	emits: ["copy-task", "share-task"],
 	data() {
 		return {
 			confirmDeleteDialogIsOpen: false,

@@ -5,6 +5,7 @@
 		data-testid="dialog-invite-participants"
 		max-width="480"
 		@keydown.esc="onClose"
+		@click:outside="onClose"
 	>
 		<v-card ref="inviteMembersContent">
 			<template #title>
@@ -24,8 +25,10 @@
 
 					<div class="mt-5">
 						<v-text-field
+							ref="descriptionField"
 							v-model="formData.title"
 							class="mb-2"
+							:rules="validationRules"
 							:label="
 								t('pages.rooms.members.inviteMember.form.description.label')
 							"
@@ -33,11 +36,13 @@
 								t('pages.rooms.members.inviteMember.form.description.hint')
 							"
 							persistent-hint
+							data-testid="invite-participant-description-input"
 						/>
 
 						<v-checkbox
 							v-model="formData.restrictedToCreatorSchool"
 							hide-details
+							data-testid="input-invite-participants-restricted-to-creator-school"
 						>
 							<template #label>
 								<div class="mt-6">
@@ -62,6 +67,7 @@
 								)
 							"
 							hide-details
+							data-testid="input-invite-participants-valid-for-students"
 						/>
 
 						<div class="d-flex align-center justify-start my-n4 pr-0">
@@ -72,6 +78,7 @@
 								"
 								hide-details
 								class="mr-2"
+								data-testid="input-invite-participants-link-expires"
 							/>
 							<DatePicker
 								ref="datePicker"
@@ -92,6 +99,7 @@
 							v-model="formData.requiresConfirmation"
 							hide-details
 							class="my-n6"
+							data-testid="input-invite-participants-requires-confirmation"
 						>
 							<template #label>
 								<div class="mt-6">
@@ -110,7 +118,7 @@
 				</template>
 				<template v-else>
 					<ShareModalResult
-						:share-url="sharedUrl!"
+						:share-url="sharedUrl"
 						type="roomMemberInvitation"
 						@copied="onCopyLink"
 						@done="onClose"
@@ -124,7 +132,6 @@
 					<v-btn
 						ref="cancelButton"
 						class="ms-auto mr-2"
-						color="primary"
 						:text="t('common.actions.cancel')"
 						data-testid="invite-participant-cancel-btn"
 						@click="onClose"
@@ -158,9 +165,9 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref, watch } from "vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VCard } from "vuetify/lib/components";
+import type { VCard, VTextField } from "vuetify/components";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
@@ -170,10 +177,13 @@ import {
 	InvitationStep,
 	UpdateRoomInvitationLinkDto,
 	useRoomInvitationLinkStore,
+	RoomInvitationFormData,
 } from "@data-room";
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { storeToRefs } from "pinia";
+import { isNonEmptyString, isOfMaxLength } from "@util-validators";
+import { useOpeningTagValidator } from "@/utils/validation";
 
 defineProps({
 	schoolName: {
@@ -193,33 +203,38 @@ const emit = defineEmits<{
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { createLink, updateLink } = useRoomInvitationLinkStore();
-const { invitationStep, sharedUrl, editedLink } = storeToRefs(
-	useRoomInvitationLinkStore()
-);
+const { invitationStep, sharedUrl, editedLink, DEFAULT_EXPIRED_DATE } =
+	storeToRefs(useRoomInvitationLinkStore());
+const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
 
-const defaultFormData = {
+const defaultFormData: RoomInvitationFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
 	isValidForStudents: false,
 	activeUntilChecked: false,
-	activeUntil: null as Date | null,
+	activeUntil: undefined,
 	requiresConfirmation: true,
 	id: "",
 };
 
 const formData = ref({ ...defaultFormData });
+const descriptionField = useTemplateRef("descriptionField");
+
+const validationRules = [
+	isNonEmptyString(t("common.validation.nonEmptyString")),
+	isOfMaxLength(100)(t("common.validation.tooLong")),
+	validateOnOpeningTag,
+];
 
 const isDatePickerDisabled = computed(() => {
 	return !formData.value.activeUntilChecked;
 });
 
 const isSubmitDisabled = computed(() => {
-	return (
-		formData.value.activeUntilChecked && formData.value.activeUntil === null
-	);
+	return formData.value.activeUntilChecked && !formData.value.activeUntil;
 });
 
 const modalTitle = computed(() => {
@@ -252,13 +267,14 @@ const subTitle = computed(() => {
 	return subTitleMap[invitationStep.value];
 });
 
-const onUpdateDate = (date: Date | null) => {
+const onUpdateDate = (date: Date) => {
 	formData.value.activeUntil = date;
 	unpause();
 };
 
 const onClose = () => {
 	emit("close");
+	editedLink.value = null;
 
 	setTimeout(() => {
 		formData.value = { ...defaultFormData };
@@ -268,12 +284,17 @@ const onClose = () => {
 const onContinue = async () => {
 	if (invitationStep.value === InvitationStep.SHARE) return;
 
+	const validationResult = await descriptionField.value?.validate?.();
+	if (validationResult && validationResult.length > 0) {
+		return;
+	}
+
 	const baseParams = {
-		title: formData.value.title || "invitation link",
+		title: formData.value.title,
 		activeUntil:
 			formData.value.activeUntilChecked && !!formData.value.activeUntil
 				? formData.value.activeUntil.toString()
-				: "2900-01-01T00:00:00.000Z",
+				: DEFAULT_EXPIRED_DATE.value,
 		isOnlyForTeachers: !formData.value.isValidForStudents,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
@@ -334,8 +355,10 @@ watch(
 			formData.value.restrictedToCreatorSchool =
 				newVal.restrictedToCreatorSchool;
 			formData.value.isValidForStudents = !newVal.isOnlyForTeachers;
-			formData.value.activeUntilChecked = newVal.activeUntil !== null;
-			formData.value.activeUntil = new Date(newVal.activeUntil!);
+			formData.value.activeUntilChecked = newVal.activeUntil !== undefined;
+			formData.value.activeUntil = newVal.activeUntil
+				? new Date(newVal.activeUntil)
+				: undefined;
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
 		}
 	}

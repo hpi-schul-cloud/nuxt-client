@@ -1,113 +1,96 @@
 <template>
 	<footer class="footer">
 		<div class="top-line">
-			<span class="current-year">© {{ currentYear }} {{ $theme.name }}</span>
+			<span class="current-year">© {{ currentYear }} {{ theme.name }}</span>
 		</div>
 
 		<div>
-			<template v-for="(link, index) in links">
-				<span v-if="index !== 0" :key="index"> - </span>
-				<template v-if="!link.innerlinks">
-					<base-link :key="link.text" class="footer-link" v-bind="link">{{
-						link.text
-					}}</base-link>
-				</template>
-				<template v-else>
-					<span
-						:key="link.text"
-						:aria-label="
-							$t('components.legacy.footer.ariaLabel', {
-								itemName: link.text,
-							})
-						"
-						>{{ link.text }}</span
-					>
-				</template>
+			<template v-for="(link, index) in links" :key="link.text">
+				<span v-if="index !== 0" :key="index" aria-hidden="true"> - </span>
+				<base-link class="footer-link" v-bind="link">{{ link.text }}</base-link>
 			</template>
 		</div>
 	</footer>
 </template>
 
-<script>
-import { authModule, filePathsModule, envConfigModule } from "@/store";
+<script setup lang="ts">
+import { filePathsModule, envConfigModule } from "@/store";
+import { injectStrict, THEME_KEY } from "@/utils/inject";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
-	computed: {
-		school() {
-			return authModule.getSchool;
+const { t } = useI18n();
+const theme = injectStrict(THEME_KEY);
+
+const currentYear = computed(() => new Date().getFullYear());
+
+const links = computed(() => {
+	const links = [
+		{
+			to: "/imprint",
+			text: t("components.legacy.footer.imprint"),
 		},
-		currentYear() {
-			return new Date().getFullYear();
+		{
+			href: "/termsofuse",
+			text: t("components.legacy.footer.terms"),
+			target: "_blank",
+			rel: "noopener",
 		},
-		links() {
-			const links = [
-				{
-					to: "/imprint",
-					text: this.$t("components.legacy.footer.imprint"),
-				},
-				{
-					href: "/termsofuse",
-					text: this.$t("components.legacy.footer.terms"),
-					target: "_blank",
-					rel: "noopener",
-				},
-				{
-					href: "/privacypolicy",
-					text: this.$t("components.legacy.footer.privacy_policy"),
-					target: "_blank",
-					rel: "noopener",
-				},
-				{
-					href: "mailto:schul-cloud@bildungsserver.berlin-brandenburg.de?subject=Schul-Cloud%20Brandenburg%20Anfrage",
-					text: this.$t("components.legacy.footer.contact"),
-				},
-				{
-					href: "https://github.com/hpi-schul-cloud",
-					text: this.$t("components.legacy.footer.github"),
-				},
-			];
-			if (envConfigModule.getEnv.ALERT_STATUS_URL) {
-				links.push({
-					href: envConfigModule.getEnv.ALERT_STATUS_URL,
-					text: this.$t("components.legacy.footer.status"),
-					target: "_blank",
-					rel: "noopener",
-				});
-			}
-			if (envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL) {
-				links.push({
-					href:
-						"mailto:" +
-						envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
-						"?subject=" +
-						this.$t("components.legacy.footer.accessibility.report"),
-					text: this.$t("components.legacy.footer.accessibility.report"),
-					target: "_blank",
-					rel: "noopener",
-				});
-			}
-			links.push({
-				href: filePathsModule.getSpecificFiles.accessibilityStatement,
-				text: this.$t("components.legacy.footer.accessibility.statement"),
-				target: "_blank",
-				rel: "noopener",
-			});
-			return links;
+		{
+			href: "/privacypolicy",
+			text: t("components.legacy.footer.privacy_policy"),
+			target: "_blank",
+			rel: "noopener",
 		},
-	},
-};
+		{
+			href: "mailto:schul-cloud@bildungsserver.berlin-brandenburg.de?subject=Schul-Cloud%20Brandenburg%20Anfrage",
+			text: t("components.legacy.footer.contact"),
+		},
+		{
+			href: "https://github.com/hpi-schul-cloud",
+			text: t("components.legacy.footer.github"),
+		},
+	];
+	if (envConfigModule.getEnv.ALERT_STATUS_URL) {
+		links.push({
+			href: envConfigModule.getEnv.ALERT_STATUS_URL,
+			text: t("components.legacy.footer.status"),
+			target: "_blank",
+			rel: "noopener",
+		});
+	}
+	if (envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL) {
+		links.push({
+			href:
+				"mailto:" +
+				envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
+				"?subject=" +
+				t("components.legacy.footer.accessibility.report"),
+			text: t("components.legacy.footer.accessibility.report"),
+			target: "_blank",
+			rel: "noopener",
+		});
+	}
+	links.push({
+		href: filePathsModule.getSpecificFiles.accessibilityStatement.toString(),
+		text: t("components.legacy.footer.accessibility.statement"),
+		target: "_blank",
+		rel: "noopener",
+	});
+	return links;
+});
 </script>
 
 <style lang="scss" scoped>
 .current-year {
-	margin-bottom: var(--space-xs);
+	margin-bottom: 8px;
 	font-size: var(--text-lg);
 }
 
 .footer {
 	width: 100%;
-	padding: 0 var(--space-md);
-	margin: var(--space-lg) 0 var(--space-md);
+	padding: 0 16px;
+	margin: 24px 0 16px;
 	text-align: center;
 }
 

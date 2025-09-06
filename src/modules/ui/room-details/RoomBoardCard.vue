@@ -198,7 +198,7 @@ const actionsMenuItems = computed(() => {
 	actions.push({
 		icon: mdiContentCopy,
 		action: () => emit("copy-board"),
-		name: t("common.actions.copy"),
+		name: t("common.actions.duplicate"),
 		dataTestId: `board-card-menu-action-copy-${
 			toRef(props, "boardCardIndex").value
 		}`,
@@ -263,13 +263,13 @@ const actionsMenuItems = computed(() => {
 		text-align: left;
 
 		.v-icon {
-			padding-bottom: var(--space-xs-4);
+			padding-bottom: 2px;
 		}
 	}
 
 	.dot-menu-section {
 		text-align: right;
-		height: calc(var(--space-base-vuetify) * 9);
+		height: 36px;
 	}
 }
 </style>

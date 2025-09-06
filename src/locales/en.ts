@@ -6,11 +6,11 @@ export default {
 	"common.actions.confirm": "Confirm",
 	"common.actions.continue": "Continue",
 	"common.actions.copy": "Copy",
+	"common.actions.duplicate": "Duplicate",
 	"common.actions.create": "Create",
 	"common.actions.delete": "Delete",
 	"common.actions.discard": "Discard",
 	"common.actions.download": "Download",
-	"common.actions.copyRoom": "Duplicate",
 	"common.actions.export": "Export",
 	"common.actions.edit": "Edit",
 	"common.actions.finish": "Finish",
@@ -37,6 +37,10 @@ export default {
 	"common.file.scanError":
 		"Error during virus check. Preview cannot be created. Please upload the file again.",
 	"common.file.virusDetected": "File has been locked due to a suspected virus.",
+	"common.file": "file",
+	"common.file.exceedsCollaboraEditableFileSize":
+		"Documents larger than {sizeInMb} cannot be edited online.",
+	"common.files": "files",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
@@ -92,10 +96,12 @@ export default {
 	"common.labels.size": "Size",
 	"common.labels.status": "Status",
 	"common.labels.student": "Student",
+	"common.labels.student.neutral": "Student",
 	"common.labels.students": "Students",
 	"common.labels.success": "success",
 	"common.labels.teacher.plural": "Teachers",
 	"common.labels.teacher": "Teacher",
+	"common.labels.teacher.neutral": "Teacher",
 	"common.labels.time": "Time",
 	"common.labels.title": "Title",
 	"common.labels.unknown": "Unknown",
@@ -168,7 +174,10 @@ export default {
 		"The text you entered exceeds the maximum length",
 	"common.validation.containsOpeningTag":
 		"Please insert a space after the less-than sign.",
+	"common.validation.nonEmptyString":
+		"This is a mandatory field and must not contain only spaces.",
 	"common.words.and": "and",
+	"common.words.board": "board",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Blue",
@@ -185,6 +194,8 @@ export default {
 	"common.words.color.turquoise": "Turquoise",
 	"common.words.color.yellow": "Yellow",
 	"common.words.copiedToClipboard": "Copied to the clipboard",
+	"common.words.copiedToClipboard.failure":
+		"Failed to copy to the clipboard. Please try it manually.",
 	"common.words.copyLinkToClipboard.success": "Link copied to clipboard",
 	"common.words.copyLinkToClipboard.failure":
 		"Link could not be copied to clipboard",
@@ -392,13 +403,13 @@ export default {
 	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
 		"The school is already in the next school year",
 	"components.administration.schoolYearChangeSection.notification.finish.success":
-		"School year successfully started",
+		"Transfer phase successfully completed. School transferred to the next year.",
 	"components.administration.schoolYearChangeSection.notification.start.success":
 		"Transfer phase started successfully",
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"End of the school year",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"The transfer phase can be started manually two weeks before the start of the holidays. If no manual start is made by the start of the holidays, the transfer phase begins automatically. The start of the transfer phase cannot be reversed.",
+		"The transfer phase can be started manually two weeks before the end of the school year. Once no manual start has taken place, the transfer phase begins automatically. The start of the transfer phase cannot be reversed.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Start transfer period",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
@@ -419,10 +430,14 @@ export default {
 		"End transfer phase",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
 		"Class and personal data (LDAP) have been updated and verified.",
-	"components.administration.schoolYearChangeSection.dialog.title":
-		"Really finish the school year?",
-	"components.administration.schoolYearChangeSection.dialog.content":
+	"components.administration.schoolYearChangeSection.dialog.start.title":
+		"Really start the transfer phase?",
+	"components.administration.schoolYearChangeSection.dialog.start.content":
 		"Synchronization of LDAP master data is interrupted during the transfer phase. Thus, user data and classes (if used) are no longer updated via LDAP. Login with previously synchronized login data is still possible. Password changes in LDAP during login are also taken into account.",
+	"components.administration.schoolYearChangeSection.dialog.finish.title":
+		"Really end the transfer phase?",
+	"components.administration.schoolYearChangeSection.dialog.finish.content":
+		"The synchronization of the LDAP data is started. User data and classes are updated. The new school year is automatically set.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hour | hours",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
@@ -454,7 +469,7 @@ export default {
 	"components.board.error.404":
 		"Error 404 – Board with this name was not found",
 	"components.board.error.403":
-		"Error 403 – Unfortunately, you do not have permission to view this content",
+		"Error 403 – Unfortunately, you do not have permission to view this content ...",
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
@@ -513,7 +528,8 @@ export default {
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"The board's view was changed to {layout} by another user.",
-	"components.board": "board",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"Preferred tools could not be loaded.",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
 	"components.boardElement": "element",
@@ -542,7 +558,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Update status",
 	"components.cardElement.fileElement.videoFormatError":
 		"The video format is not supported by this browser/operating system.",
-
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Open office document",
 	"components.cardElement.folderElement": "File folder",
 	"components.cardElement.folderElement.untitled": "Untitled folder",
 	"components.cardElement.LinkElement": "Link",
@@ -651,7 +668,7 @@ export default {
 	"components.molecules.copyResult.etherpadCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.failedCopy":
-		"The copy process could not be completed.",
+		"The duplication could not be completed.",
 	"components.molecules.copyResult.fileCopy.error":
 		"The following files could not be copied and must be added again.",
 	"components.molecules.copyResult.geogebraCopy.info":
@@ -683,22 +700,23 @@ export default {
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.course.successfullyCopied":
-		"All elements were successfully copied.",
+		"All elements were successfully duplicated.",
 	"components.molecules.copyResult.board.successfullyCopied":
-		"Board successfully copied.",
+		"Board successfully duplicated.",
 	"components.molecules.copyResult.task.successfullyCopied":
-		"Task successfully copied.",
+		"Task successfully duplicated.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
-		"Lesson successfully copied.",
+		"Lesson successfully duplicated.",
 	"components.molecules.copyResult.timeoutCopy":
-		"The copy process may take longer for large files. The content will be available shortly.",
+		"Duplicating large files may take longer. The content will be available shortly.",
 	"components.molecules.copyResult.timeoutSuccess":
-		"The copy process has been completed.",
-	"components.molecules.copyResult.title.failure": "Error during copying",
-	"components.molecules.copyResult.title.loading": "Copying is running...",
+		"The duplication process has been completed.",
+	"components.molecules.copyResult.title.failure": "Error during duplication",
+	"components.molecules.copyResult.title.loading":
+		"Duplication is in progress...",
 	"components.molecules.copyResult.title.partial":
-		"Important copying information",
-	"components.molecules.copyResult.title.success": "Copy successful",
+		"Important duplication information",
+	"components.molecules.copyResult.title.success": "Duplication successful",
 	"components.molecules.courseheader.coursedata": "Course data",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
@@ -736,6 +754,10 @@ export default {
 	"components.molecules.import.options.success": "{name} imported successfully",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"The following content will not be imported:",
+	"components.molecules.import.room.options.title": "Import room",
+	"components.molecules.import.room.rename":
+		"If necessary, the name of the room can be renamed: ",
+	"components.molecules.import.room.label": "Room name",
 	"components.molecules.import.tasks.label": "Task",
 	"components.molecules.import.tasks.rename":
 		"If necessary, the name of the task can be renamed: ",
@@ -791,8 +813,10 @@ export default {
 		"Geogebra IDs",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Course groups",
+	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
+		"Room members and permissions",
 	"components.molecules.share.options.tableHeader.InfoText":
-		"The following content will not be copied:",
+		"The following content will not be duplicated:",
 	"components.molecules.share.courses.result.linkLabel": "Link course copy",
 	"components.molecules.share.lessons.mail.body": "Link to the topic:",
 	"components.molecules.share.lessons.mail.subject": "Topic you can import",
@@ -803,11 +827,18 @@ export default {
 		"With the following link, the board can be imported as a copy by other teachers.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link to Board copy",
+	"components.molecules.share.columnBoard.mail.subject": "Board you can import",
+	"components.molecules.share.columnBoard.mail.body": "Link to the board: ",
 	"components.molecules.share.options.expiresInDays":
 		"Link expires after 21 days",
 	"components.molecules.share.options.schoolInternally":
 		"Link only valid within the school",
 	"components.molecules.share.options.title": "Share settings",
+	"components.molecules.share.room.options.infoText":
+		"With the following link, this room can be copied by other people. If an actively used room should be shared, please first create a duplicate and share that.",
+	"components.molecules.share.room.result.linkLabel": "Link room copy",
+	"components.molecules.share.room.mail.subject": "Room you can import",
+	"components.molecules.share.room.mail.body": "Link to the room: ",
 	"components.molecules.share.result.mailShare": "Send as mail",
 	"components.molecules.share.result.qrCodeScan": "Scan QR code",
 	"components.molecules.share.result.title": "Share via",
@@ -929,6 +960,11 @@ export default {
 	"components.roomForm.labels.timePeriod": "Time period",
 	"components.roomForm.labels.timePeriod.from": "Time period from",
 	"components.roomForm.labels.timePeriod.to": "Time period to",
+	"components.roomForm.labels.videoConference.title": "Video conferences",
+	"components.roomForm.labels.videoConference.label":
+		"Room members with ‘Edit’ room permissions can also add and start video conferences.",
+	"components.roomForm.labels.videoConference.helperText":
+		"Independently of this, room members with ‘Administer’ or ‘Own’ room permissions can always add and start video conferences.",
 	"components.roomForm.validation.generalSaveError":
 		"An error occurred while saving. Please check your inputs and try again.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -1000,7 +1036,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"In the next step, a copy of the room will be created.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"The following contents will not be copied:",
+		"The following contents are not included:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Room members and permissions",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Contents in Etherpads",
@@ -1098,6 +1134,10 @@ export default {
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {institute_title}.",
 	"pages.administration.classes.index.add": "Add class",
 	"pages.administration.classes.index.title": "Manage classes",
+	"pages.administration.classes.thr.hint.title":
+		"Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.text":
+		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
 	"pages.administration.common.label.archive": "Archive",
 	"pages.administration.common.label.active": "Current",
 	"pages.administration.classes.manage": "Manage class",
@@ -1106,8 +1146,10 @@ export default {
 	"pages.administration.courses.deleteDialog.content":
 		'Do you really want this course "{itemName}" to delete?',
 	"pages.administration.courses.index.add": "Add course",
-
 	"pages.administration.courses.edit": "Edit course",
+	"pages.administration.courses.withoutTeacher":
+		"Only show courses without teachers",
+	"pages.administration.courses.noTeacher": "not available",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronization",
 	"pages.administration.ldap.activate.className": "Name",
@@ -1138,8 +1180,8 @@ export default {
 		"Attribute participant",
 	"pages.administration.ldap.classes.path.info": "Relative path from base path",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Here you need to define, where we find classes and how they are structured. By adding two semicolons (;;) you can add multiple user paths separately.",
-	"pages.administration.ldap.classes.path.title": "Class path(s)",
+		"Here you need to define, where we find classes and how they are structured.",
+	"pages.administration.ldap.classes.path.title": "Class path",
 	"pages.administration.ldap.classes.subtitle":
 		"Specify the class attribute where the following information is available in your LDAP.",
 	"pages.administration.ldap.classes.title": "Classes (optional)",
@@ -1346,6 +1388,8 @@ export default {
 		"An error occured while loading the school",
 	"pages.administration.school.index.generalSettings.changeSchoolValueWarning":
 		"Once set, it cannot be changed!",
+	"pages.administration.school.index.generalSettings.disabledHint":
+		"Cannot be edited here, more information in the section school year change",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Please choose the county your school belongs to",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider":
@@ -1354,6 +1398,8 @@ export default {
 		"Language",
 	"pages.administration.school.index.generalSettings.labels.nameOfSchool":
 		"Name of the school",
+	"pages.administration.school.index.generalSettings.labels.schoolYear":
+		"School year",
 	"pages.administration.school.index.generalSettings.labels.schoolNumber":
 		"School number",
 	"pages.administration.school.index.generalSettings.labels.timezone":
@@ -1363,6 +1409,8 @@ export default {
 	"pages.administration.school.index.generalSettings.languageHint":
 		"If no language for the school is set, the system default (German) is applied.",
 	"pages.administration.school.index.generalSettings.save": "Save settings",
+	"pages.administration.school.index.generalSettings.save.success":
+		"General settings successfully saved.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
 		"To change your timezone, please reach out to one of the admins.",
 	"pages.administration.school.index.generalSettings": "General Settings",
@@ -1730,6 +1778,8 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Groups",
 	"pages.courseRooms.tabLabel.tools": "Tools",
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
+	"pages.courseRooms.course-locked":
+		"The course is locked because there is no teacher assigned. Please refer to the school administrator.",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",
@@ -1753,11 +1803,12 @@ export default {
 	"pages.room.boardCard.menu.ariaLabel": "Board menu",
 	"pages.room.cards.aria": "{itemType}, link, press enter to open",
 	"pages.room.cards.label.revert": "Revert to draft",
-	"pages.room.copy.course.message.copied": "Course was successfully copied.",
+	"pages.room.copy.course.message.copied":
+		"Course was successfully duplicated.",
 	"pages.room.copy.course.message.partiallyCopied":
-		"The course could not be copied completely.",
-	"pages.room.copy.lesson.message.copied": "Topic was successfully copied.",
-	"pages.room.copy.task.message.copied": "Task was successfully copied.",
+		"The course could not be duplicated completely.",
+	"pages.room.copy.lesson.message.copied": "Topic was successfully duplicated.",
+	"pages.room.copy.task.message.copied": "Task was successfully duplicated.",
 	"pages.room.dialog.boardLayout.title": "Select view",
 	"pages.room.dialog.boardLayout.singleColumn": "single-column",
 	"pages.room.dialog.boardLayout.multiColumn": "multi-column",
@@ -1765,6 +1816,8 @@ export default {
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Topic menu",
+	"pages.room.locked":
+		"The room is locked because no member has “Own” permission. Please contact the school administrator.",
 	"pages.room.taskCard.label.done": "Finish",
 	"pages.room.taskCard.label.due": "Due",
 	"pages.room.taskCard.label.edit": "Edit",
@@ -1830,6 +1883,8 @@ export default {
 		"Course {name} was successfully imported.",
 	"pages.rooms.ccImportCourse.error":
 		"An error occurred while importing the course.",
+	"pages.rooms.ccExportCourse.error":
+		"An error occurred while exporting the course.",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",
 	"pages.rooms.tools.deactivated": "Tool deactivated",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deactivated",
@@ -1891,9 +1946,10 @@ export default {
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.add.infoText":
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
-	"pages.rooms.members.add.role.student": "Student",
 	"pages.rooms.members.add.students.forbidden":
 		"If the visibility of students for teachers is deactivated in the school settings, only students from your own class can be added. Please contact the school admin.",
+	"pages.rooms.members.add.students.studentAdmins":
+		"Students can only add students from their own class to a room.",
 	"pages.rooms.members.add.warningText":
 		"Students from other schools can only be added to the room by a supervising teacher from their school.",
 	"pages.rooms.members.actionMenu.ariaLabel":
@@ -1954,7 +2010,7 @@ export default {
 	"pages.rooms.members.roleChange.Roomadmin.label":
 		'Same permissions as "Edit", plus add and remove other members, change their room permissions and edit the room',
 	"pages.rooms.members.roleChange.Roomowner.label":
-		"Same permissions as “ Administer”, additionally delete room",
+		"Same permissions as “Administer”, additionally delete room",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Attention: Only one person in the room can receive this permission!",
 	"pages.rooms.members.roleChange.dialogTitle.handOver":
@@ -1978,8 +2034,7 @@ export default {
 	"pages.rooms.members.inviteMember.step.edit.title": "Edit invitation link",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Students from other schools must always be added to the room by a supervising teacher from their school.",
-	"pages.rooms.members.inviteMember.form.description.label":
-		"Description (optional)",
+	"pages.rooms.members.inviteMember.form.description.label": "Description",
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Is displayed in the link overview",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
@@ -2019,7 +2074,35 @@ export default {
 		"Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update":
 		"Updating the invitation link has failed.",
+	"pages.rooms.invitationlinks.error.load":
+		"The invitation list could not be loaded.",
 	"pages.rooms.title": "Rooms",
+	"pages.rooms.administration.title": "Room administration",
+	"pages.rooms.administration.table.header.roomName": "Room name",
+	"pages.rooms.administration.table.header.roomOwner": "Room owner",
+	"pages.rooms.administration.table.header.totalMember": "Total members",
+	"pages.rooms.administration.table.header.internalMember": "Internal members",
+	"pages.rooms.administration.table.header.externalMember": "External members",
+	"pages.rooms.administration.table.header.creationDate": "Creation date",
+	"pages.rooms.administration.table.header.mainSchool": "Main school",
+	"pages.rooms.administration.table.header.actions": "Actions",
+	"pages.rooms.administration.table.row.owner.notExist": "Not existing",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"All room contents are also deleted with the room. This action cannot be undone.",
+	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
+		"Action menu for room “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Delete room",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Manage room members",
+	"pages.rooms.administration.error.load": "The room list could not be loaded.",
+	"pages.rooms.administration.error.delete": "The room could not be deleted.",
+	"pages.rooms.administration.pageTitle": "Manage rooms",
+	"pages.rooms.administration.roomDetail.infoText":
+		"Room members from other schools are shown anonymously for data protection reasons (exception: member with the “Own” room authorization).",
+	"pages.rooms.administration.roomDetail.anonymized": "(anonymized)",
+	"pages.rooms.administration.roomDetail.breadcrumb": "Room members {roomName}",
+	"pages.rooms.administration.roomDetail.header.text":
+		"Room members “{roomName}”",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",
@@ -2089,6 +2172,7 @@ export default {
 	"pages.tool.medium.mediumId": "Medium Id",
 	"pages.tool.medium.mediumSourceId": "Media catalog Id",
 	"pages.tool.medium.noMediaSource": "Without media catalog",
+	"pages.tool.medium.template": "Template",
 	"pages.userMigration.backToLogin": "Return to login page",
 	"pages.userMigration.button.skip": "Not now",
 	"pages.userMigration.button.startMigration": "Start",
@@ -2135,6 +2219,9 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
+	"pages.collabora.iframeTitle": "Office document editor",
+	"pages.collabora.jsonError": "Failed to parse JSON from Collabora message.",
+	"pages.collabora.messageError": "Collabora message is invalid.",
 	"error.500":
 		"There are problems in the system. We are working on fixing the issue. Please try again later.",
 	"error.4500":

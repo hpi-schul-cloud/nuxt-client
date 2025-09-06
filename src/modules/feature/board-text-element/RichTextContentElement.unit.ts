@@ -26,25 +26,25 @@ const mockElement: RichTextElementResponse = {
 	},
 };
 
-jest.mock("@data-board", () => {
+vi.mock("@data-board", () => {
 	return {
-		useBoardFocusHandler: jest.fn(),
-		useContentElementState: jest.fn().mockImplementation(() => ({
+		useBoardFocusHandler: vi.fn(),
+		useContentElementState: vi.fn().mockImplementation(() => ({
 			modelValue: mockElement.content,
 		})),
-		useDeleteConfirmationDialog: jest.fn(),
+		useDeleteConfirmationDialog: vi.fn(),
 	};
 });
 
-jest.mock("@ui-confirmation-dialog", () => {
+vi.mock("@ui-confirmation-dialog", () => {
 	return {
-		useDeleteConfirmationDialog: jest.fn(),
+		useDeleteConfirmationDialog: vi.fn(),
 	};
 });
 
-jest.mock("@util-board", () => {
+vi.mock("@util-board", () => {
 	return {
-		useInlineEditInteractionHandler: jest.fn(),
+		useInlineEditInteractionHandler: vi.fn(),
 	};
 });
 
@@ -54,6 +54,8 @@ describe("RichTextContentElement", () => {
 	const setup = (props: {
 		element: RichTextElementResponse;
 		isEditMode: boolean;
+		columnIndex?: number;
+		elementIndex?: number;
 	}) => {
 		const wrapper = mount(RichTextContentElementComponent, {
 			global: {
@@ -67,7 +69,11 @@ describe("RichTextContentElement", () => {
 					RichTextContentElementEdit: true,
 				},
 			},
-			props,
+			props: {
+				columnIndex: props.columnIndex ?? 0,
+				elementIndex: props.elementIndex ?? 0,
+				...props,
+			},
 		});
 
 		return { wrapper };
@@ -85,6 +91,30 @@ describe("RichTextContentElement", () => {
 			);
 			expect(displayComponent.exists()).toBe(true);
 		});
+
+		describe("and element is first element", () => {
+			it("should add first-element class", () => {
+				const { wrapper } = setup({
+					element: mockElement,
+					isEditMode: false,
+					elementIndex: 0,
+				});
+				const parentDiv = wrapper.find("div");
+				expect(parentDiv.classes()).toContain("first-element");
+			});
+		});
+
+		describe("and element is not first element", () => {
+			it("should not add first-element class", () => {
+				const { wrapper } = setup({
+					element: mockElement,
+					isEditMode: false,
+					elementIndex: 1,
+				});
+				const parentDiv = wrapper.find("div");
+				expect(parentDiv.classes()).not.toContain("first-element");
+			});
+		});
 	});
 
 	describe("when element is in edit mode", () => {
@@ -98,6 +128,30 @@ describe("RichTextContentElement", () => {
 				RichTextContentElementEditComponent
 			);
 			expect(editComponent.exists()).toBe(true);
+		});
+
+		describe("and element is first element", () => {
+			it("should add first-element class when element is first element", () => {
+				const { wrapper } = setup({
+					element: mockElement,
+					isEditMode: true,
+					elementIndex: 0,
+				});
+				const parentDiv = wrapper.find("div");
+				expect(parentDiv.classes()).toContain("first-element");
+			});
+		});
+
+		describe("and element is not first element", () => {
+			it("should not add first-element class when element is not first element", () => {
+				const { wrapper } = setup({
+					element: mockElement,
+					isEditMode: true,
+					elementIndex: 1,
+				});
+				const parentDiv = wrapper.find("div");
+				expect(parentDiv.classes()).not.toContain("first-element");
+			});
 		});
 
 		describe("and delete:element event is emitted from RichTextContentElementEdit component", () => {

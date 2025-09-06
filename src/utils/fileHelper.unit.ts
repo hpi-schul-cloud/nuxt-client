@@ -1,12 +1,16 @@
 import {
-	FileRecordScanStatus,
-	PreviewStatus,
-	PreviewWidth,
-} from "@/fileStorageApi/v3";
+	ArchiveFileParams,
+	FilePreviewStatus,
+	FilePreviewWidth,
+	FileRecordVirusScanStatus,
+} from "@/types/file/File";
+import { createMock } from "@golevelup/ts-vitest";
 import {
 	convertDownloadToPreviewUrl,
 	convertFileSize,
 	downloadFile,
+	downloadFilesAsArchive,
+	formatFileSize,
 	formatSecondsToHourMinSec,
 	getFileExtension,
 	isAudioMimeType,
@@ -20,6 +24,14 @@ import {
 	removeFileExtension,
 } from "./fileHelper";
 
+vi.mock("vue-i18n", () => {
+	return {
+		useI18n: vi.fn().mockReturnValue({
+			n: vi.fn().mockImplementation((key: string) => key),
+		}),
+	};
+});
+
 describe("@/utils/fileHelper", () => {
 	describe("downloadFile", () => {
 		const setup = () => {
@@ -30,13 +42,13 @@ describe("@/utils/fileHelper", () => {
 				href: "",
 				download: "",
 				dataset: { testid: "" },
-				click: jest.fn(),
+				click: vi.fn(),
 			};
-			const createElementSpy = jest
+			const createElementSpy = vi
 				.spyOn(document, "createElement")
-				.mockImplementation(() => link);
-			document.body.appendChild = jest.fn();
-			document.body.removeChild = jest.fn();
+				.mockImplementationOnce(() => link);
+			document.body.appendChild = vi.fn();
+			document.body.removeChild = vi.fn();
 
 			return { url, fileName, link, createElementSpy };
 		};
@@ -56,6 +68,110 @@ describe("@/utils/fileHelper", () => {
 		});
 	});
 
+	describe("downloadFilesAsArchive", () => {
+		const setup = () => {
+			const inputMockArchiveName = createMock<HTMLInputElement>();
+			const inputMockFileRecordIds = createMock<HTMLInputElement>();
+			const formMock = createMock<HTMLFormElement>();
+
+			vi.spyOn(document, "createElement").mockImplementationOnce(() => {
+				return formMock;
+			});
+
+			vi.spyOn(document, "createElement").mockImplementationOnce(() => {
+				return inputMockArchiveName;
+			});
+
+			vi.spyOn(document, "createElement").mockImplementationOnce(() => {
+				return inputMockFileRecordIds;
+			});
+
+			const appendChildSpy = vi
+				.spyOn(document.body, "appendChild")
+				.mockImplementationOnce(vi.fn());
+			const removeChildSpy = vi
+				.spyOn(document.body, "removeChild")
+				.mockImplementationOnce(vi.fn());
+
+			return {
+				formMock,
+				appendChildSpy,
+				removeChildSpy,
+				inputMockArchiveName,
+				inputMockFileRecordIds,
+			};
+		};
+
+		it("should create a form", () => {
+			const { formMock } = setup();
+
+			const params: ArchiveFileParams = {
+				archiveName: "test-archive",
+				fileRecordIds: ["1", "2", "3"],
+			};
+
+			downloadFilesAsArchive(params);
+
+			expect(formMock.method).toBe("POST");
+			expect(formMock.action).toBe("/api/v3/file/download-files-as-archive");
+			expect(formMock.enctype).toBe("application/json");
+			expect(formMock.target).toBe("_blank");
+		});
+
+		it("should create inputs with correct attributes", () => {
+			const { inputMockArchiveName, inputMockFileRecordIds } = setup();
+
+			const params: ArchiveFileParams = {
+				archiveName: "test-archive",
+				fileRecordIds: ["1", "2", "3"],
+			};
+
+			downloadFilesAsArchive(params);
+
+			// Inputs
+			expect(inputMockArchiveName.type).toBe("hidden");
+			expect(inputMockFileRecordIds.type).toBe("hidden");
+
+			expect(inputMockArchiveName.name).toBe("archiveName");
+			expect(inputMockFileRecordIds.name).toBe("fileRecordIds");
+
+			expect(inputMockArchiveName.value).toBe(params.archiveName);
+			expect(inputMockFileRecordIds.value).toBe(
+				JSON.stringify(params.fileRecordIds)
+			);
+		});
+
+		it("should calls formMock.appendChild", () => {
+			const { formMock } = setup();
+
+			const params: ArchiveFileParams = {
+				archiveName: "test-archive",
+				fileRecordIds: ["1", "2", "3"],
+			};
+
+			downloadFilesAsArchive(params);
+
+			// Appending inputs to form
+			expect(formMock.appendChild).toHaveBeenCalledTimes(2);
+		});
+
+		it("should Appending/removing form to/from body", () => {
+			const { formMock, appendChildSpy, removeChildSpy } = setup();
+
+			const params: ArchiveFileParams = {
+				archiveName: "test-archive",
+				fileRecordIds: ["1", "2", "3"],
+			};
+
+			downloadFilesAsArchive(params);
+
+			expect(appendChildSpy).toHaveBeenCalledWith(formMock);
+			expect(removeChildSpy).toHaveBeenCalledWith(formMock);
+
+			expect(formMock.submit).toHaveBeenCalled();
+		});
+	});
+
 	describe("convertFileSize", () => {
 		describe("when file size is < 1024 B", () => {
 			it("should return file size in B and unit", () => {
@@ -71,70 +187,82 @@ describe("@/utils/fileHelper", () => {
 				expect(result).toEqual({ convertedSize: 24.1591796875, unit: "KB" });
 			});
 		});
-	});
 
-	describe("when file size is >= 1 MB and < 1 GB", () => {
-		it("should return file size in MB and unit", () => {
-			const result = convertFileSize(2473900);
-			expect(result).toEqual({ convertedSize: 2.359294891357422, unit: "MB" });
+		describe("when file size is >= 1 MB and < 1 GB", () => {
+			it("should return file size in MB and unit", () => {
+				const result = convertFileSize(2473900);
+				expect(result).toEqual({
+					convertedSize: 2.359294891357422,
+					unit: "MB",
+				});
+			});
 		});
-	});
-	describe("when file size is >= 1 GB", () => {
-		it("should return file size in GB and unit", () => {
-			const result = convertFileSize(2473900000);
-			expect(result).toEqual({ convertedSize: 2.3039989173412323, unit: "GB" });
+		describe("when file size is >= 1 GB", () => {
+			it("should return file size in GB and unit", () => {
+				const result = convertFileSize(2473900000);
+				expect(result).toEqual({
+					convertedSize: 2.3039989173412323,
+					unit: "GB",
+				});
+			});
 		});
-	});
 
-	describe("when file size is at the limits of B range", () => {
-		it("should return file size 0 B if file size is negative", () => {
-			const result = convertFileSize(-1);
-			expect(result).toEqual({ convertedSize: 0, unit: "B" });
+		describe("when file size is at the limits of B range", () => {
+			it("should return file size 0 B if file size is negative", () => {
+				const result = convertFileSize(-1);
+				expect(result).toEqual({ convertedSize: 0, unit: "B" });
+			});
+			it("should return file size 0 B", () => {
+				const result = convertFileSize(0);
+				expect(result).toEqual({ convertedSize: 0, unit: "B" });
+			});
+			it("should return file size 1023 B", () => {
+				const result = convertFileSize(1023);
+				expect(result).toEqual({ convertedSize: 1023, unit: "B" });
+			});
 		});
-		it("should return file size 0 B", () => {
-			const result = convertFileSize(0);
-			expect(result).toEqual({ convertedSize: 0, unit: "B" });
-		});
-		it("should return file size 1023 B", () => {
-			const result = convertFileSize(1023);
-			expect(result).toEqual({ convertedSize: 1023, unit: "B" });
-		});
-	});
 
-	describe("when file size is at the limits of KB range", () => {
-		it("should return file size 1 KB", () => {
-			const result = convertFileSize(1024);
-			expect(result).toEqual({ convertedSize: 1, unit: "KB" });
+		describe("when file size is at the limits of KB range", () => {
+			it("should return file size 1 KB", () => {
+				const result = convertFileSize(1024);
+				expect(result).toEqual({ convertedSize: 1, unit: "KB" });
+			});
+			it("should return file size 1024 and unit", () => {
+				const result = convertFileSize(1048575);
+				expect(result).toEqual({ convertedSize: 1023.9990234375, unit: "KB" });
+			});
 		});
-		it("should return file size 1024 and unit", () => {
-			const result = convertFileSize(1048575);
-			expect(result).toEqual({ convertedSize: 1023.9990234375, unit: "KB" });
-		});
-	});
 
-	describe("when file size is at the limits of MB range", () => {
-		it("should return file size 1 MB", () => {
-			const result = convertFileSize(1048576);
-			expect(result).toEqual({ convertedSize: 1, unit: "MB" });
+		describe("when file size is at the limits of MB range", () => {
+			it("should return file size 1 MB", () => {
+				const result = convertFileSize(1048576);
+				expect(result).toEqual({ convertedSize: 1, unit: "MB" });
+			});
+			it("should return file size 1024 MB", () => {
+				const result = convertFileSize(1073741823);
+				expect(result).toEqual({
+					convertedSize: 1023.9999990463257,
+					unit: "MB",
+				});
+			});
 		});
-		it("should return file size 1024 MB", () => {
-			const result = convertFileSize(1073741823);
-			expect(result).toEqual({ convertedSize: 1023.9999990463257, unit: "MB" });
-		});
-	});
 
-	describe("when file size is at the limits of GB range", () => {
-		it("should return file size 1 GB", () => {
-			const result = convertFileSize(1073741824);
-			expect(result).toEqual({ convertedSize: 1, unit: "GB" });
-		});
-		it("should return file size 1024 GB", () => {
-			const result = convertFileSize(1099511627775);
-			expect(result).toEqual({ convertedSize: 1023.9999999990687, unit: "GB" });
-		});
-		it("should return file size >= 1024 GB", () => {
-			const result = convertFileSize(1099511627776);
-			expect(result).toEqual({ convertedSize: 1024, unit: "GB" });
+		describe("when file size is at the limits of GB range", () => {
+			it("should return file size 1 GB", () => {
+				const result = convertFileSize(1073741824);
+				expect(result).toEqual({ convertedSize: 1, unit: "GB" });
+			});
+			it("should return file size 1024 GB", () => {
+				const result = convertFileSize(1099511627775);
+				expect(result).toEqual({
+					convertedSize: 1023.9999999990687,
+					unit: "GB",
+				});
+			});
+			it("should return file size >= 1024 GB", () => {
+				const result = convertFileSize(1099511627776);
+				expect(result).toEqual({ convertedSize: 1024, unit: "GB" });
+			});
 		});
 	});
 
@@ -201,7 +329,7 @@ describe("@/utils/fileHelper", () => {
 			it("should return the preview url", () => {
 				const url = "/file/download/233/text.txt";
 
-				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
+				const result = convertDownloadToPreviewUrl(url, FilePreviewWidth._500);
 
 				expect(result).toEqual(
 					`/file/preview/233/text.txt?outputFormat=image/webp&width=500`
@@ -211,7 +339,7 @@ describe("@/utils/fileHelper", () => {
 			it("should return the preview url with two download words in source", () => {
 				const url = "/file/download/233/download";
 
-				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
+				const result = convertDownloadToPreviewUrl(url, FilePreviewWidth._500);
 
 				expect(result).toEqual(
 					`/file/preview/233/download?outputFormat=image/webp&width=500`
@@ -221,7 +349,7 @@ describe("@/utils/fileHelper", () => {
 			it("should return the preview url with two download words in source with extension", () => {
 				const url = "/file/download/233/download.txt";
 
-				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
+				const result = convertDownloadToPreviewUrl(url, FilePreviewWidth._500);
 
 				expect(result).toEqual(
 					`/file/preview/233/download.txt?outputFormat=image/webp&width=500`
@@ -244,7 +372,9 @@ describe("@/utils/fileHelper", () => {
 	describe("isScanStatusPending", () => {
 		describe("when scan status is pending", () => {
 			it("should return true", () => {
-				const result = isScanStatusPending(PreviewStatus.AWAITING_SCAN_STATUS);
+				const result = isScanStatusPending(
+					FilePreviewStatus.AWAITING_SCAN_STATUS
+				);
 
 				expect(result).toBe(true);
 			});
@@ -252,7 +382,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is not pending", () => {
 			it("should return false", () => {
-				const result = isScanStatusPending(PreviewStatus.PREVIEW_POSSIBLE);
+				const result = isScanStatusPending(FilePreviewStatus.PREVIEW_POSSIBLE);
 
 				expect(result).toBe(false);
 			});
@@ -263,7 +393,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when scan status is pending", () => {
 			it("should return true", () => {
 				const result = isScanStatusWontCheck(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
 				);
 
 				expect(result).toBe(true);
@@ -272,7 +402,9 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is not pending", () => {
 			it("should return false", () => {
-				const result = isScanStatusWontCheck(PreviewStatus.PREVIEW_POSSIBLE);
+				const result = isScanStatusWontCheck(
+					FilePreviewStatus.PREVIEW_POSSIBLE
+				);
 
 				expect(result).toBe(false);
 			});
@@ -283,7 +415,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when scan status is pending", () => {
 			it("should return true", () => {
 				const result = isScanStatusError(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
 				);
 
 				expect(result).toBe(true);
@@ -292,7 +424,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is not pending", () => {
 			it("should return false", () => {
-				const result = isScanStatusError(PreviewStatus.PREVIEW_POSSIBLE);
+				const result = isScanStatusError(FilePreviewStatus.PREVIEW_POSSIBLE);
 
 				expect(result).toBe(false);
 			});
@@ -302,7 +434,7 @@ describe("@/utils/fileHelper", () => {
 	describe("isScanStatusBlocked", () => {
 		describe("when scan status is not blocked", () => {
 			it("should return true", () => {
-				const result = isScanStatusBlocked(FileRecordScanStatus.VERIFIED);
+				const result = isScanStatusBlocked(FileRecordVirusScanStatus.VERIFIED);
 
 				expect(result).toBe(true);
 			});
@@ -310,7 +442,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is blocked", () => {
 			it("should return false", () => {
-				const result = isScanStatusBlocked(FileRecordScanStatus.BLOCKED);
+				const result = isScanStatusBlocked(FileRecordVirusScanStatus.BLOCKED);
 
 				expect(result).toBe(false);
 			});
@@ -320,7 +452,7 @@ describe("@/utils/fileHelper", () => {
 	describe("isPreviewPossible", () => {
 		describe("when preview status is possible", () => {
 			it("should return true", () => {
-				const result = isPreviewPossible(PreviewStatus.PREVIEW_POSSIBLE);
+				const result = isPreviewPossible(FilePreviewStatus.PREVIEW_POSSIBLE);
 
 				expect(result).toBe(true);
 			});
@@ -328,7 +460,9 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when preview status is AWAITING_SCAN_STATUS", () => {
 			it("should return false", () => {
-				const result = isPreviewPossible(PreviewStatus.AWAITING_SCAN_STATUS);
+				const result = isPreviewPossible(
+					FilePreviewStatus.AWAITING_SCAN_STATUS
+				);
 
 				expect(result).toBe(false);
 			});
@@ -337,7 +471,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR", () => {
 			it("should return false", () => {
 				const result = isPreviewPossible(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
 				);
 
 				expect(result).toBe(false);
@@ -347,7 +481,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK", () => {
 			it("should return false", () => {
 				const result = isPreviewPossible(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
 				);
 
 				expect(result).toBe(false);
@@ -357,7 +491,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED", () => {
 			it("should return false", () => {
 				const result = isPreviewPossible(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED
 				);
 
 				expect(result).toBe(false);
@@ -367,7 +501,7 @@ describe("@/utils/fileHelper", () => {
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE", () => {
 			it("should return false", () => {
 				const result = isPreviewPossible(
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE
+					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE
 				);
 
 				expect(result).toBe(false);
@@ -584,6 +718,66 @@ describe("@/utils/fileHelper", () => {
 				const result = removeFileExtension("");
 				expect(result).toEqual("");
 			});
+		});
+	});
+
+	describe("formatFileSize", () => {
+		const setup = () => {
+			const TestComponent = {
+				template: `<div>{{ formatted }}</div>`,
+				props: {
+					size: {
+						type: Number,
+						required: true,
+					},
+				},
+				computed: {
+					formatted(this: { size: number }) {
+						return formatFileSize(this.size);
+					},
+				},
+			};
+			return { TestComponent };
+		};
+
+		it("formats bytes correctly", () => {
+			const { TestComponent } = setup();
+
+			const wrapper = mount(TestComponent, { props: { size: 512 } });
+
+			expect(wrapper.text()).toBe("512 B");
+		});
+
+		it("formats kilobytes correctly", () => {
+			const { TestComponent } = setup();
+
+			const wrapper = mount(TestComponent, { props: { size: 2048 } });
+
+			expect(wrapper.text()).toBe("2 KB");
+		});
+
+		it("formats megabytes correctly", () => {
+			const { TestComponent } = setup();
+
+			const wrapper = mount(TestComponent, { props: { size: 1048576 } });
+
+			expect(wrapper.text()).toBe("1 MB");
+		});
+
+		it("formats gigabytes correctly", () => {
+			const { TestComponent } = setup();
+
+			const wrapper = mount(TestComponent, { props: { size: 1073741824 } });
+
+			expect(wrapper.text()).toBe("1 GB");
+		});
+
+		it("formats with decimals for non-integer sizes", () => {
+			const { TestComponent } = setup();
+
+			const wrapper = mount(TestComponent, { props: { size: 1536 } });
+
+			expect(wrapper.text()).toBe("1.5 KB");
 		});
 	});
 });

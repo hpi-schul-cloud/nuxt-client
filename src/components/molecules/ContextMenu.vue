@@ -89,7 +89,7 @@ export default {
 			validator: (values) => values.every((value) => value.text && value.event),
 		},
 	},
-	emits: ["update:show", "event"],
+	emits: ["update:show", "event", "action"],
 	data() {
 		return {
 			shouldHandleClickOutside: false,
@@ -215,19 +215,18 @@ export default {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 
 .context-menu {
-	--transition-duration: var(--duration-transition-fast);
+	--transition-duration: 0.15s;
 
 	position: absolute;
-	z-index: var(--layer-dropdown);
+	z-index: 30;
 	display: flex;
 	flex-direction: column;
 	min-width: 150px;
 	max-width: 350px;
 	background-color: rgba(var(--v-theme-white));
-	border-radius: var(--radius-sm);
+	border-radius: 4px;
 
 	> :hover {
 		background-color: map.get($grey, lighten-3);
@@ -239,11 +238,11 @@ export default {
 		justify-content: flex-start;
 		width: 100%;
 		height: 100%;
-		padding-right: var(--space-md) !important;
+		padding-right: 16px !important;
 		cursor: pointer;
 
 		&-icon {
-			margin: var(--space-md) !important;
+			margin: 16px !important;
 		}
 
 		&-text {
@@ -253,12 +252,8 @@ export default {
 			white-space: normal;
 
 			&.no-icon {
-				margin: var(--space-md);
+				margin: 16px;
 			}
-		}
-
-		&-close:not(:focus) {
-			@include visually-hidden;
 		}
 	}
 }
@@ -291,6 +286,11 @@ export default {
 .v-btn {
 	font-weight: var(--font-weight-normal) !important;
 	font-family: var(--font-accent);
+}
+
+.material-icon {
+	width: 24px;
+	height: 24px;
 }
 </style>
 

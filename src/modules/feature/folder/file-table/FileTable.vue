@@ -16,7 +16,7 @@
 		</EmptyState>
 	</template>
 	<template v-else>
-		<div class="mt-8">
+		<div class="mt-2">
 			<DataTable
 				:table-headers="headers"
 				:items="fileRecordItems"
@@ -63,9 +63,9 @@
 					>
 						<KebabMenuActionDownloadFiles
 							:disabled="!item.isSelectable"
-							:file-records="fileRecords"
 							:selected-ids="[item.id]"
 							:aria-label="t('common.actions.download')"
+							@download="onDownloadFile"
 						/>
 						<KebabMenuActionRename
 							v-if="props.hasEditPermission"
@@ -84,10 +84,19 @@
 				</template>
 
 				<template #left-of-search>
-					<FileUploadProgress :upload-progress="uploadProgress" />
+					<FileUploadProgress
+						:upload-progress="uploadProgress"
+						:are-upload-stats-visible="areUploadStatsVisible"
+						@reset-upload-progress="() => emit('reset-upload-progress')"
+					/>
 				</template>
 
 				<template #action-menu-items="{ selectedIds }">
+					<KebabMenuActionDownloadFiles
+						:selected-ids="selectedIds"
+						:aria-label="t('common.actions.download')"
+						@download="onDownloadFilesAsArchive"
+					/>
 					<KebabMenuActionDeleteFiles
 						v-if="props.hasEditPermission"
 						:file-records="fileRecords"
@@ -120,7 +129,7 @@
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
 import {
-	convertFileSize,
+	formatFileSize,
 	getFileExtension,
 	isScanStatusBlocked,
 } from "@/utils/fileHelper";
@@ -140,7 +149,7 @@ import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 import RenameFileDialog from "./RenameFileDialog.vue";
 
-const { t, n } = useI18n();
+const { t } = useI18n();
 
 const props = defineProps({
 	isLoading: {
@@ -166,9 +175,19 @@ const props = defineProps({
 		}>,
 		required: true,
 	},
+	areUploadStatsVisible: {
+		type: Boolean,
+		default: false,
+	},
 });
 
-const emit = defineEmits(["delete-files", "update:name"]);
+const emit = defineEmits([
+	"delete-files",
+	"update:name",
+	"reset-upload-progress",
+	"download-file",
+	"download-files-as-archive",
+]);
 
 const headers = [
 	{ title: "", key: "preview", sortable: false },
@@ -195,15 +214,12 @@ const fileRecordItems = computed(() => {
 	}));
 });
 
-const areUploadStatsVisible = computed(() => {
-	return props.uploadProgress.total > 0;
-});
+const onDownloadFile = (selectedIds: string[]) => {
+	emit("download-file", selectedIds);
+};
 
-const formatFileSize = (size: number) => {
-	const { convertedSize, unit } = convertFileSize(size);
-	const localizedFileSize = n(convertedSize, "fileSize");
-
-	return `${localizedFileSize} ${unit}`;
+const onDownloadFilesAsArchive = (selectedIds: string[]) => {
+	emit("download-files-as-archive", selectedIds);
 };
 
 const onDeleteFiles = (selectedFileRecords: FileRecord[]) => {

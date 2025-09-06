@@ -1,13 +1,13 @@
 <template>
 	<v-card
-		class="card d-flex align-items-center"
+		class="card d-flex align-center"
 		:aria-label="title"
 		hover
 		:data-testId="testId"
 		@click="onClick"
 	>
 		<div class="w-100">
-			<div class="d-flex align-content align-items-center">
+			<div class="d-flex align-content align-center">
 				<div v-if="logoUrl" class="logo-container my-auto mr-4">
 					<v-img
 						height="100%"
@@ -17,7 +17,7 @@
 						:alt="$t('pages.rooms.tools.logo')"
 					/>
 				</div>
-				<div class="d-flex flex-column w-100">
+				<div class="d-flex flex-column w-100 min-width-0">
 					<div class="d-flex">
 						<h2 class="text-h5 my-auto">
 							{{ title }}
@@ -40,40 +40,28 @@
 	</v-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiOpenInNew } from "@icons/material";
-import { defineComponent } from "vue";
 
-export default defineComponent({
-	props: {
-		title: {
-			type: String,
-			required: true,
-		},
-		logoUrl: {
-			type: String,
-			default: undefined,
-		},
-		openInNewTab: {
-			type: Boolean,
-		},
-		testId: {
-			type: String,
-			required: true,
-		},
-	},
-	emits: ["click"],
-	setup(props, { emit }) {
-		const onClick = () => {
-			emit("click");
-		};
+type Props = {
+	title: string;
+	logoUrl?: string;
+	openInNewTab?: boolean;
+	testId: string;
+};
 
-		return {
-			onClick,
-			mdiOpenInNew,
-		};
-	},
+withDefaults(defineProps<Props>(), {
+	logoUrl: undefined,
+	openInNewTab: false,
 });
+
+const emit = defineEmits<{
+	(e: "click"): void;
+}>();
+
+const onClick = () => {
+	emit("click");
+};
 </script>
 
 <style lang="scss" scoped>
@@ -105,5 +93,9 @@ $logo-height: 80px;
 
 .no-wrap {
 	flex-shrink: 0;
+}
+
+.min-width-0 {
+	min-width: 0;
 }
 </style>

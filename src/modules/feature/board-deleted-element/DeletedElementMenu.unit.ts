@@ -9,11 +9,14 @@ import DeletedElementMenu from "./DeletedElementMenu.vue";
 
 describe("DeletedElementMenu", () => {
 	const getWrapper = () => {
-		document.body.setAttribute("data-app", "true");
-
 		const wrapper = shallowMount(DeletedElementMenu, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				columnIndex: 0,
+				rowIndex: 0,
+				elementIndex: 0,
 			},
 		});
 
@@ -23,7 +26,7 @@ describe("DeletedElementMenu", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("Delete Button", () => {

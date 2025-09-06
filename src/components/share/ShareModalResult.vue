@@ -10,16 +10,13 @@
 			data-testid="share-course-result-url"
 		/>
 
-		<div
-			v-if="isShowQrCode"
-			class="d-flex justify-content-center overflow-hidden mt-4"
-		>
+		<div v-if="isShowQrCode" class="d-flex justify-center overflow-hidden mt-4">
 			<QRCode :url="shareUrl" data-testid="qrCode" />
 		</div>
 
 		<div
 			v-else
-			class="d-flex flex-row flex-wrap align-items-center justify-space-around"
+			class="d-flex flex-row flex-wrap align-center justify-space-around"
 		>
 			<ExtendedIconBtn
 				v-if="isExtraSmallDisplay"

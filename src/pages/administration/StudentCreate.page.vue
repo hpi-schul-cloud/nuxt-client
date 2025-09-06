@@ -18,7 +18,7 @@
 				<v-checkbox
 					v-model="sendRegistration"
 					name="switch"
-					class="mt--xl"
+					class="mt-8"
 					:label="$t('pages.administration.students.new.checkbox.label')"
 					data-testid="input_create-student_send-registration"
 				/>
@@ -60,7 +60,7 @@ export default {
 			breadcrumbs: [
 				{
 					title: this.$t("pages.administration.index.title"),
-					href: "/administration/",
+					disabled: true,
 				},
 				{
 					title: this.$t("pages.administration.students.index.title"),

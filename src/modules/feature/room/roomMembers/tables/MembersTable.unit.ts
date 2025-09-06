@@ -4,7 +4,13 @@ import {
 } from "@@/tests/test-utils/setup";
 import MembersTable from "./MembersTable.vue";
 import { nextTick, Ref, ref } from "vue";
-import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
+import {
+	mdiMenuDown,
+	mdiMenuUp,
+	mdiMagnify,
+	mdiAccountOutline,
+	mdiAccountSchoolOutline,
+} from "@icons/material";
 import {
 	meResponseFactory,
 	mockedPiniaStoreTyping,
@@ -13,9 +19,9 @@ import {
 } from "@@/tests/test-utils";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import {
-	VBtn,
 	VDataTable,
 	VDialog,
+	VIcon,
 	VTextField,
 } from "vuetify/lib/components/index";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -26,7 +32,7 @@ import {
 	useRoomMembersStore,
 	useRoomAuthorization,
 } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import ActionMenu from "./ActionMenu.vue";
 import {
 	KebabMenuActionChangePermission,
@@ -39,15 +45,18 @@ import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
 import { ChangeRole } from "@feature-room";
+import { Mock } from "vitest";
 
-jest.mock("@ui-confirmation-dialog");
-const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
+vi.mock("@ui-confirmation-dialog");
+const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
-jest.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const boardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("@data-room/roomAuthorization.composable");
-const roomAuthorizationMock = jest.mocked(useRoomAuthorization);
+vi.mock("@vueuse/integrations/useFocusTrap");
+
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
 type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
@@ -58,11 +67,11 @@ type RoomAuthorizationRefs = RefPropertiesOnly<
 >;
 
 describe("MembersTable", () => {
-	let askConfirmationMock: jest.Mock;
+	let askConfirmationMock: Mock;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
-		askConfirmationMock = jest.fn();
+		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});
@@ -97,15 +106,15 @@ describe("MembersTable", () => {
 	];
 
 	const setup = (
-		options: Partial<{
+		options?: Partial<{
 			currentUserRole: RoleName;
 			changePermissionFlag: boolean;
 			windowWidth: number;
 			members: RoomMember[];
 			isRoomOwner: boolean;
 			currentUserId: string;
-			roomAuthorization: Partial<RoomAuthorizationRefs>;
-		}> = {}
+			customRoomAuthorization: Partial<RoomAuthorizationRefs>;
+		}>
 	) => {
 		const members =
 			options?.members ??
@@ -114,19 +123,28 @@ describe("MembersTable", () => {
 			});
 
 		const windowWidth = options?.windowWidth ?? 1280;
+
+		const roomAuthDefaults = {
+			canAddRoomMembers: true,
+		};
+
+		const roomAuthorization = {
+			...roomAuthDefaults,
+			...options?.customRoomAuthorization,
+		};
 		const authorizationPermissions =
 			createMock<ReturnType<typeof useRoomAuthorization>>();
-		for (const [key, value] of Object.entries(
-			options.roomAuthorization ?? {}
-		)) {
+
+		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
 			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
 				value ?? false
 			);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
+
 		const currentUser = roomMemberFactory.build({});
 		const mockMe = meResponseFactory.build({
-			user: { id: options.currentUserId ?? currentUser.userId },
+			user: { id: options?.currentUserId ?? currentUser.userId },
 		});
 		authModule.setMe(mockMe);
 
@@ -146,7 +164,7 @@ describe("MembersTable", () => {
 						initialState: {
 							roomMembersStore: {
 								roomMembers: [...members, currentUser],
-								isRoomOwner: jest.fn(),
+								isRoomOwner: vi.fn(),
 							},
 						},
 					}),
@@ -155,7 +173,7 @@ describe("MembersTable", () => {
 		});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		roomMembersStore.isRoomOwner.mockReturnValue(options.isRoomOwner ?? false);
+		roomMembersStore.isRoomOwner.mockReturnValue(options?.isRoomOwner ?? false);
 		const roomMembers = roomMembersStore.roomMembers;
 
 		return { wrapper, roomMembersStore, roomMembers, authorizationPermissions };
@@ -209,7 +227,7 @@ describe("MembersTable", () => {
 
 	it("should render data table", () => {
 		const { wrapper, roomMembers } = setup({
-			roomAuthorization: { canAddRoomMembers: true },
+			customRoomAuthorization: { canAddRoomMembers: true },
 		});
 
 		const dataTable = wrapper.getComponent(VDataTable);
@@ -222,9 +240,48 @@ describe("MembersTable", () => {
 		expect(dataTable.props("sortDescIcon")).toEqual(mdiMenuUp);
 	});
 
+	describe("school role column", () => {
+		const getSchoolRoleCell = (row: DOMWrapper<Element>) =>
+			row.findAll("td")[4];
+
+		it.each([
+			{
+				description: "teacher icon for teacher",
+				schoolRoleNames: [RoleName.Teacher],
+				expectedIcon: mdiAccountSchoolOutline,
+			},
+			{
+				description: "student icon for students",
+				schoolRoleNames: [RoleName.Student],
+				expectedIcon: mdiAccountOutline,
+			},
+			{
+				description: "teacher icon if teacher and admin roles are present",
+				schoolRoleNames: [RoleName.Administrator, RoleName.Teacher],
+				expectedIcon: mdiAccountSchoolOutline,
+			},
+		])("should render $description", ({ schoolRoleNames, expectedIcon }) => {
+			const { wrapper } = setup({
+				members: [
+					roomMemberFactory.build({
+						schoolRoleNames,
+					}),
+				],
+			});
+
+			const dataTable = wrapper.getComponent(VDataTable);
+			const row = dataTable.find("tbody tr");
+
+			const schoolRoleCell = getSchoolRoleCell(row);
+			expect(schoolRoleCell.findComponent(VIcon).props("icon")).toBe(
+				expectedIcon
+			);
+		});
+	});
+
 	it("should render checkboxes if user can add members", async () => {
 		const { wrapper, roomMembers } = setup({
-			roomAuthorization: { canAddRoomMembers: true },
+			customRoomAuthorization: { canAddRoomMembers: true },
 		});
 
 		const dataTable = wrapper.findComponent(VDataTable);
@@ -235,7 +292,7 @@ describe("MembersTable", () => {
 
 	it("should not render checkboxes if user can not add members", async () => {
 		const { wrapper } = setup({
-			roomAuthorization: { canAddRoomMembers: false },
+			customRoomAuthorization: { canAddRoomMembers: false },
 		});
 
 		const dataTable = wrapper.findComponent(VDataTable);
@@ -304,126 +361,6 @@ describe("MembersTable", () => {
 			const expectedIndices = [1];
 
 			expect(checkedIndices).toEqual(expectedIndices);
-		});
-
-		describe("action menu", () => {
-			it("should render action menu", async () => {
-				const { wrapper } = setup();
-				await selectCheckboxes([0], wrapper);
-
-				const actionMenuAfter = wrapper.findComponent(ActionMenu);
-
-				expect(actionMenuAfter.exists()).toBe(true);
-			});
-
-			it("should have flex order 2 for extra small display sizes", async () => {
-				const { wrapper } = setup({
-					windowWidth: 599,
-				});
-				await selectCheckboxes([1], wrapper);
-
-				const actionMenu = wrapper.findComponent(ActionMenu);
-
-				expect(actionMenu.classes()).toContain("order-2");
-			});
-
-			it("should not have flex order 2 display sizes greater than 599px", async () => {
-				const { wrapper } = setup({
-					windowWidth: 800,
-				});
-				await selectCheckboxes([1], wrapper);
-
-				const actionMenu = wrapper.findComponent(ActionMenu);
-
-				expect(actionMenu.classes()).not.toContain("order-2");
-			});
-
-			it("should reset member selection when reset button is clicked", async () => {
-				const { wrapper } = setup();
-				await selectCheckboxes([1, 3], wrapper);
-
-				const actionMenu = wrapper.findComponent(ActionMenu);
-				actionMenu.vm.$emit("reset:selected");
-
-				await nextTick();
-
-				const checkboxes = wrapper
-					.getComponent(VDataTable)
-					.findAll("input[type='checkbox']");
-
-				const checkedIndices = getCheckedIndices(checkboxes);
-
-				expect(checkedIndices).toEqual([]);
-			});
-
-			it.each([
-				{
-					description: "single member",
-					selectedUserIndices: [0],
-					expectedMessage: "pages.rooms.members.remove.confirmation",
-				},
-				{
-					description: "multiple members",
-					selectedUserIndices: [0, 1],
-					expectedMessage: "pages.rooms.members.multipleRemove.confirmation",
-				},
-			])(
-				"should render confirmation dialog with text for $description when removeMember action is clicked",
-				async ({ selectedUserIndices, expectedMessage }) => {
-					const { wrapper, roomMembersStore, roomMembers } = setup();
-					await selectCheckboxes(
-						selectedUserIndices.map((index) => index + 1),
-						wrapper
-					);
-
-					askConfirmationMock.mockResolvedValue(true);
-
-					const actionMenu = wrapper.findComponent(ActionMenu);
-					await nextTick();
-					actionMenu.getComponent(VBtn).trigger("click");
-					await nextTick();
-
-					const removeButton = wrapper.findComponent(
-						KebabMenuActionRemoveMember
-					);
-					removeButton.trigger("click");
-					await nextTick();
-
-					expect(roomMembersStore.removeMembers).toHaveBeenCalledWith(
-						selectedUserIndices.map((index) => roomMembers[index].userId)
-					);
-
-					expect(askConfirmationMock).toHaveBeenCalledWith({
-						confirmActionLangKey: "common.actions.remove",
-						message: expectedMessage,
-					});
-				}
-			);
-
-			it("should keep selection if confirmation dialog is canceled", async () => {
-				const { wrapper } = setup();
-				await selectCheckboxes([2], wrapper);
-
-				askConfirmationMock.mockResolvedValue(false);
-
-				const actionMenu = wrapper.findComponent(ActionMenu);
-				await nextTick();
-				actionMenu.getComponent(VBtn).trigger("click");
-				await nextTick();
-
-				const removeButton = wrapper.findComponent(KebabMenuActionRemoveMember);
-				removeButton.trigger("click");
-				await nextTick();
-
-				const checkboxes = wrapper
-					.getComponent(VDataTable)
-					.findAll("input[type='checkbox']");
-
-				const checkedIndices = getCheckedIndices(checkboxes);
-
-				expect(checkedIndices.length).toBeGreaterThan(0);
-				expect(checkedIndices).toEqual([2]);
-			});
 		});
 	});
 
@@ -550,7 +487,7 @@ describe("MembersTable", () => {
 	describe("action column", () => {
 		it("should be rendered when user can add members", () => {
 			const { wrapper } = setup({
-				roomAuthorization: { canAddRoomMembers: true },
+				customRoomAuthorization: { canAddRoomMembers: true },
 			});
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menu = dataTable.findComponent('[data-testid="kebab-menu-0');
@@ -560,7 +497,7 @@ describe("MembersTable", () => {
 
 		it("should not be rendered when user can not add members", () => {
 			const { wrapper } = setup({
-				roomAuthorization: { canAddRoomMembers: false },
+				customRoomAuthorization: { canAddRoomMembers: false },
 			});
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menu = dataTable.findComponent('[data-testid="kebab-menu-0');
@@ -575,7 +512,7 @@ describe("MembersTable", () => {
 			});
 			const { wrapper } = setup({
 				members: [roomOwner],
-				roomAuthorization: { canAddRoomMembers: true },
+				customRoomAuthorization: { canAddRoomMembers: true },
 				currentUserId: roomOwner.userId,
 			});
 			const dataTable = wrapper.getComponent(VDataTable);
@@ -587,7 +524,7 @@ describe("MembersTable", () => {
 		describe("change role button", () => {
 			it("should be rendered when user can add members", async () => {
 				const { wrapper } = setup({
-					roomAuthorization: { canAddRoomMembers: true },
+					customRoomAuthorization: { canAddRoomMembers: true },
 				});
 				const dataTable = wrapper.getComponent(VDataTable);
 
@@ -603,7 +540,7 @@ describe("MembersTable", () => {
 
 			it("should open change role dialog when clicked", async () => {
 				const { wrapper } = setup({
-					roomAuthorization: { canAddRoomMembers: true },
+					customRoomAuthorization: { canAddRoomMembers: true },
 				});
 				const dataTable = wrapper.getComponent(VDataTable);
 

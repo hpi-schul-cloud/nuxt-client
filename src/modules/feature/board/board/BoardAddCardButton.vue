@@ -22,7 +22,8 @@
 
 <script setup lang="ts">
 import { mdiPlus } from "@icons/material";
-import { useSharedEditMode } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { computed } from "vue";
 
 defineProps({
@@ -48,6 +49,7 @@ const isEditMode = computed(() => editModeId.value !== undefined);
 	bottom: 0;
 }
 .button-background {
+	height: 72px; /* button height(48px) + pb-4(16px) + pt-2(8px) */
 	background: #fff;
 	background: linear-gradient(
 		0deg,

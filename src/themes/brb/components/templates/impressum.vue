@@ -202,19 +202,8 @@
 	</div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { mdiChat, mdiEmailOutline, mdiPhone } from "@icons/material";
-import { defineComponent } from "vue";
-
-export default defineComponent({
-	setup() {
-		return {
-			mdiEmailOutline,
-			mdiPhone,
-			mdiChat,
-		};
-	},
-});
 </script>
 
 <style lang="scss" scoped>

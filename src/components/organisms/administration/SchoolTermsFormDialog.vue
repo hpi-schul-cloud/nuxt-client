@@ -28,12 +28,11 @@
 				<v-file-input
 					ref="input-file"
 					v-model="file"
-					class="input-file mb-2"
+					class="input-file mb-2 truncate-file-input"
 					data-testid="input-file"
 					:multiple="false"
 					density="compact"
 					accept="application/pdf"
-					truncate-length="30"
 					:label="
 						t('pages.administration.school.index.termsOfUse.labels.uploadFile')
 					"
@@ -175,22 +174,11 @@ export default defineComponent({
 	line-height: var(--line-height-lg) !important;
 }
 
-.button-left {
-	width: 25%;
-	text-align: left;
-}
-
-.button-right {
-	display: inline-block;
-	width: 75%;
-	text-align: right;
-}
-
-.button-section {
-	margin-bottom: calc(var(--space-base-vuetify) * 2);
-}
-
-.button-section > button {
-	margin-left: calc(var(--space-base-vuetify) * 2);
+:deep(.truncate-file-input .v-field__input) {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	max-width: 100%;
 }
 </style>

@@ -6,11 +6,11 @@ export default {
 	"common.actions.confirm": "Підтвердити",
 	"common.actions.continue": "Продовжити",
 	"common.actions.copy": "Копіювати",
+	"common.actions.duplicate": "Дублювати",
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
 	"common.actions.download": "Завантажити",
-	"common.actions.copyRoom": "Дублювати",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
@@ -38,6 +38,10 @@ export default {
 		"Помилка під час перевірки на віруси. Неможливо створити попередній перегляд. Будь ласка, завантажте файл ще раз.",
 	"common.file.scanWontCheck": "Через розмір не може бути створено прев'ю.",
 	"common.file.virusDetected": "Файл було заблоковано через підозру на вірус.",
+	"common.file": "Файл",
+	"common.file.exceedsCollaboraEditableFileSize":
+		"Документи розміром більше {sizeInMb} не можуть бути оброблені онлайн.",
+	"common.files": "Файли",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
@@ -93,10 +97,12 @@ export default {
 	"common.labels.size": "Pозмір",
 	"common.labels.status": "Статус",
 	"common.labels.student": "Учень",
+	"common.labels.student.neutral": "Учень",
 	"common.labels.students": "Учні",
 	"common.labels.success": "успіх",
 	"common.labels.teacher.plural": "Викладачі",
 	"common.labels.teacher": "Викладач",
+	"common.labels.teacher.neutral": "Викладач",
 	"common.labels.time": "Час",
 	"common.labels.title": "Назва",
 	"common.labels.unknown": "Невідомий",
@@ -171,7 +177,10 @@ export default {
 		"Введений текст перевищує максимально дозволену довжину",
 	"common.validation.containsOpeningTag":
 		"Будь ласка, вставте пробіл після знаку менше.",
+	"common.validation.nonEmptyString":
+		"Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.and": "і",
+	"common.words.board": "Дошка",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
 	"common.words.color.blue": "Синій",
@@ -188,6 +197,8 @@ export default {
 	"common.words.color.turquoise": "Бірюза",
 	"common.words.color.yellow": "Жовтий",
 	"common.words.copiedToClipboard": "Скопійовано в буфер обміну",
+	"common.words.copiedToClipboard.failure":
+		"Не вдалося скопіювати в буфер обміну. Спробуйте вручну.",
 	"common.words.copyLinkToClipboard.success":
 		"Посилання скопійовано в буфер обміну",
 	"common.words.copyLinkToClipboard.failure":
@@ -400,13 +411,13 @@ export default {
 	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
 		"Школа вже в наступному навчальному році",
 	"components.administration.schoolYearChangeSection.notification.finish.success":
-		"Навчальний рік успішно розпочався",
+		"Фаза передачі успішно завершена. Школа перенесена до наступного року.",
 	"components.administration.schoolYearChangeSection.notification.start.success":
 		"Фаза передачі розпочалася успішно",
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Наприкінці навчального року",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"Фазу передачі можна розпочати вручну за два тижні до початку свята. Якщо до початку свята немає посібника, фаза передачі починається автоматично. Початок фази передачі не можна скасувати.",
+		"Фазу передачі можна розпочати вручну за два тижні до кінця навчального року. Після того, як не відбулося жодного ручного початку, фаза передачі починається автоматично. Початок фази передачі не можна скасувати.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
 		"Почніть фазу передачі",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
@@ -427,10 +438,14 @@ export default {
 		"Кінцева фаза передачі",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
 		"Класні та персональні дані (LDAP) були оновлені та перевірені",
-	"components.administration.schoolYearChangeSection.dialog.title":
-		"Дійсно закінчити навчальний рік?",
-	"components.administration.schoolYearChangeSection.dialog.content":
+	"components.administration.schoolYearChangeSection.dialog.start.title":
+		"Дійсно почати фазу передачі?",
+	"components.administration.schoolYearChangeSection.dialog.start.content":
 		"Синхронізація головних даних LDAP переривається під час фази передачі. Це означає, що дані та класи користувачів (якщо використовуються) більше не оновлюються через LDAP. Вхід із вже синхронізованими даними входу все ще можливий. Зміни пароля в LDAP під час входу також враховуються.",
+	"components.administration.schoolYearChangeSection.dialog.finish.title":
+		"Дійсно фаза кінцевої передачі?",
+	"components.administration.schoolYearChangeSection.dialog.finish.content":
+		"Запускається синхронізація даних LDAP. Дані користувачів та класи оновлюються. Новий навчальний рік автоматично встановлюється.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "в",
 	"components.atoms.VCustomChipTimeRemaining.hintHours":
 		"година | години (годин)",
@@ -464,7 +479,7 @@ export default {
 	"components.board.error.404":
 		"Помилка 404 – Дошки з такою назвою не знайдено",
 	"components.board.error.403":
-		"Помилка 403 – На жаль, у вас немає дозволу на перегляд цього контенту",
+		"Помилка 403 – На жаль, у вас немає дозволу на перегляд цього контенту ...",
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
@@ -527,7 +542,8 @@ export default {
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Інший користувач змінив вигляд панелі на {layout}.",
-	"components.board": "Дошка",
+	"components.board.preferredTools.notification.error.notLoaded":
+		"Не вдалося завантажити бажані інструменти.",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
 	"components.boardElement": "Eлемент",
@@ -557,6 +573,8 @@ export default {
 	"components.cardElement.fileElement.reloadStatus": "Статус оновлення",
 	"components.cardElement.fileElement.videoFormatError":
 		"Формат відео не підтримується цим браузером / операційною системою.",
+	"components.cardElement.fileElement.openOfficeDocument":
+		"Документ у форматі Open Office",
 	"components.cardElement.folderElement": "Папка з файлами",
 	"components.cardElement.folderElement.untitled": "Папка без назви",
 	"components.cardElement.LinkElement": "Посилання",
@@ -664,7 +682,7 @@ export default {
 	"components.molecules.copyResult.etherpadCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.failedCopy":
-		"Не вдалося завершити процес копіювання.",
+		"Дублювання не вдалося завершити.",
 	"components.molecules.copyResult.fileCopy.error":
 		"Наступні файли не вдалося скопіювати і їх необхідно додати заново.",
 	"components.molecules.copyResult.geogebraCopy.info":
@@ -697,22 +715,22 @@ export default {
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.course.successfullyCopied":
-		"Усі елементи успішно скопійовано.",
+		"Всі елементи були успішно продубльовані.",
 	"components.molecules.copyResult.board.successfullyCopied":
-		"Дошка успішно скопійована.",
+		"Дошка успішно продубльована.",
 	"components.molecules.copyResult.task.successfullyCopied":
-		"Задачу успішно скопійовано.",
+		"Завдання успішно продубльовано.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
-		"Тему успішно скопійовано.",
+		"Тему успішно продубльовано.",
 	"components.molecules.copyResult.timeoutCopy":
-		"Для великих файлів процес копіювання може зайняти більше часу. Вміст буде доступний найближчим часом.",
+		"Дублювання великих файлів може зайняти більше часу. Вміст буде доступний найближчим часом.",
 	"components.molecules.copyResult.timeoutSuccess":
-		"Процес копіювання завершено.",
-	"components.molecules.copyResult.title.failure": "Помилка під час копіювання",
-	"components.molecules.copyResult.title.loading": "Виконується копіювання...",
+		"Процес дублювання завершено.",
+	"components.molecules.copyResult.title.failure": "Помилка при дублюванні",
+	"components.molecules.copyResult.title.loading": "Триває тиражування...",
 	"components.molecules.copyResult.title.partial":
-		"Важлива інформація щодо копіювання",
-	"components.molecules.copyResult.title.success": "Копіювання успішне",
+		"Важлива інформація про дублювання",
+	"components.molecules.copyResult.title.success": "Дублювання успішне",
 	"components.molecules.courseheader.coursedata": "Дані курсу",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
@@ -753,6 +771,10 @@ export default {
 	"components.molecules.import.options.success": "{name} успішно імпортовано",
 	"components.molecules.import.options.tableHeader.InfoText":
 		"Наступний вміст не буде імпортовано:",
+	"components.molecules.import.room.options.title": "Імпортувати кімнату",
+	"components.molecules.import.room.rename":
+		"При необхідності назву кімнати можна перейменувати: ",
+	"components.molecules.import.room.label": "Назва кімнати",
 	"components.molecules.import.tasks.label": "Завдання",
 	"components.molecules.import.tasks.rename":
 		"При необхідності назву завдання можна перейменувати: ",
@@ -791,6 +813,8 @@ export default {
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Посилання на копію дошки",
+	"components.molecules.share.columnBoard.mail.subject": "Дошка для імпорту",
+	"components.molecules.share.columnBoard.mail.body": "Посилання на дошку: ",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
 	"components.molecules.share.roomMemberInvitation.mail.body":
 		"Посилання на кімнату: ",
@@ -815,8 +839,10 @@ export default {
 		"Ідентифікатори Geogebra",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Групи курсів",
+	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
+		"Учасники кімнати та їхні дозволи",
 	"components.molecules.share.options.tableHeader.InfoText":
-		"Наступний вміст не буде скопійовано:",
+		"Наступний контент не буде дублюватися:",
 	"components.molecules.share.courses.result.linkLabel":
 		"Посилання на копію курсу",
 	"components.molecules.share.lessons.mail.body": "Посилання на курс:",
@@ -830,6 +856,11 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Посилання дійсне тільки в межах школи",
 	"components.molecules.share.options.title": "Налаштування спільного доступу",
+	"components.molecules.share.room.options.infoText":
+		"За цим посиланням цю кімнату можуть скопіювати інші користувачі. Якщо потрібно поділитися кімнатою, яка активно використовується, спочатку створіть дублікат і поділіться ним.",
+	"components.molecules.share.room.result.linkLabel": "Копія теми посилання",
+	"components.molecules.share.room.mail.subject": "Кімната для імпорту",
+	"components.molecules.share.room.mail.body": "Посилання на кімнату: ",
 	"components.molecules.share.result.mailShare": "Надіслати поштою",
 	"components.molecules.share.result.qrCodeScan": "Відскануйте QR-код",
 	"components.molecules.share.result.title": "Поділіться через",
@@ -953,6 +984,11 @@ export default {
 	"components.roomForm.labels.timePeriod": "Період часу",
 	"components.roomForm.labels.timePeriod.from": "Період від",
 	"components.roomForm.labels.timePeriod.to": "Період до",
+	"components.roomForm.labels.videoConference.title": "Відеоконференції",
+	"components.roomForm.labels.videoConference.label":
+		"Члени кімнати з правом «Редагувати» також можуть додавати та запускати відеоконференці.",
+	"components.roomForm.labels.videoConference.helperText":
+		"Незалежно від цього, члени кімнати з правом «Управляти» або «Володіти» завжди можуть додавати та запускати відеоконференції.",
 	"components.roomForm.validation.generalSaveError":
 		"Виникла помилка при збереженні. Будь ласка, перевірте свої записи та спробуйте ще раз.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
@@ -1023,7 +1059,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"На наступному кроці буде створено копію кімнати.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"Наступний вміст не буде скопійовано:",
+		"Наступний вміст не включено:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Учасники кімнати та їхні дозволи",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Вміст із Etherpads",
@@ -1121,6 +1157,10 @@ export default {
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",
 	"pages.administration.classes.index.add": "Додати клас",
 	"pages.administration.classes.index.title": "Керувати заняттями",
+	"pages.administration.classes.thr.hint.title":
+		"Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.text":
+		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
 	"pages.administration.common.label.archive": "Архів",
 	"pages.administration.common.label.active": "поточний",
 	"pages.administration.classes.manage": "Керувати класом",
@@ -1130,6 +1170,9 @@ export default {
 		'Ви впевнені, що хочете видалити цей курс "{itemName}" ?',
 	"pages.administration.courses.index.add": "Додати курс",
 	"pages.administration.courses.edit": "Редагувати курс",
+	"pages.administration.courses.withoutTeacher":
+		"Відображати тільки курси без викладача",
+	"pages.administration.courses.noTeacher": "недоступно",
 	"pages.administration.index.title": "Адміністрування",
 	"pages.administration.ldap.activate.breadcrumb": "Cинхронізація",
 	"pages.administration.ldap.activate.className": "Ім'я",
@@ -1161,8 +1204,8 @@ export default {
 	"pages.administration.ldap.classes.path.info":
 		"Відносний шлях від базового шляху",
 	"pages.administration.ldap.classes.path.subtitle":
-		"Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind. Mit Hilfe von zwei Semikolons (;;) hast du die Möglichkeit, mehrere Nutzerpfade getrennt voneinander zu hinterlegen.",
-	"pages.administration.ldap.classes.path.title": "Шлях(и) класу",
+		"Тут ви повинні визначити, де ми знаходимо класи і як вони структуровані.",
+	"pages.administration.ldap.classes.path.title": "Шлях класу",
 	"pages.administration.ldap.classes.subtitle": "",
 	"pages.administration.ldap.classes.title": "",
 	"pages.administration.ldap.connection.basis.path.info":
@@ -1370,6 +1413,8 @@ export default {
 		"Під час завантаження школи сталася помилка",
 	"pages.administration.school.index.generalSettings.changeSchoolValueWarning":
 		"Після налаштування цей параметр буде неможливо змінити!",
+	"pages.administration.school.index.generalSettings.disabledHint":
+		"Не можна редагувати тут, більше інформації у зміні навчального року розділу",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Виберіть округ, до якого належить ваша школа",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider":
@@ -1377,6 +1422,8 @@ export default {
 	"pages.administration.school.index.generalSettings.labels.language": "Мова",
 	"pages.administration.school.index.generalSettings.labels.nameOfSchool":
 		"Назва школи",
+	"pages.administration.school.index.generalSettings.labels.schoolYear":
+		"Навчальний рік",
 	"pages.administration.school.index.generalSettings.labels.schoolNumber":
 		"Номер школи",
 	"pages.administration.school.index.generalSettings.labels.timezone":
@@ -1387,6 +1434,8 @@ export default {
 		"Якщо мову школи не встановлено, застосовується системна мова за замовчуванням (німецька).",
 	"pages.administration.school.index.generalSettings.save":
 		"Зберегти налаштування",
+	"pages.administration.school.index.generalSettings.save.success":
+		"Загальні налаштування успішно збережено.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
 		"Щоб змінити часовий пояс, зверніться до одного з адміністраторів.",
 	"pages.administration.school.index.generalSettings": "Загальні параметри",
@@ -1761,6 +1810,8 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Групи",
 	"pages.courseRooms.tabLabel.tools": "Інструмент",
 	"pages.courseRooms.tabLabel.toolsOld": "Інструмент",
+	"pages.courseRooms.course-locked":
+		"Курс заблоковано, оскільки на нього не призначено викладача. Будь ласка, зверніться до адміністратора школи.",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",
@@ -1786,11 +1837,11 @@ export default {
 	"pages.room.cards.aria":
 		"{itemType}, посилання, натисніть Enter, щоб відкрити",
 	"pages.room.cards.label.revert": "Повернути до стану чернетки",
-	"pages.room.copy.course.message.copied": "Курс успішно скопійовано.",
+	"pages.room.copy.course.message.copied": "Курс був успішно продубльований.",
 	"pages.room.copy.course.message.partiallyCopied":
 		"Повністю скопіювати курс не вдалося.",
-	"pages.room.copy.lesson.message.copied": "Тему успішно скопійовано.",
-	"pages.room.copy.task.message.copied": "Завдання успішно скопійовано.",
+	"pages.room.copy.lesson.message.copied": "Тема була успішно продубльована.",
+	"pages.room.copy.task.message.copied": "Завдання було успішно продубльовано.",
 	"pages.room.dialog.boardLayout.title": "Виберіть вид",
 	"pages.room.dialog.boardLayout.singleColumn": "одноколонкові",
 	"pages.room.dialog.boardLayout.multiColumn": "багатоколонкові",
@@ -1799,6 +1850,8 @@ export default {
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
+	"pages.room.locked":
+		"Доступ до кімнати заблоковано, оскільки жоден учасник не має права «Володіти». Зверніться до адміністратора школи.",
 	"pages.room.taskCard.label.done": "Завершити",
 	"pages.room.taskCard.label.due": "Термін",
 	"pages.room.taskCard.label.edit": "Редагувати",
@@ -1862,6 +1915,7 @@ export default {
 	"pages.rooms.ccImportCourse.loading": "Імпорт виконується...",
 	"pages.rooms.ccImportCourse.success": "Курс {name} успішно імпортовано.",
 	"pages.rooms.ccImportCourse.error": "Виникла помилка під час імпорту курсу.",
+	"pages.rooms.ccExportCourse.error": "Під час експорту курсу сталася помилка.",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",
 	"pages.rooms.tools.deactivatedDialog.title":
@@ -1923,9 +1977,10 @@ export default {
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
-	"pages.rooms.members.add.role.student": "Учень",
 	"pages.rooms.members.add.students.forbidden":
 		"Якщо в налаштуваннях школи вимкнено видимість учнів для вчителів, ви можете додавати лише учнів з вашого класу. Зверніться до адміністратора школи.",
+	"pages.rooms.members.add.students.studentAdmins":
+		"Учні можуть додавати до кімнати лише учнів зі свого класу.",
 	"pages.rooms.members.add.warningText":
 		"Учнів з інших шкіл може додати до кімнати лише відповідальний(а) вчитель(ка) з їхнього навчального закладу.",
 	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberFullName}",
@@ -2012,8 +2067,7 @@ export default {
 		"Редагувати посилання на запрошення",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Учні з інших шкіл завжди повинні бути присутніми в кімнаті під наглядом вчителя з їхньої школи.",
-	"pages.rooms.members.inviteMember.form.description.label":
-		"Опис (необов'язково)",
+	"pages.rooms.members.inviteMember.form.description.label": "Опис",
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Відображається в огляді посилань",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
@@ -2054,7 +2108,39 @@ export default {
 		"Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update":
 		"Не вдалося оновити посилання на запрошення.",
+	"pages.rooms.invitationlinks.error.load":
+		"Не вдалося завантажити список запрошень.",
 	"pages.rooms.title": "Кімнати",
+	"pages.rooms.administration.title": "Адміністрування кімнат",
+	"pages.rooms.administration.table.header.roomName": "Назва кімнати",
+	"pages.rooms.administration.table.header.roomOwner": "Власник кімнати",
+	"pages.rooms.administration.table.header.totalMember":
+		"Загальна кількість учасників",
+	"pages.rooms.administration.table.header.internalMember":
+		"Внутрішні учасники",
+	"pages.rooms.administration.table.header.externalMember": "Зовнішні учасники",
+	"pages.rooms.administration.table.header.creationDate": "Дата створення",
+	"pages.rooms.administration.table.header.mainSchool": "Головна школа",
+	"pages.rooms.administration.table.header.actions": "Дії",
+	"pages.rooms.administration.table.row.owner.notExist": "Не існує",
+	"pages.rooms.administration.table.delete.infoMessage":
+		"Видалення кімнати також призведе до видалення всіх її вмістів. Цю дію не можна скасувати.",
+	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
+		"Меню дій для кімнати “{roomName}”",
+	"pages.rooms.administration.table.actionMenu.delete": "Видалити кімнату",
+	"pages.rooms.administration.table.actionMenu.manageRoom":
+		"Керувати учасниками кімнати",
+	"pages.rooms.administration.error.load":
+		"Не вдалося завантажити список кімнат.",
+	"pages.rooms.administration.error.delete": "Кімнату не вдалося видалити.",
+	"pages.rooms.administration.pageTitle": "Керування кімнатами",
+	"pages.rooms.administration.roomDetail.infoText":
+		"Члени кімнати з інших шкіл показуються анонімно з причин захисту даних (виняток: член з авторизацією «Власник» кімнати).",
+	"pages.rooms.administration.roomDetail.anonymized": "(анонімізовано)",
+	"pages.rooms.administration.roomDetail.breadcrumb":
+		"Учасники кімнати {roomName}",
+	"pages.rooms.administration.roomDetail.header.text":
+		"Учасники кімнати “{roomName}“",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",
@@ -2121,6 +2207,7 @@ export default {
 	"pages.tool.medium.mediumId": "Середній",
 	"pages.tool.medium.mediumSourceId": "Ідентифікатор медіа каталогу",
 	"pages.tool.medium.noMediaSource": "Без медіа -каталогу",
+	"pages.tool.medium.template": "Шаблон",
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",
 	"pages.userMigration.button.skip": "Не зараз",
 	"pages.userMigration.button.startMigration": "почати рухатися",
@@ -2166,6 +2253,10 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Цей елемент більше не доступний, оскільки відеоконференції в школі вимкнено. Будь ласка, зверніться до адміністратора школи.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
+	"pages.collabora.iframeTitle": "Редактор документів Office",
+	"pages.collabora.jsonError":
+		"Не вдалося проаналізувати Json повідомлення Collabora.",
+	"pages.collabora.messageError": "Повідомлення Collabora недійсне.",
 	"error.500":
 		"Є проблеми в системі. Ми працюємо над усуненням проблеми. Будь ласка, спробуйте пізніше.",
 	"error.4500":

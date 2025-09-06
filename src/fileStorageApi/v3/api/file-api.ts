@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Schulcloud-Verbund-Software Server API
- * This is v3 of Schulcloud-Verbund-Software Server. Checkout /docs for v1.
+ * Schulcloud-Verbund-Software File Storage API
+ * This is the API documentation for the Schulcloud-Verbund-Software File Storage API
  *
  * The version of the OpenAPI document: 3.0
  * 
@@ -23,6 +23,8 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { ApiValidationError } from '../models';
 // @ts-ignore
+import { ArchiveFileParams } from '../models';
+// @ts-ignore
 import { CopyFileListResponse } from '../models';
 // @ts-ignore
 import { CopyFileParams } from '../models';
@@ -38,6 +40,8 @@ import { FileRecordResponse } from '../models';
 import { FileUrlParams } from '../models';
 // @ts-ignore
 import { MultiFileParams } from '../models';
+// @ts-ignore
+import { ParentStatisticResponse } from '../models';
 // @ts-ignore
 import { PreviewOutputMimeTypes } from '../models';
 // @ts-ignore
@@ -329,6 +333,51 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Download multiple files as a zip
+         * @param {ArchiveFileParams} archiveFileParams 
+         * @param {string} [range] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        downloadFilesAsArchive: async (archiveFileParams: ArchiveFileParams, range?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'archiveFileParams' is not null or undefined
+            assertParamExists('downloadFilesAsArchive', 'archiveFileParams', archiveFileParams)
+            const localVarPath = `/file/download-files-as-archive`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (range !== undefined && range !== null) {
+                localVarHeaderParameter['Range'] = String(range);
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(archiveFileParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Streamable download of a preview file.
          * @param {string} fileRecordId 
          * @param {string} fileName 
@@ -382,6 +431,48 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             if (ifNoneMatch !== undefined && ifNoneMatch !== null) {
                 localVarHeaderParameter['If-None-Match'] = String(ifNoneMatch);
             }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get stats (count and total size) of all files for a parent entityId.
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getParentStatistic: async (parentId: string, parentType: FileRecordParentType, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'parentId' is not null or undefined
+            assertParamExists('getParentStatistic', 'parentId', parentId)
+            // verify required parameter 'parentType' is not null or undefined
+            assertParamExists('getParentStatistic', 'parentType', parentType)
+            const localVarPath = `/file/stats/{parentType}/{parentId}`
+                .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
+                .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -772,7 +863,7 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteFiles(multiFileParams: MultiFileParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
+        async deleteFiles(multiFileParams: MultiFileParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteFiles(multiFileParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -791,6 +882,18 @@ export const FileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Download multiple files as a zip
+         * @param {ArchiveFileParams} archiveFileParams 
+         * @param {string} [range] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async downloadFilesAsArchive(archiveFileParams: ArchiveFileParams, range?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadFilesAsArchive(archiveFileParams, range, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Streamable download of a preview file.
          * @param {string} fileRecordId 
          * @param {string} fileName 
@@ -804,6 +907,18 @@ export const FileApiFp = function(configuration?: Configuration) {
          */
         async downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.downloadPreview(fileRecordId, fileName, outputFormat, width, forceUpdate, range, ifNoneMatch, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get stats (count and total size) of all files for a parent entityId.
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getParentStatistic(parentId: string, parentType: FileRecordParentType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ParentStatisticResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getParentStatistic(parentId, parentType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -954,7 +1069,7 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordResponse> {
+        deleteFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordListResponse> {
             return localVarFp.deleteFiles(multiFileParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -971,6 +1086,17 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Download multiple files as a zip
+         * @param {ArchiveFileParams} archiveFileParams 
+         * @param {string} [range] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        downloadFilesAsArchive(archiveFileParams: ArchiveFileParams, range?: string, options?: any): AxiosPromise<any> {
+            return localVarFp.downloadFilesAsArchive(archiveFileParams, range, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Streamable download of a preview file.
          * @param {string} fileRecordId 
          * @param {string} fileName 
@@ -984,6 +1110,17 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          */
         downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any): AxiosPromise<object> {
             return localVarFp.downloadPreview(fileRecordId, fileName, outputFormat, width, forceUpdate, range, ifNoneMatch, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get stats (count and total size) of all files for a parent entityId.
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getParentStatistic(parentId: string, parentType: FileRecordParentType, options?: any): AxiosPromise<ParentStatisticResponse> {
+            return localVarFp.getParentStatistic(parentId, parentType, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1127,7 +1264,7 @@ export interface FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    deleteFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordResponse>;
+    deleteFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordListResponse>;
 
     /**
      * 
@@ -1140,6 +1277,17 @@ export interface FileApiInterface {
      * @memberof FileApiInterface
      */
     download(fileRecordId: string, fileName: string, range?: string, options?: any): AxiosPromise<any>;
+
+    /**
+     * 
+     * @summary Download multiple files as a zip
+     * @param {ArchiveFileParams} archiveFileParams 
+     * @param {string} [range] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApiInterface
+     */
+    downloadFilesAsArchive(archiveFileParams: ArchiveFileParams, range?: string, options?: any): AxiosPromise<any>;
 
     /**
      * 
@@ -1156,6 +1304,17 @@ export interface FileApiInterface {
      * @memberof FileApiInterface
      */
     downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any): AxiosPromise<object>;
+
+    /**
+     * 
+     * @summary Get stats (count and total size) of all files for a parent entityId.
+     * @param {string} parentId 
+     * @param {FileRecordParentType} parentType 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApiInterface
+     */
+    getParentStatistic(parentId: string, parentType: FileRecordParentType, options?: any): AxiosPromise<ParentStatisticResponse>;
 
     /**
      * 
@@ -1327,6 +1486,19 @@ export class FileApi extends BaseAPI implements FileApiInterface {
 
     /**
      * 
+     * @summary Download multiple files as a zip
+     * @param {ArchiveFileParams} archiveFileParams 
+     * @param {string} [range] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public downloadFilesAsArchive(archiveFileParams: ArchiveFileParams, range?: string, options?: any) {
+        return FileApiFp(this.configuration).downloadFilesAsArchive(archiveFileParams, range, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Streamable download of a preview file.
      * @param {string} fileRecordId 
      * @param {string} fileName 
@@ -1341,6 +1513,19 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      */
     public downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any) {
         return FileApiFp(this.configuration).downloadPreview(fileRecordId, fileName, outputFormat, width, forceUpdate, range, ifNoneMatch, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get stats (count and total size) of all files for a parent entityId.
+     * @param {string} parentId 
+     * @param {FileRecordParentType} parentType 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public getParentStatistic(parentId: string, parentType: FileRecordParentType, options?: any) {
+        return FileApiFp(this.configuration).getParentStatistic(parentId, parentType, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

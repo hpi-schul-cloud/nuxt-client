@@ -22,39 +22,37 @@
 		<div class="d-flex justify-center mt-1 subtitle" />
 	</div>
 </template>
-<script>
+
+<script setup lang="ts">
 import { mdiLock } from "@icons/material";
-export default {
-	props: {
-		size: {
-			type: String,
-			required: true,
-		},
-		showOutline: {
-			type: Boolean,
-			required: false,
-		},
-	},
-	emits: ["dropEmptyAvatar"],
-	data() {
-		return {
-			hovered: false,
-			mdiLock,
-		};
-	},
-	methods: {
-		dragLeave() {
-			this.hovered = false;
-		},
-		dragEnter() {
-			this.hovered = true;
-		},
-		dropAvatar() {
-			this.$emit("dropEmptyAvatar");
-		},
-	},
+import { ref } from "vue";
+
+type Props = {
+	size: string;
+	showOutline?: boolean;
+};
+withDefaults(defineProps<Props>(), {
+	showOutline: false,
+});
+
+const emit = defineEmits<{
+	(e: "dropEmptyAvatar"): void;
+}>();
+
+const hovered = ref(false);
+
+const dropAvatar = () => {
+	emit("dropEmptyAvatar");
+};
+
+const dragLeave = () => {
+	hovered.value = false;
+};
+const dragEnter = () => {
+	hovered.value = true;
 };
 </script>
+
 <style scoped>
 .outlined {
 	border: 2px dashed;
@@ -74,7 +72,7 @@ export default {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	height: var(--space-xl);
+	height: 32px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;

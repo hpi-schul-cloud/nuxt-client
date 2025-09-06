@@ -10,7 +10,9 @@ export interface ElementTypeSelectionOptions {
 
 export const useSharedElementTypeSelection = createSharedComposable(() => {
 	const isDialogOpen = ref<boolean>(false);
-	const elementTypeOptions = ref<Array<ElementTypeSelectionOptions>>([]);
+	const isDialogLoading = ref<boolean>(false);
+	const staticElementTypeOptions = ref<Array<ElementTypeSelectionOptions>>([]);
+	const dynamicElementTypeOptions = ref<Array<ElementTypeSelectionOptions>>([]);
 
 	const closeDialog = () => {
 		isDialogOpen.value = false;
@@ -18,7 +20,9 @@ export const useSharedElementTypeSelection = createSharedComposable(() => {
 
 	return {
 		isDialogOpen,
+		isDialogLoading,
 		closeDialog,
-		elementTypeOptions,
+		staticElementTypeOptions,
+		dynamicElementTypeOptions,
 	};
 });

@@ -17,7 +17,7 @@ import {
 	VideoConferenceState,
 } from "./types/video-conference";
 import VideoConferenceModule from "./video-conference";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 
 describe("VideoConferenceModule", () => {
@@ -28,7 +28,7 @@ describe("VideoConferenceModule", () => {
 	});
 
 	afterEach(() => {
-		jest.restoreAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	const mockApi = () => {
@@ -39,11 +39,9 @@ describe("VideoConferenceModule", () => {
 			})
 		);
 
-		jest
-			.spyOn(serverApi, "VideoConferenceApiFactory")
-			.mockReturnValue(
-				videoconferenceApi as unknown as VideoConferenceApiInterface
-			);
+		vi.spyOn(serverApi, "VideoConferenceApiFactory").mockReturnValue(
+			videoconferenceApi as unknown as VideoConferenceApiInterface
+		);
 
 		return {
 			videoconferenceApi,

@@ -33,39 +33,30 @@
 	</v-dialog>
 </template>
 
-<script>
-import ModalFooter from "@/components/molecules/ModalFooter";
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import { computed } from "vue";
 import { useUid } from "@/utils/uid";
 
-export default defineComponent({
-	components: {
-		ModalFooter,
-	},
-	props: {
-		active: {
-			type: Boolean,
-		},
-		backgroundClickDisabled: {
-			type: Boolean,
-		},
-	},
-	emits: ["update:active"],
-	setup() {
-		const { uid } = useUid();
+type Props = {
+	active?: boolean;
+	backgroundClickDisabled?: boolean;
+};
 
-		return { uid };
-	},
-	computed: {
-		isDialogOpen: {
-			get() {
-				return this.active;
-			},
-			set(newValue) {
-				this.$emit("update:active", newValue);
-			},
-		},
-	},
+const props = withDefaults(defineProps<Props>(), {
+	active: false,
+	backgroundClickDisabled: false,
+});
+
+const emits = defineEmits<{
+	(e: "update:active", value: boolean): void;
+}>();
+
+const { uid } = useUid();
+
+const isDialogOpen = computed({
+	get: () => props.active,
+	set: (newValue: boolean) => emits("update:active", newValue),
 });
 </script>
 
@@ -74,14 +65,14 @@ export default defineComponent({
 	display: flex;
 	flex-direction: column;
 	width: 95%;
-	min-width: var(--size-content-width-min);
-	max-width: var(--size-content-width-max);
-	max-height: calc(100vh - (2 * var(--space-lg)));
+	min-width: var(--content-min-width);
+	max-width: var(--content-max-width);
+	max-height: calc(100vh - 48px);
 	margin: 0 auto;
 	overflow: hidden;
 	background-color: rgba(var(--v-theme-white));
-	border-radius: var(--radius-md);
-	transition: all var(--duration-transition-medium) ease;
+	border-radius: 8px;
+	transition: all 0.3s ease;
 
 	&.white {
 		box-shadow: none;
@@ -89,11 +80,11 @@ export default defineComponent({
 }
 
 .modal-header {
-	padding: var(--space-md);
+	padding: 16px;
 	text-align: center;
 }
 
 .modal-body {
-	padding: var(--space-md) var(--space-xl);
+	padding: 16px 32px;
 }
 </style>

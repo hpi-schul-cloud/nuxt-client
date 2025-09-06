@@ -47,8 +47,9 @@
 			<template #[`item.synchronizedCourses`]="{ item }">
 				<span data-testid="class-table-synced-courses">
 					{{
-						item.synchronizedCourses?.map((course) => course.name).join(", ") ||
-						""
+						(item.synchronizedCourses || [])
+							.map((course: CourseInfo) => course.name)
+							.join(", ") || ""
 					}}
 				</span>
 			</template>
@@ -94,8 +95,8 @@
 						<v-icon>{{ mdiPencilOutline }}</v-icon>
 					</v-btn>
 					<v-btn
-						:title="$t('pages.administration.classes.delete')"
-						:aria-label="$t('pages.administration.classes.delete')"
+						:title="t('pages.administration.classes.delete')"
+						:aria-label="t('pages.administration.classes.delete')"
 						data-testid="class-table-delete-btn"
 						variant="outlined"
 						size="small"
@@ -178,6 +179,7 @@
 		</v-custom-dialog>
 		<end-course-sync-dialog
 			v-model:is-open="isEndSyncDialogOpen"
+			data-testid="end-course-sync-dialog"
 			:course-name="selectedItemForSync.courseName"
 			:group-name="selectedItemForSync.groupName"
 			:course-id="selectedItemForSync.courseId"
@@ -185,6 +187,7 @@
 		/>
 
 		<v-btn
+			v-if="hasCreatePermission"
 			class="my-5 button-start"
 			color="primary"
 			variant="flat"
@@ -194,10 +197,20 @@
 			{{ t("pages.administration.classes.index.add") }}
 		</v-btn>
 
+		<InfoAlert
+			v-if="!hasCreatePermission"
+			class="mb-4"
+			:class="{ 'mt-4': !hasCreatePermission }"
+			data-testid="admin-class-info-alert"
+			alert-title="pages.administration.classes.thr.hint.title"
+		>
+			{{ t("pages.administration.classes.thr.hint.text") }}
+		</InfoAlert>
+
 		<p class="text-muted">
 			{{
 				t("pages.administration.common.hint", {
-					institute_title: getInstituteTitle,
+					institute_title: instituteTitle,
 				})
 			}}
 		</p>
@@ -209,7 +222,7 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
-	ClassSortBy,
+	ClassSortQueryType,
 	SchoolYearQueryType,
 	SchulcloudTheme,
 } from "@/serverApi/v3";
@@ -239,11 +252,16 @@ import {
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { InfoAlert } from "@ui-alert";
 import { useRoute, useRouter } from "vue-router";
+import { DataTableHeader } from "vuetify";
 
 type Tab = "current" | "next" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
-type ClassSortItem = { key: ClassSortBy; order?: boolean | "asc" | "desc" };
+type ClassSortItem = {
+	key: ClassSortQueryType;
+	order?: boolean | "asc" | "desc";
+};
 
 const props = defineProps({
 	tab: {
@@ -279,7 +297,7 @@ const footerProps = {
 const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
 	{
 		title: t("pages.administration.index.title"),
-		href: "/administration/",
+		disabled: true,
 	},
 	{
 		title: t("pages.administration.classes.index.title"),
@@ -314,17 +332,27 @@ const classes: ComputedRef<ClassInfo[]> = computed(
 	() => groupModule.getClasses
 );
 
+const showSourceHeader: ComputedRef<boolean> = computed(() => {
+	return classes.value.some(
+		(classItem) => classItem.externalSourceName !== undefined
+	);
+});
+
 const isLoading: ComputedRef<boolean> = computed(() => groupModule.getLoading);
 
-const hasPermission: ComputedRef<boolean> = computed(() =>
+const hasEditPermission: ComputedRef<boolean> = computed(() =>
 	authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
 );
 
 const showClassAction = (item: ClassInfo) =>
-	hasPermission.value && item.type === ClassRootType.Class;
+	hasEditPermission.value && item.type === ClassRootType.Class;
 
 const showGroupAction = (item: ClassInfo) =>
-	hasPermission.value && item.type === ClassRootType.Group;
+	hasEditPermission.value && item.type === ClassRootType.Group;
+
+const hasCreatePermission: ComputedRef<boolean> = computed(() =>
+	authModule.getUserPermissions.includes("CLASS_CREATE".toLowerCase())
+);
 
 const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
@@ -377,7 +405,7 @@ const courseSyncEnabled = computed(
 );
 
 const headers = computed(() => {
-	const headerList: unknown[] = [
+	const headerList: DataTableHeader<ClassInfo>[] = [
 		{
 			value: "name",
 			title: t("common.labels.classes"),
@@ -395,12 +423,14 @@ const headers = computed(() => {
 			sortable: true,
 		});
 	}
-	headerList.push(
-		{
+	if (showSourceHeader.value) {
+		headerList.push({
 			value: "externalSourceName",
 			title: t("common.labels.externalsource"),
 			sortable: true,
-		},
+		});
+	}
+	headerList.push(
 		{
 			key: "teacherNames",
 			value: (item: ClassInfo) => item.teacherNames.join(", "),
@@ -446,7 +476,7 @@ const onTabsChange = async (tab: string) => {
 
 const onUpdateSortBy = async (sortBy: ClassSortItem[]) => {
 	const fieldToSortBy: ClassSortItem = sortBy[0];
-	const key: ClassSortBy | undefined = fieldToSortBy
+	const key: ClassSortQueryType | undefined = fieldToSortBy
 		? fieldToSortBy.key
 		: undefined;
 	groupModule.setSortBy(key);
@@ -475,10 +505,10 @@ onMounted(() => {
 	onTabsChange(activeTab.value);
 });
 
-const getInstituteTitle: ComputedRef<string> = computed(() => {
+const instituteTitle: ComputedRef<string> = computed(() => {
 	switch (envConfigModule.getTheme) {
 		case SchulcloudTheme.N21:
-			return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
 		case SchulcloudTheme.Thr:
 			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
 		case SchulcloudTheme.Brb:

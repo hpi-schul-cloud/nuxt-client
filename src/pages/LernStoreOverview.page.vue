@@ -281,12 +281,12 @@ watchDebounced(
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
-	min-height: calc(100vh - var(--sidebar-item-height));
-	padding: 0 var(--space-lg);
+	min-height: calc(100vh - 60px);
+	padding: 0 24px;
 	overflow-y: hidden;
 
 	.arrow__back {
-		margin-top: var(--space-xs);
+		margin-top: 8px;
 		font-weight: var(--font-weight-bold);
 		cursor: pointer;
 	}
@@ -305,8 +305,8 @@ watchDebounced(
 
 	&__searchbar {
 		width: 100%;
-		padding: var(--space-md) 0;
-		margin: var(--space-md) 0;
+		padding: 16px 0;
+		margin: 16px 0;
 		transition: margin 0.7s;
 		transform: scale(1);
 	}
@@ -316,12 +316,12 @@ watchDebounced(
 	}
 
 	&__no-results {
-		margin-top: var(--space-md);
+		margin-top: 16px;
 	}
 
 	&__footer {
 		align-self: flex-end;
-		padding-bottom: var(--space-sm);
+		padding-bottom: 12px;
 	}
 }
 .search {
@@ -332,7 +332,7 @@ watchDebounced(
 
 	&__input-container {
 		width: calc(
-			2 * var(--size-content-width-min)
+			2 * var(--content-min-width)
 		); // keep in sync with wrapper in content (EmptyState.vue)
 
 		:deep(.v-field__input) {
@@ -351,20 +351,20 @@ watchDebounced(
 }
 
 .inline {
-	min-height: calc(100vh - calc(24 * var(--border-width-bold)));
+	min-height: calc(100vh - 48px);
 }
 
 .first-search {
 	&__searchbar {
 		width: 100%;
-		padding: var(--space-md) 0;
-		margin-top: var(--space-xl-3);
+		padding: 16px 0;
+		margin-top: 52px;
 	}
 }
 
 .fade-enter-active,
 .fade-leave-active {
-	transition: opacity var(--duration-transition-slow);
+	transition: opacity 0.9s;
 }
 
 .fade-enter,

@@ -11,7 +11,7 @@
 			active
 			@update:model-value="setPagination"
 		/>
-		<div v-if="perPage > 0" class="d-flex align-items-center">
+		<div v-if="perPage > 0" class="d-flex align-center">
 			<p class="total">
 				{{
 					$t("components.organisms.Pagination.currentPage", {
@@ -57,78 +57,74 @@
 	</nav>
 </template>
 
-<script>
+<script setup lang="ts">
 import { mdiChevronLeft, mdiChevronRight } from "@icons/material";
-export default {
-	props: {
-		currentPage: {
-			type: Number,
-			default: 1,
-		},
-		perPage: {
-			type: Number,
-			default: 10,
-		},
-		total: {
-			type: Number,
-			default: 0,
-		},
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
+
+type Props = {
+	currentPage?: number;
+	perPage?: number;
+	total?: number;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+	currentPage: 1,
+	perPage: 10,
+	total: 0,
+});
+
+const emit = defineEmits<{
+	(e: "update:current-page", value: number): void;
+	(e: "update:per-page", value: number): void;
+}>();
+
+const { t } = useI18n();
+
+const perPageOptions = ref([
+	{
+		text: t("components.organisms.Pagination.perPage.5"),
+		value: 5,
 	},
-	emits: ["update:current-page", "update:per-page"],
-	data() {
-		return {
-			mdiChevronLeft,
-			mdiChevronRight,
-			perPageOptions: [
-				{
-					text: this.$t("components.organisms.Pagination.perPage.5"),
-					value: 5,
-				},
-				{
-					text: this.$t("components.organisms.Pagination.perPage.10"),
-					value: 10,
-				},
-				{
-					text: this.$t("components.organisms.Pagination.perPage.25"),
-					value: 25,
-				},
-				{
-					text: this.$t("components.organisms.Pagination.perPage.50"),
-					value: 50,
-				},
-				{
-					text: this.$t("components.organisms.Pagination.perPage.100"),
-					value: 100,
-				},
-			],
-		};
+	{
+		text: t("components.organisms.Pagination.perPage.10"),
+		value: 10,
 	},
-	computed: {
-		perPageSelected() {
-			return {
-				text:
-					this.perPage +
-					" " +
-					this.$t("components.organisms.Pagination.perPage"),
-				value: this.perPage,
-			};
-		},
-		lastPage() {
-			return Math.ceil(this.total / this.perPage);
-		},
+	{
+		text: t("components.organisms.Pagination.perPage.25"),
+		value: 25,
 	},
-	methods: {
-		setPagination(val) {
-			this.$emit("update:per-page", val.value);
-			this.$emit("update:current-page", 1);
-		},
-		previousPage() {
-			this.$emit("update:current-page", this.currentPage - 1);
-		},
-		nextPage() {
-			this.$emit("update:current-page", this.currentPage + 1);
-		},
+	{
+		text: t("components.organisms.Pagination.perPage.50"),
+		value: 50,
 	},
+	{
+		text: t("components.organisms.Pagination.perPage.100"),
+		value: 100,
+	},
+]);
+
+const perPageSelected = computed(() => ({
+	text: props.perPage + " " + t("components.organisms.Pagination.perPage"),
+	value: props.perPage,
+}));
+const lastPage = computed(() => Math.ceil(props.total / props.perPage));
+
+const setPagination = (val: { text: string; value: number }) => {
+	emit("update:per-page", val.value);
+	emit("update:current-page", 1);
+};
+
+const previousPage = () => {
+	if (props.currentPage > 1) {
+		emit("update:current-page", props.currentPage - 1);
+	}
+};
+
+const nextPage = () => {
+	if (props.currentPage < lastPage.value) {
+		emit("update:current-page", props.currentPage + 1);
+	}
 };
 </script>
 
@@ -149,12 +145,12 @@ export default {
 }
 
 .pagination-link-wrapper .pagination-link {
-	padding: var(--space-xs);
-	margin-left: var(--space-sm);
+	padding: 8px;
+	margin-left: 12px;
 }
 
 .total {
-	margin-right: var(--space-sm);
+	margin-right: 12px;
 	margin-bottom: 0;
 }
 

@@ -74,15 +74,15 @@ const isMobile = computed(() => {
 .small-wrapper {
 	grid-area: content;
 	min-height: 100vh;
-	padding: var(--space-md);
+	padding: 16px;
 }
 
 .wrapper {
 	grid-area: content;
 	min-height: calc(100vh - var(--legacy-topbar-height));
-	padding-right: calc(15 * var(--border-width));
-	padding-left: calc(15 * var(--border-width));
-	margin: var(--space-lg) auto;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin: 24px auto;
 }
 
 @media (min-width: 576px) {

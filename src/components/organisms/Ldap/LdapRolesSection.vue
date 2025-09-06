@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1 class="mb--md h4">
+		<h1 class="mb-4 h4">
 			{{ $t("pages.administration.ldapEdit.roles.headLines.title") }}
 		</h1>
 		<p class="description-section">
@@ -22,7 +22,6 @@
 						$t('pages.administration.ldapEdit.roles.labels.radio.ldapGroup')
 					"
 					value="group"
-					class="ml-n2"
 				/>
 				<v-radio
 					:label="
@@ -31,7 +30,7 @@
 					value="user_attribute"
 				/>
 			</v-radio-group>
-			<p class="text-sm" style="margin-top: var(--space-xs)">
+			<p class="text-sm" style="margin-top: 8px">
 				{{ $t("pages.administration.ldapEdit.roles.labels.radio.description") }}
 			</p>
 		</div>
@@ -90,7 +89,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon class="custom-icon">$teacher</v-icon>
+				<v-icon>$teacher</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -209,10 +208,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .section-sub-header {
-	margin-bottom: var(--space-xs);
+	margin-bottom: 8px;
 }
 
 .description-section {
-	margin-bottom: var(--space-xl);
+	margin-bottom: 32px;
 }
 </style>

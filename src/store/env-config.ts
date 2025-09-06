@@ -32,6 +32,7 @@ export default class EnvConfigModule extends VuexModule {
 	env: ConfigResponse = defaultConfigEnvs;
 	envFile: FilesStorageConfigResponse = {
 		MAX_FILE_SIZE: 2684354560,
+		COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -120,10 +121,6 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.ROCKETCHAT_SERVICE_ENABLED;
 	}
 
-	get getNewSchoolAdminPageAsDefault(): boolean {
-		return this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED;
-	}
-
 	get getAvailableLanguages(): LanguageType[] {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
 	}
@@ -160,8 +157,8 @@ export default class EnvConfigModule extends VuexModule {
 		return this.envFile.MAX_FILE_SIZE;
 	}
 
-	public get getShowNewClassViewEnabled(): boolean {
-		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED;
+	get getCollaboraMaxFileSizeInBytes(): number {
+		return this.envFile.COLLABORA_MAX_FILE_SIZE_IN_BYTES;
 	}
 
 	private get serverApi(): ServerConfigApiInterface {

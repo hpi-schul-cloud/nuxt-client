@@ -21,11 +21,11 @@ describe("KebabMenuList", () => {
 		return wrapper;
 	};
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {
-		jest.useRealTimers();
+		vi.useRealTimers();
 	});
 
 	describe("when component is mounted", () => {
@@ -47,7 +47,7 @@ describe("KebabMenuList", () => {
 			const wrapper = setup();
 			const menuList = wrapper.findComponent(VList);
 
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			const firstMenuItem = menuList.findAllComponents(VListItem)[0].element;
 

@@ -14,20 +14,21 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
-import { VAutocomplete, VBtn } from "vuetify/lib/components/index";
+import { VAutocomplete, VBtn } from "vuetify/components";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 
 describe("ExternalToolConfigurator", () => {
-	jest
-		.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
-		.mockReturnValue({
-			...useExternalToolUtilsComposable.useExternalToolMappings(),
-			getBusinessErrorTranslationKey: () => "",
-		});
+	vi.spyOn(
+		useExternalToolUtilsComposable,
+		"useExternalToolMappings"
+	).mockReturnValue({
+		...useExternalToolUtilsComposable.useExternalToolMappings(),
+		getBusinessErrorTranslationKey: () => "",
+	});
 
 	const getWrapper = (
 		props: ComponentProps<typeof ExternalToolConfigurator>
@@ -50,7 +51,7 @@ describe("ExternalToolConfigurator", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("Search box", () => {
@@ -61,6 +62,7 @@ describe("ExternalToolConfigurator", () => {
 				const { wrapper } = getWrapper({
 					templates: [template],
 					configuration: schoolExternalToolFactory.build(),
+					error: undefined,
 				});
 
 				return {
@@ -99,6 +101,7 @@ describe("ExternalToolConfigurator", () => {
 					templates: [template1, template2],
 					configuration: contextExternalToolFactory.build(),
 					isPreferredTool: true,
+					error: undefined,
 				});
 
 				return {
@@ -126,6 +129,8 @@ describe("ExternalToolConfigurator", () => {
 
 				const { wrapper } = getWrapper({
 					templates: [template],
+					error: undefined,
+					configuration: undefined,
 				});
 
 				clipboardMock.readText.mockResolvedValue(clipboardText);
@@ -155,16 +160,6 @@ describe("ExternalToolConfigurator", () => {
 		});
 
 		describe("when pasting a url for an existing tool into the search box", () => {
-			beforeEach(() => {
-				const vueTeleportDiv = document.createElement("div");
-				vueTeleportDiv.className = "v-overlay-container";
-				document.body.appendChild(vueTeleportDiv);
-			});
-
-			afterEach(() => {
-				document.body.innerHTML = "";
-			});
-
 			const setup = () => {
 				const template = schoolExternalToolConfigurationTemplateFactory.build({
 					baseUrl: "https://test.com/:pathParam1/spacer/:pathParam2",
@@ -189,6 +184,8 @@ describe("ExternalToolConfigurator", () => {
 						template,
 						schoolExternalToolConfigurationTemplateFactory.build(),
 					],
+					error: undefined,
+					configuration: undefined,
 				});
 
 				return {
@@ -200,12 +197,11 @@ describe("ExternalToolConfigurator", () => {
 			it("should only show the matched tool in the selection list", async () => {
 				const { wrapper, template } = setup();
 
-				await wrapper.find(".v-field__input").trigger("click");
+				const autocomplete = wrapper.findComponent(VAutocomplete);
 
-				const searchInput = wrapper
-					.find('[data-testId="configuration-select"]')
-					.find("input");
-				await searchInput.setValue(
+				const input = autocomplete.find("input");
+				await input.trigger("focus");
+				await input.setValue(
 					"https://test.com/pathParamValue1/spacer/pathParamValue2?queryParam1=queryParamValue1"
 				);
 
@@ -243,6 +239,8 @@ describe("ExternalToolConfigurator", () => {
 				const { wrapper } = getWrapper({
 					templates:
 						schoolExternalToolConfigurationTemplateFactory.buildList(1),
+					error: undefined,
+					configuration: undefined,
 				});
 
 				await wrapper
@@ -261,6 +259,7 @@ describe("ExternalToolConfigurator", () => {
 					templates:
 						schoolExternalToolConfigurationTemplateFactory.buildList(1),
 					configuration: schoolExternalToolFactory.build(),
+					error: undefined,
 				});
 
 				await wrapper

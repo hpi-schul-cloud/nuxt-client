@@ -8,7 +8,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { ContentElementBar } from "@ui-board";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
@@ -18,13 +18,13 @@ import { setupCollaborativeTextEditorApiMock } from "./test-utils/collaborativeT
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 // Mocks
-jest.mock("@data-board", () => ({
-	useBoardFocusHandler: jest.fn(),
-	useContentElementState: jest.fn(() => ({ modelValue: {} })),
-	useDeleteConfirmationDialog: jest.fn(),
+vi.mock("@data-board", () => ({
+	useBoardFocusHandler: vi.fn(),
+	useContentElementState: vi.fn(() => ({ modelValue: {} })),
+	useDeleteConfirmationDialog: vi.fn(),
 }));
-jest.mock("@feature-board");
-jest.mock("./composables/CollaborativeTextEditorApi.composable");
+vi.mock("@feature-board");
+vi.mock("./composables/CollaborativeTextEditorApi.composable");
 
 describe("CollaborativeTextEditorElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
@@ -48,7 +48,7 @@ describe("CollaborativeTextEditorElement", () => {
 		const resolvedValue = getUrlHasError
 			? undefined
 			: `${CollaborativeTextEditorParentType.ContentElement}/${element.id}`;
-		const getUrlMock = jest.fn().mockResolvedValueOnce(resolvedValue);
+		const getUrlMock = vi.fn().mockResolvedValueOnce(resolvedValue);
 
 		const { getUrl } = setupCollaborativeTextEditorApiMock({
 			getUrlMock,
@@ -78,7 +78,7 @@ describe("CollaborativeTextEditorElement", () => {
 		});
 
 		const windowMock = createMock<Window>();
-		jest.spyOn(window, "open").mockImplementation(() => windowMock);
+		vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 		return {
 			wrapper,
@@ -90,7 +90,7 @@ describe("CollaborativeTextEditorElement", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when component is not in edit-mode", () => {

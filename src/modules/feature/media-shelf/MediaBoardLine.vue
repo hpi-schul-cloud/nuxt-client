@@ -83,11 +83,9 @@ import {
 	MediaLineResponse,
 } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import {
-	extractDataAttribute,
-	useDragAndDrop,
-	useMediaBoardEditMode,
-} from "@util-board";
+import { extractDataAttribute, useDragAndDrop } from "@util-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useMediaBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";

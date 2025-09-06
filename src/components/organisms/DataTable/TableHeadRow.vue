@@ -362,13 +362,12 @@ export default {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 
 .table__row {
 	font-weight: var(--font-weight-bold);
 
 	th {
-		border-bottom: calc(2 * var(--border-width)) solid;
+		border-bottom: 2px solid;
 
 		&.is-current-sort {
 			opacity: 1;
@@ -379,13 +378,13 @@ export default {
 			align-items: center;
 			justify-content: space-between;
 			width: 100%;
-			padding: var(--space-xs);
+			padding: 8px;
 			font-size: var(--text-md);
 			font-weight: var(--font-weight-normal);
 		}
 
 		.select-wrap {
-			padding: var(--space-xs);
+			padding: 8px;
 
 			.select {
 				margin-bottom: 0;
@@ -395,22 +394,22 @@ export default {
 }
 
 .info-button {
-	z-index: calc(var(--layer-fab) + 1);
+	z-index: 101;
 }
 
 .info-box {
 	position: absolute;
 	right: 0%;
-	z-index: calc(var(--layer-fab) + 1);
+	z-index: 101;
 	min-width: 320px;
-	margin-top: var(--space-xl-2);
-	margin-right: var(--space-lg);
-	margin-left: var(--space-lg);
+	margin-top: 40px;
+	margin-right: 24px;
+	margin-left: 24px;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		min-width: 450px;
 		max-width: 50%;
-		margin-right: var(--space-xl);
+		margin-right: 32px;
 	}
 
 	.content {
@@ -420,7 +419,7 @@ export default {
 	}
 
 	button:not(.is-none):focus {
-		z-index: var(--layer-fab);
+		z-index: 100;
 		outline: none;
 		box-shadow:
 			0 0 0 0 rgba(var(--v-theme-white)),
@@ -439,11 +438,9 @@ export default {
 }
 
 :deep(
-		.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(
-				:hover
-			)
-			.v-btn__content
-	) {
+	.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover)
+		.v-btn__content
+) {
 	opacity: 1;
 }
 

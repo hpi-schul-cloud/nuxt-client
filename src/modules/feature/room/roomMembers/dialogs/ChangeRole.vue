@@ -15,13 +15,11 @@
 					v-if="!isOwnershipHandoverMode"
 					v-model="selectedRole"
 					hide-details
-					class="ml-n2"
 				>
 					<v-radio
 						v-for="option in radioOptions"
 						:key="option.role"
 						:value="option.role"
-						color="primary"
 						class="align-start mb-2"
 						:data-testid="option.dataTestid"
 					>
@@ -88,7 +86,6 @@
 			<div class="mr-4 mb-3">
 				<v-btn
 					class="ms-auto mr-2"
-					color="primary"
 					:text="t('common.actions.cancel')"
 					data-testid="change-role-cancel-btn"
 					@click="onCancel"
@@ -137,7 +134,6 @@ const props = defineProps({
 	members: {
 		type: Array as PropType<RoomMember[]>,
 		required: true,
-		default: () => [],
 	},
 });
 
@@ -160,7 +156,8 @@ const isChangeOwnershipOptionVisible = computed(() => {
 	return (
 		currentUserId &&
 		roomMembersStore.isRoomOwner(currentUserId) &&
-		memberToChangeRole.length === 1
+		memberToChangeRole.length === 1 &&
+		isMemberStudent.value === false
 	);
 });
 const isOwnershipHandoverMode = ref(false);
@@ -188,6 +185,14 @@ const currentUserFullName = computed(() => {
 
 const memberFullName = computed(() => {
 	return `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`;
+});
+
+const memberSchoolRoles = computed(() => {
+	return memberToChangeRole[0]?.schoolRoleNames;
+});
+
+const isMemberStudent = computed(() => {
+	return memberSchoolRoles.value.includes(RoleName.Student);
 });
 
 const infoText = computed(() => {

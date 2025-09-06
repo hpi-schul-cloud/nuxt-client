@@ -3,7 +3,7 @@
 		v-if="!loading"
 		:src="iframeSrc"
 		class="player-iframe"
-		allowfullscreen="allowfullscreen"
+		allowfullscreen
 		frameborder="0"
 		scrolling="yes"
 	/>
@@ -12,61 +12,41 @@
 	</div>
 </template>
 
-<script :src="scriptSrc" charset="UTF-8"></script>
-
-<script lang="ts">
-import { defineComponent, ref, watch, onMounted } from "vue";
+<script setup lang="ts">
 import { $axios } from "@/utils/api";
+import { onMounted, ref } from "vue";
 
-export default defineComponent({
-	name: "LernStorePlayer",
-	props: {
-		nodeId: {
-			type: String,
-			default: "",
-		},
-		loading: {
-			type: Boolean,
-			default: true,
-		},
-		iframeSrc: {
-			type: String,
-			default: "",
-		},
-		scriptSrc: {
-			type: String,
-			default: "",
-		},
-	},
-	setup(props) {
-		const model = ref(props.nodeId);
-		const loading = ref(props.loading);
-		const iframeSrc = ref(props.iframeSrc);
-		const scriptSrc = ref(props.scriptSrc);
+type Props = {
+	nodeId?: string;
+};
 
-		watch(
-			() => props.nodeId,
-			(newValue: string) => {
-				model.value = newValue;
-			}
-		);
+const props = withDefaults(defineProps<Props>(), {
+	nodeId: "",
+});
 
-		onMounted(async () => {
-			await $axios
-				.get(`/v1/edu-sharing/player/${model.value}`)
-				.then((response) => {
-					iframeSrc.value = response.data.iframe_src;
-					scriptSrc.value = response.data.script_src;
-				});
-			loading.value = false;
+const loading = ref(true);
+const iframeSrc = ref("");
+
+function loadScript(scriptSrc: string): Promise<void> {
+	return new Promise((resolve, reject) => {
+		const script = document.createElement("script");
+		script.src = scriptSrc;
+		script.async = true;
+		script.onload = () => resolve();
+		script.onerror = () =>
+			reject(new Error(`Failed to load script: ${scriptSrc}`));
+		document.body.appendChild(script);
+	});
+}
+
+onMounted(async () => {
+	await $axios
+		.get(`/v1/edu-sharing/player/${props.nodeId}`)
+		.then((response) => {
+			iframeSrc.value = response.data.iframe_src;
+			loadScript(response.data.script_src);
 		});
-
-		return {
-			loading,
-			iframeSrc,
-			scriptSrc,
-		};
-	},
+	loading.value = false;
 });
 </script>
 

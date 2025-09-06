@@ -1,36 +1,41 @@
+import * as serverApi from "@/serverApi/v3/api";
+import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import {
 	boardResponseFactory,
 	envsFactory,
+	mockApiResponse,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardStore, useSocketConnection, useCardStore } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { setActivePinia } from "pinia";
 import * as socketModule from "socket.io-client";
+import { Mock } from "vitest";
+import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
+vi.mock("axios");
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("socket.io-client");
-const mockSocketIOClient = jest.mocked(socketModule);
+vi.mock("socket.io-client");
+const mockSocketIOClient = vi.mocked(socketModule);
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("../boardActions/boardSocketApi.composable");
-jest.mock("../boardActions/boardRestApi.composable");
+vi.mock("../boardActions/boardSocketApi.composable");
+vi.mock("../boardActions/boardRestApi.composable");
 
-jest.mock("@vueuse/shared", () => {
+vi.mock("@vueuse/shared", () => {
 	return {
-		...jest.requireActual("@vueuse/shared"),
-		useTimeoutFn: jest.fn().mockImplementation((cb: () => void) => {
+		useTimeoutFn: vi.fn().mockImplementation((cb: () => void) => {
 			cb();
 			return {
 				isPending: { value: false },
@@ -39,34 +44,43 @@ jest.mock("@vueuse/shared", () => {
 	};
 });
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
-const startMock = jest.fn();
-const stopMock = jest.fn();
-const initializeTimeout = (isPending = false) => {
-	const { useTimeoutFn } = jest.requireMock("@vueuse/shared");
-	useTimeoutFn.mockImplementation((cb: () => void) => {
+const startMock = vi.fn();
+const stopMock = vi.fn();
+let isPending = false;
+
+vi.mock("@vueuse/shared", () => ({
+	useTimeoutFn: vi.fn().mockImplementation((cb: () => void) => {
 		cb();
 		return {
 			isPending: { value: isPending },
 			start: startMock,
 			stop: stopMock,
 		};
-	});
+	}),
+}));
+
+const initializeTimeout = (pending = false) => {
+	isPending = pending;
 };
 
-const dispatchMock = jest.fn();
+const dispatchMock = vi.fn();
 
 describe("socket.ts", () => {
 	let mockSocket: Partial<socketModule.Socket>;
-	let timeoutResponseMock: { emitWithAck: jest.Mock };
+	let timeoutResponseMock: { emitWithAck: Mock };
 	let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	// We need to set following lines in the outmost describe level since the socket event handlers that set and use these
 	// values are created only once when the module is loaded and initially used.
-	let socketHandlers: Record<string, () => void> | undefined = undefined;
+	let socketHandlers: Record<string, (arg?: unknown) => void> | undefined =
+		undefined;
 	let boardStore: ReturnType<typeof useBoardStore>;
 	let cardStore: ReturnType<typeof useCardStore>;
+	let boardErrorReportApi: DeepMocked<
+		ReturnType<typeof BoardErrorReportApiFactory>
+	>;
 
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
@@ -77,20 +91,25 @@ describe("socket.ts", () => {
 		});
 		envConfigModule.setEnvs(envs);
 
-		timeoutResponseMock = { emitWithAck: jest.fn() };
+		timeoutResponseMock = { emitWithAck: vi.fn() };
 		mockSocket = {
 			connected: false,
-			on: jest.fn(),
-			emit: jest.fn(),
-			connect: jest.fn(),
-			disconnect: jest.fn(),
-			onAny: jest.fn(),
-			timeout: jest.fn().mockReturnValue(timeoutResponseMock),
+			on: vi.fn(),
+			emit: vi.fn(),
+			connect: vi.fn(),
+			disconnect: vi.fn(),
+			onAny: vi.fn(),
+			timeout: vi.fn().mockReturnValue(timeoutResponseMock),
 		};
 		mockSocketIOClient.io.mockReturnValue(mockSocket as socketModule.Socket);
 
 		mockBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockUseBoardNotifier.mockReturnValue(mockBoardNotifierCalls);
+
+		boardErrorReportApi = createMock<serverApi.BoardErrorReportApi>();
+		vi.spyOn(serverApi, "BoardErrorReportApiFactory").mockReturnValue(
+			boardErrorReportApi
+		);
 
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
@@ -101,11 +120,11 @@ describe("socket.ts", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getEventCallback = (eventName: string) => {
-		const listener = (mockSocket.on as jest.Mock).mock.calls.find(
+		const listener = (mockSocket.on as Mock).mock.calls.find(
 			([event]) => event === eventName
 		);
 		return listener?.[1];
@@ -114,6 +133,7 @@ describe("socket.ts", () => {
 	function getEventCallbacks() {
 		socketHandlers = socketHandlers ?? {
 			connect: getEventCallback("connect"),
+			connect_error: getEventCallback("connect_error"),
 			disconnect: getEventCallback("disconnect"),
 		};
 		return socketHandlers;
@@ -147,7 +167,13 @@ describe("socket.ts", () => {
 		if (options.doInitializeTimeout !== undefined) {
 			initializeTimeout(doInitializeTimeout);
 		}
-		return { eventCallbacks, emitOnSocket, emitWithAck, disconnectSocket };
+
+		return {
+			eventCallbacks,
+			emitOnSocket,
+			emitWithAck,
+			disconnectSocket,
+		};
 	};
 
 	describe("connect event", () => {
@@ -201,6 +227,23 @@ describe("socket.ts", () => {
 			);
 		});
 
+		it("should report successful connection restoration after retry", () => {
+			const { eventCallbacks } = setup({
+				doInitializeTimeout: true,
+			});
+			boardErrorReportApi.boardErrorReportControllerReportError.mockResolvedValue(
+				mockApiResponse({ data: {} })
+			);
+
+			const mockError = { type: "connect_error", message: "Connection failed" };
+			eventCallbacks.connect_error(mockError);
+			eventCallbacks.connect();
+
+			expect(
+				boardErrorReportApi.boardErrorReportControllerReportError
+			).toHaveBeenCalled();
+		});
+
 		describe("when board exists", () => {
 			it("should call reloadBoard", () => {
 				const { eventCallbacks } = setup({
@@ -230,6 +273,33 @@ describe("socket.ts", () => {
 		it("should showFailure when socket is disconnected", () => {
 			const { eventCallbacks } = setup();
 			eventCallbacks.disconnect();
+
+			expect(mockBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"error.4500"
+			);
+		});
+	});
+
+	describe("connect_error event", () => {
+		it("should report board error and show failure notification", () => {
+			const { eventCallbacks } = setup();
+
+			const mockError = { type: "connect_error", message: "Connection failed" };
+			eventCallbacks.connect_error(mockError);
+			nextTick();
+
+			expect(
+				boardErrorReportApi.boardErrorReportControllerReportError
+			).toHaveBeenCalledWith(expect.objectContaining(mockError));
+		});
+
+		it("should show error after 20 retries", () => {
+			const { eventCallbacks } = setup();
+
+			const mockError = { type: "connect_error", message: "Connection failed" };
+			for (let i = 0; i < 22; i++) {
+				eventCallbacks.connect_error(mockError);
+			}
 
 			expect(mockBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"error.4500"

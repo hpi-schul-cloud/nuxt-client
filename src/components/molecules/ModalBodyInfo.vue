@@ -16,29 +16,26 @@
 	</div>
 </template>
 
-<script>
-export default {
-	props: {
-		title: {
-			type: String,
-			default: "",
-		},
-		description: {
-			type: String,
-			default: "",
-		},
-	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
+<script setup lang="ts">
+type Props = {
+	title?: string;
+	description?: string;
 };
+
+withDefaults(defineProps<Props>(), {
+	title: "",
+	description: "",
+});
 </script>
 
 <style lang="scss" scoped>
 .icon {
-	font-size: var(--sidebar-item-height);
-	margin-bottom: var(--space-md);
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	vertical-align: baseline;
+	font-size: 60px;
+	margin-bottom: 16px;
 }
 
 .body-container {
@@ -54,7 +51,7 @@ export default {
 	}
 
 	.modal-description {
-		margin-top: var(--space-md);
+		margin-top: 16px;
 	}
 }
 </style>

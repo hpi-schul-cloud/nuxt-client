@@ -8,7 +8,7 @@ import { envConfigModule } from "@/store";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
-import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload";
+import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload.types";
 
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import {
@@ -21,13 +21,15 @@ import {
 	UpdateCardHeightSuccessPayload,
 	UpdateCardTitleSuccessPayload,
 	UpdateElementSuccessPayload,
-} from "./cardActions/cardActionPayload";
+} from "./cardActions/cardActionPayload.types";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards: Ref<Record<string, CardResponse>> = ref({});
 	const preferredTools: Ref<PreferredToolResponse[]> = ref([]);
+	const isPreferredToolsLoading: Ref<boolean> = ref(false);
+
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const restApi = useCardRestApi();
@@ -239,7 +241,11 @@ export const useCardStore = defineStore("cardStore", () => {
 	const loadPreferredTools = async (
 		contextType: ToolContextType
 	): Promise<void> => {
+		isPreferredToolsLoading.value = true;
+
 		preferredTools.value = (await restApi.getPreferredTools(contextType)) || [];
+
+		isPreferredToolsLoading.value = false;
 	};
 
 	const disconnectSocketRequest = () => {
@@ -271,6 +277,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		updateCardTitleSuccess,
 		loadPreferredTools,
 		preferredTools,
+		isPreferredToolsLoading,
 		disconnectSocketRequest,
 	};
 });

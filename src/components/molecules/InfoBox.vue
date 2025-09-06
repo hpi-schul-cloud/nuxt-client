@@ -10,30 +10,30 @@
 			<div class="actions">
 				<slot name="actions" />
 				<v-btn variant="text" @click.self="close">
-					{{ $t("common.labels.close") }}
+					{{ t("common.labels.close") }}
 				</v-btn>
 			</div>
 		</div>
 	</div>
 </template>
 
-<script>
-export default {
-	props: {
-		active: {
-			type: Boolean,
-		},
-	},
-	emits: ["update:active"],
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
-	methods: {
-		close() {
-			this.$emit("update:active", false);
-		},
-	},
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
+
+type Props = {
+	active: boolean;
+};
+
+defineProps<Props>();
+
+const emit = defineEmits<{
+	(e: "update:active", value: boolean): void;
+}>();
+
+const { t } = useI18n();
+
+const close = () => {
+	emit("update:active", false);
 };
 </script>
 
@@ -41,7 +41,7 @@ export default {
 .wrapper {
 	color: rgba(var(--v-theme-white));
 	background-color: rgba(var(--v-theme-info));
-	border-radius: var(--radius-lg);
+	border-radius: 16px;
 
 	h4 {
 		color: rgba(var(--v-theme-white));
@@ -50,7 +50,7 @@ export default {
 }
 
 .content {
-	padding: var(--space-md);
+	padding: 16px;
 	text-align: left;
 }
 
@@ -58,7 +58,7 @@ export default {
 	text-align: right;
 
 	> label {
-		margin-bottom: var(--space-md);
+		margin-bottom: 16px;
 	}
 }
 </style>

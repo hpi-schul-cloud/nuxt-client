@@ -4,42 +4,36 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
 
-export default defineComponent({
-	props: {
-		columnWidth: {
-			type: String,
-			default: "15rem",
-		},
-	},
-	setup(props) {
-		const col = computed(() => {
-			return `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`;
-		});
+type Props = {
+	columnWidth?: string;
+};
+const props = withDefaults(defineProps<Props>(), {
+	columnWidth: "15rem",
+});
 
-		return {
-			col,
-		};
-	},
+const col = computed(() => {
+	return `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`;
 });
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .grid {
 	display: grid;
-	grid-gap: var(--space-md);
+	grid-gap: 16px;
 	width: 100%;
 
-	@include breakpoint(tablet) {
-		grid-gap: calc(9 * var(--border-width-bold)); /* 18px */
+	@media #{map.get($display-breakpoints, 'sm')} {
+		grid-gap: 18px;
 	}
 
-	@include breakpoint(desktop) {
-		grid-gap: var(--space-lg);
+	@media #{map.get($display-breakpoints, 'md-and-up')} {
+		grid-gap: 24px;
 	}
 }
 

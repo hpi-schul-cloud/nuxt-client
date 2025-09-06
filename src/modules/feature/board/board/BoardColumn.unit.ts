@@ -21,7 +21,7 @@ import {
 	useBoardStore,
 	useForceRender,
 } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	useBoardNotifier,
@@ -33,22 +33,22 @@ import BoardColumnVue from "./BoardColumn.vue";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 
-jest.mock("@data-board/BoardPermissions.composable");
-const mockedUserPermissions = jest.mocked(useBoardPermissions);
+vi.mock("vue-router");
 
-jest.mock("@util-board/BoardNotifier.composable");
-jest.mock("@util-board/LastCreatedElement.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockUseSharedLastCreatedElement = jest.mocked(
-	useSharedLastCreatedElement
-);
+vi.mock("@data-board/BoardPermissions.composable");
+const mockedUserPermissions = vi.mocked(useBoardPermissions);
 
-jest.mock("@data-board/fixSamePositionDnD.composable");
-const mockedUseForceRender = jest.mocked(useForceRender);
+vi.mock("@util-board/BoardNotifier.composable");
+vi.mock("@util-board/LastCreatedElement.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
+
+vi.mock("@data-board/fixSamePositionDnD.composable");
+const mockedUseForceRender = vi.mocked(useForceRender);
 
 mockUseSharedLastCreatedElement.mockReturnValue({
 	lastCreatedElementId: computed(() => "element-id"),
-	resetLastCreatedElementId: jest.fn(),
+	resetLastCreatedElementId: vi.fn(),
 });
 
 describe("BoardColumn", () => {
@@ -242,7 +242,7 @@ describe("BoardColumn", () => {
 					willAcceptDrop: false,
 				};
 				const containerComponent = wrapper.findComponent({ name: "Sortable" });
-				containerComponent.vm.$emit("drag-start", emitObject);
+				containerComponent.trigger("drag-start", emitObject);
 
 				expect(isDragging.value).toBe(false);
 			});
@@ -258,6 +258,39 @@ describe("BoardColumn", () => {
 			});
 
 			expect(addCardButton.exists()).toBe(false);
+		});
+	});
+
+	describe("when a card is ended dragging", () => {
+		it("should set 'isDragging' value to be false", () => {
+			const { wrapper } = setup();
+			const emitObject = {
+				isSource: false,
+				payload: { cardId: "card-id", height: 100 },
+				willAcceptDrop: false,
+			};
+			const containerComponent = wrapper.findComponent({ name: "Sortable" });
+			containerComponent.vm.$emit("end", emitObject);
+
+			expect(isDragging.value).toBe(false);
+		});
+
+		describe("when it is dropped onto ghost column (= no data-columnId) location", () => {
+			it("should call moveCardToNewColumn", () => {
+				const { wrapper, store } = setup();
+
+				const emitObject = {
+					isSource: false,
+					payload: {
+						cardId: "card-id",
+						height: 100,
+					},
+				};
+				const containerComponent = wrapper.findComponent({ name: "Sortable" });
+				containerComponent.vm.$emit("end", emitObject);
+
+				expect(store.moveCardToNewColumn).toHaveBeenCalled();
+			});
 		});
 	});
 

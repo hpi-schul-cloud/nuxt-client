@@ -48,6 +48,11 @@
 							{{ element.title }}
 						</div>
 					</template>
+					<template #subtitle>
+						<LineClamp data-testid="media-element-domain">
+							{{ element.domain }}
+						</LineClamp>
+					</template>
 					<template #description>
 						<div
 							class="description text-body-2"
@@ -65,6 +70,7 @@
 
 <script setup lang="ts">
 import { ContentElementBar } from "@ui-board";
+import { LineClamp } from "@ui-line-clamp";
 import { useElementHover } from "@vueuse/core";
 import { PropType, ref } from "vue";
 import { MediaElementDisplay } from "./data";
@@ -97,7 +103,7 @@ $card-width: 288px;
 }
 
 .description {
-	height: 3.75rem;
+	height: 2.5rem;
 	overflow: hidden;
 }
 

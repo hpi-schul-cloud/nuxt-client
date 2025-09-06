@@ -11,24 +11,16 @@
 	</div>
 </template>
 
-<script>
-export default {
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
-};
-</script>
-
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .actions-container {
 	display: grid;
 	grid-template-areas: "primary" "secondary";
 	width: 100%;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		grid-template-areas: "secondary primary";
 	}
 }
@@ -39,7 +31,7 @@ export default {
 	flex-wrap: wrap;
 
 	> * {
-		margin: var(--space-xs) 0;
+		margin: 8px 0;
 	}
 }
 
@@ -49,7 +41,7 @@ export default {
 	grid-area: primary;
 
 	:not(:last-child) {
-		margin-left: var(--space-sm);
+		margin-left: 12px;
 	}
 }
 
@@ -57,12 +49,12 @@ export default {
 	grid-area: secondary;
 	justify-content: flex-end;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		justify-content: flex-start;
 	}
 
 	> *:not(:first-child) {
-		margin-left: var(--space-sm);
+		margin-left: 12px;
 	}
 }
 </style>

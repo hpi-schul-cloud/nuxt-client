@@ -17,6 +17,7 @@ import { VDialog } from "vuetify/lib/components/index";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
+import { nextTick } from "vue";
 
 describe("RoomVideoConferenceSection", () => {
 	const mockUrl = "https://mock.com";
@@ -71,6 +72,9 @@ describe("RoomVideoConferenceSection", () => {
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
+				stubs: {
+					VideoConferenceConfigurationDialog: true,
+				},
 			},
 			props,
 		});
@@ -84,7 +88,7 @@ describe("RoomVideoConferenceSection", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the video conference is not running", () => {
@@ -482,15 +486,11 @@ describe("RoomVideoConferenceSection", () => {
 				const card = wrapper.findComponent(RoomVideoConferenceCard);
 				await card.trigger("click");
 
-				const configurationDialog = wrapper.findComponent<typeof VDialog>(
+				const configurationDialog = wrapper.findComponent(
 					VideoConferenceConfigurationDialog
 				);
 
-				const dialogContent = configurationDialog.findComponent({
-					name: "VCard",
-				});
-
-				expect(dialogContent.exists()).toBe(true);
+				expect(configurationDialog.props("isOpen")).toBe(true);
 			});
 		});
 	});
@@ -557,7 +557,8 @@ describe("RoomVideoConferenceSection", () => {
 			const configurationDialog = wrapper.findComponent<typeof VDialog>(
 				VideoConferenceConfigurationDialog
 			);
-			await configurationDialog.vm.$emit("start-video-conference");
+			configurationDialog.vm.$emit("start-video-conference");
+			await nextTick();
 
 			const dialogContent = configurationDialog.findComponent({
 				name: "VCard",
@@ -611,7 +612,8 @@ describe("RoomVideoConferenceSection", () => {
 			const configurationDialog = wrapper.findComponent<typeof VDialog>(
 				VideoConferenceConfigurationDialog
 			);
-			await configurationDialog.vm.$emit("close");
+			configurationDialog.vm.$emit("close");
+			await nextTick();
 
 			const dialogContent = configurationDialog.findComponent({
 				name: "VCard",
@@ -626,7 +628,7 @@ describe("RoomVideoConferenceSection", () => {
 	describe("when a videoconference is started or joined", () => {
 		describe("when an error occurs", () => {
 			const setup = () => {
-				const error = jest.fn(() => {
+				const error = vi.fn(() => {
 					throw new Error();
 				});
 

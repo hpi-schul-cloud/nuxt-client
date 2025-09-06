@@ -1,7 +1,7 @@
 import * as serverApi from "../serverApi/v3/api";
 import CourseRoomListModule from "./course-room-list";
 import { AlertPayload } from "./types/alert-payload";
-import { DroppedObject, RoomsData } from "./types/rooms";
+import { DroppedObject, RoomsData, SharingCourseObject } from "./types/rooms";
 import {
 	axiosErrorFactory,
 	apiResponseErrorFactory,
@@ -42,6 +42,7 @@ const mockData: serverApi.DashboardResponse = {
 			groupElements: [],
 			copyingSince: "",
 			isSynchronized: false,
+			isLocked: false,
 		},
 		{
 			id: "456",
@@ -54,6 +55,7 @@ const mockData: serverApi.DashboardResponse = {
 			groupElements: [],
 			copyingSince: "",
 			isSynchronized: false,
+			isLocked: false,
 		},
 		{
 			id: "789",
@@ -66,18 +68,21 @@ const mockData: serverApi.DashboardResponse = {
 					title: "Biology",
 					shortTitle: "Bi",
 					displayColor: "#f23f76",
+					isLocked: false,
 				},
 				{
 					id: "645",
 					title: "Chemistry",
 					shortTitle: "Ch",
 					displayColor: "#f23f76",
+					isLocked: false,
 				},
 				{
 					id: "321",
 					title: "Physics",
 					shortTitle: "Ph",
 					displayColor: "#f23f76",
+					isLocked: false,
 				},
 			],
 			xPosition: 3,
@@ -85,6 +90,7 @@ const mockData: serverApi.DashboardResponse = {
 			groupId: "",
 			copyingSince: "",
 			isSynchronized: false,
+			isLocked: false,
 		},
 	],
 };
@@ -94,16 +100,14 @@ describe("rooms module", () => {
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
 				const mockApi = {
-					dashboardControllerFindForUser: jest
+					dashboardControllerFindForUser: vi
 						.fn()
 						.mockResolvedValue({ data: {} }),
 				};
 
-				jest
-					.spyOn(serverApi, "DashboardApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.DashboardApiInterface
-					);
+				vi.spyOn(serverApi, "DashboardApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.DashboardApiInterface
+				);
 
 				const courseRoomListModule = new CourseRoomListModule({});
 
@@ -124,20 +128,18 @@ describe("rooms module", () => {
 		describe("align", () => {
 			it("should call server and 'setPosition' mutation", async () => {
 				const mockApi = {
-					dashboardControllerMoveElement: jest.fn(() => ({
+					dashboardControllerMoveElement: vi.fn(() => ({
 						data: { id: "42", gridElements: [] },
 					})),
 				};
 
-				jest
-					.spyOn(serverApi, "DashboardApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.DashboardApiInterface
-					);
+				vi.spyOn(serverApi, "DashboardApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.DashboardApiInterface
+				);
 
 				const courseRoomListModule = new CourseRoomListModule({});
 
-				const payload = {
+				const payload: DroppedObject = {
 					from: { x: 1, y: 1 },
 					to: { x: 2, y: 2 },
 					item: {
@@ -151,6 +153,7 @@ describe("rooms module", () => {
 						groupId: "",
 						groupElements: [],
 						copyingSince: "",
+						isLocked: false,
 					},
 				};
 				const expectedParam = {
@@ -175,8 +178,8 @@ describe("rooms module", () => {
 				// TODO: call server will be here when server ready
 				const courseRoomListModule = new CourseRoomListModule({});
 
-				const setRoomDataSpy = jest.spyOn(courseRoomListModule, "setRoomData");
-				const setLoadingSpy = jest.spyOn(courseRoomListModule, "setLoading");
+				const setRoomDataSpy = vi.spyOn(courseRoomListModule, "setRoomData");
+				const setLoadingSpy = vi.spyOn(courseRoomListModule, "setLoading");
 
 				await courseRoomListModule.delete("id");
 
@@ -189,15 +192,13 @@ describe("rooms module", () => {
 		describe("update", () => {
 			it("should call the backend", async () => {
 				const mockApi = {
-					dashboardControllerPatchGroup: jest.fn((groupToPatch) => ({
+					dashboardControllerPatchGroup: vi.fn((groupToPatch) => ({
 						data: { ...groupToPatch },
 					})),
 				};
-				jest
-					.spyOn(serverApi, "DashboardApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.DashboardApiInterface
-					);
+				vi.spyOn(serverApi, "DashboardApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.DashboardApiInterface
+				);
 
 				const courseRoomListModule = new CourseRoomListModule({});
 				const roomsData: RoomsData = {
@@ -223,15 +224,13 @@ describe("rooms module", () => {
 
 			it("handle error", async () => {
 				const mockApi = {
-					dashboardControllerPatchGroup: jest.fn(() =>
+					dashboardControllerPatchGroup: vi.fn(() =>
 						Promise.reject(badRequestError)
 					),
 				};
-				jest
-					.spyOn(serverApi, "DashboardApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.DashboardApiInterface
-					);
+				vi.spyOn(serverApi, "DashboardApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.DashboardApiInterface
+				);
 				const courseRoomListModule = new CourseRoomListModule({});
 				const roomsData: RoomsData = {
 					id: "dummyId",
@@ -260,10 +259,10 @@ describe("rooms module", () => {
 
 		describe("fetchAllElements", () => {
 			it("should call the backend", async () => {
-				const mockApi = { courseControllerFindForUser: jest.fn() };
-				jest
-					.spyOn(serverApi, "CoursesApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
+				const mockApi = { courseControllerFindForUser: vi.fn() };
+				vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.CoursesApiInterface
+				);
 				const courseRoomListModule = new CourseRoomListModule({});
 				await courseRoomListModule.fetchAllElements();
 
@@ -278,27 +277,28 @@ describe("rooms module", () => {
 				).toStrictEqual(100); // $limit: 100
 			});
 
-			it("handle error", (done) => {
-				const mockApi = {
-					courseControllerFindForUser: jest.fn(() =>
-						Promise.reject(badRequestError)
-					),
-				};
-				jest
-					.spyOn(serverApi, "CoursesApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
-				const courseRoomListModule = new CourseRoomListModule({});
-
-				courseRoomListModule.fetchAllElements().then(() => {
-					expect(courseRoomListModule.getLoading).toBe(false);
-					expect(courseRoomListModule.getBusinessError).toStrictEqual(
-						businessError
+			it("handle error", () =>
+				new Promise<void>((done) => {
+					const mockApi = {
+						courseControllerFindForUser: vi.fn(() =>
+							Promise.reject(badRequestError)
+						),
+					};
+					vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(
+						mockApi as unknown as serverApi.CoursesApiInterface
 					);
-					done();
-				});
+					const courseRoomListModule = new CourseRoomListModule({});
 
-				expect(courseRoomListModule.getLoading).toBe(true);
-			});
+					courseRoomListModule.fetchAllElements().then(() => {
+						expect(courseRoomListModule.getLoading).toBe(false);
+						expect(courseRoomListModule.getBusinessError).toStrictEqual(
+							businessError
+						);
+						done();
+					});
+
+					expect(courseRoomListModule.getLoading).toBe(true);
+				}));
 		});
 
 		describe("confirmSharedCourseData", () => {
@@ -310,11 +310,11 @@ describe("rooms module", () => {
 					message: "",
 				};
 				const courseRoomListModule = new CourseRoomListModule({});
-				const getSharedCourseDataSpy = jest.spyOn(
+				const getSharedCourseDataSpy = vi.spyOn(
 					courseRoomListModule,
 					"confirmSharedCourseData"
 				);
-				getSharedCourseDataSpy.mockImplementation();
+				getSharedCourseDataSpy.mockImplementation(vi.fn());
 
 				await courseRoomListModule.confirmSharedCourseData(sharedCourseData);
 				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(
@@ -329,7 +329,7 @@ describe("rooms module", () => {
 					status: "",
 					message: "",
 				};
-				const setBusinessErrorMock = jest.fn();
+				const setBusinessErrorMock = vi.fn();
 				const courseRoomListModule = new CourseRoomListModule({});
 				courseRoomListModule.setBusinessError = setBusinessErrorMock;
 
@@ -355,6 +355,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 				];
 
@@ -371,6 +372,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 				];
 				expect(courseRoomListModule.getRoomsData).not.toStrictEqual(
@@ -427,6 +429,7 @@ describe("rooms module", () => {
 						groupId: "",
 						groupElements: [],
 						copyingSince: "",
+						isLocked: false,
 					},
 					to: { x: 5, y: 2 },
 				};
@@ -442,6 +445,7 @@ describe("rooms module", () => {
 					groupElements: [],
 					copyingSince: "",
 					isSynchronized: false,
+					isLocked: false,
 				};
 				courseRoomListModule.setRoomData(mockData.gridElements);
 				courseRoomListModule.setPosition(draggedObject);
@@ -452,7 +456,7 @@ describe("rooms module", () => {
 		describe("setAllElements", () => {
 			it("should set the all elements data", () => {
 				const courseRoomListModule = new CourseRoomListModule({});
-				const itemsToBeSet = [
+				const itemsToBeSet: serverApi.CourseMetadataResponse[] = [
 					{
 						id: "123",
 						title: "Mathe",
@@ -460,6 +464,7 @@ describe("rooms module", () => {
 						displayColor: "#54616e",
 						startDate: "2019-12-07T23:00:00.000Z",
 						untilDate: "2020-12-16T23:00:00.000Z",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -468,6 +473,7 @@ describe("rooms module", () => {
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
 						untilDate: "2300-07-30T22:00:00.000Z",
+						isLocked: false,
 					},
 				];
 
@@ -483,6 +489,7 @@ describe("rooms module", () => {
 						searchText: "Mathe 2019/20",
 						isArchived: true,
 						to: "/rooms/123",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -494,6 +501,7 @@ describe("rooms module", () => {
 						searchText: "History",
 						isArchived: false,
 						to: "/rooms/234",
+						isLocked: false,
 					},
 				];
 				courseRoomListModule.setAllElements(itemsToBeSet);
@@ -504,7 +512,7 @@ describe("rooms module", () => {
 		describe("setSharedCourseData, setImportedCourseId", () => {
 			it("should set the state and imported course id", () => {
 				const courseRoomListModule = new CourseRoomListModule({});
-				const sharedCourseData = {
+				const sharedCourseData: SharingCourseObject = {
 					code: "123",
 					courseName: "Mathe",
 					status: "success",
@@ -568,6 +576,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -580,6 +589,7 @@ describe("rooms module", () => {
 						copyingSince: "",
 						isSynchronized: false,
 						xPosition: 0,
+						isLocked: false,
 					},
 				];
 
@@ -596,6 +606,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -609,6 +620,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 				];
 
@@ -679,7 +691,7 @@ describe("rooms module", () => {
 		describe("getAllElements", () => {
 			it("should return courses-list AllElements", () => {
 				const courseRoomListModule = new CourseRoomListModule({});
-				const itemsToBeSet = [
+				const itemsToBeSet: serverApi.CourseMetadataResponse[] = [
 					{
 						id: "123",
 						title: "Mathe",
@@ -687,6 +699,7 @@ describe("rooms module", () => {
 						displayColor: "#54616e",
 						startDate: "2019-12-07T23:00:00.000Z",
 						untilDate: "2020-12-16T23:00:00.000Z",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -695,6 +708,7 @@ describe("rooms module", () => {
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
 						untilDate: "2018-07-30T22:00:00.000Z",
+						isLocked: false,
 					},
 				];
 
@@ -710,6 +724,7 @@ describe("rooms module", () => {
 						searchText: "Mathe 2019/20",
 						isArchived: true,
 						to: "/rooms/123",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -722,6 +737,7 @@ describe("rooms module", () => {
 						searchText: "History 2015-2018",
 						isArchived: true,
 						to: "/rooms/234",
+						isLocked: false,
 					},
 				];
 				expect(courseRoomListModule.getAllElements).toStrictEqual([]);
@@ -740,7 +756,7 @@ describe("rooms module", () => {
 			});
 
 			it("should return false if rooms is not empty", () => {
-				const itemsToBeSet = [
+				const itemsToBeSet: serverApi.CourseMetadataResponse[] = [
 					{
 						id: "123",
 						title: "Mathe",
@@ -748,6 +764,7 @@ describe("rooms module", () => {
 						displayColor: "#54616e",
 						startDate: "2019-12-07T23:00:00.000Z",
 						untilDate: "2020-12-16T23:00:00.000Z",
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -756,6 +773,7 @@ describe("rooms module", () => {
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
 						untilDate: "2018-07-30T22:00:00.000Z",
+						isLocked: false,
 					},
 				];
 
@@ -777,7 +795,7 @@ describe("rooms module", () => {
 			});
 
 			it("should return false if rooms is not empty", () => {
-				const itemsToBeSet = [
+				const itemsToBeSet: serverApi.DashboardGridElementResponse[] = [
 					{
 						id: "123",
 						title: "Mathe",
@@ -789,6 +807,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 					{
 						id: "234",
@@ -801,6 +820,7 @@ describe("rooms module", () => {
 						groupElements: [],
 						copyingSince: "",
 						isSynchronized: false,
+						isLocked: false,
 					},
 				];
 

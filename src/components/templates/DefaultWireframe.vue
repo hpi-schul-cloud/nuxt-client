@@ -96,7 +96,6 @@ const props = defineProps({
 	maxWidth: {
 		type: String as PropType<"full" | "short" | "nativ">,
 		required: true,
-		default: "short",
 	},
 	fabItems: {
 		type: Object as PropType<Fab>,
@@ -121,7 +120,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits({
-	onFabItemClick: (event: string) => (event ? true : false),
+	onFabItemClick: (event: string | undefined) => !!event,
 	"fab:clicked": () => true,
 });
 
@@ -155,11 +154,11 @@ const showDivider = computed(() => {
 }
 
 .wireframe-container h1:first-of-type {
-	margin-bottom: var(--space-md);
+	margin-bottom: 16px;
 }
 
 .wireframe-header {
-	padding: 0 var(--space-lg);
+	padding: 0 24px;
 	display: flex;
 	flex-direction: column;
 }
@@ -169,12 +168,12 @@ const showDivider = computed(() => {
 }
 
 .main-content {
-	padding: 0 var(--space-lg) var(--space-lg) var(--space-lg);
-	margin-top: var(--space-xl);
+	padding: 0 24px 24px 24px;
+	margin-top: 32px;
 }
 
 .container-short-width {
-	max-width: var(--size-content-width-max);
+	max-width: var(--content-max-width);
 }
 
 .container-full-width {
@@ -195,7 +194,7 @@ const showDivider = computed(() => {
 .sticky {
 	position: sticky;
 	top: var(--topbar-height);
-	z-index: var(--layer-sticky-header);
+	z-index: 20;
 	background-color: rgb(var(--v-theme-white));
 }
 

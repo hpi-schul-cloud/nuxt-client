@@ -1,6 +1,8 @@
 export * from "./apiResponseErrorFactory";
 export * from "./apiValidationResponseErrorFactory";
+export * from "./authorizedCollaboraDocumentUrlResponseFactory";
 export * from "./axiosErrorFactory";
+export * from "./axiosResponseFactory";
 export * from "./boardCardFactory";
 export * from "./boardResponseFactory";
 export * from "./businessErrorFactory";
@@ -41,6 +43,7 @@ export * from "./media-board";
 export * from "./mediaSchoolLicenseResponseFactory";
 export * from "./meResponseFactory";
 export * from "./parentNodeInfoFactory";
+export * from "./parentStatisticFactory";
 export * from "./provisioningOptionsDataFactory";
 export * from "./richTextElementContentFactory";
 export * from "./richTextElementResponseFactory";

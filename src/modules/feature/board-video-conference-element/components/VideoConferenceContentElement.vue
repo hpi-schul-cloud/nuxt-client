@@ -105,7 +105,9 @@ import { useI18n } from "vue-i18n";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { BoardMenuScope } from "@ui-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
@@ -182,7 +184,8 @@ const { modelValue, computedElement } = useContentElementState(props, {
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const route = useRoute();
 const boardId = route.params.id;
-const { isTeacher, isStudent } = useBoardPermissions();
+const { hasManageVideoConferencePermission, isTeacher, isStudent } =
+	useBoardPermissions();
 const { t } = useI18n();
 
 const isHidden = computed(
@@ -209,8 +212,7 @@ const canJoin = computed(
 			isWaitingRoomActive.value)
 );
 
-const { hasEditPermission } = useBoardPermissions();
-const canStart = computed(() => hasEditPermission.value);
+const canStart = computed(() => hasManageVideoConferencePermission.value);
 const isCreating = computed(
 	() => props.isEditMode && !computedElement.value.content.title
 );
@@ -265,7 +267,7 @@ const onStartVideoConference = async () => {
 
 const onContentEnter = async () => {
 	if (!props.isEditMode) {
-		onContentClick();
+		await onContentClick();
 	}
 };
 

@@ -1,39 +1,36 @@
 <template>
 	<div class="info-message" :class="type">
-		<v-icon class="icon" :color="iconColor">{{ icon }}</v-icon>
+		<v-icon class="mr-1" :color="iconColor">{{ icon }}</v-icon>
 		<div class="message">{{ message }}</div>
 	</div>
 </template>
-<script>
+
+<script setup lang="ts">
 import { mdiAlert } from "@icons/material";
-export default {
-	props: {
-		message: {
-			type: String,
-			required: true,
-		},
-		type: {
-			type: String,
-			required: false,
-			default: "bc-info",
-			validator: (type) =>
-				["bc-info", "bc-success", "bc-warning", "bc-error"].includes(type),
-		},
-	},
-	computed: {
-		icon() {
-			if (this.type === "bc-error") {
-				return mdiAlert;
-			}
-			return this.type.substring(3);
-		},
-		iconColor() {
-			const typeStr = this.type.substring(3);
-			return `rgba(var(--v-theme-${typeStr}))`;
-		},
-	},
+import { computed } from "vue";
+
+type Props = {
+	message: string;
+	type?: "bc-info" | "bc-success" | "bc-warning" | "bc-error";
 };
+
+const props = withDefaults(defineProps<Props>(), {
+	type: "bc-info",
+});
+
+const icon = computed(() => {
+	if (props.type === "bc-error") {
+		return mdiAlert;
+	}
+	return props.type.substring(3);
+});
+
+const iconColor = computed(() => {
+	const typeStr = props.type.substring(3);
+	return `rgba(var(--v-theme-${typeStr}))`;
+});
 </script>
+
 <style lang="scss" scoped>
 .info-message {
 	display: flex;
@@ -55,12 +52,5 @@ export default {
 
 .info-message.bc-info {
 	color: rgba(var(--v-theme-info));
-}
-
-.info-message .icon {
-	flex: 0 0 20px;
-	width: 20px;
-	height: 20px;
-	margin-right: var(--space-xs-2);
 }
 </style>

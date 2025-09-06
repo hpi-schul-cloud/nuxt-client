@@ -3,6 +3,7 @@ import ImportFlow from "@/components/share/ImportFlow.vue";
 import ImportModal from "@/components/share/ImportModal.vue";
 import SelectDestinationModal from "@/components/share/SelectDestinationModal.vue";
 import {
+	BoardExternalReferenceType,
 	CopyApiResponse,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
@@ -30,7 +31,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
@@ -49,7 +50,7 @@ describe("@components/share/ImportFlow", () => {
 		displayColor: "#54616e",
 	};
 
-	const setup = (attrs = {}) => {
+	const setup = (props = {}) => {
 		const wrapper = mount(ImportFlow, {
 			global: {
 				plugins: [
@@ -60,15 +61,17 @@ describe("@components/share/ImportFlow", () => {
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[LOADING_STATE_MODULE_KEY]: loadingStateModuleMock,
+					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 			props: {
 				token,
 				isActive: true,
-				courses: [course],
+				destinations: [{ id: course.id, name: course.title }],
+				destinationType: BoardExternalReferenceType.Course,
+				...props,
 			},
-			...attrs,
 		});
 
 		return { wrapper };
@@ -84,7 +87,9 @@ describe("@components/share/ImportFlow", () => {
 			rooms: CourseRoomListModule,
 			envConfigModule: EnvConfigModule,
 		});
-		jest.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation();
+		vi.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation(
+			vi.fn()
+		);
 	});
 
 	describe("token is provided", () => {
@@ -101,7 +106,7 @@ describe("@components/share/ImportFlow", () => {
 		});
 
 		it("shouldn't call validateShareToken if isActive is false", () => {
-			setup({ props: { isActive: false, courses: [] } });
+			setup({ isActive: false, destinations: [] });
 
 			expect(copyModuleMock.validateShareToken).not.toHaveBeenCalled();
 		});
@@ -110,7 +115,7 @@ describe("@components/share/ImportFlow", () => {
 			it("is shown for invalid token", async () => {
 				copyModuleMock.validateShareToken = () => Promise.reject(new Error());
 				setup();
-				await nextTick();
+				await flushPromises();
 
 				expect(notifierModule.show).toHaveBeenCalledWith(
 					expect.objectContaining({
@@ -132,7 +137,7 @@ describe("@components/share/ImportFlow", () => {
 						})
 					);
 				setup();
-				await nextTick();
+				await flushPromises();
 
 				expect(notifierModule.show).toHaveBeenCalledWith(
 					expect.objectContaining({
@@ -146,17 +151,21 @@ describe("@components/share/ImportFlow", () => {
 			const originalName = "Nihilismus";
 
 			describe("when parent is a lesson", () => {
-				const validateShareTokenMock = () =>
-					Promise.resolve({
-						token,
-						parentType: ShareTokenInfoResponseParentTypeEnum.Lessons,
-						parentName: originalName,
-					});
+				const setupWithValidator = async () => {
+					copyModuleMock.validateShareToken = () =>
+						Promise.resolve({
+							token,
+							parentType: ShareTokenInfoResponseParentTypeEnum.Lessons,
+							parentName: originalName,
+						});
+
+					await flushPromises();
+
+					return setup();
+				};
 
 				it("should open selectCourseModal", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const selectCourseModal = wrapper.findComponent({
 						name: "SelectDestinationModal",
@@ -166,9 +175,7 @@ describe("@components/share/ImportFlow", () => {
 				});
 
 				it("should open the importModal after selecting the course and closing the modal", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
@@ -185,9 +192,7 @@ describe("@components/share/ImportFlow", () => {
 				});
 
 				it("should call copyByShareToken when import is started", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
@@ -212,17 +217,20 @@ describe("@components/share/ImportFlow", () => {
 			});
 
 			describe("when parent is a task", () => {
-				const validateShareTokenMock = () =>
-					Promise.resolve({
-						token,
-						parentType: ShareTokenInfoResponseParentTypeEnum.Tasks,
-						parentName: originalName,
-					});
+				const setupWithValidator = async () => {
+					copyModuleMock.validateShareToken = () =>
+						Promise.resolve({
+							token,
+							parentType: ShareTokenInfoResponseParentTypeEnum.Tasks,
+							parentName: originalName,
+						});
+					await flushPromises();
+
+					return setup();
+				};
 
 				it("should open selectCourseModal", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const selectCourseModal = wrapper.findComponent({
 						name: "SelectDestinationModal",
@@ -231,9 +239,7 @@ describe("@components/share/ImportFlow", () => {
 				});
 
 				it("should open the importModal after selecting the course and closing the modal", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
@@ -250,9 +256,7 @@ describe("@components/share/ImportFlow", () => {
 				});
 
 				it("should call copyByShareToken when import is started", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
@@ -277,34 +281,34 @@ describe("@components/share/ImportFlow", () => {
 			});
 
 			describe("when parent is a course", () => {
-				const validateShareTokenMock = () =>
-					Promise.resolve({
-						token,
-						parentType: ShareTokenInfoResponseParentTypeEnum.Courses,
-						parentName: originalName,
-					});
+				const setupWithValidator = async () => {
+					copyModuleMock.validateShareToken = () =>
+						Promise.resolve({
+							token,
+							parentType: ShareTokenInfoResponseParentTypeEnum.Courses,
+							parentName: originalName,
+						});
+					await flushPromises();
+
+					return setup();
+				};
+
 				it("should open importModal", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const importModal = wrapper.findComponent({ name: "import-modal" });
 					expect(importModal.props("isOpen")).toBe(true);
 				});
 
 				it("should show original name in import modal", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const importModal = wrapper.findComponent({ name: "import-modal" });
 					expect(importModal.props("parentName")).toBe(originalName);
 				});
 
 				it("should call copyByShareToken when import is started", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const dialog = wrapper
 						.findComponent(ImportModal)
@@ -319,15 +323,13 @@ describe("@components/share/ImportFlow", () => {
 				});
 
 				it("shows failure notifier for failed copy", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
 					copyModuleMock.copyByShareToken = () => Promise.reject(new Error());
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const dialog = wrapper
 						.findComponent(ImportModal)
 						.findComponent(vCustomDialog);
-					await dialog.vm.$emit("dialog-confirmed");
+					dialog.vm.$emit("dialog-confirmed");
 
 					expect(notifierModule.show).toHaveBeenCalledWith(
 						expect.objectContaining({ status: "error" })
@@ -355,7 +357,12 @@ describe("@components/share/ImportFlow", () => {
 							getCopyResult: copyResultResponse,
 							getCopyResultFailedItems: failedItems,
 						});
-						copyModuleMock.validateShareToken = validateShareTokenMock;
+						copyModuleMock.validateShareToken = () =>
+							Promise.resolve({
+								token,
+								parentType: ShareTokenInfoResponseParentTypeEnum.Courses,
+								parentName: originalName,
+							});
 						const copyResults: CopyResultItem[] = [
 							{
 								elementId: "a123abc",
@@ -370,7 +377,7 @@ describe("@components/share/ImportFlow", () => {
 								url: "http://abc.de",
 							},
 						];
-						copyModuleMock.copyByShareToken = jest
+						copyModuleMock.copyByShareToken = vi
 							.fn()
 							.mockResolvedValue(copyResults);
 
@@ -381,14 +388,13 @@ describe("@components/share/ImportFlow", () => {
 					});
 
 					it("opens copy result modal", async () => {
-						const { wrapper } = setup();
-						await nextTick();
+						const { wrapper } = await setupWithValidator();
 
 						const dialog = wrapper
 							.findComponent(ImportModal)
 							.findComponent(vCustomDialog);
-						await dialog.vm.$emit("dialog-confirmed");
-						await new Promise((time) => setTimeout(time, 1000));
+						dialog.vm.$emit("dialog-confirmed");
+						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
 						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(
@@ -397,14 +403,13 @@ describe("@components/share/ImportFlow", () => {
 					});
 
 					it("emits success when modal is closed", async () => {
-						const { wrapper } = setup();
-						await nextTick();
+						const { wrapper } = await setupWithValidator();
 
 						const dialog = wrapper
 							.findComponent(ImportModal)
 							.findComponent(vCustomDialog);
-						await dialog.vm.$emit("dialog-confirmed");
-						await new Promise((time) => setTimeout(time, 1000));
+						dialog.vm.$emit("dialog-confirmed");
+						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
 						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(
@@ -422,17 +427,20 @@ describe("@components/share/ImportFlow", () => {
 			});
 
 			describe("when parent is a column board", () => {
-				const validateShareTokenMock = () =>
-					Promise.resolve({
-						token,
-						parentType: ShareTokenInfoResponseParentTypeEnum.ColumnBoard,
-						parentName: originalName,
-					});
+				const setupWithValidator = async () => {
+					copyModuleMock.validateShareToken = () =>
+						Promise.resolve({
+							token,
+							parentType: ShareTokenInfoResponseParentTypeEnum.ColumnBoard,
+							parentName: originalName,
+						});
+					await flushPromises();
+
+					return setup();
+				};
 
 				it("should open selectCourseModal", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const selectCourseModal = wrapper.findComponent({
 						name: "SelectDestinationModal",
@@ -442,9 +450,7 @@ describe("@components/share/ImportFlow", () => {
 				});
 
 				it("should open the importModal after selecting the course and closing the modal", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
@@ -461,9 +467,7 @@ describe("@components/share/ImportFlow", () => {
 				});
 
 				it("should call copyByShareToken when import is started", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					const { wrapper } = setup();
-					await nextTick();
+					const { wrapper } = await setupWithValidator();
 
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
@@ -483,6 +487,153 @@ describe("@components/share/ImportFlow", () => {
 						token,
 						type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
 						newName: originalName,
+					});
+				});
+			});
+
+			describe("when parent is a room", () => {
+				const setupWithValidator = async () => {
+					copyModuleMock.validateShareToken = () =>
+						Promise.resolve({
+							token,
+							parentType: ShareTokenInfoResponseParentTypeEnum.Room,
+							parentName: originalName,
+						});
+
+					await flushPromises();
+
+					return setup();
+				};
+
+				it("should open importModal", async () => {
+					const { wrapper } = await setupWithValidator();
+
+					const importModal = wrapper.findComponent({ name: "import-modal" });
+					expect(importModal.props("isOpen")).toBe(true);
+				});
+
+				it("should show original name in import modal", async () => {
+					const { wrapper } = await setupWithValidator();
+
+					const importModal = wrapper.findComponent({ name: "import-modal" });
+					expect(importModal.props("parentName")).toBe(originalName);
+				});
+
+				it("should call copyByShareToken when import is started", async () => {
+					const { wrapper } = await setupWithValidator();
+
+					const dialog = wrapper
+						.findComponent(ImportModal)
+						.findComponent(vCustomDialog);
+					dialog.vm.$emit("dialog-confirmed");
+
+					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
+						token,
+						type: ShareTokenBodyParamsParentTypeEnum.Room,
+						newName: originalName,
+					});
+				});
+
+				it("shows failure notifier for failed copy", async () => {
+					copyModuleMock.copyByShareToken = () => Promise.reject(new Error());
+					const { wrapper } = await setupWithValidator();
+
+					const dialog = wrapper
+						.findComponent(ImportModal)
+						.findComponent(vCustomDialog);
+					dialog.vm.$emit("dialog-confirmed");
+
+					expect(notifierModule.show).toHaveBeenCalledWith(
+						expect.objectContaining({ status: "error" })
+					);
+				});
+
+				describe("for partial or successful copy", () => {
+					beforeEach(() => {
+						const failedItems: CopyResultItem[] = [
+							{
+								title: "Thema",
+								type: CopyApiResponseTypeEnum.Lesson,
+								elementId: "63edd9c310b658af36648a55",
+								url: "abc.de",
+								elements: [
+									{
+										type: CopyApiResponseTypeEnum.LessonContentGroup,
+										title: "Etherpad",
+									},
+								],
+							},
+						];
+						copyModuleMock = createModuleMocks(CopyModule, {
+							getIsResultModalOpen: false,
+							getCopyResult: copyResultResponse,
+							getCopyResultFailedItems: failedItems,
+						});
+						copyModuleMock.validateShareToken = () =>
+							Promise.resolve({
+								token,
+								parentType: ShareTokenInfoResponseParentTypeEnum.Room,
+								parentName: originalName,
+							});
+						const copyResults: CopyResultItem[] = [
+							{
+								elementId: "a123abc",
+								title: "Great room",
+								elements: [
+									{
+										title: "Lesson with GeoGebra",
+										type: CopyApiResponseTypeEnum.Lesson,
+									},
+								],
+								type: CopyApiResponseTypeEnum.Room,
+								url: "http://abc.de",
+							},
+						];
+						copyModuleMock.copyByShareToken = vi
+							.fn()
+							.mockResolvedValue(copyResults);
+
+						copyResultResponse = {
+							type: CopyApiResponseTypeEnum.Room,
+							status: CopyApiResponseStatusEnum.Partial,
+						};
+					});
+
+					it("opens copy result modal", async () => {
+						const { wrapper } = await setupWithValidator();
+
+						const dialog = wrapper
+							.findComponent(ImportModal)
+							.findComponent(vCustomDialog);
+						dialog.vm.$emit("dialog-confirmed");
+						await flushPromises();
+
+						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
+						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(
+							true
+						);
+					});
+
+					it("emits success when modal is closed", async () => {
+						const { wrapper } = await setupWithValidator();
+
+						const dialog = wrapper
+							.findComponent(ImportModal)
+							.findComponent(vCustomDialog);
+						dialog.vm.$emit("dialog-confirmed");
+						await flushPromises();
+
+						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
+						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(
+							true
+						);
+
+						const copyResultModal = wrapper.findComponent({
+							name: "copy-result-modal",
+						});
+						await copyResultModal.vm.$emit("copy-dialog-closed");
+
+						expect(wrapper.emitted("success")).toHaveLength(1);
 					});
 				});
 			});

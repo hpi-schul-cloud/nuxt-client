@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import {
 	ConfigResponse,
 	ExternalToolMediumStatus,
@@ -29,7 +30,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
@@ -40,10 +41,11 @@ import { VCardText } from "vuetify/lib/components/index";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 
-jest.mock("@data-external-tool");
+vi.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
+const mockedSchoolExternalToolUsage = vi.mocked(useSchoolExternalToolUsage);
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -118,13 +120,17 @@ describe("ExternalToolSection", () => {
 		useSchoolExternalToolUsageMock =
 			createMock<ReturnType<typeof useSchoolExternalToolUsage>>();
 
-		jest
-			.mocked(useSchoolExternalToolUsage)
-			.mockReturnValue(useSchoolExternalToolUsageMock);
+		useSchoolExternalToolUsageMock.metadata = ref(
+			schoolExternalToolMetadataFactory.build()
+		);
+
+		mockedSchoolExternalToolUsage.mockReturnValue(
+			useSchoolExternalToolUsageMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when component is used", () => {
@@ -217,7 +223,7 @@ describe("ExternalToolSection", () => {
 			);
 
 			const windowMock = createMock<Window>();
-			jest.spyOn(window, "open").mockImplementation(() => windowMock);
+			vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 			return {
 				wrapper,
@@ -361,7 +367,11 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					expect(wrapper.findComponent({ name: "v-dialog" })).toBeDefined();
-					expect(wrapper.vm.isDeleteDialogOpen).toBeTruthy();
+
+					expect(
+						(wrapper.vm as unknown as typeof ExternalToolSection)
+							.isDeleteDialogOpen
+					).toBeTruthy();
 				});
 
 				describe("when dialog is rendered", () => {
@@ -454,8 +464,9 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = getWrapper();
 
 				const expectedName = "Name";
+				const wrapperVm = wrapper.vm as unknown as typeof ExternalToolSection;
 
-				wrapper.vm.itemToDelete = {
+				wrapperVm.itemToDelete = {
 					id: "id",
 					name: expectedName,
 					externalToolId: "externalToolId",
@@ -465,7 +476,7 @@ describe("ExternalToolSection", () => {
 					restrictToContexts: "",
 				};
 
-				const itemName: string = wrapper.vm.getItemName;
+				const itemName: string = wrapperVm.getItemName;
 
 				expect(itemName).toEqual(expectedName);
 			});
@@ -475,9 +486,11 @@ describe("ExternalToolSection", () => {
 			it("should return an empty string", () => {
 				const { wrapper } = getWrapper();
 
-				wrapper.vm.itemToDelete = undefined;
+				const wrapperVm = wrapper.vm as unknown as typeof ExternalToolSection;
 
-				const itemName: string = wrapper.vm.getItemName;
+				wrapperVm.itemToDelete = undefined;
+
+				const itemName: string = wrapperVm.getItemName;
 
 				expect(itemName).toEqual("");
 			});

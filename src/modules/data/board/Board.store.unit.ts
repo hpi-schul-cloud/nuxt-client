@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { applicationErrorModule, envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
@@ -15,7 +16,7 @@ import {
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useCardStore, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import {
 	useBoardNotifier,
 	useSharedEditMode,
@@ -26,45 +27,42 @@ import { computed, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { BoardLayout } from "@/serverApi/v3/api";
 import { useBoardStore } from "./Board.store";
-import { UpdateBoardLayoutRequestPayload } from "./boardActions/boardActionPayload";
+import { UpdateBoardLayoutRequestPayload } from "./boardActions/boardActionPayload.types";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
-jest.mock("./boardActions/boardSocketApi.composable");
-const mockedUseBoardSocketApi = jest.mocked(useBoardSocketApi);
+vi.mock("./boardActions/boardSocketApi.composable");
+const mockedUseBoardSocketApi = vi.mocked(useBoardSocketApi);
 
-jest.mock("./boardActions/boardRestApi.composable");
-const mockedUseBoardRestApi = jest.mocked(useBoardRestApi);
+vi.mock("./boardActions/boardRestApi.composable");
+const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 
-jest.mock("@util-board");
-const mockedSharedEditMode = jest.mocked(useSharedEditMode);
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockUseSharedLastCreatedElement = jest.mocked(
-	useSharedLastCreatedElement
-);
+vi.mock("@util-board");
+const mockedSharedEditMode = vi.mocked(useSharedEditMode);
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+vi.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-jest.mock("@data-board/socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("@data-board/socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("./cardActions/cardSocketApi.composable");
-const mockedUseCardSocketApi = jest.mocked(useCardSocketApi);
+vi.mock("./cardActions/cardSocketApi.composable");
+const mockedUseCardSocketApi = vi.mocked(useCardSocketApi);
 
-jest.mock("./BoardFocusHandler.composable");
-const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
+vi.mock("./BoardFocusHandler.composable");
+const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
-const useRouteMock = <jest.Mock>useRoute;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: () => ({ t: jest.fn().mockImplementation((key) => key) }),
+		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });
 
@@ -79,7 +77,7 @@ describe("BoardStore", () => {
 	let mockedCardSocketApiActions: DeepMocked<
 		ReturnType<typeof useCardSocketApi>
 	>;
-	let setEditModeId: jest.Mock;
+	let setEditModeId: Mock;
 	let mockedBoardFocusCalls: DeepMocked<
 		ReturnType<typeof useBoardFocusHandler>
 	>;
@@ -111,11 +109,23 @@ describe("BoardStore", () => {
 			createMock<ReturnType<typeof useBoardRestApi>>();
 		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiActions);
 
-		mockedCardSocketApiActions =
-			createMock<ReturnType<typeof useCardSocketApi>>();
+		mockedCardSocketApiActions = createMock<
+			ReturnType<typeof useCardSocketApi>
+		>({
+			dispatch: vi.fn().mockResolvedValue(undefined),
+			fetchCardRequest: vi.fn(),
+			createElementRequest: vi.fn(),
+			deleteElementRequest: vi.fn(),
+			updateElementRequest: vi.fn(),
+			moveElementRequest: vi.fn(),
+			deleteCardRequest: vi.fn(),
+			updateCardTitleRequest: vi.fn(),
+			updateCardHeightRequest: vi.fn(),
+			disconnectSocketRequest: vi.fn(),
+		});
 		mockedUseCardSocketApi.mockReturnValue(mockedCardSocketApiActions);
 
-		setEditModeId = jest.fn();
+		setEditModeId = vi.fn();
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
@@ -124,7 +134,7 @@ describe("BoardStore", () => {
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
-			resetLastCreatedElementId: jest.fn(),
+			resetLastCreatedElementId: vi.fn(),
 		});
 
 		mockedBoardFocusCalls =
@@ -171,10 +181,10 @@ describe("BoardStore", () => {
 
 	const focusSetup = (id: string) => {
 		const focusedId = ref<string | undefined>(id);
-		const mockSetFocus = jest.fn().mockImplementation((id: string) => {
+		const mockSetFocus = vi.fn().mockImplementation((id: string) => {
 			focusedId.value = id;
 		});
-		const mockForceFocus = jest.fn();
+		const mockForceFocus = vi.fn();
 		mockedBoardFocusHandler.mockReturnValue({
 			setFocus: mockSetFocus,
 			forceFocus: mockForceFocus,
@@ -185,7 +195,7 @@ describe("BoardStore", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getLastColumnIndex", () => {
@@ -409,7 +419,7 @@ describe("BoardStore", () => {
 
 		describe("when previous card needs to be focused", () => {
 			afterEach(() => {
-				jest.resetAllMocks();
+				vi.resetAllMocks();
 			});
 			describe("when the card is first element", () => {
 				it('should call "forceFocus" if already focused card is deleted', async () => {
@@ -490,7 +500,7 @@ describe("BoardStore", () => {
 
 		describe("when previous column needs to be focused", () => {
 			afterEach(() => {
-				jest.resetAllMocks();
+				vi.resetAllMocks();
 			});
 			describe("when the column is the first element", () => {
 				it('should call "forceFocus" if already focused column is deleted', async () => {
@@ -1261,7 +1271,7 @@ describe("BoardStore", () => {
 			});
 
 			it('should call applicationErrorModule.showError if "isOwnAction" is false', async () => {
-				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
+				const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
 				const { boardStore } = setup({ socketFlag: true });
 				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
 
@@ -1271,7 +1281,10 @@ describe("BoardStore", () => {
 				});
 
 				expect(setErrorSpy).toHaveBeenCalledWith(
-					createApplicationError(HttpStatusCode.NotFound)
+					createApplicationError(
+						HttpStatusCode.NotFound,
+						"components.board.error.404"
+					)
 				);
 			});
 		});

@@ -6,16 +6,29 @@
 		elevation="0"
 		variant="outlined"
 		:ripple="false"
-		:to="sanitizedUrl"
 		:tabindex="isEditMode ? 0 : undefined"
+		:aria-label="
+			t('components.cardElement.folderElement') + ' ' + element.content.title
+		"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<ContentElementBar :has-grey-background="true" :icon="mdiFolderOpenOutline">
+		<ContentElementBar
+			:has-grey-background="true"
+			:icon="mdiFolderOpenOutline"
+			tabindex="0"
+			role="button"
+			class="content-element-bar"
+			:aria-label="
+				t('components.cardElement.folderElement') + ' ' + element.content.title
+			"
+			@click="onTitleClick"
+			@keydown.enter="onTitleClick"
+		>
 			<template #title>
 				{{
 					element.content.title ||
-					$t("components.cardElement.folderElement.untitled")
+					t("components.cardElement.folderElement.untitled")
 				}}
 			</template>
 			<template v-if="isEditMode" #menu>
@@ -36,34 +49,49 @@
 				</BoardMenu>
 			</template>
 		</ContentElementBar>
+		<v-card-text>
+			<FolderTitleInput
+				v-if="isEditMode"
+				:data-testid="`folder-title-input-${columnIndex}-${rowIndex}-${elementIndex}`"
+				:title="element.content.title"
+				@update:title="onUpdateTitle"
+			/>
+			<FileStatistic :element-id="element.id" />
+		</v-card-text>
 	</v-card>
 </template>
 
 <script setup lang="ts">
 import { FileFolderElement } from "@/types/board/ContentElement";
-import { sanitizeUrl } from "@braintree/sanitize-url";
-import { useBoardFocusHandler } from "@data-board";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { mdiFolderOpenOutline } from "@icons/material";
-import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
+import { BoardMenuScope, ContentElementBar } from "@ui-board";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
-import { computed, PropType, ref, toRef } from "vue";
+import { ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import FileStatistic from "./FileStatistic.vue";
+import FolderTitleInput from "./FolderTitleInput.vue";
 
-const props = defineProps({
-	element: {
-		type: Object as PropType<FileFolderElement>,
-		required: true,
-	},
-	isEditMode: { type: Boolean, required: true },
-	isNotFirstElement: { type: Boolean, required: false },
-	isNotLastElement: { type: Boolean, required: false },
-	columnIndex: { type: Number, required: true },
-	rowIndex: { type: Number, required: true },
-	elementIndex: { type: Number, required: true },
-});
+interface FolderContentElementProps {
+	element: FileFolderElement;
+	isEditMode: boolean;
+	isNotFirstElement?: boolean;
+	isNotLastElement?: boolean;
+	columnIndex: number;
+	rowIndex: number;
+	elementIndex: number;
+}
+
+const { t } = useI18n();
+
+const props = defineProps<FolderContentElementProps>();
 
 const emit = defineEmits<{
 	(e: "delete:element", elementId: string): void;
@@ -74,8 +102,11 @@ const emit = defineEmits<{
 
 const folderContentElement = ref(null);
 const element = toRef(props, "element");
+const { modelValue } = useContentElementState(props, { autoSaveDebounce: 100 });
 
-const sanitizedUrl = computed(() => sanitizeUrl(`/folder/${element.value.id}`));
+const onUpdateTitle = (value: string) => {
+	modelValue.value.title = value;
+};
 
 useBoardFocusHandler(element.value.id, folderContentElement);
 
@@ -95,4 +126,17 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
+
+const router = useRouter();
+const onTitleClick = () => {
+	const folderRoute = `/folder/${element.value.id}`;
+
+	router.push(folderRoute);
+};
 </script>
+
+<style scoped>
+.content-element-bar:focus {
+	outline-offset: -10px;
+}
+</style>

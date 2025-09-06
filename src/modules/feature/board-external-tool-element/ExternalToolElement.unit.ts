@@ -2,7 +2,6 @@ import { ConfigResponse, ExternalToolElementResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import { BusinessError } from "@/store/types/commons";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,
@@ -11,6 +10,7 @@ import {
 	ltiDeepLinkResponseFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -23,18 +23,20 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPuzzleOutline } from "@icons/material";
+import { ContentElementBar } from "@ui-board";
 import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
+import { VImg } from "vuetify/lib/components/index";
 import ExternalToolElement from "./ExternalToolElement.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 
-jest.mock("@data-board");
-jest.mock("@data-external-tool");
-jest.mock("@util-board");
+vi.mock("@data-board");
+vi.mock("@data-external-tool");
+vi.mock("@util-board");
 
 describe("ExternalToolElement", () => {
 	let useContentElementStateMock: DeepMocked<
@@ -76,26 +78,26 @@ describe("ExternalToolElement", () => {
 				ReturnType<typeof useContextExternalToolConfigurationStatus>
 			>();
 
-		jest
-			.mocked(useContentElementState)
-			.mockReturnValue(useContentElementStateMock);
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
-		jest
-			.mocked(useExternalToolDisplayState)
-			.mockReturnValue(useExternalToolElementDisplayStateMock);
-		jest
-			.mocked(useExternalToolLaunchState)
-			.mockReturnValue(useExternalToolLaunchStateMock);
-		jest
-			.mocked(useSharedLastCreatedElement)
-			.mockReturnValue(useSharedLastCreatedElementMock);
-		jest
-			.mocked(useContextExternalToolConfigurationStatus)
-			.mockReturnValue(useToolConfigurationStatusMock);
+		vi.mocked(useContentElementState).mockReturnValue(
+			useContentElementStateMock
+		);
+		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useExternalToolDisplayState).mockReturnValue(
+			useExternalToolElementDisplayStateMock
+		);
+		vi.mocked(useExternalToolLaunchState).mockReturnValue(
+			useExternalToolLaunchStateMock
+		);
+		vi.mocked(useSharedLastCreatedElement).mockReturnValue(
+			useSharedLastCreatedElementMock
+		);
+		vi.mocked(useContextExternalToolConfigurationStatus).mockReturnValue(
+			useToolConfigurationStatusMock
+		);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getWrapper = (
@@ -117,6 +119,9 @@ describe("ExternalToolElement", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock },
+				stubs: {
+					ContentElementBar: false,
+				},
 			},
 			props: {
 				isFirstElement: false,
@@ -137,7 +142,7 @@ describe("ExternalToolElement", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the element is mounted", () => {
@@ -516,8 +521,43 @@ describe("ExternalToolElement", () => {
 		});
 	});
 
+	describe("Domain", () => {
+		const setup = () => {
+			const contextExternalToolId = "context-external-tool-id";
+			const displayData = externalToolDisplayDataFactory.build({
+				contextExternalToolId,
+				logoUrl: undefined,
+			});
+
+			const { wrapper } = getWrapper(
+				{
+					element: externalToolElementResponseFactory.build({
+						content: { contextExternalToolId },
+					}),
+					isEditMode: false,
+				},
+				displayData
+			);
+
+			return {
+				wrapper,
+				displayData,
+			};
+		};
+
+		it("should display the tool domain", () => {
+			const { wrapper, displayData } = setup();
+
+			const domain = wrapper.find(
+				"[data-testid=board-external-tool-element-domain]"
+			);
+
+			expect(domain.text()).toEqual(displayData.domain);
+		});
+	});
+
 	describe("Logo", () => {
-		describe("when not logo is defined", () => {
+		describe("when no logo is defined", () => {
 			const setup = () => {
 				const contextExternalToolId = "context-external-tool-id";
 
@@ -539,14 +579,22 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
+			it("should not show a custom icon", () => {
+				const { wrapper } = setup();
+
+				const icon = wrapper.findComponent(
+					"[data-testid=board-external-tool-element-logo]"
+				);
+
+				expect(icon.exists()).toEqual(false);
+			});
+
 			it("should show the default icon", () => {
 				const { wrapper } = setup();
 
-				const icon = wrapper
-					.findComponent({ name: "ContentElementBar" })
-					.attributes().icon;
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
-				expect(icon).toEqual(mdiPuzzleOutline);
+				expect(contentElementBar.props().icon).toEqual(mdiPuzzleOutline);
 			});
 		});
 
@@ -572,14 +620,22 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
+			it("should show a custom icon", () => {
+				const { wrapper } = setup();
+
+				const icon = wrapper.findComponent<typeof VImg>(
+					"[data-testid=board-external-tool-element-logo]"
+				);
+
+				expect(icon.props().src).toEqual("logo-url");
+			});
+
 			it("should not show the default icon", () => {
 				const { wrapper } = setup();
 
-				const icon = wrapper
-					.findComponent({ name: "ContentElementBar" })
-					.attributes().icon;
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
-				expect(icon).toBeUndefined();
+				expect(contentElementBar.props().icon).toEqual(undefined);
 			});
 		});
 	});
@@ -920,7 +976,7 @@ describe("ExternalToolElement", () => {
 
 	describe("when refresh time is over", () => {
 		const setup = () => {
-			jest.useFakeTimers({ legacyFakeTimers: true });
+			vi.useFakeTimers();
 			const { wrapper, refreshTime } = getWrapper(
 				{
 					element: externalToolElementResponseFactory.build({
@@ -947,7 +1003,7 @@ describe("ExternalToolElement", () => {
 				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalledTimes(1);
 
-			jest.advanceTimersByTime(refreshTime + 1000);
+			vi.advanceTimersByTime(refreshTime + 1000);
 			await nextTick();
 
 			expect(

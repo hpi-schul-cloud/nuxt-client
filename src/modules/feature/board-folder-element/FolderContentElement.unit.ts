@@ -4,6 +4,8 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useContentElementState } from "@data-board";
+import { createMock } from "@golevelup/ts-vitest";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import {
@@ -12,11 +14,19 @@ import {
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
 import { flushPromises, mount } from "@vue/test-utils";
+import { Router, useRouter } from "vue-router";
 import FolderContentElement from "./FolderContentElement.vue";
+import { Mock } from "vitest";
 
-jest.mock("@data-board", () => ({
-	useBoardFocusHandler: jest.fn(),
+vi.mock("@data-board", () => ({
+	useBoardFocusHandler: vi.fn(),
+	useContentElementState: vi.fn(() => ({
+		modelValue: { value: { title: "test" } },
+	})),
 }));
+
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
 describe("FolderContentElement", () => {
 	const mockElement: FileFolderElement = {
@@ -30,6 +40,7 @@ describe("FolderContentElement", () => {
 			lastUpdatedAt: "2024-01-01T00:00:00Z",
 		},
 	};
+	const router = createMock<Router>();
 
 	const setupWrapper = (options: {
 		isEditMode?: boolean;
@@ -37,8 +48,15 @@ describe("FolderContentElement", () => {
 		isNotLastElement?: boolean;
 		element?: FileFolderElement;
 	}) => {
+		useRouterMock.mockReturnValueOnce(router);
+
 		const wrapper = mount(FolderContentElement, {
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: {
+					FileStatistic: true,
+				},
+			},
 			props: {
 				element: options.element || mockElement,
 				isEditMode: options.isEditMode ?? false,
@@ -50,12 +68,19 @@ describe("FolderContentElement", () => {
 			},
 		});
 
-		return { wrapper };
+		(useContentElementState as Mock).mockReturnValue({
+			modelValue: {
+				value: (options.element || mockElement).content.title || "",
+			},
+		});
+
+		return { wrapper, router, mockElement };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
 			const { wrapper } = setupWrapper({});
+
 			expect(wrapper.exists()).toBe(true);
 		});
 
@@ -63,6 +88,7 @@ describe("FolderContentElement", () => {
 			it("should render folder title", () => {
 				const { wrapper } = setupWrapper({});
 				const title = wrapper.find("[data-testid='board-folder-element']");
+
 				expect(title.text()).toBe("Test Folder");
 			});
 		});
@@ -78,6 +104,7 @@ describe("FolderContentElement", () => {
 					},
 				});
 				const title = wrapper.find("[data-testid='board-folder-element']");
+
 				expect(title.text()).toBe(
 					"components.cardElement.folderElement.untitled"
 				);
@@ -87,6 +114,7 @@ describe("FolderContentElement", () => {
 		it("should render folder icon", () => {
 			const { wrapper } = setupWrapper({});
 			const contentElementBar = wrapper.findComponent(ContentElementBar);
+
 			expect(contentElementBar.props("icon")).toBe(mdiFolderOpenOutline);
 		});
 	});
@@ -96,8 +124,8 @@ describe("FolderContentElement", () => {
 			const { wrapper } = setupWrapper({
 				isEditMode: false,
 			});
-
 			const menu = wrapper.findComponent(BoardMenu);
+
 			expect(menu.exists()).toBe(false);
 		});
 
@@ -117,6 +145,32 @@ describe("FolderContentElement", () => {
 				expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
 			}
 		);
+
+		describe("when contentelementbar is clicked", () => {
+			it("should push folder route to router", async () => {
+				const { wrapper, mockElement } = setupWrapper({
+					isEditMode: false,
+				});
+
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
+				await contentElementBar.trigger("click");
+
+				expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
+			});
+		});
+
+		describe("when folder element title is focused and enter is pressed", () => {
+			it("should push folder route to router", async () => {
+				const { wrapper, mockElement } = setupWrapper({
+					isEditMode: false,
+				});
+
+				const folderElement = wrapper.findComponent(ContentElementBar);
+				await folderElement.trigger("keydown.enter");
+
+				expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
+			});
+		});
 	});
 
 	describe("when element is in edit mode", () => {
@@ -125,8 +179,8 @@ describe("FolderContentElement", () => {
 				const { wrapper } = setupWrapper({
 					isEditMode: true,
 				});
-
 				const menu = wrapper.findComponent(BoardMenu);
+
 				expect(menu.exists()).toBe(true);
 				expect(menu.props("scope")).toBe(BoardMenuScope.FOLDER_ELEMENT);
 			});

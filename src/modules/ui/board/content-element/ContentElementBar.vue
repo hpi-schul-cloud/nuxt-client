@@ -45,7 +45,7 @@
 				<v-icon v-if="icon" :icon="icon" size="20" class="mr-2" />
 
 				<LineClamp
-					class="content-element-title"
+					class="content-element-title min-width-0"
 					data-testid="content-element-title-slot"
 				>
 					<slot name="title" />
@@ -80,10 +80,10 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
 import { LineClamp } from "@ui-line-clamp";
-import { IconProps } from "vuetify";
 import { hasSlotContent } from "@util-vue";
+import { PropType } from "vue";
+import { IconProps } from "vuetify";
 
 const props = defineProps({
 	hasGreyBackground: {
@@ -155,5 +155,9 @@ const props = defineProps({
 }
 .statusInfo {
 	margin-left: auto;
+}
+
+.min-width-0 {
+	min-width: 0;
 }
 </style>

@@ -19,7 +19,17 @@ describe("RoomModal", () => {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			props: {
 				isOpen,
-				groupData: { title: "dummy title", groupElements: [] },
+				groupData: {
+					title: "dummy title",
+					groupElements: [],
+					shortTitle: "",
+					displayColor: "",
+					xPosition: 0,
+					yPosition: 0,
+					groupId: "",
+					isSynchronized: false,
+					to: "",
+				},
 				draggable: true,
 			},
 		});
@@ -27,7 +37,7 @@ describe("RoomModal", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when modal is not open", () => {
@@ -106,10 +116,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = jest.spyOn(
-						courseRoomListModule,
-						"update"
-					);
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");
@@ -133,6 +142,7 @@ describe("RoomModal", () => {
 						displayColor: "",
 						xPosition: -1,
 						yPosition: -1,
+						isSynchronized: false,
 					};
 
 					expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
@@ -144,10 +154,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = jest.spyOn(
-						courseRoomListModule,
-						"update"
-					);
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");
@@ -173,7 +182,9 @@ describe("RoomModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(courseRoomListModule, "update");
+				const storeRoomUpdateMock = vi
+					.spyOn(courseRoomListModule, "update")
+					.mockImplementation(vi.fn());
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
@@ -203,6 +214,7 @@ describe("RoomModal", () => {
 					displayColor: "",
 					xPosition: -1,
 					yPosition: -1,
+					isSynchronized: false,
 				};
 
 				expect(storeRoomUpdateMock).toHaveBeenCalledTimes(2);
@@ -215,10 +227,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = jest.spyOn(
-						courseRoomListModule,
-						"update"
-					);
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");
@@ -240,6 +251,7 @@ describe("RoomModal", () => {
 						displayColor: "",
 						xPosition: -1,
 						yPosition: -1,
+						isSynchronized: false,
 					};
 
 					expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
@@ -251,10 +263,9 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = jest.spyOn(
-						courseRoomListModule,
-						"update"
-					);
+					const storeRoomUpdateMock = vi
+						.spyOn(courseRoomListModule, "update")
+						.mockImplementation(vi.fn());
 					const titleInput = wrapper
 						.findComponent({ name: "v-text-field" })
 						.find("input");

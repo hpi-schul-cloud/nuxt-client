@@ -1,4 +1,8 @@
-import { RoomBoardItem, RoomDetails } from "@/types/room/Room";
+import {
+	RoomBoardItem,
+	RoomDetails,
+	RoomUpdateParams,
+} from "@/types/room/Room";
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import {
@@ -21,14 +25,15 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	const room = ref<RoomDetails>();
 	const roomVariant = ref<RoomVariant>();
 	const roomBoards = ref<RoomBoardItem[]>([]);
+	const lockedRoomName = ref<string | undefined>();
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
 	const fetchRoom = async (id: string) => {
 		try {
-			room.value = (await roomApi.roomControllerGetRoomDetails(id)).data;
 			roomVariant.value = RoomVariant.ROOM;
+			room.value = (await roomApi.roomControllerGetRoomDetails(id)).data;
 			roomBoards.value = (
 				await roomApi.roomControllerGetRoomBoards(id)
 			).data.data;
@@ -37,6 +42,11 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 
 			if (responseError.code === 404) {
 				roomVariant.value = RoomVariant.COURSE_ROOM;
+			} else if (
+				responseError.code === 403 &&
+				responseError.type === "LOCKED_ROOM"
+			) {
+				lockedRoomName.value = responseError.message;
 			} else {
 				throw createApplicationError(responseError.code);
 			}
@@ -61,18 +71,29 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		return boardId;
 	};
 
+	/**
+	 * @throws ApiResponseError | ApiValidationError
+	 */
+	const updateRoom = async (
+		id: string,
+		params: RoomUpdateParams
+	): Promise<void> => {
+		isLoading.value = true;
+		try {
+			await roomApi.roomControllerUpdateRoom(id, params);
+		} catch (error) {
+			throw mapAxiosErrorToResponseError(error);
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
 	const resetState = () => {
 		isLoading.value = true;
 		room.value = undefined;
 	};
 
-	const deactivateRoom = () => {
-		resetState();
-		isLoading.value = false;
-	};
-
 	return {
-		deactivateRoom,
 		fetchRoom,
 		createBoard,
 		isLoading,
@@ -80,5 +101,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		room,
 		roomVariant,
 		roomBoards,
+		updateRoom,
+		lockedRoomName,
 	};
 });

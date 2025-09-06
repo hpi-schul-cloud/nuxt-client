@@ -1,43 +1,45 @@
 <template>
-	<form @submit.prevent="onSave">
+	<VForm ref="roomForm">
 		<div>
 			<VTextField
 				v-model="roomData.name"
-				class="mb-8"
-				:label="$t('components.roomForm.labels.roomName')"
-				:error-messages="
-					v$.roomData.name.$errors.map((e: ErrorObject) => unref(e.$message))
-				"
+				class="room-name mb-8"
+				:label="t('components.roomForm.labels.roomName')"
+				counter="100"
+				:rules="validationRules"
+				autofocus
 				data-testid="room-name-input"
 			/>
+
 			<div class="mb-8">
-				<RoomColorPicker
-					v-model:color="roomData.color"
-					@update:color="onUpdateColor"
-				/>
+				<RoomColorPicker v-model:color="roomData.color" />
 			</div>
-			<div class="mb-8">
-				<label class="d-flex mb-2">
-					{{ $t("components.roomForm.labels.timePeriod") }}
-				</label>
-				<div class="d-flex">
-					<DatePicker
-						:date="roomData.startDate"
-						:min-date="todayISO"
-						:errors="startDateErrors"
-						class="w-50 mr-4"
-						data-testid="room-start-date-input"
-						:aria-label="$t('components.roomForm.labels.timePeriod.from')"
-						@update:date="onUpdateStartDate"
-					/>
-					<DatePicker
-						:date="roomData.endDate"
-						:min-date="todayISO"
-						class="w-50 ml-4"
-						data-testid="room-end-date-input"
-						:aria-label="$t('components.roomForm.labels.timePeriod.to')"
-						@update:date="onUpdateEndDate"
-					/>
+			<div class="mb-16">
+				<div class="mb-1 text-subtitle-1">
+					{{ t("components.roomForm.labels.videoConference.title") }}
+				</div>
+				<div class="d-flex mt-1">
+					<VCheckbox
+						:model-value="
+							roomData.features.includes(
+								RoomFeatures.EditorManageVideoconference
+							)
+						"
+						class="align-start video-conference-checkbox"
+						data-testid="room-video-conference-checkbox"
+						@update:model-value="onToggleVideoConferenceFeature"
+					>
+						<template #label>
+							<div class="d-flex flex-column mt-2">
+								{{ t("components.roomForm.labels.videoConference.label") }}
+								<span class="checkbox-label mb-1">
+									{{
+										t("components.roomForm.labels.videoConference.helperText")
+									}}
+								</span>
+							</div>
+						</template>
+					</VCheckbox>
 				</div>
 			</div>
 		</div>
@@ -49,36 +51,34 @@
 				data-testid="room-form-cancel-btn"
 				@click="onCancel"
 			>
-				{{ $t("common.actions.cancel") }}
+				{{ t("common.actions.cancel") }}
 			</VBtn>
 			<VBtn
 				variant="flat"
 				color="primary"
-				type="submit"
 				data-testid="room-form-save-btn"
+				@click="onSave"
 			>
-				{{ $t("common.actions.save") }}
+				{{ t("common.actions.save") }}
 			</VBtn>
 		</div>
 		<ConfirmationDialog />
-	</form>
+	</VForm>
 </template>
 
 <script setup lang="ts">
-import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
-import { containsOpeningTagFollowedByString } from "@/utils/validation";
+import { useOpeningTagValidator } from "@/utils/validation";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { DatePicker } from "@ui-date-time-picker";
-import { ErrorObject, useVuelidate } from "@vuelidate/core";
-import { helpers, maxLength, required } from "@vuelidate/validators";
-import dayjs from "dayjs";
-import { computed, PropType, unref } from "vue";
+import { computed, PropType, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
+import { RoomFeatures } from "@/serverApi/v3";
+import { isNonEmptyString, isOfMaxLength } from "@util-validators";
+import { VCheckbox, VForm } from "vuetify/components";
 
 const props = defineProps({
 	room: {
@@ -92,102 +92,47 @@ const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 
 const roomData = computed(() => props.room);
-const todayISO = computed(() =>
-	dayjs.tz(new Date(), "DD.MM.YYYY", "UTC").format(DATETIME_FORMAT.inputDate)
-);
+const initialRoomData = ref(JSON.stringify(roomData.value));
+const roomForm = useTemplateRef("roomForm");
 
-const isStartBeforeEndDate = (
-	startDate: string | undefined,
-	endDate: string | undefined
-) => {
-	if (!startDate || !endDate) return true;
-	return new Date(startDate) <= new Date(endDate);
-};
+const { validateOnOpeningTag } = useOpeningTagValidator();
+const validationRules = [
+	isNonEmptyString(t("common.validation.nonEmptyString")),
+	isOfMaxLength(100)(t("common.validation.tooLong")),
+	validateOnOpeningTag,
+];
 
-const areDatesSameDay = (
-	startDate: string | undefined,
-	endDate: string | undefined
-) => {
-	if (!startDate || !endDate) return true;
+const onToggleVideoConferenceFeature = (isChecked: boolean | null) => {
+	const features = roomData.value.features;
 
-	const start = new Date(startDate);
-	const end = new Date(endDate);
-	return (
-		start.getFullYear() === end.getFullYear() &&
-		start.getMonth() === end.getMonth() &&
-		start.getDate() === end.getDate()
-	);
-};
-
-const isStartBeforeOrEqualToEndDate = (
-	startDate: string | undefined,
-	endDate: string | undefined
-) => {
-	return (
-		isStartBeforeEndDate(startDate, endDate) ||
-		areDatesSameDay(startDate, endDate)
-	);
-};
-
-const startBeforeEndDateValidator = (endDate: string | undefined) => {
-	return helpers.withParams(
-		{ type: "startBeforeEndDate", value: endDate },
-		helpers.withMessage(
-			t("components.roomForm.validation.timePeriod.startBeforeEnd"),
-			(startDate: string) => isStartBeforeOrEqualToEndDate(startDate, endDate)
-		)
-	);
-};
-
-const validationRules = computed(() => ({
-	roomData: {
-		name: {
-			maxLength: helpers.withMessage(
-				t("common.validation.tooLong"),
-				maxLength(100)
-			),
-			containsOpeningTag: helpers.withMessage(
-				t("common.validation.containsOpeningTag"),
-				(name: string) => !containsOpeningTagFollowedByString(name)
-			),
-			required: helpers.withMessage(t("common.validation.required2"), required),
-		},
-		startDate: {
-			startBeforeEndDate: startBeforeEndDateValidator(roomData.value.endDate),
-		},
-	},
-}));
-
-const v$ = useVuelidate(
-	validationRules,
-	{ roomData },
-	{ $lazy: true, $autoDirty: true }
-);
-
-const startDateErrors = computed(() => v$.value.roomData.startDate.$errors);
-
-const onUpdateColor = () => {
-	v$.value.$touch();
-};
-
-const onUpdateStartDate = (newDate: string) => {
-	roomData.value.startDate = newDate;
-};
-
-const onUpdateEndDate = (newDate: string) => {
-	roomData.value.endDate = newDate;
+	const index = features.indexOf(RoomFeatures.EditorManageVideoconference);
+	if (isChecked && index === -1) {
+		features.push(RoomFeatures.EditorManageVideoconference);
+	}
+	if (!isChecked && index > -1) {
+		features.splice(index, 1);
+	}
 };
 
 const onSave = async () => {
-	const valid = await v$.value.$validate();
+	if (roomForm.value === null) return;
+
+	const { valid, errors } = await roomForm.value.validate();
 	if (valid) {
 		emit("save", { room: roomData.value });
+	} else if (errors.length > 0) {
+		// Workaround for Vuetify 3.9.4 fast-fail inputs errors will not be announced to screen readers on submitting,
+		// so we are focusing the first invalid input to announce the error.
+		// More Information: https://github.com/vuetifyjs/vuetify/issues/21920
+		const firstErrorId = errors[0].id as string;
+		document.getElementById(firstErrorId)?.focus();
 	}
 };
 
 const onCancel = async () => {
-	const noChangesMade = !v$.value.$anyDirty;
-	if (noChangesMade) emit("cancel");
+	const isFormUnchanged =
+		JSON.stringify(roomData.value) === initialRoomData.value;
+	if (isFormUnchanged) emit("cancel");
 
 	const shouldCancel = await askConfirmation({
 		message: t("ui-confirmation-dialog.ask-cancel-form"),
@@ -199,3 +144,21 @@ const onCancel = async () => {
 	}
 };
 </script>
+
+<style lang="scss" scoped>
+.checkbox-label {
+	font-size: var(--text-sm);
+	opacity: var(--v-medium-emphasis-opacity);
+}
+
+.video-conference-checkbox {
+	:deep(.v-selection-control) {
+		align-items: flex-start;
+	}
+}
+
+.room-name :deep(.v-input__details) {
+	// Reserve space for the character counter to prevent layout shift in Firefox
+	min-height: 25px;
+}
+</style>

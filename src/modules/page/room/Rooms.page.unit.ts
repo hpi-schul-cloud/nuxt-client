@@ -14,8 +14,8 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useRoomsState } from "@data-room";
-import { createMock } from "@golevelup/ts-jest";
+import { useRoomsState, useRoomAuthorization } from "@data-room";
+import { createMock } from "@golevelup/ts-vitest";
 import { ref } from "vue";
 import { RouteLocation, Router, useRoute, useRouter } from "vue-router";
 import RoomsPage from "./Rooms.page.vue";
@@ -24,19 +24,47 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomGrid } from "@feature-room";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import { InfoAlert } from "@ui-alert";
+import { Mock } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import AuthModule from "@/store/auth";
 
-jest.mock("vue-router");
-const useRouteMock = useRoute as jest.Mock;
-const useRouterMock = useRouter as jest.Mock;
+vi.mock("vue-router");
+const useRouteMock = useRoute as Mock;
+const useRouterMock = useRouter as Mock;
 
-jest.mock("@data-room/Rooms.state");
-const useRoomsStateMock = useRoomsState as jest.Mock;
+vi.mock("@data-room/Rooms.state");
+const useRoomsStateMock = useRoomsState as Mock;
+
+vi.mock("@data-room/roomAuthorization.composable");
+const roomAuthorization = vi.mocked(useRoomAuthorization);
 
 describe("RoomsPage", () => {
+	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
+
 	beforeEach(() => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
+			authModule: AuthModule,
 		});
+
+		roomPermissions = {
+			canAddRoomMembers: ref(true),
+			canCreateRoom: ref(false),
+			canChangeOwner: ref(false),
+			canCopyRoom: ref(false),
+			canViewRoom: ref(false),
+			canEditRoom: ref(false),
+			canDeleteRoom: ref(false),
+			canLeaveRoom: ref(false),
+			canRemoveRoomMembers: ref(false),
+			canEditRoomContent: ref(false),
+			canSeeAllStudents: ref(false),
+			canShareRoom: ref(false),
+			canListDrafts: ref(false),
+			canManageRoomInvitationLinks: ref(false),
+			canManageVideoconferences: ref(false),
+		};
+		roomAuthorization.mockReturnValue(roomPermissions);
 	});
 
 	const setup = (routeQuery: RouteLocation["query"] = {}) => {
@@ -57,13 +85,17 @@ describe("RoomsPage", () => {
 			rooms: ref([]),
 			isLoading: ref(false),
 			isEmpty: ref(false),
-			fetchRooms: jest.fn(),
-			deleteRoom: jest.fn(),
+			fetchRooms: vi.fn(),
+			deleteRoom: vi.fn(),
 		});
 
 		const wrapper = mount(RoomsPage, {
 			global: {
-				plugins: [createTestingI18n(), createTestingVuetify()],
+				plugins: [
+					createTestingI18n(),
+					createTestingVuetify(),
+					createTestingPinia(),
+				],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY]: envConfigModule,
 					[COPY_MODULE_KEY]: copyModule,
@@ -181,6 +213,7 @@ describe("RoomsPage", () => {
 			});
 
 			it("should have the correct props", async () => {
+				roomPermissions.canCreateRoom.value = true;
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
 

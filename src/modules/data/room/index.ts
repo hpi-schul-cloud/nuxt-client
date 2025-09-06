@@ -4,9 +4,10 @@ export { useRoomDetailsStore, RoomVariant } from "./RoomDetails.store";
 export { useCourseInfoApi } from "./courseInfoApi.composable";
 export { useCourseList } from "./courseList.composable";
 export { useRoomCreateState } from "./RoomCreate.state";
-export { useRoomEditState } from "./RoomEdit.state";
 export { useRoomAuthorization } from "./roomAuthorization.composable";
-export { useRoomCopy } from "./roomCopy.composable";
+export { useAdministrationRoomStore } from "./manageRoom/AdministrationRoom.store";
+export { useRoomMembersStore } from "./roomMembers/RoomMembers.store";
+export { useRoomInvitationLinkStore } from "./roomMembers/RoomInvitationLink.store";
 
 export type {
 	RoomMember,
@@ -14,10 +15,10 @@ export type {
 	UseLinkResult,
 	CreateRoomInvitationLinkDto,
 	UpdateRoomInvitationLinkDto,
+	RoomInvitationFormData,
 } from "./roomMembers/types";
+
 export {
 	RoomInvitationLinkValidationError,
 	InvitationStep,
 } from "./roomMembers/types";
-export { useRoomMembersStore } from "./roomMembers/RoomMembers.store";
-export { useRoomInvitationLinkStore } from "./roomMembers/RoomInvitationLink.store";

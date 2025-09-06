@@ -5,31 +5,29 @@ import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
 	meResponseFactory,
+	mockApiResponse,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useBoardNotifier } from "@util-board";
 import { AxiosInstance, AxiosPromise } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
-import {
-	InvitationStep,
-	RoomInvitationLink,
-	UpdateRoomInvitationLinkDto,
-} from "./types";
+import { InvitationStep, RoomInvitationLink } from "./types";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createAxiosError } from "@util-axios-error";
 import { RoomIdResponse } from "@/serverApi/v3/api";
+import { Mock } from "vitest";
 
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n");
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("useRoomInvitationLinkStore", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
@@ -47,11 +45,11 @@ describe("useRoomInvitationLinkStore", () => {
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
 
-		jest.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
-		jest
-			.spyOn(serverApi, "RoomInvitationLinkApiFactory")
-			.mockReturnValue(roomInvitationLinkApiMock);
-		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
+		vi.spyOn(serverApi, "RoomInvitationLinkApiFactory").mockReturnValue(
+			roomInvitationLinkApiMock
+		);
+		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
 		initializeAxios(axiosMock);
 
 		mockedBoardNotifierCalls =
@@ -87,7 +85,7 @@ describe("useRoomInvitationLinkStore", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchLinks", () => {
@@ -138,6 +136,10 @@ describe("useRoomInvitationLinkStore", () => {
 			const { roomDetailsStore, roomInvitationLinkStore } = setup();
 			const link = roomInvitationLinkFactory.build();
 
+			roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink.mockResolvedValue(
+				mockApiResponse({ data: link })
+			);
+
 			await roomInvitationLinkStore.createLink(link);
 
 			expect(
@@ -149,6 +151,33 @@ describe("useRoomInvitationLinkStore", () => {
 			expect(roomInvitationLinkStore.invitationStep).toStrictEqual(
 				InvitationStep.SHARE
 			);
+		});
+
+		describe("when 'activeUntil' value is DEFAULT_EXPIRED_DATE", () => {
+			it("should set 'activeUntil' for UI after creating link", async () => {
+				const links = roomInvitationLinkFactory.buildList(3);
+				const { roomDetailsStore, roomInvitationLinkStore } = setup(links);
+				const link = roomInvitationLinkStore.roomInvitationLinks[0];
+				link.activeUntil = roomInvitationLinkStore.DEFAULT_EXPIRED_DATE;
+
+				roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink.mockResolvedValue(
+					mockApiResponse({ data: { ...link } })
+				);
+
+				expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(3);
+				await roomInvitationLinkStore.createLink(link);
+
+				expect(
+					roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink
+				).toHaveBeenCalledWith({
+					...link,
+					roomId: roomDetailsStore.room?.id,
+				});
+
+				expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(4);
+				const createdLink = roomInvitationLinkStore.roomInvitationLinks.pop();
+				expect(createdLink?.activeUntil).toBe(undefined);
+			});
 		});
 
 		describe("when the API call fails", () => {
@@ -176,8 +205,12 @@ describe("useRoomInvitationLinkStore", () => {
 			const links = roomInvitationLinkFactory.buildList(3);
 			const { roomInvitationLinkStore } = setup(links);
 
-			const firstLink: UpdateRoomInvitationLinkDto = links[0];
+			const firstLink = links[0];
 			firstLink.title = "Updated Link";
+
+			roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink.mockResolvedValue(
+				mockApiResponse({ data: firstLink })
+			);
 
 			await roomInvitationLinkStore.updateLink(firstLink);
 
@@ -187,6 +220,37 @@ describe("useRoomInvitationLinkStore", () => {
 			expect(roomInvitationLinkStore.invitationStep).toStrictEqual(
 				InvitationStep.SHARE
 			);
+		});
+
+		describe("when 'activeUntil' value is DEFAULT_EXPIRED_DATE", () => {
+			it("should set 'activeUntil' for UI after updating link", async () => {
+				const links = roomInvitationLinkFactory.buildList(3);
+				const { roomInvitationLinkStore } = setup(links);
+				const firstLink = links[0];
+				firstLink.activeUntil = roomInvitationLinkStore.DEFAULT_EXPIRED_DATE;
+
+				roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink.mockResolvedValue(
+					mockApiResponse({ data: firstLink })
+				);
+
+				await roomInvitationLinkStore.updateLink(firstLink);
+
+				expect(
+					roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink
+				).toHaveBeenCalledWith(firstLink.id, firstLink);
+
+				const updatedLinks = roomInvitationLinkStore.roomInvitationLinks;
+				expect(updatedLinks).toHaveLength(3);
+				expect(updatedLinks[0].activeUntil).toBe(undefined);
+
+				const tableDataElement =
+					roomInvitationLinkStore.invitationTableData.find(
+						(l) => l.id === firstLink.id
+					);
+				expect(tableDataElement?.activeUntil).toBe(
+					"pages.rooms.members.tables.common.no"
+				);
+			});
 		});
 
 		describe("when the API call fails", () => {

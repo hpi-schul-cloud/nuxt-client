@@ -42,12 +42,32 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		);
 	});
 
+	const roomMembersForAdmins = computed(() => {
+		return roomMembersWithoutApplicants.value.map((member) => {
+			const isAnonymizedMember =
+				member.firstName === "---" && member.lastName === "---";
+			if (!isAnonymizedMember) return member;
+
+			const anonymizedName = t(
+				"pages.rooms.administration.roomDetail.anonymized"
+			);
+
+			return {
+				...member,
+				isSelectable: !isAnonymizedMember,
+				firstName: anonymizedName,
+				lastName: anonymizedName,
+				fullName: anonymizedName,
+			};
+		});
+	});
+
 	const isLoading = ref<boolean>(false);
-	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const ownSchool = {
 		id: schoolsModule.getSchool.id,
 		name: schoolsModule.getSchool.name,
 	};
+	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([ownSchool]);
 	const currentUserId = authModule.getUser?.id ?? "";
 	const selectedIds = ref<string[]>([]);
 	const confirmationSelectedIds = ref<string[]>([]);
@@ -60,8 +80,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	};
 
 	const schoolRoleMap: Record<string, string> = {
-		[RoleName.Teacher]: t("common.labels.teacher"),
-		[RoleName.Student]: t("pages.rooms.members.add.role.student"),
+		[RoleName.Teacher]: t("common.labels.teacher.neutral"),
+		[RoleName.Student]: t("common.labels.student.neutral"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -82,15 +102,16 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return roomId.value;
 	};
 
-	const fetchMembers = async () => {
+	const fetchMembers = async (roomId?: string) => {
 		try {
 			isLoading.value = true;
-			const { data } = (await roomApi.roomControllerGetMembers(getRoomId()))
-				.data;
+			const { data } = (
+				await roomApi.roomControllerGetMembers(roomId ?? getRoomId())
+			).data;
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
-					fullName: `${member.lastName}, ${member.firstName}`,
+					fullName: `${member.firstName} ${member.lastName}`,
 					isSelectable: !(
 						member.userId === currentUserId ||
 						member.roomRoleName === RoleName.Roomowner
@@ -120,6 +141,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		schoolRoleName: RoleName,
 		schoolId: string = ownSchool.id
 	) => {
+		if (schoolId === null) return;
+
 		try {
 			const endpointMap = {
 				[RoleName.Teacher]: () =>
@@ -140,6 +163,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 						fullName: `${user.lastName}, ${user.firstName}`,
 						schoolRoleNames: [schoolRoleName],
 						displaySchoolRole: schoolRoleMap[schoolRoleName],
+						schoolId,
 					};
 				})
 				.filter((user) => {
@@ -166,15 +190,41 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return member.fullName;
 	};
 
-	const getSchools = async () => {
-		try {
-			const response =
-				await schoolApi.schoolControllerGetSchoolListForExternalInvite();
+	const isCurrentUserStudent = computed(() => {
+		const member = roomMembers.value.find(
+			(member) => member.userId === currentUserId
+		);
 
-			schools.value = response.data.filter(
+		return member?.schoolRoleNames.includes(RoleName.Student);
+	});
+
+	const loadSchoolList = async () => {
+		if (isCurrentUserStudent.value) {
+			schools.value = [ownSchool];
+			return;
+		}
+		const areSchoolsLoaded = schools.value.length > 1;
+		if (!areSchoolsLoaded) {
+			await loadSchoolListPage();
+		}
+	};
+
+	const loadSchoolListPage = async (skip = 0, limit = 1000) => {
+		try {
+			const response = await schoolApi.schoolControllerGetSchoolList(
+				skip,
+				limit
+			);
+			if (response.data.data.length === 0) {
+				return;
+			}
+			const additionalSchools = response.data.data.filter(
 				(school) => school.id !== ownSchool.id
 			);
-			schools.value.unshift(ownSchool);
+			schools.value = [...schools.value, ...additionalSchools];
+			if (schools.value.length < response.data.total) {
+				await loadSchoolListPage(skip + limit, limit);
+			}
 		} catch (error) {
 			logger.error(error);
 		}
@@ -194,9 +244,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
 					...member,
+					fullName: `${member.firstName} ${member.lastName}`,
 					roomRoleName: roomRoleName as RoleName,
 					displayRoomRole: roomRole[roomRoleName],
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
+					schoolId: member.schoolId,
 				}))
 			);
 		} catch {
@@ -363,10 +415,32 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const resetStore = () => {
 		isLoading.value = false;
 		roomMembers.value = [];
-		schools.value = [];
+		schools.value = [ownSchool];
 		potentialRoomMembers.value = [];
 		selectedIds.value = [];
 	};
+
+	const baseTableHeaders = computed(() => {
+		return [
+			{
+				title: t("common.labels.firstName"),
+				key: "firstName",
+			},
+			{
+				title: t("common.labels.lastName"),
+				key: "lastName",
+			},
+			{
+				title: t("pages.rooms.members.tableHeader.roomRole"),
+				key: "displayRoomRole",
+			},
+			{
+				title: t("pages.rooms.members.tableHeader.schoolRole"),
+				key: "displaySchoolRole",
+			},
+			{ title: t("common.words.mainSchool"), key: "schoolName" },
+		];
+	});
 
 	return {
 		addMembers,
@@ -377,17 +451,20 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		resetPotentialMembers,
 		resetStore,
 		getPotentialMembers,
-		getSchools,
+		loadSchoolList,
 		getMemberById,
 		getMemberFullName,
 		leaveRoom,
 		rejectInvitations,
 		removeMembers,
 		updateMembersRole,
+		baseTableHeaders,
 		confirmationList,
 		confirmationSelectedIds,
+		isCurrentUserStudent,
 		isLoading,
 		roomMembers,
+		roomMembersForAdmins,
 		roomMembersWithoutApplicants,
 		roomApplicants,
 		potentialRoomMembers,

@@ -15,18 +15,24 @@
 	/>
 </template>
 
-<script setup>
-import { reactive, watch } from "vue";
+<script setup lang="ts">
+import { PropType, reactive, watch } from "vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { useI18n } from "vue-i18n";
+import { ShareOptions } from "@/store/share";
 
-const emit = defineEmits(["share-options-change"]);
+const emit = defineEmits<{
+	(e: "share-options-change", shareOptions: ShareOptions): void;
+}>();
+
 defineProps({
 	type: {
-		type: String,
+		type: String as PropType<ShareTokenBodyParamsParentTypeEnum>,
 		required: true,
 		validator: (type) =>
-			Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
+			Object.values(ShareTokenBodyParamsParentTypeEnum).includes(
+				type as ShareTokenBodyParamsParentTypeEnum
+			),
 	},
 });
 

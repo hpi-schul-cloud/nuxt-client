@@ -1,7 +1,10 @@
 <template>
 	<div
-		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
-		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
+		class="d-flex justify-space-between align-center ga-2 mb-2 pb-2 table-title-header sticky"
+		:class="{
+			'flex-column mt-4': isExtraSmallDisplay,
+			'pt-7': smAndUp,
+		}"
 		:style="stickyStyle"
 	>
 		<BatchActionMenu
@@ -39,7 +42,7 @@
 	<v-data-table
 		v-model:search="search"
 		v-model="selectedIds"
-		data-testid="data-table"
+		:data-testid="dataTestid"
 		hover
 		:item-value="selectItemKey"
 		mobile-breakpoint="sm"
@@ -126,16 +129,20 @@ const props = defineProps({
 		type: Array as PropType<string[] | undefined>,
 		default: undefined,
 	},
+	dataTestid: {
+		type: String,
+		default: "data-table",
+	},
 });
 
-defineEmits<{
+const emit = defineEmits<{
 	(e: "update:selected-ids", selectedIds: string[]): void;
 }>();
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
-
+const { xs: isExtraSmallDisplay, smAndUp } = useDisplay();
 const selectedIds = ref<string[]>([]);
+const search = ref("");
 
 watch(
 	() => props.items,
@@ -146,10 +153,9 @@ watch(
 	}
 );
 
-const search = ref("");
-
 const onResetSelectedMembers = () => {
 	selectedIds.value = [];
+	emit("update:selected-ids", selectedIds.value);
 };
 
 const stickyStyle = computed(() => ({
@@ -175,6 +181,11 @@ watch(
 	font-weight: bold;
 }
 
+:deep(.v-data-table__td-value) {
+	word-break: break-word;
+	overflow-wrap: break-word;
+}
+
 :deep(.v-data-table__td .v-selection-control--disabled) {
 	color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity));
 }
@@ -195,7 +206,7 @@ watch(
 	position: sticky;
 	z-index: 1;
 	background: rgb(var(--v-theme-white));
-	$space-left-right: calc(var(--space-base-vuetify) * 6);
+	$space-left-right: 24px;
 	right: $space-left-right;
 	left: $space-left-right;
 	width: 100%;

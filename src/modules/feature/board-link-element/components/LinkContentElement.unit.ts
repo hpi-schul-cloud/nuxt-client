@@ -16,7 +16,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { LinkContentElement } from "@feature-board-link-element";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { BoardMenu } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -33,13 +33,13 @@ import { usePreviewGenerator } from "../composables/PreviewGenerator.composable"
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 
-jest.mock("@data-board/ContentElementState.composable");
+vi.mock("@data-board/ContentElementState.composable");
 
-jest.mock("@data-board/BoardFocusHandler.composable");
-jest.mock("../composables/MetaTagExtractorApi.composable");
-jest.mock("../composables/PreviewGenerator.composable");
+vi.mock("@data-board/BoardFocusHandler.composable");
+vi.mock("../composables/MetaTagExtractorApi.composable");
+vi.mock("../composables/PreviewGenerator.composable");
 
-const mockedUseContentElementState = jest.mocked(useContentElementState);
+const mockedUseContentElementState = vi.mocked(useContentElementState);
 
 let defaultElement = linkElementResponseFactory.build();
 const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
@@ -63,7 +63,7 @@ describe("LinkContentElement", () => {
 
 	beforeAll(() => {
 		Object.defineProperty(URL, "canParse", {
-			value: jest.fn().mockReturnValue(true),
+			value: vi.fn().mockReturnValue(true),
 		});
 	});
 
@@ -75,17 +75,17 @@ describe("LinkContentElement", () => {
 		usePreviewGeneratorMock =
 			createMock<ReturnType<typeof usePreviewGenerator>>();
 
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
-		jest
-			.mocked(useMetaTagExtractorApi)
-			.mockReturnValue(useMetaTagExtractorApiMock);
-		jest.mocked(usePreviewGenerator).mockReturnValue(usePreviewGeneratorMock);
+		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useMetaTagExtractorApi).mockReturnValue(
+			useMetaTagExtractorApiMock
+		);
+		vi.mocked(usePreviewGenerator).mockReturnValue(usePreviewGeneratorMock);
 
 		defaultElement = linkElementResponseFactory.build();
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getWrapper = (props: {
@@ -388,7 +388,7 @@ describe("LinkContentElement", () => {
 					});
 
 					const domElementMock = createMock<HTMLElement>();
-					const querySelectorSpy = jest.spyOn(document, "querySelector");
+					const querySelectorSpy = vi.spyOn(document, "querySelector");
 					querySelectorSpy.mockReturnValue(domElementMock);
 
 					const { wrapper } = setupWrapper({

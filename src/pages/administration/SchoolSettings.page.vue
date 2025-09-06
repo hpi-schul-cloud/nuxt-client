@@ -15,14 +15,6 @@
 			</div>
 		</v-alert>
 		<div data-testid="no-error">
-			<v-alert type="info" class="mb-4">
-				<div class="alert-text">
-					{{ $t("pages.administration.school.index.back") }}
-					<a href="/administration/school/">
-						{{ $t("pages.administration.school.index.backLink") }}</a
-					>.
-				</div>
-			</v-alert>
 			<v-alert type="info" class="mb-12">
 				<div class="alert-text" data-testid="institute-title">
 					{{ $t("pages.administration.school.index.info", { instituteTitle }) }}
@@ -234,7 +226,7 @@ export default defineComponent({
 		const breadcrumbs: Ref<Breadcrumb[]> = ref([
 			{
 				title: t("pages.administration.index.title"),
-				href: "/administration/",
+				disabled: true,
 			},
 			{
 				title: t("pages.administration.school.index.title"),
@@ -282,10 +274,11 @@ export default defineComponent({
 			computed(
 				() => envConfigModule.getEnv.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED
 			);
+
 		const instituteTitle: ComputedRef<string> = computed(() => {
 			switch (envConfigModule.getEnv.SC_THEME) {
 				case SchulcloudTheme.N21:
-					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+					return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
 				case SchulcloudTheme.Thr:
 					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
 				case SchulcloudTheme.Brb:

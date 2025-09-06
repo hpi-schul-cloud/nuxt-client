@@ -13,8 +13,8 @@
 			<v-card-text class="text--primary">
 				<slot name="content" />
 			</v-card-text>
-			<v-card-actions v-if="hasButtons" class="action-buttons px-6">
-				<div class="button-section button-left">
+			<v-card-actions v-if="hasButtons" class="d-flex flex-row mb-2 px-6">
+				<div class="d-flex gap-2">
 					<v-btn
 						v-if="checkButtons('back')"
 						data-testid="dialog-back"
@@ -33,7 +33,7 @@
 					</v-btn>
 				</div>
 				<v-spacer />
-				<div class="button-section button-right">
+				<div class="d-flex gap-2">
 					<v-btn
 						v-if="checkButtons('cancel')"
 						data-testid="dialog-cancel"
@@ -152,17 +152,6 @@ const checkButtons = (buttonName: string) => {
 </script>
 
 <style lang="scss" scoped>
-.action-buttons {
-	display: flex;
-	flex-direction: row;
-	margin-bottom: calc(var(--space-base-vuetify) * 2);
-}
-
-.button-section {
-	display: flex;
-	gap: calc(var(--space-base-vuetify) * 2);
-}
-
 .dialog-title {
 	white-space: normal;
 	hyphens: none;

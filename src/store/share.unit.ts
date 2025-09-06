@@ -1,4 +1,4 @@
-import ShareModule, { SharePayload } from "./share";
+import ShareModule, { ShareOptions } from "./share";
 import * as serverApi from "../serverApi/v3/api";
 import {
 	ShareTokenApiInterface,
@@ -8,8 +8,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import courseRoomDetailsModule from "@/store/course-room-details";
 
-const sharePayload: SharePayload = {
-	id: "sampleCourseId",
+const shareOptions: ShareOptions = {
 	hasExpiryDate: true,
 	isSchoolInternal: true,
 };
@@ -29,7 +28,7 @@ describe("share module", () => {
 		describe("createShareUrl", () => {
 			describe("should make a 'POST' request to the backend", () => {
 				const shareTokenMockApi = {
-					shareTokenControllerCreateShareToken: jest.fn(async () => ({
+					shareTokenControllerCreateShareToken: vi.fn(async () => ({
 						data: {
 							token: "sampleToken",
 							payload: {
@@ -40,18 +39,16 @@ describe("share module", () => {
 						},
 					})),
 				};
-				jest
-					.spyOn(serverApi, "ShareTokenApiFactory")
-					.mockReturnValue(
-						shareTokenMockApi as unknown as ShareTokenApiInterface
-					);
+				vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
+					shareTokenMockApi as unknown as ShareTokenApiInterface
+				);
 
 				it("should call the backend with the correct payload", async () => {
 					const shareModule = new ShareModule({});
 					shareModule.setParentId("sampleCourseId");
 					shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
 
-					await shareModule.createShareUrl(sharePayload);
+					await shareModule.createShareUrl(shareOptions);
 
 					expect(
 						shareTokenMockApi.shareTokenControllerCreateShareToken
@@ -65,9 +62,9 @@ describe("share module", () => {
 					const shareModule = new ShareModule({});
 					shareModule.setParentId("sampleCourseId");
 					shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
-					const setShareUrlMock = jest.spyOn(shareModule, "setShareUrl");
+					const setShareUrlMock = vi.spyOn(shareModule, "setShareUrl");
 
-					await shareModule.createShareUrl(sharePayload);
+					await shareModule.createShareUrl(shareOptions);
 					const result = setShareUrlMock.mock.calls[0][0];
 
 					expect(result).toContain("rooms/courses-overview?import=sampleToken");
@@ -77,37 +74,33 @@ describe("share module", () => {
 					const shareModule = new ShareModule({});
 					const error = { statusCode: 418, message: "server error" };
 					const shareTokenErrorMockApi = {
-						shareTokenControllerCreateShareToken: jest.fn(() =>
+						shareTokenControllerCreateShareToken: vi.fn(() =>
 							Promise.reject({ ...error })
 						),
 					};
-					jest
-						.spyOn(serverApi, "ShareTokenApiFactory")
-						.mockReturnValue(
-							shareTokenErrorMockApi as unknown as ShareTokenApiInterface
-						);
+					vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
+						shareTokenErrorMockApi as unknown as ShareTokenApiInterface
+					);
 
 					shareModule.setParentId("sampleCourseId");
 
-					const errorResult = await shareModule.createShareUrl(sharePayload);
+					const errorResult = await shareModule.createShareUrl(shareOptions);
 					expect(errorResult).toStrictEqual(undefined);
 				});
 
 				it("should return undefined if shareTokenResult is undefined", async () => {
 					const shareModule = new ShareModule({});
 					const shareTokenErrorMockApi = {
-						shareTokenControllerCreateShareToken: jest.fn(() =>
+						shareTokenControllerCreateShareToken: vi.fn(() =>
 							Promise.resolve(undefined)
 						),
 					};
-					jest
-						.spyOn(serverApi, "ShareTokenApiFactory")
-						.mockReturnValue(
-							shareTokenErrorMockApi as unknown as ShareTokenApiInterface
-						);
+					vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
+						shareTokenErrorMockApi as unknown as ShareTokenApiInterface
+					);
 
 					shareModule.setParentId("sampleCourseId");
-					const errorResult = await shareModule.createShareUrl(sharePayload);
+					const errorResult = await shareModule.createShareUrl(shareOptions);
 
 					expect(errorResult).toStrictEqual(undefined);
 				});
@@ -117,13 +110,13 @@ describe("share module", () => {
 		describe("startShareFlow", () => {
 			it("should call setParentId, setParentType, setDestinationType and setShareModalOpen mutations", async () => {
 				const shareModule = new ShareModule({});
-				const setParentIdMock = jest.spyOn(shareModule, "setParentId");
-				const setParentTypeMock = jest.spyOn(shareModule, "setParentType");
-				const setDestinationTypeMock = jest.spyOn(
+				const setParentIdMock = vi.spyOn(shareModule, "setParentId");
+				const setParentTypeMock = vi.spyOn(shareModule, "setParentType");
+				const setDestinationTypeMock = vi.spyOn(
 					shareModule,
 					"setDestinationType"
 				);
-				const setShareModalOpenMock = jest.spyOn(
+				const setShareModalOpenMock = vi.spyOn(
 					shareModule,
 					"setShareModalOpen"
 				);
@@ -146,9 +139,9 @@ describe("share module", () => {
 		describe("resetShareFlow", () => {
 			it("should call setCourseId, setShareModalOpen and setShareUrl mutations", async () => {
 				const shareModule = new ShareModule({});
-				const setIdMock = jest.spyOn(shareModule, "setParentId");
-				const setShareUrlMock = jest.spyOn(shareModule, "setShareUrl");
-				const setShareModalOpenMock = jest.spyOn(
+				const setIdMock = vi.spyOn(shareModule, "setParentId");
+				const setShareUrlMock = vi.spyOn(shareModule, "setShareUrl");
+				const setShareModalOpenMock = vi.spyOn(
 					shareModule,
 					"setShareModalOpen"
 				);

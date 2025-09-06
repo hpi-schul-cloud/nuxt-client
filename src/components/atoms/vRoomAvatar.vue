@@ -13,9 +13,9 @@
 		<v-badge
 			class="ma-0 badge-component rounded avatar-badge"
 			bordered
-			color="rgba(var(--v-theme-primary))"
 			:model-value="!!badgeIcon"
 			:icon="badgeIcon"
+			:data-testid="badgeType"
 		>
 			<VBtn
 				:size="size"
@@ -33,6 +33,7 @@
 					:aria-label="avatarAriaLabel"
 					:size="size"
 					data-testid="course-icon"
+					:show-badge="showBadge"
 				>
 					<span :class="avatarTextClass" data-testid="course-short-title">
 						{{ item.shortTitle }}
@@ -69,11 +70,12 @@ const props = defineProps({
 	draggable: {
 		type: Boolean,
 	},
-	showBadge: {
-		type: Boolean,
-	},
 	condenseLayout: {
 		type: Boolean,
+	},
+	showBadge: {
+		type: Boolean,
+		default: true,
 	},
 });
 
@@ -82,8 +84,24 @@ const emit = defineEmits(["startDrag", "dragendAvatar", "dropAvatar"]);
 const { t } = useI18n();
 const router = useRouter();
 
+const badgeType = computed(() => {
+	if (props.item.isLocked) {
+		return "course-badge-lock";
+	}
+
+	if (props.item.isSynchronized) {
+		return "course-badge-sync";
+	}
+
+	return "course-badge";
+});
+
 const badgeIcon = computed(() => {
-	if (props.showBadge && props.item.notification === true) {
+	if (!props.showBadge) {
+		return undefined;
+	}
+
+	if (props.item.isLocked) {
 		return mdiLock;
 	}
 
@@ -215,14 +233,14 @@ const dropAvatar = () => {
 }
 
 .subtitle {
-	margin-right: calc(var(--space-base-vuetify) * -5);
-	margin-left: calc(var(--space-base-vuetify) * -5);
+	margin-right: -20px;
+	margin-left: -20px;
 	text-align: center;
 	overflow-wrap: break-word;
 	white-space: pre-wrap;
 
 	@include excerpt(
-		$font-size: calc(var(--space-base-vuetify) * 4),
+		$font-size: 16px,
 		$line-height: var(--line-height-lg),
 		$lines-to-show: 4
 	);

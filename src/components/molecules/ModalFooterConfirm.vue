@@ -6,22 +6,16 @@
 	</div>
 </template>
 
-<script>
-export default {
-	inheritAttrs: false,
-	props: {
-		isError: {
-			type: Boolean,
-		},
-		text: {
-			type: String,
-			default: "Ok",
-		},
-	},
-	data() {
-		return {};
-	},
+<script setup lang="ts">
+type Props = {
+	isError?: boolean;
+	text?: string;
 };
+
+withDefaults(defineProps<Props>(), {
+	isError: false,
+	text: "Ok",
+});
 </script>
 
 <style lang="scss" scoped>
@@ -34,7 +28,7 @@ export default {
 	width: 100%;
 
 	> *:not(:first-child) {
-		margin-left: var(--space-md);
+		margin-left: 16px;
 	}
 
 	@media only screen and (max-width: 520px) {
@@ -54,7 +48,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	padding: var(--space-lg) var(--space-xl);
+	padding: 24px 32px;
 	font-family: var(--font-accent);
 	font-size: var(--text-md);
 	font-weight: var(--button-font-weight);
@@ -62,9 +56,8 @@ export default {
 	cursor: pointer;
 	background: rgba(var(--v-theme-success));
 	border: none;
-	border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-	transition: all var(--duration-transition-medium)
-		cubic-bezier(0.23, 1, 0.32, 1);
+	border-radius: 0 0 4px 4px;
+	transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 
 	&:hover,
 	&:focus {

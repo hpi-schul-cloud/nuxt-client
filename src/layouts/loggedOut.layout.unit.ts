@@ -1,9 +1,14 @@
+import type { Mock } from "vitest";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
-import { APPLICATION_ERROR_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import {
+	APPLICATION_ERROR_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	THEME_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { envsFactory } from "@@/tests/test-utils";
 import {
@@ -15,8 +20,8 @@ import { mount } from "@vue/test-utils";
 import { useRouter } from "vue-router";
 import loggedOut from "./loggedOut.layout.vue";
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
 describe("loggedOutLayout", () => {
 	const mountComponent = () => {
@@ -38,24 +43,22 @@ describe("loggedOutLayout", () => {
 
 		const $route = { path: "home" };
 		const $router = {
-			push: jest.fn(),
+			push: vi.fn(),
 			currentRoute: { value: $route },
-			replace: jest.fn(),
-			afterEach: jest.fn(),
+			replace: vi.fn(),
+			afterEach: vi.fn(),
 		};
 		useRouterMock.mockReturnValue($router);
 
 		const wrapper = mount(loggedOut, {
 			global: {
-				mocks: {
-					$theme: {
-						name: "instance name",
-					},
-				},
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModuleMock,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[THEME_KEY.valueOf()]: {
+						name: "instance name",
+					},
 				},
 				stubs: ["base-link"],
 			},

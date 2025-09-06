@@ -1,4 +1,4 @@
-import { createMock } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-vitest";
 import { AxiosHeaders, AxiosResponse, AxiosResponseHeaders } from "axios";
 
 export const mockApiResponse = <T>(

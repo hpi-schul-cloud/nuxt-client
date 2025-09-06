@@ -21,7 +21,7 @@ const mockItem: CopyResultItem = {
 	url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
 };
 
-const createWrapper = (props: object) => {
+const createWrapper = (props: { item: CopyResultItem }) => {
 	return mount(CopyResultModalListItem, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
