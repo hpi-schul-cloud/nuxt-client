@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe max-width="full">
+	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs">
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-center">
@@ -39,6 +39,7 @@ import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRouter } from "vue-router";
 import { envConfigModule } from "@/store";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -66,6 +67,17 @@ const pageTitle = computed(() =>
 	buildPageTitle(t("pages.rooms.administration.pageTitle"))
 );
 useTitle(pageTitle);
+
+const breadcrumbs = computed((): Breadcrumb[] => [
+	{
+		title: t("pages.administration.index.title"),
+		disabled: true,
+	},
+	{
+		title: t("pages.rooms.administration.title"),
+		disabled: true,
+	},
+]);
 
 const manageRoom = (roomId: string) => {
 	router.push({
