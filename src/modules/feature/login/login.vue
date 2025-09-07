@@ -93,7 +93,7 @@
 					data-testid="submit-login-email"
 					:autofocus="true"
 					aria-label="login"
-					@click="submitLogin"
+					@click="submitLocalLogin"
 				>
 					{{ submitButtonLabel }}
 				</v-btn>
@@ -246,10 +246,14 @@
 					class="btn-more-options mb-4"
 					color="tertiary"
 					block
+					prepend-icon="mdiChevronUp"
 					data-testid="btn-more-options"
 					aria-label="more-options"
 					@click="openMoreOptions"
 				>
+					<v-icon>
+						{{ mdiChevronUp }}
+					</v-icon>
 					{{ moreLessOptionsButtonLabel }}
 				</v-btn>
 				<v-btn
@@ -258,10 +262,14 @@
 					class="btn-less-options mb-4"
 					color="tertiary"
 					block
+					prepend-icon="mdiChevronDown"
 					data-testid="btn-less-options"
 					aria-label="less-options"
 					@click="closeMoreOptions"
 				>
+					<v-icon>
+						{{ mdiChevronDown }}
+					</v-icon>
 					{{ moreLessOptionsButtonLabel }}
 				</v-btn>
 				<div v-show="showMoreOptions" class="mb-4">
@@ -384,8 +392,12 @@ import {
 	SystemForLdapLoginResponse,
 } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-//import { System } from "@/store/types/system";
-import { mdiEyeOffOutline, mdiEyeOutline } from "@icons/material";
+import {
+	mdiChevronDown,
+	mdiChevronUp,
+	mdiEyeOffOutline,
+	mdiEyeOutline,
+} from "@icons/material";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n"; //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
 //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
@@ -396,6 +408,7 @@ type AlertType = "info" | "success" | "warning" | "error";
 const { t } = useI18n();
 const {
 	loginEmail,
+	loginLdap,
 	isLoading,
 	setCookie,
 	loginResult,
@@ -587,6 +600,14 @@ function enableDisableLdapBtn(schoolId: string) {
 
 // ----- Login Submissions -----
 async function submitLogin() {
+	if (selectedSchool.value) {
+		await submitLdapLogin();
+	} else {
+		await submitLocalLogin();
+	}
+}
+
+async function submitLocalLogin() {
 	await loginEmail(email.value, password.value);
 	if (loginResult.value) {
 		setCookie("jwt", loginResult.value?.accessToken);
@@ -610,7 +631,7 @@ async function submitLogin() {
 	//}, 1500);
 }
 
-function submitLdapLogin() {
+async function submitLdapLogin() {
 	isSubmitting.value = true;
 	ldapLoginActive.value = false;
 	// Store school/system prefs
@@ -620,25 +641,52 @@ function submitLdapLogin() {
 		localStorage.removeItem("loginSchool");
 	}
 	if (selectedSystem.value) {
-		//localStorage.setItem("loginSystem", selectedSystem.value);
+		localStorage.setItem("loginSystem", selectedSystem.value.id);
 	} else {
 		localStorage.removeItem("loginSystem");
 	}
-	// TODO: Replace with LDAP login API logic else
-	ldapUsername.value = "";
-	ldapPassword.value = "";
-	setTimeout(() => {
-		isSubmitting.value = false;
-		ldapLoginActive.value = true;
-		//ldapButtonLabel.value = "Login Fehlgeschlagen";
-	}, 1500);
-	alert.value = {
-		type: "warning",
-		color: "error",
-		dismissible: true,
-		message: t("Login fehlgeschlagen"),
-	};
-	showAlert.value = true;
+
+	if (!selectedSchool.value) {
+		alert.value = {
+			type: "warning",
+			color: "error",
+			dismissible: true,
+			message: t("Login fehlgeschlagen"),
+		};
+		showAlert.value = true;
+		return;
+	}
+
+	await loginLdap(
+		email.value,
+		password.value,
+		selectedSchool.value.id,
+		selectedSystem.value?.id
+			? selectedSystem.value.id
+			: selectedSchool.value?.systems[0].id
+	);
+	if (loginResult.value) {
+		setCookie("jwt", loginResult.value?.accessToken);
+		setCookie("isLoggedIn", "true");
+		await router.push({ path: "/rooms" });
+	} else {
+		ldapUsername.value = "";
+		ldapPassword.value = "";
+		selectedSchool.value = null;
+		selectedSystem.value = null;
+		alert.value = {
+			type: "warning",
+			color: "error",
+			dismissible: true,
+			message: t("Login fehlgeschlagen"),
+		};
+		showAlert.value = true;
+		//setTimeout(() => {
+		//	isSubmitting.value = false;
+		//	ldapLoginActive.value = true;
+		//	ldapButtonLabel.value = "Login Fehlgeschlagen";
+		//}, 1500);
+	}
 }
 
 function incTimer() {
