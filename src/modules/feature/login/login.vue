@@ -506,7 +506,7 @@ onMounted(() => {
 
 	checkCookie();
 	fetchLdapSchools();
-	//getMockSchoolsforlogin();
+	getMockSchoolsforlogin();
 	// Restore previous login system/school preferences if available
 	const storedSchool = localStorage.getItem("loginSchool");
 	if (storedSchool) {
