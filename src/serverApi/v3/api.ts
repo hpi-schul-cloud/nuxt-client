@@ -294,6 +294,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     BoardEdit = 'BOARD_EDIT',
     BoardShareBoard = 'BOARD_SHARE_BOARD',
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
+    BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -787,6 +788,12 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     isVisible: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponse
+     */
+    readersCanEdit: boolean;
     /**
      * 
      * @type {BoardLayout}
@@ -1797,19 +1804,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_ROOMS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ROOM_INVITATION_LINKS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ROOM_ADD_STUDENTS_ENABLED: boolean;
+    FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: boolean;
     /**
      * 
      * @type {boolean}
@@ -1822,12 +1817,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_ROOM_SHARE: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ROOM_MEMBERS_TABS_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -7749,6 +7738,7 @@ export enum Permission {
     BoardEdit = 'BOARD_EDIT',
     BoardShareBoard = 'BOARD_SHARE_BOARD',
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
+    BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -8055,6 +8045,19 @@ export interface PublicSystemResponse {
      * @memberof PublicSystemResponse
      */
     oauthConfig?: OauthConfigResponse | null;
+}
+/**
+ * 
+ * @export
+ * @interface ReadersCanEditBodyParams
+ */
+export interface ReadersCanEditBodyParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ReadersCanEditBodyParams
+     */
+    readersCanEdit: boolean;
 }
 /**
  * 
@@ -13848,6 +13851,50 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * 
          * @summary Update the visibility of a board.
          * @param {string} boardId The id of the board.
+         * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerUpdateReadersCanEdit: async (boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('boardControllerUpdateReadersCanEdit', 'boardId', boardId)
+            // verify required parameter 'readersCanEditBodyParams' is not null or undefined
+            assertParamExists('boardControllerUpdateReadersCanEdit', 'readersCanEditBodyParams', readersCanEditBodyParams)
+            const localVarPath = `/boards/{boardId}/readers-can-edit`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(readersCanEditBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
          * @param {VisibilityBodyParams} visibilityBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13992,6 +14039,18 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * 
          * @summary Update the visibility of a board.
          * @param {string} boardId The id of the board.
+         * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateReadersCanEdit(boardId, readersCanEditBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
          * @param {VisibilityBodyParams} visibilityBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14096,6 +14155,17 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * 
          * @summary Update the visibility of a board.
          * @param {string} boardId The id of the board.
+         * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.boardControllerUpdateReadersCanEdit(boardId, readersCanEditBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
          * @param {VisibilityBodyParams} visibilityBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14193,6 +14263,17 @@ export interface BoardApiInterface {
      * @memberof BoardApiInterface
      */
     boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Update the visibility of a board.
+     * @param {string} boardId The id of the board.
+     * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -14310,6 +14391,19 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      */
     public boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any) {
         return BoardApiFp(this.configuration).boardControllerUpdateLayout(boardId, layoutBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update the visibility of a board.
+     * @param {string} boardId The id of the board.
+     * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerUpdateReadersCanEdit(boardId, readersCanEditBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
