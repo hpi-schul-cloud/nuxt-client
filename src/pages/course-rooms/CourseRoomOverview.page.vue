@@ -218,6 +218,7 @@ export default defineComponent({
 				return {
 					id: item.id,
 					name: item.title,
+					isLocked: item.isLocked,
 				};
 			});
 		},
