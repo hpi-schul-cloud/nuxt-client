@@ -675,23 +675,23 @@ export default {
 		"se sigue copiando",
 	"components.molecules.copyResult.courseCopy.info": "Creando curso",
 	"components.molecules.copyResult.courseFiles.info":
-		"Los archivos del curso que no forman parte de tareas o temas no se copian.",
-	"components.molecules.copyResult.courseGroupCopy.info":
-		"Por razones técnicas, los grupos y su contenido no se copian y deben agregarse nuevamente.",
+		"Archivos en Archivos del curso",
+	"components.molecules.copyResult.courseGroupCopy.info": "Grupos de cursos",
 	"components.molecules.copyResult.ctlTools.info":
 		"Las herramientas externas asociadas al curso y las tarjetas de embarque no se copian.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
 		"Las herramientas externas y las partes protegidas de las configuraciones de herramientas que no están disponibles en la escuela de destino no se copian.",
 	"components.molecules.copyResult.etherpadCopy.info":
-		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
+		"Contenidos de Etherpads",
 	"components.molecules.copyResult.failedCopy":
 		"No se pudo completar la duplicación.",
-	"components.molecules.copyResult.geogebraCopy.info":
-		"Los ID de material no se copian por razones técnicas y deben agregarse nuevamente.",
+	"components.molecules.copyResult.geogebraCopy.info": "Geogebra IDs",
+	"components.molecules.copyResult.membersAndPermissions":
+		"Miembros del curso y permisos",
 	"components.molecules.copyResult.label.externalTools":
 		"Herramientas externas",
 	"components.molecules.copyResult.tldrawCopy.info":
-		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
+		"Contenidos de pizarras blancas",
 	"components.molecules.copyResult.course.successfullyCopied":
 		"Todos los elementos fueron duplicados exitosamente.",
 	"components.molecules.copyResult.board.successfullyCopied":
@@ -710,6 +710,8 @@ export default {
 	"components.molecules.copyResult.title.partial":
 		"Información importante sobre la duplicación",
 	"components.molecules.copyResult.title.success": "Duplicación exitosa",
+	"components.molecules.copyResult.followingNotCopied":
+		"No se ha copiado lo siguiente:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
@@ -819,7 +821,7 @@ export default {
 	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
 		"Miembros y permisos de la sala",
 	"components.molecules.share.options.tableHeader.InfoText":
-		"No se copiará el siguiente contenido:",
+		"No se copiará lo siguiente:",
 	"components.molecules.share.courses.result.linkLabel":
 		"Enlace a la copia del curso",
 	"components.molecules.share.lessons.mail.body": "Enlace al tema:",
@@ -834,7 +836,7 @@ export default {
 		"El enlace sólo es válido dentro de la escuela",
 	"components.molecules.share.options.title": "Compartir la configuración",
 	"components.molecules.share.room.options.infoText":
-		"Con el siguiente enlace, esta sala puede ser copiada por otras personas. Si se debe compartir una sala en uso activo, por favor, primero cree un duplicado y compártalo.",
+		"Con el siguiente enlace, otras personas pueden importar la sala como copia.",
 	"components.molecules.share.room.result.linkLabel":
 		"Enlace a la copia del salón",
 	"components.molecules.share.room.mail.subject": "Sala para importar",
@@ -850,6 +852,8 @@ export default {
 		"Enlace a la copia de la tarea",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel":
 		"Enlace de invitación a la sala",
+	"components.molecules.share.checkPrivacyAndCopyright":
+		"Por favor, comprueba los contenidos en cuanto a derechos de autor y protección de datos.",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'¿Estás seguro de que deseas eliminar la tarea "{taskTitle}"?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Eliminar tarea",
@@ -1045,7 +1049,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"En el siguiente paso, se creará una copia de la sala.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"No se adoptan los siguientes contenidos:",
+		"No se copiará lo siguiente:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Miembros y permisos de la sala",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad":

@@ -657,22 +657,22 @@ export default {
 		"is still being copied",
 	"components.molecules.copyResult.courseCopy.info": "Creating course",
 	"components.molecules.copyResult.courseFiles.info":
-		"Course files that are not part of assignments or topics are not copied.",
-	"components.molecules.copyResult.courseGroupCopy.info":
-		"For technical reasons, groups and their content are not copied and must be added again.",
+		"Files under Course Files",
+	"components.molecules.copyResult.courseGroupCopy.info": "Course groups",
 	"components.molecules.copyResult.ctlTools.info":
 		"External tools associated with the course and boarding cards are not copied.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
 		"External tools and protected parts of the tool configurations that are not available in the target school are not copied.",
 	"components.molecules.copyResult.etherpadCopy.info":
-		"Content is not copied for data protection reasons and must be added again.",
+		"Content from Etherpads.",
 	"components.molecules.copyResult.failedCopy":
 		"The duplication could not be completed.",
-	"components.molecules.copyResult.geogebraCopy.info":
-		"Material IDs are not copied for technical reasons and must be added again.",
+	"components.molecules.copyResult.geogebraCopy.info": "Geogebra IDs",
+	"components.molecules.copyResult.membersAndPermissions":
+		"Course members and permissions",
 	"components.molecules.copyResult.label.externalTools": "External tools",
 	"components.molecules.copyResult.tldrawCopy.info":
-		"Content is not copied for data protection reasons and must be added again.",
+		"Content from whiteboards ",
 	"components.molecules.copyResult.course.successfullyCopied":
 		"All elements were successfully duplicated.",
 	"components.molecules.copyResult.board.successfullyCopied":
@@ -691,6 +691,8 @@ export default {
 	"components.molecules.copyResult.title.partial":
 		"Important duplication information",
 	"components.molecules.copyResult.title.success": "Duplication successful",
+	"components.molecules.copyResult.followingNotCopied":
+		"The following was not copied:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.import.columnBoard.label": "Board title",
@@ -789,7 +791,7 @@ export default {
 	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
 		"Room members and permissions",
 	"components.molecules.share.options.tableHeader.InfoText":
-		"The following content will not be duplicated:",
+		"The following will not be copied:",
 	"components.molecules.share.courses.result.linkLabel": "Link course copy",
 	"components.molecules.share.lessons.mail.body": "Link to the topic:",
 	"components.molecules.share.lessons.mail.subject": "Topic you can import",
@@ -808,7 +810,7 @@ export default {
 		"Link only valid within the school",
 	"components.molecules.share.options.title": "Share settings",
 	"components.molecules.share.room.options.infoText":
-		"With the following link, this room can be copied by other people. If an actively used room should be shared, please first create a duplicate and share that.",
+		"The room can be imported as a copy by other people using the following link.",
 	"components.molecules.share.room.result.linkLabel": "Link room copy",
 	"components.molecules.share.room.mail.subject": "Room you can import",
 	"components.molecules.share.room.mail.body": "Link to the room: ",
@@ -822,6 +824,8 @@ export default {
 	"components.molecules.share.tasks.result.linkLabel": "Link task copy",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel":
 		"Room invitation link",
+	"components.molecules.share.checkPrivacyAndCopyright":
+		"Please check the content for copyright and data protection.",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Are you sure, you want to delete task "{taskTitle}"?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Delete Task",
@@ -1009,7 +1013,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"In the next step, a copy of the room will be created.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"The following contents are not included:",
+		"The following will not be copied:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Room members and permissions",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Contents in Etherpads",

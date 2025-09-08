@@ -663,12 +663,12 @@ export default {
 		"wird noch kopiert",
 	"components.molecules.copyResult.courseCopy.info": "Kurs wird erstellt",
 	"components.molecules.copyResult.courseFiles.info":
-		"Dateien unter Kurs-Dateien",
+		"Dateien unter Kursdateien",
 	"components.molecules.copyResult.courseGroupCopy.info": "Kursgruppen",
 	"components.molecules.copyResult.ctlTools.info":
 		"Externe Tools, die dem Kurs oder Karten im Bereich zugeordnet sind, werden nicht kopiert.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
-		"In Zielschule nicht verfügbare externe tools und geschützte Teile der Tool-Konfigurationen werden nicht kopiert.",
+		"In Zielschule nicht verfügbare externe Tools und geschützte Teile der Tool-Konfigurationen werden nicht kopiert.",
 	"components.molecules.copyResult.etherpadCopy.info": "Inhalte aus Etherpads",
 	"components.molecules.copyResult.failedCopy":
 		"Das Duplizieren konnte nicht abgeschlossen werden.",

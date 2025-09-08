@@ -671,22 +671,21 @@ export default {
 		"bсе ще копіюється",
 	"components.molecules.copyResult.courseCopy.info": "Створення курс",
 	"components.molecules.copyResult.courseFiles.info":
-		"Файли курсу, які не є частиною завдань або тем, не копіюються.",
-	"components.molecules.copyResult.courseGroupCopy.info":
-		"З технічних причин групи та їхній вміст не копіюються і повинні бути додані знову.",
+		"Файли в розділі «Файли курсу»",
+	"components.molecules.copyResult.courseGroupCopy.info": "Групи курсів",
 	"components.molecules.copyResult.ctlTools.info":
 		"Зовнішні інструменти, пов’язані з курсом, і посадкові картки не копіюються.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
 		"Зовнішні інструменти та захищені частини конфігурацій інструментів, які недоступні в цільовій школі, не копіюються.",
-	"components.molecules.copyResult.etherpadCopy.info":
-		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
+	"components.molecules.copyResult.etherpadCopy.info": "Вміст з Etherpads",
 	"components.molecules.copyResult.failedCopy":
 		"Дублювання не вдалося завершити.",
 	"components.molecules.copyResult.geogebraCopy.info":
-		"Ідентифікатори матеріалів не копіюються з технічних причин і повинні бути додані знову.",
+		"Ідентифікатори Geogebra",
+	"components.molecules.copyResult.membersAndPermissions":
+		"Учасники курсу та повноваження",
 	"components.molecules.copyResult.label.externalTools": "Зовнішні інструменти",
-	"components.molecules.copyResult.tldrawCopy.info":
-		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
+	"components.molecules.copyResult.tldrawCopy.info": "Вміст з дошок",
 	"components.molecules.copyResult.course.successfullyCopied":
 		"Всі елементи були успішно продубльовані.",
 	"components.molecules.copyResult.board.successfullyCopied":
@@ -704,6 +703,8 @@ export default {
 	"components.molecules.copyResult.title.partial":
 		"Важлива інформація про дублювання",
 	"components.molecules.copyResult.title.success": "Дублювання успішне",
+	"components.molecules.copyResult.followingNotCopied":
+		"Наступне не було скопійовано:",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
@@ -814,7 +815,7 @@ export default {
 	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
 		"Учасники кімнати та їхні дозволи",
 	"components.molecules.share.options.tableHeader.InfoText":
-		"Наступний контент не буде дублюватися:",
+		"Наступне не копіюється:",
 	"components.molecules.share.courses.result.linkLabel":
 		"Посилання на копію курсу",
 	"components.molecules.share.lessons.mail.body": "Посилання на курс:",
@@ -829,7 +830,7 @@ export default {
 		"Посилання дійсне тільки в межах школи",
 	"components.molecules.share.options.title": "Налаштування спільного доступу",
 	"components.molecules.share.room.options.infoText":
-		"За цим посиланням цю кімнату можуть скопіювати інші користувачі. Якщо потрібно поділитися кімнатою, яка активно використовується, спочатку створіть дублікат і поділіться ним.",
+		"За допомогою наступного посилання кімната може бути імпортована як копія іншими особами.",
 	"components.molecules.share.room.result.linkLabel": "Копія теми посилання",
 	"components.molecules.share.room.mail.subject": "Кімната для імпорту",
 	"components.molecules.share.room.mail.body": "Посилання на кімнату: ",
@@ -845,6 +846,8 @@ export default {
 		"Зв'язати копію завдання",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel":
 		"Посилання на запрошення до кімнати",
+	"components.molecules.share.checkPrivacyAndCopyright":
+		"Будь ласка, перевірте вміст на предмет авторських прав та захисту даних.",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Ви впевнені, що хочете видалити завдання " {taskTitle} "?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Видалити завдання",
@@ -1031,7 +1034,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"На наступному кроці буде створено копію кімнати.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"Наступний вміст не включено:",
+		"Наступне не копіюється:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Учасники кімнати та їхні дозволи",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Вміст із Etherpads",
