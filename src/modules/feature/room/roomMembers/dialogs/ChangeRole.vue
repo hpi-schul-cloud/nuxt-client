@@ -187,21 +187,6 @@ const { updateMembersRole, changeRoomOwner } = roomMembersStore;
 const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members");
 
-const isChangeOwnershipOptionVisible = computed(() => {
-	if (props.isAdminMode) {
-		return (
-			memberToChangeRole.value.length === 1 && isMemberStudent.value === false
-		);
-	}
-
-	const currentUserId = authModule.getUser?.id;
-	return (
-		currentUserId &&
-		roomMembersStore.isRoomOwner(currentUserId) &&
-		memberToChangeRole.value.length === 1 &&
-		isMemberStudent.value === false
-	);
-});
 const isOwnershipHandoverMode = ref(false);
 const dialogTitle = computed(() =>
 	isOwnershipHandoverMode.value
