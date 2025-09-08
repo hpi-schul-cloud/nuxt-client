@@ -15,7 +15,7 @@
 				data-testid="img-permission"
 			/>
 			<div>
-				<h2 class="ml-4 text-center error-msg pl-4 pr-4">
+				<h2 class="ml-4 text-center px-4">
 					{{ t("pages.room.locked") }}
 				</h2>
 			</div>
