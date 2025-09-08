@@ -180,14 +180,14 @@
 					class="btn-login-ldap"
 					color="primary"
 					block
-					:disabled="isSubmitting || !selectedSchool"
+					:disabled="isLoading || !selectedSchool"
 					aria-label="login"
 					:autofocus="true"
 					data-testid="submit-login-ldap"
-					:data-active="ldapLoginActive"
 					:data-timeout="ldapTimeout"
 					@click="submitLdapLogin"
 				>
+					<!--:data-active="ldapLoginActive"-->
 					{{ ldapButtonLabel }}
 				</v-btn>
 				<v-card-actions>
@@ -307,7 +307,7 @@
 					class="btn-login"
 					color="primary"
 					block
-					:disabled="isSubmitting"
+					:disabled="isLoading"
 					:data-timeout="loginTimeout"
 					data-testid="submit-login-email"
 					:autofocus="true"
@@ -392,12 +392,7 @@ import {
 	SystemForLdapLoginResponse,
 } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import {
-	mdiChevronDown,
-	mdiChevronUp,
-	mdiEyeOffOutline,
-	mdiEyeOutline,
-} from "@icons/material";
+import { mdiEyeOffOutline, mdiEyeOutline, mdiChevronDown, mdiChevronUp } from "@icons/material";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n"; //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
 //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
@@ -435,7 +430,6 @@ const featureJwtExtendedTimeoutEnabled = true;
 const showEmailLoginSection = ref(false);
 const showLdapLoginSection = ref(false);
 const showMoreOptions = ref(false);
-const isSubmitting = ref(false);
 const showPwRecovery = ref(true);
 const pwRecoveryModal = ref(false);
 const pwRecoveryEmail = ref("");
@@ -461,7 +455,7 @@ const ldapButtonLabel = ref(t("components.login.button.ldap"));
 const moreLessOptionsButtonLabel = ref(
 	t("components.login.button.moreOptions")
 );
-const ldapLoginActive = ref(true);
+//const ldapLoginActive = ref(true);
 const countdownNum = ref(0); // initially let
 
 function togglePassword() {
@@ -506,7 +500,7 @@ onMounted(() => {
 
 	checkCookie();
 	fetchLdapSchools();
-	getMockSchoolsforlogin();
+	//getMockSchoolsForLogin();
 	// Restore previous login system/school preferences if available
 	const storedSchool = localStorage.getItem("loginSchool");
 	if (storedSchool) {
@@ -523,9 +517,9 @@ onMounted(() => {
 	if (loginTimeout.value || ldapTimeout.value) {
 		setTimeout(
 			() => {
-				isSubmitting.value = false;
-				ldapLoginActive.value = true;
-				enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // TODO: change value, maybe
+				isLoading.value = false;
+				//ldapLoginActive.value = true;
+				//enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // TODO: change value, maybe
 			},
 			(loginTimeout.value || ldapTimeout.value)! * 1000
 		);
@@ -534,7 +528,7 @@ onMounted(() => {
 	}
 });
 
-function getMockSchoolsforlogin() {
+function getMockSchoolsForLogin() {
 	schools.value = [
 		{ name: "school1", id: "id1", systems: [] },
 		{
@@ -555,7 +549,7 @@ function showCloud() {
 function showLdap() {
 	showEmailLoginSection.value = false;
 	showLdapLoginSection.value = true;
-	enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // TODO: change value, maybe
+	//enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // TODO: change value, maybe
 }
 function returnToMenu() {
 	showEmailLoginSection.value = false;
@@ -578,7 +572,7 @@ function setSystemOptions(systems: SystemForLdapLoginResponse[]) {
 
 function onSchoolChange(school: SchoolForLdapLoginResponse | null) {
 	selectedSchool.value = school;
-	enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // value TODO: change value, maybe
+	//enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // value TODO: change value, maybe
 	// Find systems in selected school
 	if (school && Array.isArray(school.systems)) {
 		setSystemOptions(school.systems);
@@ -592,11 +586,12 @@ function onSystemChange(system: SystemForLdapLoginResponse | null) {
 }
 
 // ----- LDAP Button State -----
-function enableDisableLdapBtn(schoolId: string) {
+//possibly unnecessary, maybe needed for timer
+/*function enableDisableLdapBtn(schoolId: string) {
 	if (ldapLoginActive.value) {
 		ldapLoginActive.value = !!schoolId;
 	}
-}
+}*/
 
 // ----- Login Submissions -----
 async function submitLogin() {
@@ -626,14 +621,13 @@ async function submitLocalLogin() {
 	}
 	//TODO: implement timer
 	//setTimeout(() => {
-	//	isSubmitting.value = false;
+	//	isLoading.value = false;
 	//	submitButtonLabel.value = t("components.login.button.email");
 	//}, 1500);
 }
 
 async function submitLdapLogin() {
-	isSubmitting.value = true;
-	ldapLoginActive.value = false;
+	//ldapLoginActive.value = false;
 	// Store school/system prefs
 	if (selectedSchool.value) {
 		localStorage.setItem("loginSchool", selectedSchool.value.id ?? "");
@@ -698,12 +692,12 @@ function incTimer() {
 		ldapButtonLabel.value = t("login.text.pleaseWaitXSeconds", {
 			seconds: countdownNum.value,
 		});
-		ldapLoginActive.value = false;
+		//ldapLoginActive.value = false;
 		setTimeout(incTimer, 1000);
 	} else {
 		submitButtonLabel.value = t("components.login.button.email");
 		ldapButtonLabel.value = t("components.login.button.ldap");
-		ldapLoginActive.value = true;
+		//ldapLoginActive.value = true;
 	}
 }
 
