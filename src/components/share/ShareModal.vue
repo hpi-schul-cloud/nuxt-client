@@ -38,6 +38,11 @@
 										)
 									}}
 								</li>
+								<li v-if="showCourseInfo">
+									{{
+										t("components.molecules.copyResult.membersAndPermissions")
+									}}
+								</li>
 								<li v-if="showCourseInfo || showLessonInfo">
 									{{
 										t(
