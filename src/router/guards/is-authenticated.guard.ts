@@ -1,5 +1,5 @@
-import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 import { authModule } from "@/store";
+import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 import { getLoginUrlWithRedirect } from "../login-redirect-url";
 
 export const isAuthenticatedGuard = (
@@ -13,6 +13,7 @@ export const isAuthenticatedGuard = (
 		next();
 	} else {
 		const loginUrl = getLoginUrlWithRedirect(to.fullPath);
+		console.log("isAuthenticatedGuard is redirecting");
 		window.location.assign(loginUrl);
 	}
 };

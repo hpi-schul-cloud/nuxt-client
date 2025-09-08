@@ -11,6 +11,7 @@ export const legacyCompatibilityGuard: NavigationGuard = (
 	next: NavigationGuardNext
 ) => {
 	if (isLegacyClient(to.path)) {
+		console.log("legacyCompatibilityGuard is redirecting");
 		window.location.assign(to.path);
 	} else {
 		next();
