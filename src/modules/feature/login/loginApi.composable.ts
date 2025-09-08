@@ -106,20 +106,14 @@ export const useLoginApi = () => {
 		return response.data;
 	};
 
-	/**
-	 * Logout current user (local session end).
-	 */
-	const apiLogout = async (options?: any): Promise<void> => {
-		await authApi.logoutControllerLogout(options);
-		// may also: await axios.delete('/collaborative-text-editor/delete-sessions');
-	};
-
-	/**
-	 * External logout (OAuth2, ...) if needed.
-	 */
-	const apiLogoutExternal = async (): Promise<void> => {
-		await authApi.logoutControllerExternalSystemLogout();
-	};
+    const apiPasswordRecovery = async (username: string): Promise<any> => {
+        try {
+            const response = await $axios.post("/v1/passwordRecovery", { username });
+            return response.data;
+        } catch (err: any) {
+            throw err;
+        }
+    };
 
 	return {
 		//apiLogin,
@@ -129,7 +123,6 @@ export const useLoginApi = () => {
 		apiGetOauthSystems,
 		apiGetLdapSchools,
 		apiCheckConsent,
-		apiLogout,
-		apiLogoutExternal,
+		apiPasswordRecovery,
 	};
 };
