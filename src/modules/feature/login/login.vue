@@ -28,7 +28,7 @@
 						class="btn-cloud"
 						color="tertiary"
 						block
-						@click="showCloud"
+						@click="showEmail"
 						variant="outlined"
 					>
 						{{ t("components.login.button.email") }}
@@ -395,6 +395,7 @@ import { envConfigModule } from "@/store";
 import { mdiEyeOffOutline, mdiEyeOutline, mdiChevronDown, mdiChevronUp } from "@icons/material";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n"; //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
+import { useRoute } from "vue-router";
 //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
 
 // Vuetify typenames
@@ -420,7 +421,7 @@ const alert = ref<{
 const showAlert = ref(false);
 
 // Feature Toggles
-const featureOauthLoginEnabled: boolean =
+const featureOauthLoginEnabled: boolean = 
 	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 //TODO: get env the schulcloud way, for now:
 const featureJwtExtendedTimeoutEnabled = true;
@@ -499,18 +500,43 @@ onMounted(() => {
 	}
 
 	checkCookie();
+	//TODO: toggle for dev
 	fetchLdapSchools();
 	//getMockSchoolsForLogin();
-	// Restore previous login system/school preferences if available
-	const storedSchool = localStorage.getItem("loginSchool");
-	if (storedSchool) {
-		const schoolObj = schools.value.find((item) => item.id === storedSchool);
-		if (schoolObj) selectedSchool.value = schoolObj;
-	}
-	const storedSystem = localStorage.getItem("loginSystem");
-	if (storedSystem) {
-		const systemObj = systemOptions.value.find((s) => s.id === storedSystem);
-		if (systemObj) selectedSystem.value = systemObj;
+
+	const route = useRoute();
+    const strategy = route.query.strategy;
+    const schoolid = route.query.schoolid;
+
+    if (strategy) {
+		if (featureOauthLoginEnabled) {
+			if (strategy === 'ldap') {
+            showLdap();
+            if (schoolid) {
+                const schoolObj = schools.value.find((item) => item.id === schoolid);
+                if (schoolObj) {
+                    selectedSchool.value = schoolObj;
+                    onSchoolChange(schoolObj);
+                }
+            }
+			} else if (strategy === 'email') {
+				showEmail();
+			}
+		}
+    } else {
+		const storedSchool = localStorage.getItem("loginSchool");
+		if (storedSchool) {
+			const schoolObj = schools.value.find((item) => item.id === storedSchool);
+			if (schoolObj) {
+				selectedSchool.value = schoolObj;
+				onSchoolChange(schoolObj);
+			}
+		}
+		const storedSystem = localStorage.getItem("loginSystem");
+		if (storedSystem) {
+			const systemObj = systemOptions.value.find((s) => s.id === storedSystem);
+			if (systemObj) selectedSystem.value = systemObj;
+		}
 	}
 
 	// Timeout initialization (auto enable after timeout)
@@ -542,7 +568,7 @@ function getMockSchoolsForLogin() {
 	];
 }
 // ----- Button Section Toggles -----
-function showCloud() {
+function showEmail() {
 	showEmailLoginSection.value = true;
 	showLdapLoginSection.value = false;
 }
