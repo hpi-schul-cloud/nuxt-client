@@ -187,6 +187,21 @@ const { updateMembersRole, changeRoomOwner } = roomMembersStore;
 const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members");
 
+const isChangeOwnershipOptionVisible = computed(() => {
+	if (props.isAdminMode) {
+		return (
+			memberToChangeRole.value.length === 1 && isMemberStudent.value === false
+		);
+	}
+
+	const currentUserId = authModule.getUser?.id;
+	return (
+		currentUserId &&
+		roomMembersStore.isRoomOwner(currentUserId) &&
+		memberToChangeRole.value.length === 1 &&
+		isMemberStudent.value === false
+	);
+});
 const isOwnershipHandoverMode = ref(false);
 const dialogTitle = computed(() =>
 	isOwnershipHandoverMode.value
@@ -286,40 +301,46 @@ const onClose = () => {
 };
 
 const radioOptions = computed(() => {
-	if (props.isAdminMode && memberToChangeRole.value.length === 1) {
-		return [
-			{
-				role: RoleName.Roomowner,
-				labelHeader: t("pages.rooms.members.roomPermissions.owner"),
-				labelDescriptions: [
-					"pages.rooms.members.roleChange.Roomowner.label",
-					"pages.rooms.members.roleChange.Roomowner.label.subText",
-				],
-				dataTestid: "change-role-option-owner",
-			},
-		];
-	}
+	const roomOwnerOption = {
+		role: RoleName.Roomowner,
+		labelHeader: t("pages.rooms.members.roomPermissions.owner"),
+		labelDescriptions: [
+			"pages.rooms.members.roleChange.Roomowner.label",
+			"pages.rooms.members.roleChange.Roomowner.label.subText",
+		],
+		dataTestid: "change-role-option-owner",
+		disabled: false,
+	};
 
-	return [
+	const baseRoles = [
 		{
 			role: RoleName.Roomviewer,
 			labelHeader: t("pages.rooms.members.roomPermissions.viewer"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomviewer.label"],
 			dataTestid: "change-role-option-viewer",
+			disabled: props.isAdminMode,
 		},
 		{
 			role: RoleName.Roomeditor,
 			labelHeader: t("pages.rooms.members.roomPermissions.editor"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomeditor.label"],
 			dataTestid: "change-role-option-editor",
+			disabled: props.isAdminMode,
 		},
 		{
 			role: RoleName.Roomadmin,
 			labelHeader: t("pages.rooms.members.roomPermissions.admin"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomadmin.label"],
 			dataTestid: "change-role-option-admin",
+			disabled: props.isAdminMode,
 		},
 	];
+
+	if (props.isAdminMode || isChangeOwnershipOptionVisible.value) {
+		return [...baseRoles, roomOwnerOption];
+	}
+
+	return baseRoles;
 });
 
 const changeRoleContent = ref();
