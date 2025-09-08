@@ -392,8 +392,13 @@ import {
 	SystemForLdapLoginResponse,
 } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { mdiEyeOffOutline, mdiEyeOutline, mdiChevronDown, mdiChevronUp } from "@icons/material";
-import { onMounted, ref } from "vue";
+import {
+	mdiChevronDown,
+	mdiChevronUp,
+	mdiEyeOffOutline,
+	mdiEyeOutline,
+} from "@icons/material";
+import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n"; //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
 import { useRoute } from "vue-router";
 //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
@@ -411,6 +416,7 @@ const {
 	schools,
 	fetchLdapSchools,
 } = useLogin();
+const route = useRoute();
 // Alerts
 const alert = ref<{
 	message: string;
@@ -421,7 +427,7 @@ const alert = ref<{
 const showAlert = ref(false);
 
 // Feature Toggles
-const featureOauthLoginEnabled: boolean = 
+const featureOauthLoginEnabled: boolean =
 	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 //TODO: get env the schulcloud way, for now:
 const featureJwtExtendedTimeoutEnabled = true;
@@ -458,6 +464,7 @@ const moreLessOptionsButtonLabel = ref(
 );
 //const ldapLoginActive = ref(true);
 const countdownNum = ref(0); // initially let
+const redirectParam = ref(route.query.redirect?.toString() || null);
 
 function togglePassword() {
 	showPassword.value = !showPassword.value;
@@ -554,6 +561,13 @@ onMounted(() => {
 	}
 });
 
+watch(
+	() => route.query.redirect,
+	(newVal) => {
+		redirectParam.value = newVal?.toString() || null;
+	}
+);
+
 function getMockSchoolsForLogin() {
 	schools.value = [
 		{ name: "school1", id: "id1", systems: [] },
@@ -633,7 +647,11 @@ async function submitLocalLogin() {
 	if (loginResult.value) {
 		setCookie("jwt", loginResult.value?.accessToken);
 		setCookie("isLoggedIn", "true");
-		await router.push({ path: "/rooms" });
+		if (redirectParam.value) {
+			await router.push({ path: redirectParam.value });
+		} else {
+			await router.push({ path: "/rooms" });
+		}
 	} else {
 		alert.value = {
 			type: "error",
@@ -688,7 +706,11 @@ async function submitLdapLogin() {
 	if (loginResult.value) {
 		setCookie("jwt", loginResult.value?.accessToken);
 		setCookie("isLoggedIn", "true");
-		await router.push({ path: "/rooms" });
+		if (redirectParam.value) {
+			await router.push({ path: redirectParam.value });
+		} else {
+			await router.push({ path: "/rooms" });
+		}
 	} else {
 		ldapUsername.value = "";
 		ldapPassword.value = "";
