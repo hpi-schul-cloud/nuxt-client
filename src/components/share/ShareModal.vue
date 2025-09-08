@@ -111,11 +111,11 @@
 							</ul>
 						</div>
 					</WarningAlert>
+					<share-modal-options-form
+						:type="type"
+						@share-options-change="onShareOptionsChange"
+					/>
 				</div>
-				<share-modal-options-form
-					:type="type"
-					@share-options-change="onShareOptionsChange"
-				/>
 				<div v-if="step === 'secondStep' && isOpen">
 					<share-modal-result
 						:share-url="shareUrl"
