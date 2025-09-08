@@ -74,11 +74,11 @@ import {
 	BoardLayout,
 	ImportUserResponseRoleNamesEnum as Roles,
 } from "@/serverApi/v3";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import RoomDotMenu from "./RoomDotMenu.vue";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	columnBoardItem: { type: Object, required: true },
@@ -105,8 +105,6 @@ const emit = defineEmits([
 
 const router = useRouter();
 const { t } = useI18n();
-
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const cardTitle = computed(() => {
 	const titlePrefix = isListBoard.value
@@ -204,7 +202,7 @@ const actionsMenuItems = computed(() => {
 		}`,
 	});
 
-	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {
+	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
 		actions.push({
 			icon: mdiShareVariantOutline,
 			action: () => emit("share-board"),

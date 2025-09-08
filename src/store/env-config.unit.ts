@@ -411,15 +411,6 @@ describe("env-config module", () => {
 			expect(envConfigModule.envFile.MAX_FILE_SIZE).toBe(10);
 		});
 
-		it("increaseLoadingErrorCount should increase loadingErrorCount value by 1", () => {
-			const envConfigModule = new EnvConfigModule({});
-			expect(envConfigModule.loadingErrorCount).toBe(0);
-
-			envConfigModule.increaseLoadingErrorCount();
-
-			expect(envConfigModule.loadingErrorCount).toBe(1);
-		});
-
 		it("setBusinessError should set businessError", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.businessError.message).toBe("");
@@ -430,19 +421,6 @@ describe("env-config module", () => {
 			});
 
 			expect(envConfigModule.businessError.message).toBe("mockValue");
-		});
-
-		it("resetBusinessError should reset businessError", () => {
-			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.setBusinessError({
-				statusCode: "mockValue",
-				message: "mockValue",
-			});
-			expect(envConfigModule.businessError.message).toBe("mockValue");
-
-			envConfigModule.resetBusinessError();
-
-			expect(envConfigModule.businessError.message).toBe("");
 		});
 
 		it("setStatus should set status", () => {

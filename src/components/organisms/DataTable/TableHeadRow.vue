@@ -227,7 +227,6 @@
 
 <script>
 import InfoBox from "@/components/molecules/InfoBox";
-import { envConfigModule } from "@/store";
 import {
 	mdiAlert,
 	mdiInformation,
@@ -235,6 +234,7 @@ import {
 	mdiMenuSwapOutline,
 	mdiMenuUpOutline,
 } from "@icons/material";
+import { useEnvConfig } from "@data-env";
 
 const selectionStateMap = new Map([
 	[true, "all"],
@@ -302,7 +302,7 @@ export default {
 			},
 		},
 		isConsentNecessary() {
-			return envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY;
+			return useEnvConfig().value.FEATURE_CONSENT_NECESSARY;
 		},
 	},
 	methods: {

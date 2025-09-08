@@ -52,6 +52,7 @@ export default defineConfigWithVueTs([
 			schulcloud,
 		},
 		rules: {
+			"require-await": 1,
 			"@typescript-eslint/ban-ts-comment": "error",
 			"@typescript-eslint/no-empty-function": "error",
 			"@typescript-eslint/no-empty-object-type": [

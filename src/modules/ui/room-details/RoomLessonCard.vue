@@ -76,7 +76,6 @@
 
 <script setup lang="ts">
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
 import { RoomData } from "@/store/types/room";
 import {
 	mdiContentCopy,
@@ -89,6 +88,7 @@ import { RoomDotMenu } from "@ui-room-details";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { LessonData } from "./types";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	lesson: {
@@ -159,7 +159,7 @@ const moreActionsMenuItems = computed(() => {
 		}`,
 	});
 
-	if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
+	if (useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED) {
 		actions.push({
 			icon: mdiContentCopy,
 			action: () => copyCard(),
@@ -181,7 +181,7 @@ const moreActionsMenuItems = computed(() => {
 		});
 	}
 
-	if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+	if (useEnvConfig().value.FEATURE_LESSON_SHARE) {
 		actions.push({
 			icon: mdiShareVariantOutline,
 			action: () => emit("open-modal", props.lesson.id),

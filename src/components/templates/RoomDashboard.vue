@@ -198,12 +198,13 @@ import {
 	ImportUserResponseRoleNamesEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { envConfigModule, courseRoomDetailsModule } from "@/store";
+import { courseRoomDetailsModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import draggable from "vuedraggable";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
+import { useEnvConfig } from "@data-env";
 
 export default {
 	components: {
@@ -313,7 +314,7 @@ export default {
 			}
 		},
 		getSharedBoard(boardId) {
-			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {
+			if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
 				this.shareModule.startShareFlow({
 					id: boardId,
 					type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
@@ -321,7 +322,7 @@ export default {
 			}
 		},
 		getSharedLesson(lessonId) {
-			if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+			if (useEnvConfig().value.FEATURE_LESSON_SHARE) {
 				this.shareModule.startShareFlow({
 					id: lessonId,
 					type: ShareTokenBodyParamsParentTypeEnum.Lessons,
@@ -329,7 +330,7 @@ export default {
 			}
 		},
 		getSharedTask(taskId) {
-			if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+			if (useEnvConfig().value.FEATURE_TASK_SHARE) {
 				this.shareModule.startShareFlow({
 					id: taskId,
 					type: ShareTokenBodyParamsParentTypeEnum.Tasks,

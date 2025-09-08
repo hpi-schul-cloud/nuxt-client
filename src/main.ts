@@ -70,6 +70,7 @@ import {
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 import { logger } from "@util-logger";
+import { useEnvStore } from "@data-env";
 
 export const app = createApp(App);
 
@@ -104,6 +105,7 @@ app.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios);
 
+	await useEnvStore().loadConfiguration();
 	await envConfigModule.loadConfiguration();
 
 	try {
