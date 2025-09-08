@@ -336,7 +336,11 @@ const radioOptions = computed(() => {
 		},
 	];
 
-	if (props.isAdminMode || isChangeOwnershipOptionVisible.value) {
+	if (props.isAdminMode) {
+		return [roomOwnerOption];
+	}
+
+	if (isChangeOwnershipOptionVisible.value) {
 		return [...baseRoles, roomOwnerOption];
 	}
 
