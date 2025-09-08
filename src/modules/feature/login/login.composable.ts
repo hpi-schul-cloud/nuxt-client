@@ -514,13 +514,17 @@ export const useLogin = () => {
 
 	const loginEmail = async (
 		username: string,
-		password: string
-		///redirect?: string
+		password: string,
+		createLoginCookies?: boolean
 	): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
-			const result = await apiLoginEmail(username, password);
+			const result = await apiLoginEmail(
+				username,
+				password,
+				createLoginCookies
+			);
 			loginResult.value = result;
 		} catch (err: unknown) {
 			error.value = {
@@ -538,13 +542,19 @@ export const useLogin = () => {
 		username: string,
 		password: string,
 		schoolId: string,
-		system: string
-		//redirect?: string
+		system: string,
+		createLoginCookies?: boolean
 	): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
-			const result = await apiLoginLdap(username, password, schoolId, system);
+			const result = await apiLoginLdap(
+				username,
+				password,
+				schoolId,
+				system,
+				createLoginCookies
+			);
 			loginResult.value = result;
 		} catch (err: unknown) {
 			error.value = {
