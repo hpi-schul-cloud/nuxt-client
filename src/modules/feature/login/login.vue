@@ -415,6 +415,9 @@ const {
 	loginResult,
 	schools,
 	fetchLdapSchools,
+	submitPasswordRecovery,
+	passwordRecoveryResult,
+	passwordRecoveryError,
 } = useLogin();
 const route = useRoute();
 // Alerts
@@ -750,18 +753,23 @@ function incTimer() {
 function openPwRecoveryModal() {
 	pwRecoveryModal.value = true;
 }
+
 function closePwRecoveryModal() {
 	pwRecoveryModal.value = false;
 }
-function submitPwRecovery() {
-	// Simulate sending password reset link
-	pwRecoveryModal.value = false;
-	alert.value = {
-		message: t("login.popup_resetPw.confirmation"),
-		type: "success",
-		color: "success",
-		dismissible: true,
-	};
-	showAlert.value = true;
+
+async function submitPwRecovery() {
+    try {
+        await submitPasswordRecovery(pwRecoveryEmail.value);
+        pwRecoveryModal.value = false;
+        await router.push({ path: "/login/pwrecovery/response" });
+    } catch (err) {
+        pwRecoveryModal.value = false;
+        if (passwordRecoveryError.value === "EMAIL_DOMAIN_BLOCKED") {
+            await router.push({ path: "/login/pwrecovery/failed" });
+        } else {
+            await router.push({ path: "/login/pwrecovery/response" });
+        }
+    }
 }
 </script>

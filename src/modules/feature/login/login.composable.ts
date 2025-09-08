@@ -479,9 +479,8 @@ export const useLogin = () => {
 		apiLoginOAuth2,
 		apiGetOauthSystems,
 		apiGetLdapSchools,
-		apiLogout,
-		apiLogoutExternal,
 		apiCheckConsent,
+		apiPasswordRecovery,
 	} = useLoginApi();
 
 	const isLoading: Ref<boolean> = ref(false);
@@ -490,6 +489,8 @@ export const useLogin = () => {
 	const oauthSystems: Ref<PublicSystemListResponse | undefined> =
 		ref(undefined); //TODO: maybe something like before: Ref<Oauth2System[] | undefined>
 	const loginResult: Ref<LoginResponse | undefined> = ref(undefined);
+	const passwordRecoveryResult = ref<any>(null);
+    const passwordRecoveryError = ref<string | null>(null);
 
 	//const login = async (
 	//	payload: LoginPa,
@@ -643,39 +644,21 @@ export const useLogin = () => {
 		}
 	};
 
-	const logout = async (options?: OidcLogoutBodyParams): Promise<void> => {
-		isLoading.value = true;
-		error.value = undefined;
-		try {
-			await apiLogout(options);
-		} catch (err: unknown) {
-			error.value = {
-				message: err instanceof Error ? err.message : "Logout failed",
-				code: (err as ApiResponseError)?.code ?? 500,
-				type: (err as ApiResponseError)?.type,
-				title: (err as ApiResponseError)?.title,
-			};
-		} finally {
-			isLoading.value = false;
-		}
-	};
-
-	const logoutExternal = async (): Promise<void> => {
-		isLoading.value = true;
-		error.value = undefined;
-		try {
-			await apiLogoutExternal();
-		} catch (err: unknown) {
-			error.value = {
-				message: err instanceof Error ? err.message : "External logout failed",
-				code: (err as ApiResponseError)?.code ?? 500,
-				type: (err as ApiResponseError)?.type,
-				title: (err as ApiResponseError)?.title,
-			};
-		} finally {
-			isLoading.value = false;
-		}
-	};
+    const submitPasswordRecovery = async (username: string) => {
+        passwordRecoveryError.value = null;
+        try {
+            const result = await apiPasswordRecovery(username.trim().toLowerCase());
+            passwordRecoveryResult.value = result;
+            return result;
+        } catch (err: any) {
+            if (err?.response?.status === 400 && err?.response?.data?.message === "EMAIL_DOMAIN_BLOCKED") {
+                passwordRecoveryError.value = "EMAIL_DOMAIN_BLOCKED";
+            } else {
+                passwordRecoveryError.value = "GENERIC_ERROR";
+            }
+            throw err;
+        }
+    };
 
 	/**
 	 * Expose login schools cache (reactive)
@@ -697,8 +680,9 @@ export const useLogin = () => {
 		oauthSystems,
 		checkConsent,
 		consentCheckResult,
-		logout,
-		logoutExternal,
+		submitPasswordRecovery,
+        passwordRecoveryResult,
+        passwordRecoveryError,
 		loginResult,
 		cookieDefaults,
 		setCookie, // expose cookie helper (simulated for browser)
