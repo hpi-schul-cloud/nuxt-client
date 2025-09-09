@@ -90,6 +90,7 @@
 					/>
 				</v-card-text>
 				<v-btn
+					v-if="!isLoginTimeoutActive"
 					id="submit-login"
 					class="btn-login"
 					color="primary"
@@ -102,6 +103,15 @@
 					@click="submitLocalLogin"
 				>
 					{{ submitButtonLabel }}
+				</v-btn>
+				<v-btn
+					v-else
+					class="btn-login"
+					color="primary"
+					block
+					disabled
+				>
+					{{ `Please wait ${countdownNum} seconds` }}
 				</v-btn>
 				<v-card-actions>
 					<v-btn
@@ -189,6 +199,7 @@
 					/>
 				</v-card-text>
 				<v-btn
+					v-if="!isLoginTimeoutActive"
 					class="btn-login-ldap"
 					color="primary"
 					block
@@ -201,6 +212,15 @@
 				>
 					<!--:data-active="ldapLoginActive"-->
 					{{ ldapButtonLabel }}
+				</v-btn>
+				<v-btn
+					v-else
+					class="btn-login-ldap"
+					color="primary"
+					block
+					disabled
+				>
+					{{ `Please wait ${countdownNum} seconds` }}
 				</v-btn>
 				<v-card-actions>
 					<v-btn
@@ -321,6 +341,7 @@
 					/>
 				</div>
 				<v-btn
+					v-if="!isLoginTimeoutActive"
 					id="submit-login"
 					class="btn-login"
 					color="primary"
@@ -333,6 +354,15 @@
 					@click="submitLogin"
 				>
 					{{ t("common.labels.login") }}
+				</v-btn>
+				<v-btn
+					v-else
+					class="btn-login"
+					color="primary"
+					block
+					disabled
+				>
+					{{ `Please wait ${countdownNum} seconds` }}
 				</v-btn>
 				<v-card-actions>
 					<v-btn
@@ -448,8 +478,7 @@ const alert = ref<{
 const showAlert = ref(false);
 
 // Feature Toggles
-const featureOauthLoginEnabled: boolean =
-	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
+const featureOauthLoginEnabled: boolean = true;//envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 //TODO: get env the schulcloud way, for now:
 const featureJwtExtendedTimeoutEnabled = true;
 //envConfigModule.getEnv.FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED
@@ -487,6 +516,8 @@ const moreLessOptionsButtonLabel = ref(
 );
 //const ldapLoginActive = ref(true);
 const countdownNum = ref(0); // initially let
+const loginTimeoutSeconds = 5;
+const isLoginTimeoutActive = ref(false);
 const redirectParam = ref(route.query.redirect?.toString() || null);
 
 function togglePassword() {
@@ -697,12 +728,9 @@ async function submitLocalLogin() {
 		showAlert.value = true;
 		email.value = "";
 		password.value = "";
+		countdownNum.value = loginTimeoutSeconds;
+        incTimer();
 	}
-	//TODO: implement timer
-	//setTimeout(() => {
-	//	isLoading.value = false;
-	//	submitButtonLabel.value = t("components.login.button.email");
-	//}, 1500);
 }
 
 async function submitLdapLogin() {
@@ -771,30 +799,19 @@ async function submitLdapLogin() {
 			message: t("Login fehlgeschlagen"),
 		};
 		showAlert.value = true;
-		//setTimeout(() => {
-		//	isSubmitting.value = false;
-		//	ldapLoginActive.value = true;
-		//	ldapButtonLabel.value = "Login Fehlgeschlagen";
-		//}, 1500);
+		countdownNum.value = loginTimeoutSeconds;
+        incTimer();
 	}
 }
 
 function incTimer() {
-	if (countdownNum.value > 1) {
-		countdownNum.value--;
-		submitButtonLabel.value = t("login.text.pleaseWaitXSeconds", {
-			seconds: countdownNum.value,
-		});
-		ldapButtonLabel.value = t("login.text.pleaseWaitXSeconds", {
-			seconds: countdownNum.value,
-		});
-		//ldapLoginActive.value = false;
-		setTimeout(incTimer, 1000);
-	} else {
-		submitButtonLabel.value = t("components.login.button.email");
-		ldapButtonLabel.value = t("components.login.button.ldap");
-		//ldapLoginActive.value = true;
-	}
+    isLoginTimeoutActive.value = true;
+    if (countdownNum.value > 1) {
+        countdownNum.value--;
+        setTimeout(incTimer, 1000);
+    } else {
+        isLoginTimeoutActive.value = false;
+    }
 }
 
 // ----- Password Recovery -----
