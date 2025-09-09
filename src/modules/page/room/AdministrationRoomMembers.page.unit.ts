@@ -5,10 +5,8 @@ import {
 	mockedPiniaStoreTyping,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import {
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { useAdministrationRoomStore } from "@data-room";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -67,7 +65,9 @@ describe("AdministrationRoomMembers.page", () => {
 			authModule: AuthModule,
 		});
 
-		const mockMe = meResponseFactory.build({ roles: [{ name: "admin" }] });
+		const mockMe = meResponseFactory.build({
+			roles: [{ id: "admin-id", name: "admin" }],
+		});
 		authModule.setMe(mockMe);
 
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
@@ -108,10 +108,12 @@ describe("AdministrationRoomMembers.page", () => {
 		});
 
 		const adminRoomStore = mockedPiniaStoreTyping(useAdministrationRoomStore);
+		const memberStore = mockedPiniaStoreTyping(useRoomMembersStore);
 
 		return {
 			wrapper,
 			adminRoomStore,
+			memberStore,
 		};
 	};
 
@@ -168,15 +170,12 @@ describe("AdministrationRoomMembers.page", () => {
 			);
 		});
 
-		it("should set 'selectedRoom' value to null when unMounted", () => {
-			// there is no selectedRoom in the store, does it need to be added?
-
-			const { adminRoomStore, wrapper } = setup();
-
-			expect(adminRoomStore.selectedRoom).not.toBeNull();
+		it("should call resetStore when unMounted", async () => {
+			const { memberStore, wrapper } = setup();
 			wrapper.unmount();
+			await nextTick();
 
-			expect(adminRoomStore.selectedRoom).toBeNull();
+			expect(memberStore.resetStore).toHaveBeenCalled();
 		});
 
 		it("should navigate to dashboard if feature is disabled", async () => {
