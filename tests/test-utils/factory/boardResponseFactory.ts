@@ -1,5 +1,5 @@
+import { BoardLayout, BoardResponse } from "@/serverApi/v3";
 import { Factory } from "fishery";
-import { BoardResponse, BoardLayout } from "@/serverApi/v3";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 
 export const boardResponseFactory = Factory.define<BoardResponse>(
@@ -12,5 +12,6 @@ export const boardResponseFactory = Factory.define<BoardResponse>(
 		layout: BoardLayout.Columns,
 		features: [],
 		permissions: [],
+		readersCanEdit: false,
 	})
 );

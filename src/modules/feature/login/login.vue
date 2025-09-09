@@ -810,13 +810,13 @@ async function submitPwRecovery() {
     try {
         await submitPasswordRecovery(pwRecoveryEmail.value);
         pwRecoveryModal.value = false;
-        await router.push({ path: "/login/pwrecovery/response" });
+        await router.push({ path: "/pwrecovery/response" });
     } catch (err) {
         pwRecoveryModal.value = false;
         if (passwordRecoveryError.value === "EMAIL_DOMAIN_BLOCKED") {
-            await router.push({ path: "/login/pwrecovery/failed" });
+            await router.push({ path: "/pwrecovery/failed" });
         } else {
-            await router.push({ path: "/login/pwrecovery/response" });
+            await router.push({ path: "/pwrecovery/response" });
         }
     }
 }
