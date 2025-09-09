@@ -3,7 +3,6 @@ import {
 	BusinessError,
 	LoginResponse,
 	Oauth2AuthorizationBodyParams,
-	OidcLogoutBodyParams,
 	PublicSystemListResponse,
 	SchoolForLdapLoginResponse,
 } from "@/serverApi/v3";
@@ -19,9 +18,9 @@ import { useLoginApi } from "./loginApi.composable";
  * A list of keys whose values should be filtered out (e.g. for logging,
  * storing, or sending to front).
  */
-const MAX_LEVEL_FILTER = 12; //TODO: should be used, i guess
+//const MAX_LEVEL_FILTER = 12; //TODO: should be used, i guess
 
-const secretDataKeys: string[] = [
+/*const secretDataKeys: string[] = [
 	// server list
 	"headers",
 	"password",
@@ -54,7 +53,7 @@ const secretDataKeys: string[] = [
 	"resetId",
 	"password_control",
 	"username",
-].map((k) => k.toLocaleLowerCase());
+].map((k) => k.toLocaleLowerCase());*/
 
 //TODO: get this filtering mess going...
 /*const filterSecretValue = (key: string, value: string): string =>
@@ -490,7 +489,7 @@ export const useLogin = () => {
 		ref(undefined); //TODO: maybe something like before: Ref<Oauth2System[] | undefined>
 	const loginResult: Ref<LoginResponse | undefined> = ref(undefined);
 	const passwordRecoveryResult = ref<any>(null);
-    const passwordRecoveryError = ref<string | null>(null);
+	const passwordRecoveryError = ref<string | null>(null);
 
 	//const login = async (
 	//	payload: LoginPa,
@@ -521,7 +520,7 @@ export const useLogin = () => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
-			const result = await apiLoginEmail(
+			const result: LoginResponse = await apiLoginEmail(
 				username,
 				password,
 				createLoginCookies
@@ -549,7 +548,7 @@ export const useLogin = () => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
-			const result = await apiLoginLdap(
+			const result: LoginResponse = await apiLoginLdap(
 				username,
 				password,
 				schoolId,
@@ -575,7 +574,7 @@ export const useLogin = () => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
-			const result = await apiLoginOAuth2(payload);
+			const result: LoginResponse = await apiLoginOAuth2(payload);
 			loginResult.value = result;
 		} catch (err: unknown) {
 			error.value = {
@@ -593,7 +592,7 @@ export const useLogin = () => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
-			const response = await apiGetOauthSystems();
+			const response: PublicSystemListResponse = await apiGetOauthSystems();
 			oauthSystems.value = response;
 		} catch (err: unknown) {
 			error.value = {
@@ -644,21 +643,24 @@ export const useLogin = () => {
 		}
 	};
 
-    const submitPasswordRecovery = async (username: string) => {
-        passwordRecoveryError.value = null;
-        try {
-            const result = await apiPasswordRecovery(username.trim().toLowerCase());
-            passwordRecoveryResult.value = result;
-            return result;
-        } catch (err: any) {
-            if (err?.response?.status === 400 && err?.response?.data?.message === "EMAIL_DOMAIN_BLOCKED") {
-                passwordRecoveryError.value = "EMAIL_DOMAIN_BLOCKED";
-            } else {
-                passwordRecoveryError.value = "GENERIC_ERROR";
-            }
-            throw err;
-        }
-    };
+	const submitPasswordRecovery = async (username: string) => {
+		passwordRecoveryError.value = null;
+		try {
+			const result = await apiPasswordRecovery(username.trim().toLowerCase());
+			passwordRecoveryResult.value = result;
+			return result;
+		} catch (err: any) {
+			if (
+				err?.response?.status === 400 &&
+				err?.response?.data?.message === "EMAIL_DOMAIN_BLOCKED"
+			) {
+				passwordRecoveryError.value = "EMAIL_DOMAIN_BLOCKED";
+			} else {
+				passwordRecoveryError.value = "GENERIC_ERROR";
+			}
+			throw err;
+		}
+	};
 
 	/**
 	 * Expose login schools cache (reactive)
@@ -681,8 +683,8 @@ export const useLogin = () => {
 		checkConsent,
 		consentCheckResult,
 		submitPasswordRecovery,
-        passwordRecoveryResult,
-        passwordRecoveryError,
+		passwordRecoveryResult,
+		passwordRecoveryError,
 		loginResult,
 		cookieDefaults,
 		setCookie, // expose cookie helper (simulated for browser)

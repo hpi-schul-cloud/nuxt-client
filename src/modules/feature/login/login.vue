@@ -28,8 +28,8 @@
 						class="btn-cloud"
 						color="tertiary"
 						block
-						@click="showEmail"
 						variant="outlined"
+						@click="showEmail"
 					>
 						{{ t("components.login.button.email") }}
 					</v-btn>
@@ -39,8 +39,8 @@
 						class="btn-ldap"
 						color="tertiary"
 						block
-						@click="showLdap"
 						variant="outlined"
+						@click="showLdap"
 					>
 						{{ t("components.login.button.ldap") }}
 					</v-btn>
@@ -78,9 +78,9 @@
 					/>
 					<v-checkbox
 						v-if="featureJwtExtendedTimeoutEnabled"
-						class="form-check mt-2"
 						id="privateDevice"
 						v-model="privateDevice"
+						class="form-check mt-2"
 						:label="$t('components.login.checkbox.stayLoggedIn')"
 						name="privateDevice"
 						value="true"
@@ -96,22 +96,15 @@
 					color="primary"
 					block
 					:disabled="isLoading"
-					:data-timeout="loginTimeout"
 					data-testid="submit-login-email"
 					:autofocus="true"
 					aria-label="login"
 					@click="submitLocalLogin"
 				>
-					{{ submitButtonLabel }}
+					{{ t("components.login.button.email") }}
 				</v-btn>
-				<v-btn
-					v-else
-					class="btn-login"
-					color="primary"
-					block
-					disabled
-				>
-					{{ `Please wait ${countdownNum} seconds` }}
+				<v-btn v-else class="btn-login" color="primary" block disabled>
+					{{ `Bitte ${countdownNum} Sekunden warten` }}
 				</v-btn>
 				<v-card-actions>
 					<v-btn
@@ -159,9 +152,9 @@
 					/>
 					<v-checkbox
 						v-if="featureJwtExtendedTimeoutEnabled"
-						class="form-check mt-2"
 						id="privateDevice"
 						v-model="privateDevice"
+						class="form-check mt-2"
 						:label="$t('components.login.checkbox.stayLoggedIn')"
 						name="privateDevice"
 						value="true"
@@ -170,23 +163,23 @@
 						hide-details
 					/>
 					<v-select
-						return-object
 						v-model="selectedSchool"
+						return-object
 						class="school"
 						:items="schools"
 						:label="$t('components.login.label.school')"
-						placeholder="Select your school"
+						placeholder="Wähle deine Schule"
 						item-title="name"
 						data-testid="select-school"
 						clearable
 						dense
 						required
-						@update:modelValue="onSchoolChange"
+						@update:model-value="onSchoolChange"
 					/>
 					<v-select
-						return-object
 						v-if="selectedSchool && currentLdapSystems.length > 1"
 						v-model="selectedSystem"
+						return-object
 						class="system"
 						:items="currentLdapSystems"
 						:label="$t('System')"
@@ -195,7 +188,7 @@
 						dense
 						clearable
 						data-testid="select-system-ldap"
-						@update:modelValue="onSystemChange"
+						@update:model-value="onSystemChange"
 					/>
 				</v-card-text>
 				<v-btn
@@ -207,20 +200,12 @@
 					aria-label="login"
 					:autofocus="true"
 					data-testid="submit-login-ldap"
-					:data-timeout="ldapTimeout"
 					@click="submitLdapLogin"
 				>
-					<!--:data-active="ldapLoginActive"-->
-					{{ ldapButtonLabel }}
+					{{ t("components.login.button.ldap") }}
 				</v-btn>
-				<v-btn
-					v-else
-					class="btn-login-ldap"
-					color="primary"
-					block
-					disabled
-				>
-					{{ `Please wait ${countdownNum} seconds` }}
+				<v-btn v-else class="btn-login-ldap" color="primary" block disabled>
+					{{ `Bitte ${countdownNum} Sekunden warten` }}
 				</v-btn>
 				<v-card-actions>
 					<v-btn
@@ -267,9 +252,9 @@
 					/>
 					<v-checkbox
 						v-if="featureJwtExtendedTimeoutEnabled"
-						class="form-check mt-2"
 						id="privateDevice"
 						v-model="privateDevice"
+						class="form-check mt-2"
 						:label="$t('components.login.checkbox.stayLoggedIn')"
 						name="privateDevice"
 						value="true"
@@ -292,7 +277,7 @@
 					<v-icon>
 						{{ mdiChevronUp }}
 					</v-icon>
-					{{ moreLessOptionsButtonLabel }}
+					{{ t("components.login.button.moreOptions") }}
 				</v-btn>
 				<v-btn
 					v-else
@@ -308,12 +293,12 @@
 					<v-icon>
 						{{ mdiChevronDown }}
 					</v-icon>
-					{{ moreLessOptionsButtonLabel }}
+					{{ t("components.login.button.less") }}
 				</v-btn>
 				<div v-show="showMoreOptions" class="mb-4">
 					<v-select
-						return-object
 						v-model="selectedSchool"
+						return-object
 						class="school"
 						:items="schools"
 						:label="$t('components.login.label.school')"
@@ -323,12 +308,12 @@
 						clearable
 						dense
 						required
-						@update:modelValue="onSchoolChange"
+						@update:model-value="onSchoolChange"
 					/>
 					<v-select
-						return-object
 						v-if="selectedSchool && currentLdapSystems.length > 1"
 						v-model="selectedSystem"
+						return-object
 						class="system"
 						:items="currentLdapSystems"
 						:label="$t('System')"
@@ -337,7 +322,7 @@
 						dense
 						clearable
 						data-testid="select-system-ldap"
-						@update:modelValue="onSystemChange"
+						@update:model-value="onSystemChange"
 					/>
 				</div>
 				<v-btn
@@ -347,7 +332,6 @@
 					color="primary"
 					block
 					:disabled="isLoading"
-					:data-timeout="loginTimeout"
 					data-testid="submit-login-email"
 					:autofocus="true"
 					aria-label="login"
@@ -355,14 +339,8 @@
 				>
 					{{ t("common.labels.login") }}
 				</v-btn>
-				<v-btn
-					v-else
-					class="btn-login"
-					color="primary"
-					block
-					disabled
-				>
-					{{ `Please wait ${countdownNum} seconds` }}
+				<v-btn v-else class="btn-login" color="primary" block disabled>
+					{{ `Bitte ${countdownNum} Sekunden warten` }}
 				</v-btn>
 				<v-card-actions>
 					<v-btn
@@ -447,7 +425,7 @@ import {
 	mdiEyeOutline,
 } from "@icons/material";
 import { onMounted, ref, watch } from "vue";
-import { useI18n } from "vue-i18n"; //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
+import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
 
@@ -459,12 +437,10 @@ const {
 	loginEmail,
 	loginLdap,
 	isLoading,
-	setCookie,
 	loginResult,
 	schools,
 	fetchLdapSchools,
 	submitPasswordRecovery,
-	passwordRecoveryResult,
 	passwordRecoveryError,
 } = useLogin();
 const route = useRoute();
@@ -478,7 +454,8 @@ const alert = ref<{
 const showAlert = ref(false);
 
 // Feature Toggles
-const featureOauthLoginEnabled: boolean = envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
+const featureOauthLoginEnabled: boolean =
+	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 //TODO: get env the schulcloud way, for now:
 const featureJwtExtendedTimeoutEnabled = true;
 //envConfigModule.getEnv.FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED
@@ -503,20 +480,12 @@ const emailError = ref("");
 const passwordError = ref("");
 
 const selectedSchool = ref<SchoolForLdapLoginResponse | null>(null);
-const systemOptions = ref<Array<SystemForLdapLoginResponse>>([]); // For cloud/email login
+const systemOptions = ref<Array<SystemForLdapLoginResponse>>([]);
 const selectedSystem = ref<SystemForLdapLoginResponse | null>(null);
 const currentLdapSystems = ref<Array<SystemForLdapLoginResponse>>([]);
 
-const loginTimeout = ref<number | null>(null);
-const ldapTimeout = ref<number | null>(null);
-const submitButtonLabel = ref(t("components.login.button.email"));
-const ldapButtonLabel = ref(t("components.login.button.ldap"));
-const moreLessOptionsButtonLabel = ref(
-	t("components.login.button.moreOptions")
-);
-//const ldapLoginActive = ref(true);
-const countdownNum = ref(0); // initially let
-const loginTimeoutSeconds = 5;
+const countdownNum = ref(0);
+const loginTimeoutSeconds = envConfigModule.getEnv.LOGIN_BLOCK_TIME;
 const isLoginTimeoutActive = ref(false);
 const redirectParam = ref(route.query.redirect?.toString() || null);
 
@@ -600,19 +569,7 @@ onMounted(() => {
 		}
 	}
 
-	// Timeout initialization (auto enable after timeout)
-	if (loginTimeout.value || ldapTimeout.value) {
-		setTimeout(
-			() => {
-				isLoading.value = false;
-				//ldapLoginActive.value = true;
-				//enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // TODO: change value, maybe
-			},
-			(loginTimeout.value || ldapTimeout.value)! * 1000
-		);
-		countdownNum.value = ldapTimeout.value || loginTimeout.value || 0;
-		incTimer();
-	}
+	incTimer();
 });
 
 watch(
@@ -622,7 +579,7 @@ watch(
 	}
 );
 
-function getMockSchoolsForLogin() {
+/*function getMockSchoolsForLogin() {
 	schools.value = [
 		{ name: "school1", id: "id1", systems: [] },
 		{
@@ -634,7 +591,8 @@ function getMockSchoolsForLogin() {
 			],
 		},
 	];
-}
+}*/
+
 // ----- Button Section Toggles -----
 function showEmail() {
 	showEmailLoginSection.value = true;
@@ -643,7 +601,6 @@ function showEmail() {
 function showLdap() {
 	showEmailLoginSection.value = false;
 	showLdapLoginSection.value = true;
-	//enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // TODO: change value, maybe
 }
 function returnToMenu() {
 	showEmailLoginSection.value = false;
@@ -651,22 +608,18 @@ function returnToMenu() {
 }
 function openMoreOptions() {
 	showMoreOptions.value = true;
-	moreLessOptionsButtonLabel.value = t("components.login.button.less");
 }
 function closeMoreOptions() {
 	showMoreOptions.value = false;
-	moreLessOptionsButtonLabel.value = t("components.login.button.moreOptions");
 }
 
 // ----- School/System Option Handling -----
-//TODO: used system object of store, maybe change
 function setSystemOptions(systems: SystemForLdapLoginResponse[]) {
 	currentLdapSystems.value = systems;
 }
 
 function onSchoolChange(school: SchoolForLdapLoginResponse | null) {
 	selectedSchool.value = school;
-	//enableDisableLdapBtn(selectedSchool.value?.id ?? ""); // value TODO: change value, maybe
 	// Find systems in selected school
 	if (school && Array.isArray(school.systems)) {
 		setSystemOptions(school.systems);
@@ -678,14 +631,6 @@ function onSchoolChange(school: SchoolForLdapLoginResponse | null) {
 function onSystemChange(system: SystemForLdapLoginResponse | null) {
 	selectedSystem.value = system;
 }
-
-// ----- LDAP Button State -----
-//possibly unnecessary, maybe needed for timer
-/*function enableDisableLdapBtn(schoolId: string) {
-	if (ldapLoginActive.value) {
-		ldapLoginActive.value = !!schoolId;
-	}
-}*/
 
 // ----- Login Submissions -----
 async function submitLogin() {
@@ -729,7 +674,7 @@ async function submitLocalLogin() {
 		email.value = "";
 		password.value = "";
 		countdownNum.value = loginTimeoutSeconds;
-        incTimer();
+		incTimer();
 	}
 }
 
@@ -748,7 +693,6 @@ async function submitLdapLogin() {
 	if (!valid) {
 		return;
 	}
-	//ldapLoginActive.value = false;
 	// Store school/system prefs
 	if (selectedSchool.value) {
 		localStorage.setItem("loginSchool", selectedSchool.value.id ?? "");
@@ -800,18 +744,18 @@ async function submitLdapLogin() {
 		};
 		showAlert.value = true;
 		countdownNum.value = loginTimeoutSeconds;
-        incTimer();
+		incTimer();
 	}
 }
 
 function incTimer() {
-    isLoginTimeoutActive.value = true;
-    if (countdownNum.value > 1) {
-        countdownNum.value--;
-        setTimeout(incTimer, 1000);
-    } else {
-        isLoginTimeoutActive.value = false;
-    }
+	isLoginTimeoutActive.value = true;
+	if (countdownNum.value > 1) {
+		countdownNum.value--;
+		setTimeout(incTimer, 1000);
+	} else {
+		isLoginTimeoutActive.value = false;
+	}
 }
 
 // ----- Password Recovery -----
@@ -824,17 +768,17 @@ function closePwRecoveryModal() {
 }
 
 async function submitPwRecovery() {
-    try {
-        await submitPasswordRecovery(pwRecoveryEmail.value);
-        pwRecoveryModal.value = false;
-        await router.push({ path: "/pwrecovery/response" });
-    } catch (err) {
-        pwRecoveryModal.value = false;
-        if (passwordRecoveryError.value === "EMAIL_DOMAIN_BLOCKED") {
-            await router.push({ path: "/pwrecovery/failed" });
-        } else {
-            await router.push({ path: "/pwrecovery/response" });
-        }
-    }
+	try {
+		await submitPasswordRecovery(pwRecoveryEmail.value);
+		pwRecoveryModal.value = false;
+		await router.push({ path: "/pwrecovery/response" });
+	} catch {
+		pwRecoveryModal.value = false;
+		if (passwordRecoveryError.value === "EMAIL_DOMAIN_BLOCKED") {
+			await router.push({ path: "/pwrecovery/failed" });
+		} else {
+			await router.push({ path: "/pwrecovery/response" });
+		}
+	}
 }
 </script>
