@@ -132,7 +132,7 @@ jobs:
     needs:
       - branch_meta
       - deploy
-    uses: hpi-schul-cloud/e2e-system-tests/.github/workflows/remote-trigger.yml@f3173803c0b271e2032bb433d24721f1aeafd1aa
+    uses: hpi-schul-cloud/e2e-system-tests/.github/workflows/remote-trigger.yml@main
     with:
       ref: ${{ needs.branch_meta.outputs.branch }}
     secrets:
