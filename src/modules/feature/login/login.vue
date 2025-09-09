@@ -478,7 +478,7 @@ const alert = ref<{
 const showAlert = ref(false);
 
 // Feature Toggles
-const featureOauthLoginEnabled: boolean = true;//envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
+const featureOauthLoginEnabled: boolean = envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 //TODO: get env the schulcloud way, for now:
 const featureJwtExtendedTimeoutEnabled = true;
 //envConfigModule.getEnv.FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED
