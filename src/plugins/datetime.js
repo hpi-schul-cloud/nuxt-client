@@ -122,7 +122,7 @@ export const printDateFromDeUTC = (date) => {
 
 export const printBirthday = (date) => {
 	if (date) {
-		// Due to a long living bug a lot of birthdays are not saved with 0 hours in UTC but with 22 or 23 hours on the day before.
+		// Due to a long living bug a lot of birthdays are not saved with 0 hours on the correct day but with 22 or 23 hours on the day before.
 		// This lead to those birthdays being displayed wrong.
 		// To fix this, we add 2 hours to the UTC time to make sure the birthday is always on the correct day.
 		return fromUTC(date).add(2, "hours").format(DATETIME_FORMAT.date);
