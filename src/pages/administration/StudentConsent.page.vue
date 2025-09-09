@@ -502,12 +502,7 @@ export default {
 			this.currentStep += 1;
 		},
 		checkBirthdays() {
-			return !this.tableData.some(
-				(element) =>
-					element.birthday === "" ||
-					element.birthday === null ||
-					!element.birthday
-			);
+			return this.tableData.every((element) => element.birthday);
 		},
 		register() {
 			if (this.isConsentNecessary && this.check === false) {
