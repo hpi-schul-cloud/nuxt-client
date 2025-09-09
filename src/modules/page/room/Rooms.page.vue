@@ -20,7 +20,7 @@
 			</thead>
 			<tbody>
 				<tr v-for="node in boardNodes" :key="node.id">
-					<td>{{ (node.payload as any)?.text }}</td>
+					<td>{{ stripHtmlTags((node.payload as any)?.text) }}</td>
 					<td>{{ node.score }}</td>
 				</tr>
 			</tbody>
@@ -65,6 +65,11 @@ useTitle(pageTitle);
 const boardNodes = ref<BoardDto[]>([]);
 
 const searchTerm = ref("");
+
+const stripHtmlTags = (input?: string): string => {
+	if (!input) return "";
+	return input.replace(/<[^>]*>/g, "");
+};
 
 const onSearchChange = async () => {
 	if (searchTerm.value.length < 3) {
