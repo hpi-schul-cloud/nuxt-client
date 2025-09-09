@@ -1,14 +1,29 @@
+import { BoardApiFactory, RoomApiFactory } from "@/serverApi/v3";
 import { RoomItem } from "@/types/room/Room";
-import { computed, ref } from "vue";
-import { RoomApiFactory } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { computed, ref } from "vue";
 
 export const useRoomsState = () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
 	const rooms = ref<RoomItem[]>([]);
 	const isLoading = ref(true);
+
+	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
+
+	const searchBoardNode = async (searchTerm: string) => {
+		try {
+			const response =
+				await boardApi.boardControllerSearchEmbedding(searchTerm);
+
+			return response.data;
+		} catch (error) {
+			const responseError = mapAxiosErrorToResponseError(error);
+
+			throw createApplicationError(responseError.code);
+		}
+	};
 
 	const fetchRooms = async () => {
 		isLoading.value = true;
@@ -76,5 +91,6 @@ export const useRoomsState = () => {
 		deleteRoom,
 		leaveRoom,
 		copyRoom,
+		searchBoardNode,
 	};
 };

@@ -294,7 +294,6 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     BoardEdit = 'BOARD_EDIT',
     BoardShareBoard = 'BOARD_SHARE_BOARD',
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
-    BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -585,6 +584,55 @@ export interface BoardContextResponse {
 /**
  * 
  * @export
+ * @interface BoardDto
+ */
+export interface BoardDto {
+    /**
+     * 
+     * @type {object}
+     * @memberof BoardDto
+     */
+    id: object;
+    /**
+     * 
+     * @type {number}
+     * @memberof BoardDto
+     */
+    version: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BoardDto
+     */
+    score: number;
+    /**
+     * 
+     * @type {object}
+     * @memberof BoardDto
+     */
+    payload?: object | null;
+    /**
+     * 
+     * @type {VectorDto}
+     * @memberof BoardDto
+     */
+    vector?: VectorDto;
+    /**
+     * 
+     * @type {object}
+     * @memberof BoardDto
+     */
+    shard_key?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof BoardDto
+     */
+    order_value?: object;
+}
+/**
+ * 
+ * @export
  * @interface BoardElementResponse
  */
 export interface BoardElementResponse {
@@ -788,12 +836,6 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     isVisible: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BoardResponse
-     */
-    readersCanEdit: boolean;
     /**
      * 
      * @type {BoardLayout}
@@ -1799,12 +1841,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_AI_TUTOR_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: boolean;
     /**
      * 
      * @type {boolean}
@@ -7738,7 +7774,6 @@ export enum Permission {
     BoardEdit = 'BOARD_EDIT',
     BoardShareBoard = 'BOARD_SHARE_BOARD',
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
-    BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -8045,19 +8080,6 @@ export interface PublicSystemResponse {
      * @memberof PublicSystemResponse
      */
     oauthConfig?: OauthConfigResponse | null;
-}
-/**
- * 
- * @export
- * @interface ReadersCanEditBodyParams
- */
-export interface ReadersCanEditBodyParams {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ReadersCanEditBodyParams
-     */
-    readersCanEdit: boolean;
 }
 /**
  * 
@@ -11177,6 +11199,56 @@ export interface ValidationError {
 /**
  * 
  * @export
+ * @interface VectorDto
+ */
+export interface VectorDto {
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof VectorDto
+     */
+    vector1d?: Array<number>;
+    /**
+     * 
+     * @type {Array<Array<number>>}
+     * @memberof VectorDto
+     */
+    vector2d: Array<Array<number>>;
+    /**
+     * 
+     * @type {VectorIndicesValuesDto}
+     * @memberof VectorDto
+     */
+    indicesValues?: VectorIndicesValuesDto;
+    /**
+     * 
+     * @type {object}
+     * @memberof VectorDto
+     */
+    other?: object;
+}
+/**
+ * 
+ * @export
+ * @interface VectorIndicesValuesDto
+ */
+export interface VectorIndicesValuesDto {
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof VectorIndicesValuesDto
+     */
+    indices: Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof VectorIndicesValuesDto
+     */
+    values: Array<number>;
+}
+/**
+ * 
+ * @export
  * @interface VideoConferenceContentBody
  */
 export interface VideoConferenceContentBody {
@@ -13761,6 +13833,47 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Search board nodes by embedding similarity.
+         * @param {string} query Search string
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerSearchEmbedding: async (query: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'query' is not null or undefined
+            assertParamExists('boardControllerSearchEmbedding', 'query', query)
+            const localVarPath = `/boards/search-embedding`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (query !== undefined) {
+                localVarQueryParameter['query'] = query;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -13841,50 +13954,6 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(layoutBodyParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Update the visibility of a board.
-         * @param {string} boardId The id of the board.
-         * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        boardControllerUpdateReadersCanEdit: async (boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'boardId' is not null or undefined
-            assertParamExists('boardControllerUpdateReadersCanEdit', 'boardId', boardId)
-            // verify required parameter 'readersCanEditBodyParams' is not null or undefined
-            assertParamExists('boardControllerUpdateReadersCanEdit', 'readersCanEditBodyParams', readersCanEditBodyParams)
-            const localVarPath = `/boards/{boardId}/readers-can-edit`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(readersCanEditBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -14013,6 +14082,17 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Search board nodes by embedding similarity.
+         * @param {string} query Search string
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerSearchEmbedding(query: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BoardDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerSearchEmbedding(query, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -14033,18 +14113,6 @@ export const BoardApiFp = function(configuration?: Configuration) {
          */
         async boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateLayout(boardId, layoutBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @summary Update the visibility of a board.
-         * @param {string} boardId The id of the board.
-         * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateReadersCanEdit(boardId, readersCanEditBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14131,6 +14199,16 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @summary Search board nodes by embedding similarity.
+         * @param {string} query Search string
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerSearchEmbedding(query: string, options?: any): AxiosPromise<Array<BoardDto>> {
+            return localVarFp.boardControllerSearchEmbedding(query, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -14150,17 +14228,6 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          */
         boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): AxiosPromise<void> {
             return localVarFp.boardControllerUpdateLayout(boardId, layoutBodyParams, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Update the visibility of a board.
-         * @param {string} boardId The id of the board.
-         * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.boardControllerUpdateReadersCanEdit(boardId, readersCanEditBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14244,6 +14311,16 @@ export interface BoardApiInterface {
 
     /**
      * 
+     * @summary Search board nodes by embedding similarity.
+     * @param {string} query Search string
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerSearchEmbedding(query: string, options?: any): AxiosPromise<Array<BoardDto>>;
+
+    /**
+     * 
      * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
      * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -14263,17 +14340,6 @@ export interface BoardApiInterface {
      * @memberof BoardApiInterface
      */
     boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): AxiosPromise<void>;
-
-    /**
-     * 
-     * @summary Update the visibility of a board.
-     * @param {string} boardId The id of the board.
-     * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardApiInterface
-     */
-    boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -14369,6 +14435,18 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
     /**
      * 
+     * @summary Search board nodes by embedding similarity.
+     * @param {string} query Search string
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerSearchEmbedding(query: string, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerSearchEmbedding(query, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
      * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -14391,19 +14469,6 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      */
     public boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any) {
         return BoardApiFp(this.configuration).boardControllerUpdateLayout(boardId, layoutBodyParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Update the visibility of a board.
-     * @param {string} boardId The id of the board.
-     * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardApi
-     */
-    public boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any) {
-        return BoardApiFp(this.configuration).boardControllerUpdateReadersCanEdit(boardId, readersCanEditBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

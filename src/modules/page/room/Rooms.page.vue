@@ -4,7 +4,29 @@
 			<h1 class="text-h3 mb-4">{{ t("pages.rooms.title") }}</h1>
 		</template>
 		<RoomsWelcomeInfo />
+		<v-text-field
+			v-model="searchTerm"
+			label="Suche Elemente"
+			@input="onSearchChange"
+			class="mb-4"
+			clearable
+		/>
+		<v-table class="mt-6" v-if="boardNodes.length">
+			<thead>
+				<tr>
+					<th><b>Text</b></th>
+					<th><b>Score</b></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="node in boardNodes" :key="node.id">
+					<td>{{ (node.payload as any)?.text }}</td>
+					<td>{{ node.score }}</td>
+				</tr>
+			</tbody>
+		</v-table>
 		<RoomGrid :rooms="rooms" :is-loading="isLoading" :is-empty="isEmpty" />
+
 		<ImportFlow
 			:is-active="isImportMode"
 			:token="importToken"
@@ -18,7 +40,7 @@
 <script setup lang="ts">
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { BoardDto, BoardExternalReferenceType } from "@/serverApi/v3";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomAuthorization, useRoomsState } from "@data-room";
@@ -32,12 +54,26 @@ import { useRoute, useRouter } from "vue-router";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { rooms, fetchRooms, isLoading, isEmpty } = useRoomsState();
+const { rooms, fetchRooms, isLoading, isEmpty, searchBoardNode } =
+	useRoomsState();
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { canCreateRoom } = useRoomAuthorization();
 
 const pageTitle = computed(() => buildPageTitle(`${t("pages.rooms.title")}`));
 useTitle(pageTitle);
+
+const boardNodes = ref<BoardDto[]>([]);
+
+const searchTerm = ref("");
+
+const onSearchChange = async () => {
+	if (searchTerm.value.length < 3) {
+		boardNodes.value = [];
+		return;
+	}
+	const nodes = await searchBoardNode(searchTerm.value);
+	boardNodes.value = nodes;
+};
 
 const fabAction = computed(() => {
 	if (!canCreateRoom.value) return;
