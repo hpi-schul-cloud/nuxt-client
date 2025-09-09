@@ -16,12 +16,21 @@
 				<tr>
 					<th><b>Text</b></th>
 					<th><b>Score</b></th>
+					<th><b>Aktionen</b></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr v-for="node in boardNodes" :key="node.id">
 					<td>{{ stripHtmlTags((node.payload as any)?.text) }}</td>
 					<td>{{ node.score }}</td>
+					<td>
+						<v-btn
+							variant="text"
+							size="small"
+							@click="onGoToCard((node.payload as any)?.svs_id)"
+							>Zum Element</v-btn
+						>
+					</td>
 				</tr>
 			</tbody>
 		</v-table>
@@ -43,6 +52,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardDto, BoardExternalReferenceType } from "@/serverApi/v3";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useFolderState } from "@data-folder";
 import { useRoomAuthorization, useRoomsState } from "@data-room";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
@@ -50,6 +60,7 @@ import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
+const { fetchParentNodeInfos } = useFolderState();
 
 const { t } = useI18n();
 const route = useRoute();
@@ -78,6 +89,19 @@ const onSearchChange = async () => {
 	}
 	const nodes = await searchBoardNode(searchTerm.value);
 	boardNodes.value = nodes;
+};
+
+const onGoToCard = async (id: string) => {
+	const res = await fetchParentNodeInfos(id);
+
+	const boardId = res?.parentHierarchy.find(
+		(parent) => parent.type === "board"
+	)?.id;
+
+	const link = `boards/${boardId}#richTextCk5-${id}`;
+	if (boardId) {
+		router.push(link);
+	}
 };
 
 const fabAction = computed(() => {

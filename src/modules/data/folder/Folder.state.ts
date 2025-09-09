@@ -19,6 +19,18 @@ export const useFolderState = () => {
 	const fileFolderElement = ref<FileFolderElement | undefined>(undefined);
 	const parentNodeInfos = ref<ParentNodeInfo[]>([]);
 
+	const fetchParentNodeInfos = async (fileFolderElementId: string) => {
+		try {
+			const response =
+				await boardElementApi.elementControllerGetElementWithParentHierarchy(
+					fileFolderElementId
+				);
+			return response.data;
+		} catch (error) {
+			throwApplicationError(error);
+		}
+	};
+
 	const fetchFileFolderElement = async (fileFolderElementId: string) => {
 		try {
 			const reponse =
@@ -103,6 +115,7 @@ export const useFolderState = () => {
 		parent,
 		mapNodeTypeToPathType,
 		renameFolder,
+		fetchParentNodeInfos,
 	};
 };
 
