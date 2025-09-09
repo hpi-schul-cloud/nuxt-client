@@ -8,7 +8,7 @@
 		<ImportFlow
 			:is-active="isImportMode"
 			:token="importToken"
-			:destinations="rooms"
+			:destinations="rooms.filter((room) => !room.isLocked)"
 			:destination-type="BoardExternalReferenceType.Room"
 			@success="onImportSuccess"
 		/>
