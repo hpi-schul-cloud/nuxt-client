@@ -43,11 +43,13 @@ export const useLoginApi = () => {
 	 */
 	const apiLoginEmail = async (
 		username: string,
-		password: string
+		password: string,
+		createLoginCookies?: boolean
 	): Promise<LoginResponse> => {
 		const response = await authApi.loginControllerLoginLocal({
 			username,
 			password,
+			createLoginCookies,
 		});
 		return response.data;
 	};
@@ -59,13 +61,15 @@ export const useLoginApi = () => {
 		username: string,
 		password: string,
 		schoolId: string,
-		systemId: string
+		systemId: string,
+		createLoginCookies?: boolean
 	): Promise<LoginResponse> => {
 		const response = await authApi.loginControllerLoginLdap({
 			username,
 			password,
 			schoolId,
 			systemId,
+			createLoginCookies,
 		});
 		return response.data;
 	};

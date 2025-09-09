@@ -515,25 +515,25 @@ onMounted(() => {
 	//getMockSchoolsForLogin();
 
 	const route = useRoute();
-    const strategy = route.query.strategy;
-    const schoolid = route.query.schoolid;
+	const strategy = route.query.strategy;
+	const schoolid = route.query.schoolid;
 
-    if (strategy) {
+	if (strategy) {
 		if (featureOauthLoginEnabled) {
-			if (strategy === 'ldap') {
-            showLdap();
-            if (schoolid) {
-                const schoolObj = schools.value.find((item) => item.id === schoolid);
-                if (schoolObj) {
-                    selectedSchool.value = schoolObj;
-                    onSchoolChange(schoolObj);
-                }
-            }
-			} else if (strategy === 'email') {
+			if (strategy === "ldap") {
+				showLdap();
+				if (schoolid) {
+					const schoolObj = schools.value.find((item) => item.id === schoolid);
+					if (schoolObj) {
+						selectedSchool.value = schoolObj;
+						onSchoolChange(schoolObj);
+					}
+				}
+			} else if (strategy === "email") {
 				showEmail();
 			}
 		}
-    } else {
+	} else {
 		const storedSchool = localStorage.getItem("loginSchool");
 		if (storedSchool) {
 			const schoolObj = schools.value.find((item) => item.id === storedSchool);
@@ -646,10 +646,8 @@ async function submitLogin() {
 }
 
 async function submitLocalLogin() {
-	await loginEmail(email.value, password.value);
+	await loginEmail(email.value, password.value, true);
 	if (loginResult.value) {
-		setCookie("jwt", loginResult.value?.accessToken);
-		setCookie("isLoggedIn", "true");
 		if (redirectParam.value) {
 			await router.push({ path: redirectParam.value });
 		} else {
@@ -704,11 +702,10 @@ async function submitLdapLogin() {
 		selectedSchool.value.id,
 		selectedSystem.value?.id
 			? selectedSystem.value.id
-			: selectedSchool.value?.systems[0].id
+			: selectedSchool.value?.systems[0].id,
+		true
 	);
 	if (loginResult.value) {
-		setCookie("jwt", loginResult.value?.accessToken);
-		setCookie("isLoggedIn", "true");
 		if (redirectParam.value) {
 			await router.push({ path: redirectParam.value });
 		} else {
