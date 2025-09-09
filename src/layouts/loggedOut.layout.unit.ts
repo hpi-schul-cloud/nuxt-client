@@ -10,7 +10,7 @@ import {
 	THEME_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { envsFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -24,6 +24,10 @@ vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
 describe("loggedOutLayout", () => {
+	beforeAll(() => {
+		createTestEnvStore();
+	});
+
 	const mountComponent = () => {
 		setupStores({
 			envConfigModule: EnvConfigModule,

@@ -24,6 +24,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
+import { createTestEnvStore } from "../../../tests/test-utils/index.js";
 
 vi.mock("vue-router");
 
@@ -158,6 +159,10 @@ const getWrapper = () => {
 };
 
 describe("@/pages/CourseRoomOverview.page", () => {
+	beforeAll(() => {
+		createTestEnvStore();
+	});
+
 	beforeEach(() => {
 		courseRoomListModule.setRoomData(mockRoomStoreData);
 		courseRoomListModule.setAllElements(mockCourseData);

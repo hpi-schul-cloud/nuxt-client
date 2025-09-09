@@ -10,6 +10,7 @@ import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import { RouterLinkStub } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { createTestEnvStore } from "../../../tests/test-utils/index.js";
 
 const mockInputData = {
 	url: "ldaps://ldap.hpi-schul-cloud.de",
@@ -91,6 +92,10 @@ describe("ldap/config", () => {
 
 		return { wrapper };
 	};
+
+	beforeAll(() => {
+		createTestEnvStore();
+	});
 
 	beforeEach(() => {
 		setupStores({

@@ -5,19 +5,20 @@ import {
 	MediaSourceLicenseType,
 } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
 	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { mockedPiniaStoreTyping, MockedStore } from "@@/tests/test-utils";
 import {
-	envsFactory,
+	createTestEnvStore,
+	mockedPiniaStoreTyping,
+	MockedStore,
+} from "@@/tests/test-utils";
+import {
 	meResponseFactory,
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
@@ -86,9 +87,7 @@ describe("ExternalToolSection", () => {
 			getSchool: mockMe.school,
 		});
 
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envsFactory.build(envs),
-		});
+		createTestEnvStore(envs);
 
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
@@ -100,8 +99,7 @@ describe("ExternalToolSection", () => {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[AUTH_MODULE_KEY.valueOf()]: authModule
 				},
 			},
 			stubs: {

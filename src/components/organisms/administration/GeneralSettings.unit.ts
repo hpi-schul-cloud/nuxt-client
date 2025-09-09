@@ -8,7 +8,11 @@ import { envConfigModule, notifierModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import { envsFactory, schoolFactory } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	envsFactory,
+	schoolFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -22,6 +26,7 @@ import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { toBase64 } from "@/utils/fileHelper";
 import { nextTick } from "vue";
+import { beforeAll } from "vitest";
 
 vi.mock("@/utils/fileHelper", async () => {
 	const original =
@@ -35,6 +40,10 @@ vi.mock("@/utils/fileHelper", async () => {
 });
 
 describe("GeneralSettings", () => {
+	beforeAll(() => {
+		createTestEnvStore();
+	});
+
 	beforeEach(() => {
 		setupStores({
 			authModule: AuthModule,

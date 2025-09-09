@@ -12,6 +12,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
 import { SchulcloudTheme } from "../../serverApi/v3";
+import { createTestEnvStore } from "../../../tests/test-utils/index.js";
 
 const mockResponseData = {
 	ok: true,
@@ -100,6 +101,10 @@ describe("ldap/activate", () => {
 
 		return { wrapper, routerPushStub };
 	};
+
+	beforeAll(() => {
+		createTestEnvStore();
+	});
 
 	beforeEach(() => {
 		setupStores({

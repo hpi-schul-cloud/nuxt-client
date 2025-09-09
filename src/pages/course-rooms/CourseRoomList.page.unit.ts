@@ -21,6 +21,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { CourseMetadataResponse } from "@/serverApi/v3";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 vi.mock("vue-router");
 
@@ -87,6 +88,10 @@ describe("@/pages/CourseRoomListPage", () => {
 
 		return { wrapper };
 	};
+
+	beforeAll(() => {
+		createTestEnvStore();
+	});
 
 	beforeEach(() => {
 		setupStores({

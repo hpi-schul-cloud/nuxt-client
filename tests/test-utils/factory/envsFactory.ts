@@ -12,5 +12,5 @@ export const createTestEnvStore = (config?: Partial<ConfigResponse>) => {
 	if (!getActivePinia()) {
 		setActivePinia(createPinia());
 	}
-	useEnvStore().setEnvs(envsFactory.build(config));
+	useEnvStore().$patch({ env: envsFactory.build(config) });
 };

@@ -14,6 +14,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
 import ConsentPage from "./StudentConsent.page.vue";
+import { createTestEnvStore } from "../../../tests/test-utils/index.js";
 
 const mockData = [
 	{
@@ -117,6 +118,10 @@ const setup = () => {
 };
 
 describe("students/consent", () => {
+	beforeAll(() => {
+		createTestEnvStore();
+	});
+
 	beforeEach(() => {
 		setupStores({
 			filePathsModule: FilePathsModule,
