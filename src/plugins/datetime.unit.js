@@ -2,6 +2,8 @@ import de from "@/locales/de";
 import en from "@/locales/en";
 import datetime, {
 	calculateUTC,
+	convertFromDeToIso,
+	convertFromIsoToDe,
 	createInputDateTime,
 	currentDate,
 	DATETIME_FORMAT,
@@ -11,9 +13,9 @@ import datetime, {
 	fromNowToFuture,
 	getTimeFromISOString,
 	getUtcOffset,
-	inputDateFromDeUTC,
 	inputRangeDate,
 	isDateTimeInPast,
+	printBirthday,
 	printDate,
 	printDateFromDeUTC,
 	printDateFromStringUTC,
@@ -29,6 +31,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import setupStores from "../../tests/test-utils/setupStores";
+import { describe } from "vitest";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -68,6 +71,31 @@ const localizedFormats = {
 		dateTimeYY: translations["en"]["format.dateTimeYY"],
 		dateLong: translations["en"]["format.dateLong"],
 		time: translations["en"]["format.time"],
+	},
+};
+
+const mockApp = {
+	$cookies: {
+		get: vi
+			.fn()
+			.mockReturnValueOnce(null)
+			.mockReturnValueOnce(TEST_USER_TIMEZONE)
+			.mockReturnValue(TEST_DATETIME_TIMEZONE),
+	},
+	$datetime: {
+		currentTimezone: TEST_USER_TIMEZONE,
+	},
+	i18n: {
+		t: (key) => translations[TEST_CURRENT_LOCALE]?.[key] || key,
+	},
+};
+
+const mockStore = {
+	state: { schools: { school: { timezone: TEST_DATETIME_TIMEZONE } } },
+	getters: {
+		"auth/getLocale": () => {
+			return TEST_CURRENT_LOCALE;
+		},
 	},
 };
 
@@ -126,13 +154,6 @@ describe("@/plugins/datetime", () => {
 		const result = printDateTimeFromStringUTC(dateString);
 		expect(result).toBe(dateTimeLocalStringYY);
 		expect(printDateTimeFromStringUTC(null)).toBe("Invalid Date");
-	});
-
-	it("inputDateFromDeUTC", () => {
-		const result = inputDateFromDeUTC(dateUTCString);
-		expect(result).toBe(dateLocal.format("YYYY-MM-DD"));
-		expect(inputDateFromDeUTC(null)).toBeNull();
-		expect(inputDateFromDeUTC("")).toBeNull();
 	});
 
 	it("printDate", () => {
@@ -211,31 +232,6 @@ describe("@/plugins/datetime", () => {
 		);
 	});
 
-	const mockApp = {
-		$cookies: {
-			get: vi
-				.fn()
-				.mockReturnValueOnce(null)
-				.mockReturnValueOnce(TEST_USER_TIMEZONE)
-				.mockReturnValue(TEST_DATETIME_TIMEZONE),
-		},
-		$datetime: {
-			currentTimezone: TEST_USER_TIMEZONE,
-		},
-		i18n: {
-			t: (key) => translations[TEST_CURRENT_LOCALE]?.[key] || key,
-		},
-	};
-
-	const mockStore = {
-		state: { schools: { school: { timezone: TEST_DATETIME_TIMEZONE } } },
-		getters: {
-			"auth/getLocale": () => {
-				return TEST_CURRENT_LOCALE;
-			},
-		},
-	};
-
 	it("init", () => {
 		datetime({ app: mockApp, store: mockStore });
 		expect(mockApp.$datetime).toStrictEqual({
@@ -285,5 +281,31 @@ describe("@/plugins/datetime", () => {
 		expect(setDefaultFormats({ ...mockApp, i18n: null })).toStrictEqual(
 			localizedFormats[TEST_CURRENT_LOCALE]
 		);
+	});
+
+	describe("printBirthday", () => {
+		it("should print birthday correctly if date is saved with 0 hours", () => {
+			const date = "1992-01-01T00:00:00Z";
+			expect(printBirthday(date)).toEqual("01/01/1992");
+		});
+
+		it("should print birthday correctly if date is saved with 22 hours on the day before", () => {
+			const date = "1991-12-31T22:00:00Z";
+			expect(printBirthday(date)).toEqual("01/01/1992");
+		});
+	});
+
+	describe("convertFromDeToIso", () => {
+		it("should convert German date format to ISO", () => {
+			const date = "31.12.1991";
+			expect(convertFromDeToIso(date)).toEqual("1991-12-31");
+		});
+	});
+
+	describe("convertFromIsoToDe", () => {
+		it("should convert ISO date format to German", () => {
+			const date = "1991-12-31";
+			expect(convertFromIsoToDe(date)).toEqual("31.12.1991");
+		});
 	});
 });

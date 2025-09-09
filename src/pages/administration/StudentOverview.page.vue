@@ -61,7 +61,7 @@
 				@update:rows-per-page="onUpdateRowsPerPage"
 			>
 				<template #datacolumn-birthday="{ data }">
-					<span class="text-content">{{ printDate(data) }}</span>
+					<span class="text-content">{{ printBirthday(data) }}</span>
 				</template>
 				<template #datacolumn-classes="{ data }">
 					{{ (data || []).join(", ") }}
@@ -138,7 +138,7 @@ import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable"
 import AdminTableLegend from "@/components/molecules/AdminTableLegend";
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import { printDate } from "@/plugins/datetime";
+import { printDate, printBirthday } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
 import {
 	mdiAccountPlus,
@@ -532,6 +532,7 @@ export default {
 			this.find();
 		},
 		printDate,
+		printBirthday,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,

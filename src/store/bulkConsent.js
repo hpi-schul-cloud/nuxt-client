@@ -1,6 +1,6 @@
 import generatePassword from "@/mixins/generatePassword";
+import { printBirthday } from "@/plugins/datetime";
 import { $axios } from "@/utils/api";
-import { inputDateFormat } from "@/plugins/datetime";
 
 export const actions = {
 	/**
@@ -78,7 +78,7 @@ export const actions = {
 			.map((student) => {
 				student.fullName = student.firstName + " " + student.lastName;
 				student.password = generatePassword();
-				student.birthday = inputDateFormat(student.birthday);
+				student.birthday = printBirthday(student.birthday);
 				return student;
 			});
 		commit("setStudentsData", data);

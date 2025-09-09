@@ -56,7 +56,7 @@
 						<base-input
 							:error="birthdayWarning && !slotProps.data ? inputError : null"
 							class="date base-input"
-							:model-value="inputDateFromDeUTC(slotProps.data)"
+							:model-value="convertFromDeToIso(slotProps.data)"
 							type="date"
 							label=""
 							data-testid="birthday-input"
@@ -64,7 +64,7 @@
 							@update:model-value="
 								inputDate({
 									id: tableData[slotProps.rowindex]._id,
-									birthDate: inputDateFormat($event),
+									birthDate: convertFromIsoToDe($event),
 								})
 							"
 						/>
@@ -312,19 +312,19 @@
 </template>
 
 <script>
-import { envConfigModule, filePathsModule, notifierModule } from "@/store";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import StepProgress from "@/components/organisms/StepProgress";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
+import StepProgress from "@/components/organisms/StepProgress";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
-	inputDateFormat,
-	inputDateFromDeUTC,
+	convertFromDeToIso,
+	convertFromIsoToDe,
 	printDateFromDeUTC,
 } from "@/plugins/datetime";
-import { mdiAlert } from "@icons/material";
+import { envConfigModule, filePathsModule, notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { mdiAlert } from "@icons/material";
 
 export default {
 	components: {
@@ -511,7 +511,7 @@ export default {
 				const users = this.tableData.map((student) => {
 					return {
 						_id: student._id,
-						birthday: inputDateFromDeUTC(student.birthday),
+						birthday: convertFromDeToIso(student.birthday),
 						password: student.password,
 						consent: {
 							userConsent: {
@@ -606,8 +606,8 @@ export default {
 				}
 			}, 2000);
 		},
-		inputDateFromDeUTC,
-		inputDateFormat,
+		convertFromDeToIso,
+		convertFromIsoToDe,
 		printDateFromDeUTC,
 		warningEventHandler() {
 			if (this.currentStep === 2) {

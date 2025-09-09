@@ -120,31 +120,21 @@ export const printDateFromDeUTC = (date) => {
 	return null;
 };
 
-/**
- * Returns formated date string based on a given date string in German format
- * TODO: Currently the server is returning this date in German format. Please check, if this is needed or can be reverted to international date format, i.e. (DD.MM.YYYY -> YYYY-MM-DD)
- * @param {String} date DE formated date string based on UTC
- * @return {String} Date string based on current timezone for usage in input field (YYYY-MM-DD)
- */
-export const inputDateFromDeUTC = (date) => {
+export const printBirthday = (date) => {
 	if (date) {
-		const result = dayjs.tz(date, "DD.MM.YYYY", "UTC");
-		return result.format(DATETIME_FORMAT.inputDate);
+		// Due to a long living bug a lot of birthdays are not saved with 0 hours in UTC but with 22 or 23 hours on the day before.
+		// This lead to those birthdays being displayed wrong.
+		// To fix this, we add 2 hours to the UTC time to make sure the birthday is always on the correct day.
+		return fromUTC(date).add(2, "hours").format(DATETIME_FORMAT.date);
 	}
-	return null;
 };
 
-/**
- * Returns formated date string based on a given date string in Backend format
- * @param {String} date formatted date string from input fields (YYYY-MM-DD)
- * @return {String} Date string based on current timezone for Backend format (DD.MM.YYYY)
- */
-export const inputDateFormat = (date) => {
-	if (date) {
-		const result = dayjs(date, DATETIME_FORMAT.inputDate).tz();
-		return result.format("DD.MM.YYYY");
-	}
-	return null;
+export const convertFromDeToIso = (date) => {
+	return dayjs(date, "DD.MM.YYYY").format("YYYY-MM-DD");
+};
+
+export const convertFromIsoToDe = (date) => {
+	return dayjs(date, "YYYY-MM-DD").format("DD.MM.YYYY");
 };
 
 /**
