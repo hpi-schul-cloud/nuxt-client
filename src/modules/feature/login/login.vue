@@ -55,9 +55,12 @@
 						v-model="email"
 						:label="$t('common.labels.email')"
 						type="email"
+						:error="!!emailError"
+						:error-messages="emailError"
 						required
 						autocomplete="username"
 						data-testid="username-email"
+						@input="emailError = ''"
 					/>
 					<!--:prepend-icon="mdiLockOutline"-->
 					<v-text-field
@@ -65,10 +68,13 @@
 						:label="$t('common.labels.password')"
 						:append-icon="showPassword ? mdiEyeOutline : mdiEyeOffOutline"
 						:type="showPassword ? 'text' : 'password'"
+						:error="!!passwordError"
+						:error-messages="passwordError"
 						required
 						autocomplete="current-password"
 						data-testid="password-email"
 						@click:append="togglePassword"
+						@input="passwordError = ''"
 					/>
 					<v-checkbox
 						v-if="featureJwtExtendedTimeoutEnabled"
@@ -120,9 +126,12 @@
 					<v-text-field
 						v-model="ldapUsername"
 						:label="$t('common.labels.username')"
+						:error="!!emailError"
+						:error-messages="emailError"
 						required
 						autocomplete="username"
 						data-testid="username-ldap"
+						@input="emailError = ''"
 					/>
 					<!--:prepend-icon="mdiLockOutline"-->
 					<v-text-field
@@ -132,8 +141,11 @@
 						:type="showLdapPassword ? 'text' : 'password'"
 						data-testid="password-ldap"
 						autocomplete="current-password"
+						:error="!!passwordError"
+						:error-messages="passwordError"
 						required
 						@click:append="toggleLdapPassword"
+						@input="passwordError = ''"
 					/>
 					<v-checkbox
 						v-if="featureJwtExtendedTimeoutEnabled"
@@ -213,19 +225,25 @@
 						v-model="email"
 						:label="$t('common.labels.emailUsername')"
 						type="email"
+						:error="!!emailError"
+						:error-messages="emailError"
 						required
 						autocomplete="username"
 						data-testid="username-email"
+						@input="emailError = ''"
 					/>
 					<v-text-field
 						v-model="password"
 						:label="$t('common.labels.password')"
 						:append-icon="showPassword ? mdiEyeOutline : mdiEyeOffOutline"
 						:type="showPassword ? 'text' : 'password'"
+						:error="!!passwordError"
+						:error-messages="passwordError"
 						required
 						autocomplete="current-password"
 						data-testid="password-email"
 						@click:append="togglePassword"
+						@input="passwordError = ''"
 					/>
 					<v-checkbox
 						v-if="featureJwtExtendedTimeoutEnabled"
@@ -452,6 +470,8 @@ const ldapPassword = ref("");
 const privateDevice = ref(false);
 const showPassword = ref(false);
 const showLdapPassword = ref(false);
+const emailError = ref("");
+const passwordError = ref("");
 
 const selectedSchool = ref<SchoolForLdapLoginResponse | null>(null);
 const systemOptions = ref<Array<SystemForLdapLoginResponse>>([]); // For cloud/email login
@@ -646,6 +666,20 @@ async function submitLogin() {
 }
 
 async function submitLocalLogin() {
+	emailError.value = "";
+	passwordError.value = "";
+	let valid = true;
+	if (!email.value) {
+		emailError.value = "Please fill out this field";
+		valid = false;
+	}
+	if (!password.value) {
+		passwordError.value = "Please fill out this field";
+		valid = false;
+	}
+	if (!valid) {
+		return;
+	}
 	await loginEmail(email.value, password.value, true);
 	if (loginResult.value) {
 		if (redirectParam.value) {
@@ -672,6 +706,20 @@ async function submitLocalLogin() {
 }
 
 async function submitLdapLogin() {
+	emailError.value = "";
+	passwordError.value = "";
+	let valid = true;
+	if (!ldapUsername.value) {
+		emailError.value = "Please fill out this field";
+		valid = false;
+	}
+	if (!ldapPassword.value) {
+		passwordError.value = "Please fill out this field";
+		valid = false;
+	}
+	if (!valid) {
+		return;
+	}
 	//ldapLoginActive.value = false;
 	// Store school/system prefs
 	if (selectedSchool.value) {
