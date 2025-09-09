@@ -231,6 +231,7 @@ describe("useCardSocketApi", () => {
 						lastUpdatedAt: new Date().toISOString(),
 						deletedAt: undefined,
 					},
+					readersCanEdit: false,
 					features: [],
 					permissions: [],
 				};
