@@ -41,7 +41,7 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { useBoardNotifier } from "@util-board";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import {
 	VBtn,
@@ -208,6 +208,7 @@ describe("RoomMembersPage", () => {
 					Members: true,
 					InviteMembersDialog: true,
 					UseFocusTrap: true,
+					// AddMembersDialog: true,
 				},
 			},
 
@@ -592,29 +593,16 @@ describe("RoomMembersPage", () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper } = setup();
 
-			const parent = wrapper.getComponent(AddMembersDialog);
-			await parent.setValue(true);
-			await parent.vm.$nextTick();
+			const dialog = wrapper.getComponent(VDialog);
+			await dialog.setValue(true);
+			expect(dialog.props("modelValue")).toBe(true);
 
-			const dialog = parent.findComponent(VDialog);
-			await dialog.trigger("keydown.escape");
-			await dialog.vm.$nextTick();
+			window.dispatchEvent(
+				new KeyboardEvent("keydown", { key: "Escape", keyCode: 27 })
+			);
+			await nextTick();
 
-			const emitted = parent.emitted();
-			expect(emitted["close"]).toBeDefined();
-
-			/*
-			await dialog.trigger("keydown.escape");
-			await dialog.vm.$nextTick();
-			// await parent.trigger("keydown.escape");
-			await parent.vm.$nextTick();
-			expect(dialog.exists()).toBe(true);
-			await dialog.trigger("keydown.escape");
-			await dialog.vm.$nextTick();
-			expect(dialog.exists()).toBe(false);
-			*/
-
-			// expect(dialog.props("modelValue")).toBe(false);
+			expect(dialog.props("modelValue")).toBe(false);
 		});
 
 		it("should close dialog on close", async () => {

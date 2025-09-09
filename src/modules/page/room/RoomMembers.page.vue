@@ -66,8 +66,8 @@
 				/>
 			</VTabsWindowItem>
 		</VTabsWindow>
-		<AddMembersDialog v-model="isMembersDialogOpen" @close="onDialogClose" />
 	</DefaultWireframe>
+	<AddMembersDialog v-model="isMembersDialogOpen" @close="onDialogClose" />
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	<ConfirmationDialog />
 	<InviteMembersDialog

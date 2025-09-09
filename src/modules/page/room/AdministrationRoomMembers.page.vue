@@ -63,7 +63,7 @@ const pageTitle = computed(() => buildPageTitle(headerText.value));
 useTitle(pageTitle);
 
 onMounted(async () => {
-	const roomId = route.params.roomId.toString();
+	const roomId = route.params.roomId?.toString();
 	await fetchRoom(roomId);
 	await fetchMembers();
 });
