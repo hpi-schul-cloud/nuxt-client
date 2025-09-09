@@ -789,7 +789,8 @@ export interface BoardResponse {
      */
     isVisible: boolean;
     /**
-     ** @type {boolean}
+     *
+     * @type {boolean}
      * @memberof BoardResponse
      */
     readersCanEdit: boolean;
@@ -1632,6 +1633,12 @@ export interface ConfigResponse {
     FEATURE_OAUTH_LOGIN_ENABLED: boolean;
     /**
      *
+     * @type {number}
+     * @memberof ConfigResponse
+     */
+    LOGIN_BLOCK_TIME: number;
+    /**
+     *
      * @type {boolean}
      * @memberof ConfigResponse
      */
@@ -1805,7 +1812,8 @@ export interface ConfigResponse {
      */
     FEATURE_AI_TUTOR_ENABLED: boolean;
     /**
-     ** @type {boolean}
+     *
+     * @type {boolean}
      * @memberof ConfigResponse
      */
     FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: boolean;
@@ -4822,6 +4830,12 @@ export interface LdapAuthorizationBodyParams {
      * @memberof LdapAuthorizationBodyParams
      */
     schoolId: string;
+    /**
+     *
+     * @type {boolean}
+     * @memberof LdapAuthorizationBodyParams
+     */
+    createLoginCookies?: boolean;
 }
 /**
  *
@@ -5275,6 +5289,12 @@ export interface LocalAuthorizationBodyParams {
      * @memberof LocalAuthorizationBodyParams
      */
     password: string;
+    /**
+     *
+     * @type {boolean}
+     * @memberof LocalAuthorizationBodyParams
+     */
+    createLoginCookies?: boolean;
 }
 /**
  *
@@ -8051,7 +8071,8 @@ export interface PublicSystemResponse {
     oauthConfig?: OauthConfigResponse | null;
 }
 /**
- ** @export
+ *
+ * @export
  * @interface ReadersCanEditBodyParams
  */
 export interface ReadersCanEditBodyParams {
@@ -14155,7 +14176,8 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.boardControllerUpdateLayout(boardId, layoutBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
-         ** @summary Update the visibility of a board.
+         *
+         * @summary Update the visibility of a board.
          * @param {string} boardId The id of the board.
          * @param {ReadersCanEditBodyParams} readersCanEditBodyParams
          * @param {*} [options] Override http request option.

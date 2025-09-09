@@ -11,6 +11,8 @@ import {
 	SystemType,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { AxiosResponse } from "axios";
+import { E } from "vitest/dist/chunks/environment.d.cL3nLXbE.js";
 
 /**
  * API abstraction for the login composable.
@@ -110,13 +112,9 @@ export const useLoginApi = () => {
 		return response.data;
 	};
 
-    const apiPasswordRecovery = async (username: string): Promise<any> => {
-        try {
-            const response = await $axios.post("/v1/passwordRecovery", { username });
-            return response.data;
-        } catch (err: any) {
-            throw err;
-        }
+    const apiPasswordRecovery = async (username: string): Promise<AxiosResponse> => {
+        const response = await $axios.post("/v1/passwordRecovery", { username });
+        return response.data;
     };
 
 	return {
