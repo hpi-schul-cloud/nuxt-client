@@ -15,8 +15,10 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { Router, useRouter } from "vue-router";
 import {
 	CreateElementFailurePayload,
 	CreateElementSuccessPayload,
@@ -31,8 +33,6 @@ import {
 } from "./cardActionPayload.types";
 import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
-import { Router, useRouter } from "vue-router";
-import { Mock } from "vitest";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
@@ -233,6 +233,7 @@ describe("useCardSocketApi", () => {
 					},
 					features: [],
 					permissions: [],
+					readersCanEdit: false,
 				};
 				const { dispatch } = useCardSocketApi();
 				return { dispatch, boardStore };

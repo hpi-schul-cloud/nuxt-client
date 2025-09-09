@@ -1,4 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { BoardLayout } from "@/serverApi/v3/api";
 import { applicationErrorModule, envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import EnvConfigModule from "@/store/env-config";
@@ -21,9 +22,9 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
-import { BoardLayout } from "@/serverApi/v3/api";
 import * as CardActions from "../cardActions/cardActions";
 import {
 	MoveCardRequestPayload,
@@ -33,7 +34,6 @@ import {
 import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
-import { Mock } from "vitest";
 
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
@@ -127,6 +127,7 @@ describe("useBoardSocketApi", () => {
 				},
 				features: [],
 				permissions: [],
+				readersCanEdit: false,
 			};
 			const { dispatch } = useBoardSocketApi();
 			return { dispatch };
