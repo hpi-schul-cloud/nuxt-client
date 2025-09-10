@@ -66,6 +66,7 @@
 				"src/modules/feature/board-folder-element"
 			],
 			"@feature-folder": ["src/modules/feature/folder"],
+			"@feature-login":["src/modules/feature/login"],
 			"@icons/*": ["src/components/icons/*"],
 			"@ui-alert": ["src/modules/ui/alert"],
 			"@ui-audio-player": ["src/modules/ui/audio-player"],

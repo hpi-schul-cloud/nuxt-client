@@ -205,6 +205,15 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		},
 	},
 	{
+		path: `/login`,
+		component: async () => await import("@/modules/page/login/Login.page.vue"),
+		name: "LoginPage",
+		meta: {
+			layout: Layouts.LOGGED_OUT,
+			isPublic: true,
+		},
+	},
+	{
 		path: "/migration",
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
