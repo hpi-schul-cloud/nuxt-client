@@ -11,6 +11,8 @@ import { logger } from "@util-logger";
 import { filter } from "lodash";
 import { ref, Ref } from "vue";
 import { useLoginApi } from "./loginApi.composable";
+import AuthModule from "@/store/auth";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 // --- logFilter logic migrated as a utility inside composable ---
 
@@ -490,6 +492,8 @@ export const useLogin = () => {
 	const loginResult: Ref<LoginResponse | undefined> = ref(undefined);
 	const passwordRecoveryError = ref<string | null>(null);
 
+	const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+
 	//const login = async (
 	//	payload: LoginPa,
 	//	options: LoginOptions = {}
@@ -525,6 +529,7 @@ export const useLogin = () => {
 				createLoginCookies
 			);
 			loginResult.value = result;
+			await authModule.login();
 		} catch (err: unknown) {
 			error.value = {
 				message: err instanceof Error ? err.message : "Email login failed",
@@ -555,6 +560,7 @@ export const useLogin = () => {
 				createLoginCookies
 			);
 			loginResult.value = result;
+			await authModule.login();
 		} catch (err: unknown) {
 			error.value = {
 				message: err instanceof Error ? err.message : "LDAP login failed",
@@ -575,6 +581,7 @@ export const useLogin = () => {
 		try {
 			const result: LoginResponse = await apiLoginOAuth2(payload);
 			loginResult.value = result;
+			await authModule.login();
 		} catch (err: unknown) {
 			error.value = {
 				message: err instanceof Error ? err.message : "OAuth2 login failed",

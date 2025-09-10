@@ -66,13 +66,16 @@ export const useLoginApi = () => {
 		systemId: string,
 		createLoginCookies?: boolean
 	): Promise<LoginResponse> => {
-		const response = await authApi.loginControllerLoginLdap({
-			username,
-			password,
-			schoolId,
-			systemId,
-			createLoginCookies,
-		});
+		const response = await authApi.loginControllerLoginLdap(
+			{
+				username,
+				password,
+				schoolId,
+				systemId,
+				createLoginCookies,
+			},
+			{ withCredentials: true }
+		);
 		return response.data;
 	};
 
@@ -83,7 +86,9 @@ export const useLoginApi = () => {
 		payload: Oauth2AuthorizationBodyParams
 	): Promise<LoginResponse> => {
 		// POST to /login/oauth2 or GET /login/oauth2/:systemId if needed
-		const response = await authApi.loginControllerLoginOauth2(payload);
+		const response = await authApi.loginControllerLoginOauth2(payload, {
+			withCredentials: true,
+		});
 		return response.data;
 	};
 
