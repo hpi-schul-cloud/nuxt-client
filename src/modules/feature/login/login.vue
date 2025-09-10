@@ -99,7 +99,7 @@
 					data-testid="submit-login-email"
 					:autofocus="true"
 					aria-label="login"
-					@click="submitLocalLogin"
+					@click="submitLogin(loginOptions.EMAIL)"
 				>
 					{{ t("components.login.button.email") }}
 				</v-btn>
@@ -200,7 +200,7 @@
 					aria-label="login"
 					:autofocus="true"
 					data-testid="submit-login-ldap"
-					@click="submitLdapLogin"
+					@click="submitLogin(loginOptions.LDAP)"
 				>
 					{{ t("components.login.button.ldap") }}
 				</v-btn>
@@ -223,11 +223,11 @@
 					{{ t("components.login.button.return") }}
 				</v-btn>
 			</v-card>
-			<!-- Non-Oauth Login Section-->
+			<!-- More or less Section-->
 			<v-card v-if="!featureOauthLoginEnabled">
 				<v-card-text>
 					<v-text-field
-						v-model="email"
+						v-model="emailMoreLess"
 						:label="$t('common.labels.emailUsername')"
 						type="email"
 						:error="!!emailError"
@@ -238,7 +238,7 @@
 						@input="emailError = ''"
 					/>
 					<v-text-field
-						v-model="password"
+						v-model="passwordMoreLess"
 						:label="$t('common.labels.password')"
 						:append-icon="showPassword ? mdiEyeOutline : mdiEyeOffOutline"
 						:type="showPassword ? 'text' : 'password'"
@@ -335,7 +335,7 @@
 					data-testid="submit-login-email"
 					:autofocus="true"
 					aria-label="login"
-					@click="submitLogin"
+					@click="submitLogin(loginOptions.MoreLess)"
 				>
 					{{ t("common.labels.login") }}
 				</v-btn>
@@ -432,6 +432,12 @@ import { useRoute } from "vue-router";
 // Vuetify typenames
 type AlertType = "info" | "success" | "warning" | "error";
 
+enum loginOptions {
+	EMAIL,
+	LDAP,
+	MoreLess,
+}
+
 const { t } = useI18n();
 const {
 	loginEmail,
@@ -473,6 +479,8 @@ const email = ref("");
 const password = ref("");
 const ldapUsername = ref("");
 const ldapPassword = ref("");
+const emailMoreLess = ref("");
+const passwordMoreLess = ref("");
 const privateDevice = ref(false);
 const showPassword = ref(false);
 const showLdapPassword = ref(false);
@@ -579,7 +587,7 @@ watch(
 	}
 );
 
-/*function getMockSchoolsForLogin() {
+function getMockSchoolsForLogin() {
 	schools.value = [
 		{ name: "school1", id: "id1", systems: [] },
 		{
@@ -591,7 +599,7 @@ watch(
 			],
 		},
 	];
-}*/
+}
 
 // ----- Button Section Toggles -----
 function showEmail() {
@@ -632,30 +640,72 @@ function onSystemChange(system: SystemForLdapLoginResponse | null) {
 	selectedSystem.value = system;
 }
 
+function checkValidityFields(loginOption: loginOptions) {
+	emailError.value = "";
+	passwordError.value = "";
+	let valid = true;
+	switch (loginOption) {
+		case loginOptions.EMAIL:
+			if (!email.value) {
+				emailError.value = "Please fill out this field";
+				valid = false;
+			}
+			if (!password.value) {
+				passwordError.value = "Please fill out this field";
+				valid = false;
+			}
+			break;
+		case loginOptions.LDAP:
+			if (!ldapUsername.value) {
+				emailError.value = "Please fill out this field";
+				valid = false;
+			}
+			if (!ldapPassword.value) {
+				passwordError.value = "Please fill out this field";
+				valid = false;
+			}
+			break;
+		case loginOptions.MoreLess:
+			if (!emailMoreLess.value) {
+				emailError.value = "Please fill out this field";
+				valid = false;
+			}
+			if (!passwordMoreLess.value) {
+				passwordError.value = "Please fill out this field";
+				valid = false;
+			}
+			break;
+		default:
+			break;
+	}
+	return valid;
+}
+
 // ----- Login Submissions -----
-async function submitLogin() {
-	if (selectedSchool.value) {
-		await submitLdapLogin();
-	} else {
-		await submitLocalLogin();
+async function submitLogin(loginOption: loginOptions) {
+	switch (loginOption) {
+		case loginOptions.EMAIL:
+			if (!checkValidityFields(loginOptions.EMAIL)) return;
+			await submitLocalLogin();
+			break;
+		case loginOptions.LDAP:
+			if (!checkValidityFields(loginOptions.LDAP)) return;
+			await submitLdapLogin();
+			break;
+		case loginOptions.MoreLess:
+			if (!checkValidityFields(loginOptions.MoreLess)) return;
+			if (selectedSchool.value && showMoreOptions.value) {
+				await submitLdapLogin();
+			} else {
+				await submitLocalLogin();
+			}
+			break;
+		default:
+			return;
 	}
 }
 
 async function submitLocalLogin() {
-	emailError.value = "";
-	passwordError.value = "";
-	let valid = true;
-	if (!email.value) {
-		emailError.value = "Please fill out this field";
-		valid = false;
-	}
-	if (!password.value) {
-		passwordError.value = "Please fill out this field";
-		valid = false;
-	}
-	if (!valid) {
-		return;
-	}
 	await loginEmail(email.value, password.value, true);
 	if (loginResult.value) {
 		if (redirectParam.value) {
@@ -679,20 +729,6 @@ async function submitLocalLogin() {
 }
 
 async function submitLdapLogin() {
-	emailError.value = "";
-	passwordError.value = "";
-	let valid = true;
-	if (!ldapUsername.value) {
-		emailError.value = "Please fill out this field";
-		valid = false;
-	}
-	if (!ldapPassword.value) {
-		passwordError.value = "Please fill out this field";
-		valid = false;
-	}
-	if (!valid) {
-		return;
-	}
 	// Store school/system prefs
 	if (selectedSchool.value) {
 		localStorage.setItem("loginSchool", selectedSchool.value.id ?? "");
