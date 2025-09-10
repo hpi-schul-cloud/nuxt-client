@@ -488,7 +488,6 @@ export const useLogin = () => {
 	const oauthSystems: Ref<PublicSystemListResponse | undefined> =
 		ref(undefined); //TODO: maybe something like before: Ref<Oauth2System[] | undefined>
 	const loginResult: Ref<LoginResponse | undefined> = ref(undefined);
-	const passwordRecoveryResult = ref<any>(null);
 	const passwordRecoveryError = ref<string | null>(null);
 
 	//const login = async (
@@ -647,7 +646,6 @@ export const useLogin = () => {
 		passwordRecoveryError.value = null;
 		try {
 			const result = await apiPasswordRecovery(username.trim().toLowerCase());
-			passwordRecoveryResult.value = result;
 			return result;
 		} catch (err: any) {
 			if (
@@ -683,7 +681,6 @@ export const useLogin = () => {
 		checkConsent,
 		consentCheckResult,
 		submitPasswordRecovery,
-		passwordRecoveryResult,
 		passwordRecoveryError,
 		loginResult,
 		cookieDefaults,
