@@ -448,6 +448,7 @@ const {
 	fetchLdapSchools,
 	submitPasswordRecovery,
 	passwordRecoveryError,
+	getValidRedirect,
 } = useLogin();
 const route = useRoute();
 // Alerts
@@ -463,8 +464,8 @@ const showAlert = ref(false);
 const featureOauthLoginEnabled: boolean =
 	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 //TODO: get env the schulcloud way, for now:
-const featureJwtExtendedTimeoutEnabled = true;
-//envConfigModule.getEnv.FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED
+const featureJwtExtendedTimeoutEnabled =
+	envConfigModule.getEnv.FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED;
 
 // Section and field states
 const showEmailLoginSection = ref(false);
@@ -587,7 +588,7 @@ watch(
 	}
 );
 
-function getMockSchoolsForLogin() {
+/*function getMockSchoolsForLogin() {
 	schools.value = [
 		{ name: "school1", id: "id1", systems: [] },
 		{
@@ -599,7 +600,7 @@ function getMockSchoolsForLogin() {
 			],
 		},
 	];
-}
+}*/
 
 // ----- Button Section Toggles -----
 function showEmail() {
@@ -709,7 +710,8 @@ async function submitLocalLogin() {
 	await loginEmail(email.value, password.value, true);
 	if (loginResult.value) {
 		if (redirectParam.value) {
-			await router.push({ path: redirectParam.value });
+			const validRedirect = getValidRedirect(redirectParam.value);
+			await router.push({ path: validRedirect });
 		} else {
 			await router.push({ path: "/rooms" });
 		}
@@ -763,7 +765,8 @@ async function submitLdapLogin() {
 	);
 	if (loginResult.value) {
 		if (redirectParam.value) {
-			await router.push({ path: redirectParam.value });
+			const validRedirect = getValidRedirect(redirectParam.value);
+			await router.push({ path: validRedirect });
 		} else {
 			await router.push({ path: "/rooms" });
 		}
