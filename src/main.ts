@@ -7,7 +7,6 @@ import {
 	commonCartridgeImportModule,
 	contentModule,
 	copyModule,
-	envConfigModule,
 	filePathsModule,
 	finishedTasksModule,
 	groupModule,
@@ -50,7 +49,6 @@ import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	CONTENT_MODULE_KEY,
 	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
@@ -106,7 +104,6 @@ app.use(VueDOMPurifyHTML, {
 	initializeAxios(axios);
 
 	await useEnvStore().loadConfiguration();
-	await envConfigModule.loadConfiguration();
 
 	try {
 		await authModule.login();
@@ -115,7 +112,7 @@ app.use(VueDOMPurifyHTML, {
 		logger.info("probably not logged in", error);
 	}
 
-	// creation of i18n relies on envConfigModule authModule
+	// creation of i18n relies on authModule
 	const i18n = createI18n();
 	const vuetify = createVuetify(i18n);
 
@@ -126,7 +123,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
 	app.provide(CONTENT_MODULE_KEY, contentModule);
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
-	app.provide(ENV_CONFIG_MODULE_KEY.valueOf(), envConfigModule);
 	app.provide("filePathsModule", filePathsModule);
 	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
 	app.provide("finishedTasksModule", finishedTasksModule);

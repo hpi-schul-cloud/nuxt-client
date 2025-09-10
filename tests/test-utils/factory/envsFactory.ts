@@ -1,8 +1,7 @@
 import { ConfigResponse } from "@/serverApi/v3";
-import { defaultConfigEnvs } from "@/store/env-config-defaults";
 import { Factory } from "fishery";
 import { createPinia, setActivePinia, getActivePinia } from "pinia";
-import { useEnvStore } from "@data-env";
+import { defaultConfigEnvs, useEnvStore } from "@data-env";
 import { FilesStorageConfigResponse } from "@/fileStorageApi/v3";
 
 export const envsFactory = Factory.define<ConfigResponse>(
