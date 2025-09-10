@@ -176,11 +176,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { SchoolSystemResponse, SchulcloudTheme } from "@/serverApi/v3";
 import { ApplicationError } from "@/store/types/application-error";
 import { School } from "@/store/types/schools";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-	SCHOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useSharedSchoolYearChange } from "@data-school";
 import { mdiAlertCircle, mdiMinus, mdiPlus } from "@icons/material";
@@ -196,6 +192,7 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { useEnvConfig } from "@data-env";
 
 export default defineComponent({
 	name: "SchoolSettings",
@@ -212,7 +209,6 @@ export default defineComponent({
 	setup() {
 		const { t } = useI18n();
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const route = useRoute();
 
 		const headline: Ref<string> = ref(
@@ -265,18 +261,14 @@ export default defineComponent({
 			() => schoolsModule.getError
 		);
 		const isFeatureOauthMigrationEnabled: ComputedRef<boolean | undefined> =
-			computed(
-				() => envConfigModule.getEnv.FEATURE_USER_LOGIN_MIGRATION_ENABLED
-			);
+			computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
 		const isFeatureSchoolPolicyEnabled: ComputedRef<boolean | undefined> =
-			computed(() => envConfigModule.getEnv.FEATURE_SCHOOL_POLICY_ENABLED_NEW);
+			computed(() => useEnvConfig().value.FEATURE_SCHOOL_POLICY_ENABLED_NEW);
 		const isFeatureSchoolTermsOfUseEnabled: ComputedRef<boolean | undefined> =
-			computed(
-				() => envConfigModule.getEnv.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED
-			);
+			computed(() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED);
 
 		const instituteTitle: ComputedRef<string> = computed(() => {
-			switch (envConfigModule.getEnv.SC_THEME) {
+			switch (useEnvConfig().value.SC_THEME) {
 				case SchulcloudTheme.N21:
 					return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
 				case SchulcloudTheme.Thr:

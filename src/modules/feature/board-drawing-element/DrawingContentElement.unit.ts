@@ -1,14 +1,12 @@
 import { DrawingElementResponse } from "@/serverApi/v3";
-import { ConfigResponse } from "@/serverApi/v3/api";
 import NotifierModule from "@/store/notifier";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { drawingElementResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { BoardMenu } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -45,7 +43,7 @@ describe("DrawingContentElement", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 			propsData: props,
@@ -70,7 +68,7 @@ describe("DrawingContentElement", () => {
 			expect(wrapper.findComponent(InnerContent).exists()).toBe(true);
 		});
 
-		it("should have the correct href and target attribute", async () => {
+		it("should have the correct href and target attribute", () => {
 			const { wrapper } = setup({
 				element: DRAWING_ELEMENT,
 				isEditMode: false,
@@ -89,7 +87,7 @@ describe("DrawingContentElement", () => {
 			expect(elementCard.attributes("target")).toBe("_blank");
 		});
 
-		it("should have the correct aria-label", async () => {
+		it("should have the correct aria-label", () => {
 			const { wrapper } = setup({
 				element: DRAWING_ELEMENT,
 				isEditMode: false,
@@ -196,7 +194,7 @@ describe("DrawingContentElement", () => {
 			});
 
 			describe("when element is first element", () => {
-				it("should hide 'moveUp' menu item", async () => {
+				it("should hide 'moveUp' menu item", () => {
 					const { wrapper } = setup({
 						element: DRAWING_ELEMENT,
 						isEditMode: true,

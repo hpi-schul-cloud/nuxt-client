@@ -130,7 +130,6 @@ import {
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
@@ -167,6 +166,7 @@ import {
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { useDisplay } from "vuetify";
+import { useEnvConfig } from "@data-env";
 
 export default defineComponent({
 	components: {
@@ -245,7 +245,7 @@ export default defineComponent({
 			];
 		},
 		boardLayoutsEnabled() {
-			return envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED;
+			return useEnvConfig().value.FEATURE_BOARD_LAYOUT_ENABLED;
 		},
 		getCurrentFabItems() {
 			return this.currentTab?.fabItems;
@@ -406,7 +406,7 @@ export default defineComponent({
 				},
 			];
 
-			if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
+			if (useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED) {
 				items.push({
 					icon: this.icons.mdiContentCopy,
 					action: () => this.onCopyRoom(this.roomData.roomId),
@@ -415,7 +415,7 @@ export default defineComponent({
 				});
 			}
 
-			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+			if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
 				items.push({
 					icon: this.icons.mdiShareVariantOutline,
 					action: () => this.shareCourse(),
@@ -424,9 +424,7 @@ export default defineComponent({
 				});
 			}
 
-			if (
-				envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED
-			) {
+			if (useEnvConfig().value.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED) {
 				items.push({
 					icon: this.icons.mdiExport,
 					action: () => this.onExport(),
@@ -447,7 +445,7 @@ export default defineComponent({
 			}
 
 			if (
-				envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED &&
+				useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED &&
 				!this.roomData.isSynchronized
 			) {
 				items.push({
@@ -546,7 +544,7 @@ export default defineComponent({
 			this.tabIndex = index >= 0 ? index : 0;
 		},
 		async shareCourse() {
-			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+			if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
 				this.shareModule.startShareFlow({
 					id: this.courseId,
 					type: ShareTokenBodyParamsParentTypeEnum.Courses,

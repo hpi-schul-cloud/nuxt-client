@@ -56,11 +56,7 @@ import { authModule } from "@/store";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	useRoomAuthorization,
@@ -87,13 +83,13 @@ import { storeToRefs } from "pinia";
 import { computed, ComputedRef, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps<{ room: RoomDetails }>();
 const room = toRef(props, "room");
 
 const router = useRouter();
 const { t } = useI18n();
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const shareModule = injectStrict(SHARE_MODULE_KEY);
 
 const { deleteRoom, leaveRoom } = useRoomsState();
@@ -131,7 +127,7 @@ const roomTitle = computed(() => {
 });
 
 const boardLayoutsEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
+	() => useEnvConfig().value.FEATURE_BOARD_LAYOUT_ENABLED
 );
 
 const boardLayoutDialogIsOpen = ref(false);
@@ -211,10 +207,10 @@ const onManageMembers = () => {
 
 const hasRoomCopyStarted = ref(false);
 const isRoomCopyFeatureEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_ROOM_COPY_ENABLED
+	() => useEnvConfig().value.FEATURE_ROOM_COPY_ENABLED
 );
 const isRoomShareFeatureEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_ROOM_SHARE
+	() => useEnvConfig().value.FEATURE_ROOM_SHARE
 );
 
 const onCopy = () => {

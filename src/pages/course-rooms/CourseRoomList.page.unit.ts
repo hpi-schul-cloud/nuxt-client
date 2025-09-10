@@ -4,7 +4,6 @@ import CourseRoomList from "./CourseRoomList.page.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import CourseRoomListModule from "@/store/course-room-list";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
@@ -21,7 +20,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { CourseMetadataResponse } from "@/serverApi/v3";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createPinia, setActivePinia } from "pinia";
 
 vi.mock("vue-router");
 
@@ -90,14 +89,13 @@ describe("@/pages/CourseRoomListPage", () => {
 	};
 
 	beforeAll(() => {
-		createTestEnvStore();
+		setActivePinia(createPinia());
 	});
 
 	beforeEach(() => {
 		setupStores({
 			courseRoomListModule: CourseRoomListModule,
 			authModule: AuthModule,
-			envConfigModule: EnvConfigModule,
 		});
 		courseRoomListModule.setAllElements(mockData);
 		courseRoomListModule.fetchAllElements = vi.fn();

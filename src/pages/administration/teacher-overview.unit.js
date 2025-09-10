@@ -3,12 +3,10 @@ import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { authModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
-import { envsFactory } from "@@/tests/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
@@ -132,7 +130,6 @@ describe("teachers/index", () => {
 
 		setupStores({
 			authModule: AuthModule,
-			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
 			notifierModule: NotifierModule,
 		});
@@ -372,37 +369,26 @@ describe("teachers/index", () => {
 	});
 
 	it("should display the columns behind the migration feature flag", () => {
-		const envBuild = envsFactory.build({
-			...envs,
-			FEATURE_USER_LOGIN_MIGRATION_ENABLED: true,
-		});
-		envConfigModule.setEnvs(envBuild);
+		createTestEnvStore({ ...envs, FEATURE_USER_LOGIN_MIGRATION_ENABLED: true });
 		const { wrapper } = setup();
 
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
 
-		expect(envConfigModule.getEnv.FEATURE_USER_LOGIN_MIGRATION_ENABLED).toBe(
-			true
-		);
 		expect(column1.exists()).toBe(true);
 		expect(column2.exists()).toBe(true);
 	});
 
 	it("should not display the columns behind the migration feature flag", () => {
-		const envBuild = envsFactory.build({
+		createTestEnvStore({
 			...envs,
 			FEATURE_USER_LOGIN_MIGRATION_ENABLED: false,
 		});
-		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
 
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
 
-		expect(envConfigModule.getEnv.FEATURE_USER_LOGIN_MIGRATION_ENABLED).toBe(
-			false
-		);
 		expect(column1.exists()).toBe(false);
 		expect(column2.exists()).toBe(false);
 	});
@@ -512,30 +498,16 @@ describe("teachers/index", () => {
 	});
 
 	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
-		const envBuild = envsFactory.build({
-			...envs,
-			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-		});
-		envConfigModule.setEnvs(envBuild);
+		createTestEnvStore({ ...envs, ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true });
 		const { wrapper } = setup();
-		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
-			true
-		);
 		expect(
 			wrapper.vm.filteredColumns.some((el) => el.field === "consentStatus")
 		).toBe(true);
 	});
 
 	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
-		const envBuild = envsFactory.build({
-			...envs,
-			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-		});
-		envConfigModule.setEnvs(envBuild);
+		createTestEnvStore({ ...envs, ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true });
 		const { wrapper } = setup();
-		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
-			true
-		);
 		const icons = wrapper.find(`[data-testid="legend-icons"]`);
 		expect(icons.exists()).toBe(true);
 	});

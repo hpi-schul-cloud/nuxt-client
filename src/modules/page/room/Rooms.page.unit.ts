@@ -1,10 +1,8 @@
 import CopyModule from "@/store/copy";
-import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import {
 	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
@@ -43,7 +41,6 @@ describe("RoomsPage", () => {
 
 	beforeEach(() => {
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			authModule: AuthModule,
 		});
 
@@ -68,7 +65,6 @@ describe("RoomsPage", () => {
 	});
 
 	const setup = (routeQuery: RouteLocation["query"] = {}) => {
-		const envConfigModule = createModuleMocks(EnvConfigModule, {});
 		const copyModule = createModuleMocks(CopyModule);
 		const loadingState = createModuleMocks(LoadingStateModule);
 		const notifierModuleMock = createModuleMocks(NotifierModule);
@@ -97,7 +93,6 @@ describe("RoomsPage", () => {
 					createTestingPinia(),
 				],
 				provide: {
-					[ENV_CONFIG_MODULE_KEY]: envConfigModule,
 					[COPY_MODULE_KEY]: copyModule,
 					[LOADING_STATE_MODULE_KEY]: loadingState,
 					[NOTIFIER_MODULE_KEY]: notifierModuleMock,
@@ -173,7 +168,7 @@ describe("RoomsPage", () => {
 		});
 
 		describe("when the import flow succeeded", () => {
-			it("should notify about successful import", async () => {
+			it("should notify about successful import", () => {
 				const { wrapper, notifierModuleMock } = setupImportMode();
 				const importFlow = wrapper.findComponent(ImportFlow);
 
@@ -187,7 +182,7 @@ describe("RoomsPage", () => {
 				);
 			});
 
-			it("should go to the room details page", async () => {
+			it("should go to the room details page", () => {
 				const { wrapper, router } = setupImportMode();
 				const importFlow = wrapper.findComponent(ImportFlow);
 
@@ -203,7 +198,7 @@ describe("RoomsPage", () => {
 
 	describe("Page Components", () => {
 		describe("DefaultWireframe", () => {
-			it("should be found in the dom", async () => {
+			it("should be found in the dom", () => {
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent({
 					name: "DefaultWireframe",
@@ -212,7 +207,7 @@ describe("RoomsPage", () => {
 				expect(wireframe.exists()).toBe(true);
 			});
 
-			it("should have the correct props", async () => {
+			it("should have the correct props", () => {
 				roomPermissions.canCreateRoom.value = true;
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
@@ -230,7 +225,7 @@ describe("RoomsPage", () => {
 		});
 
 		describe("RoomGrid", () => {
-			it("should be found in the dom", async () => {
+			it("should be found in the dom", () => {
 				const { wrapper } = setup();
 				const roomGrid = wrapper.findComponent(RoomGrid);
 

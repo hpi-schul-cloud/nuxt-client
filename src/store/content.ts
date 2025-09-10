@@ -1,4 +1,3 @@
-import { envConfigModule } from "@/store";
 import { isCollectionHelper } from "@/utils/helpers";
 import hash from "object-hash";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
@@ -14,6 +13,7 @@ import {
 	Resources,
 } from "./types/content";
 import { logger } from "@util-logger";
+import { useEnvConfig } from "@data-env";
 
 const initialState = () => ({
 	resources: {
@@ -365,6 +365,6 @@ export default class ContentModule extends VuexModule {
 
 	@Action
 	init() {
-		this.initMutation(envConfigModule.getEnv.FEATURE_ES_COLLECTIONS_ENABLED);
+		this.initMutation(useEnvConfig().value.FEATURE_ES_COLLECTIONS_ENABLED);
 	}
 }

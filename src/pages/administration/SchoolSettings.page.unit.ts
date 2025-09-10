@@ -4,11 +4,13 @@ import {
 	SchoolSystemResponse,
 	SchulcloudTheme,
 } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import { FederalState } from "@/store/types/schools";
-import { ENV_CONFIG_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { envsFactory, maintenanceStatusFactory } from "@@/tests/test-utils";
+import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import {
+	createTestEnvStore,
+	maintenanceStatusFactory,
+} from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
@@ -51,7 +53,6 @@ describe("SchoolSettingsPage", () => {
 		);
 	});
 
-	let envConfigModule: Mocked<EnvConfigModule>;
 	let schoolsModule: Mocked<SchoolsModule>;
 
 	const mockFederalState: FederalState = {
@@ -104,9 +105,7 @@ describe("SchoolSettingsPage", () => {
 			...schoolGetters,
 		});
 
-		envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envsFactory.build(envConfig),
-		});
+		createTestEnvStore(envConfig);
 
 		useRouteMock.mockImplementation(() =>
 			reactive({ path: "home", query: {} })
@@ -117,7 +116,6 @@ describe("SchoolSettingsPage", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
 		});

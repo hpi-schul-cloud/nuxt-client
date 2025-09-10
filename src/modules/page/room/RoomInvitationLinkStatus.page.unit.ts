@@ -10,7 +10,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useRouter } from "vue-router";
-import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -50,7 +49,6 @@ describe("RoomInvitationLinkStatusPage", () => {
 		setActivePinia(createPinia());
 		setupStores({
 			authModule: AuthModule,
-			envConfigModule: EnvConfigModule,
 		});
 	});
 

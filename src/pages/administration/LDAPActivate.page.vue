@@ -184,7 +184,7 @@
 </template>
 
 <script>
-import { envConfigModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { unchangedPassword } from "@/utils/ldapConstants";
@@ -200,6 +200,7 @@ import {
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchulcloudTheme } from "@/serverApi/v3";
+import { useEnvConfig } from "@data-env";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -235,8 +236,8 @@ export default {
 		}),
 		showUserMigrationOption() {
 			return (
-				envConfigModule.getTheme !== SchulcloudTheme.N21 &&
-				envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED &&
+				useEnvConfig().value.SC_THEME !== SchulcloudTheme.N21 &&
+				useEnvConfig().value.FEATURE_USER_MIGRATION_ENABLED &&
 				!this.$route?.query?.id
 			);
 		},

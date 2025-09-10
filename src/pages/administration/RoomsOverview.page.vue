@@ -208,13 +208,8 @@ import {
 	SchulcloudTheme,
 } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useCourseList } from "@data-room";
 import {
@@ -234,6 +229,7 @@ import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import type { DataTableHeader } from "vuetify";
+import { useEnvConfig } from "@data-env";
 
 type Tab = "current" | "archive";
 
@@ -250,7 +246,6 @@ const props = defineProps({
 });
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -366,7 +361,7 @@ const onCancelCourseDeletion = () => {
 };
 
 const courseSyncEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
+	() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
 );
 
 const headers = computed(() => {
@@ -464,7 +459,7 @@ onMounted(() => {
 });
 
 const instituteTitle: ComputedRef<string> = computed(() => {
-	switch (envConfigModule.getTheme) {
+	switch (useEnvConfig().value.SC_THEME) {
 		case SchulcloudTheme.N21:
 			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
 		case SchulcloudTheme.Thr:

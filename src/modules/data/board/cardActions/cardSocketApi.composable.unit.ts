@@ -6,7 +6,6 @@ import {
 	richTextElementContentFactory,
 } from "@@/tests/test-utils";
 import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";

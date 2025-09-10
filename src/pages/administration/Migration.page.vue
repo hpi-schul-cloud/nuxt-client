@@ -575,7 +575,7 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
+import { importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -592,6 +592,7 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useEnvConfig } from "@data-env";
 
 const { t } = useI18n();
 
@@ -659,11 +660,11 @@ const totalImportUsers = computed(() => {
 });
 
 const isBrb = computed(() => {
-	return envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.Brb;
+	return useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.Brb;
 });
 
 const isNbc = computed(() => {
-	return envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.N21;
+	return useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21;
 });
 
 const sourceSystemName = computed(() => {
@@ -690,9 +691,9 @@ const breadcrumbs: Ref<Breadcrumb[]> = ref([
 	},
 ]);
 
-const helpPageUri = computed(() => {
-	return envConfigModule.getEnv.MIGRATION_WIZARD_DOCUMENTATION_LINK;
-});
+const helpPageUri = computed(
+	() => useEnvConfig().value.MIGRATION_WIZARD_DOCUMENTATION_LINK
+);
 
 useTitle(
 	buildPageTitle(
@@ -704,7 +705,7 @@ useTitle(
 );
 
 const isAllowed = async () => {
-	if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED) {
+	if (useEnvConfig().value.FEATURE_USER_MIGRATION_ENABLED) {
 		return true;
 	}
 	if (school.value.id === "") {

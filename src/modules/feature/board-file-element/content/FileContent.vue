@@ -52,7 +52,7 @@ import {
 	isPdfMimeType,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, PropType, ref } from "vue";

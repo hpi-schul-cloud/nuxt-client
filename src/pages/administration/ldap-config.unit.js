@@ -1,6 +1,4 @@
 import { default as ldapConfig } from "./LDAPConfig.page.vue";
-import EnvConfigModule from "@/store/env-config";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
 import {
 	createTestingI18n,
@@ -10,7 +8,8 @@ import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import { RouterLinkStub } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { createTestEnvStore } from "../../../tests/test-utils/index.js";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const mockInputData = {
 	url: "ldaps://ldap.hpi-schul-cloud.de",
@@ -94,13 +93,7 @@ describe("ldap/config", () => {
 	};
 
 	beforeAll(() => {
-		createTestEnvStore();
-	});
-
-	beforeEach(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
+		setActivePinia(createTestingPinia());
 	});
 
 	it("should call 'getData' action if $route.query.id is defined", async () => {

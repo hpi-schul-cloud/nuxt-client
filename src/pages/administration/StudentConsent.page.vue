@@ -312,7 +312,7 @@
 </template>
 
 <script>
-import { envConfigModule, filePathsModule, notifierModule } from "@/store";
+import { filePathsModule, notifierModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import StepProgress from "@/components/organisms/StepProgress";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
@@ -325,6 +325,7 @@ import {
 } from "@/plugins/datetime";
 import { mdiAlert } from "@icons/material";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useEnvConfig } from "@data-env";
 
 export default {
 	components: {
@@ -429,10 +430,7 @@ export default {
 			];
 		},
 		isConsentNecessary() {
-			return (
-				envConfigModule.getEnv &&
-				envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY
-			);
+			return useEnvConfig().value.FEATURE_CONSENT_NECESSARY;
 		},
 		title() {
 			return this.isConsentNecessary

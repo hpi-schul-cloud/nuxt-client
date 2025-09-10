@@ -29,7 +29,6 @@
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { storeToRefs } from "pinia";
 import { useEnvConfig } from "@data-env";
 
 const { t } = useI18n();

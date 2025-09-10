@@ -227,7 +227,6 @@ import {
 	SchulcloudTheme,
 } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
@@ -235,7 +234,6 @@ import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
 	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
@@ -255,6 +253,7 @@ import { useI18n } from "vue-i18n";
 import { InfoAlert } from "@ui-alert";
 import { useRoute, useRouter } from "vue-router";
 import { DataTableHeader } from "vuetify";
+import { useEnvConfig } from "@data-env";
 
 type Tab = "current" | "next" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -273,7 +272,6 @@ const props = defineProps({
 const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -401,7 +399,7 @@ const pagination: ComputedRef<Pagination> = computed(
 const page: ComputedRef<number> = computed(() => groupModule.getPage);
 
 const courseSyncEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
+	() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
 );
 
 const headers = computed(() => {
@@ -506,7 +504,7 @@ onMounted(() => {
 });
 
 const instituteTitle: ComputedRef<string> = computed(() => {
-	switch (envConfigModule.getTheme) {
+	switch (useEnvConfig().value.SC_THEME) {
 		case SchulcloudTheme.N21:
 			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
 		case SchulcloudTheme.Thr:

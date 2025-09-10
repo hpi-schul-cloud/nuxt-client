@@ -1,9 +1,6 @@
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -102,17 +99,11 @@ describe("ldap/activate", () => {
 		return { wrapper, routerPushStub };
 	};
 
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	beforeEach(() => {
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
 		});
-		const envs = envsFactory.build({ FEATURE_USER_MIGRATION_ENABLED: false });
-		envConfigModule.setEnvs(envs);
+		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: false });
 	});
 
 	it("should call 'submitaData' action when submit button is clicked and this.$route.query.id is not defined", async () => {
@@ -214,7 +205,7 @@ describe("ldap/activate", () => {
 		expect(infoMessage.exists()).toBe(true);
 	});
 
-	it("should not show checkbox for user migration", async () => {
+	it("should not show checkbox for user migration", () => {
 		const { storeOptions } = getStoreOptions();
 
 		const { wrapper } = setup({
@@ -228,9 +219,8 @@ describe("ldap/activate", () => {
 		expect(checkbox.exists()).toBe(false);
 	});
 
-	it("should show checkbox for user migration", async () => {
-		const envs = envsFactory.build({ FEATURE_USER_MIGRATION_ENABLED: true });
-		envConfigModule.setEnvs(envs);
+	it("should show checkbox for user migration", () => {
+		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: true });
 
 		const { storeOptions } = getStoreOptions();
 
@@ -247,11 +237,10 @@ describe("ldap/activate", () => {
 
 	describe("when the instance is NBC", () => {
 		const setupNbc = () => {
-			const envs = envsFactory.build({
+			createTestEnvStore({
 				SC_THEME: SchulcloudTheme.N21,
 				FEATURE_USER_MIGRATION_ENABLED: true,
 			});
-			envConfigModule.setEnvs(envs);
 
 			const { storeOptions } = getStoreOptions();
 

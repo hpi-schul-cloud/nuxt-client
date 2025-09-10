@@ -1,13 +1,10 @@
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { createTestEnvStore, envsFactory } from "@@/tests/test-utils";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import NavigationBar from "./NavigationBar.vue";
-import { beforeAll } from "vitest";
-import { createPinia, setActivePinia } from "pinia";
-import { useEnvStore } from "@data-env";
 
 describe("@/components/legacy/NavigationBar", () => {
 	const navbarLinks = [

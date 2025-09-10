@@ -69,7 +69,6 @@
 
 <script setup lang="ts">
 import { ExternalToolElementResponse } from "@/serverApi/v3";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
 	ContextExternalTool,

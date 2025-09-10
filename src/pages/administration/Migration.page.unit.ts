@@ -1,11 +1,10 @@
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-vitest";
-import { schoolFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
 import { THEME_KEY } from "@/utils/inject";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
+import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
 import MigrationWizard from "@/pages/administration/Migration.page.vue";
@@ -15,7 +14,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { Mock } from "vitest";
+import { beforeAll, Mock } from "vitest";
 import {
 	ComponentMountingOptions,
 	flushPromises,
@@ -104,17 +103,21 @@ const getWrapperShallow = (
 describe("User Migration / Index", () => {
 	window.scrollTo = vi.fn();
 
+	beforeAll(() => {
+		createTestEnvStore({
+			SC_THEME: SchulcloudTheme.Default,
+			FEATURE_USER_MIGRATION_ENABLED: true,
+			MIGRATION_WIZARD_DOCUMENTATION_LINK:
+				"https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
+		});
+	});
+
 	beforeEach(() => {
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			importUsersModule: ImportUsersModule,
 			schoolsModule: SchoolsModule,
 		});
 
-		envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
-		envConfigModule.getEnv.SC_THEME = SchulcloudTheme.Default;
-		envConfigModule.getEnv.MIGRATION_WIZARD_DOCUMENTATION_LINK =
-			"https://docs.dbildungscloud.de/x/VAEbDg?frameable=true";
 		importUsersModule.setTotal(100);
 		schoolsModule.setSchool(
 			schoolFactory.build({

@@ -110,7 +110,9 @@ export const useAddElementDialog = (
 			},
 		];
 
-		if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
+		const envConfig = useEnvConfig();
+
+		if (envConfig.value.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
 			options.push({
 				icon: mdiLightbulbOnOutline,
 				label: t(
@@ -121,7 +123,7 @@ export const useAddElementDialog = (
 			});
 		}
 
-		if (useEnvConfig().value.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
+		if (envConfig.value.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
 			options.push({
 				icon: mdiPuzzleOutline,
 				label: t(
@@ -132,7 +134,7 @@ export const useAddElementDialog = (
 			});
 		}
 
-		if (useEnvConfig().value.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
+		if (envConfig.value.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
 			options.push({
 				icon: mdiLink,
 				label: t(
@@ -143,7 +145,7 @@ export const useAddElementDialog = (
 			});
 		}
 
-		if (useEnvConfig().value.FEATURE_TLDRAW_ENABLED) {
+		if (envConfig.value.FEATURE_TLDRAW_ENABLED) {
 			options.push({
 				icon: mdiPresentation,
 				label: t("components.cardElement.drawingElement"),
@@ -153,8 +155,7 @@ export const useAddElementDialog = (
 		}
 
 		if (
-			useEnvConfig().value
-				.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED
+			envConfig.value.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED
 		) {
 			options.push({
 				icon: mdiTextBoxEditOutline,
@@ -168,7 +169,7 @@ export const useAddElementDialog = (
 		}
 
 		if (
-			useEnvConfig().value.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
+			envConfig.value.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
 			isVideoConferenceEnabled.value &&
 			hasManageVideoConferencePermission.value
 		) {
@@ -182,7 +183,7 @@ export const useAddElementDialog = (
 			});
 		}
 
-		if (useEnvConfig().value.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
+		if (envConfig.value.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
 			options.push({
 				icon: mdiFolderOpenOutline,
 				label: t(
@@ -193,7 +194,7 @@ export const useAddElementDialog = (
 			});
 		}
 
-		if (useEnvConfig().value.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
+		if (envConfig.value.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
 			options.push({
 				icon: "$h5pOutline",
 				label: t(

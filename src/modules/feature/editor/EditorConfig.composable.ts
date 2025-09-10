@@ -2,8 +2,7 @@ import { Editor } from "@ckeditor/ckeditor5-core";
 import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { fontColors, fontBackgroundColors } from "./config";
-import { injectStrict } from "@/utils/inject/inject-strict";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject/injection-keys";
+import { useEnvStore } from "@data-env";
 
 type CKEditorKeystrokeInfo = {
 	keyCode: number;
@@ -40,11 +39,10 @@ interface EditorWithSourceElement extends Editor {
 
 export const useEditorConfig = () => {
 	const { t, locale } = useI18n();
-	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const DEFAULT_PROTOCOL = "//";
 
 	const generalConfig = reactive<GeneralConfig>({
-		language: locale.value || envConfigModule.getFallbackLanguage,
+		language: locale.value || useEnvStore().getFallbackLanguage,
 		link: {
 			defaultProtocol: DEFAULT_PROTOCOL,
 			addTargetToExternalLinks: true,

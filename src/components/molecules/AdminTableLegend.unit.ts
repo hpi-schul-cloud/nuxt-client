@@ -5,7 +5,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
 
