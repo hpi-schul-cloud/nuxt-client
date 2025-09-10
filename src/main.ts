@@ -102,6 +102,9 @@ app.use(VueDOMPurifyHTML, {
 	);
 	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
 
+	// eslint-disable-next-line no-console
+	console.log("hello!");
+
 	initializeAxios(axios);
 
 	await envConfigModule.loadConfiguration();
