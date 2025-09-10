@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {
 	NavigationGuard,
 	NavigationGuardNext,
@@ -11,6 +12,10 @@ export const legacyCompatibilityGuard: NavigationGuard = (
 	next: NavigationGuardNext
 ) => {
 	if (isLegacyClient(to.path)) {
+		console.log("legacy guard");
+		console.log(to.fullPath);
+		console.log(from.fullPath);
+
 		window.location.assign(to.path);
 	} else {
 		next();
