@@ -725,6 +725,8 @@ async function submitLocalLogin() {
 		showAlert.value = true;
 		email.value = "";
 		password.value = "";
+		emailMoreLess.value = "";
+		passwordMoreLess.value = "";
 		countdownNum.value = loginTimeoutSeconds;
 		incTimer();
 	}
@@ -773,6 +775,8 @@ async function submitLdapLogin() {
 	} else {
 		ldapUsername.value = "";
 		ldapPassword.value = "";
+		emailMoreLess.value = "";
+		passwordMoreLess.value = "";
 		selectedSchool.value = null;
 		selectedSystem.value = null;
 		alert.value = {
