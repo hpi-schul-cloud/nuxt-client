@@ -1,8 +1,8 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject/injection-keys";
-import { envsFactory, fileElementResponseFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import {
+	createTestEnvStore,
+	fileElementResponseFactory,
+} from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
@@ -68,12 +68,9 @@ describe("FileContent", () => {
 		};
 		const alerts = [FileAlert.AWAITING_SCAN_STATUS];
 
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: {
-				...envsFactory.build(),
-				FEATURE_COLUMN_BOARD_COLLABORA_ENABLED:
-					options?.isCollaboraEnabled ?? false,
-			},
+		createTestEnvStore({
+			FEATURE_COLUMN_BOARD_COLLABORA_ENABLED:
+				options?.isCollaboraEnabled ?? false,
 		});
 
 		const wrapper = shallowMount(FileContent, {
@@ -86,7 +83,6 @@ describe("FileContent", () => {
 				plugins: [createTestingVuetify()],
 				provide: {
 					[BOARD_IS_LIST_LAYOUT as symbol]: isListBoard,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 		});

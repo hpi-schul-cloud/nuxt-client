@@ -1,10 +1,7 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout, ContentElementType } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import {
 	cardResponseFactory,
-	envsFactory,
 	mockedPiniaStoreTyping,
 	richTextElementContentFactory,
 } from "@@/tests/test-utils";
@@ -58,12 +55,6 @@ describe("useCardSocketApi", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({}));
-
-		setupStores({ envConfigModule: EnvConfigModule });
-		const envs = envsFactory.build({
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
-		});
-		envConfigModule.setEnvs(envs);
 
 		socketMock = createMock<ReturnType<typeof useSocketConnection>>();
 		mockedUseSocketConnection.mockReturnValue(socketMock);

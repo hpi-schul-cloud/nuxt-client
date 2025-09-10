@@ -8,11 +8,10 @@ import {
 	CopyApiResponseTypeEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { applicationErrorModule, envConfigModule } from "@/store";
+import { applicationErrorModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -26,17 +25,18 @@ import {
 import {
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
-	envsFactory,
 } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
@@ -191,26 +191,6 @@ describe("Board", () => {
 		vi.clearAllMocks();
 	});
 
-	const mockEnvConfigModule = (envs: Partial<ConfigResponse> | undefined) => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-			applicationErrorModule: ApplicationErrorModule,
-		});
-		const envsMock = envsFactory.build({
-			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-			FEATURE_COLUMN_BOARD_SHARE: true,
-			...envs,
-		});
-		envConfigModule.setEnvs(envsMock);
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: envsMock,
-		});
-
-		return envConfigModuleMock;
-	};
-
 	const createBoard = (options?: {
 		numberOfColumns?: number;
 		isVisible?: boolean;
@@ -230,9 +210,12 @@ describe("Board", () => {
 		return board;
 	};
 
-	const setupProvideModules = (envs?: Partial<ConfigResponse>) => {
+	const setupProvideModules = () => {
 		const notifierModule = createModuleMocks(NotifierModule);
-		const envConfigModule = mockEnvConfigModule(envs);
+
+		setupStores({
+			applicationErrorModule: ApplicationErrorModule,
+		});
 
 		const copyResultId = "42";
 		const copyModule = createModuleMocks(CopyModule, {
@@ -253,7 +236,6 @@ describe("Board", () => {
 		);
 		return {
 			notifierModule,
-			envConfigModule,
 			copyModule,
 			loadingStateModule,
 			shareModule,
@@ -270,14 +252,21 @@ describe("Board", () => {
 	}) => {
 		const {
 			notifierModule,
-			envConfigModule,
 			copyModule,
 			loadingStateModule,
 			shareModule,
 			courseRoomDetailsModule,
 			copyResultId,
 			schoolExternalToolsModule,
-		} = setupProvideModules(options?.envs);
+		} = setupProvideModules();
+
+		createTestEnvStore({
+			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+			FEATURE_COLUMN_BOARD_SHARE: true,
+			...(options?.envs ?? {}),
+		});
 
 		const board = createBoard({
 			numberOfColumns: options?.numberOfColumns,
@@ -300,7 +289,6 @@ describe("Board", () => {
 				],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					loadingStateModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,

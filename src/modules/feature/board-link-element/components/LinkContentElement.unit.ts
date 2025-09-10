@@ -1,11 +1,6 @@
-import {
-	ConfigResponse,
-	LinkElementContent,
-	LinkElementResponse,
-} from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
+import { LinkElementContent, LinkElementResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
 
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
@@ -38,17 +33,9 @@ vi.mock("@data-board/ContentElementState.composable");
 vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("../composables/MetaTagExtractorApi.composable");
 vi.mock("../composables/PreviewGenerator.composable");
-
 const mockedUseContentElementState = vi.mocked(useContentElementState);
 
 let defaultElement = linkElementResponseFactory.build();
-const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-	getEnv: createMock<ConfigResponse>({
-		FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-		FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-		FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-	}),
-});
 
 describe("LinkContentElement", () => {
 	let useBoardFocusHandlerMock: DeepMocked<
@@ -105,7 +92,6 @@ describe("LinkContentElement", () => {
 			},
 			provide: {
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
 			},
 			props: { ...props },
 		});
@@ -143,7 +129,7 @@ describe("LinkContentElement", () => {
 		});
 
 		useMetaTagExtractorApiMock.getMetaTags.mockImplementation(
-			async (url: string) => ({
+			(url: string) => ({
 				url,
 				title: "Super duper mega page title",
 				description: "This page is sooo cool!",
@@ -531,7 +517,7 @@ describe("LinkContentElement", () => {
 		});
 
 		describe("onCreateUrl", () => {
-			it("should request meta tags for the given url", async () => {
+			it("should request meta tags for the given url", () => {
 				const { wrapper } = setupWrapper({
 					isEditMode: true,
 					isDetailView: false,
@@ -547,7 +533,7 @@ describe("LinkContentElement", () => {
 			});
 
 			describe("when no protocol was provided", () => {
-				it("should add https-protocol", async () => {
+				it("should add https-protocol", () => {
 					const { wrapper } = setupWrapper({
 						isEditMode: true,
 						isDetailView: false,
@@ -596,7 +582,7 @@ describe("LinkContentElement", () => {
 					});
 				});
 
-				it("should sanitize the url", async () => {
+				it("should sanitize the url", () => {
 					const VALID_UNSANITIZED_URL =
 						"&#104;&#116;&#116;&#112;&#115;&#0000058//&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;";
 					const { wrapper } = setupWrapper({
@@ -611,7 +597,7 @@ describe("LinkContentElement", () => {
 					expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
 				});
 
-				it("should sanitize a javascript-url", async () => {
+				it("should sanitize a javascript-url", () => {
 					const INVALID_UNSANITIZED_URL =
 						"javascript" + ":" + "alert(document.domain)";
 					const { wrapper } = setupWrapper({
@@ -626,7 +612,7 @@ describe("LinkContentElement", () => {
 					expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
 				});
 
-				it("should display the hostname ", async () => {
+				it("should display the hostname ", () => {
 					const INVALID_UNSANITIZED_URL = "https://de.wikipedia.org/dachs";
 					const { wrapper } = setupWrapper({
 						content: linkElementContentFactory.build({

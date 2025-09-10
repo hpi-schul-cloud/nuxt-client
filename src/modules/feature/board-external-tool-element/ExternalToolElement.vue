@@ -95,6 +95,7 @@ import { useI18n } from "vue-i18n";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	element: {
@@ -117,7 +118,6 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const { modelValue } = useContentElementState(props, {
 	autoSaveDebounce: 0,
 });
@@ -286,7 +286,7 @@ onMounted(() => {
 	}
 });
 
-const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
+const refreshTimeInMs = useEnvConfig().value.CTL_TOOLS_RELOAD_TIME_MS;
 
 const timer = setInterval(async () => {
 	await loadCardData();

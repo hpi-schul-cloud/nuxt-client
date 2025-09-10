@@ -1,16 +1,10 @@
 import type { Mock } from "vitest";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
-import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
-import {
-	APPLICATION_ERROR_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	THEME_KEY,
-} from "@/utils/inject";
+import { APPLICATION_ERROR_KEY, THEME_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createTestEnvStore, envsFactory } from "@@/tests/test-utils";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -30,16 +24,14 @@ describe("loggedOutLayout", () => {
 
 	const mountComponent = () => {
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			filePathsModule: FilePathsModule,
 		});
 
-		const envs = envsFactory.build({
+		createTestEnvStore({
 			GHOST_BASE_URL: "https://works-like-charm.com",
 			// SC_THEME must be set here because of dependency to NavigationBar
 			SC_THEME: SchulcloudTheme.Default,
 		});
-		envConfigModule.setEnvs(envs);
 
 		const applicationErrorModuleMock = createModuleMocks(
 			ApplicationErrorModule
@@ -59,7 +51,6 @@ describe("loggedOutLayout", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModuleMock,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[THEME_KEY.valueOf()]: {
 						name: "instance name",
 					},

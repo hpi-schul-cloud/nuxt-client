@@ -1,5 +1,3 @@
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -9,12 +7,11 @@ import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
 import { shallowMount } from "@vue/test-utils";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
 import FileAlerts from "./FileAlerts.vue";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 describe("FileAlerts", () => {
 	const setup = (alerts: FileAlert[]) => {
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getCollaboraMaxFileSizeInBytes: 10,
-		});
+		createTestEnvStore({}, { COLLABORA_MAX_FILE_SIZE_IN_BYTES: 10 });
 
 		const wrapper = shallowMount(FileAlerts, {
 			global: {
@@ -28,9 +25,6 @@ describe("FileAlerts", () => {
 						},
 					}),
 				],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-				},
 			},
 			propsData: { alerts },
 		});

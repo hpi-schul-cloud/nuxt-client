@@ -231,12 +231,7 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { MeSchoolResponse } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";
 import {
 	mdiNumeric1Circle,
@@ -246,9 +241,9 @@ import {
 import { InfoAlert } from "@ui-alert";
 import { computed, ComputedRef, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useEnvConfig } from "@data-env";
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const { setMaintenanceMode, maintenanceStatus } = useSharedSchoolYearChange();
 
@@ -317,7 +312,9 @@ const enableCheckbox = () => {
 	isCheckboxEnabled.value = true;
 };
 
-const instance = envConfigModule.getEnv.SC_TITLE;
+const instance = computed(() => {
+	return useEnvConfig().value.SC_TITLE;
+});
 </script>
 
 <style lang="scss" scoped>

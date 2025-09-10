@@ -139,3 +139,8 @@ export const useEnvConfig = createSharedComposable(() => {
 	const { env } = storeToRefs(useEnvStore());
 	return env;
 });
+
+export const useEnvFileConfig = createSharedComposable(() => {
+	const { envFile } = storeToRefs(useEnvStore());
+	return envFile;
+});

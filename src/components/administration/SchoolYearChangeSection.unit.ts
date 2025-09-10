@@ -1,8 +1,7 @@
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import {
-	envsFactory,
+	createTestEnvStore,
 	maintenanceStatusFactory,
 	meResponseFactory,
 } from "@@/tests/test-utils";
@@ -25,9 +24,7 @@ describe("SchoolYearChangeSection", () => {
 		ReturnType<typeof useSharedSchoolYearChange>
 	>;
 
-	const envConfigModule = createModuleMocks(EnvConfigModule, {
-		getEnv: envsFactory.build(),
-	});
+	createTestEnvStore();
 
 	const schoolId = "schoolId";
 	const mockMe = meResponseFactory.build({ school: { id: schoolId } });
@@ -41,7 +38,6 @@ describe("SchoolYearChangeSection", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
 		});

@@ -99,7 +99,7 @@ describe("ExternalToolSection", () => {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			},
 			stubs: {

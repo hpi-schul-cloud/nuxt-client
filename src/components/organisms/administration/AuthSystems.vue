@@ -145,13 +145,14 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog";
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { authModule, schoolsModule } from "@/store";
 import {
 	mdiCheckCircle,
 	mdiContentCopy,
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 } from "@icons/material";
+import { useEnvConfig } from "@data-env";
 
 export default {
 	components: {
@@ -181,7 +182,7 @@ export default {
 			return this.systems.length > 0;
 		},
 		customLoginLinkEnabled: () =>
-			envConfigModule.getEnv.FEATURE_LOGIN_LINK_ENABLED,
+			useEnvConfig().value.FEATURE_LOGIN_LINK_ENABLED,
 		hasSystemCreatePermission: () => {
 			return authModule.getUserPermissions.includes("system_create");
 		},

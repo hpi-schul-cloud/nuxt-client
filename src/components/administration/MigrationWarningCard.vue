@@ -94,7 +94,6 @@
 	</v-card>
 </template>
 <script lang="ts">
-import { injectStrict } from "@/utils/inject";
 import { computed, ComputedRef, defineComponent, Ref, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEnvConfig } from "@data-env";

@@ -1,6 +1,5 @@
 import { DrawingElementResponse } from "@/serverApi/v3";
 import { ConfigResponse } from "@/serverApi/v3/api";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -30,12 +29,6 @@ vi.mock("@feature-board");
 
 const DRAWING_ELEMENT = drawingElementResponseFactory.build();
 
-const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-	getEnv: createMock<ConfigResponse>({
-		FEATURE_TLDRAW_ENABLED: true,
-	}),
-});
-
 describe("DrawingContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 
@@ -52,8 +45,7 @@ describe("DrawingContentElement", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule
 				},
 			},
 			propsData: props,

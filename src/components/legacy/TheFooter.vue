@@ -67,7 +67,7 @@ const links = computed(() => {
 
 	if (useEnvConfig().value.ALERT_STATUS_URL) {
 		baseLinks.push({
-			href: useEnvConfig().value.ALERT_STATUS_URL,
+			href: useEnvConfig().value.ALERT_STATUS_URL as string,
 			text: t("components.legacy.footer.status"),
 			target: "_blank",
 			rel: "noopener",

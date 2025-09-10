@@ -230,7 +230,7 @@ const router = useRouter();
 
 const schoolLicenseStore = useSchoolLicenseStore();
 
-onMounted(async () => {
+onMounted(() => {
 	if (authModule.getSchool) {
 		schoolExternalToolsModule.loadSchoolExternalTools(authModule.getSchool.id);
 
