@@ -81,4 +81,5 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
 	LICENSE_SUMMARY_URL: "",
 	ROOM_MEMBER_INFO_URL: "",
+	FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED: false,
 };
