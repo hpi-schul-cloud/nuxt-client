@@ -13,7 +13,6 @@ export const isAuthenticatedGuard = (
 		next();
 	} else {
 		const loginUrl = getLoginUrlWithRedirect(to.fullPath);
-		console.log("isAuthenticatedGuard is redirecting");
 		window.location.assign(loginUrl);
 	}
 };

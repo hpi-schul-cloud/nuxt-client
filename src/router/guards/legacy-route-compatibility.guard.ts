@@ -12,6 +12,10 @@ export const legacyCompatibilityGuard: NavigationGuard = (
 	next: NavigationGuardNext
 ) => {
 	if (isLegacyClient(to.path)) {
+		console.log(window.location.pathname);
+		if (from.fullPath === "/" && window.location.pathname === to.fullPath) {
+			return;
+		}
 		console.log("legacyCompatibilityGuard is redirecting");
 		console.log(to.fullPath);
 		console.log(from.fullPath);
