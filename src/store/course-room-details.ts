@@ -230,75 +230,11 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}): Promise<void> {
 		this.resetBusinessError();
 		try {
-			// const response =
-			// 	await this.commonCartridgeApi.commonCartridgeControllerExportCourse(
-			// 		this.roomData.roomId,
-			// 		exportSettings.version,
-			// 		{
-			// 			topics: exportSettings.topics,
-			// 			tasks: exportSettings.tasks,
-			// 			columnBoards: exportSettings.columnBoards,
-			// 		},
-			// 		{
-			// 			responseType: "blob",
-			// 		}
-			// 	);
-			// const link = document.createElement("a");
-			// link.href = URL.createObjectURL(
-			// 	new Blob([response.data as unknown as Blob])
-			// );
-			// link.download = `${
-			// 	this.roomData.title
-			// }-${new Date().toISOString()}.imscc`;
-			// document.body.appendChild(link);
-			// link.click();
-			// document.body.removeChild(link);
-			// URL.revokeObjectURL(link.href);
-
 			const form = document.createElement("form");
 			form.method = "POST";
 			form.action = `/api/v3/common-cartridge/export/${this.roomData.roomId}?version=${exportSettings.version}`;
 			form.enctype = "application/json";
 			form.target = "_blank";
-
-			//const topicsSelect = document.createElement("select");
-			//topicsSelect.hidden = true;
-			//topicsSelect.name = "topics";
-			//exportSettings.topics
-			//	.map((topicId) => {
-			//		const opt = document.createElement("option");
-			//		opt.value = topicId;
-			//		opt.selected = true;
-			//		return opt;
-			//	})
-			//	.forEach((opt) => topicsSelect.add(opt));
-			//form.appendChild(topicsSelect);
-
-			//const tasksSelect = document.createElement("select");
-			//tasksSelect.hidden = true;
-			//tasksSelect.name = "tasks";
-			//exportSettings.tasks
-			//	.map((taskId) => {
-			//		const opt = document.createElement("option");
-			//		opt.value = taskId;
-			//		opt.selected = true;
-			//		return opt;
-			//	})
-			//	.forEach((opt) => tasksSelect.add(opt));
-			//form.appendChild(tasksSelect);
-
-			// const columnBoardsSelect = document.createElement("select");
-			// tasksSelect.hidden = true;
-			// tasksSelect.name = "columnBoards";
-			// exportSettings.columnBoards
-			// 	.map((columnBoardId) => {
-			// 		const opt = document.createElement("option");
-			// 		opt.value = columnBoardId;
-			// 		opt.selected = true;
-			// 		return opt;
-			// 	})
-			// 	.forEach((opt) => columnBoardsSelect.add(opt));
-			// form.appendChild(columnBoardsSelect);
 
 			const topicIdsInput = document.createElement("input");
 			topicIdsInput.type = "hidden";
