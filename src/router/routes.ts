@@ -435,8 +435,12 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		},
 	},
 	{
-		path: "/",
+		path: "/home",
 		component: () => import("@/pages/Home.page.vue"),
 		name: "home",
+		meta: {
+			layout: Layouts.LOGGED_OUT,
+			isPublic: true,
+		},
 	},
 ];
