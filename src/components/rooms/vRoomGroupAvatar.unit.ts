@@ -1,5 +1,5 @@
 import vRoomAvatar from "@/components/rooms/vRoomAvatar.vue";
-import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
+import RoomAvatarIterator from "@/components/rooms/RoomAvatarIterator.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,

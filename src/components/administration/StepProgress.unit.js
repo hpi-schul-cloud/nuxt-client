@@ -1,7 +1,7 @@
 import StepProgress from "./StepProgress";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
-describe("@/components/organisms/StepProgress", () => {
+describe("@/components/administration/StepProgress", () => {
 	it("Test that all steps are rendered", () => {
 		const mockSteps = [
 			{ name: "Test one" },

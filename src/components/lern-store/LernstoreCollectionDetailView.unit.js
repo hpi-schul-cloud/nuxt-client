@@ -29,7 +29,7 @@ setupStores({
 	notifierModule: NotifierModule,
 });
 
-describe("@/components/organisms/LernstoreCollectionDetailView", () => {
+describe("@/components/lern-store/LernstoreCollectionDetailView", () => {
 	window.scrollTo = vi.fn();
 	let wrapper;
 

@@ -15,7 +15,7 @@ import {
 
 const { tasks } = mocks;
 
-describe("@/components/organisms/TasksList", () => {
+describe("@/components/tasks/TasksList", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;

@@ -13,7 +13,7 @@ const getWrapper = (props = {}) => {
 	});
 };
 
-describe("@/components/organisms/Pagination", () => {
+describe("@/components/administration/Pagination", () => {
 	it("should only render a next page link on the first page", () => {
 		const wrapper = getWrapper({ perPage: 5, currentPage: 1, total: 40 });
 

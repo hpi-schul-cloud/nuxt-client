@@ -6,7 +6,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 
-describe("@/components/organisms/LdapUsersSection", () => {
+describe("@/components/administration/LdapUsersSection", () => {
 	const getWrapper = (props = {}) => {
 		return mount(LdapUsersSection, {
 			global: {

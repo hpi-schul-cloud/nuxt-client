@@ -1,3 +1,3 @@
-describe("@/components/organisms/DataTable/RowSelectionBar", () => {
+describe("@/components/administration/DataTable/RowSelectionBar", () => {
 	it.todo("write tests");
 });

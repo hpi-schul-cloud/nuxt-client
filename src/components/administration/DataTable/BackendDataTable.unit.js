@@ -45,7 +45,7 @@ const getTableRowsContent = async (wrapper) => {
 	});
 };
 
-describe("@/components/organisms/DataTable/BackendDataTable", () => {
+describe("@/components/administration/DataTable/BackendDataTable", () => {
 	beforeEach(() => {
 		vi.spyOn(window, "scrollTo").mockImplementation();
 	});
