@@ -5,11 +5,11 @@
 			type="error"
 			class="mb-6"
 			data-testid="error-alert"
+			:text="t('pages.administration.school.index.termsOfUse.error')"
 			:icon="mdiAlertCircle"
-			:text="$t('pages.administration.school.index.schoolPolicy.error')"
 		>
 			<div class="alert-text">
-				{{ $t("pages.administration.school.index.schoolPolicy.error") }}
+				{{ t("pages.administration.school.index.termsOfUse.error") }}
 			</div>
 		</v-alert>
 		<template v-else>
@@ -23,30 +23,28 @@
 				v-else
 				lines="two"
 				class="mb-6"
-				data-testid="policy-item"
-				:class="{ 'item-no-action': !privacyPolicy }"
-				:ripple="privacyPolicy !== null"
-				@click="downloadPolicy"
+				data-testid="terms-item"
+				:class="{ 'item-no-action': !termsOfUse }"
+				:ripple="termsOfUse !== null"
+				@click="downloadTerms"
 			>
 				<template #prepend>
 					<v-icon>$file_pdf_outline</v-icon>
 				</template>
 				<v-list-item-title class="text-body-1 mb-2">
-					{{ $t("pages.administration.school.index.schoolPolicy.fileName") }}
+					{{ t("pages.administration.school.index.termsOfUse.fileName") }}
 				</v-list-item-title>
 				<v-list-item-subtitle class="text-body-2">
-					<template v-if="privacyPolicy">
+					<template v-if="termsOfUse">
 						{{
-							$t("pages.administration.school.index.schoolPolicy.uploadedOn", {
-								date: formatDate(privacyPolicy.publishedAt),
+							t("pages.administration.school.index.termsOfUse.uploadedOn", {
+								date: formatDate(termsOfUse.publishedAt),
 							})
 						}}
 					</template>
 					<template v-else>
 						{{
-							$t(
-								"pages.administration.school.index.schoolPolicy.notUploadedYet"
-							)
+							t("pages.administration.school.index.termsOfUse.notUploadedYet")
 						}}
 					</template>
 				</v-list-item-subtitle>
@@ -54,41 +52,39 @@
 					<v-list-item-action
 						v-if="hasSchoolEditPermission"
 						data-testid="edit-button"
-						@click.stop="isSchoolPolicyFormDialogOpen = true"
+						@click.stop="isSchoolTermsFormDialogOpen = true"
 					>
 						<v-btn
 							:icon="mdiTrayArrowUp"
 							variant="text"
 							:aria-label="
-								$t('pages.administration.school.index.schoolPolicy.edit')
+								t('pages.administration.school.index.termsOfUse.edit')
 							"
 						/>
 					</v-list-item-action>
 					<v-list-item-action
-						v-if="privacyPolicy"
+						v-if="termsOfUse"
 						data-testid="delete-button"
-						@click.stop="isDeletePolicyDialogOpen = true"
+						@click.stop="isDeleteTermsDialogOpen = true"
 					>
 						<v-btn
 							:icon="mdiTrashCanOutline"
 							variant="text"
 							:aria-label="
-								$t(
-									'pages.administration.school.index.schoolPolicy.delete.title'
-								)
+								t('pages.administration.school.index.termsOfUse.delete.title')
 							"
 						/>
 					</v-list-item-action>
 				</template>
 			</v-list-item>
-			<school-policy-form-dialog
+			<school-terms-form-dialog
 				v-if="hasSchoolEditPermission"
-				:is-open="isSchoolPolicyFormDialogOpen"
+				:is-open="isSchoolTermsFormDialogOpen"
 				data-testid="form-dialog"
 				@close="closeDialog"
 			/>
 			<v-custom-dialog
-				v-model:is-open="isDeletePolicyDialogOpen"
+				v-model:is-open="isDeleteTermsDialogOpen"
 				:size="430"
 				has-buttons
 				confirm-btn-title-key="common.actions.delete"
@@ -98,16 +94,14 @@
 			>
 				<template #title>
 					<h4 class="text-h4 mt-0">
-						{{
-							$t("pages.administration.school.index.schoolPolicy.delete.title")
-						}}
+						{{ t("pages.administration.school.index.termsOfUse.delete.title") }}
 					</h4>
 				</template>
 				<template #content>
 					<v-alert type="info" class="mb-0">
 						<div class="alert-text">
 							{{
-								$t("pages.administration.school.index.schoolPolicy.delete.text")
+								t("pages.administration.school.index.termsOfUse.delete.text")
 							}}
 						</div>
 					</v-alert>
@@ -118,15 +112,15 @@
 </template>
 
 <script setup lang="ts">
-import SchoolPolicyFormDialog from "@/components/organisms/administration/SchoolPolicyFormDialog.vue";
+import SchoolTermsFormDialog from "@/components/administration/SchoolTermsFormDialog.vue";
 import { computed, ComputedRef, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
 import { useI18n } from "vue-i18n";
 import {
-	AUTH_MODULE_KEY,
-	PRIVACY_POLICY_MODULE_KEY,
 	injectStrict,
+	AUTH_MODULE_KEY,
+	TERMS_OF_USE_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
@@ -141,18 +135,18 @@ import {
 
 const { t } = useI18n();
 const authModule = injectStrict(AUTH_MODULE_KEY);
-const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
+const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
-const isSchoolPolicyFormDialogOpen: Ref<boolean> = ref(false);
-const isDeletePolicyDialogOpen: Ref<boolean> = ref(false);
+const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
+const isDeleteTermsDialogOpen: Ref<boolean> = ref(false);
 
 const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 watch(
 	school,
 	async (newValue) => {
-		await privacyPolicyModule.fetchPrivacyPolicy(newValue.id);
+		await termsOfUseModule.fetchTermsOfUse(newValue.id);
 	},
 	{ immediate: true }
 );
@@ -160,36 +154,34 @@ watch(
 const hasSchoolEditPermission: ComputedRef<boolean> = computed(() =>
 	authModule.getUserPermissions.includes("school_edit")
 );
-const privacyPolicy: ComputedRef<ConsentVersion | null> = computed(
-	() => privacyPolicyModule.getPrivacyPolicy
+const termsOfUse: ComputedRef<ConsentVersion | null> = computed(
+	() => termsOfUseModule.getTermsOfUse
 );
-const status: ComputedRef<string> = computed(
-	() => privacyPolicyModule.getStatus
-);
+const status: ComputedRef<string> = computed(() => termsOfUseModule.getStatus);
 
 const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
 
-const downloadPolicy = () => {
-	if (privacyPolicy.value) {
+const downloadTerms = () => {
+	if (termsOfUse.value) {
 		downloadFile(
-			privacyPolicy.value.consentData.data,
-			t("pages.administration.school.index.schoolPolicy.fileName")
+			termsOfUse.value.consentData.data,
+			t("pages.administration.school.index.termsOfUse.fileName")
 		);
 	}
 };
 
 const deleteFile = async () => {
-	await privacyPolicyModule.deletePrivacyPolicy();
+	await termsOfUseModule.deleteTermsOfUse();
 
 	notifierModule.show({
-		text: t("pages.administration.school.index.schoolPolicy.delete.success"),
+		text: t("pages.administration.school.index.termsOfUse.delete.success"),
 		status: "success",
 		timeout: 5000,
 	});
 };
 
 const closeDialog = () => {
-	isSchoolPolicyFormDialogOpen.value = false;
+	isSchoolTermsFormDialogOpen.value = false;
 };
 </script>
 
