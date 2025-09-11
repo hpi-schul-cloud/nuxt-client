@@ -39,6 +39,7 @@
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+				<KebabMenuActionEditingSettings />
 				<KebabMenuActionDelete
 					:name="title"
 					scope-language-key="common.words.board"
@@ -58,6 +59,7 @@ import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPEND
 import {
 	KebabMenuActionCopy,
 	KebabMenuActionDelete,
+	KebabMenuActionEditingSettings,
 	KebabMenuActionRename,
 	KebabMenuActionPublish,
 	KebabMenuActionRevert,
