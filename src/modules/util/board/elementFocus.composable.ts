@@ -13,7 +13,9 @@ export const useElementFocus = () => {
 	const focusNodeFromHash = () => {
 		if (window.location.hash) {
 			const scrollTargetId: string = window.location.hash.slice(1);
-			scrollToNodeAndFocus(scrollTargetId);
+			setTimeout(() => {
+				scrollToNodeAndFocus(scrollTargetId);
+			}, 500);
 		}
 	};
 
