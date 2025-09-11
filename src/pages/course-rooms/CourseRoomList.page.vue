@@ -59,7 +59,7 @@
 
 <script lang="ts">
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import vRoomAvatar from "@/components/rooms/vRoomAvatar.vue";
 import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { mdiMagnify } from "@icons/material";

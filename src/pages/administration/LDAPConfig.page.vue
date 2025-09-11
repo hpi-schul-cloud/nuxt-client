@@ -93,7 +93,7 @@ import RolesSection from "@/components/organisms/Ldap/LdapRolesSection.vue";
 import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection.vue";
 import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
 import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
-import InfoMessage from "@/components/atoms/InfoMessage";
+import InfoMessage from "@/components/administration/InfoMessage";
 import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 

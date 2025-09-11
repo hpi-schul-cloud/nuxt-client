@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import vRoomAvatar from "@/components/rooms/vRoomAvatar.vue";
 
 type ItemType = {
 	id: string;

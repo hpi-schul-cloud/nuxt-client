@@ -1,4 +1,4 @@
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import vRoomAvatar from "@/components/rooms/vRoomAvatar.vue";
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import {
 	createTestingI18n,

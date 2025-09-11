@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining.vue";
+import VCustomChipTimeRemaining from "@/components/tasks/VCustomChipTimeRemaining.vue";
 import { fromNowToFuture, printDateFromStringUTC } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";

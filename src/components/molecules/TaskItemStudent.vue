@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining.vue";
+import VCustomChipTimeRemaining from "@/components/tasks/VCustomChipTimeRemaining.vue";
 import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,

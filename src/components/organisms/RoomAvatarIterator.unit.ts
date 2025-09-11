@@ -1,6 +1,6 @@
 import { VueWrapper, mount } from "@vue/test-utils";
 import RoomAvatarIterator from "./RoomAvatarIterator.vue";
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import vRoomAvatar from "@/components/rooms/vRoomAvatar.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 const propsData = {

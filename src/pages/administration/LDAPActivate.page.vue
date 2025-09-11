@@ -190,7 +190,7 @@ import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { unchangedPassword } from "@/utils/ldapConstants";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
-import InfoMessage from "@/components/atoms/InfoMessage";
+import InfoMessage from "@/components/administration/InfoMessage";
 import {
 	mdiAccountSchoolOutline,
 	mdiCheckCircle,
