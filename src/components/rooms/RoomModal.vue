@@ -35,8 +35,8 @@
 	</vCustomDialog>
 </template>
 <script setup lang="ts">
-import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import RoomAvatarIterator from "@/components/rooms/RoomAvatarIterator.vue";
+import vCustomDialog from "@/components/common/vCustomDialog.vue";
 import { courseRoomListModule } from "@/store";
 import { useOpeningTagValidator } from "@/utils/validation";
 import { PropType, ref, watch } from "vue";

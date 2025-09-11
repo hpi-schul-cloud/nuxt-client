@@ -162,7 +162,7 @@
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/common/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict, THEME_KEY } from "@/utils/inject";

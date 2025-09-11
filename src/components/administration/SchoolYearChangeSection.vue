@@ -228,7 +228,7 @@
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/common/vCustomDialog.vue";
 import { MeSchoolResponse } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";

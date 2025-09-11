@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/common/vCustomDialog.vue";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useCourseApi } from "@data-room";
 import { useI18n } from "vue-i18n";

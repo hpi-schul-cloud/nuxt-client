@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
+import RoomAvatarIterator from "@/components/rooms/RoomAvatarIterator.vue";
 import { mdiLock } from "@icons/material";
 
 export default {

@@ -190,7 +190,7 @@
 
 <script>
 import RoomTaskCard from "@/components/rooms/RoomTaskCard.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/common/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import {
 	BoardElementResponseTypeEnum,

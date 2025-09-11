@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/common/vCustomDialog.vue";
 import { currentDate } from "@/plugins/datetime";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { School } from "@/store/types/schools";

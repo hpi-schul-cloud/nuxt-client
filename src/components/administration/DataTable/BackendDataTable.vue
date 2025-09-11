@@ -165,7 +165,7 @@ export default {
 		/**
 		 * Array of Objects.
 		 * Each Object must define a function "action" that will be called with the list of current selectionIds and the selectionType.
-		 * Will be passed to the @/components/organisms/DropdownMenu component.
+		 * Will be passed to the @/components/administration/DropdownMenu component.
 		 */
 		actions: {
 			type: Array,

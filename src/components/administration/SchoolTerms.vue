@@ -124,7 +124,7 @@ import {
 	SCHOOLS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/common/vCustomDialog.vue";
 import { downloadFile } from "@/utils/fileHelper";
 import { formatDateForAlerts } from "@/plugins/datetime";
 import {

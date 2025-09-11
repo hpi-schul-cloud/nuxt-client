@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/common/vCustomDialog.vue";
 import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
 import {
 	injectStrict,

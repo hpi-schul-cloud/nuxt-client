@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/common/vCustomDialog.vue";
 import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 import RoomExternalToolsErrorDialog from "@/pages/course-rooms/tools/RoomExternalToolsErrorDialog.vue";
 import { ToolContextType } from "@/serverApi/v3";

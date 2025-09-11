@@ -314,9 +314,9 @@
 <script>
 import { envConfigModule, filePathsModule, notifierModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import StepProgress from "@/components/organisms/StepProgress";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import StepProgress from "@/components/administration/StepProgress";
+import BackendDataTable from "@/components/administration/DataTable/BackendDataTable";
+import ModalBodyInfo from "@/components/base/ModalBodyInfo";
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import {
 	inputDateFormat,

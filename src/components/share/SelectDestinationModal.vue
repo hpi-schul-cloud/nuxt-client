@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/common/vCustomDialog.vue
 import { mdiInformation } from "@icons/material";
 import { computed, PropType, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";

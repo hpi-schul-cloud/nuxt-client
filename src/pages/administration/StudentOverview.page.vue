@@ -134,12 +134,12 @@
 import { mapGetters } from "vuex";
 import { envConfigModule, notifierModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
-import AdminTableLegend from "@/components/molecules/AdminTableLegend";
+import BackendDataTable from "@/components/administration/DataTable/BackendDataTable";
+import AdminTableLegend from "@/components/administration/AdminTableLegend";
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
-import ProgressModal from "@/components/molecules/ProgressModal";
+import ProgressModal from "@/components/administration/ProgressModal";
 import {
 	mdiAccountPlus,
 	mdiAlert,
@@ -156,7 +156,7 @@ import {
 } from "@icons/material";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
-import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
+import DataFilter from "@/components/administration/DataFilter/DataFilter.vue";
 
 export default {
 	components: {

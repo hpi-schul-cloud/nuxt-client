@@ -38,7 +38,7 @@
 
 <script>
 import BaseModal from "../BaseModal";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import ModalBodyInfo from "@/components/base/ModalBodyInfo";
 
 export default {
 	components: {

@@ -571,7 +571,7 @@
 </template>
 <script setup lang="ts">
 import ImportUsers from "@/components/administration/ImportUsers.vue";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/common/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";

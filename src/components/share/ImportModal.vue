@@ -117,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/common/vCustomDialog.vue";
 import { useOpeningTagValidator } from "@/utils/validation";
 import { mdiInformation } from "@icons/material";
 import { computed, reactive, ref } from "vue";

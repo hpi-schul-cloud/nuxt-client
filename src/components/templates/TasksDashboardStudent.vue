@@ -89,8 +89,8 @@
 </template>
 
 <script>
-import TasksList from "@/components/organisms/TasksList";
-import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
+import TasksList from "@/components/tasks/TasksList";
+import vCustomDoublePanels from "@/components/tasks/vCustomDoublePanels";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 
 export default {
