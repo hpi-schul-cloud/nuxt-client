@@ -80,7 +80,7 @@ const availableLanguages = computed(() => {
 
 const selectedLanguage = computed(() => {
 	const language = buildLanguageItem(
-		authModule.getLocale || useEnvStore().getFallbackLanguage
+		authModule.getLocale || useEnvStore().fallBackLanguage
 	);
 
 	return language;

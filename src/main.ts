@@ -103,7 +103,12 @@ app.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios);
 
-	await useEnvStore().loadConfiguration();
+	const success = await useEnvStore().loadConfiguration();
+
+	if (success) {
+		contentModule.init();
+		filePathsModule.init();
+	}
 
 	try {
 		await authModule.login();

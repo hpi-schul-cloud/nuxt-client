@@ -221,11 +221,7 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import {
-	ClassSortQueryType,
-	SchoolYearQueryType,
-	SchulcloudTheme,
-} from "@/serverApi/v3";
+import { ClassSortQueryType, SchoolYearQueryType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
@@ -253,7 +249,7 @@ import { useI18n } from "vue-i18n";
 import { InfoAlert } from "@ui-alert";
 import { useRoute, useRouter } from "vue-router";
 import { DataTableHeader } from "vuetify";
-import { useEnvConfig } from "@data-env";
+import { useEnvConfig, useEnvStore } from "@data-env";
 
 type Tab = "current" | "next" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -503,18 +499,7 @@ onMounted(() => {
 	onTabsChange(activeTab.value);
 });
 
-const instituteTitle: ComputedRef<string> = computed(() => {
-	switch (useEnvConfig().value.SC_THEME) {
-		case SchulcloudTheme.N21:
-			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
-		case SchulcloudTheme.Thr:
-			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-		case SchulcloudTheme.Brb:
-			return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
-		default:
-			return "Dataport";
-	}
-});
+const instituteTitle = useEnvStore().instituteTitle;
 </script>
 
 <style scoped>

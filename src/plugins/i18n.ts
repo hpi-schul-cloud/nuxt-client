@@ -49,7 +49,7 @@ const localCreateI18n = () => {
 	const i18n = createI18n<false>({
 		legacy: false,
 		locale: authModule.getLocale,
-		fallbackLocale: useEnvStore().getFallbackLanguage,
+		fallbackLocale: useEnvStore().fallBackLanguage,
 		messages: messages,
 		numberFormats,
 	});

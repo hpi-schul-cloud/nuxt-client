@@ -246,54 +246,6 @@ describe("SchoolSettingsPage", () => {
 		});
 	});
 
-	describe("institute title", () => {
-		describe("when the theme is default", () => {
-			it("should render default title", () => {
-				const { wrapper } = getWrapper({
-					SC_THEME: SchulcloudTheme.Default,
-				});
-
-				expect(wrapper.vm.instituteTitle).toEqual("Dataport");
-			});
-		});
-
-		describe("when the theme is brb", () => {
-			it("should render brb title", () => {
-				const { wrapper } = getWrapper({
-					SC_THEME: SchulcloudTheme.Brb,
-				});
-
-				expect(wrapper.vm.instituteTitle).toEqual(
-					"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"
-				);
-			});
-		});
-
-		describe("when the theme is thr", () => {
-			it("should render thr title", () => {
-				const { wrapper } = getWrapper({
-					SC_THEME: SchulcloudTheme.Thr,
-				});
-
-				expect(wrapper.vm.instituteTitle).toEqual(
-					"Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien"
-				);
-			});
-		});
-
-		describe("when the theme is n21", () => {
-			it("should render n21 title", () => {
-				const { wrapper } = getWrapper({
-					SC_THEME: SchulcloudTheme.N21,
-				});
-
-				expect(wrapper.vm.instituteTitle).toEqual(
-					"Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"
-				);
-			});
-		});
-	});
-
 	it("should compute systems correctly", () => {
 		const { wrapper } = getWrapper();
 

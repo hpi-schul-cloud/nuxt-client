@@ -173,7 +173,7 @@ import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue
 import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { SchoolSystemResponse, SchulcloudTheme } from "@/serverApi/v3";
+import { SchoolSystemResponse } from "@/serverApi/v3";
 import { ApplicationError } from "@/store/types/application-error";
 import { School } from "@/store/types/schools";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
@@ -192,7 +192,7 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { useEnvConfig } from "@data-env";
+import { useEnvConfig, useEnvStore } from "@data-env";
 
 export default defineComponent({
 	name: "SchoolSettings",
@@ -267,18 +267,7 @@ export default defineComponent({
 		const isFeatureSchoolTermsOfUseEnabled: ComputedRef<boolean | undefined> =
 			computed(() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED);
 
-		const instituteTitle: ComputedRef<string> = computed(() => {
-			switch (useEnvConfig().value.SC_THEME) {
-				case SchulcloudTheme.N21:
-					return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
-				case SchulcloudTheme.Thr:
-					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-				case SchulcloudTheme.Brb:
-					return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
-				default:
-					return "Dataport";
-			}
-		});
+		const instituteTitle = useEnvStore().instituteTitle;
 
 		onMounted(async () => {
 			if (school.value?.id) {

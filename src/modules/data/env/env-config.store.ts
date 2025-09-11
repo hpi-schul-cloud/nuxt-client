@@ -1,9 +1,5 @@
 import { defineStore, storeToRefs } from "pinia";
-import {
-	applicationErrorModule,
-	contentModule,
-	filePathsModule,
-} from "@/store";
+import { applicationErrorModule } from "@/store";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
@@ -115,8 +111,21 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		Object.assign(envFile, fileEnvsConfig);
 	};
 
-	const getFallbackLanguage = computed(() => {
+	const fallBackLanguage = computed(() => {
 		return env.I18N__FALLBACK_LANGUAGE ?? env.I18N__DEFAULT_LANGUAGE;
+	});
+
+	const instituteTitle = computed(() => {
+		switch (env.SC_THEME) {
+			case SchulcloudTheme.N21:
+				return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
+			case SchulcloudTheme.Thr:
+				return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
+			case SchulcloudTheme.Brb:
+				return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
+			default:
+				return "Dataport";
+		}
 	});
 
 	const loadConfiguration = async () => {
@@ -131,25 +140,24 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 				setFileEnvs(fileConfigRes?.data);
 			}
 
-			// TODO: Need to call that? Can we not just remove that?
-			contentModule.init();
-			filePathsModule.init();
-
 			status.value = "completed";
+			return true;
 		} catch {
 			applicationErrorModule.setError(
 				createApplicationError(HttpStatusCode.GatewayTimeout)
 			);
 			status.value = "error";
+			return false;
 		}
 	};
 
 	return {
 		loadConfiguration,
-		setEnvs,
+		status,
 		env,
 		envFile,
-		getFallbackLanguage,
+		fallBackLanguage,
+		instituteTitle,
 	};
 });
 

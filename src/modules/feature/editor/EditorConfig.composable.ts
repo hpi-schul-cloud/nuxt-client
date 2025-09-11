@@ -42,7 +42,7 @@ export const useEditorConfig = () => {
 	const DEFAULT_PROTOCOL = "//";
 
 	const generalConfig = reactive<GeneralConfig>({
-		language: locale.value || useEnvStore().getFallbackLanguage,
+		language: locale.value || useEnvStore().fallBackLanguage,
 		link: {
 			defaultProtocol: DEFAULT_PROTOCOL,
 			addTargetToExternalLinks: true,

@@ -205,7 +205,6 @@ import {
 	CourseInfoDataResponse,
 	CourseSortProps,
 	CourseStatus,
-	SchulcloudTheme,
 } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import { SortOrder } from "@/store/types/sort-order.enum";
@@ -229,7 +228,7 @@ import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import type { DataTableHeader } from "vuetify";
-import { useEnvConfig } from "@data-env";
+import { useEnvConfig, useEnvStore } from "@data-env";
 
 type Tab = "current" | "archive";
 
@@ -458,18 +457,7 @@ onMounted(() => {
 	onTabsChange(activeTab.value);
 });
 
-const instituteTitle: ComputedRef<string> = computed(() => {
-	switch (useEnvConfig().value.SC_THEME) {
-		case SchulcloudTheme.N21:
-			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
-		case SchulcloudTheme.Thr:
-			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-		case SchulcloudTheme.Brb:
-			return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
-		default:
-			return "Dataport";
-	}
-});
+const instituteTitle = useEnvStore().instituteTitle;
 </script>
 
 <style scoped>
