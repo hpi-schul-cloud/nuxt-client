@@ -12,7 +12,7 @@ const useBoardPageInformation = () => {
 	const { getContextInfo } = useBoardApi();
 
 	const boardContext = ref<Awaited<ReturnType<typeof getContextInfo>>>();
-
+	const boardTitle = ref<string>();
 	const roomId = computed(() => boardContext.value?.id);
 	const contextType = computed(() => boardContext.value?.type);
 
@@ -55,6 +55,11 @@ const useBoardPageInformation = () => {
 					to: `/rooms/${id}`,
 					disabled: false,
 				},
+				{
+					title:
+						boardTitle.value ?? t("pages.room.boardCard.label.courseBoard"),
+					disabled: true,
+				},
 			];
 		}
 		if (type === BoardContextType.Room) {
@@ -69,17 +74,26 @@ const useBoardPageInformation = () => {
 					to: `/rooms/${id}`,
 					disabled: false,
 				},
+				{
+					title: boardTitle.value ?? t("pages.roomDetails.board.defaultName"),
+					disabled: true,
+				},
 			];
 		}
 		return [];
 	});
 
-	const createPageInformation = async (id: string): Promise<void> => {
+	const createPageInformation = async (
+		id: string,
+		title?: string
+	): Promise<void> => {
 		boardContext.value = await getContextInfo(id);
+		boardTitle.value = title ?? "";
 	};
 
 	const resetPageInformation = (): void => {
 		boardContext.value = undefined;
+		boardTitle.value = "";
 	};
 
 	return {
