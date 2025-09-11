@@ -3,7 +3,6 @@
 import { createStore, Store } from "vuex";
 // Note: you shouldn't need to import store modules here.
 import { initializeStores, modules } from "@/store/store-accessor";
-import activation from "@/store/activation";
 import { bulkConsent } from "@/store/bulkConsent";
 import calendar from "@/store/calendar";
 import classes from "@/store/classes";
@@ -26,7 +25,6 @@ export default createStore({
 	plugins: [initializer], // triggers initializeStores
 	modules: {
 		...modules,
-		activation,
 		bulkConsent,
 		calendar,
 		classes,

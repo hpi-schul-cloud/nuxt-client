@@ -1123,10 +1123,6 @@ export default {
 	"page-class-members.systemInfoText":
 		"Daten der Klasse werden mit {systemName} synchronisiert. Die Klassenliste kann vorübergehend veraltet sein, bis sie mit dem neusten Stand in {systemName} abgeglichen wird. Die Daten werden nach jeder Anmeldung eines Klassenmitglieds in der Niedersächsischen Bildungscloud aktualisiert.",
 	"page-class-members.title.info": "importiert aus einem externen System",
-	"pages.activation._activationCode.index.error.title":
-		"Deine Daten konnten nicht geändert werden",
-	"pages.activation._activationCode.index.success.email":
-		"Deine E-Mail-Adresse wurde erfolgreich geändert",
 	"pages.administration.actions": "Aktionen",
 	"pages.administration.all": "alle",
 	"pages.administration.classes.createSuccessor":
