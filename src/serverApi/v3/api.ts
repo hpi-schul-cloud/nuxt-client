@@ -5978,6 +5978,12 @@ export interface MeUserResponse {
      * @memberof MeUserResponse
      */
     forcePasswordChange?: boolean;
+    /**
+     * 
+     * @type {object}
+     * @memberof MeUserResponse
+     */
+    preferences?: object;
 }
 /**
  * 

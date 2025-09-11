@@ -44,8 +44,8 @@
 			<!-- Blog Cards rendered if blogFeed is loaded and not empty -->
 			<template v-else>
 				<v-col
-					v-for="article in blogFeed"
-					:key="article.id"
+					v-for="(article, i) in blogFeed"
+					:key="i"
 					cols="12"
 					md="6"
 					lg="4"
@@ -61,7 +61,6 @@
 							<v-img
 								v-if="article.img && article.img.src"
 								:src="article.img.src"
-								:alt="article.img.title"
 								class="thumbnail"
 								height="180"
 								cover
@@ -122,6 +121,7 @@
 import Login from "@/modules/feature/login/login.vue";
 import { envConfigModule } from "@/store";
 import { logger } from "@util-logger";
+import { BlogFeedData, useBlogApi } from "@data-blog";
 
 //import { stripHtml } from "string-strip-html";
 import { onMounted, ref } from "vue";
@@ -135,12 +135,6 @@ function getAssetPath(path: string): string {
 	return path;
 }
 
-// Util: Strip HTML tags from string (Handlebars helper port)
-//TODO: import / implement stripHtMLTags
-//function stripHTMLTags(htmlText: string): string {
-//	return stripHtml(htmlText ?? "").result;
-//}
-
 // Util: Truncate pure text (Handlebars helper port)
 function truncatePure(text: string, length: number): string {
 	if (!text) return "";
@@ -149,24 +143,13 @@ function truncatePure(text: string, length: number): string {
 	return `${subString}...`;
 }
 
-// Types
-interface BlogArticle {
-	id: string;
-	url: string;
-	title: string;
-	pubDate: string;
-	img: {
-		src: string;
-		title?: string;
-	};
-	description: string;
-}
-
 // State
-const blogFeed = ref<BlogArticle[]>([]);
+const blogFeed = ref<BlogFeedData[]>([]);
 const loading = ref<boolean>(false);
 const globalAnnouncement = ref<string | null>(null);
 const ghostBaseUrl = ref<string>("");
+
+const blogApi = useBlogApi();
 
 // Simulate config system (replace with real fetch/inject in BCloud app)
 async function fetchConfig(key: string): Promise<string | null> {
@@ -183,18 +166,8 @@ async function fetchBlogs() {
 	loading.value = true;
 
 	try {
-		// Example: adjust actual API endpoint/structure as required
-		const feedRes = await fetch("/api/blogs", {
-			method: "GET",
-			headers: { "Content-Type": "application/json" },
-		});
-		if (!feedRes.ok) throw new Error("Failed to fetch blogs");
-		const resJson = await feedRes.json(); //initially
-		// Either array or { blogs: [...] }
-		const blogs: BlogArticle[] = Array.isArray(resJson) // initially let
-			? resJson
-			: (resJson.blogFeed ?? resJson.blogs ?? []);
-		blogFeed.value = blogs;
+		const blogFeedData = await blogApi.fetchBlogFeedData();
+		blogFeed.value = blogFeedData;
 	} catch (e) {
 		logger.info(e); //TODO: check what to do best here
 		blogFeed.value = [];
@@ -218,12 +191,14 @@ onMounted(async () => {
 .blog-cards {
 	margin-top: 24px;
 }
+
 .blog-card-wrapper {
 	text-decoration: none;
 	color: inherit;
 	display: block;
 	height: 100%;
 }
+
 .blog-card {
 	transition: box-shadow 0.2s;
 	height: 100%;
@@ -231,12 +206,14 @@ onMounted(async () => {
 	flex-direction: column;
 	justify-content: space-between;
 }
+
 .thumbnail {
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
 	object-fit: cover;
 	width: 100%;
 }
+
 .heading {
 	font-size: 1.1rem;
 	font-weight: 600;
@@ -244,26 +221,32 @@ onMounted(async () => {
 	flex-direction: column;
 	align-items: flex-start;
 }
+
 .title {
 	font-size: 1.06rem;
 	font-weight: 600;
 }
+
 .pub-date {
 	font-size: 0.85rem;
 	color: #888;
 }
+
 .description {
 	margin-top: 8px;
 	min-height: 48px;
 }
+
 .open-link {
 	color: #1976d2;
 	font-size: 0.95rem;
 	font-weight: 500;
 }
+
 .load-icon.spinner {
 	font-size: 25px;
 }
+
 .section-title {
 	margin: 28px 0 14px 0;
 }
