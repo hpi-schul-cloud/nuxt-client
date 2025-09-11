@@ -5972,6 +5972,12 @@ export interface MeUserResponse {
      * @memberof MeUserResponse
      */
     customAvatarBackgroundColor?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MeUserResponse
+     */
+    forcePasswordChange?: boolean;
 }
 /**
  * 
