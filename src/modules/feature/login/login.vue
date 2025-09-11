@@ -1,7 +1,7 @@
 <template>
 	<v-container
 		class="d-flex flex-column"
-		style="min-height: 100vh; width: 100%"
+		style="min-height: 30vh; width: 100%"
 	>
 		<v-card>
 			<v-card-title class="h3 mt-3">
@@ -497,6 +497,15 @@ const loginTimeoutSeconds = envConfigModule.getEnv.LOGIN_BLOCK_TIME;
 const isLoginTimeoutActive = ref(false);
 const redirectParam = ref(route.query.redirect?.toString() || null);
 
+const emit = defineEmits<{
+  (e: 'login-failed'): void;
+}>();
+
+function handleLoginError() {
+	showAlert.value = true;
+	emit('login-failed');
+}
+
 function togglePassword() {
 	showPassword.value = !showPassword.value;
 }
@@ -519,7 +528,7 @@ function checkCookie() {
 			dismissible: true,
 			message: t("login.alert.cookiesBlocked"),
 		};
-		showAlert.value = true;
+		handleLoginError();
 	}
 	return cookieEnabled;
 }
@@ -721,7 +730,7 @@ async function submitLocalLogin() {
 			dismissible: true,
 			message: "Login fehlgeschlagen",
 		};
-		showAlert.value = true;
+		handleLoginError();
 		email.value = "";
 		password.value = "";
 		emailMoreLess.value = "";
@@ -751,7 +760,7 @@ async function submitLdapLogin() {
 			dismissible: true,
 			message: t("Login fehlgeschlagen"),
 		};
-		showAlert.value = true;
+		handleLoginError();
 		return;
 	}
 
@@ -784,7 +793,7 @@ async function submitLdapLogin() {
 			dismissible: true,
 			message: t("Login fehlgeschlagen"),
 		};
-		showAlert.value = true;
+		handleLoginError();
 		countdownNum.value = loginTimeoutSeconds;
 		incTimer();
 	}

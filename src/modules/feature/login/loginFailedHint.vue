@@ -1,5 +1,5 @@
 <template>
-  <div class="login-failed-container" v-if="notification">
+  <div class="login-failed-container">
     <h4>{{t("login.headline.loginFailedHint")}}</h4>
 	<div class="steps">
 		<li class="sub-header"> {{t("login.text.loginFailedFirstHint")}}</li>
@@ -85,7 +85,6 @@ import thrLogo from "@/assets/images/thr-logo.png";
 import n21Logo from "@/assets/images/n21-logo.png";
 
 const { t } = useI18n();
-const notification = true; // <— exposed to the template in <script setup>
 </script>
 
 <style scoped>
