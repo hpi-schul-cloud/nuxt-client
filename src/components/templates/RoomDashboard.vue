@@ -189,7 +189,7 @@
 </template>
 
 <script>
-import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
+import RoomTaskCard from "@/components/rooms/RoomTaskCard.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import {

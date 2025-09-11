@@ -5,7 +5,7 @@ import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { mount } from "@vue/test-utils";
-import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
+import TaskItemTeacher from "../tasks/TaskItemTeacher.vue";
 import TasksList from "./TasksList.vue";
 import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {

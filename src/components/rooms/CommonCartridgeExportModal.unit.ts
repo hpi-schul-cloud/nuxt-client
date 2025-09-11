@@ -1,4 +1,4 @@
-import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
+import CommonCartridgeExportModal from "@/components/rooms/CommonCartridgeExportModal.vue";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import NotifierModule from "@/store/notifier";
 import courseRoomDetailsModule from "@/store/course-room-details";

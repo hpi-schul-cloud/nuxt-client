@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels.vue";
+import vCustomDoublePanels from "@/components/tasks/vCustomDoublePanels.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";

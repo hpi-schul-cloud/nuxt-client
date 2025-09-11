@@ -62,7 +62,7 @@ import {
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 	fromNowToFuture,
 } from "@/plugins/datetime";
-import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
+import TaskItemMenu from "@/components/tasks/TaskItemMenu.vue";
 import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];

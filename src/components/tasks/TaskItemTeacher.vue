@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
+import TaskItemMenu from "@/components/tasks/TaskItemMenu.vue";
 import {
 	isToday,
 	printDateFromStringUTC as dateFromUTC,
