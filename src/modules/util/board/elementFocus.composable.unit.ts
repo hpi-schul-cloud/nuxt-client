@@ -2,6 +2,10 @@ import { createMock } from "@golevelup/ts-vitest";
 import { useElementFocus } from "./elementFocus.composable";
 
 describe("elementFocus.composable", () => {
+	beforeEach(() => {
+		vi.useFakeTimers();
+		vi.clearAllMocks();
+	});
 	describe("when there is a node to focus", () => {
 		const setup = () => {
 			Object.defineProperty(window, "location", {
@@ -24,6 +28,7 @@ describe("elementFocus.composable", () => {
 			const { domElementMock } = setup();
 
 			useElementFocus().focusNodeFromHash();
+			vi.runAllTimers();
 
 			expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({
 				block: "center",
