@@ -1,5 +1,5 @@
-import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
+import AlertContainer from "@/components/common/AlertContainer.vue";
+import ApplicationErrorWrapper from "@/components/common/ApplicationErrorWrapper.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,

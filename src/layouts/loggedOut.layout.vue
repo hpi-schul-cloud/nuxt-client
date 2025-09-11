@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import NavigationBar from "@/components/logged-out-layout/NavigationBar.vue";
 import TheFooter from "@/components/logged-out-layout/TheFooter.vue";
-import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting.vue";
+import ApplicationErrorRouting from "@/components/common/ApplicationErrorRouting.vue";
 import Logo from "@/assets/img/logo/logo-image-mono.svg";
 import { injectStrict, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { computed } from "vue";

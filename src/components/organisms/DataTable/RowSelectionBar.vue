@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import ContextMenu from "@/components/molecules/ContextMenu.vue";
+import ContextMenu from "@/components/common/ContextMenu.vue";
 import { mdiClose } from "@icons/material";
 
 export default {
