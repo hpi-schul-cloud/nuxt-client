@@ -22,14 +22,16 @@ const useBoardPageInformation = () => {
 		const type = unref(boardContext)?.type;
 
 		if (type === BoardContextType.Course) {
-			return buildPageTitle(
-				`${t("pages.room.boardCard.label.courseBoard")}${roomNameForPageTitle}`
-			);
+			const title =
+				boardTitle.value ?? t("pages.room.boardCard.label.courseBoard");
+
+			return buildPageTitle(`${title}${roomNameForPageTitle}`);
 		}
 		if (type === BoardContextType.Room) {
-			return buildPageTitle(
-				`${t("pages.roomDetails.board.defaultName")}${roomNameForPageTitle}`
-			);
+			const title =
+				boardTitle.value ?? t("pages.roomDetails.board.defaultName");
+
+			return buildPageTitle(`${title}${roomNameForPageTitle}`);
 		}
 		return "";
 	});
