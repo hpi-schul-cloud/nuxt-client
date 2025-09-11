@@ -11,6 +11,7 @@ export enum CollaboraEvents {
 	HOST_POSTMESSAGE_READY = "Host_PostmessageReady",
 	REMOVE_BUTTON = "Remove_Button",
 	FEEDBACK_NEVER = "feedback-never",
+	HIDE_MENU_ITEM = "Hide_Menu_Item",
 }
 
 export const useCollaboraPostMessageApi = () => {
@@ -64,6 +65,7 @@ export const useCollaboraPostMessageApi = () => {
 
 		if (Status === "Document_Loaded") {
 			sendRemoveButtonsMessage();
+			sendHideMenuItemsMessage();
 		}
 	};
 
@@ -91,8 +93,24 @@ export const useCollaboraPostMessageApi = () => {
 			"latestupdates",
 			"signature-button",
 		];
+
 		buttonIds.forEach((buttonId) => {
 			postMessage(CollaboraEvents.REMOVE_BUTTON, { id: buttonId });
+		});
+	};
+
+	const sendHideMenuItemsMessage = () => {
+		const menuItemIds = [
+			"report-an-issue",
+			"feedback",
+			"about",
+			"latestupdates",
+			"serveraudit",
+			"signature",
+		];
+
+		menuItemIds.forEach((menuItemId) => {
+			postMessage(CollaboraEvents.HIDE_MENU_ITEM, { id: menuItemId });
 		});
 	};
 
