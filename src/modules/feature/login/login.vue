@@ -406,7 +406,6 @@
 				</v-col>
 			</v-row>
 		</v-card>
-		<div class="flex-grow-1" />
 	</v-container>
 </template>
 
