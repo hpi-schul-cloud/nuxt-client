@@ -75,7 +75,7 @@ import { getValueByPath } from "@/utils/helpers";
 
 import TableDataRow from "./TableDataRow.vue";
 import TableHeadRow from "./TableHeadRow.vue";
-import Pagination from "@/components/organisms/Pagination.vue";
+import Pagination from "@/components/administration/Pagination.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
 
 import controllableData from "@/mixins/controllableData";
