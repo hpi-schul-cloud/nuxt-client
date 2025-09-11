@@ -1115,8 +1115,6 @@ export default {
 	"page-class-members.systemInfoText":
 		"Class data is synchronized with {systemName}. The class list may be temporarily out of date until it is updated with the latest version in {systemName}. The data is updated every time a class member registers in the Niedersächsischen Bildungscloud.",
 	"page-class-members.title.info": "imported from an external system",
-	"pages.activation._activationCode.index.error.description":
-		"Your changes could not be made because the link is invalid or has expired. Please try again.",
 	"pages.activation._activationCode.index.error.title":
 		"Your data could not be changed",
 	"pages.activation._activationCode.index.success.email":

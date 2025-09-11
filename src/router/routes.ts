@@ -7,7 +7,6 @@ import {
 	isEnum,
 	isMongoId,
 	isOfficialSchoolNumber,
-	REGEX_ACTIVATION_CODE,
 	REGEX_ID,
 	REGEX_UUID,
 } from "@/utils/validation";
@@ -15,15 +14,6 @@ import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
 export const routes: Readonly<RouteRecordRaw>[] = [
-	{
-		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
-		component: () => import("@/pages/ActivationCode.page.vue"),
-		name: "activation-activationCode",
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
-		},
-	},
 	{
 		path: "/administration/ldap/activate",
 		component: () => import("@/pages/administration/LDAPActivate.page.vue"),

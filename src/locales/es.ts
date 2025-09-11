@@ -1154,8 +1154,6 @@ export default {
 	"page-class-members.systemInfoText":
 		"Los datos de la clase se sincronizan con {systemName}. La lista de clases puede estar temporalmente desactualizada hasta que se actualice con la última versión en {systemName}. Los datos se actualizan cada vez que un miembro del grupo se registra en Niedersächsischen Bildungscloud.",
 	"page-class-members.title.info": "importado desde un sistema externo",
-	"pages.activation._activationCode.index.error.description":
-		"No se han podido realizar tus cambios porque el enlace no es válido o ha caducado. Inténtalo de nuevo.",
 	"pages.activation._activationCode.index.error.title":
 		"No se han podido cambiar tus datos",
 	"pages.activation._activationCode.index.success.email":

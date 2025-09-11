@@ -1138,8 +1138,6 @@ export default {
 	"page-class-members.systemInfoText":
 		"Дані класу синхронізуються з {systemName}. Список класів може бути тимчасово застарілим, поки його не буде оновлено останньою версією в {systemName}. Дані оновлюються кожного разу, коли учасник класу реєструється в Niedersächsischen Bildungscloud.",
 	"page-class-members.title.info": "імпортовані із зовнішньої системи",
-	"pages.activation._activationCode.index.error.description":
-		"Не вдалося внести ваші зміни, оскільки посилання недійсне або термін його дії закінчився. Спробуйте ще раз.",
 	"pages.activation._activationCode.index.error.title":
 		"Не вдалося змінити ваші дані",
 	"pages.activation._activationCode.index.success.email":
