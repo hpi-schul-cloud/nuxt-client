@@ -1,4 +1,4 @@
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
+import ModalBodyInfo from "@/components/base/ModalBodyInfo.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,

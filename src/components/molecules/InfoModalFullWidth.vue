@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
+import ModalBodyInfo from "@/components/base/ModalBodyInfo.vue";
 
 type Props = {
 	design?: string;

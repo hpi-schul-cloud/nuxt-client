@@ -5,7 +5,7 @@ import {
 import { mount } from "@vue/test-utils";
 import NotificationModal from "./NotificationModal.vue";
 import { mdiAlertCircle, mdiCheckCircle } from "@icons/material";
-import ModalBodyInfo from "../molecules/ModalBodyInfo.vue";
+import ModalBodyInfo from "../base/ModalBodyInfo.vue";
 import { VIcon } from "vuetify/components";
 
 const testProps = {

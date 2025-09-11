@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalFooter from "@/components/base/ModalFooter.vue";
 import { contentModule } from "@/store";
 import { mapGetters } from "vuex";
 import BaseModal from "../base/BaseModal.vue";
