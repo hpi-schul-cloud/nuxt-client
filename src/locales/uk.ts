@@ -481,6 +481,7 @@ export default {
 	"components.board.error.403":
 		"Помилка 403 – На жаль, у вас немає дозволу на перегляд цього контенту ...",
 	"components.board.menu.board": "Налаштування дошки",
+	"components.board.menu.editing.settings": "Налаштування редагування",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
 	"components.board.menu.collaborativeTextEditorElement":
