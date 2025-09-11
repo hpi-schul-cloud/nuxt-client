@@ -47,7 +47,7 @@ const getWrapper = (props: { task: object }) => {
 	});
 };
 
-describe("@/components/molecules/TaskItemTeacher", () => {
+describe("@/components/tasks/TaskItemTeacher", () => {
 	const defineWindowWidth = (width: number) => {
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,

@@ -2,7 +2,7 @@ import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import ProgressModal from "./ProgressModal.vue";
 
-describe("@/components/molecules/ProgressModal", () => {
+describe("@/components/administration/ProgressModal", () => {
 	it(`check props are set correctly `, () => {
 		const wrapper = mount(ProgressModal, {
 			global: {

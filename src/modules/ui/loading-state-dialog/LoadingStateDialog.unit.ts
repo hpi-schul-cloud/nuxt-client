@@ -8,7 +8,7 @@ import { mount } from "@vue/test-utils";
 import { VCard } from "vuetify/lib/components/index";
 import LoadingStateDialog from "./LoadingStateDialog.vue";
 
-describe("@/components/molecules/LoadingModal", () => {
+describe("@ui-loading-state-dialog/LoadingStateDialog", () => {
 	let loadingStateModuleMock: LoadingStateModule;
 
 	const mountComponent = (attrs = {}) => {

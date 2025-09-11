@@ -17,7 +17,7 @@ vi.spyOn($axios, "get").mockResolvedValue({
 	},
 });
 
-describe("@/components/molecules/LernStorePlayer", () => {
+describe("@/components/lern-store/LernStorePlayer", () => {
 	const setup = (props = {}) => {
 		const wrapper = mount(LernStorePlayer, {
 			props,

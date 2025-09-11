@@ -1,4 +1,4 @@
-import RoomModal from "@/components/molecules/RoomModal";
+import RoomModal from "@/components/rooms/RoomModal";
 import { authModule, courseRoomListModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";

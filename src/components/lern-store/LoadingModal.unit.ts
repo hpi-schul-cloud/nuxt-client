@@ -7,7 +7,7 @@ import { mount } from "@vue/test-utils";
 import { VBtn } from "vuetify/lib/components/index";
 import LoadingModal from "./LoadingModal.vue";
 
-describe("@/components/molecules/LoadingModal", () => {
+describe("@/components/lern-store/LoadingModal", () => {
 	it(`check props are set correctly `, () => {
 		const wrapper = mount(LoadingModal, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },

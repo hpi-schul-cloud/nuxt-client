@@ -45,7 +45,7 @@ const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) => {
 	});
 };
 
-describe("@/components/molecules/TaskItemStudent", () => {
+describe("@/components/tasks/TaskItemStudent", () => {
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);

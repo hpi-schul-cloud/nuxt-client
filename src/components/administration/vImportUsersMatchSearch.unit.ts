@@ -54,7 +54,7 @@ const getWrapper = (
 	});
 };
 
-describe("@/components/molecules/vImportUsersMatchSearch", () => {
+describe("@/components/administration/vImportUsersMatchSearch", () => {
 	beforeEach(() => {
 		setupStores({ importUsersModule: ImportUsersModule });
 	});

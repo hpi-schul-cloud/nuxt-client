@@ -34,7 +34,7 @@ const getAttachToOptions = () => {
 	return { options: { attachTo: div } };
 };
 
-describe("@/components/molecules/ContextMenu", () => {
+describe("@/components/administration/ContextMenu", () => {
 	it("Renders all action buttons", () => {
 		const wrapper = getWrapper();
 

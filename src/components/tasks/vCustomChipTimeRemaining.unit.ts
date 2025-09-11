@@ -5,7 +5,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 
-describe("@/components/atoms/vCustomChipTimeRemaining", () => {
+describe("@/components/tasks/vCustomChipTimeRemaining", () => {
 	const setup = (dueDate: Date, shortenUnit = false) => {
 		const wrapper = mount(VCustomChipTimeRemaining, {
 			global: {

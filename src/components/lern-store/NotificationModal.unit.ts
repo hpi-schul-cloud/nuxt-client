@@ -15,7 +15,7 @@ const testProps = {
 	description: "test description",
 };
 
-describe("@/components/molecules/NotificationModal", () => {
+describe("@/components/lern-store/NotificationModal", () => {
 	const setup = (isSuccess: boolean) => {
 		return mount(NotificationModal, {
 			global: {

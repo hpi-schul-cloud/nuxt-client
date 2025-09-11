@@ -6,7 +6,7 @@ import { mount } from "@vue/test-utils";
 import { VExpansionPanels } from "vuetify/lib/components/index";
 import vCustomDoublePanels from "./vCustomDoublePanels.vue";
 
-describe("@/components/molecules/vCustomDoublePanels", () => {
+describe("@/components/tasks/vCustomDoublePanels", () => {
 	const propsData = {
 		panelOneCount: 1,
 		panelTwoCount: 13,

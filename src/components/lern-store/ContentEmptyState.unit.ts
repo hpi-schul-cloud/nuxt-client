@@ -5,7 +5,7 @@ import {
 import ContentEmptyState from "./ContentEmptyState.vue";
 import { ContentEmptySvg, EmptyState } from "@ui-empty-state";
 
-describe("@/components/molecules/ContentEmptyState", () => {
+describe("@/components/lern-store/ContentEmptyState", () => {
 	const wrapper = mount(ContentEmptyState, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],

@@ -225,7 +225,7 @@ const getWrapper = (
 	});
 };
 
-describe("@/components/molecules/RoomTaskCard", () => {
+describe("@/components/rooms/RoomTaskCard", () => {
 	beforeEach(() => {
 		window.location.pathname = "";
 		setupStores({ envConfigModule: EnvConfigModule });

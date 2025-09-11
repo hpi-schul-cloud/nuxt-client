@@ -51,7 +51,7 @@ const getWrapper = (
 	});
 };
 
-describe("@/components/molecules/TaskItemMenu", () => {
+describe("@/components/tasks/TaskItemMenu", () => {
 	const defineWindowWidth = (width: number) => {
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,

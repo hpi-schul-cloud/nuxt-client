@@ -70,7 +70,7 @@ const setup = (
 	return { wrapper, room, ariaLabel };
 };
 
-describe("@/components/molecules/RoomLessonCard", () => {
+describe("@/components/rooms/RoomLessonCard", () => {
 	beforeEach(() => {
 		window.location.pathname = "";
 		setupStores({ envConfigModule: EnvConfigModule });

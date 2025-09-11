@@ -15,7 +15,7 @@ import {
 import { mount } from "@vue/test-utils";
 import { VDialog } from "vuetify/lib/components/index";
 
-describe("@/components/molecules/CommonCartridgeExportModal", () => {
+describe("@/components/rooms/CommonCartridgeExportModal", () => {
 	let exportModuleMock: CommonCartridgeExportModule;
 	let courseRoomDetailsModuleMock: courseRoomDetailsModule;
 	let notifierMock: NotifierModule;

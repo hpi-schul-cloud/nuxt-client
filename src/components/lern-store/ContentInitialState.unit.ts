@@ -6,7 +6,7 @@ import { mount } from "@vue/test-utils";
 import ContentInitialState from "./ContentInitialState.vue";
 import { ContentInitialSvg, EmptyState } from "@ui-empty-state";
 
-describe("@/components/molecules/ContentInitialState", () => {
+describe("@/components/lern-store/ContentInitialState", () => {
 	const wrapper = mount(ContentInitialState, {
 		global: {
 			plugins: [createTestingI18n(), createTestingVuetify()],

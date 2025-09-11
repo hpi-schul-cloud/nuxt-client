@@ -17,7 +17,7 @@ vi.mock("vue-router", () => ({
 	useRouter: vi.fn(),
 }));
 
-describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
+describe("@/components/common/ApplicationErrorRouting.vue", () => {
 	const router = createMock<Router>({
 		currentRoute: ref({ path: "/" }),
 	});

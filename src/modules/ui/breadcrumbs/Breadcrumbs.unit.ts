@@ -5,7 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 
-describe("@/components/atoms/Breadcrumbs", () => {
+describe("@ui-breadcrumbs/Breadcrumbs", () => {
 	const setup = () => {
 		const wrapper = mount(Breadcrumbs, {
 			global: {

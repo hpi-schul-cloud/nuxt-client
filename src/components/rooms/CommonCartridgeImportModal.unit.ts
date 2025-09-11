@@ -16,7 +16,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 
-describe("@/components/molecules/CommonCartridgeImportModal", () => {
+describe("@/components/rooms/CommonCartridgeImportModal", () => {
 	const setupWrapper = (getters: Partial<CommonCartridgeImportModule>) => {
 		document.body.setAttribute("data-app", "true");
 

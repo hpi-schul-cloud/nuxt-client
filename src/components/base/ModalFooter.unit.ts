@@ -1,7 +1,7 @@
 import ModalFooter from "./ModalFooter.vue";
 import { shallowMount } from "@vue/test-utils";
 
-describe("@/components/molecules/ModalFooter", () => {
+describe("@/components/base/ModalFooter", () => {
 	it("Render with some slots", () => {
 		const wrapper = shallowMount(ModalFooter, {
 			slots: {
