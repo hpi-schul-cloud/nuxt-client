@@ -1,8 +1,6 @@
 import {
 	AuthenticationApiFactory,
-	ConsentResponse,
 	LoginResponse,
-	Oauth2ApiFactory,
 	Oauth2AuthorizationBodyParams,
 	PublicSystemListResponse,
 	SchoolApiFactory,
@@ -19,23 +17,8 @@ import { AxiosResponse } from "axios";
 export const useLoginApi = () => {
 	const authApi = AuthenticationApiFactory(undefined, "/v3", $axios);
 	const systemsApi = SystemsApiFactory(undefined, "/v3", $axios);
-	const oAuth2Api = Oauth2ApiFactory(undefined, "/v3", $axios);
+	//const oAuth2Api = Oauth2ApiFactory(undefined, "/v3", $axios);
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
-
-	/**
-	 * Standard/local login (possibly with a system/strategy).
-	 */
-	//const apiLogin = async (
-	//	payload: LoginPayload,
-	//	options: LoginOptions = {}
-	//): Promise<LoginResult> => {
-	//	// Assumes backend POST /login/
-	//	const response = await $axios.post("/login/", {
-	//		...payload,
-	//		...options,
-	//	});
-	//	return response.data;
-	//};
 
 	/**
 	 * Email strategy login.
@@ -110,12 +93,9 @@ export const useLoginApi = () => {
 	 * Check user's consent status on login success.
 	 */
 	const apiCheckConsent = async (
-		//userId: string
-		challenge: string
-	): Promise<ConsentResponse> => {
-		// Example: GET `/consents/${userId}/check/`
-		const response =
-			await oAuth2Api.oauthProviderControllerGetConsentRequest(challenge);
+		userId: string
+	): Promise<{ haveBeenUpdated: boolean; consentStatus: string }> => {
+		const response = await $axios.get(`/consents/${userId}/check/?simple=true`);
 		return response.data;
 	};
 
@@ -127,7 +107,6 @@ export const useLoginApi = () => {
 	};
 
 	return {
-		//apiLogin,
 		apiLoginEmail,
 		apiLoginLdap,
 		apiLoginOAuth2,

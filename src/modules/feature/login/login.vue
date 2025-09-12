@@ -48,7 +48,7 @@
 					:key="system.id"
 					class="login-providers mb-4"
 				>
-					<!-- some href, i dont know if that makes sense 
+					<!-- some href, i dont know if that makes sense
 					<a
 						:href="`/auth/oauth2/authorize/${system.id}?redirect=${system.oauthConfig?.redirectUri}`"
 					>-->
@@ -427,7 +427,7 @@
 </template>
 
 <script setup lang="ts">
-import { useLogin } from "@/modules/feature/login/login.composable";
+import { useLogin } from "./login.composable";
 import router from "@/router";
 import {
 	OauthConfigResponse,
@@ -471,6 +471,7 @@ const {
 	submitPasswordRecovery,
 	passwordRecoveryError,
 	getValidRedirect,
+	validatePostLoginRedirect,
 } = useLogin();
 const route = useRoute();
 // Alerts
@@ -483,7 +484,7 @@ const alert = ref<{
 const showAlert = ref(false);
 
 // Feature Toggles
-const featureOauthLoginEnabled = 
+const featureOauthLoginEnabled =
 	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 //TODO: get env the schulcloud way, for now:
 const featureJwtExtendedTimeoutEnabled =
@@ -526,6 +527,14 @@ const emit = defineEmits<{
 
 function handleLoginError() {
 	showAlert.value = true;
+	email.value = "";
+	password.value = "";
+	ldapUsername.value = "";
+	ldapPassword.value = "";
+	emailMoreLess.value = "";
+	passwordMoreLess.value = "";
+	selectedSchool.value = null;
+	selectedSystem.value = null;
 	emit("login-failed");
 }
 
@@ -828,11 +837,13 @@ async function submitLogin(loginOption: loginOptions) {
 async function submitLocalLogin() {
 	await loginEmail(email.value, password.value, true);
 	if (loginResult.value) {
+		const postLoginRedirect: string | undefined =
+			await validatePostLoginRedirect();
 		if (redirectParam.value) {
 			const validRedirect = getValidRedirect(redirectParam.value);
-			await router.push({ path: validRedirect });
+			await login(postLoginRedirect, validRedirect);
 		} else {
-			await router.push({ path: "/rooms" });
+			await login(postLoginRedirect);
 		}
 	} else {
 		alert.value = {
@@ -842,10 +853,6 @@ async function submitLocalLogin() {
 			message: "Login fehlgeschlagen",
 		};
 		handleLoginError();
-		email.value = "";
-		password.value = "";
-		emailMoreLess.value = "";
-		passwordMoreLess.value = "";
 		countdownNum.value = loginTimeoutSeconds;
 		incTimer();
 	}
@@ -885,19 +892,15 @@ async function submitLdapLogin() {
 		true
 	);
 	if (loginResult.value) {
+		const postLoginRedirect: string | undefined =
+			await validatePostLoginRedirect();
 		if (redirectParam.value) {
 			const validRedirect = getValidRedirect(redirectParam.value);
-			await router.push({ path: validRedirect });
+			await login(postLoginRedirect, validRedirect);
 		} else {
-			await router.push({ path: "/rooms" });
+			await login(postLoginRedirect);
 		}
 	} else {
-		ldapUsername.value = "";
-		ldapPassword.value = "";
-		emailMoreLess.value = "";
-		passwordMoreLess.value = "";
-		selectedSchool.value = null;
-		selectedSystem.value = null;
 		alert.value = {
 			type: "warning",
 			color: "error",
@@ -907,6 +910,29 @@ async function submitLdapLogin() {
 		handleLoginError();
 		countdownNum.value = loginTimeoutSeconds;
 		incTimer();
+	}
+}
+
+async function login(postLoginRedirect?: string, validRedirect?: string) {
+	if (!postLoginRedirect) {
+		const redirectPath: string = validRedirect ? validRedirect : "/dashboard";
+		await router.push({ path: redirectPath });
+	} else {
+		if (postLoginRedirect === "isSuperhero") {
+			alert.value = {
+				type: "error",
+				color: "error",
+				dismissible: true,
+				message:
+					"Du versuchst dich mit einem Superhero Account anzumelden. Bitte benutze einen anderen Account",
+			};
+			handleLoginError();
+		} else {
+			const redirectPath: string = validRedirect
+				? `${postLoginRedirect}?redirect=${validRedirect}`
+				: postLoginRedirect;
+			await router.push({ path: redirectPath });
+		}
 	}
 }
 

@@ -118,10 +118,10 @@
 </template>
 
 <script setup lang="ts">
-import Login from "@/modules/feature/login/login.vue";
 import { envConfigModule } from "@/store";
-import { logger } from "@util-logger";
 import { BlogFeedData, useBlogApi } from "@data-blog";
+import { Login } from "@feature-login";
+import { logger } from "@util-logger";
 
 //import { stripHtml } from "string-strip-html";
 import { onMounted, ref } from "vue";

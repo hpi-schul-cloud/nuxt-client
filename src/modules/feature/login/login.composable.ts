@@ -2,17 +2,19 @@ import {
 	ApiValidationError,
 	BusinessError,
 	LoginResponse,
+	MeResponse,
 	Oauth2AuthorizationBodyParams,
 	PublicSystemListResponse,
+	RoleName,
 	SchoolForLdapLoginResponse,
 } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
 import { ApiResponseError } from "@/store/types/commons";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { logger } from "@util-logger";
 import { filter } from "lodash";
 import { ref, Ref } from "vue";
 import { useLoginApi } from "./loginApi.composable";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 // --- logFilter logic migrated as a utility inside composable ---
 
@@ -415,66 +417,8 @@ export const loginSchoolsCache = (() => {
 
 // --- End Login Schools Cache migration ---
 
-export interface CookieDefaults {
-	httpOnly: boolean;
-	hostOnly: boolean;
-	sameSite: boolean | "strict" | "lax" | "none";
-	secure: boolean;
-	expires: Date;
-}
-
-export interface SetCookieOptions extends Partial<CookieDefaults> {
-	[key: string]: string | boolean | Date | undefined;
-}
-
-/**
- * Simulate the server-side cookieHelper for frontend (login composable) context.
- * In a frontend app, setting cookies must use document.cookie.
- * Here, we expose setCookie and cookieDefaults (with dummy defaults, simulate Configuration values).
- * Note: On the frontend, you cannot set httpOnly or hostOnly cookies.
- */
-const cookieDefaults: CookieDefaults = {
-	httpOnly: true, // Browsers do not allow setting httpOnly cookies via JS
-	hostOnly: false, // not available in browser APIs
-	sameSite: "lax",
-	//secure: import.meta.env.MODE === "production",
-	secure: false,
-	expires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour from now
-};
-
-/**
- * Set a cookie in the browser with sane (simulated) defaults.
- * @param cookieName
- * @param value
- * @param options
- */
-const setCookie = (
-	cookieName: string,
-	value: string,
-	options: SetCookieOptions = {}
-): void => {
-	const opts: CookieDefaults & SetCookieOptions = {
-		...cookieDefaults,
-		...options,
-	};
-	let cookieStr = `${encodeURIComponent(cookieName)}=${encodeURIComponent(value)}`;
-
-	if (opts.expires) {
-		cookieStr += `; expires=${opts.expires.toUTCString()}`;
-	}
-	if (opts.sameSite) {
-		cookieStr += `; samesite=${opts.sameSite}`;
-	}
-	if (opts.secure) {
-		cookieStr += `; secure`;
-	}
-	// httpOnly and hostOnly cannot be set via document.cookie
-	document.cookie = cookieStr;
-};
-
 export const useLogin = () => {
 	const {
-		//apiLogin,
 		apiLoginEmail,
 		apiLoginLdap,
 		apiLoginOAuth2,
@@ -493,27 +437,6 @@ export const useLogin = () => {
 	const passwordRecoveryError = ref<string | null>(null);
 
 	const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-
-	//const login = async (
-	//	payload: LoginPa,
-	//	options: LoginOptions = {}
-	//): Promise<void> => {
-	//	isLoading.value = true;
-	//	error.value = undefined;
-	//	try {
-	//		const result = await apiLogin(payload, options);
-	//		loginResult.value = result;
-	//	} catch (err: unknown) {
-	//		error.value = {
-	//			message: err instanceof Error ? err.message : "Login failed",
-	//			code: (err as ApiResponseError)?.code ?? 400,
-	//			type: (err as ApiResponseError)?.type,
-	//			title: (err as ApiResponseError)?.title,
-	//		};
-	//	} finally {
-	//		isLoading.value = false;
-	//	}
-	//};
 
 	const loginEmail = async (
 		username: string,
@@ -632,11 +555,23 @@ export const useLogin = () => {
 		}
 	};
 
-	const checkConsent = async (userId: string): Promise<void> => {
+	const checkConsent = async (me: MeResponse): Promise<string | undefined> => {
 		isLoading.value = true;
 		error.value = undefined;
 		try {
-			consentCheckResult.value = await apiCheckConsent(userId);
+			const { haveBeenUpdated, consentStatus } = await apiCheckConsent(
+				me.user.id
+			);
+			if (
+				!(
+					consentStatus === "ok" &&
+					!haveBeenUpdated &&
+					me.user.preferences?.firstLogin
+				)
+			) {
+				return "/firstlogin";
+			}
+			return;
 		} catch (err: unknown) {
 			error.value = {
 				message: err instanceof Error ? err.message : "Consent check failed",
@@ -667,6 +602,29 @@ export const useLogin = () => {
 		}
 	};
 
+	const validateLoginRedirect = async (): Promise<string | undefined> => {
+		const me = authModule.getMe;
+		if (!me) return;
+		const isSuperhero: boolean = me.roles.some(
+			(role) => role.name === RoleName.Superhero
+		);
+		if (isSuperhero) {
+			return "isSuperhero";
+		}
+
+		const forcePasswordChange: boolean | undefined =
+			me.user.forcePasswordChange;
+		if (forcePasswordChange) {
+			return "/forcePasswordChange";
+		}
+
+		const firstLogin = checkConsent(me);
+		if (firstLogin) {
+			return firstLogin;
+		}
+		return;
+	};
+
 	/**
 	 * Expose login schools cache (reactive)
 	 */
@@ -678,20 +636,18 @@ export const useLogin = () => {
 	return {
 		isLoading,
 		error,
-		//login,
 		loginEmail,
 		loginLdap,
 		loginOAuth2,
 		fetchOauthSystems,
 		fetchLdapSchools,
+		validatePostLoginRedirect: validateLoginRedirect,
 		oauthSystems,
 		checkConsent,
 		consentCheckResult,
 		submitPasswordRecovery,
 		passwordRecoveryError,
 		loginResult,
-		cookieDefaults,
-		setCookie, // expose cookie helper (simulated for browser)
 		//filterLog, // expose log filter utility
 		filterQuery,
 		filter,

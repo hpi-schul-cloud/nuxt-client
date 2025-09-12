@@ -6,9 +6,8 @@
 </template>
 
 <script setup lang="ts">
+import { Login, LoginFailedHint } from "@feature-login";
 import { ref } from "vue";
-import Login from "@/modules/feature/login/login.vue";
-import LoginFailedHint from "@/modules/feature/login/loginFailedHint.vue";
 
 const notification = ref(false);
 </script>
