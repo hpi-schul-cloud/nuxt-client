@@ -1408,6 +1408,12 @@ export interface ConfigResponse {
      * @type {string}
      * @memberof ConfigResponse
      */
+    HOST: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
     ACCESSIBILITY_REPORT_EMAIL: string;
     /**
      * 
