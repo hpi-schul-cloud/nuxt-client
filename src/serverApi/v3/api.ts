@@ -5980,10 +5980,10 @@ export interface MeUserResponse {
     forcePasswordChange?: boolean;
     /**
      * 
-     * @type {object}
+     * @type {UserPreferences}
      * @memberof MeUserResponse
      */
-    preferences?: object;
+    preferences?: UserPreferences;
 }
 /**
  * 
@@ -11094,6 +11094,19 @@ export enum UserMatchResponseMatchedByEnum {
     Admin = 'admin'
 }
 
+/**
+ * 
+ * @export
+ * @interface UserPreferences
+ */
+export interface UserPreferences {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserPreferences
+     */
+    firstLogin?: boolean;
+}
 /**
  * 
  * @export
