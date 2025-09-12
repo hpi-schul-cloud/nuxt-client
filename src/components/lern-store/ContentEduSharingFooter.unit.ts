@@ -5,7 +5,7 @@ import {
 import { mount } from "@vue/test-utils";
 import ContentEduSharingFooter from "./ContentEduSharingFooter.vue";
 
-describe("@/components/molecules/ContentEduSharingFooter", () => {
+describe("@/components/lern-store/ContentEduSharingFooter", () => {
 	const wrapper = mount(ContentEduSharingFooter, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		data: () => ({}),

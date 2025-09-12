@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import CopyResultModalList from "./CopyResultModalList.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/common/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { mdiAlert } from "@icons/material";

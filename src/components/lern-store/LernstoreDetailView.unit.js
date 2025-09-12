@@ -13,7 +13,7 @@ const testProps = {
 	resource: Resource,
 };
 
-describe("@/components/molecules/LernstoreDetailView", () => {
+describe("@/components/lern-store/LernstoreDetailView", () => {
 	const wrapper = shallowMount(LernstoreDetailView, {
 		props: { ...testProps },
 		global: {

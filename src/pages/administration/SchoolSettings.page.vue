@@ -167,10 +167,10 @@
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import ExternalToolsSection from "@/components/administration/ExternalToolSection.vue";
 import SchoolYearChangeSection from "@/components/administration/SchoolYearChangeSection.vue";
-import AuthSystems from "@/components/organisms/administration/AuthSystems.vue";
-import GeneralSettings from "@/components/organisms/administration/GeneralSettings.vue";
-import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue";
-import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
+import AuthSystems from "@/components/administration/AuthSystems.vue";
+import GeneralSettings from "@/components/administration/GeneralSettings.vue";
+import SchoolPolicy from "@/components/administration/SchoolPolicy.vue";
+import SchoolTermsOfUse from "@/components/administration/SchoolTerms.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { SchoolSystemResponse, SchulcloudTheme } from "@/serverApi/v3";

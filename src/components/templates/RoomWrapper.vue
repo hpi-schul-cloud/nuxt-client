@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
+import CommonCartridgeImportModal from "@/components/rooms/CommonCartridgeImportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
 	authModule,

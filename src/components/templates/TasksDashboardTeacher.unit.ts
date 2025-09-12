@@ -1,4 +1,4 @@
-import TasksList from "@/components/organisms/TasksList.vue";
+import TasksList from "@/components/tasks/TasksList.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";

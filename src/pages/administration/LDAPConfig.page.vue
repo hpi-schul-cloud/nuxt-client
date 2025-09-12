@@ -89,11 +89,11 @@ import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { unchangedPassword } from "@/utils/ldapConstants";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import RolesSection from "@/components/organisms/Ldap/LdapRolesSection.vue";
-import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection.vue";
-import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
-import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
-import InfoMessage from "@/components/atoms/InfoMessage";
+import RolesSection from "@/components/administration/Ldap/LdapRolesSection.vue";
+import ConnectionSection from "@/components/administration/Ldap/LdapConnectionSection.vue";
+import UsersSection from "@/components/administration/Ldap/LdapUsersSection.vue";
+import ClassesSection from "@/components/administration/Ldap/LdapClassesSection.vue";
+import InfoMessage from "@/components/administration/InfoMessage";
 import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 

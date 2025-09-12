@@ -9,7 +9,7 @@ import EnvConfigModule from "@/store/env-config";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
 import MigrationWizard from "@/pages/administration/Migration.page.vue";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/common/vCustomDialog.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,

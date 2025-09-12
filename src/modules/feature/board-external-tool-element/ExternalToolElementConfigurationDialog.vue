@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/common/vCustomDialog.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import { ContextExternalTool } from "@data-external-tool";
 import { useBoardNotifier } from "@util-board";

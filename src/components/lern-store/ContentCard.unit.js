@@ -13,7 +13,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { RouterLinkStub } from "@vue/test-utils";
 import ContentCard from "./ContentCard";
 
-describe("@/components/organisms/ContentCard", () => {
+describe("@/components/lern-store/ContentCard", () => {
 	beforeEach(() => {
 		setupStores({
 			authModule: AuthModule,
@@ -83,7 +83,7 @@ describe("@/components/organisms/ContentCard", () => {
 		expect(wrapper.find(".footer__icon-container").exists()).toBe(true);
 	});
 
-	describe("@/components/organisms/ContentCard Collection", () => {
+	describe("@/components/lern-store/ContentCard Collection", () => {
 		it("Renders head of contentCard as a link", () => {
 			const { wrapper } = setup(Collection);
 			expect(wrapper.find(".title-link").exists()).toBe(true);

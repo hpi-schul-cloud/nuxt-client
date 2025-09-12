@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import FormCreateUser from "@/components/organisms/FormCreateUser";
-import InfoMessage from "@/components/atoms/InfoMessage";
+import FormCreateUser from "@/components/administration/FormCreateUser";
+import InfoMessage from "@/components/administration/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";

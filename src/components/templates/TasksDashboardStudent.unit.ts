@@ -4,7 +4,7 @@ import TasksModule from "@/store/tasks";
 import { OpenTasksForStudent } from "@/store/types/tasks";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import TasksList from "@/components/organisms/TasksList.vue";
+import TasksList from "@/components/tasks/TasksList.vue";
 import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
 import { shallowMount } from "@vue/test-utils";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";

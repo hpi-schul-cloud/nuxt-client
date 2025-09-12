@@ -38,7 +38,7 @@ const getShallowWrapper = (
 	});
 };
 
-describe("@/components/molecules/RoomDotMenu", () => {
+describe("@/components/rooms/RoomDotMenu", () => {
 	it("should render with correct props", () => {
 		const wrapper = getWrapper(testProps);
 

@@ -118,8 +118,8 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue"
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
-import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import commonCartridgeExportModal from "@/components/rooms/CommonCartridgeExportModal.vue";
+import vCustomDialog from "@/components/common/vCustomDialog.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@/components/templates/RoomDashboard.vue";
 import { useCopy } from "@/composables/copy";

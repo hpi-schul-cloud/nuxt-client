@@ -1,5 +1,5 @@
 import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/common/vCustomDialog.vue";
 import { contextExternalToolFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,

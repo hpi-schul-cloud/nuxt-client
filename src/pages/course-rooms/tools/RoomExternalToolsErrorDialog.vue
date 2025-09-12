@@ -18,7 +18,7 @@
 	</v-custom-dialog>
 </template>
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/common/vCustomDialog.vue";
 import {
 	ExternalToolDisplayData,
 	useContextExternalToolConfigurationStatus,

@@ -106,7 +106,7 @@ const createMockStore = () => {
 	return { mockStore, createStudentStub };
 };
 
-describe("@/components/molecules/AddContentModal", () => {
+describe("@/components/lern-store/AddContentModal", () => {
 	const setup = (props: {
 		showCopyModal: boolean;
 		resource: {
