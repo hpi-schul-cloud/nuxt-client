@@ -3,7 +3,7 @@
 		<div class="topbar" data-testid="logged-out-top-bar">
 			<navigation-bar :img="Logo" :links="navbarItems" />
 		</div>
-		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
+		<div :class="wrapperClass">
 			<slot />
 		</div>
 		<the-footer class="footer" />
@@ -20,10 +20,12 @@ import { injectStrict, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
+import { useRoute } from "vue-router";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const { t } = useI18n();
 const { xs } = useDisplay();
+const route = useRoute();
 
 const ghostBaseUrl = computed(() => envConfigModule.getEnv.GHOST_BASE_URL);
 
@@ -45,8 +47,21 @@ const navbarItems = computed(() => [
 	},
 ]);
 
-const isMobile = computed(() => {
+const isMobile = computed<boolean>(() => {
 	return xs.value;
+});
+
+const isHomePage = computed<boolean>(() => {
+	return route.path === "/home";
+});
+
+const wrapperClass = computed<string>(() => {
+	const classes = isMobile.value ? ["small-wrapper"] : ["wrapper"];
+	if (isHomePage.value) {
+		classes.push("align-start");
+	}
+
+	return classes.join(" ");
 });
 </script>
 
