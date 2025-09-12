@@ -93,12 +93,6 @@ const links = computed(() => {
 	text-align: center;
 }
 
-.top-line {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
 .footer-link {
 	color: rgba(var(--v-theme-primary));
 	border: none;
