@@ -82,4 +82,5 @@ export const defaultConfigEnvs: ConfigResponse = {
 	LICENSE_SUMMARY_URL: "",
 	ROOM_MEMBER_INFO_URL: "",
 	FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED: false,
+	HOST: "",
 };
