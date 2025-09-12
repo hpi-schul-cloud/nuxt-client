@@ -34,7 +34,6 @@
 		"axios": "^1.8.2",
 		"canvas": "^3.1.0",
 		"dayjs": "^1.11.10",
-		"fast-xml-parser": "^5.2.5",
 		"focus-trap": "^7.6.5",
 		"katex": "^0.16.21",
 		"kjua": "^0.10.0",

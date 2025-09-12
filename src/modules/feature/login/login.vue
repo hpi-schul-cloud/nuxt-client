@@ -534,6 +534,7 @@ function handleLoginError() {
 function togglePassword() {
 	showPassword.value = !showPassword.value;
 }
+
 function toggleLdapPassword() {
 	showLdapPassword.value = !showLdapPassword.value;
 }
@@ -613,6 +614,11 @@ onMounted(() => {
 	}
 
 	incTimer();
+
+	if (route.query.error) {
+		showAlert.value = true;
+		setLoginFailedAlert();
+	}
 });
 
 watch(
@@ -743,17 +749,21 @@ function showEmail() {
 	showEmailLoginSection.value = true;
 	showLdapLoginSection.value = false;
 }
+
 function showLdap() {
 	showEmailLoginSection.value = false;
 	showLdapLoginSection.value = true;
 }
+
 function returnToMenu() {
 	showEmailLoginSection.value = false;
 	showLdapLoginSection.value = false;
 }
+
 function openMoreOptions() {
 	showMoreOptions.value = true;
 }
+
 function closeMoreOptions() {
 	showMoreOptions.value = false;
 }
@@ -842,6 +852,15 @@ async function submitLogin(loginOption: loginOptions) {
 	}
 }
 
+function setLoginFailedAlert() {
+	alert.value = {
+		type: "error",
+		color: "error",
+		dismissible: true,
+		message: "Login fehlgeschlagen",
+	};
+}
+
 async function submitLocalLogin() {
 	await loginEmail(email.value, password.value, true);
 	if (loginResult.value) {
@@ -854,12 +873,7 @@ async function submitLocalLogin() {
 			await login(postLoginRedirect);
 		}
 	} else {
-		alert.value = {
-			type: "error",
-			color: "error",
-			dismissible: true,
-			message: "Login fehlgeschlagen",
-		};
+		setLoginFailedAlert();
 		handleLoginError();
 		countdownNum.value = loginTimeoutSeconds;
 		incTimer();
