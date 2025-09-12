@@ -126,7 +126,7 @@ const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
 	});
 };
 
-describe("@/components/molecules/importUsers", () => {
+describe("@/components/administration/importUsers", () => {
 	beforeEach(() => {
 		setupStores({
 			schoolsModule: SchoolsModule,

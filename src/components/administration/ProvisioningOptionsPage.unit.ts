@@ -1,5 +1,5 @@
 import type { Mock } from "vitest";
-import VCustomDialog from "@/components/administration/vCustomDialog.vue";
+import VCustomDialog from "@/components/common/vCustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY, THEME_KEY } from "@/utils/inject";
