@@ -84,6 +84,7 @@ const mockCourseData = [
 		title: "Mathe",
 		shortTitle: "Ma",
 		displayColor: "#54616e",
+		isLocked: false,
 	},
 ];
 
@@ -191,6 +192,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 			{
 				id: "1234",
 				name: "Mathe",
+				isLocked: false,
 			},
 		];
 

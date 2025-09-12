@@ -25,6 +25,8 @@ import { InfoAlert } from "@ui-alert";
 import { Mock } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
 import AuthModule from "@/store/auth";
+import { RoomItem } from "@/types/room/Room";
+import { roomItemFactory } from "@@/tests/test-utils";
 
 vi.mock("vue-router");
 const useRouteMock = useRoute as Mock;
@@ -77,8 +79,13 @@ describe("RoomsPage", () => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
+		const roomItems = [
+			roomItemFactory.build({ isLocked: false }),
+			roomItemFactory.build({ isLocked: true }),
+		];
+
 		useRoomsStateMock.mockReturnValue({
-			rooms: ref([]),
+			rooms: ref(roomItems),
 			isLoading: ref(false),
 			isEmpty: ref(false),
 			fetchRooms: vi.fn(),
@@ -153,24 +160,41 @@ describe("RoomsPage", () => {
 			};
 		};
 
-		it("should activate import flow", () => {
+		it("should render import flow", () => {
 			const { wrapper } = setupImportMode();
 			const importFLow = wrapper.findComponent(ImportFlow);
+
+			expect(importFLow.exists()).toBe(true);
+		});
+
+		it("should activate import flow", () => {
+			const { wrapper } = setupImportMode();
+			const importFLow = wrapper.getComponent(ImportFlow);
 
 			expect(importFLow.props().isActive).toBe(true);
 		});
 
 		it("should pass the token to the import flow", () => {
 			const { wrapper, token } = setupImportMode();
-			const importFLow = wrapper.findComponent(ImportFlow);
+			const importFLow = wrapper.getComponent(ImportFlow);
 
 			expect(importFLow.props().token).toBe(token);
+		});
+
+		it("should filter out locked rooms for the import flow", () => {
+			const { wrapper } = setupImportMode();
+			const importFLow = wrapper.getComponent(ImportFlow);
+
+			const destinations = importFLow.props().destinations as RoomItem[];
+
+			expect(destinations).toHaveLength(1);
+			expect(destinations.every((room) => !room.isLocked)).toBe(true);
 		});
 
 		describe("when the import flow succeeded", () => {
 			it("should notify about successful import", () => {
 				const { wrapper, notifierModuleMock } = setupImportMode();
-				const importFlow = wrapper.findComponent(ImportFlow);
+				const importFlow = wrapper.getComponent(ImportFlow);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 
@@ -184,7 +208,7 @@ describe("RoomsPage", () => {
 
 			it("should go to the room details page", () => {
 				const { wrapper, router } = setupImportMode();
-				const importFlow = wrapper.findComponent(ImportFlow);
+				const importFlow = wrapper.getComponent(ImportFlow);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 
