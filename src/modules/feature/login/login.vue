@@ -48,14 +48,19 @@
 					:key="system.id"
 					class="login-providers mb-4"
 				>
-					<!-- some href, i dont know if that makes sense -->
+					<!-- some href, i dont know if that makes sense 
 					<a
 						:href="`/auth/oauth2/authorize/${system.id}?redirect=${system.oauthConfig?.redirectUri}`"
+					>-->
+					<v-btn
+						class="btn-cloud"
+						color="tertiary"
+						block
+						variant="outlined"
+						@click="redirectToOauthSystem(system)"
 					>
-						<v-btn class="btn-cloud" color="tertiary" block variant="outlined">
-							{{ system.displayName }}
-						</v-btn>
-					</a>
+						{{ system.displayName }}
+					</v-btn>
 				</div>
 			</v-card>
 
@@ -425,6 +430,7 @@
 import { useLogin } from "@/modules/feature/login/login.composable";
 import router from "@/router";
 import {
+	OauthConfigResponse,
 	PublicSystemResponse,
 	SchoolForLdapLoginResponse,
 	SystemForLdapLoginResponse,
@@ -439,6 +445,8 @@ import {
 import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { red } from "vuetify/util/colors";
+import { uid} from 'uid';
 //TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
 
 // Vuetify typenames
@@ -565,8 +573,8 @@ onMounted(() => {
 	//TODO: toggle for dev
 	fetchLdapSchools();
 	//getMockSchoolsForLogin();
-	//fetchOauthSystems();
-	getMockPublicSystems();
+	fetchOauthSystems();
+	//getMockPublicSystems();
 
 	const route = useRoute();
 	const strategy = route.query.strategy;
@@ -613,6 +621,43 @@ watch(
 	}
 );
 
+const getAuthenticationUrl = (oauthConfig: OauthConfigResponse, redirect_uri: string, state: string, migration: string, loginHint: string) => {
+    const authenticationUrl = new URL(oauthConfig.authEndpoint);
+
+    authenticationUrl.searchParams.append('client_id', oauthConfig.clientId);
+    authenticationUrl.searchParams.append('redirect_uri', redirect_uri);
+    authenticationUrl.searchParams.append('response_type', oauthConfig.responseType);
+    authenticationUrl.searchParams.append('scope', oauthConfig.scope);
+    authenticationUrl.searchParams.append('state', state);
+
+    if (loginHint) {
+       authenticationUrl.searchParams.append('login_hint', loginHint);
+    }
+
+    if (migration) {
+       authenticationUrl.searchParams.append('prompt', 'login');
+    }
+
+    if (oauthConfig.idpHint) {
+       authenticationUrl.searchParams.append('kc_idp_hint', oauthConfig.idpHint);
+    }
+
+    return authenticationUrl.toString();
+};
+
+function redirectToOauthSystem(system: PublicSystemResponse) {
+	const redirect_uri = new URL('/login/oauth2-callback', envConfigModule.getEnv.HOST).toString();
+	const state = uid();
+	const authUrl = getAuthenticationUrl(
+		system.oauthConfig!,
+		redirect_uri,
+		state,
+		"",
+		""
+	);
+	window.location.href = authUrl;
+}
+
 /*function getMockSchoolsForLogin() {
 	schools.value = [
 		{ name: "school1", id: "id1", systems: [] },
@@ -652,25 +697,25 @@ function getMockPublicSystems() {
 				},
 			},
 			{
-				id: "system-002",
+				id: "0000d186816abba584714c93",
 				type: "oauth",
-				alias: "beta",
-				displayName: "Beta System",
+				alias: "moin.schule",
+				displayName: "moin.schule",
 				oauthConfig: {
-					clientId: "beta-client-id",
+					clientId: "75dc8a3cf5d54121b2e8436ca39157d6",
+					redirectUri: "",
+					grantType: "authorization_code",
+					tokenEndpoint: "https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/token",
+					authEndpoint: "https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/auth",
+					responseType: "code",
+					scope: "openid",
+					provider: "sanis",
+					issuer: "https://auth.stage.niedersachsen-login.schule/realms/SANIS",
+					jwksEndpoint: "https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/certs",
+					endSessionEndpoint: "https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/logout",
 					idpHint: null,
-					redirectUri: "https://beta.com/redirect",
-					grantType: "client_credentials",
-					tokenEndpoint: "https://beta.com/token",
-					authEndpoint: "https://beta.com/auth",
-					responseType: "token",
-					scope: "read write",
-					provider: "BetaProvider",
-					logoutEndpoint: "https://beta.com/logout",
-					issuer: "https://beta.com",
-					jwksEndpoint: "https://beta.com/.well-known/jwks.json",
-					endSessionEndpoint: "https://beta.com/end-session",
-				},
+					logoutEndpoint: undefined
+				}
 			},
 		],
 	};
@@ -898,4 +943,5 @@ async function submitPwRecovery() {
 		}
 	}
 }
+
 </script>
