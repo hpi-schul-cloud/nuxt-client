@@ -1,3 +1,3 @@
-import { type BlogFeedData, useBlogApi } from "./blogApi.composable";
+import { useBlogApi } from "./blogApi.composable";
 
-export { BlogFeedData, useBlogApi };
+export { useBlogApi };
