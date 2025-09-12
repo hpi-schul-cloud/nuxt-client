@@ -34,7 +34,7 @@
 						{{ t("components.login.button.email") }}
 					</v-btn>
 				</div>
-				<div class="login-providers mb-8">
+				<div class="login-providers mb-4">
 					<v-btn
 						class="btn-ldap"
 						color="tertiary"
@@ -44,6 +44,26 @@
 					>
 						{{ t("components.login.button.ldap") }}
 					</v-btn>
+				</div>
+				<!-- Oauth Systems Section(s)-->
+				<div
+					v-for="system in oauthSystems?.data"
+					:key="system.id"
+					class="login-providers mb-4"
+				>
+					<!-- some href, i dont know if that makes sense -->
+					<a
+						:href="`/auth/oauth2/authorize/${system.id}?redirect=${system.oauthConfig?.redirectUri}`"
+					>
+						<v-btn
+							class="btn-cloud"
+							color="tertiary"
+							block
+							variant="outlined"
+						>
+							{{ system.displayName }}
+						</v-btn>
+					</a>
 				</div>
 			</v-card>
 
@@ -413,6 +433,7 @@
 import { useLogin } from "@/modules/feature/login/login.composable";
 import router from "@/router";
 import {
+	PublicSystemResponse,
 	SchoolForLdapLoginResponse,
 	SystemForLdapLoginResponse,
 } from "@/serverApi/v3";
@@ -443,8 +464,10 @@ const {
 	loginLdap,
 	isLoading,
 	loginResult,
-	schools,
 	fetchLdapSchools,
+	schools,
+	fetchOauthSystems,
+	oauthSystems,
 	submitPasswordRecovery,
 	passwordRecoveryError,
 	getValidRedirect,
@@ -460,8 +483,8 @@ const alert = ref<{
 const showAlert = ref(false);
 
 // Feature Toggles
-const featureOauthLoginEnabled: boolean =
-	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
+const featureOauthLoginEnabled: boolean = true;
+	//envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 //TODO: get env the schulcloud way, for now:
 const featureJwtExtendedTimeoutEnabled =
 	envConfigModule.getEnv.FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED;
@@ -550,6 +573,8 @@ onMounted(() => {
 	//TODO: toggle for dev
 	fetchLdapSchools();
 	//getMockSchoolsForLogin();
+	//fetchOauthSystems();
+	getMockPublicSystems();
 
 	const route = useRoute();
 	const strategy = route.query.strategy;
@@ -609,6 +634,55 @@ watch(
 		},
 	];
 }*/
+
+function getMockPublicSystems() {
+    oauthSystems.value = {
+		data: [
+			{
+				id: 'system-001',
+				type: 'oauth',
+				alias: 'alpha',
+				displayName: 'Alpha System',
+				oauthConfig: {
+					clientId: 'alpha-client-id',
+					idpHint: 'alpha-idp',
+					redirectUri: 'https://alpha.com/redirect',
+					grantType: 'authorization_code',
+					tokenEndpoint: 'https://alpha.com/token',
+					authEndpoint: 'https://alpha.com/auth',
+					responseType: 'code',
+					scope: 'openid profile email',
+					provider: 'AlphaProvider',
+					logoutEndpoint: 'https://alpha.com/logout',
+					issuer: 'https://alpha.com',
+					jwksEndpoint: 'https://alpha.com/.well-known/jwks.json',
+					endSessionEndpoint: 'https://alpha.com/end-session'
+				}
+			},
+			{
+				id: 'system-002',
+				type: 'oauth',
+				alias: 'beta',
+				displayName: 'Beta System',
+				oauthConfig: {
+					clientId: 'beta-client-id',
+					idpHint: null,
+					redirectUri: 'https://beta.com/redirect',
+					grantType: 'client_credentials',
+					tokenEndpoint: 'https://beta.com/token',
+					authEndpoint: 'https://beta.com/auth',
+					responseType: 'token',
+					scope: 'read write',
+					provider: 'BetaProvider',
+					logoutEndpoint: 'https://beta.com/logout',
+					issuer: 'https://beta.com',
+					jwksEndpoint: 'https://beta.com/.well-known/jwks.json',
+					endSessionEndpoint: 'https://beta.com/end-session'
+				}
+			}
+		],	
+	};
+}
 
 // ----- Button Section Toggles -----
 function showEmail() {
