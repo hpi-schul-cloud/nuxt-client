@@ -2,7 +2,7 @@
 	<v-dialog v-model="isOpen" max-width="520">
 		<v-card data-testid="copy-info-dialog">
 			<v-card-title
-				class="text-2 text-break px-6 pt-4"
+				class="text-h2 text-break px-6 pt-4"
 				data-testid="copy-info-dialog-title"
 			>
 				{{ $t("feature-room.CopyInfoDialog.title") }}

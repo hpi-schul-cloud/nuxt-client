@@ -24,9 +24,9 @@
 			<v-expansion-panels multiple class="pb-9" :model-value="openedPanels">
 				<v-expansion-panel data-testid="general-settings-panel" value="general">
 					<v-expansion-panel-title>
-						<div class="text-h2">
+						<h2>
 							{{ $t("pages.administration.school.index.generalSettings") }}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -44,9 +44,9 @@
 					value="privacy"
 				>
 					<v-expansion-panel-title>
-						<div class="text-h2">
+						<h2>
 							{{ $t("common.words.privacyPolicy") }}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -64,9 +64,9 @@
 					value="terms"
 				>
 					<v-expansion-panel-title>
-						<div class="text-h2">
+						<h2>
 							{{ $t("common.words.termsOfUse") }}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -83,11 +83,11 @@
 					data-testid="school-year-change-panel"
 				>
 					<v-expansion-panel-title>
-						<div class="text-h2">
+						<h2>
 							{{
 								$t("components.administration.schoolYearChangeSection.headers")
 							}}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -105,11 +105,11 @@
 					value="migration"
 				>
 					<v-expansion-panel-title>
-						<div class="text-h2">
+						<h2>
 							{{
 								$t("components.administration.adminMigrationSection.headers")
 							}}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -123,9 +123,9 @@
 
 				<v-expansion-panel data-testid="systems-panel" value="authentication">
 					<v-expansion-panel-title>
-						<div class="text-h2">
+						<h2>
 							{{ $t("pages.administration.school.index.authSystems.title") }}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -145,9 +145,9 @@
 
 				<v-expansion-panel data-testid="tools-panel" value="tools">
 					<v-expansion-panel-title>
-						<div class="text-h2">
+						<h2>
 							{{ $t("components.administration.externalToolsSection.header") }}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />

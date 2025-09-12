@@ -40,9 +40,9 @@
 							</div>
 						</div>
 					</div>
-					<h4 class="content__title">
+					<h3 class="content__title text-h4">
 						{{ resource.title || resource.name }}
-					</h4>
+					</h3>
 				</div>
 			</base-link>
 			<user-has-role :role="isNotStudent">

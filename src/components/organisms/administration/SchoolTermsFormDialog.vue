@@ -10,9 +10,9 @@
 		@dialog-confirmed="submit"
 	>
 		<template #title>
-			<h4 class="text-h2 mt-0">
+			<h3 class="text-h2 mt-0">
 				{{ t("common.words.termsOfUse") }}
-			</h4>
+			</h3>
 		</template>
 		<template #content>
 			<v-form ref="termsForm" v-model="isValid">

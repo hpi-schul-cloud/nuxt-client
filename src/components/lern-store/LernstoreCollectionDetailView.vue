@@ -79,9 +79,9 @@
 						</div>
 					</div>
 					<div class="element-cards">
-						<h4 class="text-h2">
+						<h2>
 							{{ $t("pages.content._id.collection.selectElements") }}
-						</h4>
+						</h2>
 						<transition name="fade">
 							<div v-if="true" class="content__container">
 								<lern-store-grid

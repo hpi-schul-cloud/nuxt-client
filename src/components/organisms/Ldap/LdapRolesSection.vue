@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<h1 class="text-h2">
+		<h2>
 			{{ $t("pages.administration.ldapEdit.roles.headLines.title") }}
-		</h1>
+		</h2>
 		<p class="description-section">
 			{{
 				$t("pages.administration.ldapEdit.roles.headLines.sectionDescription")
