@@ -454,16 +454,16 @@ enum loginOptions {
 
 const { t } = useI18n();
 const {
-	loginEmail,
-	loginLdap,
 	isLoading,
 	loginResult,
-	fetchLdapSchools,
 	schools,
-	fetchOauthSystems,
 	oauthSystems,
-	submitPasswordRecovery,
 	passwordRecoveryError,
+	loginEmail,
+	loginLdap,
+	fetchLdapSchools,
+	fetchOauthSystems,
+	submitPasswordRecovery,
 	getValidRedirect,
 	validatePostLoginRedirect,
 } = useLogin();
@@ -480,7 +480,6 @@ const showAlert = ref(false);
 // Feature Toggles
 const featureOauthLoginEnabled =
 	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
-//TODO: get env the schulcloud way, for now:
 const featureJwtExtendedTimeoutEnabled =
 	envConfigModule.getEnv.FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED;
 
@@ -561,7 +560,6 @@ function checkCookie() {
 
 // ----- Local Storage Versioning -----
 onMounted(() => {
-	// Versioning
 	const newVersion = 1;
 	const currentVersion = parseInt(
 		localStorage.getItem("homepageVersion") || "0",
@@ -687,7 +685,7 @@ function redirectToOauthSystem(system: PublicSystemResponse) {
 	];
 }*/
 
-function getMockPublicSystems() {
+/*function getMockPublicSystems() {
 	oauthSystems.value = {
 		data: [
 			{
@@ -738,7 +736,7 @@ function getMockPublicSystems() {
 			},
 		],
 	};
-}
+}*/
 
 // ----- Button Section Toggles -----
 function showEmail() {
