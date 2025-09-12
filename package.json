@@ -14,7 +14,7 @@
 		"test:unit:watch": "vitest watch",
 		"test:unit:ci": "vitest run --coverage",
 		"lint": "npx eslint 'src/**/*.{ts,js,vue}'",
-		"lint:fix": "npx eslint 'src/**/*.{ts,js,vue}' --fix",
+		"lint:fix": "npx eslint \"src/**/*.{ts,js,vue}\" --fix",
 		"generate-client:server": "openapi-generator-cli generate -c ./openapitools.json --generator-key server-api",
 		"generate-client:filestorage": "openapi-generator-cli generate -c ./openapitools.json --generator-key file-storage-api",
 		"generate-client:h5p-editor": "openapi-generator-cli generate -c ./openapitools.json --generator-key h5p-editor-api",

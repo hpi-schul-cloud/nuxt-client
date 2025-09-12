@@ -1,8 +1,5 @@
 <template>
-	<v-container
-		class="d-flex flex-column"
-		style="min-height: 30vh; width: 100%"
-	>
+	<v-container class="d-flex flex-column" style="min-height: 30vh; width: 100%">
 		<v-card>
 			<v-card-title class="h3 mt-3">
 				{{ t("components.login.title") }}
@@ -55,12 +52,7 @@
 					<a
 						:href="`/auth/oauth2/authorize/${system.id}?redirect=${system.oauthConfig?.redirectUri}`"
 					>
-						<v-btn
-							class="btn-cloud"
-							color="tertiary"
-							block
-							variant="outlined"
-						>
+						<v-btn class="btn-cloud" color="tertiary" block variant="outlined">
 							{{ system.displayName }}
 						</v-btn>
 					</a>
@@ -483,8 +475,8 @@ const alert = ref<{
 const showAlert = ref(false);
 
 // Feature Toggles
-const featureOauthLoginEnabled: boolean = true;
-	//envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
+const featureOauthLoginEnabled = 
+	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 //TODO: get env the schulcloud way, for now:
 const featureJwtExtendedTimeoutEnabled =
 	envConfigModule.getEnv.FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED;
@@ -521,12 +513,12 @@ const isLoginTimeoutActive = ref(false);
 const redirectParam = ref(route.query.redirect?.toString() || null);
 
 const emit = defineEmits<{
-  (e: 'login-failed'): void;
+	(e: "login-failed"): void;
 }>();
 
 function handleLoginError() {
 	showAlert.value = true;
-	emit('login-failed');
+	emit("login-failed");
 }
 
 function togglePassword() {
@@ -636,51 +628,51 @@ watch(
 }*/
 
 function getMockPublicSystems() {
-    oauthSystems.value = {
+	oauthSystems.value = {
 		data: [
 			{
-				id: 'system-001',
-				type: 'oauth',
-				alias: 'alpha',
-				displayName: 'Alpha System',
+				id: "system-001",
+				type: "oauth",
+				alias: "alpha",
+				displayName: "Alpha System",
 				oauthConfig: {
-					clientId: 'alpha-client-id',
-					idpHint: 'alpha-idp',
-					redirectUri: 'https://alpha.com/redirect',
-					grantType: 'authorization_code',
-					tokenEndpoint: 'https://alpha.com/token',
-					authEndpoint: 'https://alpha.com/auth',
-					responseType: 'code',
-					scope: 'openid profile email',
-					provider: 'AlphaProvider',
-					logoutEndpoint: 'https://alpha.com/logout',
-					issuer: 'https://alpha.com',
-					jwksEndpoint: 'https://alpha.com/.well-known/jwks.json',
-					endSessionEndpoint: 'https://alpha.com/end-session'
-				}
+					clientId: "alpha-client-id",
+					idpHint: "alpha-idp",
+					redirectUri: "https://alpha.com/redirect",
+					grantType: "authorization_code",
+					tokenEndpoint: "https://alpha.com/token",
+					authEndpoint: "https://alpha.com/auth",
+					responseType: "code",
+					scope: "openid profile email",
+					provider: "AlphaProvider",
+					logoutEndpoint: "https://alpha.com/logout",
+					issuer: "https://alpha.com",
+					jwksEndpoint: "https://alpha.com/.well-known/jwks.json",
+					endSessionEndpoint: "https://alpha.com/end-session",
+				},
 			},
 			{
-				id: 'system-002',
-				type: 'oauth',
-				alias: 'beta',
-				displayName: 'Beta System',
+				id: "system-002",
+				type: "oauth",
+				alias: "beta",
+				displayName: "Beta System",
 				oauthConfig: {
-					clientId: 'beta-client-id',
+					clientId: "beta-client-id",
 					idpHint: null,
-					redirectUri: 'https://beta.com/redirect',
-					grantType: 'client_credentials',
-					tokenEndpoint: 'https://beta.com/token',
-					authEndpoint: 'https://beta.com/auth',
-					responseType: 'token',
-					scope: 'read write',
-					provider: 'BetaProvider',
-					logoutEndpoint: 'https://beta.com/logout',
-					issuer: 'https://beta.com',
-					jwksEndpoint: 'https://beta.com/.well-known/jwks.json',
-					endSessionEndpoint: 'https://beta.com/end-session'
-				}
-			}
-		],	
+					redirectUri: "https://beta.com/redirect",
+					grantType: "client_credentials",
+					tokenEndpoint: "https://beta.com/token",
+					authEndpoint: "https://beta.com/auth",
+					responseType: "token",
+					scope: "read write",
+					provider: "BetaProvider",
+					logoutEndpoint: "https://beta.com/logout",
+					issuer: "https://beta.com",
+					jwksEndpoint: "https://beta.com/.well-known/jwks.json",
+					endSessionEndpoint: "https://beta.com/end-session",
+				},
+			},
+		],
 	};
 }
 

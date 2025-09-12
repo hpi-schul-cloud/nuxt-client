@@ -1,7 +1,7 @@
 <template>
 	<div class="display-block">
 		<Login @login-failed="notification = true" />
-		<LoginFailedHint v-if="notification"/>
+		<LoginFailedHint v-if="notification" />
 	</div>
 </template>
 
