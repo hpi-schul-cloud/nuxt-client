@@ -84,4 +84,8 @@ async function fetchBlogs() {
 		blogLoading.value = false;
 	}
 }
+
+function redirectToLoginPageWithError() {
+	router.push({ path: "/login", query: { error: true } });
+}
 </script>
