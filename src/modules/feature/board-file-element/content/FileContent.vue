@@ -52,7 +52,7 @@ import {
 	isPdfMimeType,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, PropType, ref } from "vue";
@@ -64,6 +64,7 @@ import FileInputs from "././inputs/FileInputs.vue";
 import FileAlerts from "./alert/FileAlerts.vue";
 import FileDescription from "./display/file-description/FileDescription.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	fileProperties: {
@@ -80,8 +81,6 @@ const emit = defineEmits([
 	"update:caption",
 	"add:alert",
 ]);
-
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const onFetchFile = () => {
 	emit("fetch:file");
@@ -138,9 +137,9 @@ const hasRowStyle = computed(
 	() => isSmallOrLargerListBoard.value && hasSmallPreview.value
 );
 
-const isCollaboraEnabled = computed(() => {
-	return envConfigModule.getEnv.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED;
-});
+const isCollaboraEnabled = computed(
+	() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED
+);
 
 const hasSmallPreview = computed(() => {
 	return (

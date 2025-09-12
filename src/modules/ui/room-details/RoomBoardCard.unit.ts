@@ -10,13 +10,12 @@ import {
 	ConfigResponse,
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createMock } from "@golevelup/ts-vitest";
 import { Router, useRouter } from "vue-router";
 import { VListItem, VMenu } from "vuetify/lib/components/index";
-import { Mock } from "vitest";
+import { beforeAll, Mock } from "vitest";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createPinia, setActivePinia } from "pinia";
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
@@ -78,20 +77,15 @@ const mockCourseData = {
 describe("RoomBoardCard", () => {
 	const setup = (
 		props: { boardData: BoardData; userRole: ImportUserResponseRoleNamesEnum },
-		options?: object,
-		envs?: Partial<ConfigResponse>
+		options?: object
 	) => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 		// Note: router has to be mocked before mounting the component
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: { ...envs } as ConfigResponse,
-		});
 
 		const wrapper = mount(RoomBoardCard, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock },
 			},
 			props: {
 				dragInProgress: false,
@@ -108,6 +102,10 @@ describe("RoomBoardCard", () => {
 
 		return { wrapper, router };
 	};
+
+	beforeAll(() => {
+		setActivePinia(createPinia());
+	});
 
 	afterEach(() => {
 		vi.resetAllMocks();
@@ -167,12 +165,14 @@ describe("RoomBoardCard", () => {
 						boardData: mockPublishedBoardData,
 						userRole,
 					},
-					{},
-					envs
+					{}
 				);
+
+				createTestEnvStore(envs);
 
 				return { wrapper };
 			};
+
 			it("should show three dot menu", () => {
 				const { wrapper } = setupTeacherMenu();
 				const threeDotMenu = wrapper.find(".three-dot-button");

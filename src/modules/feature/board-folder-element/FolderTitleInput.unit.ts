@@ -1,9 +1,7 @@
-import EnvConfigModule from "@/store/env-config";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/lib/components/index";
 import FolderTitleInput from "./FolderTitleInput.vue";
@@ -12,12 +10,6 @@ const VALID_TITLE = "My Folder Title";
 const INVALID_TITLE = "<A";
 
 describe("FolderTitleInput.vue", () => {
-	beforeEach(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
-	});
-
 	afterEach(() => {
 		vi.clearAllMocks();
 	});

@@ -33,10 +33,8 @@ import { createTestingPinia } from "@pinia/testing";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import EnvConfigModule from "@/store/env-config";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
-import setupStores from "@@/tests/test-utils/setupStores";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -62,10 +60,6 @@ describe("Folder.vue", () => {
 		vi.spyOn(FileHelper, "downloadFile");
 
 		const notifierModule = createModuleMocks(NotifierModule);
-
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
 
 		const parentId = "123";
 		const wrapper = mount(Folder, {

@@ -18,12 +18,9 @@ import {
 } from "@ui-kebab-menu";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
-import { envsFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { ConfigResponse } from "@/serverApi/v3";
 import { Mock } from "vitest";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
@@ -62,13 +59,10 @@ describe("@feature-room/RoomMenu", () => {
 	});
 
 	const setup = (envs: Partial<ConfigResponse> = {}) => {
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: {
-				...envsFactory.build(),
-				FEATURE_ROOM_COPY_ENABLED: true,
-				FEATURE_ROOM_SHARE: true,
-				...envs,
-			},
+		createTestEnvStore({
+			FEATURE_ROOM_COPY_ENABLED: true,
+			FEATURE_ROOM_SHARE: true,
+			...envs,
 		});
 
 		const wrapper = mount(RoomMenu, {
@@ -78,9 +72,6 @@ describe("@feature-room/RoomMenu", () => {
 					createTestingI18n(),
 					createTestingPinia(),
 				],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-				},
 				stubs: {
 					RouterLink,
 				},

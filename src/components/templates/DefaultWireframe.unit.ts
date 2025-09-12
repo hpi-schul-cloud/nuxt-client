@@ -1,7 +1,3 @@
-import { ConfigResponse } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -13,16 +9,9 @@ describe("DefaultWireframe", () => {
 	const setup = (
 		options: ComponentMountingOptions<typeof DefaultWireframe> = {}
 	) => {
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: {} as ConfigResponse,
-		});
-
 		const wrapper = mount(DefaultWireframe, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-				},
 			},
 			...options,
 		});

@@ -10,7 +10,6 @@ import AuthModule from "@/store/auth";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
-import EnvConfigModule from "@/store/env-config";
 import FilePaths from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
@@ -41,7 +40,6 @@ export let applicationErrorModule: ApplicationErrorModule;
 export let authModule: AuthModule;
 export let contentModule: ContentModule;
 export let copyModule: CopyModule;
-export let envConfigModule: EnvConfigModule;
 export let filePathsModule: FilePaths;
 export let finishedTasksModule: FinishedTasksModule;
 export let groupModule: GroupModule;
@@ -70,7 +68,6 @@ export function initializeStores(store: Store<unknown>): void {
 	authModule = getModule(AuthModule, store);
 	contentModule = getModule(ContentModule, store);
 	copyModule = getModule(CopyModule, store);
-	envConfigModule = getModule(EnvConfigModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
 	groupModule = getModule(GroupModule, store);
@@ -102,7 +99,6 @@ export const modules = {
 	authModule: AuthModule,
 	contentModule: ContentModule,
 	copyModule: CopyModule,
-	envConfigModule: EnvConfigModule,
 	filePathsModule: FilePaths,
 	finishedTasksModule: FinishedTasksModule,
 	groupModule: GroupModule,

@@ -1,6 +1,5 @@
 import { DATETIME_FORMAT, fromInputDateTime } from "@/plugins/datetime";
 import { notifierModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import {
 	createTestingI18n,
@@ -98,7 +97,6 @@ describe("FormNews", () => {
 
 	beforeEach(() => {
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			notifierModule: NotifierModule,
 		});
 	});
@@ -108,7 +106,7 @@ describe("FormNews", () => {
 		expect(wrapper.findComponent(FormNews).exists()).toBe(true);
 	});
 
-	it("passes date and time to input fields", async () => {
+	it("passes date and time to input fields", () => {
 		const { wrapper } = setup(testNews);
 
 		const dateInput = wrapper.find('[data-testid="news_date"]');

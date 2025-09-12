@@ -1,14 +1,12 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { envConfigModule, finishedTasksModule } from "@/store";
+import { finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
-import EnvConfigModule from "@/store/env-config";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { envsFactory } from "@@/tests/test-utils";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import {
 	createTestingI18n,
@@ -18,6 +16,8 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { VBtn } from "vuetify/lib/components/index";
 import TaskItemMenu from "./TaskItemMenu.vue";
+import { beforeAll } from "vitest";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 const { tasksTeacher } = mocks;
 
@@ -61,10 +61,13 @@ describe("@/components/molecules/TaskItemMenu", () => {
 		window.dispatchEvent(new Event("resize"));
 	};
 
+	beforeAll(() => {
+		createTestEnvStore();
+	});
+
 	beforeEach(() => {
 		setupStores({
 			finishedTasksModule: FinishedTasksModule,
-			envConfigModule: EnvConfigModule,
 		});
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
@@ -231,10 +234,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					userRole: "teacher",
 					courseId: "18",
 				});
-				const envs = envsFactory.build({
-					FEATURE_COPY_SERVICE_ENABLED: true,
-				});
-				envConfigModule.setEnvs(envs);
+				createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
@@ -261,10 +261,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 					userRole: "teacher",
 				});
-				const envs = envsFactory.build({
-					FEATURE_COPY_SERVICE_ENABLED: true,
-				});
-				envConfigModule.setEnvs(envs);
+				createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
@@ -292,10 +289,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
-			const envs = envsFactory.build({
-				FEATURE_COPY_SERVICE_ENABLED: false,
-			});
-			envConfigModule.setEnvs(envs);
+			createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: false });
 
 			const menuBtn = wrapper.findComponent(VBtn);
 			await menuBtn.trigger("click");

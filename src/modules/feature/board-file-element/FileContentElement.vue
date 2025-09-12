@@ -64,7 +64,6 @@ import {
 	isPreviewPossible,
 	isScanStatusBlocked,
 } from "@/utils/fileHelper";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
@@ -87,6 +86,7 @@ import FileContent from "./content/FileContent.vue";
 import { mapEditBoardPermissionToEditorMode } from "./mapper";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
+import { useEnvConfig } from "@data-env";
 
 type Props = {
 	element: FileElementResponse;
@@ -108,7 +108,6 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const router = useRouter();
 
 const fileContentElement = ref(null);
@@ -222,9 +221,9 @@ const isCollaboraEditable = computed(() => {
 	return fileRecord.value.isCollaboraEditable;
 });
 
-const isCollaboraEnabled = computed(() => {
-	return envConfigModule.getEnv.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED;
-});
+const isCollaboraEnabled = computed(
+	() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED
+);
 const cardAriaLabel = computed(() => {
 	if (isCollaboraEnabled.value && isCollaboraEditable.value) {
 		return t("components.cardElement.fileElement.openOfficeDocument");

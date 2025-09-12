@@ -1,7 +1,11 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { SchoolFeature, SystemsApiInterface } from "@/serverApi/v3/api";
-import { authModule, envConfigModule } from "@/store";
-import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
+import {
+	SchoolFeature,
+	SchulcloudTheme,
+	SystemsApiInterface,
+} from "@/serverApi/v3/api";
+import { authModule } from "@/store";
+import { createTestEnvStore, meResponseFactory } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
@@ -10,7 +14,6 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosError } from "axios";
 import AuthModule from "./auth";
-import EnvConfigModule from "./env-config";
 import SchoolsModule from "./schools";
 
 describe("schools module", () => {
@@ -24,7 +27,7 @@ describe("schools module", () => {
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 		vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemsApi);
 
-		setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
+		setupStores({ authModule: AuthModule });
 	});
 
 	afterEach(() => {
@@ -635,31 +638,17 @@ describe("schools module", () => {
 			});
 		});
 
-		describe("schoolIsExternallyManaged", () => {
-			describe("when theme is thr", () => {
-				const setup = () => {
-					const envs = envsFactory.build({
-						SC_THEME: serverApi.SchulcloudTheme.Thr,
-					});
-					envConfigModule.setEnvs(envs);
-				};
-
-				it("should return true", () => {
-					setup();
-					const schoolsModule = new SchoolsModule({});
-
-					const result = schoolsModule.schoolIsExternallyManaged;
-
-					expect(result).toBe(true);
-				});
+		describe("school is externally managed", () => {
+			it("should return true when theme is thr", () => {
+				createTestEnvStore({ SC_THEME: SchulcloudTheme.Thr });
+				const schoolsModule = new SchoolsModule({});
+				const result = schoolsModule.schoolIsExternallyManaged;
+				expect(result).toBe(true);
 			});
 
 			describe("when theme is not thr", () => {
 				const setupTheme = () => {
-					const envs = envsFactory.build({
-						SC_THEME: serverApi.SchulcloudTheme.Default,
-					});
-					envConfigModule.setEnvs(envs);
+					createTestEnvStore({ SC_THEME: SchulcloudTheme.Default });
 				};
 
 				describe("when school is external", () => {

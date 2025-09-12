@@ -23,7 +23,7 @@ import { useI18n } from "vue-i18n";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { MembersTable } from "@feature-room";
-import { envConfigModule } from "@/store";
+import { useEnvConfig } from "@data-env";
 
 defineProps({
 	headerBottom: {
@@ -44,6 +44,6 @@ const linkAriaLabel = computed(
 );
 
 const informationLink = computed(
-	() => envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
+	() => useEnvConfig().value.ROOM_MEMBER_INFO_URL
 );
 </script>

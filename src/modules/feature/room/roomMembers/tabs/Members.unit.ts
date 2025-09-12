@@ -1,4 +1,5 @@
 import {
+	createTestEnvStore,
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
@@ -17,8 +18,8 @@ import { useBoardNotifier } from "@util-board";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import { Ref, ref } from "vue";
+import { beforeAll } from "vitest";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = vi.mocked(useBoardNotifier);
@@ -37,6 +38,10 @@ type RoomAuthorizationRefs = Partial<
 describe("Members", () => {
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
+	beforeAll(() => {
+		createTestEnvStore();
+	});
+
 	beforeEach(() => {
 		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		boardNotifier.mockReturnValue(boardNotifierCalls);
@@ -44,7 +49,6 @@ describe("Members", () => {
 		setupStores({
 			schoolsModule: SchoolsModule,
 			authModule: AuthModule,
-			envConfigModule: EnvConfigModule,
 		});
 
 		schoolsModule.setSchool(

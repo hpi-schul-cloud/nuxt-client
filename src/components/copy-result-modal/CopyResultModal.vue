@@ -48,10 +48,10 @@
 import CopyResultModalList from "./CopyResultModalList.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
 import { mdiAlert } from "@icons/material";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useEnvConfig } from "@data-env";
 
 const { t } = useI18n();
 
@@ -180,7 +180,7 @@ const filesInfoText = computed(() => {
 });
 
 const externalToolsInfoText = computed(() => {
-	return envConfigModule.getEnv.FEATURE_CTL_TOOLS_COPY_ENABLED
+	return useEnvConfig().value.FEATURE_CTL_TOOLS_COPY_ENABLED
 		? t("components.molecules.copyResult.ctlTools.withFeature.info")
 		: t("components.molecules.copyResult.ctlTools.info");
 });

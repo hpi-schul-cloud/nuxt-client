@@ -1,9 +1,5 @@
 import { SchulcloudTheme } from "@/serverApi/v3";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	FILE_PATHS_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { FILE_PATHS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiAccountGroupOutline,
 	mdiAccountSupervisorCircleOutline,
@@ -22,9 +18,9 @@ import {
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
+import { useEnvConfig } from "@data-env";
 
 export const useSidebarItems = () => {
-	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const filePathsModule = injectStrict(FILE_PATHS_MODULE_KEY);
 	const { t } = useI18n();
 
@@ -129,7 +125,7 @@ export const useSidebarItems = () => {
 		{
 			href:
 				"mailto:" +
-				envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
+				useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL +
 				"?subject=" +
 				t("components.legacy.footer.accessibility.report"),
 			title: "components.legacy.footer.accessibility.report",
@@ -137,7 +133,7 @@ export const useSidebarItems = () => {
 			target: "_blank",
 			rel: "noopener",
 			feature: "ACCESSIBILITY_REPORT_EMAIL",
-			featureValue: `${envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL}`,
+			featureValue: `${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}`,
 			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
 		},
 		{
@@ -163,20 +159,20 @@ export const useSidebarItems = () => {
 			to: "/licenses",
 			title: "global.sidebar.item.licenses",
 			feature: "LICENSE_SUMMARY_URL",
-			featureValue: `${envConfigModule.getEnv.LICENSE_SUMMARY_URL}`,
+			featureValue: `${useEnvConfig().value.LICENSE_SUMMARY_URL}`,
 			testId: "sidebar-licenses",
 		},
 	]);
 
 	const systemLinks: SidebarSingleItem[] = [
 		{
-			href: `${envConfigModule.getEnv.ALERT_STATUS_URL}`,
+			href: `${useEnvConfig().value.ALERT_STATUS_URL}`,
 			title: "components.legacy.footer.status",
 			testId: "sidebar-system-status",
 			target: "_blank",
 			rel: "noopener",
 			feature: "ALERT_STATUS_URL",
-			featureValue: `${envConfigModule.getEnv.ALERT_STATUS_URL}`,
+			featureValue: `${useEnvConfig().value.ALERT_STATUS_URL}`,
 		},
 		{
 			href: filePathsModule.getSpecificFiles.accessibilityStatement as string,
@@ -233,7 +229,7 @@ export const useSidebarItems = () => {
 					title: "pages.rooms.title",
 					to: "/administration/rooms/manage",
 					feature: "FEATURE_ADMINISTRATE_ROOMS_ENABLED",
-					permissions: envConfigModule.getEnv.FEATURE_ADMINISTRATE_ROOMS_ENABLED
+					permissions: useEnvConfig().value.FEATURE_ADMINISTRATE_ROOMS_ENABLED
 						? ["SCHOOL_ADMINISTRATE_ROOMS"]
 						: undefined,
 					testId: "sidebar-room-management",
@@ -283,12 +279,12 @@ export const useSidebarItems = () => {
 				},
 				{
 					title: "global.sidebar.item.training",
-					href: `${envConfigModule.getEnv.TRAINING_URL}`,
+					href: `${useEnvConfig().value.TRAINING_URL}`,
 					target: "_blank",
 					rel: "noopener",
 					testId: "sidebar-helpsection-trainings",
 					feature: "TRAINING_URL",
-					featureValue: `${envConfigModule.getEnv.TRAINING_URL}`,
+					featureValue: `${useEnvConfig().value.TRAINING_URL}`,
 				},
 			],
 		},

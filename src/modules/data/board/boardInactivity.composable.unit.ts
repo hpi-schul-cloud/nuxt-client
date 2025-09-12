@@ -1,15 +1,12 @@
 import type { Mock } from "vitest";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	boardResponseFactory,
-	envsFactory,
+	createTestEnvStore,
 	mountComposable,
 } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
@@ -48,18 +45,15 @@ let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 let mockedSocketConnectionHandler: DeepMocked<
 	ReturnType<typeof useSocketConnection>
 >;
-const envs = envsFactory.build({
-	BOARD_COLLABORATION_URI: "mockedUri",
-	FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
-});
 
 vi.useFakeTimers();
 
 describe("pageInactivity.composable", () => {
 	setActivePinia(createTestingPinia());
-	setupStores({ envConfigModule: EnvConfigModule });
-
-	envConfigModule.setEnvs(envs);
+	createTestEnvStore({
+		BOARD_COLLABORATION_URI: "mockedUri",
+		FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
+	});
 
 	mockUseSharedLastCreatedElement.mockReturnValue({
 		lastCreatedElementId: computed(() => "element-id"),
@@ -139,14 +133,14 @@ describe("pageInactivity.composable", () => {
 		afterEach(() => {
 			vi.clearAllTimers();
 		});
-		it("should be changed after MAX_TIMEOUT_FOR_INACTIVITY is achieved", async () => {
+		it("should be changed after MAX_TIMEOUT_FOR_INACTIVITY is achieved", () => {
 			setup(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(false);
 			vi.advanceTimersByTime(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(true);
 		});
 
-		it("should not be changed after MAX_TIMEOUT_FOR_INACTIVITY is not achieved", async () => {
+		it("should not be changed after MAX_TIMEOUT_FOR_INACTIVITY is not achieved", () => {
 			setup(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(false);
 			vi.advanceTimersByTime(1000);

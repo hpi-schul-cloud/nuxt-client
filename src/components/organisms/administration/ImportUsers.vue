@@ -284,8 +284,9 @@ import {
 	ImportUserResponseRoleNamesEnum,
 	SchulcloudTheme,
 } from "@/serverApi/v3";
-import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
+import { importUsersModule, schoolsModule } from "@/store";
 import { MatchedBy } from "@/store/import-users";
+import { useEnvConfig } from "@data-env";
 
 export default {
 	components: {
@@ -394,19 +395,17 @@ export default {
 		},
 		isNbc() {
 			return (
-				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.N21
+				useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21
 			);
 		},
 		canStartMigration() {
 			return this.school.inUserMigration && this.school.inMaintenance;
 		},
 		sourceSystemName() {
-			if (
-				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.Brb
-			) {
+			if (useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.Brb) {
 				return this.$t("pages.administration.migration.brbSchulportal");
 			} else if (
-				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.N21
+				useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21
 			) {
 				return "moin.schule";
 			} else {
@@ -529,7 +528,7 @@ export default {
 				this.loading = false;
 			}
 		},
-		async savedFlag() {
+		savedFlag() {
 			this.loading = true;
 			this.reloadData();
 		},

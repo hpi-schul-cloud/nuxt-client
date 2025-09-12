@@ -1,5 +1,4 @@
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassRootType } from "@/store/types/class-info";
@@ -8,14 +7,13 @@ import { School, Year } from "@/store/types/schools";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
 	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import {
 	classInfoFactory,
 	courseFactory,
-	envsFactory,
+	createTestEnvStore,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
@@ -30,9 +28,7 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDataTableServer } from "vuetify/lib/components/index";
 import ClassOverview from "./ClassOverview.page.vue";
 import { Mock } from "vitest";
-import { envConfigModule } from "@/store";
 import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
-import setupStores from "@@/tests/test-utils/setupStores";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
@@ -117,10 +113,10 @@ const createWrapper = ({
 		...schoolsModuleGetters,
 	});
 
-	envConfigModule.setEnvs({
+	createTestEnvStore({
 		FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
 		...envs,
-	} as ConfigResponse);
+	});
 
 	const wrapper = mount(ClassOverview, {
 		global: {
@@ -133,7 +129,6 @@ const createWrapper = ({
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
 				[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			},
 			stubs: {
 				EndCourseSyncDialog: true,
@@ -156,19 +151,13 @@ const createWrapper = ({
 	};
 };
 
-const findTableComponen = (wrapper: VueWrapper) => {
+const findTableComponent = (wrapper: VueWrapper) => {
 	return wrapper.findComponent<typeof VDataTableServer>(
 		'[data-testid="admin-class-table"]'
 	);
 };
 
 describe("ClassOverview", () => {
-	beforeAll(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
-	});
-
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
@@ -230,7 +219,7 @@ describe("ClassOverview", () => {
 				return { wrapper, classes };
 			};
 
-			it("should display the entries in the table", async () => {
+			it("should display the entries in the table", () => {
 				const { classes, wrapper } = setup();
 
 				const table = wrapper.findComponent<typeof VDataTableServer>(
@@ -258,7 +247,7 @@ describe("ClassOverview", () => {
 				it("should call store to change sort by", async () => {
 					const { sortBy, wrapper, groupModule } = setup();
 
-					findTableComponen(wrapper).vm.$emit("update:sortBy", [sortBy]);
+					findTableComponent(wrapper).vm.$emit("update:sortBy", [sortBy]);
 					await nextTick();
 
 					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
@@ -284,7 +273,7 @@ describe("ClassOverview", () => {
 				it("should call store to change sort order", async () => {
 					const { sortBy, wrapper, groupModule } = setup();
 
-					findTableComponen(wrapper).vm.$emit("update:sortBy", [sortBy]);
+					findTableComponent(wrapper).vm.$emit("update:sortBy", [sortBy]);
 					await nextTick();
 
 					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
@@ -325,7 +314,7 @@ describe("ClassOverview", () => {
 				it("should call store to change the limit in pagination", async () => {
 					const { itemsPerPage, wrapper, groupModule, pagination } = setup();
 
-					findTableComponen(wrapper).vm.$emit(
+					findTableComponent(wrapper).vm.$emit(
 						"update:itemsPerPage",
 						itemsPerPage
 					);
@@ -365,7 +354,7 @@ describe("ClassOverview", () => {
 				it("should call store to update current page", async () => {
 					const { page, wrapper, groupModule, pagination } = setup();
 
-					findTableComponen(wrapper).vm.$emit("update:page", page);
+					findTableComponent(wrapper).vm.$emit("update:page", page);
 					await nextTick();
 
 					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
@@ -482,7 +471,7 @@ describe("ClassOverview", () => {
 					};
 				};
 
-				it("should redirect to legacy class manage page", async () => {
+				it("should redirect to legacy class manage page", () => {
 					const { wrapper, classId } = setup();
 
 					const manageBtn = wrapper.find(
@@ -510,7 +499,7 @@ describe("ClassOverview", () => {
 					};
 				};
 
-				it("should redirect to group class members page", async () => {
+				it("should redirect to group class members page", () => {
 					const { wrapper } = setup();
 
 					const manageBtn = wrapper.findComponent<typeof VBtn>(
@@ -535,7 +524,7 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should redirect to legacy class edit page", async () => {
+			it("should redirect to legacy class edit page", () => {
 				const { wrapper, classId } = setup();
 
 				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
@@ -559,7 +548,7 @@ describe("ClassOverview", () => {
 					};
 				};
 
-				it("should redirect to legacy class upgrade page", async () => {
+				it("should redirect to legacy class upgrade page", () => {
 					const { wrapper, classId } = setup();
 
 					const successorBtn = wrapper.find(
@@ -958,11 +947,7 @@ describe("ClassOverview", () => {
 		])(
 			"uses %s-instance specific text placeholders",
 			async (theme, expected) => {
-				const envs = envsFactory.build({
-					SC_THEME: theme,
-				});
-
-				const { wrapper } = setup(envs);
+				const { wrapper } = setup({ SC_THEME: theme });
 
 				await nextTick();
 

@@ -26,15 +26,16 @@
 </template>
 
 <script setup lang="ts">
-import { envConfigModule } from "@/store";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useEnvConfig } from "@data-env";
 
 const { t } = useI18n();
 const theme = injectStrict(THEME_KEY);
 
-const currentYear = computed(() => new Date().getFullYear());
+const currentYear = new Date().getFullYear();
+
 const links = computed(() => {
 	const baseLinks = [
 		{
@@ -63,9 +64,9 @@ const links = computed(() => {
 		},
 	];
 
-	if (envConfigModule.getEnv.ALERT_STATUS_URL) {
+	if (useEnvConfig().value.ALERT_STATUS_URL) {
 		baseLinks.push({
-			href: envConfigModule.getEnv.ALERT_STATUS_URL,
+			href: useEnvConfig().value.ALERT_STATUS_URL as string,
 			text: t("components.legacy.footer.status"),
 			target: "_blank",
 			rel: "noopener",

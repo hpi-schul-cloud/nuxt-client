@@ -1,9 +1,7 @@
-import EnvConfigModule from "@/store/env-config";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
@@ -12,12 +10,6 @@ const VALID_URL = "https://www.abc.de/my-article";
 const INVALID_URL = "my-article";
 
 describe("LinkContentElementCreate", () => {
-	beforeEach(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
-	});
-
 	afterEach(() => {
 		vi.clearAllMocks();
 	});

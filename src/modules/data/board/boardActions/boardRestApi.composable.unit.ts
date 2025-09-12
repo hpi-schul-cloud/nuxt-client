@@ -1,12 +1,7 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import {
-	applicationErrorModule,
-	courseRoomDetailsModule,
-	envConfigModule,
-} from "@/store";
+import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import EnvConfigModule from "@/store/env-config";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import { createApplicationError } from "@/utils/create-application-error.factory";
@@ -14,7 +9,6 @@ import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
-	envsFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
@@ -97,16 +91,11 @@ describe("boardRestApi", () => {
 		useRouterMock.mockReturnValue(router);
 	});
 
-	const setup = (createBoard = true, isSocketEnabled = false) => {
+	const setup = (createBoard = true) => {
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			applicationErrorModule: ApplicationErrorModule,
 			courseRoomDetailsModule: CourseRoomDetailsModule,
 		});
-		const envs = envsFactory.build({
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: isSocketEnabled,
-		});
-		envConfigModule.setEnvs(envs);
 		applicationErrorModule.setError = setErrorMock;
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);

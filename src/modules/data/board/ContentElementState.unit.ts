@@ -1,12 +1,8 @@
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { envsFactory } from "@@/tests/test-utils";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { useContentElementState } from "./ContentElementState.composable";
@@ -41,11 +37,6 @@ const useRouterMock = <Mock>useRouter;
 
 describe("useContentElementState composable", () => {
 	beforeEach(() => {
-		setupStores({ envConfigModule: EnvConfigModule });
-		const envs = envsFactory.build({
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
-		});
-		envConfigModule.setEnvs(envs);
 		setActivePinia(createTestingPinia());
 
 		const router = createMock<Router>();

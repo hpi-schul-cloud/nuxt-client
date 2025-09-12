@@ -1,8 +1,6 @@
-import EnvConfigModule from "@/store/env-config";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import {
-	ENV_CONFIG_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
@@ -17,6 +15,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import type { Mocked } from "vitest";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -28,7 +27,6 @@ vi.mock(
 
 describe("UserLoginMigrationError", () => {
 	let systemsModule: Mocked<SystemsModule>;
-	let envConfigModule: Mocked<EnvConfigModule>;
 	let userLoginMigrationModule: Mocked<UserLoginMigrationModule>;
 
 	const setup = (props: {
@@ -50,8 +48,8 @@ describe("UserLoginMigrationError", () => {
 		systemsModule = createModuleMocks(SystemsModule, {
 			getSystems: systemsMock,
 		});
-		envConfigModule = createModuleMocks(EnvConfigModule, {
-			getAccessibilityReportEmail: "ticketsystem@niedersachsen.support",
+		createTestEnvStore({
+			ACCESSIBILITY_REPORT_EMAIL: "ticketsystem@niedersachsen.support",
 		});
 		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
 			getUserLoginMigration: userLoginMigrationFactory.build(),
@@ -62,7 +60,6 @@ describe("UserLoginMigrationError", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 				},
 				mocks: {

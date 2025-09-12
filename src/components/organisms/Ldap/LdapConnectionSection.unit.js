@@ -5,8 +5,13 @@ import {
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import { createPinia, setActivePinia } from "pinia";
 
 describe("@/components/organisms/LdapConnectionSection", () => {
+	beforeAll(() => {
+		setActivePinia(createPinia());
+	});
+
 	const getWrapper = (props = {}) => {
 		return mount(LdapConnectionSection, {
 			global: {

@@ -5,10 +5,8 @@ import {
 	PreferredToolResponse,
 	ToolContextType,
 } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import {
-	envsFactory,
+	createTestEnvStore,
 	externalToolElementResponseFactory,
 	fileElementResponseFactory,
 	ObjectIdMock,
@@ -17,7 +15,6 @@ import {
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	CreateElementRequestPayload,
 	useCardStore,
@@ -86,7 +83,7 @@ describe("CardStore", () => {
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
-		setupStores({ envConfigModule: EnvConfigModule });
+		createTestEnvStore();
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 
@@ -152,12 +149,7 @@ describe("CardStore", () => {
 	});
 
 	const setup = (socketFlag = false) => {
-		if (socketFlag) {
-			const envs = envsFactory.build({
-				FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
-			});
-			envConfigModule.setEnvs(envs);
-		}
+		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: socketFlag });
 
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);

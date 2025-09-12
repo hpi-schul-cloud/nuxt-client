@@ -1,9 +1,10 @@
 import { AlertPayload } from "@/store/types/alert-payload";
 import { computed, Ref, ref, watch } from "vue";
-import { authModule, envConfigModule, notifierModule } from "@/store";
+import { authModule, notifierModule } from "@/store";
 import { useI18n } from "vue-i18n";
 import { $axios } from "@/utils/api";
 import { SessionStatus } from "./types";
+import { useEnvConfig } from "@data-env";
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();
@@ -17,7 +18,7 @@ export const useAutoLogout = () => {
 	let retry = 0;
 
 	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
-		envConfigModule.getEnv;
+		useEnvConfig().value;
 
 	const defaultRemainingTime = JWT_TIMEOUT_SECONDS || 2 * 60 * 60;
 	const DEFAULT_SHOW_WARNING_TIME =

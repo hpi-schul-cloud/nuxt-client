@@ -104,11 +104,11 @@
 </template>
 
 <script setup lang="ts">
-import { envConfigModule } from "@/store";
 import { computed, ComputedRef } from "vue";
+import { useEnvConfig } from "@data-env";
 
 const supportMail: ComputedRef<string> = computed(() => {
-	const email = envConfigModule.getContactEmail;
+	const email = useEnvConfig().value.SC_CONTACT_EMAIL;
 	const isValidMailAddress = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+$/gm.test(
 		email
 	);

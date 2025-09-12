@@ -1,7 +1,6 @@
 import { LanguageType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -9,11 +8,12 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import LanguageMenu from "./LanguageMenu.vue";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 describe("@ui-layout/LanguageMenu", () => {
 	const setup = (attrs = {}) => {
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getAvailableLanguages: [LanguageType.De, LanguageType.En],
+		createTestEnvStore({
+			I18N__AVAILABLE_LANGUAGES: [LanguageType.De, LanguageType.En],
 		});
 
 		const authModuleMock = createModuleMocks(AuthModule, {
@@ -25,13 +25,12 @@ describe("@ui-layout/LanguageMenu", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModuleMock,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 			...attrs,
 		});
 
-		return { wrapper, envConfigModuleMock, authModuleMock };
+		return { wrapper, authModuleMock };
 	};
 
 	beforeEach(() => {

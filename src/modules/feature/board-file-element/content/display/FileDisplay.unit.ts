@@ -1,8 +1,8 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { envsFactory, fileElementResponseFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import {
+	createTestEnvStore,
+	fileElementResponseFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -14,9 +14,14 @@ import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
+import { beforeAll } from "vitest";
 
 describe("FileDisplay", () => {
 	describe("when previewUrl is defined", () => {
+		beforeAll(() => {
+			createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
+		});
+
 		describe("when mimeType is not a video type", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
@@ -35,21 +40,10 @@ describe("FileDisplay", () => {
 					isEditMode: true,
 					showMenu: true,
 				};
-
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
-
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -99,21 +93,10 @@ describe("FileDisplay", () => {
 					isEditMode: true,
 					showMenu: true,
 				};
-
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
-
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -164,21 +147,10 @@ describe("FileDisplay", () => {
 					isEditMode: true,
 					showMenu: true,
 				};
-
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
-
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -224,20 +196,12 @@ describe("FileDisplay", () => {
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -285,20 +249,12 @@ describe("FileDisplay", () => {
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -345,20 +301,12 @@ describe("FileDisplay", () => {
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -380,7 +328,7 @@ describe("FileDisplay", () => {
 			});
 		});
 
-		describe("when mimeType is office type and collabora feaure enabled", () => {
+		describe("when mimeType is office type and collabora feature enabled", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
 				const props = {
@@ -400,20 +348,12 @@ describe("FileDisplay", () => {
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: true,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: true });
 
 				const wrapper = mount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -431,7 +371,7 @@ describe("FileDisplay", () => {
 			});
 		});
 
-		describe("when mimeType is office type and collabora feaure disabled", () => {
+		describe("when mimeType is office type and collabora feature disabled", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
 				const props = {
@@ -451,20 +391,12 @@ describe("FileDisplay", () => {
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
 
 				const wrapper = mount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -501,20 +433,12 @@ describe("FileDisplay", () => {
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 

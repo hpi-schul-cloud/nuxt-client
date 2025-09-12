@@ -1,7 +1,5 @@
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { envsFactory } from "@@/tests/test-utils";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -15,6 +13,7 @@ import {
 	VExpansionPanelTitle,
 } from "vuetify/lib/components/index";
 import LicenseListPage from "./LicenseList.page.vue";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 vi.mock("axios");
 const mockAxios = vi.mocked(axios, true);
@@ -32,21 +31,16 @@ mockAxios.get.mockResolvedValue({
 });
 
 describe("LicenseList Page", () => {
-	const envs = envsFactory.build({
-		LICENSE_SUMMARY_URL: "https://license-summary-url",
-	});
 	const notifierModule = createModuleMocks(NotifierModule);
+	const LICENSE_SUMMARY_URL = "https://license-summary-url";
 
 	const setup = () => {
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: { ...envs },
-		});
+		createTestEnvStore({ LICENSE_SUMMARY_URL });
 
 		const wrapper = mount(LicenseListPage, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
@@ -69,7 +63,7 @@ describe("LicenseList Page", () => {
 
 	it("should call the license summary url", () => {
 		setup();
-		expect(mockAxios.get).toHaveBeenCalledWith(envs.LICENSE_SUMMARY_URL);
+		expect(mockAxios.get).toHaveBeenCalledWith(LICENSE_SUMMARY_URL);
 	});
 
 	it("should display error notification on error", async () => {

@@ -1,16 +1,14 @@
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import * as useUserLoginMigrationMappingsComposable from "@/composables/user-login-migration-mappings.composable";
 import { ConfigResponse } from "@/serverApi/v3/api";
-import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import {
-	ENV_CONFIG_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { businessErrorFactory } from "@@/tests/test-utils";
+import { businessErrorFactory, createTestEnvStore } from "@@/tests/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
@@ -19,11 +17,11 @@ import {
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import type { Mocked } from "vitest";
+import { useEnvConfig } from "@data-env";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
 	let userLoginMigrationModule: Mocked<UserLoginMigrationModule>;
-	let envConfigModule: Mocked<EnvConfigModule>;
 
 	vi.spyOn(
 		useUserLoginMigrationMappingsComposable,
@@ -36,7 +34,7 @@ describe("AdminMigrationSection", () => {
 	const setup = (
 		schoolGetters: Partial<SchoolsModule> = {},
 		userLoginMigrationGetters: Partial<UserLoginMigrationModule> = {},
-		envConfigGetters: Partial<EnvConfigModule> = {}
+		envConfig?: Partial<ConfigResponse>
 	) => {
 		document.body.setAttribute("data-app", "true");
 
@@ -58,11 +56,10 @@ describe("AdminMigrationSection", () => {
 			...schoolGetters,
 		});
 
-		envConfigModule = createModuleMocks(EnvConfigModule, {
-			getAccessibilityReportEmail: "ticketsystem@niedersachsen.support",
-			getContactEmail: "ticketsystem@niedersachsen.support",
-			getEnv: {} as ConfigResponse,
-			...envConfigGetters,
+		createTestEnvStore({
+			ACCESSIBILITY_REPORT_EMAIL: "ticketsystem@niedersachsen.support",
+			SC_CONTACT_EMAIL: "ticketsystem@niedersachsen.support",
+			...envConfig,
 		});
 
 		const wrapper = mount(AdminMigrationSection, {
@@ -71,14 +68,12 @@ describe("AdminMigrationSection", () => {
 				provide: {
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
 		});
 
 		return {
 			wrapper,
-			envConfigModule,
 			schoolsModule,
 			userLoginMigrationModule,
 		};
@@ -92,7 +87,7 @@ describe("AdminMigrationSection", () => {
 	});
 
 	describe("supportLink", () => {
-		it("should return support link without schoolnumber in subject", async () => {
+		it("should return support link without schoolnumber in subject", () => {
 			const { wrapper } = setup({});
 
 			const linkText = wrapper.vm.supportLink;
@@ -100,12 +95,12 @@ describe("AdminMigrationSection", () => {
 			const subject = encodeURIComponent(
 				"Schule mit der Nummer: ??? soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!"
 			);
-			const expectedLink = `"mailto:${envConfigModule.getAccessibilityReportEmail}?subject=${subject}"`;
+			const expectedLink = `"mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${subject}"`;
 
 			expect(expectedLink).toContain(linkText);
 		});
 
-		it("should return support link with schoolnumber in subject", async () => {
+		it("should return support link with schoolnumber in subject", () => {
 			const { wrapper } = setup({
 				getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
 			});
@@ -115,7 +110,7 @@ describe("AdminMigrationSection", () => {
 			const subject = encodeURIComponent(
 				"Schule mit der Nummer: 12345 soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!"
 			);
-			const expectedLink = `"mailto:${envConfigModule.getAccessibilityReportEmail}?subject=${subject}"`;
+			const expectedLink = `"mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${subject}"`;
 
 			expect(expectedLink).toContain(linkText);
 		});
@@ -379,7 +374,7 @@ describe("AdminMigrationSection", () => {
 		});
 
 		describe("when an error occurs during migration start", () => {
-			it("should display an alert", async () => {
+			it("should display an alert", () => {
 				const { wrapper } = setup(
 					{
 						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
@@ -628,7 +623,7 @@ describe("AdminMigrationSection", () => {
 	});
 
 	describe("Date paragraph", () => {
-		it("should exist when migration has been completed", async () => {
+		it("should exist when migration has been completed", () => {
 			vi.useFakeTimers();
 			vi.setSystemTime(new Date(2023, 1, 2));
 			const { wrapper } = setup(
@@ -661,7 +656,7 @@ describe("AdminMigrationSection", () => {
 			expect(dateParagraph.text()).toBe(expectedText);
 		});
 
-		it("should show finalFinish text when migration grace period has expired", async () => {
+		it("should show finalFinish text when migration grace period has expired", () => {
 			vi.useFakeTimers();
 			vi.setSystemTime(new Date(2023, 1, 4));
 			const { wrapper } = setup(
@@ -692,7 +687,7 @@ describe("AdminMigrationSection", () => {
 			expect(paragraph.text()).toBe(expectedText);
 		});
 
-		it("should not exist when migration has not been completed", async () => {
+		it("should not exist when migration has not been completed", () => {
 			const { wrapper } = setup(
 				{
 					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
@@ -723,7 +718,7 @@ describe("AdminMigrationSection", () => {
 						{},
 						{},
 						{
-							getShowOutdatedUsers: false,
+							FEATURE_SHOW_OUTDATED_USERS: false,
 						}
 					);
 
@@ -745,7 +740,7 @@ describe("AdminMigrationSection", () => {
 						{},
 						{},
 						{
-							getShowOutdatedUsers: true,
+							FEATURE_SHOW_OUTDATED_USERS: true,
 						}
 					);
 
@@ -768,7 +763,7 @@ describe("AdminMigrationSection", () => {
 					{},
 					{},
 					{
-						getShowOutdatedUsers: true,
+						FEATURE_SHOW_OUTDATED_USERS: true,
 					}
 				);
 
@@ -798,7 +793,7 @@ describe("AdminMigrationSection", () => {
 						{},
 						{},
 						{
-							getEnableLdapSyncDuringMigration: false,
+							FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: false,
 						}
 					);
 
@@ -823,7 +818,7 @@ describe("AdminMigrationSection", () => {
 							},
 						},
 						{
-							getEnableLdapSyncDuringMigration: true,
+							FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
 						}
 					);
 
@@ -859,7 +854,7 @@ describe("AdminMigrationSection", () => {
 						},
 					},
 					{
-						getEnableLdapSyncDuringMigration: true,
+						FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
 					}
 				);
 
@@ -881,7 +876,7 @@ describe("AdminMigrationSection", () => {
 						getUserLoginMigration: undefined,
 					},
 					{
-						getEnableLdapSyncDuringMigration: true,
+						FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
 					}
 				);
 
@@ -911,7 +906,7 @@ describe("AdminMigrationSection", () => {
 						},
 					},
 					{
-						getEnableLdapSyncDuringMigration: true,
+						FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
 					}
 				);
 
@@ -924,7 +919,7 @@ describe("AdminMigrationSection", () => {
 		});
 
 		describe("when migration has not yet closed", () => {
-			it("should disable the switch", async () => {
+			it("should disable the switch", () => {
 				const { wrapper } = setup(
 					{
 						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
@@ -940,7 +935,7 @@ describe("AdminMigrationSection", () => {
 						},
 					},
 					{
-						getEnableLdapSyncDuringMigration: true,
+						FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
 					}
 				);
 
@@ -955,7 +950,7 @@ describe("AdminMigrationSection", () => {
 		});
 
 		describe("when clicking switch button", () => {
-			it("should call update in schoolsModule", async () => {
+			it("should call update in schoolsModule", () => {
 				const { wrapper, schoolsModule } = setup(
 					{
 						getSchool: {
@@ -974,7 +969,7 @@ describe("AdminMigrationSection", () => {
 						},
 					},
 					{
-						getEnableLdapSyncDuringMigration: true,
+						FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
 					}
 				);
 
@@ -1011,7 +1006,7 @@ describe("AdminMigrationSection", () => {
 							},
 						},
 						{
-							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as ConfigResponse,
+							FEATURE_SHOW_MIGRATION_WIZARD: true,
 						}
 					);
 
@@ -1019,7 +1014,7 @@ describe("AdminMigrationSection", () => {
 					expect(buttons[1].props("disabled")).toBeFalsy();
 				});
 
-				it("should redirect to the wizard", async () => {
+				it("should redirect to the wizard", () => {
 					const { wrapper } = setup(
 						{},
 						{
@@ -1033,7 +1028,7 @@ describe("AdminMigrationSection", () => {
 							},
 						},
 						{
-							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as ConfigResponse,
+							FEATURE_SHOW_MIGRATION_WIZARD: true,
 						}
 					);
 
@@ -1052,7 +1047,7 @@ describe("AdminMigrationSection", () => {
 							getUserLoginMigration: undefined,
 						},
 						{
-							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as ConfigResponse,
+							FEATURE_SHOW_MIGRATION_WIZARD: true,
 						}
 					);
 
@@ -1076,7 +1071,7 @@ describe("AdminMigrationSection", () => {
 							},
 						},
 						{
-							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as ConfigResponse,
+							FEATURE_SHOW_MIGRATION_WIZARD: true,
 						}
 					);
 
@@ -1107,7 +1102,7 @@ describe("AdminMigrationSection", () => {
 							},
 						},
 						{
-							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as ConfigResponse,
+							FEATURE_SHOW_MIGRATION_WIZARD: true,
 						}
 					);
 
@@ -1130,6 +1125,9 @@ describe("AdminMigrationSection", () => {
 							finishedAt: undefined,
 							mandatorySince: undefined,
 						},
+					},
+					{
+						FEATURE_SHOW_MIGRATION_WIZARD: false,
 					}
 				);
 

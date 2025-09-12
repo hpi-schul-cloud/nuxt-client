@@ -4,11 +4,9 @@ import {
 	PreviewWidth,
 } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { envsFactory } from "@@/tests/test-utils";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -30,6 +28,7 @@ import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import { FileProperties } from "./shared/types/file-properties";
 import FileUpload from "./upload/FileUpload.vue";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 vi.mock("@data-board");
 vi.mock("@feature-board");
@@ -53,13 +52,10 @@ describe("FileContentElement", () => {
 			alerts: computed(() => []),
 		});
 
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: {
-				...envsFactory.build(),
-				FEATURE_COLUMN_BOARD_COLLABORA_ENABLED:
-					props.isCollaboraEnabled ?? false,
-			},
+		createTestEnvStore({
+			FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: props.isCollaboraEnabled ?? false,
 		});
+
 		const notifierModule = createModuleMocks(NotifierModule);
 
 		const wrapper = shallowMount(FileContentElement, {
@@ -67,7 +63,6 @@ describe("FileContentElement", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 			props,

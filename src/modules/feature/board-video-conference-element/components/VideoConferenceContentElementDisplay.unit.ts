@@ -5,8 +5,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import EnvConfigModule from "@/store/env-config";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardFeatures } from "@data-board";
 import { BoardContextType } from "@/types/board/BoardContext";
 
@@ -44,10 +42,6 @@ const setupWrapper = ({
 };
 
 describe("VideoConferenceContentElementDisplay", () => {
-	beforeEach(() => {
-		setupStores({ envConfigModule: EnvConfigModule });
-	});
-
 	afterEach(() => {
 		vi.resetAllMocks();
 	});

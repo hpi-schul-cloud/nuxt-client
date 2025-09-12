@@ -162,9 +162,9 @@
 
 <script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
 import { mdiCheck } from "@icons/material";
 import { computed } from "vue";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	permissions: {
@@ -179,32 +179,31 @@ const props = defineProps({
 
 defineEmits(["update-privacy-settings", "update-feature-settings"]);
 
+const envConfig = useEnvConfig();
+
 const toggleStudentLernstoreViewEnabled = computed(
-	() =>
-		envConfigModule.getEnv.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED
+	() => envConfig.value.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED
 );
 
 const isTeacherStudentVisibilityConfigurable = computed(
-	() => envConfigModule.getEnv.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE
+	() => envConfig.value.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE
 );
 
 const isTeacherStudentVisibilityVisible = computed(
-	() => envConfigModule.getEnv.TEACHER_STUDENT_VISIBILITY__IS_VISIBLE
+	() => envConfig.value.TEACHER_STUDENT_VISIBILITY__IS_VISIBLE
 );
 
 const videoConferenceEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_VIDEOCONFERENCE_ENABLED
+	() => envConfig.value.FEATURE_VIDEOCONFERENCE_ENABLED
 );
 
-const aiTutorEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_AI_TUTOR_ENABLED
-);
+const aiTutorEnabled = computed(() => envConfig.value.FEATURE_AI_TUTOR_ENABLED);
 
 const rocketChatEnabled = computed(
-	() => envConfigModule.getEnv.ROCKETCHAT_SERVICE_ENABLED
+	() => envConfig.value.ROCKETCHAT_SERVICE_ENABLED
 );
 
-const theme = computed(() => envConfigModule.getTheme);
+const theme = computed(() => envConfig.value.SC_THEME);
 
 const studentVisibility = computed(() => {
 	if (isTeacherStudentVisibilityConfigurable.value) {
@@ -212,8 +211,7 @@ const studentVisibility = computed(() => {
 			? props.permissions.teacher.STUDENT_LIST
 			: false;
 	} else {
-		return envConfigModule.getEnv
-			.TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT;
+		return envConfig.value.TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT;
 	}
 });
 

@@ -16,8 +16,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { envConfigModule, filePathsModule } from "@/store";
+import { filePathsModule } from "@/store";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
 
 const { t } = useI18n();
 const theme = injectStrict(THEME_KEY);
@@ -45,24 +46,24 @@ const links = computed(() => {
 		{
 			href:
 				"mailto:" +
-				envConfigModule.getContactEmail +
+				useEnvConfig().value.SC_CONTACT_EMAIL +
 				"?subject=Niedersächsische%20Bildungscloud%20Anfrage",
 			text: t("components.legacy.footer.contact"),
 		},
 	];
-	if (envConfigModule.getEnv.ALERT_STATUS_URL) {
+	if (useEnvConfig().value.ALERT_STATUS_URL) {
 		linksArr.push({
-			href: envConfigModule.getEnv.ALERT_STATUS_URL,
+			href: useEnvConfig().value.ALERT_STATUS_URL as string,
 			text: t("components.legacy.footer.status"),
 			target: "_blank",
 			rel: "noopener",
 		});
 	}
-	if (envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL) {
+	if (useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL) {
 		linksArr.push({
 			href:
 				"mailto:" +
-				envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
+				useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL +
 				"?subject=" +
 				t("components.legacy.footer.accessibility.report"),
 			text: t("components.legacy.footer.accessibility.report"),

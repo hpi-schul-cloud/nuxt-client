@@ -1,19 +1,14 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 
+import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import {
-	ENV_CONFIG_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
-import {
-	envsFactory,
+	createTestEnvStore,
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
@@ -72,7 +67,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		vi.useFakeTimers();
 		setupStores({
 			authModule: AuthModule,
-			envConfigModule: EnvConfigModule,
 		});
 
 		useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
@@ -124,11 +118,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			roomBoards: [],
 			...options,
 		};
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envsFactory.build({
-				FEATURE_BOARD_LAYOUT_ENABLED: true,
-				...envs,
-			}),
+
+		createTestEnvStore({
+			FEATURE_BOARD_LAYOUT_ENABLED: true,
+			...envs,
 		});
 
 		const notifierModule = createModuleMocks(NotifierModule);
@@ -157,7 +150,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				],
 				stubs: { LeaveRoomProhibitedDialog: true, UseFocusTrap: true },
 				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				},

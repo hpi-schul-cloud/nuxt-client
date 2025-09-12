@@ -363,10 +363,6 @@ export default class TasksModule extends VuexModule {
 	}
 
 	private get taskApi(): TaskApiInterface {
-		return TaskApiFactory(
-			undefined,
-			"/v3", //`${envConfigModule.getApiUrl}/v3`,
-			$axios
-		);
+		return TaskApiFactory(undefined, "/v3", $axios);
 	}
 }

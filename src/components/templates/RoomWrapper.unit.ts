@@ -1,14 +1,12 @@
 import {
 	authModule,
 	commonCartridgeImportModule,
-	envConfigModule,
 	courseRoomListModule,
 } from "@/store";
 import AuthModule from "@/store/auth";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
-import EnvConfigModule from "@/store/env-config";
 import CourseRoomListModule from "@/store/course-room-list";
-import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -21,6 +19,7 @@ import DefaultWireframe from "./DefaultWireframe.vue";
 import RoomWrapper from "./RoomWrapper.vue";
 import { EmptyState } from "@ui-empty-state";
 import { CourseMetadataResponse } from "@/serverApi/v3";
+import { beforeAll } from "vitest";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -79,11 +78,17 @@ const mockData: CourseMetadataResponse[] = [
 ];
 
 describe("@templates/RoomWrapper.vue", () => {
+	beforeAll(() => {
+		createTestEnvStore({
+			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+			FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
+		});
+	});
+
 	beforeEach(() => {
 		setupStores({
 			courseRoomListModule: CourseRoomListModule,
 			authModule: AuthModule,
-			envConfigModule: EnvConfigModule,
 			commonCartridgeImportModule: CommonCartridgeImportModule,
 		});
 		courseRoomListModule.setAllElements(mockData);
@@ -105,7 +110,7 @@ describe("@templates/RoomWrapper.vue", () => {
 
 	describe("when data is loaded", () => {
 		describe("when data is empty", () => {
-			it("should display empty state", async () => {
+			it("should display empty state", () => {
 				const wrapper = getWrapper({
 					props: { hasRooms: false },
 				});
@@ -144,13 +149,7 @@ describe("@templates/RoomWrapper.vue", () => {
 		});
 
 		describe("when course synchronization is active", () => {
-			beforeEach(() => {
-				envConfigModule.setEnvs(
-					envsFactory.build({ FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true })
-				);
-			});
-
-			it("should have the course sync sub menu action", async () => {
+			it("should have the course sync sub menu action", () => {
 				const wrapper = getWrapper();
 
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
@@ -167,15 +166,7 @@ describe("@templates/RoomWrapper.vue", () => {
 		});
 
 		describe("when course synchronization is active", () => {
-			beforeEach(() => {
-				envConfigModule.setEnvs(
-					envsFactory.build({
-						FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
-					})
-				);
-			});
-
-			it("should have the common cartridge sub menu action", async () => {
+			it("should have the common cartridge sub menu action", () => {
 				const wrapper = getWrapper();
 
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
@@ -205,7 +196,7 @@ describe("@templates/RoomWrapper.vue", () => {
 	});
 
 	describe("when clicking on the course sync fab action", () => {
-		it("should open the course sync dialog", async () => {
+		it("should open the course sync dialog", () => {
 			const wrapper = getWrapper();
 
 			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
@@ -218,7 +209,7 @@ describe("@templates/RoomWrapper.vue", () => {
 	});
 
 	describe("when clicking on the common cartridge fab action", () => {
-		it("should open the common cartridge dialog", async () => {
+		it("should open the common cartridge dialog", () => {
 			const wrapper = getWrapper();
 
 			const defaultWireframe = wrapper.findComponent(DefaultWireframe);

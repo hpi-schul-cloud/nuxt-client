@@ -2,8 +2,6 @@ import TaskOverview from "./TaskOverview.page.vue";
 import { shallowMount } from "@vue/test-utils";
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
-import EnvConfigModule from "@/store/env-config";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 vi.mock(
@@ -34,9 +32,6 @@ describe("TaskOverview", () => {
 
 	beforeEach(() => {
 		vi.resetAllMocks();
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
 	});
 
 	it("should create component", () => {

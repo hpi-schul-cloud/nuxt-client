@@ -1,10 +1,10 @@
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useI18n } from "vue-i18n";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 vi.mock("vue-i18n", () => {
 	return {
@@ -19,22 +19,21 @@ const maxFileSize = 100;
 const mockI18nModule = vi.mocked(useI18n());
 
 const notifierModule = createModuleMocks(NotifierModule);
-const configModule = createModuleMocks(EnvConfigModule, {
-	getMaxFileSize: 100,
-});
 
 const setupMountComposable = () => {
 	return mountComposable(() => useFileStorageNotifier(), {
 		global: {
 			provide: {
 				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: configModule,
 			},
 		},
 	});
 };
 
 describe("FileStorageNotifier.composable", () => {
+	beforeAll(() => {
+		createTestEnvStore({}, { MAX_FILE_SIZE: 100 });
+	});
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});

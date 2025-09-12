@@ -1,11 +1,8 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { envsFactory, mockApiResponse } from "@@/tests/test-utils";
+import { mockApiResponse } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useCourseApi } from "./courseApi.composable";
 import { AxiosInstance } from "axios";
-import EnvConfigModule from "@/store/env-config";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 
 describe("courseApi.composable", () => {
@@ -62,19 +59,7 @@ describe("courseApi.composable", () => {
 
 	describe("deleteCourseById", () => {
 		describe("when calender service is not enabled", () => {
-			const setup = () => {
-				setupStores({ envConfigModule: EnvConfigModule });
-
-				const env = envsFactory.build({
-					CALENDAR_SERVICE_ENABLED: false,
-				});
-
-				envConfigModule.setEnvs(env);
-			};
-
 			it("should call the api to delete Course", async () => {
-				setup();
-
 				await useCourseApi().deleteCourseById("id");
 
 				expect(axiosMock.delete).toHaveBeenCalledWith("v1/courses/id");

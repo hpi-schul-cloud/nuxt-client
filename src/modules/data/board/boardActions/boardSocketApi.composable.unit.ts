@@ -1,14 +1,12 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { applicationErrorModule, envConfigModule } from "@/store";
+import { applicationErrorModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
-import EnvConfigModule from "@/store/env-config";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	boardResponseFactory,
 	cardResponseFactory,
 	columnResponseFactory,
-	envsFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -71,14 +69,8 @@ describe("useBoardSocketApi", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			applicationErrorModule: ApplicationErrorModule,
 		});
-
-		const envs = envsFactory.build({
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
-		});
-		envConfigModule.setEnvs(envs);
 
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);

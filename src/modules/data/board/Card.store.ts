@@ -4,7 +4,6 @@ import {
 	PreferredToolResponse,
 	ToolContextType,
 } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
@@ -24,6 +23,7 @@ import {
 } from "./cardActions/cardActionPayload.types";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { useEnvConfig } from "@data-env";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards: Ref<Record<string, CardResponse>> = ref({});
@@ -34,7 +34,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const restApi = useCardRestApi();
 	const isSocketEnabled =
-		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
+		useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 

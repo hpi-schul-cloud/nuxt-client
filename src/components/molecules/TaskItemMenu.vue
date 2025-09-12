@@ -111,7 +111,7 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { envConfigModule, finishedTasksModule } from "@/store";
+import { finishedTasksModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import {
 	mdiArchiveOutline,
@@ -123,6 +123,7 @@ import {
 } from "@icons/material";
 import { defineComponent } from "vue";
 import { KebabMenu } from "@ui-kebab-menu";
+import { useEnvConfig } from "@data-env";
 
 export default defineComponent({
 	components: { vCustomDialog, KebabMenu },
@@ -177,10 +178,10 @@ export default defineComponent({
 			return this.userRole === "teacher";
 		},
 		copyServiceEnabled() {
-			return envConfigModule?.getEnv.FEATURE_COPY_SERVICE_ENABLED;
+			return useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED;
 		},
 		shareTaskEnabled() {
-			return envConfigModule?.getEnv.FEATURE_TASK_SHARE;
+			return useEnvConfig().value.FEATURE_TASK_SHARE;
 		},
 		ariaLabel() {
 			// VUE3_UPGRADE we need a proper label here. was missing before.

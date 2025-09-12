@@ -1,7 +1,6 @@
 import type { Mock } from "vitest";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import ApplicationErrorModule from "@/store/application-error";
-import EnvConfigModule from "@/store/env-config";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
@@ -81,7 +80,6 @@ describe("BoardStore - moveCardSuccess", () => {
 	beforeEach(() => {
 		setActivePinia(createPinia());
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			applicationErrorModule: ApplicationErrorModule,
 		});
 

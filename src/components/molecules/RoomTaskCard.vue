@@ -95,7 +95,6 @@
 import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining.vue";
 import { fromNowToFuture, printDateFromStringUTC } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
 import { RenderHTML } from "@feature-render-html";
 import {
 	mdiContentCopy,
@@ -108,6 +107,7 @@ import {
 import { RoomDotMenu } from "@ui-room-details";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	task: {
@@ -306,7 +306,7 @@ const moreActionsMenuItems = computed(() => {
 			dataTestId: `room-task-card-menu-edit-${props.taskCardIndex}`,
 		});
 
-		if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
+		if (useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED) {
 			roleBasedMoreActions[Roles.Teacher].push({
 				icon: mdiContentCopy,
 				action: () => copyCard(),
@@ -315,7 +315,7 @@ const moreActionsMenuItems = computed(() => {
 			});
 		}
 
-		if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+		if (useEnvConfig().value.FEATURE_TASK_SHARE) {
 			roleBasedMoreActions[Roles.Teacher].push({
 				icon: mdiShareVariantOutline,
 				action: () => emit("share-task", props.task.id),

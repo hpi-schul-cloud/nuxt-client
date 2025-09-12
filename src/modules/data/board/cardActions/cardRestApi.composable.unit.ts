@@ -7,13 +7,11 @@ import {
 	RichTextElementResponse,
 	ToolContextType,
 } from "@/serverApi/v3";
-import { envConfigModule, schoolExternalToolsModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
+import { schoolExternalToolsModule } from "@/store";
 import { ToolParameterScope } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
 	contextExternalToolConfigurationTemplateFactory,
-	envsFactory,
 	externalToolElementResponseFactory,
 	mockedPiniaStoreTyping,
 	ObjectIdMock,
@@ -92,13 +90,8 @@ describe("useCardRestApi", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({}));
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			schoolExternalToolsModule: SchoolExternalToolsModule,
 		});
-		const envs = envsFactory.build({
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
-		});
-		envConfigModule.setEnvs(envs);
 
 		mockedSocketConnectionHandler =
 			createMock<ReturnType<typeof useSocketConnection>>();

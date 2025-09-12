@@ -165,7 +165,7 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { ENV_CONFIG_MODULE_KEY, injectStrict, THEME_KEY } from "@/utils/inject";
+import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	ProvisioningOptions,
@@ -176,6 +176,7 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useEnvConfig } from "@data-env";
 
 type Props = {
 	systemId: string;
@@ -230,9 +231,8 @@ const initialProvisioningOptions: Ref<ProvisioningOptions> = ref({
 	...provisioningOptionsData.value,
 });
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const isMediaLicensingEnabled =
-	envConfigModule.getEnv.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED;
+	useEnvConfig().value.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED;
 
 const wasOptionTurnedOff = (
 	provisioningOption: ProvisioningOptionsEnum

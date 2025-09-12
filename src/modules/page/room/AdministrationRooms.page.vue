@@ -38,7 +38,7 @@ import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRouter } from "vue-router";
-import { envConfigModule } from "@/store";
+import { useEnvConfig } from "@data-env";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -52,7 +52,7 @@ const { bottom: headerBottom } = useElementBounding(header);
 
 onMounted(async () => {
 	const isFeatureEnabled =
-		envConfigModule.getEnv.FEATURE_ADMINISTRATE_ROOMS_ENABLED;
+		useEnvConfig().value.FEATURE_ADMINISTRATE_ROOMS_ENABLED;
 
 	if (!isFeatureEnabled) {
 		window.location.replace("/dashboard");

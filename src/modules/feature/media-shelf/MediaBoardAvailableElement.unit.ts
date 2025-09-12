@@ -1,11 +1,10 @@
 import { ToolContextType } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { AlertPayload } from "@/store/types/alert-payload";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	businessErrorFactory,
-	envsFactory,
+	createTestEnvStore,
 	mediaAvailableLineElementResponseFactory,
 	mediaBoardResponseFactory,
 } from "@@/tests/test-utils";
@@ -37,8 +36,8 @@ describe("MediaBoardAvailableElement", () => {
 		props: ComponentProps<typeof MediaBoardAvailableElement>
 	) => {
 		const refreshTime = 299000;
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envsFactory.build({ CTL_TOOLS_RELOAD_TIME_MS: refreshTime }),
+		createTestEnvStore({
+			CTL_TOOLS_RELOAD_TIME_MS: refreshTime,
 		});
 		const notifierModule = createModuleMocks(NotifierModule);
 
@@ -49,7 +48,6 @@ describe("MediaBoardAvailableElement", () => {
 			global: {
 				plugins: [createTestingI18n()],
 				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},

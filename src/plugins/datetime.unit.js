@@ -22,13 +22,14 @@ import datetime, {
 	setDefaultTimezone,
 } from "@/plugins/datetime";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import setupStores from "../../tests/test-utils/setupStores";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -74,6 +75,10 @@ const localizedFormats = {
 setDefaultTimezone(TEST_DATETIME_TIMEZONE);
 
 describe("@/plugins/datetime", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const dateString = "2019-01-25T02:00:00.000Z";
 	const dateUTC = dayjs.tz(dateString, "UTC");
 	const dateLocalFromUTC = dateUTC.tz();
@@ -95,7 +100,7 @@ describe("@/plugins/datetime", () => {
 	const timeLocalString = dateLocal.format("HH:mm");
 
 	beforeEach(() => {
-		setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
+		setupStores({ authModule: AuthModule });
 	});
 
 	it("getUtcOffset", () => {

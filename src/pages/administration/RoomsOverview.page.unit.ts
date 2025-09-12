@@ -1,11 +1,10 @@
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	courseInfoDataResponseFactory,
-	envsFactory,
+	createTestEnvStore,
 } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -28,8 +27,6 @@ import {
 	CourseInfoDataResponse,
 	SchulcloudTheme,
 } from "@/serverApi/v3";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { envConfigModule } from "@/store";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
@@ -83,10 +80,10 @@ describe("RoomsOverview", () => {
 			getUserPermissions: ["COURSE_ADMINISTRATION".toLowerCase()],
 		});
 
-		envConfigModule.setEnvs({
+		createTestEnvStore({
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
 			...envs,
-		} as ConfigResponse);
+		});
 
 		const useCourseListMock: DeepMocked<ReturnType<typeof useCourseList>> =
 			createMock<ReturnType<typeof useCourseList>>({
@@ -104,7 +101,6 @@ describe("RoomsOverview", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 				stubs: {
 					StartExistingCourseSyncDialog: true,
@@ -134,12 +130,6 @@ describe("RoomsOverview", () => {
 			'[data-testid="admin-rooms-table"]'
 		);
 	};
-
-	beforeAll(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
-	});
 
 	beforeEach(() => {
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>({
@@ -204,7 +194,7 @@ describe("RoomsOverview", () => {
 				return { wrapper, useCourseListMock };
 			};
 
-			it("should display the entries in the table", async () => {
+			it("should display the entries in the table", () => {
 				const { useCourseListMock, wrapper } = setup();
 
 				const table = wrapper.findComponent<typeof VDataTableServer>(
@@ -558,7 +548,7 @@ describe("RoomsOverview", () => {
 				};
 			};
 
-			it("should redirect to legacy course edit page", async () => {
+			it("should redirect to legacy course edit page", () => {
 				const { wrapper, courseId } = setup();
 
 				const editBtn = wrapper.find('[data-testid="course-table-edit-btn"]');
@@ -938,11 +928,9 @@ describe("RoomsOverview", () => {
 		])(
 			"uses %s-instance specific text placeholders",
 			async (theme, expected) => {
-				const envs = envsFactory.build({
+				const { wrapper } = setup({
 					SC_THEME: theme,
 				});
-
-				const { wrapper } = setup(envs);
 
 				await nextTick();
 

@@ -132,7 +132,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { envConfigModule, notifierModule, schoolsModule } from "@/store";
+import { notifierModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@/components/molecules/AdminTableLegend";
@@ -157,6 +157,7 @@ import {
 import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
+import { useEnvConfig } from "@data-env";
 
 export default {
 	components: {
@@ -298,7 +299,7 @@ export default {
 			registrationLinks: "getRegistrationLinks",
 		}),
 		getFeatureUserLoginMigrationEnabled() {
-			return envConfigModule.getEnv.FEATURE_USER_LOGIN_MIGRATION_ENABLED;
+			return useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED;
 		},
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
@@ -343,16 +344,10 @@ export default {
 			];
 		},
 		isConsentNecessary() {
-			return (
-				envConfigModule.getEnv &&
-				envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY
-			);
+			return useEnvConfig().value.FEATURE_CONSENT_NECESSARY;
 		},
 		showConsent() {
-			return (
-				envConfigModule.getEnv &&
-				envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN
-			);
+			return useEnvConfig().value.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;

@@ -8,8 +8,9 @@ import {
 	ResourceProperties,
 	Resources,
 } from "./types/content";
-import setupStores from "@@/tests/test-utils/setupStores";
-import EnvConfigModule from "./env-config";
+import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const ESPath = "/v1/edu-sharing";
 const lessonsPath = "/v3/lessons/course";
@@ -87,6 +88,9 @@ const axiosInitializer = () => {
 };
 
 describe("content module", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 	beforeEach(() => {
 		requestPath = "";
 	});
@@ -394,8 +398,6 @@ describe("content module", () => {
 			expect(requestPath).toBe(`/v1/edu-sharing/${mockId}`);
 		});
 		it("init action calls initMutation mutation", () => {
-			setupStores({ envConfigModule: EnvConfigModule });
-
 			const contentModule = new ContentModule({});
 			const initSpy = vi.fn();
 

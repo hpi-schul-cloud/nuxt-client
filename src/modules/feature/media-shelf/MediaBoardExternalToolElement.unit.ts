@@ -1,11 +1,10 @@
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { AlertPayload } from "@/store/types/alert-payload";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	businessErrorFactory,
 	contextExternalToolConfigurationStatusFactory,
-	envsFactory,
+	createTestEnvStore,
 	externalToolDisplayDataFactory,
 	mediaExternalToolElementResponseFactory,
 } from "@@/tests/test-utils";
@@ -46,16 +45,13 @@ describe("MediaBoardExternalToolElement", () => {
 		props: ComponentProps<typeof MediaBoardExternalToolElement>
 	) => {
 		const refreshTime = 299000;
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envsFactory.build({ CTL_TOOLS_RELOAD_TIME_MS: refreshTime }),
-		});
+		createTestEnvStore({ CTL_TOOLS_RELOAD_TIME_MS: refreshTime });
 		const notifierModule = createModuleMocks(NotifierModule);
 
 		const wrapper = mount(MediaBoardExternalToolElement, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 				stubs: {

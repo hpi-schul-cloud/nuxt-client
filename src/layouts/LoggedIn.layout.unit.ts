@@ -1,16 +1,13 @@
 import { SchulcloudTheme } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import {
 	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
 	THEME_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -36,11 +33,6 @@ const setup = () => {
 		getUserPermissions: [],
 	});
 
-	const envConfigModule = createModuleMocks(EnvConfigModule, {
-		getEnv: envsFactory.build(),
-		getTheme: SchulcloudTheme.Brb,
-	});
-
 	const filePathsModule = createModuleMocks(FilePathsModule, {
 		getSpecificFiles: {
 			accessibilityStatement: "statement",
@@ -62,7 +54,6 @@ const setup = () => {
 			],
 			provide: {
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
 				[THEME_KEY.valueOf()]: {
 					name: SchulcloudTheme.N21,

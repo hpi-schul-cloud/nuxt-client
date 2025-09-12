@@ -1,16 +1,14 @@
-import { ConfigResponse, ExternalToolElementResponse } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
+import { ExternalToolElementResponse } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,
+	createTestEnvStore,
 	externalToolDisplayDataFactory,
 	externalToolElementResponseFactory,
 	ltiDeepLinkResponseFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -111,14 +109,11 @@ describe("ExternalToolElement", () => {
 		useExternalToolElementDisplayStateMock.displayData.value = displayData;
 
 		const refreshTime = 299000;
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as ConfigResponse,
-		});
+		createTestEnvStore({ CTL_TOOLS_RELOAD_TIME_MS: refreshTime });
 
 		const wrapper = shallowMount(ExternalToolElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock },
 				stubs: {
 					ContentElementBar: false,
 				},
@@ -901,7 +896,7 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should display an error alert", async () => {
+			it("should display an error alert", () => {
 				const { wrapper, error } = setup();
 
 				const alert = wrapper.findComponent(ExternalToolElementAlert);
@@ -933,7 +928,7 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should display an error alert", async () => {
+			it("should display an error alert", () => {
 				const { wrapper, error } = setup();
 
 				const alert = wrapper.findComponent(ExternalToolElementAlert);
@@ -964,7 +959,7 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should display a status alert", async () => {
+			it("should display a status alert", () => {
 				const { wrapper, status } = setup();
 
 				const alert = wrapper.findComponent(ExternalToolElementAlert);
@@ -1051,7 +1046,7 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should read that a tool needs to be selected", async () => {
+			it("should read that a tool needs to be selected", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.getComponent({ ref: "externalToolElement" });
@@ -1087,7 +1082,7 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should read the tool name and the tab it is started in", async () => {
+			it("should read the tool name and the tab it is started in", () => {
 				const { wrapper, toolName } = setup();
 
 				const card = wrapper.getComponent({ ref: "externalToolElement" });
@@ -1123,7 +1118,7 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should read the tool name and the tab it is started in", async () => {
+			it("should read the tool name and the tab it is started in", () => {
 				const { wrapper, toolName } = setup();
 
 				const card = wrapper.getComponent({ ref: "externalToolElement" });
@@ -1148,7 +1143,7 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should read that the tool is loading", async () => {
+			it("should read that the tool is loading", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.getComponent({ ref: "externalToolElement" });

@@ -52,7 +52,6 @@ import {
 	isPdfMimeType,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
@@ -61,6 +60,7 @@ import CollaboraDisplay from "./collabora-display/CollaboraDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	fileProperties: {
@@ -76,8 +76,6 @@ interface Emits {
 }
 const emit = defineEmits<Emits>();
 
-const envConfig = injectStrict(ENV_CONFIG_MODULE_KEY);
-
 const hasVideoMimeType = computed(() => {
 	return isVideoMimeType(props.fileProperties.mimeType);
 });
@@ -91,9 +89,9 @@ const hasCollaboraMimeType = computed(() => {
 	return props.fileProperties.isCollaboraEditable;
 });
 
-const isCollaboraEnabled = computed(() => {
-	return envConfig.getEnv.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED;
-});
+const isCollaboraEnabled = computed(
+	() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED
+);
 
 const onAddAlert = (alert: FileAlert) => {
 	emit("add:alert", alert);

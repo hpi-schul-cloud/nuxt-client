@@ -168,7 +168,7 @@
 </template>
 
 <script setup lang="ts">
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { authModule, schoolsModule } from "@/store";
 import { toBase64 } from "@/utils/fileHelper";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { useOpeningTagValidator } from "@/utils/validation";
@@ -182,6 +182,7 @@ import { School } from "@/store/types/schools";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { t } = useI18n();
@@ -193,7 +194,7 @@ const localSchool = ref<School>();
 const logoFile = ref<File | null>(null);
 
 const availableLanguages = computed(
-	() => envConfigModule.getAvailableLanguages
+	() => useEnvConfig().value.I18N__AVAILABLE_LANGUAGES
 );
 const federalState = computed(() => schoolsModule.getFederalState);
 const isSyncedSchool = computed(() => schoolsModule.schoolIsSynced);

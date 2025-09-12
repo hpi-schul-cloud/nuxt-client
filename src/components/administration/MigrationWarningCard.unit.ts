@@ -1,22 +1,21 @@
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { mount } from "@vue/test-utils";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { createPinia, setActivePinia } from "pinia";
 
 describe("MigrationWarningCard", () => {
+	beforeAll(() => {
+		setActivePinia(createPinia());
+	});
+
 	const setup = (value = "start") => {
 		document.body.setAttribute("data-app", "true");
 		const wrapper = mount(MigrationWarningCard, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: {
-						getMigrationEndGracePeriod: () => 86400000,
-					},
-				},
 			},
 			propsData: {
 				value,
@@ -36,7 +35,7 @@ describe("MigrationWarningCard", () => {
 
 	describe("when value is start", () => {
 		describe("when component is rendered", () => {
-			it("should have 2 buttons", async () => {
+			it("should have 2 buttons", () => {
 				const { wrapper } = setup();
 				const cardButtonAgree = wrapper.find("[data-testId=agree-btn]");
 				const cardButtonDisagree = wrapper.find("[data-testId=disagree-btn]");
@@ -91,7 +90,7 @@ describe("MigrationWarningCard", () => {
 
 	describe("when value is end", () => {
 		describe("when component is rendered", () => {
-			it("should have 2 buttons", async () => {
+			it("should have 2 buttons", () => {
 				const { wrapper } = setup("end");
 				const cardButtonAgree = wrapper.find("[data-testid=agree-btn]");
 				const cardButtonDisagree = wrapper.find("[data-testid=disagree-btn]");
@@ -100,7 +99,7 @@ describe("MigrationWarningCard", () => {
 				expect(cardButtonDisagree.exists()).toBe(true);
 			});
 
-			it("should have the right text elements ", async () => {
+			it("should have the right text elements ", () => {
 				const { wrapper } = setup("end");
 
 				const infoText = wrapper.find(

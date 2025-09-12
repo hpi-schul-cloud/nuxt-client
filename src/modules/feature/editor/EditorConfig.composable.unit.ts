@@ -1,41 +1,26 @@
-import { mountComposable } from "@@/tests/test-utils";
+import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { useEditorConfig } from "./EditorConfig.composable";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import EnvConfigModule from "@/store/env-config";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import type { Mocked } from "vitest";
+import { LanguageType } from "@/serverApi/v3";
 
 describe("useEditorConfig", () => {
 	const setup = () => {
-		const envConfigModule: Mocked<EnvConfigModule> = createModuleMocks(
-			EnvConfigModule,
-			{
-				getFallbackLanguage: "en",
-			}
-		);
+		createTestEnvStore({
+			// Using updating state instead of mocking store computed to do integration test.
+			I18N__FALLBACK_LANGUAGE: "en" as LanguageType,
+		});
 
 		const composable = mountComposable(() => useEditorConfig(), {
 			global: {
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-				},
 				plugins: [createTestingI18n()],
 			},
 		});
 
 		return {
 			composable,
-			envConfigModule,
 		};
 	};
-
-	it("should be defined", () => {
-		const { composable } = setup();
-
-		expect(composable).toBeDefined();
-	});
 
 	it("should set language correctly", () => {
 		const { composable } = setup();

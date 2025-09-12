@@ -38,7 +38,6 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
 	authModule,
 	commonCartridgeImportModule,
-	envConfigModule,
 	courseRoomListModule,
 } from "@/store";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
@@ -47,6 +46,7 @@ import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Fab, FabAction } from "./default-wireframe.types";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
+import { useEnvConfig } from "@data-env";
 
 enum RoomFabEvent {
 	COMMON_CARTRIDGE_IMPORT = "import",
@@ -80,7 +80,7 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 			},
 		];
 
-		if (envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED) {
+		if (useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED) {
 			actions.push({
 				icon: mdiSync,
 				label: t("pages.rooms.fab.add.syncedCourse"),
@@ -90,7 +90,7 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 			});
 		}
 
-		if (envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED) {
+		if (useEnvConfig().value.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED) {
 			actions.push({
 				icon: mdiImport,
 				label: t("pages.rooms.fab.import.course"),
