@@ -1,7 +1,7 @@
 <template>
 	<v-container class="d-flex flex-column" style="min-height: 30vh; width: 100%">
 		<v-card>
-			<v-card-title class="h3 mt-3">
+			<v-card-title :class="`h3 mt-3 ${isHomePage && 'text-wrap'}`">
 				{{ t("components.login.title") }}
 			</v-card-title>
 			<v-alert
@@ -438,7 +438,7 @@ import {
 	mdiEyeOutline,
 } from "@icons/material";
 import { uid } from "uid";
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useLogin } from "./login.composable";
@@ -513,6 +513,8 @@ const countdownNum = ref(0);
 const loginTimeoutSeconds = envConfigModule.getEnv.LOGIN_BLOCK_TIME;
 const isLoginTimeoutActive = ref(false);
 const redirectParam = ref(route.query.redirect?.toString() || null);
+
+const isHomePage = computed<boolean>(() => route.path === "/home");
 
 const emit = defineEmits<{
 	(e: "login-failed"): void;
