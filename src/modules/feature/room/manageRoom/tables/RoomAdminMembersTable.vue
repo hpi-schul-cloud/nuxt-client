@@ -11,8 +11,11 @@
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionChangePermission />
-			<KebabMenuActionRemoveMember />
+			<KebabMenuActionChangePermission
+				:disabled="selectedIds.length !== 1 || selectedIdsIncludeStudents"
+				@click="onChangePermission(selectedIds)"
+			/>
+			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
 		</template>
 		<template #[`item.displaySchoolRole`]="{ item }">
 			<span class="text-no-wrap">
@@ -30,15 +33,25 @@
 				:aria-label="getAriaLabel(item)"
 			>
 				<KebabMenuActionChangePermission
+					:disabled="checkIsStudent(item)"
 					:aria-label="getAriaLabel(item, 'changeRole')"
+					@click="onChangePermission([item.userId])"
 				/>
 				<KebabMenuActionRemoveMember
 					v-if="!isRoomOwner(item.userId)"
 					:aria-label="getAriaLabel(item, 'remove')"
+					@click="onRemoveMembers([item.userId])"
 				/>
 			</KebabMenu>
 		</template>
 	</DataTable>
+	<ChangeRole
+		v-model="isChangeRoleDialogOpen"
+		:members="membersToChangeRole"
+		:is-admin-mode="true"
+		@close="onDialogClose"
+	/>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -52,8 +65,13 @@ import { RoomMember, useRoomMembersStore } from "@data-room";
 import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import {
+	useConfirmationDialog,
+	ConfirmationDialog,
+} from "@ui-confirmation-dialog";
+import { ChangeRole } from "@feature-room";
 
 type Props = {
 	headerBottom?: number;
@@ -67,17 +85,37 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersForAdmins, selectedIds, baseTableHeaders } =
-	storeToRefs(roomMembersStore);
-const { isRoomOwner } = roomMembersStore;
+const {
+	roomMembersWithoutApplicants,
+	roomMembersForAdmins,
+	selectedIds,
+	baseTableHeaders,
+} = storeToRefs(roomMembersStore);
+const { isRoomOwner, removeMembers } = roomMembersStore;
+const { askConfirmation } = useConfirmationDialog();
+
+const isChangeRoleDialogOpen = ref(false);
+const membersToChangeRole = ref<RoomMember[]>([]);
 
 const tableData = computed(
 	() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]
 );
 
-const onUpdateSelectedIds = (ids: string[]) => {
-	selectedIds.value = ids;
+const checkIsStudent = (member?: RoomMember) => {
+	return member?.schoolRoleNames.some((role) =>
+		[RoleName.Student, RoleName.CourseStudent, RoleName.GuestStudent].includes(
+			role
+		)
+	);
 };
+
+const selectedIdsIncludeStudents = computed(() =>
+	selectedIds.value.some((id) =>
+		checkIsStudent(
+			roomMembersWithoutApplicants.value.find((member) => member.userId === id)
+		)
+	)
+);
 
 const getAriaLabel = (
 	member: RoomMember,
@@ -113,5 +151,41 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 		return mdiAccountOutline;
 	}
 	return undefined;
+};
+
+const confirmRemoval = async (userIds: string[]) => {
+	let message = t("pages.rooms.members.multipleRemove.confirmation");
+	if (userIds.length === 1) {
+		const memberFullName = roomMembersStore.getMemberFullName(userIds[0]);
+		message = t("pages.rooms.members.remove.confirmation", { memberFullName });
+	}
+	const shouldRemove = await askConfirmation({
+		message,
+		confirmActionLangKey: "common.actions.remove",
+	});
+	return shouldRemove;
+};
+
+const onRemoveMembers = async (ids: string[]) => {
+	const shouldRemove = await confirmRemoval(ids);
+	if (shouldRemove) await removeMembers(ids);
+};
+
+const onChangePermission = (ids: string[]) => {
+	membersToChangeRole.value = roomMembersWithoutApplicants.value.filter(
+		(member) => ids.includes(member.userId)
+	);
+
+	isChangeRoleDialogOpen.value = true;
+};
+
+const onUpdateSelectedIds = (ids: string[]) => {
+	selectedIds.value = ids;
+};
+
+const onDialogClose = () => {
+	membersToChangeRole.value = [];
+	selectedIds.value = [];
+	isChangeRoleDialogOpen.value = false;
 };
 </script>
