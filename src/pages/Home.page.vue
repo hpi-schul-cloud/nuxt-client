@@ -89,6 +89,6 @@ async function fetchBlogs() {
 }
 
 function redirectToLoginPageWithError() {
-	router.push({ path: "/login", query: { error: true } });
+	router.push({ path: "/login", query: { error: "true" } });
 }
 </script>
