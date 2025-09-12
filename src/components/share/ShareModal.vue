@@ -1,149 +1,84 @@
 <template>
-	<v-custom-dialog
-		:is-open="isOpen"
-		data-testid="share-dialog"
-		:size="480"
-		has-buttons
-		:buttons="isOpen ? actionButtons : []"
-		@dialog-closed="onCloseDialog"
-		@next="onNext()"
+	<v-dialog
+		v-model="isOpen"
+		data-testid="sharedialog"
+		max-width="480"
+		@after-leave="onCleanUp"
 	>
-		<template #title>
-			<div ref="textTitle" class="text-h4 my-2 text-break">
-				{{ modalTitle }}
-			</div>
-		</template>
-
-		<template #content>
-			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
-			<v-fade-transition>
-				<div v-if="step === 'firstStep' && isOpen">
-					<p data-testid="share-options-info-text">
-						{{ t(`components.molecules.share.${type}.options.infoText`) }}
-					</p>
-					<div
-						v-if="showAlertInfo"
-						class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
-					>
-						<div class="mx-2">
-							<v-icon color="info" :icon="mdiInformation" />
+		<v-card data-testid="copy-info-dialog">
+			<UseFocusTrap>
+				<v-card-title class="text-h4 my-2 text-break px-6 pt-4">
+					{{ modalTitle }}
+				</v-card-title>
+				<v-card-text class="pt-2 px-6">
+					<div v-if="step === 'firstStep'">
+						<p data-testid="share-options-info-text">
+							{{ t(`components.molecules.share.${type}.options.infoText`) }}
+						</p>
+						<div
+							v-if="showAlertInfo"
+							class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
+						>
+							<div class="mx-2">
+								<v-icon color="info" :icon="mdiInformation" />
+							</div>
+							<div data-testid="share-options-table-header">
+								{{
+									t("components.molecules.share.options.tableHeader.InfoText")
+								}}
+								<ul class="ml-6">
+									<li
+										v-for="bulletPoint in listItems"
+										:key="bulletPoint.translation"
+										:data-testid="bulletPoint.testId"
+									>
+										{{ t(bulletPoint.translation) }}
+									</li>
+								</ul>
+							</div>
 						</div>
-						<div data-testid="share-options-table-header">
-							{{ t("components.molecules.share.options.tableHeader.InfoText") }}
-							<ul class="ml-6">
-								<li
-									v-if="showCourseInfo"
-									data-testid="share-options-personal-data-text"
-								>
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.personalData"
-										)
-									}}
-								</li>
-								<li
-									v-if="showRoomInfo"
-									data-testid="share-options-room-memberships-data-text"
-								>
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData"
-										)
-									}}
-								</li>
-								<li v-if="showCourseInfo || showLessonInfo">
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.geogebra"
-										)
-									}}
-								</li>
-								<li
-									v-if="
-										showCourseInfo ||
-										showRoomInfo ||
-										showBoardInfo ||
-										showLessonInfo
-									"
-								>
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.etherpad"
-										)
-									}}
-								</li>
-								<li v-if="showCourseInfo || showRoomInfo || showBoardInfo">
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.whiteboard"
-										)
-									}}
-								</li>
-								<li
-									v-if="showCourseInfo || showRoomInfo || showBoardInfo"
-									data-testid="share-modal-external-tools-info"
-								>
-									{{
-										t(
-											"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
-										)
-									}}
-								</li>
-								<li
-									v-if="showCourseInfo || showRoomInfo || showBoardInfo"
-									data-testid="share-modal-external-tools-protected-parameter-info"
-								>
-									{{
-										t(
-											"components.molecules.shareImport.options.ctlTools.infoText.protected"
-										)
-									}}
-								</li>
-								<li
-									v-if="showCourseInfo"
-									data-testid="share-modal-coursefiles-info"
-								>
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
-										)
-									}}
-								</li>
-								<li v-if="showCourseInfo">
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.courseGroups"
-										)
-									}}
-								</li>
-							</ul>
-						</div>
+						<share-modal-options-form
+							:type="type"
+							@share-options-change="onShareOptionsChange"
+						/>
 					</div>
-					<share-modal-options-form
-						:type="type"
-						@share-options-change="onShareOptionsChange"
-					/>
-				</div>
 
-				<div v-if="step === 'secondStep' && isOpen">
-					<share-modal-result
-						:share-url="shareUrl"
-						:type="type"
-						@done="onDone"
-						@copied="onCopy"
-					/>
-				</div>
-			</v-fade-transition>
-		</template>
-	</v-custom-dialog>
+					<div v-else-if="step === 'secondStep'">
+						<share-modal-result
+							:share-url="shareUrl"
+							:type="type"
+							@done="onCloseDialogOrDone"
+							@copied="onCopy"
+						/>
+					</div>
+				</v-card-text>
+				<v-card-actions class="px-6 pb-4">
+					<v-spacer />
+					<template v-if="step === 'firstStep'">
+						<v-btn variant="text" @click="onCloseDialogOrDone">
+							{{ t("common.actions.cancel") }}
+						</v-btn>
+						<v-btn variant="flat" color="primary" @click="onNext">
+							{{ t("common.actions.continue") }}
+						</v-btn>
+					</template>
+					<template v-else-if="step === 'secondStep'">
+						<v-btn variant="flat" color="primary" @click="onCloseDialogOrDone">
+							{{ t("common.labels.close") }}
+						</v-btn>
+					</template>
+				</v-card-actions>
+			</UseFocusTrap>
+		</v-card>
+	</v-dialog>
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { ShareOptions } from "@/store/share";
+import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
@@ -152,14 +87,6 @@ import {
 import { mdiInformation } from "@icons/material";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
-
-type VDialogButtonActions =
-	| "back"
-	| "edit"
-	| "cancel"
-	| "confirm"
-	| "close"
-	| "next";
 
 const props = defineProps({
 	type: {
@@ -171,86 +98,111 @@ const props = defineProps({
 const { t } = useI18n();
 const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 const shareModule = injectStrict(SHARE_MODULE_KEY);
-const isOpen = computed({
-	get: () =>
-		shareModule.getIsShareModalOpen && shareModule.getParentType === props.type,
-	set: () => shareModule.resetShareFlow(),
-});
+const isOpen = computed(
+	() =>
+		shareModule.getIsShareModalOpen && shareModule.getParentType === props.type
+);
 
 type ShareModalStep = "firstStep" | "secondStep";
 
-const step = computed<ShareModalStep>(() =>
-	shareModule.getShareUrl === undefined ? "firstStep" : "secondStep"
-);
-
-const modalOptions: Record<
-	ShareModalStep,
-	{ title: string; actionButtons: VDialogButtonActions[] }
-> = {
-	firstStep: {
-		title: t("components.molecules.share.options.title"),
-		actionButtons: ["cancel", "next"],
-	},
-	secondStep: {
-		title: t("components.molecules.share.result.title"),
-		actionButtons: ["close"],
-	},
-};
-
+const step = ref<ShareModalStep>("firstStep");
 const shareUrl = computed(() => shareModule.getShareUrl ?? "");
-
-const actionButtons = computed(() => {
-	return modalOptions[step.value].actionButtons ?? [];
-});
-
 const shareOptions = ref<ShareOptions>();
 
-const modalTitle = computed(() => modalOptions[step.value].title ?? "");
+const modalTitle = computed(() =>
+	step.value === "firstStep"
+		? t("components.molecules.share.options.title")
+		: t("components.molecules.share.result.title")
+);
 
 const onShareOptionsChange = (newValue: ShareOptions) => {
-	shareOptions.value = newValue;
+	shareOptions.value = {
+		hasExpiryDate: newValue.hasExpiryDate,
+		isSchoolInternal: newValue.isSchoolInternal,
+	};
 };
-const onCloseDialog = () => {
+
+const onCloseDialogOrDone = () => {
 	shareModule.resetShareFlow();
 };
+
+const onCleanUp = () => {
+	step.value = "firstStep";
+	shareModule.resetShareFlow();
+};
+
 const onNext = () => {
+	// shareModule.createShareUrl({ isSchoolInternal: false, hasExpiryDate: false });
+	// but why is there no value available here yet?
 	if (shareOptions.value) {
 		shareModule.createShareUrl(shareOptions.value);
+		step.value = "secondStep";
 	}
 };
-const onDone = () => {
-	shareModule.resetShareFlow();
-};
+
 const onCopy = () => {
 	notifier.show({
 		text: t("common.words.copiedToClipboard"),
 		status: "success",
-		timeout: 5000,
 	});
 };
 
-const showAlertInfo = computed(() => {
-	return (
-		props.type === "courses" ||
-		props.type === "columnBoard" ||
-		props.type === "lessons" ||
-		props.type === "room"
-	);
-});
+const showAlertInfo = computed(() =>
+	["courses", "columnBoard", "lessons", "room"].includes(props.type)
+);
 
-const showCourseInfo = computed(() => {
-	return props.type === "courses";
-});
-
-const showBoardInfo = computed(() => {
-	return props.type === "columnBoard";
-});
-
-const showLessonInfo = computed(() => {
-	return props.type === "lessons";
-});
-
-const showRoomInfo = computed(() => {
-	return props.type === "room";
+const listItems = computed(() => {
+	return [
+		{
+			translation:
+				"components.molecules.shareImport.options.restrictions.infoText.personalData",
+			type: ["courses"],
+			testId: "share-options-personal-data-text",
+		},
+		{
+			translation:
+				"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData",
+			type: ["room"],
+			testId: "share-options-room-memberships-data-text",
+		},
+		{
+			translation:
+				"components.molecules.shareImport.options.restrictions.infoText.geogebra",
+			type: ["courses", "lessons"],
+		},
+		{
+			translation:
+				"components.molecules.shareImport.options.restrictions.infoText.etherpad",
+			type: ["courses", "room", "columnBoard", "lessons"],
+		},
+		{
+			translation:
+				"components.molecules.shareImport.options.restrictions.infoText.whiteboard",
+			type: ["courses", "room", "columnBoard"],
+		},
+		{
+			translation:
+				"components.molecules.shareImport.options.ctlTools.infoText.unavailable",
+			type: ["courses", "room", "columnBoard"],
+			testId: "share-modal-external-tools-info",
+		},
+		{
+			translation:
+				"components.molecules.shareImport.options.ctlTools.infoText.protected",
+			type: ["courses", "room", "columnBoard"],
+			testId: "share-modal-external-tools-protected-parameter-info",
+		},
+		{
+			translation:
+				"components.molecules.shareImport.options.restrictions.infoText.courseFiles",
+			type: ["courses"],
+			testId: "share-modal-coursefiles-info",
+		},
+		{
+			translation:
+				"components.molecules.shareImport.options.restrictions.infoText.courseGroups",
+			type: ["courses"],
+		},
+	].filter(({ type }) => type.includes(props.type));
 });
 </script>

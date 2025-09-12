@@ -114,7 +114,6 @@ const showFailureBackend = (name: string) => {
 			name,
 		}),
 		status: "error",
-		timeout: 5000,
 	});
 	closeModals();
 };
@@ -123,7 +122,6 @@ const showFailureInvalidToken = () => {
 	notifier.show({
 		text: t("components.molecules.import.options.failure.invalidToken"),
 		status: "error",
-		timeout: 5000,
 	});
 	closeModals();
 };
@@ -132,7 +130,6 @@ const showFailurePermission = () => {
 	notifier.show({
 		text: t("components.molecules.import.options.failure.permissionError"),
 		status: "error",
-		timeout: 5000,
 	});
 	closeModals();
 };

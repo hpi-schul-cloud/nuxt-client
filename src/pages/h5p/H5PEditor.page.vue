@@ -95,7 +95,6 @@ const save = async () => {
 			notifierModule.show({
 				text: t("pages.h5p.api.success.save"),
 				status: "success",
-				timeout: 5000,
 			});
 
 			notifyParent(
@@ -111,7 +110,6 @@ const save = async () => {
 			notifierModule.show({
 				text: t("common.validation.invalid"),
 				status: "error",
-				timeout: 5000,
 			});
 		}
 	}

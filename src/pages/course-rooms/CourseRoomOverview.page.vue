@@ -405,7 +405,6 @@ export default defineComponent({
 					name,
 				}),
 				status: "success",
-				timeout: 5000,
 			});
 		},
 		initCoursePolling(started, count = 0) {
@@ -420,7 +419,6 @@ export default defineComponent({
 							text: this.$t("components.molecules.copyResult.timeoutSuccess"),
 							status: "success",
 							autoClose: true,
-							timeout: 5000,
 						});
 					}
 				},
