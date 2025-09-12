@@ -67,7 +67,7 @@
 				</InfoAlert>
 
 				<InfoAlert
-					v-if="determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin"
+					v-else-if="determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin"
 					data-testid="student-admin-info-alert"
 				>
 					{{ t("pages.rooms.members.add.students.studentAdmins") }}
