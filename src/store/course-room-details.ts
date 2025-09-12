@@ -258,7 +258,13 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			form.submit();
 			document.body.removeChild(form);
 		} catch (error: unknown) {
-			this.setError(error);
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
+			});
 		}
 	}
 
