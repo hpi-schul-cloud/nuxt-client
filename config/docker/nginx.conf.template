@@ -2,7 +2,7 @@ server {
     listen 4000;
     server_name  localhost;
 
-    set $csp "default-src 'self'; base-uri 'self'; script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; connect-src 'self' ${LICENSE_SUMMARY_URL_FOR_CSP} ${GHOST_BASE_URL}; font-src 'self' data:; img-src 'self' data:; style-src 'self' 'unsafe-inline'; frame-src 'self' ${H5P_FRAME_SRC_URLS} ${COLLABORA_OFFICE_URL} https://docs.dbildungscloud.de/";
+    set $csp "default-src 'self'; base-uri 'self'; script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; connect-src 'self' ${LICENSE_SUMMARY_URL_FOR_CSP}; font-src 'self' data:; img-src 'self' data:; style-src 'self' 'unsafe-inline'; frame-src 'self' ${H5P_FRAME_SRC_URLS} ${COLLABORA_OFFICE_URL} https://docs.dbildungscloud.de/";
 
     set $h5pcsp "default-src 'self'; base-uri 'self'; script-src ${H5P_SCRIPT_SRC_URLS} 'unsafe-inline' https:; object-src 'none'; font-src 'self' data:; img-src 'self' ${H5P_IMG_SRC_URLS} data:; style-src 'self' 'unsafe-inline'; frame-src 'self' ${H5P_FRAME_SRC_URLS}";
 
