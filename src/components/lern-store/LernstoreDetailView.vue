@@ -498,13 +498,13 @@ $tablet-portrait-width: 768px;
 
 			.external-content-title {
 				margin-top: 16px;
-				font-weight: var(--font-weight-bold);
+				font-weight: bold;
 			}
 
 			.external-content-title-mobile {
 				display: none;
 				margin-top: 16px;
-				font-weight: var(--font-weight-bold);
+				font-weight: bold;
 			}
 		}
 
@@ -519,7 +519,7 @@ $tablet-portrait-width: 768px;
 
 		.author-provider {
 			font-size: var(--text-xs);
-			font-weight: var(--font-weight-bold);
+			font-weight: bold;
 		}
 
 		.description {
@@ -537,8 +537,8 @@ $tablet-portrait-width: 768px;
 			display: flex;
 			justify-content: space-between;
 			margin: 40px 0 12px 0;
-			font-size: var(--heading-5);
-			font-weight: var(--font-weight-bold);
+			font-size: var(--heading-3);
+			font-weight: bold;
 			line-height: var(--line-height-md);
 		}
 

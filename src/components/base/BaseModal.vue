@@ -10,7 +10,7 @@
 				<h2
 					v-if="$slots.header"
 					:id="`modal-${uid}-title`"
-					class="h4 modal-header"
+					class="modal-header"
 				>
 					<slot name="header" />
 				</h2>

@@ -93,7 +93,7 @@
 		@dialog-confirmed="handleDelete"
 	>
 		<template #title>
-			<h2 class="text-h4 my-2">
+			<h2 class="my-2">
 				{{ $t("components.molecules.TaskItemMenu.confirmDelete.title") }}
 			</h2>
 		</template>

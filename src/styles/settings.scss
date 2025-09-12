@@ -5,31 +5,43 @@
 	$typography: (
 		"h1": (
 			"size": var(--heading-1),
+			"line-height": 40px,
+			"letter-spacing": 0px,
 		),
 		"h2": (
 			"size": var(--heading-2),
+			"line-height": 33px,
+			"letter-spacing": 0px,
 		),
 		"h3": (
-			"size": 33px,
-			"line-height": 40px,
+			"size": var(--heading-3),
+			"line-height": 31px,
+			"letter-spacing": 0px,
 		),
 		"h4": (
 			"size": var(--heading-4),
+			"weight": 700,
+			"line-height": 30px,
+			"letter-spacing": 0px,
 		),
 		"h5": (
 			"size": var(--heading-5),
-			"weight": var(--font-weight-bold),
+			"weight": 700,
+			"line-height": 30px,
+			"letter-spacing": 0px,
 		),
 		"h6": (
 			"size": var(--heading-6),
-			"weight": var(--font-weight-bold),
+			"weight": 700,
+			"line-height": 30px,
+			"letter-spacing": 0px,
 		),
 	),
 
 	// v-btn
 	$button-font-size: 1rem,
 	$button-text-transform: none,
-	$button-font-weight: var(--font-weight-bold),
+	$button-font-weight: 700,
 	$button-text-letter-spacing: 0.044em,
 
 	// card

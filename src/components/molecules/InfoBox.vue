@@ -1,7 +1,7 @@
 <template>
 	<div v-if="active" class="wrapper">
 		<div class="content">
-			<h4>
+			<h4 class="text-h2">
 				<slot name="header" />
 			</h4>
 			<p class="body">

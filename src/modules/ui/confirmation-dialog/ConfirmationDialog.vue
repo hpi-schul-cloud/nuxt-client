@@ -7,7 +7,7 @@
 		<UseFocusTrap>
 			<VCard>
 				<template #title>
-					<h2 class="text-h4 ma-2 dialog-title" data-testid="dialog-title">
+					<h2 class="ma-2 dialog-title" data-testid="dialog-title">
 						{{ message }}
 					</h2>
 				</template>

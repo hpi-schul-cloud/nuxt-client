@@ -100,18 +100,6 @@ const links = computed(() => {
 	text-align: center;
 }
 
-.top-line {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	.hpi-logo {
-		display: block;
-		height: var(--heading-3);
-		margin: 0;
-	}
-}
-
 .bottom-line {
 	margin-top: 8px;
 

@@ -6,12 +6,12 @@
 			</div>
 		</template>
 		<template #title>
-			<p class="text-h4 mt-8" data-testid="empty-state-title">
+			<p class="text-h2 mt-8" data-testid="empty-state-title">
 				{{ title }}
 			</p>
 		</template>
 		<template #text>
-			<span class="text">
+			<span class="text-body-1">
 				<slot name="text" />
 			</span>
 		</template>
@@ -26,8 +26,3 @@ defineProps({
 	},
 });
 </script>
-<style scoped lang="scss">
-.text {
-	font-size: var(--text-base-size);
-}
-</style>

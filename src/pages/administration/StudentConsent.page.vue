@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe ref="main" max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="mb-4 h3">
+			<h1>
 				{{ title }}
 			</h1>
 			<i18n-t
@@ -38,9 +38,9 @@
 			</div>
 
 			<section v-if="currentStep === 0">
-				<h4>
+				<h2>
 					{{ $t("pages.administration.students.consent.steps.complete") }}
-				</h4>
+				</h2>
 				{{ $t("pages.administration.students.consent.steps.complete.info") }}
 
 				<backend-data-table
@@ -109,9 +109,9 @@
 			</section>
 
 			<section v-if="currentStep === 1">
-				<h4>
+				<h2>
 					{{ $t("pages.administration.students.consent.steps.register") }}
-				</h4>
+				</h2>
 				<p v-if="isConsentNecessary">
 					{{ $t("pages.administration.students.consent.steps.register.info") }}
 				</p>
@@ -183,9 +183,9 @@
 			</section>
 
 			<section v-if="currentStep === 2">
-				<h4>
+				<h2>
 					{{ $t("pages.administration.students.consent.steps.download") }}
-				</h4>
+				</h2>
 				{{ $t("pages.administration.students.consent.steps.download.info") }}
 				<backend-data-table
 					v-model:sort-by="sortBy"
@@ -218,9 +218,9 @@
 			</section>
 
 			<section v-if="currentStep === 3">
-				<h4 class="centered">
+				<h2 class="centered">
 					{{ successMessage }}
-				</h4>
+				</h2>
 				<img
 					class="success-image mb-4"
 					:src="image"
@@ -292,7 +292,7 @@
 
 			<div hidden>
 				<div id="tableStudentsForPrint">
-					<h3 class="print-title">
+					<h3 class="text-h1">
 						{{ $t("pages.administration.students.consent.print.title") }}
 					</h3>
 					<p>

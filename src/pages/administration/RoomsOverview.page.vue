@@ -6,7 +6,7 @@
 		data-testid="admin-course-title"
 	>
 		<template #header>
-			<h1 class="text-h3 pl-2">
+			<h1 class="pl-2">
 				{{ t("pages.administration.rooms.index.title") }}
 			</h1>
 			<div class="mt-n6 mb-n3">
@@ -146,7 +146,7 @@
 			@dialog-confirmed="onConfirmCourseDeletion"
 		>
 			<template #title>
-				<h2 class="text-h4 my-2">
+				<h2 class="my-2">
 					{{ t("pages.administration.courses.delete") }}
 				</h2>
 			</template>
