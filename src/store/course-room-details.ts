@@ -331,7 +331,6 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			HttpStatusCode.NotFound,
 			HttpStatusCode.RequestTimeout,
 			HttpStatusCode.InternalServerError,
-			HttpStatusCode.BadGateway,
 		];
 		if (error === null) {
 			applicationErrorModule.resetError();
