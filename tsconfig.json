@@ -71,6 +71,7 @@
 			"@icons/*": ["src/components/icons/*"],
 			"@ui-alert": ["src/modules/ui/alert"],
 			"@ui-audio-player": ["src/modules/ui/audio-player"],
+			"@ui-blog": ["src/modules/ui/blog"],
 			"@ui-board": ["src/modules/ui/board"],
 			"@ui-breadcrumbs": ["src/modules/ui/breadcrumbs"],
 			"@ui-chip": ["src/modules/ui/chip"],
