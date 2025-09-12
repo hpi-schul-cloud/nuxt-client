@@ -28,23 +28,26 @@
 
 		<v-col cols="4">
 			<aside>
-				<Login class="pa-0" />
+				<Login class="pa-0" @login-failed="redirectToLoginPageWithError()" />
 			</aside>
 		</v-col>
 	</v-row>
 </template>
 
 <script setup lang="ts">
+import { useBlogApi } from "@data-blog";
 import { Login } from "@feature-login";
 import { Blog } from "@ui-blog";
 import { envConfigModule } from "@/store";
 import { onMounted, ref } from "vue";
-import { BlogFeedData, useBlogApi } from "@data-blog";
+import { useRouter } from "vue-router";
+import { BlogFeedDataResponse } from "@/serverApi/v3";
 
 const { fetchBlogFeedData } = useBlogApi();
+const router = useRouter();
 
 // State
-const blogFeed = ref<BlogFeedData[]>([]);
+const blogFeed = ref<BlogFeedDataResponse[]>([]);
 const blogLoading = ref<boolean>(true);
 const globalAnnouncement = ref<string | null>(null);
 const ghostBaseUrl = ref<string>("");

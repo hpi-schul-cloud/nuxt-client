@@ -1,30 +1,5 @@
-import axios from "axios";
-import { XMLParser } from "fast-xml-parser";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-
-type BlogFeedResponseChannelItem = {
-	title: string;
-	pubDate: string;
-	description: string;
-	"media:content"?: { "@_url": string };
-	link?: string;
-};
-
-type BlogFeedResponse = {
-	rss: {
-		channel: { item: BlogFeedResponseChannelItem[] };
-	};
-};
-
-export type BlogFeedData = BlogFeedResponseChannelItem & {
-	description: string;
-	url: string;
-	img: {
-		src: string;
-		alt: string;
-	};
-};
+import { BlogApiFactory, BlogFeedDataResponse } from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
 
 const stripHTML = (html: string) => {
 	const tempDiv = document.createElement("div");
@@ -33,44 +8,20 @@ const stripHTML = (html: string) => {
 };
 
 export const useBlogApi = () => {
-	const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+	const blogApi = BlogApiFactory(undefined, "/v3", $axios);
 
-	const fetchBlogFeedData = async (): Promise<BlogFeedData[]> => {
-		const blogFeedUrl = new URL("/rss", envConfigModule.getGhostBaseUrl);
+	const fetchBlogFeedData = async (): Promise<BlogFeedDataResponse[]> => {
+		const response = await blogApi.blogControllerFetchBlogFeed();
 
-		const response = await axios.get<string>(blogFeedUrl.href, {
-			timeout: 2000,
+		/*
+		 FIXME: this should be done in the backend, but I cannot find an elegant solution to both strip html and decode
+		 the double encoded characters gotten from the blog sites, putting in the the "document" decodes them properly
+		 */
+		response.data.blogFeed.forEach((feedData) => {
+			feedData.description = stripHTML(feedData.description);
 		});
 
-		const parser = new XMLParser({
-			ignoreAttributes: false,
-			attributeNamePrefix: "@_",
-		});
-		const parsedResponse: BlogFeedResponse = parser.parse(response.data);
-
-		const blogFeed = parsedResponse.rss.channel.item
-			.filter((item) => item["media:content"] !== undefined && item.link)
-			.slice(0, 3)
-			.map((e) => {
-				const date = new Date(e.pubDate);
-				const locale = "en-us";
-				const month = date.toLocaleString(locale, { month: "long" });
-
-				const feedData: BlogFeedData = {
-					...e,
-					pubDate: `${date.getDate()}. ${month}`,
-					description: stripHTML(e.description),
-					url: e.link as string,
-					img: {
-						src: e["media:content"]?.["@_url"] as string,
-						alt: e.title,
-					},
-				};
-
-				return feedData;
-			});
-
-		return blogFeed;
+		return response.data.blogFeed;
 	};
 
 	return {

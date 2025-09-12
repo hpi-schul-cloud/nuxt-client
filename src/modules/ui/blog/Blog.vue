@@ -28,15 +28,16 @@
 					class="pa-1 ma-3 max-w-40"
 				>
 					<a
-						:href="article.url"
+						:href="article.redirectUrl"
 						class="blog-card-wrapper"
 						target="_blank"
 						rel="noopener"
 					>
 						<v-card class="blog-card" hover>
 							<v-img
-								v-if="article.img && article.img.src"
-								:src="article.img.src"
+								v-if="article.image && article.image.url"
+								:src="article.image.url"
+								:alt="article.image.alt"
 								class="thumbnail"
 								height="180"
 								cover
@@ -85,11 +86,11 @@
 </template>
 
 <script setup lang="ts">
-import { BlogFeedData } from "@data-blog";
+import { BlogFeedDataResponse } from "@/serverApi/v3";
 
 const props = defineProps<{
 	loading: boolean;
-	blogFeedList: BlogFeedData[];
+	blogFeedList: BlogFeedDataResponse[];
 }>();
 
 const emit = defineEmits<{
@@ -109,8 +110,6 @@ function truncatePure(text: string, length: number): string {
 	const subString = text.substr(0, length - 1);
 	return `${subString}...`;
 }
-
-function fetchBlogs() {}
 </script>
 
 <style scoped>

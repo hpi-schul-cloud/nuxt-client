@@ -517,6 +517,75 @@ export interface BasicToolConfigParams {
 /**
  * 
  * @export
+ * @interface BlogFeedDataResponse
+ */
+export interface BlogFeedDataResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof BlogFeedDataResponse
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BlogFeedDataResponse
+     */
+    pubDate: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BlogFeedDataResponse
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BlogFeedDataResponse
+     */
+    redirectUrl: string;
+    /**
+     * 
+     * @type {BlogFeedImageResponse}
+     * @memberof BlogFeedDataResponse
+     */
+    image: BlogFeedImageResponse;
+}
+/**
+ * 
+ * @export
+ * @interface BlogFeedImageResponse
+ */
+export interface BlogFeedImageResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof BlogFeedImageResponse
+     */
+    url: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BlogFeedImageResponse
+     */
+    alt: string;
+}
+/**
+ * 
+ * @export
+ * @interface BlogFeedResponse
+ */
+export interface BlogFeedResponse {
+    /**
+     * 
+     * @type {Array<BlogFeedDataResponse>}
+     * @memberof BlogFeedResponse
+     */
+    blogFeed: Array<BlogFeedDataResponse>;
+}
+/**
+ * 
+ * @export
  * @interface BoardColumnBoardResponse
  */
 export interface BoardColumnBoardResponse {
@@ -13580,6 +13649,121 @@ export class AuthorizationApi extends BaseAPI implements AuthorizationApiInterfa
      */
     public authorizationReferenceControllerResolveToken(token: string, tokenTtlInSeconds: number, options?: any) {
         return AuthorizationApiFp(this.configuration).authorizationReferenceControllerResolveToken(token, tokenTtlInSeconds, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * BlogApi - axios parameter creator
+ * @export
+ */
+export const BlogApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Returns data for the blog feed to be shown in the home page.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        blogControllerFetchBlogFeed: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/blog/feed`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BlogApi - functional programming interface
+ * @export
+ */
+export const BlogApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BlogApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns data for the blog feed to be shown in the home page.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async blogControllerFetchBlogFeed(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BlogFeedResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.blogControllerFetchBlogFeed(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * BlogApi - factory interface
+ * @export
+ */
+export const BlogApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BlogApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns data for the blog feed to be shown in the home page.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        blogControllerFetchBlogFeed(options?: any): AxiosPromise<BlogFeedResponse> {
+            return localVarFp.blogControllerFetchBlogFeed(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * BlogApi - interface
+ * @export
+ * @interface BlogApi
+ */
+export interface BlogApiInterface {
+    /**
+     * 
+     * @summary Returns data for the blog feed to be shown in the home page.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BlogApiInterface
+     */
+    blogControllerFetchBlogFeed(options?: any): AxiosPromise<BlogFeedResponse>;
+
+}
+
+/**
+ * BlogApi - object-oriented interface
+ * @export
+ * @class BlogApi
+ * @extends {BaseAPI}
+ */
+export class BlogApi extends BaseAPI implements BlogApiInterface {
+    /**
+     * 
+     * @summary Returns data for the blog feed to be shown in the home page.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BlogApi
+     */
+    public blogControllerFetchBlogFeed(options?: any) {
+        return BlogApiFp(this.configuration).blogControllerFetchBlogFeed(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
