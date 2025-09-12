@@ -48,12 +48,8 @@
 					:key="system.id"
 					class="login-providers mb-4"
 				>
-					<!-- some href, i dont know if that makes sense
-					<a
-						:href="`/auth/oauth2/authorize/${system.id}?redirect=${system.oauthConfig?.redirectUri}`"
-					>-->
 					<v-btn
-						class="btn-cloud"
+						class="btn-oauth"
 						color="tertiary"
 						block
 						variant="outlined"
@@ -427,7 +423,6 @@
 </template>
 
 <script setup lang="ts">
-import { useLogin } from "./login.composable";
 import router from "@/router";
 import {
 	OauthConfigResponse,
@@ -442,12 +437,11 @@ import {
 	mdiEyeOffOutline,
 	mdiEyeOutline,
 } from "@icons/material";
+import { uid } from "uid";
 import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { red } from "vuetify/util/colors";
-import { uid} from 'uid';
-//TODO: implement in composable or import (compare how alerting works here, notifiermodule?)
+import { useLogin } from "./login.composable";
 
 // Vuetify typenames
 type AlertType = "info" | "success" | "warning" | "error";
@@ -630,32 +624,44 @@ watch(
 	}
 );
 
-const getAuthenticationUrl = (oauthConfig: OauthConfigResponse, redirect_uri: string, state: string, migration: string, loginHint: string) => {
-    const authenticationUrl = new URL(oauthConfig.authEndpoint);
+const getAuthenticationUrl = (
+	oauthConfig: OauthConfigResponse,
+	redirect_uri: string,
+	state: string,
+	migration: string,
+	loginHint: string
+) => {
+	const authenticationUrl = new URL(oauthConfig.authEndpoint);
 
-    authenticationUrl.searchParams.append('client_id', oauthConfig.clientId);
-    authenticationUrl.searchParams.append('redirect_uri', redirect_uri);
-    authenticationUrl.searchParams.append('response_type', oauthConfig.responseType);
-    authenticationUrl.searchParams.append('scope', oauthConfig.scope);
-    authenticationUrl.searchParams.append('state', state);
+	authenticationUrl.searchParams.append("client_id", oauthConfig.clientId);
+	authenticationUrl.searchParams.append("redirect_uri", redirect_uri);
+	authenticationUrl.searchParams.append(
+		"response_type",
+		oauthConfig.responseType
+	);
+	authenticationUrl.searchParams.append("scope", oauthConfig.scope);
+	authenticationUrl.searchParams.append("state", state);
 
-    if (loginHint) {
-       authenticationUrl.searchParams.append('login_hint', loginHint);
-    }
+	if (loginHint) {
+		authenticationUrl.searchParams.append("login_hint", loginHint);
+	}
 
-    if (migration) {
-       authenticationUrl.searchParams.append('prompt', 'login');
-    }
+	if (migration) {
+		authenticationUrl.searchParams.append("prompt", "login");
+	}
 
-    if (oauthConfig.idpHint) {
-       authenticationUrl.searchParams.append('kc_idp_hint', oauthConfig.idpHint);
-    }
+	if (oauthConfig.idpHint) {
+		authenticationUrl.searchParams.append("kc_idp_hint", oauthConfig.idpHint);
+	}
 
-    return authenticationUrl.toString();
+	return authenticationUrl.toString();
 };
 
 function redirectToOauthSystem(system: PublicSystemResponse) {
-	const redirect_uri = new URL('/login/oauth2-callback', envConfigModule.getEnv.HOST).toString();
+	const redirect_uri = new URL(
+		"/login/oauth2-callback",
+		envConfigModule.getEnv.HOST
+	).toString();
 	const state = uid();
 	const authUrl = getAuthenticationUrl(
 		system.oauthConfig!,
@@ -714,17 +720,21 @@ function getMockPublicSystems() {
 					clientId: "75dc8a3cf5d54121b2e8436ca39157d6",
 					redirectUri: "",
 					grantType: "authorization_code",
-					tokenEndpoint: "https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/token",
-					authEndpoint: "https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/auth",
+					tokenEndpoint:
+						"https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/token",
+					authEndpoint:
+						"https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/auth",
 					responseType: "code",
 					scope: "openid",
 					provider: "sanis",
 					issuer: "https://auth.stage.niedersachsen-login.schule/realms/SANIS",
-					jwksEndpoint: "https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/certs",
-					endSessionEndpoint: "https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/logout",
+					jwksEndpoint:
+						"https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/certs",
+					endSessionEndpoint:
+						"https://auth.stage.niedersachsen-login.schule/realms/SANIS/protocol/openid-connect/logout",
 					idpHint: null,
-					logoutEndpoint: undefined
-				}
+					logoutEndpoint: undefined,
+				},
 			},
 		],
 	};
@@ -969,5 +979,4 @@ async function submitPwRecovery() {
 		}
 	}
 }
-
 </script>
