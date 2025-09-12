@@ -4,6 +4,7 @@
 		max-width="480"
 		data-testid="video-conference-config-dialog"
 		@keydown.esc="$emit('close')"
+		@click:outside="$emit('close')"
 	>
 		<UseFocusTrap>
 			<VCard :ripple="false">
