@@ -327,7 +327,8 @@ onUnmounted(() => {
 
 watch(
 	() => route.hash,
-	() => focusNodeFromHash()
+	() => focusNodeFromHash(),
+	{ immediate: true }
 );
 
 watch([isBoardVisible, arePermissionsLoaded], () => {

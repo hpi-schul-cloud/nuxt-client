@@ -233,6 +233,7 @@ describe("useCardSocketApi", () => {
 					},
 					features: [],
 					permissions: [],
+					readersCanEdit: false,
 				};
 				const { dispatch } = useCardSocketApi();
 				return { dispatch, boardStore };

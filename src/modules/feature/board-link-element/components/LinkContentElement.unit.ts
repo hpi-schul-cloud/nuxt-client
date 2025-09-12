@@ -82,6 +82,8 @@ describe("LinkContentElement", () => {
 		vi.mocked(usePreviewGenerator).mockReturnValue(usePreviewGeneratorMock);
 
 		defaultElement = linkElementResponseFactory.build();
+		vi.useFakeTimers();
+		vi.clearAllMocks();
 	});
 
 	afterEach(() => {
@@ -420,6 +422,7 @@ describe("LinkContentElement", () => {
 					);
 
 					await linkElement.trigger("click");
+					vi.runAllTimers();
 
 					expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({
 						block: "center",

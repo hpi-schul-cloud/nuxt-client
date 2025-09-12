@@ -128,6 +128,8 @@ describe("Board", () => {
 	const hash = "";
 
 	beforeEach(() => {
+		vi.useFakeTimers();
+		vi.clearAllMocks();
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
@@ -415,6 +417,8 @@ describe("Board", () => {
 
 			it("should scroll to and focus the element", async () => {
 				const { domElementMock } = setup2();
+
+				await vi.runAllTimers();
 
 				await nextTick();
 
