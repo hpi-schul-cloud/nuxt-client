@@ -59,7 +59,7 @@
 						variant="outlined"
 						@click="redirectToOauthSystem(system)"
 					>
-						{{ system.displayName }}
+						Login über {{ system.displayName }}
 					</v-btn>
 				</div>
 			</v-card>
