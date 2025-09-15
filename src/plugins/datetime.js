@@ -6,8 +6,8 @@ import "dayjs/locale/uk";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
-import { useEnvConfig } from "@data-env"; // dependent on utc plugin
+import utc from "dayjs/plugin/utc"; // dependent on utc plugin
+import { useEnvConfig } from "@data-env";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
