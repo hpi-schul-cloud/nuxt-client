@@ -91,7 +91,7 @@ const {
 	selectedIds,
 	baseTableHeaders,
 } = storeToRefs(roomMembersStore);
-const { isRoomOwner, removeMembers } = roomMembersStore;
+const { isRoomOwner, removeMembers, fetchMembers } = roomMembersStore;
 const { askConfirmation } = useConfirmationDialog();
 
 const isChangeRoleDialogOpen = ref(false);
@@ -184,6 +184,7 @@ const onUpdateSelectedIds = (ids: string[]) => {
 };
 
 const onDialogClose = () => {
+	fetchMembers();
 	membersToChangeRole.value = [];
 	selectedIds.value = [];
 	isChangeRoleDialogOpen.value = false;
