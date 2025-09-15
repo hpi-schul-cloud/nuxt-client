@@ -147,6 +147,26 @@ describe("useEnvStore", () => {
 	});
 
 	describe("loadConfiguration", () => {
+		it("should request, process and provide env data.", async () => {
+			const mockData: ConfigResponse = {
+				...defaultConfigEnvs,
+				SC_THEME: SchulcloudTheme.Default,
+				ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+				SC_TITLE: "SomeThing",
+			};
+			await setup(true, mockData);
+			expect(useEnvStore().env).toEqual(mockData);
+		});
+
+		it("should request, process and provide env data.", async () => {
+			const mockFileData: FilesStorageConfigResponse = {
+				MAX_FILE_SIZE: 1,
+				COLLABORA_MAX_FILE_SIZE_IN_BYTES: 2,
+			};
+			await setup(true, undefined, mockFileData);
+			expect(useEnvStore().envFile).toEqual(mockFileData);
+		});
+
 		it("should handle error on file configuration gracefully", async () => {
 			doMockServerApiData(defaultConfigEnvs);
 

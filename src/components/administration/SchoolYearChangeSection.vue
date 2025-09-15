@@ -312,9 +312,7 @@ const enableCheckbox = () => {
 	isCheckboxEnabled.value = true;
 };
 
-const instance = computed(() => {
-	return useEnvConfig().value.SC_TITLE;
-});
+const instance = computed(() => useEnvConfig().value.SC_TITLE);
 </script>
 
 <style lang="scss" scoped>
