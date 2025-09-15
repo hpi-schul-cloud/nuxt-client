@@ -80,7 +80,6 @@ watch(
 
 		if (!isFeatureEnabled) {
 			window.location.replace("/dashboard");
-			return;
 		}
 	},
 	{ immediate: true }
