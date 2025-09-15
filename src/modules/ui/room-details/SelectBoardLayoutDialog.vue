@@ -21,7 +21,7 @@
 						@click.stop="$emit('select', item.type)"
 					/>
 				</VCardText>
-				<VCardActions class="mb-2 px-6">
+				<VCardActions class="mb-2 px-6 justify-end">
 					<VBtn
 						data-testid="dialog-close"
 						variant="outlined"
