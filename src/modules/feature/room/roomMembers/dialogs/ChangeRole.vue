@@ -212,10 +212,6 @@ const dialogTitle = computed(() =>
 watch(
 	memberToChangeRole,
 	() => {
-		if (memberToChangeRole.value.length === 1 && props.isAdminMode) {
-			selectedRole.value = RoleName.Roomowner;
-			return;
-		}
 		if (memberToChangeRole.value.length > 1) {
 			const roleNamesInProp = memberToChangeRole.value.map(
 				(member) => member.roomRoleName
@@ -309,7 +305,6 @@ const radioOptions = computed(() => {
 			"pages.rooms.members.roleChange.Roomowner.label.subText",
 		],
 		dataTestid: "change-role-option-owner",
-		disabled: false,
 	};
 
 	const baseRoles = [
@@ -318,21 +313,18 @@ const radioOptions = computed(() => {
 			labelHeader: t("pages.rooms.members.roomPermissions.viewer"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomviewer.label"],
 			dataTestid: "change-role-option-viewer",
-			disabled: props.isAdminMode,
 		},
 		{
 			role: RoleName.Roomeditor,
 			labelHeader: t("pages.rooms.members.roomPermissions.editor"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomeditor.label"],
 			dataTestid: "change-role-option-editor",
-			disabled: props.isAdminMode,
 		},
 		{
 			role: RoleName.Roomadmin,
 			labelHeader: t("pages.rooms.members.roomPermissions.admin"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomadmin.label"],
 			dataTestid: "change-role-option-admin",
-			disabled: props.isAdminMode,
 		},
 	];
 
