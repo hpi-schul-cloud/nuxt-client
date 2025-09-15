@@ -22,13 +22,13 @@ const routeToErrorPage = () => {
 	}
 };
 
-//watch(
-//	() => applicationErrorModule.getStatusCode,
-//	(to) => {
-//		if (to !== null) {
-//			routeToErrorPage();
-//		}
-//	},
-//	{ immediate: true }
-//);
+watch(
+	() => applicationErrorModule.getStatusCode,
+	(to) => {
+		if (to !== null) {
+			routeToErrorPage();
+		}
+	},
+	{ immediate: true }
+);
 </script>
