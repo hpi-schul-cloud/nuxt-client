@@ -37,9 +37,9 @@
 					@click="onShareBoard"
 				/>
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-				<KebabMenuActionEditingSettings />
+				<KebabMenuActionEditingSettings @click="onEditBoardSettings" />
+				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionDelete
 					:name="title"
 					scope-language-key="common.words.board"
@@ -98,6 +98,7 @@ const emit = defineEmits([
 	"update:visibility",
 	"delete:board",
 	"change-layout",
+	"edit:settings",
 ]);
 
 const { t } = useI18n();
@@ -172,6 +173,10 @@ const onDeleteBoard = async (confirmation: Promise<boolean>) => {
 
 const onChangeBoardLayout = async () => {
 	emit("change-layout");
+};
+
+const onEditBoardSettings = () => {
+	emit("edit:settings");
 };
 
 const emitTitle = useDebounceFn((newTitle: string) => {

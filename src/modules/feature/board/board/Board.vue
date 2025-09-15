@@ -20,6 +20,7 @@
 						@share:board="onShareBoard"
 						@delete:board="openDeleteBoardDialog(boardId)"
 						@change-layout="onUpdateBoardLayout"
+						@edit:settings="onEditBoardSettings"
 					/>
 				</template>
 				<div :class="boardClasses" :style="boardStyle">
@@ -95,6 +96,10 @@
 					:current-layout="board.layout"
 					@select="onSelectBoardLayout"
 				/>
+				<EditSettingsDialog
+					:model-value="isEditSettingsDialogOpen"
+					@close="onEditBoardSettingsClose"
+				/>
 			</DefaultWireframe>
 		</template>
 	</div>
@@ -156,6 +161,7 @@ import {
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
+import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
@@ -177,6 +183,7 @@ const { createPageInformation, contextType, roomId, resetPageInformation } =
 	useSharedBoardPageInformation();
 const { createApplicationError } = useApplicationError();
 const isDragging = ref(false);
+const isEditSettingsDialogOpen = ref(false);
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -443,6 +450,14 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 		boardId: props.boardId,
 		layout,
 	});
+};
+
+const onEditBoardSettings = () => {
+	isEditSettingsDialogOpen.value = true;
+};
+
+const onEditBoardSettingsClose = () => {
+	isEditSettingsDialogOpen.value = false;
 };
 </script>
 
