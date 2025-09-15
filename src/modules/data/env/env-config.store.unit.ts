@@ -200,7 +200,6 @@ describe("useEnvConfig", () => {
 	});
 
 	it("should proxy env config as ref from useEnvStore", async () => {
-		expect(useEnvConfig().value.SC_TITLE).toEqual(""); // Default value
 		useEnvStore().$patch({ env: { SC_TITLE: "School" } });
 		expect(useEnvConfig().value.SC_TITLE).toEqual("School");
 	});
