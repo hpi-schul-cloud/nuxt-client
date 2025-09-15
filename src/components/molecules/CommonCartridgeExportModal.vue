@@ -9,7 +9,7 @@
 	>
 		<v-card :ripple="false">
 			<template #title>
-				<h2 class="mt-2">
+				<h2 class="mt-2 text-break">
 					{{ $t(title) }}
 				</h2>
 			</template>
