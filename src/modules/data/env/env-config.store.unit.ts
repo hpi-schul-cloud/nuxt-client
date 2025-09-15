@@ -158,7 +158,7 @@ describe("useEnvStore", () => {
 			expect(useEnvStore().env).toEqual(mockData);
 		});
 
-		it("should request, process and provide env data.", async () => {
+		it("should request, process and provide env file data.", async () => {
 			const mockFileData: FilesStorageConfigResponse = {
 				MAX_FILE_SIZE: 1,
 				COLLABORA_MAX_FILE_SIZE_IN_BYTES: 2,
