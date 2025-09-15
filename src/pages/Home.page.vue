@@ -28,7 +28,7 @@
 
 		<v-col cols="4">
 			<aside>
-				<Login class="pa-0" @login-failed="redirectToLoginPageWithError()" />
+				<Login class="pa-0" @login-failed="redirectToLoginPageWithError" />
 			</aside>
 		</v-col>
 	</v-row>
@@ -88,7 +88,7 @@ async function fetchBlogs() {
 	}
 }
 
-function redirectToLoginPageWithError() {
-	router.push({ path: "/login", query: { error: "true" } });
+function redirectToLoginPageWithError(errorDetails: {error_code: string}) {
+	router.push({ path: "/login", query: { error_code: errorDetails.error_code } });
 }
 </script>

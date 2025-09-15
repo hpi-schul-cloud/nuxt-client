@@ -478,7 +478,7 @@ const alert = ref<{
 const showAlert = ref(false);
 
 // Feature Toggles
-const featureOauthLoginEnabled =
+const featureOauthLoginEnabled = true;
 	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 const featureJwtExtendedTimeoutEnabled =
 	envConfigModule.getEnv.FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED;
@@ -517,10 +517,10 @@ const redirectParam = ref(route.query.redirect?.toString() || null);
 const isHomePage = computed<boolean>(() => route.path === "/home");
 
 const emit = defineEmits<{
-	(e: "login-failed"): void;
+	(e: "login-failed", errorDetails: {error_code: string}): void;
 }>();
 
-function handleLoginError() {
+function handleLoginError(error_code: string) {
 	showAlert.value = true;
 	email.value = "";
 	password.value = "";
@@ -530,7 +530,7 @@ function handleLoginError() {
 	passwordMoreLess.value = "";
 	selectedSchool.value = null;
 	selectedSystem.value = null;
-	emit("login-failed");
+	emit("login-failed", {error_code});
 }
 
 function togglePassword() {
@@ -556,7 +556,7 @@ function checkCookie() {
 			dismissible: true,
 			message: t("login.alert.cookiesBlocked"),
 		};
-		handleLoginError();
+		handleLoginError("login_failed");
 	}
 	return cookieEnabled;
 }
@@ -615,11 +615,24 @@ onMounted(() => {
 		}
 	}
 
-	incTimer();
-
-	if (route.query.error) {
+	const error_code = route.query.error_code;
+	if (error_code && error_code === "login_failed") {
 		showAlert.value = true;
 		setLoginFailedAlert();
+		countdownNum.value = loginTimeoutSeconds;
+		incTimer();
+	} else if (error_code && error_code === "superhero") {
+		// Superhero login attempt
+		alert.value = {
+				type: "error",
+				color: "error",
+				dismissible: true,
+				message:
+					"Du versuchst dich mit einem Superhero Account anzumelden. Bitte benutze einen anderen Account",
+			};
+		showAlert.value = true;
+		countdownNum.value = loginTimeoutSeconds;
+		incTimer();
 	}
 });
 
@@ -876,7 +889,7 @@ async function submitLocalLogin() {
 		}
 	} else {
 		setLoginFailedAlert();
-		handleLoginError();
+		handleLoginError("login_failed");
 		countdownNum.value = loginTimeoutSeconds;
 		incTimer();
 	}
@@ -902,7 +915,7 @@ async function submitLdapLogin() {
 			dismissible: true,
 			message: t("Login fehlgeschlagen"),
 		};
-		handleLoginError();
+		handleLoginError("login_failed");
 		return;
 	}
 
@@ -931,7 +944,7 @@ async function submitLdapLogin() {
 			dismissible: true,
 			message: t("Login fehlgeschlagen"),
 		};
-		handleLoginError();
+		handleLoginError("login_failed");
 		countdownNum.value = loginTimeoutSeconds;
 		incTimer();
 	}
@@ -950,7 +963,7 @@ async function login(postLoginRedirect?: string, validRedirect?: string) {
 				message:
 					"Du versuchst dich mit einem Superhero Account anzumelden. Bitte benutze einen anderen Account",
 			};
-			handleLoginError();
+			handleLoginError("superhero");
 		} else {
 			const redirectPath: string = validRedirect
 				? `${postLoginRedirect}?redirect=${validRedirect}`

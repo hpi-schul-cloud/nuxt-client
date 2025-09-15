@@ -1,13 +1,10 @@
 <template>
-	<v-container>
-		<Login @login-failed="notification = true" />
+	<!-- TODO: Maybe there is a better way for this styling...-->
+	<v-container style="height: 3000px;">
+		<Login @login-failed="notification = true" error-code="route.query.error_code" />
 		<LoginFailedHint v-if="notification" />
-		<div>
-			<br v-for="n in 100" :key="n" />
-		</div>
 	</v-container>
 </template>
-<!-- TODO: There must be a way to make that better...-->
 
 <script setup lang="ts">
 import { Login, LoginFailedHint } from "@feature-login";
@@ -19,7 +16,8 @@ const route = useRoute();
 const notification = ref(false);
 
 onMounted(() => {
-	if (route.query.error) {
+	const error_code = route.query.error_code;
+	if (error_code && error_code === "login_failed") {
 		notification.value = true;
 	}
 });
