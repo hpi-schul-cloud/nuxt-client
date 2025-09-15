@@ -17,7 +17,7 @@ const notification = ref(false);
 
 onMounted(() => {
 	const error_code = route.query.error_code;
-	if (error_code && error_code === "login_failed") {
+	if (error_code) {
 		notification.value = true;
 	}
 });
