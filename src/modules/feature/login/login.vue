@@ -285,6 +285,7 @@
 					prepend-icon="mdiChevronUp"
 					data-testid="btn-more-options"
 					aria-label="more-options"
+					variant="outlined"
 					@click="openMoreOptions"
 				>
 					<v-icon>
@@ -301,6 +302,7 @@
 					prepend-icon="mdiChevronDown"
 					data-testid="btn-less-options"
 					aria-label="less-options"
+					variant="outlined"
 					@click="closeMoreOptions"
 				>
 					<v-icon>
@@ -442,6 +444,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useLogin } from "./login.composable";
+import { set } from "lodash";
 
 // Vuetify typenames
 type AlertType = "info" | "success" | "warning" | "error";
@@ -521,6 +524,13 @@ const emit = defineEmits<{
 }>();
 
 function handleLoginError(error_code: string) {
+	if (error_code === "superhero") {
+		setFailedAlert("Du versuchst dich mit einem Superhero Account anzumelden. Bitte benutze einen anderen Account");
+	} else if (error_code === "cookies_blocked") {
+		setFailedAlert("Cookies sind blockiert");
+	} else {
+		setFailedAlert();
+	}
 	showAlert.value = true;
 	email.value = "";
 	password.value = "";
@@ -531,6 +541,15 @@ function handleLoginError(error_code: string) {
 	selectedSchool.value = null;
 	selectedSystem.value = null;
 	emit("login-failed", {error_code});
+}
+
+function setFailedAlert(message: string = "Login fehlgeschlagen") {
+	alert.value = {
+		type: "error",
+		color: "error",
+		dismissible: true,
+		message: message,
+	};
 }
 
 function togglePassword() {
@@ -550,13 +569,7 @@ function checkCookie() {
 	}
 	// If cookies not enabled, show alert
 	if (!cookieEnabled) {
-		alert.value = {
-			type: "error",
-			color: "error",
-			dismissible: true,
-			message: t("login.alert.cookiesBlocked"),
-		};
-		handleLoginError("login_failed");
+		handleLoginError("cookies_blocked");
 	}
 	return cookieEnabled;
 }
@@ -617,20 +630,12 @@ onMounted(() => {
 
 	const error_code = route.query.error_code;
 	if (error_code && error_code === "login_failed") {
-		showAlert.value = true;
-		setLoginFailedAlert();
+		handleLoginError("login_failed");
 		countdownNum.value = loginTimeoutSeconds;
 		incTimer();
 	} else if (error_code && error_code === "superhero") {
 		// Superhero login attempt
-		alert.value = {
-				type: "error",
-				color: "error",
-				dismissible: true,
-				message:
-					"Du versuchst dich mit einem Superhero Account anzumelden. Bitte benutze einen anderen Account",
-			};
-		showAlert.value = true;
+		handleLoginError("superhero");
 		countdownNum.value = loginTimeoutSeconds;
 		incTimer();
 	}
@@ -867,15 +872,6 @@ async function submitLogin(loginOption: loginOptions) {
 	}
 }
 
-function setLoginFailedAlert() {
-	alert.value = {
-		type: "error",
-		color: "error",
-		dismissible: true,
-		message: "Login fehlgeschlagen",
-	};
-}
-
 async function submitLocalLogin() {
 	await loginEmail(email.value, password.value, true);
 	if (loginResult.value) {
@@ -888,7 +884,6 @@ async function submitLocalLogin() {
 			await login(postLoginRedirect);
 		}
 	} else {
-		setLoginFailedAlert();
 		handleLoginError("login_failed");
 		countdownNum.value = loginTimeoutSeconds;
 		incTimer();
@@ -909,12 +904,6 @@ async function submitLdapLogin() {
 	}
 
 	if (!selectedSchool.value) {
-		alert.value = {
-			type: "warning",
-			color: "error",
-			dismissible: true,
-			message: t("Login fehlgeschlagen"),
-		};
 		handleLoginError("login_failed");
 		return;
 	}
@@ -938,12 +927,6 @@ async function submitLdapLogin() {
 			await login(postLoginRedirect);
 		}
 	} else {
-		alert.value = {
-			type: "warning",
-			color: "error",
-			dismissible: true,
-			message: t("Login fehlgeschlagen"),
-		};
 		handleLoginError("login_failed");
 		countdownNum.value = loginTimeoutSeconds;
 		incTimer();
@@ -956,13 +939,6 @@ async function login(postLoginRedirect?: string, validRedirect?: string) {
 		await router.push({ path: redirectPath });
 	} else {
 		if (postLoginRedirect === "isSuperhero") {
-			alert.value = {
-				type: "error",
-				color: "error",
-				dismissible: true,
-				message:
-					"Du versuchst dich mit einem Superhero Account anzumelden. Bitte benutze einen anderen Account",
-			};
 			handleLoginError("superhero");
 		} else {
 			const redirectPath: string = validRedirect
