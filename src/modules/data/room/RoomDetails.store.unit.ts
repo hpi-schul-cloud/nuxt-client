@@ -67,6 +67,31 @@ describe("useRoomDetailsStore", () => {
 		mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
 	};
 
+	describe("fetchRoom", () => {
+		it("should call fetchRoom api", async () => {
+			const { store } = setup();
+
+			expect(store.isLoading).toBe(true);
+			await store.fetchRoom("room-id");
+
+			expect(roomApiMock.roomControllerGetRoomDetails).toHaveBeenCalledWith(
+				"room-id"
+			);
+			expect(store.isLoading).toBe(false);
+		});
+
+		describe("when fetching room fails with other errors", () => {
+			it("should throw an error", async () => {
+				const { store } = setup();
+				expect(store.isLoading).toBe(true);
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+
+				await expect(store.fetchRoom("room-id")).rejects.toThrow();
+				expect(store.isLoading).toBe(false);
+			});
+		});
+	});
+
 	describe("fetchRoomAndBoards", () => {
 		it("should call fetchRoomAndBoards api", async () => {
 			const { store } = setup();
