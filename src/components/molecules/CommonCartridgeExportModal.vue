@@ -8,12 +8,12 @@
 		@keydown.esc="onCloseDialog"
 	>
 		<v-card :ripple="false">
-			<v-card-title>
-				<div ref="textTitle" class="text-h2 my-2 px-6 text-break">
+			<template #title>
+				<h2 class="mt-2">
 					{{ $t(title) }}
-				</div>
-			</v-card-title>
-			<v-card-text class="text--primary">
+				</h2>
+			</template>
+			<template #text>
 				<div v-if="step === 0 && isExportModalOpen">
 					<div class="">
 						<v-radio-group v-model="radios">
@@ -99,8 +99,8 @@
 						/>
 					</v-container>
 				</div>
-			</v-card-text>
-			<v-card-actions>
+			</template>
+			<template #actions>
 				<div class="mb-2">
 					<v-btn
 						v-if="step === 1"
@@ -152,7 +152,7 @@
 						{{ $t("common.actions.export") }}
 					</v-btn>
 				</div>
-			</v-card-actions>
+			</template>
 		</v-card>
 	</v-dialog>
 </template>
