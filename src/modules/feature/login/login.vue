@@ -478,7 +478,7 @@ const alert = ref<{
 const showAlert = ref(false);
 
 // Feature Toggles
-const featureOauthLoginEnabled = true;
+const featureOauthLoginEnabled =
 	envConfigModule.getEnv.FEATURE_OAUTH_LOGIN_ENABLED;
 const featureJwtExtendedTimeoutEnabled =
 	envConfigModule.getEnv.FEATURE_JWT_EXTENDED_TIMEOUT_ENABLED;
