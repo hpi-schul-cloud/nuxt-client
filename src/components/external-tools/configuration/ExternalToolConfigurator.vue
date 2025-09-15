@@ -54,7 +54,6 @@
 				selectedTemplate &&
 				(!isAboveParametersSlotEmpty || hasSelectedTemplateParameters)
 			"
-			class="mb-10"
 		>
 			{{ $t("pages.tool.settings") }}
 		</h2>
