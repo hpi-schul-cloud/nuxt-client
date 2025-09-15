@@ -166,7 +166,6 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { computed, ref, useTemplateRef, watch } from "vue";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import type { VCard, VTextField } from "vuetify/components";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
@@ -184,6 +183,7 @@ import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { storeToRefs } from "pinia";
 import { isNonEmptyString, isOfMaxLength } from "@util-validators";
 import { useOpeningTagValidator } from "@/utils/validation";
+import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 
 defineProps({
 	schoolName: {
@@ -333,9 +333,7 @@ const datePickerDate = computed(() => {
 });
 
 const inviteMembersContent = ref<VCard>();
-const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
-	immediate: true,
-});
+const { pause, unpause } = useSafeFocusTrap(isOpen, inviteMembersContent);
 
 watch(
 	() => formData.value.restrictedToCreatorSchool,
@@ -360,15 +358,6 @@ watch(
 				? new Date(newVal.activeUntil)
 				: undefined;
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
-		}
-	}
-);
-
-watch(
-	() => isOpen.value,
-	(isOpen: boolean) => {
-		if (isOpen === false) {
-			deactivate();
 		}
 	}
 );

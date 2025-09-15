@@ -67,7 +67,9 @@
 				</InfoAlert>
 
 				<InfoAlert
-					v-else-if="determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin"
+					v-else-if="
+						determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin
+					"
 					data-testid="student-admin-info-alert"
 				>
 					{{ t("pages.rooms.members.add.students.studentAdmins") }}
@@ -124,15 +126,15 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { RoleName } from "@/serverApi/v3";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import type { VAutocomplete, VCard, VSelect } from "vuetify/components";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { useDisplay } from "vuetify";
+import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 
 interface SchoolRoleItem {
 	id: RoleName;
@@ -218,22 +220,7 @@ const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
 const selectedUsers = ref<string[]>([]);
 
 const addMembersContent = ref<VCard>();
-const { pause, unpause, deactivate } = useFocusTrap(addMembersContent, {
-	immediate: true,
-});
-
-// the focus trap does not automatically deactivate on dialog close leading to broken UI
-// TODO put as composable
-// e. g. useBetterFocusTrap<ref, boolean>(addMembersContent, isOpen);
-// should return pause, unpause, deactivate
-watch(
-	() => isOpen.value,
-	(isOpen: boolean) => {
-		if (isOpen === false) {
-			deactivate();
-		}
-	}
-);
+const { pause, unpause } = useSafeFocusTrap(isOpen, addMembersContent);
 
 const isSchoolSelectionDisabled = computed(() => {
 	return isCurrentUserStudent.value;

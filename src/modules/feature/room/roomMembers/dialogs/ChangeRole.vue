@@ -134,7 +134,6 @@ import {
 	ChangeRoomRoleBodyParamsRoleNameEnum as RoleEnum,
 	RoleName,
 } from "@/serverApi/v3";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { useDisplay } from "vuetify";
 import {
 	RoomMember,
@@ -145,6 +144,7 @@ import { WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 import { authModule } from "@/store";
 import { VCard } from "vuetify/components";
+import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 
 const props = defineProps({
 	members: {
@@ -348,18 +348,7 @@ const radioOptions = computed(() => {
 });
 
 const changeRoleContent = ref();
-const { deactivate } = useFocusTrap(changeRoleContent, {
-	immediate: true,
-});
-
-watch(
-	() => isOpen.value,
-	(isOpen: boolean) => {
-		if (isOpen === false) {
-			deactivate();
-		}
-	}
-);
+useSafeFocusTrap(isOpen, changeRoleContent);
 </script>
 
 <style lang="scss" scoped>
