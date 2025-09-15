@@ -9,9 +9,9 @@
 		@next="onNext()"
 	>
 		<template #title>
-			<div ref="textTitle" class="text-h2 my-2 text-break">
+			<h2 class="mt-2 text-break">
 				{{ modalTitle }}
-			</div>
+			</h2>
 		</template>
 
 		<template #content>

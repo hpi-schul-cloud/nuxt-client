@@ -8,9 +8,9 @@
 		@dialog-closed="onDialogClosed"
 	>
 		<template #title>
-			<div ref="textTitle" class="text-h2 my-2 wordbreak-normal">
+			<h2 class="mt-2 wordbreak-normal">
 				{{ $t("components.molecules.copyResult.title.partial") }}
-			</div>
+			</h2>
 		</template>
 		<template #content>
 			<div ref="copy-dialog-content" data-testid="copy-result-notifications">

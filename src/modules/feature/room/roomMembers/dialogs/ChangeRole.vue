@@ -1,7 +1,7 @@
 <template>
 	<v-card ref="changeRoleContent">
 		<template #title>
-			<h2 ref="textTitle" class="mt-2 dialog-title">
+			<h2 class="mt-2 dialog-title">
 				{{ dialogTitle }}
 			</h2>
 		</template>
