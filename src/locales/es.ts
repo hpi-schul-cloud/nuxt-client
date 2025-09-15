@@ -479,7 +479,7 @@ export default {
 	"components.board.error.403":
 		"Error 403 – Lamentablemente, falta la autorización para ver este contenido ...",
 	"components.board.menu.board": "Configuración del tablero",
-	"components.board.menu.editing.settings": "Configuración de edición",
+	"components.board.menu.editing.settings.title": "Configuración de edición",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
 	"components.board.menu.collaborativeTextEditorElement":

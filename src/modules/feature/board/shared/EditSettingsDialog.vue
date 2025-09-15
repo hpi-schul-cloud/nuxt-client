@@ -58,7 +58,7 @@ const { t } = useI18n();
 const { xs } = useDisplay();
 
 const modalTitle = computed(() =>
-	t("pages.rooms.members.inviteMember.step.edit.title")
+	t("components.board.menu.editing.settings.title")
 );
 
 // const subTitle = computed(() =>

@@ -471,7 +471,8 @@ export default {
 	"components.board.error.403":
 		"Error 403 – Unfortunately, you do not have permission to view this content ...",
 	"components.board.menu.board": "Board settings",
-	"components.board.menu.editing.settings": "Editing settings",
+	"components.board.menu.editing.settings.title.title": "Editing settings",
+	"components.board.menu.editing.settings.title": "Editing settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
 	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",

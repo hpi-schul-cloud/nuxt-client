@@ -474,7 +474,7 @@ export default {
 	"components.board.error.403":
 		"Fehler 403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen ... ",
 	"components.board.menu.board": "Bereich-Einstellungen",
-	"components.board.menu.editing.settings": "Bearbeitungseinstellungen",
+	"components.board.menu.editing.settings.title": "Bearbeitungseinstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
 	"components.board.menu.collaborativeTextEditorElement":

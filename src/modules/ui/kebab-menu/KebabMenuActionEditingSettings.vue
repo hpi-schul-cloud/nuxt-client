@@ -4,7 +4,7 @@
 		data-testid="kebab-menu-action-edit-setting"
 		:disabled="disabled"
 	>
-		{{ t("components.board.menu.editing.settings") }}
+		{{ t("components.board.menu.editing.settings.title") }}
 	</KebabMenuAction>
 </template>
 
