@@ -506,7 +506,7 @@ describe("course-room module", () => {
 
 				expect(formMock.method).toBe("POST");
 				expect(formMock.action).toBe(
-					`/api/v3/common-cartridge/export/testRoomId?version=${exportSettings.version}`
+					`/api/v3/common-cartridge/export/${courseRoomDetailsModule.roomData.roomId}?version=${exportSettings.version}`
 				);
 				expect(formMock.enctype).toBe("application/json");
 				expect(formMock.target).toBe("_blank");
@@ -516,10 +516,7 @@ describe("course-room module", () => {
 				const { inputMockTopicIds, inputMockTaskIds, inputMockColumnBoardIds } =
 					setup();
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				courseRoomDetailsModule.setRoomData({
-					...courseRoomDetailsModule.roomData,
-					roomId: "testRoomId",
-				});
+
 				const exportSettings = {
 					version: version as "1.1.0",
 					topics: ["topic1", "topic2"],
@@ -552,10 +549,6 @@ describe("course-room module", () => {
 				const { formMock } = setup();
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				courseRoomDetailsModule.setRoomData({
-					...courseRoomDetailsModule.roomData,
-					roomId: "testRoomId",
-				});
 
 				const exportSettings = {
 					version: version as "1.1.0",
@@ -572,10 +565,6 @@ describe("course-room module", () => {
 				const { formMock, appendChildSpy, removeChildSpy } = setup();
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				courseRoomDetailsModule.setRoomData({
-					...courseRoomDetailsModule.roomData,
-					roomId: "testRoomId",
-				});
 
 				const exportSettings = {
 					version: version as "1.1.0",
@@ -591,6 +580,28 @@ describe("course-room module", () => {
 				expect(appendChildSpy).toHaveBeenCalledWith(formMock);
 				expect(removeChildSpy).toHaveBeenCalledWith(formMock);
 				expect(formMock.submit).toHaveBeenCalled();
+			});
+
+			it("should catch error in catch block", async () => {
+				const { formMock, removeChildSpy } = setup();
+				const error = new Error("some error");
+				formMock.submit = vi.fn(() => {
+					throw error;
+				});
+				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+
+				const exportSettings = {
+					version: version as "1.1.0",
+					topics: ["topic1"],
+					tasks: ["task1"],
+					columnBoards: ["board1"],
+				};
+				await courseRoomDetailsModule.downloadCommonCartridgeCourse(
+					exportSettings
+				);
+				expect(courseRoomDetailsModule.getError).toStrictEqual(error);
+				expect(courseRoomDetailsModule.getLoading).toBe(false);
+				expect(removeChildSpy).not.toHaveBeenCalled();
 			});
 		});
 
