@@ -98,7 +98,7 @@ const radioOptions = computed(() => [
 		labelHeader: "components.board.menu.editing.settings.modal.options.first",
 		labelInlineFormattedText: "common.words.not",
 		labelDescription:
-			"components.board.menu.editing.settings.modal.options.defaultSetting", // TODO i18n
+			"components.board.menu.editing.settings.modal.options.defaultSetting",
 		dataTestid: "edit-settings-option-1",
 	},
 	{
