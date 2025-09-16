@@ -18,10 +18,11 @@
 					{{ t("components.board.menu.editing.settings.modal.subtitle") }}
 				</div>
 				<div>
-					<v-radio-group hide-details class="mt-6">
+					<v-radio-group v-model="selectedOption" hide-details class="mt-6">
 						<v-radio
 							v-for="(option, index) in radioOptions"
 							:key="index"
+							:value="option.value"
 							class="align-start mb-2"
 							:data-testid="option.dataTestid"
 						>
@@ -83,12 +84,17 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { xs } = useDisplay();
 
+const selectedOption = ref<
+	"editableWithoutReadPermission" | "editableWithReadPermission"
+>("editableWithoutReadPermission");
+
 const modalTitle = computed(() =>
 	t("components.board.menu.editing.settings.title")
 );
 
 const radioOptions = computed(() => [
 	{
+		value: "editableWithoutReadPermission",
 		labelHeader: "components.board.menu.editing.settings.modal.options.first",
 		labelInlineFormattedText: "common.words.not",
 		labelDescription:
@@ -96,6 +102,7 @@ const radioOptions = computed(() => [
 		dataTestid: "edit-settings-option-1",
 	},
 	{
+		value: "editableWithReadPermission",
 		labelHeader: "components.board.menu.editing.settings.modal.options.second",
 		labelInlineFormattedText: "common.words.also",
 		labelDescription: "",
@@ -103,17 +110,11 @@ const radioOptions = computed(() => [
 	},
 ]);
 
-// const onUpdateDate = () => {
-
-// 	unpause();
-// };
-
 const onClose = () => {
 	emit("close");
 };
 
 const editSettings = ref<VCard>();
-
 useFocusTrap(editSettings, {
 	immediate: true,
 });
