@@ -70,6 +70,10 @@ export const useBoardSocketApi = () => {
 				BoardActions.updateBoardLayoutSuccess,
 				boardStore.updateBoardLayoutSuccess
 			),
+			on(
+				BoardActions.updateReaderCanEditSuccess,
+				boardStore.updateReaderCanEditSuccess
+			),
 		];
 
 		const failureActions = [
@@ -84,6 +88,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateBoardTitleFailure, reloadBoard),
 			on(BoardActions.updateBoardVisibilityFailure, reloadBoard),
 			on(BoardActions.updateBoardLayoutFailure, reloadBoard),
+			on(BoardActions.updateReaderCanEditFailure, reloadBoard),
 		];
 
 		const ariaLiveNotifications = [
@@ -191,7 +196,7 @@ export const useBoardSocketApi = () => {
 	const updateReaderCanEditRequest = (
 		payload: UpdateReaderCanEditRequestPayload
 	) => {
-		emitOnSocket("update-reader-can-edit-request", payload);
+		emitOnSocket("update-readers-can-edit-request", payload);
 	};
 
 	const updateBoardLayoutRequest = (
