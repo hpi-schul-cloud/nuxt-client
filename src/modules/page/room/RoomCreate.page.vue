@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="text-h3 mb-4" data-testid="page-title">
+			<h1 data-testid="page-title">
 				{{ $t("pages.rooms.fab.title") }}
 			</h1>
 		</template>

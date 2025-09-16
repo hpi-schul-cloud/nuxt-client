@@ -1,7 +1,7 @@
 <template>
 	<room-wrapper :has-rooms="hasRooms">
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4">
+			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.all") }}
 			</h1>
 			<div class="header-actions-section mb-5">
