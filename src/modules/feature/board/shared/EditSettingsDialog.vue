@@ -80,7 +80,7 @@ const isOpen = defineModel({
 
 const emit = defineEmits<{
 	(e: "close"): void;
-	(e: "save", value: string): void;
+	(e: "save", value: boolean): void;
 }>();
 
 const { t } = useI18n();
@@ -117,7 +117,9 @@ const onClose = () => {
 };
 
 const onSave = () => {
-	emit("save", selectedOption.value);
+	const payload = selectedOption.value === "editableWithReadPermission";
+
+	emit("save", payload);
 	emit("close");
 };
 

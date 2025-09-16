@@ -99,6 +99,7 @@
 				/>
 				<EditSettingsDialog
 					:model-value="isEditSettingsDialogOpen"
+					@save="onSaveEditBoardSettings"
 					@close="onEditBoardSettingsClose"
 				/>
 			</DefaultWireframe>
@@ -459,6 +460,15 @@ const onEditBoardSettings = () => {
 };
 
 const onEditBoardSettingsClose = () => {
+	isEditSettingsDialogOpen.value = false;
+};
+
+const onSaveEditBoardSettings = async (isEditableForEveryone: boolean) => {
+	await boardStore.updateReaderCanEditRequest({
+		boardId: props.boardId,
+		readersCanEdit: isEditableForEveryone,
+	});
+
 	isEditSettingsDialogOpen.value = false;
 };
 </script>
