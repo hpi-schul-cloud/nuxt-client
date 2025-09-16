@@ -65,7 +65,7 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
 			],
 			exclude: ["vuetify"],
 		},
-		define: { "process.env": {} },
+		define: { "process.env": {}, global: "globalThis" },
 		resolve: {
 			alias: [
 				...tsconfigAliases,
