@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 import Vue from "@vitejs/plugin-vue";
 import { defineConfig, type UserConfig } from "vite";
@@ -9,9 +10,11 @@ import { generateAliases } from "./config/vite/theme-aliases";
 import { ThemeResolver } from "./config/vite/theme-resolver-plugin";
 import { getTsconfigAliases } from "./config/vite/tsconfig-aliases";
 import Checker from "vite-plugin-checker";
+import path from "node:path";
 
 export default defineConfig(async ({ mode }): Promise<UserConfig> => {
-	const replacements = await generateAliases(__dirname);
+	console.log(`Vite mode: ${mode}`);
+	const replacements = await generateAliases(path.resolve(__dirname));
 	const tsconfigAliases = getTsconfigAliases();
 
 	return {

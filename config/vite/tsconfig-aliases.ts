@@ -1,16 +1,19 @@
+/* eslint-disable no-console */
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Alias } from "vite";
 
 export function getTsconfigAliases(tsconfigPath = "./tsconfig.json") {
+	console.log("> getTsconfigAliases called with tsconfigPath:", tsconfigPath);
 	const tsconfig = JSON.parse(readFileSync(resolve(tsconfigPath), "utf-8"));
 	const paths = tsconfig.compilerOptions?.paths || {};
 	const baseUrl = tsconfig.compilerOptions?.baseUrl || ".";
 	const aliases: Alias[] = [];
 
 	const __dirName = dirname(fileURLToPath(import.meta.url));
-	const baseDir = resolve(__dirName, "../../", baseUrl);
+	const baseDir = resolve(__dirName, "..", "..", baseUrl);
+	console.log("Base directory for aliases:", baseDir);
 
 	for (const [key, valueArr] of Object.entries(paths)) {
 		// Ensure valueArr is an array and get the first value
@@ -18,6 +21,7 @@ export function getTsconfigAliases(tsconfigPath = "./tsconfig.json") {
 		// Remove trailing /* from key and value
 		const aliasKey = key.replace(/\/\*$/, "");
 		const aliasValue = resolve(baseDir, value.replace(/\/\*$/, ""));
+		// console.log(`Alias found: ${aliasKey} -> ${aliasValue}`);
 		aliases.push({
 			find: aliasKey,
 			replacement: aliasValue,

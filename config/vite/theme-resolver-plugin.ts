@@ -16,6 +16,7 @@ const ThemeResolver = (replacements: AliasConfig[]): Plugin => {
 			});
 
 			if (foundReplace) {
+				// eslint-disable-next-line no-console
 				console.info(
 					`replace "${foundReplace.find}" with "${foundReplace.replacement}"`
 				);
