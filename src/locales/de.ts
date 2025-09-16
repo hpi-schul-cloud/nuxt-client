@@ -177,6 +177,7 @@ export default {
 		"Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
 	"common.validation.nonEmptyString":
 		"Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
+	"common.words.also": "auch",
 	"common.words.and": "und",
 	"common.words.board": "Bereich",
 	"common.words.classes": "Klassen",
@@ -214,6 +215,7 @@ export default {
 	"common.words.lernstore": "Lern-Store",
 	"common.words.mainSchool": "Stammschule",
 	"common.words.no": "Nein",
+	"common.words.not": "nicht",
 	"common.words.noChoice": "Keine Auswahl",
 	"common.words.otherGroups": "sonstige Gruppen",
 	"common.words.externalTools": "externe Tools",
@@ -475,6 +477,14 @@ export default {
 		"Fehler 403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen ... ",
 	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.editing.settings.title": "Bearbeitungseinstellungen",
+	"components.board.menu.editing.settings.modal.subtitle":
+		"Hier können die Bearbeitungsrechte für diesen Bereich verändert werden. Unabhängig von dieser Einstellung können Mitglieder mit der Raumberechtigung „Bearbeiten“ und höher immer Bereiche bearbeiten. ",
+	"components.board.menu.editing.settings.modal.options.first":
+		"Dieser Bereich ist {0} bearbeitbar für Mitglieder mit der Raumberechtigung „Lesen“.",
+	"components.board.menu.editing.settings.modal.options.defaultSetting":
+		"Standardeinstellung",
+	"components.board.menu.editing.settings.modal.options.second":
+		"Dieser Bereich ist {0} bearbeitbar für Mitglieder mit der Raumberechtigung „Lesen“. ",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
 	"components.board.menu.collaborativeTextEditorElement":

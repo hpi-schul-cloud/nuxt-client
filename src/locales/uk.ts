@@ -179,6 +179,7 @@ export default {
 		"Будь ласка, вставте пробіл після знаку менше.",
 	"common.validation.nonEmptyString":
 		"Це обов'язкове поле і не повинно містити лише пробіли.",
+	"common.words.also": "також",
 	"common.words.and": "і",
 	"common.words.board": "Дошка",
 	"common.words.classes": "класи",
@@ -215,6 +216,7 @@ export default {
 	"common.words.lernstore": "Навчальний магазин",
 	"common.words.mainSchool": "Основна школа",
 	"common.words.no": "Немає",
+	"common.words.not": "не",
 	"common.words.noChoice": "Немає вибору",
 	"common.words.otherGroups": "інші групи",
 	"common.words.externalTools": "зовнішні засоби",
@@ -482,6 +484,14 @@ export default {
 		"Помилка 403 – На жаль, у вас немає дозволу на перегляд цього контенту ...",
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.editing.settings.title": "Налаштування редагування",
+	"components.board.menu.editing.settings.modal.subtitle":
+		"Тут ви можете змінити права редагування для цієї області. Незалежно від цієї настройки, учасники з правом доступу до кімнати 'Редагувати' та вище завжди можуть редагувати області.",
+	"components.board.menu.editing.settings.modal.options.first":
+		"Ця область {0} підлягає редагуванню для учасників з правом доступу до кімнати 'Читати'.",
+	"components.board.menu.editing.settings.modal.options.defaultSetting":
+		"Стандартна настройка",
+	"components.board.menu.editing.settings.modal.options.second":
+		"Ця область {0} підлягає редагуванню для учасників з правом доступу до кімнати 'Читати'.",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
 	"components.board.menu.collaborativeTextEditorElement":

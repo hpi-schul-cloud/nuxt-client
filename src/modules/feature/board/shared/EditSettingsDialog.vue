@@ -2,37 +2,63 @@
 	<VDialog
 		v-model="isOpen"
 		:width="xs ? 'auto' : 480"
-		data-testid="dialog-invite-participants"
+		data-testid="dialog-edit-settings"
 		max-width="480"
 		@keydown.esc="onClose"
 		@click:outside="onClose"
 	>
-		<v-card ref="inviteMembersContent">
+		<v-card ref="editSettings">
 			<template #title>
 				<h2 class="text-h4 mt-2">
 					{{ modalTitle }}
 				</h2>
 			</template>
 			<template #text>
-				<div class="mt-5">asdasd</div>
+				<div>
+					{{ t("components.board.menu.editing.settings.modal.subtitle") }}
+				</div>
+				<div>
+					<v-radio-group hide-details class="mt-6">
+						<v-radio
+							v-for="(option, index) in radioOptions"
+							:key="index"
+							class="align-start mb-2"
+							:data-testid="option.dataTestid"
+						>
+							<template #label>
+								<div class="inline-flex flex-column mt-2">
+									<i18n-t :keypath="option.labelHeader">
+										<b>{{ t(option.labelInlineFormattedText) }}</b>
+									</i18n-t>
+									<div>
+										<span class="radio-label">
+											{{ t(option.labelDescription) }}
+										</span>
+									</div>
+								</div>
+							</template>
+						</v-radio>
+					</v-radio-group>
+				</div>
 			</template>
-
 			<template #actions>
-				<v-btn
-					ref="cancelButton"
-					class="ms-auto mr-2"
-					:text="t('common.actions.cancel')"
-					data-testid="invite-participant-cancel-btn"
-					@click="onClose"
-				/>
-				<v-btn
-					ref="continueButton"
-					class="ms-auto"
-					color="primary"
-					variant="flat"
-					:text="t('common.actions.continue')"
-					data-testid="invite-participant-save-btn"
-				/>
+				<div class="mr-4 mb-3">
+					<v-btn
+						ref="cancelButton"
+						class="ms-auto mr-2"
+						:text="t('common.actions.cancel')"
+						data-testid="edit-settings-cancel-btn"
+						@click="onClose"
+					/>
+					<v-btn
+						ref="saveButton"
+						class="ms-auto"
+						color="primary"
+						variant="flat"
+						:text="t('common.actions.save')"
+						data-testid="edit-settings-save-btn"
+					/>
+				</div>
 			</template>
 		</v-card>
 	</VDialog>
@@ -40,7 +66,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import type { VCard } from "vuetify/components";
 import { useDisplay } from "vuetify";
@@ -61,9 +87,21 @@ const modalTitle = computed(() =>
 	t("components.board.menu.editing.settings.title")
 );
 
-// const subTitle = computed(() =>
-// 	t("pages.rooms.members.inviteMember.editStep.subTitle")
-// );
+const radioOptions = computed(() => [
+	{
+		labelHeader: "components.board.menu.editing.settings.modal.options.first",
+		labelInlineFormattedText: "common.words.not",
+		labelDescription:
+			"components.board.menu.editing.settings.modal.options.defaultSetting", // TODO i18n
+		dataTestid: "edit-settings-option-1",
+	},
+	{
+		labelHeader: "components.board.menu.editing.settings.modal.options.second",
+		labelInlineFormattedText: "common.words.also",
+		labelDescription: "",
+		dataTestid: "edit-settings-option-2",
+	},
+]);
 
 // const onUpdateDate = () => {
 
@@ -75,17 +113,24 @@ const onClose = () => {
 };
 
 const editSettings = ref<VCard>();
-// const { pause, unpause, deactivate } = useFocusTrap(editSettings, {
-const { deactivate } = useFocusTrap(editSettings, {
+
+useFocusTrap(editSettings, {
 	immediate: true,
 });
-
-watch(
-	() => isOpen.value,
-	(isOpen: boolean) => {
-		if (isOpen === false) {
-			deactivate();
-		}
-	}
-);
 </script>
+
+<style lang="scss" scoped>
+.dialog-title {
+	max-width: 460px;
+	white-space: normal;
+}
+.radio-label {
+	font-size: 14px;
+	line-height: var(--line-height-lg);
+	opacity: var(--v-medium-emphasis-opacity);
+}
+.alert-text {
+	line-height: var(--line-height-lg);
+	letter-spacing: normal;
+}
+</style>

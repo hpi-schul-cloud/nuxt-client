@@ -176,6 +176,7 @@ export default {
 		"Please insert a space after the less-than sign.",
 	"common.validation.nonEmptyString":
 		"This is a mandatory field and must not contain only spaces.",
+	"common.words.also": "also",
 	"common.words.and": "and",
 	"common.words.board": "board",
 	"common.words.classes": "Classes",
@@ -211,6 +212,7 @@ export default {
 	"common.words.lernstore": "Learning Store",
 	"common.words.mainSchool": "Main School",
 	"common.words.no": "No",
+	"common.words.not": "not",
 	"common.words.noChoice": "No choice",
 	"common.words.otherGroups": "other groups",
 	"common.words.externalTools": "external tools",
@@ -471,8 +473,15 @@ export default {
 	"components.board.error.403":
 		"Error 403 – Unfortunately, you do not have permission to view this content ...",
 	"components.board.menu.board": "Board settings",
-	"components.board.menu.editing.settings.title.title": "Editing settings",
 	"components.board.menu.editing.settings.title": "Editing settings",
+	"components.board.menu.editing.settings.modal.subtitle":
+		"Here you can change the editing rights for this area. Regardless of this setting, members with the room permission 'Edit' and higher can always edit areas.",
+	"components.board.menu.editing.settings.modal.options.first":
+		"This area is {0} editable for members with the 'Read' room permission.",
+	"components.board.menu.editing.settings.modal.options.defaultSetting":
+		"Default setting",
+	"components.board.menu.editing.settings.modal.options.second":
+		"This area is {0} editable by members with the room permission “Read”.",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
 	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",

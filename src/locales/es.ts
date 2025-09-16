@@ -180,6 +180,7 @@ export default {
 		"Inserte un espacio después del signo menos-que.",
 	"common.validation.nonEmptyString":
 		"Este campo es obligatorio y no debe contener sólo espacios.",
+	"common.words.also": "también",
 	"common.words.and": "y",
 	"common.words.board": "tablero",
 	"common.words.classes": "Clases",
@@ -215,6 +216,7 @@ export default {
 	"common.words.lernstore": "Lern-Store",
 	"common.words.mainSchool": "Escuela principal",
 	"common.words.no": "No",
+	"common.words.not": "no",
 	"common.words.noChoice": "Sin elección",
 	"common.words.otherGroups": "otros grupos",
 	"common.words.externalTools": "herramientas externas",
@@ -480,6 +482,14 @@ export default {
 		"Error 403 – Lamentablemente, falta la autorización para ver este contenido ...",
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.editing.settings.title": "Configuración de edición",
+	"components.board.menu.editing.settings.modal.subtitle":
+		"Aquí puede cambiar los derechos de edición para esta área. Independientemente de esta configuración, los miembros con el permiso de sala 'Editar' y superior siempre pueden editar áreas.",
+	"components.board.menu.editing.settings.modal.options.first":
+		"Este área {0} es editable para miembros con el permiso de sala 'Leer'.",
+	"components.board.menu.editing.settings.modal.options.defaultSetting":
+		"Configuración predeterminada",
+	"components.board.menu.editing.settings.modal.options.second":
+		"Esta área {0} es editable por miembros con el permiso de sala 'Leer'.",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
 	"components.board.menu.collaborativeTextEditorElement":
