@@ -1,3 +1,4 @@
+import "@/polyfills/global";
 import { mountBaseComponents } from "@/components/base/components";
 import "@/plugins/polyfills";
 import {
