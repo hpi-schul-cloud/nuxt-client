@@ -9,7 +9,7 @@
 	>
 		<v-card ref="inviteMembersContent">
 			<template #title>
-				<h2 class="text-h4 mt-2">
+				<h2 class="mt-2">
 					{{ modalTitle }}
 				</h2>
 			</template>

@@ -229,7 +229,7 @@ watchEffect(() => {
 	display: inline-block;
 	min-width: 1em;
 	padding: 0 $field-control-padding-end 0 $field-control-padding-start;
-	font-size: var(--heading-3);
+	font-size: var(--heading-1);
 	font-family: var(--font-accent);
 	letter-spacing: $field-letter-spacing;
 }
