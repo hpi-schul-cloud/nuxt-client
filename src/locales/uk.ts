@@ -555,6 +555,7 @@ export default {
 		"Інший користувач змінив вигляд панелі на {layout}.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"Не вдалося завантажити бажані інструменти.",
+	"components.board.header.chip.editableForEveryone": "Редагується для всіх",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
 	"components.boardElement": "Eлемент",

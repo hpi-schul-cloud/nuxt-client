@@ -9,7 +9,7 @@
 	>
 		<v-card ref="editSettings">
 			<template #title>
-				<h2 class="text-h4 mt-2">
+				<h2 class="text-h4 mt-2 dialog-title">
 					{{ modalTitle }}
 				</h2>
 			</template>
@@ -58,6 +58,7 @@
 						variant="flat"
 						:text="t('common.actions.save')"
 						data-testid="edit-settings-save-btn"
+						@click="onSave"
 					/>
 				</div>
 			</template>
@@ -79,6 +80,7 @@ const isOpen = defineModel({
 
 const emit = defineEmits<{
 	(e: "close"): void;
+	(e: "save", value: string): void;
 }>();
 
 const { t } = useI18n();
@@ -111,6 +113,11 @@ const radioOptions = computed(() => [
 ]);
 
 const onClose = () => {
+	emit("close");
+};
+
+const onSave = () => {
+	emit("save", selectedOption.value);
 	emit("close");
 };
 

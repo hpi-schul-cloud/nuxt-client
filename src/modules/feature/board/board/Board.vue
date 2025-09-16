@@ -14,6 +14,7 @@
 						:board-id="board.id"
 						:title="board.title"
 						:is-draft="!isBoardVisible"
+						:is-editable-for-everyone="isEditableForEveryone"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
@@ -215,6 +216,7 @@ const {
 } = useBoardPermissions();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
+const isEditableForEveryone = computed(() => board.value?.readersCanEdit);
 
 const onCreateCard = async (columnId: string) => {
 	if (hasCreateCardPermission.value) boardStore.createCardRequest({ columnId });

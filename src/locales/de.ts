@@ -546,6 +546,7 @@ export default {
 		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"Bevorzugte Tools konnten nicht geladen werden.",
+	"components.board.header.chip.editableForEveryone": "Für alle bearbeitbar",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
 	"components.boardElement": "Element",

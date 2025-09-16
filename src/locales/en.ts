@@ -541,6 +541,7 @@ export default {
 		"The board's view was changed to {layout} by another user.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"Preferred tools could not be loaded.",
+	"components.board.header.chip.editableForEveryone": "Editable for everyone",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
 	"components.boardElement": "element",

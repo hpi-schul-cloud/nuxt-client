@@ -25,6 +25,7 @@
 		</InlineEditInteractionHandler>
 		<div class="d-flex mt-4">
 			<BoardDraftChip v-if="isDraft" />
+			<BoardEditableChip v-if="isEditableForEveryone" />
 			<BoardMenu
 				v-if="hasEditPermission"
 				:scope="BoardMenuScope.BOARD"
@@ -74,6 +75,7 @@ import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardDraftChip from "./BoardDraftChip.vue";
+import BoardEditableChip from "./BoardEditableChip.vue";
 import { upperCaseFirstChar } from "@/utils/textFormatting";
 
 const props = defineProps({
@@ -88,6 +90,10 @@ const props = defineProps({
 	isDraft: {
 		type: Boolean,
 		required: true,
+	},
+	isEditableForEveryone: {
+		type: Boolean,
+		// required: true,
 	},
 });
 
