@@ -1,6 +1,6 @@
 # Copilot Instructions for AI Agents
 
-This project is a modern Vue/Nuxt client for Schul-Cloud, with a modular architecture and strong conventions. Follow these guidelines to be productive and maintain consistency:
+This project is a Vue/Nuxt client for Schul-Cloud, with a modular architecture and strong conventions. Follow these guidelines to be productive and maintain consistency:
 
 ## Architecture Overview
 - **Entry Point:** `src/main.ts` bootstraps the app; `App.vue` is the root component.
@@ -19,7 +19,7 @@ This project is a modern Vue/Nuxt client for Schul-Cloud, with a modular archite
 
 ## Project-Specific Conventions
 - **Assets:** Use `/assets` for images and fonts to support theming. Avoid placing images in `/public` unless strictly static.
-- **Logos:** Only HPI Schul-Cloud logos in `src/assets/img/logo/` (see its README).
+- **Logos:** Only logos in `src/assets/img/logo/` (see its README).
 - **Vuex:** Store modules auto-activate by file presence (Nuxt convention).
 - **Testing:** Place unit tests next to source files with `.unit.ts` suffix, or in `tests/unit/`.
 - **External Docs:** See [project documentation](https://documentation.dbildungscloud.dev/docs/category/nuxt-client) for deeper details.
@@ -30,7 +30,6 @@ This project is a modern Vue/Nuxt client for Schul-Cloud, with a modular archite
 - **Quality Gates:** SonarCloud integration (see README badges).
 
 ## Examples
-- To add a new theme: create a folder in `public/themes/` and update theme config in `src/theme.config.js`.
 - To add a new composable: place in `src/composables/`, add a `.unit.ts` for tests.
 - To add a new API module: follow the structure in `src/commonCartridgeApi/v3/`.
 
