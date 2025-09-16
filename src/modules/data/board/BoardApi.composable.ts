@@ -337,6 +337,15 @@ export const useBoardApi = () => {
 		return boardApi.boardControllerUpdateVisibility(boardId, { isVisible });
 	};
 
+	const updateReaderCanEditCall = async (
+		boardId: string,
+		readersCanEdit: boolean
+	) => {
+		return boardApi.boardControllerUpdateReadersCanEdit(boardId, {
+			readersCanEdit,
+		});
+	};
+
 	const updateBoardLayoutCall = async (
 		boardId: string,
 		layout: BoardLayout
@@ -364,6 +373,7 @@ export const useBoardApi = () => {
 		moveElementCall,
 		updateBoardTitleCall,
 		updateBoardVisibilityCall,
+		updateReaderCanEditCall,
 		updateCardHeightCall,
 		updateCardTitle,
 		updateColumnTitleCall,

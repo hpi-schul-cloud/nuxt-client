@@ -21,6 +21,7 @@ import {
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
+	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
 
@@ -39,6 +40,7 @@ export const useBoardRestApi = () => {
 		updateBoardTitleCall,
 		updateBoardVisibilityCall,
 		updateBoardLayoutCall,
+		updateReaderCanEditCall,
 	} = useBoardApi();
 
 	const { t } = useI18n();
@@ -233,6 +235,26 @@ export const useBoardRestApi = () => {
 		}
 	};
 
+	const updateReaderCanEditRequest = async (
+		payload: UpdateReaderCanEditRequestPayload
+	) => {
+		if (boardStore.board === undefined) return;
+		const { boardId, readersCanEdit } = payload;
+
+		try {
+			await updateReaderCanEditCall(boardId, readersCanEdit);
+			boardStore.updateReaderCanEditSuccess({
+				boardId,
+				readersCanEdit,
+				isOwnAction: true,
+			});
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "board"),
+			});
+		}
+	};
+
 	const updateBoardLayoutRequest = async (
 		payload: UpdateBoardLayoutRequestPayload
 	) => {
@@ -295,6 +317,7 @@ export const useBoardRestApi = () => {
 		updateColumnTitleRequest,
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,
+		updateReaderCanEditRequest,
 		updateBoardLayoutRequest,
 		reloadBoard,
 		reloadBoardSuccess,

@@ -22,6 +22,7 @@ import {
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
+	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
 
@@ -187,6 +188,12 @@ export const useBoardSocketApi = () => {
 		emitOnSocket("update-board-visibility-request", payload);
 	};
 
+	const updateReaderCanEditRequest = (
+		payload: UpdateReaderCanEditRequestPayload
+	) => {
+		emitOnSocket("update-reader-can-edit-request", payload);
+	};
+
 	const updateBoardLayoutRequest = (
 		payload: UpdateBoardLayoutRequestPayload
 	) => {
@@ -239,5 +246,6 @@ export const useBoardSocketApi = () => {
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,
 		updateBoardLayoutRequest,
+		updateReaderCanEditRequest,
 	};
 };

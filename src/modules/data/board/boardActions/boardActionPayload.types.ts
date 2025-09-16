@@ -125,6 +125,16 @@ export type UpdateBoardVisibilitySuccessPayload = {
 	isVisible: boolean;
 	isOwnAction: boolean;
 };
+
+export type UpdateReaderCanEditRequestPayload = {
+	boardId: string;
+	readersCanEdit: boolean;
+};
+export type UpdateReaderCanEditSuccessPayload = {
+	boardId: string;
+	readersCanEdit: boolean;
+	isOwnAction: boolean;
+};
 export type UpdateBoardVisibilityFailurePayload =
 	UpdateBoardVisibilityRequestPayload;
 
