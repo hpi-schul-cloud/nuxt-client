@@ -350,7 +350,7 @@
 					data-testid="submit-login-email"
 					:autofocus="true"
 					aria-label="login"
-					@click="submitLogin(loginOptions.MoreLess)"
+					@click="submitLogin(loginOptions.MORELESS)"
 				>
 					{{ t("common.labels.login") }}
 				</v-btn>
@@ -391,6 +391,9 @@
 									class="form-control"
 									data-testid="password-recovery-email"
 									required
+									:error="!!pwRecoveryError"
+									:error-messages="pwRecoveryError"
+									@input="pwRecoveryError = ''"
 								/>
 								<p class="mt-2" data-testid="info-message">
 									{{ t("components.login.passwordRecovery.text1") }}
@@ -452,7 +455,8 @@ type AlertType = "info" | "success" | "warning" | "error";
 enum loginOptions {
 	EMAIL,
 	LDAP,
-	MoreLess,
+	MORELESS,
+	PWRECOVERY,
 }
 
 const { t } = useI18n();
@@ -506,6 +510,7 @@ const showPassword = ref(false);
 const showLdapPassword = ref(false);
 const emailError = ref("");
 const passwordError = ref("");
+const pwRecoveryError = ref("");
 
 const selectedSchool = ref<SchoolForLdapLoginResponse | null>(null);
 const systemOptions = ref<Array<SystemForLdapLoginResponse>>([]);
@@ -832,13 +837,19 @@ function checkValidityFields(loginOption: loginOptions) {
 				valid = false;
 			}
 			break;
-		case loginOptions.MoreLess:
+		case loginOptions.MORELESS:
 			if (!emailMoreLess.value) {
 				emailError.value = "Please fill out this field";
 				valid = false;
 			}
 			if (!passwordMoreLess.value) {
 				passwordError.value = "Please fill out this field";
+				valid = false;
+			}
+			break;
+		case loginOptions.PWRECOVERY:
+			if (!pwRecoveryEmail.value) {
+				pwRecoveryError.value = "Please fill out this field";
 				valid = false;
 			}
 			break;
@@ -859,8 +870,8 @@ async function submitLogin(loginOption: loginOptions) {
 			if (!checkValidityFields(loginOptions.LDAP)) return;
 			await submitLdapLogin();
 			break;
-		case loginOptions.MoreLess:
-			if (!checkValidityFields(loginOptions.MoreLess)) return;
+		case loginOptions.MORELESS:
+			if (!checkValidityFields(loginOptions.MORELESS)) return;
 			if (selectedSchool.value && showMoreOptions.value) {
 				await submitLdapLogin();
 			} else {
@@ -970,6 +981,7 @@ function closePwRecoveryModal() {
 
 async function submitPwRecovery() {
 	try {
+		if (!checkValidityFields(loginOptions.PWRECOVERY)) return;
 		await submitPasswordRecovery(pwRecoveryEmail.value);
 		pwRecoveryModal.value = false;
 		await router.push({ path: "/pwrecovery/response" });
