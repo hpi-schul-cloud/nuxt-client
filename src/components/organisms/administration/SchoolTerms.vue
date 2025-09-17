@@ -93,9 +93,9 @@
 				@dialog-confirmed="deleteFile"
 			>
 				<template #title>
-					<h4 class="text-h4 mt-0">
+					<h3 class="text-h2 mt-0">
 						{{ t("pages.administration.school.index.termsOfUse.delete.title") }}
-					</h4>
+					</h3>
 				</template>
 				<template #content>
 					<v-alert type="info" class="mb-0">

@@ -9,7 +9,7 @@
 	>
 		<v-card ref="changeRoleContent">
 			<template #title>
-				<h2 ref="textTitle" class="text-h4 mt-2 dialog-title">
+				<h2 ref="textTitle" class="mt-2 dialog-title">
 					{{ dialogTitle }}
 				</h2>
 			</template>

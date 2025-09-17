@@ -1,8 +1,8 @@
 <template>
 	<div class="mb-4">
-		<h5>
+		<h3>
 			{{ $t("components.administration.externalToolsSection.vidis.title") }}
-		</h5>
+		</h3>
 		<p>
 			{{
 				$t("components.administration.externalToolsSection.vidis.description")

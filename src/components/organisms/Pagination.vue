@@ -154,10 +154,6 @@ const nextPage = () => {
 	margin-bottom: 0;
 }
 
-:deep(.v-input__icon .v-icon) {
-	font-size: var(--text-base-size);
-}
-
 .select-input-width {
 	max-width: 150px;
 }
