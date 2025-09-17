@@ -12,6 +12,7 @@ export enum CollaboraEvents {
 	REMOVE_BUTTON = "Remove_Button",
 	FEEDBACK_NEVER = "feedback-never",
 	HIDE_MENU_ITEM = "Hide_Menu_Item",
+	UI_CLOSE = "UI_Close",
 }
 
 export const useCollaboraPostMessageApi = () => {
@@ -52,6 +53,10 @@ export const useCollaboraPostMessageApi = () => {
 	const handleCollaboraMessages = (message: CollaboraMessage) => {
 		if (hasLoadingStatusMessageId(message.MessageId)) {
 			handleLoadingStatusUpdate(message);
+		}
+
+		if (hasUICloseMessageId(message.MessageId)) {
+			window.close();
 		}
 	};
 
@@ -131,6 +136,12 @@ export const useCollaboraPostMessageApi = () => {
 			messageId === CollaboraEvents.APP_LOADING_STATUS;
 
 		return isLoadingStatusMessage;
+	};
+
+	const hasUICloseMessageId = (messageId: string): boolean => {
+		const isUICloseMessage = messageId === CollaboraEvents.UI_CLOSE;
+
+		return isUICloseMessage;
 	};
 
 	return {
