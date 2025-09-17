@@ -39,7 +39,7 @@
 								:src="article.image.url"
 								:alt="article.image.alt"
 								class="thumbnail"
-								height="180"
+								height="321"
 								cover
 							/>
 							<v-card-title class="heading d-flex flex-column align-start">

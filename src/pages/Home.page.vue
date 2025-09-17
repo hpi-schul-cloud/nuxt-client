@@ -1,21 +1,5 @@
 <template>
 	<v-row>
-		<!--		&lt;!&ndash; GLOBAL_ANNOUNCEMENT &ndash;&gt;-->
-		<!--		<v-row>-->
-		<!--			<v-col cols="12">-->
-		<!--				<v-alert-->
-		<!--					v-if="globalAnnouncement"-->
-		<!--					type="info"-->
-		<!--					class="mb-4"-->
-		<!--					border="start"-->
-		<!--					elevation="1"-->
-		<!--					icon="mdi-bullhorn"-->
-		<!--				>-->
-		<!--					<div>globalAnnouncement</div>-->
-		<!--				</v-alert>-->
-		<!--			</v-col>-->
-		<!--		</v-row>-->
-
 		<v-col cols="8" class="v-card">
 			<v-card class="pa-4 pt-0">
 				<Blog
@@ -88,7 +72,10 @@ async function fetchBlogs() {
 	}
 }
 
-function redirectToLoginPageWithError(errorDetails: {error_code: string}) {
-	router.push({ path: "/login", query: { error_code: errorDetails.error_code } });
+function redirectToLoginPageWithError(errorDetails: { error_code: string }) {
+	router.push({
+		path: "/login",
+		query: { error_code: errorDetails.error_code },
+	});
 }
 </script>
