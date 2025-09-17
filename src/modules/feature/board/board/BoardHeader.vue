@@ -25,7 +25,7 @@
 		</InlineEditInteractionHandler>
 		<div class="d-flex mt-4">
 			<BoardDraftChip v-if="isDraft" />
-			<BoardEditableChip v-if="isEditableForEveryone" />
+			<BoardEditableChip v-if="isEditableChipVisible" />
 			<BoardMenu
 				v-if="hasEditPermission"
 				:scope="BoardMenuScope.BOARD"
@@ -39,7 +39,10 @@
 				/>
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-				<KebabMenuActionEditingSettings @click="onEditBoardSettings" />
+				<KebabMenuActionEditingSettings
+					v-if="hasManageReadersCanEditPermission"
+					@click="onEditBoardSettings"
+				/>
 				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionDelete
 					:name="title"
@@ -91,9 +94,12 @@ const props = defineProps({
 		type: Boolean,
 		required: true,
 	},
-	isEditableForEveryone: {
+	isEditableChipVisible: {
 		type: Boolean,
-		// required: true,
+	},
+	hasManageReadersCanEditPermission: {
+		type: Boolean,
+		required: true,
 	},
 });
 

@@ -14,7 +14,10 @@
 						:board-id="board.id"
 						:title="board.title"
 						:is-draft="!isBoardVisible"
-						:is-editable-for-everyone="isEditableChipVisible"
+						:is-editable-chip-visible="isEditableChipVisible"
+						:has-manage-readers-can-edit-permission="
+							hasManageReadersCanEditPermission
+						"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
@@ -301,6 +304,13 @@ const onUpdateBoardVisibility = async (isVisible: boolean) => {
 		boardId: props.boardId,
 		isVisible,
 	});
+
+	if (board.value?.readersCanEdit) {
+		boardStore.updateReaderCanEditRequest({
+			boardId: props.boardId,
+			readersCanEdit: false,
+		});
+	}
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
