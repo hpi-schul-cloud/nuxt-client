@@ -160,6 +160,7 @@ describe("BoardPermissions.composable", () => {
 				hasEditPermission,
 				hasManageVideoConferencePermission,
 				hasShareBoardPermission,
+				hasUpdateReadersCanEditPermission,
 				isTeacher,
 				isStudent,
 			} = useBoardPermissions();
@@ -172,7 +173,7 @@ describe("BoardPermissions.composable", () => {
 			expect(hasEditPermission.value).toBe(false);
 			expect(hasManageVideoConferencePermission.value).toBe(false);
 			expect(hasShareBoardPermission.value).toBe(false);
-
+			expect(hasUpdateReadersCanEditPermission.value).toBe(false);
 			expect(isTeacher.value).toBe(false);
 			expect(isStudent.value).toBe(true);
 		});
@@ -198,6 +199,7 @@ describe("BoardPermissions.composable", () => {
 				hasCreateToolPermission,
 				hasEditPermission,
 				hasManageVideoConferencePermission,
+				hasUpdateReadersCanEditPermission,
 				isTeacher,
 				isStudent,
 				hasShareBoardPermission,
@@ -211,7 +213,7 @@ describe("BoardPermissions.composable", () => {
 			expect(hasEditPermission.value).toBe(true);
 			expect(hasManageVideoConferencePermission.value).toBe(true);
 			expect(hasShareBoardPermission.value).toBe(true);
-
+			expect(hasUpdateReadersCanEditPermission.value).toBe(false);
 			expect(isTeacher.value).toBe(true);
 			expect(isStudent.value).toBe(false);
 		});
