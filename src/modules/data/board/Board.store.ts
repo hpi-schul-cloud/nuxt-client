@@ -240,7 +240,11 @@ export const useBoardStore = defineStore("boardStore", () => {
 	) => {
 		if (!board.value) return;
 
-		board.value.readersCanEdit = payload.readersCanEdit;
+		const { isOwnAction, readersCanEdit } = payload;
+
+		board.value.readersCanEdit = readersCanEdit;
+		if (!isOwnAction)
+			socketOrRest.fetchBoardRequest({ boardId: board.value.id });
 	};
 
 	const updateBoardLayoutRequest = async (
