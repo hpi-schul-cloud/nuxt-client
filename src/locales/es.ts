@@ -482,14 +482,16 @@ export default {
 		"Error 403 – Lamentablemente, falta la autorización para ver este contenido ...",
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.editing.settings.title": "Configuración de edición",
-	"components.board.menu.editing.settings.modal.subtitle":
+	"components.board.dialog.readerCanEdit.subtitle":
 		"Aquí puede cambiar los derechos de edición para esta área. Independientemente de esta configuración, los miembros con el permiso de sala 'Editar' y superior siempre pueden editar áreas.",
-	"components.board.menu.editing.settings.modal.options.first":
+	"components.board.dialog.readerCanEdit.options.first":
 		"Este área {0} es editable para miembros con el permiso de sala 'Leer'.",
-	"components.board.menu.editing.settings.modal.options.defaultSetting":
+	"components.board.dialog.readerCanEdit.options.defaultSetting":
 		"Configuración predeterminada",
-	"components.board.menu.editing.settings.modal.options.second":
+	"components.board.dialog.readerCanEdit.options.second":
 		"Esta área {0} es editable por miembros con el permiso de sala 'Leer'.",
+	"components.board.dialog.readerCanEdit.alert.text":
+		"El tablero debe publicarse primero antes de que se puedan ajustar los ajustes de edición.",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
 	"components.board.menu.collaborativeTextEditorElement":

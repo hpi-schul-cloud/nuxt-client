@@ -14,7 +14,7 @@
 						:board-id="board.id"
 						:title="board.title"
 						:is-draft="!isBoardVisible"
-						:is-editable-for-everyone="isEditableForEveryone"
+						:is-editable-for-everyone="isEditableChipVisible"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
@@ -99,6 +99,7 @@
 				/>
 				<EditSettingsDialog
 					:model-value="isEditSettingsDialogOpen"
+					:is-draft-mode="!isBoardVisible"
 					@save="onSaveEditBoardSettings"
 					@close="onEditBoardSettingsClose"
 				/>
@@ -213,11 +214,13 @@ const {
 	hasCreateToolPermission,
 	hasDeletePermission,
 	hasEditPermission,
+	hasUpdateReadersCanEditPermission,
 	arePermissionsLoaded,
 } = useBoardPermissions();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
-const isEditableForEveryone = computed(() => board.value?.readersCanEdit);
+const isEditableChipVisible = computed(() => board.value?.readersCanEdit);
+const hasManageReadersCanEditPermission = ref(false);
 
 const onCreateCard = async (columnId: string) => {
 	if (hasCreateCardPermission.value) boardStore.createCardRequest({ columnId });
@@ -352,6 +355,11 @@ watch([isBoardVisible, arePermissionsLoaded], () => {
 				t("components.board.error.403")
 			)
 		);
+	}
+
+	if (arePermissionsLoaded?.value && hasUpdateReadersCanEditPermission?.value) {
+		hasManageReadersCanEditPermission.value =
+			hasUpdateReadersCanEditPermission.value;
 	}
 });
 

@@ -484,14 +484,16 @@ export default {
 		"Помилка 403 – На жаль, у вас немає дозволу на перегляд цього контенту ...",
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.editing.settings.title": "Налаштування редагування",
-	"components.board.menu.editing.settings.modal.subtitle":
+	"components.board.dialog.readerCanEdit.subtitle":
 		"Тут ви можете змінити права редагування для цієї області. Незалежно від цієї настройки, учасники з правом доступу до кімнати 'Редагувати' та вище завжди можуть редагувати області.",
-	"components.board.menu.editing.settings.modal.options.first":
+	"components.board.dialog.readerCanEdit.options.first":
 		"Ця область {0} підлягає редагуванню для учасників з правом доступу до кімнати 'Читати'.",
-	"components.board.menu.editing.settings.modal.options.defaultSetting":
+	"components.board.dialog.readerCanEdit.options.defaultSetting":
 		"Стандартна настройка",
-	"components.board.menu.editing.settings.modal.options.second":
+	"components.board.dialog.readerCanEdit.options.second":
 		"Ця область {0} підлягає редагуванню для учасників з правом доступу до кімнати 'Читати'.",
+	"components.board.dialog.readerCanEdit.alert.text":
+		"Дошка спочатку повинна бути опублікована, перш ніж можна буде налаштувати параметри редагування.",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
 	"components.board.menu.collaborativeTextEditorElement":

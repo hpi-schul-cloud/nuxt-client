@@ -14,33 +14,43 @@
 				</h2>
 			</template>
 			<template #text>
-				<div>
-					{{ t("components.board.menu.editing.settings.modal.subtitle") }}
-				</div>
-				<div>
-					<v-radio-group v-model="selectedOption" hide-details class="mt-6">
-						<v-radio
-							v-for="(option, index) in radioOptions"
-							:key="index"
-							:value="option.value"
-							class="align-start mb-2"
-							:data-testid="option.dataTestid"
-						>
-							<template #label>
-								<div class="inline-flex flex-column mt-2">
-									<i18n-t :keypath="option.labelHeader">
-										<b>{{ t(option.labelInlineFormattedText) }}</b>
-									</i18n-t>
-									<div>
-										<span class="radio-label">
-											{{ t(option.labelDescription) }}
-										</span>
+				<WarningAlert v-if="isDraftMode">
+					<span class="alert-text">
+						<p>
+							{{ t("components.board.dialog.readerCanEdit.alert.text") }}
+						</p>
+					</span>
+				</WarningAlert>
+				<template v-else>
+					<div>
+						{{ t("components.board.dialog.readerCanEdit.subtitle") }}
+					</div>
+
+					<div>
+						<v-radio-group v-model="selectedOption" hide-details class="mt-6">
+							<v-radio
+								v-for="(option, index) in radioOptions"
+								:key="index"
+								:value="option.value"
+								class="align-start mb-2"
+								:data-testid="option.dataTestid"
+							>
+								<template #label>
+									<div class="inline-flex flex-column mt-2">
+										<i18n-t :keypath="option.labelHeader">
+											<b>{{ t(option.labelInlineFormattedText) }}</b>
+										</i18n-t>
+										<div>
+											<span class="radio-label">
+												{{ t(option.labelDescription) }}
+											</span>
+										</div>
 									</div>
-								</div>
-							</template>
-						</v-radio>
-					</v-radio-group>
-				</div>
+								</template>
+							</v-radio>
+						</v-radio-group>
+					</div>
+				</template>
 			</template>
 			<template #actions>
 				<div class="mr-4 mb-3">
@@ -48,10 +58,12 @@
 						ref="cancelButton"
 						class="ms-auto mr-2"
 						:text="t('common.actions.cancel')"
+						:variant="isDraftMode ? 'outlined' : 'flat'"
 						data-testid="edit-settings-cancel-btn"
 						@click="onClose"
 					/>
 					<v-btn
+						v-if="!isDraftMode"
 						ref="saveButton"
 						class="ms-auto"
 						color="primary"
@@ -72,6 +84,15 @@ import { computed, ref } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import type { VCard } from "vuetify/components";
 import { useDisplay } from "vuetify";
+import { WarningAlert } from "@ui-alert";
+
+type Props = {
+	isDraftMode?: boolean;
+};
+
+withDefaults(defineProps<Props>(), {
+	isDraftMode: false,
+});
 
 const isOpen = defineModel({
 	type: Boolean,
@@ -97,15 +118,15 @@ const modalTitle = computed(() =>
 const radioOptions = computed(() => [
 	{
 		value: "editableWithoutReadPermission",
-		labelHeader: "components.board.menu.editing.settings.modal.options.first",
+		labelHeader: "components.board.dialog.readerCanEdit.options.first",
 		labelInlineFormattedText: "common.words.not",
 		labelDescription:
-			"components.board.menu.editing.settings.modal.options.defaultSetting",
+			"components.board.dialog.readerCanEdit.options.defaultSetting",
 		dataTestid: "edit-settings-option-1",
 	},
 	{
 		value: "editableWithReadPermission",
-		labelHeader: "components.board.menu.editing.settings.modal.options.second",
+		labelHeader: "components.board.dialog.readerCanEdit.options.second",
 		labelInlineFormattedText: "common.words.also",
 		labelDescription: "",
 		dataTestid: "edit-settings-option-2",
