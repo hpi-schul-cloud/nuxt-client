@@ -193,6 +193,7 @@ import {
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useEnvConfig, useEnvStore } from "@data-env";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
 	name: "SchoolSettings",
@@ -267,7 +268,7 @@ export default defineComponent({
 		const isFeatureSchoolTermsOfUseEnabled: ComputedRef<boolean | undefined> =
 			computed(() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED);
 
-		const instituteTitle = useEnvStore().instituteTitle;
+		const { instituteTitle } = storeToRefs(useEnvStore());
 
 		onMounted(async () => {
 			if (school.value?.id) {

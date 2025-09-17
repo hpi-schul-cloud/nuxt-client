@@ -229,6 +229,7 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import type { DataTableHeader } from "vuetify";
 import { useEnvConfig, useEnvStore } from "@data-env";
+import { storeToRefs } from "pinia";
 
 type Tab = "current" | "archive";
 
@@ -457,7 +458,7 @@ onMounted(() => {
 	onTabsChange(activeTab.value);
 });
 
-const instituteTitle = useEnvStore().instituteTitle;
+const { instituteTitle } = storeToRefs(useEnvStore());
 </script>
 
 <style scoped>

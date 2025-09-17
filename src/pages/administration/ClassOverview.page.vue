@@ -250,6 +250,7 @@ import { InfoAlert } from "@ui-alert";
 import { useRoute, useRouter } from "vue-router";
 import { DataTableHeader } from "vuetify";
 import { useEnvConfig, useEnvStore } from "@data-env";
+import { storeToRefs } from "pinia";
 
 type Tab = "current" | "next" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -499,7 +500,7 @@ onMounted(() => {
 	onTabsChange(activeTab.value);
 });
 
-const instituteTitle = useEnvStore().instituteTitle;
+const { instituteTitle } = storeToRefs(useEnvStore());
 </script>
 
 <style scoped>
