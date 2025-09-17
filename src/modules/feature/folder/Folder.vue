@@ -7,7 +7,7 @@
 	>
 		<template #header>
 			<div class="d-flex align-center">
-				<h1 class="text-h3 mb-4" data-testid="folder-title">
+				<h1 data-testid="folder-title">
 					{{ folderName }}
 				</h1>
 				<FolderMenu

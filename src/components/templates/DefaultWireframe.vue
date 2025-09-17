@@ -17,7 +17,7 @@
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
 			<slot name="header">
-				<h1 v-if="headline" class="text-h3" :data-testid="dataTestid">
+				<h1 v-if="headline" :data-testid="dataTestid">
 					{{ headline }}
 				</h1>
 			</slot>

@@ -13,7 +13,7 @@
 			data-testid="room-badge-lock"
 		>
 			<div class="tile-icon" :class="avatarColor">
-				<span class="text-h3 text-white" data-testid="room-short-title">
+				<span class="text-h1 text-white" data-testid="room-short-title">
 					{{ roomShortName }}
 				</span>
 			</div>

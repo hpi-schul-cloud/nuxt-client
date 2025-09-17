@@ -1,8 +1,8 @@
 <template>
 	<div class="users-container">
-		<h3 class="title-class">
+		<h2 class="title-class">
 			{{ $t("pages.administration.ldap.users.title") }}
-		</h3>
+		</h2>
 		<p>
 			{{ $t("pages.administration.ldap.users.title.info") }}
 		</p>
