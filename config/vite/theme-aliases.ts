@@ -24,7 +24,7 @@ type AliasConfig = {
 const generateAliases = async (dirname: string) => {
 	const aliases = Array<AliasConfig>();
 	const usedTheme = process.env.SC_THEME;
-	console.log(`🎨 Attempting to load school theme ...`);
+	console.log(`🎨 Attempting to load theme ...`);
 
 	if (usedTheme && isThemeAvailable(dirname, usedTheme)) {
 		console.log(`🔄 Loading theme ${usedTheme} ...`);
