@@ -606,6 +606,19 @@ describe("BoardApi.composable", () => {
 		});
 	});
 
+	describe("@updateReaderCanEditCall", () => {
+		it("should call boardControllerUpdateReadersCanEdit api", async () => {
+			const { updateReaderCanEditCall } = useBoardApi();
+
+			await updateReaderCanEditCall("board-id", true);
+
+			expect(boardApi.boardControllerUpdateReadersCanEdit).toHaveBeenCalledWith(
+				"board-id",
+				{ readersCanEdit: true }
+			);
+		});
+	});
+
 	describe("updateBoardLayoutCall", () => {
 		it("should call boardControllerUpdateLayout api", async () => {
 			const { updateBoardLayoutCall } = useBoardApi();
