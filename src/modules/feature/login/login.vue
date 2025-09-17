@@ -946,10 +946,12 @@ async function submitLdapLogin() {
 
 async function login(postLoginRedirect?: string, validRedirect?: string) {
 	if (!postLoginRedirect) {
+		console.log("No postLoginRedirect, redirecting to /dashboard");
 		const redirectPath: string = validRedirect ? validRedirect : "/dashboard";
 		await router.push({ path: redirectPath });
 	} else {
 		if (postLoginRedirect === "isSuperhero") {
+			console.log("Superhero login attempt");
 			handleLoginError("superhero");
 		} else {
 			const redirectPath: string = validRedirect
