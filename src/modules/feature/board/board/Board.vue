@@ -367,7 +367,11 @@ watch([isBoardVisible, arePermissionsLoaded], () => {
 		);
 	}
 
-	if (arePermissionsLoaded?.value && hasUpdateReadersCanEditPermission?.value) {
+	if (
+		arePermissionsLoaded?.value &&
+		hasUpdateReadersCanEditPermission?.value &&
+		envConfigModule.getEnv.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE
+	) {
 		hasManageReadersCanEditPermission.value =
 			hasUpdateReadersCanEditPermission.value;
 	}
