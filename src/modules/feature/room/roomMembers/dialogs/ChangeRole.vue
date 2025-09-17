@@ -21,6 +21,7 @@
 				<div>
 					<v-radio-group
 						v-if="!isOwnershipHandoverMode"
+						ref="radioGroup"
 						v-model="selectedRole"
 						hide-details
 					>
@@ -340,7 +341,11 @@ const radioOptions = computed(() => {
 });
 
 const changeRoleContent = ref();
-useSafeFocusTrap(isOpen, changeRoleContent);
+const radioGroup = ref();
+useSafeFocusTrap(isOpen, changeRoleContent, {
+	initialFocus: radioGroup?.value,
+	immediate: false,
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,15 +1,20 @@
 import { MaybeRefOrGetter, ModelRef, Ref, watch } from "vue";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import {
+	useFocusTrap,
+	UseFocusTrapOptions,
+} from "@vueuse/integrations/useFocusTrap";
 import { Arrayable, MaybeComputedElementRef } from "@vueuse/core";
 
-// This composable makes sure the focus trap is properly deactivated when the v-model boolean changes to false
+// This composable makes sure the focus trap is properly deactivated when isActiveRef (e. g. the v-model of a dialog) boolean changes to false.
 export function useSafeFocusTrap(
 	isActiveRef: ModelRef<boolean> | Ref<boolean>,
-	target: Arrayable<MaybeRefOrGetter<string> | MaybeComputedElementRef>
+	target: Arrayable<MaybeRefOrGetter<string> | MaybeComputedElementRef>,
+	options?: UseFocusTrapOptions
 ) {
 	const { pause, unpause, activate, deactivate, hasFocus, isPaused } =
 		useFocusTrap(target, {
 			immediate: true,
+			...options,
 		});
 
 	watch(
