@@ -255,4 +255,24 @@ describe("useCollaboraMessage", () => {
 			});
 		});
 	});
+
+	describe("handleUICloseUpdate", () => {
+		it("should call window.close()", () => {
+			setupMountComposable();
+
+			const validMsg = JSON.stringify({
+				MessageId: CollaboraEvents.UI_CLOSE,
+				Values: {},
+			});
+
+			const spy = vi.spyOn(window, "close").mockImplementation(() => {
+				// do nothing
+			});
+			window.dispatchEvent(new MessageEvent("message", { data: validMsg }));
+
+			expect(spy).toHaveBeenCalled();
+
+			spy.mockRestore();
+		});
+	});
 });
