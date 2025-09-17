@@ -886,6 +886,7 @@ async function submitLogin(loginOption: loginOptions) {
 async function submitLocalLogin() {
 	await loginEmail(email.value, password.value, true);
 	if (loginResult.value) {
+		console.log("Login result:", loginResult.value);
 		const postLoginRedirect: string | undefined =
 			await validatePostLoginRedirect();
 		if (redirectParam.value) {
