@@ -119,6 +119,7 @@ describe("useBoardSocketApi", () => {
 				},
 				features: [],
 				permissions: [],
+				readersCanEdit: false,
 			};
 			const { dispatch } = useBoardSocketApi();
 			return { dispatch };

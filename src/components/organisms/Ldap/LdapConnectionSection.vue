@@ -1,8 +1,8 @@
 <template>
 	<div class="connection-container">
-		<h3 class="title-class">
+		<h2 class="title-class">
 			{{ $t("pages.administration.ldap.connection.title") }}
-		</h3>
+		</h2>
 
 		<base-input
 			data-testid="ldapDataConnectionUrl"

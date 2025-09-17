@@ -6,7 +6,7 @@
 		data-testid="admin-class-title"
 	>
 		<template #header>
-			<h1 class="text-h3 pl-2">
+			<h1>
 				{{ t("pages.administration.classes.index.title") }}
 			</h1>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
@@ -163,7 +163,7 @@
 			@dialog-confirmed="onConfirmClassDeletion"
 		>
 			<template #title>
-				<h2 class="text-h4 my-2">
+				<h2 class="my-2">
 					{{ t("pages.administration.classes.deleteDialog.title") }}
 				</h2>
 			</template>

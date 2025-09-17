@@ -1,7 +1,7 @@
 <template>
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/migration_error.svg" alt="" />
-		<h1 class="pl-4 pr-4">
+		<h1 class="px-4">
 			{{ t("pages.userMigration.error.title") }}
 		</h1>
 		<div>

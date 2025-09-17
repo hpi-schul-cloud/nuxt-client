@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<h3 class="title-class">
+		<h2 class="title-class">
 			{{ $t("pages.administration.ldap.classes.title") }}
-		</h3>
+		</h2>
 		<v-switch
 			v-model="checked"
 			:label="$t('pages.administration.ldap.classes.activate.import')"

@@ -1,7 +1,7 @@
 <template>
 	<v-container class="align-center d-flex justify-center w-100">
 		<div class="license-list w-100">
-			<h1 class="text-h3 d-flex justify-center">
+			<h1>
 				{{ t("pages.licenseList.title") }}
 			</h1>
 			<p>{{ t("pages.licenseList.introduction") }}</p>
@@ -12,7 +12,7 @@
 					:key="name"
 				>
 					<v-expansion-panel-title>
-						<div class="text-h4">{{ name }}</div>
+						<div class="text-h2">{{ name }}</div>
 						<template #actions="{ expanded }">
 							<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 						</template>

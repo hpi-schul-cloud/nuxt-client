@@ -9,9 +9,9 @@
 		@dialog-canceled="onCancel"
 	>
 		<template #title>
-			<div ref="textTitle" class="text-h4 my-2">
+			<h2 class="mt-2">
 				{{ t(`components.molecules.import.${parentType}.options.title`) }}
-			</div>
+			</h2>
 		</template>
 
 		<template #content>
