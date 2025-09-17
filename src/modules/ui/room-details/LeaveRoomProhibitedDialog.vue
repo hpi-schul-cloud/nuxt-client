@@ -8,7 +8,7 @@
 		<UseFocusTrap>
 			<VCard>
 				<template #title>
-					<h2 class="text-h4 mt-2" data-testid="dialog-title">
+					<h2 class="mt-2" data-testid="dialog-title">
 						{{ t("pages.rooms.leaveRoom.menu") }}
 					</h2>
 				</template>
