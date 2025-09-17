@@ -864,18 +864,18 @@ async function submitLogin(loginOption: loginOptions) {
 	switch (loginOption) {
 		case loginOptions.EMAIL:
 			if (!checkValidityFields(loginOptions.EMAIL)) return;
-			await submitLocalLogin();
+			await submitLocalLogin(email.value, password.value);
 			break;
 		case loginOptions.LDAP:
 			if (!checkValidityFields(loginOptions.LDAP)) return;
-			await submitLdapLogin();
+			await submitLdapLogin(ldapUsername.value, ldapPassword.value);
 			break;
 		case loginOptions.MORELESS:
 			if (!checkValidityFields(loginOptions.MORELESS)) return;
 			if (selectedSchool.value && showMoreOptions.value) {
-				await submitLdapLogin();
+				await submitLdapLogin(emailMoreLess.value, passwordMoreLess.value);
 			} else {
-				await submitLocalLogin();
+				await submitLocalLogin(emailMoreLess.value, passwordMoreLess.value);
 			}
 			break;
 		default:
@@ -883,10 +883,9 @@ async function submitLogin(loginOption: loginOptions) {
 	}
 }
 
-async function submitLocalLogin() {
-	await loginEmail(email.value, password.value, true);
+async function submitLocalLogin(emailParam: string, passwordParam: string) {
+	await loginEmail(emailParam, passwordParam, true);
 	if (loginResult.value) {
-		console.log("Login result:", loginResult.value);
 		const postLoginRedirect: string | undefined =
 			await validatePostLoginRedirect();
 		if (redirectParam.value) {
@@ -902,7 +901,7 @@ async function submitLocalLogin() {
 	}
 }
 
-async function submitLdapLogin() {
+async function submitLdapLogin(emailParam: string, passwordParam: string) {
 	// Store school/system prefs
 	if (selectedSchool.value) {
 		localStorage.setItem("loginSchool", selectedSchool.value.id ?? "");
@@ -921,8 +920,8 @@ async function submitLdapLogin() {
 	}
 
 	await loginLdap(
-		email.value,
-		password.value,
+		emailParam,
+		passwordParam,
 		selectedSchool.value.id,
 		selectedSystem.value?.id
 			? selectedSystem.value.id
@@ -947,12 +946,10 @@ async function submitLdapLogin() {
 
 async function login(postLoginRedirect?: string, validRedirect?: string) {
 	if (!postLoginRedirect) {
-		console.log("No postLoginRedirect, redirecting to /dashboard");
 		const redirectPath: string = validRedirect ? validRedirect : "/dashboard";
 		await router.push({ path: redirectPath });
 	} else {
 		if (postLoginRedirect === "isSuperhero") {
-			console.log("Superhero login attempt");
 			handleLoginError("superhero");
 		} else {
 			const redirectPath: string = validRedirect

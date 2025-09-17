@@ -96,7 +96,6 @@ export const useLogin = () => {
 				type: (err as ApiResponseError)?.type,
 				title: (err as ApiResponseError)?.title,
 			};
-			console.error("Login error:", err);
 		} finally {
 			isLoading.value = false;
 		}
