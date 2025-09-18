@@ -9,7 +9,7 @@
 	>
 		<VCard ref="editSettings">
 			<template #title>
-				<h2 class="text-h4 mt-2 dialog-title">
+				<h2 class="mt-2 dialog-title">
 					{{ modalTitle }}
 				</h2>
 			</template>

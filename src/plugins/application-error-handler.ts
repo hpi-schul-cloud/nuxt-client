@@ -6,7 +6,6 @@ export const handleApplicationError = (err: unknown) => {
 	 * Note: The Global-ErrorHandler wraps the error
 	 * so we can't use instanceof ApplicationError here.
 	 */
-
 	const applicationError = err as ApplicationError;
 	if (applicationError.name === "ApplicationError") {
 		applicationErrorModule.setError({

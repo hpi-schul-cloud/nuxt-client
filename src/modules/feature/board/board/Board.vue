@@ -368,7 +368,7 @@ watch([isBoardVisible, arePermissionsLoaded], () => {
 	hasReadersEditPermission.value =
 		arePermissionsLoaded?.value &&
 		hasUpdateReadersCanEditPermission?.value &&
-		envConfigModule.getEnv.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE;
+		useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE;
 });
 
 const { isLoadingDialogOpen } = useLoadingState(
