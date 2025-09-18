@@ -1,7 +1,7 @@
 <template>
 	<v-container class="d-flex flex-column" style="min-height: 30vh; width: 100%">
-		<v-card>
-			<v-card-title :class="`h3 mt-3 ${isHomePage && 'text-wrap'}`">
+		<v-card class="login-card-block">
+			<v-card-title :class="`h3 mt-0 pa-0 ${isHomePage && 'text-wrap'}`">
 				{{ t("components.login.title") }}
 			</v-card-title>
 			<v-alert
@@ -20,7 +20,7 @@
 					featureOauthLoginEnabled
 				"
 			>
-				<div class="login-providers mb-4">
+				<div class="login-providers">
 					<v-btn
 						class="btn-cloud"
 						color="tertiary"
@@ -31,7 +31,7 @@
 						{{ t("components.login.button.email") }}
 					</v-btn>
 				</div>
-				<div class="login-providers mb-4">
+				<div class="login-providers">
 					<v-btn
 						class="btn-ldap"
 						color="tertiary"
@@ -46,7 +46,7 @@
 				<div
 					v-for="system in oauthSystems?.data"
 					:key="system.id"
-					class="login-providers mb-4"
+					class="login-providers"
 				>
 					<v-btn
 						class="btn-oauth"
@@ -61,8 +61,8 @@
 			</v-card>
 
 			<!-- Email Login Section -->
-			<v-card v-show="showEmailLoginSection" class="email-login-section">
-				<v-card-text>
+			<v-card v-show="showEmailLoginSection" class="login-section">
+				<v-card-text class="pt-0">
 					<!--:prepend-icon="mdiEmailOutline"-->
 					<v-text-field
 						v-model="email"
@@ -136,7 +136,7 @@
 				</v-btn>
 			</v-card>
 			<!-- LDAP Login Section -->
-			<v-card v-show="showLdapLoginSection" class="ldap-login-section">
+			<v-card v-show="showLdapLoginSection" class="login-section">
 				<v-card-text>
 					<!--:prepend-icon="mdiAccountOutline"-->
 					<v-text-field
@@ -237,8 +237,8 @@
 				</v-btn>
 			</v-card>
 			<!-- More or less Section-->
-			<v-card v-if="!featureOauthLoginEnabled">
-				<v-card-text>
+			<v-card v-if="!featureOauthLoginEnabled" class="login-section">
+				<v-card-text class="pt-0">
 					<v-text-field
 						v-model="emailMoreLess"
 						:label="$t('common.labels.emailUsername')"
@@ -525,12 +525,14 @@ const redirectParam = ref(route.query.redirect?.toString() || null);
 const isHomePage = computed<boolean>(() => route.path === "/home");
 
 const emit = defineEmits<{
-	(e: "login-failed", errorDetails: {error_code: string}): void;
+	(e: "login-failed", errorDetails: { error_code: string }): void;
 }>();
 
 function handleLoginError(error_code: string) {
 	if (error_code === "superhero") {
-		setFailedAlert("Du versuchst dich mit einem Superhero Account anzumelden. Bitte benutze einen anderen Account");
+		setFailedAlert(
+			"Du versuchst dich mit einem Superhero Account anzumelden. Bitte benutze einen anderen Account"
+		);
 	} else if (error_code === "cookies_blocked") {
 		setFailedAlert("Cookies sind blockiert");
 	} else {
@@ -545,7 +547,7 @@ function handleLoginError(error_code: string) {
 	passwordMoreLess.value = "";
 	selectedSchool.value = null;
 	selectedSystem.value = null;
-	emit("login-failed", {error_code});
+	emit("login-failed", { error_code });
 }
 
 function setFailedAlert(message: string = "Login fehlgeschlagen") {
@@ -995,3 +997,13 @@ async function submitPwRecovery() {
 	}
 }
 </script>
+
+<style scoped>
+.login-card-block {
+	padding: 1rem 1.25rem;
+}
+
+.login-section {
+	box-shadow: none;
+}
+</style>
