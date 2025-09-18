@@ -229,9 +229,6 @@
 
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { MeSchoolResponse } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";
 import {
 	mdiNumeric1Circle,
@@ -242,18 +239,15 @@ import { InfoAlert } from "@ui-alert";
 import { computed, ComputedRef, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEnvConfig } from "@data-env";
-
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+import { useAuthStoreRefs } from "@data-auth";
 
 const { setMaintenanceMode, maintenanceStatus } = useSharedSchoolYearChange();
 
-const school: ComputedRef<MeSchoolResponse | undefined> = computed(() => {
-	return authModule.getSchool;
-});
+const { school } = useAuthStoreRefs();
 
-const isCheckboxEnabled: Ref<boolean> = ref(false);
+const isCheckboxEnabled = ref(false);
 
-const isCheckboxConfirmed: Ref<boolean> = ref(false);
+const isCheckboxConfirmed = ref(false);
 
 const { t } = useI18n();
 
@@ -284,7 +278,7 @@ const schoolYearMode: ComputedRef<string> = computed(() => {
 	return schoolMaintenanceMode;
 });
 
-const isFinishDialogOpen: Ref<boolean> = ref(false);
+const isFinishDialogOpen = ref(false);
 
 const finishTransferDialog = () => {
 	isFinishDialogOpen.value = true;

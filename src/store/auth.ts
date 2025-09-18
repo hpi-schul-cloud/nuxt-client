@@ -13,6 +13,7 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
 import { useEnvConfig } from "@data-env";
+import { useAuthStore } from "@data-auth";
 
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	const d = new Date();
@@ -139,6 +140,7 @@ export default class AuthModule extends VuexModule {
 	@Action
 	async login() {
 		const { data } = await this.meApi.meControllerMe();
+		await useAuthStore().login();
 
 		this.setMe(data);
 

@@ -199,11 +199,9 @@ import {
 	ToolApiAxiosParamCreator,
 } from "@/serverApi/v3";
 import { RequestArgs } from "@/serverApi/v3/base";
-import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
-	AUTH_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
@@ -219,21 +217,21 @@ import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 import { useEnvConfig } from "@data-env";
+import { useAuthStore } from "@data-auth";
 
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 );
 const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 const router = useRouter();
 
 const schoolLicenseStore = useSchoolLicenseStore();
 
 onMounted(() => {
-	if (authModule.getSchool) {
-		schoolExternalToolsModule.loadSchoolExternalTools(authModule.getSchool.id);
-
+	const school = useAuthStore().school;
+	if (school) {
+		schoolExternalToolsModule.loadSchoolExternalTools(school.id);
 		schoolLicenseStore.fetchMediaSchoolLicenses();
 	}
 });
@@ -251,9 +249,7 @@ const items: ComputedRef<SchoolExternalToolItem[]> = computed(() => {
 	return getItems(schoolExternalToolsModule);
 });
 
-const isLoading: ComputedRef<boolean> = computed(() => {
-	return schoolExternalToolsModule.getLoading;
-});
+const isLoading = computed(() => schoolExternalToolsModule.getLoading);
 
 const editTool = (item: SchoolExternalToolItem) => {
 	router.push({

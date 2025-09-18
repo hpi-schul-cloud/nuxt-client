@@ -1,15 +1,20 @@
 import { Permission } from "@/serverApi/v3";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
-import { authModule } from "@/store";
 import { ref, toValue, watchEffect } from "vue";
+import { useAuthStore } from "@data-auth";
 
 export const useRoomAuthorization = () => {
 	const { room } = storeToRefs(useRoomDetailsStore());
+	const { hasPermission } = useAuthStore();
+	const userCanCreateRoom = hasPermission(Permission.SchoolCreateRoom);
+	const userCanManageRoomInvitationLinks = hasPermission(
+		Permission.SchoolManageRoomInvitationlinks
+	);
 
 	const canAddRoomMembers = ref(false);
 	const canChangeOwner = ref(false);
-	const canCreateRoom = ref(false);
+	const canCreateRoom = hasPermission(Permission.SchoolCreateRoom);
 	const canDeleteRoom = ref(false);
 	const canCopyRoom = ref(false);
 	const canShareRoom = ref(false);
@@ -17,7 +22,7 @@ export const useRoomAuthorization = () => {
 	const canEditRoomContent = ref(false);
 	const canLeaveRoom = ref(false);
 	const canRemoveRoomMembers = ref(false);
-	const canSeeAllStudents = ref(false);
+	const canSeeAllStudents = hasPermission(Permission.StudentList);
 	const canViewRoom = ref(false);
 	const canManageRoomInvitationLinks = ref(false);
 	const canListDrafts = ref(false);
@@ -28,18 +33,11 @@ export const useRoomAuthorization = () => {
 
 		canAddRoomMembers.value = permissions.includes(Permission.RoomAddMembers);
 		canChangeOwner.value = permissions.includes(Permission.RoomChangeOwner);
-		canCreateRoom.value = authModule?.getUserPermissions.includes(
-			Permission.SchoolCreateRoom.toLowerCase()
-		);
 		canDeleteRoom.value = permissions.includes(Permission.RoomDeleteRoom);
 		canCopyRoom.value =
-			authModule?.getUserPermissions.includes(
-				Permission.SchoolCreateRoom.toLowerCase()
-			) && permissions.includes(Permission.RoomCopyRoom);
+			userCanCreateRoom.value && permissions.includes(Permission.RoomCopyRoom);
 		canShareRoom.value =
-			authModule?.getUserPermissions.includes(
-				Permission.SchoolCreateRoom.toLowerCase()
-			) && permissions.includes(Permission.RoomShareRoom);
+			userCanCreateRoom.value && permissions.includes(Permission.RoomShareRoom);
 		canEditRoom.value = permissions.includes(Permission.RoomEditRoom);
 		canEditRoomContent.value = permissions.includes(Permission.RoomEditContent);
 		canLeaveRoom.value = permissions.includes(Permission.RoomLeaveRoom);
@@ -47,12 +45,8 @@ export const useRoomAuthorization = () => {
 			Permission.RoomRemoveMembers
 		);
 		canManageRoomInvitationLinks.value =
-			authModule?.getUserPermissions.includes(
-				Permission.SchoolManageRoomInvitationlinks.toLowerCase()
-			) && permissions.includes(Permission.RoomManageInvitationlinks);
-		canSeeAllStudents.value = authModule?.getUserPermissions.includes(
-			Permission.StudentList.toLowerCase()
-		);
+			userCanManageRoomInvitationLinks.value &&
+			permissions.includes(Permission.RoomManageInvitationlinks);
 		canViewRoom.value = permissions.includes(Permission.RoomListContent);
 		canListDrafts.value = permissions.includes(Permission.RoomListDrafts);
 		canManageVideoconferences.value = permissions.includes(

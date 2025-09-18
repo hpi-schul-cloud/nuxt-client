@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { authModule } from "@/store";
+import { useAuthStore } from "@data-auth";
 
 export default {
 	props: {
@@ -24,7 +24,7 @@ export default {
 	},
 	computed: {
 		userRoles() {
-			return authModule.getUserRoles;
+			return useAuthStore().userRoles;
 		},
 		hasRole() {
 			return typeof this.role === "string"

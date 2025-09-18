@@ -1,8 +1,8 @@
-import AuthModule from "@/store/auth";
 import { BusinessError } from "@/store/types/commons";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import {
+	contextExternalToolConfigurationStatusFactory,
+	createTestAuthStoreWithRole,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -16,6 +16,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
+import { RoleName } from "@/serverApi/v3";
 
 vi.mock("@data-board");
 
@@ -49,22 +50,17 @@ describe("ExternalToolElementAlert", () => {
 			error?: BusinessError;
 			toolStatus?: ContextExternalToolConfigurationStatus;
 		},
-		userRoles?: string[]
+		roleName: RoleName = RoleName.Teacher
 	) => {
 		useToolConfigurationStatusMock.determineToolStatusTranslationKey.mockReturnValue(
 			"translated"
 		);
 
-		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: userRoles,
-		});
+		createTestAuthStoreWithRole(roleName);
 
 		const wrapper = mount(ExternalToolElementAlert, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 				mocks: {
 					$t: (key: string, dynamic?: object): string =>
 						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
@@ -79,7 +75,6 @@ describe("ExternalToolElementAlert", () => {
 
 		return {
 			wrapper,
-			authModule,
 		};
 	};
 
@@ -156,7 +151,7 @@ describe("ExternalToolElementAlert", () => {
 							isOutdatedOnScopeSchool: true,
 						}),
 					},
-					["teacher"]
+					RoleName.Teacher
 				);
 
 				return {
@@ -186,7 +181,7 @@ describe("ExternalToolElementAlert", () => {
 							isOutdatedOnScopeSchool: true,
 						}),
 					},
-					["student"]
+					RoleName.Student
 				);
 
 				return {
@@ -218,7 +213,7 @@ describe("ExternalToolElementAlert", () => {
 							isOutdatedOnScopeContext: true,
 						}),
 					},
-					["teacher"]
+					RoleName.Teacher
 				);
 
 				return {
@@ -248,7 +243,7 @@ describe("ExternalToolElementAlert", () => {
 							isOutdatedOnScopeContext: true,
 						}),
 					},
-					["student"]
+					RoleName.Student
 				);
 
 				return {
@@ -281,7 +276,7 @@ describe("ExternalToolElementAlert", () => {
 							isOutdatedOnScopeContext: true,
 						}),
 					},
-					["teacher"]
+					RoleName.Teacher
 				);
 
 				return {
@@ -312,7 +307,7 @@ describe("ExternalToolElementAlert", () => {
 							isOutdatedOnScopeContext: true,
 						}),
 					},
-					["student"]
+					RoleName.Student
 				);
 
 				return {
@@ -343,7 +338,7 @@ describe("ExternalToolElementAlert", () => {
 						isDeactivated: true,
 					}),
 				},
-				["teacher"]
+				RoleName.Teacher
 			);
 
 			const alerts = wrapper.findAllComponents(WarningAlert);
@@ -365,7 +360,7 @@ describe("ExternalToolElementAlert", () => {
 						isNotLicensed: true,
 					}),
 				},
-				["teacher"]
+				RoleName.Teacher
 			);
 
 			const alerts = wrapper.findAllComponents(WarningAlert);
@@ -388,7 +383,7 @@ describe("ExternalToolElementAlert", () => {
 							isIncompleteOnScopeContext: true,
 						}),
 					},
-					["teacher"]
+					RoleName.Teacher
 				);
 
 				return {
@@ -418,7 +413,7 @@ describe("ExternalToolElementAlert", () => {
 							isIncompleteOnScopeContext: true,
 						}),
 					},
-					["student"]
+					RoleName.Student
 				);
 
 				return {
@@ -450,7 +445,7 @@ describe("ExternalToolElementAlert", () => {
 							isIncompleteOperationalOnScopeContext: true,
 						}),
 					},
-					["teacher"]
+					RoleName.Teacher
 				);
 
 				return {
@@ -480,7 +475,7 @@ describe("ExternalToolElementAlert", () => {
 							isIncompleteOperationalOnScopeContext: true,
 						}),
 					},
-					["student"]
+					RoleName.Student
 				);
 
 				return {

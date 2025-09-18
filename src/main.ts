@@ -69,6 +69,7 @@ import {
 } from "./utils/inject";
 import { logger } from "@util-logger";
 import { useEnvStore } from "@data-env";
+import { useAuthStore } from "@/modules/data/auth/auth.store";
 
 export const app = createApp(App);
 
@@ -111,6 +112,7 @@ app.use(VueDOMPurifyHTML, {
 	}
 
 	try {
+		// await useAuthStore().login();
 		await authModule.login();
 	} catch (error) {
 		// TODO improve exception handling, best case test if its a 401, if not log the unknown error

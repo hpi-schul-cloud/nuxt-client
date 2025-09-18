@@ -1,7 +1,5 @@
-import { authModule, schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
+import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
-import { meResponseFactory } from "@@/tests/test-utils";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
@@ -11,7 +9,11 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { RouterLinkStub } from "@vue/test-utils";
 import AuthSystems from "./AuthSystems";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import {
+	createTestAuthStoreWithPermissions,
+	createTestEnvStore,
+} from "@@/tests/test-utils";
+import { Permission } from "@/serverApi/v3/index.js";
 
 const generateProps = () => ({
 	systems: [
@@ -55,6 +57,7 @@ const searchStrings = {
 
 describe("AuthSystems", () => {
 	const RouterLinkStubMock = { ...RouterLinkStub, useLink: vi.fn() };
+
 	const createWrapper = (options = {}) => {
 		const wrapper = mount(AuthSystems, {
 			global: {
@@ -68,11 +71,8 @@ describe("AuthSystems", () => {
 	};
 
 	beforeEach(() => {
-		createTestEnvStore();
-
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 	});
 
@@ -165,10 +165,8 @@ describe("AuthSystems", () => {
 		});
 
 		it("ldap button should be visible", () => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["SYSTEM_CREATE"],
-			});
-			authModule.setMe(mockMe);
+			createTestAuthStoreWithPermissions([Permission.SystemCreate]);
+
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const ldapButtonVisibility = wrapper.findAllComponents(
@@ -198,10 +196,11 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the edit system button", () => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
-			});
-			authModule.setMe(mockMe);
+			createTestAuthStoreWithPermissions([
+				Permission.SystemCreate,
+				Permission.SystemEdit,
+			]);
+
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
@@ -240,10 +239,11 @@ describe("AuthSystems", () => {
 		});
 
 		it("should redirect to ldap config page from edit button of general ldap system", () => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
-			});
-			authModule.setMe(mockMe);
+			createTestAuthStoreWithPermissions([
+				Permission.SystemCreate,
+				Permission.SystemEdit,
+			]);
+
 			const wrapper = createWrapper({ props: generateProps() });
 			const editSystemButton = wrapper.findComponent(
 				searchStrings.editSystemButton
@@ -256,10 +256,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display system edit button and redirect to correct config page ", () => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
-			});
-			authModule.setMe(mockMe);
+			createTestAuthStoreWithPermissions([
+				Permission.SystemCreate,
+				Permission.SystemEdit,
+			]);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const systemEditButtons = wrapper.findAllComponents(
@@ -286,10 +286,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the dialog", async () => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
-			});
-			authModule.setMe(mockMe);
+			createTestAuthStoreWithPermissions([
+				Permission.SystemCreate,
+				Permission.SystemEdit,
+			]);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);
@@ -306,10 +306,7 @@ describe("AuthSystems", () => {
 
 	describe("events", () => {
 		it("should call the action when 'dialog-confirmed' triggered", async () => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["SYSTEM_CREATE"],
-			});
-			authModule.setMe(mockMe);
+			createTestAuthStoreWithPermissions([Permission.SystemCreate]);
 			const deleteSpy = vi
 				.spyOn(schoolsModule, "deleteSystem")
 				.mockImplementation(vi.fn());
@@ -327,14 +324,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("should call the method when delete dialog confirmed", async () => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["SYSTEM_CREATE"],
-			});
-			authModule.setMe(mockMe);
+			createTestAuthStoreWithPermissions([Permission.SystemCreate]);
 			const removeSystem = vi
 				.spyOn(AuthSystems.methods, "removeSystem")
 				.mockImplementation(vi.fn());
-			authModule.setMe(mockMe);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);
@@ -346,10 +339,11 @@ describe("AuthSystems", () => {
 		});
 
 		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", () => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT", "SYSTEM_VIEW"],
-			});
-			authModule.setMe(mockMe);
+			createTestAuthStoreWithPermissions([
+				Permission.SystemCreate,
+				Permission.SystemEdit,
+				Permission.SystemView,
+			]);
 			const wrapper = createWrapper({ props: generateProps() });
 			const deleteButton = wrapper.find(searchStrings.deleteSystemButton);
 			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(false);

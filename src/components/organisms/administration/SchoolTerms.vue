@@ -119,7 +119,6 @@ import { ConsentVersion } from "@/store/types/consent-version";
 import { useI18n } from "vue-i18n";
 import {
 	injectStrict,
-	AUTH_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -132,9 +131,10 @@ import {
 	mdiTrashCanOutline,
 	mdiTrayArrowUp,
 } from "@icons/material";
+import { useAuthStore } from "@data-auth";
+import { Permission } from "@/serverApi/v3";
 
 const { t } = useI18n();
-const authModule = injectStrict(AUTH_MODULE_KEY);
 const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
@@ -151,9 +151,10 @@ watch(
 	{ immediate: true }
 );
 
-const hasSchoolEditPermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("school_edit")
+const hasSchoolEditPermission = useAuthStore().hasPermission(
+	Permission.SchoolEdit
 );
+
 const termsOfUse: ComputedRef<ConsentVersion | null> = computed(
 	() => termsOfUseModule.getTermsOfUse
 );

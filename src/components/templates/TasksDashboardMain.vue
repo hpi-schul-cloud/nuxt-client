@@ -89,7 +89,6 @@
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { authModule } from "@/store";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import {
@@ -104,6 +103,7 @@ import {
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import { COPY_MODULE_KEY } from "@/utils/inject";
+import { useAuthStore } from "@data-auth";
 
 const roleBasedRoutes = {
 	[Roles.Teacher]: ["current", "drafts", "finished"],
@@ -267,7 +267,7 @@ export default {
 		fabItems() {
 			if (
 				!this.isStudent &&
-				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
+				useAuthStore().userPermissions.includes("homework_create")
 			) {
 				return {
 					icon: mdiPlus,

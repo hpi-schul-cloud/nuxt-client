@@ -1,5 +1,3 @@
-import { authModule } from "@/store";
-import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
@@ -13,7 +11,7 @@ import {
 	SHARE_MODULE_KEY,
 	TASKS_MODULE_KEY,
 } from "@/utils/inject";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { createTestAuthStoreWithPermissions } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -26,6 +24,7 @@ import { VAutocomplete } from "vuetify/lib/components/index";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
+import { Permission } from "@/serverApi/v3";
 
 const $route = {
 	query: {
@@ -117,10 +116,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				tasksIsEmpty: false,
 			});
 
-			setupStores({
-				authModule: AuthModule,
-			});
-
 			wrapper = mountComponent({
 				props: {
 					role: "student",
@@ -204,13 +199,9 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 			setupStores({
 				copyModule: CopyModule,
-				authModule: AuthModule,
 			});
+			createTestAuthStoreWithPermissions([Permission.HomeworkCreate]);
 
-			const mockMe = meResponseFactory.build({
-				permissions: ["HOMEWORK_CREATE"],
-			});
-			authModule.setMe(mockMe);
 			wrapper = mountComponent({
 				props: {
 					role: "teacher",

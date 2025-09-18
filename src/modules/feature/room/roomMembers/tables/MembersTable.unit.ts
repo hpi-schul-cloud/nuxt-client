@@ -12,6 +12,8 @@ import {
 	mdiAccountSchoolOutline,
 } from "@icons/material";
 import {
+	createTestAuthStore,
+	createTestAuthStoreWithUser,
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
@@ -42,8 +44,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
-import { authModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import { ChangeRole } from "@feature-room";
 import { Mock } from "vitest";
 
@@ -85,7 +86,6 @@ describe("MembersTable", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -143,10 +143,6 @@ describe("MembersTable", () => {
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
 		const currentUser = roomMemberFactory.build({});
-		const mockMe = meResponseFactory.build({
-			user: { id: options?.currentUserId ?? currentUser.userId },
-		});
-		authModule.setMe(mockMe);
 
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,
@@ -154,21 +150,20 @@ describe("MembersTable", () => {
 			value: windowWidth,
 		});
 
+		createTestingPinia({
+			initialState: {
+				roomMembersStore: {
+					roomMembers: [...members, currentUser],
+					isRoomOwner: vi.fn(),
+				},
+			},
+		});
+		createTestAuthStoreWithUser(options?.currentUserId ?? currentUser.userId);
+
 		const wrapper = mount(MembersTable, {
 			attachTo: document.body,
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomMembersStore: {
-								roomMembers: [...members, currentUser],
-								isRoomOwner: vi.fn(),
-							},
-						},
-					}),
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
 

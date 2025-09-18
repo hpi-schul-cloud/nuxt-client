@@ -20,6 +20,7 @@
 		"types": ["node", "vitest/globals"],
 		"typeRoots": ["./node_modules/@types", "./types", "./node_modules"],
 		"paths": {
+            "@data-auth": ["src/modules/data/auth"],
 			"@data-board": ["src/modules/data/board"],
 			"@data-external-tool": ["src/modules/data/external-tool"],
 			"@data-group": ["src/modules/data/group"],

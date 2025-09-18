@@ -52,6 +52,7 @@ export default defineConfigWithVueTs([
 			schulcloud,
 		},
 		rules: {
+			"require-await": "warn",
 			"@typescript-eslint/ban-ts-comment": "error",
 			"@typescript-eslint/no-empty-function": "error",
 			"@typescript-eslint/no-empty-object-type": [
@@ -117,6 +118,11 @@ export default defineConfigWithVueTs([
 			"no-unused-vars": "off", // disable the base rule for @typescript-eslint/no-unused-vars
 			"no-useless-escape": "error",
 			"no-var": "error",
+			"arrow-body-style": [
+				"warn",
+				"as-needed",
+				{ requireReturnForObjectLiteral: true },
+			],
 			"prefer-const": "error",
 			"prettier/prettier": "error",
 			"schulcloud/material-icon-imports": "error",

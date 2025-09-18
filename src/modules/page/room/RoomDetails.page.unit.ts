@@ -1,6 +1,4 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { authModule } from "@/store";
-import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
@@ -9,7 +7,6 @@ import { RoomBoardItem } from "@/types/room/Room";
 import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestEnvStore,
-	meResponseFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
@@ -22,7 +19,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	RoomVariant,
 	useRoomAuthorization,
@@ -41,7 +37,7 @@ import {
 } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { Mock } from "vitest";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 
 vi.mock("vue-router", () => ({
@@ -65,9 +61,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	beforeEach(() => {
 		vi.useFakeTimers();
-		setupStores({
-			authModule: AuthModule,
-		});
 
 		useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
 			isLoading: ref(false),
@@ -76,8 +69,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 		vi.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
 
-		const mockMe = meResponseFactory.build();
-		authModule.setMe(mockMe);
+		createTestEnvStore();
 
 		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
@@ -87,14 +79,14 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		roomPermissions = {
 			canAddRoomMembers: ref(false),
 			canChangeOwner: ref(false),
-			canCreateRoom: ref(false),
+			canCreateRoom: computed(() => false),
 			canViewRoom: ref(false),
 			canEditRoom: ref(false),
 			canDeleteRoom: ref(false),
 			canLeaveRoom: ref(true),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
-			canSeeAllStudents: ref(false),
+			canSeeAllStudents: computed(() => false),
 			canCopyRoom: ref(false),
 			canShareRoom: ref(false),
 			canManageRoomInvitationLinks: ref(false),
@@ -171,7 +163,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	};
 
 	describe("when page is mounted", () => {
-		it("should set the page title", async () => {
+		it("should set the page title", () => {
 			const { room } = setup();
 
 			expect(document.title).toContain(
@@ -244,7 +236,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and user clicks on edit room", () => {
-			it("should navigate to the edit room page", async () => {
+			it("should navigate to the edit room page", () => {
 				const { wrapper, router, room } = setup();
 
 				const menu = wrapper.getComponent({ name: "RoomMenu" });
@@ -260,7 +252,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and user clicks on manage members", () => {
-			it("should navigate to the member management page", async () => {
+			it("should navigate to the member management page", () => {
 				const { wrapper, router, room } = setup();
 
 				const menu = wrapper.getComponent({ name: "RoomMenu" });
@@ -277,35 +269,35 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("when a user clicks on leave room", () => {
 			describe("and user has permission to leave room", () => {
-				it("should call leaveRoom when dialog confirmed", async () => {
+				it("should call leaveRoom when dialog confirmed", () => {
 					askConfirmationMock.mockResolvedValue(true);
 					const { wrapper, useRoomsStateMock } = setup();
 
 					const menu = wrapper.getComponent(RoomMenu);
-					await menu.vm.$emit("room:leave");
+					menu.vm.$emit("room:leave");
 
 					expect(useRoomsStateMock.leaveRoom).toHaveBeenCalled();
 				});
 
-				it("should not call leaveRoom when dialog canceled", async () => {
+				it("should not call leaveRoom when dialog canceled", () => {
 					askConfirmationMock.mockResolvedValue(false);
 					const { wrapper, useRoomsStateMock } = setup();
 
 					const menu = wrapper.getComponent(RoomMenu);
-					await menu.vm.$emit("room:leave");
+					menu.vm.$emit("room:leave");
 
 					expect(useRoomsStateMock.leaveRoom).not.toHaveBeenCalled();
 				});
 			});
 
 			describe("when user has not the permission to leave the room", () => {
-				it("should open leave room prohibited dialog", async () => {
+				it("should open leave room prohibited dialog", () => {
 					roomPermissions.canLeaveRoom.value = false;
 
 					const { wrapper } = setup();
 
 					const menu = wrapper.getComponent(RoomMenu);
-					await menu.vm.$emit("room:leave");
+					menu.vm.$emit("room:leave");
 					const leaveRoomProhibitedDialog = wrapper.getComponent(
 						LeaveRoomProhibitedDialog
 					);

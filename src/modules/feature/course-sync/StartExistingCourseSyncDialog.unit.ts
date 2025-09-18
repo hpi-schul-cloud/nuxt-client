@@ -1,10 +1,13 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { MeResponse, RoleName } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
-import { AUTH_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { groupResponseFactory, meResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestAuthStore,
+	groupResponseFactory,
+	meResponseFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -32,11 +35,8 @@ describe("StartExistingCourseSyncDialog", () => {
 		},
 		admin?: MeResponse
 	) => {
-		const me = meResponseFactory.build();
 		const notifierModule = createModuleMocks(NotifierModule);
-		const authModule = createModuleMocks(AuthModule, {
-			getMe: admin ?? me,
-		});
+		const { mockedMe } = createTestAuthStore({ me: admin ?? {} });
 
 		const wrapper = mount(StartExistingCourseSyncDialog, {
 			global: {
@@ -51,7 +51,6 @@ describe("StartExistingCourseSyncDialog", () => {
 				},
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			},
 			props,
@@ -60,7 +59,7 @@ describe("StartExistingCourseSyncDialog", () => {
 		return {
 			wrapper,
 			notifierModule,
-			me,
+			me: mockedMe,
 		};
 	};
 
@@ -273,7 +272,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			const group = groupResponseFactory.build({
 				users: [
 					{
-						id: me.user.id,
+						id: me.user?.id,
 						firstName: me.user.firstName,
 						lastName: me.user.lastName,
 						role: RoleName.Teacher,

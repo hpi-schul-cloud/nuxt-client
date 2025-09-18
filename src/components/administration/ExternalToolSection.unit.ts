@@ -4,22 +4,20 @@ import {
 	ExternalToolMediumStatus,
 	MediaSourceLicenseType,
 } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
-	AUTH_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import {
+	createTestAuthStore,
 	createTestEnvStore,
 	mockedPiniaStoreTyping,
 	MockedStore,
 } from "@@/tests/test-utils";
 import {
-	meResponseFactory,
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
 	schoolToolConfigurationStatusFactory,
@@ -49,6 +47,7 @@ vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
 describe("ExternalToolSection", () => {
+	const schoolId = "schoolId";
 	let el: HTMLDivElement;
 
 	let useSchoolExternalToolUsageMock: DeepMocked<
@@ -82,11 +81,7 @@ describe("ExternalToolSection", () => {
 
 		const notifierModule = createModuleMocks(NotifierModule);
 
-		const mockMe = meResponseFactory.build({ school: { id: "schoolId" } });
-		const authModule = createModuleMocks(AuthModule, {
-			getSchool: mockMe.school,
-		});
-
+		createTestAuthStore({ me: { school: { id: schoolId } } });
 		createTestEnvStore(envs);
 
 		const router = createMock<Router>();
@@ -99,7 +94,6 @@ describe("ExternalToolSection", () => {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			},
 			stubs: {
@@ -145,7 +139,7 @@ describe("ExternalToolSection", () => {
 
 				expect(
 					schoolExternalToolsModule.loadSchoolExternalTools
-				).toHaveBeenCalledWith("schoolId");
+				).toHaveBeenCalledWith(schoolId);
 			});
 
 			it("should load the school licenses", () => {
@@ -163,7 +157,7 @@ describe("ExternalToolSection", () => {
 			const schoolExternalTool = schoolExternalToolFactory.build({
 				id: "testId",
 				toolId: "toolId",
-				schoolId: "schoolId",
+				schoolId,
 				parameters: [],
 				name: firstToolName,
 				status: schoolToolConfigurationStatusFactory.build(),
@@ -186,7 +180,7 @@ describe("ExternalToolSection", () => {
 						{
 							id: "testId2",
 							toolId: "toolId",
-							schoolId: "schoolId",
+							schoolId,
 							parameters: [],
 							name: secondToolName,
 							status: schoolToolConfigurationStatusFactory.build({
@@ -204,7 +198,7 @@ describe("ExternalToolSection", () => {
 						{
 							id: "testId3",
 							toolId: "toolId",
-							schoolId: "schoolId",
+							schoolId,
 							parameters: [],
 							name: "Test3",
 							status: schoolToolConfigurationStatusFactory.build({
@@ -396,7 +390,7 @@ describe("ExternalToolSection", () => {
 								{
 									id: "testId",
 									toolId: "toolId",
-									schoolId: "schoolId",
+									schoolId,
 									parameters: [],
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),
@@ -428,7 +422,7 @@ describe("ExternalToolSection", () => {
 								{
 									id: "testId",
 									toolId: "toolId",
-									schoolId: "schoolId",
+									schoolId,
 									parameters: [],
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),

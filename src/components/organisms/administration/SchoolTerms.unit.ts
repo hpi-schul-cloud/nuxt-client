@@ -1,5 +1,4 @@
 import SchoolTerms from "./SchoolTerms.vue";
-import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
 import TermsOfUseModule from "@/store/terms-of-use";
 import NotifierModule from "@/store/notifier";
@@ -8,7 +7,6 @@ import { VueWrapper, mount } from "@vue/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { ConsentVersion } from "@/store/types/consent-version";
 import {
-	AUTH_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
@@ -19,11 +17,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import type { Mocked } from "vitest";
+import { createTestAuthStore } from "@@/tests/test-utils";
+import { Permission } from "@/serverApi/v3";
 
 vi.mock("@/utils/fileHelper");
 
 describe("SchoolTerms", () => {
-	let authModule: Mocked<AuthModule>;
 	let schoolsModule: Mocked<SchoolsModule>;
 	let termsOfUseModule: Mocked<TermsOfUseModule>;
 	let notifierModule: Mocked<NotifierModule>;
@@ -57,11 +56,9 @@ describe("SchoolTerms", () => {
 			},
 			getStatus: "completed",
 		},
-		userPermissions: string[] = ["school_edit"]
+		permissions = [Permission.SchoolEdit]
 	) => {
-		authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: userPermissions,
-		});
+		createTestAuthStore({ me: { permissions } });
 
 		schoolsModule = createModuleMocks(SchoolsModule, {
 			getSchool: mockSchool,
@@ -78,7 +75,6 @@ describe("SchoolTerms", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
@@ -150,13 +146,13 @@ describe("SchoolTerms", () => {
 
 	describe("when user does not have school edit permission", () => {
 		it("should not render edit button", () => {
-			const wrapper = setup(undefined, ["school_view"]);
+			const wrapper = setup(undefined, [Permission.SchoolView]);
 
 			expect(wrapper.find('[data-testid="edit-button"]').exists()).toBe(false);
 		});
 
 		it("should not render dialog component", () => {
-			const wrapper = setup(undefined, ["school_view"]);
+			const wrapper = setup(undefined, [Permission.SchoolView]);
 
 			expect(wrapper.find('[data-testid="form-dialog"]').exists()).toBe(false);
 		});

@@ -1,21 +1,15 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout, Permission, RoleName } from "@/serverApi/v3";
-import { authModule } from "@/store";
 import { BoardContextType } from "@/types/board/BoardContext";
 import {
 	boardResponseFactory,
-	createTestEnvStore,
-	meResponseFactory,
+	createTestAuthStore,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
-import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import AuthModule from "../../../store/auth";
 import { useBoardStore } from "./Board.store";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardPermissions } from "./BoardPermissions.composable";
@@ -56,8 +50,6 @@ describe("BoardPermissions.composable", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
-		setActivePinia(createTestingPinia());
-
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
@@ -108,21 +100,13 @@ describe("BoardPermissions.composable", () => {
 			resetPageInformation: vi.fn(),
 		});
 
-		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false });
-
-		setupStores({
-			authModule: AuthModule,
-		});
-
 		const userRoleEntities = userRoles.map((role: RoleName) => ({
 			id: Math.random().toString(),
 			name: role,
 		}));
-		const mockMe = meResponseFactory.build({
-			roles: userRoleEntities,
-			permissions: userPermissions,
+		createTestAuthStore({
+			me: { roles: userRoleEntities, permissions: userPermissions },
 		});
-		authModule.setMe(mockMe);
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		const board = boardResponseFactory.build({
@@ -139,7 +123,7 @@ describe("BoardPermissions.composable", () => {
 	};
 
 	describe("when the user does not have the permissions", () => {
-		it("should return false for board permissions", async () => {
+		it("should return false for board permissions", () => {
 			setupAllStores({
 				userRoles: [RoleName.Student],
 				userPermissions: [],
@@ -174,7 +158,7 @@ describe("BoardPermissions.composable", () => {
 	});
 
 	describe("when the user does have the permissions", () => {
-		it("should return true for board permissions", async () => {
+		it("should return true for board permissions", () => {
 			setupAllStores({
 				userRoles: [RoleName.Teacher],
 				userPermissions: [Permission.ContextToolAdmin],

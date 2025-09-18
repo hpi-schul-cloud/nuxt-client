@@ -4,7 +4,6 @@ import {
 	WopiApiFactory,
 	WopiApiInterface,
 } from "@/fileStorageApi/v3";
-import { authModule } from "@/store/store-accessor";
 import {
 	EditorMode,
 	FileRecord,
@@ -17,6 +16,7 @@ import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { useFileRecordsStore } from "./FileRecords.state";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 import { useParentStatisticsStore } from "./ParentStatistics.state";
+import { useAuthStore } from "@data-auth";
 
 export enum ErrorType {
 	FILE_IS_BLOCKED = "FILE_IS_BLOCKED",
@@ -53,7 +53,7 @@ export const useFileStorageApi = () => {
 		parentType: FileRecordParent
 	): Promise<void> => {
 		try {
-			const schoolId = authModule.getSchool?.id as string;
+			const schoolId = useAuthStore().school?.id as string;
 			const response = await fileApi.list(
 				schoolId,
 				StorageLocation.SCHOOL,
@@ -74,7 +74,7 @@ export const useFileStorageApi = () => {
 		parentType: FileRecordParent
 	): Promise<void> => {
 		try {
-			const schoolId = authModule.getSchool?.id as string;
+			const schoolId = useAuthStore().school?.id as string;
 			const response = await fileApi.upload(
 				schoolId,
 				StorageLocation.SCHOOL,
@@ -97,7 +97,7 @@ export const useFileStorageApi = () => {
 		try {
 			const { pathname } = new URL(imageUrl);
 			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
-			const schoolId = authModule.getSchool?.id as string;
+			const schoolId = useAuthStore().school?.id as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
 				fileName,

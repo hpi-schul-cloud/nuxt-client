@@ -1,4 +1,4 @@
-import { authModule } from "@/store";
+import { useAuthStore } from "@data-auth";
 
 export default {
 	props: {
@@ -9,7 +9,7 @@ export default {
 	},
 	computed: {
 		userPermissions() {
-			return authModule.getUserPermissions;
+			return useAuthStore().userPermissions;
 		},
 		$_hasPermission() {
 			return this.$_userHasPermission(this.permission);

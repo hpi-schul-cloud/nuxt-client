@@ -168,13 +168,14 @@
 </template>
 
 <script setup lang="ts">
-import { authModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import { toBase64 } from "@/utils/fileHelper";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { useOpeningTagValidator } from "@/utils/validation";
 import PrivacySettings from "./PrivacySettings.vue";
 import {
 	LanguageType,
+	Permission,
 	SchoolFeature,
 	SchoolUpdateBodyParams,
 } from "@/serverApi/v3";
@@ -183,6 +184,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
+import { useAuthStore } from "@data-auth";
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { t } = useI18n();
@@ -208,9 +210,9 @@ const languages = computed(() => {
 	});
 });
 
-const hasSchoolEditPermission = computed(() => {
-	return authModule.getUserPermissions.includes("school_edit");
-});
+const hasSchoolEditPermission = useAuthStore().hasPermission(
+	Permission.SchoolEdit
+);
 
 const convertDataUrlToFile = (dataURL: string, fileName: string) => {
 	const dataUrlParts = dataURL.split(",");

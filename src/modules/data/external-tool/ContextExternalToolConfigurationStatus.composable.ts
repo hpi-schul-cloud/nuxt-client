@@ -1,15 +1,14 @@
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useI18n } from "vue-i18n";
 import { ContextExternalToolConfigurationStatus } from "./types";
+import { useAuthStore } from "@data-auth";
 
 export const useContextExternalToolConfigurationStatus = () => {
-	const authModule = injectStrict(AUTH_MODULE_KEY);
 	const { t } = useI18n();
 
 	const determineToolStatusTranslationKey = (
 		toolConfigStatus: ContextExternalToolConfigurationStatus
 	): string => {
-		const userRoles = authModule.getUserRoles;
+		const userRoles = useAuthStore().userRoles;
 
 		if (userRoles.includes("teacher")) {
 			if (
@@ -37,7 +36,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 		toolConfigStatus: ContextExternalToolConfigurationStatus
 	): string => {
 		let statusString: string;
-		const userRoles = authModule.getUserRoles;
+		const userRoles = useAuthStore().userRoles;
 
 		if (toolConfigStatus.isDeactivated) {
 			statusString = t("common.medium.alert.deactivated") + " ";
@@ -57,7 +56,8 @@ export const useContextExternalToolConfigurationStatus = () => {
 	};
 
 	const determineDeactivatedTranslationKey = (): string => {
-		const userRoles = authModule.getUserRoles;
+		const userRoles = useAuthStore().userRoles;
+
 		if (userRoles.includes("student")) {
 			return "common.tool.information.deactivated.student";
 		} else {
@@ -66,7 +66,8 @@ export const useContextExternalToolConfigurationStatus = () => {
 	};
 
 	const determineNotLicensedTranslationKey = (): string => {
-		const userRoles = authModule.getUserRoles;
+		const userRoles = useAuthStore().userRoles;
+
 		if (userRoles.includes("student")) {
 			return "common.tool.information.notLicensed.student";
 		} else {
@@ -89,9 +90,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 		return true;
 	};
 
-	const isTeacher = (): boolean => {
-		return authModule.getUserRoles.includes("teacher");
-	};
+	const isTeacher = () => useAuthStore().userRoles.includes("teacher");
 
 	return {
 		determineToolStatusTranslationKey,

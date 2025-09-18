@@ -1,12 +1,10 @@
-import {
-	authModule,
-	commonCartridgeImportModule,
-	courseRoomListModule,
-} from "@/store";
-import AuthModule from "@/store/auth";
+import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CourseRoomListModule from "@/store/course-room-list";
-import { createTestEnvStore, meResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestAuthStoreWithPermissions,
+	createTestEnvStore,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -18,15 +16,15 @@ import { FabAction } from "./default-wireframe.types";
 import DefaultWireframe from "./DefaultWireframe.vue";
 import RoomWrapper from "./RoomWrapper.vue";
 import { EmptyState } from "@ui-empty-state";
-import { CourseMetadataResponse } from "@/serverApi/v3";
+import { Permission, CourseMetadataResponse } from "@/serverApi/v3";
 import { beforeAll } from "vitest";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
 		props: { hasRooms: true },
 	}
-) => {
-	return mount(RoomWrapper, {
+) =>
+	mount(RoomWrapper, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			stubs: {
@@ -36,7 +34,6 @@ const getWrapper = (
 		},
 		...options,
 	});
-};
 
 const mockData: CourseMetadataResponse[] = [
 	{
@@ -83,12 +80,13 @@ describe("@templates/RoomWrapper.vue", () => {
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
 			FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
 		});
+
+		createTestAuthStoreWithPermissions([Permission.CourseCreate]);
 	});
 
 	beforeEach(() => {
 		setupStores({
 			courseRoomListModule: CourseRoomListModule,
-			authModule: AuthModule,
 			commonCartridgeImportModule: CommonCartridgeImportModule,
 		});
 		courseRoomListModule.setAllElements(mockData);
@@ -134,13 +132,6 @@ describe("@templates/RoomWrapper.vue", () => {
 	});
 
 	describe("when user has course create permission", () => {
-		beforeEach(() => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["COURSE_CREATE"],
-			});
-			authModule.setMe(mockMe);
-		});
-
 		it("should display fab", () => {
 			const wrapper = getWrapper();
 
@@ -185,9 +176,7 @@ describe("@templates/RoomWrapper.vue", () => {
 
 	describe("when user does not have course create permission", () => {
 		it("should not display fab", () => {
-			const mockMe = meResponseFactory.build();
-			authModule.setMe(mockMe);
-
+			createTestAuthStoreWithPermissions([]);
 			const wrapper = getWrapper();
 
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);

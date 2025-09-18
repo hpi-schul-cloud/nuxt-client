@@ -1,10 +1,11 @@
 import { AlertPayload } from "@/store/types/alert-payload";
 import { computed, Ref, ref, watch } from "vue";
-import { authModule, notifierModule } from "@/store";
+import { notifierModule } from "@/store";
 import { useI18n } from "vue-i18n";
 import { $axios } from "@/utils/api";
 import { SessionStatus } from "./types";
 import { useEnvConfig } from "@data-env";
+import { useAuthStore } from "@data-auth";
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();
@@ -107,7 +108,7 @@ export const useAutoLogout = () => {
 		clearPollings();
 
 		if (sessionStatus.value === SessionStatus.Ended) {
-			authModule.logout();
+			useAuthStore().logout();
 			return;
 		}
 
