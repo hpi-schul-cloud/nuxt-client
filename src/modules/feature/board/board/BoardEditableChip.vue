@@ -8,7 +8,7 @@
 		<div class="chip-content">
 			<v-icon left class="mr-2" color="">{{ mdiPencilPlusOutline }}</v-icon>
 			<span>
-				{{ $t("components.board.header.chip.editableForEveryone") }}
+				{{ t("components.board.header.chip.editableForEveryone") }}
 			</span>
 		</div>
 	</VChip>
@@ -16,6 +16,9 @@
 
 <script setup lang="ts">
 import { mdiPencilPlusOutline } from "@icons/material";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 </script>
 
 <style lang="scss" scoped>
