@@ -80,7 +80,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import type { VCard } from "vuetify/components";
 import { useDisplay } from "vuetify";
@@ -145,9 +145,18 @@ const onSave = () => {
 };
 
 const editSettings = ref<VCard>();
-useFocusTrap(editSettings, {
+const { deactivate } = useFocusTrap(editSettings, {
 	immediate: true,
 });
+
+watch(
+	() => isOpen.value,
+	(isOpen: boolean) => {
+		if (isOpen === false) {
+			deactivate();
+		}
+	}
+);
 </script>
 
 <style lang="scss" scoped>
