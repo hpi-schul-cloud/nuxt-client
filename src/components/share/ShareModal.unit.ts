@@ -59,9 +59,9 @@ describe("@/components/share/ShareModal", () => {
 
 		it("should have the correct title", () => {
 			const { wrapper } = setup();
-			const title = wrapper.vm.$refs.textTitle as HTMLElement;
+			const title = wrapper.findComponent({ name: "v-card-title" });
 
-			expect(title.textContent).toContain(
+			expect(title.text()).toContain(
 				"components.molecules.share.options.title"
 			);
 		});

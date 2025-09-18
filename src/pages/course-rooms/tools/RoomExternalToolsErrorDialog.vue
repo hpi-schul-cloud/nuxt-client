@@ -8,7 +8,7 @@
 		@dialog-closed="onCloseCustomDialog"
 	>
 		<template #title>
-			<h2 class="text-h4 my-2">
+			<h2 class="my-2">
 				{{ t(getTitle, { toolName: selectedItem.name }) }}
 			</h2>
 		</template>

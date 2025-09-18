@@ -19,7 +19,7 @@
 		</VSnackbar>
 
 		<template #header>
-			<h1 class="text-h3">
+			<h1>
 				{{
 					t("pages.administration.migration.title", {
 						source: sourceSystemName,
