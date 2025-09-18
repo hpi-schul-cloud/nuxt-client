@@ -1,6 +1,6 @@
 <template>
 	<div class="mb-10">
-		<h2 class="text-h4" data-testid="medium-details-title">
+		<h2 data-testid="medium-details-title">
 			{{
 				isMediumTemplate
 					? t("pages.tool.medium.template")

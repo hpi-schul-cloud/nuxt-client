@@ -3,7 +3,7 @@
 		<UseFocusTrap :options="{ immediate: true }">
 			<VCard data-testid="board-layout-dialog">
 				<VCardTitle
-					class="text-h4 text-break px-6 pt-4"
+					class="text-h2 text-break px-6 pt-4"
 					data-testid="board-layout-dialog-title"
 				>
 					{{ $t("pages.room.dialog.boardLayout.title") }}

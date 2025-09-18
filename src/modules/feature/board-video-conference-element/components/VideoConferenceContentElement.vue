@@ -65,7 +65,7 @@
 		>
 			<VCard :ripple="false">
 				<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
-					<h2 class="text-h4 my-2 text-break-word">
+					<h2 class="my-2 text-break-word">
 						{{ t("error.generic") }}
 					</h2>
 				</VCardTitle>

@@ -8,12 +8,12 @@
 		@keydown.esc="onCancel()"
 	>
 		<v-card :ripple="false">
-			<v-card-title>
-				<div ref="textTitle" class="text-h4 my-2 text-break">
+			<template #title>
+				<h2 class="mt-2">
 					{{ $t("pages.rooms.ccImportCourse.title") }}
-				</div>
-			</v-card-title>
-			<v-card-text class="text--primary">
+				</h2>
+			</template>
+			<template #text>
 				<v-file-input
 					v-model="file"
 					class="truncate-file-input"
@@ -24,8 +24,8 @@
 					show-size
 					data-testid="dialog-file-input"
 				/>
-			</v-card-text>
-			<v-card-actions>
+			</template>
+			<template #actions>
 				<v-spacer />
 				<div class="mb-2">
 					<v-btn
@@ -50,7 +50,7 @@
 						{{ $t("pages.rooms.ccImportCourse.confirm") }}
 					</v-btn>
 				</div>
-			</v-card-actions>
+			</template>
 		</v-card>
 	</v-dialog>
 </template>

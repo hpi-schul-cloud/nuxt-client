@@ -5,7 +5,7 @@
 		@dialog-closed="onCancel"
 	>
 		<template #title>
-			<h2 class="text-h4 my-2">
+			<h2 class="my-2">
 				{{ t("feature-board-external-tool-element.dialog.title") }}
 			</h2>
 		</template>

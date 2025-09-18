@@ -11,7 +11,7 @@
 				<v-expansion-panel-title
 					v-else-if="!isEmpty"
 					data-testid="upperTaskSection"
-					class="text-h6 font-weight-bold"
+					class="text-h4 font-weight-bold"
 					@click="toggle"
 				>
 					{{ panelOneTitle }} ({{ panelOneCount }})
@@ -29,7 +29,7 @@
 				</v-expansion-panel-title>
 				<v-expansion-panel-title
 					v-else-if="!isEmpty"
-					class="text-h6 font-weight-bold"
+					class="text-h4 font-weight-bold"
 					data-testid="lowerTaskSection"
 					@click="toggle"
 					>{{ panelTwoTitle }} ({{ panelTwoCount }})

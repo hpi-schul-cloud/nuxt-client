@@ -1,24 +1,20 @@
+/* eslint-disable no-console */
+
 import path from "node:path";
 import fs from "node:fs";
+import { pathToFileURL } from "url";
 
-const getThemeConfig = async (themePath: string) => {
-	const replacements = (await import(`${themePath}/alias.config.mjs`)).default;
+const getThemeConfig = async (themePath: string) =>
+	(await import(pathToFileURL(themePath).href)).default;
 
-	return replacements;
-};
-
-const getAvailableThemes = (dirname: string) => {
-	const themeRootPath = path.resolve(dirname, "./src/themes");
-	const themeNames = fs
-		.readdirSync(themeRootPath, { withFileTypes: true })
+const getAvailableThemes = (dirname: string) =>
+	fs
+		.readdirSync(path.join(dirname, "./src/themes"), { withFileTypes: true })
 		.filter((dirent) => dirent.isDirectory())
 		.map((dirent) => dirent.name);
-	return themeNames;
-};
 
-const isThemeAvailable = (dirname: string, themeName: string) => {
-	return getAvailableThemes(dirname).includes(themeName);
-};
+const isThemeAvailable = (dirname: string, themeName: string) =>
+	getAvailableThemes(dirname).includes(themeName);
 
 type AliasConfig = {
 	find: string;
@@ -28,18 +24,22 @@ type AliasConfig = {
 const generateAliases = async (dirname: string) => {
 	const aliases = Array<AliasConfig>();
 	const usedTheme = process.env.SC_THEME;
+	console.log(`🎨 Attempting to load theme ...`);
 
 	if (usedTheme && isThemeAvailable(dirname, usedTheme)) {
+		console.log(`🔄 Loading theme ${usedTheme} ...`);
+
 		const themePath = `./src/themes/${usedTheme}`;
+
 		const { replacements } = await getThemeConfig(
-			path.resolve(dirname, themePath)
+			path.join(dirname, themePath, "alias.config.mjs")
 		);
 
 		replacements.forEach((alias: AliasConfig) => {
 			if (typeof alias === "string") {
 				aliases.push({
-					find: path.resolve(dirname, `src/${alias}`),
-					replacement: path.resolve(dirname, `${themePath}/${alias}`),
+					find: path.join(dirname, `src/${alias}`),
+					replacement: path.join(dirname, `${themePath}/${alias}`),
 				});
 			}
 
@@ -49,14 +49,15 @@ const generateAliases = async (dirname: string) => {
 				typeof alias.replacement === "string"
 			) {
 				aliases.push({
-					find: path.resolve(dirname, `src/${alias.find}`),
-					replacement: path.resolve(
-						dirname,
-						`${themePath}/${alias.replacement}`
-					),
+					find: path.join(dirname, `src/${alias.find}`),
+					replacement: path.join(dirname, `${themePath}/${alias.replacement}`),
 				});
 			}
 		});
+
+		console.log(`✨  Theme ${usedTheme} loaded successfully!`);
+	} else {
+		console.log(`✨  The default theme is in use.`);
 	}
 
 	return aliases;
