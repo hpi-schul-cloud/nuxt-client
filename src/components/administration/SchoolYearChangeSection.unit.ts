@@ -1,8 +1,7 @@
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import {
-	envsFactory,
+	createTestEnvStore,
 	maintenanceStatusFactory,
 	meResponseFactory,
 } from "@@/tests/test-utils";
@@ -17,6 +16,7 @@ import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { VBtn, VCheckbox } from "vuetify/lib/components/index";
 import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
+import { beforeAll } from "vitest";
 
 vi.mock("@data-school");
 
@@ -25,8 +25,8 @@ describe("SchoolYearChangeSection", () => {
 		ReturnType<typeof useSharedSchoolYearChange>
 	>;
 
-	const envConfigModule = createModuleMocks(EnvConfigModule, {
-		getEnv: envsFactory.build(),
+	beforeAll(() => {
+		createTestEnvStore();
 	});
 
 	const schoolId = "schoolId";
@@ -41,7 +41,6 @@ describe("SchoolYearChangeSection", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
 		});

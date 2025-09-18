@@ -1,6 +1,5 @@
 import { io, type Socket } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
-import { envConfigModule } from "@/store";
 import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
 import { useBoardNotifier } from "@util-board";
@@ -10,6 +9,7 @@ import { ref } from "vue";
 import { logger } from "@util-logger";
 import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { useEnvConfig } from "@data-env";
 
 const isInitialConnection = ref(true);
 let instance: Socket | null = null;
@@ -37,7 +37,7 @@ export const useSocketConnection = (
 			: true;
 
 	if (instance === null) {
-		instance = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
+		instance = io(useEnvConfig().value.BOARD_COLLABORATION_URI, {
 			path: "/board-collaboration",
 			withCredentials: true,
 			reconnectionAttempts: 20,

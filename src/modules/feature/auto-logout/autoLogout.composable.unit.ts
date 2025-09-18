@@ -1,11 +1,9 @@
-import EnvConfigModule from "@/store/env-config";
 import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
 import setupStores from "@@/tests/test-utils/setupStores";
 import NotifierModule from "@/store/notifier";
 import AuthModule from "@/store/auth";
-import { envConfigModule } from "@/store";
-import { envsFactory, mountComposable } from "@@/tests/test-utils";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { nextTick } from "vue";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { flushPromises } from "@vue/test-utils";
@@ -33,11 +31,6 @@ const mockEndpointResponse = () => {
 		},
 	});
 };
-
-const envs = envsFactory.build({
-	JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
-	JWT_TIMEOUT_SECONDS: jwtTimerResponse.timeout,
-});
 
 vi.mock("@/utils/api", () => ({
 	$axios: {
@@ -75,19 +68,20 @@ describe("useAutoLogout", () => {
 	});
 
 	setupStores({
-		envConfigModule: EnvConfigModule,
 		notifierModule: NotifierModule,
 		authModule: AuthModule,
 	});
 
-	envConfigModule.setEnvs(envs);
+	createTestEnvStore({
+		JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
+		JWT_TIMEOUT_SECONDS: jwtTimerResponse.timeout,
+	});
 	const notifierModuleMock = createModuleMocks(NotifierModule);
 
 	const setup = (options?: { remainingTimeInSeconds?: number }) => {
 		const composable = mountComposable(() => useAutoLogout(), {
 			global: {
 				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				},
 			},
@@ -180,8 +174,8 @@ describe("useAutoLogout", () => {
 	describe("remainingTimeInMinutes", () => {
 		it("should return the correct value", () => {
 			jwtTimerResponse.ttl = 120;
-			envConfigModule.setEnvs({
-				...envs,
+			createTestEnvStore({
+				JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
 				JWT_TIMEOUT_SECONDS: jwtTimerResponse.ttl,
 			});
 			const { remainingTimeInMinutes } = setup();
@@ -199,8 +193,8 @@ describe("useAutoLogout", () => {
 
 		it("should be 'Ended' when the session ends", async () => {
 			jwtTimerResponse.ttl = 120;
-			envConfigModule.setEnvs({
-				...envs,
+			createTestEnvStore({
+				JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
 				JWT_TIMEOUT_SECONDS: jwtTimerResponse.ttl,
 			});
 			const { sessionStatus } = setup();

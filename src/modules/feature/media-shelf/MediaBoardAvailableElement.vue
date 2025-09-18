@@ -11,11 +11,7 @@ import {
 	MediaAvailableLineElementResponse,
 	ToolContextType,
 } from "@/serverApi/v3";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useExternalToolLaunchState } from "@data-external-tool";
 import { useDragAndDrop } from "@util-board";
 import { useErrorNotification } from "@util-error-notification";
@@ -23,6 +19,7 @@ import { computed, ComputedRef, onUnmounted, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	element: {
@@ -32,7 +29,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const {
@@ -74,7 +70,7 @@ watch(
 	{ immediate: true }
 );
 
-const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
+const refreshTimeInMs = useEnvConfig().value.CTL_TOOLS_RELOAD_TIME_MS;
 
 const timer = setInterval(async () => {
 	await loadAvailableLineElementData(props.element);

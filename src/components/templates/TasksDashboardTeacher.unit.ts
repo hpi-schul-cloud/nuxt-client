@@ -22,6 +22,9 @@ import {
 import { mount } from "@vue/test-utils";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import { EmptyState } from "@ui-empty-state";
+import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -35,6 +38,10 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
 	let shareModuleMock: ShareModule;
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	const mountComponent = (attrs = {}) => {
 		const wrapper = mount(TasksDashboardTeacher, {

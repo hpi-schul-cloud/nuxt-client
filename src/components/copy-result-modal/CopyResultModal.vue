@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
+import { useEnvConfig } from "@data-env";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -144,7 +144,7 @@ const isCourse = computed(() => {
 });
 
 const externalToolsInfoText = computed(() => {
-	return envConfigModule.getEnv.FEATURE_CTL_TOOLS_COPY_ENABLED
+	return useEnvConfig().value.FEATURE_CTL_TOOLS_COPY_ENABLED
 		? t("components.molecules.copyResult.ctlTools.withFeature.info")
 		: t("components.molecules.copyResult.ctlTools.info");
 });

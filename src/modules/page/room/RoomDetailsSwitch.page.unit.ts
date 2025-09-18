@@ -1,7 +1,4 @@
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import EnvConfigModule from "@/store/env-config";
-import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -9,7 +6,6 @@ import {
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetailsSwitchPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
 import { Router, useRoute, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-vitest";
@@ -28,9 +24,6 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 
 	beforeEach(() => {
 		useRouterMock.mockReturnValue(router);
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
 	});
 
 	const setup = (
@@ -44,12 +37,6 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 			lockedRoomName?: string;
 		} = { isLoading: false, roomVariant: RoomVariant.ROOM }
 	) => {
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envsFactory.build({
-				FEATURE_BOARD_LAYOUT_ENABLED: true,
-			}),
-		});
-
 		const room = roomFactory.build();
 
 		const wrapper = mount(RoomDetailsSwitchPage, {
@@ -69,9 +56,6 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 						},
 					}),
 				],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-				},
 				stubs: {
 					CourseRoomDetailsPage: true,
 					"RoomLocked.page": true,

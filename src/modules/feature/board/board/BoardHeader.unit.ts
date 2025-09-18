@@ -1,11 +1,8 @@
 import { ConfigResponse } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -25,6 +22,7 @@ import { shallowMount } from "@vue/test-utils";
 import { computed, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = vi.mocked(useBoardPermissions);
@@ -58,16 +56,11 @@ describe("BoardHeader", () => {
 			isFocusContained: undefined,
 		});
 
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: { ...options?.envs } as ConfigResponse,
-		});
+		createTestEnvStore(options?.envs);
 
 		const wrapper = shallowMount(BoardHeader, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-				},
 				stubs: {
 					VTooltip: false,
 					VOverlay: false,
@@ -317,7 +310,7 @@ describe("BoardHeader", () => {
 			);
 		});
 
-		it("should display 'publish' button instead of 'revert' button in menu", async () => {
+		it("should display 'publish' button instead of 'revert' button in menu", () => {
 			const { wrapper } = setup(
 				{
 					permissions: { hasEditPermission: ref(true) },

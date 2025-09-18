@@ -55,11 +55,7 @@ export default class NewsModule extends VuexModule {
 	}
 
 	private get newsApi() {
-		return NewsApiFactory(
-			undefined,
-			"/v3", //`${envConfigModule.getApiUrl}/v3`,
-			$axios
-		);
+		return NewsApiFactory(undefined, "/v3", $axios);
 	}
 
 	@Mutation

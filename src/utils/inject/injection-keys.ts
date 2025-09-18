@@ -4,7 +4,6 @@ import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
-import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import GroupModule from "@/store/group";
 import LoadingStateModule from "@/store/loading-state";
@@ -25,8 +24,6 @@ import VideoConferenceModule from "@/store/video-conference";
 import { InjectionKey } from "vue";
 import FinishedTasksModule from "@/store/finished-tasks";
 
-export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
-	Symbol("envConfigModule");
 export const FILE_PATHS_MODULE_KEY: InjectionKey<FilePathsModule> =
 	Symbol("filePathsModule");
 export const NOTIFIER_MODULE_KEY: InjectionKey<NotifierModule> =
