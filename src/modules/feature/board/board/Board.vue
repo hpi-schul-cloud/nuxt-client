@@ -15,9 +15,7 @@
 						:title="board.title"
 						:is-draft="!isBoardVisible"
 						:is-editable-chip-visible="isEditableChipVisible"
-						:has-manage-readers-can-edit-permission="
-							hasManageReadersCanEditPermission
-						"
+						:has-readers-edit-permission="hasReadersEditPermission"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
@@ -223,7 +221,7 @@ const {
 
 const isBoardVisible = computed(() => board.value?.isVisible);
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit);
-const hasManageReadersCanEditPermission = ref(false);
+const hasReadersEditPermission = ref(false);
 
 const onCreateCard = async (columnId: string) => {
 	if (hasCreateCardPermission.value) boardStore.createCardRequest({ columnId });
@@ -367,14 +365,10 @@ watch([isBoardVisible, arePermissionsLoaded], () => {
 		);
 	}
 
-	if (
+	hasReadersEditPermission.value =
 		arePermissionsLoaded?.value &&
 		hasUpdateReadersCanEditPermission?.value &&
-		envConfigModule.getEnv.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE
-	) {
-		hasManageReadersCanEditPermission.value =
-			hasUpdateReadersCanEditPermission.value;
-	}
+		envConfigModule.getEnv.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE;
 });
 
 const { isLoadingDialogOpen } = useLoadingState(

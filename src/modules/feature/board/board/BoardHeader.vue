@@ -40,7 +40,7 @@
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 				<KebabMenuActionEditingSettings
-					v-if="hasManageReadersCanEditPermission"
+					v-if="hasReadersEditPermission"
 					@click="onEditBoardSettings"
 				/>
 				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
@@ -97,7 +97,7 @@ const props = defineProps({
 	isEditableChipVisible: {
 		type: Boolean,
 	},
-	hasManageReadersCanEditPermission: {
+	hasReadersEditPermission: {
 		type: Boolean,
 		required: true,
 	},

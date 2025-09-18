@@ -79,7 +79,7 @@ describe("BoardHeader", () => {
 				boardId: "abc123",
 				isDraft: props?.isDraft || false,
 				isEditableChipVisible: true,
-				hasManageReadersCanEditPermission: true,
+				hasReadersEditPermission: true,
 			},
 		});
 		return { startEditMode: mockedStartEditMode, wrapper };
