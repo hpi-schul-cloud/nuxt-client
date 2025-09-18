@@ -19,6 +19,7 @@
 					!showLdapLoginSection &&
 					featureOauthLoginEnabled
 				"
+				class="login-form"
 			>
 				<div class="login-providers">
 					<v-btn
@@ -61,8 +62,8 @@
 			</v-card>
 
 			<!-- Email Login Section -->
-			<v-card v-show="showEmailLoginSection" class="login-section">
-				<v-card-text class="pt-0">
+			<v-card v-show="showEmailLoginSection" class="login-form">
+				<v-card-text>
 					<!--:prepend-icon="mdiEmailOutline"-->
 					<v-text-field
 						v-model="email"
@@ -136,7 +137,7 @@
 				</v-btn>
 			</v-card>
 			<!-- LDAP Login Section -->
-			<v-card v-show="showLdapLoginSection" class="login-section">
+			<v-card v-show="showLdapLoginSection" class="login-form">
 				<v-card-text>
 					<!--:prepend-icon="mdiAccountOutline"-->
 					<v-text-field
@@ -237,8 +238,8 @@
 				</v-btn>
 			</v-card>
 			<!-- More or less Section-->
-			<v-card v-if="!featureOauthLoginEnabled" class="login-section">
-				<v-card-text class="pt-0">
+			<v-card v-if="!featureOauthLoginEnabled" class="login-form">
+				<v-card-text>
 					<v-text-field
 						v-model="emailMoreLess"
 						:label="$t('common.labels.emailUsername')"
@@ -447,7 +448,6 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useLogin } from "./login.composable";
-import { set } from "lodash";
 
 // Vuetify typenames
 type AlertType = "info" | "success" | "warning" | "error";
@@ -1003,7 +1003,11 @@ async function submitPwRecovery() {
 	padding: 1rem 1.25rem;
 }
 
-.login-section {
+.login-form {
 	box-shadow: none;
+}
+
+.login-providers {
+	margin-bottom: 1rem;
 }
 </style>
