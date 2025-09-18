@@ -7,7 +7,7 @@
 		@keydown.esc="onClose"
 		@click:outside="onClose"
 	>
-		<v-card ref="editSettings">
+		<VCard ref="editSettings">
 			<template #title>
 				<h2 class="text-h4 mt-2 dialog-title">
 					{{ modalTitle }}
@@ -22,13 +22,12 @@
 					</span>
 				</WarningAlert>
 				<template v-else>
-					<div>
+					<div data-testid="edit-settings-subtitle">
 						{{ t("components.board.dialog.readerCanEdit.subtitle") }}
 					</div>
-
 					<div>
-						<v-radio-group v-model="selectedOption" hide-details class="mt-6">
-							<v-radio
+						<VRadioGroup v-model="selectedOption" hide-details class="mt-6">
+							<VRadio
 								v-for="(option, index) in radioOptions"
 								:key="index"
 								:value="option.value"
@@ -47,14 +46,14 @@
 										</div>
 									</div>
 								</template>
-							</v-radio>
-						</v-radio-group>
+							</VRadio>
+						</VRadioGroup>
 					</div>
 				</template>
 			</template>
 			<template #actions>
 				<div class="mr-4 mb-3">
-					<v-btn
+					<VBtn
 						ref="cancelButton"
 						class="ms-auto mr-2"
 						:text="t('common.actions.cancel')"
@@ -62,7 +61,7 @@
 						data-testid="edit-settings-cancel-btn"
 						@click="onClose"
 					/>
-					<v-btn
+					<VBtn
 						v-if="!isDraftMode"
 						ref="saveButton"
 						class="ms-auto"
@@ -74,7 +73,7 @@
 					/>
 				</div>
 			</template>
-		</v-card>
+		</VCard>
 	</VDialog>
 </template>
 
