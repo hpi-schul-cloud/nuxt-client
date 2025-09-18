@@ -1,4 +1,4 @@
-import { applicationErrorModule, envConfigModule } from "@/store";
+import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
 import { createApplicationError } from "@/utils/create-application-error.factory";
@@ -39,6 +39,7 @@ import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload.types"
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { ColumnResponse } from "@/serverApi/v3";
+import { useEnvConfig } from "@data-env";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
@@ -49,7 +50,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const restApi = useBoardRestApi();
 	const isSocketEnabled =
-		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
+		useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
 
@@ -102,7 +103,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const createCardRequest = (payload: CreateCardRequestPayload) => {
-		socketOrRest.createCardRequest(payload);
+		return socketOrRest.createCardRequest(payload);
 	};
 
 	const createCardSuccess = (payload: CreateCardSuccessPayload) => {

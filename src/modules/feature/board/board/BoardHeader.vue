@@ -55,7 +55,6 @@
 </template>
 
 <script setup lang="ts">
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import { BoardMenuScope } from "@ui-board";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
@@ -80,6 +79,7 @@ import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler
 import BoardDraftChip from "./BoardDraftChip.vue";
 import BoardEditableChip from "./BoardEditableChip.vue";
 import { upperCaseFirstChar } from "@/utils/textFormatting";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	boardId: {
@@ -210,10 +210,8 @@ const calculateWidth = () => {
 	fieldWidth.value = `${width + 1}px`;
 };
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-
 const isShareEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE
+	() => useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE
 );
 
 watchEffect(() => {

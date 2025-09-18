@@ -44,17 +44,14 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import CloudLogo from "../CloudLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
 import { mdiMenuOpen } from "@icons/material";
+import { useEnvConfig } from "@data-env";
 
 const sidebarExpanded = defineModel({
 	type: Boolean,
@@ -62,7 +59,6 @@ const sidebarExpanded = defineModel({
 });
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const { pageLinks, legalLinks, metaLinks } = useSidebarItems();
 
@@ -84,13 +80,13 @@ const userHasPermission = (item: SidebarSingleItem | SidebarGroupItem) => {
 const hasFeatureEnabled = (item: SidebarSingleItem | SidebarGroupItem) => {
 	if (!item.feature) return true;
 
-	return envConfigModule.getEnv[item.feature] === (item.featureValue ?? true);
+	return useEnvConfig().value[item.feature] === (item.featureValue ?? true);
 };
 
 const isEnabledForTheme = (item: SidebarSingleItem | SidebarGroupItem) => {
 	if (!item.theme) return true;
 
-	return item.theme.includes(envConfigModule.getEnv.SC_THEME);
+	return item.theme.includes(useEnvConfig().value.SC_THEME);
 };
 
 const getItemsForUser = (items: SidebarItems) => {

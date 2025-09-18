@@ -43,14 +43,10 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiMinus, mdiPlus } from "@icons/material";
+import { useEnvConfig } from "@data-env";
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
@@ -79,7 +75,7 @@ const removeVersionNumbers = (data: LicenseData): LicenseData => {
 
 const fetchLicenseData = async () => {
 	try {
-		const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
+		const licensesUrl = useEnvConfig().value.LICENSE_SUMMARY_URL;
 		if (!licensesUrl) throw new Error("License summary URL is not defined");
 
 		licenseData.value = removeVersionNumbers(

@@ -148,7 +148,7 @@ const onDragStart = (): void => {
 	dragStart();
 };
 
-const onDragEnd = async (event: SortableEvent) => {
+const onDragEnd = (event: SortableEvent) => {
 	dragEnd();
 	const { newIndex, oldIndex, to, from, item } = event;
 	const cardId = extractDataAttribute(item, "cardId") as string;

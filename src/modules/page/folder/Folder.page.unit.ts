@@ -4,14 +4,14 @@ import {
 } from "@@/tests/test-utils/setup";
 import { Folder } from "@feature-folder";
 import { FolderPage } from "@page-folder";
-
-vi.mock("@/store", () => ({
-	envConfigModule: {
-		getEnv: { SC_TITLE: "Test Title" },
-	},
-}));
+import { beforeAll } from "vitest";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 describe("FolderPage", () => {
+	beforeAll(() => {
+		createTestEnvStore({ SC_TITLE: "Test Title" });
+	});
+
 	const setupWrapper = () => {
 		const wrapper = shallowMount(FolderPage, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
@@ -33,11 +33,11 @@ describe("FolderPage", () => {
 	});
 
 	describe("when folder component emits 'update:folder-name'", () => {
-		it("should update the page title with the new folder name", async () => {
+		it("should update the page title with the new folder name", () => {
 			const { wrapper } = setupWrapper();
 			const folderComponent = wrapper.findComponent(Folder);
 
-			await folderComponent.vm.$emit("update:folder-name", "Updated Folder");
+			folderComponent.vm.$emit("update:folder-name", "Updated Folder");
 
 			expect(document.title).toBe(
 				"Updated Folder - pages.folder.title - Test Title"

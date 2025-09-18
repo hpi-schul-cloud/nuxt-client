@@ -1,7 +1,6 @@
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
-import EnvConfigModule from "@/store/env-config";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
@@ -141,7 +140,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			expect(fab.exists()).toBe(false);
 		});
 
-		it("should open tab from store state", async () => {
+		it("should open tab from store state", () => {
 			const studentDashboard = wrapper.findComponent(TasksDashboardStudent);
 			expect(studentDashboard.props("tabRoutes")).toContain("open");
 		});
@@ -162,7 +161,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				});
 			});
 
-			it("should call 'setCourseFilters' mutation with v-autocomplete on change", async () => {
+			it("should call 'setCourseFilters' mutation with v-autocomplete on change", () => {
 				const autocompleteEl =
 					wrapper.findComponent<VAutocomplete>(".v-autocomplete");
 				autocompleteEl.vm.$emit("update:modelValue");
@@ -206,7 +205,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			setupStores({
 				copyModule: CopyModule,
 				authModule: AuthModule,
-				envConfigModule: EnvConfigModule,
 			});
 
 			const mockMe = meResponseFactory.build({
@@ -239,12 +237,12 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			);
 		});
 
-		it("should open tab from store state", async () => {
+		it("should open tab from store state", () => {
 			const teacherDashboard = wrapper.findComponent(TasksDashboardTeacher);
 			expect(teacherDashboard.props("tabRoutes")).toContain("current");
 		});
 
-		it("should show substituteFilter on 1st tab", async () => {
+		it("should show substituteFilter on 1st tab", () => {
 			tasksModuleMock = createModuleMocks(TasksModule, {
 				...tasksModuleGetters,
 				getActiveTab: "current",
@@ -258,7 +256,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			expect(wrapper.findComponent({ name: "v-switch" }).exists()).toBe(true);
 		});
 
-		it("should show substituteFilter on 2nd tab", async () => {
+		it("should show substituteFilter on 2nd tab", () => {
 			tasksModuleMock = createModuleMocks(TasksModule, {
 				...tasksModuleGetters,
 				getActiveTab: "drafts",
@@ -272,7 +270,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			expect(wrapper.findComponent({ name: "v-switch" }).exists()).toBe(true);
 		});
 
-		it("should hide substituteFilter on 3rd tab", async () => {
+		it("should hide substituteFilter on 3rd tab", () => {
 			tasksModuleMock = createModuleMocks(TasksModule, {
 				...tasksModuleGetters,
 				getActiveTab: "finished",

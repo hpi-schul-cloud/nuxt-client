@@ -1,15 +1,11 @@
-import { ConfigResponse } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { CourseFeatures } from "@/store/types/room";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-} from "@/utils/inject";
+import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	businessErrorFactory,
 	courseFactory,
+	createTestEnvStore,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils/factory";
 import {
@@ -40,9 +36,7 @@ describe("RoomExternalToolOverview", () => {
 		});
 
 		const refreshTime = 299000;
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as ConfigResponse,
-		});
+		createTestEnvStore({ CTL_TOOLS_RELOAD_TIME_MS: refreshTime });
 
 		courseRoomDetailsModule.fetchCourse.mockResolvedValue(null);
 
@@ -50,7 +44,6 @@ describe("RoomExternalToolOverview", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
 			},
