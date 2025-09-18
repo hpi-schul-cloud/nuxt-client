@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import PrivacySettings from "./PrivacySettings";
-import { createTestEnvStore } from "../../../../tests/test-utils/index.js";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 const generateProps = () => ({
 	permissions: {

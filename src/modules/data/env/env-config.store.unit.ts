@@ -16,6 +16,7 @@ import {
 	FileConfigApiFactory,
 	FilesStorageConfigResponse,
 } from "@/fileStorageApi/v3";
+import { mockApiResponse } from "@@/tests/test-utils";
 
 vi.mock("@/store", () => ({
 	applicationErrorModule: {
@@ -29,21 +30,13 @@ const mockedServerApi = vi.mocked(ServerConfigApiFactory);
 vi.mock("@/fileStorageApi/v3");
 const mockedFileConfigApi = vi.mocked(FileConfigApiFactory);
 
-const createMockAxiosResponse = <T>(data: T): AxiosResponse<T> => ({
-	data,
-	status: 200,
-	statusText: "OK",
-	headers: {},
-	config: {} as never,
-});
-
 describe("useEnvStore", () => {
 	const doMockServerApiData = (data: ConfigResponse) => {
 		mockedServerApi.mockReturnValue({
 			serverConfigControllerPublicConfig(): Promise<
 				AxiosResponse<ConfigResponse>
 			> {
-				return Promise.resolve(createMockAxiosResponse(data));
+				return Promise.resolve(mockApiResponse({ data }));
 			},
 		});
 	};
@@ -51,7 +44,7 @@ describe("useEnvStore", () => {
 	const doMockFileConfigApiData = (data: FilesStorageConfigResponse) => {
 		mockedFileConfigApi.mockReturnValue({
 			publicConfig(): Promise<AxiosResponse<FilesStorageConfigResponse>> {
-				return Promise.resolve(createMockAxiosResponse(data));
+				return Promise.resolve(mockApiResponse({ data }));
 			},
 		});
 	};

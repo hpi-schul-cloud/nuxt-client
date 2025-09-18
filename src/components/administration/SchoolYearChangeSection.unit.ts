@@ -16,6 +16,7 @@ import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { VBtn, VCheckbox } from "vuetify/lib/components/index";
 import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
+import { beforeAll } from "vitest";
 
 vi.mock("@data-school");
 
@@ -24,7 +25,9 @@ describe("SchoolYearChangeSection", () => {
 		ReturnType<typeof useSharedSchoolYearChange>
 	>;
 
-	createTestEnvStore();
+	beforeAll(() => {
+		createTestEnvStore();
+	});
 
 	const schoolId = "schoolId";
 	const mockMe = meResponseFactory.build({ school: { id: schoolId } });

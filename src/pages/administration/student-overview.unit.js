@@ -20,7 +20,7 @@ import mock$objects from "../../../tests/test-utils/pageStubs";
 import StudentPage from "./StudentOverview.page.vue";
 import { RouterLinkStub } from "@vue/test-utils";
 import { mdiCheckAll, mdiClose } from "@icons/material";
-import { createTestEnvStore } from "../../../tests/test-utils/index.js";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 const mockData = [
 	{

@@ -18,7 +18,7 @@ import { nextTick } from "vue";
 import { createStore } from "vuex";
 import TeacherPage from "./TeacherOverview.page.vue";
 import { RouterLinkStub } from "@vue/test-utils";
-import { createTestEnvStore } from "../../../tests/test-utils/index.js";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 const mockData = [
 	{

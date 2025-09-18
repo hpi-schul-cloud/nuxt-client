@@ -4,7 +4,7 @@ import AuthModule from "@/store/auth";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { unref } from "vue";
 import { createI18n } from "./i18n";
-import { createTestEnvStore } from "../../tests/test-utils/index.js";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 describe("i18n plugin", () => {
 	beforeAll(() => {

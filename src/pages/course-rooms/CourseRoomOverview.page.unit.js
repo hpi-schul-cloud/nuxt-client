@@ -22,7 +22,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
-import { createTestEnvStore } from "../../../tests/test-utils/index.js";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 vi.mock("vue-router");
 

@@ -11,7 +11,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { RouterLinkStub } from "@vue/test-utils";
 import AuthSystems from "./AuthSystems";
-import { createTestEnvStore } from "../../../../tests/test-utils/index.js";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 const generateProps = () => ({
 	systems: [

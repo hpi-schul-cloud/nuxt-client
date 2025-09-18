@@ -9,7 +9,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
 import { SchulcloudTheme } from "../../serverApi/v3";
-import { createTestEnvStore } from "../../../tests/test-utils/index.js";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 const mockResponseData = {
 	ok: true,
