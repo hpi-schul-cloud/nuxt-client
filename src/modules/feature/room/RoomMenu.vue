@@ -41,7 +41,7 @@ import {
 import { useRoomAuthorization } from "@data-room";
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
 
 defineProps({
 	roomName: { type: String, required: false, default: undefined },
@@ -58,12 +58,11 @@ const emit = defineEmits([
 
 const { t } = useI18n();
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const isRoomCopyFeatureEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_ROOM_COPY_ENABLED
+	() => useEnvConfig().value.FEATURE_ROOM_COPY_ENABLED
 );
 const isRoomShareFeatureEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_ROOM_SHARE
+	() => useEnvConfig().value.FEATURE_ROOM_SHARE
 );
 
 const {

@@ -9,8 +9,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import setupStores from "@@/tests/test-utils/setupStores";
-import EnvConfigModule from "@/store/env-config";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VueWrapper } from "@vue/test-utils";
 import {
@@ -18,7 +16,10 @@ import {
 	InvitationStep,
 	RoomInvitationLink,
 } from "@data-room";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
@@ -50,9 +51,7 @@ describe("InviteMembersDialog", () => {
 	let deactivateMock: Mock;
 
 	beforeAll(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
+		createTestEnvStore();
 	});
 	beforeEach(() => {
 		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();

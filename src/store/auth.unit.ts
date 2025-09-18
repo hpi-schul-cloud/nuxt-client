@@ -1,18 +1,16 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { LanguageType } from "@/serverApi/v3/api";
-import { envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 import {
-	envsFactory,
+	createTestEnvStore,
 	meResponseFactory,
 	mockApiResponse,
 } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
-import EnvConfigModule from "./env-config";
-import { MockInstance } from "vitest";
+import { beforeAll, MockInstance } from "vitest";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 vi.useFakeTimers();
 
@@ -137,11 +135,6 @@ describe("auth store module", () => {
 	});
 
 	describe("getters", () => {
-		beforeEach(() => {
-			setupStores({
-				envConfigModule: EnvConfigModule,
-			});
-		});
 		describe("getMe", () => {
 			it("should return the me state", () => {
 				const authModule = new AuthModule({});
@@ -162,9 +155,9 @@ describe("auth store module", () => {
 			});
 
 			it("should return the default language if locale is not set", () => {
+				createTestEnvStore({ I18N__DEFAULT_LANGUAGE: LanguageType.Uk });
 				const authModule = new AuthModule({});
 				authModule.locale = "" as LanguageType;
-				envConfigModule.env.I18N__DEFAULT_LANGUAGE = LanguageType.Uk;
 
 				expect(authModule.getLocale).toBe(LanguageType.Uk);
 			});
@@ -172,7 +165,7 @@ describe("auth store module", () => {
 			it("should return the fallback language if neither locale nor default language are set", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "" as LanguageType;
-				envConfigModule.env.I18N__DEFAULT_LANGUAGE = "" as LanguageType;
+				createTestEnvStore({ I18N__DEFAULT_LANGUAGE: "" as LanguageType });
 
 				expect(authModule.getLocale).toBe("de");
 			});
@@ -242,15 +235,12 @@ describe("auth store module", () => {
 	});
 
 	describe("actions", () => {
-		beforeEach(() => {
-			setupStores({
-				envConfigModule: EnvConfigModule,
-			});
-			const envs = envsFactory.build({
+		beforeAll(() => {
+			setupStores(); // Kept until other modules are als migrated to pinia
+			createTestEnvStore({
 				FEATURE_EXTENSIONS_ENABLED: true,
 				FEATURE_TEAMS_ENABLED: true,
 			});
-			envConfigModule.setEnvs(envs);
 		});
 
 		describe("login", () => {

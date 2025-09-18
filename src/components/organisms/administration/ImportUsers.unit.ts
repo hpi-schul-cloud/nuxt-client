@@ -3,11 +3,10 @@ import {
 	ImportUserResponseRoleNamesEnum,
 	SchulcloudTheme,
 } from "@/serverApi/v3";
-import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
+import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
-import { schoolFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -26,6 +25,7 @@ import {
 	mdiFlagOutline,
 	mdiPencilOutline,
 } from "@icons/material";
+import { beforeAll } from "vitest";
 
 const mockImportUsers: ImportUserListResponse = {
 	total: 3,
@@ -127,14 +127,16 @@ const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
 };
 
 describe("@/components/molecules/importUsers", () => {
+	beforeAll(() => {
+		createTestEnvStore({ SC_THEME: SchulcloudTheme.Default });
+	});
+
 	beforeEach(() => {
 		setupStores({
 			schoolsModule: SchoolsModule,
 			importUsersModule: ImportUsersModule,
-			envConfigModule: EnvConfigModule,
 		});
 		importUsersModule.setImportUsersList(mockImportUsers);
-		envConfigModule.env.SC_THEME = SchulcloudTheme.Default;
 		schoolsModule.setSchool(
 			schoolFactory.build({
 				inUserMigration: true,

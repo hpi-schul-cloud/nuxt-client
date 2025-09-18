@@ -13,6 +13,9 @@ import { mount } from "@vue/test-utils";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
 import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher.vue";
+import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const {
 	tasksTeacher,
@@ -48,6 +51,10 @@ const getWrapper = (props: { task: object }) => {
 };
 
 describe("@/components/molecules/TaskItemTeacher", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const defineWindowWidth = (width: number) => {
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,

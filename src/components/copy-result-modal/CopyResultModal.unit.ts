@@ -1,16 +1,13 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import CopyResultModal from "./CopyResultModal.vue";
 import CopyResultModalList from "./CopyResultModalList.vue";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 const mockGeoGebraItem = {
 	title: "GeoGebra Element Title",
@@ -65,9 +62,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 	};
 
 	beforeAll(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
+		createTestEnvStore();
 	});
 
 	afterEach(() => {
@@ -149,10 +144,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		describe("when there is no failed file and CTL_TOOLS_COPY feature flag is enabled", () => {
 			describe("when the item has element of type external tool", () => {
 				const setup = () => {
-					const envs = envsFactory.build({
-						FEATURE_CTL_TOOLS_COPY_ENABLED: true,
-					});
-					envConfigModule.setEnvs(envs);
+					createTestEnvStore({ FEATURE_CTL_TOOLS_COPY_ENABLED: true });
 
 					const copyResultItems = mockLessonResultItems([]);
 					copyResultItems[0].elements.push({
@@ -184,10 +176,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 
 			describe("when there is an item of type ExternalToolElement", () => {
 				const setup = () => {
-					const envs = envsFactory.build({
-						FEATURE_CTL_TOOLS_COPY_ENABLED: true,
-					});
-					envConfigModule.setEnvs(envs);
+					createTestEnvStore({ FEATURE_CTL_TOOLS_COPY_ENABLED: true });
 
 					const copyResultItems = mockLessonResultItems([]);
 					copyResultItems[0].elements.push({
