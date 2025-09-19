@@ -545,6 +545,10 @@ export default {
 		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
+	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
+		"Der Bereich wurde von einem anderen Benutzer für alle Benutzer als bearbeitbar festgelegt.",
+	"components.board.screenReader.notification.boardSetAsNotEditableForAllUsers.success":
+		"Der Bereich wurde von einem anderen Benutzer für alle Benutzer als nicht bearbeitbar festgelegt.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"Bevorzugte Tools konnten nicht geladen werden.",
 	"components.board.header.chip.editableForEveryone": "Für alle bearbeitbar",

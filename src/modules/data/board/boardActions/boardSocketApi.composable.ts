@@ -35,10 +35,12 @@ export const useBoardSocketApi = () => {
 		notifyDeleteColumnSuccess,
 		notifyMoveCardSuccess,
 		notifyMoveColumnSuccess,
+		notifySetBoardAsEditableForAllUsersSuccess,
+		notifySetBoardAsNotEditableForAllUsersSuccess,
+		notifyUpdateBoardLayoutSuccess,
 		notifyUpdateBoardTitleSuccess,
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateColumnTitleSuccess,
-		notifyUpdateBoardLayoutSuccess,
 	} = useBoardAriaNotification();
 	const { t } = useI18n();
 
@@ -105,6 +107,14 @@ export const useBoardSocketApi = () => {
 			),
 			on(BoardActions.updateColumnTitleSuccess, notifyUpdateColumnTitleSuccess),
 			on(BoardActions.updateBoardLayoutSuccess, notifyUpdateBoardLayoutSuccess),
+			on(
+				BoardActions.updateReaderCanEditSuccess,
+				notifySetBoardAsEditableForAllUsersSuccess
+			),
+			on(
+				BoardActions.updateReaderCanEditSuccess,
+				notifySetBoardAsNotEditableForAllUsersSuccess
+			),
 		];
 
 		handle(

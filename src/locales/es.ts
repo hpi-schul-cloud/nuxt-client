@@ -554,6 +554,10 @@ export default {
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Otro usuario cambió la vista del panel a {layout}.",
+	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
+		"El tablero fue establecida como editable para todos los usuarios por otro usuario.",
+	"components.board.screenReader.notification.boardSetAsNotEditableForAllUsers.success":
+		"El tablero fue establecida como no editable para todos los usuarios por otro usuario.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"No se pudieron cargar las herramientas preferidas.",
 	"components.board.header.chip.editableForEveryone": "Editable para todos",

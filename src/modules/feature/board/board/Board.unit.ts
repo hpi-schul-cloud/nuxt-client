@@ -196,6 +196,7 @@ describe("Board", () => {
 	const createBoard = (options?: {
 		numberOfColumns?: number;
 		isVisible?: boolean;
+		readersCanEdit?: boolean;
 	}): Board => {
 		const cards = cardSkeletonResponseFactory.buildList(3);
 		const columns = columnResponseFactory.buildList(
@@ -207,6 +208,7 @@ describe("Board", () => {
 		const board = boardResponseFactory.build({
 			columns,
 			isVisible: options?.isVisible ?? true,
+			readersCanEdit: options?.readersCanEdit ?? false,
 		});
 
 		return board;
@@ -250,6 +252,7 @@ describe("Board", () => {
 	const setup = (options?: {
 		numberOfColumns?: number;
 		isBoardVisible?: boolean;
+		isReadersCanEdit?: boolean;
 		envs?: Partial<ConfigResponse>;
 	}) => {
 		const {
@@ -267,12 +270,14 @@ describe("Board", () => {
 			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_SHARE: true,
+			FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: true,
 			...(options?.envs ?? {}),
 		});
 
 		const board = createBoard({
 			numberOfColumns: options?.numberOfColumns,
 			isVisible: options?.isBoardVisible,
+			readersCanEdit: options?.isReadersCanEdit ?? false,
 		});
 
 		const wrapper = mount(BoardVue, {
@@ -298,7 +303,11 @@ describe("Board", () => {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
 				},
-				stubs: { ShareModal: true, UseFocusTrap: true },
+				stubs: {
+					ShareModal: true,
+					UseFocusTrap: true,
+					EditSettingsDialog: true,
+				},
 				renderStubDefaultSlot: true,
 			},
 			propsData: { boardId: board.id },
@@ -912,6 +921,29 @@ describe("Board", () => {
 							expect(setErrorMock).not.toHaveBeenCalled();
 						});
 					});
+
+					describe("when revert to draft mode", () => {
+						describe("when board is already in readersCanEdit mode", () => {
+							it("should not update board visibility", async () => {
+								const { wrapper, boardStore } = setup({
+									isBoardVisible: true,
+									isReadersCanEdit: true,
+								});
+
+								const boardHeader = wrapper.findComponent({
+									name: "BoardHeader",
+								});
+								await boardHeader.vm.$emit("update:visibility");
+
+								expect(
+									boardStore.updateReaderCanEditRequest
+								).toHaveBeenCalled();
+								expect(
+									boardStore.updateBoardVisibilityRequest
+								).toHaveBeenCalled();
+							});
+						});
+					});
 				});
 			});
 		});
@@ -940,6 +972,35 @@ describe("Board", () => {
 					name: "boards-id",
 					params: { id: copyResultId },
 				});
+			});
+		});
+
+		describe("when the user has readers edit permission", () => {
+			it("should allow changing the board visibility", async () => {
+				mockedBoardPermissions.hasUpdateReadersCanEditPermission = ref(true);
+				mockedBoardPermissions.arePermissionsLoaded = ref(true);
+				const { wrapper, boardStore } = setup({
+					isBoardVisible: true,
+					// isReadersCanEdit: true,
+					envs: { FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: true },
+				});
+
+				await nextTick();
+				await nextTick();
+				await nextTick();
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+
+				// boardHeader.setProps({ hasReadersEditPermission: true });
+				await boardHeader.vm.$emit("edit:settings");
+				await nextTick();
+				await nextTick();
+				await nextTick();
+				await nextTick();
+
+				expect(boardStore.updateReaderCanEditRequest).toHaveBeenCalled();
 			});
 		});
 

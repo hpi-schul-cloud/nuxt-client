@@ -36,7 +36,7 @@
 							>
 								<template #label>
 									<div class="inline-flex flex-column mt-2">
-										<i18n-t :keypath="option.labelHeader">
+										<i18n-t :keypath="option.labelHeader" scope="global">
 											<b>{{ t(option.labelInlineFormattedText) }}</b>
 										</i18n-t>
 										<div>

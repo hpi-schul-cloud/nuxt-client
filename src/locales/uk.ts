@@ -554,6 +554,10 @@ export default {
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Інший користувач змінив вигляд панелі на {layout}.",
+	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
+		"Дошку було встановлено як редаговану для всіх користувачів іншим користувачем.",
+	"components.board.screenReader.notification.boardSetAsNotEditableForAllUsers.success":
+		"Дошку було встановлено як не редаговану для всіх користувачів іншим користувачем.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"Не вдалося завантажити бажані інструменти.",
 	"components.board.header.chip.editableForEveryone": "Редагується для всіх",

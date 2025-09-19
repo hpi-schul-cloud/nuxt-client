@@ -540,6 +540,10 @@ export default {
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"The board's view was changed to {layout} by another user.",
+	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
+		"The board was set as editable for all users by another user.",
+	"components.board.screenReader.notification.boardSetAsNotEditableForAllUsers.success":
+		"The board was set as not editable for all users by another user.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"Preferred tools could not be loaded.",
 	"components.board.header.chip.editableForEveryone": "Editable for everyone",
