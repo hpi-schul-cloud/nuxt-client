@@ -151,8 +151,9 @@ const { deactivate } = useFocusTrap(editSettings, {
 watch(
 	() => isOpen.value,
 	(isOpen: boolean) => {
-		if (isOpen === false) {
+		if (!isOpen) {
 			deactivate();
+			selectedOption.value = "editableWithoutReadPermission";
 		}
 	}
 );
