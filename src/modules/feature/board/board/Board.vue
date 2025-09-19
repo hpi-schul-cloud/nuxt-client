@@ -170,6 +170,7 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { useEnvConfig } from "@data-env";
+import { logger } from "@util-logger";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -364,6 +365,13 @@ watch([isBoardVisible, arePermissionsLoaded], () => {
 			)
 		);
 	}
+
+	// test on live environment if this condition works as expected
+	logger.log("Board access check", {
+		arePermissionsLoaded: arePermissionsLoaded.value,
+		hasUpdateReadersCanEditPermission: hasUpdateReadersCanEditPermission.value,
+		configFeature: useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE,
+	});
 
 	hasReadersEditPermission.value =
 		arePermissionsLoaded?.value &&
