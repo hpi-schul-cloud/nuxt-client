@@ -201,7 +201,6 @@ export default {
 		"Link in die Zwischenablage kopiert",
 	"common.words.copyLinkToClipboard.failure":
 		"Link konnte nicht in die Zwischenablage kopiert werden",
-	"common.words.courseGroups": "Kursgruppen",
 	"common.words.courses": "Kurse",
 	"common.words.draft": "Entwurf",
 	"common.words.drafts": "Entwürfe",
@@ -665,47 +664,19 @@ export default {
 		"wird noch kopiert",
 	"components.molecules.copyResult.courseCopy.info": "Kurs wird erstellt",
 	"components.molecules.copyResult.courseFiles.info":
-		"Kursdateien, die nicht Teil von Aufgaben oder Themen sind, werden nicht kopiert.",
-	"components.molecules.copyResult.courseGroupCopy.info":
-		"Gruppen und deren Inhalte werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
+		"Dateien unter Kursdateien",
+	"components.molecules.copyResult.courseGroupCopy.info": "Kursgruppen",
 	"components.molecules.copyResult.ctlTools.info":
 		"Externe Tools, die dem Kurs oder Karten im Bereich zugeordnet sind, werden nicht kopiert.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
-		"In Zielschule nicht verfügbare externe tools und geschützte Teile der Tool-Konfigurationen werden nicht kopiert.",
-	"components.molecules.copyResult.etherpadCopy.info":
-		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
+		"In Zielschule nicht verfügbare externe Tools und geschützte Teile der Tool-Konfigurationen werden nicht kopiert.",
+	"components.molecules.copyResult.etherpadCopy.info": "Inhalte aus Etherpads",
 	"components.molecules.copyResult.failedCopy":
 		"Das Duplizieren konnte nicht abgeschlossen werden.",
-	"components.molecules.copyResult.fileCopy.error":
-		"Folgende Dateien konnten nicht kopiert werden und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.geogebraCopy.info":
-		"Material-IDs werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.information":
-		"Nachfolgend können die fehlenden Inhalte mit Hilfe der Quick-Links ergänzt werden. Die Links öffnen sich in einem separatem Tab.",
-	"components.molecules.copyResult.label.columnBoard": "Bereich",
-	"components.molecules.copyResult.label.content": "Inhalt",
-	"components.molecules.copyResult.label.etherpad": "Etherpad",
-	"components.molecules.copyResult.label.externalTools": "Externe Tools",
-	"components.molecules.copyResult.label.file": "Datei",
-	"components.molecules.copyResult.label.files": "Dateien",
-	"components.molecules.copyResult.label.geogebra": "GeoGebra",
-	"components.molecules.copyResult.label.leaf": "Blatt",
-	"components.molecules.copyResult.label.lernstoreMaterial": "Lern-Material",
-	"components.molecules.copyResult.label.lernstoreMaterialGroup":
-		"Lern-Materialien",
-	"components.molecules.copyResult.label.lessonContentGroup":
-		"Unterrichtsinhalte",
-	"components.molecules.copyResult.label.submissions": "Abgaben",
-	"components.molecules.copyResult.label.text": "Text",
-	"components.molecules.copyResult.label.tldraw": "Whiteboard",
-	"components.molecules.copyResult.label.link": "Link",
-	"components.molecules.copyResult.label.timeGroup": "Zeitgruppe",
-	"components.molecules.copyResult.label.unknown": "Unbekannt",
-	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
-	"components.molecules.copyResult.label.toolElements": "Tool-Element",
-	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
-	"components.molecules.copyResult.tldrawCopy.info":
-		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
+	"components.molecules.copyResult.geogebraCopy.info": "Geogebra IDs",
+	"components.molecules.copyResult.membersAndPermissions":
+		"Kursmitglieder und Berechtigungen",
+	"components.molecules.copyResult.tldrawCopy.info": "Inhalte aus Whiteboards",
 	"components.molecules.copyResult.course.successfullyCopied":
 		"Alle Elemente wurden erfolgreich dupliziert.",
 	"components.molecules.copyResult.board.successfullyCopied":
@@ -723,7 +694,8 @@ export default {
 	"components.molecules.copyResult.title.partial":
 		"Wichtige Kopier-Informationen",
 	"components.molecules.copyResult.title.success": "Duplizieren erfolgreich",
-	"components.molecules.courseheader.coursedata": "Kursdateien",
+	"components.molecules.copyResult.followingNotCopied":
+		"Folgendes wurde nicht kopiert:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
@@ -837,7 +809,7 @@ export default {
 	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
 		"Raum-Mitglieder und Berechtigungen",
 	"components.molecules.share.options.tableHeader.InfoText":
-		"Folgende Inhalte werden nicht kopiert:",
+		"Folgendes wird nicht kopiert:",
 	"components.molecules.share.courses.result.linkLabel": "Link Kurskopie",
 	"components.molecules.share.lessons.mail.body": "Link zum Thema:",
 	"components.molecules.share.lessons.mail.subject": "Thema zum Importieren",
@@ -850,7 +822,7 @@ export default {
 		"Link nur schulintern gültig",
 	"components.molecules.share.options.title": "Teilen-Einstellungen",
 	"components.molecules.share.room.options.infoText":
-		"Mit dem folgenden Link kann dieser Raum von anderen Personen kopiert werden. Wenn kein aktiv genutzter Raum geteilt werden soll, bitte zuerst ein Duplikat erstellen und dieses teilen.",
+		"Mit dem folgenden Link kann der Raum als Kopie von anderen Personen importiert werden.",
 	"components.molecules.share.room.result.linkLabel": "Link Raum-Kopie",
 	"components.molecules.share.room.mail.subject": "Raum zum Importieren",
 	"components.molecules.share.room.mail.body": "Link zum Raum: ",
@@ -864,6 +836,8 @@ export default {
 	"components.molecules.share.tasks.result.linkLabel": "Link Aufgabekopie",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel":
 		"Link Raum-Einladung",
+	"components.molecules.share.checkPrivacyAndCopyright":
+		"Bitte die Inhalte auf Urheberrecht und Datenschutz prüfen.",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Bist du dir sicher, dass du die Aufgabe "{taskTitle}" löschen möchtest?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Aufgabe löschen",
@@ -1044,7 +1018,7 @@ export default {
 	"feature-room.CopyInfoDialog.text.nextStep":
 		"Im nächsten Schritt wird eine Kopie des Raumes erstellt.",
 	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"Folgende Inhalte werden nicht übernommen:",
+		"Folgendes wird nicht kopiert:",
 	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
 		"Raum-Mitglieder und Berechtigungen",
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Inhalte aus Etherpads",

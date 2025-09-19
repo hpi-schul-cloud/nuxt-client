@@ -1,6 +1,6 @@
 import AdministrationRoomsPage from "./AdministrationRooms.page.vue";
 import {
-	envsFactory,
+	createTestEnvStore,
 	mockedPiniaStoreTyping,
 	schoolFactory,
 } from "@@/tests/test-utils";
@@ -13,11 +13,10 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
-import { schoolsModule, envConfigModule } from "@/store";
+import { schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { Router, useRouter } from "vue-router";
 import { Mock } from "vitest";
-import EnvConfigModule from "@/store/env-config";
 import { nextTick } from "vue";
 
 vi.mock("@util-board/BoardNotifier.composable");
@@ -50,7 +49,6 @@ describe("AdministrationRooms.page", () => {
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 		setupStores({
 			schoolsModule: SchoolsModule,
-			envConfigModule: EnvConfigModule,
 		});
 
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
@@ -63,10 +61,9 @@ describe("AdministrationRooms.page", () => {
 		isEmptyList?: boolean;
 		featureFlag?: boolean;
 	}) => {
-		const envs = envsFactory.build({
+		createTestEnvStore({
 			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,
 		});
-		envConfigModule.setEnvs(envs);
 		const isEmptyList = options?.isEmptyList ?? false;
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);

@@ -7,11 +7,15 @@
 			>
 				{{ $t("feature-room.CopyInfoDialog.title") }}
 			</v-card-title>
+
 			<v-card-text class="pt-2">
 				<p>
 					{{ $t("feature-room.CopyInfoDialog.text.nextStep") }}
 				</p>
-				<InfoAlert>
+				<InfoAlert class="mb-4">
+					{{ $t("components.molecules.share.checkPrivacyAndCopyright") }}
+				</InfoAlert>
+				<WarningAlert>
 					<p class="mb-1">
 						{{ t("feature-room.CopyInfoDialog.text.alert.followingContent") }}
 					</p>
@@ -33,7 +37,7 @@
 							}}
 						</li>
 					</ul>
-				</InfoAlert>
+				</WarningAlert>
 			</v-card-text>
 			<v-card-actions class="px-6 pb-4">
 				<v-spacer />
@@ -58,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { InfoAlert } from "@ui-alert";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 

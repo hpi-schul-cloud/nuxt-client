@@ -7,7 +7,6 @@ import {
 	commonCartridgeImportModule,
 	contentModule,
 	copyModule,
-	envConfigModule,
 	filePathsModule,
 	finishedTasksModule,
 	groupModule,
@@ -50,7 +49,6 @@ import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	CONTENT_MODULE_KEY,
 	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
@@ -70,6 +68,7 @@ import {
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 import { logger } from "@util-logger";
+import { useEnvStore } from "@data-env";
 
 export const app = createApp(App);
 
@@ -104,7 +103,12 @@ app.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios);
 
-	await envConfigModule.loadConfiguration();
+	const success = await useEnvStore().loadConfiguration();
+
+	if (success) {
+		contentModule.init();
+		filePathsModule.init();
+	}
 
 	try {
 		await authModule.login();
@@ -113,7 +117,7 @@ app.use(VueDOMPurifyHTML, {
 		logger.info("probably not logged in", error);
 	}
 
-	// creation of i18n relies on envConfigModule authModule
+	// creation of i18n relies on authModule
 	const i18n = createI18n();
 	const vuetify = createVuetify(i18n);
 
@@ -124,7 +128,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
 	app.provide(CONTENT_MODULE_KEY, contentModule);
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
-	app.provide(ENV_CONFIG_MODULE_KEY.valueOf(), envConfigModule);
 	app.provide("filePathsModule", filePathsModule);
 	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
 	app.provide("finishedTasksModule", finishedTasksModule);
