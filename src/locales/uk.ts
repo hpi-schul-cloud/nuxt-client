@@ -485,12 +485,10 @@ export default {
 	"components.board.menu.editing.settings.title": "Налаштування редагування",
 	"components.board.dialog.readerCanEdit.subtitle":
 		"Тут ви можете змінити права редагування для цієї області. Незалежно від цієї настройки, учасники з правом доступу до кімнати 'Редагувати' та вище завжди можуть редагувати області.",
-	"components.board.dialog.readerCanEdit.options.first":
+	"components.board.dialog.readerCanEdit.options":
 		"Ця область {0} підлягає редагуванню для учасників з правом доступу до кімнати 'Читати'.",
 	"components.board.dialog.readerCanEdit.options.defaultSetting":
 		"Стандартна настройка",
-	"components.board.dialog.readerCanEdit.options.second":
-		"Ця область {0} підлягає редагуванню для учасників з правом доступу до кімнати 'Читати'.",
 	"components.board.dialog.readerCanEdit.alert.text":
 		"Дошка спочатку повинна бути опублікована, перш ніж можна буде налаштувати параметри редагування.",
 	"components.board.menu.card": "Налаштування картки",

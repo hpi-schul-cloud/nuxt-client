@@ -6,7 +6,7 @@
 		data-testid="board-editable-chip"
 	>
 		<div class="chip-content">
-			<v-icon left class="mr-2" color="">{{ mdiPencilPlusOutline }}</v-icon>
+			<v-icon left class="icon mr-2">{{ mdiPencilPlusOutline }}</v-icon>
 			<span>
 				{{ t("components.board.header.chip.editableForEveryone") }}
 			</span>
@@ -24,5 +24,8 @@ const { t } = useI18n();
 <style lang="scss" scoped>
 .chip-content {
 	color: rgba(var(--v-theme-on-surface));
+}
+.icon {
+	color: rgba(var(--v-theme-on-surface), 0.8);
 }
 </style>

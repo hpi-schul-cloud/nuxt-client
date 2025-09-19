@@ -475,12 +475,10 @@ export default {
 	"components.board.menu.editing.settings.title": "Editing settings",
 	"components.board.dialog.readerCanEdit.subtitle":
 		"Here you can change the editing rights for this area. Regardless of this setting, members with the room permission 'Edit' and higher can always edit areas.",
-	"components.board.dialog.readerCanEdit.options.first":
-		"This area is {0} editable for members with the 'Read' room permission.",
+	"components.board.dialog.readerCanEdit.options":
+		"This board is {0} editable by members with the room permission “Read”.",
 	"components.board.dialog.readerCanEdit.options.defaultSetting":
 		"Default setting",
-	"components.board.dialog.readerCanEdit.options.second":
-		"This area is {0} editable by members with the room permission “Read”.",
 	"components.board.dialog.readerCanEdit.alert.text":
 		"The board must first be published before the editing settings can be adjusted.",
 	"components.board.menu.card": "Card settings",

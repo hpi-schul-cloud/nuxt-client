@@ -117,7 +117,7 @@ const modalTitle = computed(() =>
 const radioOptions = computed(() => [
 	{
 		value: "editableWithoutReadPermission",
-		labelHeader: "components.board.dialog.readerCanEdit.options.first",
+		labelHeader: "components.board.dialog.readerCanEdit.options",
 		labelInlineFormattedText: "common.words.not",
 		labelDescription:
 			"components.board.dialog.readerCanEdit.options.defaultSetting",
@@ -125,7 +125,7 @@ const radioOptions = computed(() => [
 	},
 	{
 		value: "editableWithReadPermission",
-		labelHeader: "components.board.dialog.readerCanEdit.options.second",
+		labelHeader: "components.board.dialog.readerCanEdit.options",
 		labelInlineFormattedText: "common.words.also",
 		labelDescription: "",
 		dataTestid: "edit-settings-option-2",

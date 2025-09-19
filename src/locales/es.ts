@@ -483,12 +483,10 @@ export default {
 	"components.board.menu.editing.settings.title": "Configuración de edición",
 	"components.board.dialog.readerCanEdit.subtitle":
 		"Aquí puede cambiar los derechos de edición para esta área. Independientemente de esta configuración, los miembros con el permiso de sala 'Editar' y superior siempre pueden editar áreas.",
-	"components.board.dialog.readerCanEdit.options.first":
-		"Este área {0} es editable para miembros con el permiso de sala 'Leer'.",
+	"components.board.dialog.readerCanEdit.options":
+		"Este tablero {0} es editable para miembros con el permiso de sala 'Leer'.",
 	"components.board.dialog.readerCanEdit.options.defaultSetting":
 		"Configuración predeterminada",
-	"components.board.dialog.readerCanEdit.options.second":
-		"Esta área {0} es editable por miembros con el permiso de sala 'Leer'.",
 	"components.board.dialog.readerCanEdit.alert.text":
 		"El tablero debe publicarse primero antes de que se puedan ajustar los ajustes de edición.",
 	"components.board.menu.card": "Configuración de la tarjeta",

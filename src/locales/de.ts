@@ -477,15 +477,13 @@ export default {
 	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.editing.settings.title": "Bearbeitungseinstellungen",
 	"components.board.dialog.readerCanEdit.subtitle":
-		"Hier können die Bearbeitungsrechte für diesen Bereich verändert werden. Unabhängig von dieser Einstellung können Mitglieder mit der Raumberechtigung „Bearbeiten“ und höher immer Bereiche bearbeiten. ",
-	"components.board.dialog.readerCanEdit.options.first":
+		"Hier können die Bearbeitungsrechte für diesen Bereich verändert werden. Unabhängig von dieser Einstellung können Mitglieder mit der Raumberechtigung „Bearbeiten“ und höher immer Bereiche bearbeiten.",
+	"components.board.dialog.readerCanEdit.options":
 		"Dieser Bereich ist {0} bearbeitbar für Mitglieder mit der Raumberechtigung „Lesen“.",
 	"components.board.dialog.readerCanEdit.options.defaultSetting":
 		"Standardeinstellung",
-	"components.board.dialog.readerCanEdit.options.second":
-		"Dieser Bereich ist {0} bearbeitbar für Mitglieder mit der Raumberechtigung „Lesen“. ",
 	"components.board.dialog.readerCanEdit.alert.text":
-		"Der Bereich muss zuerst veröffentlicht werden, bevor die Bearbeitungs-einstellungen angepasst werden können.",
+		"Der Bereich muss zuerst veröffentlicht werden, bevor die Bearbeitungseinstellungen angepasst werden können.",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
 	"components.board.menu.collaborativeTextEditorElement":
