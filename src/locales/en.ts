@@ -552,6 +552,7 @@ export default {
 	"components.cardElement.fileElement.emptyAlt":
 		"Here is an image with the following name",
 	"components.cardElement.fileElement.pdfAlt": "Preview image for ",
+	"components.cardElement.fileElement.collaboraFile": "Document",
 	"components.cardElement.fileElement.previewError":
 		"Failed to load the preview.",
 	"components.cardElement.fileElement.reloadStatus": "Update status",

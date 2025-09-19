@@ -567,6 +567,7 @@ export default {
 		"Ось зображення з такою назвою",
 	"components.cardElement.fileElement.pdfAlt":
 		"попередній перегляд зображення для ",
+	"components.cardElement.fileElement.collaboraFile": "Документ",
 	"components.cardElement.fileElement.previewError":
 		"Не вдалося завантажити попередній перегляд.",
 	"components.cardElement.fileElement.reloadStatus": "Статус оновлення",
