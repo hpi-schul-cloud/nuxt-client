@@ -1,5 +1,4 @@
 import NotifierModule from "@/store/notifier";
-import { meResponseFactory } from "@@/tests/test-utils";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
 	createTestingI18n,
@@ -9,23 +8,18 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
 import NewStudent from "./StudentCreate.page.vue";
+import { createTestAuthStore } from "../../../tests/test-utils/index.js";
 
-vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+vi.mock("@/utils/pageTitle", () => {
+	return {
+		buildPageTitle: (pageTitle) => pageTitle ?? "",
+	};
+});
 
 const createMockStore = () => {
 	const createStudentStub = vi.fn();
 	const mockStore = createStore({
 		modules: {
-			auth: {
-				namespaced: true,
-				getters: {
-					getUser: () => ({
-						permissions: ["STUDENT_CREATE"],
-					}),
-				},
-			},
 			users: {
 				namespaced: true,
 				actions: {
@@ -38,9 +32,11 @@ const createMockStore = () => {
 				mutations: {
 					resetBusinessError: vi.fn(),
 				},
-				state: () => ({
-					businessError: "null",
-				}),
+				state: () => {
+					return {
+						businessError: "null",
+					};
+				},
 			},
 		},
 	});
@@ -49,20 +45,21 @@ const createMockStore = () => {
 };
 
 describe("students/new", () => {
+	beforeAll(() => {
+		createTestAuthStore();
+	});
 	beforeEach(() => {
 		setupStores({ notifierModule: NotifierModule });
 	});
 
 	const setup = () => {
 		const { mockStore, createStudentStub } = createMockStore();
-		const mockMe = meResponseFactory.build();
 
 		const wrapper = mount(NewStudent, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
 					$store: mockStore,
-					$me: mockMe,
 					$t: (key) => key,
 				},
 			},

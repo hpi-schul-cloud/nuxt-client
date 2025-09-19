@@ -206,7 +206,6 @@ import {
 	Permission,
 } from "@/serverApi/v3";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useCourseList } from "@data-room";
 import {

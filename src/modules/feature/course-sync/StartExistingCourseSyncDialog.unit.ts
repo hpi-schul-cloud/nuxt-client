@@ -33,7 +33,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			courseName: "courseName",
 			courseTeachers: ["firstName lastName"],
 		},
-		admin?: MeResponse
+		admin?: Partial<MeResponse>
 	) => {
 		const notifierModule = createModuleMocks(NotifierModule);
 		const { mockedMe } = createTestAuthStore({ me: admin ?? {} });
@@ -346,9 +346,9 @@ describe("StartExistingCourseSyncDialog", () => {
 					courseName: "courseName",
 					courseTeachers: ["firstname lastname"],
 				},
-				meResponseFactory.build({
+				{
 					roles: [{ id: "0", name: RoleName.Administrator }],
-				})
+				}
 			);
 
 			const group = groupResponseFactory.build({
@@ -404,9 +404,9 @@ describe("StartExistingCourseSyncDialog", () => {
 					courseName: "courseName",
 					courseTeachers: ["Firstname Lastname", "another teacher"],
 				},
-				meResponseFactory.build({
+				{
 					roles: [{ id: "0", name: RoleName.Administrator }],
-				})
+				}
 			);
 
 			const group = groupResponseFactory.build({

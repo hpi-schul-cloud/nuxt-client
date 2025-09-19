@@ -8,11 +8,11 @@ import {
 	RoleName,
 	UserApiFactory,
 } from "@/serverApi/v3";
-import { Status } from "@/store/types/commons";
 import { $axios } from "@/utils/api";
 import { useEnvConfig } from "@data-env";
-import { schoolsModule } from "@/store";
+import { logger } from "@util-logger";
 
+// use of vueuse "useCookies" ?
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	const d = new Date();
 	d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
@@ -27,7 +27,6 @@ export const useAuthStore = defineStore("authStore", () => {
 	const loggedIn = ref(false);
 	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
-	const status = ref<Status>("");
 
 	// Computed store properties
 	const school = computed(() => meResponse.value?.school);
@@ -47,12 +46,13 @@ export const useAuthStore = defineStore("authStore", () => {
 	const userPermissions = computed(() => meResponse.value?.permissions ?? []);
 	const systemId = computed(() => meResponse.value?.systemId);
 
-	const hasPermission = (permission: Permission) =>
-		computed(() => userPermissions.value?.includes(permission) || false);
-
 	const isTeacher = computed(() => userRoles.value.includes(RoleName.Teacher));
 	const isStudent = computed(() => userRoles.value.includes(RoleName.Student));
 	const isExpert = computed(() => userRoles.value.includes(RoleName.Expert));
+
+	// Helpers/Utils
+	const hasPermission = (permission: Permission) =>
+		computed(() => userPermissions.value?.includes(permission) || false);
 
 	// Actions
 
@@ -61,11 +61,6 @@ export const useAuthStore = defineStore("authStore", () => {
 
 		userLocale.value = data.language;
 		meResponse.value = data;
-
-		// There are several places in the app, where more school data is needed, than is included in the MeResponse (e.g. on school admin page).
-		// It is not easily possible to fetch it there when needed. That's why it is fetched here centrally.
-		await schoolsModule.fetchSchool();
-
 		loggedIn.value = true;
 	};
 
@@ -77,25 +72,22 @@ export const useAuthStore = defineStore("authStore", () => {
 
 	const externalLogout = () => logout("/logout/external");
 
-	const updateUserLanguage = async (language: LanguageType) => {
-		status.value = "pending";
-		try {
-			const response = await userApi.userControllerChangeLanguage({ language });
-			if (response.data.successful) {
-				userLocale.value = language;
-				setCookie("USER_LANG", language, 30);
-			}
-		} catch {
-			status.value = "error";
-		}
-	};
+	const updateUserLanguage = (language: LanguageType) =>
+		userApi
+			.userControllerChangeLanguage({ language })
+			.then((response) => {
+				if (response.data.successful) {
+					userLocale.value = language;
+					setCookie("USER_LANG", language, 30);
+				}
+			})
+			.catch(logger.error);
 
 	return {
 		loggedIn,
 		userLocale,
 		locale,
 		meResponse,
-		status,
 		user,
 		userPermissions,
 		hasPermission,

@@ -158,7 +158,6 @@ import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import {
-	AUTH_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
@@ -306,7 +305,6 @@ export default defineComponent({
 		learnContentFabItems() {
 			const actions = [];
 
-			const store = useAuthStore();
 			if (useAuthStore().userPermissions.includes(Permission.HomeworkCreate)) {
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.task"),

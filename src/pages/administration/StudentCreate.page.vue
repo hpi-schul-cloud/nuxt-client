@@ -42,6 +42,8 @@ import { inputRangeDate } from "@/plugins/datetime";
 import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mapGetters } from "vuex";
+import { useAuthStore } from "@data-auth";
+import { RoleName } from "@/serverApi/v3/index.js";
 
 export default {
 	components: {
@@ -94,8 +96,8 @@ export default {
 				lastName: userData.lastName,
 				email: userData.email,
 				birthday: this.date,
-				roles: ["student"],
-				schoolId: this.$me.school.id,
+				roles: [RoleName.Student],
+				schoolId: useAuthStore().school?.id,
 				sendRegistration: this.sendRegistration,
 			});
 			if (!this.businessError) {

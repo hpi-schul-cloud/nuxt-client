@@ -26,8 +26,7 @@
 </template>
 
 <script lang="ts">
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { defineComponent, ref, computed, PropType } from "vue";
+import { defineComponent, computed, PropType } from "vue";
 import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";

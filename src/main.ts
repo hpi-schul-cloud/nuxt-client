@@ -2,7 +2,6 @@ import { mountBaseComponents } from "@/components/base/components";
 import "@/plugins/polyfills";
 import {
 	applicationErrorModule,
-	authModule,
 	commonCartridgeExportModule,
 	commonCartridgeImportModule,
 	contentModule,
@@ -44,7 +43,6 @@ import { initializeAxios } from "./utils/api";
 
 import {
 	APPLICATION_ERROR_KEY,
-	AUTH_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	CONTENT_MODULE_KEY,
@@ -69,7 +67,7 @@ import {
 } from "./utils/inject";
 import { logger } from "@util-logger";
 import { useEnvStore } from "@data-env";
-import { useAuthStore } from "@/modules/data/auth/Auth.store";
+import { useAuthStore } from "@data-auth";
 
 export const app = createApp(App);
 
@@ -83,14 +81,6 @@ mountBaseComponents(app);
 app.config.errorHandler = handleApplicationError;
 
 app.config.globalProperties.$theme = themeConfig;
-
-app.mixin({
-	computed: {
-		$me() {
-			return authModule.getMe;
-		},
-	},
-});
 
 app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
@@ -113,6 +103,7 @@ app.use(VueDOMPurifyHTML, {
 
 	try {
 		await useAuthStore().login();
+		await schoolsModule.fetchSchool(); // fetch school relies on successful login to know the school id
 	} catch (error) {
 		// TODO improve exception handling, best case test if its a 401, if not log the unknown error
 		logger.info("probably not logged in", error);
@@ -126,7 +117,6 @@ app.use(VueDOMPurifyHTML, {
 
 	// NUXT_REMOVAL get rid of store DI
 	app.provide(APPLICATION_ERROR_KEY.valueOf(), applicationErrorModule);
-	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
 	app.provide(CONTENT_MODULE_KEY, contentModule);
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide("filePathsModule", filePathsModule);
