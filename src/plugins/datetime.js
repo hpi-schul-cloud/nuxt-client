@@ -1,4 +1,3 @@
-import { authModule } from "@/store";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 import "dayjs/locale/es";
@@ -8,6 +7,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import { useEnvConfig } from "@data-env";
+import { useAuthStore } from "@data-auth";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -286,7 +286,7 @@ export const formatDateForAlerts = (date, isLocalTimeZone = false) => {
 };
 
 export const setDayjsLocale = () => {
-	const locale = authModule?.getLocale || "de";
+	const locale = useAuthStore().locale || "de";
 	dayjs.locale(locale);
 };
 
@@ -321,7 +321,7 @@ export const isDateTimeInPast = (dateTime) => {
 export const getTimeFromISOString = (dateIsoString) => {
 	if (!dateIsoString) return "";
 
-	const locale = authModule?.getLocale || "de";
+	const locale = useAuthStore().locale || "de";
 	return new Date(dateIsoString).toLocaleTimeString(locale.value, {
 		timeStyle: "short",
 		hourCycle: "h23",

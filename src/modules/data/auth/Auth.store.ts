@@ -4,6 +4,7 @@ import {
 	LanguageType,
 	MeApiFactory,
 	MeResponse,
+	Permission,
 	RoleName,
 	UserApiFactory,
 } from "@/serverApi/v3";
@@ -24,7 +25,7 @@ export const useAuthStore = defineStore("authStore", () => {
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
 
 	const loggedIn = ref(false);
-	const localeRef = ref<LanguageType>();
+	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
 	const status = ref<Status>("");
 
@@ -39,21 +40,15 @@ export const useAuthStore = defineStore("authStore", () => {
 	const locale = computed(
 		() =>
 			// TODO: Why is it not directly using useEnvStore().fallBackLanguage and if it is, why is here default preferred before fallBack ?!
-			localeRef.value ??
+			userLocale.value ??
 			useEnvConfig().value.I18N__DEFAULT_LANGUAGE ??
 			LanguageType.De
 	);
 	const userPermissions = computed(() => meResponse.value?.permissions ?? []);
+	const systemId = computed(() => meResponse.value?.systemId);
 
-	const hasPermission = (permission: string) =>
+	const hasPermission = (permission: Permission) =>
 		computed(() => userPermissions.value?.includes(permission) || false);
-
-	const hasEveryPermission = (permission: string[]) =>
-		computed(() =>
-			permission.every((permission) =>
-				userPermissions.value.includes(permission)
-			)
-		);
 
 	const isTeacher = computed(() => userRoles.value.includes(RoleName.Teacher));
 	const isStudent = computed(() => userRoles.value.includes(RoleName.Student));
@@ -64,21 +59,12 @@ export const useAuthStore = defineStore("authStore", () => {
 	const login = async () => {
 		const { data } = await meApi.meControllerMe();
 
-		localeRef.value = data.language;
+		userLocale.value = data.language;
 		meResponse.value = data;
 
 		// There are several places in the app, where more school data is needed, than is included in the MeResponse (e.g. on school admin page).
 		// It is not easily possible to fetch it there when needed. That's why it is fetched here centrally.
 		await schoolsModule.fetchSchool();
-
-		// TODO Remove once added to User permissions SC-2401
-		// TODO: create a computed instead ? --> see how its used
-		if (useEnvConfig().value.FEATURE_EXTENSIONS_ENABLED) {
-			meResponse.value.permissions.push("ADDONS_ENABLED");
-		}
-		if (useEnvConfig().value.FEATURE_TEAMS_ENABLED) {
-			meResponse.value.permissions.push("TEAMS_ENABLED");
-		}
 
 		loggedIn.value = true;
 	};
@@ -96,7 +82,7 @@ export const useAuthStore = defineStore("authStore", () => {
 		try {
 			const response = await userApi.userControllerChangeLanguage({ language });
 			if (response.data.successful) {
-				localeRef.value = language;
+				userLocale.value = language;
 				setCookie("USER_LANG", language, 30);
 			}
 		} catch {
@@ -106,18 +92,19 @@ export const useAuthStore = defineStore("authStore", () => {
 
 	return {
 		loggedIn,
+		userLocale,
 		locale,
 		meResponse,
 		status,
 		user,
 		userPermissions,
 		hasPermission,
-		hasEveryPermission,
 		isTeacher,
 		isStudent,
 		isExpert,
 		school,
 		userRoles,
+		systemId,
 		login,
 		logout,
 		externalLogout,

@@ -1,34 +1,32 @@
 import RoomExternalToolsErrorDialog from "@/pages/course-rooms/tools/RoomExternalToolsErrorDialog.vue";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
 import {
 	contextExternalToolConfigurationStatusFactory,
+	createTestAuthStore,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { mount } from "@vue/test-utils";
+import { Permission, RoleName } from "@/serverApi/v3";
 
 describe("RoomExternalToolsErrorDialog", () => {
 	const getWrapper = (props: {
 		selectedItem: ExternalToolDisplayData;
 		isOpen?: boolean;
 	}) => {
-		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
-			getUserRoles: ["teacher"],
+		createTestAuthStore({
+			me: {
+				permissions: [Permission.ContextToolAdmin],
+				roles: [{ name: RoleName.Teacher, id: "teacher1" }],
+			},
 		});
 
 		const wrapper = mount(RoomExternalToolsErrorDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 			},
 			props: {
 				isOpen: true,

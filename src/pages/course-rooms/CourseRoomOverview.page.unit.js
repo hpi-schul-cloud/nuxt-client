@@ -1,6 +1,5 @@
 import RoomModal from "@/components/molecules/RoomModal";
-import { authModule, courseRoomListModule } from "@/store";
-import AuthModule from "@/store/auth";
+import { courseRoomListModule } from "@/store";
 import CopyModule from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
@@ -88,34 +87,31 @@ const mockCourseData = [
 	},
 ];
 
-const mockAuthStoreData = {
-	_id: "asdf",
-	id: "asdf",
-	firstName: "Arthur",
-	lastName: "Dent",
-	email: "arthur.dent@hitchhiker.org",
-	roles: [{ name: "student", displayName: "Student" }],
-	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
-};
-
 setupStores({
-	authModule: AuthModule,
 	courseRoomListModule: CourseRoomListModule,
 });
 
 const spyMocks = {
 	storeRoomAlignMock: vi
 		.spyOn(courseRoomListModule, "align")
-		.mockImplementation(async () => ({})),
+		.mockImplementation(() => {
+			return {};
+		}),
 	storeModuleFetchMock: vi
 		.spyOn(courseRoomListModule, "fetch")
-		.mockImplementation(async () => ({})),
+		.mockImplementation(() => {
+			return {};
+		}),
 	storeModuleFetchAllMock: vi
 		.spyOn(courseRoomListModule, "fetchAllElements")
-		.mockImplementation(async () => ({})),
+		.mockImplementation(() => {
+			return {};
+		}),
 	storeModuleUpdateMock: vi
 		.spyOn(courseRoomListModule, "update")
-		.mockImplementation(async () => ({})),
+		.mockImplementation(() => {
+			return {};
+		}),
 };
 
 let copyModuleMock;
@@ -160,7 +156,6 @@ describe("@/pages/CourseRoomOverview.page", () => {
 	beforeEach(() => {
 		courseRoomListModule.setRoomData(mockRoomStoreData);
 		courseRoomListModule.setAllElements(mockCourseData);
-		authModule.setMe(mockAuthStoreData);
 	});
 
 	afterEach(() => {

@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import MembersTable from "./MembersTable.vue";
-import { nextTick, Ref, ref } from "vue";
+import { computed, nextTick, Ref, ref } from "vue";
 import {
 	mdiMenuDown,
 	mdiMenuUp,
@@ -12,9 +12,7 @@ import {
 	mdiAccountSchoolOutline,
 } from "@icons/material";
 import {
-	createTestAuthStore,
 	createTestAuthStoreWithUser,
-	meResponseFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
@@ -136,8 +134,8 @@ describe("MembersTable", () => {
 			createMock<ReturnType<typeof useRoomAuthorization>>();
 
 		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
-				value ?? false
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(
+				() => value ?? false
 			);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
@@ -204,7 +202,7 @@ describe("MembersTable", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should have column style for extra small display sizes", async () => {
+	it("should have column style for extra small display sizes", () => {
 		const { wrapper } = setup({ windowWidth: 599 });
 
 		const dataTable = wrapper.get(".table-title-header");
@@ -212,7 +210,7 @@ describe("MembersTable", () => {
 		expect(dataTable.classes()).toContain("flex-column");
 	});
 
-	it("should not have column style when display size is over 599px", async () => {
+	it("should not have column style when display size is over 599px", () => {
 		const { wrapper } = setup({ windowWidth: 800 });
 
 		const dataTable = wrapper.get(".table-title-header");
@@ -274,7 +272,7 @@ describe("MembersTable", () => {
 		});
 	});
 
-	it("should render checkboxes if user can add members", async () => {
+	it("should render checkboxes if user can add members", () => {
 		const { wrapper, roomMembers } = setup({
 			customRoomAuthorization: { canAddRoomMembers: true },
 		});
@@ -285,7 +283,7 @@ describe("MembersTable", () => {
 		expect(checkboxes.length).toEqual(roomMembers.length + 1); // all checkboxes including header checkbox
 	});
 
-	it("should not render checkboxes if user can not add members", async () => {
+	it("should not render checkboxes if user can not add members", () => {
 		const { wrapper } = setup({
 			customRoomAuthorization: { canAddRoomMembers: false },
 		});
@@ -295,7 +293,7 @@ describe("MembersTable", () => {
 		expect(checkboxes.length).toEqual(0);
 	});
 
-	it("non-selectable members should have their checkboxes disabled", async () => {
+	it("non-selectable members should have their checkboxes disabled", () => {
 		const nonSelectableMembers = roomMemberFactory.buildList(3, {
 			isSelectable: false,
 		});
@@ -311,7 +309,7 @@ describe("MembersTable", () => {
 		expect(checkboxes.length).toEqual(nonSelectableMembers.length);
 	});
 
-	it("should not show room applicants", async () => {
+	it("should not show room applicants", () => {
 		const roomAdmins = roomMemberFactory.buildList(3, {
 			roomRoleName: RoleName.Roomadmin,
 			displayRoomRole: RoleName.Roomadmin,
@@ -360,7 +358,7 @@ describe("MembersTable", () => {
 	});
 
 	describe("when no members are selected", () => {
-		it("should not render action menu when no members are selected", async () => {
+		it("should not render action menu when no members are selected", () => {
 			const { wrapper } = setup();
 			const actionMenu = wrapper.findComponent(ActionMenu);
 
@@ -441,7 +439,7 @@ describe("MembersTable", () => {
 			expect(search.props("prependInnerIcon")).toEqual(mdiMagnify);
 		});
 
-		it("should render search component with flex order 1 for extra small display sizes", async () => {
+		it("should render search component with flex order 1 for extra small display sizes", () => {
 			const { wrapper } = setup({
 				windowWidth: 599,
 			});
@@ -451,7 +449,7 @@ describe("MembersTable", () => {
 			expect(search.classes()).toContain("order-1");
 		});
 
-		it("should not render search component with flex order 1 for display sizes greater than 599px", async () => {
+		it("should not render search component with flex order 1 for display sizes greater than 599px", () => {
 			const { wrapper } = setup({
 				windowWidth: 800,
 			});
@@ -562,7 +560,7 @@ describe("MembersTable", () => {
 			expect(changeRoleDialog.props("modelValue")).toBe(true);
 
 			const addMemberComponent = changeRoleDialog.findComponent(ChangeRole);
-			await addMemberComponent.vm.$emit("close");
+			addMemberComponent.vm.$emit("close");
 
 			expect(changeRoleDialog.props("modelValue")).toBe(false);
 		});

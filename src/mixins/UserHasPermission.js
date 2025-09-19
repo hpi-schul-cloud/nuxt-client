@@ -21,7 +21,7 @@ export default {
 				throw new Error("parameter permission is missing");
 			}
 			return typeof permission === "string"
-				? !permission || this.userPermissions.includes(permission.toLowerCase())
+				? !permission || this.userPermissions.includes(permission)
 				: !permission() || permission(this.userPermissions);
 		},
 	},

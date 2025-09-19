@@ -11,7 +11,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomsState, useRoomAuthorization } from "@data-room";
 import { createMock } from "@golevelup/ts-vitest";
 import { ref } from "vue";
@@ -24,7 +23,6 @@ import ImportFlow from "@/components/share/ImportFlow.vue";
 import { InfoAlert } from "@ui-alert";
 import { Mock } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
-import AuthModule from "@/store/auth";
 import { RoomItem } from "@/types/room/Room";
 import { roomItemFactory } from "@@/tests/test-utils";
 
@@ -42,10 +40,6 @@ describe("RoomsPage", () => {
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 
 	beforeEach(() => {
-		setupStores({
-			authModule: AuthModule,
-		});
-
 		roomPermissions = {
 			canAddRoomMembers: ref(true),
 			canCreateRoom: ref(false),
@@ -232,7 +226,8 @@ describe("RoomsPage", () => {
 			});
 
 			it("should have the correct props", () => {
-				roomPermissions.canCreateRoom.value = true;
+				roomAuthorization.mockReturnValue({ canCreateRoom: ref(true) });
+
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
 

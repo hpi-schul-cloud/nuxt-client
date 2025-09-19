@@ -4,7 +4,7 @@ import {
 	defaultConfigEnvs,
 	useEnvConfig,
 	useEnvStore,
-} from "./env-config.store";
+} from "./EnvConfig.store";
 import { AxiosResponse } from "axios";
 import {
 	ConfigResponse,

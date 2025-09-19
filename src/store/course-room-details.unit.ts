@@ -2,11 +2,9 @@ import * as serverApi from "@/serverApi/v3/api";
 import * as commonCartridgeApi from "@/commonCartridgeApi/v3/api/common-cartridge-api";
 import { CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3/api";
 import { BoardParentType } from "@/serverApi/v3/api";
-import { applicationErrorModule, authModule } from "@/store";
+import { applicationErrorModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
-import AuthModule from "@/store/auth";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory } from "@@/tests/test-utils";
 import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
@@ -33,19 +31,19 @@ let getRequestReturn: Promise<{ data: Course } | AxiosError> | undefined;
 
 const axiosInitializer = () => {
 	initializeAxios({
-		get: async (path: string, params: object) => {
+		get: (path: string, params: object) => {
 			receivedRequests = [{ path }, { params }];
 			return getRequestReturn;
 		},
-		post: async (path: string) => {
+		post: (path: string) => {
 			receivedRequests = [{ path }, { params: undefined }];
 			return getRequestReturn;
 		},
-		patch: async (path: string, params: object) => {
+		patch: (path: string, params: object) => {
 			receivedRequests = [{ path }, { params }];
 			return getRequestReturn;
 		},
-		delete: async (path: string) => {
+		delete: (path: string) => {
 			receivedRequests = [{ path }, { params: undefined }];
 			return getRequestReturn;
 		},
@@ -77,7 +75,6 @@ const businessError = businessErrorFactory.build({
 describe("course-room module", () => {
 	beforeEach(() => {
 		setupStores({
-			authModule: AuthModule,
 			applicationErrorModule: ApplicationErrorModule,
 		});
 		receivedRequests = [{ path: "" }, { params: {} }];
@@ -511,11 +508,6 @@ describe("course-room module", () => {
 		});
 
 		describe("finishTask", () => {
-			beforeEach(() => {
-				const mockMe = meResponseFactory.build();
-				authModule.setMe(mockMe);
-			});
-
 			it("should make a 'PATCH' call to the backend", async () => {
 				(() => {
 					initializeAxios({
@@ -605,11 +597,6 @@ describe("course-room module", () => {
 		});
 
 		describe("fetchScopePermission", () => {
-			beforeEach(() => {
-				const mockMe = meResponseFactory.build();
-				authModule.setMe(mockMe);
-			});
-
 			it("should make a 'GET' call to the backend to fetch the scoped 'room' permissions", async () => {
 				(() => {
 					initializeAxios({
@@ -715,26 +702,23 @@ describe("course-room module", () => {
 				HttpStatusCode.NotFound,
 				HttpStatusCode.RequestTimeout,
 				HttpStatusCode.InternalServerError,
-			])(
-				"should create an application-error for http-error(%p)",
-				async (code) => {
-					const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
-					const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+			])("should create an application-error for http-error(%p)", (code) => {
+				const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
+				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 
-					const errorData = axiosErrorFactory.build({
-						response: {
-							data: apiResponseErrorFactory.build({
-								message: "FORBIDDEN",
-								code,
-							}),
-						},
-					});
+				const errorData = axiosErrorFactory.build({
+					response: {
+						data: apiResponseErrorFactory.build({
+							message: "FORBIDDEN",
+							code,
+						}),
+					},
+				});
 
-					courseRoomDetailsModule.setError(errorData);
+				courseRoomDetailsModule.setError(errorData);
 
-					expect(setErrorSpy).toHaveBeenCalled();
-				}
-			);
+				expect(setErrorSpy).toHaveBeenCalled();
+			});
 		});
 
 		describe("setBusinessError", () => {

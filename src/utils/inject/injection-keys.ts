@@ -1,5 +1,4 @@
 import ApplicationErrorModule from "@/store/application-error";
-import AuthModule from "@/store/auth";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import ContentModule from "@/store/content";
@@ -28,7 +27,6 @@ export const FILE_PATHS_MODULE_KEY: InjectionKey<FilePathsModule> =
 	Symbol("filePathsModule");
 export const NOTIFIER_MODULE_KEY: InjectionKey<NotifierModule> =
 	Symbol("notifierModule");
-export const AUTH_MODULE_KEY: InjectionKey<AuthModule> = Symbol("authModule");
 export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsModule> =
 	Symbol("schoolExternalToolsModule");
 export const APPLICATION_ERROR_KEY: InjectionKey<ApplicationErrorModule> =

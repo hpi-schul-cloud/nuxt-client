@@ -1,5 +1,8 @@
-import { createTestEnvStore } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import {
+	createTestAuthStore,
+	createTestEnvStore,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -8,12 +11,11 @@ import { System, useSystemApi } from "@data-system";
 import { useOAuthApi } from "@data-oauth";
 import { DeepMocked, createMock } from "@golevelup/ts-vitest";
 import { LanguageType } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
 import UserMenu from "./UserMenu.vue";
+import { useAuthStore } from "@data-auth";
 
 vi.mock("@data-system");
 vi.mock("@data-oauth");
@@ -27,13 +29,8 @@ describe("@ui-layout/UserMenu", () => {
 		mockedSystem?: System,
 		mockedTokenExpiration?: Date
 	) => {
-		const authModule = createModuleMocks(AuthModule, {
-			getLocale: "de",
-			logout: vi.fn(),
-			externalLogout: vi.fn(),
-			get loginSystem(): string | undefined {
-				return mockedSystem?.id;
-			},
+		const { authStore } = createTestAuthStore({
+			me: { systemId: mockedSystem?.id },
 		});
 
 		createTestEnvStore({
@@ -55,9 +52,6 @@ describe("@ui-layout/UserMenu", () => {
 		const wrapper = mount(UserMenu, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 			},
 			props: {
 				user: {
@@ -69,14 +63,14 @@ describe("@ui-layout/UserMenu", () => {
 			},
 		});
 
-		return { wrapper, authModule };
+		return { wrapper, authStore };
 	};
 
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
-	it("should render with correct user initials", async () => {
+	it("should render with correct user initials", () => {
 		const { wrapper } = setupWrapper();
 
 		const initials = wrapper.findComponent("[data-testid=user-menu-btn]");
@@ -96,7 +90,7 @@ describe("@ui-layout/UserMenu", () => {
 	});
 
 	it("should trigger logout function on logout item click", async () => {
-		const { wrapper, authModule } = setupWrapper();
+		const { wrapper, authStore } = setupWrapper();
 
 		const menuBtn = wrapper.findComponent({ name: "VBtn" });
 		await menuBtn.trigger("click");
@@ -105,7 +99,7 @@ describe("@ui-layout/UserMenu", () => {
 		expect(logoutBtn.exists()).toBe(true);
 		await logoutBtn.trigger("click");
 
-		expect(authModule.logout).toHaveBeenCalled();
+		expect(authStore.logout).toHaveBeenCalled();
 	});
 
 	describe("external logout", () => {
@@ -117,9 +111,9 @@ describe("@ui-layout/UserMenu", () => {
 					hasEndSessionEndpoint: true,
 				};
 
-				const { wrapper, authModule } = setupWrapper(true, mockedSystem);
+				const { wrapper, authStore } = setupWrapper(true, mockedSystem);
 
-				return { wrapper, authModule, mockedSystem };
+				return { wrapper, authStore, mockedSystem };
 			};
 
 			it("should show the external logout button", async () => {
@@ -139,7 +133,7 @@ describe("@ui-layout/UserMenu", () => {
 			});
 
 			it("should trigger external logout function on logout item click", async () => {
-				const { wrapper, authModule } = setup();
+				const { wrapper, authStore } = setup();
 
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
@@ -151,7 +145,7 @@ describe("@ui-layout/UserMenu", () => {
 				expect(externalLogoutBtn.exists()).toBe(true);
 				await externalLogoutBtn.trigger("click");
 
-				expect(authModule.externalLogout).toHaveBeenCalled();
+				expect(authStore.externalLogout).toHaveBeenCalled();
 			});
 
 			it("should show the correct text for the logout button", async () => {

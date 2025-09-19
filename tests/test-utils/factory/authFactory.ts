@@ -1,37 +1,46 @@
-import { createPinia, getActivePinia, setActivePinia } from "pinia";
+import { getActivePinia, setActivePinia } from "pinia";
 import { useAuthStore } from "@data-auth";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { meResponseFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { MeResponse, Permission, RoleName } from "@/serverApi/v3";
 import { DeepPartial } from "fishery";
+import { createTestingPinia } from "@pinia/testing";
 
-export const createTestAuthStore = (
-	options: {
-		me?: DeepPartial<MeResponse>;
-	} = {}
-) => {
+export const createTestAuthStore = ({
+	me,
+	stubActions,
+}: {
+	me?: DeepPartial<MeResponse>;
+	stubActions?: boolean;
+} = {}) => {
 	if (!getActivePinia()) {
-		setActivePinia(createPinia());
+		setActivePinia(createTestingPinia({ stubActions }));
 	}
 
-	const mockedMe = meResponseFactory.build(options.me);
+	const mockedMe = meResponseFactory.build(me);
 
 	useAuthStore().$patch({
 		meResponse: mockedMe,
 	});
-	return { mockedMe };
+	const authStore = mockedPiniaStoreTyping(useAuthStore);
+
+	return { mockedMe, authStore };
 };
 
-export const createTestAuthStoreWithPermissions = (permissions: Permission[]) =>
-	createTestAuthStore({ me: { permissions } });
+export const createTestAuthStoreWithPermissions = (
+	permissions: Permission[],
+	stubActions?: boolean
+) => createTestAuthStore({ me: { permissions }, stubActions });
 
-export const createTestAuthStoreWithUser = (id: string) =>
-	createTestAuthStore({ me: { user: { id } } });
+export const createTestAuthStoreWithUser = (
+	id?: string,
+	stubActions?: boolean
+) => createTestAuthStore({ me: { user: { id } }, stubActions });
 
-export const createTestAuthStoreWithRole = (roleName: RoleName) =>
+export const createTestAuthStoreWithRole = (
+	roleName: RoleName,
+	stubActions?: boolean
+) =>
 	createTestAuthStore({
 		me: { roles: [{ id: roleName, name: roleName }] },
+		stubActions,
 	});
-
-export const createTestAuthStoreWithRole = (roleName: RoleName) => {
-	return {};
-};

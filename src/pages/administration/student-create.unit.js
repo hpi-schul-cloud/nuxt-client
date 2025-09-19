@@ -1,4 +1,3 @@
-import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import { meResponseFactory } from "@@/tests/test-utils";
 import mock$objects from "@@/tests/test-utils/pageStubs";
@@ -51,7 +50,7 @@ const createMockStore = () => {
 
 describe("students/new", () => {
 	beforeEach(() => {
-		setupStores({ authModule: AuthModule, notifierModule: NotifierModule });
+		setupStores({ notifierModule: NotifierModule });
 	});
 
 	const setup = () => {

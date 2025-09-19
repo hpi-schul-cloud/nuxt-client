@@ -22,7 +22,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import { WarningAlert } from "@ui-alert";
-import { Ref, ref } from "vue";
+import { computed, Ref } from "vue";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { Mock } from "vitest";
 
@@ -106,8 +106,8 @@ describe("AddMembers", () => {
 			createMock<ReturnType<typeof useRoomAuthorization>>();
 
 		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
-				value ?? false
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(
+				() => value ?? false
 			);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);

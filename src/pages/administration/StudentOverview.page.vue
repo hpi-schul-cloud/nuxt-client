@@ -158,6 +158,8 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 import { useEnvConfig } from "@data-env";
+import { useAuthStore } from "@data-auth";
+import { Permission } from "@/serverApi/v3/index.js";
 
 export default {
 	components: {
@@ -338,7 +340,7 @@ export default {
 					),
 					icon: mdiDeleteOutline,
 					action: this.handleBulkDelete,
-					permission: "STUDENT_DELETE",
+					permission: Permission.StudentDelete,
 					dataTestId: "delete_action",
 				},
 			];
@@ -424,7 +426,7 @@ export default {
 		fab() {
 			if (
 				this.schoolIsExternallyManaged ||
-				!this.$_userHasPermission("STUDENT_CREATE")
+				!this.$_userHasPermission(Permission.StudentCreate)
 			) {
 				return null;
 			}
@@ -693,7 +695,7 @@ export default {
 			this.find();
 		},
 		async getClassNameList() {
-			const { currentYear } = this.$store.getters["authModule/getSchool"];
+			const { currentYear } = useAuthStore().school;
 			await this.$store.dispatch("classes/find", {
 				query: {
 					$limit: 1000,

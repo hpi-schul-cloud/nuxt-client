@@ -53,9 +53,9 @@ import { useI18n } from "vue-i18n";
 import { useOAuthApi } from "@data-oauth";
 import { System, useSystemApi } from "@data-system";
 import { MeUserResponse } from "@/serverApi/v3";
-import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
 import LanguageMenu from "./LanguageMenu.vue";
 import { useEnvConfig } from "@data-env";
+import { useAuthStore, useAuthStoreRefs } from "@data-auth";
 
 const props = defineProps({
 	user: {
@@ -68,31 +68,32 @@ const props = defineProps({
 	},
 });
 
+const { systemId } = useAuthStoreRefs();
+
 const { t } = useI18n();
-const authModule = injectStrict(AUTH_MODULE_KEY);
 const { getSystem } = useSystemApi();
 const { getSessionTokenExpiration } = useOAuthApi();
 
-const userRole = computed(() => {
-	return t(`common.roleName.${toRef(props.roleNames).value[0]}`).toString();
-});
+const userRole = computed(() =>
+	t(`common.roleName.${toRef(props.roleNames).value[0]}`).toString()
+);
 
-const initials = computed(() => {
-	return props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1);
-});
+const initials = computed(
+	() => props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1)
+);
 
 const system: Ref<System | undefined> = ref();
 
 const isExternalLogoutAllowed = computed(
 	() =>
 		useEnvConfig().value.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED &&
-		!!authModule.loginSystem &&
+		!!systemId.value &&
 		!!system.value?.hasEndSessionEndpoint
 );
 
-const systemName: ComputedRef<string> = computed(() => {
-	return system.value?.displayName ?? "";
-});
+const systemName: ComputedRef<string> = computed(
+	() => system.value?.displayName ?? ""
+);
 
 const now: Ref<Date> = ref(new Date());
 
@@ -104,8 +105,8 @@ const isSessionTokenExpired: ComputedRef<boolean> = computed(
 );
 
 onMounted(async () => {
-	if (authModule.loginSystem) {
-		system.value = await getSystem(authModule.loginSystem);
+	if (systemId.value) {
+		system.value = await getSystem(systemId.value);
 	}
 	if (isExternalLogoutAllowed.value) {
 		sessionTokenExpiration.value = await getSessionTokenExpiration();
@@ -117,11 +118,11 @@ const onMenuBtnClicked = () => {
 };
 
 const logout = () => {
-	authModule.logout();
+	useAuthStore().logout();
 };
 
 const externalLogout = () => {
-	authModule.externalLogout();
+	useAuthStore().externalLogout();
 };
 </script>
 

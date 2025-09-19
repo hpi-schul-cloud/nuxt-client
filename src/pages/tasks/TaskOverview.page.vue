@@ -4,16 +4,15 @@
 
 <script setup lang="ts">
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
-import AuthModule from "@/store/auth";
 import TasksModule from "@/store/tasks";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useTitle } from "@vueuse/core";
 import { computed, inject, onMounted } from "vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useI18n } from "vue-i18n";
+import { useAuthStoreRefs } from "@data-auth";
 
 const { t } = useI18n();
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+const { isTeacher, isStudent } = useAuthStoreRefs();
 const tasksModule = inject<TasksModule | undefined>("tasksModule");
 
 if (tasksModule === undefined) {
@@ -25,8 +24,8 @@ useTitle(buildPageTitle(t("common.words.tasks")));
 onMounted(() => tasksModule.fetchAllTasks());
 
 const dashboardRole = computed(() => {
-	if (authModule.getUserRoles.includes("teacher")) return "teacher";
-	if (authModule.getUserRoles.includes("student")) return "student";
+	if (isTeacher.value) return "teacher";
+	if (isStudent.value) return "student";
 	return undefined;
 });
 </script>

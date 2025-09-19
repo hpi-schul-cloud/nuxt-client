@@ -1,1 +1,1 @@
-export * from "./env-config.store";
+export * from "./EnvConfig.store";

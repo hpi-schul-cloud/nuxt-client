@@ -53,13 +53,12 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 import RoomExternalToolsErrorDialog from "@/pages/course-rooms/tools/RoomExternalToolsErrorDialog.vue";
-import { ToolContextType } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { Permission, ToolContextType } from "@/serverApi/v3";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@data-auth";
 
 const props = defineProps({
 	tools: {
@@ -77,7 +76,6 @@ const emit = defineEmits<{
 	(e: "refresh"): void;
 }>();
 
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const router = useRouter();
 const { t } = useI18n();
 
@@ -86,9 +84,7 @@ const isErrorDialogOpen = ref(false);
 const selectedItem = ref<ExternalToolDisplayData | undefined>();
 
 const selectedItemName = computed(() => selectedItem.value?.name || "???");
-const canEdit = computed(() =>
-	authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
-);
+const canEdit = useAuthStore().hasPermission(Permission.ContextToolAdmin);
 
 const onOpenDeleteDialog = (tool: ExternalToolDisplayData) => {
 	selectedItem.value = tool;
@@ -100,7 +96,7 @@ const onCloseDeleteDialog = () => {
 	isDeleteDialogOpen.value = false;
 };
 
-const onDeleteTool = async () => {
+const onDeleteTool = () => {
 	if (selectedItem.value) {
 		emit("delete", selectedItem.value);
 	}

@@ -50,23 +50,19 @@ import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.
 
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import {
+	Permission,
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
 import {
-	VideoConferenceInfo,
 	VideoConferenceOptions,
 	VideoConferenceState,
 } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
-import {
-	AUTH_MODULE_KEY,
-	injectStrict,
-	VIDEO_CONFERENCE_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, VIDEO_CONFERENCE_MODULE_KEY } from "@/utils/inject";
 import { computed, ComputedRef, onMounted, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useAuthStore, useAuthStoreRefs } from "@data-auth";
 
 const props = defineProps({
 	roomId: {
@@ -76,50 +72,41 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const { hasPermission: hasAuthPermission } = useAuthStore();
+const { isExpert, userRoles } = useAuthStoreRefs();
 
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const videoConferenceModule: VideoConferenceModule = injectStrict(
 	VIDEO_CONFERENCE_MODULE_KEY
 );
 
-const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
+const videoConferenceInfo = computed(
 	() => videoConferenceModule.getVideoConferenceInfo
 );
 
-const isWaitingRoomActive: ComputedRef<boolean> = computed(
+const isWaitingRoomActive = computed(
 	() => videoConferenceInfo.value.options.moderatorMustApproveJoinRequests
 );
 
-const isRunning: ComputedRef<boolean> = computed(
+const isRunning = computed(
 	() => videoConferenceInfo.value.state === VideoConferenceState.RUNNING
 );
 
-const isRefreshing: ComputedRef<boolean> = computed(
-	() => videoConferenceModule.getLoading
-);
+const isRefreshing = computed(() => videoConferenceModule.getLoading);
 
-const canJoin: ComputedRef<boolean> = computed(
+const canJoinMeeting = hasAuthPermission(Permission.JoinMeeting);
+const canStart = hasAuthPermission(Permission.StartMeeting);
+const canJoin = computed(
 	() =>
-		authModule.getUserPermissions.includes("join_meeting") &&
-		(!authModule.getUserRoles.includes("expert") ||
-			authModule.getUserRoles.length > 1 ||
-			isWaitingRoomActive.value)
+		canJoinMeeting.value &&
+		(!isExpert.value || userRoles.value.length > 1 || isWaitingRoomActive.value)
 );
 
-const canStart: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("start_meeting")
-);
-
-const hasPermission: ComputedRef<boolean> = computed(() => {
-	return canJoin.value || canStart.value;
-});
+const hasPermission = computed(() => canJoin.value || canStart.value);
 
 const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 
 const videoConferenceOptions: ComputedRef<VideoConferenceOptions> = computed(
-	() => {
-		return videoConferenceModule.getVideoConferenceInfo.options;
-	}
+	() => videoConferenceModule.getVideoConferenceInfo.options
 );
 
 onMounted(async () => {

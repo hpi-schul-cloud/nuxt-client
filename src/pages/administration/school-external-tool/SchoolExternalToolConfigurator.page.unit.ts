@@ -1,16 +1,14 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import ExternalToolMediumDetails from "@/components/external-tools/configuration/ExternalToolMediumDetails.vue";
-import AuthModule from "@/store/auth";
 import { SchoolExternalToolSave } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
-	AUTH_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { createTestAuthStore } from "@@/tests/test-utils";
 import {
 	businessErrorFactory,
 	schoolExternalToolConfigurationTemplateFactory,
@@ -37,9 +35,11 @@ vi.mock(
 		}) as typeof import("@/utils/pageTitle")
 );
 
-vi.mock("vue-router", () => ({
-	useRouter: vi.fn(),
-}));
+vi.mock("vue-router", () => {
+	return {
+		useRouter: vi.fn(),
+	};
+});
 
 const useRouterMock = <Mock>useRouter;
 
@@ -60,10 +60,7 @@ describe("SchoolExternalToolConfigurator", () => {
 		);
 
 		const schoolId = "schoolId";
-		const mockMe = meResponseFactory.build({ school: { id: schoolId } });
-		const authModule = createModuleMocks(AuthModule, {
-			getSchool: mockMe.school,
-		});
+		createTestAuthStore({ me: { school: { id: schoolId } } });
 
 		const notifierModule = createModuleMocks(NotifierModule);
 
@@ -77,7 +74,6 @@ describe("SchoolExternalToolConfigurator", () => {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			},
 			props,
@@ -87,7 +83,6 @@ describe("SchoolExternalToolConfigurator", () => {
 			wrapper,
 			router,
 			schoolExternalToolsModule,
-			authModule,
 			notifierModule,
 			schoolId,
 		};

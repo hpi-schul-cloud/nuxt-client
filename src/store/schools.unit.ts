@@ -4,16 +4,13 @@ import {
 	SchulcloudTheme,
 	SystemsApiInterface,
 } from "@/serverApi/v3/api";
-import { authModule } from "@/store";
-import { createTestEnvStore, meResponseFactory } from "@@/tests/test-utils";
+import { createTestAuthStore, createTestEnvStore } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosError } from "axios";
-import AuthModule from "./auth";
 import SchoolsModule from "./schools";
 
 describe("schools module", () => {
@@ -26,8 +23,6 @@ describe("schools module", () => {
 
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 		vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemsApi);
-
-		setupStores({ authModule: AuthModule });
 	});
 
 	afterEach(() => {
@@ -37,8 +32,7 @@ describe("schools module", () => {
 	describe("actions", () => {
 		describe("fetchSchool", () => {
 			it("should call mutations correctly", async () => {
-				const mockMe = meResponseFactory.build();
-				authModule.setMe(mockMe);
+				createTestAuthStore();
 				const mockSchoolResponse = schoolResponseFactory.build();
 				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
 					mockApiResponse({ data: mockSchoolResponse })
@@ -58,8 +52,7 @@ describe("schools module", () => {
 			});
 
 			it("should set school state correctly", async () => {
-				const mockMe = meResponseFactory.build();
-				authModule.setMe(mockMe);
+				createTestAuthStore();
 				const mockSchoolResponse = schoolResponseFactory.build({
 					features: [
 						serverApi.SchoolFeature.RocketChat,
@@ -97,10 +90,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
 				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
-				const mockMe = meResponseFactory.build({
-					school: { id: "4711" },
-				});
-				authModule.setMe(mockMe);
+				createTestAuthStore({ me: { school: { id: "4711" } } });
 
 				await schoolsModule.fetchSchool();
 
@@ -269,7 +259,9 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const spy = vi.spyOn(serverApi, "UserImportApiFactory");
 				const mockApi = {
-					importUserControllerEndSchoolInMaintenance: vi.fn(() => ({})),
+					importUserControllerEndSchoolInMaintenance: vi.fn(() => {
+						return {};
+					}),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -362,7 +354,9 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const spy = vi.spyOn(serverApi, "UserImportApiFactory");
 				const mockApi = {
-					importUserControllerStartSchoolInUserMigration: vi.fn(() => ({})),
+					importUserControllerStartSchoolInUserMigration: vi.fn(() => {
+						return {};
+					}),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface

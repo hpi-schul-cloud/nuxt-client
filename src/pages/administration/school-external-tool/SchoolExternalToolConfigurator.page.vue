@@ -63,7 +63,6 @@ import ExternalToolConfigurator from "@/components/external-tools/configuration/
 import ExternalToolMediumDetails from "@/components/external-tools/configuration/ExternalToolMediumDetails.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import AuthModule from "@/store/auth";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolSave,
@@ -74,7 +73,6 @@ import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { BusinessError } from "@/store/types/commons";
 import {
-	AUTH_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
@@ -85,16 +83,18 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useAuthStoreRefs } from "@data-auth";
 
 const props = defineProps<{
 	configId?: string;
 }>();
 
+const { school } = useAuthStoreRefs();
+
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 );
 const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 const { t } = useI18n();
 
@@ -147,12 +147,12 @@ const onSave = async (
 	template: SchoolExternalToolConfigurationTemplate,
 	configuredParameterValues: ToolParameterEntry[]
 ) => {
-	if (authModule.getSchool) {
+	if (school.value) {
 		const schoolExternalTool: SchoolExternalToolSave =
 			SchoolExternalToolMapper.mapTemplateToSchoolExternalToolSave(
 				template,
 				configuredParameterValues,
-				authModule.getSchool.id,
+				school.value.id,
 				isDeactivated.value
 			);
 
@@ -198,9 +198,9 @@ onMounted(async () => {
 			await schoolExternalToolsModule.loadSchoolExternalTool(props.configId);
 
 		isDeactivated.value = configuration.value?.isDeactivated ?? false;
-	} else if (authModule.getSchool) {
+	} else if (school.value) {
 		await schoolExternalToolsModule.loadAvailableToolsForSchool(
-			authModule.getSchool.id
+			school.value.id
 		);
 	}
 

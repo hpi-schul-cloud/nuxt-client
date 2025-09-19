@@ -1,7 +1,6 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";
@@ -77,7 +76,6 @@ describe("RoomMembersPage", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(

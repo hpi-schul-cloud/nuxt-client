@@ -5,7 +5,7 @@ import {
 import { VueWrapper } from "@vue/test-utils";
 import RoomMenu from "./RoomMenu.vue";
 import { RouterLink } from "vue-router";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRoomAuthorization } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import {
@@ -35,7 +35,7 @@ describe("@feature-room/RoomMenu", () => {
 	beforeEach(() => {
 		roomPermissions = {
 			canAddRoomMembers: ref(false),
-			canCreateRoom: ref(false),
+			canCreateRoom: computed(() => false),
 			canChangeOwner: ref(false),
 			canViewRoom: ref(false),
 			canEditRoom: ref(false),
@@ -44,7 +44,7 @@ describe("@feature-room/RoomMenu", () => {
 			canLeaveRoom: ref(false),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
-			canSeeAllStudents: ref(false),
+			canSeeAllStudents: computed(() => false),
 			canShareRoom: ref(false),
 			canListDrafts: ref(false),
 			canManageRoomInvitationLinks: ref(false),
@@ -105,7 +105,7 @@ describe("@feature-room/RoomMenu", () => {
 		};
 	};
 
-	it("should render menu", async () => {
+	it("should render menu", () => {
 		const { menuBtn } = setup();
 
 		expect(menuBtn.exists()).toBe(true);

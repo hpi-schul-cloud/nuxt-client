@@ -62,14 +62,13 @@ const { pageLinks, legalLinks, metaLinks } = useSidebarItems();
 
 const isSidebarCategoryItem = (
 	item: SidebarSingleItem | SidebarGroupItem
-): item is SidebarGroupItem => {
-	return (item as SidebarGroupItem).children !== undefined;
-};
+): item is SidebarGroupItem =>
+	(item as SidebarGroupItem).children !== undefined;
 
 const userHasPermission = (item: SidebarSingleItem | SidebarGroupItem) =>
 	!item.permissions ||
-	item.permissions.some((permission: string) =>
-		useAuthStore().userPermissions.includes(permission.toLowerCase())
+	item.permissions.some((permission) =>
+		useAuthStore().userPermissions.includes(permission)
 	);
 
 const hasFeatureEnabled = (item: SidebarSingleItem | SidebarGroupItem) => {
@@ -87,13 +86,12 @@ const isEnabledForTheme = (item: SidebarSingleItem | SidebarGroupItem) => {
 const getItemsForUser = (items: SidebarItems) => {
 	const sidebarItems = items.filter((item) => {
 		if (isSidebarCategoryItem(item)) {
-			item.children = item.children.filter((child) => {
-				return (
+			item.children = item.children.filter(
+				(child) =>
 					userHasPermission(child) &&
 					hasFeatureEnabled(child) &&
 					isEnabledForTheme(child)
-				);
-			});
+			);
 		}
 
 		return (
