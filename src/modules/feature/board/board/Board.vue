@@ -372,11 +372,13 @@ watch([isBoardVisible, arePermissionsLoaded], () => {
 		hasUpdateReadersCanEditPermission: hasUpdateReadersCanEditPermission.value,
 		configFeature: useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE,
 	});
+	// test on live environment if this condition works as expected
+	hasReadersEditPermission.value = true;
 
-	hasReadersEditPermission.value =
-		arePermissionsLoaded?.value &&
-		hasUpdateReadersCanEditPermission?.value &&
-		useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE;
+	// hasReadersEditPermission.value =
+	// 	arePermissionsLoaded?.value &&
+	// 	hasUpdateReadersCanEditPermission?.value &&
+	// 	useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE;
 });
 
 const { isLoadingDialogOpen } = useLoadingState(
