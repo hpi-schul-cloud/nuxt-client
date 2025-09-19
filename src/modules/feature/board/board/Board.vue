@@ -170,7 +170,6 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { useEnvConfig } from "@data-env";
-import { logger } from "@util-logger";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -353,33 +352,28 @@ watch(
 	{ immediate: true }
 );
 
-watch([isBoardVisible, arePermissionsLoaded], () => {
-	const canAccessBoard = isBoardVisible.value || hasEditPermission.value;
+watch(
+	[isBoardVisible, arePermissionsLoaded],
+	() => {
+		const canAccessBoard = isBoardVisible.value || hasEditPermission.value;
 
-	if (arePermissionsLoaded?.value && !canAccessBoard) {
-		router.replace({ name: "room-details", params: { id: roomId.value } });
-		applicationErrorModule.setError(
-			createApplicationError(
-				HttpStatusCode.Forbidden,
-				t("components.board.error.403")
-			)
-		);
-	}
+		if (arePermissionsLoaded?.value && !canAccessBoard) {
+			router.replace({ name: "room-details", params: { id: roomId.value } });
+			applicationErrorModule.setError(
+				createApplicationError(
+					HttpStatusCode.Forbidden,
+					t("components.board.error.403")
+				)
+			);
+		}
 
-	// test on live environment if this condition works as expected
-	logger.log("Board access check", {
-		arePermissionsLoaded: arePermissionsLoaded.value,
-		hasUpdateReadersCanEditPermission: hasUpdateReadersCanEditPermission.value,
-		configFeature: useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE,
-	});
-	// test on live environment if this condition works as expected
-	hasReadersEditPermission.value = true;
-
-	// hasReadersEditPermission.value =
-	// 	arePermissionsLoaded?.value &&
-	// 	hasUpdateReadersCanEditPermission?.value &&
-	// 	useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE;
-});
+		hasReadersEditPermission.value =
+			arePermissionsLoaded?.value &&
+			hasUpdateReadersCanEditPermission?.value &&
+			useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE;
+	},
+	{ immediate: true }
+);
 
 const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.copyResult.title.loading")

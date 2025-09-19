@@ -5,6 +5,8 @@ import {
 } from "@@/tests/test-utils/setup";
 import { Mock } from "vitest";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { VCard, VRadioGroup } from "vuetify/components";
+import { WarningAlert } from "@ui-alert";
 
 vi.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
@@ -48,7 +50,7 @@ describe("EditSettingsDialog", () => {
 
 			expect(wrapper.findComponent(EditSettingsDialog).exists()).toBe(true);
 
-			const cardComponent = wrapper.findComponent({ name: "VCard" });
+			const cardComponent = wrapper.findComponent(VCard);
 			const dialogTitle = cardComponent.find(".dialog-title");
 
 			expect(dialogTitle.text()).toBe(
@@ -59,21 +61,19 @@ describe("EditSettingsDialog", () => {
 		describe("when isDraftMode is false", () => {
 			it("should not render the draft mode alert", () => {
 				const { wrapper } = setup({ isDraftMode: false });
-				const alertComponent = wrapper.findComponent({ name: "WarningAlert" });
+				const alertComponent = wrapper.findComponent(WarningAlert);
 				expect(alertComponent.exists()).toBe(false);
 			});
 
 			it("should render the VRadioGroup component", () => {
 				const { wrapper } = setup({ isDraftMode: false });
-				const radioGroupComponent = wrapper.findComponent({
-					name: "VRadioGroup",
-				});
+				const radioGroupComponent = wrapper.findComponent(VRadioGroup);
 				expect(radioGroupComponent.exists()).toBe(true);
 			});
 
 			it("should render the dialog text", () => {
 				const { wrapper } = setup({ isDraftMode: false });
-				const cardComponent = wrapper.findComponent({ name: "VCard" });
+				const cardComponent = wrapper.findComponent(VCard);
 				const dialogText = cardComponent.find(
 					'[data-testid="edit-settings-subtitle"]'
 				);
@@ -87,7 +87,7 @@ describe("EditSettingsDialog", () => {
 				"should render the radio option with %s",
 				(dataTestid) => {
 					const { wrapper } = setup({ isDraftMode: false });
-					const cardComponent = wrapper.findComponent({ name: "VCard" });
+					const cardComponent = wrapper.findComponent(VCard);
 					const option = cardComponent.find(`[data-testid="${dataTestid}"]`);
 
 					expect(option.exists()).toBe(true);
@@ -96,7 +96,7 @@ describe("EditSettingsDialog", () => {
 
 			it("should render the cancel and save buttons", () => {
 				const { wrapper } = setup({ isDraftMode: false });
-				const cardComponent = wrapper.findComponent({ name: "VCard" });
+				const cardComponent = wrapper.findComponent(VCard);
 				const cancelButton = cardComponent.find(
 					'[data-testid="edit-settings-cancel-btn"]'
 				);
@@ -112,7 +112,7 @@ describe("EditSettingsDialog", () => {
 		describe("when isDraftMode is true", () => {
 			it("should render the draft mode alert", () => {
 				const { wrapper } = setup({ isDraftMode: true });
-				const alertComponent = wrapper.findComponent({ name: "WarningAlert" });
+				const alertComponent = wrapper.findComponent(WarningAlert);
 				expect(alertComponent.exists()).toBe(true);
 
 				const alertText = alertComponent.find(".alert-text");
@@ -123,15 +123,13 @@ describe("EditSettingsDialog", () => {
 
 			it("should not render the VRadioGroup component", () => {
 				const { wrapper } = setup({ isDraftMode: true });
-				const radioGroupComponent = wrapper.findComponent({
-					name: "VRadioGroup",
-				});
+				const radioGroupComponent = wrapper.findComponent(VRadioGroup);
 				expect(radioGroupComponent.exists()).toBe(false);
 			});
 
 			it("should not render the dialog text", () => {
 				const { wrapper } = setup({ isDraftMode: true });
-				const cardComponent = wrapper.findComponent({ name: "VCard" });
+				const cardComponent = wrapper.findComponent(VCard);
 				const dialogText = cardComponent.find(
 					'[data-testid="edit-settings-subtitle"]'
 				);
@@ -141,7 +139,7 @@ describe("EditSettingsDialog", () => {
 
 			it("should render only the cancel button", () => {
 				const { wrapper } = setup({ isDraftMode: true });
-				const cardComponent = wrapper.findComponent({ name: "VCard" });
+				const cardComponent = wrapper.findComponent(VCard);
 				const cancelButton = cardComponent.find(
 					'[data-testid="edit-settings-cancel-btn"]'
 				);
@@ -167,7 +165,7 @@ describe("EditSettingsDialog", () => {
 	describe("@emits", () => {
 		it("should emit 'close' when the cancel button is clicked", async () => {
 			const { wrapper } = setup();
-			const cardComponent = wrapper.findComponent({ name: "VCard" });
+			const cardComponent = wrapper.findComponent(VCard);
 			const cancelButton = cardComponent.find(
 				'[data-testid="edit-settings-cancel-btn"]'
 			);
@@ -178,7 +176,7 @@ describe("EditSettingsDialog", () => {
 
 		it("should emit 'save' with the selected option when the save button is clicked", async () => {
 			const { wrapper } = setup();
-			const cardComponent = wrapper.findComponent({ name: "VCard" });
+			const cardComponent = wrapper.findComponent(VCard);
 			const saveButton = cardComponent.find(
 				'[data-testid="edit-settings-save-btn"]'
 			);
