@@ -270,7 +270,7 @@ describe("Board", () => {
 			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_SHARE: true,
-			FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: true,
+			// FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: true,
 			...(options?.envs ?? {}),
 		});
 
@@ -321,6 +321,7 @@ describe("Board", () => {
 			board: Board;
 			openDeleteBoardDialog: () => void;
 			isBoardVisible: boolean;
+			isEditSettingsDialogOpen: boolean;
 		};
 
 		return {
@@ -924,7 +925,7 @@ describe("Board", () => {
 
 					describe("when revert to draft mode", () => {
 						describe("when board is already in readersCanEdit mode", () => {
-							it("should not update board visibility", async () => {
+							it("should not call updateReaderCanEditRequest", async () => {
 								const { wrapper, boardStore } = setup({
 									isBoardVisible: true,
 									isReadersCanEdit: true,
@@ -937,7 +938,31 @@ describe("Board", () => {
 
 								expect(
 									boardStore.updateReaderCanEditRequest
+								).toHaveBeenCalledWith({
+									boardId: boardStore.board!.id,
+									readersCanEdit: false,
+								});
+								expect(
+									boardStore.updateBoardVisibilityRequest
 								).toHaveBeenCalled();
+							});
+						});
+
+						describe("when board is not in readersCanEdit mode", () => {
+							it("should call updateReaderCanEditRequest", async () => {
+								const { wrapper, boardStore } = setup({
+									isBoardVisible: true,
+									isReadersCanEdit: false,
+								});
+
+								const boardHeader = wrapper.findComponent({
+									name: "BoardHeader",
+								});
+								await boardHeader.vm.$emit("update:visibility");
+
+								expect(
+									boardStore.updateReaderCanEditRequest
+								).not.toHaveBeenCalled();
 								expect(
 									boardStore.updateBoardVisibilityRequest
 								).toHaveBeenCalled();
@@ -975,32 +1000,64 @@ describe("Board", () => {
 			});
 		});
 
-		describe("when the user has readers edit permission", () => {
-			it("should allow changing the board visibility", async () => {
-				mockedBoardPermissions.hasUpdateReadersCanEditPermission = ref(true);
-				mockedBoardPermissions.arePermissionsLoaded = ref(true);
-				const { wrapper, boardStore } = setup({
-					isBoardVisible: true,
-					// isReadersCanEdit: true,
-					envs: { FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: true },
+		describe("readersCanEdit", () => {
+			describe("when set/unset the board for the user with the 'read' permission", () => {
+				it("should call updateReaderCanEditRequest with correct payload", async () => {
+					mockedBoardPermissions.hasUpdateReadersCanEditPermission = ref(false);
+					mockedBoardPermissions.arePermissionsLoaded = ref(true);
+					const { wrapper, boardStore } = setup({
+						isBoardVisible: true,
+						envs: { FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: true },
+					});
+
+					const boardHeader = wrapper.findComponent({
+						name: "BoardHeader",
+					});
+					await boardHeader.vm.$emit("edit:settings");
+
+					const editSettingsDialog = wrapper.findComponent({
+						name: "EditSettingsDialog",
+					});
+					expect(editSettingsDialog.exists()).toBe(true);
+
+					editSettingsDialog.vm.$emit("save", false);
+
+					expect(boardStore.updateReaderCanEditRequest).toHaveBeenCalledWith({
+						boardId: boardStore.board!.id,
+						readersCanEdit: false,
+					});
+
+					editSettingsDialog.vm.$emit("save", false);
+					expect(boardStore.updateReaderCanEditRequest).toHaveBeenCalledWith({
+						boardId: boardStore.board!.id,
+						readersCanEdit: false,
+					});
 				});
 
-				await nextTick();
-				await nextTick();
-				await nextTick();
+				it("should set 'isEditSettingsDialogOpen' to false", async () => {
+					mockedBoardPermissions.hasUpdateReadersCanEditPermission = ref(false);
+					mockedBoardPermissions.arePermissionsLoaded = ref(true);
+					const { wrapper, wrapperVM } = setup({
+						isBoardVisible: true,
+						envs: { FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: true },
+					});
 
-				const boardHeader = wrapper.findComponent({
-					name: "BoardHeader",
+					const boardHeader = wrapper.findComponent({
+						name: "BoardHeader",
+					});
+					await boardHeader.vm.$emit("edit:settings");
+
+					const editSettingsDialog = wrapper.findComponent({
+						name: "EditSettingsDialog",
+					});
+
+					expect(wrapperVM.isEditSettingsDialogOpen).toBe(true);
+
+					editSettingsDialog.vm.$emit("close");
+					await nextTick();
+
+					expect(wrapperVM.isEditSettingsDialogOpen).toBe(false);
 				});
-
-				// boardHeader.setProps({ hasReadersEditPermission: true });
-				await boardHeader.vm.$emit("edit:settings");
-				await nextTick();
-				await nextTick();
-				await nextTick();
-				await nextTick();
-
-				expect(boardStore.updateReaderCanEditRequest).toHaveBeenCalled();
 			});
 		});
 
