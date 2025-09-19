@@ -146,49 +146,133 @@ describe("useCollaboraMessage", () => {
 
 			document.body.removeChild(iframe);
 		});
+		describe('Handle App_LoadingStatus:Document_Loaded correctly"', () => {
+			it("should send remove button messages", () => {
+				const { iframe, targetOrigin } = setupMountComposable();
 
-		it("should handle App_LoadingStatus:Document_Loaded correctly", () => {
-			const { iframe, targetOrigin } = setupMountComposable();
+				const date = Date.now();
+				vi.setSystemTime(date);
 
-			const date = Date.now();
-			vi.setSystemTime(date);
+				const validMsg = JSON.stringify({
+					MessageId: CollaboraEvents.APP_LOADING_STATUS,
+					Values: { Status: "Document_Loaded" },
+				});
 
-			const validMsg = JSON.stringify({
-				MessageId: CollaboraEvents.APP_LOADING_STATUS,
-				Values: { Status: "Document_Loaded" },
+				const expectedMsg = {
+					MessageId: CollaboraEvents.REMOVE_BUTTON,
+					SendTime: date,
+					Values: undefined,
+				};
+
+				const spy = vi.spyOn(iframe.contentWindow as Window, "postMessage");
+				window.dispatchEvent(new MessageEvent("message", { data: validMsg }));
+
+				expect(spy).toHaveBeenNthCalledWith(
+					1,
+					JSON.stringify({ ...expectedMsg, Values: { id: "feedback-button" } }),
+					targetOrigin
+				);
+				expect(spy).toHaveBeenNthCalledWith(
+					2,
+					JSON.stringify({ ...expectedMsg, Values: { id: "about-button" } }),
+					targetOrigin
+				);
+				expect(spy).toHaveBeenNthCalledWith(
+					3,
+					JSON.stringify({ ...expectedMsg, Values: { id: "latestupdates" } }),
+					targetOrigin
+				);
+				expect(spy).toHaveBeenNthCalledWith(
+					4,
+					JSON.stringify({
+						...expectedMsg,
+						Values: { id: "signature-button" },
+					}),
+					targetOrigin
+				);
+
+				document.body.removeChild(iframe);
 			});
 
-			const expectedMsg = {
-				MessageId: CollaboraEvents.REMOVE_BUTTON,
-				SendTime: date,
-				Values: undefined,
-			};
+			it("should send hide menu item messages", () => {
+				const { iframe, targetOrigin } = setupMountComposable();
 
-			const spy = vi.spyOn(iframe.contentWindow as Window, "postMessage");
+				const date = Date.now();
+				vi.setSystemTime(date);
+
+				const validMsg = JSON.stringify({
+					MessageId: CollaboraEvents.APP_LOADING_STATUS,
+					Values: { Status: "Document_Loaded" },
+				});
+
+				const expectedMsg = {
+					MessageId: CollaboraEvents.HIDE_MENU_ITEM,
+					SendTime: date,
+					Values: undefined,
+				};
+
+				const spy = vi.spyOn(iframe.contentWindow as Window, "postMessage");
+				window.dispatchEvent(new MessageEvent("message", { data: validMsg }));
+
+				expect(spy).toHaveBeenNthCalledWith(
+					5,
+					JSON.stringify({ ...expectedMsg, Values: { id: "report-an-issue" } }),
+					targetOrigin
+				);
+				expect(spy).toHaveBeenNthCalledWith(
+					6,
+					JSON.stringify({ ...expectedMsg, Values: { id: "feedback" } }),
+					targetOrigin
+				);
+				expect(spy).toHaveBeenNthCalledWith(
+					7,
+					JSON.stringify({ ...expectedMsg, Values: { id: "about" } }),
+					targetOrigin
+				);
+				expect(spy).toHaveBeenNthCalledWith(
+					8,
+					JSON.stringify({ ...expectedMsg, Values: { id: "latestupdates" } }),
+					targetOrigin
+				);
+				expect(spy).toHaveBeenNthCalledWith(
+					9,
+					JSON.stringify({
+						...expectedMsg,
+						Values: { id: "serveraudit" },
+					}),
+					targetOrigin
+				);
+				expect(spy).toHaveBeenNthCalledWith(
+					10,
+					JSON.stringify({
+						...expectedMsg,
+						Values: { id: "signature" },
+					}),
+					targetOrigin
+				);
+
+				document.body.removeChild(iframe);
+			});
+		});
+	});
+
+	describe("handleUICloseUpdate", () => {
+		it("should call window.close()", () => {
+			setupMountComposable();
+
+			const validMsg = JSON.stringify({
+				MessageId: CollaboraEvents.UI_CLOSE,
+				Values: {},
+			});
+
+			const spy = vi.spyOn(window, "close").mockImplementation(() => {
+				// do nothing
+			});
 			window.dispatchEvent(new MessageEvent("message", { data: validMsg }));
 
-			expect(spy).toHaveBeenNthCalledWith(
-				1,
-				JSON.stringify({ ...expectedMsg, Values: { id: "feedback-button" } }),
-				targetOrigin
-			);
-			expect(spy).toHaveBeenNthCalledWith(
-				2,
-				JSON.stringify({ ...expectedMsg, Values: { id: "about-button" } }),
-				targetOrigin
-			);
-			expect(spy).toHaveBeenNthCalledWith(
-				3,
-				JSON.stringify({ ...expectedMsg, Values: { id: "latestupdates" } }),
-				targetOrigin
-			);
-			expect(spy).toHaveBeenNthCalledWith(
-				4,
-				JSON.stringify({ ...expectedMsg, Values: { id: "signature-button" } }),
-				targetOrigin
-			);
+			expect(spy).toHaveBeenCalled();
 
-			document.body.removeChild(iframe);
+			spy.mockRestore();
 		});
 	});
 });
