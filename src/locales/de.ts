@@ -573,6 +573,7 @@ export default {
 	"components.cardElement.fileElement.emptyAlt":
 		"Hier ist ein Bild mit folgendem Namen",
 	"components.cardElement.fileElement.pdfAlt": "Vorschaubild für ",
+	"components.cardElement.fileElement.collaboraFile": "Dokument",
 	"components.cardElement.fileElement.previewError":
 		"Laden der Vorschau fehlgeschlagen.",
 	"components.cardElement.fileElement.reloadStatus": "Status aktualisieren",

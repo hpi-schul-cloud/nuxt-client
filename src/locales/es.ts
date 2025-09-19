@@ -582,6 +582,7 @@ export default {
 	"components.cardElement.fileElement.emptyAlt":
 		"Aquí tenéis una imagen con el siguiente nombre",
 	"components.cardElement.fileElement.pdfAlt": "Imagen de vista previa para ",
+	"components.cardElement.fileElement.collaboraFile": "Archivo",
 	"components.cardElement.fileElement.previewError":
 		"No se ha podido cargar la vista previa.",
 	"components.cardElement.fileElement.reloadStatus": "Estado de actualización",
