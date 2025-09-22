@@ -32,7 +32,7 @@
 					variant="outlined"
 					@click.stop="closeDialog"
 				>
-					{{ t("common.labels.close") }}
+					{{ t("common.actions.cancel") }}
 				</VBtn>
 			</VCardActions>
 		</VCard>
