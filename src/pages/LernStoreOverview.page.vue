@@ -33,12 +33,11 @@
 									:icon="mdiClose"
 									:aria-label="$t('common.actions.delete')"
 									density="compact"
-									size="x-large"
 									variant="text"
 									:ripple="false"
 									@click="searchQuery = ''"
 								/>
-								<v-icon v-else :icon="mdiMagnify" size="x-large" />
+								<v-icon v-else :icon="mdiMagnify" size="large" />
 							</template>
 						</v-text-field>
 					</div>
