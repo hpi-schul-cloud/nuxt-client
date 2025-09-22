@@ -18,7 +18,6 @@ import { Router, useRoute } from "vue-router";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import AuthModule from "@/store/auth";
-import { RoomAdminMembersTable } from "@feature-room";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -104,7 +103,7 @@ describe("AdministrationRoomMembers.page", () => {
 				],
 				stubs: {
 					RoomAdminMembersTable: true,
-				}
+				},
 			},
 		});
 

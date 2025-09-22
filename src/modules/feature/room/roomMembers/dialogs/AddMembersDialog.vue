@@ -122,7 +122,7 @@
 					/>
 				</div>
 			</template>
-		<VCard>
+		</VCard>
 	</VDialog>
 </template>
 
