@@ -3,11 +3,7 @@ import { MeResponse, RoleName } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestAuthStore,
-	groupResponseFactory,
-	meResponseFactory,
-} from "@@/tests/test-utils";
+import { createTestAuthStore, groupResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,

@@ -1,7 +1,6 @@
 import {
 	createTestAuthStoreWithUser,
 	createTestEnvStore,
-	meResponseFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
@@ -18,7 +17,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
-import { computed, Ref, ref } from "vue";
+import { computed, Ref } from "vue";
 import { beforeAll } from "vitest";
 
 vi.mock("@util-board/BoardNotifier.composable");

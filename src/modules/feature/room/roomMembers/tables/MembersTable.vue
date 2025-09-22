@@ -79,7 +79,7 @@ import { useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
 import { ChangeRole } from "@feature-room";
 import { RoleName } from "@/serverApi/v3";
-import { useAuthStore, useAuthStoreRefs } from "@data-auth";
+import { useAuthStore } from "@data-auth";
 
 type Props = {
 	headerBottom?: number;

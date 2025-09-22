@@ -29,7 +29,6 @@ import {
 import { RoomMenu } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDetailsPage } from "@page-room";
-import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState } from "@ui-empty-state";
 import {
@@ -148,7 +147,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				room,
 			},
 		});
-
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 

@@ -27,7 +27,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
-import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
 import { VBtn } from "vuetify/lib/components/index";

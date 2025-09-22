@@ -1,8 +1,4 @@
-import {
-	createTestAuthStore,
-	createTestEnvStore,
-	mockedPiniaStoreTyping,
-} from "@@/tests/test-utils";
+import { createTestAuthStore, createTestEnvStore } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -15,7 +11,6 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
 import UserMenu from "./UserMenu.vue";
-import { useAuthStore } from "@data-auth";
 
 vi.mock("@data-system");
 vi.mock("@data-oauth");

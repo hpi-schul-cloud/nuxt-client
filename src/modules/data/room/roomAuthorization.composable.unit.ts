@@ -6,7 +6,6 @@ import {
 } from "@@/tests/test-utils";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { useRoomDetailsStore } from "@data-room";
-import { createTestingPinia } from "@pinia/testing";
 import { createPinia, setActivePinia } from "pinia";
 import { ref } from "vue";
 import { useRoomAuthorization } from "./roomAuthorization.composable";
