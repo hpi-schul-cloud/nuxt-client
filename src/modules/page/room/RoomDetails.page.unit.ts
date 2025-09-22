@@ -37,10 +37,9 @@ import {
 	SelectBoardLayoutDialog,
 } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
-import { beforeAll, Mock } from "vitest";
+import { Mock } from "vitest";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { setActivePinia } from "pinia";
 
 vi.mock("vue-router", () => {
 	return {
@@ -65,6 +64,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	beforeEach(() => {
 		vi.useFakeTimers();
+		vi.clearAllMocks();
 
 		useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
 			isLoading: ref(false),
@@ -121,22 +121,23 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		const room = roomFactory.build({});
 
+		createTestEnvStore({
+			FEATURE_BOARD_LAYOUT_ENABLED: true,
+			...envs,
+		});
+
+		useRoomDetailsStore().$patch({
+			isLoading: false,
+			room,
+			roomVariant: RoomVariant.ROOM,
+			roomBoards,
+		});
+
+		createTestAuthStore();
+
 		const wrapper = mount(RoomDetailsPage, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomDetailsStore: {
-								isLoading: false,
-								room,
-								roomVariant: RoomVariant.ROOM,
-								roomBoards,
-							},
-						},
-					}),
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { LeaveRoomProhibitedDialog: true, UseFocusTrap: true },
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
@@ -148,11 +149,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			},
 		});
 
-		createTestAuthStore();
-		createTestEnvStore({
-			FEATURE_BOARD_LAYOUT_ENABLED: true,
-			...envs,
-		});
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 
@@ -272,12 +268,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("when a user clicks on leave room", () => {
 			describe("and user has permission to leave room", () => {
-				it("should call leaveRoom when dialog confirmed", () => {
+				it("should call leaveRoom when dialog confirmed", async () => {
 					askConfirmationMock.mockResolvedValue(true);
 					const { wrapper, useRoomsStateMock } = setup();
 
 					const menu = wrapper.getComponent(RoomMenu);
-					menu.vm.$emit("room:leave");
+					await menu.vm.$emit("room:leave");
 
 					expect(useRoomsStateMock.leaveRoom).toHaveBeenCalled();
 				});
@@ -294,13 +290,13 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 
 			describe("when user has not the permission to leave the room", () => {
-				it("should open leave room prohibited dialog", () => {
+				it("should open leave room prohibited dialog", async () => {
 					roomPermissions.canLeaveRoom.value = false;
 
 					const { wrapper } = setup();
 
 					const menu = wrapper.getComponent(RoomMenu);
-					menu.vm.$emit("room:leave");
+					await menu.vm.$emit("room:leave");
 					const leaveRoomProhibitedDialog = wrapper.getComponent(
 						LeaveRoomProhibitedDialog
 					);

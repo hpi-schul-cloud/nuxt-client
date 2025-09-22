@@ -560,7 +560,7 @@ describe("MembersTable", () => {
 			expect(changeRoleDialog.props("modelValue")).toBe(true);
 
 			const addMemberComponent = changeRoleDialog.findComponent(ChangeRole);
-			addMemberComponent.vm.$emit("close");
+			await addMemberComponent.vm.$emit("close");
 
 			expect(changeRoleDialog.props("modelValue")).toBe(false);
 		});

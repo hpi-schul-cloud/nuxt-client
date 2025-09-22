@@ -34,7 +34,7 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { useBoardNotifier } from "@util-board";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import {
 	VBtn,
@@ -103,7 +103,7 @@ describe("RoomMembersPage", () => {
 
 		roomPermissions = {
 			canAddRoomMembers: ref(true),
-			canCreateRoom: ref(false),
+			canCreateRoom: computed(() => false),
 			canChangeOwner: ref(false),
 			canCopyRoom: ref(false),
 			canViewRoom: ref(false),
@@ -112,7 +112,7 @@ describe("RoomMembersPage", () => {
 			canLeaveRoom: ref(false),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
-			canSeeAllStudents: ref(false),
+			canSeeAllStudents: computed(() => false),
 			canShareRoom: ref(false),
 			canManageRoomInvitationLinks: ref(false),
 			canListDrafts: ref(false),
@@ -141,11 +141,13 @@ describe("RoomMembersPage", () => {
 
 		const members = roomMemberFactory
 			.buildList(3, { roomRoleName: RoleName.Roomeditor })
-			.map((member) => ({
-				...member,
-				displayRoomRole: "",
-				displaySchoolRole: "",
-			}));
+			.map((member) => {
+				return {
+					...member,
+					displayRoomRole: "",
+					displaySchoolRole: "",
+				};
+			});
 
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
 
@@ -207,9 +209,8 @@ describe("RoomMembersPage", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should fetch members on mount", async () => {
+	it("should fetch members on mount", () => {
 		const { roomMembersStore } = setup();
-
 		expect(roomMembersStore.fetchMembers).toHaveBeenCalled();
 	});
 
@@ -387,7 +388,7 @@ describe("RoomMembersPage", () => {
 			];
 		};
 
-		it("should render DefaultWireframe", async () => {
+		it("should render DefaultWireframe", () => {
 			const { wrapper } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 
@@ -416,7 +417,7 @@ describe("RoomMembersPage", () => {
 				},
 			])(
 				"should set correct fab items when active tab is $activeTab",
-				async ({ activeTab, expectedFabItems }) => {
+				({ activeTab, expectedFabItems }) => {
 					roomPermissions.canAddRoomMembers.value = true;
 					const { wrapper } = setup({ activeTab });
 					const wireframe = wrapper.findComponent(DefaultWireframe);

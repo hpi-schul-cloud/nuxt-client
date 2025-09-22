@@ -13,7 +13,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useRoomsState, useRoomAuthorization } from "@data-room";
 import { createMock } from "@golevelup/ts-vitest";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { RouteLocation, Router, useRoute, useRouter } from "vue-router";
 import RoomsPage from "./Rooms.page.vue";
 import { mdiPlus } from "@icons/material";
@@ -42,7 +42,7 @@ describe("RoomsPage", () => {
 	beforeEach(() => {
 		roomPermissions = {
 			canAddRoomMembers: ref(true),
-			canCreateRoom: ref(false),
+			canCreateRoom: computed(() => false),
 			canChangeOwner: ref(false),
 			canCopyRoom: ref(false),
 			canViewRoom: ref(false),
@@ -51,7 +51,7 @@ describe("RoomsPage", () => {
 			canLeaveRoom: ref(false),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
-			canSeeAllStudents: ref(false),
+			canSeeAllStudents: computed(() => false),
 			canShareRoom: ref(false),
 			canListDrafts: ref(false),
 			canManageRoomInvitationLinks: ref(false),
@@ -226,7 +226,7 @@ describe("RoomsPage", () => {
 			});
 
 			it("should have the correct props", () => {
-				roomAuthorization.mockReturnValue({ canCreateRoom: ref(true) });
+				roomPermissions.canCreateRoom = computed(() => true);
 
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);

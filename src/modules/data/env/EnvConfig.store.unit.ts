@@ -1,4 +1,4 @@
-import { createPinia, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
 import { beforeAll, beforeEach, expect } from "vitest";
 import {
 	defaultConfigEnvs,
@@ -17,6 +17,7 @@ import {
 	FilesStorageConfigResponse,
 } from "@/fileStorageApi/v3";
 import { mockApiResponse } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@/store", () => {
 	return {
@@ -67,8 +68,7 @@ describe("useEnvStore", () => {
 	};
 
 	beforeEach(() => {
-		setActivePinia(createPinia());
-		vi.resetAllMocks();
+		setActivePinia(createTestingPinia({ stubActions: false }));
 	});
 
 	describe("initialization", () => {
@@ -187,7 +187,7 @@ describe("useEnvStore", () => {
 
 describe("useEnvConfig", () => {
 	beforeAll(() => {
-		setActivePinia(createPinia());
+		setActivePinia(createTestingPinia());
 	});
 
 	it("should proxy env config as ref from useEnvStore", () => {

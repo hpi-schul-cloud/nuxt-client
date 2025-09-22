@@ -245,9 +245,9 @@ const { getHeaders, getItems } = useExternalToolsSectionUtils(
 
 const { fetchSchoolExternalToolUsage, metadata } = useSchoolExternalToolUsage();
 
-const items: ComputedRef<SchoolExternalToolItem[]> = computed(() => {
-	return getItems(schoolExternalToolsModule);
-});
+const items: ComputedRef<SchoolExternalToolItem[]> = computed(() =>
+	getItems(schoolExternalToolsModule)
+);
 
 const isLoading = computed(() => schoolExternalToolsModule.getLoading);
 
@@ -285,11 +285,11 @@ const onDeleteTool = async () => {
 };
 
 const itemToDelete: Ref<SchoolExternalToolItem | undefined> = ref();
-const getItemName: ComputedRef<string> = computed(() => {
-	return itemToDelete.value ? itemToDelete.value?.name : "";
-});
+const getItemName: ComputedRef<string> = computed(() =>
+	itemToDelete.value ? itemToDelete.value?.name : ""
+);
 
-const isDeleteDialogOpen: Ref<boolean> = ref(false);
+const isDeleteDialogOpen = ref(false);
 
 const openDeleteDialog = async (item: SchoolExternalToolItem) => {
 	itemToDelete.value = item;
@@ -322,20 +322,18 @@ const isMediaBoardUsageVisible = computed(() => {
 	return isVisible;
 });
 
-const isVidisEnabled = computed(() => {
-	return useEnvConfig().value.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED;
-});
+const isVidisEnabled = computed(
+	() => useEnvConfig().value.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED
+);
 
 const isLicensedToSchool = (
 	mediumId?: string,
 	mediaSourceId?: string
-): boolean => {
-	return schoolLicenseStore.isLicensed(mediumId, mediaSourceId);
-};
+): boolean => schoolLicenseStore.isLicensed(mediumId, mediaSourceId);
 
-const isLicensesLoading: ComputedRef<boolean> = computed(() => {
-	return schoolLicenseStore.isLoading;
-});
+const isLicensesLoading: ComputedRef<boolean> = computed(
+	() => schoolLicenseStore.isLoading
+);
 </script>
 
 <style lang="scss" scoped>

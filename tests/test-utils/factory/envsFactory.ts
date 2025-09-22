@@ -4,6 +4,8 @@ import { setActivePinia, getActivePinia } from "pinia";
 import { defaultConfigEnvs, useEnvStore } from "@data-env";
 import { FilesStorageConfigResponse } from "@/fileStorageApi/v3";
 import { createTestingPinia } from "@pinia/testing";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { useAuthStore } from "@data-auth";
 
 export const envsFactory = Factory.define<ConfigResponse>(
 	() => defaultConfigEnvs
@@ -16,8 +18,14 @@ export const createTestEnvStore = (
 	if (!getActivePinia()) {
 		setActivePinia(createTestingPinia());
 	}
-	useEnvStore().$patch({ env: envsFactory.build(config) });
+
+	const env = envsFactory.build(config);
+	const envFile = fileConfig;
+
+	useEnvStore().$patch({ env });
 	if (fileConfig) {
-		useEnvStore().$patch({ envFile: fileConfig });
+		useEnvStore().$patch({ envFile });
 	}
+	const envStore = mockedPiniaStoreTyping(useEnvStore);
+	return { envStore, env, envFile };
 };

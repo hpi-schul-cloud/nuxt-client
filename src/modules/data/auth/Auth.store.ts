@@ -52,7 +52,7 @@ export const useAuthStore = defineStore("authStore", () => {
 
 	// Helpers/Utils
 	const hasPermission = (permission: Permission) =>
-		computed(() => userPermissions.value?.includes(permission) || false);
+		computed(() => userPermissions.value?.includes(permission) ?? false);
 
 	// Actions
 
