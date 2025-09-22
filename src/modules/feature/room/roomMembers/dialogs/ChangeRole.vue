@@ -287,14 +287,20 @@ const onConfirm = async () => {
 
 const onChangeOwner = async () => {
 	await changeRoomOwner(memberToChangeRole.value[0].userId);
-	memberToChangeRole.value = [];
-	selectedIds.value = [];
-	isOwnershipHandoverMode.value = false;
+	resetComponentState();
 	emit("close");
 };
 
 const onClose = () => {
+	resetComponentState();
 	emit("close");
+};
+
+const resetComponentState = () => {
+	memberToChangeRole.value = [];
+	selectedIds.value = [];
+	isOwnershipHandoverMode.value = false;
+	selectedRole.value = null;
 };
 
 const radioOptions = computed(() => {
