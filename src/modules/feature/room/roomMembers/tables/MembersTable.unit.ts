@@ -19,6 +19,7 @@ import {
 } from "@@/tests/test-utils";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import {
+	VCard,
 	VDataTable,
 	VDialog,
 	VIcon,
@@ -612,7 +613,7 @@ describe("MembersTable", () => {
 			await changeRoleButton.trigger("click");
 
 			const changeRoleDialog = wrapper.findComponent(ChangeRole);
-			const card = wrapper.findComponent({ name: "VCard" });
+			const card = wrapper.findComponent(VCard);
 			await card.trigger("keydown.esc");
 
 			expect(changeRoleDialog.props("modelValue")).toBe(false);

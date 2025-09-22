@@ -62,7 +62,8 @@
 								<p class="mb-0">
 									{{
 										t("pages.rooms.members.handOverAlert.label.subText", {
-											currentUserFullName,
+											memberFullName: "what",
+											currentUserFullName: "test",
 										})
 									}}
 								</p>
@@ -77,12 +78,14 @@
 									</template>
 									<template #memberFullName>{{ memberFullName }}</template>
 								</i18n-t>
+								<p>{{ memberFullName }} {{ currentUserFullName }}</p>
 								<p class="mb-0">
 									{{
 										t(
 											"pages.rooms.members.handOverAlert.confirm.label.subText",
 											{
-												memberFullName,
+												memberFullName: "what2",
+												currentUserFullName: "test2",
 											}
 										)
 									}}
@@ -294,6 +297,8 @@ const onChangeOwner = async () => {
 };
 
 const onClose = () => {
+	selectedIds.value = [];
+	isOwnershipHandoverMode.value = false;
 	emit("close");
 };
 

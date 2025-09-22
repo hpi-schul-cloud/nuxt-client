@@ -12,7 +12,7 @@
 	>
 		<template #[`action-menu-items`]>
 			<KebabMenuActionChangePermission
-				:disabled="selectedIds.length !== 1 || selectedIdsIncludeStudents"
+				v-if="selectedIds.length === 1 || !selectedIdsIncludeStudents"
 				@click="onChangePermission(selectedIds)"
 			/>
 			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
@@ -33,7 +33,7 @@
 				:aria-label="getAriaLabel(item)"
 			>
 				<KebabMenuActionChangePermission
-					:disabled="checkIsStudent(item)"
+					v-if="!checkIsStudent(item)"
 					:aria-label="getAriaLabel(item, 'changeRole')"
 					@click="onChangePermission([item.userId])"
 				/>

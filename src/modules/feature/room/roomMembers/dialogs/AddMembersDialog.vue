@@ -7,7 +7,7 @@
 		persistent
 		@keydown.esc="onClose"
 	>
-		<v-card ref="addMembersContent">
+		<VCard ref="addMembersContent">
 			<template #title>
 				<h2 class="mt-2">
 					{{ t("pages.rooms.members.add") }}
@@ -17,7 +17,7 @@
 			<template #text>
 				<InfoAlert>{{ t("pages.rooms.members.add.infoText") }}</InfoAlert>
 				<div class="mt-8" data-testid="add-participant-school">
-					<v-autocomplete
+					<VAutocomplete
 						ref="autoCompleteSchool"
 						v-model="selectedSchool"
 						density="comfortable"
@@ -26,7 +26,9 @@
 						:items="schoolItems"
 						:label="t('global.sidebar.item.school')"
 						:disabled="
-							isItemListDisabled || (isSchoolSelectionDisabled ?? false)
+							isItemListDisabled ||
+							(isSchoolSelectionDisabled ?? false) ||
+							schoolItems.length <= 1
 						"
 						:aria-disabled="isItemListDisabled"
 						@update:model-value="onValueChange"
@@ -35,7 +37,7 @@
 				</div>
 
 				<div class="mt-4" data-testid="add-participant-role">
-					<v-select
+					<VSelect
 						ref="selectRole"
 						v-model="selectedSchoolRole"
 						density="comfortable"
@@ -54,7 +56,7 @@
 							<VIcon class="mr-1" :icon="item.raw.icon" />
 							{{ item.title }}
 						</template>
-					</v-select>
+					</VSelect>
 				</div>
 
 				<InfoAlert
@@ -98,9 +100,9 @@
 			</template>
 
 			<template #actions>
-				<v-spacer />
+				<VSpacer />
 				<div class="mr-4 mb-3">
-					<v-btn
+					<VBtn
 						ref="cancelButton"
 						class="ms-auto mr-2"
 						color="primary"
@@ -108,7 +110,7 @@
 						data-testid="add-participant-cancel-btn"
 						@click="onClose"
 					/>
-					<v-btn
+					<VBtn
 						ref="addButton"
 						class="ms-auto"
 						color="primary"
@@ -120,7 +122,7 @@
 					/>
 				</div>
 			</template>
-		</v-card>
+		<VCard>
 	</VDialog>
 </template>
 
@@ -184,6 +186,7 @@ const { addMembers, getPotentialMembers, resetPotentialMembers } =
 
 const schoolItems = computed(() => {
 	if (props.isAdminMode) {
+		// maybe...?
 		return schools.value.slice(0, 1);
 	} else {
 		return schools.value;
@@ -198,25 +201,27 @@ const canAddAllStudents = computed(() => {
 
 const selectedSchool = ref(schools.value[0].id);
 
-const schoolRoles: SchoolRoleItem[] = [
-	{
+const schoolRoles = computed<SchoolRoleItem[]>(() => {
+	const student = {
 		id: RoleName.Student,
 		name: t("common.labels.student.neutral"),
 		icon: mdiAccountOutline,
-	},
-	{
+	};
+	const teacher = {
 		id: RoleName.Teacher,
 		name: t("common.labels.teacher.neutral"),
 		icon: mdiAccountSchoolOutline,
-	},
-];
+	};
+
+	return props.isAdminMode ? [teacher] : [student, teacher];
+});
 
 const schoolRoleListItemProps = (item: SchoolRoleItem) => ({
 	title: item.name,
 	prependIcon: item.icon,
 });
 
-const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
+const selectedSchoolRole = ref<RoleName>(schoolRoles.value[0].id);
 const selectedUsers = ref<string[]>([]);
 
 const addMembersContent = ref<VCard>();

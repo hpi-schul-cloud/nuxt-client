@@ -208,7 +208,6 @@ describe("RoomMembersPage", () => {
 					Members: true,
 					InviteMembersDialog: true,
 					UseFocusTrap: true,
-					// AddMembersDialog: true,
 				},
 			},
 

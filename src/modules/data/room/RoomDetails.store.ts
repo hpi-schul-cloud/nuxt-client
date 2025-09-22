@@ -30,35 +30,16 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
-	const fetchRoomAndBoards = async (id: string) => {
+	const fetchRoomGeneric = async (
+		id: string,
+		additionalFn?: (id: string) => Promise<void>
+	) => {
 		try {
 			roomVariant.value = RoomVariant.ROOM;
 			room.value = (await roomApi.roomControllerGetRoomDetails(id)).data;
-			roomBoards.value = (
-				await roomApi.roomControllerGetRoomBoards(id)
-			).data.data;
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-
-			if (responseError.code === 404) {
-				roomVariant.value = RoomVariant.COURSE_ROOM;
-			} else if (
-				responseError.code === 403 &&
-				responseError.type === "LOCKED_ROOM"
-			) {
-				lockedRoomName.value = responseError.message;
-			} else {
-				throw createApplicationError(responseError.code);
+			if (additionalFn) {
+				await additionalFn(id);
 			}
-		} finally {
-			isLoading.value = false;
-		}
-	};
-
-	const fetchRoom = async (id: string) => {
-		try {
-			roomVariant.value = RoomVariant.ROOM;
-			room.value = (await roomApi.roomControllerGetRoomDetails(id)).data;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
@@ -109,6 +90,16 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 			isLoading.value = false;
 		}
 	};
+
+	const populateRoomBoards = async (id: string) => {
+		roomBoards.value = (
+			await roomApi.roomControllerGetRoomBoards(id)
+		).data.data;
+	};
+
+	const fetchRoom = (id: string) => fetchRoomGeneric(id);
+	const fetchRoomAndBoards = (id: string) =>
+		fetchRoomGeneric(id, populateRoomBoards);
 
 	const resetState = () => {
 		isLoading.value = true;
