@@ -15,10 +15,8 @@
 			</template>
 
 			<template #text>
-				<InfoAlert v-if="!isAdminMode" class="mb-8">
-					{{ t("pages.rooms.members.add.infoText") }}
-				</InfoAlert>
-				<div data-testid="add-participant-school">
+				<InfoAlert>{{ t("pages.rooms.members.add.infoText") }}</InfoAlert>
+				<div class="mt-8" data-testid="add-participant-school">
 					<VAutocomplete
 						ref="autoCompleteSchool"
 						v-model="selectedSchool"
