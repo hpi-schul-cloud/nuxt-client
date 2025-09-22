@@ -52,12 +52,12 @@ export default defineConfigWithVueTs([
 			schulcloud,
 		},
 		rules: {
-			"arrow-body-style": [
-				"warn",
-				"as-needed",
-				{ requireReturnForObjectLiteral: true },
-			],
-			"require-await": "warn",
+			// "arrow-body-style": [
+			// 	"warn",
+			// 	"as-needed",
+			// 	{ requireReturnForObjectLiteral: true },
+			// ],
+			// "require-await": "warn",
 			"@typescript-eslint/ban-ts-comment": "error",
 			"@typescript-eslint/no-empty-function": "error",
 			"@typescript-eslint/no-empty-object-type": [
