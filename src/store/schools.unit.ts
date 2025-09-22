@@ -4,7 +4,11 @@ import {
 	SchulcloudTheme,
 	SystemsApiInterface,
 } from "@/serverApi/v3/api";
-import { createTestAuthStore, createTestEnvStore } from "@@/tests/test-utils";
+import {
+	createTestAuthStore,
+	createTestAuthStoreWithSchool,
+	createTestEnvStore,
+} from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
@@ -90,7 +94,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
 				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
-				createTestAuthStore({ me: { school: { id: "4711" } } });
+				createTestAuthStoreWithSchool("4711");
 
 				await schoolsModule.fetchSchool();
 

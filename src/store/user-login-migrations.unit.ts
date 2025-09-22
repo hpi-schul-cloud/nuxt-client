@@ -11,6 +11,7 @@ import {
 	axiosErrorFactory,
 	businessErrorFactory,
 	createTestAuthStore,
+	createTestAuthStoreWithSchool,
 	createTestAuthStoreWithUser,
 	mockApiResponse,
 	userLoginMigrationFactory,
@@ -332,7 +333,7 @@ describe("UserLoginMigrationModule", () => {
 		describe("getLatestUserLoginMigrationForSchool", () => {
 			describe("when school id is not available", () => {
 				const setup = () => {
-					createTestAuthStore({ me: { school: { id: undefined } } });
+					createTestAuthStoreWithSchool(undefined);
 				};
 
 				it("should not get latest user login migrations", async () => {

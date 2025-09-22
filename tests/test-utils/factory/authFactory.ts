@@ -31,6 +31,11 @@ export const createTestAuthStoreWithPermissions = (
 	stubActions?: boolean
 ) => createTestAuthStore({ me: { permissions }, stubActions });
 
+export const createTestAuthStoreWithSchool = (
+	schoolId?: string,
+	stubActions?: boolean
+) => createTestAuthStore({ me: { school: { id: schoolId } }, stubActions });
+
 export const createTestAuthStoreWithUser = (
 	id?: string,
 	stubActions?: boolean

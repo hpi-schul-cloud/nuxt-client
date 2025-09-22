@@ -8,7 +8,7 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createTestAuthStore } from "@@/tests/test-utils";
+import { createTestAuthStoreWithSchool } from "@@/tests/test-utils";
 import {
 	businessErrorFactory,
 	schoolExternalToolConfigurationTemplateFactory,
@@ -60,7 +60,7 @@ describe("SchoolExternalToolConfigurator", () => {
 		);
 
 		const schoolId = "schoolId";
-		createTestAuthStore({ me: { school: { id: schoolId } } });
+		createTestAuthStoreWithSchool(schoolId);
 
 		const notifierModule = createModuleMocks(NotifierModule);
 
