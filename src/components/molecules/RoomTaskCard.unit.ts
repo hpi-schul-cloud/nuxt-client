@@ -1,13 +1,11 @@
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
+
 import { Task } from "@/store/types/room";
-import { envsFactory } from "@@/tests/test-utils";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import RoomTaskCard from "./RoomTaskCard.vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
@@ -226,9 +224,12 @@ const getWrapper = (
 };
 
 describe("@/components/molecules/RoomTaskCard", () => {
+	beforeAll(() => {
+		createTestEnvStore();
+	});
+
 	beforeEach(() => {
 		window.location.pathname = "";
-		setupStores({ envConfigModule: EnvConfigModule });
 	});
 
 	describe("common behaviors and actions", () => {
@@ -594,10 +595,9 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to true", () => {
 					it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
-						const envs = envsFactory.build({
+						createTestEnvStore({
 							FEATURE_COPY_SERVICE_ENABLED: true,
 						});
-						envConfigModule.setEnvs(envs);
 						const copyCard = vi.fn();
 						const wrapper = getWrapper({ task: testTask, userRole });
 						(wrapper.vm as unknown as typeof RoomTaskCard).copyCard = copyCard;
@@ -616,10 +616,9 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to false", () => {
 					it("should not find the copy option in the 'more action' menu", async () => {
-						const envs = envsFactory.build({
+						createTestEnvStore({
 							FEATURE_COPY_SERVICE_ENABLED: false,
 						});
-						envConfigModule.setEnvs(envs);
 						const wrapper = getWrapper({ task: testTask, userRole });
 
 						const threeDotButton = wrapper.find(".three-dot-button");

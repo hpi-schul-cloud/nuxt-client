@@ -1,15 +1,16 @@
-import { envConfigModule, notifierModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
+import { notifierModule } from "@/store";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	createTestEnvStore,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
-	envsFactory,
 } from "@@/tests/test-utils/factory";
 import {
 	createTestingI18n,
@@ -56,11 +57,8 @@ describe("BoardColumn", () => {
 	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
 
 	beforeEach(() => {
-		setupStores({ envConfigModule: EnvConfigModule });
-		const envs = envsFactory.build({
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
-		});
-		envConfigModule.setEnvs(envs);
+		setupStores({});
+		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false });
 
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
@@ -96,7 +94,6 @@ describe("BoardColumn", () => {
 				],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
 			props: {

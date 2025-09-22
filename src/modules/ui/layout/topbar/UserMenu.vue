@@ -53,12 +53,9 @@ import { useI18n } from "vue-i18n";
 import { useOAuthApi } from "@data-oauth";
 import { System, useSystemApi } from "@data-system";
 import { MeUserResponse } from "@/serverApi/v3";
-import {
-	injectStrict,
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
 import LanguageMenu from "./LanguageMenu.vue";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	user: {
@@ -73,7 +70,6 @@ const props = defineProps({
 
 const { t } = useI18n();
 const authModule = injectStrict(AUTH_MODULE_KEY);
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const { getSystem } = useSystemApi();
 const { getSessionTokenExpiration } = useOAuthApi();
 
@@ -87,9 +83,9 @@ const initials = computed(() => {
 
 const system: Ref<System | undefined> = ref();
 
-const isExternalLogoutAllowed: ComputedRef<boolean> = computed(
+const isExternalLogoutAllowed = computed(
 	() =>
-		envConfigModule.getEnv.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED &&
+		useEnvConfig().value.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED &&
 		!!authModule.loginSystem &&
 		!!system.value?.hasEndSessionEndpoint
 );

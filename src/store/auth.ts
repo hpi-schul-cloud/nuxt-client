@@ -8,10 +8,11 @@ import {
 	UserApiFactory,
 	UserApiInterface,
 } from "@/serverApi/v3";
-import { envConfigModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
+import { useEnvConfig } from "@data-env";
 
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	const d = new Date();
@@ -96,8 +97,8 @@ export default class AuthModule extends VuexModule {
 		if (this.locale) {
 			return this.locale;
 		}
-		if (envConfigModule.getEnv.I18N__DEFAULT_LANGUAGE) {
-			return envConfigModule.getEnv.I18N__DEFAULT_LANGUAGE;
+		if (useEnvConfig().value.I18N__DEFAULT_LANGUAGE) {
+			return useEnvConfig().value.I18N__DEFAULT_LANGUAGE;
 		}
 		return LanguageType.De; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
 	}
@@ -146,10 +147,10 @@ export default class AuthModule extends VuexModule {
 		await schoolsModule.fetchSchool();
 
 		//TODO Remove once added to User permissions SC-2401
-		if (envConfigModule.getEnv.FEATURE_EXTENSIONS_ENABLED) {
+		if (useEnvConfig().value.FEATURE_EXTENSIONS_ENABLED) {
 			this.addUserPermission("ADDONS_ENABLED");
 		}
-		if (envConfigModule.getEnv.FEATURE_TEAMS_ENABLED) {
+		if (useEnvConfig().value.FEATURE_TEAMS_ENABLED) {
 			this.addUserPermission("TEAMS_ENABLED");
 		}
 

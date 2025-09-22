@@ -1,11 +1,11 @@
-import { envConfigModule } from "@/store";
+import { useEnvConfig } from "@data-env";
 
 export const getLoginUrlWithRedirect = (targetPath: string) => {
 	const currentOrigin = window.location.origin;
 
 	const currentUrl = new URL(targetPath, currentOrigin);
 	const loginUrl = new URL(
-		envConfigModule.getEnv.NOT_AUTHENTICATED_REDIRECT_URL,
+		useEnvConfig().value.NOT_AUTHENTICATED_REDIRECT_URL,
 		currentOrigin // fallback to current origin, if a relative url is configured
 	);
 

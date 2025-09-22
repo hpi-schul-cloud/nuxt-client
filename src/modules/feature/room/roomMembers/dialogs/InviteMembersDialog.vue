@@ -178,11 +178,11 @@ import {
 	useRoomInvitationLinkStore,
 	RoomInvitationFormData,
 } from "@data-room";
-import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { storeToRefs } from "pinia";
 import { isNonEmptyString, isOfMaxLength } from "@util-validators";
 import { useOpeningTagValidator } from "@/utils/validation";
+import { useEnvConfig } from "@data-env";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 
 defineProps({
@@ -363,6 +363,6 @@ watch(
 );
 
 const informationLink = computed(
-	() => envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
+	() => useEnvConfig().value.ROOM_MEMBER_INFO_URL
 );
 </script>

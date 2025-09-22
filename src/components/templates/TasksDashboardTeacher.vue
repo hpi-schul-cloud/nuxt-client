@@ -85,11 +85,9 @@
 </template>
 
 <script setup lang="ts">
-import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
 import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
 import { useI18n } from "vue-i18n";
@@ -105,6 +103,8 @@ import TasksModule from "@/store/tasks";
 import ShareModule from "@/store/share";
 import FinishedTasksModule from "@/store/finished-tasks";
 import { CopyParams } from "@/store/copy";
+import { useEnvConfig } from "@data-env";
+import VCustomDoublePanels from "@/components/molecules/vCustomDoublePanels.vue";
 
 const tasksModule: TasksModule = injectStrict(TASKS_MODULE_KEY);
 const finishedTasksModule: FinishedTasksModule = injectStrict(
@@ -158,8 +158,8 @@ const onCopyTask = async (payload: CopyParams) => {
 	await tasksModule.fetchAllTasks();
 };
 
-const onShareTask = async (taskId: string) => {
-	if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+const onShareTask = (taskId: string) => {
+	if (useEnvConfig().value.FEATURE_TASK_SHARE) {
 		shareModule.startShareFlow({
 			id: taskId,
 			type: ShareTokenBodyParamsParentTypeEnum.Tasks,
