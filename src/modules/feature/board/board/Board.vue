@@ -101,6 +101,7 @@
 				<EditSettingsDialog
 					:model-value="isEditSettingsDialogOpen"
 					:is-draft-mode="!isBoardVisible"
+					:is-reader-can-edit="isEditableChipVisible"
 					@save="onSaveEditBoardSettings"
 					@close="onEditBoardSettingsClose"
 				/>

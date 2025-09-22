@@ -56,7 +56,11 @@
 					<VBtn
 						ref="cancelButton"
 						class="ms-auto mr-2"
-						:text="t('common.actions.cancel')"
+						:text="
+							isDraftMode
+								? t('common.labels.close')
+								: t('common.actions.cancel')
+						"
 						:variant="isDraftMode ? 'outlined' : 'flat'"
 						data-testid="edit-settings-cancel-btn"
 						@click="onClose"
@@ -79,7 +83,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import type { VCard } from "vuetify/components";
 import { useDisplay } from "vuetify";
@@ -87,10 +91,12 @@ import { WarningAlert } from "@ui-alert";
 
 type Props = {
 	isDraftMode?: boolean;
+	isReaderCanEdit?: boolean;
 };
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
 	isDraftMode: false,
+	isReaderCanEdit: false,
 });
 
 const isOpen = defineModel({
@@ -153,10 +159,15 @@ watch(
 	(isOpen: boolean) => {
 		if (!isOpen) {
 			deactivate();
-			selectedOption.value = "editableWithoutReadPermission";
 		}
 	}
 );
+
+onMounted(() => {
+	if (props.isReaderCanEdit) {
+		selectedOption.value = "editableWithReadPermission";
+	}
+});
 </script>
 
 <style lang="scss" scoped>
