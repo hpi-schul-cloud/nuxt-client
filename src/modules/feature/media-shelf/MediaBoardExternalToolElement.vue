@@ -34,11 +34,7 @@
 
 <script setup lang="ts">
 import { MediaExternalToolElementResponse } from "@/serverApi/v3";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	useContextExternalToolConfigurationStatus,
 	useExternalToolDisplayState,
@@ -52,6 +48,7 @@ import { useI18n } from "vue-i18n";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	element: {
@@ -65,7 +62,6 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const {
@@ -131,7 +127,7 @@ const isToolNotLicensed: ComputedRef = computed(
 		!displayData.value?.status.isDeactivated
 );
 
-const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
+const refreshTimeInMs = useEnvConfig().value.CTL_TOOLS_RELOAD_TIME_MS;
 
 const timer = setInterval(async () => {
 	await loadExternalToolData(props.element);
@@ -143,7 +139,7 @@ onUnmounted(() => {
 
 const { isDragging } = useDragAndDrop();
 
-const onDelete = async () => {
+const onDelete = () => {
 	emit("delete:element", props.element.id);
 };
 

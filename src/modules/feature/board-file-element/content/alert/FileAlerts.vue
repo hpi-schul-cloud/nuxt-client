@@ -43,10 +43,10 @@
 
 <script setup lang="ts">
 import { formatFileSize } from "@/utils/fileHelper";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
 import { useI18n } from "vue-i18n";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
+import { useEnvFileConfig } from "@data-env";
 
 type Props = {
 	alerts: FileAlert[];
@@ -59,9 +59,8 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const maxCollaboraFileSizeWithUnit = formatFileSize(
-	envConfigModule?.getCollaboraMaxFileSizeInBytes
+	useEnvFileConfig().value?.COLLABORA_MAX_FILE_SIZE_IN_BYTES
 );
 
 const onStatusReload = () => {

@@ -1,8 +1,7 @@
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { authModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
+import { meResponseFactory } from "@@/tests/test-utils";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
@@ -12,6 +11,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { RouterLinkStub } from "@vue/test-utils";
 import AuthSystems from "./AuthSystems";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 const generateProps = () => ({
 	systems: [
@@ -68,104 +68,103 @@ describe("AuthSystems", () => {
 	};
 
 	beforeEach(() => {
+		createTestEnvStore();
+
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
 			authModule: AuthModule,
 		});
 	});
 
-	describe("displaying values", () => {
-		describe("login link", () => {
-			beforeEach(() => {
-				const envs = envsFactory.build({
-					FEATURE_LOGIN_LINK_ENABLED: true,
-				});
-				envConfigModule.setEnvs(envs);
-			});
-
-			it("login link field should not be visible", () => {
-				const envs = envsFactory.build({
-					FEATURE_LOGIN_LINK_ENABLED: false,
-				});
-				envConfigModule.setEnvs(envs);
-
-				const wrapper = createWrapper({ props: generateProps() });
-
-				const loginLinkFieldVisibility = wrapper.findAll(
-					searchStrings.schoolLoginLink
-				);
-
-				expect(loginLinkFieldVisibility).toHaveLength(0);
-			});
-
-			it("login link field should be visible for all systems", () => {
-				schoolsModule.setSchool(mockSchool);
-				const wrapper = createWrapper({ props: generateProps() });
-
-				const loginLinkFieldVisibility = wrapper.findAll(
-					searchStrings.schoolLoginLink
-				);
-				const oauthAndLdapLink = wrapper.find(searchStrings.oauthAndLdapLink);
-				const ldapLink = wrapper.find(searchStrings.ldapLink);
-				const oauthLink = wrapper.find(searchStrings.oauthLink);
-
-				expect(loginLinkFieldVisibility).toHaveLength(3);
-				expect(oauthAndLdapLink.element.value).toContain(
-					`strategy=${wrapper.props().systems[1].oauthConfig.provider}`
-				);
-				expect(ldapLink.element.value).toContain("strategy=ldap");
-				expect(ldapLink.element.value).toContain(`schoolId=${mockSchool.id}`);
-				expect(oauthLink.element.value).toContain(
-					`strategy=${wrapper.props().systems[3].oauthConfig.provider}`
-				);
-			});
-
-			it("login link field should render email login link", () => {
-				const props = generateProps();
-				props.systems = [];
-
-				const wrapper = createWrapper({ props });
-
-				const loginLinkFieldVisibility = wrapper.findAll(
-					searchStrings.schoolLoginLink
-				);
-				const emailLink = wrapper.find(searchStrings.emailLink);
-
-				expect(loginLinkFieldVisibility).toHaveLength(1);
-				expect(emailLink.element.value).toContain("strategy=email");
-			});
-
-			it("login link copy button should copy login link", () => {
-				const mockElem = {
-					value: "example_value",
-					select: () => ({}),
-					setSelectionRange: () => ({}),
-				};
-				Object.assign(navigator, {
-					clipboard: {
-						writeText: () => ({}),
-					},
-				});
-				Object.assign(document, {
-					getElementById: () => {
-						return mockElem;
-					},
-				});
-				const clipboardSpy = vi.spyOn(navigator.clipboard, "writeText");
-				const wrapper = createWrapper({ props: generateProps() });
-
-				const loginLinkFieldVisibility = wrapper.findAll(
-					searchStrings.schoolLoginLink
-				);
-				loginLinkFieldVisibility[0].find(".v-icon").trigger("click");
-
-				expect(loginLinkFieldVisibility).toHaveLength(3);
-				expect(clipboardSpy).toHaveBeenCalledWith(mockElem.value);
-			});
+	describe("login link", () => {
+		beforeEach(() => {
+			createTestEnvStore({ FEATURE_LOGIN_LINK_ENABLED: true });
 		});
 
-		it("ldap button should be visible", async () => {
+		it("login link field should not be visible", () => {
+			createTestEnvStore({ FEATURE_LOGIN_LINK_ENABLED: false });
+
+			const wrapper = createWrapper({ props: generateProps() });
+
+			const loginLinkFieldVisibility = wrapper.findAll(
+				searchStrings.schoolLoginLink
+			);
+
+			expect(loginLinkFieldVisibility).toHaveLength(0);
+		});
+
+		it("login link field should be visible for all systems", () => {
+			schoolsModule.setSchool(mockSchool);
+			const wrapper = createWrapper({ props: generateProps() });
+
+			const loginLinkFieldVisibility = wrapper.findAll(
+				searchStrings.schoolLoginLink
+			);
+			const oauthAndLdapLink = wrapper.find(searchStrings.oauthAndLdapLink);
+			const ldapLink = wrapper.find(searchStrings.ldapLink);
+			const oauthLink = wrapper.find(searchStrings.oauthLink);
+
+			expect(loginLinkFieldVisibility).toHaveLength(3);
+			expect(oauthAndLdapLink.element.value).toContain(
+				`strategy=${wrapper.props().systems[1].oauthConfig.provider}`
+			);
+			expect(ldapLink.element.value).toContain("strategy=ldap");
+			expect(ldapLink.element.value).toContain(`schoolId=${mockSchool.id}`);
+			expect(oauthLink.element.value).toContain(
+				`strategy=${wrapper.props().systems[3].oauthConfig.provider}`
+			);
+		});
+
+		it("login link field should render email login link", () => {
+			const props = generateProps();
+			props.systems = [];
+
+			const wrapper = createWrapper({ props });
+
+			const loginLinkFieldVisibility = wrapper.findAll(
+				searchStrings.schoolLoginLink
+			);
+			const emailLink = wrapper.find(searchStrings.emailLink);
+
+			expect(loginLinkFieldVisibility).toHaveLength(1);
+			expect(emailLink.element.value).toContain("strategy=email");
+		});
+
+		it("login link copy button should copy login link", () => {
+			const mockElem = {
+				value: "example_value",
+				select: () => ({}),
+				setSelectionRange: () => ({}),
+			};
+			Object.assign(navigator, {
+				clipboard: {
+					writeText: () => ({}),
+				},
+			});
+			Object.assign(document, {
+				getElementById: () => {
+					return mockElem;
+				},
+			});
+			const clipboardSpy = vi.spyOn(navigator.clipboard, "writeText");
+			const wrapper = createWrapper({ props: generateProps() });
+
+			const loginLinkFieldVisibility = wrapper.findAll(
+				searchStrings.schoolLoginLink
+			);
+			loginLinkFieldVisibility[0].find(".v-icon").trigger("click");
+
+			expect(loginLinkFieldVisibility).toHaveLength(3);
+			expect(clipboardSpy).toHaveBeenCalledWith(mockElem.value);
+		});
+	});
+
+	describe("displaying values", () => {
+		beforeAll(() => {
+			createTestEnvStore({ FEATURE_LOGIN_LINK_ENABLED: false });
+		});
+
+		it("ldap button should be visible", () => {
 			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE"],
 			});
@@ -185,7 +184,7 @@ describe("AuthSystems", () => {
 			);
 		});
 
-		it("table should exist and display the correct data", async () => {
+		it("table should exist and display the correct data", () => {
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const systemTable = wrapper.find(searchStrings.tableSystem);
@@ -198,7 +197,7 @@ describe("AuthSystems", () => {
 			expect(tableCell[1].element.textContent).toStrictEqual("sample system");
 		});
 
-		it("should display the edit system button", async () => {
+		it("should display the edit system button", () => {
 			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
@@ -278,7 +277,7 @@ describe("AuthSystems", () => {
 			);
 		});
 
-		it("should NOT display the dialog", async () => {
+		it("should NOT display the dialog", () => {
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const customDialog = wrapper.findAll(searchStrings.customDialog);
@@ -346,7 +345,7 @@ describe("AuthSystems", () => {
 			expect(removeSystem).toHaveBeenCalled();
 		});
 
-		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", async () => {
+		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", () => {
 			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT", "SYSTEM_VIEW"],
 			});

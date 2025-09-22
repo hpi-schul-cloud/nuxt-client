@@ -1,9 +1,7 @@
-import { envConfigModule } from "@/store";
-import { envsFactory } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
-import EnvConfigModule from "./env-config";
 import FilePathsModule from "./filePaths";
 import { SpecificFiles, GlobalFiles } from "./types/filePaths";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { useEnvConfig } from "@data-env";
 
 const specificFiles = {
 	accessibilityStatement:
@@ -49,17 +47,10 @@ const mockSetGloablFiles = (payload: string) =>
 
 describe("filePaths module", () => {
 	describe("actions", () => {
-		beforeEach(() => {
-			setupStores({ envConfigModule: EnvConfigModule });
-		});
-
-		it("init should call the setDocumentBaseDir, setSpecificFiles, and setGlobalFiles mutations", async () => {
+		it("init should call the setDocumentBaseDir, setSpecificFiles, and setGlobalFiles mutations", () => {
 			const filePathsModule = new FilePathsModule({});
 			const mockURL = "http://mock.url/";
-			const envs = envsFactory.build({
-				DOCUMENT_BASE_DIR: mockURL,
-			});
-			envConfigModule.setEnvs(envs);
+			createTestEnvStore({ DOCUMENT_BASE_DIR: mockURL });
 			const spyBaseDir = vi.fn();
 			const spySpecificFiles = vi.fn();
 			const spyGlobalFiles = vi.fn();
@@ -78,14 +69,13 @@ describe("filePaths module", () => {
 			expect(spySpecificFiles).toHaveBeenCalled();
 			expect(spyGlobalFiles).toHaveBeenCalled();
 		});
-		it("sets baseDir to DOCUMENT_BASE_DIR env if it is defined", async () => {
+		it("sets baseDir to DOCUMENT_BASE_DIR env if it is defined", () => {
 			const filePathsModule = new FilePathsModule({});
 			const mockURL = "http://mock.url/";
-			const envs = envsFactory.build({ DOCUMENT_BASE_DIR: mockURL });
-			envConfigModule.setEnvs(envs);
-			await filePathsModule.init();
+			createTestEnvStore({ DOCUMENT_BASE_DIR: mockURL });
+			filePathsModule.init();
 			expect(filePathsModule.getDocumentBaseDir).toBe(
-				`${mockURL}${envs.SC_THEME}/`
+				`${mockURL}${useEnvConfig().value.SC_THEME}/`
 			);
 		});
 	});
