@@ -1,8 +1,8 @@
 import * as serverApi from "@/serverApi/v3/api";
 import {
+	ChangeRoomRoleBodyParamsRoleNameEnum,
 	RoleName,
 	SchoolUserListResponse,
-	ChangeRoomRoleBodyParamsRoleNameEnum,
 } from "@/serverApi/v3/api";
 import { authModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
@@ -14,8 +14,8 @@ import {
 	mockedPiniaStoreTyping,
 	roomFactory,
 	roomMemberFactory,
-	roomMemberSchoolResponseFactory,
 	roomMemberSchoolListResponseFactory,
+	roomMemberSchoolResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -1084,6 +1084,19 @@ describe("useRoomMembers", () => {
 			const result = roomMembersStore.getMemberFullName(member.userId);
 
 			expect(result).toBe(`${member.firstName} ${member.lastName}`);
+		});
+	});
+
+	describe("getRoomOwnerFullName", () => {
+		it("should return the full name of the room owner", async () => {
+			const roomOwner = roomMemberFactory.build({
+				roomRoleName: RoleName.Roomowner,
+			});
+			const { roomMembersStore } = setup([roomOwner]);
+
+			const result = roomMembersStore.getRoomOwnerFullName();
+
+			expect(result).toBe(`${roomOwner.firstName} ${roomOwner.lastName}`);
 		});
 	});
 

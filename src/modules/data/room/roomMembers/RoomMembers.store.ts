@@ -1,21 +1,21 @@
-import { computed, Ref, ref } from "vue";
-import { RoomMember } from "./types";
 import {
+	ChangeRoomRoleBodyParamsRoleNameEnum,
 	RoleName,
 	RoomApiFactory,
-	SchoolApiFactory,
 	RoomMemberResponse,
+	SchoolApiFactory,
 	SchoolForExternalInviteResponse,
-	ChangeRoomRoleBodyParamsRoleNameEnum,
 } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
-import { useI18n } from "vue-i18n";
-import { useBoardNotifier } from "@util-board";
 import { schoolsModule } from "@/store";
 import { authModule } from "@/store/store-accessor";
+import { $axios } from "@/utils/api";
+import { useRoomDetailsStore } from "@data-room";
+import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
-import { useRoomDetailsStore } from "@data-room";
+import { computed, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { RoomMember } from "./types";
 
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const { t } = useI18n();
@@ -187,6 +187,13 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			return "";
 		}
 		return member.fullName;
+	};
+
+	const getRoomOwnerFullName = () => {
+		const owner = roomMembers.value.find(
+			(member) => member.roomRoleName === RoleName.Roomowner
+		);
+		return owner?.fullName;
 	};
 
 	const isCurrentUserStudent = computed(() => {
@@ -453,6 +460,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		loadSchoolList,
 		getMemberById,
 		getMemberFullName,
+		getRoomOwnerFullName,
 		leaveRoom,
 		rejectInvitations,
 		removeMembers,

@@ -1997,9 +1997,9 @@ export default {
 	"pages.rooms.members.handOverAlert.label":
 		"This room's permissions are being transferred to {memberFullName}.",
 	"pages.rooms.members.handOverAlert.label.subText":
-		"{currentUserFullName} loses the “Own” permissions and receives the “Administer” permission.",
+		"{roomOwner} loses the “Own” permissions and receives the “Administer” permission.",
 	"pages.rooms.members.handOverAlert.confirm.label":
-		"If this permission is transferred to {memberFullName}, {currentUserFullName} loses the right to delete the room.",
+		"If this permission is transferred to {memberFullName}, {roomOwner} loses the right to delete the room.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"This action can only be undone by {memberFullName}.",
 	"pages.rooms.members.inviteMember.step.prepare.title":

@@ -7,7 +7,7 @@
 		@keydown.esc="onClose"
 		@click:outside="onClose"
 	>
-		<v-card ref="changeRoleContent">
+		<VCard ref="changeRoleContent">
 			<template #title>
 				<h2 ref="textTitle" class="mt-2 dialog-title">
 					{{ dialogTitle }}
@@ -19,13 +19,13 @@
 					{{ infoText }}
 				</div>
 				<div>
-					<v-radio-group
+					<VRadioGroup
 						v-if="!isOwnershipHandoverMode"
 						ref="radioGroup"
 						v-model="selectedRole"
 						hide-details
 					>
-						<v-radio
+						<VRadio
 							v-for="option in radioOptions"
 							:key="option.role"
 							:value="option.role"
@@ -44,8 +44,8 @@
 									</span>
 								</div>
 							</template>
-						</v-radio>
-					</v-radio-group>
+						</VRadio>
+					</VRadioGroup>
 
 					<WarningAlert
 						v-if="selectedRole === RoleName.Roomowner"
@@ -62,8 +62,7 @@
 								<p class="mb-0">
 									{{
 										t("pages.rooms.members.handOverAlert.label.subText", {
-											memberFullName: "what",
-											currentUserFullName: "test",
+											roomOwner: currentOwnerFullName,
 										})
 									}}
 								</p>
@@ -73,19 +72,17 @@
 									keypath="pages.rooms.members.handOverAlert.confirm.label"
 									scope="global"
 								>
-									<template #currentUserFullName>
-										{{ currentUserFullName }}
+									<template #roomOwner>
+										{{ currentOwnerFullName }}
 									</template>
 									<template #memberFullName>{{ memberFullName }}</template>
 								</i18n-t>
-								<p>{{ memberFullName }} {{ currentUserFullName }}</p>
 								<p class="mb-0">
 									{{
 										t(
 											"pages.rooms.members.handOverAlert.confirm.label.subText",
 											{
-												memberFullName: "what2",
-												currentUserFullName: "test2",
+												memberFullName,
 											}
 										)
 									}}
@@ -97,15 +94,15 @@
 			</template>
 
 			<template #actions>
-				<v-spacer />
+				<VSpacer />
 				<div class="mr-4 mb-3">
-					<v-btn
+					<VBtn
 						class="ms-auto mr-2"
 						:text="t('common.actions.cancel')"
 						data-testid="change-role-cancel-btn"
 						@click="onClose"
 					/>
-					<v-btn
+					<VBtn
 						v-if="!isOwnershipHandoverMode"
 						class="ms-auto"
 						color="primary"
@@ -115,7 +112,7 @@
 						:disabled="isLoading || !selectedRole"
 						@click="withLoading(() => onConfirm())"
 					/>
-					<v-btn
+					<VBtn
 						v-else
 						class="ms-auto"
 						color="primary"
@@ -127,18 +124,17 @@
 					/>
 				</div>
 			</template>
-		</v-card>
+		</VCard>
 	</VDialog>
 </template>
 
 <script setup lang="ts">
-import { computed, ModelRef, PropType, ref, toRef, watch } from "vue";
-import { useI18n } from "vue-i18n";
+import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum as RoleEnum,
 	RoleName,
 } from "@/serverApi/v3";
-import { useDisplay } from "vuetify";
+import { authModule } from "@/store";
 import {
 	RoomMember,
 	useRoomDetailsStore,
@@ -146,9 +142,10 @@ import {
 } from "@data-room";
 import { WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
-import { authModule } from "@/store";
+import { computed, ModelRef, PropType, ref, toRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 import { VCard } from "vuetify/components";
-import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 
 const props = defineProps({
 	members: {
@@ -245,8 +242,8 @@ if (memberToChangeRole.value.length > 1) {
 	selectedRole.value = memberToChangeRole.value[0]?.roomRoleName;
 }
 
-const currentUserFullName = computed(() => {
-	return roomMembersStore.getMemberFullName(authModule.getUser?.id);
+const currentOwnerFullName = computed(() => {
+	return roomMembersStore.getRoomOwnerFullName();
 });
 
 const memberFullName = computed(() => {
