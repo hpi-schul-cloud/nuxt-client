@@ -1,4 +1,6 @@
-import AdministrationRoomDetailPage from "./AdministrationRoomMembers.page.vue";
+import { authModule, schoolsModule } from "@/store";
+import AuthModule from "@/store/auth";
+import SchoolsModule from "@/store/schools";
 import {
 	createTestEnvStore,
 	meResponseFactory,
@@ -6,18 +8,16 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import SchoolsModule from "@/store/schools";
-import { authModule, schoolsModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { Mock } from "vitest";
-import { Router, useRoute } from "vue-router";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
-import AuthModule from "@/store/auth";
+import { Router, useRoute } from "vue-router";
+import AdministrationRoomDetailPage from "./AdministrationRoomMembers.page.vue";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -160,9 +160,7 @@ describe("AdministrationRoomMembers.page", () => {
 		it("should display the correct page header", () => {
 			const { wrapper } = setup();
 
-			const header = wrapper.find(
-				"[data-testid='administration-room-members-title']"
-			);
+			const header = wrapper.find("[data-testid='admin-room-detail-title']");
 
 			expect(header.exists()).toBe(true);
 			expect(header.text()).toBe(

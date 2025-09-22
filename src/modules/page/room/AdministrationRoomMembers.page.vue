@@ -27,16 +27,16 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useI18n } from "vue-i18n";
-import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";
-import { AddMembersDialog, RoomAdminMembersTable } from "@feature-room";
-import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
-import { storeToRefs } from "pinia";
-import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { mdiPlus } from "@icons/material";
-import { useRoute } from "vue-router";
 import { useEnvConfig } from "@data-env";
+import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
+import { AddMembersDialog, RoomAdminMembersTable } from "@feature-room";
+import { mdiPlus } from "@icons/material";
+import { useElementBounding, useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
+import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 const { fetchRoom } = useRoomDetailsStore();
 const { room } = storeToRefs(useRoomDetailsStore());
 
@@ -98,16 +98,12 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	];
 });
 
-const fabAction = computed(() => {
-	{
-		return {
-			icon: mdiPlus,
-			title: t("pages.rooms.members.add"),
-			ariaLabel: t("pages.rooms.members.add"),
-			dataTestId: "fab-add-members",
-		};
-	}
-});
+const fabAction = computed(() => ({
+	icon: mdiPlus,
+	title: t("pages.rooms.members.add"),
+	ariaLabel: t("pages.rooms.members.add"),
+	dataTestId: "fab-add-members",
+}));
 
 const onFabClick = async () => {
 	loadSchoolList();
