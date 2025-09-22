@@ -7,6 +7,7 @@ import { Mock } from "vitest";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
 import { VCard, VRadioGroup } from "vuetify/components";
 import { WarningAlert } from "@ui-alert";
+import { nextTick } from "vue";
 
 vi.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
@@ -24,10 +25,15 @@ describe("EditSettingsDialog", () => {
 		});
 	});
 
-	const setup = (options?: { modelValue?: boolean; isDraftMode?: boolean }) => {
-		const { modelValue, isDraftMode } = {
+	const setup = (options?: {
+		modelValue?: boolean;
+		isDraftMode?: boolean;
+		isReaderCanEdit?: boolean;
+	}) => {
+		const { modelValue, isDraftMode, isReaderCanEdit } = {
 			modelValue: true,
 			isDraftMode: false,
+			isReaderCanEdit: false,
 			...options,
 		};
 
@@ -38,6 +44,7 @@ describe("EditSettingsDialog", () => {
 			props: {
 				modelValue,
 				isDraftMode,
+				isReaderCanEdit,
 			},
 		});
 
@@ -149,6 +156,22 @@ describe("EditSettingsDialog", () => {
 
 				expect(cancelButton.exists()).toBe(true);
 				expect(saveButton.exists()).toBe(false);
+			});
+		});
+
+		describe("when isReaderCanEdit prop is true", () => {
+			it("should have the second radio option selected by default", async () => {
+				const { wrapper } = setup({
+					isDraftMode: false,
+					isReaderCanEdit: true,
+				});
+				await nextTick();
+				const cardComponent = wrapper.findComponent(VCard);
+				const secondOption = cardComponent.find(
+					'[data-testid="edit-settings-option-2"] input'
+				);
+
+				expect((secondOption.element as HTMLInputElement).checked).toBe(true);
 			});
 		});
 	});

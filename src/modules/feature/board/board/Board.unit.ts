@@ -350,7 +350,7 @@ describe("Board", () => {
 		it("should be found in the dom", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.findComponent(BoardVue).exists()).toBeTruthy();
+			expect(wrapper.findComponent(BoardVue).exists()).toBe(true);
 		});
 
 		it("should call 'useBoardInactivity' composable", async () => {
