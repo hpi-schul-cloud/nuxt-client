@@ -40,6 +40,7 @@ export const ToolParamTypeMapping: Record<
 	[CustomParameterTypeParams.AutoMediumid]: ToolParameterType.AutoMediumid,
 	[CustomParameterTypeParams.AutoGroupExternaluuid]:
 		ToolParameterType.AutoGroupExternaluuid,
+	[CustomParameterTypeParams.AutoPublisher]: ToolParameterType.AutoPublisher,
 };
 
 export const ToolParamScopeMapping: Record<
