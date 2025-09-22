@@ -1,5 +1,5 @@
 import UserHasRole from "./UserHasRole";
-import { createTestAuthStore } from "../../../tests/test-utils/index.js";
+import { createTestAuthStore } from "@@/tests/test-utils";
 
 /**
  * @param  { String } expectedRole used as prop

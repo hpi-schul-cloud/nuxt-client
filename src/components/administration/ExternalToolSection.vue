@@ -245,9 +245,7 @@ const { getHeaders, getItems } = useExternalToolsSectionUtils(
 
 const { fetchSchoolExternalToolUsage, metadata } = useSchoolExternalToolUsage();
 
-const items: ComputedRef<SchoolExternalToolItem[]> = computed(() =>
-	getItems(schoolExternalToolsModule)
-);
+const items = computed(() => getItems(schoolExternalToolsModule));
 
 const isLoading = computed(() => schoolExternalToolsModule.getLoading);
 
@@ -285,7 +283,7 @@ const onDeleteTool = async () => {
 };
 
 const itemToDelete: Ref<SchoolExternalToolItem | undefined> = ref();
-const getItemName: ComputedRef<string> = computed(() =>
+const getItemName = computed(() =>
 	itemToDelete.value ? itemToDelete.value?.name : ""
 );
 
@@ -326,14 +324,10 @@ const isVidisEnabled = computed(
 	() => useEnvConfig().value.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED
 );
 
-const isLicensedToSchool = (
-	mediumId?: string,
-	mediaSourceId?: string
-): boolean => schoolLicenseStore.isLicensed(mediumId, mediaSourceId);
+const isLicensedToSchool = (mediumId?: string, mediaSourceId?: string) =>
+	schoolLicenseStore.isLicensed(mediumId, mediaSourceId);
 
-const isLicensesLoading: ComputedRef<boolean> = computed(
-	() => schoolLicenseStore.isLoading
-);
+const isLicensesLoading = computed(() => schoolLicenseStore.isLoading);
 </script>
 
 <style lang="scss" scoped>

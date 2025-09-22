@@ -9,12 +9,13 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { RouterLinkStub } from "@vue/test-utils";
 import ContentCard from "./ContentCard";
-import { createPinia, setActivePinia } from "pinia";
-import { createTestAuthStore } from "../../../tests/test-utils/index.js";
+import { setActivePinia } from "pinia";
+import { createTestAuthStoreWithRole } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("@/components/organisms/ContentCard", () => {
 	beforeAll(() => {
-		setActivePinia(createPinia());
+		setActivePinia(createTestingPinia());
 	});
 	beforeEach(() => {
 		setupStores({
@@ -22,9 +23,7 @@ describe("@/components/organisms/ContentCard", () => {
 		});
 
 		// The role can be anything here except "student", because of the "isNotStudent" method in ContentCard.
-		createTestAuthStore({
-			me: { roles: [{ id: "test-role-id", name: "test-role" }] },
-		});
+		createTestAuthStoreWithRole("test-role");
 	});
 
 	const setup = (resource = Resource) => {

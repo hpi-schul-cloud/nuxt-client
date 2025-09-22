@@ -154,6 +154,7 @@ import {
 } from "@icons/material";
 import { useEnvConfig } from "@data-env";
 import { useAuthStore } from "@data-auth";
+import { Permission } from "@/serverApi/v3/index.js";
 
 export default {
 	components: {
@@ -185,8 +186,9 @@ export default {
 		customLoginLinkEnabled: () =>
 			useEnvConfig().value.FEATURE_LOGIN_LINK_ENABLED,
 		hasSystemCreatePermission: () =>
-			useAuthStore().hasPermission("system_create"),
-		hasSystemEditPermission: () => useAuthStore().hasPermission("system_edit"),
+			useAuthStore().hasPermission(Permission.SystemCreate),
+		hasSystemEditPermission: () =>
+			useAuthStore().hasPermission(Permission.SystemEdit),
 	},
 	methods: {
 		ariaLabels(system) {
