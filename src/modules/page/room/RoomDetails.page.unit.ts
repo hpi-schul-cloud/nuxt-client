@@ -6,6 +6,7 @@ import { RoomBoardItem } from "@/types/room/Room";
 
 import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import {
+	createTestAuthStore,
 	createTestEnvStore,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
@@ -36,15 +37,18 @@ import {
 	SelectBoardLayoutDialog,
 } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
-import { Mock } from "vitest";
+import { beforeAll, Mock } from "vitest";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
+import { setActivePinia } from "pinia";
 
-vi.mock("vue-router", () => ({
-	useRouter: vi.fn().mockReturnValue({
-		push: vi.fn(),
-	}),
-}));
+vi.mock("vue-router", () => {
+	return {
+		useRouter: vi.fn().mockReturnValue({
+			push: vi.fn(),
+		}),
+	};
+});
 
 vi.mock("@data-room/Rooms.state");
 
@@ -68,8 +72,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			rooms: ref([]),
 		});
 		vi.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
-
-		createTestEnvStore();
 
 		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
@@ -111,11 +113,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			...options,
 		};
 
-		createTestEnvStore({
-			FEATURE_BOARD_LAYOUT_ENABLED: true,
-			...envs,
-		});
-
 		const notifierModule = createModuleMocks(NotifierModule);
 		const shareModule = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: false,
@@ -149,6 +146,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			props: {
 				room,
 			},
+		});
+
+		createTestAuthStore();
+		createTestEnvStore({
+			FEATURE_BOARD_LAYOUT_ENABLED: true,
+			...envs,
 		});
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);

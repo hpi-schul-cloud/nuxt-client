@@ -18,6 +18,8 @@ import RoomWrapper from "./RoomWrapper.vue";
 import { EmptyState } from "@ui-empty-state";
 import { Permission, CourseMetadataResponse } from "@/serverApi/v3";
 import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -76,6 +78,7 @@ const mockData: CourseMetadataResponse[] = [
 
 describe("@templates/RoomWrapper.vue", () => {
 	beforeAll(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestEnvStore({
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
 			FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,

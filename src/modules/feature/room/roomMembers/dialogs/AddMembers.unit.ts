@@ -25,6 +25,7 @@ import { WarningAlert } from "@ui-alert";
 import { computed, Ref } from "vue";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { Mock } from "vitest";
+import { useAuthStore } from "@data-auth";
 
 vi.mock("@vueuse/integrations/useFocusTrap");
 
@@ -96,6 +97,7 @@ describe("AddMembers", () => {
 					{ id: "user-id", name: options?.schoolRole ?? RoleName.Teacher },
 				],
 			},
+			stubActions: false,
 		});
 
 		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.Teacher];
@@ -125,6 +127,9 @@ describe("AddMembers", () => {
 								schools: roomMembersSchools,
 								roomMembers,
 							},
+							authStore: {
+								meResponse: mockedMe,
+							},
 						},
 					}),
 				],
@@ -132,6 +137,7 @@ describe("AddMembers", () => {
 		});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		// const authStore = mockedPiniaStoreTyping(useAuthStore);
 
 		return {
 			wrapper,

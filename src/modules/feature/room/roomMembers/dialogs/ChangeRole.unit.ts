@@ -27,7 +27,6 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
-import { createPinia, setActivePinia } from "pinia";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);

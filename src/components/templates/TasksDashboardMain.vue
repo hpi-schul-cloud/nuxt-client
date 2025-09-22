@@ -89,7 +89,10 @@
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import {
+	ImportUserResponseRoleNamesEnum as Roles,
+	Permission,
+} from "@/serverApi/v3";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import {
 	mdiArchiveOutline,
@@ -267,7 +270,7 @@ export default {
 		fabItems() {
 			if (
 				!this.isStudent &&
-				useAuthStore().userPermissions.includes("homework_create")
+				useAuthStore().userPermissions.includes(Permission.HomeworkCreate)
 			) {
 				return {
 					icon: mdiPlus,

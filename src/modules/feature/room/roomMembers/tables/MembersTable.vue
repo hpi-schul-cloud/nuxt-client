@@ -110,7 +110,6 @@ const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 
 const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
-	const userId2 = useAuthStore().user?.id;
 	const isNotCurrentUser = userId !== useAuthStore().user?.id;
 	const isNotRoomOwner = !isRoomOwner(userId);
 	return isNotCurrentUser && isNotRoomOwner;

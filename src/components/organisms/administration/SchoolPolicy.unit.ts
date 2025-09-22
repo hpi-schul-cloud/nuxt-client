@@ -58,7 +58,7 @@ describe("SchoolPolicy", () => {
 		},
 		permissions = [Permission.SchoolEdit]
 	) => {
-		createTestAuthStore({ me: { permissions } });
+		createTestAuthStore({ me: { permissions }, stubActions: false });
 
 		schoolsModule = createModuleMocks(SchoolsModule, {
 			getSchool: mockSchool,

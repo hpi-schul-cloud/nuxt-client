@@ -44,6 +44,7 @@ import { Fab, FabAction } from "./default-wireframe.types";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useEnvConfig } from "@data-env";
 import { useAuthStore } from "@data-auth";
+import { Permission } from "@/serverApi/v3";
 
 enum RoomFabEvent {
 	COMMON_CARTRIDGE_IMPORT = "import",
@@ -65,7 +66,7 @@ const props = defineProps({
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
-const canCreateCourse = useAuthStore().hasPermission("course_create");
+const canCreateCourse = useAuthStore().hasPermission(Permission.CourseCreate);
 
 const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 	if (canCreateCourse.value) {
@@ -118,15 +119,12 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 	return undefined;
 });
 
-const isLoading: ComputedRef<boolean> = computed(() => {
-	return courseRoomListModule.getLoading;
-});
+const isLoading = computed(() => courseRoomListModule.getLoading);
 
-const isEmptyState: ComputedRef<boolean> = computed(() => {
-	return (
+const isEmptyState = computed(
+	() =>
 		!courseRoomListModule.getLoading && !props.hasRooms && !props.hasImportToken
-	);
-});
+);
 
 const fabItemClickHandler = (event: string | undefined): void => {
 	if (event === RoomFabEvent.SYNCHRONIZED_COURSE) {

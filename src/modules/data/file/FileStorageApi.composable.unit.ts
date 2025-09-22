@@ -20,9 +20,10 @@ import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordRespons
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { createMock } from "@golevelup/ts-vitest";
 import { AxiosResponse } from "axios";
-import { createPinia, setActivePinia } from "pinia";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
 import { setupFileStorageNotifier } from "./test-utils/fileStorageNotifier";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("./FileStorageNotifications.composable");
 
@@ -50,7 +51,10 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 
 describe("FileStorageApi Composable", () => {
 	beforeAll(() => {
-		createTestAuthStore({ me: { school: { id: "schoolId" } } });
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAuthStore({
+			me: { school: { id: "schoolId" } },
+		});
 	});
 
 	beforeEach(() => {

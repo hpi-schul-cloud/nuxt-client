@@ -267,7 +267,9 @@ const onLeaveRoom = async () => {
 		confirmActionLangKey: "common.actions.leave",
 	});
 
-	if (!shouldLeave) return;
+	if (!shouldLeave) {
+		return;
+	}
 	await leaveRoom(roomId);
 	router.push("/rooms");
 };

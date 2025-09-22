@@ -14,6 +14,8 @@ import {
 	createTestEnvStore,
 } from "@@/tests/test-utils";
 import { Permission } from "@/serverApi/v3/index.js";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 const generateProps = () => ({
 	systems: [
@@ -69,6 +71,10 @@ describe("AuthSystems", () => {
 
 		return wrapper;
 	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
+	});
 
 	beforeEach(() => {
 		setupStores({
