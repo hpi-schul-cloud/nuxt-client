@@ -1,8 +1,3 @@
-import { ConfigResponse } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -12,21 +7,10 @@ import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { ComponentPublicInstance, nextTick } from "vue";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import AddElementDialog from "./AddElementDialog.vue";
-import type { Mocked } from "vitest";
 
 vi.mock("./SharedElementTypeSelection.composable");
 
 describe("ElementTypeSelection", () => {
-	const envConfigModule: Mocked<EnvConfigModule> = createModuleMocks(
-		EnvConfigModule,
-		{
-			getEnv: envsFactory.build({
-				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-			}) as unknown as ConfigResponse,
-		}
-	);
-
 	const setupMocks = () => {
 		const {
 			closeDialog,
@@ -72,9 +56,6 @@ describe("ElementTypeSelection", () => {
 			const wrapper = mount(AddElementDialog, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: {
-						[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					},
 				},
 			});
 
@@ -98,10 +79,6 @@ describe("ElementTypeSelection", () => {
 			const wrapper = mount(AddElementDialog, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
-
-					provide: {
-						[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					},
 				},
 			});
 
@@ -157,10 +134,6 @@ describe("ElementTypeSelection", () => {
 					},
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-						},
 					},
 				});
 

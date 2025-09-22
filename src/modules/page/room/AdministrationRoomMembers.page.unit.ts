@@ -1,6 +1,6 @@
 import AdministrationRoomDetailPage from "./AdministrationRoomMembers.page.vue";
 import {
-	envsFactory,
+	createTestEnvStore,
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 	schoolFactory,
@@ -11,12 +11,11 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { authModule, schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { Mock } from "vitest";
 import { Router, useRoute } from "vue-router";
 import { nextTick } from "vue";
-import EnvConfigModule from "@/store/env-config";
 import { useI18n } from "vue-i18n";
 import AuthModule from "@/store/auth";
 import { RoomAdminMembersTable } from "@feature-room";
@@ -62,7 +61,6 @@ describe("AdministrationRoomMembers.page", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			envConfigModule: EnvConfigModule,
 			authModule: AuthModule,
 		});
 
@@ -81,10 +79,9 @@ describe("AdministrationRoomMembers.page", () => {
 		isEmptyList?: boolean;
 		featureFlag?: boolean;
 	}) => {
-		const envs = envsFactory.build({
+		createTestEnvStore({
 			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,
 		});
-		envConfigModule.setEnvs(envs);
 		const isEmptyList = options?.isEmptyList ?? false;
 
 		const wrapper = mount(AdministrationRoomDetailPage, {

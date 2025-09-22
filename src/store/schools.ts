@@ -13,7 +13,7 @@ import {
 	UserImportApiFactory,
 	UserImportApiInterface,
 } from "@/serverApi/v3";
-import { authModule, envConfigModule } from "@/store";
+import { authModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
 import { AxiosError } from "axios";
@@ -21,6 +21,7 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { useApplicationError } from "../composables/application-error.composable";
 import { ApplicationError } from "./types/application-error";
 import { School } from "./types/schools";
+import { useEnvConfig } from "@data-env";
 
 @Module({
 	name: "schoolsModule",
@@ -158,7 +159,7 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	get schoolIsExternallyManaged(): boolean {
-		const isThr = envConfigModule.getTheme === SchulcloudTheme.Thr;
+		const isThr = useEnvConfig().value.SC_THEME === SchulcloudTheme.Thr;
 		const result = this.school.isExternal || isThr;
 
 		return result;

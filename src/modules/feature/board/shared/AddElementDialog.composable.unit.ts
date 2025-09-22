@@ -1,10 +1,9 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { ConfigResponse } from "@/serverApi/v3/api";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { injectStrict } from "@/utils/inject";
 import {
-	envsFactory,
+	createTestEnvStore,
 	mockedPiniaStoreTyping,
 	ObjectIdMock,
 } from "@@/tests/test-utils";
@@ -70,26 +69,11 @@ vi.mocked(useBoardFeatures).mockImplementation(() => {
 	};
 });
 
-// simple mock, as we only need to provide the env-config-module (the concrete value is even irrelevant for the currently implemented tests)
-mockedInjectStrict.mockImplementation(() => {
-	return {
-		getEnv: envsFactory.build({
-			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: false,
-			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: false,
-			FEATURE_TLDRAW_ENABLED: false,
-			FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: false,
-			FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
-			FEATURE_COLUMN_BOARD_H5P_ENABLED: false,
-		}),
-	};
-});
-
 describe("ElementTypeSelection Composable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			notifierModule: NotifierModule,
 		});
 	});
@@ -298,19 +282,15 @@ describe("ElementTypeSelection Composable", () => {
 				dynamicElementTypeOptions,
 			} = setupSharedElementTypeSelectionMock();
 
-			mockedInjectStrict.mockImplementation(() => {
-				return {
-					getEnv: {
-						FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-						FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-						FEATURE_TLDRAW_ENABLED: true,
-						FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
-						FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
-						FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
-						FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
-						FEATURE_COLUMN_BOARD_H5P_ENABLED: true,
-					},
-				};
+			createTestEnvStore({
+				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+				FEATURE_TLDRAW_ENABLED: true,
+				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
+				FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
+				FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
+				FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
+				FEATURE_COLUMN_BOARD_H5P_ENABLED: true,
 			});
 
 			const { askType } = useAddElementDialog(addElementMock, "cardId");
@@ -934,7 +914,7 @@ describe("ElementTypeSelection Composable", () => {
 
 	describe("when preferred tools in card store is updated", () => {
 		const setup = (
-			env: Partial<ConfigResponse> = {
+			envConfig: Partial<ConfigResponse> = {
 				FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
 			}
 		) => {
@@ -952,11 +932,7 @@ describe("ElementTypeSelection Composable", () => {
 			const cardStore = mockedPiniaStoreTyping(useCardStore);
 			cardStore.preferredTools = [];
 
-			mockedInjectStrict.mockImplementation(() => {
-				return {
-					getEnv: env,
-				};
-			});
+			createTestEnvStore(envConfig);
 
 			useAddElementDialog(vi.fn(), cardId);
 

@@ -36,7 +36,7 @@ import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiPlus } from "@icons/material";
 import { useRoute } from "vue-router";
-import { envConfigModule } from "@/store";
+import { useEnvConfig } from "@data-env";
 const { fetchRoom } = useRoomDetailsStore();
 const { room } = storeToRefs(useRoomDetailsStore());
 
@@ -73,7 +73,7 @@ watch(
 	() => route.params.roomId,
 	async () => {
 		const isFeatureEnabled =
-			envConfigModule.getEnv.FEATURE_ADMINISTRATE_ROOMS_ENABLED;
+			useEnvConfig().value.FEATURE_ADMINISTRATE_ROOMS_ENABLED;
 
 		if (!isFeatureEnabled) {
 			window.location.replace("/dashboard");

@@ -21,26 +21,13 @@
 					<p data-testid="share-options-info-text">
 						{{ t(`components.molecules.share.${type}.options.infoText`) }}
 					</p>
-					<div
-						v-if="showAlertInfo"
-						class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
-					>
-						<div class="mx-2">
-							<v-icon color="info" :icon="mdiInformation" />
-						</div>
+					<InfoAlert v-if="showAlertInfo" class="mb-4">
+						{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
+					</InfoAlert>
+					<WarningAlert v-if="showAlertInfo">
 						<div data-testid="share-options-table-header">
 							{{ t("components.molecules.share.options.tableHeader.InfoText") }}
 							<ul class="ml-6">
-								<li
-									v-if="showCourseInfo"
-									data-testid="share-options-personal-data-text"
-								>
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.personalData"
-										)
-									}}
-								</li>
 								<li
 									v-if="showRoomInfo"
 									data-testid="share-options-room-memberships-data-text"
@@ -49,6 +36,11 @@
 										t(
 											"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData"
 										)
+									}}
+								</li>
+								<li v-if="showCourseInfo">
+									{{
+										t("components.molecules.copyResult.membersAndPermissions")
 									}}
 								</li>
 								<li v-if="showCourseInfo || showLessonInfo">
@@ -118,13 +110,12 @@
 								</li>
 							</ul>
 						</div>
-					</div>
+					</WarningAlert>
 					<share-modal-options-form
 						:type="type"
 						@share-options-change="onShareOptionsChange"
 					/>
 				</div>
-
 				<div v-if="step === 'secondStep' && isOpen">
 					<share-modal-result
 						:share-url="shareUrl"
@@ -149,7 +140,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import { mdiInformation } from "@icons/material";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -231,26 +222,26 @@ const onCopy = () => {
 
 const showAlertInfo = computed(() => {
 	return (
-		props.type === "courses" ||
-		props.type === "columnBoard" ||
-		props.type === "lessons" ||
-		props.type === "room"
+		props.type === ShareTokenBodyParamsParentTypeEnum.Courses ||
+		props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
+		props.type === ShareTokenBodyParamsParentTypeEnum.Lessons ||
+		props.type === ShareTokenBodyParamsParentTypeEnum.Room
 	);
 });
 
 const showCourseInfo = computed(() => {
-	return props.type === "courses";
+	return props.type === ShareTokenBodyParamsParentTypeEnum.Courses;
 });
 
 const showBoardInfo = computed(() => {
-	return props.type === "columnBoard";
+	return props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard;
 });
 
 const showLessonInfo = computed(() => {
-	return props.type === "lessons";
+	return props.type === ShareTokenBodyParamsParentTypeEnum.Lessons;
 });
 
 const showRoomInfo = computed(() => {
-	return props.type === "room";
+	return props.type === ShareTokenBodyParamsParentTypeEnum.Room;
 });
 </script>

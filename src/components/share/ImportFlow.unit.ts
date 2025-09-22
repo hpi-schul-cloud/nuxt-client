@@ -13,7 +13,6 @@ import {
 import { courseRoomListModule } from "@/store";
 import CopyModule from "@/store/copy";
 import CourseRoomListModule from "@/store/course-room-list";
-import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import {
@@ -85,7 +84,6 @@ describe("@components/share/ImportFlow", () => {
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		setupStores({
 			rooms: CourseRoomListModule,
-			envConfigModule: EnvConfigModule,
 		});
 		vi.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation(
 			vi.fn()

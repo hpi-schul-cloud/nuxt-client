@@ -1,14 +1,10 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { BoardErrorReportApiFactory } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import {
 	boardResponseFactory,
-	envsFactory,
 	mockApiResponse,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardStore, useSocketConnection, useCardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -84,12 +80,6 @@ describe("socket.ts", () => {
 
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
-		setupStores({ envConfigModule: EnvConfigModule });
-		const envs = envsFactory.build({
-			BOARD_COLLABORATION_URI: "mockedUri",
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
-		});
-		envConfigModule.setEnvs(envs);
 
 		timeoutResponseMock = { emitWithAck: vi.fn() };
 		mockSocket = {
