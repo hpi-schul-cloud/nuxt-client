@@ -13,7 +13,7 @@ import { useRoomDetailsStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
-import { computed, Ref, ref } from "vue";
+import { computed, Ref, ref, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { RoomMember } from "./types";
 
@@ -52,13 +52,13 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 				"pages.rooms.administration.roomDetail.anonymized"
 			);
 
-			return {
+			return reactive({
 				...member,
 				isSelectable: !isAnonymizedMember,
 				firstName: anonymizedName,
 				lastName: anonymizedName,
 				fullName: anonymizedName,
-			};
+			});
 		});
 	});
 
@@ -255,6 +255,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					displayRoomRole: roomRole[roomRoleName],
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 					schoolId: member.schoolId,
+					isSelectable: true,
 				}))
 			);
 		} catch {
