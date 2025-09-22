@@ -1,6 +1,13 @@
-import { mount } from "@vue/test-utils";
-import ChangeRole from "./ChangeRole.vue";
 import { RoleName } from "@/serverApi/v3";
+import { authModule, schoolsModule } from "@/store";
+import AuthModule from "@/store/auth";
+import SchoolsModule from "@/store/schools";
+import {
+	meResponseFactory,
+	mockedPiniaStoreTyping,
+	roomFactory,
+	schoolFactory,
+} from "@@/tests/test-utils";
 import {
 	roomAdminFactory,
 	roomEditorFactory,
@@ -12,25 +19,18 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomMember, useRoomMembersStore } from "@data-room";
-import { nextTick } from "vue";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import {
-	meResponseFactory,
-	mockedPiniaStoreTyping,
-	roomFactory,
-	schoolFactory,
-} from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
-import { authModule, schoolsModule } from "@/store";
-import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
-import { createPinia, setActivePinia } from "pinia";
+import { mount } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { createPinia, setActivePinia } from "pinia";
 import { Mock } from "vitest";
+import { nextTick } from "vue";
+import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
+import ChangeRole from "./ChangeRole.vue";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -123,6 +123,10 @@ describe("ChangeRole.vue", () => {
 			.fn()
 			.mockReturnValue(isRoomOwner ?? false);
 
+		roomMembersStore.getRoomOwnerFullName.mockReturnValue(
+			isRoomOwner ? currentUser.fullName : undefined
+		);
+
 		const wrapper = mount(ChangeRole, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n(), pinia],
@@ -203,9 +207,10 @@ describe("ChangeRole.vue", () => {
 			});
 
 			it("should render 'Alert' component", async () => {
+				const currentUser = roomOwnerFactory.build();
 				const { wrapper } = setup({
 					membersForRoleChange: [roomAdminFactory.build()],
-					currentUser: roomOwnerFactory.build(),
+					currentUser,
 					isRoomOwner: true,
 				});
 
