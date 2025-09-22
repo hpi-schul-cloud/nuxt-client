@@ -15,8 +15,10 @@
 			</template>
 
 			<template #text>
-				<InfoAlert>{{ t("pages.rooms.members.add.infoText") }}</InfoAlert>
-				<div class="mt-8" data-testid="add-participant-school">
+				<InfoAlert v-if="!isAdminMode" class="mb-8">
+					{{ t("pages.rooms.members.add.infoText") }}
+				</InfoAlert>
+				<div data-testid="add-participant-school">
 					<VAutocomplete
 						ref="autoCompleteSchool"
 						v-model="selectedSchool"
@@ -25,12 +27,9 @@
 						item-value="id"
 						:items="schoolItems"
 						:label="t('global.sidebar.item.school')"
-						:disabled="
-							isItemListDisabled ||
-							(isSchoolSelectionDisabled ?? false) ||
-							schoolItems.length <= 1
-						"
-						:aria-disabled="isItemListDisabled"
+						:disabled="isSchoolSelectionDisabled"
+						:aria-disabled="isSchoolSelectionDisabled"
+						v-bind="isAdminMode ? { menuIcon: '', readonly: true } : undefined"
 						@update:model-value="onValueChange"
 						@update:menu="onItemListToggle"
 					/>
@@ -61,6 +60,7 @@
 
 				<InfoAlert
 					v-if="
+						!isAdminMode &&
 						determineStudentAlertType === StudentAlertTypeEnum.StudentVisibility
 					"
 					data-testid="student-visibility-info-alert"
@@ -127,17 +127,16 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref } from "vue";
+import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { RoleName } from "@/serverApi/v3";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
-import type { VAutocomplete, VCard, VSelect } from "vuetify/components";
+import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
-import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
-
+import type { VAutocomplete, VCard, VSelect } from "vuetify/components";
 interface SchoolRoleItem {
 	id: RoleName;
 	name: string;
@@ -149,11 +148,12 @@ enum StudentAlertTypeEnum {
 	StudentVisibility = "STUDENT_VISIBILITY",
 }
 
-const props = defineProps({
-	isAdminMode: {
-		type: Boolean,
-		default: false,
-	},
+interface AddMembersDialogProps {
+	isAdminMode?: boolean;
+}
+
+const props = withDefaults(defineProps<AddMembersDialogProps>(), {
+	isAdminMode: false,
 });
 
 const isOpen = defineModel({
@@ -186,7 +186,6 @@ const { addMembers, getPotentialMembers, resetPotentialMembers } =
 
 const schoolItems = computed(() => {
 	if (props.isAdminMode) {
-		// maybe...?
 		return schools.value.slice(0, 1);
 	} else {
 		return schools.value;
@@ -201,34 +200,33 @@ const canAddAllStudents = computed(() => {
 
 const selectedSchool = ref(schools.value[0].id);
 
-const schoolRoles = computed<SchoolRoleItem[]>(() => {
-	const student = {
+const schoolRoles: SchoolRoleItem[] = [
+	{
 		id: RoleName.Student,
 		name: t("common.labels.student.neutral"),
 		icon: mdiAccountOutline,
-	};
-	const teacher = {
+	},
+	{
 		id: RoleName.Teacher,
 		name: t("common.labels.teacher.neutral"),
 		icon: mdiAccountSchoolOutline,
-	};
-
-	return props.isAdminMode ? [teacher] : [student, teacher];
-});
+	},
+];
 
 const schoolRoleListItemProps = (item: SchoolRoleItem) => ({
 	title: item.name,
 	prependIcon: item.icon,
 });
 
-const selectedSchoolRole = ref<RoleName>(schoolRoles.value[0].id);
+const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
 const selectedUsers = ref<string[]>([]);
 
 const addMembersContent = ref<VCard>();
 const { pause, unpause } = useSafeFocusTrap(isOpen, addMembersContent);
 
 const isSchoolSelectionDisabled = computed(() => {
-	return isCurrentUserStudent.value;
+	if (props.isAdminMode) return false;
+	return isCurrentUserStudent.value || isItemListDisabled.value;
 });
 
 const isStudentSelectionDisabled = computed(() => {

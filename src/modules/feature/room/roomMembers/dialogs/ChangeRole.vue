@@ -48,7 +48,7 @@
 					</VRadioGroup>
 
 					<WarningAlert
-						v-if="selectedRole === RoleName.Roomowner"
+						v-if="selectedRole === RoleName.Roomowner && currentOwnerFullName"
 						:class="isOwnershipHandoverMode ? 'ml-0' : 'ml-8'"
 					>
 						<span class="alert-text">
