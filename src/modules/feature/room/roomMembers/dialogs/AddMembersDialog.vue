@@ -131,7 +131,7 @@ import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import type { VAutocomplete, VCard, VSelect } from "vuetify/components";
@@ -290,8 +290,10 @@ const onClose = () => {
 	emit("close");
 };
 
-onMounted(() => {
-	getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
+watch(isOpen, async (val) => {
+	if (val) {
+		await getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
+	}
 });
 
 const isItemListDisabled = computed(() => selectedUsers.value.length > 0);
