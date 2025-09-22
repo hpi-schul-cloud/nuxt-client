@@ -1992,7 +1992,7 @@ export default {
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Attention: Only one person in the room can receive this permission!",
 	"pages.rooms.members.roleChange.dialogTitle.handOver":
-		"Room permission “Ownership” really transferred?",
+		"Transfer room permission “own”?",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Transfer ownership",
 	"pages.rooms.members.handOverAlert.label":
 		"This room's permissions are being transferred to {memberFullName}.",
