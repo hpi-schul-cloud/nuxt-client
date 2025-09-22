@@ -49,7 +49,7 @@ describe("useRoomMembers", () => {
 		name: "Paul-Gerhardt-Gymnasium",
 	};
 
-	const createTestAuthTestUser = (userId: string, roleName: RoleName) => {
+	const createAuthTestUser = (userId: string, roleName: RoleName) => {
 		createTestAuthStore({
 			me: {
 				roles: [{ id: userId, name: roleName }],
@@ -359,7 +359,7 @@ describe("useRoomMembers", () => {
 		describe("when the current user is a student", () => {
 			it("should return true", () => {
 				const userId = "student-id";
-				createTestAuthTestUser(userId, RoleName.Student);
+				createAuthTestUser(userId, RoleName.Student);
 
 				const { roomMembersStore } = setup();
 
@@ -377,7 +377,7 @@ describe("useRoomMembers", () => {
 		describe("when the current user is not a student", () => {
 			it("should return false", () => {
 				const userId = "teacher-id";
-				createTestAuthTestUser(userId, RoleName.Teacher);
+				createAuthTestUser(userId, RoleName.Teacher);
 
 				const { roomMembersStore } = setup();
 
@@ -457,7 +457,7 @@ describe("useRoomMembers", () => {
 		describe("when the current user is a student", () => {
 			it("should not fetch the school list", async () => {
 				const userId = "student-id";
-				createTestAuthTestUser(userId, RoleName.Student);
+				createAuthTestUser(userId, RoleName.Student);
 
 				const { roomMembersStore } = setup();
 

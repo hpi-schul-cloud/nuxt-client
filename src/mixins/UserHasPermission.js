@@ -11,9 +11,6 @@ export default {
 		userPermissions() {
 			return useAuthStore().userPermissions;
 		},
-		$_hasPermission() {
-			return this.$_userHasPermission(this.permission);
-		},
 	},
 	methods: {
 		$_userHasPermission(permission) {

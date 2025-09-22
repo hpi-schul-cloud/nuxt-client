@@ -1,6 +1,7 @@
 import { useI18n } from "vue-i18n";
 import { ContextExternalToolConfigurationStatus } from "./types";
 import { useAuthStore } from "@data-auth";
+import { RoleName } from "@/serverApi/v3";
 
 export const useContextExternalToolConfigurationStatus = () => {
 	const { t } = useI18n();
@@ -10,7 +11,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 	): string => {
 		const userRoles = useAuthStore().userRoles;
 
-		if (userRoles.includes("teacher")) {
+		if (userRoles.includes(RoleName.Teacher)) {
 			if (
 				toolConfigStatus.isOutdatedOnScopeSchool &&
 				toolConfigStatus.isOutdatedOnScopeContext
@@ -46,9 +47,9 @@ export const useContextExternalToolConfigurationStatus = () => {
 			statusString = t("common.medium.alert.incomplete") + " ";
 		}
 
-		if (userRoles.includes("administrator")) {
+		if (userRoles.includes(RoleName.Administrator)) {
 			return statusString + t("common.medium.information.admin");
-		} else if (userRoles.includes("teacher")) {
+		} else if (userRoles.includes(RoleName.Teacher)) {
 			return statusString + t("common.medium.information.teacher");
 		} else {
 			return statusString + t("common.medium.information.student");
@@ -58,7 +59,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 	const determineDeactivatedTranslationKey = (): string => {
 		const userRoles = useAuthStore().userRoles;
 
-		if (userRoles.includes("student")) {
+		if (userRoles.includes(RoleName.Student)) {
 			return "common.tool.information.deactivated.student";
 		} else {
 			return "common.tool.information.deactivated.teacher";
@@ -68,7 +69,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 	const determineNotLicensedTranslationKey = (): string => {
 		const userRoles = useAuthStore().userRoles;
 
-		if (userRoles.includes("student")) {
+		if (userRoles.includes(RoleName.Student)) {
 			return "common.tool.information.notLicensed.student";
 		} else {
 			return "common.tool.information.notLicensed.teacher";
@@ -90,7 +91,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 		return true;
 	};
 
-	const isTeacher = () => useAuthStore().userRoles.includes("teacher");
+	const isTeacher = () => useAuthStore().userRoles.includes(RoleName.Teacher);
 
 	return {
 		determineToolStatusTranslationKey,

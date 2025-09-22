@@ -6,9 +6,10 @@ import {
 } from "@@/tests/test-utils";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { useRoomDetailsStore } from "@data-room";
-import { createPinia, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
 import { ref } from "vue";
 import { useRoomAuthorization } from "./roomAuthorization.composable";
+import { createTestingPinia } from "@pinia/testing";
 
 type setupParams = {
 	userRoles?: RoleName[];
@@ -20,7 +21,7 @@ let roomDetailsStore: ReturnType<typeof useRoomDetailsStore>;
 
 describe("roomAuthorization", () => {
 	beforeAll(() => {
-		setActivePinia(createPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 	});
 	beforeEach(() => {
 		roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);

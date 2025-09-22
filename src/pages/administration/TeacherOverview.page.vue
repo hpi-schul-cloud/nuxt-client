@@ -146,7 +146,7 @@ import { reactive } from "vue";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 import { useEnvConfig } from "@data-env";
 import { useAuthStore } from "@data-auth";
-import { RoleName } from "@/serverApi/v3/index.js";
+import { Permission, RoleName } from "@/serverApi/v3/index.js";
 
 export default {
 	components: {
@@ -397,7 +397,7 @@ export default {
 		fab() {
 			if (
 				this.schoolIsExternallyManaged ||
-				!this.$_userHasPermission("TEACHER_CREATE")
+				!this.$_userHasPermission(Permission.TeacherCreate)
 			) {
 				return null;
 			}

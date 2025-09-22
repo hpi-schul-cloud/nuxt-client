@@ -87,7 +87,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 	beforeAll(() => {
-		setActivePinia(createTestingPinia({ stubActions: true }));
+		setActivePinia(createTestingPinia());
 	});
 
 	describe("when mounting the component", () => {

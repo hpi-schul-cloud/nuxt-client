@@ -1,7 +1,7 @@
 import { RoleName } from "@/serverApi/v3";
 import {
 	contextExternalToolConfigurationStatusFactory,
-	createTestAuthStore,
+	createTestAuthStoreWithRole,
 	mountComposable,
 } from "@@/tests/test-utils";
 import { useContextExternalToolConfigurationStatus } from "./ContextExternalToolConfigurationStatus.composable";
@@ -14,9 +14,7 @@ vi.mock("vue-i18n", () => {
 
 describe("ToolConfigurationStatus.composable", () => {
 	const getComposable = (userRole = RoleName.Teacher) => {
-		createTestAuthStore({
-			me: { roles: [{ id: "testRole", name: userRole }] },
-		});
+		createTestAuthStoreWithRole(userRole);
 
 		const composable = mountComposable(() =>
 			useContextExternalToolConfigurationStatus()
