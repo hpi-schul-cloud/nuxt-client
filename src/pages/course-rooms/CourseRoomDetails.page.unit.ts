@@ -6,12 +6,10 @@ import {
 	ShareTokenBodyParamsParentTypeEnum,
 	SingleColumnBoardResponse,
 } from "@/serverApi/v3/api";
-import { envConfigModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
@@ -23,13 +21,12 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
-import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, meResponseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
@@ -214,9 +211,6 @@ const getWrapper = ({
 
 describe("@/pages/CourseRoomDetails.page.vue", () => {
 	beforeEach(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
 			getIsOpen: false,
 		});
@@ -226,7 +220,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 		vi.resetAllMocks();
 	});
 
-	it("should fetch data", async () => {
+	it("should fetch data", () => {
 		getWrapper();
 
 		expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalled();
@@ -251,7 +245,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 	});
 
 	describe("when course is locked", () => {
-		it("should show the locked course page", async () => {
+		it("should show the locked course page", () => {
 			const wrapper = getWrapper({
 				isLocked: true,
 			});
@@ -333,10 +327,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 			describe("when feature is enabled", () => {
 				it("should render the button to open dialog", async () => {
-					const envs = envsFactory.build({
-						FEATURE_BOARD_LAYOUT_ENABLED: true,
-					});
-					envConfigModule.setEnvs(envs);
+					createTestEnvStore({ FEATURE_BOARD_LAYOUT_ENABLED: true });
 					const wrapper = getWrapper({ permissionData: ["course_edit"] });
 					const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
@@ -350,10 +341,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 				});
 
 				it("should open layout dialog when button is clicked", async () => {
-					const envs = envsFactory.build({
-						FEATURE_BOARD_LAYOUT_ENABLED: true,
-					});
-					envConfigModule.setEnvs(envs);
+					createTestEnvStore({ FEATURE_BOARD_LAYOUT_ENABLED: true });
 					const wrapper = getWrapper({ permissionData: ["course_edit"] });
 
 					const layoutDialog = wrapper.findComponent(
@@ -424,10 +412,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 			describe("when 'FEATURE_COPY_SERVICE_ENABLED' is turned on", () => {
 				it("should display 'copy' action", async () => {
-					const envs = envsFactory.build({
-						FEATURE_COPY_SERVICE_ENABLED: true,
-					});
-					envConfigModule.setEnvs(envs);
+					createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 					const wrapper = getWrapper();
 
 					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
@@ -449,10 +434,11 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 			describe("when 'FEATURE_COURSE_SHARE' is turned on", () => {
 				it("should display 'share' action", async () => {
-					const envs = envsFactory.build({
+					createTestEnvStore({
 						FEATURE_COURSE_SHARE: true,
+						FEATURE_COPY_SERVICE_ENABLED: false,
 					});
-					envConfigModule.setEnvs(envs);
+
 					const wrapper = getWrapper();
 
 					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
@@ -495,10 +481,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 			describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 				it("should call the onCopyRoom method when 'Copy course' menu was clicked", async () => {
-					const envs = envsFactory.build({
-						FEATURE_COPY_SERVICE_ENABLED: true,
-					});
-					envConfigModule.setEnvs(envs);
+					createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 
 					const wrapper = getWrapper();
 					expect(wrapper.vm.courseId).toBe("123");
@@ -520,10 +503,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 			describe("test Course export", () => {
 				it("should not find export button when feature flag is false", async () => {
-					const envs = envsFactory.build({
+					createTestEnvStore({
 						FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
 					});
-					envConfigModule.setEnvs(envs);
 
 					const wrapper = getWrapper();
 
@@ -541,10 +523,10 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 				});
 
 				it("should call onExport method when 'Export Course' menu clicked", async () => {
-					const envs = envsFactory.build({
+					createTestEnvStore({
 						FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
 					});
-					envConfigModule.setEnvs(envs);
+
 					const wrapper = getWrapper();
 
 					const threeDotButton = wrapper.findComponent(
@@ -561,10 +543,8 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 			});
 
 			it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
-				const envs = envsFactory.build({
-					FEATURE_COURSE_SHARE: true,
-				});
-				envConfigModule.setEnvs(envs);
+				createTestEnvStore({ FEATURE_COURSE_SHARE: true });
+
 				const wrapper = getWrapper();
 
 				const threeDotButton = wrapper.findComponent(
@@ -581,10 +561,8 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 			});
 
 			it("should call store action after 'Share Course' menu clicked", async () => {
-				const envs = envsFactory.build({
-					FEATURE_COURSE_SHARE: true,
-				});
-				envConfigModule.setEnvs(envs);
+				createTestEnvStore({ FEATURE_COURSE_SHARE: true });
+
 				const wrapper = getWrapper();
 
 				const threeDotButton = wrapper.findComponent(
