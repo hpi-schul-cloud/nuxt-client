@@ -27,7 +27,7 @@
 						variant="outlined"
 						@click="$emit('update:modelValue', false)"
 					>
-						{{ $t("common.labels.close") }}
+						{{ $t("common.labels.cancel") }}
 					</VBtn>
 				</VCardActions>
 			</VCard>
