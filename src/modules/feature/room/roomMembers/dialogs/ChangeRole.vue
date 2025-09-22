@@ -297,7 +297,6 @@ const onClose = () => {
 };
 
 const resetComponentState = () => {
-	memberToChangeRole.value = [];
 	selectedIds.value = [];
 	isOwnershipHandoverMode.value = false;
 	selectedRole.value = null;
