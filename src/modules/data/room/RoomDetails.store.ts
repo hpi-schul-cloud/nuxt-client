@@ -30,15 +30,14 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
-	const fetchRoomGeneric = async (
-		id: string,
-		additionalFn?: (id: string) => Promise<void>
-	) => {
+	const fetchRoom = async (id: string, config = { loadBoards: false }) => {
 		try {
 			roomVariant.value = RoomVariant.ROOM;
 			room.value = (await roomApi.roomControllerGetRoomDetails(id)).data;
-			if (additionalFn) {
-				await additionalFn(id);
+			if (config.loadBoards) {
+				roomBoards.value = (
+					await roomApi.roomControllerGetRoomBoards(id)
+				).data.data;
 			}
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
@@ -56,6 +55,10 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		} finally {
 			isLoading.value = false;
 		}
+	};
+
+	const fetchRoomAndBoards = async (id: string) => {
+		await fetchRoom(id, { loadBoards: true });
 	};
 
 	const createBoard = async (
@@ -90,16 +93,6 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 			isLoading.value = false;
 		}
 	};
-
-	const populateRoomBoards = async (id: string) => {
-		roomBoards.value = (
-			await roomApi.roomControllerGetRoomBoards(id)
-		).data.data;
-	};
-
-	const fetchRoom = (id: string) => fetchRoomGeneric(id);
-	const fetchRoomAndBoards = (id: string) =>
-		fetchRoomGeneric(id, populateRoomBoards);
 
 	const resetState = () => {
 		isLoading.value = true;
