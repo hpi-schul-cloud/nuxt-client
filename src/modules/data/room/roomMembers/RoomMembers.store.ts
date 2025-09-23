@@ -334,16 +334,19 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		const currentOwner = roomMembers.value.find(
 			(member) => member.roomRoleName === RoleName.Roomowner
 		);
+		if (currentOwner) {
+			updateMemberRole(currentOwner, RoleName.Roomadmin);
+		}
+
 		const memberToBeOwner = roomMembers.value.find(
 			(member) => member.userId === userId
 		);
-		if (!currentOwner || !memberToBeOwner) {
+		if (!memberToBeOwner) {
 			showFailure(t("pages.rooms.members.error.updateRole"));
 			return;
 		}
 
 		updateMemberRole(memberToBeOwner, RoleName.Roomowner);
-		updateMemberRole(currentOwner, RoleName.Roomadmin);
 	};
 
 	const confirmInvitations = async (ids: string[]) => {
