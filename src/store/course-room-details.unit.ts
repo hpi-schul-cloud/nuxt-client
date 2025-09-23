@@ -1,6 +1,4 @@
 import * as serverApi from "@/serverApi/v3/api";
-import * as commonCartridgeApi from "@/commonCartridgeApi/v3/api/common-cartridge-api";
-import { CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3/api";
 import { BoardParentType } from "@/serverApi/v3/api";
 import { applicationErrorModule, authModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
@@ -14,7 +12,7 @@ import {
 	courseFactory,
 } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { AxiosError, AxiosInstance, AxiosPromise } from "axios";
+import { AxiosError, AxiosInstance } from "axios";
 import CourseRoomDetailsModule from "./course-room-details";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
