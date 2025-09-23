@@ -1,8 +1,4 @@
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import AutoLogoutWarning from "./AutoLogoutWarning.vue";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { ConfigResponse } from "@/serverApi/v3";
 import { useAutoLogout } from "./autoLogout.composable";
 import {
 	createTestingI18n,
@@ -57,17 +53,12 @@ describe("AutoLogoutWarning", () => {
 	};
 
 	const setup = (options?: {
-		envs?: Partial<ConfigResponse>;
 		autoLogoutVariables?: Partial<typeof defaultVars>;
 	}) => {
 		options = {
-			envs: { JWT_SHOW_TIMEOUT_WARNING_SECONDS: 30, JWT_TIMEOUT_SECONDS: 60 },
 			autoLogoutVariables: { ...defaultVars },
 			...options,
 		};
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: { ...options.envs } as ConfigResponse,
-		});
 
 		mockedUseAutoLogout.mockReturnValue({
 			...defaultVars,
@@ -80,9 +71,6 @@ describe("AutoLogoutWarning", () => {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 				components: {
 					"base-modal": BaseModal,
-				},
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 		});
@@ -103,7 +91,7 @@ describe("AutoLogoutWarning", () => {
 
 	describe("showDialog", () => {
 		describe("when showDialog is set true", () => {
-			it("should show the dialog", async () => {
+			it("should show the dialog", () => {
 				const { wrapper } = setup({
 					autoLogoutVariables: {
 						showDialog: ref(true),
@@ -117,7 +105,7 @@ describe("AutoLogoutWarning", () => {
 		});
 
 		describe("when showDialog is set false", () => {
-			it("should not show the dialog", async () => {
+			it("should not show the dialog", () => {
 				const { wrapper } = setup({
 					autoLogoutVariables: {
 						showDialog: ref(false),
@@ -132,7 +120,7 @@ describe("AutoLogoutWarning", () => {
 
 	describe("confirm button", () => {
 		describe("when sessionStatus is 'ended'", () => {
-			it("should set the correct title", async () => {
+			it("should set the correct title", () => {
 				const { wrapper } = setup({
 					autoLogoutVariables: {
 						sessionStatus: ref(SessionStatus.Ended),
@@ -161,7 +149,7 @@ describe("AutoLogoutWarning", () => {
 		});
 
 		describe("when sessionStatus is 'continued'", () => {
-			it("should set the correct title", async () => {
+			it("should set the correct title", () => {
 				const { wrapper } = setup({
 					autoLogoutVariables: {
 						sessionStatus: ref(SessionStatus.Continued),

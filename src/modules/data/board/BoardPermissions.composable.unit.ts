@@ -1,11 +1,10 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout, Permission, RoleName } from "@/serverApi/v3";
-import { authModule, envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
+import { authModule } from "@/store";
 import { BoardContextType } from "@/types/board/BoardContext";
 import {
 	boardResponseFactory,
-	envsFactory,
+	createTestEnvStore,
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
@@ -109,8 +108,9 @@ describe("BoardPermissions.composable", () => {
 			resetPageInformation: vi.fn(),
 		});
 
+		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false });
+
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			authModule: AuthModule,
 		});
 
@@ -123,11 +123,6 @@ describe("BoardPermissions.composable", () => {
 			permissions: userPermissions,
 		});
 		authModule.setMe(mockMe);
-
-		const env = envsFactory.build({
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
-		});
-		envConfigModule.setEnvs(env);
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		const board = boardResponseFactory.build({

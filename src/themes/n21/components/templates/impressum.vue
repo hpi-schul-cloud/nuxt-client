@@ -1,8 +1,8 @@
 <template>
 	<div class="impressum-container">
 		<div class="impressum-max-width pa-4">
-			<h1 class="h2">Impressum</h1>
-			<h2 class="h4">
+			<h1>Impressum</h1>
+			<h2>
 				NIEDERSÄCHSISCHE BILDUNGSCLOUD – <br />
 				Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung
 				(NLQ), Körperschaft des öffentlichen Rechts
@@ -24,7 +24,7 @@
 				}}</base-link
 				>.
 			</p>
-			<h2 class="h4">Verantwortliche</h2>
+			<h2>Verantwortliche</h2>
 			<p>Vertretungsberechtigte Verantwortliche gemäß § 5 DDG und § 18 MStV:</p>
 			<p>
 				Direktorin Dr. Elke Richlick<br />
@@ -45,7 +45,7 @@
 				><br />
 				Tel.: 05121 1695-0
 			</p>
-			<h2 class="h4">Rechtliche Hinweise</h2>
+			<h2>Rechtliche Hinweise</h2>
 			<p>
 				Das Landesprojekt Niedersächsische Bildungscloud wird durchgeführt durch
 				das Niedersächsische Landesinstitut für schulische Qualitätsentwicklung
@@ -104,11 +104,11 @@
 </template>
 
 <script setup lang="ts">
-import { envConfigModule } from "@/store";
 import { computed, ComputedRef } from "vue";
+import { useEnvConfig } from "@data-env";
 
 const supportMail: ComputedRef<string> = computed(() => {
-	const email = envConfigModule.getContactEmail;
+	const email = useEnvConfig().value.SC_CONTACT_EMAIL;
 	const isValidMailAddress = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+$/gm.test(
 		email
 	);

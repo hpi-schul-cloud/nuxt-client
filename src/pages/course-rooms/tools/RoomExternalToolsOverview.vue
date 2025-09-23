@@ -46,11 +46,7 @@ import { mdiAlertCircle } from "@icons/material";
 import { ToolContextType } from "@/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { Course, CourseFeatures } from "@/store/types/room";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
 import {
 	ExternalToolDisplayData,
 	useExternalToolDisplayListState,
@@ -60,6 +56,7 @@ import { useI18n } from "vue-i18n";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 import { EmptyState, ToolsEmptyStateSvg } from "@ui-empty-state";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	roomId: {
@@ -72,7 +69,6 @@ const { t } = useI18n();
 const courseRoomDetailsModule: CourseRoomDetailsModule = injectStrict(
 	COURSE_ROOM_DETAILS_MODULE_KEY
 );
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const {
 	fetchDisplayData,
@@ -96,7 +92,7 @@ onMounted(async () => {
 	course.value = await courseRoomDetailsModule.fetchCourse(props.roomId);
 });
 
-const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
+const refreshTimeInMs = useEnvConfig().value.CTL_TOOLS_RELOAD_TIME_MS;
 
 const timer = setInterval(async () => {
 	await fetchDisplayData(props.roomId, ToolContextType.Course);

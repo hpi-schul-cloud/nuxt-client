@@ -1,9 +1,22 @@
+import { defineStore, storeToRefs } from "pinia";
+import { applicationErrorModule } from "@/store";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	ConfigResponse,
 	LanguageType,
 	SchulcloudTheme,
+	ServerConfigApiFactory,
 	Timezone,
 } from "@/serverApi/v3";
+import {
+	FileConfigApiFactory,
+	FilesStorageConfigResponse,
+} from "@/fileStorageApi/v3";
+import { Status } from "@/store/types/commons";
+import { computed, reactive, ref } from "vue";
+import { $axios } from "@/utils/api";
+import { createSharedComposable } from "@vueuse/core";
 
 export const defaultConfigEnvs: ConfigResponse = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "",
@@ -52,6 +65,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
 	FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
 	FEATURE_COURSE_SHARE: false,
+	FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: false,
 	FEATURE_BOARD_LAYOUT_ENABLED: false,
 	FEATURE_LOGIN_LINK_ENABLED: false,
 	FEATURE_LESSON_SHARE: false,
@@ -79,3 +93,81 @@ export const defaultConfigEnvs: ConfigResponse = {
 	LICENSE_SUMMARY_URL: "",
 	ROOM_MEMBER_INFO_URL: "",
 };
+export const useEnvStore = defineStore("envConfigStore", () => {
+	const serverApi = ServerConfigApiFactory(undefined, "/v3", $axios);
+	const fileConfigApi = FileConfigApiFactory(undefined, "/v3", $axios);
+
+	const envFile = reactive<FilesStorageConfigResponse>({
+		MAX_FILE_SIZE: 2684354560,
+		COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
+	});
+	const env = reactive<ConfigResponse>(defaultConfigEnvs);
+	const status = ref<Status>("pending");
+
+	const setEnvs = (envConfig: ConfigResponse) => {
+		Object.assign(env, envConfig);
+	};
+
+	const setFileEnvs = (fileEnvsConfig: FilesStorageConfigResponse) => {
+		Object.assign(envFile, fileEnvsConfig);
+	};
+
+	const fallBackLanguage = computed(() => {
+		return env.I18N__FALLBACK_LANGUAGE ?? env.I18N__DEFAULT_LANGUAGE;
+	});
+
+	const instituteTitle = computed(() => {
+		switch (env.SC_THEME) {
+			case SchulcloudTheme.N21:
+				return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
+			case SchulcloudTheme.Thr:
+				return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
+			case SchulcloudTheme.Brb:
+				return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
+			default:
+				return "Dataport";
+		}
+	});
+
+	const loadConfiguration = async () => {
+		try {
+			const [serverConfigRes, fileConfigRes] = await Promise.all([
+				serverApi.serverConfigControllerPublicConfig(),
+				fileConfigApi.publicConfig().catch(() => undefined), // Optional, catching when not available
+			]);
+
+			setEnvs(serverConfigRes.data);
+			if (fileConfigRes?.data) {
+				setFileEnvs(fileConfigRes?.data);
+			}
+
+			status.value = "completed";
+			return true;
+		} catch {
+			applicationErrorModule.setError(
+				createApplicationError(HttpStatusCode.GatewayTimeout)
+			);
+			status.value = "error";
+			return false;
+		}
+	};
+
+	return {
+		loadConfiguration,
+		status,
+		env,
+		envFile,
+		fallBackLanguage,
+		instituteTitle,
+	};
+});
+
+export const useEnvConfig = createSharedComposable(() => {
+	const { env } = storeToRefs(useEnvStore());
+	return env;
+});
+
+export const useEnvFileConfig = createSharedComposable(() => {
+	const { envFile } = storeToRefs(useEnvStore());
+	return envFile;
+});

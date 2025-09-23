@@ -1,10 +1,8 @@
 import CopyModule from "@/store/copy";
-import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import {
 	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
@@ -27,6 +25,8 @@ import { InfoAlert } from "@ui-alert";
 import { Mock } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
 import AuthModule from "@/store/auth";
+import { RoomItem } from "@/types/room/Room";
+import { roomItemFactory } from "@@/tests/test-utils";
 
 vi.mock("vue-router");
 const useRouteMock = useRoute as Mock;
@@ -43,7 +43,6 @@ describe("RoomsPage", () => {
 
 	beforeEach(() => {
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			authModule: AuthModule,
 		});
 
@@ -68,7 +67,6 @@ describe("RoomsPage", () => {
 	});
 
 	const setup = (routeQuery: RouteLocation["query"] = {}) => {
-		const envConfigModule = createModuleMocks(EnvConfigModule, {});
 		const copyModule = createModuleMocks(CopyModule);
 		const loadingState = createModuleMocks(LoadingStateModule);
 		const notifierModuleMock = createModuleMocks(NotifierModule);
@@ -81,8 +79,13 @@ describe("RoomsPage", () => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
+		const roomItems = [
+			roomItemFactory.build({ isLocked: false }),
+			roomItemFactory.build({ isLocked: true }),
+		];
+
 		useRoomsStateMock.mockReturnValue({
-			rooms: ref([]),
+			rooms: ref(roomItems),
 			isLoading: ref(false),
 			isEmpty: ref(false),
 			fetchRooms: vi.fn(),
@@ -97,7 +100,6 @@ describe("RoomsPage", () => {
 					createTestingPinia(),
 				],
 				provide: {
-					[ENV_CONFIG_MODULE_KEY]: envConfigModule,
 					[COPY_MODULE_KEY]: copyModule,
 					[LOADING_STATE_MODULE_KEY]: loadingState,
 					[NOTIFIER_MODULE_KEY]: notifierModuleMock,
@@ -158,24 +160,41 @@ describe("RoomsPage", () => {
 			};
 		};
 
-		it("should activate import flow", () => {
+		it("should render import flow", () => {
 			const { wrapper } = setupImportMode();
 			const importFLow = wrapper.findComponent(ImportFlow);
+
+			expect(importFLow.exists()).toBe(true);
+		});
+
+		it("should activate import flow", () => {
+			const { wrapper } = setupImportMode();
+			const importFLow = wrapper.getComponent(ImportFlow);
 
 			expect(importFLow.props().isActive).toBe(true);
 		});
 
 		it("should pass the token to the import flow", () => {
 			const { wrapper, token } = setupImportMode();
-			const importFLow = wrapper.findComponent(ImportFlow);
+			const importFLow = wrapper.getComponent(ImportFlow);
 
 			expect(importFLow.props().token).toBe(token);
 		});
 
+		it("should filter out locked rooms for the import flow", () => {
+			const { wrapper } = setupImportMode();
+			const importFLow = wrapper.getComponent(ImportFlow);
+
+			const destinations = importFLow.props().destinations as RoomItem[];
+
+			expect(destinations).toHaveLength(1);
+			expect(destinations.every((room) => !room.isLocked)).toBe(true);
+		});
+
 		describe("when the import flow succeeded", () => {
-			it("should notify about successful import", async () => {
+			it("should notify about successful import", () => {
 				const { wrapper, notifierModuleMock } = setupImportMode();
-				const importFlow = wrapper.findComponent(ImportFlow);
+				const importFlow = wrapper.getComponent(ImportFlow);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 
@@ -187,9 +206,9 @@ describe("RoomsPage", () => {
 				);
 			});
 
-			it("should go to the room details page", async () => {
+			it("should go to the room details page", () => {
 				const { wrapper, router } = setupImportMode();
-				const importFlow = wrapper.findComponent(ImportFlow);
+				const importFlow = wrapper.getComponent(ImportFlow);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 
@@ -203,7 +222,7 @@ describe("RoomsPage", () => {
 
 	describe("Page Components", () => {
 		describe("DefaultWireframe", () => {
-			it("should be found in the dom", async () => {
+			it("should be found in the dom", () => {
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent({
 					name: "DefaultWireframe",
@@ -212,7 +231,7 @@ describe("RoomsPage", () => {
 				expect(wireframe.exists()).toBe(true);
 			});
 
-			it("should have the correct props", async () => {
+			it("should have the correct props", () => {
 				roomPermissions.canCreateRoom.value = true;
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
@@ -230,7 +249,7 @@ describe("RoomsPage", () => {
 		});
 
 		describe("RoomGrid", () => {
-			it("should be found in the dom", async () => {
+			it("should be found in the dom", () => {
 				const { wrapper } = setup();
 				const roomGrid = wrapper.findComponent(RoomGrid);
 

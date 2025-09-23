@@ -1,17 +1,18 @@
 import type { Mock } from "vitest";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { applicationErrorModule, envConfigModule } from "@/store";
+import { applicationErrorModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
-import EnvConfigModule from "@/store/env-config";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
-	envsFactory,
 } from "@@/tests/test-utils/factory";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -87,7 +88,6 @@ describe("BoardStore", () => {
 	beforeEach(() => {
 		setActivePinia(createPinia());
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			applicationErrorModule: ApplicationErrorModule,
 		});
 
@@ -162,12 +162,9 @@ describe("BoardStore", () => {
 			columns: [firstColumn, secondColumn],
 		});
 
-		if (socketFlag) {
-			const envs = envsFactory.build({
-				FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
-			});
-			envConfigModule.setEnvs(envs);
-		}
+		createTestEnvStore({
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: socketFlag,
+		});
 
 		const boardStore = useBoardStore();
 		if (createBoard) {

@@ -5,7 +5,7 @@
 		:breadcrumbs="breadcrumbs"
 	>
 		<template #header>
-			<h1 class="text-h3 mb-4" data-testid="page-title">
+			<h1 data-testid="page-title">
 				{{ $t("pages.roomDetails.ariaLabels.menu.action.edit") }}
 			</h1>
 		</template>

@@ -1,14 +1,14 @@
 <template>
 	<DefaultWireframe max-width="nativ" :fab-items="fabAction">
 		<template #header>
-			<h1 class="text-h3 mb-4">{{ t("pages.rooms.title") }}</h1>
+			<h1>{{ t("pages.rooms.title") }}</h1>
 		</template>
 		<RoomsWelcomeInfo />
 		<RoomGrid :rooms="rooms" :is-loading="isLoading" :is-empty="isEmpty" />
 		<ImportFlow
 			:is-active="isImportMode"
 			:token="importToken"
-			:destinations="rooms"
+			:destinations="rooms.filter((room) => !room.isLocked)"
 			:destination-type="BoardExternalReferenceType.Room"
 			@success="onImportSuccess"
 		/>

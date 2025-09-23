@@ -64,6 +64,7 @@ const onKeyUp = () => ensurePoliteNotifications();
 
 const isFirstElement = computed(() => props.elementIndex === 0);
 </script>
+
 <style lang="scss" scoped>
 :deep(.ck-content) {
 	overflow: hidden; // prevent margin collapse
@@ -75,9 +76,8 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	}
 
 	h4 {
-		font-size: var(--heading-6);
 		letter-spacing: 0.01em;
-		font-weight: var(--font-weight-bold);
+		font-weight: bold;
 	}
 
 	h5 {

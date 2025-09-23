@@ -1,7 +1,7 @@
 <template>
 	<room-wrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4">
+			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.active") }}
 			</h1>
 			<div class="mb-5 header-actions-section">
@@ -120,7 +120,7 @@
 	<import-flow
 		:is-active="isImportMode"
 		:token="importToken"
-		:destinations="courses"
+		:destinations="courses.filter((course) => !course.isLocked)"
 		destination-type="course"
 		@success="onImportSuccess"
 	/>
@@ -218,6 +218,7 @@ export default defineComponent({
 				return {
 					id: item.id,
 					name: item.title,
+					isLocked: item.isLocked,
 				};
 			});
 		},

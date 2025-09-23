@@ -12,6 +12,9 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const { tasks } = mocks;
 
@@ -43,6 +46,10 @@ describe("@/components/organisms/TasksList", () => {
 		getStatus: "completed",
 		hasTasks: true,
 	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	beforeEach(() => {
 		copyModuleMock = createModuleMocks(CopyModule);

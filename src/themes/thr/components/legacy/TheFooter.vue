@@ -24,8 +24,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { filePathsModule, envConfigModule } from "@/store";
+import { filePathsModule } from "@/store";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
 
 const { t } = useI18n();
 const theme = injectStrict(THEME_KEY);
@@ -59,20 +60,20 @@ const links = computed(() => {
 		},
 	];
 
-	if (envConfigModule.getEnv.ALERT_STATUS_URL) {
+	if (useEnvConfig().value.ALERT_STATUS_URL) {
 		linksArr.push({
-			href: envConfigModule.getEnv.ALERT_STATUS_URL,
+			href: useEnvConfig().value.ALERT_STATUS_URL as string,
 			text: t("components.legacy.footer.status"),
 			target: "_blank",
 			rel: "noopener",
 		});
 	}
 
-	if (envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL) {
+	if (useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL) {
 		linksArr.push({
 			href:
 				"mailto:" +
-				envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
+				useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL +
 				"?subject=" +
 				t("components.legacy.footer.accessibility.report"),
 			text: t("components.legacy.footer.accessibility.report"),
@@ -98,18 +99,6 @@ const links = computed(() => {
 	padding: 0 16px;
 	margin: 24px 0 16px;
 	text-align: center;
-}
-
-.top-line {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	.hpi-logo {
-		display: block;
-		height: var(--heading-3);
-		margin: 0;
-	}
 }
 
 .bottom-line {

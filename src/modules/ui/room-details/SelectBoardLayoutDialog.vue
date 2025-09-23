@@ -3,13 +3,13 @@
 		<UseFocusTrap :options="{ immediate: true }">
 			<VCard data-testid="board-layout-dialog">
 				<VCardTitle
-					class="text-h4 text-break px-6 pt-4"
+					class="text-h2 text-break px-6 pt-4"
 					data-testid="board-layout-dialog-title"
 				>
 					{{ $t("pages.room.dialog.boardLayout.title") }}
 				</VCardTitle>
 				<VCardText
-					class="d-flex flex-row flex-wrap align-center justify-space-around"
+					class="d-flex flex-row flex-wrap align-center justify-space-around pt-4 pb-6"
 				>
 					<ExtendedIconBtn
 						v-for="(item, key) in boardLayouts"
@@ -21,13 +21,13 @@
 						@click.stop="$emit('select', item.type)"
 					/>
 				</VCardText>
-				<VCardActions class="mb-2 px-6">
+				<VCardActions class="mb-2 px-6 justify-end">
 					<VBtn
 						data-testid="dialog-close"
 						variant="outlined"
 						@click="$emit('update:modelValue', false)"
 					>
-						{{ $t("common.labels.close") }}
+						{{ $t("common.actions.cancel") }}
 					</VBtn>
 				</VCardActions>
 			</VCard>

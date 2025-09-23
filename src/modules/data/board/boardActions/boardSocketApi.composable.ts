@@ -41,7 +41,7 @@ export const useBoardSocketApi = () => {
 	} = useBoardAriaNotification();
 	const { t } = useI18n();
 
-	const dispatch = async (
+	const dispatch = (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
 	) => {
 		const successActions = [
@@ -114,7 +114,7 @@ export const useBoardSocketApi = () => {
 	const { emitOnSocket, emitWithAck, disconnectSocket } =
 		useSocketConnection(dispatch);
 
-	const createCardRequest = async (payload: CreateCardRequestPayload) => {
+	const createCardRequest = (payload: CreateCardRequestPayload) => {
 		emitOnSocket("create-card-request", {
 			...payload,
 			requiredEmptyElements: [
@@ -123,10 +123,10 @@ export const useBoardSocketApi = () => {
 		});
 	};
 
-	const fetchBoardRequest = async (
+	const fetchBoardRequest = (
 		payload: FetchBoardRequestPayload,
 		loading = true
-	): Promise<void> => {
+	) => {
 		boardStore.setLoading(loading);
 		emitOnSocket("fetch-board-request", payload);
 	};
