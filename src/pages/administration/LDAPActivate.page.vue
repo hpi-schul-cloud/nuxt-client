@@ -108,11 +108,11 @@
 			class="section"
 			data-testid="migrateUsersSection"
 		>
-			<h3 class="title-class">
+			<h2 class="title-class">
 				{{
 					$t("pages.administration.ldap.activate.migrateExistingUsers.title")
 				}}
-			</h3>
+			</h2>
 			<base-input
 				v-model="migrateUsersCheckbox"
 				type="checkbox"
@@ -184,7 +184,7 @@
 </template>
 
 <script>
-import { envConfigModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { unchangedPassword } from "@/utils/ldapConstants";
@@ -200,6 +200,7 @@ import {
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchulcloudTheme } from "@/serverApi/v3";
+import { useEnvConfig } from "@data-env";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -235,8 +236,8 @@ export default {
 		}),
 		showUserMigrationOption() {
 			return (
-				envConfigModule.getTheme !== SchulcloudTheme.N21 &&
-				envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED &&
+				useEnvConfig().value.SC_THEME !== SchulcloudTheme.N21 &&
+				useEnvConfig().value.FEATURE_USER_MIGRATION_ENABLED &&
 				!this.$route?.query?.id
 			);
 		},
@@ -354,13 +355,13 @@ export default {
 .icon-text-unit {
 	margin-top: 12px;
 	margin-right: 24px;
-	font-weight: var(--font-weight-bold);
+	font-weight: bold;
 	white-space: nowrap;
 }
 
 .category-title {
 	margin: 40px 0 24px 0;
-	font-weight: var(--font-weight-bold);
+	font-weight: bold;
 }
 
 table {

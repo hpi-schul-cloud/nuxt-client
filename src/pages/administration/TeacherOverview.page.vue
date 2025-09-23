@@ -118,12 +118,7 @@
 	</div>
 </template>
 <script>
-import {
-	authModule,
-	envConfigModule,
-	notifierModule,
-	schoolsModule,
-} from "@/store";
+import { authModule, notifierModule, schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
@@ -149,6 +144,7 @@ import {
 import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
+import { useEnvConfig } from "@data-env";
 
 export default {
 	components: {
@@ -323,10 +319,7 @@ export default {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
 		getFeatureUserLoginMigrationEnabled() {
-			return envConfigModule.getEnv.FEATURE_USER_LOGIN_MIGRATION_ENABLED;
-		},
-		env() {
-			return envConfigModule.getEnv;
+			return useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED;
 		},
 		tableData: {
 			get() {
@@ -335,7 +328,7 @@ export default {
 			},
 		},
 		showConsent() {
-			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
+			return useEnvConfig().value.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;
@@ -670,7 +663,7 @@ export default {
 }
 
 span {
-	font-weight: var(--font-weight-normal);
+	font-weight: normal;
 }
 
 button:not(.is-none):focus {

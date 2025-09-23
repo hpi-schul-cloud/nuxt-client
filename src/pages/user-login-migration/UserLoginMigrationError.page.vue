@@ -1,7 +1,7 @@
 <template>
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/migration_error.svg" alt="" />
-		<h1 class="pl-4 pr-4">
+		<h1 class="px-4">
 			{{ t("pages.userMigration.error.title") }}
 		</h1>
 		<div>
@@ -69,7 +69,6 @@
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import {
-	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	SYSTEMS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
@@ -85,10 +84,10 @@ import {
 	ref,
 } from "vue";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
-import EnvConfigModule from "@/store/env-config";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import { useI18n } from "vue-i18n";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import { useEnvConfig } from "@data-env";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
@@ -110,9 +109,6 @@ export default defineComponent({
 	},
 	setup(props) {
 		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
-		const envConfigModule: EnvConfigModule = injectStrict(
-			ENV_CONFIG_MODULE_KEY
-		);
 		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(
 			USER_LOGIN_MIGRATION_MODULE_KEY
 		);
@@ -143,7 +139,7 @@ export default defineComponent({
 		const supportLink: ComputedRef<string> = computed(() =>
 			sanitizeUrl(
 				`mailto:${
-					envConfigModule.getAccessibilityReportEmail
+					useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL
 				}?subject=${getSubject()}`
 			)
 		);

@@ -262,7 +262,6 @@ import { BusinessError } from "@/store/types/commons";
 import { School } from "@/store/types/schools";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import {
-	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
@@ -281,6 +280,7 @@ import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { InfoAlert } from "@ui-alert";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import { useEnvConfig } from "@data-env";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -290,7 +290,6 @@ export default defineComponent({
 	},
 	setup() {
 		const { t } = useI18n();
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 		const userLoginMigrationModule = injectStrict(
 			USER_LOGIN_MIGRATION_MODULE_KEY
@@ -401,21 +400,22 @@ export default defineComponent({
 			return subject;
 		};
 
-		const supportLink: ComputedRef<string> = computed(
+		const supportLink = computed(
 			() =>
 				`mailto:${
-					envConfigModule.getAccessibilityReportEmail
+					useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL
 				}?subject=${getSubject()}`
 		);
 
-		const globalFeatureEnableLdapSyncDuringMigration: ComputedRef<boolean> =
-			computed(() => envConfigModule.getEnableLdapSyncDuringMigration);
-
-		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
-			() => envConfigModule.getShowOutdatedUsers
+		const globalFeatureEnableLdapSyncDuringMigration = computed(
+			() => useEnvConfig().value.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION
 		);
 
-		const isSchoolMigrated: ComputedRef<boolean> = computed(() => {
+		const globalFeatureShowOutdatedUsers = computed(
+			() => useEnvConfig().value.FEATURE_SHOW_OUTDATED_USERS
+		);
+
+		const isSchoolMigrated = computed(() => {
 			let hasTargetSystem = false;
 
 			if (userLoginMigration.value?.targetSystemId) {
@@ -427,11 +427,11 @@ export default defineComponent({
 			return hasTargetSystem;
 		});
 
-		const showMigrationWizard: ComputedRef<boolean> = computed(
-			() => !!envConfigModule.getEnv.FEATURE_SHOW_MIGRATION_WIZARD
+		const showMigrationWizard = computed(
+			() => !!useEnvConfig().value.FEATURE_SHOW_MIGRATION_WIZARD
 		);
 
-		const isMigrationFinished: ComputedRef<boolean> = computed(
+		const isMigrationFinished = computed(
 			() => !!userLoginMigration.value?.finishedAt
 		);
 
@@ -446,7 +446,7 @@ export default defineComponent({
 
 		const contactEmailLink: ComputedRef<string> = computed(() =>
 			sanitizeUrl(
-				`mailto:${envConfigModule.getContactEmail}}?subject=Schulnummer nicht korrekt`
+				`mailto:${useEnvConfig().value.SC_CONTACT_EMAIL}}?subject=Schulnummer nicht korrekt`
 			)
 		);
 

@@ -32,13 +32,10 @@
 
 <script setup lang="ts">
 import { LanguageType } from "@/serverApi/v3";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useEnvConfig, useEnvStore } from "@data-env";
 
 defineOptions({
 	inheritAttrs: false,
@@ -52,7 +49,6 @@ type LanguageItem = {
 };
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const { t } = useI18n();
 
 const changeLanguage = async (item: LanguageItem) => {
@@ -71,8 +67,10 @@ const buildLanguageItem = (lang: LanguageType | string): LanguageItem => {
 };
 
 const availableLanguages = computed(() => {
-	const languages = envConfigModule.getAvailableLanguages
-		.map((language) => buildLanguageItem(language))
+	const languages = useEnvConfig()
+		.value.I18N__AVAILABLE_LANGUAGES.map((language) =>
+			buildLanguageItem(language)
+		)
 		.filter((language) => {
 			return language.language !== selectedLanguage.value.language;
 		});
@@ -82,7 +80,7 @@ const availableLanguages = computed(() => {
 
 const selectedLanguage = computed(() => {
 	const language = buildLanguageItem(
-		authModule.getLocale || envConfigModule.getFallbackLanguage
+		authModule.getLocale || useEnvStore().fallBackLanguage
 	);
 
 	return language;

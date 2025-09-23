@@ -1,13 +1,11 @@
 import type { Mock } from "vitest";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY, THEME_KEY } from "@/utils/inject";
+import { THEME_KEY } from "@/utils/inject";
 import {
-	envsFactory,
+	createTestEnvStore,
 	provisioningOptionsDataFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -52,21 +50,18 @@ describe("ProvisioningOptionsPage", () => {
 		props: ComponentProps<typeof ProvisioningOptionsPage> = {
 			systemId: "systemId",
 		},
-		envConfig: ConfigResponse = envsFactory.build({
+		envConfig: Partial<ConfigResponse> = {
 			FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
-		})
+		}
 	) => {
 		useRouterMock.mockReturnValue(router);
 
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envConfig,
-		});
+		createTestEnvStore(envConfig);
 
 		const wrapper = mount(ProvisioningOptionsPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[THEME_KEY.valueOf()]: {
 						name: "instance name",
 					},
@@ -77,7 +72,6 @@ describe("ProvisioningOptionsPage", () => {
 
 		return {
 			wrapper,
-			envConfigModule,
 		};
 	};
 
@@ -151,9 +145,9 @@ describe("ProvisioningOptionsPage", () => {
 
 				const { wrapper } = getWrapper(
 					{ systemId: "systemId" },
-					envsFactory.build({
+					{
 						FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
-					})
+					}
 				);
 
 				return {
@@ -193,9 +187,9 @@ describe("ProvisioningOptionsPage", () => {
 
 				const { wrapper } = getWrapper(
 					{ systemId: "systemId" },
-					envsFactory.build({
+					{
 						FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true,
-					})
+					}
 				);
 
 				return {

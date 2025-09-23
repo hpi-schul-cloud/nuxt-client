@@ -19,7 +19,7 @@
 				</div>
 				<div class="d-flex flex-column w-100 min-width-0">
 					<div class="d-flex">
-						<h2 class="text-h5 my-auto">
+						<h2 class="text-h4 my-auto">
 							{{ title }}
 						</h2>
 						<v-icon

@@ -1,8 +1,8 @@
 <template>
 	<div class="connection-container">
-		<h3 class="title-class">
+		<h2 class="title-class">
 			{{ $t("pages.administration.ldap.connection.title") }}
-		</h3>
+		</h2>
 
 		<base-input
 			data-testid="ldapDataConnectionUrl"
@@ -84,7 +84,6 @@
 </template>
 
 <script>
-import { envConfigModule } from "@/store";
 import { required } from "@vuelidate/validators";
 import {
 	ldapPathRegexValidator,
@@ -99,6 +98,7 @@ import {
 	mdiFileTreeOutline,
 	mdiLockOutline,
 } from "@icons/material";
+import { useEnvConfig } from "@data-env";
 
 export default defineComponent({
 	props: {
@@ -143,7 +143,7 @@ export default defineComponent({
 	},
 	computed: {
 		insecureLDAPURLAllowed: () =>
-			envConfigModule?.getEnv.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED,
+			useEnvConfig().value?.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED,
 	},
 	watch: {
 		validate: function () {

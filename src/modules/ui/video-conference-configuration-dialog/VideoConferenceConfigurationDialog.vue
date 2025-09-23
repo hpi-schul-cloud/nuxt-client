@@ -4,14 +4,12 @@
 		max-width="480"
 		data-testid="video-conference-config-dialog"
 		@keydown.esc="$emit('close')"
+		@click:outside="$emit('close')"
 	>
 		<UseFocusTrap>
 			<VCard :ripple="false">
 				<VCardTitle>
-					<h2
-						class="text-h4 my-2"
-						data-testid="video-conference-config-dialog-title"
-					>
+					<h2 class="my-2" data-testid="video-conference-config-dialog-title">
 						{{ t("pages.common.tools.configureVideoconferenceDialog.title") }}
 					</h2>
 				</VCardTitle>

@@ -6,21 +6,19 @@
 		data-testid="admin-course-title"
 	>
 		<template #header>
-			<h1 class="text-h3 pl-2">
+			<h1>
 				{{ t("pages.administration.rooms.index.title") }}
 			</h1>
-			<div class="mt-n6 mb-n3">
-				<v-switch
-					v-model="withoutTeacher"
-					:label="t('pages.administration.courses.withoutTeacher')"
-					:true-icon="mdiCheck"
-					data-testid="admin-course-without-teacher-checkbox"
-					hide-details
-					:true-value="true"
-					:false-value="false"
-					@update:model-value="onUpdateWithoutTeacherFilter"
-				/>
-			</div>
+			<v-switch
+				v-model="withoutTeacher"
+				:label="t('pages.administration.courses.withoutTeacher')"
+				:true-icon="mdiCheck"
+				data-testid="admin-course-without-teacher-checkbox"
+				hide-details
+				:true-value="true"
+				:false-value="false"
+				@update:model-value="onUpdateWithoutTeacherFilter"
+			/>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="activeTab" class="tabs-max-width" grow>
 					<v-tab value="current" data-testid="admin-course-current-tab">
@@ -146,7 +144,7 @@
 			@dialog-confirmed="onConfirmCourseDeletion"
 		>
 			<template #title>
-				<h2 class="text-h4 my-2">
+				<h2 class="my-2">
 					{{ t("pages.administration.courses.delete") }}
 				</h2>
 			</template>
@@ -205,16 +203,10 @@ import {
 	CourseInfoDataResponse,
 	CourseSortProps,
 	CourseStatus,
-	SchulcloudTheme,
 } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useCourseList } from "@data-room";
 import {
@@ -234,6 +226,8 @@ import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import type { DataTableHeader } from "vuetify";
+import { useEnvConfig, useEnvStore } from "@data-env";
+import { storeToRefs } from "pinia";
 
 type Tab = "current" | "archive";
 
@@ -250,7 +244,6 @@ const props = defineProps({
 });
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -366,7 +359,7 @@ const onCancelCourseDeletion = () => {
 };
 
 const courseSyncEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
+	() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
 );
 
 const headers = computed(() => {
@@ -463,18 +456,7 @@ onMounted(() => {
 	onTabsChange(activeTab.value);
 });
 
-const instituteTitle: ComputedRef<string> = computed(() => {
-	switch (envConfigModule.getTheme) {
-		case SchulcloudTheme.N21:
-			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
-		case SchulcloudTheme.Thr:
-			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-		case SchulcloudTheme.Brb:
-			return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
-		default:
-			return "Dataport";
-	}
-});
+const { instituteTitle } = storeToRefs(useEnvStore());
 </script>
 
 <style scoped>

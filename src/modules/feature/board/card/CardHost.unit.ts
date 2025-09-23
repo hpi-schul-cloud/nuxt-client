@@ -1,6 +1,4 @@
 import { CardResponse } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
@@ -9,14 +7,12 @@ import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import {
 	cardResponseFactory,
-	envsFactory,
 	fileElementResponseFactory,
 } from "@@/tests/test-utils/factory";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
@@ -77,12 +73,6 @@ describe("CardHost", () => {
 	let useShareBoardLinkMock: DeepMocked<ReturnType<typeof useShareBoardLink>>;
 
 	beforeEach(() => {
-		setupStores({ envConfigModule: EnvConfigModule });
-		const envs = envsFactory.build({
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
-		});
-		envConfigModule.setEnvs(envs);
-
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
