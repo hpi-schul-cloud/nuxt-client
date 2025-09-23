@@ -290,8 +290,8 @@ const onClose = () => {
 	emit("close");
 };
 
-watch(isOpen, async (val) => {
-	if (val) {
+watch(isOpen, async (isDialogOpen) => {
+	if (isDialogOpen) {
 		await getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
 	}
 });
