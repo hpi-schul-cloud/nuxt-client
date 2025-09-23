@@ -228,39 +228,37 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		tasks: string[];
 		columnBoards: string[];
 	}): Promise<void> {
-		this.resetBusinessError();
 		try {
-			const response =
-				await this.commonCartridgeApi.commonCartridgeControllerExportCourse(
-					this.roomData.roomId,
-					exportSettings.version,
-					{
-						topics: exportSettings.topics,
-						tasks: exportSettings.tasks,
-						columnBoards: exportSettings.columnBoards,
-					},
-					{
-						responseType: "blob",
-					}
-				);
+			const form = document.createElement("form");
+			form.method = "POST";
+			form.action = `/api/v3/common-cartridge/export/${this.roomData.roomId}?version=${exportSettings.version}`;
+			form.enctype = "application/json";
+			form.target = "_blank";
 
-			const link = document.createElement("a");
-			link.href = URL.createObjectURL(
-				new Blob([response.data as unknown as Blob])
-			);
-			link.download = `${
-				this.roomData.title
-			}-${new Date().toISOString()}.imscc`;
-			link.click();
-			URL.revokeObjectURL(link.href);
+			const topicIdsInput = document.createElement("input");
+			topicIdsInput.type = "hidden";
+			topicIdsInput.name = "topics";
+			topicIdsInput.value = JSON.stringify(exportSettings.topics);
+			form.appendChild(topicIdsInput);
+
+			const taskIdsInput = document.createElement("input");
+			taskIdsInput.type = "hidden";
+			taskIdsInput.name = "tasks";
+			taskIdsInput.value = JSON.stringify(exportSettings.tasks);
+			form.appendChild(taskIdsInput);
+
+			const columnBoardIdsInput = document.createElement("input");
+			columnBoardIdsInput.type = "hidden";
+			columnBoardIdsInput.name = "columnBoards";
+			columnBoardIdsInput.value = JSON.stringify(exportSettings.columnBoards);
+			form.appendChild(columnBoardIdsInput);
+
+			document.body.appendChild(form);
+			form.submit();
+			document.body.removeChild(form);
 		} catch (error: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
-
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
+			this.setError(error);
+			this.setLoading(false);
 		}
 	}
 
