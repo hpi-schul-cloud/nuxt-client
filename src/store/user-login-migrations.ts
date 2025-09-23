@@ -13,7 +13,7 @@ import {
 	UserLoginMigration,
 	UserLoginMigrationMapper,
 } from "./user-login-migration";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 @Module({
 	name: "userLoginMigrationModule",
@@ -77,11 +77,11 @@ export default class UserLoginMigrationModule extends VuexModule {
 
 		this.resetBusinessError();
 
-		if (useAuthStore().user?.id) {
+		if (useAppStore().user?.id) {
 			try {
 				const response: AxiosResponse<UserLoginMigrationSearchListResponse> =
 					await this.userLoginMigrationApi.userLoginMigrationControllerGetMigrations(
-						useAuthStore().user?.id
+						useAppStore().user?.id
 					);
 
 				if (response.data.total > 1) {
@@ -121,7 +121,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 
 		this.resetBusinessError();
 
-		const schoolId = useAuthStore().school?.id;
+		const schoolId = useAppStore().school?.id;
 		if (schoolId) {
 			try {
 				const response: AxiosResponse<UserLoginMigrationResponse> =

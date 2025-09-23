@@ -1,5 +1,5 @@
 import {
-	createTestAuthStoreWithUser,
+	createTestAppStoreWithUser,
 	createTestEnvStore,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
@@ -65,7 +65,7 @@ describe("Members", () => {
 		}> = {}
 	) => {
 		const currentUser = roomMemberFactory.build();
-		createTestAuthStoreWithUser(currentUser.userId);
+		createTestAppStoreWithUser(currentUser.userId);
 
 		const roomMembers = [];
 		if (options?.isCurrentUser) {

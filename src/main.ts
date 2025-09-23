@@ -67,7 +67,7 @@ import {
 } from "./utils/inject";
 import { logger } from "@util-logger";
 import { useEnvStore } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 export const app = createApp(App);
 
@@ -102,14 +102,14 @@ app.use(VueDOMPurifyHTML, {
 	}
 
 	try {
-		await useAuthStore().login();
+		await useAppStore().login();
 		await schoolsModule.fetchSchool(); // fetch school relies on successful login to know the school id
 	} catch (error) {
 		// TODO improve exception handling, best case test if its a 401, if not log the unknown error
 		logger.info("probably not logged in", error);
 	}
 
-	// creation of i18n relies on Auth.store
+	// creation of i18n relies on App.store
 	const i18n = createI18n();
 	const vuetify = createVuetify(i18n);
 

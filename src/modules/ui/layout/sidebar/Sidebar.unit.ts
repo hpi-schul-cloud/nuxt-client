@@ -12,7 +12,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { Permission, SchulcloudTheme } from "@/serverApi/v3";
 import { useSidebarSelection } from "./SidebarSelection.composable";
 import {
-	createTestAuthStoreWithPermissions,
+	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 } from "@@/tests/test-utils";
 
@@ -38,7 +38,7 @@ const setup = (
 		isTeamsEnabled?: boolean;
 	} = { permissions: [], sidebarExpanded: true, isTeamsEnabled: false }
 ) => {
-	createTestAuthStoreWithPermissions(permissions ?? []);
+	createTestAppStoreWithPermissions(permissions ?? []);
 	createTestEnvStore({
 		SC_THEME: SchulcloudTheme.Brb,
 		FEATURE_TEAMS_ENABLED: isTeamsEnabled,

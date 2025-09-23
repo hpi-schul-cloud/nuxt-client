@@ -83,13 +83,13 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useAuthStoreRefs } from "@data-auth";
+import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps<{
 	configId?: string;
 }>();
 
-const { school } = useAuthStoreRefs();
+const { school } = useAppStoreRefs();
 
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY

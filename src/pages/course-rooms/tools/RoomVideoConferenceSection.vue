@@ -62,7 +62,7 @@ import VideoConferenceModule from "@/store/video-conference";
 import { injectStrict, VIDEO_CONFERENCE_MODULE_KEY } from "@/utils/inject";
 import { computed, ComputedRef, onMounted, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useAuthStore, useAuthStoreRefs } from "@data-auth";
+import { useAppStore, useAppStoreRefs } from "@data-app";
 
 const props = defineProps({
 	roomId: {
@@ -72,8 +72,8 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { hasPermission: hasAuthPermission } = useAuthStore();
-const { isExpert, userRoles } = useAuthStoreRefs();
+const { hasPermission: hasAuthPermission } = useAppStore();
+const { isExpert, userRoles } = useAppStoreRefs();
 
 const videoConferenceModule: VideoConferenceModule = injectStrict(
 	VIDEO_CONFERENCE_MODULE_KEY

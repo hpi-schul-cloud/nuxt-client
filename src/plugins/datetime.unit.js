@@ -26,7 +26,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
-import { createTestAuthStore } from "../../tests/test-utils/index.js";
+import { createTestAppStore } from "../../tests/test-utils/index.js";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -73,7 +73,7 @@ setDefaultTimezone(TEST_DATETIME_TIMEZONE);
 
 describe("@/plugins/datetime", () => {
 	beforeAll(() => {
-		createTestAuthStore();
+		createTestAppStore();
 	});
 
 	const dateString = "2019-01-25T02:00:00.000Z";

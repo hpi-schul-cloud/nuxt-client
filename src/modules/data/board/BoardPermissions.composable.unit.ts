@@ -3,7 +3,7 @@ import { BoardLayout, Permission, RoleName } from "@/serverApi/v3";
 import { BoardContextType } from "@/types/board/BoardContext";
 import {
 	boardResponseFactory,
-	createTestAuthStore,
+	createTestAppStore,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -104,7 +104,7 @@ describe("BoardPermissions.composable", () => {
 			id: Math.random().toString(),
 			name: role,
 		}));
-		createTestAuthStore({
+		createTestAppStore({
 			me: { roles: userRoleEntities, permissions: userPermissions },
 		});
 

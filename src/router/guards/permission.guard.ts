@@ -6,7 +6,7 @@ import {
 } from "vue-router";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { Permission } from "@/serverApi/v3";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 const { createApplicationError } = useApplicationError();
 export function createPermissionGuard(
@@ -18,7 +18,7 @@ export function createPermissionGuard(
 		from: RouteLocationNormalized,
 		next: NavigationGuardNext
 	) => {
-		if (permissions.every((p) => useAuthStore().userPermissions.includes(p))) {
+		if (permissions.every((p) => useAppStore().userPermissions.includes(p))) {
 			return next();
 		}
 

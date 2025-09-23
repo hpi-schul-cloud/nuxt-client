@@ -10,9 +10,9 @@ import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
 	businessErrorFactory,
-	createTestAuthStore,
-	createTestAuthStoreWithSchool,
-	createTestAuthStoreWithUser,
+	createTestAppStore,
+	createTestAppStoreWithSchool,
+	createTestAppStoreWithUser,
 	mockApiResponse,
 	userLoginMigrationFactory,
 	userLoginMigrationResponseFactory,
@@ -121,7 +121,7 @@ describe("UserLoginMigrationModule", () => {
 		describe("getLatestUserLoginMigrationForCurrentUser", () => {
 			describe("when user id is not available", () => {
 				const setup = () => {
-					createTestAuthStoreWithUser(undefined);
+					createTestAppStoreWithUser(undefined);
 				};
 
 				it("should not get latest user login migration ", async () => {
@@ -138,7 +138,7 @@ describe("UserLoginMigrationModule", () => {
 			describe("when user is available", () => {
 				describe("when there is no migration for a user", () => {
 					const setup = () => {
-						createTestAuthStoreWithUser("userId");
+						createTestAppStoreWithUser("userId");
 
 						const listResponse: UserLoginMigrationSearchListResponse = {
 							data: [],
@@ -165,7 +165,7 @@ describe("UserLoginMigrationModule", () => {
 
 				describe("when there are more than one migration for a user", () => {
 					const setup = () => {
-						createTestAuthStoreWithUser("userId");
+						createTestAppStoreWithUser("userId");
 
 						const axiosError = axiosErrorFactory
 							.withStatusCode(HttpStatusCode.BadRequest)
@@ -202,7 +202,7 @@ describe("UserLoginMigrationModule", () => {
 
 				describe("when there is one migration for a user", () => {
 					const setup = () => {
-						createTestAuthStoreWithUser("userId");
+						createTestAppStoreWithUser("userId");
 
 						const userLoginMigrationResponse: UserLoginMigrationResponse =
 							userLoginMigrationResponseFactory.build({
@@ -262,7 +262,7 @@ describe("UserLoginMigrationModule", () => {
 
 			describe("when the api throws an error", () => {
 				const setup = () => {
-					createTestAuthStoreWithUser("userId");
+					createTestAppStoreWithUser("userId");
 
 					const error = axiosErrorFactory
 						.withStatusCode(HttpStatusCode.BadRequest)
@@ -306,7 +306,7 @@ describe("UserLoginMigrationModule", () => {
 
 			describe("when the api returns a bad request", () => {
 				const setup = () => {
-					createTestAuthStoreWithUser("userId");
+					createTestAppStoreWithUser("userId");
 
 					const axiosError = axiosErrorFactory
 						.withStatusCode(HttpStatusCode.BadRequest)
@@ -333,7 +333,7 @@ describe("UserLoginMigrationModule", () => {
 		describe("getLatestUserLoginMigrationForSchool", () => {
 			describe("when school id is not available", () => {
 				const setup = () => {
-					createTestAuthStoreWithSchool(undefined);
+					createTestAppStoreWithSchool(undefined);
 				};
 
 				it("should not get latest user login migrations", async () => {
@@ -350,7 +350,7 @@ describe("UserLoginMigrationModule", () => {
 			describe("when school is available", () => {
 				describe("when there is no migration for a school", () => {
 					const setup = () => {
-						createTestAuthStore();
+						createTestAppStore();
 
 						const error = axiosErrorFactory.build({
 							response: {
@@ -376,7 +376,7 @@ describe("UserLoginMigrationModule", () => {
 
 				describe("when there is a migration for the school", () => {
 					const setup = () => {
-						createTestAuthStore();
+						createTestAppStore();
 
 						const userLoginMigrationResponse: UserLoginMigrationResponse =
 							userLoginMigrationResponseFactory.build({
@@ -429,7 +429,7 @@ describe("UserLoginMigrationModule", () => {
 
 			describe("when the api throws an error", () => {
 				const setup = () => {
-					createTestAuthStore();
+					createTestAppStore();
 
 					const error = axiosErrorFactory
 						.withStatusCode(HttpStatusCode.BadRequest)

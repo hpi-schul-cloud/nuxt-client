@@ -253,7 +253,7 @@ import { useRoute, useRouter } from "vue-router";
 import { DataTableHeader } from "vuetify";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { storeToRefs } from "pinia";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 type Tab = "current" | "next" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -269,7 +269,7 @@ const props = defineProps({
 	},
 });
 
-const { hasPermission } = useAuthStore();
+const { hasPermission } = useAppStore();
 const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
 const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 

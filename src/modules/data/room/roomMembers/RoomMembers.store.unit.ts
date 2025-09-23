@@ -8,7 +8,7 @@ import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
-	createTestAuthStore,
+	createTestAppStore,
 	mockApiResponse,
 	mockedPiniaStoreTyping,
 	roomFactory,
@@ -50,7 +50,7 @@ describe("useRoomMembers", () => {
 	};
 
 	const createAuthTestUser = (userId: string, roleName: RoleName) => {
-		createTestAuthStore({
+		createTestAppStore({
 			me: {
 				roles: [{ id: userId, name: roleName }],
 				user: { id: userId },

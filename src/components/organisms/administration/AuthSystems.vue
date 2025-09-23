@@ -153,7 +153,7 @@ import {
 	mdiTrashCanOutline,
 } from "@icons/material";
 import { useEnvConfig } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 import { Permission } from "@/serverApi/v3/index.js";
 
 export default {
@@ -186,9 +186,9 @@ export default {
 		customLoginLinkEnabled: () =>
 			useEnvConfig().value.FEATURE_LOGIN_LINK_ENABLED,
 		hasSystemCreatePermission: () =>
-			useAuthStore().hasPermission(Permission.SystemCreate),
+			useAppStore().hasPermission(Permission.SystemCreate),
 		hasSystemEditPermission: () =>
-			useAuthStore().hasPermission(Permission.SystemEdit),
+			useAppStore().hasPermission(Permission.SystemEdit),
 	},
 	methods: {
 		ariaLabels(system) {

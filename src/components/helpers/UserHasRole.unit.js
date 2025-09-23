@@ -1,5 +1,5 @@
 import UserHasRole from "./UserHasRole";
-import { createTestAuthStore } from "@@/tests/test-utils";
+import { createTestAppStore } from "@@/tests/test-utils";
 
 /**
  * @param  { String } expectedRole used as prop
@@ -38,19 +38,19 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 
 describe("@/components/helpers/UserHasRole", () => {
 	it("view true-slot if user has role", () => {
-		createTestAuthStore({ me: { roles: [{ id: "admin1", name: "admin" }] } });
+		createTestAppStore({ me: { roles: [{ id: "admin1", name: "admin" }] } });
 		checkCorrectView("ADMIN", ["admin"], true);
 	});
 	it("view false-slot if user does not have role", () => {
-		createTestAuthStore({ me: { roles: [{ id: "user1", name: "user" }] } });
+		createTestAppStore({ me: { roles: [{ id: "user1", name: "user" }] } });
 		checkCorrectView("ADMIN", ["user"], false);
 	});
 	it("defaults to view rejected", () => {
-		createTestAuthStore({ me: { roles: [{ id: "user1", name: "user" }] } });
+		createTestAppStore({ me: { roles: [{ id: "user1", name: "user" }] } });
 		checkCorrectView(undefined, ["user"], false);
 	});
 	it("defaults to false when user has no roles", () => {
-		createTestAuthStore({});
+		createTestAppStore({});
 		checkCorrectView("ADMIN", [], false);
 	});
 });

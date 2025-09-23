@@ -217,7 +217,7 @@ import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 import { useEnvConfig } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
@@ -229,7 +229,7 @@ const router = useRouter();
 const schoolLicenseStore = useSchoolLicenseStore();
 
 onMounted(() => {
-	const school = useAuthStore().school;
+	const school = useAppStore().school;
 	if (school) {
 		schoolExternalToolsModule.loadSchoolExternalTools(school.id);
 		schoolLicenseStore.fetchMediaSchoolLicenses();

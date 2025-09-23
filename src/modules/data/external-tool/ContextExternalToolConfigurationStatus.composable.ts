@@ -1,6 +1,6 @@
 import { useI18n } from "vue-i18n";
 import { ContextExternalToolConfigurationStatus } from "./types";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 import { RoleName } from "@/serverApi/v3";
 
 export const useContextExternalToolConfigurationStatus = () => {
@@ -9,7 +9,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 	const determineToolStatusTranslationKey = (
 		toolConfigStatus: ContextExternalToolConfigurationStatus
 	): string => {
-		const userRoles = useAuthStore().userRoles;
+		const userRoles = useAppStore().userRoles;
 
 		if (userRoles.includes(RoleName.Teacher)) {
 			if (
@@ -37,7 +37,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 		toolConfigStatus: ContextExternalToolConfigurationStatus
 	): string => {
 		let statusString: string;
-		const userRoles = useAuthStore().userRoles;
+		const userRoles = useAppStore().userRoles;
 
 		if (toolConfigStatus.isDeactivated) {
 			statusString = t("common.medium.alert.deactivated") + " ";
@@ -57,7 +57,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 	};
 
 	const determineDeactivatedTranslationKey = (): string => {
-		const userRoles = useAuthStore().userRoles;
+		const userRoles = useAppStore().userRoles;
 
 		if (userRoles.includes(RoleName.Student)) {
 			return "common.tool.information.deactivated.student";
@@ -67,7 +67,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 	};
 
 	const determineNotLicensedTranslationKey = (): string => {
-		const userRoles = useAuthStore().userRoles;
+		const userRoles = useAppStore().userRoles;
 
 		if (userRoles.includes(RoleName.Student)) {
 			return "common.tool.information.notLicensed.student";
@@ -91,7 +91,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 		return true;
 	};
 
-	const isTeacher = () => useAuthStore().userRoles.includes(RoleName.Teacher);
+	const isTeacher = () => useAppStore().userRoles.includes(RoleName.Teacher);
 
 	return {
 		determineToolStatusTranslationKey,

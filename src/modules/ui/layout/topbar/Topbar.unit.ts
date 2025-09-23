@@ -12,11 +12,11 @@ import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index";
 import { RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import { createTestAuthStore, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 
 describe("@ui-layout/Topbar", () => {
 	const setup = async (windowWidth = 1300, isSidebarExpanded?: boolean) => {
-		createTestAuthStore({
+		createTestAppStore({
 			me: {
 				school: {
 					id: "234",

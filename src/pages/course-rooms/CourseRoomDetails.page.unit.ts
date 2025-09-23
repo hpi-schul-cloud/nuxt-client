@@ -20,7 +20,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
-import { createTestAuthStore, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -164,7 +164,7 @@ const getWrapper = ({
 		getIsLocked: isLocked,
 	});
 
-	createTestAuthStore({
+	createTestAppStore({
 		me: { roles: [{ id: "0", name: roleName }], permissions: permissionData },
 	});
 

@@ -12,7 +12,7 @@ import {
 	mdiAccountSchoolOutline,
 } from "@icons/material";
 import {
-	createTestAuthStoreWithUser,
+	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
@@ -156,7 +156,7 @@ describe("MembersTable", () => {
 				},
 			},
 		});
-		createTestAuthStoreWithUser(options?.currentUserId ?? currentUser.userId);
+		createTestAppStoreWithUser(options?.currentUserId ?? currentUser.userId);
 
 		const wrapper = mount(MembersTable, {
 			attachTo: document.body,

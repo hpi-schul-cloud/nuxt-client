@@ -6,7 +6,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createTestAuthStoreWithRole } from "@@/tests/test-utils";
+import { createTestAppStoreWithRole } from "@@/tests/test-utils";
 import { RoleName } from "@/serverApi/v3";
 
 describe("SubmissionContentElementDisplay", () => {
@@ -18,7 +18,7 @@ describe("SubmissionContentElementDisplay", () => {
 			loading: false,
 			isOverdue: false,
 		};
-		createTestAuthStoreWithRole(role);
+		createTestAppStoreWithRole(role);
 
 		const wrapper = shallowMount(SubmissionContentElementDisplay, {
 			global: {

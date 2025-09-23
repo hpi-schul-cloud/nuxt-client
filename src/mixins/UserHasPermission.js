@@ -1,4 +1,4 @@
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 export default {
 	props: {
@@ -9,7 +9,7 @@ export default {
 	},
 	computed: {
 		userPermissions() {
-			return useAuthStore().userPermissions;
+			return useAppStore().userPermissions;
 		},
 	},
 	methods: {

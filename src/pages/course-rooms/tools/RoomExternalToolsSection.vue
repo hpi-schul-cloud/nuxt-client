@@ -58,7 +58,7 @@ import { ExternalToolDisplayData } from "@data-external-tool";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 const props = defineProps({
 	tools: {
@@ -84,7 +84,7 @@ const isErrorDialogOpen = ref(false);
 const selectedItem = ref<ExternalToolDisplayData | undefined>();
 
 const selectedItemName = computed(() => selectedItem.value?.name || "???");
-const canEdit = useAuthStore().hasPermission(Permission.ContextToolAdmin);
+const canEdit = useAppStore().hasPermission(Permission.ContextToolAdmin);
 
 const onOpenDeleteDialog = (tool: ExternalToolDisplayData) => {
 	selectedItem.value = tool;

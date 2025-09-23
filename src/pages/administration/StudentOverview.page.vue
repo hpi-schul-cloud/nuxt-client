@@ -158,7 +158,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 import { useEnvConfig } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 import { Permission } from "@/serverApi/v3/index.js";
 
 export default {
@@ -695,7 +695,7 @@ export default {
 			this.find();
 		},
 		async getClassNameList() {
-			const { currentYear } = useAuthStore().school;
+			const { currentYear } = useAppStore().school;
 			await this.$store.dispatch("classes/find", {
 				query: {
 					$limit: 1000,

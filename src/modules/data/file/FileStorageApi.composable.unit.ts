@@ -12,7 +12,7 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	authorizedCollaboraDocumentUrlResponseFactory,
 	AxiosResponseFactory,
-	createTestAuthStoreWithSchool,
+	createTestAppStoreWithSchool,
 } from "@@/tests/test-utils";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
@@ -52,7 +52,7 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 describe("FileStorageApi Composable", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		createTestAuthStoreWithSchool("schoolId");
+		createTestAppStoreWithSchool("schoolId");
 	});
 
 	beforeEach(() => {

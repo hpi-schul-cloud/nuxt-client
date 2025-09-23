@@ -28,7 +28,7 @@ import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { Mock } from "vitest";
-import { createTestAuthStoreWithRole } from "@@/tests/test-utils";
+import { createTestAppStoreWithRole } from "@@/tests/test-utils";
 
 vi.mock("@data-board/ContentElementState.composable");
 vi.mock("@data-board/BoardFocusHandler.composable");
@@ -153,7 +153,7 @@ describe("VideoConferenceContentElement", () => {
 		useVideoConferenceMock.isRunning = computed(() => isRunning);
 		useVideoConferenceMock.error = ref(error);
 
-		createTestAuthStoreWithRole(role);
+		createTestAppStoreWithRole(role);
 
 		useBoardPermissionsMock = createMock<
 			ReturnType<typeof useBoardPermissions>

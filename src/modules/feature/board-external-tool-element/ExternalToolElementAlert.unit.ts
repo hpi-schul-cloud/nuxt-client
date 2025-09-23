@@ -1,7 +1,7 @@
 import { BusinessError } from "@/store/types/commons";
 import {
 	contextExternalToolConfigurationStatusFactory,
-	createTestAuthStoreWithRole,
+	createTestAppStoreWithRole,
 } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -56,7 +56,7 @@ describe("ExternalToolElementAlert", () => {
 			"translated"
 		);
 
-		createTestAuthStoreWithRole(roleName);
+		createTestAppStoreWithRole(roleName);
 
 		const wrapper = mount(ExternalToolElementAlert, {
 			global: {

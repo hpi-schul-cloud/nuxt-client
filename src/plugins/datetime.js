@@ -7,7 +7,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import { useEnvConfig } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -286,7 +286,7 @@ export const formatDateForAlerts = (date, isLocalTimeZone = false) => {
 };
 
 export const setDayjsLocale = () => {
-	const locale = useAuthStore().locale || "de";
+	const locale = useAppStore().locale || "de";
 	dayjs.locale(locale);
 };
 
@@ -321,7 +321,7 @@ export const isDateTimeInPast = (dateTime) => {
 export const getTimeFromISOString = (dateIsoString) => {
 	if (!dateIsoString) return "";
 
-	const locale = useAuthStore().locale || "de";
+	const locale = useAppStore().locale || "de";
 	return new Date(dateIsoString).toLocaleTimeString(locale.value, {
 		timeStyle: "short",
 		hourCycle: "h23",

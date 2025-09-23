@@ -1,5 +1,5 @@
 import {
-	createTestAuthStoreWithSchool,
+	createTestAppStoreWithSchool,
 	createTestEnvStore,
 	maintenanceStatusFactory,
 } from "@@/tests/test-utils";
@@ -25,7 +25,7 @@ describe("SchoolYearChangeSection", () => {
 
 	beforeAll(() => {
 		createTestEnvStore();
-		createTestAuthStoreWithSchool(schoolId);
+		createTestAppStoreWithSchool(schoolId);
 	});
 
 	const getWrapper = () => {

@@ -13,7 +13,7 @@ import { default as enVuetify } from "vuetify/lib/locale/en";
 import { default as esVuetify } from "vuetify/lib/locale/es";
 import { default as ukVuetify } from "vuetify/lib/locale/uk";
 import { useEnvStore } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 declare type SupportedLanguages = "en" | "de" | "es" | "uk";
 
@@ -48,7 +48,7 @@ const localCreateI18n = () => {
 	// https://vue-i18n.intlify.dev/guide/advanced/typescript#global-resource-schema-type-definition
 	const i18n = createI18n<false>({
 		legacy: false,
-		locale: useAuthStore().locale,
+		locale: useAppStore().locale,
 		fallbackLocale: useEnvStore().fallBackLanguage,
 		messages: messages,
 		numberFormats,

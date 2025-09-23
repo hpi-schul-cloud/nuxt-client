@@ -3,7 +3,7 @@ import { EditorMode } from "@/types/file/File";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	authorizedCollaboraDocumentUrlResponseFactory,
-	createTestAuthStoreWithUser,
+	createTestAppStoreWithUser,
 	ObjectIdMock,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -15,7 +15,7 @@ import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
 import { flushPromises } from "@vue/test-utils";
 import CollaboraPage from "./Collabora.page.vue";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 describe("Collabora.page", () => {
 	const setup = () => {
@@ -24,7 +24,7 @@ describe("Collabora.page", () => {
 		const authorizedCollaboraDocumentUrlResponse =
 			authorizedCollaboraDocumentUrlResponseFactory.build();
 
-		const { mockedMe } = createTestAuthStoreWithUser("user-id");
+		const { mockedMe } = createTestAppStoreWithUser("user-id");
 
 		const fileStorageApiMock =
 			createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
@@ -85,7 +85,7 @@ describe("Collabora.page", () => {
 		expect(wrapper.find("iframe").exists()).toBe(true);
 		expect(wrapper.find("iframe").attributes("src")).toEqual(
 			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl +
-				`?lang=${useAuthStore().locale}`
+				`?lang=${useAppStore().locale}`
 		);
 	});
 

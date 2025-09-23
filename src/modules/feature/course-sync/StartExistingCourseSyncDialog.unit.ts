@@ -3,7 +3,7 @@ import { MeResponse, RoleName } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createTestAuthStore, groupResponseFactory } from "@@/tests/test-utils";
+import { createTestAppStore, groupResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -32,7 +32,7 @@ describe("StartExistingCourseSyncDialog", () => {
 		admin?: Partial<MeResponse>
 	) => {
 		const notifierModule = createModuleMocks(NotifierModule);
-		const { mockedMe } = createTestAuthStore({ me: admin ?? {} });
+		const { mockedMe } = createTestAppStore({ me: admin ?? {} });
 
 		const wrapper = mount(StartExistingCourseSyncDialog, {
 			global: {

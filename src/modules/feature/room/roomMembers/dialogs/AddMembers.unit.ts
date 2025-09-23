@@ -6,7 +6,7 @@ import AddMembers from "./AddMembers.vue";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import {
-	createTestAuthStore,
+	createTestAppStore,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
@@ -90,7 +90,7 @@ describe("AddMembers", () => {
 			roomRoleName: RoleName.Roomadmin,
 		});
 
-		const { mockedMe } = createTestAuthStore({
+		const { mockedMe } = createTestAppStore({
 			me: {
 				roles: [
 					{ id: "user-id", name: options?.schoolRole ?? RoleName.Teacher },
@@ -126,7 +126,7 @@ describe("AddMembers", () => {
 								schools: roomMembersSchools,
 								roomMembers,
 							},
-							authStore: {
+							applicationStore: {
 								meResponse: mockedMe,
 							},
 						},

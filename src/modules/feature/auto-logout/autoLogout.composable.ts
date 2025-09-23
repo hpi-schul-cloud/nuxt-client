@@ -5,7 +5,7 @@ import { useI18n } from "vue-i18n";
 import { $axios } from "@/utils/api";
 import { SessionStatus } from "./types";
 import { useEnvConfig } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();
@@ -108,7 +108,7 @@ export const useAutoLogout = () => {
 		clearPollings();
 
 		if (sessionStatus.value === SessionStatus.Ended) {
-			useAuthStore().logout();
+			useAppStore().logout();
 			return;
 		}
 

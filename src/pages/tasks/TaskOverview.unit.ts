@@ -2,7 +2,7 @@ import TaskOverview from "./TaskOverview.page.vue";
 import { shallowMount } from "@vue/test-utils";
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createTestAuthStore } from "@@/tests/test-utils";
+import { createTestAppStore } from "@@/tests/test-utils";
 import { RoleName } from "@/serverApi/v3";
 
 vi.mock(
@@ -16,7 +16,7 @@ vi.mock(
 describe("TaskOverview", () => {
 	const fetchAllTasksSpy = vi.fn();
 	const getWrapper = (userRole?: RoleName) => {
-		createTestAuthStore({
+		createTestAppStore({
 			me: { roles: userRole ? [{ id: "test-user", name: userRole }] : [] },
 		});
 

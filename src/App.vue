@@ -12,7 +12,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { availableLayouts, isLayout } from "./layouts";
 import { setComputedScrollbarWidthAsCssVar } from "./utils/scrollbarWidth";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 const route = useRoute();
 
@@ -21,7 +21,7 @@ setComputedScrollbarWidthAsCssVar();
 const layout = computed(() => {
 	let layoutName = (route.meta.layout as string) || Layouts.LOGGED_IN;
 
-	if (!useAuthStore().loggedIn) {
+	if (!useAppStore().loggedIn) {
 		layoutName = Layouts.LOGGED_OUT;
 	}
 

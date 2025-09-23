@@ -239,11 +239,11 @@ import { InfoAlert } from "@ui-alert";
 import { computed, ComputedRef, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEnvConfig } from "@data-env";
-import { useAuthStoreRefs } from "@data-auth";
+import { useAppStoreRefs } from "@data-app";
 
 const { setMaintenanceMode, maintenanceStatus } = useSharedSchoolYearChange();
 
-const { school } = useAuthStoreRefs();
+const { school } = useAppStoreRefs();
 
 const isCheckboxEnabled = ref(false);
 

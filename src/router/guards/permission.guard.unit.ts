@@ -4,7 +4,7 @@ import {
 	NavigationGuardNext,
 	RouteLocationNormalized,
 } from "vue-router";
-import { createTestAuthStoreWithPermissions } from "@@/tests/test-utils";
+import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { Permission } from "@/serverApi/v3";
 
 const mockError = vi.fn();
@@ -23,7 +23,7 @@ describe("PermissionGuard", () => {
 	const invalidPermission = "invalidPermission" as Permission;
 
 	beforeAll(() => {
-		createTestAuthStoreWithPermissions([validPermissionA, validPermissionB]);
+		createTestAppStoreWithPermissions([validPermissionA, validPermissionB]);
 	});
 
 	afterEach(() => {
@@ -37,7 +37,7 @@ describe("PermissionGuard", () => {
 	}
 
 	describe("createPermissionGuard", () => {
-		it("should check permissions from the auth store and allow access", () => {
+		it("should check permissions from the application store and allow access", () => {
 			const { to, from, next } = setup();
 			const permissionGuard: NavigationGuard = createPermissionGuard(
 				[validPermissionA],
@@ -49,7 +49,7 @@ describe("PermissionGuard", () => {
 			expect(next).toHaveBeenCalledWith();
 		});
 
-		it("should check with one valid and one invalid permissions from the auth store and deny access", () => {
+		it("should check with one valid and one invalid permissions from the application store and deny access", () => {
 			const { to, from, next } = setup();
 			const fallbackRoute = "/dashboard";
 			const permissionGuard: NavigationGuard = createPermissionGuard(
@@ -62,7 +62,7 @@ describe("PermissionGuard", () => {
 			expect(next).toHaveBeenCalledWith(fallbackRoute);
 		});
 
-		it("should check permissions from the auth store and deny access", () => {
+		it("should check permissions from the application store and deny access", () => {
 			const { to, from, next } = setup();
 			const fallbackRoute = "/dashboard";
 			const permissionGuard: NavigationGuard = createPermissionGuard(

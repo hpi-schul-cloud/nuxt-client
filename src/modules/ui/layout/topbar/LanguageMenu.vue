@@ -35,7 +35,7 @@ import { LanguageType } from "@/serverApi/v3";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEnvConfig, useEnvStore } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 defineOptions({
 	inheritAttrs: false,
@@ -51,7 +51,7 @@ type LanguageItem = {
 const { t } = useI18n();
 
 const changeLanguage = async (item: LanguageItem) => {
-	await useAuthStore().updateUserLanguage(item.language);
+	await useAppStore().updateUserLanguage(item.language);
 	window.location.reload();
 };
 
@@ -74,7 +74,7 @@ const availableLanguages = computed(() =>
 );
 
 const selectedLanguage = computed(() =>
-	buildLanguageItem(useAuthStore().locale || useEnvStore().fallBackLanguage)
+	buildLanguageItem(useAppStore().locale || useEnvStore().fallBackLanguage)
 );
 
 const ariaLabel = computed(

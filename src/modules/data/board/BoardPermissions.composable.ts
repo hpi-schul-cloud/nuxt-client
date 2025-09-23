@@ -3,13 +3,13 @@ import { BoardPermissionChecks } from "@/types/board/Permissions";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useBoardStore } from "./Board.store";
-import { useAuthStoreRefs } from "@data-auth";
+import { useAppStoreRefs } from "@data-app";
 import { createSharedComposable } from "@vueuse/core";
 
 const boardPermissions = (): BoardPermissionChecks => {
 	const boardPermissions = computed(() => board.value?.permissions ?? []);
 
-	const { isTeacher, isStudent, userPermissions } = useAuthStoreRefs();
+	const { isTeacher, isStudent, userPermissions } = useAppStoreRefs();
 	const { board } = storeToRefs(useBoardStore());
 
 	const arePermissionsLoaded = computed(

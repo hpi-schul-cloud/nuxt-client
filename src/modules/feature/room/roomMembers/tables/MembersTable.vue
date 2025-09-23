@@ -79,7 +79,7 @@ import { useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
 import { ChangeRole } from "@feature-room";
 import { RoleName } from "@/serverApi/v3";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 type Props = {
 	headerBottom?: number;
@@ -110,7 +110,7 @@ const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 
 const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
-	const isNotCurrentUser = userId !== useAuthStore().user?.id;
+	const isNotCurrentUser = userId !== useAppStore().user?.id;
 	const isNotRoomOwner = !isRoomOwner(userId);
 	return isNotCurrentUser && isNotRoomOwner;
 };

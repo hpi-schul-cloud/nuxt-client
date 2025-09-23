@@ -12,7 +12,7 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import {
-	createTestAuthStoreWithSchool,
+	createTestAppStoreWithSchool,
 	createTestEnvStore,
 	mockedPiniaStoreTyping,
 	MockedStore,
@@ -81,7 +81,7 @@ describe("ExternalToolSection", () => {
 
 		const notifierModule = createModuleMocks(NotifierModule);
 
-		createTestAuthStoreWithSchool(schoolId);
+		createTestAppStoreWithSchool(schoolId);
 		createTestEnvStore(envs);
 
 		const router = createMock<Router>();

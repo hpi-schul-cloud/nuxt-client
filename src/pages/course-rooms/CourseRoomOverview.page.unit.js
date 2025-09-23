@@ -22,7 +22,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import { createTestAuthStore } from "../../../tests/test-utils/index.js";
+import { createTestAppStore } from "../../../tests/test-utils/index.js";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 
@@ -154,7 +154,7 @@ const getWrapper = () => {
 describe("@/pages/CourseRoomOverview.page", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		createTestAuthStore();
+		createTestAppStore();
 		createTestEnvStore();
 	});
 

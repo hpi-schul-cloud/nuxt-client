@@ -184,7 +184,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { t } = useI18n();
@@ -210,7 +210,7 @@ const languages = computed(() => {
 	});
 });
 
-const hasSchoolEditPermission = useAuthStore().hasPermission(
+const hasSchoolEditPermission = useAppStore().hasPermission(
 	Permission.SchoolEdit
 );
 

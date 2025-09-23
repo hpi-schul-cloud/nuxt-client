@@ -21,7 +21,7 @@ import { useApplicationError } from "../composables/application-error.composable
 import { ApplicationError } from "./types/application-error";
 import { School } from "./types/schools";
 import { useEnvConfig } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 @Module({
 	name: "schoolsModule",
@@ -180,7 +180,7 @@ export default class SchoolsModule extends VuexModule {
 	@Action
 	async fetchSchool(): Promise<void> {
 		this.setLoading(true);
-		const schoolId = useAuthStore().school?.id;
+		const schoolId = useAppStore().school?.id;
 		if (schoolId) {
 			try {
 				const school = (

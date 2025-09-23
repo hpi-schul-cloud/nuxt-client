@@ -8,7 +8,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
 import NewStudent from "./StudentCreate.page.vue";
-import { createTestAuthStore } from "../../../tests/test-utils/index.js";
+import { createTestAppStore } from "../../../tests/test-utils/index.js";
 
 vi.mock("@/utils/pageTitle", () => {
 	return {
@@ -46,7 +46,7 @@ const createMockStore = () => {
 
 describe("students/new", () => {
 	beforeAll(() => {
-		createTestAuthStore();
+		createTestAppStore();
 	});
 	beforeEach(() => {
 		setupStores({ notifierModule: NotifierModule });

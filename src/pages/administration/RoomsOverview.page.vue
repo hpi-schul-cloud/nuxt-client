@@ -227,7 +227,7 @@ import { useRoute, useRouter } from "vue-router";
 import type { DataTableHeader } from "vuetify";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { storeToRefs } from "pinia";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 type Tab = "current" | "archive";
 
@@ -303,7 +303,7 @@ const courseStatus: ComputedRef<CourseStatus> = computed(() => {
 	}
 });
 
-const hasPermission = useAuthStore().hasPermission(
+const hasPermission = useAppStore().hasPermission(
 	Permission.CourseAdministration
 );
 

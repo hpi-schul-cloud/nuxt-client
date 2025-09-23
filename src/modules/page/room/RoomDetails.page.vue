@@ -83,7 +83,7 @@ import { computed, ComputedRef, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useEnvConfig } from "@data-env";
-import { useAuthStoreRefs } from "@data-auth";
+import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps<{ room: RoomDetails }>();
 const room = toRef(props, "room");
@@ -248,7 +248,7 @@ const onDelete = async () => {
 	router.push({ name: "rooms" });
 };
 
-const { user } = useAuthStoreRefs();
+const { user } = useAppStoreRefs();
 
 const onLeaveRoom = async () => {
 	if (!canLeaveRoom.value) {

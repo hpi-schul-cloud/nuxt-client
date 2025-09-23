@@ -1,7 +1,7 @@
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
 	courseInfoDataResponseFactory,
-	createTestAuthStoreWithPermissions,
+	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 } from "@@/tests/test-utils";
 import {
@@ -77,7 +77,7 @@ describe("RoomsOverview", () => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
-		createTestAuthStoreWithPermissions(
+		createTestAppStoreWithPermissions(
 			[Permission.CourseAdministration],
 			false
 		);

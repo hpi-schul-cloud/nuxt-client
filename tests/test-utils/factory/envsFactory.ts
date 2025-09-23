@@ -5,7 +5,7 @@ import { defaultConfigEnvs, useEnvStore } from "@data-env";
 import { FilesStorageConfigResponse } from "@/fileStorageApi/v3";
 import { createTestingPinia } from "@pinia/testing";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 export const envsFactory = Factory.define<ConfigResponse>(
 	() => defaultConfigEnvs

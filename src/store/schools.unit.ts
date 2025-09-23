@@ -5,8 +5,8 @@ import {
 	SystemsApiInterface,
 } from "@/serverApi/v3/api";
 import {
-	createTestAuthStore,
-	createTestAuthStoreWithSchool,
+	createTestAppStore,
+	createTestAppStoreWithSchool,
 	createTestEnvStore,
 } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
@@ -36,7 +36,7 @@ describe("schools module", () => {
 	describe("actions", () => {
 		describe("fetchSchool", () => {
 			it("should call mutations correctly", async () => {
-				createTestAuthStore();
+				createTestAppStore();
 				const mockSchoolResponse = schoolResponseFactory.build();
 				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
 					mockApiResponse({ data: mockSchoolResponse })
@@ -56,7 +56,7 @@ describe("schools module", () => {
 			});
 
 			it("should set school state correctly", async () => {
-				createTestAuthStore();
+				createTestAppStore();
 				const mockSchoolResponse = schoolResponseFactory.build({
 					features: [
 						serverApi.SchoolFeature.RocketChat,
@@ -94,7 +94,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
 				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
-				createTestAuthStoreWithSchool("4711");
+				createTestAppStoreWithSchool("4711");
 
 				await schoolsModule.fetchSchool();
 

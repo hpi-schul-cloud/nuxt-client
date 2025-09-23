@@ -14,7 +14,7 @@ import { EditorMode } from "@/types/file/File";
 import { useFileStorageApi } from "@data-file";
 import { computed, onMounted, ref } from "vue";
 import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
-import { useAuthStoreRefs } from "@data-auth";
+import { useAppStoreRefs } from "@data-app";
 
 interface Props {
 	fileRecordId: string;
@@ -27,7 +27,7 @@ const iframeRef = ref<HTMLIFrameElement>();
 const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
 const { setupPostMessageAPI } = useCollaboraPostMessageApi();
 
-const { user, locale } = useAuthStoreRefs();
+const { user, locale } = useAppStoreRefs();
 
 const userName = computed(() => {
 	const firstName = user.value?.firstName;

@@ -10,7 +10,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { RouterLinkStub } from "@vue/test-utils";
 import AuthSystems from "./AuthSystems";
 import {
-	createTestAuthStoreWithPermissions,
+	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 } from "@@/tests/test-utils";
 import { Permission } from "@/serverApi/v3/index.js";
@@ -171,7 +171,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("ldap button should be visible", () => {
-			createTestAuthStoreWithPermissions([Permission.SystemCreate]);
+			createTestAppStoreWithPermissions([Permission.SystemCreate]);
 
 			const wrapper = createWrapper({ props: generateProps() });
 
@@ -202,7 +202,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the edit system button", () => {
-			createTestAuthStoreWithPermissions([
+			createTestAppStoreWithPermissions([
 				Permission.SystemCreate,
 				Permission.SystemEdit,
 			]);
@@ -245,7 +245,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should redirect to ldap config page from edit button of general ldap system", () => {
-			createTestAuthStoreWithPermissions([
+			createTestAppStoreWithPermissions([
 				Permission.SystemCreate,
 				Permission.SystemEdit,
 			]);
@@ -262,7 +262,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display system edit button and redirect to correct config page ", () => {
-			createTestAuthStoreWithPermissions([
+			createTestAppStoreWithPermissions([
 				Permission.SystemCreate,
 				Permission.SystemEdit,
 			]);
@@ -292,7 +292,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the dialog", async () => {
-			createTestAuthStoreWithPermissions([
+			createTestAppStoreWithPermissions([
 				Permission.SystemCreate,
 				Permission.SystemEdit,
 			]);
@@ -312,7 +312,7 @@ describe("AuthSystems", () => {
 
 	describe("events", () => {
 		it("should call the action when 'dialog-confirmed' triggered", async () => {
-			createTestAuthStoreWithPermissions([Permission.SystemCreate]);
+			createTestAppStoreWithPermissions([Permission.SystemCreate]);
 			const deleteSpy = vi
 				.spyOn(schoolsModule, "deleteSystem")
 				.mockImplementation(vi.fn());
@@ -330,7 +330,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should call the method when delete dialog confirmed", async () => {
-			createTestAuthStoreWithPermissions([Permission.SystemCreate]);
+			createTestAppStoreWithPermissions([Permission.SystemCreate]);
 			const removeSystem = vi
 				.spyOn(AuthSystems.methods, "removeSystem")
 				.mockImplementation(vi.fn());
@@ -345,7 +345,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", () => {
-			createTestAuthStoreWithPermissions([
+			createTestAppStoreWithPermissions([
 				Permission.SystemCreate,
 				Permission.SystemEdit,
 				Permission.SystemView,

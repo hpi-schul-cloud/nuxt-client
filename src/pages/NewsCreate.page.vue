@@ -24,7 +24,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { FormNews } from "@feature-news-form";
 import { newsModule, notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 export default {
 	components: {
@@ -53,7 +53,7 @@ export default {
 			try {
 				const newsTarget = this.getNewsTarget(
 					this.$route.query,
-					useAuthStore().school.id
+					useAppStore().school.id
 				);
 				await newsModule.createNews({
 					title: news.title,

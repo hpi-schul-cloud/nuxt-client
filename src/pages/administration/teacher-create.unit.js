@@ -9,7 +9,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
 import { default as NewTeacher } from "./TeacherCreate.page.vue";
 import { flushPromises } from "@vue/test-utils";
-import { createTestAuthStore } from "../../../tests/test-utils/index.js";
+import { createTestAppStore } from "../../../tests/test-utils/index.js";
 
 vi.mock("@/utils/pageTitle", () => {
 	return {
@@ -36,7 +36,7 @@ const createMockStore = (createTeacherStub) => {
 
 describe("teachers/new", () => {
 	beforeAll(() => {
-		createTestAuthStore();
+		createTestAppStore();
 	});
 
 	beforeEach(() => {

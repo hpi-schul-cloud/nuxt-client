@@ -43,7 +43,7 @@ import { useI18n } from "vue-i18n";
 import { Fab, FabAction } from "./default-wireframe.types";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useEnvConfig } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 import { Permission } from "@/serverApi/v3";
 
 enum RoomFabEvent {
@@ -66,7 +66,7 @@ const props = defineProps({
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
-const canCreateCourse = useAuthStore().hasPermission(Permission.CourseCreate);
+const canCreateCourse = useAppStore().hasPermission(Permission.CourseCreate);
 
 const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 	if (canCreateCourse.value) {

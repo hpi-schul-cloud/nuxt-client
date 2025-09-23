@@ -16,7 +16,7 @@ import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { nextTick } from "vue";
-import { createTestAuthStore } from "@@/tests/test-utils";
+import { createTestAppStore } from "@@/tests/test-utils";
 
 describe("RoomVideoConferenceSection", () => {
 	const mockUrl = "https://mock.com";
@@ -34,7 +34,7 @@ describe("RoomVideoConferenceSection", () => {
 			writable: true, // possibility to override
 		});
 
-		createTestAuthStore({
+		createTestAppStore({
 			me: {
 				permissions: userPermissions,
 				roles: isExpert ? [{ id: "expert", name: RoleName.Expert }] : [],

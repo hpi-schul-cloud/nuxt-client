@@ -1,4 +1,4 @@
-import { createTestAuthStore, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -24,7 +24,7 @@ describe("@ui-layout/UserMenu", () => {
 		mockedSystem?: System,
 		mockedTokenExpiration?: Date
 	) => {
-		const { authStore } = createTestAuthStore({
+		const { appStore } = createTestAppStore({
 			me: { systemId: mockedSystem?.id },
 		});
 
@@ -58,7 +58,7 @@ describe("@ui-layout/UserMenu", () => {
 			},
 		});
 
-		return { wrapper, authStore };
+		return { wrapper, appStore };
 	};
 
 	afterEach(() => {
@@ -85,7 +85,7 @@ describe("@ui-layout/UserMenu", () => {
 	});
 
 	it("should trigger logout function on logout item click", async () => {
-		const { wrapper, authStore } = setupWrapper();
+		const { wrapper, appStore } = setupWrapper();
 
 		const menuBtn = wrapper.findComponent({ name: "VBtn" });
 		await menuBtn.trigger("click");
@@ -94,7 +94,7 @@ describe("@ui-layout/UserMenu", () => {
 		expect(logoutBtn.exists()).toBe(true);
 		await logoutBtn.trigger("click");
 
-		expect(authStore.logout).toHaveBeenCalled();
+		expect(appStore.logout).toHaveBeenCalled();
 	});
 
 	describe("external logout", () => {
@@ -106,9 +106,9 @@ describe("@ui-layout/UserMenu", () => {
 					hasEndSessionEndpoint: true,
 				};
 
-				const { wrapper, authStore } = setupWrapper(true, mockedSystem);
+				const { wrapper, appStore } = setupWrapper(true, mockedSystem);
 
-				return { wrapper, authStore, mockedSystem };
+				return { wrapper, appStore, mockedSystem };
 			};
 
 			it("should show the external logout button", async () => {
@@ -128,7 +128,7 @@ describe("@ui-layout/UserMenu", () => {
 			});
 
 			it("should trigger external logout function on logout item click", async () => {
-				const { wrapper, authStore } = setup();
+				const { wrapper, appStore } = setup();
 
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
@@ -140,7 +140,7 @@ describe("@ui-layout/UserMenu", () => {
 				expect(externalLogoutBtn.exists()).toBe(true);
 				await externalLogoutBtn.trigger("click");
 
-				expect(authStore.externalLogout).toHaveBeenCalled();
+				expect(appStore.externalLogout).toHaveBeenCalled();
 			});
 
 			it("should show the correct text for the logout button", async () => {

@@ -1,13 +1,13 @@
 import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 import { getLoginUrlWithRedirect } from "../login-redirect-url";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 export const isAuthenticatedGuard = (
 	to: RouteLocationNormalized,
 	from: RouteLocationNormalized,
 	next: NavigationGuardNext
 ) => {
-	const userIsLoggedIn = useAuthStore().loggedIn;
+	const userIsLoggedIn = useAppStore().loggedIn;
 
 	if (userIsLoggedIn || isRoutePublic(to)) {
 		next();

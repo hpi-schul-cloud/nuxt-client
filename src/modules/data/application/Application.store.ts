@@ -20,7 +20,7 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	document.cookie = `${cname}=${cvalue}; Expires=${expires}; Path=/; Secure; SameSite=None`;
 };
 
-export const useAuthStore = defineStore("authStore", () => {
+export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
 
@@ -104,4 +104,4 @@ export const useAuthStore = defineStore("authStore", () => {
 	};
 });
 
-export const useAuthStoreRefs = () => storeToRefs(useAuthStore());
+export const useAppStoreRefs = () => storeToRefs(useAppStore());

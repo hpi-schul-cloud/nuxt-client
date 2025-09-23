@@ -31,7 +31,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoleName } from "@/serverApi/v3/index.js";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 export default {
 	components: {
@@ -73,7 +73,7 @@ export default {
 					lastName: teacherData.lastName,
 					email: teacherData.email,
 					roles: [RoleName.Teacher],
-					schoolId: useAuthStore().school?.id,
+					schoolId: useAppStore().school?.id,
 					sendRegistration: this.sendRegistration,
 					generateRegistrationLink: true,
 				})

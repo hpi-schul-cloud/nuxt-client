@@ -6,7 +6,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { beforeAll } from "vitest";
-import { createTestAuthStore } from "@@/tests/test-utils";
+import { createTestAppStore } from "@@/tests/test-utils";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
@@ -14,7 +14,7 @@ const testProps = {
 
 describe("@ui-layout/CloudStatusMessages", () => {
 	beforeAll(() => {
-		createTestAuthStore();
+		createTestAppStore();
 	});
 
 	const setup = () => {

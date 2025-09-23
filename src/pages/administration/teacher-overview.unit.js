@@ -18,7 +18,7 @@ import { createStore } from "vuex";
 import TeacherPage from "./TeacherOverview.page.vue";
 import { RouterLinkStub } from "@vue/test-utils";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import { createTestAuthStore } from "../../../tests/test-utils/index.js";
+import { createTestAppStore } from "../../../tests/test-utils/index.js";
 
 const mockData = [
 	{
@@ -141,7 +141,7 @@ describe("teachers/index", () => {
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
 
-		createTestAuthStore({
+		createTestAppStore({
 			me: {
 				school: { ...mockSchool },
 				roles: [

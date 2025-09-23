@@ -10,7 +10,7 @@ import {
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import { beforeAll } from "vitest";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 
@@ -61,7 +61,7 @@ describe("@ui-layout/LanguageMenu", () => {
 		});
 
 		it("should update the user's language", async () => {
-			const authStore = mockedPiniaStoreTyping(useAuthStore);
+			const appStore = mockedPiniaStoreTyping(useAppStore);
 			const { wrapper } = setup();
 
 			const selectedItem = wrapper.find('[data-testid="selected-language-de"]');
@@ -70,7 +70,7 @@ describe("@ui-layout/LanguageMenu", () => {
 				'[data-testid="available-language-en"]'
 			);
 			await availableItem.trigger("click");
-			expect(authStore.updateUserLanguage).toHaveBeenCalledWith("en");
+			expect(appStore.updateUserLanguage).toHaveBeenCalledWith("en");
 			expect(window.location.reload).toHaveBeenCalled();
 		});
 	});

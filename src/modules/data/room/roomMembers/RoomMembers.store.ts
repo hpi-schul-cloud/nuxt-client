@@ -15,7 +15,7 @@ import { schoolsModule } from "@/store";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
 import { useRoomDetailsStore } from "@data-room";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const { t } = useI18n();
@@ -68,7 +68,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		name: schoolsModule.getSchool.name,
 	};
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([ownSchool]);
-	const currentUserId = computed(() => useAuthStore().user?.id);
+	const currentUserId = computed(() => useAppStore().user?.id);
 
 	const selectedIds = ref<string[]>([]);
 	const confirmationSelectedIds = ref<string[]>([]);

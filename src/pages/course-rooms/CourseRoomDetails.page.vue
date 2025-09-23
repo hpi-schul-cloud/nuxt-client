@@ -167,7 +167,7 @@ import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { useDisplay } from "vuetify";
 import { useEnvConfig } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 export default defineComponent({
 	components: {
@@ -305,7 +305,7 @@ export default defineComponent({
 		learnContentFabItems() {
 			const actions = [];
 
-			if (useAuthStore().userPermissions.includes(Permission.HomeworkCreate)) {
+			if (useAppStore().userPermissions.includes(Permission.HomeworkCreate)) {
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.task"),
 					icon: mdiFormatListChecks,
@@ -315,7 +315,7 @@ export default defineComponent({
 				});
 			}
 
-			if (useAuthStore().userPermissions.includes(Permission.TopicCreate)) {
+			if (useAppStore().userPermissions.includes(Permission.TopicCreate)) {
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.lesson"),
 					icon: mdiViewListOutline,
@@ -326,8 +326,8 @@ export default defineComponent({
 			}
 
 			if (
-				useAuthStore().userPermissions.includes(Permission.CourseEdit) &&
-				useAuthStore().isTeacher
+				useAppStore().userPermissions.includes(Permission.CourseEdit) &&
+				useAppStore().isTeacher
 			) {
 				if (this.boardLayoutsEnabled) {
 					actions.push({
@@ -369,12 +369,12 @@ export default defineComponent({
 			return this.courseRoomDetailsModule.getPermissionData || [];
 		},
 		dashBoardRole() {
-			if (useAuthStore().isTeacher) return Roles.Teacher;
-			if (useAuthStore().isStudent) return Roles.Student;
+			if (useAppStore().isTeacher) return Roles.Teacher;
+			if (useAppStore().isStudent) return Roles.Student;
 			return undefined;
 		},
 		canEditTools() {
-			return !!useAuthStore().userPermissions?.includes(
+			return !!useAppStore().userPermissions?.includes(
 				Permission.ContextToolAdmin
 			);
 		},
@@ -497,7 +497,7 @@ export default defineComponent({
 
 			await this.courseRoomDetailsModule.fetchScopePermission({
 				courseId,
-				userId: useAuthStore().user?.id,
+				userId: useAppStore().user?.id,
 			});
 
 			document.title = buildPageTitle(this.roomData.title);

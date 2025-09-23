@@ -8,7 +8,7 @@ import { GROUP_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import {
 	classInfoFactory,
 	courseFactory,
-	createTestAuthStoreWithPermissions,
+	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -85,7 +85,7 @@ const createWrapper = ({
 		...groupModuleGetters,
 	});
 
-	createTestAuthStoreWithPermissions(
+	createTestAppStoreWithPermissions(
 		userPermissions ?? defaultPermissions,
 		false
 	);

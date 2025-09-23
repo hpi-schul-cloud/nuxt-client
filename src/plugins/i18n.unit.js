@@ -1,19 +1,19 @@
 import { unref } from "vue";
 import { createI18n } from "./i18n";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import { createTestAuthStore } from "../../tests/test-utils/index.js";
-import { useAuthStore } from "@data-auth";
+import { createTestAppStore } from "../../tests/test-utils/index.js";
+import { useAppStore } from "@data-app";
 
 describe("i18n plugin", () => {
 	beforeAll(() => {
-		createTestAuthStore();
+		createTestAppStore();
 		createTestEnvStore({
 			I18N__FALLBACK_LANGUAGE: "da",
 		});
 	});
 
-	it("sets locale to the locale computed in the auth store module", () => {
-		useAuthStore().$patch({ userLocale: "fi" });
+	it("sets locale to the locale computed in the application store module", () => {
+		useAppStore().$patch({ userLocale: "fi" });
 		const i18n = createI18n();
 
 		expect(unref(i18n.global.locale)).toBe("fi");
@@ -21,7 +21,7 @@ describe("i18n plugin", () => {
 	});
 
 	it("sets the number formats for all supported languages correctly", () => {
-		useAuthStore().$patch({ userLocale: "fi" });
+		useAppStore().$patch({ userLocale: "fi" });
 		const i18n = createI18n();
 
 		expect(

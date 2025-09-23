@@ -53,7 +53,7 @@ import { WarningAlert } from "@ui-alert";
 import { computed, ModelRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
@@ -93,7 +93,7 @@ const onConfirmGroupSelection = (group: GroupResponse) => {
 const { startSynchronization } = useCourseApi();
 
 const isUserInGroup = computed(() => {
-	const me = useAuthStore().meResponse;
+	const me = useAppStore().meResponse;
 
 	if (!me || !selectedGroup.value) {
 		return false;

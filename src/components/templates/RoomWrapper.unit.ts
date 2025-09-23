@@ -2,7 +2,7 @@ import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CourseRoomListModule from "@/store/course-room-list";
 import {
-	createTestAuthStoreWithPermissions,
+	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 } from "@@/tests/test-utils";
 import {
@@ -84,7 +84,7 @@ describe("@templates/RoomWrapper.vue", () => {
 			FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
 		});
 
-		createTestAuthStoreWithPermissions([Permission.CourseCreate]);
+		createTestAppStoreWithPermissions([Permission.CourseCreate]);
 	});
 
 	beforeEach(() => {
@@ -179,7 +179,7 @@ describe("@templates/RoomWrapper.vue", () => {
 
 	describe("when user does not have course create permission", () => {
 		it("should not display fab", () => {
-			createTestAuthStoreWithPermissions([]);
+			createTestAppStoreWithPermissions([]);
 			const wrapper = getWrapper();
 
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);

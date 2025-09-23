@@ -1,11 +1,11 @@
 import { getActivePinia, setActivePinia } from "pinia";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 import { meResponseFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { MeResponse, Permission, RoleName } from "@/serverApi/v3";
 import { DeepPartial } from "fishery";
 import { createTestingPinia } from "@pinia/testing";
 
-export const createTestAuthStore = ({
+export const createTestAppStore = ({
 	me,
 	stubActions,
 }: {
@@ -18,34 +18,32 @@ export const createTestAuthStore = ({
 
 	const mockedMe = meResponseFactory.build(me);
 
-	useAuthStore().$patch({
-		meResponse: mockedMe,
-	});
-	const authStore = mockedPiniaStoreTyping(useAuthStore);
+	useAppStore().$patch({ meResponse: mockedMe });
+	const appStore = mockedPiniaStoreTyping(useAppStore);
 
-	return { mockedMe, authStore };
+	return { mockedMe, appStore };
 };
 
-export const createTestAuthStoreWithPermissions = (
+export const createTestAppStoreWithPermissions = (
 	permissions: Permission[],
 	stubActions?: boolean
-) => createTestAuthStore({ me: { permissions }, stubActions });
+) => createTestAppStore({ me: { permissions }, stubActions });
 
-export const createTestAuthStoreWithSchool = (
+export const createTestAppStoreWithSchool = (
 	schoolId?: string,
 	stubActions?: boolean
-) => createTestAuthStore({ me: { school: { id: schoolId } }, stubActions });
+) => createTestAppStore({ me: { school: { id: schoolId } }, stubActions });
 
-export const createTestAuthStoreWithUser = (
+export const createTestAppStoreWithUser = (
 	id?: string,
 	stubActions?: boolean
-) => createTestAuthStore({ me: { user: { id } }, stubActions });
+) => createTestAppStore({ me: { user: { id } }, stubActions });
 
-export const createTestAuthStoreWithRole = (
+export const createTestAppStoreWithRole = (
 	roleName: RoleName,
 	stubActions?: boolean
 ) =>
-	createTestAuthStore({
+	createTestAppStore({
 		me: { roles: [{ id: roleName, name: roleName }] },
 		stubActions,
 	});

@@ -9,10 +9,11 @@ import { useTitle } from "@vueuse/core";
 import { computed, inject, onMounted } from "vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useI18n } from "vue-i18n";
-import { useAuthStoreRefs } from "@data-auth";
+import { useAppStoreRefs } from "@data-app";
+import { RoleName } from "@/serverApi/v3";
 
 const { t } = useI18n();
-const { isTeacher, isStudent } = useAuthStoreRefs();
+const { isTeacher, isStudent } = useAppStoreRefs();
 const tasksModule = inject<TasksModule | undefined>("tasksModule");
 
 if (tasksModule === undefined) {
@@ -24,8 +25,8 @@ useTitle(buildPageTitle(t("common.words.tasks")));
 onMounted(() => tasksModule.fetchAllTasks());
 
 const dashboardRole = computed(() => {
-	if (isTeacher.value) return "teacher";
-	if (isStudent.value) return "student";
+	if (isTeacher.value) return RoleName.Teacher;
+	if (isStudent.value) return RoleName.Student;
 	return undefined;
 });
 </script>

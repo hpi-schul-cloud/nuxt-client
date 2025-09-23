@@ -132,7 +132,7 @@ import {
 } from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { Tab } from "@/types/room/RoomMembers";
-import { useAuthStoreRefs } from "@data-auth";
+import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps({
 	tab: {
@@ -255,7 +255,7 @@ const onFabClick = () => {
 	}
 };
 
-const { user } = useAuthStoreRefs();
+const { user } = useAppStoreRefs();
 
 const currentUserSchoolName = computed(() => {
 	const currentUser = user.value;

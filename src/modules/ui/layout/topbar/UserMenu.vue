@@ -55,7 +55,7 @@ import { System, useSystemApi } from "@data-system";
 import { MeUserResponse } from "@/serverApi/v3";
 import LanguageMenu from "./LanguageMenu.vue";
 import { useEnvConfig } from "@data-env";
-import { useAuthStore, useAuthStoreRefs } from "@data-auth";
+import { useAppStore, useAppStoreRefs } from "@data-app";
 
 const props = defineProps({
 	user: {
@@ -68,7 +68,7 @@ const props = defineProps({
 	},
 });
 
-const { systemId } = useAuthStoreRefs();
+const { systemId } = useAppStoreRefs();
 
 const { t } = useI18n();
 const { getSystem } = useSystemApi();
@@ -118,11 +118,11 @@ const onMenuBtnClicked = () => {
 };
 
 const logout = () => {
-	useAuthStore().logout();
+	useAppStore().logout();
 };
 
 const externalLogout = () => {
-	useAuthStore().externalLogout();
+	useAppStore().externalLogout();
 };
 </script>
 

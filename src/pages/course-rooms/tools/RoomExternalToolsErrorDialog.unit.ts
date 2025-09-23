@@ -1,7 +1,7 @@
 import RoomExternalToolsErrorDialog from "@/pages/course-rooms/tools/RoomExternalToolsErrorDialog.vue";
 import {
 	contextExternalToolConfigurationStatusFactory,
-	createTestAuthStore,
+	createTestAppStore,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils";
 import {
@@ -17,7 +17,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 		selectedItem: ExternalToolDisplayData;
 		isOpen?: boolean;
 	}) => {
-		createTestAuthStore({
+		createTestAppStore({
 			me: {
 				permissions: [Permission.ContextToolAdmin],
 				roles: [{ name: RoleName.Teacher, id: "teacher1" }],

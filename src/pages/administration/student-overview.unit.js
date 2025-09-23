@@ -18,7 +18,7 @@ import mock$objects from "../../../tests/test-utils/pageStubs";
 import StudentPage from "./StudentOverview.page.vue";
 import { RouterLinkStub } from "@vue/test-utils";
 import { mdiCheckAll, mdiClose } from "@icons/material";
-import { createTestEnvStore, createTestAuthStore } from "@@/tests/test-utils";
+import { createTestEnvStore, createTestAppStore } from "@@/tests/test-utils";
 
 const mockData = [
 	{
@@ -163,7 +163,7 @@ describe("students/index", () => {
 		const { mockStore, usersActionsStubs, uiStateMutationsStubs } =
 			createMockStore();
 
-		createTestAuthStore({
+		createTestAppStore({
 			me: {
 				school: { ...mockSchool, isExternal: false },
 				roles: [{ id: roleName, name: roleName }],

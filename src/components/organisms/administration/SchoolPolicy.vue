@@ -137,7 +137,7 @@ import {
 	mdiTrashCanOutline,
 	mdiTrayArrowUp,
 } from "@icons/material";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 import { Permission } from "@/serverApi/v3";
 
 const { t } = useI18n();
@@ -157,7 +157,7 @@ watch(
 	{ immediate: true }
 );
 
-const hasSchoolEditPermission = useAuthStore().hasPermission(
+const hasSchoolEditPermission = useAppStore().hasPermission(
 	Permission.SchoolEdit
 );
 

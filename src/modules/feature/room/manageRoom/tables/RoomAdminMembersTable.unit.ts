@@ -1,6 +1,6 @@
 import { nextTick } from "vue";
 import {
-	createTestAuthStore,
+	createTestAppStore,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
@@ -47,7 +47,7 @@ describe("RoomAdminMembersTable", () => {
 	const setup = () => {
 		const currentUser = roomMemberFactory.build({});
 
-		createTestAuthStore({ me: { user: { id: currentUser.userId } } });
+		createTestAppStore({ me: { user: { id: currentUser.userId } } });
 
 		const members = [
 			...roomMemberFactory.buildList(3, {

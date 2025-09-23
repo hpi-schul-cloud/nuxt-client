@@ -119,7 +119,7 @@ import {
 	VideoConferenceScope,
 } from "@/serverApi/v3";
 import { useVideoConference } from "../composables/VideoConference.composable";
-import { useAuthStoreRefs } from "@data-auth";
+import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps({
 	element: {
@@ -184,7 +184,7 @@ const { modelValue, computedElement } = useContentElementState(props, {
 const route = useRoute();
 const boardId = route.params.id;
 
-const { isStudent, isTeacher, isExpert, userRoles } = useAuthStoreRefs();
+const { isStudent, isTeacher, isExpert, userRoles } = useAppStoreRefs();
 
 const { hasManageVideoConferencePermission } = useBoardPermissions();
 const { t } = useI18n();

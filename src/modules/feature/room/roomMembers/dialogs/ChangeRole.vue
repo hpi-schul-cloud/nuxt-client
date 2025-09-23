@@ -128,7 +128,7 @@ import {
 } from "@data-room";
 import { WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
-import { useAuthStoreRefs } from "@data-auth";
+import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps({
 	members: {
@@ -151,7 +151,7 @@ const { updateMembersRole, changeRoomOwner } = roomMembersStore;
 const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members")?.value;
 
-const { user } = useAuthStoreRefs();
+const { user } = useAppStoreRefs();
 
 const isChangeOwnershipOptionVisible = computed(() => {
 	const currentUserId = user.value?.id;

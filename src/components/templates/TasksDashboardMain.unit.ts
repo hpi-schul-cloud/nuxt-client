@@ -11,7 +11,7 @@ import {
 	SHARE_MODULE_KEY,
 	TASKS_MODULE_KEY,
 } from "@/utils/inject";
-import { createTestAuthStoreWithPermissions } from "@@/tests/test-utils";
+import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -206,7 +206,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			setupStores({
 				copyModule: CopyModule,
 			});
-			createTestAuthStoreWithPermissions([Permission.HomeworkCreate]);
+			createTestAppStoreWithPermissions([Permission.HomeworkCreate]);
 
 			wrapper = mountComponent({
 				props: {

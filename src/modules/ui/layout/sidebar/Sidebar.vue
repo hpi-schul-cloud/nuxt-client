@@ -51,7 +51,7 @@ import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
 import { mdiMenuOpen } from "@icons/material";
 import { useEnvConfig } from "@data-env";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 const sidebarExpanded = defineModel({
 	type: Boolean,
@@ -68,7 +68,7 @@ const isSidebarCategoryItem = (
 const userHasPermission = (item: SidebarSingleItem | SidebarGroupItem) =>
 	!item.permissions ||
 	item.permissions.some((permission) =>
-		useAuthStore().userPermissions.includes(permission)
+		useAppStore().userPermissions.includes(permission)
 	);
 
 const hasFeatureEnabled = (item: SidebarSingleItem | SidebarGroupItem) => {

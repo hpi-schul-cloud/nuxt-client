@@ -2,7 +2,7 @@ import { printDateFromStringUTC } from "@/plugins/datetime";
 import { RoleName } from "@/serverApi/v3";
 import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
 import {
-	createTestAuthStoreWithRole,
+	createTestAppStoreWithRole,
 	fileRecordFactory,
 } from "@@/tests/test-utils";
 import {
@@ -19,7 +19,7 @@ import { beforeAll } from "vitest";
 
 describe("FileTable", () => {
 	beforeAll(() => {
-		createTestAuthStoreWithRole(RoleName.Teacher);
+		createTestAppStoreWithRole(RoleName.Teacher);
 	});
 
 	const setupWrapper = (props: {

@@ -42,7 +42,7 @@ import { inputRangeDate } from "@/plugins/datetime";
 import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mapGetters } from "vuex";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 import { RoleName } from "@/serverApi/v3/index.js";
 
 export default {
@@ -97,7 +97,7 @@ export default {
 				email: userData.email,
 				birthday: this.date,
 				roles: [RoleName.Student],
-				schoolId: useAuthStore().school?.id,
+				schoolId: useAppStore().school?.id,
 				sendRegistration: this.sendRegistration,
 			});
 			if (!this.businessError) {

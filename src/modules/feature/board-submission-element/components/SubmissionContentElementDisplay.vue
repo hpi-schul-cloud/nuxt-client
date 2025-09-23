@@ -34,7 +34,7 @@ import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import { StudentSubmission, TeacherSubmission } from "../types/submission";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
-import { useAuthStoreRefs } from "@data-auth";
+import { useAppStoreRefs } from "@data-app";
 
 export default defineComponent({
 	name: "SubmissionContentElementDisplay",
@@ -69,7 +69,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
-		const { isTeacher, isStudent, locale } = useAuthStoreRefs();
+		const { isTeacher, isStudent, locale } = useAppStoreRefs();
 
 		const updateCompleted = (completed: boolean) => {
 			emit("update:completed", completed);

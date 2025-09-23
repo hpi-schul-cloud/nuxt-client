@@ -1,7 +1,7 @@
 import { Permission, RoleName } from "@/serverApi/v3";
 import { RoomDetails } from "@/types/room/Room";
 import {
-	createTestAuthStore,
+	createTestAppStore,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
@@ -41,7 +41,7 @@ describe("roomAuthorization", () => {
 			id: Math.random().toString(),
 			name: role,
 		}));
-		createTestAuthStore({
+		createTestAppStore({
 			me: {
 				permissions: userPermissions,
 				roles: userRoleEntities,

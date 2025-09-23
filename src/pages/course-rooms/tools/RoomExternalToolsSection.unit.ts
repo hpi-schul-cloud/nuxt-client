@@ -1,7 +1,7 @@
 import { Permission, RoleName, ToolContextType } from "@/serverApi/v3";
 import {
 	contextExternalToolConfigurationStatusFactory,
-	createTestAuthStore,
+	createTestAppStore,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils";
 import {
@@ -27,7 +27,7 @@ const useRouterMock = <Mock>useRouter;
 
 describe("RoomExternalToolsSection", () => {
 	beforeAll(() => {
-		createTestAuthStore({
+		createTestAppStore({
 			me: {
 				roles: [{ id: "teacher-id", name: RoleName.Teacher }],
 				permissions: [Permission.ContextToolAdmin],

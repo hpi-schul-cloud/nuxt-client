@@ -2,11 +2,11 @@ import { Permission } from "@/serverApi/v3";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { ref, toValue, watchEffect } from "vue";
-import { useAuthStore } from "@data-auth";
+import { useAppStore } from "@data-app";
 
 export const useRoomAuthorization = () => {
 	const { room } = storeToRefs(useRoomDetailsStore());
-	const { hasPermission } = useAuthStore();
+	const { hasPermission } = useAppStore();
 	const userCanCreateRoom = hasPermission(Permission.SchoolCreateRoom);
 	const userCanManageRoomInvitationLinks = hasPermission(
 		Permission.SchoolManageRoomInvitationlinks

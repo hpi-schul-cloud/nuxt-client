@@ -6,7 +6,7 @@ import { RoomBoardItem } from "@/types/room/Room";
 
 import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import {
-	createTestAuthStore,
+	createTestAppStore,
 	createTestEnvStore,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
@@ -132,7 +132,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			roomBoards,
 		});
 
-		createTestAuthStore();
+		createTestAppStore();
 
 		const wrapper = mount(RoomDetailsPage, {
 			global: {

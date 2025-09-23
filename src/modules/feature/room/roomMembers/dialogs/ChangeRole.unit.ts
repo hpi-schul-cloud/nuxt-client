@@ -18,7 +18,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import {
-	createTestAuthStoreWithUser,
+	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	schoolFactory,
@@ -82,7 +82,7 @@ describe("ChangeRole.vue", () => {
 				roomDetailsStore: { room },
 			},
 		});
-		createTestAuthStoreWithUser(currentUser.userId);
+		createTestAppStoreWithUser(currentUser.userId);
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
 		roomMembersStore.roomMembers = roomMembers;

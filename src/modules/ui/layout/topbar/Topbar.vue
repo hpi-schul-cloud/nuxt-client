@@ -61,7 +61,7 @@ import CloudStatusMessages from "./CloudStatusMessages.vue";
 import UserMenu from "./UserMenu.vue";
 import { StatusAlert } from "@/store/types/status-alert";
 import CloudLogo from "../CloudLogo.vue";
-import { useAuthStoreRefs } from "@data-auth";
+import { useAppStoreRefs } from "@data-app";
 
 defineProps({
 	sidebarExpanded: {
@@ -100,7 +100,7 @@ const statusAlertColor = computed(() => {
 	return statusAlertsIncludeDanger ? "error" : "info";
 });
 
-const { user, school, userRoles: roleNames } = useAuthStoreRefs();
+const { user, school, userRoles: roleNames } = useAppStoreRefs();
 
 const hasLogo = computed(() => !!school.value?.logo?.url);
 
