@@ -3241,6 +3241,7 @@ export enum CustomParameterTypeParams {
     AutoSchoolid = 'auto_schoolid',
     AutoSchoolnumber = 'auto_schoolnumber',
     AutoMediumid = 'auto_mediumid',
+    AutoPublisher = 'auto_publisher',
     AutoGroupExternaluuid = 'auto_group_externaluuid'
 }
 
