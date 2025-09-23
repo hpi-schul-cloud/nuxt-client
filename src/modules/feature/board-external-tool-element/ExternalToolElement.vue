@@ -16,6 +16,12 @@
 		@keydown.stop
 		@click="onClickElement"
 	>
+		<ExternalToolElementAlert
+			:tool-display-name="toolDisplayName"
+			:error="displayError || launchError"
+			:tool-status="toolConfigurationStatus"
+			data-testid="board-external-tool-element-alert"
+		/>
 		<ContentElementBar :has-grey-background="true" :icon="getIcon">
 			<template v-if="displayData && displayData.logoUrl" #logo>
 				<VImg
@@ -50,12 +56,6 @@
 				/>
 			</template>
 		</ContentElementBar>
-		<ExternalToolElementAlert
-			:tool-display-name="toolDisplayName"
-			:error="displayError || launchError"
-			:tool-status="toolConfigurationStatus"
-			data-testid="board-external-tool-element-alert"
-		/>
 		<ExternalToolElementConfigurationDialog
 			:is-open="isConfigurationDialogOpen"
 			:context-id="element.id"
