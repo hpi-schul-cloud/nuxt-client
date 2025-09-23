@@ -77,10 +77,7 @@ describe("RoomsOverview", () => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
-		createTestAppStoreWithPermissions(
-			[Permission.CourseAdministration],
-			false
-		);
+		createTestAppStoreWithPermissions([Permission.CourseAdministration], false);
 
 		createTestEnvStore({
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,

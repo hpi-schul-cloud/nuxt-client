@@ -1,9 +1,32 @@
 import { getActivePinia, setActivePinia } from "pinia";
 import { useAppStore } from "@data-app";
-import { meResponseFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { MeResponse, Permission, RoleName } from "@/serverApi/v3";
-import { DeepPartial } from "fishery";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { LanguageType, MeResponse, Permission, RoleName } from "@/serverApi/v3";
+import { DeepPartial, Factory } from "fishery";
 import { createTestingPinia } from "@pinia/testing";
+
+export const meResponseFactory = Factory.define<MeResponse>(({ sequence }) => ({
+	user: {
+		id: `user-${sequence}`,
+		firstName: `firstName${sequence}`,
+		lastName: `lastName${sequence}`,
+		customAvatarBackgroundColor: `customAvatarBackgroundColor${sequence}`,
+	},
+	school: {
+		id: `school-${sequence}`,
+		name: `schoolName${sequence}`,
+		logo: {
+			url: `logoUrl${sequence}`,
+			name: `logoName${sequence}`,
+		},
+	},
+	roles: [],
+	permissions: [],
+	language: LanguageType.De,
+	account: {
+		id: `account-${sequence}`,
+	},
+}));
 
 export const createTestAppStore = ({
 	me,

@@ -42,7 +42,6 @@ export * from "./ltiDeepLinkResponseFactory";
 export * from "./maintenanceStatusFactory";
 export * from "./media-board";
 export * from "./mediaSchoolLicenseResponseFactory";
-export * from "./meResponseFactory";
 export * from "./parentNodeInfoFactory";
 export * from "./parentStatisticFactory";
 export * from "./provisioningOptionsDataFactory";

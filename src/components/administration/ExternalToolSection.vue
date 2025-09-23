@@ -209,7 +209,7 @@ import {
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
-import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
+import { computed, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";

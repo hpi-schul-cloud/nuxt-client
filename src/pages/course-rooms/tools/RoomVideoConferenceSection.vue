@@ -54,10 +54,7 @@ import {
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 } from "@/serverApi/v3";
-import {
-	VideoConferenceOptions,
-	VideoConferenceState,
-} from "@/store/types/video-conference";
+import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import { injectStrict, VIDEO_CONFERENCE_MODULE_KEY } from "@/utils/inject";
 import { computed, ComputedRef, onMounted, ref, Ref } from "vue";
