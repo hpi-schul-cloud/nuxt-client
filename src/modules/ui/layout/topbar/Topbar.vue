@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ComputedRef, computed, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useDisplay } from "vuetify";
 import { STATUS_ALERTS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiMenu, mdiAlert, mdiQrcode } from "@icons/material";
@@ -59,7 +59,6 @@ import TopbarItem from "./TopbarItem.vue";
 import PageShare from "./PageShare.vue";
 import CloudStatusMessages from "./CloudStatusMessages.vue";
 import UserMenu from "./UserMenu.vue";
-import { StatusAlert } from "@/store/types/status-alert";
 import CloudLogo from "../CloudLogo.vue";
 import { useAppStoreRefs } from "@data-app";
 
@@ -86,9 +85,7 @@ onMounted(() => {
 	})();
 });
 
-const statusAlerts: ComputedRef<StatusAlert[]> = computed(
-	() => statusAlertsModule.getStatusAlerts
-);
+const statusAlerts = computed(() => statusAlertsModule.getStatusAlerts);
 
 const showStatusAlertIcon = computed(() => statusAlerts.value.length !== 0);
 

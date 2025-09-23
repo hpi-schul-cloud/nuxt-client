@@ -1,6 +1,6 @@
 export * from "./apiResponseErrorFactory";
 export * from "./apiValidationResponseErrorFactory";
-export * from "./authFactory";
+export * from "./applicationFactory";
 export * from "./authorizedCollaboraDocumentUrlResponseFactory";
 export * from "./axiosErrorFactory";
 export * from "./axiosResponseFactory";

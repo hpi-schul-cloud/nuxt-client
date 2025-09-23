@@ -16,14 +16,14 @@ import { createTestingPinia } from "@pinia/testing";
 describe("@/components/organisms/ContentCard", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
+
+		// The role can be anything here except "student", because of the "isNotStudent" method in ContentCard.
+		createTestAppStoreWithRole("test-role");
 	});
 	beforeEach(() => {
 		setupStores({
 			contentModule: ContentModule,
 		});
-
-		// The role can be anything here except "student", because of the "isNotStudent" method in ContentCard.
-		createTestAppStoreWithRole("test-role");
 	});
 
 	const setup = (resource = Resource) => {

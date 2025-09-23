@@ -63,7 +63,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	beforeEach(() => {
 		vi.useFakeTimers();
-		vi.clearAllMocks();
 
 		useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
 			isLoading: ref(false),

@@ -89,7 +89,7 @@
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { Permission, Role, RoleName } from "@/serverApi/v3";
+import { Permission, RoleName } from "@/serverApi/v3";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import {
 	mdiArchiveOutline,

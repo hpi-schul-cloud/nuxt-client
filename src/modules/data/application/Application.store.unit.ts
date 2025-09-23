@@ -146,7 +146,7 @@ describe("useApplicationStore", () => {
 		it("should successfully login and update store state", async () => {
 			await setup({ language: LanguageType.Es });
 
-			expect(useAppStore().loggedIn).toBe(true);
+			expect(useAppStore().isLoggedIn).toBe(true);
 			expect(useAppStore().locale).toBe(LanguageType.Es);
 		});
 
@@ -160,7 +160,7 @@ describe("useApplicationStore", () => {
 			try {
 				await useAppStore().login();
 			} catch {
-				expect(useAppStore().loggedIn).toBe(false);
+				expect(useAppStore().isLoggedIn).toBe(false);
 			}
 		});
 	});

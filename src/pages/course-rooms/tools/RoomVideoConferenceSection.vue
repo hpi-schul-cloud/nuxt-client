@@ -105,7 +105,7 @@ const hasPermission = computed(() => canJoin.value || canStart.value);
 
 const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 
-const videoConferenceOptions: ComputedRef<VideoConferenceOptions> = computed(
+const videoConferenceOptions = computed(
 	() => videoConferenceModule.getVideoConferenceInfo.options
 );
 

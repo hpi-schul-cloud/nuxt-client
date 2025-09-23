@@ -40,15 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-	computed,
-	ComputedRef,
-	PropType,
-	toRef,
-	ref,
-	Ref,
-	onMounted,
-} from "vue";
+import { computed, PropType, toRef, ref, Ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useOAuthApi } from "@data-oauth";
 import { System, useSystemApi } from "@data-system";
@@ -91,15 +83,13 @@ const isExternalLogoutAllowed = computed(
 		!!system.value?.hasEndSessionEndpoint
 );
 
-const systemName: ComputedRef<string> = computed(
-	() => system.value?.displayName ?? ""
-);
+const systemName = computed(() => system.value?.displayName ?? "");
 
-const now: Ref<Date> = ref(new Date());
+const now = ref(new Date());
 
 const sessionTokenExpiration: Ref<Date | undefined> = ref();
 
-const isSessionTokenExpired: ComputedRef<boolean> = computed(
+const isSessionTokenExpired = computed(
 	() =>
 		!sessionTokenExpiration.value || now.value >= sessionTokenExpiration.value
 );

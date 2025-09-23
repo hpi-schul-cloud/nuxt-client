@@ -8,13 +8,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
 import NewStudent from "./StudentCreate.page.vue";
-import { createTestAppStore } from "../../../tests/test-utils/index.js";
-
-vi.mock("@/utils/pageTitle", () => {
-	return {
-		buildPageTitle: (pageTitle) => pageTitle ?? "",
-	};
-});
+import { createTestAppStore } from "@@/tests/test-utils";
 
 const createMockStore = () => {
 	const createStudentStub = vi.fn();

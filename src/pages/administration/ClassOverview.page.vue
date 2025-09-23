@@ -326,11 +326,11 @@ const currentYear = computed(
 
 const classes = computed(() => groupModule.getClasses);
 
-const showSourceHeader: ComputedRef<boolean> = computed(() =>
+const showSourceHeader = computed(() =>
 	classes.value.some((classItem) => classItem.externalSourceName !== undefined)
 );
 
-const isLoading: ComputedRef<boolean> = computed(() => groupModule.getLoading);
+const isLoading = computed(() => groupModule.getLoading);
 
 const hasEditPermission = hasPermission(Permission.ClassEdit);
 const hasCreatePermission = hasPermission(Permission.ClassCreate);
@@ -341,15 +341,13 @@ const showClassAction = (item: ClassInfo) =>
 const showGroupAction = (item: ClassInfo) =>
 	hasEditPermission.value && item.type === ClassRootType.Group;
 
-const isDeleteDialogOpen: Ref<boolean> = ref(false);
+const isDeleteDialogOpen = ref(false);
 
-const isEndSyncDialogOpen: Ref<boolean> = ref(false);
+const isEndSyncDialogOpen = ref(false);
 
 const selectedItem: Ref<ClassInfo | undefined> = ref();
 
-const selectedItemName: ComputedRef<string> = computed(
-	() => selectedItem.value?.name || "???"
-);
+const selectedItemName = computed(() => selectedItem.value?.name || "???");
 
 const selectedItemForSync: ComputedRef<{
 	courseName: string;

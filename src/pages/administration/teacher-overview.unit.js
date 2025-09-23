@@ -17,8 +17,7 @@ import { nextTick } from "vue";
 import { createStore } from "vuex";
 import TeacherPage from "./TeacherOverview.page.vue";
 import { RouterLinkStub } from "@vue/test-utils";
-import { createTestEnvStore } from "@@/tests/test-utils";
-import { createTestAppStore } from "../../../tests/test-utils/index.js";
+import { createTestEnvStore, createTestAppStore } from "@@/tests/test-utils";
 
 const mockData = [
 	{
@@ -143,12 +142,8 @@ describe("teachers/index", () => {
 
 		createTestAppStore({
 			me: {
-				school: { ...mockSchool },
-				roles: [
-					{
-						name: RoleName.Administrator,
-					},
-				],
+				school: mockSchool,
+				roles: [{ name: RoleName.Administrator }],
 				permissions: [Permission.TeacherCreate, Permission.TeacherDelete],
 			},
 		});

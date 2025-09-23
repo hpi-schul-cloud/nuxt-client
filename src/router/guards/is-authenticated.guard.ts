@@ -7,7 +7,7 @@ export const isAuthenticatedGuard = (
 	from: RouteLocationNormalized,
 	next: NavigationGuardNext
 ) => {
-	const userIsLoggedIn = useAppStore().loggedIn;
+	const userIsLoggedIn = useAppStore().isLoggedIn;
 
 	if (userIsLoggedIn || isRoutePublic(to)) {
 		next();

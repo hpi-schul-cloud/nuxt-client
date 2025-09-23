@@ -9,13 +9,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
 import { default as NewTeacher } from "./TeacherCreate.page.vue";
 import { flushPromises } from "@vue/test-utils";
-import { createTestAppStore } from "../../../tests/test-utils/index.js";
-
-vi.mock("@/utils/pageTitle", () => {
-	return {
-		buildPageTitle: (pageTitle) => pageTitle ?? "",
-	};
-});
+import { createTestAppStore } from "@@/tests/test-utils";
 
 const createMockStore = (createTeacherStub) => {
 	const mockStore = createStore({

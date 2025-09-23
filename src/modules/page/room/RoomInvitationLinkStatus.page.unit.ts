@@ -18,7 +18,7 @@ import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/room
 import NotifierModule from "@/store/notifier";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useBoardNotifier } from "@util-board";
-import { createPinia, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
 import { flushPromises } from "@vue/test-utils";
 import { beforeAll } from "vitest";
 
@@ -47,7 +47,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeAll(() => {
-		setActivePinia(createPinia());
+		setActivePinia(createTestingPinia());
 	});
 
 	afterEach(() => {

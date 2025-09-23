@@ -50,7 +50,7 @@ describe("ExternalToolElementAlert", () => {
 			error?: BusinessError;
 			toolStatus?: ContextExternalToolConfigurationStatus;
 		},
-		roleName: RoleName = RoleName.Teacher
+		roleName = RoleName.Teacher
 	) => {
 		useToolConfigurationStatusMock.determineToolStatusTranslationKey.mockReturnValue(
 			"translated"

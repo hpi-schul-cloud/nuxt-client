@@ -24,7 +24,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
 
-	const loggedIn = ref(false);
+	const isLoggedIn = ref(false);
 	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
 
@@ -61,7 +61,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 		userLocale.value = data.language;
 		meResponse.value = data;
-		loggedIn.value = true;
+		isLoggedIn.value = true;
 	};
 
 	const logout = (redirectUrl = "/logout") => {
@@ -84,7 +84,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 			.catch(logger.error);
 
 	return {
-		loggedIn,
+		isLoggedIn,
 		userLocale,
 		locale,
 		meResponse,

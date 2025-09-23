@@ -21,8 +21,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
-import { createTestAppStore } from "../../../tests/test-utils/index.js";
+import { createTestEnvStore, createTestAppStore } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 

@@ -10,7 +10,7 @@ import { createTestAppStoreWithRole } from "@@/tests/test-utils";
 import { RoleName } from "@/serverApi/v3";
 
 describe("SubmissionContentElementDisplay", () => {
-	const setup = (role: RoleName = RoleName.Teacher) => {
+	const setup = (role = RoleName.Teacher) => {
 		const props = {
 			dueDate: "01.01.2023 01:23",
 			studentSubmission: { completed: false },

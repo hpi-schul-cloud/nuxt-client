@@ -6,7 +6,7 @@ import AddMembers from "./AddMembers.vue";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import {
-	createTestAppStore,
+	createTestAppStoreWithRole,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
@@ -90,14 +90,10 @@ describe("AddMembers", () => {
 			roomRoleName: RoleName.Roomadmin,
 		});
 
-		const { mockedMe } = createTestAppStore({
-			me: {
-				roles: [
-					{ id: "user-id", name: options?.schoolRole ?? RoleName.Teacher },
-				],
-			},
-			stubActions: false,
-		});
+		const { mockedMe } = createTestAppStoreWithRole(
+			options?.schoolRole ?? RoleName.Teacher,
+			false
+		);
 
 		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.Teacher];
 		roomMembers[0].userId = mockedMe.user.id;
