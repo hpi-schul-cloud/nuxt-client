@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, vi } from "vitest";
 import { setActivePinia } from "pinia";
-import { useAppStore } from "./Application.store";
+import { useAppStore } from "./application.store";
 import {
 	LanguageType,
 	MeApiFactory,
