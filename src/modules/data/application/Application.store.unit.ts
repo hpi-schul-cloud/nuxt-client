@@ -100,7 +100,7 @@ describe("useApplicationStore", () => {
 				expect(useAppStore().isExpert).toBe(false);
 			});
 
-			it("should correctly identify teacher role", async () => {
+			it("should correctly identify student role", async () => {
 				await setup({ roles: [{ id: "any", name: RoleName.Student }] });
 
 				expect(useAppStore().isTeacher).toBe(false);

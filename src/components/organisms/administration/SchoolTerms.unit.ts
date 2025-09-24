@@ -17,7 +17,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import type { Mocked } from "vitest";
-import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { Permission } from "@/serverApi/v3";
 
 vi.mock("@/utils/fileHelper");
@@ -58,7 +58,7 @@ describe("SchoolTerms", () => {
 		},
 		permissions = [Permission.SchoolEdit]
 	) => {
-		createTestAppStore({ me: { permissions }, stubActions: false });
+		createTestAppStoreWithPermissions(permissions, false);
 
 		schoolsModule = createModuleMocks(SchoolsModule, {
 			getSchool: mockSchool,

@@ -50,7 +50,7 @@ describe("@/components/helpers/UserHasRole", () => {
 		checkCorrectView(undefined, ["user"], false);
 	});
 	it("defaults to false when user has no roles", () => {
-		createTestAppStore({});
+		createTestAppStore();
 		checkCorrectView("ADMIN", [], false);
 	});
 });

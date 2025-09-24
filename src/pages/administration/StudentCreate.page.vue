@@ -43,7 +43,7 @@ import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mapGetters } from "vuex";
 import { useAppStore } from "@data-app";
-import { RoleName } from "@/serverApi/v3/index.js";
+import { RoleName } from "@/serverApi/v3";
 
 export default {
 	components: {

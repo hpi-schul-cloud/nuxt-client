@@ -13,7 +13,7 @@ import {
 	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 } from "@@/tests/test-utils";
-import { Permission } from "@/serverApi/v3/index.js";
+import { Permission } from "@/serverApi/v3";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 

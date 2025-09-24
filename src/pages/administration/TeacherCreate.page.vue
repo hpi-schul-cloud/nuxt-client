@@ -30,7 +30,7 @@ import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { RoleName } from "@/serverApi/v3/index.js";
+import { RoleName } from "@/serverApi/v3";
 import { useAppStore } from "@data-app";
 
 export default {

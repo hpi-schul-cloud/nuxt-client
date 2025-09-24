@@ -146,7 +146,7 @@ import { reactive } from "vue";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 import { useEnvConfig } from "@data-env";
 import { useAppStore } from "@data-app";
-import { Permission, RoleName } from "@/serverApi/v3/index.js";
+import { Permission, RoleName } from "@/serverApi/v3";
 
 export default {
 	components: {
