@@ -5,11 +5,9 @@ import { createStore, Store } from "vuex";
 import { initializeStores, modules } from "@/store/store-accessor";
 import activation from "@/store/activation";
 import { bulkConsent } from "@/store/bulkConsent";
-import calendar from "@/store/calendar";
 import classes from "@/store/classes";
 import courses from "@/store/courses";
 import { ldapConfig } from "@/store/ldap-config";
-import lessons from "@/store/lessons";
 import uiState from "@/store/uiState";
 import users from "@/store/users";
 
@@ -28,11 +26,9 @@ export default createStore({
 		...modules,
 		activation,
 		bulkConsent,
-		calendar,
 		classes,
 		courses,
 		"ldap-config": ldapConfig,
-		lessons,
 		uiState,
 		users,
 	},
