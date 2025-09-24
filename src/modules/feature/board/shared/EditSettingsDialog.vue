@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import type { VCard } from "vuetify/components";
 import { useDisplay } from "vuetify";
@@ -91,12 +91,12 @@ import { WarningAlert } from "@ui-alert";
 
 type Props = {
 	isDraftMode?: boolean;
-	isReaderCanEdit?: boolean;
+	isEditableSelected?: boolean;
 };
 
 const props = withDefaults(defineProps<Props>(), {
 	isDraftMode: false,
-	isReaderCanEdit: false,
+	isEditableSelected: false,
 });
 
 const isOpen = defineModel({
@@ -140,6 +140,7 @@ const radioOptions = computed(() => [
 
 const onClose = () => {
 	emit("close");
+	selectedOption.value = "editableWithoutReadPermission";
 };
 
 const onSave = () => {
@@ -160,14 +161,11 @@ watch(
 		if (!isOpen) {
 			deactivate();
 		}
+		if (props.isEditableSelected) {
+			selectedOption.value = "editableWithReadPermission";
+		}
 	}
 );
-
-onMounted(() => {
-	if (props.isReaderCanEdit) {
-		selectedOption.value = "editableWithReadPermission";
-	}
-});
 </script>
 
 <style lang="scss" scoped>
