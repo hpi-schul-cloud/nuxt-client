@@ -132,7 +132,7 @@ const props = defineProps({
 	},
 });
 
-const { fetchRoomAndBoards } = useRoomDetailsStore();
+const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -283,7 +283,7 @@ onMounted(async () => {
 
 	const roomId = route.params.id.toString();
 	if (room.value === undefined) {
-		await fetchRoomAndBoards(roomId);
+		await fetchRoom(roomId);
 	}
 	await fetchMembers();
 });
