@@ -115,8 +115,7 @@
 						variant="flat"
 						:text="t('common.actions.add')"
 						data-testid="add-participant-save-btn"
-						:disabled="isButtonDisabled"
-						@click="withLoading(() => onAddMembers())"
+						@click="onAddMembers"
 					/>
 				</div>
 			</template>
@@ -158,16 +157,6 @@ const isOpen = defineModel({
 	type: Boolean,
 	required: true,
 });
-
-const isLoading = ref(false);
-const withLoading = async (fn: () => Promise<void>) => {
-	isLoading.value = true;
-	try {
-		await fn();
-	} finally {
-		isLoading.value = false;
-	}
-};
 
 const emit = defineEmits<{
 	(e: "close"): void;
@@ -297,9 +286,6 @@ watch(isOpen, async (isDialogOpen) => {
 });
 
 const isItemListDisabled = computed(() => selectedUsers.value.length > 0);
-const isButtonDisabled = computed(
-	() => isLoading.value || selectedUsers.value.length === 0
-);
 </script>
 <style lang="scss" scoped>
 // show focus indicator for chips on safari
