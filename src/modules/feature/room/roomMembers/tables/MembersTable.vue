@@ -78,8 +78,8 @@ import {
 import { useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
 import { ChangeRole } from "@feature-room";
-import { authModule } from "@/store/store-accessor";
 import { RoleName } from "@/serverApi/v3";
+import { useAppStore } from "@data-app";
 
 type Props = {
 	headerBottom?: number;
@@ -98,6 +98,7 @@ const { canAddRoomMembers } = useRoomAuthorization();
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } =
 	storeToRefs(roomMembersStore);
+
 const { isRoomOwner, removeMembers } = roomMembersStore;
 const { askConfirmation } = useConfirmationDialog();
 
@@ -109,7 +110,7 @@ const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 
 const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
-	const isNotCurrentUser = userId !== authModule.getUser?.id;
+	const isNotCurrentUser = userId !== useAppStore().user?.id;
 	const isNotRoomOwner = !isRoomOwner(userId);
 	return isNotCurrentUser && isNotRoomOwner;
 };

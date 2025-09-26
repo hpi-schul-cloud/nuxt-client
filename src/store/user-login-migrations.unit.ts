@@ -4,20 +4,19 @@ import {
 	UserLoginMigrationResponse,
 	UserLoginMigrationSearchListResponse,
 } from "@/serverApi/v3/api";
-import AuthModule from "@/store/auth";
-import { authModule } from "@/store/store-accessor";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
 	businessErrorFactory,
-	meResponseFactory,
+	createTestAppStore,
+	createTestAppStoreWithSchool,
+	createTestAppStoreWithUser,
 	mockApiResponse,
 	userLoginMigrationFactory,
 	userLoginMigrationResponseFactory,
 } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
@@ -37,10 +36,6 @@ describe("UserLoginMigrationModule", () => {
 		vi.spyOn(serverApi, "UserLoginMigrationApiFactory").mockReturnValue(
 			apiMock
 		);
-
-		setupStores({
-			authModule: AuthModule,
-		});
 	});
 
 	afterEach(() => {
@@ -126,8 +121,7 @@ describe("UserLoginMigrationModule", () => {
 		describe("getLatestUserLoginMigrationForCurrentUser", () => {
 			describe("when user id is not available", () => {
 				const setup = () => {
-					const mockMe = meResponseFactory.build({ user: { id: undefined } });
-					authModule.setMe(mockMe);
+					createTestAppStoreWithUser(undefined);
 				};
 
 				it("should not get latest user login migration ", async () => {
@@ -144,8 +138,7 @@ describe("UserLoginMigrationModule", () => {
 			describe("when user is available", () => {
 				describe("when there is no migration for a user", () => {
 					const setup = () => {
-						const mockMe = meResponseFactory.build({ user: { id: "userId" } });
-						authModule.setMe(mockMe);
+						createTestAppStoreWithUser("userId");
 
 						const listResponse: UserLoginMigrationSearchListResponse = {
 							data: [],
@@ -172,8 +165,7 @@ describe("UserLoginMigrationModule", () => {
 
 				describe("when there are more than one migration for a user", () => {
 					const setup = () => {
-						const mockMe = meResponseFactory.build({ user: { id: "userId" } });
-						authModule.setMe(mockMe);
+						createTestAppStoreWithUser("userId");
 
 						const axiosError = axiosErrorFactory
 							.withStatusCode(HttpStatusCode.BadRequest)
@@ -210,8 +202,7 @@ describe("UserLoginMigrationModule", () => {
 
 				describe("when there is one migration for a user", () => {
 					const setup = () => {
-						const mockMe = meResponseFactory.build({ user: { id: "userId" } });
-						authModule.setMe(mockMe);
+						createTestAppStoreWithUser("userId");
 
 						const userLoginMigrationResponse: UserLoginMigrationResponse =
 							userLoginMigrationResponseFactory.build({
@@ -271,8 +262,7 @@ describe("UserLoginMigrationModule", () => {
 
 			describe("when the api throws an error", () => {
 				const setup = () => {
-					const mockMe = meResponseFactory.build({ user: { id: "userId" } });
-					authModule.setMe(mockMe);
+					createTestAppStoreWithUser("userId");
 
 					const error = axiosErrorFactory
 						.withStatusCode(HttpStatusCode.BadRequest)
@@ -316,8 +306,7 @@ describe("UserLoginMigrationModule", () => {
 
 			describe("when the api returns a bad request", () => {
 				const setup = () => {
-					const mockMe = meResponseFactory.build({ user: { id: "userId" } });
-					authModule.setMe(mockMe);
+					createTestAppStoreWithUser("userId");
 
 					const axiosError = axiosErrorFactory
 						.withStatusCode(HttpStatusCode.BadRequest)
@@ -344,10 +333,7 @@ describe("UserLoginMigrationModule", () => {
 		describe("getLatestUserLoginMigrationForSchool", () => {
 			describe("when school id is not available", () => {
 				const setup = () => {
-					const mockMe = meResponseFactory.build({
-						school: { id: undefined },
-					});
-					authModule.setMe(mockMe);
+					createTestAppStoreWithSchool(undefined);
 				};
 
 				it("should not get latest user login migrations", async () => {
@@ -364,8 +350,7 @@ describe("UserLoginMigrationModule", () => {
 			describe("when school is available", () => {
 				describe("when there is no migration for a school", () => {
 					const setup = () => {
-						const mockMe = meResponseFactory.build();
-						authModule.setMe(mockMe);
+						createTestAppStore();
 
 						const error = axiosErrorFactory.build({
 							response: {
@@ -391,8 +376,7 @@ describe("UserLoginMigrationModule", () => {
 
 				describe("when there is a migration for the school", () => {
 					const setup = () => {
-						const mockMe = meResponseFactory.build();
-						authModule.setMe(mockMe);
+						createTestAppStore();
 
 						const userLoginMigrationResponse: UserLoginMigrationResponse =
 							userLoginMigrationResponseFactory.build({
@@ -445,8 +429,7 @@ describe("UserLoginMigrationModule", () => {
 
 			describe("when the api throws an error", () => {
 				const setup = () => {
-					const mockMe = meResponseFactory.build();
-					authModule.setMe(mockMe);
+					createTestAppStore();
 
 					const error = axiosErrorFactory
 						.withStatusCode(HttpStatusCode.BadRequest)

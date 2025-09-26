@@ -1,6 +1,4 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { authModule } from "@/store";
-import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
@@ -8,8 +6,8 @@ import { RoomBoardItem } from "@/types/room/Room";
 
 import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import {
+	createTestAppStore,
 	createTestEnvStore,
-	meResponseFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
@@ -22,7 +20,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	RoomVariant,
 	useRoomAuthorization,
@@ -32,7 +29,6 @@ import {
 import { RoomMenu } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDetailsPage } from "@page-room";
-import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState } from "@ui-empty-state";
 import {
@@ -41,14 +37,16 @@ import {
 } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { Mock } from "vitest";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 
-vi.mock("vue-router", () => ({
-	useRouter: vi.fn().mockReturnValue({
-		push: vi.fn(),
-	}),
-}));
+vi.mock("vue-router", () => {
+	return {
+		useRouter: vi.fn().mockReturnValue({
+			push: vi.fn(),
+		}),
+	};
+});
 
 vi.mock("@data-room/Rooms.state");
 
@@ -65,9 +63,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	beforeEach(() => {
 		vi.useFakeTimers();
-		setupStores({
-			authModule: AuthModule,
-		});
 
 		useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
 			isLoading: ref(false),
@@ -75,9 +70,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			rooms: ref([]),
 		});
 		vi.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
-
-		const mockMe = meResponseFactory.build();
-		authModule.setMe(mockMe);
 
 		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
@@ -87,14 +79,14 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		roomPermissions = {
 			canAddRoomMembers: ref(false),
 			canChangeOwner: ref(false),
-			canCreateRoom: ref(false),
+			canCreateRoom: computed(() => false),
 			canViewRoom: ref(false),
 			canEditRoom: ref(false),
 			canDeleteRoom: ref(false),
 			canLeaveRoom: ref(true),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
-			canSeeAllStudents: ref(false),
+			canSeeAllStudents: computed(() => false),
 			canCopyRoom: ref(false),
 			canShareRoom: ref(false),
 			canManageRoomInvitationLinks: ref(false),
@@ -119,11 +111,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			...options,
 		};
 
-		createTestEnvStore({
-			FEATURE_BOARD_LAYOUT_ENABLED: true,
-			...envs,
-		});
-
 		const notifierModule = createModuleMocks(NotifierModule);
 		const shareModule = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: false,
@@ -132,22 +119,23 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		const room = roomFactory.build({});
 
+		createTestEnvStore({
+			FEATURE_BOARD_LAYOUT_ENABLED: true,
+			...envs,
+		});
+
+		useRoomDetailsStore().$patch({
+			isLoading: false,
+			room,
+			roomVariant: RoomVariant.ROOM,
+			roomBoards,
+		});
+
+		createTestAppStore();
+
 		const wrapper = mount(RoomDetailsPage, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomDetailsStore: {
-								isLoading: false,
-								room,
-								roomVariant: RoomVariant.ROOM,
-								roomBoards,
-							},
-						},
-					}),
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { LeaveRoomProhibitedDialog: true, UseFocusTrap: true },
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
@@ -171,7 +159,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	};
 
 	describe("when page is mounted", () => {
-		it("should set the page title", async () => {
+		it("should set the page title", () => {
 			const { room } = setup();
 
 			expect(document.title).toContain(
@@ -244,7 +232,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and user clicks on edit room", () => {
-			it("should navigate to the edit room page", async () => {
+			it("should navigate to the edit room page", () => {
 				const { wrapper, router, room } = setup();
 
 				const menu = wrapper.getComponent({ name: "RoomMenu" });
@@ -260,7 +248,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and user clicks on manage members", () => {
-			it("should navigate to the member management page", async () => {
+			it("should navigate to the member management page", () => {
 				const { wrapper, router, room } = setup();
 
 				const menu = wrapper.getComponent({ name: "RoomMenu" });
@@ -287,12 +275,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					expect(useRoomsStateMock.leaveRoom).toHaveBeenCalled();
 				});
 
-				it("should not call leaveRoom when dialog canceled", async () => {
+				it("should not call leaveRoom when dialog canceled", () => {
 					askConfirmationMock.mockResolvedValue(false);
 					const { wrapper, useRoomsStateMock } = setup();
 
 					const menu = wrapper.getComponent(RoomMenu);
-					await menu.vm.$emit("room:leave");
+					menu.vm.$emit("room:leave");
 
 					expect(useRoomsStateMock.leaveRoom).not.toHaveBeenCalled();
 				});

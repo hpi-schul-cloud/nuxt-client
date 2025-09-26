@@ -1,10 +1,9 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { MeResponse, RoleName } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
-import { AUTH_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { groupResponseFactory, meResponseFactory } from "@@/tests/test-utils";
+import { createTestAppStore, groupResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -30,13 +29,10 @@ describe("StartExistingCourseSyncDialog", () => {
 			courseName: "courseName",
 			courseTeachers: ["firstName lastName"],
 		},
-		admin?: MeResponse
+		admin?: Partial<MeResponse>
 	) => {
-		const me = meResponseFactory.build();
 		const notifierModule = createModuleMocks(NotifierModule);
-		const authModule = createModuleMocks(AuthModule, {
-			getMe: admin ?? me,
-		});
+		const { mockedMe } = createTestAppStore({ me: admin ?? {} });
 
 		const wrapper = mount(StartExistingCourseSyncDialog, {
 			global: {
@@ -51,7 +47,6 @@ describe("StartExistingCourseSyncDialog", () => {
 				},
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			},
 			props,
@@ -60,7 +55,7 @@ describe("StartExistingCourseSyncDialog", () => {
 		return {
 			wrapper,
 			notifierModule,
-			me,
+			me: mockedMe,
 		};
 	};
 
@@ -273,7 +268,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			const group = groupResponseFactory.build({
 				users: [
 					{
-						id: me.user.id,
+						id: me.user?.id,
 						firstName: me.user.firstName,
 						lastName: me.user.lastName,
 						role: RoleName.Teacher,
@@ -347,9 +342,9 @@ describe("StartExistingCourseSyncDialog", () => {
 					courseName: "courseName",
 					courseTeachers: ["firstname lastname"],
 				},
-				meResponseFactory.build({
+				{
 					roles: [{ id: "0", name: RoleName.Administrator }],
-				})
+				}
 			);
 
 			const group = groupResponseFactory.build({
@@ -405,9 +400,9 @@ describe("StartExistingCourseSyncDialog", () => {
 					courseName: "courseName",
 					courseTeachers: ["Firstname Lastname", "another teacher"],
 				},
-				meResponseFactory.build({
+				{
 					roles: [{ id: "0", name: RoleName.Administrator }],
-				})
+				}
 			);
 
 			const group = groupResponseFactory.build({

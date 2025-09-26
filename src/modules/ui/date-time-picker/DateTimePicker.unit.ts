@@ -4,19 +4,25 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import DateTimePicker from "./DateTimePicker.vue";
+import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("DateTimePicker", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const mountComponent = (
 		options: ComponentMountingOptions<typeof DateTimePicker> = {}
-	) => {
-		return mount(DateTimePicker, {
+	) =>
+		mount(DateTimePicker, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			...options,
 			attachTo: document.body,
 		});
-	};
 
 	it("should render component", () => {
 		const wrapper = mountComponent({

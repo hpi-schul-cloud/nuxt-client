@@ -128,6 +128,7 @@ import {
 	BoardLayout,
 	BoardParentType,
 	ImportUserResponseRoleNamesEnum as Roles,
+	Permission,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
@@ -157,7 +158,6 @@ import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import {
-	AUTH_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
@@ -167,6 +167,7 @@ import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { useDisplay } from "vuetify";
 import { useEnvConfig } from "@data-env";
+import { useAppStore } from "@data-app";
 
 export default defineComponent({
 	components: {
@@ -187,7 +188,6 @@ export default defineComponent({
 		shareModule: { from: SHARE_MODULE_KEY },
 		commonCartridgeExportModule: { from: COMMON_CARTRIDGE_EXPORT_MODULE_KEY },
 		courseRoomDetailsModule: { from: COURSE_ROOM_DETAILS_MODULE_KEY },
-		authModule: { from: AUTH_MODULE_KEY },
 	},
 	setup() {
 		const { t } = useI18n();
@@ -305,11 +305,7 @@ export default defineComponent({
 		learnContentFabItems() {
 			const actions = [];
 
-			if (
-				this.authModule.getUserPermissions.includes(
-					"HOMEWORK_CREATE".toLowerCase()
-				)
-			) {
+			if (useAppStore().userPermissions.includes(Permission.HomeworkCreate)) {
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.task"),
 					icon: mdiFormatListChecks,
@@ -319,11 +315,7 @@ export default defineComponent({
 				});
 			}
 
-			if (
-				this.authModule.getUserPermissions.includes(
-					"TOPIC_CREATE".toLowerCase()
-				)
-			) {
+			if (useAppStore().userPermissions.includes(Permission.TopicCreate)) {
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.lesson"),
 					icon: mdiViewListOutline,
@@ -334,10 +326,8 @@ export default defineComponent({
 			}
 
 			if (
-				this.authModule.getUserPermissions.includes(
-					"COURSE_EDIT".toLowerCase()
-				) &&
-				this.authModule.getUserRoles.includes(Roles.Teacher)
+				useAppStore().userPermissions.includes(Permission.CourseEdit) &&
+				useAppStore().isTeacher
 			) {
 				if (this.boardLayoutsEnabled) {
 					actions.push({
@@ -378,17 +368,14 @@ export default defineComponent({
 		scopedPermissions() {
 			return this.courseRoomDetailsModule.getPermissionData || [];
 		},
-		roles() {
-			return this.authModule.getUserRoles;
-		},
 		dashBoardRole() {
-			if (this.roles.includes(Roles.Teacher)) return Roles.Teacher;
-			if (this.roles.includes(Roles.Student)) return Roles.Student;
+			if (useAppStore().isTeacher) return Roles.Teacher;
+			if (useAppStore().isStudent) return Roles.Student;
 			return undefined;
 		},
 		canEditTools() {
-			return !!this.authModule?.getUserPermissions.includes(
-				"CONTEXT_TOOL_ADMIN".toLowerCase()
+			return !!useAppStore().userPermissions?.includes(
+				Permission.ContextToolAdmin
 			);
 		},
 		headlineMenuItems() {
@@ -510,7 +497,7 @@ export default defineComponent({
 
 			await this.courseRoomDetailsModule.fetchScopePermission({
 				courseId,
-				userId: this.authModule.getUser?.id,
+				userId: useAppStore().user?.id,
 			});
 
 			document.title = buildPageTitle(this.roomData.title);

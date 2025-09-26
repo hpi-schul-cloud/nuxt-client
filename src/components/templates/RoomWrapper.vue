@@ -35,11 +35,7 @@
 <script setup lang="ts">
 import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import {
-	authModule,
-	commonCartridgeImportModule,
-	courseRoomListModule,
-} from "@/store";
+import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
 import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
 import { computed, ComputedRef, Ref, ref } from "vue";
@@ -47,6 +43,8 @@ import { useI18n } from "vue-i18n";
 import { Fab, FabAction } from "./default-wireframe.types";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useEnvConfig } from "@data-env";
+import { useAppStore } from "@data-app";
+import { Permission } from "@/serverApi/v3";
 
 enum RoomFabEvent {
 	COMMON_CARTRIDGE_IMPORT = "import",
@@ -68,8 +66,10 @@ const props = defineProps({
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
+const canCreateCourse = useAppStore().hasPermission(Permission.CourseCreate);
+
 const fabItems: ComputedRef<Fab | undefined> = computed(() => {
-	if (authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())) {
+	if (canCreateCourse.value) {
 		const actions: FabAction[] = [
 			{
 				icon: mdiSchoolOutline,
@@ -119,15 +119,12 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 	return undefined;
 });
 
-const isLoading: ComputedRef<boolean> = computed(() => {
-	return courseRoomListModule.getLoading;
-});
+const isLoading = computed(() => courseRoomListModule.getLoading);
 
-const isEmptyState: ComputedRef<boolean> = computed(() => {
-	return (
+const isEmptyState = computed(
+	() =>
 		!courseRoomListModule.getLoading && !props.hasRooms && !props.hasImportToken
-	);
-});
+);
 
 const fabItemClickHandler = (event: string | undefined): void => {
 	if (event === RoomFabEvent.SYNCHRONIZED_COURSE) {

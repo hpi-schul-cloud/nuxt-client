@@ -118,9 +118,8 @@ import {
 	VideoConferenceElementResponse,
 	VideoConferenceScope,
 } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useVideoConference } from "../composables/VideoConference.composable";
+import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps({
 	element: {
@@ -181,11 +180,13 @@ if (isVideoConferenceEnabled.value) {
 const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
 });
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+
 const route = useRoute();
 const boardId = route.params.id;
-const { hasManageVideoConferencePermission, isTeacher, isStudent } =
-	useBoardPermissions();
+
+const { isStudent, isTeacher, isExpert, userRoles } = useAppStoreRefs();
+
+const { hasManageVideoConferencePermission } = useBoardPermissions();
 const { t } = useI18n();
 
 const isHidden = computed(
@@ -207,8 +208,8 @@ const hasParticipationPermission = computed(
 const canJoin = computed(
 	() =>
 		(isStudent.value || isTeacher.value) &&
-		(!authModule.getUserRoles.includes("expert") ||
-			authModule.getUserRoles.length > 1 ||
+		(!isExpert.value ||
+			userRoles.value?.length > 1 ||
 			isWaitingRoomActive.value)
 );
 

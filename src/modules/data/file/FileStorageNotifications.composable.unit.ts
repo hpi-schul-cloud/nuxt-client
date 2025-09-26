@@ -20,15 +20,14 @@ const mockI18nModule = vi.mocked(useI18n());
 
 const notifierModule = createModuleMocks(NotifierModule);
 
-const setupMountComposable = () => {
-	return mountComposable(() => useFileStorageNotifier(), {
+const setupMountComposable = () =>
+	mountComposable(() => useFileStorageNotifier(), {
 		global: {
 			provide: {
 				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 			},
 		},
 	});
-};
 
 describe("FileStorageNotifier.composable", () => {
 	beforeAll(() => {

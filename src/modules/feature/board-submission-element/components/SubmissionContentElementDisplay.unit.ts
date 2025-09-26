@@ -1,7 +1,4 @@
-import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { shallowMount } from "@vue/test-utils";
-import AuthModule from "@/store/auth";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
@@ -9,9 +6,11 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { createTestAppStoreWithRole } from "@@/tests/test-utils";
+import { RoleName } from "@/serverApi/v3";
 
 describe("SubmissionContentElementDisplay", () => {
-	const setup = (role: "teacher" | "student" = "teacher") => {
+	const setup = (role = RoleName.Teacher) => {
 		const props = {
 			dueDate: "01.01.2023 01:23",
 			studentSubmission: { completed: false },
@@ -19,16 +18,11 @@ describe("SubmissionContentElementDisplay", () => {
 			loading: false,
 			isOverdue: false,
 		};
-		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: [role],
-		});
+		createTestAppStoreWithRole(role);
 
 		const wrapper = shallowMount(SubmissionContentElementDisplay, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 			},
 			props,
 		});
@@ -47,21 +41,21 @@ describe("SubmissionContentElementDisplay", () => {
 
 	describe("As a student", () => {
 		it("should render SubmissionItemStudentDisplay", () => {
-			const { wrapper } = setup("student");
+			const { wrapper } = setup(RoleName.Student);
 
 			const component = wrapper.findComponent(SubmissionItemStudentDisplay);
 			expect(component.exists()).toBe(true);
 		});
 
 		it("should not render SubmissionItemsTeacherDisplay", () => {
-			const { wrapper } = setup("student");
+			const { wrapper } = setup(RoleName.Student);
 
 			const component = wrapper.findComponent(SubmissionItemsTeacherDisplay);
 			expect(component.exists()).toBe(false);
 		});
 
-		it("should emit 'update:completed' when completed state changes", async () => {
-			const { wrapper } = setup("student");
+		it("should emit 'update:completed' when completed state changes", () => {
+			const { wrapper } = setup(RoleName.Student);
 
 			const component = wrapper.findComponent(SubmissionItemStudentDisplay);
 			component.vm.$emit("update:completed");
@@ -73,14 +67,14 @@ describe("SubmissionContentElementDisplay", () => {
 
 	describe("As a teacher", () => {
 		it("should render SubmissionItemsTeacherDisplay", () => {
-			const { wrapper } = setup("teacher");
+			const { wrapper } = setup(RoleName.Teacher);
 
 			const component = wrapper.findComponent(SubmissionItemsTeacherDisplay);
 			expect(component.exists()).toBe(true);
 		});
 
 		it("should not render SubmissionItemStudentDisplay", () => {
-			const { wrapper } = setup("teacher");
+			const { wrapper } = setup(RoleName.Teacher);
 
 			const component = wrapper.findComponent(SubmissionItemStudentDisplay);
 			expect(component.exists()).toBe(false);

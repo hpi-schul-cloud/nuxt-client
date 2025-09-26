@@ -89,8 +89,7 @@
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { authModule } from "@/store";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { Permission, RoleName } from "@/serverApi/v3";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import {
 	mdiArchiveOutline,
@@ -104,10 +103,11 @@ import {
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import { COPY_MODULE_KEY } from "@/utils/inject";
+import { useAppStore } from "@data-app";
 
 const roleBasedRoutes = {
-	[Roles.Teacher]: ["current", "drafts", "finished"],
-	[Roles.Student]: ["open", "completed", "finished"],
+	[RoleName.Teacher]: ["current", "drafts", "finished"],
+	[RoleName.Student]: ["open", "completed", "finished"],
 };
 
 export default {
@@ -187,10 +187,10 @@ export default {
 		},
 		// TODO: split teacher and student sides
 		isStudent() {
-			return this.role === Roles.Student;
+			return this.role === RoleName.Student;
 		},
 		isTeacher() {
-			return this.role === Roles.Teacher;
+			return this.role === RoleName.Teacher;
 		},
 		showCourseFilter() {
 			if (this.tab === this.tabRoutes[2]) return false;
@@ -267,7 +267,7 @@ export default {
 		fabItems() {
 			if (
 				!this.isStudent &&
-				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
+				useAppStore().userPermissions.includes(Permission.HomeworkCreate)
 			) {
 				return {
 					icon: mdiPlus,

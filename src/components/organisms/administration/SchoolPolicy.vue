@@ -124,7 +124,6 @@ import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
 import { useI18n } from "vue-i18n";
 import {
-	AUTH_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
@@ -138,9 +137,10 @@ import {
 	mdiTrashCanOutline,
 	mdiTrayArrowUp,
 } from "@icons/material";
+import { useAppStore } from "@data-app";
+import { Permission } from "@/serverApi/v3";
 
 const { t } = useI18n();
-const authModule = injectStrict(AUTH_MODULE_KEY);
 const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
@@ -157,9 +157,10 @@ watch(
 	{ immediate: true }
 );
 
-const hasSchoolEditPermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("school_edit")
+const hasSchoolEditPermission = useAppStore().hasPermission(
+	Permission.SchoolEdit
 );
+
 const privacyPolicy: ComputedRef<ConsentVersion | null> = computed(
 	() => privacyPolicyModule.getPrivacyPolicy
 );

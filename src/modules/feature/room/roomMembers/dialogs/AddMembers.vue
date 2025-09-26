@@ -144,11 +144,7 @@ const { isCurrentUserStudent, potentialRoomMembers, schools } =
 const { addMembers, getPotentialMembers, resetPotentialMembers } =
 	roomMembersStore;
 
-const { canAddRoomMembers, canSeeAllStudents } = useRoomAuthorization();
-
-const canAddAllStudents = computed(() => {
-	return canAddRoomMembers.value && canSeeAllStudents.value;
-});
+const { canAddAllStudents } = useRoomAuthorization();
 
 const selectedSchool = ref(schools.value[0].id);
 
@@ -191,9 +187,7 @@ const { pause, unpause } = useFocusTrap(addMembersContent, {
 	immediate: true,
 });
 
-const isSchoolSelectionDisabled = computed(() => {
-	return isCurrentUserStudent.value;
-});
+const isSchoolSelectionDisabled = computed(() => isCurrentUserStudent.value);
 
 const isStudentSelectionDisabled = computed(() => {
 	const isExternalSchoolSelected = selectedSchool.value !== schools.value[0].id;
@@ -201,11 +195,10 @@ const isStudentSelectionDisabled = computed(() => {
 	return isExternalSchoolSelected && isStudentRoleSelected;
 });
 
-const isRestrictedStudentVisibilityCase = computed(() => {
-	return (
+const isRestrictedStudentVisibilityCase = computed(
+	() =>
 		selectedSchoolRole.value === RoleName.Student && !canAddAllStudents.value
-	);
-});
+);
 
 const determineStudentAlertType = computed<StudentAlertTypeEnum | null>(() => {
 	if (

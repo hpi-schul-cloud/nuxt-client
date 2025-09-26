@@ -1,8 +1,5 @@
-import { authModule } from "@/store";
-import AuthModule from "@/store/auth";
-import { meResponseFactory } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
 import UserHasRole from "./UserHasRole";
+import { createTestAppStore } from "@@/tests/test-utils";
 
 /**
  * @param  { String } expectedRole used as prop
@@ -40,34 +37,20 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 };
 
 describe("@/components/helpers/UserHasRole", () => {
-	beforeEach(() => {
-		setupStores({
-			authModule: AuthModule,
-		});
-	});
-
 	it("view true-slot if user has role", () => {
-		const mockMe = meResponseFactory.build({ roles: [{ name: "admin" }] });
-		authModule.setMe(mockMe);
-
+		createTestAppStore({ me: { roles: [{ id: "admin1", name: "admin" }] } });
 		checkCorrectView("ADMIN", ["admin"], true);
 	});
 	it("view false-slot if user does not have role", () => {
-		const mockMe = meResponseFactory.build({ roles: [{ name: "user" }] });
-		authModule.setMe(mockMe);
-
+		createTestAppStore({ me: { roles: [{ id: "user1", name: "user" }] } });
 		checkCorrectView("ADMIN", ["user"], false);
 	});
 	it("defaults to view rejected", () => {
-		const mockMe = meResponseFactory.build({ roles: [{ name: "user" }] });
-		authModule.setMe(mockMe);
-
+		createTestAppStore({ me: { roles: [{ id: "user1", name: "user" }] } });
 		checkCorrectView(undefined, ["user"], false);
 	});
 	it("defaults to false when user has no roles", () => {
-		const mockMe = meResponseFactory.build();
-		authModule.setMe(mockMe);
-
+		createTestAppStore();
 		checkCorrectView("ADMIN", [], false);
 	});
 });

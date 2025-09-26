@@ -145,7 +145,7 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog";
-import { authModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import {
 	mdiCheckCircle,
 	mdiContentCopy,
@@ -153,6 +153,8 @@ import {
 	mdiTrashCanOutline,
 } from "@icons/material";
 import { useEnvConfig } from "@data-env";
+import { useAppStore } from "@data-app";
+import { Permission } from "@/serverApi/v3";
 
 export default {
 	components: {
@@ -183,12 +185,10 @@ export default {
 		},
 		customLoginLinkEnabled: () =>
 			useEnvConfig().value.FEATURE_LOGIN_LINK_ENABLED,
-		hasSystemCreatePermission: () => {
-			return authModule.getUserPermissions.includes("system_create");
-		},
-		hasSystemEditPermission: () => {
-			return authModule.getUserPermissions.includes("system_edit");
-		},
+		hasSystemCreatePermission: () =>
+			useAppStore().hasPermission(Permission.SystemCreate),
+		hasSystemEditPermission: () =>
+			useAppStore().hasPermission(Permission.SystemEdit),
 	},
 	methods: {
 		ariaLabels(system) {

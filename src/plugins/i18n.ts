@@ -1,4 +1,3 @@
-import { authModule } from "@/store";
 import { createI18n } from "vue-i18n";
 // It looks like we have to use default exports and no additional imports in the language files. Otherwise resource pre-compilation will fail.
 // https://github.com/intlify/bundle-tools/blob/b245313be48c089db3f325f9bc96ad37ab2011b8/packages/bundle-utils/src/js.ts#L83C1-L109C6
@@ -14,6 +13,7 @@ import { default as enVuetify } from "vuetify/lib/locale/en";
 import { default as esVuetify } from "vuetify/lib/locale/es";
 import { default as ukVuetify } from "vuetify/lib/locale/uk";
 import { useEnvStore } from "@data-env";
+import { useAppStore } from "@data-app";
 
 declare type SupportedLanguages = "en" | "de" | "es" | "uk";
 
@@ -48,7 +48,7 @@ const localCreateI18n = () => {
 	// https://vue-i18n.intlify.dev/guide/advanced/typescript#global-resource-schema-type-definition
 	const i18n = createI18n<false>({
 		legacy: false,
-		locale: authModule.getLocale,
+		locale: useAppStore().locale,
 		fallbackLocale: useEnvStore().fallBackLanguage,
 		messages: messages,
 		numberFormats,

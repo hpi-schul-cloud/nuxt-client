@@ -199,11 +199,9 @@ import {
 	ToolApiAxiosParamCreator,
 } from "@/serverApi/v3";
 import { RequestArgs } from "@/serverApi/v3/base";
-import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
-	AUTH_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
@@ -211,7 +209,7 @@ import {
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
-import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
+import { computed, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
@@ -219,21 +217,21 @@ import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 import { useEnvConfig } from "@data-env";
+import { useAppStore } from "@data-app";
 
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 );
 const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 const router = useRouter();
 
 const schoolLicenseStore = useSchoolLicenseStore();
 
 onMounted(() => {
-	if (authModule.getSchool) {
-		schoolExternalToolsModule.loadSchoolExternalTools(authModule.getSchool.id);
-
+	const school = useAppStore().school;
+	if (school) {
+		schoolExternalToolsModule.loadSchoolExternalTools(school.id);
 		schoolLicenseStore.fetchMediaSchoolLicenses();
 	}
 });
@@ -247,13 +245,9 @@ const { getHeaders, getItems } = useExternalToolsSectionUtils(
 
 const { fetchSchoolExternalToolUsage, metadata } = useSchoolExternalToolUsage();
 
-const items: ComputedRef<SchoolExternalToolItem[]> = computed(() => {
-	return getItems(schoolExternalToolsModule);
-});
+const items = computed(() => getItems(schoolExternalToolsModule));
 
-const isLoading: ComputedRef<boolean> = computed(() => {
-	return schoolExternalToolsModule.getLoading;
-});
+const isLoading = computed(() => schoolExternalToolsModule.getLoading);
 
 const editTool = (item: SchoolExternalToolItem) => {
 	router.push({
@@ -289,11 +283,11 @@ const onDeleteTool = async () => {
 };
 
 const itemToDelete: Ref<SchoolExternalToolItem | undefined> = ref();
-const getItemName: ComputedRef<string> = computed(() => {
-	return itemToDelete.value ? itemToDelete.value?.name : "";
-});
+const getItemName = computed(() =>
+	itemToDelete.value ? itemToDelete.value?.name : ""
+);
 
-const isDeleteDialogOpen: Ref<boolean> = ref(false);
+const isDeleteDialogOpen = ref(false);
 
 const openDeleteDialog = async (item: SchoolExternalToolItem) => {
 	itemToDelete.value = item;
@@ -326,20 +320,14 @@ const isMediaBoardUsageVisible = computed(() => {
 	return isVisible;
 });
 
-const isVidisEnabled = computed(() => {
-	return useEnvConfig().value.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED;
-});
+const isVidisEnabled = computed(
+	() => useEnvConfig().value.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED
+);
 
-const isLicensedToSchool = (
-	mediumId?: string,
-	mediaSourceId?: string
-): boolean => {
-	return schoolLicenseStore.isLicensed(mediumId, mediaSourceId);
-};
+const isLicensedToSchool = (mediumId?: string, mediaSourceId?: string) =>
+	schoolLicenseStore.isLicensed(mediumId, mediaSourceId);
 
-const isLicensesLoading: ComputedRef<boolean> = computed(() => {
-	return schoolLicenseStore.isLoading;
-});
+const isLicensesLoading = computed(() => schoolLicenseStore.isLoading);
 </script>
 
 <style lang="scss" scoped>

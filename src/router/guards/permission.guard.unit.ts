@@ -4,19 +4,28 @@ import {
 	NavigationGuardNext,
 	RouteLocationNormalized,
 } from "vue-router";
+import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
+import { Permission } from "@/serverApi/v3";
 
 const mockError = vi.fn();
 
-vi.mock("@/store", () => ({
-	authModule: {
-		getUserPermissions: ["validPermission_1", "validPermission_2"],
-	},
-	applicationErrorModule: {
-		setError: () => mockError(),
-	},
-}));
+vi.mock("@/store", () => {
+	return {
+		applicationErrorModule: {
+			setError: () => mockError(),
+		},
+	};
+});
 
 describe("PermissionGuard", () => {
+	const validPermissionA = "validPermissionA" as Permission;
+	const validPermissionB = "validPermissionB" as Permission;
+	const invalidPermission = "invalidPermission" as Permission;
+
+	beforeAll(() => {
+		createTestAppStoreWithPermissions([validPermissionA, validPermissionB]);
+	});
+
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
@@ -28,10 +37,10 @@ describe("PermissionGuard", () => {
 	}
 
 	describe("createPermissionGuard", () => {
-		it("should check permissions from the authModule and allow access", () => {
+		it("should check permissions from the application store and allow access", () => {
 			const { to, from, next } = setup();
 			const permissionGuard: NavigationGuard = createPermissionGuard(
-				["validPermission_1"],
+				[validPermissionA],
 				"/dashboard"
 			);
 
@@ -40,11 +49,11 @@ describe("PermissionGuard", () => {
 			expect(next).toHaveBeenCalledWith();
 		});
 
-		it("should check with one valid and one invalid permissions from the authModule and deny access", () => {
+		it("should check with one valid and one invalid permissions from the application store and deny access", () => {
 			const { to, from, next } = setup();
 			const fallbackRoute = "/dashboard";
 			const permissionGuard: NavigationGuard = createPermissionGuard(
-				["validPermission_1", "invalidPermission"],
+				[validPermissionA, invalidPermission],
 				fallbackRoute
 			);
 
@@ -53,11 +62,11 @@ describe("PermissionGuard", () => {
 			expect(next).toHaveBeenCalledWith(fallbackRoute);
 		});
 
-		it("should check permissions from the authModule and deny access", () => {
+		it("should check permissions from the application store and deny access", () => {
 			const { to, from, next } = setup();
 			const fallbackRoute = "/dashboard";
 			const permissionGuard: NavigationGuard = createPermissionGuard(
-				["invalidPermission"],
+				[invalidPermission],
 				fallbackRoute
 			);
 
@@ -69,7 +78,7 @@ describe("PermissionGuard", () => {
 		it("should create a '403' error if fallbackRoute is not provided and with invalid permission", () => {
 			const { to, from, next } = setup();
 			const permissionGuard: NavigationGuard = createPermissionGuard([
-				"invalidPermission",
+				invalidPermission,
 			]);
 
 			permissionGuard(to, from, next);
@@ -80,8 +89,8 @@ describe("PermissionGuard", () => {
 		it("should create a '403' error if fallbackRoute is not provided and with one invalid permission", () => {
 			const { to, from, next } = setup();
 			const permissionGuard: NavigationGuard = createPermissionGuard([
-				"validPermission_1",
-				"invalidPermission",
+				validPermissionA,
+				invalidPermission,
 			]);
 
 			permissionGuard(to, from, next);

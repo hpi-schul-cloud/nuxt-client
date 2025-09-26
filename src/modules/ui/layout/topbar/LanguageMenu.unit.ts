@@ -1,36 +1,36 @@
 import { LanguageType } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import LanguageMenu from "./LanguageMenu.vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
+import { beforeAll } from "vitest";
+import { useAppStore } from "@data-app";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("@ui-layout/LanguageMenu", () => {
-	const setup = (attrs = {}) => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			I18N__AVAILABLE_LANGUAGES: [LanguageType.De, LanguageType.En],
 		});
+	});
 
-		const authModuleMock = createModuleMocks(AuthModule, {
-			getLocale: "de",
-		});
-
+	const setup = (attrs = {}) => {
 		const wrapper = mount(LanguageMenu, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModuleMock,
-				},
 			},
 			...attrs,
 		});
 
-		return { wrapper, authModuleMock };
+		return { wrapper };
 	};
 
 	beforeEach(() => {
@@ -61,7 +61,8 @@ describe("@ui-layout/LanguageMenu", () => {
 		});
 
 		it("should update the user's language", async () => {
-			const { wrapper, authModuleMock } = setup();
+			const appStore = mockedPiniaStoreTyping(useAppStore);
+			const { wrapper } = setup();
 
 			const selectedItem = wrapper.find('[data-testid="selected-language-de"]');
 			await selectedItem.trigger("click");
@@ -69,8 +70,7 @@ describe("@ui-layout/LanguageMenu", () => {
 				'[data-testid="available-language-en"]'
 			);
 			await availableItem.trigger("click");
-
-			expect(authModuleMock.updateUserLanguage).toHaveBeenCalledWith("en");
+			expect(appStore.updateUserLanguage).toHaveBeenCalledWith("en");
 			expect(window.location.reload).toHaveBeenCalled();
 		});
 	});

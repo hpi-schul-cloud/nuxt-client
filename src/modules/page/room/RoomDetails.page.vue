@@ -52,7 +52,6 @@
 import ShareModal from "@/components/share/ShareModal.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { authModule } from "@/store";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
@@ -84,6 +83,7 @@ import { computed, ComputedRef, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useEnvConfig } from "@data-env";
+import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps<{ room: RoomDetails }>();
 const room = toRef(props, "room");
@@ -248,13 +248,15 @@ const onDelete = async () => {
 	router.push({ name: "rooms" });
 };
 
+const { user } = useAppStoreRefs();
+
 const onLeaveRoom = async () => {
 	if (!canLeaveRoom.value) {
 		isLeaveRoomProhibitedDialogOpen.value = true;
 		return;
 	}
 
-	const currentUserId = authModule.getUser?.id;
+	const currentUserId = user.value?.id;
 	if (!currentUserId) return;
 	const roomId = room.value.id;
 
@@ -265,7 +267,9 @@ const onLeaveRoom = async () => {
 		confirmActionLangKey: "common.actions.leave",
 	});
 
-	if (!shouldLeave) return;
+	if (!shouldLeave) {
+		return;
+	}
 	await leaveRoom(roomId);
 	router.push("/rooms");
 };

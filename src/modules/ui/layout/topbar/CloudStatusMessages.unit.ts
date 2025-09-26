@@ -5,12 +5,18 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { beforeAll } from "vitest";
+import { createTestAppStore } from "@@/tests/test-utils";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
 };
 
 describe("@ui-layout/CloudStatusMessages", () => {
+	beforeAll(() => {
+		createTestAppStore();
+	});
+
 	const setup = () => {
 		const wrapper = mount(CloudStatusMessages, {
 			global: {

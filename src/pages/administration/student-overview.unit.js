@@ -2,12 +2,10 @@ import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
-import { SchulcloudTheme } from "@/serverApi/v3";
-import { authModule, schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
+import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
 import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
-import { meResponseFactory } from "@@/tests/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
@@ -20,7 +18,7 @@ import mock$objects from "../../../tests/test-utils/pageStubs";
 import StudentPage from "./StudentOverview.page.vue";
 import { RouterLinkStub } from "@vue/test-utils";
 import { mdiCheckAll, mdiClose } from "@icons/material";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, createTestAppStore } from "@@/tests/test-utils";
 
 const mockData = [
 	{
@@ -65,14 +63,10 @@ const createMockStore = () => {
 						return { data: [] };
 					},
 				},
-				state: () => ({
-					list: [],
-				}),
-			},
-			authModule: {
-				namespaced: true,
-				getters: {
-					getSchool: () => () => ({ ...mockSchool, isExternal: false }),
+				state: () => {
+					return {
+						list: [],
+					};
 				},
 			},
 			schools: {
@@ -91,12 +85,14 @@ const createMockStore = () => {
 				},
 				getters: {
 					getList: () => mockData,
-					getPagination: () => ({
-						limit: 25,
-						skip: 0,
-						total: 2,
-						query: "",
-					}),
+					getPagination: () => {
+						return {
+							limit: 25,
+							skip: 0,
+							total: 2,
+							query: "",
+						};
+					},
 					getActive: () => false,
 					getPercent: () => 0,
 					getQrLinks: () => [],
@@ -106,7 +102,9 @@ const createMockStore = () => {
 			uiState: {
 				namespaced: true,
 				getters: {
-					get: () => () => ({ page: 1 }),
+					get: () => () => {
+						return { page: 1 };
+					},
 				},
 				mutations: {
 					set: vi.fn(),
@@ -136,14 +134,11 @@ describe("students/index", () => {
 		process.env = { ...OLD_ENV }; // make a copy
 
 		setupStores({
-			authModule: AuthModule,
 			schoolsModule: SchoolsModule,
 			notifierModule: NotifierModule,
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
-		const mockMe = meResponseFactory.build();
-		authModule.setMe(mockMe);
 	});
 
 	afterAll(() => {
@@ -159,12 +154,22 @@ describe("students/index", () => {
 			};
 			return state[key];
 		},
-		set: () => ({}),
+		set: () => {
+			return {};
+		},
 	};
 
-	const setup = () => {
+	const setup = (permissions, roleName) => {
 		const { mockStore, usersActionsStubs, uiStateMutationsStubs } =
 			createMockStore();
+
+		createTestAppStore({
+			me: {
+				school: { ...mockSchool, isExternal: false },
+				roles: [{ id: roleName, name: roleName }],
+				permissions,
+			},
+		});
 
 		const wrapper = mount(StudentPage, {
 			global: {
@@ -189,9 +194,7 @@ describe("students/index", () => {
 	};
 
 	it("should call 'deleteUsers' action", async () => {
-		const { wrapper, usersActionsStubs } = setup();
-		authModule.addUserPermission("STUDENT_DELETE");
-
+		const { wrapper, usersActionsStubs } = setup([Permission.StudentDelete]);
 		await nextTick();
 
 		const userRows = wrapper.findAll('[data-testid="table-data-row"]');
@@ -236,9 +239,7 @@ describe("students/index", () => {
 	});
 
 	it("should emit the 'delete' action when deleting a user", async () => {
-		const { wrapper } = setup();
-
-		authModule.addUserPermission("STUDENT_DELETE");
+		const { wrapper } = setup([Permission.StudentDelete]);
 
 		// user row exists
 		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
@@ -419,8 +420,7 @@ describe("students/index", () => {
 	});
 
 	it("should render the fab-floating component if user has SUDENT_CREATE permission", () => {
-		authModule.addUserPermission("STUDENT_CREATE");
-		const { wrapper } = setup();
+		const { wrapper } = setup([Permission.StudentCreate]);
 
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_students_table"]`
@@ -429,15 +429,10 @@ describe("students/index", () => {
 	});
 
 	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", () => {
-		authModule.setMe({
-			roles: [
-				{
-					name: "administrator",
-				},
-			],
-			permissions: ["STUDENT_DELETE"],
-		});
-		const { wrapper } = setup();
+		const { wrapper } = setup([
+			Permission.StudentDelete,
+			RoleName.Administrator,
+		]);
 
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_students_table"]`

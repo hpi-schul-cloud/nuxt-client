@@ -118,7 +118,7 @@
 	</div>
 </template>
 <script>
-import { authModule, notifierModule, schoolsModule } from "@/store";
+import { notifierModule, schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
@@ -145,6 +145,8 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 import { useEnvConfig } from "@data-env";
+import { useAppStore } from "@data-app";
+import { Permission, RoleName } from "@/serverApi/v3";
 
 export default {
 	components: {
@@ -339,7 +341,9 @@ export default {
 			);
 
 			// filters out the QR bulk action is user is not an admin
-			if (!authModule.getUserRoles.some((name) => name === "administrator")) {
+			if (
+				!useAppStore().userRoles.some((name) => name === RoleName.Administrator)
+			) {
 				editedActions = editedActions.filter(
 					(action) =>
 						action.label !==
@@ -363,7 +367,7 @@ export default {
 			// filters out edit column if school is external or if user is not an admin
 			if (
 				this.schoolIsExternallyManaged ||
-				!authModule.getUserRoles.some((name) => name === "administrator")
+				!useAppStore().userRoles.some((name) => name === RoleName.Administrator)
 			) {
 				editedColumns = this.tableColumns.filter(
 					// _id field sets the edit column
@@ -389,7 +393,7 @@ export default {
 		fab() {
 			if (
 				this.schoolIsExternallyManaged ||
-				!this.$_userHasPermission("TEACHER_CREATE")
+				!this.$_userHasPermission(Permission.TeacherCreate)
 			) {
 				return null;
 			}

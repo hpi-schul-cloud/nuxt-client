@@ -13,8 +13,7 @@ import {
 	FileConfigApiFactory,
 	FilesStorageConfigResponse,
 } from "@/fileStorageApi/v3";
-import { Status } from "@/store/types/commons";
-import { computed, reactive, ref } from "vue";
+import { computed, reactive } from "vue";
 import { $axios } from "@/utils/api";
 import { createSharedComposable } from "@vueuse/core";
 
@@ -102,7 +101,6 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
 	});
 	const env = reactive<ConfigResponse>(defaultConfigEnvs);
-	const status = ref<Status>("pending");
 
 	const setEnvs = (envConfig: ConfigResponse) => {
 		Object.assign(env, envConfig);
@@ -112,9 +110,9 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		Object.assign(envFile, fileEnvsConfig);
 	};
 
-	const fallBackLanguage = computed(() => {
-		return env.I18N__FALLBACK_LANGUAGE ?? env.I18N__DEFAULT_LANGUAGE;
-	});
+	const fallBackLanguage = computed(
+		() => env.I18N__FALLBACK_LANGUAGE ?? env.I18N__DEFAULT_LANGUAGE
+	);
 
 	const instituteTitle = computed(() => {
 		switch (env.SC_THEME) {
@@ -141,20 +139,17 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 				setFileEnvs(fileConfigRes?.data);
 			}
 
-			status.value = "completed";
 			return true;
 		} catch {
 			applicationErrorModule.setError(
 				createApplicationError(HttpStatusCode.GatewayTimeout)
 			);
-			status.value = "error";
 			return false;
 		}
 	};
 
 	return {
 		loadConfiguration,
-		status,
 		env,
 		envFile,
 		fallBackLanguage,
