@@ -216,7 +216,7 @@ const {
 	hasCreateToolPermission,
 	hasDeletePermission,
 	hasEditPermission,
-	hasManageBoardPermission,
+	hasManageReadersCanEditPermission,
 	arePermissionsLoaded,
 } = useBoardPermissions();
 
@@ -370,7 +370,7 @@ watch(
 
 		hasReadersEditPermission.value =
 			arePermissionsLoaded?.value &&
-			hasManageBoardPermission?.value &&
+			hasManageReadersCanEditPermission?.value &&
 			useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE;
 	},
 	{ immediate: true }
