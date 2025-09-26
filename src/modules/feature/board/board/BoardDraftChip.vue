@@ -3,7 +3,6 @@
 		<template #activator="{ props }">
 			<VChip
 				v-bind="props"
-				size="small"
 				class="align-self-center cursor-default"
 				data-testid="board-draft-chip"
 			>

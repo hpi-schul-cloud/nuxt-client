@@ -25,8 +25,9 @@
 		</InlineEditInteractionHandler>
 		<div class="d-flex mt-4">
 			<BoardDraftChip v-if="isDraft" />
+			<BoardEditableChip v-if="isEditableChipVisible" />
 			<BoardMenu
-				v-if="hasEditPermission"
+				v-if="hasManageBoardPermission"
 				:scope="BoardMenuScope.BOARD"
 				data-testid="board-menu-btn"
 			>
@@ -37,8 +38,12 @@
 					@click="onShareBoard"
 				/>
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+				<KebabMenuActionEditingSettings
+					v-if="hasReadersEditPermission"
+					@click="onEditBoardSettings"
+				/>
+				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionDelete
 					:name="title"
 					scope-language-key="common.words.board"
@@ -57,6 +62,7 @@ import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPEND
 import {
 	KebabMenuActionCopy,
 	KebabMenuActionDelete,
+	KebabMenuActionEditingSettings,
 	KebabMenuActionRename,
 	KebabMenuActionPublish,
 	KebabMenuActionRevert,
@@ -71,6 +77,7 @@ import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardDraftChip from "./BoardDraftChip.vue";
+import BoardEditableChip from "./BoardEditableChip.vue";
 import { upperCaseFirstChar } from "@/utils/textFormatting";
 import { useEnvConfig } from "@data-env";
 
@@ -87,6 +94,13 @@ const props = defineProps({
 		type: Boolean,
 		required: true,
 	},
+	isEditableChipVisible: {
+		type: Boolean,
+	},
+	hasReadersEditPermission: {
+		type: Boolean,
+		required: true,
+	},
 });
 
 const emit = defineEmits([
@@ -96,6 +110,7 @@ const emit = defineEmits([
 	"update:visibility",
 	"delete:board",
 	"change-layout",
+	"edit:settings",
 ]);
 
 const { t } = useI18n();
@@ -105,7 +120,8 @@ const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
 );
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
-const { hasEditPermission, hasShareBoardPermission } = useBoardPermissions();
+const { hasEditPermission, hasManageBoardPermission, hasShareBoardPermission } =
+	useBoardPermissions();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
@@ -170,6 +186,10 @@ const onDeleteBoard = async (confirmation: Promise<boolean>) => {
 
 const onChangeBoardLayout = async () => {
 	emit("change-layout");
+};
+
+const onEditBoardSettings = () => {
+	emit("edit:settings");
 };
 
 const emitTitle = useDebounceFn((newTitle: string) => {

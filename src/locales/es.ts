@@ -180,6 +180,7 @@ export default {
 		"Inserte un espacio después del signo menos-que.",
 	"common.validation.nonEmptyString":
 		"Este campo es obligatorio y no debe contener sólo espacios.",
+	"common.words.also": "también",
 	"common.words.and": "y",
 	"common.words.board": "tablero",
 	"common.words.classes": "Clases",
@@ -214,6 +215,7 @@ export default {
 	"common.words.lernstore": "Lern-Store",
 	"common.words.mainSchool": "Escuela principal",
 	"common.words.no": "No",
+	"common.words.not": "no",
 	"common.words.noChoice": "Sin elección",
 	"common.words.otherGroups": "otros grupos",
 	"common.words.externalTools": "herramientas externas",
@@ -478,6 +480,15 @@ export default {
 	"components.board.error.403":
 		"Error 403 – Lamentablemente, falta la autorización para ver este contenido ...",
 	"components.board.menu.board": "Configuración del tablero",
+	"components.board.menu.editing.settings.title": "Configuración de edición",
+	"components.board.dialog.readerCanEdit.subtitle":
+		"Aquí puede cambiar los derechos de edición para esta área. Independientemente de esta configuración, los miembros con el permiso de sala 'Editar' y superior siempre pueden editar áreas.",
+	"components.board.dialog.readerCanEdit.options":
+		"Este tablero {0} es editable para miembros con el permiso de sala 'Leer'.",
+	"components.board.dialog.readerCanEdit.options.defaultSetting":
+		"Configuración predeterminada",
+	"components.board.dialog.readerCanEdit.alert.text":
+		"El tablero debe publicarse primero antes de que se puedan ajustar los ajustes de edición.",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
 	"components.board.menu.collaborativeTextEditorElement":
@@ -541,8 +552,13 @@ export default {
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Otro usuario cambió la vista del panel a {layout}.",
+	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
+		"El tablero fue establecida como editable para todos los usuarios por otro usuario.",
+	"components.board.screenReader.notification.boardSetAsNotEditableForAllUsers.success":
+		"El tablero fue establecida como no editable para todos los usuarios por otro usuario.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"No se pudieron cargar las herramientas preferidas.",
+	"components.board.header.chip.editableForEveryone": "Editable para todos",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
 	"components.boardElement": "elemento",

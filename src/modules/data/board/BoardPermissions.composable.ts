@@ -20,6 +20,8 @@ const boardPermissions = (): BoardPermissionChecks => {
 	const hasEditPermission = ref(false);
 	const hasDeletePermission = ref(false);
 	const hasManageVideoConferencePermission = ref(false);
+	const hasManageReadersCanEditPermission = ref(false);
+	const hasManageBoardPermission = ref(false);
 	const hasShareBoardPermission = ref(false);
 
 	watchEffect(() => {
@@ -40,6 +42,12 @@ const boardPermissions = (): BoardPermissionChecks => {
 		);
 		hasEditPermission.value = permissions.includes(Permission.BoardEdit);
 		hasDeletePermission.value = permissions.includes(Permission.BoardEdit);
+		hasManageBoardPermission.value = permissions.includes(
+			Permission.BoardManage
+		);
+		hasManageReadersCanEditPermission.value = permissions.includes(
+			Permission.BoardManageReadersCanEdit
+		);
 		hasManageVideoConferencePermission.value = permissions.includes(
 			Permission.BoardManageVideoconference
 		);
@@ -57,7 +65,9 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasEditPermission,
 		hasDeletePermission,
 		hasManageVideoConferencePermission,
+		hasManageReadersCanEditPermission,
 		hasShareBoardPermission,
+		hasManageBoardPermission,
 		isTeacher,
 		isStudent,
 	};

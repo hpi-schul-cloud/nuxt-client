@@ -32,6 +32,9 @@ import {
 	UpdateBoardVisibilityFailurePayload,
 	UpdateBoardVisibilityRequestPayload,
 	UpdateBoardVisibilitySuccessPayload,
+	UpdateReaderCanEditFailurePayload,
+	UpdateReaderCanEditRequestPayload,
+	UpdateReaderCanEditSuccessPayload,
 	UpdateColumnTitleFailurePayload,
 	UpdateColumnTitleRequestPayload,
 	UpdateColumnTitleSuccessPayload,
@@ -199,4 +202,19 @@ export const updateBoardLayoutSuccess = createAction(
 export const updateBoardLayoutFailure = createAction(
 	"update-board-layout-failure",
 	props<UpdateBoardLayoutFailurePayload>()
+);
+
+export const updateReaderCanEditRequest = createAction(
+	"update-readers-can-edit-request",
+	props<UpdateReaderCanEditRequestPayload>()
+);
+
+export const updateReaderCanEditSuccess = createAction(
+	"update-readers-can-edit-success",
+	props<UpdateReaderCanEditSuccessPayload>()
+);
+
+export const updateReaderCanEditFailure = createAction(
+	"update-readers-can-edit-failure",
+	props<UpdateReaderCanEditFailurePayload>()
 );
