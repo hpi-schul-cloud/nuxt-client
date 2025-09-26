@@ -90,14 +90,11 @@ import { useDisplay } from "vuetify";
 import { WarningAlert } from "@ui-alert";
 
 type Props = {
-	isDraftMode?: boolean;
-	isEditableSelected?: boolean;
+	isDraftMode: boolean;
+	isEditableSelected: boolean;
 };
 
-const props = withDefaults(defineProps<Props>(), {
-	isDraftMode: false,
-	isEditableSelected: false,
-});
+const props = defineProps<Props>();
 
 const isOpen = defineModel({
 	type: Boolean,
@@ -112,9 +109,8 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { xs } = useDisplay();
 
-const selectedOption = ref<
-	"editableWithoutReadPermission" | "editableWithReadPermission"
->("editableWithoutReadPermission");
+type EditOption = "notEditable" | "editable";
+const selectedOption = ref<EditOption>("notEditable");
 
 const modalTitle = computed(() =>
 	t("components.board.menu.editing.settings.title")
@@ -122,7 +118,7 @@ const modalTitle = computed(() =>
 
 const radioOptions = computed(() => [
 	{
-		value: "editableWithoutReadPermission",
+		value: "notEditable",
 		labelHeader: "components.board.dialog.readerCanEdit.options",
 		labelInlineFormattedText: "common.words.not",
 		labelDescription:
@@ -130,7 +126,7 @@ const radioOptions = computed(() => [
 		dataTestid: "edit-settings-option-1",
 	},
 	{
-		value: "editableWithReadPermission",
+		value: "editable",
 		labelHeader: "components.board.dialog.readerCanEdit.options",
 		labelInlineFormattedText: "common.words.also",
 		labelDescription: "",
@@ -140,13 +136,14 @@ const radioOptions = computed(() => [
 
 const onClose = () => {
 	emit("close");
-	selectedOption.value = "editableWithoutReadPermission";
 };
 
 const onSave = () => {
-	const payload = selectedOption.value === "editableWithReadPermission";
+	const payload = selectedOption.value === "editable";
+	if (payload !== props.isEditableSelected) {
+		emit("save", payload);
+	}
 
-	emit("save", payload);
 	emit("close");
 };
 
@@ -161,10 +158,19 @@ watch(
 		if (!isOpen) {
 			deactivate();
 		}
-		if (props.isEditableSelected) {
-			selectedOption.value = "editableWithReadPermission";
-		}
 	}
+);
+
+watch(
+	() => props.isEditableSelected,
+	(isEditableSelected: boolean) => {
+		if (isEditableSelected) {
+			selectedOption.value = "editable";
+		} else {
+			selectedOption.value = "notEditable";
+		}
+	},
+	{ immediate: true }
 );
 </script>
 

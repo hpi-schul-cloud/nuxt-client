@@ -168,7 +168,7 @@ describe("EditSettingsDialog", () => {
 				const radioGroupComponent = wrapper.findComponent(VRadioGroup);
 				expect(radioGroupComponent.exists()).toBe(true);
 				expect(radioGroupComponent.props("modelValue")).toStrictEqual(
-					"editableWithoutReadPermission"
+					"editable"
 				);
 			});
 		});
@@ -195,17 +195,34 @@ describe("EditSettingsDialog", () => {
 			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 
-		it("should emit 'save' with the selected option when the save button is clicked", async () => {
-			const { wrapper } = setup();
-			const cardComponent = wrapper.findComponent(VCard);
-			const saveButton = cardComponent.find(
-				'[data-testid="edit-settings-save-btn"]'
-			);
+		describe("when modelValue is changed and the save button is clicked", () => {
+			it("should emit 'save' with the selected option ", async () => {
+				const { wrapper } = setup({ isEditableSelected: true });
+				const cardComponent = wrapper.findComponent(VCard);
+				const saveButton = cardComponent.find(
+					'[data-testid="edit-settings-save-btn"]'
+				);
+				const radioGroupComponent = cardComponent.findComponent(VRadioGroup);
+				radioGroupComponent.vm.$emit("update:modelValue", "notEditable");
 
-			await saveButton.trigger("click");
+				await saveButton.trigger("click");
 
-			expect(wrapper.emitted()).toHaveProperty("save");
-			expect(wrapper.emitted("save")?.[0]).toEqual([false]);
+				expect(wrapper.emitted()).toHaveProperty("save");
+				expect(wrapper.emitted("save")?.[0]).toEqual([false]);
+			});
+		});
+
+		describe("when modelValue is not changed and the save button is clicked", () => {
+			it("should not emit 'save'", async () => {
+				const { wrapper } = setup({ isEditableSelected: true });
+				const cardComponent = wrapper.findComponent(VCard);
+				const saveButton = cardComponent.find(
+					'[data-testid="edit-settings-save-btn"]'
+				);
+
+				await saveButton.trigger("click");
+				expect(wrapper.emitted("save")).toBeUndefined();
+			});
 		});
 	});
 });

@@ -221,7 +221,9 @@ const {
 } = useBoardPermissions();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
-const isEditableChipVisible = computed(() => board.value?.readersCanEdit);
+const isEditableChipVisible = computed(
+	() => board.value?.readersCanEdit ?? false
+);
 const hasReadersEditPermission = ref(false);
 
 const onCreateCard = async (columnId: string) => {
