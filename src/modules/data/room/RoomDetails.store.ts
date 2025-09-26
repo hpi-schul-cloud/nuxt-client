@@ -30,13 +30,15 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
-	const fetchRoom = async (id: string) => {
+	const fetchRoom = async (id: string, config = { loadBoards: false }) => {
 		try {
 			roomVariant.value = RoomVariant.ROOM;
 			room.value = (await roomApi.roomControllerGetRoomDetails(id)).data;
-			roomBoards.value = (
-				await roomApi.roomControllerGetRoomBoards(id)
-			).data.data;
+			if (config.loadBoards) {
+				roomBoards.value = (
+					await roomApi.roomControllerGetRoomBoards(id)
+				).data.data;
+			}
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
@@ -53,6 +55,10 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		} finally {
 			isLoading.value = false;
 		}
+	};
+
+	const fetchRoomAndBoards = async (id: string) => {
+		await fetchRoom(id, { loadBoards: true });
 	};
 
 	const createBoard = async (
@@ -94,6 +100,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	};
 
 	return {
+		fetchRoomAndBoards,
 		fetchRoom,
 		createBoard,
 		isLoading,

@@ -19,6 +19,7 @@ import {
 } from "@@/tests/test-utils";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import {
+	VCard,
 	VDataTable,
 	VDialog,
 	VIcon,
@@ -45,6 +46,7 @@ import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
 import { ChangeRole } from "@feature-room";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
 import { Mock } from "vitest";
 
 vi.mock("@ui-confirmation-dialog");
@@ -58,6 +60,8 @@ vi.mock("@vueuse/integrations/useFocusTrap");
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
+vi.mock("@vueuse/integrations/useFocusTrap");
+
 type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
 };
@@ -70,6 +74,10 @@ describe("MembersTable", () => {
 	let askConfirmationMock: Mock;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
+	let deactivateMock: Mock;
+
 	beforeEach(() => {
 		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
@@ -78,6 +86,16 @@ describe("MembersTable", () => {
 		mockedUseRemoveConfirmationDialog.mockReturnValue({
 			askConfirmation: askConfirmationMock,
 			isDialogOpen: ref(false),
+		});
+
+		pauseMock = vi.fn();
+		unpauseMock = vi.fn();
+		deactivateMock = vi.fn();
+
+		(useFocusTrap as Mock).mockReturnValue({
+			pause: pauseMock,
+			unpause: unpauseMock,
+			deactivate: deactivateMock,
 		});
 
 		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
@@ -169,6 +187,9 @@ describe("MembersTable", () => {
 						},
 					}),
 				],
+			},
+			stubs: {
+				ChangeRole: true,
 			},
 		});
 
@@ -560,26 +581,40 @@ describe("MembersTable", () => {
 
 	describe("change role dialog", () => {
 		it("should close dialog on @cancel", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({
+				customRoomAuthorization: { canAddRoomMembers: true },
+			});
 
-			const changeRoleDialog = wrapper.findComponent(VDialog);
-			await changeRoleDialog.setValue(true);
+			const dataTable = wrapper.getComponent(VDataTable);
+
+			const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
+			await menuBtn.trigger("click");
+
+			const changeRoleDialog = wrapper.findComponent(ChangeRole);
+			const changeRoleButton = wrapper.findComponent(
+				KebabMenuActionChangePermission
+			);
+			await changeRoleButton.trigger("click");
 			expect(changeRoleDialog.props("modelValue")).toBe(true);
 
-			const addMemberComponent = changeRoleDialog.findComponent(ChangeRole);
-			await addMemberComponent.vm.$emit("close");
-
+			await changeRoleDialog.vm.$emit("close");
 			expect(changeRoleDialog.props("modelValue")).toBe(false);
 		});
 
 		it("should close dialog on escape key", async () => {
 			const { wrapper } = setup();
+			const dataTable = wrapper.getComponent(VDataTable);
+			const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
+			await menuBtn.trigger("click");
 
-			const changeRoleDialog = wrapper.findComponent(VDialog);
-			await changeRoleDialog.setValue(true);
+			const changeRoleButton = wrapper.findComponent(
+				KebabMenuActionChangePermission
+			);
+			await changeRoleButton.trigger("click");
 
-			const dialogContent = changeRoleDialog.getComponent(ChangeRole);
-			await dialogContent.trigger("keydown.escape");
+			const changeRoleDialog = wrapper.findComponent(ChangeRole);
+			const card = wrapper.findComponent(VCard);
+			await card.trigger("keydown.esc");
 
 			expect(changeRoleDialog.props("modelValue")).toBe(false);
 		});

@@ -18,6 +18,7 @@ import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { DataTable } from "@ui-data-table";
+import { ChangeRole } from "@feature-room";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = vi.mocked(useBoardNotifier);
@@ -63,6 +64,7 @@ describe("RoomAdminMembersTable", () => {
 				firstName: "---",
 				lastName: "---",
 				roomRoleName: RoleName.Roomviewer,
+				schoolRoleNames: [RoleName.Student],
 			}),
 			...roomMemberFactory.buildList(1, {
 				schoolId: "different-school-id",
@@ -206,18 +208,37 @@ describe("RoomAdminMembersTable", () => {
 		});
 	});
 
-	describe("selection", () => {
+	describe("when selecting members", () => {
 		it("should update 'selectedIds' value when a member is selected", async () => {
+			const { wrapper, roomMembersStore, roomMembers } = setup();
+
+			const dataTable = wrapper.getComponent(DataTable);
+			const checkboxes = dataTable.findAll("input[type='checkbox']");
+			checkboxes.at(3)?.trigger("click");
+			await nextTick();
+
+			const userIds = roomMembers.slice(2, 3).map((m) => m.userId);
+			expect(roomMembersStore.selectedIds).toEqual(
+				expect.arrayContaining(userIds)
+			);
+		});
+	});
+
+	describe("when closing the dialog", () => {
+		it("should reset 'selectedIds' value", async () => {
 			const { wrapper, roomMembersStore } = setup();
 
 			const dataTable = wrapper.getComponent(DataTable);
-			const emittedIds = ["123", "456"];
-			dataTable.vm.$emit("update:selected-ids", emittedIds);
+			const checkboxes = dataTable.findAll("input[type='checkbox']");
+			checkboxes.at(3)?.trigger("click");
 			await nextTick();
 
-			expect(roomMembersStore.selectedIds).toEqual(
-				expect.arrayContaining(emittedIds)
-			);
+			const changeRoleDialog = wrapper.getComponent(ChangeRole);
+			changeRoleDialog.vm.$emit("close");
+			await nextTick();
+
+			expect(roomMembersStore.selectedIds).toEqual([]);
+			expect(roomMembersStore.fetchMembers).toHaveBeenCalled();
 		});
 	});
 });

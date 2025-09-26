@@ -2029,9 +2029,9 @@ export default {
 	"pages.rooms.members.handOverAlert.label":
 		"Diese Raumberechtigung wird an {memberFullName} übertragen.",
 	"pages.rooms.members.handOverAlert.label.subText":
-		"{currentUserFullName} verliert die Berechtigung „Besitzen” und erhält die Berechtigung „Verwalten”.",
+		"{roomOwner} verliert die Berechtigung „Besitzen” und erhält die Berechtigung „Verwalten”.",
 	"pages.rooms.members.handOverAlert.confirm.label":
-		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {currentUserFullName} das Recht, den Raum zu löschen.",
+		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {roomOwner} das Recht, den Raum zu löschen.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
 	"pages.rooms.members.inviteMember.step.prepare.title":

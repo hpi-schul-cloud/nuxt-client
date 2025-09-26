@@ -134,7 +134,7 @@ describe("AdministrationRooms.page", () => {
 			await roomAdminTable.vm.$emit("manage-room-members", roomId);
 
 			const expectedRoute = {
-				name: "administration-rooms-manage-details",
+				name: "administration-rooms-manage-members",
 				params: { roomId },
 			};
 

@@ -1,21 +1,21 @@
-import { computed, Ref, ref } from "vue";
-import { RoomMember } from "./types";
 import {
+	ChangeRoomRoleBodyParamsRoleNameEnum,
 	RoleName,
 	RoomApiFactory,
-	SchoolApiFactory,
 	RoomMemberResponse,
+	SchoolApiFactory,
 	SchoolForExternalInviteResponse,
-	ChangeRoomRoleBodyParamsRoleNameEnum,
 } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
-import { useI18n } from "vue-i18n";
-import { useBoardNotifier } from "@util-board";
 import { schoolsModule } from "@/store";
 import { authModule } from "@/store/store-accessor";
+import { $axios } from "@/utils/api";
+import { useRoomDetailsStore } from "@data-room";
+import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
-import { useRoomDetailsStore } from "@data-room";
+import { computed, Ref, ref, reactive } from "vue";
+import { useI18n } from "vue-i18n";
+import { RoomMember } from "./types";
 
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const { t } = useI18n();
@@ -52,13 +52,13 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 				"pages.rooms.administration.roomDetail.anonymized"
 			);
 
-			return {
+			return reactive({
 				...member,
 				isSelectable: !isAnonymizedMember,
 				firstName: anonymizedName,
 				lastName: anonymizedName,
 				fullName: anonymizedName,
-			};
+			});
 		});
 	});
 
@@ -102,12 +102,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return roomId.value;
 	};
 
-	const fetchMembers = async (roomId?: string) => {
+	const fetchMembers = async () => {
 		try {
 			isLoading.value = true;
-			const { data } = (
-				await roomApi.roomControllerGetMembers(roomId ?? getRoomId())
-			).data;
+			const { data } = (await roomApi.roomControllerGetMembers(getRoomId()))
+				.data;
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
@@ -120,9 +119,9 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 				};
 			});
-			isLoading.value = false;
 		} catch {
 			showFailure(t("pages.rooms.members.error.load"));
+		} finally {
 			isLoading.value = false;
 		}
 	};
@@ -190,6 +189,13 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return member.fullName;
 	};
 
+	const getRoomOwnerFullName = () => {
+		const owner = roomMembers.value.find(
+			(member) => member.roomRoleName === RoleName.Roomowner
+		);
+		return owner?.fullName;
+	};
+
 	const isCurrentUserStudent = computed(() => {
 		const member = roomMembers.value.find(
 			(member) => member.userId === currentUserId
@@ -249,6 +255,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					displayRoomRole: roomRole[roomRoleName],
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 					schoolId: member.schoolId,
+					isSelectable: true,
 				}))
 			);
 		} catch {
@@ -327,16 +334,19 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		const currentOwner = roomMembers.value.find(
 			(member) => member.roomRoleName === RoleName.Roomowner
 		);
+		if (currentOwner) {
+			updateMemberRole(currentOwner, RoleName.Roomadmin);
+		}
+
 		const memberToBeOwner = roomMembers.value.find(
 			(member) => member.userId === userId
 		);
-		if (!currentOwner || !memberToBeOwner) {
+		if (!memberToBeOwner) {
 			showFailure(t("pages.rooms.members.error.updateRole"));
 			return;
 		}
 
 		updateMemberRole(memberToBeOwner, RoleName.Roomowner);
-		updateMemberRole(currentOwner, RoleName.Roomadmin);
 	};
 
 	const confirmInvitations = async (ids: string[]) => {
@@ -454,6 +464,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		loadSchoolList,
 		getMemberById,
 		getMemberFullName,
+		getRoomOwnerFullName,
 		leaveRoom,
 		rejectInvitations,
 		removeMembers,
