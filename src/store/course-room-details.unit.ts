@@ -33,19 +33,19 @@ const axiosInitializer = () => {
 	initializeAxios({
 		get: (path: string, params: object) => {
 			receivedRequests = [{ path }, { params }];
-			return getRequestReturn;
+			return Promise.resolve(getRequestReturn);
 		},
 		post: (path: string) => {
 			receivedRequests = [{ path }, { params: undefined }];
-			return getRequestReturn;
+			return Promise.resolve(getRequestReturn);
 		},
 		patch: (path: string, params: object) => {
 			receivedRequests = [{ path }, { params }];
-			return getRequestReturn;
+			return Promise.resolve(getRequestReturn);
 		},
 		delete: (path: string) => {
 			receivedRequests = [{ path }, { params: undefined }];
-			return getRequestReturn;
+			return Promise.resolve(getRequestReturn);
 		},
 	} as AxiosInstance);
 };

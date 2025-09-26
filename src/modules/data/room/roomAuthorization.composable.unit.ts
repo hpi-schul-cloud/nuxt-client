@@ -20,10 +20,8 @@ type setupParams = {
 let roomDetailsStore: ReturnType<typeof useRoomDetailsStore>;
 
 describe("roomAuthorization", () => {
-	beforeAll(() => {
-		setActivePinia(createTestingPinia({ stubActions: false }));
-	});
 	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 	});
 

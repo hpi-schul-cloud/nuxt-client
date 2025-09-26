@@ -144,11 +144,7 @@ const { isCurrentUserStudent, potentialRoomMembers, schools } =
 const { addMembers, getPotentialMembers, resetPotentialMembers } =
 	roomMembersStore;
 
-const { canAddRoomMembers, canSeeAllStudents } = useRoomAuthorization();
-
-const canAddAllStudents = computed(
-	() => canAddRoomMembers.value && canSeeAllStudents.value
-);
+const { canAddAllStudents } = useRoomAuthorization();
 
 const selectedSchool = ref(schools.value[0].id);
 
