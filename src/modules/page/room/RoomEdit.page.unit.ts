@@ -90,7 +90,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			},
 		});
 
-		const { isLoading, updateRoom, fetchRoomAndBoards } =
+		const { isLoading, updateRoom, fetchRoom } =
 			mockedPiniaStoreTyping(useRoomDetailsStore);
 
 		return {
@@ -98,7 +98,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			isLoading,
 			useRoute,
 			updateRoom,
-			fetchRoomAndBoards,
+			fetchRoom,
 			room,
 			roomId,
 			notifierModule,
@@ -113,9 +113,9 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 	describe("is room undefined", () => {
 		it("should fetch room details on mount", () => {
-			const { fetchRoomAndBoards, roomId } = setup({ isRoomDefined: false });
+			const { fetchRoom, roomId } = setup({ isRoomDefined: false });
 
-			expect(fetchRoomAndBoards).toHaveBeenCalledWith(roomId);
+			expect(fetchRoom).toHaveBeenCalledWith(roomId);
 		});
 	});
 
