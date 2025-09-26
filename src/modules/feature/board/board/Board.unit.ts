@@ -1003,7 +1003,7 @@ describe("Board", () => {
 		describe("readersCanEdit", () => {
 			describe("when set/unset the board for the user with the 'read' permission", () => {
 				it("should call updateReaderCanEditRequest with correct payload", async () => {
-					mockedBoardPermissions.hasUpdateReadersCanEditPermission = ref(false);
+					mockedBoardPermissions.hasManageBoardPermission = ref(false);
 					mockedBoardPermissions.arePermissionsLoaded = ref(true);
 					const { wrapper, boardStore } = setup({
 						isBoardVisible: true,
@@ -1035,7 +1035,7 @@ describe("Board", () => {
 				});
 
 				it("should set 'isEditSettingsDialogOpen' to false", async () => {
-					mockedBoardPermissions.hasUpdateReadersCanEditPermission = ref(false);
+					mockedBoardPermissions.hasManageBoardPermission = ref(false);
 					mockedBoardPermissions.arePermissionsLoaded = ref(true);
 					const { wrapper, wrapperVM } = setup({
 						isBoardVisible: true,
