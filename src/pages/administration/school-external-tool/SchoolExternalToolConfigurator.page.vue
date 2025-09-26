@@ -69,21 +69,16 @@ import {
 	ToolParameterEntry,
 } from "@/store/external-tool";
 import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
-import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { BusinessError } from "@/store/types/commons";
-import {
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useAppStoreRefs } from "@data-app";
+import { notifySuccess, useAppStoreRefs } from "@data-app";
 
 const props = defineProps<{
 	configId?: string;
@@ -94,8 +89,6 @@ const { school } = useAppStoreRefs();
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 );
-const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-
 const { t } = useI18n();
 
 const pageTitle = buildPageTitle(t("pages.tool.title"));
@@ -175,10 +168,7 @@ const onSave = async (
 					"components.administration.externalToolsSection.notification.created"
 				);
 
-		notifierModule.show({
-			text: message,
-			status: "success",
-		});
+		notifySuccess(message);
 
 		await router.push({
 			path: schoolSetting.to,

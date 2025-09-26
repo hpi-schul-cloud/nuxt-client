@@ -2,19 +2,20 @@ import * as serverApi from "@/serverApi/v3/api";
 import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import {
 	boardResponseFactory,
+	expectNotification,
 	mockApiResponse,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import { useBoardStore, useSocketConnection, useCardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
 import { setActivePinia } from "pinia";
 import * as socketModule from "socket.io-client";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
+import { useNotificationStore } from "@data-app";
 vi.mock("axios");
 
 vi.mock("vue-i18n");
@@ -22,9 +23,6 @@ vi.mock("vue-i18n");
 
 vi.mock("socket.io-client");
 const mockSocketIOClient = vi.mocked(socketModule);
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("../boardActions/boardSocketApi.composable");
 vi.mock("../boardActions/boardRestApi.composable");
@@ -67,7 +65,6 @@ const dispatchMock = vi.fn();
 describe("socket.ts", () => {
 	let mockSocket: Partial<socketModule.Socket>;
 	let timeoutResponseMock: { emitWithAck: Mock };
-	let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	// We need to set following lines in the outmost describe level since the socket event handlers that set and use these
 	// values are created only once when the module is loaded and initially used.
 	let socketHandlers: Record<string, (arg?: unknown) => void> | undefined =
@@ -92,9 +89,6 @@ describe("socket.ts", () => {
 			timeout: vi.fn().mockReturnValue(timeoutResponseMock),
 		};
 		mockSocketIOClient.io.mockReturnValue(mockSocket as socketModule.Socket);
-
-		mockBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		mockUseBoardNotifier.mockReturnValue(mockBoardNotifierCalls);
 
 		boardErrorReportApi = createMock<serverApi.BoardErrorReportApi>();
 		vi.spyOn(serverApi, "BoardErrorReportApiFactory").mockReturnValue(
@@ -172,9 +166,7 @@ describe("socket.ts", () => {
 			eventCallbacks.disconnect();
 			eventCallbacks.connect();
 
-			expect(mockBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
-				"common.notification.connection.restored"
-			);
+			expectNotification("success");
 		});
 
 		describe("when the client connects for the first time", () => {
@@ -182,7 +174,7 @@ describe("socket.ts", () => {
 				const { eventCallbacks } = setup({ isInitialConnection: true });
 				eventCallbacks.connect();
 
-				expect(mockBoardNotifierCalls.showSuccess).not.toHaveBeenCalled();
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
 				expect(boardStore.reloadBoard).not.toHaveBeenCalled();
 				expect(cardStore.fetchCardRequest).not.toHaveBeenCalled();
 			});
@@ -197,9 +189,7 @@ describe("socket.ts", () => {
 				eventCallbacks.disconnect();
 				eventCallbacks.connect();
 
-				expect(mockBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
-					"common.notification.connection.restored"
-				);
+				expectNotification("success");
 			});
 		});
 
@@ -212,9 +202,9 @@ describe("socket.ts", () => {
 			eventCallbacks.connect();
 
 			expect(stopMock).toHaveBeenCalled();
-			expect(mockBoardNotifierCalls.showSuccess).not.toHaveBeenCalledWith(
-				"common.notification.connection.restored"
-			);
+			expect(useNotificationStore().notify).not.toHaveBeenCalledWith({
+				status: "success",
+			});
 		});
 
 		it("should report successful connection restoration after retry", () => {
@@ -263,118 +253,119 @@ describe("socket.ts", () => {
 		it("should showFailure when socket is disconnected", () => {
 			const { eventCallbacks } = setup();
 			eventCallbacks.disconnect();
-
-			expect(mockBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"error.4500"
-			);
-		});
-	});
-
-	describe("connect_error event", () => {
-		it("should report board error and show failure notification", () => {
-			const { eventCallbacks } = setup();
-
-			const mockError = { type: "connect_error", message: "Connection failed" };
-			eventCallbacks.connect_error(mockError);
-			nextTick();
-
-			expect(
-				boardErrorReportApi.boardErrorReportControllerReportError
-			).toHaveBeenCalledWith(expect.objectContaining(mockError));
+			expectNotification("error");
 		});
 
-		it("should show error after 20 retries", () => {
-			const { eventCallbacks } = setup();
+		describe("connect_error event", () => {
+			it("should report board error and show failure notification", () => {
+				const { eventCallbacks } = setup();
 
-			const mockError = { type: "connect_error", message: "Connection failed" };
-			for (let i = 0; i < 22; i++) {
+				const mockError = {
+					type: "connect_error",
+					message: "Connection failed",
+				};
 				eventCallbacks.connect_error(mockError);
-			}
+				nextTick();
 
-			expect(mockBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"error.4500"
-			);
-		});
-	});
-
-	describe("emitOnSocket", () => {
-		it("should call emit", () => {
-			const { emitOnSocket } = setup();
-
-			emitOnSocket("deleteCard", {});
-			expect(mockSocket.emit).toHaveBeenCalledWith("deleteCard", {});
-		});
-
-		it("should not call connect if connected already", () => {
-			mockSocket.connected = true;
-			const { emitOnSocket } = setup();
-
-			emitOnSocket("deleteCard", {});
-
-			expect(mockSocket.connect).not.toHaveBeenCalled();
-		});
-
-		it("should call connect if not connected yet", () => {
-			mockSocket.connected = false;
-			const { emitOnSocket } = setup();
-
-			emitOnSocket("deleteCard", {});
-
-			expect(mockSocket.connect).toHaveBeenCalled();
-		});
-	});
-
-	describe("emitWithAck", () => {
-		it("should call emitWithAck", () => {
-			const { emitWithAck } = setup();
-
-			emitWithAck("deleteCard", {});
-
-			expect(mockSocket.timeout).toHaveBeenCalledWith(30000);
-			expect(timeoutResponseMock.emitWithAck).toHaveBeenCalledWith(
-				"deleteCard",
-				{}
-			);
-		});
-
-		it("should not call connect if connected already", () => {
-			mockSocket.connected = true;
-			const { emitWithAck } = setup();
-
-			emitWithAck("deleteCard", {});
-
-			expect(mockSocket.connect).not.toHaveBeenCalled();
-		});
-
-		it("should call connect if not connected yet", () => {
-			mockSocket.connected = false;
-			const { emitWithAck } = setup();
-
-			emitWithAck("deleteCard", {});
-
-			expect(mockSocket.connect).toHaveBeenCalled();
-		});
-	});
-
-	describe("disconnectSocket", () => {
-		it("should call disconnect", () => {
-			const { disconnectSocket } = setup();
-
-			disconnectSocket();
-
-			expect(mockSocket.disconnect).toHaveBeenCalled();
-		});
-
-		it("should call stop if timeout is pending", () => {
-			const { eventCallbacks, disconnectSocket } = setup({
-				doInitializeTimeout: true,
+				expect(
+					boardErrorReportApi.boardErrorReportControllerReportError
+				).toHaveBeenCalledWith(expect.objectContaining(mockError));
 			});
 
-			eventCallbacks.disconnect();
-			eventCallbacks.connect();
-			disconnectSocket();
+			it("should show error after 20 retries", () => {
+				const { eventCallbacks } = setup();
 
-			expect(stopMock).toHaveBeenCalled();
+				const mockError = {
+					type: "connect_error",
+					message: "Connection failed",
+				};
+				for (let i = 0; i < 22; i++) {
+					eventCallbacks.connect_error(mockError);
+				}
+
+				expectNotification("error");
+			});
+		});
+
+		describe("emitOnSocket", () => {
+			it("should call emit", () => {
+				const { emitOnSocket } = setup();
+
+				emitOnSocket("deleteCard", {});
+				expect(mockSocket.emit).toHaveBeenCalledWith("deleteCard", {});
+			});
+
+			it("should not call connect if connected already", () => {
+				mockSocket.connected = true;
+				const { emitOnSocket } = setup();
+
+				emitOnSocket("deleteCard", {});
+
+				expect(mockSocket.connect).not.toHaveBeenCalled();
+			});
+
+			it("should call connect if not connected yet", () => {
+				mockSocket.connected = false;
+				const { emitOnSocket } = setup();
+
+				emitOnSocket("deleteCard", {});
+
+				expect(mockSocket.connect).toHaveBeenCalled();
+			});
+		});
+
+		describe("emitWithAck", () => {
+			it("should call emitWithAck", () => {
+				const { emitWithAck } = setup();
+
+				emitWithAck("deleteCard", {});
+
+				expect(mockSocket.timeout).toHaveBeenCalledWith(30000);
+				expect(timeoutResponseMock.emitWithAck).toHaveBeenCalledWith(
+					"deleteCard",
+					{}
+				);
+			});
+
+			it("should not call connect if connected already", () => {
+				mockSocket.connected = true;
+				const { emitWithAck } = setup();
+
+				emitWithAck("deleteCard", {});
+
+				expect(mockSocket.connect).not.toHaveBeenCalled();
+			});
+
+			it("should call connect if not connected yet", () => {
+				mockSocket.connected = false;
+				const { emitWithAck } = setup();
+
+				emitWithAck("deleteCard", {});
+
+				expect(mockSocket.connect).toHaveBeenCalled();
+			});
+		});
+
+		describe("disconnectSocket", () => {
+			it("should call disconnect", () => {
+				const { disconnectSocket } = setup();
+
+				disconnectSocket();
+
+				expect(mockSocket.disconnect).toHaveBeenCalled();
+			});
+
+			it("should call stop if timeout is pending", () => {
+				const { eventCallbacks, disconnectSocket } = setup({
+					doInitializeTimeout: true,
+				});
+
+				eventCallbacks.disconnect();
+				eventCallbacks.connect();
+				disconnectSocket();
+
+				expect(stopMock).toHaveBeenCalled();
+			});
 		});
 	});
 });

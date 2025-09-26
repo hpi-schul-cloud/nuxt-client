@@ -1,15 +1,15 @@
-import { notifierModule } from "@/store";
-import NotifierModule from "@/store/notifier";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
 import { default as NewTeacher } from "./TeacherCreate.page.vue";
 import { flushPromises } from "@vue/test-utils";
 import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { expectNotification } from "../../../tests/test-utils/index.js";
 
 const createMockStore = (createTeacherStub) => {
 	const mockStore = createStore({
@@ -29,12 +29,9 @@ const createMockStore = (createTeacherStub) => {
 };
 
 describe("teachers/new", () => {
-	beforeAll(() => {
-		createTestAppStore();
-	});
-
 	beforeEach(() => {
-		setupStores({ notifierModule: NotifierModule });
+		setActivePinia(createTestingPinia());
+		createTestAppStore();
 	});
 
 	it("should call 'createTeacher' action", async () => {
@@ -78,7 +75,6 @@ describe("teachers/new", () => {
 		const createTeacherStub = vi.fn();
 		const mockStore = createMockStore(createTeacherStub);
 
-		const notifierModuleMock = vi.spyOn(notifierModule, "show");
 		const wrapper = mount(NewTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -108,7 +104,7 @@ describe("teachers/new", () => {
 		// we need to wait until everything is settled
 		await flushPromises();
 
-		expect(notifierModuleMock).toHaveBeenCalled();
+		expectNotification("success");
 	});
 
 	it("should show error", async () => {

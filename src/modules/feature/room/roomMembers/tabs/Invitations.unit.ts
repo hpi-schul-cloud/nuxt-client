@@ -3,24 +3,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { Invitations } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { useRoomInvitationLinkStore, RoomInvitationLink } from "@data-room";
 import { nextTick } from "vue";
 
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
-
 describe("Invitations", () => {
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-
-	beforeEach(() => {
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
-	});
-
 	afterEach(() => {
 		vi.clearAllMocks();
 	});

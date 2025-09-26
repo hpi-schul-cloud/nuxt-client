@@ -99,11 +99,12 @@ const redirectToEditorUrl = async () => {
 	});
 };
 
-const ariaLabel = computed(() => {
-	return `${t("components.cardElement.collaborativeTextEditorElement")}, ${t(
-		"common.ariaLabel.newTab"
-	)}`;
-});
+const ariaLabel = computed(
+	() =>
+		`${t("components.cardElement.collaborativeTextEditorElement")}, ${t(
+			"common.ariaLabel.newTab"
+		)}`
+);
 
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (props.isEditMode) {
@@ -119,9 +120,9 @@ const onMoveDown = () => emit("move-down:edit");
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = computed(() => {
-	return smAndUp.value && isListLayout.value;
-});
+const isSmallOrLargerListBoard = computed(
+	() => smAndUp.value && isListLayout.value
+);
 </script>
 
 <style scoped lang="scss">

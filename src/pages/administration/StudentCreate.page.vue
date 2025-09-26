@@ -39,10 +39,9 @@ import FormCreateUser from "@/components/organisms/FormCreateUser";
 import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { inputRangeDate } from "@/plugins/datetime";
-import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mapGetters } from "vuex";
-import { useAppStore } from "@data-app";
+import { notifySuccess, useAppStore } from "@data-app";
 import { RoleName } from "@/serverApi/v3";
 
 export default {
@@ -101,11 +100,7 @@ export default {
 				sendRegistration: this.sendRegistration,
 			});
 			if (!this.businessError) {
-				notifierModule.show({
-					text: this.$t("pages.administration.students.new.success"),
-					status: "success",
-					timeout: 5000,
-				});
+				notifySuccess(this.$t("pages.administration.students.new.success"));
 				this.$router.push({
 					path: `/administration/students`,
 				});

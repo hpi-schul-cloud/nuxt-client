@@ -1,34 +1,31 @@
-import NotifierModule from "@/store/notifier";
-import { AlertPayload } from "@/store/types/alert-payload";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mount } from "@vue/test-utils";
 import AlertContainer from "./AlertContainer.vue";
 import Alert from "./Alert.vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-
-const getWrapper = (items: AlertPayload[] = [], options?: object) => {
-	const notifierModule = createModuleMocks(NotifierModule, {
-		getNotifierItems: items,
-	});
-
-	const wrapper = mount(AlertContainer, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-			},
-		},
-		...options,
-	});
-
-	return { wrapper, notifierModule };
-};
+import { AlertPayload, notifySuccess, useNotificationStore } from "@data-app";
+import { beforeEach } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { nextTick } from "vue";
 
 describe("AlertContainer", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
+	});
+
+	const getWrapper = () => {
+		const wrapper = mount(AlertContainer, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+		});
+
+		return { wrapper };
+	};
+
 	it("Alert should initially not be rendered", () => {
 		const { wrapper } = getWrapper();
 
@@ -41,32 +38,19 @@ describe("AlertContainer", () => {
 			text: "hello world",
 			status: "info",
 			autoClose: true,
-			timeout: 5000,
 		};
-		const { wrapper } = getWrapper([alertPayload]);
+		useNotificationStore().notify(alertPayload);
+		const { wrapper } = getWrapper();
 
 		const alert = wrapper.findComponent(Alert);
 		expect(alert.text()).toEqual(alertPayload.text);
 		expect(alert.classes()).toContain(`bg-${alertPayload.status}`);
 	});
 
-	it("should be able to render list", () => {
-		const data: AlertPayload[] = [
-			{
-				text: "hello world",
-				status: "success",
-				autoClose: true,
-				timeout: 5000,
-			},
-			{
-				text: "hello bar",
-				status: "success",
-				autoClose: true,
-				timeout: 5000,
-			},
-		];
-
-		const { wrapper } = getWrapper(data);
+	it("should be able to render list", async () => {
+		const { wrapper } = getWrapper();
+		["hello world", "hello bar"].forEach((message) => notifySuccess(message));
+		await nextTick();
 
 		const notificationData = wrapper.findAllComponents(Alert);
 		expect(notificationData.length).toEqual(2);
@@ -86,7 +70,7 @@ describe("AlertContainer", () => {
 		expect(result.exists()).toBe(true);
 	});
 
-	it("should set desktop position-class as default", async () => {
+	it("should set desktop position-class as default", () => {
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,
 			configurable: true,

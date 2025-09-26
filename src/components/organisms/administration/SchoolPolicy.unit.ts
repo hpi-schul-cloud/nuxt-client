@@ -1,16 +1,11 @@
 import SchoolPolicy from "./SchoolPolicy.vue";
 import SchoolsModule from "@/store/schools";
 import PrivacyPolicyModule from "@/store/privacy-policy";
-import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mount } from "@vue/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { ConsentVersion } from "@/store/types/consent-version";
-import {
-	NOTIFIER_MODULE_KEY,
-	PRIVACY_POLICY_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -25,7 +20,6 @@ vi.mock("@/utils/fileHelper");
 describe("SchoolPolicy", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
 	let privacyPolicyModule: Mocked<PrivacyPolicyModule>;
-	let notifierModule: Mocked<NotifierModule>;
 
 	const mockPolicy: ConsentVersion = {
 		_id: "123",
@@ -68,15 +62,12 @@ describe("SchoolPolicy", () => {
 			...getters,
 		});
 
-		notifierModule = createModuleMocks(NotifierModule);
-
 		const wrapper = mount(SchoolPolicy, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 		});

@@ -136,7 +136,6 @@ import { SelectBoardLayoutDialog } from "@ui-room-details";
 import {
 	BOARD_IS_LIST_LAYOUT,
 	extractDataAttribute,
-	useBoardNotifier,
 	useElementFocus,
 } from "@util-board";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
@@ -160,6 +159,7 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { useEnvConfig } from "@data-env";
+import { useNotificationStore } from "@data-app";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -167,7 +167,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { resetNotifierModule } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
@@ -322,7 +321,7 @@ onUnmounted(() => {
 	boardStore.disconnectSocketRequest();
 	boardStore.setBoard(undefined);
 	cardStore.resetState();
-	resetNotifierModule();
+	useNotificationStore().clearAll();
 });
 
 watch(

@@ -1,20 +1,19 @@
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useBoardNotifier } from "@util-board";
 import { isAxiosError } from "axios";
 import { nextTick } from "vue";
 
 import { ErrorType, useErrorHandler } from "./ErrorHandler.composable";
-import { mountComposable } from "@@/tests/test-utils";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { notifierModule } from "@/store";
+import { expectNotification, mountComposable } from "@@/tests/test-utils";
+import { useNotificationStore } from "@data-app";
+import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("axios");
 const mockedIsAxiosError = vi.mocked(isAxiosError);
 
 vi.mock("@util-board");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const keys = [
 	"components.board.notifications.errors.notCreated",
 	"components.board.notifications.errors.notLoaded",
@@ -37,16 +36,6 @@ vi.mock("vue-i18n", () => {
 	};
 });
 
-const mountErrorComposable = () => {
-	return mountComposable(() => useErrorHandler(), {
-		global: {
-			provide: {
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-			},
-		},
-	});
-};
-
 const mockErrorResponse = (code = 404, message = "NOT FOUND") => {
 	const expectedPayload = apiResponseErrorFactory.build({ code, message });
 	const errorResponse = axiosErrorFactory.build({
@@ -57,15 +46,11 @@ const mockErrorResponse = (code = 404, message = "NOT FOUND") => {
 };
 
 describe("ErrorHandler.Composable", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
-	const setup = () => {
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
-		return mountErrorComposable();
-	};
+	const setup = () => mountComposable(() => useErrorHandler());
 
 	beforeEach(() => {
 		keys.forEach((key) => (translationMap[key] = key));
@@ -88,7 +73,7 @@ describe("ErrorHandler.Composable", () => {
 		});
 
 		describe("when no errorHandler for the code of the error is defined", () => {
-			it("should fall back to console.error", async () => {
+			it("should fall back to console.error", () => {
 				const consoleErrorSpy = vi
 					.spyOn(console, "error")
 					.mockImplementation(vi.fn());
@@ -108,7 +93,7 @@ describe("ErrorHandler.Composable", () => {
 
 	describe("handleAnyError", () => {
 		describe("when an error is handled", () => {
-			it("should execute the callback for any error", async () => {
+			it("should execute the callback for any error", () => {
 				const { handleAnyError } = setup();
 
 				mockedIsAxiosError.mockReturnValueOnce(true);
@@ -142,7 +127,7 @@ describe("ErrorHandler.Composable", () => {
 				handler();
 				await nextTick();
 
-				expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
+				expectNotification("error");
 			});
 		});
 
@@ -157,9 +142,9 @@ describe("ErrorHandler.Composable", () => {
 				handler();
 				await nextTick();
 
-				expect(
-					mockedBoardNotifierCalls.showCustomNotifier
-				).toHaveBeenCalledWith("error.generic", "error", undefined);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error", text: "error.generic" })
+				);
 			});
 		});
 	});
@@ -200,7 +185,7 @@ describe("ErrorHandler.Composable", () => {
 			notifySocketError("notCreated", "board", "error", 5000);
 			await nextTick();
 
-			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
+			expectNotification("error");
 		});
 
 		it.each(["notCreated", "notUpdated", "notDeleted", "notLoaded"])(
@@ -209,12 +194,11 @@ describe("ErrorHandler.Composable", () => {
 				const { notifySocketError } = setup();
 				notifySocketError(key as ErrorType, "board");
 
-				expect(
-					mockedBoardNotifierCalls.showCustomNotifier
-				).toHaveBeenCalledWith(
-					`components.board.notifications.errors.${key}`,
-					"error",
-					undefined
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: `components.board.notifications.errors.${key}`,
+					})
 				);
 			}
 		);

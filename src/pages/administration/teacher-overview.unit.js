@@ -4,7 +4,6 @@ import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
 import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import mock$objects from "@@/tests/test-utils/pageStubs";
@@ -18,6 +17,8 @@ import { createStore } from "vuex";
 import TeacherPage from "./TeacherOverview.page.vue";
 import { RouterLinkStub } from "@vue/test-utils";
 import { createTestEnvStore, createTestAppStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 const mockData = [
 	{
@@ -123,11 +124,9 @@ const createMockStore = () => {
 describe("teachers/index", () => {
 	const OLD_ENV = process.env;
 
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
 		vi.useFakeTimers();
 
 		vi.resetModules(); // reset module registry to avoid conflicts
@@ -135,7 +134,6 @@ describe("teachers/index", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			notifierModule: NotifierModule,
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });

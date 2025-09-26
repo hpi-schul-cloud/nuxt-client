@@ -1,8 +1,8 @@
 <template>
 	<v-alert
-		v-model="showNotifier"
-		:icon="icon"
-		:type="status"
+		v-model="isAlertShown"
+		:icon
+		:type="notification.status"
 		class="alert"
 		closable
 		max-width="400"
@@ -11,20 +11,20 @@
 		@update:model-value="closeNotification"
 	>
 		<div class="alert-text mr-2" data-testId="alert-text">
-			{{ text }}
+			{{ notification.text }}
 		</div>
 	</v-alert>
 </template>
 
 <script setup lang="ts">
-import { AlertPayload } from "@/store/types/alert-payload";
 import {
 	mdiAlert,
 	mdiAlertCircle,
 	mdiCheckCircle,
 	mdiInformation,
 } from "@icons/material";
-import { computed, PropType, Ref, ref } from "vue";
+import { computed, PropType, ref } from "vue";
+import { AlertPayload, AlertStatus, useNotificationStore } from "@data-app";
 
 const props = defineProps({
 	notification: {
@@ -32,27 +32,25 @@ const props = defineProps({
 		required: true,
 	},
 });
+const { removeNotifier } = useNotificationStore();
 
-const showNotifier: Ref<boolean> = ref(true);
-
-const emit = defineEmits(["remove:notification"]);
+const isAlertShown = ref(true);
 
 const closeNotification = () => {
-	emit("remove:notification", props.notification);
-	showNotifier.value = false;
+	removeNotifier(props.notification);
+	isAlertShown.value = false;
 };
 
-const icon = computed(() => {
-	if (props.notification.status === "success") return mdiCheckCircle;
-	if (props.notification.status === "warning") return mdiAlert;
-	if (props.notification.status === "error") return mdiAlertCircle;
-	if (props.notification.status === "info") return mdiInformation;
-	return undefined;
-});
+const statusIcons: { [status in AlertStatus]: string } = {
+	success: mdiCheckCircle,
+	warning: mdiAlert,
+	error: mdiAlertCircle,
+	info: mdiInformation,
+};
 
-const status = computed(() => props.notification.status);
-
-const text = computed(() => props.notification.text);
+const icon = computed(
+	() => statusIcons[props.notification.status] ?? undefined
+);
 </script>
 
 <style lang="scss" scoped>

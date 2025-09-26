@@ -2,11 +2,9 @@ import CourseRoomListModule from "@/store/course-room-list";
 import CommonCartridgeImportModal from "./CommonCartridgeImportModal.vue";
 import { mount } from "@vue/test-utils";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
 import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -15,12 +13,19 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
+import { expectNotification } from "@@/tests/test-utils";
+import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("@/components/molecules/CommonCartridgeImportModal", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const setupWrapper = (getters: Partial<CommonCartridgeImportModule>) => {
 		document.body.setAttribute("data-app", "true");
 
-		const notifierModuleMock = createModuleMocks(NotifierModule);
 		const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
 			getAllElements: [],
 		});
@@ -35,7 +40,6 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 				provide: {
 					[LOADING_STATE_MODULE_KEY.valueOf()]:
 						createModuleMocks(LoadingStateModule),
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
 					[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]:
 						commonCartridgeImportModule,
@@ -46,7 +50,6 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 		return {
 			wrapper,
 			roomsModuleMock,
-			notifierModuleMock,
 			commonCartridgeImportModule,
 		};
 	};
@@ -54,7 +57,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 	describe("when dialog is open", () => {
 		const setup = () => setupWrapper({ isOpen: true });
 
-		it("should contain disabled confirm button", async () => {
+		it("should contain disabled confirm button", () => {
 			const { wrapper } = setup();
 
 			const confirmBtn = wrapper.findComponent(
@@ -65,7 +68,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 			expect(confirmBtn.classes()).toContain("v-btn--disabled");
 		});
 
-		it("should contain enabled cancel button", async () => {
+		it("should contain enabled cancel button", () => {
 			const { wrapper } = setup();
 
 			const cancelBtn = wrapper.findComponent(
@@ -114,7 +117,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 			});
 
 		it("should show success message", async () => {
-			const { wrapper, roomsModuleMock, notifierModuleMock } = setup();
+			const { wrapper, roomsModuleMock } = setup();
 			const confirmBtn = wrapper.findComponent(
 				"[data-testId='dialog-confirm-btn']"
 			);
@@ -123,11 +126,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 
 			expect(roomsModuleMock.fetch).toHaveBeenCalledTimes(1);
 			expect(roomsModuleMock.fetchAllElements).toHaveBeenCalledTimes(1);
-			expect(notifierModuleMock.show).toHaveBeenCalledWith({
-				status: "success",
-				text: expect.any(String),
-				autoClose: true,
-			});
+			expectNotification("success");
 		});
 	});
 
@@ -140,7 +139,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 			});
 
 		it("should show error message", async () => {
-			const { wrapper, notifierModuleMock, roomsModuleMock } = setup();
+			const { wrapper, roomsModuleMock } = setup();
 			const confirmBtn = wrapper.findComponent(
 				"[data-testId='dialog-confirm-btn']"
 			);
@@ -149,11 +148,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 
 			expect(roomsModuleMock.fetch).toHaveBeenCalled();
 			expect(roomsModuleMock.fetchAllElements).toHaveBeenCalled();
-			expect(notifierModuleMock.show).toHaveBeenCalledWith({
-				status: "error",
-				text: expect.any(String),
-				autoClose: true,
-			});
+			expectNotification("error");
 		});
 	});
 

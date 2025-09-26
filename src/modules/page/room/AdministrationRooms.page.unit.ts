@@ -10,8 +10,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useAdministrationRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -19,34 +18,21 @@ import { Router, useRouter } from "vue-router";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
 
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
+vi.mock("vue-router", () => {
+	return {
+		useRoute: vi.fn(),
+		useRouter: vi.fn(),
+	};
+});
 const useRouterMock = <Mock>useRouter;
 
 describe("AdministrationRooms.page", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
 	};
 
 	beforeEach(() => {
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});
@@ -97,7 +83,7 @@ describe("AdministrationRooms.page", () => {
 	};
 
 	describe("rendering", () => {
-		it("should render the page and Table component ", async () => {
+		it("should render the page and Table component ", () => {
 			const { wrapper } = setup();
 			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
 			const emptyStateComponent = wrapper.findComponent({ name: "EmptyState" });
@@ -107,7 +93,7 @@ describe("AdministrationRooms.page", () => {
 			expect(emptyStateComponent.exists()).toBe(false);
 		});
 
-		it("should render the EmptyState component when isEmptyList is true", async () => {
+		it("should render the EmptyState component when isEmptyList is true", () => {
 			const { wrapper } = setup({ isEmptyList: true });
 			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
 			const emptyStateComponent = wrapper.findComponent({ name: "EmptyState" });

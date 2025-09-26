@@ -20,7 +20,6 @@ import {
 	mdiTrayArrowUp,
 	mdiVideoOutline,
 } from "@icons/material";
-import { useBoardNotifier } from "@util-board";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import {
@@ -28,6 +27,7 @@ import {
 	useSharedElementTypeSelection,
 } from "./SharedElementTypeSelection.composable";
 import { useEnvConfig } from "@data-env";
+import { notifyInfo } from "@data-app";
 
 type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 
@@ -44,7 +44,6 @@ export const useAddElementDialog = (
 
 	const cardStore = useCardStore();
 
-	const { showCustomNotifier } = useBoardNotifier();
 	const { t } = useI18n();
 
 	const {
@@ -86,7 +85,7 @@ export const useAddElementDialog = (
 			translationKey = translationKeyDrawing;
 		}
 		if (translationKey !== "") {
-			showCustomNotifier(t(translationKey), "info");
+			notifyInfo(t(translationKey));
 		}
 	};
 

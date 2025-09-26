@@ -1,5 +1,5 @@
 import { getActivePinia, setActivePinia } from "pinia";
-import { useAppStore } from "@data-app";
+import { AlertStatus, useAppStore, useNotificationStore } from "@data-app";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { LanguageType, MeResponse, Permission, RoleName } from "@/serverApi/v3";
 import { DeepPartial, Factory } from "fishery";
@@ -70,3 +70,9 @@ export const createTestAppStoreWithRole = (
 		me: { roles: [{ id: roleName, name: roleName }] },
 		stubActions,
 	});
+
+export const expectNotification = (status: AlertStatus) => {
+	expect(useNotificationStore().notify).toHaveBeenCalledWith(
+		expect.objectContaining({ status })
+	);
+};

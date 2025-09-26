@@ -1,10 +1,10 @@
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useI18n } from "vue-i18n";
 import {
 	appLoadingStatusValueSchema,
 	CollaboraMessage,
 	collaboraMessageSchema,
 } from "./CollaboraPostMessage.schema";
+import { notifyError } from "@data-app";
 
 export enum CollaboraEvents {
 	APP_LOADING_STATUS = "App_LoadingStatus",
@@ -17,7 +17,6 @@ export enum CollaboraEvents {
 
 export const useCollaboraPostMessageApi = () => {
 	const { t } = useI18n();
-	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 	let collaboraWindow: Window | null = null;
 	let targetOrigin = "";
 
@@ -39,16 +38,9 @@ export const useCollaboraPostMessageApi = () => {
 
 			handleCollaboraMessages(message);
 		} catch {
-			showMessageError();
+			notifyError(t("pages.collabora.messageError"));
 		}
 	};
-
-	const showMessageError = () =>
-		notifierModule.show({
-			text: t("pages.collabora.messageError"),
-			status: "error",
-			timeout: 5000,
-		});
 
 	const handleCollaboraMessages = (message: CollaboraMessage) => {
 		if (hasLoadingStatusMessageId(message.MessageId)) {
@@ -123,26 +115,15 @@ export const useCollaboraPostMessageApi = () => {
 		try {
 			return JSON.parse(data);
 		} catch {
-			notifierModule.show({
-				text: t("pages.collabora.jsonError"),
-				status: "error",
-				timeout: 5000,
-			});
+			notifyError(t("pages.collabora.jsonError"));
 		}
 	};
 
-	const hasLoadingStatusMessageId = (messageId: string): boolean => {
-		const isLoadingStatusMessage =
-			messageId === CollaboraEvents.APP_LOADING_STATUS;
+	const hasLoadingStatusMessageId = (messageId: string): boolean =>
+		messageId === CollaboraEvents.APP_LOADING_STATUS;
 
-		return isLoadingStatusMessage;
-	};
-
-	const hasUICloseMessageId = (messageId: string): boolean => {
-		const isUICloseMessage = messageId === CollaboraEvents.UI_CLOSE;
-
-		return isUICloseMessage;
-	};
+	const hasUICloseMessageId = (messageId: string): boolean =>
+		messageId === CollaboraEvents.UI_CLOSE;
 
 	return {
 		setupPostMessageAPI,

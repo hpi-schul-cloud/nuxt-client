@@ -1,27 +1,24 @@
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import {
 	axiosErrorFactory,
+	expectNotification,
 	i18nMock,
 	mockApiResponse,
 	mountComposable,
 } from "@@/tests/test-utils";
 import * as h5pApi from "@/h5pEditorApi/v3/api/h5p-editor-api";
 import { H5pEditorApiInterface } from "@/h5pEditorApi/v3";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useH5PEditorApi } from "@data-h5p";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { HttpStatusCode } from "axios";
-import type { Mocked } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("h5pEditorApi.composable", () => {
 	let h5pEditorApi: DeepMocked<H5pEditorApiInterface>;
 
-	const notifierModule: Mocked<NotifierModule> =
-		createModuleMocks(NotifierModule);
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		h5pEditorApi = createMock<H5pEditorApiInterface>();
 
 		vi.spyOn(h5pApi, "H5pEditorApiFactory").mockReturnValue(h5pEditorApi);
@@ -35,9 +32,6 @@ describe("h5pEditorApi.composable", () => {
 		const setupComposable = () => {
 			const composable = mountComposable(() => useH5PEditorApi(), {
 				global: {
-					provide: {
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					},
 					plugins: [createTestingI18n()],
 					mocks: i18nMock,
 				},
@@ -131,10 +125,7 @@ describe("h5pEditorApi.composable", () => {
 
 				await composable.getContentTitle(contentId);
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "components.cardElement.h5pElement.title.error.load",
-					status: "error",
-				});
+				expectNotification("error");
 			});
 		});
 	});

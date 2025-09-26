@@ -2,9 +2,8 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
-import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
+import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -13,11 +12,18 @@ import {
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
+import { expectNotification } from "@@/tests/test-utils";
+import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("@/components/share/ShareModal", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	describe("when course is shared", () => {
 		let shareModuleMock: ShareModule;
-		let notifierModuleMock: NotifierModule;
 
 		const setup = () => {
 			const wrapper = mount(ShareModal, {
@@ -25,7 +31,6 @@ describe("@/components/share/ShareModal", () => {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					},
 				},
 				props: {
@@ -45,8 +50,6 @@ describe("@/components/share/ShareModal", () => {
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
-
-			notifierModuleMock = createModuleMocks(NotifierModule);
 		});
 
 		it("should start with step 1", () => {
@@ -110,7 +113,7 @@ describe("@/components/share/ShareModal", () => {
 			).toStrictEqual(payload);
 		});
 
-		it("should call 'onCopy' method when sub component emits 'copied'", async () => {
+		it("should call 'onCopy' method when sub component emits 'copied'", () => {
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
 				getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
@@ -120,7 +123,7 @@ describe("@/components/share/ShareModal", () => {
 			const form = wrapper.findComponent(ShareModalResult);
 
 			form.vm.$emit("copied");
-			expect(notifierModuleMock.show).toHaveBeenCalled();
+			expectNotification("success");
 		});
 
 		it("should show copyright and privacy info alert", () => {
@@ -159,14 +162,12 @@ describe("@/components/share/ShareModal", () => {
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
-			const notifierModuleMock = createModuleMocks(NotifierModule);
 
 			const wrapper = mount(ShareModal, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					},
 				},
 				props: {
@@ -204,14 +205,12 @@ describe("@/components/share/ShareModal", () => {
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
-			const notifierModuleMock = createModuleMocks(NotifierModule);
 
 			const wrapper = mount(ShareModal, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					},
 				},
 				props: {
@@ -249,14 +248,12 @@ describe("@/components/share/ShareModal", () => {
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
-			const notifierModuleMock = createModuleMocks(NotifierModule);
 
 			const wrapper = mount(ShareModal, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					},
 				},
 				props: {
@@ -294,14 +291,12 @@ describe("@/components/share/ShareModal", () => {
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
-			const notifierModuleMock = createModuleMocks(NotifierModule);
 
 			const wrapper = mount(ShareModal, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					},
 				},
 				props: {
