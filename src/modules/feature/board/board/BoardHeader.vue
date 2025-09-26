@@ -27,7 +27,7 @@
 			<BoardDraftChip v-if="isDraft" />
 			<BoardEditableChip v-if="isEditableChipVisible" />
 			<BoardMenu
-				v-if="hasEditPermission"
+				v-if="hasManageBoardPermission"
 				:scope="BoardMenuScope.BOARD"
 				data-testid="board-menu-btn"
 			>
@@ -120,7 +120,8 @@ const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
 );
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
-const { hasEditPermission, hasShareBoardPermission } = useBoardPermissions();
+const { hasEditPermission, hasManageBoardPermission, hasShareBoardPermission } =
+	useBoardPermissions();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
