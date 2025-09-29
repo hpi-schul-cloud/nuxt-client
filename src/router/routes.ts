@@ -16,6 +16,11 @@ import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
 export const routes: Readonly<RouteRecordRaw>[] = [
 	{
+		path: "/",
+		component: () => import("@/pages/Home.page.vue"),
+		name: "home",
+	},
+	{
 		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
 		component: () => import("@/pages/ActivationCode.page.vue"),
 		name: "activation-activationCode",
@@ -23,6 +28,25 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			isPublic: true,
 			layout: Layouts.LOGGED_OUT,
 		},
+	},
+	{
+		path: "/administration/groups/classes",
+		component: () => import("@/pages/administration/ClassOverview.page.vue"),
+		name: "administration-groups-classes",
+		beforeEnter: createPermissionGuard(["class_list", "group_list"]),
+		props: (route: RouteLocationNormalized) => ({
+			tab: route.query.tab,
+		}),
+	},
+	{
+		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,
+		name: "administration-groups-classes-members",
+		component: async () =>
+			(await import("@page-class-members")).ClassMembersPage,
+		beforeEnter: createPermissionGuard(["group_view"]),
+		props: (to: RouteLocationNormalized) => ({
+			groupId: to.params.groupId,
+		}),
 	},
 	{
 		path: "/administration/ldap/activate",
@@ -40,6 +64,28 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: "/administration/migration",
 		component: () => import("@/pages/administration/Migration.page.vue"),
 		name: "administration-migration",
+	},
+	{
+		path: `/administration/rooms/manage`,
+		component: async () => (await import("@page-room")).AdministrationRoomsPage,
+		name: "administration-rooms-manage",
+		beforeEnter: createPermissionGuard(["school_administrate_rooms"]),
+	},
+	{
+		path: `/administration/rooms/manage/:roomId(${REGEX_ID})`,
+		component: async () =>
+			(await import("@page-room")).AdministrationRoomDetailsPage,
+		name: "administration-rooms-manage-details",
+		beforeEnter: createPermissionGuard(["school_administrate_rooms"]),
+	},
+	{
+		path: "/administration/rooms/new",
+		component: () => import("@/pages/administration/RoomsOverview.page.vue"),
+		name: "administration-rooms-new",
+		beforeEnter: createPermissionGuard(["course_administration"]),
+		props: (route: RouteLocationNormalized) => ({
+			tab: route.query.tab,
+		}),
 	},
 	{
 		path: "/administration/school-settings",
@@ -113,44 +159,11 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: createPermissionGuard(["teacher_create"]),
 	},
 	{
-		path: `/administration/rooms/manage`,
-		component: async () => (await import("@page-room")).AdministrationRoomsPage,
-		name: "administration-rooms-manage",
-		beforeEnter: createPermissionGuard(["school_administrate_rooms"]),
-	},
-	{
-		path: `/administration/rooms/manage/:roomId(${REGEX_ID})`,
-		component: async () =>
-			(await import("@page-room")).AdministrationRoomDetailsPage,
-		name: "administration-rooms-manage-details",
-		beforeEnter: createPermissionGuard(["school_administrate_rooms"]),
-	},
-	{
-		path: "/administration/rooms/new",
-		component: () => import("@/pages/administration/RoomsOverview.page.vue"),
-		name: "administration-rooms-new",
-		beforeEnter: createPermissionGuard(["course_administration"]),
+		path: `/boards/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-board")).ColumnBoardPage,
+		name: "boards-id",
 		props: (route: RouteLocationNormalized) => ({
-			tab: route.query.tab,
-		}),
-	},
-	{
-		path: "/administration/groups/classes",
-		component: () => import("@/pages/administration/ClassOverview.page.vue"),
-		name: "administration-groups-classes",
-		beforeEnter: createPermissionGuard(["class_list", "group_list"]),
-		props: (route: RouteLocationNormalized) => ({
-			tab: route.query.tab,
-		}),
-	},
-	{
-		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,
-		name: "administration-groups-classes-members",
-		component: async () =>
-			(await import("@page-class-members")).ClassMembersPage,
-		beforeEnter: createPermissionGuard(["group_view"]),
-		props: (to: RouteLocationNormalized) => ({
-			groupId: to.params.groupId,
+			boardId: route.params.id,
 		}),
 	},
 	{
@@ -197,12 +210,66 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		},
 	},
 	{
+		path: `/folder/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-folder")).FolderPage,
+		beforeEnter: [checkFolderFeature],
+		name: "folder-id",
+		props: (route: RouteLocationNormalized) => ({
+			folderId: route.params.id,
+		}),
+	},
+	{
+		path: `/h5p/player/:contentId(${REGEX_ID})`,
+		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
+		name: "h5pPlayer",
+		beforeEnter: validateQueryParameters({
+			parentType: isEnum(H5PContentParentType),
+		}),
+		props: (to: RouteLocationNormalized) => ({
+			parentType: to.query.parentType,
+			contentId: to.params.contentId,
+		}),
+		meta: {
+			layout: Layouts.BORDERLESS,
+		},
+	},
+	{
+		path: `/h5p/editor/:contentId(${REGEX_ID})?`,
+		component: () => import("@/pages/h5p/H5PEditor.page.vue"),
+		name: "h5pEditor",
+		beforeEnter: validateQueryParameters({
+			parentType: isEnum(H5PContentParentType),
+			parentId: isMongoId,
+		}),
+		props: (to: RouteLocationNormalized) => ({
+			parentId: to.query.parentId,
+			parentType: to.query.parentType,
+			contentId: to.params.contentId || undefined,
+		}),
+		meta: {
+			layout: Layouts.BORDERLESS,
+		},
+	},
+	{
 		path: "/imprint",
 		component: () => import("@/pages/Imprint.page.vue"),
 		name: "imprint",
 		meta: {
 			isPublic: true,
 		},
+	},
+	{
+		path: "/licenses",
+		component: async () => await import("@/pages/LicenseList.page.vue"),
+		name: "licenses",
+		meta: {
+			isPublic: true,
+		},
+	},
+	{
+		path: `/media-shelf`,
+		component: async () => (await import("@page-media-shelf")).MediaShelfPage,
+		name: "media-shelf",
 	},
 	{
 		path: "/migration",
@@ -263,29 +330,19 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: createPermissionGuard(["news_edit"]),
 	},
 	{
-		path: `/folder/:id(${REGEX_ID})`,
-		component: async () => (await import("@page-folder")).FolderPage,
-		beforeEnter: [checkFolderFeature],
-		name: "folder-id",
-		props: (route: RouteLocationNormalized) => ({
-			folderId: route.params.id,
-		}),
-	},
-	{
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
 		name: "rooms",
 	},
 	{
-		path: `/rooms/new`,
-		component: async () => (await import("@page-room")).RoomCreatePage,
-		beforeEnter: [createPermissionGuard(["school_create_room"])],
-		name: "rooms-new",
-	},
-	{
 		path: `/rooms/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-room")).RoomDetailsSwitchPage,
 		name: "room-details",
+	},
+	{
+		path: `/rooms/:id(${REGEX_ID})/board`,
+		redirect: { name: "boards-id" },
+		name: "rooms-board",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/edit`,
@@ -316,19 +373,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "course-room-overview",
 	},
 	{
-		path: `/rooms/:id(${REGEX_ID})/board`,
-		redirect: { name: "boards-id" },
-		name: "rooms-board",
-	},
-	{
-		path: `/boards/:id(${REGEX_ID})`,
-		component: async () => (await import("@page-board")).ColumnBoardPage,
-		name: "boards-id",
-		props: (route: RouteLocationNormalized) => ({
-			boardId: route.params.id,
-		}),
-	},
-	{
 		path: `/rooms/invitation-link/:id(${REGEX_ID})`,
 		component: async () =>
 			(await import("@page-room")).RoomInvitationLinkStatusPage,
@@ -336,6 +380,12 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		props: (route: RouteLocationNormalized) => ({
 			invitationLinkId: route.params.id,
 		}),
+	},
+	{
+		path: `/rooms/new`,
+		component: async () => (await import("@page-room")).RoomCreatePage,
+		beforeEnter: [createPermissionGuard(["school_create_room"])],
+		name: "rooms-new",
 	},
 	{
 		path: "/tasks",
@@ -371,55 +421,5 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			contextType: to.query.contextType,
 			configId: to.params.configId,
 		}),
-	},
-	{
-		path: `/h5p/player/:contentId(${REGEX_ID})`,
-		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
-		name: "h5pPlayer",
-		beforeEnter: validateQueryParameters({
-			parentType: isEnum(H5PContentParentType),
-		}),
-		props: (to: RouteLocationNormalized) => ({
-			parentType: to.query.parentType,
-			contentId: to.params.contentId,
-		}),
-		meta: {
-			layout: Layouts.BORDERLESS,
-		},
-	},
-	{
-		path: `/h5p/editor/:contentId(${REGEX_ID})?`,
-		component: () => import("@/pages/h5p/H5PEditor.page.vue"),
-		name: "h5pEditor",
-		beforeEnter: validateQueryParameters({
-			parentType: isEnum(H5PContentParentType),
-			parentId: isMongoId,
-		}),
-		props: (to: RouteLocationNormalized) => ({
-			parentId: to.query.parentId,
-			parentType: to.query.parentType,
-			contentId: to.params.contentId || undefined,
-		}),
-		meta: {
-			layout: Layouts.BORDERLESS,
-		},
-	},
-	{
-		path: `/media-shelf`,
-		component: async () => (await import("@page-media-shelf")).MediaShelfPage,
-		name: "media-shelf",
-	},
-	{
-		path: "/licenses",
-		component: async () => await import("@/pages/LicenseList.page.vue"),
-		name: "licenses",
-		meta: {
-			isPublic: true,
-		},
-	},
-	{
-		path: "/",
-		component: () => import("@/pages/Home.page.vue"),
-		name: "home",
 	},
 ];
