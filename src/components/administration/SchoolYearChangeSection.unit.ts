@@ -1,11 +1,8 @@
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
 import {
+	createTestAppStoreWithSchool,
 	createTestEnvStore,
 	maintenanceStatusFactory,
-	meResponseFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -21,27 +18,20 @@ import { beforeAll } from "vitest";
 vi.mock("@data-school");
 
 describe("SchoolYearChangeSection", () => {
+	const schoolId = "schoolId";
 	let useSharedSchoolYearChangeApiMock: DeepMocked<
 		ReturnType<typeof useSharedSchoolYearChange>
 	>;
 
 	beforeAll(() => {
 		createTestEnvStore();
-	});
-
-	const schoolId = "schoolId";
-	const mockMe = meResponseFactory.build({ school: { id: schoolId } });
-	const authModule = createModuleMocks(AuthModule, {
-		getSchool: mockMe.school,
+		createTestAppStoreWithSchool(schoolId);
 	});
 
 	const getWrapper = () => {
 		const wrapper = mount(SchoolYearChangeSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 			},
 		});
 

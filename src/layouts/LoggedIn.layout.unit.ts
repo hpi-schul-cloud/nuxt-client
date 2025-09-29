@@ -1,8 +1,6 @@
 import { SchulcloudTheme } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
 import FilePathsModule from "@/store/filePaths";
 import {
-	AUTH_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
 	THEME_KEY,
@@ -29,9 +27,6 @@ const setup = () => {
 	const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
 		getStatusAlerts: [],
 	});
-	const authModule = createModuleMocks(AuthModule, {
-		getUserPermissions: [],
-	});
 
 	const filePathsModule = createModuleMocks(FilePathsModule, {
 		getSpecificFiles: {
@@ -53,7 +48,6 @@ const setup = () => {
 				createTestingPinia(),
 			],
 			provide: {
-				[AUTH_MODULE_KEY.valueOf()]: authModule,
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
 				[THEME_KEY.valueOf()]: {
 					name: SchulcloudTheme.N21,

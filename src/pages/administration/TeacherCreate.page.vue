@@ -30,6 +30,8 @@ import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RoleName } from "@/serverApi/v3";
+import { useAppStore } from "@data-app";
 
 export default {
 	components: {
@@ -70,8 +72,8 @@ export default {
 					firstName: teacherData.firstName,
 					lastName: teacherData.lastName,
 					email: teacherData.email,
-					roles: ["teacher"],
-					schoolId: this.$me.school.id,
+					roles: [RoleName.Teacher],
+					schoolId: useAppStore().school?.id,
 					sendRegistration: this.sendRegistration,
 					generateRegistrationLink: true,
 				})

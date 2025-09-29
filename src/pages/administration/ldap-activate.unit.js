@@ -45,14 +45,6 @@ const getStoreOptions = () => {
 
 	const storeOptions = {
 		modules: {
-			auth: {
-				namespaced: true,
-				state: () => ({
-					user: {
-						permissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
-					},
-				}),
-			},
 			"ldap-config": {
 				namespaced: true,
 				actions: {

@@ -1,7 +1,6 @@
 import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
 import setupStores from "@@/tests/test-utils/setupStores";
 import NotifierModule from "@/store/notifier";
-import AuthModule from "@/store/auth";
 import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { nextTick } from "vue";
@@ -69,7 +68,6 @@ describe("useAutoLogout", () => {
 
 	setupStores({
 		notifierModule: NotifierModule,
-		authModule: AuthModule,
 	});
 
 	createTestEnvStore({
@@ -164,7 +162,7 @@ describe("useAutoLogout", () => {
 		it("should be true when an error occurs", async () => {
 			jwtTimerResponse.rejected = true;
 			const { errorOnExtend, extendSession } = setup();
-			extendSession();
+			await extendSession();
 			await flushPromises();
 
 			expect(errorOnExtend.value).toBe(true);
@@ -207,7 +205,7 @@ describe("useAutoLogout", () => {
 		it("should be 'Error' when an error occurs", async () => {
 			jwtTimerResponse.rejected = true;
 			const { sessionStatus, extendSession } = setup();
-			extendSession();
+			await extendSession();
 			await flushPromises();
 
 			expect(sessionStatus.value).toBe(SessionStatus.Error);
@@ -218,7 +216,7 @@ describe("useAutoLogout", () => {
 			jwtTimerResponse.rejected = false;
 
 			const { sessionStatus, extendSession } = setup();
-			extendSession();
+			await extendSession();
 			await flushPromises();
 
 			expect(sessionStatus.value).toBe(SessionStatus.Continued);
