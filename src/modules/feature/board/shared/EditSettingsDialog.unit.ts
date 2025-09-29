@@ -5,7 +5,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { Mock } from "vitest";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
-import { VCard, VRadioGroup } from "vuetify/components";
+import { VCard, VDialog, VRadioGroup } from "vuetify/components";
 import { WarningAlert } from "@ui-alert";
 
 vi.mock("@vueuse/integrations/useFocusTrap", () => {
@@ -62,6 +62,39 @@ describe("EditSettingsDialog", () => {
 			expect(dialogTitle.text()).toBe(
 				"components.board.menu.editing.settings.title"
 			);
+		});
+
+		describe("responsive dialog", () => {
+			describe("when window width is greater than 480px", () => {
+				it("should set width prop to 480", () => {
+					Object.defineProperty(window, "innerWidth", {
+						writable: true,
+						configurable: true,
+						value: 1000,
+					});
+					const { wrapper } = setup();
+					const dialogComponent = wrapper.findComponent(VDialog);
+					expect(dialogComponent.exists()).toBe(true);
+					expect(dialogComponent.props("modelValue")).toBe(true);
+
+					expect(dialogComponent.props("width")).toBe(480);
+				});
+			});
+			describe("when window width is less than or equal to 480px", () => {
+				it("should set width prop to auto", () => {
+					Object.defineProperty(window, "innerWidth", {
+						writable: true,
+						configurable: true,
+						value: 400,
+					});
+					const { wrapper } = setup();
+					const dialogComponent = wrapper.findComponent(VDialog);
+					expect(dialogComponent.exists()).toBe(true);
+					expect(dialogComponent.props("modelValue")).toBe(true);
+
+					expect(dialogComponent.props("width")).toBe("auto");
+				});
+			});
 		});
 
 		describe("when isDraftMode is false", () => {
