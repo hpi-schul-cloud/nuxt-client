@@ -6,7 +6,7 @@ import { nextTick } from "vue";
 import { ErrorType, useErrorHandler } from "./ErrorHandler.composable";
 import { expectNotification, mountComposable } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 
@@ -46,15 +46,12 @@ const mockErrorResponse = (code = 404, message = "NOT FOUND") => {
 };
 
 describe("ErrorHandler.Composable", () => {
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		keys.forEach((key) => (translationMap[key] = key));
 	});
 
 	const setup = () => mountComposable(() => useErrorHandler());
-
-	beforeEach(() => {
-		keys.forEach((key) => (translationMap[key] = key));
-	});
 
 	describe("handleError", () => {
 		describe("when custom error handler for 404 is defined", () => {

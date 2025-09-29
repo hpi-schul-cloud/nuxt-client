@@ -13,7 +13,7 @@ import {
 import { mount } from "@vue/test-utils";
 import { VDialog } from "vuetify/lib/components/index";
 import { expectNotification } from "@@/tests/test-utils";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 
@@ -21,7 +21,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 	let exportModuleMock: CommonCartridgeExportModule;
 	let courseRoomDetailsModuleMock: courseRoomDetailsModule;
 
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 

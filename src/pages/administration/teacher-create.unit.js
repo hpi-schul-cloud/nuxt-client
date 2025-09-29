@@ -6,10 +6,9 @@ import {
 import { createStore } from "vuex";
 import { default as NewTeacher } from "./TeacherCreate.page.vue";
 import { flushPromises } from "@vue/test-utils";
-import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestAppStore, expectNotification } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { expectNotification } from "../../../tests/test-utils/index.js";
 
 const createMockStore = (createTeacherStub) => {
 	const mockStore = createStore({

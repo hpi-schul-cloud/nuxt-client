@@ -12,14 +12,14 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@util-board");
 
 describe("ExternalToolElementConfigurationDialog", () => {
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 

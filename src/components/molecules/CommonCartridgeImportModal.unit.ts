@@ -14,12 +14,12 @@ import {
 } from "@@/tests/test-utils/setup";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { expectNotification } from "@@/tests/test-utils";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 
 describe("@/components/molecules/CommonCartridgeImportModal", () => {
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 

@@ -11,7 +11,7 @@ import { nextTick } from "vue";
 import { VIcon, VTextField } from "vuetify/components";
 import ExternalToolMediumDetails from "./ExternalToolMediumDetails.vue";
 import { expectNotification } from "@@/tests/test-utils";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 
@@ -29,7 +29,7 @@ describe("ExternalToolMediumDetails", () => {
 		return { wrapper };
 	};
 
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 

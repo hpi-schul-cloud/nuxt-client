@@ -10,8 +10,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
 import ConsentPage from "./StudentConsent.page.vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
-import { expectNotification } from "../../../tests/test-utils/index.js";
+import { createTestEnvStore, expectNotification } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 

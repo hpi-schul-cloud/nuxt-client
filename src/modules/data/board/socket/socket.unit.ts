@@ -76,8 +76,6 @@ describe("socket.ts", () => {
 	>;
 
 	beforeAll(() => {
-		setActivePinia(createTestingPinia());
-
 		timeoutResponseMock = { emitWithAck: vi.fn() };
 		mockSocket = {
 			connected: false,
@@ -100,6 +98,7 @@ describe("socket.ts", () => {
 	});
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		mockSocket.connected = true;
 	});
 

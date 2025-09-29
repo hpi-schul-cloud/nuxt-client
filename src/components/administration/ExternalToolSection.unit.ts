@@ -53,7 +53,7 @@ describe("ExternalToolSection", () => {
 	>;
 	let schoolLicenseStore: MockedStore<typeof useSchoolLicenseStore>;
 
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		schoolLicenseStore = mockedPiniaStoreTyping(useSchoolLicenseStore);
 	});

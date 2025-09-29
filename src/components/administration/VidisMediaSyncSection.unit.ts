@@ -8,7 +8,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { beforeAll, expect } from "vitest";
+import { beforeEach, expect } from "vitest";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 
@@ -19,8 +19,16 @@ describe("VidisMediaSyncSection", () => {
 		ReturnType<typeof useSchoolLicenseApi>
 	>;
 
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+
+		useSchoolLicenseApiMock =
+			createMock<ReturnType<typeof useSchoolLicenseApi>>();
+		vi.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
+	});
+
+	afterEach(() => {
+		vi.resetAllMocks();
 	});
 
 	const getWrapper = () => {
@@ -34,17 +42,6 @@ describe("VidisMediaSyncSection", () => {
 			wrapper,
 		};
 	};
-
-	beforeEach(() => {
-		useSchoolLicenseApiMock =
-			createMock<ReturnType<typeof useSchoolLicenseApi>>();
-
-		vi.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
-	});
-
-	afterEach(() => {
-		vi.resetAllMocks();
-	});
 
 	describe("Sync button", () => {
 		describe("when the request is successful", () => {

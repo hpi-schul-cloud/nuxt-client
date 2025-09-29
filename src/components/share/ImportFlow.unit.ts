@@ -30,7 +30,6 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
-import { beforeAll } from "vitest";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 
@@ -46,10 +45,6 @@ describe("@components/share/ImportFlow", () => {
 		shortTitle: "Ma",
 		displayColor: "#54616e",
 	};
-
-	beforeAll(() => {
-		setActivePinia(createTestingPinia());
-	});
 
 	const setup = (props = {}) => {
 		const wrapper = mount(ImportFlow, {
@@ -78,6 +73,8 @@ describe("@components/share/ImportFlow", () => {
 	};
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+
 		copyModuleMock = createModuleMocks(CopyModule, {
 			getIsResultModalOpen: false,
 			getCopyResult: copyResultResponse,
@@ -320,7 +317,7 @@ describe("@components/share/ImportFlow", () => {
 					const dialog = wrapper
 						.findComponent(ImportModal)
 						.findComponent(vCustomDialog);
-					dialog.vm.$emit("dialog-confirmed");
+					await dialog.vm.$emit("dialog-confirmed");
 
 					expectNotification("error");
 				});
@@ -530,7 +527,7 @@ describe("@components/share/ImportFlow", () => {
 					const dialog = wrapper
 						.findComponent(ImportModal)
 						.findComponent(vCustomDialog);
-					dialog.vm.$emit("dialog-confirmed");
+					await dialog.vm.$emit("dialog-confirmed");
 
 					expectNotification("error");
 				});

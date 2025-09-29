@@ -13,11 +13,6 @@ import {
 describe("useNotificationStore", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		vi.useFakeTimers();
-	});
-
-	afterEach(() => {
-		vi.useRealTimers();
 	});
 
 	it("should add notification to store", () => {

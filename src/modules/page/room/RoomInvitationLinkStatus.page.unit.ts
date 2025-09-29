@@ -15,7 +15,7 @@ import RoomInvitationLinkStatusPage from "./RoomInvitationLinkStatus.page.vue";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { setActivePinia } from "pinia";
 import { flushPromises } from "@vue/test-utils";
-import { beforeAll } from "vitest";
+import { beforeAll, beforeEach } from "vitest";
 
 vi.mock("vue-router", () => {
 	return {
@@ -36,7 +36,7 @@ vi.mock("vue-i18n", async (importOriginal) => {
 });
 
 describe("RoomInvitationLinkStatusPage", () => {
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 

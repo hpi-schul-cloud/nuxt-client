@@ -13,12 +13,12 @@ import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
 import { expectNotification } from "@@/tests/test-utils";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 
 describe("@/components/share/ShareModal", () => {
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 
