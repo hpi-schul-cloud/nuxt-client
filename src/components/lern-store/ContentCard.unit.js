@@ -1,8 +1,5 @@
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import { authModule } from "@/store";
-import AuthModule from "@/store/auth";
 import ContentModule from "@/store/content";
-import { meResponseFactory } from "@@/tests/test-utils";
 import { Collection } from "@@/tests/test-utils/mockDataCollection";
 import { Resource } from "@@/tests/test-utils/mockDataResource";
 import {
@@ -12,17 +9,21 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { RouterLinkStub } from "@vue/test-utils";
 import ContentCard from "./ContentCard";
+import { setActivePinia } from "pinia";
+import { createTestAppStoreWithRole } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("@/components/organisms/ContentCard", () => {
-	beforeEach(() => {
-		setupStores({
-			authModule: AuthModule,
-			contentModule: ContentModule,
-		});
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
 
 		// The role can be anything here except "student", because of the "isNotStudent" method in ContentCard.
-		const mockMe = meResponseFactory.build({ roles: [{ name: "test-role" }] });
-		authModule.setMe(mockMe);
+		createTestAppStoreWithRole("test-role");
+	});
+	beforeEach(() => {
+		setupStores({
+			contentModule: ContentModule,
+		});
 	});
 
 	const setup = (resource = Resource) => {
