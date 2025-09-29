@@ -62,7 +62,6 @@ import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPEND
 import {
 	KebabMenuActionCopy,
 	KebabMenuActionDelete,
-	KebabMenuActionEditingSettings,
 	KebabMenuActionRename,
 	KebabMenuActionPublish,
 	KebabMenuActionRevert,
@@ -80,6 +79,7 @@ import BoardDraftChip from "./BoardDraftChip.vue";
 import BoardEditableChip from "./BoardEditableChip.vue";
 import { upperCaseFirstChar } from "@/utils/textFormatting";
 import { useEnvConfig } from "@data-env";
+import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 
 const props = defineProps({
 	boardId: {

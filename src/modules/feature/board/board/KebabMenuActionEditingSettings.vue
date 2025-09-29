@@ -10,6 +10,6 @@
 <script setup lang="ts">
 import { mdiPencilPlusOutline } from "@icons/material";
 import { useI18n } from "vue-i18n";
-import KebabMenuAction from "./KebabMenuAction.vue";
+import { KebabMenuAction } from "@ui-kebab-menu";
 const { t } = useI18n();
 </script>

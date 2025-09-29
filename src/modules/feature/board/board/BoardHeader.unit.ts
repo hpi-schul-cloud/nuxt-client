@@ -12,7 +12,6 @@ import {
 	KebabMenuActionChangeLayout,
 	KebabMenuActionCopy,
 	KebabMenuActionDelete,
-	KebabMenuActionEditingSettings,
 	KebabMenuActionPublish,
 	KebabMenuActionRename,
 	KebabMenuActionRevert,
@@ -20,10 +19,11 @@ import {
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
-import { computed, nextTick, ref } from "vue";
+import { computed, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = vi.mocked(useBoardPermissions);
