@@ -73,6 +73,7 @@
 		"eslint": "^9.27.0",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-prettier": "^5.4.0",
+		"eslint-plugin-simple-import-sort": "^12.1.1",
 		"eslint-plugin-vue": "^10.2.0",
 		"fishery": "^2.3.1",
 		"globals": "^15.9.0",
