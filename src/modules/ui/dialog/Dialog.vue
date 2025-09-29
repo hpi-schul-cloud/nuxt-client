@@ -9,26 +9,22 @@
 		<UseFocusTrap>
 			<VCard>
 				<template #title>
-					<div class="mx-4">
-						<h2
-							:id="`modal-${uid}-title`"
-							class="ma-2 dialog-title"
-							data-testid="dialog-title"
-						>
-							{{ message }}
-						</h2>
-					</div></template
-				>
+					<h2
+						:id="`modal-${uid}-title`"
+						class="dialog-title"
+						data-testid="dialog-title"
+					>
+						{{ message }}
+					</h2>
+				</template>
 				<template #text>
-					<div class="mx-4">
-						<div :id="`modal-${uid}-body`">
-							<slot name="content" />
-						</div>
+					<div :id="`modal-${uid}-body`">
+						<slot name="content" />
 					</div>
 				</template>
 				<template #actions>
 					<VSpacer />
-					<div class="d-flex mb-2 gap-2 mx-4">
+					<div class="d-flex ga-2">
 						<VBtn
 							data-testid="dialog-cancel"
 							:aria-label="t('common.actions.cancel')"
@@ -95,5 +91,15 @@ const onConfirm = () => {
 	hyphens: none;
 	word-break: break-word;
 	line-height: var(--line-height-lg);
+	margin: 0;
+}
+.v-card :deep(.v-card-item) {
+	padding: 1.25rem 1.5rem;
+}
+.v-card :deep(.v-card-text) {
+	padding: 0 1.5rem;
+}
+.v-card :deep(.v-card-actions) {
+	padding: 0 1.5rem 1.5rem;
 }
 </style>
