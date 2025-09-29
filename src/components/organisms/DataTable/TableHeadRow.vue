@@ -227,7 +227,6 @@
 
 <script>
 import InfoBox from "@/components/molecules/InfoBox";
-import { envConfigModule } from "@/store";
 import {
 	mdiAlert,
 	mdiInformation,
@@ -235,6 +234,7 @@ import {
 	mdiMenuSwapOutline,
 	mdiMenuUpOutline,
 } from "@icons/material";
+import { useEnvConfig } from "@data-env";
 
 const selectionStateMap = new Map([
 	[true, "all"],
@@ -302,7 +302,7 @@ export default {
 			},
 		},
 		isConsentNecessary() {
-			return envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY;
+			return useEnvConfig().value.FEATURE_CONSENT_NECESSARY;
 		},
 	},
 	methods: {
@@ -364,7 +364,7 @@ export default {
 @use "@/styles/settings.scss" as *;
 
 .table__row {
-	font-weight: var(--font-weight-bold);
+	font-weight: bold;
 
 	th {
 		border-bottom: 2px solid;
@@ -380,7 +380,7 @@ export default {
 			width: 100%;
 			padding: 8px;
 			font-size: var(--text-md);
-			font-weight: var(--font-weight-normal);
+			font-weight: normal;
 		}
 
 		.select-wrap {
@@ -415,7 +415,7 @@ export default {
 	.content {
 		max-height: 35vh;
 		overflow-y: scroll;
-		font-weight: var(--font-weight-normal);
+		font-weight: normal;
 	}
 
 	button:not(.is-none):focus {

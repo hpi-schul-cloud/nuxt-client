@@ -24,6 +24,7 @@
 			"@data-external-tool": ["src/modules/data/external-tool"],
 			"@data-group": ["src/modules/data/group"],
 			"@data-system": ["src/modules/data/system"],
+            "@data-env": ["src/modules/data/env"],
 			"@data-provisioning-options": ["src/modules/data/provisioning-options"],
 			"@data-room": ["src/modules/data/room"],
 			"@data-file": ["src/modules/data/file"],

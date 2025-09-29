@@ -3,7 +3,7 @@
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-center">
-					<h1 class="text-h3 mb-4" data-testid="admin-room-title">
+					<h1 data-testid="admin-room-title">
 						{{ t("pages.rooms.administration.title") }}
 					</h1>
 				</div>
@@ -38,8 +38,8 @@ import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRouter } from "vue-router";
-import { envConfigModule } from "@/store";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { useEnvConfig } from "@data-env";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -53,7 +53,7 @@ const { bottom: headerBottom } = useElementBounding(header);
 
 onMounted(async () => {
 	const isFeatureEnabled =
-		envConfigModule.getEnv.FEATURE_ADMINISTRATE_ROOMS_ENABLED;
+		useEnvConfig().value.FEATURE_ADMINISTRATE_ROOMS_ENABLED;
 
 	if (!isFeatureEnabled) {
 		window.location.replace("/dashboard");

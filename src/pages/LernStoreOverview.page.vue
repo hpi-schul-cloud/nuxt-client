@@ -33,12 +33,11 @@
 									:icon="mdiClose"
 									:aria-label="$t('common.actions.delete')"
 									density="compact"
-									size="x-large"
 									variant="text"
 									:ripple="false"
 									@click="searchQuery = ''"
 								/>
-								<v-icon v-else :icon="mdiMagnify" size="x-large" />
+								<v-icon v-else :icon="mdiMagnify" size="large" />
 							</template>
 						</v-text-field>
 					</div>
@@ -287,7 +286,7 @@ watchDebounced(
 
 	.arrow__back {
 		margin-top: 8px;
-		font-weight: var(--font-weight-bold);
+		font-weight: bold;
 		cursor: pointer;
 	}
 
@@ -340,10 +339,6 @@ watchDebounced(
 			text-align: center;
 
 			@media #{map.get($display-breakpoints, 'sm-and-up')} {
-				font-size: var(--heading-6);
-			}
-
-			@media #{map.get($display-breakpoints, 'md-and-up')} {
 				font-size: var(--heading-4);
 			}
 		}

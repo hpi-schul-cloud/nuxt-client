@@ -50,7 +50,6 @@
 </template>
 
 <script setup lang="ts">
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import { BoardMenuScope } from "@ui-board";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
@@ -73,6 +72,7 @@ import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardDraftChip from "./BoardDraftChip.vue";
 import { upperCaseFirstChar } from "@/utils/textFormatting";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	boardId: {
@@ -191,10 +191,8 @@ const calculateWidth = () => {
 	fieldWidth.value = `${width + 1}px`;
 };
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-
 const isShareEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE
+	() => useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE
 );
 
 watchEffect(() => {
@@ -216,7 +214,7 @@ watchEffect(() => {
 	display: inline-block;
 	min-width: 1em;
 	padding: 0 $field-control-padding-end 0 $field-control-padding-start;
-	font-size: var(--heading-3);
+	font-size: var(--heading-1);
 	font-family: var(--font-accent);
 	letter-spacing: $field-letter-spacing;
 }

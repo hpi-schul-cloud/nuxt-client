@@ -24,9 +24,9 @@
 			<v-expansion-panels multiple class="pb-9" :model-value="openedPanels">
 				<v-expansion-panel data-testid="general-settings-panel" value="general">
 					<v-expansion-panel-title>
-						<div class="text-h4">
+						<h2 class="ma-0">
 							{{ $t("pages.administration.school.index.generalSettings") }}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -44,9 +44,9 @@
 					value="privacy"
 				>
 					<v-expansion-panel-title>
-						<div class="text-h4">
+						<h2 class="ma-0">
 							{{ $t("common.words.privacyPolicy") }}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -64,9 +64,9 @@
 					value="terms"
 				>
 					<v-expansion-panel-title>
-						<div class="text-h4">
+						<h2 class="ma-0">
 							{{ $t("common.words.termsOfUse") }}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -83,11 +83,11 @@
 					data-testid="school-year-change-panel"
 				>
 					<v-expansion-panel-title>
-						<div class="text-h4">
+						<h2 class="ma-0">
 							{{
 								$t("components.administration.schoolYearChangeSection.headers")
 							}}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -105,11 +105,11 @@
 					value="migration"
 				>
 					<v-expansion-panel-title>
-						<div class="text-h4">
+						<h2 class="ma-0">
 							{{
 								$t("components.administration.adminMigrationSection.headers")
 							}}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -123,9 +123,9 @@
 
 				<v-expansion-panel data-testid="systems-panel" value="authentication">
 					<v-expansion-panel-title>
-						<div class="text-h4">
+						<h2 class="ma-0">
 							{{ $t("pages.administration.school.index.authSystems.title") }}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -145,9 +145,9 @@
 
 				<v-expansion-panel data-testid="tools-panel" value="tools">
 					<v-expansion-panel-title>
-						<div class="text-h4">
+						<h2 class="ma-0">
 							{{ $t("components.administration.externalToolsSection.header") }}
-						</div>
+						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
@@ -173,14 +173,10 @@ import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue
 import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { SchoolSystemResponse, SchulcloudTheme } from "@/serverApi/v3";
+import { SchoolSystemResponse } from "@/serverApi/v3";
 import { ApplicationError } from "@/store/types/application-error";
 import { School } from "@/store/types/schools";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-	SCHOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useSharedSchoolYearChange } from "@data-school";
 import { mdiAlertCircle, mdiMinus, mdiPlus } from "@icons/material";
@@ -196,6 +192,8 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { useEnvConfig, useEnvStore } from "@data-env";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
 	name: "SchoolSettings",
@@ -212,7 +210,6 @@ export default defineComponent({
 	setup() {
 		const { t } = useI18n();
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const route = useRoute();
 
 		const headline: Ref<string> = ref(
@@ -265,28 +262,13 @@ export default defineComponent({
 			() => schoolsModule.getError
 		);
 		const isFeatureOauthMigrationEnabled: ComputedRef<boolean | undefined> =
-			computed(
-				() => envConfigModule.getEnv.FEATURE_USER_LOGIN_MIGRATION_ENABLED
-			);
+			computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
 		const isFeatureSchoolPolicyEnabled: ComputedRef<boolean | undefined> =
-			computed(() => envConfigModule.getEnv.FEATURE_SCHOOL_POLICY_ENABLED_NEW);
+			computed(() => useEnvConfig().value.FEATURE_SCHOOL_POLICY_ENABLED_NEW);
 		const isFeatureSchoolTermsOfUseEnabled: ComputedRef<boolean | undefined> =
-			computed(
-				() => envConfigModule.getEnv.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED
-			);
+			computed(() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED);
 
-		const instituteTitle: ComputedRef<string> = computed(() => {
-			switch (envConfigModule.getEnv.SC_THEME) {
-				case SchulcloudTheme.N21:
-					return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
-				case SchulcloudTheme.Thr:
-					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-				case SchulcloudTheme.Brb:
-					return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
-				default:
-					return "Dataport";
-			}
-		});
+		const { instituteTitle } = storeToRefs(useEnvStore());
 
 		onMounted(async () => {
 			if (school.value?.id) {

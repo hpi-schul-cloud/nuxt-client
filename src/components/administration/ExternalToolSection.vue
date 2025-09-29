@@ -117,7 +117,7 @@
 		>
 			<v-card :ripple="false">
 				<v-card-title data-testid="delete-dialog-title">
-					<h2 class="text-h4 my-2">
+					<h2 class="my-2">
 						{{
 							t("components.administration.externalToolsSection.dialog.title")
 						}}
@@ -200,12 +200,10 @@ import {
 } from "@/serverApi/v3";
 import { RequestArgs } from "@/serverApi/v3/base";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
 	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
@@ -220,11 +218,11 @@ import { useExternalToolsSectionUtils } from "./external-tool-section-utils.comp
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
+import { useEnvConfig } from "@data-env";
 
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 );
-const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
@@ -232,7 +230,7 @@ const router = useRouter();
 
 const schoolLicenseStore = useSchoolLicenseStore();
 
-onMounted(async () => {
+onMounted(() => {
 	if (authModule.getSchool) {
 		schoolExternalToolsModule.loadSchoolExternalTools(authModule.getSchool.id);
 
@@ -244,8 +242,9 @@ const { t } = useI18n();
 
 const { getHeaders, getItems } = useExternalToolsSectionUtils(
 	t,
-	envConfigModule.getEnv.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED
+	useEnvConfig().value.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED
 );
+
 const { fetchSchoolExternalToolUsage, metadata } = useSchoolExternalToolUsage();
 
 const items: ComputedRef<SchoolExternalToolItem[]> = computed(() => {
@@ -317,18 +316,18 @@ const onCloseDeleteDialog = () => {
 	isDeleteDialogOpen.value = false;
 };
 
-const isMediaBoardUsageVisible: ComputedRef<boolean> = computed(() => {
+const isMediaBoardUsageVisible = computed(() => {
 	if (!metadata.value) {
 		return false;
 	}
 	const isVisible =
 		metadata.value.mediaBoard > 0 ||
-		envConfigModule.getEnv.FEATURE_MEDIA_SHELF_ENABLED;
+		useEnvConfig().value.FEATURE_MEDIA_SHELF_ENABLED;
 	return isVisible;
 });
 
-const isVidisEnabled: ComputedRef<boolean> = computed(() => {
-	return envConfigModule.getEnv.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED;
+const isVidisEnabled = computed(() => {
+	return useEnvConfig().value.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED;
 });
 
 const isLicensedToSchool = (

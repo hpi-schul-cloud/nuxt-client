@@ -2,13 +2,11 @@ import RoomModal from "@/components/molecules/RoomModal";
 import { authModule, courseRoomListModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
-import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import CourseRoomListModule from "@/store/course-room-list";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import {
-	ENV_CONFIG_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
@@ -24,6 +22,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 vi.mock("vue-router");
 
@@ -85,6 +84,7 @@ const mockCourseData = [
 		title: "Mathe",
 		shortTitle: "Ma",
 		displayColor: "#54616e",
+		isLocked: false,
 	},
 ];
 
@@ -100,7 +100,6 @@ const mockAuthStoreData = {
 
 setupStores({
 	authModule: AuthModule,
-	envConfigModule: EnvConfigModule,
 	courseRoomListModule: CourseRoomListModule,
 });
 
@@ -134,9 +133,6 @@ const getWrapper = () => {
 	});
 	loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 	notifierModuleMock = createModuleMocks(NotifierModule);
-	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-		getCtlToolsTabEnabled: false,
-	});
 	const courseRoomListModuleMock = createModuleMocks(courseRoomListModule);
 	return mount(CourseRoomOverviewPage, {
 		global: {
@@ -145,7 +141,6 @@ const getWrapper = () => {
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				[NOTIFIER_MODULE_KEY]: notifierModuleMock,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
 					CommonCartridgeImportModule
 				),
@@ -158,6 +153,10 @@ const getWrapper = () => {
 };
 
 describe("@/pages/CourseRoomOverview.page", () => {
+	beforeAll(() => {
+		createTestEnvStore();
+	});
+
 	beforeEach(() => {
 		courseRoomListModule.setRoomData(mockRoomStoreData);
 		courseRoomListModule.setAllElements(mockCourseData);
@@ -193,6 +192,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 			{
 				id: "1234",
 				name: "Mathe",
+				isLocked: false,
 			},
 		];
 

@@ -1,7 +1,7 @@
 <template>
 	<v-container class="align-center d-flex justify-center w-100">
 		<div class="license-list w-100">
-			<h1 class="text-h3 d-flex justify-center">
+			<h1>
 				{{ t("pages.licenseList.title") }}
 			</h1>
 			<p>{{ t("pages.licenseList.introduction") }}</p>
@@ -12,7 +12,7 @@
 					:key="name"
 				>
 					<v-expansion-panel-title>
-						<div class="text-h4">{{ name }}</div>
+						<div class="text-h2">{{ name }}</div>
 						<template #actions="{ expanded }">
 							<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 						</template>
@@ -43,14 +43,10 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiMinus, mdiPlus } from "@icons/material";
+import { useEnvConfig } from "@data-env";
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
@@ -79,7 +75,7 @@ const removeVersionNumbers = (data: LicenseData): LicenseData => {
 
 const fetchLicenseData = async () => {
 	try {
-		const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
+		const licensesUrl = useEnvConfig().value.LICENSE_SUMMARY_URL;
 		if (!licensesUrl) throw new Error("License summary URL is not defined");
 
 		licenseData.value = removeVersionNumbers(

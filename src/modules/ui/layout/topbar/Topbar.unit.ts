@@ -7,7 +7,6 @@ import {
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
@@ -16,10 +15,9 @@ import StatusAlertsModule from "@/store/status-alerts";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index";
-import { envsFactory } from "@@/tests/test-utils";
-import EnvConfigModule from "@/store/env-config";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
+import { createTestEnvStore } from "@@/tests/test-utils";
 
 describe("@ui-layout/Topbar", () => {
 	const setup = async (windowWidth = 1300, isSidebarExpanded?: boolean) => {
@@ -39,10 +37,8 @@ describe("@ui-layout/Topbar", () => {
 			getUserRoles: ["administrator"],
 		});
 
-		const envs = envsFactory.build();
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envs,
-			getTheme: SchulcloudTheme.Brb,
+		createTestEnvStore({
+			SC_THEME: SchulcloudTheme.Brb,
 		});
 
 		const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
@@ -61,7 +57,6 @@ describe("@ui-layout/Topbar", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},

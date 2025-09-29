@@ -6,7 +6,7 @@
 	>
 		<template #header>
 			<div ref="header" class="d-flex align-items-center">
-				<h1 class="text-h3 mb-4" data-testid="admin-room-detail-title">
+				<h1 data-testid="admin-room-detail-title">
 					{{ headerText }}
 				</h1>
 			</div>
@@ -34,7 +34,7 @@ import { useElementBounding, useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiPlus } from "@icons/material";
 import { useRoute } from "vue-router";
-import { envConfigModule } from "@/store";
+import { useEnvConfig } from "@data-env";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -63,7 +63,7 @@ watch(
 	() => route.params.roomId,
 	async () => {
 		const isFeatureEnabled =
-			envConfigModule.getEnv.FEATURE_ADMINISTRATE_ROOMS_ENABLED;
+			useEnvConfig().value.FEATURE_ADMINISTRATE_ROOMS_ENABLED;
 
 		if (!isFeatureEnabled) {
 			window.location.replace("/dashboard");

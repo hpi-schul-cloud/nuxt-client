@@ -32,7 +32,7 @@
 			@dialog-canceled="onCloseDeleteDialog"
 		>
 			<template #title>
-				<h2 class="text-h4 my-2" data-testid="delete-dialog-title">
+				<h2 class="my-2" data-testid="delete-dialog-title">
 					{{ t("pages.rooms.tools.deleteDialog.title") }}
 				</h2>
 			</template>

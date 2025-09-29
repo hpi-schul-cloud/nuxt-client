@@ -1,4 +1,4 @@
-import { envsFactory } from "@@/tests/test-utils";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -9,8 +9,7 @@ import { useOAuthApi } from "@data-oauth";
 import { DeepMocked, createMock } from "@golevelup/ts-vitest";
 import { LanguageType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
@@ -37,11 +36,9 @@ describe("@ui-layout/UserMenu", () => {
 			},
 		});
 
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getAvailableLanguages: [LanguageType.De, LanguageType.En],
-			getEnv: envsFactory.build({
-				FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: isExternalFeatureEnabled,
-			}),
+		createTestEnvStore({
+			FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: isExternalFeatureEnabled,
+			I18N__AVAILABLE_LANGUAGES: [LanguageType.De, LanguageType.En],
 		});
 
 		useSystemApiMock = createMock<ReturnType<typeof useSystemApi>>();
@@ -60,7 +57,6 @@ describe("@ui-layout/UserMenu", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
 			props: {

@@ -41,9 +41,9 @@
 
 <script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
 import { mdiLogin } from "@icons/material";
 import { computed, ref } from "vue";
+import { useEnvConfig } from "@data-env";
 
 type Props = {
 	logoLink?: string;
@@ -63,15 +63,15 @@ const props = withDefaults(defineProps<Props>(), {
 
 const activeLink = ref(window.location.pathname);
 
-const hasButtons = computed(() => {
-	return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default;
-});
+const isDefaultTheme = computed(
+	() => useEnvConfig().value.SC_THEME === SchulcloudTheme.Default
+);
 
-const linksToDisplay = computed(() => {
-	return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default
-		? props.links
-		: [];
-});
+const hasButtons = computed(() => isDefaultTheme.value);
+
+const linksToDisplay = computed(() =>
+	isDefaultTheme.value ? props.links : []
+);
 
 const setActive = (idx: number) => {
 	activeLink.value = props.links[idx].href;
@@ -224,7 +224,7 @@ const setActive = (idx: number) => {
 }
 
 a.active {
-	font-weight: var(--font-weight-bold);
+	font-weight: bold;
 	color: rgba(var(--v-theme-white));
 	background-color: rgba(var(--v-theme-accent));
 	border-radius: 4px;

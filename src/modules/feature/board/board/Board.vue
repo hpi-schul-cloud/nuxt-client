@@ -118,7 +118,6 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
@@ -151,6 +150,7 @@ import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
+import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -322,7 +322,8 @@ onUnmounted(() => {
 
 watch(
 	() => route.hash,
-	() => focusNodeFromHash()
+	() => focusNodeFromHash(),
+	{ immediate: true }
 );
 
 watch([isBoardVisible, arePermissionsLoaded], () => {
@@ -351,7 +352,7 @@ const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
 
 const isListBoard = computed(
 	() =>
-		envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
+		useEnvConfig().value.FEATURE_BOARD_LAYOUT_ENABLED &&
 		board.value?.layout === BoardLayout.List
 );
 
@@ -403,11 +404,10 @@ const onCopyBoard = async () => {
 	router.push({ name: "boards-id", params: { id: copyId } });
 };
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const shareModule = injectStrict(SHARE_MODULE_KEY);
 
 const onShareBoard = () => {
-	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {
+	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
 		shareModule.startShareFlow({
 			id: props.boardId,
 			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,

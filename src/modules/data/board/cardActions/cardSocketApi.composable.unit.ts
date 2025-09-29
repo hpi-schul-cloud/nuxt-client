@@ -1,15 +1,11 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout, ContentElementType } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import {
 	cardResponseFactory,
-	envsFactory,
 	mockedPiniaStoreTyping,
 	richTextElementContentFactory,
 } from "@@/tests/test-utils";
 import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -58,12 +54,6 @@ describe("useCardSocketApi", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({}));
-
-		setupStores({ envConfigModule: EnvConfigModule });
-		const envs = envsFactory.build({
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
-		});
-		envConfigModule.setEnvs(envs);
 
 		socketMock = createMock<ReturnType<typeof useSocketConnection>>();
 		mockedUseSocketConnection.mockReturnValue(socketMock);
@@ -233,6 +223,7 @@ describe("useCardSocketApi", () => {
 					},
 					features: [],
 					permissions: [],
+					readersCanEdit: false,
 				};
 				const { dispatch } = useCardSocketApi();
 				return { dispatch, boardStore };
