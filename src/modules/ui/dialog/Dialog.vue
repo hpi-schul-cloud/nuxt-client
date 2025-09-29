@@ -8,20 +8,24 @@
 	>
 		<UseFocusTrap>
 			<VCard>
-				<div class="mx-4">
-					<h2
-						:id="`modal-${uid}-title`"
-						class="ma-2 dialog-title"
-						data-testid="dialog-title"
-					>
-						{{ message }}
-					</h2>
-
-					<div :id="`modal-${uid}-body`">
-						<slot name="content" />
+				<template #title>
+					<div class="mx-4">
+						<h2
+							:id="`modal-${uid}-title`"
+							class="ma-2 dialog-title"
+							data-testid="dialog-title"
+						>
+							{{ message }}
+						</h2>
+					</div></template
+				>
+				<template #text>
+					<div class="mx-4">
+						<div :id="`modal-${uid}-body`">
+							<slot name="content" />
+						</div>
 					</div>
-				</div>
-
+				</template>
 				<template #actions>
 					<VSpacer />
 					<div class="d-flex mb-2 gap-2 mx-4">
