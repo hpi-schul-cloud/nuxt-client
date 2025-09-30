@@ -1,7 +1,6 @@
 <template>
 	<default-wireframe
 		:headline="t('pages.administration.classes.index.title')"
-		:breadcrumbs="breadcrumbs"
 		max-width="full"
 		data-testid="admin-class-title"
 	>
@@ -219,7 +218,6 @@
 
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ClassSortQueryType, SchoolYearQueryType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
@@ -288,17 +286,6 @@ const footerProps = {
 	itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
 	itemsPerPageOptions: [5, 10, 25, 50, 100],
 };
-
-const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
-	{
-		title: t("pages.administration.index.title"),
-		disabled: true,
-	},
-	{
-		title: t("pages.administration.classes.index.title"),
-		disabled: true,
-	},
-]);
 
 useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
 

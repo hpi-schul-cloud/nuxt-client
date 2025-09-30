@@ -1,7 +1,6 @@
 <template>
 	<default-wireframe
 		:headline="t('pages.tool.title')"
-		:breadcrumbs="breadcrumbs"
 		max-width="short"
 		data-testid="school-external-tool-configurator-title"
 	>
@@ -61,7 +60,6 @@
 <script setup lang="ts">
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import ExternalToolMediumDetails from "@/components/external-tools/configuration/ExternalToolMediumDetails.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import AuthModule from "@/store/auth";
 import {
@@ -101,21 +99,7 @@ const { t } = useI18n();
 const pageTitle = buildPageTitle(t("pages.tool.title"));
 useTitle(pageTitle);
 
-const schoolSetting: Breadcrumb = {
-	title: t("pages.administration.school.index.title"),
-	to: "/administration/school-settings",
-};
-const breadcrumbs: Breadcrumb[] = [
-	{
-		title: t("pages.administration.index.title"),
-		disabled: true,
-	},
-	schoolSetting,
-	{
-		title: t("pages.tool.title"),
-		disabled: true,
-	},
-];
+const schoolSettingPath = "/administration/school-settings";
 
 const hasData: Ref<boolean> = ref(false);
 const loading: ComputedRef<boolean> = computed(
@@ -138,7 +122,7 @@ const apiError: ComputedRef<BusinessError | undefined> = computed(() =>
 
 const router = useRouter();
 const onCancel = () => {
-	router.push({ path: schoolSetting.to! });
+	router.push({ path: schoolSettingPath });
 };
 
 const isDeactivated: Ref<boolean> = ref(false);
@@ -181,7 +165,7 @@ const onSave = async (
 		});
 
 		await router.push({
-			path: schoolSetting.to,
+			path: schoolSettingPath,
 			query: { openPanels: "tools" },
 		});
 	}

@@ -2,7 +2,6 @@
 	<DefaultWireframe
 		:headline="t('pages.administration.migration.title')"
 		max-width="full"
-		:breadcrumbs="breadcrumbs"
 	>
 		<VSnackbar
 			v-if="businessError && businessError.statusCode !== '200'"
@@ -572,7 +571,6 @@
 <script setup lang="ts">
 import ImportUsers from "@/components/organisms/administration/ImportUsers.vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
@@ -676,20 +674,6 @@ const sourceSystemName = computed(() => {
 		return t("pages.administration.migration.ldapSource");
 	}
 });
-
-const breadcrumbs: Ref<Breadcrumb[]> = ref([
-	{
-		title: t("pages.administration.index.title"),
-		disabled: true,
-	},
-	{
-		title: t("pages.administration.migration.title", {
-			source: sourceSystemName.value,
-			instance: theme.name,
-		}),
-		disabled: true,
-	},
-]);
 
 const helpPageUri = computed(
 	() => useEnvConfig().value.MIGRATION_WIZARD_DOCUMENTATION_LINK

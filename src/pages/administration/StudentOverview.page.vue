@@ -2,7 +2,6 @@
 	<div>
 		<default-wireframe
 			:headline="$t('pages.administration.students.index.title')"
-			:breadcrumbs="breadcrumbs"
 			max-width="full"
 			:fab-items="fab"
 		>
@@ -268,16 +267,6 @@ export default {
 			],
 			tableSelection: [],
 			tableSelectionType: "inclusive",
-			breadcrumbs: [
-				{
-					title: this.$t("pages.administration.index.title"),
-					disabled: true,
-				},
-				{
-					title: this.$t("pages.administration.students.index.title"),
-					disabled: true,
-				},
-			],
 			active: false,
 			searchQuery:
 				(this.getUiState("filter", "pages.administration.students.index") &&
