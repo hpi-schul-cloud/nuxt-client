@@ -102,21 +102,22 @@ describe("RoomMembersPage", () => {
 		});
 
 		roomPermissions = {
-			canAddRoomMembers: ref(true),
+			canAddRoomMembers: computed(() => true),
+			canAddAllStudents: computed(() => false),
 			canCreateRoom: computed(() => false),
-			canChangeOwner: ref(false),
-			canCopyRoom: ref(false),
-			canViewRoom: ref(false),
-			canEditRoom: ref(false),
-			canDeleteRoom: ref(false),
-			canLeaveRoom: ref(false),
-			canRemoveRoomMembers: ref(false),
-			canEditRoomContent: ref(false),
+			canChangeOwner: computed(() => false),
+			canCopyRoom: computed(() => false),
+			canViewRoom: computed(() => false),
+			canEditRoom: computed(() => false),
+			canDeleteRoom: computed(() => false),
+			canLeaveRoom: computed(() => false),
+			canRemoveRoomMembers: computed(() => false),
+			canEditRoomContent: computed(() => false),
 			canSeeAllStudents: computed(() => false),
-			canShareRoom: ref(false),
-			canManageRoomInvitationLinks: ref(false),
-			canListDrafts: ref(false),
-			canManageVideoconferences: ref(false),
+			canShareRoom: computed(() => false),
+			canManageRoomInvitationLinks: computed(() => false),
+			canListDrafts: computed(() => false),
+			canManageVideoconferences: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 
@@ -222,14 +223,14 @@ describe("RoomMembersPage", () => {
 
 	describe("page title", () => {
 		it("should set correct title when user can add members", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { room } = setup();
 			expect(document.title).toContain(
 				`${room?.name} - pages.rooms.members.manage`
 			);
 		});
 		it("should set correct title when user can not add members", () => {
-			roomPermissions.canAddRoomMembers.value = false;
+			roomPermissions.canAddRoomMembers = computed(() => false);
 			const { room } = setup();
 			expect(document.title).toContain(
 				`${room?.name} - pages.rooms.members.label`
@@ -239,14 +240,14 @@ describe("RoomMembersPage", () => {
 
 	describe("heading", () => {
 		it("should set the correct heading when user can add members", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper } = setup({});
 			const heading = wrapper.get("h1");
 			expect(heading.text()).toBe("pages.rooms.members.management");
 		});
 
 		it("should set the correct heading when user can not add members", () => {
-			roomPermissions.canAddRoomMembers.value = false;
+			roomPermissions.canAddRoomMembers = computed(() => false);
 			const { wrapper } = setup({});
 			const heading = wrapper.get("h1");
 			expect(heading.text()).toBe("pages.rooms.members.label");
@@ -270,7 +271,7 @@ describe("RoomMembersPage", () => {
 
 		describe("when user can leave the room", () => {
 			it("should open confirmation dialog when member can leave room", async () => {
-				roomPermissions.canLeaveRoom.value = true;
+				roomPermissions.canLeaveRoom = computed(() => true);
 				const { wrapper } = setup();
 				askConfirmationMock.mockResolvedValue(true);
 
@@ -291,7 +292,8 @@ describe("RoomMembersPage", () => {
 			});
 
 			it("should call remove method after confirmation", async () => {
-				roomPermissions.canLeaveRoom.value = true;
+				roomPermissions.canLeaveRoom = computed(() => true);
+
 				const { wrapper, roomMembersStore } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);
@@ -418,7 +420,7 @@ describe("RoomMembersPage", () => {
 			])(
 				"should set correct fab items when active tab is $activeTab",
 				({ activeTab, expectedFabItems }) => {
-					roomPermissions.canAddRoomMembers.value = true;
+					roomPermissions.canAddRoomMembers = computed(() => true);
 					const { wrapper } = setup({ activeTab });
 					const wireframe = wrapper.findComponent(DefaultWireframe);
 
@@ -429,7 +431,7 @@ describe("RoomMembersPage", () => {
 
 		describe("breadcrumbs", () => {
 			it("should set correct breadcrumbs when user can add members", () => {
-				roomPermissions.canAddRoomMembers.value = true;
+				roomPermissions.canAddRoomMembers = computed(() => true);
 				const { wrapper, room } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
 				const expectedBreadcrumbs = buildBreadcrumbs(room!, true);
@@ -438,7 +440,7 @@ describe("RoomMembersPage", () => {
 			});
 
 			it("should set correct breadcrumbs when user can not add members", () => {
-				roomPermissions.canAddRoomMembers.value = false;
+				roomPermissions.canAddRoomMembers = computed(() => false);
 				const { wrapper, room } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
 				const expectedBreadcrumbs = buildBreadcrumbs(room!, false);
@@ -450,7 +452,7 @@ describe("RoomMembersPage", () => {
 
 	describe("add members fab", () => {
 		it("should render when user can add members", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 			const addMemberButton = wireframe.findComponent(
@@ -460,7 +462,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should not render when user can not add members", () => {
-			roomPermissions.canAddRoomMembers.value = false;
+			roomPermissions.canAddRoomMembers = computed(() => false);
 			const { wrapper } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 			const addMemberButton = wireframe.findComponent(
@@ -471,7 +473,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should call loadSchoolList method", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper, roomMembersStore } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 
@@ -485,7 +487,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should open Dialog", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper } = setup({
 				activeTab: Tab.Members,
 			});
@@ -508,7 +510,7 @@ describe("RoomMembersPage", () => {
 
 	describe("invite members fab", () => {
 		it("should open Dialog", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper, roomInvitationLinkStore } = setup({
 				activeTab: Tab.Invitations,
 			});
@@ -540,7 +542,7 @@ describe("RoomMembersPage", () => {
 
 	describe("add members dialog", () => {
 		it("should set isMembersDialogOpen to false on @close", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper } = setup();
 
 			const dialog = wrapper.findComponent(VDialog);
@@ -554,7 +556,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should close dialog on escape key", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper } = setup();
 
 			const dialog = wrapper.getComponent(VDialog);
@@ -569,7 +571,7 @@ describe("RoomMembersPage", () => {
 
 	describe("Tabnavigation", () => {
 		it("should not render tabs when isVisibleTabNavigation is false", () => {
-			roomPermissions.canManageRoomInvitationLinks.value = false;
+			roomPermissions.canManageRoomInvitationLinks = computed(() => false);
 			const { wrapper } = setup();
 
 			const tabs = wrapper.findComponent(VTabs);
@@ -578,7 +580,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should render all tabs when isVisibleTabNavigation is true", () => {
-			roomPermissions.canManageRoomInvitationLinks.value = true;
+			roomPermissions.canManageRoomInvitationLinks = computed(() => true);
 			const { wrapper } = setup();
 
 			const tabs = wrapper.findComponent(VTabs);
@@ -617,7 +619,7 @@ describe("RoomMembersPage", () => {
 		it.each(Object.values(Tab))(
 			"should set the active tab to the one passed in props (%s)",
 			(activeTab) => {
-				roomPermissions.canManageRoomInvitationLinks.value = true;
+				roomPermissions.canManageRoomInvitationLinks = computed(() => true);
 				const { wrapper } = setup({
 					activeTab,
 				});
