@@ -1,5 +1,5 @@
 <template>
-	<VAppBar flat :height="appBarHeight" scroll-behavior="hide">
+	<VAppBar flat :height="appBarHeight" scroll-behavior="hide" scroll-threshold="0">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template #prepend>
 			<VAppBarNavIcon
