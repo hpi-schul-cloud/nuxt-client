@@ -1,5 +1,21 @@
 <template>
 	<div>
+		<InfoAlert
+			v-if="shouldShowNoFeatureAlert"
+			data-testid="vc-info-box-no-feature"
+		>
+			{{ notEnabledMessage }}
+		</InfoAlert>
+
+		<InfoAlert v-if="shouldShowInfoAlert" data-testid="vc-info-box-show">
+			{{ alertMessage }}
+		</InfoAlert>
+		<InfoAlert
+			v-if="shouldShowNoPermissionAlert"
+			data-testid="vc-info-box-no-permission"
+		>
+			{{ noPermissionMessage }}
+		</InfoAlert>
 		<ContentElementBar
 			:has-grey-background="true"
 			:icon="mdiVideoOutline"
@@ -8,22 +24,6 @@
 			@click.stop="onContentClick"
 		>
 			<template #display>
-				<InfoAlert
-					v-if="shouldShowNoFeatureAlert"
-					data-testid="vc-info-box-no-feature"
-				>
-					{{ notEnabledMessage }}
-				</InfoAlert>
-
-				<InfoAlert v-if="shouldShowInfoAlert" data-testid="vc-info-box-show">
-					{{ alertMessage }}
-				</InfoAlert>
-				<InfoAlert
-					v-if="shouldShowNoPermissionAlert"
-					data-testid="vc-info-box-no-permission"
-				>
-					{{ noPermissionMessage }}
-				</InfoAlert>
 				<VImg :src="imageSrc" alt="" cover />
 			</template>
 			<template #title>

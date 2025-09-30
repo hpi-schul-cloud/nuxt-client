@@ -4,10 +4,9 @@ import {
 } from "@@/tests/test-utils/setup";
 import AddMembers from "./AddMembers.vue";
 import { RoleName } from "@/serverApi/v3";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { authModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import {
-	meResponseFactory,
+	createTestAppStoreWithRole,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
@@ -22,9 +21,8 @@ import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
 import { WarningAlert } from "@ui-alert";
-import { Ref, ref } from "vue";
+import { computed, Ref } from "vue";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { Mock } from "vitest";
 
@@ -64,7 +62,6 @@ describe("AddMembers", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -93,21 +90,21 @@ describe("AddMembers", () => {
 			roomRoleName: RoleName.Roomadmin,
 		});
 
-		const mockMe = meResponseFactory.build({
-			roles: [{ id: "user-id", name: options?.schoolRole ?? RoleName.Teacher }],
-		});
-		authModule.setMe(mockMe);
+		const { mockedMe } = createTestAppStoreWithRole(
+			options?.schoolRole ?? RoleName.Teacher,
+			false
+		);
 
 		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.Teacher];
-		roomMembers[0].userId = mockMe.user.id;
-		roomMembersSchools[0].id = mockMe.school.id;
+		roomMembers[0].userId = mockedMe.user.id;
+		roomMembersSchools[0].id = mockedMe.school.id;
 
 		const authorizationPermissions =
 			createMock<ReturnType<typeof useRoomAuthorization>>();
 
 		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
-				value ?? false
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(
+				() => value ?? false
 			);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
@@ -125,12 +122,12 @@ describe("AddMembers", () => {
 								schools: roomMembersSchools,
 								roomMembers,
 							},
+							applicationStore: {
+								meResponse: mockedMe,
+							},
 						},
 					}),
 				],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 			},
 		});
 
@@ -138,7 +135,7 @@ describe("AddMembers", () => {
 
 		return {
 			wrapper,
-			mockMe,
+			mockedMe,
 			potentialRoomMembers,
 			roomMembersSchools,
 			roomMembersStore,
@@ -492,7 +489,7 @@ describe("AddMembers", () => {
 	});
 
 	describe("focus trap", () => {
-		it("should pause focus trap when any autocomplete or select menu is open", async () => {
+		it("should pause focus trap when any autocomplete or select menu is open", () => {
 			const { wrapper } = setup();
 			const roleComponent = wrapper.getComponent({
 				ref: "selectRole",
@@ -503,7 +500,7 @@ describe("AddMembers", () => {
 			expect(pauseMock).toHaveBeenCalledTimes(1);
 		});
 
-		it("should unpause focus trap when all autocomplete and select menus are closed", async () => {
+		it("should unpause focus trap when all autocomplete and select menus are closed", () => {
 			const { wrapper } = setup();
 			const userComponent = wrapper.getComponent({
 				ref: "autoCompleteUsers",
@@ -516,7 +513,7 @@ describe("AddMembers", () => {
 			expect(unpauseMock).toHaveBeenCalled();
 		});
 
-		it("should not unpause focus trap when a autocomplete or select is closed while another one is opened", async () => {
+		it("should not unpause focus trap when a autocomplete or select is closed while another one is opened", () => {
 			// this happens when user switches between autocomplete or select components for brief moment both are treated as open
 			const { wrapper } = setup();
 			const roleComponent = wrapper.getComponent({
@@ -679,14 +676,14 @@ describe("AddMembers", () => {
 	});
 
 	describe("when current user is a student admin", () => {
-		it("should disable the school selection with current users school selected", async () => {
-			const { mockMe, wrapper } = setup({ schoolRole: RoleName.Student });
+		it("should disable the school selection with current users school selected", () => {
+			const { mockedMe, wrapper } = setup({ schoolRole: RoleName.Student });
 			const schoolComponent = wrapper.getComponent({
 				ref: "autoCompleteSchool",
 			});
 
 			expect(schoolComponent.props("disabled")).toBe(true);
-			expect(schoolComponent.props("modelValue")).toBe(mockMe.school.id);
+			expect(schoolComponent.props("modelValue")).toBe(mockedMe.school.id);
 		});
 
 		it("should show specific student admin info message", async () => {

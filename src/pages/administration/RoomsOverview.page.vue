@@ -203,10 +203,9 @@ import {
 	CourseInfoDataResponse,
 	CourseSortProps,
 	CourseStatus,
+	Permission,
 } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useCourseList } from "@data-room";
 import {
@@ -228,6 +227,7 @@ import { useRoute, useRouter } from "vue-router";
 import type { DataTableHeader } from "vuetify";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { storeToRefs } from "pinia";
+import { useAppStore } from "@data-app";
 
 type Tab = "current" | "archive";
 
@@ -242,8 +242,6 @@ const props = defineProps({
 		default: "current",
 	},
 });
-
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -305,8 +303,8 @@ const courseStatus: ComputedRef<CourseStatus> = computed(() => {
 	}
 });
 
-const hasPermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("COURSE_ADMINISTRATION".toLowerCase())
+const hasPermission = useAppStore().hasPermission(
+	Permission.CourseAdministration
 );
 
 const showRoomAction = (item: CourseInfoDataResponse) =>

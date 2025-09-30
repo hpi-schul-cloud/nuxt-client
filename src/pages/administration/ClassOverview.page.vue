@@ -221,15 +221,17 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { ClassSortQueryType, SchoolYearQueryType } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
+import {
+	ClassSortQueryType,
+	Permission,
+	SchoolYearQueryType,
+} from "@/serverApi/v3";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
-	AUTH_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
@@ -251,6 +253,7 @@ import { useRoute, useRouter } from "vue-router";
 import { DataTableHeader } from "vuetify";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { storeToRefs } from "pinia";
+import { useAppStore } from "@data-app";
 
 type Tab = "current" | "next" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -266,8 +269,8 @@ const props = defineProps({
 	},
 });
 
+const { hasPermission } = useAppStore();
 const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 const route = useRoute();
@@ -315,29 +318,22 @@ const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
 	}
 });
 
-const nextYear: ComputedRef<string> = computed(
-	() => schoolsModule.getSchool.years.nextYear.name
-);
+const nextYear = computed(() => schoolsModule.getSchool.years.nextYear.name);
 
-const currentYear: ComputedRef<string> = computed(
+const currentYear = computed(
 	() => schoolsModule.getSchool.years.activeYear.name
 );
 
-const classes: ComputedRef<ClassInfo[]> = computed(
-	() => groupModule.getClasses
+const classes = computed(() => groupModule.getClasses);
+
+const showSourceHeader = computed(() =>
+	classes.value.some((classItem) => classItem.externalSourceName !== undefined)
 );
 
-const showSourceHeader: ComputedRef<boolean> = computed(() => {
-	return classes.value.some(
-		(classItem) => classItem.externalSourceName !== undefined
-	);
-});
+const isLoading = computed(() => groupModule.getLoading);
 
-const isLoading: ComputedRef<boolean> = computed(() => groupModule.getLoading);
-
-const hasEditPermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
-);
+const hasEditPermission = hasPermission(Permission.ClassEdit);
+const hasCreatePermission = hasPermission(Permission.ClassCreate);
 
 const showClassAction = (item: ClassInfo) =>
 	hasEditPermission.value && item.type === ClassRootType.Class;
@@ -345,19 +341,13 @@ const showClassAction = (item: ClassInfo) =>
 const showGroupAction = (item: ClassInfo) =>
 	hasEditPermission.value && item.type === ClassRootType.Group;
 
-const hasCreatePermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("CLASS_CREATE".toLowerCase())
-);
+const isDeleteDialogOpen = ref(false);
 
-const isDeleteDialogOpen: Ref<boolean> = ref(false);
-
-const isEndSyncDialogOpen: Ref<boolean> = ref(false);
+const isEndSyncDialogOpen = ref(false);
 
 const selectedItem: Ref<ClassInfo | undefined> = ref();
 
-const selectedItemName: ComputedRef<string> = computed(
-	() => selectedItem.value?.name || "???"
-);
+const selectedItemName = computed(() => selectedItem.value?.name || "???");
 
 const selectedItemForSync: ComputedRef<{
 	courseName: string;

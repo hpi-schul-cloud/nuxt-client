@@ -51,20 +51,16 @@
 </template>
 
 <script setup lang="ts">
-import { ComputedRef, computed, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useDisplay } from "vuetify";
-import {
-	AUTH_MODULE_KEY,
-	STATUS_ALERTS_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { STATUS_ALERTS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiMenu, mdiAlert, mdiQrcode } from "@icons/material";
 import TopbarItem from "./TopbarItem.vue";
 import PageShare from "./PageShare.vue";
 import CloudStatusMessages from "./CloudStatusMessages.vue";
 import UserMenu from "./UserMenu.vue";
-import { StatusAlert } from "@/store/types/status-alert";
 import CloudLogo from "../CloudLogo.vue";
+import { useAppStoreRefs } from "@data-app";
 
 defineProps({
 	sidebarExpanded: {
@@ -76,17 +72,12 @@ defineProps({
 defineEmits(["sidebar-toggled"]);
 
 const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
-const authModule = injectStrict(AUTH_MODULE_KEY);
 
 const { lgAndUp, mdAndUp } = useDisplay();
 
-const isDesktop = computed(() => {
-	return lgAndUp.value;
-});
+const isDesktop = computed(() => lgAndUp.value);
 
-const isTabletOrBigger = computed(() => {
-	return mdAndUp.value;
-});
+const isTabletOrBigger = computed(() => mdAndUp.value);
 
 onMounted(() => {
 	(async () => {
@@ -94,13 +85,9 @@ onMounted(() => {
 	})();
 });
 
-const statusAlerts: ComputedRef<StatusAlert[]> = computed(() => {
-	return statusAlertsModule.getStatusAlerts;
-});
+const statusAlerts = computed(() => statusAlertsModule.getStatusAlerts);
 
-const showStatusAlertIcon = computed(() => {
-	return statusAlerts.value.length !== 0;
-});
+const showStatusAlertIcon = computed(() => statusAlerts.value.length !== 0);
 
 const statusAlertColor = computed(() => {
 	const statusAlertsIncludeDanger =
@@ -110,21 +97,9 @@ const statusAlertColor = computed(() => {
 	return statusAlertsIncludeDanger ? "error" : "info";
 });
 
-const user = computed(() => {
-	return authModule.getUser;
-});
+const { user, school, userRoles: roleNames } = useAppStoreRefs();
 
-const school = computed(() => {
-	return authModule.getSchool;
-});
-
-const roleNames = computed(() => {
-	return authModule.getUserRoles;
-});
-
-const hasLogo = computed(() => {
-	return !!school.value?.logo?.url;
-});
+const hasLogo = computed(() => !!school.value?.logo?.url);
 
 const appBarHeight = computed(() => {
 	const height = window
