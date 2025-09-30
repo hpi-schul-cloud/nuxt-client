@@ -44,7 +44,6 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import CloudLogo from "../CloudLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
@@ -52,30 +51,25 @@ import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
 import { mdiMenuOpen } from "@icons/material";
 import { useEnvConfig } from "@data-env";
+import { useAppStore } from "@data-app";
 
 const sidebarExpanded = defineModel({
 	type: Boolean,
 	required: true,
 });
 
-const authModule = injectStrict(AUTH_MODULE_KEY);
-
 const { pageLinks, legalLinks, metaLinks } = useSidebarItems();
 
 const isSidebarCategoryItem = (
 	item: SidebarSingleItem | SidebarGroupItem
-): item is SidebarGroupItem => {
-	return (item as SidebarGroupItem).children !== undefined;
-};
+): item is SidebarGroupItem =>
+	(item as SidebarGroupItem).children !== undefined;
 
-const userHasPermission = (item: SidebarSingleItem | SidebarGroupItem) => {
-	return (
-		!item.permissions ||
-		item.permissions.some((permission: string) => {
-			return authModule.getUserPermissions.includes(permission.toLowerCase());
-		})
+const userHasPermission = (item: SidebarSingleItem | SidebarGroupItem) =>
+	!item.permissions ||
+	item.permissions.some((permission) =>
+		useAppStore().userPermissions.includes(permission)
 	);
-};
 
 const hasFeatureEnabled = (item: SidebarSingleItem | SidebarGroupItem) => {
 	if (!item.feature) return true;
@@ -92,13 +86,12 @@ const isEnabledForTheme = (item: SidebarSingleItem | SidebarGroupItem) => {
 const getItemsForUser = (items: SidebarItems) => {
 	const sidebarItems = items.filter((item) => {
 		if (isSidebarCategoryItem(item)) {
-			item.children = item.children.filter((child) => {
-				return (
+			item.children = item.children.filter(
+				(child) =>
 					userHasPermission(child) &&
 					hasFeatureEnabled(child) &&
 					isEnabledForTheme(child)
-				);
-			});
+			);
 		}
 
 		return (

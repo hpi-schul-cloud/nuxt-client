@@ -5828,10 +5828,10 @@ export interface MeResponse {
     roles: Array<MeRoleResponse>;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<Permission>}
      * @memberof MeResponse
      */
-    permissions: Array<string>;
+    permissions: Array<Permission>;
     /**
      * 
      * @type {LanguageType}
