@@ -1,5 +1,10 @@
 <template>
-	<VDialog v-model="isDialogOpen" data-testid="dialog" :max-width="480">
+	<VDialog
+		v-model="isDialogOpen"
+		data-testid="dialog"
+		:max-width="480"
+		:aria-labelledby="`modal-${uid}-title`"
+	>
 		<UseFocusTrap>
 			<VCard>
 				<template #title>
