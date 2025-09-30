@@ -199,13 +199,8 @@ import {
 	ToolApiAxiosParamCreator,
 } from "@/serverApi/v3";
 import { RequestArgs } from "@/serverApi/v3/base";
-import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import {
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
@@ -217,13 +212,11 @@ import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 import { useEnvConfig } from "@data-env";
-import { useAppStore } from "@data-app";
+import { notifyError, notifySuccess, useAppStore } from "@data-app";
 
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 );
-const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-
 const router = useRouter();
 
 const schoolLicenseStore = useSchoolLicenseStore();
@@ -272,12 +265,9 @@ const onDeleteTool = async () => {
 		);
 	}
 
-	notifierModule.show({
-		text: t(
-			"components.administration.externalToolsSection.notification.deleted"
-		),
-		status: "success",
-	});
+	notifySuccess(
+		t("components.administration.externalToolsSection.notification.deleted")
+	);
 
 	onCloseDeleteDialog();
 };
@@ -295,12 +285,11 @@ const openDeleteDialog = async (item: SchoolExternalToolItem) => {
 	await fetchSchoolExternalToolUsage(item.id);
 
 	if (!metadata.value) {
-		notifierModule.show({
-			text: t(
+		notifyError(
+			t(
 				"components.administration.externalToolsSection.dialog.content.metadata.error"
-			),
-			status: "error",
-		});
+			)
+		);
 	}
 };
 

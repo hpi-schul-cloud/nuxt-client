@@ -1,6 +1,6 @@
 import { unchangedPassword } from "../utils/ldapConstants";
 import { $axios } from "@/utils/api";
-import { notifierModule } from "@/store";
+import { notifyError } from "@data-app";
 
 const formatServerData = (data) => {
 	const { providerOptions } = data;
@@ -73,11 +73,7 @@ export const actions = {
 			commit("setData", formatServerData(data));
 			commit("setStatus", "completed");
 		} catch (error) {
-			notifierModule.show({
-				text: String(error),
-				status: "error",
-				timeout: 5000,
-			});
+			notifyError(String(error));
 		}
 	},
 	async verifyData({ commit }, payload) {
@@ -90,11 +86,7 @@ export const actions = {
 			commit("setVerified", verification);
 			commit("setStatus", "completed");
 		} catch (error) {
-			notifierModule.show({
-				text: String(error),
-				status: "error",
-				timeout: 5000,
-			});
+			notifyError(String(error));
 		}
 	},
 	async verifyExisting({ commit }, { systemId, systemData }) {
@@ -110,11 +102,7 @@ export const actions = {
 			commit("setVerified", verification);
 			commit("setStatus", "completed");
 		} catch (error) {
-			notifierModule.show({
-				text: String(error),
-				status: "error",
-				timeout: 5000,
-			});
+			notifyError(String(error));
 		}
 	},
 	async submitData({ commit }, payload) {
@@ -126,11 +114,7 @@ export const actions = {
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {
-			notifierModule.show({
-				text: String(error),
-				status: "error",
-				timeout: 5000,
-			});
+			notifyError(String(error));
 		}
 	},
 	async patchData({ commit }, { systemData, systemId }) {
@@ -142,11 +126,7 @@ export const actions = {
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {
-			notifierModule.show({
-				text: String(error),
-				status: "error",
-				timeout: 5000,
-			});
+			notifyError(String(error));
 		}
 	},
 };

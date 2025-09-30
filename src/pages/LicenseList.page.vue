@@ -43,11 +43,10 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
-import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiMinus, mdiPlus } from "@icons/material";
 import { useEnvConfig } from "@data-env";
+import { notifyError } from "@data-app";
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
 type LicenseDetails = {
@@ -82,14 +81,11 @@ const fetchLicenseData = async () => {
 			(await axios.get(licensesUrl as string)).data
 		);
 	} catch {
-		notifierModule.show({
-			text: t("error.load"),
-			status: "error",
-		});
+		notifyError(t("error.load"));
 	}
 };
 
-onMounted(async () => {
+onMounted(() => {
 	fetchLicenseData();
 });
 </script>

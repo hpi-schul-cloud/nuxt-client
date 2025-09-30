@@ -1,6 +1,4 @@
 import { DATETIME_FORMAT, fromInputDateTime } from "@/plugins/datetime";
-import { notifierModule } from "@/store";
-import NotifierModule from "@/store/notifier";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -12,6 +10,9 @@ import { nextTick } from "vue";
 import { createStore } from "vuex";
 import FormNews from "./FormNews.vue";
 import { News } from "@/store/types/news";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { expectNotification } from "@@/tests/test-utils";
 
 const date = "2022-07-05";
 const time = "11:00";
@@ -96,9 +97,8 @@ describe("FormNews", () => {
 	};
 
 	beforeEach(() => {
-		setupStores({
-			notifierModule: NotifierModule,
-		});
+		setActivePinia(createTestingPinia());
+		setupStores({});
 	});
 
 	it("should render component", () => {
@@ -133,23 +133,17 @@ describe("FormNews", () => {
 		});
 
 		it("shows validation error on empty title", async () => {
-			const notifierMock = vi.spyOn(notifierModule, "show");
-
 			const { wrapper } = setup({ ...testNews, title: "" });
 
 			await wrapper.find("form").trigger("submit");
-			expect(notifierMock).toHaveBeenCalled();
-			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
+			expectNotification("error");
 		});
 
 		it("shows validation error on empty content", async () => {
-			const notifierMock = vi.spyOn(notifierModule, "show");
-
 			const { wrapper } = setup({ ...testNews, content: "" });
 
 			await wrapper.find("form").trigger("submit");
-			expect(notifierMock).toHaveBeenCalled();
-			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
+			expectNotification("error");
 		});
 
 		it("does not emit save event on empty title", async () => {

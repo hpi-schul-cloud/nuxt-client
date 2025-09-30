@@ -1,10 +1,8 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
@@ -13,7 +11,6 @@ import {
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -33,7 +30,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
-import { useBoardNotifier } from "@util-board";
 import { computed, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import {
@@ -56,15 +52,11 @@ const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
 
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let askConfirmationMock: Mock;
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	const routeRoomId = "room-id";
 
@@ -119,9 +111,6 @@ describe("RoomMembersPage", () => {
 			canManageVideoconferences: ref(false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
-
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(boardNotifierCalls);
 	});
 
 	const setup = (options?: {
@@ -171,9 +160,6 @@ describe("RoomMembersPage", () => {
 					createTestingI18n(),
 					createTestingVuetify(),
 				],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-				},
 				stubs: {
 					LeaveRoomProhibitedDialog: true,
 					AddMembers: true,

@@ -1,4 +1,3 @@
-import { AlertPayload } from "@/store/types/alert-payload";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -7,20 +6,18 @@ import { mount } from "@vue/test-utils";
 import Alert from "./Alert.vue";
 import { mdiCheckCircle } from "@icons/material";
 import { VAlert, VIcon } from "vuetify/lib/components/index";
+import { beforeEach } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { useNotificationStore } from "@data-app";
 
-const getWrapper = (props?: AlertPayload) => {
-	const data: AlertPayload = {
-		text: "hello world",
-		status: "success",
-	};
-
+const getWrapper = () => {
 	const wrapper = mount(Alert, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
 		props: {
-			notification: data,
-			...props,
+			notification: { text: "hello world", status: "success" },
 		},
 	});
 
@@ -28,6 +25,10 @@ const getWrapper = (props?: AlertPayload) => {
 };
 
 describe("Alert", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	it("should set correct data", () => {
 		const { wrapper } = getWrapper();
 
@@ -36,14 +37,12 @@ describe("Alert", () => {
 		expect(wrapper.findComponent(VAlert).props("type")).toBe("success");
 	});
 
-	describe("event remove:notification", () => {
-		it("should be emitted when close is clicked", async () => {
-			const { wrapper } = getWrapper();
+	it("should remove the alert, when user clicks the close button.", async () => {
+		const { wrapper } = getWrapper();
 
-			const button = wrapper.findComponent(".v-alert__close > button");
-			await button.trigger("click");
+		const button = wrapper.findComponent(".v-alert__close > button");
+		await button.trigger("click");
 
-			expect(wrapper.emitted("remove:notification")).toHaveLength(1);
-		});
+		expect(useNotificationStore().notifierItems.length).toBe(0);
 	});
 });

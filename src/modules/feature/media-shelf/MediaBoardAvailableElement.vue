@@ -11,7 +11,6 @@ import {
 	MediaAvailableLineElementResponse,
 	ToolContextType,
 } from "@/serverApi/v3";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useExternalToolLaunchState } from "@data-external-tool";
 import { useDragAndDrop } from "@util-board";
 import { useErrorNotification } from "@util-error-notification";
@@ -20,6 +19,7 @@ import { useI18n } from "vue-i18n";
 import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import { useEnvConfig } from "@data-env";
+import { notifyError } from "@data-app";
 
 const props = defineProps({
 	element: {
@@ -29,7 +29,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const {
 	launchTool,
@@ -85,11 +84,7 @@ const { isDragging } = useDragAndDrop();
 const onClick = async () => {
 	// Loading has failed before
 	if (launchError.value) {
-		notifierModule.show({
-			status: "error",
-			text: t("error.generic"),
-		});
-
+		notifyError(t("error.generic"));
 		return;
 	}
 

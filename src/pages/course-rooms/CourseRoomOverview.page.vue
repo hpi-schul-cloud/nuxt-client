@@ -134,10 +134,10 @@ import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiCheck, mdiMagnify } from "@icons/material";
 import { defineComponent, reactive } from "vue";
+import { notifySuccess } from "@data-app";
 
 export default defineComponent({
 	components: {
@@ -147,9 +147,6 @@ export default defineComponent({
 		vRoomEmptyAvatar,
 		RoomModal,
 		ImportFlow,
-	},
-	inject: {
-		notifierModule: { from: NOTIFIER_MODULE_KEY },
 	},
 	layout: "defaultVuetify",
 	setup() {
@@ -400,13 +397,11 @@ export default defineComponent({
 			}
 		},
 		showImportSuccess(name) {
-			this.notifierModule?.show({
-				text: this.$t("components.molecules.import.options.success", {
+			notifySuccess(
+				this.$t("components.molecules.import.options.success", {
 					name,
-				}),
-				status: "success",
-				timeout: 5000,
-			});
+				})
+			);
 		},
 		initCoursePolling(started, count = 0) {
 			const nextTimeout = count * count * 1000 + 5000;
@@ -416,12 +411,9 @@ export default defineComponent({
 					if (this.hasRoomsBeingCopied) {
 						this.initCoursePolling(started ?? new Date(), count + 1);
 					} else {
-						this.notifierModule?.show({
-							text: this.$t("components.molecules.copyResult.timeoutSuccess"),
-							status: "success",
-							autoClose: true,
-							timeout: 5000,
-						});
+						notifySuccess(
+							this.$t("components.molecules.copyResult.timeoutSuccess")
+						);
 					}
 				},
 				Math.min(nextTimeout, 30000)

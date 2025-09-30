@@ -4,7 +4,6 @@ import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
 import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
@@ -135,7 +134,6 @@ describe("students/index", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			notifierModule: NotifierModule,
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });

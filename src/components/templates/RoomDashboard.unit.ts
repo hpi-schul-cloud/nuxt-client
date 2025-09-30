@@ -3,9 +3,8 @@ import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { courseRoomDetailsModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
-import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
+import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -119,7 +118,6 @@ const emptyMockData = {
 const shareModuleMock = createModuleMocks(ShareModule, {
 	getIsShareModalOpen: false,
 });
-const notifierModuleMock = createModuleMocks(NotifierModule);
 
 const getWrapper = (
 	props: ComponentProps<typeof RoomDashboard>,
@@ -132,7 +130,6 @@ const getWrapper = (
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 			},
 		},

@@ -41,16 +41,12 @@ import ContextExternalToolConfigurator from "@/components/external-tools/configu
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ToolContextType } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import {
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
+import { notifySuccess } from "@data-app";
 
 const props = defineProps({
 	configId: {
@@ -61,7 +57,6 @@ const props = defineProps({
 	contextType: { type: String as PropType<ToolContextType>, required: true },
 });
 
-const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const courseRoomDetailsModule: CourseRoomDetailsModule = injectStrict(
 	COURSE_ROOM_DETAILS_MODULE_KEY
 );
@@ -97,8 +92,7 @@ const onSuccess = async () => {
 		? t("components.administration.externalToolsSection.notification.updated")
 		: t("components.administration.externalToolsSection.notification.created");
 
-	notifierModule.show({ text: message, status: "success" });
-
+	notifySuccess(message);
 	await router.push({ path: contextRoute.value, query: { tab: "tools" } });
 };
 

@@ -1,11 +1,9 @@
-import NotifierModule from "@/store/notifier";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
+	expectNotification,
 	i18nMock,
 	mountComposable,
 	provisioningOptionsDataFactory,
@@ -15,6 +13,10 @@ import { DeepMocked, createMock } from "@golevelup/ts-vitest";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";
 import { ProvisioningOptions } from "./type/ProvisioningOptions";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { expect } from "vitest";
+import { useNotificationStore } from "@data-app";
 
 vi.mock("@data-provisioning-options/ProvisioningOptionsApi.composable");
 
@@ -22,9 +24,9 @@ describe("ProvisioningOptionsState.composable", () => {
 	let useProvisioningOptionsApiMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsApi>
 	>;
-	const notifierModule = createModuleMocks(NotifierModule);
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		useProvisioningOptionsApiMock =
 			createMock<ReturnType<typeof useProvisioningOptionsApi>>();
 
@@ -44,9 +46,6 @@ describe("ProvisioningOptionsState.composable", () => {
 					() => useProvisioningOptionsState(),
 					{
 						global: {
-							provide: {
-								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-							},
 							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
@@ -58,7 +57,7 @@ describe("ProvisioningOptionsState.composable", () => {
 				};
 			};
 
-			it("should have default values", async () => {
+			it("should have default values", () => {
 				const { composable } = setup();
 
 				expect(
@@ -85,9 +84,6 @@ describe("ProvisioningOptionsState.composable", () => {
 					() => useProvisioningOptionsState(),
 					{
 						global: {
-							provide: {
-								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-							},
 							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
@@ -150,9 +146,6 @@ describe("ProvisioningOptionsState.composable", () => {
 					() => useProvisioningOptionsState(),
 					{
 						global: {
-							provide: {
-								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-							},
 							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
@@ -202,7 +195,7 @@ describe("ProvisioningOptionsState.composable", () => {
 
 				await composable.fetchProvisioningOptionsData("systemId");
 
-				expect(notifierModule.show).toHaveBeenCalled();
+				expectNotification("error");
 			});
 		});
 
@@ -225,9 +218,6 @@ describe("ProvisioningOptionsState.composable", () => {
 					() => useProvisioningOptionsState(),
 					{
 						global: {
-							provide: {
-								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-							},
 							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
@@ -244,7 +234,7 @@ describe("ProvisioningOptionsState.composable", () => {
 
 				await composable.fetchProvisioningOptionsData("systemId");
 
-				expect(notifierModule.show).not.toHaveBeenCalled();
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
 			});
 		});
 	});
@@ -267,9 +257,6 @@ describe("ProvisioningOptionsState.composable", () => {
 					() => useProvisioningOptionsState(),
 					{
 						global: {
-							provide: {
-								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-							},
 							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
@@ -343,9 +330,6 @@ describe("ProvisioningOptionsState.composable", () => {
 					() => useProvisioningOptionsState(),
 					{
 						global: {
-							provide: {
-								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-							},
 							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
@@ -399,7 +383,7 @@ describe("ProvisioningOptionsState.composable", () => {
 					provisioningOptionsDataMock
 				);
 
-				expect(notifierModule.show).toHaveBeenCalled();
+				expectNotification("error");
 			});
 		});
 	});

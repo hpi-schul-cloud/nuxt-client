@@ -10,17 +10,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useRouter } from "vue-router";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import RoomInvitationLinkStatusPage from "./RoomInvitationLinkStatus.page.vue";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
-import NotifierModule from "@/store/notifier";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useBoardNotifier } from "@util-board";
 import { setActivePinia } from "pinia";
 import { flushPromises } from "@vue/test-utils";
-import { beforeAll } from "vitest";
+import { beforeAll, beforeEach } from "vitest";
 
 vi.mock("vue-router", () => {
 	return {
@@ -29,9 +24,6 @@ vi.mock("vue-router", () => {
 		}),
 	};
 });
-
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
@@ -44,9 +36,7 @@ vi.mock("vue-i18n", async (importOriginal) => {
 });
 
 describe("RoomInvitationLinkStatusPage", () => {
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 
@@ -55,11 +45,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 	});
 
 	const setup = async (useLinkResult: UseLinkResult) => {
-		const notifierModule = createModuleMocks(NotifierModule);
 		const invitationLink = roomInvitationLinkFactory.build();
-
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
 
 		const pinia = createTestingPinia({
 			initialState: {
@@ -80,9 +66,6 @@ describe("RoomInvitationLinkStatusPage", () => {
 			attachTo: document.body,
 			global: {
 				plugins: [pinia, createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 
 			props: {

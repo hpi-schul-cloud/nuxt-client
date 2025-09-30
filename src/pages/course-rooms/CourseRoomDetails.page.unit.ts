@@ -11,13 +11,11 @@ import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
@@ -113,7 +111,6 @@ const $router = { push: vi.fn(), resolve: vi.fn(), replace: vi.fn() };
 
 let copyModule: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
-let notifierModule: NotifierModule;
 let shareModule: ShareModule;
 let downloadModule: CommonCartridgeExportModule;
 let courseRoomDetailsModule: CourseRoomDetailsModule;
@@ -129,7 +126,6 @@ const getWrapper = ({
 	roleName = "teacher",
 	isLocked = false,
 }: WrapperOptions = {}) => {
-	notifierModule = createModuleMocks(NotifierModule);
 	copyModule = createModuleMocks(CopyModule, {
 		copy: vi.fn(),
 		getIsResultModalOpen: false,
@@ -183,7 +179,6 @@ const getWrapper = ({
 			provide: {
 				[COPY_MODULE_KEY.valueOf()]: copyModule,
 				loadingStateModule: loadingStateModuleMock,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModule,
 				[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,

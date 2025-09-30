@@ -98,9 +98,10 @@ const onDeleteElement = async (confirmation: Promise<boolean>) => {
 	}
 };
 
-const ariaLabel = computed(() => {
-	return `${t("components.cardElement.drawingElement")}, ${t(
-		"common.ariaLabel.newTab"
-	)}`;
-});
+const ariaLabel = computed(
+	() =>
+		`${t("components.cardElement.drawingElement")}, ${t(
+			"common.ariaLabel.newTab"
+		)}`
+);
 </script>

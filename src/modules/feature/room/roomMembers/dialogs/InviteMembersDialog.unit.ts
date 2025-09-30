@@ -7,8 +7,6 @@ import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { nextTick } from "vue";
 import { createTestingPinia } from "@pinia/testing";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VueWrapper } from "@vue/test-utils";
 import {
@@ -18,11 +16,9 @@ import {
 } from "@data-room";
 import {
 	createTestEnvStore,
+	expectNotification,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
 import { Mock } from "vitest";
 
 vi.mock("vue-i18n", async (importOriginal) => {
@@ -39,13 +35,10 @@ vi.mock("@vueuse/integrations/useFocusTrap", () => {
 	};
 });
 
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
 vi.useFakeTimers();
 
 describe("InviteMembersDialog", () => {
 	let wrapper: VueWrapper<InstanceType<typeof InviteMembersDialog>>;
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
 	let deactivateMock: Mock;
@@ -54,8 +47,6 @@ describe("InviteMembersDialog", () => {
 		createTestEnvStore();
 	});
 	beforeEach(() => {
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
 		deactivateMock = vi.fn();
@@ -93,7 +84,6 @@ describe("InviteMembersDialog", () => {
 			...options,
 		};
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
-		const notifierModule = createModuleMocks(NotifierModule);
 
 		wrapper = mount(InviteMembersDialog, {
 			global: {
@@ -111,9 +101,6 @@ describe("InviteMembersDialog", () => {
 						},
 					}),
 				],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			props: {
 				modelValue,
@@ -129,7 +116,7 @@ describe("InviteMembersDialog", () => {
 			useRoomInvitationLinkStore
 		);
 
-		return { wrapper, roomInvitationLinkStore, notifierModule };
+		return { wrapper, roomInvitationLinkStore };
 	};
 
 	it("should render correctly", () => {
@@ -305,21 +292,15 @@ describe("InviteMembersDialog", () => {
 
 			describe("when copy link button is clicked on ShareModalResult", () => {
 				it("should copy the link to clipboard", async () => {
-					const { wrapper, notifierModule } = setup({
+					const { wrapper } = setup({
 						preDefinedStep: InvitationStep.SHARE,
 					});
 
 					await nextTick();
 
 					const shareModalResult = wrapper.findComponent(ShareModalResult);
-
 					await shareModalResult.vm.$emit("copied");
-
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						text: "common.words.copiedToClipboard",
-						status: "success",
-						timeout: 5000,
-					});
+					expectNotification("success");
 				});
 			});
 

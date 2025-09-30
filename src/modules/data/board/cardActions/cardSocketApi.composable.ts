@@ -1,4 +1,4 @@
-import { chunk } from "lodash";
+import { chunk } from "lodash-es";
 import * as CardActions from "./cardActions";
 import { useSocketConnection } from "../socket/socket";
 import { useBoardStore } from "../Board.store";

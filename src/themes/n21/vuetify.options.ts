@@ -1,5 +1,5 @@
 import base from "@/themes/base-vuetify.options";
-import { merge } from "lodash";
+import { merge } from "lodash-es";
 import { type ThemeDefinition } from "vuetify";
 
 const n21Theme: ThemeDefinition = {

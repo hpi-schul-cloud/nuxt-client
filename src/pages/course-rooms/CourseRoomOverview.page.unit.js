@@ -2,12 +2,10 @@ import RoomModal from "@/components/molecules/RoomModal";
 import { courseRoomListModule } from "@/store";
 import CopyModule from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
 import CourseRoomListModule from "@/store/course-room-list";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import {
 	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
@@ -118,7 +116,6 @@ const spyMocks = {
 
 let copyModuleMock;
 let loadingStateModuleMock;
-let notifierModuleMock;
 
 const defaultMocks = {
 	$route: { query: {} },
@@ -130,7 +127,6 @@ const getWrapper = () => {
 		getIsResultModalOpen: false,
 	});
 	loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-	notifierModuleMock = createModuleMocks(NotifierModule);
 	const courseRoomListModuleMock = createModuleMocks(courseRoomListModule);
 	return mount(CourseRoomOverviewPage, {
 		global: {
@@ -138,7 +134,6 @@ const getWrapper = () => {
 			provide: {
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
-				[NOTIFIER_MODULE_KEY]: notifierModuleMock,
 				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
 					CommonCartridgeImportModule
 				),
@@ -151,13 +146,10 @@ const getWrapper = () => {
 };
 
 describe("@/pages/CourseRoomOverview.page", () => {
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStore();
 		createTestEnvStore();
-	});
-
-	beforeEach(() => {
 		courseRoomListModule.setRoomData(mockRoomStoreData);
 		courseRoomListModule.setAllElements(mockCourseData);
 	});

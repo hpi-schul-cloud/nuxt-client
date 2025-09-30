@@ -4,9 +4,13 @@ import {
 	LanguageType,
 	SchoolSystemResponse,
 } from "@/serverApi/v3";
-import { notifierModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
-import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	expectNotification,
+	schoolFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -16,8 +20,6 @@ import GeneralSettings from "./GeneralSettings.vue";
 import { mount } from "@vue/test-utils";
 import { VFileInput, VSelect, VTextField } from "vuetify/components";
 import { schoolYearResponseFactory } from "@@/tests/test-utils/factory/schoolYearResponseFactory";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { toBase64 } from "@/utils/fileHelper";
 import { nextTick } from "vue";
 import { beforeAll } from "vitest";
@@ -48,7 +50,6 @@ describe("GeneralSettings", () => {
 	beforeEach(() => {
 		setupStores({
 			schoolsModule: SchoolsModule,
-			notifierModule: NotifierModule,
 		});
 	});
 
@@ -82,9 +83,6 @@ describe("GeneralSettings", () => {
 		const wrapper = mount(GeneralSettings, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 		});
 		return { wrapper, school };
@@ -107,7 +105,7 @@ describe("GeneralSettings", () => {
 				expect(textField.text()).toContain(school.name);
 			});
 
-			it("should not be possible to edit the school name if the school is synced", async () => {
+			it("should not be possible to edit the school name if the school is synced", () => {
 				const syncedSystem: SchoolSystemResponse[] = [
 					{
 						id: "0000d186816abba584714c90",
@@ -126,7 +124,7 @@ describe("GeneralSettings", () => {
 				expect(textField.props("disabled")).toBe(true);
 			});
 
-			it("should be possible to edit the school name if the school is not synced", async () => {
+			it("should be possible to edit the school name if the school is not synced", () => {
 				const unsyncedSystem: SchoolSystemResponse[] = [
 					{
 						id: "0000d186816abba584714c91",
@@ -143,7 +141,7 @@ describe("GeneralSettings", () => {
 				expect(textField.props("disabled")).toBe(false);
 			});
 
-			it("should be possible to edit the school name if the school is not attached to a system", async () => {
+			it("should be possible to edit the school name if the school is not attached to a system", () => {
 				schoolsModule.setSystems([]);
 				const { wrapper } = setup();
 
@@ -166,7 +164,7 @@ describe("GeneralSettings", () => {
 				expect(textField.props("modelValue")).toBe(school.currentYear?.name);
 			});
 
-			it("should show current school year as readonly", async () => {
+			it("should show current school year as readonly", () => {
 				const { wrapper } = setup();
 
 				const textField = wrapper.findComponent<typeof VTextField>(
@@ -179,7 +177,7 @@ describe("GeneralSettings", () => {
 		});
 
 		describe("school number", () => {
-			it("school number text should be disabled if the number is set", async () => {
+			it("school number text should be disabled if the number is set", () => {
 				const { wrapper, school } = setup({ officialSchoolNumber: "12345" });
 
 				const textField = wrapper.findComponent<typeof VTextField>(
@@ -191,7 +189,7 @@ describe("GeneralSettings", () => {
 				expect(textField.props("disabled")).toBe(true);
 			});
 
-			it("school number text should not be disabled if the number is not set", async () => {
+			it("school number text should not be disabled if the number is not set", () => {
 				const { wrapper } = setup({ officialSchoolNumber: undefined });
 
 				const textField = wrapper.findComponent<typeof VTextField>(
@@ -262,7 +260,7 @@ describe("GeneralSettings", () => {
 				expect(select.props("disabled")).toBe(true);
 			});
 
-			it("should not be disabled if the value is not set", async () => {
+			it("should not be disabled if the value is not set", () => {
 				const { wrapper } = setup({
 					county: undefined,
 				});
@@ -293,7 +291,7 @@ describe("GeneralSettings", () => {
 		});
 
 		describe("logo element", () => {
-			it("logo element should be found", async () => {
+			it("logo element should be found", () => {
 				const { wrapper } = setup();
 				const logo = wrapper.find(".school-logo");
 
@@ -302,7 +300,7 @@ describe("GeneralSettings", () => {
 		});
 
 		describe("timezone input", () => {
-			it("timezone input should display the correct data", async () => {
+			it("timezone input should display the correct data", () => {
 				const { wrapper, school } = setup();
 
 				const timezoneInput = wrapper.findComponent<typeof VTextField>(
@@ -331,7 +329,7 @@ describe("GeneralSettings", () => {
 				expect(languageSelect.exists()).toBe(true);
 			});
 
-			it("should display select element with available languages", async () => {
+			it("should display select element with available languages", () => {
 				const { wrapper } = setup();
 
 				const languageSelect = wrapper.findComponent<typeof VSelect>(
@@ -472,7 +470,6 @@ describe("GeneralSettings", () => {
 		});
 
 		it("show success notification on save", async () => {
-			const notifierMock = vi.spyOn(notifierModule, "show");
 			vi.spyOn(schoolsModule, "update").mockResolvedValue();
 			const { wrapper } = setup({ county: undefined });
 
@@ -481,8 +478,7 @@ describe("GeneralSettings", () => {
 			);
 			await buttonElement.trigger("click");
 
-			expect(notifierMock).toHaveBeenCalled();
-			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("success");
+			expectNotification("success");
 		});
 	});
 

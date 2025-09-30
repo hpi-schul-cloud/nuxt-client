@@ -1,9 +1,7 @@
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
-import { notifierModule } from "@/store";
 import FilePathsModule from "@/store/filePaths";
-import NotifierModule from "@/store/notifier";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -12,7 +10,9 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
 import ConsentPage from "./StudentConsent.page.vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, expectNotification } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 const mockData = [
 	{
@@ -116,14 +116,11 @@ const setup = () => {
 };
 
 describe("students/consent", () => {
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
 		setupStores({
 			filePathsModule: FilePathsModule,
-			notifierModule: NotifierModule,
 		});
 	});
 
@@ -290,7 +287,6 @@ describe("students/consent", () => {
 	});
 
 	it("should progress next step if consent is not required", async () => {
-		const notifierModuleMock = vi.spyOn(notifierModule, "show");
 		createTestEnvStore({ FEATURE_CONSENT_NECESSARY: false });
 
 		const { wrapper } = setup();
@@ -304,6 +300,6 @@ describe("students/consent", () => {
 
 		await nextButton2.trigger("click");
 
-		expect(notifierModuleMock).toHaveBeenCalled();
+		expectNotification("success");
 	});
 });

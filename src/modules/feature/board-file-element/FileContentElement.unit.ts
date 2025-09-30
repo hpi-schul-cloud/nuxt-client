@@ -4,12 +4,9 @@ import {
 	PreviewWidth,
 } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -56,14 +53,9 @@ describe("FileContentElement", () => {
 			FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: props.isCollaboraEnabled ?? false,
 		});
 
-		const notifierModule = createModuleMocks(NotifierModule);
-
 		const wrapper = shallowMount(FileContentElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			props,
 			slots: {
@@ -417,7 +409,7 @@ describe("FileContentElement", () => {
 			});
 
 			describe("when collabora feature is enabled and mime typ is collabora type", () => {
-				it("should add aria label to v-card", async () => {
+				it("should add aria label to v-card", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: true,
 						mimeType: "application/vnd.oasis.opendocument.text",
@@ -432,7 +424,7 @@ describe("FileContentElement", () => {
 				});
 
 				describe("when card is clicked", () => {
-					it("should open collabora url in new tab", async () => {
+					it("should open collabora url in new tab", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
@@ -483,7 +475,7 @@ describe("FileContentElement", () => {
 			});
 
 			describe("when collabora feature is not enabled and mime typ is collabora type", () => {
-				it("should not add aria label to v-card", async () => {
+				it("should not add aria label to v-card", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: false,
 						mimeType: "application/vnd.oasis.opendocument.text",
@@ -496,7 +488,7 @@ describe("FileContentElement", () => {
 				});
 
 				describe("when card is clicked", () => {
-					it("should not open collabora url in new tab", async () => {
+					it("should not open collabora url in new tab", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/vnd.oasis.opendocument.text",
@@ -547,7 +539,7 @@ describe("FileContentElement", () => {
 			});
 
 			describe("when collabora feature is enabled and mime typ is not collabora type", () => {
-				it("should not add aria label to v-card", async () => {
+				it("should not add aria label to v-card", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: true,
 						mimeType: "application/pdf",
@@ -560,7 +552,7 @@ describe("FileContentElement", () => {
 				});
 
 				describe("when card is clicked", () => {
-					it("should not open collabora url in new tab", async () => {
+					it("should not open collabora url in new tab", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/pdf",
@@ -611,7 +603,7 @@ describe("FileContentElement", () => {
 			});
 
 			describe("when collabora feature is not enabled and mime typ is not collabora type", () => {
-				it("should not add aria label to v-card", async () => {
+				it("should not add aria label to v-card", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: false,
 						mimeType: "application/pdf",
@@ -624,7 +616,7 @@ describe("FileContentElement", () => {
 				});
 
 				describe("when card is clicked", () => {
-					it("should not open collabora url in new tab", async () => {
+					it("should not open collabora url in new tab", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/pdf",
@@ -1101,7 +1093,7 @@ describe("FileContentElement", () => {
 			});
 
 			describe("when collabora feature is enabled and mime typ is collabora type", () => {
-				it("should add aria label to v-card", async () => {
+				it("should add aria label to v-card", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: true,
 						mimeType: "application/vnd.oasis.opendocument.text",
@@ -1116,7 +1108,7 @@ describe("FileContentElement", () => {
 				});
 
 				describe("when card is clicked", () => {
-					it("should open collabora url in new tab", async () => {
+					it("should open collabora url in new tab", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
@@ -1167,7 +1159,7 @@ describe("FileContentElement", () => {
 			});
 
 			describe("when collabora feature is not enabled and mime typ is collabora type", () => {
-				it("should not add aria label to v-card", async () => {
+				it("should not add aria label to v-card", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: false,
 						mimeType: "application/vnd.oasis.opendocument.text",
@@ -1180,7 +1172,7 @@ describe("FileContentElement", () => {
 				});
 
 				describe("when card is clicked", () => {
-					it("should not open collabora url in new tab", async () => {
+					it("should not open collabora url in new tab", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/vnd.oasis.opendocument.text",
@@ -1231,7 +1223,7 @@ describe("FileContentElement", () => {
 			});
 
 			describe("when collabora feature is enabled and mime typ is not collabora type", () => {
-				it("should not add aria label to v-card", async () => {
+				it("should not add aria label to v-card", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: true,
 						mimeType: "application/pdf",
@@ -1244,7 +1236,7 @@ describe("FileContentElement", () => {
 				});
 
 				describe("when card is clicked", () => {
-					it("should not open collabora url in new tab", async () => {
+					it("should not open collabora url in new tab", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/pdf",
@@ -1295,7 +1287,7 @@ describe("FileContentElement", () => {
 			});
 
 			describe("when collabora feature is not enabled and mime typ is not collabora type", () => {
-				it("should not add aria label to v-card", async () => {
+				it("should not add aria label to v-card", () => {
 					const { wrapper } = setup({
 						isCollaboraEnabled: false,
 						mimeType: "application/pdf",
@@ -1308,7 +1300,7 @@ describe("FileContentElement", () => {
 				});
 
 				describe("when card is clicked", () => {
-					it("should not open collabora url in new tab", async () => {
+					it("should not open collabora url in new tab", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/pdf",

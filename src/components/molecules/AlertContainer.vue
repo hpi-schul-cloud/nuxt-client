@@ -10,7 +10,6 @@
 				v-for="(notification, index) in notifierItems"
 				:key="index"
 				:notification="notification"
-				@remove:notification="onRemoveNotification"
 			/>
 		</transition-group>
 	</div>
@@ -19,28 +18,16 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useDisplay } from "vuetify";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import Alert from "./Alert.vue";
-import { AlertPayload } from "@/store/types/alert-payload";
+import { useNotificationStore } from "@data-app";
+import { storeToRefs } from "pinia";
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const { xs } = useDisplay();
+const { notifierItems } = storeToRefs(useNotificationStore());
+const { xs: isMobile } = useDisplay();
 
-const isMobile = computed(() => {
-	return xs.value;
-});
-
-const transition = computed(() => {
-	return isMobile.value ? "scale-transition" : "scroll-x-reverse-transition";
-});
-
-const notifierItems = computed(() => {
-	return notifierModule.getNotifierItems;
-});
-
-const onRemoveNotification = (notification: AlertPayload) => {
-	notifierModule.removeNotifier(notification);
-};
+const transition = computed(() =>
+	isMobile.value ? "scale-transition" : "scroll-x-reverse-transition"
+);
 </script>
 
 <style lang="scss" scoped>

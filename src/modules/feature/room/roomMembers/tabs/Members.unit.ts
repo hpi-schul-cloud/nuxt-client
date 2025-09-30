@@ -12,16 +12,12 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { Members, MembersTable } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import { computed, Ref } from "vue";
 import { beforeAll } from "vitest";
-
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
@@ -35,16 +31,11 @@ type RoomAuthorizationRefs = Partial<
 >;
 
 describe("Members", () => {
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-
 	beforeAll(() => {
 		createTestEnvStore();
 	});
 
 	beforeEach(() => {
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
-
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});

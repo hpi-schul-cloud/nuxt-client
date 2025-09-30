@@ -15,8 +15,6 @@ import {
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { nextTick } from "vue";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import {
 	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
@@ -27,9 +25,6 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("@vueuse/integrations/useFocusTrap");
 
@@ -44,13 +39,7 @@ vi.mock("vue-i18n", async (importOriginal) => {
 });
 
 describe("ChangeRole.vue", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-
 	beforeEach(() => {
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});

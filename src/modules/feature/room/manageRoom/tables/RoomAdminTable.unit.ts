@@ -13,13 +13,11 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useAdministrationRoomStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiAlert } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu } from "@ui-kebab-menu";
-import { useBoardNotifier } from "@util-board";
 import { Mock } from "vitest";
 import { nextTick, ref } from "vue";
 import { VIcon } from "vuetify/components";
@@ -28,12 +26,8 @@ import RoomAdminTable from "./RoomAdminTable.vue";
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
 describe("RoomAdminTable", () => {
 	let askConfirmationMock: Mock;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	const ownSchool = {
 		id: "school-id",
@@ -50,9 +44,6 @@ describe("RoomAdminTable", () => {
 			isDialogOpen: ref(false),
 		});
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});
