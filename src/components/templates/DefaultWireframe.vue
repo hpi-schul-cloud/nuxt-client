@@ -158,7 +158,7 @@ const showDivider = computed(() => {
 }
 
 .wireframe-header {
-	padding: 0 24px;
+	padding: 1.5rem  1.5rem 0;
 	display: flex;
 	flex-direction: column;
 }
