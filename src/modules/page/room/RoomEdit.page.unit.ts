@@ -6,7 +6,7 @@ import { RoomEditPage } from "@page-room";
 import { useRoute, useRouter } from "vue-router";
 import { RoomUpdateParams, RoomColor } from "@/types/room/Room";
 import { RoomForm } from "@feature-room";
-import { nextTick, ref } from "vue";
+import { computed, nextTick } from "vue";
 import { Mock } from "vitest";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -125,7 +125,8 @@ describe("@pages/RoomEdit.page.vue", () => {
 	describe("loading is done", () => {
 		describe("when user has no edit room permissions", () => {
 			it("should not render DefaultWireframe", () => {
-				roomPermissions.canEditRoom = ref(false);
+				roomPermissions.canEditRoom = computed(() => false);
+
 				const { wrapper } = setup({ isLoading: false });
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 
@@ -133,7 +134,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			});
 
 			it("should navigate to room details page", async () => {
-				roomPermissions.canEditRoom = ref(false);
+				roomPermissions.canEditRoom = computed(() => false);
 
 				const { roomId } = setup({ isLoading: false });
 				await nextTick();
@@ -147,7 +148,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 		describe("when user has edit room permissions ", () => {
 			beforeEach(() => {
-				roomPermissions.canEditRoom = ref(true);
+				roomPermissions.canEditRoom = computed(() => true);
 			});
 			it("should render DefaultWireframe", () => {
 				const { wrapper } = setup();
