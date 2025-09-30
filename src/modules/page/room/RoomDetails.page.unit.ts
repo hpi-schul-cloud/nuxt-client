@@ -76,21 +76,22 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		roomPermissions = {
-			canAddRoomMembers: ref(false),
-			canChangeOwner: ref(false),
+			canAddRoomMembers: computed(() => false),
 			canCreateRoom: computed(() => false),
-			canViewRoom: ref(false),
-			canEditRoom: ref(false),
-			canDeleteRoom: ref(false),
-			canLeaveRoom: ref(true),
-			canRemoveRoomMembers: ref(false),
-			canEditRoomContent: ref(false),
+			canChangeOwner: computed(() => false),
+			canViewRoom: computed(() => false),
+			canAddAllStudents: computed(() => false),
+			canEditRoom: computed(() => false),
+			canDeleteRoom: computed(() => false),
+			canCopyRoom: computed(() => false),
+			canLeaveRoom: computed(() => true),
+			canRemoveRoomMembers: computed(() => false),
+			canEditRoomContent: computed(() => false),
 			canSeeAllStudents: computed(() => false),
-			canCopyRoom: ref(false),
-			canShareRoom: ref(false),
-			canManageRoomInvitationLinks: ref(false),
-			canListDrafts: ref(false),
-			canManageVideoconferences: ref(false),
+			canShareRoom: computed(() => false),
+			canListDrafts: computed(() => false),
+			canManageRoomInvitationLinks: computed(() => false),
+			canManageVideoconferences: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
@@ -208,8 +209,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when user deletes the room", () => {
 		it("should reroute to rooms overview page", async () => {
-			roomPermissions.canDeleteRoom.value = true;
-			roomPermissions.canViewRoom.value = true;
+			roomPermissions.canDeleteRoom = computed(() => true);
+			roomPermissions.canViewRoom = computed(() => true);
 
 			const { wrapper, router } = setup();
 
@@ -224,8 +225,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when using the menu", () => {
 		beforeEach(() => {
-			roomPermissions.canEditRoomContent.value = true;
-			roomPermissions.canDeleteRoom.value = true;
+			roomPermissions.canEditRoomContent = computed(() => true);
+			roomPermissions.canDeleteRoom = computed(() => true);
 		});
 
 		describe("and user clicks on edit room", () => {
@@ -285,7 +286,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 			describe("when user has not the permission to leave the room", () => {
 				it("should open leave room prohibited dialog", async () => {
-					roomPermissions.canLeaveRoom.value = false;
+					roomPermissions.canLeaveRoom = computed(() => false);
 
 					const { wrapper } = setup();
 
@@ -312,7 +313,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and user does not have permission to edit room content", () => {
 			it("should not render speed dial menu", () => {
-				roomPermissions.canEditRoomContent.value = false;
+				roomPermissions.canEditRoomContent = computed(() => false);
 				const { wrapper } = setup();
 
 				const fabButton = wrapper.findComponent(
@@ -325,7 +326,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and multiple board layouts are enabled", () => {
 			beforeEach(() => {
-				roomPermissions.canEditRoomContent.value = true;
+				roomPermissions.canEditRoomContent = computed(() => true);
 			});
 
 			const openDialog = async (wrapper: VueWrapper) => {
@@ -401,7 +402,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and only column board is enabled", () => {
 			beforeEach(() => {
-				roomPermissions.canEditRoomContent.value = true;
+				roomPermissions.canEditRoomContent = computed(() => true);
 			});
 
 			it("should not render dialog", () => {
@@ -457,7 +458,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	describe("room boards", () => {
 		describe("when user can view room", () => {
 			beforeEach(() => {
-				roomPermissions.canViewRoom.value = true;
+				roomPermissions.canViewRoom = computed(() => true);
 			});
 
 			it("should render room boards", () => {
@@ -490,7 +491,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 				describe("when user can see drafts", () => {
 					it("should render board tiles in draft mode", () => {
-						roomPermissions.canListDrafts.value = true;
+						roomPermissions.canListDrafts = computed(() => true);
+
 						const { wrapper, totalCount } = setupWithBoards();
 
 						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
@@ -501,7 +503,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 				describe("when user cannot see draft content", () => {
 					it("should not render board tiles in draft mode", () => {
-						roomPermissions.canListDrafts.value = false;
+						roomPermissions.canListDrafts = computed(() => false);
+
 						const { wrapper, visibleCount } = setupWithBoards();
 
 						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
@@ -514,7 +517,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("when user cannot view room", () => {
 			it("should not render room boards", () => {
-				roomPermissions.canViewRoom.value = false;
+				roomPermissions.canViewRoom = computed(() => false);
 				const { wrapper } = setup({
 					roomBoards: roomBoardTileListFactory.buildList(3),
 				});
