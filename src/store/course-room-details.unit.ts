@@ -993,15 +993,5 @@ describe("course-room module", () => {
 				);
 			});
 		});
-
-		describe("getCommonCartridgeApi", () => {
-			it("should return the CommonCartridgeApiInterface", () => {
-				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-
-				const result = courseRoomDetailsModule.commonCartridgeApi;
-
-				expect(result).toBeInstanceOf(Object);
-			});
-		});
 	});
 });

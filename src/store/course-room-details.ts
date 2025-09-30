@@ -1,13 +1,13 @@
 import {
 	BoardApiFactory,
+	CourseRoomsApiFactory,
+	CourseRoomsApiInterface,
 	CreateBoardBodyParams,
 	CreateBoardResponse,
 	LessonApiFactory,
 	LessonApiInterface,
 	PatchOrderParams,
 	PatchVisibilityParams,
-	CourseRoomsApiFactory,
-	CourseRoomsApiInterface,
 	SingleColumnBoardResponse,
 	TaskApiFactory,
 	TaskApiInterface,
@@ -15,15 +15,11 @@ import {
 import { applicationErrorModule } from "@/store";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { isAxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
-import {
-	CommonCartridgeApiFactory,
-	CommonCartridgeApiInterface,
-} from "@/commonCartridgeApi/v3";
-import { isAxiosError } from "axios";
 
 @Module({
 	name: "courseRoomDetailsModule",
@@ -56,10 +52,6 @@ export default class CourseRoomDetailsModule extends VuexModule {
 
 	private get lessonApi(): LessonApiInterface {
 		return LessonApiFactory(undefined, "/v3", $axios);
-	}
-
-	public get commonCartridgeApi(): CommonCartridgeApiInterface {
-		return CommonCartridgeApiFactory(undefined, "/v3", $axios);
 	}
 
 	@Action
