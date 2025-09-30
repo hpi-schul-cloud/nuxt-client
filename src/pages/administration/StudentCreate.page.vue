@@ -64,7 +64,6 @@ export default {
 				},
 				{
 					title: this.$t("pages.administration.students.new.title"),
-					to: "/administration/students/new",
 					disabled: true,
 				},
 			],

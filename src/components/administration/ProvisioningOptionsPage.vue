@@ -1,6 +1,7 @@
 <template>
 	<DefaultWireframe
 		:headline="$t('components.administration.provisioningOptions.page.title')"
+		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
 		<VSkeletonLoader :loading="isLoading" type="list-item-two-line@4">
@@ -175,6 +176,7 @@ import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useEnvConfig } from "@data-env";
+import { Breadcrumb } from "../templates/default-wireframe.types";
 
 type Props = {
 	systemId: string;
@@ -204,6 +206,19 @@ const pageTitle = buildPageTitle(
 	t("components.administration.provisioningOptions.page.title")
 );
 useTitle(pageTitle);
+
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+	return [
+		{
+			title: t("pages.administration.school.index.title"),
+			to: "/administration/school-settings",
+		},
+		{
+			title: t("components.administration.provisioningOptions.page.title"),
+			disabled: true,
+		},
+	];
+});
 
 const provisioningOptions: ComputedRef<ProvisioningOptions> = computed(
 	() => provisioningOptionsData.value

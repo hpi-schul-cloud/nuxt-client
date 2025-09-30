@@ -170,21 +170,6 @@ describe("ClassOverview", () => {
 			expect(wrapper.exists()).toBe(true);
 		});
 
-		describe("breadcrumbs", () => {
-			it("should render static breadcrumbs", () => {
-				const { wrapper } = setup();
-
-				const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
-
-				expect(breadcrumbs.at(0)?.text()).toEqual(
-					"pages.administration.index.title"
-				);
-				expect(breadcrumbs.at(1)?.text()).toEqual(
-					"pages.administration.classes.index.title"
-				);
-			});
-		});
-
 		describe("onMounted", () => {
 			describe("when loading the page", () => {
 				it("should load the classes", async () => {

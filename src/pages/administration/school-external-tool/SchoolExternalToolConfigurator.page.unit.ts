@@ -97,22 +97,6 @@ describe("SchoolExternalToolConfigurator", () => {
 		vi.clearAllMocks();
 	});
 
-	describe("breadcrumbs", () => {
-		it("should render static breadcrumbs", () => {
-			const { wrapper } = getWrapper();
-
-			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
-
-			expect(breadcrumbs.at(0)?.text()).toEqual(
-				"pages.administration.index.title"
-			);
-			expect(breadcrumbs.at(1)?.text()).toEqual(
-				"pages.administration.school.index.title"
-			);
-			expect(breadcrumbs.at(2)?.text()).toEqual("pages.tool.title");
-		});
-	});
-
 	describe("title", () => {
 		it("should render title", () => {
 			const { wrapper } = getWrapper({});

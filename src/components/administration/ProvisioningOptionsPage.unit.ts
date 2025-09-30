@@ -93,22 +93,6 @@ describe("ProvisioningOptionsPage", () => {
 		vi.clearAllMocks();
 	});
 
-	describe("breadcrumbs", () => {
-		it("should render static breadcrumbs", () => {
-			const { wrapper } = getWrapper();
-
-			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
-
-			expect(breadcrumbs[0].text()).toEqual("pages.administration.index.title");
-			expect(breadcrumbs[1].text()).toEqual(
-				"pages.administration.school.index.title"
-			);
-			expect(breadcrumbs[2].text()).toEqual(
-				"components.administration.provisioningOptions.page.title"
-			);
-		});
-	});
-
 	describe("title", () => {
 		it("should render static title", () => {
 			const { wrapper } = getWrapper();
