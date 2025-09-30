@@ -128,7 +128,7 @@ import {
 } from "@data-room";
 import { WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
-import { authModule } from "@/store";
+import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps({
 	members: {
@@ -151,8 +151,10 @@ const { updateMembersRole, changeRoomOwner } = roomMembersStore;
 const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members")?.value;
 
+const { user } = useAppStoreRefs();
+
 const isChangeOwnershipOptionVisible = computed(() => {
-	const currentUserId = authModule.getUser?.id;
+	const currentUserId = user.value?.id;
 	return (
 		currentUserId &&
 		roomMembersStore.isRoomOwner(currentUserId) &&
@@ -179,21 +181,21 @@ if (memberToChangeRole.length > 1) {
 	selectedRole.value = memberToChangeRole[0]?.roomRoleName;
 }
 
-const currentUserFullName = computed(() => {
-	return roomMembersStore.getMemberFullName(authModule.getUser?.id);
-});
+const currentUserFullName = computed(() =>
+	roomMembersStore.getMemberFullName(user.value?.id)
+);
 
-const memberFullName = computed(() => {
-	return `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`;
-});
+const memberFullName = computed(
+	() => `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`
+);
 
-const memberSchoolRoles = computed(() => {
-	return memberToChangeRole[0]?.schoolRoleNames;
-});
+const memberSchoolRoles = computed(
+	() => memberToChangeRole[0]?.schoolRoleNames
+);
 
-const isMemberStudent = computed(() => {
-	return memberSchoolRoles.value.includes(RoleName.Student);
-});
+const isMemberStudent = computed(() =>
+	memberSchoolRoles.value.includes(RoleName.Student)
+);
 
 const infoText = computed(() => {
 	const roomName = room.value?.name ?? "";
