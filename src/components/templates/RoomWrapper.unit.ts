@@ -19,7 +19,6 @@ import { EmptyState } from "@ui-empty-state";
 import { Permission, CourseMetadataResponse } from "@/serverApi/v3";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
-import { useNotificationStore } from "@data-app";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -77,7 +76,6 @@ const mockData: CourseMetadataResponse[] = [
 ];
 
 describe("@templates/RoomWrapper.vue", () => {
-
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestEnvStore({

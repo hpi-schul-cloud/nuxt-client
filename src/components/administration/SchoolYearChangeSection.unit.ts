@@ -13,7 +13,7 @@ import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { VBtn, VCheckbox } from "vuetify/lib/components/index";
 import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
-import { beforeAll, beforeEach } from "vitest";
+import { beforeEach } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 
