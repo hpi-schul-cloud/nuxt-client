@@ -141,6 +141,9 @@ const showDivider = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+:global(:root) {
+	--v-layout-top: 0px !important;
+}
 @use "@/styles/settings.scss" as *;
 
 .wireframe-container-flex {
