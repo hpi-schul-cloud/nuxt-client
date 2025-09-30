@@ -154,6 +154,10 @@ describe("useFolderState", () => {
 							title: "Column Board",
 							to: "/boards/column-board-id",
 						},
+						{
+							disabled: true,
+							title: "title 3",
+						},
 					]);
 				});
 			});
@@ -182,6 +186,10 @@ describe("useFolderState", () => {
 						{
 							title: "Room",
 							to: "/rooms/room-id",
+						},
+						{
+							disabled: true,
+							title: "title 4",
 						},
 					]);
 				});

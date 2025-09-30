@@ -73,7 +73,7 @@ describe("BoardPageInformation.composable", () => {
 
 				await createPageInformation(fakeId);
 
-				expect(breadcrumbs.value).toHaveLength(2);
+				expect(breadcrumbs.value).toHaveLength(3);
 			});
 
 			it("should set page title", async () => {
@@ -139,7 +139,7 @@ describe("BoardPageInformation.composable", () => {
 
 				await createPageInformation(fakeId);
 
-				expect(breadcrumbs.value).toHaveLength(2);
+				expect(breadcrumbs.value).toHaveLength(3);
 			});
 
 			it("should set page title", async () => {
