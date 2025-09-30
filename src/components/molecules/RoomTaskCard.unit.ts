@@ -10,6 +10,8 @@ import { mount } from "@vue/test-utils";
 import RoomTaskCard from "./RoomTaskCard.vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { nextTick } from "vue";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const testTask = {
 	id: "123",
@@ -224,11 +226,9 @@ const getWrapper = (
 };
 
 describe("@/components/molecules/RoomTaskCard", () => {
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
 		window.location.pathname = "";
 	});
 

@@ -16,6 +16,8 @@ import { ComponentProps } from "vue-component-type-helpers";
 import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@data-external-tool");
 vi.mock("./data");
@@ -33,6 +35,7 @@ describe("MediaBoardAvailableElement", () => {
 		props: ComponentProps<typeof MediaBoardAvailableElement>
 	) => {
 		const refreshTime = 299000;
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			CTL_TOOLS_RELOAD_TIME_MS: refreshTime,
 		});

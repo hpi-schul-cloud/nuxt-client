@@ -26,6 +26,8 @@ import { FileAlert } from "./shared/types/FileAlert.enum";
 import { FileProperties } from "./shared/types/file-properties";
 import FileUpload from "./upload/FileUpload.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@data-board");
 vi.mock("@feature-board");
@@ -48,7 +50,7 @@ describe("FileContentElement", () => {
 			addAlert: addAlertMock,
 			alerts: computed(() => []),
 		});
-
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: props.isCollaboraEnabled ?? false,
 		});

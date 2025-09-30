@@ -38,14 +38,14 @@ import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { Mock } from "vitest";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
-vi.mock("vue-router", () => {
-	return {
-		useRouter: vi.fn().mockReturnValue({
-			push: vi.fn(),
-		}),
-	};
-});
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn().mockReturnValue({
+		push: vi.fn(),
+	}),
+}));
 
 vi.mock("@data-room/Rooms.state");
 
@@ -118,6 +118,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		const room = roomFactory.build({});
 
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_BOARD_LAYOUT_ENABLED: true,
 			...envs,

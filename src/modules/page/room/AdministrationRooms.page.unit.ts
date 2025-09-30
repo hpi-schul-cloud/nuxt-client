@@ -17,13 +17,12 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { Router, useRouter } from "vue-router";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
+import { setActivePinia } from "pinia";
 
-vi.mock("vue-router", () => {
-	return {
-		useRoute: vi.fn(),
-		useRouter: vi.fn(),
-	};
-});
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
+}));
 const useRouterMock = <Mock>useRouter;
 
 describe("AdministrationRooms.page", () => {
@@ -47,6 +46,7 @@ describe("AdministrationRooms.page", () => {
 		isEmptyList?: boolean;
 		featureFlag?: boolean;
 	}) => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,
 		});

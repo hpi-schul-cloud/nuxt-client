@@ -4,6 +4,8 @@ import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createTestAppStore } from "@@/tests/test-utils";
 import { RoleName } from "@/serverApi/v3";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -16,6 +18,7 @@ vi.mock(
 describe("TaskOverview", () => {
 	const fetchAllTasksSpy = vi.fn();
 	const getWrapper = (userRole?: RoleName) => {
+		setActivePinia(createTestingPinia());
 		createTestAppStore({
 			me: { roles: userRole ? [{ id: "test-user", name: userRole }] : [] },
 		});

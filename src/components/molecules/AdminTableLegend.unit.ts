@@ -7,6 +7,9 @@ import {
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { nextTick } from "vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const icons = [
 	{ icon: "mdi-check", color: "green", label: "Label 1" },
@@ -14,7 +17,8 @@ const icons = [
 ];
 
 describe("AdminTableLegend", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore();
 	});
 
@@ -27,9 +31,8 @@ describe("AdminTableLegend", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
-					$t: (key: string, placeholders: Record<string, string> = {}) => {
-						return `${key}|${Object.values(placeholders || {}).join("|")}`;
-					},
+					$t: (key: string, placeholders: Record<string, string> = {}) =>
+						`${key}|${Object.values(placeholders || {}).join("|")}`,
 				},
 			},
 			props: {

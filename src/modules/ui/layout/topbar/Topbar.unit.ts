@@ -12,9 +12,12 @@ import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index";
 import { RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("@ui-layout/Topbar", () => {
 	const setup = async (windowWidth = 1300, isSidebarExpanded?: boolean) => {
+		setActivePinia(createTestingPinia());
 		createTestAppStore({
 			me: {
 				school: {

@@ -32,6 +32,8 @@ import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { nextTick } from "vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -159,7 +161,7 @@ const getWrapper = ({
 		getPermissionData: permissionData,
 		getIsLocked: isLocked,
 	});
-
+	setActivePinia(createTestingPinia());
 	createTestAppStore({
 		me: { roles: [{ id: "0", name: roleName }], permissions: permissionData },
 	});

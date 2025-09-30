@@ -15,9 +15,12 @@ import { useRoomMembersStore } from "@data-room";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import { DataTable } from "@ui-data-table";
+import { setActivePinia } from "pinia";
 
 describe("RoomAdminMembersTable", () => {
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});
@@ -36,7 +39,6 @@ describe("RoomAdminMembersTable", () => {
 
 	const setup = () => {
 		const currentUser = roomMemberFactory.build({});
-
 		createTestAppStoreWithUser(currentUser.userId);
 
 		const members = [

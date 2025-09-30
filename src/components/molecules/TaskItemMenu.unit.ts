@@ -15,8 +15,9 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { VBtn } from "vuetify/lib/components/index";
 import TaskItemMenu from "./TaskItemMenu.vue";
-import { beforeAll } from "vitest";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const { tasksTeacher } = mocks;
 
@@ -57,11 +58,10 @@ describe("@/components/molecules/TaskItemMenu", () => {
 		window.dispatchEvent(new Event("resize"));
 	};
 
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
+
 		setupStores({
 			finishedTasksModule: FinishedTasksModule,
 		});

@@ -16,6 +16,8 @@ import {
 } from "@@/tests/test-utils/setup";
 import type { Mocked } from "vitest";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -48,6 +50,7 @@ describe("UserLoginMigrationError", () => {
 		systemsModule = createModuleMocks(SystemsModule, {
 			getSystems: systemsMock,
 		});
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			ACCESSIBILITY_REPORT_EMAIL: "ticketsystem@niedersachsen.support",
 		});

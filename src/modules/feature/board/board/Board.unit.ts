@@ -66,6 +66,7 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { Mock } from "vitest";
 import { useNotificationStore } from "@data-app";
+import { setActivePinia } from "pinia";
 
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
@@ -249,6 +250,7 @@ describe("Board", () => {
 			schoolExternalToolsModule,
 		} = setupProvideModules();
 
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,

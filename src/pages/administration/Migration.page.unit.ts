@@ -14,7 +14,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { beforeAll, Mock } from "vitest";
+import { Mock } from "vitest";
 import {
 	ComponentMountingOptions,
 	flushPromises,
@@ -25,6 +25,8 @@ import {
 import { ComponentPublicInstance, nextTick } from "vue";
 import { NamedValue } from "vue-i18n";
 import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -88,8 +90,8 @@ const getWrapper = (
 
 const getWrapperShallow = (
 	options: ComponentMountingOptions<typeof MigrationWizard> = {}
-): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> => {
-	return shallowMount(MigrationWizard, {
+): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> =>
+	shallowMount(MigrationWizard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -98,21 +100,18 @@ const getWrapperShallow = (
 		},
 		...options,
 	});
-};
 
 describe("User Migration / Index", () => {
 	window.scrollTo = vi.fn();
 
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			SC_THEME: SchulcloudTheme.Default,
 			FEATURE_USER_MIGRATION_ENABLED: true,
 			MIGRATION_WIZARD_DOCUMENTATION_LINK:
 				"https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
 		});
-	});
-
-	beforeEach(() => {
 		setupStores({
 			importUsersModule: ImportUsersModule,
 			schoolsModule: SchoolsModule,
@@ -281,9 +280,7 @@ describe("User Migration / Index", () => {
 				importUsersModule,
 				"performMigration"
 			);
-			performMigrationMock.mockImplementation(async () => {
-				return Promise.resolve();
-			});
+			performMigrationMock.mockImplementation(async () => Promise.resolve());
 
 			const wrapper = getWrapper();
 

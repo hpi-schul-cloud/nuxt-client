@@ -19,7 +19,8 @@ import {
 	expectNotification,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
-import { Mock } from "vitest";
+import { beforeEach, Mock } from "vitest";
+import { setActivePinia } from "pinia";
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
@@ -29,11 +30,9 @@ vi.mock("vue-i18n", async (importOriginal) => {
 	};
 });
 
-vi.mock("@vueuse/integrations/useFocusTrap", () => {
-	return {
-		useFocusTrap: vi.fn(),
-	};
-});
+vi.mock("@vueuse/integrations/useFocusTrap", () => ({
+	useFocusTrap: vi.fn(),
+}));
 
 vi.useFakeTimers();
 
@@ -43,7 +42,8 @@ describe("InviteMembersDialog", () => {
 	let unpauseMock: Mock;
 	let deactivateMock: Mock;
 
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore();
 	});
 	beforeEach(() => {

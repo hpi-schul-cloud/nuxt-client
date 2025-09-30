@@ -17,6 +17,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { Mock } from "vitest";
 import { Router, useRoute } from "vue-router";
 import { nextTick } from "vue";
+import { setActivePinia } from "pinia";
 
 vi.mock("vue-router");
 const useRouteMock = <Mock>useRoute;
@@ -37,6 +38,7 @@ describe("AdministrationRoomDetails.page", () => {
 	const router = createMock<Router>();
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		useRouteMock.mockReturnValue(router);
 
 		setupStores({

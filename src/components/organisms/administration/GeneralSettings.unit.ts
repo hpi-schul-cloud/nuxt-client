@@ -22,7 +22,9 @@ import { VFileInput, VSelect, VTextField } from "vuetify/components";
 import { schoolYearResponseFactory } from "@@/tests/test-utils/factory/schoolYearResponseFactory";
 import { toBase64 } from "@/utils/fileHelper";
 import { nextTick } from "vue";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@/utils/fileHelper", async () => {
 	const original =
@@ -36,7 +38,8 @@ vi.mock("@/utils/fileHelper", async () => {
 });
 
 describe("GeneralSettings", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			I18N__AVAILABLE_LANGUAGES: [
 				LanguageType.De,
@@ -45,9 +48,6 @@ describe("GeneralSettings", () => {
 				LanguageType.Uk,
 			],
 		});
-	});
-
-	beforeEach(() => {
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});

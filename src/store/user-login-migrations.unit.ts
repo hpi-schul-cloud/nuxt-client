@@ -22,6 +22,8 @@ import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { UserLoginMigration } from "./user-login-migration";
 import UserLoginMigrationModule from "./user-login-migrations";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("UserLoginMigrationModule", () => {
 	let module: UserLoginMigrationModule;
@@ -29,6 +31,7 @@ describe("UserLoginMigrationModule", () => {
 	let apiMock: DeepMocked<UserLoginMigrationApiInterface>;
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		module = new UserLoginMigrationModule({});
 
 		apiMock = createMock<UserLoginMigrationApiInterface>();

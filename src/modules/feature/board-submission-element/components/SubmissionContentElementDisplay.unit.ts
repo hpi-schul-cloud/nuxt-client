@@ -8,6 +8,8 @@ import {
 } from "@@/tests/test-utils/setup";
 import { createTestAppStoreWithRole } from "@@/tests/test-utils";
 import { RoleName } from "@/serverApi/v3";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("SubmissionContentElementDisplay", () => {
 	const setup = (role = RoleName.Teacher) => {
@@ -18,6 +20,7 @@ describe("SubmissionContentElementDisplay", () => {
 			loading: false,
 			isOverdue: false,
 		};
+		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(role);
 
 		const wrapper = shallowMount(SubmissionContentElementDisplay, {

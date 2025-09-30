@@ -17,7 +17,8 @@ import { createTestingPinia } from "@pinia/testing";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import { computed, Ref } from "vue";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
@@ -31,7 +32,8 @@ type RoomAuthorizationRefs = Partial<
 >;
 
 describe("Members", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore();
 	});
 

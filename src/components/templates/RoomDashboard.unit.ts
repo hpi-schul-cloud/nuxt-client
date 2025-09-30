@@ -1,4 +1,4 @@
-import { beforeAll, Mock } from "vitest";
+import { beforeEach, Mock } from "vitest";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { courseRoomDetailsModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
@@ -20,6 +20,8 @@ import { Router, useRouter } from "vue-router";
 import { VCard } from "vuetify/lib/components/index";
 import RoomDashboard from "./RoomDashboard.vue";
 import { EmptyState } from "@ui-empty-state";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -141,13 +143,12 @@ const getWrapper = (
 };
 
 describe("@/components/templates/RoomDashboard.vue", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_LESSON_SHARE: true,
 			FEATURE_TASK_SHARE: true,
 		});
-	});
-	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
@@ -574,7 +575,8 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("CopyTask Process", () => {
-		beforeAll(() => {
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
 			createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
 
@@ -610,7 +612,8 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("CopyLesson Process", () => {
-		beforeAll(() => {
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
 			createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
 
@@ -646,7 +649,8 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("CopyBoard Process", () => {
-		beforeAll(() => {
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
 			createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
 

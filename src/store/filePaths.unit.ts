@@ -2,6 +2,9 @@ import FilePathsModule from "./filePaths";
 import { SpecificFiles, GlobalFiles } from "./types/filePaths";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { useEnvConfig } from "@data-env";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const specificFiles = {
 	accessibilityStatement:
@@ -46,6 +49,10 @@ const mockSetGloablFiles = (payload: string) =>
 	) as GlobalFiles;
 
 describe("filePaths module", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	describe("actions", () => {
 		it("init should call the setDocumentBaseDir, setSpecificFiles, and setGlobalFiles mutations", () => {
 			const filePathsModule = new FilePathsModule({});

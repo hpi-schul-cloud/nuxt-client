@@ -25,6 +25,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { useDragAndDrop, useSharedLastCreatedElement } from "@util-board";
 import { computed, nextTick, ref } from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
+import { setActivePinia } from "pinia";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 
@@ -49,6 +50,7 @@ describe("BoardColumn", () => {
 
 	beforeEach(() => {
 		setupStores({});
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false });
 
 		mockedUseForceRenderHandler =

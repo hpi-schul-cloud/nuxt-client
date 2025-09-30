@@ -2,6 +2,8 @@ import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
 import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { nextTick } from "vue";
 import { flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -62,6 +64,7 @@ describe("useAutoLogout", () => {
 		vi.clearAllTimers();
 	});
 
+	setActivePinia(createTestingPinia());
 	createTestEnvStore({
 		JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
 		JWT_TIMEOUT_SECONDS: jwtTimerResponse.timeout,
