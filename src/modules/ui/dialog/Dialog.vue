@@ -5,7 +5,7 @@
 				<template #title>
 					<h2
 						:id="`modal-${uid}-title`"
-						class="dialog-title"
+						class="ma-0 dialog-title"
 						data-testid="dialog-title"
 					>
 						{{ message }}
@@ -85,7 +85,6 @@ const onConfirm = () => {
 	hyphens: none;
 	word-break: break-word;
 	line-height: var(--line-height-lg);
-	margin: 0;
 }
 .v-card :deep(.v-card-item) {
 	padding: 1.25rem 1.5rem;
