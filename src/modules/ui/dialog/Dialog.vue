@@ -91,6 +91,7 @@ const onConfirm = () => {
 }
 .v-card :deep(.v-card-text) {
 	padding: 0 1.5rem;
+	margin-bottom: 1rem;
 }
 .v-card :deep(.v-card-actions) {
 	padding: 0 1.5rem 1.5rem;
