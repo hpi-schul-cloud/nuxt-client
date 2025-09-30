@@ -1,6 +1,4 @@
 import * as serverApi from "@/serverApi/v3/api";
-import * as commonCartridgeApi from "@/commonCartridgeApi/v3/api/common-cartridge-api";
-import { CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3/api";
 import { BoardParentType } from "@/serverApi/v3/api";
 import { applicationErrorModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
@@ -12,10 +10,11 @@ import {
 	courseFactory,
 } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { AxiosError, AxiosInstance, AxiosPromise } from "axios";
+import { AxiosError, AxiosInstance } from "axios";
 import CourseRoomDetailsModule from "./course-room-details";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
+import { createMock } from "@golevelup/ts-vitest";
 
 type ReceivedRequests = [
 	{
@@ -448,62 +447,153 @@ describe("course-room module", () => {
 		});
 
 		describe("downloadCommonCartridgeCourse", () => {
-			it("should call backend api", async () => {
-				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const mockApi: CommonCartridgeApiInterface = {
-					commonCartridgeControllerExportCourse: vi.fn(
-						() => Promise.resolve() as unknown as AxiosPromise<void>
-					),
-					commonCartridgeControllerImportCourse: vi.fn(
-						() => Promise.resolve() as unknown as AxiosPromise<void>
-					),
-				};
-				const spy = vi
-					.spyOn(commonCartridgeApi, "CommonCartridgeApiFactory")
-					.mockReturnValue(mockApi);
+			const setup = () => {
+				const inputMockTopicIds = createMock<HTMLInputElement>();
+				const inputMockTaskIds = createMock<HTMLInputElement>();
+				const inputMockColumnBoardIds = createMock<HTMLInputElement>();
+				const formMock = createMock<HTMLFormElement>();
 
-				await expect(
-					courseRoomDetailsModule.downloadCommonCartridgeCourse({
-						version: "1.1.0",
-						topics: [],
-						tasks: [],
-						columnBoards: [],
-					})
-				).resolves.not.toBeDefined();
-
-				expect(
-					mockApi.commonCartridgeControllerExportCourse
-				).toHaveBeenCalled();
-
-				spy.mockRestore();
-			});
-
-			it("should catch error in catch block", async () => {
-				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const mockApi: CommonCartridgeApiInterface = {
-					commonCartridgeControllerExportCourse: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
-					commonCartridgeControllerImportCourse: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
-				};
-				const spy = vi
-					.spyOn(commonCartridgeApi, "CommonCartridgeApiFactory")
-					.mockReturnValue(mockApi);
-
-				await courseRoomDetailsModule.downloadCommonCartridgeCourse({
-					version: "1.1.0",
-					topics: [],
-					tasks: [],
-					columnBoards: [],
-				});
-
-				expect(courseRoomDetailsModule.businessError).toStrictEqual(
-					businessError
+				vi.spyOn(document, "createElement").mockReturnValueOnce(formMock);
+				vi.spyOn(document, "createElement").mockReturnValueOnce(
+					inputMockTopicIds
+				);
+				vi.spyOn(document, "createElement").mockReturnValueOnce(
+					inputMockTaskIds
+				);
+				vi.spyOn(document, "createElement").mockReturnValueOnce(
+					inputMockColumnBoardIds
 				);
 
-				spy.mockRestore();
+				const appendChildSpy = vi
+					.spyOn(document.body, "appendChild")
+					.mockImplementationOnce(vi.fn());
+				const removeChildSpy = vi
+					.spyOn(document.body, "removeChild")
+					.mockImplementationOnce(vi.fn());
+
+				return {
+					formMock,
+					appendChildSpy,
+					removeChildSpy,
+					inputMockTopicIds,
+					inputMockTaskIds,
+					inputMockColumnBoardIds,
+				};
+			};
+
+			it("should create a form", () => {
+				const { formMock } = setup();
+
+				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+				courseRoomDetailsModule.setRoomData({
+					...courseRoomDetailsModule.roomData,
+					roomId: "testRoomId",
+				});
+
+				const exportSettings: {
+					version: "1.1.0" | "1.3.0";
+					topics: string[];
+					tasks: string[];
+					columnBoards: string[];
+				} = {
+					version: "1.1.0",
+					topics: ["topic1", "topic2"],
+					tasks: ["task1", "task2"],
+					columnBoards: ["board1", "board2"],
+				};
+				courseRoomDetailsModule.downloadCommonCartridgeCourse(exportSettings);
+
+				expect(formMock.method).toBe("POST");
+				expect(formMock.action).toBe(
+					`/api/v3/common-cartridge/export/${courseRoomDetailsModule.roomData.roomId}?version=${exportSettings.version}`
+				);
+				expect(formMock.enctype).toBe("application/json");
+				expect(formMock.target).toBe("_blank");
+			});
+
+			it("should create inputs with correct attributes", () => {
+				const { inputMockTopicIds, inputMockTaskIds, inputMockColumnBoardIds } =
+					setup();
+				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+
+				const exportSettings: {
+					version: "1.1.0" | "1.3.0";
+					topics: string[];
+					tasks: string[];
+					columnBoards: string[];
+				} = {
+					version: "1.1.0",
+					topics: ["topic1", "topic2"],
+					tasks: ["task1", "task2"],
+					columnBoards: ["board1", "board2"],
+				};
+
+				courseRoomDetailsModule.downloadCommonCartridgeCourse(exportSettings);
+
+				expect(inputMockTopicIds.type).toBe("hidden");
+				expect(inputMockTaskIds.type).toBe("hidden");
+				expect(inputMockColumnBoardIds.type).toBe("hidden");
+
+				expect(inputMockTopicIds.name).toBe("topics");
+				expect(inputMockTaskIds.name).toBe("tasks");
+				expect(inputMockColumnBoardIds.name).toBe("columnBoards");
+
+				expect(inputMockTopicIds.value).toBe(
+					JSON.stringify(exportSettings.topics)
+				);
+				expect(inputMockTaskIds.value).toBe(
+					JSON.stringify(exportSettings.tasks)
+				);
+				expect(inputMockColumnBoardIds.value).toBe(
+					JSON.stringify(exportSettings.columnBoards)
+				);
+			});
+
+			it("should call formMock.appendChild 3 times", () => {
+				const { formMock } = setup();
+
+				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+
+				const exportSettings: {
+					version: "1.1.0" | "1.3.0";
+					topics: string[];
+					tasks: string[];
+					columnBoards: string[];
+				} = {
+					version: "1.1.0",
+					topics: ["topic1"],
+					tasks: ["task1"],
+					columnBoards: ["board1"],
+				};
+
+				courseRoomDetailsModule.downloadCommonCartridgeCourse(exportSettings);
+				expect(formMock.appendChild).toHaveBeenCalledTimes(3);
+			});
+
+			it("should append/remove form to/from body", async () => {
+				const { formMock, appendChildSpy, removeChildSpy } = setup();
+
+				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+
+				const exportSettings: {
+					version: "1.1.0" | "1.3.0";
+					topics: string[];
+					tasks: string[];
+					columnBoards: string[];
+				} = {
+					version: "1.1.0",
+					topics: ["topic1"],
+					tasks: ["task1"],
+					columnBoards: ["board1"],
+				};
+
+				await courseRoomDetailsModule.downloadCommonCartridgeCourse(
+					exportSettings
+				);
+
+				expect(appendChildSpy).toHaveBeenCalledWith(formMock);
+				expect(removeChildSpy).toHaveBeenCalledWith(formMock);
+				expect(formMock.submit).toHaveBeenCalled();
 			});
 		});
 
@@ -901,16 +991,6 @@ describe("course-room module", () => {
 				expect(courseRoomDetailsModule.getPermissionData).toStrictEqual(
 					expectedPermissions
 				);
-			});
-		});
-
-		describe("getCommonCartridgeApi", () => {
-			it("should return the CommonCartridgeApiInterface", () => {
-				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-
-				const result = courseRoomDetailsModule.commonCartridgeApi;
-
-				expect(result).toBeInstanceOf(Object);
 			});
 		});
 	});
