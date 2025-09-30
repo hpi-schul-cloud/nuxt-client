@@ -28,7 +28,7 @@ export * from "./courseMetadataResponseFactory";
 export * from "./customParameterResponseFactory";
 export * from "./deletedElementResponseFactory";
 export * from "./drawingElementResponseFactory";
-export * from "./envsFactory";
+export * from "./env-test.utils";
 export * from "./externalToolDisplayDataFactory";
 export * from "./externalToolElementResponseFactory";
 export * from "./fileElementContentFactory";

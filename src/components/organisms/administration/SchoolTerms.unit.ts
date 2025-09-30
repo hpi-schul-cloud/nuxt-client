@@ -14,6 +14,8 @@ import {
 import type { Mocked } from "vitest";
 import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { Permission } from "@/serverApi/v3";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("@/utils/fileHelper");
 
@@ -52,7 +54,8 @@ describe("SchoolTerms", () => {
 		},
 		permissions = [Permission.SchoolEdit]
 	) => {
-		createTestAppStoreWithPermissions(permissions, false);
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStoreWithPermissions(permissions);
 
 		schoolsModule = createModuleMocks(SchoolsModule, {
 			getSchool: mockSchool,

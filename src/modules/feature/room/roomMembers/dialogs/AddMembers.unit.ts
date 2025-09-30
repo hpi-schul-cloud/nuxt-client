@@ -24,6 +24,7 @@ import { WarningAlert } from "@ui-alert";
 import { computed, Ref } from "vue";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { Mock } from "vitest";
+import { setActivePinia } from "pinia";
 
 vi.mock("@vueuse/integrations/useFocusTrap");
 
@@ -81,9 +82,9 @@ describe("AddMembers", () => {
 			roomRoleName: RoleName.Roomadmin,
 		});
 
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		const { mockedMe } = createTestAppStoreWithRole(
-			options?.schoolRole ?? RoleName.Teacher,
-			false
+			options?.schoolRole ?? RoleName.Teacher
 		);
 
 		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.Teacher];
