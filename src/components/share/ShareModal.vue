@@ -21,7 +21,11 @@
 					<p data-testid="share-options-info-text">
 						{{ t(`components.molecules.share.${type}.options.infoText`) }}
 					</p>
-					<InfoAlert v-if="showAlertInfo" class="mb-4">
+					<InfoAlert
+						v-if="showAlertInfo"
+						class="mb-4"
+						data-testid="share-info-copyright-data-protection"
+					>
 						{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
 					</InfoAlert>
 					<WarningAlert v-if="showAlertInfo">
@@ -38,12 +42,18 @@
 										)
 									}}
 								</li>
-								<li v-if="showCourseInfo">
+								<li
+									v-if="showCourseInfo"
+									data-testid="share-modal-course-member-permission"
+								>
 									{{
 										t("components.molecules.copyResult.membersAndPermissions")
 									}}
 								</li>
-								<li v-if="showCourseInfo || showLessonInfo">
+								<li
+									v-if="showCourseInfo || showLessonInfo"
+									data-testid="share-modal-geogebra"
+								>
 									{{
 										t(
 											"components.molecules.shareImport.options.restrictions.infoText.geogebra"
@@ -57,6 +67,7 @@
 										showBoardInfo ||
 										showLessonInfo
 									"
+									data-testid="share-modal-content-etherpad"
 								>
 									{{
 										t(
@@ -64,7 +75,10 @@
 										)
 									}}
 								</li>
-								<li v-if="showCourseInfo || showRoomInfo || showBoardInfo">
+								<li
+									v-if="showCourseInfo || showRoomInfo || showBoardInfo"
+									data-testid="share-modal-content-whiteboard"
+								>
 									{{
 										t(
 											"components.molecules.shareImport.options.restrictions.infoText.whiteboard"
