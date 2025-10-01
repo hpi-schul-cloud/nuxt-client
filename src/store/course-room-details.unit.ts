@@ -1,12 +1,8 @@
 import * as serverApi from "@/serverApi/v3/api";
-import * as commonCartridgeApi from "@/commonCartridgeApi/v3/api/common-cartridge-api";
-import { CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3/api";
 import { BoardParentType } from "@/serverApi/v3/api";
-import { applicationErrorModule, authModule } from "@/store";
+import { applicationErrorModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
-import AuthModule from "@/store/auth";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory } from "@@/tests/test-utils";
 import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
@@ -14,10 +10,11 @@ import {
 	courseFactory,
 } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { AxiosError, AxiosInstance, AxiosPromise } from "axios";
+import { AxiosError, AxiosInstance } from "axios";
 import CourseRoomDetailsModule from "./course-room-details";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
+import { createMock } from "@golevelup/ts-vitest";
 
 type ReceivedRequests = [
 	{
@@ -33,21 +30,21 @@ let getRequestReturn: Promise<{ data: Course } | AxiosError> | undefined;
 
 const axiosInitializer = () => {
 	initializeAxios({
-		get: async (path: string, params: object) => {
+		get: (path: string, params: object) => {
 			receivedRequests = [{ path }, { params }];
-			return getRequestReturn;
+			return Promise.resolve(getRequestReturn);
 		},
-		post: async (path: string) => {
+		post: (path: string) => {
 			receivedRequests = [{ path }, { params: undefined }];
-			return getRequestReturn;
+			return Promise.resolve(getRequestReturn);
 		},
-		patch: async (path: string, params: object) => {
+		patch: (path: string, params: object) => {
 			receivedRequests = [{ path }, { params }];
-			return getRequestReturn;
+			return Promise.resolve(getRequestReturn);
 		},
-		delete: async (path: string) => {
+		delete: (path: string) => {
 			receivedRequests = [{ path }, { params: undefined }];
-			return getRequestReturn;
+			return Promise.resolve(getRequestReturn);
 		},
 	} as AxiosInstance);
 };
@@ -77,7 +74,6 @@ const businessError = businessErrorFactory.build({
 describe("course-room module", () => {
 	beforeEach(() => {
 		setupStores({
-			authModule: AuthModule,
 			applicationErrorModule: ApplicationErrorModule,
 		});
 		receivedRequests = [{ path: "" }, { params: {} }];
@@ -451,71 +447,157 @@ describe("course-room module", () => {
 		});
 
 		describe("downloadCommonCartridgeCourse", () => {
-			it("should call backend api", async () => {
-				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const mockApi: CommonCartridgeApiInterface = {
-					commonCartridgeControllerExportCourse: vi.fn(
-						() => Promise.resolve() as unknown as AxiosPromise<void>
-					),
-					commonCartridgeControllerImportCourse: vi.fn(
-						() => Promise.resolve() as unknown as AxiosPromise<void>
-					),
-				};
-				const spy = vi
-					.spyOn(commonCartridgeApi, "CommonCartridgeApiFactory")
-					.mockReturnValue(mockApi);
+			const setup = () => {
+				const inputMockTopicIds = createMock<HTMLInputElement>();
+				const inputMockTaskIds = createMock<HTMLInputElement>();
+				const inputMockColumnBoardIds = createMock<HTMLInputElement>();
+				const formMock = createMock<HTMLFormElement>();
 
-				await expect(
-					courseRoomDetailsModule.downloadCommonCartridgeCourse({
-						version: "1.1.0",
-						topics: [],
-						tasks: [],
-						columnBoards: [],
-					})
-				).resolves.not.toBeDefined();
-
-				expect(
-					mockApi.commonCartridgeControllerExportCourse
-				).toHaveBeenCalled();
-
-				spy.mockRestore();
-			});
-
-			it("should catch error in catch block", async () => {
-				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const mockApi: CommonCartridgeApiInterface = {
-					commonCartridgeControllerExportCourse: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
-					commonCartridgeControllerImportCourse: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
-				};
-				const spy = vi
-					.spyOn(commonCartridgeApi, "CommonCartridgeApiFactory")
-					.mockReturnValue(mockApi);
-
-				await courseRoomDetailsModule.downloadCommonCartridgeCourse({
-					version: "1.1.0",
-					topics: [],
-					tasks: [],
-					columnBoards: [],
-				});
-
-				expect(courseRoomDetailsModule.businessError).toStrictEqual(
-					businessError
+				vi.spyOn(document, "createElement").mockReturnValueOnce(formMock);
+				vi.spyOn(document, "createElement").mockReturnValueOnce(
+					inputMockTopicIds
+				);
+				vi.spyOn(document, "createElement").mockReturnValueOnce(
+					inputMockTaskIds
+				);
+				vi.spyOn(document, "createElement").mockReturnValueOnce(
+					inputMockColumnBoardIds
 				);
 
-				spy.mockRestore();
+				const appendChildSpy = vi
+					.spyOn(document.body, "appendChild")
+					.mockImplementationOnce(vi.fn());
+				const removeChildSpy = vi
+					.spyOn(document.body, "removeChild")
+					.mockImplementationOnce(vi.fn());
+
+				return {
+					formMock,
+					appendChildSpy,
+					removeChildSpy,
+					inputMockTopicIds,
+					inputMockTaskIds,
+					inputMockColumnBoardIds,
+				};
+			};
+
+			it("should create a form", () => {
+				const { formMock } = setup();
+
+				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+				courseRoomDetailsModule.setRoomData({
+					...courseRoomDetailsModule.roomData,
+					roomId: "testRoomId",
+				});
+
+				const exportSettings: {
+					version: "1.1.0" | "1.3.0";
+					topics: string[];
+					tasks: string[];
+					columnBoards: string[];
+				} = {
+					version: "1.1.0",
+					topics: ["topic1", "topic2"],
+					tasks: ["task1", "task2"],
+					columnBoards: ["board1", "board2"],
+				};
+				courseRoomDetailsModule.downloadCommonCartridgeCourse(exportSettings);
+
+				expect(formMock.method).toBe("POST");
+				expect(formMock.action).toBe(
+					`/api/v3/common-cartridge/export/${courseRoomDetailsModule.roomData.roomId}?version=${exportSettings.version}`
+				);
+				expect(formMock.enctype).toBe("application/json");
+				expect(formMock.target).toBe("_blank");
+			});
+
+			it("should create inputs with correct attributes", () => {
+				const { inputMockTopicIds, inputMockTaskIds, inputMockColumnBoardIds } =
+					setup();
+				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+
+				const exportSettings: {
+					version: "1.1.0" | "1.3.0";
+					topics: string[];
+					tasks: string[];
+					columnBoards: string[];
+				} = {
+					version: "1.1.0",
+					topics: ["topic1", "topic2"],
+					tasks: ["task1", "task2"],
+					columnBoards: ["board1", "board2"],
+				};
+
+				courseRoomDetailsModule.downloadCommonCartridgeCourse(exportSettings);
+
+				expect(inputMockTopicIds.type).toBe("hidden");
+				expect(inputMockTaskIds.type).toBe("hidden");
+				expect(inputMockColumnBoardIds.type).toBe("hidden");
+
+				expect(inputMockTopicIds.name).toBe("topics");
+				expect(inputMockTaskIds.name).toBe("tasks");
+				expect(inputMockColumnBoardIds.name).toBe("columnBoards");
+
+				expect(inputMockTopicIds.value).toBe(
+					JSON.stringify(exportSettings.topics)
+				);
+				expect(inputMockTaskIds.value).toBe(
+					JSON.stringify(exportSettings.tasks)
+				);
+				expect(inputMockColumnBoardIds.value).toBe(
+					JSON.stringify(exportSettings.columnBoards)
+				);
+			});
+
+			it("should call formMock.appendChild 3 times", () => {
+				const { formMock } = setup();
+
+				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+
+				const exportSettings: {
+					version: "1.1.0" | "1.3.0";
+					topics: string[];
+					tasks: string[];
+					columnBoards: string[];
+				} = {
+					version: "1.1.0",
+					topics: ["topic1"],
+					tasks: ["task1"],
+					columnBoards: ["board1"],
+				};
+
+				courseRoomDetailsModule.downloadCommonCartridgeCourse(exportSettings);
+				expect(formMock.appendChild).toHaveBeenCalledTimes(3);
+			});
+
+			it("should append/remove form to/from body", async () => {
+				const { formMock, appendChildSpy, removeChildSpy } = setup();
+
+				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+
+				const exportSettings: {
+					version: "1.1.0" | "1.3.0";
+					topics: string[];
+					tasks: string[];
+					columnBoards: string[];
+				} = {
+					version: "1.1.0",
+					topics: ["topic1"],
+					tasks: ["task1"],
+					columnBoards: ["board1"],
+				};
+
+				await courseRoomDetailsModule.downloadCommonCartridgeCourse(
+					exportSettings
+				);
+
+				expect(appendChildSpy).toHaveBeenCalledWith(formMock);
+				expect(removeChildSpy).toHaveBeenCalledWith(formMock);
+				expect(formMock.submit).toHaveBeenCalled();
 			});
 		});
 
 		describe("finishTask", () => {
-			beforeEach(() => {
-				const mockMe = meResponseFactory.build();
-				authModule.setMe(mockMe);
-			});
-
 			it("should make a 'PATCH' call to the backend", async () => {
 				(() => {
 					initializeAxios({
@@ -605,11 +687,6 @@ describe("course-room module", () => {
 		});
 
 		describe("fetchScopePermission", () => {
-			beforeEach(() => {
-				const mockMe = meResponseFactory.build();
-				authModule.setMe(mockMe);
-			});
-
 			it("should make a 'GET' call to the backend to fetch the scoped 'room' permissions", async () => {
 				(() => {
 					initializeAxios({
@@ -715,26 +792,23 @@ describe("course-room module", () => {
 				HttpStatusCode.NotFound,
 				HttpStatusCode.RequestTimeout,
 				HttpStatusCode.InternalServerError,
-			])(
-				"should create an application-error for http-error(%p)",
-				async (code) => {
-					const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
-					const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+			])("should create an application-error for http-error(%p)", (code) => {
+				const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
+				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 
-					const errorData = axiosErrorFactory.build({
-						response: {
-							data: apiResponseErrorFactory.build({
-								message: "FORBIDDEN",
-								code,
-							}),
-						},
-					});
+				const errorData = axiosErrorFactory.build({
+					response: {
+						data: apiResponseErrorFactory.build({
+							message: "FORBIDDEN",
+							code,
+						}),
+					},
+				});
 
-					courseRoomDetailsModule.setError(errorData);
+				courseRoomDetailsModule.setError(errorData);
 
-					expect(setErrorSpy).toHaveBeenCalled();
-				}
-			);
+				expect(setErrorSpy).toHaveBeenCalled();
+			});
 		});
 
 		describe("setBusinessError", () => {
@@ -917,16 +991,6 @@ describe("course-room module", () => {
 				expect(courseRoomDetailsModule.getPermissionData).toStrictEqual(
 					expectedPermissions
 				);
-			});
-		});
-
-		describe("getCommonCartridgeApi", () => {
-			it("should return the CommonCartridgeApiInterface", () => {
-				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-
-				const result = courseRoomDetailsModule.commonCartridgeApi;
-
-				expect(result).toBeInstanceOf(Object);
 			});
 		});
 	});

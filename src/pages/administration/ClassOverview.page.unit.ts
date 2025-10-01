@@ -1,18 +1,14 @@
-import AuthModule from "@/store/auth";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassRootType } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { School, Year } from "@/store/types/schools";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import {
-	AUTH_MODULE_KEY,
-	GROUP_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { GROUP_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import {
 	classInfoFactory,
 	courseFactory,
+	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -28,12 +24,14 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDataTableServer } from "vuetify/lib/components/index";
 import ClassOverview from "./ClassOverview.page.vue";
 import { Mock } from "vitest";
-import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
+import { ConfigResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
 
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
+vi.mock("vue-router", () => {
+	return {
+		useRoute: vi.fn(),
+		useRouter: vi.fn(),
+	};
+});
 const useRouteMock = <Mock>useRoute;
 const useRouterMock = <Mock>useRouter;
 
@@ -51,7 +49,7 @@ type CreateWrapperOptions = {
 	groupModuleGetters?: Partial<GroupModule>;
 	schoolsModuleGetters?: Partial<SchoolsModule>;
 	props?: { tab: Tab };
-	userPermissions?: string[];
+	userPermissions?: Permission[];
 	envs?: Partial<ConfigResponse>;
 };
 
@@ -67,13 +65,7 @@ const createWrapper = ({
 	const router = createMock<Router>();
 	useRouterMock.mockReturnValue(router);
 
-	const defaultPermissions = ["CLASS_EDIT", "CLASS_CREATE"].map((p) =>
-		p.toLowerCase()
-	);
-
-	const effectivePermissions = (userPermissions ?? defaultPermissions).map(
-		(p) => p.toLowerCase()
-	);
+	const defaultPermissions = [Permission.ClassEdit, Permission.ClassCreate];
 
 	const groupModule = createModuleMocks(GroupModule, {
 		getClasses: [
@@ -93,9 +85,10 @@ const createWrapper = ({
 		...groupModuleGetters,
 	});
 
-	const authModule = createModuleMocks(AuthModule, {
-		getUserPermissions: effectivePermissions,
-	});
+	createTestAppStoreWithPermissions(
+		userPermissions ?? defaultPermissions,
+		false
+	);
 
 	const schoolModule = createModuleMocks(SchoolsModule, {
 		getSchool: {
@@ -128,15 +121,13 @@ const createWrapper = ({
 			provide: {
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
 				[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
-				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
 			stubs: {
 				EndCourseSyncDialog: true,
 			},
 			mocks: {
-				t: (key: string, placeholders: Record<string, string> = {}) => {
-					return `${key}|${Object.values(placeholders || {}).join("|")}`;
-				},
+				t: (key: string, placeholders: Record<string, string> = {}) =>
+					`${key}|${Object.values(placeholders || {}).join("|")}`,
 			},
 		},
 		props,
@@ -151,11 +142,10 @@ const createWrapper = ({
 	};
 };
 
-const findTableComponent = (wrapper: VueWrapper) => {
-	return wrapper.findComponent<typeof VDataTableServer>(
+const findTableComponent = (wrapper: VueWrapper) =>
+	wrapper.findComponent<typeof VDataTableServer>(
 		'[data-testid="admin-class-table"]'
 	);
-};
 
 describe("ClassOverview", () => {
 	afterEach(() => {
@@ -353,10 +343,9 @@ describe("ClassOverview", () => {
 	describe("action buttons", () => {
 		describe("when user has no edit permission", () => {
 			const setup = () => {
-				const userPermissions: string[] = [];
 				const { wrapper } = createWrapper({
 					props: { tab: "current" },
-					userPermissions,
+					userPermissions: [],
 				});
 
 				return {
@@ -793,13 +782,12 @@ describe("ClassOverview", () => {
 
 	describe("addClass", () => {
 		describe("when create permission is present", () => {
-			const userPermissions = ["class_create"];
 			const setup = () => {
 				const { wrapper } = createWrapper({
 					props: {
 						tab: "current",
 					},
-					userPermissions,
+					userPermissions: [Permission.ClassCreate],
 				});
 
 				return {
@@ -839,13 +827,12 @@ describe("ClassOverview", () => {
 		});
 
 		describe("when create permission is not present", () => {
-			const userPermissions: string[] = [];
 			const setup = () => {
 				const { wrapper } = createWrapper({
 					props: {
 						tab: "current",
 					},
-					userPermissions,
+					userPermissions: [],
 				});
 
 				return {

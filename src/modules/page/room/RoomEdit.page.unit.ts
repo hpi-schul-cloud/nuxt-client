@@ -6,7 +6,7 @@ import { RoomEditPage } from "@page-room";
 import { useRoute, useRouter } from "vue-router";
 import { RoomUpdateParams, RoomColor } from "@/types/room/Room";
 import { RoomForm } from "@feature-room";
-import { nextTick, ref } from "vue";
+import { nextTick, computed } from "vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
@@ -131,7 +131,8 @@ describe("@pages/RoomEdit.page.vue", () => {
 	describe("loading is done", () => {
 		describe("when user has no edit room permissions", () => {
 			it("should not render DefaultWireframe", () => {
-				roomPermissions.canEditRoom = ref(false);
+				roomPermissions.canEditRoom = computed(() => false);
+
 				const { wrapper } = setup({ isLoading: false });
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 
@@ -139,7 +140,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			});
 
 			it("should navigate to room details page", async () => {
-				roomPermissions.canEditRoom = ref(false);
+				roomPermissions.canEditRoom = computed(() => false);
 
 				const { roomId } = setup({ isLoading: false });
 				await nextTick();
@@ -153,7 +154,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 		describe("when user has edit room permissions ", () => {
 			beforeEach(() => {
-				roomPermissions.canEditRoom = ref(true);
+				roomPermissions.canEditRoom = computed(() => true);
 			});
 			it("should render DefaultWireframe", () => {
 				const { wrapper } = setup();

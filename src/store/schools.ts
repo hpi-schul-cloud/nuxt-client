@@ -13,7 +13,6 @@ import {
 	UserImportApiFactory,
 	UserImportApiInterface,
 } from "@/serverApi/v3";
-import { authModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
 import { AxiosError } from "axios";
@@ -22,6 +21,7 @@ import { useApplicationError } from "../composables/application-error.composable
 import { ApplicationError } from "./types/application-error";
 import { School } from "./types/schools";
 import { useEnvConfig } from "@data-env";
+import { useAppStore } from "@data-app";
 
 @Module({
 	name: "schoolsModule",
@@ -180,12 +180,11 @@ export default class SchoolsModule extends VuexModule {
 	@Action
 	async fetchSchool(): Promise<void> {
 		this.setLoading(true);
-		if (authModule.getSchool?.id) {
+		const schoolId = useAppStore().school?.id;
+		if (schoolId) {
 			try {
 				const school = (
-					await this.schoolApi.schoolControllerGetSchoolById(
-						authModule.getSchool?.id
-					)
+					await this.schoolApi.schoolControllerGetSchoolById(schoolId)
 				).data;
 
 				this.setSchool(school);

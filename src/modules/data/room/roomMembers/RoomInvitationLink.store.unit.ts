@@ -1,10 +1,8 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { authModule, schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
+import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
-	meResponseFactory,
 	mockApiResponse,
 	mockedPiniaStoreTyping,
 	roomFactory,
@@ -58,7 +56,6 @@ describe("useRoomInvitationLinkStore", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -67,9 +64,6 @@ describe("useRoomInvitationLinkStore", () => {
 				name: "Paul-Gerhardt-Gymnasium",
 			})
 		);
-
-		const mockMe = meResponseFactory.build();
-		authModule.setMe(mockMe);
 	});
 
 	const setup = (roomInvitationLinks: RoomInvitationLink[] = []) => {
