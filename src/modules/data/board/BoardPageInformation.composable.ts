@@ -43,7 +43,7 @@ const useBoardPageInformation = () => {
 	const pageTitle = computed(() => {
 		const boardTitleForPageTitle = boardTitle.value;
 
-		return buildPageTitle(`${boardTitleForPageTitle} - ${roomName.value}`);
+		return buildPageTitle(boardTitleForPageTitle, roomName.value);
 	});
 
 	const breadcrumbs = computed<Breadcrumb[]>(() => {

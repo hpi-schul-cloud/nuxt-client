@@ -8,7 +8,7 @@
 		<ImportFlow
 			:is-active="isImportMode"
 			:token="importToken"
-			:destinations="rooms.filter((room) => !room.isLocked)"
+			:destinations="importFlowDestinations"
 			:destination-type="BoardExternalReferenceType.Room"
 			@success="onImportSuccess"
 		/>
@@ -36,7 +36,7 @@ const { rooms, fetchRooms, isLoading, isEmpty } = useRoomsState();
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { canCreateRoom } = useRoomAuthorization();
 
-const pageTitle = computed(() => buildPageTitle(`${t("pages.rooms.title")}`));
+const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
 useTitle(pageTitle);
 
 const fabAction = computed(() => {
@@ -71,6 +71,10 @@ watch(
 onMounted(() => {
 	fetchRooms();
 });
+
+const importFlowDestinations = computed(() =>
+	rooms.value.filter((room) => !room.isLocked)
+);
 
 const onImportSuccess = (newName: string, destinationId?: string) => {
 	showImportSuccess(newName);
