@@ -41,21 +41,22 @@ describe("RoomsPage", () => {
 
 	beforeEach(() => {
 		roomPermissions = {
-			canAddRoomMembers: ref(true),
+			canAddRoomMembers: computed(() => true),
+			canAddAllStudents: computed(() => false),
 			canCreateRoom: computed(() => false),
-			canChangeOwner: ref(false),
-			canCopyRoom: ref(false),
-			canViewRoom: ref(false),
-			canEditRoom: ref(false),
-			canDeleteRoom: ref(false),
-			canLeaveRoom: ref(false),
-			canRemoveRoomMembers: ref(false),
-			canEditRoomContent: ref(false),
+			canChangeOwner: computed(() => false),
+			canCopyRoom: computed(() => false),
+			canViewRoom: computed(() => false),
+			canEditRoom: computed(() => false),
+			canDeleteRoom: computed(() => false),
+			canLeaveRoom: computed(() => false),
+			canRemoveRoomMembers: computed(() => false),
+			canEditRoomContent: computed(() => false),
 			canSeeAllStudents: computed(() => false),
-			canShareRoom: ref(false),
-			canListDrafts: ref(false),
-			canManageRoomInvitationLinks: ref(false),
-			canManageVideoconferences: ref(false),
+			canShareRoom: computed(() => false),
+			canListDrafts: computed(() => false),
+			canManageRoomInvitationLinks: computed(() => false),
+			canManageVideoconferences: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
