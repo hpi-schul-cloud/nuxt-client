@@ -2,50 +2,52 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { computed, ref, unref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useBoardApi } from "./BoardApi.composable";
 
-const useBoardPageInformation = () => {
+const useBoardPageInformation = (boardTitle?: string) => {
 	const { t } = useI18n();
 
 	const { getContextInfo } = useBoardApi();
 
 	const boardContext = ref<Awaited<ReturnType<typeof getContextInfo>>>();
-	const boardTitle = ref<string>();
 	const roomId = computed(() => boardContext.value?.id);
 	const contextType = computed(() => boardContext.value?.type);
 
-	const pageTitle = computed(() => {
-		const roomName = unref(boardContext)?.name;
-		const roomNameForPageTitle = roomName ? ", " + roomName : "";
-		const type = unref(boardContext)?.type;
+	const roomName = computed(() => {
+		let roomNameFallback = t("common.labels.room");
 
-		if (type === BoardContextType.Course) {
-			const title =
-				boardTitle.value ?? t("pages.room.boardCard.label.courseBoard");
-
-			return buildPageTitle(`${title}${roomNameForPageTitle}`);
+		if (contextType.value === BoardContextType.Course) {
+			roomNameFallback = t("common.labels.course");
 		}
-		if (type === BoardContextType.Room) {
-			const title =
-				boardTitle.value ?? t("pages.roomDetails.board.defaultName");
 
-			return buildPageTitle(`${title}${roomNameForPageTitle}`);
-		}
-		return "";
+		return boardContext.value?.name ?? roomNameFallback;
 	});
 
-	const breadcrumbs = computed((): Breadcrumb[] => {
-		const id = unref(boardContext)?.id;
-		const type = unref(boardContext)?.type;
-		const name = unref(boardContext)?.name;
+	const boardTitleFallback = computed(() => {
+		let fallback = t("common.labels.board");
 
-		if (!id || !type) {
-			return [];
+		if (contextType.value === BoardContextType.Course) {
+			fallback = t("pages.room.boardCard.label.courseBoard");
+		}
+		if (contextType.value === BoardContextType.Room) {
+			fallback = t("pages.roomDetails.board.defaultName");
 		}
 
-		if (type === BoardContextType.Course) {
+		return fallback;
+	});
+
+	const pageTitle = computed(() => {
+		const boardTitleForPageTitle = boardTitle ?? boardTitleFallback.value;
+
+		return buildPageTitle(`${boardTitleForPageTitle} - ${roomName.value}`);
+	});
+
+	const breadcrumbs = computed<Breadcrumb[]>(() => {
+		if (!roomId.value || !contextType.value) return [];
+
+		if (contextType.value === BoardContextType.Course) {
 			return [
 				{
 					title: t("common.words.courses"),
@@ -53,18 +55,18 @@ const useBoardPageInformation = () => {
 					disabled: false,
 				},
 				{
-					title: name ?? t("common.labels.course"),
-					to: `/rooms/${id}`,
+					title: roomName.value,
+					to: `/rooms/${roomId.value}`,
 					disabled: false,
 				},
 				{
-					title:
-						boardTitle.value ?? t("pages.room.boardCard.label.courseBoard"),
+					title: boardTitle ?? boardTitleFallback.value,
 					disabled: true,
 				},
 			];
 		}
-		if (type === BoardContextType.Room) {
+
+		if (contextType.value === BoardContextType.Room) {
 			return [
 				{
 					title: t("pages.rooms.title"),
@@ -72,30 +74,26 @@ const useBoardPageInformation = () => {
 					disabled: false,
 				},
 				{
-					title: name ?? t("common.labels.room"),
-					to: `/rooms/${id}`,
+					title: roomName.value,
+					to: `/rooms/${roomId.value}`,
 					disabled: false,
 				},
 				{
-					title: boardTitle.value ?? t("pages.roomDetails.board.defaultName"),
+					title: boardTitle ?? boardTitleFallback.value,
 					disabled: true,
 				},
 			];
 		}
+
 		return [];
 	});
 
-	const createPageInformation = async (
-		id: string,
-		title?: string
-	): Promise<void> => {
+	const createPageInformation = async (id: string) => {
 		boardContext.value = await getContextInfo(id);
-		boardTitle.value = title ?? "";
 	};
 
 	const resetPageInformation = (): void => {
 		boardContext.value = undefined;
-		boardTitle.value = "";
 	};
 
 	return {

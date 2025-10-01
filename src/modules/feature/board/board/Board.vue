@@ -169,12 +169,12 @@ const {
 	roomId,
 	createPageInformation,
 	resetPageInformation,
-} = useSharedBoardPageInformation();
+} = useSharedBoardPageInformation(board.value?.title);
 const { createApplicationError } = useApplicationError();
 const isDragging = ref(false);
 
 watch(board, async () => {
-	await createPageInformation(props.boardId, board.value?.title);
+	await createPageInformation(props.boardId);
 });
 
 const route = useRoute();
