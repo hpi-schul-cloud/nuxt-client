@@ -5,11 +5,14 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useBoardApi } from "./BoardApi.composable";
+import { logger } from "@util-logger";
+import { useBoardStore } from "./Board.store";
 
-const useBoardPageInformation = (boardTitle?: string) => {
+const useBoardPageInformation = () => {
 	const { t } = useI18n();
 
 	const { getContextInfo } = useBoardApi();
+	const boardStore = useBoardStore();
 
 	const boardContext = ref<Awaited<ReturnType<typeof getContextInfo>>>();
 	const roomId = computed(() => boardContext.value?.id);
@@ -25,8 +28,8 @@ const useBoardPageInformation = (boardTitle?: string) => {
 		return boardContext.value?.name ?? roomNameFallback;
 	});
 
-	const boardTitleFallback = computed(() => {
-		let fallback = t("common.labels.board");
+	const boardTitle = computed(() => {
+		let fallback = t("common.words.board");
 
 		if (contextType.value === BoardContextType.Course) {
 			fallback = t("pages.room.boardCard.label.courseBoard");
@@ -35,16 +38,17 @@ const useBoardPageInformation = (boardTitle?: string) => {
 			fallback = t("pages.roomDetails.board.defaultName");
 		}
 
-		return fallback;
+		return boardStore.board?.title ?? fallback;
 	});
 
 	const pageTitle = computed(() => {
-		const boardTitleForPageTitle = boardTitle ?? boardTitleFallback.value;
+		const boardTitleForPageTitle = boardTitle.value;
 
 		return buildPageTitle(`${boardTitleForPageTitle} - ${roomName.value}`);
 	});
 
 	const breadcrumbs = computed<Breadcrumb[]>(() => {
+		logger.log("boardTitle", boardTitle?.value);
 		if (!roomId.value || !contextType.value) return [];
 
 		if (contextType.value === BoardContextType.Course) {
@@ -60,7 +64,7 @@ const useBoardPageInformation = (boardTitle?: string) => {
 					disabled: false,
 				},
 				{
-					title: boardTitle ?? boardTitleFallback.value,
+					title: boardTitle.value,
 					disabled: true,
 				},
 			];
@@ -79,7 +83,7 @@ const useBoardPageInformation = (boardTitle?: string) => {
 					disabled: false,
 				},
 				{
-					title: boardTitle ?? boardTitleFallback.value,
+					title: boardTitle.value,
 					disabled: true,
 				},
 			];

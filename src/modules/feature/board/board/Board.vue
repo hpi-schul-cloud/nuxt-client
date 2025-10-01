@@ -169,7 +169,7 @@ const {
 	roomId,
 	createPageInformation,
 	resetPageInformation,
-} = useSharedBoardPageInformation(board.value?.title);
+} = useSharedBoardPageInformation();
 const { createApplicationError } = useApplicationError();
 const isDragging = ref(false);
 
