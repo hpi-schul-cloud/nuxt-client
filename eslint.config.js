@@ -1,11 +1,10 @@
+import schulcloud from "./lib/eslint-plugin-schulcloud/index.js";
 import js from "@eslint/js";
 import { configureVueProject, defineConfigWithVueTs, vueTsConfigs } from "@vue/eslint-config-typescript";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import pluginVue from "eslint-plugin-vue";
 import globals from "globals";
-
-import schulcloud from "./lib/eslint-plugin-schulcloud/index.js";
 
 configureVueProject({
 	scriptLangs: [
@@ -51,9 +50,27 @@ export default defineConfigWithVueTs([
 			"simple-import-sort": simpleImportSort,
 		},
 		rules: {
-			"arrow-body-style": ["warn", "as-needed", { requireReturnForObjectLiteral: true }],
+			"arrow-body-style": ["warn", "as-needed", { requireReturnForObjectLiteral: false }],
 			"require-await": "warn",
-			"simple-import-sort/imports": "warn",
+			"simple-import-sort/imports": [
+				"warn",
+				{
+					groups: [[]],
+				},
+			],
+
+			// "simple-import-sort/imports": [
+			// 	"warn",
+			// 	{
+			// 		groups: [
+			// 			// External packages
+			// 			["^(?!@(?:data|feature|page|ui|util)(?:-|/)|@/|\\.)\\w"],
+			// 			// Internal - Aliases (mit - oder /) + @/ + relative
+			// 			["^@(?:data|feature|page|ui|util)(?:-|/)", "^@/", "^\\."],
+			// 			["^\\."], // Relative imports
+			// 		],
+			// 	},
+			// ],
 			"simple-import-sort/exports": "warn",
 			"@typescript-eslint/ban-ts-comment": "error",
 			"@typescript-eslint/no-empty-function": "error",
@@ -103,22 +120,7 @@ export default defineConfigWithVueTs([
 			"no-useless-escape": "error",
 			"no-var": "error",
 			"prefer-const": "error",
-			"prettier/prettier": [
-				"error",
-				{
-					printWidth: 120,
-					useTabs: true,
-					trailingComma: "es5",
-					bracketSpacing: true,
-					jsxBracketSameLine: false,
-					arrowParens: "always",
-					proseWrap: "never",
-					htmlWhitespaceSensitivity: "css",
-					endOfLine: "lf",
-					semi: true,
-					singleQuote: false,
-				},
-			],
+			"prettier/prettier": ["error"],
 			"schulcloud/material-icon-imports": "error",
 			"vue/html-self-closing": [
 				"error",
