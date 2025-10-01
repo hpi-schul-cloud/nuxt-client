@@ -46,14 +46,13 @@ vi.mock("vue-i18n", async (importOriginal) => {
 });
 
 describe("ChangeRole.vue", () => {
-	beforeEach(() => {
-		let mockedBoardNotifierCalls: DeepMocked<
-			ReturnType<typeof useBoardNotifier>
-		>;
-		let pauseMock: Mock;
-		let unpauseMock: Mock;
-		let deactivateMock: Mock;
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
+	let deactivateMock: Mock;
+
+	beforeEach(() => {
 		// setActivePinia(createPinia());
 
 		pauseMock = vi.fn();
