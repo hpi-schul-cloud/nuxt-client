@@ -12,10 +12,16 @@
 	>
 		<template #[`action-menu-items`]>
 			<KebabMenuActionChangePermission
-				v-if="selectedIds.length === 1 || !selectedIdsIncludeStudents"
+				v-if="
+					isOwnSchool && selectedIdsBelongToOwnSchool &&
+					(selectedIds.length === 1 || !selectedIdsIncludeStudents)
+				"
 				@click="onChangePermission(selectedIds)"
 			/>
-			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
+			<KebabMenuActionRemoveMember
+				v-if="selectedIdsBelongToOwnSchool"
+				@click="onRemoveMembers(selectedIds)"
+			/>
 		</template>
 		<template #[`item.displaySchoolRole`]="{ item }">
 			<span class="text-no-wrap">
@@ -33,12 +39,12 @@
 				:aria-label="getAriaLabel(item)"
 			>
 				<KebabMenuActionChangePermission
-					v-if="!checkIsStudent(item)"
+					v-if="!checkIsStudent(item) && belongsToOwnSchool(item.schoolId)"
 					:aria-label="getAriaLabel(item, 'changeRole')"
 					@click="onChangePermission([item.userId])"
 				/>
 				<KebabMenuActionRemoveMember
-					v-if="!isRoomOwner(item.userId)"
+					v-if="!isRoomOwner(item.userId) && belongsToOwnSchool(item.schoolId)"
 					:aria-label="getAriaLabel(item, 'remove')"
 					@click="onRemoveMembers([item.userId])"
 				/>
@@ -61,7 +67,7 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import { RoomMember, useRoomMembersStore } from "@data-room";
+import { RoomMember, useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
 import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { storeToRefs } from "pinia";
@@ -72,6 +78,7 @@ import {
 	ConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { ChangeRole } from "@feature-room";
+import { schoolsModule } from "@/store/store-accessor";
 
 type Props = {
 	headerBottom?: number;
@@ -165,6 +172,17 @@ const confirmRemoval = async (userIds: string[]) => {
 	});
 	return shouldRemove;
 };
+
+const { userSchoolId } = useAdministrationRoomStore();
+const adminSchoolId = computed(() => schoolsModule.getSchool.id);
+const isOwnSchool = computed(() => userSchoolId === adminSchoolId.value);
+
+const belongsToOwnSchool = (schoolId: string) =>
+	schoolId === adminSchoolId.value;
+
+const selectedIdsBelongToOwnSchool = computed(() =>
+	selectedIds.value.every(belongsToOwnSchool)
+);
 
 const onRemoveMembers = async (ids: string[]) => {
 	const shouldRemove = await confirmRemoval(ids);

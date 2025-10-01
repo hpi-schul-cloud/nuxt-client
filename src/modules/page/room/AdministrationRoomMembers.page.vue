@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
@@ -98,16 +99,27 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	];
 });
 
-const fabAction = computed(() => ({
-	icon: mdiPlus,
-	title: t("pages.rooms.members.add"),
-	ariaLabel: t("pages.rooms.members.add"),
-	dataTestId: "fab-add-members",
-}));
+const adminSchoolId = computed(() => schoolsModule.getSchool.id);
+const isOwnSchool = computed(
+	() => room.value?.schoolId === adminSchoolId.value
+);
+
+const fabAction = computed(() => {
+	return isOwnSchool.value
+		? {
+				icon: mdiPlus,
+				title: t("pages.rooms.members.add"),
+				ariaLabel: t("pages.rooms.members.add"),
+				dataTestId: "fab-add-members",
+			}
+		: undefined;
+});
 
 const onFabClick = async () => {
-	loadSchoolList();
-	isMembersDialogOpen.value = true;
+	if (isOwnSchool.value) {
+		loadSchoolList();
+		isMembersDialogOpen.value = true;
+	}
 };
 
 const onDialogClose = () => {
