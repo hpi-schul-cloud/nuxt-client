@@ -1,5 +1,5 @@
-import { Mock } from "vitest";
 import { useCollaborativeTextEditorApi } from "../composables/CollaborativeTextEditorApi.composable";
+import { Mock } from "vitest";
 
 interface Props {
 	getUrlMock?: Mock;
@@ -7,9 +7,7 @@ interface Props {
 
 export const setupCollaborativeTextEditorApiMock = (props: Props = {}) => {
 	const { getUrlMock } = props;
-	const mockedCollaborativeTextEditorApi = vi.mocked(
-		useCollaborativeTextEditorApi
-	);
+	const mockedCollaborativeTextEditorApi = vi.mocked(useCollaborativeTextEditorApi);
 
 	const getUrl = getUrlMock ?? vi.fn();
 

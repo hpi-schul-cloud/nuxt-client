@@ -23,37 +23,17 @@
 				</BoardColumnInteractionHandler>
 			</div>
 			<div class="mt-2 mr-3">
-				<BoardMenu
-					v-if="hasDeletePermission"
-					:scope="BoardMenuScope.COLUMN"
-					:data-testid="`column-menu-btn-${index}`"
-				>
+				<BoardMenu v-if="hasDeletePermission" :scope="BoardMenuScope.COLUMN" :data-testid="`column-menu-btn-${index}`">
 					<KebabMenuActionRename v-if="!isEditMode" @click="onStartEditMode" />
 					<template v-if="isListBoard">
-						<KebabMenuActionMoveUp
-							v-if="isNotFirstColumn"
-							@click="onMoveColumnUp"
-						/>
-						<KebabMenuActionMoveDown
-							v-if="isNotLastColumn"
-							@click="onMoveColumnDown"
-						/>
+						<KebabMenuActionMoveUp v-if="isNotFirstColumn" @click="onMoveColumnUp" />
+						<KebabMenuActionMoveDown v-if="isNotLastColumn" @click="onMoveColumnDown" />
 					</template>
 					<template v-else>
-						<KebabMenuActionMoveLeft
-							v-if="isNotFirstColumn"
-							@click="onMoveColumnLeft"
-						/>
-						<KebabMenuActionMoveRight
-							v-if="isNotLastColumn"
-							@click="onMoveColumnRight"
-						/>
+						<KebabMenuActionMoveLeft v-if="isNotFirstColumn" @click="onMoveColumnLeft" />
+						<KebabMenuActionMoveRight v-if="isNotLastColumn" @click="onMoveColumnRight" />
 					</template>
-					<KebabMenuActionDelete
-						:name="title"
-						scope-language-key="components.boardColumn"
-						@click="onDelete"
-					/>
+					<KebabMenuActionDelete :name="title" scope-language-key="components.boardColumn" @click="onDelete" />
 				</BoardMenu>
 			</div>
 		</div>
@@ -62,23 +42,23 @@
 </template>
 
 <script setup lang="ts">
-import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
-import { BoardMenuScope } from "@ui-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionRename,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-	KebabMenuActionMoveLeft,
-	KebabMenuActionMoveRight,
-} from "@ui-kebab-menu";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
+import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { BoardMenuScope } from "@ui-board";
+import {
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveLeft,
+	KebabMenuActionMoveRight,
+	KebabMenuActionMoveUp,
+	KebabMenuActionRename,
+} from "@ui-kebab-menu";
+import { ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -102,9 +82,7 @@ const { t } = useI18n();
 
 const columnId = toRef(props, "columnId");
 const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
-const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
-	columnId.value
-);
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(columnId.value);
 
 const columnHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(columnId.value, columnHeader);
@@ -140,9 +118,7 @@ const onMoveColumnKeyboard = (event: KeyboardEvent) => {
 	}
 };
 
-const emitIfNotListBoard = (
-	event: "move:column-left" | "move:column-right"
-) => {
+const emitIfNotListBoard = (event: "move:column-left" | "move:column-right") => {
 	if (!props.isListBoard) {
 		emit(event);
 	}

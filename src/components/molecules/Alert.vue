@@ -18,12 +18,7 @@
 
 <script setup lang="ts">
 import { AlertPayload } from "@/store/types/alert-payload";
-import {
-	mdiAlert,
-	mdiAlertCircle,
-	mdiCheckCircle,
-	mdiInformation,
-} from "@icons/material";
+import { mdiAlert, mdiAlertCircle, mdiCheckCircle, mdiInformation } from "@icons/material";
 import { computed, PropType, Ref, ref } from "vue";
 
 const props = defineProps({

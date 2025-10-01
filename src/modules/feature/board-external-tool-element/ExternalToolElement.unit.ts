@@ -1,3 +1,6 @@
+import ExternalToolElement from "./ExternalToolElement.vue";
+import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
+import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
 import {
@@ -9,10 +12,7 @@ import {
 	ltiDeepLinkResponseFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
 	ContextExternalTool,
@@ -28,70 +28,44 @@ import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { VImg } from "vuetify/lib/components/index";
-import ExternalToolElement from "./ExternalToolElement.vue";
-import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
-import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 
 vi.mock("@data-board");
 vi.mock("@data-external-tool");
 vi.mock("@util-board");
 
 describe("ExternalToolElement", () => {
-	let useContentElementStateMock: DeepMocked<
-		ReturnType<typeof useContentElementState>
-	>;
-	let useBoardFocusHandlerMock: DeepMocked<
-		ReturnType<typeof useBoardFocusHandler>
-	>;
-	let useExternalToolElementDisplayStateMock: DeepMocked<
-		ReturnType<typeof useExternalToolDisplayState>
-	>;
-	let useExternalToolLaunchStateMock: DeepMocked<
-		ReturnType<typeof useExternalToolLaunchState>
-	>;
-	let useSharedLastCreatedElementMock: DeepMocked<
-		ReturnType<typeof useSharedLastCreatedElement>
-	>;
+	let useContentElementStateMock: DeepMocked<ReturnType<typeof useContentElementState>>;
+	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
+	let useExternalToolElementDisplayStateMock: DeepMocked<ReturnType<typeof useExternalToolDisplayState>>;
+	let useExternalToolLaunchStateMock: DeepMocked<ReturnType<typeof useExternalToolLaunchState>>;
+	let useSharedLastCreatedElementMock: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
 
-	let useToolConfigurationStatusMock: DeepMocked<
-		ReturnType<typeof useContextExternalToolConfigurationStatus>
-	>;
+	let useToolConfigurationStatusMock: DeepMocked<ReturnType<typeof useContextExternalToolConfigurationStatus>>;
 
 	beforeEach(() => {
-		useContentElementStateMock =
-			createMock<ReturnType<typeof useContentElementState>>();
-		useBoardFocusHandlerMock =
-			createMock<ReturnType<typeof useBoardFocusHandler>>();
-		useExternalToolElementDisplayStateMock = createMock<
-			ReturnType<typeof useExternalToolDisplayState>
-		>({ error: ref(), displayData: ref(), isLoading: ref(false) });
-		useExternalToolLaunchStateMock = createMock<
-			ReturnType<typeof useExternalToolLaunchState>
-		>({ error: ref(), toolLaunchRequest: ref(), isLoading: ref(false) });
-		useSharedLastCreatedElementMock = createMock<
-			ReturnType<typeof useSharedLastCreatedElement>
-		>({ lastCreatedElementId: ref() });
-		useToolConfigurationStatusMock =
-			createMock<
-				ReturnType<typeof useContextExternalToolConfigurationStatus>
-			>();
+		useContentElementStateMock = createMock<ReturnType<typeof useContentElementState>>();
+		useBoardFocusHandlerMock = createMock<ReturnType<typeof useBoardFocusHandler>>();
+		useExternalToolElementDisplayStateMock = createMock<ReturnType<typeof useExternalToolDisplayState>>({
+			error: ref(),
+			displayData: ref(),
+			isLoading: ref(false),
+		});
+		useExternalToolLaunchStateMock = createMock<ReturnType<typeof useExternalToolLaunchState>>({
+			error: ref(),
+			toolLaunchRequest: ref(),
+			isLoading: ref(false),
+		});
+		useSharedLastCreatedElementMock = createMock<ReturnType<typeof useSharedLastCreatedElement>>({
+			lastCreatedElementId: ref(),
+		});
+		useToolConfigurationStatusMock = createMock<ReturnType<typeof useContextExternalToolConfigurationStatus>>();
 
-		vi.mocked(useContentElementState).mockReturnValue(
-			useContentElementStateMock
-		);
+		vi.mocked(useContentElementState).mockReturnValue(useContentElementStateMock);
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
-		vi.mocked(useExternalToolDisplayState).mockReturnValue(
-			useExternalToolElementDisplayStateMock
-		);
-		vi.mocked(useExternalToolLaunchState).mockReturnValue(
-			useExternalToolLaunchStateMock
-		);
-		vi.mocked(useSharedLastCreatedElement).mockReturnValue(
-			useSharedLastCreatedElementMock
-		);
-		vi.mocked(useContextExternalToolConfigurationStatus).mockReturnValue(
-			useToolConfigurationStatusMock
-		);
+		vi.mocked(useExternalToolDisplayState).mockReturnValue(useExternalToolElementDisplayStateMock);
+		vi.mocked(useExternalToolLaunchState).mockReturnValue(useExternalToolLaunchStateMock);
+		vi.mocked(useSharedLastCreatedElement).mockReturnValue(useSharedLastCreatedElementMock);
+		vi.mocked(useContextExternalToolConfigurationStatus).mockReturnValue(useToolConfigurationStatusMock);
 	});
 
 	afterEach(() => {
@@ -158,9 +132,7 @@ describe("ExternalToolElement", () => {
 
 				await nextTick();
 
-				expect(
-					useExternalToolElementDisplayStateMock.fetchDisplayData
-				).toHaveBeenCalledWith("contextExternalToolId");
+				expect(useExternalToolElementDisplayStateMock.fetchDisplayData).toHaveBeenCalledWith("contextExternalToolId");
 			});
 
 			it("should load the launch request", async () => {
@@ -178,9 +150,7 @@ describe("ExternalToolElement", () => {
 
 				await nextTick();
 
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).toHaveBeenCalledWith("contextExternalToolId");
+				expect(useExternalToolLaunchStateMock.fetchContextLaunchRequest).toHaveBeenCalledWith("contextExternalToolId");
 			});
 
 			it("should not open dialog", async () => {
@@ -201,9 +171,7 @@ describe("ExternalToolElement", () => {
 
 				await nextTick();
 
-				const dialog = wrapper.findComponent(
-					ExternalToolElementConfigurationDialog
-				);
+				const dialog = wrapper.findComponent(ExternalToolElementConfigurationDialog);
 
 				expect(dialog.props("isOpen")).toEqual(false);
 			});
@@ -228,9 +196,7 @@ describe("ExternalToolElement", () => {
 
 				await nextTick();
 
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).not.toHaveBeenCalled();
+				expect(useExternalToolLaunchStateMock.fetchContextLaunchRequest).not.toHaveBeenCalled();
 			});
 		});
 
@@ -252,9 +218,7 @@ describe("ExternalToolElement", () => {
 
 				await nextTick();
 
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).not.toHaveBeenCalled();
+				expect(useExternalToolLaunchStateMock.fetchContextLaunchRequest).not.toHaveBeenCalled();
 			});
 		});
 
@@ -276,9 +240,7 @@ describe("ExternalToolElement", () => {
 
 				await nextTick();
 
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).not.toHaveBeenCalled();
+				expect(useExternalToolLaunchStateMock.fetchContextLaunchRequest).not.toHaveBeenCalled();
 			});
 		});
 
@@ -300,9 +262,7 @@ describe("ExternalToolElement", () => {
 
 				await nextTick();
 
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).not.toHaveBeenCalled();
+				expect(useExternalToolLaunchStateMock.fetchContextLaunchRequest).not.toHaveBeenCalled();
 			});
 		});
 
@@ -318,9 +278,7 @@ describe("ExternalToolElement", () => {
 
 				await nextTick();
 
-				const dialog = wrapper.findComponent(
-					ExternalToolElementConfigurationDialog
-				);
+				const dialog = wrapper.findComponent(ExternalToolElementConfigurationDialog);
 
 				expect(dialog.props("isOpen")).toEqual(true);
 			});
@@ -333,9 +291,7 @@ describe("ExternalToolElement", () => {
 
 				await nextTick();
 
-				expect(
-					useExternalToolElementDisplayStateMock.fetchDisplayData
-				).not.toHaveBeenCalled();
+				expect(useExternalToolElementDisplayStateMock.fetchDisplayData).not.toHaveBeenCalled();
 			});
 
 			it("should not load the launch request", async () => {
@@ -346,9 +302,7 @@ describe("ExternalToolElement", () => {
 
 				await nextTick();
 
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).not.toHaveBeenCalled();
+				expect(useExternalToolLaunchStateMock.fetchContextLaunchRequest).not.toHaveBeenCalled();
 			});
 		});
 	});
@@ -543,9 +497,7 @@ describe("ExternalToolElement", () => {
 		it("should display the tool domain", () => {
 			const { wrapper, displayData } = setup();
 
-			const domain = wrapper.find(
-				"[data-testid=board-external-tool-element-domain]"
-			);
+			const domain = wrapper.find("[data-testid=board-external-tool-element-domain]");
 
 			expect(domain.text()).toEqual(displayData.domain);
 		});
@@ -577,9 +529,7 @@ describe("ExternalToolElement", () => {
 			it("should not show a custom icon", () => {
 				const { wrapper } = setup();
 
-				const icon = wrapper.findComponent(
-					"[data-testid=board-external-tool-element-logo]"
-				);
+				const icon = wrapper.findComponent("[data-testid=board-external-tool-element-logo]");
 
 				expect(icon.exists()).toEqual(false);
 			});
@@ -618,9 +568,7 @@ describe("ExternalToolElement", () => {
 			it("should show a custom icon", () => {
 				const { wrapper } = setup();
 
-				const icon = wrapper.findComponent<typeof VImg>(
-					"[data-testid=board-external-tool-element-logo]"
-				);
+				const icon = wrapper.findComponent<typeof VImg>("[data-testid=board-external-tool-element-logo]");
 
 				expect(icon.props().src).toEqual("logo-url");
 			});
@@ -720,9 +668,7 @@ describe("ExternalToolElement", () => {
 				card.vm.$emit("click");
 				await nextTick();
 
-				const dialog = wrapper.findComponent(
-					ExternalToolElementConfigurationDialog
-				);
+				const dialog = wrapper.findComponent(ExternalToolElementConfigurationDialog);
 
 				expect(dialog.props("isOpen")).toEqual(true);
 			});
@@ -730,11 +676,9 @@ describe("ExternalToolElement", () => {
 
 		describe("when the dialog is saving a tool", () => {
 			const setup = () => {
-				const savedTool: ContextExternalTool = contextExternalToolFactory.build(
-					{
-						id: "contextExternalToolId",
-					}
-				);
+				const savedTool: ContextExternalTool = contextExternalToolFactory.build({
+					id: "contextExternalToolId",
+				});
 
 				const { wrapper } = getWrapper({
 					element: externalToolElementResponseFactory.build(),
@@ -750,9 +694,7 @@ describe("ExternalToolElement", () => {
 			it("should update the elements content", async () => {
 				const { wrapper, savedTool } = setup();
 
-				const dialog = wrapper.findComponent(
-					ExternalToolElementConfigurationDialog
-				);
+				const dialog = wrapper.findComponent(ExternalToolElementConfigurationDialog);
 
 				dialog.vm.$emit("save", savedTool);
 				await nextTick();
@@ -765,16 +707,12 @@ describe("ExternalToolElement", () => {
 			it("should fetch the display data", async () => {
 				const { wrapper, savedTool } = setup();
 
-				const dialog = wrapper.findComponent(
-					ExternalToolElementConfigurationDialog
-				);
+				const dialog = wrapper.findComponent(ExternalToolElementConfigurationDialog);
 
 				dialog.vm.$emit("save", savedTool);
 				await nextTick();
 
-				expect(
-					useExternalToolElementDisplayStateMock.fetchDisplayData
-				).toHaveBeenCalledWith(savedTool.id);
+				expect(useExternalToolElementDisplayStateMock.fetchDisplayData).toHaveBeenCalledWith(savedTool.id);
 			});
 		});
 	});
@@ -817,9 +755,7 @@ describe("ExternalToolElement", () => {
 				card.vm.$emit("click");
 				await nextTick();
 
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).toHaveBeenCalled();
+				expect(useExternalToolLaunchStateMock.fetchContextLaunchRequest).toHaveBeenCalled();
 			});
 		});
 
@@ -865,9 +801,7 @@ describe("ExternalToolElement", () => {
 				card.vm.$emit("click");
 				await nextTick();
 
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).toHaveBeenCalled();
+				expect(useExternalToolLaunchStateMock.fetchContextLaunchRequest).toHaveBeenCalled();
 			});
 		});
 	});
@@ -994,16 +928,12 @@ describe("ExternalToolElement", () => {
 			const { refreshTime } = setup();
 			await nextTick();
 
-			expect(
-				useExternalToolLaunchStateMock.fetchContextLaunchRequest
-			).toHaveBeenCalledTimes(1);
+			expect(useExternalToolLaunchStateMock.fetchContextLaunchRequest).toHaveBeenCalledTimes(1);
 
 			vi.advanceTimersByTime(refreshTime + 1000);
 			await nextTick();
 
-			expect(
-				useExternalToolLaunchStateMock.fetchContextLaunchRequest
-			).toHaveBeenCalledTimes(2);
+			expect(useExternalToolLaunchStateMock.fetchContextLaunchRequest).toHaveBeenCalledTimes(2);
 		});
 	});
 

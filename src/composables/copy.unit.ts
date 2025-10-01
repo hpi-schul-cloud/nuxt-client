@@ -1,3 +1,4 @@
+import { useCopy } from "./copy";
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
@@ -5,9 +6,8 @@ import NotifierModule from "@/store/notifier";
 import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { ref, watch } from "vue";
-import { useCopy } from "./copy";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { ref, watch } from "vue";
 
 vi.mock("./loadingState");
 
@@ -47,9 +47,7 @@ describe("copy composable", () => {
 
 	it("should call copyModule.copy()", async () => {
 		const { copy, copyModuleMock, payload } = setup();
-		copyModuleMock.copy = vi
-			.fn()
-			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
+		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
 		await copy(payload);
 
@@ -59,9 +57,7 @@ describe("copy composable", () => {
 
 	it("should open and close loading dialog", async () => {
 		const { copy, copyModuleMock, payload, isLoadingDialogOpen } = setup();
-		copyModuleMock.copy = vi
-			.fn()
-			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
+		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
 		const isLoadingDialogOpenStates: boolean[] = [];
 		watch(isLoadingDialogOpen, (newValue) => {
@@ -81,15 +77,11 @@ describe("copy composable", () => {
 				id: "testId",
 				type: copyParamsType,
 			};
-			copyModuleMock.copy = vi
-				.fn()
-				.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
+			copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
 			await copy(payload);
 
-			expect(notifierModuleMock.show).toHaveBeenCalledWith(
-				expect.objectContaining({ status: "success" })
-			);
+			expect(notifierModuleMock.show).toHaveBeenCalledWith(expect.objectContaining({ status: "success" }));
 		}
 	);
 
@@ -100,9 +92,7 @@ describe("copy composable", () => {
 			type: CopyParamsTypeEnum.Course,
 		};
 
-		copyModuleMock.copy = vi
-			.fn()
-			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
+		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
 		await copy(payload);
 
@@ -111,22 +101,16 @@ describe("copy composable", () => {
 
 	it("should open failure alert notification on failed copy", async () => {
 		const { copy, copyModuleMock, notifierModuleMock, payload } = setup();
-		copyModuleMock.copy = vi
-			.fn()
-			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Failure });
+		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Failure });
 
 		await copy(payload);
 
-		expect(notifierModuleMock.show).toHaveBeenCalledWith(
-			expect.objectContaining({ status: "error" })
-		);
+		expect(notifierModuleMock.show).toHaveBeenCalledWith(expect.objectContaining({ status: "error" }));
 	});
 
 	it("should open copyResultModal notification on partially failed copy", async () => {
 		const { copy, copyModuleMock, payload } = setup();
-		copyModuleMock.copy = vi
-			.fn()
-			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Partial });
+		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Partial });
 
 		await copy(payload);
 
@@ -139,8 +123,6 @@ describe("copy composable", () => {
 
 		await copy(payload);
 
-		expect(notifierModuleMock.show).toHaveBeenCalledWith(
-			expect.objectContaining({ status: "info" })
-		);
+		expect(notifierModuleMock.show).toHaveBeenCalledWith(expect.objectContaining({ status: "info" }));
 	});
 });

@@ -1,8 +1,4 @@
-import {
-	MetaDataEntityType,
-	MetaTagExtractorApiFactory,
-	MetaTagExtractorResponse,
-} from "@/serverApi/v3";
+import { MetaDataEntityType, MetaTagExtractorApiFactory, MetaTagExtractorResponse } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { useI18n } from "vue-i18n";
@@ -19,9 +15,7 @@ export const useMetaTagExtractorApi = () => {
 	const { t } = useI18n();
 	const metaTagApi = MetaTagExtractorApiFactory(undefined, "/v3", $axios);
 
-	const mapMetaTagResponse = (
-		response: MetaTagExtractorResponse
-	): MetaTagResult => {
+	const mapMetaTagResponse = (response: MetaTagExtractorResponse): MetaTagResult => {
 		const titleParts = [
 			getPrefix(response.type),
 			getTitle(response.type, response.title),
@@ -57,10 +51,7 @@ export const useMetaTagExtractorApi = () => {
 		return title;
 	};
 
-	const getSuffix = (
-		type: MetaDataEntityType,
-		parentTitle: string | undefined
-	): string => {
+	const getSuffix = (type: MetaDataEntityType, parentTitle: string | undefined): string => {
 		if (type === MetaDataEntityType.Board && parentTitle) {
 			return `(${parentTitle})`;
 		}
@@ -70,10 +61,9 @@ export const useMetaTagExtractorApi = () => {
 
 	const getMetaTags = async (url: string): Promise<MetaTagResult> => {
 		try {
-			const res: AxiosResponse<MetaTagExtractorResponse> =
-				await metaTagApi.metaTagExtractorControllerGetMetaTags({
-					url,
-				});
+			const res: AxiosResponse<MetaTagExtractorResponse> = await metaTagApi.metaTagExtractorControllerGetMetaTags({
+				url,
+			});
 
 			const metaTagResult: MetaTagResult = mapMetaTagResponse(res.data);
 

@@ -1,22 +1,10 @@
+import { defaultConfigEnvs, useEnvConfig, useEnvStore } from "./env-config.store";
+import { FileConfigApiFactory, FilesStorageConfigResponse } from "@/fileStorageApi/v3";
+import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory } from "@/serverApi/v3";
+import { mockApiResponse } from "@@/tests/test-utils";
+import { AxiosResponse } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeAll, beforeEach, expect } from "vitest";
-import {
-	defaultConfigEnvs,
-	useEnvConfig,
-	useEnvStore,
-} from "./env-config.store";
-import { AxiosResponse } from "axios";
-import {
-	ConfigResponse,
-	LanguageType,
-	SchulcloudTheme,
-	ServerConfigApiFactory,
-} from "@/serverApi/v3";
-import {
-	FileConfigApiFactory,
-	FilesStorageConfigResponse,
-} from "@/fileStorageApi/v3";
-import { mockApiResponse } from "@@/tests/test-utils";
 
 vi.mock("@/store", () => ({
 	applicationErrorModule: {
@@ -33,9 +21,7 @@ const mockedFileConfigApi = vi.mocked(FileConfigApiFactory);
 describe("useEnvStore", () => {
 	const doMockServerApiData = (data: ConfigResponse) => {
 		mockedServerApi.mockReturnValue({
-			serverConfigControllerPublicConfig(): Promise<
-				AxiosResponse<ConfigResponse>
-			> {
+			serverConfigControllerPublicConfig(): Promise<AxiosResponse<ConfigResponse>> {
 				return Promise.resolve(mockApiResponse({ data }));
 			},
 		});
@@ -113,9 +99,7 @@ describe("useEnvStore", () => {
 				SC_THEME: SchulcloudTheme.Brb,
 			});
 
-			expect(useEnvStore().instituteTitle).toBe(
-				"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"
-			);
+			expect(useEnvStore().instituteTitle).toBe("Ministerium für Bildung, Jugend und Sport des Landes Brandenburg");
 		});
 
 		it("should render thr title when the theme is thr", async () => {
@@ -164,9 +148,7 @@ describe("useEnvStore", () => {
 			doMockServerApiData(defaultConfigEnvs);
 
 			mockedFileConfigApi.mockReturnValue({
-				publicConfig: vi
-					.fn()
-					.mockRejectedValue(new Error("File config not available")),
+				publicConfig: vi.fn().mockRejectedValue(new Error("File config not available")),
 			});
 
 			await useEnvStore().loadConfiguration();
@@ -175,9 +157,7 @@ describe("useEnvStore", () => {
 
 		it("should handle server configuration failure", async () => {
 			mockedServerApi.mockReturnValue({
-				serverConfigControllerPublicConfig: vi
-					.fn()
-					.mockRejectedValue(new Error("Server configuration failure")),
+				serverConfigControllerPublicConfig: vi.fn().mockRejectedValue(new Error("Server configuration failure")),
 			});
 
 			const success = await useEnvStore().loadConfiguration();

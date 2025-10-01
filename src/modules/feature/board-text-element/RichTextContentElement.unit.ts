@@ -1,17 +1,14 @@
+import RichTextContentElementComponent from "./RichTextContentElement.vue";
+import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
+import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import RichTextContentElementComponent from "./RichTextContentElement.vue";
-import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
-import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
 import { nextTick } from "vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 const mockElement: RichTextElementResponse = {
 	id: "test-id",
@@ -26,27 +23,21 @@ const mockElement: RichTextElementResponse = {
 	},
 };
 
-vi.mock("@data-board", () => {
-	return {
-		useBoardFocusHandler: vi.fn(),
-		useContentElementState: vi.fn().mockImplementation(() => ({
-			modelValue: mockElement.content,
-		})),
-		useDeleteConfirmationDialog: vi.fn(),
-	};
-});
+vi.mock("@data-board", () => ({
+	useBoardFocusHandler: vi.fn(),
+	useContentElementState: vi.fn().mockImplementation(() => ({
+		modelValue: mockElement.content,
+	})),
+	useDeleteConfirmationDialog: vi.fn(),
+}));
 
-vi.mock("@ui-confirmation-dialog", () => {
-	return {
-		useDeleteConfirmationDialog: vi.fn(),
-	};
-});
+vi.mock("@ui-confirmation-dialog", () => ({
+	useDeleteConfirmationDialog: vi.fn(),
+}));
 
-vi.mock("@util-board", () => {
-	return {
-		useInlineEditInteractionHandler: vi.fn(),
-	};
-});
+vi.mock("@util-board", () => ({
+	useInlineEditInteractionHandler: vi.fn(),
+}));
 
 describe("RichTextContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
@@ -59,11 +50,7 @@ describe("RichTextContentElement", () => {
 	}) => {
 		const wrapper = mount(RichTextContentElementComponent, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
 				provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
 				stubs: {
 					RichTextContentElementEdit: true,
@@ -86,9 +73,7 @@ describe("RichTextContentElement", () => {
 				isEditMode: false,
 			});
 
-			const displayComponent = wrapper.findComponent(
-				RichTextContentElementDisplayComponent
-			);
+			const displayComponent = wrapper.findComponent(RichTextContentElementDisplayComponent);
 			expect(displayComponent.exists()).toBe(true);
 		});
 
@@ -124,9 +109,7 @@ describe("RichTextContentElement", () => {
 				isEditMode: true,
 			});
 
-			const editComponent = wrapper.findComponent(
-				RichTextContentElementEditComponent
-			);
+			const editComponent = wrapper.findComponent(RichTextContentElementEditComponent);
 			expect(editComponent.exists()).toBe(true);
 		});
 
@@ -161,9 +144,7 @@ describe("RichTextContentElement", () => {
 					isEditMode: true,
 				});
 
-				const richTextContentElementEditComponent = wrapper.findComponent(
-					RichTextContentElementEditComponent
-				);
+				const richTextContentElementEditComponent = wrapper.findComponent(RichTextContentElementEditComponent);
 				richTextContentElementEditComponent.vm.$emit("delete:element");
 				await nextTick();
 				const emitted = wrapper.emitted("delete:element");

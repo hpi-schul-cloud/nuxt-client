@@ -1,8 +1,8 @@
+import UserHasRole from "./UserHasRole";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
 import { meResponseFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import UserHasRole from "./UserHasRole";
 
 /**
  * @param  { String } expectedRole used as prop

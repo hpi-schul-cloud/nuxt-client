@@ -1,6 +1,6 @@
-import { mountComposable } from "@@/tests/test-utils";
-import { useDataTableFilter } from "./filter.composable";
 import { FilterOption, Registration, UpdateFilterParamType } from "../types";
+import { useDataTableFilter } from "./filter.composable";
+import { mountComposable } from "@@/tests/test-utils";
 
 vi.mock("@vueuse/core", async (importOriginal) => {
 	const defaultState = {
@@ -24,15 +24,11 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 	};
 });
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
+}));
 
-const setup = (userType: string) => {
-	return mountComposable(() => useDataTableFilter(userType));
-};
+const setup = (userType: string) => mountComposable(() => useDataTableFilter(userType));
 
 const removeAllFilters = () => {
 	const { removeFilter, selectedFilterType, filterQuery } = setup("student");
@@ -63,12 +59,8 @@ describe("filter composable", () => {
 		expect(defaultFilterMenuItems[0].value).toEqual(FilterOption.REGISTRATION);
 		expect(defaultFilterMenuItems[1].value).toEqual(FilterOption.CLASSES);
 		expect(defaultFilterMenuItems[2].value).toEqual(FilterOption.CREATION_DATE);
-		expect(defaultFilterMenuItems[3].value).toEqual(
-			FilterOption.LAST_MIGRATION_ON
-		);
-		expect(defaultFilterMenuItems[4].value).toEqual(
-			FilterOption.OBSOLOTE_SINCE
-		);
+		expect(defaultFilterMenuItems[3].value).toEqual(FilterOption.LAST_MIGRATION_ON);
+		expect(defaultFilterMenuItems[4].value).toEqual(FilterOption.OBSOLOTE_SINCE);
 	});
 
 	it("should return user based registrationOptions", () => {
@@ -96,8 +88,7 @@ describe("filter composable", () => {
 		});
 
 		it("should return 'isDateFiltering' value to be true", () => {
-			const { selectedFilterType, isDateFiltering, isSelectFiltering } =
-				setup("student");
+			const { selectedFilterType, isDateFiltering, isSelectFiltering } = setup("student");
 			selectedFilterType.value = FilterOption.CREATION_DATE;
 
 			expect(isDateFiltering.value).toBe(true);
@@ -105,8 +96,7 @@ describe("filter composable", () => {
 		});
 
 		it("should return 'isSelectFiltering' value to be true", () => {
-			const { selectedFilterType, isDateFiltering, isSelectFiltering } =
-				setup("student");
+			const { selectedFilterType, isDateFiltering, isSelectFiltering } = setup("student");
 			selectedFilterType.value = FilterOption.CLASSES;
 
 			expect(isSelectFiltering.value).toBe(true);
@@ -121,28 +111,19 @@ describe("filter composable", () => {
 			expect(filterMenuItems.value.length).toEqual(5);
 			expect(filterMenuItems.value[0].value).toEqual(FilterOption.REGISTRATION);
 			expect(filterMenuItems.value[1].value).toEqual(FilterOption.CLASSES);
-			expect(filterMenuItems.value[2].value).toEqual(
-				FilterOption.CREATION_DATE
-			);
-			expect(filterMenuItems.value[3].value).toEqual(
-				FilterOption.LAST_MIGRATION_ON
-			);
-			expect(filterMenuItems.value[4].value).toEqual(
-				FilterOption.OBSOLOTE_SINCE
-			);
+			expect(filterMenuItems.value[2].value).toEqual(FilterOption.CREATION_DATE);
+			expect(filterMenuItems.value[3].value).toEqual(FilterOption.LAST_MIGRATION_ON);
+			expect(filterMenuItems.value[4].value).toEqual(FilterOption.OBSOLOTE_SINCE);
 		});
 
 		it("should should return the filtered menu items after selection", () => {
-			const { filterMenuItems, selectedFilterType, updateFilter } =
-				setup("student");
+			const { filterMenuItems, selectedFilterType, updateFilter } = setup("student");
 			selectedFilterType.value = FilterOption.CLASSES;
 			updateFilter(["1A"] as UpdateFilterParamType);
 
 			expect(filterMenuItems.value.length).toEqual(4);
 
-			const found = filterMenuItems.value.find(
-				(item) => item.value == FilterOption.CLASSES
-			);
+			const found = filterMenuItems.value.find((item) => item.value == FilterOption.CLASSES);
 			expect(found).toBeUndefined();
 		});
 	});
@@ -152,8 +133,7 @@ describe("filter composable", () => {
 			removeAllFilters();
 		});
 		it("should remove filter from filterQuery", () => {
-			const { filterQuery, removeFilter, selectedFilterType } =
-				setup("student");
+			const { filterQuery, removeFilter, selectedFilterType } = setup("student");
 
 			const filters = {
 				[FilterOption.CREATION_DATE]: {
@@ -174,12 +154,7 @@ describe("filter composable", () => {
 
 	describe("setFilterChipTitles", () => {
 		it("should set filter chip titles", () => {
-			const {
-				filterChipTitles,
-				filterQuery,
-				updateFilter,
-				selectedFilterType,
-			} = setup("teacher");
+			const { filterChipTitles, filterQuery, updateFilter, selectedFilterType } = setup("teacher");
 
 			const filters = {
 				[FilterOption.CREATION_DATE]: {
@@ -204,50 +179,34 @@ describe("filter composable", () => {
 			updateFilter(filters[FilterOption.CLASSES] as UpdateFilterParamType);
 
 			selectedFilterType.value = FilterOption.CREATION_DATE;
-			updateFilter(
-				filters[FilterOption.CREATION_DATE] as UpdateFilterParamType
-			);
+			updateFilter(filters[FilterOption.CREATION_DATE] as UpdateFilterParamType);
 
 			selectedFilterType.value = FilterOption.REGISTRATION;
 			updateFilter(filters[FilterOption.REGISTRATION] as UpdateFilterParamType);
 
 			selectedFilterType.value = FilterOption.LAST_MIGRATION_ON;
-			updateFilter(
-				filters[FilterOption.LAST_MIGRATION_ON] as UpdateFilterParamType
-			);
+			updateFilter(filters[FilterOption.LAST_MIGRATION_ON] as UpdateFilterParamType);
 
 			selectedFilterType.value = FilterOption.OBSOLOTE_SINCE;
-			updateFilter(
-				filters[FilterOption.OBSOLOTE_SINCE] as UpdateFilterParamType
-			);
+			updateFilter(filters[FilterOption.OBSOLOTE_SINCE] as UpdateFilterParamType);
 
 			expect(filterChipTitles.value.length).toEqual(5);
-			expect(filterChipTitles.value[0].item).toEqual(
-				FilterOption.CREATION_DATE
-			);
+			expect(filterChipTitles.value[0].item).toEqual(FilterOption.CREATION_DATE);
 			expect(filterChipTitles.value[0].title).toEqual(
 				"utils.adminFilter.date.created 09.01.2024 common.words.and 30.01.2024"
 			);
 
 			expect(filterChipTitles.value[1].item).toEqual(FilterOption.CLASSES);
-			expect(filterChipTitles.value[1].title).toEqual(
-				"utils.adminFilter.class.title = 1A"
-			);
+			expect(filterChipTitles.value[1].title).toEqual("utils.adminFilter.class.title = 1A");
 			expect(filterChipTitles.value[2].item).toEqual(FilterOption.REGISTRATION);
-			expect(filterChipTitles.value[2].title).toEqual(
-				"pages.administration.students.legend.icon.success"
-			);
+			expect(filterChipTitles.value[2].title).toEqual("pages.administration.students.legend.icon.success");
 
-			expect(filterChipTitles.value[3].item).toEqual(
-				FilterOption.LAST_MIGRATION_ON
-			);
+			expect(filterChipTitles.value[3].item).toEqual(FilterOption.LAST_MIGRATION_ON);
 			expect(filterChipTitles.value[3].title).toEqual(
 				"utils.adminFilter.lastMigration.title 09.01.2024 common.words.and 29.01.2024"
 			);
 
-			expect(filterChipTitles.value[4].item).toEqual(
-				FilterOption.OBSOLOTE_SINCE
-			);
+			expect(filterChipTitles.value[4].item).toEqual(FilterOption.OBSOLOTE_SINCE);
 			expect(filterChipTitles.value[4].title).toEqual(
 				"utils.adminFilter.outdatedSince.title 09.01.2024 common.words.and 21.01.2024"
 			);

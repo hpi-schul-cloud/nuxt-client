@@ -1,11 +1,11 @@
+import { GroupListFilter } from "./types";
 import { GroupListResponse, GroupResponse } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useGroupApi } from "@data-group";
-import { ref, Ref } from "vue";
+import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { GroupListFilter } from "./types";
 
 export const useGroupListState = () => {
 	const { getGroups } = useGroupApi();
@@ -20,17 +20,11 @@ export const useGroupListState = () => {
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 
-	const fetchGroups = async (
-		filter?: GroupListFilter,
-		options?: { append: boolean }
-	): Promise<void> => {
+	const fetchGroups = async (filter?: GroupListFilter, options?: { append: boolean }): Promise<void> => {
 		isLoading.value = true;
 
 		try {
-			const response: GroupListResponse = await getGroups(
-				{ limit: limit.value, skip: skip.value },
-				filter
-			);
+			const response: GroupListResponse = await getGroups({ limit: limit.value, skip: skip.value }, filter);
 
 			total.value = response.total;
 

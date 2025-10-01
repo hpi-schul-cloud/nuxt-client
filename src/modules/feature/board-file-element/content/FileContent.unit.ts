@@ -1,18 +1,15 @@
+import { FileAlert } from "../shared/types/FileAlert.enum";
+import FileAlerts from "./alert/FileAlerts.vue";
+import FileDescription from "./display/file-description/FileDescription.vue";
+import FileDisplay from "./display/FileDisplay.vue";
+import FileContent from "./FileContent.vue";
+import ContentElementFooter from "./footer/ContentElementFooter.vue";
+import FileInputs from "./inputs/FileInputs.vue";
 import { PreviewStatus } from "@/fileStorageApi/v3";
-import {
-	createTestEnvStore,
-	fileElementResponseFactory,
-} from "@@/tests/test-utils";
+import { createTestEnvStore, fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
-import { FileAlert } from "../shared/types/FileAlert.enum";
-import FileContent from "./FileContent.vue";
-import FileAlerts from "./alert/FileAlerts.vue";
-import FileDisplay from "./display/FileDisplay.vue";
-import FileDescription from "./display/file-description/FileDescription.vue";
-import ContentElementFooter from "./footer/ContentElementFooter.vue";
-import FileInputs from "./inputs/FileInputs.vue";
 
 describe("FileContent", () => {
 	beforeEach(() => {
@@ -32,13 +29,7 @@ describe("FileContent", () => {
 		isCollaboraEditable?: boolean;
 		isCollaboraEnabled?: boolean;
 	}) => {
-		const {
-			isListBoard,
-			mimeType,
-			previewUrl,
-			windowWidth,
-			isCollaboraEditable,
-		} = {
+		const { isListBoard, mimeType, previewUrl, windowWidth, isCollaboraEditable } = {
 			isListBoard: false,
 			mimeType: "testMimeType",
 			previewUrl: "testPreviewUrl",
@@ -69,8 +60,7 @@ describe("FileContent", () => {
 		const alerts = [FileAlert.AWAITING_SCAN_STATUS];
 
 		createTestEnvStore({
-			FEATURE_COLUMN_BOARD_COLLABORA_ENABLED:
-				options?.isCollaboraEnabled ?? false,
+			FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: options?.isCollaboraEnabled ?? false,
 		});
 
 		const wrapper = shallowMount(FileContent, {
@@ -105,18 +95,15 @@ describe("FileContent", () => {
 				${"small"}  | ${600}
 				${"medium"} | ${960}
 				${"large"}  | ${1280}
-			`(
-				"content should have row style for $screenSize display sizes",
-				({ px: windowWidth }) => {
-					const { wrapper } = setup({
-						mimeType: "application/pdf",
-						isListBoard: true,
-						windowWidth,
-					});
+			`("content should have row style for $screenSize display sizes", ({ px: windowWidth }) => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+					isListBoard: true,
+					windowWidth,
+				});
 
-					expect(wrapper.classes()).toContain("flex-row");
-				}
-			);
+				expect(wrapper.classes()).toContain("flex-row");
+			});
 
 			it("content should have column style when display size is smaller than 600px", () => {
 				const { wrapper } = setup({
@@ -133,21 +120,17 @@ describe("FileContent", () => {
 				${"small"}  | ${600}
 				${"medium"} | ${960}
 				${"large"}  | ${1280}
-			`(
-				"file display container should have a width of 33% for $screenSize display sizes",
-				({ px: windowWidth }) => {
-					const { wrapper } = setup({
-						mimeType: "application/pdf",
-						isListBoard: true,
-						windowWidth,
-					});
+			`("file display container should have a width of 33% for $screenSize display sizes", ({ px: windowWidth }) => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+					isListBoard: true,
+					windowWidth,
+				});
 
-					const fileDisplayContainer =
-						wrapper.getComponent(FileDisplay).element.parentElement;
+				const fileDisplayContainer = wrapper.getComponent(FileDisplay).element.parentElement;
 
-					expect(fileDisplayContainer.classList).toContain("w-33");
-				}
-			);
+				expect(fileDisplayContainer.classList).toContain("w-33");
+			});
 
 			it("file display container should not have a width of 33% when display size is smaller than 600px", () => {
 				const { wrapper } = setup({
@@ -156,8 +139,7 @@ describe("FileContent", () => {
 					windowWidth: 599,
 				});
 
-				const fileDisplayContainer =
-					wrapper.getComponent(FileDisplay).element.parentElement;
+				const fileDisplayContainer = wrapper.getComponent(FileDisplay).element.parentElement;
 
 				expect(fileDisplayContainer.classList).not.toContain("w-33");
 			});
@@ -167,21 +149,17 @@ describe("FileContent", () => {
 				${"small"}  | ${600}
 				${"medium"} | ${960}
 				${"large"}  | ${1280}
-			`(
-				"should have class 'file-information' for $screenSize display sizes",
-				({ px: windowWidth }) => {
-					const { wrapper } = setup({
-						mimeType: "application/pdf",
-						isListBoard: true,
-						windowWidth,
-					});
+			`("should have class 'file-information' for $screenSize display sizes", ({ px: windowWidth }) => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+					isListBoard: true,
+					windowWidth,
+				});
 
-					const fileDisplayContainer =
-						wrapper.getComponent(FileDescription).element.parentElement;
+				const fileDisplayContainer = wrapper.getComponent(FileDescription).element.parentElement;
 
-					expect(fileDisplayContainer.classList).toContain("file-information");
-				}
-			);
+				expect(fileDisplayContainer.classList).toContain("file-information");
+			});
 
 			it("should not have class 'file-information' when display size is smaller than 600px", () => {
 				const { wrapper } = setup({
@@ -190,12 +168,9 @@ describe("FileContent", () => {
 					windowWidth: 599,
 				});
 
-				const fileDisplayContainer =
-					wrapper.getComponent(FileDescription).element.parentElement;
+				const fileDisplayContainer = wrapper.getComponent(FileDescription).element.parentElement;
 
-				expect(fileDisplayContainer.classList).not.toContain(
-					"file-information"
-				);
+				expect(fileDisplayContainer.classList).not.toContain("file-information");
 			});
 		});
 
@@ -206,17 +181,14 @@ describe("FileContent", () => {
 				${"small"}       | ${600}
 				${"medium"}      | ${960}
 				${"large"}       | ${1280}
-			`(
-				"content should have column style for $screenSize display sizes",
-				({ px: windowWidth }) => {
-					const { wrapper } = setup({
-						isListBoard: true,
-						windowWidth,
-					});
+			`("content should have column style for $screenSize display sizes", ({ px: windowWidth }) => {
+				const { wrapper } = setup({
+					isListBoard: true,
+					windowWidth,
+				});
 
-					expect(wrapper.classes()).toContain("flex-column");
-				}
-			);
+				expect(wrapper.classes()).toContain("flex-column");
+			});
 
 			it.each`
 				screenSize       | px
@@ -232,8 +204,7 @@ describe("FileContent", () => {
 						windowWidth,
 					});
 
-					const fileDisplayContainer =
-						wrapper.getComponent(FileDisplay).element.parentElement;
+					const fileDisplayContainer = wrapper.getComponent(FileDisplay).element.parentElement;
 
 					expect(fileDisplayContainer.classList).not.toContain("w-33");
 				}
@@ -245,22 +216,16 @@ describe("FileContent", () => {
 				${"small"}       | ${600}
 				${"medium"}      | ${960}
 				${"large"}       | ${1280}
-			`(
-				"should not have class file-information for $screenSize display sizes",
-				({ px: windowWidth }) => {
-					const { wrapper } = setup({
-						isListBoard: true,
-						windowWidth,
-					});
+			`("should not have class file-information for $screenSize display sizes", ({ px: windowWidth }) => {
+				const { wrapper } = setup({
+					isListBoard: true,
+					windowWidth,
+				});
 
-					const fileDisplayContainer =
-						wrapper.getComponent(FileDescription).element.parentElement;
+				const fileDisplayContainer = wrapper.getComponent(FileDescription).element.parentElement;
 
-					expect(fileDisplayContainer.classList).not.toContain(
-						"file-information"
-					);
-				}
-			);
+				expect(fileDisplayContainer.classList).not.toContain("file-information");
+			});
 		});
 	});
 
@@ -271,17 +236,14 @@ describe("FileContent", () => {
 			${"small"}       | ${600}
 			${"medium"}      | ${960}
 			${"large"}       | ${1280}
-		`(
-			"content should have column style for $screenSize display sizes",
-			({ px: windowWidth }) => {
-				const { wrapper } = setup({
-					isListBoard: false,
-					windowWidth,
-				});
+		`("content should have column style for $screenSize display sizes", ({ px: windowWidth }) => {
+			const { wrapper } = setup({
+				isListBoard: false,
+				windowWidth,
+			});
 
-				expect(wrapper.classes()).toContain("flex-column");
-			}
-		);
+			expect(wrapper.classes()).toContain("flex-column");
+		});
 
 		it.each`
 			screenSize       | px
@@ -289,20 +251,16 @@ describe("FileContent", () => {
 			${"small"}       | ${600}
 			${"medium"}      | ${960}
 			${"large"}       | ${1280}
-		`(
-			"file display container should not have a width of 33% for $screenSize display sizes",
-			({ px: windowWidth }) => {
-				const { wrapper } = setup({
-					isListBoard: false,
-					windowWidth,
-				});
+		`("file display container should not have a width of 33% for $screenSize display sizes", ({ px: windowWidth }) => {
+			const { wrapper } = setup({
+				isListBoard: false,
+				windowWidth,
+			});
 
-				const fileDisplayContainer =
-					wrapper.getComponent(FileDisplay).element.parentElement;
+			const fileDisplayContainer = wrapper.getComponent(FileDisplay).element.parentElement;
 
-				expect(fileDisplayContainer.classList).not.toContain("w-33");
-			}
-		);
+			expect(fileDisplayContainer.classList).not.toContain("w-33");
+		});
 
 		it.each`
 			screenSize       | px
@@ -310,22 +268,16 @@ describe("FileContent", () => {
 			${"small"}       | ${600}
 			${"medium"}      | ${960}
 			${"large"}       | ${1280}
-		`(
-			"should not have class file-information for $screenSize display sizes",
-			({ px: windowWidth }) => {
-				const { wrapper } = setup({
-					isListBoard: false,
-					windowWidth,
-				});
+		`("should not have class file-information for $screenSize display sizes", ({ px: windowWidth }) => {
+			const { wrapper } = setup({
+				isListBoard: false,
+				windowWidth,
+			});
 
-				const fileDisplayContainer =
-					wrapper.getComponent(FileDescription).element.parentElement;
+			const fileDisplayContainer = wrapper.getComponent(FileDescription).element.parentElement;
 
-				expect(fileDisplayContainer.classList).not.toContain(
-					"file-information"
-				);
-			}
-		);
+			expect(fileDisplayContainer.classList).not.toContain("file-information");
+		});
 	});
 
 	describe("file display", () => {

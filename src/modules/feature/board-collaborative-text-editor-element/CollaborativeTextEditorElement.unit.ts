@@ -1,21 +1,18 @@
+import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
+import { setupCollaborativeTextEditorApiMock } from "./test-utils/collaborativeTextEditorApiMock";
 import { CollaborativeTextEditorParentType } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { collaborativeTextEditorElementResponseFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { createMock } from "@golevelup/ts-vitest";
 import { ContentElementBar } from "@ui-board";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VCard } from "vuetify/lib/components/index";
-import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
-import { setupCollaborativeTextEditorApiMock } from "./test-utils/collaborativeTextEditorApiMock";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 // Mocks
 vi.mock("@data-board", () => ({
@@ -98,9 +95,7 @@ describe("CollaborativeTextEditorElement", () => {
 			const { wrapper } = setup({
 				isEditMode: false,
 			});
-			expect(
-				wrapper.findComponent(CollaborativeTextEditorElement).isVisible()
-			).toBe(true);
+			expect(wrapper.findComponent(CollaborativeTextEditorElement).isVisible()).toBe(true);
 		});
 
 		it("should render the ContentElementBar", () => {
@@ -115,9 +110,7 @@ describe("CollaborativeTextEditorElement", () => {
 				isEditMode: false,
 			});
 
-			const boardMenu = wrapper.findComponent(
-				CollaborativeTextEditorElementMenu
-			);
+			const boardMenu = wrapper.findComponent(CollaborativeTextEditorElementMenu);
 
 			expect(boardMenu.exists()).toBe(false);
 		});
@@ -135,25 +128,20 @@ describe("CollaborativeTextEditorElement", () => {
 		});
 
 		describe("when element is focused", () => {
-			it.each(["enter", "space"])(
-				"should open element in new tab when %s is pressed",
-				async (key) => {
-					const { wrapper, windowMock, element } = setup({
-						isEditMode: false,
-					});
+			it.each(["enter", "space"])("should open element in new tab when %s is pressed", async (key) => {
+				const { wrapper, windowMock, element } = setup({
+					isEditMode: false,
+				});
 
-					const elementCard = wrapper.findComponent({
-						ref: "collaborativeTextEditorElement",
-					});
+				const elementCard = wrapper.findComponent({
+					ref: "collaborativeTextEditorElement",
+				});
 
-					await elementCard.trigger(`keydown.${key}`);
+				await elementCard.trigger(`keydown.${key}`);
 
-					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(windowMock.location).toBe(
-						`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`
-					);
-				}
-			);
+				expect(window.open).toHaveBeenCalledTimes(1);
+				expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+			});
 
 			it.each(["enter", "space"])(
 				"should not open element in new tab when %s is pressed and getUrl is undefined",
@@ -170,28 +158,23 @@ describe("CollaborativeTextEditorElement", () => {
 					await elementCard.trigger(`keydown.${key}`);
 
 					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(windowMock.location).not.toBe(
-						`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`
-					);
+					expect(windowMock.location).not.toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
 				}
 			);
 
-			it.each(["up", "down"])(
-				"should not emit 'move-keyboard:edit' when arrow key %s is pressed",
-				async (key) => {
-					const { wrapper } = setup({
-						isEditMode: false,
-					});
+			it.each(["up", "down"])("should not emit 'move-keyboard:edit' when arrow key %s is pressed", async (key) => {
+				const { wrapper } = setup({
+					isEditMode: false,
+				});
 
-					const elementCard = wrapper.findComponent({
-						ref: "collaborativeTextEditorElement",
-					});
+				const elementCard = wrapper.findComponent({
+					ref: "collaborativeTextEditorElement",
+				});
 
-					await elementCard.trigger(`keydown.${key}`);
+				await elementCard.trigger(`keydown.${key}`);
 
-					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
-				}
-			);
+				expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
+			});
 		});
 
 		describe("when element is clicked", () => {
@@ -208,10 +191,7 @@ describe("CollaborativeTextEditorElement", () => {
 					await card.trigger("click");
 
 					expect(getUrl).toHaveBeenCalledTimes(1);
-					expect(getUrl).toHaveBeenCalledWith(
-						element.id,
-						CollaborativeTextEditorParentType.ContentElement
-					);
+					expect(getUrl).toHaveBeenCalledWith(element.id, CollaborativeTextEditorParentType.ContentElement);
 				});
 
 				it("should open collaborative text editor in new tab", async () => {
@@ -226,9 +206,7 @@ describe("CollaborativeTextEditorElement", () => {
 					await card.trigger("click");
 
 					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(windowMock.location).toBe(
-						`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`
-					);
+					expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
 				});
 			});
 
@@ -246,9 +224,7 @@ describe("CollaborativeTextEditorElement", () => {
 					await card.trigger("click");
 
 					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(windowMock.location).not.toBe(
-						`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`
-					);
+					expect(windowMock.location).not.toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
 				});
 			});
 		});
@@ -256,42 +232,34 @@ describe("CollaborativeTextEditorElement", () => {
 
 	describe("when component is in edit-mode", () => {
 		describe("when element is focused", () => {
-			it.each(["up", "down"])(
-				"should emit 'move-keyboard:edit' when arrow key %s is pressed",
-				async (key) => {
-					const { wrapper } = setup({
-						isEditMode: true,
-					});
+			it.each(["up", "down"])("should emit 'move-keyboard:edit' when arrow key %s is pressed", async (key) => {
+				const { wrapper } = setup({
+					isEditMode: true,
+				});
 
-					const elementCard = wrapper.findComponent({
-						ref: "collaborativeTextEditorElement",
-					});
+				const elementCard = wrapper.findComponent({
+					ref: "collaborativeTextEditorElement",
+				});
 
-					await elementCard.trigger(`keydown.${key}`);
+				await elementCard.trigger(`keydown.${key}`);
 
-					expect(wrapper.emitted("move-keyboard:edit")).toBeTruthy();
-				}
-			);
+				expect(wrapper.emitted("move-keyboard:edit")).toBeTruthy();
+			});
 
-			it.each(["enter", "space"])(
-				"should open element in new tab when %s is pressed",
-				async (key) => {
-					const { wrapper, windowMock, element } = setup({
-						isEditMode: true,
-					});
+			it.each(["enter", "space"])("should open element in new tab when %s is pressed", async (key) => {
+				const { wrapper, windowMock, element } = setup({
+					isEditMode: true,
+				});
 
-					const elementCard = wrapper.findComponent({
-						ref: "collaborativeTextEditorElement",
-					});
+				const elementCard = wrapper.findComponent({
+					ref: "collaborativeTextEditorElement",
+				});
 
-					await elementCard.trigger(`keydown.${key}`);
+				await elementCard.trigger(`keydown.${key}`);
 
-					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(windowMock.location).toBe(
-						`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`
-					);
-				}
-			);
+				expect(window.open).toHaveBeenCalledTimes(1);
+				expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+			});
 		});
 
 		it("should render BoardMenu element", async () => {
@@ -299,9 +267,7 @@ describe("CollaborativeTextEditorElement", () => {
 				isEditMode: true,
 			});
 
-			const boardMenu = wrapper.findComponent(
-				CollaborativeTextEditorElementMenu
-			);
+			const boardMenu = wrapper.findComponent(CollaborativeTextEditorElementMenu);
 			expect(boardMenu.exists()).toBe(true);
 		});
 
@@ -311,9 +277,7 @@ describe("CollaborativeTextEditorElement", () => {
 					isEditMode: true,
 				});
 
-				const boardMenu = wrapper.findComponent(
-					CollaborativeTextEditorElementMenu
-				);
+				const boardMenu = wrapper.findComponent(CollaborativeTextEditorElementMenu);
 				boardMenu.vm.$emit("move-down:element");
 
 				expect(wrapper.emitted("move-down:edit")).toBeTruthy();
@@ -326,9 +290,7 @@ describe("CollaborativeTextEditorElement", () => {
 					isEditMode: true,
 				});
 
-				const boardMenu = wrapper.findComponent(
-					CollaborativeTextEditorElementMenu
-				);
+				const boardMenu = wrapper.findComponent(CollaborativeTextEditorElementMenu);
 				boardMenu.vm.$emit("move-up:element");
 
 				expect(wrapper.emitted("move-up:edit")).toBeTruthy();
@@ -341,9 +303,7 @@ describe("CollaborativeTextEditorElement", () => {
 					isEditMode: true,
 				});
 
-				const boardMenu = wrapper.findComponent(
-					CollaborativeTextEditorElementMenu
-				);
+				const boardMenu = wrapper.findComponent(CollaborativeTextEditorElementMenu);
 				boardMenu.vm.$emit("delete:element");
 				await nextTick();
 
@@ -358,19 +318,14 @@ describe("CollaborativeTextEditorElement", () => {
 			${"small"}  | ${600}
 			${"medium"} | ${960}
 			${"large"}  | ${1280}
-		`(
-			"content should have row style for $screenSize display sizes",
-			({ px: windowWidth }) => {
-				const { wrapper } = setup({
-					isListBoard: true,
-					windowWidth,
-				});
+		`("content should have row style for $screenSize display sizes", ({ px: windowWidth }) => {
+			const { wrapper } = setup({
+				isListBoard: true,
+				windowWidth,
+			});
 
-				expect(wrapper.find(".content-element-bar").classes()).toContain(
-					"flex-row"
-				);
-			}
-		);
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-row");
+		});
 
 		it("content should have column style when display size is smaller than 600px", () => {
 			const { wrapper } = setup({
@@ -378,9 +333,7 @@ describe("CollaborativeTextEditorElement", () => {
 				windowWidth: 599,
 			});
 
-			expect(wrapper.find(".content-element-bar").classes()).toContain(
-				"flex-column"
-			);
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
 		});
 	});
 
@@ -391,18 +344,13 @@ describe("CollaborativeTextEditorElement", () => {
 			${"small"}  | ${600}
 			${"medium"} | ${960}
 			${"large"}  | ${1280}
-		`(
-			"content should have column style for $screenSize display sizes",
-			({ px: windowWidth }) => {
-				const { wrapper } = setup({
-					isListBoard: false,
-					windowWidth,
-				});
+		`("content should have column style for $screenSize display sizes", ({ px: windowWidth }) => {
+			const { wrapper } = setup({
+				isListBoard: false,
+				windowWidth,
+			});
 
-				expect(wrapper.find(".content-element-bar").classes()).toContain(
-					"flex-column"
-				);
-			}
-		);
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
+		});
 	});
 });

@@ -1,5 +1,7 @@
+import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { FILE_PATHS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountGroupOutline,
 	mdiAccountSupervisorCircleOutline,
@@ -17,8 +19,6 @@ import {
 } from "@icons/material";
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
-import { useEnvConfig } from "@data-env";
 
 export const useSidebarItems = () => {
 	const filePathsModule = injectStrict(FILE_PATHS_MODULE_KEY);
@@ -193,11 +193,7 @@ export const useSidebarItems = () => {
 			href: "https://github.com/hpi-schul-cloud",
 			testId: "sidebar-system-github",
 			target: "_blank",
-			theme: [
-				SchulcloudTheme.Brb,
-				SchulcloudTheme.Default,
-				SchulcloudTheme.Thr,
-			],
+			theme: [SchulcloudTheme.Brb, SchulcloudTheme.Default, SchulcloudTheme.Thr],
 		},
 		{
 			href: "/security",

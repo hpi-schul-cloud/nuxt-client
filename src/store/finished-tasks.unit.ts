@@ -1,5 +1,5 @@
-import FinishedTasksModule from "./finished-tasks";
 import * as serverApi from "../serverApi/v3/api";
+import FinishedTasksModule from "./finished-tasks";
 import { taskFactory } from "./task.filter.unit";
 import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
@@ -37,9 +37,7 @@ describe("finished task store", () => {
 						})),
 					};
 
-					spy.mockReturnValue(
-						taskApiMock as unknown as serverApi.TaskApiInterface
-					);
+					spy.mockReturnValue(taskApiMock as unknown as serverApi.TaskApiInterface);
 
 					finishedTasksModule.fetchFinishedTasks().then(() => {
 						expect(finishedTasksModule.getTasks).toStrictEqual([
@@ -48,9 +46,7 @@ describe("finished task store", () => {
 							},
 						]);
 						expect(finishedTasksModule.getStatus).toBe("completed");
-						expect(
-							taskApiMock.taskControllerFindAllFinished
-						).toHaveBeenCalledTimes(1);
+						expect(taskApiMock.taskControllerFindAllFinished).toHaveBeenCalledTimes(1);
 						done();
 					});
 					expect(finishedTasksModule.getStatus).toBe("pending");
@@ -88,13 +84,9 @@ describe("finished task store", () => {
 					finishedTasksModule.pagination.total = 110;
 
 					finishedTasksModule.fetchFinishedTasks().then(() => {
-						expect(finishedTasksModule.getTasks).toStrictEqual([
-							{ mockTask: "mock task #1" },
-						]);
+						expect(finishedTasksModule.getTasks).toStrictEqual([{ mockTask: "mock task #1" }]);
 						expect(finishedTasksModule.getStatus).toBe("completed");
-						expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
-							1
-						);
+						expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(1);
 						done();
 					});
 					expect(finishedTasksModule.getStatus).toBe("pending");
@@ -118,9 +110,7 @@ describe("finished task store", () => {
 
 					finishedTasksModule.fetchFinishedTasks().then(() => {
 						expect(finishedTasksModule.getStatus).toBe("completed");
-						expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
-							0
-						);
+						expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(0);
 						done();
 					});
 					spy.mockRestore();
@@ -143,9 +133,7 @@ describe("finished task store", () => {
 
 					finishedTasksModule.fetchFinishedTasks().then(() => {
 						expect(finishedTasksModule.getStatus).toBe("completed");
-						expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
-							0
-						);
+						expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(0);
 						done();
 					});
 					spy.mockRestore();
@@ -159,9 +147,7 @@ describe("finished task store", () => {
 
 					const error = { status: 418, statusText: "I'm a teapot" };
 					const mockApi = {
-						taskControllerFindAllFinished: vi.fn(() =>
-							Promise.reject({ ...error })
-						),
+						taskControllerFindAllFinished: vi.fn(() => Promise.reject({ ...error })),
 					};
 					const spy = vi
 						.spyOn(serverApi, "TaskApiFactory")
@@ -171,9 +157,7 @@ describe("finished task store", () => {
 						expect(finishedTasksModule.getTasks).toStrictEqual([]);
 						expect(finishedTasksModule.getStatus).toBe("error");
 						expect(finishedTasksModule.businessError).toStrictEqual(error);
-						expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
-							1
-						);
+						expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(1);
 						done();
 					});
 					expect(finishedTasksModule.getStatus).toBe("pending");
@@ -244,9 +228,7 @@ describe("finished task store", () => {
 
 					const error = { status: 418, statusText: "I'm a teapot" };
 					const mockApi = {
-						taskControllerFindAllFinished: vi.fn(() =>
-							Promise.reject({ ...error })
-						),
+						taskControllerFindAllFinished: vi.fn(() => Promise.reject({ ...error })),
 					};
 					const spy = vi
 						.spyOn(serverApi, "TaskApiFactory")
@@ -256,9 +238,7 @@ describe("finished task store", () => {
 						expect(finishedTasksModule.getTasks).toStrictEqual([]);
 						expect(finishedTasksModule.getStatus).toBe("error");
 						expect(finishedTasksModule.businessError).toStrictEqual(error);
-						expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
-							1
-						);
+						expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(1);
 						done();
 					});
 					expect(finishedTasksModule.getStatus).toBe("pending");
@@ -280,9 +260,7 @@ describe("finished task store", () => {
 						taskControllerRestore: vi.fn(() => Promise.reject({ ...error })),
 					};
 
-					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
-						mockApi as unknown as serverApi.TaskApiInterface
-					);
+					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
 					finishedTasksModule.restoreTask(task.id).then(() => {
 						expect(finishedTasksModule.getStatus).toBe("error");

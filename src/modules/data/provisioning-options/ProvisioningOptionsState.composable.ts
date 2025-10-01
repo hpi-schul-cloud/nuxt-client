@@ -1,14 +1,13 @@
+import { ProvisioningOptions, useProvisioningOptionsApi } from "./index";
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { ref, Ref } from "vue";
+import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { ProvisioningOptions, useProvisioningOptionsApi } from "./index";
 
 export const useProvisioningOptionsState = () => {
-	const { getProvisioningOptions, saveProvisioningOptions } =
-		useProvisioningOptionsApi();
+	const { getProvisioningOptions, saveProvisioningOptions } = useProvisioningOptionsApi();
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 	const { t } = useI18n();
 	const isLoading: Ref<boolean> = ref(false);
@@ -26,9 +25,7 @@ export const useProvisioningOptionsState = () => {
 		schoolExternalTools: false,
 	};
 
-	const fetchProvisioningOptionsData = async (
-		systemId: string
-	): Promise<void> => {
+	const fetchProvisioningOptionsData = async (systemId: string): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 
@@ -64,10 +61,7 @@ export const useProvisioningOptionsState = () => {
 		error.value = undefined;
 
 		try {
-			provisioningOptionsData.value = await saveProvisioningOptions(
-				systemId,
-				provisioningOptions
-			);
+			provisioningOptionsData.value = await saveProvisioningOptions(systemId, provisioningOptions);
 		} catch (errorResponse) {
 			notifierModule.show({
 				text: t("error.generic"),

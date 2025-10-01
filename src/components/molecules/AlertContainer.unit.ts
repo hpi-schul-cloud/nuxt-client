@@ -1,14 +1,11 @@
+import Alert from "./Alert.vue";
+import AlertContainer from "./AlertContainer.vue";
 import NotifierModule from "@/store/notifier";
 import { AlertPayload } from "@/store/types/alert-payload";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { mount } from "@vue/test-utils";
-import AlertContainer from "./AlertContainer.vue";
-import Alert from "./Alert.vue";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 const getWrapper = (items: AlertPayload[] = [], options?: object) => {
 	const notifierModule = createModuleMocks(NotifierModule, {

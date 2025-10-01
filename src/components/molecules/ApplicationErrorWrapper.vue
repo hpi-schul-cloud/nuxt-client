@@ -6,14 +6,7 @@
 				:error-text="translatedErrorMessage"
 				data-testid="error-content"
 			/>
-			<v-btn
-				ref="btn-back"
-				class="mt-4"
-				color="primary"
-				variant="flat"
-				data-testid="btn-back"
-				href="/dashboard"
-			>
+			<v-btn ref="btn-back" class="mt-4" color="primary" variant="flat" data-testid="btn-back" href="/dashboard">
 				{{ $t("error.action.back") }}
 			</v-btn>
 		</div>
@@ -21,9 +14,9 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { injectStrict, APPLICATION_ERROR_KEY } from "@/utils/inject";
-import { computed } from "vue";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
+import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
@@ -31,9 +24,7 @@ const { t } = useI18n();
 
 const hasError = computed(() => applicationErrorModule.getStatusCode !== null);
 
-const appErrorStatusCode = computed(() =>
-	Number(applicationErrorModule.getStatusCode)
-);
+const appErrorStatusCode = computed(() => Number(applicationErrorModule.getStatusCode));
 const translatedErrorMessage = computed(() =>
 	hasError.value ? t(applicationErrorModule.getTranslationKey).toString() : ""
 );

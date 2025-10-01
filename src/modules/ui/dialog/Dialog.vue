@@ -9,11 +9,7 @@
 		<UseFocusTrap>
 			<VCard>
 				<div class="mx-4">
-					<h2
-						:id="`modal-${uid}-title`"
-						class="ma-2 dialog-title"
-						data-testid="dialog-title"
-					>
+					<h2 :id="`modal-${uid}-title`" class="ma-2 dialog-title" data-testid="dialog-title">
 						{{ message }}
 					</h2>
 

@@ -1,6 +1,3 @@
-import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
-import { BoardLayout } from "@/serverApi/v3";
-import { useI18n } from "vue-i18n";
 import { useBoardStore } from "../Board.store";
 import {
 	CreateCardSuccessPayload,
@@ -14,7 +11,6 @@ import {
 	UpdateColumnTitleSuccessPayload,
 } from "../boardActions/boardActionPayload.types";
 import { useCardStore } from "../Card.store";
-
 import {
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
@@ -23,38 +19,27 @@ import {
 	UpdateCardTitleSuccessPayload,
 	UpdateElementSuccessPayload,
 } from "../cardActions/cardActionPayload.types";
+import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
+import { BoardLayout } from "@/serverApi/v3";
+import { useI18n } from "vue-i18n";
 
 const { notifyOnScreenReader } = useAriaLiveNotifier();
 
 export const SR_I18N_KEYS_MAP = {
-	CARD_CREATED_SUCCESS:
-		"components.board.screenReader.notification.cardCreated.success",
-	COLUMN_CREATED_SUCCESS:
-		"components.board.screenReader.notification.columnCreated.success",
-	CARD_DELETED_SUCCESS:
-		"components.board.screenReader.notification.cardDeleted.success",
-	COLUMN_DELETED_SUCCESS:
-		"components.board.screenReader.notification.columnDeleted.success",
-	CARD_MOVED_IN_SAME_COLUMN_SUCCESS:
-		"components.board.screenReader.notification.cardMovedInSameColumn.success",
-	CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS:
-		"components.board.screenReader.notification.cardMovedToAnotherColumn.success",
-	COLUMN_MOVED_SUCCESS:
-		"components.board.screenReader.notification.columnMoved.success",
-	BOARD_TITLE_UPDATED_SUCCESS:
-		"components.board.screenReader.notification.boardTitleUpdated.success",
-	BOARD_PUBLISHED_SUCCESS:
-		"components.board.screenReader.notification.boardVisibilityUpdated.published",
-	BOARD_UNPUBLISHED_SUCCESS:
-		"components.board.screenReader.notification.boardVisibilityUpdated.draft",
-	COLUMN_TITLE_UPDATED_SUCCESS:
-		"components.board.screenReader.notification.columnTitleUpdated.success",
-	CARD_TITLE_UPDATED_SUCCESS:
-		"components.board.screenReader.notification.cardTitleUpdated.success",
-	CARD_UPDATED_SUCCESS:
-		"components.board.screenReader.notification.cardUpdated.success",
-	BOARD_LAYOUT_UPDATED_SUCCESS:
-		"components.board.screenReader.notification.boardLayoutUpdated.success",
+	CARD_CREATED_SUCCESS: "components.board.screenReader.notification.cardCreated.success",
+	COLUMN_CREATED_SUCCESS: "components.board.screenReader.notification.columnCreated.success",
+	CARD_DELETED_SUCCESS: "components.board.screenReader.notification.cardDeleted.success",
+	COLUMN_DELETED_SUCCESS: "components.board.screenReader.notification.columnDeleted.success",
+	CARD_MOVED_IN_SAME_COLUMN_SUCCESS: "components.board.screenReader.notification.cardMovedInSameColumn.success",
+	CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS: "components.board.screenReader.notification.cardMovedToAnotherColumn.success",
+	COLUMN_MOVED_SUCCESS: "components.board.screenReader.notification.columnMoved.success",
+	BOARD_TITLE_UPDATED_SUCCESS: "components.board.screenReader.notification.boardTitleUpdated.success",
+	BOARD_PUBLISHED_SUCCESS: "components.board.screenReader.notification.boardVisibilityUpdated.published",
+	BOARD_UNPUBLISHED_SUCCESS: "components.board.screenReader.notification.boardVisibilityUpdated.draft",
+	COLUMN_TITLE_UPDATED_SUCCESS: "components.board.screenReader.notification.columnTitleUpdated.success",
+	CARD_TITLE_UPDATED_SUCCESS: "components.board.screenReader.notification.cardTitleUpdated.success",
+	CARD_UPDATED_SUCCESS: "components.board.screenReader.notification.cardUpdated.success",
+	BOARD_LAYOUT_UPDATED_SUCCESS: "components.board.screenReader.notification.boardLayoutUpdated.success",
 };
 
 export const useBoardAriaNotification = () => {
@@ -66,9 +51,7 @@ export const useBoardAriaNotification = () => {
 	const getElementOwner = (elementId: string) => {
 		if (!cards) return;
 
-		const card = Object.values(cards).find((c) => {
-			return c.elements.find((element) => element.id === elementId);
-		});
+		const card = Object.values(cards).find((c) => c.elements.find((element) => element.id === elementId));
 		if (!card) return;
 
 		return card.id;
@@ -145,9 +128,7 @@ export const useBoardAriaNotification = () => {
 		);
 	};
 
-	const notifyUpdateBoardTitleSuccess = (
-		action: UpdateBoardTitleSuccessPayload
-	) => {
+	const notifyUpdateBoardTitleSuccess = (action: UpdateBoardTitleSuccessPayload) => {
 		const { newTitle, isOwnAction } = action;
 		if (isOwnAction) return;
 
@@ -158,22 +139,16 @@ export const useBoardAriaNotification = () => {
 		);
 	};
 
-	const notifyUpdateBoardVisibilitySuccess = (
-		action: UpdateBoardVisibilitySuccessPayload
-	) => {
+	const notifyUpdateBoardVisibilitySuccess = (action: UpdateBoardVisibilitySuccessPayload) => {
 		const { isVisible, isOwnAction } = action;
 		if (isOwnAction) return;
 
 		notifyOnScreenReader(
-			isVisible
-				? t(SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS)
-				: t(SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS)
+			isVisible ? t(SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS) : t(SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS)
 		);
 	};
 
-	const notifyUpdateColumnTitleSuccess = (
-		action: UpdateColumnTitleSuccessPayload
-	) => {
+	const notifyUpdateColumnTitleSuccess = (action: UpdateColumnTitleSuccessPayload) => {
 		const { newTitle, isOwnAction, columnId } = action;
 		if (isOwnAction) return;
 
@@ -186,9 +161,7 @@ export const useBoardAriaNotification = () => {
 		);
 	};
 
-	const notifyUpdateCardTitleSuccess = (
-		action: UpdateCardTitleSuccessPayload
-	) => {
+	const notifyUpdateCardTitleSuccess = (action: UpdateCardTitleSuccessPayload) => {
 		const { newTitle, isOwnAction, cardId } = action;
 		if (isOwnAction) return;
 
@@ -280,9 +253,7 @@ export const useBoardAriaNotification = () => {
 		);
 	};
 
-	const notifyUpdateBoardLayoutSuccess = (
-		action: UpdateBoardLayoutSuccessPayload
-	): void => {
+	const notifyUpdateBoardLayoutSuccess = (action: UpdateBoardLayoutSuccessPayload): void => {
 		const { layout, isOwnAction } = action;
 		if (isOwnAction) return;
 

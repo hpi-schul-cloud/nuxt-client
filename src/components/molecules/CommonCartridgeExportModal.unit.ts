@@ -1,17 +1,14 @@
 import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
-import NotifierModule from "@/store/notifier";
 import courseRoomDetailsModule from "@/store/course-room-details";
+import NotifierModule from "@/store/notifier";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { VDialog } from "vuetify/lib/components/index";
 
@@ -57,8 +54,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 				provide: {
 					[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: exportModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierMock,
-					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]:
-						courseRoomDetailsModuleMock,
+					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModuleMock,
 				},
 			},
 		});
@@ -81,9 +77,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 	describe("onCancel / onCloseDialog", () => {
 		it("should close dialog when cancel button clicked", async () => {
 			const wrapper = setup();
-			const closeBtn = wrapper.findComponent(
-				'[data-testid="dialog-cancel-btn"]'
-			);
+			const closeBtn = wrapper.findComponent('[data-testid="dialog-cancel-btn"]');
 			await closeBtn.trigger("click");
 			const emit = wrapper.emitted();
 			expect(emit).toHaveProperty("dialog-closed");
@@ -119,9 +113,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			const wrapper = setup();
 			const nextBtn = wrapper.findComponent("[data-testid='dialog-next-btn']");
 			await nextBtn.trigger("click");
-			const exportBtn = wrapper.findComponent(
-				'[data-testid="dialog-export-btn"]'
-			);
+			const exportBtn = wrapper.findComponent('[data-testid="dialog-export-btn"]');
 			await exportBtn.trigger("click");
 			const emit = wrapper.emitted();
 			expect(emit).toHaveProperty("dialog-confirmed");
@@ -137,9 +129,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			const wrapper = setup(false);
 			const nextBtn = wrapper.findComponent("[data-testid='dialog-next-btn']");
 			await nextBtn.trigger("click");
-			const exportBtn = wrapper.findComponent(
-				'[data-testid="dialog-export-btn"]'
-			);
+			const exportBtn = wrapper.findComponent('[data-testid="dialog-export-btn"]');
 			await exportBtn.trigger("click");
 			const emit = wrapper.emitted();
 			expect(emit).toHaveProperty("dialog-confirmed");
@@ -163,23 +153,13 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
 			await nextBtn.trigger("click");
 
-			const allTopics = wrapper.findComponent(
-				'[data-testid="all-topics-checkbox"]'
-			);
+			const allTopics = wrapper.findComponent('[data-testid="all-topics-checkbox"]');
 
-			expect(
-				allTopics
-					.findAll("input")
-					.some((input) => input.attributes("value") === "true")
-			).toBe(true);
+			expect(allTopics.findAll("input").some((input) => input.attributes("value") === "true")).toBe(true);
 
 			await allTopics.trigger("click");
 
-			expect(
-				allTopics
-					.findAll("input")
-					.some((input) => input.attributes("value") === "false")
-			).toBe(false);
+			expect(allTopics.findAll("input").some((input) => input.attributes("value") === "false")).toBe(false);
 		});
 	});
 
@@ -189,23 +169,13 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
 			await nextBtn.trigger("click");
 
-			const allTasks = wrapper.findComponent(
-				'[data-testid="all-tasks-checkbox"]'
-			);
+			const allTasks = wrapper.findComponent('[data-testid="all-tasks-checkbox"]');
 
-			expect(
-				allTasks
-					.findAll("input")
-					.some((input) => input.attributes("value") === "true")
-			).toBe(true);
+			expect(allTasks.findAll("input").some((input) => input.attributes("value") === "true")).toBe(true);
 
 			await allTasks.trigger("click");
 
-			expect(
-				allTasks
-					.findAll("input")
-					.some((input) => input.attributes("value") === "false")
-			).toBe(false);
+			expect(allTasks.findAll("input").some((input) => input.attributes("value") === "false")).toBe(false);
 		});
 	});
 
@@ -215,23 +185,13 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
 			await nextBtn.trigger("click");
 
-			const allColumnBoards = wrapper.findComponent(
-				'[data-testid="all-column-boards-checkbox"]'
-			);
+			const allColumnBoards = wrapper.findComponent('[data-testid="all-column-boards-checkbox"]');
 
-			expect(
-				allColumnBoards
-					.findAll("input")
-					.some((input) => input.attributes("value") === "true")
-			).toBe(true);
+			expect(allColumnBoards.findAll("input").some((input) => input.attributes("value") === "true")).toBe(true);
 
 			await allColumnBoards.trigger("click");
 
-			expect(
-				allColumnBoards
-					.findAll("input")
-					.some((input) => input.attributes("value") === "false")
-			).toBe(false);
+			expect(allColumnBoards.findAll("input").some((input) => input.attributes("value") === "false")).toBe(false);
 		});
 	});
 });

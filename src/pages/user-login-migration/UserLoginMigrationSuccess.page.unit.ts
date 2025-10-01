@@ -1,13 +1,10 @@
+import UserLoginMigrationSuccessPage from "./UserLoginMigrationSuccess.page.vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { shallowMount } from "@vue/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import UserLoginMigrationSuccessPage from "./UserLoginMigrationSuccess.page.vue";
 import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 import type { Mocked } from "vitest";
 
 vi.mock(
@@ -59,9 +56,7 @@ describe("UserLoginMigrationSuccess", () => {
 					targetSystem: "targetSystemId",
 				});
 
-				const result: boolean = wrapper
-					.findComponent(UserLoginMigrationSuccessPage)
-					.exists();
+				const result: boolean = wrapper.findComponent(UserLoginMigrationSuccessPage).exists();
 
 				expect(result).toEqual(true);
 			});

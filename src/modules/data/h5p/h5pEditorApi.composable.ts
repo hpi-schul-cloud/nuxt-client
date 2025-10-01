@@ -10,9 +10,7 @@ export const useH5PEditorApi = () => {
 	const { t } = useI18n();
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
-	const getContentTitle = async (
-		contentId: string
-	): Promise<string | undefined> => {
+	const getContentTitle = async (contentId: string): Promise<string | undefined> => {
 		let title: string | undefined;
 
 		await h5pEditorApi

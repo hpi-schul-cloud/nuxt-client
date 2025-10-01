@@ -1,23 +1,15 @@
 import SchoolPolicy from "./SchoolPolicy.vue";
 import AuthModule from "@/store/auth";
-import SchoolsModule from "@/store/schools";
-import PrivacyPolicyModule from "@/store/privacy-policy";
 import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { mount } from "@vue/test-utils";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import PrivacyPolicyModule from "@/store/privacy-policy";
+import SchoolsModule from "@/store/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
-import {
-	AUTH_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	PRIVACY_POLICY_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-} from "@/utils/inject";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import { downloadFile } from "@/utils/fileHelper";
+import { AUTH_MODULE_KEY, NOTIFIER_MODULE_KEY, PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import type { Mocked } from "vitest";
 
 vi.mock("@/utils/fileHelper");
@@ -126,9 +118,7 @@ describe("SchoolPolicy", () => {
 				getPrivacyPolicy: null,
 			});
 
-			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(
-				false
-			);
+			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(false);
 		});
 	});
 
@@ -144,9 +134,7 @@ describe("SchoolPolicy", () => {
 			const editBtn = wrapper.find('[data-testid="edit-button"]');
 			await editBtn.trigger("click");
 
-			expect(
-				wrapper.findComponent({ name: "school-policy-form-dialog" }).exists()
-			).toBe(true);
+			expect(wrapper.findComponent({ name: "school-policy-form-dialog" }).exists()).toBe(true);
 		});
 	});
 

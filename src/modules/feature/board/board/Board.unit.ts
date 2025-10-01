@@ -1,3 +1,6 @@
+import BoardVue from "./Board.vue";
+import BoardColumn from "./BoardColumn.vue";
+import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { useCopy } from "@/composables/copy";
@@ -18,10 +21,7 @@ import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import {
-	BoardPermissionChecks,
-	defaultPermissions,
-} from "@/types/board/Permissions";
+import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import {
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
@@ -29,20 +29,10 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import {
-	createTestEnvStore,
-	mockedPiniaStoreTyping,
-} from "@@/tests/test-utils";
-import {
-	boardResponseFactory,
-	cardSkeletonResponseFactory,
-	columnResponseFactory,
-} from "@@/tests/test-utils/factory";
+import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	useBoardInactivity,
@@ -62,12 +52,9 @@ import {
 	useSharedLastCreatedElement,
 } from "@util-board";
 import { mount } from "@vue/test-utils";
+import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
-import BoardVue from "./Board.vue";
-import BoardColumn from "./BoardColumn.vue";
-import BoardHeader from "./BoardHeader.vue";
-import { Mock } from "vitest";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -83,9 +70,7 @@ const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 
 vi.mock("@data-board/BoardPageInformation.composable");
-const mockedUseSharedBoardPageInformation = vi.mocked(
-	useSharedBoardPageInformation
-);
+const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformation);
 
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
@@ -114,14 +99,10 @@ const mockedCreateApplicationError = vi.mocked(useApplicationError);
 describe("Board", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
-	let mockedBoardPermissionsHandler: DeepMocked<
-		ReturnType<typeof useBoardPermissions>
-	>;
+	let mockedBoardPermissionsHandler: DeepMocked<ReturnType<typeof useBoardPermissions>>;
 	let router: DeepMocked<Router>;
 	let mockedBoardPermissions: BoardPermissionChecks;
-	let mockedUsePageInactivity: DeepMocked<
-		ReturnType<typeof useBoardInactivity>
-	>;
+	let mockedUsePageInactivity: DeepMocked<ReturnType<typeof useBoardInactivity>>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
 	const setErrorMock = vi.fn();
@@ -130,22 +111,17 @@ describe("Board", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
 		vi.clearAllMocks();
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		mockedCopyCalls = createMock<ReturnType<typeof useCopy>>();
 		mockUseCopy.mockReturnValue(mockedCopyCalls);
 
-		mockedBoardPermissionsHandler =
-			createMock<ReturnType<typeof useBoardPermissions>>();
+		mockedBoardPermissionsHandler = createMock<ReturnType<typeof useBoardPermissions>>();
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissionsHandler);
 
-		mockedCreateApplicationErrorCalls =
-			createMock<ReturnType<typeof useApplicationError>>();
-		mockedCreateApplicationError.mockReturnValue(
-			mockedCreateApplicationErrorCalls
-		);
+		mockedCreateApplicationErrorCalls = createMock<ReturnType<typeof useApplicationError>>();
+		mockedCreateApplicationError.mockReturnValue(mockedCreateApplicationErrorCalls);
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
@@ -184,8 +160,7 @@ describe("Board", () => {
 
 		mockedBoardPermissions = { ...defaultPermissions };
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissions);
-		mockedUsePageInactivity =
-			createMock<ReturnType<typeof useBoardInactivity>>();
+		mockedUsePageInactivity = createMock<ReturnType<typeof useBoardInactivity>>();
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
 	});
 
@@ -193,17 +168,11 @@ describe("Board", () => {
 		vi.clearAllMocks();
 	});
 
-	const createBoard = (options?: {
-		numberOfColumns?: number;
-		isVisible?: boolean;
-	}): Board => {
+	const createBoard = (options?: { numberOfColumns?: number; isVisible?: boolean }): Board => {
 		const cards = cardSkeletonResponseFactory.buildList(3);
-		const columns = columnResponseFactory.buildList(
-			options?.numberOfColumns ?? 1,
-			{
-				cards,
-			}
-		);
+		const columns = columnResponseFactory.buildList(options?.numberOfColumns ?? 1, {
+			cards,
+		});
 		const board = boardResponseFactory.build({
 			columns,
 			isVisible: options?.isVisible ?? true,
@@ -233,9 +202,7 @@ describe("Board", () => {
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomId: "room1",
 		});
-		const schoolExternalToolsModule = createModuleMocks(
-			SchoolExternalToolsModule
-		);
+		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule);
 		return {
 			notifierModule,
 			copyModule,
@@ -247,11 +214,7 @@ describe("Board", () => {
 		};
 	};
 
-	const setup = (options?: {
-		numberOfColumns?: number;
-		isBoardVisible?: boolean;
-		envs?: Partial<ConfigResponse>;
-	}) => {
+	const setup = (options?: { numberOfColumns?: number; isBoardVisible?: boolean; envs?: Partial<ConfigResponse> }) => {
 		const {
 			notifierModule,
 			copyModule,
@@ -295,8 +258,7 @@ describe("Board", () => {
 					loadingStateModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
-					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
-						schoolExternalToolsModule,
+					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 				},
 				stubs: { ShareModal: true, UseFocusTrap: true },
 				renderStubDefaultSlot: true,
@@ -832,8 +794,7 @@ describe("Board", () => {
 							mockedBoardPermissions.hasEditPermission = ref(false);
 							mockedBoardPermissions.arePermissionsLoaded = ref(true);
 
-							const mockRoomId =
-								mockedUseSharedBoardPageInformation().roomId.value;
+							const mockRoomId = mockedUseSharedBoardPageInformation().roomId.value;
 							mockedBoardPermissions.isTeacher = ref(false);
 							const { boardStore, wrapperVM } = setup();
 							expect(wrapperVM.isBoardVisible).toBe(true);
@@ -846,9 +807,7 @@ describe("Board", () => {
 								name: "room-details",
 								params: { id: mockRoomId },
 							});
-							expect(
-								mockedCreateApplicationErrorCalls.createApplicationError
-							).toHaveBeenCalledWith(
+							expect(mockedCreateApplicationErrorCalls.createApplicationError).toHaveBeenCalledWith(
 								HttpStatusCode.Forbidden,
 								"components.board.error.403"
 							);
@@ -868,9 +827,7 @@ describe("Board", () => {
 							await nextTick();
 
 							expect(wrapperVM.isBoardVisible).toBe(false);
-							expect(
-								mockedCreateApplicationErrorCalls.createApplicationError
-							).not.toHaveBeenCalled();
+							expect(mockedCreateApplicationErrorCalls.createApplicationError).not.toHaveBeenCalled();
 							expect(setErrorMock).not.toHaveBeenCalled();
 						});
 					});
@@ -888,9 +845,7 @@ describe("Board", () => {
 							await nextTick();
 
 							expect(wrapperVM.isBoardVisible).toBe(true);
-							expect(
-								mockedCreateApplicationErrorCalls.createApplicationError
-							).not.toHaveBeenCalled();
+							expect(mockedCreateApplicationErrorCalls.createApplicationError).not.toHaveBeenCalled();
 							expect(setErrorMock).not.toHaveBeenCalled();
 						});
 					});
@@ -906,9 +861,7 @@ describe("Board", () => {
 							await nextTick();
 
 							expect(wrapperVM.isBoardVisible).toBe(true);
-							expect(
-								mockedCreateApplicationErrorCalls.createApplicationError
-							).not.toHaveBeenCalled();
+							expect(mockedCreateApplicationErrorCalls.createApplicationError).not.toHaveBeenCalled();
 							expect(setErrorMock).not.toHaveBeenCalled();
 						});
 					});
@@ -1024,9 +977,7 @@ describe("Board", () => {
 				const { wrapper } = setup();
 
 				const boardHeader = wrapper.findComponent(BoardHeader);
-				const boardLayoutDialog = wrapper.findComponent(
-					SelectBoardLayoutDialog
-				);
+				const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 
 				boardHeader.vm.$emit("change-layout");
 				await nextTick();
@@ -1040,9 +991,7 @@ describe("Board", () => {
 				it("should close the dialog", async () => {
 					const { wrapper } = setup();
 
-					const boardLayoutDialog = wrapper.findComponent(
-						SelectBoardLayoutDialog
-					);
+					const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 					await boardLayoutDialog.setValue(true, "modelValue");
 
 					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
@@ -1054,9 +1003,7 @@ describe("Board", () => {
 				it("should send the update request", async () => {
 					const { wrapper, boardStore, board } = setup();
 
-					const boardLayoutDialog = wrapper.findComponent(
-						SelectBoardLayoutDialog
-					);
+					const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 
 					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
 					await nextTick();
@@ -1072,9 +1019,7 @@ describe("Board", () => {
 				it("should close the dialog", async () => {
 					const { wrapper } = setup();
 
-					const boardLayoutDialog = wrapper.findComponent(
-						SelectBoardLayoutDialog
-					);
+					const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 					await boardLayoutDialog.setValue(true, "modelValue");
 
 					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
@@ -1086,9 +1031,7 @@ describe("Board", () => {
 				it("should not send an update request", async () => {
 					const { wrapper, boardStore, board } = setup();
 
-					const boardLayoutDialog = wrapper.findComponent(
-						SelectBoardLayoutDialog
-					);
+					const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 
 					boardLayoutDialog.vm.$emit("select", board.layout);
 					await nextTick();

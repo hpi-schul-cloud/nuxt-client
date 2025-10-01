@@ -1,4 +1,4 @@
-import { actions, mutations, getters } from "./bulkConsent";
+import { actions, getters, mutations } from "./bulkConsent";
 
 const consentDataMock = {
 	_id: "60c220d9d03a60006502f137",
@@ -107,10 +107,7 @@ describe("store/bulkConsent", () => {
 
 		describe("setRegisteredStudents", () => {
 			it("sets registered students ids into registeredStudents state object", () => {
-				const mockData = [
-					"5f2987e020834114b8efd6f1",
-					"5f2987e020834114b8efd6f2",
-				];
+				const mockData = ["5f2987e020834114b8efd6f1", "5f2987e020834114b8efd6f2"];
 
 				const payload = mockData;
 				const state = { registeredStudents: [] };
@@ -142,9 +139,7 @@ describe("store/bulkConsent", () => {
 				const state = { selectedStudentsData: [consentDataMock] };
 				mutations.updateStudentData(state, birthdayData);
 
-				expect(state.selectedStudentsData[0].birthday).toStrictEqual(
-					birthdayData.birthDate
-				);
+				expect(state.selectedStudentsData[0].birthday).toStrictEqual(birthdayData.birthDate);
 			});
 
 			it("updates students password in selectedStudentsData state object", () => {
@@ -157,19 +152,14 @@ describe("store/bulkConsent", () => {
 
 				mutations.updateStudentData(state, passData);
 
-				expect(state.selectedStudentsData[0].password).toStrictEqual(
-					passData.pass
-				);
+				expect(state.selectedStudentsData[0].password).toStrictEqual(passData.pass);
 			});
 		});
 	});
 	describe("getters", () => {
 		describe("getSelectedStudents", () => {
 			it("gets selectedStudents array from the state", () => {
-				const userIds = [
-					"5f2987e020834114b8efd6f1",
-					"5f2987e020834114b8efd6f2",
-				];
+				const userIds = ["5f2987e020834114b8efd6f1", "5f2987e020834114b8efd6f2"];
 				const state = { selectedStudents: userIds };
 				const retrievedState = getters.getSelectedStudents(state);
 				expect(state.selectedStudents).toStrictEqual(retrievedState);

@@ -10,11 +10,11 @@
 </template>
 
 <script setup lang="ts">
+import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
 import { EditorMode } from "@/types/file/File";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useFileStorageApi } from "@data-file";
 import { computed, onMounted, ref } from "vue";
-import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
 
 interface Props {
 	fileRecordId: string;

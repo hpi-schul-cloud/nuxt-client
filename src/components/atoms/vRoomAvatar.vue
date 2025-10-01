@@ -29,32 +29,22 @@
 				@keypress.enter="onClick"
 				@dragenter.prevent.stop="dragEnter"
 			>
-				<v-avatar
-					:aria-label="avatarAriaLabel"
-					:size="size"
-					data-testid="course-icon"
-					:show-badge="showBadge"
-				>
+				<v-avatar :aria-label="avatarAriaLabel" :size="size" data-testid="course-icon" :show-badge="showBadge">
 					<span :class="avatarTextClass" data-testid="course-short-title">
 						{{ item.shortTitle }}
 					</span>
 				</v-avatar>
 			</VBtn>
 		</v-badge>
-		<div
-			v-if="!condenseLayout"
-			aria-hidden="true"
-			:class="titleClasses"
-			data-testid="course-title"
-		>
+		<div v-if="!condenseLayout" aria-hidden="true" :class="titleClasses" data-testid="course-title">
 			{{ title }}
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
 import { mdiLock, mdiSync } from "@icons/material";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -117,9 +107,7 @@ const stillBeingCopied = computed(() => props.item.copyingSince !== undefined);
 const avatarAriaLabel = computed(() => {
 	const course = t("common.labels.course");
 	if (stillBeingCopied.value) {
-		const ariaLabelSuffix = t(
-			"components.molecules.copyResult.courseCopy.ariaLabelSuffix"
-		);
+		const ariaLabelSuffix = t("components.molecules.copyResult.courseCopy.ariaLabelSuffix");
 		return `${course} ${props.item.title}: ${ariaLabelSuffix}`;
 	}
 	return `${course} ${props.item.title}`;
@@ -142,13 +130,9 @@ const avatarTextClass = computed(() => {
 	return classes;
 });
 
-const avatarClass = computed(() =>
-	stillBeingCopied.value ? ["grey-lighten-2"] : []
-);
+const avatarClass = computed(() => (stillBeingCopied.value ? ["grey-lighten-2"] : []));
 
-const avatarColor = computed(() =>
-	stillBeingCopied.value ? undefined : props.item.displayColor
-);
+const avatarColor = computed(() => (stillBeingCopied.value ? undefined : props.item.displayColor));
 
 const title = computed(() => {
 	if (props.item.copyingSince) {
@@ -164,9 +148,7 @@ const title = computed(() => {
 
 const titleClasses = computed(() => {
 	const marginClass = props.item.titleDate ? "mb-5" : "mb-7";
-	const copyingClass = stillBeingCopied.value
-		? ["text-grey", "text-darken-1"]
-		: [];
+	const copyingClass = stillBeingCopied.value ? ["text-grey", "text-darken-1"] : [];
 
 	return ["justify-center", "mt-2", "subtitle", marginClass, ...copyingClass];
 });
@@ -239,11 +221,7 @@ const dropAvatar = () => {
 	overflow-wrap: break-word;
 	white-space: pre-wrap;
 
-	@include excerpt(
-		$font-size: 16px,
-		$line-height: var(--line-height-lg),
-		$lines-to-show: 4
-	);
+	@include excerpt($font-size: 16px, $line-height: var(--line-height-lg), $lines-to-show: 4);
 }
 
 @media #{map.get($display-breakpoints, 'xs')} {

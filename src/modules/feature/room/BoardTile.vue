@@ -14,10 +14,7 @@
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
 			{{ subtitleText }}
 		</VCardSubtitle>
-		<VCardTitle
-			class="board-tile-title text-body-1 font-weight-bold mb-2"
-			:data-testid="`board-tile-title-${index}`"
-		>
+		<VCardTitle class="board-tile-title text-body-1 font-weight-bold mb-2" :data-testid="`board-tile-title-${index}`">
 			<LineClamp>
 				{{ board.title }}
 			</LineClamp>
@@ -29,9 +26,9 @@
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
+import { LineClamp } from "@ui-line-clamp";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { LineClamp } from "@ui-line-clamp";
 
 const props = defineProps({
 	board: { type: Object as PropType<RoomBoardItem>, required: true },
@@ -41,18 +38,12 @@ const props = defineProps({
 const { t } = useI18n();
 const board = toRef(props, "board");
 
-const isListBoard = computed(() => {
-	return board.value.layout === BoardLayout.List;
-});
+const isListBoard = computed(() => board.value.layout === BoardLayout.List);
 
-const isDraft = computed(() => {
-	return board.value.isVisible === false;
-});
+const isDraft = computed(() => board.value.isVisible === false);
 
 const subtitleIcon = computed(() => {
-	const icon = isListBoard.value
-		? mdiViewAgendaOutline
-		: mdiViewDashboardOutline;
+	const icon = isListBoard.value ? mdiViewAgendaOutline : mdiViewDashboardOutline;
 
 	return icon;
 });
@@ -70,7 +61,5 @@ const subtitleText = computed(() => {
 	return text;
 });
 
-const boardPath = computed(() => {
-	return `/boards/${board.value.id}`;
-});
+const boardPath = computed(() => `/boards/${board.value.id}`);
 </script>

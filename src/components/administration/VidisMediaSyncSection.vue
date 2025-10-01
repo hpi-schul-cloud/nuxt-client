@@ -4,9 +4,7 @@
 			{{ $t("components.administration.externalToolsSection.vidis.title") }}
 		</h3>
 		<p>
-			{{
-				$t("components.administration.externalToolsSection.vidis.description")
-			}}
+			{{ $t("components.administration.externalToolsSection.vidis.description") }}
 		</p>
 		<div class="d-flex mt-8" data-testid="external-tool-section-table-actions">
 			<VSpacer />
@@ -46,9 +44,7 @@ const updateVidisLicenses = async () => {
 
 		notifierModule.show({
 			status: "success",
-			text: t(
-				"components.administration.externalToolsSection.vidis.notification.success"
-			),
+			text: t("components.administration.externalToolsSection.vidis.notification.success"),
 		});
 	} catch (errorResponse: unknown) {
 		const apiError = mapAxiosErrorToResponseError(errorResponse);
@@ -56,9 +52,7 @@ const updateVidisLicenses = async () => {
 		if (apiError.code === HttpStatusCode.RequestTimeout) {
 			notifierModule.show({
 				status: "info",
-				text: t(
-					"components.administration.externalToolsSection.vidis.notification.timeout"
-				),
+				text: t("components.administration.externalToolsSection.vidis.notification.timeout"),
 			});
 		} else {
 			notifierModule.show({

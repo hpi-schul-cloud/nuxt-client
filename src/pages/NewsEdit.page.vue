@@ -19,13 +19,7 @@
 			max-width="short"
 		>
 			<div>
-				<form-news
-					v-if="news"
-					:news="news"
-					@save="onSave"
-					@delete="onDelete"
-					@cancel="onCancel"
-				/>
+				<form-news v-if="news" :news="news" @save="onSave" @delete="onDelete" @cancel="onCancel" />
 			</div>
 		</default-wireframe>
 	</div>
@@ -35,11 +29,7 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { AlertStatus } from "@/store/types/alert-payload";
 import { News, PatchNewsPayload } from "@/store/types/news";
-import {
-	injectStrict,
-	NEWS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, NEWS_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { FormNews } from "@feature-news-form";
 import { useTitle } from "@vueuse/core";

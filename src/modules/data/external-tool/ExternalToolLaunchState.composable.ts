@@ -1,20 +1,14 @@
+import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { ContextExternalToolBodyParams, LaunchType } from "@/serverApi/v3";
-import {
-	ToolLaunchRequest,
-	ToolLaunchRequestMethodEnum,
-} from "@/store/external-tool";
+import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { uniqueId } from "lodash";
-import { onUnmounted, ref, Ref } from "vue";
-import { useExternalToolApi } from "./ExternalToolApi.composable";
+import { onUnmounted, Ref, ref } from "vue";
 
-export const useExternalToolLaunchState = (
-	refreshCallback?: () => Promise<void> | void
-) => {
-	const { fetchContextLaunchDataCall, fetchSchoolLaunchDataCall } =
-		useExternalToolApi();
+export const useExternalToolLaunchState = (refreshCallback?: () => Promise<void> | void) => {
+	const { fetchContextLaunchDataCall, fetchSchoolLaunchDataCall } = useExternalToolApi();
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
@@ -23,16 +17,12 @@ export const useExternalToolLaunchState = (
 	const windowRef: Ref<Window | null> = ref(null);
 	const windowIntervalHandle: Ref<NodeJS.Timeout | undefined> = ref();
 
-	const fetchContextLaunchRequest = async (
-		contextExternalToolId: string
-	): Promise<void> => {
+	const fetchContextLaunchRequest = async (contextExternalToolId: string): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 
 		try {
-			toolLaunchRequest.value = await fetchContextLaunchDataCall(
-				contextExternalToolId
-			);
+			toolLaunchRequest.value = await fetchContextLaunchDataCall(contextExternalToolId);
 		} catch (axiosError: unknown) {
 			const apiError = mapAxiosErrorToResponseError(axiosError);
 
@@ -54,10 +44,7 @@ export const useExternalToolLaunchState = (
 		error.value = undefined;
 
 		try {
-			toolLaunchRequest.value = await fetchSchoolLaunchDataCall(
-				schoolExternalToolId,
-				contextExternalToolBodyParams
-			);
+			toolLaunchRequest.value = await fetchSchoolLaunchDataCall(schoolExternalToolId, contextExternalToolBodyParams);
 		} catch (axiosError: unknown) {
 			const apiError = mapAxiosErrorToResponseError(axiosError);
 
@@ -99,8 +86,7 @@ export const useExternalToolLaunchState = (
 	};
 
 	const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
-		const existingForm: HTMLElement | null =
-			document.getElementById("launch-form");
+		const existingForm: HTMLElement | null = document.getElementById("launch-form");
 
 		if (existingForm) {
 			document.body.removeChild(existingForm);

@@ -1,4 +1,4 @@
-import { ref, Ref } from "vue";
+import { Ref, ref } from "vue";
 
 export type BoardPermissionChecks = {
 	arePermissionsLoaded: Ref<boolean>;

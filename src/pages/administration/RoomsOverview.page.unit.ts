@@ -1,44 +1,29 @@
+import RoomsOverview from "./RoomsOverview.page.vue";
+import { ConfigResponse, CourseInfoDataResponse, SchulcloudTheme } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { courseInfoDataResponseFactory, createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	courseInfoDataResponseFactory,
-	createTestEnvStore,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseApi, useCourseList } from "@data-room";
-import {
-	EndCourseSyncDialog,
-	StartExistingCourseSyncDialog,
-} from "@feature-course-sync";
+import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount, VueWrapper } from "@vue/test-utils";
+import { Mock } from "vitest";
 import { nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VDataTableServer } from "vuetify/lib/components/index";
-import RoomsOverview from "./RoomsOverview.page.vue";
-import { Mock } from "vitest";
-import {
-	ConfigResponse,
-	CourseInfoDataResponse,
-	SchulcloudTheme,
-} from "@/serverApi/v3";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
 	useRouter: vi.fn(),
 }));
 
-vi.mock("@data-room", () => {
-	return {
-		useCourseList: vi.fn(),
-		useCourseApi: vi.fn(),
-	};
-});
+vi.mock("@data-room", () => ({
+	useCourseList: vi.fn(),
+	useCourseApi: vi.fn(),
+}));
 
 const useRouteMock = <Mock>useRoute;
 const useRouterMock = <Mock>useRouter;
@@ -85,14 +70,15 @@ describe("RoomsOverview", () => {
 			...envs,
 		});
 
-		const useCourseListMock: DeepMocked<ReturnType<typeof useCourseList>> =
-			createMock<ReturnType<typeof useCourseList>>({
-				isLoading: ref(),
-				pagination: ref(pagination),
-				page: ref(page),
-				courses: ref(courses),
-				withoutTeacher: ref(false),
-			});
+		const useCourseListMock: DeepMocked<ReturnType<typeof useCourseList>> = createMock<
+			ReturnType<typeof useCourseList>
+		>({
+			isLoading: ref(),
+			pagination: ref(pagination),
+			page: ref(page),
+			courses: ref(courses),
+			withoutTeacher: ref(false),
+		});
 
 		vi.mocked(useCourseList).mockReturnValue(useCourseListMock);
 
@@ -107,9 +93,8 @@ describe("RoomsOverview", () => {
 					EndCourseSyncDialog: true,
 				},
 				mocks: {
-					t: (key: string, placeholders: Record<string, string> = {}) => {
-						return `${key}|${Object.values(placeholders || {}).join("|")}`;
-					},
+					t: (key: string, placeholders: Record<string, string> = {}) =>
+						`${key}|${Object.values(placeholders || {}).join("|")}`,
 				},
 			},
 			props: {
@@ -125,11 +110,8 @@ describe("RoomsOverview", () => {
 		};
 	};
 
-	const findTableComponent = (wrapper: VueWrapper) => {
-		return wrapper.findComponent<typeof VDataTableServer>(
-			'[data-testid="admin-rooms-table"]'
-		);
-	};
+	const findTableComponent = (wrapper: VueWrapper) =>
+		wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-rooms-table"]');
 
 	beforeEach(() => {
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>({
@@ -158,12 +140,8 @@ describe("RoomsOverview", () => {
 
 				const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-				expect(breadcrumbs.at(0)?.text()).toEqual(
-					"pages.administration.index.title"
-				);
-				expect(breadcrumbs.at(1)?.text()).toEqual(
-					"pages.administration.rooms.index.title"
-				);
+				expect(breadcrumbs.at(0)?.text()).toEqual("pages.administration.index.title");
+				expect(breadcrumbs.at(1)?.text()).toEqual("pages.administration.rooms.index.title");
 			});
 		});
 
@@ -197,9 +175,7 @@ describe("RoomsOverview", () => {
 			it("should display the entries in the table", () => {
 				const { useCourseListMock, wrapper } = setup();
 
-				const table = wrapper.findComponent<typeof VDataTableServer>(
-					'[data-testid="admin-rooms-table"]'
-				);
+				const table = wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-rooms-table"]');
 
 				expect(table.props("items")).toEqual(useCourseListMock.courses.value);
 			});
@@ -252,9 +228,7 @@ describe("RoomsOverview", () => {
 					await nextTick();
 
 					expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
-					expect(useCourseListMock.setSortOrder).toHaveBeenCalledWith(
-						SortOrder.DESC
-					);
+					expect(useCourseListMock.setSortOrder).toHaveBeenCalledWith(SortOrder.DESC);
 				});
 			});
 		});
@@ -281,10 +255,7 @@ describe("RoomsOverview", () => {
 				it("should call composable to change the limit in pagination", async () => {
 					const { itemsPerPage, wrapper, useCourseListMock } = setup();
 
-					findTableComponent(wrapper).vm.$emit(
-						"update:itemsPerPage",
-						itemsPerPage
-					);
+					findTableComponent(wrapper).vm.$emit("update:itemsPerPage", itemsPerPage);
 					await nextTick();
 
 					expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
@@ -398,17 +369,11 @@ describe("RoomsOverview", () => {
 
 				const editBtn = wrapper.find('[data-testid="course-table-edit-btn"]');
 
-				const deleteBtn = wrapper.find(
-					'[data-testid="course-table-delete-btn"]'
-				);
+				const deleteBtn = wrapper.find('[data-testid="course-table-delete-btn"]');
 
-				const startSyncButton = wrapper.find(
-					'[data-testid="course-table-start-course-sync-btn"]'
-				);
+				const startSyncButton = wrapper.find('[data-testid="course-table-start-course-sync-btn"]');
 
-				const endSyncButton = wrapper.find(
-					'[data-testid="course-table-end-course-sync-btn"]'
-				);
+				const endSyncButton = wrapper.find('[data-testid="course-table-end-course-sync-btn"]');
 
 				expect(startSyncButton.exists()).toBeTruthy();
 				expect(editBtn.exists()).toBeTruthy();
@@ -442,17 +407,11 @@ describe("RoomsOverview", () => {
 
 				const editBtn = wrapper.find('[data-testid="course-table-edit-btn"]');
 
-				const deleteBtn = wrapper.find(
-					'[data-testid="course-table-delete-btn"]'
-				);
+				const deleteBtn = wrapper.find('[data-testid="course-table-delete-btn"]');
 
-				const endSyncButton = wrapper.find(
-					'[data-testid="course-table-end-course-sync-btn"]'
-				);
+				const endSyncButton = wrapper.find('[data-testid="course-table-end-course-sync-btn"]');
 
-				const startSyncButton = wrapper.find(
-					'[data-testid="course-table-start-course-sync-btn"]'
-				);
+				const startSyncButton = wrapper.find('[data-testid="course-table-start-course-sync-btn"]');
 
 				expect(endSyncButton.exists()).toBeTruthy();
 				expect(editBtn.exists()).toBeTruthy();
@@ -469,13 +428,9 @@ describe("RoomsOverview", () => {
 
 				const editBtn = wrapper.find('[data-testid="course-table-edit-btn"]');
 
-				const deleteBtn = wrapper.find(
-					'[data-testid="course-table-delete-btn"]'
-				);
+				const deleteBtn = wrapper.find('[data-testid="course-table-delete-btn"]');
 
-				const startSyncButton = wrapper.find(
-					'[data-testid="course-table-start-course-sync-btn"]'
-				);
+				const startSyncButton = wrapper.find('[data-testid="course-table-start-course-sync-btn"]');
 
 				expect(editBtn.exists()).toBeFalsy();
 				expect(deleteBtn.exists()).toBeFalsy();
@@ -507,17 +462,11 @@ describe("RoomsOverview", () => {
 
 				const editBtn = wrapper.find('[data-testid="course-table-edit-btn"]');
 
-				const deleteBtn = wrapper.find(
-					'[data-testid="course-table-delete-btn"]'
-				);
+				const deleteBtn = wrapper.find('[data-testid="course-table-delete-btn"]');
 
-				const startSyncButton = wrapper.find(
-					'[data-testid="course-table-start-course-sync-btn"]'
-				);
+				const startSyncButton = wrapper.find('[data-testid="course-table-start-course-sync-btn"]');
 
-				const endSyncButton = wrapper.find(
-					'[data-testid="course-table-end-course-sync-btn"]'
-				);
+				const endSyncButton = wrapper.find('[data-testid="course-table-end-course-sync-btn"]');
 
 				expect(startSyncButton.exists()).toBeFalsy();
 				expect(endSyncButton.exists()).toBeFalsy();
@@ -580,9 +529,7 @@ describe("RoomsOverview", () => {
 			it("should open the delete dialog", async () => {
 				const { wrapper } = setup();
 
-				await wrapper
-					.find('[data-testid="course-table-delete-btn"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
 				await nextTick();
 
 				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
@@ -615,9 +562,7 @@ describe("RoomsOverview", () => {
 			it("should open the StartExistingCourseSyncDialog ", async () => {
 				const { wrapper } = setup();
 
-				await wrapper
-					.find('[data-testid="course-table-start-course-sync-btn"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="course-table-start-course-sync-btn"]').trigger("click");
 				await nextTick();
 
 				const dialog = wrapper.findComponent({
@@ -654,9 +599,7 @@ describe("RoomsOverview", () => {
 			it("should open the EndCourseSyncDialog ", async () => {
 				const { wrapper } = setup();
 
-				const endCourSyncBtn = wrapper.getComponent(
-					'[data-testid="course-table-end-course-sync-btn"]'
-				);
+				const endCourSyncBtn = wrapper.getComponent('[data-testid="course-table-end-course-sync-btn"]');
 
 				await endCourSyncBtn.trigger("click");
 
@@ -691,15 +634,11 @@ describe("RoomsOverview", () => {
 				it("should not delete course", async () => {
 					const { wrapper, useCourseListMock } = setup();
 
-					await wrapper
-						.find('[data-testid="course-table-delete-btn"]')
-						.trigger("click");
+					await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
 
 					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
 
-					await dialog
-						.findComponent('[data-testid="dialog-cancel"')
-						.trigger("click");
+					await dialog.findComponent('[data-testid="dialog-cancel"').trigger("click");
 
 					expect(useCourseListMock.deleteCourse).not.toHaveBeenCalled();
 				});
@@ -709,15 +648,11 @@ describe("RoomsOverview", () => {
 				it("should delete course", async () => {
 					const { wrapper, useCourseListMock } = setup();
 
-					await wrapper
-						.find('[data-testid="course-table-delete-btn"]')
-						.trigger("click");
+					await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
 
 					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
 
-					await dialog
-						.findComponent('[data-testid="dialog-confirm"')
-						.trigger("click");
+					await dialog.findComponent('[data-testid="dialog-confirm"').trigger("click");
 
 					expect(useCourseListMock.deleteCourse).toHaveBeenCalled();
 				});
@@ -744,9 +679,7 @@ describe("RoomsOverview", () => {
 			it("should fetch courses", async () => {
 				const { wrapper, useCourseListMock } = setup();
 
-				await wrapper
-					.find('[data-testid="course-table-start-course-sync-btn"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="course-table-start-course-sync-btn"]').trigger("click");
 				await nextTick();
 
 				wrapper.getComponent(StartExistingCourseSyncDialog).emitted("success");
@@ -777,9 +710,7 @@ describe("RoomsOverview", () => {
 			it("should fetch courses", async () => {
 				const { wrapper, useCourseListMock } = setup();
 
-				await wrapper
-					.find('[data-testid="course-table-end-course-sync-btn"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="course-table-end-course-sync-btn"]').trigger("click");
 				await nextTick();
 
 				wrapper.getComponent(EndCourseSyncDialog).emitted("success");
@@ -803,13 +734,9 @@ describe("RoomsOverview", () => {
 			it("should show 2 tabs", () => {
 				const { wrapper } = setup();
 
-				const currentTab = wrapper.find(
-					'[data-testid="admin-course-current-tab"]'
-				);
+				const currentTab = wrapper.find('[data-testid="admin-course-current-tab"]');
 
-				const archiveTab = wrapper.find(
-					'[data-testid="admin-course-archive-tab"]'
-				);
+				const archiveTab = wrapper.find('[data-testid="admin-course-archive-tab"]');
 
 				expect(currentTab.exists()).toBeTruthy();
 				expect(archiveTab.exists()).toBeTruthy();
@@ -818,9 +745,7 @@ describe("RoomsOverview", () => {
 			it("should have current tab active", () => {
 				const { wrapper } = setup();
 
-				const currentTab = wrapper.find(
-					'[data-testid="admin-course-current-tab"]'
-				);
+				const currentTab = wrapper.find('[data-testid="admin-course-current-tab"]');
 
 				expect(currentTab.classes()).toContain("v-tab--selected");
 			});
@@ -841,9 +766,7 @@ describe("RoomsOverview", () => {
 			it("should replace the route to the given tab ", async () => {
 				const { wrapper, router } = setup();
 
-				await wrapper
-					.find('[data-testid="admin-course-current-tab"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="admin-course-current-tab"]').trigger("click");
 
 				expect(router.replace).toHaveBeenCalledWith({
 					query: { tab: "current" },
@@ -868,9 +791,7 @@ describe("RoomsOverview", () => {
 			it("should call composable to fetch courses for archive tab", async () => {
 				const { wrapper, useCourseListMock } = setup();
 
-				await wrapper
-					.find('[data-testid="admin-course-archive-tab"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="admin-course-archive-tab"]').trigger("click");
 				await nextTick();
 
 				expect(useCourseListMock.fetchCourses).toHaveBeenCalledWith("archive");
@@ -881,13 +802,9 @@ describe("RoomsOverview", () => {
 			it("should call composable to fetch courses of current tab", async () => {
 				const { wrapper, useCourseListMock } = createWrapper();
 
-				await wrapper
-					.find('[data-testid="admin-course-archive-tab"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="admin-course-archive-tab"]').trigger("click");
 
-				await wrapper
-					.find('[data-testid="admin-course-current-tab"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="admin-course-current-tab"]').trigger("click");
 
 				expect(useCourseListMock.fetchCourses).toHaveBeenCalledWith("current");
 			});
@@ -898,12 +815,8 @@ describe("RoomsOverview", () => {
 		describe("when clicking on add course buttton", () => {
 			it("should redirect to legacy create course page", () => {
 				const { wrapper } = createWrapper();
-				const addClassBtn = wrapper.find(
-					'[data-testid="admin-courses-add-button"]'
-				);
-				expect(addClassBtn.attributes().href).toStrictEqual(
-					"/courses/add?redirectUrl=/administration/rooms/new"
-				);
+				const addClassBtn = wrapper.find('[data-testid="admin-courses-add-button"]');
+				expect(addClassBtn.attributes().href).toStrictEqual("/courses/add?redirectUrl=/administration/rooms/new");
 			});
 		});
 	});
@@ -917,25 +830,16 @@ describe("RoomsOverview", () => {
 
 		it.each([
 			[SchulcloudTheme.Default, "Dataport"],
-			[
-				SchulcloudTheme.Brb,
-				"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg",
-			],
-			[
-				SchulcloudTheme.N21,
-				"Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)",
-			],
-		])(
-			"uses %s-instance specific text placeholders",
-			async (theme, expected) => {
-				const { wrapper } = setup({
-					SC_THEME: theme,
-				});
+			[SchulcloudTheme.Brb, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+			[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
+		])("uses %s-instance specific text placeholders", async (theme, expected) => {
+			const { wrapper } = setup({
+				SC_THEME: theme,
+			});
 
-				await nextTick();
+			await nextTick();
 
-				expect(wrapper.text()).toContain(expected);
-			}
-		);
+			expect(wrapper.text()).toContain(expected);
+		});
 	});
 });

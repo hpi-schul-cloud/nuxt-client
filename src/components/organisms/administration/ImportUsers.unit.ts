@@ -1,21 +1,11 @@
-import {
-	ImportUserListResponse,
-	ImportUserResponseRoleNamesEnum,
-	SchulcloudTheme,
-} from "@/serverApi/v3";
+import ImportUsers from "./ImportUsers.vue";
+import { ImportUserListResponse, ImportUserResponseRoleNamesEnum, SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
 import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
-import { VDataTable } from "vuetify/lib/components/index";
-import ImportUsers from "./ImportUsers.vue";
 import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
@@ -25,7 +15,10 @@ import {
 	mdiFlagOutline,
 	mdiPencilOutline,
 } from "@icons/material";
+import { mount } from "@vue/test-utils";
 import { beforeAll } from "vitest";
+import { nextTick } from "vue";
+import { VDataTable } from "vuetify/lib/components/index";
 
 const mockImportUsers: ImportUserListResponse = {
 	total: 3,
@@ -56,10 +49,7 @@ const mockImportUsers: ImportUserListResponse = {
 			loginName: "bettina.melzer",
 			firstName: "Bettina",
 			lastName: "Melzer",
-			roleNames: [
-				ImportUserResponseRoleNamesEnum.Admin,
-				ImportUserResponseRoleNamesEnum.Teacher,
-			],
+			roleNames: [ImportUserResponseRoleNamesEnum.Admin, ImportUserResponseRoleNamesEnum.Teacher],
 			classNames: ["1c"],
 		},
 	],
@@ -164,9 +154,7 @@ describe("@/components/molecules/importUsers", () => {
 
 		const alertElement = wrapper.findAll(".v-alert");
 		expect(alertElement).toHaveLength(1);
-		expect(alertElement[0].element.textContent).toContain(
-			wrapper.vm.$t("pages.administration.migration.cannotStart")
-		);
+		expect(alertElement[0].element.textContent).toContain(wrapper.vm.$t("pages.administration.migration.cannotStart"));
 
 		schoolsModule.setSchool(
 			schoolFactory.build({
@@ -235,9 +223,7 @@ describe("@/components/molecules/importUsers", () => {
 		it("should set search data properties when search first name changes", async () => {
 			const { wrapper, getDataFromApiSpy } = setup();
 
-			const searchFirstNameElement = wrapper.getComponent(
-				'[data-testid="search-first-name"]'
-			);
+			const searchFirstNameElement = wrapper.getComponent('[data-testid="search-first-name"]');
 
 			await searchFirstNameElement.setValue("some text");
 
@@ -248,9 +234,7 @@ describe("@/components/molecules/importUsers", () => {
 		it("should set search data properties when search last name changes", async () => {
 			const { wrapper, getDataFromApiSpy } = setup();
 
-			const searchLastNameElement = wrapper.getComponent(
-				'[data-testid="search-last-name"]'
-			);
+			const searchLastNameElement = wrapper.getComponent('[data-testid="search-last-name"]');
 			await searchLastNameElement.setValue("some text");
 
 			expect(wrapper.vm.searchLastName).toStrictEqual("some text");
@@ -260,9 +244,7 @@ describe("@/components/molecules/importUsers", () => {
 		it("should set search data properties when search username changes", async () => {
 			const { wrapper, getDataFromApiSpy } = setup();
 
-			const searchLoginNameElement = wrapper.getComponent(
-				'[data-testid="search-login-name"]'
-			);
+			const searchLoginNameElement = wrapper.getComponent('[data-testid="search-login-name"]');
 			await searchLoginNameElement.setValue("some text");
 
 			expect(wrapper.vm.searchLoginName).toStrictEqual("some text");
@@ -272,9 +254,7 @@ describe("@/components/molecules/importUsers", () => {
 		it("should set search data properties when search role changes", async () => {
 			const { wrapper, getDataFromApiSpy } = setup();
 
-			const searchRoleElement = wrapper.getComponent(
-				'[data-testid="search-role"]'
-			);
+			const searchRoleElement = wrapper.getComponent('[data-testid="search-role"]');
 			await searchRoleElement.setValue("role search");
 
 			expect(wrapper.vm.searchRole).toStrictEqual("role search");
@@ -284,9 +264,7 @@ describe("@/components/molecules/importUsers", () => {
 		it("should set search data properties when search classes changes", async () => {
 			const { wrapper, getDataFromApiSpy } = setup();
 
-			const searchClassesElement = wrapper.getComponent(
-				'[data-testid="search-classes"]'
-			);
+			const searchClassesElement = wrapper.getComponent('[data-testid="search-classes"]');
 			await searchClassesElement.setValue("class search");
 
 			expect(wrapper.vm.searchClasses).toStrictEqual("class search");
@@ -296,39 +274,24 @@ describe("@/components/molecules/importUsers", () => {
 		it("should search data proprieties when match filter is set", async () => {
 			const { wrapper } = setup();
 
-			const searchMatchedByNoneElement = wrapper.getComponent(
-				'[data-testid="search-matched-by-none"]'
-			);
-			const searchMatchedByAdminElement = wrapper.getComponent(
-				'[data-testid="search-matched-by-admin"]'
-			);
-			const searchMatchedByAutoElement = wrapper.getComponent(
-				'[data-testid="search-matched-by-auto"]'
-			);
+			const searchMatchedByNoneElement = wrapper.getComponent('[data-testid="search-matched-by-none"]');
+			const searchMatchedByAdminElement = wrapper.getComponent('[data-testid="search-matched-by-admin"]');
+			const searchMatchedByAutoElement = wrapper.getComponent('[data-testid="search-matched-by-auto"]');
 
 			await searchMatchedByNoneElement.trigger("click");
 			expect(wrapper.vm.searchMatchedBy).toStrictEqual([MatchedBy.None]);
 
 			await searchMatchedByAdminElement.trigger("click");
-			expect(wrapper.vm.searchMatchedBy).toStrictEqual([
-				MatchedBy.None,
-				MatchedBy.Admin,
-			]);
+			expect(wrapper.vm.searchMatchedBy).toStrictEqual([MatchedBy.None, MatchedBy.Admin]);
 
 			await searchMatchedByAutoElement.trigger("click");
-			expect(wrapper.vm.searchMatchedBy).toStrictEqual([
-				MatchedBy.None,
-				MatchedBy.Admin,
-				MatchedBy.Auto,
-			]);
+			expect(wrapper.vm.searchMatchedBy).toStrictEqual([MatchedBy.None, MatchedBy.Admin, MatchedBy.Auto]);
 		});
 
 		it("should set search data proprieties when flag filter is toggle", async () => {
 			const { wrapper, getDataFromApiSpy } = setup();
 
-			const searchFlaggedElement = wrapper.getComponent(
-				'[data-testid="search-flagged"]'
-			);
+			const searchFlaggedElement = wrapper.getComponent('[data-testid="search-flagged"]');
 			await searchFlaggedElement.trigger("click");
 			expect(wrapper.vm.searchFlagged).toBeTruthy();
 
@@ -359,9 +322,7 @@ describe("@/components/molecules/importUsers", () => {
 			const { wrapper } = setup(mockData);
 			const wrapperVm = wrapper.vm as unknown as typeof ImportUsers;
 
-			const sortFirstNameElement = wrapper.find(
-				'[data-testid="head-first-name"]'
-			);
+			const sortFirstNameElement = wrapper.find('[data-testid="head-first-name"]');
 			await sortFirstNameElement.trigger("click");
 
 			expect(wrapperVm.options.sortBy[0].key).toEqual("firstName");
@@ -376,9 +337,7 @@ describe("@/components/molecules/importUsers", () => {
 		it("should sort by last name", async () => {
 			const { wrapper } = setup(mockData);
 
-			const sortLastNameElement = wrapper.find(
-				'[data-testid="head-last-name"]'
-			);
+			const sortLastNameElement = wrapper.find('[data-testid="head-last-name"]');
 			await sortLastNameElement.trigger("click");
 
 			const wrapperVm = wrapper.vm as unknown as typeof ImportUsers;

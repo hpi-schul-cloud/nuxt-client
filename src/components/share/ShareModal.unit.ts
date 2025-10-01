@@ -1,3 +1,4 @@
+import ShareModal from "./ShareModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
@@ -6,13 +7,9 @@ import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
-import ShareModal from "./ShareModal.vue";
 
 describe("@/components/share/ShareModal", () => {
 	describe("when course is shared", () => {
@@ -61,9 +58,7 @@ describe("@/components/share/ShareModal", () => {
 			const { wrapper } = setup();
 			const title = wrapper.findComponent({ name: "v-card-title" });
 
-			expect(title.text()).toContain(
-				"components.molecules.share.options.title"
-			);
+			expect(title.text()).toContain("components.molecules.share.options.title");
 		});
 
 		it("should call 'createShareUrl' store method when next button clicked", () => {
@@ -105,9 +100,7 @@ describe("@/components/share/ShareModal", () => {
 
 			form.vm.$emit("share-options-change", payload);
 
-			expect(
-				(wrapper.vm as unknown as typeof ShareModal).shareOptions
-			).toStrictEqual(payload);
+			expect((wrapper.vm as unknown as typeof ShareModal).shareOptions).toStrictEqual(payload);
 		});
 
 		it("should call 'onCopy' method when sub component emits 'copied'", async () => {
@@ -127,9 +120,7 @@ describe("@/components/share/ShareModal", () => {
 			const { wrapper } = setup();
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"components.molecules.share.checkPrivacyAndCopyright"
-			);
+			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
 		});
 
 		describe("ctl tool info", () => {
@@ -139,14 +130,10 @@ describe("@/components/share/ShareModal", () => {
 				const dialog = wrapper.findComponent(vCustomDialog);
 				const cardText = dialog.findComponent({ name: "v-card-text" });
 
-				const infotext = cardText.find(
-					`[data-testid="share-modal-external-tools-info"]`
-				);
+				const infotext = cardText.find(`[data-testid="share-modal-external-tools-info"]`);
 
 				expect(infotext.isVisible()).toBe(true);
-				expect(infotext.text()).toEqual(
-					"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
-				);
+				expect(infotext.text()).toEqual("components.molecules.shareImport.options.ctlTools.infoText.unavailable");
 			});
 		});
 	});
@@ -183,9 +170,7 @@ describe("@/components/share/ShareModal", () => {
 			const { wrapper } = setup();
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"components.molecules.share.checkPrivacyAndCopyright"
-			);
+			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
 		});
 
 		it("should show warning alert", () => {
@@ -228,9 +213,7 @@ describe("@/components/share/ShareModal", () => {
 			const { wrapper } = setup();
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"components.molecules.share.checkPrivacyAndCopyright"
-			);
+			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
 		});
 
 		it("should show warning alert", () => {
@@ -273,9 +256,7 @@ describe("@/components/share/ShareModal", () => {
 			const { wrapper } = setup();
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"components.molecules.share.checkPrivacyAndCopyright"
-			);
+			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
 		});
 
 		it("should show warning alert", () => {

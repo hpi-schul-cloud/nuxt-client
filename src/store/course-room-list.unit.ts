@@ -2,11 +2,7 @@ import * as serverApi from "../serverApi/v3/api";
 import CourseRoomListModule from "./course-room-list";
 import { AlertPayload } from "./types/alert-payload";
 import { DroppedObject, RoomsData, SharingCourseObject } from "./types/rooms";
-import {
-	axiosErrorFactory,
-	apiResponseErrorFactory,
-	businessErrorFactory,
-} from "@@/tests/test-utils";
+import { apiResponseErrorFactory, axiosErrorFactory, businessErrorFactory } from "@@/tests/test-utils";
 
 const badRequestError = axiosErrorFactory.build({
 	response: {
@@ -100,9 +96,7 @@ describe("rooms module", () => {
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
 				const mockApi = {
-					dashboardControllerFindForUser: vi
-						.fn()
-						.mockResolvedValue({ data: {} }),
+					dashboardControllerFindForUser: vi.fn().mockResolvedValue({ data: {} }),
 				};
 
 				vi.spyOn(serverApi, "DashboardApiFactory").mockReturnValue(
@@ -166,10 +160,7 @@ describe("rooms module", () => {
 				});
 
 				expect(courseRoomListModule.getLoading).toBe(true);
-				expect(mockApi.dashboardControllerMoveElement).toHaveBeenLastCalledWith(
-					"",
-					expectedParam
-				);
+				expect(mockApi.dashboardControllerMoveElement).toHaveBeenLastCalledWith("", expectedParam);
 			});
 		});
 
@@ -224,9 +215,7 @@ describe("rooms module", () => {
 
 			it("handle error", async () => {
 				const mockApi = {
-					dashboardControllerPatchGroup: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
+					dashboardControllerPatchGroup: vi.fn(() => Promise.reject(badRequestError)),
 				};
 				vi.spyOn(serverApi, "DashboardApiFactory").mockReturnValue(
 					mockApi as unknown as serverApi.DashboardApiInterface
@@ -245,9 +234,7 @@ describe("rooms module", () => {
 				await courseRoomListModule.update(roomsData);
 
 				expect(courseRoomListModule.getLoading).toBe(false);
-				expect(courseRoomListModule.getBusinessError).toStrictEqual(
-					businessError
-				);
+				expect(courseRoomListModule.getBusinessError).toStrictEqual(businessError);
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
 					roomsData.id,
 					roomsData.xPosition,
@@ -260,40 +247,28 @@ describe("rooms module", () => {
 		describe("fetchAllElements", () => {
 			it("should call the backend", async () => {
 				const mockApi = { courseControllerFindForUser: vi.fn() };
-				vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.CoursesApiInterface
-				);
+				vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 				const courseRoomListModule = new CourseRoomListModule({});
 				await courseRoomListModule.fetchAllElements();
 
 				expect(courseRoomListModule.getLoading).toBe(false);
 				expect(mockApi.courseControllerFindForUser).toHaveBeenCalledTimes(1);
 
-				expect(
-					mockApi.courseControllerFindForUser.mock.calls[0][0]
-				).toStrictEqual(0); // $skip: 0
-				expect(
-					mockApi.courseControllerFindForUser.mock.calls[0][1]
-				).toStrictEqual(100); // $limit: 100
+				expect(mockApi.courseControllerFindForUser.mock.calls[0][0]).toStrictEqual(0); // $skip: 0
+				expect(mockApi.courseControllerFindForUser.mock.calls[0][1]).toStrictEqual(100); // $limit: 100
 			});
 
 			it("handle error", () =>
 				new Promise<void>((done) => {
 					const mockApi = {
-						courseControllerFindForUser: vi.fn(() =>
-							Promise.reject(badRequestError)
-						),
+						courseControllerFindForUser: vi.fn(() => Promise.reject(badRequestError)),
 					};
-					vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(
-						mockApi as unknown as serverApi.CoursesApiInterface
-					);
+					vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 					const courseRoomListModule = new CourseRoomListModule({});
 
 					courseRoomListModule.fetchAllElements().then(() => {
 						expect(courseRoomListModule.getLoading).toBe(false);
-						expect(courseRoomListModule.getBusinessError).toStrictEqual(
-							businessError
-						);
+						expect(courseRoomListModule.getBusinessError).toStrictEqual(businessError);
 						done();
 					});
 
@@ -310,16 +285,11 @@ describe("rooms module", () => {
 					message: "",
 				};
 				const courseRoomListModule = new CourseRoomListModule({});
-				const getSharedCourseDataSpy = vi.spyOn(
-					courseRoomListModule,
-					"confirmSharedCourseData"
-				);
+				const getSharedCourseDataSpy = vi.spyOn(courseRoomListModule, "confirmSharedCourseData");
 				getSharedCourseDataSpy.mockImplementation(vi.fn());
 
 				await courseRoomListModule.confirmSharedCourseData(sharedCourseData);
-				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(
-					sharedCourseData
-				);
+				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(sharedCourseData);
 			});
 
 			it("should call the businessError mutation", async () => {
@@ -375,9 +345,7 @@ describe("rooms module", () => {
 						isLocked: false,
 					},
 				];
-				expect(courseRoomListModule.getRoomsData).not.toStrictEqual(
-					roomsDataToBeChanged
-				);
+				expect(courseRoomListModule.getRoomsData).not.toStrictEqual(roomsDataToBeChanged);
 				courseRoomListModule.setRoomData(roomsDataToBeChanged);
 				expect(courseRoomListModule.roomsData).toStrictEqual(expectedData);
 			});
@@ -522,12 +490,8 @@ describe("rooms module", () => {
 
 				courseRoomListModule.setSharedCourseData(sharedCourseData);
 				courseRoomListModule.setImportedCourseId(importedCourseId);
-				expect(courseRoomListModule.sharedCourseData).toStrictEqual(
-					sharedCourseData
-				);
-				expect(courseRoomListModule.importedCourseId).toStrictEqual(
-					importedCourseId
-				);
+				expect(courseRoomListModule.sharedCourseData).toStrictEqual(sharedCourseData);
+				expect(courseRoomListModule.importedCourseId).toStrictEqual(importedCourseId);
 			});
 		});
 
@@ -539,9 +503,7 @@ describe("rooms module", () => {
 					message: "error",
 					error: { type: "BadRequest" },
 				};
-				expect(courseRoomListModule.getBusinessError).not.toBe(
-					businessErrorData
-				);
+				expect(courseRoomListModule.getBusinessError).not.toBe(businessErrorData);
 				courseRoomListModule.setBusinessError(businessErrorData);
 				expect(courseRoomListModule.businessError).toBe(businessErrorData);
 			});
@@ -670,9 +632,7 @@ describe("rooms module", () => {
 				};
 
 				courseRoomListModule.setSharedCourseData(sharedCourseData);
-				expect(courseRoomListModule.getCourseSharingStatus).toStrictEqual(
-					sharedCourseData
-				);
+				expect(courseRoomListModule.getCourseSharingStatus).toStrictEqual(sharedCourseData);
 			});
 		});
 
@@ -682,9 +642,7 @@ describe("rooms module", () => {
 				const sampleId = "sample_id";
 				expect(courseRoomListModule.getImportedCourseId).toStrictEqual("");
 				courseRoomListModule.setImportedCourseId(sampleId);
-				expect(courseRoomListModule.getImportedCourseId).toStrictEqual(
-					sampleId
-				);
+				expect(courseRoomListModule.getImportedCourseId).toStrictEqual(sampleId);
 			});
 		});
 

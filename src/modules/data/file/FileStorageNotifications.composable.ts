@@ -1,7 +1,7 @@
 import { formatFileSize } from "@/utils/fileHelper";
-import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { useI18n } from "vue-i18n";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useEnvFileConfig } from "@data-env";
+import { useI18n } from "vue-i18n";
 
 export const useFileStorageNotifier = () => {
 	const { t } = useI18n();
@@ -28,9 +28,7 @@ export const useFileStorageNotifier = () => {
 	};
 
 	const showInternalServerError = () => {
-		const message = t(
-			"components.board.notifications.errors.fileServiceNotAvailable"
-		);
+		const message = t("components.board.notifications.errors.fileServiceNotAvailable");
 
 		showFailure(message);
 	};
@@ -47,9 +45,7 @@ export const useFileStorageNotifier = () => {
 	};
 
 	const showFileTooBigError = () => {
-		const maxFileSizeWithUnit = formatFileSize(
-			useEnvFileConfig().value.MAX_FILE_SIZE
-		);
+		const maxFileSizeWithUnit = formatFileSize(useEnvFileConfig().value.MAX_FILE_SIZE);
 
 		const message = t("components.board.notifications.errors.fileToBig", {
 			maxFileSizeWithUnit,

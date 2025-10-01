@@ -1,3 +1,4 @@
+import TaskItemStudent from "./TaskItemStudent.vue";
 import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
@@ -8,17 +9,12 @@ import TasksModule from "@/store/tasks";
 import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
-import TaskItemStudent from "./TaskItemStudent.vue";
 import { ComponentProps } from "vue-component-type-helpers";
 
-const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
-	mocks;
+const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } = mocks;
 
 let tasksModuleMock: TasksModule;
 let copyModuleMock: CopyModule;
@@ -28,8 +24,8 @@ const mockRouter = {
 	push: vi.fn(),
 };
 
-const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) => {
-	return mount(TaskItemStudent, {
+const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) =>
+	mount(TaskItemStudent, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -43,7 +39,6 @@ const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) => {
 			$router: mockRouter,
 		},
 	});
-};
 
 describe("@/components/molecules/TaskItemStudent", () => {
 	beforeEach(() => {
@@ -103,9 +98,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 
 		const wrapper = getWrapper({ task: taskCloseToDueDate });
 
-		expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(
-			true
-		);
+		expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(true);
 	});
 
 	it("Should not render hint label, if task is close to due date and submitted", () => {
@@ -128,17 +121,13 @@ describe("@/components/molecules/TaskItemStudent", () => {
 
 		const wrapper = getWrapper({ task: taskCloseToDueDate });
 
-		expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(
-			false
-		);
+		expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(false);
 	});
 
 	it("Should render no hint label if the task is due in the far future", () => {
 		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
 
-		expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(
-			false
-		);
+		expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(false);
 	});
 
 	it("computed DueDateLabel() method should be able to render a shortened date", () => {
@@ -168,8 +157,6 @@ describe("@/components/molecules/TaskItemStudent", () => {
 	it("should display topic", () => {
 		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
 
-		expect(wrapper.text()).toContain(
-			"offencommon.words.topic Malen nach Zahlen"
-		);
+		expect(wrapper.text()).toContain("offencommon.words.topic Malen nach Zahlen");
 	});
 });

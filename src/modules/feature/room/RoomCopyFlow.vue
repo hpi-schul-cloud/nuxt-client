@@ -1,19 +1,15 @@
 <template>
-	<RoomCopyInfoDialog
-		v-if="isRoomCopyInfoDialogOpen"
-		@copy:cancel="onCancelCopy"
-		@copy:confirm="onConfirmCopy"
-	/>
+	<RoomCopyInfoDialog v-if="isRoomCopyInfoDialogOpen" @copy:cancel="onCancelCopy" @copy:confirm="onConfirmCopy" />
 </template>
 
 <script setup lang="ts">
+import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
 import { useLoadingState } from "@/composables/loadingState";
 import { CopyApiResponseStatusEnum, RoomApiFactory } from "@/serverApi/v3";
 import { RoomDetails } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
 import { nextTick, onMounted, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -55,10 +51,7 @@ const onConfirmCopy = async () => {
 	try {
 		const response = await roomApi.roomControllerCopyRoom(props.room.id);
 		const copyResult = response.data;
-		if (
-			copyResult.status === CopyApiResponseStatusEnum.Failure ||
-			copyResult.id === undefined
-		) {
+		if (copyResult.status === CopyApiResponseStatusEnum.Failure || copyResult.id === undefined) {
 			showFailure();
 			emit("copy:error", copyResult.id);
 		} else {

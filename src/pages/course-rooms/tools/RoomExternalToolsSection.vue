@@ -86,9 +86,7 @@ const isErrorDialogOpen = ref(false);
 const selectedItem = ref<ExternalToolDisplayData | undefined>();
 
 const selectedItemName = computed(() => selectedItem.value?.name || "???");
-const canEdit = computed(() =>
-	authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
-);
+const canEdit = computed(() => authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase()));
 
 const onOpenDeleteDialog = (tool: ExternalToolDisplayData) => {
 	selectedItem.value = tool;

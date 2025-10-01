@@ -1,10 +1,10 @@
+import { createI18n } from "./i18n";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { unref } from "vue";
-import { createI18n } from "./i18n";
-import { createTestEnvStore } from "@@/tests/test-utils";
 
 describe("i18n plugin", () => {
 	beforeAll(() => {
@@ -44,17 +44,9 @@ describe("i18n plugin", () => {
 
 		const i18n = createI18n();
 
-		expect(
-			unref(i18n.global.numberFormats).de.fileSize.maximumFractionDigits
-		).toBe(2);
-		expect(
-			unref(i18n.global.numberFormats).en.fileSize.maximumFractionDigits
-		).toBe(2);
-		expect(
-			unref(i18n.global.numberFormats).es.fileSize.maximumFractionDigits
-		).toBe(2);
-		expect(
-			unref(i18n.global.numberFormats).uk.fileSize.maximumFractionDigits
-		).toBe(2);
+		expect(unref(i18n.global.numberFormats).de.fileSize.maximumFractionDigits).toBe(2);
+		expect(unref(i18n.global.numberFormats).en.fileSize.maximumFractionDigits).toBe(2);
+		expect(unref(i18n.global.numberFormats).es.fileSize.maximumFractionDigits).toBe(2);
+		expect(unref(i18n.global.numberFormats).uk.fileSize.maximumFractionDigits).toBe(2);
 	});
 });

@@ -1,11 +1,6 @@
-import { mountComposable } from "@@/tests/test-utils";
 import { useExternalToolValidation } from "./external-tool-validation.composable";
-import {
-	ToolParameter,
-	ToolParameterLocation,
-	ToolParameterScope,
-	ToolParameterType,
-} from "@/store/external-tool";
+import { ToolParameter, ToolParameterLocation, ToolParameterScope, ToolParameterType } from "@/store/external-tool";
+import { mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 describe("useExternalToolValidation", () => {
@@ -39,10 +34,7 @@ describe("useExternalToolValidation", () => {
 		it("should return true when validation passed", () => {
 			const { validateParameter, toolParameter } = setup();
 
-			const rules: (() => string | boolean)[] = validateParameter(
-				toolParameter,
-				undefined
-			);
+			const rules: (() => string | boolean)[] = validateParameter(toolParameter, undefined);
 
 			expect(rules[0]()).toBeTruthy();
 		});
@@ -51,14 +43,9 @@ describe("useExternalToolValidation", () => {
 			const { validateParameter, toolParameter } = setup();
 			toolParameter.isOptional = false;
 
-			const rules: (() => string | boolean)[] = validateParameter(
-				toolParameter,
-				undefined
-			);
+			const rules: (() => string | boolean)[] = validateParameter(toolParameter, undefined);
 
-			const requiredRuleExists = rules.some(
-				(rule) => rule() === "common.validation.required2"
-			);
+			const requiredRuleExists = rules.some((rule) => rule() === "common.validation.required2");
 
 			expect(requiredRuleExists).toBeTruthy();
 		});
@@ -67,14 +54,9 @@ describe("useExternalToolValidation", () => {
 			const { validateParameter, toolParameter } = setup();
 			toolParameter.regex = "[x]";
 
-			const rules: (() => string | boolean)[] = validateParameter(
-				toolParameter,
-				"test"
-			);
+			const rules: (() => string | boolean)[] = validateParameter(toolParameter, "test");
 
-			const regexRuleExists = rules.some(
-				(rule) => rule() === "common.validation.regex"
-			);
+			const regexRuleExists = rules.some((rule) => rule() === "common.validation.regex");
 
 			expect(regexRuleExists).toBeTruthy();
 		});
@@ -83,14 +65,9 @@ describe("useExternalToolValidation", () => {
 			const { validateParameter, toolParameter } = setup();
 			toolParameter.type = ToolParameterType.Number;
 
-			const rules: (() => string | boolean)[] = validateParameter(
-				toolParameter,
-				"noNumber2123"
-			);
+			const rules: (() => string | boolean)[] = validateParameter(toolParameter, "noNumber2123");
 
-			const numberRuleExists = rules.some(
-				(rule) => rule() === "common.validation.number"
-			);
+			const numberRuleExists = rules.some((rule) => rule() === "common.validation.number");
 
 			expect(numberRuleExists).toBeTruthy();
 		});

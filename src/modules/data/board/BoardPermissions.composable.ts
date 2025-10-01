@@ -1,10 +1,10 @@
+import { useBoardStore } from "./Board.store";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { authModule } from "@/store";
 import { BoardPermissionChecks } from "@/types/board/Permissions";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { storeToRefs } from "pinia";
 import { Ref, ref, toValue, watchEffect } from "vue";
-import { useBoardStore } from "./Board.store";
 
 const boardPermissions = (): BoardPermissionChecks => {
 	const userRoles: string[] = authModule?.getUserRoles || [];
@@ -31,21 +31,13 @@ const boardPermissions = (): BoardPermissionChecks => {
 
 		hasMovePermission.value = permissions.includes(Permission.BoardEdit);
 		hasCreateCardPermission.value = permissions.includes(Permission.BoardEdit);
-		hasCreateColumnPermission.value = permissions.includes(
-			Permission.BoardEdit
-		);
+		hasCreateColumnPermission.value = permissions.includes(Permission.BoardEdit);
 		// TODO fix lower case permissions
-		hasCreateToolPermission.value = permissions.includes(
-			Permission.ContextToolAdmin.toLowerCase()
-		);
+		hasCreateToolPermission.value = permissions.includes(Permission.ContextToolAdmin.toLowerCase());
 		hasEditPermission.value = permissions.includes(Permission.BoardEdit);
 		hasDeletePermission.value = permissions.includes(Permission.BoardEdit);
-		hasManageVideoConferencePermission.value = permissions.includes(
-			Permission.BoardManageVideoconference
-		);
-		hasShareBoardPermission.value = permissions.includes(
-			Permission.BoardShareBoard
-		);
+		hasManageVideoConferencePermission.value = permissions.includes(Permission.BoardManageVideoconference);
+		hasShareBoardPermission.value = permissions.includes(Permission.BoardShareBoard);
 	});
 
 	return {
@@ -63,5 +55,4 @@ const boardPermissions = (): BoardPermissionChecks => {
 	};
 };
 
-export const useBoardPermissions =
-	createTestableSharedComposable(boardPermissions);
+export const useBoardPermissions = createTestableSharedComposable(boardPermissions);

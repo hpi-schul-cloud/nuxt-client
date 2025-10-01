@@ -1,5 +1,4 @@
-import { importUsersModule } from "@/store";
-import ImportUsersModule from "@/store/import-users";
+import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 import {
 	ImportUserResponse,
 	ImportUserResponseRoleNamesEnum,
@@ -7,18 +6,16 @@ import {
 	UserMatchResponseMatchedByEnum,
 	UserMatchResponseRoleNamesEnum,
 } from "@/serverApi/v3";
+import { importUsersModule } from "@/store";
+import ImportUsersModule from "@/store/import-users";
 import { THEME_KEY } from "@/utils/inject";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mdiFlag, mdiFlagOutline } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { VAutocomplete, VBtn, VListItem } from "vuetify/lib/components/index";
-import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 
 const testProps = {
 	editedItem: {
@@ -35,10 +32,7 @@ const testProps = {
 	ldapSource: "LDAP",
 };
 
-const getWrapper = (
-	props: ComponentProps<typeof vImportUsersMatchSearch>,
-	options?: object
-) => {
+const getWrapper = (props: ComponentProps<typeof vImportUsersMatchSearch>, options?: object) => {
 	vi.spyOn(importUsersModule, "fetchAllUsers").mockResolvedValue();
 	return mount(vImportUsersMatchSearch, {
 		global: {
@@ -164,17 +158,13 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		});
 
 		const deleteMatchMock = vi.spyOn(importUsersModule, "deleteMatch");
-		deleteMatchMock.mockImplementation(async () => {
-			return Promise.resolve(importUser);
-		});
+		deleteMatchMock.mockImplementation(async () => Promise.resolve(importUser));
 		const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
 		await deleteMatchButton.trigger("click");
 		await nextTick();
 
 		expect(deleteMatchMock).toHaveBeenCalledTimes(1);
-		expect(deleteMatchMock).toHaveBeenCalledWith(
-			testProps.editedItem.importUserId
-		);
+		expect(deleteMatchMock).toHaveBeenCalledWith(testProps.editedItem.importUserId);
 		expect(wrapper.emitted()["deleted-match"]).toBeTruthy();
 	});
 
@@ -200,9 +190,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 	it("should not display username when prop nbc is set", () => {
 		const wrapper = getWrapper({ ...testProps, isNbc: true });
 
-		const editedItemUsername = wrapper.find(
-			"[data-testid=edited-item-username]"
-		);
+		const editedItemUsername = wrapper.find("[data-testid=edited-item-username]");
 
 		expect(editedItemUsername.exists()).toBe(false);
 	});
@@ -233,13 +221,9 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 			const { setupTestProps } = setup();
 			const wrapper = getWrapper(setupTestProps);
 
-			const editedItemElement = wrapper
-				.find("[data-testid=edited-item]")
-				.html();
+			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
-			expect(editedItemElement).not.toContain(
-				`common.labels.role ${setupTestProps.ldapSource}`
-			);
+			expect(editedItemElement).not.toContain(`common.labels.role ${setupTestProps.ldapSource}`);
 		});
 	});
 
@@ -270,9 +254,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				const { adminTestProps } = setup();
 				const wrapper = getWrapper(adminTestProps);
 
-				const editedItemElement = wrapper
-					.find("[data-testid=edited-item]")
-					.html();
+				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 				expect(editedItemElement).toContain("Max");
 				expect(editedItemElement).toContain("Mustermann");
@@ -310,9 +292,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				const { adminTestProps } = setup();
 				const wrapper = getWrapper(adminTestProps);
 
-				const editedItemElement = wrapper
-					.find("[data-testid=edited-item]")
-					.html();
+				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 				expect(editedItemElement).toContain("Max");
 				expect(editedItemElement).toContain("Mustermann");
@@ -350,9 +330,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				const { adminTestProps } = setup();
 				const wrapper = getWrapper(adminTestProps);
 
-				const editedItemElement = wrapper
-					.find("[data-testid=edited-item]")
-					.html();
+				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 				expect(editedItemElement).toContain("Max");
 				expect(editedItemElement).toContain("Mustermann");
@@ -390,9 +368,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				const { adminTestProps } = setup();
 				const wrapper = getWrapper(adminTestProps);
 
-				const editedItemElement = wrapper
-					.find("[data-testid=edited-item]")
-					.html();
+				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 				expect(editedItemElement).toContain("Max");
 				expect(editedItemElement).toContain("Mustermann");
@@ -430,16 +406,12 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				const { setupTestProps } = setup();
 				const wrapper = getWrapper(setupTestProps);
 
-				const editedItemElement = wrapper
-					.find("[data-testid=edited-item]")
-					.html();
+				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 				expect(editedItemElement).toContain("Max");
 				expect(editedItemElement).toContain("Mustermann");
 				expect(editedItemElement).toContain("common.roleName.student");
-				expect(editedItemElement).toContain(
-					"components.molecules.importUsersMatch.externalRoleName.none"
-				);
+				expect(editedItemElement).toContain("components.molecules.importUsersMatch.externalRoleName.none");
 			});
 		});
 	});

@@ -4,11 +4,7 @@
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 	>
-		<div
-			data-testid="event-handle"
-			@keydown.up.down.left.right="onKeydownArrow"
-			@keydown.enter="onKeydownEnter"
-		>
+		<div data-testid="event-handle" @keydown.up.down.left.right="onKeydownArrow" @keydown.enter="onKeydownEnter">
 			<slot />
 		</div>
 	</InlineEditInteractionHandler>

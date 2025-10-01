@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount, shallowMount } from "@vue/test-utils";
-import { VBtn, VIcon, VListItem, VMenu } from "vuetify/lib/components/index";
 import RoomDotMenu from "./RoomDotMenu.vue";
 import { MenuItem } from "./types";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount, shallowMount } from "@vue/test-utils";
+import { VBtn, VIcon, VListItem, VMenu } from "vuetify/lib/components/index";
 
 const action = vi.fn();
 const testProps: { menuItems: MenuItem[] } = {
@@ -19,24 +16,19 @@ const testProps: { menuItems: MenuItem[] } = {
 	],
 };
 
-const getWrapper = (props: { menuItems: MenuItem[] }, options?: object) => {
-	return mount(RoomDotMenu, {
+const getWrapper = (props: { menuItems: MenuItem[] }, options?: object) =>
+	mount(RoomDotMenu, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		props,
 		...options,
 	});
-};
 
-const getShallowWrapper = (
-	props: { menuItems: MenuItem[] },
-	options?: object
-) => {
-	return shallowMount(RoomDotMenu, {
+const getShallowWrapper = (props: { menuItems: MenuItem[] }, options?: object) =>
+	shallowMount(RoomDotMenu, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		props,
 		...options,
 	});
-};
 
 describe("@/components/molecules/RoomDotMenu", () => {
 	it("should render with correct props", () => {

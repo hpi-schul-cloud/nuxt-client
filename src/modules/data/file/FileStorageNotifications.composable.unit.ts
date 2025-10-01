@@ -1,34 +1,31 @@
+import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useI18n } from "vue-i18n";
-import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
-import { createTestEnvStore } from "@@/tests/test-utils";
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({
-			t: vi.fn().mockImplementation((key: string) => key),
-			n: vi.fn().mockImplementation((key: string) => key),
-		}),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({
+		t: vi.fn().mockImplementation((key: string) => key),
+		n: vi.fn().mockImplementation((key: string) => key),
+	}),
+}));
 
 const maxFileSize = 100;
 const mockI18nModule = vi.mocked(useI18n());
 
 const notifierModule = createModuleMocks(NotifierModule);
 
-const setupMountComposable = () => {
-	return mountComposable(() => useFileStorageNotifier(), {
+const setupMountComposable = () =>
+	mountComposable(() => useFileStorageNotifier(), {
 		global: {
 			provide: {
 				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 			},
 		},
 	});
-};
 
 describe("FileStorageNotifier.composable", () => {
 	beforeAll(() => {
@@ -100,8 +97,7 @@ describe("FileStorageNotifier.composable", () => {
 
 	describe("when showInternalServerError called", () => {
 		const setup = () => {
-			const i18nKey =
-				"components.board.notifications.errors.fileServiceNotAvailable";
+			const i18nKey = "components.board.notifications.errors.fileServiceNotAvailable";
 
 			return { i18nKey };
 		};

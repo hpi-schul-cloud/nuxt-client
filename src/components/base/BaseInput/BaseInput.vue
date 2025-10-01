@@ -18,21 +18,13 @@
 </template>
 
 <script>
-import BaseInputDefault, {
-	supportedTypes as defaultInputTypes,
-} from "./BaseInputDefault.vue";
-import BaseInputCheckbox, {
-	supportedTypes as checkboxInputTypes,
-} from "./BaseInputCheckbox.vue";
+import BaseInputCheckbox, { supportedTypes as checkboxInputTypes } from "./BaseInputCheckbox.vue";
+import BaseInputDefault, { supportedTypes as defaultInputTypes } from "./BaseInputDefault.vue";
 import { logger } from "@util-logger";
 
 const componentDictionary = {};
-defaultInputTypes.forEach(
-	(type) => (componentDictionary[type] = BaseInputDefault)
-);
-checkboxInputTypes.forEach(
-	(type) => (componentDictionary[type] = BaseInputCheckbox)
-);
+defaultInputTypes.forEach((type) => (componentDictionary[type] = BaseInputDefault));
+checkboxInputTypes.forEach((type) => (componentDictionary[type] = BaseInputCheckbox));
 export const supportedTypes = Object.keys(componentDictionary);
 
 export const validationDelay = 800;
@@ -46,9 +38,7 @@ export default {
 		type: {
 			type: String,
 			required: true,
-			validator: (type) => {
-				return supportedTypes.includes(type);
-			},
+			validator: (type) => supportedTypes.includes(type),
 		},
 		validationModel: {
 			type: Object,
@@ -74,9 +64,7 @@ export default {
 		validationMessage() {
 			if (this.validationModel && this.validationModel.$dirty) {
 				for (const entry of this.validationMessages) {
-					const error = this.validationModel.$errors.find(
-						(e) => e.$validator === entry.key
-					);
+					const error = this.validationModel.$errors.find((e) => e.$validator === entry.key);
 					if (error) {
 						return entry.message;
 					}
@@ -87,10 +75,7 @@ export default {
 	},
 	created() {
 		if (!componentDictionary[this.type]) {
-			logger.error(
-				`invalid prop type ${this.type}:\n` +
-					`$attrs ${JSON.stringify(this.$attrs)}`
-			);
+			logger.error(`invalid prop type ${this.type}:\n` + `$attrs ${JSON.stringify(this.$attrs)}`);
 		}
 		this.validationObject = this.validationModel;
 	},
@@ -101,10 +86,7 @@ export default {
 				if (this.validationObject.$futureTouch) {
 					clearTimeout(this.validationObject.$futureTouch);
 				}
-				this.validationObject.$futureTouch = setTimeout(
-					() => this.validationObject.$touch(),
-					validationDelay
-				);
+				this.validationObject.$futureTouch = setTimeout(() => this.validationObject.$touch(), validationDelay);
 			}
 
 			this.$emit("update:modelValue", event);

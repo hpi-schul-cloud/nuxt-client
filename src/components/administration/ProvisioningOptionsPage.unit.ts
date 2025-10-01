@@ -1,26 +1,17 @@
-import type { Mock } from "vitest";
+import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 import { THEME_KEY } from "@/utils/inject";
-import {
-	createTestEnvStore,
-	provisioningOptionsDataFactory,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import {
-	ProvisioningOptions,
-	useProvisioningOptionsState,
-} from "@data-provisioning-options";
+import { createTestEnvStore, provisioningOptionsDataFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ProvisioningOptions, useProvisioningOptionsState } from "@data-provisioning-options";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
+import type { Mock } from "vitest";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { Router, useRouter } from "vue-router";
 import { VCheckboxBtn } from "vuetify/lib/components/index";
-import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 
 vi.mock("@data-provisioning-options");
 
@@ -41,9 +32,7 @@ describe("ProvisioningOptionsPage", () => {
 		behavior: "smooth",
 	}));
 
-	let useProvisioningOptionsStateMock: DeepMocked<
-		ReturnType<typeof useProvisioningOptionsState>
-	>;
+	let useProvisioningOptionsStateMock: DeepMocked<ReturnType<typeof useProvisioningOptionsState>>;
 	const router = createMock<Router>();
 
 	const getWrapper = (
@@ -76,17 +65,13 @@ describe("ProvisioningOptionsPage", () => {
 	};
 
 	beforeEach(() => {
-		useProvisioningOptionsStateMock = createMock<
-			ReturnType<typeof useProvisioningOptionsState>
-		>({
+		useProvisioningOptionsStateMock = createMock<ReturnType<typeof useProvisioningOptionsState>>({
 			isLoading: ref(false),
 			provisioningOptionsData: ref(provisioningOptionsDataFactory.build()),
 			error: ref(),
 		});
 
-		vi.mocked(useProvisioningOptionsState).mockReturnValue(
-			useProvisioningOptionsStateMock
-		);
+		vi.mocked(useProvisioningOptionsState).mockReturnValue(useProvisioningOptionsStateMock);
 	});
 
 	afterEach(() => {
@@ -100,12 +85,8 @@ describe("ProvisioningOptionsPage", () => {
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
 			expect(breadcrumbs[0].text()).toEqual("pages.administration.index.title");
-			expect(breadcrumbs[1].text()).toEqual(
-				"pages.administration.school.index.title"
-			);
-			expect(breadcrumbs[2].text()).toEqual(
-				"components.administration.provisioningOptions.page.title"
-			);
+			expect(breadcrumbs[1].text()).toEqual("pages.administration.school.index.title");
+			expect(breadcrumbs[2].text()).toEqual("components.administration.provisioningOptions.page.title");
 		});
 	});
 
@@ -115,9 +96,7 @@ describe("ProvisioningOptionsPage", () => {
 
 			const title = wrapper.find("h1");
 
-			expect(title.text()).toContain(
-				"components.administration.provisioningOptions.page.title"
-			);
+			expect(title.text()).toContain("components.administration.provisioningOptions.page.title");
 		});
 	});
 
@@ -128,9 +107,7 @@ describe("ProvisioningOptionsPage", () => {
 
 				await nextTick();
 
-				expect(
-					useProvisioningOptionsStateMock.fetchProvisioningOptionsData
-				).toHaveBeenCalledWith("systemId");
+				expect(useProvisioningOptionsStateMock.fetchProvisioningOptionsData).toHaveBeenCalledWith("systemId");
 			});
 		});
 	});
@@ -140,8 +117,7 @@ describe("ProvisioningOptionsPage", () => {
 			const setup = () => {
 				const provisioningOptions = provisioningOptionsDataFactory.build();
 
-				useProvisioningOptionsStateMock.provisioningOptionsData.value =
-					provisioningOptions;
+				useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptions;
 
 				const { wrapper } = getWrapper(
 					{ systemId: "systemId" },
@@ -158,18 +134,10 @@ describe("ProvisioningOptionsPage", () => {
 			it("should render 3 checkboxes", () => {
 				const { wrapper } = setup();
 
-				const classCheckbox = wrapper.find(
-					"[data-testid=checkbox-option-class]"
-				);
-				const courseCheckbox = wrapper.find(
-					"[data-testid=checkbox-option-course]"
-				);
-				const othersCheckbox = wrapper.find(
-					"[data-testid=checkbox-option-others]"
-				);
-				const schoolExternalToolCheckbox = wrapper.find(
-					"[data-testid=checkbox-option-school-external-tools]"
-				);
+				const classCheckbox = wrapper.find("[data-testid=checkbox-option-class]");
+				const courseCheckbox = wrapper.find("[data-testid=checkbox-option-course]");
+				const othersCheckbox = wrapper.find("[data-testid=checkbox-option-others]");
+				const schoolExternalToolCheckbox = wrapper.find("[data-testid=checkbox-option-school-external-tools]");
 
 				expect(classCheckbox.isVisible()).toEqual(true);
 				expect(courseCheckbox.isVisible()).toEqual(true);
@@ -182,8 +150,7 @@ describe("ProvisioningOptionsPage", () => {
 			const setup = () => {
 				const provisioningOptions = provisioningOptionsDataFactory.build();
 
-				useProvisioningOptionsStateMock.provisioningOptionsData.value =
-					provisioningOptions;
+				useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptions;
 
 				const { wrapper } = getWrapper(
 					{ systemId: "systemId" },
@@ -200,18 +167,10 @@ describe("ProvisioningOptionsPage", () => {
 			it("should render 4 checkboxes", () => {
 				const { wrapper } = setup();
 
-				const classCheckbox = wrapper.find(
-					"[data-testid=checkbox-option-class]"
-				);
-				const courseCheckbox = wrapper.find(
-					"[data-testid=checkbox-option-course]"
-				);
-				const othersCheckbox = wrapper.find(
-					"[data-testid=checkbox-option-others]"
-				);
-				const schoolExternalToolCheckbox = wrapper.find(
-					"[data-testid=checkbox-option-school-external-tools]"
-				);
+				const classCheckbox = wrapper.find("[data-testid=checkbox-option-class]");
+				const courseCheckbox = wrapper.find("[data-testid=checkbox-option-course]");
+				const othersCheckbox = wrapper.find("[data-testid=checkbox-option-others]");
+				const schoolExternalToolCheckbox = wrapper.find("[data-testid=checkbox-option-school-external-tools]");
 
 				expect(classCheckbox.isVisible()).toEqual(true);
 				expect(courseCheckbox.isVisible()).toEqual(true);
@@ -224,14 +183,11 @@ describe("ProvisioningOptionsPage", () => {
 	describe("buttons", () => {
 		describe("when clicking the cancel button", () => {
 			const setup = () => {
-				useProvisioningOptionsStateMock.provisioningOptionsData.value =
-					provisioningOptionsDataFactory.build();
+				useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptionsDataFactory.build();
 
 				const { wrapper } = getWrapper();
 
-				const cancelButton = wrapper.find(
-					'[data-testid="provisioning-options-cancel-button"]'
-				);
+				const cancelButton = wrapper.find('[data-testid="provisioning-options-cancel-button"]');
 
 				const redirect = {
 					path: "/administration/school-settings",
@@ -249,9 +205,7 @@ describe("ProvisioningOptionsPage", () => {
 
 				await cancelButton.trigger("click");
 
-				expect(
-					useProvisioningOptionsStateMock.updateProvisioningOptionsData
-				).not.toHaveBeenCalled();
+				expect(useProvisioningOptionsStateMock.updateProvisioningOptionsData).not.toHaveBeenCalled();
 			});
 
 			it("should return to school settings page", async () => {
@@ -266,14 +220,11 @@ describe("ProvisioningOptionsPage", () => {
 		describe("when clicking the save", () => {
 			describe("when enabling options", () => {
 				const setup = () => {
-					useProvisioningOptionsStateMock.provisioningOptionsData.value =
-						provisioningOptionsDataFactory.build();
+					useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptionsDataFactory.build();
 
 					const { wrapper } = getWrapper();
 
-					const saveButton = wrapper.find(
-						'[data-testid="provisioning-options-save-button"]'
-					);
+					const saveButton = wrapper.find('[data-testid="provisioning-options-save-button"]');
 
 					const redirect = {
 						path: "/administration/school-settings",
@@ -291,9 +242,9 @@ describe("ProvisioningOptionsPage", () => {
 
 					await saveButton.trigger("click");
 
-					expect(
-						useProvisioningOptionsStateMock.updateProvisioningOptionsData
-					).toHaveBeenCalledWith<[string, ProvisioningOptions]>("systemId", {
+					expect(useProvisioningOptionsStateMock.updateProvisioningOptionsData).toHaveBeenCalledWith<
+						[string, ProvisioningOptions]
+					>("systemId", {
 						class: true,
 						course: false,
 						others: false,
@@ -316,16 +267,13 @@ describe("ProvisioningOptionsPage", () => {
 					vi.clearAllMocks();
 				});
 				const setup = async () => {
-					useProvisioningOptionsStateMock.provisioningOptionsData.value =
-						provisioningOptionsDataFactory.build({
-							class: true,
-						});
+					useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptionsDataFactory.build({
+						class: true,
+					});
 
 					const { wrapper } = getWrapper();
 
-					const saveButton = wrapper.find(
-						'[data-testid="provisioning-options-save-button"]'
-					);
+					const saveButton = wrapper.find('[data-testid="provisioning-options-save-button"]');
 
 					await flushPromises();
 
@@ -346,9 +294,7 @@ describe("ProvisioningOptionsPage", () => {
 
 					await saveButton.trigger("click");
 
-					expect(
-						useProvisioningOptionsStateMock.updateProvisioningOptionsData
-					).not.toHaveBeenCalled();
+					expect(useProvisioningOptionsStateMock.updateProvisioningOptionsData).not.toHaveBeenCalled();
 				});
 
 				it("should open the warning dialog", async () => {
@@ -364,14 +310,11 @@ describe("ProvisioningOptionsPage", () => {
 
 			describe("when an error occurs", () => {
 				const setup = () => {
-					useProvisioningOptionsStateMock.provisioningOptionsData.value =
-						provisioningOptionsDataFactory.build();
+					useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptionsDataFactory.build();
 
 					const { wrapper } = getWrapper();
 
-					const saveButton = wrapper.find(
-						'[data-testid="provisioning-options-save-button"]'
-					);
+					const saveButton = wrapper.find('[data-testid="provisioning-options-save-button"]');
 
 					useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
 					useProvisioningOptionsStateMock.error.value = {
@@ -390,9 +333,9 @@ describe("ProvisioningOptionsPage", () => {
 
 					saveButton.trigger("click");
 
-					expect(
-						useProvisioningOptionsStateMock.updateProvisioningOptionsData
-					).toHaveBeenCalledWith<[string, ProvisioningOptions]>("systemId", {
+					expect(useProvisioningOptionsStateMock.updateProvisioningOptionsData).toHaveBeenCalledWith<
+						[string, ProvisioningOptions]
+					>("systemId", {
 						class: true,
 						course: false,
 						others: false,

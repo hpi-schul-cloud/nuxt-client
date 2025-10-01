@@ -72,23 +72,20 @@ export const useBoardApi = () => {
 		});
 	};
 
-	const updateCardHeightCall = async (id: string, height: number) => {
-		return cardsApi.cardControllerUpdateCardHeight(id, {
+	const updateCardHeightCall = async (id: string, height: number) =>
+		cardsApi.cardControllerUpdateCardHeight(id, {
 			height,
 		});
-	};
 
-	const updateCardTitle = async (id: string, title: string) => {
-		return cardsApi.cardControllerUpdateCardTitle(id, {
+	const updateCardTitle = async (id: string, title: string) =>
+		cardsApi.cardControllerUpdateCardTitle(id, {
 			title,
 		});
-	};
 
-	const updateColumnTitleCall = async (id: string, title: string) => {
-		return boardColumnApi.columnControllerUpdateColumnTitle(id, {
+	const updateColumnTitleCall = async (id: string, title: string) =>
+		boardColumnApi.columnControllerUpdateColumnTitle(id, {
 			title,
 		});
-	};
 
 	const updateElementCall = async (element: AnyContentElement) => {
 		const data = generateDataProp(element);
@@ -98,11 +95,8 @@ export const useBoardApi = () => {
 	};
 
 	const generateDataProp = (element: AnyContentElement) => {
-		const isRichTextElement = (
-			element: AnyContentElement
-		): element is RichTextElementResponse => {
-			return element.type === ContentElementType.RichText;
-		};
+		const isRichTextElement = (element: AnyContentElement): element is RichTextElementResponse =>
+			element.type === ContentElementType.RichText;
 
 		if (isRichTextElement(element)) {
 			const body: RichTextElementContentBody = {
@@ -112,11 +106,8 @@ export const useBoardApi = () => {
 			return body;
 		}
 
-		const isFileElement = (
-			element: AnyContentElement
-		): element is FileElementResponse => {
-			return element.type === ContentElementType.File;
-		};
+		const isFileElement = (element: AnyContentElement): element is FileElementResponse =>
+			element.type === ContentElementType.File;
 
 		if (isFileElement(element)) {
 			const body: FileElementContentBody = {
@@ -126,11 +117,8 @@ export const useBoardApi = () => {
 			return body;
 		}
 
-		const isFileFolderElement = (
-			element: AnyContentElement
-		): element is FileElementResponse => {
-			return element.type === ContentElementType.FileFolder;
-		};
+		const isFileFolderElement = (element: AnyContentElement): element is FileElementResponse =>
+			element.type === ContentElementType.FileFolder;
 
 		if (isFileFolderElement(element)) {
 			const body: FileElementContentBody = {
@@ -140,11 +128,8 @@ export const useBoardApi = () => {
 			return body;
 		}
 
-		const isSubmissionContainerElement = (
-			element: AnyContentElement
-		): element is SubmissionContainerElementResponse => {
-			return element.type === ContentElementType.SubmissionContainer;
-		};
+		const isSubmissionContainerElement = (element: AnyContentElement): element is SubmissionContainerElementResponse =>
+			element.type === ContentElementType.SubmissionContainer;
 
 		if (isSubmissionContainerElement(element)) {
 			const body: SubmissionContainerElementContentBody = {
@@ -154,11 +139,8 @@ export const useBoardApi = () => {
 			return body;
 		}
 
-		const isLinkElement = (
-			element: AnyContentElement
-		): element is LinkElementResponse => {
-			return element.type === ContentElementType.Link;
-		};
+		const isLinkElement = (element: AnyContentElement): element is LinkElementResponse =>
+			element.type === ContentElementType.Link;
 
 		if (isLinkElement(element)) {
 			const body: LinkElementContentBody = {
@@ -169,11 +151,8 @@ export const useBoardApi = () => {
 			return body;
 		}
 
-		const isExternalToolElement = (
-			element: AnyContentElement
-		): element is ExternalToolElementResponse => {
-			return element.type === ContentElementType.ExternalTool;
-		};
+		const isExternalToolElement = (element: AnyContentElement): element is ExternalToolElementResponse =>
+			element.type === ContentElementType.ExternalTool;
 
 		if (isExternalToolElement(element)) {
 			const body: ExternalToolElementContentBody = {
@@ -184,11 +163,8 @@ export const useBoardApi = () => {
 			return body;
 		}
 
-		const isDrawingElement = (
-			element: AnyContentElement
-		): element is DrawingElementResponse => {
-			return element.type === ContentElementType.Drawing;
-		};
+		const isDrawingElement = (element: AnyContentElement): element is DrawingElementResponse =>
+			element.type === ContentElementType.Drawing;
 
 		if (isDrawingElement(element)) {
 			const body: DrawingElementContentBody = {
@@ -198,11 +174,8 @@ export const useBoardApi = () => {
 			return body;
 		}
 
-		const isVideoConferenceElement = (
-			element: AnyContentElement
-		): element is VideoConferenceElementResponse => {
-			return element.type === ContentElementType.VideoConference;
-		};
+		const isVideoConferenceElement = (element: AnyContentElement): element is VideoConferenceElementResponse =>
+			element.type === ContentElementType.VideoConference;
 
 		if (isVideoConferenceElement(element)) {
 			const body: VideoConferenceElementContentBody = {
@@ -212,11 +185,8 @@ export const useBoardApi = () => {
 			return body;
 		}
 
-		const isH5pElement = (
-			element: AnyContentElement
-		): element is H5pElementResponse => {
-			return element.type === ContentElementType.H5p;
-		};
+		const isH5pElement = (element: AnyContentElement): element is H5pElementResponse =>
+			element.type === ContentElementType.H5p;
 
 		if (isH5pElement(element)) {
 			const body: H5pElementContentBody = {
@@ -234,84 +204,54 @@ export const useBoardApi = () => {
 	const createElementCall = async (
 		cardId: string,
 		params: CreateContentElementBodyParams
-	): AxiosPromise<AnyContentElement> => {
-		return await cardsApi.cardControllerCreateElement(cardId, params);
-	};
+	): AxiosPromise<AnyContentElement> => await cardsApi.cardControllerCreateElement(cardId, params);
 
-	const deleteCardCall = async (cardId: string) => {
-		return cardsApi.cardControllerDeleteCard(cardId);
-	};
+	const deleteCardCall = async (cardId: string) => cardsApi.cardControllerDeleteCard(cardId);
 
-	const deleteElementCall = async (elementId: string) => {
-		return elementApi.elementControllerDeleteElement(elementId);
-	};
+	const deleteElementCall = async (elementId: string) => elementApi.elementControllerDeleteElement(elementId);
 
-	const deleteColumnCall = async (columnId: string) => {
-		return boardColumnApi.columnControllerDeleteColumn(columnId);
-	};
+	const deleteColumnCall = async (columnId: string) => boardColumnApi.columnControllerDeleteColumn(columnId);
 
 	const createCardCall = async (columnId: string): Promise<CardResponse> => {
 		const response = await boardColumnApi.columnControllerCreateCard(columnId, {
-			requiredEmptyElements: [
-				CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
-			],
+			requiredEmptyElements: [CreateCardBodyParamsRequiredEmptyElementsEnum.RichText],
 		});
 		return response.data;
 	};
 
-	const moveCardCall = async (
-		cardId: string,
-		toColumnId: string,
-		toPosition: number
-	): Promise<void> => {
+	const moveCardCall = async (cardId: string, toColumnId: string, toPosition: number): Promise<void> => {
 		await cardsApi.cardControllerMoveCard(cardId, {
 			toColumnId,
 			toPosition,
 		});
 	};
 
-	const moveColumnCall = async (
-		columnId: string,
-		toBoardId: string,
-		toPosition: number
-	): Promise<void> => {
+	const moveColumnCall = async (columnId: string, toBoardId: string, toPosition: number): Promise<void> => {
 		await boardColumnApi.columnControllerMoveColumn(columnId, {
 			toBoardId,
 			toPosition,
 		});
 	};
 
-	const moveElementCall = async (
-		elementId: string,
-		toCardId: string,
-		toPosition: number
-	) => {
-		return elementApi.elementControllerMoveElement(elementId, {
+	const moveElementCall = async (elementId: string, toCardId: string, toPosition: number) =>
+		elementApi.elementControllerMoveElement(elementId, {
 			toCardId,
 			toPosition,
 		});
-	};
 
-	const fetchRoomName = async (
-		type: BoardContextType,
-		id: string
-	): Promise<string | undefined> => {
+	const fetchRoomName = async (type: BoardContextType, id: string): Promise<string | undefined> => {
 		const name =
 			type === BoardContextType.Room
 				? (await roomApi.roomControllerGetRoomDetails(id)).data.name
-				: (await courseRoomApi.courseRoomsControllerGetRoomBoard(id)).data
-						.title;
+				: (await courseRoomApi.courseRoomsControllerGetRoomBoard(id)).data.title;
 
 		return name;
 	};
 
 	type ContextInfo = { id: string; type: BoardContextType; name: string };
 
-	const getContextInfo = async (
-		boardId: string
-	): Promise<ContextInfo | undefined> => {
-		const contextResponse =
-			await boardApi.boardControllerGetBoardContext(boardId);
+	const getContextInfo = async (boardId: string): Promise<ContextInfo | undefined> => {
+		const contextResponse = await boardApi.boardControllerGetBoardContext(boardId);
 		if (contextResponse.status !== 200) {
 			return undefined;
 		}
@@ -330,27 +270,16 @@ export const useBoardApi = () => {
 		};
 	};
 
-	const updateBoardVisibilityCall = async (
-		boardId: string,
-		isVisible: boolean
-	) => {
-		return boardApi.boardControllerUpdateVisibility(boardId, { isVisible });
-	};
+	const updateBoardVisibilityCall = async (boardId: string, isVisible: boolean) =>
+		boardApi.boardControllerUpdateVisibility(boardId, { isVisible });
 
-	const updateBoardLayoutCall = async (
-		boardId: string,
-		layout: BoardLayout
-	): Promise<AxiosResponse<void>> => {
-		return boardApi.boardControllerUpdateLayout(boardId, { layout });
-	};
+	const updateBoardLayoutCall = async (boardId: string, layout: BoardLayout): Promise<AxiosResponse<void>> =>
+		boardApi.boardControllerUpdateLayout(boardId, { layout });
 
 	const getElementWithParentHierarchyCall = async (
 		elementId: string
-	): AxiosPromise<ElementWithParentHierarchyResponse> => {
-		return await elementApi.elementControllerGetElementWithParentHierarchy(
-			elementId
-		);
-	};
+	): AxiosPromise<ElementWithParentHierarchyResponse> =>
+		await elementApi.elementControllerGetElementWithParentHierarchy(elementId);
 
 	return {
 		fetchBoardCall,

@@ -53,14 +53,12 @@ const module = {
 			return state.currentPage;
 		},
 	},
-	state: () => {
-		return {
-			posts: [],
-			currentPost: {},
-			pages: [],
-			currentPage: {},
-		};
-	},
+	state: () => ({
+		posts: [],
+		currentPost: {},
+		pages: [],
+		currentPage: {},
+	}),
 };
 
 export default module;

@@ -1,6 +1,6 @@
 import { checkFolderFeature } from "@/router/guards/check-folder-feature.guard";
-import { RouteLocationNormalized } from "vue-router";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { RouteLocationNormalized } from "vue-router";
 
 vi.mock("@/utils/inject");
 

@@ -53,14 +53,10 @@ const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const rules = reactive({
-	validateOnOpeningTag: (value: string) => {
-		return validateOnOpeningTag(value);
-	},
+	validateOnOpeningTag: (value: string) => validateOnOpeningTag(value),
 });
 
-const isNameValid = computed(() => {
-	return rules.validateOnOpeningTag(nameRef.value) === true;
-});
+const isNameValid = computed(() => rules.validateOnOpeningTag(nameRef.value) === true);
 
 const onCancel = () => {
 	emit("cancel");

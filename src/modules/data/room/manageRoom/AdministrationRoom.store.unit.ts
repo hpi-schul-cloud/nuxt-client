@@ -1,26 +1,23 @@
+import { printFromStringUtcToFullDate } from "@/plugins/datetime";
 import * as serverApi from "@/serverApi/v3/api";
-import { useAdministrationRoomStore } from "@data-room";
-import { useI18n } from "vue-i18n";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { AxiosInstance, AxiosPromise } from "axios";
-import { createPinia, setActivePinia } from "pinia";
+import { RoomStatsItemResponse, RoomStatsListResponse } from "@/serverApi/v3/api";
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
-	RoomStatsItemResponse,
-	RoomStatsListResponse,
-} from "@/serverApi/v3/api";
-import {
 	mockedPiniaStoreTyping,
-	schoolFactory,
 	roomStatsItemResponseFactory,
 	roomStatsListResponseFactory,
+	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
-import { schoolsModule } from "@/store";
+import { useAdministrationRoomStore } from "@data-room";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { useBoardNotifier } from "@util-board";
+import { AxiosInstance, AxiosPromise } from "axios";
+import { createPinia, setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { printFromStringUtcToFullDate } from "@/plugins/datetime";
+import { useI18n } from "vue-i18n";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
@@ -40,14 +37,11 @@ describe("useAdministrationRoomStore", () => {
 	beforeEach(() => {
 		setActivePinia(createPinia());
 		roomAdministrationApiMock = createMock<serverApi.RoomApiInterface>();
-		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(
-			roomAdministrationApiMock
-		);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomAdministrationApiMock);
 		axiosMock = createMock<AxiosInstance>();
 		initializeAxios(axiosMock);
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setupStores({
@@ -78,9 +72,7 @@ describe("useAdministrationRoomStore", () => {
 
 			await roomAdminStore.fetchRooms();
 
-			expect(
-				roomAdministrationApiMock.roomControllerGetRoomStats
-			).toHaveBeenCalled();
+			expect(roomAdministrationApiMock.roomControllerGetRoomStats).toHaveBeenCalled();
 			expect(roomAdminStore.isLoading).toBe(false);
 			expect(roomAdminStore.isEmptyList).toBe(false);
 		});
@@ -117,15 +109,11 @@ describe("useAdministrationRoomStore", () => {
 
 		it("should handle errors and show failure notification", async () => {
 			const { roomAdminStore } = setup();
-			roomAdministrationApiMock.roomControllerGetRoomStats.mockRejectedValue(
-				new Error("API Error")
-			);
+			roomAdministrationApiMock.roomControllerGetRoomStats.mockRejectedValue(new Error("API Error"));
 
 			await roomAdminStore.fetchRooms();
 
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.administration.error.load"
-			);
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith("pages.rooms.administration.error.load");
 			expect(roomAdminStore.isEmptyList).toBe(true);
 			expect(roomAdminStore.roomList).toEqual([]);
 			expect(roomAdminStore.isLoading).toBe(false);
@@ -142,9 +130,7 @@ describe("useAdministrationRoomStore", () => {
 
 				await roomAdminStore.fetchRooms();
 
-				const expectedDate = printFromStringUtcToFullDate(
-					mockRoomList.data[0].createdAt
-				);
+				const expectedDate = printFromStringUtcToFullDate(mockRoomList.data[0].createdAt);
 
 				expect(roomAdminStore.roomList[0].createdAt).toBe(expectedDate);
 			});
@@ -157,10 +143,7 @@ describe("useAdministrationRoomStore", () => {
 					owner: "",
 				});
 
-				const roomsFromAnotherSchool = roomStatsItemResponseFactory.buildList(
-					2,
-					{ schoolName: "C School" }
-				);
+				const roomsFromAnotherSchool = roomStatsItemResponseFactory.buildList(2, { schoolName: "C School" });
 
 				const roomsFromOwnSchool = roomStatsItemResponseFactory.buildList(2, {
 					schoolName: ownSchool.name,
@@ -221,9 +204,7 @@ describe("useAdministrationRoomStore", () => {
 
 			await selectRoomAndLoadMembers(mockRoomList.data[0].roomId);
 
-			expect(
-				roomAdministrationApiMock.roomControllerGetMembers
-			).toHaveBeenCalledWith(mockRoomList.data[0].roomId);
+			expect(roomAdministrationApiMock.roomControllerGetMembers).toHaveBeenCalledWith(mockRoomList.data[0].roomId);
 
 			expect(roomAdminStore.selectedRoom).toEqual({
 				roomId: mockRoomList.data[0].roomId,
@@ -244,13 +225,9 @@ describe("useAdministrationRoomStore", () => {
 			const roomIdToDelete = mockRooms.data[0].roomId;
 			await roomAdminStore.deleteRoom(roomIdToDelete);
 
-			const remainingRooms = mockRooms.data.filter(
-				(room) => room.roomId !== roomIdToDelete
-			);
+			const remainingRooms = mockRooms.data.filter((room) => room.roomId !== roomIdToDelete);
 
-			expect(
-				roomAdministrationApiMock.roomControllerDeleteRoom
-			).toHaveBeenCalledWith(roomIdToDelete);
+			expect(roomAdministrationApiMock.roomControllerDeleteRoom).toHaveBeenCalledWith(roomIdToDelete);
 			expect(roomAdminStore.roomList).toEqual(remainingRooms);
 			expect(roomAdminStore.isLoading).toBe(false);
 		});
@@ -259,15 +236,11 @@ describe("useAdministrationRoomStore", () => {
 			const { roomAdminStore } = setup();
 
 			const roomIdToDelete = "room-id";
-			roomAdministrationApiMock.roomControllerDeleteRoom.mockRejectedValue(
-				new Error("API Error")
-			);
+			roomAdministrationApiMock.roomControllerDeleteRoom.mockRejectedValue(new Error("API Error"));
 
 			await roomAdminStore.deleteRoom(roomIdToDelete);
 
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.administration.error.delete"
-			);
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith("pages.rooms.administration.error.delete");
 			expect(roomAdminStore.isLoading).toBe(false);
 		});
 	});

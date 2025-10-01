@@ -1,9 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import PrivacySettings from "./PrivacySettings";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 const generateProps = () => ({
 	permissions: {
@@ -28,14 +25,13 @@ const searchStrings = {
 	aiTutor: "toggle_ai_tutor",
 };
 
-const getWrapper = (props = generateProps()) => {
-	return mount(PrivacySettings, {
+const getWrapper = (props = generateProps()) =>
+	mount(PrivacySettings, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
 		props,
 	});
-};
 
 describe("PrivacySettings", () => {
 	describe("env config", () => {
@@ -45,9 +41,7 @@ describe("PrivacySettings", () => {
 
 				const wrapper = getWrapper();
 
-				expect(
-					wrapper.findAll(`[data-testid=${searchStrings.studentVisibility}]`)
-				).toHaveLength(1);
+				expect(wrapper.findAll(`[data-testid=${searchStrings.studentVisibility}]`)).toHaveLength(1);
 			});
 		});
 
@@ -57,9 +51,7 @@ describe("PrivacySettings", () => {
 
 				const wrapper = getWrapper();
 
-				expect(
-					wrapper.findAll(`[data-testid=${searchStrings.studentVisibility}]`)
-				).toHaveLength(0);
+				expect(wrapper.findAll(`[data-testid=${searchStrings.studentVisibility}]`)).toHaveLength(0);
 			});
 		});
 
@@ -72,9 +64,7 @@ describe("PrivacySettings", () => {
 
 				const wrapper = getWrapper();
 
-				const studentVisibilitySwitch = wrapper.findComponent(
-					`[data-testid=${searchStrings.studentVisibility}]`
-				);
+				const studentVisibilitySwitch = wrapper.findComponent(`[data-testid=${searchStrings.studentVisibility}]`);
 
 				expect(studentVisibilitySwitch.props().disabled).toBe(false);
 			});
@@ -89,9 +79,7 @@ describe("PrivacySettings", () => {
 
 				const wrapper = getWrapper();
 
-				const studentVisibilitySwitch = wrapper.findComponent(
-					`[data-testid=${searchStrings.studentVisibility}]`
-				);
+				const studentVisibilitySwitch = wrapper.findComponent(`[data-testid=${searchStrings.studentVisibility}]`);
 
 				expect(studentVisibilitySwitch.props().disabled).toBe(true);
 			});
@@ -105,9 +93,7 @@ describe("PrivacySettings", () => {
 				});
 				const wrapper = getWrapper();
 
-				expect(
-					wrapper.findAll(`[data-testid=${searchStrings.learnStore}]`)
-				).toHaveLength(1);
+				expect(wrapper.findAll(`[data-testid=${searchStrings.learnStore}]`)).toHaveLength(1);
 			});
 		});
 
@@ -119,9 +105,7 @@ describe("PrivacySettings", () => {
 				});
 				const wrapper = getWrapper();
 
-				expect(
-					wrapper.findAll(`[data-testid=${searchStrings.learnStore}]`)
-				).toHaveLength(0);
+				expect(wrapper.findAll(`[data-testid=${searchStrings.learnStore}]`)).toHaveLength(0);
 			});
 		});
 
@@ -130,9 +114,7 @@ describe("PrivacySettings", () => {
 				createTestEnvStore({ FEATURE_VIDEOCONFERENCE_ENABLED: true });
 				const wrapper = getWrapper();
 
-				expect(
-					wrapper.findAll(`[data-testid=${searchStrings.videoconference}]`)
-				).toHaveLength(1);
+				expect(wrapper.findAll(`[data-testid=${searchStrings.videoconference}]`)).toHaveLength(1);
 			});
 		});
 
@@ -141,9 +123,7 @@ describe("PrivacySettings", () => {
 				createTestEnvStore({ FEATURE_VIDEOCONFERENCE_ENABLED: false });
 				const wrapper = getWrapper();
 
-				expect(
-					wrapper.findAll(`[data-testid=${searchStrings.videoconference}]`)
-				).toHaveLength(0);
+				expect(wrapper.findAll(`[data-testid=${searchStrings.videoconference}]`)).toHaveLength(0);
 			});
 		});
 
@@ -152,9 +132,7 @@ describe("PrivacySettings", () => {
 				createTestEnvStore({ FEATURE_AI_TUTOR_ENABLED: true });
 				const wrapper = getWrapper();
 
-				expect(
-					wrapper.findAll(`[data-testid=${searchStrings.aiTutor}]`)
-				).toHaveLength(1);
+				expect(wrapper.findAll(`[data-testid=${searchStrings.aiTutor}]`)).toHaveLength(1);
 			});
 		});
 
@@ -163,9 +141,7 @@ describe("PrivacySettings", () => {
 				createTestEnvStore({ FEATURE_AI_TUTOR_ENABLED: false });
 				const wrapper = getWrapper();
 
-				expect(
-					wrapper.findAll(`[data-testid=${searchStrings.aiTutor}]`)
-				).toHaveLength(0);
+				expect(wrapper.findAll(`[data-testid=${searchStrings.aiTutor}]`)).toHaveLength(0);
 			});
 		});
 
@@ -174,9 +150,7 @@ describe("PrivacySettings", () => {
 				createTestEnvStore({ ROCKETCHAT_SERVICE_ENABLED: true });
 				const wrapper = getWrapper();
 
-				expect(
-					wrapper.findAll(`[data-testid=${searchStrings.rocketChat}]`)
-				).toHaveLength(1);
+				expect(wrapper.findAll(`[data-testid=${searchStrings.rocketChat}]`)).toHaveLength(1);
 			});
 		});
 
@@ -185,9 +159,7 @@ describe("PrivacySettings", () => {
 				createTestEnvStore({ ROCKETCHAT_SERVICE_ENABLED: false });
 				const wrapper = getWrapper();
 
-				expect(
-					wrapper.findAll(`[data-testid=${searchStrings.rocketChat}]`)
-				).toHaveLength(0);
+				expect(wrapper.findAll(`[data-testid=${searchStrings.rocketChat}]`)).toHaveLength(0);
 			});
 		});
 	});
@@ -211,9 +183,7 @@ describe("PrivacySettings", () => {
 						})
 					);
 
-					const studentVisibilitySwitch = wrapper.findComponent(
-						`[data-testid=${searchStrings.studentVisibility}]`
-					);
+					const studentVisibilitySwitch = wrapper.findComponent(`[data-testid=${searchStrings.studentVisibility}]`);
 
 					expect(studentVisibilitySwitch.props().modelValue).toBe(true);
 				});
@@ -233,9 +203,7 @@ describe("PrivacySettings", () => {
 						})
 					);
 
-					const studentVisibilitySwitch = wrapper.findComponent(
-						`[data-testid=${searchStrings.studentVisibility}]`
-					);
+					const studentVisibilitySwitch = wrapper.findComponent(`[data-testid=${searchStrings.studentVisibility}]`);
 
 					expect(studentVisibilitySwitch.props().modelValue).toBe(false);
 				});
@@ -251,9 +219,7 @@ describe("PrivacySettings", () => {
 						})
 					);
 
-					const studentVisibilitySwitch = wrapper.findComponent(
-						`[data-testid=${searchStrings.studentVisibility}]`
-					);
+					const studentVisibilitySwitch = wrapper.findComponent(`[data-testid=${searchStrings.studentVisibility}]`);
 
 					expect(studentVisibilitySwitch.props().modelValue).toBe(false);
 				});
@@ -269,9 +235,7 @@ describe("PrivacySettings", () => {
 
 					const wrapper = getWrapper();
 
-					const studentVisibilitySwitch = wrapper.findComponent(
-						`[data-testid=${searchStrings.studentVisibility}]`
-					);
+					const studentVisibilitySwitch = wrapper.findComponent(`[data-testid=${searchStrings.studentVisibility}]`);
 
 					expect(studentVisibilitySwitch.props().modelValue).toBe(true);
 				});
@@ -284,9 +248,7 @@ describe("PrivacySettings", () => {
 					});
 					const wrapper = getWrapper();
 
-					const studentVisibilitySwitch = wrapper.findComponent(
-						`[data-testid=${searchStrings.studentVisibility}]`
-					);
+					const studentVisibilitySwitch = wrapper.findComponent(`[data-testid=${searchStrings.studentVisibility}]`);
 
 					expect(studentVisibilitySwitch.props().modelValue).toBe(false);
 				});
@@ -309,9 +271,7 @@ describe("PrivacySettings", () => {
 					})
 				);
 
-				const learnStoreSwitch = wrapper.findComponent(
-					`[data-testid=${searchStrings.learnStore}]`
-				);
+				const learnStoreSwitch = wrapper.findComponent(`[data-testid=${searchStrings.learnStore}]`);
 
 				expect(learnStoreSwitch.props().modelValue).toBe(true);
 			});
@@ -331,9 +291,7 @@ describe("PrivacySettings", () => {
 					})
 				);
 
-				const learnStoreSwitch = wrapper.findComponent(
-					`[data-testid=${searchStrings.learnStore}]`
-				);
+				const learnStoreSwitch = wrapper.findComponent(`[data-testid=${searchStrings.learnStore}]`);
 
 				expect(learnStoreSwitch.props().modelValue).toBe(false);
 			});
@@ -350,9 +308,7 @@ describe("PrivacySettings", () => {
 					})
 				);
 
-				const videoconferenceSwitch = wrapper.findComponent(
-					`[data-testid=${searchStrings.videoconference}]`
-				);
+				const videoconferenceSwitch = wrapper.findComponent(`[data-testid=${searchStrings.videoconference}]`);
 
 				expect(videoconferenceSwitch.props().modelValue).toBe(true);
 			});
@@ -368,9 +324,7 @@ describe("PrivacySettings", () => {
 					})
 				);
 
-				const videoconferenceSwitch = wrapper.findComponent(
-					`[data-testid=${searchStrings.videoconference}]`
-				);
+				const videoconferenceSwitch = wrapper.findComponent(`[data-testid=${searchStrings.videoconference}]`);
 
 				expect(videoconferenceSwitch.props().modelValue).toBe(false);
 			});
@@ -388,9 +342,7 @@ describe("PrivacySettings", () => {
 					})
 				);
 
-				const rocketChatSwitch = wrapper.findComponent(
-					`[data-testid=${searchStrings.rocketChat}]`
-				);
+				const rocketChatSwitch = wrapper.findComponent(`[data-testid=${searchStrings.rocketChat}]`);
 
 				expect(rocketChatSwitch.props().modelValue).toBe(true);
 			});
@@ -405,9 +357,7 @@ describe("PrivacySettings", () => {
 					})
 				);
 
-				const rocketChatSwitch = wrapper.findComponent(
-					`[data-testid=${searchStrings.rocketChat}]`
-				);
+				const rocketChatSwitch = wrapper.findComponent(`[data-testid=${searchStrings.rocketChat}]`);
 
 				expect(rocketChatSwitch.props().modelValue).toBe(false);
 			});
@@ -422,27 +372,21 @@ describe("PrivacySettings", () => {
 			});
 
 			const wrapper = getWrapper();
-			const learnStoreSwitch = wrapper.findComponent(
-				`[data-testid=${searchStrings.learnStore}]`
-			);
+			const learnStoreSwitch = wrapper.findComponent(`[data-testid=${searchStrings.learnStore}]`);
 
 			learnStoreSwitch.vm.$emit("update:modelValue", false);
 
 			let emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(1);
 			expect(emitted["update-privacy-settings"][0][0]).toBe(false);
-			expect(emitted["update-privacy-settings"][0][1]).toBe(
-				"student.LERNSTORE_VIEW"
-			);
+			expect(emitted["update-privacy-settings"][0][1]).toBe("student.LERNSTORE_VIEW");
 
 			learnStoreSwitch.vm.$emit("update:modelValue", true);
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(2);
 			expect(emitted["update-privacy-settings"][1][0]).toBe(true);
-			expect(emitted["update-privacy-settings"][1][1]).toBe(
-				"student.LERNSTORE_VIEW"
-			);
+			expect(emitted["update-privacy-settings"][1][1]).toBe("student.LERNSTORE_VIEW");
 		});
 
 		it("should emit on value change for student visibility switch", () => {
@@ -452,26 +396,20 @@ describe("PrivacySettings", () => {
 			});
 			const wrapper = getWrapper();
 
-			const studentVisibilitySwitch = wrapper.findComponent(
-				`[data-testid=${searchStrings.studentVisibility}]`
-			);
+			const studentVisibilitySwitch = wrapper.findComponent(`[data-testid=${searchStrings.studentVisibility}]`);
 			studentVisibilitySwitch.vm.$emit("update:modelValue", false);
 
 			let emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(1);
 			expect(emitted["update-privacy-settings"][0][0]).toBe(false);
-			expect(emitted["update-privacy-settings"][0][1]).toBe(
-				"teacher.STUDENT_LIST"
-			);
+			expect(emitted["update-privacy-settings"][0][1]).toBe("teacher.STUDENT_LIST");
 
 			studentVisibilitySwitch.vm.$emit("update:modelValue", true);
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(2);
 			expect(emitted["update-privacy-settings"][1][0]).toBe(true);
-			expect(emitted["update-privacy-settings"][1][1]).toBe(
-				"teacher.STUDENT_LIST"
-			);
+			expect(emitted["update-privacy-settings"][1][1]).toBe("teacher.STUDENT_LIST");
 		});
 
 		it("should emit on value change for rocketChat switch", () => {
@@ -479,9 +417,7 @@ describe("PrivacySettings", () => {
 
 			const wrapper = getWrapper();
 
-			const rocketChatSwitch = wrapper.findComponent(
-				`[data-testid=${searchStrings.rocketChat}]`
-			);
+			const rocketChatSwitch = wrapper.findComponent(`[data-testid=${searchStrings.rocketChat}]`);
 			rocketChatSwitch.vm.$emit("update:modelValue", false);
 
 			let emitted = wrapper.emitted();
@@ -501,9 +437,7 @@ describe("PrivacySettings", () => {
 			createTestEnvStore({ FEATURE_VIDEOCONFERENCE_ENABLED: true });
 			const wrapper = getWrapper();
 
-			const videoconferenceSwitch = wrapper.findComponent(
-				`[data-testid=${searchStrings.videoconference}]`
-			);
+			const videoconferenceSwitch = wrapper.findComponent(`[data-testid=${searchStrings.videoconference}]`);
 			videoconferenceSwitch.vm.$emit("update:modelValue", false);
 
 			let emitted = wrapper.emitted();

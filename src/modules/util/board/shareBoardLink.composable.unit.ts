@@ -1,3 +1,4 @@
+import { useShareBoardLink } from "./shareBoardLink.composable";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mountComposable } from "@@/tests/test-utils";
@@ -5,12 +6,10 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { BoardMenuScope } from "@ui-board";
-import { useShareBoardLink } from "./shareBoardLink.composable";
 import type { Mocked } from "vitest";
 
 describe("useShareBoardLink", () => {
-	const notifierModule: Mocked<NotifierModule> =
-		createModuleMocks(NotifierModule);
+	const notifierModule: Mocked<NotifierModule> = createModuleMocks(NotifierModule);
 
 	afterEach(() => {
 		vi.clearAllMocks();
@@ -74,9 +73,7 @@ describe("useShareBoardLink", () => {
 
 				await composable.copyShareLink("123", BoardMenuScope.CARD);
 
-				expect(clipboardMock.writeText).toHaveBeenCalledWith(
-					`${origin}${pathname}#card-123`
-				);
+				expect(clipboardMock.writeText).toHaveBeenCalledWith(`${origin}${pathname}#card-123`);
 			});
 
 			it("should show a success message", async () => {

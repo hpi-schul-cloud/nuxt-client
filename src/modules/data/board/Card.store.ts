@@ -1,14 +1,4 @@
-import {
-	CardResponse,
-	ContentElementType,
-	PreferredToolResponse,
-	ToolContextType,
-} from "@/serverApi/v3";
-import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
-import { defineStore } from "pinia";
-import { nextTick, Ref, ref } from "vue";
 import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload.types";
-
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import {
 	CreateElementRequestPayload,
@@ -23,7 +13,11 @@ import {
 } from "./cardActions/cardActionPayload.types";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
+import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
+import { defineStore } from "pinia";
+import { nextTick, Ref, ref } from "vue";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards: Ref<Record<string, CardResponse>> = ref({});
@@ -33,8 +27,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const restApi = useCardRestApi();
-	const isSocketEnabled =
-		useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
+	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
@@ -53,9 +46,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		cards.value = {};
 	};
 
-	const getCard = (cardId: string): CardResponse | undefined => {
-		return cards.value[cardId];
-	};
+	const getCard = (cardId: string): CardResponse | undefined => cards.value[cardId];
 
 	const createCardSuccess = (payload: CreateCardSuccessPayload) => {
 		if (payload.newCard) {
@@ -65,9 +56,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const updateCardTitleRequest = socketOrRest.updateCardTitleRequest;
 
-	const updateCardTitleSuccess = async (
-		payload: UpdateCardTitleSuccessPayload
-	) => {
+	const updateCardTitleSuccess = async (payload: UpdateCardTitleSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
@@ -76,9 +65,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const updateCardHeightRequest = socketOrRest.updateCardHeightRequest;
 
-	const updateCardHeightSuccess = async (
-		payload: UpdateCardHeightSuccessPayload
-	) => {
+	const updateCardHeightSuccess = async (payload: UpdateCardHeightSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
@@ -99,10 +86,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const createElementRequest = socketOrRest.createElementRequest;
 
-	const createPreferredElement = async (
-		payload: CreateElementRequestPayload,
-		tool: PreferredToolResponse
-	) => {
+	const createPreferredElement = async (payload: CreateElementRequestPayload, tool: PreferredToolResponse) => {
 		restApi.createPreferredElement(payload, tool);
 	};
 
@@ -111,11 +95,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (card === undefined) return;
 
 		const { toPosition } = payload;
-		if (
-			toPosition !== undefined &&
-			toPosition >= 0 &&
-			toPosition <= card.elements.length
-		) {
+		if (toPosition !== undefined && toPosition >= 0 && toPosition <= card.elements.length) {
 			card.elements.splice(toPosition, 0, payload.newElement);
 		} else {
 			card.elements.push(payload.newElement);
@@ -140,12 +120,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		});
 	};
 
-	const moveElementRequest = async (
-		cardId: string,
-		elementId: string,
-		elementIndex: number,
-		delta: 1 | -1
-	) => {
+	const moveElementRequest = async (cardId: string, elementId: string, elementIndex: number, delta: 1 | -1) => {
 		const card = cards.value[cardId];
 		if (card === undefined) return;
 
@@ -176,18 +151,13 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const deleteElementRequest = socketOrRest.deleteElementRequest;
 
-	const deleteElementSuccess = async (
-		payload: DeleteElementSuccessPayload
-	): Promise<void> => {
+	const deleteElementSuccess = async (payload: DeleteElementSuccessPayload): Promise<void> => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
 		const { focusedId } = useBoardFocusHandler(payload.elementId);
 		if (focusedId?.value === payload.elementId) {
-			const previousId = getPreviousElementId(
-				payload.elementId,
-				payload.cardId
-			);
+			const previousId = getPreviousElementId(payload.elementId, payload.cardId);
 
 			if (!previousId) return;
 			forceFocus(previousId);
@@ -203,24 +173,17 @@ export const useCardStore = defineStore("cardStore", () => {
 	const updateElementRequest = socketOrRest.updateElementRequest;
 
 	const updateElementSuccess = async (payload: UpdateElementSuccessPayload) => {
-		const cardToUpdate = Object.values(cards.value).find((c) =>
-			c.elements.some((e) => e.id === payload.elementId)
-		);
+		const cardToUpdate = Object.values(cards.value).find((c) => c.elements.some((e) => e.id === payload.elementId));
 		if (cardToUpdate === undefined) return;
 		const cardId = cardToUpdate.id;
 
 		if (cardId) {
-			const elementIndex = cardToUpdate.elements.findIndex(
-				(e) => e.id === payload.elementId
-			);
+			const elementIndex = cardToUpdate.elements.findIndex((e) => e.id === payload.elementId);
 			cards.value[cardId].elements[elementIndex].content = payload.data.content;
 		}
 	};
 
-	const getPreviousElementId = (
-		elementId: string,
-		cardId: string
-	): string | undefined => {
+	const getPreviousElementId = (elementId: string, cardId: string): string | undefined => {
 		const elements = cards.value[cardId].elements;
 		if (elements.length === 0) return cardId;
 
@@ -238,9 +201,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		return previousElement.id;
 	};
 
-	const loadPreferredTools = async (
-		contextType: ToolContextType
-	): Promise<void> => {
+	const loadPreferredTools = async (contextType: ToolContextType): Promise<void> => {
 		isPreferredToolsLoading.value = true;
 
 		preferredTools.value = (await restApi.getPreferredTools(contextType)) || [];

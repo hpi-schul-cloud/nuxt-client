@@ -1,22 +1,15 @@
+import Sidebar from "./Sidebar.vue";
+import { useSidebarSelection } from "./SidebarSelection.composable";
+import { SchulcloudTheme } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
+import FilePathsModule from "@/store/filePaths";
+import { AUTH_MODULE_KEY, FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { h, nextTick, ref } from "vue";
 import { VApp } from "vuetify/lib/components/index";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import {
-	AUTH_MODULE_KEY,
-	FILE_PATHS_MODULE_KEY,
-	THEME_KEY,
-} from "@/utils/inject";
-import Sidebar from "./Sidebar.vue";
-import AuthModule from "@/store/auth";
-import FilePathsModule from "@/store/filePaths";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { SchulcloudTheme } from "@/serverApi/v3";
-import { useSidebarSelection } from "./SidebarSelection.composable";
-import { createTestEnvStore } from "@@/tests/test-utils";
 
 vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
@@ -98,9 +91,7 @@ describe("@ui-layout/Sidebar", () => {
 	describe("when sidebar toggle was clicked", () => {
 		it("should hide sidebar", async () => {
 			const { wrapper } = setup();
-			const toggleBtn = wrapper.getComponent(
-				"[data-testid='sidebar-toggle-close']"
-			);
+			const toggleBtn = wrapper.getComponent("[data-testid='sidebar-toggle-close']");
 			await toggleBtn.trigger("click");
 
 			const nav = wrapper.get("nav");
@@ -114,9 +105,7 @@ describe("@ui-layout/Sidebar", () => {
 		it("should filter items correctly", () => {
 			const { wrapper } = setup({ permissions: [] });
 
-			expect(wrapper.find("[data-testid='sidebar-teams']").exists()).toBe(
-				false
-			);
+			expect(wrapper.find("[data-testid='sidebar-teams']").exists()).toBe(false);
 		});
 	});
 
@@ -151,9 +140,7 @@ describe("@ui-layout/Sidebar", () => {
 				await nextTick();
 				await nextTick();
 
-				expect(wrapper.find("[data-testid='sidebar-tasks']").exists()).toBe(
-					true
-				);
+				expect(wrapper.find("[data-testid='sidebar-tasks']").exists()).toBe(true);
 			});
 		});
 	});

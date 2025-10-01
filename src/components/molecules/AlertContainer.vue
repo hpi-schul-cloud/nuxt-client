@@ -17,26 +17,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { useDisplay } from "vuetify";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import Alert from "./Alert.vue";
 import { AlertPayload } from "@/store/types/alert-payload";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { computed } from "vue";
+import { useDisplay } from "vuetify";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { xs } = useDisplay();
 
-const isMobile = computed(() => {
-	return xs.value;
-});
+const isMobile = computed(() => xs.value);
 
-const transition = computed(() => {
-	return isMobile.value ? "scale-transition" : "scroll-x-reverse-transition";
-});
+const transition = computed(() => (isMobile.value ? "scale-transition" : "scroll-x-reverse-transition"));
 
-const notifierItems = computed(() => {
-	return notifierModule.getNotifierItems;
-});
+const notifierItems = computed(() => notifierModule.getNotifierItems);
 
 const onRemoveNotification = (notification: AlertPayload) => {
 	notifierModule.removeNotifier(notification);

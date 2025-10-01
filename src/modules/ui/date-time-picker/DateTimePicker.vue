@@ -30,12 +30,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useVModel, watchDebounced } from "@vueuse/core";
-import { useI18n } from "vue-i18n";
-import { isDateTimeInPast, getTimeFromISOString } from "@/plugins/datetime";
 import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
+import { getTimeFromISOString, isDateTimeInPast } from "@/plugins/datetime";
+import { useVModel, watchDebounced } from "@vueuse/core";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	dateTime: { type: String, default: undefined },
@@ -55,9 +55,7 @@ const time = ref(getTimeFromISOString(dateTime.value));
 const dateMissing = computed(() => time.value && !date.value);
 const dateTimeInPast = computed(() => isDateTimeInPast(dateTime.value));
 const errors = ref<Array<string>>([]);
-const hintMessage = ref<string>(
-	dateTimeInPast.value ? t("components.dateTimePicker.messages.dateInPast") : ""
-);
+const hintMessage = ref<string>(dateTimeInPast.value ? t("components.dateTimePicker.messages.dateInPast") : "");
 
 const emitDateTime = () => {
 	if (!date.value && !time.value) {
@@ -73,10 +71,7 @@ const emitDateTime = () => {
 	const timeValue = time.value || "23:59";
 	const hoursAndMinutes = timeValue.split(":");
 
-	dateTimeObject.setHours(
-		parseInt(hoursAndMinutes[0]),
-		parseInt(hoursAndMinutes[1])
-	);
+	dateTimeObject.setHours(parseInt(hoursAndMinutes[0]), parseInt(hoursAndMinutes[1]));
 	dateTime.value = dateTimeObject.toISOString();
 };
 

@@ -1,6 +1,6 @@
 import coursesStore from "./courses";
-import NotifierModule from "@/store/notifier";
 import { notifierModule } from "@/store";
+import NotifierModule from "@/store/notifier";
 import setupStores from "@@/tests/test-utils/setupStores";
 
 describe("courses store", () => {
@@ -34,11 +34,7 @@ describe("courses store", () => {
 			coursesStore.actions.removeCourseItem(storeContext, courseItem);
 
 			// then
-			expect(dispatch).toHaveBeenCalledWith(
-				"homeworks/remove",
-				undefined,
-				expect.any(Object)
-			);
+			expect(dispatch).toHaveBeenCalledWith("homeworks/remove", undefined, expect.any(Object));
 		});
 
 		it("should call dispatch with proper courseItem id when item is a homework", () => {
@@ -53,11 +49,7 @@ describe("courses store", () => {
 			coursesStore.actions.removeCourseItem(storeContext, courseItem);
 
 			// then
-			expect(dispatch).toHaveBeenCalledWith(
-				expect.any(String),
-				homeworkId,
-				expect.any(Object)
-			);
+			expect(dispatch).toHaveBeenCalledWith(expect.any(String), homeworkId, expect.any(Object));
 		});
 
 		it("should call dispatch with { root: true } argument when item is a lesson", () => {
@@ -89,11 +81,7 @@ describe("courses store", () => {
 			coursesStore.actions.removeCourseItem(storeContext, courseItem);
 
 			// then
-			expect(dispatch).toHaveBeenCalledWith(
-				"lessons/remove",
-				undefined,
-				expect.any(Object)
-			);
+			expect(dispatch).toHaveBeenCalledWith("lessons/remove", undefined, expect.any(Object));
 		});
 
 		it("should call dispatch with proper courseItem id when item is a lesson", () => {
@@ -108,11 +96,7 @@ describe("courses store", () => {
 			coursesStore.actions.removeCourseItem(storeContext, courseItem);
 
 			// then
-			expect(dispatch).toHaveBeenCalledWith(
-				expect.any(String),
-				homeworkId,
-				expect.any(Object)
-			);
+			expect(dispatch).toHaveBeenCalledWith(expect.any(String), homeworkId, expect.any(Object));
 		});
 
 		it("should call dispatch with { root: true } argument when item is a homework", () => {

@@ -1,36 +1,32 @@
+import { useCollaborativeTextEditorNotifier } from "./CollaborativeTextEditorNotifications.composable";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useI18n } from "vue-i18n";
-import { useCollaborativeTextEditorNotifier } from "./CollaborativeTextEditorNotifications.composable";
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({
-			t: vi
-				.fn()
-				.mockImplementation(
-					(key: string, dynamic?: object): string =>
-						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
-				),
-		}),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({
+		t: vi
+			.fn()
+			.mockImplementation(
+				(key: string, dynamic?: object): string => key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
+			),
+	}),
+}));
 
 const mockI18nModule = vi.mocked(useI18n());
 
 const notifierModule = createModuleMocks(NotifierModule);
 
-const setupMountComposable = () => {
-	return mountComposable(() => useCollaborativeTextEditorNotifier(), {
+const setupMountComposable = () =>
+	mountComposable(() => useCollaborativeTextEditorNotifier(), {
 		global: {
 			provide: {
 				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 			},
 		},
 	});
-};
 
 describe("CollaborativeTextEditorNotifications.composable", () => {
 	beforeEach(() => {

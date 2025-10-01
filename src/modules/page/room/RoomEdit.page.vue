@@ -1,21 +1,12 @@
 <template>
-	<DefaultWireframe
-		v-if="!isLoading && canEditRoom"
-		max-width="short"
-		:breadcrumbs="breadcrumbs"
-	>
+	<DefaultWireframe v-if="!isLoading && canEditRoom" max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
 			<h1 data-testid="page-title">
 				{{ $t("pages.roomDetails.ariaLabels.menu.action.edit") }}
 			</h1>
 		</template>
 		<div>
-			<RoomForm
-				v-if="roomData"
-				:room="roomData"
-				@save="onSave"
-				@cancel="onCancel"
-			/>
+			<RoomForm v-if="roomData" :room="roomData" @save="onSave" @cancel="onCancel" />
 		</div>
 	</DefaultWireframe>
 </template>
@@ -23,19 +14,19 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { ApiResponseError } from "@/store/types/commons";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { RoomUpdateParams } from "@/types/room/Room";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { ApiResponseError } from "@/store/types/commons";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { storeToRefs } from "pinia";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
@@ -50,9 +41,7 @@ const { canEditRoom } = useRoomAuthorization();
 
 const roomData = ref<RoomUpdateParams>();
 
-const pageTitle = computed(() =>
-	buildPageTitle(`${t("pages.roomEdit.title")}`)
-);
+const pageTitle = computed(() => buildPageTitle(`${t("pages.roomEdit.title")}`));
 useTitle(pageTitle);
 
 onMounted(async () => {

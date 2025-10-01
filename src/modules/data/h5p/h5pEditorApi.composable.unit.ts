@@ -1,15 +1,10 @@
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
-import {
-	axiosErrorFactory,
-	i18nMock,
-	mockApiResponse,
-	mountComposable,
-} from "@@/tests/test-utils";
-import * as h5pApi from "@/h5pEditorApi/v3/api/h5p-editor-api";
 import { H5pEditorApiInterface } from "@/h5pEditorApi/v3";
+import * as h5pApi from "@/h5pEditorApi/v3/api/h5p-editor-api";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { axiosErrorFactory, i18nMock, mockApiResponse, mountComposable } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useH5PEditorApi } from "@data-h5p";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { HttpStatusCode } from "axios";
@@ -18,8 +13,7 @@ import type { Mocked } from "vitest";
 describe("h5pEditorApi.composable", () => {
 	let h5pEditorApi: DeepMocked<H5pEditorApiInterface>;
 
-	const notifierModule: Mocked<NotifierModule> =
-		createModuleMocks(NotifierModule);
+	const notifierModule: Mocked<NotifierModule> = createModuleMocks(NotifierModule);
 
 	beforeEach(() => {
 		h5pEditorApi = createMock<H5pEditorApiInterface>();
@@ -107,13 +101,9 @@ describe("h5pEditorApi.composable", () => {
 
 				const contentId = "test-id";
 
-				const error = axiosErrorFactory
-					.withStatusCode(HttpStatusCode.NotFound)
-					.build();
+				const error = axiosErrorFactory.withStatusCode(HttpStatusCode.NotFound).build();
 
-				h5pEditorApi.h5PEditorControllerGetContentParameters.mockRejectedValueOnce(
-					error
-				);
+				h5pEditorApi.h5PEditorControllerGetContentParameters.mockRejectedValueOnce(error);
 
 				return { composable, contentId };
 			};

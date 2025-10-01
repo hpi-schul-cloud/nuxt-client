@@ -1,10 +1,7 @@
+import NavigationBar from "./NavigationBar.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import NavigationBar from "./NavigationBar.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("@/components/legacy/NavigationBar", () => {
 	const navbarLinks = [

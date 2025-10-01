@@ -1,4 +1,3 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	CourseMetadataResponse,
 	CoursesApiFactory,
@@ -8,16 +7,11 @@ import {
 	DashboardGridElementResponse,
 } from "../serverApi/v3/api";
 import { $axios, mapAxiosErrorToResponseError } from "../utils/api";
-
-import { currentDate, fromUTC } from "@/plugins/datetime";
-import { BusinessError } from "./types/commons";
-import {
-	AllItems,
-	DroppedObject,
-	RoomsData,
-	SharingCourseObject,
-} from "./types/rooms";
 import { AlertPayload } from "./types/alert-payload";
+import { BusinessError } from "./types/commons";
+import { AllItems, DroppedObject, RoomsData, SharingCourseObject } from "./types/rooms";
+import { currentDate, fromUTC } from "@/plugins/datetime";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
 	name: "courseRoomListModule",
@@ -74,8 +68,7 @@ export default class CourseRoomListModule extends VuexModule {
 			if (item.id) {
 				to = `/rooms/${item.id}`;
 			}
-			const isArchived =
-				item.untilDate && fromUTC(item.untilDate || "") < currentDate();
+			const isArchived = item.untilDate && fromUTC(item.untilDate || "") < currentDate();
 			if (!isArchived) {
 				return { ...item, searchText: item.title, isArchived, to };
 			}
@@ -88,9 +81,7 @@ export default class CourseRoomListModule extends VuexModule {
 			let titleDate = untilDate;
 			if (difference !== 0) {
 				const symbol = difference > 1 ? "-" : "/";
-				titleDate = `${startDate}${symbol}${
-					symbol == "/" ? shortenedUntilDate : untilDate
-				}`;
+				titleDate = `${startDate}${symbol}${symbol == "/" ? shortenedUntilDate : untilDate}`;
 			}
 
 			return {
@@ -121,9 +112,7 @@ export default class CourseRoomListModule extends VuexModule {
 	@Mutation
 	setPosition(droppedComponent: DroppedObject): void {
 		const { to } = droppedComponent;
-		const itemToBeChanged = this.roomsData.find(
-			(item) => item.id == droppedComponent.item.id
-		);
+		const itemToBeChanged = this.roomsData.find((item) => item.id == droppedComponent.item.id);
 
 		if (itemToBeChanged) {
 			itemToBeChanged.xPosition = to.x;
@@ -213,13 +202,9 @@ export default class CourseRoomListModule extends VuexModule {
 	}
 
 	@Action
-	async fetch(params?: {
-		indicateLoading: boolean;
-		device: string;
-	}): Promise<void> {
+	async fetch(params?: { indicateLoading: boolean; device: string }): Promise<void> {
 		// device parameter will be used to fetch data specified for device
-		const indicateLoading =
-			params?.indicateLoading === undefined ? true : params.indicateLoading;
+		const indicateLoading = params?.indicateLoading === undefined ? true : params.indicateLoading;
 		if (indicateLoading) this.setLoading(true);
 		try {
 			const { data } = await this.dashboardApi.dashboardControllerFindForUser();
@@ -248,10 +233,7 @@ export default class CourseRoomListModule extends VuexModule {
 
 		this.setLoading(true);
 		try {
-			const response = await this.dashboardApi.dashboardControllerMoveElement(
-				this.getRoomsId,
-				reqObject
-			);
+			const response = await this.dashboardApi.dashboardControllerMoveElement(this.getRoomsId, reqObject);
 
 			this.setPosition(payload);
 			this.setRoomData(response.data.gridElements);
@@ -272,16 +254,11 @@ export default class CourseRoomListModule extends VuexModule {
 	async update(payload: RoomsData): Promise<void> {
 		this.setLoading(true);
 		try {
-			await this.dashboardApi.dashboardControllerPatchGroup(
-				this.getRoomsId,
-				payload.xPosition,
-				payload.yPosition,
-				{ title: payload.title }
-			);
+			await this.dashboardApi.dashboardControllerPatchGroup(this.getRoomsId, payload.xPosition, payload.yPosition, {
+				title: payload.title,
+			});
 			const roomIndex = this.roomsData.findIndex(
-				(room) =>
-					room.xPosition === payload.xPosition &&
-					room.yPosition === payload.yPosition
+				(room) => room.xPosition === payload.xPosition && room.yPosition === payload.yPosition
 			);
 			const roomsData = [...this.roomsData];
 			roomsData[roomIndex] = {
@@ -326,10 +303,7 @@ export default class CourseRoomListModule extends VuexModule {
 	async fetchAllElements(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const { data } = await this.coursesApi.courseControllerFindForUser(
-				0,
-				100
-			);
+			const { data } = await this.coursesApi.courseControllerFindForUser(0, 100);
 
 			this.setAllElements(data.data);
 			this.setLoading(false);
@@ -346,9 +320,7 @@ export default class CourseRoomListModule extends VuexModule {
 	}
 
 	@Action
-	async confirmSharedCourseData(
-		courseData: SharingCourseObject
-	): Promise<void> {
+	async confirmSharedCourseData(courseData: SharingCourseObject): Promise<void> {
 		this.resetBusinessError();
 		try {
 			const importedCourseResponse = (

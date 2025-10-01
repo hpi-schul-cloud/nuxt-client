@@ -3,30 +3,21 @@ import * as useUserLoginMigrationMappingsComposable from "@/composables/user-log
 import { ConfigResponse } from "@/serverApi/v3/api";
 import SchoolsModule from "@/store/schools";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
-import {
-	SCHOOLS_MODULE_KEY,
-	USER_LOGIN_MIGRATION_MODULE_KEY,
-} from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { SCHOOLS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
 import { businessErrorFactory, createTestEnvStore } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
-import type { Mocked } from "vitest";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useEnvConfig } from "@data-env";
+import { mount } from "@vue/test-utils";
+import type { Mocked } from "vitest";
+import { nextTick } from "vue";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
 	let userLoginMigrationModule: Mocked<UserLoginMigrationModule>;
 
-	vi.spyOn(
-		useUserLoginMigrationMappingsComposable,
-		"useUserLoginMigrationMappings"
-	).mockReturnValue({
+	vi.spyOn(useUserLoginMigrationMappingsComposable, "useUserLoginMigrationMappings").mockReturnValue({
 		...useUserLoginMigrationMappingsComposable.useUserLoginMigrationMappings(),
 		getBusinessErrorTranslationKey: () => "",
 	});
@@ -134,9 +125,7 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			expect(
-				wrapper.find('[data-testId="migration-control-section"]').exists()
-			).toEqual(true);
+			expect(wrapper.find('[data-testId="migration-control-section"]').exists()).toEqual(true);
 		});
 
 		it("should not render migration description when grace period is expired", () => {
@@ -156,9 +145,7 @@ describe("AdminMigrationSection", () => {
 			vi.useFakeTimers();
 			vi.setSystemTime(new Date(2023, 1, 3));
 
-			expect(
-				wrapper.find('[data-testId="migration-control-section"]').exists()
-			).toBe(false);
+			expect(wrapper.find('[data-testId="migration-control-section"]').exists()).toBe(false);
 		});
 	});
 
@@ -172,16 +159,8 @@ describe("AdminMigrationSection", () => {
 			);
 
 			const infoText = wrapper.get('[data-testId="migration-info-text"]');
-			const expectedText = [
-				"firstParagraph",
-				"secondParagraph",
-				"thirdParagraph",
-				"fourthParagraph",
-			]
-				.map(
-					(text) =>
-						`components.administration.adminMigrationSection.infoText.${text}`
-				)
+			const expectedText = ["firstParagraph", "secondParagraph", "thirdParagraph", "fourthParagraph"]
+				.map((text) => `components.administration.adminMigrationSection.infoText.${text}`)
 				.join("");
 
 			expect(infoText.text()).toEqual(expectedText);
@@ -204,9 +183,7 @@ describe("AdminMigrationSection", () => {
 
 			const infoText = wrapper.get('[data-testId="migration-active-status"]');
 
-			expect(infoText.text()).toStrictEqual(
-				"components.administration.adminMigrationSection.migrationActive"
-			);
+			expect(infoText.text()).toStrictEqual("components.administration.adminMigrationSection.migrationActive");
 		});
 	});
 
@@ -263,9 +240,7 @@ describe("AdminMigrationSection", () => {
 			const switchComponent = wrapper.findComponent({ name: "v-switch" });
 			switchComponent.vm.$emit("update:modelValue", true);
 
-			expect(
-				userLoginMigrationModule.setUserLoginMigrationMandatory
-			).toHaveBeenCalledWith(true);
+			expect(userLoginMigrationModule.setUserLoginMigrationMandatory).toHaveBeenCalledWith(true);
 		});
 
 		it("should set school oauth migration to optional, when click has been triggered again", () => {
@@ -286,9 +261,7 @@ describe("AdminMigrationSection", () => {
 			const switchComponent = wrapper.findComponent({ name: "v-switch" });
 			switchComponent.vm.$emit("update:modelValue", false);
 
-			expect(
-				userLoginMigrationModule.setUserLoginMigrationMandatory
-			).toHaveBeenCalledWith(false);
+			expect(userLoginMigrationModule.setUserLoginMigrationMandatory).toHaveBeenCalledWith(false);
 		});
 	});
 
@@ -348,9 +321,7 @@ describe("AdminMigrationSection", () => {
 			vi.useFakeTimers();
 			vi.setSystemTime(new Date(2023, 1, 3));
 
-			const buttonComponent = wrapper.find(
-				"[data-testId=migration-start-button]"
-			);
+			const buttonComponent = wrapper.find("[data-testId=migration-start-button]");
 
 			expect(buttonComponent.exists()).toBe(false);
 		});
@@ -484,12 +455,8 @@ describe("AdminMigrationSection", () => {
 					await cardButtonAgree.trigger("click");
 
 					expect(cardComponent.exists()).toBe(false);
-					expect(
-						userLoginMigrationModule.startUserLoginMigration
-					).toHaveBeenCalled();
-					expect(
-						userLoginMigrationModule.fetchLatestUserLoginMigrationForSchool
-					).toHaveBeenCalled();
+					expect(userLoginMigrationModule.startUserLoginMigration).toHaveBeenCalled();
+					expect(userLoginMigrationModule.fetchLatestUserLoginMigrationForSchool).toHaveBeenCalled();
 				});
 			});
 		});
@@ -508,15 +475,11 @@ describe("AdminMigrationSection", () => {
 				await buttonComponent.trigger("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
-				const cardButtonDisagree = cardComponent.find(
-					"[data-testId=disagree-btn]"
-				);
+				const cardButtonDisagree = cardComponent.find("[data-testId=disagree-btn]");
 				await cardButtonDisagree.trigger("click");
 
 				expect(cardComponent.exists()).toBe(false);
-				expect(userLoginMigrationModule.getUserLoginMigration).toStrictEqual(
-					undefined
-				);
+				expect(userLoginMigrationModule.getUserLoginMigration).toStrictEqual(undefined);
 			});
 		});
 
@@ -574,12 +537,8 @@ describe("AdminMigrationSection", () => {
 
 				warningCards[0].vm.$emit("set");
 
-				expect(
-					userLoginMigrationModule.closeUserLoginMigration
-				).toHaveBeenCalled();
-				expect(
-					userLoginMigrationModule.fetchLatestUserLoginMigrationForSchool
-				).toHaveBeenCalled();
+				expect(userLoginMigrationModule.closeUserLoginMigration).toHaveBeenCalled();
+				expect(userLoginMigrationModule.fetchLatestUserLoginMigrationForSchool).toHaveBeenCalled();
 			});
 		});
 
@@ -604,9 +563,7 @@ describe("AdminMigrationSection", () => {
 				await buttonComponent.trigger("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
-				const cardButtonDisagree = cardComponent.find(
-					"[data-testid=disagree-btn]"
-				);
+				const cardButtonDisagree = cardComponent.find("[data-testid=disagree-btn]");
 				await cardButtonDisagree.trigger("click");
 
 				expect(cardComponent.exists()).toBe(false);
@@ -642,15 +599,10 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const dateParagraph = wrapper.get(
-				"[data-testid=migration-finished-timestamp]"
-			);
+			const dateParagraph = wrapper.get("[data-testid=migration-finished-timestamp]");
 
 			const expectedText = ["firstParagraph", "secondParagraph"]
-				.map(
-					(paragraph) =>
-						`components.administration.adminMigrationSection.oauthMigrationFinished.text.${paragraph}`
-				)
+				.map((paragraph) => `components.administration.adminMigrationSection.oauthMigrationFinished.text.${paragraph}`)
 				.join("");
 
 			expect(dateParagraph.text()).toBe(expectedText);
@@ -675,9 +627,7 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const paragraph = wrapper.get(
-				"[data-testid=migration-finished-timestamp]"
-			);
+			const paragraph = wrapper.get("[data-testid=migration-finished-timestamp]");
 
 			const expectedText = [
 				"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph",
@@ -722,12 +672,8 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const switchComponent = wrapper.find(
-						'[data-testid="show-outdated-users-switch"]'
-					);
-					const paragraph = wrapper.find(
-						'[data-testid="show-outdated-users-description"]'
-					);
+					const switchComponent = wrapper.find('[data-testid="show-outdated-users-switch"]');
+					const paragraph = wrapper.find('[data-testid="show-outdated-users-description"]');
 
 					expect(switchComponent.exists()).toBe(false);
 					expect(paragraph.exists()).toBe(false);
@@ -744,12 +690,8 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const switchComponent = wrapper.find(
-						'[data-testid="show-outdated-users-switch"]'
-					);
-					const paragraph = wrapper.find(
-						'[data-testid="show-outdated-users-description"]'
-					);
+					const switchComponent = wrapper.find('[data-testid="show-outdated-users-switch"]');
+					const paragraph = wrapper.find('[data-testid="show-outdated-users-description"]');
 
 					expect(switchComponent.exists()).toBe(true);
 					expect(paragraph.exists()).toBe(true);
@@ -797,9 +739,7 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const switchComponent = wrapper.find(
-						'[data-testid="enable-sync-during-migration-switch"]'
-					);
+					const switchComponent = wrapper.find('[data-testid="enable-sync-during-migration-switch"]');
 
 					expect(switchComponent.exists()).toBe(false);
 				});
@@ -828,9 +768,7 @@ describe("AdminMigrationSection", () => {
 						name: "v-switch",
 					});
 
-					const switchComponent = switchComponents[1].get(
-						'[data-testid="enable-sync-during-migration-switch"]'
-					);
+					const switchComponent = switchComponents[1].get('[data-testid="enable-sync-during-migration-switch"]');
 
 					expect(switchComponent).toBeDefined();
 				});
@@ -858,9 +796,7 @@ describe("AdminMigrationSection", () => {
 					}
 				);
 
-				const switchComponent = wrapper.find(
-					'[data-testid="enable-sync-during-migration-switch"]'
-				);
+				const switchComponent = wrapper.find('[data-testid="enable-sync-during-migration-switch"]');
 
 				expect(switchComponent.exists()).toBe(false);
 			});
@@ -880,9 +816,7 @@ describe("AdminMigrationSection", () => {
 					}
 				);
 
-				const switchComponent = wrapper.find(
-					'[data-testid="enable-sync-during-migration-switch"]'
-				);
+				const switchComponent = wrapper.find('[data-testid="enable-sync-during-migration-switch"]');
 
 				expect(switchComponent.exists()).toBe(true);
 			});
@@ -910,9 +844,7 @@ describe("AdminMigrationSection", () => {
 					}
 				);
 
-				const switchComponent = wrapper.find(
-					'[data-testid="enable-sync-during-migration-switch"]'
-				);
+				const switchComponent = wrapper.find('[data-testid="enable-sync-during-migration-switch"]');
 
 				expect(switchComponent.attributes("disabled")).toEqual(undefined);
 			});
@@ -1075,9 +1007,7 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const migrationWizardButton = wrapper.find(
-						'[data-testid="migration-wizard-button]'
-					);
+					const migrationWizardButton = wrapper.find('[data-testid="migration-wizard-button]');
 					expect(migrationWizardButton.exists()).toBeFalsy();
 				});
 			});

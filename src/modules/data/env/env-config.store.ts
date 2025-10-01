@@ -1,22 +1,13 @@
-import { defineStore, storeToRefs } from "pinia";
+import { FileConfigApiFactory, FilesStorageConfigResponse } from "@/fileStorageApi/v3";
+import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory, Timezone } from "@/serverApi/v3";
 import { applicationErrorModule } from "@/store";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import {
-	ConfigResponse,
-	LanguageType,
-	SchulcloudTheme,
-	ServerConfigApiFactory,
-	Timezone,
-} from "@/serverApi/v3";
-import {
-	FileConfigApiFactory,
-	FilesStorageConfigResponse,
-} from "@/fileStorageApi/v3";
 import { Status } from "@/store/types/commons";
-import { computed, reactive, ref } from "vue";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { createSharedComposable } from "@vueuse/core";
+import { defineStore, storeToRefs } from "pinia";
+import { computed, reactive, ref } from "vue";
 
 export const defaultConfigEnvs: ConfigResponse = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "",
@@ -112,9 +103,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		Object.assign(envFile, fileEnvsConfig);
 	};
 
-	const fallBackLanguage = computed(() => {
-		return env.I18N__FALLBACK_LANGUAGE ?? env.I18N__DEFAULT_LANGUAGE;
-	});
+	const fallBackLanguage = computed(() => env.I18N__FALLBACK_LANGUAGE ?? env.I18N__DEFAULT_LANGUAGE);
 
 	const instituteTitle = computed(() => {
 		switch (env.SC_THEME) {
@@ -144,9 +133,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 			status.value = "completed";
 			return true;
 		} catch {
-			applicationErrorModule.setError(
-				createApplicationError(HttpStatusCode.GatewayTimeout)
-			);
+			applicationErrorModule.setError(createApplicationError(HttpStatusCode.GatewayTimeout));
 			status.value = "error";
 			return false;
 		}

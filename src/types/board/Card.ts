@@ -1,6 +1,6 @@
-import { CardSkeletonResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "./ContentElement";
 import { VisibilitySettings } from "./VisibilitySettings";
+import { CardSkeletonResponse } from "@/serverApi/v3";
 
 export type BoardCardSkeleton = CardSkeletonResponse;
 

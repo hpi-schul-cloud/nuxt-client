@@ -102,10 +102,7 @@ describe("notifier store", () => {
 				};
 				notifierModule.addNotifier(payloadOne);
 				notifierModule.addNotifier(payloadTwo);
-				expect(notifierModule.notifierItems).toStrictEqual([
-					payloadTwo,
-					payloadOne,
-				]);
+				expect(notifierModule.notifierItems).toStrictEqual([payloadTwo, payloadOne]);
 			});
 		});
 
@@ -126,10 +123,7 @@ describe("notifier store", () => {
 				};
 				notifierModule.addNotifier(payload);
 				notifierModule.addNotifier(anotherPayload);
-				expect(notifierModule.notifierItems).toStrictEqual([
-					anotherPayload,
-					payload,
-				]);
+				expect(notifierModule.notifierItems).toStrictEqual([anotherPayload, payload]);
 				notifierModule.removeNotifier(payload);
 				expect(notifierModule.notifierItems).toStrictEqual([anotherPayload]);
 			});
@@ -152,10 +146,7 @@ describe("notifier store", () => {
 				};
 				notifierModule.addNotifier(payload);
 				notifierModule.addNotifier(anotherPayload);
-				expect(notifierModule.notifierItems).toStrictEqual([
-					anotherPayload,
-					payload,
-				]);
+				expect(notifierModule.notifierItems).toStrictEqual([anotherPayload, payload]);
 				notifierModule.reset();
 				expect(notifierModule.notifierItems).toStrictEqual([]);
 			});

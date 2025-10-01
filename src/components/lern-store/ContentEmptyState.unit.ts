@@ -1,8 +1,5 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import ContentEmptyState from "./ContentEmptyState.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ContentEmptySvg, EmptyState } from "@ui-empty-state";
 
 describe("@/components/molecules/ContentEmptyState", () => {
@@ -21,9 +18,7 @@ describe("@/components/molecules/ContentEmptyState", () => {
 	it("Provides prop title", () => {
 		const emptyStateElement = wrapper.findComponent(EmptyState);
 
-		expect(emptyStateElement.props().title).toBe(
-			"pages.content.emptyState.error.title"
-		);
+		expect(emptyStateElement.props().title).toBe("pages.content.emptyState.error.title");
 	});
 
 	it("Provides svg", () => {
@@ -47,8 +42,6 @@ describe("@/components/molecules/ContentEmptyState", () => {
 			.map((key) => `pages.content.emptyState.error.message.suggestions.${key}`)
 			.join("");
 
-		expect(text.text()).toBe(
-			`pages.content.emptyState.error.message.suggestions${suggestionItems}`
-		);
+		expect(text.text()).toBe(`pages.content.emptyState.error.message.suggestions${suggestionItems}`);
 	});
 });

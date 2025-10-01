@@ -1,12 +1,9 @@
-import { mount } from "@vue/test-utils";
 import AdminTableLegend from "./AdminTableLegend.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { nextTick } from "vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 
 const icons = [
 	{ icon: "mdi-check", color: "green", label: "Label 1" },
@@ -27,9 +24,8 @@ describe("AdminTableLegend", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
-					$t: (key: string, placeholders: Record<string, string> = {}) => {
-						return `${key}|${Object.values(placeholders || {}).join("|")}`;
-					},
+					$t: (key: string, placeholders: Record<string, string> = {}) =>
+						`${key}|${Object.values(placeholders || {}).join("|")}`,
 				},
 			},
 			props: {
@@ -60,21 +56,13 @@ describe("AdminTableLegend", () => {
 		createTestEnvStore({ SC_THEME: SchulcloudTheme.Thr });
 		const { wrapper } = setup();
 
-		expect(wrapper.text()).toContain(
-			"components.molecules.admintablelegend.thr"
-		);
+		expect(wrapper.text()).toContain("components.molecules.admintablelegend.thr");
 	});
 
 	it.each([
 		[SchulcloudTheme.Default, "Dataport"],
-		[
-			SchulcloudTheme.Brb,
-			"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg",
-		],
-		[
-			SchulcloudTheme.N21,
-			"Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)",
-		],
+		[SchulcloudTheme.Brb, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+		[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
 	])("uses %s-instance specific text placeholders", async (theme, expected) => {
 		createTestEnvStore({ SC_THEME: theme });
 		const { wrapper } = setup();

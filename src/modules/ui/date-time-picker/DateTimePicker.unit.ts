@@ -1,22 +1,16 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import DateTimePicker from "./DateTimePicker.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 
 describe("DateTimePicker", () => {
-	const mountComponent = (
-		options: ComponentMountingOptions<typeof DateTimePicker> = {}
-	) => {
-		return mount(DateTimePicker, {
+	const mountComponent = (options: ComponentMountingOptions<typeof DateTimePicker> = {}) =>
+		mount(DateTimePicker, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			...options,
 			attachTo: document.body,
 		});
-	};
 
 	it("should render component", () => {
 		const wrapper = mountComponent({

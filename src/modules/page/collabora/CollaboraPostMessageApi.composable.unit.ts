@@ -1,14 +1,11 @@
 // Unit tests
+import { CollaboraEvents, useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mountComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { describe, expect, it, vi } from "vitest";
-import {
-	CollaboraEvents,
-	useCollaboraPostMessageApi,
-} from "./CollaboraPostMessageApi.composable";
 
 describe("useCollaboraMessage", () => {
 	beforeEach(() => {
@@ -21,8 +18,8 @@ describe("useCollaboraMessage", () => {
 
 	const notifierModuleMock = createModuleMocks(NotifierModule);
 
-	const setupMountComposable = () => {
-		return mountComposable(() => useCollaboraPostMessageApi(), {
+	const setupMountComposable = () =>
+		mountComposable(() => useCollaboraPostMessageApi(), {
 			global: {
 				plugins: [createTestingI18n()],
 				provide: {
@@ -30,7 +27,6 @@ describe("useCollaboraMessage", () => {
 				},
 			},
 		});
-	};
 
 	it("should show error if message is invalid JSON", () => {
 		setupMountComposable();
@@ -99,17 +95,14 @@ describe("useCollaboraMessage", () => {
 			const iframe = document.createElement("iframe");
 			document.body.appendChild(iframe);
 
-			const { setupPostMessageAPI } = mountComposable(
-				() => useCollaboraPostMessageApi(),
-				{
-					global: {
-						plugins: [createTestingI18n()],
-						provide: {
-							[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
-						},
+			const { setupPostMessageAPI } = mountComposable(() => useCollaboraPostMessageApi(), {
+				global: {
+					plugins: [createTestingI18n()],
+					provide: {
+						[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
 					},
-				}
-			);
+				},
+			});
 
 			setupPostMessageAPI(iframe, targetOrigin);
 

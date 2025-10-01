@@ -1,6 +1,6 @@
+import { $axios } from "@/utils/api";
 import mergeDeep from "@/utils/merge-deep";
 import serviceTemplate from "@/utils/service-template";
-import { $axios } from "@/utils/api";
 
 const base = serviceTemplate("users");
 const baseState = base.state();

@@ -1,5 +1,3 @@
-import { $axios } from "@/utils/api";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	BoardExternalReferenceType,
 	ShareTokenApiFactory,
@@ -8,6 +6,8 @@ import {
 	ShareTokenBodyParamsParentTypeEnum,
 	ShareTokenResponse,
 } from "../serverApi/v3/api";
+import { $axios } from "@/utils/api";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 export interface ShareOptions {
 	isSchoolInternal: boolean;
@@ -20,10 +20,7 @@ export interface StartFlow {
 	destinationType?: BoardExternalReferenceType;
 }
 
-const getSharePath = (
-	parentType: ShareTokenBodyParamsParentTypeEnum,
-	destinationType: BoardExternalReferenceType
-) => {
+const getSharePath = (parentType: ShareTokenBodyParamsParentTypeEnum, destinationType: BoardExternalReferenceType) => {
 	if (parentType === ShareTokenBodyParamsParentTypeEnum.ColumnBoard) {
 		if (destinationType === BoardExternalReferenceType.Room) {
 			return "rooms";
@@ -48,17 +45,14 @@ export default class ShareModule extends VuexModule {
 	private parentId = "";
 	private shareUrl: string | undefined = undefined;
 	private parentType = ShareTokenBodyParamsParentTypeEnum.Courses;
-	private destinationType: BoardExternalReferenceType =
-		BoardExternalReferenceType.Course;
+	private destinationType: BoardExternalReferenceType = BoardExternalReferenceType.Course;
 
 	private get shareApi(): ShareTokenApiInterface {
 		return ShareTokenApiFactory(undefined, "v3", $axios);
 	}
 
 	@Action
-	async createShareUrl(
-		payload: ShareOptions
-	): Promise<ShareTokenResponse | undefined> {
+	async createShareUrl(payload: ShareOptions): Promise<ShareTokenResponse | undefined> {
 		const shareTokenPayload: ShareTokenBodyParams = {
 			parentType: this.parentType,
 			parentId: this.parentId,
@@ -66,10 +60,7 @@ export default class ShareModule extends VuexModule {
 			schoolExclusive: payload.isSchoolInternal,
 		};
 		try {
-			const shareTokenResult =
-				await this.shareApi.shareTokenControllerCreateShareToken(
-					shareTokenPayload
-				);
+			const shareTokenResult = await this.shareApi.shareTokenControllerCreateShareToken(shareTokenPayload);
 			if (!shareTokenResult) return undefined;
 			const sharePath = getSharePath(this.parentType, this.destinationType);
 			const shareUrl = `${window.location.origin}/${sharePath}?import=${shareTokenResult.data.token}`;

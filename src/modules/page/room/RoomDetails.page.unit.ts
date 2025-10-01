@@ -5,40 +5,21 @@ import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
-
 import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestEnvStore,
-	meResponseFactory,
-	mockedPiniaStoreTyping,
-} from "@@/tests/test-utils";
+import { createTestEnvStore, meResponseFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import {
-	roomBoardTileListFactory,
-	roomFactory,
-} from "@@/tests/test-utils/factory/room";
+import { roomBoardTileListFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import {
-	RoomVariant,
-	useRoomAuthorization,
-	useRoomDetailsStore,
-	useRoomsState,
-} from "@data-room";
+import { RoomVariant, useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomMenu } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState } from "@ui-empty-state";
-import {
-	LeaveRoomProhibitedDialog,
-	SelectBoardLayoutDialog,
-} from "@ui-room-details";
+import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { Mock } from "vitest";
 import { ref } from "vue";
@@ -174,9 +155,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		it("should set the page title", async () => {
 			const { room } = setup();
 
-			expect(document.title).toContain(
-				`${room.name} - ${"pages.roomDetails.title"}`
-			);
+			expect(document.title).toContain(`${room.name} - ${"pages.roomDetails.title"}`);
 		});
 
 		it("should render DefaultWireframe", () => {
@@ -306,9 +285,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 					const menu = wrapper.getComponent(RoomMenu);
 					await menu.vm.$emit("room:leave");
-					const leaveRoomProhibitedDialog = wrapper.getComponent(
-						LeaveRoomProhibitedDialog
-					);
+					const leaveRoomProhibitedDialog = wrapper.getComponent(LeaveRoomProhibitedDialog);
 
 					expect(leaveRoomProhibitedDialog.isVisible()).toBe(true);
 					expect(leaveRoomProhibitedDialog.props("modelValue")).toEqual(true);
@@ -330,9 +307,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				roomPermissions.canEditRoomContent.value = false;
 				const { wrapper } = setup();
 
-				const fabButton = wrapper.findComponent(
-					"[data-testid='add-content-button']"
-				);
+				const fabButton = wrapper.findComponent("[data-testid='add-content-button']");
 
 				expect(fabButton.exists()).toBe(false);
 			});
@@ -346,9 +321,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			const openDialog = async (wrapper: VueWrapper) => {
 				await openSpeedDialMenu(wrapper);
 
-				const boardCreateDialogBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_board']"
-				);
+				const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
 				await boardCreateDialogBtn.trigger("click");
 			};
 
@@ -359,9 +332,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const actions = wrapper.findAllComponents({
 					name: "SpeedDialMenuAction",
 				});
-				const boardCreateDialogBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_board']"
-				);
+				const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
 
 				expect(actions).toHaveLength(1);
 				expect(boardCreateDialogBtn.exists()).toBe(true);
@@ -440,9 +411,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const actions = wrapper.findAllComponents({
 					name: "SpeedDialMenuAction",
 				});
-				const boardCreateBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_column_board']"
-				);
+				const boardCreateBtn = wrapper.findComponent("[data-testid='fab_button_add_column_board']");
 
 				expect(actions).toHaveLength(1);
 				expect(boardCreateBtn.exists()).toBe(true);
@@ -454,9 +423,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				});
 				await openSpeedDialMenu(wrapper);
 
-				const boardCreateBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_column_board']"
-				);
+				const boardCreateBtn = wrapper.findComponent("[data-testid='fab_button_add_column_board']");
 
 				await boardCreateBtn.trigger("click");
 
@@ -488,8 +455,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			describe("when some boards are in draft mode", () => {
 				const setupWithBoards = (totalCount = 3, inDraftMode = 1) => {
 					const visibleCount = totalCount - inDraftMode;
-					const visibleBoards =
-						roomBoardTileListFactory.buildList(visibleCount);
+					const visibleBoards = roomBoardTileListFactory.buildList(visibleCount);
 					const draftBoards = roomBoardTileListFactory.buildList(inDraftMode, {
 						isVisible: false,
 					});

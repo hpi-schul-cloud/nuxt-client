@@ -1,10 +1,7 @@
-import { mount } from "@vue/test-utils";
 import CloudStatusMessages from "./CloudStatusMessages.vue";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,

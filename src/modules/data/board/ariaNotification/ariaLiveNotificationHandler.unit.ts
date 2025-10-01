@@ -1,23 +1,12 @@
+import { CreateCardSuccessPayload, CreateColumnSuccessPayload } from "../boardActions/boardActionPayload.types";
+import { SR_I18N_KEYS_MAP, useBoardAriaNotification } from "./ariaLiveNotificationHandler";
 import { BoardLayout, ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import {
-	cardResponseFactory,
-	columnResponseFactory,
-} from "@@/tests/test-utils";
-import {
-	CreateCardSuccessPayload,
-	CreateColumnSuccessPayload,
-} from "../boardActions/boardActionPayload.types";
-import {
-	SR_I18N_KEYS_MAP,
-	useBoardAriaNotification,
-} from "./ariaLiveNotificationHandler";
+import { cardResponseFactory, columnResponseFactory } from "@@/tests/test-utils";
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
+}));
 
 vi.mock("../Board.store", () => ({
 	useBoardStore: vi.fn().mockReturnValue({
@@ -50,8 +39,7 @@ describe("useBoardAriaNotification", () => {
 
 	const mockNotifyOnScreenReader = vi.fn();
 	vi.mock("@/composables/ariaLiveNotifier", async (importOriginal) => {
-		const actual =
-			await importOriginal<typeof import("@/composables/ariaLiveNotifier")>();
+		const actual = await importOriginal<typeof import("@/composables/ariaLiveNotifier")>();
 		return {
 			...actual,
 
@@ -91,9 +79,7 @@ describe("useBoardAriaNotification", () => {
 
 		notifyCreateColumnSuccess(payload);
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS);
 	});
 
 	it("should notify on cardDelete", () => {
@@ -115,9 +101,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS);
 	});
 
 	it("should notify on cardMove", () => {
@@ -136,9 +120,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.CARD_MOVED_IN_SAME_COLUMN_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_MOVED_IN_SAME_COLUMN_SUCCESS);
 	});
 
 	it("should notify on cardMove to another column", () => {
@@ -157,9 +139,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS);
 	});
 
 	it("should notify on columnMove", () => {
@@ -191,9 +171,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS);
 	});
 
 	describe("should notify on boardVisibilityUpdate", () => {
@@ -207,9 +185,7 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			vi.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toContain(
-				SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS
-			);
+			expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS);
 		});
 
 		it("should notify on boardUnpublished", () => {
@@ -222,9 +198,7 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			vi.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toContain(
-				SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS
-			);
+			expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS);
 		});
 	});
 
@@ -239,9 +213,7 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			vi.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toContain(
-				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
-			);
+			expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS);
 		});
 
 		it("should notify on boardLayoutUpdate to list", () => {
@@ -254,9 +226,7 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			vi.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toContain(
-				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
-			);
+			expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS);
 		});
 
 		it("should notify on boardLayoutUpdate to unknown", () => {
@@ -269,9 +239,7 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			vi.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toContain(
-				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
-			);
+			expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS);
 		});
 	});
 
@@ -286,9 +254,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.COLUMN_TITLE_UPDATED_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_TITLE_UPDATED_SUCCESS);
 	});
 
 	it("should notify on cardTitleUpdate", () => {
@@ -302,9 +268,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS);
 	});
 
 	it("should notify on elementUpdate", () => {

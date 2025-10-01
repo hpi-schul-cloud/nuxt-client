@@ -1,9 +1,9 @@
-import { mount } from "@vue/test-utils";
 import H5PEditor from "./H5PEditor.vue";
-import { H5PEditorComponent } from "@lumieducation/h5p-webcomponents";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { nextTick } from "vue";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { H5PEditorComponent } from "@lumieducation/h5p-webcomponents";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 
 vi.mock(import("@lumieducation/h5p-webcomponents"), async (importOriginal) => {
 	const actual = await importOriginal();
@@ -18,8 +18,8 @@ describe("H5PEditor", () => {
 	const parentType = H5PContentParentType.BOARD_ELEMENT;
 	const parentId = "test-parent-id";
 
-	const createWrapper = (props = {}) => {
-		return mount(H5PEditor, {
+	const createWrapper = (props = {}) =>
+		mount(H5PEditor, {
 			global: {
 				plugins: [createTestingI18n()],
 			},
@@ -30,7 +30,6 @@ describe("H5PEditor", () => {
 				...props,
 			},
 		});
-	};
 
 	it("renders without errors with standard props", async () => {
 		const wrapper = createWrapper();

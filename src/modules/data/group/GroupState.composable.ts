@@ -1,8 +1,8 @@
-import { ref, Ref } from "vue";
-import { Group, useGroupApi } from "@data-group";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { Group, useGroupApi } from "@data-group";
+import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useGroupState = () => {

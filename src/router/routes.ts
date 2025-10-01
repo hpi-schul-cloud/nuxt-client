@@ -49,20 +49,14 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/administration/school-settings/tool-configuration",
-		component: () =>
-			import(
-				"@/pages/administration/school-external-tool/SchoolExternalToolConfigurator.page.vue"
-			),
+		component: () => import("@/pages/administration/school-external-tool/SchoolExternalToolConfigurator.page.vue"),
 		name: "administration-tool-config-overview",
 		beforeEnter: createPermissionGuard(["school_tool_admin"]),
 		children: [
 			{
 				path: ":configId",
 				name: "administration-tool-config-edit",
-				component: () =>
-					import(
-						"@/pages/administration/school-external-tool/SchoolExternalToolConfigurator.page.vue"
-					),
+				component: () => import("@/pages/administration/school-external-tool/SchoolExternalToolConfigurator.page.vue"),
 			},
 		],
 		props: (to: RouteLocationNormalized) => ({
@@ -71,13 +65,9 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/administration/school-settings/provisioning-options",
-		component: () =>
-			import("@/components/administration/ProvisioningOptionsPage.vue"),
+		component: () => import("@/components/administration/ProvisioningOptionsPage.vue"),
 		name: "provivisioning-options-page",
-		beforeEnter: createPermissionGuard([
-			"school_system_view",
-			"school_system_edit",
-		]),
+		beforeEnter: createPermissionGuard(["school_system_view", "school_system_edit"]),
 		props: (to: RouteLocationNormalized) => ({
 			systemId: to.query.systemId,
 		}),
@@ -120,8 +110,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: `/administration/rooms/manage/:roomId(${REGEX_ID})`,
-		component: async () =>
-			(await import("@page-room")).AdministrationRoomDetailsPage,
+		component: async () => (await import("@page-room")).AdministrationRoomDetailsPage,
 		name: "administration-rooms-manage-details",
 		beforeEnter: createPermissionGuard(["school_administrate_rooms"]),
 	},
@@ -146,8 +135,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,
 		name: "administration-groups-classes-members",
-		component: async () =>
-			(await import("@page-class-members")).ClassMembersPage,
+		component: async () => (await import("@page-class-members")).ClassMembersPage,
 		beforeEnter: createPermissionGuard(["group_view"]),
 		props: (to: RouteLocationNormalized) => ({
 			groupId: to.params.groupId,
@@ -206,8 +194,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/migration",
-		component: () =>
-			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
+		component: () => import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
 		name: "user-login-migration-consent",
 		meta: {
 			layout: Layouts.LOGGED_OUT,
@@ -215,14 +202,11 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/migration/error",
-		component: () =>
-			import("@/pages/user-login-migration/UserLoginMigrationError.page.vue"),
+		component: () => import("@/pages/user-login-migration/UserLoginMigrationError.page.vue"),
 		name: "user-login-migration-error",
 		beforeEnter: validateQueryParameters({
-			sourceSchoolNumber: (value: unknown) =>
-				!isDefined(value) || isOfficialSchoolNumber(value),
-			targetSchoolNumber: (value: unknown) =>
-				!isDefined(value) || isOfficialSchoolNumber(value),
+			sourceSchoolNumber: (value: unknown) => !isDefined(value) || isOfficialSchoolNumber(value),
+			targetSchoolNumber: (value: unknown) => !isDefined(value) || isOfficialSchoolNumber(value),
 		}),
 		props: (to: RouteLocationNormalized) => ({
 			sourceSchoolNumber: to.query.sourceSchoolNumber,
@@ -236,8 +220,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/migration/success",
-		component: () =>
-			import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
+		component: () => import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
 		name: "user-login-migration-success",
 		beforeEnter: validateQueryParameters({
 			targetSystem: isMongoId,
@@ -330,8 +313,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: `/rooms/invitation-link/:id(${REGEX_ID})`,
-		component: async () =>
-			(await import("@page-room")).RoomInvitationLinkStatusPage,
+		component: async () => (await import("@page-room")).RoomInvitationLinkStatusPage,
 		name: "rooms-invitation-link-id",
 		props: (route: RouteLocationNormalized) => ({
 			invitationLinkId: route.params.id,
@@ -344,10 +326,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: `/tools/context/tool-configuration`,
-		component: () =>
-			import(
-				"@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"
-			),
+		component: () => import("@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"),
 		name: "context-external-tool-configuration",
 		beforeEnter: [
 			createPermissionGuard(["context_tool_admin"]),
@@ -360,10 +339,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			{
 				path: ":configId",
 				name: "context-external-tool-configuration-edit",
-				component: () =>
-					import(
-						"@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"
-					),
+				component: () => import("@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"),
 			},
 		],
 		props: (to: RouteLocationNormalized) => ({

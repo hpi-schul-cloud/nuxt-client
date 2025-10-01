@@ -1,12 +1,12 @@
-import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
-import setupStores from "@@/tests/test-utils/setupStores";
-import NotifierModule from "@/store/notifier";
 import AuthModule from "@/store/auth";
-import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
+import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { nextTick } from "vue";
+import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
 import { flushPromises } from "@vue/test-utils";
+import { nextTick } from "vue";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -106,9 +106,7 @@ describe("useAutoLogout", () => {
 		describe("when the timer is below the warning time", () => {
 			it("should set 'showDialog' true", async () => {
 				jwtTimerResponse.ttl = jwtTimerResponse.showTimeoutValue - 10;
-				const timeToAdvance =
-					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) *
-					1000;
+				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) * 1000;
 				const { showDialog } = setup();
 
 				vi.advanceTimersByTime(timeToAdvance);
@@ -127,9 +125,7 @@ describe("useAutoLogout", () => {
 
 			it("should be true when the session is extended", async () => {
 				jwtTimerResponse.ttl = 100;
-				const timeToAdvance =
-					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) *
-					1000;
+				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) * 1000;
 				const { isTTLUpdated } = setup();
 				vi.advanceTimersByTime(timeToAdvance);
 				await nextTick();
@@ -141,9 +137,7 @@ describe("useAutoLogout", () => {
 		describe("when the timer is above the warning time", () => {
 			it("should set 'showDialog' to false", async () => {
 				jwtTimerResponse.ttl = jwtTimerResponse.showTimeoutValue + 10;
-				const timeToAdvance =
-					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue - 10) *
-					1000;
+				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue - 10) * 1000;
 				const { showDialog } = setup();
 
 				vi.advanceTimersByTime(timeToAdvance);

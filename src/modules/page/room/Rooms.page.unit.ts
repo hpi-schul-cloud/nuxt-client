@@ -1,32 +1,25 @@
+import RoomsPage from "./Rooms.page.vue";
+import ImportFlow from "@/components/share/ImportFlow.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import {
-	COPY_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { RoomItem } from "@/types/room/Room";
+import { COPY_MODULE_KEY, LOADING_STATE_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { roomItemFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useRoomsState, useRoomAuthorization } from "@data-room";
-import { createMock } from "@golevelup/ts-vitest";
-import { ref } from "vue";
-import { RouteLocation, Router, useRoute, useRouter } from "vue-router";
-import RoomsPage from "./Rooms.page.vue";
-import { mdiPlus } from "@icons/material";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { useRoomAuthorization, useRoomsState } from "@data-room";
 import { RoomGrid } from "@feature-room";
-import ImportFlow from "@/components/share/ImportFlow.vue";
+import { createMock } from "@golevelup/ts-vitest";
+import { mdiPlus } from "@icons/material";
+import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
 import { Mock } from "vitest";
-import { createTestingPinia } from "@pinia/testing";
-import AuthModule from "@/store/auth";
-import { RoomItem } from "@/types/room/Room";
-import { roomItemFactory } from "@@/tests/test-utils";
+import { ref } from "vue";
+import { RouteLocation, Router, useRoute, useRouter } from "vue-router";
 
 vi.mock("vue-router");
 const useRouteMock = useRoute as Mock;
@@ -79,10 +72,7 @@ describe("RoomsPage", () => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
-		const roomItems = [
-			roomItemFactory.build({ isLocked: false }),
-			roomItemFactory.build({ isLocked: true }),
-		];
+		const roomItems = [roomItemFactory.build({ isLocked: false }), roomItemFactory.build({ isLocked: true })];
 
 		useRoomsStateMock.mockReturnValue({
 			rooms: ref(roomItems),
@@ -94,11 +84,7 @@ describe("RoomsPage", () => {
 
 		const wrapper = mount(RoomsPage, {
 			global: {
-				plugins: [
-					createTestingI18n(),
-					createTestingVuetify(),
-					createTestingPinia(),
-				],
+				plugins: [createTestingI18n(), createTestingVuetify(), createTestingPinia()],
 				provide: {
 					[COPY_MODULE_KEY]: copyModule,
 					[LOADING_STATE_MODULE_KEY]: loadingState,

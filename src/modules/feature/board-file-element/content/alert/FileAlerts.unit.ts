@@ -1,12 +1,9 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
-import { shallowMount } from "@vue/test-utils";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
 import FileAlerts from "./FileAlerts.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
+import { shallowMount } from "@vue/test-utils";
 
 describe("FileAlerts", () => {
 	const setup = (alerts: FileAlert[]) => {
@@ -33,9 +30,7 @@ describe("FileAlerts", () => {
 
 	describe("when alerts contains FileAlert.EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE", () => {
 		it("should render FileAlert.EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE", () => {
-			const { wrapper } = setup([
-				FileAlert.EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE,
-			]);
+			const { wrapper } = setup([FileAlert.EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE]);
 
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
@@ -49,9 +44,7 @@ describe("FileAlerts", () => {
 
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"components.cardElement.fileElement.videoFormatError"
-			);
+			expect(infoAlert.text()).toBe("components.cardElement.fileElement.videoFormatError");
 		});
 	});
 
@@ -61,9 +54,7 @@ describe("FileAlerts", () => {
 
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"components.cardElement.fileElement.audioFormatError"
-			);
+			expect(infoAlert.text()).toBe("components.cardElement.fileElement.audioFormatError");
 		});
 	});
 
@@ -74,9 +65,7 @@ describe("FileAlerts", () => {
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
 			expect(infoAlert.text()).toContain("common.file.awaitingScan");
-			expect(infoAlert.text()).toContain(
-				"components.cardElement.fileElement.reloadStatus"
-			);
+			expect(infoAlert.text()).toContain("components.cardElement.fileElement.reloadStatus");
 		});
 	});
 
@@ -112,18 +101,13 @@ describe("FileAlerts", () => {
 
 	describe("when alerts contains SCAN_STATUS_BLOCKED and VIDEO_FORMAT_ERROR", () => {
 		it("should render FileAlert.SCAN_STATUS_BLOCKED", () => {
-			const { wrapper } = setup([
-				FileAlert.SCAN_STATUS_BLOCKED,
-				FileAlert.VIDEO_FORMAT_ERROR,
-			]);
+			const { wrapper } = setup([FileAlert.SCAN_STATUS_BLOCKED, FileAlert.VIDEO_FORMAT_ERROR]);
 
 			const errorAlert = wrapper.findComponent(ErrorAlert);
 			expect(errorAlert.text()).toContain("common.file.virusDetected");
 
 			const infoAlert = wrapper.findComponent(InfoAlert);
-			expect(infoAlert.text()).toBe(
-				"components.cardElement.fileElement.videoFormatError"
-			);
+			expect(infoAlert.text()).toBe("components.cardElement.fileElement.videoFormatError");
 		});
 	});
 });

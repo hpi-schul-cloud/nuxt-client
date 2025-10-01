@@ -1,51 +1,25 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import MembersTable from "./MembersTable.vue";
-import { nextTick, Ref, ref } from "vue";
-import {
-	mdiMenuDown,
-	mdiMenuUp,
-	mdiMagnify,
-	mdiAccountOutline,
-	mdiAccountSchoolOutline,
-} from "@icons/material";
-import {
-	meResponseFactory,
-	mockedPiniaStoreTyping,
-	roomMemberFactory,
-	schoolFactory,
-} from "@@/tests/test-utils";
-import { DOMWrapper, VueWrapper } from "@vue/test-utils";
-import {
-	VDataTable,
-	VDialog,
-	VIcon,
-	VTextField,
-} from "vuetify/lib/components/index";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import { RoleName } from "@/serverApi/v3";
-import {
-	RoomMember,
-	useRoomMembersStore,
-	useRoomAuthorization,
-} from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import ActionMenu from "./ActionMenu.vue";
-import {
-	KebabMenuActionChangePermission,
-	KebabMenuActionRemoveMember,
-} from "@ui-kebab-menu";
-import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
-import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
+import MembersTable from "./MembersTable.vue";
+import { RoleName } from "@/serverApi/v3";
 import { authModule, schoolsModule } from "@/store";
+import AuthModule from "@/store/auth";
+import SchoolsModule from "@/store/schools";
+import { meResponseFactory, mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { RoomMember, useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { mdiAccountOutline, mdiAccountSchoolOutline, mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
+import { createTestingPinia } from "@pinia/testing";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
+import { useBoardNotifier } from "@util-board";
+import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import { Mock } from "vitest";
+import { nextTick, Ref, ref } from "vue";
+import { VDataTable, VDialog, VIcon, VTextField } from "vuetify/lib/components/index";
 
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
@@ -62,9 +36,7 @@ type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
 };
 
-type RoomAuthorizationRefs = RefPropertiesOnly<
-	ReturnType<typeof useRoomAuthorization>
->;
+type RoomAuthorizationRefs = RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>;
 
 describe("MembersTable", () => {
 	let askConfirmationMock: Mock;
@@ -132,13 +104,10 @@ describe("MembersTable", () => {
 			...roomAuthDefaults,
 			...options?.customRoomAuthorization,
 		};
-		const authorizationPermissions =
-			createMock<ReturnType<typeof useRoomAuthorization>>();
+		const authorizationPermissions = createMock<ReturnType<typeof useRoomAuthorization>>();
 
 		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
-				value ?? false
-			);
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(value ?? false);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
@@ -232,17 +201,14 @@ describe("MembersTable", () => {
 
 		const dataTable = wrapper.getComponent(VDataTable);
 
-		expect(dataTable.props("headers")!.map((header) => header.title)).toEqual(
-			tableHeaders
-		);
+		expect(dataTable.props("headers")!.map((header) => header.title)).toEqual(tableHeaders);
 		expect(dataTable.props("items")).toEqual(roomMembers);
 		expect(dataTable.props("sortAscIcon")).toEqual(mdiMenuDown);
 		expect(dataTable.props("sortDescIcon")).toEqual(mdiMenuUp);
 	});
 
 	describe("school role column", () => {
-		const getSchoolRoleCell = (row: DOMWrapper<Element>) =>
-			row.findAll("td")[4];
+		const getSchoolRoleCell = (row: DOMWrapper<Element>) => row.findAll("td")[4];
 
 		it.each([
 			{
@@ -273,9 +239,7 @@ describe("MembersTable", () => {
 			const row = dataTable.find("tbody tr");
 
 			const schoolRoleCell = getSchoolRoleCell(row);
-			expect(schoolRoleCell.findComponent(VIcon).props("icon")).toBe(
-				expectedIcon
-			);
+			expect(schoolRoleCell.findComponent(VIcon).props("icon")).toBe(expectedIcon);
 		});
 	});
 
@@ -309,9 +273,7 @@ describe("MembersTable", () => {
 			members: nonSelectableMembers,
 		});
 
-		const checkboxes = wrapper
-			.getComponent(VDataTable)
-			.findAll("input[type='checkbox']:disabled");
+		const checkboxes = wrapper.getComponent(VDataTable).findAll("input[type='checkbox']:disabled");
 
 		expect(checkboxes.length).toEqual(nonSelectableMembers.length);
 	});
@@ -331,12 +293,8 @@ describe("MembersTable", () => {
 			members,
 		});
 
-		expect(wrapper.text()).not.toEqual(
-			expect.stringContaining(roomApplicant.firstName)
-		);
-		expect(wrapper.text()).not.toEqual(
-			expect.stringContaining(roomApplicant.lastName)
-		);
+		expect(wrapper.text()).not.toEqual(expect.stringContaining(roomApplicant.firstName));
+		expect(wrapper.text()).not.toEqual(expect.stringContaining(roomApplicant.lastName));
 	});
 
 	describe("when selecting members", () => {
@@ -345,10 +303,7 @@ describe("MembersTable", () => {
 
 			const { checkboxes } = await selectCheckboxes([0], wrapper);
 			const checkedIndices = getCheckedIndices(checkboxes);
-			const expectedIndices = Array.from(
-				{ length: roomMembers.length + 1 },
-				(_, i) => i
-			);
+			const expectedIndices = Array.from({ length: roomMembers.length + 1 }, (_, i) => i);
 
 			expect(checkedIndices).toEqual(expectedIndices);
 		});
@@ -384,14 +339,9 @@ describe("MembersTable", () => {
 		});
 
 		describe("when the remove button in the user row is clicked", () => {
-			const triggerMemberRemoval = async (
-				index: number,
-				wrapper: VueWrapper
-			) => {
+			const triggerMemberRemoval = async (index: number, wrapper: VueWrapper) => {
 				const dataTable = wrapper.getComponent(VDataTable);
-				const menuButton = dataTable.findComponent(
-					`[data-testid=kebab-menu-${index}]`
-				);
+				const menuButton = dataTable.findComponent(`[data-testid=kebab-menu-${index}]`);
 				await menuButton.trigger("click");
 				await nextTick();
 
@@ -419,9 +369,7 @@ describe("MembersTable", () => {
 				askConfirmationMock.mockResolvedValue(true);
 
 				await triggerMemberRemoval(2, wrapper);
-				expect(roomMembersStore.removeMembers).toHaveBeenCalledWith([
-					roomMembers[2].userId,
-				]);
+				expect(roomMembersStore.removeMembers).toHaveBeenCalledWith([roomMembers[2].userId]);
 			});
 
 			it("should not call removeMembers when dialog is cancelled", async () => {
@@ -531,9 +479,7 @@ describe("MembersTable", () => {
 				const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
 				await menuBtn.trigger("click");
 
-				const changeRoleButton = wrapper.findComponent(
-					KebabMenuActionChangePermission
-				);
+				const changeRoleButton = wrapper.findComponent(KebabMenuActionChangePermission);
 
 				expect(changeRoleButton.exists()).toBe(true);
 			});
@@ -547,9 +493,7 @@ describe("MembersTable", () => {
 				const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
 				await menuBtn.trigger("click");
 
-				const changeRoleButton = wrapper.findComponent(
-					KebabMenuActionChangePermission
-				);
+				const changeRoleButton = wrapper.findComponent(KebabMenuActionChangePermission);
 				await changeRoleButton.trigger("click");
 
 				const changeRoleDialog = wrapper.findComponent(VDialog);

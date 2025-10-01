@@ -1,5 +1,5 @@
-import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 import { useEnvConfig } from "@data-env";
+import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
 export const checkFolderFeature = (
 	to: RouteLocationNormalized,

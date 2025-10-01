@@ -1,5 +1,5 @@
-import { createTestEnvStore } from "@@/tests/test-utils";
 import { buildPageTitle } from "./pageTitle";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { beforeAll } from "vitest";
 
 describe("pageTitle", () => {

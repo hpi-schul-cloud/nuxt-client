@@ -1,3 +1,5 @@
+import mock$objects from "../../../tests/test-utils/pageStubs";
+import StudentPage from "./StudentOverview.page.vue";
 import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
@@ -8,19 +10,14 @@ import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import { meResponseFactory } from "@@/tests/test-utils";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { mdiCheckAll, mdiClose } from "@icons/material";
+import { RouterLinkStub } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
-import mock$objects from "../../../tests/test-utils/pageStubs";
-import StudentPage from "./StudentOverview.page.vue";
-import { RouterLinkStub } from "@vue/test-utils";
-import { mdiCheckAll, mdiClose } from "@icons/material";
-import { createTestEnvStore } from "@@/tests/test-utils";
 
 const mockData = [
 	{
@@ -61,9 +58,7 @@ const createMockStore = () => {
 			classes: {
 				namespaced: true,
 				actions: {
-					find: () => {
-						return { data: [] };
-					},
+					find: () => ({ data: [] }),
 				},
 				state: () => ({
 					list: [],
@@ -163,8 +158,7 @@ describe("students/index", () => {
 	};
 
 	const setup = () => {
-		const { mockStore, usersActionsStubs, uiStateMutationsStubs } =
-			createMockStore();
+		const { mockStore, usersActionsStubs, uiStateMutationsStubs } = createMockStore();
 
 		const wrapper = mount(StudentPage, {
 			global: {
@@ -198,28 +192,19 @@ describe("students/index", () => {
 		expect(userRows).toHaveLength(2);
 
 		// select first entry
-		const checkbox = userRows
-			.at(0)
-			.find(".selection-column")
-			.get('input[type="checkbox"]');
+		const checkbox = userRows.at(0).find(".selection-column").get('input[type="checkbox"]');
 		checkbox.setChecked();
 
 		// open actions menu
 		await nextTick();
-		const actionsBtn = wrapper.find(
-			".row-selection-info .actions button:first-child"
-		);
+		const actionsBtn = wrapper.find(".row-selection-info .actions button:first-child");
 		await actionsBtn.trigger("click");
 
 		// click delete menu button
-		const deleteBtn = wrapper
-			.findAll(".row-selection-info .context-menu button")
-			.at(3);
+		const deleteBtn = wrapper.findAll(".row-selection-info .context-menu button").at(3);
 		await deleteBtn.trigger("click");
 
-		const confirmBtn = wrapper.findComponent(
-			"[data-testid='btn-dialog-confirm']"
-		);
+		const confirmBtn = wrapper.findComponent("[data-testid='btn-dialog-confirm']");
 		await confirmBtn.trigger("click");
 
 		expect(usersActionsStubs.deleteUsers.mock.calls).toHaveLength(1);
@@ -257,9 +242,7 @@ describe("students/index", () => {
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
-		const openContextButton = wrapper.find(
-			"[data-test-id='context-menu-open']"
-		);
+		const openContextButton = wrapper.find("[data-test-id='context-menu-open']");
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
@@ -273,9 +256,7 @@ describe("students/index", () => {
 		vi.runAllTimers();
 
 		// delete action is emitted
-		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
-			"delete_action"
-		);
+		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual("delete_action");
 	});
 
 	it("should emit the 'registration_link' action when the action button is clicked", async () => {
@@ -297,25 +278,19 @@ describe("students/index", () => {
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
-		const openContextButton = wrapper.find(
-			"[data-test-id='context-menu-open']"
-		);
+		const openContextButton = wrapper.find("[data-test-id='context-menu-open']");
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
 
 		// registration_link button action is rendered in contextMenu
-		const registrationButton = wrapper.find(
-			`[data-testid="registration_link"]`
-		);
+		const registrationButton = wrapper.find(`[data-testid="registration_link"]`);
 		expect(registrationButton.exists()).toBe(true);
 		// registration_link button is clicked
 		await registrationButton.trigger("click");
 
 		// registration_link action is emitted
-		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
-			"registration_link"
-		);
+		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual("registration_link");
 
 		// store action is called
 		expect(usersActionsStubs.sendRegistrationLink).toHaveBeenCalled();
@@ -340,9 +315,7 @@ describe("students/index", () => {
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
-		const openContextButton = wrapper.find(
-			"[data-test-id='context-menu-open']"
-		);
+		const openContextButton = wrapper.find("[data-test-id='context-menu-open']");
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
@@ -355,9 +328,7 @@ describe("students/index", () => {
 		await registrationButton.trigger("click");
 
 		// qr_code action is emitted
-		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
-			"qr_code"
-		);
+		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual("qr_code");
 
 		// store action is called
 		expect(usersActionsStubs.getQrRegistrationLinks).toHaveBeenCalled();
@@ -410,8 +381,7 @@ describe("students/index", () => {
 	});
 
 	it("editBtn's to property should have the expected URL", () => {
-		const expectedURL =
-			"/administration/students/0000d231816abba584714c9e/edit?returnUrl=/administration/students";
+		const expectedURL = "/administration/students/0000d231816abba584714c9e/edit?returnUrl=/administration/students";
 		const { wrapper } = setup();
 
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
@@ -422,9 +392,7 @@ describe("students/index", () => {
 		authModule.addUserPermission("STUDENT_CREATE");
 		const { wrapper } = setup();
 
-		const fabComponent = wrapper.find(
-			`[data-testid="fab_button_students_table"]`
-		);
+		const fabComponent = wrapper.find(`[data-testid="fab_button_students_table"]`);
 		expect(fabComponent.exists()).toBe(true);
 	});
 
@@ -439,9 +407,7 @@ describe("students/index", () => {
 		});
 		const { wrapper } = setup();
 
-		const fabComponent = wrapper.find(
-			`[data-testid="fab_button_students_table"]`
-		);
+		const fabComponent = wrapper.find(`[data-testid="fab_button_students_table"]`);
 		expect(fabComponent.exists()).toBe(false);
 	});
 
@@ -450,9 +416,7 @@ describe("students/index", () => {
 
 		const { wrapper } = setup();
 
-		const fabComponent = wrapper.find(
-			`[data-testid="fab_button_students_table"]`
-		);
+		const fabComponent = wrapper.find(`[data-testid="fab_button_students_table"]`);
 		expect(fabComponent.exists()).toBe(false);
 	});
 
@@ -512,9 +476,7 @@ describe("students/index", () => {
 		createTestEnvStore({ ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true });
 		const { wrapper } = setup();
 
-		expect(
-			wrapper.vm.filteredColumns.some((el) => el.field === "consentStatus")
-		).toBe(true);
+		expect(wrapper.vm.filteredColumns.some((el) => el.field === "consentStatus")).toBe(true);
 	});
 
 	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {

@@ -1,6 +1,9 @@
-import { mount } from "@vue/test-utils";
 import ChangeRole from "./ChangeRole.vue";
 import { RoleName } from "@/serverApi/v3";
+import { authModule, schoolsModule } from "@/store";
+import AuthModule from "@/store/auth";
+import SchoolsModule from "@/store/schools";
+import { meResponseFactory, mockedPiniaStoreTyping, roomFactory, schoolFactory } from "@@/tests/test-utils";
 import {
 	roomAdminFactory,
 	roomEditorFactory,
@@ -8,27 +11,16 @@ import {
 	roomOwnerFactory,
 	roomViewerFactory,
 } from "@@/tests/test-utils/factory/room/roomMembersFactory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomMember, useRoomMembersStore } from "@data-room";
-import { nextTick } from "vue";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import {
-	meResponseFactory,
-	mockedPiniaStoreTyping,
-	roomFactory,
-	schoolFactory,
-} from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
-import { authModule, schoolsModule } from "@/store";
-import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
+import { mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
+import { nextTick } from "vue";
+import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -51,8 +43,7 @@ describe("ChangeRole.vue", () => {
 	beforeEach(() => {
 		setActivePinia(createPinia());
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setupStores({
@@ -95,12 +86,8 @@ describe("ChangeRole.vue", () => {
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
 		roomMembersStore.roomMembers = roomMembers;
-		roomMembersStore.selectedIds = membersForRoleChange.map(
-			(member) => member.userId
-		);
-		roomMembersStore.isRoomOwner = vi
-			.fn()
-			.mockReturnValue(options.isRoomOwner ?? false);
+		roomMembersStore.selectedIds = membersForRoleChange.map((member) => member.userId);
+		roomMembersStore.isRoomOwner = vi.fn().mockReturnValue(options.isRoomOwner ?? false);
 
 		const wrapper = mount(ChangeRole, {
 			global: {
@@ -126,12 +113,8 @@ describe("ChangeRole.vue", () => {
 			const radioButtons = wrapper.findAllComponents(VRadio);
 			expect(radioButtons.length).toBe(3);
 
-			const cancelButton = wrapper.find(
-				"[data-testid='change-role-cancel-btn']"
-			);
-			const confirmButton = wrapper.find(
-				"[data-testid='change-role-confirm-btn']"
-			);
+			const cancelButton = wrapper.find("[data-testid='change-role-cancel-btn']");
+			const confirmButton = wrapper.find("[data-testid='change-role-confirm-btn']");
 			expect(cancelButton.exists()).toBe(true);
 			expect(confirmButton.exists()).toBe(true);
 		});
@@ -140,21 +123,14 @@ describe("ChangeRole.vue", () => {
 			const { wrapper } = setup({
 				membersForRoleChange: [roomAdminFactory.build()],
 			});
-			expect(wrapper.text()).toContain(
-				"pages.rooms.members.roleChange.subTitle"
-			);
+			expect(wrapper.text()).toContain("pages.rooms.members.roleChange.subTitle");
 		});
 
 		it("renders correctly with multiple members", () => {
 			const { wrapper } = setup({
-				membersForRoleChange: [
-					roomAdminFactory.build(),
-					roomViewerFactory.build(),
-				],
+				membersForRoleChange: [roomAdminFactory.build(), roomViewerFactory.build()],
 			});
-			expect(wrapper.text()).toContain(
-				"pages.rooms.members.roleChange.multipleUser.subTitle"
-			);
+			expect(wrapper.text()).toContain("pages.rooms.members.roleChange.multipleUser.subTitle");
 			expect(wrapper.text()).toContain("pages.rooms.members.changePermission");
 		});
 
@@ -167,9 +143,7 @@ describe("ChangeRole.vue", () => {
 				});
 
 				const radioGroup = wrapper.getComponent(VRadioGroup);
-				const ownerRadioButton = radioGroup.find(
-					'[data-testid="change-role-option-owner"]'
-				);
+				const ownerRadioButton = radioGroup.find('[data-testid="change-role-option-owner"]');
 
 				expect(ownerRadioButton.exists()).toBe(true);
 
@@ -185,9 +159,7 @@ describe("ChangeRole.vue", () => {
 				});
 
 				const radioGroup = wrapper.getComponent(VRadioGroup);
-				const ownRadioButton = radioGroup.find(
-					'[data-testid="change-role-option-owner"]'
-				);
+				const ownRadioButton = radioGroup.find('[data-testid="change-role-option-owner"]');
 				expect(ownRadioButton.exists()).toBe(true);
 
 				const alertElementBefore = wrapper.findComponent(VAlert);
@@ -198,9 +170,7 @@ describe("ChangeRole.vue", () => {
 
 				const alertElementAfter = wrapper.findComponent(VAlert);
 				expect(alertElementAfter.exists()).toBe(true);
-				expect(alertElementAfter.text()).toContain(
-					"pages.rooms.members.handOverAlert.label"
-				);
+				expect(alertElementAfter.text()).toContain("pages.rooms.members.handOverAlert.label");
 			});
 
 			describe("when the confirm button clicked", () => {
@@ -212,17 +182,13 @@ describe("ChangeRole.vue", () => {
 					});
 
 					const radioGroup = wrapper.getComponent(VRadioGroup);
-					const ownRadioButton = radioGroup.find(
-						'[data-testid="change-role-option-owner"]'
-					);
+					const ownRadioButton = radioGroup.find('[data-testid="change-role-option-owner"]');
 					expect(ownRadioButton.exists()).toBe(true);
 
 					radioGroup.setValue(RoleName.Roomowner);
 					await nextTick();
 
-					const confirmButton = wrapper.find(
-						"[data-testid='change-role-confirm-btn']"
-					);
+					const confirmButton = wrapper.find("[data-testid='change-role-confirm-btn']");
 					await confirmButton.trigger("click");
 
 					const radioButtons = wrapper.findAllComponents(VRadio);
@@ -237,24 +203,18 @@ describe("ChangeRole.vue", () => {
 					});
 
 					const radioGroup = wrapper.getComponent(VRadioGroup);
-					const ownRadioButton = radioGroup.find(
-						'[data-testid="change-role-option-owner"]'
-					);
+					const ownRadioButton = radioGroup.find('[data-testid="change-role-option-owner"]');
 					expect(ownRadioButton.exists()).toBe(true);
 
 					radioGroup.setValue(RoleName.Roomowner);
 					await nextTick();
 
-					const confirmButton = wrapper.find(
-						"[data-testid='change-role-confirm-btn']"
-					);
+					const confirmButton = wrapper.find("[data-testid='change-role-confirm-btn']");
 					await confirmButton.trigger("click");
 
 					const alertElementAfter = wrapper.findComponent(VAlert);
 					expect(alertElementAfter.exists()).toBe(true);
-					expect(alertElementAfter.text()).toContain(
-						"pages.rooms.members.handOverAlert.confirm.label"
-					);
+					expect(alertElementAfter.text()).toContain("pages.rooms.members.handOverAlert.confirm.label");
 				});
 			});
 		});
@@ -266,9 +226,7 @@ describe("ChangeRole.vue", () => {
 				});
 
 				const radioGroup = wrapper.getComponent(VRadioGroup);
-				const ownRadioButton = radioGroup.find(
-					'[data-testid="change-role-option-owner"]'
-				);
+				const ownRadioButton = radioGroup.find('[data-testid="change-role-option-owner"]');
 
 				const radioButtons = radioGroup.findAllComponents(VRadio);
 
@@ -278,17 +236,12 @@ describe("ChangeRole.vue", () => {
 
 			it("should not render the 'Own' option if any member has the roomViewer role", () => {
 				const { wrapper } = setup({
-					membersForRoleChange: [
-						roomAdminFactory.build(),
-						roomViewerFactory.build(),
-					],
+					membersForRoleChange: [roomAdminFactory.build(), roomViewerFactory.build()],
 					isRoomOwner: true,
 				});
 
 				const radioGroup = wrapper.getComponent(VRadioGroup);
-				const ownRadioButton = radioGroup.find(
-					'[data-testid="change-role-option-owner"]'
-				);
+				const ownRadioButton = radioGroup.find('[data-testid="change-role-option-owner"]');
 
 				expect(ownRadioButton.exists()).toBe(false);
 
@@ -299,11 +252,7 @@ describe("ChangeRole.vue", () => {
 	});
 
 	describe("@selectedRole", () => {
-		const roleTestCases = [
-			RoleName.Roomviewer,
-			RoleName.Roomeditor,
-			RoleName.Roomadmin,
-		];
+		const roleTestCases = [RoleName.Roomviewer, RoleName.Roomeditor, RoleName.Roomadmin];
 
 		describe.each(roleTestCases)('when member role is "%s" ', (role) => {
 			it(`should have "${role}" pre-selected`, async () => {
@@ -327,11 +276,7 @@ describe("ChangeRole.vue", () => {
 
 		it("should have no role pre-selected when multiple members with different roles are passed", () => {
 			const { wrapper } = setup({
-				membersForRoleChange: [
-					roomViewerFactory.build(),
-					roomEditorFactory.build(),
-					roomAdminFactory.build(),
-				],
+				membersForRoleChange: [roomViewerFactory.build(), roomEditorFactory.build(), roomAdminFactory.build()],
 			});
 
 			const radioGroup = wrapper.findComponent(VRadioGroup);
@@ -342,9 +287,7 @@ describe("ChangeRole.vue", () => {
 	describe("action buttons", () => {
 		it("should emit 'close' event when cancel button is clicked", async () => {
 			const { wrapper } = setup();
-			await wrapper
-				.find("[data-testid='change-role-cancel-btn']")
-				.trigger("click");
+			await wrapper.find("[data-testid='change-role-cancel-btn']").trigger("click");
 
 			expect(wrapper.emitted()).toHaveProperty("close");
 		});
@@ -355,9 +298,7 @@ describe("ChangeRole.vue", () => {
 				const { wrapper, roomMembersStore } = setup({
 					membersForRoleChange: [memberForRoleChange],
 				});
-				await wrapper
-					.find("[data-testid='change-role-confirm-btn']")
-					.trigger("click");
+				await wrapper.find("[data-testid='change-role-confirm-btn']").trigger("click");
 
 				expect(roomMembersStore.updateMembersRole).toHaveBeenCalledWith(
 					RoleName.Roomviewer,
@@ -372,9 +313,7 @@ describe("ChangeRole.vue", () => {
 				const { wrapper } = setup({
 					membersForRoleChange: [memberForRoleChange],
 				});
-				await wrapper
-					.find("[data-testid='change-role-confirm-btn']")
-					.trigger("click");
+				await wrapper.find("[data-testid='change-role-confirm-btn']").trigger("click");
 
 				expect(wrapper.emitted()).toHaveProperty("close");
 				expect(wrapper.emitted("close")).toHaveLength(1);
@@ -389,9 +328,7 @@ describe("ChangeRole.vue", () => {
 
 				expect(roomMembersStore.selectedIds).toEqual(membersForRoleChangeIds);
 
-				await wrapper
-					.find("[data-testid='change-role-confirm-btn']")
-					.trigger("click");
+				await wrapper.find("[data-testid='change-role-confirm-btn']").trigger("click");
 
 				expect(roomMembersStore.selectedIds).toEqual([]);
 			});
@@ -411,21 +348,15 @@ describe("ChangeRole.vue", () => {
 				radioGroup.setValue(RoleName.Roomowner);
 				await nextTick();
 
-				const confirmButton = wrapper.find(
-					"[data-testid='change-role-confirm-btn']"
-				);
+				const confirmButton = wrapper.find("[data-testid='change-role-confirm-btn']");
 				await confirmButton.trigger("click");
 
-				const handOverButton = wrapper.find(
-					"[data-testid='change-owner-confirm-btn']"
-				);
+				const handOverButton = wrapper.find("[data-testid='change-owner-confirm-btn']");
 
 				expect(handOverButton.exists()).toBe(true);
 				await handOverButton.trigger("click");
 
-				expect(roomMembersStore.changeRoomOwner).toHaveBeenCalledWith(
-					memberForRoleChange.userId
-				);
+				expect(roomMembersStore.changeRoomOwner).toHaveBeenCalledWith(memberForRoleChange.userId);
 			});
 			it("should emit 'close' event when button is clicked", async () => {
 				const memberForRoleChange = roomAdminFactory.build();
@@ -438,14 +369,10 @@ describe("ChangeRole.vue", () => {
 				radioGroup.setValue(RoleName.Roomowner);
 				await nextTick();
 
-				const confirmButton = wrapper.find(
-					"[data-testid='change-role-confirm-btn']"
-				);
+				const confirmButton = wrapper.find("[data-testid='change-role-confirm-btn']");
 				await confirmButton.trigger("click");
 
-				const handOverButton = wrapper.find(
-					"[data-testid='change-owner-confirm-btn']"
-				);
+				const handOverButton = wrapper.find("[data-testid='change-owner-confirm-btn']");
 				await handOverButton.trigger("click");
 
 				expect(wrapper.emitted()).toHaveProperty("close");
@@ -464,14 +391,10 @@ describe("ChangeRole.vue", () => {
 				radioGroup.setValue(RoleName.Roomowner);
 				await nextTick();
 
-				const confirmButton = wrapper.find(
-					"[data-testid='change-role-confirm-btn']"
-				);
+				const confirmButton = wrapper.find("[data-testid='change-role-confirm-btn']");
 				await confirmButton.trigger("click");
 
-				const handOverButton = wrapper.find(
-					"[data-testid='change-owner-confirm-btn']"
-				);
+				const handOverButton = wrapper.find("[data-testid='change-owner-confirm-btn']");
 				await handOverButton.trigger("click");
 
 				expect(roomMembersStore.selectedIds).toEqual([]);

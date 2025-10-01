@@ -1,7 +1,7 @@
-import { shallowMount } from "@vue/test-utils";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
 import CloudLogo from "./CloudLogo.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 
 describe("CloudLogo", () => {
 	const setup = () => {

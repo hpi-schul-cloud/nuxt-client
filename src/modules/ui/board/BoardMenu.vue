@@ -27,12 +27,12 @@
 </template>
 
 <script setup lang="ts">
+import { BoardMenuScope } from "./board-menu-scope";
 import type { MessageSchema } from "@/locales/schema";
 import { mdiDotsVertical } from "@icons/material";
 import { KebabMenuList } from "@ui-kebab-menu";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import { BoardMenuScope } from "./board-menu-scope";
 
 const { t } = useI18n();
 
@@ -59,27 +59,20 @@ const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 	[BoardMenuScope.BOARD]: "components.board.menu.board",
 	[BoardMenuScope.COLUMN]: "components.board.menu.column",
 	[BoardMenuScope.CARD]: "components.board.menu.card",
-	[BoardMenuScope.COLLABORATIVE_TEXT_EDITOR_ELEMENT]:
-		"components.board.menu.collaborativeTextEditorElement",
+	[BoardMenuScope.COLLABORATIVE_TEXT_EDITOR_ELEMENT]: "components.board.menu.collaborativeTextEditorElement",
 	[BoardMenuScope.DRAWING_ELEMENT]: "components.board.menu.drawingElement",
-	[BoardMenuScope.EXTERNAL_TOOL_ELEMENT]:
-		"components.board.menu.externalToolElement",
+	[BoardMenuScope.EXTERNAL_TOOL_ELEMENT]: "components.board.menu.externalToolElement",
 	[BoardMenuScope.FILE_ELEMENT]: "components.board.menu.fileElement",
 	[BoardMenuScope.FOLDER_ELEMENT]: "components.board.menu.folderElement",
 	[BoardMenuScope.LINK_ELEMENT]: "components.board.menu.linkElement",
-	[BoardMenuScope.SUBMISSION_ELEMENT]:
-		"components.board.menu.submissionElement",
+	[BoardMenuScope.SUBMISSION_ELEMENT]: "components.board.menu.submissionElement",
 	[BoardMenuScope.DELETED_ELEMENT]: "components.board.menu.deletedElement",
-	[BoardMenuScope.MEDIA_EXTERNAL_TOOL_ELEMENT]:
-		"components.board.menu.mediaExternalToolElement",
-	[BoardMenuScope.VIDEO_CONFERENCE_ELEMENT]:
-		"components.board.menu.videoConferenceElement",
+	[BoardMenuScope.MEDIA_EXTERNAL_TOOL_ELEMENT]: "components.board.menu.mediaExternalToolElement",
+	[BoardMenuScope.VIDEO_CONFERENCE_ELEMENT]: "components.board.menu.videoConferenceElement",
 	[BoardMenuScope.H5P_ELEMENT]: "components.board.menu.h5pElement",
 };
 
-const boardMenuAriaLabel = computed(() => {
-	return ariaLabelForScope[props.scope];
-});
+const boardMenuAriaLabel = computed(() => ariaLabelForScope[props.scope]);
 </script>
 
 <style scoped>

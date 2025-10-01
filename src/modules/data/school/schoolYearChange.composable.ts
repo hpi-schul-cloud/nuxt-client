@@ -1,11 +1,11 @@
+import { useSchoolApi } from "./schoolApi.composable";
+import { MaintenanceStatus } from "./types";
 import NotifierModule from "@/store/notifier";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createSharedComposable } from "@vueuse/core";
-import { ref, Ref } from "vue";
+import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useSchoolApi } from "./schoolApi.composable";
-import { MaintenanceStatus } from "./types";
 
 export const useSchoolYearChange = () => {
 	const { fetchMaintenanceStatus, setMaintenance } = useSchoolApi();
@@ -30,10 +30,7 @@ export const useSchoolYearChange = () => {
 		isLoading.value = false;
 	};
 
-	const setMaintenanceMode = async (
-		schoolId: string,
-		maintenance: boolean
-	): Promise<void> => {
+	const setMaintenanceMode = async (schoolId: string, maintenance: boolean): Promise<void> => {
 		isLoading.value = true;
 
 		try {
@@ -41,16 +38,12 @@ export const useSchoolYearChange = () => {
 
 			if (maintenance) {
 				notifierModule.show({
-					text: t(
-						"components.administration.schoolYearChangeSection.notification.start.success"
-					),
+					text: t("components.administration.schoolYearChangeSection.notification.start.success"),
 					status: "success",
 				});
 			} else {
 				notifierModule.show({
-					text: t(
-						"components.administration.schoolYearChangeSection.notification.finish.success"
-					),
+					text: t("components.administration.schoolYearChangeSection.notification.finish.success"),
 					status: "success",
 				});
 			}
@@ -59,24 +52,19 @@ export const useSchoolYearChange = () => {
 
 			if (apiError.type === "MISSING_YEARS") {
 				notifierModule.show({
-					text: t(
-						"components.administration.schoolYearChangeSection.notification.finish.error.missingYears"
-					),
+					text: t("components.administration.schoolYearChangeSection.notification.finish.error.missingYears"),
 					status: "error",
 					autoClose: false,
 				});
 			} else if (apiError.type === "SCHOOL_ALREADY_IN_NEXT_YEAR") {
 				notifierModule.show({
-					text: t(
-						"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear"
-					),
+					text: t("components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear"),
 					status: "error",
 				});
 				if (maintenanceStatus.value) {
 					maintenanceStatus.value.maintenance.active = false;
 					maintenanceStatus.value.maintenance.startDate = undefined;
-					maintenanceStatus.value.currentYear =
-						maintenanceStatus.value.nextYear;
+					maintenanceStatus.value.currentYear = maintenanceStatus.value.nextYear;
 				}
 			} else {
 				notifierModule.show({
@@ -97,5 +85,4 @@ export const useSchoolYearChange = () => {
 	};
 };
 
-export const useSharedSchoolYearChange =
-	createSharedComposable(useSchoolYearChange);
+export const useSharedSchoolYearChange = createSharedComposable(useSchoolYearChange);

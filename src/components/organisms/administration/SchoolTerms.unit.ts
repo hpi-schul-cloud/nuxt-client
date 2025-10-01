@@ -1,23 +1,15 @@
 import SchoolTerms from "./SchoolTerms.vue";
 import AuthModule from "@/store/auth";
+import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import TermsOfUseModule from "@/store/terms-of-use";
-import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { VueWrapper, mount } from "@vue/test-utils";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { ConsentVersion } from "@/store/types/consent-version";
-import {
-	AUTH_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-	TERMS_OF_USE_MODULE_KEY,
-} from "@/utils/inject";
 import { downloadFile } from "@/utils/fileHelper";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { AUTH_MODULE_KEY, NOTIFIER_MODULE_KEY, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount, VueWrapper } from "@vue/test-utils";
 import type { Mocked } from "vitest";
 
 vi.mock("@/utils/fileHelper");
@@ -126,9 +118,7 @@ describe("SchoolTerms", () => {
 				getTermsOfUse: null,
 			});
 
-			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(
-				false
-			);
+			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(false);
 		});
 	});
 
@@ -142,9 +132,7 @@ describe("SchoolTerms", () => {
 		it("should render dialog component", () => {
 			const wrapper = setup();
 
-			expect(
-				wrapper.findComponent({ name: "school-terms-form-dialog" }).exists()
-			).toBe(true);
+			expect(wrapper.findComponent({ name: "school-terms-form-dialog" }).exists()).toBe(true);
 		});
 	});
 
@@ -179,9 +167,7 @@ describe("SchoolTerms", () => {
 			const wrapperVm = wrapper.vm as unknown as typeof SchoolTerms;
 
 			expect(wrapperVm.isDeleteTermsDialogOpen).toBe(false);
-			await wrapper
-				.findComponent('[data-testid="delete-button"]')
-				.trigger("click");
+			await wrapper.findComponent('[data-testid="delete-button"]').trigger("click");
 			expect(wrapperVm.isDeleteTermsDialogOpen).toBe(true);
 		});
 	});
@@ -191,9 +177,7 @@ describe("SchoolTerms", () => {
 			const wrapper = setup();
 
 			const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
-			const termsItem = wrapper.findComponent(
-				'[data-testid="terms-item"]'
-			) as VueWrapper<typeof SchoolTerms>;
+			const termsItem = wrapper.findComponent('[data-testid="terms-item"]') as VueWrapper<typeof SchoolTerms>;
 
 			termsItem.vm.$emit("click");
 			expect(downloadFileMock).toHaveBeenCalledTimes(1);

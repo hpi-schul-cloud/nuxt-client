@@ -12,53 +12,32 @@
 					})
 				}}
 				<span class="d-block">
-					<i18n-t
-						keypath="pages.userMigration.error.description.support"
-						scope="global"
-					>
-						<a :href="supportLink">{{
-							t("pages.userMigration.error.description.support.link")
-						}}</a>
+					<i18n-t keypath="pages.userMigration.error.description.support" scope="global">
+						<a :href="supportLink">{{ t("pages.userMigration.error.description.support.link") }}</a>
 					</i18n-t>
 				</span>
 			</p>
 			<p v-else data-testid="text-multiple-users-found" class="ma-8">
 				{{ t("pages.userMigration.error.multipleUsersFound") }}
 				<span class="d-block">
-					<i18n-t
-						keypath="pages.userMigration.error.description.support"
-						scope="global"
-					>
-						<a :href="supportLink">{{
-							t("pages.userMigration.error.description.support.link")
-						}}</a>
+					<i18n-t keypath="pages.userMigration.error.description.support" scope="global">
+						<a :href="supportLink">{{ t("pages.userMigration.error.description.support.link") }}</a>
 					</i18n-t>
 				</span>
 			</p>
-			<p
-				v-if="targetSchoolNumber && sourceSchoolNumber"
-				data-testid="text-schoolnumber-mismatch"
-			>
+			<p v-if="targetSchoolNumber && sourceSchoolNumber" data-testid="text-schoolnumber-mismatch">
 				{{ t("pages.userMigration.error.schoolNumberMismatch.information") }}
 				<span class="d-block font-weight-bold">
 					{{
-						t(
-							"pages.userMigration.error.schoolNumberMismatch.information.schoolNumber",
-							{
-								targetSystem: getSystemName(),
-								targetSchoolNumber,
-								sourceSchoolNumber,
-							}
-						)
+						t("pages.userMigration.error.schoolNumberMismatch.information.schoolNumber", {
+							targetSystem: getSystemName(),
+							targetSchoolNumber,
+							sourceSchoolNumber,
+						})
 					}}
 				</span>
 			</p>
-			<v-btn
-				color="primary"
-				variant="flat"
-				data-testId="btn-proceed"
-				to="/logout"
-			>
+			<v-btn color="primary" variant="flat" data-testId="btn-proceed" to="/logout">
 				{{ $t("pages.userMigration.backToLogin") }}
 			</v-btn>
 		</div>
@@ -68,26 +47,15 @@
 <script lang="ts">
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import {
-	injectStrict,
-	SYSTEMS_MODULE_KEY,
-	USER_LOGIN_MIGRATION_MODULE_KEY,
-} from "@/utils/inject";
-import { buildPageTitle } from "@/utils/pageTitle";
-import { useTitle } from "@vueuse/core";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	Ref,
-	ref,
-} from "vue";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
 import { UserLoginMigration } from "@/store/user-login-migration";
-import { useI18n } from "vue-i18n";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
+import { injectStrict, SYSTEMS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useEnvConfig } from "@data-env";
+import { useTitle } from "@vueuse/core";
+import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
@@ -109,22 +77,16 @@ export default defineComponent({
 	},
 	setup(props) {
 		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
-		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(
-			USER_LOGIN_MIGRATION_MODULE_KEY
-		);
+		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(USER_LOGIN_MIGRATION_MODULE_KEY);
 		const { t } = useI18n();
 
 		const pageTitle = buildPageTitle(t("pages.userMigration.error.title"));
 		useTitle(pageTitle);
 
-		const getSystemName = (): string => {
-			return (
-				systemsModule?.getSystems.find(
-					(system: System): boolean =>
-						system.id === userLoginMigration.value?.targetSystemId
-				)?.name ?? ""
-			);
-		};
+		const getSystemName = (): string =>
+			systemsModule?.getSystems.find(
+				(system: System): boolean => system.id === userLoginMigration.value?.targetSystemId
+			)?.name ?? "";
 
 		const isLoading: Ref<boolean> = ref(true);
 
@@ -137,15 +99,12 @@ export default defineComponent({
 		};
 
 		const supportLink: ComputedRef<string> = computed(() =>
-			sanitizeUrl(
-				`mailto:${
-					useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL
-				}?subject=${getSubject()}`
-			)
+			sanitizeUrl(`mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${getSubject()}`)
 		);
 
-		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
-			computed(() => userLoginMigrationModule.getUserLoginMigration);
+		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> = computed(
+			() => userLoginMigrationModule.getUserLoginMigration
+		);
 
 		onMounted(async () => {
 			await systemsModule?.fetchSystems();

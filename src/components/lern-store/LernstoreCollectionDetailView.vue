@@ -33,11 +33,7 @@
 							({{ $t("pages.content._id.metadata.provider") }})
 						</span>
 					</div>
-					<RenderHTML
-						v-if="description"
-						class="description text-wrap"
-						:html="description"
-					/>
+					<RenderHTML v-if="description" class="description text-wrap" :html="description" />
 					<div class="metadata">
 						<div v-if="createdAt || updatedAt" class="meta-container">
 							<div class="meta-icon">
@@ -60,14 +56,8 @@
 							</div>
 							<template v-if="tags.length > 0">
 								<div class="text-wrap">
-									<span
-										v-for="(tag, index) in tags"
-										:key="index"
-										class="meta-text"
-									>
-										<base-link :href="'/content/?q=' + tag" class="tag link">
-											#{{ tag }}
-										</base-link>
+									<span v-for="(tag, index) in tags" :key="index" class="meta-text">
+										<base-link :href="'/content/?q=' + tag" class="tag link"> #{{ tag }} </base-link>
 									</span>
 								</div>
 							</template>
@@ -90,22 +80,12 @@
 									class="cards"
 									data-testid="lernStoreCardsContainer"
 								>
-									<content-card
-										v-for="(element, i) of elements.data"
-										:key="i"
-										:selectable="true"
-										:resource="element"
-									/>
+									<content-card v-for="(element, i) of elements.data" :key="i" :selectable="true" :resource="element" />
 								</lern-store-grid>
 							</div>
 						</transition>
 					</div>
-					<v-progress-circular
-						v-show="loading"
-						indeterminate
-						size="115"
-						class="spinner mt-16"
-					/>
+					<v-progress-circular v-show="loading" indeterminate size="115" class="spinner mt-16" />
 				</div>
 				<div class="buttons">
 					<user-has-role class="floating-buttons" :role="isNotStudent">
@@ -125,26 +105,20 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import {
-	getAuthor,
-	getDescription,
-	getMetadataAttribute,
-	getProvider,
-	getTags,
-} from "@/utils/helpers";
-import { printDateFromTimestamp } from "@/plugins/datetime";
-import contentMeta from "@/mixins/contentMeta";
-import infiniteScrolling from "@/mixins/infiniteScrolling";
-import { contentModule, notifierModule } from "@/store";
+import BaseLink from "../base/BaseLink";
+import UserHasRole from "@/components/helpers/UserHasRole";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import ContentCard from "@/components/lern-store/ContentCard";
 import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter";
-import UserHasRole from "@/components/helpers/UserHasRole";
-import BaseLink from "../base/BaseLink";
-import { RenderHTML } from "@feature-render-html";
+import contentMeta from "@/mixins/contentMeta";
+import infiniteScrolling from "@/mixins/infiniteScrolling";
+import { printDateFromTimestamp } from "@/plugins/datetime";
+import { contentModule, notifierModule } from "@/store";
+import { getAuthor, getDescription, getMetadataAttribute, getProvider, getTags } from "@/utils/helpers";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RenderHTML } from "@feature-render-html";
 import { mdiCalendar, mdiChevronLeft, mdiPound } from "@icons/material";
+import { defineComponent } from "vue";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -201,19 +175,13 @@ export default defineComponent({
 			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
 		description() {
-			return getDescription(
-				this.resource.description,
-				this.resource.properties
-			);
+			return getDescription(this.resource.description, this.resource.properties);
 		},
 		tags() {
 			return getTags(this.resource.properties);
 		},
 		collectionUUID() {
-			return getMetadataAttribute(
-				this.resource.properties,
-				"ccm:replicationsourceuuid"
-			);
+			return getMetadataAttribute(this.resource.properties, "ccm:replicationsourceuuid");
 		},
 		query() {
 			const query = {
@@ -234,9 +202,7 @@ export default defineComponent({
 		selected(selectedElements) {
 			const counterLabel = selectedElements > 0 ? ` (${selectedElements})` : "";
 
-			this.btnLabel = `${this.$t(
-				"pages.content._id.addToTopic"
-			)}${counterLabel}`;
+			this.btnLabel = `${this.$t("pages.content._id.addToTopic")}${counterLabel}`;
 		},
 		elements() {
 			return this.elements;
@@ -282,9 +248,7 @@ export default defineComponent({
 			}
 		},
 		isNotStudent(roles) {
-			return this.role === ""
-				? roles.some((role) => !role.startsWith("student"))
-				: this.role;
+			return this.role === "" ? roles.some((role) => !role.startsWith("student")) : this.role;
 		},
 	},
 });

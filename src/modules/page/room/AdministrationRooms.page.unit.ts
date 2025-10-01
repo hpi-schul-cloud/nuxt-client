@@ -1,23 +1,16 @@
 import AdministrationRoomsPage from "./AdministrationRooms.page.vue";
-import {
-	createTestEnvStore,
-	mockedPiniaStoreTyping,
-	schoolFactory,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
+import { createTestEnvStore, mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { useAdministrationRoomStore } from "@data-room";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import SchoolsModule from "@/store/schools";
-import { schoolsModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { Router, useRouter } from "vue-router";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
+import { Router, useRouter } from "vue-router";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -44,8 +37,7 @@ describe("AdministrationRooms.page", () => {
 	};
 
 	beforeEach(() => {
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -57,10 +49,7 @@ describe("AdministrationRooms.page", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: {
-		isEmptyList?: boolean;
-		featureFlag?: boolean;
-	}) => {
+	const setup = (options?: { isEmptyList?: boolean; featureFlag?: boolean }) => {
 		createTestEnvStore({
 			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,
 		});

@@ -1,24 +1,18 @@
+import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
 import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
 import { ToolContextType } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import {
-	NOTIFIER_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-} from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
+import { COURSE_ROOM_DETAILS_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { contextExternalToolFactory } from "@@/tests/test-utils/factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
+import { Mock } from "vitest";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { Router, useRouter } from "vue-router";
-import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
-import { Mock } from "vitest";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
@@ -30,9 +24,7 @@ const router = createMock<Router>();
 useRouterMock.mockReturnValue(router);
 
 describe("CourseContextExternalToolConfigurator", () => {
-	const getWrapper = (
-		props: ComponentProps<typeof CourseContextExternalToolConfigurator>
-	) => {
+	const getWrapper = (props: ComponentProps<typeof CourseContextExternalToolConfigurator>) => {
 		const notifierModule = createModuleMocks(NotifierModule);
 
 		const roomTitle = "Room Title";
@@ -125,9 +117,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		it("should load the configurator data", async () => {
 			const { wrapper } = await setup();
 
-			const configurator = wrapper.getComponent(
-				ContextExternalToolConfigurator
-			);
+			const configurator = wrapper.getComponent(ContextExternalToolConfigurator);
 
 			expect(configurator.vm.fetchData).toHaveBeenCalled();
 		});
@@ -171,9 +161,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		it("should redirect back to the room page", async () => {
 			const { wrapper, contextId } = setup();
 
-			wrapper
-				.findComponent(ContextExternalToolConfigurator)
-				.vm.$emit("success", contextExternalToolFactory.build());
+			wrapper.findComponent(ContextExternalToolConfigurator).vm.$emit("success", contextExternalToolFactory.build());
 			await nextTick();
 
 			expect(router.push).toHaveBeenCalledWith({
@@ -185,9 +173,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		it("should display a notification when created", async () => {
 			const { wrapper, notifierModule } = setup();
 
-			wrapper
-				.findComponent(ContextExternalToolConfigurator)
-				.vm.$emit("success", contextExternalToolFactory.build());
+			wrapper.findComponent(ContextExternalToolConfigurator).vm.$emit("success", contextExternalToolFactory.build());
 			await nextTick();
 
 			expect(notifierModule.show).toHaveBeenCalledWith({

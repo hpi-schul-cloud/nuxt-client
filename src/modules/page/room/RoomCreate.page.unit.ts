@@ -1,16 +1,13 @@
+import NotifierModule from "@/store/notifier";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
-import { useRoomCreateState } from "@data-room";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { RoomCreatePage } from "@page-room";
-import { useRouter } from "vue-router";
-import { RoomForm } from "@feature-room";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useRoomCreateState } from "@data-room";
+import { RoomForm } from "@feature-room";
+import { RoomCreatePage } from "@page-room";
 import { flushPromises } from "@vue/test-utils";
+import { useRouter } from "vue-router";
 
 vi.mock("vue-router", () => ({
 	useRouter: vi.fn().mockReturnValue({

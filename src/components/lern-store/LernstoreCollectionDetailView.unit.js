@@ -1,13 +1,10 @@
 import LernstoreCollectionDetailView from "./LernstoreCollectionDetailView";
-import { Collection } from "@@/tests/test-utils/mockDataCollection";
 import ContentModule from "@/store/content";
 import NotifierModule from "@/store/notifier";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { initializeAxios } from "@/utils/api";
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
+import { Collection } from "@@/tests/test-utils/mockDataCollection";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { RouterLinkStub } from "@vue/test-utils";
 
 vi.mock("@/utils/pageTitle", () => ({
@@ -15,9 +12,7 @@ vi.mock("@/utils/pageTitle", () => ({
 }));
 
 initializeAxios({
-	get: async () => {
-		return { data: [] };
-	},
+	get: async () => ({ data: [] }),
 });
 
 const testProps = {
@@ -64,9 +59,7 @@ describe("@/components/organisms/LernstoreCollectionDetailView", () => {
 	});
 
 	it("Gets collection UUID", () => {
-		expect(wrapper.vm.collectionUUID).toBe(
-			"be9bc35d-78f9-51a0-beb0-170512ad9666"
-		);
+		expect(wrapper.vm.collectionUUID).toBe("be9bc35d-78f9-51a0-beb0-170512ad9666");
 	});
 
 	it("Search Elements function get's called", async () => {

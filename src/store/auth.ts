@@ -1,3 +1,5 @@
+import { $axios } from "../utils/api";
+import { BusinessError, Status } from "./types/commons";
 import {
 	LanguageType,
 	MeApiFactory,
@@ -9,10 +11,8 @@ import {
 	UserApiInterface,
 } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { $axios } from "../utils/api";
-import { BusinessError, Status } from "./types/commons";
 import { useEnvConfig } from "@data-env";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	const d = new Date();

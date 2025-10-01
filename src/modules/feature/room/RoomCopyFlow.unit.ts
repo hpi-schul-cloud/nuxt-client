@@ -1,18 +1,11 @@
-import {
-	CopyApiResponseStatusEnum,
-	CopyApiResponseTypeEnum,
-	RoomApiFactory,
-} from "@/serverApi/v3";
+import { CopyApiResponseStatusEnum, CopyApiResponseTypeEnum, RoomApiFactory } from "@/serverApi/v3";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import { ApplicationError } from "@/store/types/application-error";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mockApiResponse, roomFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomCopyFlow } from "@feature-room";
 import { createMock } from "@golevelup/ts-vitest";
 import { flushPromises } from "@vue/test-utils";
@@ -164,9 +157,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 		it("should show a success notification", async () => {
 			const { notifierModuleMock } = await setupWithApiSuccess();
 
-			expect(notifierModuleMock.show).toHaveBeenCalledWith(
-				expect.objectContaining({ status: "success" })
-			);
+			expect(notifierModuleMock.show).toHaveBeenCalledWith(expect.objectContaining({ status: "success" }));
 		});
 
 		it("should emit 'copy:success' event", async () => {
@@ -211,9 +202,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 		it("should show a failure notification", async () => {
 			const { notifierModuleMock } = await setupWithFailure();
 
-			expect(notifierModuleMock.show).toHaveBeenCalledWith(
-				expect.objectContaining({ status: "error" })
-			);
+			expect(notifierModuleMock.show).toHaveBeenCalledWith(expect.objectContaining({ status: "error" }));
 		});
 
 		it("should emit 'copy:error' event", async () => {
@@ -258,9 +247,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 		it("should show a failure notification", async () => {
 			const { notifierModuleMock } = await setupWithNoId();
 
-			expect(notifierModuleMock.show).toHaveBeenCalledWith(
-				expect.objectContaining({ status: "error" })
-			);
+			expect(notifierModuleMock.show).toHaveBeenCalledWith(expect.objectContaining({ status: "error" }));
 		});
 
 		it("should emit 'copy:error' event", async () => {
@@ -280,9 +267,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 		const setupWithError = async () => {
 			const { infoDialog, roomApiMock, ...rest } = await mountComponent();
 
-			roomApiMock.roomControllerCopyRoom.mockRejectedValue(
-				new Error("API call failed")
-			);
+			roomApiMock.roomControllerCopyRoom.mockRejectedValue(new Error("API call failed"));
 
 			await infoDialog.vm.$emit("copy:confirm");
 			await flushPromises(); // wait for ref to be updated
@@ -299,9 +284,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 		it("should show a timeout info notification", async () => {
 			const { notifierModuleMock } = await setupWithError();
 
-			expect(notifierModuleMock.show).toHaveBeenCalledWith(
-				expect.objectContaining({ status: "info" })
-			);
+			expect(notifierModuleMock.show).toHaveBeenCalledWith(expect.objectContaining({ status: "info" }));
 		});
 
 		it("should throw an application error", async () => {

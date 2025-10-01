@@ -1,3 +1,7 @@
+import AuthModule from "../../../store/auth";
+import { useBoardStore } from "./Board.store";
+import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
+import { useBoardPermissions } from "./BoardPermissions.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout, Permission, RoleName } from "@/serverApi/v3";
 import { authModule } from "@/store";
@@ -15,16 +19,10 @@ import { useBoardNotifier } from "@util-board";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import AuthModule from "../../../store/auth";
-import { useBoardStore } from "./Board.store";
-import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
-import { useBoardPermissions } from "./BoardPermissions.composable";
 
 vi.mock("vue-router");
 vi.mock("@data-board/BoardPageInformation.composable");
-const mockedUseSharedBoardPageInformation = vi.mocked(
-	useSharedBoardPageInformation
-);
+const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformation);
 
 vi.mock(
 	"@/utils/create-shared-composable",
@@ -34,14 +32,12 @@ vi.mock(
 		}) as typeof import("@/utils/create-shared-composable")
 );
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({
-			t: vi.fn().mockImplementation((key: string) => key),
-			n: vi.fn().mockImplementation((key: string) => key),
-		}),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({
+		t: vi.fn().mockImplementation((key: string) => key),
+		n: vi.fn().mockImplementation((key: string) => key),
+	}),
+}));
 
 vi.mocked(useI18n());
 
@@ -61,8 +57,7 @@ describe("BoardPermissions.composable", () => {
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 	});
 
@@ -79,19 +74,9 @@ describe("BoardPermissions.composable", () => {
 			boardPermissions: Permission[];
 		}>
 	) => {
-		const {
-			userRoles,
-			userPermissions,
-			roomId,
-			contextType,
-			boardPermissions,
-		} = {
+		const { userRoles, userPermissions, roomId, contextType, boardPermissions } = {
 			userRoles: [RoleName.Teacher],
-			userPermissions: [
-				Permission.CourseEdit,
-				Permission.CourseCreate,
-				Permission.CourseRemove,
-			],
+			userPermissions: [Permission.CourseEdit, Permission.CourseCreate, Permission.CourseRemove],
 			roomId: "room-id",
 			contextType: undefined,
 			boardPermissions: [],
@@ -178,11 +163,7 @@ describe("BoardPermissions.composable", () => {
 			setupAllStores({
 				userRoles: [RoleName.Teacher],
 				userPermissions: [Permission.ContextToolAdmin],
-				boardPermissions: [
-					Permission.BoardEdit,
-					Permission.BoardManageVideoconference,
-					Permission.BoardShareBoard,
-				],
+				boardPermissions: [Permission.BoardEdit, Permission.BoardManageVideoconference, Permission.BoardShareBoard],
 			});
 
 			const {

@@ -1,14 +1,9 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 
 describe("DefaultWireframe", () => {
-	const setup = (
-		options: ComponentMountingOptions<typeof DefaultWireframe> = {}
-	) => {
+	const setup = (options: ComponentMountingOptions<typeof DefaultWireframe> = {}) => {
 		const wrapper = mount(DefaultWireframe, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -101,10 +96,7 @@ describe("DefaultWireframe", () => {
 		const wrapper = setup({
 			props: { headline: "property title", fullWidth: false, maxWidth: "full" },
 			slots: {
-				header: [
-					"<h1>slot title</h1>",
-					"<div class='menu'>a custom menu or searchbar</div>",
-				],
+				header: ["<h1>slot title</h1>", "<div class='menu'>a custom menu or searchbar</div>"],
 			},
 		});
 

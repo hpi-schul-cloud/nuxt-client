@@ -1,7 +1,7 @@
-import { createTestEnvStore } from "@@/tests/test-utils";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
 import TheFooter from "./TheFooter.vue";
 import { THEME_KEY } from "@/utils/inject";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { beforeAll } from "vitest";
 
 describe("@/components/legacy/TheFooter.vue", () => {
@@ -48,8 +48,6 @@ describe("@/components/legacy/TheFooter.vue", () => {
 		const links = wrapper.findAllComponents("base-link-stub");
 
 		expect(links).toHaveLength(7);
-		expect(wrapper.find(".bottom-line span").text()).toBe(
-			"©" + new Date().getFullYear() + " " + theme.name
-		);
+		expect(wrapper.find(".bottom-line span").text()).toBe("©" + new Date().getFullYear() + " " + theme.name);
 	});
 });

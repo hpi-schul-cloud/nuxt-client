@@ -1,36 +1,16 @@
+import BoardColumnVue from "./BoardColumn.vue";
 import { notifierModule } from "@/store";
-import {
-	BoardPermissionChecks,
-	defaultPermissions,
-} from "@/types/board/Permissions";
+import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestEnvStore,
-	mockedPiniaStoreTyping,
-} from "@@/tests/test-utils";
-import {
-	cardSkeletonResponseFactory,
-	columnResponseFactory,
-} from "@@/tests/test-utils/factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import {
-	useBoardPermissions,
-	useBoardStore,
-	useForceRender,
-} from "@data-board";
+import { useBoardPermissions, useBoardStore, useForceRender } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import {
-	useBoardNotifier,
-	useDragAndDrop,
-	useSharedLastCreatedElement,
-} from "@util-board";
+import { useBoardNotifier, useDragAndDrop, useSharedLastCreatedElement } from "@util-board";
 import { computed, nextTick, ref } from "vue";
-import BoardColumnVue from "./BoardColumn.vue";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 
@@ -60,22 +40,15 @@ describe("BoardColumn", () => {
 		setupStores({});
 		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false });
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-		mockedUseForceRenderHandler =
-			createMock<ReturnType<typeof useForceRender>>();
+		mockedUseForceRenderHandler = createMock<ReturnType<typeof useForceRender>>();
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
 	});
 
-	const setup = (options?: {
-		permissions?: Partial<BoardPermissionChecks>;
-		cardsCount?: number;
-	}) => {
-		const cards = cardSkeletonResponseFactory.buildList(
-			options?.cardsCount ?? 3
-		);
+	const setup = (options?: { permissions?: Partial<BoardPermissionChecks>; cardsCount?: number }) => {
+		const cards = cardSkeletonResponseFactory.buildList(options?.cardsCount ?? 3);
 		const column = columnResponseFactory.build({
 			cards,
 		});
@@ -87,11 +60,7 @@ describe("BoardColumn", () => {
 
 		const wrapper = mount(BoardColumnVue, {
 			global: {
-				plugins: [
-					createTestingI18n(),
-					createTestingVuetify(),
-					createTestingPinia(),
-				],
+				plugins: [createTestingI18n(), createTestingVuetify(), createTestingPinia()],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},

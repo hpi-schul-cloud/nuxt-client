@@ -1,6 +1,6 @@
+import { notifierModule } from "@/store";
 import mergeDeep from "@/utils/merge-deep";
 import serviceTemplate from "@/utils/service-template";
-import { notifierModule } from "@/store";
 
 const base = serviceTemplate("courses");
 
@@ -12,20 +12,12 @@ const coursesModule = mergeDeep(base, {
 			try {
 				if (courseItem.type === "homework") {
 					await dispatch("homeworks/remove", courseItem.id, { root: true });
-					successDeleteNotification = this.app.i18n.t(
-						"pages.courses._id.homework.deleteSuccess"
-					);
-					unsuccesfullDeleteNotification = this.app.i18n.t(
-						"pages.courses._id.homework.deleteError"
-					);
+					successDeleteNotification = this.app.i18n.t("pages.courses._id.homework.deleteSuccess");
+					unsuccesfullDeleteNotification = this.app.i18n.t("pages.courses._id.homework.deleteError");
 				} else {
 					await dispatch("lessons/remove", courseItem.id, { root: true });
-					successDeleteNotification = this.app.i18n.t(
-						"pages.courses._id.editorDocument.deleteSuccess"
-					);
-					unsuccesfullDeleteNotification = this.app.i18n.t(
-						"pages.courses._id.editorDocument.deleteError"
-					);
+					successDeleteNotification = this.app.i18n.t("pages.courses._id.editorDocument.deleteSuccess");
+					unsuccesfullDeleteNotification = this.app.i18n.t("pages.courses._id.editorDocument.deleteError");
 				}
 				notifierModule.show({
 					text: successDeleteNotification,
@@ -42,16 +34,13 @@ const coursesModule = mergeDeep(base, {
 		},
 	},
 	getters: {
-		getCoursesOptions: (state) => {
-			return state.list
+		getCoursesOptions: (state) =>
+			state.list
 				.filter((course) => course.isArchived === false)
-				.map((course) => {
-					return {
-						_id: course._id,
-						name: course.name,
-					};
-				});
-		},
+				.map((course) => ({
+					_id: course._id,
+					name: course.name,
+				})),
 	},
 });
 

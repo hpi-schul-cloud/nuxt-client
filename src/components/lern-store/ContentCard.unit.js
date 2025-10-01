@@ -1,3 +1,4 @@
+import ContentCard from "./ContentCard";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
@@ -5,13 +6,9 @@ import ContentModule from "@/store/content";
 import { meResponseFactory } from "@@/tests/test-utils";
 import { Collection } from "@@/tests/test-utils/mockDataCollection";
 import { Resource } from "@@/tests/test-utils/mockDataResource";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { RouterLinkStub } from "@vue/test-utils";
-import ContentCard from "./ContentCard";
 
 describe("@/components/organisms/ContentCard", () => {
 	beforeEach(() => {
@@ -61,9 +58,7 @@ describe("@/components/organisms/ContentCard", () => {
 		const { wrapper } = setup();
 
 		expect(wrapper.find(".content__img-thumbnail").exists()).toBe(true);
-		expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(
-			Resource.preview.url
-		);
+		expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(Resource.preview.url);
 		expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe("");
 	});
 
@@ -71,9 +66,7 @@ describe("@/components/organisms/ContentCard", () => {
 		const { wrapper } = setup();
 
 		expect(wrapper.find(".content__title").exists()).toBe(true);
-		expect(wrapper.find(".content__title").text()).toBe(
-			"Technik der Dotierung"
-		);
+		expect(wrapper.find(".content__title").text()).toBe("Technik der Dotierung");
 	});
 
 	it("Renders footer of content Card for single elements", () => {
@@ -93,12 +86,8 @@ describe("@/components/organisms/ContentCard", () => {
 			const { wrapper } = setup(Collection);
 
 			expect(wrapper.find(".content__img-thumbnail").exists()).toBe(true);
-			expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(
-				Collection.preview.url
-			);
-			expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe(
-				""
-			);
+			expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(Collection.preview.url);
+			expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe("");
 		});
 
 		it("Renders collection icon", () => {
@@ -114,9 +103,7 @@ describe("@/components/organisms/ContentCard", () => {
 			const { wrapper } = setup(Collection);
 
 			expect(wrapper.find(".content__title").exists()).toBe(true);
-			expect(wrapper.find(".content__title").text()).toBe(
-				"heimische Singvögel"
-			);
+			expect(wrapper.find(".content__title").text()).toBe("heimische Singvögel");
 		});
 
 		it("Renders footer of content Card for single elements", () => {

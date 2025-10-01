@@ -1,18 +1,17 @@
 import { useBoardNotifier } from "./BoardNotifier.composable";
-import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
-const setup = () => {
-	return mountComposable(() => useBoardNotifier(), {
+const setup = () =>
+	mountComposable(() => useBoardNotifier(), {
 		global: {
 			provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
 		},
 	});
-};
 
 describe("BoardNotifications.composable", () => {
 	beforeEach(() => {

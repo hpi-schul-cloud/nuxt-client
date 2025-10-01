@@ -33,9 +33,9 @@
 <script setup lang="ts">
 import { LanguageType } from "@/serverApi/v3";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useEnvConfig, useEnvStore } from "@data-env";
 
 defineOptions({
 	inheritAttrs: false,
@@ -60,37 +60,31 @@ const buildLanguageItem = (lang: LanguageType | string): LanguageItem => {
 	const language = lang as LanguageType;
 	const longName = t(`global.topbar.language.longName.${language}`);
 	const translatedName = t(`common.words.languages.${language}`);
-	const icon =
-		"$langIcon" + language.charAt(0).toUpperCase() + language.slice(1);
+	const icon = "$langIcon" + language.charAt(0).toUpperCase() + language.slice(1);
 
 	return { language, longName, translatedName, icon };
 };
 
 const availableLanguages = computed(() => {
 	const languages = useEnvConfig()
-		.value.I18N__AVAILABLE_LANGUAGES.map((language) =>
-			buildLanguageItem(language)
-		)
-		.filter((language) => {
-			return language.language !== selectedLanguage.value.language;
-		});
+		.value.I18N__AVAILABLE_LANGUAGES.map((language) => buildLanguageItem(language))
+		.filter((language) => language.language !== selectedLanguage.value.language);
 
 	return languages;
 });
 
 const selectedLanguage = computed(() => {
-	const language = buildLanguageItem(
-		authModule.getLocale || useEnvStore().fallBackLanguage
-	);
+	const language = buildLanguageItem(authModule.getLocale || useEnvStore().fallBackLanguage);
 
 	return language;
 });
 
-const ariaLabel = computed(() => {
-	return `${t("global.topbar.language.select")} ${t(
-		"global.topbar.language.selectedLanguage"
-	)} ${selectedLanguage.value.translatedName}`;
-});
+const ariaLabel = computed(
+	() =>
+		`${t("global.topbar.language.select")} ${t(
+			"global.topbar.language.selectedLanguage"
+		)} ${selectedLanguage.value.translatedName}`
+);
 </script>
 
 <style scoped>

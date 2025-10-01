@@ -13,12 +13,7 @@
 			</div>
 		</v-alert>
 		<template v-else>
-			<v-progress-linear
-				v-if="status === 'pending'"
-				indeterminate
-				class="mb-6"
-				data-testid="progress-bar"
-			/>
+			<v-progress-linear v-if="status === 'pending'" indeterminate class="mb-6" data-testid="progress-bar" />
 			<v-list-item
 				v-else
 				lines="two"
@@ -43,11 +38,7 @@
 						}}
 					</template>
 					<template v-else>
-						{{
-							$t(
-								"pages.administration.school.index.schoolPolicy.notUploadedYet"
-							)
-						}}
+						{{ $t("pages.administration.school.index.schoolPolicy.notUploadedYet") }}
 					</template>
 				</v-list-item-subtitle>
 				<template #append>
@@ -59,9 +50,7 @@
 						<v-btn
 							:icon="mdiTrayArrowUp"
 							variant="text"
-							:aria-label="
-								$t('pages.administration.school.index.schoolPolicy.edit')
-							"
+							:aria-label="$t('pages.administration.school.index.schoolPolicy.edit')"
 						/>
 					</v-list-item-action>
 					<v-list-item-action
@@ -72,11 +61,7 @@
 						<v-btn
 							:icon="mdiTrashCanOutline"
 							variant="text"
-							:aria-label="
-								$t(
-									'pages.administration.school.index.schoolPolicy.delete.title'
-								)
-							"
+							:aria-label="$t('pages.administration.school.index.schoolPolicy.delete.title')"
 						/>
 					</v-list-item-action>
 				</template>
@@ -98,17 +83,13 @@
 			>
 				<template #title>
 					<h3 class="text-h2 mt-0">
-						{{
-							$t("pages.administration.school.index.schoolPolicy.delete.title")
-						}}
+						{{ $t("pages.administration.school.index.schoolPolicy.delete.title") }}
 					</h3>
 				</template>
 				<template #content>
 					<v-alert type="info" class="mb-0">
 						<div class="alert-text">
-							{{
-								$t("pages.administration.school.index.schoolPolicy.delete.text")
-							}}
+							{{ $t("pages.administration.school.index.schoolPolicy.delete.text") }}
 						</div>
 					</v-alert>
 				</template>
@@ -119,25 +100,21 @@
 
 <script setup lang="ts">
 import SchoolPolicyFormDialog from "@/components/organisms/administration/SchoolPolicyFormDialog.vue";
-import { computed, ComputedRef, ref, Ref, watch } from "vue";
-import { School } from "@/store/types/schools";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { formatDateForAlerts } from "@/plugins/datetime";
 import { ConsentVersion } from "@/store/types/consent-version";
-import { useI18n } from "vue-i18n";
+import { School } from "@/store/types/schools";
+import { downloadFile } from "@/utils/fileHelper";
 import {
 	AUTH_MODULE_KEY,
-	PRIVACY_POLICY_MODULE_KEY,
 	injectStrict,
-	SCHOOLS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	PRIVACY_POLICY_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { downloadFile } from "@/utils/fileHelper";
-import { formatDateForAlerts } from "@/plugins/datetime";
-import {
-	mdiAlertCircle,
-	mdiTrashCanOutline,
-	mdiTrayArrowUp,
-} from "@icons/material";
+import { mdiAlertCircle, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
+import { computed, ComputedRef, Ref, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const authModule = injectStrict(AUTH_MODULE_KEY);
@@ -160,21 +137,14 @@ watch(
 const hasSchoolEditPermission: ComputedRef<boolean> = computed(() =>
 	authModule.getUserPermissions.includes("school_edit")
 );
-const privacyPolicy: ComputedRef<ConsentVersion | null> = computed(
-	() => privacyPolicyModule.getPrivacyPolicy
-);
-const status: ComputedRef<string> = computed(
-	() => privacyPolicyModule.getStatus
-);
+const privacyPolicy: ComputedRef<ConsentVersion | null> = computed(() => privacyPolicyModule.getPrivacyPolicy);
+const status: ComputedRef<string> = computed(() => privacyPolicyModule.getStatus);
 
 const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
 
 const downloadPolicy = () => {
 	if (privacyPolicy.value) {
-		downloadFile(
-			privacyPolicy.value.consentData.data,
-			t("pages.administration.school.index.schoolPolicy.fileName")
-		);
+		downloadFile(privacyPolicy.value.consentData.data, t("pages.administration.school.index.schoolPolicy.fileName"));
 	}
 };
 

@@ -125,8 +125,7 @@ export type UpdateBoardVisibilitySuccessPayload = {
 	isVisible: boolean;
 	isOwnAction: boolean;
 };
-export type UpdateBoardVisibilityFailurePayload =
-	UpdateBoardVisibilityRequestPayload;
+export type UpdateBoardVisibilityFailurePayload = UpdateBoardVisibilityRequestPayload;
 
 export type DisconnectSocketRequestPayload = Record<string, never>;
 

@@ -7,9 +7,9 @@ import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import AuthModule from "@/store/auth";
 import TasksModule from "@/store/tasks";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { computed, inject, onMounted } from "vue";
-import { buildPageTitle } from "@/utils/pageTitle";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();

@@ -21,9 +21,9 @@
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { FormNews } from "@feature-news-form";
 import { newsModule, notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { FormNews } from "@feature-news-form";
 
 export default {
 	components: {
@@ -50,10 +50,7 @@ export default {
 		},
 		create: async function (news) {
 			try {
-				const newsTarget = this.getNewsTarget(
-					this.$route.query,
-					this.$me.school.id
-				);
+				const newsTarget = this.getNewsTarget(this.$route.query, this.$me.school.id);
 				await newsModule.createNews({
 					title: news.title,
 					content: news.content,

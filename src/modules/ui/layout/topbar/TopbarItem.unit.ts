@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import TopbarItem from "./TopbarItem.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiAlert } from "@icons/material";
+import { mount } from "@vue/test-utils";
 
 describe("@ui-layout/TopbarItem", () => {
 	const setup = () => {

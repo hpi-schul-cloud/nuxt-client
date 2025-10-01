@@ -1,8 +1,8 @@
 import TaskOverview from "./TaskOverview.page.vue";
-import { shallowMount } from "@vue/test-utils";
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -14,8 +14,8 @@ vi.mock(
 
 describe("TaskOverview", () => {
 	const fetchAllTasksSpy = vi.fn();
-	const getWrapper = (userRole: string) => {
-		return shallowMount(TaskOverview, {
+	const getWrapper = (userRole: string) =>
+		shallowMount(TaskOverview, {
 			global: {
 				plugins: [createTestingI18n()],
 				provide: {
@@ -28,7 +28,6 @@ describe("TaskOverview", () => {
 				},
 			},
 		});
-	};
 
 	beforeEach(() => {
 		vi.resetAllMocks();
@@ -49,14 +48,11 @@ describe("TaskOverview", () => {
 		expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
 	});
 
-	it.each(["teacher", "student"])(
-		"should render child component for %p",
-		(userRole) => {
-			const wrapper = getWrapper(userRole);
-			const childComponent = wrapper.findComponent(TasksDashboardMain);
-			expect(childComponent.exists()).toBeTruthy();
-		}
-	);
+	it.each(["teacher", "student"])("should render child component for %p", (userRole) => {
+		const wrapper = getWrapper(userRole);
+		const childComponent = wrapper.findComponent(TasksDashboardMain);
+		expect(childComponent.exists()).toBeTruthy();
+	});
 
 	it("should not render child component for arbitrary roles", () => {
 		const wrapper = getWrapper("arbitraryRole");

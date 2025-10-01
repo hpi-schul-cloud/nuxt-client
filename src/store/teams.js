@@ -41,11 +41,8 @@ const module = mergeDeep(base, {
 		},
 	},
 	getters: {
-		hasTeamPermission: (_state, localGetters) => (permission) => {
-			return localGetters.current.user
-				? localGetters.current.user.permissions.find((p) => p === permission)
-				: false;
-		},
+		hasTeamPermission: (_state, localGetters) => (permission) =>
+			localGetters.current.user ? localGetters.current.user.permissions.find((p) => p === permission) : false,
 	},
 });
 

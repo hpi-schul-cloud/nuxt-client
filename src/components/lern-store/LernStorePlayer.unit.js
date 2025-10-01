@@ -1,13 +1,11 @@
+import LernStorePlayer from "./LernStorePlayer";
 import { $axios, initializeAxios } from "@/utils/api";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { flushPromises, mount } from "@vue/test-utils";
 import { expect } from "vitest";
-import LernStorePlayer from "./LernStorePlayer";
 
 initializeAxios({
-	get: async () => {
-		return { data: {} };
-	},
+	get: async () => ({ data: {} }),
 });
 
 vi.spyOn($axios, "get").mockResolvedValue({
@@ -38,11 +36,7 @@ describe("@/components/molecules/LernStorePlayer", () => {
 	it("Renders Spinner", () => {
 		const { wrapper } = setup();
 		expect(wrapper.find(".player-iframe").exists()).toBe(false);
-		expect(
-			wrapper
-				.find(".d-flex, .justify-center, .align-center, .min-height-screen")
-				.exists()
-		).toBe(true);
+		expect(wrapper.find(".d-flex, .justify-center, .align-center, .min-height-screen").exists()).toBe(true);
 	});
 
 	it("Fetches data by nodeId", async () => {
@@ -50,9 +44,7 @@ describe("@/components/molecules/LernStorePlayer", () => {
 			nodeId: "testNodeId",
 		});
 
-		expect($axios.get).toHaveBeenCalledWith(
-			"/v1/edu-sharing/player/testNodeId"
-		);
+		expect($axios.get).toHaveBeenCalledWith("/v1/edu-sharing/player/testNodeId");
 	});
 
 	it("Renders Iframe src", async () => {
@@ -60,9 +52,7 @@ describe("@/components/molecules/LernStorePlayer", () => {
 
 		await flushPromises();
 
-		expect(wrapper.find(".player-iframe").attributes("src")).toBe(
-			"iframeTestSRC"
-		);
+		expect(wrapper.find(".player-iframe").attributes("src")).toBe("iframeTestSRC");
 	});
 
 	it("Renders script tag", async () => {

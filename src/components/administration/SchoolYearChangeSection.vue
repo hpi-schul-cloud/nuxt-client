@@ -6,10 +6,7 @@
 					instance,
 				})
 			}}
-			<i18n-t
-				keypath="components.administration.schoolYearChangeSection.info.part.two"
-				scope="global"
-			>
+			<i18n-t keypath="components.administration.schoolYearChangeSection.info.part.two" scope="global">
 				<a
 					data-testid="school-year-change-doc-link"
 					href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=123407337"
@@ -23,23 +20,14 @@
 		<div>
 			<div class="step-title">
 				<v-icon :icon="mdiNumeric1Circle" size="24px" />
-				{{
-					t("components.administration.schoolYearChangeSection.title.step.one")
-				}}
+				{{ t("components.administration.schoolYearChangeSection.title.step.one") }}
 			</div>
 			<div>
 				<p>
-					{{
-						t(
-							"components.administration.schoolYearChangeSection.description.step.one"
-						)
-					}}
+					{{ t("components.administration.schoolYearChangeSection.description.step.one") }}
 				</p>
 			</div>
-			<div
-				class="d-flex mt-8"
-				data-testid="school-year-change-section-start-transfer"
-			>
+			<div class="d-flex mt-8" data-testid="school-year-change-section-start-transfer">
 				<VSpacer />
 				<VBtn
 					v-if="schoolYearMode !== SchoolYearModeEnum.ACTIVE"
@@ -51,11 +39,7 @@
 					:loading="isLoading"
 					@click="startTransfer"
 				>
-					{{
-						t(
-							"components.administration.schoolYearChangeSection.step.one.button.startTransfer"
-						)
-					}}
+					{{ t("components.administration.schoolYearChangeSection.step.one.button.startTransfer") }}
 				</VBtn>
 				<VBtn
 					v-if="schoolYearMode === SchoolYearModeEnum.ACTIVE"
@@ -66,117 +50,74 @@
 					data-testid="started-transfer-button"
 					:readonly="true"
 				>
-					{{
-						t(
-							"components.administration.schoolYearChangeSection.step.one.button.transferStarted"
-						)
-					}}
+					{{ t("components.administration.schoolYearChangeSection.step.one.button.transferStarted") }}
 				</VBtn>
 			</div>
 		</div>
 		<div>
 			<div class="step-title">
 				<v-icon :icon="mdiNumeric2Circle" size="24px" />
-				{{
-					t("components.administration.schoolYearChangeSection.title.step.two")
-				}}
+				{{ t("components.administration.schoolYearChangeSection.title.step.two") }}
 			</div>
 			<div>
 				<p>
-					{{
-						t(
-							"components.administration.schoolYearChangeSection.description.step.two"
-						)
-					}}
+					{{ t("components.administration.schoolYearChangeSection.description.step.two") }}
 				</p>
 			</div>
 			<InfoAlert data-testid="info-alert-ldap-data">
-				{{
-					t("components.administration.schoolYearChangeSection.info.step.two")
-				}}
+				{{ t("components.administration.schoolYearChangeSection.info.step.two") }}
 			</InfoAlert>
-			<div
-				class="d-flex mt-8"
-				data-testid="school-year-change-section-table-actions"
-			>
+			<div class="d-flex mt-8" data-testid="school-year-change-section-table-actions">
 				<VSpacer />
 				<VBtn
 					class="btn"
 					href="/administration/startldapschoolyear"
 					target="_blank"
-					:disabled="
-						schoolYearMode !== SchoolYearModeEnum.ACTIVE || isCheckboxConfirmed
-					"
+					:disabled="schoolYearMode !== SchoolYearModeEnum.ACTIVE || isCheckboxConfirmed"
 					color="primary"
 					variant="outlined"
 					data-testid="ldap-data-button"
 					:loading="isLoading"
 					@click="enableCheckbox()"
 				>
-					{{
-						t(
-							"components.administration.schoolYearChangeSection.step.two.button"
-						)
-					}}
+					{{ t("components.administration.schoolYearChangeSection.step.two.button") }}
 				</VBtn>
 			</div>
 		</div>
 		<div>
 			<div class="step-title">
 				<v-icon :icon="mdiNumeric3Circle" size="24px" />
-				{{
-					t(
-						"components.administration.schoolYearChangeSection.title.step.three"
-					)
-				}}
+				{{ t("components.administration.schoolYearChangeSection.title.step.three") }}
 			</div>
 			<div>
 				<p>
 					{{
-						t(
-							"components.administration.schoolYearChangeSection.description.step.three",
-							{
-								instance,
-							}
-						)
+						t("components.administration.schoolYearChangeSection.description.step.three", {
+							instance,
+						})
 					}}
 				</p>
 			</div>
-			<div
-				class="d-flex mt-8"
-				data-testid="school-year-change-section-table-actions"
-			>
+			<div class="d-flex mt-8" data-testid="school-year-change-section-table-actions">
 				<VCheckbox
 					v-model="isCheckboxConfirmed"
-					:disabled="
-						!isCheckboxEnabled || schoolYearMode !== SchoolYearModeEnum.ACTIVE
-					"
+					:disabled="!isCheckboxEnabled || schoolYearMode !== SchoolYearModeEnum.ACTIVE"
 					data-testId="checkbox-update-data"
-					:label="
-						t(
-							'components.administration.schoolYearChangeSection.checkbox.step.three'
-						)
-					"
+					:label="t('components.administration.schoolYearChangeSection.checkbox.step.three')"
 					:hide-details="true"
 					density="comfortable"
 				/>
 				<VSpacer />
 				<VBtn
 					class="btn"
-					:disabled="
-						!isCheckboxConfirmed || schoolYearMode !== SchoolYearModeEnum.ACTIVE
-					"
+					:disabled="!isCheckboxConfirmed || schoolYearMode !== SchoolYearModeEnum.ACTIVE"
 					color="primary"
 					variant="flat"
 					data-testid="finish-transfer-button"
 					:loading="isLoading"
 					@click="finishTransferDialog"
 				>
-					{{
-						t(
-							"components.administration.schoolYearChangeSection.step.three.button"
-						)
-					}}
+					{{ t("components.administration.schoolYearChangeSection.step.three.button") }}
 				</VBtn>
 			</div>
 			<VCustomDialog
@@ -187,18 +128,10 @@
 				@dialog-confirmed="confirmSchoolYearChange"
 			>
 				<template #title>
-					{{
-						t(
-							"components.administration.schoolYearChangeSection.dialog.start.title"
-						)
-					}}
+					{{ t("components.administration.schoolYearChangeSection.dialog.start.title") }}
 				</template>
 				<template #content>
-					{{
-						t(
-							"components.administration.schoolYearChangeSection.dialog.start.content"
-						)
-					}}
+					{{ t("components.administration.schoolYearChangeSection.dialog.start.content") }}
 				</template>
 			</VCustomDialog>
 			<VCustomDialog
@@ -209,18 +142,10 @@
 				@dialog-confirmed="finishTransfer"
 			>
 				<template #title>
-					{{
-						t(
-							"components.administration.schoolYearChangeSection.dialog.finish.title"
-						)
-					}}
+					{{ t("components.administration.schoolYearChangeSection.dialog.finish.title") }}
 				</template>
 				<template #content>
-					{{
-						t(
-							"components.administration.schoolYearChangeSection.dialog.finish.content"
-						)
-					}}
+					{{ t("components.administration.schoolYearChangeSection.dialog.finish.content") }}
 				</template>
 			</VCustomDialog>
 		</div>
@@ -232,24 +157,18 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { MeSchoolResponse } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";
-import {
-	mdiNumeric1Circle,
-	mdiNumeric2Circle,
-	mdiNumeric3Circle,
-} from "@icons/material";
-import { InfoAlert } from "@ui-alert";
-import { computed, ComputedRef, ref, Ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { useEnvConfig } from "@data-env";
+import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";
+import { mdiNumeric1Circle, mdiNumeric2Circle, mdiNumeric3Circle } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
+import { computed, ComputedRef, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 const { setMaintenanceMode, maintenanceStatus } = useSharedSchoolYearChange();
 
-const school: ComputedRef<MeSchoolResponse | undefined> = computed(() => {
-	return authModule.getSchool;
-});
+const school: ComputedRef<MeSchoolResponse | undefined> = computed(() => authModule.getSchool);
 
 const isCheckboxEnabled: Ref<boolean> = ref(false);
 
@@ -265,9 +184,7 @@ const schoolYearMode: ComputedRef<string> = computed(() => {
 	let schoolMaintenanceMode = SchoolYearModeEnum.IDLE.valueOf();
 
 	if (maintenanceStatus.value) {
-		const maintenanceModeStarts = new Date(
-			maintenanceStatus.value?.currentYear.endDate
-		);
+		const maintenanceModeStarts = new Date(maintenanceStatus.value?.currentYear.endDate);
 
 		const twoWeeksFromStart = new Date(maintenanceModeStarts.valueOf());
 		twoWeeksFromStart.setDate(twoWeeksFromStart.getDate() - 14);

@@ -1,6 +1,6 @@
-import { shallowMount } from "@vue/test-utils";
 import CardSkeleton from "./CardSkeleton.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 
 describe("CardSkeleton", () => {
 	const setup = (props: { height: number }) => {

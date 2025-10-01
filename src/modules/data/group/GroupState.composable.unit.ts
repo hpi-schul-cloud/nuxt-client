@@ -1,19 +1,18 @@
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { Group, useGroupApi, useGroupState } from "./index";
+import NotifierModule from "@/store/notifier";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { mountComposable } from "@@/tests/test-utils";
 import { groupFactory } from "@@/tests/test-utils/factory/groupFactory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { mountComposable } from "@@/tests/test-utils";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import type { Mocked } from "vitest";
 
 vi.mock("@data-group/GroupApi.composable");
 
 describe("GroupState.composable", () => {
 	let useGroupApiMock: DeepMocked<ReturnType<typeof useGroupApi>>;
-	const notifierModule: Mocked<NotifierModule> =
-		createModuleMocks(NotifierModule);
+	const notifierModule: Mocked<NotifierModule> = createModuleMocks(NotifierModule);
 
 	beforeEach(() => {
 		useGroupApiMock = createMock<ReturnType<typeof useGroupApi>>();

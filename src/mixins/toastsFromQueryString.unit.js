@@ -1,6 +1,6 @@
 import toastsFromQueryString from "./toastsFromQueryString";
-import NotifierModule from "@/store/notifier";
 import { notifierModule } from "@/store";
+import NotifierModule from "@/store/notifier";
 import setupStores from "@@/tests/test-utils/setupStores";
 
 describe("@/mixins/toastsFromQueryString", () => {

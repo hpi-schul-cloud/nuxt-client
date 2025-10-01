@@ -1,18 +1,15 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import FilterDialog from "./FilterDialog.vue";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 
 describe("@components/DataFilter/FilterDialog.vue", () => {
-	const mountComponent = (
-		options: ComponentMountingOptions<typeof FilterDialog> = {}
-	) => {
-		return mount(FilterDialog, {
+	const mountComponent = (options: ComponentMountingOptions<typeof FilterDialog> = {}) =>
+		mount(FilterDialog, {
 			global: {
 				plugins: [createTestingVuetify()],
 			},
 			...options,
 		});
-	};
 
 	describe("should render the component", () => {
 		it("should render the component", () => {

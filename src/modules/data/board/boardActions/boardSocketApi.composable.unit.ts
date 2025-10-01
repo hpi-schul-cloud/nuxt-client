@@ -1,4 +1,14 @@
+import * as CardActions from "../cardActions/cardActions";
+import {
+	MoveCardRequestPayload,
+	UpdateBoardLayoutFailurePayload,
+	UpdateBoardLayoutSuccessPayload,
+} from "./boardActionPayload.types";
+import * as BoardActions from "./boardActions";
+import { useBoardRestApi } from "./boardRestApi.composable";
+import { useBoardSocketApi } from "./boardSocketApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { BoardLayout } from "@/serverApi/v3/api";
 import { applicationErrorModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -10,28 +20,14 @@ import {
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import {
-	useBoardStore,
-	useForceRender,
-	useSocketConnection,
-} from "@data-board";
+import { useBoardStore, useForceRender, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
-import { BoardLayout } from "@/serverApi/v3/api";
-import * as CardActions from "../cardActions/cardActions";
-import {
-	MoveCardRequestPayload,
-	UpdateBoardLayoutFailurePayload,
-	UpdateBoardLayoutSuccessPayload,
-} from "./boardActionPayload.types";
-import * as BoardActions from "./boardActions";
-import { useBoardRestApi } from "./boardRestApi.composable";
-import { useBoardSocketApi } from "./boardSocketApi.composable";
-import { Mock } from "vitest";
 
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
@@ -61,9 +57,7 @@ describe("useBoardSocketApi", () => {
 	let mockedBoardRestApiHandler: DeepMocked<ReturnType<typeof useBoardRestApi>>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedSharedLastCreatedElementActions: DeepMocked<
-		ReturnType<typeof useSharedLastCreatedElement>
-	>;
+	let mockedSharedLastCreatedElementActions: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
 	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
 
 	beforeEach(() => {
@@ -78,24 +72,18 @@ describe("useBoardSocketApi", () => {
 		socketMock = createMock<ReturnType<typeof useSocketConnection>>();
 		mockedUseSocketConnection.mockReturnValue(socketMock);
 
-		mockedBoardRestApiHandler =
-			createMock<ReturnType<typeof useBoardRestApi>>();
+		mockedBoardRestApiHandler = createMock<ReturnType<typeof useBoardRestApi>>();
 		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiHandler);
 
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-		mockedSharedLastCreatedElementActions =
-			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
-		mockedSharedLastCreatedElement.mockReturnValue(
-			mockedSharedLastCreatedElementActions
-		);
-		mockedUseForceRenderHandler =
-			createMock<ReturnType<typeof useForceRender>>();
+		mockedSharedLastCreatedElementActions = createMock<ReturnType<typeof useSharedLastCreatedElement>>();
+		mockedSharedLastCreatedElement.mockReturnValue(mockedSharedLastCreatedElementActions);
+		mockedUseForceRenderHandler = createMock<ReturnType<typeof useForceRender>>();
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
 	});
 
@@ -273,9 +261,7 @@ describe("useBoardSocketApi", () => {
 			};
 			dispatch(BoardActions.updateBoardVisibilitySuccess(payload));
 
-			expect(boardStore.updateBoardVisibilitySuccess).toHaveBeenCalledWith(
-				payload
-			);
+			expect(boardStore.updateBoardVisibilitySuccess).toHaveBeenCalledWith(payload);
 		});
 
 		it("should call updateBoardLayoutSuccess for corresponding action", () => {
@@ -299,17 +285,10 @@ describe("useBoardSocketApi", () => {
 				dispatch(BoardActions.fetchBoardFailure({ boardId: "test" }));
 
 				expect(setErrorSpy).toHaveBeenCalledWith(
-					createApplicationError(
-						HttpStatusCode.NotFound,
-						"components.board.error.404"
-					)
+					createApplicationError(HttpStatusCode.NotFound, "components.board.error.404")
 				);
-				expect(setErrorSpy.mock.calls[0][0].statusCode).toStrictEqual(
-					HttpStatusCode.NotFound
-				);
-				expect(setErrorSpy.mock.calls[0][0].translationKey).toStrictEqual(
-					"components.board.error.404"
-				);
+				expect(setErrorSpy.mock.calls[0][0].statusCode).toStrictEqual(HttpStatusCode.NotFound);
+				expect(setErrorSpy.mock.calls[0][0].translationKey).toStrictEqual("components.board.error.404");
 			});
 
 			it("should reload the board for createCardFailure action", () => {
@@ -317,10 +296,7 @@ describe("useBoardSocketApi", () => {
 
 				dispatch(BoardActions.createCardFailure({ columnId: "test" }));
 
-				expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-					"fetch-board-request",
-					expect.anything()
-				);
+				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
 			});
 
 			it("should reload the board for createColumnFailure action", () => {
@@ -328,10 +304,7 @@ describe("useBoardSocketApi", () => {
 
 				dispatch(BoardActions.createColumnFailure({ boardId: "test" }));
 
-				expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-					"fetch-board-request",
-					expect.anything()
-				);
+				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
 			});
 
 			it("should reload the board for deleteCardFailure action", () => {
@@ -339,10 +312,7 @@ describe("useBoardSocketApi", () => {
 
 				dispatch(CardActions.deleteCardFailure({ cardId: "test" }));
 
-				expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-					"fetch-board-request",
-					expect.anything()
-				);
+				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
 			});
 
 			it("should reload the board for deleteColumnFailure action", () => {
@@ -350,10 +320,7 @@ describe("useBoardSocketApi", () => {
 
 				dispatch(BoardActions.deleteColumnFailure({ columnId: "test" }));
 
-				expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-					"fetch-board-request",
-					expect.anything()
-				);
+				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
 			});
 
 			it("should reload the board for moveCardFailure action", () => {
@@ -371,10 +338,7 @@ describe("useBoardSocketApi", () => {
 					})
 				);
 
-				expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-					"fetch-board-request",
-					expect.anything()
-				);
+				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
 			});
 
 			it("should reload the board for moveColumnFailure action", () => {
@@ -387,10 +351,7 @@ describe("useBoardSocketApi", () => {
 					})
 				);
 
-				expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-					"fetch-board-request",
-					expect.anything()
-				);
+				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
 			});
 
 			it("should reload the board for updateColumnTitleFailure action", () => {
@@ -403,10 +364,7 @@ describe("useBoardSocketApi", () => {
 					})
 				);
 
-				expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-					"fetch-board-request",
-					expect.anything()
-				);
+				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
 			});
 
 			it("should reload the board for updateBoardTitleFailure action", () => {
@@ -419,10 +377,7 @@ describe("useBoardSocketApi", () => {
 					})
 				);
 
-				expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-					"fetch-board-request",
-					expect.anything()
-				);
+				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
 			});
 
 			it("should reload the board for updateBoardVisibilityFailure action", () => {
@@ -435,10 +390,7 @@ describe("useBoardSocketApi", () => {
 					})
 				);
 
-				expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-					"fetch-board-request",
-					expect.anything()
-				);
+				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
 			});
 
 			it("should reload the board for updateBoardLayoutFailure action", () => {
@@ -451,10 +403,7 @@ describe("useBoardSocketApi", () => {
 					})
 				);
 
-				expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-					"fetch-board-request",
-					expect.anything()
-				);
+				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
 			});
 		});
 	});
@@ -475,10 +424,10 @@ describe("useBoardSocketApi", () => {
 
 			createCardRequest({ columnId: "test" });
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"create-card-request",
-				{ columnId: "test", requiredEmptyElements: ["richText"] }
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("create-card-request", {
+				columnId: "test",
+				requiredEmptyElements: ["richText"],
+			});
 		});
 	});
 
@@ -491,10 +440,7 @@ describe("useBoardSocketApi", () => {
 
 			expect(boardStore.setLoading).toHaveBeenCalledWith(true);
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"fetch-board-request",
-				{ boardId: "boardId" }
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", { boardId: "boardId" });
 		});
 	});
 
@@ -504,10 +450,7 @@ describe("useBoardSocketApi", () => {
 
 			deleteBoardRequest({ boardId: "test" });
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"delete-board-request",
-				{ boardId: "test" }
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("delete-board-request", { boardId: "test" });
 		});
 	});
 
@@ -517,10 +460,7 @@ describe("useBoardSocketApi", () => {
 
 			createColumnRequest({ boardId: "boardId" });
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"create-column-request",
-				{ boardId: "boardId" }
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("create-column-request", { boardId: "boardId" });
 		});
 	});
 
@@ -530,10 +470,7 @@ describe("useBoardSocketApi", () => {
 
 			deleteColumnRequest({ columnId: "test" });
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"delete-column-request",
-				{ columnId: "test" }
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("delete-column-request", { columnId: "test" });
 		});
 	});
 
@@ -560,10 +497,10 @@ describe("useBoardSocketApi", () => {
 				toColumnId: "testColumnId",
 			} as MoveCardRequestPayload);
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"move-card-request",
-				{ cardId: "test", toColumnId: "testColumnId" }
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("move-card-request", {
+				cardId: "test",
+				toColumnId: "testColumnId",
+			});
 		});
 
 		it("should call action with correct parameters when toColumnId is undefined", async () => {
@@ -589,14 +526,11 @@ describe("useBoardSocketApi", () => {
 
 			await moveCardRequest(moveCardPayload);
 
-			expect(socketMock.emitWithAck).toHaveBeenCalledWith(
-				"create-column-request",
-				{ boardId: board.id }
-			);
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"move-card-request",
-				{ ...moveCardPayload, toColumnId: newColumn.id }
-			);
+			expect(socketMock.emitWithAck).toHaveBeenCalledWith("create-column-request", { boardId: board.id });
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("move-card-request", {
+				...moveCardPayload,
+				toColumnId: newColumn.id,
+			});
 		});
 	});
 
@@ -628,17 +562,14 @@ describe("useBoardSocketApi", () => {
 				byKeyboard: false,
 			});
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"move-column-request",
-				{
-					columnMove: {
-						addedIndex: 1,
-						removedIndex: 0,
-						columnId: "testColumnId",
-					},
-					byKeyboard: false,
-				}
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("move-column-request", {
+				columnMove: {
+					addedIndex: 1,
+					removedIndex: 0,
+					columnId: "testColumnId",
+				},
+				byKeyboard: false,
+			});
 		});
 	});
 
@@ -648,10 +579,10 @@ describe("useBoardSocketApi", () => {
 
 			updateColumnTitleRequest({ columnId: "test", newTitle: "newTitle" });
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"update-column-title-request",
-				{ columnId: "test", newTitle: "newTitle" }
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("update-column-title-request", {
+				columnId: "test",
+				newTitle: "newTitle",
+			});
 		});
 	});
 
@@ -661,10 +592,10 @@ describe("useBoardSocketApi", () => {
 
 			updateBoardTitleRequest({ boardId: "boardId", newTitle: "newTitle" });
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"update-board-title-request",
-				{ boardId: "boardId", newTitle: "newTitle" }
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("update-board-title-request", {
+				boardId: "boardId",
+				newTitle: "newTitle",
+			});
 		});
 	});
 
@@ -674,10 +605,10 @@ describe("useBoardSocketApi", () => {
 
 			updateBoardVisibilityRequest({ boardId: "boardId", isVisible: true });
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"update-board-visibility-request",
-				{ boardId: "boardId", isVisible: true }
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("update-board-visibility-request", {
+				boardId: "boardId",
+				isVisible: true,
+			});
 		});
 	});
 
@@ -690,12 +621,13 @@ describe("useBoardSocketApi", () => {
 				layout: BoardLayout.Columns,
 			});
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith<
-				[string, UpdateBoardLayoutFailurePayload]
-			>("update-board-layout-request", {
-				boardId: "boardId",
-				layout: BoardLayout.Columns,
-			});
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith<[string, UpdateBoardLayoutFailurePayload]>(
+				"update-board-layout-request",
+				{
+					boardId: "boardId",
+					layout: BoardLayout.Columns,
+				}
+			);
 		});
 	});
 });

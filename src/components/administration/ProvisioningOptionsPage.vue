@@ -10,19 +10,14 @@
 					<VCheckboxBtn
 						v-model="provisioningOptions.class"
 						color="primary"
-						:label="
-							$t('components.administration.provisioningOptions.class.label')
-						"
+						:label="$t('components.administration.provisioningOptions.class.label')"
 						data-testid="checkbox-option-class"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
-							$t(
-								"components.administration.provisioningOptions.class.description",
-								{
-									instance: theme.name,
-								}
-							)
+							$t("components.administration.provisioningOptions.class.description", {
+								instance: theme.name,
+							})
 						}}
 					</div>
 				</div>
@@ -31,19 +26,14 @@
 					<VCheckboxBtn
 						v-model="provisioningOptions.course"
 						color="primary"
-						:label="
-							$t('components.administration.provisioningOptions.course.label')
-						"
+						:label="$t('components.administration.provisioningOptions.course.label')"
 						data-testid="checkbox-option-course"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
-							$t(
-								"components.administration.provisioningOptions.course.description",
-								{
-									instance: theme.name,
-								}
-							)
+							$t("components.administration.provisioningOptions.course.description", {
+								instance: theme.name,
+							})
 						}}
 					</div>
 				</div>
@@ -52,21 +42,14 @@
 					<VCheckboxBtn
 						v-model="provisioningOptions.others"
 						color="primary"
-						:label="
-							$t(
-								'components.administration.provisioningOptions.otherGroups.label'
-							)
-						"
+						:label="$t('components.administration.provisioningOptions.otherGroups.label')"
 						data-testid="checkbox-option-others"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
-							$t(
-								"components.administration.provisioningOptions.otherGroups.description",
-								{
-									instance: theme.name,
-								}
-							)
+							$t("components.administration.provisioningOptions.otherGroups.description", {
+								instance: theme.name,
+							})
 						}}
 					</div>
 				</div>
@@ -75,21 +58,14 @@
 					<VCheckboxBtn
 						v-model="provisioningOptions.schoolExternalTools"
 						color="primary"
-						:label="
-							$t(
-								'components.administration.provisioningOptions.schoolExternalTools.label'
-							)
-						"
+						:label="$t('components.administration.provisioningOptions.schoolExternalTools.label')"
 						data-testid="checkbox-option-school-external-tools"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
-							$t(
-								"components.administration.provisioningOptions.schoolExternalTools.description",
-								{
-									instance: theme.name,
-								}
-							)
+							$t("components.administration.provisioningOptions.schoolExternalTools.description", {
+								instance: theme.name,
+							})
 						}}
 					</div>
 				</div>
@@ -97,12 +73,7 @@
 		</VSkeletonLoader>
 
 		<v-row class="justify-end mt-10">
-			<v-btn
-				class="mr-2"
-				data-testid="provisioning-options-cancel-button"
-				variant="outlined"
-				@click="onCancel"
-			>
+			<v-btn class="mr-2" data-testid="provisioning-options-cancel-button" variant="outlined" @click="onCancel">
 				{{ t("common.actions.cancel") }}
 			</v-btn>
 
@@ -134,26 +105,16 @@
 			<template #content>
 				<span class="text-md mt-2">
 					{{
-						t(
-							"components.administration.provisioningOptions.warning.question",
-							{
-								groupTypes: newlyTurnedOffOptions
-									.map(translateProvisioningOption)
-									.join(", "),
-							}
-						)
+						t("components.administration.provisioningOptions.warning.question", {
+							groupTypes: newlyTurnedOffOptions.map(translateProvisioningOption).join(", "),
+						})
 					}}
 				</span>
 				<v-alert type="warning" class="mt-4 mb-0">
 					{{
-						t(
-							"components.administration.provisioningOptions.warning.consequence",
-							{
-								groupTypes: newlyTurnedOffOptions
-									.map(translateProvisioningOption)
-									.join(", "),
-							}
-						)
+						t("components.administration.provisioningOptions.warning.consequence", {
+							groupTypes: newlyTurnedOffOptions.map(translateProvisioningOption).join(", "),
+						})
 					}}
 				</v-alert>
 			</template>
@@ -167,16 +128,12 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import {
-	ProvisioningOptions,
-	ProvisioningOptionsEnum,
-	useProvisioningOptionsState,
-} from "@data-provisioning-options";
+import { useEnvConfig } from "@data-env";
+import { ProvisioningOptions, ProvisioningOptionsEnum, useProvisioningOptionsState } from "@data-provisioning-options";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useEnvConfig } from "@data-env";
 
 type Props = {
 	systemId: string;
@@ -192,19 +149,12 @@ const provisioningOptionTranslations = {
 };
 
 const { t } = useI18n();
-const {
-	fetchProvisioningOptionsData,
-	updateProvisioningOptionsData,
-	provisioningOptionsData,
-	isLoading,
-	error,
-} = useProvisioningOptionsState();
+const { fetchProvisioningOptionsData, updateProvisioningOptionsData, provisioningOptionsData, isLoading, error } =
+	useProvisioningOptionsState();
 const router = useRouter();
 const theme = injectStrict(THEME_KEY);
 
-const pageTitle = buildPageTitle(
-	t("components.administration.provisioningOptions.page.title")
-);
+const pageTitle = buildPageTitle(t("components.administration.provisioningOptions.page.title"));
 useTitle(pageTitle);
 
 const schoolSettingsPage: Breadcrumb = {
@@ -223,38 +173,26 @@ const breadcrumbs: Breadcrumb[] = [
 	},
 ];
 
-const provisioningOptions: ComputedRef<ProvisioningOptions> = computed(
-	() => provisioningOptionsData.value
-);
+const provisioningOptions: ComputedRef<ProvisioningOptions> = computed(() => provisioningOptionsData.value);
 
 const initialProvisioningOptions: Ref<ProvisioningOptions> = ref({
 	...provisioningOptionsData.value,
 });
 
-const isMediaLicensingEnabled =
-	useEnvConfig().value.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED;
+const isMediaLicensingEnabled = useEnvConfig().value.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED;
 
-const wasOptionTurnedOff = (
-	provisioningOption: ProvisioningOptionsEnum
-): boolean => {
+const wasOptionTurnedOff = (provisioningOption: ProvisioningOptionsEnum): boolean => {
 	const wasTurnedOff =
-		initialProvisioningOptions.value[provisioningOption] &&
-		!provisioningOptions.value[provisioningOption];
+		initialProvisioningOptions.value[provisioningOption] && !provisioningOptions.value[provisioningOption];
 
 	return wasTurnedOff;
 };
 
-const newlyTurnedOffOptions: ComputedRef<ProvisioningOptionsEnum[]> = computed(
-	() => {
-		const options: ProvisioningOptionsEnum[] = Object.values(
-			ProvisioningOptionsEnum
-		);
+const newlyTurnedOffOptions: ComputedRef<ProvisioningOptionsEnum[]> = computed(() => {
+	const options: ProvisioningOptionsEnum[] = Object.values(ProvisioningOptionsEnum);
 
-		return options.filter((option: ProvisioningOptionsEnum): boolean =>
-			wasOptionTurnedOff(option)
-		);
-	}
-);
+	return options.filter((option: ProvisioningOptionsEnum): boolean => wasOptionTurnedOff(option));
+});
 
 const translateProvisioningOption = (option: ProvisioningOptionsEnum) => {
 	if (option === ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS) {
@@ -276,8 +214,7 @@ const onSaveButtonClick = async () => {
 	if (newlyTurnedOffOptions.value.length) {
 		if (
 			newlyTurnedOffOptions.value.length === 1 &&
-			newlyTurnedOffOptions.value[0] ===
-				ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS
+			newlyTurnedOffOptions.value[0] === ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS
 		) {
 			await saveOptions();
 		}
@@ -289,10 +226,7 @@ const onSaveButtonClick = async () => {
 };
 
 const saveOptions = async () => {
-	await updateProvisioningOptionsData(
-		props.systemId,
-		provisioningOptions.value
-	);
+	await updateProvisioningOptionsData(props.systemId, provisioningOptions.value);
 
 	if (!error.value) {
 		await redirectToAdminPage();

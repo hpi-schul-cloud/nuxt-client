@@ -1,18 +1,12 @@
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import {
-	ExternalToolMediumResponse,
-	ExternalToolMediumStatus,
-} from "@/serverApi/v3";
+import ExternalToolMediumDetails from "./ExternalToolMediumDetails.vue";
+import { ExternalToolMediumResponse, ExternalToolMediumStatus } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VIcon, VTextField } from "vuetify/components";
-import ExternalToolMediumDetails from "./ExternalToolMediumDetails.vue";
 
 describe("ExternalToolMediumDetails", () => {
 	const getWrapper = (selectedTemplateMedium: ExternalToolMediumResponse) => {
@@ -74,9 +68,7 @@ describe("ExternalToolMediumDetails", () => {
 					mediaSourceId: "media-source-id",
 				});
 
-				const mediumIdText = wrapper.findComponent<typeof VTextField>(
-					'[data-testid="medium-details-medium-id"]'
-				);
+				const mediumIdText = wrapper.findComponent<typeof VTextField>('[data-testid="medium-details-medium-id"]');
 
 				expect(mediumIdText.exists()).toBe(false);
 			});
@@ -90,9 +82,7 @@ describe("ExternalToolMediumDetails", () => {
 					mediaSourceId: "media-source-id",
 				});
 
-				const mediumIdText = wrapper.findComponent<typeof VTextField>(
-					'[data-testid="medium-details-medium-id"]'
-				);
+				const mediumIdText = wrapper.findComponent<typeof VTextField>('[data-testid="medium-details-medium-id"]');
 
 				expect(mediumIdText.isVisible()).toBe(true);
 				expect(mediumIdText.props().modelValue).toEqual("medium-id");
@@ -123,9 +113,7 @@ describe("ExternalToolMediumDetails", () => {
 				it("should copy the medium id to the clipboard", async () => {
 					const { wrapper, clipboardWriteTextMock, mediumId } = setup();
 
-					const copyIcon = wrapper
-						.findComponent('[data-testid="medium-details-medium-id"]')
-						.findComponent(VIcon);
+					const copyIcon = wrapper.findComponent('[data-testid="medium-details-medium-id"]').findComponent(VIcon);
 
 					await copyIcon.trigger("click");
 					await nextTick();
@@ -136,9 +124,7 @@ describe("ExternalToolMediumDetails", () => {
 				it("should show a success notification", async () => {
 					const { wrapper, notifierModule } = setup();
 
-					const copyIcon = wrapper
-						.findComponent('[data-testid="medium-details-medium-id"]')
-						.findComponent(VIcon);
+					const copyIcon = wrapper.findComponent('[data-testid="medium-details-medium-id"]').findComponent(VIcon);
 
 					await copyIcon.trigger("click");
 					await nextTick();
@@ -173,9 +159,7 @@ describe("ExternalToolMediumDetails", () => {
 				it("should show a error notification", async () => {
 					const { wrapper, notifierModule } = setup();
 
-					const copyIcon = wrapper
-						.findComponent('[data-testid="medium-details-medium-id"]')
-						.findComponent(VIcon);
+					const copyIcon = wrapper.findComponent('[data-testid="medium-details-medium-id"]').findComponent(VIcon);
 
 					await copyIcon.trigger("click");
 					await nextTick();
@@ -197,9 +181,7 @@ describe("ExternalToolMediumDetails", () => {
 					mediaSourceId: "media-source-id-1",
 				});
 
-				const sourceIdText = wrapper.findComponent<typeof VTextField>(
-					'[data-testid="medium-details-media-source-id"]'
-				);
+				const sourceIdText = wrapper.findComponent<typeof VTextField>('[data-testid="medium-details-media-source-id"]');
 
 				expect(sourceIdText.isVisible()).toBe(true);
 				expect(sourceIdText.props().modelValue).toEqual("media-source-id-1");
@@ -214,9 +196,7 @@ describe("ExternalToolMediumDetails", () => {
 					mediaSourceId: "media-source-id-2",
 				});
 
-				const sourceIdText = wrapper.findComponent<typeof VTextField>(
-					'[data-testid="medium-details-media-source-id"]'
-				);
+				const sourceIdText = wrapper.findComponent<typeof VTextField>('[data-testid="medium-details-media-source-id"]');
 
 				expect(sourceIdText.isVisible()).toBe(true);
 				expect(sourceIdText.props().modelValue).toEqual("media-source-id-2");
@@ -252,9 +232,7 @@ describe("ExternalToolMediumDetails", () => {
 				it("should copy the media source id to the clipboard", async () => {
 					const { wrapper, clipboardWriteTextMock, mediaSourceId } = setup();
 
-					const copyIcon = wrapper
-						.findComponent('[data-testid="medium-details-media-source-id"]')
-						.findComponent(VIcon);
+					const copyIcon = wrapper.findComponent('[data-testid="medium-details-media-source-id"]').findComponent(VIcon);
 
 					await copyIcon.trigger("click");
 					await nextTick();
@@ -265,9 +243,7 @@ describe("ExternalToolMediumDetails", () => {
 				it("should show a success notification", async () => {
 					const { wrapper, notifierModule } = setup();
 
-					const copyIcon = wrapper
-						.findComponent('[data-testid="medium-details-media-source-id"]')
-						.findComponent(VIcon);
+					const copyIcon = wrapper.findComponent('[data-testid="medium-details-media-source-id"]').findComponent(VIcon);
 
 					await copyIcon.trigger("click");
 					await nextTick();
@@ -302,9 +278,7 @@ describe("ExternalToolMediumDetails", () => {
 				it("should show a error notification", async () => {
 					const { wrapper, notifierModule } = setup();
 
-					const copyIcon = wrapper
-						.findComponent('[data-testid="medium-details-media-source-id"]')
-						.findComponent(VIcon);
+					const copyIcon = wrapper.findComponent('[data-testid="medium-details-media-source-id"]').findComponent(VIcon);
 
 					await copyIcon.trigger("click");
 					await nextTick();

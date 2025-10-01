@@ -1,11 +1,8 @@
+import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";
 import * as serverApi from "@/serverApi/v3/api";
 import { MediaSchoolLicenseListResponse } from "@/serverApi/v3/api";
-import {
-	mediaSchoolLicenseResponseFactory,
-	mockApiResponse,
-} from "@@/tests/test-utils";
+import { mediaSchoolLicenseResponseFactory, mockApiResponse } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";
 
 describe("useSchoolLicenseApi", () => {
 	let schoolLicenseApi: DeepMocked<serverApi.SchoolLicenseApiInterface>;
@@ -13,9 +10,7 @@ describe("useSchoolLicenseApi", () => {
 	beforeEach(() => {
 		schoolLicenseApi = createMock<serverApi.SchoolLicenseApiInterface>();
 
-		vi.spyOn(serverApi, "SchoolLicenseApiFactory").mockReturnValue(
-			schoolLicenseApi
-		);
+		vi.spyOn(serverApi, "SchoolLicenseApiFactory").mockReturnValue(schoolLicenseApi);
 	});
 
 	afterEach(() => {
@@ -26,9 +21,7 @@ describe("useSchoolLicenseApi", () => {
 		it("should call the api", async () => {
 			await useSchoolLicenseApi().updateSchoolLicenses();
 
-			expect(
-				schoolLicenseApi.schoolLicenseControllerUpdateMediaSchoolLicenses
-			).toHaveBeenCalled();
+			expect(schoolLicenseApi.schoolLicenseControllerUpdateMediaSchoolLicenses).toHaveBeenCalled();
 		});
 	});
 
@@ -51,16 +44,13 @@ describe("useSchoolLicenseApi", () => {
 
 			await useSchoolLicenseApi().getMediaSchoolLicensesForSchool();
 
-			expect(
-				schoolLicenseApi.schoolLicenseControllerGetMediaSchoolLicensesForSchool
-			).toHaveBeenCalled();
+			expect(schoolLicenseApi.schoolLicenseControllerGetMediaSchoolLicensesForSchool).toHaveBeenCalled();
 		});
 
 		it("should return licenses", async () => {
 			const { licenseList } = setup();
 
-			const result =
-				await useSchoolLicenseApi().getMediaSchoolLicensesForSchool();
+			const result = await useSchoolLicenseApi().getMediaSchoolLicensesForSchool();
 
 			expect(result).toEqual(licenseList);
 		});

@@ -1,10 +1,10 @@
+import { useErrorNotification } from "./error-notification.composable";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { nextTick, ref } from "vue";
-import { useErrorNotification } from "./error-notification.composable";
 
 describe("useErrorNotification.composable", () => {
 	afterEach(() => {

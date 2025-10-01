@@ -1,25 +1,16 @@
+import ImageDisplay from "./ImageDisplay.vue";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import {
-	LightBoxContentType,
-	LightBoxOptions,
-	useLightBox,
-} from "@ui-light-box";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { LightBoxContentType, LightBoxOptions, useLightBox } from "@ui-light-box";
 import { mount } from "@vue/test-utils";
 import { ref } from "vue";
-import ImageDisplay from "./ImageDisplay.vue";
 
 vi.mock("@ui-light-box");
 vi.mock("@/utils/fileHelper");
 
 const mockedUseLightBox = vi.mocked(useLightBox);
-const mockedConvertDownloadToPreviewUrl = vi.mocked(
-	convertDownloadToPreviewUrl
-);
+const mockedConvertDownloadToPreviewUrl = vi.mocked(convertDownloadToPreviewUrl);
 
 describe("ImageDisplay", () => {
 	const setup = (props: { isEditMode: boolean; alternativeText?: string }) => {
@@ -43,9 +34,7 @@ describe("ImageDisplay", () => {
 			lightBoxOptions: ref(),
 		});
 
-		mockedConvertDownloadToPreviewUrl.mockImplementation(
-			(downloadUrl) => downloadUrl
-		);
+		mockedConvertDownloadToPreviewUrl.mockImplementation((downloadUrl) => downloadUrl);
 
 		const wrapper = mount(ImageDisplay, {
 			props: propsData,
@@ -83,9 +72,7 @@ describe("ImageDisplay", () => {
 			expect(image.exists()).toBe(true);
 			expect(image.attributes("cover")).toBe("false");
 			expect(image.attributes("src")).toBe(previewSrc);
-			expect(image.attributes("alt")).toBe(
-				"components.cardElement.fileElement.emptyAlt " + nameProp
-			);
+			expect(image.attributes("alt")).toBe("components.cardElement.fileElement.emptyAlt " + nameProp);
 			expect(image.attributes("maxheight")).toBe("336");
 		});
 
@@ -109,9 +96,7 @@ describe("ImageDisplay", () => {
 
 				const alt = wrapper.find(imageSelektor).attributes("alt");
 
-				expect(alt).toBe(
-					"components.cardElement.fileElement.emptyAlt " + nameProp
-				);
+				expect(alt).toBe("components.cardElement.fileElement.emptyAlt " + nameProp);
 			});
 		});
 
@@ -140,30 +125,27 @@ describe("ImageDisplay", () => {
 		});
 
 		describe("when div emits keydown", () => {
-			it.each(["space", "enter"])(
-				"should call open function when pressing %s",
-				async (key) => {
-					const alternativeText = "alternative text";
-					const { wrapper, src, nameProp, open } = setup({
-						isEditMode: false,
-						alternativeText,
-					});
-					const options: LightBoxOptions = {
-						type: LightBoxContentType.IMAGE,
-						downloadUrl: src,
-						previewUrl: src,
-						alt: alternativeText,
-						name: nameProp,
-					};
+			it.each(["space", "enter"])("should call open function when pressing %s", async (key) => {
+				const alternativeText = "alternative text";
+				const { wrapper, src, nameProp, open } = setup({
+					isEditMode: false,
+					alternativeText,
+				});
+				const options: LightBoxOptions = {
+					type: LightBoxContentType.IMAGE,
+					downloadUrl: src,
+					previewUrl: src,
+					alt: alternativeText,
+					name: nameProp,
+				};
 
-					const image = wrapper.find(imageSelektor);
-					expect(image.exists()).toBe(true);
-					image.trigger(`keydown.${key}`);
+				const image = wrapper.find(imageSelektor);
+				expect(image.exists()).toBe(true);
+				image.trigger(`keydown.${key}`);
 
-					expect(open).toHaveBeenCalledTimes(1);
-					expect(open).toHaveBeenCalledWith(options);
-				}
-			);
+				expect(open).toHaveBeenCalledTimes(1);
+				expect(open).toHaveBeenCalledWith(options);
+			});
 		});
 	});
 
@@ -205,9 +187,7 @@ describe("ImageDisplay", () => {
 
 				const alt = wrapper.find(imageSelektor).attributes("alt");
 
-				expect(alt).toBe(
-					"components.cardElement.fileElement.emptyAlt " + nameProp
-				);
+				expect(alt).toBe("components.cardElement.fileElement.emptyAlt " + nameProp);
 			});
 		});
 	});

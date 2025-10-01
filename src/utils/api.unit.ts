@@ -1,8 +1,8 @@
+import { $axios, initializeAxios, mapAxiosErrorToResponseError } from "./api";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
-import axios, { isAxiosError } from "axios";
-import { $axios, initializeAxios, mapAxiosErrorToResponseError } from "./api";
 import { mount } from "@vue/test-utils";
+import axios, { isAxiosError } from "axios";
 
 vi.mock("axios");
 const mockedIsAxiosError = vi.mocked(isAxiosError);

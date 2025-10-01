@@ -1,13 +1,10 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomInvitationLink, useRoomInvitationLinkStore } from "@data-room";
 import { Invitations } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { useRoomInvitationLinkStore, RoomInvitationLink } from "@data-room";
 import { nextTick } from "vue";
 
 vi.mock("@util-board/BoardNotifier.composable");
@@ -43,9 +40,7 @@ describe("Invitations", () => {
 			},
 		});
 
-		const roomInvitationLinkStore = mockedPiniaStoreTyping(
-			useRoomInvitationLinkStore
-		);
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(useRoomInvitationLinkStore);
 
 		return { wrapper, roomInvitationLinkStore };
 	};
@@ -60,9 +55,7 @@ describe("Invitations", () => {
 		const { wrapper } = setup();
 		const infoText = wrapper.get("[data-testid=info-text]");
 
-		expect(infoText.text()).toBe(
-			"pages.rooms.members.tab.invitations.infoText"
-		);
+		expect(infoText.text()).toBe("pages.rooms.members.tab.invitations.infoText");
 	});
 
 	it("should fetch links onMount life cycle", async () => {

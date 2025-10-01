@@ -8,20 +8,14 @@
 			@click.stop="onContentClick"
 		>
 			<template #display>
-				<InfoAlert
-					v-if="shouldShowNoFeatureAlert"
-					data-testid="vc-info-box-no-feature"
-				>
+				<InfoAlert v-if="shouldShowNoFeatureAlert" data-testid="vc-info-box-no-feature">
 					{{ notEnabledMessage }}
 				</InfoAlert>
 
 				<InfoAlert v-if="shouldShowInfoAlert" data-testid="vc-info-box-show">
 					{{ alertMessage }}
 				</InfoAlert>
-				<InfoAlert
-					v-if="shouldShowNoPermissionAlert"
-					data-testid="vc-info-box-no-permission"
-				>
+				<InfoAlert v-if="shouldShowNoPermissionAlert" data-testid="vc-info-box-no-permission">
 					{{ noPermissionMessage }}
 				</InfoAlert>
 				<VImg :src="imageSrc" alt="" cover />
@@ -45,15 +39,15 @@
 
 <script setup lang="ts">
 import image from "@/assets/img/videoConference.svg";
-import { computed, PropType, ref } from "vue";
-import { mdiVideoOutline } from "@icons/material";
-import { ContentElementBar } from "@ui-board";
-import { injectStrict } from "@/utils/inject";
-import { useDisplay } from "vuetify";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { useI18n } from "vue-i18n";
 import { BoardContextType } from "@/types/board/BoardContext";
+import { injectStrict } from "@/utils/inject";
+import { mdiVideoOutline } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
+import { ContentElementBar } from "@ui-board";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { computed, PropType, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 
 const emit = defineEmits(["click", "refresh"]);
 
@@ -93,17 +87,11 @@ const { t } = useI18n();
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = computed(
-	() => smAndUp.value && isListLayout.value
-);
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
 
-const shouldShowNoFeatureAlert = computed(
-	() => props.canStart && !props.isVideoConferenceEnabled
-);
+const shouldShowNoFeatureAlert = computed(() => props.canStart && !props.isVideoConferenceEnabled);
 const shouldShowInfoAlert = computed(() => !props.isRunning && !props.canStart);
-const shouldShowNoPermissionAlert = computed(
-	() => props.isRunning && !props.hasParticipationPermission
-);
+const shouldShowNoPermissionAlert = computed(() => props.isRunning && !props.hasParticipationPermission);
 
 const alertMessage = computed(() => {
 	if (props.isVideoConferenceEnabled) {
@@ -132,8 +120,7 @@ const notEnabledMessage = computed(() => {
 });
 
 const onContentClick = () => {
-	if (!props.isVideoConferenceEnabled || !props.hasParticipationPermission)
-		return;
+	if (!props.isVideoConferenceEnabled || !props.hasParticipationPermission) return;
 
 	if (!props.isRunning && props.hasParticipationPermission && !props.canStart) {
 		emit("refresh");

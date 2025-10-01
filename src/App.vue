@@ -7,12 +7,12 @@
 </template>
 
 <script setup lang="ts">
-import { Layouts } from "@/layouts/types";
-import { computed } from "vue";
-import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
-import { useRoute } from "vue-router";
 import { availableLayouts, isLayout } from "./layouts";
 import { setComputedScrollbarWidthAsCssVar } from "./utils/scrollbarWidth";
+import { Layouts } from "@/layouts/types";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const route = useRoute();

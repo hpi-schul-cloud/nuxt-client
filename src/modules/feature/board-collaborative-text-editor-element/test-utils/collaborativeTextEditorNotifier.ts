@@ -7,11 +7,7 @@ interface Props {
 }
 
 export const setupCollaborativeTextEditorNotifier = (props: Props = {}) => {
-	const {
-		showForbiddenErrorMock,
-		showUnauthorizedErrorMock,
-		showInternalServerErrorMock,
-	} = props;
+	const { showForbiddenErrorMock, showUnauthorizedErrorMock, showInternalServerErrorMock } = props;
 
 	const mockedSelectedFile = vi.mocked(useCollaborativeTextEditorNotifier);
 

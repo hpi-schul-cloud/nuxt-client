@@ -1,16 +1,12 @@
+import AuthModule from "./auth";
 import * as serverApi from "@/serverApi/v3/api";
 import { LanguageType } from "@/serverApi/v3/api";
 import { initializeAxios } from "@/utils/api";
-import {
-	createTestEnvStore,
-	meResponseFactory,
-	mockApiResponse,
-} from "@@/tests/test-utils";
+import { createTestEnvStore, meResponseFactory, mockApiResponse } from "@@/tests/test-utils";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosError, AxiosInstance } from "axios";
-import AuthModule from "./auth";
 import { beforeAll, MockInstance } from "vitest";
-import setupStores from "@@/tests/test-utils/setupStores";
 
 vi.useFakeTimers();
 
@@ -124,12 +120,8 @@ describe("auth store module", () => {
 
 				authModule.resetBusinessError();
 
-				expect(authModule.businessError.statusCode).toBe(
-					defaultBusinessErrorMock.statusCode
-				);
-				expect(authModule.businessError.message).toBe(
-					defaultBusinessErrorMock.message
-				);
+				expect(authModule.businessError.statusCode).toBe(defaultBusinessErrorMock.statusCode);
+				expect(authModule.businessError.message).toBe(defaultBusinessErrorMock.message);
 			});
 		});
 	});
@@ -204,9 +196,7 @@ describe("auth store module", () => {
 				});
 				authModule.setMe(mockMe);
 
-				expect(authModule.getUserPermissions).toStrictEqual([
-					"test-permission",
-				]);
+				expect(authModule.getUserPermissions).toStrictEqual(["test-permission"]);
 			});
 		});
 
@@ -250,18 +240,13 @@ describe("auth store module", () => {
 					user: { id: "test-id" },
 					language: languageMock,
 				});
-				meApi.meControllerMe.mockResolvedValueOnce(
-					mockApiResponse({ data: mockMe })
-				);
+				meApi.meControllerMe.mockResolvedValueOnce(mockApiResponse({ data: mockMe }));
 				const authModule = new AuthModule({});
 
 				await authModule.login();
 
 				expect(authModule.getLocale).toStrictEqual(languageMock);
-				expect(authModule.getUserPermissions).toStrictEqual([
-					"addons_enabled",
-					"teams_enabled",
-				]);
+				expect(authModule.getUserPermissions).toStrictEqual(["addons_enabled", "teams_enabled"]);
 				expect(authModule.getUser?.id).toStrictEqual("test-id");
 			});
 		});
@@ -277,9 +262,7 @@ describe("auth store module", () => {
 						data: { successful: true },
 					}),
 				};
-				vi.spyOn(serverApi, "UserApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.UserApiInterface
-				);
+				vi.spyOn(serverApi, "UserApiFactory").mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
 				const authModule = new AuthModule({});
 
 				authModule.updateUserLanguage(LanguageType.De);
@@ -293,9 +276,7 @@ describe("auth store module", () => {
 						throw new AxiosError("I'm an error");
 					}),
 				};
-				vi.spyOn(serverApi, "UserApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.UserApiInterface
-				);
+				vi.spyOn(serverApi, "UserApiFactory").mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
 				const authModule = new AuthModule({});
 
 				authModule.updateUserLanguage(LanguageType.De);

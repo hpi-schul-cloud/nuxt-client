@@ -1,14 +1,11 @@
+import LanguageMenu from "./LanguageMenu.vue";
 import { LanguageType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
-import LanguageMenu from "./LanguageMenu.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("@ui-layout/LanguageMenu", () => {
 	const setup = (attrs = {}) => {
@@ -44,9 +41,7 @@ describe("@ui-layout/LanguageMenu", () => {
 		it("should render the selected language item", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.find("[data-testid=selected-language-de]").exists()).toBe(
-				true
-			);
+			expect(wrapper.find("[data-testid=selected-language-de]").exists()).toBe(true);
 		});
 
 		it("should render the available language items", async () => {
@@ -55,9 +50,7 @@ describe("@ui-layout/LanguageMenu", () => {
 			const selectedItem = wrapper.find('[data-testid="selected-language-de"]');
 			await selectedItem.trigger("click");
 
-			expect(
-				wrapper.findAll('[data-testid="available-language-en"]')
-			).toHaveLength(1);
+			expect(wrapper.findAll('[data-testid="available-language-en"]')).toHaveLength(1);
 		});
 
 		it("should update the user's language", async () => {
@@ -65,9 +58,7 @@ describe("@ui-layout/LanguageMenu", () => {
 
 			const selectedItem = wrapper.find('[data-testid="selected-language-de"]');
 			await selectedItem.trigger("click");
-			const availableItem = wrapper.find(
-				'[data-testid="available-language-en"]'
-			);
+			const availableItem = wrapper.find('[data-testid="available-language-en"]');
 			await availableItem.trigger("click");
 
 			expect(authModuleMock.updateUserLanguage).toHaveBeenCalledWith("en");

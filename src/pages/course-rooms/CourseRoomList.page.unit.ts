@@ -1,46 +1,38 @@
-import { courseRoomListModule } from "@/store";
-import { mount } from "@vue/test-utils";
 import CourseRoomList from "./CourseRoomList.page.vue";
-import setupStores from "@@/tests/test-utils/setupStores";
-import CourseRoomListModule from "@/store/course-room-list";
+import { CourseMetadataResponse } from "@/serverApi/v3";
+import { courseRoomListModule } from "@/store";
 import AuthModule from "@/store/auth";
-import {
-	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	COURSE_ROOM_LIST_MODULE_KEY,
-} from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
+import CourseRoomListModule from "@/store/course-room-list";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import { nextTick } from "vue";
 import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
-import { CourseMetadataResponse } from "@/serverApi/v3";
+	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
+	COURSE_ROOM_LIST_MODULE_KEY,
+	LOADING_STATE_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
+import { nextTick } from "vue";
 
 vi.mock("vue-router");
 
-const getWrapper = () => {
-	return mount(CourseRoomList, {
+const getWrapper = () =>
+	mount(CourseRoomList, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				[LOADING_STATE_MODULE_KEY.valueOf()]:
-					createModuleMocks(LoadingStateModule),
+				[LOADING_STATE_MODULE_KEY.valueOf()]: createModuleMocks(LoadingStateModule),
 				[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]:
-					createModuleMocks(CourseRoomListModule),
-				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
-					CommonCartridgeImportModule
-				),
+				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: createModuleMocks(CourseRoomListModule),
+				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(CommonCartridgeImportModule),
 			},
 		},
 	});
-};
 
 const mockData: CourseMetadataResponse[] = [
 	{

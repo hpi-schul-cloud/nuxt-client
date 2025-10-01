@@ -1,13 +1,12 @@
+import H5pElement from "./H5pElement.vue";
+import H5pElementMenu from "./H5pElementMenu.vue";
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
+import { H5pElementResponse } from "@/serverApi/v3";
+import NotifierModule from "@/store/notifier";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { h5pElementResponseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { H5PContentParentType } from "@/h5pEditorApi/v3";
-import NotifierModule from "@/store/notifier";
-import { H5pElementResponse } from "@/serverApi/v3";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -18,23 +17,18 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { RouteLocationResolved, useRouter } from "vue-router";
 import { VImg } from "vuetify/components";
-import H5pElement from "./H5pElement.vue";
-import H5pElementMenu from "./H5pElementMenu.vue";
 
 vi.mock("@data-board");
 vi.mock("@data-h5p");
 vi.mock("vue-router");
 
 describe("H5pElement", () => {
-	let useBoardFocusHandlerMock: DeepMocked<
-		ReturnType<typeof useBoardFocusHandler>
-	>;
+	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
 	let useRouterMock: DeepMocked<ReturnType<typeof useRouter>>;
 	let useH5PEditorMock: DeepMocked<ReturnType<typeof useH5PEditorApi>>;
 
 	beforeEach(() => {
-		useBoardFocusHandlerMock =
-			createMock<ReturnType<typeof useBoardFocusHandler>>();
+		useBoardFocusHandlerMock = createMock<ReturnType<typeof useBoardFocusHandler>>();
 		useRouterMock = createMock<ReturnType<typeof useRouter>>();
 
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
@@ -53,9 +47,7 @@ describe("H5pElement", () => {
 	}) => {
 		useH5PEditorMock = createMock<ReturnType<typeof useH5PEditorApi>>();
 		vi.mocked(useH5PEditorApi).mockReturnValue(useH5PEditorMock);
-		useH5PEditorMock.getContentTitle.mockResolvedValueOnce(
-			propsData.contentTitle
-		);
+		useH5PEditorMock.getContentTitle.mockResolvedValueOnce(propsData.contentTitle);
 
 		const wrapper = mount(H5pElement, {
 			global: {
@@ -168,17 +160,14 @@ describe("H5pElement", () => {
 				};
 			};
 
-			it.each(["up", "down"])(
-				"should emit 'move-keyboard:edit' when arrow key %s is pressed",
-				async (key) => {
-					const { wrapper } = setup();
+			it.each(["up", "down"])("should emit 'move-keyboard:edit' when arrow key %s is pressed", async (key) => {
+				const { wrapper } = setup();
 
-					const card = wrapper.getComponent({ ref: "elementCard" });
-					await card.trigger(`keydown.${key}`);
+				const card = wrapper.getComponent({ ref: "elementCard" });
+				await card.trigger(`keydown.${key}`);
 
-					expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
-				}
-			);
+				expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
+			});
 		});
 	});
 
@@ -434,13 +423,9 @@ describe("H5pElement", () => {
 				await nextTick();
 				await nextTick();
 
-				const titleLine = wrapper
-					.getComponent(ContentElementBar)
-					.getComponent(LineClamp);
+				const titleLine = wrapper.getComponent(ContentElementBar).getComponent(LineClamp);
 
-				expect(titleLine.text()).toBe(
-					"components.cardElement.h5pElement.create"
-				);
+				expect(titleLine.text()).toBe("components.cardElement.h5pElement.create");
 			});
 		});
 
@@ -469,9 +454,7 @@ describe("H5pElement", () => {
 					await nextTick();
 					await nextTick();
 
-					const titleLine = wrapper
-						.getComponent(ContentElementBar)
-						.getComponent(LineClamp);
+					const titleLine = wrapper.getComponent(ContentElementBar).getComponent(LineClamp);
 
 					expect(titleLine.text()).toBe(contentTitle);
 				});
@@ -498,9 +481,7 @@ describe("H5pElement", () => {
 					await nextTick();
 					await nextTick();
 
-					const titleLine = wrapper
-						.getComponent(ContentElementBar)
-						.getComponent(LineClamp);
+					const titleLine = wrapper.getComponent(ContentElementBar).getComponent(LineClamp);
 
 					expect(titleLine.text()).toBe("components.cardElement.h5pElement");
 				});
@@ -539,9 +520,7 @@ describe("H5pElement", () => {
 					});
 					await nextTick();
 
-					const titleLine = wrapper
-						.getComponent(ContentElementBar)
-						.getComponent(LineClamp);
+					const titleLine = wrapper.getComponent(ContentElementBar).getComponent(LineClamp);
 
 					expect(titleLine.text()).toBe(contentTitle);
 				});
@@ -575,9 +554,7 @@ describe("H5pElement", () => {
 					});
 					await nextTick();
 
-					const titleLine = wrapper
-						.getComponent(ContentElementBar)
-						.getComponent(LineClamp);
+					const titleLine = wrapper.getComponent(ContentElementBar).getComponent(LineClamp);
 
 					expect(titleLine.text()).toBe("components.cardElement.h5pElement");
 				});
@@ -657,18 +634,14 @@ describe("H5pElement", () => {
 					({ px: windowWidth }) => {
 						const { wrapper } = setup(true, windowWidth);
 
-						expect(wrapper.find(".content-element-bar").classes()).toContain(
-							"flex-row"
-						);
+						expect(wrapper.find(".content-element-bar").classes()).toContain("flex-row");
 					}
 				);
 
 				it("content should have column style when display size is smaller than 600px", () => {
 					const { wrapper } = setup(true, 599);
 
-					expect(wrapper.find(".content-element-bar").classes()).toContain(
-						"flex-column"
-					);
+					expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
 				});
 			});
 
@@ -684,9 +657,7 @@ describe("H5pElement", () => {
 					({ px: windowWidth }) => {
 						const { wrapper } = setup(false, windowWidth);
 
-						expect(wrapper.find(".content-element-bar").classes()).toContain(
-							"flex-column"
-						);
+						expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
 					}
 				);
 			});

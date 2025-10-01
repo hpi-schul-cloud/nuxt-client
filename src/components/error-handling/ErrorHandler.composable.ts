@@ -4,25 +4,13 @@ import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
 import { useI18n } from "vue-i18n";
 
-export type ErrorType =
-	| "notCreated"
-	| "notLoaded"
-	| "notUpdated"
-	| "notDeleted"
-	| "notMoved";
+export type ErrorType = "notCreated" | "notLoaded" | "notUpdated" | "notDeleted" | "notMoved";
 
-export type BoardObjectType =
-	| "board"
-	| "boardColumn"
-	| "boardRow"
-	| "boardCard"
-	| "boardElement";
+export type BoardObjectType = "board" | "boardColumn" | "boardRow" | "boardCard" | "boardElement";
 
 type ErrorStatus = "success" | "error" | "warning" | "info";
 
-export type ApiErrorHandler = (
-	error?: ApiResponseError | ApiValidationError
-) => Promise<void> | void;
+export type ApiErrorHandler = (error?: ApiResponseError | ApiValidationError) => Promise<void> | void;
 
 export type ApiErrorHandlerFactory = (
 	errorType: ErrorType,
@@ -38,10 +26,7 @@ export const useErrorHandler = () => {
 
 	const { showCustomNotifier } = useBoardNotifier();
 
-	const generateErrorText = (
-		errorType: ErrorType,
-		boardObjectType?: BoardObjectType
-	) => {
+	const generateErrorText = (errorType: ErrorType, boardObjectType?: BoardObjectType) => {
 		let errorKey = `components.board.notifications.errors.${errorType}`;
 		if (!t(errorKey)) {
 			errorKey = "error.generic";
@@ -52,17 +37,17 @@ export const useErrorHandler = () => {
 		return t(errorKey, { type }).toString();
 	};
 
-	const notifyWithTemplate: ApiErrorHandlerFactory = (
-		errorType: ErrorType,
-		boardObjectType?: BoardObjectType,
-		status: ErrorStatus = "error",
-		timeout?: number
-	): ApiErrorHandler => {
-		return () => {
+	const notifyWithTemplate: ApiErrorHandlerFactory =
+		(
+			errorType: ErrorType,
+			boardObjectType?: BoardObjectType,
+			status: ErrorStatus = "error",
+			timeout?: number
+		): ApiErrorHandler =>
+		() => {
 			const text = generateErrorText(errorType, boardObjectType);
 			showCustomNotifier(text, status, timeout);
 		};
-	};
 
 	const defaultErrorMap: ErrorMap = {
 		404: notifyWithTemplate("notLoaded"),

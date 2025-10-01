@@ -1,3 +1,4 @@
+import TaskItemMenu from "./TaskItemMenu.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
@@ -6,18 +7,14 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import { VBtn } from "vuetify/lib/components/index";
-import TaskItemMenu from "./TaskItemMenu.vue";
 import { beforeAll } from "vitest";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { VBtn } from "vuetify/lib/components/index";
 
 const { tasksTeacher } = mocks;
 
@@ -35,8 +32,8 @@ const getWrapper = (
 		courseId?: string;
 	},
 	options = {}
-) => {
-	return mount(TaskItemMenu, {
+) =>
+	mount(TaskItemMenu, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -49,7 +46,6 @@ const getWrapper = (
 		props,
 		...options,
 	});
-};
 
 describe("@/components/molecules/TaskItemMenu", () => {
 	const defineWindowWidth = (width: number) => {
@@ -119,9 +115,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				userRole: "teacher",
 			});
 
-			expect(wrapper.vm.copyLink).toStrictEqual(
-				`/homework/${task.id}/copy?returnUrl=/tasks`
-			);
+			expect(wrapper.vm.copyLink).toStrictEqual(`/homework/${task.id}/copy?returnUrl=/tasks`);
 		});
 
 		it("should set isTeacher correctly", () => {
@@ -179,9 +173,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 
 	describe("when restoring a task", () => {
 		it("should call restoreTask of FinishedTasksModule", async () => {
-			const restoreTaskMock = vi
-				.spyOn(finishedTasksModule, "restoreTask")
-				.mockImplementation(vi.fn());
+			const restoreTaskMock = vi.spyOn(finishedTasksModule, "restoreTask").mockImplementation(vi.fn());
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,

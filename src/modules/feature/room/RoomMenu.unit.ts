@@ -1,26 +1,23 @@
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
-import { VueWrapper } from "@vue/test-utils";
 import RoomMenu from "./RoomMenu.vue";
-import { RouterLink } from "vue-router";
-import { ref } from "vue";
+import { ConfigResponse } from "@/serverApi/v3";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRoomAuthorization } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionEdit,
-	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,
 	KebabMenuActionRoomCopy,
+	KebabMenuActionRoomMembers,
 	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
-import { ConfigResponse } from "@/serverApi/v3";
+import { VueWrapper } from "@vue/test-utils";
 import { Mock } from "vitest";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { ref } from "vue";
+import { RouterLink } from "vue-router";
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
@@ -67,11 +64,7 @@ describe("@feature-room/RoomMenu", () => {
 
 		const wrapper = mount(RoomMenu, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia(),
-				],
+				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 				stubs: {
 					RouterLink,
 				},
@@ -86,12 +79,8 @@ describe("@feature-room/RoomMenu", () => {
 	const findKebabActions = (wrapper: VueWrapper) => {
 		const kebabActionDelete = wrapper.findComponent(KebabMenuActionDelete);
 		const kebabActionEdit = wrapper.findComponent(KebabMenuActionEdit);
-		const kebabActionRoomMembers = wrapper.findComponent(
-			KebabMenuActionRoomMembers
-		);
-		const kebabActionLeaveRoom = wrapper.findComponent(
-			KebabMenuActionLeaveRoom
-		);
+		const kebabActionRoomMembers = wrapper.findComponent(KebabMenuActionRoomMembers);
+		const kebabActionLeaveRoom = wrapper.findComponent(KebabMenuActionLeaveRoom);
 		const kebabActionRoomCopy = wrapper.findComponent(KebabMenuActionRoomCopy);
 		const kebabActionRoomShare = wrapper.findComponent(KebabMenuActionShare);
 
@@ -118,12 +107,8 @@ describe("@feature-room/RoomMenu", () => {
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
-			const {
-				kebabActionEdit,
-				kebabActionRoomMembers,
-				kebabActionDelete,
-				kebabActionLeaveRoom,
-			} = findKebabActions(wrapper);
+			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete, kebabActionLeaveRoom } =
+				findKebabActions(wrapper);
 
 			expect(kebabActionEdit.exists()).toBe(true);
 			expect(kebabActionRoomMembers.exists()).toBe(false);
@@ -139,12 +124,8 @@ describe("@feature-room/RoomMenu", () => {
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
-			const {
-				kebabActionEdit,
-				kebabActionRoomMembers,
-				kebabActionDelete,
-				kebabActionLeaveRoom,
-			} = findKebabActions(wrapper);
+			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete, kebabActionLeaveRoom } =
+				findKebabActions(wrapper);
 
 			expect(kebabActionDelete.exists()).toBe(true);
 			expect(kebabActionEdit.exists()).toBe(false);
@@ -161,17 +142,11 @@ describe("@feature-room/RoomMenu", () => {
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
-			const {
-				kebabActionEdit,
-				kebabActionRoomMembers,
-				kebabActionDelete,
-				kebabActionLeaveRoom,
-			} = findKebabActions(wrapper);
+			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete, kebabActionLeaveRoom } =
+				findKebabActions(wrapper);
 
 			expect(kebabActionRoomMembers.exists()).toBe(true);
-			expect(kebabActionRoomMembers.props("membersInfoText")).toBe(
-				"pages.rooms.members.view"
-			);
+			expect(kebabActionRoomMembers.props("membersInfoText")).toBe("pages.rooms.members.view");
 			expect(kebabActionEdit.exists()).toBe(false);
 			expect(kebabActionDelete.exists()).toBe(false);
 			expect(kebabActionLeaveRoom.exists()).toBe(true);
@@ -187,12 +162,8 @@ describe("@feature-room/RoomMenu", () => {
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
-			const {
-				kebabActionEdit,
-				kebabActionRoomMembers,
-				kebabActionDelete,
-				kebabActionLeaveRoom,
-			} = findKebabActions(wrapper);
+			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete, kebabActionLeaveRoom } =
+				findKebabActions(wrapper);
 
 			expect(kebabActionEdit.exists()).toBe(true);
 			expect(kebabActionRoomMembers.exists()).toBe(true);
@@ -300,9 +271,7 @@ describe("@feature-room/RoomMenu", () => {
 			const { kebabActionRoomMembers } = findKebabActions(wrapper);
 
 			expect(kebabActionRoomMembers.exists()).toBe(true);
-			expect(kebabActionRoomMembers.props("membersInfoText")).toBe(
-				"pages.rooms.members.manage"
-			);
+			expect(kebabActionRoomMembers.props("membersInfoText")).toBe("pages.rooms.members.manage");
 		});
 	});
 

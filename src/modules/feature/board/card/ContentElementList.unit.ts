@@ -1,9 +1,8 @@
+import ContentElementList from "./ContentElementList.vue";
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
@@ -16,8 +15,6 @@ import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { shallowMount } from "@vue/test-utils";
-import ContentElementList from "./ContentElementList.vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
 import { beforeAll } from "vitest";
 
 describe("ContentElementList", () => {
@@ -36,11 +33,7 @@ describe("ContentElementList", () => {
 			});
 		});
 
-		const setup = (props: {
-			elements: AnyContentElement[];
-			isEditMode: boolean;
-			isDetailView: boolean;
-		}) => {
+		const setup = (props: { elements: AnyContentElement[]; isEditMode: boolean; isDetailView: boolean }) => {
 			document.body.setAttribute("data-app", "true");
 
 			const wrapper = shallowMount(ContentElementList, {
@@ -110,17 +103,14 @@ describe("ContentElementList", () => {
 				},
 			];
 
-			it.each(elementComponents)(
-				"should render $elementType-elements",
-				({ elementType, component }) => {
-					const { wrapper } = setup({
-						elements: [{ type: elementType } as AnyContentElement],
-						isEditMode: false,
-						isDetailView: false,
-					});
-					expect(wrapper.findComponent(component).exists()).toBe(true);
-				}
-			);
+			it.each(elementComponents)("should render $elementType-elements", ({ elementType, component }) => {
+				const { wrapper } = setup({
+					elements: [{ type: elementType } as AnyContentElement],
+					isEditMode: false,
+					isDetailView: false,
+				});
+				expect(wrapper.findComponent(component).exists()).toBe(true);
+			});
 
 			it.each(elementComponents)(
 				"should propagate isEditMode to children of $elementType-elements",
@@ -153,11 +143,7 @@ describe("ContentElementList", () => {
 			});
 		});
 
-		const setup = (props: {
-			elements: AnyContentElement[];
-			isEditMode: boolean;
-			isDetailView: boolean;
-		}) => {
+		const setup = (props: { elements: AnyContentElement[]; isEditMode: boolean; isDetailView: boolean }) => {
 			document.body.setAttribute("data-app", "true");
 
 			const wrapper = shallowMount(ContentElementList, {
@@ -172,9 +158,7 @@ describe("ContentElementList", () => {
 
 		it("should not render FolderContentElement", () => {
 			const { wrapper } = setup({
-				elements: [
-					{ type: ContentElementType.FileFolder } as AnyContentElement,
-				],
+				elements: [{ type: ContentElementType.FileFolder } as AnyContentElement],
 				isEditMode: false,
 				isDetailView: false,
 			});

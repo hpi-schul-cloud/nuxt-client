@@ -1,24 +1,21 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { RoomEditPage } from "@page-room";
-import { useRoute, useRouter } from "vue-router";
-import { RoomUpdateParams, RoomColor } from "@/types/room/Room";
-import { RoomForm } from "@feature-room";
-import { nextTick, ref } from "vue";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { Mock } from "vitest";
-import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { createTestingPinia } from "@pinia/testing";
-import { mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { ApplicationError } from "@/store/types/application-error";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import NotifierModule from "@/store/notifier";
+import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { RoomColor, RoomUpdateParams } from "@/types/room/Room";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
+import { RoomForm } from "@feature-room";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { RoomEditPage } from "@page-room";
+import { createTestingPinia } from "@pinia/testing";
+import { Mock } from "vitest";
+import { nextTick, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 vi.mock("vue-router");
 const useRouteMock = useRoute as Mock;
@@ -90,8 +87,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			},
 		});
 
-		const { isLoading, updateRoom, fetchRoom } =
-			mockedPiniaStoreTyping(useRoomDetailsStore);
+		const { isLoading, updateRoom, fetchRoom } = mockedPiniaStoreTyping(useRoomDetailsStore);
 
 		return {
 			wrapper,
@@ -188,11 +184,8 @@ describe("@pages/RoomEdit.page.vue", () => {
 				const defaultWireframe = wrapper.findComponent({
 					name: "DefaultWireframe",
 				});
-				const breadcrumbsProp: Breadcrumb[] =
-					defaultWireframe.props().breadcrumbs;
-				const breadcrumb = breadcrumbsProp.find(
-					(breadcrumb: Breadcrumb) => breadcrumb.title === room?.name
-				);
+				const breadcrumbsProp: Breadcrumb[] = defaultWireframe.props().breadcrumbs;
+				const breadcrumb = breadcrumbsProp.find((breadcrumb: Breadcrumb) => breadcrumb.title === room?.name);
 
 				expect(breadcrumb?.to).toContain(roomId);
 			});
@@ -250,9 +243,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 						(wrapper.vm as unknown as typeof RoomEditPage).onSave({
 							room: roomParams,
 						})
-					).rejects.toThrow(
-						new ApplicationError(HttpStatusCode.Unauthorized, "error.401")
-					);
+					).rejects.toThrow(new ApplicationError(HttpStatusCode.Unauthorized, "error.401"));
 				});
 			});
 

@@ -1,9 +1,7 @@
-import {
-	FileApiFactory,
-	FileApiInterface,
-	WopiApiFactory,
-	WopiApiInterface,
-} from "@/fileStorageApi/v3";
+import { useFileRecordsStore } from "./FileRecords.state";
+import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
+import { useParentStatisticsStore } from "./ParentStatistics.state";
+import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
 import {
 	EditorMode,
@@ -14,9 +12,6 @@ import {
 	StorageLocation,
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { useFileRecordsStore } from "./FileRecords.state";
-import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
-import { useParentStatisticsStore } from "./ParentStatistics.state";
 
 export enum ErrorType {
 	FILE_IS_BLOCKED = "FILE_IS_BLOCKED",
@@ -42,24 +37,14 @@ export const useFileStorageApi = () => {
 		showFileExistsError,
 	} = useFileStorageNotifier();
 
-	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords } =
-		useFileRecordsStore();
+	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords } = useFileRecordsStore();
 
-	const { getStatisticByParentId, setStatisticForParent } =
-		useParentStatisticsStore();
+	const { getStatisticByParentId, setStatisticForParent } = useParentStatisticsStore();
 
-	const fetchFiles = async (
-		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+	const fetchFiles = async (parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
 			const schoolId = authModule.getSchool?.id as string;
-			const response = await fileApi.list(
-				schoolId,
-				StorageLocation.SCHOOL,
-				parentId,
-				parentType
-			);
+			const response = await fileApi.list(schoolId, StorageLocation.SCHOOL, parentId, parentType);
 
 			upsertFileRecords(response.data.data);
 		} catch (error) {
@@ -68,20 +53,10 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const upload = async (
-		file: File,
-		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+	const upload = async (file: File, parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
 			const schoolId = authModule.getSchool?.id as string;
-			const response = await fileApi.upload(
-				schoolId,
-				StorageLocation.SCHOOL,
-				parentId,
-				parentType,
-				file
-			);
+			const response = await fileApi.upload(schoolId, StorageLocation.SCHOOL, parentId, parentType, file);
 			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
@@ -89,11 +64,7 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const uploadFromUrl = async (
-		imageUrl: string,
-		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+	const uploadFromUrl = async (imageUrl: string, parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
 			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
@@ -117,10 +88,7 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const rename = async (
-		fileRecordId: FileRecord["id"],
-		params: RenameFileParams
-	): Promise<void> => {
+	const rename = async (fileRecordId: FileRecord["id"], params: RenameFileParams): Promise<void> => {
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
@@ -150,10 +118,7 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const fetchFileStatistic = async (
-		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+	const fetchFileStatistic = async (parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
 			const response = await fileApi.getParentStatistic(parentId, parentType);
 			const newStatistic = response.data;
@@ -171,11 +136,7 @@ export const useFileStorageApi = () => {
 		userDisplayName: string
 	): Promise<string> => {
 		try {
-			const response = await wopiApi.getAuthorizedCollaboraDocumentUrl(
-				fileRecordId,
-				editorMode,
-				userDisplayName
-			);
+			const response = await wopiApi.getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName);
 			const url = response.data.authorizedCollaboraDocumentUrl;
 
 			return url;

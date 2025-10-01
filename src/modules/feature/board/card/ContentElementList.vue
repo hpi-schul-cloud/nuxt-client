@@ -1,9 +1,7 @@
 <template>
 	<VCardText class="mb-n4">
 		<template v-for="(element, index) in elements" :key="element.id">
-			<div
-				:data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`"
-			>
+			<div :data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`">
 				<component
 					:is="mapToComponent(element.type)"
 					:id="element.id"
@@ -30,6 +28,7 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
+import { useEnvConfig } from "@data-env";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
@@ -42,7 +41,6 @@ import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { PropType } from "vue";
-import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	elements: {
@@ -78,10 +76,7 @@ const onDeleteElement = (elementId: string) => {
 	emit("delete:element", elementId);
 };
 
-const onMoveElementDown = (
-	elementIndex: number,
-	element: AnyContentElement
-) => {
+const onMoveElementDown = (elementIndex: number, element: AnyContentElement) => {
 	const elementMove: ElementMove = {
 		elementIndex,
 		payload: element.id,
@@ -97,11 +92,7 @@ const onMoveElementUp = (elementIndex: number, element: AnyContentElement) => {
 	emit("move-up:element", elementMove);
 };
 
-const onMoveElementKeyboard = (
-	elementIndex: number,
-	element: AnyContentElement,
-	event: KeyboardEvent
-) => {
+const onMoveElementKeyboard = (elementIndex: number, element: AnyContentElement, event: KeyboardEvent) => {
 	const elementMove: ElementMove = {
 		elementIndex,
 		payload: element.id,
@@ -114,9 +105,7 @@ const mapToComponent = (type: ContentElementType) => {
 
 	switch (type) {
 		case ContentElementType.CollaborativeTextEditor:
-			if (
-				envConfig.value.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED
-			) {
+			if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED) {
 				return CollaborativeTextEditorElement;
 			}
 			break;
@@ -176,14 +165,11 @@ const elementTypesWithTabindexZero = [
 ];
 
 const getTabIndex = (element: AnyContentElement) => {
-	const tabindex = elementTypesWithTabindexZero.includes(element.type)
-		? 0
-		: undefined;
+	const tabindex = elementTypesWithTabindexZero.includes(element.type) ? 0 : undefined;
 	return tabindex !== undefined ? { tabindex } : undefined;
 };
 
-const isNotFirstElement = (elementIndex: number) =>
-	elementIndex !== 0 && props.elements.length > 1;
+const isNotFirstElement = (elementIndex: number) => elementIndex !== 0 && props.elements.length > 1;
 
 const isNotLastElement = (elementIndex: number) =>
 	elementIndex !== props.elements.length - 1 && props.elements.length > 1;

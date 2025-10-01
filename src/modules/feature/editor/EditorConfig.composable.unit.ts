@@ -1,8 +1,8 @@
-import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { useEditorConfig } from "./EditorConfig.composable";
+import { LanguageType } from "@/serverApi/v3";
+import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { LanguageType } from "@/serverApi/v3";
 
 describe("useEditorConfig", () => {
 	const setup = () => {
@@ -32,16 +32,11 @@ describe("useEditorConfig", () => {
 
 		const fontColorOliveGreen = composable.generalConfig.fontColor.colors[0];
 
-		expect(fontColorOliveGreen.label).toBe(
-			"components.editor.fonts.colors.oliveGreen"
-		);
+		expect(fontColorOliveGreen.label).toBe("components.editor.fonts.colors.oliveGreen");
 
-		const fontBackgroundColorIndigo =
-			composable.generalConfig.fontBackgroundColor.colors[4];
+		const fontBackgroundColorIndigo = composable.generalConfig.fontBackgroundColor.colors[4];
 
-		expect(fontBackgroundColorIndigo.label).toBe(
-			"components.editor.fonts.colors.indigo"
-		);
+		expect(fontBackgroundColorIndigo.label).toBe("components.editor.fonts.colors.indigo");
 	});
 
 	describe("when keydown event is triggered", () => {

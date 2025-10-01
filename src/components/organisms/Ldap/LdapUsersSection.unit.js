@@ -1,14 +1,11 @@
-import { mount } from "@vue/test-utils";
 import LdapUsersSection from "./LdapUsersSection";
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("@/components/organisms/LdapUsersSection", () => {
-	const getWrapper = (props = {}) => {
-		return mount(LdapUsersSection, {
+	const getWrapper = (props = {}) =>
+		mount(LdapUsersSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				components: {
@@ -27,23 +24,14 @@ describe("@/components/organisms/LdapUsersSection", () => {
 				...props,
 			},
 		});
-	};
 
 	it("has correct child components", () => {
 		const wrapper = getWrapper();
 
-		expect(wrapper.find("[data-testid=ldapDataUsersUserPath]").exists()).toBe(
-			true
-		);
-		expect(wrapper.find("[data-testid=ldapDataUsersFirstName]").exists()).toBe(
-			true
-		);
-		expect(wrapper.find("[data-testid=ldapDataUsersFamilyName]").exists()).toBe(
-			true
-		);
-		expect(wrapper.find("[data-testid=ldapDataUsersEmail]").exists()).toBe(
-			true
-		);
+		expect(wrapper.find("[data-testid=ldapDataUsersUserPath]").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataUsersFirstName]").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataUsersFamilyName]").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataUsersEmail]").exists()).toBe(true);
 		expect(wrapper.find("[data-testid=ldapDataUsersUid]").exists()).toBe(true);
 		expect(wrapper.find("[data-testid=ldapDataUsersUuid]").exists()).toBe(true);
 	});
@@ -128,19 +116,13 @@ describe("@/components/organisms/LdapUsersSection", () => {
 		expect(wrapper.vm.v$.$invalid).toBe(true);
 		expect(errorMessageComponent.exists()).toBeFalsy();
 
-		const inputFirstName = wrapper.find(
-			"input[data-testid=ldapDataUsersFirstName]"
-		);
+		const inputFirstName = wrapper.find("input[data-testid=ldapDataUsersFirstName]");
 		expect(inputFirstName.exists()).toBe(true);
-		expect(inputFirstName.element.value).toBe(
-			ldapConfigDataTestSpecific.firstName
-		);
+		expect(inputFirstName.element.value).toBe(ldapConfigDataTestSpecific.firstName);
 
 		await inputFirstName.trigger("blur"); // without this the error is not displayed
 
-		errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataUsersFirstName'] .base-input-info.base-input-error"
-		);
+		errorMessageComponent = wrapper.find("div[data-testid='ldapDataUsersFirstName'] .base-input-info.base-input-error");
 		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 });

@@ -1,11 +1,8 @@
-import { AlertPayload } from "@/store/types/alert-payload";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import Alert from "./Alert.vue";
+import { AlertPayload } from "@/store/types/alert-payload";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiCheckCircle } from "@icons/material";
+import { mount } from "@vue/test-utils";
 import { VAlert, VIcon } from "vuetify/lib/components/index";
 
 const getWrapper = (props?: AlertPayload) => {

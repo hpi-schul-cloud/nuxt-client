@@ -1,14 +1,11 @@
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { shallowMount } from "@vue/test-utils";
-import AuthModule from "@/store/auth";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
-import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
+import AuthModule from "@/store/auth";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 
 describe("SubmissionContentElementDisplay", () => {
 	const setup = (role: "teacher" | "student" = "teacher") => {

@@ -1,14 +1,11 @@
+import EndCourseSyncDialog from "./EndCourseSyncDialog.vue";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseApi } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
-import EndCourseSyncDialog from "./EndCourseSyncDialog.vue";
 
 vi.mock("@data-room");
 
@@ -78,9 +75,7 @@ describe("EndCourseSyncDialog", () => {
 			const confirmBtn = wrapper.findComponent("[data-testid=dialog-confirm]");
 			await confirmBtn.trigger("click");
 
-			expect(courseApiMock.stopSynchronization).toHaveBeenCalledWith(
-				"courseId"
-			);
+			expect(courseApiMock.stopSynchronization).toHaveBeenCalledWith("courseId");
 		});
 
 		it("should show a success notification", async () => {

@@ -1,29 +1,19 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import InviteMembersDialog from "./InviteMembersDialog.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import { nextTick } from "vue";
-import { createTestingPinia } from "@pinia/testing";
-import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VueWrapper } from "@vue/test-utils";
-import {
-	useRoomInvitationLinkStore,
-	InvitationStep,
-	RoomInvitationLink,
-} from "@data-room";
-import {
-	createTestEnvStore,
-	mockedPiniaStoreTyping,
-} from "@@/tests/test-utils";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { InvitationStep, RoomInvitationLink, useRoomInvitationLinkStore } from "@data-room";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { useBoardNotifier } from "@util-board";
+import { VueWrapper } from "@vue/test-utils";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock } from "vitest";
+import { nextTick } from "vue";
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
@@ -33,11 +23,9 @@ vi.mock("vue-i18n", async (importOriginal) => {
 	};
 });
 
-vi.mock("@vueuse/integrations/useFocusTrap", () => {
-	return {
-		useFocusTrap: vi.fn(),
-	};
-});
+vi.mock("@vueuse/integrations/useFocusTrap", () => ({
+	useFocusTrap: vi.fn(),
+}));
 
 vi.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = vi.mocked(useBoardNotifier);
@@ -125,9 +113,7 @@ describe("InviteMembersDialog", () => {
 			setDescription(wrapper, "invitation link");
 		}
 
-		const roomInvitationLinkStore = mockedPiniaStoreTyping(
-			useRoomInvitationLinkStore
-		);
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(useRoomInvitationLinkStore);
 
 		return { wrapper, roomInvitationLinkStore, notifierModule };
 	};
@@ -152,9 +138,7 @@ describe("InviteMembersDialog", () => {
 				const card = wrapper.findComponent({ name: "VCard" });
 				const title = card.findComponent({ name: "VCardTitle" });
 
-				expect(title.text()).toBe(
-					"pages.rooms.members.inviteMember.step.prepare.title"
-				);
+				expect(title.text()).toBe("pages.rooms.members.inviteMember.step.prepare.title");
 			});
 
 			it("should have the correct action buttons", async () => {
@@ -196,9 +180,7 @@ describe("InviteMembersDialog", () => {
 					"pages.rooms.members.inviteMember.form.linkExpires.label",
 					"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label",
 				].forEach((label) => {
-					expect(
-						checkboxes.some((checkbox) => checkbox.text().includes(label))
-					).toBe(true);
+					expect(checkboxes.some((checkbox) => checkbox.text().includes(label))).toBe(true);
 				});
 			});
 		});
@@ -212,9 +194,7 @@ describe("InviteMembersDialog", () => {
 				const card = wrapper.findComponent({ name: "VCard" });
 				const title = card.findComponent({ name: "VCardTitle" });
 
-				expect(title.text()).toBe(
-					"pages.rooms.members.inviteMember.step.edit.title"
-				);
+				expect(title.text()).toBe("pages.rooms.members.inviteMember.step.edit.title");
 			});
 
 			it("should have the correct action buttons", async () => {
@@ -254,8 +234,7 @@ describe("InviteMembersDialog", () => {
 					});
 					await nextTick();
 
-					roomInvitationLinkStore.editedLink =
-						roomInvitationLinkStore.roomInvitationLinks[0];
+					roomInvitationLinkStore.editedLink = roomInvitationLinkStore.roomInvitationLinks[0];
 
 					expect(roomInvitationLinkStore.editedLink).not.toBeNull();
 
@@ -278,9 +257,7 @@ describe("InviteMembersDialog", () => {
 				await nextTick();
 				await nextTick();
 
-				expect(title.text()).toBe(
-					"pages.rooms.members.inviteMember.step.share.title"
-				);
+				expect(title.text()).toBe("pages.rooms.members.inviteMember.step.share.title");
 			});
 
 			it("should have the correct action button", async () => {
@@ -362,9 +339,7 @@ describe("InviteMembersDialog", () => {
 				requiresConfirmation: true,
 			};
 
-			expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(
-				expectedFormValues
-			);
+			expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(expectedFormValues);
 		});
 
 		it("should call updateLink method if form is valid", async () => {
@@ -388,9 +363,7 @@ describe("InviteMembersDialog", () => {
 				requiresConfirmation: true,
 			};
 
-			expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(
-				expectedFormValues
-			);
+			expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(expectedFormValues);
 		});
 
 		it("should not call store method when form is invalid", async () => {
@@ -408,9 +381,7 @@ describe("InviteMembersDialog", () => {
 
 			expect(roomInvitationLinkStore.createLink).not.toHaveBeenCalled();
 			expect(roomInvitationLinkStore.updateLink).not.toHaveBeenCalled();
-			expect(descriptionField.text()).toContain(
-				"common.validation.nonEmptyString"
-			);
+			expect(descriptionField.text()).toContain("common.validation.nonEmptyString");
 		});
 	});
 
@@ -446,9 +417,7 @@ describe("InviteMembersDialog", () => {
 			const descriptionField = wrapper.findComponent({
 				ref: "descriptionField",
 			});
-			expect(descriptionField.text()).toContain(
-				"common.validation.nonEmptyString"
-			);
+			expect(descriptionField.text()).toContain("common.validation.nonEmptyString");
 		});
 
 		it("should show error when description contains only whitespaces", async () => {
@@ -462,9 +431,7 @@ describe("InviteMembersDialog", () => {
 			const descriptionField = wrapper.findComponent({
 				ref: "descriptionField",
 			});
-			expect(descriptionField.text()).toContain(
-				"common.validation.nonEmptyString"
-			);
+			expect(descriptionField.text()).toContain("common.validation.nonEmptyString");
 		});
 
 		it("should show error when description contains < followed by a string", async () => {
@@ -476,9 +443,7 @@ describe("InviteMembersDialog", () => {
 			const descriptionField = wrapper.findComponent({
 				ref: "descriptionField",
 			});
-			expect(descriptionField.text()).toContain(
-				"common.validation.containsOpeningTag"
-			);
+			expect(descriptionField.text()).toContain("common.validation.containsOpeningTag");
 		});
 
 		it("should show error when description is longer then 100 characters", async () => {
@@ -555,21 +520,15 @@ describe("InviteMembersDialog", () => {
 				const { wrapper } = setup();
 				await nextTick();
 
-				const datePickerBefore = wrapper.findComponent(
-					'[data-testid="date-picker-until"]'
-				);
-				expect(datePickerBefore.classes().includes("v-input--disabled")).toBe(
-					true
-				);
+				const datePickerBefore = wrapper.findComponent('[data-testid="date-picker-until"]');
+				expect(datePickerBefore.classes().includes("v-input--disabled")).toBe(true);
 
 				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
 				const thirdCheckbox = checkboxes[2];
 
 				await thirdCheckbox.setValue(true);
 
-				const datePicker = wrapper.findComponent(
-					'[data-testid="date-picker-until"]'
-				);
+				const datePicker = wrapper.findComponent('[data-testid="date-picker-until"]');
 				await nextTick();
 
 				expect(datePicker.classes().includes("v-input--disabled")).toBe(false);
@@ -585,9 +544,7 @@ describe("InviteMembersDialog", () => {
 				const thirdCheckbox = checkboxes[2];
 				await thirdCheckbox.setValue(true);
 				await nextTick();
-				const continueButton = wrapper.findComponent(
-					'[data-testid="invite-participant-save-btn"]'
-				);
+				const continueButton = wrapper.findComponent('[data-testid="invite-participant-save-btn"]');
 
 				expect(continueButton.classes("v-btn--disabled")).toBe(true);
 

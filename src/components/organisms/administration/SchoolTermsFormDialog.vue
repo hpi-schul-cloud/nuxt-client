@@ -18,11 +18,7 @@
 			<v-form ref="termsForm" v-model="isValid">
 				<v-alert type="warning" class="mb-10" :icon="mdiAlert">
 					<div class="alert-text">
-						{{
-							t(
-								"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent"
-							)
-						}}
+						{{ t("pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent") }}
 					</div>
 				</v-alert>
 				<v-file-input
@@ -33,12 +29,8 @@
 					:multiple="false"
 					density="compact"
 					accept="application/pdf"
-					:label="
-						t('pages.administration.school.index.termsOfUse.labels.uploadFile')
-					"
-					:hint="
-						t('pages.administration.school.index.termsOfUse.hints.uploadFile')
-					"
+					:label="t('pages.administration.school.index.termsOfUse.labels.uploadFile')"
+					:hint="t('pages.administration.school.index.termsOfUse.hints.uploadFile')"
 					:persistent-hint="true"
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
 					@blur="onBlur"
@@ -59,19 +51,14 @@
 
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
-import {
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-	TERMS_OF_USE_MODULE_KEY,
-} from "@/utils/inject";
-import { School } from "@/store/types/schools";
 import { currentDate } from "@/plugins/datetime";
-import { toBase64 } from "@/utils/fileHelper";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
-import { useI18n } from "vue-i18n";
+import { School } from "@/store/types/schools";
+import { toBase64 } from "@/utils/fileHelper";
+import { injectStrict, NOTIFIER_MODULE_KEY, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
 import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
+import { computed, ComputedRef, defineComponent, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SchoolTermsFormDialog",
@@ -100,11 +87,9 @@ export default defineComponent({
 
 		const maxFileUploadSizeInKb = 4194304;
 		const validationRules = {
-			required: (value: File | null) =>
-				!!value || t("common.validation.required"),
+			required: (value: File | null) => !!value || t("common.validation.required"),
 			mustBePdf: (value: File | null) =>
-				value?.type === "application/pdf" ||
-				t("pages.administration.school.index.termsOfUse.validation.notPdf"),
+				value?.type === "application/pdf" || t("pages.administration.school.index.termsOfUse.validation.notPdf"),
 			maxSize: (value: File | null) =>
 				(!!value && value.size <= maxFileUploadSizeInKb) ||
 				t("pages.administration.school.index.termsOfUse.validation.fileTooBig"),

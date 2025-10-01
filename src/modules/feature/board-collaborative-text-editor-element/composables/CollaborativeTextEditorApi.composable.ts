@@ -1,3 +1,4 @@
+import { useCollaborativeTextEditorNotifier } from "./CollaborativeTextEditorNotifications.composable";
 import {
 	CollaborativeTextEditorApiFactory,
 	CollaborativeTextEditorApiInterface,
@@ -5,7 +6,6 @@ import {
 } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createTestableGlobaleState } from "@/utils/create-global-state";
-import { useCollaborativeTextEditorNotifier } from "./CollaborativeTextEditorNotifications.composable";
 
 export enum ErrorType {
 	Unauthorized = "Unauthorized",
@@ -13,11 +13,13 @@ export enum ErrorType {
 }
 
 const collaborativeTextEditorApi = () => {
-	const collaborativeTextEditorApi: CollaborativeTextEditorApiInterface =
-		CollaborativeTextEditorApiFactory(undefined, "/v3", $axios);
+	const collaborativeTextEditorApi: CollaborativeTextEditorApiInterface = CollaborativeTextEditorApiFactory(
+		undefined,
+		"/v3",
+		$axios
+	);
 
-	const { showForbiddenError, showUnauthorizedError, showInternalServerError } =
-		useCollaborativeTextEditorNotifier();
+	const { showForbiddenError, showUnauthorizedError, showInternalServerError } = useCollaborativeTextEditorNotifier();
 
 	const getUrl = async (
 		parentId: string,
@@ -62,6 +64,4 @@ const collaborativeTextEditorApi = () => {
 	};
 };
 
-export const useCollaborativeTextEditorApi = createTestableGlobaleState(
-	collaborativeTextEditorApi
-);
+export const useCollaborativeTextEditorApi = createTestableGlobaleState(collaborativeTextEditorApi);

@@ -1,3 +1,4 @@
+import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import ImportModal from "@/components/share/ImportModal.vue";
@@ -15,25 +16,14 @@ import CopyModule from "@/store/copy";
 import CourseRoomListModule from "@/store/course-room-list";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import {
-	COPY_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
-import {
-	apiResponseErrorFactory,
-	axiosErrorFactory,
-} from "@@/tests/test-utils";
+import { COPY_MODULE_KEY, LOADING_STATE_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { apiResponseErrorFactory, axiosErrorFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
 
 describe("@components/share/ImportFlow", () => {
 	let copyModuleMock: CopyModule;
@@ -52,11 +42,7 @@ describe("@components/share/ImportFlow", () => {
 	const setup = (props = {}) => {
 		const wrapper = mount(ImportFlow, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[LOADING_STATE_MODULE_KEY]: loadingStateModuleMock,
@@ -85,9 +71,7 @@ describe("@components/share/ImportFlow", () => {
 		setupStores({
 			rooms: CourseRoomListModule,
 		});
-		vi.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation(
-			vi.fn()
-		);
+		vi.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation(vi.fn());
 	});
 
 	describe("token is provided", () => {
@@ -178,9 +162,7 @@ describe("@components/share/ImportFlow", () => {
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
 
-					const selectCourseDialog = wrapper
-						.findComponent(SelectDestinationModal)
-						.findComponent(vCustomDialog);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
 					await nextTick();
@@ -195,14 +177,10 @@ describe("@components/share/ImportFlow", () => {
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
 
-					const selectCourseDialog = wrapper
-						.findComponent(SelectDestinationModal)
-						.findComponent(vCustomDialog);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
-					const importModalDialog = wrapper
-						.findComponent(ImportModal)
-						.findComponent(vCustomDialog);
+					const importModalDialog = wrapper.findComponent(ImportModal).findComponent(vCustomDialog);
 					importModalDialog.vm.$emit("dialog-confirmed");
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
@@ -242,9 +220,7 @@ describe("@components/share/ImportFlow", () => {
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
 
-					const selectCourseDialog = wrapper
-						.findComponent(SelectDestinationModal)
-						.findComponent(vCustomDialog);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
 					await nextTick();
@@ -259,14 +235,10 @@ describe("@components/share/ImportFlow", () => {
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
 
-					const selectCourseDialog = wrapper
-						.findComponent(SelectDestinationModal)
-						.findComponent(vCustomDialog);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
-					const importModalDialog = wrapper
-						.findComponent(ImportModal)
-						.findComponent(vCustomDialog);
+					const importModalDialog = wrapper.findComponent(ImportModal).findComponent(vCustomDialog);
 					importModalDialog.vm.$emit("dialog-confirmed");
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
@@ -308,9 +280,7 @@ describe("@components/share/ImportFlow", () => {
 				it("should call copyByShareToken when import is started", async () => {
 					const { wrapper } = await setupWithValidator();
 
-					const dialog = wrapper
-						.findComponent(ImportModal)
-						.findComponent(vCustomDialog);
+					const dialog = wrapper.findComponent(ImportModal).findComponent(vCustomDialog);
 					dialog.vm.$emit("dialog-confirmed");
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
@@ -324,14 +294,10 @@ describe("@components/share/ImportFlow", () => {
 					copyModuleMock.copyByShareToken = () => Promise.reject(new Error());
 					const { wrapper } = await setupWithValidator();
 
-					const dialog = wrapper
-						.findComponent(ImportModal)
-						.findComponent(vCustomDialog);
+					const dialog = wrapper.findComponent(ImportModal).findComponent(vCustomDialog);
 					dialog.vm.$emit("dialog-confirmed");
 
-					expect(notifierModule.show).toHaveBeenCalledWith(
-						expect.objectContaining({ status: "error" })
-					);
+					expect(notifierModule.show).toHaveBeenCalledWith(expect.objectContaining({ status: "error" }));
 				});
 
 				describe("for partial or successful copy", () => {
@@ -375,9 +341,7 @@ describe("@components/share/ImportFlow", () => {
 								url: "http://abc.de",
 							},
 						];
-						copyModuleMock.copyByShareToken = vi
-							.fn()
-							.mockResolvedValue(copyResults);
+						copyModuleMock.copyByShareToken = vi.fn().mockResolvedValue(copyResults);
 
 						copyResultResponse = {
 							type: CopyApiResponseTypeEnum.Course,
@@ -388,31 +352,23 @@ describe("@components/share/ImportFlow", () => {
 					it("opens copy result modal", async () => {
 						const { wrapper } = await setupWithValidator();
 
-						const dialog = wrapper
-							.findComponent(ImportModal)
-							.findComponent(vCustomDialog);
+						const dialog = wrapper.findComponent(ImportModal).findComponent(vCustomDialog);
 						dialog.vm.$emit("dialog-confirmed");
 						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
-						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(
-							true
-						);
+						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
 					});
 
 					it("emits success when modal is closed", async () => {
 						const { wrapper } = await setupWithValidator();
 
-						const dialog = wrapper
-							.findComponent(ImportModal)
-							.findComponent(vCustomDialog);
+						const dialog = wrapper.findComponent(ImportModal).findComponent(vCustomDialog);
 						dialog.vm.$emit("dialog-confirmed");
 						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
-						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(
-							true
-						);
+						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
 
 						const copyResultModal = wrapper.findComponent({
 							name: "copy-result-modal",
@@ -453,9 +409,7 @@ describe("@components/share/ImportFlow", () => {
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
 
-					const selectCourseDialog = wrapper
-						.findComponent(SelectDestinationModal)
-						.findComponent(vCustomDialog);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
 					await nextTick();
@@ -470,14 +424,10 @@ describe("@components/share/ImportFlow", () => {
 					const select = wrapper.findComponent({ name: "v-select" });
 					select.setValue(course);
 
-					const selectCourseDialog = wrapper
-						.findComponent(SelectDestinationModal)
-						.findComponent(vCustomDialog);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
-					const importModalDialog = wrapper
-						.findComponent(ImportModal)
-						.findComponent(vCustomDialog);
+					const importModalDialog = wrapper.findComponent(ImportModal).findComponent(vCustomDialog);
 					importModalDialog.vm.$emit("dialog-confirmed");
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
@@ -520,9 +470,7 @@ describe("@components/share/ImportFlow", () => {
 				it("should call copyByShareToken when import is started", async () => {
 					const { wrapper } = await setupWithValidator();
 
-					const dialog = wrapper
-						.findComponent(ImportModal)
-						.findComponent(vCustomDialog);
+					const dialog = wrapper.findComponent(ImportModal).findComponent(vCustomDialog);
 					dialog.vm.$emit("dialog-confirmed");
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
@@ -536,14 +484,10 @@ describe("@components/share/ImportFlow", () => {
 					copyModuleMock.copyByShareToken = () => Promise.reject(new Error());
 					const { wrapper } = await setupWithValidator();
 
-					const dialog = wrapper
-						.findComponent(ImportModal)
-						.findComponent(vCustomDialog);
+					const dialog = wrapper.findComponent(ImportModal).findComponent(vCustomDialog);
 					dialog.vm.$emit("dialog-confirmed");
 
-					expect(notifierModule.show).toHaveBeenCalledWith(
-						expect.objectContaining({ status: "error" })
-					);
+					expect(notifierModule.show).toHaveBeenCalledWith(expect.objectContaining({ status: "error" }));
 				});
 
 				describe("for partial or successful copy", () => {
@@ -587,9 +531,7 @@ describe("@components/share/ImportFlow", () => {
 								url: "http://abc.de",
 							},
 						];
-						copyModuleMock.copyByShareToken = vi
-							.fn()
-							.mockResolvedValue(copyResults);
+						copyModuleMock.copyByShareToken = vi.fn().mockResolvedValue(copyResults);
 
 						copyResultResponse = {
 							type: CopyApiResponseTypeEnum.Room,
@@ -600,31 +542,23 @@ describe("@components/share/ImportFlow", () => {
 					it("opens copy result modal", async () => {
 						const { wrapper } = await setupWithValidator();
 
-						const dialog = wrapper
-							.findComponent(ImportModal)
-							.findComponent(vCustomDialog);
+						const dialog = wrapper.findComponent(ImportModal).findComponent(vCustomDialog);
 						dialog.vm.$emit("dialog-confirmed");
 						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
-						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(
-							true
-						);
+						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
 					});
 
 					it("emits success when modal is closed", async () => {
 						const { wrapper } = await setupWithValidator();
 
-						const dialog = wrapper
-							.findComponent(ImportModal)
-							.findComponent(vCustomDialog);
+						const dialog = wrapper.findComponent(ImportModal).findComponent(vCustomDialog);
 						dialog.vm.$emit("dialog-confirmed");
 						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
-						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(
-							true
-						);
+						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
 
 						const copyResultModal = wrapper.findComponent({
 							name: "copy-result-modal",

@@ -1,32 +1,18 @@
+import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
+import CardHost from "./CardHost.vue";
+import ContentElementList from "./ContentElementList.vue";
 import { CardResponse } from "@/serverApi/v3";
-import {
-	BoardPermissionChecks,
-	defaultPermissions,
-} from "@/types/board/Permissions";
+import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
-import {
-	cardResponseFactory,
-	fileElementResponseFactory,
-} from "@@/tests/test-utils/factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import {
-	useBoardFocusHandler,
-	useBoardPermissions,
-	useCardStore,
-} from "@data-board";
+import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useBoardFocusHandler, useBoardPermissions, useCardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionEdit,
-	KebabMenuActionShareLink,
-} from "@ui-kebab-menu";
+import { KebabMenuActionDelete, KebabMenuActionEdit, KebabMenuActionShareLink } from "@ui-kebab-menu";
 import {
 	useBoardNotifier,
 	useCourseBoardEditMode,
@@ -36,9 +22,6 @@ import {
 } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed, ref } from "vue";
-import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
-import CardHost from "./CardHost.vue";
-import ContentElementList from "./ContentElementList.vue";
 
 vi.mock("vue-router");
 
@@ -57,24 +40,17 @@ const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
 
 vi.mock("../shared/AddElementDialog.composable");
 vi.mock("@ui-confirmation-dialog");
-const mockedUseDeleteConfirmationDialog = vi.mocked(
-	useDeleteConfirmationDialog
-);
+const mockedUseDeleteConfirmationDialog = vi.mocked(useDeleteConfirmationDialog);
 
 describe("CardHost", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	let mockedBoardPermissionsHandler: DeepMocked<
-		ReturnType<typeof useBoardPermissions>
-	>;
+	let mockedBoardPermissionsHandler: DeepMocked<ReturnType<typeof useBoardPermissions>>;
 	let mockedBoardPermissions: BoardPermissionChecks;
-	let mockedSharedLastCreatedElementCalls: DeepMocked<
-		ReturnType<typeof useSharedLastCreatedElement>
-	>;
+	let mockedSharedLastCreatedElementCalls: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
 	let useShareBoardLinkMock: DeepMocked<ReturnType<typeof useShareBoardLink>>;
 
 	beforeEach(() => {
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		mockedUseSharedEditMode.mockReturnValue({
@@ -112,17 +88,13 @@ describe("CardHost", () => {
 			isDeleteDialogOpen: ref(false),
 		});
 
-		mockedBoardPermissionsHandler =
-			createMock<ReturnType<typeof useBoardPermissions>>();
+		mockedBoardPermissionsHandler = createMock<ReturnType<typeof useBoardPermissions>>();
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissionsHandler);
 
 		mockedBoardPermissions = { ...defaultPermissions };
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissions);
-		mockedSharedLastCreatedElementCalls =
-			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
-		mockedSharedLastCreatedElement.mockReturnValue(
-			mockedSharedLastCreatedElementCalls
-		);
+		mockedSharedLastCreatedElementCalls = createMock<ReturnType<typeof useSharedLastCreatedElement>>();
+		mockedSharedLastCreatedElement.mockReturnValue(mockedSharedLastCreatedElementCalls);
 	});
 
 	afterEach(() => {
@@ -187,16 +159,12 @@ describe("CardHost", () => {
 			it("should be rendered if card is not loaded", () => {
 				const { wrapper } = setup({ hasCard: false });
 
-				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(
-					true
-				);
+				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(true);
 			});
 
 			it("should not be rendered if card is loaded", () => {
 				const { wrapper } = setup();
-				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(
-					false
-				);
+				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(false);
 			});
 		});
 
@@ -243,10 +211,7 @@ describe("CardHost", () => {
 
 				await shareLinkButton.trigger("click");
 
-				expect(useShareBoardLinkMock.copyShareLink).toHaveBeenCalledWith(
-					cardId,
-					BoardMenuScope.CARD
-				);
+				expect(useShareBoardLinkMock.copyShareLink).toHaveBeenCalledWith(cardId, BoardMenuScope.CARD);
 			});
 		});
 

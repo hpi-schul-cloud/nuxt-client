@@ -1,9 +1,5 @@
 import { createPermissionGuard } from "@/router/guards/permission.guard";
-import {
-	NavigationGuard,
-	NavigationGuardNext,
-	RouteLocationNormalized,
-} from "vue-router";
+import { NavigationGuard, NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
 const mockError = vi.fn();
 
@@ -30,10 +26,7 @@ describe("PermissionGuard", () => {
 	describe("createPermissionGuard", () => {
 		it("should check permissions from the authModule and allow access", () => {
 			const { to, from, next } = setup();
-			const permissionGuard: NavigationGuard = createPermissionGuard(
-				["validPermission_1"],
-				"/dashboard"
-			);
+			const permissionGuard: NavigationGuard = createPermissionGuard(["validPermission_1"], "/dashboard");
 
 			permissionGuard(to, from, next);
 
@@ -56,10 +49,7 @@ describe("PermissionGuard", () => {
 		it("should check permissions from the authModule and deny access", () => {
 			const { to, from, next } = setup();
 			const fallbackRoute = "/dashboard";
-			const permissionGuard: NavigationGuard = createPermissionGuard(
-				["invalidPermission"],
-				fallbackRoute
-			);
+			const permissionGuard: NavigationGuard = createPermissionGuard(["invalidPermission"], fallbackRoute);
 
 			permissionGuard(to, from, next);
 
@@ -68,9 +58,7 @@ describe("PermissionGuard", () => {
 
 		it("should create a '403' error if fallbackRoute is not provided and with invalid permission", () => {
 			const { to, from, next } = setup();
-			const permissionGuard: NavigationGuard = createPermissionGuard([
-				"invalidPermission",
-			]);
+			const permissionGuard: NavigationGuard = createPermissionGuard(["invalidPermission"]);
 
 			permissionGuard(to, from, next);
 
@@ -79,10 +67,7 @@ describe("PermissionGuard", () => {
 
 		it("should create a '403' error if fallbackRoute is not provided and with one invalid permission", () => {
 			const { to, from, next } = setup();
-			const permissionGuard: NavigationGuard = createPermissionGuard([
-				"validPermission_1",
-				"invalidPermission",
-			]);
+			const permissionGuard: NavigationGuard = createPermissionGuard(["validPermission_1", "invalidPermission"]);
 
 			permissionGuard(to, from, next);
 

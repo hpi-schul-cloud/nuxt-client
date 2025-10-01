@@ -1,21 +1,16 @@
+import { ContextExternalToolConfigurationStatus } from "./types";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useI18n } from "vue-i18n";
-import { ContextExternalToolConfigurationStatus } from "./types";
 
 export const useContextExternalToolConfigurationStatus = () => {
 	const authModule = injectStrict(AUTH_MODULE_KEY);
 	const { t } = useI18n();
 
-	const determineToolStatusTranslationKey = (
-		toolConfigStatus: ContextExternalToolConfigurationStatus
-	): string => {
+	const determineToolStatusTranslationKey = (toolConfigStatus: ContextExternalToolConfigurationStatus): string => {
 		const userRoles = authModule.getUserRoles;
 
 		if (userRoles.includes("teacher")) {
-			if (
-				toolConfigStatus.isOutdatedOnScopeSchool &&
-				toolConfigStatus.isOutdatedOnScopeContext
-			) {
+			if (toolConfigStatus.isOutdatedOnScopeSchool && toolConfigStatus.isOutdatedOnScopeContext) {
 				return "common.tool.information.incomplete.outdated.schoolAndContext.teacher";
 			} else if (toolConfigStatus.isOutdatedOnScopeSchool) {
 				return "common.tool.information.outdatedOnSchool.teacher";
@@ -74,9 +69,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 		}
 	};
 
-	const isOperational = (
-		toolConfigStatus: ContextExternalToolConfigurationStatus
-	): boolean => {
+	const isOperational = (toolConfigStatus: ContextExternalToolConfigurationStatus): boolean => {
 		if (
 			toolConfigStatus.isIncompleteOnScopeContext ||
 			toolConfigStatus.isOutdatedOnScopeContext ||
@@ -89,9 +82,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 		return true;
 	};
 
-	const isTeacher = (): boolean => {
-		return authModule.getUserRoles.includes("teacher");
-	};
+	const isTeacher = (): boolean => authModule.getUserRoles.includes("teacher");
 
 	return {
 		determineToolStatusTranslationKey,

@@ -1,28 +1,20 @@
-import { BusinessError } from "@/store/types/commons";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import {
-	axiosErrorFactory,
-	externalToolDisplayDataFactory,
-} from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useExternalToolDisplayState } from "./externalToolDisplayState.composable";
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
+import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { axiosErrorFactory, externalToolDisplayDataFactory } from "@@/tests/test-utils";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 
 vi.mock("@data-external-tool/externalToolReferenceApi.composable");
 
 describe("externalToolDisplayState.composable", () => {
-	let useExternalToolReferenceApiMock: DeepMocked<
-		ReturnType<typeof useExternalToolReferenceApi>
-	>;
+	let useExternalToolReferenceApiMock: DeepMocked<ReturnType<typeof useExternalToolReferenceApi>>;
 
 	beforeEach(() => {
-		useExternalToolReferenceApiMock =
-			createMock<ReturnType<typeof useExternalToolReferenceApi>>();
+		useExternalToolReferenceApiMock = createMock<ReturnType<typeof useExternalToolReferenceApi>>();
 
-		vi.mocked(useExternalToolReferenceApi).mockReturnValue(
-			useExternalToolReferenceApiMock
-		);
+		vi.mocked(useExternalToolReferenceApi).mockReturnValue(useExternalToolReferenceApiMock);
 	});
 
 	afterEach(() => {
@@ -40,12 +32,9 @@ describe("externalToolDisplayState.composable", () => {
 	describe("fetchDisplayData", () => {
 		describe("when data is loaded", () => {
 			const setup = () => {
-				const displayDataMock: ExternalToolDisplayData =
-					externalToolDisplayDataFactory.build();
+				const displayDataMock: ExternalToolDisplayData = externalToolDisplayDataFactory.build();
 
-				useExternalToolReferenceApiMock.fetchDisplayDataCall.mockResolvedValue(
-					displayDataMock
-				);
+				useExternalToolReferenceApiMock.fetchDisplayDataCall.mockResolvedValue(displayDataMock);
 
 				const composable = useExternalToolDisplayState();
 
@@ -73,9 +62,7 @@ describe("externalToolDisplayState.composable", () => {
 
 				await fetchDisplayData("contextId");
 
-				expect(
-					useExternalToolReferenceApiMock.fetchDisplayDataCall
-				).toHaveBeenCalledWith("contextId");
+				expect(useExternalToolReferenceApiMock.fetchDisplayDataCall).toHaveBeenCalledWith("contextId");
 			});
 
 			it("should set the display data in the state", async () => {
@@ -92,9 +79,7 @@ describe("externalToolDisplayState.composable", () => {
 				const errorResponse = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(errorResponse);
 
-				useExternalToolReferenceApiMock.fetchDisplayDataCall.mockRejectedValueOnce(
-					errorResponse
-				);
+				useExternalToolReferenceApiMock.fetchDisplayDataCall.mockRejectedValueOnce(errorResponse);
 
 				return {
 					errorResponse,

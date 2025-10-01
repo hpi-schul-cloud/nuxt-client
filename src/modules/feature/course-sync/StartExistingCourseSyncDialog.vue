@@ -31,13 +31,10 @@
 			</WarningAlert>
 			<p class="text-md mt-2" data-testid="group-dialog-info-text">
 				{{
-					$t(
-						"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text",
-						{
-							groupName: selectedGroup?.name || "",
-							courseName: courseName,
-						}
-					)
+					$t("feature-course-sync.StartExistingCourseSyncDialog.confirmation.text", {
+						groupName: selectedGroup?.name || "",
+						courseName: courseName,
+					})
 				}}
 			</p>
 		</template>
@@ -45,24 +42,15 @@
 </template>
 
 <script setup lang="ts">
+import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import {
-	GroupResponse,
-	GroupUserResponse,
-	MeResponse,
-	RoleName,
-} from "@/serverApi/v3";
+import { GroupResponse, GroupUserResponse, MeResponse, RoleName } from "@/serverApi/v3";
 import type AuthModule from "@/store/auth";
-import {
-	AUTH_MODULE_KEY,
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY, injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useCourseApi } from "@data-room";
 import { WarningAlert } from "@ui-alert";
 import { computed, ModelRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
@@ -109,21 +97,13 @@ const isUserInGroup = computed(() => {
 		return false;
 	}
 
-	const isPartOfGroup: boolean = selectedGroup.value.users.some(
-		(user: GroupUserResponse) => user.id === me.user.id
-	);
+	const isPartOfGroup: boolean = selectedGroup.value.users.some((user: GroupUserResponse) => user.id === me.user.id);
 
-	const isAdmin: boolean = me.roles.some(
-		(role) => role.name === RoleName.Administrator
-	);
+	const isAdmin: boolean = me.roles.some((role) => role.name === RoleName.Administrator);
 
 	if (isAdmin && !isPartOfGroup) {
-		const allCourseTeacherPartOfGroup = props.courseTeachers?.every(
-			(teacher) => {
-				return selectedGroup.value?.users.some(
-					(user) => user.firstName + " " + user.lastName === teacher
-				);
-			}
+		const allCourseTeacherPartOfGroup = props.courseTeachers?.every((teacher) =>
+			selectedGroup.value?.users.some((user) => user.firstName + " " + user.lastName === teacher)
 		);
 
 		return allCourseTeacherPartOfGroup;

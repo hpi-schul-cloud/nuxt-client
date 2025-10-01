@@ -1,10 +1,5 @@
 <template>
-	<v-data-iterator
-		:items="avatars"
-		:items-per-page="maxItems"
-		hide-default-footer
-		no-data-text=""
-	>
+	<v-data-iterator :items="avatars" :items-per-page="maxItems" hide-default-footer no-data-text="">
 		<template #default="{ items }">
 			<v-container>
 				<v-row align="center">

@@ -1,3 +1,6 @@
+import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
+import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
+import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
 	BoardElementResponseTypeEnum as BoardTypes,
@@ -23,19 +26,13 @@ import {
 } from "@/utils/inject/injection-keys";
 import { createTestEnvStore, meResponseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
-import { VBtn } from "vuetify/lib/components/index";
-import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
-import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { nextTick } from "vue";
-import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
+import { VBtn } from "vuetify/lib/components/index";
 
 vi.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -95,10 +92,7 @@ const mockData: SingleColumnBoardResponse = {
 
 const mockPermissionsCourseTeacher = ["COURSE_CREATE", "COURSE_EDIT"];
 
-const mockPermissionsCourseSubstitutionTeacher = [
-	"HOMEWORK_CREATE",
-	"HOMEWORK_EDIT",
-];
+const mockPermissionsCourseSubstitutionTeacher = ["HOMEWORK_CREATE", "HOMEWORK_EDIT"];
 
 const mockPermissionsStudent = ["BASE_VIEW"];
 
@@ -180,11 +174,7 @@ const getWrapper = ({
 
 	return mount(CourseRoomDetailsPage, {
 		global: {
-			plugins: [
-				createTestingVuetify(),
-				createTestingI18n(),
-				createTestingPinia(),
-			],
+			plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 			mocks: {
 				$router,
 				$route,
@@ -271,9 +261,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 			await fabComponent.findComponent(VBtn).trigger("click");
 			const newTaskAction = wrapper.findAllComponents(SpeedDialMenuAction)[0];
 
-			expect(newTaskAction.props("href")).toStrictEqual(
-				"/homework/new?course=123&returnUrl=rooms/123"
-			);
+			expect(newTaskAction.props("href")).toStrictEqual("/homework/new?course=123&returnUrl=rooms/123");
 		});
 
 		it("'add lesson' button should have correct path", async () => {
@@ -286,9 +274,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 			await fabComponent.findComponent(VBtn).trigger("click");
 			const newTaskAction = wrapper.findAllComponents(SpeedDialMenuAction)[1];
 
-			expect(newTaskAction.props("href")).toStrictEqual(
-				"/courses/123/topics/add?returnUrl=rooms/123"
-			);
+			expect(newTaskAction.props("href")).toStrictEqual("/courses/123/topics/add?returnUrl=rooms/123");
 		});
 
 		it("'add column board' button should be rendered", async () => {
@@ -297,9 +283,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 			// open menu
 			await fabComponent.findComponent(VBtn).trigger("click");
-			const btnDataTestIds = wrapper
-				.findAllComponents(SpeedDialMenuAction)
-				.map((btn) => btn.props("dataTestId"));
+			const btnDataTestIds = wrapper.findAllComponents(SpeedDialMenuAction).map((btn) => btn.props("dataTestId"));
 
 			expect(btnDataTestIds.includes("fab_button_add_column_board")).toBe(true);
 		});
@@ -314,13 +298,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 					// open menu
 					await fabComponent.findComponent(VBtn).trigger("click");
-					const btnDataTestIds = wrapper
-						.findAllComponents(SpeedDialMenuAction)
-						.map((btn) => btn.props("dataTestId"));
+					const btnDataTestIds = wrapper.findAllComponents(SpeedDialMenuAction).map((btn) => btn.props("dataTestId"));
 
-					expect(btnDataTestIds.includes("fab_button_add_column_board")).toBe(
-						false
-					);
+					expect(btnDataTestIds.includes("fab_button_add_column_board")).toBe(false);
 					expect(btnDataTestIds.includes("fab_button_add_board")).toBe(false);
 				});
 			});
@@ -333,9 +313,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 					// open menu
 					await fabComponent.findComponent(VBtn).trigger("click");
-					const btnDataTestIds = wrapper
-						.findAllComponents(SpeedDialMenuAction)
-						.map((btn) => btn.props("dataTestId"));
+					const btnDataTestIds = wrapper.findAllComponents(SpeedDialMenuAction).map((btn) => btn.props("dataTestId"));
 
 					expect(btnDataTestIds.includes("fab_button_add_board")).toBe(true);
 				});
@@ -344,18 +322,14 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 					createTestEnvStore({ FEATURE_BOARD_LAYOUT_ENABLED: true });
 					const wrapper = getWrapper({ permissionData: ["course_edit"] });
 
-					const layoutDialog = wrapper.findComponent(
-						"[data-testid=board-layout-dialog]"
-					);
+					const layoutDialog = wrapper.findComponent("[data-testid=board-layout-dialog]");
 					expect(layoutDialog.exists()).toBe(false);
 
 					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 					defaultWireframe.vm.$emit("onFabItemClick", "board-type-dialog-open");
 					await nextTick();
 
-					const openLayoutDialog = wrapper.findComponent(
-						"[data-testid=board-layout-dialog]"
-					);
+					const openLayoutDialog = wrapper.findComponent("[data-testid=board-layout-dialog]");
 					expect(openLayoutDialog.exists()).toBe(true);
 				});
 			});
@@ -396,17 +370,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
 					await menuButton.trigger("click");
 
-					expect(
-						wrapper
-							.findComponent("[data-testid=room-menu-edit-delete]")
-							.exists()
-					).toBe(true);
-					expect(
-						wrapper.findComponent("[data-testid=room-menu-copy]").exists()
-					).toBe(false);
-					expect(
-						wrapper.findComponent("[data-testid=room-menu-share]").exists()
-					).toBe(false);
+					expect(wrapper.findComponent("[data-testid=room-menu-edit-delete]").exists()).toBe(true);
+					expect(wrapper.findComponent("[data-testid=room-menu-copy]").exists()).toBe(false);
+					expect(wrapper.findComponent("[data-testid=room-menu-share]").exists()).toBe(false);
 				});
 			});
 
@@ -418,17 +384,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
 					await menuButton.trigger("click");
 
-					expect(
-						wrapper
-							.findComponent("[data-testid=room-menu-edit-delete]")
-							.exists()
-					).toBe(true);
-					expect(
-						wrapper.findComponent("[data-testid=room-menu-copy]").exists()
-					).toBe(true);
-					expect(
-						wrapper.findComponent("[data-testid=room-menu-share]").exists()
-					).toBe(false);
+					expect(wrapper.findComponent("[data-testid=room-menu-edit-delete]").exists()).toBe(true);
+					expect(wrapper.findComponent("[data-testid=room-menu-copy]").exists()).toBe(true);
+					expect(wrapper.findComponent("[data-testid=room-menu-share]").exists()).toBe(false);
 				});
 			});
 
@@ -444,17 +402,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
 					await menuButton.trigger("click");
 
-					expect(
-						wrapper
-							.findComponent("[data-testid=room-menu-edit-delete]")
-							.exists()
-					).toBe(true);
-					expect(
-						wrapper.findComponent("[data-testid=room-menu-copy]").exists()
-					).toBe(false);
-					expect(
-						wrapper.findComponent("[data-testid=room-menu-share]").exists()
-					).toBe(true);
+					expect(wrapper.findComponent("[data-testid=room-menu-edit-delete]").exists()).toBe(true);
+					expect(wrapper.findComponent("[data-testid=room-menu-copy]").exists()).toBe(false);
+					expect(wrapper.findComponent("[data-testid=room-menu-share]").exists()).toBe(true);
 				});
 			});
 
@@ -466,14 +416,10 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 				const wrapper = getWrapper();
 
-				const threeDotButton = wrapper.findComponent(
-					'[data-testid="room-menu"]'
-				);
+				const threeDotButton = wrapper.findComponent('[data-testid="room-menu"]');
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findComponent(
-					`[data-testid=room-menu-edit-delete]`
-				);
+				const moreActionButton = wrapper.findComponent(`[data-testid=room-menu-edit-delete]`);
 				await moreActionButton.trigger("click");
 
 				expect(window.location.href).toStrictEqual("/courses/123/edit");
@@ -486,14 +432,10 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 					const wrapper = getWrapper();
 					expect(wrapper.vm.courseId).toBe("123");
 
-					const threeDotButton = wrapper.findComponent(
-						'[data-testid="room-menu"]'
-					);
+					const threeDotButton = wrapper.findComponent('[data-testid="room-menu"]');
 					await threeDotButton.trigger("click");
 
-					const moreActionButton = wrapper.findComponent(
-						`[data-testid=room-menu-copy]`
-					);
+					const moreActionButton = wrapper.findComponent(`[data-testid=room-menu-copy]`);
 					await moreActionButton.trigger("click");
 
 					expect(copyModule.copy).toHaveBeenCalled();
@@ -509,17 +451,11 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 					const wrapper = getWrapper();
 
-					const threeDotButton = wrapper.findComponent(
-						'[data-testid="room-menu"]'
-					);
+					const threeDotButton = wrapper.findComponent('[data-testid="room-menu"]');
 					await threeDotButton.trigger("click");
-					const moreActionButton = wrapper.findAll(
-						`[data-testid=room-menu-common-cartridge-download]`
-					);
+					const moreActionButton = wrapper.findAll(`[data-testid=room-menu-common-cartridge-download]`);
 
-					expect(moreActionButton).not.toContain(
-						`[data-testid=room-menu-common-cartridge-download]`
-					);
+					expect(moreActionButton).not.toContain(`[data-testid=room-menu-common-cartridge-download]`);
 				});
 
 				it("should call onExport method when 'Export Course' menu clicked", async () => {
@@ -529,13 +465,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 					const wrapper = getWrapper();
 
-					const threeDotButton = wrapper.findComponent(
-						'[data-testid="room-menu"]'
-					);
+					const threeDotButton = wrapper.findComponent('[data-testid="room-menu"]');
 					await threeDotButton.trigger("click");
-					const moreActionButton = wrapper.findComponent(
-						`[data-testid=room-menu-common-cartridge-download]`
-					);
+					const moreActionButton = wrapper.findComponent(`[data-testid=room-menu-common-cartridge-download]`);
 					await moreActionButton.trigger("click");
 
 					expect(downloadModule.startExportFlow).toHaveBeenCalled();
@@ -547,14 +479,10 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 				const wrapper = getWrapper();
 
-				const threeDotButton = wrapper.findComponent(
-					'[data-testid="room-menu"]'
-				);
+				const threeDotButton = wrapper.findComponent('[data-testid="room-menu"]');
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findComponent(
-					`[data-testid=room-menu-share]`
-				);
+				const moreActionButton = wrapper.findComponent(`[data-testid=room-menu-share]`);
 				await moreActionButton.trigger("click");
 
 				expect(shareModule.startShareFlow).toHaveBeenCalled();
@@ -565,14 +493,10 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 				const wrapper = getWrapper();
 
-				const threeDotButton = wrapper.findComponent(
-					'[data-testid="room-menu"]'
-				);
+				const threeDotButton = wrapper.findComponent('[data-testid="room-menu"]');
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findComponent(
-					`[data-testid=room-menu-share]`
-				);
+				const moreActionButton = wrapper.findComponent(`[data-testid=room-menu-share]`);
 				await moreActionButton.trigger("click");
 
 				expect(shareModule.startShareFlow).toHaveBeenCalled();

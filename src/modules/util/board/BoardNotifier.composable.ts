@@ -1,4 +1,4 @@
-import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 export const useBoardNotifier = () => {
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
@@ -27,11 +27,7 @@ export const useBoardNotifier = () => {
 		});
 	};
 
-	const showCustomNotifier = (
-		text: string,
-		status: "success" | "error" | "warning" | "info",
-		timeout = 5000
-	) => {
+	const showCustomNotifier = (text: string, status: "success" | "error" | "warning" | "info", timeout = 5000) => {
 		notifierModule.show({
 			text,
 			status,
