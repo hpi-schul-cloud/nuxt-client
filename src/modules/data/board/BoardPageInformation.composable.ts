@@ -5,7 +5,6 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useBoardApi } from "./BoardApi.composable";
-import { logger } from "@util-logger";
 import { useBoardStore } from "./Board.store";
 
 const useBoardPageInformation = () => {
@@ -48,7 +47,6 @@ const useBoardPageInformation = () => {
 	});
 
 	const breadcrumbs = computed<Breadcrumb[]>(() => {
-		logger.log("boardTitle", boardTitle?.value);
 		if (!roomId.value || !contextType.value) return [];
 
 		if (contextType.value === BoardContextType.Course) {
