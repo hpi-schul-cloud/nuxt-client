@@ -602,7 +602,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should close dialog on close", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper } = setup();
 
 			const dialog = wrapper.getComponent(AddMembersDialog);
