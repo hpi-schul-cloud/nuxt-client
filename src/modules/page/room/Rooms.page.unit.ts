@@ -11,10 +11,9 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomsState, useRoomAuthorization } from "@data-room";
 import { createMock } from "@golevelup/ts-vitest";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { RouteLocation, Router, useRoute, useRouter } from "vue-router";
 import RoomsPage from "./Rooms.page.vue";
 import { mdiPlus } from "@icons/material";
@@ -24,7 +23,6 @@ import ImportFlow from "@/components/share/ImportFlow.vue";
 import { InfoAlert } from "@ui-alert";
 import { Mock } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
-import AuthModule from "@/store/auth";
 import { RoomItem } from "@/types/room/Room";
 import { roomItemFactory } from "@@/tests/test-utils";
 
@@ -42,26 +40,23 @@ describe("RoomsPage", () => {
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 
 	beforeEach(() => {
-		setupStores({
-			authModule: AuthModule,
-		});
-
 		roomPermissions = {
-			canAddRoomMembers: ref(true),
-			canCreateRoom: ref(false),
-			canChangeOwner: ref(false),
-			canCopyRoom: ref(false),
-			canViewRoom: ref(false),
-			canEditRoom: ref(false),
-			canDeleteRoom: ref(false),
-			canLeaveRoom: ref(false),
-			canRemoveRoomMembers: ref(false),
-			canEditRoomContent: ref(false),
-			canSeeAllStudents: ref(false),
-			canShareRoom: ref(false),
-			canListDrafts: ref(false),
-			canManageRoomInvitationLinks: ref(false),
-			canManageVideoconferences: ref(false),
+			canAddRoomMembers: computed(() => true),
+			canAddAllStudents: computed(() => false),
+			canCreateRoom: computed(() => false),
+			canChangeOwner: computed(() => false),
+			canCopyRoom: computed(() => false),
+			canViewRoom: computed(() => false),
+			canEditRoom: computed(() => false),
+			canDeleteRoom: computed(() => false),
+			canLeaveRoom: computed(() => false),
+			canRemoveRoomMembers: computed(() => false),
+			canEditRoomContent: computed(() => false),
+			canSeeAllStudents: computed(() => false),
+			canShareRoom: computed(() => false),
+			canListDrafts: computed(() => false),
+			canManageRoomInvitationLinks: computed(() => false),
+			canManageVideoconferences: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
@@ -232,7 +227,8 @@ describe("RoomsPage", () => {
 			});
 
 			it("should have the correct props", () => {
-				roomPermissions.canCreateRoom.value = true;
+				roomPermissions.canCreateRoom = computed(() => true);
+
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
 

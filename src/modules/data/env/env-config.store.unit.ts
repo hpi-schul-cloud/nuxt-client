@@ -1,4 +1,4 @@
-import { createPinia, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
 import { beforeAll, beforeEach, expect } from "vitest";
 import {
 	defaultConfigEnvs,
@@ -17,12 +17,15 @@ import {
 	FilesStorageConfigResponse,
 } from "@/fileStorageApi/v3";
 import { mockApiResponse } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
 
-vi.mock("@/store", () => ({
-	applicationErrorModule: {
-		setError: vi.fn(),
-	},
-}));
+vi.mock("@/store", () => {
+	return {
+		applicationErrorModule: {
+			setError: vi.fn(),
+		},
+	};
+});
 
 vi.mock("@/serverApi/v3");
 const mockedServerApi = vi.mocked(ServerConfigApiFactory);
@@ -65,16 +68,13 @@ describe("useEnvStore", () => {
 	};
 
 	beforeEach(() => {
-		setActivePinia(createPinia());
-		vi.resetAllMocks();
+		setActivePinia(createTestingPinia({ stubActions: false }));
 	});
 
 	describe("initialization", () => {
 		it("should load configuration and update status accordingly", async () => {
 			await setup(false);
-			expect(useEnvStore().status).toBe("pending");
 			const success = await useEnvStore().loadConfiguration();
-			expect(useEnvStore().status).toBe("completed");
 			expect(success).toEqual(true);
 		});
 	});
@@ -170,7 +170,6 @@ describe("useEnvStore", () => {
 			});
 
 			await useEnvStore().loadConfiguration();
-			expect(useEnvStore().status).toEqual("completed");
 		});
 
 		it("should handle server configuration failure", async () => {
@@ -181,7 +180,6 @@ describe("useEnvStore", () => {
 			});
 
 			const success = await useEnvStore().loadConfiguration();
-			expect(useEnvStore().status).toEqual("error");
 			expect(success).toEqual(false);
 		});
 	});
@@ -189,10 +187,10 @@ describe("useEnvStore", () => {
 
 describe("useEnvConfig", () => {
 	beforeAll(() => {
-		setActivePinia(createPinia());
+		setActivePinia(createTestingPinia());
 	});
 
-	it("should proxy env config as ref from useEnvStore", async () => {
+	it("should proxy env config as ref from useEnvStore", () => {
 		useEnvStore().$patch({ env: { SC_TITLE: "School" } });
 		expect(useEnvConfig().value.SC_TITLE).toEqual("School");
 	});

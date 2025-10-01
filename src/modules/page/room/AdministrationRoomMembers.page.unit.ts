@@ -1,9 +1,8 @@
-import { authModule, schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
+import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
+	createTestAppStoreWithRole,
 	createTestEnvStore,
-	meResponseFactory,
 	mockedPiniaStoreTyping,
 	schoolFactory,
 } from "@@/tests/test-utils";
@@ -18,6 +17,7 @@ import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { Router, useRoute } from "vue-router";
 import AdministrationRoomDetailPage from "./AdministrationRoomMembers.page.vue";
+import { RoleName } from "@/serverApi/v3";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -60,13 +60,9 @@ describe("AdministrationRoomMembers.page", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
-		const mockMe = meResponseFactory.build({
-			roles: [{ id: "admin-id", name: "admin" }],
-		});
-		authModule.setMe(mockMe);
+		createTestAppStoreWithRole(RoleName.Administrator);
 
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});

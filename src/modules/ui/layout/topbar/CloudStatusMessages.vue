@@ -60,9 +60,7 @@ const getIcon = (status: string) => {
 		: { icon: mdiInformation, color: "info" };
 };
 
-const formatDate = (dateTime: string) => {
-	return formatDateForAlerts(dateTime, true);
-};
+const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
 </script>
 
 <style lang="scss" scoped>

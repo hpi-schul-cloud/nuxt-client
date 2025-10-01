@@ -5,7 +5,6 @@ import {
 	SchoolSystemResponse,
 } from "@/serverApi/v3";
 import { notifierModule, schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
 import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
 import {
@@ -48,7 +47,6 @@ describe("GeneralSettings", () => {
 
 	beforeEach(() => {
 		setupStores({
-			authModule: AuthModule,
 			schoolsModule: SchoolsModule,
 			notifierModule: NotifierModule,
 		});

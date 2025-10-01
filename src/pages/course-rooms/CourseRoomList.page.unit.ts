@@ -3,7 +3,6 @@ import { mount } from "@vue/test-utils";
 import CourseRoomList from "./CourseRoomList.page.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import CourseRoomListModule from "@/store/course-room-list";
-import AuthModule from "@/store/auth";
 import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
@@ -95,7 +94,6 @@ describe("@/pages/CourseRoomListPage", () => {
 	beforeEach(() => {
 		setupStores({
 			courseRoomListModule: CourseRoomListModule,
-			authModule: AuthModule,
 		});
 		courseRoomListModule.setAllElements(mockData);
 		courseRoomListModule.fetchAllElements = vi.fn();

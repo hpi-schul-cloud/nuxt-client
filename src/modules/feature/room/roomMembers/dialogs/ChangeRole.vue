@@ -133,7 +133,6 @@ import {
 	ChangeRoomRoleBodyParamsRoleNameEnum as RoleEnum,
 	RoleName,
 } from "@/serverApi/v3";
-import { authModule } from "@/store";
 import {
 	RoomMember,
 	useRoomDetailsStore,
@@ -145,6 +144,7 @@ import { computed, ModelRef, PropType, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VCard } from "vuetify/components";
+import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps({
 	members: {
@@ -187,6 +187,8 @@ const { updateMembersRole, changeRoomOwner } = roomMembersStore;
 const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members");
 
+const { user } = useAppStoreRefs();
+
 const isChangeOwnershipOptionVisible = computed(() => {
 	if (props.isAdminMode) {
 		return (
@@ -194,7 +196,7 @@ const isChangeOwnershipOptionVisible = computed(() => {
 		);
 	}
 
-	const currentUserId = authModule.getUser?.id;
+	const currentUserId = user.value?.id;
 	return (
 		currentUserId &&
 		roomMembersStore.isRoomOwner(currentUserId) &&
@@ -253,9 +255,9 @@ const memberSchoolRoles = computed(() => {
 	return memberToChangeRole.value[0]?.schoolRoleNames;
 });
 
-const isMemberStudent = computed(() => {
-	return memberSchoolRoles.value.includes(RoleName.Student);
-});
+const isMemberStudent = computed(() =>
+	memberSchoolRoles.value.includes(RoleName.Student)
+);
 
 const infoText = computed(() => {
 	const roomName = room.value?.name ?? "";

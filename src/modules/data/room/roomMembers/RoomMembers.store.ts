@@ -7,7 +7,6 @@ import {
 	SchoolForExternalInviteResponse,
 } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import { authModule } from "@/store/store-accessor";
 import { $axios } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
@@ -16,6 +15,7 @@ import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { RoomMember } from "./types";
+import { useAppStore } from "@data-app";
 
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const { t } = useI18n();
@@ -68,7 +68,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		name: schoolsModule.getSchool.name,
 	};
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([ownSchool]);
-	const currentUserId = authModule.getUser?.id ?? "";
+	const currentUserId = computed(() => useAppStore().user?.id);
+
 	const selectedIds = ref<string[]>([]);
 	const confirmationSelectedIds = ref<string[]>([]);
 
@@ -112,7 +113,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					...member,
 					fullName: `${member.firstName} ${member.lastName}`,
 					isSelectable: !(
-						member.userId === currentUserId ||
+						member.userId === currentUserId.value ||
 						member.roomRoleName === RoleName.Roomowner
 					),
 					displayRoomRole: roomRole[member.roomRoleName],
@@ -198,7 +199,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const isCurrentUserStudent = computed(() => {
 		const member = roomMembers.value.find(
-			(member) => member.userId === currentUserId
+			(member) => member.userId === currentUserId.value
 		);
 
 		return member?.schoolRoleNames.includes(RoleName.Student);

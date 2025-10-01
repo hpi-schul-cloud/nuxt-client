@@ -1,12 +1,11 @@
 import { RoleName } from "@/serverApi/v3";
-import { authModule, schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
+import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
-	meResponseFactory,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	schoolFactory,
+	createTestAppStoreWithUser,
 } from "@@/tests/test-utils";
 import {
 	roomAdminFactory,
@@ -25,12 +24,11 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { mount } from "@vue/test-utils";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
-import { createPinia, setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { nextTick } from "vue";
 import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
 import ChangeRole from "./ChangeRole.vue";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { Mock } from "vitest";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -48,13 +46,15 @@ vi.mock("vue-i18n", async (importOriginal) => {
 });
 
 describe("ChangeRole.vue", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	let pauseMock: Mock;
-	let unpauseMock: Mock;
-	let deactivateMock: Mock;
-
 	beforeEach(() => {
-		setActivePinia(createPinia());
+		let mockedBoardNotifierCalls: DeepMocked<
+			ReturnType<typeof useBoardNotifier>
+		>;
+		let pauseMock: Mock;
+		let unpauseMock: Mock;
+		let deactivateMock: Mock;
+
+		// setActivePinia(createPinia());
 
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
@@ -72,7 +72,6 @@ describe("ChangeRole.vue", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -100,11 +99,6 @@ describe("ChangeRole.vue", () => {
 			...options,
 		};
 
-		const mockMe = meResponseFactory.build({
-			user: { id: currentUser.userId },
-		});
-		authModule.setMe(mockMe);
-
 		const roomMembers = [...membersForRoleChange, currentUser];
 		const room = roomFactory.build();
 
@@ -113,6 +107,7 @@ describe("ChangeRole.vue", () => {
 				roomDetailsStore: { room },
 			},
 		});
+		createTestAppStoreWithUser(currentUser.userId);
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
 		roomMembersStore.roomMembers = roomMembers;
@@ -338,7 +333,7 @@ describe("ChangeRole.vue", () => {
 		];
 
 		describe.each(roleTestCases)('when member role is "%s" ', (role) => {
-			it(`should have "${role}" pre-selected`, async () => {
+			it(`should have "${role}" pre-selected`, () => {
 				const members = roomMemberFactory.buildList(3, {
 					roomRoleName: role,
 				});

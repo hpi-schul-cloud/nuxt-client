@@ -12,6 +12,7 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	authorizedCollaboraDocumentUrlResponseFactory,
 	AxiosResponseFactory,
+	createTestAppStoreWithSchool,
 } from "@@/tests/test-utils";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
@@ -19,9 +20,10 @@ import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordRespons
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { createMock } from "@golevelup/ts-vitest";
 import { AxiosResponse } from "axios";
-import { createPinia, setActivePinia } from "pinia";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
 import { setupFileStorageNotifier } from "./test-utils/fileStorageNotifier";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("./FileStorageNotifications.composable");
 
@@ -31,12 +33,6 @@ vi.mock("@/utils/api");
 const mockedMapAxiosErrorToResponseError = vi.mocked(
 	mapAxiosErrorToResponseError
 );
-
-vi.mock("@/store/store-accessor", () => ({
-	authModule: {
-		getSchool: { id: "schoolId" },
-	},
-}));
 
 const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	const expectedPayload = apiResponseErrorFactory.build({
@@ -54,8 +50,12 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 };
 
 describe("FileStorageApi Composable", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStoreWithSchool("schoolId");
+	});
+
 	beforeEach(() => {
-		setActivePinia(createPinia());
 		vi.resetAllMocks();
 	});
 

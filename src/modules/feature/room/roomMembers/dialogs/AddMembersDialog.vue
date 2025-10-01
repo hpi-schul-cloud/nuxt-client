@@ -179,11 +179,7 @@ const schoolItems = computed(() => {
 	}
 });
 
-const { canAddRoomMembers, canSeeAllStudents } = useRoomAuthorization();
-
-const canAddAllStudents = computed(() => {
-	return canAddRoomMembers.value && canSeeAllStudents.value;
-});
+const { canAddAllStudents } = useRoomAuthorization();
 
 const selectedSchool = ref(schools.value[0].id);
 
@@ -222,11 +218,10 @@ const isStudentSelectionDisabled = computed(() => {
 	return isExternalSchoolSelected && isStudentRoleSelected;
 });
 
-const isRestrictedStudentVisibilityCase = computed(() => {
-	return (
+const isRestrictedStudentVisibilityCase = computed(
+	() =>
 		selectedSchoolRole.value === RoleName.Student && !canAddAllStudents.value
-	);
-});
+);
 
 const determineStudentAlertType = computed<StudentAlertTypeEnum | null>(() => {
 	if (

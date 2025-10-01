@@ -4,12 +4,11 @@ import {
 	RoleName,
 	SchoolUserListResponse,
 } from "@/serverApi/v3/api";
-import { authModule, schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
+import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
-	meResponseFactory,
+	createTestAppStore,
 	mockApiResponse,
 	mockedPiniaStoreTyping,
 	roomFactory,
@@ -28,10 +27,10 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
-import { createPinia, setActivePinia } from "pinia";
 import { Mock, MockInstance } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
+import { createPinia, setActivePinia } from "pinia";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
@@ -50,9 +49,17 @@ describe("useRoomMembers", () => {
 		name: "Paul-Gerhardt-Gymnasium",
 	};
 
+	const createAuthTestUser = (userId: string, roleName: RoleName) => {
+		createTestAppStore({
+			me: {
+				roles: [{ id: userId, name: roleName }],
+				user: { id: userId },
+			},
+		});
+	};
+
 	beforeEach(() => {
 		setActivePinia(createPinia());
-
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
@@ -68,13 +75,9 @@ describe("useRoomMembers", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
-
-		const mockMe = meResponseFactory.build();
-		authModule.setMe(mockMe);
 	});
 
 	const setup = (members: RoomMember[] = []) => {
@@ -355,10 +358,8 @@ describe("useRoomMembers", () => {
 	describe("isCurrentUserStudent", () => {
 		describe("when the current user is a student", () => {
 			it("should return true", () => {
-				const currentUser = meResponseFactory.build({
-					roles: [{ id: "student-id", name: RoleName.Student }],
-				});
-				authModule.setMe(currentUser);
+				const userId = "student-id";
+				createAuthTestUser(userId, RoleName.Student);
 
 				const { roomMembersStore } = setup();
 
@@ -367,7 +368,7 @@ describe("useRoomMembers", () => {
 				});
 
 				roomMembers[0].schoolRoleNames = [RoleName.Student];
-				roomMembers[0].userId = currentUser.user.id;
+				roomMembers[0].userId = userId;
 				roomMembersStore.roomMembers = [...roomMembers];
 
 				expect(roomMembersStore.isCurrentUserStudent).toBe(true);
@@ -375,10 +376,8 @@ describe("useRoomMembers", () => {
 		});
 		describe("when the current user is not a student", () => {
 			it("should return false", () => {
-				const currentUser = meResponseFactory.build({
-					roles: [{ id: "teacher-id", name: RoleName.Teacher }],
-				});
-				authModule.setMe(currentUser);
+				const userId = "teacher-id";
+				createAuthTestUser(userId, RoleName.Teacher);
 
 				const { roomMembersStore } = setup();
 
@@ -387,7 +386,7 @@ describe("useRoomMembers", () => {
 				});
 
 				roomMembers[0].schoolRoleNames = [RoleName.Teacher];
-				roomMembers[0].userId = currentUser.user.id;
+				roomMembers[0].userId = userId;
 				roomMembersStore.roomMembers = [...roomMembers];
 
 				expect(roomMembersStore.isCurrentUserStudent).toBe(false);
@@ -457,10 +456,9 @@ describe("useRoomMembers", () => {
 
 		describe("when the current user is a student", () => {
 			it("should not fetch the school list", async () => {
-				const currentUser = meResponseFactory.build({
-					roles: [{ id: "student-id", name: RoleName.Student }],
-				});
-				authModule.setMe(currentUser);
+				const userId = "student-id";
+				createAuthTestUser(userId, RoleName.Student);
+
 				const { roomMembersStore } = setup();
 
 				const roomMembers = roomMemberFactory.buildList(2, {
@@ -468,7 +466,7 @@ describe("useRoomMembers", () => {
 				});
 
 				roomMembers[0].schoolRoleNames = [RoleName.Student];
-				roomMembers[0].userId = currentUser.user.id;
+				roomMembers[0].userId = userId;
 				roomMembersStore.roomMembers = [...roomMembers];
 
 				await roomMembersStore.loadSchoolList();

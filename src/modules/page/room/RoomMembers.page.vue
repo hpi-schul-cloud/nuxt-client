@@ -123,7 +123,7 @@ import {
 } from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { Tab } from "@/types/room/RoomMembers";
-import { authModule } from "@/store";
+import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps({
 	tab: {
@@ -193,9 +193,9 @@ const pageTitle = computed(() =>
 );
 useTitle(pageTitle);
 
-const isVisibleTabNavigation = computed(() => {
-	return canManageRoomInvitationLinks.value;
-});
+const isVisibleTabNavigation = computed(
+	() => canManageRoomInvitationLinks.value
+);
 
 const tabs: Array<{
 	title: string;
@@ -231,7 +231,7 @@ const tabs: Array<{
 	},
 ];
 
-const onFabClick = async () => {
+const onFabClick = () => {
 	switch (activeTab.value) {
 		case Tab.Invitations:
 			invitationStep.value = InvitationStep.PREPARE;
@@ -246,8 +246,10 @@ const onFabClick = async () => {
 	}
 };
 
+const { user } = useAppStoreRefs();
+
 const currentUserSchoolName = computed(() => {
-	const currentUser = authModule.getUser;
+	const currentUser = user.value;
 	if (!currentUser) return "";
 	const member = roomMembersStore.getMemberById(currentUser?.id);
 

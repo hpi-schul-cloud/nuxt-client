@@ -1,15 +1,15 @@
 import { Permission, RoleName } from "@/serverApi/v3";
 import { RoomDetails } from "@/types/room/Room";
-import { meResponseFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	createTestAppStore,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { useRoomDetailsStore } from "@data-room";
-import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { ref } from "vue";
-import setupStores from "../../../../tests/test-utils/setupStores";
-import { authModule } from "../../../store";
-import AuthModule from "../../../store/auth";
 import { useRoomAuthorization } from "./roomAuthorization.composable";
+import { createTestingPinia } from "@pinia/testing";
 
 type setupParams = {
 	userRoles?: RoleName[];
@@ -21,7 +21,7 @@ let roomDetailsStore: ReturnType<typeof useRoomDetailsStore>;
 
 describe("roomAuthorization", () => {
 	beforeEach(() => {
-		setActivePinia(createTestingPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 	});
 
@@ -35,16 +35,16 @@ describe("roomAuthorization", () => {
 		);
 		roomDetailsStore.room = room.value;
 
-		setupStores({ authModule: AuthModule });
 		const userRoleEntities = userRoles.map((role: RoleName) => ({
 			id: Math.random().toString(),
 			name: role,
 		}));
-		const mockMe = meResponseFactory.build({
-			roles: userRoleEntities,
-			permissions: userPermissions,
+		createTestAppStore({
+			me: {
+				permissions: userPermissions,
+				roles: userRoleEntities,
+			},
 		});
-		authModule.setMe(mockMe);
 
 		return useRoomAuthorization();
 	};
@@ -53,9 +53,7 @@ describe("roomAuthorization", () => {
 		describe("when the user has school create room permission", () => {
 			const setup = () => {
 				return genericSetup({
-					userPermissions: [
-						Permission.SchoolCreateRoom.toLocaleLowerCase() as Permission,
-					],
+					userPermissions: [Permission.SchoolCreateRoom],
 				});
 			};
 
