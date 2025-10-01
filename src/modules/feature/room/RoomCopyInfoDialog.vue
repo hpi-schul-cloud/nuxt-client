@@ -12,7 +12,10 @@
 				<p>
 					{{ $t("feature-room.CopyInfoDialog.text.nextStep") }}
 				</p>
-				<InfoAlert class="mb-4">
+				<InfoAlert
+					class="mb-4"
+					data-testid="copy-info-copyright-data-protection"
+				>
 					{{ $t("components.molecules.share.checkPrivacyAndCopyright") }}
 				</InfoAlert>
 				<WarningAlert>
