@@ -52,7 +52,7 @@ describe("useNotificationStore", () => {
 
 		const alert = store.notifierItems[0];
 		store.notify({ text: "Second", status: "success" });
-		store.removeNotifier(alert);
+		store.removeNotifier(alert.id);
 
 		expect(store.notifierItems).toHaveLength(1);
 		expect(store.notifierItems[0].text).toBe("Second");

@@ -4,12 +4,13 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import AlertContainer from "./AlertContainer.vue";
-import Alert from "./Alert.vue";
+import { VAlert, VIcon } from "vuetify/lib/components/index";
 import { AlertPayload, notifySuccess, useNotificationStore } from "@data-app";
 import { beforeEach } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
+import { mdiInformation } from "@icons/material";
 
 describe("AlertContainer", () => {
 	beforeEach(() => {
@@ -29,7 +30,7 @@ describe("AlertContainer", () => {
 	it("Alert should initially not be rendered", () => {
 		const { wrapper } = getWrapper();
 
-		const alertComponent = wrapper.findComponent(Alert);
+		const alertComponent = wrapper.findComponent(VAlert);
 		expect(alertComponent.exists()).toBe(false);
 	});
 
@@ -41,10 +42,12 @@ describe("AlertContainer", () => {
 		};
 		useNotificationStore().notify(alertPayload);
 		const { wrapper } = getWrapper();
+		const alert = wrapper.findComponent(VAlert);
 
-		const alert = wrapper.findComponent(Alert);
+		expect(alert.props("type")).toBe("info");
 		expect(alert.text()).toEqual(alertPayload.text);
 		expect(alert.classes()).toContain(`bg-${alertPayload.status}`);
+		expect(wrapper.findComponent(VIcon).props("icon")).toBe(mdiInformation);
 	});
 
 	it("should be able to render list", async () => {
@@ -52,7 +55,7 @@ describe("AlertContainer", () => {
 		["hello world", "hello bar"].forEach((message) => notifySuccess(message));
 		await nextTick();
 
-		const notificationData = wrapper.findAllComponents(Alert);
+		const notificationData = wrapper.findAllComponents(VAlert);
 		expect(notificationData.length).toEqual(2);
 	});
 

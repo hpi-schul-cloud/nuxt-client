@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { uniqueId } from "lodash-es";
 
 export type AlertStatus = "success" | "error" | "warning" | "info";
 
@@ -10,14 +11,18 @@ export interface AlertPayload {
 	duration?: number;
 }
 
+export interface Alert extends AlertPayload {
+	id: string;
+}
+
 /**
  * Store to spawn/remove alert messages for the user.
  */
 export const useNotificationStore = defineStore("NotifyStore", () => {
-	const notifierItems = ref<AlertPayload[]>([]);
+	const notifierItems = ref<Alert[]>([]);
 
-	const removeNotifier = (alert: AlertPayload) => {
-		const index = notifierItems.value.indexOf(alert);
+	const removeNotifier = (id: string) => {
+		const index = notifierItems.value.findIndex((alert) => alert.id === id);
 		notifierItems.value.splice(index, 1);
 	};
 
@@ -26,7 +31,9 @@ export const useNotificationStore = defineStore("NotifyStore", () => {
 	 * Default timeout is 5000ms and autoClose is true.
 	 */
 	const notify = (payload: AlertPayload) => {
-		const alertData: AlertPayload = {
+		const id = uniqueId();
+		const alertData: Alert = {
+			id,
 			...payload,
 			autoClose: payload.autoClose ?? true,
 			duration: payload.duration ?? 5000,
@@ -35,11 +42,11 @@ export const useNotificationStore = defineStore("NotifyStore", () => {
 
 		if (alertData.autoClose) {
 			setTimeout(() => {
-				removeNotifier(alertData);
+				removeNotifier(id);
 			}, alertData.duration);
 		}
 		return () => {
-			removeNotifier(alertData);
+			removeNotifier(id);
 		};
 	};
 
