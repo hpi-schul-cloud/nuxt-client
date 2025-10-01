@@ -27,9 +27,7 @@ export const useFolderState = () => {
 	});
 
 	const folderName = computed(() => {
-		const title = fileFolderElement.value?.content.title;
-
-		return title ? title : t("pages.folder.untitled");
+		return fileFolderElement.value?.content.title ?? t("pages.folder.untitled");
 	});
 
 	const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
