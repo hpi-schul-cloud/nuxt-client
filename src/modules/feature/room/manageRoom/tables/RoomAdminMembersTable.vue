@@ -13,7 +13,8 @@
 		<template #[`action-menu-items`]>
 			<KebabMenuActionChangePermission
 				v-if="
-					isOwnSchool && selectedIdsBelongToOwnSchool &&
+					isOwnSchool &&
+					selectedIdsBelongToOwnSchool &&
 					(selectedIds.length === 1 || !selectedIdsIncludeStudents)
 				"
 				@click="onChangePermission(selectedIds)"
@@ -67,7 +68,11 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import { RoomMember, useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
+import {
+	RoomMember,
+	useRoomDetailsStore,
+	useRoomMembersStore,
+} from "@data-room";
 import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { storeToRefs } from "pinia";
@@ -173,9 +178,11 @@ const confirmRemoval = async (userIds: string[]) => {
 	return shouldRemove;
 };
 
-const { userSchoolId } = useAdministrationRoomStore();
+const { room } = storeToRefs(useRoomDetailsStore());
 const adminSchoolId = computed(() => schoolsModule.getSchool.id);
-const isOwnSchool = computed(() => userSchoolId === adminSchoolId.value);
+const isOwnSchool = computed(
+	() => room.value?.schoolId === adminSchoolId.value
+);
 
 const belongsToOwnSchool = (schoolId: string) =>
 	schoolId === adminSchoolId.value;
