@@ -13,7 +13,8 @@
 		<template #[`action-menu-items`]>
 			<KebabMenuActionChangePermission
 				v-if="
-					isOwnSchool && selectedIdsBelongToOwnSchool &&
+					isOwnSchool &&
+					selectedIdsBelongToOwnSchool &&
 					(selectedIds.length === 1 || !selectedIdsIncludeStudents)
 				"
 				@click="onChangePermission(selectedIds)"
@@ -67,7 +68,11 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import { RoomMember, useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
+import {
+	RoomMember,
+	useAdministrationRoomStore,
+	useRoomMembersStore,
+} from "@data-room";
 import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { storeToRefs } from "pinia";
