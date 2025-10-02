@@ -40,12 +40,16 @@
 				:aria-label="getAriaLabel(item)"
 			>
 				<KebabMenuActionChangePermission
-					v-if="!checkIsStudent(item) && belongsToOwnSchool(item.schoolId)"
+					v-if="
+						isOwnSchool &&
+						!checkIsStudent(item) &&
+						belongsToOwnSchool(item.userId)
+					"
 					:aria-label="getAriaLabel(item, 'changeRole')"
 					@click="onChangePermission([item.userId])"
 				/>
 				<KebabMenuActionRemoveMember
-					v-if="!isRoomOwner(item.userId) && belongsToOwnSchool(item.schoolId)"
+					v-if="!isRoomOwner(item.userId) && belongsToOwnSchool(item.userId)"
 					:aria-label="getAriaLabel(item, 'remove')"
 					@click="onRemoveMembers([item.userId])"
 				/>
@@ -184,8 +188,13 @@ const isOwnSchool = computed(
 	() => room.value?.schoolId === adminSchoolId.value
 );
 
-const belongsToOwnSchool = (schoolId: string) =>
-	schoolId === adminSchoolId.value;
+const belongsToOwnSchool = (userId: string) => {
+	const member = roomMembersWithoutApplicants.value.find(
+		(member) => member.userId === userId
+	);
+
+	return member?.schoolId === adminSchoolId.value;
+};
 
 const selectedIdsBelongToOwnSchool = computed(() =>
 	selectedIds.value.every(belongsToOwnSchool)
