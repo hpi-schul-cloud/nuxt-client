@@ -14,14 +14,17 @@ import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("FileDisplay", () => {
-	describe("when previewUrl is defined", () => {
-		beforeAll(() => {
-			createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
-		});
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
+	});
 
+	describe("when previewUrl is defined", () => {
 		describe("when mimeType is not a video type", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();

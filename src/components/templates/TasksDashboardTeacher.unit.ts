@@ -2,14 +2,12 @@ import TasksList from "@/components/organisms/TasksList.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import { OpenTasksForTeacher } from "@/store/types/tasks";
 import {
 	COPY_MODULE_KEY,
 	FINISHED_TASKS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 	TASKS_MODULE_KEY,
 } from "@/utils/inject";
@@ -36,7 +34,6 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
 	let loadingStateModuleMock: LoadingStateModule;
-	let notifierModuleMock: NotifierModule;
 	let shareModuleMock: ShareModule;
 
 	beforeAll(() => {
@@ -55,7 +52,6 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 					[TASKS_MODULE_KEY]: tasksModuleMock,
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
 			},
@@ -87,7 +83,6 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		});
 		copyModuleMock = createModuleMocks(CopyModule);
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-		notifierModuleMock = createModuleMocks(NotifierModule);
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: false,
 		});
@@ -129,7 +124,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		expect(emptyStateComponent.exists()).toBe(true);
 	});
 
-	it("should update store when tab changes", async () => {
+	it("should update store when tab changes", () => {
 		const wrapper = mountComponent({
 			propsData: {
 				tabRoutes,
@@ -141,7 +136,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		expect(tasksModuleMock.setActiveTab).toHaveBeenCalled();
 	});
 
-	it("should handle copy-task event", async () => {
+	it("should handle copy-task event", () => {
 		const wrapper = mountComponent({
 			propsData: {
 				tabRoutes,

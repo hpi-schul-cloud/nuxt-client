@@ -1,13 +1,11 @@
 import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import {
 	COPY_MODULE_KEY,
 	FINISHED_TASKS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 	TASKS_MODULE_KEY,
 } from "@/utils/inject";
@@ -60,7 +58,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	let copyModuleMock: CopyModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let loadingStateModuleMock: LoadingStateModule;
-	let notifierModuleMock: NotifierModule;
 	let shareModuleMock: ShareModule;
 	let wrapper: VueWrapper;
 
@@ -75,7 +72,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					[TASKS_MODULE_KEY]: tasksModuleMock,
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
 				mocks: {
@@ -193,7 +189,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				getIsResultModalOpen: false,
 			});
 			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-			notifierModuleMock = createModuleMocks(NotifierModule);
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: false,
 			});

@@ -1,12 +1,10 @@
-import NotifierModule from "@/store/notifier";
 import { EditorMode } from "@/types/file/File";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	authorizedCollaboraDocumentUrlResponseFactory,
 	createTestAppStoreWithUser,
+	expectNotification,
 	ObjectIdMock,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -16,8 +14,16 @@ import { createMock } from "@golevelup/ts-vitest";
 import { flushPromises } from "@vue/test-utils";
 import CollaboraPage from "./Collabora.page.vue";
 import { useAppStore } from "@data-app";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("Collabora.page", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		vi.resetAllMocks();
+	});
+
 	const setup = () => {
 		const fileRecordId = ObjectIdMock();
 		const editorMode = EditorMode.EDIT;
@@ -35,14 +41,9 @@ describe("Collabora.page", () => {
 			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl
 		);
 
-		const notifierModule = createModuleMocks(NotifierModule);
-
 		const wrapper = mount(CollaboraPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			propsData: {
 				fileRecordId,
@@ -57,13 +58,8 @@ describe("Collabora.page", () => {
 			fileStorageApiMock,
 			fileRecordId,
 			mockedMe,
-			notifierModule,
 		};
 	};
-
-	beforeEach(() => {
-		vi.resetAllMocks();
-	});
 
 	it("should call getAuthorizedCollaboraDocumentUrl with correct parameters", () => {
 		const { fileStorageApiMock, fileRecordId, editorMode, mockedMe } = setup();
@@ -93,7 +89,7 @@ describe("Collabora.page", () => {
 		describe("when message is not a collabora message", () => {
 			describe("when MessageId is missing", () => {
 				it("should show notification", () => {
-					const { notifierModule } = setup();
+					setup();
 
 					const message = `{
 					"SendTime": 1755591627240,
@@ -104,17 +100,13 @@ describe("Collabora.page", () => {
 					});
 					window.dispatchEvent(messageEvent);
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						text: "pages.collabora.messageError",
-						status: "error",
-						timeout: 5000,
-					});
+					expectNotification("error");
 				});
 			});
 
 			describe("when MessageId is not string", () => {
 				it("should show notification", () => {
-					const { notifierModule } = setup();
+					setup();
 
 					const message = `{
 						"MessageId": 1,
@@ -126,17 +118,13 @@ describe("Collabora.page", () => {
 					});
 					window.dispatchEvent(messageEvent);
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						text: "pages.collabora.messageError",
-						status: "error",
-						timeout: 5000,
-					});
+					expectNotification("error");
 				});
 			});
 
 			describe("when Values is missing", () => {
 				it("should show notification", () => {
-					const { notifierModule } = setup();
+					setup();
 
 					const message = `{
 						"MessageId": "Some_Other_Message",
@@ -147,18 +135,14 @@ describe("Collabora.page", () => {
 					});
 					window.dispatchEvent(messageEvent);
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						text: "pages.collabora.messageError",
-						status: "error",
-						timeout: 5000,
-					});
+					expectNotification("error");
 				});
 			});
 		});
 
 		describe("when message is not valid json", () => {
 			it("should show notification ", () => {
-				const { notifierModule } = setup();
+				setup();
 
 				const modifiedMessage = `{
 					sdf
@@ -168,11 +152,7 @@ describe("Collabora.page", () => {
 				});
 				window.dispatchEvent(messageEvent);
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "pages.collabora.jsonError",
-					status: "error",
-					timeout: 5000,
-				});
+				expectNotification("error");
 			});
 		});
 	});

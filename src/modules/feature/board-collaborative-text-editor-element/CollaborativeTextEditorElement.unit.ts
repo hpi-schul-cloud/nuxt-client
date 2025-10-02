@@ -1,7 +1,4 @@
 import { CollaborativeTextEditorParentType } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { collaborativeTextEditorElementResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -14,7 +11,8 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VCard } from "vuetify/lib/components/index";
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
-import { setupCollaborativeTextEditorApiMock } from "./test-utils/collaborativeTextEditorApiMock";
+import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
+
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 // Mocks
@@ -24,11 +22,13 @@ vi.mock("@data-board", () => ({
 	useDeleteConfirmationDialog: vi.fn(),
 }));
 vi.mock("@feature-board");
+
 vi.mock("./composables/CollaborativeTextEditorApi.composable");
+const mockedUseCollaborativeTextEditorApi = vi.mocked(
+	useCollaborativeTextEditorApi
+);
 
 describe("CollaborativeTextEditorElement", () => {
-	const notifierModule = createModuleMocks(NotifierModule);
-
 	const setup = (options?: {
 		getUrlHasError?: boolean;
 		isEditMode?: boolean;
@@ -37,7 +37,7 @@ describe("CollaborativeTextEditorElement", () => {
 	}) => {
 		const element = collaborativeTextEditorElementResponseFactory.build();
 
-		const { isListBoard, windowWidth, getUrlHasError, isEditMode } = {
+		const { isListBoard, getUrlHasError, windowWidth, isEditMode } = {
 			getUrlHasError: false,
 			isListBoard: false,
 			isEditMode: false,
@@ -48,10 +48,9 @@ describe("CollaborativeTextEditorElement", () => {
 		const resolvedValue = getUrlHasError
 			? undefined
 			: `${CollaborativeTextEditorParentType.ContentElement}/${element.id}`;
-		const getUrlMock = vi.fn().mockResolvedValueOnce(resolvedValue);
 
-		const { getUrl } = setupCollaborativeTextEditorApiMock({
-			getUrlMock,
+		mockedUseCollaborativeTextEditorApi.mockReturnValue({
+			getUrl: vi.fn().mockResolvedValueOnce(resolvedValue),
 		});
 
 		Object.defineProperty(window, "innerWidth", {
@@ -64,7 +63,6 @@ describe("CollaborativeTextEditorElement", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[BOARD_IS_LIST_LAYOUT as symbol]: isListBoard,
 				},
 			},
@@ -84,7 +82,6 @@ describe("CollaborativeTextEditorElement", () => {
 			wrapper,
 			isEditMode: true,
 			element: element,
-			getUrl,
 			windowMock,
 		};
 	};
@@ -197,7 +194,7 @@ describe("CollaborativeTextEditorElement", () => {
 		describe("when element is clicked", () => {
 			describe("when getUrl returns successful", () => {
 				it("should call getUrl", async () => {
-					const { wrapper, element, getUrl } = setup({
+					const { wrapper, element } = setup({
 						isEditMode: false,
 					});
 
@@ -207,8 +204,10 @@ describe("CollaborativeTextEditorElement", () => {
 
 					await card.trigger("click");
 
-					expect(getUrl).toHaveBeenCalledTimes(1);
-					expect(getUrl).toHaveBeenCalledWith(
+					expect(useCollaborativeTextEditorApi().getUrl).toHaveBeenCalledTimes(
+						1
+					);
+					expect(useCollaborativeTextEditorApi().getUrl).toHaveBeenCalledWith(
 						element.id,
 						CollaborativeTextEditorParentType.ContentElement
 					);
@@ -294,7 +293,7 @@ describe("CollaborativeTextEditorElement", () => {
 			);
 		});
 
-		it("should render BoardMenu element", async () => {
+		it("should render BoardMenu element", () => {
 			const { wrapper } = setup({
 				isEditMode: true,
 			});
@@ -306,7 +305,7 @@ describe("CollaborativeTextEditorElement", () => {
 		});
 
 		describe("when move down is emitted by CollaborativeTextEditorElementMenu", () => {
-			it('should emit "move-down:edit" collaborative text editor', async () => {
+			it('should emit "move-down:edit" collaborative text editor', () => {
 				const { wrapper } = setup({
 					isEditMode: true,
 				});
@@ -321,7 +320,7 @@ describe("CollaborativeTextEditorElement", () => {
 		});
 
 		describe("when move up is clicked", () => {
-			it('should emit "move-up" collaborative text editor', async () => {
+			it('should emit "move-up" collaborative text editor', () => {
 				const { wrapper } = setup({
 					isEditMode: true,
 				});

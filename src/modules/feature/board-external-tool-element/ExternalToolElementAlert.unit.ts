@@ -17,6 +17,8 @@ import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import { RoleName } from "@/serverApi/v3";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@data-board");
 
@@ -56,6 +58,7 @@ describe("ExternalToolElementAlert", () => {
 			"translated"
 		);
 
+		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(roleName);
 
 		const wrapper = mount(ExternalToolElementAlert, {

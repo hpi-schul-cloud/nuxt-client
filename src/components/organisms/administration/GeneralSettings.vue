@@ -182,14 +182,11 @@ import {
 import { School } from "@/store/types/schools";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
-import { useAppStore } from "@data-app";
+import { notifySuccess, useAppStore } from "@data-app";
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { t } = useI18n();
-
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const localSchool = ref<School>();
 
@@ -322,11 +319,9 @@ const save = async () => {
 		props: updatedSchool,
 	});
 
-	notifierModule.show({
-		text: t("pages.administration.school.index.generalSettings.save.success"),
-		status: "success",
-		timeout: 5000,
-	});
+	notifySuccess(
+		"pages.administration.school.index.generalSettings.save.success"
+	);
 
 	if (updatedSchool.logo) {
 		schoolsModule.setSchoolLogo({

@@ -12,6 +12,7 @@ import { ToolParameterScope } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
 	contextExternalToolConfigurationTemplateFactory,
+	expectNotification,
 	externalToolElementResponseFactory,
 	mockedPiniaStoreTyping,
 	ObjectIdMock,
@@ -28,7 +29,7 @@ import {
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier, useSharedEditMode } from "@util-board";
+import { useSharedEditMode } from "@util-board";
 import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
@@ -57,9 +58,6 @@ const mockedSharedCardRequestPool = vi.mocked(useSharedCardRequestPool);
 vi.mock("@util-board/editMode.composable");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
@@ -84,7 +82,6 @@ describe("useCardRestApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
 		ReturnType<typeof useSocketConnection>
 	>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let setEditModeId: Mock;
 
 	beforeEach(() => {
@@ -114,10 +111,6 @@ describe("useCardRestApi", () => {
 		mockedSharedCardRequestPool.mockReturnValue(
 			mockedSharedCardRequestPoolCalls
 		);
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setEditModeId = vi.fn();
 		mockedSharedEditMode.mockReturnValue({
@@ -604,9 +597,7 @@ describe("useCardRestApi", () => {
 
 				await getPreferredTools(ToolContextType.BoardElement);
 
-				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"components.board.preferredTools.notification.error.notLoaded"
-				);
+				expectNotification("error");
 			});
 		});
 	});

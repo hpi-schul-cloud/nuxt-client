@@ -5,15 +5,18 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
 import { createTestAppStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
 };
 
 describe("@ui-layout/CloudStatusMessages", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestAppStore();
 	});
 

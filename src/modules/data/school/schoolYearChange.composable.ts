@@ -1,15 +1,13 @@
-import NotifierModule from "@/store/notifier";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createSharedComposable } from "@vueuse/core";
 import { ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useSchoolApi } from "./schoolApi.composable";
 import { MaintenanceStatus } from "./types";
+import { notifyError, notifySuccess } from "@data-app";
 
 export const useSchoolYearChange = () => {
 	const { fetchMaintenanceStatus, setMaintenance } = useSchoolApi();
-	const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 	const { t } = useI18n();
 	const maintenanceStatus: Ref<MaintenanceStatus | undefined> = ref();
@@ -21,10 +19,7 @@ export const useSchoolYearChange = () => {
 		try {
 			maintenanceStatus.value = await fetchMaintenanceStatus(schoolId);
 		} catch {
-			notifierModule.show({
-				text: t("error.generic"),
-				status: "error",
-			});
+			notifyError(t("error.generic"));
 		}
 
 		isLoading.value = false;
@@ -40,38 +35,34 @@ export const useSchoolYearChange = () => {
 			maintenanceStatus.value = await setMaintenance(schoolId, maintenance);
 
 			if (maintenance) {
-				notifierModule.show({
-					text: t(
+				notifySuccess(
+					t(
 						"components.administration.schoolYearChangeSection.notification.start.success"
-					),
-					status: "success",
-				});
+					)
+				);
 			} else {
-				notifierModule.show({
-					text: t(
+				notifySuccess(
+					t(
 						"components.administration.schoolYearChangeSection.notification.finish.success"
-					),
-					status: "success",
-				});
+					)
+				);
 			}
 		} catch (axiosError: unknown) {
 			const apiError = mapAxiosErrorToResponseError(axiosError);
 
 			if (apiError.type === "MISSING_YEARS") {
-				notifierModule.show({
-					text: t(
+				notifyError(
+					t(
 						"components.administration.schoolYearChangeSection.notification.finish.error.missingYears"
 					),
-					status: "error",
-					autoClose: false,
-				});
+					false
+				); // TODO: PR: why is that one not auto closing?
 			} else if (apiError.type === "SCHOOL_ALREADY_IN_NEXT_YEAR") {
-				notifierModule.show({
-					text: t(
+				notifyError(
+					t(
 						"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear"
-					),
-					status: "error",
-				});
+					)
+				);
 				if (maintenanceStatus.value) {
 					maintenanceStatus.value.maintenance.active = false;
 					maintenanceStatus.value.maintenance.startDate = undefined;
@@ -79,10 +70,7 @@ export const useSchoolYearChange = () => {
 						maintenanceStatus.value.nextYear;
 				}
 			} else {
-				notifierModule.show({
-					text: t("error.generic"),
-					status: "error",
-				});
+				notifyError("error.generic");
 			}
 		}
 

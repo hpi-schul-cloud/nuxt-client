@@ -21,12 +21,8 @@ import {
 	useSocketConnection,
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import {
-	useBoardNotifier,
-	useSharedEditMode,
-	useSharedLastCreatedElement,
-} from "@util-board";
-import { cloneDeep } from "lodash";
+import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
+import { cloneDeep } from "lodash-es";
 import { createPinia, setActivePinia } from "pinia";
 import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -49,7 +45,6 @@ const mockedUseCardRestApi = vi.mocked(useCardRestApi);
 
 vi.mock("@util-board");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
@@ -62,7 +57,6 @@ vi.mock("./BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
 describe("CardStore", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedSocketApiHandler: DeepMocked<
@@ -86,10 +80,6 @@ describe("CardStore", () => {
 		createTestEnvStore();
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);

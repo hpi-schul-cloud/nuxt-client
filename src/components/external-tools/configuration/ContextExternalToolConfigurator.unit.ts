@@ -1,11 +1,7 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { ToolContextType } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import {
-	NOTIFIER_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import {
 	businessErrorFactory,
 	contextExternalToolFactory,
@@ -45,7 +41,6 @@ describe("CourseContextExternalToolConfigurator", () => {
 		props: ComponentProps<typeof ContextExternalToolConfigurator>,
 		getters: Partial<SchoolExternalToolsModule> = {}
 	) => {
-		const notifierModule = createModuleMocks(NotifierModule);
 		const schoolExternalToolsModule = createModuleMocks(
 			SchoolExternalToolsModule,
 			{
@@ -58,7 +53,6 @@ describe("CourseContextExternalToolConfigurator", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
 				},
@@ -116,7 +110,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		});
 
 		describe("when updating an existing configuration", () => {
-			const setup = async () => {
+			const setup = () => {
 				const contextExternalTool = contextExternalToolFactory.build({
 					displayName: "testName",
 				});
@@ -158,7 +152,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		});
 
 		describe("when a preferred tool with a custom parameter is loaded", () => {
-			const setup = async () => {
+			const setup = () => {
 				const contextExternalToolConfigurationTemplate =
 					contextExternalToolConfigurationTemplateFactory.build();
 				const { wrapper } = getWrapper(

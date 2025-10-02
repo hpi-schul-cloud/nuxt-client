@@ -3,9 +3,8 @@ import {
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime";
 import CopyModule from "@/store/copy";
-import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import {
@@ -22,20 +21,18 @@ const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
 
 let tasksModuleMock: TasksModule;
 let copyModuleMock: CopyModule;
-let notifierModuleMock: NotifierModule;
 
 const mockRouter = {
 	push: vi.fn(),
 };
 
-const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) => {
-	return mount(TaskItemStudent, {
+const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) =>
+	mount(TaskItemStudent, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				tasksModule: tasksModuleMock,
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			},
 		},
 		props,
@@ -43,13 +40,11 @@ const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) => {
 			$router: mockRouter,
 		},
 	});
-};
 
 describe("@/components/molecules/TaskItemStudent", () => {
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
-		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	it("Should direct user to legacy task details page", async () => {

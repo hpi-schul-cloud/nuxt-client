@@ -105,23 +105,19 @@ import ContentEmptyState from "@/components/lern-store/ContentEmptyState.vue";
 import ContentInitialState from "@/components/lern-store/ContentInitialState.vue";
 import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
 import themeConfig from "@/theme.config";
-import {
-	CONTENT_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { CONTENT_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiChevronLeft, mdiClose, mdiMagnify } from "@icons/material";
 import { useDebounceFn, watchDebounced } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
+import { notifyError } from "@data-app";
 
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const contentModule = injectStrict(CONTENT_MODULE_KEY);
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const searchQuery = ref("");
 const activateTransition = ref(false);
@@ -178,11 +174,7 @@ const searchContent = useDebounceFn(async () => {
 	try {
 		await contentModule.getResources(searchQuery.value);
 	} catch {
-		notifierModule.show({
-			text: t("pages.content.notification.lernstoreNotAvailable"),
-			status: "error",
-			timeout: 5000,
-		});
+		notifyError(t("pages.content.notification.lernstoreNotAvailable"));
 	}
 }, 500);
 
@@ -226,11 +218,7 @@ const addContent = async () => {
 	try {
 		await contentModule.addResources(query);
 	} catch {
-		notifierModule.show({
-			text: t("pages.content.notification.lernstoreNotAvailable"),
-			status: "error",
-			timeout: 5000,
-		});
+		notifyError(t("pages.content.notification.lernstoreNotAvailable"));
 	}
 };
 

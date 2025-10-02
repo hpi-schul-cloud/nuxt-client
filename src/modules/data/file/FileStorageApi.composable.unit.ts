@@ -21,11 +21,17 @@ import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { createMock } from "@golevelup/ts-vitest";
 import { AxiosResponse } from "axios";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
-import { setupFileStorageNotifier } from "./test-utils/fileStorageNotifier";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { beforeEach } from "vitest";
+import { useNotificationStore } from "@data-app";
 
-vi.mock("./FileStorageNotifications.composable");
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn(() => ({
+		t: vi.fn((key) => key),
+		n: vi.fn((key) => key),
+	})),
+}));
 
 vi.mock("@/utils/helpers");
 
@@ -50,7 +56,7 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 };
 
 describe("FileStorageApi Composable", () => {
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStoreWithSchool("schoolId");
 	});
@@ -67,8 +73,6 @@ describe("FileStorageApi Composable", () => {
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
-
-				setupFileStorageNotifier();
 
 				return {
 					parentId,
@@ -104,8 +108,6 @@ describe("FileStorageApi Composable", () => {
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.list.mockResolvedValueOnce(response);
-
-				setupFileStorageNotifier();
 
 				return {
 					parentId,
@@ -155,37 +157,32 @@ describe("FileStorageApi Composable", () => {
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.list.mockRejectedValue(responseError);
 
-				const {
-					showInternalServerError,
-					showUnauthorizedError,
-					showForbiddenError,
-				} = setupFileStorageNotifier();
-
 				return {
 					parentId,
 					parentType,
 					responseError,
-					showInternalServerError,
-					showUnauthorizedError,
-					showForbiddenError,
 				};
 			};
 
-			it("should call showUnauthorizedError and pass error", async () => {
-				const { parentId, parentType, showUnauthorizedError, responseError } =
-					setup(ErrorType.Unauthorized);
+			it("should notify unauthorized and pass error", async () => {
+				const { parentId, parentType, responseError } = setup(
+					ErrorType.Unauthorized
+				);
 
 				const { fetchFiles } = useFileStorageApi();
 
 				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
 					responseError
 				);
-				expect(showUnauthorizedError).toHaveBeenCalledTimes(1);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error", text: "error.401" })
+				);
 			});
 
-			it("should call showForbiddenError and pass error", async () => {
-				const { parentId, parentType, showForbiddenError, responseError } =
-					setup(ErrorType.Forbidden);
+			it("should notify forbidden error and pass error", async () => {
+				const { parentId, parentType, responseError } = setup(
+					ErrorType.Forbidden
+				);
 
 				const { fetchFiles } = useFileStorageApi();
 
@@ -193,18 +190,23 @@ describe("FileStorageApi Composable", () => {
 					responseError
 				);
 
-				expect(showForbiddenError).toHaveBeenCalledTimes(1);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error", text: "error.403" })
+				);
 			});
 
-			it("should call showInternalServerError and pass error", async () => {
-				const { parentId, parentType, showInternalServerError, responseError } =
-					setup();
+			it("should notify internal server error and pass error", async () => {
+				const { parentId, parentType, responseError } = setup();
 				const { fetchFiles } = useFileStorageApi();
 				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
 					responseError
 				);
-
-				expect(showInternalServerError).toHaveBeenCalledTimes(1);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileServiceNotAvailable",
+					})
+				);
 			});
 		});
 	});
@@ -226,8 +228,6 @@ describe("FileStorageApi Composable", () => {
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.upload.mockResolvedValueOnce(response);
-
-				setupFileStorageNotifier();
 
 				return {
 					parentId,
@@ -280,32 +280,28 @@ describe("FileStorageApi Composable", () => {
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.upload.mockRejectedValue(responseError);
 
-				const { showFileTooBigError } = setupFileStorageNotifier();
-
 				return {
 					parentId,
 					parentType,
 					file,
-					showFileTooBigError,
 					responseError,
 				};
 			};
 
-			it("should call showFileTooBigError and pass error", async () => {
-				const {
-					parentId,
-					parentType,
-					file,
-					showFileTooBigError,
-					responseError,
-				} = setup();
+			it("should notify file to big error and pass error", async () => {
+				const { parentId, parentType, file, responseError } = setup();
 				const { upload } = useFileStorageApi();
 
 				await expect(upload(file, parentId, parentType)).rejects.toBe(
 					responseError
 				);
 
-				expect(showFileTooBigError).toBeCalled();
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileToBig",
+					})
+				);
 			});
 		});
 	});
@@ -329,8 +325,6 @@ describe("FileStorageApi Composable", () => {
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.uploadFromUrl.mockResolvedValueOnce(response);
-
-				setupFileStorageNotifier();
 
 				return {
 					parentId,
@@ -387,23 +381,25 @@ describe("FileStorageApi Composable", () => {
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.uploadFromUrl.mockRejectedValueOnce(responseError);
 
-				const { showFileTooBigError } = setupFileStorageNotifier();
-
 				return {
 					parentId,
 					parentType,
 					file,
-					showFileTooBigError,
 				};
 			};
 
-			it("should call showFileTooBigError", async () => {
-				const { parentId, parentType, showFileTooBigError } = setup();
+			it("should notify with file to big error", async () => {
+				const { parentId, parentType } = setup();
 				const { uploadFromUrl } = useFileStorageApi();
 
 				await uploadFromUrl("abc:/not-an-url", parentId, parentType);
 
-				expect(showFileTooBigError).toHaveBeenCalledTimes(1);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileToBig",
+					})
+				);
 			});
 		});
 	});
@@ -429,8 +425,6 @@ describe("FileStorageApi Composable", () => {
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
 				fileApi.patchFilename.mockResolvedValueOnce(response);
-
-				setupFileStorageNotifier();
 
 				return {
 					parentId,
@@ -479,21 +473,22 @@ describe("FileStorageApi Composable", () => {
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
 				fileApi.patchFilename.mockRejectedValue(responseError);
 
-				const { showFileExistsError } = setupFileStorageNotifier();
-
 				return {
 					renameFileParams,
-					showFileExistsError,
 				};
 			};
 
-			it("should call showFileExistsError", async () => {
-				const { renameFileParams, showFileExistsError } = setup();
+			it("should notify with file exists error", async () => {
+				const { renameFileParams } = setup();
 				const { rename } = useFileStorageApi();
 
 				await rename("dfgdfg", renameFileParams);
-
-				expect(showFileExistsError).toHaveBeenCalledTimes(1);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileNameExists",
+					})
+				);
 			});
 		});
 	});
@@ -526,8 +521,6 @@ describe("FileStorageApi Composable", () => {
 				});
 
 				fileApi.deleteFiles.mockResolvedValue(response);
-
-				setupFileStorageNotifier();
 
 				return {
 					parentId,
@@ -593,23 +586,14 @@ describe("FileStorageApi Composable", () => {
 				mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
 				fileApi.deleteFiles.mockRejectedValue(responseError);
 
-				const { showInternalServerError, showFileNotDeletedError } =
-					setupFileStorageNotifier();
-
 				return {
-					showInternalServerError,
-					showFileNotDeletedError,
 					expectedPayload,
 					fileRecordResponse,
 				};
 			};
 
-			it("should call showInternalServerError, showFileNotDeletedError, pass error and upsert filerecords", async () => {
-				const {
-					showInternalServerError,
-					showFileNotDeletedError,
-					fileRecordResponse,
-				} = setup();
+			it("should notify internal server error, file not deleted error and upsert filerecords", async () => {
+				const { fileRecordResponse } = setup();
 				const { deleteFiles, getFileRecordsByParentId, fetchFiles } =
 					useFileStorageApi();
 
@@ -624,8 +608,18 @@ describe("FileStorageApi Composable", () => {
 
 				await deleteFiles([]);
 
-				expect(showInternalServerError).toHaveBeenCalledTimes(1);
-				expect(showFileNotDeletedError).toHaveBeenCalledTimes(1);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileNotDeleted",
+					})
+				);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileServiceNotAvailable",
+					})
+				);
 				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([
 					fileRecordResponse,
 				]);
@@ -651,8 +645,6 @@ describe("FileStorageApi Composable", () => {
 				wopiApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
 					axiosResponse
 				);
-
-				setupFileStorageNotifier();
 
 				return {
 					fileRecordId,
@@ -704,24 +696,16 @@ describe("FileStorageApi Composable", () => {
 					responseError
 				);
 
-				const { showForbiddenError } = setupFileStorageNotifier();
-
 				return {
 					fileRecordId,
 					editorMode,
 					userDisplayName,
 					responseError,
-					showForbiddenError,
 				};
 			};
 
-			it("should call showForbiddenError and throw error", async () => {
-				const {
-					fileRecordId,
-					editorMode,
-					userDisplayName,
-					showForbiddenError,
-				} = setup();
+			it("should notify forbidden error and throw error", async () => {
+				const { fileRecordId, editorMode, userDisplayName } = setup();
 				const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
 
 				await expect(
@@ -732,7 +716,9 @@ describe("FileStorageApi Composable", () => {
 					)
 				).rejects.toThrow();
 
-				expect(showForbiddenError).toHaveBeenCalledTimes(1);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error", text: "error.403" })
+				);
 			});
 		});
 
@@ -754,24 +740,16 @@ describe("FileStorageApi Composable", () => {
 					responseError
 				);
 
-				const { showUnauthorizedError } = setupFileStorageNotifier();
-
 				return {
 					fileRecordId,
 					editorMode,
 					userDisplayName,
 					responseError,
-					showUnauthorizedError,
 				};
 			};
 
-			it("should call showUnauthorizedError and throw error", async () => {
-				const {
-					fileRecordId,
-					editorMode,
-					userDisplayName,
-					showUnauthorizedError,
-				} = setup();
+			it("should notify unauthorized error and throw error", async () => {
+				const { fileRecordId, editorMode, userDisplayName } = setup();
 				const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
 
 				await expect(
@@ -781,8 +759,9 @@ describe("FileStorageApi Composable", () => {
 						userDisplayName
 					)
 				).rejects.toThrow();
-
-				expect(showUnauthorizedError).toHaveBeenCalledTimes(1);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error", text: "error.401" })
+				);
 			});
 		});
 	});

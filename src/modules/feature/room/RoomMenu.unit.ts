@@ -21,6 +21,7 @@ import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composabl
 import { ConfigResponse } from "@/serverApi/v3";
 import { Mock } from "vitest";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
@@ -60,6 +61,7 @@ describe("@feature-room/RoomMenu", () => {
 	});
 
 	const setup = (envs: Partial<ConfigResponse> = {}) => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_ROOM_COPY_ENABLED: true,
 			FEATURE_ROOM_SHARE: true,

@@ -1,6 +1,3 @@
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -13,7 +10,10 @@ import {
 	VExpansionPanelTitle,
 } from "vuetify/lib/components/index";
 import LicenseListPage from "./LicenseList.page.vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, expectNotification } from "@@/tests/test-utils";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("axios");
 const mockAxios = vi.mocked(axios, true);
@@ -31,8 +31,11 @@ mockAxios.get.mockResolvedValue({
 });
 
 describe("LicenseList Page", () => {
-	const notifierModule = createModuleMocks(NotifierModule);
 	const LICENSE_SUMMARY_URL = "https://license-summary-url";
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	const setup = () => {
 		createTestEnvStore({ LICENSE_SUMMARY_URL });
@@ -40,9 +43,6 @@ describe("LicenseList Page", () => {
 		const wrapper = mount(LicenseListPage, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 		});
 
@@ -71,7 +71,7 @@ describe("LicenseList Page", () => {
 		setup();
 		await flushPromises();
 
-		expect(notifierModule.show).toHaveBeenCalled();
+		expectNotification("error");
 	});
 
 	describe("when the license item is clicked", () => {

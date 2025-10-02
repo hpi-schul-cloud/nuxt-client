@@ -3,13 +3,8 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import SchoolsModule from "@/store/schools";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { mount } from "@vue/test-utils";
-import NotifierModule from "@/store/notifier";
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
-import {
-	NOTIFIER_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-	TERMS_OF_USE_MODULE_KEY,
-} from "@/utils/inject";
+import { SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -17,7 +12,6 @@ import {
 import type { Mocked } from "vitest";
 
 describe("SchoolPolicyFormDialog", () => {
-	let notifierModule: Mocked<NotifierModule>;
 	let schoolsModule: Mocked<SchoolsModule>;
 	let termsOfUseModule: Mocked<TermsOfUseModule>;
 
@@ -47,13 +41,10 @@ describe("SchoolPolicyFormDialog", () => {
 			...getters,
 		});
 
-		notifierModule = createModuleMocks(NotifierModule);
-
 		const wrapper = mount(SchoolTermsFormDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				},

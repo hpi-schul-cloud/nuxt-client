@@ -29,6 +29,8 @@ import VideoConferenceContentElementCreate from "./VideoConferenceContentElement
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { Mock } from "vitest";
 import { createTestAppStoreWithRole } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@data-board/ContentElementState.composable");
 vi.mock("@data-board/BoardFocusHandler.composable");
@@ -41,11 +43,9 @@ const useRouteMock = <Mock>useRoute;
 useRouteMock.mockReturnValue({ params: { id: "room-id" } });
 
 vi.mock("@data-board/BoardFeatures.composable");
-vi.mocked(useBoardFeatures).mockImplementation(() => {
-	return {
-		isFeatureEnabled: vi.fn().mockReturnValue(true),
-	};
-});
+vi.mocked(useBoardFeatures).mockImplementation(() => ({
+	isFeatureEnabled: vi.fn().mockReturnValue(true),
+}));
 
 const mockedUseContentElementState = vi.mocked(useContentElementState);
 
@@ -153,6 +153,7 @@ describe("VideoConferenceContentElement", () => {
 		useVideoConferenceMock.isRunning = computed(() => isRunning);
 		useVideoConferenceMock.error = ref(error);
 
+		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(role);
 
 		useBoardPermissionsMock = createMock<

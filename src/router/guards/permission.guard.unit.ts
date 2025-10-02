@@ -6,23 +6,25 @@ import {
 } from "vue-router";
 import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { Permission } from "@/serverApi/v3";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const mockError = vi.fn();
 
-vi.mock("@/store", () => {
-	return {
-		applicationErrorModule: {
-			setError: () => mockError(),
-		},
-	};
-});
+vi.mock("@/store", () => ({
+	applicationErrorModule: {
+		setError: () => mockError(),
+	},
+}));
 
 describe("PermissionGuard", () => {
 	const validPermissionA = "validPermissionA" as Permission;
 	const validPermissionB = "validPermissionB" as Permission;
 	const invalidPermission = "invalidPermission" as Permission;
 
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestAppStoreWithPermissions([validPermissionA, validPermissionB]);
 	});
 

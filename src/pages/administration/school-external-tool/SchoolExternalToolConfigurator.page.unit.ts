@@ -1,14 +1,13 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import ExternalToolMediumDetails from "@/components/external-tools/configuration/ExternalToolMediumDetails.vue";
 import { SchoolExternalToolSave } from "@/store/external-tool";
-import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import {
-	NOTIFIER_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createTestAppStoreWithSchool } from "@@/tests/test-utils";
+import {
+	createTestAppStoreWithSchool,
+	expectNotification,
+} from "@@/tests/test-utils";
 import {
 	businessErrorFactory,
 	schoolExternalToolConfigurationTemplateFactory,
@@ -25,7 +24,9 @@ import { mount } from "@vue/test-utils";
 import { Component, nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
-import { Mock } from "vitest";
+import { beforeEach, Mock } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -44,6 +45,10 @@ vi.mock("vue-router", () => {
 const useRouterMock = <Mock>useRouter;
 
 describe("SchoolExternalToolConfigurator", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const getWrapper = (
 		props: { configId?: string } = {},
 		getters: Partial<SchoolExternalToolsModule> = {}
@@ -62,8 +67,6 @@ describe("SchoolExternalToolConfigurator", () => {
 		const schoolId = "schoolId";
 		createTestAppStoreWithSchool(schoolId);
 
-		const notifierModule = createModuleMocks(NotifierModule);
-
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
@@ -73,7 +76,6 @@ describe("SchoolExternalToolConfigurator", () => {
 				provide: {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 			props,
@@ -83,14 +85,9 @@ describe("SchoolExternalToolConfigurator", () => {
 			wrapper,
 			router,
 			schoolExternalToolsModule,
-			notifierModule,
 			schoolId,
 		};
 	};
-
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
 
 	describe("breadcrumbs", () => {
 		it("should render static breadcrumbs", () => {
@@ -178,24 +175,18 @@ describe("SchoolExternalToolConfigurator", () => {
 					parameters: toolParameterFactory.buildList(1),
 				});
 
-				const {
-					wrapper,
-					router,
-					schoolExternalToolsModule,
-					schoolId,
-					notifierModule,
-				} = getWrapper(
-					{},
-					{
-						getSchoolExternalToolConfigurationTemplates: [template],
-					}
-				);
+				const { wrapper, router, schoolExternalToolsModule, schoolId } =
+					getWrapper(
+						{},
+						{
+							getSchoolExternalToolConfigurationTemplates: [template],
+						}
+					);
 
 				return {
 					wrapper,
 					router,
 					schoolExternalToolsModule,
-					notifierModule,
 					template,
 					schoolId,
 				};
@@ -246,17 +237,14 @@ describe("SchoolExternalToolConfigurator", () => {
 			});
 
 			it("should display a notification when created", async () => {
-				const { wrapper, notifierModule, template } = setup();
+				const { wrapper, template } = setup();
 
 				wrapper
 					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, []);
 				await nextTick();
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "components.administration.externalToolsSection.notification.created",
-					status: "success",
-				});
+				expectNotification("success");
 			});
 		});
 
@@ -266,24 +254,18 @@ describe("SchoolExternalToolConfigurator", () => {
 
 				const schoolExternalToolId = "configId";
 
-				const {
-					wrapper,
-					router,
-					schoolExternalToolsModule,
-					schoolId,
-					notifierModule,
-				} = getWrapper(
-					{ configId: schoolExternalToolId },
-					{
-						getSchoolExternalToolConfigurationTemplates: [template],
-					}
-				);
+				const { wrapper, router, schoolExternalToolsModule, schoolId } =
+					getWrapper(
+						{ configId: schoolExternalToolId },
+						{
+							getSchoolExternalToolConfigurationTemplates: [template],
+						}
+					);
 
 				return {
 					wrapper,
 					router,
 					schoolExternalToolsModule,
-					notifierModule,
 					template,
 					schoolId,
 					schoolExternalToolId,
@@ -339,17 +321,14 @@ describe("SchoolExternalToolConfigurator", () => {
 			});
 
 			it("should display a notification when updated", async () => {
-				const { wrapper, notifierModule, template } = setup();
+				const { wrapper, template } = setup();
 
 				wrapper
 					.findComponent(ExternalToolConfigurator as Component)
 					.vm.$emit("save", template, []);
 				await nextTick();
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "components.administration.externalToolsSection.notification.updated",
-					status: "success",
-				});
+				expectNotification("success");
 			});
 		});
 

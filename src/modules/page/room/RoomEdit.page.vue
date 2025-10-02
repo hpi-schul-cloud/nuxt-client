@@ -31,13 +31,12 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ApiResponseError } from "@/store/types/commons";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { storeToRefs } from "pinia";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { notifyError } from "@data-app";
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
 const route = useRoute();
@@ -86,10 +85,7 @@ const onSave = async (payload: { room: RoomUpdateParams }) => {
 		});
 	} catch (error: unknown) {
 		if (isInvalidRequestError(error)) {
-			notifierModule.show({
-				text: t("components.roomForm.validation.generalSaveError"),
-				status: "error",
-			});
+			notifyError(t("components.roomForm.validation.generalSaveError"));
 		} else {
 			throw createApplicationError((error as ApiResponseError).code);
 		}

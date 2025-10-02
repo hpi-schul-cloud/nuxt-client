@@ -5,8 +5,11 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
 import FilePathsModule from "@/store/filePaths";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 const setup = (envs?: Partial<ConfigResponse>, theme = SchulcloudTheme.Brb) => {
+	setActivePinia(createTestingPinia());
 	createTestEnvStore({
 		ALERT_STATUS_URL: "https://status.dbildungscloud.de",
 		ACCESSIBILITY_REPORT_EMAIL: "email",

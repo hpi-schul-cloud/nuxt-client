@@ -48,17 +48,14 @@ import {
 	ExternalToolMediumResponse,
 	ExternalToolMediumStatus,
 } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiContentCopy } from "@icons/material";
 import { useI18n } from "vue-i18n";
 import { computed, ComputedRef, Ref, toRef } from "vue";
+import { notifyError, notifySuccess } from "@data-app";
 
 const props = defineProps<{
 	selectedTemplateMedium: ExternalToolMediumResponse;
 }>();
-
-const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const { t } = useI18n();
 
@@ -74,15 +71,9 @@ const isMediumTemplate: ComputedRef<boolean> = computed(
 const copyDetailToClipboard = (text: string | undefined) => {
 	try {
 		window.navigator.clipboard.writeText(text ?? "");
-		notifierModule.show({
-			status: "success",
-			text: t("common.words.copiedToClipboard"),
-		});
+		notifySuccess(t("common.words.copiedToClipboard"));
 	} catch {
-		notifierModule.show({
-			status: "error",
-			text: t("common.words.copiedToClipboard.failure"),
-		});
+		notifyError(t("common.words.copiedToClipboard.failure"));
 	}
 };
 </script>

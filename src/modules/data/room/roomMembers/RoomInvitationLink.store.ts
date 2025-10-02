@@ -1,7 +1,6 @@
 import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
-import { useBoardNotifier } from "@util-board";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -14,12 +13,12 @@ import {
 } from "./types";
 import { isAxiosError } from "axios";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
+import { notifyError } from "@data-app";
 
 export const useRoomInvitationLinkStore = defineStore(
 	"roomInvitationLinkStore",
 	() => {
 		const { t } = useI18n();
-		const { showFailure } = useBoardNotifier();
 
 		const { room } = storeToRefs(useRoomDetailsStore());
 
@@ -60,12 +59,10 @@ export const useRoomInvitationLinkStore = defineStore(
 				isLoading.value = true;
 				const response = await roomApi.roomControllerGetInvitationLinks(roomId);
 				roomInvitationLinks.value = response.data.roomInvitationLinks.map(
-					(link) => {
-						return checkDefaultExpiredDate(link);
-					}
+					(link) => checkDefaultExpiredDate(link)
 				);
 			} catch {
-				showFailure(t("pages.rooms.invitationlinks.error.load"));
+				notifyError(t("pages.rooms.invitationlinks.error.load"));
 			} finally {
 				isLoading.value = false;
 			}
@@ -91,7 +88,7 @@ export const useRoomInvitationLinkStore = defineStore(
 				sharedUrl.value = BASE_SHARED_URL + response.id;
 				invitationStep.value = InvitationStep.SHARE;
 			} catch {
-				showFailure(t("pages.rooms.invitationlinks.error.create"));
+				notifyError(t("pages.rooms.invitationlinks.error.create"));
 				isInvitationDialogOpen.value = false;
 			}
 		};
@@ -115,7 +112,7 @@ export const useRoomInvitationLinkStore = defineStore(
 				sharedUrl.value = BASE_SHARED_URL + response.id;
 				invitationStep.value = InvitationStep.SHARE;
 			} catch {
-				showFailure(t("pages.rooms.invitationlinks.error.update"));
+				notifyError(t("pages.rooms.invitationlinks.error.update"));
 				isInvitationDialogOpen.value = false;
 			} finally {
 				isLoading.value = false;
@@ -135,7 +132,7 @@ export const useRoomInvitationLinkStore = defineStore(
 				);
 				selectedIds.value = [];
 			} catch {
-				showFailure(t("pages.rooms.invitationlinks.error.delete"));
+				notifyError(t("pages.rooms.invitationlinks.error.delete"));
 			}
 		};
 

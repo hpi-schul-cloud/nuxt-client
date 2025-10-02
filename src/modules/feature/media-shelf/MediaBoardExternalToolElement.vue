@@ -34,7 +34,6 @@
 
 <script setup lang="ts">
 import { MediaExternalToolElementResponse } from "@/serverApi/v3";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	useContextExternalToolConfigurationStatus,
 	useExternalToolDisplayState,
@@ -49,6 +48,7 @@ import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 import { useEnvConfig } from "@data-env";
+import { notifyError, notifyWarning } from "@data-app";
 
 const props = defineProps({
 	element: {
@@ -62,7 +62,6 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const {
 	fetchDisplayData,
@@ -146,11 +145,7 @@ const onDelete = () => {
 const onClick = async () => {
 	const hasLaunchRequestFailed = !!launchError.value;
 	if (hasLaunchRequestFailed) {
-		notifierModule.show({
-			status: "error",
-			text: t("error.load"),
-		});
-
+		notifyError(t("error.load"));
 		return;
 	}
 
@@ -161,11 +156,9 @@ const onClick = async () => {
 
 	const hasValidStatus = isOperational(displayData.value.status);
 	if (!hasValidStatus) {
-		notifierModule.show({
-			status: "warning",
-			text: determineMediaBoardElementStatusMessage(displayData.value.status),
-		});
-
+		notifyWarning(
+			determineMediaBoardElementStatusMessage(displayData.value.status)
+		);
 		return;
 	}
 
@@ -177,11 +170,7 @@ const onClick = async () => {
 
 	const hasLaunchFailed = !!launchError.value;
 	if (hasLaunchFailed) {
-		notifierModule.show({
-			status: "error",
-			text: t("error.generic"),
-		});
-
+		notifyError(t("error.generic"));
 		return;
 	}
 

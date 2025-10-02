@@ -3,10 +3,7 @@ import {
 	SchoolApiInterface,
 	SchulConneXProvisioningOptionsResponse,
 } from "@/serverApi/v3/api";
-import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -15,7 +12,6 @@ import { ProvisioningOptions } from "./type/ProvisioningOptions";
 
 describe("ProvisioningOptionsApi.composable", () => {
 	let schoolApi: DeepMocked<SchoolApiInterface>;
-	const notifierModule = createModuleMocks(NotifierModule);
 
 	beforeAll(() => {
 		schoolApi = createMock<SchoolApiInterface>();
@@ -40,11 +36,7 @@ describe("ProvisioningOptionsApi.composable", () => {
 				schoolExternalToolProvisioningEnabled: true,
 			};
 
-			const composable = mountComposable(() => useProvisioningOptionsApi(), {
-				global: {
-					provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
-				},
-			});
+			const composable = mountComposable(() => useProvisioningOptionsApi());
 
 			schoolApi.schoolControllerGetProvisioningOptions.mockResolvedValue(
 				mockApiResponse({ data: provisioningOptions })
@@ -89,11 +81,7 @@ describe("ProvisioningOptionsApi.composable", () => {
 					error
 				);
 
-				const composable = mountComposable(() => useProvisioningOptionsApi(), {
-					global: {
-						provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
-					},
-				});
+				const composable = mountComposable(() => useProvisioningOptionsApi());
 
 				return {
 					error,
@@ -126,11 +114,7 @@ describe("ProvisioningOptionsApi.composable", () => {
 				schoolExternalTools: true,
 			};
 
-			const composable = mountComposable(() => useProvisioningOptionsApi(), {
-				global: {
-					provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
-				},
-			});
+			const composable = mountComposable(() => useProvisioningOptionsApi());
 
 			schoolApi.schoolControllerSetProvisioningOptions.mockResolvedValue(
 				mockApiResponse({ data: provisioningOptions })
@@ -182,11 +166,7 @@ describe("ProvisioningOptionsApi.composable", () => {
 					error
 				);
 
-				const composable = mountComposable(() => useProvisioningOptionsApi(), {
-					global: {
-						provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
-					},
-				});
+				const composable = mountComposable(() => useProvisioningOptionsApi());
 
 				const provisioningOptionsEntry: ProvisioningOptions = {
 					class: true,

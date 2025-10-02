@@ -62,15 +62,14 @@ import { useI18n } from "vue-i18n";
 import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
+import { notifyError, notifySuccess } from "@data-app";
 
 const i18n = useI18n();
 const courseRoomListModule = injectStrict(COURSE_ROOM_LIST_MODULE_KEY);
 const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const commonCartridgeImportModule = injectStrict(
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY
 );
@@ -118,17 +117,11 @@ async function onConfirm(): Promise<void> {
 
 	if (commonCartridgeImportModule.isSuccess) {
 		const title = courseRoomListModule.getAllElements[0]?.title;
-		notifierModule.show({
-			status: "success",
-			text: i18n.t("pages.rooms.ccImportCourse.success", { name: title }),
-			autoClose: true,
-		});
+		notifySuccess(
+			i18n.t("pages.rooms.ccImportCourse.success", { name: title })
+		);
 	} else {
-		notifierModule.show({
-			status: "error",
-			text: i18n.t("pages.rooms.ccImportCourse.error"),
-			autoClose: true,
-		});
+		notifyError(i18n.t("pages.rooms.ccImportCourse.error"));
 	}
 
 	file.value = undefined;

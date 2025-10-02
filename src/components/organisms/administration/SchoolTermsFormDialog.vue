@@ -62,7 +62,6 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
 import {
 	injectStrict,
-	NOTIFIER_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
@@ -72,6 +71,7 @@ import { toBase64 } from "@/utils/fileHelper";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { useI18n } from "vue-i18n";
 import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
+import { notifySuccess } from "@data-app";
 
 export default defineComponent({
 	name: "SchoolTermsFormDialog",
@@ -88,7 +88,6 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { t } = useI18n();
 		const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
-		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 		const termsForm: Ref<File[]> = ref([]);
@@ -140,12 +139,9 @@ export default defineComponent({
 				emit("close");
 				await termsOfUseModule.createTermsOfUse(newConsentVersion);
 
-				notifierModule.show({
-					text: t("pages.administration.school.index.termsOfUse.success"),
-					status: "success",
-					timeout: 5000,
-				});
-
+				notifySuccess(
+					t("pages.administration.school.index.termsOfUse.success")
+				);
 				resetForm();
 			}
 		};

@@ -17,6 +17,8 @@ import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { nextTick } from "vue";
 import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("RoomVideoConferenceSection", () => {
 	const mockUrl = "https://mock.com";
@@ -34,12 +36,12 @@ describe("RoomVideoConferenceSection", () => {
 			writable: true, // possibility to override
 		});
 
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStore({
 			me: {
 				permissions: userPermissions,
 				roles: isExpert ? [{ id: "expert", name: RoleName.Expert }] : [],
 			},
-			stubActions: false,
 		});
 
 		const videoConferenceModule = createModuleMocks(VideoConferenceModule, {

@@ -1,6 +1,5 @@
 import * as serverApi from "../serverApi/v3/api";
 import CourseRoomListModule from "./course-room-list";
-import { AlertPayload } from "./types/alert-payload";
 import { DroppedObject, RoomsData, SharingCourseObject } from "./types/rooms";
 import {
 	axiosErrorFactory,
@@ -829,20 +828,6 @@ describe("rooms module", () => {
 				expect(courseRoomListModule.hasCurrentRooms).toStrictEqual(false);
 				courseRoomListModule.setRoomData(itemsToBeSet);
 				expect(courseRoomListModule.hasCurrentRooms).toStrictEqual(true);
-			});
-		});
-
-		describe("getAlertData", () => {
-			it("should return alert data", () => {
-				const courseRoomListModule = new CourseRoomListModule({});
-				const alertData: AlertPayload = {
-					status: "success",
-					text: "pages.rooms.uploadCourse.success",
-					autoClose: true,
-				};
-
-				courseRoomListModule.setAlertData(alertData);
-				expect(courseRoomListModule.getAlertData).toStrictEqual(alertData);
 			});
 		});
 	});

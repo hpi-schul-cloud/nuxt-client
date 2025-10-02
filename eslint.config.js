@@ -55,7 +55,7 @@ export default defineConfigWithVueTs([
 			// "arrow-body-style": [
 			// 	"warn",
 			// 	"as-needed",
-			// 	{ requireReturnForObjectLiteral: true },
+			// 	{ requireReturnForObjectLiteral: false },
 			// ],
 			// "require-await": "warn",
 			"@typescript-eslint/ban-ts-comment": "error",

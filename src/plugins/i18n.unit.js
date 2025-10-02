@@ -3,9 +3,12 @@ import { createI18n } from "./i18n";
 import { createTestEnvStore, createTestAppStore } from "@@/tests/test-utils";
 
 import { useAppStore } from "@data-app";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("i18n plugin", () => {
 	beforeAll(() => {
+		setActivePinia(createTestingPinia());
 		createTestAppStore();
 		createTestEnvStore({
 			I18N__FALLBACK_LANGUAGE: "da",

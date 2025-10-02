@@ -94,8 +94,8 @@ import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection
 import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
 import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
 import InfoMessage from "@/components/atoms/InfoMessage";
-import { notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { notifySuccess } from "@data-app";
 
 export default {
 	components: {
@@ -202,11 +202,7 @@ export default {
 					if (!this.verified.ok) {
 						return;
 					} else {
-						notifierModule.show({
-							text: this.$t("pages.administration.ldap.index.verified"),
-							status: "success",
-							timeout: 5000,
-						});
+						notifySuccess(this.$t("pages.administration.ldap.index.verified"));
 						if (systemId) {
 							this.$router.push({
 								path: `/administration/ldap/activate?id=${systemId}`,

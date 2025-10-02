@@ -9,6 +9,7 @@ import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
 	createTestAppStore,
+	expectNotification,
 	mockApiResponse,
 	mockedPiniaStoreTyping,
 	roomFactory,
@@ -24,26 +25,22 @@ import {
 	useRoomMembersStore,
 } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
 import { Mock, MockInstance } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
-import { createPinia, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("useRoomMembers", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
 	let consoleErrorSpy: MockInstance;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
@@ -59,7 +56,7 @@ describe("useRoomMembers", () => {
 	};
 
 	beforeEach(() => {
-		setActivePinia(createPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
@@ -68,10 +65,6 @@ describe("useRoomMembers", () => {
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
 		initializeAxios(axiosMock);
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -97,12 +90,8 @@ describe("useRoomMembers", () => {
 
 	it("should throw an error if the roomId is undefined", async () => {
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-
 		await roomMembersStore.fetchMembers();
-
-		expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-			"pages.rooms.members.error.load"
-		);
+		expectNotification("error");
 	});
 
 	describe("fetchMembers", () => {
@@ -223,10 +212,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerGetMembers.mockRejectedValue(error);
 
 			await roomMembersStore.fetchMembers();
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.load"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -348,10 +334,7 @@ describe("useRoomMembers", () => {
 			schoolApiMock.schoolControllerGetTeachers.mockRejectedValue(error);
 
 			await roomMembersStore.getPotentialMembers(RoleName.Teacher);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.load"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -550,10 +533,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerAddMembers.mockRejectedValue(error);
 
 			await roomMembersStore.addMembers(["id"]);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.add"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -589,10 +569,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerRemoveMembers.mockRejectedValue(error);
 
 			await roomMembersStore.removeMembers(["id"]);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.remove"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -618,10 +595,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerLeaveRoom.mockRejectedValue(error);
 
 			await roomMembersStore.leaveRoom();
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.remove"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -700,10 +674,7 @@ describe("useRoomMembers", () => {
 			await roomMembersStore.updateMembersRole(
 				ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin
 			);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.updateRole"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -767,10 +738,7 @@ describe("useRoomMembers", () => {
 			}
 
 			await roomMembersStore.changeRoomOwner(futureRoomOwner?.userId ?? "");
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.updateRole"
-			);
+			expectNotification("error");
 		});
 
 		it("should throw an error if the API call fails", async () => {
@@ -780,10 +748,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerChangeRoomOwner.mockRejectedValue(error);
 
 			await roomMembersStore.changeRoomOwner("test-id");
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.updateRole"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -835,10 +800,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerChangeRolesOfMembers.mockRejectedValue(error);
 
 			await roomMembersStore.confirmInvitations(["id"]);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.updateRole"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -883,10 +845,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerRemoveMembers.mockRejectedValue(error);
 
 			await roomMembersStore.rejectInvitations(["id"]);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.remove"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -902,10 +861,7 @@ describe("useRoomMembers", () => {
 					roomMembersStore.roomMembers = membersMock;
 
 					await roomMembersStore.confirmInvitations([membersMock[0].userId]);
-
-					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
-						"pages.rooms.members.confirmationTable.notification.confirm"
-					);
+					expectNotification("success");
 				});
 			});
 			describe("with multiple actions", () => {
@@ -920,10 +876,7 @@ describe("useRoomMembers", () => {
 					await roomMembersStore.confirmInvitations(
 						membersMock.map((member) => member.userId)
 					);
-
-					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
-						"pages.rooms.members.confirmationTable.notification.confirm.multiple"
-					);
+					expectNotification("success");
 				});
 			});
 		});
@@ -939,10 +892,7 @@ describe("useRoomMembers", () => {
 					roomMembersStore.roomMembers = membersMock;
 
 					await roomMembersStore.rejectInvitations([membersMock[0].userId]);
-
-					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
-						"pages.rooms.members.confirmationTable.notification.reject"
-					);
+					expectNotification("success");
 				});
 			});
 			describe("with multiple actions", () => {
@@ -957,10 +907,7 @@ describe("useRoomMembers", () => {
 					await roomMembersStore.rejectInvitations(
 						membersMock.map((member) => member.userId)
 					);
-
-					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
-						"pages.rooms.members.confirmationTable.notification.reject.multiple"
-					);
+					expectNotification("success");
 				});
 			});
 		});

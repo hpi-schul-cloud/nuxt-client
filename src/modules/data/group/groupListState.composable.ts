@@ -1,16 +1,15 @@
 import { GroupListResponse, GroupResponse } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useGroupApi } from "@data-group";
 import { ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { GroupListFilter } from "./types";
+import { notifyError } from "@data-app";
 
 export const useGroupListState = () => {
 	const { getGroups } = useGroupApi();
 	const { t } = useI18n();
-	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 	const groups: Ref<GroupResponse[]> = ref([]);
 	const total: Ref<number> = ref(0);
@@ -55,10 +54,7 @@ export const useGroupListState = () => {
 			message: apiError.message,
 		};
 
-		notifierModule.show({
-			text: t("error.load"),
-			status: "error",
-		});
+		notifyError(t("error.load"));
 	};
 
 	return {

@@ -15,7 +15,9 @@ import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
-import { Mock } from "vitest";
+import { beforeEach, Mock } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("vue-router", () => {
 	return {
@@ -26,13 +28,13 @@ vi.mock("vue-router", () => {
 const useRouterMock = <Mock>useRouter;
 
 describe("RoomExternalToolsSection", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStore({
 			me: {
 				roles: [{ id: "teacher-id", name: RoleName.Teacher }],
 				permissions: [Permission.ContextToolAdmin],
 			},
-			stubActions: false,
 		});
 	});
 

@@ -1,13 +1,10 @@
 import { mount } from "@vue/test-utils";
 import { ref } from "vue";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import ClassMembersPage from "./ClassMembers.page.vue";
 import { Group, useGroupState } from "@data-group";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { groupFactory } from "@@/tests/test-utils/factory";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -25,8 +22,6 @@ describe("@pages/ClassMembers.page.vue", () => {
 		useGroupStateMock.isLoading = ref(false);
 		useGroupStateMock.group = ref(group);
 
-		const notifierModule = createModuleMocks(NotifierModule);
-
 		const wrapper = mount(ClassMembersPage, {
 			props,
 			global: {
@@ -35,9 +30,6 @@ describe("@pages/ClassMembers.page.vue", () => {
 					createTestingI18n(),
 					vueDompurifyHTMLPlugin,
 				],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 				stubs: { ClassMembersInfoBox: true },
 			},
 		});
@@ -109,7 +101,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 	});
 
 	describe("onMounted", () => {
-		it("should load the group for given groupId", async () => {
+		it("should load the group for given groupId", () => {
 			setup({
 				groupId: "groupId",
 			});

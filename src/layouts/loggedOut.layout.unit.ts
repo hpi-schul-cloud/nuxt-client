@@ -13,19 +13,18 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { useRouter } from "vue-router";
 import loggedOut from "./loggedOut.layout.vue";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
 describe("loggedOutLayout", () => {
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	const mountComponent = () => {
 		setupStores({
 			filePathsModule: FilePathsModule,
 		});
+		setActivePinia(createTestingPinia());
 
 		createTestEnvStore({
 			GHOST_BASE_URL: "https://works-like-charm.com",

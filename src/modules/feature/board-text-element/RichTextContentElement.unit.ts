@@ -1,7 +1,4 @@
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -29,9 +26,11 @@ const mockElement: RichTextElementResponse = {
 vi.mock("@data-board", () => {
 	return {
 		useBoardFocusHandler: vi.fn(),
-		useContentElementState: vi.fn().mockImplementation(() => ({
-			modelValue: mockElement.content,
-		})),
+		useContentElementState: vi.fn().mockImplementation(() => {
+			return {
+				modelValue: mockElement.content,
+			};
+		}),
 		useDeleteConfirmationDialog: vi.fn(),
 	};
 });
@@ -49,8 +48,6 @@ vi.mock("@util-board", () => {
 });
 
 describe("RichTextContentElement", () => {
-	const notifierModule = createModuleMocks(NotifierModule);
-
 	const setup = (props: {
 		element: RichTextElementResponse;
 		isEditMode: boolean;
@@ -64,7 +61,6 @@ describe("RichTextContentElement", () => {
 					createTestingI18n(),
 					vueDompurifyHTMLPlugin,
 				],
-				provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
 				stubs: {
 					RichTextContentElementEdit: true,
 				},

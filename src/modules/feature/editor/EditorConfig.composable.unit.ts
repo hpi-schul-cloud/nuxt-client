@@ -3,9 +3,12 @@ import { useEditorConfig } from "./EditorConfig.composable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { LanguageType } from "@/serverApi/v3";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("useEditorConfig", () => {
 	const setup = () => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			// Using updating state instead of mocking store computed to do integration test.
 			I18N__FALLBACK_LANGUAGE: "en" as LanguageType,

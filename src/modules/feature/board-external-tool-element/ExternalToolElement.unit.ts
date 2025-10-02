@@ -31,6 +31,8 @@ import { VImg } from "vuetify/lib/components/index";
 import ExternalToolElement from "./ExternalToolElement.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@data-board");
 vi.mock("@data-external-tool");
@@ -109,6 +111,7 @@ describe("ExternalToolElement", () => {
 		useExternalToolElementDisplayStateMock.displayData.value = displayData;
 
 		const refreshTime = 299000;
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ CTL_TOOLS_RELOAD_TIME_MS: refreshTime });
 
 		const wrapper = shallowMount(ExternalToolElement, {

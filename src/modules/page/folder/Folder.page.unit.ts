@@ -4,11 +4,14 @@ import {
 } from "@@/tests/test-utils/setup";
 import { Folder } from "@feature-folder";
 import { FolderPage } from "@page-folder";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("FolderPage", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ SC_TITLE: "Test Title" });
 	});
 

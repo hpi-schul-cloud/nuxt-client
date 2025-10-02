@@ -4,9 +4,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import ConfirmationTable from "./ConfirmationTable.vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
@@ -31,7 +28,6 @@ vi.mock("vue-i18n", async (importOriginal) => {
 const mockI18n = vi.mocked(useI18n());
 
 describe("ConfirmationTable", () => {
-	const notifierModule = createModuleMocks(NotifierModule);
 	beforeEach(() => {
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -71,9 +67,6 @@ describe("ConfirmationTable", () => {
 
 		const wrapper = mount(ConfirmationTable, {
 			global: {
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 				plugins: [
 					createTestingI18n(),
 					createTestingVuetify(),

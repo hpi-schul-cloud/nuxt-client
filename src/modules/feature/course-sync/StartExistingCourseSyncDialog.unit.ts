@@ -1,9 +1,10 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { MeResponse, RoleName } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createTestAppStore, groupResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestAppStore,
+	expectNotification,
+	groupResponseFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -16,6 +17,8 @@ import type { ComponentProps } from "vue-component-type-helpers";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("@data-room");
 
@@ -31,7 +34,6 @@ describe("StartExistingCourseSyncDialog", () => {
 		},
 		admin?: Partial<MeResponse>
 	) => {
-		const notifierModule = createModuleMocks(NotifierModule);
 		const { mockedMe } = createTestAppStore({ me: admin ?? {} });
 
 		const wrapper = mount(StartExistingCourseSyncDialog, {
@@ -45,21 +47,18 @@ describe("StartExistingCourseSyncDialog", () => {
 					GroupSelectionDialog: true,
 					VDialog: true,
 				},
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			props,
 		});
 
 		return {
 			wrapper,
-			notifierModule,
 			me: mockedMe,
 		};
 	};
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		courseApiMock = createMock<ReturnType<typeof useCourseApi>>();
 
 		vi.mocked(useCourseApi).mockReturnValue(courseApiMock);
@@ -126,7 +125,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 	describe("when confirming the confirm dialog", () => {
 		const setup = async () => {
-			const { wrapper, notifierModule } = getWrapper();
+			const { wrapper } = getWrapper();
 
 			const group = groupResponseFactory.build();
 
@@ -143,7 +142,6 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			return {
 				wrapper,
-				notifierModule,
 				group,
 			};
 		};
@@ -165,12 +163,9 @@ describe("StartExistingCourseSyncDialog", () => {
 		});
 
 		it("should show a success notification", async () => {
-			const { notifierModule } = await setup();
+			await setup();
 
-			expect(notifierModule.show).toHaveBeenCalledWith({
-				text: "feature-course-sync.StartExistingCourseSyncDialog.success",
-				status: "success",
-			});
+			expectNotification("success");
 		});
 
 		it("should emit a success event", async () => {
@@ -182,7 +177,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 	describe("when starting the sync fails", () => {
 		const setup = async () => {
-			const { wrapper, notifierModule } = getWrapper();
+			const { wrapper } = getWrapper();
 
 			courseApiMock.startSynchronization.mockRejectedValueOnce(new Error());
 
@@ -201,18 +196,13 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			return {
 				wrapper,
-				notifierModule,
 				group,
 			};
 		};
 
 		it("should show an error notification", async () => {
-			const { notifierModule } = await setup();
-
-			expect(notifierModule.show).toHaveBeenCalledWith({
-				text: "common.notification.error",
-				status: "error",
-			});
+			await setup();
+			expectNotification("error");
 		});
 
 		it("should not emit a success event", async () => {
@@ -224,7 +214,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 	describe("when data is missing on confirming the group", () => {
 		const setup = async () => {
-			const { wrapper, notifierModule } = getWrapper({
+			const { wrapper } = getWrapper({
 				isOpen: true,
 			});
 
@@ -241,17 +231,12 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			return {
 				wrapper,
-				notifierModule,
 			};
 		};
 
 		it("should show an error notification", async () => {
-			const { notifierModule } = await setup();
-
-			expect(notifierModule.show).toHaveBeenCalledWith({
-				text: "common.notification.error",
-				status: "error",
-			});
+			await setup();
+			expectNotification("error");
 		});
 
 		it("should not emit a success event", async () => {
@@ -263,7 +248,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 	describe("when the user is part of the selected group", () => {
 		const setup = async () => {
-			const { wrapper, notifierModule, me } = getWrapper();
+			const { wrapper, me } = getWrapper();
 
 			const group = groupResponseFactory.build({
 				users: [
@@ -281,7 +266,6 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			return {
 				wrapper,
-				notifierModule,
 				group,
 			};
 		};
@@ -299,7 +283,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 	describe("when the user is not part of the selected group", () => {
 		const setup = async () => {
-			const { wrapper, notifierModule } = getWrapper();
+			const { wrapper } = getWrapper();
 
 			const group = groupResponseFactory.build({
 				users: [
@@ -317,7 +301,6 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			return {
 				wrapper,
-				notifierModule,
 				group,
 			};
 		};
@@ -335,7 +318,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 	describe("when the user is not part of the selected group and course teacher are part of group", () => {
 		const setup = async () => {
-			const { wrapper, notifierModule } = getWrapper(
+			const { wrapper } = getWrapper(
 				{
 					isOpen: true,
 					courseId: "courseId",
@@ -375,7 +358,6 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			return {
 				wrapper,
-				notifierModule,
 				group,
 			};
 		};
@@ -393,7 +375,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 	describe("when the user is not part of the selected group and course teacher are not part of group", () => {
 		const setup = async () => {
-			const { wrapper, notifierModule } = getWrapper(
+			const { wrapper } = getWrapper(
 				{
 					isOpen: true,
 					courseId: "courseId",
@@ -421,7 +403,6 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			return {
 				wrapper,
-				notifierModule,
 				group,
 			};
 		};

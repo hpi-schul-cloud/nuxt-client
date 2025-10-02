@@ -167,7 +167,7 @@
 import { useI18n } from "vue-i18n";
 import { computed, ref, useTemplateRef, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import type { VCard, VTextField } from "vuetify/components";
+import type { VCard } from "vuetify/components";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
@@ -179,11 +179,11 @@ import {
 	useRoomInvitationLinkStore,
 	RoomInvitationFormData,
 } from "@data-room";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { storeToRefs } from "pinia";
 import { isNonEmptyString, isOfMaxLength } from "@util-validators";
 import { useOpeningTagValidator } from "@/utils/validation";
 import { useEnvConfig } from "@data-env";
+import { notifySuccess } from "@data-app";
 
 defineProps({
 	schoolName: {
@@ -201,7 +201,6 @@ const emit = defineEmits<{
 	(e: "close"): void;
 }>();
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { createLink, updateLink } = useRoomInvitationLinkStore();
 const { invitationStep, sharedUrl, editedLink, DEFAULT_EXPIRED_DATE } =
 	storeToRefs(useRoomInvitationLinkStore());
@@ -229,13 +228,11 @@ const validationRules = [
 	validateOnOpeningTag,
 ];
 
-const isDatePickerDisabled = computed(() => {
-	return !formData.value.activeUntilChecked;
-});
+const isDatePickerDisabled = computed(() => !formData.value.activeUntilChecked);
 
-const isSubmitDisabled = computed(() => {
-	return formData.value.activeUntilChecked && !formData.value.activeUntil;
-});
+const isSubmitDisabled = computed(
+	() => formData.value.activeUntilChecked && !formData.value.activeUntil
+);
 
 const modalTitle = computed(() => {
 	const titleMap = {
@@ -319,18 +316,14 @@ const onContinue = async () => {
 };
 
 const onCopyLink = () => {
-	notifierModule.show({
-		text: t("common.words.copiedToClipboard"),
-		status: "success",
-		timeout: 5000,
-	});
+	notifySuccess(t("common.words.copiedToClipboard"));
 };
 
-const datePickerDate = computed(() => {
-	return formData.value.activeUntilChecked && !!formData.value.activeUntil
+const datePickerDate = computed(() =>
+	formData.value.activeUntilChecked && !!formData.value.activeUntil
 		? formData.value.activeUntil.toString()
-		: "";
-});
+		: ""
+);
 
 const inviteMembersContent = ref<VCard>();
 const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {

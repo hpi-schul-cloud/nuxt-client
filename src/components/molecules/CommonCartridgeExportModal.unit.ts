@@ -1,10 +1,8 @@
 import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
-import NotifierModule from "@/store/notifier";
 import courseRoomDetailsModule from "@/store/course-room-details";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -14,11 +12,18 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { VDialog } from "vuetify/lib/components/index";
+import { expectNotification } from "@@/tests/test-utils";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("@/components/molecules/CommonCartridgeExportModal", () => {
 	let exportModuleMock: CommonCartridgeExportModule;
 	let courseRoomDetailsModuleMock: courseRoomDetailsModule;
-	let notifierMock: NotifierModule;
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	const setup = (isSuccess = true) => {
 		exportModuleMock = createModuleMocks(CommonCartridgeExportModule, {
@@ -49,14 +54,12 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 						statusCode: "500",
 					},
 		});
-		notifierMock = createModuleMocks(NotifierModule);
 
 		const wrapper = mount(CommonCartridgeExportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: exportModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierMock,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]:
 						courseRoomDetailsModuleMock,
 				},
@@ -71,7 +74,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 	});
 
 	describe("when getIsExportModalOpen is true", () => {
-		it("should open the Dialog", async () => {
+		it("should open the Dialog", () => {
 			const wrapper = setup();
 			const dialog = wrapper.findComponent(VDialog);
 			expect(dialog.props("modelValue")).toBe(true);
@@ -149,11 +152,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 
 			expect(exportBtn.exists()).toBe(false);
 			expect(exportModuleMock.startExport).toHaveBeenCalled();
-			expect(notifierMock.show).toHaveBeenCalledWith({
-				status: "error",
-				text: expect.any(String),
-				autoClose: true,
-			});
+			expectNotification("error");
 		});
 	});
 

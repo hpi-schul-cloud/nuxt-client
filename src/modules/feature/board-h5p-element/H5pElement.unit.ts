@@ -1,13 +1,10 @@
 import { h5pElementResponseFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
-import NotifierModule from "@/store/notifier";
 import { H5pElementResponse } from "@/serverApi/v3";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -60,7 +57,6 @@ describe("H5pElement", () => {
 		const wrapper = mount(H5pElement, {
 			global: {
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 					[BOARD_IS_LIST_LAYOUT as symbol]: propsData.isListBoard ?? false,
 				},
 				plugins: [createTestingVuetify(), createTestingI18n()],

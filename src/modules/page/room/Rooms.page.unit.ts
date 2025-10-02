@@ -1,11 +1,6 @@
 import CopyModule from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
-import {
-	COPY_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { COPY_MODULE_KEY, LOADING_STATE_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -24,7 +19,7 @@ import { InfoAlert } from "@ui-alert";
 import { Mock } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { RoomItem } from "@/types/room/Room";
-import { roomItemFactory } from "@@/tests/test-utils";
+import { expectNotification, roomItemFactory } from "@@/tests/test-utils";
 
 vi.mock("vue-router");
 const useRouteMock = useRoute as Mock;
@@ -64,7 +59,6 @@ describe("RoomsPage", () => {
 	const setup = (routeQuery: RouteLocation["query"] = {}) => {
 		const copyModule = createModuleMocks(CopyModule);
 		const loadingState = createModuleMocks(LoadingStateModule);
-		const notifierModuleMock = createModuleMocks(NotifierModule);
 
 		const route = createMock<RouteLocation>({
 			query: routeQuery,
@@ -97,7 +91,6 @@ describe("RoomsPage", () => {
 				provide: {
 					[COPY_MODULE_KEY]: copyModule,
 					[LOADING_STATE_MODULE_KEY]: loadingState,
-					[NOTIFIER_MODULE_KEY]: notifierModuleMock,
 				},
 				stubs: { ImportFlow: true },
 			},
@@ -105,7 +98,6 @@ describe("RoomsPage", () => {
 
 		return {
 			wrapper,
-			notifierModuleMock,
 			router,
 		};
 	};
@@ -145,12 +137,11 @@ describe("RoomsPage", () => {
 	describe("when the page is in import mode", () => {
 		const setupImportMode = () => {
 			const token = "6S6s-CWVVxEG";
-			const { wrapper, notifierModuleMock, router } = setup({ import: token });
+			const { wrapper, router } = setup({ import: token });
 
 			return {
 				wrapper,
 				token,
-				notifierModuleMock,
 				router,
 			};
 		};
@@ -188,17 +179,12 @@ describe("RoomsPage", () => {
 
 		describe("when the import flow succeeded", () => {
 			it("should notify about successful import", () => {
-				const { wrapper, notifierModuleMock } = setupImportMode();
+				const { wrapper } = setupImportMode();
 				const importFlow = wrapper.getComponent(ImportFlow);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 
-				expect(notifierModuleMock.show).toHaveBeenCalledWith(
-					expect.objectContaining({
-						text: "components.molecules.import.options.success",
-						status: "success",
-					})
-				);
+				expectNotification("success");
 			});
 
 			it("should go to the room details page", () => {

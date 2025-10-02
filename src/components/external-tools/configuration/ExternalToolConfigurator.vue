@@ -106,9 +106,7 @@ import {
 	ToolParameter,
 	ToolParameterEntry,
 } from "@/store/external-tool";
-import NotifierModule from "@/store/notifier";
 import { BusinessError } from "@/store/types/commons";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	ContextExternalTool,
 	ExternalToolConfigurationTemplate,
@@ -127,10 +125,9 @@ import {
 import { useI18n } from "vue-i18n";
 import { useExternalToolUrlInsertion } from "./external-tool-url-insertion.composable";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
+import { notifyError } from "@data-app";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
-
-const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const { t } = useI18n();
 
@@ -201,7 +198,7 @@ const onCancel = () => {
 	emit("cancel");
 };
 
-const onSave = async () => {
+const onSave = () => {
 	if (selectedTemplate.value) {
 		const parameterEntries: ToolParameterEntry[] = mapValidParameterEntries(
 			selectedTemplate.value
@@ -311,10 +308,7 @@ const pasteFromClipboard = async () => {
 
 		updateSearchInput(text);
 	} catch {
-		notifierModule.show({
-			text: t("pages.tool.select.clipboard.error"),
-			status: "error",
-		});
+		notifyError(t("pages.tool.select.clipboard.error"));
 	}
 };
 

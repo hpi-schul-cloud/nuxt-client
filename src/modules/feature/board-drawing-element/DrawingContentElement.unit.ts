@@ -1,7 +1,4 @@
 import { DrawingElementResponse } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { drawingElementResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -18,18 +15,20 @@ import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";
 
 // Mocks
-vi.mock("@data-board", () => ({
-	useBoardFocusHandler: vi.fn(),
-	useContentElementState: vi.fn(() => ({ modelValue: {} })),
-	useDeleteConfirmationDialog: vi.fn(),
-}));
+vi.mock("@data-board", () => {
+	return {
+		useBoardFocusHandler: vi.fn(),
+		useContentElementState: vi.fn(() => {
+			return { modelValue: {} };
+		}),
+		useDeleteConfirmationDialog: vi.fn(),
+	};
+});
 vi.mock("@feature-board");
 
 const DRAWING_ELEMENT = drawingElementResponseFactory.build();
 
 describe("DrawingContentElement", () => {
-	const notifierModule = createModuleMocks(NotifierModule);
-
 	const setup = (props: {
 		element: DrawingElementResponse;
 		isEditMode: boolean;
@@ -42,9 +41,6 @@ describe("DrawingContentElement", () => {
 		const wrapper = shallowMount(DrawingContentElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			propsData: props,
 		});

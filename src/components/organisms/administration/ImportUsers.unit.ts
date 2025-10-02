@@ -25,7 +25,9 @@ import {
 	mdiFlagOutline,
 	mdiPencilOutline,
 } from "@icons/material";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 const mockImportUsers: ImportUserListResponse = {
 	total: 3,
@@ -127,7 +129,8 @@ const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
 };
 
 describe("@/components/molecules/importUsers", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ SC_THEME: SchulcloudTheme.Default });
 	});
 

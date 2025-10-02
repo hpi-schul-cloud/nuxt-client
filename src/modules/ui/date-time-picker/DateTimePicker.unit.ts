@@ -4,12 +4,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import DateTimePicker from "./DateTimePicker.vue";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 
 describe("DateTimePicker", () => {
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 

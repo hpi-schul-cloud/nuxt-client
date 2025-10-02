@@ -7,6 +7,9 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import CopyResultModal from "./CopyResultModal.vue";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const mockGeoGebraItem = {
 	title: "GeoGebra Element Title",
@@ -32,17 +35,15 @@ const mockLessonResultItems = (
 		mockCourseGroupItem,
 		mockFileItem,
 	]
-) => {
-	return [
-		{
-			type: CopyApiResponseTypeEnum.Lesson,
-			title: "Lesson Title",
-			elementId: "mockId",
-			elements,
-			url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
-		},
-	];
-};
+) => [
+	{
+		type: CopyApiResponseTypeEnum.Lesson,
+		title: "Lesson Title",
+		elementId: "mockId",
+		elements,
+		url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
+	},
+];
 
 describe("@/components/copy-result-modal/CopyResultModal", () => {
 	const createWrapper = (options = {}) => {
@@ -60,7 +61,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		return wrapper;
 	};
 
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore();
 	});
 

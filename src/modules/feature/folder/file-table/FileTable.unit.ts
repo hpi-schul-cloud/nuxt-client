@@ -15,10 +15,13 @@ import { VSkeletonLoader } from "vuetify/lib/components/index";
 import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("FileTable", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(RoleName.Teacher);
 	});
 

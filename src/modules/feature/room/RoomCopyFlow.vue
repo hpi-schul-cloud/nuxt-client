@@ -12,10 +12,10 @@ import { CopyApiResponseStatusEnum, RoomApiFactory } from "@/serverApi/v3";
 import { RoomDetails } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
 import { nextTick, onMounted, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 
 const props = defineProps({
 	room: {
@@ -31,7 +31,6 @@ const emit = defineEmits<{
 	(e: "copy:ended"): void;
 }>();
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 const isRoomCopyInfoDialogOpen = ref(false);
@@ -59,14 +58,14 @@ const onConfirmCopy = async () => {
 			copyResult.status === CopyApiResponseStatusEnum.Failure ||
 			copyResult.id === undefined
 		) {
-			showFailure();
+			notifyError(t("data-room.copy.alert.error"), false);
 			emit("copy:error", copyResult.id);
 		} else {
-			showSuccess();
+			notifySuccess(t("data-room.copy.alert.success"));
 			emit("copy:success", copyResult.id);
 		}
 	} catch (error) {
-		showTimeout();
+		notifyInfo(t("components.molecules.copyResult.timeoutCopy"), false);
 		const responseError = mapAxiosErrorToResponseError(error);
 		throw createApplicationError(responseError.code);
 	} finally {
@@ -74,28 +73,5 @@ const onConfirmCopy = async () => {
 		await nextTick();
 		emit("copy:ended");
 	}
-};
-
-const showSuccess = () => {
-	notifierModule.show({
-		text: t("data-room.copy.alert.success"),
-		status: "success",
-	});
-};
-
-const showFailure = () => {
-	notifierModule.show({
-		text: t("data-room.copy.alert.error"),
-		status: "error",
-		autoClose: false,
-	});
-};
-
-const showTimeout = () => {
-	notifierModule.show({
-		text: t("components.molecules.copyResult.timeoutCopy"),
-		status: "info",
-		autoClose: false,
-	});
 };
 </script>

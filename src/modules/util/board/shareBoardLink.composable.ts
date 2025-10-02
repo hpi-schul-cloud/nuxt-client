@@ -1,15 +1,12 @@
-import NotifierModule from "@/store/notifier";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { BoardMenuScope } from "@ui-board";
 import { useI18n } from "vue-i18n";
+import { notifyError, notifySuccess } from "@data-app";
 
 export const useShareBoardLink = () => {
-	const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 	const { t } = useI18n();
 
-	const getShareLinkId = (nodeId: string, scope: BoardMenuScope) => {
-		return `${scope}-${nodeId}`;
-	};
+	const getShareLinkId = (nodeId: string, scope: BoardMenuScope) =>
+		`${scope}-${nodeId}`;
 
 	const copyShareLink = async (
 		nodeId: string,
@@ -20,18 +17,9 @@ export const useShareBoardLink = () => {
 
 		try {
 			await navigator.clipboard.writeText(shareLink.toString());
-
-			notifierModule.show({
-				status: "success",
-				text: t("common.words.copyLinkToClipboard.success"),
-				autoClose: true,
-			});
+			notifySuccess("common.words.copyLinkToClipboard.success");
 		} catch {
-			notifierModule.show({
-				status: "error",
-				text: t("common.words.copyLinkToClipboard.failure"),
-				autoClose: true,
-			});
+			notifyError(t("common.words.copyLinkToClipboard.failure"));
 		}
 	};
 

@@ -168,12 +168,12 @@ import {
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	injectStrict,
-	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiInformation } from "@icons/material";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { notifyError, notifySuccess } from "@data-app";
 
 type Selection = {
 	isSelected: boolean;
@@ -182,7 +182,6 @@ type Selection = {
 };
 
 const { t } = useI18n();
-const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 const commonCartridgeExportModule = injectStrict(
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY
 );
@@ -317,11 +316,7 @@ function onNext(): void {
 
 async function onExport(): Promise<void> {
 	emit("dialog-confirmed", false);
-	notifier.show({
-		text: t("common.words.export"),
-		status: "success",
-		timeout: 5000,
-	});
+	notifySuccess(t("common.words.export"));
 
 	const topicIds: string[] = allTopics.value
 		.filter((topic) => topic.isSelected)
@@ -341,11 +336,7 @@ async function onExport(): Promise<void> {
 	await commonCartridgeExportModule.startExport();
 
 	if (courseRoomDetailsModule.getBusinessError?.statusCode !== "") {
-		notifier.show({
-			status: "error",
-			text: t("pages.rooms.ccExportCourse.error"),
-			autoClose: true,
-		});
+		notifyError(t("pages.rooms.ccExportCourse.error"));
 	}
 
 	resetDialog();

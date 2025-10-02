@@ -1,13 +1,12 @@
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
-import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { mount } from "@vue/test-utils";
 import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
 import TasksList from "./TasksList.vue";
-import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -15,6 +14,7 @@ import {
 import { beforeAll } from "vitest";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { RoleName } from "@/serverApi/v3";
 
 const { tasks } = mocks;
 
@@ -22,7 +22,6 @@ describe("@/components/organisms/TasksList", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
-	let notifierModuleMock: NotifierModule;
 
 	const mountComponent = (options = {}) => {
 		const wrapper = mount(TasksList, {
@@ -32,7 +31,6 @@ describe("@/components/organisms/TasksList", () => {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					tasksModule: tasksModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				},
 			},
 			...options,
@@ -58,7 +56,6 @@ describe("@/components/organisms/TasksList", () => {
 			getTasks: [],
 			tasksIsEmpty: true,
 		});
-		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	describe("props", () => {
@@ -226,7 +223,7 @@ describe("@/components/organisms/TasksList", () => {
 			const wrapper = mountComponent({
 				propsData: {
 					tasks,
-					userRole: "student",
+					userRole: RoleName.Student,
 				},
 			});
 
@@ -234,11 +231,11 @@ describe("@/components/organisms/TasksList", () => {
 		});
 	});
 
-	it("should passthrough copy-task event", async () => {
+	it("should passthrough copy-task event", () => {
 		const wrapper = mountComponent({
 			propsData: {
 				tasks,
-				userRole: "teacher",
+				userRole: RoleName.Teacher,
 			},
 		});
 

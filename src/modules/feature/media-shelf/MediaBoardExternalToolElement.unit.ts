@@ -1,14 +1,11 @@
-import NotifierModule from "@/store/notifier";
-import { AlertPayload } from "@/store/types/alert-payload";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	businessErrorFactory,
 	contextExternalToolConfigurationStatusFactory,
 	createTestEnvStore,
+	expectNotification,
 	externalToolDisplayDataFactory,
 	mediaExternalToolElementResponseFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -27,6 +24,8 @@ import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("@data-external-tool");
 
@@ -46,14 +45,10 @@ describe("MediaBoardExternalToolElement", () => {
 	) => {
 		const refreshTime = 299000;
 		createTestEnvStore({ CTL_TOOLS_RELOAD_TIME_MS: refreshTime });
-		const notifierModule = createModuleMocks(NotifierModule);
 
 		const wrapper = mount(MediaBoardExternalToolElement, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 				stubs: {
 					MediaBoardExternalToolElementMenu: true,
 				},
@@ -63,7 +58,6 @@ describe("MediaBoardExternalToolElement", () => {
 
 		return {
 			wrapper,
-			notifierModule,
 			refreshTime,
 		};
 	};
@@ -75,6 +69,9 @@ describe("MediaBoardExternalToolElement", () => {
 			displayData: ref(),
 			error: ref(),
 		});
+
+		setActivePinia(createTestingPinia());
+
 		useExternalToolLaunchStateMock = createMock<
 			ReturnType<typeof useExternalToolLaunchState>
 		>({
@@ -270,7 +267,7 @@ describe("MediaBoardExternalToolElement", () => {
 			const setup = () => {
 				const externalToolElement =
 					mediaExternalToolElementResponseFactory.build();
-				const { wrapper, notifierModule } = getWrapper({
+				const { wrapper } = getWrapper({
 					element: externalToolElement,
 				});
 
@@ -282,19 +279,15 @@ describe("MediaBoardExternalToolElement", () => {
 				return {
 					wrapper,
 					externalToolElement,
-					notifierModule,
 				};
 			};
 
 			it("should show a general error notification", async () => {
-				const { wrapper, notifierModule } = setup();
+				const { wrapper } = setup();
 
 				await wrapper.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalledWith<[AlertPayload]>({
-					status: "error",
-					text: "error.load",
-				});
+				expectNotification("error");
 			});
 
 			it("should not launch the tool", async () => {
@@ -312,7 +305,7 @@ describe("MediaBoardExternalToolElement", () => {
 			const setup = () => {
 				const externalToolElement =
 					mediaExternalToolElementResponseFactory.build();
-				const { wrapper, notifierModule } = getWrapper({
+				const { wrapper } = getWrapper({
 					element: externalToolElement,
 				});
 
@@ -331,17 +324,16 @@ describe("MediaBoardExternalToolElement", () => {
 				return {
 					wrapper,
 					externalToolElement,
-					notifierModule,
 					statusMock,
 				};
 			};
 
 			it("should call composable to determine error message", async () => {
-				const { wrapper, notifierModule, statusMock } = setup();
+				const { wrapper, statusMock } = setup();
 
 				await wrapper.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalled();
+				expectNotification("warning");
 				expect(
 					useContextExternalToolConfigurationStatusMock.determineMediaBoardElementStatusMessage
 				).toHaveBeenCalledWith(statusMock);

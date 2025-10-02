@@ -1,14 +1,14 @@
-import NotifierModule from "@/store/notifier";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
 import NewStudent from "./StudentCreate.page.vue";
 import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 const createMockStore = () => {
 	const createStudentStub = vi.fn();
@@ -39,11 +39,9 @@ const createMockStore = () => {
 };
 
 describe("students/new", () => {
-	beforeAll(() => {
-		createTestAppStore();
-	});
 	beforeEach(() => {
-		setupStores({ notifierModule: NotifierModule });
+		setActivePinia(createTestingPinia());
+		createTestAppStore();
 	});
 
 	const setup = () => {

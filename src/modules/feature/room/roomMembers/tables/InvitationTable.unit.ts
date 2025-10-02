@@ -4,9 +4,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import InvitationTable from "./InvitationTable.vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
@@ -38,7 +35,6 @@ vi.mocked(useDeleteConfirmationDialog);
 describe("InvitationTable", () => {
 	let askConfirmationMock: Mock;
 	let askDeleteConfirmationMock: Mock;
-	const notifierModule = createModuleMocks(NotifierModule);
 	beforeEach(() => {
 		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
@@ -64,9 +60,6 @@ describe("InvitationTable", () => {
 	const setup = () => {
 		const wrapper = mount(InvitationTable, {
 			global: {
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 				plugins: [
 					createTestingI18n(),
 					createTestingVuetify(),

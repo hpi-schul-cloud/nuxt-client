@@ -1,7 +1,6 @@
 import LernstoreCollectionDetailView from "./LernstoreCollectionDetailView";
 import { Collection } from "@@/tests/test-utils/mockDataCollection";
 import ContentModule from "@/store/content";
-import NotifierModule from "@/store/notifier";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -26,7 +25,6 @@ const testProps = {
 
 setupStores({
 	contentModule: ContentModule,
-	notifierModule: NotifierModule,
 });
 
 describe("@/components/organisms/LernstoreCollectionDetailView", () => {

@@ -11,12 +11,15 @@ import {
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { mount } from "@vue/test-utils";
 import { Permission, RoleName } from "@/serverApi/v3";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("RoomExternalToolsErrorDialog", () => {
 	const getWrapper = (props: {
 		selectedItem: ExternalToolDisplayData;
 		isOpen?: boolean;
 	}) => {
+		setActivePinia(createTestingPinia());
 		createTestAppStore({
 			me: {
 				permissions: [Permission.ContextToolAdmin],

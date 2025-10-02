@@ -136,7 +136,7 @@ import {
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import contentMeta from "@/mixins/contentMeta";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
-import { contentModule, notifierModule } from "@/store";
+import { contentModule } from "@/store";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import ContentCard from "@/components/lern-store/ContentCard";
 import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter";
@@ -145,6 +145,7 @@ import BaseLink from "../base/BaseLink";
 import { RenderHTML } from "@feature-render-html";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiCalendar, mdiChevronLeft, mdiPound } from "@icons/material";
+import { notifyError } from "@data-app";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -268,11 +269,9 @@ export default defineComponent({
 				contentModule.clearElements();
 				await contentModule.getElements(this.query);
 			} catch {
-				notifierModule.show({
-					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
-					status: "error",
-					timeout: 5000,
-				});
+				notifyError(
+					this.$t("pages.content.notification.lernstoreNotAvailable")
+				);
 			}
 		},
 		async addElements() {

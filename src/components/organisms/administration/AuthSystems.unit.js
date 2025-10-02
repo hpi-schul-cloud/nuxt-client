@@ -72,11 +72,8 @@ describe("AuthSystems", () => {
 		return wrapper;
 	};
 
-	beforeAll(() => {
-		setActivePinia(createTestingPinia({ stubActions: false }));
-	});
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});

@@ -1,21 +1,19 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { ConfigResponse } from "@/serverApi/v3/api";
-import NotifierModule from "@/store/notifier";
 import { injectStrict } from "@/utils/inject";
 import {
 	createTestEnvStore,
+	expectNotification,
 	mockedPiniaStoreTyping,
 	ObjectIdMock,
 } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	useBoardFeatures,
 	useBoardPermissions,
 	useCardStore,
 } from "@data-board";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { useSharedLastCreatedElement } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { ref } from "vue";
@@ -26,6 +24,7 @@ import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
+import { useNotificationStore } from "@data-app";
 
 vi.mock("vue-router");
 vi.mock("./SharedElementTypeSelection.composable");
@@ -51,9 +50,6 @@ vi.mock("vue-i18n", () => {
 	};
 });
 
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
 vi.mock("@util-board/LastCreatedElement.composable");
 vi.mocked(useSharedLastCreatedElement).mockImplementation(() => {
 	return {
@@ -72,10 +68,6 @@ vi.mocked(useBoardFeatures).mockImplementation(() => {
 describe("ElementTypeSelection Composable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-
-		setupStores({
-			notifierModule: NotifierModule,
-		});
 	});
 
 	afterEach(() => {
@@ -92,15 +84,10 @@ describe("ElementTypeSelection Composable", () => {
 				const addElementMock = vi.fn();
 				const elementType = ContentElementType.RichText;
 
-				const mockedBoardNotifierCalls =
-					createMock<ReturnType<typeof useBoardNotifier>>();
-				mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
 				return {
 					addElementMock,
 					elementType,
 					cardId,
-					mockedBoardNotifierCalls,
 				};
 			};
 
@@ -144,28 +131,15 @@ describe("ElementTypeSelection Composable", () => {
 					const addElementMock = vi.fn();
 					const elementType = ContentElementType.CollaborativeTextEditor;
 
-					const mockedBoardNotifierCalls =
-						createMock<ReturnType<typeof useBoardNotifier>>();
-					mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
 					return {
 						addElementMock,
 						elementType,
-						mockedBoardNotifierCalls,
 						cardId,
 					};
 				};
 
 				it("should show Notification", async () => {
-					const i18nKeyCollaborativeTextEditor =
-						"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
-
-					const {
-						addElementMock,
-						elementType,
-						mockedBoardNotifierCalls,
-						cardId,
-					} = setup();
+					const { addElementMock, elementType, cardId } = setup();
 
 					const { onElementClick } = useAddElementDialog(
 						addElementMock,
@@ -173,10 +147,7 @@ describe("ElementTypeSelection Composable", () => {
 					);
 
 					await onElementClick(elementType);
-
-					expect(
-						mockedBoardNotifierCalls.showCustomNotifier
-					).toHaveBeenCalledWith(i18nKeyCollaborativeTextEditor, "info");
+					expectNotification("info");
 				});
 			});
 
@@ -189,25 +160,15 @@ describe("ElementTypeSelection Composable", () => {
 					const addElementMock = vi.fn();
 					const elementType = ContentElementType.RichText;
 
-					const mockedBoardNotifierCalls =
-						createMock<ReturnType<typeof useBoardNotifier>>();
-					mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
 					return {
 						addElementMock,
 						elementType,
-						mockedBoardNotifierCalls,
 						cardId,
 					};
 				};
 
 				it("should NOT show Notification", async () => {
-					const {
-						addElementMock,
-						elementType,
-						mockedBoardNotifierCalls,
-						cardId,
-					} = setup();
+					const { addElementMock, elementType, cardId } = setup();
 
 					const { onElementClick } = useAddElementDialog(
 						addElementMock,
@@ -215,20 +176,15 @@ describe("ElementTypeSelection Composable", () => {
 					);
 
 					await onElementClick(elementType);
-
-					expect(
-						mockedBoardNotifierCalls.showCustomNotifier
-					).toHaveBeenCalledTimes(0);
+					expect(useNotificationStore().notify).not.toHaveBeenCalled();
 				});
 			});
 
 			describe("when element type is Whiteboard", () => {
 				it("should show Notification", async () => {
-					const i18nKeyWhiteboard =
-						"components.cardElement.notification.visibleAndEditable";
 					const addElementMock = vi.fn();
 					const elementType = ContentElementType.Drawing;
-					const { mockedBoardNotifierCalls, cardId } = setup();
+					const { cardId } = setup();
 
 					const { onElementClick } = useAddElementDialog(
 						addElementMock,
@@ -236,10 +192,7 @@ describe("ElementTypeSelection Composable", () => {
 					);
 
 					await onElementClick(elementType);
-
-					expect(
-						mockedBoardNotifierCalls.showCustomNotifier
-					).toHaveBeenCalledWith(i18nKeyWhiteboard, "info");
+					expectNotification("info");
 				});
 			});
 		});
@@ -247,10 +200,6 @@ describe("ElementTypeSelection Composable", () => {
 			const setup = () => {
 				const error = new Error("Test error");
 				const addElementMock = vi.fn().mockRejectedValueOnce(error);
-
-				const mockedBoardNotifierCalls =
-					createMock<ReturnType<typeof useBoardNotifier>>();
-				mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 				setupSharedElementTypeSelectionMock();
 
@@ -324,10 +273,6 @@ describe("ElementTypeSelection Composable", () => {
 			const preferredToolsSetup = () => {
 				const { askType, isDialogLoading, dynamicElementTypeOptions } = setup();
 
-				const mockedBoardNotifierCalls =
-					createMock<ReturnType<typeof useBoardNotifier>>();
-				mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
 				const cardStore = mockedPiniaStoreTyping(useCardStore);
 
 				cardStore.isPreferredToolsLoading = false;
@@ -390,10 +335,6 @@ describe("ElementTypeSelection Composable", () => {
 		describe("when preferred tools are still loading", () => {
 			const preferredToolsSetup = () => {
 				const { askType, isDialogLoading, dynamicElementTypeOptions } = setup();
-
-				const mockedBoardNotifierCalls =
-					createMock<ReturnType<typeof useBoardNotifier>>();
-				mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 				const cardStore = mockedPiniaStoreTyping(useCardStore);
 
@@ -460,10 +401,6 @@ describe("ElementTypeSelection Composable", () => {
 					hasManageVideoConferencePermission
 				),
 			} as BoardPermissionChecks);
-
-			const mockedBoardNotifierCalls =
-				createMock<ReturnType<typeof useBoardNotifier>>();
-			mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 			mockedPiniaStoreTyping(useCardStore);
 
@@ -835,10 +772,6 @@ describe("ElementTypeSelection Composable", () => {
 						closeDialogMock,
 					});
 
-				const mockedBoardNotifierCalls =
-					createMock<ReturnType<typeof useBoardNotifier>>();
-				mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
 				const preferredTool = {
 					schoolExternalToolId: ObjectIdMock(),
 					name: "test-tool-name-1",
@@ -863,7 +796,6 @@ describe("ElementTypeSelection Composable", () => {
 					cardStore,
 					preferredTool,
 					closeDialogMock,
-					mockedBoardNotifierCalls,
 				};
 			};
 
@@ -924,10 +856,6 @@ describe("ElementTypeSelection Composable", () => {
 				setupSharedElementTypeSelectionMock({
 					closeDialogMock,
 				});
-
-			const mockedBoardNotifierCalls =
-				createMock<ReturnType<typeof useBoardNotifier>>();
-			mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 			const cardStore = mockedPiniaStoreTyping(useCardStore);
 			cardStore.preferredTools = [];

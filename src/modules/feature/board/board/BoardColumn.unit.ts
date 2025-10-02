@@ -1,9 +1,7 @@
-import { notifierModule } from "@/store";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestEnvStore,
 	mockedPiniaStoreTyping,
@@ -22,15 +20,12 @@ import {
 	useBoardStore,
 	useForceRender,
 } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import {
-	useBoardNotifier,
-	useDragAndDrop,
-	useSharedLastCreatedElement,
-} from "@util-board";
+import { useDragAndDrop, useSharedLastCreatedElement } from "@util-board";
 import { computed, nextTick, ref } from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
+import { setActivePinia } from "pinia";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 
@@ -39,9 +34,7 @@ vi.mock("vue-router");
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = vi.mocked(useBoardPermissions);
 
-vi.mock("@util-board/BoardNotifier.composable");
 vi.mock("@util-board/LastCreatedElement.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 vi.mock("@data-board/fixSamePositionDnD.composable");
@@ -53,16 +46,12 @@ mockUseSharedLastCreatedElement.mockReturnValue({
 });
 
 describe("BoardColumn", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
 
 	beforeEach(() => {
 		setupStores({});
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false });
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		mockedUseForceRenderHandler =
 			createMock<ReturnType<typeof useForceRender>>();
@@ -92,9 +81,6 @@ describe("BoardColumn", () => {
 					createTestingVuetify(),
 					createTestingPinia(),
 				],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			props: {
 				column,
@@ -122,7 +108,7 @@ describe("BoardColumn", () => {
 	});
 
 	describe("when a card moved ", () => {
-		it("should call 'moveCardRequest' method", async () => {
+		it("should call 'moveCardRequest' method", () => {
 			const { wrapper, store } = setup();
 
 			const emitObject = {
@@ -152,7 +138,7 @@ describe("BoardColumn", () => {
 		});
 
 		describe("when a card is moved to its column and the same position", () => {
-			it("should not call 'moveCardRequest' method", async () => {
+			it("should not call 'moveCardRequest' method", () => {
 				const { wrapper, store } = setup({ cardsCount: 1 });
 
 				const emitObject = {
@@ -182,7 +168,7 @@ describe("BoardColumn", () => {
 
 		describe("when a card is moved by keyboard", () => {
 			describe("when ArrowDown key is pressed for first card", () => {
-				it("should call 'moveCardRequest' method", async () => {
+				it("should call 'moveCardRequest' method", () => {
 					const { wrapper, store } = setup({ cardsCount: 3 });
 
 					const cardHostComponents = wrapper.findAllComponents({
@@ -196,7 +182,7 @@ describe("BoardColumn", () => {
 			});
 
 			describe("when ArrowDown key is pressed for last card", () => {
-				it("should call 'moveCardRequest' method", async () => {
+				it("should call 'moveCardRequest' method", () => {
 					const { wrapper, store } = setup({ cardsCount: 3 });
 
 					const cardHostComponents = wrapper.findAllComponents({

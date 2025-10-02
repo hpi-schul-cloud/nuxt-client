@@ -1,8 +1,5 @@
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolParameterLocation } from "@/store/external-tool";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	contextExternalToolConfigurationTemplateFactory,
 	contextExternalToolFactory,
@@ -33,14 +30,9 @@ describe("ExternalToolConfigurator", () => {
 	const getWrapper = (
 		props: ComponentProps<typeof ExternalToolConfigurator>
 	) => {
-		const notifierModule = createModuleMocks(NotifierModule);
-
 		const wrapper = mount(ExternalToolConfigurator, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			props,
 		});
@@ -71,7 +63,7 @@ describe("ExternalToolConfigurator", () => {
 				};
 			};
 
-			it("should disable the selection", async () => {
+			it("should disable the selection", () => {
 				const { wrapper } = setup();
 
 				const select = wrapper
@@ -81,7 +73,7 @@ describe("ExternalToolConfigurator", () => {
 				expect(select.attributes("disabled")).toBeDefined();
 			});
 
-			it("should display the edited tool in the selection", async () => {
+			it("should display the edited tool in the selection", () => {
 				const { wrapper, template } = setup();
 
 				const selectionRow = wrapper.find(".v-autocomplete .v-list-item-title");
@@ -110,7 +102,7 @@ describe("ExternalToolConfigurator", () => {
 				};
 			};
 
-			it("should display the preferred tool in the selection", async () => {
+			it("should display the preferred tool in the selection", () => {
 				const { wrapper, template1 } = setup();
 
 				const selectionRow = wrapper.find(".v-autocomplete .v-list-item-title");

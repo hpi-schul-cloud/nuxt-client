@@ -1,21 +1,18 @@
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { Group, useGroupApi, useGroupState } from "./index";
 import { groupFactory } from "@@/tests/test-utils/factory/groupFactory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { mountComposable } from "@@/tests/test-utils";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { expectNotification, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import type { Mocked } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("@data-group/GroupApi.composable");
 
 describe("GroupState.composable", () => {
 	let useGroupApiMock: DeepMocked<ReturnType<typeof useGroupApi>>;
-	const notifierModule: Mocked<NotifierModule> =
-		createModuleMocks(NotifierModule);
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		useGroupApiMock = createMock<ReturnType<typeof useGroupApi>>();
 
 		vi.mocked(useGroupApi).mockReturnValue(useGroupApiMock);
@@ -29,9 +26,6 @@ describe("GroupState.composable", () => {
 		const composable = mountComposable(() => useGroupState(), {
 			global: {
 				plugins: [createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 		});
 
@@ -42,7 +36,7 @@ describe("GroupState.composable", () => {
 
 	describe("fetchGroup", () => {
 		describe("when no data is loaded", () => {
-			it("should not have data", async () => {
+			it("should not have data", () => {
 				const { composable } = getComposable();
 
 				expect(composable.group.value).toBeUndefined();
@@ -97,10 +91,7 @@ describe("GroupState.composable", () => {
 
 				await composable.fetchGroup("groupId");
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "error.load",
-					status: "error",
-				});
+				expectNotification("error");
 			});
 		});
 	});

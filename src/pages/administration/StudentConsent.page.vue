@@ -312,7 +312,7 @@
 </template>
 
 <script>
-import { filePathsModule, notifierModule } from "@/store";
+import { filePathsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import StepProgress from "@/components/organisms/StepProgress";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
@@ -326,6 +326,7 @@ import {
 import { mdiAlert } from "@icons/material";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
+import { notifyError, notifySuccess } from "@data-app";
 
 export default {
 	components: {
@@ -534,13 +535,11 @@ export default {
 				}, this);
 				this.$store.dispatch("bulkConsent/register", users);
 
-				notifierModule.show({
-					text: this.$t(
+				notifySuccess(
+					this.$t(
 						"pages.administration.students.consent.steps.register.success"
-					),
-					status: "success",
-					timeout: 5000,
-				});
+					)
+				);
 				this.next();
 			}
 		},
@@ -597,11 +596,9 @@ export default {
 		checkTableData() {
 			this.tableTimeOut = setTimeout(() => {
 				if (this.tableData.length === 0) {
-					notifierModule.show({
-						text: this.$t("pages.administration.students.consent.table.empty"),
-						status: "error",
-						timeout: 5000,
-					});
+					notifyError(
+						this.$t("pages.administration.students.consent.table.empty")
+					);
 
 					this.$router.push({
 						path: `/administration/students`,

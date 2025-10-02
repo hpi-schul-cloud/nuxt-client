@@ -1,9 +1,8 @@
-import { getActivePinia, setActivePinia } from "pinia";
-import { useAppStore } from "@data-app";
+import { Pinia } from "pinia";
+import { AlertStatus, useAppStore, useNotificationStore } from "@data-app";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { LanguageType, MeResponse, Permission, RoleName } from "@/serverApi/v3";
 import { DeepPartial, Factory } from "fishery";
-import { createTestingPinia } from "@pinia/testing";
 
 export const meResponseFactory = Factory.define<MeResponse>(({ sequence }) => ({
 	user: {
@@ -30,18 +29,15 @@ export const meResponseFactory = Factory.define<MeResponse>(({ sequence }) => ({
 
 export const createTestAppStore = ({
 	me,
-	stubActions,
+	pinia,
 }: {
 	me?: DeepPartial<MeResponse>;
-	stubActions?: boolean;
+	pinia?: Pinia;
 } = {}) => {
-	if (!getActivePinia()) {
-		setActivePinia(createTestingPinia({ stubActions }));
-	}
-
 	const mockedMe = meResponseFactory.build(me);
+	const store = useAppStore(pinia);
 
-	useAppStore().$patch({ meResponse: mockedMe });
+	store.$patch({ meResponse: mockedMe });
 	const appStore = mockedPiniaStoreTyping(useAppStore);
 
 	return { mockedMe, appStore };
@@ -49,24 +45,25 @@ export const createTestAppStore = ({
 
 export const createTestAppStoreWithPermissions = (
 	permissions: Permission[],
-	stubActions?: boolean
-) => createTestAppStore({ me: { permissions }, stubActions });
+	pinia?: Pinia
+) => createTestAppStore({ me: { permissions }, pinia });
 
 export const createTestAppStoreWithSchool = (
 	schoolId?: string,
-	stubActions?: boolean
-) => createTestAppStore({ me: { school: { id: schoolId } }, stubActions });
+	pinia?: Pinia
+) => createTestAppStore({ me: { school: { id: schoolId } }, pinia });
 
-export const createTestAppStoreWithUser = (
-	id?: string,
-	stubActions?: boolean
-) => createTestAppStore({ me: { user: { id } }, stubActions });
+export const createTestAppStoreWithUser = (id?: string, pinia?: Pinia) =>
+	createTestAppStore({ me: { user: { id } }, pinia });
 
-export const createTestAppStoreWithRole = (
-	roleName: RoleName,
-	stubActions?: boolean
-) =>
+export const createTestAppStoreWithRole = (roleName: RoleName, pinia?: Pinia) =>
 	createTestAppStore({
 		me: { roles: [{ id: roleName, name: roleName }] },
-		stubActions,
+		pinia,
 	});
+
+export const expectNotification = (status: AlertStatus) => {
+	expect(useNotificationStore().notify).toHaveBeenCalledWith(
+		expect.objectContaining({ status })
+	);
+};

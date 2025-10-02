@@ -73,7 +73,7 @@ import {
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
-import { uniqueId } from "lodash";
+import { uniqueId } from "lodash-es";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, PropType, Ref, WritableComputedRef } from "vue";

@@ -17,19 +17,16 @@ import { VAutocomplete, VIcon } from "vuetify/lib/components/index";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { createTestingPinia } from "@pinia/testing";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import { WarningAlert } from "@ui-alert";
 import { computed, Ref } from "vue";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { Mock } from "vitest";
+import { setActivePinia } from "pinia";
 
 vi.mock("@vueuse/integrations/useFocusTrap");
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
@@ -46,7 +43,6 @@ describe("AddMembers", () => {
 	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
 		pauseMock = vi.fn();
@@ -55,10 +51,6 @@ describe("AddMembers", () => {
 			pause: pauseMock,
 			unpause: unpauseMock,
 		});
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -90,9 +82,9 @@ describe("AddMembers", () => {
 			roomRoleName: RoleName.Roomadmin,
 		});
 
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		const { mockedMe } = createTestAppStoreWithRole(
-			options?.schoolRole ?? RoleName.Teacher,
-			false
+			options?.schoolRole ?? RoleName.Teacher
 		);
 
 		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.Teacher];

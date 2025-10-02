@@ -18,11 +18,14 @@ import { VideoConferenceContentElement } from "@feature-board-video-conference-e
 import { shallowMount } from "@vue/test-utils";
 import ContentElementList from "./ContentElementList.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("ContentElementList", () => {
 	describe("when feature flags are true", () => {
-		beforeAll(() => {
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
 			createTestEnvStore({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
@@ -143,7 +146,8 @@ describe("ContentElementList", () => {
 	});
 
 	describe("when FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED is false", () => {
-		beforeAll(() => {
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
 			createTestEnvStore({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
