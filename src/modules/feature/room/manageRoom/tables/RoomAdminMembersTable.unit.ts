@@ -17,6 +17,7 @@ import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { DataTable } from "@ui-data-table";
+import { ChangeRole } from "@feature-room";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = vi.mocked(useBoardNotifier);
@@ -59,6 +60,7 @@ describe("RoomAdminMembersTable", () => {
 				firstName: "---",
 				lastName: "---",
 				roomRoleName: RoleName.Roomviewer,
+				schoolRoleNames: [RoleName.Student],
 			}),
 			...roomMemberFactory.buildList(1, {
 				schoolId: "different-school-id",
@@ -147,38 +149,22 @@ describe("RoomAdminMembersTable", () => {
 			});
 		});
 
-		it("should not render kebab menu for the other school members but room owners", () => {
+		it("should render kebab menu only for users belonging to admin school", () => {
 			const { wrapper, roomMembersForAdmins } = setup();
 
-			const otherSchoolMembers = roomMembersForAdmins.filter(
-				(member) => member.schoolId === "different-school-id"
-			);
-
-			otherSchoolMembers.forEach(async (member) => {
-				if (member.roomRoleName === RoleName.Roomowner) {
-					await nextTick();
-					const kebabMenu = wrapper.findComponent(
-						`[data-testid="kebab-menu-${member.userId}"]`
-					);
-
-					expect(kebabMenu.exists()).toBe(true);
-					return;
-				}
+			roomMembersForAdmins.forEach(async (member) => {
 				await nextTick();
 				const kebabMenu = wrapper.findComponent(
 					`[data-testid="kebab-menu-${member.userId}"]`
 				);
 
-				const checkBox = wrapper
-					.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`)
-					.find("input");
-
-				expect(checkBox.attributes()).toHaveProperty("disabled");
-				expect(kebabMenu.exists()).toBe(false);
+				expect(kebabMenu.exists()).toBe(
+					member.schoolId === "school-id" ? true : false
+				);
 			});
 		});
 
-		it("should render kebab menu for same school members", () => {
+		it("should render kebab menu actions for same school members", () => {
 			const { wrapper, roomMembersForAdmins } = setup();
 
 			const sameSchoolMembers = roomMembersForAdmins.filter(
@@ -188,32 +174,62 @@ describe("RoomAdminMembersTable", () => {
 			sameSchoolMembers.forEach(async (member) => {
 				await nextTick();
 
-				const kebabMenu = wrapper.findComponent(
-					`[data-testid="kebab-menu-${member.userId}"]`
+				const removeMemberAction = wrapper.findComponent(
+					`[data-testid="kebab-menu-${member.userId}-remove-member"]`
+				);
+				const changePermissionAction = wrapper.findComponent(
+					`[data-testid="kebab-menu-${member.userId}-change-permission"]`
 				);
 
-				const checkBox = wrapper
-					.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`)
-					.find("input");
+				const userIsRoomOwner = member.roomRoleName === RoleName.Roomowner;
 
-				expect(checkBox.attributes()).not.toHaveProperty("disabled");
-				expect(kebabMenu.exists()).toBe(true);
+				if (userIsRoomOwner) {
+					expect(removeMemberAction.exists()).toBe(false);
+					expect(changePermissionAction.exists()).toBe(false);
+				}
+				if (member.schoolId === "school-id" && !userIsRoomOwner) {
+					expect(removeMemberAction.exists()).toBe(true);
+				}
+
+				if (member.schoolId === "other-school-id") {
+					expect(removeMemberAction.exists()).toBe(false);
+					expect(changePermissionAction.exists()).toBe(false);
+				}
 			});
 		});
 	});
 
-	describe("selection", () => {
+	describe("when selecting members", () => {
 		it("should update 'selectedIds' value when a member is selected", async () => {
+			const { wrapper, roomMembersStore, roomMembers } = setup();
+
+			const dataTable = wrapper.getComponent(DataTable);
+			const checkboxes = dataTable.findAll("input[type='checkbox']");
+			checkboxes.at(3)?.trigger("click");
+			await nextTick();
+
+			const userIds = roomMembers.slice(2, 3).map((m) => m.userId);
+			expect(roomMembersStore.selectedIds).toEqual(
+				expect.arrayContaining(userIds)
+			);
+		});
+	});
+
+	describe("when closing the dialog", () => {
+		it("should reset 'selectedIds' value", async () => {
 			const { wrapper, roomMembersStore } = setup();
 
 			const dataTable = wrapper.getComponent(DataTable);
-			const emittedIds = ["123", "456"];
-			dataTable.vm.$emit("update:selected-ids", emittedIds);
+			const checkboxes = dataTable.findAll("input[type='checkbox']");
+			checkboxes.at(3)?.trigger("click");
 			await nextTick();
 
-			expect(roomMembersStore.selectedIds).toEqual(
-				expect.arrayContaining(emittedIds)
-			);
+			const changeRoleDialog = wrapper.getComponent(ChangeRole);
+			changeRoleDialog.vm.$emit("close");
+			await nextTick();
+
+			expect(roomMembersStore.selectedIds).toEqual([]);
+			expect(roomMembersStore.fetchMembers).toHaveBeenCalled();
 		});
 	});
 });

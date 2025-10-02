@@ -1,6 +1,12 @@
-import { mount } from "@vue/test-utils";
-import ChangeRole from "./ChangeRole.vue";
 import { RoleName } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
+import {
+	mockedPiniaStoreTyping,
+	roomFactory,
+	schoolFactory,
+	createTestAppStoreWithUser,
+} from "@@/tests/test-utils";
 import {
 	roomAdminFactory,
 	roomEditorFactory,
@@ -12,21 +18,17 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomMember, useRoomMembersStore } from "@data-room";
-import { nextTick } from "vue";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import {
-	createTestAppStoreWithUser,
-	mockedPiniaStoreTyping,
-	roomFactory,
-	schoolFactory,
-} from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
-import { schoolsModule } from "@/store";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";
+import ChangeRole from "./ChangeRole.vue";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { Mock } from "vitest";
 
 vi.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
@@ -46,7 +48,23 @@ vi.mock("vue-i18n", async (importOriginal) => {
 describe("ChangeRole.vue", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
+	let deactivateMock: Mock;
+
 	beforeEach(() => {
+		// setActivePinia(createPinia());
+
+		pauseMock = vi.fn();
+		unpauseMock = vi.fn();
+		deactivateMock = vi.fn();
+
+		(useFocusTrap as Mock).mockReturnValue({
+			pause: pauseMock,
+			unpause: unpauseMock,
+			deactivate: deactivateMock,
+		});
+
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
@@ -64,15 +82,21 @@ describe("ChangeRole.vue", () => {
 	});
 
 	const setup = (
-		options: Partial<{
+		options?: Partial<{
+			modelValue: boolean;
 			members: RoomMember[];
 			membersForRoleChange: RoomMember[];
 			currentUser: RoomMember;
 			isRoomOwner: boolean;
-		}> = {}
+		}>
 	) => {
 		const currentUser = options?.currentUser ?? roomAdminFactory.build();
 		const membersForRoleChange = options?.membersForRoleChange ?? [];
+		const { modelValue, isRoomOwner } = {
+			modelValue: true,
+			isRoomOwner: false,
+			...options,
+		};
 
 		const roomMembers = [...membersForRoleChange, currentUser];
 		const room = roomFactory.build();
@@ -91,15 +115,21 @@ describe("ChangeRole.vue", () => {
 		);
 		roomMembersStore.isRoomOwner = vi
 			.fn()
-			.mockReturnValue(options.isRoomOwner ?? false);
+			.mockReturnValue(isRoomOwner ?? false);
+
+		roomMembersStore.getRoomOwnerFullName.mockReturnValue(
+			isRoomOwner ? currentUser.fullName : undefined
+		);
 
 		const wrapper = mount(ChangeRole, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n(), pinia],
 			},
 			props: {
+				modelValue,
 				members: membersForRoleChange,
 			},
+			stubs: { useFocusTrap: true },
 		});
 
 		return { wrapper, roomMembersStore };
@@ -112,15 +142,16 @@ describe("ChangeRole.vue", () => {
 	describe("when the component is rendered", () => {
 		it("should render correctly", () => {
 			const { wrapper } = setup();
-			expect(wrapper.text()).toContain("pages.rooms.members.changePermission");
 
-			const radioButtons = wrapper.findAllComponents(VRadio);
+			const card = wrapper.findComponent({ name: "VCard" });
+			const title = card.findComponent({ name: "VCardTitle" });
+			expect(title.text()).toContain("pages.rooms.members.changePermission");
+
+			const radioButtons = card.findAllComponents(VRadio);
 			expect(radioButtons.length).toBe(3);
 
-			const cancelButton = wrapper.find(
-				"[data-testid='change-role-cancel-btn']"
-			);
-			const confirmButton = wrapper.find(
+			const cancelButton = card.find("[data-testid='change-role-cancel-btn']");
+			const confirmButton = card.find(
 				"[data-testid='change-role-confirm-btn']"
 			);
 			expect(cancelButton.exists()).toBe(true);
@@ -131,9 +162,8 @@ describe("ChangeRole.vue", () => {
 			const { wrapper } = setup({
 				membersForRoleChange: [roomAdminFactory.build()],
 			});
-			expect(wrapper.text()).toContain(
-				"pages.rooms.members.roleChange.subTitle"
-			);
+			const card = wrapper.findComponent({ name: "VCard" });
+			expect(card.text()).toContain("pages.rooms.members.roleChange.subTitle");
 		});
 
 		it("renders correctly with multiple members", () => {
@@ -143,10 +173,12 @@ describe("ChangeRole.vue", () => {
 					roomViewerFactory.build(),
 				],
 			});
-			expect(wrapper.text()).toContain(
+
+			const card = wrapper.findComponent({ name: "VCard" });
+			expect(card.text()).toContain(
 				"pages.rooms.members.roleChange.multipleUser.subTitle"
 			);
-			expect(wrapper.text()).toContain("pages.rooms.members.changePermission");
+			expect(card.text()).toContain("pages.rooms.members.changePermission");
 		});
 
 		describe("when the current user is the owner and only one member selected", () => {
@@ -169,9 +201,10 @@ describe("ChangeRole.vue", () => {
 			});
 
 			it("should render 'Alert' component", async () => {
+				const currentUser = roomOwnerFactory.build();
 				const { wrapper } = setup({
 					membersForRoleChange: [roomAdminFactory.build()],
-					currentUser: roomOwnerFactory.build(),
+					currentUser,
 					isRoomOwner: true,
 				});
 
@@ -210,13 +243,14 @@ describe("ChangeRole.vue", () => {
 
 					radioGroup.setValue(RoleName.Roomowner);
 					await nextTick();
+					const card = wrapper.findComponent({ name: "VCard" });
 
-					const confirmButton = wrapper.find(
+					const confirmButton = card.find(
 						"[data-testid='change-role-confirm-btn']"
 					);
 					await confirmButton.trigger("click");
 
-					const radioButtons = wrapper.findAllComponents(VRadio);
+					const radioButtons = card.findAllComponents(VRadio);
 					expect(radioButtons.length).toBe(0);
 				});
 
@@ -226,8 +260,9 @@ describe("ChangeRole.vue", () => {
 						currentUser: roomOwnerFactory.build(),
 						isRoomOwner: true,
 					});
+					const card = wrapper.findComponent({ name: "VCard" });
 
-					const radioGroup = wrapper.getComponent(VRadioGroup);
+					const radioGroup = card.getComponent(VRadioGroup);
 					const ownRadioButton = radioGroup.find(
 						'[data-testid="change-role-option-owner"]'
 					);
@@ -236,12 +271,12 @@ describe("ChangeRole.vue", () => {
 					radioGroup.setValue(RoleName.Roomowner);
 					await nextTick();
 
-					const confirmButton = wrapper.find(
+					const confirmButton = card.find(
 						"[data-testid='change-role-confirm-btn']"
 					);
 					await confirmButton.trigger("click");
 
-					const alertElementAfter = wrapper.findComponent(VAlert);
+					const alertElementAfter = card.findComponent(VAlert);
 					expect(alertElementAfter.exists()).toBe(true);
 					expect(alertElementAfter.text()).toContain(
 						"pages.rooms.members.handOverAlert.confirm.label"
@@ -333,7 +368,8 @@ describe("ChangeRole.vue", () => {
 	describe("action buttons", () => {
 		it("should emit 'close' event when cancel button is clicked", async () => {
 			const { wrapper } = setup();
-			await wrapper
+			const card = wrapper.findComponent({ name: "VCard" });
+			await card
 				.find("[data-testid='change-role-cancel-btn']")
 				.trigger("click");
 
@@ -346,7 +382,9 @@ describe("ChangeRole.vue", () => {
 				const { wrapper, roomMembersStore } = setup({
 					membersForRoleChange: [memberForRoleChange],
 				});
-				await wrapper
+
+				const card = wrapper.findComponent({ name: "VCard" });
+				await card
 					.find("[data-testid='change-role-confirm-btn']")
 					.trigger("click");
 
@@ -363,7 +401,9 @@ describe("ChangeRole.vue", () => {
 				const { wrapper } = setup({
 					membersForRoleChange: [memberForRoleChange],
 				});
-				await wrapper
+
+				const card = wrapper.findComponent({ name: "VCard" });
+				await card
 					.find("[data-testid='change-role-confirm-btn']")
 					.trigger("click");
 
@@ -379,8 +419,9 @@ describe("ChangeRole.vue", () => {
 				const membersForRoleChangeIds = [memberForRoleChange.userId];
 
 				expect(roomMembersStore.selectedIds).toEqual(membersForRoleChangeIds);
+				const card = wrapper.findComponent({ name: "VCard" });
 
-				await wrapper
+				await card
 					.find("[data-testid='change-role-confirm-btn']")
 					.trigger("click");
 
@@ -397,17 +438,18 @@ describe("ChangeRole.vue", () => {
 						roomRoleName: RoleName.Roomowner,
 					}),
 				});
+				const card = wrapper.findComponent({ name: "VCard" });
 
-				const radioGroup = wrapper.findComponent(VRadioGroup);
+				const radioGroup = card.findComponent(VRadioGroup);
 				radioGroup.setValue(RoleName.Roomowner);
 				await nextTick();
 
-				const confirmButton = wrapper.find(
+				const confirmButton = card.find(
 					"[data-testid='change-role-confirm-btn']"
 				);
 				await confirmButton.trigger("click");
 
-				const handOverButton = wrapper.find(
+				const handOverButton = card.find(
 					"[data-testid='change-owner-confirm-btn']"
 				);
 
@@ -418,6 +460,7 @@ describe("ChangeRole.vue", () => {
 					memberForRoleChange.userId
 				);
 			});
+
 			it("should emit 'close' event when button is clicked", async () => {
 				const memberForRoleChange = roomAdminFactory.build();
 				const { wrapper } = setup({
@@ -425,16 +468,17 @@ describe("ChangeRole.vue", () => {
 					currentUser: roomOwnerFactory.build(),
 				});
 
-				const radioGroup = wrapper.findComponent(VRadioGroup);
+				const card = wrapper.findComponent({ name: "VCard" });
+				const radioGroup = card.findComponent(VRadioGroup);
 				radioGroup.setValue(RoleName.Roomowner);
 				await nextTick();
 
-				const confirmButton = wrapper.find(
+				const confirmButton = card.find(
 					"[data-testid='change-role-confirm-btn']"
 				);
 				await confirmButton.trigger("click");
 
-				const handOverButton = wrapper.find(
+				const handOverButton = card.find(
 					"[data-testid='change-owner-confirm-btn']"
 				);
 				await handOverButton.trigger("click");
@@ -450,17 +494,18 @@ describe("ChangeRole.vue", () => {
 				});
 				const selectedIds = [memberForRoleChange.userId];
 				expect(roomMembersStore.selectedIds).toEqual(selectedIds);
+				const card = wrapper.findComponent({ name: "VCard" });
 
-				const radioGroup = wrapper.findComponent(VRadioGroup);
+				const radioGroup = card.findComponent(VRadioGroup);
 				radioGroup.setValue(RoleName.Roomowner);
 				await nextTick();
 
-				const confirmButton = wrapper.find(
+				const confirmButton = card.find(
 					"[data-testid='change-role-confirm-btn']"
 				);
 				await confirmButton.trigger("click");
 
-				const handOverButton = wrapper.find(
+				const handOverButton = card.find(
 					"[data-testid='change-owner-confirm-btn']"
 				);
 				await handOverButton.trigger("click");

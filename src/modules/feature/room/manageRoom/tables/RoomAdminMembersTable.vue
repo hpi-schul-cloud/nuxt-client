@@ -11,8 +11,14 @@
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionChangePermission />
-			<KebabMenuActionRemoveMember />
+			<KebabMenuActionChangePermission
+				v-if="selectedIds.length === 1 && canChangeRole(selectedIds)"
+				@click="onChangePermission(selectedIds)"
+			/>
+			<KebabMenuActionRemoveMember
+				v-if="canRemoveMember(selectedIds)"
+				@click="onRemoveMembers(selectedIds)"
+			/>
 		</template>
 		<template #[`item.displaySchoolRole`]="{ item }">
 			<span class="text-no-wrap">
@@ -25,20 +31,32 @@
 		</template>
 		<template #[`item.actions`]="{ item }">
 			<KebabMenu
-				v-if="item.isSelectable"
+				v-if="canChangeRole(item) || canRemoveMember(item)"
 				:data-testid="`kebab-menu-${item.userId}`"
 				:aria-label="getAriaLabel(item)"
 			>
 				<KebabMenuActionChangePermission
+					v-if="canChangeRole(item)"
+					:data-testid="`kebab-menu-${item.userId}-change-permission`"
 					:aria-label="getAriaLabel(item, 'changeRole')"
+					@click="onChangePermission([item.userId])"
 				/>
 				<KebabMenuActionRemoveMember
-					v-if="!isRoomOwner(item.userId)"
+					v-if="canRemoveMember(item)"
+					:data-testid="`kebab-menu-${item.userId}-remove-member`"
 					:aria-label="getAriaLabel(item, 'remove')"
+					@click="onRemoveMembers([item.userId])"
 				/>
 			</KebabMenu>
 		</template>
 	</DataTable>
+	<ChangeRole
+		v-model="isChangeRoleDialogOpen"
+		:members="membersToChangeRole"
+		:is-admin-mode="true"
+		@close="onDialogClose"
+	/>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -48,12 +66,22 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import { RoomMember, useRoomMembersStore } from "@data-room";
+import {
+	RoomMember,
+	useRoomDetailsStore,
+	useRoomMembersStore,
+} from "@data-room";
 import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import {
+	useConfirmationDialog,
+	ConfirmationDialog,
+} from "@ui-confirmation-dialog";
+import { ChangeRole } from "@feature-room";
+import { schoolsModule } from "@/store/store-accessor";
 
 type Props = {
 	headerBottom?: number;
@@ -67,16 +95,28 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersForAdmins, selectedIds, baseTableHeaders } =
-	storeToRefs(roomMembersStore);
-const { isRoomOwner } = roomMembersStore;
+const {
+	roomMembersWithoutApplicants,
+	roomMembersForAdmins,
+	selectedIds,
+	baseTableHeaders,
+} = storeToRefs(roomMembersStore);
+const { isRoomOwner, removeMembers, fetchMembers } = roomMembersStore;
+const { askConfirmation } = useConfirmationDialog();
+
+const isChangeRoleDialogOpen = ref(false);
+const membersToChangeRole = ref<RoomMember[]>([]);
 
 const tableData = computed(
 	() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]
 );
 
-const onUpdateSelectedIds = (ids: string[]) => {
-	selectedIds.value = ids;
+const checkIsStudent = (member?: RoomMember) => {
+	return member?.schoolRoleNames.some((role) =>
+		[RoleName.Student, RoleName.CourseStudent, RoleName.GuestStudent].includes(
+			role
+		)
+	);
 };
 
 const getAriaLabel = (
@@ -113,5 +153,82 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 		return mdiAccountOutline;
 	}
 	return undefined;
+};
+
+const confirmRemoval = async (userIds: string[]) => {
+	let message = t("pages.rooms.members.multipleRemove.confirmation");
+	if (userIds.length === 1) {
+		const memberFullName = roomMembersStore.getMemberFullName(userIds[0]);
+		message = t("pages.rooms.members.remove.confirmation", { memberFullName });
+	}
+	const shouldRemove = await askConfirmation({
+		message,
+		confirmActionLangKey: "common.actions.remove",
+	});
+	return shouldRemove;
+};
+
+const { room } = storeToRefs(useRoomDetailsStore());
+const adminSchoolId = computed(() => schoolsModule.getSchool.id);
+const isOwnSchool = computed(
+	() => room.value?.schoolId === adminSchoolId.value
+);
+
+const belongsToOwnSchool = (userId: string) => {
+	const member = roomMembersWithoutApplicants.value.find(
+		(member) => member.userId === userId
+	);
+
+	return member?.schoolId === adminSchoolId.value;
+};
+
+const membersByIds = (ids: string[]) =>
+	roomMembersWithoutApplicants.value.filter((member) =>
+		ids.includes(member.userId)
+	);
+
+const canChangeRole = (item: RoomMember | string[]) => {
+	if (Array.isArray(item)) {
+		const members = membersByIds(item);
+		return members.every(canChangeRole);
+	}
+	return (
+		isOwnSchool.value &&
+		!checkIsStudent(item) &&
+		!isRoomOwner(item.userId) &&
+		belongsToOwnSchool(item.userId)
+	);
+};
+
+const canRemoveMember = (item: RoomMember | string[]) => {
+	if (Array.isArray(item)) {
+		const members = membersByIds(item);
+		return members.every(canRemoveMember);
+	}
+	return !isRoomOwner(item.userId) && belongsToOwnSchool(item.userId);
+};
+
+const onRemoveMembers = async (ids: string[]) => {
+	const shouldRemove = await confirmRemoval(ids);
+	if (shouldRemove) await removeMembers(ids);
+};
+
+const onChangePermission = (ids: string[]) => {
+	membersToChangeRole.value = roomMembersWithoutApplicants.value.filter(
+		(member) => ids.includes(member.userId)
+	);
+
+	isChangeRoleDialogOpen.value = true;
+};
+
+const onUpdateSelectedIds = (ids: string[]) => {
+	selectedIds.value = ids;
+};
+
+const onDialogClose = () => {
+	fetchMembers();
+	membersToChangeRole.value = [];
+	selectedIds.value = [];
+	isChangeRoleDialogOpen.value = false;
 };
 </script>
