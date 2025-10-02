@@ -10,7 +10,6 @@
 			<v-text-field
 				v-model="nameRef"
 				data-testid="rename-dialog-input"
-				class="mt-8"
 				density="compact"
 				flat
 				:aria-label="$t('common.labels.name.new')"
