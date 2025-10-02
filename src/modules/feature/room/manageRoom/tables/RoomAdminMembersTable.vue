@@ -12,15 +12,11 @@
 	>
 		<template #[`action-menu-items`]>
 			<KebabMenuActionChangePermission
-				v-if="
-					isOwnSchool &&
-					selectedIdsBelongToOwnSchool &&
-					(selectedIds.length === 1 || !selectedIdsIncludeStudents)
-				"
+				v-if="selectedIds.length === 1 && canChangeRole(selectedIds)"
 				@click="onChangePermission(selectedIds)"
 			/>
 			<KebabMenuActionRemoveMember
-				v-if="selectedIdsBelongToOwnSchool"
+				v-if="canRemoveMember(selectedIds)"
 				@click="onRemoveMembers(selectedIds)"
 			/>
 		</template>
@@ -35,21 +31,19 @@
 		</template>
 		<template #[`item.actions`]="{ item }">
 			<KebabMenu
-				v-if="item.isSelectable"
+				v-if="canChangeRole(item) || canRemoveMember(item)"
 				:data-testid="`kebab-menu-${item.userId}`"
 				:aria-label="getAriaLabel(item)"
 			>
 				<KebabMenuActionChangePermission
-					v-if="
-						isOwnSchool &&
-						!checkIsStudent(item) &&
-						belongsToOwnSchool(item.userId)
-					"
+					v-if="canChangeRole(item)"
+					:data-testid="`kebab-menu-${item.userId}-change-permission`"
 					:aria-label="getAriaLabel(item, 'changeRole')"
 					@click="onChangePermission([item.userId])"
 				/>
 				<KebabMenuActionRemoveMember
-					v-if="!isRoomOwner(item.userId) && belongsToOwnSchool(item.userId)"
+					v-if="canRemoveMember(item)"
+					:data-testid="`kebab-menu-${item.userId}-remove-member`"
 					:aria-label="getAriaLabel(item, 'remove')"
 					@click="onRemoveMembers([item.userId])"
 				/>
@@ -125,14 +119,6 @@ const checkIsStudent = (member?: RoomMember) => {
 	);
 };
 
-const selectedIdsIncludeStudents = computed(() =>
-	selectedIds.value.some((id) =>
-		checkIsStudent(
-			roomMembersWithoutApplicants.value.find((member) => member.userId === id)
-		)
-	)
-);
-
 const getAriaLabel = (
 	member: RoomMember,
 	actionFor: "remove" | "changeRole" | "" = ""
@@ -196,9 +182,31 @@ const belongsToOwnSchool = (userId: string) => {
 	return member?.schoolId === adminSchoolId.value;
 };
 
-const selectedIdsBelongToOwnSchool = computed(() =>
-	selectedIds.value.every(belongsToOwnSchool)
-);
+const membersByIds = (ids: string[]) =>
+	roomMembersWithoutApplicants.value.filter((member) =>
+		ids.includes(member.userId)
+	);
+
+const canChangeRole = (item: RoomMember | string[]) => {
+	if (Array.isArray(item)) {
+		const members = membersByIds(item);
+		return members.every(canChangeRole);
+	}
+	return (
+		isOwnSchool.value &&
+		!checkIsStudent(item) &&
+		!isRoomOwner(item.userId) &&
+		belongsToOwnSchool(item.userId)
+	);
+};
+
+const canRemoveMember = (item: RoomMember | string[]) => {
+	if (Array.isArray(item)) {
+		const members = membersByIds(item);
+		return members.every(canRemoveMember);
+	}
+	return !isRoomOwner(item.userId) && belongsToOwnSchool(item.userId);
+};
 
 const onRemoveMembers = async (ids: string[]) => {
 	const shouldRemove = await confirmRemoval(ids);
