@@ -13,17 +13,21 @@
 			</h2>
 		</template>
 		<template #content>
-			<InfoAlert class="mb-4">
+			<InfoAlert class="mb-4" data-testid="copy-info-copyright-data-protection">
 				{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
 			</InfoAlert>
 			<WarningAlert data-testid="copy-result-notifications">
 				{{ t("components.molecules.copyResult.followingNotCopied") }}
 				<ul class="ml-6">
-					<li v-if="isCourse">
+					<li v-if="isCourse" data-testid="copy-modal-course-member-permission">
 						{{ t("components.molecules.copyResult.membersAndPermissions") }}
 					</li>
 					<template v-for="(warning, index) in copyResultWarnings">
-						<li v-if="warning.isShow" :key="index" data-testid="warning-title">
+						<li
+							v-if="warning.isShow"
+							:key="index"
+							:data-testid="warning.testId"
+						>
 							{{ warning.text }}
 						</li>
 					</template>
@@ -87,26 +91,32 @@ const copyResultWarnings = computed(() => {
 		{
 			isShow: hasGeogebraElement.value,
 			text: t("components.molecules.copyResult.geogebraCopy.info"),
+			testId: "copy-modal-geogebra",
 		},
 		{
 			isShow: hasEtherpadElement.value,
 			text: t("components.molecules.copyResult.etherpadCopy.info"),
+			testId: "copy-modal-content-etherpad",
 		},
 		{
 			isShow: hasDrawingElement.value,
 			text: t("components.molecules.copyResult.tldrawCopy.info"),
+			testId: "copy-modal-content-whiteboard",
 		},
 		{
 			isShow: isCourse.value,
 			text: t("components.molecules.copyResult.courseFiles.info"),
+			testId: "copy-modal-course-data",
 		},
 		{
 			isShow: hasExternalTool.value || hasExternalToolElement.value,
 			text: externalToolsInfoText.value,
+			testId: "copy-modal-external-tool",
 		},
 		{
 			isShow: hasCourseGroup.value,
 			text: t("components.molecules.copyResult.courseGroupCopy.info"),
+			testId: "copy-modal-course-group",
 		},
 	];
 });
