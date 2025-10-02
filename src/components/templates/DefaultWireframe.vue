@@ -13,7 +13,7 @@
 			aria-live="assertive"
 			class="d-sr-only"
 		/>
-		<div class="wireframe-header sticky">
+		<div class="wireframe-header">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
 			<slot name="header">
@@ -58,7 +58,7 @@
 					</speed-dial-menu>
 				</slot>
 			</div>
-			<v-divider v-if="showDivider" class="mx-n6" role="presentation" />
+			<v-divider class="mx-n6" role="presentation" />
 		</div>
 		<v-container
 			:fluid="maxWidth !== 'nativ'"
@@ -141,6 +141,9 @@ const showDivider = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+:global(:root) {
+	--v-layout-top: 0px !important;
+}
 @use "@/styles/settings.scss" as *;
 
 .wireframe-container-flex {
@@ -158,7 +161,7 @@ const showDivider = computed(() => {
 }
 
 .wireframe-header {
-	padding: 0 24px;
+	padding: 1.5rem  1.5rem 0;
 	display: flex;
 	flex-direction: column;
 }
