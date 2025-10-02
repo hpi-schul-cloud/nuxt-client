@@ -17,9 +17,7 @@ defineProps({
 const { t } = useI18n();
 
 const handleFolderNameUpdate = (newFolderName: string) => {
-	const pageTitle = buildPageTitle(
-		`${newFolderName} - ${t("pages.folder.title")}`
-	);
+	const pageTitle = buildPageTitle(newFolderName, t("pages.folder.title"));
 
 	useTitle(pageTitle);
 };

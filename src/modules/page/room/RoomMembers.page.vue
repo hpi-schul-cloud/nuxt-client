@@ -198,7 +198,7 @@ watchEffect(() => {
 });
 
 const pageTitle = computed(() =>
-	buildPageTitle(`${room.value?.name} - ${membersInfoText.value}`)
+	buildPageTitle(room.value?.name, membersInfoText.value)
 );
 useTitle(pageTitle);
 

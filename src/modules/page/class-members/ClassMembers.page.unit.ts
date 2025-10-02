@@ -90,9 +90,6 @@ describe("@pages/ClassMembers.page.vue", () => {
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
 			expect(breadcrumbs.at(0)?.text()).toEqual(
-				"pages.administration.index.title"
-			);
-			expect(breadcrumbs.at(1)?.text()).toEqual(
 				"pages.administration.classes.index.title"
 			);
 		});
@@ -102,7 +99,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 				groupId: "groupId",
 			});
 
-			const breadcrumb = wrapper.findAll(".breadcrumbs-item").at(2);
+			const breadcrumb = wrapper.findAll(".breadcrumbs-item").at(1);
 
 			expect(breadcrumb?.text()).toEqual(`common.labels.class '${group.name}'`);
 		});

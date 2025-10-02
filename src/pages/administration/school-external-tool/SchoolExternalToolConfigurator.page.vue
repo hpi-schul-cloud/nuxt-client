@@ -101,21 +101,20 @@ const { t } = useI18n();
 const pageTitle = buildPageTitle(t("pages.tool.title"));
 useTitle(pageTitle);
 
-const schoolSetting: Breadcrumb = {
-	title: t("pages.administration.school.index.title"),
-	to: "/administration/school-settings",
-};
-const breadcrumbs: Breadcrumb[] = [
-	{
-		title: t("pages.administration.index.title"),
-		disabled: true,
-	},
-	schoolSetting,
-	{
-		title: t("pages.tool.title"),
-		disabled: true,
-	},
-];
+const schoolSettingPath = "/administration/school-settings";
+
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+	return [
+		{
+			title: t("pages.administration.school.index.title"),
+			to: schoolSettingPath,
+		},
+		{
+			title: t("pages.tool.title"),
+			disabled: true,
+		},
+	];
+});
 
 const hasData: Ref<boolean> = ref(false);
 const loading: ComputedRef<boolean> = computed(
@@ -138,7 +137,7 @@ const apiError: ComputedRef<BusinessError | undefined> = computed(() =>
 
 const router = useRouter();
 const onCancel = () => {
-	router.push({ path: schoolSetting.to! });
+	router.push({ path: schoolSettingPath });
 };
 
 const isDeactivated: Ref<boolean> = ref(false);
@@ -181,7 +180,7 @@ const onSave = async (
 		});
 
 		await router.push({
-			path: schoolSetting.to,
+			path: schoolSettingPath,
 			query: { openPanels: "tools" },
 		});
 	}

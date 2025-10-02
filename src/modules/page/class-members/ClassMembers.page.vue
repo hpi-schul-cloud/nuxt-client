@@ -82,10 +82,6 @@ export default defineComponent({
 
 		const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 			{
-				title: t("pages.administration.index.title"),
-				disabled: true,
-			},
-			{
 				title: t("pages.administration.classes.index.title"),
 				to: "/administration/groups/classes",
 			},

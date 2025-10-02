@@ -163,7 +163,6 @@
 
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -177,6 +176,7 @@ import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useEnvConfig } from "@data-env";
+import { Breadcrumb } from "../templates/default-wireframe.types";
 
 type Props = {
 	systemId: string;
@@ -207,21 +207,18 @@ const pageTitle = buildPageTitle(
 );
 useTitle(pageTitle);
 
-const schoolSettingsPage: Breadcrumb = {
-	title: t("pages.administration.school.index.title"),
-	to: "/administration/school-settings",
-};
-const breadcrumbs: Breadcrumb[] = [
-	{
-		title: t("pages.administration.index.title"),
-		disabled: true,
-	},
-	schoolSettingsPage,
-	{
-		title: t("components.administration.provisioningOptions.page.title"),
-		disabled: true,
-	},
-];
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+	return [
+		{
+			title: t("pages.administration.school.index.title"),
+			to: "/administration/school-settings",
+		},
+		{
+			title: t("components.administration.provisioningOptions.page.title"),
+			disabled: true,
+		},
+	];
+});
 
 const provisioningOptions: ComputedRef<ProvisioningOptions> = computed(
 	() => provisioningOptionsData.value
@@ -305,7 +302,7 @@ const onCancel = async () => {
 
 const redirectToAdminPage = async () => {
 	await router.push({
-		path: schoolSettingsPage.to,
+		path: "/administration/school-settings",
 		query: { openPanels: "authentication" },
 	});
 };

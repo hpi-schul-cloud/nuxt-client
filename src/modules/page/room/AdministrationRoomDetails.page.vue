@@ -81,7 +81,6 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 			title: t("pages.rooms.administration.title"),
 			to: "/administration/rooms/manage",
 		},
-
 		{
 			title: t("pages.rooms.administration.roomDetail.breadcrumb", {
 				roomName: selectedRoom.value?.roomName,

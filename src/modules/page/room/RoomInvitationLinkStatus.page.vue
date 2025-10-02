@@ -66,7 +66,7 @@ const useLink = async () => {
 };
 
 const pageTitle = computed(() =>
-	buildPageTitle(`${t("pages.rooms.invitationLinkStatus.title")}`)
+	buildPageTitle(t("pages.rooms.invitationLinkStatus.title"))
 );
 useTitle(pageTitle);
 
