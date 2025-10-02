@@ -179,6 +179,7 @@ export default {
 		"Будь ласка, вставте пробіл після знаку менше.",
 	"common.validation.nonEmptyString":
 		"Це обов'язкове поле і не повинно містити лише пробіли.",
+	"common.words.also": "також",
 	"common.words.and": "і",
 	"common.words.board": "Дошка",
 	"common.words.classes": "класи",
@@ -214,6 +215,7 @@ export default {
 	"common.words.lernstore": "Навчальний магазин",
 	"common.words.mainSchool": "Основна школа",
 	"common.words.no": "Немає",
+	"common.words.not": "не",
 	"common.words.noChoice": "Немає вибору",
 	"common.words.otherGroups": "інші групи",
 	"common.words.externalTools": "зовнішні засоби",
@@ -480,6 +482,15 @@ export default {
 	"components.board.error.403":
 		"Помилка 403 – На жаль, у вас немає дозволу на перегляд цього контенту ...",
 	"components.board.menu.board": "Налаштування дошки",
+	"components.board.menu.editing.settings.title": "Налаштування редагування",
+	"components.board.dialog.readerCanEdit.subtitle":
+		"Тут ви можете змінити права редагування для цієї області. Незалежно від цієї настройки, учасники з правом доступу до кімнати 'Редагувати' та вище завжди можуть редагувати області.",
+	"components.board.dialog.readerCanEdit.options":
+		"Ця область {0} підлягає редагуванню для учасників з правом доступу до кімнати 'Читати'.",
+	"components.board.dialog.readerCanEdit.options.defaultSetting":
+		"Стандартна настройка",
+	"components.board.dialog.readerCanEdit.alert.text":
+		"Дошка спочатку повинна бути опублікована, перш ніж можна буде налаштувати параметри редагування.",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
 	"components.board.menu.collaborativeTextEditorElement":
@@ -541,8 +552,13 @@ export default {
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Інший користувач змінив вигляд панелі на {layout}.",
+	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
+		"Дошку було встановлено як редаговану для всіх користувачів іншим користувачем.",
+	"components.board.screenReader.notification.boardSetAsNotEditableForAllUsers.success":
+		"Дошку було встановлено як не редаговану для всіх користувачів іншим користувачем.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"Не вдалося завантажити бажані інструменти.",
+	"components.board.header.chip.editableForEveryone": "Редагується для всіх",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
 	"components.boardElement": "Eлемент",

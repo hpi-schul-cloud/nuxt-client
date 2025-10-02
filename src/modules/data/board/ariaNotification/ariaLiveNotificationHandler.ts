@@ -12,6 +12,7 @@ import {
 	UpdateBoardTitleSuccessPayload,
 	UpdateBoardVisibilitySuccessPayload,
 	UpdateColumnTitleSuccessPayload,
+	UpdateReaderCanEditSuccessPayload,
 } from "../boardActions/boardActionPayload.types";
 import { useCardStore } from "../Card.store";
 
@@ -55,6 +56,10 @@ export const SR_I18N_KEYS_MAP = {
 		"components.board.screenReader.notification.cardUpdated.success",
 	BOARD_LAYOUT_UPDATED_SUCCESS:
 		"components.board.screenReader.notification.boardLayoutUpdated.success",
+	BOARD_SET_AS_EDITABLE_FOR_ALL_USERS_SUCCESS:
+		"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success",
+	BOARD_SET_AS_NOT_EDITABLE_FOR_ALL_USERS_SUCCESS:
+		"components.board.screenReader.notification.boardSetAsNotEditableForAllUsers.success",
 };
 
 export const useBoardAriaNotification = () => {
@@ -306,21 +311,43 @@ export const useBoardAriaNotification = () => {
 		);
 	};
 
+	const notifySetBoardAsEditableForAllUsersSuccess = (
+		action: UpdateReaderCanEditSuccessPayload
+	) => {
+		if (action.isOwnAction) return;
+
+		notifyOnScreenReader(
+			t(SR_I18N_KEYS_MAP.BOARD_SET_AS_EDITABLE_FOR_ALL_USERS_SUCCESS)
+		);
+	};
+
+	const notifySetBoardAsNotEditableForAllUsersSuccess = (
+		action: UpdateReaderCanEditSuccessPayload
+	) => {
+		if (action.isOwnAction) return;
+
+		notifyOnScreenReader(
+			t(SR_I18N_KEYS_MAP.BOARD_SET_AS_NOT_EDITABLE_FOR_ALL_USERS_SUCCESS)
+		);
+	};
+
 	return {
 		notifyCreateCardSuccess,
 		notifyCreateColumnSuccess,
+		notifyCreateElementSuccess,
 		notifyDeleteCardSuccess,
 		notifyDeleteColumnSuccess,
+		notifyDeleteElementSuccess,
 		notifyMoveCardSuccess,
 		notifyMoveColumnSuccess,
+		notifyMoveElementSuccess,
+		notifySetBoardAsEditableForAllUsersSuccess,
+		notifySetBoardAsNotEditableForAllUsersSuccess,
+		notifyUpdateBoardLayoutSuccess,
 		notifyUpdateBoardTitleSuccess,
 		notifyUpdateBoardVisibilitySuccess,
-		notifyUpdateColumnTitleSuccess,
 		notifyUpdateCardTitleSuccess,
-		notifyCreateElementSuccess,
+		notifyUpdateColumnTitleSuccess,
 		notifyUpdateElementSuccess,
-		notifyDeleteElementSuccess,
-		notifyMoveElementSuccess,
-		notifyUpdateBoardLayoutSuccess,
 	};
 };

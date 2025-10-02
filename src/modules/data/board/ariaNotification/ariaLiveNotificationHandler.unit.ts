@@ -228,6 +228,68 @@ describe("useBoardAriaNotification", () => {
 		});
 	});
 
+	describe("@boardSetAsEditableForAllUsers", () => {
+		describe("when board is set as editable", () => {
+			it("should notify on boardSetAsEditableForAllUsers", () => {
+				const { notifySetBoardAsEditableForAllUsersSuccess } =
+					useBoardAriaNotification();
+				const element = document.getElementById("notify-screen-reader-polite");
+				notifySetBoardAsEditableForAllUsersSuccess({
+					boardId: "boardId",
+					readersCanEdit: true,
+					isOwnAction: false,
+				});
+				vi.advanceTimersByTime(3000);
+				expect(element?.innerHTML).toContain(
+					SR_I18N_KEYS_MAP.BOARD_SET_AS_EDITABLE_FOR_ALL_USERS_SUCCESS
+				);
+			});
+
+			it("should not notify if the action is own", () => {
+				const { notifySetBoardAsEditableForAllUsersSuccess } =
+					useBoardAriaNotification();
+				const element = document.getElementById("notify-screen-reader-polite");
+				notifySetBoardAsEditableForAllUsersSuccess({
+					boardId: "boardId",
+					readersCanEdit: true,
+					isOwnAction: true,
+				});
+				vi.advanceTimersByTime(3000);
+				expect(element?.innerHTML).toBe("");
+			});
+		});
+
+		describe("when board is not set as editable", () => {
+			it("should notify on boardSetAsNotEditableForAllUsers", () => {
+				const { notifySetBoardAsNotEditableForAllUsersSuccess } =
+					useBoardAriaNotification();
+				const element = document.getElementById("notify-screen-reader-polite");
+				notifySetBoardAsNotEditableForAllUsersSuccess({
+					boardId: "boardId",
+					readersCanEdit: false,
+					isOwnAction: false,
+				});
+				vi.advanceTimersByTime(3000);
+				expect(element?.innerHTML).toContain(
+					SR_I18N_KEYS_MAP.BOARD_SET_AS_NOT_EDITABLE_FOR_ALL_USERS_SUCCESS
+				);
+			});
+
+			it("should not notify if the action is own", () => {
+				const { notifySetBoardAsNotEditableForAllUsersSuccess } =
+					useBoardAriaNotification();
+				const element = document.getElementById("notify-screen-reader-polite");
+				notifySetBoardAsNotEditableForAllUsersSuccess({
+					boardId: "boardId",
+					readersCanEdit: false,
+					isOwnAction: true,
+				});
+				vi.advanceTimersByTime(3000);
+				expect(element?.innerHTML).toBe("");
+			});
+		});
+	});
+
 	describe("when notifying on boardLayoutUpdate", () => {
 		it("should notify on boardLayoutUpdate to columns", () => {
 			const { notifyUpdateBoardLayoutSuccess } = useBoardAriaNotification();

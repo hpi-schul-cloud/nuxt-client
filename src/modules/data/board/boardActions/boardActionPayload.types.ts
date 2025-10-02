@@ -128,6 +128,18 @@ export type UpdateBoardVisibilitySuccessPayload = {
 export type UpdateBoardVisibilityFailurePayload =
 	UpdateBoardVisibilityRequestPayload;
 
+export type UpdateReaderCanEditRequestPayload = {
+	boardId: string;
+	readersCanEdit: boolean;
+};
+export type UpdateReaderCanEditSuccessPayload = {
+	boardId: string;
+	readersCanEdit: boolean;
+	isOwnAction: boolean;
+};
+export type UpdateReaderCanEditFailurePayload =
+	UpdateReaderCanEditRequestPayload;
+
 export type DisconnectSocketRequestPayload = Record<string, never>;
 
 export type UpdateBoardLayoutRequestPayload = {
