@@ -606,11 +606,11 @@ describe("BoardApi.composable", () => {
 		});
 	});
 
-	describe("@updateReaderCanEditCall", () => {
+	describe("@updateReadersCanEditCall", () => {
 		it("should call boardControllerUpdateReadersCanEdit api", async () => {
-			const { updateReaderCanEditCall } = useBoardApi();
+			const { updateReadersCanEditCall } = useBoardApi();
 
-			await updateReaderCanEditCall("board-id", true);
+			await updateReadersCanEditCall("board-id", true);
 
 			expect(boardApi.boardControllerUpdateReadersCanEdit).toHaveBeenCalledWith(
 				"board-id",

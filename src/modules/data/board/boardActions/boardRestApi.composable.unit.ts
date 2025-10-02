@@ -727,7 +727,7 @@ describe("boardRestApi", () => {
 			setup();
 			const { updateReaderCanEditRequest } = useBoardRestApi();
 
-			mockedBoardApiCalls.updateReaderCanEditCall.mockRejectedValue({});
+			mockedBoardApiCalls.updateReadersCanEditCall.mockRejectedValue({});
 
 			await updateReaderCanEditRequest(payload);
 

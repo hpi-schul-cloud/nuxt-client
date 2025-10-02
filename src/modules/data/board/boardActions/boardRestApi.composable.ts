@@ -40,7 +40,7 @@ export const useBoardRestApi = () => {
 		updateBoardTitleCall,
 		updateBoardVisibilityCall,
 		updateBoardLayoutCall,
-		updateReaderCanEditCall,
+		updateReadersCanEditCall,
 	} = useBoardApi();
 
 	const { t } = useI18n();
@@ -242,7 +242,7 @@ export const useBoardRestApi = () => {
 		const { boardId, readersCanEdit } = payload;
 
 		try {
-			await updateReaderCanEditCall(boardId, readersCanEdit);
+			await updateReadersCanEditCall(boardId, readersCanEdit);
 			boardStore.updateReaderCanEditSuccess({
 				boardId,
 				readersCanEdit,
