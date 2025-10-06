@@ -29,7 +29,7 @@ export const useFolderState = () => {
 
 	const folderName = computed(() => fileFolderElement.value?.content.title ?? t("pages.folder.untitled"));
 
-	const pageTitle = computed(() => buildPageTitle(folderName.value, t("pages.folder.title")));
+	const pageTitle = computed(() => buildPageTitle(folderName.value, parent.value?.name ?? t("pages.folder.title")));
 
 	const breadcrumbs = computed<Breadcrumb[]>(() => {
 		const breadcrumbItems: Breadcrumb[] = [];
