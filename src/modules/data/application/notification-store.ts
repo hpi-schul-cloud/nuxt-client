@@ -18,7 +18,7 @@ export interface Alert extends AlertPayload {
 /**
  * Store to spawn/remove alert messages for the user.
  */
-export const useNotificationStore = defineStore("NotifyStore", () => {
+export const useNotificationStore = defineStore("notifyStore", () => {
 	const notifierItems = ref<Alert[]>([]);
 
 	const removeNotifier = (id: string) => {

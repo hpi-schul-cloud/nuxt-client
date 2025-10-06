@@ -13,7 +13,7 @@
 			aria-live="assertive"
 			class="d-sr-only"
 		/>
-		<div class="wireframe-header">
+		<div class="wireframe-header sticky">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
 			<slot name="header">

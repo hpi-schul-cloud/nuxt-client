@@ -9,46 +9,33 @@ import { useNotificationStore } from "@data-app";
 import { beforeEach } from "vitest";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 
 vi.mock("axios");
 const mockedIsAxiosError = vi.mocked(isAxiosError);
 
-vi.mock("@util-board");
-const keys = [
-	"components.board.notifications.errors.notCreated",
-	"components.board.notifications.errors.notLoaded",
-	"components.board.notifications.errors.notUpdated",
-	"components.board.notifications.errors.notDeleted",
-];
-const translationMap: Record<string, string> = {};
-
-keys.forEach((key) => (translationMap[key] = key));
-
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({
-			t: (key: string) => {
-				return translationMap[key] || "error.generic";
-			},
-			tc: (key: string) => key,
-			te: (key: string) => translationMap[key] !== undefined,
-		}),
-	};
-});
+const missingErrorKey = "components.board.notifications.errors.missingErrorKey";
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({
+		t: vi
+			.fn()
+			.mockImplementation((key: string) =>
+				key === missingErrorKey ? undefined : key
+			),
+	}),
+}));
 
 const mockErrorResponse = (code = 404, message = "NOT FOUND") => {
 	const expectedPayload = apiResponseErrorFactory.build({ code, message });
-	const errorResponse = axiosErrorFactory.build({
+
+	return axiosErrorFactory.build({
 		response: { data: expectedPayload },
 	});
-
-	return errorResponse;
 };
 
 describe("ErrorHandler.Composable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		keys.forEach((key) => (translationMap[key] = key));
 	});
 
 	const setup = () => mountComposable(() => useErrorHandler());
@@ -71,19 +58,17 @@ describe("ErrorHandler.Composable", () => {
 
 		describe("when no errorHandler for the code of the error is defined", () => {
 			it("should fall back to console.error", () => {
-				const consoleErrorSpy = vi
-					.spyOn(console, "error")
-					.mockImplementation(vi.fn());
 				const { handleError } = setup();
+				const spy = vi.fn();
+				logger.error = spy;
 
 				mockedIsAxiosError.mockReturnValueOnce(true);
 				const errorResponse = mockErrorResponse(99999, "undefined error type");
 
 				handleError(errorResponse);
 
-				expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
-
-				consoleErrorSpy.mockRestore();
+				expect(spy).toHaveBeenCalledTimes(1);
+				spy.mockRestore();
 			});
 		});
 	});
@@ -131,11 +116,8 @@ describe("ErrorHandler.Composable", () => {
 		describe("when error key does not exist", () => {
 			it("should use a generic error message", async () => {
 				const { notifyWithTemplate } = setup();
-				delete translationMap[
-					"components.board.notifications.errors.notCreated"
-				];
 
-				const handler = notifyWithTemplate("notCreated");
+				const handler = notifyWithTemplate("missingErrorKey" as ErrorType);
 				handler();
 				await nextTick();
 
