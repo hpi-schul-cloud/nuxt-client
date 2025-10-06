@@ -1,10 +1,6 @@
 <template>
 	<div>
-		<default-wireframe
-			:headline="$t('pages.administration.students.index.title')"
-			max-width="full"
-			:fab-items="fab"
-		>
+		<default-wireframe :headline="$t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
 			<progress-modal
 				:active="isDeleting"
 				:percent="deletedPercent"

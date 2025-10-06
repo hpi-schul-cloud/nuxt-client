@@ -71,9 +71,7 @@ onMounted(() => {
 	fetchRooms();
 });
 
-const importFlowDestinations = computed(() =>
-	rooms.value.filter((room) => !room.isLocked)
-);
+const importFlowDestinations = computed(() => rooms.value.filter((room) => !room.isLocked));
 
 const onImportSuccess = (newName: string, destinationId?: string) => {
 	notifySuccess(

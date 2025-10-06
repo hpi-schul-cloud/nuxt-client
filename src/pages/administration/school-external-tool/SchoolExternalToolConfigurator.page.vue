@@ -76,18 +76,16 @@ useTitle(pageTitle);
 
 const schoolSettingPath = "/administration/school-settings";
 
-const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	return [
-		{
-			title: t("pages.administration.school.index.title"),
-			to: schoolSettingPath,
-		},
-		{
-			title: t("pages.tool.title"),
-			disabled: true,
-		},
-	];
-});
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
+	{
+		title: t("pages.administration.school.index.title"),
+		to: schoolSettingPath,
+	},
+	{
+		title: t("pages.tool.title"),
+		disabled: true,
+	},
+]);
 
 const hasData: Ref<boolean> = ref(false);
 const loading: ComputedRef<boolean> = computed(() => !hasData.value || schoolExternalToolsModule.getLoading);

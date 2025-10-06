@@ -9,7 +9,8 @@ import {
 } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { computed, ComputedRef, Ref, ref } from "vue";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useFolderState = () => {
@@ -28,7 +29,9 @@ export const useFolderState = () => {
 
 	const folderName = computed(() => fileFolderElement.value?.content.title ?? t("pages.folder.untitled"));
 
-	const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+	const pageTitle = computed(() => buildPageTitle(folderName.value, t("pages.folder.title")));
+
+	const breadcrumbs = computed<Breadcrumb[]>(() => {
 		const breadcrumbItems: Breadcrumb[] = [];
 
 		if (!parentNodeInfos.value || parentNodeInfos.value.length == 0) return breadcrumbItems;
@@ -116,6 +119,7 @@ export const useFolderState = () => {
 		breadcrumbs,
 		fileFolderElement,
 		folderName,
+		pageTitle,
 		parent,
 		fetchFileFolderElement,
 		mapNodeTypeToPathType,
