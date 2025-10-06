@@ -18,11 +18,7 @@ import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFac
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import {
-	useBoardNotifier,
-	useSharedEditMode,
-	useSharedLastCreatedElement,
-} from "@util-board";
+import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { createPinia, setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
@@ -42,7 +38,6 @@ const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 
 vi.mock("@util-board");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
@@ -68,7 +63,6 @@ vi.mock("vue-i18n", () => {
 });
 
 describe("BoardStore", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedSocketConnectionHandler: DeepMocked<
 		ReturnType<typeof useSocketConnection>
@@ -90,10 +84,6 @@ describe("BoardStore", () => {
 		setupStores({
 			applicationErrorModule: ApplicationErrorModule,
 		});
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
@@ -419,7 +409,7 @@ describe("BoardStore", () => {
 				vi.resetAllMocks();
 			});
 			describe("when the card is first element", () => {
-				it('should call "forceFocus" if already focused card is deleted', async () => {
+				it('should call "forceFocus" if already focused card is deleted', () => {
 					const { boardStore, cards, firstColumn } = setup();
 					const firstCardId = cards[0].cardId;
 
@@ -438,7 +428,7 @@ describe("BoardStore", () => {
 			});
 
 			describe("when the card is not the first element", () => {
-				it('should call "forceFocus" if already focused card is deleted', async () => {
+				it('should call "forceFocus" if already focused card is deleted', () => {
 					const { boardStore, cards } = setup();
 					const firstCardId = cards[0].cardId;
 					const secondCardId = cards[1].cardId;
@@ -500,7 +490,7 @@ describe("BoardStore", () => {
 				vi.resetAllMocks();
 			});
 			describe("when the column is the first element", () => {
-				it('should call "forceFocus" if already focused column is deleted', async () => {
+				it('should call "forceFocus" if already focused column is deleted', () => {
 					const { boardStore, firstColumn } = setup();
 
 					const { setFocus } = focusSetup(firstColumn.id);
@@ -519,7 +509,7 @@ describe("BoardStore", () => {
 			});
 
 			describe("when the column is not the first element", () => {
-				it('should call "forceFocus" if already focused column is deleted', async () => {
+				it('should call "forceFocus" if already focused column is deleted', () => {
 					const { boardStore, firstColumn, secondColumn } = setup();
 
 					const { setFocus } = focusSetup(secondColumn.id);
@@ -536,7 +526,7 @@ describe("BoardStore", () => {
 				});
 			});
 
-			it("should not call forceFocus if column is not focused", async () => {
+			it("should not call forceFocus if column is not focused", () => {
 				const { boardStore, firstColumn } = setup();
 
 				const { setFocus, forceFocus } = focusSetup("unknownId");
@@ -628,6 +618,69 @@ describe("BoardStore", () => {
 			});
 
 			expect(boardStore.board?.isVisible).toStrictEqual(true);
+		});
+	});
+
+	describe("@updateReaderCanEditSuccess", () => {
+		const payload = {
+			boardId: "boardId",
+			readersCanEdit: true,
+		};
+
+		it("should not update readersCanEdit when board value is undefined", () => {
+			const { boardStore } = setup({ createBoard: false });
+			boardStore.updateReaderCanEditSuccess({ ...payload, isOwnAction: true });
+			expect(boardStore.board).toBe(undefined);
+		});
+
+		describe("when socket connection is not established", () => {
+			it("should update readersCanEdit", () => {
+				const { boardStore } = setup({ socketFlag: false });
+				boardStore.updateReaderCanEditSuccess({
+					...payload,
+					isOwnAction: true,
+				});
+				expect(boardStore.board?.readersCanEdit).toBe(true);
+				expect(
+					mockedBoardRestApiActions.fetchBoardRequest
+				).not.toHaveBeenCalled();
+			});
+
+			describe("when isOwnAction is false", () => {
+				it("should fetch board", () => {
+					const { boardStore } = setup({ socketFlag: false });
+					boardStore.updateReaderCanEditSuccess({
+						...payload,
+						isOwnAction: false,
+					});
+					expect(
+						mockedBoardRestApiActions.fetchBoardRequest
+					).toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("when socket connection is established", () => {
+			it("should update readersCanEdit", () => {
+				const { boardStore } = setup({ socketFlag: true });
+				boardStore.updateReaderCanEditSuccess({
+					...payload,
+					isOwnAction: true,
+				});
+				expect(boardStore.board?.readersCanEdit).toBe(true);
+				expect(mockedSocketApiActions.fetchBoardRequest).not.toHaveBeenCalled();
+			});
+
+			describe("when isOwnAction is false", () => {
+				it("should fetch board", () => {
+					const { boardStore } = setup({ socketFlag: true });
+					boardStore.updateReaderCanEditSuccess({
+						...payload,
+						isOwnAction: false,
+					});
+					expect(mockedSocketApiActions.fetchBoardRequest).toHaveBeenCalled();
+				});
+			});
 		});
 	});
 
@@ -1032,6 +1085,28 @@ describe("BoardStore", () => {
 
 				expect(
 					mockedBoardRestApiActions.updateBoardVisibilityRequest
+				).toHaveBeenCalledWith(payload);
+			});
+		});
+
+		describe("@updateReadersRequest", () => {
+			const payload = { boardId: "boardId", readersCanEdit: true };
+			it("should call socketApi.updateReaderCanEditRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.updateReaderCanEditRequest(payload);
+
+				expect(
+					mockedSocketApiActions.updateReaderCanEditRequest
+				).toHaveBeenCalledWith(payload);
+			});
+			it("should call restApi.updateReaderCanEditRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.updateReaderCanEditRequest(payload);
+
+				expect(
+					mockedBoardRestApiActions.updateReaderCanEditRequest
 				).toHaveBeenCalledWith(payload);
 			});
 		});

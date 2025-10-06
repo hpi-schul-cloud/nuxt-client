@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useBoardStore } from "./Board.store";
 import { useAppStoreRefs } from "@data-app";
-import { createSharedComposable } from "@vueuse/core";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 
 const boardPermissions = (): BoardPermissionChecks => {
 	const boardPermissions = computed(() => board.value?.permissions ?? []);
@@ -38,6 +38,14 @@ const boardPermissions = (): BoardPermissionChecks => {
 		checkPermission(Permission.ContextToolAdmin)
 	);
 
+	const hasManageBoardPermission = computed(() =>
+		checkPermission(Permission.BoardManage)
+	);
+
+	const hasManageReadersCanEditPermission = computed(() =>
+		checkPermission(Permission.BoardManageReadersCanEdit)
+	);
+
 	const hasManageVideoConferencePermission = computed(() =>
 		checkPermission(Permission.BoardManageVideoconference)
 	);
@@ -54,6 +62,8 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasCreateToolPermission,
 		hasEditPermission,
 		hasDeletePermission,
+		hasManageBoardPermission,
+		hasManageReadersCanEditPermission,
 		hasManageVideoConferencePermission,
 		hasShareBoardPermission,
 		isTeacher,
@@ -61,4 +71,5 @@ const boardPermissions = (): BoardPermissionChecks => {
 	};
 };
 
-export const useBoardPermissions = createSharedComposable(boardPermissions);
+export const useBoardPermissions =
+	createTestableSharedComposable(boardPermissions);

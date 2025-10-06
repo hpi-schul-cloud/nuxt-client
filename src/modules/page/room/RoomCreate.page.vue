@@ -21,10 +21,9 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ApiResponseError } from "@/store/types/commons";
+import { notifyError } from "@data-app";
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
 const router = useRouter();
@@ -53,10 +52,7 @@ const onSave = async (payload: { room: RoomCreateParams }) => {
 		router.push({ name: "room-details", params: { id: room.id } });
 	} catch (error: unknown) {
 		if (isInvalidRequestError(error)) {
-			notifierModule.show({
-				text: t("components.roomForm.validation.generalSaveError"),
-				status: "error",
-			});
+			notifyError(t("components.roomForm.validation.generalSaveError"));
 		} else {
 			throw createApplicationError((error as ApiResponseError).code);
 		}

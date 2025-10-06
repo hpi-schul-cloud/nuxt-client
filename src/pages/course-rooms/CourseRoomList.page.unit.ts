@@ -6,12 +6,10 @@ import CourseRoomListModule from "@/store/course-room-list";
 import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
 import { nextTick } from "vue";
 import {
 	createTestingI18n,
@@ -23,14 +21,13 @@ import { createPinia, setActivePinia } from "pinia";
 
 vi.mock("vue-router");
 
-const getWrapper = () => {
-	return mount(CourseRoomList, {
+const getWrapper = () =>
+	mount(CourseRoomList, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[LOADING_STATE_MODULE_KEY.valueOf()]:
 					createModuleMocks(LoadingStateModule),
-				[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]:
 					createModuleMocks(CourseRoomListModule),
 				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
@@ -39,7 +36,6 @@ const getWrapper = () => {
 			},
 		},
 	});
-};
 
 const mockData: CourseMetadataResponse[] = [
 	{
@@ -124,7 +120,7 @@ describe("@/pages/CourseRoomListPage", () => {
 
 	describe("when data is loaded", () => {
 		describe("and data is not empty", () => {
-			it("should search elements on list", async () => {
+			it("should search elements on list", () => {
 				const { wrapper } = setup();
 
 				expect(wrapper.vm.rooms.length).toEqual(4);

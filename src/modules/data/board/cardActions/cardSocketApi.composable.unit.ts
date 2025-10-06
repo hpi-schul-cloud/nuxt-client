@@ -9,7 +9,7 @@ import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/rich
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -39,18 +39,15 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 vi.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-vi.mock("@util-board/BoardNotifier.composable");
 vi.mock("@util-board/LastCreatedElement.composable");
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 describe("useCardSocketApi", () => {
 	let socketMock: DeepMocked<ReturnType<typeof useSocketConnection>>;
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({}));
@@ -61,9 +58,6 @@ describe("useCardSocketApi", () => {
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 		vi.useFakeTimers();
 
 		mockUseSharedLastCreatedElement.mockReturnValue({

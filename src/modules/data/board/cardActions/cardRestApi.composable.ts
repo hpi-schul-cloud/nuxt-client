@@ -21,7 +21,7 @@ import {
 	ContextExternalToolSave,
 	useContextExternalToolApi,
 } from "@data-external-tool";
-import { useBoardNotifier, useSharedEditMode } from "@util-board";
+import { useSharedEditMode } from "@util-board";
 import { AxiosResponse } from "axios";
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardStore } from "../Card.store";
@@ -37,6 +37,7 @@ import {
 	UpdateElementRequestPayload,
 } from "./cardActionPayload.types";
 import { useI18n } from "vue-i18n";
+import { notifyError } from "@data-app";
 
 export const useCardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -63,7 +64,6 @@ export const useCardRestApi = () => {
 	const { setEditModeId } = useSharedEditMode();
 
 	const { t } = useI18n();
-	const { showFailure } = useBoardNotifier();
 
 	const createElementRequest = async (
 		payload: CreateElementRequestPayload
@@ -130,9 +130,8 @@ export const useCardRestApi = () => {
 
 					const isExternalToolElement = (
 						element: AnyContentElement
-					): element is ExternalToolElementResponse => {
-						return element.type === ContentElementType.ExternalTool;
-					};
+					): element is ExternalToolElementResponse =>
+						element.type === ContentElementType.ExternalTool;
 
 					if (isExternalToolElement(newElement.data)) {
 						newElement.data.content.contextExternalToolId =
@@ -168,7 +167,7 @@ export const useCardRestApi = () => {
 
 			return preferredTools.data.data;
 		} catch {
-			showFailure(
+			notifyError(
 				t("components.board.preferredTools.notification.error.notLoaded")
 			);
 		}

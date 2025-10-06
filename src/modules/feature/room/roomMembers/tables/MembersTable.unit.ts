@@ -33,14 +33,13 @@ import {
 	useRoomMembersStore,
 	useRoomAuthorization,
 } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import ActionMenu from "./ActionMenu.vue";
 import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
@@ -50,9 +49,6 @@ import { Mock } from "vitest";
 
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
-
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("@vueuse/integrations/useFocusTrap");
 
@@ -71,7 +67,6 @@ type RoomAuthorizationRefs = RefPropertiesOnly<
 
 describe("MembersTable", () => {
 	let askConfirmationMock: Mock;
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
@@ -96,9 +91,6 @@ describe("MembersTable", () => {
 			unpause: unpauseMock,
 			deactivate: deactivateMock,
 		});
-
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
 
 		setupStores({
 			schoolsModule: SchoolsModule,

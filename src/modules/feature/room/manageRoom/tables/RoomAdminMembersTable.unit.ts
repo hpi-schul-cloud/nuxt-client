@@ -13,21 +13,17 @@ import { createTestingPinia } from "@pinia/testing";
 import { RoleName } from "@/serverApi/v3";
 import { useRoomMembersStore } from "@data-room";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { DataTable } from "@ui-data-table";
+import { setActivePinia } from "pinia";
 import { ChangeRole } from "@feature-room";
 
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
+// vi.mock("@util-board/BoardNotifier.composable");
+// const boardNotifier = vi.mocked(useBoardNotifier);
 
 describe("RoomAdminMembersTable", () => {
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-
 	beforeEach(() => {
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
+		setActivePinia(createTestingPinia());
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -47,7 +43,6 @@ describe("RoomAdminMembersTable", () => {
 
 	const setup = () => {
 		const currentUser = roomMemberFactory.build({});
-
 		createTestAppStoreWithUser(currentUser.userId);
 
 		const members = [

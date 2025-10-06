@@ -26,6 +26,8 @@ import {
 	Permission,
 	SchulcloudTheme,
 } from "@/serverApi/v3";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-router", () => {
 	return {
@@ -77,7 +79,8 @@ describe("RoomsOverview", () => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
-		createTestAppStoreWithPermissions([Permission.CourseAdministration], false);
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStoreWithPermissions([Permission.CourseAdministration]);
 
 		createTestEnvStore({
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,

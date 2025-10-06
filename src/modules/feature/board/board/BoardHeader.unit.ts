@@ -23,6 +23,9 @@ import { computed, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
+import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = vi.mocked(useBoardPermissions);
@@ -39,7 +42,7 @@ describe("BoardHeader", () => {
 			permissions?: Partial<BoardPermissionChecks>;
 			envs?: Partial<ConfigResponse>;
 		},
-		props?: { isDraft: boolean }
+		props?: { isDraft?: boolean; hasReadersEditPermission?: boolean }
 	) => {
 		const isEditMode = computed(() => true);
 		const mockedStartEditMode = vi.fn();
@@ -50,12 +53,14 @@ describe("BoardHeader", () => {
 		});
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
+			hasManageBoardPermission: ref(true),
 			...options?.permissions,
 		});
 		mockUseBoardFocusHandler.mockReturnValue({
 			isFocusContained: undefined,
 		});
 
+		setActivePinia(createTestingPinia());
 		createTestEnvStore(options?.envs);
 
 		const wrapper = shallowMount(BoardHeader, {
@@ -71,6 +76,8 @@ describe("BoardHeader", () => {
 				titlePlaceholder: "Board 1",
 				boardId: "abc123",
 				isDraft: props?.isDraft || false,
+				isEditableChipVisible: true,
+				hasReadersEditPermission: props?.hasReadersEditPermission || false,
 			},
 		});
 		return { startEditMode: mockedStartEditMode, wrapper };
@@ -91,7 +98,7 @@ describe("BoardHeader", () => {
 		describe("when user is not permitted to edit the board", () => {
 			it("should not find the BoardMenu in the DOM", () => {
 				const { wrapper } = setup({
-					permissions: { hasEditPermission: ref(false) },
+					permissions: { hasManageBoardPermission: ref(false) },
 				});
 
 				const boardMenuComponent = wrapper.findAllComponents({
@@ -104,9 +111,7 @@ describe("BoardHeader", () => {
 
 		describe("when user is permitted to edit the board", () => {
 			it("should find the BoardMenu in the DOM", () => {
-				const { wrapper } = setup({
-					permissions: { hasEditPermission: ref(true) },
-				});
+				const { wrapper } = setup();
 
 				const boardMenuComponent = wrapper.findAllComponents({
 					name: "BoardMenu",
@@ -117,7 +122,6 @@ describe("BoardHeader", () => {
 
 			it("should enable copying", () => {
 				const { wrapper } = setup({
-					permissions: { hasEditPermission: ref(true) },
 					envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 				});
 
@@ -128,7 +132,6 @@ describe("BoardHeader", () => {
 
 			it("should enable sharing with feature flag", () => {
 				const { wrapper } = setup({
-					permissions: { hasEditPermission: ref(true) },
 					envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 				});
 
@@ -139,7 +142,6 @@ describe("BoardHeader", () => {
 
 			it("should disable sharing with feature flag", () => {
 				const { wrapper } = setup({
-					permissions: { hasEditPermission: ref(true) },
 					envs: { FEATURE_COLUMN_BOARD_SHARE: false },
 				});
 
@@ -246,7 +248,9 @@ describe("BoardHeader", () => {
 	describe("when the 'share' menu button is clicked", () => {
 		it("should emit 'share:board'", async () => {
 			const { wrapper } = setup({
-				permissions: { hasShareBoardPermission: ref(true) },
+				permissions: {
+					hasShareBoardPermission: ref(true),
+				},
 				envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 			});
 
@@ -296,14 +300,23 @@ describe("BoardHeader", () => {
 		});
 	});
 
+	describe("when board's editable settings are changed", () => {
+		it("should emit 'update:editable'", async () => {
+			const { wrapper } = setup({}, { hasReadersEditPermission: true });
+
+			const editableSwitch = wrapper.findComponent(
+				KebabMenuActionEditingSettings
+			);
+
+			await editableSwitch.trigger("click");
+
+			expect(wrapper.emitted("edit:settings")).toHaveLength(1);
+		});
+	});
+
 	describe("when board is a draft", () => {
 		it("should display draft label", () => {
-			const { wrapper } = setup(
-				{
-					permissions: { hasEditPermission: ref(true) },
-				},
-				{ isDraft: true }
-			);
+			const { wrapper } = setup({}, { isDraft: true });
 
 			expect(wrapper.findComponent({ name: "BoardDraftChip" }).exists()).toBe(
 				true
@@ -311,12 +324,7 @@ describe("BoardHeader", () => {
 		});
 
 		it("should display 'publish' button instead of 'revert' button in menu", () => {
-			const { wrapper } = setup(
-				{
-					permissions: { hasEditPermission: ref(true) },
-				},
-				{ isDraft: true }
-			);
+			const { wrapper } = setup({}, { isDraft: true });
 
 			const revertButton = wrapper.findComponent(KebabMenuActionRevert);
 			expect(revertButton.exists()).toBe(false);
@@ -327,12 +335,7 @@ describe("BoardHeader", () => {
 
 		describe("when the 'publish' menu button is clicked", () => {
 			it("should emit 'publish", async () => {
-				const { wrapper } = setup(
-					{
-						permissions: { hasEditPermission: ref(true) },
-					},
-					{ isDraft: true }
-				);
+				const { wrapper } = setup({}, { isDraft: true });
 
 				const publishButton = wrapper.findComponent(KebabMenuActionPublish);
 				expect(publishButton.exists()).toBe(true);

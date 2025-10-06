@@ -12,7 +12,6 @@ import {
 	importUsersModule,
 	loadingStateModule,
 	newsModule,
-	notifierModule,
 	privacyPolicyModule,
 	courseRoomDetailsModule,
 	courseRoomListModule,
@@ -51,7 +50,6 @@ import {
 	GROUP_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NEWS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
@@ -126,7 +124,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide("importUsersModule", importUsersModule);
 	app.provide("loadingStateModule", loadingStateModule);
 	app.provide(NEWS_MODULE_KEY.valueOf(), newsModule);
-	app.provide(NOTIFIER_MODULE_KEY.valueOf(), notifierModule);
 	app.provide(PRIVACY_POLICY_MODULE_KEY.valueOf(), privacyPolicyModule);
 	app.provide(TERMS_OF_USE_MODULE_KEY.valueOf(), termsOfUseModule);
 	app.provide(

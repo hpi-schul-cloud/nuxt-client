@@ -1,24 +1,30 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
-import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { ref, watch } from "vue";
 import { useCopy } from "./copy";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { expectNotification } from "@@/tests/test-utils";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("./loadingState");
 
 describe("copy composable", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({}));
+	});
+
 	const setup = () => {
 		const payload: CopyParams = {
 			id: "testId",
 			type: CopyParamsTypeEnum.Lesson,
 		};
 
-		const notifierModuleMock = createModuleMocks(NotifierModule);
 		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		const copyModuleMock = createModuleMocks(CopyModule);
 
@@ -29,7 +35,6 @@ describe("copy composable", () => {
 				plugins: [createTestingI18n()],
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					loadingStateModule: loadingStateModuleMock,
 				},
 			},
@@ -38,7 +43,6 @@ describe("copy composable", () => {
 		return {
 			copy,
 			payload,
-			notifierModuleMock,
 			loadingStateModuleMock,
 			copyModuleMock,
 			isLoadingDialogOpen,
@@ -69,14 +73,13 @@ describe("copy composable", () => {
 		});
 
 		await copy(payload);
-
 		expect(isLoadingDialogOpenStates).toEqual([true, false]);
 	});
 
 	it.each([[CopyParamsTypeEnum.Lesson], [CopyParamsTypeEnum.Task]])(
 		"should open success alert notification on a successful %s copy",
 		async (copyParamsType: CopyParamsTypeEnum) => {
-			const { copy, copyModuleMock, notifierModuleMock } = setup();
+			const { copy, copyModuleMock } = setup();
 			const payload: CopyParams = {
 				id: "testId",
 				type: copyParamsType,
@@ -87,9 +90,7 @@ describe("copy composable", () => {
 
 			await copy(payload);
 
-			expect(notifierModuleMock.show).toHaveBeenCalledWith(
-				expect.objectContaining({ status: "success" })
-			);
+			expectNotification("success");
 		}
 	);
 
@@ -110,16 +111,14 @@ describe("copy composable", () => {
 	});
 
 	it("should open failure alert notification on failed copy", async () => {
-		const { copy, copyModuleMock, notifierModuleMock, payload } = setup();
+		const { copy, copyModuleMock, payload } = setup();
 		copyModuleMock.copy = vi
 			.fn()
 			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Failure });
 
 		await copy(payload);
 
-		expect(notifierModuleMock.show).toHaveBeenCalledWith(
-			expect.objectContaining({ status: "error" })
-		);
+		expectNotification("error");
 	});
 
 	it("should open copyResultModal notification on partially failed copy", async () => {
@@ -134,13 +133,11 @@ describe("copy composable", () => {
 	});
 
 	it("should open failure alert notification on server error", async () => {
-		const { copy, copyModuleMock, notifierModuleMock, payload } = setup();
+		const { copy, copyModuleMock, payload } = setup();
 		copyModuleMock.copy = vi.fn().mockRejectedValue(false);
 
 		await copy(payload);
 
-		expect(notifierModuleMock.show).toHaveBeenCalledWith(
-			expect.objectContaining({ status: "info" })
-		);
+		expectNotification("info");
 	});
 });

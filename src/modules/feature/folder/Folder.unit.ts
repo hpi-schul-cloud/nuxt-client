@@ -30,11 +30,9 @@ import FolderMenu from "./FolderMenu.vue";
 import { Mock } from "vitest";
 import { Router, useRouter } from "vue-router";
 import { createTestingPinia } from "@pinia/testing";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
+import { useBoardStore } from "@/modules/data/board/Board.store";
+import { setActivePinia } from "pinia"; // FIX_CIRCULAR_DEPENDENCY
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -46,20 +44,18 @@ describe("Folder.vue", () => {
 	enableAutoUnmount(afterEach);
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		vi.restoreAllMocks();
 	});
 
-	const buildUploadStatsTranslation = (uploaded: string, total: string) => {
-		return `${uploaded} von ${total} Dateien hochgeladen`;
-	};
+	const buildUploadStatsTranslation = (uploaded: string, total: string) =>
+		`${uploaded} von ${total} Dateien hochgeladen`;
 	const setupWrapper = () => {
 		const router: DeepMocked<Router> = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
 		vi.spyOn(FileHelper, "downloadFilesAsArchive");
 		vi.spyOn(FileHelper, "downloadFile");
-
-		const notifierModule = createModuleMocks(NotifierModule);
 
 		const parentId = "123";
 		const wrapper = mount(Folder, {
@@ -76,12 +72,8 @@ describe("Folder.vue", () => {
 							},
 						},
 					}),
-					createTestingPinia(),
 				],
 				stubs: { ConfirmationDialog: true, UseFocusTrap: true },
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			props: {
 				folderId: parentId,
@@ -224,8 +216,8 @@ describe("Folder.vue", () => {
 					});
 					folderStateMock.parent = ref(parent) as ComputedRef<ParentNodeInfo>;
 
-					const folderName = "Test Folder" as unknown as ComputedRef<string>;
-					folderStateMock.folderName = folderName;
+					folderStateMock.folderName =
+						"Test Folder" as unknown as ComputedRef<string>;
 					folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
 					const boardState = createMock<
@@ -286,8 +278,8 @@ describe("Folder.vue", () => {
 						folderStateMock
 					);
 
-					const folderName = "Test Folder" as unknown as ComputedRef<string>;
-					folderStateMock.folderName = folderName;
+					folderStateMock.folderName =
+						"Test Folder" as unknown as ComputedRef<string>;
 					folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
 					const parent = parentNodeInfoFactory.build();
@@ -864,8 +856,8 @@ describe("Folder.vue", () => {
 						() => "boards"
 					);
 
-					const folderName = "Test Folder" as unknown as ComputedRef<string>;
-					folderStateMock.folderName = folderName;
+					folderStateMock.folderName =
+						"Test Folder" as unknown as ComputedRef<string>;
 					folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
 					const parent = parentNodeInfoFactory.build({

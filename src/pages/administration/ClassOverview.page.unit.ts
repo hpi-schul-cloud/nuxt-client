@@ -25,6 +25,8 @@ import { VBtn, VDataTableServer } from "vuetify/lib/components/index";
 import ClassOverview from "./ClassOverview.page.vue";
 import { Mock } from "vitest";
 import { ConfigResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("vue-router", () => {
 	return {
@@ -85,10 +87,8 @@ const createWrapper = ({
 		...groupModuleGetters,
 	});
 
-	createTestAppStoreWithPermissions(
-		userPermissions ?? defaultPermissions,
-		false
-	);
+	setActivePinia(createTestingPinia({ stubActions: false }));
+	createTestAppStoreWithPermissions(userPermissions ?? defaultPermissions);
 
 	const schoolModule = createModuleMocks(SchoolsModule, {
 		getSchool: {

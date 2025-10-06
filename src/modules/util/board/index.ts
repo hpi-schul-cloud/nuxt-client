@@ -1,5 +1,4 @@
 import { BOARD_IS_LIST_LAYOUT } from "./board-injection-tokens";
-import { useBoardNotifier } from "./BoardNotifier.composable";
 import { useDragAndDrop } from "./dragAndDrop.composable";
 import {
 	type EditModePermissions,
@@ -14,7 +13,6 @@ import { useSharedLastCreatedElement } from "./LastCreatedElement.composable";
 import { useShareBoardLink } from "./shareBoardLink.composable";
 
 export {
-	useBoardNotifier,
 	useSharedLastCreatedElement,
 	extractDataAttribute,
 	BOARD_IS_LIST_LAYOUT,

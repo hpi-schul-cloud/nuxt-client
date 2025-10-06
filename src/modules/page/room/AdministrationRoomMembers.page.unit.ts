@@ -1,5 +1,3 @@
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import {
 	createTestAppStoreWithRole,
 	createTestEnvStore,
@@ -7,20 +5,19 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import SchoolsModule from "@/store/schools";
+import { schoolsModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { Router, useRoute } from "vue-router";
 import AdministrationRoomDetailPage from "./AdministrationRoomMembers.page.vue";
 import { RoleName } from "@/serverApi/v3";
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+import { setActivePinia } from "pinia";
 
 vi.mock("vue-router");
 const useRouteMock = <Mock>useRoute;
@@ -44,7 +41,6 @@ vi.mock("vue-i18n", () => {
 vi.mocked(useI18n());
 
 describe("AdministrationRoomMembers.page", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
@@ -52,10 +48,7 @@ describe("AdministrationRoomMembers.page", () => {
 	const router = createMock<Router>();
 
 	beforeEach(() => {
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
+		setActivePinia(createTestingPinia());
 		useRouteMock.mockReturnValue(router);
 
 		setupStores({
@@ -114,7 +107,7 @@ describe("AdministrationRoomMembers.page", () => {
 	};
 
 	describe("rendering", () => {
-		it("should render the page and Table component ", async () => {
+		it("should render the page and Table component ", () => {
 			const { wrapper } = setup();
 			const roomAdminTable = wrapper.findComponent({
 				name: "RoomAdminMembersTable",

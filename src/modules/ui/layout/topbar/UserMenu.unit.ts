@@ -11,6 +11,8 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
 import UserMenu from "./UserMenu.vue";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@data-system");
 vi.mock("@data-oauth");
@@ -24,6 +26,7 @@ describe("@ui-layout/UserMenu", () => {
 		mockedSystem?: System,
 		mockedTokenExpiration?: Date
 	) => {
+		setActivePinia(createTestingPinia());
 		const { appStore } = createTestAppStore({
 			me: { systemId: mockedSystem?.id },
 		});

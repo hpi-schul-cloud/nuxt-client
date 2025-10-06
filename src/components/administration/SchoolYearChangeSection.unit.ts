@@ -13,7 +13,9 @@ import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { VBtn, VCheckbox } from "vuetify/lib/components/index";
 import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("@data-school");
 
@@ -23,7 +25,8 @@ describe("SchoolYearChangeSection", () => {
 		ReturnType<typeof useSharedSchoolYearChange>
 	>;
 
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore();
 		createTestAppStoreWithSchool(schoolId);
 	});

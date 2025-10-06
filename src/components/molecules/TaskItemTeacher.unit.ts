@@ -1,7 +1,6 @@
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
-import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import {
@@ -27,20 +26,18 @@ const {
 
 let tasksModuleMock: TasksModule;
 let copyModuleMock: CopyModule;
-let notifierModuleMock: NotifierModule;
 
 const mockRouter = {
 	push: vi.fn(),
 };
 
-const getWrapper = (props: { task: object }) => {
-	return mount(TaskItemTeacher, {
+const getWrapper = (props: { task: object }) =>
+	mount(TaskItemTeacher, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				tasksModule: tasksModuleMock,
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			},
 		},
 		props: props,
@@ -48,7 +45,6 @@ const getWrapper = (props: { task: object }) => {
 			$router: mockRouter,
 		},
 	});
-};
 
 describe("@/components/molecules/TaskItemTeacher", () => {
 	beforeAll(() => {
@@ -69,7 +65,6 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
-		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	it("accepts valid task props", () => {
@@ -95,7 +90,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 		expect(locationSpy).toHaveBeenCalledWith(`/homework/${tasksTeacher[0].id}`);
 	});
 
-	it("should passthrough copy-task event", async () => {
+	it("should passthrough copy-task event", () => {
 		const wrapper = getWrapper({
 			task: tasksTeacher[0],
 		});

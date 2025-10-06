@@ -3,9 +3,8 @@ import { finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import {
@@ -16,15 +15,15 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { VBtn } from "vuetify/lib/components/index";
 import TaskItemMenu from "./TaskItemMenu.vue";
-import { beforeAll } from "vitest";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const { tasksTeacher } = mocks;
 
 let tasksModuleMock: TasksModule;
 let copyModuleMock: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
-let notifierModuleMock: NotifierModule;
 
 const getWrapper = (
 	props: {
@@ -35,21 +34,19 @@ const getWrapper = (
 		courseId?: string;
 	},
 	options = {}
-) => {
-	return mount(TaskItemMenu, {
+) =>
+	mount(TaskItemMenu, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				tasksModule: tasksModuleMock,
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			},
 		},
 		props,
 		...options,
 	});
-};
 
 describe("@/components/molecules/TaskItemMenu", () => {
 	const defineWindowWidth = (width: number) => {
@@ -61,18 +58,16 @@ describe("@/components/molecules/TaskItemMenu", () => {
 		window.dispatchEvent(new Event("resize"));
 	};
 
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
+
 		setupStores({
 			finishedTasksModule: FinishedTasksModule,
 		});
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	defineWindowWidth(1264);

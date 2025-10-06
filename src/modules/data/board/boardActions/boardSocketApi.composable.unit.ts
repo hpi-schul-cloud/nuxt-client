@@ -17,7 +17,7 @@ import {
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
@@ -45,9 +45,7 @@ const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
-vi.mock("@util-board/BoardNotifier.composable");
 vi.mock("@util-board/LastCreatedElement.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
@@ -59,7 +57,6 @@ const useRouterMock = <Mock>useRouter;
 describe("useBoardSocketApi", () => {
 	let socketMock: DeepMocked<ReturnType<typeof useSocketConnection>>;
 	let mockedBoardRestApiHandler: DeepMocked<ReturnType<typeof useBoardRestApi>>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedSharedLastCreatedElementActions: DeepMocked<
 		ReturnType<typeof useSharedLastCreatedElement>
@@ -84,10 +81,6 @@ describe("useBoardSocketApi", () => {
 
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		mockedSharedLastCreatedElementActions =
 			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
@@ -677,6 +670,25 @@ describe("useBoardSocketApi", () => {
 			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
 				"update-board-visibility-request",
 				{ boardId: "boardId", isVisible: true }
+			);
+		});
+	});
+
+	describe("updateReaderCanEditRequest", () => {
+		it("should call action with correct parameters", () => {
+			const { updateReaderCanEditRequest } = useBoardSocketApi();
+
+			updateReaderCanEditRequest({
+				boardId: "boardId",
+				readersCanEdit: true,
+			});
+
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
+				"update-readers-can-edit-request",
+				{
+					boardId: "boardId",
+					readersCanEdit: true,
+				}
 			);
 		});
 	});

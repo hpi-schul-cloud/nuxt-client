@@ -1,17 +1,16 @@
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { mountComposable } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { expectNotification, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { BoardMenuScope } from "@ui-board";
 import { useShareBoardLink } from "./shareBoardLink.composable";
-import type { Mocked } from "vitest";
+import { beforeEach } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("useShareBoardLink", () => {
-	const notifierModule: Mocked<NotifierModule> =
-		createModuleMocks(NotifierModule);
-
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
@@ -20,9 +19,6 @@ describe("useShareBoardLink", () => {
 		const composable = mountComposable(() => useShareBoardLink(), {
 			global: {
 				plugins: [createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 		});
 
@@ -85,11 +81,7 @@ describe("useShareBoardLink", () => {
 
 				await composable.copyShareLink("123", BoardMenuScope.CARD);
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					status: "success",
-					text: "common.words.copyLinkToClipboard.success",
-					autoClose: true,
-				});
+				expectNotification("success");
 			});
 		});
 
@@ -100,11 +92,7 @@ describe("useShareBoardLink", () => {
 
 				await composable.copyShareLink("123", BoardMenuScope.CARD);
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					status: "error",
-					text: "common.words.copyLinkToClipboard.failure",
-					autoClose: true,
-				});
+				expectNotification("error");
 			});
 		});
 	});

@@ -6,20 +6,18 @@ import {
 	SchoolApiFactory,
 	SchoolForExternalInviteResponse,
 } from "@/serverApi/v3";
-import { schoolsModule } from "@/store";
 import { $axios } from "@/utils/api";
-import { useRoomDetailsStore } from "@data-room";
-import { useBoardNotifier } from "@util-board";
+import { useI18n } from "vue-i18n";
+import { schoolsModule } from "@/store";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
-import { computed, Ref, ref, reactive } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, Ref, ref } from "vue";
 import { RoomMember } from "./types";
-import { useAppStore } from "@data-app";
+import { useRoomDetailsStore } from "@data-room";
+import { notifyError, notifySuccess, useAppStore } from "@data-app";
 
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const { t } = useI18n();
-	const { showFailure, showSuccess } = useBoardNotifier();
 
 	const { room } = storeToRefs(useRoomDetailsStore());
 	const roomId = computed(() => room.value?.id);
@@ -30,20 +28,20 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]
 	> = ref([]);
 
-	const roomMembersWithoutApplicants = computed(() => {
-		return roomMembers.value.filter(
+	const roomMembersWithoutApplicants = computed(() =>
+		roomMembers.value.filter(
 			(member) => member.roomRoleName !== RoleName.Roomapplicant
-		);
-	});
+		)
+	);
 
-	const roomApplicants = computed(() => {
-		return roomMembers.value.filter(
+	const roomApplicants = computed(() =>
+		roomMembers.value.filter(
 			(member) => member.roomRoleName === RoleName.Roomapplicant
-		);
-	});
+		)
+	);
 
-	const roomMembersForAdmins = computed(() => {
-		return roomMembersWithoutApplicants.value.map((member) => {
+	const roomMembersForAdmins = computed(() =>
+		roomMembersWithoutApplicants.value.map((member) => {
 			const isAnonymizedMember =
 				member.firstName === "---" && member.lastName === "---";
 			if (!isAnonymizedMember) return member;
@@ -52,15 +50,15 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 				"pages.rooms.administration.roomDetail.anonymized"
 			);
 
-			return reactive({
+			return {
 				...member,
 				isSelectable: !isAnonymizedMember,
 				firstName: anonymizedName,
 				lastName: anonymizedName,
 				fullName: anonymizedName,
-			});
-		});
-	});
+			};
+		})
+	);
 
 	const isLoading = ref<boolean>(false);
 	const ownSchool = {
@@ -121,8 +119,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 				};
 			});
 		} catch {
-			showFailure(t("pages.rooms.members.error.load"));
-		} finally {
+			notifyError(t("pages.rooms.members.error.load"));
 			isLoading.value = false;
 		}
 	};
@@ -166,21 +163,19 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 						schoolId,
 					};
 				})
-				.filter((user) => {
-					return (
+				.filter(
+					(user) =>
 						user.schoolRoleNames.includes(schoolRoleName) &&
 						!roomMembers.value.some((member) => member.userId === user.id)
-					);
-				})
+				)
 				.sort((a, b) => a.fullName.localeCompare(b.fullName));
 		} catch {
-			showFailure(t("pages.rooms.members.error.load"));
+			notifyError(t("pages.rooms.members.error.load"));
 		}
 	};
 
-	const getMemberById = (userId: string) => {
-		return roomMembers.value.find((member) => member.userId === userId);
-	};
+	const getMemberById = (userId: string) =>
+		roomMembers.value.find((member) => member.userId === userId);
 
 	const getMemberFullName = (userId = "") => {
 		const member = getMemberById(userId);
@@ -256,11 +251,10 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					displayRoomRole: roomRole[roomRoleName],
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 					schoolId: member.schoolId,
-					isSelectable: true,
 				}))
 			);
 		} catch {
-			showFailure(t("pages.rooms.members.error.add"));
+			notifyError(t("pages.rooms.members.error.add"));
 		}
 	};
 
@@ -274,7 +268,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			);
 			selectedIds.value = [];
 		} catch {
-			showFailure(t("pages.rooms.members.error.remove"));
+			notifyError(t("pages.rooms.members.error.remove"));
 		}
 	};
 
@@ -283,7 +277,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		try {
 			await roomApi.roomControllerLeaveRoom(getRoomId());
 		} catch {
-			showFailure(t("pages.rooms.members.error.remove"));
+			notifyError(t("pages.rooms.members.error.remove"));
 		} finally {
 			isLoading.value = false;
 		}
@@ -316,7 +310,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 				}
 			});
 		} catch {
-			showFailure(t("pages.rooms.members.error.updateRole"));
+			notifyError(t("pages.rooms.members.error.updateRole"));
 		}
 	};
 
@@ -327,11 +321,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			});
 			setRoomOwner(userId);
 		} catch {
-			showFailure(t("pages.rooms.members.error.updateRole"));
+			notifyError(t("pages.rooms.members.error.updateRole"));
 		}
 	};
 
-	const setRoomOwner = async (userId: string) => {
+	const setRoomOwner = (userId: string) => {
 		const currentOwner = roomMembers.value.find(
 			(member) => member.roomRoleName === RoleName.Roomowner
 		);
@@ -342,8 +336,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		const memberToBeOwner = roomMembers.value.find(
 			(member) => member.userId === userId
 		);
-		if (!memberToBeOwner) {
-			showFailure(t("pages.rooms.members.error.updateRole"));
+		if (!currentOwner || !memberToBeOwner) {
+			notifyError(t("pages.rooms.members.error.updateRole"));
 			return;
 		}
 
@@ -360,14 +354,12 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			showNotification(ids, "confirm");
 
 			roomMembers.value
-				.filter((member) => {
-					return ids.includes(member.userId);
-				})
+				.filter((member) => ids.includes(member.userId))
 				.forEach((member) => {
 					updateMemberRole(member, RoleName.Roomviewer, true);
 				});
 		} catch {
-			showFailure(t("pages.rooms.members.error.updateRole"));
+			notifyError(t("pages.rooms.members.error.updateRole"));
 		}
 
 		confirmationSelectedIds.value = [];
@@ -381,11 +373,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 			showNotification(ids, "reject");
 
-			roomMembers.value = roomMembers.value.filter((member) => {
-				return !ids.includes(member.userId);
-			});
+			roomMembers.value = roomMembers.value.filter(
+				(member) => !ids.includes(member.userId)
+			);
 		} catch {
-			showFailure(t("pages.rooms.members.error.remove"));
+			notifyError(t("pages.rooms.members.error.remove"));
 		}
 
 		confirmationSelectedIds.value = [];
@@ -406,7 +398,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 							fullName: getMemberFullName(ids[0]),
 						}
 					);
-		showSuccess(successMessage);
+		notifySuccess(successMessage);
 	};
 
 	const updateMemberRole = (
@@ -431,27 +423,25 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		selectedIds.value = [];
 	};
 
-	const baseTableHeaders = computed(() => {
-		return [
-			{
-				title: t("common.labels.firstName"),
-				key: "firstName",
-			},
-			{
-				title: t("common.labels.lastName"),
-				key: "lastName",
-			},
-			{
-				title: t("pages.rooms.members.tableHeader.roomRole"),
-				key: "displayRoomRole",
-			},
-			{
-				title: t("pages.rooms.members.tableHeader.schoolRole"),
-				key: "displaySchoolRole",
-			},
-			{ title: t("common.words.mainSchool"), key: "schoolName" },
-		];
-	});
+	const baseTableHeaders = computed(() => [
+		{
+			title: t("common.labels.firstName"),
+			key: "firstName",
+		},
+		{
+			title: t("common.labels.lastName"),
+			key: "lastName",
+		},
+		{
+			title: t("pages.rooms.members.tableHeader.roomRole"),
+			key: "displayRoomRole",
+		},
+		{
+			title: t("pages.rooms.members.tableHeader.schoolRole"),
+			key: "displaySchoolRole",
+		},
+		{ title: t("common.words.mainSchool"), key: "schoolName" },
+	]);
 
 	return {
 		addMembers,

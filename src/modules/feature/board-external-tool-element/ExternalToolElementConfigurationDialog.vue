@@ -29,9 +29,9 @@ import ContextExternalToolConfigurator from "@/components/external-tools/configu
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import { ContextExternalTool } from "@data-external-tool";
-import { useBoardNotifier } from "@util-board";
 import { nextTick, onMounted, PropType, ref, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { notifySuccess } from "@data-app";
 
 const props = defineProps({
 	isOpen: {
@@ -58,7 +58,6 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { showSuccess } = useBoardNotifier();
 
 const contextExternalToolConfigurator: Ref<InstanceType<
 	typeof ContextExternalToolConfigurator
@@ -81,7 +80,7 @@ const onSuccess = (savedTool: ContextExternalTool) => {
 		? t("components.administration.externalToolsSection.notification.updated")
 		: t("components.administration.externalToolsSection.notification.created");
 
-	showSuccess(message);
+	notifySuccess(message);
 
 	closeDialog();
 };

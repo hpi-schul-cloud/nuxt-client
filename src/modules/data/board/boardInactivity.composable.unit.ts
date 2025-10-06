@@ -1,7 +1,4 @@
 import type { Mock } from "vitest";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	boardResponseFactory,
 	createTestEnvStore,
@@ -9,7 +6,7 @@ import {
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { computed, nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
@@ -27,21 +24,15 @@ vi.mock("vue-i18n", () => ({
 	}),
 }));
 
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
 vi.mock("./socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
-vi.mock("@util-board/BoardNotifier.composable");
 vi.mock("@util-board/LastCreatedElement.composable");
-const mockUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 let mockedSocketConnectionHandler: DeepMocked<
 	ReturnType<typeof useSocketConnection>
 >;
@@ -60,12 +51,6 @@ describe("pageInactivity.composable", () => {
 		resetLastCreatedElementId: vi.fn(),
 	});
 
-	mockBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-	mockUseBoardNotifier.mockReturnValue(mockBoardNotifierCalls);
-
-	mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-	mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
 	mockedSocketConnectionHandler =
 		createMock<ReturnType<typeof useSocketConnection>>();
 	mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
@@ -79,15 +64,8 @@ describe("pageInactivity.composable", () => {
 		boardStore.board = boardResponseFactory.build();
 		cardStore.cards = {};
 
-		const useBoardInactivityComposable = mountComposable(
-			() => useBoardInactivity(timer),
-			{
-				global: {
-					provide: {
-						[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-					},
-				},
-			}
+		const useBoardInactivityComposable = mountComposable(() =>
+			useBoardInactivity(timer)
 		);
 
 		return { useBoardInactivityComposable, boardStore, cardStore };

@@ -16,7 +16,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier, useSharedEditMode } from "@util-board";
+import { useSharedEditMode } from "@util-board";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { Router, useRouter } from "vue-router";
@@ -33,9 +33,6 @@ const mockedUseBoardApi = vi.mocked(useBoardApi);
 
 vi.mock("@util-board/editMode.composable");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
@@ -59,7 +56,6 @@ describe("boardRestApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
 		ReturnType<typeof useSocketConnection>
 	>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let setEditModeId: Mock;
 	const setErrorMock = vi.fn();
 
@@ -75,10 +71,6 @@ describe("boardRestApi", () => {
 
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setEditModeId = vi.fn();
 		mockedSharedEditMode.mockReturnValue({
@@ -695,6 +687,41 @@ describe("boardRestApi", () => {
 				boardId: "boardId",
 				isVisible: true,
 			});
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
+	describe("@updateReadersCanEditRequest", () => {
+		it("should not call updateReadersCanEditSuccess action when board value is undefined", async () => {
+			const payload = { boardId: "boardId", readersCanEdit: true };
+			const { boardStore } = setup(false);
+			const { updateReaderCanEditRequest } = useBoardRestApi();
+			await updateReaderCanEditRequest(payload);
+
+			expect(boardStore.updateReaderCanEditSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call updateReadersCanEditSuccess action if the API call is successful", async () => {
+			const payload = { boardId: "boardId", readersCanEdit: true };
+			const { boardStore } = setup();
+			const { updateReaderCanEditRequest } = useBoardRestApi();
+			await updateReaderCanEditRequest(payload);
+
+			expect(boardStore.updateReaderCanEditSuccess).toHaveBeenCalledWith({
+				...payload,
+				isOwnAction: true,
+			});
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const payload = { boardId: "boardId", readersCanEdit: true };
+			setup();
+			const { updateReaderCanEditRequest } = useBoardRestApi();
+
+			mockedBoardApiCalls.updateReadersCanEditCall.mockRejectedValue({});
+
+			await updateReaderCanEditRequest(payload);
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});

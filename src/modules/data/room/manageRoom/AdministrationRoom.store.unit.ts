@@ -1,10 +1,9 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { useAdministrationRoomStore } from "@data-room";
 import { useI18n } from "vue-i18n";
-import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance, AxiosPromise } from "axios";
-import { createPinia, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
 import { initializeAxios } from "@/utils/api";
 import {
 	RoomStatsItemResponse,
@@ -15,40 +14,34 @@ import {
 	schoolFactory,
 	roomStatsItemResponseFactory,
 	roomStatsListResponseFactory,
+	expectNotification,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import { Mock } from "vitest";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
 describe("useAdministrationRoomStore", () => {
 	let roomAdministrationApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
 	};
 
 	beforeEach(() => {
-		setActivePinia(createPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		roomAdministrationApiMock = createMock<serverApi.RoomApiInterface>();
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(
 			roomAdministrationApiMock
 		);
 		axiosMock = createMock<AxiosInstance>();
 		initializeAxios(axiosMock);
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -107,10 +100,12 @@ describe("useAdministrationRoomStore", () => {
 
 			await roomAdminStore.fetchRooms();
 
-			const expectedRoomList = mockRoomList.data.map((room) => ({
-				...room,
-				createdAt: printFromStringUtcToFullDate(room.createdAt),
-			}));
+			const expectedRoomList = mockRoomList.data.map((room) => {
+				return {
+					...room,
+					createdAt: printFromStringUtcToFullDate(room.createdAt),
+				};
+			});
 
 			expect(roomAdminStore.roomList).toEqual(expectedRoomList);
 		});
@@ -123,9 +118,7 @@ describe("useAdministrationRoomStore", () => {
 
 			await roomAdminStore.fetchRooms();
 
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.administration.error.load"
-			);
+			expectNotification("error");
 			expect(roomAdminStore.isEmptyList).toBe(true);
 			expect(roomAdminStore.roomList).toEqual([]);
 			expect(roomAdminStore.isLoading).toBe(false);
@@ -196,10 +189,12 @@ describe("useAdministrationRoomStore", () => {
 						roomsFromAnotherSchool[1],
 					],
 				});
-				const sortedAndFormattedRoomList = sortedList.data.map((room) => ({
-					...room,
-					createdAt: printFromStringUtcToFullDate(room.createdAt),
-				}));
+				const sortedAndFormattedRoomList = sortedList.data.map((room) => {
+					return {
+						...room,
+						createdAt: printFromStringUtcToFullDate(room.createdAt),
+					};
+				});
 
 				expect(roomAdminStore.roomList).toEqual(sortedAndFormattedRoomList);
 			});
@@ -239,9 +234,7 @@ describe("useAdministrationRoomStore", () => {
 
 			await roomAdminStore.deleteRoom(roomIdToDelete);
 
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.administration.error.delete"
-			);
+			expectNotification("error");
 			expect(roomAdminStore.isLoading).toBe(false);
 		});
 	});

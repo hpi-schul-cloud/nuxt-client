@@ -7,12 +7,13 @@ import {
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useBoardNotifier } from "@util-board";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useBoardStore } from "./Board.store";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardPermissions } from "./BoardPermissions.composable";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-router");
 vi.mock("@data-board/BoardPageInformation.composable");
@@ -28,34 +29,25 @@ vi.mock(
 		}) as typeof import("@/utils/create-shared-composable")
 );
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({
-			t: vi.fn().mockImplementation((key: string) => key),
-			n: vi.fn().mockImplementation((key: string) => key),
-		}),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({
+		t: vi.fn().mockImplementation((key: string) => key),
+		n: vi.fn().mockImplementation((key: string) => key),
+	}),
+}));
 
 vi.mocked(useI18n());
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
 describe("BoardPermissions.composable", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 	});
 
 	afterEach(() => {
@@ -139,6 +131,7 @@ describe("BoardPermissions.composable", () => {
 				hasEditPermission,
 				hasManageVideoConferencePermission,
 				hasShareBoardPermission,
+				hasManageBoardPermission,
 				isTeacher,
 				isStudent,
 			} = useBoardPermissions();
@@ -151,7 +144,7 @@ describe("BoardPermissions.composable", () => {
 			expect(hasEditPermission.value).toBe(false);
 			expect(hasManageVideoConferencePermission.value).toBe(false);
 			expect(hasShareBoardPermission.value).toBe(false);
-
+			expect(hasManageBoardPermission.value).toBe(false);
 			expect(isTeacher.value).toBe(false);
 			expect(isStudent.value).toBe(true);
 		});
@@ -177,6 +170,7 @@ describe("BoardPermissions.composable", () => {
 				hasCreateToolPermission,
 				hasEditPermission,
 				hasManageVideoConferencePermission,
+				hasManageBoardPermission,
 				isTeacher,
 				isStudent,
 				hasShareBoardPermission,
@@ -190,7 +184,7 @@ describe("BoardPermissions.composable", () => {
 			expect(hasEditPermission.value).toBe(true);
 			expect(hasManageVideoConferencePermission.value).toBe(true);
 			expect(hasShareBoardPermission.value).toBe(true);
-
+			expect(hasManageBoardPermission.value).toBe(false);
 			expect(isTeacher.value).toBe(true);
 			expect(isStudent.value).toBe(false);
 		});

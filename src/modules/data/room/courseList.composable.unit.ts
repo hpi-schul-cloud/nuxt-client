@@ -4,11 +4,9 @@ import {
 	CourseSortProps,
 	CourseStatus,
 } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	axiosErrorFactory,
+	expectNotification,
 	i18nMock,
 	mockApiResponse,
 	mountComposable,
@@ -21,7 +19,8 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
 import { useCourseApi } from "./courseApi.composable";
 import { useCourseList } from "./courseList.composable";
-import type { Mocked } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("./courseApi.composable");
 vi.mock("./courseInfoApi.composable");
@@ -30,10 +29,8 @@ describe("courseList.composable", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
 	let useCourseInfoApiMock: DeepMocked<ReturnType<typeof useCourseInfoApi>>;
 
-	const notifierModule: Mocked<NotifierModule> =
-		createModuleMocks(NotifierModule);
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>();
 		useCourseInfoApiMock = createMock<ReturnType<typeof useCourseInfoApi>>();
 
@@ -49,9 +46,6 @@ describe("courseList.composable", () => {
 		const setup = () => {
 			const composable = mountComposable(() => useCourseList(), {
 				global: {
-					provide: {
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					},
 					plugins: [createTestingI18n()],
 					mocks: i18nMock,
 				},
@@ -76,9 +70,6 @@ describe("courseList.composable", () => {
 		const setup = () => {
 			const composable = mountComposable(() => useCourseList(), {
 				global: {
-					provide: {
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					},
 					plugins: [createTestingI18n()],
 					mocks: i18nMock,
 				},
@@ -101,9 +92,6 @@ describe("courseList.composable", () => {
 		const setup = () => {
 			const composable = mountComposable(() => useCourseList(), {
 				global: {
-					provide: {
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					},
 					plugins: [createTestingI18n()],
 					mocks: i18nMock,
 				},
@@ -126,9 +114,6 @@ describe("courseList.composable", () => {
 		const setup = () => {
 			const composable = mountComposable(() => useCourseList(), {
 				global: {
-					provide: {
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					},
 					plugins: [createTestingI18n()],
 					mocks: i18nMock,
 				},
@@ -155,9 +140,6 @@ describe("courseList.composable", () => {
 			const setup = () => {
 				const composable = mountComposable(() => useCourseList(), {
 					global: {
-						provide: {
-							[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						},
 						plugins: [createTestingI18n()],
 						mocks: i18nMock,
 					},
@@ -168,13 +150,13 @@ describe("courseList.composable", () => {
 				};
 			};
 
-			it("should not have data", async () => {
+			it("should not have data", () => {
 				const { composable } = setup();
 
 				expect(composable.courses.value).toEqual([]);
 			});
 
-			it("should have default values", async () => {
+			it("should have default values", () => {
 				const { composable } = setup();
 
 				expect(composable.pagination.value).toEqual<Pagination>({
@@ -210,9 +192,6 @@ describe("courseList.composable", () => {
 
 				const composable = mountComposable(() => useCourseList(), {
 					global: {
-						provide: {
-							[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						},
 						plugins: [createTestingI18n()],
 						mocks: i18nMock,
 					},
@@ -294,9 +273,6 @@ describe("courseList.composable", () => {
 
 				const composable = mountComposable(() => useCourseList(), {
 					global: {
-						provide: {
-							[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						},
 						plugins: [createTestingI18n()],
 						mocks: i18nMock,
 					},
@@ -332,10 +308,7 @@ describe("courseList.composable", () => {
 
 				await composable.fetchCourses(CourseStatus.Current);
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "error.load",
-					status: "error",
-				});
+				expectNotification("error");
 			});
 		});
 	});
@@ -345,9 +318,6 @@ describe("courseList.composable", () => {
 			const setup = () => {
 				const composable = mountComposable(() => useCourseList(), {
 					global: {
-						provide: {
-							[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						},
 						plugins: [createTestingI18n()],
 						mocks: i18nMock,
 					},
@@ -384,9 +354,6 @@ describe("courseList.composable", () => {
 
 				const composable = mountComposable(() => useCourseList(), {
 					global: {
-						provide: {
-							[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						},
 						plugins: [createTestingI18n()],
 						mocks: i18nMock,
 					},
@@ -423,10 +390,7 @@ describe("courseList.composable", () => {
 
 				await composable.deleteCourse("id");
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "error.load",
-					status: "error",
-				});
+				expectNotification("error");
 			});
 		});
 	});

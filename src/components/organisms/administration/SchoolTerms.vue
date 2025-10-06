@@ -121,7 +121,6 @@ import {
 	injectStrict,
 	TERMS_OF_USE_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { downloadFile } from "@/utils/fileHelper";
@@ -131,14 +130,12 @@ import {
 	mdiTrashCanOutline,
 	mdiTrayArrowUp,
 } from "@icons/material";
-import { useAppStore } from "@data-app";
+import { notifySuccess, useAppStore } from "@data-app";
 import { Permission } from "@/serverApi/v3";
 
 const { t } = useI18n();
 const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-
 const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
 const isDeleteTermsDialogOpen: Ref<boolean> = ref(false);
 
@@ -173,12 +170,9 @@ const downloadTerms = () => {
 
 const deleteFile = async () => {
 	await termsOfUseModule.deleteTermsOfUse();
-
-	notifierModule.show({
-		text: t("pages.administration.school.index.termsOfUse.delete.success"),
-		status: "success",
-		timeout: 5000,
-	});
+	notifySuccess(
+		t("pages.administration.school.index.termsOfUse.delete.success")
+	);
 };
 
 const closeDialog = () => {

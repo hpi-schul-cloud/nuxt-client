@@ -1,16 +1,11 @@
 import SchoolTerms from "./SchoolTerms.vue";
 import SchoolsModule from "@/store/schools";
 import TermsOfUseModule from "@/store/terms-of-use";
-import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { VueWrapper, mount } from "@vue/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { ConsentVersion } from "@/store/types/consent-version";
-import {
-	NOTIFIER_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-	TERMS_OF_USE_MODULE_KEY,
-} from "@/utils/inject";
+import { SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
 import { downloadFile } from "@/utils/fileHelper";
 import {
 	createTestingI18n,
@@ -19,13 +14,14 @@ import {
 import type { Mocked } from "vitest";
 import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { Permission } from "@/serverApi/v3";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("@/utils/fileHelper");
 
 describe("SchoolTerms", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
 	let termsOfUseModule: Mocked<TermsOfUseModule>;
-	let notifierModule: Mocked<NotifierModule>;
 
 	const mockTerms: ConsentVersion = {
 		_id: "123",
@@ -58,7 +54,8 @@ describe("SchoolTerms", () => {
 		},
 		permissions = [Permission.SchoolEdit]
 	) => {
-		createTestAppStoreWithPermissions(permissions, false);
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStoreWithPermissions(permissions);
 
 		schoolsModule = createModuleMocks(SchoolsModule, {
 			getSchool: mockSchool,
@@ -68,15 +65,12 @@ describe("SchoolTerms", () => {
 			...getters,
 		});
 
-		notifierModule = createModuleMocks(NotifierModule);
-
 		const wrapper = mount(SchoolTerms, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 		});
