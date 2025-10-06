@@ -7,7 +7,7 @@ import {
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
