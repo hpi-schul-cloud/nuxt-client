@@ -1,15 +1,6 @@
 <template>
-	<default-wireframe
-		:headline="headline"
-		:breadcrumbs="breadcrumbs"
-		max-width="nativ"
-	>
-		<v-alert
-			v-if="error"
-			type="error"
-			:icon="mdiAlertCircle"
-			data-testid="error-alert"
-		>
+	<default-wireframe :headline="headline" :breadcrumbs="breadcrumbs" max-width="nativ">
+		<v-alert v-if="error" type="error" :icon="mdiAlertCircle" data-testid="error-alert">
 			<div class="alert-text">
 				{{ $t(error.translationKey) }}
 			</div>
@@ -38,11 +29,7 @@
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
-				<v-expansion-panel
-					v-if="isFeatureSchoolPolicyEnabled"
-					data-testid="policy-panel"
-					value="privacy"
-				>
+				<v-expansion-panel v-if="isFeatureSchoolPolicyEnabled" data-testid="policy-panel" value="privacy">
 					<v-expansion-panel-title>
 						<h2 class="ma-0">
 							{{ $t("common.words.privacyPolicy") }}
@@ -58,11 +45,7 @@
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
-				<v-expansion-panel
-					v-if="isFeatureSchoolTermsOfUseEnabled"
-					data-testid="terms-panel"
-					value="terms"
-				>
+				<v-expansion-panel v-if="isFeatureSchoolTermsOfUseEnabled" data-testid="terms-panel" value="terms">
 					<v-expansion-panel-title>
 						<h2 class="ma-0">
 							{{ $t("common.words.termsOfUse") }}
@@ -78,15 +61,10 @@
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
-				<v-expansion-panel
-					v-if="schoolUsesLdap"
-					data-testid="school-year-change-panel"
-				>
+				<v-expansion-panel v-if="schoolUsesLdap" data-testid="school-year-change-panel">
 					<v-expansion-panel-title>
 						<h2 class="ma-0">
-							{{
-								$t("components.administration.schoolYearChangeSection.headers")
-							}}
+							{{ $t("components.administration.schoolYearChangeSection.headers") }}
 						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
@@ -99,16 +77,10 @@
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
-				<v-expansion-panel
-					v-if="isFeatureOauthMigrationEnabled"
-					data-testid="migration-panel"
-					value="migration"
-				>
+				<v-expansion-panel v-if="isFeatureOauthMigrationEnabled" data-testid="migration-panel" value="migration">
 					<v-expansion-panel-title>
 						<h2 class="ma-0">
-							{{
-								$t("components.administration.adminMigrationSection.headers")
-							}}
+							{{ $t("components.administration.adminMigrationSection.headers") }}
 						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
@@ -134,10 +106,7 @@
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
 						<template v-if="isLoading">
-							<v-skeleton-loader
-								type="table-thead, table-row, table-row"
-								data-testid="systems-panel-skeleton"
-							/>
+							<v-skeleton-loader type="table-thead, table-row, table-row" data-testid="systems-panel-skeleton" />
 						</template>
 						<auth-systems v-else :systems="systems" />
 					</v-expansion-panel-text>
@@ -178,22 +147,14 @@ import { ApplicationError } from "@/store/types/application-error";
 import { School } from "@/store/types/schools";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import { useSharedSchoolYearChange } from "@data-school";
 import { mdiAlertCircle, mdiMinus, mdiPlus } from "@icons/material";
 import { useTitle } from "@vueuse/core";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	ref,
-	Ref,
-	watch,
-} from "vue";
+import { storeToRefs } from "pinia";
+import { computed, ComputedRef, defineComponent, onMounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { useEnvConfig, useEnvStore } from "@data-env";
-import { storeToRefs } from "pinia";
 
 export default defineComponent({
 	name: "SchoolSettings",
@@ -212,13 +173,10 @@ export default defineComponent({
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 		const route = useRoute();
 
-		const headline: Ref<string> = ref(
-			t("pages.administration.school.index.title")
-		);
+		const headline: Ref<string> = ref(t("pages.administration.school.index.title"));
 		const pageTitle = buildPageTitle(headline.value);
 		useTitle(pageTitle);
-		const { fetchSchoolYearStatus, maintenanceStatus } =
-			useSharedSchoolYearChange();
+		const { fetchSchoolYearStatus, maintenanceStatus } = useSharedSchoolYearChange();
 
 		const breadcrumbs: Ref<Breadcrumb[]> = ref([
 			{
@@ -252,21 +210,18 @@ export default defineComponent({
 		const openedPanels: ComputedRef<string[]> = computed(() =>
 			route.query.openPanels ? route.query.openPanels.toString().split(",") : []
 		);
-		const systems: ComputedRef<SchoolSystemResponse[]> = computed(
-			() => schoolsModule.getSystems
+		const systems: ComputedRef<SchoolSystemResponse[]> = computed(() => schoolsModule.getSystems);
+		const isLoading: ComputedRef<boolean> = computed(() => schoolsModule.getLoading);
+		const error: ComputedRef<ApplicationError | null> = computed(() => schoolsModule.getError);
+		const isFeatureOauthMigrationEnabled: ComputedRef<boolean | undefined> = computed(
+			() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED
 		);
-		const isLoading: ComputedRef<boolean> = computed(
-			() => schoolsModule.getLoading
+		const isFeatureSchoolPolicyEnabled: ComputedRef<boolean | undefined> = computed(
+			() => useEnvConfig().value.FEATURE_SCHOOL_POLICY_ENABLED_NEW
 		);
-		const error: ComputedRef<ApplicationError | null> = computed(
-			() => schoolsModule.getError
+		const isFeatureSchoolTermsOfUseEnabled: ComputedRef<boolean | undefined> = computed(
+			() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED
 		);
-		const isFeatureOauthMigrationEnabled: ComputedRef<boolean | undefined> =
-			computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
-		const isFeatureSchoolPolicyEnabled: ComputedRef<boolean | undefined> =
-			computed(() => useEnvConfig().value.FEATURE_SCHOOL_POLICY_ENABLED_NEW);
-		const isFeatureSchoolTermsOfUseEnabled: ComputedRef<boolean | undefined> =
-			computed(() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED);
 
 		const { instituteTitle } = storeToRefs(useEnvStore());
 
@@ -276,9 +231,7 @@ export default defineComponent({
 			}
 		});
 
-		const schoolUsesLdap: ComputedRef<boolean> = computed(
-			() => !!maintenanceStatus.value?.schoolUsesLdap
-		);
+		const schoolUsesLdap: ComputedRef<boolean> = computed(() => !!maintenanceStatus.value?.schoolUsesLdap);
 
 		return {
 			headline,

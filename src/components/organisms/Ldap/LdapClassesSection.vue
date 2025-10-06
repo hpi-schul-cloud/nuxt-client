@@ -23,9 +23,7 @@
 			:validation-model="v$.modelValue.classPath"
 			:validation-messages="classPathValidationMessage"
 			datatest-id="ldapDataClassesclassPath"
-			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, classPath: $event })
-			"
+			@update:model-value="$emit('update:modelValue', { ...modelValue, classPath: $event })"
 		>
 			<template #icon>
 				<v-icon :icon="mdiFileTreeOutline" />
@@ -44,9 +42,7 @@
 			:validation-model="v$.modelValue.nameAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesNameAttribute"
-			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, nameAttribute: $event })
-			"
+			@update:model-value="$emit('update:modelValue', { ...modelValue, nameAttribute: $event })"
 		>
 			<template #icon>
 				<v-icon>$class</v-icon>
@@ -77,15 +73,11 @@
 </template>
 
 <script>
-import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
-import { defineComponent } from "vue";
+import { mdiAccountGroupOutline, mdiCheck, mdiFileTreeOutline } from "@icons/material";
 import useVuelidate from "@vuelidate/core";
-import {
-	mdiAccountGroupOutline,
-	mdiCheck,
-	mdiFileTreeOutline,
-} from "@icons/material";
+import { required } from "@vuelidate/validators";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	props: {
@@ -106,9 +98,7 @@ export default defineComponent({
 	data() {
 		return {
 			checked: false,
-			classesValidationMessage: [
-				{ key: "required", message: this.$t("common.validation.required") },
-			],
+			classesValidationMessage: [{ key: "required", message: this.$t("common.validation.required") }],
 			classPathValidationMessage: [
 				{
 					key: "ldapPathRegexValidator",

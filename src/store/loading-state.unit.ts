@@ -6,10 +6,7 @@ describe("loading-state store", () => {
 		describe("open", () => {
 			it("should set default values for omitted options", () => {
 				const loadingStateModule = new LoadingStateModule({});
-				const setLoadingStateMock = vi.spyOn(
-					loadingStateModule,
-					"setLoadingState"
-				);
+				const setLoadingStateMock = vi.spyOn(loadingStateModule, "setLoadingState");
 				const payload: LoadingStatePayload = { text: "Test Text" };
 
 				loadingStateModule.open(payload);
@@ -25,10 +22,7 @@ describe("loading-state store", () => {
 
 			it("should overwrite default values with given options", () => {
 				const loadingStateModule = new LoadingStateModule({});
-				const setLoadingStateMock = vi.spyOn(
-					loadingStateModule,
-					"setLoadingState"
-				);
+				const setLoadingStateMock = vi.spyOn(loadingStateModule, "setLoadingState");
 
 				const payload: LoadingStatePayload = {
 					text: "Test Text",

@@ -1,3 +1,7 @@
+import GroupModule from "./group";
+import { ClassInfo, ClassRootType } from "./types/class-info";
+import { BusinessError, Pagination } from "./types/commons";
+import { SortOrder } from "./types/sort-order.enum";
 import {
 	ClassInfoResponse,
 	ClassInfoSearchListResponse,
@@ -17,10 +21,6 @@ import { classInfoFactory } from "@@/tests/test-utils/factory/classInfoFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance } from "axios";
-import GroupModule from "./group";
-import { ClassInfo, ClassRootType } from "./types/class-info";
-import { BusinessError, Pagination } from "./types/commons";
-import { SortOrder } from "./types/sort-order.enum";
 
 describe("GroupModule", () => {
 	let module: GroupModule;
@@ -201,17 +201,14 @@ describe("GroupModule", () => {
 					total: 25,
 				};
 
-				const response: ClassInfoSearchListResponse =
-					classInfoSearchListResponseFactory.build({
-						data: classes,
-						total: pagination.total,
-						skip: pagination.skip,
-						limit: pagination.limit,
-					});
+				const response: ClassInfoSearchListResponse = classInfoSearchListResponseFactory.build({
+					data: classes,
+					total: pagination.total,
+					skip: pagination.skip,
+					limit: pagination.limit,
+				});
 
-				apiMock.groupControllerFindClasses.mockResolvedValue(
-					mockApiResponse({ data: response })
-				);
+				apiMock.groupControllerFindClasses.mockResolvedValue(mockApiResponse({ data: response }));
 
 				return {
 					response,

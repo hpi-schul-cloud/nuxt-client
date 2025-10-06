@@ -5,8 +5,6 @@ import { createApplicationError } from "@/utils/create-application-error.factory
  *
  * ApplicationError hides all content and displays a standardized error page.
  */
-export const useApplicationError = () => {
-	return {
-		createApplicationError,
-	};
-};
+export const useApplicationError = () => ({
+	createApplicationError,
+});

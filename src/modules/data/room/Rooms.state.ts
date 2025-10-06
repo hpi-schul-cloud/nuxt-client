@@ -1,8 +1,8 @@
-import { RoomItem } from "@/types/room/Room";
-import { computed, ref } from "vue";
 import { RoomApiFactory } from "@/serverApi/v3";
+import { RoomItem } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { computed, ref } from "vue";
 
 export const useRoomsState = () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -64,9 +64,7 @@ export const useRoomsState = () => {
 		}
 	};
 
-	const isEmpty = computed(() => {
-		return rooms.value.length === 0;
-	});
+	const isEmpty = computed(() => rooms.value.length === 0);
 
 	return {
 		rooms,

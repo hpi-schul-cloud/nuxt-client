@@ -1,4 +1,4 @@
-import { upperCaseFirstChar, toKebabCase } from "@/utils/textFormatting";
+import { toKebabCase, upperCaseFirstChar } from "@/utils/textFormatting";
 
 // can not start with $ or _ because of Vue restrictions
 export const localDataPrefix = "#component";
@@ -16,11 +16,7 @@ export const localDataPrefix = "#component";
  * Note: You must also set the props in the component itself. Mixins can not define props. :(
  */
 export default (props) => {
-	if (
-		!props ||
-		!Array.isArray(props) ||
-		props.some((v) => typeof v !== "string")
-	) {
+	if (!props || !Array.isArray(props) || props.some((v) => typeof v !== "string")) {
 		throw new Error("props must be an array of string");
 	}
 

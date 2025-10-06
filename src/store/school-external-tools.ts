@@ -1,3 +1,6 @@
+import { SchoolExternalTool, SchoolExternalToolSave } from "./external-tool";
+import { SchoolExternalToolMapper } from "./external-tool/mapper";
+import { BusinessError } from "./types/commons";
 import {
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolConfigurationTemplateResponse,
@@ -7,15 +10,9 @@ import {
 	ToolApiInterface,
 } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import {
-	ContextExternalToolConfigurationTemplate,
-	SchoolExternalToolConfigurationTemplate,
-} from "@data-external-tool";
+import { ContextExternalToolConfigurationTemplate, SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { SchoolExternalTool, SchoolExternalToolSave } from "./external-tool";
-import { SchoolExternalToolMapper } from "./external-tool/mapper";
-import { BusinessError } from "./types/commons";
 
 @Module({
 	name: "schoolExternalToolsModule",
@@ -25,12 +22,9 @@ import { BusinessError } from "./types/commons";
 export default class SchoolExternalToolsModule extends VuexModule {
 	private schoolExternalTools: SchoolExternalTool[] = [];
 
-	private schoolExternalToolConfigurationTemplates: SchoolExternalToolConfigurationTemplate[] =
-		[];
+	private schoolExternalToolConfigurationTemplates: SchoolExternalToolConfigurationTemplate[] = [];
 
-	private contextExternalToolConfigurationTemplate:
-		| ContextExternalToolConfigurationTemplate
-		| undefined;
+	private contextExternalToolConfigurationTemplate: ContextExternalToolConfigurationTemplate | undefined;
 
 	private loading = false;
 
@@ -52,9 +46,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		return this.schoolExternalToolConfigurationTemplates;
 	}
 
-	get getContextExternalToolConfigurationTemplate():
-		| ContextExternalToolConfigurationTemplate
-		| undefined {
+	get getContextExternalToolConfigurationTemplate(): ContextExternalToolConfigurationTemplate | undefined {
 		return this.contextExternalToolConfigurationTemplate;
 	}
 
@@ -73,15 +65,11 @@ export default class SchoolExternalToolsModule extends VuexModule {
 
 	@Mutation
 	removeSchoolExternalTool(configId: string): void {
-		this.schoolExternalTools = this.schoolExternalTools.filter(
-			(tool: SchoolExternalTool) => tool.id !== configId
-		);
+		this.schoolExternalTools = this.schoolExternalTools.filter((tool: SchoolExternalTool) => tool.id !== configId);
 	}
 
 	@Mutation
-	setSchoolExternalToolConfigurationTemplates(
-		toolConfigurations: SchoolExternalToolConfigurationTemplate[]
-	): void {
+	setSchoolExternalToolConfigurationTemplates(toolConfigurations: SchoolExternalToolConfigurationTemplate[]): void {
 		this.schoolExternalToolConfigurationTemplates = [...toolConfigurations];
 	}
 
@@ -116,13 +104,10 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		this.setLoading(true);
 
 		try {
-			const resp =
-				await this.toolApi.toolSchoolControllerGetSchoolExternalTools(schoolId);
+			const resp = await this.toolApi.toolSchoolControllerGetSchoolExternalTools(schoolId);
 
 			const schoolExternalTools: SchoolExternalTool[] =
-				SchoolExternalToolMapper.mapSchoolExternalToolSearchListResponse(
-					resp.data
-				);
+				SchoolExternalToolMapper.mapSchoolExternalToolSearchListResponse(resp.data);
 
 			this.setSchoolExternalTools(schoolExternalTools);
 		} catch (error: unknown) {
@@ -139,20 +124,15 @@ export default class SchoolExternalToolsModule extends VuexModule {
 	}
 
 	@Action
-	async loadSchoolExternalTool(
-		schoolExternalToolId: string
-	): Promise<SchoolExternalTool | undefined> {
+	async loadSchoolExternalTool(schoolExternalToolId: string): Promise<SchoolExternalTool | undefined> {
 		this.setLoading(true);
 		this.resetBusinessError();
 
 		try {
 			const response: AxiosResponse<SchoolExternalToolResponse> =
-				await this.toolApi.toolSchoolControllerGetSchoolExternalTool(
-					schoolExternalToolId
-				);
+				await this.toolApi.toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId);
 
-			const mapped: SchoolExternalTool =
-				SchoolExternalToolMapper.mapToSchoolExternalTool(response.data);
+			const mapped: SchoolExternalTool = SchoolExternalToolMapper.mapToSchoolExternalTool(response.data);
 
 			this.setLoading(false);
 
@@ -175,9 +155,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		this.setLoading(true);
 
 		try {
-			await this.toolApi.toolSchoolControllerDeleteSchoolExternalTool(
-				schoolExternalToolId
-			);
+			await this.toolApi.toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId);
 
 			this.removeSchoolExternalTool(schoolExternalToolId);
 		} catch (error: unknown) {
@@ -200,14 +178,10 @@ export default class SchoolExternalToolsModule extends VuexModule {
 
 		try {
 			const availableTools: AxiosResponse<SchoolExternalToolConfigurationTemplateListResponse> =
-				await this.toolApi.toolConfigurationControllerGetAvailableToolsForSchool(
-					schoolId
-				);
+				await this.toolApi.toolConfigurationControllerGetAvailableToolsForSchool(schoolId);
 
 			const mapped: SchoolExternalToolConfigurationTemplate[] =
-				SchoolExternalToolMapper.mapToSchoolExternalToolConfigurationTemplateList(
-					availableTools.data
-				);
+				SchoolExternalToolMapper.mapToSchoolExternalToolConfigurationTemplateList(availableTools.data);
 
 			this.setSchoolExternalToolConfigurationTemplates(mapped);
 		} catch (error: unknown) {
@@ -224,22 +198,16 @@ export default class SchoolExternalToolsModule extends VuexModule {
 	}
 
 	@Action
-	async loadConfigurationTemplateForSchoolExternalTool(
-		schoolExternalToolId: string
-	): Promise<void> {
+	async loadConfigurationTemplateForSchoolExternalTool(schoolExternalToolId: string): Promise<void> {
 		this.setLoading(true);
 		this.resetBusinessError();
 
 		try {
 			const configTemplate: AxiosResponse<SchoolExternalToolConfigurationTemplateResponse> =
-				await this.toolApi.toolConfigurationControllerGetConfigurationTemplateForSchool(
-					schoolExternalToolId
-				);
+				await this.toolApi.toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId);
 
 			const mapped: SchoolExternalToolConfigurationTemplate =
-				SchoolExternalToolMapper.mapToSchoolExternalToolConfigurationTemplate(
-					configTemplate.data
-				);
+				SchoolExternalToolMapper.mapToSchoolExternalToolConfigurationTemplate(configTemplate.data);
 
 			this.setSchoolExternalToolConfigurationTemplates([mapped]);
 		} catch (error: unknown) {
@@ -256,21 +224,15 @@ export default class SchoolExternalToolsModule extends VuexModule {
 	}
 
 	@Action
-	async createSchoolExternalTool(
-		schoolExternalTool: SchoolExternalToolSave
-	): Promise<void> {
+	async createSchoolExternalTool(schoolExternalTool: SchoolExternalToolSave): Promise<void> {
 		this.setLoading(true);
 		this.resetBusinessError();
 
 		try {
 			const schoolExternalToolPostParams: SchoolExternalToolPostParams =
-				SchoolExternalToolMapper.mapToSchoolExternalToolPostParams(
-					schoolExternalTool
-				);
+				SchoolExternalToolMapper.mapToSchoolExternalToolPostParams(schoolExternalTool);
 
-			await this.toolApi.toolSchoolControllerCreateSchoolExternalTool(
-				schoolExternalToolPostParams
-			);
+			await this.toolApi.toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
@@ -294,9 +256,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 
 		try {
 			const schoolExternalToolPostParams: SchoolExternalToolPostParams =
-				SchoolExternalToolMapper.mapToSchoolExternalToolPostParams(
-					params.schoolExternalTool
-				);
+				SchoolExternalToolMapper.mapToSchoolExternalToolPostParams(params.schoolExternalTool);
 
 			await this.toolApi.toolSchoolControllerUpdateSchoolExternalTool(
 				params.schoolExternalToolId,

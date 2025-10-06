@@ -1,8 +1,8 @@
+import { System } from "./types";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { PublicSystemResponse, SystemsApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
-import { System } from "./types";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
 export const useSystemApi = () => {
 	const { handleError } = useErrorHandler();
@@ -10,8 +10,7 @@ export const useSystemApi = () => {
 
 	const getSystem = async (systemId: string): Promise<System | undefined> => {
 		try {
-			const response: AxiosResponse<PublicSystemResponse> =
-				await systemApi.systemControllerGetSystem(systemId);
+			const response: AxiosResponse<PublicSystemResponse> = await systemApi.systemControllerGetSystem(systemId);
 
 			const system: System = {
 				id: response.data.id,

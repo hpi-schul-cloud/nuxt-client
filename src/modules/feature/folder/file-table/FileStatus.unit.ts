@@ -1,11 +1,8 @@
+import FileStatus from "./FileStatus.vue";
 import { FileRecordScanStatus, PreviewStatus } from "@/fileStorageApi/v3";
 import { FilePreviewStatus, FileRecord } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import FileStatus from "./FileStatus.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("FileStatus", () => {
 	const setupWrapper = (fileRecord: FileRecord) => {
@@ -38,28 +35,19 @@ describe("FileStatus", () => {
 
 			const { wrapper } = setupWrapper(fileRecord);
 
-			expect(
-				wrapper
-					.findComponent('[data-testid="file-status-scan-pending"]')
-					.exists()
-			).toBe(true);
+			expect(wrapper.findComponent('[data-testid="file-status-scan-pending"]').exists()).toBe(true);
 		});
 	});
 
 	describe("when status wont check", () => {
 		it("sould shows v-icon", () => {
 			const fileRecord = fileRecordFactory.build({
-				previewStatus:
-					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK,
+				previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK,
 			});
 
 			const { wrapper } = setupWrapper(fileRecord);
 
-			expect(
-				wrapper
-					.findComponent('[data-testid="file-status-scan-wont-check"]')
-					.exists()
-			).toBe(true);
+			expect(wrapper.findComponent('[data-testid="file-status-scan-wont-check"]').exists()).toBe(true);
 		});
 	});
 
@@ -71,9 +59,7 @@ describe("FileStatus", () => {
 
 			const { wrapper } = setupWrapper(fileRecord);
 
-			expect(
-				wrapper.findComponent('[data-testid="file-status-scan-error"]').exists()
-			).toBe(true);
+			expect(wrapper.findComponent('[data-testid="file-status-scan-error"]').exists()).toBe(true);
 		});
 	});
 
@@ -85,11 +71,7 @@ describe("FileStatus", () => {
 
 			const { wrapper } = setupWrapper(fileRecord);
 
-			expect(
-				wrapper
-					.findComponent('[data-testid="file-status-scan-virus-detected"]')
-					.exists()
-			).toBe(true);
+			expect(wrapper.findComponent('[data-testid="file-status-scan-virus-detected"]').exists()).toBe(true);
 		});
 	});
 });

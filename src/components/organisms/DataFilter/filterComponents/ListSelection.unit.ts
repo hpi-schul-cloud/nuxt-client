@@ -1,9 +1,6 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import ListSelection from "./ListSelection.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 
 const mockProps = {
 	selectionList: [
@@ -14,16 +11,13 @@ const mockProps = {
 	selectedList: ["1A", "1C"],
 };
 
-const mountComponent = (
-	options: ComponentMountingOptions<typeof ListSelection> = {}
-) => {
-	return mount(ListSelection, {
+const mountComponent = (options: ComponentMountingOptions<typeof ListSelection> = {}) =>
+	mount(ListSelection, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
 		...options,
 	});
-};
 
 describe("@components/DataFilter/filterComponents/ListSelection.vue", () => {
 	describe("should render the component", () => {
@@ -35,19 +29,11 @@ describe("@components/DataFilter/filterComponents/ListSelection.vue", () => {
 				},
 			});
 
-			const checkboxComponents = wrapper.findAllComponents(
-				'[data-testid="list-selection"]'
-			);
+			const checkboxComponents = wrapper.findAllComponents('[data-testid="list-selection"]');
 
-			expect(checkboxComponents[0].text()).toBe(
-				mockProps.selectionList[0].label
-			);
-			expect(checkboxComponents[1].text()).toBe(
-				mockProps.selectionList[1].label
-			);
-			expect(checkboxComponents[2].text()).toBe(
-				mockProps.selectionList[2].label
-			);
+			expect(checkboxComponents[0].text()).toBe(mockProps.selectionList[0].label);
+			expect(checkboxComponents[1].text()).toBe(mockProps.selectionList[1].label);
+			expect(checkboxComponents[2].text()).toBe(mockProps.selectionList[2].label);
 
 			expect(wrapper.vm.selectedList).toStrictEqual(mockProps.selectedList);
 		});
@@ -68,16 +54,11 @@ describe("@components/DataFilter/filterComponents/ListSelection.vue", () => {
 					name: "FilterActionButtons",
 				});
 
-				await checkboxComponent.vm.$emit(
-					"update:modelValue",
-					mockProps.selectedList
-				);
+				await checkboxComponent.vm.$emit("update:modelValue", mockProps.selectedList);
 				await actionButtonComponent.vm.$emit("update:filter");
 
 				expect(wrapper.emitted()).toHaveProperty("update:filter");
-				expect(wrapper.emitted()["update:filter"][0]).toStrictEqual([
-					["1A", "1C"],
-				]);
+				expect(wrapper.emitted()["update:filter"][0]).toStrictEqual([["1A", "1C"]]);
 				expect(wrapper.emitted()).toHaveProperty("dialog-closed");
 			});
 

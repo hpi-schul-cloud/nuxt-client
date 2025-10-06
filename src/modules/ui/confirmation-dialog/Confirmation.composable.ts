@@ -9,9 +9,7 @@ interface ConfirmationOptions {
 export const useConfirmationDialog = () => {
 	const { askInternal, isDialogOpen } = useInternalConfirmationDialog();
 
-	const askConfirmation = async (
-		data: ConfirmationOptions
-	): Promise<boolean> => {
+	const askConfirmation = async (data: ConfirmationOptions): Promise<boolean> => {
 		const promise = new Promise<boolean>((resolve) => {
 			askInternal(data, resolve);
 		});
@@ -46,10 +44,7 @@ export const useInternalConfirmationDialog = createSharedComposable(() => {
 		isDialogOpen.value = false;
 	};
 
-	const askInternal = (
-		options: ConfirmationOptions,
-		resolve: (value: boolean) => void
-	) => {
+	const askInternal = (options: ConfirmationOptions, resolve: (value: boolean) => void) => {
 		dialogOptions.value = options;
 		isDialogOpen.value = true;
 		returnResult = resolve;

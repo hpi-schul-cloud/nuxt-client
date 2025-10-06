@@ -21,12 +21,7 @@
 					{{ route.title }}
 				</v-btn>
 				<div v-if="hasButtons" class="buttons-container">
-					<v-btn
-						color="primary"
-						variant="outlined"
-						to="/loginRedirect"
-						class="mx-2"
-					>
+					<v-btn color="primary" variant="outlined" to="/loginRedirect" class="mx-2">
 						<v-icon size="20" class="mr-1">{{ mdiLogin }}</v-icon>
 						{{ $t("common.labels.login") }}
 					</v-btn>
@@ -41,9 +36,9 @@
 
 <script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
+import { useEnvConfig } from "@data-env";
 import { mdiLogin } from "@icons/material";
 import { computed, ref } from "vue";
-import { useEnvConfig } from "@data-env";
 
 type Props = {
 	logoLink?: string;
@@ -63,15 +58,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 const activeLink = ref(window.location.pathname);
 
-const isDefaultTheme = computed(
-	() => useEnvConfig().value.SC_THEME === SchulcloudTheme.Default
-);
+const isDefaultTheme = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.Default);
 
 const hasButtons = computed(() => isDefaultTheme.value);
 
-const linksToDisplay = computed(() =>
-	isDefaultTheme.value ? props.links : []
-);
+const linksToDisplay = computed(() => (isDefaultTheme.value ? props.links : []));
 
 const setActive = (idx: number) => {
 	activeLink.value = props.links[idx].href;

@@ -1,18 +1,3 @@
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { BoardLayout, ContentElementType } from "@/serverApi/v3";
-import {
-	cardResponseFactory,
-	mockedPiniaStoreTyping,
-	richTextElementContentFactory,
-} from "@@/tests/test-utils";
-import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
-import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
-import { setActivePinia } from "pinia";
-import { computed } from "vue";
-import { useI18n } from "vue-i18n";
 import {
 	CreateElementFailurePayload,
 	CreateElementSuccessPayload,
@@ -27,8 +12,19 @@ import {
 } from "./cardActionPayload.types";
 import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
-import { Router, useRouter } from "vue-router";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { BoardLayout, ContentElementType } from "@/serverApi/v3";
+import { cardResponseFactory, mockedPiniaStoreTyping, richTextElementContentFactory } from "@@/tests/test-utils";
+import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
+import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { useSharedLastCreatedElement } from "@util-board";
+import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+import { Router, useRouter } from "vue-router";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
@@ -39,18 +35,15 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 vi.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-vi.mock("@util-board/BoardNotifier.composable");
 vi.mock("@util-board/LastCreatedElement.composable");
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 describe("useCardSocketApi", () => {
 	let socketMock: DeepMocked<ReturnType<typeof useSocketConnection>>;
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({}));
@@ -61,9 +54,6 @@ describe("useCardSocketApi", () => {
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 		vi.useFakeTimers();
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
@@ -346,10 +336,7 @@ describe("useCardSocketApi", () => {
 
 			createElementRequest(payload);
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"create-element-request",
-				payload
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("create-element-request", payload);
 		});
 	});
 
@@ -364,10 +351,7 @@ describe("useCardSocketApi", () => {
 
 			deleteElementRequest(payload);
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"delete-element-request",
-				payload
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("delete-element-request", payload);
 		});
 	});
 
@@ -383,10 +367,7 @@ describe("useCardSocketApi", () => {
 
 			moveElementRequest(payload);
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"move-element-request",
-				payload
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("move-element-request", payload);
 		});
 	});
 
@@ -398,16 +379,13 @@ describe("useCardSocketApi", () => {
 
 			updateElementRequest({ element });
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"update-element-request",
-				{
-					elementId: element.id,
-					data: {
-						type: element.type,
-						content: element.content,
-					},
-				}
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("update-element-request", {
+				elementId: element.id,
+				data: {
+					type: element.type,
+					content: element.content,
+				},
+			});
 		});
 	});
 
@@ -419,10 +397,7 @@ describe("useCardSocketApi", () => {
 
 			deleteCardRequest(payload);
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"delete-card-request",
-				payload
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("delete-card-request", payload);
 		});
 	});
 
@@ -437,10 +412,7 @@ describe("useCardSocketApi", () => {
 
 			updateCardTitleRequest(payload);
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"update-card-title-request",
-				payload
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("update-card-title-request", payload);
 		});
 	});
 
@@ -455,10 +427,7 @@ describe("useCardSocketApi", () => {
 
 			updateCardHeightRequest(payload);
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"update-card-height-request",
-				payload
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("update-card-height-request", payload);
 		});
 	});
 	describe("fetchCardRequest", () => {
@@ -471,10 +440,7 @@ describe("useCardSocketApi", () => {
 			fetchCardRequest(payload);
 
 			vi.advanceTimersByTime(1000);
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
-				"fetch-card-request",
-				payload
-			);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-card-request", payload);
 		});
 	});
 });

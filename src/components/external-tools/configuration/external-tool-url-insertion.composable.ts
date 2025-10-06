@@ -47,19 +47,14 @@ export function useExternalToolUrlInsertion() {
 		return undefined;
 	};
 
-	const extractPathParameters = (
-		inputtedUrl: string,
-		templateBaseUrl: string
-	): Map<string, string> => {
+	const extractPathParameters = (inputtedUrl: string, templateBaseUrl: string): Map<string, string> => {
 		const paramsNameValueMap: Map<string, string> = new Map<string, string>();
 		if (!isValidUrl(inputtedUrl)) {
 			return paramsNameValueMap;
 		}
 
 		const urlParts = templateBaseUrl.split("/");
-		const templateParamNames = urlParts
-			.filter((part) => part.startsWith(":"))
-			.map((part) => part.substring(1));
+		const templateParamNames = urlParts.filter((part) => part.startsWith(":")).map((part) => part.substring(1));
 
 		const baseUrlRegex = createBaseUrlRegex(templateBaseUrl);
 		const inputUrlWithoutQuery = getUrlWithoutQueryParams(inputtedUrl);

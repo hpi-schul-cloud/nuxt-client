@@ -1,3 +1,6 @@
+import { useApplicationError } from "../composables/application-error.composable";
+import { ApplicationError } from "./types/application-error";
+import { School } from "./types/schools";
 import {
 	FederalStateResponse,
 	SchoolApiFactory,
@@ -15,13 +18,10 @@ import {
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
+import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { useApplicationError } from "../composables/application-error.composable";
-import { ApplicationError } from "./types/application-error";
-import { School } from "./types/schools";
-import { useEnvConfig } from "@data-env";
-import { useAppStore } from "@data-app";
 
 @Module({
 	name: "schoolsModule",
@@ -183,9 +183,7 @@ export default class SchoolsModule extends VuexModule {
 		const schoolId = useAppStore().school?.id;
 		if (schoolId) {
 			try {
-				const school = (
-					await this.schoolApi.schoolControllerGetSchoolById(schoolId)
-				).data;
+				const school = (await this.schoolApi.schoolControllerGetSchoolById(schoolId)).data;
 
 				this.setSchool(school);
 
@@ -209,9 +207,7 @@ export default class SchoolsModule extends VuexModule {
 	async fetchSystems(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const { data } = await this.schoolApi.schoolControllerGetSchoolSystems(
-				this.school.id
-			);
+			const { data } = await this.schoolApi.schoolControllerGetSchoolSystems(this.school.id);
 
 			this.setSystems(data);
 			this.setLoading(false);
@@ -230,17 +226,11 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Action
-	async update(payload: {
-		id: string;
-		props: SchoolUpdateBodyParams;
-	}): Promise<void> {
+	async update(payload: { id: string; props: SchoolUpdateBodyParams }): Promise<void> {
 		const { id, props } = payload;
 		this.setLoading(true);
 		try {
-			const { data } = await this.schoolApi.schoolControllerUpdateSchool(
-				id,
-				props
-			);
+			const { data } = await this.schoolApi.schoolControllerUpdateSchool(id, props);
 
 			this.setSchool(data);
 			this.setLoading(false);
@@ -313,9 +303,7 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		this.setError(null);
 		try {
-			await this.importUserApi.importUserControllerStartSchoolInUserMigration(
-				useCentralLdap
-			);
+			await this.importUserApi.importUserControllerStartSchoolInUserMigration(useCentralLdap);
 			this.setSchool({
 				...this.school,
 				inUserMigration: true,

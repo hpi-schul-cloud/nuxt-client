@@ -1,21 +1,13 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount, VueWrapper } from "@vue/test-utils";
 import RoomBoardCard from "./RoomBoardCard.vue";
-
-import {
-	BoardLayout,
-	ConfigResponse,
-	ImportUserResponseRoleNamesEnum,
-} from "@/serverApi/v3";
+import { BoardLayout, ConfigResponse, ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { createPinia, setActivePinia } from "pinia";
+import { beforeAll, Mock } from "vitest";
 import { Router, useRouter } from "vue-router";
 import { VListItem, VMenu } from "vuetify/lib/components/index";
-import { beforeAll, Mock } from "vitest";
-import { createTestEnvStore } from "@@/tests/test-utils";
-import { createPinia, setActivePinia } from "pinia";
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
@@ -75,10 +67,7 @@ const mockCourseData = {
 };
 
 describe("RoomBoardCard", () => {
-	const setup = (
-		props: { boardData: BoardData; userRole: ImportUserResponseRoleNamesEnum },
-		options?: object
-	) => {
+	const setup = (props: { boardData: BoardData; userRole: ImportUserResponseRoleNamesEnum }, options?: object) => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 		// Note: router has to be mocked before mounting the component
@@ -123,8 +112,7 @@ describe("RoomBoardCard", () => {
 			it("should have correct board title", () => {
 				const { wrapper } = setup({ boardData: mockDraftBoardData, userRole });
 				const expectedBoardTitle = mockDraftBoardData.title;
-				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element
-					.textContent;
+				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element.textContent;
 
 				expect(boardTitle).toContain(expectedBoardTitle);
 			});
@@ -137,8 +125,7 @@ describe("RoomBoardCard", () => {
 					userRole,
 				});
 				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
-				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element
-					.textContent;
+				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element.textContent;
 
 				expect(boardTitle).toContain(expectedBoardTitle);
 			});
@@ -151,8 +138,7 @@ describe("RoomBoardCard", () => {
 					userRole,
 				});
 				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
-				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element
-					.textContent;
+				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element.textContent;
 
 				expect(boardTitle).toContain(expectedBoardTitle);
 			});
@@ -188,9 +174,7 @@ describe("RoomBoardCard", () => {
 					const menu = wrapper.findComponent(VMenu);
 					const menuItems = menu.findAllComponents(VListItem);
 
-					const menuItem = menuItems.find(
-						(item) => item.attributes("data-testid") === dataTestid
-					);
+					const menuItem = menuItems.find((item) => item.attributes("data-testid") === dataTestid);
 
 					return menuItem;
 				};
@@ -198,20 +182,14 @@ describe("RoomBoardCard", () => {
 				it("should include the 'edit' item", async () => {
 					const { wrapper } = setupTeacherMenu();
 
-					const menuItem = await getMenuItem(
-						wrapper,
-						"board-card-menu-action-edit-0"
-					);
+					const menuItem = await getMenuItem(wrapper, "board-card-menu-action-edit-0");
 					expect(menuItem?.exists()).toBe(true);
 				});
 
 				it("should include the 'copy' item", async () => {
 					const { wrapper } = setupTeacherMenu();
 
-					const menuItem = await getMenuItem(
-						wrapper,
-						"board-card-menu-action-copy-0"
-					);
+					const menuItem = await getMenuItem(wrapper, "board-card-menu-action-copy-0");
 					expect(menuItem?.exists()).toBe(true);
 				});
 
@@ -221,10 +199,7 @@ describe("RoomBoardCard", () => {
 							FEATURE_COLUMN_BOARD_SHARE: true,
 						});
 
-						const menuItem = await getMenuItem(
-							wrapper,
-							"board-card-menu-action-share-0"
-						);
+						const menuItem = await getMenuItem(wrapper, "board-card-menu-action-share-0");
 						expect(menuItem?.exists()).toBe(true);
 					});
 				});
@@ -235,10 +210,7 @@ describe("RoomBoardCard", () => {
 							FEATURE_COLUMN_BOARD_SHARE: false,
 						});
 
-						const menuItem = await getMenuItem(
-							wrapper,
-							"board-card-menu-action-share-0"
-						);
+						const menuItem = await getMenuItem(wrapper, "board-card-menu-action-share-0");
 						expect(menuItem).toBeUndefined();
 					});
 				});
@@ -246,10 +218,7 @@ describe("RoomBoardCard", () => {
 				it("should include the 'remove' item", async () => {
 					const { wrapper } = setupTeacherMenu();
 
-					const menuItem = await getMenuItem(
-						wrapper,
-						"board-card-menu-action-remove-0"
-					);
+					const menuItem = await getMenuItem(wrapper, "board-card-menu-action-remove-0");
 					expect(menuItem?.exists()).toBe(true);
 				});
 
@@ -257,10 +226,7 @@ describe("RoomBoardCard", () => {
 					it("should emit 'copy-board' event", async () => {
 						const { wrapper } = setupTeacherMenu();
 
-						const menuItem = await getMenuItem(
-							wrapper,
-							"board-card-menu-action-copy-0"
-						);
+						const menuItem = await getMenuItem(wrapper, "board-card-menu-action-copy-0");
 
 						await menuItem?.trigger("click");
 
@@ -274,10 +240,7 @@ describe("RoomBoardCard", () => {
 							FEATURE_COLUMN_BOARD_SHARE: true,
 						});
 
-						const menuItem = await getMenuItem(
-							wrapper,
-							"board-card-menu-action-share-0"
-						);
+						const menuItem = await getMenuItem(wrapper, "board-card-menu-action-share-0");
 
 						await menuItem?.trigger("click");
 
@@ -293,13 +256,9 @@ describe("RoomBoardCard", () => {
 							boardData: mockDraftBoardData,
 							userRole,
 						});
-						const boardCardTitle = wrapper.find(
-							`[data-testid="board-card-title-0"]`
-						).element.textContent;
+						const boardCardTitle = wrapper.find(`[data-testid="board-card-title-0"]`).element.textContent;
 
-						expect(boardCardTitle).toContain(
-							"pages.room.boardCard.label.columnBoard - common.words.draft"
-						);
+						expect(boardCardTitle).toContain("pages.room.boardCard.label.columnBoard - common.words.draft");
 					});
 				});
 
@@ -309,13 +268,9 @@ describe("RoomBoardCard", () => {
 							boardData: mockDraftListBoardData,
 							userRole,
 						});
-						const boardCardTitle = wrapper.find(
-							`[data-testid="board-card-title-0"]`
-						).element.textContent;
+						const boardCardTitle = wrapper.find(`[data-testid="board-card-title-0"]`).element.textContent;
 
-						expect(boardCardTitle).toContain(
-							"pages.room.boardCard.label.listBoard - common.words.draft"
-						);
+						expect(boardCardTitle).toContain("pages.room.boardCard.label.listBoard - common.words.draft");
 					});
 				});
 
@@ -332,9 +287,7 @@ describe("RoomBoardCard", () => {
 						userRole,
 					});
 					const boardPublishedCard = wrapperPublished.find(".board-card");
-					expect(boardPublishedCard.element.className).not.toContain(
-						"board-hidden"
-					);
+					expect(boardPublishedCard.element.className).not.toContain("board-hidden");
 				});
 
 				it("should show publish action button in menu", () => {
@@ -343,9 +296,7 @@ describe("RoomBoardCard", () => {
 						userRole,
 					});
 
-					const cardActionButtons = wrapperDraft.findAllComponents(
-						`[data-testid="board-card-action-publish-0"]`
-					);
+					const cardActionButtons = wrapperDraft.findAllComponents(`[data-testid="board-card-action-publish-0"]`);
 					expect(cardActionButtons).toHaveLength(1);
 				});
 
@@ -355,8 +306,7 @@ describe("RoomBoardCard", () => {
 						userRole,
 					});
 					const boardPublishedCard = wrapperDraft.find(".board-card");
-					const actionButtonsPublished =
-						boardPublishedCard.findAll(".action-button");
+					const actionButtonsPublished = boardPublishedCard.findAll(".action-button");
 
 					expect(actionButtonsPublished).toHaveLength(1);
 				});
@@ -369,13 +319,9 @@ describe("RoomBoardCard", () => {
 							boardData: mockPublishedBoardData,
 							userRole,
 						});
-						const boardCardTitle = wrapper.find(
-							`[data-testid="board-card-title-0"]`
-						).element.textContent;
+						const boardCardTitle = wrapper.find(`[data-testid="board-card-title-0"]`).element.textContent;
 
-						expect(boardCardTitle).toContain(
-							"pages.room.boardCard.label.columnBoard"
-						);
+						expect(boardCardTitle).toContain("pages.room.boardCard.label.columnBoard");
 					});
 				});
 
@@ -385,13 +331,9 @@ describe("RoomBoardCard", () => {
 							boardData: mockPublishedListBoardData,
 							userRole,
 						});
-						const boardCardTitle = wrapper.find(
-							`[data-testid="board-card-title-0"]`
-						).element.textContent;
+						const boardCardTitle = wrapper.find(`[data-testid="board-card-title-0"]`).element.textContent;
 
-						expect(boardCardTitle).toContain(
-							"pages.room.boardCard.label.listBoard"
-						);
+						expect(boardCardTitle).toContain("pages.room.boardCard.label.listBoard");
 					});
 				});
 
@@ -401,8 +343,7 @@ describe("RoomBoardCard", () => {
 						userRole,
 					});
 
-					const threeDotMenuPublished =
-						wrapperPublished.find(".three-dot-button");
+					const threeDotMenuPublished = wrapperPublished.find(".three-dot-button");
 					await threeDotMenuPublished.trigger("click");
 
 					const moreActionButtons = wrapperPublished.findAllComponents(
@@ -417,8 +358,7 @@ describe("RoomBoardCard", () => {
 						userRole,
 					});
 					const boardPublishedCard = wrapperPublished.find(".board-card");
-					const actionButtonsPublished =
-						boardPublishedCard.findAll(".action-button");
+					const actionButtonsPublished = boardPublishedCard.findAll(".action-button");
 					expect(actionButtonsPublished).toHaveLength(0);
 				});
 			});
@@ -432,16 +372,14 @@ describe("RoomBoardCard", () => {
 					boardData: mockPublishedBoardData,
 					userRole,
 				});
-				const threeDotMenuPublishedStudent =
-					wrapperPublishedStudent.find(".three-dot-button");
+				const threeDotMenuPublishedStudent = wrapperPublishedStudent.find(".three-dot-button");
 				expect(threeDotMenuPublishedStudent.exists()).toBe(false);
 
 				const { wrapper: wrapperDraftStudent } = setup({
 					boardData: mockDraftBoardData,
 					userRole,
 				});
-				const threeDotMenuDraftStudent =
-					wrapperDraftStudent.find(".three-dot-button");
+				const threeDotMenuDraftStudent = wrapperDraftStudent.find(".three-dot-button");
 				expect(threeDotMenuDraftStudent.exists()).toBe(false);
 			});
 
@@ -451,18 +389,15 @@ describe("RoomBoardCard", () => {
 					userRole,
 				});
 				const boardDraftCardStudent = wrapperDraftStudent.find(".board-card");
-				const actionButtonsDraftStudent =
-					boardDraftCardStudent.findAll(".action-button");
+				const actionButtonsDraftStudent = boardDraftCardStudent.findAll(".action-button");
 				expect(actionButtonsDraftStudent).toHaveLength(0);
 
 				const { wrapper: wrapperPublishedStudent } = setup({
 					boardData: mockPublishedBoardData,
 					userRole,
 				});
-				const boardPublishedCardStudent =
-					wrapperPublishedStudent.find(".board-card");
-				const actionButtonsPublishedStudent =
-					boardPublishedCardStudent.findAll(".action-button");
+				const boardPublishedCardStudent = wrapperPublishedStudent.find(".board-card");
+				const actionButtonsPublishedStudent = boardPublishedCardStudent.findAll(".action-button");
 				expect(actionButtonsPublishedStudent).toHaveLength(0);
 			});
 		});
@@ -558,14 +493,9 @@ describe("RoomBoardCard", () => {
 		);
 
 		it("should emit 'update-visibility' when card action button is pressed on draft board", async () => {
-			const { wrapper } = setup(
-				{ boardData: mockDraftBoardData, userRole },
-				{ userRole: "teacher" }
-			);
+			const { wrapper } = setup({ boardData: mockDraftBoardData, userRole }, { userRole: "teacher" });
 			const boardCard = wrapper.find(".board-card");
-			const cardActionButton = boardCard.findComponent(
-				`[data-testid="board-card-action-publish-0"]`
-			);
+			const cardActionButton = boardCard.findComponent(`[data-testid="board-card-action-publish-0"]`);
 
 			await cardActionButton.trigger("click");
 			const emitted = wrapper.emitted("update-visibility");
@@ -573,16 +503,11 @@ describe("RoomBoardCard", () => {
 		});
 
 		it("should emit 'update-visibility' when three dot menu button and action button is pressed on published board", async () => {
-			const { wrapper } = setup(
-				{ boardData: mockPublishedBoardData, userRole },
-				{ userRole: "teacher" }
-			);
+			const { wrapper } = setup({ boardData: mockPublishedBoardData, userRole }, { userRole: "teacher" });
 
 			const threeDotMenuPublished = wrapper.find(".three-dot-button");
 			await threeDotMenuPublished.trigger("click");
-			const moreActionButton = wrapper.findComponent(
-				`[data-testid="board-card-menu-action-unpublish-0"]`
-			);
+			const moreActionButton = wrapper.findComponent(`[data-testid="board-card-menu-action-unpublish-0"]`);
 
 			await moreActionButton.trigger("click");
 			const emitted = wrapper.emitted("update-visibility");

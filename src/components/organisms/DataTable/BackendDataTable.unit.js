@@ -1,11 +1,8 @@
+import BackendDataTable from "./BackendDataTable";
+import { tableColumns, tableData } from "./DataTable.data-factory.js";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
-import BackendDataTable from "./BackendDataTable";
-import { tableData, tableColumns } from "./DataTable.data-factory.js";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
 	mdiCheckboxBlankOutline,
 	mdiCheckboxIntermediate,
@@ -25,8 +22,7 @@ function getWrapper(props, options) {
 				"base-link": BaseLink,
 			},
 			mocks: {
-				$t: (key, dynamic) =>
-					key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+				$t: (key, dynamic) => key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 			},
 		},
 		props: {
@@ -39,11 +35,8 @@ function getWrapper(props, options) {
 	});
 }
 
-const getTableRowsContent = async (wrapper) => {
-	return wrapper.findAll("tbody tr").map((rowWrapper) => {
-		return rowWrapper.findAll("td").map((cell) => cell.text());
-	});
-};
+const getTableRowsContent = async (wrapper) =>
+	wrapper.findAll("tbody tr").map((rowWrapper) => rowWrapper.findAll("td").map((cell) => cell.text()));
 
 describe("@/components/organisms/DataTable/BackendDataTable", () => {
 	beforeEach(() => {
@@ -55,20 +48,14 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			const wrapper = getWrapper();
 
 			expect(wrapper.findAll("tbody tr")).toHaveLength(defaultData.length);
-			expect(wrapper.find("thead tr").findAll("th")).toHaveLength(
-				tableColumns.length
-			);
+			expect(wrapper.find("thead tr").findAll("th")).toHaveLength(tableColumns.length);
 			expect(wrapper.find("tbody tr").find("td").exists()).toBe(true);
 
 			expect(wrapper.find("thead tr th").text()).toContain("Vorname");
 
-			expect(wrapper.find("tbody tr td").text()).toContain(
-				defaultData[0].firstName
-			);
+			expect(wrapper.find("tbody tr td").text()).toContain(defaultData[0].firstName);
 
-			expect(wrapper.find("tbody tr").findAll("td").at(2).text()).toContain(
-				defaultData[0].address.city
-			);
+			expect(wrapper.find("tbody tr").findAll("td").at(2).text()).toContain(defaultData[0].address.city);
 		});
 	});
 
@@ -116,9 +103,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 
 	describe("sort", () => {
 		const getSortButton = (wrapper, text = "Vorname") =>
-			wrapper
-				.findAll(".v-btn.is-sortable")
-				.find((w) => w.text().startsWith(text));
+			wrapper.findAll(".v-btn.is-sortable").find((w) => w.text().startsWith(text));
 
 		const setup = () => {
 			const wrapper = getWrapper({
@@ -184,12 +169,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 					["firstName", "asc"],
 					["address.city", "asc"],
 				],
-				"update:sort-by": [
-					["firstName"],
-					["firstName"],
-					["firstName"],
-					["address.city"],
-				],
+				"update:sort-by": [["firstName"], ["firstName"], ["firstName"], ["address.city"]],
 				"update:sort-order": [["asc"], ["desc"], ["asc"], ["asc"]],
 			});
 		});
@@ -205,12 +185,8 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 		const getVisibleSelections = (wrapper) => {
 			const rowWrappers = wrapper.findAll("tbody tr");
 			return rowWrappers
-				.filter((rowWrapper) => {
-					return rowWrapper.find("input[type=checkbox]").element.checked;
-				})
-				.map((rowWrapper) => {
-					return rowWrapper.findAll("td").map((cell) => cell.text());
-				});
+				.filter((rowWrapper) => rowWrapper.find("input[type=checkbox]").element.checked)
+				.map((rowWrapper) => rowWrapper.findAll("td").map((cell) => cell.text()));
 		};
 
 		const hasVisibleSelections = (wrapper, data, expectedSelectionIds) => {
@@ -218,12 +194,8 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			return (
 				visibleSelections.length === expectedSelectionIds.length &&
 				expectedSelectionIds.every((expectedId) => {
-					const selectionFirstName = data.find(
-						(row) => row._id === expectedId
-					).firstName;
-					return visibleSelections.find(
-						(selectionRow) => selectionRow[1] === selectionFirstName
-					);
+					const selectionFirstName = data.find((row) => row._id === expectedId).firstName;
+					return visibleSelections.find((selectionRow) => selectionRow[1] === selectionFirstName);
 				})
 			);
 		};
@@ -241,12 +213,8 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			const dataRow = wrapper.findComponent('[data-testid="table-data-row"]');
 			await dataRow.vm.$emit("update:selected", true);
 
-			expect(wrapper.emitted("update:selection")).toStrictEqual([
-				[[testData[0]._id], "inclusive"],
-			]);
-			expect(wrapper.emitted("update:selectedRowIds")).toStrictEqual([
-				[[testData[0]._id]],
-			]);
+			expect(wrapper.emitted("update:selection")).toStrictEqual([[[testData[0]._id], "inclusive"]]);
+			expect(wrapper.emitted("update:selectedRowIds")).toStrictEqual([[[testData[0]._id]]]);
 		});
 
 		it("can unselect a value", async () => {
@@ -269,10 +237,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				[["0"], "inclusive"],
 				[[], "inclusive"],
 			]);
-			expect(wrapper.emitted("update:selectedRowIds")).toStrictEqual([
-				[["0"]],
-				[[]],
-			]);
+			expect(wrapper.emitted("update:selectedRowIds")).toStrictEqual([[["0"]], [[]]]);
 		});
 
 		it("can select all values on page", async () => {
@@ -288,20 +253,10 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			expect(getVisibleSelections(wrapper)).toHaveLength(0);
 			await wrapper.find("thead tr input[type=checkbox]").trigger("click");
 
-			const rowSelectionBarElement = wrapper.findComponent(
-				'[data-testid="table-data-head"]'
-			);
-			await rowSelectionBarElement.vm.$emit(
-				"update:current-page-selection-state",
-				"all"
-			);
-			expect(hasVisibleSelections(wrapper, testData, expectedSelection)).toBe(
-				true
-			);
-			expect(wrapper.emitted("update:selection")[0]).toStrictEqual([
-				expectedSelection,
-				"inclusive",
-			]);
+			const rowSelectionBarElement = wrapper.findComponent('[data-testid="table-data-head"]');
+			await rowSelectionBarElement.vm.$emit("update:current-page-selection-state", "all");
+			expect(hasVisibleSelections(wrapper, testData, expectedSelection)).toBe(true);
+			expect(wrapper.emitted("update:selection")[0]).toStrictEqual([expectedSelection, "inclusive"]);
 		});
 
 		it("can preselect values", async () => {
@@ -314,9 +269,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				rowsSelectable: true,
 			});
 			expect(await getVisibleSelections(wrapper)).toHaveLength(totalSelections);
-			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(
-				true
-			);
+			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(true);
 		});
 
 		it("can preselect all values", async () => {
@@ -330,9 +283,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			});
 			wrapper.emitted();
 			expect(await getVisibleSelections(wrapper)).toHaveLength(totalSelections);
-			expect(
-				await hasVisibleSelections(wrapper, testData, expectedSelection)
-			).toBe(true);
+			expect(await hasVisibleSelections(wrapper, testData, expectedSelection)).toBe(true);
 		});
 
 		describe("header checkbox shows", () => {
@@ -345,9 +296,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 						selectionType: "inclusive",
 						rowsSelectable: true,
 					});
-					const checkboxIcon = wrapper
-						.get("thead tr .v-icon path")
-						.attributes("d");
+					const checkboxIcon = wrapper.get("thead tr .v-icon path").attributes("d");
 					return { checkboxIcon };
 				};
 
@@ -378,9 +327,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 						selectionType: "exclusive",
 						rowsSelectable: true,
 					});
-					const checkboxIcon = wrapper
-						.get("thead tr .v-icon path")
-						.attributes("d");
+					const checkboxIcon = wrapper.get("thead tr .v-icon path").attributes("d");
 					return { checkboxIcon };
 				};
 
@@ -406,12 +353,9 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 
 		describe("actions", () => {
 			const findButtonByText = (wrapper, text) =>
-				wrapper
-					.findAll(".v-btn")
-					.filter((button) => button.text().includes(text))[0];
+				wrapper.findAll(".v-btn").filter((button) => button.text().includes(text))[0];
 
-			const getActionsButton = (wrapper) =>
-				findButtonByText(wrapper, "pages.administration.actions");
+			const getActionsButton = (wrapper) => findButtonByText(wrapper, "pages.administration.actions");
 
 			it("can trigger on selected rows", async () => {
 				const totalSelections = testData.length;

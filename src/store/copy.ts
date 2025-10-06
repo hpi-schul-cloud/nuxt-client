@@ -1,6 +1,3 @@
-import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultItem";
-import { AxiosStatic } from "axios";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	BoardApiFactory,
 	BoardApiInterface,
@@ -17,6 +14,9 @@ import {
 	TaskApiInterface,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
+import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultItem";
+import { AxiosStatic } from "axios";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 export type CopyParams = {
 	id: string;
@@ -67,17 +67,11 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Action
-	async copy({
-		id,
-		courseId,
-		type,
-	}: CopyParams): Promise<CopyApiResponse | undefined> {
+	async copy({ id, courseId, type }: CopyParams): Promise<CopyApiResponse | undefined> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
 		if (type === CopyParamsTypeEnum.Task) {
-			copyResult = await this.taskApi
-				.taskControllerCopyTask(id, { courseId })
-				.then((response) => response.data);
+			copyResult = await this.taskApi.taskControllerCopyTask(id, { courseId }).then((response) => response.data);
 		}
 
 		if (type === CopyParamsTypeEnum.Lesson) {
@@ -87,9 +81,7 @@ export default class CopyModule extends VuexModule {
 		}
 
 		if (type === CopyParamsTypeEnum.Course) {
-			copyResult = await this.roomsApi
-				.courseRoomsControllerCopyCourse(id)
-				.then((response) => response.data);
+			copyResult = await this.roomsApi.courseRoomsControllerCopyCourse(id).then((response) => response.data);
 
 			if (copyResult && copyResult.elements) {
 				this.checkDrawingChildren(copyResult.elements);
@@ -97,9 +89,7 @@ export default class CopyModule extends VuexModule {
 		}
 
 		if (type === CopyParamsTypeEnum.ColumnBoard) {
-			copyResult = await this.boardApi
-				.boardControllerCopyBoard(id)
-				.then((response) => response.data);
+			copyResult = await this.boardApi.boardControllerCopyBoard(id).then((response) => response.data);
 		}
 
 		if (copyResult === undefined) {
@@ -128,24 +118,15 @@ export default class CopyModule extends VuexModule {
 
 	@Action({ rawError: true })
 	async validateShareToken(token: string): Promise<ShareTokenInfoResponse> {
-		const shareTokenResponse =
-			await this.shareApi.shareTokenControllerLookupShareToken(token);
+		const shareTokenResponse = await this.shareApi.shareTokenControllerLookupShareToken(token);
 		return shareTokenResponse.data;
 	}
 
 	@Action({ rawError: true })
-	async copyByShareToken({
-		token,
-		type,
-		newName,
-		destinationId,
-	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
+	async copyByShareToken({ token, type, newName, destinationId }: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
-		if (
-			type === ShareTokenInfoResponseParentTypeEnum.Courses ||
-			type === ShareTokenInfoResponseParentTypeEnum.Room
-		) {
+		if (type === ShareTokenInfoResponseParentTypeEnum.Courses || type === ShareTokenInfoResponseParentTypeEnum.Room) {
 			copyResult = await this.shareApi
 				.shareTokenControllerImportShareToken(token, { newName })
 				.then((response) => response.data);
@@ -193,9 +174,7 @@ export default class CopyModule extends VuexModule {
 			return;
 		}
 
-		const isFeedbackParent: (type: CopyApiResponseTypeEnum) => boolean = (
-			type
-		) => {
+		const isFeedbackParent: (type: CopyApiResponseTypeEnum) => boolean = (type) => {
 			if (type === CopyApiResponseTypeEnum.Course) return true;
 			if (type === CopyApiResponseTypeEnum.Lesson) return true;
 			if (type === CopyApiResponseTypeEnum.Task) return true;
@@ -204,9 +183,7 @@ export default class CopyModule extends VuexModule {
 			return false;
 		};
 
-		const isFeedbackChild: (type: CopyApiResponseTypeEnum) => boolean = (
-			type: CopyApiResponseTypeEnum
-		) => {
+		const isFeedbackChild: (type: CopyApiResponseTypeEnum) => boolean = (type: CopyApiResponseTypeEnum) => {
 			if (type === CopyApiResponseTypeEnum.LessonContentEtherpad) return true;
 			if (type === CopyApiResponseTypeEnum.LessonContentGeogebra) return true;
 			if (type === CopyApiResponseTypeEnum.LessonContentTask) return true;
@@ -216,8 +193,7 @@ export default class CopyModule extends VuexModule {
 			if (type === CopyApiResponseTypeEnum.File) return true;
 			if (type === CopyApiResponseTypeEnum.CoursegroupGroup) return true;
 			if (type === CopyApiResponseTypeEnum.DrawingElement) return true;
-			if (type === CopyApiResponseTypeEnum.CollaborativeTextEditorElement)
-				return true;
+			if (type === CopyApiResponseTypeEnum.CollaborativeTextEditorElement) return true;
 			if (type === CopyApiResponseTypeEnum.ExternalToolElement) return true;
 			return false;
 		};
@@ -253,10 +229,7 @@ export default class CopyModule extends VuexModule {
 			const currentParentUrl = getUrl(element) ?? parentUrl;
 			if (isFeedbackChild(element.type)) {
 				const parentItem = parents[parents.length - 1]; // get last inserted parent-node
-				parentItem.elements = [
-					...parentItem.elements,
-					{ type: element.type, title: element.title || "" },
-				];
+				parentItem.elements = [...parentItem.elements, { type: element.type, title: element.title || "" }];
 				return parents;
 			}
 
@@ -270,18 +243,13 @@ export default class CopyModule extends VuexModule {
 				});
 			}
 
-			element.elements?.forEach(
-				(e) => (parents = [...getItemsFromBranch(e, currentParentUrl, parents)])
-			);
+			element.elements?.forEach((e) => (parents = [...getItemsFromBranch(e, currentParentUrl, parents)]));
 			return parents;
 		};
 
 		const rootUrl = getUrl(payload);
 		if (rootUrl) {
-			const result: CopyResultItem[] = getItemsFromBranch(
-				payload,
-				rootUrl
-			).filter((item) => item.elements.length > 0);
+			const result: CopyResultItem[] = getItemsFromBranch(payload, rootUrl).filter((item) => item.elements.length > 0);
 			this.copyResultFailedItems = result;
 		}
 	}

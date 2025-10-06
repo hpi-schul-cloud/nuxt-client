@@ -33,10 +33,7 @@
 <script setup lang="ts">
 import { BusinessError } from "@/store/types/commons";
 import { useBoardPermissions } from "@data-board";
-import {
-	ContextExternalToolConfigurationStatus,
-	useContextExternalToolConfigurationStatus,
-} from "@data-external-tool";
+import { ContextExternalToolConfigurationStatus, useContextExternalToolConfigurationStatus } from "@data-external-tool";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed, ComputedRef } from "vue";
 
@@ -50,11 +47,8 @@ const props = withDefaults(defineProps<Props>(), {
 	error: undefined,
 });
 
-const {
-	determineToolStatusTranslationKey,
-	determineDeactivatedTranslationKey,
-	determineNotLicensedTranslationKey,
-} = useContextExternalToolConfigurationStatus();
+const { determineToolStatusTranslationKey, determineDeactivatedTranslationKey, determineNotLicensedTranslationKey } =
+	useContextExternalToolConfigurationStatus();
 
 const { isTeacher } = useBoardPermissions();
 
@@ -66,8 +60,7 @@ const isToolNotLaunchable: ComputedRef<boolean> = computed(
 );
 
 const isToolIncompleteOperational: ComputedRef<boolean> = computed(
-	() =>
-		props.toolStatus.isIncompleteOperationalOnScopeContext && isTeacher.value
+	() => props.toolStatus.isIncompleteOperationalOnScopeContext && isTeacher.value
 );
 
 const errorMessage: ComputedRef<string> = computed(() =>

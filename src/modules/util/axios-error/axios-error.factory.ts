@@ -7,8 +7,8 @@ type Options = {
 	data?: unknown;
 };
 
-export const createAxiosError = (options: Options = {}) => {
-	return new AxiosError(
+export const createAxiosError = (options: Options = {}) =>
+	new AxiosError(
 		options.message ?? "Unauthorized",
 		options.statusCode?.toString() ?? "401",
 		{ headers: {} as AxiosRequestHeaders },
@@ -21,4 +21,3 @@ export const createAxiosError = (options: Options = {}) => {
 			config: { headers: {} as AxiosRequestHeaders },
 		}
 	);
-};

@@ -49,34 +49,26 @@ describe("localStorage composable", () => {
 	});
 
 	it("should return the correct filter storage for students' filter", () => {
-		const { initializeUserType, getFilterStorage, setFilterState, state } =
-			useFilterLocalStorage();
+		const { initializeUserType, getFilterStorage, setFilterState, state } = useFilterLocalStorage();
 		initializeUserType("student");
 		const testQuery = { test: "test" };
 
 		setFilterState(testQuery);
 
 		expect(getFilterStorage()).toEqual(testQuery);
-		expect(
-			state.value.filter["pages.administration.students.index"]?.query
-		).toEqual(testQuery);
+		expect(state.value.filter["pages.administration.students.index"]?.query).toEqual(testQuery);
 
-		expect(
-			state.value.filter["pages.administration.teachers.index"]?.query
-		).toEqual({});
+		expect(state.value.filter["pages.administration.teachers.index"]?.query).toEqual({});
 	});
 
 	it("should return the correct filter storage for teachers' filter", () => {
-		const { initializeUserType, getFilterStorage, setFilterState, state } =
-			useFilterLocalStorage();
+		const { initializeUserType, getFilterStorage, setFilterState, state } = useFilterLocalStorage();
 		initializeUserType("teacher");
 		const testQuery = { test: "teachers" };
 
 		setFilterState(testQuery);
 
 		expect(getFilterStorage()).toEqual(testQuery);
-		expect(
-			state.value.filter["pages.administration.teachers.index"]?.query
-		).toEqual(testQuery);
+		expect(state.value.filter["pages.administration.teachers.index"]?.query).toEqual(testQuery);
 	});
 });

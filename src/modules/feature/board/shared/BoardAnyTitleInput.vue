@@ -22,11 +22,7 @@
 		/>
 	</template>
 	<template v-else>
-		<component
-			:is="`h${headingLevel}`"
-			class="title"
-			:class="scope === 'board' ? 'board-title' : 'other-title'"
-		>
+		<component :is="`h${headingLevel}`" class="title" :class="scope === 'board' ? 'board-title' : 'other-title'">
 			{{ modelValue.trim() ? modelValue : emptyValueFallback }}
 		</component>
 	</template>
@@ -106,19 +102,12 @@ onMounted(() => {
 watch(
 	() => props.isEditMode,
 	async (newVal, oldVal) => {
-		if (
-			props.scope !== "column" &&
-			props.scope !== "board" &&
-			!props.isFocused
-		) {
+		if (props.scope !== "column" && props.scope !== "board" && !props.isFocused) {
 			return;
 		}
 
 		if (newVal && !oldVal) {
-			if (
-				modelValue.value.trim().length < 1 &&
-				props.emptyValueFallback.length > 0
-			) {
+			if (modelValue.value.trim().length < 1 && props.emptyValueFallback.length > 0) {
 				modelValue.value = props.emptyValueFallback;
 			}
 
@@ -137,15 +126,9 @@ const validationRules = computed(() => ({
 	},
 }));
 
-const v$ = useVuelidate(
-	validationRules,
-	{ modelValue },
-	{ $lazy: true, $autoDirty: true }
-);
+const v$ = useVuelidate(validationRules, { modelValue }, { $lazy: true, $autoDirty: true });
 
-const errorMessages = computed(() =>
-	v$.value.modelValue.$errors.map((e: ErrorObject) => unref(e.$message))
-);
+const errorMessages = computed(() => v$.value.modelValue.$errors.map((e: ErrorObject) => unref(e.$message)));
 
 const headingLevel = computed(() => {
 	switch (props.scope) {

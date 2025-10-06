@@ -1,17 +1,11 @@
+import CardHostDetailView from "./CardHostDetailView.vue";
 import { CardResponse } from "@/serverApi/v3";
-import {
-	cardResponseFactory,
-	fileElementResponseFactory,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { defaultPermissions } from "@/types/board/Permissions";
+import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useBoardPermissions } from "@data-board";
 import { shallowMount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
-import CardHostDetailView from "./CardHostDetailView.vue";
-import { useBoardPermissions } from "@data-board";
-import { defaultPermissions } from "@/types/board/Permissions";
 
 const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
 	elements: [fileElementResponseFactory.build()],

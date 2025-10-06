@@ -7,11 +7,7 @@
 	>
 		<v-card class="modal-container">
 			<slot>
-				<h2
-					v-if="$slots.header"
-					:id="`modal-${uid}-title`"
-					class="modal-header"
-				>
+				<h2 v-if="$slots.header" :id="`modal-${uid}-title`" class="modal-header">
 					<slot name="header" />
 				</h2>
 				<div :id="`modal-${uid}-body`" class="modal-body">
@@ -35,8 +31,8 @@
 
 <script setup lang="ts">
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import { computed } from "vue";
 import { useUid } from "@/utils/uid";
+import { computed } from "vue";
 
 type Props = {
 	active?: boolean;

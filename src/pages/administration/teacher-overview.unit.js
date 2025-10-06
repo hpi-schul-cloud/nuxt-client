@@ -1,23 +1,21 @@
+import TeacherPage from "./TeacherOverview.page.vue";
 import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
 import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import mock$objects from "@@/tests/test-utils/pageStubs";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
+import { RouterLinkStub } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
-import TeacherPage from "./TeacherOverview.page.vue";
-import { RouterLinkStub } from "@vue/test-utils";
-import { createTestEnvStore, createTestAppStore } from "@@/tests/test-utils";
 
 const mockData = [
 	{
@@ -66,15 +64,11 @@ const createMockStore = () => {
 			classes: {
 				namespaced: true,
 				actions: {
-					find: () => {
-						return { data: [] };
-					},
+					find: () => ({ data: [] }),
 				},
-				state: () => {
-					return {
-						list: [],
-					};
-				},
+				state: () => ({
+					list: [],
+				}),
 			},
 			users: {
 				namespaced: true,
@@ -86,14 +80,12 @@ const createMockStore = () => {
 				},
 				getters: {
 					getList: () => mockData,
-					getPagination: () => {
-						return {
-							limit: 25,
-							skip: 0,
-							total: 2,
-							query: "",
-						};
-					},
+					getPagination: () => ({
+						limit: 25,
+						skip: 0,
+						total: 2,
+						query: "",
+					}),
 					getActive: () => false,
 					getPercent: () => 0,
 					getQrLinks: () => [],
@@ -102,9 +94,7 @@ const createMockStore = () => {
 			uiState: {
 				namespaced: true,
 				getters: {
-					get: () => () => {
-						return { page: 1 };
-					},
+					get: () => () => ({ page: 1 }),
 				},
 				mutations: {
 					set: vi.fn(),
@@ -123,11 +113,9 @@ const createMockStore = () => {
 describe("teachers/index", () => {
 	const OLD_ENV = process.env;
 
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
 		vi.useFakeTimers();
 
 		vi.resetModules(); // reset module registry to avoid conflicts
@@ -135,7 +123,6 @@ describe("teachers/index", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			notifierModule: NotifierModule,
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
@@ -163,14 +150,11 @@ describe("teachers/index", () => {
 			return state[key];
 		},
 
-		set: () => {
-			return {};
-		},
+		set: () => ({}),
 	};
 
 	const setup = () => {
-		const { mockStore, usersActionsStubs, uiStateMutationsStubs } =
-			createMockStore();
+		const { mockStore, usersActionsStubs, uiStateMutationsStubs } = createMockStore();
 
 		const wrapper = mount(TeacherPage, {
 			global: {
@@ -203,28 +187,20 @@ describe("teachers/index", () => {
 		expect(userRows).toHaveLength(2);
 
 		// select first entry
-		const checkbox = userRows
-			.at(0)
-			.find('.selection-column input[type="checkbox"]');
+		const checkbox = userRows.at(0).find('.selection-column input[type="checkbox"]');
 		checkbox.setChecked();
 
 		// open actions menu
 		await wrapper.vm.$nextTick();
-		const actionsBtn = wrapper.find(
-			".row-selection-info .actions button:first-child"
-		);
+		const actionsBtn = wrapper.find(".row-selection-info .actions button:first-child");
 		actionsBtn.trigger("click");
 		await wrapper.vm.$nextTick();
 
 		// click delete menu button
-		const deleteBtn = wrapper
-			.findAll(".row-selection-info .context-menu button")
-			.at(2);
+		const deleteBtn = wrapper.findAll(".row-selection-info .context-menu button").at(2);
 		await deleteBtn.trigger("click");
 
-		const confirmBtn = wrapper.findComponent(
-			"[data-testid='btn-dialog-confirm']"
-		);
+		const confirmBtn = wrapper.findComponent("[data-testid='btn-dialog-confirm']");
 		await confirmBtn.trigger("click");
 
 		expect(usersActionsStubs.deleteUsers.mock.calls).toHaveLength(1);
@@ -262,9 +238,7 @@ describe("teachers/index", () => {
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
-		const openContextButton = wrapper.find(
-			"[data-test-id='context-menu-open']"
-		);
+		const openContextButton = wrapper.find("[data-test-id='context-menu-open']");
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
@@ -278,9 +252,7 @@ describe("teachers/index", () => {
 		vi.runAllTimers();
 
 		// delete action is emitted
-		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
-			"delete_action"
-		);
+		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual("delete_action");
 	});
 
 	it("should emit the 'registration_link' action when the action button is clicked", async () => {
@@ -303,27 +275,21 @@ describe("teachers/index", () => {
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
-		const openContextButton = wrapper.find(
-			"[data-test-id='context-menu-open']"
-		);
+		const openContextButton = wrapper.find("[data-test-id='context-menu-open']");
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
 		vi.runAllTimers();
 
 		// registration_link button action is rendered in contextMenu
-		const registrationButton = wrapper.find(
-			`[data-testid="registration_link"]`
-		);
+		const registrationButton = wrapper.find(`[data-testid="registration_link"]`);
 		expect(registrationButton.exists()).toBe(true);
 		// registration_link button is clicked
 		await registrationButton.trigger("click");
 		vi.runAllTimers();
 
 		// registration_link action is emitted
-		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
-			"registration_link"
-		);
+		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual("registration_link");
 	});
 
 	it("should emit the 'qr_code' action when the action button is clicked", async () => {
@@ -346,9 +312,7 @@ describe("teachers/index", () => {
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
-		const openContextButton = wrapper.find(
-			"[data-test-id='context-menu-open']"
-		);
+		const openContextButton = wrapper.find("[data-test-id='context-menu-open']");
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
@@ -362,9 +326,7 @@ describe("teachers/index", () => {
 		vi.runAllTimers();
 
 		// qr_code action is emitted
-		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
-			"qr_code"
-		);
+		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual("qr_code");
 	});
 
 	it("should display the same number of elements as in the mockData object", () => {
@@ -415,8 +377,7 @@ describe("teachers/index", () => {
 	});
 
 	it("editBtn's to property should have the expected URL", () => {
-		const expectedURL =
-			"/administration/teachers/0000d231816abba584714c9e/edit?returnUrl=/administration/teachers";
+		const expectedURL = "/administration/teachers/0000d231816abba584714c9e/edit?returnUrl=/administration/teachers";
 		const { wrapper } = setup();
 
 		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
@@ -426,9 +387,7 @@ describe("teachers/index", () => {
 	it("should render the fab-floating component if user has TEACHER_CREATE permission", () => {
 		const { wrapper } = setup();
 
-		const fabComponent = wrapper.find(
-			`[data-testid="fab_button_teachers_table"]`
-		);
+		const fabComponent = wrapper.find(`[data-testid="fab_button_teachers_table"]`);
 		expect(fabComponent.exists()).toBe(true);
 	});
 
@@ -443,9 +402,7 @@ describe("teachers/index", () => {
 		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
 		const { wrapper } = setup();
 
-		const fabComponent = wrapper.find(
-			`[data-testid="fab_button_teachers_table"]`
-		);
+		const fabComponent = wrapper.find(`[data-testid="fab_button_teachers_table"]`);
 		expect(fabComponent.exists()).toBe(false);
 	});
 
@@ -471,9 +428,7 @@ describe("teachers/index", () => {
 		// run all existing timers
 		vi.runAllTimers();
 
-		const searchBarInput = wrapper
-			.find(`[data-testid="searchbar"]`)
-			.get("input");
+		const searchBarInput = wrapper.find(`[data-testid="searchbar"]`).get("input");
 		expect(searchBarInput.exists()).toBe(true);
 
 		searchBarInput.setValue("abc");
@@ -491,9 +446,7 @@ describe("teachers/index", () => {
 
 		vi.runAllTimers();
 
-		const filterComponent = wrapper.findComponent(
-			`[data-testid="data_filter"]`
-		);
+		const filterComponent = wrapper.findComponent(`[data-testid="data_filter"]`);
 		expect(filterComponent.exists()).toBe(true);
 
 		filterComponent.setProps({ activeFilters: { classes: ["mockclassname"] } });
@@ -506,9 +459,7 @@ describe("teachers/index", () => {
 	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
 		createTestEnvStore({ ...envs, ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true });
 		const { wrapper } = setup();
-		expect(
-			wrapper.vm.filteredColumns.some((el) => el.field === "consentStatus")
-		).toBe(true);
+		expect(wrapper.vm.filteredColumns.some((el) => el.field === "consentStatus")).toBe(true);
 	});
 
 	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {

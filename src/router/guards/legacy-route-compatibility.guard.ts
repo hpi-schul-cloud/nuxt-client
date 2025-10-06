@@ -1,9 +1,5 @@
-import {
-	NavigationGuard,
-	NavigationGuardNext,
-	RouteLocationNormalized,
-} from "vue-router";
 import { isLegacyClient } from "../legacy-client-route.js";
+import { NavigationGuard, NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
 export const legacyCompatibilityGuard: NavigationGuard = (
 	to: RouteLocationNormalized,

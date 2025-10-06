@@ -1,7 +1,4 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuList } from "@ui-kebab-menu";
 import { VList, VListItem } from "vuetify/lib/components/index";
 

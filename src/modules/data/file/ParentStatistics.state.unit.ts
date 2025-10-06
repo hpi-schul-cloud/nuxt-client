@@ -1,6 +1,6 @@
+import { useParentStatisticsStore } from "./ParentStatistics.state";
 import { parentStatisticFactory } from "@@/tests/test-utils";
 import { createPinia, setActivePinia } from "pinia";
-import { useParentStatisticsStore } from "./ParentStatistics.state";
 
 describe("useParentStatisticsStore", () => {
 	const setup = () => {

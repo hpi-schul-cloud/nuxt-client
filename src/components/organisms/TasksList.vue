@@ -1,28 +1,15 @@
 <template>
 	<v-list role="feed" lines="two">
-		<v-list-subheader
-			v-if="title && isListFilled"
-			class="text-subtitle-1 ml-n4 mx-sm-0"
-		>
+		<v-list-subheader v-if="title && isListFilled" class="text-subtitle-1 ml-n4 mx-sm-0">
 			{{ title }}
 		</v-list-subheader>
 		<template v-if="showSkeleton">
 			<v-skeleton-loader type="text" :max-width="'15%'" />
-			<v-skeleton-loader
-				v-for="task of 4"
-				ref="skeleton"
-				:key="task"
-				:type="'list-item-avatar-two-line'"
-			/>
+			<v-skeleton-loader v-for="task of 4" ref="skeleton" :key="task" :type="'list-item-avatar-two-line'" />
 		</template>
 		<template v-for="(task, index) of tasks" v-else :key="index">
 			<template v-if="userRole === 'student'">
-				<task-item-student
-					v-if="isLastTaskItem(index)"
-					:key="index"
-					v-intersect="loadMore"
-					:task="task"
-				/>
+				<task-item-student v-if="isLastTaskItem(index)" :key="index" v-intersect="loadMore" :task="task" />
 				<task-item-student v-else :task="task" role="article" />
 				<v-divider v-if="index < tasks.length - 1" />
 			</template>
@@ -35,13 +22,7 @@
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
 				/>
-				<task-item-teacher
-					v-else
-					:task="task"
-					role="article"
-					@copy-task="onCopyTask"
-					@share-task="onShareTask"
-				/>
+				<task-item-teacher v-else :task="task" role="article" @copy-task="onCopyTask" @share-task="onShareTask" />
 				<v-divider v-if="index < tasks.length - 1" />
 			</template>
 		</template>
@@ -97,9 +78,7 @@ export default {
 			return this.finishedTasksModule.getIsInitialized;
 		},
 		status: function () {
-			return this.type === "current"
-				? this.currentTaskStatus
-				: this.finishedTasksStatus;
+			return this.type === "current" ? this.currentTaskStatus : this.finishedTasksStatus;
 		},
 		showSkeleton: function () {
 			if (!this.hasPagination) {
@@ -109,11 +88,7 @@ export default {
 			}
 		},
 		showSpinner: function () {
-			return (
-				this.hasPagination &&
-				this.finishedTasksIsInitialized &&
-				this.status === "pending"
-			);
+			return this.hasPagination && this.finishedTasksIsInitialized && this.status === "pending";
 		},
 		isListFilled: function () {
 			return this.status === "completed" && this.tasks.length > 0;

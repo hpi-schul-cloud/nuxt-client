@@ -1,8 +1,6 @@
-import {
-	BoardObjectType,
-	ErrorType,
-	useErrorHandler,
-} from "@/components/error-handling/ErrorHandler.composable";
+import { useMediaBoardApi } from "./mediaBoardApi.composable";
+import { ElementCreate, ElementMove, LineMove } from "./types";
+import { BoardObjectType, ErrorType, useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	BoardLayout,
 	DeletedElementResponse,
@@ -13,9 +11,7 @@ import {
 	MediaLineResponse,
 } from "@/serverApi/v3";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
-import { ref, Ref } from "vue";
-import { useMediaBoardApi } from "./mediaBoardApi.composable";
-import { ElementCreate, ElementMove, LineMove } from "./types";
+import { Ref, ref } from "vue";
 
 const useMediaBoardState = () => {
 	const api = useMediaBoardApi();
@@ -32,9 +28,7 @@ const useMediaBoardState = () => {
 			return -1;
 		}
 
-		const lineIndex: number = mediaBoard.value.lines.findIndex(
-			(line) => line.id === lineId
-		);
+		const lineIndex: number = mediaBoard.value.lines.findIndex((line) => line.id === lineId);
 
 		return lineIndex;
 	};
@@ -45,10 +39,9 @@ const useMediaBoardState = () => {
 		}
 
 		const lineIndex: number = mediaBoard.value.lines.findIndex((line) => {
-			const element:
-				| MediaExternalToolElementResponse
-				| DeletedElementResponse
-				| undefined = line.elements.find((element) => element.id === elementId);
+			const element: MediaExternalToolElementResponse | DeletedElementResponse | undefined = line.elements.find(
+				(element) => element.id === elementId
+			);
 
 			return element !== undefined;
 		});
@@ -79,10 +72,7 @@ const useMediaBoardState = () => {
 
 			await api.updateBoardLayout(mediaBoard.value.id, layout);
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notUpdated", "boardRow")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notUpdated", "boardRow"));
 		}
 	};
 
@@ -94,8 +84,7 @@ const useMediaBoardState = () => {
 		isLoading.value = true;
 
 		try {
-			const availableList: MediaAvailableLineResponse =
-				await api.getAvailableMedia(mediaBoard.value.id);
+			const availableList: MediaAvailableLineResponse = await api.getAvailableMedia(mediaBoard.value.id);
 
 			availableMediaLine.value = availableList;
 		} catch (error) {
@@ -113,18 +102,13 @@ const useMediaBoardState = () => {
 
 		try {
 			isBoardOperationLoading.value = true;
-			const newLine: MediaLineResponse = await api.createLine(
-				mediaBoard.value.id
-			);
+			const newLine: MediaLineResponse = await api.createLine(mediaBoard.value.id);
 
 			mediaBoard.value.lines.push(newLine);
 
 			return newLine;
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notCreated", "boardRow")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notCreated", "boardRow"));
 		} finally {
 			isBoardOperationLoading.value = false;
 		}
@@ -152,10 +136,7 @@ const useMediaBoardState = () => {
 
 			await fetchAvailableMedia();
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notDeleted", "boardRow")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notDeleted", "boardRow"));
 		} finally {
 			isBoardOperationLoading.value = false;
 		}
@@ -175,10 +156,7 @@ const useMediaBoardState = () => {
 			}
 
 			// Check bounds
-			if (
-				newLineIndex < 0 ||
-				newLineIndex > mediaBoard.value.lines.length - 1
-			) {
+			if (newLineIndex < 0 || newLineIndex > mediaBoard.value.lines.length - 1) {
 				return;
 			}
 
@@ -192,19 +170,13 @@ const useMediaBoardState = () => {
 
 			await api.moveLine(lineId, mediaBoard.value.id, newLineIndex);
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notUpdated", "boardRow")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notUpdated", "boardRow"));
 		} finally {
 			isBoardOperationLoading.value = false;
 		}
 	};
 
-	const updateLineTitle = async (
-		lineId: string,
-		newTitle: string
-	): Promise<void> => {
+	const updateLineTitle = async (lineId: string, newTitle: string): Promise<void> => {
 		if (mediaBoard.value === undefined) {
 			return;
 		}
@@ -220,17 +192,11 @@ const useMediaBoardState = () => {
 
 			await api.updateLineTitle(lineId, newTitle);
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notUpdated", "boardRow")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notUpdated", "boardRow"));
 		}
 	};
 
-	const updateLineBackgroundColor = async (
-		lineId: string,
-		color: MediaBoardColors
-	): Promise<void> => {
+	const updateLineBackgroundColor = async (lineId: string, color: MediaBoardColors): Promise<void> => {
 		if (mediaBoard.value === undefined) {
 			return;
 		}
@@ -246,20 +212,12 @@ const useMediaBoardState = () => {
 
 			await api.updateLineColor(lineId, color);
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notUpdated", "boardRow")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notUpdated", "boardRow"));
 		}
 	};
 
-	const updateAvailableLineBackgroundColor = async (
-		color: MediaBoardColors
-	): Promise<void> => {
-		if (
-			mediaBoard.value === undefined ||
-			availableMediaLine.value === undefined
-		) {
+	const updateAvailableLineBackgroundColor = async (color: MediaBoardColors): Promise<void> => {
+		if (mediaBoard.value === undefined || availableMediaLine.value === undefined) {
 			return;
 		}
 
@@ -268,17 +226,11 @@ const useMediaBoardState = () => {
 
 			await api.updateAvailableLineColor(mediaBoard.value.id, color);
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notUpdated", "boardRow")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notUpdated", "boardRow"));
 		}
 	};
 
-	const updateLineCollapsed = async (
-		lineId: string,
-		value: boolean
-	): Promise<void> => {
+	const updateLineCollapsed = async (lineId: string, value: boolean): Promise<void> => {
 		if (mediaBoard.value === undefined) {
 			return;
 		}
@@ -294,20 +246,12 @@ const useMediaBoardState = () => {
 
 			await api.updateLineCollapsed(lineId, value);
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notUpdated", "boardRow")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notUpdated", "boardRow"));
 		}
 	};
 
-	const updateAvailableLineCollapsed = async (
-		value: boolean
-	): Promise<void> => {
-		if (
-			mediaBoard.value === undefined ||
-			availableMediaLine.value === undefined
-		) {
+	const updateAvailableLineCollapsed = async (value: boolean): Promise<void> => {
+		if (mediaBoard.value === undefined || availableMediaLine.value === undefined) {
 			return;
 		}
 
@@ -316,28 +260,19 @@ const useMediaBoardState = () => {
 
 			await api.updateAvailableLineCollapsed(mediaBoard.value.id, value);
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notUpdated", "boardRow")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notUpdated", "boardRow"));
 		}
 	};
 
 	// Media Element
-	const createElement = async (
-		createOptions: ElementCreate
-	): Promise<MediaExternalToolElementResponse | undefined> => {
-		if (
-			mediaBoard.value === undefined ||
-			availableMediaLine.value === undefined
-		) {
+	const createElement = async (createOptions: ElementCreate): Promise<MediaExternalToolElementResponse | undefined> => {
+		if (mediaBoard.value === undefined || availableMediaLine.value === undefined) {
 			return;
 		}
 
 		try {
 			let { toLineId } = createOptions;
-			const { oldElementIndex, newElementIndex, schoolExternalToolId } =
-				createOptions;
+			const { oldElementIndex, newElementIndex, schoolExternalToolId } = createOptions;
 
 			if (toLineId === undefined) {
 				const newLine: MediaLineResponse | undefined = await createLine();
@@ -355,12 +290,11 @@ const useMediaBoardState = () => {
 				temp.splice(oldElementIndex, 1);
 				availableMediaLine.value.elements = temp;
 			}
-			const newElement: MediaExternalToolElementResponse =
-				await api.createElement(
-					toLineId,
-					newElementIndex,
-					schoolExternalToolId
-				);
+			const newElement: MediaExternalToolElementResponse = await api.createElement(
+				toLineId,
+				newElementIndex,
+				schoolExternalToolId
+			);
 
 			const lineIndex: number = getLineIndex(toLineId);
 
@@ -370,10 +304,7 @@ const useMediaBoardState = () => {
 
 			return newElement;
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notCreated", "boardElement")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notCreated", "boardElement"));
 		} finally {
 			isBoardOperationLoading.value = false;
 		}
@@ -393,9 +324,9 @@ const useMediaBoardState = () => {
 				return;
 			}
 
-			const elementIndex: number = mediaBoard.value.lines[
-				lineIndex
-			].elements.findIndex((element) => element.id === elementId);
+			const elementIndex: number = mediaBoard.value.lines[lineIndex].elements.findIndex(
+				(element) => element.id === elementId
+			);
 
 			const temp = Array.from(mediaBoard.value.lines[lineIndex].elements);
 			temp.splice(elementIndex, 1);
@@ -405,10 +336,7 @@ const useMediaBoardState = () => {
 
 			await fetchAvailableMedia();
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notCreated", "boardElement")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notCreated", "boardElement"));
 		} finally {
 			isBoardOperationLoading.value = false;
 		}
@@ -421,8 +349,7 @@ const useMediaBoardState = () => {
 
 		try {
 			let { toLineId } = elementMove;
-			const { elementId, oldElementIndex, newElementIndex, fromLineId } =
-				elementMove;
+			const { elementId, oldElementIndex, newElementIndex, fromLineId } = elementMove;
 
 			// Same position
 			if (fromLineId === toLineId && oldElementIndex === newElementIndex) {
@@ -454,36 +381,26 @@ const useMediaBoardState = () => {
 
 			await api.moveElement(elementId, toLineId, newElementIndex);
 
-			const tempFromLine = Array.from(
-				mediaBoard.value.lines[fromLineIndex].elements
-			);
-			const element: MediaExternalToolElementResponse | DeletedElementResponse =
-				tempFromLine.splice(oldElementIndex, 1)[0];
+			const tempFromLine = Array.from(mediaBoard.value.lines[fromLineIndex].elements);
+			const element: MediaExternalToolElementResponse | DeletedElementResponse = tempFromLine.splice(
+				oldElementIndex,
+				1
+			)[0];
 			mediaBoard.value.lines[fromLineIndex].elements = tempFromLine;
 
-			const tempToLine = Array.from(
-				mediaBoard.value.lines[toLineIndex].elements
-			);
+			const tempToLine = Array.from(mediaBoard.value.lines[toLineIndex].elements);
 			tempToLine.splice(newElementIndex, 0, element);
 			mediaBoard.value.lines[toLineIndex].elements = tempToLine;
 		} catch (error) {
-			handleAnyError(
-				error,
-				notifyWithTemplateAndReload("notUpdated", "boardElement")
-			);
+			handleAnyError(error, notifyWithTemplateAndReload("notUpdated", "boardElement"));
 		} finally {
 			isBoardOperationLoading.value = false;
 		}
 	};
 
-	const notifyWithTemplateAndReload = (
-		errorType: ErrorType,
-		boardObjectType?: BoardObjectType
-	) => {
-		return () => {
-			notifyWithTemplate(errorType, boardObjectType)();
-			fetchMediaBoardForUser();
-		};
+	const notifyWithTemplateAndReload = (errorType: ErrorType, boardObjectType?: BoardObjectType) => () => {
+		notifyWithTemplate(errorType, boardObjectType)();
+		fetchMediaBoardForUser();
 	};
 
 	return {
@@ -510,5 +427,4 @@ const useMediaBoardState = () => {
 	};
 };
 
-export const useSharedMediaBoardState =
-	createTestableSharedComposable(useMediaBoardState);
+export const useSharedMediaBoardState = createTestableSharedComposable(useMediaBoardState);

@@ -15,12 +15,7 @@
 					{{ t("pages.userMigration.success.description.loginAgain") }}
 				</span>
 			</p>
-			<v-btn
-				color="primary"
-				variant="flat"
-				data-testId="btn-proceed"
-				to="/logout"
-			>
+			<v-btn color="primary" variant="flat" data-testId="btn-proceed" to="/logout">
 				{{
 					t("pages.userMigration.success.login", {
 						targetSystem: getSystemName(targetSystem),
@@ -32,12 +27,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, Ref } from "vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
+import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
-import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
+import { defineComponent, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -55,13 +50,8 @@ export default defineComponent({
 		const pageTitle = buildPageTitle(t("pages.userMigration.success.title"));
 		useTitle(pageTitle);
 
-		const getSystemName = (id: string): string => {
-			return (
-				systemsModule?.getSystems.find(
-					(system: System): boolean => system.id === id
-				)?.name ?? ""
-			);
-		};
+		const getSystemName = (id: string): string =>
+			systemsModule?.getSystems.find((system: System): boolean => system.id === id)?.name ?? "";
 
 		const isLoading: Ref<boolean> = ref(true);
 

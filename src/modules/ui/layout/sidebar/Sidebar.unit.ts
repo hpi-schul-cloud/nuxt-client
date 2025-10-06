@@ -1,28 +1,20 @@
+import Sidebar from "./Sidebar.vue";
+import { useSidebarSelection } from "./SidebarSelection.composable";
+import { Permission, SchulcloudTheme } from "@/serverApi/v3";
+import FilePathsModule from "@/store/filePaths";
+import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
+import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { h, ref } from "vue";
 import { VApp } from "vuetify/lib/components/index";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
-import Sidebar from "./Sidebar.vue";
-import FilePathsModule from "@/store/filePaths";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { Permission, SchulcloudTheme } from "@/serverApi/v3";
-import { useSidebarSelection } from "./SidebarSelection.composable";
-import {
-	createTestAppStoreWithPermissions,
-	createTestEnvStore,
-} from "@@/tests/test-utils";
 
-vi.mock("vue-router", () => {
-	return {
-		useRoute: () => {
-			return { path: "rooms/courses-list" };
-		},
-	};
-});
+vi.mock("vue-router", () => ({
+	useRoute: () => ({ path: "rooms/courses-list" }),
+}));
 
 vi.mock("./SidebarSelection.composable");
 const mockedUseSidebarSelection = vi.mocked(useSidebarSelection);
@@ -38,6 +30,7 @@ const setup = (
 		isTeamsEnabled?: boolean;
 	} = { permissions: [], sidebarExpanded: true, isTeamsEnabled: false }
 ) => {
+	setActivePinia(createTestingPinia());
 	createTestAppStoreWithPermissions(permissions ?? []);
 	createTestEnvStore({
 		SC_THEME: SchulcloudTheme.Brb,
@@ -100,9 +93,7 @@ describe("@ui-layout/Sidebar", () => {
 	describe("when sidebar toggle was clicked", () => {
 		it("should hide sidebar", async () => {
 			const { wrapper } = setup();
-			const toggleBtn = wrapper.getComponent(
-				"[data-testid='sidebar-toggle-close']"
-			);
+			const toggleBtn = wrapper.getComponent("[data-testid='sidebar-toggle-close']");
 			await toggleBtn.trigger("click");
 
 			const nav = wrapper.get("nav");
@@ -116,9 +107,7 @@ describe("@ui-layout/Sidebar", () => {
 		it("should filter items correctly", () => {
 			const { wrapper } = setup({ permissions: [] });
 
-			expect(wrapper.find("[data-testid='sidebar-teams']").exists()).toBe(
-				false
-			);
+			expect(wrapper.find("[data-testid='sidebar-teams']").exists()).toBe(false);
 		});
 	});
 
@@ -147,9 +136,7 @@ describe("@ui-layout/Sidebar", () => {
 					permissions: [Permission.TaskDashboardViewV3],
 				});
 
-				expect(wrapper.find("[data-testid='sidebar-tasks']").exists()).toBe(
-					true
-				);
+				expect(wrapper.find("[data-testid='sidebar-tasks']").exists()).toBe(true);
 			});
 		});
 	});

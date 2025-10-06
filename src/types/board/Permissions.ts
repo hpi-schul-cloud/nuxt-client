@@ -1,4 +1,4 @@
-import { ref, Ref } from "vue";
+import { Ref, ref } from "vue";
 
 export type BoardPermissionChecks = {
 	arePermissionsLoaded: Ref<boolean>;
@@ -8,6 +8,8 @@ export type BoardPermissionChecks = {
 	hasCreateToolPermission: Ref<boolean>;
 	hasEditPermission: Ref<boolean>;
 	hasDeletePermission: Ref<boolean>;
+	hasManageBoardPermission: Ref<boolean>;
+	hasManageReadersCanEditPermission: Ref<boolean>;
 	hasManageVideoConferencePermission: Ref<boolean>;
 	hasShareBoardPermission: Ref<boolean>;
 	isTeacher: Ref<boolean>;
@@ -22,6 +24,8 @@ export const defaultPermissions: BoardPermissionChecks = {
 	hasCreateToolPermission: ref(true),
 	hasDeletePermission: ref(true),
 	hasEditPermission: ref(true),
+	hasManageBoardPermission: ref(false),
+	hasManageReadersCanEditPermission: ref(true),
 	hasManageVideoConferencePermission: ref(true),
 	hasShareBoardPermission: ref(true),
 	isTeacher: ref(true),

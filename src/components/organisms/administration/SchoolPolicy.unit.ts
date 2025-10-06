@@ -1,31 +1,24 @@
 import SchoolPolicy from "./SchoolPolicy.vue";
-import SchoolsModule from "@/store/schools";
-import PrivacyPolicyModule from "@/store/privacy-policy";
-import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { mount } from "@vue/test-utils";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import { ConsentVersion } from "@/store/types/consent-version";
-import {
-	NOTIFIER_MODULE_KEY,
-	PRIVACY_POLICY_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-} from "@/utils/inject";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { downloadFile } from "@/utils/fileHelper";
-import type { Mocked } from "vitest";
-import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { Permission } from "@/serverApi/v3";
+import PrivacyPolicyModule from "@/store/privacy-policy";
+import SchoolsModule from "@/store/schools";
+import { ConsentVersion } from "@/store/types/consent-version";
+import { downloadFile } from "@/utils/fileHelper";
+import { PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import type { Mocked } from "vitest";
 
 vi.mock("@/utils/fileHelper");
 
 describe("SchoolPolicy", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
 	let privacyPolicyModule: Mocked<PrivacyPolicyModule>;
-	let notifierModule: Mocked<NotifierModule>;
 
 	const mockPolicy: ConsentVersion = {
 		_id: "123",
@@ -58,7 +51,8 @@ describe("SchoolPolicy", () => {
 		},
 		permissions = [Permission.SchoolEdit]
 	) => {
-		createTestAppStoreWithPermissions(permissions, false);
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStoreWithPermissions(permissions);
 
 		schoolsModule = createModuleMocks(SchoolsModule, {
 			getSchool: mockSchool,
@@ -68,15 +62,12 @@ describe("SchoolPolicy", () => {
 			...getters,
 		});
 
-		notifierModule = createModuleMocks(NotifierModule);
-
 		const wrapper = mount(SchoolPolicy, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 		});
@@ -122,9 +113,7 @@ describe("SchoolPolicy", () => {
 				getPrivacyPolicy: null,
 			});
 
-			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(
-				false
-			);
+			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(false);
 		});
 	});
 
@@ -140,9 +129,7 @@ describe("SchoolPolicy", () => {
 			const editBtn = wrapper.find('[data-testid="edit-button"]');
 			await editBtn.trigger("click");
 
-			expect(
-				wrapper.findComponent({ name: "school-policy-form-dialog" }).exists()
-			).toBe(true);
+			expect(wrapper.findComponent({ name: "school-policy-form-dialog" }).exists()).toBe(true);
 		});
 	});
 

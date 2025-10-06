@@ -1,32 +1,25 @@
-import { nextTick } from "vue";
+import RoomAdminMembersTable from "./RoomAdminMembersTable.vue";
+import { RoleName } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
 import {
 	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import RoomAdminMembersTable from "./RoomAdminMembersTable.vue";
-import { schoolsModule } from "@/store";
-import { createTestingVuetify } from "@@/tests/test-utils/setup/createTestingVuetify";
 import { createTestingI18n } from "@@/tests/test-utils/setup/createTestingI18n";
-import { createTestingPinia } from "@pinia/testing";
-import { RoleName } from "@/serverApi/v3";
-import { useRoomMembersStore } from "@data-room";
+import { createTestingVuetify } from "@@/tests/test-utils/setup/createTestingVuetify";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import SchoolsModule from "@/store/schools";
+import { useRoomMembersStore } from "@data-room";
+import { createTestingPinia } from "@pinia/testing";
 import { DataTable } from "@ui-data-table";
-
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
+import { setActivePinia } from "pinia";
+import { nextTick } from "vue";
 
 describe("RoomAdminMembersTable", () => {
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-
 	beforeEach(() => {
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
+		setActivePinia(createTestingPinia());
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -46,7 +39,6 @@ describe("RoomAdminMembersTable", () => {
 
 	const setup = () => {
 		const currentUser = roomMemberFactory.build({});
-
 		createTestAppStoreWithUser(currentUser.userId);
 
 		const members = [
@@ -116,9 +108,7 @@ describe("RoomAdminMembersTable", () => {
 
 			const dataTable = wrapper.getComponent(DataTable);
 			expect(dataTable.props("items")).toEqual(roomMembersForAdmins);
-			expect(
-				dataTable.props("tableHeaders")!.map((header) => header.title)
-			).toEqual(tableHeaders);
+			expect(dataTable.props("tableHeaders")!.map((header) => header.title)).toEqual(tableHeaders);
 		});
 	});
 
@@ -127,20 +117,14 @@ describe("RoomAdminMembersTable", () => {
 			const { wrapper, roomMembersForAdmins } = setup();
 
 			const anonymizedMembers = roomMembersForAdmins.filter(
-				(member) =>
-					member.firstName ===
-					"pages.rooms.administration.roomDetail.anonymized"
+				(member) => member.firstName === "pages.rooms.administration.roomDetail.anonymized"
 			);
 
 			anonymizedMembers.forEach(async (member) => {
 				await nextTick();
-				const kebabMenu = wrapper.findComponent(
-					`[data-testid="kebab-menu-${member?.userId}"]`
-				);
+				const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-${member?.userId}"]`);
 
-				const checkBox = wrapper
-					.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`)
-					.find("input");
+				const checkBox = wrapper.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`).find("input");
 
 				expect(kebabMenu.exists()).toBe(false);
 				expect(checkBox.attributes()).toHaveProperty("disabled");
@@ -150,28 +134,20 @@ describe("RoomAdminMembersTable", () => {
 		it("should not render kebab menu for the other school members but room owners", () => {
 			const { wrapper, roomMembersForAdmins } = setup();
 
-			const otherSchoolMembers = roomMembersForAdmins.filter(
-				(member) => member.schoolId === "different-school-id"
-			);
+			const otherSchoolMembers = roomMembersForAdmins.filter((member) => member.schoolId === "different-school-id");
 
 			otherSchoolMembers.forEach(async (member) => {
 				if (member.roomRoleName === RoleName.Roomowner) {
 					await nextTick();
-					const kebabMenu = wrapper.findComponent(
-						`[data-testid="kebab-menu-${member.userId}"]`
-					);
+					const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-${member.userId}"]`);
 
 					expect(kebabMenu.exists()).toBe(true);
 					return;
 				}
 				await nextTick();
-				const kebabMenu = wrapper.findComponent(
-					`[data-testid="kebab-menu-${member.userId}"]`
-				);
+				const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-${member.userId}"]`);
 
-				const checkBox = wrapper
-					.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`)
-					.find("input");
+				const checkBox = wrapper.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`).find("input");
 
 				expect(checkBox.attributes()).toHaveProperty("disabled");
 				expect(kebabMenu.exists()).toBe(false);
@@ -188,13 +164,9 @@ describe("RoomAdminMembersTable", () => {
 			sameSchoolMembers.forEach(async (member) => {
 				await nextTick();
 
-				const kebabMenu = wrapper.findComponent(
-					`[data-testid="kebab-menu-${member.userId}"]`
-				);
+				const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-${member.userId}"]`);
 
-				const checkBox = wrapper
-					.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`)
-					.find("input");
+				const checkBox = wrapper.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`).find("input");
 
 				expect(checkBox.attributes()).not.toHaveProperty("disabled");
 				expect(kebabMenu.exists()).toBe(true);
@@ -211,9 +183,7 @@ describe("RoomAdminMembersTable", () => {
 			dataTable.vm.$emit("update:selected-ids", emittedIds);
 			await nextTick();
 
-			expect(roomMembersStore.selectedIds).toEqual(
-				expect.arrayContaining(emittedIds)
-			);
+			expect(roomMembersStore.selectedIds).toEqual(expect.arrayContaining(emittedIds));
 		});
 	});
 });

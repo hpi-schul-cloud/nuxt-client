@@ -1,15 +1,12 @@
+import ErrorPage from "./Error.page.vue";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import ApplicationErrorModule from "@/store/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import ErrorPage from "./Error.page.vue";
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -29,10 +26,7 @@ vi.mock("@/composables/locale-storage.composable", () => ({
 }));
 
 describe("@pages/Error.page.vue", () => {
-	const mountComponent = (
-		statusCode: HttpStatusCode | null = 400,
-		translationKey = "error.400"
-	) => {
+	const mountComponent = (statusCode: HttpStatusCode | null = 400, translationKey = "error.400") => {
 		vi.spyOn(window.performance, "getEntriesByType").mockReturnValue([
 			{
 				entryType: "navigate",
@@ -66,13 +60,10 @@ describe("@pages/Error.page.vue", () => {
 					}),
 				],
 				provide: {
-					[APPLICATION_ERROR_KEY.valueOf()]: createModuleMocks(
-						ApplicationErrorModule,
-						{
-							getStatusCode: statusCode,
-							getTranslationKey: translationKey,
-						}
-					),
+					[APPLICATION_ERROR_KEY.valueOf()]: createModuleMocks(ApplicationErrorModule, {
+						getStatusCode: statusCode,
+						getTranslationKey: translationKey,
+					}),
 				},
 			},
 		});

@@ -2,13 +2,7 @@
 	<ContentElementBar>
 		<template #display>
 			<div @click="openPdf">
-				<PreviewImage
-					:src="previewSrc"
-					alt=""
-					:aspect-ratio="1.77777"
-					position="top"
-					:cover="true"
-				/>
+				<PreviewImage :src="previewSrc" alt="" :aspect-ratio="1.77777" position="top" :cover="true" />
 			</div>
 		</template>
 		<template v-if="showMenu" #menu><slot /></template>

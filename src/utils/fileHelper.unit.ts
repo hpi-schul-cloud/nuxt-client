@@ -1,11 +1,4 @@
 import {
-	ArchiveFileParams,
-	FilePreviewStatus,
-	FilePreviewWidth,
-	FileRecordVirusScanStatus,
-} from "@/types/file/File";
-import { createMock } from "@golevelup/ts-vitest";
-import {
 	convertDownloadToPreviewUrl,
 	convertFileSize,
 	downloadFile,
@@ -23,14 +16,14 @@ import {
 	isVideoMimeType,
 	removeFileExtension,
 } from "./fileHelper";
+import { ArchiveFileParams, FilePreviewStatus, FilePreviewWidth, FileRecordVirusScanStatus } from "@/types/file/File";
+import { createMock } from "@golevelup/ts-vitest";
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({
-			n: vi.fn().mockImplementation((key: string) => key),
-		}),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({
+		n: vi.fn().mockImplementation((key: string) => key),
+	}),
+}));
 
 describe("@/utils/fileHelper", () => {
 	describe("downloadFile", () => {
@@ -44,9 +37,7 @@ describe("@/utils/fileHelper", () => {
 				dataset: { testid: "" },
 				click: vi.fn(),
 			};
-			const createElementSpy = vi
-				.spyOn(document, "createElement")
-				.mockImplementationOnce(() => link);
+			const createElementSpy = vi.spyOn(document, "createElement").mockImplementationOnce(() => link);
 			document.body.appendChild = vi.fn();
 			document.body.removeChild = vi.fn();
 
@@ -74,24 +65,14 @@ describe("@/utils/fileHelper", () => {
 			const inputMockFileRecordIds = createMock<HTMLInputElement>();
 			const formMock = createMock<HTMLFormElement>();
 
-			vi.spyOn(document, "createElement").mockImplementationOnce(() => {
-				return formMock;
-			});
+			vi.spyOn(document, "createElement").mockImplementationOnce(() => formMock);
 
-			vi.spyOn(document, "createElement").mockImplementationOnce(() => {
-				return inputMockArchiveName;
-			});
+			vi.spyOn(document, "createElement").mockImplementationOnce(() => inputMockArchiveName);
 
-			vi.spyOn(document, "createElement").mockImplementationOnce(() => {
-				return inputMockFileRecordIds;
-			});
+			vi.spyOn(document, "createElement").mockImplementationOnce(() => inputMockFileRecordIds);
 
-			const appendChildSpy = vi
-				.spyOn(document.body, "appendChild")
-				.mockImplementationOnce(vi.fn());
-			const removeChildSpy = vi
-				.spyOn(document.body, "removeChild")
-				.mockImplementationOnce(vi.fn());
+			const appendChildSpy = vi.spyOn(document.body, "appendChild").mockImplementationOnce(vi.fn());
+			const removeChildSpy = vi.spyOn(document.body, "removeChild").mockImplementationOnce(vi.fn());
 
 			return {
 				formMock,
@@ -136,9 +117,7 @@ describe("@/utils/fileHelper", () => {
 			expect(inputMockFileRecordIds.name).toBe("fileRecordIds");
 
 			expect(inputMockArchiveName.value).toBe(params.archiveName);
-			expect(inputMockFileRecordIds.value).toBe(
-				JSON.stringify(params.fileRecordIds)
-			);
+			expect(inputMockFileRecordIds.value).toBe(JSON.stringify(params.fileRecordIds));
 		});
 
 		it("should calls formMock.appendChild", () => {
@@ -299,9 +278,7 @@ describe("@/utils/fileHelper", () => {
 
 				const result = convertDownloadToPreviewUrl(url);
 
-				expect(result).toEqual(
-					`/file/preview/233/text.txt?outputFormat=image/webp`
-				);
+				expect(result).toEqual(`/file/preview/233/text.txt?outputFormat=image/webp`);
 			});
 
 			it("should return the preview url with two download words in source", () => {
@@ -309,9 +286,7 @@ describe("@/utils/fileHelper", () => {
 
 				const result = convertDownloadToPreviewUrl(url);
 
-				expect(result).toEqual(
-					`/file/preview/233/download?outputFormat=image/webp`
-				);
+				expect(result).toEqual(`/file/preview/233/download?outputFormat=image/webp`);
 			});
 
 			it("should return the preview url with two download words in source with extension", () => {
@@ -319,9 +294,7 @@ describe("@/utils/fileHelper", () => {
 
 				const result = convertDownloadToPreviewUrl(url);
 
-				expect(result).toEqual(
-					`/file/preview/233/download.txt?outputFormat=image/webp`
-				);
+				expect(result).toEqual(`/file/preview/233/download.txt?outputFormat=image/webp`);
 			});
 		});
 
@@ -331,9 +304,7 @@ describe("@/utils/fileHelper", () => {
 
 				const result = convertDownloadToPreviewUrl(url, FilePreviewWidth._500);
 
-				expect(result).toEqual(
-					`/file/preview/233/text.txt?outputFormat=image/webp&width=500`
-				);
+				expect(result).toEqual(`/file/preview/233/text.txt?outputFormat=image/webp&width=500`);
 			});
 
 			it("should return the preview url with two download words in source", () => {
@@ -341,9 +312,7 @@ describe("@/utils/fileHelper", () => {
 
 				const result = convertDownloadToPreviewUrl(url, FilePreviewWidth._500);
 
-				expect(result).toEqual(
-					`/file/preview/233/download?outputFormat=image/webp&width=500`
-				);
+				expect(result).toEqual(`/file/preview/233/download?outputFormat=image/webp&width=500`);
 			});
 
 			it("should return the preview url with two download words in source with extension", () => {
@@ -351,9 +320,7 @@ describe("@/utils/fileHelper", () => {
 
 				const result = convertDownloadToPreviewUrl(url, FilePreviewWidth._500);
 
-				expect(result).toEqual(
-					`/file/preview/233/download.txt?outputFormat=image/webp&width=500`
-				);
+				expect(result).toEqual(`/file/preview/233/download.txt?outputFormat=image/webp&width=500`);
 			});
 
 			it("should return the preview url", () => {
@@ -362,9 +329,7 @@ describe("@/utils/fileHelper", () => {
 				// @ts-expect-error Enum only provides on value currently but will provide more in the future
 				const result = convertDownloadToPreviewUrl(url, 1000);
 
-				expect(result).toEqual(
-					`/file/preview/233/text.txt?outputFormat=image/webp&width=1000`
-				);
+				expect(result).toEqual(`/file/preview/233/text.txt?outputFormat=image/webp&width=1000`);
 			});
 		});
 	});
@@ -372,9 +337,7 @@ describe("@/utils/fileHelper", () => {
 	describe("isScanStatusPending", () => {
 		describe("when scan status is pending", () => {
 			it("should return true", () => {
-				const result = isScanStatusPending(
-					FilePreviewStatus.AWAITING_SCAN_STATUS
-				);
+				const result = isScanStatusPending(FilePreviewStatus.AWAITING_SCAN_STATUS);
 
 				expect(result).toBe(true);
 			});
@@ -392,9 +355,7 @@ describe("@/utils/fileHelper", () => {
 	describe("isScanStatusWontCheck", () => {
 		describe("when scan status is pending", () => {
 			it("should return true", () => {
-				const result = isScanStatusWontCheck(
-					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
-				);
+				const result = isScanStatusWontCheck(FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK);
 
 				expect(result).toBe(true);
 			});
@@ -402,9 +363,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when scan status is not pending", () => {
 			it("should return false", () => {
-				const result = isScanStatusWontCheck(
-					FilePreviewStatus.PREVIEW_POSSIBLE
-				);
+				const result = isScanStatusWontCheck(FilePreviewStatus.PREVIEW_POSSIBLE);
 
 				expect(result).toBe(false);
 			});
@@ -414,9 +373,7 @@ describe("@/utils/fileHelper", () => {
 	describe("isScanStatusError", () => {
 		describe("when scan status is pending", () => {
 			it("should return true", () => {
-				const result = isScanStatusError(
-					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
-				);
+				const result = isScanStatusError(FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR);
 
 				expect(result).toBe(true);
 			});
@@ -460,9 +417,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when preview status is AWAITING_SCAN_STATUS", () => {
 			it("should return false", () => {
-				const result = isPreviewPossible(
-					FilePreviewStatus.AWAITING_SCAN_STATUS
-				);
+				const result = isPreviewPossible(FilePreviewStatus.AWAITING_SCAN_STATUS);
 
 				expect(result).toBe(false);
 			});
@@ -470,9 +425,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR", () => {
 			it("should return false", () => {
-				const result = isPreviewPossible(
-					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
-				);
+				const result = isPreviewPossible(FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR);
 
 				expect(result).toBe(false);
 			});
@@ -480,9 +433,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK", () => {
 			it("should return false", () => {
-				const result = isPreviewPossible(
-					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
-				);
+				const result = isPreviewPossible(FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK);
 
 				expect(result).toBe(false);
 			});
@@ -490,9 +441,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED", () => {
 			it("should return false", () => {
-				const result = isPreviewPossible(
-					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED
-				);
+				const result = isPreviewPossible(FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED);
 
 				expect(result).toBe(false);
 			});
@@ -500,9 +449,7 @@ describe("@/utils/fileHelper", () => {
 
 		describe("when preview status is PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE", () => {
 			it("should return false", () => {
-				const result = isPreviewPossible(
-					FilePreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE
-				);
+				const result = isPreviewPossible(FilePreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE);
 
 				expect(result).toBe(false);
 			});

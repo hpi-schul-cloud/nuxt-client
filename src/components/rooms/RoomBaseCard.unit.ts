@@ -1,15 +1,9 @@
-import { mount } from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import RoomBaseCard from "./RoomBaseCard.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("RoomBaseCard", () => {
-	const getWrapper = (propsData: {
-		logoUrl?: string;
-		openInNewTab?: boolean;
-	}) => {
+	const getWrapper = (propsData: { logoUrl?: string; openInNewTab?: boolean }) => {
 		const title = "Test Card Title";
 		const testId = "test-card";
 

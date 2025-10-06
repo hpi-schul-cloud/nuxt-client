@@ -1,18 +1,13 @@
+import KebabMenuAction from "./KebabMenuAction.vue";
+import KebabMenuActionDelete from "./KebabMenuActionDelete.vue";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import KebabMenuAction from "./KebabMenuAction.vue";
-import KebabMenuActionDelete from "./KebabMenuActionDelete.vue";
 
 vi.mock("@ui-confirmation-dialog");
-const mockedUseDeleteConfirmationDialog = vi.mocked(
-	useDeleteConfirmationDialog
-);
+const mockedUseDeleteConfirmationDialog = vi.mocked(useDeleteConfirmationDialog);
 
 describe("KebabMenuActionMoveDown Component", () => {
 	const setup = () => {

@@ -1,7 +1,7 @@
-import { VueWrapper, mount } from "@vue/test-utils";
 import RoomAvatarIterator from "./RoomAvatarIterator.vue";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount, VueWrapper } from "@vue/test-utils";
 
 const propsData = {
 	itemSize: "4em",
@@ -48,8 +48,8 @@ const propsData = {
 	condenseLayout: true,
 };
 
-const getWrapper = () => {
-	return mount(RoomAvatarIterator, {
+const getWrapper = () =>
+	mount(RoomAvatarIterator, {
 		global: {
 			plugins: [createTestingVuetify()],
 			stubs: {
@@ -61,7 +61,6 @@ const getWrapper = () => {
 		},
 		props: propsData,
 	});
-};
 
 describe("RoomAvatarIterator", () => {
 	it("should have props", async () => {
@@ -80,9 +79,7 @@ describe("RoomAvatarIterator", () => {
 
 		expect(avatarComponents).toHaveLength(2);
 
-		const avatarComponentOne = avatarComponents[0] as VueWrapper<
-			typeof vRoomAvatar
-		>;
+		const avatarComponentOne = avatarComponents[0] as VueWrapper<typeof vRoomAvatar>;
 
 		expect(avatarComponentOne.props()).toEqual({
 			item: propsData.avatars[0],

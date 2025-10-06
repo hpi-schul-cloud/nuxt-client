@@ -1,12 +1,9 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import vRoomAvatar from "./vRoomAvatar.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { mdiSync } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { VBadge } from "vuetify/lib/components/index";
-import vRoomAvatar from "./vRoomAvatar.vue";
 
 const mockData = {
 	id: "456",
@@ -62,8 +59,7 @@ describe("vRoomAvatar", () => {
 
 	it("should display the short title", () => {
 		const { wrapper } = setup();
-		const shortLabelElement = wrapper.find(".single-avatar")
-			.element as HTMLElement;
+		const shortLabelElement = wrapper.find(".single-avatar").element as HTMLElement;
 
 		expect(shortLabelElement).toBeTruthy();
 		expect(shortLabelElement.innerHTML).toStrictEqual("Bi");
@@ -176,9 +172,7 @@ describe("vRoomAvatar", () => {
 			await avatarComponent.trigger("dragstart");
 			const startDragEvent = wrapper.emitted("startDrag");
 
-			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(
-				true
-			);
+			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(true);
 			expect(startDragEvent).toHaveLength(1);
 			expect(startDragEvent && startDragEvent[0][0]).toStrictEqual(mockData);
 		});
@@ -208,9 +202,7 @@ describe("vRoomAvatar", () => {
 
 			await avatarComponent.trigger("dragenter");
 
-			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(
-				false
-			);
+			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(false);
 		});
 
 		it("should emit 'dragend' event when draging ended", async () => {
@@ -219,9 +211,7 @@ describe("vRoomAvatar", () => {
 
 			await avatarComponent.trigger("dragend");
 
-			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(
-				false
-			);
+			expect((wrapper.vm as unknown as typeof vRoomAvatar).isDragging).toBe(false);
 			expect(wrapper.emitted()).toHaveProperty("dragend");
 		});
 	});
@@ -246,9 +236,7 @@ describe("vRoomAvatar", () => {
 
 			const element = wrapper.find(".subtitle").element as HTMLElement;
 
-			expect(element.innerHTML.trim()).toContain(
-				"components.molecules.copyResult.courseCopy.info"
-			);
+			expect(element.innerHTML.trim()).toContain("components.molecules.copyResult.courseCopy.info");
 			expect(element.className).toContain("text-grey");
 			expect(element.className).toContain("text-darken-1");
 		});
@@ -258,9 +246,7 @@ describe("vRoomAvatar", () => {
 
 			const avatarComponent = wrapper.findComponent({ name: "VBtn" });
 
-			expect(avatarComponent.attributes().class.split(" ")).toContain(
-				"grey-lighten-2"
-			);
+			expect(avatarComponent.attributes().class.split(" ")).toContain("grey-lighten-2");
 		});
 	});
 });
