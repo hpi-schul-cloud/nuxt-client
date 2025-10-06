@@ -11,7 +11,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { RoomMember, useRoomMembersStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
@@ -47,8 +46,6 @@ describe("ChangeRole.vue", () => {
 	let deactivateMock: Mock;
 
 	beforeEach(() => {
-		// setActivePinia(createPinia());
-
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
 		deactivateMock = vi.fn();
