@@ -1,13 +1,6 @@
 <template>
 	<section :class="{ inline: isInline }">
-		<v-btn
-			v-if="isInline"
-			variant="text"
-			:ripple="false"
-			design="none"
-			class="arrow__back"
-			@click="goBack"
-		>
+		<v-btn v-if="isInline" variant="text" :ripple="false" design="none" class="arrow__back" @click="goBack">
 			<v-icon> {{ mdiChevronLeft }}</v-icon>
 			{{ $t("pages.content.index.backToCourse") }}
 		</v-btn>
@@ -18,11 +11,7 @@
 						<v-text-field
 							v-model="searchQuery"
 							autofocus
-							:class="
-								activateTransition
-									? 'content__searchbar'
-									: 'first-search__searchbar'
-							"
+							:class="activateTransition ? 'content__searchbar' : 'first-search__searchbar'"
 							:placeholder="$t('pages.content.index.search.placeholder')"
 							data-testid="learningstore-search-input"
 							@update:model-value="onInput"
@@ -48,30 +37,17 @@
 							<!-- initial state, empty search -->
 							<content-initial-state v-if="searchQuery.length === 0" />
 							<!-- search query not empty and there are no results -->
-							<div
-								v-else-if="!resources.data.length && !loading"
-								class="content__no_results"
-							>
+							<div v-else-if="!resources.data.length && !loading" class="content__no_results">
 								<content-empty-state />
 							</div>
 							<!-- search query not empty and there are results -->
 							<template v-if="searchQuery.length > 1">
 								<p v-show="resources.data.length !== 0" class="content__total">
 									{{ resources.total }}
-									{{ $t("pages.content.index.search_results") }} "{{
-										searchQueryResult
-									}}"
+									{{ $t("pages.content.index.search_results") }} "{{ searchQueryResult }}"
 								</p>
-								<v-infinite-scroll
-									empty-text=""
-									width="100%"
-									:items="resources"
-									@load="onLoad"
-								>
-									<lern-store-grid
-										column-width="14rem"
-										data-testid="lernStoreCardsContainer"
-									>
+								<v-infinite-scroll empty-text="" width="100%" :items="resources" @load="onLoad">
+									<lern-store-grid column-width="14rem" data-testid="lernStoreCardsContainer">
 										<content-card
 											v-for="resource of resources.data"
 											:key="resource.properties['ccm:replicationsourceuuid'][0]"
@@ -81,11 +57,7 @@
 										/>
 									</lern-store-grid>
 									<template #loading>
-										<v-progress-circular
-											indeterminate
-											size="115"
-											class="align-self-center mt-4"
-										/>
+										<v-progress-circular indeterminate size="115" class="align-self-center mt-4" />
 									</template>
 								</v-infinite-scroll>
 							</template>
@@ -107,12 +79,12 @@ import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
 import themeConfig from "@/theme.config";
 import { CONTENT_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { notifyError } from "@data-app";
 import { mdiChevronLeft, mdiClose, mdiMagnify } from "@icons/material";
 import { useDebounceFn, watchDebounced } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { notifyError } from "@data-app";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -124,9 +96,7 @@ const activateTransition = ref(false);
 const searchQueryResult = ref("");
 const queryOptions = ref({ $limit: 12, $skip: 0 });
 
-let doneCallbackFunction:
-	| ((status: "ok" | "empty" | "loading" | "error") => void)
-	| undefined = undefined;
+let doneCallbackFunction: ((status: "ok" | "empty" | "loading" | "error") => void) | undefined = undefined;
 
 onMounted(() => {
 	const pageTitle = isInline.value
@@ -147,9 +117,7 @@ const isInline = computed(() => !!route.query.inline);
 const resources = computed(() => contentModule.getResourcesGetter);
 const loading = computed(() => contentModule.getLoading);
 const reachedTotal = computed(
-	() =>
-		resources.value.total !== 0 &&
-		resources.value.data.length >= resources.value.total
+	() => resources.value.total !== 0 && resources.value.data.length >= resources.value.total
 );
 
 const onInput = async () => {
@@ -318,9 +286,7 @@ watchDebounced(
 	max-width: 100%;
 
 	&__input-container {
-		width: calc(
-			2 * var(--content-min-width)
-		); // keep in sync with wrapper in content (EmptyState.vue)
+		width: calc(2 * var(--content-min-width)); // keep in sync with wrapper in content (EmptyState.vue)
 
 		:deep(.v-field__input) {
 			font-size: var(--text-lg);

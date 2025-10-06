@@ -1,9 +1,6 @@
-import { shallowMount } from "@vue/test-utils";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 
 describe("SubmissionContentElementTitle", () => {
 	const setup = () => {

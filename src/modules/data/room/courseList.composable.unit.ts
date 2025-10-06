@@ -1,26 +1,15 @@
-import {
-	CourseInfoDataResponse,
-	CourseInfoListResponse,
-	CourseSortProps,
-	CourseStatus,
-} from "@/serverApi/v3";
-import {
-	axiosErrorFactory,
-	expectNotification,
-	i18nMock,
-	mockApiResponse,
-	mountComposable,
-} from "@@/tests/test-utils";
+import { useCourseApi } from "./courseApi.composable";
+import { useCourseInfoApi } from "./courseInfoApi.composable";
+import { useCourseList } from "./courseList.composable";
+import { CourseInfoDataResponse, CourseInfoListResponse, CourseSortProps, CourseStatus } from "@/serverApi/v3";
+import { BusinessError, Pagination } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { axiosErrorFactory, expectNotification, i18nMock, mockApiResponse, mountComposable } from "@@/tests/test-utils";
+import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { BusinessError, Pagination } from "@/store/types/commons";
-import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { useCourseInfoApi } from "./courseInfoApi.composable";
-import { useCourseApi } from "./courseApi.composable";
-import { useCourseList } from "./courseList.composable";
-import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("./courseApi.composable");
 vi.mock("./courseInfoApi.composable");
@@ -60,9 +49,7 @@ describe("courseList.composable", () => {
 
 			composable.setSortBy(CourseSortProps.Name);
 
-			expect(composable.key.value).toEqual<CourseSortProps>(
-				CourseSortProps.Name
-			);
+			expect(composable.key.value).toEqual<CourseSortProps>(CourseSortProps.Name);
 		});
 	});
 
@@ -186,9 +173,7 @@ describe("courseList.composable", () => {
 					skip: 0,
 					total: 10,
 				};
-				useCourseInfoApiMock.loadCoursesForSchool.mockResolvedValue(
-					mockApiResponse({ data: courseList })
-				);
+				useCourseInfoApiMock.loadCoursesForSchool.mockResolvedValue(mockApiResponse({ data: courseList }));
 
 				const composable = mountComposable(() => useCourseList(), {
 					global: {
@@ -244,9 +229,7 @@ describe("courseList.composable", () => {
 
 				await composable.fetchCourses(CourseStatus.Current);
 
-				expect(composable.courses.value).toEqual<CourseInfoDataResponse[]>([
-					courseInfo,
-				]);
+				expect(composable.courses.value).toEqual<CourseInfoDataResponse[]>([courseInfo]);
 			});
 
 			describe("and withoutTeacher is set to true", () => {
@@ -255,9 +238,14 @@ describe("courseList.composable", () => {
 					composable.withoutTeacher.value = true;
 					await composable.fetchCourses(CourseStatus.Current);
 
-					expect(
-						useCourseInfoApiMock.loadCoursesForSchool
-					).toHaveBeenCalledWith("current", true, 10, 0, undefined, "asc");
+					expect(useCourseInfoApiMock.loadCoursesForSchool).toHaveBeenCalledWith(
+						"current",
+						true,
+						10,
+						0,
+						undefined,
+						"asc"
+					);
 				});
 			});
 		});
@@ -267,9 +255,7 @@ describe("courseList.composable", () => {
 				const errorResponse = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(errorResponse);
 
-				useCourseInfoApiMock.loadCoursesForSchool.mockRejectedValue(
-					errorResponse
-				);
+				useCourseInfoApiMock.loadCoursesForSchool.mockRejectedValue(errorResponse);
 
 				const composable = mountComposable(() => useCourseList(), {
 					global: {

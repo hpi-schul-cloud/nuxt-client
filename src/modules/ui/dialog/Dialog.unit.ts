@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import Dialog from "./Dialog.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { enableAutoUnmount, mount } from "@vue/test-utils";
 import { VCard, VDialog } from "vuetify/lib/components/index";
-import Dialog from "./Dialog.vue";
 
 describe("Dialog", () => {
 	enableAutoUnmount(afterEach);

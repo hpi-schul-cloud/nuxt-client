@@ -1,11 +1,11 @@
+import { useErrorNotification } from "./error-notification.composable";
 import { expectNotification, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { nextTick, ref } from "vue";
-import { useErrorNotification } from "./error-notification.composable";
-import { beforeEach } from "vitest";
+import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { useNotificationStore } from "@data-app";
+import { beforeEach } from "vitest";
+import { nextTick, ref } from "vue";
 
 describe("useErrorNotification.composable", () => {
 	beforeEach(() => {

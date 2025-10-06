@@ -1,8 +1,8 @@
-import { BusinessError } from "@/store/types/commons";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { ref, Ref } from "vue";
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
+import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { Ref, ref } from "vue";
 
 export const useExternalToolDisplayState = () => {
 	const { fetchDisplayDataCall } = useExternalToolReferenceApi();
@@ -11,9 +11,7 @@ export const useExternalToolDisplayState = () => {
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref(undefined);
 
-	const fetchDisplayData = async (
-		contextExternalToolId: string
-	): Promise<void> => {
+	const fetchDisplayData = async (contextExternalToolId: string): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 

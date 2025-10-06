@@ -10,12 +10,7 @@
 					:parent-id="parentId"
 					@load-error="loadError"
 				/>
-				<v-btn
-					class="mt-4"
-					color="primary"
-					data-testid="editor-save-button"
-					@click="save"
-				>
+				<v-btn class="mt-4" color="primary" data-testid="editor-save-button" @click="save">
 					{{ t("common.actions.save") }}
 				</v-btn>
 			</div>
@@ -24,17 +19,17 @@
 </template>
 
 <script setup lang="ts">
+import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
+import { H5pEditorHooks } from "./types/h5pEditorHooks";
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { H5PContentParentType, H5PSaveResponse } from "@/h5pEditorApi/v3";
 import type ApplicationErrorModule from "@/store/application-error";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
+import { notifyError, notifySuccess } from "@data-app";
 import { onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
-import { H5pEditorHooks } from "./types/h5pEditorHooks";
-import { notifyError, notifySuccess } from "@data-app";
 
 const props = defineProps<{
 	parentType: H5PContentParentType;
@@ -42,9 +37,7 @@ const props = defineProps<{
 	contentId?: string;
 }>();
 
-const applicationErrorModule: ApplicationErrorModule = injectStrict(
-	APPLICATION_ERROR_KEY
-);
+const applicationErrorModule: ApplicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
 
 const { t } = useI18n();
 

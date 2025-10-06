@@ -1,3 +1,7 @@
+import { GroupMapper } from "./group/group.mapper";
+import { ClassInfo } from "./types/class-info";
+import { BusinessError, Pagination } from "./types/commons";
+import { SortOrder } from "./types/sort-order.enum";
 import {
 	ClassInfoSearchListResponse,
 	ClassSortQueryType,
@@ -8,10 +12,6 @@ import {
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { GroupMapper } from "./group/group.mapper";
-import { ClassInfo } from "./types/class-info";
-import { BusinessError, Pagination } from "./types/commons";
-import { SortOrder } from "./types/sort-order.enum";
 
 @Module({
 	name: "groupModule",
@@ -107,10 +107,7 @@ export default class GroupModule extends VuexModule {
 	}
 
 	@Action
-	async deleteClass(deleteQuery: {
-		classId: string;
-		query?: SchoolYearQueryType;
-	}): Promise<void> {
+	async deleteClass(deleteQuery: { classId: string; query?: SchoolYearQueryType }): Promise<void> {
 		this.setLoading(true);
 
 		try {
@@ -131,22 +128,17 @@ export default class GroupModule extends VuexModule {
 	}
 
 	@Action
-	async loadClassesForSchool(data?: {
-		schoolYearQuery?: SchoolYearQueryType;
-	}): Promise<void> {
+	async loadClassesForSchool(data?: { schoolYearQuery?: SchoolYearQueryType }): Promise<void> {
 		this.setLoading(true);
 		try {
-			const response: AxiosResponse<ClassInfoSearchListResponse> =
-				await this.groupApi.groupControllerFindClasses(
-					this.pagination.skip,
-					this.pagination.limit,
-					this.getSortOrder,
-					this.getSortBy,
-					data?.schoolYearQuery
-				);
-			const mappedClasses: ClassInfo[] = GroupMapper.mapToClassInfo(
-				response.data.data
+			const response: AxiosResponse<ClassInfoSearchListResponse> = await this.groupApi.groupControllerFindClasses(
+				this.pagination.skip,
+				this.pagination.limit,
+				this.getSortOrder,
+				this.getSortBy,
+				data?.schoolYearQuery
 			);
+			const mappedClasses: ClassInfo[] = GroupMapper.mapToClassInfo(response.data.data);
 
 			this.setPagination({
 				limit: response.data.limit,

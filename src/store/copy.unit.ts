@@ -1,9 +1,5 @@
 import * as serverApi from "../serverApi/v3/api";
-import {
-	CopyApiResponse,
-	CopyApiResponseStatusEnum,
-	CopyApiResponseTypeEnum,
-} from "../serverApi/v3/api";
+import { CopyApiResponse, CopyApiResponseStatusEnum, CopyApiResponseTypeEnum } from "../serverApi/v3/api";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "./copy";
 
 const serverDataPartial: CopyApiResponse = {
@@ -75,9 +71,7 @@ describe("copy module", () => {
 					courseId: "courseId-value",
 				};
 
-				await expect(() => copyModule.copy(payload)).rejects.toThrow(
-					`CopyProcess unknown type: ${payload.type}`
-				);
+				await expect(() => copyModule.copy(payload)).rejects.toThrow(`CopyProcess unknown type: ${payload.type}`);
 			});
 
 			describe("copy a task", () => {
@@ -86,9 +80,7 @@ describe("copy module", () => {
 						const taskMockApi = {
 							taskControllerCopyTask: vi.fn(async () => ({ data: {} })),
 						};
-						vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
-							taskMockApi as unknown as serverApi.TaskApiInterface
-						);
+						vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(taskMockApi as unknown as serverApi.TaskApiInterface);
 						const copyModule = new CopyModule({});
 
 						return { copyModule, taskMockApi };
@@ -104,10 +96,7 @@ describe("copy module", () => {
 						};
 						await copyModule.copy(payload);
 
-						expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalledWith(
-							"taskId",
-							{ courseId: "testCourseId" }
-						);
+						expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalledWith("taskId", { courseId: "testCourseId" });
 					});
 
 					it("should send with NO courseId", async () => {
@@ -120,10 +109,7 @@ describe("copy module", () => {
 
 						await copyModule.copy(payload);
 
-						expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalledWith(
-							"taskId",
-							{ courseId: undefined }
-						);
+						expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalledWith("taskId", { courseId: undefined });
 					});
 				});
 			});
@@ -148,9 +134,7 @@ describe("copy module", () => {
 
 					await copyModule.copy(payload);
 
-					expect(
-						roomCopyMockApi.courseRoomsControllerCopyCourse
-					).toHaveBeenCalledWith("courseId-value");
+					expect(roomCopyMockApi.courseRoomsControllerCopyCourse).toHaveBeenCalledWith("courseId-value");
 				});
 			});
 
@@ -170,9 +154,9 @@ describe("copy module", () => {
 						type: CopyParamsTypeEnum.Lesson,
 						courseId: "testCourseId",
 					});
-					expect(
-						roomCopyMockApi.courseRoomsControllerCopyLesson
-					).toHaveBeenCalledWith("testLessonId", { courseId: "testCourseId" });
+					expect(roomCopyMockApi.courseRoomsControllerCopyLesson).toHaveBeenCalledWith("testLessonId", {
+						courseId: "testCourseId",
+					});
 				});
 			});
 
@@ -190,9 +174,7 @@ describe("copy module", () => {
 						type: CopyParamsTypeEnum.ColumnBoard,
 						courseId: "testCourseId",
 					});
-					expect(
-						boardCopyMockApi.boardControllerCopyBoard
-					).toHaveBeenCalledWith("testBoardId");
+					expect(boardCopyMockApi.boardControllerCopyBoard).toHaveBeenCalledWith("testBoardId");
 				});
 			});
 		});
@@ -213,9 +195,7 @@ describe("copy module", () => {
 
 				await copyModule.validateShareToken(token);
 
-				expect(
-					shareApiMock.shareTokenControllerLookupShareToken
-				).toHaveBeenCalledWith(token);
+				expect(shareApiMock.shareTokenControllerLookupShareToken).toHaveBeenCalledWith(token);
 			});
 		});
 
@@ -241,9 +221,7 @@ describe("copy module", () => {
 
 				await copyModule.copyByShareToken(payload);
 
-				expect(
-					shareApiMock.shareTokenControllerImportShareToken
-				).toHaveBeenCalledWith(token, { newName });
+				expect(shareApiMock.shareTokenControllerImportShareToken).toHaveBeenCalledWith(token, { newName });
 			});
 
 			it("should throw an error if copyResult is undefined", async () => {
@@ -261,9 +239,9 @@ describe("copy module", () => {
 					newName: "My Course",
 				};
 
-				await expect(() =>
-					copyModule.copyByShareToken(payload)
-				).rejects.toThrow(`CopyProcess unknown type: ${payload.type}`);
+				await expect(() => copyModule.copyByShareToken(payload)).rejects.toThrow(
+					`CopyProcess unknown type: ${payload.type}`
+				);
 			});
 		});
 
@@ -289,9 +267,7 @@ describe("copy module", () => {
 
 				await copyModule.copyByShareToken(payload);
 
-				expect(
-					shareApiMock.shareTokenControllerImportShareToken
-				).toHaveBeenCalledWith(token, { newName });
+				expect(shareApiMock.shareTokenControllerImportShareToken).toHaveBeenCalledWith(token, { newName });
 			});
 
 			it("should throw an error if copyResult is undefined", async () => {
@@ -309,9 +285,9 @@ describe("copy module", () => {
 					newName: "My Lesson",
 				};
 
-				await expect(() =>
-					copyModule.copyByShareToken(payload)
-				).rejects.toThrow(`CopyProcess unknown type: ${payload.type}`);
+				await expect(() => copyModule.copyByShareToken(payload)).rejects.toThrow(
+					`CopyProcess unknown type: ${payload.type}`
+				);
 			});
 		});
 	});
@@ -405,9 +381,7 @@ describe("copy module", () => {
 					copyModule.setCopyResultFailedItems({
 						payload: serverData,
 					});
-					expect(copyModule.getCopyResultFailedItems).toStrictEqual(
-						expectedData
-					);
+					expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 				});
 			});
 

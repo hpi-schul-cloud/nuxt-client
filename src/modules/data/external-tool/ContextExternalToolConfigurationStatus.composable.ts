@@ -1,21 +1,16 @@
-import { useI18n } from "vue-i18n";
 import { ContextExternalToolConfigurationStatus } from "./types";
-import { useAppStore } from "@data-app";
 import { RoleName } from "@/serverApi/v3";
+import { useAppStore } from "@data-app";
+import { useI18n } from "vue-i18n";
 
 export const useContextExternalToolConfigurationStatus = () => {
 	const { t } = useI18n();
 
-	const determineToolStatusTranslationKey = (
-		toolConfigStatus: ContextExternalToolConfigurationStatus
-	): string => {
+	const determineToolStatusTranslationKey = (toolConfigStatus: ContextExternalToolConfigurationStatus): string => {
 		const userRoles = useAppStore().userRoles;
 
 		if (userRoles.includes(RoleName.Teacher)) {
-			if (
-				toolConfigStatus.isOutdatedOnScopeSchool &&
-				toolConfigStatus.isOutdatedOnScopeContext
-			) {
+			if (toolConfigStatus.isOutdatedOnScopeSchool && toolConfigStatus.isOutdatedOnScopeContext) {
 				return "common.tool.information.incomplete.outdated.schoolAndContext.teacher";
 			} else if (toolConfigStatus.isOutdatedOnScopeSchool) {
 				return "common.tool.information.outdatedOnSchool.teacher";
@@ -76,9 +71,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 		}
 	};
 
-	const isOperational = (
-		toolConfigStatus: ContextExternalToolConfigurationStatus
-	): boolean => {
+	const isOperational = (toolConfigStatus: ContextExternalToolConfigurationStatus): boolean => {
 		if (
 			toolConfigStatus.isIncompleteOnScopeContext ||
 			toolConfigStatus.isOutdatedOnScopeContext ||

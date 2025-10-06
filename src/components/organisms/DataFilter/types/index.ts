@@ -12,16 +12,16 @@ import {
 } from "./types";
 
 export {
-	FilterOption,
-	Registration,
-	User,
 	ChipTitle,
 	DateSelection,
 	FilterItem,
+	FilterOption,
 	FilterOptionsType,
 	FilterQuery,
+	Registration,
 	SelectOptionsType,
 	UiState,
 	UpdateFilterParamType,
+	User,
 	UserBasedRegistrationOptions,
 };

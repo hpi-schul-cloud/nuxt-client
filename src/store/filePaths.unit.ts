@@ -1,18 +1,15 @@
 import FilePathsModule from "./filePaths";
-import { SpecificFiles, GlobalFiles } from "./types/filePaths";
+import { GlobalFiles, SpecificFiles } from "./types/filePaths";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { useEnvConfig } from "@data-env";
-import { beforeEach } from "vitest";
-import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 const specificFiles = {
-	accessibilityStatement:
-		"Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
-	privacy:
-		"Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
-	termsOfUse:
-		"Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
+	accessibilityStatement: "Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
+	privacy: "Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
+	termsOfUse: "Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
 	analogConsent: "Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
@@ -24,28 +21,19 @@ const globalFiles = {
 		"Willkommensordner/Begleitmaterial/Broschuere_Die-Schul-Cloud-im-Unterricht-Fachuebergreifende-Unterrichtsszenarien-und-Methoden.pdf",
 	BroschuereSCimUnterricht2:
 		"Willkommensordner/Begleitmaterial/Broschuere_Die-Schul-Cloud-im-Unterricht-und-Schulalltag-Mehrwert-und-Voraussetzungen.pdf",
-	BroschuereSCundLernen4:
-		"Willkommensordner/Begleitmaterial/Broschuere_HPI-Schul-Cloud-und-Lernen-4.0.pdf",
-	SchulrechnerInDieSC2017:
-		"Dokumente/Schulrechner-wandern-in-die-Cloud-2017.pdf",
-	SCKonzeptPilotierung2017:
-		"Dokumente/Konzept-und-Pilotierung-der-Schul-Cloud-2017.pdf",
+	BroschuereSCundLernen4: "Willkommensordner/Begleitmaterial/Broschuere_HPI-Schul-Cloud-und-Lernen-4.0.pdf",
+	SchulrechnerInDieSC2017: "Dokumente/Schulrechner-wandern-in-die-Cloud-2017.pdf",
+	SCKonzeptPilotierung2017: "Dokumente/Konzept-und-Pilotierung-der-Schul-Cloud-2017.pdf",
 };
 
 const mockSetSpecificFiles = (payload: string) =>
 	Object.fromEntries(
-		Object.entries(specificFiles).map(([key, value]) => [
-			key,
-			String(new URL(value, payload)),
-		])
+		Object.entries(specificFiles).map(([key, value]) => [key, String(new URL(value, payload))])
 	) as SpecificFiles;
 
 const mockSetGloablFiles = (payload: string) =>
 	Object.fromEntries(
-		Object.entries(globalFiles).map(([key, value]) => [
-			key,
-			String(new URL(`global/${value}`, payload)),
-		])
+		Object.entries(globalFiles).map(([key, value]) => [key, String(new URL(`global/${value}`, payload))])
 	) as GlobalFiles;
 
 describe("filePaths module", () => {
@@ -81,9 +69,7 @@ describe("filePaths module", () => {
 			const mockURL = "http://mock.url/";
 			createTestEnvStore({ DOCUMENT_BASE_DIR: mockURL });
 			filePathsModule.init();
-			expect(filePathsModule.getDocumentBaseDir).toBe(
-				`${mockURL}${useEnvConfig().value.SC_THEME}/`
-			);
+			expect(filePathsModule.getDocumentBaseDir).toBe(`${mockURL}${useEnvConfig().value.SC_THEME}/`);
 		});
 	});
 	describe("mutations", () => {
@@ -95,9 +81,7 @@ describe("filePaths module", () => {
 			};
 
 			filePathsModule.setDocumentBaseDir(mockPayload);
-			expect(filePathsModule.getDocumentBaseDir).toBe(
-				`${mockPayload.baseDir}${mockPayload.theme}/`
-			);
+			expect(filePathsModule.getDocumentBaseDir).toBe(`${mockPayload.baseDir}${mockPayload.theme}/`);
 		});
 		it("setSpecificfiles should correctly set the specificFiles state object ", () => {
 			const filePathsModule = new FilePathsModule({});

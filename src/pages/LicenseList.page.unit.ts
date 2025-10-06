@@ -1,19 +1,13 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { flushPromises } from "@vue/test-utils";
-import axios from "axios";
-import { nextTick } from "vue";
-import {
-	VExpansionPanelText,
-	VExpansionPanelTitle,
-} from "vuetify/lib/components/index";
 import LicenseListPage from "./LicenseList.page.vue";
 import { createTestEnvStore, expectNotification } from "@@/tests/test-utils";
-import { beforeEach } from "vitest";
-import { setActivePinia } from "pinia";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { flushPromises } from "@vue/test-utils";
+import axios from "axios";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
+import { nextTick } from "vue";
+import { VExpansionPanelText, VExpansionPanelTitle } from "vuetify/lib/components/index";
 
 vi.mock("axios");
 const mockAxios = vi.mocked(axios, true);
@@ -54,11 +48,9 @@ describe("LicenseList Page", () => {
 		await flushPromises();
 
 		expect(wrapper.exists()).toBe(true);
-		["MIT-License", "Apache-2.0", "pages.licenseList.title"].forEach(
-			(license) => {
-				expect(wrapper.text()).toContain(license);
-			}
-		);
+		["MIT-License", "Apache-2.0", "pages.licenseList.title"].forEach((license) => {
+			expect(wrapper.text()).toContain(license);
+		});
 	});
 
 	it("should call the license summary url", () => {

@@ -1,16 +1,13 @@
+import TasksList from "@/components/organisms/TasksList.vue";
+import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
 import FinishedTasksModule from "@/store/finished-tasks";
 import TasksModule from "@/store/tasks";
 import { OpenTasksForStudent } from "@/store/types/tasks";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import TasksList from "@/components/organisms/TasksList.vue";
-import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
-import { shallowMount } from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { EmptyState } from "@ui-empty-state";
+import { shallowMount } from "@vue/test-utils";
 
 const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 

@@ -1,23 +1,16 @@
 import AdministrationRoomsPage from "./AdministrationRooms.page.vue";
-import {
-	createTestEnvStore,
-	mockedPiniaStoreTyping,
-	schoolFactory,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { useAdministrationRoomStore } from "@data-room";
-import { createTestingPinia } from "@pinia/testing";
-import { createMock } from "@golevelup/ts-vitest";
-import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
+import { createTestEnvStore, mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { Router, useRouter } from "vue-router";
+import { useAdministrationRoomStore } from "@data-room";
+import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
-import { setActivePinia } from "pinia";
+import { Router, useRouter } from "vue-router";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
@@ -42,10 +35,7 @@ describe("AdministrationRooms.page", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: {
-		isEmptyList?: boolean;
-		featureFlag?: boolean;
-	}) => {
+	const setup = (options?: { isEmptyList?: boolean; featureFlag?: boolean }) => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,

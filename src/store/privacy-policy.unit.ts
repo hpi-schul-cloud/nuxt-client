@@ -1,16 +1,11 @@
+import PrivacyPolicyModule from "./privacy-policy";
+import { BusinessError } from "@/store/types/commons";
+import { ConsentVersion, CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
-import PrivacyPolicyModule from "./privacy-policy";
-import {
-	ConsentVersion,
-	CreateConsentVersionPayload,
-} from "@/store/types/consent-version";
-import { BusinessError } from "@/store/types/commons";
 
 let receivedRequests: { path: string }[] = [];
-let getRequestReturn:
-	| { data: { data: ConsentVersion[] } }
-	| { data: ConsentVersion } = {
+let getRequestReturn: { data: { data: ConsentVersion[] } } | { data: ConsentVersion } = {
 	data: { data: [] },
 };
 
@@ -91,9 +86,7 @@ describe("privacy policy module", () => {
 				expect(receivedRequests[0].path).toBe("/v1/consentVersions");
 				expect(setStatusSpy).toHaveBeenCalledWith("pending");
 				expect(setStatusSpy).toHaveBeenCalledWith("completed");
-				expect(setPrivacyPolicySpy).toHaveBeenCalledWith(
-					getRequestReturn.data.data[0]
-				);
+				expect(setPrivacyPolicySpy).toHaveBeenCalledWith(getRequestReturn.data.data[0]);
 				expect(policyModule.privacyPolicy).toBe(getRequestReturn.data.data[0]);
 			});
 		});

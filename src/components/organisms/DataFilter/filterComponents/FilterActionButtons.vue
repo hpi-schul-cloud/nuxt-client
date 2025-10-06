@@ -1,18 +1,10 @@
 <template>
 	<div class="d-flex justify-space-between">
-		<v-btn
-			variant="flat"
-			data-testid="remove-filter-button"
-			@click="onRemoveFilter"
-		>
+		<v-btn variant="flat" data-testid="remove-filter-button" @click="onRemoveFilter">
 			{{ t("common.actions.remove") }}
 		</v-btn>
 		<div>
-			<v-btn
-				variant="flat"
-				data-testid="cancel-filter-button"
-				@click="onCancel"
-			>
+			<v-btn variant="flat" data-testid="cancel-filter-button" @click="onCancel">
 				{{ t("common.actions.cancel") }}
 			</v-btn>
 			<v-btn

@@ -1,20 +1,12 @@
+import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.vue";
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
-import {
-	businessErrorFactory,
-	contextExternalToolFactory,
-} from "@@/tests/test-utils";
-import {
-	contextExternalToolConfigurationTemplateFactory,
-	toolParameterFactory,
-} from "@@/tests/test-utils/factory";
+import { businessErrorFactory, contextExternalToolFactory } from "@@/tests/test-utils";
+import { contextExternalToolConfigurationTemplateFactory, toolParameterFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
 	ContextExternalToolSave,
 	useContextExternalToolConfigurationState,
@@ -24,7 +16,6 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { Component, nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.vue";
 
 vi.mock("@data-external-tool/contextExternalToolConfigurationState.composable");
 vi.mock("@data-external-tool/contextExternalToolState.composable");
@@ -33,28 +24,22 @@ describe("CourseContextExternalToolConfigurator", () => {
 	let useContextExternalToolConfigurationStateMock: DeepMocked<
 		ReturnType<typeof useContextExternalToolConfigurationState>
 	>;
-	let useContextExternalToolStateMock: DeepMocked<
-		ReturnType<typeof useContextExternalToolState>
-	>;
+	let useContextExternalToolStateMock: DeepMocked<ReturnType<typeof useContextExternalToolState>>;
 
 	const getWrapper = (
 		props: ComponentProps<typeof ContextExternalToolConfigurator>,
 		getters: Partial<SchoolExternalToolsModule> = {}
 	) => {
-		const schoolExternalToolsModule = createModuleMocks(
-			SchoolExternalToolsModule,
-			{
-				getContextExternalToolConfigurationTemplate: undefined,
-				...getters,
-			}
-		);
+		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule, {
+			getContextExternalToolConfigurationTemplate: undefined,
+			...getters,
+		});
 
 		const wrapper = mount(ContextExternalToolConfigurator, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
-						schoolExternalToolsModule,
+					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 				},
 			},
 			props,
@@ -73,20 +58,14 @@ describe("CourseContextExternalToolConfigurator", () => {
 			isLoading: ref(),
 			availableTools: ref([]),
 		});
-		useContextExternalToolStateMock = createMock<
-			ReturnType<typeof useContextExternalToolState>
-		>({
+		useContextExternalToolStateMock = createMock<ReturnType<typeof useContextExternalToolState>>({
 			error: ref(),
 			isLoading: ref(),
 			contextExternalTool: ref(),
 		});
 
-		vi.mocked(useContextExternalToolConfigurationState).mockReturnValue(
-			useContextExternalToolConfigurationStateMock
-		);
-		vi.mocked(useContextExternalToolState).mockReturnValue(
-			useContextExternalToolStateMock
-		);
+		vi.mocked(useContextExternalToolConfigurationState).mockReturnValue(useContextExternalToolConfigurationStateMock);
+		vi.mocked(useContextExternalToolState).mockReturnValue(useContextExternalToolStateMock);
 	});
 
 	afterEach(() => {
@@ -121,8 +100,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 					contextType: contextExternalTool.contextType,
 				});
 
-				useContextExternalToolStateMock.contextExternalTool.value =
-					contextExternalTool;
+				useContextExternalToolStateMock.contextExternalTool.value = contextExternalTool;
 
 				return {
 					wrapper,
@@ -145,24 +123,20 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 				await wrapper.vm.fetchData();
 
-				expect(
-					useContextExternalToolStateMock.fetchContextExternalTool
-				).toHaveBeenCalledWith(contextExternalTool.id);
+				expect(useContextExternalToolStateMock.fetchContextExternalTool).toHaveBeenCalledWith(contextExternalTool.id);
 			});
 		});
 
 		describe("when a preferred tool with a custom parameter is loaded", () => {
 			const setup = () => {
-				const contextExternalToolConfigurationTemplate =
-					contextExternalToolConfigurationTemplateFactory.build();
+				const contextExternalToolConfigurationTemplate = contextExternalToolConfigurationTemplateFactory.build();
 				const { wrapper } = getWrapper(
 					{
 						contextId: "contextId",
 						contextType: ToolContextType.BoardElement,
 					},
 					{
-						getContextExternalToolConfigurationTemplate:
-							contextExternalToolConfigurationTemplate,
+						getContextExternalToolConfigurationTemplate: contextExternalToolConfigurationTemplate,
 					}
 				);
 
@@ -183,14 +157,13 @@ describe("CourseContextExternalToolConfigurator", () => {
 			});
 
 			it("should set the preferred tool as an available tool", async () => {
-				const { wrapper, contextExternalToolConfigurationTemplate } =
-					await setup();
+				const { wrapper, contextExternalToolConfigurationTemplate } = await setup();
 
 				await wrapper.vm.fetchData();
 
-				expect(
-					useContextExternalToolConfigurationStateMock.availableTools.value
-				).toEqual([contextExternalToolConfigurationTemplate]);
+				expect(useContextExternalToolConfigurationStateMock.availableTools.value).toEqual([
+					contextExternalToolConfigurationTemplate,
+				]);
 			});
 		});
 	});
@@ -204,9 +177,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 			await wrapper.vm.fetchData();
 
-			wrapper
-				.findComponent(ExternalToolConfigurator as Component)
-				.vm.$emit("cancel");
+			wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("cancel");
 			await nextTick();
 
 			expect(wrapper.emitted("cancel")).toBeDefined();
@@ -222,9 +193,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 					parameters: toolParameterFactory.buildList(1),
 				});
 
-				useContextExternalToolConfigurationStateMock.availableTools.value = [
-					template,
-				];
+				useContextExternalToolConfigurationStateMock.availableTools.value = [template];
 
 				const { wrapper } = getWrapper({
 					contextId,
@@ -245,19 +214,17 @@ describe("CourseContextExternalToolConfigurator", () => {
 				const { wrapper, template, contextId, contextType } = await setup();
 				const testValue = "test";
 
-				wrapper
-					.findComponent(ExternalToolConfigurator as Component)
-					.vm.$emit("save", template, [
-						{
-							name: template.parameters[0].name,
-							value: testValue,
-						},
-					]);
+				wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("save", template, [
+					{
+						name: template.parameters[0].name,
+						value: testValue,
+					},
+				]);
 				await nextTick();
 
-				expect(
-					useContextExternalToolStateMock.createContextExternalTool
-				).toHaveBeenCalledWith<[ContextExternalToolSave]>({
+				expect(useContextExternalToolStateMock.createContextExternalTool).toHaveBeenCalledWith<
+					[ContextExternalToolSave]
+				>({
 					contextId,
 					contextType,
 					displayName: undefined,
@@ -274,9 +241,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			it("should should emit the success event", async () => {
 				const { wrapper, template } = await setup();
 
-				wrapper
-					.findComponent(ExternalToolConfigurator as Component)
-					.vm.$emit("save", template, []);
+				wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("save", template, []);
 				await nextTick();
 
 				expect(wrapper.emitted("success")).toBeDefined();
@@ -285,19 +250,15 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 		describe("when editing a configuration", () => {
 			const setup = async () => {
-				const template =
-					contextExternalToolConfigurationTemplateFactory.build();
+				const template = contextExternalToolConfigurationTemplateFactory.build();
 				const contextExternalTool = contextExternalToolFactory.build({
 					displayName: "testName",
 					contextId: "contextId",
 					contextType: ToolContextType.Course,
 				});
 
-				useContextExternalToolConfigurationStateMock.availableTools.value = [
-					template,
-				];
-				useContextExternalToolStateMock.contextExternalTool.value =
-					contextExternalTool;
+				useContextExternalToolConfigurationStateMock.availableTools.value = [template];
+				useContextExternalToolStateMock.contextExternalTool.value = contextExternalTool;
 
 				const { wrapper } = getWrapper({
 					contextId: contextExternalTool.contextId,
@@ -317,31 +278,24 @@ describe("CourseContextExternalToolConfigurator", () => {
 			it("should save the tool", async () => {
 				const { wrapper, template, contextExternalTool } = await setup();
 
-				wrapper
-					.findComponent(ExternalToolConfigurator as Component)
-					.vm.$emit("save", template, []);
+				wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("save", template, []);
 				await nextTick();
 
-				expect(
-					useContextExternalToolStateMock.updateContextExternalTool
-				).toHaveBeenCalledWith<[string, ContextExternalToolSave]>(
-					contextExternalTool.id,
-					{
-						contextId: contextExternalTool.contextId,
-						contextType: contextExternalTool.contextType,
-						displayName: contextExternalTool.displayName,
-						parameters: [],
-						schoolToolId: template.schoolExternalToolId,
-					}
-				);
+				expect(useContextExternalToolStateMock.updateContextExternalTool).toHaveBeenCalledWith<
+					[string, ContextExternalToolSave]
+				>(contextExternalTool.id, {
+					contextId: contextExternalTool.contextId,
+					contextType: contextExternalTool.contextType,
+					displayName: contextExternalTool.displayName,
+					parameters: [],
+					schoolToolId: template.schoolExternalToolId,
+				});
 			});
 
 			it("should redirect back to context settings page when there is no error", async () => {
 				const { wrapper, template } = await setup();
 
-				wrapper
-					.findComponent(ExternalToolConfigurator as Component)
-					.vm.$emit("save", template, []);
+				wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("save", template, []);
 				await nextTick();
 
 				expect(wrapper.emitted("success")).toBeDefined();
@@ -357,8 +311,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 				await wrapper.vm.fetchData();
 
-				useContextExternalToolStateMock.error.value =
-					businessErrorFactory.build();
+				useContextExternalToolStateMock.error.value = businessErrorFactory.build();
 
 				return {
 					wrapper,
@@ -370,11 +323,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 				wrapper
 					.findComponent(ExternalToolConfigurator as Component)
-					.vm.$emit(
-						"save",
-						contextExternalToolConfigurationTemplateFactory.build(),
-						[]
-					);
+					.vm.$emit("save", contextExternalToolConfigurationTemplateFactory.build(), []);
 				await nextTick();
 
 				expect(wrapper.emitted("success")).toBeUndefined();

@@ -1,19 +1,11 @@
-import { isCollectionHelper } from "@/utils/helpers";
-import hash from "object-hash";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { Status } from "./types/commons";
-import {
-	AddToLessonQuery,
-	Elements,
-	Lessons,
-	Query,
-	Resource,
-	ResourceProperties,
-	Resources,
-} from "./types/content";
-import { logger } from "@util-logger";
+import { AddToLessonQuery, Elements, Lessons, Query, Resource, ResourceProperties, Resources } from "./types/content";
+import { isCollectionHelper } from "@/utils/helpers";
 import { useEnvConfig } from "@data-env";
+import { logger } from "@util-logger";
+import hash from "object-hash";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 const initialState = () => ({
 	resources: {
@@ -89,8 +81,7 @@ export default class ContentModule extends VuexModule {
 	loadingCounter: number = initialState().loadingCounter;
 	loading: boolean = initialState().loading;
 	lastQuery: string = initialState().lastQuery;
-	collectionsFeatureFlag: boolean | null =
-		initialState().collectionsFeatureFlag;
+	collectionsFeatureFlag: boolean | null = initialState().collectionsFeatureFlag;
 	currentResource: Resource = initialState().currentResource;
 	status: Status | null = initialState().status;
 	notificationModal: string | null = initialState().notificationModal;
@@ -103,9 +94,7 @@ export default class ContentModule extends VuexModule {
 				break;
 			}
 		}
-		this.selected = this.elements.data.filter(
-			(el) => el.stateSelected === true
-		).length;
+		this.selected = this.elements.data.filter((el) => el.stateSelected === true).length;
 	}
 
 	@Mutation
@@ -115,9 +104,7 @@ export default class ContentModule extends VuexModule {
 
 	@Mutation
 	addResourcesMutation(payload: Resources): void {
-		payload.data.forEach((resource: Resource) =>
-			this.resources.data.push(resource)
-		);
+		payload.data.forEach((resource: Resource) => this.resources.data.push(resource));
 		this.resources = {
 			...this.resources,
 			pagination: payload.pagination,
@@ -131,9 +118,7 @@ export default class ContentModule extends VuexModule {
 
 	@Mutation
 	addElementsMutation(payload: Elements): void {
-		payload.data.forEach((element: Resource) =>
-			this.elements.data.push(element)
-		);
+		payload.data.forEach((element: Resource) => this.elements.data.push(element));
 		this.elements = {
 			...this.elements,
 			pagination: payload.pagination,
@@ -236,10 +221,7 @@ export default class ContentModule extends VuexModule {
 	}
 
 	get isCollection() {
-		return (
-			this.collectionsFeatureFlag === true &&
-			isCollectionHelper(this.currentResource.properties)
-		);
+		return this.collectionsFeatureFlag === true && isCollectionHelper(this.currentResource.properties);
 	}
 
 	get getNotificationModal() {
@@ -345,10 +327,7 @@ export default class ContentModule extends VuexModule {
 	@Action
 	async addToLesson(payload: AddToLessonQuery) {
 		try {
-			await $axios.post(
-				`/v1/lessons/${payload.lessonId}/material`,
-				payload.material
-			);
+			await $axios.post(`/v1/lessons/${payload.lessonId}/material`, payload.material);
 			this.setNotificationModal("successModal");
 		} catch {
 			this.setNotificationModal("errorModal");

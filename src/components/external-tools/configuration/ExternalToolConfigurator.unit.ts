@@ -1,3 +1,5 @@
+import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
+import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolParameterLocation } from "@/store/external-tool";
 import {
@@ -7,29 +9,19 @@ import {
 	schoolExternalToolFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import { VAutocomplete, VBtn } from "vuetify/components";
-import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
-import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 
 describe("ExternalToolConfigurator", () => {
-	vi.spyOn(
-		useExternalToolUtilsComposable,
-		"useExternalToolMappings"
-	).mockReturnValue({
+	vi.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings").mockReturnValue({
 		...useExternalToolUtilsComposable.useExternalToolMappings(),
 		getBusinessErrorTranslationKey: () => "",
 	});
 
-	const getWrapper = (
-		props: ComponentProps<typeof ExternalToolConfigurator>
-	) => {
+	const getWrapper = (props: ComponentProps<typeof ExternalToolConfigurator>) => {
 		const wrapper = mount(ExternalToolConfigurator, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -66,9 +58,7 @@ describe("ExternalToolConfigurator", () => {
 			it("should disable the selection", () => {
 				const { wrapper } = setup();
 
-				const select = wrapper
-					.findComponent('[data-testId="configuration-select"]')
-					.get("input");
+				const select = wrapper.findComponent('[data-testId="configuration-select"]').get("input");
 
 				expect(select.attributes("disabled")).toBeDefined();
 			});
@@ -84,10 +74,8 @@ describe("ExternalToolConfigurator", () => {
 
 		describe("when a preferred tool is loaded", () => {
 			const setup = () => {
-				const template1 =
-					contextExternalToolConfigurationTemplateFactory.build();
-				const template2 =
-					contextExternalToolConfigurationTemplateFactory.build();
+				const template1 = contextExternalToolConfigurationTemplateFactory.build();
+				const template2 = contextExternalToolConfigurationTemplateFactory.build();
 
 				const { wrapper } = getWrapper({
 					templates: [template1, template2],
@@ -138,9 +126,7 @@ describe("ExternalToolConfigurator", () => {
 			it("should paste the text from the clipboard into the input field", async () => {
 				const { wrapper, clipboardMock, clipboardText } = setup();
 
-				const icon = wrapper
-					.find(".v-input__append")
-					.find(".v-icon--clickable");
+				const icon = wrapper.find(".v-input__append").find(".v-icon--clickable");
 				await icon.trigger("click");
 				await flushPromises();
 
@@ -172,10 +158,7 @@ describe("ExternalToolConfigurator", () => {
 				});
 
 				const { wrapper } = getWrapper({
-					templates: [
-						template,
-						schoolExternalToolConfigurationTemplateFactory.build(),
-					],
+					templates: [template, schoolExternalToolConfigurationTemplateFactory.build()],
 					error: undefined,
 					configuration: undefined,
 				});
@@ -193,13 +176,9 @@ describe("ExternalToolConfigurator", () => {
 
 				const input = autocomplete.find("input");
 				await input.trigger("focus");
-				await input.setValue(
-					"https://test.com/pathParamValue1/spacer/pathParamValue2?queryParam1=queryParamValue1"
-				);
+				await input.setValue("https://test.com/pathParamValue1/spacer/pathParamValue2?queryParam1=queryParamValue1");
 
-				const selectionItems = wrapper.findAllComponents(
-					'[data-testid="configuration-select-item"]'
-				);
+				const selectionItems = wrapper.findAllComponents('[data-testid="configuration-select-item"]');
 
 				expect(selectionItems.length).toEqual(1);
 				expect(selectionItems[0].text()).toEqual(template.name);
@@ -216,11 +195,7 @@ describe("ExternalToolConfigurator", () => {
 				await autocomplete.setValue(template);
 
 				const settings = wrapper.getComponent(ExternalToolConfigSettings);
-				expect(settings.props().modelValue).toEqual([
-					"pathParamValue1",
-					"queryParamValue1",
-					"pathParamValue2",
-				]);
+				expect(settings.props().modelValue).toEqual(["pathParamValue1", "queryParamValue1", "pathParamValue2"]);
 			});
 		});
 	});
@@ -229,15 +204,12 @@ describe("ExternalToolConfigurator", () => {
 		describe("when clicking the cancel button", () => {
 			it("should emit the cancel event", async () => {
 				const { wrapper } = getWrapper({
-					templates:
-						schoolExternalToolConfigurationTemplateFactory.buildList(1),
+					templates: schoolExternalToolConfigurationTemplateFactory.buildList(1),
 					error: undefined,
 					configuration: undefined,
 				});
 
-				await wrapper
-					.findComponent<typeof VBtn>('[data-testId="cancel-button"]')
-					.trigger("click");
+				await wrapper.findComponent<typeof VBtn>('[data-testId="cancel-button"]').trigger("click");
 
 				expect(wrapper.emitted("cancel")).toBeDefined();
 			});
@@ -248,15 +220,12 @@ describe("ExternalToolConfigurator", () => {
 		describe("when clicking the save button", () => {
 			it("should emit the save event", async () => {
 				const { wrapper } = getWrapper({
-					templates:
-						schoolExternalToolConfigurationTemplateFactory.buildList(1),
+					templates: schoolExternalToolConfigurationTemplateFactory.buildList(1),
 					configuration: schoolExternalToolFactory.build(),
 					error: undefined,
 				});
 
-				await wrapper
-					.findComponent<typeof VBtn>('[data-testId="save-button"]')
-					.trigger("click");
+				await wrapper.findComponent<typeof VBtn>('[data-testId="save-button"]').trigger("click");
 
 				expect(wrapper.emitted("save")).toBeDefined();
 			});

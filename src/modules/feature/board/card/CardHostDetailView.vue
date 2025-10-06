@@ -16,16 +16,10 @@
 							<v-icon>{{ mdiClose }}</v-icon>
 						</v-btn>
 						<v-spacer />
-						<v-btn class="mr-4" @click="onToggleFullscreen">
-							toggle fullscreen (debug)
-						</v-btn>
+						<v-btn class="mr-4" @click="onToggleFullscreen"> toggle fullscreen (debug) </v-btn>
 						<v-btn class="mr-4" @click="onToggleEdit">
 							{{
-								isEditMode
-									? $t("common.actions.edit") +
-										" " +
-										$t("common.actions.finish")
-									: $t("common.actions.edit")
+								isEditMode ? $t("common.actions.edit") + " " + $t("common.actions.finish") : $t("common.actions.edit")
 							}}
 						</v-btn>
 
@@ -64,15 +58,15 @@
 </template>
 
 <script lang="ts">
+import CardAddElementMenu from "./CardAddElementMenu.vue";
+import CardTitle from "./CardTitle.vue";
+import ContentElementList from "./ContentElementList.vue";
 import { CardResponse } from "@/serverApi/v3";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { useBoardPermissions } from "@data-board";
 import { mdiClose } from "@icons/material";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { defineComponent, PropType, ref } from "vue";
-import CardAddElementMenu from "./CardAddElementMenu.vue";
-import CardTitle from "./CardTitle.vue";
-import ContentElementList from "./ContentElementList.vue";
 
 export default defineComponent({
 	name: "CardHostDetailView",
@@ -129,29 +123,20 @@ export default defineComponent({
 			isEditMode.value = true;
 		};
 
-		const onDeleteElement = (elementId: string) =>
-			emit("delete:element", elementId);
+		const onDeleteElement = (elementId: string) => emit("delete:element", elementId);
 
 		const onDeleteCard = async () => {
 			let shouldDelete = true;
-			shouldDelete = await askDeleteConfirmation(
-				props.card.title,
-				"components.boardCard"
-			);
+			shouldDelete = await askDeleteConfirmation(props.card.title, "components.boardCard");
 
 			if (shouldDelete) {
 				emit("delete:card");
 			}
 		};
 
-		const onMoveElementDown = (elementMove: ElementMove) =>
-			emit("move-down:element", elementMove);
-		const onMoveElementUp = (elementMove: ElementMove) =>
-			emit("move-up:element", elementMove);
-		const onMoveElementKeyboard = (
-			elementMove: ElementMove,
-			keyCode: string
-		) => {
+		const onMoveElementDown = (elementMove: ElementMove) => emit("move-down:element", elementMove);
+		const onMoveElementUp = (elementMove: ElementMove) => emit("move-up:element", elementMove);
+		const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
 			emit("move-keyboard:element", elementMove, keyCode);
 		};
 

@@ -1,18 +1,15 @@
+import ConsentPage from "./StudentConsent.page.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
 import FilePathsModule from "@/store/filePaths";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { nextTick } from "vue";
-import { createStore } from "vuex";
-import ConsentPage from "./StudentConsent.page.vue";
 import { createTestEnvStore, expectNotification } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { nextTick } from "vue";
+import { createStore } from "vuex";
 
 const mockData = [
 	{
@@ -50,8 +47,7 @@ const specificFilesMock = {
 		"https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 	termsOfUse:
 		"https://s3.hidrive.strato.com/cloud-instances/default/Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
-	analogConsent:
-		"https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf",
+	analogConsent: "https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
 const createMockStore = () => {
@@ -67,10 +63,7 @@ const createMockStore = () => {
 				},
 				getters: {
 					getSelectedStudentsData: () => mockData,
-					getSelectedStudents: () => [
-						"60c220e2d03a60006502f272",
-						"60c220f4d03a60006502f500",
-					],
+					getSelectedStudents: () => ["60c220e2d03a60006502f272", "60c220f4d03a60006502f500"],
 				},
 
 				mutations: {

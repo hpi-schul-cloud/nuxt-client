@@ -1,29 +1,23 @@
+import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { axiosErrorFactory, expectNotification } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useSchoolLicenseApi } from "@data-license";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { mount } from "@vue/test-utils";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { beforeEach, expect } from "vitest";
-import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach, expect } from "vitest";
 
 vi.mock("@data-license");
 
 describe("VidisMediaSyncSection", () => {
-	let useSchoolLicenseApiMock: DeepMocked<
-		ReturnType<typeof useSchoolLicenseApi>
-	>;
+	let useSchoolLicenseApiMock: DeepMocked<ReturnType<typeof useSchoolLicenseApi>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 
-		useSchoolLicenseApiMock =
-			createMock<ReturnType<typeof useSchoolLicenseApi>>();
+		useSchoolLicenseApiMock = createMock<ReturnType<typeof useSchoolLicenseApi>>();
 		vi.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
 	});
 
@@ -77,9 +71,7 @@ describe("VidisMediaSyncSection", () => {
 				const { wrapper } = getWrapper();
 
 				useSchoolLicenseApiMock.updateSchoolLicenses.mockRejectedValueOnce(
-					axiosErrorFactory
-						.withStatusCode(HttpStatusCode.RequestTimeout)
-						.build()
+					axiosErrorFactory.withStatusCode(HttpStatusCode.RequestTimeout).build()
 				);
 
 				return {
@@ -101,9 +93,7 @@ describe("VidisMediaSyncSection", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper();
 
-				useSchoolLicenseApiMock.updateSchoolLicenses.mockRejectedValueOnce(
-					new Error()
-				);
+				useSchoolLicenseApiMock.updateSchoolLicenses.mockRejectedValueOnce(new Error());
 
 				return {
 					wrapper,

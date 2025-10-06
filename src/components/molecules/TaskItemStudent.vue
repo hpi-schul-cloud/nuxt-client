@@ -18,9 +18,7 @@
 			</v-avatar>
 		</template>
 		<!-- item main info -->
-		<div
-			class="d-flex align-center justify-space-between flex-wrap flex-sm-nowrap"
-		>
+		<div class="d-flex align-center justify-space-between flex-wrap flex-sm-nowrap">
 			<!-- item title -->
 			<div class="task-item__main-info w-65" :style="conditionalWidth">
 				<v-list-item-subtitle data-testid="taskSubtitle">
@@ -45,11 +43,7 @@
 		</div>
 		<template #append>
 			<div :id="`task-menu-${task.id}`" class="context-menu-btn">
-				<task-item-menu
-					:task-id="task.id"
-					:task-is-finished="task.status.isFinished"
-					user-role="student"
-				/>
+				<task-item-menu :task-id="task.id" :task-is-finished="task.status.isFinished" user-role="student" />
 			</div>
 		</template>
 	</v-list-item>
@@ -57,12 +51,12 @@
 
 <script>
 import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining.vue";
+import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
 import {
+	fromNowToFuture,
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
-	fromNowToFuture,
 } from "@/plugins/datetime";
-import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
 import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
@@ -125,19 +119,13 @@ export default {
 			return stateIcons[this.taskState] || stateIcons["open"];
 		},
 		topic() {
-			return this.task.lessonName
-				? `${this.$t("common.words.topic")} ${this.task.lessonName}`
-				: "";
+			return this.task.lessonName ? `${this.$t("common.words.topic")} ${this.task.lessonName}` : "";
 		},
 		dueDateLabel() {
 			const dueDate = this.task.dueDate;
-			const convertedDueDate = this.$vuetify.display.xs
-				? dateFromUTC(dueDate)
-				: dateTimeFromUTC(dueDate);
+			const convertedDueDate = this.$vuetify.display.xs ? dateFromUTC(dueDate) : dateTimeFromUTC(dueDate);
 
-			return !dueDate
-				? undefined
-				: `${this.$t("pages.tasks.labels.due")} ${convertedDueDate}`;
+			return !dueDate ? undefined : `${this.$t("pages.tasks.labels.due")} ${convertedDueDate}`;
 		},
 		taskLabel() {
 			return `${this.task.courseName}`;

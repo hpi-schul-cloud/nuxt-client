@@ -1,12 +1,9 @@
-import { shallowMount } from "@vue/test-utils";
+import { TeacherSubmission } from "../types/submission";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { DateTimePicker } from "@ui-date-time-picker";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { TeacherSubmission } from "../types/submission";
+import { shallowMount } from "@vue/test-utils";
 
 const mockedSubmissions: TeacherSubmission[] = [
 	{
@@ -40,9 +37,7 @@ describe("SubmissionContentElementEdit", () => {
 	it("should be found in dom", () => {
 		const { wrapper } = setup();
 
-		const submissionContentElement = wrapper.findComponent(
-			SubmissionContentElementEdit
-		);
+		const submissionContentElement = wrapper.findComponent(SubmissionContentElementEdit);
 		expect(submissionContentElement.exists()).toBe(true);
 	});
 
@@ -57,9 +52,7 @@ describe("SubmissionContentElementEdit", () => {
 	it("should hand over submissions prop to SubmissionItemsTeacherDisplay", () => {
 		const { wrapper } = setup();
 
-		const submissions = wrapper
-			.findComponent(SubmissionItemsTeacherDisplay)
-			.props("submissions");
+		const submissions = wrapper.findComponent(SubmissionItemsTeacherDisplay).props("submissions");
 
 		expect(submissions).toEqual(mockedSubmissions);
 	});
@@ -67,9 +60,7 @@ describe("SubmissionContentElementEdit", () => {
 	it("should hand over loading prop to SubmissionItemsTeacherDisplay", () => {
 		const { wrapper } = setup();
 
-		const loading = wrapper
-			.findComponent(SubmissionItemsTeacherDisplay)
-			.props("loading");
+		const loading = wrapper.findComponent(SubmissionItemsTeacherDisplay).props("loading");
 
 		expect(loading).toBe(true);
 	});
@@ -77,9 +68,7 @@ describe("SubmissionContentElementEdit", () => {
 	it("should hand over isOverdue prop to SubmissionItemsTeacherDisplay", () => {
 		const { wrapper } = setup();
 
-		const isOverdue = wrapper
-			.findComponent(SubmissionItemsTeacherDisplay)
-			.props("isOverdue");
+		const isOverdue = wrapper.findComponent(SubmissionItemsTeacherDisplay).props("isOverdue");
 
 		expect(isOverdue).toBe(false);
 	});

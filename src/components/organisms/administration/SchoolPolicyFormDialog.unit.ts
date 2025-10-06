@@ -1,14 +1,11 @@
-import PrivacyPolicyModule from "@/store/privacy-policy";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import SchoolsModule from "@/store/schools";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import { mount } from "@vue/test-utils";
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
+import PrivacyPolicyModule from "@/store/privacy-policy";
+import SchoolsModule from "@/store/schools";
 import { PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import type { Mocked } from "vitest";
 
 describe("SchoolPolicyFormDialog", () => {
@@ -55,10 +52,7 @@ describe("SchoolPolicyFormDialog", () => {
 		it("should disable submit button", () => {
 			const wrapper = setup();
 
-			expect(
-				wrapper.findComponent('[data-testid="dialog-confirm"]').attributes()
-					.disabled
-			).toBeDefined();
+			expect(wrapper.findComponent('[data-testid="dialog-confirm"]').attributes().disabled).toBeDefined();
 		});
 
 		it("should render warning icon", async () => {
@@ -66,9 +60,7 @@ describe("SchoolPolicyFormDialog", () => {
 			const fileInput = wrapper.findComponent({ name: "v-file-input" });
 			await fileInput.trigger("blur");
 
-			expect(
-				wrapper.findComponent('[data-testid="warning-icon"]').exists()
-			).toBe(true);
+			expect(wrapper.findComponent('[data-testid="warning-icon"]').exists()).toBe(true);
 		});
 	});
 

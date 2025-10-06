@@ -1,6 +1,6 @@
 import generatePassword from "@/mixins/generatePassword";
-import { $axios } from "@/utils/api";
 import { inputDateFormat } from "@/plugins/datetime";
+import { $axios } from "@/utils/api";
 
 export const actions = {
 	/**
@@ -108,9 +108,7 @@ export const mutations = {
 		state.selectedStudentsData = payload;
 	},
 	updateStudentData(state, payload) {
-		const index = state.selectedStudentsData.findIndex(
-			(st) => st._id === payload.id
-		);
+		const index = state.selectedStudentsData.findIndex((st) => st._id === payload.id);
 
 		if (index !== -1 && payload.birthDate) {
 			state.selectedStudentsData[index].birthday = payload.birthDate;
@@ -124,14 +122,12 @@ export const mutations = {
 	},
 };
 
-export const state = () => {
-	return {
-		selectedStudents: [],
-		registeredStudents: [],
-		selectedStudentsData: [],
-		registerError: {},
-	};
-};
+export const state = () => ({
+	selectedStudents: [],
+	registeredStudents: [],
+	selectedStudentsData: [],
+	registerError: {},
+});
 
 export const bulkConsent = {
 	namespaced: true,

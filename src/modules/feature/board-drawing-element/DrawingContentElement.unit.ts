@@ -1,29 +1,18 @@
-import { DrawingElementResponse } from "@/serverApi/v3";
-import { drawingElementResponseFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { BoardMenu } from "@ui-board";
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
-import { shallowMount } from "@vue/test-utils";
 import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";
+import { DrawingElementResponse } from "@/serverApi/v3";
+import { drawingElementResponseFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardMenu } from "@ui-board";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { shallowMount } from "@vue/test-utils";
 
 // Mocks
-vi.mock("@data-board", () => {
-	return {
-		useBoardFocusHandler: vi.fn(),
-		useContentElementState: vi.fn(() => {
-			return { modelValue: {} };
-		}),
-		useDeleteConfirmationDialog: vi.fn(),
-	};
-});
+vi.mock("@data-board", () => ({
+	useBoardFocusHandler: vi.fn(),
+	useContentElementState: vi.fn(() => ({ modelValue: {} })),
+	useDeleteConfirmationDialog: vi.fn(),
+}));
 vi.mock("@feature-board");
 
 const DRAWING_ELEMENT = drawingElementResponseFactory.build();
@@ -77,9 +66,7 @@ describe("DrawingContentElement", () => {
 				ref: "drawingElement",
 			});
 
-			expect(elementCard.attributes("href")).toBe(
-				`/tldraw?parentId=${DRAWING_ELEMENT.id}`
-			);
+			expect(elementCard.attributes("href")).toBe(`/tldraw?parentId=${DRAWING_ELEMENT.id}`);
 			expect(elementCard.attributes("target")).toBe("_blank");
 		});
 
@@ -102,26 +89,23 @@ describe("DrawingContentElement", () => {
 		});
 
 		describe("when element is in view mode", () => {
-			it.each(["up", "down"])(
-				"should not 'emit move-keyboard:edit' when arrow key %s is pressed",
-				async (key) => {
-					const { wrapper } = setup({
-						element: DRAWING_ELEMENT,
-						isEditMode: false,
-						columnIndex: 0,
-						rowIndex: 1,
-						elementIndex: 2,
-					});
+			it.each(["up", "down"])("should not 'emit move-keyboard:edit' when arrow key %s is pressed", async (key) => {
+				const { wrapper } = setup({
+					element: DRAWING_ELEMENT,
+					isEditMode: false,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
+				});
 
-					const elementCard = wrapper.findComponent({
-						ref: "drawingElement",
-					});
+				const elementCard = wrapper.findComponent({
+					ref: "drawingElement",
+				});
 
-					await elementCard.trigger(`keydown.${key}`);
+				await elementCard.trigger(`keydown.${key}`);
 
-					expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
-				}
-			);
+				expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
+			});
 
 			it("should not render element menu", () => {
 				const { wrapper } = setup({
@@ -139,26 +123,23 @@ describe("DrawingContentElement", () => {
 		});
 
 		describe("when element is in edit-mode", () => {
-			it.each(["up", "down"])(
-				"should 'emit move-keyboard:edit' when arrow key %s is pressed",
-				async (key) => {
-					const { wrapper } = setup({
-						element: DRAWING_ELEMENT,
-						isEditMode: true,
-						columnIndex: 0,
-						rowIndex: 1,
-						elementIndex: 2,
-					});
+			it.each(["up", "down"])("should 'emit move-keyboard:edit' when arrow key %s is pressed", async (key) => {
+				const { wrapper } = setup({
+					element: DRAWING_ELEMENT,
+					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
+				});
 
-					const elementCard = wrapper.findComponent({
-						ref: "drawingElement",
-					});
+				const elementCard = wrapper.findComponent({
+					ref: "drawingElement",
+				});
 
-					await elementCard.trigger(`keydown.${key}`);
+				await elementCard.trigger(`keydown.${key}`);
 
-					expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
-				}
-			);
+				expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
+			});
 
 			it("should render element menu", () => {
 				const { wrapper } = setup({

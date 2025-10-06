@@ -32,11 +32,7 @@
 		>
 			<PageShare />
 		</TopbarItem>
-		<div
-			v-if="school && isTabletOrBigger"
-			class="mr-3 mr-lg-4 school-name"
-			data-testid="school-name"
-		>
+		<div v-if="school && isTabletOrBigger" class="mr-3 mr-lg-4 school-name" data-testid="school-name">
 			{{ school.name }}
 		</div>
 		<img
@@ -51,16 +47,16 @@
 </template>
 
 <script setup lang="ts">
+import CloudLogo from "../CloudLogo.vue";
+import CloudStatusMessages from "./CloudStatusMessages.vue";
+import PageShare from "./PageShare.vue";
+import TopbarItem from "./TopbarItem.vue";
+import UserMenu from "./UserMenu.vue";
+import { injectStrict, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
+import { useAppStoreRefs } from "@data-app";
+import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
 import { computed, onMounted } from "vue";
 import { useDisplay } from "vuetify";
-import { STATUS_ALERTS_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { mdiMenu, mdiAlert, mdiQrcode } from "@icons/material";
-import TopbarItem from "./TopbarItem.vue";
-import PageShare from "./PageShare.vue";
-import CloudStatusMessages from "./CloudStatusMessages.vue";
-import UserMenu from "./UserMenu.vue";
-import CloudLogo from "../CloudLogo.vue";
-import { useAppStoreRefs } from "@data-app";
 
 defineProps({
 	sidebarExpanded: {
@@ -90,9 +86,7 @@ const statusAlerts = computed(() => statusAlertsModule.getStatusAlerts);
 const showStatusAlertIcon = computed(() => statusAlerts.value.length !== 0);
 
 const statusAlertColor = computed(() => {
-	const statusAlertsIncludeDanger =
-		statusAlerts.value.filter((alert) => alert.status === "danger").length !==
-		0;
+	const statusAlertsIncludeDanger = statusAlerts.value.filter((alert) => alert.status === "danger").length !== 0;
 
 	return statusAlertsIncludeDanger ? "error" : "info";
 });
@@ -102,9 +96,7 @@ const { user, school, userRoles: roleNames } = useAppStoreRefs();
 const hasLogo = computed(() => !!school.value?.logo?.url);
 
 const appBarHeight = computed(() => {
-	const height = window
-		.getComputedStyle(document.documentElement)
-		.getPropertyValue("--topbar-height");
+	const height = window.getComputedStyle(document.documentElement).getPropertyValue("--topbar-height");
 	const heightWithoutUnit = parseInt(height);
 
 	return heightWithoutUnit;

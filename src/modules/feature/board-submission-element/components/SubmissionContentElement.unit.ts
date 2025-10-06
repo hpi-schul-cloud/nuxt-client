@@ -1,18 +1,15 @@
+import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
+import SubmissionContentElement from "./SubmissionContentElement.vue";
+import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
+import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useContentElementState } from "@data-board";
 import { createMock } from "@golevelup/ts-vitest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { shallowMount } from "@vue/test-utils";
 import { computed, ref, unref } from "vue";
-import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
-import SubmissionContentElement from "./SubmissionContentElement.vue";
-import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
-import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 
 vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("@feature-board");
@@ -25,20 +22,13 @@ useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
 
 vi.mock("@data-board/ContentElementState.composable");
 const mockedUseContentElementState = vi.mocked(useContentElementState);
-const mockedUseContentElementStateResponse =
-	createMock<ReturnType<typeof useContentElementState>>();
+const mockedUseContentElementStateResponse = createMock<ReturnType<typeof useContentElementState>>();
 
-mockedUseContentElementState.mockReturnValue(
-	mockedUseContentElementStateResponse
-);
+mockedUseContentElementState.mockReturnValue(mockedUseContentElementStateResponse);
 
 vi.mock("../composables/SubmissionContentElementState.composable");
-const mockedUseSubmissionContentElementState = vi.mocked(
-	useSubmissionContentElementState
-);
-const mockedUseSubmissionContentElementStateResponse: ReturnType<
-	typeof useSubmissionContentElementState
-> = {
+const mockedUseSubmissionContentElementState = vi.mocked(useSubmissionContentElementState);
+const mockedUseSubmissionContentElementStateResponse: ReturnType<typeof useSubmissionContentElementState> = {
 	submissions: ref([]),
 	studentSubmission: ref({ completed: false }),
 	fetchSubmissionItems: vi.fn(),
@@ -47,9 +37,7 @@ const mockedUseSubmissionContentElementStateResponse: ReturnType<
 	isOverdue: computed(() => false),
 };
 
-mockedUseSubmissionContentElementState.mockReturnValue(
-	mockedUseSubmissionContentElementStateResponse
-);
+mockedUseSubmissionContentElementState.mockReturnValue(mockedUseSubmissionContentElementStateResponse);
 
 describe("SubmissionContentElement", () => {
 	const getWrapper = (props: {
@@ -73,8 +61,7 @@ describe("SubmissionContentElement", () => {
 		const setup = () => {
 			const element = submissionContainerElementResponseFactory.build();
 
-			const submissionContainerElementResponse =
-				submissionContainerElementResponseFactory.build();
+			const submissionContainerElementResponse = submissionContainerElementResponseFactory.build();
 
 			mockedUseContentElementState.mockReturnValue({
 				modelValue: ref({
@@ -115,46 +102,32 @@ describe("SubmissionContentElement", () => {
 		it("should hand over dueDate to SubmissionContentElementDisplay", () => {
 			const { wrapper, element } = setup();
 
-			const dueDate = wrapper
-				.findComponent(SubmissionContentElementDisplay)
-				.props("dueDate");
+			const dueDate = wrapper.findComponent(SubmissionContentElementDisplay).props("dueDate");
 			expect(dueDate).toBe(element.content.dueDate);
 		});
 
 		it("should hand over submissionItems to SubmissionContentElementDisplay", () => {
 			const { wrapper } = setup();
 
-			const completed = wrapper
-				.findComponent(SubmissionContentElementDisplay)
-				.props("submissions");
+			const completed = wrapper.findComponent(SubmissionContentElementDisplay).props("submissions");
 
-			expect(completed).toBe(
-				unref(mockedUseSubmissionContentElementStateResponse.submissions)
-			);
+			expect(completed).toBe(unref(mockedUseSubmissionContentElementStateResponse.submissions));
 		});
 
 		it("should hand over loading state to SubmissionContentElementDisplay", () => {
 			const { wrapper } = setup();
 
-			const loading = wrapper
-				.findComponent(SubmissionContentElementDisplay)
-				.props("loading");
+			const loading = wrapper.findComponent(SubmissionContentElementDisplay).props("loading");
 
-			expect(loading).toBe(
-				unref(mockedUseSubmissionContentElementStateResponse.loading)
-			);
+			expect(loading).toBe(unref(mockedUseSubmissionContentElementStateResponse.loading));
 		});
 
 		it("should hand over isOverdue state to SubmissionContentElementDisplay", () => {
 			const { wrapper } = setup();
 
-			const isOverdue = wrapper
-				.findComponent(SubmissionContentElementDisplay)
-				.props("isOverdue");
+			const isOverdue = wrapper.findComponent(SubmissionContentElementDisplay).props("isOverdue");
 
-			expect(isOverdue).toBe(
-				unref(mockedUseSubmissionContentElementStateResponse.isOverdue)
-			);
+			expect(isOverdue).toBe(unref(mockedUseSubmissionContentElementStateResponse.isOverdue));
 		});
 
 		it("should update completed state when it receives 'update:completed' event from child", () => {
@@ -163,9 +136,7 @@ describe("SubmissionContentElement", () => {
 			const component = wrapper.findComponent(SubmissionContentElementDisplay);
 			component.vm.$emit("update:completed");
 
-			expect(
-				mockedUseSubmissionContentElementStateResponse.updateSubmissionItem
-			).toHaveBeenCalledTimes(1);
+			expect(mockedUseSubmissionContentElementStateResponse.updateSubmissionItem).toHaveBeenCalledTimes(1);
 		});
 	});
 
@@ -173,8 +144,7 @@ describe("SubmissionContentElement", () => {
 		const setup = () => {
 			const element = submissionContainerElementResponseFactory.build();
 
-			const submissionContainerElementResponse =
-				submissionContainerElementResponseFactory.build();
+			const submissionContainerElementResponse = submissionContainerElementResponseFactory.build();
 
 			mockedUseContentElementState.mockReturnValue({
 				modelValue: ref({
@@ -200,9 +170,7 @@ describe("SubmissionContentElement", () => {
 
 		it("should be found in dom", () => {
 			const { wrapper } = setup();
-			expect(wrapper.findComponent(SubmissionContentElement).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent(SubmissionContentElement).exists()).toBe(true);
 		});
 
 		it("should render SubmissionContentElementEdit component", () => {
@@ -215,9 +183,7 @@ describe("SubmissionContentElement", () => {
 		it("should hand over dueDate to SubmissionContentElementEdit", () => {
 			const { wrapper, element } = setup();
 
-			const dueDate = wrapper
-				.findComponent(SubmissionContentElementEdit)
-				.props("dueDate");
+			const dueDate = wrapper.findComponent(SubmissionContentElementEdit).props("dueDate");
 
 			expect(dueDate).toBe(element.content.dueDate);
 		});
@@ -225,37 +191,25 @@ describe("SubmissionContentElement", () => {
 		it("should hand over submissionItems to SubmissionContentElementEdit", () => {
 			const { wrapper } = setup();
 
-			const completed = wrapper
-				.findComponent(SubmissionContentElementEdit)
-				.props("submissions");
+			const completed = wrapper.findComponent(SubmissionContentElementEdit).props("submissions");
 
-			expect(completed).toBe(
-				unref(mockedUseSubmissionContentElementStateResponse.submissions)
-			);
+			expect(completed).toBe(unref(mockedUseSubmissionContentElementStateResponse.submissions));
 		});
 
 		it("should hand over loading state to SubmissionContentElementEdit", () => {
 			const { wrapper } = setup();
 
-			const loading = wrapper
-				.findComponent(SubmissionContentElementEdit)
-				.props("loading");
+			const loading = wrapper.findComponent(SubmissionContentElementEdit).props("loading");
 
-			expect(loading).toBe(
-				unref(mockedUseSubmissionContentElementStateResponse.loading)
-			);
+			expect(loading).toBe(unref(mockedUseSubmissionContentElementStateResponse.loading));
 		});
 
 		it("should hand over isOverdue state to SubmissionContentElementEdit", () => {
 			const { wrapper } = setup();
 
-			const isOverdue = wrapper
-				.findComponent(SubmissionContentElementEdit)
-				.props("isOverdue");
+			const isOverdue = wrapper.findComponent(SubmissionContentElementEdit).props("isOverdue");
 
-			expect(isOverdue).toBe(
-				unref(mockedUseSubmissionContentElementStateResponse.isOverdue)
-			);
+			expect(isOverdue).toBe(unref(mockedUseSubmissionContentElementStateResponse.isOverdue));
 		});
 
 		it("should emit 'move-keyboard:edit' when arrow key down is pressed", () => {

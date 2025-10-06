@@ -1,8 +1,5 @@
 <template>
-	<KebabMenuAction
-		:icon="mdiPencilOutline"
-		data-testid="kebab-menu-action-edit"
-	>
+	<KebabMenuAction :icon="mdiPencilOutline" data-testid="kebab-menu-action-edit">
 		{{ text ?? t("common.actions.edit") }}
 	</KebabMenuAction>
 </template>

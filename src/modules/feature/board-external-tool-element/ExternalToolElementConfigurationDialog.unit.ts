@@ -1,20 +1,14 @@
+import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import {
-	contextExternalToolFactory,
-	expectNotification,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { contextExternalToolFactory, expectNotification } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
-import { beforeEach } from "vitest";
-import { setActivePinia } from "pinia";
-import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@util-board");
 
@@ -72,9 +66,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 			const dialog = wrapper.findComponent(vCustomDialog);
 			const title = dialog.findComponent({ name: "v-card-title" });
 
-			expect(title.text()).toEqual(
-				"feature-board-external-tool-element.dialog.title"
-			);
+			expect(title.text()).toEqual("feature-board-external-tool-element.dialog.title");
 		});
 	});
 
@@ -84,9 +76,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 
 			await nextTick();
 
-			const configurator = wrapper.findComponent(
-				ContextExternalToolConfigurator
-			);
+			const configurator = wrapper.findComponent(ContextExternalToolConfigurator);
 
 			expect(configurator.vm.fetchData).toHaveBeenCalled();
 		});
@@ -96,9 +86,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 		it("should emit the close event", async () => {
 			const { wrapper } = getWrapper();
 
-			const configurator = wrapper.findComponent(
-				ContextExternalToolConfigurator
-			);
+			const configurator = wrapper.findComponent(ContextExternalToolConfigurator);
 			configurator.vm.$emit("cancel");
 			await nextTick();
 
@@ -108,9 +96,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 		it("should clear the configurator data", async () => {
 			const { wrapper } = getWrapper();
 
-			const configurator = wrapper.findComponent(
-				ContextExternalToolConfigurator
-			);
+			const configurator = wrapper.findComponent(ContextExternalToolConfigurator);
 			configurator.vm.$emit("cancel");
 			await nextTick();
 
@@ -122,9 +108,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 		it("should display a notification when created", async () => {
 			const { wrapper } = getWrapper();
 
-			const configurator = wrapper.findComponent(
-				ContextExternalToolConfigurator
-			);
+			const configurator = wrapper.findComponent(ContextExternalToolConfigurator);
 			configurator.vm.$emit("success", contextExternalToolFactory.build());
 			await flushPromises();
 
@@ -134,9 +118,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 		it("should emit the save event", async () => {
 			const { wrapper } = getWrapper();
 
-			const configurator = wrapper.findComponent(
-				ContextExternalToolConfigurator
-			);
+			const configurator = wrapper.findComponent(ContextExternalToolConfigurator);
 			configurator.vm.$emit("success", contextExternalToolFactory.build());
 			await flushPromises();
 
@@ -146,9 +128,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 		it("should emit the close event", async () => {
 			const { wrapper } = getWrapper();
 
-			const configurator = wrapper.findComponent(
-				ContextExternalToolConfigurator
-			);
+			const configurator = wrapper.findComponent(ContextExternalToolConfigurator);
 			configurator.vm.$emit("success", contextExternalToolFactory.build());
 			await flushPromises();
 

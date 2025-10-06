@@ -1,5 +1,5 @@
-import NewsModule from "./news";
 import * as serverApi from "../serverApi/v3/api";
+import NewsModule from "./news";
 
 describe("news store", () => {
 	describe("findNews", () => {
@@ -15,9 +15,7 @@ describe("news store", () => {
 						},
 					})),
 				};
-				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.NewsApiInterface
-				);
+				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
 				const newsModule = new NewsModule({});
 
 				newsModule.findNews().then(() => {
@@ -38,9 +36,7 @@ describe("news store", () => {
 				const mockApi = {
 					newsControllerFindAll: vi.fn(() => Promise.reject({ ...error })),
 				};
-				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.NewsApiInterface
-				);
+				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
 				const newsModule = new NewsModule({});
 
 				newsModule.findNews().then(() => {
@@ -61,9 +57,7 @@ describe("news store", () => {
 						data: { mockNews: "mock news value" },
 					})),
 				};
-				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.NewsApiInterface
-				);
+				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
 				const newsModule = new NewsModule({});
 				const newsId = "1234";
 
@@ -83,9 +77,7 @@ describe("news store", () => {
 				const mockApi = {
 					newsControllerFindOne: vi.fn(() => Promise.reject({ ...error })),
 				};
-				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.NewsApiInterface
-				);
+				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
 				const newsModule = new NewsModule({});
 				const newsId = "1234";
 
@@ -107,9 +99,7 @@ describe("news store", () => {
 						data: { id: 42, ...newsToCreate },
 					})),
 				};
-				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.NewsApiInterface
-				);
+				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
 				const newsModule = new NewsModule({});
 
 				const newsToCreate: serverApi.CreateNewsParams = {
@@ -128,9 +118,7 @@ describe("news store", () => {
 					done();
 				});
 				expect(newsModule.getStatus).toBe("pending");
-				expect(mockApi.newsControllerCreate).toHaveBeenLastCalledWith(
-					newsToCreate
-				);
+				expect(mockApi.newsControllerCreate).toHaveBeenLastCalledWith(newsToCreate);
 			}));
 		it("should handle an error", () =>
 			new Promise<void>((done) => {
@@ -138,9 +126,7 @@ describe("news store", () => {
 				const mockApi = {
 					newsControllerCreate: vi.fn(() => Promise.reject({ ...error })),
 				};
-				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.NewsApiInterface
-				);
+				vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
 				const newsModule = new NewsModule({});
 				const newsToCreate: serverApi.CreateNewsParams = {
 					title: "a news title",

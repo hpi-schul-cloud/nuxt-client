@@ -1,5 +1,5 @@
-import { useStorage } from "@vueuse/core";
 import { UiState, User } from "../types";
+import { useStorage } from "@vueuse/core";
 import { ref } from "vue";
 
 export const useFilterLocalStorage = () => {
@@ -35,11 +35,10 @@ export const useFilterLocalStorage = () => {
 
 	const state = useStorage("uiState", defaultState);
 
-	const getFilterStorage = () => {
-		return userType.value == User.STUDENT
+	const getFilterStorage = () =>
+		userType.value == User.STUDENT
 			? state.value.filter["pages.administration.students.index"]?.query
 			: state.value.filter["pages.administration.teachers.index"]?.query;
-	};
 
 	const setFilterState = (val: object) => {
 		if (userType.value == User.STUDENT)

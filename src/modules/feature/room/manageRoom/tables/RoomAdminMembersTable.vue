@@ -22,10 +22,7 @@
 		</template>
 		<template #[`item.displaySchoolRole`]="{ item }">
 			<span class="text-no-wrap">
-				<VIcon
-					v-if="getSchoolRoleIcon(item.schoolRoleNames)"
-					:icon="getSchoolRoleIcon(item.schoolRoleNames)"
-				/>
+				<VIcon v-if="getSchoolRoleIcon(item.schoolRoleNames)" :icon="getSchoolRoleIcon(item.schoolRoleNames)" />
 				{{ item.displaySchoolRole }}
 			</span>
 		</template>
@@ -107,9 +104,7 @@ const { askConfirmation } = useConfirmationDialog();
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 
-const tableData = computed(
-	() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]
-);
+const tableData = computed(() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]);
 
 const checkIsStudent = (member?: RoomMember) => {
 	return member?.schoolRoleNames.some((role) =>
@@ -119,10 +114,7 @@ const checkIsStudent = (member?: RoomMember) => {
 	);
 };
 
-const getAriaLabel = (
-	member: RoomMember,
-	actionFor: "remove" | "changeRole" | "" = ""
-) => {
+const getAriaLabel = (member: RoomMember, actionFor: "remove" | "changeRole" | "" = "") => {
 	const memberFullName = member.fullName;
 	const mapActionToConst = {
 		remove: "pages.rooms.members.remove.ariaLabel",
@@ -133,17 +125,15 @@ const getAriaLabel = (
 	return t(languageKey, { memberFullName });
 };
 
-const tableHeaders = computed(() => {
-	return [
-		...baseTableHeaders.value,
-		{
-			title: t("pages.rooms.members.tableHeader.actions"),
-			key: "actions",
-			sortable: false,
-			width: 50,
-		},
-	];
-});
+const tableHeaders = computed(() => [
+	...baseTableHeaders.value,
+	{
+		title: t("pages.rooms.members.tableHeader.actions"),
+		key: "actions",
+		sortable: false,
+		width: 50,
+	},
+]);
 
 const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	if (schoolRoleNames.includes(RoleName.Teacher)) {

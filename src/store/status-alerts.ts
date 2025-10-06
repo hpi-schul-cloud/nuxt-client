@@ -1,8 +1,8 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError, Status } from "./types/commons";
 import { StatusAlert } from "./types/status-alert";
-import { $axios } from "@/utils/api";
 import { AlertApiFactory } from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
 	name: "statusAlertsModule",

@@ -9,11 +9,7 @@
 		>
 			<div :class="{ 'info-line': true, 'label-visible': showLabel }">
 				<transition name="fade">
-					<label
-						v-show="showLabel"
-						:class="{ label: true, 'base-input-info': true }"
-						:for="`input-${uid}`"
-					>
+					<label v-show="showLabel" :class="{ label: true, 'base-input-info': true }" :for="`input-${uid}`">
 						{{ label }}
 					</label>
 				</transition>
@@ -40,11 +36,7 @@
 							:class="classes"
 							:min="appliedType === 'date' && birthDate ? minDate : ''"
 							:max="appliedType === 'date' && birthDate ? maxDate : ''"
-							:pattern="
-								appliedType === 'date' && birthDate
-									? birthDateValidationPattern
-									: null
-							"
+							:pattern="appliedType === 'date' && birthDate ? birthDateValidationPattern : null"
 							@input="handleInput"
 							@focus="handleFocus"
 							@blur="handleBlur"
@@ -64,16 +56,8 @@
 					>
 						<v-icon>{{ visibilityIcon }}</v-icon>
 					</v-btn>
-					<v-icon
-						v-if="hasError"
-						color="rgba(var(--v-theme-error))"
-						:icon="mdiAlert"
-					/>
-					<v-icon
-						v-if="success"
-						color="rgba(var(--v-theme-success))"
-						:icon="mdiCheckCircleOutline"
-					/>
+					<v-icon v-if="hasError" color="rgba(var(--v-theme-error))" :icon="mdiAlert" />
+					<v-icon v-if="success" color="rgba(var(--v-theme-success))" :icon="mdiCheckCircleOutline" />
 				</div>
 			</div>
 		</div>
@@ -92,14 +76,9 @@
 </template>
 <script>
 import { inputRangeDate } from "@/plugins/datetime";
-import {
-	mdiAlert,
-	mdiCheckCircleOutline,
-	mdiEyeOffOutline,
-	mdiEyeOutline,
-} from "@icons/material";
-import { defineComponent } from "vue";
 import { useUid } from "@/utils/uid";
+import { mdiAlert, mdiCheckCircleOutline, mdiEyeOffOutline, mdiEyeOutline } from "@icons/material";
+import { defineComponent } from "vue";
 
 export const supportedTypes = [
 	"email",
@@ -127,9 +106,7 @@ export default defineComponent({
 		type: {
 			type: [String, Boolean], // Boolean is used to disable validation when the slot is used
 			required: true,
-			validator: (type) => {
-				return supportedTypes.includes(type) || !type;
-			},
+			validator: (type) => supportedTypes.includes(type) || !type,
 		},
 		label: { type: String, required: true },
 		labelHidden: { type: Boolean },
@@ -162,8 +139,7 @@ export default defineComponent({
 			passwordVisible: false,
 			minDate: inputRangeDate(-100, "y"),
 			maxDate: inputRangeDate(-4, "y"),
-			birthDateValidationPattern:
-				"(3[01]|[12][0-9]|0?[1-9]).(1[012]|0?[1-9]).((?:19|20)d{2})",
+			birthDateValidationPattern: "(3[01]|[12][0-9]|0?[1-9]).(1[012]|0?[1-9]).((?:19|20)d{2})",
 		};
 	},
 	computed: {
@@ -177,13 +153,7 @@ export default defineComponent({
 			return !!(this.error || this.validationError);
 		},
 		showLabel() {
-			return (
-				(this.hasFocus ||
-					this.disabled ||
-					Boolean(this.modelValue) ||
-					!this.placeholder) &&
-				!this.labelHidden
-			);
+			return (this.hasFocus || this.disabled || Boolean(this.modelValue) || !this.placeholder) && !this.labelHidden;
 		},
 		visibilityIcon() {
 			return this.passwordVisible ? mdiEyeOutline : mdiEyeOffOutline;

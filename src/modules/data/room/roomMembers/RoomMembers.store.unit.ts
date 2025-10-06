@@ -1,9 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
-import {
-	ChangeRoomRoleBodyParamsRoleNameEnum,
-	RoleName,
-	SchoolUserListResponse,
-} from "@/serverApi/v3/api";
+import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName, SchoolUserListResponse } from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
@@ -19,19 +15,15 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import {
-	RoomMember,
-	useRoomDetailsStore,
-	useRoomMembersStore,
-} from "@data-room";
+import { RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
+import { setActivePinia } from "pinia";
 import { Mock, MockInstance } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
-import { setActivePinia } from "pinia";
-import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
@@ -400,9 +392,7 @@ describe("useRoomMembers", () => {
 			const totalCount = 3600;
 			let skip = 0;
 			while (skip < totalCount) {
-				const schools = roomMemberSchoolResponseFactory.buildList(
-					Math.min(1000, totalCount - skip)
-				);
+				const schools = roomMemberSchoolResponseFactory.buildList(Math.min(1000, totalCount - skip));
 
 				schoolApiMock.schoolControllerGetSchoolList.mockResolvedValueOnce(
 					mockApiResponse({
@@ -421,9 +411,7 @@ describe("useRoomMembers", () => {
 
 			expect(roomMembersStore.schools).toHaveLength(totalCount + 1);
 			expect(roomMembersStore.schools[0]).toStrictEqual(ownSchool);
-			expect(schoolApiMock.schoolControllerGetSchoolList).toHaveBeenCalledTimes(
-				4
-			);
+			expect(schoolApiMock.schoolControllerGetSchoolList).toHaveBeenCalledTimes(4);
 		});
 
 		it("should throw an error if the API call fails", async () => {
@@ -456,9 +444,7 @@ describe("useRoomMembers", () => {
 
 				const schoolList = roomMembersStore.schools;
 
-				expect(
-					schoolApiMock.schoolControllerGetSchoolList
-				).not.toHaveBeenCalled();
+				expect(schoolApiMock.schoolControllerGetSchoolList).not.toHaveBeenCalled();
 				expect(schoolList).toHaveLength(1);
 				expect(schoolList[0]).toStrictEqual(ownSchool);
 			});
@@ -481,12 +467,9 @@ describe("useRoomMembers", () => {
 
 			await roomMembersStore.addMembers([firstPotentialMember.userId]);
 
-			expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(
-				roomDetailsStore.room!.id,
-				{
-					userIds: [firstPotentialMember.userId],
-				}
-			);
+			expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+				userIds: [firstPotentialMember.userId],
+			});
 			expect(roomMembersStore.roomMembers).toEqual([
 				{
 					...firstPotentialMember,
@@ -511,12 +494,9 @@ describe("useRoomMembers", () => {
 
 			await roomMembersStore.addMembers([firstPotentialMember.userId]);
 
-			expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(
-				roomDetailsStore.room!.id,
-				{
-					userIds: [firstPotentialMember.userId],
-				}
-			);
+			expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+				userIds: [firstPotentialMember.userId],
+			});
 			expect(roomMembersStore.roomMembers).toEqual([
 				{
 					...firstPotentialMember,
@@ -541,9 +521,7 @@ describe("useRoomMembers", () => {
 		it("should remove a members from the room", async () => {
 			const { roomMembersStore, roomDetailsStore } = setup();
 
-			roomApiMock.roomControllerRemoveMembers.mockResolvedValue(
-				mockApiResponse({})
-			);
+			roomApiMock.roomControllerRemoveMembers.mockResolvedValue(mockApiResponse({}));
 
 			const membersMock = roomMemberFactory.buildList(3, {
 				roomRoleName: RoleName.Roomeditor,
@@ -552,12 +530,9 @@ describe("useRoomMembers", () => {
 
 			await roomMembersStore.removeMembers([membersMock[1].userId]);
 
-			expect(roomApiMock.roomControllerRemoveMembers).toHaveBeenCalledWith(
-				roomDetailsStore.room!.id,
-				{
-					userIds: [membersMock[1].userId],
-				}
-			);
+			expect(roomApiMock.roomControllerRemoveMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+				userIds: [membersMock[1].userId],
+			});
 
 			expect(roomMembersStore.roomMembers).not.toContainEqual(membersMock[1]);
 		});
@@ -577,15 +552,11 @@ describe("useRoomMembers", () => {
 		it("should call the leaveRoom api", async () => {
 			const { roomMembersStore, roomDetailsStore } = setup();
 
-			roomApiMock.roomControllerLeaveRoom.mockResolvedValue(
-				mockApiResponse({})
-			);
+			roomApiMock.roomControllerLeaveRoom.mockResolvedValue(mockApiResponse({}));
 
 			await roomMembersStore.leaveRoom();
 
-			expect(roomApiMock.roomControllerLeaveRoom).toHaveBeenCalledWith(
-				roomDetailsStore.room!.id
-			);
+			expect(roomApiMock.roomControllerLeaveRoom).toHaveBeenCalledWith(roomDetailsStore.room!.id);
 		});
 
 		it("should throw an error if the API call fails", async () => {
@@ -603,9 +574,7 @@ describe("useRoomMembers", () => {
 		it("should update the role of a member", async () => {
 			const { roomMembersStore, roomDetailsStore } = setup();
 
-			roomApiMock.roomControllerChangeRolesOfMembers.mockResolvedValue(
-				mockApiResponse({})
-			);
+			roomApiMock.roomControllerChangeRolesOfMembers.mockResolvedValue(mockApiResponse({}));
 
 			const membersMock = roomMemberFactory.buildList(3, {
 				roomRoleName: RoleName.Roomviewer,
@@ -614,55 +583,36 @@ describe("useRoomMembers", () => {
 
 			roomMembersStore.selectedIds = [membersMock[1].userId];
 
-			await roomMembersStore.updateMembersRole(
-				ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin
-			);
+			await roomMembersStore.updateMembersRole(ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin);
 
-			expect(
-				roomApiMock.roomControllerChangeRolesOfMembers
-			).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+			expect(roomApiMock.roomControllerChangeRolesOfMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
 				userIds: [membersMock[1].userId],
 				roleName: RoleName.Roomadmin,
 			});
 
-			expect(roomMembersStore.roomMembers[1].roomRoleName).toBe(
-				RoleName.Roomadmin
-			);
-			expect(roomMembersStore.roomMembers[1].displayRoomRole).toBe(
-				"pages.rooms.members.roomPermissions.admin"
-			);
+			expect(roomMembersStore.roomMembers[1].roomRoleName).toBe(RoleName.Roomadmin);
+			expect(roomMembersStore.roomMembers[1].displayRoomRole).toBe("pages.rooms.members.roomPermissions.admin");
 		});
 
 		it("should update the role of a member with 'id' parameter", async () => {
 			const { roomMembersStore, roomDetailsStore } = setup();
 
-			roomApiMock.roomControllerChangeRolesOfMembers.mockResolvedValue(
-				mockApiResponse({})
-			);
+			roomApiMock.roomControllerChangeRolesOfMembers.mockResolvedValue(mockApiResponse({}));
 
 			const membersMock = roomMemberFactory.buildList(3, {
 				roomRoleName: RoleName.Roomviewer,
 			});
 			roomMembersStore.roomMembers = membersMock;
 
-			await roomMembersStore.updateMembersRole(
-				ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin,
-				membersMock[1].userId
-			);
+			await roomMembersStore.updateMembersRole(ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin, membersMock[1].userId);
 
-			expect(
-				roomApiMock.roomControllerChangeRolesOfMembers
-			).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+			expect(roomApiMock.roomControllerChangeRolesOfMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
 				userIds: [membersMock[1].userId],
 				roleName: RoleName.Roomadmin,
 			});
 
-			expect(roomMembersStore.roomMembers[1].roomRoleName).toBe(
-				RoleName.Roomadmin
-			);
-			expect(roomMembersStore.roomMembers[1].displayRoomRole).toBe(
-				"pages.rooms.members.roomPermissions.admin"
-			);
+			expect(roomMembersStore.roomMembers[1].roomRoleName).toBe(RoleName.Roomadmin);
+			expect(roomMembersStore.roomMembers[1].displayRoomRole).toBe("pages.rooms.members.roomPermissions.admin");
 		});
 
 		it("should throw an error if the API call fails", async () => {
@@ -671,9 +621,7 @@ describe("useRoomMembers", () => {
 			const error = new Error("Test error");
 			roomApiMock.roomControllerChangeRolesOfMembers.mockRejectedValue(error);
 
-			await roomMembersStore.updateMembersRole(
-				ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin
-			);
+			await roomMembersStore.updateMembersRole(ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin);
 			expectNotification("error");
 		});
 	});
@@ -689,12 +637,9 @@ describe("useRoomMembers", () => {
 
 			await roomMembersStore.changeRoomOwner(membersMock[1].userId);
 
-			expect(roomApiMock.roomControllerChangeRoomOwner).toHaveBeenCalledWith(
-				roomDetailsStore.room!.id,
-				{
-					userId: membersMock[1].userId,
-				}
-			);
+			expect(roomApiMock.roomControllerChangeRoomOwner).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+				userId: membersMock[1].userId,
+			});
 		});
 
 		it("should swap the ownership in the state", async () => {
@@ -708,11 +653,7 @@ describe("useRoomMembers", () => {
 			});
 			const futureRoomOwner = roomViewers.pop();
 			if (futureRoomOwner) {
-				roomMembersStore.roomMembers = [
-					roomOwner,
-					futureRoomOwner,
-					...roomViewers,
-				];
+				roomMembersStore.roomMembers = [roomOwner, futureRoomOwner, ...roomViewers];
 			}
 
 			expect(roomOwner.roomRoleName).toBe(RoleName.Roomowner);
@@ -732,9 +673,7 @@ describe("useRoomMembers", () => {
 			});
 			const futureRoomOwner = membersMock.pop();
 			if (futureRoomOwner) {
-				roomApiMock.roomControllerChangeRoomOwner.mockResolvedValue(
-					mockApiResponse({})
-				);
+				roomApiMock.roomControllerChangeRoomOwner.mockResolvedValue(mockApiResponse({}));
 			}
 
 			await roomMembersStore.changeRoomOwner(futureRoomOwner?.userId ?? "");
@@ -763,9 +702,7 @@ describe("useRoomMembers", () => {
 
 			await roomMembersStore.confirmInvitations([membersMock[0].userId]);
 
-			expect(
-				roomApiMock.roomControllerChangeRolesOfMembers
-			).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+			expect(roomApiMock.roomControllerChangeRolesOfMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
 				userIds: [membersMock[0].userId],
 				roleName: ChangeRoomRoleBodyParamsRoleNameEnum.Roomviewer,
 			});
@@ -779,18 +716,12 @@ describe("useRoomMembers", () => {
 			});
 			roomMembersStore.roomMembers = membersMock;
 
-			expect(roomMembersStore.roomMembers[0].displayRoomRole).not.toBe(
-				"pages.rooms.members.roomPermissions.viewer"
-			);
+			expect(roomMembersStore.roomMembers[0].displayRoomRole).not.toBe("pages.rooms.members.roomPermissions.viewer");
 
 			await roomMembersStore.confirmInvitations([membersMock[0].userId]);
 
-			expect(roomMembersStore.roomMembers[0].roomRoleName).toBe(
-				RoleName.Roomviewer
-			);
-			expect(roomMembersStore.roomMembers[0].displayRoomRole).toBe(
-				"pages.rooms.members.roomPermissions.viewer"
-			);
+			expect(roomMembersStore.roomMembers[0].roomRoleName).toBe(RoleName.Roomviewer);
+			expect(roomMembersStore.roomMembers[0].displayRoomRole).toBe("pages.rooms.members.roomPermissions.viewer");
 		});
 
 		it("should throw an error if the API call fails", async () => {
@@ -815,12 +746,9 @@ describe("useRoomMembers", () => {
 
 			await roomMembersStore.rejectInvitations([membersMock[0].userId]);
 
-			expect(roomApiMock.roomControllerRemoveMembers).toHaveBeenCalledWith(
-				roomDetailsStore.room!.id,
-				{
-					userIds: [membersMock[0].userId],
-				}
-			);
+			expect(roomApiMock.roomControllerRemoveMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+				userIds: [membersMock[0].userId],
+			});
 		});
 
 		it("should remove the member from the room members", async () => {
@@ -873,9 +801,7 @@ describe("useRoomMembers", () => {
 					});
 					roomMembersStore.roomMembers = membersMock;
 
-					await roomMembersStore.confirmInvitations(
-						membersMock.map((member) => member.userId)
-					);
+					await roomMembersStore.confirmInvitations(membersMock.map((member) => member.userId));
 					expectNotification("success");
 				});
 			});
@@ -904,9 +830,7 @@ describe("useRoomMembers", () => {
 					});
 					roomMembersStore.roomMembers = membersMock;
 
-					await roomMembersStore.rejectInvitations(
-						membersMock.map((member) => member.userId)
-					);
+					await roomMembersStore.rejectInvitations(membersMock.map((member) => member.userId));
 					expectNotification("success");
 				});
 			});
@@ -1056,18 +980,13 @@ describe("useRoomMembers", () => {
 				roomRoleName: RoleName.Roomviewer,
 			});
 
-			roomMembersStore.roomMembers = [
-				...roomApplicants,
-				...roomMembersWithoutApplicants,
-			];
+			roomMembersStore.roomMembers = [...roomApplicants, ...roomMembersWithoutApplicants];
 
 			await nextTick();
 
 			expect(roomMembersStore.roomApplicants).toEqual(roomApplicants);
 			expect(roomMembersStore.roomApplicants.length).toEqual(3);
-			expect(roomMembersStore.roomMembersWithoutApplicants).toEqual(
-				roomMembersWithoutApplicants
-			);
+			expect(roomMembersStore.roomMembersWithoutApplicants).toEqual(roomMembersWithoutApplicants);
 			expect(roomMembersStore.roomMembersWithoutApplicants.length).toEqual(2);
 			expect(roomMembersStore.roomMembers.length).toEqual(5);
 		});

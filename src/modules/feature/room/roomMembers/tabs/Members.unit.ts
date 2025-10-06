@@ -1,3 +1,5 @@
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
 import {
 	createTestAppStoreWithUser,
 	createTestEnvStore,
@@ -5,20 +7,15 @@ import {
 	roomMemberFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { Members, MembersTable } from "@feature-room";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import SchoolsModule from "@/store/schools";
-import { schoolsModule } from "@/store";
-import { computed, Ref } from "vue";
-import { beforeEach } from "vitest";
 import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
+import { computed, Ref } from "vue";
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
@@ -27,9 +24,7 @@ type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
 };
 
-type RoomAuthorizationRefs = Partial<
-	RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>
->;
+type RoomAuthorizationRefs = Partial<RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>>;
 
 describe("Members", () => {
 	beforeEach(() => {
@@ -65,15 +60,10 @@ describe("Members", () => {
 			roomMembers.push(currentUser);
 		}
 
-		const authorizationPermissions =
-			createMock<ReturnType<typeof useRoomAuthorization>>();
+		const authorizationPermissions = createMock<ReturnType<typeof useRoomAuthorization>>();
 
-		for (const [key, value] of Object.entries(
-			options.roomAuthorization ?? {}
-		)) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(
-				() => value ?? false
-			);
+		for (const [key, value] of Object.entries(options.roomAuthorization ?? {})) {
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(() => value ?? false);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 

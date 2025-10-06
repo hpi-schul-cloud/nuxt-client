@@ -2,9 +2,9 @@ import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import { injectStrict } from "@/utils/inject";
 import { COPY_MODULE_KEY } from "@/utils/inject/injection-keys";
+import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 
 export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 	const copyModule = injectStrict(COPY_MODULE_KEY);
@@ -12,11 +12,9 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 
 	const backgroundCopyProcesses: Ref<CopyParams[]> = ref([]);
 
-	const markBackgroundCopyProcess = (data: CopyParams) =>
-		backgroundCopyProcesses.value.push(data);
+	const markBackgroundCopyProcess = (data: CopyParams) => backgroundCopyProcesses.value.push(data);
 
-	const isCopyProcessInBackground = (copyParams: CopyParams) =>
-		backgroundCopyProcesses.value.includes(copyParams);
+	const isCopyProcessInBackground = (copyParams: CopyParams) => backgroundCopyProcesses.value.includes(copyParams);
 
 	const openResultModal = () => copyModule?.setResultModalOpen(true);
 
@@ -39,10 +37,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 		isLoadingDialogOpen.value = true;
 		try {
 			const copyResult = await copyModule?.copy(copyParams);
-			if (
-				copyParams.type !== CopyParamsTypeEnum.Course &&
-				copyResult?.status === CopyApiResponseStatusEnum.Success
-			) {
+			if (copyParams.type !== CopyParamsTypeEnum.Course && copyResult?.status === CopyApiResponseStatusEnum.Success) {
 				notifySuccess(getNotifierMessage(copyParams.type));
 			} else if (copyResult?.status === CopyApiResponseStatusEnum.Failure) {
 				notifyError(t("components.molecules.copyResult.failedCopy"), false);

@@ -1,14 +1,10 @@
 import { createPermissionGuard } from "@/router/guards/permission.guard";
-import {
-	NavigationGuard,
-	NavigationGuardNext,
-	RouteLocationNormalized,
-} from "vue-router";
-import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { Permission } from "@/serverApi/v3";
-import { beforeEach } from "vitest";
-import { setActivePinia } from "pinia";
+import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
+import { NavigationGuard, NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
 const mockError = vi.fn();
 
@@ -41,10 +37,7 @@ describe("PermissionGuard", () => {
 	describe("createPermissionGuard", () => {
 		it("should check permissions from the application store and allow access", () => {
 			const { to, from, next } = setup();
-			const permissionGuard: NavigationGuard = createPermissionGuard(
-				[validPermissionA],
-				"/dashboard"
-			);
+			const permissionGuard: NavigationGuard = createPermissionGuard([validPermissionA], "/dashboard");
 
 			permissionGuard(to, from, next);
 
@@ -67,10 +60,7 @@ describe("PermissionGuard", () => {
 		it("should check permissions from the application store and deny access", () => {
 			const { to, from, next } = setup();
 			const fallbackRoute = "/dashboard";
-			const permissionGuard: NavigationGuard = createPermissionGuard(
-				[invalidPermission],
-				fallbackRoute
-			);
+			const permissionGuard: NavigationGuard = createPermissionGuard([invalidPermission], fallbackRoute);
 
 			permissionGuard(to, from, next);
 
@@ -79,9 +69,7 @@ describe("PermissionGuard", () => {
 
 		it("should create a '403' error if fallbackRoute is not provided and with invalid permission", () => {
 			const { to, from, next } = setup();
-			const permissionGuard: NavigationGuard = createPermissionGuard([
-				invalidPermission,
-			]);
+			const permissionGuard: NavigationGuard = createPermissionGuard([invalidPermission]);
 
 			permissionGuard(to, from, next);
 
@@ -90,10 +78,7 @@ describe("PermissionGuard", () => {
 
 		it("should create a '403' error if fallbackRoute is not provided and with one invalid permission", () => {
 			const { to, from, next } = setup();
-			const permissionGuard: NavigationGuard = createPermissionGuard([
-				validPermissionA,
-				invalidPermission,
-			]);
+			const permissionGuard: NavigationGuard = createPermissionGuard([validPermissionA, invalidPermission]);
 
 			permissionGuard(to, from, next);
 

@@ -1,12 +1,9 @@
-import { axiosErrorFactory, mockApiResponse } from "@@/tests/test-utils";
+import { useOAuthApi } from "./oauthApi.composable";
 import * as serverApi from "@/serverApi/v3/api";
-import {
-	OAuthApiInterface,
-	OAuthSessionTokenExpirationResponse,
-} from "@/serverApi/v3/api";
+import { OAuthApiInterface, OAuthSessionTokenExpirationResponse } from "@/serverApi/v3/api";
+import { axiosErrorFactory, mockApiResponse } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { HttpStatusCode } from "axios";
-import { useOAuthApi } from "./oauthApi.composable";
 
 describe("oauthApi.composable", () => {
 	let oauthApi: DeepMocked<OAuthApiInterface>;
@@ -28,9 +25,7 @@ describe("oauthApi.composable", () => {
 					expiresAt: new Date(Date.now() + 3600 * 1000).toISOString(),
 				};
 
-				oauthApi.oAuthControllerGetSessionTokenExpiration.mockResolvedValueOnce(
-					mockApiResponse({ data: expiration })
-				);
+				oauthApi.oAuthControllerGetSessionTokenExpiration.mockResolvedValueOnce(mockApiResponse({ data: expiration }));
 
 				return {
 					expiration,
@@ -50,21 +45,15 @@ describe("oauthApi.composable", () => {
 
 				await useOAuthApi().getSessionTokenExpiration();
 
-				expect(
-					oauthApi.oAuthControllerGetSessionTokenExpiration
-				).toHaveBeenCalled();
+				expect(oauthApi.oAuthControllerGetSessionTokenExpiration).toHaveBeenCalled();
 			});
 		});
 
 		describe("when the api call fails with any error status code", () => {
 			const setup = () => {
-				const error = axiosErrorFactory
-					.withStatusCode(HttpStatusCode.NotFound)
-					.build();
+				const error = axiosErrorFactory.withStatusCode(HttpStatusCode.NotFound).build();
 
-				oauthApi.oAuthControllerGetSessionTokenExpiration.mockRejectedValueOnce(
-					error
-				);
+				oauthApi.oAuthControllerGetSessionTokenExpiration.mockRejectedValueOnce(error);
 
 				return { error };
 			};

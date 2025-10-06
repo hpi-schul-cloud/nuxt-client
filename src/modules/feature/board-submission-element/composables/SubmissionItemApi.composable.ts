@@ -14,30 +14,17 @@ export const useSubmissionItemApi = () => {
 		submissionContainerId: string,
 		completed: boolean
 	): Promise<SubmissionItemResponse> => {
-		const response = await elementApi.elementControllerCreateSubmissionItem(
-			submissionContainerId,
-			{ completed: completed }
-		);
+		const response = await elementApi.elementControllerCreateSubmissionItem(submissionContainerId, {
+			completed: completed,
+		});
 		return response.data;
 	};
 
-	const updateSubmissionItemCall = async (
-		submissionItemId: string,
-		completed: boolean
-	) => {
-		return await submissionItemApi.boardSubmissionControllerUpdateSubmissionItem(
-			submissionItemId,
-			{ completed: completed }
-		);
-	};
+	const updateSubmissionItemCall = async (submissionItemId: string, completed: boolean) =>
+		await submissionItemApi.boardSubmissionControllerUpdateSubmissionItem(submissionItemId, { completed: completed });
 
-	const fetchSubmissionItemsCall = async (
-		submissionContainerId: string
-	): Promise<SubmissionsResponse> => {
-		const response =
-			await submissionItemApi.boardSubmissionControllerGetSubmissionItems(
-				submissionContainerId
-			);
+	const fetchSubmissionItemsCall = async (submissionContainerId: string): Promise<SubmissionsResponse> => {
+		const response = await submissionItemApi.boardSubmissionControllerGetSubmissionItems(submissionContainerId);
 		return response.data;
 	};
 

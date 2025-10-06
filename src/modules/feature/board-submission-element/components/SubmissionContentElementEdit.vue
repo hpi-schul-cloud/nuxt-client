@@ -14,22 +14,18 @@
 			:time-input-label="t('common.labels.time')"
 			@update:date-time="onDateTimeInput"
 		/>
-		<SubmissionItemsTeacherDisplay
-			:submissions="submissions"
-			:is-overdue="isOverdue"
-			:loading="loading"
-		/>
+		<SubmissionItemsTeacherDisplay :submissions="submissions" :is-overdue="isOverdue" :loading="loading" />
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { useI18n } from "vue-i18n";
-import { mdiLightbulbOnOutline } from "@icons/material";
 import { TeacherSubmission } from "../types/submission";
-import { DateTimePicker } from "@ui-date-time-picker";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
+import { mdiLightbulbOnOutline } from "@icons/material";
+import { DateTimePicker } from "@ui-date-time-picker";
+import { defineComponent, PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SubmissionContentElementEdit",

@@ -12,25 +12,17 @@ export const useH5pEditorBoardHooks = (elementId: string) => {
 	const boardApi = useBoardApi();
 	const element: Ref<H5pElementResponse | undefined> = ref();
 
-	const applicationErrorModule: ApplicationErrorModule = injectStrict(
-		APPLICATION_ERROR_KEY
-	);
+	const applicationErrorModule: ApplicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
 
-	const isH5pElement = (
-		element: AnyContentElement
-	): element is H5pElementResponse => {
-		return element.type === ContentElementType.H5p;
-	};
+	const isH5pElement = (element: AnyContentElement): element is H5pElementResponse =>
+		element.type === ContentElementType.H5p;
 
 	const onCreate = async (): Promise<void> => {
-		const response =
-			await boardApi.getElementWithParentHierarchyCall(elementId);
+		const response = await boardApi.getElementWithParentHierarchyCall(elementId);
 		const elementData: AnyContentElement = response.data.element;
 
 		if (!isH5pElement(elementData)) {
-			applicationErrorModule.setError(
-				createApplicationError(HttpStatusCode.NotFound)
-			);
+			applicationErrorModule.setError(createApplicationError(HttpStatusCode.NotFound));
 
 			return;
 		}

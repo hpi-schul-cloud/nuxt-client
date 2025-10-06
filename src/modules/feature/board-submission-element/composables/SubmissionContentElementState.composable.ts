@@ -1,19 +1,12 @@
+import { StudentSubmission, TeacherSubmission } from "../types/submission";
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ref, computed, onMounted, Ref, watch } from "vue";
 import { SubmissionsResponse } from "@/serverApi/v3";
-import { TeacherSubmission, StudentSubmission } from "../types/submission";
+import { computed, onMounted, Ref, ref, watch } from "vue";
 
-export const useSubmissionContentElementState = (
-	id: string,
-	modelValue: Ref<{ dueDate?: string }>
-) => {
+export const useSubmissionContentElementState = (id: string, modelValue: Ref<{ dueDate?: string }>) => {
 	const { notifyWithTemplate } = useErrorHandler();
-	const {
-		fetchSubmissionItemsCall,
-		createSubmissionItemCall,
-		updateSubmissionItemCall,
-	} = useSubmissionItemApi();
+	const { fetchSubmissionItemsCall, createSubmissionItemCall, updateSubmissionItemCall } = useSubmissionItemApi();
 	let submissionsResponse: SubmissionsResponse = {
 		submissionItemsResponse: [],
 		users: [],
@@ -51,10 +44,7 @@ export const useSubmissionContentElementState = (
 			return;
 		}
 		try {
-			await updateSubmissionItemCall(
-				submissionsResponse.submissionItemsResponse[0].id,
-				completed
-			);
+			await updateSubmissionItemCall(submissionsResponse.submissionItemsResponse[0].id, completed);
 			submissionsResponse.submissionItemsResponse[0].completed = completed;
 		} catch {
 			notifyWithTemplate("notUpdated", "boardElement")();
@@ -80,10 +70,7 @@ export const useSubmissionContentElementState = (
 		return new Date() > new Date(modelValue.value.dueDate);
 	});
 
-	const sortByName = (
-		submissionA: TeacherSubmission,
-		submissionB: TeacherSubmission
-	) => {
+	const sortByName = (submissionA: TeacherSubmission, submissionB: TeacherSubmission) => {
 		const lastNameA = submissionA.lastName.toUpperCase();
 		const lastNameB = submissionB.lastName.toUpperCase();
 		if (lastNameA < lastNameB) {
@@ -101,13 +88,12 @@ export const useSubmissionContentElementState = (
 			return { completed: false };
 		}
 
-		const completionState =
-			submissionsResponse.submissionItemsResponse[0].completed;
+		const completionState = submissionsResponse.submissionItemsResponse[0].completed;
 		return { completed: completionState };
 	};
 
-	const mapTeacherSubmission = (submissionsResponse: SubmissionsResponse) => {
-		return submissionsResponse.users
+	const mapTeacherSubmission = (submissionsResponse: SubmissionsResponse) =>
+		submissionsResponse.users
 			.map((student) => {
 				const submissionInfo: Partial<TeacherSubmission> = {
 					firstName: student.firstName,
@@ -136,7 +122,6 @@ export const useSubmissionContentElementState = (
 				return submissionInfo as TeacherSubmission;
 			})
 			.sort(sortByName);
-	};
 
 	return {
 		submissions,

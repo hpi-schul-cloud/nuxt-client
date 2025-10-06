@@ -4,13 +4,13 @@
 
 <script setup lang="ts">
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
+import { RoleName } from "@/serverApi/v3";
 import TasksModule from "@/store/tasks";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useAppStoreRefs } from "@data-app";
 import { useTitle } from "@vueuse/core";
 import { computed, inject, onMounted } from "vue";
-import { buildPageTitle } from "@/utils/pageTitle";
 import { useI18n } from "vue-i18n";
-import { useAppStoreRefs } from "@data-app";
-import { RoleName } from "@/serverApi/v3";
 
 const { t } = useI18n();
 const { isTeacher, isStudent } = useAppStoreRefs();

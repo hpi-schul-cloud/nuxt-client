@@ -1,14 +1,11 @@
-import TermsOfUseModule from "@/store/terms-of-use";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import SchoolsModule from "@/store/schools";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import { mount } from "@vue/test-utils";
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
+import SchoolsModule from "@/store/schools";
+import TermsOfUseModule from "@/store/terms-of-use";
 import { SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import type { Mocked } from "vitest";
 
 describe("SchoolPolicyFormDialog", () => {
@@ -59,10 +56,7 @@ describe("SchoolPolicyFormDialog", () => {
 		it("should disable submit button", () => {
 			const wrapper = setup();
 
-			expect(
-				wrapper.findComponent('[data-testid="dialog-confirm"]').attributes()
-					.disabled
-			).toBeDefined();
+			expect(wrapper.findComponent('[data-testid="dialog-confirm"]').attributes().disabled).toBeDefined();
 		});
 
 		it("should render warning icon", async () => {
@@ -70,9 +64,7 @@ describe("SchoolPolicyFormDialog", () => {
 			const fileInput = wrapper.findComponent({ name: "v-file-input" });
 			await fileInput.trigger("blur");
 
-			expect(
-				wrapper.findComponent('[data-testid="warning-icon"]').exists()
-			).toBe(true);
+			expect(wrapper.findComponent('[data-testid="warning-icon"]').exists()).toBe(true);
 		});
 	});
 
@@ -80,9 +72,7 @@ describe("SchoolPolicyFormDialog", () => {
 		it("should emit 'close'", async () => {
 			const wrapper = setup();
 
-			await wrapper
-				.findComponent('[data-testid="dialog-cancel"]')
-				.trigger("click");
+			await wrapper.findComponent('[data-testid="dialog-cancel"]').trigger("click");
 			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 	});

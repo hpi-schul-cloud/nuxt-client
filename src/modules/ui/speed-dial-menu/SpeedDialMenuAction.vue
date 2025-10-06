@@ -1,14 +1,7 @@
 -
 <template>
-	<transition
-		:name="orientation === 'left' ? 'slide-fade-left' : 'slide-fade-right'"
-	>
-		<div
-			v-if="isShow"
-			class="d-flex flex-row pt-4 align-center"
-			:class="classes"
-			:style="styles"
-		>
+	<transition :name="orientation === 'left' ? 'slide-fade-left' : 'slide-fade-right'">
+		<div v-if="isShow" class="d-flex flex-row pt-4 align-center" :class="classes" :style="styles">
 			<template v-if="orientation === 'left'">
 				<v-btn
 					color="primary"
@@ -24,13 +17,7 @@
 					<v-icon>{{ props.icon }}</v-icon>
 					<span class="d-sr-only"> <slot /> </span>
 				</v-btn>
-				<v-btn
-					class="ml-4 elevation-6"
-					tabindex="-1"
-					aria-hidden="true"
-					:href="href"
-					:to="to"
-					@click="onClick"
+				<v-btn class="ml-4 elevation-6" tabindex="-1" aria-hidden="true" :href="href" :to="to" @click="onClick"
 					><slot />
 				</v-btn>
 			</template>
@@ -65,14 +52,14 @@
 </template>
 
 <script lang="ts" setup>
-import { delay } from "@/utils/helpers";
-import { injectStrict } from "@/utils/inject";
-import { computed, onMounted, Ref, ref, unref } from "vue";
 import {
 	INJECT_SPEED_DIAL_ACTION_CLICKED,
 	INJECT_SPEED_DIAL_DIRECTION,
 	INJECT_SPEED_DIAL_ORIENTATION,
 } from "./injection-tokens";
+import { delay } from "@/utils/helpers";
+import { injectStrict } from "@/utils/inject";
+import { computed, onMounted, Ref, ref, unref } from "vue";
 
 interface Props {
 	icon: string;
@@ -93,12 +80,8 @@ const emit = defineEmits<{
 	(event: "click"): void;
 }>();
 
-const orientation = injectStrict<Ref<"left" | "right">>(
-	INJECT_SPEED_DIAL_ORIENTATION
-);
-const direction = injectStrict<Ref<"top" | "bottom">>(
-	INJECT_SPEED_DIAL_DIRECTION
-);
+const orientation = injectStrict<Ref<"left" | "right">>(INJECT_SPEED_DIAL_ORIENTATION);
+const direction = injectStrict<Ref<"top" | "bottom">>(INJECT_SPEED_DIAL_DIRECTION);
 const closeMenu = injectStrict<() => void>(INJECT_SPEED_DIAL_ACTION_CLICKED);
 
 const isShow = ref(false);

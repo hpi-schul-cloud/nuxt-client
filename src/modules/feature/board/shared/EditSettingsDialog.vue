@@ -56,11 +56,7 @@
 					<VBtn
 						ref="cancelButton"
 						class="ms-auto mr-2"
-						:text="
-							isDraftMode
-								? t('common.labels.close')
-								: t('common.actions.cancel')
-						"
+						:text="isDraftMode ? t('common.labels.close') : t('common.actions.cancel')"
 						:variant="isDraftMode ? 'outlined' : 'flat'"
 						data-testid="edit-settings-cancel-btn"
 						@click="onClose"
@@ -82,12 +78,12 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { computed, ref, watch } from "vue";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import type { VCard } from "vuetify/components";
-import { useDisplay } from "vuetify";
 import { WarningAlert } from "@ui-alert";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
+import type { VCard } from "vuetify/components";
 
 type Props = {
 	isDraftMode: boolean;
@@ -112,17 +108,14 @@ const { xs } = useDisplay();
 type EditOption = "notEditable" | "editable";
 const selectedOption = ref<EditOption>("notEditable");
 
-const modalTitle = computed(() =>
-	t("components.board.menu.editing.settings.title")
-);
+const modalTitle = computed(() => t("components.board.menu.editing.settings.title"));
 
 const radioOptions = computed(() => [
 	{
 		value: "notEditable",
 		labelHeader: "components.board.dialog.readerCanEdit.options",
 		labelInlineFormattedText: "common.words.not",
-		labelDescription:
-			"components.board.dialog.readerCanEdit.options.defaultSetting",
+		labelDescription: "components.board.dialog.readerCanEdit.options.defaultSetting",
 		dataTestid: "edit-settings-option-1",
 	},
 	{

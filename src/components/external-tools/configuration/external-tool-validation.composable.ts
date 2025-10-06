@@ -1,13 +1,10 @@
-import { useI18n } from "vue-i18n";
 import { ToolParameter, ToolParameterType } from "@/store/external-tool";
+import { useI18n } from "vue-i18n";
 
 export function useExternalToolValidation() {
 	const { t } = useI18n();
 
-	const validateParameter = (
-		param: ToolParameter,
-		inputValue: string | undefined
-	): Array<() => boolean | string> => {
+	const validateParameter = (param: ToolParameter, inputValue: string | undefined): Array<() => boolean | string> => {
 		const rules = [];
 		if (!param.isOptional && !inputValue) {
 			rules.push(() => t("common.validation.required2"));
@@ -29,10 +26,7 @@ export function useExternalToolValidation() {
 			const regex = new RegExp(param.regex);
 			rules.push(() => {
 				if (inputValue) {
-					return (
-						regex.test(inputValue) ||
-						t("common.validation.regex", { comment: param.regexComment })
-					);
+					return regex.test(inputValue) || t("common.validation.regex", { comment: param.regexComment });
 				}
 				return true;
 			});
@@ -45,9 +39,7 @@ export function useExternalToolValidation() {
 		rules: Array<() => boolean | string>
 	): void => {
 		if (inputValue && param.type === ToolParameterType.Number) {
-			rules.push(
-				() => !isNaN(Number(inputValue)) || t("common.validation.number")
-			);
+			rules.push(() => !isNaN(Number(inputValue)) || t("common.validation.number"));
 		}
 	};
 

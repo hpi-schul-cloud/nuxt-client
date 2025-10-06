@@ -1,9 +1,6 @@
-import { mount } from "@vue/test-utils";
 import LineClamp from "./LineClamp.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("LineClamp", () => {
 	const setup = (defaultSlotContent: string) => {

@@ -1,10 +1,10 @@
+import { useBoardStore } from "./Board.store";
 import { Permission } from "@/serverApi/v3";
 import { BoardPermissionChecks } from "@/types/board/Permissions";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
+import { useAppStoreRefs } from "@data-app";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
-import { useBoardStore } from "./Board.store";
-import { useAppStoreRefs } from "@data-app";
-import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 
 const boardPermissions = (): BoardPermissionChecks => {
 	const boardPermissions = computed(() => board.value?.permissions ?? []);
@@ -12,21 +12,13 @@ const boardPermissions = (): BoardPermissionChecks => {
 	const { isTeacher, isStudent, userPermissions } = useAppStoreRefs();
 	const { board } = storeToRefs(useBoardStore());
 
-	const arePermissionsLoaded = computed(
-		() => boardPermissions.value.length > 0
-	);
+	const arePermissionsLoaded = computed(() => boardPermissions.value.length > 0);
 
-	const permissions = computed(() => [
-		...boardPermissions.value,
-		...userPermissions.value,
-	]);
+	const permissions = computed(() => [...boardPermissions.value, ...userPermissions.value]);
 
-	const checkPermission = (permission: Permission) =>
-		permissions.value.includes(permission);
+	const checkPermission = (permission: Permission) => permissions.value.includes(permission);
 
-	const isBoardEditAllowed = computed(() =>
-		checkPermission(Permission.BoardEdit)
-	);
+	const isBoardEditAllowed = computed(() => checkPermission(Permission.BoardEdit));
 
 	const hasMovePermission = computed(() => isBoardEditAllowed.value);
 	const hasCreateCardPermission = computed(() => isBoardEditAllowed.value);
@@ -34,25 +26,15 @@ const boardPermissions = (): BoardPermissionChecks => {
 	const hasEditPermission = computed(() => isBoardEditAllowed.value);
 	const hasDeletePermission = computed(() => isBoardEditAllowed.value);
 
-	const hasCreateToolPermission = computed(() =>
-		checkPermission(Permission.ContextToolAdmin)
-	);
+	const hasCreateToolPermission = computed(() => checkPermission(Permission.ContextToolAdmin));
 
-	const hasManageBoardPermission = computed(() =>
-		checkPermission(Permission.BoardManage)
-	);
+	const hasManageBoardPermission = computed(() => checkPermission(Permission.BoardManage));
 
-	const hasManageReadersCanEditPermission = computed(() =>
-		checkPermission(Permission.BoardManageReadersCanEdit)
-	);
+	const hasManageReadersCanEditPermission = computed(() => checkPermission(Permission.BoardManageReadersCanEdit));
 
-	const hasManageVideoConferencePermission = computed(() =>
-		checkPermission(Permission.BoardManageVideoconference)
-	);
+	const hasManageVideoConferencePermission = computed(() => checkPermission(Permission.BoardManageVideoconference));
 
-	const hasShareBoardPermission = computed(() =>
-		checkPermission(Permission.BoardShareBoard)
-	);
+	const hasShareBoardPermission = computed(() => checkPermission(Permission.BoardShareBoard));
 
 	return {
 		arePermissionsLoaded,
@@ -71,5 +53,4 @@ const boardPermissions = (): BoardPermissionChecks => {
 	};
 };
 
-export const useBoardPermissions =
-	createTestableSharedComposable(boardPermissions);
+export const useBoardPermissions = createTestableSharedComposable(boardPermissions);

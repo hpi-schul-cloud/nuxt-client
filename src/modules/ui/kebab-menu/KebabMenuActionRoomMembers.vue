@@ -1,8 +1,5 @@
 <template>
-	<KebabMenuAction
-		:icon="mdiAccountGroupOutline"
-		data-testid="kebab-menu-action-room-members"
-	>
+	<KebabMenuAction :icon="mdiAccountGroupOutline" data-testid="kebab-menu-action-room-members">
 		{{ membersInfoText }}
 	</KebabMenuAction>
 </template>

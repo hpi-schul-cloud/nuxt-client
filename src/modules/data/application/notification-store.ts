@@ -1,6 +1,6 @@
+import { uniqueId } from "lodash-es";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { uniqueId } from "lodash-es";
 
 export type AlertStatus = "success" | "error" | "warning" | "info";
 

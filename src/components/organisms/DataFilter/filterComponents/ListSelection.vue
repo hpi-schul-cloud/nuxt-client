@@ -19,9 +19,9 @@
 	/>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import FilterActionButtons from "./FilterActionButtons.vue";
 import { SelectOptionsType } from "../types";
+import FilterActionButtons from "./FilterActionButtons.vue";
+import { onMounted, ref } from "vue";
 
 const props = defineProps({
 	selectionList: {

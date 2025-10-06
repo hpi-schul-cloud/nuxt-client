@@ -1,9 +1,9 @@
 import { checkFolderFeature } from "@/router/guards/check-folder-feature.guard";
-import { RouteLocationNormalized } from "vue-router";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import { beforeEach } from "vitest";
-import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
+import { RouteLocationNormalized } from "vue-router";
 
 vi.mock("@/utils/inject");
 

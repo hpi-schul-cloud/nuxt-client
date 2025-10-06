@@ -16,12 +16,7 @@
 				{{
 					$t("components.organisms.Pagination.currentPage", {
 						start: total > 0 ? currentPage * perPage - perPage + 1 : 0,
-						end:
-							perPage > total
-								? total
-								: currentPage * perPage > total
-									? total
-									: currentPage * perPage,
+						end: perPage > total ? total : currentPage * perPage > total ? total : currentPage * perPage,
 						total,
 					})
 				}}

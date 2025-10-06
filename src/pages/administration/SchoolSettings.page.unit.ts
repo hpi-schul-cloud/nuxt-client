@@ -1,31 +1,21 @@
+import SchoolSettings from "./SchoolSettings.page.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
-import {
-	ConfigResponse,
-	SchoolSystemResponse,
-	SchulcloudTheme,
-} from "@/serverApi/v3";
+import { ConfigResponse, SchoolSystemResponse, SchulcloudTheme } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { FederalState } from "@/store/types/schools";
 import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestEnvStore,
-	maintenanceStatusFactory,
-} from "@@/tests/test-utils";
+import { createTestEnvStore, maintenanceStatusFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useSharedSchoolYearChange } from "@data-school";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import type { Mock, Mocked } from "vitest";
 import { nextTick, reactive } from "vue";
 import { useRoute } from "vue-router";
-import SchoolSettings from "./SchoolSettings.page.vue";
-import type { Mock, Mocked } from "vitest";
-import { setActivePinia } from "pinia";
-import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-router");
 
@@ -42,18 +32,13 @@ vi.mock(
 vi.mock("@data-school/schoolYearChange.composable");
 
 describe("SchoolSettingsPage", () => {
-	let useSharedSchoolYearChangeApiMock: DeepMocked<
-		ReturnType<typeof useSharedSchoolYearChange>
-	>;
+	let useSharedSchoolYearChangeApiMock: DeepMocked<ReturnType<typeof useSharedSchoolYearChange>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useSharedSchoolYearChangeApiMock =
-			createMock<ReturnType<typeof useSharedSchoolYearChange>>();
+		useSharedSchoolYearChangeApiMock = createMock<ReturnType<typeof useSharedSchoolYearChange>>();
 
-		vi.mocked(useSharedSchoolYearChange).mockReturnValue(
-			useSharedSchoolYearChangeApiMock
-		);
+		vi.mocked(useSharedSchoolYearChange).mockReturnValue(useSharedSchoolYearChangeApiMock);
 	});
 
 	let schoolsModule: Mocked<SchoolsModule>;
@@ -80,9 +65,7 @@ describe("SchoolSettingsPage", () => {
 			"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Brandenburg_Wappen.svg/354px-Brandenburg_Wappen.svg.png",
 	};
 
-	const mockSystems: SchoolSystemResponse[] = [
-		{ id: "123", type: "itslearning" },
-	];
+	const mockSystems: SchoolSystemResponse[] = [{ id: "123", type: "itslearning" }];
 
 	const getWrapper = (
 		envConfig: Partial<ConfigResponse> = {
@@ -110,9 +93,7 @@ describe("SchoolSettingsPage", () => {
 
 		createTestEnvStore(envConfig);
 
-		useRouteMock.mockImplementation(() =>
-			reactive({ path: "home", query: {} })
-		);
+		useRouteMock.mockImplementation(() => reactive({ path: "home", query: {} }));
 
 		const wrapper = shallowMount(SchoolSettings, {
 			global: {
@@ -130,9 +111,7 @@ describe("SchoolSettingsPage", () => {
 		it("should fetch maintenance status of school", () => {
 			getWrapper();
 
-			expect(
-				useSharedSchoolYearChangeApiMock.fetchSchoolYearStatus
-			).toHaveBeenCalledWith(mockSchool.id);
+			expect(useSharedSchoolYearChangeApiMock.fetchSchoolYearStatus).toHaveBeenCalledWith(mockSchool.id);
 		});
 	});
 
@@ -176,9 +155,7 @@ describe("SchoolSettingsPage", () => {
 		it("should render admin migration expansion panel", () => {
 			const { wrapper } = getWrapper();
 
-			expect(wrapper.find('[data-testid="migration-panel"]').exists()).toBe(
-				true
-			);
+			expect(wrapper.find('[data-testid="migration-panel"]').exists()).toBe(true);
 		});
 	});
 
@@ -188,17 +165,16 @@ describe("SchoolSettingsPage", () => {
 				FEATURE_USER_LOGIN_MIGRATION_ENABLED: false,
 			});
 
-			expect(wrapper.find('[data-testid="migration-panel"]').exists()).toBe(
-				false
-			);
+			expect(wrapper.find('[data-testid="migration-panel"]').exists()).toBe(false);
 		});
 	});
 
 	describe("school year change", () => {
 		describe("when school has an active ldap", () => {
 			const setup = () => {
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build({ schoolUsesLdap: true });
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
+					schoolUsesLdap: true,
+				});
 
 				const { wrapper } = getWrapper();
 
@@ -210,16 +186,15 @@ describe("SchoolSettingsPage", () => {
 			it("should show school year change panel", () => {
 				const { wrapper } = setup();
 
-				expect(
-					wrapper.find('[data-testid="school-year-change-panel"]').exists()
-				).toBe(true);
+				expect(wrapper.find('[data-testid="school-year-change-panel"]').exists()).toBe(true);
 			});
 		});
 
 		describe("when school does not have an active ldap", () => {
 			const setup = () => {
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build({ schoolUsesLdap: false });
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
+					schoolUsesLdap: false,
+				});
 
 				const { wrapper } = getWrapper();
 
@@ -231,9 +206,7 @@ describe("SchoolSettingsPage", () => {
 			it("should hide school year change panel", () => {
 				const { wrapper } = setup();
 
-				expect(
-					wrapper.find('[data-testid="school-year-change-panel"]').exists()
-				).toBe(false);
+				expect(wrapper.find('[data-testid="school-year-change-panel"]').exists()).toBe(false);
 			});
 		});
 
@@ -242,9 +215,7 @@ describe("SchoolSettingsPage", () => {
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = undefined;
 				const { wrapper } = getWrapper();
 
-				expect(
-					wrapper.find('[data-testid="school-year-change-panel"]').exists()
-				).toBe(false);
+				expect(wrapper.find('[data-testid="school-year-change-panel"]').exists()).toBe(false);
 			});
 		});
 	});
@@ -261,9 +232,7 @@ describe("SchoolSettingsPage", () => {
 			getLoading: true,
 		});
 
-		expect(
-			wrapper.find('[data-testid="systems-panel-skeleton"]').exists()
-		).toBe(true);
+		expect(wrapper.find('[data-testid="systems-panel-skeleton"]').exists()).toBe(true);
 	});
 
 	it("should render alert on error", () => {

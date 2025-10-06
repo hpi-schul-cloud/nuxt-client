@@ -1,12 +1,9 @@
+import NavigationBar from "./NavigationBar.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import NavigationBar from "./NavigationBar.vue";
-import { setActivePinia } from "pinia";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 
 describe("@/components/legacy/NavigationBar", () => {

@@ -12,26 +12,24 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { ApiResponseError } from "@/store/types/commons";
 import { RoomCreateParams } from "@/types/room/Room";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { notifyError } from "@data-app";
 import { useRoomCreateState } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { useTitle } from "@vueuse/core";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { ApiResponseError } from "@/store/types/commons";
-import { notifyError } from "@data-app";
 
 const { t } = useI18n();
 
 const router = useRouter();
 const { createRoom, roomData } = useRoomCreateState();
 
-const pageTitle = computed(() =>
-	buildPageTitle(`${t("pages.roomCreate.title")}`)
-);
+const pageTitle = computed(() => buildPageTitle(`${t("pages.roomCreate.title")}`));
 useTitle(pageTitle);
 
 const breadcrumbs: Breadcrumb[] = [

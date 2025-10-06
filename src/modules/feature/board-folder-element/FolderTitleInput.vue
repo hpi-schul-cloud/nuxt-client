@@ -39,9 +39,7 @@ const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const rules = reactive({
-	validateOnOpeningTag: (value: string) => {
-		return validateOnOpeningTag(value);
-	},
+	validateOnOpeningTag: (value: string) => validateOnOpeningTag(value),
 });
 
 const defaultTitle = t("pages.folder.untitled");
@@ -55,9 +53,7 @@ watch(
 	{ immediate: true }
 );
 
-const isTitleValid = computed(() => {
-	return rules.validateOnOpeningTag(titleRef.value) === true;
-});
+const isTitleValid = computed(() => rules.validateOnOpeningTag(titleRef.value) === true);
 
 const onConfirm = async () => {
 	if (isTitleValid.value) {

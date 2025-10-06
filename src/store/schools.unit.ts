@@ -1,22 +1,14 @@
+import SchoolsModule from "./schools";
 import * as serverApi from "@/serverApi/v3/api";
-import {
-	SchoolFeature,
-	SchulcloudTheme,
-	SystemsApiInterface,
-} from "@/serverApi/v3/api";
-import {
-	createTestAppStore,
-	createTestAppStoreWithSchool,
-	createTestEnvStore,
-} from "@@/tests/test-utils";
+import { SchoolFeature, SchulcloudTheme, SystemsApiInterface } from "@/serverApi/v3/api";
+import { createTestAppStore, createTestAppStoreWithSchool, createTestEnvStore } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { AxiosError } from "axios";
-import SchoolsModule from "./schools";
 import { createTestingPinia } from "@pinia/testing";
+import { AxiosError } from "axios";
 import { setActivePinia } from "pinia";
 
 describe("schools module", () => {
@@ -41,9 +33,7 @@ describe("schools module", () => {
 			it("should call mutations correctly", async () => {
 				createTestAppStore();
 				const mockSchoolResponse = schoolResponseFactory.build();
-				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
-					mockApiResponse({ data: mockSchoolResponse })
-				);
+				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(mockApiResponse({ data: mockSchoolResponse }));
 				const schoolsModule = new SchoolsModule({});
 
 				const setSchoolSpy = vi.spyOn(schoolsModule, "setSchool");
@@ -61,14 +51,9 @@ describe("schools module", () => {
 			it("should set school state correctly", async () => {
 				createTestAppStore();
 				const mockSchoolResponse = schoolResponseFactory.build({
-					features: [
-						serverApi.SchoolFeature.RocketChat,
-						serverApi.SchoolFeature.Videoconference,
-					],
+					features: [serverApi.SchoolFeature.RocketChat, serverApi.SchoolFeature.Videoconference],
 				});
-				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
-					mockApiResponse({ data: mockSchoolResponse })
-				);
+				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(mockApiResponse({ data: mockSchoolResponse }));
 				const schoolsModule = new SchoolsModule({});
 
 				const expectedFeatureObject: Record<SchoolFeature, boolean> = {
@@ -90,9 +75,7 @@ describe("schools module", () => {
 			});
 
 			it("should set error if api client throws error", async () => {
-				schoolApi.schoolControllerGetSchoolById.mockRejectedValueOnce(
-					new AxiosError()
-				);
+				schoolApi.schoolControllerGetSchoolById.mockRejectedValueOnce(new AxiosError());
 
 				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
@@ -116,8 +99,7 @@ describe("schools module", () => {
 					systemIds: ["mockSystemId"],
 				});
 
-				const mockSchoolSystemResponse =
-					schoolSystemResponseFactory.buildList(1);
+				const mockSchoolSystemResponse = schoolSystemResponseFactory.buildList(1);
 				schoolApi.schoolControllerGetSchoolSystems.mockResolvedValueOnce(
 					mockApiResponse({ data: mockSchoolSystemResponse })
 				);
@@ -130,16 +112,12 @@ describe("schools module", () => {
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setSystemsSpy).toHaveBeenCalled();
-				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(
-					mockSchoolSystemResponse
-				);
+				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(mockSchoolSystemResponse);
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
-				schoolApi.schoolControllerGetSchoolSystems.mockRejectedValueOnce(
-					new AxiosError()
-				);
+				schoolApi.schoolControllerGetSchoolSystems.mockRejectedValueOnce(new AxiosError());
 
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
@@ -167,9 +145,7 @@ describe("schools module", () => {
 				};
 
 				const mockSchoolResponse = schoolResponseFactory.build();
-				schoolApi.schoolControllerUpdateSchool.mockResolvedValueOnce(
-					mockApiResponse({ data: mockSchoolResponse })
-				);
+				schoolApi.schoolControllerUpdateSchool.mockResolvedValueOnce(mockApiResponse({ data: mockSchoolResponse }));
 
 				const schoolsModule = new SchoolsModule({});
 
@@ -178,13 +154,10 @@ describe("schools module", () => {
 
 				await schoolsModule.update({ id: "111", props: uploadData });
 
-				expect(schoolApi.schoolControllerUpdateSchool).toHaveBeenCalledWith(
-					"111",
-					{
-						features: ["rocketChat"],
-						name: "Paul Newname Gymnasium",
-					}
-				);
+				expect(schoolApi.schoolControllerUpdateSchool).toHaveBeenCalledWith("111", {
+					features: ["rocketChat"],
+					name: "Paul Newname Gymnasium",
+				});
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setSchoolSpy).toHaveBeenCalled();
@@ -198,9 +171,7 @@ describe("schools module", () => {
 					features: [serverApi.SchoolFeature.RocketChat],
 				};
 				const schoolsModule = new SchoolsModule({});
-				schoolApi.schoolControllerUpdateSchool.mockRejectedValueOnce(
-					new AxiosError()
-				);
+				schoolApi.schoolControllerUpdateSchool.mockRejectedValueOnce(new AxiosError());
 
 				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
 				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
@@ -230,9 +201,7 @@ describe("schools module", () => {
 					const fetchSystemsSpy = vi.spyOn(schoolsModule, "fetchSystems");
 
 					await schoolsModule.deleteSystem(systemId);
-					expect(
-						schoolApi.schoolControllerRemoveSystemFromSchool
-					).toHaveBeenCalledWith(school.id, systemId);
+					expect(schoolApi.schoolControllerRemoveSystemFromSchool).toHaveBeenCalledWith(school.id, systemId);
 					expect(setLoadingSpy).toHaveBeenCalled();
 					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 					expect(fetchSchoolSpy).toHaveBeenCalled();
@@ -241,9 +210,7 @@ describe("schools module", () => {
 
 				it("should trigger error and goes into the catch block", async () => {
 					const systemId = "id_1";
-					schoolApi.schoolControllerRemoveSystemFromSchool.mockRejectedValueOnce(
-						new AxiosError()
-					);
+					schoolApi.schoolControllerRemoveSystemFromSchool.mockRejectedValueOnce(new AxiosError());
 					const schoolsModule = new SchoolsModule({});
 
 					const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
@@ -252,9 +219,7 @@ describe("schools module", () => {
 					await schoolsModule.deleteSystem(systemId);
 
 					expect(setErrorSpy).toHaveBeenCalled();
-					expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(
-						expect.any(Object)
-					);
+					expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 					expect(setLoadingSpy).toHaveBeenCalled();
 					expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 				});
@@ -268,9 +233,7 @@ describe("schools module", () => {
 				const mockApi = {
 					importUserControllerEndSchoolInMaintenance: vi.fn(() => ({})),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
 				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
 				const setSchoolSpy = vi.spyOn(schoolsModule, "setSchool");
@@ -293,9 +256,7 @@ describe("schools module", () => {
 					inMaintenance: false,
 				});
 				await schoolsModule.migrationStartSync();
-				expect(
-					mockApi.importUserControllerEndSchoolInMaintenance
-				).not.toHaveBeenCalled();
+				expect(mockApi.importUserControllerEndSchoolInMaintenance).not.toHaveBeenCalled();
 			});
 
 			it("should call backend and set state correctly", async () => {
@@ -312,9 +273,7 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 
-				expect(
-					mockApi.importUserControllerEndSchoolInMaintenance
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerEndSchoolInMaintenance).toHaveBeenCalledTimes(1);
 				expect(setSchoolSpy).toHaveBeenCalledTimes(2);
 				expect(setSchoolSpy.mock.calls[1][0]).toStrictEqual({
 					...mockSchool,
@@ -325,17 +284,11 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				const { schoolsModule, setLoadingSpy, setErrorSpy, spy } = setup();
 
-				const error = new AxiosError(
-					JSON.stringify({ statusCode: "500", message: "foo" })
-				);
+				const error = new AxiosError(JSON.stringify({ statusCode: "500", message: "foo" }));
 				const mockApi = {
-					importUserControllerEndSchoolInMaintenance: vi.fn(() =>
-						Promise.reject(error)
-					),
+					importUserControllerEndSchoolInMaintenance: vi.fn(() => Promise.reject(error)),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 				schoolsModule.setSchool({
 					...mockSchool,
 					inMaintenance: true,
@@ -343,9 +296,7 @@ describe("schools module", () => {
 
 				await schoolsModule.migrationStartSync();
 
-				expect(
-					mockApi.importUserControllerEndSchoolInMaintenance
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerEndSchoolInMaintenance).toHaveBeenCalledTimes(1);
 
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
@@ -361,9 +312,7 @@ describe("schools module", () => {
 				const mockApi = {
 					importUserControllerStartSchoolInUserMigration: vi.fn(() => ({})),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 				const setLoadingSpy = vi.spyOn(schoolsModule, "setLoading");
 				const setErrorSpy = vi.spyOn(schoolsModule, "setError");
 				const setSchoolSpy = vi.spyOn(schoolsModule, "setSchool");
@@ -386,14 +335,11 @@ describe("schools module", () => {
 					inUserMigration: false,
 				});
 				await schoolsModule.migrationStartSync();
-				expect(
-					mockApi.importUserControllerStartSchoolInUserMigration
-				).not.toHaveBeenCalled();
+				expect(mockApi.importUserControllerStartSchoolInUserMigration).not.toHaveBeenCalled();
 			});
 
 			it("should call backend and set state", async () => {
-				const { schoolsModule, mockApi, setLoadingSpy, setSchoolSpy } =
-					setupSchoolInMigrationMode();
+				const { schoolsModule, mockApi, setLoadingSpy, setSchoolSpy } = setupSchoolInMigrationMode();
 
 				schoolsModule.setSchool({
 					...mockSchool,
@@ -407,9 +353,7 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 
-				expect(
-					mockApi.importUserControllerStartSchoolInUserMigration
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerStartSchoolInUserMigration).toHaveBeenCalledTimes(1);
 
 				expect(setSchoolSpy).toHaveBeenCalledTimes(2);
 				expect(setSchoolSpy.mock.calls[1][0]).toStrictEqual({
@@ -420,18 +364,13 @@ describe("schools module", () => {
 			});
 
 			it("should handle error", async () => {
-				const { schoolsModule, setLoadingSpy, setErrorSpy, spy } =
-					setupSchoolInMigrationMode();
+				const { schoolsModule, setLoadingSpy, setErrorSpy, spy } = setupSchoolInMigrationMode();
 				const error = { statusCode: "500", message: "foo" };
 
 				const mockApi = {
-					importUserControllerStartSchoolInUserMigration: vi.fn(() =>
-						Promise.reject({ ...error })
-					),
+					importUserControllerStartSchoolInUserMigration: vi.fn(() => Promise.reject({ ...error })),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 				schoolsModule.setSchool({
 					...mockSchool,
 					inUserMigration: false,
@@ -439,9 +378,7 @@ describe("schools module", () => {
 
 				await schoolsModule.setSchoolInUserMigration();
 
-				expect(
-					mockApi.importUserControllerStartSchoolInUserMigration
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerStartSchoolInUserMigration).toHaveBeenCalledTimes(1);
 
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
