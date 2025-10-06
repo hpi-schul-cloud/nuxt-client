@@ -99,16 +99,17 @@ describe("useSafeTask", () => {
 describe("useSafeSingleTask", () => {
 	it("should execute the same function multiple times", async () => {
 		let counter = 0;
-		const task = useSafeTaskRunner(() => Promise.resolve(++counter));
+		const { data, run } = useSafeTaskRunner(() => Promise.resolve(++counter));
 
-		const result1 = await task.run();
-		const result2 = await task.run();
-		const result3 = await task.run();
+		const result1 = await run();
+		const result2 = await run();
+		const result3 = await run();
 
 		expect(result1.success).toBe(true);
 		expect(result1.result).toBe(1);
 		expect(result2.result).toBe(2);
 		expect(result3.result).toBe(3);
+		expect(data.value).toBe(3);
 	});
 
 	it("should maintain error state across runs", async () => {

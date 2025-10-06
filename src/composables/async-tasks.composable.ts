@@ -46,6 +46,12 @@ export const useSafeTask = () => {
 export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>) => {
 	const { error, status, isRunning, execute, reset } = useSafeTask();
 
-	const run = () => execute(fn);
-	return { error, status, isRunning, run, reset };
+	const data = ref<T>();
+
+	const run = async () => {
+		const { result, success } = await execute(fn);
+		data.value = result;
+		return { result, success };
+	};
+	return { error, status, data, isRunning, run, reset };
 };
