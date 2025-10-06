@@ -1,7 +1,7 @@
 import { BoardCardApiFactory, CardResponse } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { useDebounceFn } from "@vueuse/core";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
+import { useDebounceFn } from "@vueuse/core";
 
 type CardRequest = {
 	id: string;
@@ -17,12 +17,11 @@ const useCardRequestPool = () => {
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 	const requestPool: CardRequest[] = [];
 
-	const fetchCard = async (cardId: string): Promise<CardResponse> => {
-		return new Promise((resolve, reject) => {
+	const fetchCard = async (cardId: string): Promise<CardResponse> =>
+		new Promise((resolve, reject) => {
 			requestPool.push({ id: cardId, resolve, reject });
 			debouncedFetchCards();
 		});
-	};
 
 	const debouncedFetchCards = useDebounceFn(
 		() => {
@@ -75,5 +74,4 @@ const useCardRequestPool = () => {
 	return { fetchCard };
 };
 
-export const useSharedCardRequestPool =
-	createTestableSharedComposable(useCardRequestPool);
+export const useSharedCardRequestPool = createTestableSharedComposable(useCardRequestPool);

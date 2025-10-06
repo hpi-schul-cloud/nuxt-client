@@ -1,3 +1,4 @@
+import { BusinessError } from "./types/commons";
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	ImportUserResponseRoleNamesEnum,
@@ -5,12 +6,7 @@ import {
 	UserMatchResponseRoleNamesEnum,
 } from "@/serverApi/v3/api";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
-import { BusinessError } from "./types/commons";
-import {
-	axiosErrorFactory,
-	apiResponseErrorFactory,
-	businessErrorFactory,
-} from "@@/tests/test-utils";
+import { apiResponseErrorFactory, axiosErrorFactory, businessErrorFactory } from "@@/tests/test-utils";
 
 const mockResponse = {
 	data: {
@@ -118,12 +114,8 @@ describe("import-users store actions", () => {
 					},
 				]);
 				expect(importUserModule.getUserList.total).toEqual(3);
-				expect(
-					mockApi.importUserControllerFindAllUnmatchedUsers
-				).toHaveBeenCalledTimes(1);
-				expect(
-					mockApi.importUserControllerFindAllUnmatchedUsers
-				).toHaveBeenCalledWith(undefined, 0, 1);
+				expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledWith(undefined, 0, 1);
 			});
 
 			it("should request list of unmatched users with filter", async () => {
@@ -138,12 +130,8 @@ describe("import-users store actions", () => {
 					},
 				]);
 				expect(importUserModule.getUserList.total).toEqual(3);
-				expect(
-					mockApi.importUserControllerFindAllUnmatchedUsers
-				).toHaveBeenCalledTimes(1);
-				expect(
-					mockApi.importUserControllerFindAllUnmatchedUsers
-				).toHaveBeenCalledWith("john", 0, 1);
+				expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledWith("john", 0, 1);
 			});
 
 			it("should request list of unmatched users with pagination", async () => {
@@ -159,32 +147,22 @@ describe("import-users store actions", () => {
 					},
 				]);
 				expect(importUserModule.getUserList.total).toEqual(3);
-				expect(
-					mockApi.importUserControllerFindAllUnmatchedUsers
-				).toHaveBeenCalledTimes(1);
-				expect(
-					mockApi.importUserControllerFindAllUnmatchedUsers
-				).toHaveBeenCalledWith(undefined, 10, 5);
+				expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledWith(undefined, 10, 5);
 			});
 
 			it("should handle business errors", async () => {
 				const { importUserModule, spy } = setup();
 
 				const mockApi = {
-					importUserControllerFindAllUnmatchedUsers: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
+					importUserControllerFindAllUnmatchedUsers: vi.fn(() => Promise.reject(badRequestError)),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 
 				await importUserModule.fetchAllUsers();
 
 				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
-				expect(
-					mockApi.importUserControllerFindAllUnmatchedUsers
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -194,32 +172,22 @@ describe("import-users store actions", () => {
 
 				await importUserModule.fetchTotalUnmatched();
 
-				expect(
-					mockApi.importUserControllerFindAllUnmatchedUsers
-				).toHaveBeenCalledWith(undefined, 0, 1);
-				expect(
-					mockApi.importUserControllerFindAllUnmatchedUsers
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledWith(undefined, 0, 1);
+				expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledTimes(1);
 				expect(importUserModule.getTotalUnmatched).toEqual(3);
 			});
 
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerFindAllUnmatchedUsers: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
+					importUserControllerFindAllUnmatchedUsers: vi.fn(() => Promise.reject(badRequestError)),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 
 				await importUserModule.fetchTotalUnmatched();
 
 				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
-				expect(
-					mockApi.importUserControllerFindAllUnmatchedUsers
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -235,12 +203,8 @@ describe("import-users store actions", () => {
 					},
 				]);
 				expect(importUserModule.getImportUserList.total).toEqual(3);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledTimes(1);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledWith(
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
 					undefined,
 					undefined,
 					undefined,
@@ -261,11 +225,7 @@ describe("import-users store actions", () => {
 				importUserModule.setFirstName("john");
 				importUserModule.setLastName("doe");
 				importUserModule.setLoginName("johnny");
-				importUserModule.setMatch([
-					MatchedBy.Admin,
-					MatchedBy.Auto,
-					MatchedBy.None,
-				]);
+				importUserModule.setMatch([MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None]);
 				importUserModule.setFlagged(true);
 				importUserModule.setClasses("5a");
 				importUserModule.setRole(ImportUserResponseRoleNamesEnum.Student);
@@ -277,12 +237,8 @@ describe("import-users store actions", () => {
 					},
 				]);
 				expect(importUserModule.getImportUserList.total).toEqual(3);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledTimes(1);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledWith(
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
 					"john",
 					"doe",
 					"johnny",
@@ -309,12 +265,8 @@ describe("import-users store actions", () => {
 					},
 				]);
 				expect(importUserModule.getImportUserList.total).toEqual(3);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledTimes(1);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledWith(
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
 					undefined,
 					undefined,
 					undefined,
@@ -342,12 +294,8 @@ describe("import-users store actions", () => {
 					},
 				]);
 				expect(importUserModule.getImportUserList.total).toEqual(3);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledTimes(1);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledWith(
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
 					undefined,
 					undefined,
 					undefined,
@@ -375,12 +323,8 @@ describe("import-users store actions", () => {
 					},
 				]);
 				expect(importUserModule.getImportUserList.total).toEqual(3);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledTimes(1);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledWith(
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
 					undefined,
 					undefined,
 					undefined,
@@ -398,20 +342,14 @@ describe("import-users store actions", () => {
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerFindAllImportUsers: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
+					importUserControllerFindAllImportUsers: vi.fn(() => Promise.reject(badRequestError)),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 
 				await importUserModule.fetchAllImportUsers();
 
 				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -421,9 +359,7 @@ describe("import-users store actions", () => {
 
 				await importUserModule.fetchTotal();
 
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledWith(
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
 					undefined,
 					undefined,
 					undefined,
@@ -436,29 +372,21 @@ describe("import-users store actions", () => {
 					0,
 					1
 				);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledTimes(1);
 				expect(importUserModule.getTotal).toEqual(3);
 			});
 
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerFindAllImportUsers: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
+					importUserControllerFindAllImportUsers: vi.fn(() => Promise.reject(badRequestError)),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 
 				await importUserModule.fetchTotal();
 
 				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -468,9 +396,7 @@ describe("import-users store actions", () => {
 
 				await importUserModule.fetchTotalMatched();
 
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledWith(
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
 					undefined,
 					undefined,
 					undefined,
@@ -483,29 +409,21 @@ describe("import-users store actions", () => {
 					0,
 					1
 				);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledTimes(1);
 				expect(importUserModule.getTotalMatched).toEqual(3);
 			});
 
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerFindAllImportUsers: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
+					importUserControllerFindAllImportUsers: vi.fn(() => Promise.reject(badRequestError)),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 
 				await importUserModule.fetchTotalMatched();
 
 				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
-				expect(
-					mockApi.importUserControllerFindAllImportUsers
-				).toHaveBeenCalledTimes(1);
+				expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -516,32 +434,22 @@ describe("import-users store actions", () => {
 				const importUserId = "abc";
 				await importUserModule.deleteMatch(importUserId);
 
-				expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledWith(
-					importUserId
-				);
-				expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledTimes(
-					1
-				);
+				expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledWith(importUserId);
+				expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledTimes(1);
 			});
 
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerRemoveMatch: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
+					importUserControllerRemoveMatch: vi.fn(() => Promise.reject(badRequestError)),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 
 				const importUserId = "abc";
 				await importUserModule.deleteMatch(importUserId);
 
 				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
-				expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledTimes(
-					1
-				);
+				expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -553,23 +461,16 @@ describe("import-users store actions", () => {
 				const userId = "abc";
 				await importUserModule.saveMatch({ importUserId, userId });
 
-				expect(mockApi.importUserControllerSetMatch).toHaveBeenCalledWith(
-					importUserId,
-					{ userId }
-				);
+				expect(mockApi.importUserControllerSetMatch).toHaveBeenCalledWith(importUserId, { userId });
 				expect(mockApi.importUserControllerSetMatch).toHaveBeenCalledTimes(1);
 			});
 
 			it("should handle error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerSetMatch: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
+					importUserControllerSetMatch: vi.fn(() => Promise.reject(badRequestError)),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 
 				const importUserId = "abc";
 				const userId = "abc";
@@ -587,10 +488,7 @@ describe("import-users store actions", () => {
 				const importUserId = "abc";
 				await importUserModule.saveFlag({ importUserId, flagged: true });
 
-				expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledWith(
-					importUserId,
-					{ flagged: true }
-				);
+				expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledWith(importUserId, { flagged: true });
 				expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledTimes(1);
 			});
 
@@ -600,18 +498,13 @@ describe("import-users store actions", () => {
 				const importUserId = "abc";
 				await importUserModule.saveFlag({ importUserId, flagged: false });
 
-				expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledWith(
-					importUserId,
-					{ flagged: false }
-				);
+				expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledWith(importUserId, { flagged: false });
 				expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledTimes(1);
 			});
 
 			it("should update the state", async () => {
 				const { importUserModule, spy, mockApi } = setup();
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 				importUserModule.setImportUsersList({
 					limit: 2,
 					skip: 0,
@@ -642,17 +535,13 @@ describe("import-users store actions", () => {
 				await importUserModule.saveFlag({ importUserId, flagged: false });
 
 				let changedUser = importUserModule.getImportUserList.data.find(
-					(importUser) => {
-						return importUser.importUserId === importUserId;
-					}
+					(importUser) => importUser.importUserId === importUserId
 				);
 				expect(changedUser?.flagged).toBe(false);
 
 				await importUserModule.saveFlag({ importUserId, flagged: true });
 				changedUser = importUserModule.getImportUserList.data.find(
-					(importUser) => {
-						return importUser.importUserId === importUserId;
-					}
+					(importUser) => importUser.importUserId === importUserId
 				);
 				expect(changedUser?.flagged).toBe(true);
 			});
@@ -660,13 +549,9 @@ describe("import-users store actions", () => {
 			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
-					importUserControllerUpdateFlag: vi.fn(() =>
-						Promise.reject(badRequestError)
-					),
+					importUserControllerUpdateFlag: vi.fn(() => Promise.reject(badRequestError)),
 				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 
 				const importUserId = "abc";
 				await importUserModule.saveFlag({ importUserId, flagged: false });
@@ -683,9 +568,7 @@ describe("import-users store actions", () => {
 
 					await importUserModule.populateImportUsersFromExternalSystem();
 
-					expect(
-						mockApi.importUserControllerPopulateImportUsers
-					).toHaveBeenCalledWith(false);
+					expect(mockApi.importUserControllerPopulateImportUsers).toHaveBeenCalledWith(false);
 				});
 			});
 
@@ -695,9 +578,7 @@ describe("import-users store actions", () => {
 
 					await importUserModule.populateImportUsersFromExternalSystem(true);
 
-					expect(
-						mockApi.importUserControllerPopulateImportUsers
-					).toHaveBeenCalledWith(true);
+					expect(mockApi.importUserControllerPopulateImportUsers).toHaveBeenCalledWith(true);
 				});
 			});
 
@@ -705,19 +586,13 @@ describe("import-users store actions", () => {
 				it("should set a business error", async () => {
 					const { importUserModule, spy } = setup();
 					const mockApi = {
-						importUserControllerPopulateImportUsers: vi.fn(() =>
-							Promise.reject(badRequestError)
-						),
+						importUserControllerPopulateImportUsers: vi.fn(() => Promise.reject(badRequestError)),
 					};
-					spy.mockReturnValue(
-						mockApi as unknown as serverApi.UserImportApiInterface
-					);
+					spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 
 					await importUserModule.populateImportUsersFromExternalSystem();
 
-					expect(importUserModule.getBusinessError).toEqual<BusinessError>(
-						businessError
-					);
+					expect(importUserModule.getBusinessError).toEqual<BusinessError>(businessError);
 				});
 			});
 		});
@@ -729,9 +604,7 @@ describe("import-users store actions", () => {
 
 					await importUserModule.cancelMigration();
 
-					expect(
-						mockApi.importUserControllerCancelMigration
-					).toHaveBeenCalledWith();
+					expect(mockApi.importUserControllerCancelMigration).toHaveBeenCalledWith();
 				});
 			});
 
@@ -739,20 +612,14 @@ describe("import-users store actions", () => {
 				it("should set a business error", async () => {
 					const { importUserModule, spy } = setup();
 					const mockApi = {
-						importUserControllerCancelMigration: vi.fn(() =>
-							Promise.reject(badRequestError)
-						),
+						importUserControllerCancelMigration: vi.fn(() => Promise.reject(badRequestError)),
 					};
 
-					spy.mockReturnValue(
-						mockApi as unknown as serverApi.UserImportApiInterface
-					);
+					spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 
 					await importUserModule.cancelMigration();
 
-					expect(importUserModule.getBusinessError).toEqual<BusinessError>(
-						businessError
-					);
+					expect(importUserModule.getBusinessError).toEqual<BusinessError>(businessError);
 				});
 			});
 		});
@@ -764,9 +631,7 @@ describe("import-users store actions", () => {
 
 					await importUserModule.clearAllAutoMatches();
 
-					expect(
-						mockApi.importUserControllerClearAllAutoMatches
-					).toHaveBeenCalled();
+					expect(mockApi.importUserControllerClearAllAutoMatches).toHaveBeenCalled();
 				});
 			});
 
@@ -775,20 +640,14 @@ describe("import-users store actions", () => {
 					const { importUserModule, spy } = setup();
 
 					const mockApi = {
-						importUserControllerClearAllAutoMatches: vi.fn(() =>
-							Promise.reject(badRequestError)
-						),
+						importUserControllerClearAllAutoMatches: vi.fn(() => Promise.reject(badRequestError)),
 					};
 
-					spy.mockReturnValue(
-						mockApi as unknown as serverApi.UserImportApiInterface
-					);
+					spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
 
 					await importUserModule.clearAllAutoMatches();
 
-					expect(importUserModule.getBusinessError).toEqual<BusinessError>(
-						businessError
-					);
+					expect(importUserModule.getBusinessError).toEqual<BusinessError>(businessError);
 				});
 			});
 		});
@@ -807,12 +666,8 @@ describe("import-users store actions", () => {
 				importUserModule.deleteMatchMutation("extern.1234");
 
 				expect(importUserModule.getImportUserList.data[0]).toEqual(expected);
-				expect(importUserModule.getImportUserList.data[1]).toEqual(
-					oldImportUserList.data[1]
-				);
-				expect(oldImportUserList == importUserModule.getImportUserList).toBe(
-					false
-				);
+				expect(importUserModule.getImportUserList.data[1]).toEqual(oldImportUserList.data[1]);
+				expect(oldImportUserList == importUserModule.getImportUserList).toBe(false);
 			});
 
 			it("should not do anything if user ID does not exist", () => {
@@ -844,12 +699,8 @@ describe("import-users store actions", () => {
 				});
 
 				expect(importUserModule.getImportUserList.data[0]).toEqual(expected);
-				expect(importUserModule.getImportUserList.data[1]).toEqual(
-					oldImportUserList.data[1]
-				);
-				expect(oldImportUserList == importUserModule.getImportUserList).toBe(
-					false
-				);
+				expect(importUserModule.getImportUserList.data[1]).toEqual(oldImportUserList.data[1]);
+				expect(oldImportUserList == importUserModule.getImportUserList).toBe(false);
 				importUserModule.setUserFlagged({
 					importUserId: "extern.1234",
 					flagged: false,

@@ -1,5 +1,5 @@
-import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 
 declare type HandledApplicationErrors =
 	| HttpStatusCode.BadRequest
@@ -23,14 +23,11 @@ describe("application-error composable", () => {
 		[HttpStatusCode.NotFound, "error.404"],
 		[HttpStatusCode.RequestTimeout, "error.408"],
 		[HttpStatusCode.InternalServerError, "error.generic"],
-	])(
-		"Code %p should create translationKey of %p",
-		(code: HttpStatusCode, translationKey: string) => {
-			const err = createApplicationError(code as HandledApplicationErrors);
-			expect(err.statusCode).toBe(code);
-			expect(err.translationKey).toBe(translationKey);
-		}
-	);
+	])("Code %p should create translationKey of %p", (code: HttpStatusCode, translationKey: string) => {
+		const err = createApplicationError(code as HandledApplicationErrors);
+		expect(err.statusCode).toBe(code);
+		expect(err.translationKey).toBe(translationKey);
+	});
 
 	it.each([
 		[HttpStatusCode.BadRequest],
@@ -39,15 +36,12 @@ describe("application-error composable", () => {
 		[HttpStatusCode.NotFound],
 		[HttpStatusCode.RequestTimeout],
 		[HttpStatusCode.InternalServerError],
-	])(
-		"Code %p should be overwritable with custom translation",
-		(code: HttpStatusCode) => {
-			const customTranslationKey = "custom.translation";
-			const err = createApplicationError(code, customTranslationKey);
-			expect(err.statusCode).toBe(code);
-			expect(err.translationKey).toBe(customTranslationKey);
-		}
-	);
+	])("Code %p should be overwritable with custom translation", (code: HttpStatusCode) => {
+		const customTranslationKey = "custom.translation";
+		const err = createApplicationError(code, customTranslationKey);
+		expect(err.statusCode).toBe(code);
+		expect(err.translationKey).toBe(customTranslationKey);
+	});
 
 	it("unhandled error codes should require a translationKey", () => {
 		const customTranslationKey = "custom.translation";
@@ -61,11 +55,7 @@ describe("application-error composable", () => {
 		const customTranslationKey = "custom.translation";
 		const unhandledErrorKey = HttpStatusCode.IAmATeapot;
 		const optionalMessage = "optionalMessage";
-		const err = createApplicationError(
-			unhandledErrorKey,
-			customTranslationKey,
-			optionalMessage
-		);
+		const err = createApplicationError(unhandledErrorKey, customTranslationKey, optionalMessage);
 		expect(err.statusCode).toBe(unhandledErrorKey);
 		expect(err.translationKey).toBe(customTranslationKey);
 		expect(err.message).toBe(optionalMessage);

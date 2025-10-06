@@ -1,9 +1,8 @@
 import { ConfigResponse } from "@/serverApi/v3";
 import { Factory } from "fishery";
-import { setActivePinia, getActivePinia } from "pinia";
+import { Pinia } from "pinia";
 import { defaultConfigEnvs, useEnvStore } from "@data-env";
 import { FilesStorageConfigResponse } from "@/fileStorageApi/v3";
-import { createTestingPinia } from "@pinia/testing";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 
 export const envsFactory = Factory.define<ConfigResponse>(
@@ -12,18 +11,16 @@ export const envsFactory = Factory.define<ConfigResponse>(
 
 export const createTestEnvStore = (
 	config?: Partial<ConfigResponse>,
-	fileConfig?: Partial<FilesStorageConfigResponse>
+	fileConfig?: Partial<FilesStorageConfigResponse>,
+	pinia?: Pinia
 ) => {
-	if (!getActivePinia()) {
-		setActivePinia(createTestingPinia());
-	}
-
 	const env = envsFactory.build(config);
 	const envFile = fileConfig;
+	const store = useEnvStore(pinia);
 
-	useEnvStore().$patch({ env });
+	store.$patch({ env });
 	if (fileConfig) {
-		useEnvStore().$patch({ envFile });
+		store.$patch({ envFile });
 	}
 	const envStore = mockedPiniaStoreTyping(useEnvStore);
 	return { envStore, env, envFile };

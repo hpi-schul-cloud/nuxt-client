@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import KebabMenuActionShareLink from "./KebabMenuActionShareLink.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardMenuScope } from "@ui-board";
 import { mount } from "@vue/test-utils";
-import KebabMenuActionShareLink from "./KebabMenuActionShareLink.vue";
 
 describe("BoardMenuActionShareLink", () => {
 	const setup = (scope: BoardMenuScope) => {

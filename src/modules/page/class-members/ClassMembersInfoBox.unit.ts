@@ -1,12 +1,9 @@
-import { flushPromises, mount } from "@vue/test-utils";
-import { nextTick } from "vue";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useSystemApi } from "@data-system";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { flushPromises, mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 
 vi.mock("@data-system");
 
@@ -19,8 +16,7 @@ describe("ClassMembersInfoBox", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
-					$t: (key: string, dynamic?: object): string =>
-						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+					$t: (key: string, dynamic?: object): string => key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 				},
 			},
 		});
@@ -56,9 +52,7 @@ describe("ClassMembersInfoBox", () => {
 
 			const alert = wrapper.findComponent({ name: "v-alert" });
 
-			expect(alert.text()).toEqual(
-				'page-class-members.systemInfoText {"systemName":"asdf"}'
-			);
+			expect(alert.text()).toEqual('page-class-members.systemInfoText {"systemName":"asdf"}');
 		});
 	});
 
@@ -70,11 +64,7 @@ describe("ClassMembersInfoBox", () => {
 
 			const text = wrapper.find('[data-testid="class-members-info-box-text"]');
 
-			const expectedTextParagraphes = [
-				"firstParagraph",
-				"secondParagraph",
-				"thirdParagraph",
-			]
+			const expectedTextParagraphes = ["firstParagraph", "secondParagraph", "thirdParagraph"]
 				.map((text) => `pages.classMembers.infoBox.text.${text}`)
 				.join("");
 
@@ -82,9 +72,7 @@ describe("ClassMembersInfoBox", () => {
 				.map((text) => `pages.classMembers.infoBox.text.listItem.${text}`)
 				.join("");
 
-			expect(text.text()).toEqual(
-				expectedTextParagraphes + expectedTextListItems
-			);
+			expect(text.text()).toEqual(expectedTextParagraphes + expectedTextListItems);
 		});
 	});
 

@@ -1,9 +1,6 @@
 export function setComputedScrollbarWidthAsCssVar() {
 	const scrollbarWidth = getScrollbarWidth();
-	document.documentElement.style.setProperty(
-		"--computed-scrollbar-width",
-		`${scrollbarWidth}px`
-	);
+	document.documentElement.style.setProperty("--computed-scrollbar-width", `${scrollbarWidth}px`);
 }
 
 // Taken from https://stackoverflow.com/a/13382873/11854580

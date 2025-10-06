@@ -1,23 +1,11 @@
 <template>
 	<ContentElementBar v-if="isEditMode">
 		<template #element>
-			<div
-				v-if="isUploading || fileWasPicked"
-				class="d-flex align-center pt-1"
-				style="height: 32px"
-			>
-				<v-progress-linear
-					data-testid="board-file-element-progress-bar"
-					indeterminate
-					color="primary"
-				/>
+			<div v-if="isUploading || fileWasPicked" class="d-flex align-center pt-1" style="height: 32px">
+				<v-progress-linear data-testid="board-file-element-progress-bar" indeterminate color="primary" />
 			</div>
 
-			<FilePicker
-				v-else
-				v-model:is-file-picker-open="isFilePickerOpen"
-				@update:file="onFileSelect"
-			/>
+			<FilePicker v-else v-model:is-file-picker-open="isFilePickerOpen" @update:file="onFileSelect" />
 		</template>
 
 		<template #menu>
@@ -27,10 +15,10 @@
 </template>
 
 <script lang="ts">
+import FilePicker from "./file-picker/FilePicker.vue";
 import { ContentElementBar } from "@ui-board";
 import { useSharedLastCreatedElement } from "@util-board";
 import { defineComponent, onBeforeUnmount, onMounted, ref } from "vue";
-import FilePicker from "./file-picker/FilePicker.vue";
 
 export default defineComponent({
 	name: "FileUpload",
@@ -45,8 +33,7 @@ export default defineComponent({
 		const isFilePickerOpen = ref(false);
 		const fileWasPicked = ref(false);
 
-		const { lastCreatedElementId, resetLastCreatedElementId } =
-			useSharedLastCreatedElement();
+		const { lastCreatedElementId, resetLastCreatedElementId } = useSharedLastCreatedElement();
 
 		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
 			if (fileWasPicked.value || props.isUploading) {

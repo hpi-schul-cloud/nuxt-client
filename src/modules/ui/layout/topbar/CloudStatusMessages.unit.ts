@@ -1,19 +1,19 @@
-import { mount } from "@vue/test-utils";
 import CloudStatusMessages from "./CloudStatusMessages.vue";
-import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { beforeAll } from "vitest";
 import { createTestAppStore } from "@@/tests/test-utils";
+import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
 };
 
 describe("@ui-layout/CloudStatusMessages", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestAppStore();
 	});
 

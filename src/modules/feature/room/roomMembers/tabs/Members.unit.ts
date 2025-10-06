@@ -1,3 +1,5 @@
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
 import {
 	createTestAppStoreWithUser,
 	createTestEnvStore,
@@ -5,23 +7,15 @@ import {
 	roomMemberFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { Members, MembersTable } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
-import SchoolsModule from "@/store/schools";
-import { schoolsModule } from "@/store";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 import { computed, Ref } from "vue";
-import { beforeAll } from "vitest";
-
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
@@ -30,21 +24,15 @@ type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
 };
 
-type RoomAuthorizationRefs = Partial<
-	RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>
->;
+type RoomAuthorizationRefs = Partial<RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>>;
 
 describe("Members", () => {
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore();
 	});
 
 	beforeEach(() => {
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
-
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});
@@ -72,15 +60,10 @@ describe("Members", () => {
 			roomMembers.push(currentUser);
 		}
 
-		const authorizationPermissions =
-			createMock<ReturnType<typeof useRoomAuthorization>>();
+		const authorizationPermissions = createMock<ReturnType<typeof useRoomAuthorization>>();
 
-		for (const [key, value] of Object.entries(
-			options.roomAuthorization ?? {}
-		)) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(
-				() => value ?? false
-			);
+		for (const [key, value] of Object.entries(options.roomAuthorization ?? {})) {
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(() => value ?? false);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 

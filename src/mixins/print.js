@@ -11,11 +11,9 @@ const printStyles = (optionalStyles) => `<style>
 	${optionalStyles}
 </style>`;
 
-const getPageHtml = (head, body) =>
-	`<html><head>${head}</head><body>${body}</body></html>`;
+const getPageHtml = (head, body) => `<html><head>${head}</head><body>${body}</body></html>`;
 
-const getQRCodeBase64Image = (text) =>
-	kjua({ text: text, render: "canvas" }).toDataURL();
+const getQRCodeBase64Image = (text) => kjua({ text: text, render: "canvas" }).toDataURL();
 
 const print = (content, styles = "") => {
 	const w = window.open();
@@ -68,9 +66,7 @@ const printQRs = (items = []) => {
 				const QRCodeBase64Image = getQRCodeBase64Image(item.qrContent);
 				return `<div class="part">
 					<div class="image-wrapper">
-						<img class="qr-code" alt="${
-							item.qrContent
-						}" src="${QRCodeBase64Image}" width="200" height="200">
+						<img class="qr-code" alt="${item.qrContent}" src="${QRCodeBase64Image}" width="200" height="200">
 						<div class="qr-content">${item.qrContent}</div>
 					</div>
 					${item.title ? `<h4 class="title">${item.title}</h4>` : ""}

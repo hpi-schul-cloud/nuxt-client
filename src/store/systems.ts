@@ -1,13 +1,8 @@
+import { System } from "./types/system";
+import { PublicSystemListResponse, PublicSystemResponse, SystemsApiFactory, SystemsApiInterface } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { System } from "./types/system";
-import {
-	PublicSystemListResponse,
-	PublicSystemResponse,
-	SystemsApiFactory,
-	SystemsApiInterface,
-} from "@/serverApi/v3";
 
 @Module({
 	name: "systemsModule",
@@ -54,8 +49,7 @@ export default class SystemsModule extends VuexModule {
 	async fetchSystems(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const systems: AxiosResponse<PublicSystemListResponse> =
-				await this.systemApi.systemControllerFind();
+			const systems: AxiosResponse<PublicSystemListResponse> = await this.systemApi.systemControllerFind();
 
 			const mappedSystems: System[] = systems.data.data.map(
 				(system: PublicSystemResponse): System => ({

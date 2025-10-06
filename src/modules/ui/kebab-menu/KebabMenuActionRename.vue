@@ -1,18 +1,14 @@
 <template>
-	<KebabMenuAction
-		:icon="mdiRenameOutline"
-		data-testid="kebab-menu-action-rename"
-		:disabled="disabled"
-	>
+	<KebabMenuAction :icon="mdiRenameOutline" data-testid="kebab-menu-action-rename" :disabled="disabled">
 		{{ t("common.actions.rename") }}
 	</KebabMenuAction>
 </template>
 
 <script setup lang="ts">
+import KebabMenuAction from "./KebabMenuAction.vue";
 import { mdiRenameOutline } from "@icons/material";
 import { PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import KebabMenuAction from "./KebabMenuAction.vue";
 const { t } = useI18n();
 
 defineProps({

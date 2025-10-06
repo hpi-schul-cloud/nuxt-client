@@ -1,17 +1,12 @@
-import { nextTick } from "vue";
-import { mount } from "@vue/test-utils";
-import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import { TeacherSubmission } from "../types/submission";
+import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 
 describe("SubmissionItemsTeacherDisplay", () => {
 	const setup = (
-		submissions: TeacherSubmission[] = [
-			{ firstName: "Max", lastName: "Meyer", status: "open" },
-		],
+		submissions: TeacherSubmission[] = [{ firstName: "Max", lastName: "Meyer", status: "open" }],
 		loading = false,
 		isOverdue = false
 	) => {
@@ -42,9 +37,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 	describe("while loading", () => {
 		it("should show loading skeleton", () => {
-			const submissions: TeacherSubmission[] = [
-				{ firstName: "Max", lastName: "Meyer", status: "open" },
-			];
+			const submissions: TeacherSubmission[] = [{ firstName: "Max", lastName: "Meyer", status: "open" }];
 			const loading = true;
 			const { wrapper } = setup(submissions, loading);
 
@@ -53,9 +46,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should not show submissionItems", () => {
-			const submissions: TeacherSubmission[] = [
-				{ firstName: "Max", lastName: "Meyer", status: "open" },
-			];
+			const submissions: TeacherSubmission[] = [{ firstName: "Max", lastName: "Meyer", status: "open" }];
 			const loading = true;
 			const { wrapper } = setup(submissions, loading);
 
@@ -91,9 +82,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show one submissionItem per student", async () => {
-			const submissions: TeacherSubmission[] = [
-				{ firstName: "Max", lastName: "Meyer", status: "open" },
-			];
+			const submissions: TeacherSubmission[] = [{ firstName: "Max", lastName: "Meyer", status: "open" }];
 			const { wrapper } = setup(submissions);
 
 			const panelHeader = wrapper.findComponent({

@@ -1,4 +1,3 @@
-import { createAction, props } from "@/types/board/ActionFactory";
 import {
 	CreateCardFailurePayload,
 	CreateCardRequestPayload,
@@ -35,113 +34,45 @@ import {
 	UpdateColumnTitleFailurePayload,
 	UpdateColumnTitleRequestPayload,
 	UpdateColumnTitleSuccessPayload,
+	UpdateReaderCanEditFailurePayload,
+	UpdateReaderCanEditRequestPayload,
+	UpdateReaderCanEditSuccessPayload,
 } from "./boardActionPayload.types";
+import { createAction, props } from "@/types/board/ActionFactory";
 
-export const disconnectSocket = createAction(
-	"disconnect-socket",
-	props<DisconnectSocketRequestPayload>()
-);
+export const disconnectSocket = createAction("disconnect-socket", props<DisconnectSocketRequestPayload>());
 
-export const createCardRequest = createAction(
-	"create-card-request",
-	props<CreateCardRequestPayload>()
-);
-export const createCardSuccess = createAction(
-	"create-card-success",
-	props<CreateCardSuccessPayload>()
-);
-export const createCardFailure = createAction(
-	"create-card-failure",
-	props<CreateCardFailurePayload>()
-);
+export const createCardRequest = createAction("create-card-request", props<CreateCardRequestPayload>());
+export const createCardSuccess = createAction("create-card-success", props<CreateCardSuccessPayload>());
+export const createCardFailure = createAction("create-card-failure", props<CreateCardFailurePayload>());
 
-export const createColumnRequest = createAction(
-	"create-column-request",
-	props()
-);
-export const createColumnSuccess = createAction(
-	"create-column-success",
-	props<CreateColumnSuccessPayload>()
-);
-export const createColumnFailure = createAction(
-	"create-column-failure",
-	props<CreateColumnFailurePayload>()
-);
+export const createColumnRequest = createAction("create-column-request", props());
+export const createColumnSuccess = createAction("create-column-success", props<CreateColumnSuccessPayload>());
+export const createColumnFailure = createAction("create-column-failure", props<CreateColumnFailurePayload>());
 
-export const deleteBoardRequest = createAction(
-	"delete-board-request",
-	props<DeleteBoardRequestPayload>()
-);
-export const deleteBoardSuccess = createAction(
-	"delete-board-success",
-	props<DeleteBoardSuccessPayload>()
-);
-export const deleteBoardFailure = createAction(
-	"delete-board-failure",
-	props<DeleteBoardFailurePayload>()
-);
+export const deleteBoardRequest = createAction("delete-board-request", props<DeleteBoardRequestPayload>());
+export const deleteBoardSuccess = createAction("delete-board-success", props<DeleteBoardSuccessPayload>());
+export const deleteBoardFailure = createAction("delete-board-failure", props<DeleteBoardFailurePayload>());
 
-export const deleteColumnRequest = createAction(
-	"delete-column-request",
-	props<DeleteColumnRequestPayload>()
-);
-export const deleteColumnSuccess = createAction(
-	"delete-column-success",
-	props<DeleteColumnSuccessPayload>()
-);
-export const deleteColumnFailure = createAction(
-	"delete-column-failure",
-	props<DeleteColumnFailurePayload>()
-);
+export const deleteColumnRequest = createAction("delete-column-request", props<DeleteColumnRequestPayload>());
+export const deleteColumnSuccess = createAction("delete-column-success", props<DeleteColumnSuccessPayload>());
+export const deleteColumnFailure = createAction("delete-column-failure", props<DeleteColumnFailurePayload>());
 
-export const moveCardRequest = createAction(
-	"move-card-request",
-	props<MoveCardRequestPayload>()
-);
-export const moveCardSuccess = createAction(
-	"move-card-success",
-	props<MoveCardSuccessPayload>()
-);
-export const moveCardFailure = createAction(
-	"move-card-failure",
-	props<MoveCardFailurePayload>()
-);
+export const moveCardRequest = createAction("move-card-request", props<MoveCardRequestPayload>());
+export const moveCardSuccess = createAction("move-card-success", props<MoveCardSuccessPayload>());
+export const moveCardFailure = createAction("move-card-failure", props<MoveCardFailurePayload>());
 
-export const moveColumnRequest = createAction(
-	"move-column-request",
-	props<MoveColumnRequestPayload>()
-);
-export const moveColumnSuccess = createAction(
-	"move-column-success",
-	props<MoveColumnSuccessPayload>()
-);
-export const moveColumnFailure = createAction(
-	"move-column-failure",
-	props<MoveColumnFailurePayload>()
-);
+export const moveColumnRequest = createAction("move-column-request", props<MoveColumnRequestPayload>());
+export const moveColumnSuccess = createAction("move-column-success", props<MoveColumnSuccessPayload>());
+export const moveColumnFailure = createAction("move-column-failure", props<MoveColumnFailurePayload>());
 
-export const fetchBoardRequest = createAction(
-	"fetch-board-request",
-	props<FetchBoardRequestPayload>()
-);
-export const fetchBoardSuccess = createAction(
-	"fetch-board-success",
-	props<FetchBoardSuccessPayload>()
-);
-export const fetchBoardFailure = createAction(
-	"fetch-board-failure",
-	props<FetchBoardFailurePayload>()
-);
+export const fetchBoardRequest = createAction("fetch-board-request", props<FetchBoardRequestPayload>());
+export const fetchBoardSuccess = createAction("fetch-board-success", props<FetchBoardSuccessPayload>());
+export const fetchBoardFailure = createAction("fetch-board-failure", props<FetchBoardFailurePayload>());
 
-export const reloadBoard = createAction(
-	"reload-board-request",
-	props<ReloadBoardPayload>()
-);
+export const reloadBoard = createAction("reload-board-request", props<ReloadBoardPayload>());
 
-export const reloadBoardSuccess = createAction(
-	"reload-board-success",
-	props<ReloadBoardSuccessPayload>()
-);
+export const reloadBoardSuccess = createAction("reload-board-success", props<ReloadBoardSuccessPayload>());
 
 // WIP: reloadBoardFailure?
 
@@ -199,4 +130,19 @@ export const updateBoardLayoutSuccess = createAction(
 export const updateBoardLayoutFailure = createAction(
 	"update-board-layout-failure",
 	props<UpdateBoardLayoutFailurePayload>()
+);
+
+export const updateReaderCanEditRequest = createAction(
+	"update-readers-can-edit-request",
+	props<UpdateReaderCanEditRequestPayload>()
+);
+
+export const updateReaderCanEditSuccess = createAction(
+	"update-readers-can-edit-success",
+	props<UpdateReaderCanEditSuccessPayload>()
+);
+
+export const updateReaderCanEditFailure = createAction(
+	"update-readers-can-edit-failure",
+	props<UpdateReaderCanEditFailurePayload>()
 );

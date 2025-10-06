@@ -21,8 +21,6 @@ describe("Confirmations", () => {
 		const { wrapper } = setup();
 		const infoText = wrapper.get("[data-testid=info-text]");
 
-		expect(infoText.text()).toBe(
-			"pages.rooms.members.tab.confirmations.infoText"
-		);
+		expect(infoText.text()).toBe("pages.rooms.members.tab.confirmations.infoText");
 	});
 });

@@ -1,10 +1,17 @@
 import { checkFolderFeature } from "@/router/guards/check-folder-feature.guard";
-import { RouteLocationNormalized } from "vue-router";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
+import { RouteLocationNormalized } from "vue-router";
 
 vi.mock("@/utils/inject");
 
 describe("checkFolderFeature Guard", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	it("should call next with no arguments when FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED is true", () => {
 		createTestEnvStore({ FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true });
 

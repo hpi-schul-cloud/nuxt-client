@@ -39,19 +39,11 @@ const tableActions = (allRows) => [
 		action: (rowIds, selectionType = "inclusive") => {
 			let selections;
 			if (selectionType === "inclusive") {
-				selections = allRows
-					.filter((row) => rowIds.includes(row.id))
-					.map((selection) => selection.firstName);
+				selections = allRows.filter((row) => rowIds.includes(row.id)).map((selection) => selection.firstName);
 			} else {
-				selections = allRows
-					.filter((row) => !rowIds.includes(row.id))
-					.map((selection) => selection.firstName);
+				selections = allRows.filter((row) => !rowIds.includes(row.id)).map((selection) => selection.firstName);
 			}
-			alert(
-				`${selections.join(", ")} (${
-					selections.length
-				}) wurde(n) zum Löschen ausgewählt`
-			);
+			alert(`${selections.join(", ")} (${selections.length}) wurde(n) zum Löschen ausgewählt`);
 		},
 	},
 ];
@@ -150,11 +142,4 @@ const tableActiveFilters = [
 	},
 ];
 
-export {
-	tableData,
-	tableColumns,
-	tableActions,
-	tableFilters,
-	tableQuery,
-	tableActiveFilters,
-};
+export { tableActions, tableActiveFilters, tableColumns, tableData, tableFilters, tableQuery };

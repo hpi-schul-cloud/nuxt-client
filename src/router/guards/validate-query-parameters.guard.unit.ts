@@ -1,8 +1,8 @@
+import { validateQueryParameters } from "@/router/guards/validate-query-parameters.guard";
 import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
-import { validateQueryParameters } from "@/router/guards/validate-query-parameters.guard";
 import { isMongoId } from "@/utils/validation";
+import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
 vi.mock("@/store", () => ({
 	applicationErrorModule: {

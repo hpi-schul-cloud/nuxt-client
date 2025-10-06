@@ -1,26 +1,24 @@
-import { beforeAll, Mock } from "vitest";
+import RoomDashboard from "./RoomDashboard.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { courseRoomDetailsModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
-import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { ComponentProps } from "vue-component-type-helpers";
+import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { EmptyState } from "@ui-empty-state";
 import { mount, VueWrapper } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach, Mock } from "vitest";
 import { nextTick } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import { Router, useRouter } from "vue-router";
 import { VCard } from "vuetify/lib/components/index";
-import RoomDashboard from "./RoomDashboard.vue";
-import { EmptyState } from "@ui-empty-state";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -119,12 +117,8 @@ const emptyMockData = {
 const shareModuleMock = createModuleMocks(ShareModule, {
 	getIsShareModalOpen: false,
 });
-const notifierModuleMock = createModuleMocks(NotifierModule);
 
-const getWrapper = (
-	props: ComponentProps<typeof RoomDashboard>,
-	options?: object
-) => {
+const getWrapper = (props: ComponentProps<typeof RoomDashboard>, options?: object) => {
 	const router = createMock<Router>();
 	useRouterMock.mockReturnValue(router);
 
@@ -132,7 +126,6 @@ const getWrapper = (
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 			},
 		},
@@ -144,13 +137,12 @@ const getWrapper = (
 };
 
 describe("@/components/templates/RoomDashboard.vue", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_LESSON_SHARE: true,
 			FEATURE_TASK_SHARE: true,
 		});
-	});
-	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
@@ -214,9 +206,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 			const emptyStateComponent = wrapper.findComponent(EmptyState);
 			expect(emptyStateComponent.exists()).toBe(true);
-			expect(emptyStateComponent.props("title")).toBe(
-				"pages.room.learningContent.emptyState"
-			);
+			expect(emptyStateComponent.props("title")).toBe("pages.room.learningContent.emptyState");
 		});
 
 		it("Should render empty state for students", () => {
@@ -226,9 +216,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			});
 
 			const emptyStateComponent = wrapper.findComponent(EmptyState);
-			expect(emptyStateComponent.props("title")).toBe(
-				"pages.room.learningContent.emptyState"
-			);
+			expect(emptyStateComponent.props("title")).toBe("pages.room.learningContent.emptyState");
 		});
 	});
 
@@ -274,28 +262,18 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should sort elements after Drag&Drop", async () => {
-			courseRoomDetailsModule.sortElements = vi
-				.fn()
-				.mockImplementation(vi.fn());
+			courseRoomDetailsModule.sortElements = vi.fn().mockImplementation(vi.fn());
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			const items = JSON.parse(JSON.stringify(wrapper.vm.roomData.elements));
 			items.splice(1, 0, items.splice(0, 1)[0]);
 
-			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual(
-				"Mathe"
-			);
-			expect(wrapper.vm.roomData.elements[1].content.courseName).toStrictEqual(
-				"Mathe_2"
-			);
+			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual("Mathe");
+			expect(wrapper.vm.roomData.elements[1].content.courseName).toStrictEqual("Mathe_2");
 
 			const draggableElement = wrapper.findComponent({ name: "draggable" });
 			await draggableElement.vm.$emit("update:modelValue", items);
-			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual(
-				"Mathe_2"
-			);
-			expect(wrapper.vm.roomData.elements[1].content.courseName).toStrictEqual(
-				"Mathe"
-			);
+			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual("Mathe_2");
+			expect(wrapper.vm.roomData.elements[1].content.courseName).toStrictEqual("Mathe");
 		});
 
 		it("sortable option should not true if the user is 'student'", () => {
@@ -396,9 +374,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				.find((dialog) => dialog.vm.$attrs["data-testid"] === dataTestid);
 
 			if (!dialog) {
-				throw new Error(
-					`Cannot find VCustomDialog with data-testid="${dataTestid}"`
-				);
+				throw new Error(`Cannot find VCustomDialog with data-testid="${dataTestid}"`);
 			}
 
 			return dialog;
@@ -486,9 +462,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.itemDelete.isOpen = true;
 			await nextTick();
-			const cancelButton = wrapper.findComponent(
-				`[data-testid="dialog-cancel"]`
-			);
+			const cancelButton = wrapper.findComponent(`[data-testid="dialog-cancel"]`);
 			cancelButton.trigger("click");
 			expect(wrapper.vm.itemDelete.isOpen).toBe(false);
 		});
@@ -577,7 +551,8 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("CopyTask Process", () => {
-		beforeAll(() => {
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
 			createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
 
@@ -613,7 +588,8 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("CopyLesson Process", () => {
-		beforeAll(() => {
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
 			createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
 
@@ -649,7 +625,8 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("CopyBoard Process", () => {
-		beforeAll(() => {
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
 			createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
 

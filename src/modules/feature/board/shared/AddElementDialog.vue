@@ -1,9 +1,5 @@
 <template>
-	<VDialog
-		v-model="isDialogOpen"
-		data-testid="element-type-selection"
-		:width="dialogWidth"
-	>
+	<VDialog v-model="isDialogOpen" data-testid="element-type-selection" :width="dialogWidth">
 		<VCard :loading="isDialogLoading">
 			<VCardTitle class="text-h2 text-break px-6 pt-4">
 				{{ t("components.elementTypeSelection.dialog.title") }}
@@ -27,11 +23,7 @@
 				/>
 			</VCardText>
 			<VCardActions class="mb-2 px-6">
-				<VBtn
-					data-testid="dialog-close"
-					variant="outlined"
-					@click.stop="closeDialog"
-				>
+				<VBtn data-testid="dialog-close" variant="outlined" @click.stop="closeDialog">
 					{{ t("common.actions.cancel") }}
 				</VBtn>
 			</VCardActions>
@@ -40,25 +32,18 @@
 </template>
 
 <script setup lang="ts">
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
-const {
-	isDialogOpen,
-	isDialogLoading,
-	closeDialog,
-	staticElementTypeOptions,
-	dynamicElementTypeOptions,
-} = useSharedElementTypeSelection();
+const { isDialogOpen, isDialogLoading, closeDialog, staticElementTypeOptions, dynamicElementTypeOptions } =
+	useSharedElementTypeSelection();
 
 const { t } = useI18n();
 
 const dialogWidth: ComputedRef<number> = computed(() => {
-	const totalOptions =
-		staticElementTypeOptions.value.length +
-		dynamicElementTypeOptions.value.length;
+	const totalOptions = staticElementTypeOptions.value.length + dynamicElementTypeOptions.value.length;
 	return totalOptions >= 3 ? 426 : 320;
 });
 </script>

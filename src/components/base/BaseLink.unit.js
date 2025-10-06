@@ -1,6 +1,6 @@
 import BaseLink from "./BaseLink";
-import { RouterLinkStub } from "@vue/test-utils";
 import { logger } from "@util-logger";
+import { RouterLinkStub } from "@vue/test-utils";
 
 describe("@/components/base/BaseLink", () => {
 	const createWrapper = (options = {}) => {
@@ -60,9 +60,7 @@ describe("@/components/base/BaseLink", () => {
 			},
 		});
 
-		expect(wrapper.find("a").element.href).toContain(
-			"https://dbildungscloud.de"
-		);
+		expect(wrapper.find("a").element.href).toContain("https://dbildungscloud.de");
 	});
 
 	it("renders router link for internal :to links", () => {
@@ -86,34 +84,26 @@ describe("@/components/base/BaseLink", () => {
 
 	it("log warning for insecure external urls", () => {
 		// use .mockImplementation() to prevent output to console
-		const consoleWarnSpy = vi
-			.spyOn(console, "warn")
-			.mockImplementation(vi.fn());
+		const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(vi.fn());
 		const loggerWarn = vi.spyOn(logger, "warn").mockImplementation();
 		createWrapper({
 			props: {
 				href: "http://dbildungscloud.de",
 			},
 		});
-		expect(loggerWarn).toHaveBeenCalledWith(
-			expect.stringContaining("Insecure href")
-		);
+		expect(loggerWarn).toHaveBeenCalledWith(expect.stringContaining("Insecure href"));
 
 		consoleWarnSpy.mockRestore();
 	});
 
 	it("log warning for invalid props", () => {
 		// use .mockImplementation() to prevent output to console
-		const consoleWarnSpy = vi
-			.spyOn(console, "warn")
-			.mockImplementation(vi.fn());
+		const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(vi.fn());
 		const loggerWarn = vi.spyOn(logger, "warn").mockImplementation();
 
 		createWrapper();
 
-		expect(loggerWarn).toHaveBeenCalledWith(
-			expect.stringContaining("Invalid props")
-		);
+		expect(loggerWarn).toHaveBeenCalledWith(expect.stringContaining("Invalid props"));
 
 		consoleWarnSpy.mockRestore();
 	});

@@ -1,11 +1,14 @@
-import { createTestEnvStore } from "@@/tests/test-utils";
 import { buildPageTitle } from "./pageTitle";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
 
 describe("pageTitle", () => {
 	const instanceTitle = "mockedTitle";
 
 	beforeAll(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			SC_TITLE: instanceTitle,
 		});

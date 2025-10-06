@@ -1,12 +1,9 @@
-import { mount } from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import SidebarItem from "./SidebarItem.vue";
 import { SidebarSingleItem } from "../types";
-import { ref } from "vue";
+import SidebarItem from "./SidebarItem.vue";
 import { useSidebarSelection } from "./SidebarSelection.composable";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { ref } from "vue";
 
 const iconItem: SidebarSingleItem = {
 	icon: "mdiOpen",

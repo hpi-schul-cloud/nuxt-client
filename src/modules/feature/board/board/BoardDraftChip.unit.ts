@@ -1,8 +1,5 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import BoardDraftChip from "./BoardDraftChip.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("@feature-board/BoardDraftChip", () => {
 	const setup = () => {

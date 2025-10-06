@@ -32,10 +32,10 @@
 
 <script setup lang="ts">
 import { LanguageType } from "@/serverApi/v3";
+import { useAppStore } from "@data-app";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useEnvConfig, useEnvStore } from "@data-env";
-import { useAppStore } from "@data-app";
 
 defineOptions({
 	inheritAttrs: false,
@@ -59,23 +59,18 @@ const buildLanguageItem = (lang: LanguageType | string): LanguageItem => {
 	const language = lang as LanguageType;
 	const longName = t(`global.topbar.language.longName.${language}`);
 	const translatedName = t(`common.words.languages.${language}`);
-	const icon =
-		"$langIcon" + language.charAt(0).toUpperCase() + language.slice(1);
+	const icon = "$langIcon" + language.charAt(0).toUpperCase() + language.slice(1);
 
 	return { language, longName, translatedName, icon };
 };
 
 const availableLanguages = computed(() =>
 	useEnvConfig()
-		.value.I18N__AVAILABLE_LANGUAGES.map((language) =>
-			buildLanguageItem(language)
-		)
+		.value.I18N__AVAILABLE_LANGUAGES.map((language) => buildLanguageItem(language))
 		.filter((language) => language.language !== selectedLanguage.value.language)
 );
 
-const selectedLanguage = computed(() =>
-	buildLanguageItem(useAppStore().locale || useEnvStore().fallBackLanguage)
-);
+const selectedLanguage = computed(() => buildLanguageItem(useAppStore().locale || useEnvStore().fallBackLanguage));
 
 const ariaLabel = computed(
 	() =>

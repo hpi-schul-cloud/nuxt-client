@@ -1,5 +1,5 @@
-import { createMock } from "@golevelup/ts-vitest";
 import { useElementFocus } from "./elementFocus.composable";
+import { createMock } from "@golevelup/ts-vitest";
 import { logger } from "@util-logger";
 
 describe("elementFocus.composable", () => {

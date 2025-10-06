@@ -1,15 +1,14 @@
+import { SchulcloudTheme } from "../../serverApi/v3";
+import { default as ldapActivate } from "./LDAPActivate.page.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
 import SchoolsModule from "@/store/schools";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { createStore } from "vuex";
-import { default as ldapActivate } from "./LDAPActivate.page.vue";
-import { SchulcloudTheme } from "../../serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { createStore } from "vuex";
 
 const mockResponseData = {
 	ok: true,
@@ -95,6 +94,7 @@ describe("ldap/activate", () => {
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: false });
 	});
 
@@ -166,9 +166,7 @@ describe("ldap/activate", () => {
 		});
 
 		const confirmModal = wrapper.findComponent({ name: "v-dialog" });
-		const confirmBtn = confirmModal
-			.findComponent({ name: "v-card" })
-			.find('[data-testid="ldapOkButton"]');
+		const confirmBtn = confirmModal.findComponent({ name: "v-card" }).find('[data-testid="ldapOkButton"]');
 		expect(confirmBtn.exists()).toBe(true);
 		await confirmBtn.trigger("click");
 

@@ -1,6 +1,6 @@
-import { mount } from "@vue/test-utils";
 import BaseModal from "./BaseModal.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("@/components/base/BaseModal", () => {
 	const setup = (options = {}) => {

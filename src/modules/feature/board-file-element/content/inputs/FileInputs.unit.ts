@@ -1,17 +1,13 @@
+import AlternativeText from "./alternative-text/AlternativeText.vue";
+import CaptionText from "./caption/CaptionText.vue";
+import FileInputs from "./FileInputs.vue";
 import { PreviewStatus } from "@/fileStorageApi/v3";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
-import FileInputs from "./FileInputs.vue";
-import AlternativeText from "./alternative-text/AlternativeText.vue";
-import CaptionText from "./caption/CaptionText.vue";
 
 describe("FileInputs", () => {
-	const setup = (props: {
-		previewUrl?: string;
-		isEditMode: boolean;
-		isPdf?: boolean;
-	}) => {
+	const setup = (props: { previewUrl?: string; isEditMode: boolean; isPdf?: boolean }) => {
 		const element = fileElementResponseFactory.build();
 		const fileProperties = {
 			name: "test",
@@ -72,9 +68,7 @@ describe("FileInputs", () => {
 						const alternativeText = wrapper.findComponent(AlternativeText);
 						alternativeText.vm.$emit("update:alternativeText", "test");
 
-						expect(wrapper.emitted("update:alternativeText")).toEqual([
-							["test"],
-						]);
+						expect(wrapper.emitted("update:alternativeText")).toEqual([["test"]]);
 					});
 				});
 			});

@@ -1,7 +1,7 @@
-import { mdiAlertCircle } from "@icons/material";
-import { shallowMount } from "@vue/test-utils";
 import BaseAlert from "./BaseAlert.vue";
 import ErrorAlert from "./ErrorAlert.vue";
+import { mdiAlertCircle } from "@icons/material";
+import { shallowMount } from "@vue/test-utils";
 
 describe("ErrorAlert", () => {
 	const setup = () => {

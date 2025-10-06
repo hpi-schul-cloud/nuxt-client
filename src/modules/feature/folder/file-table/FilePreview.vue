@@ -19,17 +19,8 @@
 
 <script setup lang="ts">
 import { FilePreviewWidth, FileRecord } from "@/types/file/File";
-import {
-	convertDownloadToPreviewUrl,
-	isAudioMimeType,
-	isPreviewPossible,
-	isVideoMimeType,
-} from "@/utils/fileHelper";
-import {
-	mdiFileDocumentOutline,
-	mdiFileMusicOutline,
-	mdiFileVideoOutline,
-} from "@icons/material";
+import { convertDownloadToPreviewUrl, isAudioMimeType, isPreviewPossible, isVideoMimeType } from "@/utils/fileHelper";
+import { mdiFileDocumentOutline, mdiFileMusicOutline, mdiFileVideoOutline } from "@icons/material";
 import { computed, PropType } from "vue";
 import { useDisplay } from "vuetify";
 

@@ -1,5 +1,5 @@
-import { mount } from "@vue/test-utils";
 import QRCode from "./QRCode.vue";
+import { mount } from "@vue/test-utils";
 
 describe("@ui-qr-code", () => {
 	it("Generates a qrCode image", () => {

@@ -1,9 +1,4 @@
-import {
-	FederalStateResponse,
-	SchoolFeature,
-	SchoolResponse,
-	SchoolYearResponse,
-} from "@/serverApi/v3";
+import { FederalStateResponse, SchoolFeature, SchoolResponse, SchoolYearResponse } from "@/serverApi/v3";
 
 export interface Year extends SchoolYearResponse {}
 

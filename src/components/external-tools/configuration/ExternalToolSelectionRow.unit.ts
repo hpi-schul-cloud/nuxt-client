@@ -1,9 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("ExternalToolSelectionRow", () => {
 	const setup = (maxHeight?: number, maxWidth?: number) => {
@@ -30,9 +27,7 @@ describe("ExternalToolSelectionRow", () => {
 	describe("when component is used", () => {
 		it("should be found in the dom", () => {
 			const { wrapper } = setup();
-			expect(
-				wrapper.findComponent(ExternalToolSelectionRow).exists()
-			).toBeTruthy();
+			expect(wrapper.findComponent(ExternalToolSelectionRow).exists()).toBeTruthy();
 		});
 	});
 

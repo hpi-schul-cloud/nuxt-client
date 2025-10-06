@@ -26,8 +26,7 @@ export type SidebarItemBaseData = {
 	theme?: SchulcloudTheme[];
 };
 
-export type SidebarSingleItem = SidebarItemBaseData &
-	(ExternalLink | RouterLink);
+export type SidebarSingleItem = SidebarItemBaseData & (ExternalLink | RouterLink);
 
 export type SidebarGroupItem = {
 	children: SidebarSingleItem[];

@@ -43,8 +43,8 @@
 
 <script setup lang="ts">
 import { mdiClose } from "@icons/material";
-import { useI18n } from "vue-i18n";
 import { KebabMenuList } from "@ui-kebab-menu";
+import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 defineProps({

@@ -18,11 +18,7 @@
 			</template>
 			<template #[`item.statusText`]="{ item }">
 				<div class="text-no-wrap" data-testid="external-tool-status">
-					<v-icon
-						v-if="item.isOutdated || item.isDeactivated"
-						color="warning"
-						start
-					>
+					<v-icon v-if="item.isOutdated || item.isDeactivated" color="warning" start>
 						{{ mdiAlert }}
 					</v-icon>
 					<v-icon v-else color="success" start>
@@ -34,29 +30,17 @@
 				</div>
 			</template>
 			<template #[`item.medium`]="{ item }">
-				<div
-					v-if="item.medium"
-					class="text-no-wrap"
-					data-testid="external-tool-medium"
-				>
+				<div v-if="item.medium" class="text-no-wrap" data-testid="external-tool-medium">
 					<VProgressCircular v-if="isLicensesLoading" />
 					<VIcon
 						v-else-if="
-							item.medium.mediaSourceLicenseType !==
-								MediaSourceLicenseType.SchoolLicense ||
-							isLicensedToSchool(
-								item.medium.mediumId,
-								item.medium.mediaSourceId
-							)
+							item.medium.mediaSourceLicenseType !== MediaSourceLicenseType.SchoolLicense ||
+							isLicensedToSchool(item.medium.mediumId, item.medium.mediaSourceId)
 						"
 						start
 						color="success"
 						aria-hidden="false"
-						:aria-label="
-							t(
-								'components.administration.externalToolsSection.table.ariaLabel.mediumAvailable'
-							)
-						"
+						:aria-label="t('components.administration.externalToolsSection.table.ariaLabel.mediumAvailable')"
 					>
 						{{ mdiCheckCircle }}
 					</VIcon>
@@ -65,19 +49,12 @@
 						start
 						color="warning"
 						aria-hidden="false"
-						:aria-label="
-							t(
-								'components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable'
-							)
-						"
+						:aria-label="t('components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable')"
 					>
 						{{ mdiAlert }}
 					</VIcon>
 					<span>
-						{{
-							item.medium.mediaSourceName ||
-							$t("pages.tool.medium.noMediaSource")
-						}}
+						{{ item.medium.mediaSourceName || $t("pages.tool.medium.noMediaSource") }}
 					</span>
 				</div>
 				<span v-else data-testid="external-tool-medium"> - </span>
@@ -109,18 +86,11 @@
 			</VBtn>
 		</div>
 
-		<v-dialog
-			v-if="metadata"
-			v-model="isDeleteDialogOpen"
-			data-testid="delete-dialog"
-			max-width="360"
-		>
+		<v-dialog v-if="metadata" v-model="isDeleteDialogOpen" data-testid="delete-dialog" max-width="360">
 			<v-card :ripple="false">
 				<v-card-title data-testid="delete-dialog-title">
 					<h2 class="my-2">
-						{{
-							t("components.administration.externalToolsSection.dialog.title")
-						}}
+						{{ t("components.administration.externalToolsSection.dialog.title") }}
 					</h2>
 				</v-card-title>
 				<v-card-text>
@@ -133,11 +103,7 @@
 							<b>{{ getItemName }}</b>
 						</i18n-t>
 						<p class="mb-0">
-							{{
-								t(
-									"components.administration.externalToolsSection.dialog.content.header.secondParagraph"
-								)
-							}}
+							{{ t("components.administration.externalToolsSection.dialog.content.header.secondParagraph") }}
 						</p>
 					</div>
 					<p data-testid="delete-dialog-content-courses" class="text-md mb-0">
@@ -151,30 +117,17 @@
 						{{ t("common.tool.context.type.boardElements") }}
 						<b>({{ metadata.boardElement }})</b>
 					</p>
-					<p
-						v-if="isMediaBoardUsageVisible"
-						data-testid="delete-dialog-content-media-shelves"
-						class="text-md"
-					>
+					<p v-if="isMediaBoardUsageVisible" data-testid="delete-dialog-content-media-shelves" class="text-md">
 						{{ t("common.tool.context.type.mediaShelves") }}
 						<b>({{ metadata.mediaBoard }})</b>
 					</p>
 					<p data-testid="delete-dialog-content-media-warning">
-						{{
-							t(
-								"components.administration.externalToolsSection.dialog.content.warning"
-							)
-						}}
+						{{ t("components.administration.externalToolsSection.dialog.content.warning") }}
 					</p>
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer />
-					<v-btn
-						data-testId="delete-dialog-cancel"
-						class="dialog-closed"
-						variant="text"
-						@click="onCloseDeleteDialog"
-					>
+					<v-btn data-testId="delete-dialog-cancel" class="dialog-closed" variant="text" @click="onCloseDeleteDialog">
 						{{ t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
@@ -194,36 +147,24 @@
 </template>
 
 <script setup lang="ts">
-import {
-	MediaSourceLicenseType,
-	ToolApiAxiosParamCreator,
-} from "@/serverApi/v3";
+import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
+import ExternalToolToolbar from "./ExternalToolToolbar.vue";
+import { SchoolExternalToolItem } from "./school-external-tool-item";
+import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
+import { MediaSourceLicenseType, ToolApiAxiosParamCreator } from "@/serverApi/v3";
 import { RequestArgs } from "@/serverApi/v3/base";
-import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import {
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
+import { notifyError, notifySuccess, useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { computed, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
-import ExternalToolToolbar from "./ExternalToolToolbar.vue";
-import { SchoolExternalToolItem } from "./school-external-tool-item";
-import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { useEnvConfig } from "@data-env";
-import { useAppStore } from "@data-app";
 
-const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
-);
-const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-
+const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY);
 const router = useRouter();
 
 const schoolLicenseStore = useSchoolLicenseStore();
@@ -257,35 +198,23 @@ const editTool = (item: SchoolExternalToolItem) => {
 };
 
 const showDatasheet = async (item: SchoolExternalToolItem) => {
-	const requestArgs: RequestArgs =
-		await ToolApiAxiosParamCreator().toolControllerGetDatasheet(
-			item.externalToolId
-		);
+	const requestArgs: RequestArgs = await ToolApiAxiosParamCreator().toolControllerGetDatasheet(item.externalToolId);
 
 	window.open("/api/v3" + requestArgs.url);
 };
 
 const onDeleteTool = async () => {
 	if (itemToDelete.value) {
-		await schoolExternalToolsModule.deleteSchoolExternalTool(
-			itemToDelete.value.id
-		);
+		await schoolExternalToolsModule.deleteSchoolExternalTool(itemToDelete.value.id);
 	}
 
-	notifierModule.show({
-		text: t(
-			"components.administration.externalToolsSection.notification.deleted"
-		),
-		status: "success",
-	});
+	notifySuccess(t("components.administration.externalToolsSection.notification.deleted"));
 
 	onCloseDeleteDialog();
 };
 
 const itemToDelete: Ref<SchoolExternalToolItem | undefined> = ref();
-const getItemName = computed(() =>
-	itemToDelete.value ? itemToDelete.value?.name : ""
-);
+const getItemName = computed(() => (itemToDelete.value ? itemToDelete.value?.name : ""));
 
 const isDeleteDialogOpen = ref(false);
 
@@ -295,12 +224,7 @@ const openDeleteDialog = async (item: SchoolExternalToolItem) => {
 	await fetchSchoolExternalToolUsage(item.id);
 
 	if (!metadata.value) {
-		notifierModule.show({
-			text: t(
-				"components.administration.externalToolsSection.dialog.content.metadata.error"
-			),
-			status: "error",
-		});
+		notifyError(t("components.administration.externalToolsSection.dialog.content.metadata.error"));
 	}
 };
 
@@ -314,15 +238,11 @@ const isMediaBoardUsageVisible = computed(() => {
 	if (!metadata.value) {
 		return false;
 	}
-	const isVisible =
-		metadata.value.mediaBoard > 0 ||
-		useEnvConfig().value.FEATURE_MEDIA_SHELF_ENABLED;
+	const isVisible = metadata.value.mediaBoard > 0 || useEnvConfig().value.FEATURE_MEDIA_SHELF_ENABLED;
 	return isVisible;
 });
 
-const isVidisEnabled = computed(
-	() => useEnvConfig().value.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED
-);
+const isVidisEnabled = computed(() => useEnvConfig().value.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED);
 
 const isLicensedToSchool = (mediumId?: string, mediaSourceId?: string) =>
 	schoolLicenseStore.isLicensed(mediumId, mediaSourceId);

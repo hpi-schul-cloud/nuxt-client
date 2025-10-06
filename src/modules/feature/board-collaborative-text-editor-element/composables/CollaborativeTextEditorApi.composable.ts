@@ -5,7 +5,8 @@ import {
 } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createTestableGlobaleState } from "@/utils/create-global-state";
-import { useCollaborativeTextEditorNotifier } from "./CollaborativeTextEditorNotifications.composable";
+import { notifyError } from "@data-app";
+import { useI18n } from "vue-i18n";
 
 export enum ErrorType {
 	Unauthorized = "Unauthorized",
@@ -13,11 +14,12 @@ export enum ErrorType {
 }
 
 const collaborativeTextEditorApi = () => {
-	const collaborativeTextEditorApi: CollaborativeTextEditorApiInterface =
-		CollaborativeTextEditorApiFactory(undefined, "/v3", $axios);
-
-	const { showForbiddenError, showUnauthorizedError, showInternalServerError } =
-		useCollaborativeTextEditorNotifier();
+	const { t } = useI18n();
+	const collaborativeTextEditorApi: CollaborativeTextEditorApiInterface = CollaborativeTextEditorApiFactory(
+		undefined,
+		"/v3",
+		$axios
+	);
 
 	const getUrl = async (
 		parentId: string,
@@ -32,27 +34,25 @@ const collaborativeTextEditorApi = () => {
 
 			return response.data.url;
 		} catch (error) {
-			showError(error);
+			const { message } = mapAxiosErrorToResponseError(error);
+			showMessageByType(message);
 		}
-	};
-
-	const showError = (error: unknown) => {
-		const responseError = mapAxiosErrorToResponseError(error);
-		const { message } = responseError;
-
-		showMessageByType(message);
 	};
 
 	const showMessageByType = (message: ErrorType | string) => {
 		switch (message) {
 			case ErrorType.Unauthorized:
-				showUnauthorizedError();
+				notifyError(t("error.401"));
 				break;
 			case ErrorType.Forbidden:
-				showForbiddenError();
+				notifyError(t("error.403"));
 				break;
 			default:
-				showInternalServerError();
+				notifyError(
+					t("components.board.notifications.errors.notCreated", {
+						type: t("components.cardElement.collaborativeTextEditorElement"),
+					})
+				);
 				break;
 		}
 	};
@@ -62,6 +62,4 @@ const collaborativeTextEditorApi = () => {
 	};
 };
 
-export const useCollaborativeTextEditorApi = createTestableGlobaleState(
-	collaborativeTextEditorApi
-);
+export const useCollaborativeTextEditorApi = createTestableGlobaleState(collaborativeTextEditorApi);

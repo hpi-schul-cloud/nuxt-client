@@ -1,10 +1,6 @@
 <template>
 	<OnClickOutside @trigger="onClickOutside">
-		<div
-			v-if="isMenu"
-			role="menu"
-			class="position-relative d-inline-block overflow-visible"
-		>
+		<div v-if="isMenu" role="menu" class="position-relative d-inline-block overflow-visible">
 			<v-btn
 				id="fab"
 				:rounded="!isCollapsed ? 'xl' : 'circle'"
@@ -20,12 +16,7 @@
 				<span v-if="!isCollapsed" class="d-block"><slot /></span>
 				<span v-else class="d-sr-only"><slot /></span>
 			</v-btn>
-			<div
-				v-if="isMenuOpen"
-				ref="outlet"
-				class="position-absolute overflow-visible"
-				:class="classes"
-			>
+			<div v-if="isMenuOpen" ref="outlet" class="position-absolute overflow-visible" :class="classes">
 				<template v-for="(actionNode, i) in actions" :key="i">
 					<component :is="actionNode" :speed-dial-index="i" />
 				</template>
@@ -53,15 +44,15 @@
 </template>
 
 <script lang="ts" setup>
-import { mdiClose } from "@icons/material";
-import { OnClickOutside } from "@vueuse/components";
-import { useWindowScroll, watchThrottled } from "@vueuse/core";
-import { computed, provide, ref, toRef, useSlots, VNode } from "vue";
 import {
 	INJECT_SPEED_DIAL_ACTION_CLICKED,
 	INJECT_SPEED_DIAL_DIRECTION,
 	INJECT_SPEED_DIAL_ORIENTATION,
 } from "./injection-tokens";
+import { mdiClose } from "@icons/material";
+import { OnClickOutside } from "@vueuse/components";
+import { useWindowScroll, watchThrottled } from "@vueuse/core";
+import { computed, provide, ref, toRef, useSlots, VNode } from "vue";
 import { useDisplay } from "vuetify";
 
 interface Props {
@@ -122,9 +113,7 @@ watchThrottled(
 	{ throttle: 200 }
 );
 
-const isCollapsed = computed(
-	() => isMenuOpen.value || isForceCollapseOnMobileScroll.value
-);
+const isCollapsed = computed(() => isMenuOpen.value || isForceCollapseOnMobileScroll.value);
 
 const classes = computed(() => {
 	const classList: string[] = [];
@@ -150,13 +139,8 @@ const onClickOutside = () => (isMenuOpen.value = false);
  * Returns true if the actions in actions-slot are wrapped by a pseudo element.
  * This is the case if the actions were rendered in a v-for-loop
  */
-const hasPseudoRenderElement = (actionsInSlot: VNode[]) => {
-	return (
-		actionsInSlot.length === 1 &&
-		actionsInSlot[0].props === null &&
-		Array.isArray(actionsInSlot[0].children)
-	);
-};
+const hasPseudoRenderElement = (actionsInSlot: VNode[]) =>
+	actionsInSlot.length === 1 && actionsInSlot[0].props === null && Array.isArray(actionsInSlot[0].children);
 </script>
 
 <style scoped lang="scss">

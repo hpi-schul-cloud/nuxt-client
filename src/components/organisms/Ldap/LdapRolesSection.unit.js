@@ -1,14 +1,11 @@
-import { mount } from "@vue/test-utils";
 import LdapRolesSection from "./LdapRolesSection";
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("@/components/organisms/LdapRolesSection", () => {
-	const getWrapper = (props = {}) => {
-		return mount(LdapRolesSection, {
+	const getWrapper = (props = {}) =>
+		mount(LdapRolesSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				components: {
@@ -27,24 +24,15 @@ describe("@/components/organisms/LdapRolesSection", () => {
 				...props,
 			},
 		});
-	};
 
 	it("has correct child components", () => {
 		const wrapper = getWrapper();
 
 		expect(wrapper.find(".section-sub-header").exists()).toBe(true);
-		expect(wrapper.find("[data-testid=ldapDataRolesMember]").exists()).toBe(
-			true
-		);
-		expect(wrapper.find("[data-testid=ldapDataRolesStudent]").exists()).toBe(
-			true
-		);
-		expect(wrapper.find("[data-testid=ldapDataRolesTeacher]").exists()).toBe(
-			true
-		);
-		expect(wrapper.find("[data-testid=ldapDataRolesAdmin]").exists()).toBe(
-			true
-		);
+		expect(wrapper.find("[data-testid=ldapDataRolesMember]").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataRolesStudent]").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataRolesTeacher]").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataRolesAdmin]").exists()).toBe(true);
 		expect(wrapper.find("[data-testid=ldapDataRolesUser]").exists()).toBe(true);
 	});
 
@@ -145,9 +133,7 @@ describe("@/components/organisms/LdapRolesSection", () => {
 
 		await inputMember.trigger("blur"); // without this the error is not displayed
 
-		errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataRolesStudent'] .base-input-info.base-input-error"
-		);
+		errorMessageComponent = wrapper.find("div[data-testid='ldapDataRolesStudent'] .base-input-info.base-input-error");
 		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 });

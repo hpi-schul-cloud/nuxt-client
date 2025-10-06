@@ -11,11 +11,7 @@
 			</modal-body-info>
 		</template>
 		<template #footer>
-			<modal-footer-confirm
-				:is-error="!isSuccess"
-				text="Ok"
-				@click="closeModal"
-			/>
+			<modal-footer-confirm :is-error="!isSuccess" text="Ok" @click="closeModal" />
 		</template>
 	</base-modal>
 </template>

@@ -1,5 +1,3 @@
-import { beforeEach, describe, expect, vi } from "vitest";
-import { setActivePinia } from "pinia";
 import { useAppStore } from "./application.store";
 import {
 	LanguageType,
@@ -10,12 +8,14 @@ import {
 	SuccessfulResponse,
 	UserApiFactory,
 } from "@/serverApi/v3";
-import { createTestingPinia } from "@pinia/testing";
-import { AxiosInstance, AxiosPromise } from "axios";
-import { meResponseFactory, mockApiResponse } from "@@/tests/test-utils";
-import { DeepPartial } from "fishery";
 import { initializeAxios } from "@/utils/api";
+import { meResponseFactory, mockApiResponse } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
+import { AxiosInstance, AxiosPromise } from "axios";
+import { DeepPartial } from "fishery";
+import { setActivePinia } from "pinia";
+import { beforeEach, describe, expect, vi } from "vitest";
 
 vi.mock("@/serverApi/v3");
 const mockedMeApi = vi.mocked(MeApiFactory);
@@ -33,9 +33,7 @@ describe("useApplicationStore", () => {
 	};
 
 	const doMockUserApiData = (data: SuccessfulResponse) => {
-		const mockChangeLanguage = vi
-			.fn()
-			.mockResolvedValue(mockApiResponse({ data }));
+		const mockChangeLanguage = vi.fn().mockResolvedValue(mockApiResponse({ data }));
 
 		mockedUserApi.mockReturnValue({
 			userControllerChangeLanguage: mockChangeLanguage,
@@ -80,14 +78,8 @@ describe("useApplicationStore", () => {
 
 			expect(useAppStore().user).toStrictEqual(meResponse.user);
 			expect(useAppStore().school).toEqual(meResponse.school);
-			expect(useAppStore().userRoles).toEqual([
-				RoleName.Teacher,
-				RoleName.Superhero,
-			]);
-			expect(useAppStore().userPermissions).toEqual([
-				Permission.CourseCreate,
-				Permission.HomeworkCreate,
-			]);
+			expect(useAppStore().userRoles).toEqual([RoleName.Teacher, RoleName.Superhero]);
+			expect(useAppStore().userPermissions).toEqual([Permission.CourseCreate, Permission.HomeworkCreate]);
 			expect(useAppStore().systemId).toEqual("system-super-hero");
 		});
 
@@ -152,9 +144,7 @@ describe("useApplicationStore", () => {
 
 		it("should not log in on api error", async () => {
 			mockedMeApi.mockReturnValue({
-				meControllerMe: vi
-					.fn()
-					.mockRejectedValue(new Error("Me data not available.")),
+				meControllerMe: vi.fn().mockRejectedValue(new Error("Me data not available.")),
 			});
 
 			try {

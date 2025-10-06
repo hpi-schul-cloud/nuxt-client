@@ -1,9 +1,11 @@
 import TaskOverview from "./TaskOverview.page.vue";
-import { shallowMount } from "@vue/test-utils";
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createTestAppStore } from "@@/tests/test-utils";
 import { RoleName } from "@/serverApi/v3";
+import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -16,6 +18,7 @@ vi.mock(
 describe("TaskOverview", () => {
 	const fetchAllTasksSpy = vi.fn();
 	const getWrapper = (userRole?: RoleName) => {
+		setActivePinia(createTestingPinia());
 		createTestAppStore({
 			me: { roles: userRole ? [{ id: "test-user", name: userRole }] : [] },
 		});
@@ -51,14 +54,11 @@ describe("TaskOverview", () => {
 		expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
 	});
 
-	it.each([RoleName.Teacher, RoleName.Student])(
-		"should render child component for %p",
-		(userRole) => {
-			const wrapper = getWrapper(userRole);
-			const childComponent = wrapper.findComponent(TasksDashboardMain);
-			expect(childComponent.exists()).toBeTruthy();
-		}
-	);
+	it.each([RoleName.Teacher, RoleName.Student])("should render child component for %p", (userRole) => {
+		const wrapper = getWrapper(userRole);
+		const childComponent = wrapper.findComponent(TasksDashboardMain);
+		expect(childComponent.exists()).toBeTruthy();
+	});
 
 	it("should not render child component for arbitrary roles", () => {
 		const wrapper = getWrapper(RoleName.Superhero);

@@ -21,10 +21,10 @@
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { FormNews } from "@feature-news-form";
-import { newsModule, notifierModule } from "@/store";
+import { newsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useAppStore } from "@data-app";
+import { notifyError, notifySuccess, useAppStore } from "@data-app";
+import { FormNews } from "@feature-news-form";
 
 export default {
 	components: {
@@ -51,10 +51,7 @@ export default {
 		},
 		create: async function (news) {
 			try {
-				const newsTarget = this.getNewsTarget(
-					this.$route.query,
-					useAppStore().school.id
-				);
+				const newsTarget = this.getNewsTarget(this.$route.query, useAppStore().school.id);
 				await newsModule.createNews({
 					title: news.title,
 					content: news.content,
@@ -63,21 +60,13 @@ export default {
 					targetModel: newsTarget.targetModel,
 				});
 				if (this.status === "completed") {
-					notifierModule.show({
-						text: this.$t("components.organisms.FormNews.success.create"),
-						status: "success",
-						timeout: 5000,
-					});
+					notifySuccess(this.$t("components.organisms.FormNews.success.create"));
 					await this.$router.push({
 						path: `/news/${this.createdNews.id}`,
 					});
 				}
 			} catch {
-				notifierModule.show({
-					text: this.$t("components.organisms.FormNews.errors.create"),
-					status: "error",
-					timeout: 5000,
-				});
+				notifyError(this.$t("components.organisms.FormNews.errors.create"));
 			}
 		},
 		async onCancel() {

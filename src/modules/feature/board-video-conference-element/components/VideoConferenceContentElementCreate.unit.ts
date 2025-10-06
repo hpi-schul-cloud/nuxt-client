@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { mount } from "@vue/test-utils";
 
 const setupWrapper = () => {
 	const wrapper = mount(VideoConferenceContentElementCreate, {
@@ -42,9 +39,7 @@ describe("VideoConferenceContentElementCreate", () => {
 				const wrapper = setupWrapper();
 
 				await wrapper.findComponent({ name: "VTextarea" }).setValue(title);
-				await wrapper
-					.findComponent({ name: "VTextarea" })
-					.trigger("keydown.enter");
+				await wrapper.findComponent({ name: "VTextarea" }).trigger("keydown.enter");
 
 				expect(wrapper.emitted("create:title")).toEqual([[title]]);
 			});

@@ -1,12 +1,7 @@
 <template>
 	<v-list-group :value="item.title">
 		<template #activator="{ props }">
-			<v-list-item
-				v-bind="props"
-				color="primary"
-				tabindex="0"
-				:data-testid="item.testId"
-			>
+			<v-list-item v-bind="props" color="primary" tabindex="0" :data-testid="item.testId">
 				<template #prepend>
 					<v-icon :icon="item.icon" class="mr-2" />
 				</template>
@@ -22,9 +17,9 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
 import { SidebarGroupItem } from "../types";
 import SidebarItem from "./SidebarItem.vue";
+import { PropType } from "vue";
 
 defineProps({
 	item: {

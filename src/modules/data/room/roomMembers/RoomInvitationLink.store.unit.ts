@@ -1,58 +1,48 @@
+import { InvitationStep, RoomInvitationLink } from "./types";
 import * as serverApi from "@/serverApi/v3/api";
+import { RoomIdResponse } from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
+	expectNotification,
 	mockApiResponse,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
+import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useBoardNotifier } from "@util-board";
-import { AxiosInstance, AxiosPromise } from "axios";
-import { createPinia, setActivePinia } from "pinia";
-import { useI18n } from "vue-i18n";
-import { InvitationStep, RoomInvitationLink } from "./types";
-import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
+import { createTestingPinia } from "@pinia/testing";
 import { createAxiosError } from "@util-axios-error";
-import { RoomIdResponse } from "@/serverApi/v3/api";
+import { AxiosInstance, AxiosPromise } from "axios";
+import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
+import { useI18n } from "vue-i18n";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("useRoomInvitationLinkStore", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let roomInvitationLinkApiMock: DeepMocked<serverApi.RoomInvitationLinkApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
-		setActivePinia(createPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
-		roomInvitationLinkApiMock =
-			createMock<serverApi.RoomInvitationLinkApiInterface>();
+		roomInvitationLinkApiMock = createMock<serverApi.RoomInvitationLinkApiInterface>();
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
-		vi.spyOn(serverApi, "RoomInvitationLinkApiFactory").mockReturnValue(
-			roomInvitationLinkApiMock
-		);
+		vi.spyOn(serverApi, "RoomInvitationLinkApiFactory").mockReturnValue(roomInvitationLinkApiMock);
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
 		initializeAxios(axiosMock);
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -70,9 +60,7 @@ describe("useRoomInvitationLinkStore", () => {
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 		roomDetailsStore.room = roomFactory.build();
 
-		const roomInvitationLinkStore = mockedPiniaStoreTyping(
-			useRoomInvitationLinkStore
-		);
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(useRoomInvitationLinkStore);
 		roomInvitationLinkStore.roomInvitationLinks = roomInvitationLinks;
 
 		return { roomInvitationLinkStore, roomDetailsStore };
@@ -89,24 +77,17 @@ describe("useRoomInvitationLinkStore", () => {
 
 				await roomInvitationLinkStore.fetchLinks();
 
-				expect(
-					roomApiMock.roomControllerGetInvitationLinks
-				).toHaveBeenCalledWith(roomDetailsStore.room?.id);
+				expect(roomApiMock.roomControllerGetInvitationLinks).toHaveBeenCalledWith(roomDetailsStore.room?.id);
 			});
 
 			describe("when the API call fails", () => {
 				it("should show a failure message", async () => {
 					const { roomInvitationLinkStore } = setup();
 
-					roomApiMock.roomControllerGetInvitationLinks.mockRejectedValue(
-						new Error("API error")
-					);
+					roomApiMock.roomControllerGetInvitationLinks.mockRejectedValue(new Error("API error"));
 
 					await roomInvitationLinkStore.fetchLinks();
-
-					expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-						"pages.rooms.invitationlinks.error.load"
-					);
+					expectNotification("error");
 				});
 			});
 		});
@@ -118,9 +99,7 @@ describe("useRoomInvitationLinkStore", () => {
 
 				await roomInvitationLinkStore.fetchLinks();
 
-				expect(
-					roomApiMock.roomControllerGetInvitationLinks
-				).not.toHaveBeenCalled();
+				expect(roomApiMock.roomControllerGetInvitationLinks).not.toHaveBeenCalled();
 			});
 		});
 	});
@@ -136,15 +115,11 @@ describe("useRoomInvitationLinkStore", () => {
 
 			await roomInvitationLinkStore.createLink(link);
 
-			expect(
-				roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink
-			).toHaveBeenCalledWith({
+			expect(roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink).toHaveBeenCalledWith({
 				...link,
 				roomId: roomDetailsStore.room?.id,
 			});
-			expect(roomInvitationLinkStore.invitationStep).toStrictEqual(
-				InvitationStep.SHARE
-			);
+			expect(roomInvitationLinkStore.invitationStep).toStrictEqual(InvitationStep.SHARE);
 		});
 
 		describe("when 'activeUntil' value is DEFAULT_EXPIRED_DATE", () => {
@@ -161,9 +136,7 @@ describe("useRoomInvitationLinkStore", () => {
 				expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(3);
 				await roomInvitationLinkStore.createLink(link);
 
-				expect(
-					roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink
-				).toHaveBeenCalledWith({
+				expect(roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink).toHaveBeenCalledWith({
 					...link,
 					roomId: roomDetailsStore.room?.id,
 				});
@@ -184,12 +157,8 @@ describe("useRoomInvitationLinkStore", () => {
 
 				await roomInvitationLinkStore.createLink(link);
 
-				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.invitationlinks.error.create"
-				);
-				expect(roomInvitationLinkStore.invitationStep).not.toStrictEqual(
-					InvitationStep.SHARE
-				);
+				expectNotification("error");
+				expect(roomInvitationLinkStore.invitationStep).not.toStrictEqual(InvitationStep.SHARE);
 			});
 		});
 	});
@@ -208,12 +177,11 @@ describe("useRoomInvitationLinkStore", () => {
 
 			await roomInvitationLinkStore.updateLink(firstLink);
 
-			expect(
-				roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink
-			).toHaveBeenCalledWith(firstLink.id, firstLink);
-			expect(roomInvitationLinkStore.invitationStep).toStrictEqual(
-				InvitationStep.SHARE
+			expect(roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink).toHaveBeenCalledWith(
+				firstLink.id,
+				firstLink
 			);
+			expect(roomInvitationLinkStore.invitationStep).toStrictEqual(InvitationStep.SHARE);
 		});
 
 		describe("when 'activeUntil' value is DEFAULT_EXPIRED_DATE", () => {
@@ -229,21 +197,17 @@ describe("useRoomInvitationLinkStore", () => {
 
 				await roomInvitationLinkStore.updateLink(firstLink);
 
-				expect(
-					roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink
-				).toHaveBeenCalledWith(firstLink.id, firstLink);
+				expect(roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink).toHaveBeenCalledWith(
+					firstLink.id,
+					firstLink
+				);
 
 				const updatedLinks = roomInvitationLinkStore.roomInvitationLinks;
 				expect(updatedLinks).toHaveLength(3);
 				expect(updatedLinks[0].activeUntil).toBe(undefined);
 
-				const tableDataElement =
-					roomInvitationLinkStore.invitationTableData.find(
-						(l) => l.id === firstLink.id
-					);
-				expect(tableDataElement?.activeUntil).toBe(
-					"pages.rooms.members.tables.common.no"
-				);
+				const tableDataElement = roomInvitationLinkStore.invitationTableData.find((l) => l.id === firstLink.id);
+				expect(tableDataElement?.activeUntil).toBe("pages.rooms.members.tables.common.no");
 			});
 		});
 
@@ -251,21 +215,15 @@ describe("useRoomInvitationLinkStore", () => {
 			it("should show a failure message", async () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
-				roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink.mockRejectedValue(
-					new Error("API error")
-				);
+				roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink.mockRejectedValue(new Error("API error"));
 
 				const firstLink = links[0];
 				firstLink.title = "Updated Link";
 
 				await roomInvitationLinkStore.updateLink(firstLink);
 
-				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.invitationlinks.error.update"
-				);
-				expect(roomInvitationLinkStore.invitationStep).not.toStrictEqual(
-					InvitationStep.SHARE
-				);
+				expectNotification("error");
+				expect(roomInvitationLinkStore.invitationStep).not.toStrictEqual(InvitationStep.SHARE);
 			});
 		});
 	});
@@ -279,9 +237,7 @@ describe("useRoomInvitationLinkStore", () => {
 
 			await roomInvitationLinkStore.deleteLinks(secondLink.id);
 
-			expect(
-				roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLinks
-			).toHaveBeenCalledWith([secondLink.id]);
+			expect(roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLinks).toHaveBeenCalledWith([secondLink.id]);
 			expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(2);
 		});
 
@@ -289,17 +245,12 @@ describe("useRoomInvitationLinkStore", () => {
 			it("should show a failure message", async () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
-				roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLinks.mockRejectedValue(
-					new Error("API error")
-				);
+				roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLinks.mockRejectedValue(new Error("API error"));
 
 				const firstLink = links[0];
 
 				await roomInvitationLinkStore.deleteLinks(firstLink.id);
-
-				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.invitationlinks.error.delete"
-				);
+				expectNotification("error");
 			});
 		});
 	});
@@ -309,9 +260,7 @@ describe("useRoomInvitationLinkStore", () => {
 			const links = roomInvitationLinkFactory.buildList(3);
 			const { roomInvitationLinkStore } = setup(links);
 
-			expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(
-				links.length
-			);
+			expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(links.length);
 
 			roomInvitationLinkStore.resetStore();
 
@@ -329,9 +278,7 @@ describe("useRoomInvitationLinkStore", () => {
 			const result = await roomInvitationLinkStore.useLink(firstLink.id);
 
 			expect(result).not.toBeUndefined();
-			expect(
-				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink
-			).toHaveBeenCalledWith(firstLink.id);
+			expect(roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink).toHaveBeenCalledWith(firstLink.id);
 		});
 
 		describe("when the API call succeeds", () => {
@@ -339,9 +286,9 @@ describe("useRoomInvitationLinkStore", () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
 				const roomId = "some-id";
-				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockResolvedValue(
-					{ data: { id: roomId } } as unknown as AxiosPromise<RoomIdResponse>
-				);
+				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockResolvedValue({
+					data: { id: roomId },
+				} as unknown as AxiosPromise<RoomIdResponse>);
 				const firstLink = links[0];
 
 				const result = await roomInvitationLinkStore.useLink(firstLink.id);
@@ -354,16 +301,13 @@ describe("useRoomInvitationLinkStore", () => {
 			it("should return the validation error message", async () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
-				const message =
-					serverApi.RoomInvitationLinkValidationError.RestrictedToCreatorSchool;
+				const message = serverApi.RoomInvitationLinkValidationError.RestrictedToCreatorSchool;
 				const schoolName = "My example School";
 				const axiosError = createAxiosError({
 					message,
 					data: { details: { validationMessage: message, schoolName } },
 				});
-				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockRejectedValue(
-					axiosError
-				);
+				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockRejectedValue(axiosError);
 
 				const firstLink = links[0];
 				const result = await roomInvitationLinkStore.useLink(firstLink.id);

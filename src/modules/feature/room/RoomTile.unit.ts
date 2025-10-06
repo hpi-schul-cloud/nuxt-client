@@ -1,11 +1,8 @@
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
+import RoomTile from "./RoomTile.vue";
+import { RoomColor, RoomItem } from "@/types/room/Room";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
-import RoomTile from "./RoomTile.vue";
-import { RoomItem, RoomColor } from "@/types/room/Room";
 
 const mockRoom: RoomItem = {
 	id: "123",

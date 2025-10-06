@@ -21,10 +21,7 @@ export const useFolderState = () => {
 
 	const fetchFileFolderElement = async (fileFolderElementId: string) => {
 		try {
-			const reponse =
-				await boardElementApi.elementControllerGetElementWithParentHierarchy(
-					fileFolderElementId
-				);
+			const reponse = await boardElementApi.elementControllerGetElementWithParentHierarchy(fileFolderElementId);
 
 			fileFolderElement.value = castToFileFolderElement(reponse.data.element);
 			parentNodeInfos.value = reponse.data.parentHierarchy;
@@ -33,15 +30,11 @@ export const useFolderState = () => {
 		}
 	};
 
-	const renameFolder = async (
-		title: string,
-		fileFolderElementId: string
-	): Promise<void> => {
+	const renameFolder = async (title: string, fileFolderElementId: string): Promise<void> => {
 		try {
-			await boardElementApi.elementControllerUpdateElement(
-				fileFolderElementId,
-				{ data: { content: { title }, type: ContentElementType.FileFolder } }
-			);
+			await boardElementApi.elementControllerUpdateElement(fileFolderElementId, {
+				data: { content: { title }, type: ContentElementType.FileFolder },
+			});
 			await fetchFileFolderElement(fileFolderElementId);
 		} catch (error) {
 			throwApplicationError(error);
@@ -57,8 +50,7 @@ export const useFolderState = () => {
 	const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 		const breadcrumbItems: Breadcrumb[] = [];
 
-		if (!parentNodeInfos.value || parentNodeInfos.value.length == 0)
-			return breadcrumbItems;
+		if (!parentNodeInfos.value || parentNodeInfos.value.length == 0) return breadcrumbItems;
 
 		const rootItem = buildRootBreadCrumbItem(parentNodeInfos);
 		if (rootItem) breadcrumbItems.push(rootItem);
@@ -106,9 +98,7 @@ export const useFolderState = () => {
 	};
 };
 
-const castToFileFolderElement = (
-	element: AnyContentElement
-): FileFolderElement => {
+const castToFileFolderElement = (element: AnyContentElement): FileFolderElement => {
 	if (element.type === ContentElementType.FileFolder) {
 		return element as FileFolderElement;
 	} else {
