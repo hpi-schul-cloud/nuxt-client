@@ -1,15 +1,12 @@
+import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { MediaBoardColors } from "@/serverApi/v3";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiChevronDown, mdiChevronUp } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { VColorPicker, VListItem } from "vuetify/lib/components/index";
 import colors from "vuetify/lib/util/colors";
-import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 
 describe("MediaBoardLineMenu", () => {
 	const getWrapper = (
@@ -81,9 +78,7 @@ describe("MediaBoardLineMenu", () => {
 		it("should emit the delete:line event", async () => {
 			const { wrapper } = getWrapper();
 
-			const deleteListItem = wrapper.findComponent(
-				"[data-testid=action-delete-line]"
-			);
+			const deleteListItem = wrapper.findComponent("[data-testid=action-delete-line]");
 			await deleteListItem.trigger("click");
 
 			expect(wrapper.emitted("delete:line")).toEqual([["lineId"]]);
@@ -94,9 +89,7 @@ describe("MediaBoardLineMenu", () => {
 		it("should emit the rename-title event", async () => {
 			const { wrapper } = getWrapper();
 
-			const renameListItem = wrapper.findComponent(
-				"[data-testid=action-update-line-title]"
-			);
+			const renameListItem = wrapper.findComponent("[data-testid=action-update-line-title]");
 			await renameListItem.trigger("click");
 
 			expect(wrapper.emitted("rename-title")).toEqual([["lineId"]]);
@@ -107,9 +100,7 @@ describe("MediaBoardLineMenu", () => {
 		it("should emit the update event for the color-model", async () => {
 			const { wrapper } = getWrapper();
 
-			const colorListItem = wrapper.findComponent(
-				"[data-testid=action-update-line-title]"
-			);
+			const colorListItem = wrapper.findComponent("[data-testid=action-update-line-title]");
 			await colorListItem.trigger("click");
 
 			const colorPicker = wrapper.getComponent(VColorPicker);
@@ -124,9 +115,7 @@ describe("MediaBoardLineMenu", () => {
 		it("should emit the update event for the collapsed-model", async () => {
 			const { wrapper } = getWrapper();
 
-			const colorListItem = wrapper.findComponent(
-				"[data-testid=collapse-line-btn]"
-			);
+			const colorListItem = wrapper.findComponent("[data-testid=collapse-line-btn]");
 			await colorListItem.trigger("click");
 
 			expect(wrapper.emitted("update:collapsed")).toEqual([[true]]);
@@ -135,16 +124,12 @@ describe("MediaBoardLineMenu", () => {
 		it("should use the correct icon", async () => {
 			const { wrapper } = getWrapper();
 
-			const svg = wrapper
-				.findComponent("[data-testid=collapse-line-btn]")
-				.find("svg");
+			const svg = wrapper.findComponent("[data-testid=collapse-line-btn]").find("svg");
 			const path = svg.find("path");
 
 			expect(path.attributes("d")).toEqual(mdiChevronUp);
 
-			const colorListItem = wrapper.findComponent(
-				"[data-testid=collapse-line-btn]"
-			);
+			const colorListItem = wrapper.findComponent("[data-testid=collapse-line-btn]");
 			await colorListItem.trigger("click");
 
 			expect(path.attributes("d")).toEqual(mdiChevronDown);

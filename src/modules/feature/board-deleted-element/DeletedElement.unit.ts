@@ -1,33 +1,23 @@
+import DeletedElement from "./DeletedElement.vue";
+import DeletedElementMenu from "./DeletedElementMenu.vue";
 import { deletedElementResponseFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import DeletedElement from "./DeletedElement.vue";
-import DeletedElementMenu from "./DeletedElementMenu.vue";
 
 vi.mock("@data-board");
 
 describe("DeletedElement", () => {
-	let useBoardFocusHandlerMock: DeepMocked<
-		ReturnType<typeof useBoardFocusHandler>
-	>;
-	let useBoardPermissionsMock: DeepMocked<
-		ReturnType<typeof useBoardPermissions>
-	>;
+	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
+	let useBoardPermissionsMock: DeepMocked<ReturnType<typeof useBoardPermissions>>;
 
 	beforeEach(() => {
-		useBoardFocusHandlerMock =
-			createMock<ReturnType<typeof useBoardFocusHandler>>();
-		useBoardPermissionsMock = createMock<
-			ReturnType<typeof useBoardPermissions>
-		>({ isTeacher: ref(true) });
+		useBoardFocusHandlerMock = createMock<ReturnType<typeof useBoardFocusHandler>>();
+		useBoardPermissionsMock = createMock<ReturnType<typeof useBoardPermissions>>({ isTeacher: ref(true) });
 
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 		vi.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
@@ -160,9 +150,7 @@ describe("DeletedElement", () => {
 				wrapper.findComponent(DeletedElementMenu).vm.$emit("delete:element");
 				await nextTick();
 
-				expect(wrapper.emitted("delete:element")).toEqual([
-					[deletedElement.id],
-				]);
+				expect(wrapper.emitted("delete:element")).toEqual([[deletedElement.id]]);
 			});
 		});
 	});
@@ -188,9 +176,7 @@ describe("DeletedElement", () => {
 
 				const alert = wrapper.findComponent(WarningAlert);
 
-				expect(alert.text()).toEqual(
-					"components.cardElement.deletedElement.warning.externalToolElement"
-				);
+				expect(alert.text()).toEqual("components.cardElement.deletedElement.warning.externalToolElement");
 			});
 		});
 	});

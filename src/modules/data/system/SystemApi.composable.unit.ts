@@ -30,9 +30,7 @@ describe("SystemApi.composable", () => {
 				displayName: "displayName",
 			};
 
-			systemApi.systemControllerGetSystem.mockResolvedValue(
-				mockApiResponse({ data: system })
-			);
+			systemApi.systemControllerGetSystem.mockResolvedValue(mockApiResponse({ data: system }));
 
 			return {
 				system,
@@ -45,9 +43,7 @@ describe("SystemApi.composable", () => {
 
 				await useSystemApi().getSystem("systemId");
 
-				expect(systemApi.systemControllerGetSystem).toHaveBeenCalledWith(
-					"systemId"
-				);
+				expect(systemApi.systemControllerGetSystem).toHaveBeenCalledWith("systemId");
 			});
 
 			it("should return a system", async () => {

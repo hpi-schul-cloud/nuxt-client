@@ -24,26 +24,21 @@
 				/>
 			</template>
 			<template #errors>
-				<info-message
-					v-if="businessError"
-					:message="$t('pages.administration.students.new.error')"
-					type="bc-error"
-				/>
+				<info-message v-if="businessError" :message="$t('pages.administration.students.new.error')" type="bc-error" />
 			</template>
 		</form-create-user>
 	</default-wireframe>
 </template>
 
 <script>
-import FormCreateUser from "@/components/organisms/FormCreateUser";
 import InfoMessage from "@/components/atoms/InfoMessage";
+import FormCreateUser from "@/components/organisms/FormCreateUser";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { inputRangeDate } from "@/plugins/datetime";
-import { notifierModule } from "@/store";
-import { buildPageTitle } from "@/utils/pageTitle";
-import { mapGetters } from "vuex";
-import { useAppStore } from "@data-app";
 import { RoleName } from "@/serverApi/v3";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { notifySuccess, useAppStore } from "@data-app";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -80,9 +75,7 @@ export default {
 		this.$store.commit("users/resetBusinessError");
 	},
 	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.administration.students.new.title")
-		);
+		document.title = buildPageTitle(this.$t("pages.administration.students.new.title"));
 	},
 	methods: {
 		async createStudent(userData) {
@@ -96,11 +89,7 @@ export default {
 				sendRegistration: this.sendRegistration,
 			});
 			if (!this.businessError) {
-				notifierModule.show({
-					text: this.$t("pages.administration.students.new.success"),
-					status: "success",
-					timeout: 5000,
-				});
+				notifySuccess(this.$t("pages.administration.students.new.success"));
 				this.$router.push({
 					path: `/administration/students`,
 				});

@@ -26,15 +26,12 @@ export const useFolderState = () => {
 		return parent;
 	});
 
-	const folderName = computed(() => {
-		return fileFolderElement.value?.content.title ?? t("pages.folder.untitled");
-	});
+	const folderName = computed(() => fileFolderElement.value?.content.title ?? t("pages.folder.untitled"));
 
 	const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 		const breadcrumbItems: Breadcrumb[] = [];
 
-		if (!parentNodeInfos.value || parentNodeInfos.value.length == 0)
-			return breadcrumbItems;
+		if (!parentNodeInfos.value || parentNodeInfos.value.length == 0) return breadcrumbItems;
 
 		const rootItem = buildRootBreadCrumbItem(parentNodeInfos);
 		if (rootItem) breadcrumbItems.push(rootItem);
@@ -53,10 +50,7 @@ export const useFolderState = () => {
 
 	const fetchFileFolderElement = async (fileFolderElementId: string) => {
 		try {
-			const response =
-				await boardElementApi.elementControllerGetElementWithParentHierarchy(
-					fileFolderElementId
-				);
+			const response = await boardElementApi.elementControllerGetElementWithParentHierarchy(fileFolderElementId);
 
 			fileFolderElement.value = castToFileFolderElement(response.data.element);
 			parentNodeInfos.value = response.data.parentHierarchy;
@@ -65,15 +59,11 @@ export const useFolderState = () => {
 		}
 	};
 
-	const renameFolder = async (
-		title: string,
-		fileFolderElementId: string
-	): Promise<void> => {
+	const renameFolder = async (title: string, fileFolderElementId: string): Promise<void> => {
 		try {
-			await boardElementApi.elementControllerUpdateElement(
-				fileFolderElementId,
-				{ data: { content: { title }, type: ContentElementType.FileFolder } }
-			);
+			await boardElementApi.elementControllerUpdateElement(fileFolderElementId, {
+				data: { content: { title }, type: ContentElementType.FileFolder },
+			});
 			await fetchFileFolderElement(fileFolderElementId);
 		} catch (error) {
 			throwApplicationError(error);
@@ -95,9 +85,7 @@ export const useFolderState = () => {
 		}
 	};
 
-	const castToFileFolderElement = (
-		element: AnyContentElement
-	): FileFolderElement => {
+	const castToFileFolderElement = (element: AnyContentElement): FileFolderElement => {
 		if (element.type === ContentElementType.FileFolder) {
 			return element as FileFolderElement;
 		} else {

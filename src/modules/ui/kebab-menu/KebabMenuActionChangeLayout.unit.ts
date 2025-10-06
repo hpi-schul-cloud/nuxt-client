@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import KebabMenuAction from "./KebabMenuAction.vue";
 import KebabMenuActionChangeLayout from "./KebabMenuActionChangeLayout.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("KebabMenuActionChangeLayout", () => {
 	const setup = () => {

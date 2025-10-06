@@ -1,39 +1,28 @@
+import { useFolderState } from "./Folder.state";
 import * as serverApi from "@/serverApi/v3/api";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import {
-	axiosErrorFactory,
-	fileFolderElementResponseFactory,
-	parentNodeInfoFactory,
-} from "@@/tests/test-utils";
+import { axiosErrorFactory, fileFolderElementResponseFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
 import { createMock } from "@golevelup/ts-vitest";
 import { AxiosPromise } from "axios";
-import { useFolderState } from "./Folder.state";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
+}));
 
 describe("useFolderState", () => {
-	const setup = (props?: {
-		element?: unknown;
-		parentNodeInfos?: ParentNodeInfo[];
-	}) => {
+	const setup = (props?: { element?: unknown; parentNodeInfos?: ParentNodeInfo[] }) => {
 		const boardApi = createMock<serverApi.BoardElementApiInterface>();
 		const folderElement = fileFolderElementResponseFactory.build();
 		const parentNodeInfos = parentNodeInfoFactory.build();
 
-		boardApi.elementControllerGetElementWithParentHierarchy.mockReturnValueOnce(
-			{
-				data: {
-					element: props?.element ?? folderElement,
-					parentHierarchy: props?.parentNodeInfos ?? parentNodeInfos,
-				},
-			} as unknown as AxiosPromise
-		);
+		boardApi.elementControllerGetElementWithParentHierarchy.mockReturnValueOnce({
+			data: {
+				element: props?.element ?? folderElement,
+				parentHierarchy: props?.parentNodeInfos ?? parentNodeInfos,
+			},
+		} as unknown as AxiosPromise);
 
 		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
 
@@ -46,8 +35,7 @@ describe("useFolderState", () => {
 	};
 
 	it("should initialize with default values", () => {
-		const { breadcrumbs, fileFolderElement, folderName, parent } =
-			useFolderState();
+		const { breadcrumbs, fileFolderElement, folderName, parent } = useFolderState();
 
 		expect(breadcrumbs.value).toEqual([]);
 		expect(fileFolderElement.value).toBeUndefined();
@@ -66,8 +54,7 @@ describe("useFolderState", () => {
 					await fetchFileFolderElement(testId);
 
 					expect(
-						serverApi.BoardElementApiFactory()
-							.elementControllerGetElementWithParentHierarchy
+						serverApi.BoardElementApiFactory().elementControllerGetElementWithParentHierarchy
 					).toHaveBeenCalledWith(testId);
 				});
 			});
@@ -76,17 +63,11 @@ describe("useFolderState", () => {
 				const setupWithError = (statusCode: HttpStatusCode) => {
 					const boardApi = createMock<serverApi.BoardElementApiInterface>();
 
-					const axiosError = axiosErrorFactory
-						.withStatusCode(statusCode)
-						.build();
+					const axiosError = axiosErrorFactory.withStatusCode(statusCode).build();
 
-					boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(
-						axiosError
-					);
+					boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(axiosError);
 
-					vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(
-						boardApi
-					);
+					vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
 				};
 
 				it("should throw an error", async () => {
@@ -96,9 +77,7 @@ describe("useFolderState", () => {
 
 					const { fetchFileFolderElement } = useFolderState();
 
-					await expect(fetchFileFolderElement("invalid-id")).rejects.toThrow(
-						expectedError
-					);
+					await expect(fetchFileFolderElement("invalid-id")).rejects.toThrow(expectedError);
 				});
 			});
 
@@ -106,8 +85,7 @@ describe("useFolderState", () => {
 				it("should set fileFolderElement correctly", async () => {
 					const { testId, title, createdAt, lastUpdatedAt } = setup();
 
-					const { fetchFileFolderElement, fileFolderElement } =
-						useFolderState();
+					const { fetchFileFolderElement, fileFolderElement } = useFolderState();
 
 					await fetchFileFolderElement(testId);
 
@@ -267,9 +245,7 @@ describe("useFolderState", () => {
 
 		it("should throw an error for an unknown node type", () => {
 			const { mapNodeTypeToPathType } = useFolderState();
-			expect(() => mapNodeTypeToPathType("unknown")).toThrow(
-				"Unknown node type: unknown"
-			);
+			expect(() => mapNodeTypeToPathType("unknown")).toThrow("Unknown node type: unknown");
 		});
 	});
 });

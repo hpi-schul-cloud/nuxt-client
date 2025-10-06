@@ -92,33 +92,17 @@
 				</div>
 			</div>
 		</section>
-		<div
-			v-for="(error, index) in activationErrors"
-			:key="index"
-			class="errors-container"
-		>
-			<info-message
-				data-testid="errorInfoMessage"
-				:message="error"
-				type="bc-error"
-			/>
+		<div v-for="(error, index) in activationErrors" :key="index" class="errors-container">
+			<info-message data-testid="errorInfoMessage" :message="error" type="bc-error" />
 		</div>
-		<section
-			v-if="showUserMigrationOption"
-			class="section"
-			data-testid="migrateUsersSection"
-		>
+		<section v-if="showUserMigrationOption" class="section" data-testid="migrateUsersSection">
 			<h2 class="title-class">
-				{{
-					$t("pages.administration.ldap.activate.migrateExistingUsers.title")
-				}}
+				{{ $t("pages.administration.ldap.activate.migrateExistingUsers.title") }}
 			</h2>
 			<base-input
 				v-model="migrateUsersCheckbox"
 				type="checkbox"
-				:label="
-					$t('pages.administration.ldap.activate.migrateExistingUsers.checkbox')
-				"
+				:label="$t('pages.administration.ldap.activate.migrateExistingUsers.checkbox')"
 				data-testid="migrateUsersCheckbox"
 			/>
 			<p>
@@ -128,18 +112,12 @@
 		<div v-if="schoolErrors" class="errors-container">
 			<info-message
 				data-testid="school-migration-activation-error"
-				:message="
-					$t('pages.administration.ldap.activate.migrateExistingUsers.error')
-				"
+				:message="$t('pages.administration.ldap.activate.migrateExistingUsers.error')"
 				type="bc-error"
 			/>
 		</div>
 		<div class="bottom-buttons">
-			<v-btn
-				variant="text"
-				data-testid="ldapBackButton"
-				@click="backButtonHandler"
-			>
+			<v-btn variant="text" data-testid="ldapBackButton" @click="backButtonHandler">
 				<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
 				{{ $t("common.actions.back") }}
 			</v-btn>
@@ -153,21 +131,12 @@
 				{{ $t("pages.administration.ldap.save.example.synchronize") }}
 			</v-btn>
 		</div>
-		<base-modal
-			v-model:active="submitted.ok"
-			:background-click-disabled="true"
-			data-testid="confirmModal"
-		>
+		<base-modal v-model:active="submitted.ok" :background-click-disabled="true" data-testid="confirmModal">
 			<template #header />
 			<template #body>
-				<modal-body-info
-					:title="$t('pages.administration.ldap.activate.message')"
-				>
+				<modal-body-info :title="$t('pages.administration.ldap.activate.message')">
 					<template #icon>
-						<v-icon
-							color="rgba(var(--v-theme-success))"
-							:icon="mdiCheckCircle"
-						/>
+						<v-icon color="rgba(var(--v-theme-success))" :icon="mdiCheckCircle" />
 					</template>
 				</modal-body-info>
 			</template>
@@ -184,23 +153,23 @@
 </template>
 
 <script>
-import { schoolsModule } from "@/store";
-import { mapGetters } from "vuex";
-import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
-import { unchangedPassword } from "@/utils/ldapConstants";
+import InfoMessage from "@/components/atoms/InfoMessage";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
-import InfoMessage from "@/components/atoms/InfoMessage";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { SchulcloudTheme } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
+import { unchangedPassword } from "@/utils/ldapConstants";
+import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountSchoolOutline,
 	mdiCheckCircle,
 	mdiChevronLeft,
 	mdiShieldAccountVariantOutline,
 } from "@icons/material";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { buildPageTitle } from "@/utils/pageTitle";
-import { SchulcloudTheme } from "@/serverApi/v3";
-import { useEnvConfig } from "@data-env";
+import { mapGetters } from "vuex";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -280,9 +249,7 @@ export default {
 	mounted() {
 		this.migrateUsersCheckbox = this.showUserMigrationOption;
 
-		document.title = buildPageTitle(
-			this.$t("pages.administration.ldap.save.title")
-		);
+		document.title = buildPageTitle(this.$t("pages.administration.ldap.save.title"));
 	},
 	methods: {
 		backButtonHandler() {
@@ -309,10 +276,7 @@ export default {
 					systemId: id,
 				});
 			} else {
-				await this.$store.dispatch(
-					"ldap-config/submitData",
-					temporaryConfigData
-				);
+				await this.$store.dispatch("ldap-config/submitData", temporaryConfigData);
 			}
 		},
 		okButtonHandler() {

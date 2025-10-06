@@ -1,15 +1,12 @@
-import AutoLogoutWarning from "./AutoLogoutWarning.vue";
 import { useAutoLogout } from "./autoLogout.composable";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { computed, ref } from "vue";
-import { createMock } from "@golevelup/ts-vitest";
-import { Router, useRouter } from "vue-router";
-import BaseModal from "@/components/base/BaseModal.vue";
+import AutoLogoutWarning from "./AutoLogoutWarning.vue";
 import { SessionStatus } from "./types";
+import BaseModal from "@/components/base/BaseModal.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-vitest";
 import { Mock } from "vitest";
+import { computed, ref } from "vue";
+import { Router, useRouter } from "vue-router";
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
@@ -52,9 +49,7 @@ describe("AutoLogoutWarning", () => {
 		extendSession: vi.fn(),
 	};
 
-	const setup = (options?: {
-		autoLogoutVariables?: Partial<typeof defaultVars>;
-	}) => {
+	const setup = (options?: { autoLogoutVariables?: Partial<typeof defaultVars> }) => {
 		options = {
 			autoLogoutVariables: { ...defaultVars },
 			...options,
@@ -129,9 +124,7 @@ describe("AutoLogoutWarning", () => {
 
 				const button = wrapper.findComponent({ name: "v-btn" });
 				expect(button.exists()).toBe(true);
-				expect(button.text()).toContain(
-					"feature-autoLogout.button.confirm.returnToLogin"
-				);
+				expect(button.text()).toContain("feature-autoLogout.button.confirm.returnToLogin");
 			});
 
 			it("should call router.push when clicked", async () => {

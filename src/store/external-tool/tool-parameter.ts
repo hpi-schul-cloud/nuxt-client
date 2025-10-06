@@ -1,6 +1,6 @@
-import { ToolParameterScope } from "./tool-parameter-scope.enum";
-import { ToolParameterLocation } from "./tool-parameter-location.enum";
 import { ToolParameterType } from "./tool-parameter.enum";
+import { ToolParameterLocation } from "./tool-parameter-location.enum";
+import { ToolParameterScope } from "./tool-parameter-scope.enum";
 
 export interface ToolParameter {
 	name: string;

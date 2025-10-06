@@ -1,16 +1,13 @@
-import { SchulcloudTheme } from "@/serverApi/v3";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError } from "./types/commons";
 import { GlobalFiles, SpecificFiles } from "./types/filePaths";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 const specificFiles: SpecificFiles = {
-	accessibilityStatement:
-		"Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
-	privacy:
-		"Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
-	termsOfUse:
-		"Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
+	accessibilityStatement: "Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
+	privacy: "Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
+	termsOfUse: "Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
 	analogConsent: "Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
@@ -25,12 +22,9 @@ const globalFiles: GlobalFiles = {
 		"Willkommensordner/Begleitmaterial/Broschuere_Die-Schul-Cloud-im-Unterricht-Fachuebergreifende-Unterrichtsszenarien-und-Methoden.pdf",
 	BroschuereSCimUnterricht2:
 		"Willkommensordner/Begleitmaterial/Broschuere_Die-Schul-Cloud-im-Unterricht-und-Schulalltag-Mehrwert-und-Voraussetzungen.pdf",
-	BroschuereSCundLernen4:
-		"Willkommensordner/Begleitmaterial/Broschuere_HPI-Schul-Cloud-und-Lernen-4.0.pdf",
-	SchulrechnerInDieSC2017:
-		"Dokumente/Schulrechner-wandern-in-die-Cloud-2017.pdf",
-	SCKonzeptPilotierung2017:
-		"Dokumente/Konzept-und-Pilotierung-der-Schul-Cloud-2017.pdf",
+	BroschuereSCundLernen4: "Willkommensordner/Begleitmaterial/Broschuere_HPI-Schul-Cloud-und-Lernen-4.0.pdf",
+	SchulrechnerInDieSC2017: "Dokumente/Schulrechner-wandern-in-die-Cloud-2017.pdf",
+	SCKonzeptPilotierung2017: "Dokumente/Konzept-und-Pilotierung-der-Schul-Cloud-2017.pdf",
 };
 
 @Module({
@@ -59,28 +53,20 @@ export default class FilePathsModule extends VuexModule {
 
 	@Mutation
 	setDocumentBaseDir(payload: { baseDir: string; theme: string }) {
-		this.documentBaseDir = String(
-			new URL(`${payload.theme}/`, payload.baseDir)
-		);
+		this.documentBaseDir = String(new URL(`${payload.theme}/`, payload.baseDir));
 	}
 
 	@Mutation
 	setSpecificFiles(payload: string) {
 		this.specificFiles = Object.fromEntries(
-			Object.entries(specificFiles).map(([key, value]) => [
-				key,
-				String(new URL(value, payload)),
-			])
+			Object.entries(specificFiles).map(([key, value]) => [key, String(new URL(value, payload))])
 		) as SpecificFiles;
 	}
 
 	@Mutation
 	setGlobalFiles(payload: string) {
 		this.globalFiles = Object.fromEntries(
-			Object.entries(globalFiles).map(([key, value]) => [
-				key,
-				String(new URL(`global/${value}`, payload)),
-			])
+			Object.entries(globalFiles).map(([key, value]) => [key, String(new URL(`global/${value}`, payload))])
 		) as GlobalFiles;
 	}
 

@@ -1,5 +1,3 @@
-import { finishedTasksModule } from "@/store";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { TaskFilter } from "./task.filter";
@@ -13,6 +11,8 @@ import {
 	TasksCountPerCourseStudent,
 	TasksCountPerCourseTeacher,
 } from "./types/tasks";
+import { finishedTasksModule } from "@/store";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
 	name: "tasksModule",
@@ -142,13 +142,9 @@ export default class TasksModule extends VuexModule {
 
 		// remove substitute course(s) from course filter when substitute filter is disabled
 		if (!enabled) {
-			const courseNamesWithoutSubstitutes = new TaskFilter(this.tasks)
-				.filterSubstituteForTeacher(false)
-				.courseNames();
+			const courseNamesWithoutSubstitutes = new TaskFilter(this.tasks).filterSubstituteForTeacher(false).courseNames();
 
-			this.courseFilter = this.courseFilter.filter((courseName) =>
-				courseNamesWithoutSubstitutes.includes(courseName)
-			);
+			this.courseFilter = this.courseFilter.filter((courseName) => courseNamesWithoutSubstitutes.includes(courseName));
 		}
 	}
 
@@ -191,23 +187,17 @@ export default class TasksModule extends VuexModule {
 	}
 
 	get getCourseFilters(): TaskCourseFilter[] {
-		const filteredTasks = new TaskFilter(this.tasks).filterSubstituteForTeacher(
-			this.substituteFilter
-		).tasks;
+		const filteredTasks = new TaskFilter(this.tasks).filterSubstituteForTeacher(this.substituteFilter).tasks;
 
 		// map to filter objects (can still contain duplicates by courseName)
-		const mappedToFilter: TaskCourseFilter[] = filteredTasks.map((task) => {
-			return {
-				value: task.courseName,
-				text: task.courseName,
-				isSubstitution: task.status.isSubstitutionTeacher,
-			};
-		});
+		const mappedToFilter: TaskCourseFilter[] = filteredTasks.map((task) => ({
+			value: task.courseName,
+			text: task.courseName,
+			isSubstitution: task.status.isSubstitutionTeacher,
+		}));
 
 		// make the list unique by courseName
-		const uniqueFilters = [
-			...new Map(mappedToFilter.map((item) => [item.value, item])).values(),
-		];
+		const uniqueFilters = [...new Map(mappedToFilter.map((item) => [item.value, item])).values()];
 		return uniqueFilters;
 	}
 
@@ -228,10 +218,7 @@ export default class TasksModule extends VuexModule {
 	}
 
 	get openTasksForStudentIsEmpty(): boolean {
-		const openTaskCount = new TaskFilter(this.tasks)
-			.byCourseNames(this.courseFilter)
-			.byOpenForStudent()
-			.count();
+		const openTaskCount = new TaskFilter(this.tasks).byCourseNames(this.courseFilter).byOpenForStudent().count();
 
 		return this.isReady && openTaskCount === 0;
 	}
@@ -265,9 +252,7 @@ export default class TasksModule extends VuexModule {
 	}
 
 	get getOpenTasksForStudent(): OpenTasksForStudent {
-		const filter = new TaskFilter(this.tasks)
-			.byCourseNames(this.courseFilter)
-			.byOpenForStudent();
+		const filter = new TaskFilter(this.tasks).byCourseNames(this.courseFilter).byOpenForStudent();
 
 		const result = {
 			overdue: filter.byOverdue().tasks,
@@ -309,11 +294,7 @@ export default class TasksModule extends VuexModule {
 			.filterSubstituteForTeacher(this.substituteFilter)
 			.byCourseNames(this.courseFilter)
 			.byDraftForTeacher(true)
-			.tasks.sort(
-				(task1, task2) =>
-					new Date(task2.createdAt).getTime() -
-					new Date(task1.createdAt).getTime()
-			);
+			.tasks.sort((task1, task2) => new Date(task2.createdAt).getTime() - new Date(task1.createdAt).getTime());
 
 		return draftTasks;
 	}
@@ -321,13 +302,9 @@ export default class TasksModule extends VuexModule {
 	get getTasksCountPerCourseStudent(): TasksCountPerCourseStudent {
 		const allCourseNames = new TaskFilter(this.tasks).courseNames();
 
-		const openCounts = new TaskFilter(this.tasks)
-			.byOpenForStudent()
-			.countByCourseName(allCourseNames);
+		const openCounts = new TaskFilter(this.tasks).byOpenForStudent().countByCourseName(allCourseNames);
 
-		const completedCounts = new TaskFilter(this.tasks)
-			.byCompletedForStudent()
-			.countByCourseName(allCourseNames);
+		const completedCounts = new TaskFilter(this.tasks).byCompletedForStudent().countByCourseName(allCourseNames);
 
 		const tasksCount: TasksCountPerCourseStudent = {
 			open: openCounts,

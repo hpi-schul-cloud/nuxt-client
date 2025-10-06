@@ -1,46 +1,34 @@
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
-import NotifierModule from "@/store/notifier";
-import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import mocks from "@@/tests/test-utils/mockDataTasks";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
-import { mount } from "@vue/test-utils";
-import { VBtn, VListItem } from "vuetify/lib/components/index";
 import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher.vue";
-import { beforeAll } from "vitest";
-import { setActivePinia } from "pinia";
+import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
+import TasksModule from "@/store/tasks";
+import { COPY_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import mocks from "@@/tests/test-utils/mockDataTasks";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeAll } from "vitest";
+import { VBtn, VListItem } from "vuetify/lib/components/index";
 
-const {
-	tasksTeacher,
-	drafts,
-	plannedTask,
-	dueDateTasksTeacher,
-	noDueDateTasksTeacher,
-} = mocks;
+const { tasksTeacher, drafts, plannedTask, dueDateTasksTeacher, noDueDateTasksTeacher } = mocks;
 
 let tasksModuleMock: TasksModule;
 let copyModuleMock: CopyModule;
-let notifierModuleMock: NotifierModule;
 
 const mockRouter = {
 	push: vi.fn(),
 };
 
-const getWrapper = (props: { task: object }) => {
-	return mount(TaskItemTeacher, {
+const getWrapper = (props: { task: object }) =>
+	mount(TaskItemTeacher, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				tasksModule: tasksModuleMock,
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			},
 		},
 		props: props,
@@ -48,7 +36,6 @@ const getWrapper = (props: { task: object }) => {
 			$router: mockRouter,
 		},
 	});
-};
 
 describe("@/components/molecules/TaskItemTeacher", () => {
 	beforeAll(() => {
@@ -69,7 +56,6 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
-		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	it("accepts valid task props", () => {
@@ -95,7 +81,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 		expect(locationSpy).toHaveBeenCalledWith(`/homework/${tasksTeacher[0].id}`);
 	});
 
-	it("should passthrough copy-task event", async () => {
+	it("should passthrough copy-task event", () => {
 		const wrapper = getWrapper({
 			task: tasksTeacher[0],
 		});
@@ -109,9 +95,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 		const oneTaskItemMenu = wrapper.findComponent(TaskItemMenu);
 		oneTaskItemMenu.vm.$emit("copy-task", payload);
 
-		expect(wrapper.emitted()["copy-task"]?.[0]).toStrictEqual(
-			expect.arrayContaining([payload])
-		);
+		expect(wrapper.emitted()["copy-task"]?.[0]).toStrictEqual(expect.arrayContaining([payload]));
 	});
 
 	describe("when task is a draft task", () => {
@@ -125,9 +109,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 
 				expect(taskLabel.exists()).toBe(true);
 				expect(taskLabel.text()).toContain("pages.tasks.labels.noCourse");
-				expect(wrapper.vm.courseName).toStrictEqual(
-					"pages.tasks.labels.noCourse"
-				);
+				expect(wrapper.vm.courseName).toStrictEqual("pages.tasks.labels.noCourse");
 			});
 
 			it("should show createdAt date in label", () => {
@@ -138,9 +120,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				const taskLabel = wrapper.find("[data-testid='task-label']");
 
 				expect(taskLabel.exists()).toBe(true);
-				expect(taskLabel.text()).toContain(
-					"components.molecules.TaskItemMenu.labels.createdAt 28.09.17"
-				);
+				expect(taskLabel.text()).toContain("components.molecules.TaskItemMenu.labels.createdAt 28.09.17");
 				expect(wrapper.vm.taskLabel).toStrictEqual(
 					"pages.tasks.labels.noCourse - components.molecules.TaskItemMenu.labels.createdAt 28.09.17"
 				);
@@ -155,12 +135,8 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 					const taskLabel = wrapper.find("[data-testid='task-label']");
 
 					expect(taskLabel.exists()).toBe(true);
-					expect(taskLabel.text()).toContain(
-						"common.words.substitute pages.tasks.labels.noCourse"
-					);
-					expect(wrapper.vm.courseName).toStrictEqual(
-						"common.words.substitute pages.tasks.labels.noCourse"
-					);
+					expect(taskLabel.text()).toContain("common.words.substitute pages.tasks.labels.noCourse");
+					expect(wrapper.vm.courseName).toStrictEqual("common.words.substitute pages.tasks.labels.noCourse");
 				});
 			});
 		});
@@ -211,9 +187,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 
 				expect(taskLabel.exists()).toBe(true);
 				expect(taskLabel.text()).toContain("common.words.substitute Mathe");
-				expect(wrapper.vm.courseName).toStrictEqual(
-					"common.words.substitute Mathe"
-				);
+				expect(wrapper.vm.courseName).toStrictEqual("common.words.substitute Mathe");
 			});
 		});
 
@@ -258,12 +232,8 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.exists()).toBe(true);
-			expect(taskLabel.text()).toStrictEqual(
-				"Deutsch - pages.tasks.labels.planned 28.09.00"
-			);
-			expect(wrapper.vm.taskLabel).toStrictEqual(
-				"Deutsch - pages.tasks.labels.planned 28.09.00"
-			);
+			expect(taskLabel.text()).toStrictEqual("Deutsch - pages.tasks.labels.planned 28.09.00");
+			expect(wrapper.vm.taskLabel).toStrictEqual("Deutsch - pages.tasks.labels.planned 28.09.00");
 		});
 	});
 
@@ -290,12 +260,8 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.exists()).toBe(true);
-			expect(taskLabel.text()).toMatch(
-				"common.words.substitute Mathe - pages.tasks.labels.due 11.06.00"
-			);
-			expect(wrapper.vm.taskLabel).toStrictEqual(
-				`common.words.substitute Mathe - pages.tasks.labels.due 11.06.00`
-			);
+			expect(taskLabel.text()).toMatch("common.words.substitute Mathe - pages.tasks.labels.due 11.06.00");
+			expect(wrapper.vm.taskLabel).toStrictEqual(`common.words.substitute Mathe - pages.tasks.labels.due 11.06.00`);
 		});
 	});
 
@@ -309,9 +275,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 
 			expect(topicLabel.exists()).toBe(true);
 			expect(topicLabel.text()).toMatch("common.words.topic Malen nach Zahlen");
-			expect(wrapper.vm.topic).toStrictEqual(
-				"common.words.topic Malen nach Zahlen"
-			);
+			expect(wrapper.vm.topic).toStrictEqual("common.words.topic Malen nach Zahlen");
 		});
 	});
 
@@ -321,12 +285,8 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				task: dueDateTasksTeacher[4],
 			});
 
-			const lessonChipLarge = wrapper.find(
-				"[data-testid='task-lesson-chip-large']"
-			);
-			const lessonChipSmall = wrapper.find(
-				"[data-testid='task-lesson-chip-small']"
-			);
+			const lessonChipLarge = wrapper.find("[data-testid='task-lesson-chip-large']");
+			const lessonChipSmall = wrapper.find("[data-testid='task-lesson-chip-small']");
 			const taskStatus = wrapper.find("[data-testid='task-status']");
 			const taskStatusSmall = wrapper.find("[data-testid='task-status-small']");
 			const hasUnpublished = wrapper.vm.hasUnpublishedLesson;
@@ -362,9 +322,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				expect(
-					wrapper.findComponent(`[data-testid="task-edit"]`).isVisible()
-				).toBe(true);
+				expect(wrapper.findComponent(`[data-testid="task-edit"]`).isVisible()).toBe(true);
 			});
 
 			it("should close menu on btn click", async () => {
@@ -407,9 +365,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			await menuBtn.trigger("click");
 			const editBtn = wrapper.findComponent(`[data-testid="task-edit"]`);
 
-			expect(editBtn.attributes("href")).toBe(
-				`/homework/${tasksTeacher[0].id}/edit`
-			);
+			expect(editBtn.attributes("href")).toBe(`/homework/${tasksTeacher[0].id}/edit`);
 		});
 
 		it("always show menu on mobile", () => {

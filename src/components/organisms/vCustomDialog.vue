@@ -1,11 +1,5 @@
 <template>
-	<v-dialog
-		ref="vDialog"
-		v-model="isOpen"
-		:max-width="size"
-		@click:outside="closeDialog"
-		@keydown.esc="closeDialog"
-	>
+	<v-dialog ref="vDialog" v-model="isOpen" :max-width="size" @click:outside="closeDialog" @keydown.esc="closeDialog">
 		<v-card :ripple="false" data-testid="dialog-content">
 			<v-card-title data-testid="dialog-title" class="dialog-title px-6 pt-4">
 				<slot name="title" />
@@ -15,20 +9,10 @@
 			</v-card-text>
 			<v-card-actions v-if="hasButtons" class="d-flex flex-row mb-2 px-6">
 				<div class="d-flex gap-2">
-					<v-btn
-						v-if="checkButtons('back')"
-						data-testid="dialog-back"
-						variant="outlined"
-						@click="$emit('back')"
-					>
+					<v-btn v-if="checkButtons('back')" data-testid="dialog-back" variant="outlined" @click="$emit('back')">
 						{{ $t("common.actions.back") }}
 					</v-btn>
-					<v-btn
-						v-if="checkButtons('edit')"
-						data-testid="dialog-edit"
-						variant="flat"
-						@click="$emit('dialog-edit')"
-					>
+					<v-btn v-if="checkButtons('edit')" data-testid="dialog-edit" variant="flat" @click="$emit('dialog-edit')">
 						{{ $t("common.actions.edit") }}
 					</v-btn>
 				</div>
@@ -57,12 +41,7 @@
 						</v-icon>
 						{{ $t(confirmBtnTitleKey) }}
 					</v-btn>
-					<v-btn
-						v-if="checkButtons('close')"
-						data-testid="dialog-close"
-						variant="outlined"
-						@click="closeDialog"
-					>
+					<v-btn v-if="checkButtons('close')" data-testid="dialog-close" variant="outlined" @click="closeDialog">
 						{{ $t("common.labels.close") }}
 					</v-btn>
 					<v-btn
@@ -110,21 +89,12 @@ const props = defineProps({
 		type: Boolean,
 	},
 	buttons: {
-		type: Array as PropType<
-			("back" | "edit" | "cancel" | "confirm" | "close" | "next")[]
-		>,
+		type: Array as PropType<("back" | "edit" | "cancel" | "confirm" | "close" | "next")[]>,
 		default: () => ["cancel", "confirm"],
 	},
 });
 
-const emit = defineEmits([
-	"dialog-closed",
-	"dialog-confirmed",
-	"dialog-canceled",
-	"next",
-	"back",
-	"dialog-edit",
-]);
+const emit = defineEmits(["dialog-closed", "dialog-confirmed", "dialog-canceled", "next", "back", "dialog-edit"]);
 
 const isOpen: ModelRef<boolean> = defineModel("isOpen", {
 	type: Boolean,
@@ -146,9 +116,7 @@ const closeDialog = () => {
 	emit("dialog-closed");
 };
 
-const checkButtons = (buttonName: string) => {
-	return props.buttons.some((button) => button == buttonName);
-};
+const checkButtons = (buttonName: string) => props.buttons.some((button) => button == buttonName);
 </script>
 
 <style lang="scss" scoped>

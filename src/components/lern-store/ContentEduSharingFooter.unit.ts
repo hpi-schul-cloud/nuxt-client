@@ -1,9 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import ContentEduSharingFooter from "./ContentEduSharingFooter.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("@/components/molecules/ContentEduSharingFooter", () => {
 	const wrapper = mount(ContentEduSharingFooter, {
@@ -27,8 +24,6 @@ describe("@/components/molecules/ContentEduSharingFooter", () => {
 
 	it("Provides proper text", () => {
 		expect(wrapper.find(".edusharing-footer__text").exists()).toBe(true);
-		expect(wrapper.find(".edusharing-footer__text").text()).toBe(
-			"components.molecules.EdusharingFooter.text"
-		);
+		expect(wrapper.find(".edusharing-footer__text").text()).toBe("components.molecules.EdusharingFooter.text");
 	});
 });

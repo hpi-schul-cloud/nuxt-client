@@ -1,12 +1,9 @@
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
-import { ComponentProps } from "vue-component-type-helpers";
 import BoardTile from "./BoardTile.vue";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { ComponentProps } from "vue-component-type-helpers";
 
 const mockBoard: RoomBoardItem = {
 	id: "59cce2c61113d1132c98dc06",
@@ -34,9 +31,7 @@ describe("@feature-room/BoardTile", () => {
 			const { wrapper } = setup({ board: mockBoard, index: 0 });
 
 			const subtitle = wrapper.get("[data-testid='board-tile-subtitle-0']");
-			expect(subtitle.text()).toStrictEqual(
-				"pages.room.boardCard.label.columnBoard - common.words.draft"
-			);
+			expect(subtitle.text()).toStrictEqual("pages.room.boardCard.label.columnBoard - common.words.draft");
 		});
 
 		it("should display tile in draft style", () => {

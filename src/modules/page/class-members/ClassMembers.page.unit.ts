@@ -1,17 +1,11 @@
-import { mount } from "@vue/test-utils";
-import { ref } from "vue";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import ClassMembersPage from "./ClassMembers.page.vue";
+import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
+import { groupFactory } from "@@/tests/test-utils/factory";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Group, useGroupState } from "@data-group";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { groupFactory } from "@@/tests/test-utils/factory";
-import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { ref } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 vi.mock("@data-group/GroupState.composable");
@@ -25,19 +19,10 @@ describe("@pages/ClassMembers.page.vue", () => {
 		useGroupStateMock.isLoading = ref(false);
 		useGroupStateMock.group = ref(group);
 
-		const notifierModule = createModuleMocks(NotifierModule);
-
 		const wrapper = mount(ClassMembersPage, {
 			props,
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
+				plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
 				stubs: { ClassMembersInfoBox: true },
 			},
 		});
@@ -89,9 +74,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-			expect(breadcrumbs.at(0)?.text()).toEqual(
-				"pages.administration.classes.index.title"
-			);
+			expect(breadcrumbs.at(0)?.text()).toEqual("pages.administration.classes.index.title");
 		});
 
 		it("should render dynamic class name breadcrumb", () => {
@@ -106,7 +89,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 	});
 
 	describe("onMounted", () => {
-		it("should load the group for given groupId", async () => {
+		it("should load the group for given groupId", () => {
 			setup({
 				groupId: "groupId",
 			});

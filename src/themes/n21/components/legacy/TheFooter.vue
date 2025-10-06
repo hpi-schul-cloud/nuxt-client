@@ -14,11 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { useI18n } from "vue-i18n";
 import { filePathsModule } from "@/store";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const theme = injectStrict(THEME_KEY);
@@ -44,10 +44,7 @@ const links = computed(() => {
 			rel: "noopener",
 		},
 		{
-			href:
-				"mailto:" +
-				useEnvConfig().value.SC_CONTACT_EMAIL +
-				"?subject=Niedersächsische%20Bildungscloud%20Anfrage",
+			href: "mailto:" + useEnvConfig().value.SC_CONTACT_EMAIL + "?subject=Niedersächsische%20Bildungscloud%20Anfrage",
 			text: t("components.legacy.footer.contact"),
 		},
 	];

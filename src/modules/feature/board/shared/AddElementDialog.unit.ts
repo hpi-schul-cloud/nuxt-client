@@ -1,24 +1,16 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
+import AddElementDialog from "./AddElementDialog.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { ComponentPublicInstance, nextTick } from "vue";
-import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
-import AddElementDialog from "./AddElementDialog.vue";
 
 vi.mock("./SharedElementTypeSelection.composable");
 
 describe("ElementTypeSelection", () => {
 	const setupMocks = () => {
-		const {
-			closeDialog,
-			isDialogOpen,
-			isDialogLoading,
-			staticElementTypeOptions,
-			dynamicElementTypeOptions,
-		} = setupSharedElementTypeSelectionMock();
+		const { closeDialog, isDialogOpen, isDialogLoading, staticElementTypeOptions, dynamicElementTypeOptions } =
+			setupSharedElementTypeSelectionMock();
 
 		const createTextElement = vi.fn();
 		const createFileElement = vi.fn();
@@ -73,8 +65,7 @@ describe("ElementTypeSelection", () => {
 		const setup = async () => {
 			document.body.setAttribute("data-app", "true");
 
-			const { isDialogOpen, staticElementTypeOptions, closeDialog } =
-				setupMocks();
+			const { isDialogOpen, staticElementTypeOptions, closeDialog } = setupMocks();
 
 			const wrapper = mount(AddElementDialog, {
 				global: {
@@ -98,9 +89,7 @@ describe("ElementTypeSelection", () => {
 			const { staticElementTypeOptions, wrapper } = await setup();
 
 			for (const elementTypeOption of staticElementTypeOptions.value) {
-				const button = wrapper.findComponent(
-					`[data-testid=${elementTypeOption.testId}]`
-				);
+				const button = wrapper.findComponent(`[data-testid=${elementTypeOption.testId}]`);
 				await button.trigger("click");
 				await nextTick();
 
@@ -127,15 +116,14 @@ describe("ElementTypeSelection", () => {
 			const { isDialogOpen, dynamicElementTypeOptions } = setupMocks();
 
 			type AddElementDialogWrapper<T> = VueWrapper<ComponentPublicInstance & T>;
-			const wrapper: AddElementDialogWrapper<Partial<{ dialogWidth: number }>> =
-				mount(AddElementDialog, {
-					attrs: {
-						width: 320,
-					},
-					global: {
-						plugins: [createTestingVuetify(), createTestingI18n()],
-					},
-				});
+			const wrapper: AddElementDialogWrapper<Partial<{ dialogWidth: number }>> = mount(AddElementDialog, {
+				attrs: {
+					width: 320,
+				},
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+			});
 
 			isDialogOpen.value = true;
 			await nextTick();
@@ -157,9 +145,7 @@ describe("ElementTypeSelection", () => {
 			];
 			await flushPromises();
 
-			const option = wrapper.findComponent<typeof ExtendedIconBtn>(
-				`[data-testid="${testId}"]`
-			);
+			const option = wrapper.findComponent<typeof ExtendedIconBtn>(`[data-testid="${testId}"]`);
 
 			expect(option.isVisible()).toBe(true);
 		});

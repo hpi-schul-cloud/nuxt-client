@@ -1,17 +1,13 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import FilePicker from "./file-picker/FilePicker.vue";
+import FileUpload from "./FileUpload.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import * as utilBoard from "@util-board";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import FileUpload from "./FileUpload.vue";
-import FilePicker from "./file-picker/FilePicker.vue";
 
 const setupUseSharedLastCreatedElementMock = () => {
-	const mockedUse =
-		createMock<ReturnType<typeof utilBoard.useSharedLastCreatedElement>>();
+	const mockedUse = createMock<ReturnType<typeof utilBoard.useSharedLastCreatedElement>>();
 	vi.spyOn(utilBoard, "useSharedLastCreatedElement").mockReturnValue(mockedUse);
 };
 

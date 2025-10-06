@@ -1,11 +1,9 @@
-import { AlertPayload } from "@/store/types/alert-payload";
-import { computed, Ref, ref, watch } from "vue";
-import { notifierModule } from "@/store";
-import { useI18n } from "vue-i18n";
-import { $axios } from "@/utils/api";
 import { SessionStatus } from "./types";
+import { $axios } from "@/utils/api";
+import { AlertPayload, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { useAppStore } from "@data-app";
+import { computed, Ref, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();
@@ -18,19 +16,15 @@ export const useAutoLogout = () => {
 	let ttlTimeoutPolling: ReturnType<typeof setTimeout> | null = null;
 	let retry = 0;
 
-	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
-		useEnvConfig().value;
+	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } = useEnvConfig().value;
 
 	const defaultRemainingTime = JWT_TIMEOUT_SECONDS || 2 * 60 * 60;
-	const DEFAULT_SHOW_WARNING_TIME =
-		JWT_SHOW_TIMEOUT_WARNING_SECONDS || 1 * 60 * 60;
+	const DEFAULT_SHOW_WARNING_TIME = JWT_SHOW_TIMEOUT_WARNING_SECONDS || 1 * 60 * 60;
 
 	let remainingTimeInSeconds = defaultRemainingTime;
 	let ttlCount = 0;
 
-	const remainingTimeInMinutes = computed(() =>
-		Math.max(Math.floor(remainingTimeInSeconds / 60), 0)
-	);
+	const remainingTimeInMinutes = computed(() => Math.max(Math.floor(remainingTimeInSeconds / 60), 0));
 
 	const clearPollings = () => {
 		if (remainingTimePolling) {
@@ -43,8 +37,8 @@ export const useAutoLogout = () => {
 		}
 	};
 
-	const startTimeout = () => {
-		return setTimeout(
+	const startTimeout = () =>
+		setTimeout(
 			async () => {
 				retry++;
 				try {
@@ -70,7 +64,6 @@ export const useAutoLogout = () => {
 			},
 			2 ** retry * 1000
 		);
-	};
 
 	const checkTTL = async () => {
 		if (ttlTimeoutPolling) return ttlCount;
@@ -135,12 +128,10 @@ export const useAutoLogout = () => {
 		[SessionStatus.Continued]: {
 			text: t("feature-autoLogout.message.success"),
 			status: "success",
-			timeout: 5000,
 		},
 		[SessionStatus.Error]: {
 			text: t("feature-autoLogout.message.error"),
 			status: "error",
-			timeout: 5000,
 		},
 		[SessionStatus.Ended]: {
 			text: t("feature-autoLogout.message.error.401"),
@@ -153,7 +144,7 @@ export const useAutoLogout = () => {
 		() => sessionStatus.value,
 		(newValue) => {
 			if (newValue === null) return;
-			notifierModule.show(notificationMap[newValue]);
+			useNotificationStore().notify(notificationMap[newValue]);
 		}
 	);
 

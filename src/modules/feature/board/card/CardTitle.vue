@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { useVModel } from "@vueuse/core";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import { useVModel } from "@vueuse/core";
 
 const props = defineProps({
 	value: {

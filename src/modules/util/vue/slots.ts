@@ -15,9 +15,7 @@ import { Slot, VNode } from "vue";
  *  ```
  */
 
-export const hasSlotContent = (slot: Slot | undefined, props = {}) => {
-	return slot && !isSlotEmpty(slot, props);
-};
+export const hasSlotContent = (slot: Slot | undefined, props = {}) => slot && !isSlotEmpty(slot, props);
 
 function isSlotEmpty(slot: Slot | undefined, props = {}): boolean {
 	return slot !== undefined && isVNodeEmpty(slot?.(props));

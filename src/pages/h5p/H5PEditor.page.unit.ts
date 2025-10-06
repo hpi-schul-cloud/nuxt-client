@@ -1,39 +1,31 @@
+import H5pEditorPage from "./H5PEditor.page.vue";
+import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
 import { H5PContentParentType, H5PSaveResponse } from "@/h5pEditorApi/v3";
 import ApplicationErrorModule from "@/store/application-error";
-import NotifierModule from "@/store/notifier";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { APPLICATION_ERROR_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import {
-	apiValidationResponseErrorFactory,
-	axiosErrorFactory,
-} from "@@/tests/test-utils";
+import { APPLICATION_ERROR_KEY } from "@/utils/inject";
+import { apiValidationResponseErrorFactory, axiosErrorFactory, expectNotification } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import H5pEditorPage from "./H5PEditor.page.vue";
-import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 
 vi.mock("./h5pEditorBoardHooks.composable");
 
 describe("H5PEditorPage", () => {
-	let useH5pEditorBoardHooksMock: DeepMocked<
-		ReturnType<typeof useH5pEditorBoardHooks>
-	>;
+	let useH5pEditorBoardHooksMock: DeepMocked<ReturnType<typeof useH5pEditorBoardHooks>>;
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		useH5pEditorBoardHooksMock = createMock();
 
-		vi.mocked(useH5pEditorBoardHooks).mockReturnValue(
-			useH5pEditorBoardHooksMock
-		);
+		vi.mocked(useH5pEditorBoardHooks).mockReturnValue(useH5pEditorBoardHooksMock);
 	});
 
 	afterEach(() => {
@@ -47,7 +39,6 @@ describe("H5PEditorPage", () => {
 			contentId: undefined,
 		}
 	) => {
-		const notifierModule = createModuleMocks(NotifierModule);
 		const applicationErrorModule = createModuleMocks(ApplicationErrorModule);
 
 		const saveFn = vi.fn();
@@ -56,7 +47,6 @@ describe("H5PEditorPage", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
 				},
 				stubs: {
@@ -73,7 +63,6 @@ describe("H5PEditorPage", () => {
 
 		return {
 			wrapper,
-			notifierModule,
 			applicationErrorModule,
 			saveFn,
 		};
@@ -87,9 +76,7 @@ describe("H5PEditorPage", () => {
 					parentId: "parentId",
 				});
 
-				expect(
-					(wrapper.vm as unknown as typeof H5pEditorPage).hooks
-				).toBeUndefined();
+				expect((wrapper.vm as unknown as typeof H5pEditorPage).hooks).toBeUndefined();
 			});
 		});
 
@@ -110,9 +97,7 @@ describe("H5PEditorPage", () => {
 			describe("when onCreate hook fails", () => {
 				const setup = () => {
 					const error = createApplicationError(HttpStatusCode.NotFound);
-					const axiosError = axiosErrorFactory
-						.withStatusCode(error.statusCode)
-						.build();
+					const axiosError = axiosErrorFactory.withStatusCode(error.statusCode).build();
 
 					useH5pEditorBoardHooksMock.onCreate.mockRejectedValueOnce(axiosError);
 
@@ -142,9 +127,7 @@ describe("H5PEditorPage", () => {
 		describe("when the editor has a loading error", () => {
 			const setup = () => {
 				const error = createApplicationError(HttpStatusCode.BadRequest);
-				const axiosError = axiosErrorFactory
-					.withStatusCode(error.statusCode)
-					.build();
+				const axiosError = axiosErrorFactory.withStatusCode(error.statusCode).build();
 
 				useH5pEditorBoardHooksMock.onCreate.mockRejectedValueOnce(axiosError);
 
@@ -181,7 +164,7 @@ describe("H5PEditorPage", () => {
 					},
 				};
 
-				const { wrapper, notifierModule, saveFn } = getWrapper({
+				const { wrapper, saveFn } = getWrapper({
 					parentType: H5PContentParentType.BOARD_ELEMENT,
 					parentId: "parentId",
 				});
@@ -191,7 +174,6 @@ describe("H5PEditorPage", () => {
 
 				return {
 					wrapper,
-					notifierModule,
 					saveFn,
 					response,
 				};
@@ -212,9 +194,7 @@ describe("H5PEditorPage", () => {
 				const saveButton = wrapper.get('[data-testid="editor-save-button"]');
 				await saveButton.trigger("click");
 
-				expect(useH5pEditorBoardHooksMock.afterSave).toHaveBeenCalledWith(
-					response.contentId
-				);
+				expect(useH5pEditorBoardHooksMock.afterSave).toHaveBeenCalledWith(response.contentId);
 			});
 
 			it("should dispatch a custom save event", async () => {
@@ -235,22 +215,18 @@ describe("H5PEditorPage", () => {
 			});
 
 			it("should show a success notification", async () => {
-				const { wrapper, notifierModule } = setup();
+				const { wrapper } = setup();
 
 				const saveButton = wrapper.get('[data-testid="editor-save-button"]');
 				await saveButton.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "pages.h5p.api.success.save",
-					status: "success",
-					timeout: 5000,
-				});
+				expectNotification("success");
 			});
 		});
 
 		describe("when editor save function fails", () => {
 			const setup = () => {
-				const { wrapper, notifierModule, saveFn } = getWrapper({
+				const { wrapper, saveFn } = getWrapper({
 					parentType: H5PContentParentType.BOARD_ELEMENT,
 					parentId: "parentId",
 				});
@@ -260,7 +236,6 @@ describe("H5PEditorPage", () => {
 
 				return {
 					wrapper,
-					notifierModule,
 					saveFn,
 				};
 			};
@@ -284,16 +259,12 @@ describe("H5PEditorPage", () => {
 			});
 
 			it("should show an error notification", async () => {
-				const { wrapper, notifierModule } = setup();
+				const { wrapper } = setup();
 
 				const saveButton = wrapper.get('[data-testid="editor-save-button"]');
 				await saveButton.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "common.validation.invalid",
-					status: "error",
-					timeout: 5000,
-				});
+				expectNotification("error");
 			});
 		});
 
@@ -307,7 +278,7 @@ describe("H5PEditorPage", () => {
 					},
 				};
 
-				const { wrapper, notifierModule, saveFn } = getWrapper({
+				const { wrapper, saveFn } = getWrapper({
 					parentType: H5PContentParentType.BOARD_ELEMENT,
 					parentId: "parentId",
 				});
@@ -318,7 +289,6 @@ describe("H5PEditorPage", () => {
 
 				return {
 					wrapper,
-					notifierModule,
 					saveFn,
 				};
 			};
@@ -333,16 +303,12 @@ describe("H5PEditorPage", () => {
 			});
 
 			it("should show an error notification", async () => {
-				const { wrapper, notifierModule } = setup();
+				const { wrapper } = setup();
 
 				const saveButton = wrapper.get('[data-testid="editor-save-button"]');
 				await saveButton.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "common.validation.invalid",
-					status: "error",
-					timeout: 5000,
-				});
+				expectNotification("error");
 			});
 		});
 	});

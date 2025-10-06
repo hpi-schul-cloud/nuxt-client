@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import DeletedElementMenu from "./DeletedElementMenu.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuActionDelete } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import DeletedElementMenu from "./DeletedElementMenu.vue";
 
 describe("DeletedElementMenu", () => {
 	const getWrapper = () => {

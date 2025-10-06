@@ -1,3 +1,7 @@
+import { useBoardApi } from "../BoardApi.composable";
+import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { UpdateCardHeightRequestPayload, UpdateCardTitleRequestPayload } from "./cardActionPayload.types";
+import { useCardRestApi } from "./cardRestApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	ContentElementType,
@@ -12,6 +16,7 @@ import { ToolParameterScope } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
 	contextExternalToolConfigurationTemplateFactory,
+	expectNotification,
 	externalToolElementResponseFactory,
 	mockedPiniaStoreTyping,
 	ObjectIdMock,
@@ -28,19 +33,12 @@ import {
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier, useSharedEditMode } from "@util-board";
+import { useSharedEditMode } from "@util-board";
 import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
 import { computed, ref } from "vue";
 import { Router, useRouter } from "vue-router";
-import { useBoardApi } from "../BoardApi.composable";
-import { useSharedCardRequestPool } from "../CardRequestPool.composable";
-import {
-	UpdateCardHeightRequestPayload,
-	UpdateCardTitleRequestPayload,
-} from "./cardActionPayload.types";
-import { useCardRestApi } from "./cardRestApi.composable";
-import { Mock } from "vitest";
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
@@ -57,34 +55,22 @@ const mockedSharedCardRequestPool = vi.mocked(useSharedCardRequestPool);
 vi.mock("@util-board/editMode.composable");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
+}));
 
 describe("useCardRestApi", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
-	let mockedContextExternalToolApiCalls: DeepMocked<
-		ReturnType<typeof useContextExternalToolApi>
-	>;
-	let mockedSharedCardRequestPoolCalls: DeepMocked<
-		ReturnType<typeof useSharedCardRequestPool>
-	>;
-	let mockedSocketConnectionHandler: DeepMocked<
-		ReturnType<typeof useSocketConnection>
-	>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let mockedContextExternalToolApiCalls: DeepMocked<ReturnType<typeof useContextExternalToolApi>>;
+	let mockedSharedCardRequestPoolCalls: DeepMocked<ReturnType<typeof useSharedCardRequestPool>>;
+	let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
 	let setEditModeId: Mock;
 
 	beforeEach(() => {
@@ -93,8 +79,7 @@ describe("useCardRestApi", () => {
 			schoolExternalToolsModule: SchoolExternalToolsModule,
 		});
 
-		mockedSocketConnectionHandler =
-			createMock<ReturnType<typeof useSocketConnection>>();
+		mockedSocketConnectionHandler = createMock<ReturnType<typeof useSocketConnection>>();
 		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
@@ -103,21 +88,11 @@ describe("useCardRestApi", () => {
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 
-		mockedContextExternalToolApiCalls =
-			createMock<ReturnType<typeof useContextExternalToolApi>>();
-		mockedUseContextExternalToolApi.mockReturnValue(
-			mockedContextExternalToolApiCalls
-		);
+		mockedContextExternalToolApiCalls = createMock<ReturnType<typeof useContextExternalToolApi>>();
+		mockedUseContextExternalToolApi.mockReturnValue(mockedContextExternalToolApiCalls);
 
-		mockedSharedCardRequestPoolCalls =
-			createMock<ReturnType<typeof useSharedCardRequestPool>>();
-		mockedSharedCardRequestPool.mockReturnValue(
-			mockedSharedCardRequestPoolCalls
-		);
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+		mockedSharedCardRequestPoolCalls = createMock<ReturnType<typeof useSharedCardRequestPool>>();
+		mockedSharedCardRequestPool.mockReturnValue(mockedSharedCardRequestPoolCalls);
 
 		setEditModeId = vi.fn();
 		mockedSharedEditMode.mockReturnValue({
@@ -160,14 +135,10 @@ describe("useCardRestApi", () => {
 
 			cardStore.getCard.mockReturnValue(card);
 
-			const newElementResponse = createMock<
-				AxiosResponse<RichTextElementResponse, unknown>
-			>({
+			const newElementResponse = createMock<AxiosResponse<RichTextElementResponse, unknown>>({
 				data: richTextElementResponseFactory.build(),
 			});
-			mockedBoardApiCalls.createElementCall.mockResolvedValue(
-				newElementResponse
-			);
+			mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
 
 			const payload = {
 				cardId: card.id,
@@ -222,8 +193,7 @@ describe("useCardRestApi", () => {
 			};
 
 			it("should not call createElementSuccess action", async () => {
-				const { createPreferredElement, preferredTool, cardStore } =
-					setupPreferredElementCall();
+				const { createPreferredElement, preferredTool, cardStore } = setupPreferredElementCall();
 
 				await createPreferredElement(
 					{
@@ -251,14 +221,10 @@ describe("useCardRestApi", () => {
 
 				cardStore.getCard.mockReturnValue(card);
 
-				const newElementResponse = createMock<
-					AxiosResponse<ExternalToolElementResponse, unknown>
-				>({
+				const newElementResponse = createMock<AxiosResponse<ExternalToolElementResponse, unknown>>({
 					data: externalToolElementResponseFactory.build(),
 				});
-				mockedBoardApiCalls.createElementCall.mockResolvedValue(
-					newElementResponse
-				);
+				mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
 
 				return {
 					createPreferredElement,
@@ -270,8 +236,7 @@ describe("useCardRestApi", () => {
 			};
 
 			it("should call fetchAvailableToolsForContextCall", async () => {
-				const { createPreferredElement, preferredTool, newElementResponse } =
-					setupPreferredElementCall();
+				const { createPreferredElement, preferredTool, newElementResponse } = setupPreferredElementCall();
 
 				await createPreferredElement(
 					{
@@ -282,22 +247,15 @@ describe("useCardRestApi", () => {
 					preferredTool
 				);
 
-				expect(
-					mockedContextExternalToolApiCalls.fetchAvailableToolsForContextCall
-				).toHaveBeenCalledWith(
+				expect(mockedContextExternalToolApiCalls.fetchAvailableToolsForContextCall).toHaveBeenCalledWith(
 					newElementResponse.data.id,
 					ToolContextType.BoardElement
 				);
 			});
 
 			it("should call createElementSuccess action", async () => {
-				const {
-					createPreferredElement,
-					preferredTool,
-					newElementResponse,
-					cardStore,
-					card,
-				} = setupPreferredElementCall();
+				const { createPreferredElement, preferredTool, newElementResponse, cardStore, card } =
+					setupPreferredElementCall();
 
 				const payload = {
 					cardId: card.id,
@@ -345,23 +303,14 @@ describe("useCardRestApi", () => {
 
 				cardStore.getCard.mockReturnValue(card);
 
-				const newElementResponse = createMock<
-					AxiosResponse<ExternalToolElementResponse, unknown>
-				>({
+				const newElementResponse = createMock<AxiosResponse<ExternalToolElementResponse, unknown>>({
 					data: externalToolElementResponseFactory.build(),
 				});
-				mockedBoardApiCalls.createElementCall.mockResolvedValue(
-					newElementResponse
-				);
+				mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
 
-				mockedContextExternalToolApiCalls.fetchAvailableToolsForContextCall.mockResolvedValue(
-					[availableTool]
-				);
+				mockedContextExternalToolApiCalls.fetchAvailableToolsForContextCall.mockResolvedValue([availableTool]);
 
-				const setTemplateSpy = vi.spyOn(
-					schoolExternalToolsModule,
-					"setContextExternalToolConfigurationTemplate"
-				);
+				const setTemplateSpy = vi.spyOn(schoolExternalToolsModule, "setContextExternalToolConfigurationTemplate");
 
 				return {
 					createPreferredElement,
@@ -373,12 +322,7 @@ describe("useCardRestApi", () => {
 			};
 
 			it("should set the ContextExternalToolConfigurationTemplate in schoolToolModule", async () => {
-				const {
-					createPreferredElement,
-					preferredTool,
-					payload,
-					setTemplateSpy,
-				} = setupPreferredElementCall();
+				const { createPreferredElement, preferredTool, payload, setTemplateSpy } = setupPreferredElementCall();
 
 				await createPreferredElement(payload, preferredTool);
 
@@ -390,23 +334,15 @@ describe("useCardRestApi", () => {
 			});
 
 			it("should not create a ContextExternal Tool", async () => {
-				const { createPreferredElement, preferredTool, payload } =
-					setupPreferredElementCall();
+				const { createPreferredElement, preferredTool, payload } = setupPreferredElementCall();
 
 				await createPreferredElement(payload, preferredTool);
 
-				expect(
-					mockedContextExternalToolApiCalls.createContextExternalToolCall
-				).not.toHaveBeenCalled();
+				expect(mockedContextExternalToolApiCalls.createContextExternalToolCall).not.toHaveBeenCalled();
 			});
 
 			it("should not update the element", async () => {
-				const {
-					createPreferredElement,
-					preferredTool,
-					payload,
-					updateElementCall,
-				} = setupPreferredElementCall();
+				const { createPreferredElement, preferredTool, payload, updateElementCall } = setupPreferredElementCall();
 
 				await createPreferredElement(payload, preferredTool);
 
@@ -439,14 +375,10 @@ describe("useCardRestApi", () => {
 
 				cardStore.getCard.mockReturnValue(card);
 
-				const newElementResponse = createMock<
-					AxiosResponse<ExternalToolElementResponse, unknown>
-				>({
+				const newElementResponse = createMock<AxiosResponse<ExternalToolElementResponse, unknown>>({
 					data: externalToolElementResponseFactory.build(),
 				});
-				mockedBoardApiCalls.createElementCall.mockResolvedValue(
-					newElementResponse
-				);
+				mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
 
 				const contextExternalToolSave: ContextExternalToolSave = {
 					schoolToolId: preferredTool.schoolExternalToolId,
@@ -455,9 +387,7 @@ describe("useCardRestApi", () => {
 					parameters: [],
 				};
 
-				mockedContextExternalToolApiCalls.fetchAvailableToolsForContextCall.mockResolvedValue(
-					[availableTool]
-				);
+				mockedContextExternalToolApiCalls.fetchAvailableToolsForContextCall.mockResolvedValue([availableTool]);
 
 				return {
 					createPreferredElement,
@@ -470,28 +400,18 @@ describe("useCardRestApi", () => {
 			};
 
 			it("should create a ContextExternal Tool", async () => {
-				const {
-					createPreferredElement,
-					preferredTool,
-					payload,
-					contextExternalToolSave,
-				} = setupPreferredElementCall();
+				const { createPreferredElement, preferredTool, payload, contextExternalToolSave } = setupPreferredElementCall();
 
 				await createPreferredElement(payload, preferredTool);
 
-				expect(
-					mockedContextExternalToolApiCalls.createContextExternalToolCall
-				).toHaveBeenCalledWith(contextExternalToolSave);
+				expect(mockedContextExternalToolApiCalls.createContextExternalToolCall).toHaveBeenCalledWith(
+					contextExternalToolSave
+				);
 			});
 
 			it("should update the element", async () => {
-				const {
-					createPreferredElement,
-					preferredTool,
-					payload,
-					newElementResponse,
-					updateElementCall,
-				} = setupPreferredElementCall();
+				const { createPreferredElement, preferredTool, payload, newElementResponse, updateElementCall } =
+					setupPreferredElementCall();
 
 				await createPreferredElement(payload, preferredTool);
 
@@ -521,8 +441,7 @@ describe("useCardRestApi", () => {
 				};
 			};
 			it("should call handleError", async () => {
-				const { card, createPreferredElement, preferredTool } =
-					setupPreferredElementCall();
+				const { card, createPreferredElement, preferredTool } = setupPreferredElementCall();
 
 				await createPreferredElement(
 					{
@@ -552,14 +471,10 @@ describe("useCardRestApi", () => {
 					],
 				};
 
-				const preferredToolResponse = createMock<
-					AxiosResponse<PreferredToolListResponse, unknown>
-				>({
+				const preferredToolResponse = createMock<AxiosResponse<PreferredToolListResponse, unknown>>({
 					data: preferredTools,
 				});
-				mockedContextExternalToolApiCalls.fetchPreferredTools.mockResolvedValue(
-					preferredToolResponse
-				);
+				mockedContextExternalToolApiCalls.fetchPreferredTools.mockResolvedValue(preferredToolResponse);
 
 				return {
 					getPreferredTools,
@@ -572,9 +487,7 @@ describe("useCardRestApi", () => {
 
 				await getPreferredTools(ToolContextType.BoardElement);
 
-				expect(
-					mockedContextExternalToolApiCalls.fetchPreferredTools
-				).toBeCalledWith(ToolContextType.BoardElement);
+				expect(mockedContextExternalToolApiCalls.fetchPreferredTools).toBeCalledWith(ToolContextType.BoardElement);
 			});
 
 			it("should return preferred tools", async () => {
@@ -590,9 +503,7 @@ describe("useCardRestApi", () => {
 			const setupPreferredTool = () => {
 				const { getPreferredTools } = useCardRestApi();
 
-				mockedContextExternalToolApiCalls.fetchPreferredTools.mockRejectedValue(
-					{}
-				);
+				mockedContextExternalToolApiCalls.fetchPreferredTools.mockRejectedValue({});
 
 				return {
 					getPreferredTools,
@@ -604,9 +515,7 @@ describe("useCardRestApi", () => {
 
 				await getPreferredTools(ToolContextType.BoardElement);
 
-				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"components.board.preferredTools.notification.error.notLoaded"
-				);
+				expectNotification("error");
 			});
 		});
 	});
@@ -721,14 +630,10 @@ describe("useCardRestApi", () => {
 
 			const element = richTextElementResponseFactory.build();
 
-			const updateElementResponse = createMock<
-				AxiosResponse<RichTextElementResponse, unknown>
-			>({
+			const updateElementResponse = createMock<AxiosResponse<RichTextElementResponse, unknown>>({
 				data: { id: element.id, content: element.content, type: element.type },
 			});
-			mockedBoardApiCalls.updateElementCall.mockResolvedValue(
-				updateElementResponse
-			);
+			mockedBoardApiCalls.updateElementCall.mockResolvedValue(updateElementResponse);
 
 			await updateElementRequest({
 				element,
@@ -966,10 +871,7 @@ describe("useCardRestApi", () => {
 			});
 
 			executeErrorHandler();
-			expect(mockedErrorHandler.notifyWithTemplate).toHaveBeenCalledWith(
-				"notUpdated",
-				undefined
-			);
+			expect(mockedErrorHandler.notifyWithTemplate).toHaveBeenCalledWith("notUpdated", undefined);
 
 			expect(boardStore.reloadBoard).toHaveBeenCalled();
 			expect(setEditModeId).toHaveBeenCalledWith(undefined);

@@ -24,14 +24,10 @@
 </template>
 
 <script setup lang="ts">
-import { useBoardFocusHandler } from "@data-board";
-import {
-	BoardAnyTitleInput,
-	BoardColumnInteractionHandler,
-} from "@feature-board";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useMediaBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-
+import { useBoardFocusHandler } from "@data-board";
+import { BoardAnyTitleInput, BoardColumnInteractionHandler } from "@feature-board";
 import { ref, toRef } from "vue";
 
 const props = defineProps({
@@ -57,9 +53,7 @@ const emit = defineEmits<{
 	(e: "update:title", newTitle: string): void;
 }>();
 
-const { isEditMode, startEditMode, stopEditMode } = useMediaBoardEditMode(
-	lineIdRef.value
-);
+const { isEditMode, startEditMode, stopEditMode } = useMediaBoardEditMode(lineIdRef.value);
 
 const lineHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(lineIdRef.value, lineHeader);

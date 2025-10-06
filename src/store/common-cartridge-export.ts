@@ -1,5 +1,5 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { courseRoomDetailsModule } from "./store-accessor";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
 	name: "commonCartridgeExportModule",

@@ -19,8 +19,8 @@
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardExternalReferenceType } from "@/serverApi/v3";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { notifySuccess } from "@data-app";
 import { useRoomAuthorization, useRoomsState } from "@data-room";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
@@ -33,7 +33,6 @@ const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { rooms, fetchRooms, isLoading, isEmpty } = useRoomsState();
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { canCreateRoom } = useRoomAuthorization();
 
 const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
@@ -77,7 +76,12 @@ const importFlowDestinations = computed(() =>
 );
 
 const onImportSuccess = (newName: string, destinationId?: string) => {
-	showImportSuccess(newName);
+	notifySuccess(
+		t("components.molecules.import.options.success", {
+			name: newName,
+		})
+	);
+
 	if (destinationId) {
 		router.replace({ name: "room-details", params: { id: destinationId } });
 	} else {
@@ -86,15 +90,5 @@ const onImportSuccess = (newName: string, destinationId?: string) => {
 		isImportMode.value = false;
 		importToken.value = undefined;
 	}
-};
-
-const showImportSuccess = (newName: string) => {
-	notifierModule.show({
-		text: t("components.molecules.import.options.success", {
-			name: newName,
-		}),
-		status: "success",
-		timeout: 5000,
-	});
 };
 </script>

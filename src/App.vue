@@ -7,12 +7,12 @@
 </template>
 
 <script setup lang="ts">
-import { Layouts } from "@/layouts/types";
-import { computed } from "vue";
-import { useRoute } from "vue-router";
 import { availableLayouts, isLayout } from "./layouts";
 import { setComputedScrollbarWidthAsCssVar } from "./utils/scrollbarWidth";
+import { Layouts } from "@/layouts/types";
 import { useAppStore } from "@data-app";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 
 const route = useRoute();
 

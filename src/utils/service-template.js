@@ -1,18 +1,16 @@
-import { reactive } from "vue";
 import { $axios } from "@/utils/api";
 import { logger } from "@util-logger";
+import { reactive } from "vue";
 
 export default function (endpoint) {
 	const baseUrl = "/v1/" + endpoint;
-	const getDefaultState = () => {
-		return {
-			current: null,
-			list: [],
-			pagination: {},
-			businessError: null,
-			status: null,
-		};
-	};
+	const getDefaultState = () => ({
+		current: null,
+		list: [],
+		pagination: {},
+		businessError: null,
+		status: null,
+	});
 	return {
 		namespaced: true,
 		baseUrl,
@@ -60,9 +58,7 @@ export default function (endpoint) {
 			},
 			async patch({ commit }, payload = []) {
 				commit("setStatus", "pending");
-				const data = (
-					await $axios.patch(baseUrl + "/" + payload[0], payload[1])
-				).data;
+				const data = (await $axios.patch(baseUrl + "/" + payload[0], payload[1])).data;
 				commit("set", {
 					items: [data],
 				});
@@ -70,8 +66,7 @@ export default function (endpoint) {
 			},
 			async update({ commit }, payload = []) {
 				commit("setStatus", "pending");
-				const data = (await $axios.put(baseUrl + "/" + payload[0], payload[1]))
-					.data;
+				const data = (await $axios.put(baseUrl + "/" + payload[0], payload[1])).data;
 				commit("set", {
 					items: [data],
 				});
@@ -99,27 +94,15 @@ export default function (endpoint) {
 			},
 		},
 		getters: {
-			getCurrent: (state) => {
-				return state.current;
-			},
-			getList: (state) => {
-				return state.list;
-			},
-			getBusinessError: (state) => {
-				return state.businessError;
-			},
-			getPagination: (state) => {
-				return state.pagination;
-			},
-			getStatus: (state) => {
-				return state.status;
-			},
+			getCurrent: (state) => state.current,
+			getList: (state) => state.list,
+			getBusinessError: (state) => state.businessError,
+			getPagination: (state) => state.pagination,
+			getStatus: (state) => state.status,
 			/**
 			 * @deprecated use getStatus instead
 			 */
-			getLoading: (state) => {
-				return state.status === "pending";
-			},
+			getLoading: (state) => state.status === "pending",
 		},
 		mutations: {
 			set(state, { items }) {
@@ -132,13 +115,9 @@ export default function (endpoint) {
 				state.businessError = null;
 			},
 			patchSingleItem(state, item) {
-				const index = state.list.findIndex(
-					(e) => e._id === item._id || item.id
-				);
+				const index = state.list.findIndex((e) => e._id === item._id || item.id);
 				if (index === -1) {
-					logger.error(
-						"patchSingleItem error: No element in state.list found."
-					);
+					logger.error("patchSingleItem error: No element in state.list found.");
 				}
 				state.list[index] = Object.assign(state.list[index], item);
 			},

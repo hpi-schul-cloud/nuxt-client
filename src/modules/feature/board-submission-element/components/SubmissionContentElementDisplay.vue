@@ -2,10 +2,7 @@
 	<div>
 		<div class="bg-grey-lighten-4 pa-4 rounded-t">
 			<SubmissionContentElementTitle />
-			<v-card-subtitle
-				class="pa-0 mt-1 text-subtitle-1"
-				data-testid="board-submission-element-due-date"
-			>
+			<v-card-subtitle class="pa-0 mt-1 text-subtitle-1" data-testid="board-submission-element-due-date">
 				{{ formattedDueDate }}
 			</v-card-subtitle>
 		</div>
@@ -26,15 +23,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType } from "vue";
-import dayjs from "dayjs";
-import { useI18n } from "vue-i18n";
-import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
-import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
-import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import { StudentSubmission, TeacherSubmission } from "../types/submission";
+import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
+import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
+import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { useAppStoreRefs } from "@data-app";
+import dayjs from "dayjs";
+import { computed, defineComponent, PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SubmissionContentElementDisplay",
@@ -83,9 +80,7 @@ export default defineComponent({
 			dayjs.locale(locale.value);
 			const format = `dddd, ${DATETIME_FORMAT.date} - HH:mm`;
 
-			return `${t("components.cardElement.submissionElement.until")} ${dayjs(
-				props.dueDate
-			).format(format)}`;
+			return `${t("components.cardElement.submissionElement.until")} ${dayjs(props.dueDate).format(format)}`;
 		});
 
 		return {

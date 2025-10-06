@@ -15,23 +15,12 @@
 						<tasks-list :tasks="noDueDateTasks" user-role="student" />
 					</template>
 					<template #panelTwo>
-						<tasks-list
-							:tasks="withDueDateTasks"
-							:title="$t('pages.tasks.subtitleOpen')"
-							user-role="student"
-						/>
-						<tasks-list
-							:tasks="overdueTasks"
-							:title="$t('pages.tasks.student.subtitleOverDue')"
-							user-role="student"
-						/>
+						<tasks-list :tasks="withDueDateTasks" :title="$t('pages.tasks.subtitleOpen')" user-role="student" />
+						<tasks-list :tasks="overdueTasks" :title="$t('pages.tasks.student.subtitleOverDue')" user-role="student" />
 					</template>
 				</v-custom-double-panels>
 				<VContainer>
-					<EmptyState
-						v-if="openTasksForStudentIsEmpty"
-						:title="$t('pages.tasks.student.open.emptyState.title')"
-					>
+					<EmptyState v-if="openTasksForStudentIsEmpty" :title="$t('pages.tasks.student.open.emptyState.title')">
 						<template #media>
 							<TasksEmptyStateSvg />
 						</template>
@@ -67,17 +56,9 @@
 				</VContainer>
 			</v-window-item>
 			<v-window-item :value="tabRoutes[2]">
-				<tasks-list
-					:tasks="finishedTasks"
-					user-role="student"
-					type="finished"
-					:has-pagination="tab === tabRoutes[2]"
-				/>
+				<tasks-list :tasks="finishedTasks" user-role="student" type="finished" :has-pagination="tab === tabRoutes[2]" />
 				<VContainer>
-					<EmptyState
-						v-if="finishedTasksIsEmpty"
-						:title="$t('pages.tasks.finished.emptyState.title')"
-					>
+					<EmptyState v-if="finishedTasksIsEmpty" :title="$t('pages.tasks.finished.emptyState.title')">
 						<template #media>
 							<TasksEmptyStateSvg />
 						</template>
@@ -89,8 +70,8 @@
 </template>
 
 <script>
-import TasksList from "@/components/organisms/TasksList";
 import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
+import TasksList from "@/components/organisms/TasksList";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 
 export default {

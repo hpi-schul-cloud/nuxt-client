@@ -1,21 +1,20 @@
-import { mount } from "@vue/test-utils";
 import Topbar from "./Topbar.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { STATUS_ALERTS_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import StatusAlertsModule from "@/store/status-alerts";
+import { STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index";
-import { RoleName, SchulcloudTheme } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 
 describe("@ui-layout/Topbar", () => {
 	const setup = async (windowWidth = 1300, isSidebarExpanded?: boolean) => {
+		setActivePinia(createTestingPinia());
 		createTestAppStore({
 			me: {
 				school: {
@@ -46,7 +45,6 @@ describe("@ui-layout/Topbar", () => {
 		const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
 			getStatusAlerts: mockStatusAlerts,
 		});
-		const notifierModule = createModuleMocks(NotifierModule);
 
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,
@@ -59,7 +57,6 @@ describe("@ui-layout/Topbar", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 			slots: {

@@ -1,28 +1,16 @@
 import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { useBoardNotifier } from "@util-board";
+import { useNotificationStore } from "@data-app";
 import { logger } from "@util-logger";
 import { useI18n } from "vue-i18n";
 
-export type ErrorType =
-	| "notCreated"
-	| "notLoaded"
-	| "notUpdated"
-	| "notDeleted"
-	| "notMoved";
+export type ErrorType = "notCreated" | "notLoaded" | "notUpdated" | "notDeleted" | "notMoved";
 
-export type BoardObjectType =
-	| "board"
-	| "boardColumn"
-	| "boardRow"
-	| "boardCard"
-	| "boardElement";
+export type BoardObjectType = "board" | "boardColumn" | "boardRow" | "boardCard" | "boardElement";
 
 type ErrorStatus = "success" | "error" | "warning" | "info";
 
-export type ApiErrorHandler = (
-	error?: ApiResponseError | ApiValidationError
-) => Promise<void> | void;
+export type ApiErrorHandler = (error?: ApiResponseError | ApiValidationError) => Promise<void> | void;
 
 export type ApiErrorHandlerFactory = (
 	errorType: ErrorType,
@@ -36,12 +24,7 @@ export type ErrorMap = Record<number, ApiErrorHandler>;
 export const useErrorHandler = () => {
 	const { t } = useI18n();
 
-	const { showCustomNotifier } = useBoardNotifier();
-
-	const generateErrorText = (
-		errorType: ErrorType,
-		boardObjectType?: BoardObjectType
-	) => {
+	const generateErrorText = (errorType: ErrorType, boardObjectType?: BoardObjectType) => {
 		let errorKey = `components.board.notifications.errors.${errorType}`;
 		if (!t(errorKey)) {
 			errorKey = "error.generic";
@@ -52,17 +35,17 @@ export const useErrorHandler = () => {
 		return t(errorKey, { type }).toString();
 	};
 
-	const notifyWithTemplate: ApiErrorHandlerFactory = (
-		errorType: ErrorType,
-		boardObjectType?: BoardObjectType,
-		status: ErrorStatus = "error",
-		timeout?: number
-	): ApiErrorHandler => {
-		return () => {
+	const notifyWithTemplate: ApiErrorHandlerFactory =
+		(
+			errorType: ErrorType,
+			boardObjectType?: BoardObjectType,
+			status: ErrorStatus = "error",
+			duration?: number
+		): ApiErrorHandler =>
+		() => {
 			const text = generateErrorText(errorType, boardObjectType);
-			showCustomNotifier(text, status, timeout);
+			useNotificationStore().notify({ text, status, duration });
 		};
-	};
 
 	const defaultErrorMap: ErrorMap = {
 		404: notifyWithTemplate("notLoaded"),
@@ -73,10 +56,10 @@ export const useErrorHandler = () => {
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType,
 		status: ErrorStatus = "error",
-		timeout?: number
-	): void => {
+		duration?: number
+	) => {
 		const text = generateErrorText(errorType, boardObjectType);
-		showCustomNotifier(text, status, timeout);
+		useNotificationStore().notify({ text, status, duration });
 	};
 
 	const handleError = (error: unknown, errorMap?: Partial<ErrorMap>) => {

@@ -1,3 +1,4 @@
+import H5pPlayerPage from "./H5PPlayer.page.vue";
 import H5PPlayerComponent from "@/components/h5p/H5PPlayer.vue";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import ApplicationErrorModule from "@/store/application-error";
@@ -6,14 +7,10 @@ import { createApplicationError } from "@/utils/create-application-error.factory
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";
 import { axiosErrorFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import H5pPlayerPage from "./H5PPlayer.page.vue";
 
 vi.mock("vue-router", () => ({
 	useRoute: () => ({ params: { id: "test-id" }, query: {} }),
@@ -51,9 +48,7 @@ describe("H5PPlayerPage", () => {
 		describe("when the player has a loading error", () => {
 			const setup = () => {
 				const error = createApplicationError(HttpStatusCode.BadRequest);
-				const axiosError = axiosErrorFactory
-					.withStatusCode(HttpStatusCode.BadRequest)
-					.build();
+				const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.BadRequest).build();
 
 				const { wrapper, applicationErrorModule } = getWrapper();
 

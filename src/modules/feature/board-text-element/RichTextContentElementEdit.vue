@@ -13,12 +13,12 @@
 </template>
 
 <script lang="ts">
-import { InlineEditor } from "@feature-editor";
-import { useEventListener } from "@vueuse/core";
-import { defineComponent, onMounted, ref, watch, computed } from "vue";
-import { useViewportOffsetTop } from "@ui-layout";
 import { injectStrict } from "@/utils/inject";
+import { InlineEditor } from "@feature-editor";
+import { useViewportOffsetTop } from "@ui-layout";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { useEventListener } from "@vueuse/core";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
@@ -42,10 +42,7 @@ export default defineComponent({
 		const modelValue = ref("");
 
 		const isListLayout = injectStrict(BOARD_IS_LIST_LAYOUT);
-		const offsetTop = computed(
-			() =>
-				useViewportOffsetTop(props.columnIndex, isListLayout).offsetTop.value
-		);
+		const offsetTop = computed(() => useViewportOffsetTop(props.columnIndex, isListLayout).offsetTop.value);
 
 		onMounted(() => {
 			if (props.value !== undefined) {
@@ -62,8 +59,7 @@ export default defineComponent({
 		const onUpdateValue = (newValue: string) => (modelValue.value = newValue);
 
 		const onFocus = () => {
-			const ckBalloonPanelElements =
-				document.getElementsByClassName("ck-balloon-panel");
+			const ckBalloonPanelElements = document.getElementsByClassName("ck-balloon-panel");
 
 			for (const element of ckBalloonPanelElements) {
 				useEventListener(element, "click", (event: PointerEvent) => {

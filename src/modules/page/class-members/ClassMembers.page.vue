@@ -7,9 +7,7 @@
 		<template #header>
 			<h1 data-testid="admin-class-title">
 				{{ title }}
-				<span v-show="isExternal" class="text-subtitle-1">
-					({{ $t("page-class-members.title.info") }})
-				</span>
+				<span v-show="isExternal" class="text-subtitle-1"> ({{ $t("page-class-members.title.info") }}) </span>
 			</h1>
 		</template>
 		<v-data-table
@@ -41,13 +39,13 @@
 </template>
 
 <script lang="ts">
+import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { DataTableHeader } from "vuetify";
 import { GroupMapper, GroupUser, useGroupState } from "@data-group";
 import { computed, ComputedRef, defineComponent, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
-import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
+import { DataTableHeader } from "vuetify";
 
 interface GroupUserTableData {
 	firstName: string;
@@ -72,13 +70,9 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
-		const groupName: ComputedRef<string> = computed(
-			() => group.value?.name ?? ""
-		);
+		const groupName: ComputedRef<string> = computed(() => group.value?.name ?? "");
 
-		const title: ComputedRef<string> = computed(
-			() => `${t("common.labels.class")} '${groupName.value}'`
-		);
+		const title: ComputedRef<string> = computed(() => `${t("common.labels.class")} '${groupName.value}'`);
 
 		const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 			{
@@ -91,23 +85,17 @@ export default defineComponent({
 			},
 		]);
 
-		const externalSystemId: ComputedRef<string | undefined> = computed(
-			() => group.value?.externalSource?.systemId
-		);
+		const externalSystemId: ComputedRef<string | undefined> = computed(() => group.value?.externalSource?.systemId);
 
 		const items: ComputedRef<GroupUserTableData[]> = computed(
 			() => group.value?.users.map(mapGroupUserToTableData) ?? []
 		);
 
-		const mapGroupUserToTableData = (
-			groupUser: GroupUser
-		): GroupUserTableData => {
-			return {
-				firstName: groupUser.firstName,
-				lastName: groupUser.lastName,
-				roleName: t(GroupMapper.getTranslationKey(groupUser.role)),
-			};
-		};
+		const mapGroupUserToTableData = (groupUser: GroupUser): GroupUserTableData => ({
+			firstName: groupUser.firstName,
+			lastName: groupUser.lastName,
+			roleName: t(GroupMapper.getTranslationKey(groupUser.role)),
+		});
 
 		const headers: DataTableHeader[] = [
 			{
@@ -127,9 +115,7 @@ export default defineComponent({
 			},
 		];
 
-		const isExternal: ComputedRef<boolean> = computed(
-			() => !!group.value?.externalSource
-		);
+		const isExternal: ComputedRef<boolean> = computed(() => !!group.value?.externalSource);
 
 		return {
 			t,

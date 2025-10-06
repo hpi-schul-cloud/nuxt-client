@@ -1,28 +1,20 @@
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 import { useSchoolExternalToolUsage } from "./SchoolExternalToolUsage.composable";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
-import {
-	axiosErrorFactory,
-	schoolExternalToolMetadataFactory,
-} from "@@/tests/test-utils";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { axiosErrorFactory, schoolExternalToolMetadataFactory } from "@@/tests/test-utils";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 
 vi.mock("@data-external-tool/SchoolExternalToolApi.composable");
 
 describe("SchoolExternalToolUsage.composable", () => {
-	let useSchoolExternalToolApiMock: DeepMocked<
-		ReturnType<typeof useSchoolExternalToolApi>
-	>;
+	let useSchoolExternalToolApiMock: DeepMocked<ReturnType<typeof useSchoolExternalToolApi>>;
 
 	beforeEach(() => {
-		useSchoolExternalToolApiMock =
-			createMock<ReturnType<typeof useSchoolExternalToolApi>>();
+		useSchoolExternalToolApiMock = createMock<ReturnType<typeof useSchoolExternalToolApi>>();
 
-		vi.mocked(useSchoolExternalToolApi).mockReturnValue(
-			useSchoolExternalToolApiMock
-		);
+		vi.mocked(useSchoolExternalToolApi).mockReturnValue(useSchoolExternalToolApiMock);
 	});
 
 	afterEach(() => {
@@ -32,12 +24,9 @@ describe("SchoolExternalToolUsage.composable", () => {
 	describe("fetchSchoolExternalToolMetadata", () => {
 		describe("when fetching metadata", () => {
 			const setup = () => {
-				const response: SchoolExternalToolMetadata =
-					schoolExternalToolMetadataFactory.build();
+				const response: SchoolExternalToolMetadata = schoolExternalToolMetadataFactory.build();
 
-				useSchoolExternalToolApiMock.fetchSchoolExternalToolMetadata.mockResolvedValue(
-					response
-				);
+				useSchoolExternalToolApiMock.fetchSchoolExternalToolMetadata.mockResolvedValue(response);
 
 				return {
 					...useSchoolExternalToolUsage(),
@@ -50,9 +39,9 @@ describe("SchoolExternalToolUsage.composable", () => {
 
 				await fetchSchoolExternalToolUsage("schoolExternalToolId");
 
-				expect(
-					useSchoolExternalToolApiMock.fetchSchoolExternalToolMetadata
-				).toHaveBeenCalledWith("schoolExternalToolId");
+				expect(useSchoolExternalToolApiMock.fetchSchoolExternalToolMetadata).toHaveBeenCalledWith(
+					"schoolExternalToolId"
+				);
 			});
 
 			it("should not have an error", async () => {
@@ -69,9 +58,7 @@ describe("SchoolExternalToolUsage.composable", () => {
 				const axiosError = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(axiosError);
 
-				useSchoolExternalToolApiMock.fetchSchoolExternalToolMetadata.mockRejectedValue(
-					axiosError
-				);
+				useSchoolExternalToolApiMock.fetchSchoolExternalToolMetadata.mockRejectedValue(axiosError);
 
 				return {
 					...useSchoolExternalToolUsage(),
