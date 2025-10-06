@@ -57,19 +57,14 @@
 				</div>
 
 				<InfoAlert
-					v-if="
-						!isAdminMode &&
-						determineStudentAlertType === StudentAlertTypeEnum.StudentVisibility
-					"
+					v-if="!isAdminMode && determineStudentAlertType === StudentAlertTypeEnum.StudentVisibility"
 					data-testid="student-visibility-info-alert"
 				>
 					{{ t("pages.rooms.members.add.students.forbidden") }}
 				</InfoAlert>
 
 				<InfoAlert
-					v-else-if="
-						determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin
-					"
+					v-else-if="determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin"
 					data-testid="student-admin-info-alert"
 				>
 					{{ t("pages.rooms.members.add.students.studentAdmins") }}
@@ -166,10 +161,8 @@ const { t } = useI18n();
 const { xs } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
-const { isCurrentUserStudent, potentialRoomMembers, schools } =
-	storeToRefs(roomMembersStore);
-const { addMembers, getPotentialMembers, resetPotentialMembers } =
-	roomMembersStore;
+const { isCurrentUserStudent, potentialRoomMembers, schools } = storeToRefs(roomMembersStore);
+const { addMembers, getPotentialMembers, resetPotentialMembers } = roomMembersStore;
 
 const schoolItems = computed(() => {
 	if (props.isAdminMode) {
@@ -219,22 +212,15 @@ const isStudentSelectionDisabled = computed(() => {
 });
 
 const isRestrictedStudentVisibilityCase = computed(
-	() =>
-		selectedSchoolRole.value === RoleName.Student && !canAddAllStudents.value
+	() => selectedSchoolRole.value === RoleName.Student && !canAddAllStudents.value
 );
 
 const determineStudentAlertType = computed<StudentAlertTypeEnum | null>(() => {
-	if (
-		selectedSchoolRole.value === RoleName.Student &&
-		isCurrentUserStudent.value
-	) {
+	if (selectedSchoolRole.value === RoleName.Student && isCurrentUserStudent.value) {
 		return StudentAlertTypeEnum.StudentAdmin;
 	}
 
-	if (
-		isRestrictedStudentVisibilityCase.value &&
-		!isStudentSelectionDisabled.value
-	) {
+	if (isRestrictedStudentVisibilityCase.value && !isStudentSelectionDisabled.value) {
 		return StudentAlertTypeEnum.StudentVisibility;
 	}
 
