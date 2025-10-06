@@ -28,6 +28,8 @@ import {
 	UpdateBoardVisibilitySuccessPayload,
 	UpdateColumnTitleRequestPayload,
 	UpdateColumnTitleSuccessPayload,
+	UpdateReaderCanEditRequestPayload,
+	UpdateReaderCanEditSuccessPayload,
 } from "./boardActions/boardActionPayload.types";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
@@ -226,6 +228,24 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 
 		board.value.isVisible = payload.isVisible;
+	};
+
+	const updateReaderCanEditRequest = async (
+		payload: UpdateReaderCanEditRequestPayload
+	) => {
+		await socketOrRest.updateReaderCanEditRequest(payload);
+	};
+
+	const updateReaderCanEditSuccess = (
+		payload: UpdateReaderCanEditSuccessPayload
+	) => {
+		if (!board.value) return;
+
+		const { isOwnAction, readersCanEdit } = payload;
+
+		board.value.readersCanEdit = readersCanEdit;
+		if (!isOwnAction)
+			socketOrRest.fetchBoardRequest({ boardId: board.value.id });
 	};
 
 	const updateBoardLayoutRequest = async (
@@ -437,6 +457,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		updateBoardVisibilitySuccess,
 		updateBoardLayoutRequest,
 		updateBoardLayoutSuccess,
+		updateReaderCanEditSuccess,
+		updateReaderCanEditRequest,
 		fetchBoardRequest,
 		fetchBoardSuccess,
 		reloadBoard,

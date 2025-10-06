@@ -700,6 +700,41 @@ describe("boardRestApi", () => {
 		});
 	});
 
+	describe("@updateReadersCanEditRequest", () => {
+		it("should not call updateReadersCanEditSuccess action when board value is undefined", async () => {
+			const payload = { boardId: "boardId", readersCanEdit: true };
+			const { boardStore } = setup(false);
+			const { updateReaderCanEditRequest } = useBoardRestApi();
+			await updateReaderCanEditRequest(payload);
+
+			expect(boardStore.updateReaderCanEditSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call updateReadersCanEditSuccess action if the API call is successful", async () => {
+			const payload = { boardId: "boardId", readersCanEdit: true };
+			const { boardStore } = setup();
+			const { updateReaderCanEditRequest } = useBoardRestApi();
+			await updateReaderCanEditRequest(payload);
+
+			expect(boardStore.updateReaderCanEditSuccess).toHaveBeenCalledWith({
+				...payload,
+				isOwnAction: true,
+			});
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const payload = { boardId: "boardId", readersCanEdit: true };
+			setup();
+			const { updateReaderCanEditRequest } = useBoardRestApi();
+
+			mockedBoardApiCalls.updateReadersCanEditCall.mockRejectedValue({});
+
+			await updateReaderCanEditRequest(payload);
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
 	describe("updateBoardLayoutRequest", () => {
 		it("should not call updateBoardLayoutSuccess action when board value is undefined", async () => {
 			const { boardStore } = setup(false);

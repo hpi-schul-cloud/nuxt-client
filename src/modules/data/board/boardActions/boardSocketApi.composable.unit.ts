@@ -681,6 +681,25 @@ describe("useBoardSocketApi", () => {
 		});
 	});
 
+	describe("updateReaderCanEditRequest", () => {
+		it("should call action with correct parameters", () => {
+			const { updateReaderCanEditRequest } = useBoardSocketApi();
+
+			updateReaderCanEditRequest({
+				boardId: "boardId",
+				readersCanEdit: true,
+			});
+
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith(
+				"update-readers-can-edit-request",
+				{
+					boardId: "boardId",
+					readersCanEdit: true,
+				}
+			);
+		});
+	});
+
 	describe("updateBoardLayoutRequest", () => {
 		it("should call action with correct parameters", () => {
 			const { updateBoardLayoutRequest } = useBoardSocketApi();

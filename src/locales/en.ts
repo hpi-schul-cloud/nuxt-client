@@ -176,6 +176,7 @@ export default {
 		"Please insert a space after the less-than sign.",
 	"common.validation.nonEmptyString":
 		"This is a mandatory field and must not contain only spaces.",
+	"common.words.also": "also",
 	"common.words.and": "and",
 	"common.words.board": "board",
 	"common.words.classes": "Classes",
@@ -210,6 +211,7 @@ export default {
 	"common.words.lernstore": "Learning Store",
 	"common.words.mainSchool": "Main School",
 	"common.words.no": "No",
+	"common.words.not": "not",
 	"common.words.noChoice": "No choice",
 	"common.words.otherGroups": "other groups",
 	"common.words.externalTools": "external tools",
@@ -470,6 +472,15 @@ export default {
 	"components.board.error.403":
 		"Error 403 – Unfortunately, you do not have permission to view this content ...",
 	"components.board.menu.board": "Board settings",
+	"components.board.menu.editing.settings.title": "Editing settings",
+	"components.board.dialog.readerCanEdit.subtitle":
+		"Here you can change the editing rights for this area. Regardless of this setting, members with the room permission 'Edit' and higher can always edit areas.",
+	"components.board.dialog.readerCanEdit.options":
+		"This board is {0} editable by members with the room permission “Read”.",
+	"components.board.dialog.readerCanEdit.options.defaultSetting":
+		"Default setting",
+	"components.board.dialog.readerCanEdit.alert.text":
+		"The board must first be published before the editing settings can be adjusted.",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
 	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",
@@ -527,8 +538,13 @@ export default {
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"The board's view was changed to {layout} by another user.",
+	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
+		"The board was set as editable for all users by another user.",
+	"components.board.screenReader.notification.boardSetAsNotEditableForAllUsers.success":
+		"The board was set as not editable for all users by another user.",
 	"components.board.preferredTools.notification.error.notLoaded":
 		"Preferred tools could not be loaded.",
+	"components.board.header.chip.editableForEveryone": "Editable for everyone",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
 	"components.boardElement": "element",
