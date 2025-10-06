@@ -20,10 +20,7 @@
 				<br />
 				De-Mail: poststelle[at]dataport.de-mail.de
 			</p>
-			<h2>
-				Dataport ist eine Anstalt des öffentlichen Rechts. Sie wird vertreten
-				durch den Vorstand:
-			</h2>
+			<h2>Dataport ist eine Anstalt des öffentlichen Rechts. Sie wird vertreten durch den Vorstand:</h2>
 			<p>
 				Dr. Johann Bizer (Vorsitzender)
 				<br />

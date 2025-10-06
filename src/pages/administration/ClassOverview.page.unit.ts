@@ -1,3 +1,5 @@
+import ClassOverview from "./ClassOverview.page.vue";
+import { ConfigResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassRootType } from "@/store/types/class-info";
@@ -12,28 +14,21 @@ import {
 	createTestEnvStore,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { mount, VueWrapper } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDataTableServer } from "vuetify/lib/components/index";
-import ClassOverview from "./ClassOverview.page.vue";
-import { Mock } from "vitest";
-import { ConfigResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
-import { createTestingPinia } from "@pinia/testing";
-import { setActivePinia } from "pinia";
 
-vi.mock("vue-router", () => {
-	return {
-		useRoute: vi.fn(),
-		useRouter: vi.fn(),
-	};
-});
+vi.mock("vue-router", () => ({
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
+}));
 const useRouteMock = <Mock>useRoute;
 const useRouterMock = <Mock>useRouter;
 
@@ -113,11 +108,7 @@ const createWrapper = ({
 
 	const wrapper = mount(ClassOverview, {
 		global: {
-			plugins: [
-				createTestingVuetify(),
-				createTestingI18n(),
-				vueDompurifyHTMLPlugin,
-			],
+			plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
 			provide: {
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
 				[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
@@ -143,9 +134,7 @@ const createWrapper = ({
 };
 
 const findTableComponent = (wrapper: VueWrapper) =>
-	wrapper.findComponent<typeof VDataTableServer>(
-		'[data-testid="admin-class-table"]'
-	);
+	wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-class-table"]');
 
 describe("ClassOverview", () => {
 	afterEach(() => {
@@ -166,12 +155,8 @@ describe("ClassOverview", () => {
 
 				const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-				expect(breadcrumbs.at(0)?.text()).toEqual(
-					"pages.administration.index.title"
-				);
-				expect(breadcrumbs.at(1)?.text()).toEqual(
-					"pages.administration.classes.index.title"
-				);
+				expect(breadcrumbs.at(0)?.text()).toEqual("pages.administration.index.title");
+				expect(breadcrumbs.at(1)?.text()).toEqual("pages.administration.classes.index.title");
 			});
 		});
 
@@ -212,9 +197,7 @@ describe("ClassOverview", () => {
 			it("should display the entries in the table", () => {
 				const { classes, wrapper } = setup();
 
-				const table = wrapper.findComponent<typeof VDataTableServer>(
-					'[data-testid="admin-class-table"]'
-				);
+				const table = wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-class-table"]');
 
 				expect(table.props("items")).toEqual(classes);
 			});
@@ -304,10 +287,7 @@ describe("ClassOverview", () => {
 				it("should call store to change the limit in pagination", async () => {
 					const { itemsPerPage, wrapper, groupModule, pagination } = setup();
 
-					findTableComponent(wrapper).vm.$emit(
-						"update:itemsPerPage",
-						itemsPerPage
-					);
+					findTableComponent(wrapper).vm.$emit("update:itemsPerPage", itemsPerPage);
 					await nextTick();
 
 					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
@@ -371,18 +351,10 @@ describe("ClassOverview", () => {
 			it("should not render any button", () => {
 				const { wrapper } = setup();
 
-				expect(
-					wrapper.find('[data-testid="legacy-class-table-manage-btn"]').exists()
-				).toEqual(false);
-				expect(
-					wrapper.find('[data-testid="class-table-edit-btn"]').exists()
-				).toEqual(false);
-				expect(
-					wrapper.find('[data-testid="class-table-delete-btn"]').exists()
-				).toEqual(false);
-				expect(
-					wrapper.find('[data-testid="class-table-successor-btn"]').exists()
-				).toEqual(false);
+				expect(wrapper.find('[data-testid="legacy-class-table-manage-btn"]').exists()).toEqual(false);
+				expect(wrapper.find('[data-testid="class-table-edit-btn"]').exists()).toEqual(false);
+				expect(wrapper.find('[data-testid="class-table-delete-btn"]').exists()).toEqual(false);
+				expect(wrapper.find('[data-testid="class-table-successor-btn"]').exists()).toEqual(false);
 
 				return {
 					wrapper,
@@ -396,19 +368,13 @@ describe("ClassOverview", () => {
 			it("should render 4 buttons", () => {
 				const { wrapper } = setup();
 
-				const manageBtn = wrapper.find(
-					'[data-testid="legacy-class-table-manage-btn"]'
-				);
+				const manageBtn = wrapper.find('[data-testid="legacy-class-table-manage-btn"]');
 
 				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
 
-				const deleteBtn = wrapper.find(
-					'[data-testid="class-table-delete-btn"]'
-				);
+				const deleteBtn = wrapper.find('[data-testid="class-table-delete-btn"]');
 
-				const successorBtn = wrapper.find(
-					'[data-testid="class-table-successor-btn"]'
-				);
+				const successorBtn = wrapper.find('[data-testid="class-table-successor-btn"]');
 
 				expect(manageBtn.exists()).toBeTruthy();
 				expect(editBtn.exists()).toBeTruthy();
@@ -426,19 +392,13 @@ describe("ClassOverview", () => {
 			it("should render only manage button which refers to members page", () => {
 				const { wrapper } = setup();
 
-				const manageBtn = wrapper.find(
-					'[data-testid="class-table-members-manage-btn"]'
-				);
+				const manageBtn = wrapper.find('[data-testid="class-table-members-manage-btn"]');
 
 				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
 
-				const deleteBtn = wrapper.find(
-					'[data-testid="class-table-delete-btn"]'
-				);
+				const deleteBtn = wrapper.find('[data-testid="class-table-delete-btn"]');
 
-				const successorBtn = wrapper.find(
-					'[data-testid="class-table-successor-btn"]'
-				);
+				const successorBtn = wrapper.find('[data-testid="class-table-successor-btn"]');
 
 				expect(manageBtn.exists()).toBeTruthy();
 				expect(editBtn.exists()).toBeFalsy();
@@ -463,16 +423,10 @@ describe("ClassOverview", () => {
 				it("should redirect to legacy class manage page", () => {
 					const { wrapper, classId } = setup();
 
-					const manageBtn = wrapper.find(
-						'[data-testid="legacy-class-table-manage-btn"]'
-					);
+					const manageBtn = wrapper.find('[data-testid="legacy-class-table-manage-btn"]');
 
-					expect(manageBtn.attributes().href).toStrictEqual(
-						`/administration/classes/${classId}/manage`
-					);
-					expect(
-						manageBtn.findComponent({ name: "router-link" }).exists()
-					).toBeFalsy();
+					expect(manageBtn.attributes().href).toStrictEqual(`/administration/classes/${classId}/manage`);
+					expect(manageBtn.findComponent({ name: "router-link" }).exists()).toBeFalsy();
 				});
 			});
 
@@ -491,9 +445,7 @@ describe("ClassOverview", () => {
 				it("should redirect to group class members page", () => {
 					const { wrapper } = setup();
 
-					const manageBtn = wrapper.findComponent<typeof VBtn>(
-						'[data-testid="class-table-members-manage-btn"]'
-					);
+					const manageBtn = wrapper.findComponent<typeof VBtn>('[data-testid="class-table-members-manage-btn"]');
 
 					expect(manageBtn.attributes().href).toBeUndefined();
 					expect(manageBtn.props("to")).toBeDefined();
@@ -518,9 +470,7 @@ describe("ClassOverview", () => {
 
 				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
 
-				expect(editBtn.attributes().href).toStrictEqual(
-					`/administration/classes/${classId}/edit`
-				);
+				expect(editBtn.attributes().href).toStrictEqual(`/administration/classes/${classId}/edit`);
 			});
 		});
 
@@ -540,13 +490,9 @@ describe("ClassOverview", () => {
 				it("should redirect to legacy class upgrade page", () => {
 					const { wrapper, classId } = setup();
 
-					const successorBtn = wrapper.find(
-						'[data-testid="class-table-successor-btn"]'
-					);
+					const successorBtn = wrapper.find('[data-testid="class-table-successor-btn"]');
 
-					expect(successorBtn.attributes().href).toStrictEqual(
-						`/administration/classes/${classId}/createSuccessor`
-					);
+					expect(successorBtn.attributes().href).toStrictEqual(`/administration/classes/${classId}/createSuccessor`);
 				});
 			});
 		});
@@ -573,9 +519,7 @@ describe("ClassOverview", () => {
 			it("should display the upgrade button as disabled", () => {
 				const { wrapper } = setup();
 
-				const successorBtn = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="class-table-successor-btn"]'
-				);
+				const successorBtn = wrapper.findComponent<typeof VBtn>('[data-testid="class-table-successor-btn"]');
 
 				expect(successorBtn.props("disabled")).toEqual(true);
 			});
@@ -593,9 +537,7 @@ describe("ClassOverview", () => {
 			it("should open the delete dialog", async () => {
 				const { wrapper } = setup();
 
-				await wrapper
-					.find('[data-testid="class-table-delete-btn"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 				await nextTick();
 
 				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
@@ -617,15 +559,11 @@ describe("ClassOverview", () => {
 				it("should not delete class", async () => {
 					const { wrapper, groupModule } = setup();
 
-					await wrapper
-						.find('[data-testid="class-table-delete-btn"]')
-						.trigger("click");
+					await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 
 					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
 
-					await dialog
-						.findComponent('[data-testid="dialog-cancel"')
-						.trigger("click");
+					await dialog.findComponent('[data-testid="dialog-cancel"').trigger("click");
 
 					expect(groupModule.deleteClass).not.toHaveBeenCalled();
 				});
@@ -635,15 +573,11 @@ describe("ClassOverview", () => {
 				it("should delete class", async () => {
 					const { wrapper, groupModule } = setup();
 
-					await wrapper
-						.find('[data-testid="class-table-delete-btn"]')
-						.trigger("click");
+					await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 
 					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
 
-					await dialog
-						.findComponent('[data-testid="dialog-confirm"')
-						.trigger("click");
+					await dialog.findComponent('[data-testid="dialog-confirm"').trigger("click");
 
 					expect(groupModule.deleteClass).toHaveBeenCalled();
 				});
@@ -664,17 +598,11 @@ describe("ClassOverview", () => {
 			it("should show 3 tabs", () => {
 				const { wrapper } = setup();
 
-				const nextYearTab = wrapper.find(
-					'[data-testid="admin-class-next-year-tab"]'
-				);
+				const nextYearTab = wrapper.find('[data-testid="admin-class-next-year-tab"]');
 
-				const currentYearTab = wrapper.find(
-					'[data-testid="admin-class-current-year-tab"]'
-				);
+				const currentYearTab = wrapper.find('[data-testid="admin-class-current-year-tab"]');
 
-				const previousYearTab = wrapper.find(
-					'[data-testid="admin-class-previous-years-tab"]'
-				);
+				const previousYearTab = wrapper.find('[data-testid="admin-class-previous-years-tab"]');
 
 				expect(nextYearTab.exists()).toBeTruthy();
 				expect(currentYearTab.exists()).toBeTruthy();
@@ -684,9 +612,7 @@ describe("ClassOverview", () => {
 			it("should have current year tab active", () => {
 				const { wrapper } = setup();
 
-				const currentYearTab = wrapper.find(
-					'[data-testid="admin-class-current-year-tab"]'
-				);
+				const currentYearTab = wrapper.find('[data-testid="admin-class-current-year-tab"]');
 
 				expect(currentYearTab.classes()).toContain("v-tab--selected");
 			});
@@ -707,9 +633,7 @@ describe("ClassOverview", () => {
 			it("should replace the route to the given tab ", async () => {
 				const { wrapper, router } = setup();
 
-				await wrapper
-					.find('[data-testid="admin-class-next-year-tab"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="admin-class-next-year-tab"]').trigger("click");
 
 				expect(router.replace).toHaveBeenCalledWith({
 					query: { tab: "next" },
@@ -732,9 +656,7 @@ describe("ClassOverview", () => {
 			it("should call store to load classes of next year", async () => {
 				const { wrapper, groupModule } = setup();
 
-				await wrapper
-					.find('[data-testid="admin-class-next-year-tab"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="admin-class-next-year-tab"]').trigger("click");
 
 				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith({
 					schoolYearQuery: "nextYear",
@@ -757,9 +679,7 @@ describe("ClassOverview", () => {
 			it("should call store to load classes of previous years", async () => {
 				const { wrapper, groupModule } = setup();
 
-				await wrapper
-					.find('[data-testid="admin-class-previous-years-tab"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="admin-class-previous-years-tab"]').trigger("click");
 
 				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith({
 					schoolYearQuery: "previousYears",
@@ -780,13 +700,9 @@ describe("ClassOverview", () => {
 			it("should call store to load groups and classes of current year", async () => {
 				const { wrapper, groupModule } = setup();
 
-				await wrapper
-					.find('[data-testid="admin-class-next-year-tab"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="admin-class-next-year-tab"]').trigger("click");
 
-				await wrapper
-					.find('[data-testid="admin-class-current-year-tab"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="admin-class-current-year-tab"]').trigger("click");
 
 				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith({
 					schoolYearQuery: "currentYear",
@@ -813,9 +729,7 @@ describe("ClassOverview", () => {
 			it("should render add class button", () => {
 				const { wrapper } = setup();
 
-				expect(
-					wrapper.find('[data-testid="admin-class-add-button"]').exists()
-				).toEqual(true);
+				expect(wrapper.find('[data-testid="admin-class-add-button"]').exists()).toEqual(true);
 			});
 
 			describe("when clicking on add class buttton", () => {
@@ -830,13 +744,9 @@ describe("ClassOverview", () => {
 				it("should redirect to legacy create class page", () => {
 					const { wrapper } = setup();
 
-					const addClassBtn = wrapper.find(
-						'[data-testid="admin-class-add-button"]'
-					);
+					const addClassBtn = wrapper.find('[data-testid="admin-class-add-button"]');
 
-					expect(addClassBtn.attributes().href).toStrictEqual(
-						"/administration/classes/create"
-					);
+					expect(addClassBtn.attributes().href).toStrictEqual("/administration/classes/create");
 				});
 			});
 		});
@@ -858,17 +768,13 @@ describe("ClassOverview", () => {
 			it("should not render add class button", () => {
 				const { wrapper } = setup();
 
-				expect(
-					wrapper.find('[data-testid="admin-class-add-button"]').exists()
-				).toEqual(false);
+				expect(wrapper.find('[data-testid="admin-class-add-button"]').exists()).toEqual(false);
 			});
 
 			it("should render info alert", () => {
 				const { wrapper } = setup();
 
-				expect(
-					wrapper.find('[data-testid="admin-class-info-alert"]').exists()
-				).toEqual(true);
+				expect(wrapper.find('[data-testid="admin-class-info-alert"]').exists()).toEqual(true);
 			});
 		});
 	});
@@ -893,9 +799,7 @@ describe("ClassOverview", () => {
 		it("should open end course sync dialog", async () => {
 			const { wrapper } = setup();
 
-			await wrapper
-				.find('[data-testid="class-table-end-course-sync-btn"]')
-				.trigger("click");
+			await wrapper.find('[data-testid="class-table-end-course-sync-btn"]').trigger("click");
 
 			const dialog = wrapper.findComponent({ name: "EndCourseSyncDialog" });
 			expect(dialog.vm.isOpen).toBe(true);
@@ -923,23 +827,14 @@ describe("ClassOverview", () => {
 
 		it.each([
 			[SchulcloudTheme.Default, "Dataport"],
-			[
-				SchulcloudTheme.Brb,
-				"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg",
-			],
-			[
-				SchulcloudTheme.N21,
-				"Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)",
-			],
-		])(
-			"uses %s-instance specific text placeholders",
-			async (theme, expected) => {
-				const { wrapper } = setup({ SC_THEME: theme });
+			[SchulcloudTheme.Brb, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+			[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
+		])("uses %s-instance specific text placeholders", async (theme, expected) => {
+			const { wrapper } = setup({ SC_THEME: theme });
 
-				await nextTick();
+			await nextTick();
 
-				expect(wrapper.text()).toContain(expected);
-			}
-		);
+			expect(wrapper.text()).toContain(expected);
+		});
 	});
 });

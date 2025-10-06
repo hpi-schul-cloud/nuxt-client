@@ -1,11 +1,7 @@
 <template>
 	<template v-if="isLoading">
 		<VContainer class="loader">
-			<VSkeletonLoader
-				ref="skeleton-loader"
-				type="table-thead, table-tbody"
-				class="mt-6"
-			/>
+			<VSkeletonLoader ref="skeleton-loader" type="table-thead, table-tbody" class="mt-6" />
 		</VContainer>
 	</template>
 	<template v-else-if="isEmpty && !areUploadStatsVisible">
@@ -17,11 +13,7 @@
 	</template>
 	<template v-else>
 		<div class="mt-2">
-			<DataTable
-				:table-headers="headers"
-				:items="fileRecordItems"
-				:show-select="true"
-			>
+			<DataTable :table-headers="headers" :items="fileRecordItems" :show-select="true">
 				<template #[`item.preview`]="{ item }">
 					<FileInteractionHandler :file-record-item="item">
 						<FilePreview
@@ -33,34 +25,24 @@
 				</template>
 				<template #[`item.name`]="{ item }">
 					<FileInteractionHandler :file-record-item="item">
-						<span
-							:data-testid="`name-${item.name}`"
-							:class="{ 'text-disabled': !item.isSelectable }"
-						>
+						<span :data-testid="`name-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">
 							{{ item.name }}
 							<FileStatus :file-record="item" />
 						</span>
 					</FileInteractionHandler>
 				</template>
 				<template #[`item.createdAt`]="{ item }">
-					<span
-						:data-testid="`created-at-${item.name}`"
-						:class="{ 'text-disabled': !item.isSelectable }"
-						>{{ printDateFromStringUTC(item.createdAt) }}</span
-					>
+					<span :data-testid="`created-at-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">{{
+						printDateFromStringUTC(item.createdAt)
+					}}</span>
 				</template>
 				<template #[`item.size`]="{ item }">
-					<span
-						:data-testid="`size-${item.name}`"
-						:class="{ 'text-disabled': !item.isSelectable }"
+					<span :data-testid="`size-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }"
 						>{{ formatFileSize(item.size) }}
 					</span>
 				</template>
 				<template #[`item.actions`]="{ item }">
-					<KebabMenu
-						:data-testid="`kebab-menu-${item.name}`"
-						:aria-label="buildActionMenuAriaLabel(item)"
-					>
+					<KebabMenu :data-testid="`kebab-menu-${item.name}`" :aria-label="buildActionMenuAriaLabel(item)">
 						<KebabMenuActionDownloadFiles
 							:disabled="!item.isSelectable"
 							:selected-ids="[item.id]"
@@ -126,18 +108,6 @@
 </template>
 
 <script setup lang="ts">
-import { printDateFromStringUTC } from "@/plugins/datetime";
-import { FileRecord } from "@/types/file/File";
-import {
-	formatFileSize,
-	getFileExtension,
-	isScanStatusBlocked,
-} from "@/utils/fileHelper";
-import { DataTable } from "@ui-data-table";
-import { EmptyState } from "@ui-empty-state";
-import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
-import { computed, PropType, ref } from "vue";
-import { useI18n } from "vue-i18n";
 import DeleteFileDialog from "./DeleteFileDialog.vue";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
@@ -148,6 +118,14 @@ import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 import RenameFileDialog from "./RenameFileDialog.vue";
+import { printDateFromStringUTC } from "@/plugins/datetime";
+import { FileRecord } from "@/types/file/File";
+import { formatFileSize, getFileExtension, isScanStatusBlocked } from "@/utils/fileHelper";
+import { DataTable } from "@ui-data-table";
+import { EmptyState } from "@ui-empty-state";
+import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
+import { computed, PropType, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
@@ -207,12 +185,12 @@ const isRenameDialogOpen = ref(false);
 const isDeleteFilesDialogOpen = ref(false);
 const fileRecordsToDelete = ref<FileRecord[]>([]);
 
-const fileRecordItems = computed(() => {
-	return props.fileRecords.map((item) => ({
+const fileRecordItems = computed(() =>
+	props.fileRecords.map((item) => ({
 		...item,
 		isSelectable: isScanStatusBlocked(item.securityCheckStatus),
-	}));
-});
+	}))
+);
 
 const onDownloadFile = (selectedIds: string[]) => {
 	emit("download-file", selectedIds);
@@ -259,9 +237,8 @@ const onRenameDialogConfirm = (newName: string) => {
 	fileRecordToRename.value = undefined;
 };
 
-const buildActionMenuAriaLabel = (item: FileRecord): string => {
-	return t("pages.folder.ariaLabels.actionMenu", {
+const buildActionMenuAriaLabel = (item: FileRecord): string =>
+	t("pages.folder.ariaLabels.actionMenu", {
 		name: item.name,
 	});
-};
 </script>

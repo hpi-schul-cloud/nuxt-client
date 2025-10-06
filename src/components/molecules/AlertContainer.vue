@@ -27,25 +27,18 @@
 </template>
 
 <script setup lang="ts">
+import { AlertStatus, useNotificationStore } from "@data-app";
+import { mdiAlert, mdiAlertCircle, mdiCheckCircle, mdiInformation } from "@icons/material";
+import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useDisplay } from "vuetify";
-import { AlertStatus, useNotificationStore } from "@data-app";
-import { storeToRefs } from "pinia";
-import {
-	mdiAlert,
-	mdiAlertCircle,
-	mdiCheckCircle,
-	mdiInformation,
-} from "@icons/material";
 
 const { notifierItems } = storeToRefs(useNotificationStore());
 const { removeNotifier } = useNotificationStore();
 
 const { xs: isMobile } = useDisplay();
 
-const transition = computed(() =>
-	isMobile.value ? "scale-transition" : "scroll-x-reverse-transition"
-);
+const transition = computed(() => (isMobile.value ? "scale-transition" : "scroll-x-reverse-transition"));
 
 const statusIcons: { [status in AlertStatus]: string } = {
 	success: mdiCheckCircle,

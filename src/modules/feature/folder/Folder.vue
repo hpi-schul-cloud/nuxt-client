@@ -1,10 +1,5 @@
 <template>
-	<DefaultWireframe
-		max-width="full"
-		:breadcrumbs="breadcrumbs"
-		:fab-items="fabAction"
-		@fab:clicked="fabClickHandler"
-	>
+	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction" @fab:clicked="fabClickHandler">
 		<template #header>
 			<div class="d-flex align-center">
 				<h1 data-testid="folder-title">
@@ -39,30 +34,24 @@
 		@confirm="onRename"
 		@cancel="onRenameCancel"
 	/>
-	<input
-		ref="fileInput"
-		type="file"
-		multiple
-		hidden
-		data-testid="input-folder-fileupload"
-		aria-hidden="true"
-	/>
+	<input ref="fileInput" type="file" multiple hidden data-testid="input-folder-fileupload" aria-hidden="true" />
 	<LightBox />
 </template>
 
 <script setup lang="ts">
+import FileTable from "./file-table/FileTable.vue";
+import FolderMenu from "./FolderMenu.vue";
+import RenameFolderDialog from "./RenameFolderDialog.vue";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useBoardApi } from "@/modules/data/board/BoardApi.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
-import {
-	useBoardPermissions,
-	useSharedBoardPageInformation,
-} from "@data-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardApi } from "@/modules/data/board/BoardApi.composable"; // FIX_CIRCULAR_DEPENDENCY
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
+import { useBoardPermissions, useSharedBoardPageInformation } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
@@ -71,11 +60,7 @@ import { LightBox } from "@ui-light-box";
 import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import FileTable from "./file-table/FileTable.vue";
-import FolderMenu from "./FolderMenu.vue";
-import RenameFolderDialog from "./RenameFolderDialog.vue";
 import { useRouter } from "vue-router";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
 const boardApi = useBoardApi();
 
@@ -93,19 +78,12 @@ const emit = defineEmits<{
 	(update: "update:folder-name", folderName: string): void;
 }>();
 
-const {
-	breadcrumbs,
-	folderName,
-	fetchFileFolderElement,
-	parent,
-	mapNodeTypeToPathType,
-	renameFolder,
-} = useFolderState();
+const { breadcrumbs, folderName, fetchFileFolderElement, parent, mapNodeTypeToPathType, renameFolder } =
+	useFolderState();
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
-const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles, rename } =
-	useFileStorageApi();
+const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles, rename } = useFileStorageApi();
 
 const boardStore = useBoardStore();
 
@@ -137,9 +115,7 @@ const isLoading = ref(true);
 const isEmpty = computed(() => uploadedFileRecords.value.length === 0);
 const runningUploads = ref<number>(0);
 
-const uploadedFileRecords = computed(() => {
-	return fileRecords.value.filter((fileRecord) => !fileRecord.isUploading);
-});
+const uploadedFileRecords = computed(() => fileRecords.value.filter((fileRecord) => !fileRecord.isUploading));
 
 const fabClickHandler = () => {
 	if (fileInput.value) {
@@ -170,9 +146,7 @@ const onDeleteFiles = async (fileRecords: FileRecord[]) => {
 };
 
 const downloadFileHandler = (selectedIds: string[]) => {
-	const fileRecord = fileRecords.value.find(
-		(file) => file.id === selectedIds[0]
-	);
+	const fileRecord = fileRecords.value.find((file) => file.id === selectedIds[0]);
 	if (fileRecord) {
 		downloadFile(fileRecord.url, fileRecord.name);
 	}
@@ -244,9 +218,7 @@ const decrementRunningUploads = (count: number) => {
 
 onMounted(async () => {
 	if (fileInput.value) {
-		fileInput.value.addEventListener("change", async (event) =>
-			onFileSelection(event)
-		);
+		fileInput.value.addEventListener("change", async (event) => onFileSelection(event));
 	}
 
 	await fetchFileFolderElement(props.folderId);

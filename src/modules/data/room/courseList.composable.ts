@@ -1,15 +1,11 @@
-import {
-	CourseInfoDataResponse,
-	CourseSortProps,
-	CourseStatus,
-} from "@/serverApi/v3";
-import { BusinessError, Pagination } from "@/store/types/commons";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { ref, Ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { useCourseApi } from "./courseApi.composable";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
+import { CourseInfoDataResponse, CourseSortProps, CourseStatus } from "@/serverApi/v3";
+import { BusinessError, Pagination } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError } from "@data-app";
+import { Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export const useCourseList = () => {
 	const { deleteCourseById } = useCourseApi();
@@ -43,9 +39,7 @@ export const useCourseList = () => {
 		pagination.value = paginationData;
 	};
 
-	const fetchCourses = async (
-		courseStatusQueryType: CourseStatus
-	): Promise<void> => {
+	const fetchCourses = async (courseStatusQueryType: CourseStatus): Promise<void> => {
 		isLoading.value = true;
 
 		try {

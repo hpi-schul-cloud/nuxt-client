@@ -18,10 +18,7 @@ describe("ApplicationErrorModule store", () => {
 
 			it("should call the mutations", () => {
 				const setStatusCodeMock = vi.spyOn(errorModule, "setStatusCode");
-				const setTranslationKeyMock = vi.spyOn(
-					errorModule,
-					"setTranslationKey"
-				);
+				const setTranslationKeyMock = vi.spyOn(errorModule, "setTranslationKey");
 				const payload = {
 					statusCode: HttpStatusCode.Unauthorized,
 					translationKey: "funny error key",
@@ -43,10 +40,7 @@ describe("ApplicationErrorModule store", () => {
 
 			it("should call the mutations", () => {
 				const setStatusCodeMock = vi.spyOn(errorModule, "setStatusCode");
-				const setTranslationKeyMock = vi.spyOn(
-					errorModule,
-					"setTranslationKey"
-				);
+				const setTranslationKeyMock = vi.spyOn(errorModule, "setTranslationKey");
 				errorModule.resetError();
 
 				expect(setStatusCodeMock).toHaveBeenCalledWith(null);
@@ -65,9 +59,7 @@ describe("ApplicationErrorModule store", () => {
 			errorModule.setTranslationKey(payload.translationKey);
 
 			expect(errorModule.getStatusCode).toStrictEqual(payload.statusCode);
-			expect(errorModule.getTranslationKey).toStrictEqual(
-				payload.translationKey
-			);
+			expect(errorModule.getTranslationKey).toStrictEqual(payload.translationKey);
 		});
 	});
 });

@@ -8,9 +8,9 @@
 </template>
 
 <script setup lang="ts">
+import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import { GroupResponse } from "@/serverApi/v3";
 import { ModelRef } from "vue";
-import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
 const isOpen: ModelRef<boolean> = defineModel("isOpen", {
 	type: Boolean,

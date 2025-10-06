@@ -1,13 +1,11 @@
+import { HttpStatusCode } from "../store/types/http-status-code.enum";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { HttpStatusCode } from "../store/types/http-status-code.enum";
 
 vi.mock("./loadingState");
 
 describe("application-error composable", () => {
-	const setup = () => {
-		return mountComposable(() => useApplicationError(), {});
-	};
+	const setup = () => mountComposable(() => useApplicationError(), {});
 
 	it("should return createApplicationError", async () => {
 		const { createApplicationError } = setup();

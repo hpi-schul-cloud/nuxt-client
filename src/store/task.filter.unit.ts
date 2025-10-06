@@ -50,10 +50,7 @@ describe("task filter", () => {
 			const task3 = taskFactory.build({ courseName: "Mathe" });
 			const task4 = taskFactory.build({ courseName: "Physik" });
 			const tasks = [task1, task2, task3, task4];
-			const filteredTasks = new TaskFilter(tasks).byCourseNames([
-				"Mathe",
-				"Physik",
-			]).tasks;
+			const filteredTasks = new TaskFilter(tasks).byCourseNames(["Mathe", "Physik"]).tasks;
 			expect(filteredTasks).toEqual([task1, task3, task4]);
 		});
 	});
@@ -194,9 +191,7 @@ describe("task filter", () => {
 			const task2 = taskFactory.build({ status: { isDraft: false } });
 			const task3 = taskFactory.build();
 			const tasks = [task1, task2, task3];
-			const filteredTasks = new TaskFilter(tasks).byDraftForTeacher(
-				false
-			).tasks;
+			const filteredTasks = new TaskFilter(tasks).byDraftForTeacher(false).tasks;
 			expect(filteredTasks).toEqual([task2, task3]);
 		});
 	});
@@ -210,9 +205,7 @@ describe("task filter", () => {
 				status: { isSubstitutionTeacher: false },
 			});
 			const tasks = [task1, task2];
-			const filteredTasks = new TaskFilter(tasks).filterSubstituteForTeacher(
-				true
-			).tasks;
+			const filteredTasks = new TaskFilter(tasks).filterSubstituteForTeacher(true).tasks;
 			expect(filteredTasks).toEqual([task1, task2]);
 		});
 
@@ -224,9 +217,7 @@ describe("task filter", () => {
 				status: { isSubstitutionTeacher: false },
 			});
 			const tasks = [task1, task2];
-			const filteredTasks = new TaskFilter(tasks).filterSubstituteForTeacher(
-				false
-			).tasks;
+			const filteredTasks = new TaskFilter(tasks).filterSubstituteForTeacher(false).tasks;
 			expect(filteredTasks).toEqual([task2]);
 		});
 	});
@@ -242,10 +233,7 @@ describe("task filter", () => {
 		it("should count the filtered tasks by course name", () => {
 			const tasksMathe = taskFactory.buildList(5, { courseName: "Mathe" });
 			const tasksDeutsch = taskFactory.buildList(3, { courseName: "Deutsch" });
-			const countedByCourseName = new TaskFilter([
-				...tasksMathe,
-				...tasksDeutsch,
-			]).countByCourseName();
+			const countedByCourseName = new TaskFilter([...tasksMathe, ...tasksDeutsch]).countByCourseName();
 			expect(countedByCourseName).toEqual({
 				Mathe: 5,
 				Deutsch: 3,
@@ -255,10 +243,11 @@ describe("task filter", () => {
 		it("should be able to provide the list of course names", () => {
 			const tasksMathe = taskFactory.buildList(5, { courseName: "Mathe" });
 			const tasksDeutsch = taskFactory.buildList(3, { courseName: "Deutsch" });
-			const countedByCourseName = new TaskFilter([
-				...tasksMathe,
-				...tasksDeutsch,
-			]).countByCourseName(["Mathe", "Deutsch", "Englisch"]);
+			const countedByCourseName = new TaskFilter([...tasksMathe, ...tasksDeutsch]).countByCourseName([
+				"Mathe",
+				"Deutsch",
+				"Englisch",
+			]);
 			expect(countedByCourseName).toEqual({
 				Mathe: 5,
 				Deutsch: 3,

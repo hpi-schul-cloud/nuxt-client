@@ -20,11 +20,7 @@
 				</div>
 				<div class="d-flex mt-1">
 					<VCheckbox
-						:model-value="
-							roomData.features.includes(
-								RoomFeatures.EditorManageVideoconference
-							)
-						"
+						:model-value="roomData.features.includes(RoomFeatures.EditorManageVideoconference)"
 						class="align-start video-conference-checkbox"
 						data-testid="room-video-conference-checkbox"
 						@update:model-value="onToggleVideoConferenceFeature"
@@ -33,9 +29,7 @@
 							<div class="d-flex flex-column mt-2">
 								{{ t("components.roomForm.labels.videoConference.label") }}
 								<span class="checkbox-label mb-1">
-									{{
-										t("components.roomForm.labels.videoConference.helperText")
-									}}
+									{{ t("components.roomForm.labels.videoConference.helperText") }}
 								</span>
 							</div>
 						</template>
@@ -45,20 +39,10 @@
 		</div>
 		<div class="d-flex">
 			<VSpacer />
-			<VBtn
-				variant="text"
-				class="mr-4"
-				data-testid="room-form-cancel-btn"
-				@click="onCancel"
-			>
+			<VBtn variant="text" class="mr-4" data-testid="room-form-cancel-btn" @click="onCancel">
 				{{ t("common.actions.cancel") }}
 			</VBtn>
-			<VBtn
-				variant="flat"
-				color="primary"
-				data-testid="room-form-save-btn"
-				@click="onSave"
-			>
+			<VBtn variant="flat" color="primary" data-testid="room-form-save-btn" @click="onSave">
 				{{ t("common.actions.save") }}
 			</VBtn>
 		</div>
@@ -67,17 +51,14 @@
 </template>
 
 <script setup lang="ts">
-import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
-import { useOpeningTagValidator } from "@/utils/validation";
-import {
-	ConfirmationDialog,
-	useConfirmationDialog,
-} from "@ui-confirmation-dialog";
-import { computed, PropType, ref, useTemplateRef } from "vue";
-import { useI18n } from "vue-i18n";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { RoomFeatures } from "@/serverApi/v3";
+import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
+import { useOpeningTagValidator } from "@/utils/validation";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { isNonEmptyString, isOfMaxLength } from "@util-validators";
+import { computed, PropType, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
 import { VCheckbox, VForm } from "vuetify/components";
 
 const props = defineProps({
@@ -130,8 +111,7 @@ const onSave = async () => {
 };
 
 const onCancel = async () => {
-	const isFormUnchanged =
-		JSON.stringify(roomData.value) === initialRoomData.value;
+	const isFormUnchanged = JSON.stringify(roomData.value) === initialRoomData.value;
 	if (isFormUnchanged) emit("cancel");
 
 	const shouldCancel = await askConfirmation({

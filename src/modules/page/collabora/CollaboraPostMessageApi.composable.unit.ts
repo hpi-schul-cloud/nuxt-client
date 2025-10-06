@@ -1,12 +1,9 @@
+import { CollaboraEvents, useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
 import { expectNotification, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { describe, expect, it, vi } from "vitest";
-import {
-	CollaboraEvents,
-	useCollaboraPostMessageApi,
-} from "./CollaboraPostMessageApi.composable";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { describe, expect, it, vi } from "vitest";
 
 describe("useCollaboraMessage", () => {
 	beforeEach(() => {
@@ -18,13 +15,12 @@ describe("useCollaboraMessage", () => {
 		vi.useRealTimers();
 	});
 
-	const setupMountComposable = () => {
-		return mountComposable(() => useCollaboraPostMessageApi(), {
+	const setupMountComposable = () =>
+		mountComposable(() => useCollaboraPostMessageApi(), {
 			global: {
 				plugins: [createTestingI18n()],
 			},
 		});
-	};
 
 	it("should show error if message is invalid JSON", () => {
 		setupMountComposable();
@@ -75,14 +71,11 @@ describe("useCollaboraMessage", () => {
 			const iframe = document.createElement("iframe");
 			document.body.appendChild(iframe);
 
-			const { setupPostMessageAPI } = mountComposable(
-				() => useCollaboraPostMessageApi(),
-				{
-					global: {
-						plugins: [createTestingI18n()],
-					},
-				}
-			);
+			const { setupPostMessageAPI } = mountComposable(() => useCollaboraPostMessageApi(), {
+				global: {
+					plugins: [createTestingI18n()],
+				},
+			});
 
 			setupPostMessageAPI(iframe, targetOrigin);
 

@@ -18,11 +18,7 @@
 			<v-form ref="policyForm" v-model="isValid">
 				<v-alert type="warning" class="mb-10" :icon="mdiAlert">
 					<div class="alert-text">
-						{{
-							t(
-								"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent"
-							)
-						}}
+						{{ t("pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent") }}
 					</div>
 				</v-alert>
 				<v-file-input
@@ -32,14 +28,8 @@
 					data-testid="input-file"
 					density="compact"
 					accept="application/pdf"
-					:label="
-						t(
-							'pages.administration.school.index.schoolPolicy.labels.uploadFile'
-						)
-					"
-					:hint="
-						t('pages.administration.school.index.schoolPolicy.hints.uploadFile')
-					"
+					:label="t('pages.administration.school.index.schoolPolicy.labels.uploadFile')"
+					:hint="t('pages.administration.school.index.schoolPolicy.hints.uploadFile')"
 					:persistent-hint="true"
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
 					@blur="onBlur"
@@ -64,15 +54,11 @@ import { currentDate } from "@/plugins/datetime";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
-import {
-	injectStrict,
-	PRIVACY_POLICY_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-} from "@/utils/inject";
-import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
-import { computed, ComputedRef, ref, Ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { injectStrict, PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
+import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
+import { computed, ComputedRef, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 type Props = {
 	isOpen: boolean;
@@ -97,8 +83,7 @@ const maxFileUploadSizeInKb = 4194304;
 const rules = {
 	required: (value: File | null) => !!value || t("common.validation.required"),
 	mustBePdf: (value: File | null) =>
-		value?.type === "application/pdf" ||
-		t("pages.administration.school.index.schoolPolicy.validation.notPdf"),
+		value?.type === "application/pdf" || t("pages.administration.school.index.schoolPolicy.validation.notPdf"),
 	maxSize: (value: File | null) =>
 		(!!value && value.size <= maxFileUploadSizeInKb) ||
 		t("pages.administration.school.index.schoolPolicy.validation.fileTooBig"),

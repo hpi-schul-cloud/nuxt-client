@@ -1,14 +1,11 @@
-import mock$objects from "@@/tests/test-utils/pageStubs";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { createStore } from "vuex";
 import { default as NewTeacher } from "./TeacherCreate.page.vue";
-import { flushPromises } from "@vue/test-utils";
 import { createTestAppStore, expectNotification } from "@@/tests/test-utils";
+import mock$objects from "@@/tests/test-utils/pageStubs";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { createStore } from "vuex";
 
 const createMockStore = (createTeacherStub) => {
 	const mockStore = createStore({
@@ -18,9 +15,7 @@ const createMockStore = (createTeacherStub) => {
 				actions: {
 					createTeacher: createTeacherStub,
 				},
-				state: () => {
-					return {};
-				},
+				state: () => ({}),
 			},
 		},
 	});
@@ -47,22 +42,14 @@ describe("teachers/new", () => {
 		});
 		mock$objects(wrapper);
 
-		const inputFirstName = wrapper
-			.find('[data-testid="input_create-user_firstname"]')
-			.get("input");
-		const inputLastName = wrapper
-			.find('[data-testid="input_create-user_lastname"]')
-			.get("input");
-		const inputEmail = wrapper
-			.find('[data-testid="input_create-user_email"]')
-			.get("input");
+		const inputFirstName = wrapper.find('[data-testid="input_create-user_firstname"]').get("input");
+		const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"]').get("input");
+		const inputEmail = wrapper.find('[data-testid="input_create-user_email"]').get("input");
 
 		inputFirstName.setValue("Klara");
 		inputLastName.setValue("Fall");
 		inputEmail.setValue("klara.fall@mail.de");
-		await wrapper
-			.find('[data-testid="button_create-user_submit"]')
-			.trigger("click");
+		await wrapper.find('[data-testid="button_create-user_submit"]').trigger("click");
 
 		// we need to wait until everything is settled
 		await flushPromises();
@@ -83,22 +70,14 @@ describe("teachers/new", () => {
 			},
 		});
 		mock$objects(wrapper);
-		const inputFirstName = wrapper
-			.find('[data-testid="input_create-user_firstname"]')
-			.get("input");
-		const inputLastName = wrapper
-			.find('[data-testid="input_create-user_lastname"]')
-			.get("input");
-		const inputEmail = wrapper
-			.find('[data-testid="input_create-user_email"]')
-			.get("input");
+		const inputFirstName = wrapper.find('[data-testid="input_create-user_firstname"]').get("input");
+		const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"]').get("input");
+		const inputEmail = wrapper.find('[data-testid="input_create-user_email"]').get("input");
 
 		inputFirstName.setValue("Klara");
 		inputLastName.setValue("Fall");
 		inputEmail.setValue("klara.fall@mail.de");
-		await wrapper
-			.find('[data-testid="button_create-user_submit"]')
-			.trigger("click");
+		await wrapper.find('[data-testid="button_create-user_submit"]').trigger("click");
 
 		// we need to wait until everything is settled
 		await flushPromises();
@@ -114,9 +93,7 @@ describe("teachers/new", () => {
 			actions: {
 				createTeacher: failingCreateAction,
 			},
-			state: () => {
-				return {};
-			},
+			state: () => ({}),
 		};
 		const wrapper = mount(NewTeacher, {
 			global: {
@@ -127,24 +104,16 @@ describe("teachers/new", () => {
 			},
 		});
 		mock$objects(wrapper);
-		const inputFirstName = wrapper
-			.find('[data-testid="input_create-user_firstname"]')
-			.get("input");
-		const inputLastName = wrapper
-			.find('[data-testid="input_create-user_lastname"]')
-			.get("input");
-		const inputEmail = wrapper
-			.find('[data-testid="input_create-user_email"]')
-			.get("input");
+		const inputFirstName = wrapper.find('[data-testid="input_create-user_firstname"]').get("input");
+		const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"]').get("input");
+		const inputEmail = wrapper.find('[data-testid="input_create-user_email"]').get("input");
 		let errorMessageComponent = wrapper.find(".info-message.bc-error");
 		expect(errorMessageComponent.exists()).toBeFalsy();
 
 		inputFirstName.setValue("Klara");
 		inputLastName.setValue("Fall");
 		inputEmail.setValue("klara.fall@mail.de");
-		await wrapper
-			.find('[data-testid="button_create-user_submit"]')
-			.trigger("click");
+		await wrapper.find('[data-testid="button_create-user_submit"]').trigger("click");
 
 		// we need to wait until everything is settled
 		await flushPromises();

@@ -1,7 +1,7 @@
-import setupStores from "@@/tests/test-utils/setupStores";
 import CommonCartridgeExportModule from "./common-cartridge-export";
 import CourseRoomDetailsModule from "./course-room-details";
 import { courseRoomDetailsModule } from "./store-accessor";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 describe("commonCartridgeExportModule", () => {
 	describe("actions", () => {
@@ -118,9 +118,7 @@ describe("commonCartridgeExportModule", () => {
 
 				commonCartridgeExportModule.setColumnBoards(["columnBoard"]);
 
-				expect(commonCartridgeExportModule.getColumnBoards).toEqual([
-					"columnBoard",
-				]);
+				expect(commonCartridgeExportModule.getColumnBoards).toEqual(["columnBoard"]);
 			});
 		});
 	});

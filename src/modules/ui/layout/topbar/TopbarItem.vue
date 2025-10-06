@@ -1,14 +1,7 @@
 <template>
 	<VMenu>
 		<template #activator="{ props }">
-			<v-btn
-				v-bind="props"
-				v-bind.attr="$attrs"
-				:icon="icon"
-				:color="color"
-				:data-testid="dataTestId"
-				size="small"
-			/>
+			<v-btn v-bind="props" v-bind.attr="$attrs" :icon="icon" :color="color" :data-testid="dataTestId" size="small" />
 		</template>
 		<VCard>
 			<slot />

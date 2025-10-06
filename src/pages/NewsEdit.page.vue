@@ -19,13 +19,7 @@
 			max-width="short"
 		>
 			<div>
-				<form-news
-					v-if="news"
-					:news="news"
-					@save="onSave"
-					@delete="onDelete"
-					@cancel="onCancel"
-				/>
+				<form-news v-if="news" :news="news" @save="onSave" @delete="onDelete" @cancel="onCancel" />
 			</div>
 		</default-wireframe>
 	</div>
@@ -36,12 +30,12 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { News, PatchNewsPayload } from "@/store/types/news";
 import { injectStrict, NEWS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { AlertStatus, useNotificationStore } from "@data-app";
 import { FormNews } from "@feature-news-form";
 import { useTitle } from "@vueuse/core";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { AlertStatus, useNotificationStore } from "@data-app";
 
 const { t } = useI18n();
 const router = useRouter();

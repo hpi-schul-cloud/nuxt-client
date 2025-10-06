@@ -1,15 +1,12 @@
+import CopyResultModal from "./CopyResultModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
-import CopyResultModal from "./CopyResultModal.vue";
-import { beforeEach } from "vitest";
-import { setActivePinia } from "pinia";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 const mockGeoGebraItem = {
 	title: "GeoGebra Element Title",
@@ -28,14 +25,7 @@ const mockFileItem = {
 	type: CopyApiResponseTypeEnum.File,
 };
 
-const mockLessonResultItems = (
-	elements = [
-		mockGeoGebraItem,
-		mockEtherpadItem,
-		mockCourseGroupItem,
-		mockFileItem,
-	]
-) => [
+const mockLessonResultItems = (elements = [mockGeoGebraItem, mockEtherpadItem, mockCourseGroupItem, mockFileItem]) => [
 	{
 		type: CopyApiResponseTypeEnum.Lesson,
 		title: "Lesson Title",
@@ -105,9 +95,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
 			const dialog = wrapper.findComponent(vCustomDialog);
-			const headline = dialog
-				.findComponent('[data-testid="dialog-title"]')
-				.text();
+			const headline = dialog.findComponent('[data-testid="dialog-title"]').text();
 
 			expect(headline).toBe("components.molecules.copyResult.title.partial");
 		});
@@ -137,9 +125,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const dialog = wrapper.findComponent(vCustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
-			expect(content).toContain(
-				"components.molecules.copyResult.courseFiles.info"
-			);
+			expect(content).toContain("components.molecules.copyResult.courseFiles.info");
 		});
 
 		describe("when there is no failed file and CTL_TOOLS_COPY feature flag is enabled", () => {
@@ -169,9 +155,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					const dialog = wrapper.findComponent(vCustomDialog);
 					const content = dialog.findComponent(".v-card-text").text();
 
-					expect(content).toContain(
-						"components.molecules.copyResult.ctlTools.withFeature.info"
-					);
+					expect(content).toContain("components.molecules.copyResult.ctlTools.withFeature.info");
 				});
 			});
 
@@ -201,9 +185,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					const dialog = wrapper.findComponent(vCustomDialog);
 					const content = dialog.findComponent(".v-card-text").text();
 
-					expect(content).toContain(
-						"components.molecules.copyResult.ctlTools.withFeature.info"
-					);
+					expect(content).toContain("components.molecules.copyResult.ctlTools.withFeature.info");
 				});
 			});
 		});
@@ -222,12 +204,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 							type: CopyApiResponseTypeEnum.Course,
 							title: "Lesson Title",
 							elementId: "mockId",
-							elements: [
-								mockGeoGebraItem,
-								mockEtherpadItem,
-								mockCourseGroupItem,
-								mockFileItem,
-							],
+							elements: [mockGeoGebraItem, mockEtherpadItem, mockCourseGroupItem, mockFileItem],
 							url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
 						},
 					],
@@ -244,9 +221,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const dialog = wrapper.findComponent(vCustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
-			expect(content).toContain(
-				"components.molecules.copyResult.membersAndPermissions"
-			);
+			expect(content).toContain("components.molecules.copyResult.membersAndPermissions");
 		});
 	});
 
@@ -272,9 +247,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const dialog = wrapper.findComponent(vCustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
-			expect(content).not.toContain(
-				"components.molecules.copyResult.membersAndPermissions"
-			);
+			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
 		});
 	});
 
@@ -300,9 +273,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const dialog = wrapper.findComponent(vCustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
-			expect(content).not.toContain(
-				"components.molecules.copyResult.membersAndPermissions"
-			);
+			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
 		});
 	});
 
@@ -328,9 +299,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const dialog = wrapper.findComponent(vCustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
-			expect(content).not.toContain(
-				"components.molecules.copyResult.membersAndPermissions"
-			);
+			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
 		});
 	});
 
@@ -356,9 +325,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const dialog = wrapper.findComponent(vCustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
-			expect(content).not.toContain(
-				"components.molecules.copyResult.membersAndPermissions"
-			);
+			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
 		});
 	});
 });

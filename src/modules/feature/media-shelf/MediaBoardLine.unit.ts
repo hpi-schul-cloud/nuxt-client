@@ -1,13 +1,16 @@
+import { availableMediaLineId, ElementMove } from "./data";
+import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
+import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
+import MediaBoardLine from "./MediaBoardLine.vue";
+import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
+import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { BoardLayout } from "@/serverApi/v3";
 import {
 	deletedElementResponseFactory,
 	mediaExternalToolElementResponseFactory,
 	mediaLineResponseFactory,
 } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { useDragAndDrop, useMediaBoardEditMode } from "@util-board";
 import { mount } from "@vue/test-utils";
@@ -15,12 +18,6 @@ import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { availableMediaLineId, ElementMove } from "./data";
-import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
-import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
-import MediaBoardLine from "./MediaBoardLine.vue";
-import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
-import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 
 describe("MediaBoardLine", () => {
 	const getWrapper = (
@@ -207,17 +204,14 @@ describe("MediaBoardLine", () => {
 		});
 
 		it("should emit the update:element-position event", async () => {
-			const { wrapper, sortableEvent, fromLineId, toLineId, elementId } =
-				setup();
+			const { wrapper, sortableEvent, fromLineId, toLineId, elementId } = setup();
 
 			const sortable = wrapper.findComponent(Sortable);
 
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();
 
-			expect(wrapper.emitted("update:element-position")).toEqual<
-				[ElementMove][]
-			>([
+			expect(wrapper.emitted("update:element-position")).toEqual<[ElementMove][]>([
 				[
 					{
 						oldElementIndex: 0,
@@ -289,9 +283,7 @@ describe("MediaBoardLine", () => {
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();
 
-			expect(wrapper.emitted("update:element-position")).toEqual<
-				[ElementMove][]
-			>([
+			expect(wrapper.emitted("update:element-position")).toEqual<[ElementMove][]>([
 				[
 					{
 						oldElementIndex: 0,
@@ -533,9 +525,7 @@ describe("MediaBoardLine", () => {
 			it("should render the element as MediaBoardExternalToolDeletedElement", () => {
 				const { wrapper } = setup();
 
-				const deletedElement = wrapper.findComponent(
-					MediaBoardExternalToolDeletedElement
-				);
+				const deletedElement = wrapper.findComponent(MediaBoardExternalToolDeletedElement);
 
 				expect(deletedElement.exists()).toEqual(true);
 			});
@@ -559,9 +549,7 @@ describe("MediaBoardLine", () => {
 			it("should render the element as MediaBoardExternalToolElement", () => {
 				const { wrapper } = setup();
 
-				const externalToolElement = wrapper.findComponent(
-					MediaBoardExternalToolElement
-				);
+				const externalToolElement = wrapper.findComponent(MediaBoardExternalToolElement);
 
 				expect(externalToolElement.exists()).toEqual(true);
 			});

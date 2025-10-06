@@ -1,3 +1,6 @@
+import { BusinessError } from "./types/commons";
+import { HttpStatusCode } from "./types/http-status-code.enum";
+import { Course } from "./types/room";
 import {
 	BoardApiFactory,
 	CourseRoomsApiFactory,
@@ -17,9 +20,6 @@ import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { isAxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { BusinessError } from "./types/commons";
-import { HttpStatusCode } from "./types/http-status-code.enum";
-import { Course } from "./types/room";
 
 @Module({
 	name: "courseRoomDetailsModule",
@@ -77,8 +77,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	async fetchContent(id: string) {
 		this.setLoading(true);
 		try {
-			const { data } =
-				await this.roomsApi.courseRoomsControllerGetRoomBoard(id);
+			const { data } = await this.roomsApi.courseRoomsControllerGetRoomBoard(id);
 			this.setRoomData(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
@@ -99,10 +98,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async publishCard(payload: {
-		elementId: string;
-		visibility: boolean;
-	}): Promise<void> {
+	async publishCard(payload: { elementId: string; visibility: boolean }): Promise<void> {
 		this.setLoading(true);
 		const visibilityParam: PatchVisibilityParams = {
 			visibility: payload.visibility,
@@ -126,10 +122,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	async sortElements(payload: PatchOrderParams): Promise<void> {
 		this.setLoading(true);
 		try {
-			await this.roomsApi.courseRoomsControllerPatchOrderingOfElements(
-				this.roomData.roomId,
-				payload
-			);
+			await this.roomsApi.courseRoomsControllerPatchOrderingOfElements(this.roomData.roomId, payload);
 			await this.fetchContent(this.roomData.roomId);
 			this.setLoading(false);
 		} catch (error: unknown) {
@@ -194,9 +187,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async createBoard(
-		prams: CreateBoardBodyParams
-	): Promise<CreateBoardResponse | undefined> {
+	async createBoard(prams: CreateBoardBodyParams): Promise<CreateBoardResponse | undefined> {
 		this.resetBusinessError();
 		try {
 			const { data } = await this.boardApi.boardControllerCreateBoard(prams);
@@ -250,10 +241,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async finishTask(payload: {
-		itemId: string;
-		action: "finish" | "restore";
-	}): Promise<void> {
+	async finishTask(payload: { itemId: string; action: "finish" | "restore" }): Promise<void> {
 		this.resetBusinessError();
 		try {
 			if (payload.action === "finish") {
@@ -274,10 +262,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async fetchScopePermission(payload: {
-		courseId: string;
-		userId: string;
-	}): Promise<void> {
+	async fetchScopePermission(payload: { courseId: string; userId: string }): Promise<void> {
 		const requestUrl = `/v3/courses/${payload.courseId}/user-permissions`;
 		try {
 			const ret_val = (await $axios.get(requestUrl)).data;

@@ -1,8 +1,8 @@
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { Group, useGroupApi, useGroupState } from "./index";
-import { groupFactory } from "@@/tests/test-utils/factory/groupFactory";
 import { expectNotification, mountComposable } from "@@/tests/test-utils";
+import { groupFactory } from "@@/tests/test-utils/factory/groupFactory";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 

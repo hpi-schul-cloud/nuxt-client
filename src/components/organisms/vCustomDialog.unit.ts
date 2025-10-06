@@ -1,10 +1,6 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import CustomDialog from "./vCustomDialog.vue";
-
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 
 const mockProps = {
 	isOpen: true,
@@ -18,16 +14,13 @@ const negativeTestmockProps = {
 };
 
 describe("@/components/vCustomDialog", () => {
-	const mountComponent = (
-		options: ComponentMountingOptions<typeof CustomDialog> = {}
-	) => {
-		return mount(CustomDialog, {
+	const mountComponent = (options: ComponentMountingOptions<typeof CustomDialog> = {}) =>
+		mount(CustomDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			...options,
 		});
-	};
 
 	it("should open the dialog", () => {
 		const wrapper = mountComponent({ props: mockProps });
@@ -93,9 +86,7 @@ describe("@/components/vCustomDialog", () => {
 
 		const backButton = wrapper.findComponent(`[data-testid="dialog-back"]`);
 		const cancelButton = wrapper.findComponent(`[data-testid="dialog-cancel"]`);
-		const confirmButton = wrapper.findComponent(
-			`[data-testid="dialog-confirm"]`
-		);
+		const confirmButton = wrapper.findComponent(`[data-testid="dialog-confirm"]`);
 		const closeButton = wrapper.findComponent(`[data-testid="dialog-cancel"]`);
 		const nextButton = wrapper.findComponent(`[data-testid="dialog-next"]`);
 		expect(backButton.exists()).toBe(true);
@@ -115,9 +106,7 @@ describe("@/components/vCustomDialog", () => {
 			},
 		});
 
-		const confirmButton = wrapper.getComponent(
-			`[data-testid="dialog-confirm"]`
-		);
+		const confirmButton = wrapper.getComponent(`[data-testid="dialog-confirm"]`);
 		expect(confirmButton.attributes().disabled).toBeDefined();
 	});
 
@@ -131,9 +120,7 @@ describe("@/components/vCustomDialog", () => {
 			},
 		});
 
-		const confirmButton = wrapper.getComponent(
-			`[data-testid="dialog-confirm"]`
-		);
+		const confirmButton = wrapper.getComponent(`[data-testid="dialog-confirm"]`);
 		expect(confirmButton.html()).toContain("test text");
 	});
 

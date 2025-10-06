@@ -20,6 +20,7 @@ import ImportFlow from "@/components/share/ImportFlow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardExternalReferenceType } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { notifySuccess } from "@data-app";
 import { useRoomAuthorization, useRoomsState } from "@data-room";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
@@ -27,7 +28,6 @@ import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { notifySuccess } from "@data-app";
 
 const { t } = useI18n();
 const route = useRoute();

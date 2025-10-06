@@ -1,31 +1,15 @@
-import {
-	BoardPermissionChecks,
-	defaultPermissions,
-} from "@/types/board/Permissions";
-import {
-	createTestEnvStore,
-	mockedPiniaStoreTyping,
-} from "@@/tests/test-utils";
-import {
-	cardSkeletonResponseFactory,
-	columnResponseFactory,
-} from "@@/tests/test-utils/factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import BoardColumnVue from "./BoardColumn.vue";
+import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
+import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import {
-	useBoardPermissions,
-	useBoardStore,
-	useForceRender,
-} from "@data-board";
+import { useBoardPermissions, useBoardStore, useForceRender } from "@data-board";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useDragAndDrop, useSharedLastCreatedElement } from "@util-board";
-import { computed, nextTick, ref } from "vue";
-import BoardColumnVue from "./BoardColumn.vue";
 import { setActivePinia } from "pinia";
+import { computed, nextTick, ref } from "vue";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 
@@ -53,18 +37,12 @@ describe("BoardColumn", () => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false });
 
-		mockedUseForceRenderHandler =
-			createMock<ReturnType<typeof useForceRender>>();
+		mockedUseForceRenderHandler = createMock<ReturnType<typeof useForceRender>>();
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
 	});
 
-	const setup = (options?: {
-		permissions?: Partial<BoardPermissionChecks>;
-		cardsCount?: number;
-	}) => {
-		const cards = cardSkeletonResponseFactory.buildList(
-			options?.cardsCount ?? 3
-		);
+	const setup = (options?: { permissions?: Partial<BoardPermissionChecks>; cardsCount?: number }) => {
+		const cards = cardSkeletonResponseFactory.buildList(options?.cardsCount ?? 3);
 		const column = columnResponseFactory.build({
 			cards,
 		});
@@ -76,11 +54,7 @@ describe("BoardColumn", () => {
 
 		const wrapper = mount(BoardColumnVue, {
 			global: {
-				plugins: [
-					createTestingI18n(),
-					createTestingVuetify(),
-					createTestingPinia(),
-				],
+				plugins: [createTestingI18n(), createTestingVuetify(), createTestingPinia()],
 			},
 			props: {
 				column,

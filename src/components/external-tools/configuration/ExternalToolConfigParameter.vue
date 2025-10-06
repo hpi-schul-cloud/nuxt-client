@@ -1,11 +1,6 @@
 <template>
 	<div>
-		<template
-			v-if="
-				parameter.type !== ToolParameterType.Number &&
-				parameter.type !== ToolParameterType.Boolean
-			"
-		>
+		<template v-if="parameter.type !== ToolParameterType.Number && parameter.type !== ToolParameterType.Boolean">
 			<v-text-field
 				v-model="modelValue"
 				:label="getLabelText()"
@@ -45,17 +40,10 @@
 </template>
 
 <script setup lang="ts">
-import { ToolParameter, ToolParameterType } from "@/store/external-tool";
-import {
-	computed,
-	ModelRef,
-	PropType,
-	ref,
-	Ref,
-	WritableComputedRef,
-} from "vue";
-import { useI18n } from "vue-i18n";
 import { useExternalToolValidation } from "./external-tool-validation.composable";
+import { ToolParameter, ToolParameterType } from "@/store/external-tool";
+import { computed, ModelRef, PropType, Ref, ref, WritableComputedRef } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	parameter: {

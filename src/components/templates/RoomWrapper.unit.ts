@@ -1,24 +1,18 @@
-import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
-import CourseRoomListModule from "@/store/course-room-list";
-import {
-	createTestAppStoreWithPermissions,
-	createTestEnvStore,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { SpeedDialMenu } from "@ui-speed-dial-menu";
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { FabAction } from "./default-wireframe.types";
 import DefaultWireframe from "./DefaultWireframe.vue";
 import RoomWrapper from "./RoomWrapper.vue";
-import { EmptyState } from "@ui-empty-state";
-import { Permission, CourseMetadataResponse } from "@/serverApi/v3";
-import { setActivePinia } from "pinia";
+import { CourseMetadataResponse, Permission } from "@/serverApi/v3";
+import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
+import CourseRoomListModule from "@/store/course-room-list";
+import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
+import { EmptyState } from "@ui-empty-state";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -99,9 +93,7 @@ describe("@templates/RoomWrapper.vue", () => {
 				props: { hasRooms: false },
 			});
 
-			expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(true);
 		});
 	});
 
@@ -143,15 +135,11 @@ describe("@templates/RoomWrapper.vue", () => {
 				const wrapper = getWrapper();
 
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				const fabActions: FabAction[] | undefined =
-					defaultWireframe.props().fabItems?.actions;
+				const fabActions: FabAction[] | undefined = defaultWireframe.props().fabItems?.actions;
 
-				expect(
-					fabActions?.some(
-						(action: FabAction) =>
-							action.dataTestId === "fab_button_add_synced_course"
-					)
-				).toEqual(true);
+				expect(fabActions?.some((action: FabAction) => action.dataTestId === "fab_button_add_synced_course")).toEqual(
+					true
+				);
 			});
 		});
 
@@ -160,15 +148,9 @@ describe("@templates/RoomWrapper.vue", () => {
 				const wrapper = getWrapper();
 
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				const fabActions: FabAction[] | undefined =
-					defaultWireframe.props().fabItems?.actions;
+				const fabActions: FabAction[] | undefined = defaultWireframe.props().fabItems?.actions;
 
-				expect(
-					fabActions?.some(
-						(action: FabAction) =>
-							action.dataTestId === "fab_button_import_course"
-					)
-				).toEqual(true);
+				expect(fabActions?.some((action: FabAction) => action.dataTestId === "fab_button_import_course")).toEqual(true);
 			});
 		});
 	});
@@ -190,9 +172,7 @@ describe("@templates/RoomWrapper.vue", () => {
 			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 			defaultWireframe.vm.$emit("onFabItemClick", "syncedCourse");
 
-			expect(
-				(wrapper.vm as unknown as typeof RoomWrapper).isCourseSyncDialogOpen
-			).toEqual(true);
+			expect((wrapper.vm as unknown as typeof RoomWrapper).isCourseSyncDialogOpen).toEqual(true);
 		});
 	});
 

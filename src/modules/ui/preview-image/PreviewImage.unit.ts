@@ -1,7 +1,4 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { WarningAlert } from "@ui-alert";
 import { PreviewImage } from "@ui-preview-image";
 import { mount, shallowMount } from "@vue/test-utils";
@@ -9,9 +6,7 @@ import { ComponentProps } from "vue-component-type-helpers";
 import { VImg } from "vuetify/lib/components/index";
 
 describe("PreviewImage", () => {
-	const setupWithShallowMount = (
-		props?: ComponentProps<typeof PreviewImage>
-	) => {
+	const setupWithShallowMount = (props?: ComponentProps<typeof PreviewImage>) => {
 		const propsData = {
 			...props,
 			src: "https://www.example.com/image-preview.jpg",

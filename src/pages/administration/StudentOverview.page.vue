@@ -10,18 +10,14 @@
 				:active="isDeleting"
 				:percent="deletedPercent"
 				:title="$t('pages.administration.students.index.remove.progress.title')"
-				:description="
-					$t('pages.administration.students.index.remove.progress.description')
-				"
+				:description="$t('pages.administration.students.index.remove.progress.description')"
 				data-testid="progress-modal"
 			/>
 
 			<base-input
 				v-model="searchQuery"
 				type="text"
-				:placeholder="
-					$t('pages.administration.students.index.searchbar.placeholder')
-				"
+				:placeholder="$t('pages.administration.students.index.searchbar.placeholder')"
 				class="search-section"
 				label=""
 				data-testid="searchbar"
@@ -32,11 +28,7 @@
 				</template>
 			</base-input>
 
-			<DataFilter
-				filter-for="student"
-				:class-names="classNameList"
-				@update:filter="onUpdateFilter"
-			/>
+			<DataFilter filter-for="student" :class-names="classNameList" @update:filter="onUpdateFilter" />
 
 			<backend-data-table
 				v-model:current-page="page"
@@ -79,21 +71,9 @@
 				</template>
 				<template #datacolumn-consentStatus="{ data: status }">
 					<span class="text-content">
-						<v-icon
-							v-if="status === 'ok'"
-							color="rgba(var(--v-theme-success))"
-							:icon="mdiCheckAll"
-						/>
-						<v-icon
-							v-else-if="status === 'parentsAgreed'"
-							color="rgba(var(--v-theme-warning))"
-							:icon="mdiCheck"
-						/>
-						<v-icon
-							v-else-if="status === 'missing'"
-							color="rgba(var(--v-theme-error))"
-							:icon="mdiClose"
-						/>
+						<v-icon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheckAll" />
+						<v-icon v-else-if="status === 'parentsAgreed'" color="rgba(var(--v-theme-warning))" :icon="mdiCheck" />
+						<v-icon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
 					</span>
 				</template>
 				<template #datacolumn-_id="{ data, selected, highlighted }">
@@ -106,9 +86,7 @@
 							'row-highlighted': highlighted,
 						}"
 						:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
-						:aria-label="
-							$t('pages.administration.students.table.edit.ariaLabel')
-						"
+						:aria-label="$t('pages.administration.students.table.edit.ariaLabel')"
 						data-testid="edit_student_button"
 					>
 						<v-icon size="20" :icon="mdiPencilOutline" />
@@ -131,15 +109,19 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { schoolsModule } from "@/store";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@/components/molecules/AdminTableLegend";
+import ProgressModal from "@/components/molecules/ProgressModal";
+import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
+import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
-import ProgressModal from "@/components/molecules/ProgressModal";
+import { Permission } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountPlus,
 	mdiAlert,
@@ -154,12 +136,8 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
-import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
-import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
-import { useEnvConfig } from "@data-env";
-import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
-import { Permission } from "@/serverApi/v3";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -189,29 +167,22 @@ export default {
 			mdiPencilOutline,
 			mdiPlus,
 			mdiQrcode,
-			currentFilterQuery: this.getUiState(
-				"filter",
-				"pages.administration.students.index"
-			),
+			currentFilterQuery: this.getUiState("filter", "pages.administration.students.index"),
 			page:
 				(this.getUiState("pagination", "pages.administration.students.index") &&
-					this.getUiState("pagination", "pages.administration.students.index")
-						.page) ||
+					this.getUiState("pagination", "pages.administration.students.index").page) ||
 				1,
 			limit:
 				(this.getUiState("pagination", "pages.administration.students.index") &&
-					this.getUiState("pagination", "pages.administration.students.index")
-						.limit) ||
+					this.getUiState("pagination", "pages.administration.students.index").limit) ||
 				25,
 			sortBy:
 				(this.getUiState("sorting", "pages.administration.students.index") &&
-					this.getUiState("sorting", "pages.administration.students.index")
-						.sortBy) ||
+					this.getUiState("sorting", "pages.administration.students.index").sortBy) ||
 				"firstName",
 			sortOrder:
 				(this.getUiState("sorting", "pages.administration.students.index") &&
-					this.getUiState("sorting", "pages.administration.students.index")
-						.sortOrder) ||
+					this.getUiState("sorting", "pages.administration.students.index").sortOrder) ||
 				"asc",
 			tableColumns: [
 				{
@@ -283,8 +254,7 @@ export default {
 			active: false,
 			searchQuery:
 				(this.getUiState("filter", "pages.administration.students.index") &&
-					this.getUiState("filter", "pages.administration.students.index")
-						.searchQuery) ||
+					this.getUiState("filter", "pages.administration.students.index").searchQuery) ||
 				"",
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
@@ -310,20 +280,14 @@ export default {
 			return [
 				{
 					label: this.isConsentNecessary
-						? this.$t(
-								"pages.administration.students.index.tableActions.consent"
-							)
-						: this.$t(
-								"pages.administration.students.index.tableActions.registration"
-							),
+						? this.$t("pages.administration.students.index.tableActions.consent")
+						: this.$t("pages.administration.students.index.tableActions.registration"),
 					icon: mdiCheck,
 					action: this.handleBulkConsent,
 					dataTestId: "consent_action",
 				},
 				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.email"
-					),
+					label: this.$t("pages.administration.students.index.tableActions.email"),
 					icon: mdiEmailOutline,
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
@@ -335,9 +299,7 @@ export default {
 					dataTestId: "qr_code",
 				},
 				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.delete"
-					),
+					label: this.$t("pages.administration.students.index.tableActions.delete"),
 					icon: mdiDeleteOutline,
 					action: this.handleBulkDelete,
 					permission: Permission.StudentDelete,
@@ -362,9 +324,7 @@ export default {
 			// filter the delete action if school is external
 			if (this.schoolIsExternallyManaged) {
 				editedActions = editedActions.filter(
-					(action) =>
-						action.label !==
-						this.$t("pages.administration.students.index.tableActions.delete")
+					(action) => action.label !== this.$t("pages.administration.students.index.tableActions.delete")
 				);
 			}
 
@@ -382,9 +342,7 @@ export default {
 
 			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
 			if (!this.showConsent) {
-				editedColumns = editedColumns.filter(
-					(col) => col.field !== "consentStatus"
-				);
+				editedColumns = editedColumns.filter((col) => col.field !== "consentStatus");
 			}
 
 			// filters out the lastLoginSystemChange and outdatedSince columns if FEATURE_USER_LOGIN_MIGRATION_ENABLED env is disabled
@@ -409,9 +367,7 @@ export default {
 				instanceBasedIcons.push({
 					icon: mdiCheck,
 					color: "rgba(var(--v-theme-warning))",
-					label: this.$t(
-						"utils.adminFilter.consent.label.parentsAgreementMissing"
-					),
+					label: this.$t("utils.adminFilter.consent.label.parentsAgreementMissing"),
 				});
 			}
 
@@ -424,10 +380,7 @@ export default {
 			return instanceBasedIcons;
 		},
 		fab() {
-			if (
-				this.schoolIsExternallyManaged ||
-				!this.$_userHasPermission(Permission.StudentCreate)
-			) {
+			if (this.schoolIsExternallyManaged || !this.$_userHasPermission(Permission.StudentCreate)) {
 				return null;
 			}
 
@@ -457,21 +410,12 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			const uiState = this.getUiState(
-				"filter",
-				"pages.administration.students.index"
-			);
+			const uiState = this.getUiState("filter", "pages.administration.students.index");
 
-			if (uiState && uiState.searchQuery)
-				query.searchQuery = uiState.searchQuery;
+			if (uiState && uiState.searchQuery) query.searchQuery = uiState.searchQuery;
 
 			this.currentFilterQuery = query;
-			if (
-				JSON.stringify(query) !==
-				JSON.stringify(
-					this.getUiState("filter", "pages.administration.students.index")
-				)
-			) {
+			if (JSON.stringify(query) !== JSON.stringify(this.getUiState("filter", "pages.administration.students.index"))) {
 				this.onUpdateCurrentPage(1);
 			}
 			this.setUiState("filter", "pages.administration.students.index", {
@@ -484,9 +428,7 @@ export default {
 		this.getClassNameList();
 	},
 	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.administration.students.index.title")
-		);
+		document.title = buildPageTitle(this.$t("pages.administration.students.index.title"));
 	},
 	methods: {
 		find() {
@@ -553,18 +495,12 @@ export default {
 					selectionType,
 				});
 				if (this.registrationLinks.totalMailsSend === rowIds.length) {
-					notifySuccess(
-						this.$t("pages.administration.sendMail.success", rowIds.length)
-					);
+					notifySuccess(this.$t("pages.administration.sendMail.success", rowIds.length));
 				} else {
-					notifyInfo(
-						this.$t("pages.administration.sendMail.alreadyRegistered")
-					);
+					notifyInfo(this.$t("pages.administration.sendMail.alreadyRegistered"));
 				}
 			} catch {
-				notifyError(
-					this.$t("pages.administration.sendMail.error", rowIds.length)
-				);
+				notifyError(this.$t("pages.administration.sendMail.error", rowIds.length));
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
@@ -580,9 +516,7 @@ export default {
 					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 				}
 			} catch {
-				notifyError(
-					this.$t("pages.administration.printQr.error", rowIds.length)
-				);
+				notifyError(this.$t("pages.administration.printQr.error", rowIds.length));
 			}
 		},
 		handleBulkDelete(rowIds, selectionType) {
@@ -604,28 +538,21 @@ export default {
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = this.$t(
-					"pages.administration.students.index.remove.confirm.message.some",
-					rowIds.length,
-					{ number: rowIds.length }
-				);
+				message = this.$t("pages.administration.students.index.remove.confirm.message.some", rowIds.length, {
+					number: rowIds.length,
+				});
 			} else {
 				if (rowIds.length) {
-					message = this.$t(
-						"pages.administration.students.index.remove.confirm.message.many",
-						{ number: rowIds.length }
-					);
+					message = this.$t("pages.administration.students.index.remove.confirm.message.many", {
+						number: rowIds.length,
+					});
 				} else {
-					message = this.$t(
-						"pages.administration.students.index.remove.confirm.message.all"
-					);
+					message = this.$t("pages.administration.students.index.remove.confirm.message.all");
 				}
 			}
 			this.dialogConfirm({
 				message,
-				confirmText: this.$t(
-					"pages.administration.students.index.remove.confirm.btnText"
-				),
+				confirmText: this.$t("pages.administration.students.index.remove.confirm.btnText"),
 				cancelText: this.$t("common.actions.cancel"),
 				icon: mdiAlert,
 				iconColor: "rgba(var(--v-theme-error))",

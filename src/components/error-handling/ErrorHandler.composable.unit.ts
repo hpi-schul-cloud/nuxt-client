@@ -1,15 +1,14 @@
-import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
-import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
-import { isAxiosError } from "axios";
-import { nextTick } from "vue";
-
 import { ErrorType, useErrorHandler } from "./ErrorHandler.composable";
 import { expectNotification, mountComposable } from "@@/tests/test-utils";
+import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
+import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import { useNotificationStore } from "@data-app";
-import { beforeEach } from "vitest";
-import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
+import { isAxiosError } from "axios";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
+import { nextTick } from "vue";
 
 vi.mock("axios");
 const mockedIsAxiosError = vi.mocked(isAxiosError);
@@ -17,11 +16,7 @@ const mockedIsAxiosError = vi.mocked(isAxiosError);
 const missingErrorKey = "components.board.notifications.errors.missingErrorKey";
 vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn().mockReturnValue({
-		t: vi
-			.fn()
-			.mockImplementation((key: string) =>
-				key === missingErrorKey ? undefined : key
-			),
+		t: vi.fn().mockImplementation((key: string) => (key === missingErrorKey ? undefined : key)),
 	}),
 }));
 
@@ -133,27 +128,16 @@ describe("ErrorHandler.Composable", () => {
 			const { generateErrorText } = setup();
 
 			const i18nCreateErrorKey = generateErrorText("notCreated", "board");
-			expect(i18nCreateErrorKey).toBe(
-				"components.board.notifications.errors.notCreated"
-			);
+			expect(i18nCreateErrorKey).toBe("components.board.notifications.errors.notCreated");
 
 			const i18nReadErrorKey = generateErrorText("notLoaded", "boardColumn");
-			expect(i18nReadErrorKey).toBe(
-				"components.board.notifications.errors.notLoaded"
-			);
+			expect(i18nReadErrorKey).toBe("components.board.notifications.errors.notLoaded");
 
 			const i18nUpdateErrorKey = generateErrorText("notUpdated", "boardCard");
-			expect(i18nUpdateErrorKey).toBe(
-				"components.board.notifications.errors.notUpdated"
-			);
+			expect(i18nUpdateErrorKey).toBe("components.board.notifications.errors.notUpdated");
 
-			const i18nDeleteErrorKey = generateErrorText(
-				"notDeleted",
-				"boardElement"
-			);
-			expect(i18nDeleteErrorKey).toBe(
-				"components.board.notifications.errors.notDeleted"
-			);
+			const i18nDeleteErrorKey = generateErrorText("notDeleted", "boardElement");
+			expect(i18nDeleteErrorKey).toBe("components.board.notifications.errors.notDeleted");
 		});
 	});
 
@@ -167,19 +151,16 @@ describe("ErrorHandler.Composable", () => {
 			expectNotification("error");
 		});
 
-		it.each(["notCreated", "notUpdated", "notDeleted", "notLoaded"])(
-			"should return i18n keys of %s",
-			(key) => {
-				const { notifySocketError } = setup();
-				notifySocketError(key as ErrorType, "board");
+		it.each(["notCreated", "notUpdated", "notDeleted", "notLoaded"])("should return i18n keys of %s", (key) => {
+			const { notifySocketError } = setup();
+			notifySocketError(key as ErrorType, "board");
 
-				expect(useNotificationStore().notify).toHaveBeenCalledWith(
-					expect.objectContaining({
-						status: "error",
-						text: `components.board.notifications.errors.${key}`,
-					})
-				);
-			}
-		);
+			expect(useNotificationStore().notify).toHaveBeenCalledWith(
+				expect.objectContaining({
+					status: "error",
+					text: `components.board.notifications.errors.${key}`,
+				})
+			);
+		});
 	});
 });

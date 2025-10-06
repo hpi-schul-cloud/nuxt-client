@@ -1,3 +1,4 @@
+import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
 import * as serverApi from "@/fileStorageApi/v3/api/file-api";
 import * as wopiApi from "@/fileStorageApi/v3/api/wopi-api";
 import {
@@ -18,13 +19,12 @@ import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponse
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
-import { createMock } from "@golevelup/ts-vitest";
-import { AxiosResponse } from "axios";
-import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
-import { setActivePinia } from "pinia";
-import { createTestingPinia } from "@pinia/testing";
-import { beforeEach } from "vitest";
 import { useNotificationStore } from "@data-app";
+import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { AxiosResponse } from "axios";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn(() => ({
@@ -36,9 +36,7 @@ vi.mock("vue-i18n", () => ({
 vi.mock("@/utils/helpers");
 
 vi.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = vi.mocked(
-	mapAxiosErrorToResponseError
-);
+const mockedMapAxiosErrorToResponseError = vi.mocked(mapAxiosErrorToResponseError);
 
 const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	const expectedPayload = apiResponseErrorFactory.build({
@@ -99,9 +97,7 @@ describe("FileStorageApi Composable", () => {
 					parentId,
 					parentType,
 				});
-				const response = createMock<
-					AxiosResponse<FileRecordListResponse, unknown>
-				>({
+				const response = createMock<AxiosResponse<FileRecordListResponse, unknown>>({
 					data: { data: [fileRecordResponse] },
 				});
 
@@ -124,12 +120,7 @@ describe("FileStorageApi Composable", () => {
 
 				await fetchFiles(parentId, parentType);
 
-				expect(fileApi.list).toHaveBeenCalledWith(
-					"schoolId",
-					StorageLocation.SCHOOL,
-					parentId,
-					parentType
-				);
+				expect(fileApi.list).toHaveBeenCalledWith("schoolId", StorageLocation.SCHOOL, parentId, parentType);
 			});
 
 			it("should set filerecord", async () => {
@@ -165,30 +156,22 @@ describe("FileStorageApi Composable", () => {
 			};
 
 			it("should notify unauthorized and pass error", async () => {
-				const { parentId, parentType, responseError } = setup(
-					ErrorType.Unauthorized
-				);
+				const { parentId, parentType, responseError } = setup(ErrorType.Unauthorized);
 
 				const { fetchFiles } = useFileStorageApi();
 
-				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
-					responseError
-				);
+				await expect(fetchFiles(parentId, parentType)).rejects.toBe(responseError);
 				expect(useNotificationStore().notify).toHaveBeenCalledWith(
 					expect.objectContaining({ status: "error", text: "error.401" })
 				);
 			});
 
 			it("should notify forbidden error and pass error", async () => {
-				const { parentId, parentType, responseError } = setup(
-					ErrorType.Forbidden
-				);
+				const { parentId, parentType, responseError } = setup(ErrorType.Forbidden);
 
 				const { fetchFiles } = useFileStorageApi();
 
-				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
-					responseError
-				);
+				await expect(fetchFiles(parentId, parentType)).rejects.toBe(responseError);
 
 				expect(useNotificationStore().notify).toHaveBeenCalledWith(
 					expect.objectContaining({ status: "error", text: "error.403" })
@@ -198,9 +181,7 @@ describe("FileStorageApi Composable", () => {
 			it("should notify internal server error and pass error", async () => {
 				const { parentId, parentType, responseError } = setup();
 				const { fetchFiles } = useFileStorageApi();
-				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
-					responseError
-				);
+				await expect(fetchFiles(parentId, parentType)).rejects.toBe(responseError);
 				expect(useNotificationStore().notify).toHaveBeenCalledWith(
 					expect.objectContaining({
 						status: "error",
@@ -244,13 +225,7 @@ describe("FileStorageApi Composable", () => {
 
 				await upload(file, parentId, parentType);
 
-				expect(fileApi.upload).toHaveBeenCalledWith(
-					"schoolId",
-					StorageLocation.SCHOOL,
-					parentId,
-					parentType,
-					file
-				);
+				expect(fileApi.upload).toHaveBeenCalledWith("schoolId", StorageLocation.SCHOOL, parentId, parentType, file);
 			});
 
 			it("should set filerecord", async () => {
@@ -270,9 +245,7 @@ describe("FileStorageApi Composable", () => {
 				const parentType = FileRecordParent.BOARDNODES;
 				const file = new File([""], "filename");
 
-				const { responseError, expectedPayload } = setupErrorResponse(
-					ErrorType.FILE_TOO_BIG
-				);
+				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.FILE_TOO_BIG);
 
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
@@ -292,9 +265,7 @@ describe("FileStorageApi Composable", () => {
 				const { parentId, parentType, file, responseError } = setup();
 				const { upload } = useFileStorageApi();
 
-				await expect(upload(file, parentId, parentType)).rejects.toBe(
-					responseError
-				);
+				await expect(upload(file, parentId, parentType)).rejects.toBe(responseError);
 
 				expect(useNotificationStore().notify).toHaveBeenCalledWith(
 					expect.objectContaining({
@@ -371,9 +342,7 @@ describe("FileStorageApi Composable", () => {
 				const parentType = FileRecordParent.BOARDNODES;
 				const file = new File([""], "filename");
 
-				const { responseError, expectedPayload } = setupErrorResponse(
-					ErrorType.FILE_TOO_BIG
-				);
+				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.FILE_TOO_BIG);
 
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
@@ -440,10 +409,7 @@ describe("FileStorageApi Composable", () => {
 
 				await rename(fileRecordResponse.id, renameFileParams);
 
-				expect(fileApi.patchFilename).toHaveBeenCalledWith(
-					fileRecordResponse.id,
-					renameFileParams
-				);
+				expect(fileApi.patchFilename).toHaveBeenCalledWith(fileRecordResponse.id, renameFileParams);
 			});
 
 			it("should set filerecord", async () => {
@@ -463,9 +429,7 @@ describe("FileStorageApi Composable", () => {
 					fileName: "new-file-name.txt",
 				};
 
-				const { responseError, expectedPayload } = setupErrorResponse(
-					ErrorType.FILE_NAME_EXISTS
-				);
+				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.FILE_NAME_EXISTS);
 
 				mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
 
@@ -503,9 +467,7 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 				});
 
-				const fetchResponse = createMock<
-					AxiosResponse<FileRecordListResponse, unknown>
-				>({
+				const fetchResponse = createMock<AxiosResponse<FileRecordListResponse, unknown>>({
 					data: { data: [fileRecordResponse] },
 				});
 
@@ -514,9 +476,7 @@ describe("FileStorageApi Composable", () => {
 
 				fileApi.list.mockResolvedValueOnce(fetchResponse);
 
-				const response = createMock<
-					AxiosResponse<FileRecordListResponse, unknown>
-				>({
+				const response = createMock<AxiosResponse<FileRecordListResponse, unknown>>({
 					data: { data: [fileRecordResponse] },
 				});
 
@@ -543,16 +503,10 @@ describe("FileStorageApi Composable", () => {
 
 			it("should remove filerecord", async () => {
 				const { parentId, fileRecordResponse } = setup();
-				const { deleteFiles, getFileRecordsByParentId, fetchFiles } =
-					useFileStorageApi();
+				const { deleteFiles, getFileRecordsByParentId, fetchFiles } = useFileStorageApi();
 
-				await fetchFiles(
-					fileRecordResponse.parentId,
-					fileRecordResponse.parentType
-				);
-				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([
-					fileRecordResponse,
-				]);
+				await fetchFiles(fileRecordResponse.parentId, fileRecordResponse.parentType);
+				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([fileRecordResponse]);
 
 				await deleteFiles([fileRecordResponse]);
 
@@ -569,9 +523,7 @@ describe("FileStorageApi Composable", () => {
 					parentId,
 					parentType,
 				});
-				const response = createMock<
-					AxiosResponse<FileRecordListResponse, unknown>
-				>({
+				const response = createMock<AxiosResponse<FileRecordListResponse, unknown>>({
 					data: { data: [fileRecordResponse] },
 				});
 
@@ -579,9 +531,7 @@ describe("FileStorageApi Composable", () => {
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.list.mockResolvedValueOnce(response);
 
-				const { responseError, expectedPayload } = setupErrorResponse(
-					ErrorType.FILE_NOT_FOUND
-				);
+				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.FILE_NOT_FOUND);
 
 				mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
 				fileApi.deleteFiles.mockRejectedValue(responseError);
@@ -594,17 +544,11 @@ describe("FileStorageApi Composable", () => {
 
 			it("should notify internal server error, file not deleted error and upsert filerecords", async () => {
 				const { fileRecordResponse } = setup();
-				const { deleteFiles, getFileRecordsByParentId, fetchFiles } =
-					useFileStorageApi();
+				const { deleteFiles, getFileRecordsByParentId, fetchFiles } = useFileStorageApi();
 
-				await fetchFiles(
-					fileRecordResponse.parentId,
-					fileRecordResponse.parentType
-				);
+				await fetchFiles(fileRecordResponse.parentId, fileRecordResponse.parentType);
 
-				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([
-					fileRecordResponse,
-				]);
+				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([fileRecordResponse]);
 
 				await deleteFiles([]);
 
@@ -620,9 +564,7 @@ describe("FileStorageApi Composable", () => {
 						text: "components.board.notifications.errors.fileServiceNotAvailable",
 					})
 				);
-				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([
-					fileRecordResponse,
-				]);
+				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([fileRecordResponse]);
 			});
 		});
 	});
@@ -635,16 +577,11 @@ describe("FileStorageApi Composable", () => {
 				const userDisplayName = "Test User";
 
 				const response = authorizedCollaboraDocumentUrlResponseFactory.build();
-				const axiosResponse =
-					AxiosResponseFactory.create<AuthorizedCollaboraDocumentUrlResponse>(
-						response
-					);
+				const axiosResponse = AxiosResponseFactory.create<AuthorizedCollaboraDocumentUrlResponse>(response);
 
 				const wopiApiMock = createMock<wopiApi.WopiApiInterface>();
 				vi.spyOn(wopiApi, "WopiApiFactory").mockReturnValueOnce(wopiApiMock);
-				wopiApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
-					axiosResponse
-				);
+				wopiApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(axiosResponse);
 
 				return {
 					fileRecordId,
@@ -656,24 +593,16 @@ describe("FileStorageApi Composable", () => {
 			};
 
 			it("should call WopiApiFactory.getAuthorizedCollaboraDocumentUrl and return url", async () => {
-				const {
-					fileRecordId,
-					editorMode,
-					userDisplayName,
-					wopiApiMock,
-					response,
-				} = setup();
+				const { fileRecordId, editorMode, userDisplayName, wopiApiMock, response } = setup();
 				const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
 
-				const result = await getAuthorizedCollaboraDocumentUrl(
+				const result = await getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName);
+
+				expect(wopiApiMock.getAuthorizedCollaboraDocumentUrl).toHaveBeenCalledWith(
 					fileRecordId,
 					editorMode,
 					userDisplayName
 				);
-
-				expect(
-					wopiApiMock.getAuthorizedCollaboraDocumentUrl
-				).toHaveBeenCalledWith(fileRecordId, editorMode, userDisplayName);
 				expect(result).toBe(response.authorizedCollaboraDocumentUrl);
 			});
 		});
@@ -687,14 +616,10 @@ describe("FileStorageApi Composable", () => {
 				const wopiApiMock = createMock<wopiApi.WopiApiInterface>();
 				vi.spyOn(wopiApi, "WopiApiFactory").mockReturnValueOnce(wopiApiMock);
 
-				const { responseError, expectedPayload } = setupErrorResponse(
-					ErrorType.Forbidden
-				);
+				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.Forbidden);
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
-				wopiApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(
-					responseError
-				);
+				wopiApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(responseError);
 
 				return {
 					fileRecordId,
@@ -708,13 +633,7 @@ describe("FileStorageApi Composable", () => {
 				const { fileRecordId, editorMode, userDisplayName } = setup();
 				const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
 
-				await expect(
-					getAuthorizedCollaboraDocumentUrl(
-						fileRecordId,
-						editorMode,
-						userDisplayName
-					)
-				).rejects.toThrow();
+				await expect(getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName)).rejects.toThrow();
 
 				expect(useNotificationStore().notify).toHaveBeenCalledWith(
 					expect.objectContaining({ status: "error", text: "error.403" })
@@ -731,14 +650,10 @@ describe("FileStorageApi Composable", () => {
 				const wopiApiMock = createMock<wopiApi.WopiApiInterface>();
 				vi.spyOn(wopiApi, "WopiApiFactory").mockReturnValueOnce(wopiApiMock);
 
-				const { responseError, expectedPayload } = setupErrorResponse(
-					ErrorType.Unauthorized
-				);
+				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.Unauthorized);
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
-				wopiApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(
-					responseError
-				);
+				wopiApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(responseError);
 
 				return {
 					fileRecordId,
@@ -752,13 +667,7 @@ describe("FileStorageApi Composable", () => {
 				const { fileRecordId, editorMode, userDisplayName } = setup();
 				const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
 
-				await expect(
-					getAuthorizedCollaboraDocumentUrl(
-						fileRecordId,
-						editorMode,
-						userDisplayName
-					)
-				).rejects.toThrow();
+				await expect(getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName)).rejects.toThrow();
 				expect(useNotificationStore().notify).toHaveBeenCalledWith(
 					expect.objectContaining({ status: "error", text: "error.401" })
 				);

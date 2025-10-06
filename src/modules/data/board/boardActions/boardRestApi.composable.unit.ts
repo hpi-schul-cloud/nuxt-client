@@ -1,4 +1,7 @@
+import { useBoardApi } from "../BoardApi.composable";
+import { useBoardRestApi } from "./boardRestApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { BoardLayout } from "@/serverApi/v3/api";
 import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import CourseRoomDetailsModule from "@/store/course-room-details";
@@ -18,12 +21,9 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedEditMode } from "@util-board";
 import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
 import { computed, ref } from "vue";
 import { Router, useRouter } from "vue-router";
-import { BoardLayout } from "@/serverApi/v3/api";
-import { useBoardApi } from "../BoardApi.composable";
-import { useBoardRestApi } from "./boardRestApi.composable";
-import { Mock } from "vitest";
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
@@ -40,30 +40,23 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: () => {
-			return {
-				t: (key: string) => key,
-			};
-		},
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: () => ({
+		t: (key: string) => key,
+	}),
+}));
 
 describe("boardRestApi", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
-	let mockedSocketConnectionHandler: DeepMocked<
-		ReturnType<typeof useSocketConnection>
-	>;
+	let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
 	let setEditModeId: Mock;
 	const setErrorMock = vi.fn();
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 
-		mockedSocketConnectionHandler =
-			createMock<ReturnType<typeof useSocketConnection>>();
+		mockedSocketConnectionHandler = createMock<ReturnType<typeof useSocketConnection>>();
 		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
@@ -181,17 +174,10 @@ describe("boardRestApi", () => {
 			await fetchBoardRequest({ boardId: boardStore.board!.id });
 
 			expect(setErrorMock).toHaveBeenCalledWith(
-				createApplicationError(
-					HttpStatusCode.NotFound,
-					"components.board.error.404"
-				)
+				createApplicationError(HttpStatusCode.NotFound, "components.board.error.404")
 			);
-			expect(setErrorMock.mock.lastCall![0].statusCode).toStrictEqual(
-				HttpStatusCode.NotFound
-			);
-			expect(setErrorMock.mock.lastCall![0].translationKey).toStrictEqual(
-				"components.board.error.404"
-			);
+			expect(setErrorMock.mock.lastCall![0].statusCode).toStrictEqual(HttpStatusCode.NotFound);
+			expect(setErrorMock.mock.lastCall![0].translationKey).toStrictEqual("components.board.error.404");
 		});
 	});
 
@@ -809,10 +795,7 @@ describe("boardRestApi", () => {
 			});
 
 			executeErrorHandler();
-			expect(mockedErrorHandler.notifyWithTemplate).toHaveBeenCalledWith(
-				"notUpdated",
-				"board"
-			);
+			expect(mockedErrorHandler.notifyWithTemplate).toHaveBeenCalledWith("notUpdated", "board");
 
 			expect(setEditModeId).toHaveBeenCalledWith(undefined);
 		});
@@ -834,9 +817,7 @@ describe("boardRestApi", () => {
 
 			await reloadBoard();
 
-			expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalledWith(
-				boardStore.board!.id
-			);
+			expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalledWith(boardStore.board!.id);
 		});
 	});
 });

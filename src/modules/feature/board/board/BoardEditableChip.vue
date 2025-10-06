@@ -1,9 +1,5 @@
 <template>
-	<VChip
-		color="info"
-		class="align-self-center cursor-default"
-		data-testid="board-editable-chip"
-	>
+	<VChip color="info" class="align-self-center cursor-default" data-testid="board-editable-chip">
 		<div class="chip-content">
 			<v-icon left class="icon mr-1">{{ mdiPencilPlusOutline }}</v-icon>
 			<span>

@@ -1,26 +1,17 @@
+import { ErrorType, useCollaborativeTextEditorApi } from "./CollaborativeTextEditorApi.composable";
 import * as serverApi from "@/serverApi/v3/api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import {
-	apiResponseErrorFactory,
-	axiosErrorFactory,
-	expectNotification,
-} from "@@/tests/test-utils";
+import { apiResponseErrorFactory, axiosErrorFactory, expectNotification } from "@@/tests/test-utils";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
-import { createMock } from "@golevelup/ts-vitest";
-import { AxiosResponse } from "axios";
-import {
-	ErrorType,
-	useCollaborativeTextEditorApi,
-} from "./CollaborativeTextEditorApi.composable";
 import { useNotificationStore } from "@data-app";
-import { beforeEach } from "vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 vi.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = vi.mocked(
-	mapAxiosErrorToResponseError
-);
+const mockedMapAxiosErrorToResponseError = vi.mocked(mapAxiosErrorToResponseError);
 
 vi.mock(
 	"@/utils/create-global-state",
@@ -63,21 +54,14 @@ describe("CollaborativeTextEditorApi Composable", () => {
 		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns successful", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
-				const parentType =
-					serverApi.CollaborativeTextEditorParentType.ContentElement;
+				const parentType = serverApi.CollaborativeTextEditorParentType.ContentElement;
 
-				const response = createMock<
-					AxiosResponse<serverApi.CollaborativeTextEditorResponse, unknown>
-				>({
+				const response = createMock<AxiosResponse<serverApi.CollaborativeTextEditorResponse, unknown>>({
 					data: { url: `${parentType}/${parentId}` },
 				});
 
-				const collaborativeTextEditorApi =
-					createMock<serverApi.CollaborativeTextEditorApiInterface>();
-				vi.spyOn(
-					serverApi,
-					"CollaborativeTextEditorApiFactory"
-				).mockReturnValue(collaborativeTextEditorApi);
+				const collaborativeTextEditorApi = createMock<serverApi.CollaborativeTextEditorApiInterface>();
+				vi.spyOn(serverApi, "CollaborativeTextEditorApiFactory").mockReturnValue(collaborativeTextEditorApi);
 				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockResolvedValueOnce(
 					response
 				);
@@ -117,18 +101,13 @@ describe("CollaborativeTextEditorApi Composable", () => {
 		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns error", () => {
 			const setup = (message?: string) => {
 				const parentId = ObjectIdMock();
-				const parentType =
-					serverApi.CollaborativeTextEditorParentType.ContentElement;
+				const parentType = serverApi.CollaborativeTextEditorParentType.ContentElement;
 
 				const { responseError, expectedPayload } = setupErrorResponse(message);
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
-				const collaborativeTextEditorApi =
-					createMock<serverApi.CollaborativeTextEditorApiInterface>();
-				vi.spyOn(
-					serverApi,
-					"CollaborativeTextEditorApiFactory"
-				).mockReturnValue(collaborativeTextEditorApi);
+				const collaborativeTextEditorApi = createMock<serverApi.CollaborativeTextEditorApiInterface>();
+				vi.spyOn(serverApi, "CollaborativeTextEditorApiFactory").mockReturnValue(collaborativeTextEditorApi);
 				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockRejectedValue(
 					responseError
 				);

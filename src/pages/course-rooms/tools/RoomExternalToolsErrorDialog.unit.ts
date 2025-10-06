@@ -1,24 +1,18 @@
 import RoomExternalToolsErrorDialog from "@/pages/course-rooms/tools/RoomExternalToolsErrorDialog.vue";
+import { Permission, RoleName } from "@/serverApi/v3";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	createTestAppStore,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExternalToolDisplayData } from "@data-external-tool";
-import { mount } from "@vue/test-utils";
-import { Permission, RoleName } from "@/serverApi/v3";
-import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 
 describe("RoomExternalToolsErrorDialog", () => {
-	const getWrapper = (props: {
-		selectedItem: ExternalToolDisplayData;
-		isOpen?: boolean;
-	}) => {
+	const getWrapper = (props: { selectedItem: ExternalToolDisplayData; isOpen?: boolean }) => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore({
 			me: {
@@ -71,9 +65,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const content = wrapper.findComponent(".v-card-text");
 
-				expect(content.text()).toEqual(
-					"common.tool.information.outdatedOnSchool.teacher"
-				);
+				expect(content.text()).toEqual("common.tool.information.outdatedOnSchool.teacher");
 			});
 		});
 
@@ -97,9 +89,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
-				expect(title.text()).toEqual(
-					"pages.rooms.tools.incompleteDialog.title"
-				);
+				expect(title.text()).toEqual("pages.rooms.tools.incompleteDialog.title");
 			});
 
 			it("should render the correct content text", () => {
@@ -107,9 +97,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const content = wrapper.findComponent(".v-card-text");
 
-				expect(content.text()).toEqual(
-					"common.tool.information.outdated.teacher"
-				);
+				expect(content.text()).toEqual("common.tool.information.outdated.teacher");
 			});
 		});
 
@@ -141,9 +129,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const content = wrapper.findComponent(".v-card-text");
 
-				expect(content.text()).toEqual(
-					"common.tool.information.outdated.teacher"
-				);
+				expect(content.text()).toEqual("common.tool.information.outdated.teacher");
 			});
 		});
 
@@ -167,9 +153,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
-				expect(title.text()).toEqual(
-					"pages.rooms.tools.deactivatedDialog.title"
-				);
+				expect(title.text()).toEqual("pages.rooms.tools.deactivatedDialog.title");
 			});
 
 			it("should render the correct content text", () => {
@@ -177,9 +161,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const content = wrapper.findComponent(".v-card-text");
 
-				expect(content.text()).toEqual(
-					"common.tool.information.deactivated.teacher"
-				);
+				expect(content.text()).toEqual("common.tool.information.deactivated.teacher");
 			});
 		});
 
@@ -203,9 +185,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
-				expect(title.text()).toEqual(
-					"pages.rooms.tools.notLicensedDialog.title"
-				);
+				expect(title.text()).toEqual("pages.rooms.tools.notLicensedDialog.title");
 			});
 
 			it("should render the correct content text", () => {
@@ -213,9 +193,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const content = wrapper.findComponent(".v-card-text");
 
-				expect(content.text()).toEqual(
-					"common.tool.information.notLicensed.teacher"
-				);
+				expect(content.text()).toEqual("common.tool.information.notLicensed.teacher");
 			});
 		});
 	});

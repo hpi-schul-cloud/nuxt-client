@@ -1,19 +1,16 @@
-import { mount } from "@vue/test-utils";
 import Topbar from "./Topbar.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
+import { RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import StatusAlertsModule from "@/store/status-alerts";
+import { STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index";
-import { RoleName, SchulcloudTheme } from "@/serverApi/v3";
-import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
-import { setActivePinia } from "pinia";
-import { createTestingPinia } from "@pinia/testing";
 
 describe("@ui-layout/Topbar", () => {
 	const setup = async (windowWidth = 1300, isSidebarExpanded?: boolean) => {

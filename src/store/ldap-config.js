@@ -4,11 +4,7 @@ import { notifyError } from "@data-app";
 
 const formatServerData = (data) => {
 	const { providerOptions } = data;
-	const {
-		userAttributeNameMapping,
-		roleAttributeNameMapping,
-		classAttributeNameMapping,
-	} = providerOptions;
+	const { userAttributeNameMapping, roleAttributeNameMapping, classAttributeNameMapping } = providerOptions;
 
 	return {
 		url: data.url,
@@ -33,37 +29,35 @@ const formatServerData = (data) => {
 	};
 };
 
-const formatClientData = (data) => {
-	return {
-		url: data.url,
-		rootPath: data.basisPath,
-		searchUser: data.searchUser,
-		searchUserPassword: data.searchUserPassword,
-		providerOptions: {
-			userPathAdditions: data.userPath,
-			classPathAdditions: data.classPath,
-			roleType: data.groupOption,
-			userAttributeNameMapping: {
-				givenName: data.firstName,
-				sn: data.familyName,
-				uuid: data.uuid,
-				uid: data.uid,
-				mail: data.email,
-				role: data.member,
-			},
-			roleAttributeNameMapping: {
-				roleStudent: data.student,
-				roleTeacher: data.teacher,
-				roleAdmin: data.admin,
-				roleNoSc: data.user,
-			},
-			classAttributeNameMapping: {
-				description: data.nameAttribute,
-				uniqueMember: data.participantAttribute,
-			},
+const formatClientData = (data) => ({
+	url: data.url,
+	rootPath: data.basisPath,
+	searchUser: data.searchUser,
+	searchUserPassword: data.searchUserPassword,
+	providerOptions: {
+		userPathAdditions: data.userPath,
+		classPathAdditions: data.classPath,
+		roleType: data.groupOption,
+		userAttributeNameMapping: {
+			givenName: data.firstName,
+			sn: data.familyName,
+			uuid: data.uuid,
+			uid: data.uid,
+			mail: data.email,
+			role: data.member,
 		},
-	};
-};
+		roleAttributeNameMapping: {
+			roleStudent: data.student,
+			roleTeacher: data.teacher,
+			roleAdmin: data.admin,
+			roleNoSc: data.user,
+		},
+		classAttributeNameMapping: {
+			description: data.nameAttribute,
+			uniqueMember: data.participantAttribute,
+		},
+	},
+});
 
 export const actions = {
 	async getData({ commit }, id) {
@@ -161,32 +155,20 @@ export const mutations = {
 };
 
 export const getters = {
-	getData: (state) => {
-		return state.data;
-	},
-	getVerified: (state) => {
-		return state.verified;
-	},
-	getSubmitted: (state) => {
-		return state.submitted;
-	},
-	getTemp: (state) => {
-		return state.temp;
-	},
-	getStatus: (state) => {
-		return state.status;
-	},
+	getData: (state) => state.data,
+	getVerified: (state) => state.verified,
+	getSubmitted: (state) => state.submitted,
+	getTemp: (state) => state.temp,
+	getStatus: (state) => state.status,
 };
 
-export const state = () => {
-	return {
-		data: {},
-		verified: {},
-		submitted: {},
-		temp: {},
-		status: null,
-	};
-};
+export const state = () => ({
+	data: {},
+	verified: {},
+	submitted: {},
+	temp: {},
+	status: null,
+});
 
 export const ldapConfig = {
 	namespaced: true,

@@ -33,12 +33,10 @@ export default {
 	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
 	"common.file.awaitingScan":
 		"La vista previa se muestra después de una comprobación de virus correcta. El fichero se está analizando actualmente.",
-	"common.file.scanWontCheck":
-		"Debido al tamaño, no se puede generar una vista previa.",
+	"common.file.scanWontCheck": "Debido al tamaño, no se puede generar una vista previa.",
 	"common.file.scanError":
 		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
-	"common.file.virusDetected":
-		"Se ha bloqueado el archivo debido a un virus sospechoso.",
+	"common.file.virusDetected": "Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"common.file": "Archivo",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Los documentos que superen los {sizeInMb} no se pueden editar en línea.",
@@ -74,13 +72,11 @@ export default {
 	"common.labels.lastName": "Apellidos",
 	"common.labels.login": "Iniciar sesión",
 	"common.labels.logout": "Cerrar sesión",
-	"common.labels.migrated.tooltip":
-		"Muestra cuándo se completó la migración de la cuenta",
+	"common.labels.migrated.tooltip": "Muestra cuándo se completó la migración de la cuenta",
 	"common.labels.migrated": "Última migración el",
 	"common.labels.name": "Nombre",
 	"common.labels.notVisible": "No visible",
-	"common.labels.outdated.tooltip":
-		"Muestra cuándo la cuenta se marcó como obsoleta",
+	"common.labels.outdated.tooltip": "Muestra cuándo la cuenta se marcó como obsoleta",
 	"common.labels.outdated": "Obsoleto desde",
 	"common.labels.partial": "parcial",
 	"common.labels.password.new": "Nueva contraseña",
@@ -113,23 +109,20 @@ export default {
 	"common.loading.text": "Los datos se están cargando...",
 	"common.medium.alert.deactivated": "Los medios están deshabilitados.",
 	"common.medium.alert.notLicensed": "El medio no está autorizado.",
-	"common.medium.alert.incomplete":
-		"La configuración del medio no actual o incompleta.",
+	"common.medium.alert.incomplete": "La configuración del medio no actual o incompleta.",
 	"common.medium.chip.deactivated": "Desactivado",
 	"common.medium.chip.notLicensed": "No autorizado",
 	"common.medium.chip.incomplete": "Configuración incompleta",
 	"common.medium.chip.noLongerAvailable": "Ya no está disponible",
 	"common.medium.information.admin": "Por favor verifique la configuración.",
 	"common.medium.information.student": "Por favor contacte a un maestro.",
-	"common.medium.information.teacher":
-		"Por favor comuníquese con el administrador de la escuela.",
+	"common.medium.information.teacher": "Por favor comuníquese con el administrador de la escuela.",
 	"common.nodata": "Datos no disponibles",
 	"common.notification.error": "Se ha producido un error.",
 	"common.notification.connection.restored": "La conexión se ha reestablecido.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.AAAA",
-	"common.placeholder.email.confirmation":
-		"Repetir la dirección de correo electrónico",
+	"common.placeholder.email.confirmation": "Repetir la dirección de correo electrónico",
 	"common.placeholder.email.update": "Nueva dirección de correo electrónico",
 	"common.placeholder.email": "clara.fall{'@'}mail.de",
 	"common.placeholder.firstName": "Klara",
@@ -138,8 +131,7 @@ export default {
 	"common.placeholder.password.current": "Contraseña actual",
 	"common.placeholder.password.new.confirmation": "Repetir nueva contraseña",
 	"common.placeholder.password.new": "Nueva contraseña",
-	"common.placeholder.repeat.email":
-		"Repetir la dirección de correo electrónico",
+	"common.placeholder.repeat.email": "Repetir la dirección de correo electrónico",
 	"common.roleName.administrator": "Administrador",
 	"common.roleName.expert": "Experto",
 	"common.roleName.helpdesk": "Centro de ayuda",
@@ -166,20 +158,15 @@ export default {
 	"common.tool.context.type.courses": "Herramientas del curso",
 	"common.tool.context.type.boardElements": "Tableros",
 	"common.tool.context.type.mediaShelves": "Estante multimedia",
-	"common.validation.email":
-		"Por favor, introduzca una dirección de correo electrónico válida",
+	"common.validation.email": "Por favor, introduzca una dirección de correo electrónico válida",
 	"common.validation.invalid": "Los datos introducidos no son válidos",
 	"common.validation.number": "Se debe ingresar un número entero.",
-	"common.validation.regex":
-		"La entrada debe cumplir con la siguiente regla: {comentario}.",
+	"common.validation.regex": "La entrada debe cumplir con la siguiente regla: {comentario}.",
 	"common.validation.required": "Por favor, rellene este campo",
 	"common.validation.required2": "Este es un campo obligatorio.",
-	"common.validation.tooLong":
-		"The text you entered exceeds the maximum length",
-	"common.validation.containsOpeningTag":
-		"Inserte un espacio después del signo menos-que.",
-	"common.validation.nonEmptyString":
-		"Este campo es obligatorio y no debe contener sólo espacios.",
+	"common.validation.tooLong": "The text you entered exceeds the maximum length",
+	"common.validation.containsOpeningTag": "Inserte un espacio después del signo menos-que.",
+	"common.validation.nonEmptyString": "Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.also": "también",
 	"common.words.and": "y",
 	"common.words.board": "tablero",
@@ -199,11 +186,9 @@ export default {
 	"common.words.color.turquoise": "Turquesa",
 	"common.words.color.yellow": "Amarillo",
 	"common.words.copiedToClipboard": "Copiado en el portapapeles",
-	"common.words.copiedToClipboard.failure":
-		"No se pudo copiar al portapapeles. Inténtelo manualmente.",
+	"common.words.copiedToClipboard.failure": "No se pudo copiar al portapapeles. Inténtelo manualmente.",
 	"common.words.copyLinkToClipboard.success": "Enlace copiado al portapapeles",
-	"common.words.copyLinkToClipboard.failure":
-		"El enlace no se pudo copiar al portapapeles",
+	"common.words.copyLinkToClipboard.failure": "El enlace no se pudo copiar al portapapeles",
 	"common.words.courses": "Cursos",
 	"common.words.draft": "Borrador",
 	"common.words.drafts": "Borradores",
@@ -243,15 +228,13 @@ export default {
 	"components.administrationSection.description.support.link": "soporte",
 	"components.administrationSection.description.moreInformation":
 		"Información importante sobre el proceso de migración es {0}.",
-	"components.administrationSection.description.moreInformation.link":
-		"disponible aquí",
+	"components.administrationSection.description.moreInformation.link": "disponible aquí",
 	"components.administration.adminMigrationSection.enableSyncDuringMigration.label":
 		"Permitir la sincronización con el sistema de inicio de sesión anterior para clases y cuentas durante la migración",
 	"components.administration.adminMigrationSection.endWarningCard.agree": "Sí",
 	"components.administration.adminMigrationSection.endWarningCard.check":
 		"Confirmo la finalización de la migración. Una vez transcurrido el periodo de espera de {gracePeriod} días como muy pronto, se desconectará definitivamente el antiguo sistema de inicio de sesión y se eliminarán las cuentas que no se hayan migrado.",
-	"components.administration.adminMigrationSection.endWarningCard.disagree":
-		"Desgaje",
+	"components.administration.adminMigrationSection.endWarningCard.disagree": "Desgaje",
 	"components.administration.adminMigrationSection.endWarningCard.text":
 		"Confirme que desea completar la migración de la cuenta de usuario a moin.schule.",
 	"components.administration.adminMigrationSection.endWarningCard.text.warning":
@@ -270,8 +253,7 @@ export default {
 		"Tras un periodo de espera de {gracePeriod} días, la finalización de la migración de cuentas se convierte en definitiva. A continuación, se desactiva el antiguo sistema de inicio de sesión y se eliminan las cuentas que no se hayan migrado.",
 	"components.administration.adminMigrationSection.endWarningCard.title":
 		"¿Realmente desea completar la migración de la cuenta de usuario a moin.schule ahora?",
-	"components.administration.adminMigrationSection.headers":
-		"Migración de cuenta a moin.schule",
+	"components.administration.adminMigrationSection.headers": "Migración de cuenta a moin.schule",
 	"components.administration.adminMigrationSection.infoText.firstParagraph":
 		"Verifique que el número de escuela oficial ingresado en Niedersächsische Bildungscloud sea correcto.",
 	"components.administration.adminMigrationSection.infoText.secondParagraph":
@@ -280,18 +262,13 @@ export default {
 		"No puede cambiar el número de escuela ingresado de forma independiente. Si es necesario corregir el número de la escuela, comuníquese con {0}.",
 	"components.administration.adminMigrationSection.infoText.fourthParagraph":
 		"El inicio de la migración confirma que el número de escuela ingresado es correcto.",
-	"components.administration.adminMigrationSection.mandatorySwitch.label":
-		"Migración obligatoria",
-	"components.administration.adminMigrationSection.migrationActive":
-		"La migración de cuenta está activa.",
-	"components.administration.adminMigrationSection.migrationEnableButton.label":
-		"Iniciar la migración",
-	"components.administration.adminMigrationSection.migrationEndButton.label":
-		"Completar la migración",
+	"components.administration.adminMigrationSection.mandatorySwitch.label": "Migración obligatoria",
+	"components.administration.adminMigrationSection.migrationActive": "La migración de cuenta está activa.",
+	"components.administration.adminMigrationSection.migrationEnableButton.label": "Iniciar la migración",
+	"components.administration.adminMigrationSection.migrationEndButton.label": "Completar la migración",
 	"components.administration.adminMigrationSection.migrationWizardButton.description":
 		"Abre una herramienta que se utiliza para migrar cuentas de usuario a moin.schule sin la participación del usuario. Esta herramienta estará disponible una vez que el primer usuario de esta escuela haya migrado exitosamente a moin.schule.",
-	"components.administration.adminMigrationSection.migrationWizardButton.label":
-		"Abrir asistente de migración",
+	"components.administration.adminMigrationSection.migrationWizardButton.label": "Abrir asistente de migración",
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
 		"Si cancela ahora la ejecución del asistente de migración, se restablecerán los vínculos de cuenta realizados en la sesión actual. ¿Realmente desea cancelar el asistente ahora?",
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
@@ -304,12 +281,9 @@ export default {
 		"El periodo de espera ha expirado. ¡La migración se completó finalmente el {finishDate} a las {finishTime}!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
 		"Las cuentas de estudiantes y profesores obsoletas se muestran en las listas de selección correspondientes cuando los usuarios se asignan a clases, cursos y equipos.",
-	"components.administration.adminMigrationSection.showOutdatedUsers.label":
-		"Mostrar cuentas de usuario obsoletas",
-	"components.administration.adminMigrationSection.startWarningCard.agree":
-		"Comenzar",
-	"components.administration.adminMigrationSection.startWarningCard.disagree":
-		"Desgaje",
+	"components.administration.adminMigrationSection.showOutdatedUsers.label": "Mostrar cuentas de usuario obsoletas",
+	"components.administration.adminMigrationSection.startWarningCard.agree": "Comenzar",
+	"components.administration.adminMigrationSection.startWarningCard.disagree": "Desgaje",
 	"components.administration.adminMigrationSection.startWarningCard.text":
 		"Con el inicio de la migración, todos los estudiantes y profesores de su escuela podrán cambiar el sistema de registro a moin.schule. Los usuarios que hayan cambiado el sistema de inicio de sesión solo podrán iniciar sesión a través de moin.schule.",
 	"components.administration.adminMigrationSection.startWarningCard.title":
@@ -320,16 +294,11 @@ export default {
 		"El asistente de migración ha encontrado automáticamente los enlaces de las cuentas basándose en los nombres de usuario.",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
 		"¿Desea restablecer ahora los enlaces encontrados automáticamente?",
-	"components.administration.externalToolsSection.action.add":
-		"Añadir Herramienta Externa",
-	"components.administration.externalToolsSection.action.delete":
-		"Eliminar herramienta",
-	"components.administration.externalToolsSection.action.edit":
-		"Editar herramienta",
-	"components.administration.externalToolsSection.action.showDatasheet":
-		"Ver hoja de datos",
-	"components.administration.externalToolsSection.action.sync":
-		"Disponibilidad de actualización",
+	"components.administration.externalToolsSection.action.add": "Añadir Herramienta Externa",
+	"components.administration.externalToolsSection.action.delete": "Eliminar herramienta",
+	"components.administration.externalToolsSection.action.edit": "Editar herramienta",
+	"components.administration.externalToolsSection.action.showDatasheet": "Ver hoja de datos",
+	"components.administration.externalToolsSection.action.sync": "Disponibilidad de actualización",
 	"components.administration.externalToolsSection.description.firstParagraph":
 		"Los parámetros específicos de la escuela para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta estará disponible dentro de la escuela.",
 	"components.administration.externalToolsSection.description.secondParagraph":
@@ -339,8 +308,7 @@ export default {
 	"components.administration.externalToolsSection.vidis.title": "Medios VIDIS",
 	"components.administration.externalToolsSection.vidis.description":
 		"La disponibilidad de los medios VIDIS se actualiza automáticamente. Además, aquí se puede actualizar manualmente la disponibilidad de los medios, por ejemplo para poder utilizar los medios activados recientemente directamente en la nube de la escuela.",
-	"components.administration.externalToolsSection.vidis.notification.success":
-		"Medios VIDIS actualizados exitosamente",
+	"components.administration.externalToolsSection.vidis.notification.success": "Medios VIDIS actualizados exitosamente",
 	"components.administration.externalToolsSection.vidis.notification.timeout":
 		"La actualización de los medios de VIDIS continúa en segundo plano. Por favor, tenga paciencia un momento.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
@@ -351,62 +319,44 @@ export default {
 		"Actualmente la herramienta se utiliza de la siguiente manera:",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Atención: Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
-	"components.administration.externalToolsSection.dialog.title":
-		"Quitar Herramienta Externa",
-	"components.administration.externalToolsSection.header":
-		"Herramientas Externas",
+	"components.administration.externalToolsSection.dialog.title": "Quitar Herramienta Externa",
+	"components.administration.externalToolsSection.header": "Herramientas Externas",
 	"components.administration.externalToolsSection.info":
 		"Esta área permite integrar herramientas de terceros en la nube. Utilizando las funciones proporcionadas, se puede añadir herramientas, actualizar las existentes o eliminar las que ya no sean necesarias. A continuación, los profesores podrán añadir las herramientas a los cursos.",
-	"components.administration.externalToolsSection.notification.created":
-		"La herramienta se creó correctamente.",
-	"components.administration.externalToolsSection.notification.deleted":
-		"La herramienta se eliminó correctamente.",
+	"components.administration.externalToolsSection.notification.created": "La herramienta se creó correctamente.",
+	"components.administration.externalToolsSection.notification.deleted": "La herramienta se eliminó correctamente.",
 	"components.administration.externalToolsSection.notification.updated":
 		"La herramienta se ha actualizado correctamente.",
-	"components.administration.externalToolsSection.table.header.status":
-		"Estado",
-	"components.administration.externalToolsSection.table.header.restrictedTo":
-		"Restringido a",
-	"components.administration.externalToolsSection.table.header.medium":
-		"Gestión de medios",
-	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable":
-		"Medio externo autorizado",
-	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable":
-		"Medio externo no autorizado",
+	"components.administration.externalToolsSection.table.header.status": "Estado",
+	"components.administration.externalToolsSection.table.header.restrictedTo": "Restringido a",
+	"components.administration.externalToolsSection.table.header.medium": "Gestión de medios",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable": "Medio externo autorizado",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable": "Medio externo no autorizado",
 	"components.administration.provisioningOptions.class.description":
 		"Active esta opción si las clases deben sincronizarse en la {instance}.",
-	"components.administration.provisioningOptions.class.label":
-		"Sincronización de clases",
+	"components.administration.provisioningOptions.class.label": "Sincronización de clases",
 	"components.administration.provisioningOptions.course.description":
 		"Active esta opción si los cursos y lecciones deben sincronizarse en la {instance}.",
-	"components.administration.provisioningOptions.course.label":
-		"Sincronización de cursos y lecciones",
+	"components.administration.provisioningOptions.course.label": "Sincronización de cursos y lecciones",
 	"components.administration.provisioningOptions.otherGroups.description":
 		"Active esta opción si otros grupos deben sincronizarse en la {instance}.",
-	"components.administration.provisioningOptions.otherGroups.label":
-		"Sincronización de otros grupos.",
+	"components.administration.provisioningOptions.otherGroups.label": "Sincronización de otros grupos.",
 
 	"components.administration.provisioningOptions.schoolExternalTools.description":
 		"Si esta opción está activada, las activaciones de herramientas externas se realizan automáticamente desde moin.schule.",
-	"components.administration.provisioningOptions.schoolExternalTools.label":
-		"Activación de herramientas externas",
+	"components.administration.provisioningOptions.schoolExternalTools.label": "Activación de herramientas externas",
 
-	"components.administration.provisioningOptions.page.title":
-		"Opciones de sincronización de datos",
+	"components.administration.provisioningOptions.page.title": "Opciones de sincronización de datos",
 	"components.administration.provisioningOptions.warning.consequence":
 		"¡Todos los {groupTypes} previamente sincronizados se eliminarán de tu escuela!",
 	"components.administration.provisioningOptions.warning.question":
 		"¿Está seguro de que desea desactivar la sincronización de {groupTypes}?",
-	"components.administration.provisioningOptions.warning.title":
-		"Deshabilitar la sincronización",
-	"components.administration.schoolYearChangeSection.headers":
-		"Cambio de año escolar",
+	"components.administration.provisioningOptions.warning.title": "Deshabilitar la sincronización",
+	"components.administration.schoolYearChangeSection.headers": "Cambio de año escolar",
 	"components.administration.schoolYearChangeSection.info.part.one":
 		"Con la ayuda de la fase de transferencia, la membresía de clase y los datos personales en el LDAP se pueden ajustar en paz. Finalmente, todos los cambios se pueden transferir a la {instance}.",
-	"components.administration.schoolYearChangeSection.info.part.two":
-		" (más información sobre el {0})",
-	"components.administration.schoolYearChangeSection.info.link":
-		"Ayuda del lado de la ayuda",
+	"components.administration.schoolYearChangeSection.info.part.two": " (más información sobre el {0})",
+	"components.administration.schoolYearChangeSection.info.link": "Ayuda del lado de la ayuda",
 	"components.administration.schoolYearChangeSection.notification.finish.error.missingYears":
 		"No se encontraron suficientes años escolares. ¡Póngase en contacto con el soporte!",
 	"components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear":
@@ -415,28 +365,21 @@ export default {
 		"Fase de transferencia completada con éxito. escuela transferida al próximo año.",
 	"components.administration.schoolYearChangeSection.notification.start.success":
 		"La fase de transferencia comenzó con éxito",
-	"components.administration.schoolYearChangeSection.title.step.one":
-		"Al final del año escolar",
+	"components.administration.schoolYearChangeSection.title.step.one": "Al final del año escolar",
 	"components.administration.schoolYearChangeSection.description.step.one":
 		"La fase de transferencia se puede comenzar manualmente dos semanas antes del final del año escolar. Una vez que no se ha producido ningún inicio manual, la fase de transferencia comienza automáticamente. El inicio de la fase de transferencia no se puede deshacer.",
-	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
-		"Fase de transferencia de inicio",
-	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
-		"Fase de transferencia iniciada",
-	"components.administration.schoolYearChangeSection.title.step.two":
-		"Alrededor de las vacaciones de verano",
+	"components.administration.schoolYearChangeSection.step.one.button.startTransfer": "Fase de transferencia de inicio",
+	"components.administration.schoolYearChangeSection.step.one.button.transferStarted": "Fase de transferencia iniciada",
+	"components.administration.schoolYearChangeSection.title.step.two": "Alrededor de las vacaciones de verano",
 	"components.administration.schoolYearChangeSection.description.step.two":
 		"Durante la fase de transferencia, todos los datos de clase y personales se pueden actualizar en paz. El inicio de sesión y los cambios en las contraseñas aún son posibles para todos los usuarios existentes. Se pueden crear nuevos cursos durante la fase de transferencia, pero sin la asignación de clases.",
 	"components.administration.schoolYearChangeSection.info.step.two":
 		"Durante la fase de transferencia, no se sincronizan nuevos usuarios, clases o cambios en los datos existentes del LDAP.",
-	"components.administration.schoolYearChangeSection.step.two.button":
-		"Verifique los datos de LDAP",
-	"components.administration.schoolYearChangeSection.title.step.three":
-		"Nuevo año escolar",
+	"components.administration.schoolYearChangeSection.step.two.button": "Verifique los datos de LDAP",
+	"components.administration.schoolYearChangeSection.title.step.three": "Nuevo año escolar",
 	"components.administration.schoolYearChangeSection.description.step.three":
 		"Aquí la transferencia de los datos se puede iniciar al {instance}. Esto acelera en el nuevo año escolar.",
-	"components.administration.schoolYearChangeSection.step.three.button":
-		"Fase de transferencia final",
+	"components.administration.schoolYearChangeSection.step.three.button": "Fase de transferencia final",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
 		"Los datos de clase y personales (LDAP) se han actualizado y marcado",
 	"components.administration.schoolYearChangeSection.dialog.start.title":
@@ -475,63 +418,45 @@ export default {
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
 	"components.board.draftChip.tooltip": "Sólo visible para los profesores",
-	"components.board.error.404":
-		"Error 404 – No se ha encontrado ningún tablero con este nombre",
-	"components.board.error.403":
-		"Error 403 – Lamentablemente, falta la autorización para ver este contenido ...",
+	"components.board.error.404": "Error 404 – No se ha encontrado ningún tablero con este nombre",
+	"components.board.error.403": "Error 403 – Lamentablemente, falta la autorización para ver este contenido ...",
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.editing.settings.title": "Configuración de edición",
 	"components.board.dialog.readerCanEdit.subtitle":
 		"Aquí puede cambiar los derechos de edición para esta área. Independientemente de esta configuración, los miembros con el permiso de sala 'Editar' y superior siempre pueden editar áreas.",
 	"components.board.dialog.readerCanEdit.options":
 		"Este tablero {0} es editable para miembros con el permiso de sala 'Leer'.",
-	"components.board.dialog.readerCanEdit.options.defaultSetting":
-		"Configuración predeterminada",
+	"components.board.dialog.readerCanEdit.options.defaultSetting": "Configuración predeterminada",
 	"components.board.dialog.readerCanEdit.alert.text":
 		"El tablero debe publicarse primero antes de que se puedan ajustar los ajustes de edición.",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
-	"components.board.menu.collaborativeTextEditorElement":
-		"Configuración del etherpad",
+	"components.board.menu.collaborativeTextEditorElement": "Configuración del etherpad",
 	"components.board.menu.drawingElement": "Configuración de la pizarra",
-	"components.board.menu.externalToolElement":
-		"Configuración de la herramienta externa",
+	"components.board.menu.externalToolElement": "Configuración de la herramienta externa",
 	"components.board.menu.mediaExternalToolElement": "Configuraciones medias",
 	"components.board.menu.fileElement": "Configuración del archivo",
-	"components.board.menu.folderElement":
-		"Configuración de la carpeta de archivos",
+	"components.board.menu.folderElement": "Configuración de la carpeta de archivos",
 	"components.board.menu.linkElement": "Configuración del enlace",
 	"components.board.menu.submissionElement": "Configuración del envío",
-	"components.board.menu.videoConferenceElement":
-		"Configuración de la videoconferencia",
-	"components.board.menu.h5pElement":
-		"Configuración de elementos de aprendizaje interactivo",
-	"components.board.menu.deletedElement":
-		"Configuración de contenido eliminado",
-	"components.board.notifications.errors.fileNameExists":
-		"Ya existe un archivo con este nombre.",
+	"components.board.menu.videoConferenceElement": "Configuración de la videoconferencia",
+	"components.board.menu.h5pElement": "Configuración de elementos de aprendizaje interactivo",
+	"components.board.menu.deletedElement": "Configuración de contenido eliminado",
+	"components.board.notifications.errors.fileNameExists": "Ya existe un archivo con este nombre.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
 		"El servicio de archivos no está disponible actualmente.",
-	"components.board.notifications.errors.fileNotDeleted":
-		"No se han podido eliminar los archivos.",
+	"components.board.notifications.errors.fileNotDeleted": "No se han podido eliminar los archivos.",
 	"components.board.notifications.errors.fileToBig":
 		"Los archivos adjuntos superan el tamaño máximo permitido de {maxFileSizeWithUnit}.",
-	"components.board.notifications.errors.notCreated":
-		"{type} no se ha podido crear.",
-	"components.board.notifications.errors.notDeleted":
-		"{type} no se ha podido eliminar.",
-	"components.board.notifications.errors.notLoaded":
-		"{type} no se ha podido cargar.",
-	"components.board.notifications.errors.notUpdated":
-		"No se han podido guardar los cambios.",
+	"components.board.notifications.errors.notCreated": "{type} no se ha podido crear.",
+	"components.board.notifications.errors.notDeleted": "{type} no se ha podido eliminar.",
+	"components.board.notifications.errors.notLoaded": "{type} no se ha podido cargar.",
+	"components.board.notifications.errors.notUpdated": "No se han podido guardar los cambios.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Otro usuario ha creado una tarjeta en la columna {columnPosition}.",
-	"components.board.screenReader.notification.columnCreated.success":
-		"Una columna fue creada por otro usuario.",
-	"components.board.screenReader.notification.cardDeleted.success":
-		"Una tarjeta fue eliminada por otro usuario.",
-	"components.board.screenReader.notification.columnDeleted.success":
-		"Una columna fue eliminada por otro usuario.",
+	"components.board.screenReader.notification.columnCreated.success": "Una columna fue creada por otro usuario.",
+	"components.board.screenReader.notification.cardDeleted.success": "Una tarjeta fue eliminada por otro usuario.",
+	"components.board.screenReader.notification.columnDeleted.success": "Una columna fue eliminada por otro usuario.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"En la columna {columnPosition}, se ha movido una carta a la posición {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
@@ -556,8 +481,7 @@ export default {
 		"El tablero fue establecida como editable para todos los usuarios por otro usuario.",
 	"components.board.screenReader.notification.boardSetAsNotEditableForAllUsers.success":
 		"El tablero fue establecida como no editable para todos los usuarios por otro usuario.",
-	"components.board.preferredTools.notification.error.notLoaded":
-		"No se pudieron cargar las herramientas preferidas.",
+	"components.board.preferredTools.notification.error.notLoaded": "No se pudieron cargar las herramientas preferidas.",
 	"components.board.header.chip.editableForEveryone": "Editable para todos",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
@@ -579,17 +503,14 @@ export default {
 	"components.cardElement.fileElement.audioFormatError":
 		"El formato de audio no es compatible con este navegador / sistema operativo.",
 	"components.cardElement.fileElement.caption": "Descripción",
-	"components.cardElement.fileElement.emptyAlt":
-		"Aquí tenéis una imagen con el siguiente nombre",
+	"components.cardElement.fileElement.emptyAlt": "Aquí tenéis una imagen con el siguiente nombre",
 	"components.cardElement.fileElement.pdfAlt": "Imagen de vista previa para ",
 	"components.cardElement.fileElement.collaboraFile": "Archivo",
-	"components.cardElement.fileElement.previewError":
-		"No se ha podido cargar la vista previa.",
+	"components.cardElement.fileElement.previewError": "No se ha podido cargar la vista previa.",
 	"components.cardElement.fileElement.reloadStatus": "Estado de actualización",
 	"components.cardElement.fileElement.videoFormatError":
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
-	"components.cardElement.fileElement.openOfficeDocument":
-		"Abrir documento Office",
+	"components.cardElement.fileElement.openOfficeDocument": "Abrir documento Office",
 	"components.cardElement.folderElement": "Carpeta de archivos",
 	"components.cardElement.folderElement.untitled": "Carpeta sin título",
 	"components.cardElement.LinkElement": "Enlace",
@@ -604,59 +525,44 @@ export default {
 	"components.cardElement.submissionElement.until": "hasta el",
 	"components.cardElement.submissionElement": "Envío",
 	"components.cardElement.titleElement.placeholder": "Añadir título",
-	"components.cardElement.titleElement.validation.maxLength":
-		"El título solo puede tener {maxLength} caracteres.",
-	"components.cardElement.titleElement.validation.required":
-		"Por favor ingrese un título.",
+	"components.cardElement.titleElement.validation.maxLength": "El título solo puede tener {maxLength} caracteres.",
+	"components.cardElement.titleElement.validation.required": "Por favor ingrese un título.",
 	"components.cardElement.titleElement": "Elemento título",
 	"components.cardElement.videoConferenceElement": "Videoconferencia",
-	"components.cardElement.videoConferenceElement.label":
-		"Insertar título de la videoconferencia",
+	"components.cardElement.videoConferenceElement.label": "Insertar título de la videoconferencia",
 	"components.cardElement.deletedElement": "Contenido eliminado",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.cardElement.h5pElement": "Elemento de aprendizaje interactivo",
-	"components.cardElement.h5pElement.create":
-		"Crear elemento de aprendizaje...",
+	"components.cardElement.h5pElement.create": "Crear elemento de aprendizaje...",
 	"components.cardElement.h5pElement.title.error.load":
 		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",
-	"components.datePicker.validation.format":
-		"Por favor utilice el formato DD.MM.AAAA",
+	"components.datePicker.validation.format": "Por favor utilice el formato DD.MM.AAAA",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
-	"components.dateTimePicker.messages.dateInPast":
-		"La fecha y la hora están en el pasado.",
-	"components.dateTimePicker.messages.dateRequired":
-		"Sin fecha no es posible especificar la hora.",
+	"components.dateTimePicker.messages.dateInPast": "La fecha y la hora están en el pasado.",
+	"components.dateTimePicker.messages.dateRequired": "Sin fecha no es posible especificar la hora.",
 	"components.editor.fonts.colors.oliveGreen": "Verde Oliva",
 	"components.editor.fonts.colors.indigo": "Índigo",
 	"components.editor.fonts.colors.darkPurple": "Púrpura Oscuro",
 	"components.editor.fonts.colors.pink": "Rosa",
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
-	"components.elementTypeSelection.elements.externalToolElement.subtitle":
-		"Herramientas externas",
+	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Herramientas externas",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
-	"components.elementTypeSelection.elements.folderElement":
-		"Carpeta de archivos",
-	"components.elementTypeSelection.elements.folderElement.subtitle":
-		"Carpeta de archivos",
-	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
-		"Etherpad",
+	"components.elementTypeSelection.elements.folderElement": "Carpeta de archivos",
+	"components.elementTypeSelection.elements.folderElement.subtitle": "Carpeta de archivos",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle": "Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
-	"components.elementTypeSelection.elements.submissionElement.subtitle":
-		"Envíos",
+	"components.elementTypeSelection.elements.submissionElement.subtitle": "Envíos",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Texto",
-	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
-		"Videoconferencia",
-	"components.elementTypeSelection.elements.h5pElement.subtitle":
-		"Elemento de aprendizaje interactivo",
+	"components.elementTypeSelection.elements.videoConferenceElement.subtitle": "Videoconferencia",
+	"components.elementTypeSelection.elements.h5pElement.subtitle": "Elemento de aprendizaje interactivo",
 	"components.externalTools.status.deactivated": "Desactivado",
 	"components.externalTools.status.incomplete": "Configuración incompleta",
 	"components.externalTools.status.latest": "Actual",
 	"components.externalTools.status.outdated": "Anticuado",
 	"components.externalTools.status.unknown": "Desconocido",
 	"components.legacy.footer.accessibility.report": "Accesibilidad feedback",
-	"components.legacy.footer.accessibility.statement":
-		"Declaración de accesibilidad",
+	"components.legacy.footer.accessibility.statement": "Declaración de accesibilidad",
 	"components.legacy.footer.ariaLabel": "Enlace, {itemName}",
 	"components.legacy.footer.contact": "Contacto",
 	"components.legacy.footer.github": "GitHub",
@@ -677,10 +583,8 @@ export default {
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
 	"components.molecules.admintablelegend.thr":
 		"Algunos o todos los datos de los usuarios de su centro educativo se sincronizan desde una fuente externa (LDAP, IDM, portal del centro educativo, etc.). Por lo tanto, la edición de estos datos maestros de usuario sólo es posible en el sistema de origen, no en la nube de la escuela. La creación de nuevos alumnos o profesores sólo es posible en el sistema de origen.",
-	"components.molecules.ContentCard.report.body":
-		"Informar del contenido con el ID",
-	"components.molecules.ContentCard.report.email":
-		"inhalte{'@'}hpi-schul-cloud.de",
+	"components.molecules.ContentCard.report.body": "Informar del contenido con el ID",
+	"components.molecules.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.molecules.ContentCard.report.subject":
 		"Estimado equipo: me gustaría informar sobre el contenido mencionado en el asunto porque: [indica tus razones aquí]",
 	"components.molecules.ContentCardMenu.action.copy": "Copia a...",
@@ -688,92 +592,64 @@ export default {
 	"components.molecules.ContentCardMenu.action.report": "Informe",
 	"components.molecules.ContentCardMenu.action.share": "Compartir",
 	"components.molecules.ContextMenu.action.close": "Cerrar menú contextual",
-	"components.molecules.copyResult.courseCopy.ariaLabelSuffix":
-		"se sigue copiando",
+	"components.molecules.copyResult.courseCopy.ariaLabelSuffix": "se sigue copiando",
 	"components.molecules.copyResult.courseCopy.info": "Creando curso",
-	"components.molecules.copyResult.courseFiles.info":
-		"Archivos en Archivos del curso",
+	"components.molecules.copyResult.courseFiles.info": "Archivos en Archivos del curso",
 	"components.molecules.copyResult.courseGroupCopy.info": "Grupos de cursos",
 	"components.molecules.copyResult.ctlTools.info":
 		"Las herramientas externas asociadas al curso y las tarjetas de embarque no se copian.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
 		"Las herramientas externas y las partes protegidas de las configuraciones de herramientas que no están disponibles en la escuela de destino no se copian.",
-	"components.molecules.copyResult.etherpadCopy.info":
-		"Contenidos de Etherpads",
-	"components.molecules.copyResult.failedCopy":
-		"No se pudo completar la duplicación.",
+	"components.molecules.copyResult.etherpadCopy.info": "Contenidos de Etherpads",
+	"components.molecules.copyResult.failedCopy": "No se pudo completar la duplicación.",
 	"components.molecules.copyResult.geogebraCopy.info": "Geogebra IDs",
-	"components.molecules.copyResult.membersAndPermissions":
-		"Miembros del curso y permisos",
-	"components.molecules.copyResult.label.externalTools":
-		"Herramientas externas",
-	"components.molecules.copyResult.tldrawCopy.info":
-		"Contenidos de pizarras blancas",
-	"components.molecules.copyResult.course.successfullyCopied":
-		"Todos los elementos fueron duplicados exitosamente.",
-	"components.molecules.copyResult.board.successfullyCopied":
-		"Tablero duplicado con éxito.",
-	"components.molecules.copyResult.task.successfullyCopied":
-		"Tarea duplicada con éxito.",
-	"components.molecules.copyResult.lesson.successfullyCopied":
-		"Tema duplicado con éxito.",
+	"components.molecules.copyResult.membersAndPermissions": "Miembros del curso y permisos",
+	"components.molecules.copyResult.label.externalTools": "Herramientas externas",
+	"components.molecules.copyResult.tldrawCopy.info": "Contenidos de pizarras blancas",
+	"components.molecules.copyResult.course.successfullyCopied": "Todos los elementos fueron duplicados exitosamente.",
+	"components.molecules.copyResult.board.successfullyCopied": "Tablero duplicado con éxito.",
+	"components.molecules.copyResult.task.successfullyCopied": "Tarea duplicada con éxito.",
+	"components.molecules.copyResult.lesson.successfullyCopied": "Tema duplicado con éxito.",
 	"components.molecules.copyResult.timeoutCopy":
 		"El proceso de duplicación puede tardar más en el caso de archivos de gran tamaño. El contenido estará disponible en breve.",
-	"components.molecules.copyResult.timeoutSuccess":
-		"El proceso de duplicación ha finalizado.",
-	"components.molecules.copyResult.title.failure":
-		"Error durante la duplicación",
+	"components.molecules.copyResult.timeoutSuccess": "El proceso de duplicación ha finalizado.",
+	"components.molecules.copyResult.title.failure": "Error durante la duplicación",
 	"components.molecules.copyResult.title.loading": "Duplicando en proceso...",
-	"components.molecules.copyResult.title.partial":
-		"Información importante sobre la duplicación",
+	"components.molecules.copyResult.title.partial": "Información importante sobre la duplicación",
 	"components.molecules.copyResult.title.success": "Duplicación exitosa",
-	"components.molecules.copyResult.followingNotCopied":
-		"No se ha copiado lo siguiente:",
+	"components.molecules.copyResult.followingNotCopied": "No se ha copiado lo siguiente:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
-	"components.molecules.import.columnBoard.rename":
-		"Si es necesario, se puede cambiar el nombre del tablero: ",
-	"components.molecules.import.columnBoard.options.infoText":
-		"Puede cambiar el nombre del tablero a continuación.",
+	"components.molecules.import.columnBoard.rename": "Si es necesario, se puede cambiar el nombre del tablero: ",
+	"components.molecules.import.columnBoard.options.infoText": "Puede cambiar el nombre del tablero a continuación.",
 	"components.molecules.import.columnBoard.options.title": "Importar tablero",
-	"components.molecules.import.columnBoard.options.selectCourse":
-		"Elija el curso",
+	"components.molecules.import.columnBoard.options.selectCourse": "Elija el curso",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar el tablero.",
 	"components.molecules.import.courses.label": "Nombre del curso",
-	"components.molecules.import.columnBoard.options.selectRoom":
-		"Seleccionar sala",
+	"components.molecules.import.columnBoard.options.selectRoom": "Seleccionar sala",
 	"components.molecules.import.columnBoard.options.selectRoom.infoText":
 		"Seleccione la sala en la que desea importar el tablero.",
-	"components.molecules.import.courses.rename":
-		"Si es necesario, se puede cambiar el nombre del curso: ",
+	"components.molecules.import.courses.rename": "Si es necesario, se puede cambiar el nombre del curso: ",
 	"components.molecules.import.courses.options.title": "Importar copia nuestra",
 	"components.molecules.import.lessons.label": "Tema",
-	"components.molecules.import.lessons.rename":
-		"Si es necesario, se puede cambiar el nombre del tema: ",
+	"components.molecules.import.lessons.rename": "Si es necesario, se puede cambiar el nombre del tema: ",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar el tema.",
 	"components.molecules.import.lessons.options.selectCourse": "Elija el curso",
 	"components.molecules.import.lessons.options.title": "Importar tema",
-	"components.molecules.import.options.failure.backendError":
-		"'{name}' no se pudo importar.",
-	"components.molecules.import.options.failure.invalidToken":
-		"El token en el enlace es desconocido o ha caducado.",
-	"components.molecules.import.options.failure.permissionError":
-		"Desafortunadamente, falta la autorización necesaria.",
-	"components.molecules.import.options.loadingMessage":
-		"Importación en curso...",
+	"components.molecules.import.options.failure.backendError": "'{name}' no se pudo importar.",
+	"components.molecules.import.options.failure.invalidToken": "El token en el enlace es desconocido o ha caducado.",
+	"components.molecules.import.options.failure.permissionError": "Desafortunadamente, falta la autorización necesaria.",
+	"components.molecules.import.options.loadingMessage": "Importación en curso...",
 	"components.molecules.import.options.success": "{name} importado con éxito",
-	"components.molecules.import.options.tableHeader.InfoText":
-		"No se importará el siguiente contenido:",
+	"components.molecules.import.options.tableHeader.InfoText": "No se importará el siguiente contenido:",
 	"components.molecules.import.room.options.title": "Importar espacio",
-	"components.molecules.import.room.rename":
-		"Si es necesario, se puede cambiar el nombre del espacio: ",
+	"components.molecules.import.room.rename": "Si es necesario, se puede cambiar el nombre del espacio: ",
 	"components.molecules.import.room.label": "Nombre del espacio",
 	"components.molecules.import.tasks.label": "Tarea",
-	"components.molecules.import.tasks.rename":
-		"Si es necesario, se puede cambiar el nombre de la tarea: ",
+	"components.molecules.import.tasks.rename": "Si es necesario, se puede cambiar el nombre de la tarea: ",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar la tarea.",
 	"components.molecules.import.tasks.options.selectCourse": "Elija el curso",
@@ -787,33 +663,23 @@ export default {
 		"Las cuentas de usuario {source} se importan posteriormente a la {instance}. Si desea vincular una cuenta de usuario de {source} a una cuenta de usuario de {instance} existente para conservar los datos del usuario, puede seleccionar aquí la cuenta de {instance} respectiva.",
 	"components.molecules.importUsersMatch.subtitle":
 		"Las cuentas de usuario {source} se importan posteriormente a la {instance}. Si desea vincular una cuenta de usuario de {source} a una cuenta de usuario de {instance} existente para conservar los datos del usuario, puede seleccionar aquí la cuenta de {instance} respectiva. De lo contrario, se creará como una nueva cuenta de usuario.",
-	"components.molecules.importUsersMatch.title":
-		"Vincular la cuenta {source} a la cuenta {instance}",
+	"components.molecules.importUsersMatch.title": "Vincular la cuenta {source} a la cuenta {instance}",
 	"components.molecules.importUsersMatch.unMatched.nbc": "Ninguno.",
-	"components.molecules.importUsersMatch.unMatched":
-		"Ninguno. El usuario es recién creado.",
+	"components.molecules.importUsersMatch.unMatched": "Ninguno. El usuario es recién creado.",
 	"components.molecules.importUsersMatch.write": "Introduzca nombre o apellido",
-	"components.molecules.importUsersMatch.externalRoleName.none":
-		"No disponible",
-	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
-		"Profesor",
-	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
-		"Estudiante",
-	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
-		"Administrador de organización",
-	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
-		"Gestión organizativa",
+	"components.molecules.importUsersMatch.externalRoleName.none": "No disponible",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher": "Profesor",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student": "Estudiante",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Administrador de organización",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Gestión organizativa",
 	"components.molecules.MintEcFooter.chapters": "Resumen del capítulo",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
-	"components.molecules.share.columnBoard.result.linkLabel":
-		"Enlace a la copia del tablón",
-	"components.molecules.share.columnBoard.mail.subject":
-		"Tablero para importar",
+	"components.molecules.share.columnBoard.result.linkLabel": "Enlace a la copia del tablón",
+	"components.molecules.share.columnBoard.mail.subject": "Tablero para importar",
 	"components.molecules.share.columnBoard.mail.body": "Enlace al tablero: ",
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
-	"components.molecules.share.roomMemberInvitation.mail.body":
-		"Enlace a la Sala: ",
+	"components.molecules.share.roomMemberInvitation.mail.body": "Enlace a la Sala: ",
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
@@ -823,39 +689,27 @@ export default {
 		"Configuraciones protegidas de herramientas externas",
 	"components.molecules.share.courses.options.infoText":
 		"Utilizando el siguiente enlace, otros profesores pueden importar el curso como una copia.",
-	"components.molecules.shareImport.options.restrictions.infoText.personalData":
-		"Datos personales",
-	"components.molecules.shareImport.options.restrictions.infoText.courseFiles":
-		"Archivos en Archivos de curso",
-	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
-		"Contenido de Etherpads",
-	"components.molecules.shareImport.options.restrictions.infoText.whiteboard":
-		"Contenido de Whiteboards",
-	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
-		"ID de Geogebra",
-	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
-		"Grupos de cursos",
+	"components.molecules.shareImport.options.restrictions.infoText.personalData": "Datos personales",
+	"components.molecules.shareImport.options.restrictions.infoText.courseFiles": "Archivos en Archivos de curso",
+	"components.molecules.shareImport.options.restrictions.infoText.etherpad": "Contenido de Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.whiteboard": "Contenido de Whiteboards",
+	"components.molecules.shareImport.options.restrictions.infoText.geogebra": "ID de Geogebra",
+	"components.molecules.shareImport.options.restrictions.infoText.courseGroups": "Grupos de cursos",
 	"components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData":
 		"Miembros y permisos de la sala",
-	"components.molecules.share.options.tableHeader.InfoText":
-		"No se copiará lo siguiente:",
-	"components.molecules.share.courses.result.linkLabel":
-		"Enlace a la copia del curso",
+	"components.molecules.share.options.tableHeader.InfoText": "No se copiará lo siguiente:",
+	"components.molecules.share.courses.result.linkLabel": "Enlace a la copia del curso",
 	"components.molecules.share.lessons.mail.body": "Enlace al tema:",
 	"components.molecules.share.lessons.mail.subject": "Tema de importación",
 	"components.molecules.share.lessons.options.infoText":
 		"Con el siguiente enlace, el tema puede ser importado como copia por otros profesores.",
-	"components.molecules.share.lessons.result.linkLabel":
-		"Enlace a la copia del tema",
-	"components.molecules.share.options.expiresInDays":
-		"El enlace caduca a los 21 días",
-	"components.molecules.share.options.schoolInternally":
-		"El enlace sólo es válido dentro de la escuela",
+	"components.molecules.share.lessons.result.linkLabel": "Enlace a la copia del tema",
+	"components.molecules.share.options.expiresInDays": "El enlace caduca a los 21 días",
+	"components.molecules.share.options.schoolInternally": "El enlace sólo es válido dentro de la escuela",
 	"components.molecules.share.options.title": "Compartir la configuración",
 	"components.molecules.share.room.options.infoText":
 		"Con el siguiente enlace, otras personas pueden importar la sala como copia.",
-	"components.molecules.share.room.result.linkLabel":
-		"Enlace a la copia del salón",
+	"components.molecules.share.room.result.linkLabel": "Enlace a la copia del salón",
 	"components.molecules.share.room.mail.subject": "Sala para importar",
 	"components.molecules.share.room.mail.body": "Enlace a la sala: ",
 	"components.molecules.share.result.mailShare": "Enviar como correo",
@@ -865,10 +719,8 @@ export default {
 	"components.molecules.share.tasks.mail.subject": "Tarea de importación",
 	"components.molecules.share.tasks.options.infoText":
 		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores.",
-	"components.molecules.share.tasks.result.linkLabel":
-		"Enlace a la copia de la tarea",
-	"components.molecules.share.roomMemberInvitation.result.linkLabel":
-		"Enlace de invitación a la sala",
+	"components.molecules.share.tasks.result.linkLabel": "Enlace a la copia de la tarea",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Enlace de invitación a la sala",
 	"components.molecules.share.checkPrivacyAndCopyright":
 		"Por favor, comprueba los contenidos en cuanto a derechos de autor y protección de datos.",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
@@ -877,48 +729,33 @@ export default {
 	"components.molecules.TaskItemMenu.finish": "Terminar",
 	"components.molecules.TaskItemMenu.labels.createdAt": "Creado",
 	"components.molecules.TaskItemTeacher.graded": "Calificado",
-	"components.molecules.TaskItemTeacher.lessonIsNotPublished":
-		"Tema no publicada",
-	"components.molecules.TaskItemTeacher.status":
-		"{submitted}/{max} entregado, {graded} calificado",
+	"components.molecules.TaskItemTeacher.lessonIsNotPublished": "Tema no publicada",
+	"components.molecules.TaskItemTeacher.status": "{submitted}/{max} entregado, {graded} calificado",
 	"components.molecules.TaskItemTeacher.submitted": "Entregado",
-	"components.molecules.TextEditor.noLocalFiles":
-		"Actualmente no se admiten archivos locales.",
-	"components.molecules.export.options.info":
-		"El siguiente contenido no se exporta:",
-	"components.molecules.export.options.info.point1":
-		"Archivos subidos dentro del curso.",
-	"components.molecules.export.options.info.point2":
-		"Envíos asignados a una tarea.",
-	"components.organisms.ContentCard.report.body":
-		"Informar del contenido con el ID",
-	"components.organisms.ContentCard.report.email":
-		"inhalte{'@'}hpi-schul-cloud.de",
+	"components.molecules.TextEditor.noLocalFiles": "Actualmente no se admiten archivos locales.",
+	"components.molecules.export.options.info": "El siguiente contenido no se exporta:",
+	"components.molecules.export.options.info.point1": "Archivos subidos dentro del curso.",
+	"components.molecules.export.options.info.point2": "Envíos asignados a una tarea.",
+	"components.organisms.ContentCard.report.body": "Informar del contenido con el ID",
+	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
 		"Estimado equipo: me gustaría informar sobre el contenido mencionado en el asunto porque: [pon tus razones aquí]",
 	"components.organisms.DataFilter.add": "Añadir filtro",
-	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting":
-		"cambiar clasificación",
-	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc":
-		"ordenados en orden ascendente",
-	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc":
-		"ordenados en orden descendente",
+	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting": "cambiar clasificación",
+	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc": "ordenados en orden ascendente",
+	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc": "ordenados en orden descendente",
 	"components.organisms.FormNews.cancel.confirm.cancel": "Continuar",
-	"components.organisms.FormNews.cancel.confirm.confirm":
-		"Descartar los cambios",
+	"components.organisms.FormNews.cancel.confirm.confirm": "Descartar los cambios",
 	"components.organisms.FormNews.cancel.confirm.message":
 		"Si cancelas la edición, se perderán todos los cambios no guardados.",
 	"components.organisms.FormNews.editor.placeholder": "Érase una vez...",
 	"components.organisms.FormNews.error.patch": "Error al actualizar.",
 	"components.organisms.FormNews.error.remove": "Error durante la eliminación.",
 	"components.organisms.FormNews.errors.create": "Error durante la creación.",
-	"components.organisms.FormNews.errors.missing_content":
-		"Tu artículo está vacío. ;)",
-	"components.organisms.FormNews.errors.missing_title":
-		"Cada artículo debe tener un título.",
+	"components.organisms.FormNews.errors.missing_content": "Tu artículo está vacío. ;)",
+	"components.organisms.FormNews.errors.missing_title": "Cada artículo debe tener un título.",
 	"components.organisms.FormNews.input.title.label": "Título de la noticia",
-	"components.organisms.FormNews.input.title.placeholder":
-		"Empecemos con el título",
+	"components.organisms.FormNews.input.title.placeholder": "Empecemos con el título",
 	"components.organisms.FormNews.label.planned_publish":
 		"Aquí puedes establecer una fecha para la publicación automática en el futuro (opcional):",
 	"components.organisms.FormNews.remove.confirm.cancel": "Cancelar",
@@ -926,10 +763,8 @@ export default {
 	"components.organisms.FormNews.remove.confirm.message":
 		"¿Estás seguro de que quieres borrar este artículo de forma irreversible?",
 	"components.organisms.FormNews.success.create": "Artículo creado.",
-	"components.organisms.FormNews.success.patch":
-		"Artículo actualizado correctamente.",
-	"components.organisms.FormNews.success.remove":
-		"Artículo eliminado correctamente.",
+	"components.organisms.FormNews.success.patch": "Artículo actualizado correctamente.",
+	"components.organisms.FormNews.success.remove": "Artículo eliminado correctamente.",
 	"components.organisms.importUsers.createNew": "Crear nuevo",
 	"components.organisms.importUsers.editImportUser": "Editar usario",
 	"components.organisms.importUsers.flagImportUser": "Marcar usario",
@@ -942,18 +777,15 @@ export default {
 		"Las entradas que deben marcarse y, en caso necesario, comprobarse posteriormente se pueden marcar con una bandera.",
 	"components.organisms.importUsers.legendUnMatched":
 		"{instance} usuario no encontrado. Una vez completada la migración, se creará automáticamente una nueva cuenta de usuario tan pronto como el usuario {source} inicie sesión en {instance} por primera vez.",
-	"components.organisms.importUsers.searchAdminMatched":
-		"Búsqueda vinculada por el administrador",
-	"components.organisms.importUsers.searchAutoMatched":
-		"Búsqueda vinculada automáticamente",
+	"components.organisms.importUsers.searchAdminMatched": "Búsqueda vinculada por el administrador",
+	"components.organisms.importUsers.searchAutoMatched": "Búsqueda vinculada automáticamente",
 	"components.organisms.importUsers.searchClass": "Buscar por clase",
 	"components.organisms.importUsers.searchFirstName": "Búsqueda por nombre",
 	"components.organisms.importUsers.searchFlagged": "Búsqueda marcada",
 	"components.organisms.importUsers.searchLastName": "Búsqueda por apellido",
 	"components.organisms.importUsers.searchRole": "Elija el rol",
 	"components.organisms.importUsers.searchUnMatched": "Búsqueda no vinculada",
-	"components.organisms.importUsers.searchUserName":
-		"Buscar por nombre de usuario",
+	"components.organisms.importUsers.searchUserName": "Buscar por nombre de usuario",
 	"components.organisms.importUsers.tableClasses": "Clase",
 	"components.organisms.importUsers.tableFirstName": "Nombre",
 	"components.organisms.importUsers.tableFlag": "Marca",
@@ -963,8 +795,7 @@ export default {
 	"components.organisms.importUsers.tableUserName": "Nombre de usuario",
 	"components.organisms.LegacyFooter.contact": "Contacto",
 	"components.organisms.LegacyFooter.job-offer": "Anuncios de empleo",
-	"components.organisms.Pagination.currentPage":
-		"{start} a {end} desde {total}",
+	"components.organisms.Pagination.currentPage": "{start} a {end} desde {total}",
 	"components.organisms.Pagination.perPage.10": "10 por página",
 	"components.organisms.Pagination.perPage.100": "100 por página",
 	"components.organisms.Pagination.perPage.25": "25 por página",
@@ -972,10 +803,8 @@ export default {
 	"components.organisms.Pagination.perPage.50": "50 por página",
 	"components.organisms.Pagination.perPage": "por página",
 	"components.organisms.Pagination.recordsPerPage": "Entradas por página",
-	"components.organisms.Pagination.showTotalRecords":
-		"Mostrar todas las {total} entradas",
-	"components.organisms.TasksDashboardMain.filter.substitute":
-		"Tareas de las Susstiticiones",
+	"components.organisms.Pagination.showTotalRecords": "Mostrar todas las {total} entradas",
+	"components.organisms.TasksDashboardMain.filter.substitute": "Tareas de las Susstiticiones",
 	"components.organisms.TasksDashboardMain.tab.completed": "Completado",
 	"components.organisms.TasksDashboardMain.tab.current": "Actual",
 	"components.organisms.TasksDashboardMain.tab.drafts": "Borradores",
@@ -994,59 +823,44 @@ export default {
 		"Se ha producido un error al guardar. Por favor, compruebe sus entradas e inténtelo de nuevo.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
 		"La fecha de inicio debe ser anterior a la fecha de finalización.",
-	"components.timePicker.validation.format":
-		"Por favor utilice el formato HH:MM",
+	"components.timePicker.validation.format": "Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
 	"data-room.copy.alert.success": "Sala duplicada con éxito.",
-	"data-room.copy.alert.error":
-		"No se pudo completar el proceso de duplicación.",
+	"data-room.copy.alert.error": "No se pudo completar el proceso de duplicación.",
 	"data-room.copy.loading": "La sala se está duplicando...",
 	"error.400": "401 – Solicitud incorrecta",
-	"error.401":
-		"401 – Lamentablemente, falta la autorización para ver este contenido.",
-	"error.403":
-		"403 – Lamentablemente, falta la autorización para ver este contenido.",
+	"error.401": "401 – Lamentablemente, falta la autorización para ver este contenido.",
+	"error.403": "403 – Lamentablemente, falta la autorización para ver este contenido.",
 	"error.404": "404 – No encontrado",
 	"error.408": "408 – Tiempo de espera de la conexión al servidor",
 	"error.action.back": "Al panel",
 	"error.generic": "Se ha producido un error",
 	"error.load": "Error al cargar los datos.",
 	"error.proxy.action": "Volver a cargar la página",
-	"error.proxy.description":
-		"Tenemos un pequeño problema con nuestra infraestructura. Enseguida volvemos.",
+	"error.proxy.description": "Tenemos un pequeño problema con nuestra infraestructura. Enseguida volvemos.",
 	"feature-autoLogout.button.confirm": "Ampliar sesión",
-	"feature-autoLogout.button.confirm.returnToLogin":
-		"Volver a la página de inicio de sesión",
-	"feature-autoLogout.message.error.401":
-		"Tu sesión ya ha caducado. Inicia sesión de nuevo.",
+	"feature-autoLogout.button.confirm.returnToLogin": "Volver a la página de inicio de sesión",
+	"feature-autoLogout.message.error.401": "Tu sesión ya ha caducado. Inicia sesión de nuevo.",
 	"feature-autoLogout.message.error":
 		"Vaya... ¡Eso no debería haber sucedido! No se ha podido ampliar tu sesión. Vuelve a intentarlo de inmediato.",
 	"feature-autoLogout.component.image.alt": "Perezoso",
 	"feature-autoLogout.message.success": "Sesión ampliada correctamente.",
-	"feature-autoLogout.warning.remainingTime":
-		"menos de un minuto | un minuto | {remainingTime} minutos",
-	"feature-autoLogout.warning":
-		"Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
+	"feature-autoLogout.warning.remainingTime": "menos de un minuto | un minuto | {remainingTime} minutos",
+	"feature-autoLogout.warning": "Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
 	"feature-board-external-tool-element.alert.error.student":
 		"La herramienta no se puede iniciar actualmente. Actualice el tablero o comuníquese con el maestro o instructor del curso.",
 	"feature-board-external-tool-element.alert.error.teacher":
 		"La herramienta no se puede iniciar actualmente. Actualice el tablero o comuníquese con el administrador de la escuela.",
-	"feature-board-external-tool-element.dialog.title":
-		"Selección y configuración",
-	"feature-board-external-tool-element.placeholder.selectTool":
-		"Herramienta de selección...",
-	"feature-board-external-tool-element.placeholder.selectContent":
-		"Seleccionar contenido de {toolName}...",
+	"feature-board-external-tool-element.dialog.title": "Selección y configuración",
+	"feature-board-external-tool-element.placeholder.selectTool": "Herramienta de selección...",
+	"feature-board-external-tool-element.placeholder.selectContent": "Seleccionar contenido de {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Finalizar sincronización",
 	"feature-course-sync.EndCourseSyncDialog.description":
 		"¿Debería realmente detenerse la sincronización del curso {courseName} con el grupo de usuarios {groupName}?",
-	"feature-course-sync.EndCourseSyncDialog.success":
-		"Sincronización completada exitosamente",
-	"feature-course-sync.GroupSelectionDialog.title":
-		"Seleccionar grupo de usuarios",
-	"feature-course-sync.GroupSelectionDialog.selection.label":
-		"Selección de grupo",
+	"feature-course-sync.EndCourseSyncDialog.success": "Sincronización completada exitosamente",
+	"feature-course-sync.GroupSelectionDialog.title": "Seleccionar grupo de usuarios",
+	"feature-course-sync.GroupSelectionDialog.selection.label": "Selección de grupo",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Los siguientes datos para crear un nuevo curso no están disponibles en el grupo de usuarios {groupName}: {teacher} Por favor, regístrese en moin.schule y comience la creación del curso nuevamente.",
 	"feature-course-sync.StartNewCourseSyncDialog.text":
@@ -1059,22 +873,15 @@ export default {
 		"Una sincronización sobrescribe a los participantes del curso (estudiantes asignados).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
 		"¿Debería realmente sincronizarse el curso {courseName} con el grupo de usuarios {groupName}?",
-	"feature-course-sync.StartExistingCourseSyncDialog.success":
-		"Grupo de usuarios sincronizado exitosamente",
+	"feature-course-sync.StartExistingCourseSyncDialog.success": "Grupo de usuarios sincronizado exitosamente",
 	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
 	"feature-room.CopyInfoDialog.title": "Duplicar Sala",
-	"feature-room.CopyInfoDialog.text.nextStep":
-		"En el siguiente paso, se creará una copia de la sala.",
-	"feature-room.CopyInfoDialog.text.alert.followingContent":
-		"No se copiará lo siguiente:",
-	"feature-room.CopyInfoDialog.text.alert.membersPermissions":
-		"Miembros y permisos de la sala",
-	"feature-room.CopyInfoDialog.text.alert.Etherpad":
-		"Contenidos de los Etherpads",
-	"feature-room.CopyInfoDialog.text.alert.whiteboard":
-		"Contenidos de las pizarras blancas",
-	"feature-room.CopyInfoDialog.text.alert.protectedSettings":
-		"Configuraciones protegidas de herramientas externas",
+	"feature-room.CopyInfoDialog.text.nextStep": "En el siguiente paso, se creará una copia de la sala.",
+	"feature-room.CopyInfoDialog.text.alert.followingContent": "No se copiará lo siguiente:",
+	"feature-room.CopyInfoDialog.text.alert.membersPermissions": "Miembros y permisos de la sala",
+	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Contenidos de los Etherpads",
+	"feature-room.CopyInfoDialog.text.alert.whiteboard": "Contenidos de las pizarras blancas",
+	"feature-room.CopyInfoDialog.text.alert.protectedSettings": "Configuraciones protegidas de herramientas externas",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD/MM/YYYY HH:mm",
@@ -1148,25 +955,21 @@ export default {
 	"page-class-members.title.info": "importado desde un sistema externo",
 	"pages.activation._activationCode.index.error.description":
 		"No se han podido realizar tus cambios porque el enlace no es válido o ha caducado. Inténtalo de nuevo.",
-	"pages.activation._activationCode.index.error.title":
-		"No se han podido cambiar tus datos",
+	"pages.activation._activationCode.index.error.title": "No se han podido cambiar tus datos",
 	"pages.activation._activationCode.index.success.email":
 		"Tu dirección de correo electrónico se ha cambiado correctamente",
 	"pages.administration.actions": "Acciones",
 	"pages.administration.all": "todos",
-	"pages.administration.classes.createSuccessor":
-		"Mover la clase al próximo año escolar",
+	"pages.administration.classes.createSuccessor": "Mover la clase al próximo año escolar",
 	"pages.administration.classes.delete": "Eliminar clase",
-	"pages.administration.classes.deleteDialog.content":
-		'¿Está seguro de que desea eliminar la clase "{itemName}"?',
+	"pages.administration.classes.deleteDialog.content": '¿Está seguro de que desea eliminar la clase "{itemName}"?',
 	"pages.administration.classes.deleteDialog.title": "¿Eliminar clase?",
 	"pages.administration.classes.edit": "Editar clase",
 	"pages.administration.common.hint":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
 	"pages.administration.classes.index.add": "Agregar clase",
 	"pages.administration.classes.index.title": "Administrar clases",
-	"pages.administration.classes.thr.hint.title":
-		"Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.title": "Warum kann ich keine Einträge bearbeiten?",
 	"pages.administration.classes.thr.hint.text":
 		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
 	"pages.administration.common.label.archive": "Archivo",
@@ -1174,12 +977,10 @@ export default {
 	"pages.administration.classes.manage": "Administrar clase",
 	"pages.administration.classes.header.sync": "Sincronizado con",
 	"pages.administration.courses.delete": "Eliminar curso",
-	"pages.administration.courses.deleteDialog.content":
-		'¿Realmente quieres este curso? "{itemName}" borrar?',
+	"pages.administration.courses.deleteDialog.content": '¿Realmente quieres este curso? "{itemName}" borrar?',
 	"pages.administration.courses.index.add": "Agregar curso",
 	"pages.administration.courses.edit": "Editar curso",
-	"pages.administration.courses.withoutTeacher":
-		"Mostrar sólo los cursos sin profesor",
+	"pages.administration.courses.withoutTeacher": "Mostrar sólo los cursos sin profesor",
 	"pages.administration.courses.noTeacher": "no disponible",
 	"pages.administration.index.title": "Administración",
 	"pages.administration.ldap.activate.breadcrumb": "Sincronización",
@@ -1196,22 +997,17 @@ export default {
 		"Se ha producido un error. No se ha podido activar el asistente de migración. El sistema LDAP tampoco se ha activado. Por favor, inténtelo de nuevo. Si este problema persiste, póngase en contacto con el servicio de asistencia.",
 	"pages.administration.ldap.activate.migrateExistingUsers.info":
 		"Si ya ha creado manualmente los usuarios que van a ser gestionados a través de LDAP en el futuro, puede utilizar el asistente de migración. El asistente vincula los usuarios LDAP con los usuarios existentes. Puede ajustar la asignación y debe confirmarla antes de que ésta se active. Sólo entonces los usuarios pueden iniciar la sesión a través del LDAP. Si el sistema LDAP se activa sin el asistente de migración, todos los usuarios se importan desde el LDAP. Ya no es posible asignar usuarios posteriormente.",
-	"pages.administration.ldap.activate.migrateExistingUsers.title":
-		"Migrar a los usuarios existentes",
+	"pages.administration.ldap.activate.migrateExistingUsers.title": "Migrar a los usuarios existentes",
 	"pages.administration.ldap.activate.ok": "Ok",
 	"pages.administration.ldap.activate.roles": "Roles",
 	"pages.administration.ldap.activate.uid": "UID",
 	"pages.administration.ldap.activate.uuid": "UUID",
-	"pages.administration.ldap.classes.activate.import":
-		"Activar la importación de clases",
+	"pages.administration.ldap.classes.activate.import": "Activar la importación de clases",
 	"pages.administration.ldap.classes.hint":
 		"Cada sistema LDAP utiliza diferentes atributos para representar las clases. Por favor, ayúdenos con la asignación de los atributos de sus clases. Hemos creado algunos valores predeterminados útiles que puede ajustar aquí en cualquier momento.",
-	"pages.administration.ldap.classes.notice.title":
-		"Atributo del Nombre de la pantalla",
-	"pages.administration.ldap.classes.participant.title":
-		"Atributo del Participante",
-	"pages.administration.ldap.classes.path.info":
-		"Ruta relativa desde la ruta base",
+	"pages.administration.ldap.classes.notice.title": "Atributo del Nombre de la pantalla",
+	"pages.administration.ldap.classes.participant.title": "Atributo del Participante",
+	"pages.administration.ldap.classes.path.info": "Ruta relativa desde la ruta base",
 	"pages.administration.ldap.classes.path.subtitle":
 		"Aquí hay que definir dónde encontramos las clases y cómo están estructuradas.",
 	"pages.administration.ldap.classes.path.title": "Ruta de clase",
@@ -1223,50 +1019,39 @@ export default {
 	"pages.administration.ldap.connection.basis.path": "Ruta base de la escuela",
 	"pages.administration.ldap.connection.search.user.info":
 		"DN de usuari{'@'} completo, incluida la ruta de acceso a la raíz del usuari{'@'} que tiene acceso a toda la información del usuari{'@'}.",
-	"pages.administration.ldap.connection.search.user.password":
-		"Contraseña para la búsqueda de usuari{'@'}s",
-	"pages.administration.ldap.connection.search.user":
-		"Búsqueda de usuari{'@'}s",
+	"pages.administration.ldap.connection.search.user.password": "Contraseña para la búsqueda de usuari{'@'}s",
+	"pages.administration.ldap.connection.search.user": "Búsqueda de usuari{'@'}s",
 	"pages.administration.ldap.connection.server.info":
 		"Por favor, asegúrese de que el servidor sea accesible a través del protocolo seguro ldaps://.",
 	"pages.administration.ldap.connection.server.url": "URL del servidor",
 	"pages.administration.ldap.connection.title": "Conexión",
-	"pages.administration.ldap.errors.configuration":
-		"Objeto de configuración no válido",
-	"pages.administration.ldap.errors.credentials":
-		"Credenciales incorrectas para la búsqueda de usuari{'@'}s",
+	"pages.administration.ldap.errors.configuration": "Objeto de configuración no válido",
+	"pages.administration.ldap.errors.credentials": "Credenciales incorrectas para la búsqueda de usuari{'@'}s",
 	"pages.administration.ldap.errors.path": "Ruta de búsqueda o base incorrecta",
 	"pages.administration.ldap.index.buttons.reset": "Restablecer entradas",
 	"pages.administration.ldap.index.buttons.verify": "Verificar las entradas",
 	"pages.administration.ldap.index.title": "Configuración LDAP",
 	"pages.administration.ldap.index.verified": "La verificación fue exitosa",
 	"pages.administration.ldap.save.example.class": "Ejemplo de clase",
-	"pages.administration.ldap.save.example.synchronize":
-		"Activar la sincronización",
+	"pages.administration.ldap.save.example.synchronize": "Activar la sincronización",
 	"pages.administration.ldap.save.example.user": "Ejemplo de usuari{'@'}s",
 	"pages.administration.ldap.save.subtitle":
 		"En los siguientes ejemplos puedes comprobar si hemos asignado los atributos correctamente.",
-	"pages.administration.ldap.save.title":
-		"Los siguientes conjuntos de datos están disponibles para la sincronización",
-	"pages.administration.ldap.subtitle.help":
-		"Puede encontrar más información en nuestra ",
-	"pages.administration.ldap.subtitle.helping.link":
-		"Área de ayuda para la configuración LDAP",
+	"pages.administration.ldap.save.title": "Los siguientes conjuntos de datos están disponibles para la sincronización",
+	"pages.administration.ldap.subtitle.help": "Puede encontrar más información en nuestra ",
+	"pages.administration.ldap.subtitle.helping.link": "Área de ayuda para la configuración LDAP",
 	"pages.administration.ldap.subtitle.one":
 		"Cualquier cambio en la siguiente configuración puede hacer que el inicio de sesión deje de funcionar para usted y para todos l{'@'}s usuari{'@'}s de su escuela. Por lo tanto, sólo haga cambios si es consciente de las consecuencias. Algunas áreas son de sólo lectura.",
 	"pages.administration.ldap.subtitle.two":
 		"Después de la verificación, puede previsualizar el contenido en la vista previa. L{'@'}s usuari{'@'}s a los que les falte alguno de los atributos requeridos en el directorio no serán sincronizados.",
 	"pages.administration.ldap.title":
 		"Configuración de la sincronización e inicio de sesión de l{'@'}s usuari{'@'}s a través de LDAP",
-	"pages.administration.ldap.users.domain.title":
-		"Nombre de dominio (ruta en LDAP)",
+	"pages.administration.ldap.users.domain.title": "Nombre de dominio (ruta en LDAP)",
 	"pages.administration.ldap.users.hint":
 		"Cada sistema LDAP utiliza diferentes atributos para representar a l{'@'}s usuari{'@'}s. Por favor, ayúdanos con la asignación de los atributos de tus usuarios. Hemos creado algunos valores predeterminados útiles que puede ajustar aquí en cualquier momento.",
 	"pages.administration.ldap.users.path.email": "Valor de atributo de e-mail",
-	"pages.administration.ldap.users.path.firstname":
-		"Valor de atributo de Nombre",
-	"pages.administration.ldap.users.path.lastname":
-		"Valor de atributo de Apellido",
+	"pages.administration.ldap.users.path.firstname": "Valor de atributo de Nombre",
+	"pages.administration.ldap.users.path.lastname": "Valor de atributo de Apellido",
 	"pages.administration.ldap.users.path.title": "Ruta de usuari{'@'}",
 	"pages.administration.ldap.users.title.info":
 		"En el siguiente campo de entrada hay que definir dónde encontramos a l{'@'}s usuari{'@'}s y cómo están estructurados. Con la ayuda de dos puntos y coma (;;) tiene la posibilidad de almacenar varias rutas de usuari{'@'} por separado.",
@@ -1279,76 +1064,50 @@ export default {
 	"pages.administration.ldap.users.uuid.title": "Atributo uuid",
 	"pages.administration.ldapEdit.roles.headLines.sectionDescription":
 		"A continuación, l{'@'}s usuari{'@'}s encontrados deben ser asignados a los roles predefinidos de $longname.",
-	"pages.administration.ldapEdit.roles.headLines.title":
-		"Roles del usuari{'@'}",
-	"pages.administration.ldapEdit.roles.info.admin":
-		"Ejemplo: cn=admin,ou=rollen,o=schule,dc=de",
-	"pages.administration.ldapEdit.roles.info.student":
-		"Ejemplo: cn=schueler,ou=rollen,o=schule,dc=de",
-	"pages.administration.ldapEdit.roles.info.teacher":
-		"Ejemplo: cn=lehrer,ou=rollen,o=schule,dc=de",
-	"pages.administration.ldapEdit.roles.info.user":
-		"Ejemplo:  cn=ehemalige,ou=rollen,o=schule,dc=de",
-	"pages.administration.ldapEdit.roles.labels.admin":
-		"Valor del atributo admin",
+	"pages.administration.ldapEdit.roles.headLines.title": "Roles del usuari{'@'}",
+	"pages.administration.ldapEdit.roles.info.admin": "Ejemplo: cn=admin,ou=rollen,o=schule,dc=de",
+	"pages.administration.ldapEdit.roles.info.student": "Ejemplo: cn=schueler,ou=rollen,o=schule,dc=de",
+	"pages.administration.ldapEdit.roles.info.teacher": "Ejemplo: cn=lehrer,ou=rollen,o=schule,dc=de",
+	"pages.administration.ldapEdit.roles.info.user": "Ejemplo:  cn=ehemalige,ou=rollen,o=schule,dc=de",
+	"pages.administration.ldapEdit.roles.labels.admin": "Valor del atributo admin",
 	"pages.administration.ldapEdit.roles.labels.member": "Atributo del rol",
-	"pages.administration.ldapEdit.roles.labels.noSchoolCloud":
-		"Valor del atributo ignorar usuari{'@'}",
+	"pages.administration.ldapEdit.roles.labels.noSchoolCloud": "Valor del atributo ignorar usuari{'@'}",
 	"pages.administration.ldapEdit.roles.labels.radio.description":
 		"¿El rol de usuari{'@'} se almacena textualmente en el atributo de usuari{'@'} o existe un grupo LDAP para los respectivos roles de usuari{'@'}?",
 	"pages.administration.ldapEdit.roles.labels.radio.ldapGroup": "Grupo LDAP",
-	"pages.administration.ldapEdit.roles.labels.radio.userAttribute":
-		"Atributo del usuari{'@'}",
-	"pages.administration.ldapEdit.roles.labels.student":
-		"Valor del atributo estudiante",
-	"pages.administration.ldapEdit.roles.labels.teacher":
-		"Valor del atributo profesor",
-	"pages.administration.ldapEdit.roles.labels.user":
-		"Valor del atributo ignorar usuari{'@'}",
-	"pages.administration.ldapEdit.roles.placeholder.admin":
-		"Valor del atributo admin",
+	"pages.administration.ldapEdit.roles.labels.radio.userAttribute": "Atributo del usuari{'@'}",
+	"pages.administration.ldapEdit.roles.labels.student": "Valor del atributo estudiante",
+	"pages.administration.ldapEdit.roles.labels.teacher": "Valor del atributo profesor",
+	"pages.administration.ldapEdit.roles.labels.user": "Valor del atributo ignorar usuari{'@'}",
+	"pages.administration.ldapEdit.roles.placeholder.admin": "Valor del atributo admin",
 	"pages.administration.ldapEdit.roles.placeholder.member": "miembroDe",
-	"pages.administration.ldapEdit.roles.placeholder.student":
-		"Valor del atributo estudiante",
-	"pages.administration.ldapEdit.roles.placeholder.teacher":
-		"Valor del atributo profesor",
-	"pages.administration.ldapEdit.roles.placeholder.user":
-		"Valor del atributo ignorar usuari{'@'}",
-	"pages.administration.ldapEdit.validation.path":
-		"Por favor, utilice un formato de ruta LDAP",
-	"pages.administration.ldapEdit.validation.url":
-		"Por favor, utilice un formato de URL válido",
+	"pages.administration.ldapEdit.roles.placeholder.student": "Valor del atributo estudiante",
+	"pages.administration.ldapEdit.roles.placeholder.teacher": "Valor del atributo profesor",
+	"pages.administration.ldapEdit.roles.placeholder.user": "Valor del atributo ignorar usuari{'@'}",
+	"pages.administration.ldapEdit.validation.path": "Por favor, utilice un formato de ruta LDAP",
+	"pages.administration.ldapEdit.validation.url": "Por favor, utilice un formato de URL válido",
 	"pages.administration.migration.back": "Paso anterior",
-	"pages.administration.migration.clearAutoMatches":
-		"Restablecer accesos directos automáticos",
-	"pages.administration.migration.backToAdministration":
-		"Volver a Administración",
+	"pages.administration.migration.clearAutoMatches": "Restablecer accesos directos automáticos",
+	"pages.administration.migration.backToAdministration": "Volver a Administración",
 	"pages.administration.migration.brbSchulportal": "weBBSchule",
 	"pages.administration.migration.cannotStart":
 		"La migración no puede comenzar. La escuela no está en modo de migración ni en fase de transferencia.",
 	"pages.administration.migration.confirm":
 		"Esto confirma que se ha comprobado o realizado la asignación de las cuentas de usuario locales y que se puede realizar la migración.",
-	"pages.administration.migration.error":
-		"Se ha producido un error. Por favor, inténtelo más tarde.",
-	"pages.administration.migration.finishTransferPhase":
-		"Fin de la fase de transferencia",
-	"pages.administration.migration.finishWizard":
-		"Asistente de migración completo",
+	"pages.administration.migration.error": "Se ha producido un error. Por favor, inténtelo más tarde.",
+	"pages.administration.migration.finishTransferPhase": "Fin de la fase de transferencia",
+	"pages.administration.migration.finishWizard": "Asistente de migración completo",
 	"pages.administration.migration.ldapSource": "LDAP",
 	"pages.administration.migration.migrate": "Guardar enlace",
 	"pages.administration.migration.nbc.migrate": "Realizar migración",
 	"pages.administration.migration.next": "Próximo",
-	"pages.administration.migration.performingMigration":
-		"La implementación de la migración...",
-	"pages.administration.migration.startUserMigration":
-		"Iniciar la migración de cuentas",
-	"pages.administration.migration.matchByPreferredName":
-		"Prefiere apodos para la vinculación automática de cuentas",
+	"pages.administration.migration.performingMigration": "La implementación de la migración...",
+	"pages.administration.migration.startUserMigration": "Iniciar la migración de cuentas",
+	"pages.administration.migration.matchByPreferredName": "Prefiere apodos para la vinculación automática de cuentas",
 	"pages.administration.migration.step1": "Instrucciones",
 	"pages.administration.migration.step2": "Preparación",
 	"pages.administration.migration.step3": "Resumen",
-	"pages.administration.migration.step4.bullets.classes":
-		"Aún no se ha importado ninguna clase del {source}.",
+	"pages.administration.migration.step4.bullets.classes": "Aún no se ha importado ninguna clase del {source}.",
 	"pages.administration.migration.step4.bullets.linkedUsers":
 		"Los usuarios cuyas cuentas de usuario se han vinculado ya pueden iniciar sesión con sus datos de acceso LDAP. Sin embargo, los datos personales de estos usuarios (nombre, fecha de nacimiento, funciones, clases, etc.) aún no se han actualizado desde LDAP.",
 	"pages.administration.migration.step4.bullets.newUsers":
@@ -1366,21 +1125,18 @@ export default {
 	"pages.administration.migration.step4": "Fase de transferencia",
 	"pages.administration.migration.step5.afterSync.bullet1":
 		"Cuentas de usuario vinculadas: Los usuarios pueden iniciar sesión con sus credenciales de {source}. Los datos personales de estos usuarios proceden de la {source} (nombre, fecha de nacimiento, función, clases, etc.).",
-	"pages.administration.migration.step5.afterSync.bullet2":
-		"Se han creado cuentas de usuario nuevas.",
+	"pages.administration.migration.step5.afterSync.bullet2": "Se han creado cuentas de usuario nuevas.",
 	"pages.administration.migration.step5.afterSync":
 		"Tras la ejecución de la sincronización, se completa la vinculación de las cuentas de usuario de {source} y {instance}. Es decir:",
 	"pages.administration.migration.step5.nbc.bullet1":
 		"Cuentas de usuario vinculadas: los usuarios pueden iniciar sesión con sus credenciales de {source}. Los datos personales de estos usuarios se obtienen de {source} y, si es necesario, se actualizan con cada proceso de inicio de sesión (nombre, fecha de nacimiento, rol, clases, etc.).",
 	"pages.administration.migration.step5.nbc.linkingFinished":
 		"Las cuentas de usuario de {instance} seleccionadas se han vinculado a las cuentas de usuario de {source} correspondientes.",
-	"pages.administration.migration.step5.syncReady1":
-		"La escuela está ahora habilitada para la ejecución de Sync.",
+	"pages.administration.migration.step5.syncReady1": "La escuela está ahora habilitada para la ejecución de Sync.",
 	"pages.administration.migration.step5.syncReady2":
 		"Con la siguiente ejecución de sincronización, todos los datos de la {source} se transfieren a la {instance}.",
 	"pages.administration.migration.step5": "Finalizar",
-	"pages.administration.migration.summary.firstParagraph":
-		"Se realizaron las siguientes asignaciones:",
+	"pages.administration.migration.summary.firstParagraph": "Se realizaron las siguientes asignaciones:",
 	"pages.administration.migration.summary.secondParagraph.importUsersCount":
 		"{source}-las cuentas de usuario tienen una cuenta de usuario {instance} asignada. Estas cuentas de usuario se migrarán a {source}.",
 	"pages.administration.migration.summary.thirdParagraph.importUsersUnmatchedCount":
@@ -1392,40 +1148,31 @@ export default {
 	"pages.administration.migration.title": "Migración de cuentas de usuario",
 	"pages.administration.migration.tutorialWait":
 		"Tenga en cuenta que, una vez que se inicie el proceso de migración de la escuela, puede tardar hasta 1 hora en obtener los datos. Después de esto, podrá continuar con el siguiente paso.",
-	"pages.administration.migration.waiting":
-		"Esperando la sincronización de datos...",
+	"pages.administration.migration.waiting": "Esperando la sincronización de datos...",
 	"pages.administration.migration.identical_user_login_migration_system":
 		"¡La migración no puede comenzar porque el sistema de inicio de sesión de destino y el sistema de inicio de sesión actual de su escuela son el mismo!",
-	"pages.administration.migration.moin_schule_system_not_found":
-		"¡No puedo encontrar el sistema moin.schule!",
+	"pages.administration.migration.moin_schule_system_not_found": "¡No puedo encontrar el sistema moin.schule!",
 	"pages.administration.or": "o",
-	"pages.administration.printQr.emptyUser":
-		"L{'@'}s usuari{'@'}s seleccionad{'@'}s ya han sido registrad{'@'}s",
-	"pages.administration.printQr.error":
-		"No se han podido generar los enlaces de registro",
+	"pages.administration.printQr.emptyUser": "L{'@'}s usuari{'@'}s seleccionad{'@'}s ya han sido registrad{'@'}s",
+	"pages.administration.printQr.error": "No se han podido generar los enlaces de registro",
 	"pages.administration.remove.error": "Error al eliminar usuarios",
 	"pages.administration.remove.success": "Usuarios seleccionados eliminados",
 	"pages.administration.rooms.index.title": "Administrar cursos",
-	"pages.administration.school.index.authSystems.addLdap":
-		"Añadir sistema LDAP",
+	"pages.administration.school.index.authSystems.addLdap": "Añadir sistema LDAP",
 	"pages.administration.school.index.authSystems.alias": "Alias",
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"¿Estás seguro de que deseas eliminar la siguiente sistema de autenticación?",
 	"pages.administration.school.index.authSystems.delete": "Eliminar {system}",
-	"pages.administration.school.index.authSystems.deleteAuthSystem":
-		"Eliminar sistema LDAP",
+	"pages.administration.school.index.authSystems.deleteAuthSystem": "Eliminar sistema LDAP",
 	"pages.administration.school.index.authSystems.edit": "Editar {system}",
-	"pages.administration.school.index.authSystems.loginLinkLabel":
-		"Enlace de acceso a la escuela",
+	"pages.administration.school.index.authSystems.loginLinkLabel": "Enlace de acceso a la escuela",
 	"pages.administration.school.index.authSystems.title": "Autenticación",
 	"pages.administration.school.index.authSystems.type": "Tipo",
 	"pages.administration.school.index.back": "Para algunos ajustes ",
-	"pages.administration.school.index.backLink":
-		"vuelva a la antigua página de administración aquí",
+	"pages.administration.school.index.backLink": "vuelva a la antigua página de administración aquí",
 	"pages.administration.school.index.error.gracePeriodExceeded":
 		"El período de gracia después de finalizar la migración ha expirado",
-	"pages.administration.school.index.error":
-		"Ocurrió un error al cargar la escuela",
+	"pages.administration.school.index.error": "Ocurrió un error al cargar la escuela",
 	"pages.administration.school.index.generalSettings.changeSchoolValueWarning":
 		"¡Una vez configurado no puedrá ser cambiado!",
 	"pages.administration.school.index.generalSettings.disabledHint":
@@ -1435,37 +1182,26 @@ export default {
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider":
 		"Proveedor de almacenamiento en la nube",
 	"pages.administration.school.index.generalSettings.labels.language": "Idioma",
-	"pages.administration.school.index.generalSettings.labels.nameOfSchool":
-		"Nombre de la escuela",
-	"pages.administration.school.index.generalSettings.labels.schoolYear":
-		"Año escolar",
-	"pages.administration.school.index.generalSettings.labels.schoolNumber":
-		"Numero de la escuela",
-	"pages.administration.school.index.generalSettings.labels.timezone":
-		"Zona horaria",
-	"pages.administration.school.index.generalSettings.labels.uploadSchoolLogo":
-		"Cargar el logotipo de la escuela",
+	"pages.administration.school.index.generalSettings.labels.nameOfSchool": "Nombre de la escuela",
+	"pages.administration.school.index.generalSettings.labels.schoolYear": "Año escolar",
+	"pages.administration.school.index.generalSettings.labels.schoolNumber": "Numero de la escuela",
+	"pages.administration.school.index.generalSettings.labels.timezone": "Zona horaria",
+	"pages.administration.school.index.generalSettings.labels.uploadSchoolLogo": "Cargar el logotipo de la escuela",
 	"pages.administration.school.index.generalSettings.languageHint":
 		"If no language for the school is set, the system default (German) is applied.",
-	"pages.administration.school.index.generalSettings.save":
-		"Guardar configuración",
-	"pages.administration.school.index.generalSettings.save.success":
-		"Ajustes generales guardados correctamente.",
+	"pages.administration.school.index.generalSettings.save": "Guardar configuración",
+	"pages.administration.school.index.generalSettings.save.success": "Ajustes generales guardados correctamente.",
 	"pages.administration.school.index.generalSettings.timezoneHint":
 		"Para cambiar su zona horaria, comuníquese con uno de los administradores.",
 	"pages.administration.school.index.generalSettings": "Configuración general",
 	"pages.administration.school.index.info":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {instituteTitle}.",
-	"pages.administration.school.index.privacySettings.labels.chatFunction":
-		"Activar función de chat",
-	"pages.administration.school.index.privacySettings.labels.lernStore":
-		"Lern-Store para estudiantes",
+	"pages.administration.school.index.privacySettings.labels.chatFunction": "Activar función de chat",
+	"pages.administration.school.index.privacySettings.labels.lernStore": "Lern-Store para estudiantes",
 	"pages.administration.school.index.privacySettings.labels.studentVisibility":
 		"Activar la visibilidad de los estudiantes para los profesores",
-	"pages.administration.school.index.privacySettings.labels.videoConference":
-		"Activar la videoconferencia",
-	"pages.administration.school.index.privacySettings.labels.aiTutor":
-		"Activar tutor de IA en la escuela",
+	"pages.administration.school.index.privacySettings.labels.videoConference": "Activar la videoconferencia",
+	"pages.administration.school.index.privacySettings.labels.aiTutor": "Activar tutor de IA en la escuela",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"Si los chats están habilitados en tu escuela, los administradores del equipo pueden desbloquear la función de chat de manera selectiva y respectivamente para su equipo.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1482,36 +1218,26 @@ export default {
 		"Si la videoconferencia está activada en su centro, los profesores pueden iniciar videoconferencias para todos los participantes del curso en aulas, cursos y equipos. En las aulas y los cursos, las videoconferencias pueden añadirse como elemento a las secciones (de una columna y de varias columnas), en los cursos las videoconferencias pueden utilizarse en «Herramientas» y en los equipos dentro de la función de cita.",
 	"pages.administration.school.index.privacySettings.longText.aiTutor":
 		"Si AI Tutor está activado en tu escuela, los profesores pueden agregar AI Tutor en sus áreas.",
-	"pages.administration.school.index.privacySettings":
-		"Configuración de la privacidad",
-	"pages.administration.school.index.schoolIsCurrentlyDrawing":
-		"Tu escuela está recibiendo",
+	"pages.administration.school.index.privacySettings": "Configuración de la privacidad",
+	"pages.administration.school.index.schoolIsCurrentlyDrawing": "Tu escuela está recibiendo",
 	"pages.administration.school.index.schoolPolicy.cancel": "Cancelar",
 	"pages.administration.school.index.schoolPolicy.delete.success":
 		"El archivo de Política de Privacidad se ha eliminado correctamente.",
 	"pages.administration.school.index.schoolPolicy.delete.text":
 		"Si borra este archivo, se utilizará automáticamente la Política de Privacidad por defecto.",
-	"pages.administration.school.index.schoolPolicy.delete.title":
-		"Borrar la Política de Privacidad",
-	"pages.administration.school.index.schoolPolicy.download":
-		"Descargar Política de Privacidad",
-	"pages.administration.school.index.schoolPolicy.edit":
-		"Editar Política de Privacidad",
+	"pages.administration.school.index.schoolPolicy.delete.title": "Borrar la Política de Privacidad",
+	"pages.administration.school.index.schoolPolicy.download": "Descargar Política de Privacidad",
+	"pages.administration.school.index.schoolPolicy.edit": "Editar Política de Privacidad",
 	"pages.administration.school.index.schoolPolicy.error":
 		"Se ha producido un error al cargar la Política de Privacidad",
-	"pages.administration.school.index.schoolPolicy.fileName":
-		"Política de Privacidad de la escuela",
-	"pages.administration.school.index.schoolPolicy.hints.uploadFile":
-		"Cargar archivo (sólo PDF, 4 MB como máximo)",
-	"pages.administration.school.index.schoolPolicy.labels.uploadFile":
-		"Seleccionar archivo",
+	"pages.administration.school.index.schoolPolicy.fileName": "Política de Privacidad de la escuela",
+	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Cargar archivo (sólo PDF, 4 MB como máximo)",
+	"pages.administration.school.index.schoolPolicy.labels.uploadFile": "Seleccionar archivo",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent":
 		"La nueva Política de Privacidad sustituirá irremediablemente a la anterior y se presentará a todos los usuarios de esta escuela para su aprobación.",
-	"pages.administration.school.index.schoolPolicy.notUploadedYet":
-		"Aún no se ha cargado",
+	"pages.administration.school.index.schoolPolicy.notUploadedYet": "Aún no se ha cargado",
 	"pages.administration.school.index.schoolPolicy.replace": "Sustituir",
-	"pages.administration.school.index.schoolPolicy.success":
-		"El nuevo archivo se ha cargado correctamente.",
+	"pages.administration.school.index.schoolPolicy.success": "El nuevo archivo se ha cargado correctamente.",
 	"pages.administration.school.index.schoolPolicy.uploadedOn": "Subido {date}",
 	"pages.administration.school.index.schoolPolicy.validation.fileTooBig":
 		"El archivo pesa más de 4 MB. Por favor, reduzca el tamaño del archivo",
@@ -1522,35 +1248,25 @@ export default {
 		"El archivo de condiciones de uso se ha eliminado correctamente.",
 	"pages.administration.school.index.termsOfUse.delete.text":
 		"Si borra este archivo, se utilizarán automáticamente las Condiciones de Uso por defecto.",
-	"pages.administration.school.index.termsOfUse.delete.title":
-		"Borrar las Condiciones de Uso",
-	"pages.administration.school.index.termsOfUse.download":
-		"Descargar Condiciones de Uso",
-	"pages.administration.school.index.termsOfUse.edit":
-		"Editar Condiciones de Uso",
-	"pages.administration.school.index.termsOfUse.error":
-		"Se ha producido un error al cargar la Condiciones de Uso",
-	"pages.administration.school.index.termsOfUse.fileName":
-		"Condiciones de Uso de la escuela",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile":
-		"Cargar archivo (sólo PDF, 4 MB como máximo)",
-	"pages.administration.school.index.termsOfUse.labels.uploadFile":
-		"Seleccionar archivo",
+	"pages.administration.school.index.termsOfUse.delete.title": "Borrar las Condiciones de Uso",
+	"pages.administration.school.index.termsOfUse.download": "Descargar Condiciones de Uso",
+	"pages.administration.school.index.termsOfUse.edit": "Editar Condiciones de Uso",
+	"pages.administration.school.index.termsOfUse.error": "Se ha producido un error al cargar la Condiciones de Uso",
+	"pages.administration.school.index.termsOfUse.fileName": "Condiciones de Uso de la escuela",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Cargar archivo (sólo PDF, 4 MB como máximo)",
+	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Seleccionar archivo",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"La nueva Condiciones de Uso sustituirá irremediablemente a la anterior y se presentará a todos los usuarios de esta escuela para su aprobación.",
-	"pages.administration.school.index.termsOfUse.notUploadedYet":
-		"Aún no se ha cargado",
+	"pages.administration.school.index.termsOfUse.notUploadedYet": "Aún no se ha cargado",
 	"pages.administration.school.index.termsOfUse.replace": "Sustituir",
-	"pages.administration.school.index.termsOfUse.success":
-		"El nuevo archivo se ha cargado correctamente.",
+	"pages.administration.school.index.termsOfUse.success": "El nuevo archivo se ha cargado correctamente.",
 	"pages.administration.school.index.termsOfUse.uploadedOn": "Subido {date}",
 	"pages.administration.school.index.termsOfUse.validation.fileTooBig":
 		"El archivo pesa más de 4 MB. Por favor, reduzca el tamaño del archivo",
 	"pages.administration.school.index.termsOfUse.validation.notPdf":
 		"Este formato de archivo no es compatible. Utilice sólo PDF",
 	"pages.administration.school.index.title": "Administrar escuela",
-	"pages.administration.school.index.usedFileStorage":
-		"Almacenamiento de archivos usados en la nube",
+	"pages.administration.school.index.usedFileStorage": "Almacenamiento de archivos usados en la nube",
 	"pages.administration.select": "seleccionad{'@'}s",
 	"pages.administration.selected": "seleccionado(s)",
 	"pages.administration.sendMail.alreadyRegistered":
@@ -1559,12 +1275,9 @@ export default {
 		"No se ha podido enviar el enlace de registro | No se han podido enviar los enlaces de registro",
 	"pages.administration.sendMail.success":
 		"Enlace de registro enviado correctamente | Enlaces de registro enviados correctamente",
-	"pages.administration.students.consent.cancel.modal.confirm":
-		"Cancelar de todos modos",
-	"pages.administration.students.consent.cancel.modal.continue":
-		"Continuar con el registro",
-	"pages.administration.students.consent.cancel.modal.download.continue":
-		"Imprimir datos de acceso",
+	"pages.administration.students.consent.cancel.modal.confirm": "Cancelar de todos modos",
+	"pages.administration.students.consent.cancel.modal.continue": "Continuar con el registro",
+	"pages.administration.students.consent.cancel.modal.download.continue": "Imprimir datos de acceso",
 	"pages.administration.students.consent.cancel.modal.download.info":
 		"Atención: ¿Está seguro de que quiere cancelar el proceso sin haber descargado los datos de acceso? No se puede volver a acceder a esta página.",
 	"pages.administration.students.consent.cancel.modal.info":
@@ -1573,16 +1286,12 @@ export default {
 	"pages.administration.students.consent.handout": "Impreso",
 	"pages.administration.students.consent.info":
 		"Puedes declarar el consentimiento de la {dataProtection} y los {terms} de la nube de la escuela en nombre de tus estudiantes, si has obtenido el consentimiento por adelantado de forma analógica, a través de {handout}.",
-	"pages.administration.students.consent.input.missing":
-		"Falta la fecha de nacimiento",
-	"pages.administration.students.consent.print.title":
-		"Registro completado con éxito",
-	"pages.administration.students.consent.print":
-		"Imprimir lista con datos de acceso",
+	"pages.administration.students.consent.input.missing": "Falta la fecha de nacimiento",
+	"pages.administration.students.consent.print.title": "Registro completado con éxito",
+	"pages.administration.students.consent.print": "Imprimir lista con datos de acceso",
 	"pages.administration.students.consent.steps.complete.info":
 		"Asegúrate de que las fechas de nacimiento de todos l{'@'}s usuari{'@'}s estén completas y añade los datos que faltan si es necesario.",
-	"pages.administration.students.consent.steps.complete.inputerror":
-		"Falta la fecha de nacimiento",
+	"pages.administration.students.consent.steps.complete.inputerror": "Falta la fecha de nacimiento",
 	"pages.administration.students.consent.steps.complete.next": "Aplicar datos",
 	"pages.administration.students.consent.steps.complete.warn":
 		"No todos l{'@'}s usuari{'@'}s tienen fechas de nacimiento válidas. Primero completa los datos de nacimiento que faltan.",
@@ -1591,61 +1300,44 @@ export default {
 		"Estas son las contraseñas para el inicio de sesión inicial en la nube de la escuela.\nSe debe elegir una nueva contraseña para el primer inicio de sesión. Los estudiantes que tengan al menos 14 años de edad también deben declarar su consentimiento cuando inicien sesión por primera vez.",
 	"pages.administration.students.consent.steps.download.info":
 		"Guarda e imprime la lista y entrégala a l{'@'}s usuari{'@'}s para su primer registro.",
-	"pages.administration.students.consent.steps.download.next":
-		"Descargar datos de acceso",
-	"pages.administration.students.consent.steps.download":
-		"Descargar datos de acceso",
-	"pages.administration.students.consent.steps.register.analog-consent":
-		"formulario de consentimiento analógico",
+	"pages.administration.students.consent.steps.download.next": "Descargar datos de acceso",
+	"pages.administration.students.consent.steps.download": "Descargar datos de acceso",
+	"pages.administration.students.consent.steps.register.analog-consent": "formulario de consentimiento analógico",
 	"pages.administration.students.consent.steps.register.confirm.warn":
 		"Confirma que has recibido los formularios de consentimiento de los padres y estudiantes en papel y que has leído las normas para el consentimiento.",
 	"pages.administration.students.consent.steps.register.confirm":
 		"Por la presente confirmo que he recibido el {analogConsent} en papel de los padres de los estudiantes mencionados anteriormente.",
 	"pages.administration.students.consent.steps.register.info":
 		"Comprueba que has recibido el consentimiento de los estudiantes enumerados de manera analógica en papel, se te pedirá que te registres en nombre de l{'@'}s usuari{'@'}s.",
-	"pages.administration.students.consent.steps.register.next":
-		"Registrar usuarios",
+	"pages.administration.students.consent.steps.register.next": "Registrar usuarios",
 	"pages.administration.students.consent.steps.register.print":
 		"Ahora puedes iniciar sesión en la nube con tu contraseña inicial. Ve a {hostName} e inicia sesión con los siguientes datos de acceso:",
-	"pages.administration.students.consent.steps.register.success":
-		"Usuario registrado correctamente",
-	"pages.administration.students.consent.steps.register":
-		"Realizar el registro",
-	"pages.administration.students.consent.steps.success.back":
-		"Volver a la vista general",
-	"pages.administration.students.consent.steps.success.image.alt":
-		"Conecta el gráfico de forma segura",
+	"pages.administration.students.consent.steps.register.success": "Usuario registrado correctamente",
+	"pages.administration.students.consent.steps.register": "Realizar el registro",
+	"pages.administration.students.consent.steps.success.back": "Volver a la vista general",
+	"pages.administration.students.consent.steps.success.image.alt": "Conecta el gráfico de forma segura",
 	"pages.administration.students.consent.steps.success":
 		"¡Enhorabuena, has completado el registro analógico correctamente!",
 	"pages.administration.students.consent.table.empty":
 		"Todos l{'@'}s usuari{'@'}s que has elegido ya han recibido su consentimiento.",
-	"pages.administration.students.consent.title":
-		"Registrarse de forma analógica",
+	"pages.administration.students.consent.title": "Registrarse de forma analógica",
 	"pages.administration.students.fab.add": "Nuevo estudiante",
 	"pages.administration.students.fab.import": "Importar estudiante",
-	"pages.administration.students.index.remove.confirm.btnText":
-		"Eliminar estudiante",
+	"pages.administration.students.index.remove.confirm.btnText": "Eliminar estudiante",
 	"pages.administration.students.index.remove.confirm.message.all":
 		"¿Estás seguro de que deseas eliminar a todos los estudiantes?",
 	"pages.administration.students.index.remove.confirm.message.many":
 		"¿Estás seguro de que deseas eliminar a todos los estudiantes excepto a {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"¿Estás seguro de que deseas eliminar a este estudiante? | ¿Estás seguro de que deseas eliminar a este estudiante de {number}?",
-	"pages.administration.students.index.remove.progress.description":
-		"Por favor, espera...",
-	"pages.administration.students.index.remove.progress.title":
-		"Eliminando alumn{'@'}s",
-	"pages.administration.students.index.searchbar.placeholder":
-		"Buscar estudiantes",
-	"pages.administration.students.index.tableActions.consent":
-		"Formulario de consentimiento analógico",
+	"pages.administration.students.index.remove.progress.description": "Por favor, espera...",
+	"pages.administration.students.index.remove.progress.title": "Eliminando alumn{'@'}s",
+	"pages.administration.students.index.searchbar.placeholder": "Buscar estudiantes",
+	"pages.administration.students.index.tableActions.consent": "Formulario de consentimiento analógico",
 	"pages.administration.students.index.tableActions.delete": "Eliminar",
-	"pages.administration.students.index.tableActions.email":
-		"Enviar los enlaces de registro por correo electrónico",
-	"pages.administration.students.index.tableActions.qr":
-		"Imprimir los enlaces de registro como código QR",
-	"pages.administration.students.index.tableActions.registration":
-		"Registro manual",
+	"pages.administration.students.index.tableActions.email": "Enviar los enlaces de registro por correo electrónico",
+	"pages.administration.students.index.tableActions.qr": "Imprimir los enlaces de registro como código QR",
+	"pages.administration.students.index.tableActions.registration": "Registro manual",
 	"pages.administration.students.index.title": "Administrar estudiantes",
 	"pages.administration.students.infobox.headline": "Completar registros",
 	"pages.administration.students.infobox.LDAP.helpsection": "Área de ayuda",
@@ -1655,8 +1347,7 @@ export default {
 		"La primera vez que se conecte, se le pedirá el formulario de consentimiento para completar el registro.",
 	"pages.administration.students.infobox.LDAP.paragraph-3":
 		"IMPORTANTE: Para los estudiantes menores de 16 años, se requiere el consentimiento de un padre o tutor durante el proceso de inscripción. En este caso, asegúrese de que el primer inicio de sesión tenga lugar en presencia de uno de los padres, normalmente en casa.",
-	"pages.administration.students.infobox.LDAP.paragraph-4":
-		"Encontrará más información sobre la inscripción en ",
+	"pages.administration.students.infobox.LDAP.paragraph-4": "Encontrará más información sobre la inscripción en ",
 	"pages.administration.students.infobox.li-1":
 		"Envía los enlaces de registro a través de la nube de la escuela a las direcciones de correo electrónico proporcionadas (también es posible hacerlo directamente al importar/crear)",
 	"pages.administration.students.infobox.li-2":
@@ -1672,8 +1363,7 @@ export default {
 		"Como alternativa, puedes cambiar al modo de edición del perfil de usuari{'@'} y recuperar el enlace de registro individual para enviarlo manualmente mediante el método que elijas.",
 	"pages.administration.students.infobox.paragraph-4":
 		"IMPORTANTE: para los estudiantes menores de 16 años, lo primero que se pide durante el proceso de registro es el consentimiento de un padre o tutor. En este caso, recomendamos la distribución de los enlaces de registro como hojas QR o la recuperación de los enlaces de forma individual y su envío a los padres. Después de que los padres hayan dado su consentimiento, los estudiantes reciben una contraseña de inicio y pueden completar la última parte del registro por su cuenta en cualquier momento. Para el uso de la nube escolar en las escuelas primarias, los formularios en papel son una alternativa popular.",
-	"pages.administration.students.infobox.registrationOnly.headline":
-		"Información sobre la inscripción",
+	"pages.administration.students.infobox.registrationOnly.headline": "Información sobre la inscripción",
 	"pages.administration.students.infobox.registrationOnly.li-1":
 		"Envío de enlaces de registro a las direcciones de correo electrónico guardadas (también es posible directamente durante la importación/creación)",
 	"pages.administration.students.infobox.registrationOnly.li-2":
@@ -1694,57 +1384,43 @@ export default {
 	"pages.administration.students.manualRegistration.steps.success":
 		"¡Enhorabuena, has completado con éxito el registro analógico!",
 	"pages.administration.students.manualRegistration.title": "Registro manual",
-	"pages.administration.students.new.checkbox.label":
-		"Enviar el enlace de registro al estudiante",
+	"pages.administration.students.new.checkbox.label": "Enviar el enlace de registro al estudiante",
 	"pages.administration.students.new.error":
 		"No se ha podido añadir el estudiante. Es posible que la dirección de correo electrónico ya exista.",
-	"pages.administration.students.new.success":
-		"¡Estudiante creado correctamente!",
+	"pages.administration.students.new.success": "¡Estudiante creado correctamente!",
 	"pages.administration.students.new.title": "Añadir estudiante",
 	"pages.administration.students.table.edit.ariaLabel": "Editar estudiante",
 	"pages.administration.teachers.fab.add": "Nuevo profesor",
 	"pages.administration.teachers.fab.import": "Importar profesor",
-	"pages.administration.teachers.index.remove.confirm.btnText":
-		"Eliminar profesor",
+	"pages.administration.teachers.index.remove.confirm.btnText": "Eliminar profesor",
 	"pages.administration.teachers.index.remove.confirm.message.all":
 		"¿Estás seguro de que deseas eliminar a todos los profesores?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
 		"¿Estás seguro de que deseas eliminar a todos los estudiantes excepto a {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"¿Estás seguro de que deseas eliminar a este profesor: en? | ¿Estás seguro de que deseas eliminar a este profesor de {number}?",
-	"pages.administration.teachers.index.remove.progress.description":
-		"Por favor, espera...",
-	"pages.administration.teachers.index.remove.progress.title":
-		"Eliminando profesor{'@'}s",
+	"pages.administration.teachers.index.remove.progress.description": "Por favor, espera...",
+	"pages.administration.teachers.index.remove.progress.title": "Eliminando profesor{'@'}s",
 	"pages.administration.teachers.index.searchbar.placeholder": "Buscar",
-	"pages.administration.teachers.index.tableActions.consent":
-		"Formulario de consentimiento analógico",
+	"pages.administration.teachers.index.tableActions.consent": "Formulario de consentimiento analógico",
 	"pages.administration.teachers.index.tableActions.delete": "Eliminar",
-	"pages.administration.teachers.index.tableActions.email":
-		"Enviar los enlaces de registro por correo electrónico",
-	"pages.administration.teachers.index.tableActions.qr":
-		"Imprimir los enlaces de registro como código QR",
-	"pages.administration.teachers.index.title":
-		"Gestionar a l{'@'}s profesora(e)s",
-	"pages.administration.teachers.new.checkbox.label":
-		"Enviar el enlace de registro al profesor",
+	"pages.administration.teachers.index.tableActions.email": "Enviar los enlaces de registro por correo electrónico",
+	"pages.administration.teachers.index.tableActions.qr": "Imprimir los enlaces de registro como código QR",
+	"pages.administration.teachers.index.title": "Gestionar a l{'@'}s profesora(e)s",
+	"pages.administration.teachers.new.checkbox.label": "Enviar el enlace de registro al profesor",
 	"pages.administration.teachers.new.error":
 		"No se ha podido añadir el profesor. Es posible que la dirección de correo electrónico ya exista.",
-	"pages.administration.teachers.new.success":
-		"¡Profesor creado correctamente!",
+	"pages.administration.teachers.new.success": "¡Profesor creado correctamente!",
 	"pages.administration.teachers.new.title": "Añadir profesor",
 	"pages.administration.teachers.table.edit.ariaLabel": "Editar profesor",
-	"pages.common.tools.configureVideoconferenceDialog.title":
-		"Crear videoconferencia",
+	"pages.common.tools.configureVideoconferenceDialog.title": "Crear videoconferencia",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Derechos de moderación para todos los participantes",
-	"pages.common.tools.configureVideoconferenceDialog.text.mute":
-		"Silenciar a los participantes al entrar",
+	"pages.common.tools.configureVideoconferenceDialog.text.mute": "Silenciar a los participantes al entrar",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
 		"Activar la sala de espera para los participantes",
 	"pages.content._id.addToTopic": "Para ser añadido a",
-	"pages.content._id.collection.selectElements":
-		"Selecciona los elementos que deses añadir al tema",
+	"pages.content._id.collection.selectElements": "Selecciona los elementos que deses añadir al tema",
 	"pages.content._id.metadata.author": "Autor",
 	"pages.content._id.metadata.createdAt": "Creado el",
 	"pages.content._id.metadata.noTags": "Sin etiquetas",
@@ -1756,12 +1432,9 @@ export default {
 		"La consulta de búsqueda debe contener al menos 2 caracteres.",
 	"pages.content.emptyState.error.message.suggestions.correctSpelling":
 		"Comprueba si todas las palabras están escritas correctamente.",
-	"pages.content.emptyState.error.message.suggestions.otherSearchTerms":
-		"Prueba otras consultas de búsqueda.",
-	"pages.content.emptyState.error.message.suggestions.generalSearchTerms":
-		"Prueba con consultas más comunes.",
-	"pages.content.emptyState.error.message.suggestions.lessSearchTerms":
-		"Intenta usar una consulta más corta.",
+	"pages.content.emptyState.error.message.suggestions.otherSearchTerms": "Prueba otras consultas de búsqueda.",
+	"pages.content.emptyState.error.message.suggestions.generalSearchTerms": "Prueba con consultas más comunes.",
+	"pages.content.emptyState.error.message.suggestions.lessSearchTerms": "Intenta usar una consulta más corta.",
 	"pages.content.emptyState.error.title": "¡Vaya, no hay resultados!",
 	"pages.content.index.backToCourse": "Volver al curso",
 	"pages.content.index.backToOverview": "Volver a la vista general",
@@ -1769,8 +1442,7 @@ export default {
 	"pages.content.index.search_resources": "Recursos",
 	"pages.content.index.search_results": "Resultados de la búsqueda de",
 	"pages.content.index.search.placeholder": "Buscar tienda de aprendizaje",
-	"pages.content.initState.description":
-		"Aquí encontrará contenidos de alta calidad adaptados a su estado.",
+	"pages.content.initState.description": "Aquí encontrará contenidos de alta calidad adaptados a su estado.",
 	"pages.content.initState.description.newMaterials":
 		"Nuestro equipo está desarrollando constantemente nuevos materiales para mejorar su experiencia de aprendizaje.",
 	"pages.content.initState.description.hint": "Nota:",
@@ -1792,22 +1464,17 @@ export default {
 	"pages.content.label.selected": "Activo",
 	"pages.content.material.leavePageWarningFooter":
 		"El uso de estas ofertas puede estar sujeto a otras condiciones legales. Por lo tanto, consulta la política de privacidad del proveedor externo.",
-	"pages.content.material.leavePageWarningMain":
-		"Nota: al hacer clic en el enlace, te irás de Schul-Cloud Brandenburg",
+	"pages.content.material.leavePageWarningMain": "Nota: al hacer clic en el enlace, te irás de Schul-Cloud Brandenburg",
 	"pages.content.material.showMaterialHint":
 		"Nota: Utilice la parte izquierda de la pantalla para acceder al contenido.",
 	"pages.content.material.showMaterialHintMobile":
 		"Nota: Utilice el elemento anterior de la pantalla para acceder al contenido.",
 	"pages.content.material.toMaterial": "Material",
-	"pages.content.notification.errorMsg":
-		"Algo ha salido mal. No se ha podido añadir material.",
-	"pages.content.notification.lernstoreNotAvailable":
-		"La tienda de aprendizaje no está disponible",
+	"pages.content.notification.errorMsg": "Algo ha salido mal. No se ha podido añadir material.",
+	"pages.content.notification.lernstoreNotAvailable": "La tienda de aprendizaje no está disponible",
 	"pages.content.notification.loading": "Se añade material",
-	"pages.content.notification.successMsg":
-		"El material se ha añadido correctamente",
-	"pages.content.page.window.title":
-		"Crear tema: {instance} - Tu entorno de aprendizaje digital",
+	"pages.content.notification.successMsg": "El material se ha añadido correctamente",
+	"pages.content.page.window.title": "Crear tema: {instance} - Tu entorno de aprendizaje digital",
 	"pages.content.placeholder.chooseACourse": "Elige un curso / asignatura",
 	"pages.content.placeholder.noLessonTopic": "Crear un tema en el curso",
 	"pages.content.preview_img.alt": "Vista previa de la imagen",
@@ -1838,10 +1505,8 @@ export default {
 	"pages.h5p.api.success.save": "El contenido se ha guardado correctamente.",
 	"pages.impressum.title": "Impresión",
 	"pages.licenseList.title": "Lista de licencias de código abierto",
-	"pages.licenseList.introduction":
-		"A continuación se indican las licencias de software de los paquetes utilizados.",
-	"pages.licenseList.packageIntroduction":
-		"Paquetes utilizados bajo esta licencia:",
+	"pages.licenseList.introduction": "A continuación se indican las licencias de software de los paquetes utilizados.",
+	"pages.licenseList.packageIntroduction": "Paquetes utilizados bajo esta licencia:",
 	"pages.news.edit.title.default": "Editar artículo",
 	"pages.news.edit.title": "Editar {title}",
 	"pages.news.index.new": "Añadir noticias",
@@ -1854,12 +1519,9 @@ export default {
 	"pages.room.boardCard.menu.ariaLabel": "Menú del tablero",
 	"pages.room.cards.aria": "{itemType}, enlace, presione Intro para abrir",
 	"pages.room.cards.label.revert": "Volver al borrador",
-	"pages.room.copy.course.message.copied":
-		"El curso se ha duplicado correctamente.",
-	"pages.room.copy.course.message.partiallyCopied":
-		"El curso no se pudo duplicar completamente.",
-	"pages.room.copy.lesson.message.copied":
-		"El tema se ha duplicado correctamente.",
+	"pages.room.copy.course.message.copied": "El curso se ha duplicado correctamente.",
+	"pages.room.copy.course.message.partiallyCopied": "El curso no se pudo duplicar completamente.",
+	"pages.room.copy.lesson.message.copied": "El tema se ha duplicado correctamente.",
 	"pages.room.copy.task.message.copied": "La tarea se duplicó con éxito.",
 	"pages.room.dialog.boardLayout.title": "Seleccionar vista",
 	"pages.room.dialog.boardLayout.singleColumn": "monocolumna",
@@ -1882,8 +1544,7 @@ export default {
 	"pages.room.taskCard.student.label.submitted": "Completado",
 	"pages.room.taskCard.teacher.label.overdue": "Expirado",
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
-	"pages.room.learningContent.emptyState":
-		"Actualmente no hay contenidos de aprendizaje en este curso",
+	"pages.room.learningContent.emptyState": "Actualmente no hay contenidos de aprendizaje en este curso",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
 	"pages.rooms.emptyState.title": "Actualmente no hay cursos",
 	"pages.rooms.fab.add.course": "Nuevo curso",
@@ -1898,10 +1559,8 @@ export default {
 	"pages.rooms.invitationLinkStatus.bird.alt": "Pájaro con alas plegadas",
 	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
 		"Lamentablemente, el enlace de invitación sólo es válido para los alumnos de la escuela «{schoolName}»",
-	"pages.rooms.invitationLinkStatus.expired":
-		"Lamentablemente, el enlace de invitación ya no es válido",
-	"pages.rooms.invitationLinkStatus.invalidLink":
-		"Lamentablemente, el enlace de invitación no existe",
+	"pages.rooms.invitationLinkStatus.expired": "Lamentablemente, el enlace de invitación ya no es válido",
+	"pages.rooms.invitationLinkStatus.invalidLink": "Lamentablemente, el enlace de invitación no existe",
 	"pages.rooms.invitationLinkStatus.onlyForTeachers":
 		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
@@ -1922,32 +1581,23 @@ export default {
 		"Atención: reemplaza manualmente las herramientas con datos de usuario que se incluyen en el tema posteriormente (por ejemplo, Etherpad, GeoGebra), ya que los cambios en esto afectarán al curso original. Los archivos (imágenes, vídeos y audios) y el material vinculado no se ven afectados y pueden permanecer sin cambios.",
 	"pages.rooms.importCourse.step_1.text": "Información",
 	"pages.rooms.importCourse.step_2.text": "Pega el código",
-	"pages.rooms.importCourse.step_2":
-		"Pegue el código aquí para importar el curso compartido.",
+	"pages.rooms.importCourse.step_2": "Pegue el código aquí para importar el curso compartido.",
 	"pages.rooms.importCourse.step_3.text": "Nombre del curso",
-	"pages.rooms.importCourse.step_3":
-		"El curso importado se puede renombrar en el siguiente paso.",
+	"pages.rooms.importCourse.step_3": "El curso importado se puede renombrar en el siguiente paso.",
 	"pages.rooms.ccImportCourse.title": "Importar curso",
 	"pages.rooms.ccImportCourse.confirm": "Importar",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Seleccionar archivo",
 	"pages.rooms.ccImportCourse.loading": "Importación en curso...",
-	"pages.rooms.ccImportCourse.success":
-		"El curso {name} se ha importado correctamente.",
-	"pages.rooms.ccImportCourse.error":
-		"Se ha producido un error al importar el curso.",
-	"pages.rooms.ccExportCourse.error":
-		"Se produjo un error al exportar el curso.",
+	"pages.rooms.ccImportCourse.success": "El curso {name} se ha importado correctamente.",
+	"pages.rooms.ccImportCourse.error": "Se ha producido un error al importar el curso.",
+	"pages.rooms.ccExportCourse.error": "Se produjo un error al exportar el curso.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
-	"pages.rooms.tools.deactivatedDialog.title":
-		"Herramienta “{toolName}“ desactivada",
-	"pages.rooms.tools.notLicensedDialog.title":
-		"Herramienta “{toolName}“ no autorizada",
-	"pages.rooms.tools.deleteDialog.content":
-		"¿Está seguro de que desea eliminar la herramienta '{itemName}' del curso?",
+	"pages.rooms.tools.deactivatedDialog.title": "Herramienta “{toolName}“ desactivada",
+	"pages.rooms.tools.notLicensedDialog.title": "Herramienta “{toolName}“ no autorizada",
+	"pages.rooms.tools.deleteDialog.content": "¿Está seguro de que desea eliminar la herramienta '{itemName}' del curso?",
 	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",
-	"pages.rooms.tools.emptyState":
-		"Actualmente no hay herramientas en este curso",
+	"pages.rooms.tools.emptyState": "Actualmente no hay herramientas en este curso",
 	"pages.rooms.tools.incomplete": "Configuración incompleta",
 	"pages.rooms.tools.incompleteDialog.title": "Configuración incomplet",
 	"pages.rooms.tools.logo": "Logotipo de la herramienta",
@@ -1959,8 +1609,7 @@ export default {
 	"pages.room.modal.course.export.options.topics": "Temas",
 	"pages.room.modal.course.export.options.tasks": "Tareas sin tema",
 	"pages.room.modal.course.export.options.columnBoards": "Tableros",
-	"pages.room.modal.course.export.version1.1":
-		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
+	"pages.room.modal.course.export.version1.1": "Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
 	"pages.roomCreate.title": "Crear sala",
 	"pages.roomEdit.title": "Editar sala",
@@ -1969,8 +1618,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar sala",
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
-	"pages.roomDetails.emptyState":
-		"Actualmente no hay contenidos de aprendizaje en esta sala",
+	"pages.roomDetails.emptyState": "Actualmente no hay contenidos de aprendizaje en esta sala",
 	"pages.rooms.emptyState": "Actualmente no hay salas",
 	"pages.rooms.fab.title": "Crear sala",
 	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
@@ -1986,12 +1634,10 @@ export default {
 	"pages.rooms.leaveRoom.RoomOwner.warning":
 		"Antes de que se pueda abandonar la sala, la autorización de propiedad de la sala debe transferirse a otro miembro de la sala. Esto se puede hacer en la gestión de miembros de la sala.",
 	"pages.rooms.leaveRoom.menu": "Salir de la sala",
-	"pages.rooms.members.error.load":
-		"No se pudo cargar la lista de participantes.",
+	"pages.rooms.members.error.load": "No se pudo cargar la lista de participantes.",
 	"pages.rooms.members.error.add": "Error al agregar participantes.",
 	"pages.rooms.members.error.remove": "Error al eliminar participantes.",
-	"pages.rooms.members.error.updateRole":
-		"El cambio de autorizaciones en la sala ha fallado.",
+	"pages.rooms.members.error.updateRole": "El cambio de autorizaciones en la sala ha fallado.",
 	"pages.rooms.members.filter": "Tabla de búsqueda/filtro",
 	"pages.rooms.members.infoText":
 		"Añadir miembros a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
@@ -2007,14 +1653,10 @@ export default {
 		"Los alumnos sólo pueden añadir alumnos de su propia clase a una sala.",
 	"pages.rooms.members.add.warningText":
 		"Los alumnos de otras escuelas solo pueden ser añadidos al espacio por un docente responsable de su escuela.",
-	"pages.rooms.members.actionMenu.ariaLabel":
-		"Menú de acciones para {memberFullName}",
-	"pages.rooms.members.actionMenu.selectedMembers":
-		"Menú de acciones para {count} participantes seleccionados",
-	"pages.rooms.members.changePermission":
-		"Cambiar las autorizaciones en la sala",
-	"pages.rooms.members.changePermission.ariaLabel":
-		"Cambiar autorizaciones de sala para {memberFullName}",
+	"pages.rooms.members.actionMenu.ariaLabel": "Menú de acciones para {memberFullName}",
+	"pages.rooms.members.actionMenu.selectedMembers": "Menú de acciones para {count} participantes seleccionados",
+	"pages.rooms.members.changePermission": "Cambiar las autorizaciones en la sala",
+	"pages.rooms.members.changePermission.ariaLabel": "Cambiar autorizaciones de sala para {memberFullName}",
 	"pages.rooms.members.manage": "Gestionar miembros",
 	"pages.rooms.members.management": "Administración de miembros",
 	"pages.rooms.members.view": "Ver miembros",
@@ -2025,37 +1667,27 @@ export default {
 	"pages.rooms.members.tab.confirmations": "Confirmaciones",
 	"pages.rooms.members.tab.confirmations.infoText":
 		"Si al crear un enlace de invitación está activada la opción „Entrar en la sala sólo tras confirmación”, al hacer clic en el enlace se genera primero una solicitud de afiliación. Esta puede confirmarse o rechazarse aquí. Si se confirma la solicitud de afiliación, la persona recibe acceso a todos los contenidos de la sala y aparece en la lista de miembros.",
-	"pages.rooms.members.remove.ariaLabel":
-		"Eliminar {memberFullName} de la sala",
-	"pages.rooms.members.resetSelection.ariaLabel":
-		"Restablecer las miembros seleccionados de la lista",
-	"pages.rooms.members.multipleRemove.ariaLabel":
-		"Eliminar varios miembros de la sala",
-	"pages.rooms.members.remove.confirmation":
-		"¿Eliminar {memberFullName} de la sala?",
-	"pages.rooms.members.multipleRemove.confirmation":
-		"¿Eliminar miembros seleccionados de la sala?",
+	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberFullName} de la sala",
+	"pages.rooms.members.resetSelection.ariaLabel": "Restablecer las miembros seleccionados de la lista",
+	"pages.rooms.members.multipleRemove.ariaLabel": "Eliminar varios miembros de la sala",
+	"pages.rooms.members.remove.confirmation": "¿Eliminar {memberFullName} de la sala?",
+	"pages.rooms.members.multipleRemove.confirmation": "¿Eliminar miembros seleccionados de la sala?",
 	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
 	"pages.rooms.members.roomPermissions.admin": "Administrar",
 	"pages.rooms.members.roomPermissions.owner": "Propietario",
 	"pages.rooms.members.roomPermissions.editor": "Editar",
 	"pages.rooms.members.roomPermissions.viewer": "Leer",
-	"pages.rooms.members.select.all":
-		"Seleccionar a todos los participantes de la sala",
-	"pages.rooms.members.select.none":
-		"Deseleccionar a todos los participantes de la sala",
+	"pages.rooms.members.select.all": "Seleccionar a todos los participantes de la sala",
+	"pages.rooms.members.select.none": "Deseleccionar a todos los participantes de la sala",
 	"pages.rooms.members.tableHeader.roomRole": "Autorizaciones de sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",
 	"pages.rooms.members.tableHeader.description": "Descripción",
-	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
-		"Sólo válido dentro de la escuela",
-	"pages.rooms.members.tableHeader.validForStudents":
-		"También válido para estudiantes",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool": "Sólo válido dentro de la escuela",
+	"pages.rooms.members.tableHeader.validForStudents": "También válido para estudiantes",
 	"pages.rooms.members.tableHeader.expirationDate": "Fecha de caducidad",
-	"pages.rooms.members.tableHeader.confirmationRequired":
-		"Confirmación obligatoria",
+	"pages.rooms.members.tableHeader.confirmationRequired": "Confirmación obligatoria",
 	"pages.rooms.members.tableHeader.status": "Estado",
 	"pages.rooms.members.tables.common.yes": "sí",
 	"pages.rooms.members.tables.common.no": "no",
@@ -2065,8 +1697,7 @@ export default {
 		"{memberFullName} recibe las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
 		"Los miembros seleccionados reciben las siguientes autorizaciones en la sala “{roomName}”:",
-	"pages.rooms.members.roleChange.Roomviewer.label":
-		"Accede a los tableros de la sala y visualiza el contenido",
+	"pages.rooms.members.roleChange.Roomviewer.label": "Accede a los tableros de la sala y visualiza el contenido",
 	"pages.rooms.members.roleChange.Roomeditor.label": "Crear y editar contenido",
 	"pages.rooms.members.roleChange.Roomadmin.label":
 		'Las mismas autorizaciones que en "Editar", además de añadir y eliminar otros miembros, cambiar sus autorizaciones de sala y editar salas.',
@@ -2077,69 +1708,53 @@ export default {
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Atención: ¡Solo una persona en la sala puede recibir esto!",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Transferir propiedad",
-	"pages.rooms.members.handOverAlert.label":
-		"Esta autorización de sala se transfiere a {memberFullName}.",
+	"pages.rooms.members.handOverAlert.label": "Esta autorización de sala se transfiere a {memberFullName}.",
 	"pages.rooms.members.handOverAlert.label.subText":
 		"{currentUserFullName} pierde la autorización «Propietario» y gana la autorización «Administrar».",
 	"pages.rooms.members.handOverAlert.confirm.label":
 		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
-	"pages.rooms.members.inviteMember.step.prepare.title":
-		"Crear enlace de invitación",
+	"pages.rooms.members.inviteMember.step.prepare.title": "Crear enlace de invitación",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",
 	"pages.rooms.members.inviteMember.editStep.subTitle":
 		"El enlace de invitación editado se muestra en el siguiente paso.",
-	"pages.rooms.members.inviteMember.step.share.title":
-		"Compartir enlace de invitación",
-	"pages.rooms.members.inviteMember.step.edit.title":
-		"Editar enlace de invitación",
+	"pages.rooms.members.inviteMember.step.share.title": "Compartir enlace de invitación",
+	"pages.rooms.members.inviteMember.step.edit.title": "Editar enlace de invitación",
 	"pages.rooms.members.inviteMember.infoAlert.text":
 		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
 	"pages.rooms.members.inviteMember.form.description.label": "Descripción",
-	"pages.rooms.members.inviteMember.form.description.hint":
-		"Se muestra en el resumen del enlace",
+	"pages.rooms.members.inviteMember.form.description.hint": "Se muestra en el resumen del enlace",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
 		"Enlace sólo válido para usuarios de la siguiente escuela:",
-	"pages.rooms.members.inviteMember.form.validForStudents.label":
-		"Enlace válido también para estudiantes",
-	"pages.rooms.members.inviteMember.form.linkExpires.label":
-		"El enlace caduca el",
+	"pages.rooms.members.inviteMember.form.validForStudents.label": "Enlace válido también para estudiantes",
+	"pages.rooms.members.inviteMember.form.linkExpires.label": "El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"La entrada a la habitación sólo es posible previa confirmación ({0})",
 	"pages.rooms.members.invitationTable.multipleDelete.confirmation":
 		"¿Suprimir los enlaces de invitación seleccionados?",
-	"pages.rooms.members.invitationTable.delete.confirmation":
-		"¿Suprimir el enlace de invitación '{invitation}'?",
-	"pages.rooms.members.invitationTable.shareButton.ariaLabel":
-		"Compartir enlace de invitación „{linkTitle}“",
-	"pages.rooms.members.confirmationTable.menus.confirm.label":
-		"Confirmar solicitud de afiliación",
-	"pages.rooms.members.confirmationTable.menus.reject.label":
-		"Rechazar la solicitud de adhesión",
-	"pages.rooms.members.confirmationTable.notification.confirm":
-		"{fullName} ha sido añadido como miembro de la sala.",
+	"pages.rooms.members.invitationTable.delete.confirmation": "¿Suprimir el enlace de invitación '{invitation}'?",
+	"pages.rooms.members.invitationTable.shareButton.ariaLabel": "Compartir enlace de invitación „{linkTitle}“",
+	"pages.rooms.members.confirmationTable.menus.confirm.label": "Confirmar solicitud de afiliación",
+	"pages.rooms.members.confirmationTable.menus.reject.label": "Rechazar la solicitud de adhesión",
+	"pages.rooms.members.confirmationTable.notification.confirm": "{fullName} ha sido añadido como miembro de la sala.",
 	"pages.rooms.members.confirmationTable.notification.reject":
 		"La solicitud de {fullName} para unirse ha sido rechazada.",
 	"pages.rooms.members.confirmationTable.notification.confirm.multiple":
 		"Las personas seleccionadas han sido añadidas a la sala como miembros.",
 	"pages.rooms.members.confirmationTable.notification.reject.multiple":
 		"Las solicitudes de adhesión de las personas seleccionadas han sido rechazadas.",
-	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel":
-		"Menú de acción para {fullName}",
+	"pages.rooms.members.confirmationTable.actionMenu.ariaLabel": "Menú de acción para {fullName}",
 	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel":
 		"Confirmar la solicitud de membresía de {fullName}",
 	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel":
 		"Rechazar la solicitud de membresía de {fullName}",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
 		"Menú de acción para el enlace de invitación „{linkTitle}“",
-	"pages.rooms.invitationlinks.error.create":
-		"No se ha podido crear el enlace de invitación.",
-	"pages.rooms.invitationlinks.error.update":
-		"Se ha producido un error al actualizar el enlace de invitación.",
-	"pages.rooms.invitationlinks.error.load":
-		"No se pudo cargar la lista de invitados.",
+	"pages.rooms.invitationlinks.error.create": "No se ha podido crear el enlace de invitación.",
+	"pages.rooms.invitationlinks.error.update": "Se ha producido un error al actualizar el enlace de invitación.",
+	"pages.rooms.invitationlinks.error.load": "No se pudo cargar la lista de invitados.",
 	"pages.rooms.title": "Salas",
 	"pages.rooms.administration.title": "Administración de salas",
 	"pages.rooms.administration.table.header.roomName": "Nombre de la sala",
@@ -2153,39 +1768,29 @@ export default {
 	"pages.rooms.administration.table.row.owner.notExist": "No existe",
 	"pages.rooms.administration.table.delete.infoMessage":
 		"Todos los contenidos de la sala también se eliminan con la sala. Esta acción no se puede deshacer.",
-	"pages.rooms.administration.table.row.actionMenu.ariaLabel":
-		"Menú de acciones para la sala “{roomName}”",
+	"pages.rooms.administration.table.row.actionMenu.ariaLabel": "Menú de acciones para la sala “{roomName}”",
 	"pages.rooms.administration.table.actionMenu.delete": "Eliminar sala",
-	"pages.rooms.administration.table.actionMenu.manageRoom":
-		"Administrar miembros de la sala",
-	"pages.rooms.administration.error.load":
-		"No se pudo cargar la lista de salas.",
+	"pages.rooms.administration.table.actionMenu.manageRoom": "Administrar miembros de la sala",
+	"pages.rooms.administration.error.load": "No se pudo cargar la lista de salas.",
 	"pages.rooms.administration.error.delete": "No se pudo eliminar la sala.",
 	"pages.rooms.administration.pageTitle": "Administrar salas",
 	"pages.rooms.administration.roomDetail.infoText":
 		"Los miembros de la sala de otras escuelas se muestran de forma anónima por razones de protección de datos (excepción: miembro con la autorización de sala “Propietario”).",
 	"pages.rooms.administration.roomDetail.anonymized": "(anónimo)",
-	"pages.rooms.administration.roomDetail.breadcrumb":
-		"Miembros de la sala {roomName}",
-	"pages.rooms.administration.roomDetail.header.text":
-		"Miembros de la sala “{roomName}”",
+	"pages.rooms.administration.roomDetail.breadcrumb": "Miembros de la sala {roomName}",
+	"pages.rooms.administration.roomDetail.header.text": "Miembros de la sala “{roomName}”",
 	"pages.taskCard.addElement": "Añadir artículo",
-	"pages.taskCard.deleteElement.text":
-		"¿Estás seguro de que deseas eliminar este elemento?",
+	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
-	"pages.tasks.finished.emptyState.title":
-		"Actualmente no hay tareas completadas",
+	"pages.tasks.finished.emptyState.title": "Actualmente no hay tareas completadas",
 	"pages.tasks.labels.due": "Entrega",
 	"pages.tasks.labels.filter": "Filtrar por curso",
 	"pages.tasks.labels.noCourse": "Sin asignación de curso",
-	"pages.tasks.labels.noCoursesAvailable":
-		"No hay ningún curso con este nombre.",
+	"pages.tasks.labels.noCoursesAvailable": "No hay ningún curso con este nombre.",
 	"pages.tasks.labels.overdue": "Expirada",
 	"pages.tasks.labels.planned": "Planificada",
-	"pages.tasks.student.completed.emptyState.title":
-		"Actualmente no hay tareas completadas",
-	"pages.tasks.student.open.emptyState.title":
-		"Actualmente no hay tareas abiertas",
+	"pages.tasks.student.completed.emptyState.title": "Actualmente no hay tareas completadas",
+	"pages.tasks.student.open.emptyState.title": "Actualmente no hay tareas abiertas",
 	"pages.tasks.student.openTasks": "Tareas abiertas",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
 	"pages.tasks.student.subtitleOverDue": "Tareas perdidas",
@@ -2194,8 +1799,7 @@ export default {
 	"pages.tasks.subtitleNotGraded": "Sin calificar",
 	"pages.tasks.subtitleOpen": "Tareas abiertas",
 	"pages.tasks.subtitleWithDue": "Con plazo",
-	"pages.tasks.teacher.drafts.emptyState.title":
-		"Actualmente no hay borradores",
+	"pages.tasks.teacher.drafts.emptyState.title": "Actualmente no hay borradores",
 	"pages.tasks.teacher.open.emptyState.title": "Actualmente no hay tareas",
 	"pages.tasks.teacher.subtitleOverDue": "Tareas expiradas",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
@@ -2220,12 +1824,9 @@ export default {
 	"pages.tool.deactivate.label": "Desactivar herramienta en la escuela",
 	"pages.tool.description.firstParagraph":
 		"Los parámetros específicos del curso para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta está disponible dentro del curso.",
-	"pages.tool.description.secondParagraph":
-		"Eliminar una configuración elimina la herramienta del curso.",
-	"pages.tool.description.moreInformation":
-		"Puede encontrar más información en nuestro {0}.",
-	"pages.tool.description.moreInformation.link":
-		"Sección de ayuda sobre herramientas externas",
+	"pages.tool.description.secondParagraph": "Eliminar una configuración elimina la herramienta del curso.",
+	"pages.tool.description.moreInformation": "Puede encontrar más información en nuestro {0}.",
+	"pages.tool.description.moreInformation.link": "Sección de ayuda sobre herramientas externas",
 	"pages.tool.select.label": "Selección de Herramientas / URL de herramienta",
 	"pages.tool.select.description":
 		"Busque herramientas o ingrese la URL de una herramienta o insértela desde el caché manualmente o con un botón",
@@ -2245,10 +1846,8 @@ export default {
 	"pages.userMigration.description.firstParagraph.hello": "¡Hola!",
 	"pages.userMigration.description.firstParagraph.changeSource":
 		"Actualmente, su escuela está cambiando el sistema de registro.",
-	"pages.userMigration.description.firstParagraph.fromSource":
-		"Ahora puede migrar su cuenta a {targetSystem}.",
-	"pages.userMigration.description.firstParagraph.fromSourceMandatory":
-		"Ahora debe migrar su cuenta a {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.fromSource": "Ahora puede migrar su cuenta a {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.fromSourceMandatory": "Ahora debe migrar su cuenta a {targetSystem}.",
 	"pages.userMigration.description.firstParagraph.loginWith":
 		"Después de la mudanza, solo puede registrarse aquí con {targetSystem}.",
 	"pages.userMigration.description.lastParagraph":
@@ -2260,25 +1859,18 @@ export default {
 	"pages.userMigration.error.description.support.link": "Soporte",
 	"pages.userMigration.error.multipleUsersFound":
 		"Este Cuenta de moin.schule ya está vinculado a una cuenta en la Niedersächsische Bildungscloud y no se puede volver a utilizar para la migración.",
-	"pages.userMigration.error.schoolNumberMismatch.information":
-		"Por favor pasa esta información:",
+	"pages.userMigration.error.schoolNumberMismatch.information": "Por favor pasa esta información:",
 	"pages.userMigration.error.schoolNumberMismatch.information.schoolNumber":
 		"{sourceSchoolNumber}, número de escuela en {targetSystem}: {targetSchoolNumber}.",
 	"pages.userMigration.error.title": "Error al mover la cuenta",
-	"pages.userMigration.success.description":
-		"Se completó el movimiento de su cuenta a {targetSystem}.",
-	"pages.userMigration.success.description.loginAgain":
-		"Por favor, regístrese de nuevo ahora.",
-	"pages.userMigration.success.login":
-		"Iniciar sesión a través de {targetSystem}",
-	"pages.userMigration.success.title":
-		"Migración exitosa de su sistema de registro",
+	"pages.userMigration.success.description": "Se completó el movimiento de su cuenta a {targetSystem}.",
+	"pages.userMigration.success.description.loginAgain": "Por favor, regístrese de nuevo ahora.",
+	"pages.userMigration.success.login": "Iniciar sesión a través de {targetSystem}",
+	"pages.userMigration.success.title": "Migración exitosa de su sistema de registro",
 	"pages.userMigration.title": "Reubicación del sistema de inicio de sesión",
 	"pages.videoConference.action.refresh": "Estado de actualización",
-	"pages.videoConference.info.noPermission":
-		"La videoconferencia aún no ha comenzado o no tienes permiso para unirte.",
-	"pages.videoConference.info.notStarted":
-		"La videoconferencia aún no ha comenzado.",
+	"pages.videoConference.info.noPermission": "La videoconferencia aún no ha comenzado o no tienes permiso para unirte.",
+	"pages.videoConference.info.notStarted": "La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"El elemento ya no está disponible. Póngase en contacto con el profesor.",
 	"pages.videoConference.info.courseParent.notEnabledTeacher":
@@ -2287,23 +1879,19 @@ export default {
 		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"pages.collabora.iframeTitle": "Editor de documentos de Office",
-	"pages.collabora.jsonError":
-		"No se pudo analizar el JSON del mensaje Collabora.",
+	"pages.collabora.jsonError": "No se pudo analizar el JSON del mensaje Collabora.",
 	"pages.collabora.messageError": "El mensaje de Collabora no es válido.",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",
 	"error.4500":
 		"Error de conexión: No se ha podido establecer la sesión en tiempo real. Compruebe la conexión o vuelva a cargar la página.",
-	"error.4401":
-		"Lamentablemente, falta la autorización para ver este contenido.",
-	"tldraw.error.ws.4400":
-		"Falta el nombre de la sala en los parámetros de la URL",
+	"error.4401": "Lamentablemente, falta la autorización para ver este contenido.",
+	"tldraw.error.ws.4400": "Falta el nombre de la sala en los parámetros de la URL",
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"ui-confirmation-dialog.ask-cancel-form": "¿Descartar cambios?",
 	"ui-layout.topbar.pageShare.printQRCode": "Imprimir código QR",
-	"ui.actionMenu.selectedRows":
-		"Menú de acciones para {count} líneas seleccionadas",
+	"ui.actionMenu.selectedRows": "Menú de acciones para {count} líneas seleccionadas",
 	"ui.actionMenu.actions": "Acciones",
 	"ui.actionMenu.select.none": "Deseleccionar todas las líneas",
 	"ui.dataTable.select.all": "Seleccionar todas las líneas",
@@ -2311,8 +1899,7 @@ export default {
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",
-	"utils.adminFilter.consent.label.parentsAgreementMissing":
-		"Falta el acuerdo del estudiante",
+	"utils.adminFilter.consent.label.parentsAgreementMissing": "Falta el acuerdo del estudiante",
 	"utils.adminFilter.consent.missing": "no disponible",
 	"utils.adminFilter.consent.ok": "completamente",
 	"utils.adminFilter.consent.parentsAgreed": "solo están de acuerdo los padres",
@@ -2322,24 +1909,19 @@ export default {
 	"utils.adminFilter.date.label.from": "Fecha desde",
 	"utils.adminFilter.date.label.until": "Fecha hasta",
 	"utils.adminFilter.date.title": "Fecha de creación",
-	"utils.adminFilter.lastMigration.label.from":
-		"Migrado por última vez el desde",
-	"utils.adminFilter.lastMigration.label.until":
-		"Migrado por última vez el hasta",
+	"utils.adminFilter.lastMigration.label.from": "Migrado por última vez el desde",
+	"utils.adminFilter.lastMigration.label.until": "Migrado por última vez el hasta",
 	"utils.adminFilter.lastMigration.title": "Migrado por última vez el",
 	"utils.adminFilter.outdatedSince.label.from": "Obsoleto desde",
 	"utils.adminFilter.outdatedSince.label.until": "Obsoleto desde hasta",
 	"utils.adminFilter.outdatedSince.title": "Obsoleto desde",
 	"utils.adminFilter.placeholder.class": "Filtrar por clase...",
-	"utils.adminFilter.placeholder.complete.lastname":
-		"Filtra por el apellido completo...",
-	"utils.adminFilter.placeholder.complete.name":
-		"Filtrar por nombre completo...",
+	"utils.adminFilter.placeholder.complete.lastname": "Filtra por el apellido completo...",
+	"utils.adminFilter.placeholder.complete.name": "Filtrar por nombre completo...",
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
 	"feature.media-shelf.title": "Estante multimedia",
-	"feature.media-shelf.emptyState":
-		"Actualmente no hay medios disponibles para su uso",
+	"feature.media-shelf.emptyState": "Actualmente no hay medios disponibles para su uso",
 	"feature.media-shelf.createLine": "Añadir línea",
 	"feature.media-shelf.line.title": "Línea",
 	"feature.media-shelf.availableLine.title": "Medios disponibles",
@@ -2358,9 +1940,7 @@ export default {
 	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
 	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
-	"pages.folder.delete-multiple-confirmation":
-		"¿Borrar realmente todos los archivos {total}?",
+	"pages.folder.delete-multiple-confirmation": "¿Borrar realmente todos los archivos {total}?",
 	"pages.folder.delete-confirmation": "¿Borrar realmente el archivo {name}?",
-	"pages.folder.rename-file-dialog.validation.duplicate-file-name":
-		"El nombre del archivo ya existe.",
+	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "El nombre del archivo ya existe.",
 };

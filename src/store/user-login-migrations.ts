@@ -1,3 +1,5 @@
+import { BusinessError } from "./types/commons";
+import { UserLoginMigration, UserLoginMigrationMapper } from "./user-login-migration";
 import {
 	UserLoginMigrationApiFactory,
 	UserLoginMigrationApiInterface,
@@ -6,14 +8,9 @@ import {
 } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useAppStore } from "@data-app";
 import { AxiosResponse, HttpStatusCode } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { BusinessError } from "./types/commons";
-import {
-	UserLoginMigration,
-	UserLoginMigrationMapper,
-} from "./user-login-migration";
-import { useAppStore } from "@data-app";
 
 @Module({
 	name: "userLoginMigrationModule",
@@ -80,22 +77,17 @@ export default class UserLoginMigrationModule extends VuexModule {
 		if (useAppStore().user?.id) {
 			try {
 				const response: AxiosResponse<UserLoginMigrationSearchListResponse> =
-					await this.userLoginMigrationApi.userLoginMigrationControllerGetMigrations(
-						useAppStore().user?.id
-					);
+					await this.userLoginMigrationApi.userLoginMigrationControllerGetMigrations(useAppStore().user?.id);
 
 				if (response.data.total > 1) {
 					throw new Error("More than one migration found for user.");
 				}
 
 				if (response.data.data.length === 1) {
-					const userLoginMigrationResponse: UserLoginMigrationResponse =
-						response.data.data[0];
+					const userLoginMigrationResponse: UserLoginMigrationResponse = response.data.data[0];
 
 					const userLoginMigration: UserLoginMigration =
-						UserLoginMigrationMapper.mapToUserLoginMigration(
-							userLoginMigrationResponse
-						);
+						UserLoginMigrationMapper.mapToUserLoginMigration(userLoginMigrationResponse);
 
 					this.setUserLoginMigration(userLoginMigration);
 				}
@@ -125,12 +117,9 @@ export default class UserLoginMigrationModule extends VuexModule {
 		if (schoolId) {
 			try {
 				const response: AxiosResponse<UserLoginMigrationResponse> =
-					await this.userLoginMigrationApi.userLoginMigrationControllerFindUserLoginMigrationBySchool(
-						schoolId
-					);
+					await this.userLoginMigrationApi.userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId);
 
-				const userLoginMigration: UserLoginMigration =
-					UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
+				const userLoginMigration: UserLoginMigration = UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
 
 				this.setUserLoginMigration(userLoginMigration);
 			} catch (error: unknown) {
@@ -164,8 +153,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 			const response: AxiosResponse<UserLoginMigrationResponse> =
 				await this.userLoginMigrationApi.userLoginMigrationControllerStartMigration();
 
-			const userLoginMigration: UserLoginMigration =
-				UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
+			const userLoginMigration: UserLoginMigration = UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
 
 			this.setUserLoginMigration(userLoginMigration);
 		} catch (error: unknown) {
@@ -190,12 +178,9 @@ export default class UserLoginMigrationModule extends VuexModule {
 
 		try {
 			const response: AxiosResponse<UserLoginMigrationResponse> =
-				await this.userLoginMigrationApi.userLoginMigrationControllerSetMigrationMandatory(
-					{ mandatory }
-				);
+				await this.userLoginMigrationApi.userLoginMigrationControllerSetMigrationMandatory({ mandatory });
 
-			const userLoginMigration: UserLoginMigration =
-				UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
+			const userLoginMigration: UserLoginMigration = UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
 
 			this.setUserLoginMigration(userLoginMigration);
 		} catch (error: unknown) {
@@ -222,8 +207,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 			const response: AxiosResponse<UserLoginMigrationResponse> =
 				await this.userLoginMigrationApi.userLoginMigrationControllerRestartMigration();
 
-			const userLoginMigration: UserLoginMigration =
-				UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
+			const userLoginMigration: UserLoginMigration = UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
 
 			this.setUserLoginMigration(userLoginMigration);
 		} catch (error: unknown) {
@@ -251,8 +235,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 				await this.userLoginMigrationApi.userLoginMigrationControllerCloseMigration();
 
 			if (response.data.closedAt) {
-				const userLoginMigration: UserLoginMigration =
-					UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
+				const userLoginMigration: UserLoginMigration = UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
 
 				this.setUserLoginMigration(userLoginMigration);
 			} else {

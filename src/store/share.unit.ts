@@ -1,12 +1,12 @@
-import ShareModule, { ShareOptions } from "./share";
 import * as serverApi from "../serverApi/v3/api";
 import {
+	BoardExternalReferenceType,
 	ShareTokenApiInterface,
 	ShareTokenBodyParamsParentTypeEnum,
-	BoardExternalReferenceType,
 } from "../serverApi/v3/api";
-import setupStores from "@@/tests/test-utils/setupStores";
+import ShareModule, { ShareOptions } from "./share";
 import courseRoomDetailsModule from "@/store/course-room-details";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 const shareOptions: ShareOptions = {
 	hasExpiryDate: true,
@@ -50,12 +50,8 @@ describe("share module", () => {
 
 					await shareModule.createShareUrl(shareOptions);
 
-					expect(
-						shareTokenMockApi.shareTokenControllerCreateShareToken
-					).toHaveBeenCalledTimes(1);
-					expect(
-						shareTokenMockApi.shareTokenControllerCreateShareToken
-					).toHaveBeenCalledWith(expectedServerPayload);
+					expect(shareTokenMockApi.shareTokenControllerCreateShareToken).toHaveBeenCalledTimes(1);
+					expect(shareTokenMockApi.shareTokenControllerCreateShareToken).toHaveBeenCalledWith(expectedServerPayload);
 				});
 
 				it("should call setShareUrl mutation", async () => {
@@ -74,9 +70,7 @@ describe("share module", () => {
 					const shareModule = new ShareModule({});
 					const error = { statusCode: 418, message: "server error" };
 					const shareTokenErrorMockApi = {
-						shareTokenControllerCreateShareToken: vi.fn(() =>
-							Promise.reject({ ...error })
-						),
+						shareTokenControllerCreateShareToken: vi.fn(() => Promise.reject({ ...error })),
 					};
 					vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
 						shareTokenErrorMockApi as unknown as ShareTokenApiInterface
@@ -91,9 +85,7 @@ describe("share module", () => {
 				it("should return undefined if shareTokenResult is undefined", async () => {
 					const shareModule = new ShareModule({});
 					const shareTokenErrorMockApi = {
-						shareTokenControllerCreateShareToken: vi.fn(() =>
-							Promise.resolve(undefined)
-						),
+						shareTokenControllerCreateShareToken: vi.fn(() => Promise.resolve(undefined)),
 					};
 					vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
 						shareTokenErrorMockApi as unknown as ShareTokenApiInterface
@@ -112,14 +104,8 @@ describe("share module", () => {
 				const shareModule = new ShareModule({});
 				const setParentIdMock = vi.spyOn(shareModule, "setParentId");
 				const setParentTypeMock = vi.spyOn(shareModule, "setParentType");
-				const setDestinationTypeMock = vi.spyOn(
-					shareModule,
-					"setDestinationType"
-				);
-				const setShareModalOpenMock = vi.spyOn(
-					shareModule,
-					"setShareModalOpen"
-				);
+				const setDestinationTypeMock = vi.spyOn(shareModule, "setDestinationType");
+				const setShareModalOpenMock = vi.spyOn(shareModule, "setShareModalOpen");
 				const testId = "test-id";
 				const type = ShareTokenBodyParamsParentTypeEnum.Courses;
 				const destinationType = BoardExternalReferenceType.Room;
@@ -141,10 +127,7 @@ describe("share module", () => {
 				const shareModule = new ShareModule({});
 				const setIdMock = vi.spyOn(shareModule, "setParentId");
 				const setShareUrlMock = vi.spyOn(shareModule, "setShareUrl");
-				const setShareModalOpenMock = vi.spyOn(
-					shareModule,
-					"setShareModalOpen"
-				);
+				const setShareModalOpenMock = vi.spyOn(shareModule, "setShareModalOpen");
 				shareModule.resetShareFlow();
 
 				expect(setIdMock).toHaveBeenCalledWith("");
@@ -174,9 +157,7 @@ describe("share module", () => {
 			const shareModule = new ShareModule({});
 			shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
 
-			expect(shareModule.getParentType).toStrictEqual(
-				ShareTokenBodyParamsParentTypeEnum.Courses
-			);
+			expect(shareModule.getParentType).toStrictEqual(ShareTokenBodyParamsParentTypeEnum.Courses);
 		});
 	});
 });

@@ -1,22 +1,15 @@
-import type { Mock } from "vitest";
-import {
-	boardResponseFactory,
-	createTestEnvStore,
-	mountComposable,
-} from "@@/tests/test-utils";
+import { useBoardStore } from "./Board.store";
+import { connectionOptions, useBoardInactivity } from "./boardInactivity.composable";
+import { useCardStore } from "./Card.store";
+import { useSocketConnection } from "./socket/socket";
+import { boardResponseFactory, createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
+import type { Mock } from "vitest";
 import { computed, nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
-import { useBoardStore } from "./Board.store";
-import {
-	connectionOptions,
-	useBoardInactivity,
-} from "./boardInactivity.composable";
-import { useCardStore } from "./Card.store";
-import { useSocketConnection } from "./socket/socket";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -33,9 +26,7 @@ const useRouterMock = <Mock>useRouter;
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-let mockedSocketConnectionHandler: DeepMocked<
-	ReturnType<typeof useSocketConnection>
->;
+let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
 
 vi.useFakeTimers();
 
@@ -51,8 +42,7 @@ describe("pageInactivity.composable", () => {
 		resetLastCreatedElementId: vi.fn(),
 	});
 
-	mockedSocketConnectionHandler =
-		createMock<ReturnType<typeof useSocketConnection>>();
+	mockedSocketConnectionHandler = createMock<ReturnType<typeof useSocketConnection>>();
 	mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 	const router = createMock<Router>();
@@ -64,9 +54,7 @@ describe("pageInactivity.composable", () => {
 		boardStore.board = boardResponseFactory.build();
 		cardStore.cards = {};
 
-		const useBoardInactivityComposable = mountComposable(() =>
-			useBoardInactivity(timer)
-		);
+		const useBoardInactivityComposable = mountComposable(() => useBoardInactivity(timer));
 
 		return { useBoardInactivityComposable, boardStore, cardStore };
 	};
@@ -89,8 +77,7 @@ describe("pageInactivity.composable", () => {
 		});
 
 		it("should not call the store functions when isTimeoutReached value false", async () => {
-			const { useBoardInactivityComposable, boardStore, cardStore } =
-				setup(3000);
+			const { useBoardInactivityComposable, boardStore, cardStore } = setup(3000);
 			connectionOptions.isTimeoutReached = false;
 			useBoardInactivityComposable.visibility.value = "hidden";
 			await nextTick();

@@ -1,10 +1,10 @@
+import SpeedDialMenu from "./SpeedDialMenu.vue";
+import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiClose } from "@icons/material";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { DefineComponent, defineComponent, nextTick } from "vue";
 import { VBtn } from "vuetify/lib/components/index";
-import SpeedDialMenu from "./SpeedDialMenu.vue";
-import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 
 // eslint-disable-next-line vue/one-component-per-file
 const componentWithFlatSlots: DefineComponent = defineComponent({
@@ -103,61 +103,52 @@ describe("SpeedDialMenu", () => {
 	it.each([
 		{ type: "hardcoded Slots", component: componentWithFlatSlots },
 		{ type: "iterated Slots", component: componentWithIteratedSlots },
-	])(
-		"should open and close menu on click with $type",
-		async ({ component }) => {
-			vi.useFakeTimers();
-			const { wrapper } = setup({ component });
+	])("should open and close menu on click with $type", async ({ component }) => {
+		vi.useFakeTimers();
+		const { wrapper } = setup({ component });
 
-			// --- Open
-			await toggleMenu(wrapper);
+		// --- Open
+		await toggleMenu(wrapper);
 
-			const actionsAfterOpen = wrapper.findAllComponents(SpeedDialMenuAction);
-			expect(actionsAfterOpen).toHaveLength(3);
+		const actionsAfterOpen = wrapper.findAllComponents(SpeedDialMenuAction);
+		expect(actionsAfterOpen).toHaveLength(3);
 
-			// --- Close
-			await toggleMenu(wrapper);
+		// --- Close
+		await toggleMenu(wrapper);
 
-			const actionsAfterClose = wrapper.findAllComponents(SpeedDialMenuAction);
-			expect(actionsAfterClose).toHaveLength(0);
-		}
-	);
+		const actionsAfterClose = wrapper.findAllComponents(SpeedDialMenuAction);
+		expect(actionsAfterClose).toHaveLength(0);
+	});
 
 	it.each([
 		{ type: "hardcoded Slots", component: componentWithFlatSlots },
 		{ type: "iterated Slots", component: componentWithIteratedSlots },
-	])(
-		"should provide incremental index to actions with $type",
-		async ({ component }) => {
-			vi.useFakeTimers();
-			const { wrapper } = setup({ component });
+	])("should provide incremental index to actions with $type", async ({ component }) => {
+		vi.useFakeTimers();
+		const { wrapper } = setup({ component });
 
-			// --- Open
-			await toggleMenu(wrapper);
+		// --- Open
+		await toggleMenu(wrapper);
 
-			const actionsAfterOpen = wrapper.findAllComponents(SpeedDialMenuAction);
+		const actionsAfterOpen = wrapper.findAllComponents(SpeedDialMenuAction);
 
-			actionsAfterOpen.forEach((action, index) => {
-				expect(action.props("speedDialIndex")).toEqual(index);
-			});
-		}
-	);
+		actionsAfterOpen.forEach((action, index) => {
+			expect(action.props("speedDialIndex")).toEqual(index);
+		});
+	});
 
 	it.each([
 		{ type: "hardcoded Slots", component: componentWithFlatSlots },
 		{ type: "iterated Slots", component: componentWithIteratedSlots },
-	])(
-		"should render labels in default slots for menu-button with $type",
-		async ({ component }) => {
-			vi.useFakeTimers();
-			const { wrapper } = setup({ component });
+	])("should render labels in default slots for menu-button with $type", async ({ component }) => {
+		vi.useFakeTimers();
+		const { wrapper } = setup({ component });
 
-			const menu = wrapper.findComponent(SpeedDialMenu);
-			const menuButton = menu.findComponent(VBtn);
+		const menu = wrapper.findComponent(SpeedDialMenu);
+		const menuButton = menu.findComponent(VBtn);
 
-			expect(menuButton.text()).toEqual("DefaultSlotLabel");
-		}
-	);
+		expect(menuButton.text()).toEqual("DefaultSlotLabel");
+	});
 
 	describe("when component has no actions", () => {
 		it("should emit 'fab:clicked' after click the fab button", async () => {

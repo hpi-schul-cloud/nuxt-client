@@ -1,16 +1,10 @@
-import ContentModule from "./content";
 import { initializeAxios } from "../utils/api";
-import { AxiosInstance } from "axios";
-import {
-	Elements,
-	Lessons,
-	Resource,
-	ResourceProperties,
-	Resources,
-} from "./types/content";
-import { beforeAll } from "vitest";
-import { setActivePinia } from "pinia";
+import ContentModule from "./content";
+import { Elements, Lessons, Resource, ResourceProperties, Resources } from "./types/content";
 import { createTestingPinia } from "@pinia/testing";
+import { AxiosInstance } from "axios";
+import { setActivePinia } from "pinia";
+import { beforeAll } from "vitest";
 
 const ESPath = "/v1/edu-sharing";
 const lessonsPath = "/v3/lessons/course";
@@ -417,9 +411,7 @@ describe("content module", () => {
 				total: 0,
 				limit: 0,
 				skip: 0,
-				data: [
-					{ ...mockResource, ref: { id: "mockId" }, stateSelected: false },
-				],
+				data: [{ ...mockResource, ref: { id: "mockId" }, stateSelected: false }],
 				pagination: undefined,
 			};
 			contentModule.elements = mockElements;

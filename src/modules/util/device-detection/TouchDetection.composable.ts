@@ -1,6 +1,6 @@
-import { ref } from "vue";
-import { useEventListener } from "@vueuse/core";
 import { isTouchEvent } from "./util/isTouchEvent";
+import { useEventListener } from "@vueuse/core";
+import { ref } from "vue";
 
 export const useTouchDetection = () => {
 	const hasTouchCapability = "ontouchstart" in window || "touchstart" in window;

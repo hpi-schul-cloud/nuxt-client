@@ -11,11 +11,7 @@
 				{{ infoText }}
 			</div>
 			<div>
-				<v-radio-group
-					v-if="!isOwnershipHandoverMode"
-					v-model="selectedRole"
-					hide-details
-				>
+				<v-radio-group v-if="!isOwnershipHandoverMode" v-model="selectedRole" hide-details>
 					<v-radio
 						v-for="option in radioOptions"
 						:key="option.role"
@@ -26,11 +22,7 @@
 						<template #label>
 							<div class="d-flex flex-column mt-2">
 								{{ option.labelHeader }}
-								<span
-									v-for="labelDescription in option.labelDescriptions"
-									:key="labelDescription"
-									class="radio-label"
-								>
+								<span v-for="labelDescription in option.labelDescriptions" :key="labelDescription" class="radio-label">
 									{{ t(labelDescription) }}
 								</span>
 							</div>
@@ -38,16 +30,10 @@
 					</v-radio>
 				</v-radio-group>
 
-				<WarningAlert
-					v-if="selectedRole === RoleName.Roomowner"
-					:class="isOwnershipHandoverMode ? 'ml-0' : 'ml-8'"
-				>
+				<WarningAlert v-if="selectedRole === RoleName.Roomowner" :class="isOwnershipHandoverMode ? 'ml-0' : 'ml-8'">
 					<span class="alert-text">
 						<template v-if="!isOwnershipHandoverMode">
-							<i18n-t
-								keypath="pages.rooms.members.handOverAlert.label"
-								scope="global"
-							>
+							<i18n-t keypath="pages.rooms.members.handOverAlert.label" scope="global">
 								<template #memberFullName>{{ memberFullName }}</template>
 							</i18n-t>
 							<p class="mb-0">
@@ -59,10 +45,7 @@
 							</p>
 						</template>
 						<template v-else>
-							<i18n-t
-								keypath="pages.rooms.members.handOverAlert.confirm.label"
-								scope="global"
-							>
+							<i18n-t keypath="pages.rooms.members.handOverAlert.confirm.label" scope="global">
 								<template #currentUserFullName>
 									{{ currentUserFullName }}
 								</template>
@@ -114,21 +97,14 @@
 </template>
 
 <script setup lang="ts">
+import { ChangeRoomRoleBodyParamsRoleNameEnum as RoleEnum, RoleName } from "@/serverApi/v3";
+import { useAppStoreRefs } from "@data-app";
+import { RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
+import { WarningAlert } from "@ui-alert";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { storeToRefs } from "pinia";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import {
-	ChangeRoomRoleBodyParamsRoleNameEnum as RoleEnum,
-	RoleName,
-} from "@/serverApi/v3";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import {
-	RoomMember,
-	useRoomDetailsStore,
-	useRoomMembersStore,
-} from "@data-room";
-import { WarningAlert } from "@ui-alert";
-import { storeToRefs } from "pinia";
-import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps({
 	members: {
@@ -170,9 +146,7 @@ const dialogTitle = computed(() =>
 );
 
 if (memberToChangeRole.length > 1) {
-	const roleNamesInProp = memberToChangeRole.map(
-		(member) => member.roomRoleName
-	);
+	const roleNamesInProp = memberToChangeRole.map((member) => member.roomRoleName);
 
 	if (roleNamesInProp.every((roleName) => roleNamesInProp[0] === roleName)) {
 		selectedRole.value = roleNamesInProp[0];
@@ -181,21 +155,13 @@ if (memberToChangeRole.length > 1) {
 	selectedRole.value = memberToChangeRole[0]?.roomRoleName;
 }
 
-const currentUserFullName = computed(() =>
-	roomMembersStore.getMemberFullName(user.value?.id)
-);
+const currentUserFullName = computed(() => roomMembersStore.getMemberFullName(user.value?.id));
 
-const memberFullName = computed(
-	() => `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`
-);
+const memberFullName = computed(() => `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`);
 
-const memberSchoolRoles = computed(
-	() => memberToChangeRole[0]?.schoolRoleNames
-);
+const memberSchoolRoles = computed(() => memberToChangeRole[0]?.schoolRoleNames);
 
-const isMemberStudent = computed(() =>
-	memberSchoolRoles.value.includes(RoleName.Student)
-);
+const isMemberStudent = computed(() => memberSchoolRoles.value.includes(RoleName.Student));
 
 const infoText = computed(() => {
 	const roomName = room.value?.name ?? "";

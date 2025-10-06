@@ -1,21 +1,16 @@
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useRoomsState } from "./Rooms.state";
-import * as serverApi from "@/serverApi/v3/api";
-import { AxiosInstance } from "axios";
 import { useApplicationError } from "@/composables/application-error.composable";
-import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
-import setupStores from "@@/tests/test-utils/setupStores";
+import * as serverApi from "@/serverApi/v3/api";
 import ApplicationErrorModule from "@/store/application-error";
-import {
-	apiResponseErrorFactory,
-	axiosErrorFactory,
-} from "@@/tests/test-utils";
 import { RoomColor } from "@/types/room/Room";
+import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { apiResponseErrorFactory, axiosErrorFactory } from "@@/tests/test-utils";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { AxiosInstance } from "axios";
 
 vi.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = vi.mocked(
-	mapAxiosErrorToResponseError
-);
+const mockedMapAxiosErrorToResponseError = vi.mocked(mapAxiosErrorToResponseError);
 
 vi.mock("@/composables/application-error.composable");
 const mockedCreateApplicationError = vi.mocked(useApplicationError);
@@ -47,11 +42,8 @@ describe("useRoomsState", () => {
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		initializeAxios(axiosMock);
 
-		mockedCreateApplicationErrorCalls =
-			createMock<ReturnType<typeof useApplicationError>>();
-		mockedCreateApplicationError.mockReturnValue(
-			mockedCreateApplicationErrorCalls
-		);
+		mockedCreateApplicationErrorCalls = createMock<ReturnType<typeof useApplicationError>>();
+		mockedCreateApplicationError.mockReturnValue(mockedCreateApplicationErrorCalls);
 
 		setupStores({
 			applicationErrorModule: ApplicationErrorModule,
@@ -97,9 +89,7 @@ describe("useRoomsState", () => {
 			expect(isLoading.value).toBe(true);
 
 			await deleteRoom("room-id");
-			expect(roomApiMock.roomControllerDeleteRoom).toHaveBeenCalledWith(
-				"room-id"
-			);
+			expect(roomApiMock.roomControllerDeleteRoom).toHaveBeenCalledWith("room-id");
 			expect(isLoading.value).toBe(false);
 		});
 
@@ -166,9 +156,7 @@ describe("useRoomsState", () => {
 			expect(isLoading.value).toBe(true);
 
 			await copyRoom("room-id");
-			expect(roomApiMock.roomControllerCopyRoom).toHaveBeenCalledWith(
-				"room-id"
-			);
+			expect(roomApiMock.roomControllerCopyRoom).toHaveBeenCalledWith("room-id");
 			expect(isLoading.value).toBe(false);
 		});
 

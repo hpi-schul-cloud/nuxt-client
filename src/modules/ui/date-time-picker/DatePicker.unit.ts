@@ -1,19 +1,10 @@
-import {
-	ComponentMountingOptions,
-	flushPromises,
-	mount,
-} from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import DatePicker from "./DatePicker.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, flushPromises, mount } from "@vue/test-utils";
 
 describe("DatePicker", () => {
-	const mountComponent = (
-		options: ComponentMountingOptions<typeof DatePicker> = {}
-	) => {
-		return mount(DatePicker, {
+	const mountComponent = (options: ComponentMountingOptions<typeof DatePicker> = {}) =>
+		mount(DatePicker, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
@@ -25,7 +16,6 @@ describe("DatePicker", () => {
 			...options,
 			attachTo: document.body,
 		});
-	};
 
 	const setup = () => {
 		const wrapper = mountComponent({
@@ -101,9 +91,7 @@ describe("DatePicker", () => {
 			await flushPromises();
 
 			const errorElement = textField.find(".v-messages");
-			expect(errorElement.text()).toEqual(
-				"components.datePicker.validation.required"
-			);
+			expect(errorElement.text()).toEqual("components.datePicker.validation.required");
 		});
 	});
 
@@ -146,9 +134,7 @@ describe("DatePicker", () => {
 			await flushPromises();
 
 			const errorElement = textField.find(".v-messages");
-			expect(errorElement.text()).toEqual(
-				"components.datePicker.validation.format"
-			);
+			expect(errorElement.text()).toEqual("components.datePicker.validation.format");
 		});
 
 		it.todo("should display external error message");

@@ -1,16 +1,13 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import AlertContainer from "./AlertContainer.vue";
-import { VAlert, VIcon } from "vuetify/lib/components/index";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { AlertPayload, notifySuccess, useNotificationStore } from "@data-app";
-import { beforeEach } from "vitest";
-import { createTestingPinia } from "@pinia/testing";
-import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
 import { mdiInformation } from "@icons/material";
+import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
+import { nextTick } from "vue";
+import { VAlert, VIcon } from "vuetify/lib/components/index";
 
 describe("AlertContainer", () => {
 	beforeEach(() => {

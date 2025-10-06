@@ -1,9 +1,6 @@
-import { expect, Mock } from "vitest";
-import {
-	ConfigResponse,
-	ExternalToolMediumStatus,
-	MediaSourceLicenseType,
-} from "@/serverApi/v3";
+import ExternalToolSection from "./ExternalToolSection.vue";
+import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
+import { ConfigResponse, ExternalToolMediumStatus, MediaSourceLicenseType } from "@/serverApi/v3";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
@@ -20,10 +17,8 @@ import {
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useNotificationStore } from "@data-app";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -31,12 +26,10 @@ import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { expect, Mock } from "vitest";
 import { nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
 import { VCardText } from "vuetify/lib/components/index";
-import ExternalToolSection from "./ExternalToolSection.vue";
-import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { useNotificationStore } from "@data-app";
 
 vi.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
 const mockedSchoolExternalToolUsage = vi.mocked(useSchoolExternalToolUsage);
@@ -48,9 +41,7 @@ describe("ExternalToolSection", () => {
 	const schoolId = "schoolId";
 	let el: HTMLDivElement;
 
-	let useSchoolExternalToolUsageMock: DeepMocked<
-		ReturnType<typeof useSchoolExternalToolUsage>
-	>;
+	let useSchoolExternalToolUsageMock: DeepMocked<ReturnType<typeof useSchoolExternalToolUsage>>;
 	let schoolLicenseStore: MockedStore<typeof useSchoolLicenseStore>;
 
 	beforeEach(() => {
@@ -60,21 +51,15 @@ describe("ExternalToolSection", () => {
 
 	const createDatasheetButtonIndex = 1;
 
-	const getWrapper = (
-		getters: Partial<SchoolExternalToolsModule> = {},
-		envs: Partial<ConfigResponse> = {}
-	) => {
+	const getWrapper = (getters: Partial<SchoolExternalToolsModule> = {}, envs: Partial<ConfigResponse> = {}) => {
 		el = document.createElement("div");
 		el.setAttribute("data-app", "true");
 		document.body.appendChild(el);
 
-		const schoolExternalToolsModule = createModuleMocks(
-			SchoolExternalToolsModule,
-			{
-				getSchoolExternalTools: [],
-				...getters,
-			}
-		);
+		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule, {
+			getSchoolExternalTools: [],
+			...getters,
+		});
 
 		createTestAppStoreWithSchool(schoolId);
 		createTestEnvStore(envs);
@@ -86,8 +71,7 @@ describe("ExternalToolSection", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
-						schoolExternalToolsModule,
+					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 				},
 			},
 			stubs: {
@@ -102,16 +86,11 @@ describe("ExternalToolSection", () => {
 	};
 
 	beforeEach(() => {
-		useSchoolExternalToolUsageMock =
-			createMock<ReturnType<typeof useSchoolExternalToolUsage>>();
+		useSchoolExternalToolUsageMock = createMock<ReturnType<typeof useSchoolExternalToolUsage>>();
 
-		useSchoolExternalToolUsageMock.metadata = ref(
-			schoolExternalToolMetadataFactory.build()
-		);
+		useSchoolExternalToolUsageMock.metadata = ref(schoolExternalToolMetadataFactory.build());
 
-		mockedSchoolExternalToolUsage.mockReturnValue(
-			useSchoolExternalToolUsageMock
-		);
+		mockedSchoolExternalToolUsage.mockReturnValue(useSchoolExternalToolUsageMock);
 	});
 
 	afterEach(() => {
@@ -130,9 +109,7 @@ describe("ExternalToolSection", () => {
 			it("should load the external tools", () => {
 				const { schoolExternalToolsModule } = getWrapper();
 
-				expect(
-					schoolExternalToolsModule.loadSchoolExternalTools
-				).toHaveBeenCalledWith(schoolId);
+				expect(schoolExternalToolsModule.loadSchoolExternalTools).toHaveBeenCalledWith(schoolId);
 			});
 
 			it("should load the school licenses", () => {
@@ -229,9 +206,7 @@ describe("ExternalToolSection", () => {
 					})
 					.findAll("th");
 
-				expect(vueWrapperArray[0].find("span").text()).toEqual(
-					"common.labels.name"
-				);
+				expect(vueWrapperArray[0].find("span").text()).toEqual("common.labels.name");
 				expect(vueWrapperArray[1].find("span").text()).toEqual(
 					"components.administration.externalToolsSection.table.header.status"
 				);
@@ -271,19 +246,13 @@ describe("ExternalToolSection", () => {
 				const thirdRow = tableRows[2].findAll("td");
 
 				expect(firstRow[1].html()).toContain(mdiCheckCircle);
-				expect(firstRow[1].find("span").text()).toEqual(
-					"components.externalTools.status.latest"
-				);
+				expect(firstRow[1].find("span").text()).toEqual("components.externalTools.status.latest");
 
 				expect(secondRow[1].html()).toContain(mdiAlert);
-				expect(secondRow[1].find("span").text()).toEqual(
-					"components.externalTools.status.outdated"
-				);
+				expect(secondRow[1].find("span").text()).toEqual("components.externalTools.status.outdated");
 
 				expect(thirdRow[1].html()).toContain(mdiAlert);
-				expect(thirdRow[1].find("span").text()).toEqual(
-					"components.externalTools.status.deactivated"
-				);
+				expect(thirdRow[1].find("span").text()).toEqual("components.externalTools.status.deactivated");
 			});
 
 			it("medium status should be rendered in the datatable", () => {
@@ -299,9 +268,7 @@ describe("ExternalToolSection", () => {
 				expect(firstRow[2].find("span").text()).toEqual("Medium Source Name");
 
 				expect(secondRow[2].html()).toContain(mdiAlert);
-				expect(secondRow[2].find("span").text()).toEqual(
-					"pages.tool.medium.noMediaSource"
-				);
+				expect(secondRow[2].find("span").text()).toEqual("pages.tool.medium.noMediaSource");
 
 				expect(thirdRow[2].html()).not.toContain("v-icon");
 				expect(thirdRow[2].find("span").text()).toEqual("-");
@@ -314,15 +281,9 @@ describe("ExternalToolSection", () => {
 					const tableRows = wrapper.find("tbody").findAll("tr");
 
 					const firstRowButtons = tableRows[1].findAll("button");
-					expect(
-						firstRowButtons[0].classes().includes("v-btn--icon")
-					).toBeTruthy();
-					expect(
-						firstRowButtons[1].classes().includes("v-btn--icon")
-					).toBeTruthy();
-					expect(
-						firstRowButtons.at(2)?.classes().includes("v-btn--icon")
-					).toBeTruthy();
+					expect(firstRowButtons[0].classes().includes("v-btn--icon")).toBeTruthy();
+					expect(firstRowButtons[1].classes().includes("v-btn--icon")).toBeTruthy();
+					expect(firstRowButtons.at(2)?.classes().includes("v-btn--icon")).toBeTruthy();
 				});
 
 				it("should open a new tab with click on create datasheet", async () => {
@@ -331,16 +292,12 @@ describe("ExternalToolSection", () => {
 
 					const tableRows = wrapper.find("tbody").findAll("tr");
 					const firstRowButtons = tableRows.at(0)?.findAll("button");
-					const datasheetButton = firstRowButtons?.at(
-						createDatasheetButtonIndex
-					);
+					const datasheetButton = firstRowButtons?.at(createDatasheetButtonIndex);
 
 					await datasheetButton!.trigger("click");
 					await nextTick();
 
-					expect(window.open).toHaveBeenCalledWith(
-						`/api/v3/tools/external-tools/${toolId}/datasheet`
-					);
+					expect(window.open).toHaveBeenCalledWith(`/api/v3/tools/external-tools/${toolId}/datasheet`);
 				});
 
 				it("a dialog should be displayed with click on delete", async () => {
@@ -353,10 +310,7 @@ describe("ExternalToolSection", () => {
 
 					expect(wrapper.findComponent({ name: "v-dialog" })).toBeDefined();
 
-					expect(
-						(wrapper.vm as unknown as typeof ExternalToolSection)
-							.isDeleteDialogOpen
-					).toBeTruthy();
+					expect((wrapper.vm as unknown as typeof ExternalToolSection).isDeleteDialogOpen).toBeTruthy();
 				});
 
 				describe("when dialog is rendered", () => {
@@ -364,15 +318,11 @@ describe("ExternalToolSection", () => {
 						const { wrapper } = setupItems();
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
-						const deleteButton = tableRows[0].get(
-							'[data-testid="deleteAction"]'
-						);
+						const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
 						await deleteButton.trigger("click");
 
-						expect(wrapper.find("p").html()).toContain(
-							"components.administration.externalToolsSection.info"
-						);
+						expect(wrapper.find("p").html()).toContain("components.administration.externalToolsSection.info");
 					});
 				});
 
@@ -393,20 +343,14 @@ describe("ExternalToolSection", () => {
 						});
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
-						const deleteButton = tableRows[0].get(
-							'[data-testid="deleteAction"]'
-						);
+						const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
 						await deleteButton.trigger("click");
 
-						const confirmButton = wrapper.getComponent(
-							"[data-testId=delete-dialog-confirm]"
-						);
+						const confirmButton = wrapper.getComponent("[data-testId=delete-dialog-confirm]");
 						await confirmButton.trigger("click");
 
-						expect(
-							schoolExternalToolsModule.deleteSchoolExternalTool
-						).toHaveBeenCalled();
+						expect(schoolExternalToolsModule.deleteSchoolExternalTool).toHaveBeenCalled();
 					});
 
 					it("should call notifySuccess", async () => {
@@ -425,15 +369,11 @@ describe("ExternalToolSection", () => {
 						});
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
-						const deleteButton = tableRows[0].get(
-							'[data-testid="deleteAction"]'
-						);
+						const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
 						await deleteButton.trigger("click");
 
-						const confirmButton = wrapper.findComponent(
-							"[data-testId='delete-dialog-confirm']"
-						);
+						const confirmButton = wrapper.findComponent("[data-testId='delete-dialog-confirm']");
 						await confirmButton.trigger("click");
 						expect(useNotificationStore().notify).toHaveBeenCalled();
 					});
@@ -484,18 +424,12 @@ describe("ExternalToolSection", () => {
 	describe("when deleting a schoolExternalTool", () => {
 		describe("when metadata is given", () => {
 			const setup = () => {
-				const schoolExternalToolMetadata =
-					schoolExternalToolMetadataFactory.build({ mediaBoard: 0 });
+				const schoolExternalToolMetadata = schoolExternalToolMetadataFactory.build({ mediaBoard: 0 });
 
-				useSchoolExternalToolUsageMock.metadata = ref(
-					schoolExternalToolMetadata
-				);
+				useSchoolExternalToolUsageMock.metadata = ref(schoolExternalToolMetadata);
 
 				const { wrapper } = getWrapper({
-					getSchoolExternalTools: [
-						schoolExternalToolFactory.build(),
-						schoolExternalToolFactory.build(),
-					],
+					getSchoolExternalTools: [schoolExternalToolFactory.build(), schoolExternalToolFactory.build()],
 				});
 
 				return {
@@ -526,9 +460,7 @@ describe("ExternalToolSection", () => {
 				await deleteButton.trigger("click");
 
 				const cardText = wrapper.findComponent(VCardText);
-				const headerDialogLine = cardText.get(
-					'[data-testid="delete-dialog-content-header"]'
-				);
+				const headerDialogLine = cardText.get('[data-testid="delete-dialog-content-header"]');
 
 				const expectedDialogHeaderText = [
 					"components.administration.externalToolsSection.dialog.content.header.firstParagraph",
@@ -549,12 +481,8 @@ describe("ExternalToolSection", () => {
 				await deleteButton.trigger("click");
 
 				const cardText = wrapper.findComponent(VCardText);
-				const courseDialogLine = cardText.find(
-					'[data-testid="delete-dialog-content-courses"]'
-				);
-				const boardDialogLine = cardText.find(
-					'[data-testid="delete-dialog-content-board-elements"]'
-				);
+				const courseDialogLine = cardText.find('[data-testid="delete-dialog-content-courses"]');
+				const boardDialogLine = cardText.find('[data-testid="delete-dialog-content-board-elements"]');
 
 				expect(courseDialogLine.exists()).toEqual(true);
 				expect(courseDialogLine.text()).toEqual(expectedCourseDialog);
@@ -572,9 +500,7 @@ describe("ExternalToolSection", () => {
 				await deleteButton.trigger("click");
 
 				const cardText = wrapper.findComponent(VCardText);
-				const boardDialogLine = cardText.find(
-					'[data-testid="delete-dialog-content-board-elements"]'
-				);
+				const boardDialogLine = cardText.find('[data-testid="delete-dialog-content-board-elements"]');
 
 				expect(boardDialogLine.exists()).toEqual(true);
 				expect(boardDialogLine.classes()).not.toContain("mb-0");
@@ -589,9 +515,7 @@ describe("ExternalToolSection", () => {
 				await deleteButton.trigger("click");
 
 				const cardText = wrapper.findComponent(VCardText);
-				const warningDialogLine = cardText.find(
-					'[data-testid="delete-dialog-content-media-warning"]'
-				);
+				const warningDialogLine = cardText.find('[data-testid="delete-dialog-content-media-warning"]');
 
 				expect(warningDialogLine.exists()).toEqual(true);
 				expect(warningDialogLine.text()).toEqual(
@@ -619,12 +543,9 @@ describe("ExternalToolSection", () => {
 					mediaBoard: 1,
 				};
 
-				const schoolExternalToolMetadata =
-					schoolExternalToolMetadataFactory.build(metadata);
+				const schoolExternalToolMetadata = schoolExternalToolMetadataFactory.build(metadata);
 
-				useSchoolExternalToolUsageMock.metadata = ref(
-					schoolExternalToolMetadata
-				);
+				useSchoolExternalToolUsageMock.metadata = ref(schoolExternalToolMetadata);
 
 				const { wrapper } = getWrapper(
 					{
@@ -653,9 +574,7 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					const cardText = wrapper.findComponent(VCardText);
-					const mediaBoardDialogLine = cardText.find(
-						'[data-testid="delete-dialog-content-media-shelves"]'
-					);
+					const mediaBoardDialogLine = cardText.find('[data-testid="delete-dialog-content-media-shelves"]');
 
 					expect(mediaBoardDialogLine.exists()).toEqual(true);
 					expect(mediaBoardDialogLine.text()).toEqual(expectedDialogText);
@@ -670,9 +589,7 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					const cardText = wrapper.findComponent(VCardText);
-					const mediaBoardDialogLine = cardText.find(
-						'[data-testid="delete-dialog-content-media-shelves"]'
-					);
+					const mediaBoardDialogLine = cardText.find('[data-testid="delete-dialog-content-media-shelves"]');
 
 					expect(mediaBoardDialogLine.exists()).toEqual(true);
 					expect(mediaBoardDialogLine.classes()).not.toContain("mb-0");
@@ -689,9 +606,7 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					const cardText = wrapper.findComponent(VCardText);
-					const mediaBoardDialogLine = cardText.find(
-						'[data-testid="delete-dialog-content-media-shelves"]'
-					);
+					const mediaBoardDialogLine = cardText.find('[data-testid="delete-dialog-content-media-shelves"]');
 
 					expect(mediaBoardDialogLine.exists()).toEqual(true);
 					expect(mediaBoardDialogLine.text()).toEqual(expectedDialogText);
@@ -706,9 +621,7 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					const cardText = wrapper.findComponent(VCardText);
-					const mediaBoardDialogLine = cardText.find(
-						'[data-testid="delete-dialog-content-media-shelves"]'
-					);
+					const mediaBoardDialogLine = cardText.find('[data-testid="delete-dialog-content-media-shelves"]');
 
 					expect(mediaBoardDialogLine.exists()).toEqual(true);
 					expect(mediaBoardDialogLine.classes()).not.toContain("mb-0");
@@ -724,12 +637,9 @@ describe("ExternalToolSection", () => {
 					mediaBoard: 0,
 				};
 
-				const schoolExternalToolMetadata =
-					schoolExternalToolMetadataFactory.build(metadata);
+				const schoolExternalToolMetadata = schoolExternalToolMetadataFactory.build(metadata);
 
-				useSchoolExternalToolUsageMock.metadata = ref(
-					schoolExternalToolMetadata
-				);
+				useSchoolExternalToolUsageMock.metadata = ref(schoolExternalToolMetadata);
 
 				const { wrapper } = getWrapper(
 					{
@@ -758,9 +668,7 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					const cardText = wrapper.findComponent(VCardText);
-					const mediaBoardDialogLine = cardText.find(
-						'[data-testid="delete-dialog-content-media-shelves"]'
-					);
+					const mediaBoardDialogLine = cardText.find('[data-testid="delete-dialog-content-media-shelves"]');
 
 					expect(mediaBoardDialogLine.exists()).toEqual(true);
 					expect(mediaBoardDialogLine.text()).toEqual(expectedDialogText);
@@ -775,9 +683,7 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					const cardText = wrapper.findComponent(VCardText);
-					const mediaBoardDialogLine = cardText.find(
-						'[data-testid="delete-dialog-content-media-shelves"]'
-					);
+					const mediaBoardDialogLine = cardText.find('[data-testid="delete-dialog-content-media-shelves"]');
 
 					expect(mediaBoardDialogLine.exists()).toEqual(true);
 					expect(mediaBoardDialogLine.classes()).not.toContain("mb-0");
@@ -794,9 +700,7 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					const cardText = wrapper.findComponent(VCardText);
-					const mediaBoardDialogLine = cardText.find(
-						'[data-testid="delete-dialog-content-media-shelves"]'
-					);
+					const mediaBoardDialogLine = cardText.find('[data-testid="delete-dialog-content-media-shelves"]');
 
 					expect(mediaBoardDialogLine.exists()).toEqual(false);
 				});
@@ -810,9 +714,7 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					const cardText = wrapper.findComponent(VCardText);
-					const boardElementsDialogLine = cardText.find(
-						'[data-testid="delete-dialog-content-board-elements"]'
-					);
+					const boardElementsDialogLine = cardText.find('[data-testid="delete-dialog-content-board-elements"]');
 
 					expect(boardElementsDialogLine.classes()).not.toContain("mb-0");
 				});
@@ -824,10 +726,7 @@ describe("ExternalToolSection", () => {
 				useSchoolExternalToolUsageMock.metadata = ref(undefined);
 
 				const { wrapper } = getWrapper({
-					getSchoolExternalTools: [
-						schoolExternalToolFactory.build({}),
-						schoolExternalToolFactory.build(),
-					],
+					getSchoolExternalTools: [schoolExternalToolFactory.build({}), schoolExternalToolFactory.build()],
 				});
 
 				return {

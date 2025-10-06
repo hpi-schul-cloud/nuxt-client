@@ -21,9 +21,7 @@ describe("GroupApi.composable", () => {
 		const setup = () => {
 			const group: GroupResponse = groupResponseFactory.build();
 
-			groupApi.groupControllerGetGroup.mockResolvedValue(
-				mockApiResponse({ data: group })
-			);
+			groupApi.groupControllerGetGroup.mockResolvedValue(mockApiResponse({ data: group }));
 
 			return {
 				group,
@@ -70,9 +68,7 @@ describe("GroupApi.composable", () => {
 				limit: 10,
 			};
 
-			groupApi.groupControllerGetAllGroups.mockResolvedValue(
-				mockApiResponse({ data: groupList })
-			);
+			groupApi.groupControllerGetAllGroups.mockResolvedValue(mockApiResponse({ data: groupList }));
 
 			return {
 				groupList,
@@ -93,12 +89,7 @@ describe("GroupApi.composable", () => {
 				}
 			);
 
-			expect(groupApi.groupControllerGetAllGroups).toHaveBeenCalledWith(
-				1,
-				2,
-				true,
-				"testName"
-			);
+			expect(groupApi.groupControllerGetAllGroups).toHaveBeenCalledWith(1, 2, true, "testName");
 		});
 
 		it("should return a group", async () => {

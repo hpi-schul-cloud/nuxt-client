@@ -1,15 +1,8 @@
+import FilePreview from "./FilePreview.vue";
 import { FilePreviewStatus, FileRecord } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import {
-	mdiFileDocumentOutline,
-	mdiFileMusicOutline,
-	mdiFileVideoOutline,
-} from "@icons/material";
-import FilePreview from "./FilePreview.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mdiFileDocumentOutline, mdiFileMusicOutline, mdiFileVideoOutline } from "@icons/material";
 
 describe("FilePreview", () => {
 	const setupWrapper = (fileRecord: FileRecord) => {

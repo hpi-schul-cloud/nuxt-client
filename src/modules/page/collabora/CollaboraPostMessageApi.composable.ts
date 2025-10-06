@@ -1,10 +1,6 @@
-import { useI18n } from "vue-i18n";
-import {
-	appLoadingStatusValueSchema,
-	CollaboraMessage,
-	collaboraMessageSchema,
-} from "./CollaboraPostMessage.schema";
+import { appLoadingStatusValueSchema, CollaboraMessage, collaboraMessageSchema } from "./CollaboraPostMessage.schema";
 import { notifyError } from "@data-app";
+import { useI18n } from "vue-i18n";
 
 export enum CollaboraEvents {
 	APP_LOADING_STATUS = "App_LoadingStatus",
@@ -22,10 +18,7 @@ export const useCollaboraPostMessageApi = () => {
 
 	window.addEventListener("message", (event) => listenForMessages(event.data));
 
-	const setupPostMessageAPI = (
-		iframeRef: HTMLIFrameElement,
-		iframeOrigin: string
-	) => {
+	const setupPostMessageAPI = (iframeRef: HTMLIFrameElement, iframeOrigin: string) => {
 		targetOrigin = iframeOrigin;
 		collaboraWindow = iframeRef?.contentWindow;
 	};
@@ -68,9 +61,7 @@ export const useCollaboraPostMessageApi = () => {
 
 	const postMessage = (messageId: string, values?: unknown) => {
 		if (!collaboraWindow || !targetOrigin) {
-			throw new Error(
-				"Collabora iframe not setup properly, please call setupPostMessageAPI first."
-			);
+			throw new Error("Collabora iframe not setup properly, please call setupPostMessageAPI first.");
 		}
 
 		collaboraWindow.postMessage(
@@ -84,12 +75,7 @@ export const useCollaboraPostMessageApi = () => {
 	};
 
 	const sendRemoveButtonsMessage = () => {
-		const buttonIds = [
-			"feedback-button",
-			"about-button",
-			"latestupdates",
-			"signature-button",
-		];
+		const buttonIds = ["feedback-button", "about-button", "latestupdates", "signature-button"];
 
 		buttonIds.forEach((buttonId) => {
 			postMessage(CollaboraEvents.REMOVE_BUTTON, { id: buttonId });
@@ -97,14 +83,7 @@ export const useCollaboraPostMessageApi = () => {
 	};
 
 	const sendHideMenuItemsMessage = () => {
-		const menuItemIds = [
-			"report-an-issue",
-			"feedback",
-			"about",
-			"latestupdates",
-			"serveraudit",
-			"signature",
-		];
+		const menuItemIds = ["report-an-issue", "feedback", "about", "latestupdates", "serveraudit", "signature"];
 
 		menuItemIds.forEach((menuItemId) => {
 			postMessage(CollaboraEvents.HIDE_MENU_ITEM, { id: menuItemId });
@@ -119,11 +98,9 @@ export const useCollaboraPostMessageApi = () => {
 		}
 	};
 
-	const hasLoadingStatusMessageId = (messageId: string): boolean =>
-		messageId === CollaboraEvents.APP_LOADING_STATUS;
+	const hasLoadingStatusMessageId = (messageId: string): boolean => messageId === CollaboraEvents.APP_LOADING_STATUS;
 
-	const hasUICloseMessageId = (messageId: string): boolean =>
-		messageId === CollaboraEvents.UI_CLOSE;
+	const hasUICloseMessageId = (messageId: string): boolean => messageId === CollaboraEvents.UI_CLOSE;
 
 	return {
 		setupPostMessageAPI,

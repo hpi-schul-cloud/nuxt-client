@@ -1,27 +1,16 @@
-import {
-	CopyApiResponseStatusEnum,
-	CopyApiResponseTypeEnum,
-	RoomApiFactory,
-} from "@/serverApi/v3";
+import { CopyApiResponseStatusEnum, CopyApiResponseTypeEnum, RoomApiFactory } from "@/serverApi/v3";
 import LoadingStateModule from "@/store/loading-state";
 import { ApplicationError } from "@/store/types/application-error";
-import {
-	expectNotification,
-	mockApiResponse,
-	roomFactory,
-} from "@@/tests/test-utils";
+import { expectNotification, mockApiResponse, roomFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomCopyFlow } from "@feature-room";
 import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { beforeEach, Mock } from "vitest";
 import { nextTick } from "vue";
-import { createTestingPinia } from "@pinia/testing";
-import { setActivePinia } from "pinia";
 
 vi.mock("@/serverApi/v3", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("@/serverApi/v3")>();
@@ -276,9 +265,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 		const setupWithError = async () => {
 			const { infoDialog, roomApiMock, ...rest } = await mountComponent();
 
-			roomApiMock.roomControllerCopyRoom.mockRejectedValue(
-				new Error("API call failed")
-			);
+			roomApiMock.roomControllerCopyRoom.mockRejectedValue(new Error("API call failed"));
 
 			await infoDialog.vm.$emit("copy:confirm");
 			await flushPromises(); // wait for ref to be updated

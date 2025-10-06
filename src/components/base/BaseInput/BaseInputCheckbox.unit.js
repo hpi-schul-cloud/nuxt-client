@@ -1,6 +1,6 @@
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInputCheckbox";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("@/components/base/BaseInputCheckbox", () => {
 	it(`Check if input type="checkbox" is rendered`, () => {

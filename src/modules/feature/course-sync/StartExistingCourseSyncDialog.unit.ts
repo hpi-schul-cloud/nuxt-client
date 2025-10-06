@@ -1,24 +1,17 @@
+import GroupSelectionDialog from "./GroupSelectionDialog.vue";
+import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { MeResponse, RoleName } from "@/serverApi/v3";
-import {
-	createTestAppStore,
-	expectNotification,
-	groupResponseFactory,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestAppStore, expectNotification, groupResponseFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseApi } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import GroupSelectionDialog from "./GroupSelectionDialog.vue";
-import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
-import { createTestingPinia } from "@pinia/testing";
-import { setActivePinia } from "pinia";
 
 vi.mock("@data-room");
 
@@ -38,11 +31,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 		const wrapper = mount(StartExistingCourseSyncDialog, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
 				stubs: {
 					GroupSelectionDialog: true,
 					VDialog: true,
@@ -89,9 +78,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			expect(groupSelectionDialog.props().isOpen).toEqual(false);
 			expect(confirmationDialog.props().isOpen).toEqual(false);
-			expect(
-				(wrapper.vm as unknown as typeof StartExistingCourseSyncDialog).step
-			).toEqual(0);
+			expect((wrapper.vm as unknown as typeof StartExistingCourseSyncDialog).step).toEqual(0);
 		});
 	});
 
@@ -135,9 +122,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			const confirmationDialog = wrapper.getComponent<typeof vCustomDialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
-			const confirmBtn = confirmationDialog.findComponent(
-				"[data-testid=dialog-confirm]"
-			);
+			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");
 			await confirmBtn.trigger("click");
 
 			return {
@@ -156,10 +141,7 @@ describe("StartExistingCourseSyncDialog", () => {
 		it("should call the api", async () => {
 			const { group } = await setup();
 
-			expect(courseApiMock.startSynchronization).toHaveBeenCalledWith(
-				"courseId",
-				group.id
-			);
+			expect(courseApiMock.startSynchronization).toHaveBeenCalledWith("courseId", group.id);
 		});
 
 		it("should show a success notification", async () => {
@@ -189,9 +171,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			const confirmationDialog = wrapper.getComponent<typeof vCustomDialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
-			const confirmBtn = confirmationDialog.findComponent(
-				"[data-testid=dialog-confirm]"
-			);
+			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");
 			await confirmBtn.trigger("click");
 
 			return {
@@ -224,9 +204,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			const confirmationDialog = wrapper.getComponent<typeof vCustomDialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
-			const confirmBtn = confirmationDialog.findComponent(
-				"[data-testid=dialog-confirm]"
-			);
+			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");
 			await confirmBtn.trigger("click");
 
 			return {
@@ -275,9 +253,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			const text = wrapper.find("[data-testid=no-teacher-warning-text]");
 
-			expect(text.text()).toEqual(
-				"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning"
-			);
+			expect(text.text()).toEqual("feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning");
 		});
 	});
 
@@ -367,9 +343,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			const text = wrapper.find("[data-testid=no-teacher-warning-text]");
 
-			expect(text.text()).toEqual(
-				"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning"
-			);
+			expect(text.text()).toEqual("feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning");
 		});
 	});
 

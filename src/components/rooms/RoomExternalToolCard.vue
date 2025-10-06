@@ -12,30 +12,19 @@
 				{{ tool.domain }}
 			</LineClamp>
 			<div class="d-flex ga-1">
-				<WarningChip
-					v-if="isToolDeactivated"
-					data-testId="tool-card-status-deactivated"
-				>
+				<WarningChip v-if="isToolDeactivated" data-testId="tool-card-status-deactivated">
 					{{ $t("pages.rooms.tools.deactivated") }}
 				</WarningChip>
 
-				<WarningChip
-					v-if="isToolNotLicensed"
-					data-testId="tool-card-status-not-licensed"
-				>
+				<WarningChip v-if="isToolNotLicensed" data-testId="tool-card-status-not-licensed">
 					{{ $t("common.medium.chip.notLicensed") }}
 				</WarningChip>
 
-				<InfoChip
-					v-if="showAsIncompleteOperational"
-					data-testId="tool-card-status-incompleteOperational"
+				<InfoChip v-if="showAsIncompleteOperational" data-testId="tool-card-status-incompleteOperational"
 					>{{ $t("pages.rooms.tools.outdated") }}
 				</InfoChip>
 
-				<WarningChip
-					v-if="isToolOutdated || isToolIncomplete"
-					data-testId="tool-card-status"
-				>
+				<WarningChip v-if="isToolOutdated || isToolIncomplete" data-testId="tool-card-status">
 					{{ $t("pages.rooms.tools.outdated") }}
 				</WarningChip>
 			</div>
@@ -53,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+import RoomBaseCard from "./RoomBaseCard.vue";
 import {
 	ExternalToolDisplayData,
 	useContextExternalToolConfigurationStatus,
@@ -64,7 +54,6 @@ import { LineClamp } from "@ui-line-clamp";
 import { RoomDotMenu } from "@ui-room-details";
 import { computed, ComputedRef, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import RoomBaseCard from "./RoomBaseCard.vue";
 
 const props = defineProps({
 	tool: {
@@ -81,11 +70,7 @@ const emit = defineEmits(["edit", "delete", "error", "refresh"]);
 
 const { t } = useI18n();
 
-const {
-	fetchContextLaunchRequest,
-	launchTool,
-	error: launchError,
-} = useExternalToolLaunchState(() => emit("refresh"));
+const { fetchContextLaunchRequest, launchTool, error: launchError } = useExternalToolLaunchState(() => emit("refresh"));
 
 const { isTeacher } = useContextExternalToolConfigurationStatus();
 
@@ -127,9 +112,7 @@ const menuItems = [
 	},
 ];
 
-const isDeepLinkingTool: ComputedRef = computed(
-	() => !!props.tool.isLtiDeepLinkingTool
-);
+const isDeepLinkingTool: ComputedRef = computed(() => !!props.tool.isLtiDeepLinkingTool);
 
 const hasDeepLink: ComputedRef = computed(() => !!props.tool.ltiDeepLink);
 
@@ -145,40 +128,25 @@ const toolName: ComputedRef = computed(() => {
 	return props.tool.name;
 });
 
-const showTool: ComputedRef = computed(
-	() => !(isDeepLinkingTool.value && !hasDeepLink.value && !isTeacher())
-);
+const showTool: ComputedRef = computed(() => !(isDeepLinkingTool.value && !hasDeepLink.value && !isTeacher()));
 
 const isToolOutdated: ComputedRef = computed(
-	() =>
-		props.tool.status.isOutdatedOnScopeSchool ||
-		props.tool.status.isOutdatedOnScopeContext
+	() => props.tool.status.isOutdatedOnScopeSchool || props.tool.status.isOutdatedOnScopeContext
 );
 
-const isToolIncomplete: ComputedRef = computed(
-	() => props.tool.status.isIncompleteOnScopeContext
-);
+const isToolIncomplete: ComputedRef = computed(() => props.tool.status.isIncompleteOnScopeContext);
 
 const showAsIncompleteOperational: ComputedRef = computed(
 	() => props.tool.status.isIncompleteOperationalOnScopeContext && isTeacher()
 );
 
-const isToolDeactivated: ComputedRef = computed(
-	() => props.tool.status.isDeactivated
-);
+const isToolDeactivated: ComputedRef = computed(() => props.tool.status.isDeactivated);
 
-const isToolNotLicensed: ComputedRef = computed(
-	() => props.tool.status.isNotLicensed
-);
+const isToolNotLicensed: ComputedRef = computed(() => props.tool.status.isNotLicensed);
 
-const isToolLaunchable = computed(() => {
-	return (
-		!isToolOutdated.value &&
-		!isToolDeactivated.value &&
-		!isToolIncomplete.value &&
-		!isToolNotLicensed.value
-	);
-});
+const isToolLaunchable = computed(
+	() => !isToolOutdated.value && !isToolDeactivated.value && !isToolIncomplete.value && !isToolNotLicensed.value
+);
 
 const loadLaunchRequest = async () => {
 	if (!isToolLaunchable.value) {

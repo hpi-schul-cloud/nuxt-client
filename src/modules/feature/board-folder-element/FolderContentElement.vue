@@ -7,9 +7,7 @@
 		variant="outlined"
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
-		:aria-label="
-			t('components.cardElement.folderElement') + ' ' + element.content.title
-		"
+		:aria-label="t('components.cardElement.folderElement') + ' ' + element.content.title"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
@@ -19,17 +17,12 @@
 			tabindex="0"
 			role="button"
 			class="content-element-bar"
-			:aria-label="
-				t('components.cardElement.folderElement') + ' ' + element.content.title
-			"
+			:aria-label="t('components.cardElement.folderElement') + ' ' + element.content.title"
 			@click="onTitleClick"
 			@keydown.enter="onTitleClick"
 		>
 			<template #title>
-				{{
-					element.content.title ||
-					t("components.cardElement.folderElement.untitled")
-				}}
+				{{ element.content.title || t("components.cardElement.folderElement.untitled") }}
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu
@@ -38,14 +31,8 @@
 					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				>
 					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-					<KebabMenuActionMoveDown
-						v-if="isNotLastElement"
-						@click="onMoveDown"
-					/>
-					<KebabMenuActionDelete
-						scope-language-key="components.cardElement.folderElement"
-						@click="onDelete"
-					/>
+					<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+					<KebabMenuActionDelete scope-language-key="components.cardElement.folderElement" @click="onDelete" />
 				</BoardMenu>
 			</template>
 		</ContentElementBar>
@@ -62,22 +49,18 @@
 </template>
 
 <script setup lang="ts">
+import FileStatistic from "./FileStatistic.vue";
+import FolderTitleInput from "./FolderTitleInput.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import { FileFolderElement } from "@/types/board/ContentElement";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenuScope, ContentElementBar } from "@ui-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import FileStatistic from "./FileStatistic.vue";
-import FolderTitleInput from "./FolderTitleInput.vue";
 
 interface FolderContentElementProps {
 	element: FileFolderElement;

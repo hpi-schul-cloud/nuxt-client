@@ -1,18 +1,13 @@
-import { ref } from "vue";
 import { useInternalConfirmationDialog } from "./Confirmation.composable";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import ConfirmationDialog from "./ConfirmationDialog.vue";
-import { VCard, VDialog } from "vuetify/lib/components/index";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { VueWrapper } from "@vue/test-utils";
 import { Mock } from "vitest";
+import { ref } from "vue";
+import { VCard, VDialog } from "vuetify/lib/components/index";
 
 vi.mock("./Confirmation.composable");
-const useInternalConfirmationDialogMock = vi.mocked(
-	useInternalConfirmationDialog
-);
+const useInternalConfirmationDialogMock = vi.mocked(useInternalConfirmationDialog);
 
 describe("ConfirmationDialog", () => {
 	let cancelMock: Mock;
@@ -24,10 +19,7 @@ describe("ConfirmationDialog", () => {
 		confirmMock = vi.fn();
 	});
 
-	const setup = (options?: {
-		message?: string;
-		confirmActionLangKey?: string;
-	}) => {
+	const setup = (options?: { message?: string; confirmActionLangKey?: string }) => {
 		const { message, confirmActionLangKey } = {
 			message: "titleMessage",
 			confirmActionLangKey: "ActionKey",
@@ -65,10 +57,7 @@ describe("ConfirmationDialog", () => {
 		it("should render dialog title", async () => {
 			const { wrapper, message } = setup();
 
-			const dialogTitle = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.find(".dialog-title");
+			const dialogTitle = wrapper.findComponent(VDialog).findComponent(VCard).find(".dialog-title");
 
 			expect(dialogTitle.text()).toContain(message);
 		});
@@ -76,10 +65,7 @@ describe("ConfirmationDialog", () => {
 		it("should render empty dialog title if no message is provided", async () => {
 			const { wrapper } = setup({ message: undefined });
 
-			const dialogTitle = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.find(".dialog-title");
+			const dialogTitle = wrapper.findComponent(VDialog).findComponent(VCard).find(".dialog-title");
 
 			expect(dialogTitle.text()).toBe("");
 		});

@@ -1,20 +1,17 @@
+import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
+import TasksList from "./TasksList.vue";
+import { RoleName } from "@/serverApi/v3";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import TasksModule from "@/store/tasks";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import { mount } from "@vue/test-utils";
-import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
-import TasksList from "./TasksList.vue";
-import { COPY_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { beforeAll } from "vitest";
-import { setActivePinia } from "pinia";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
-import { RoleName } from "@/serverApi/v3";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeAll } from "vitest";
 
 const { tasks } = mocks;
 
@@ -171,9 +168,7 @@ describe("@/components/organisms/TasksList", () => {
 			});
 
 			expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(true);
-			expect(
-				wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
-			).toBe(true);
+			expect(wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()).toBe(true);
 			expect(wrapper.find(".v-progress-circular").exists()).toBe(false);
 			expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 			expect(wrapper.props()).toStrictEqual({
@@ -205,9 +200,7 @@ describe("@/components/organisms/TasksList", () => {
 
 			expect(wrapper.find(".v-progress-circular").exists()).toBe(true);
 			expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(false);
-			expect(
-				wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
-			).toBe(false);
+			expect(wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()).toBe(false);
 		});
 
 		it("Should compute correct status", () => {
@@ -248,8 +241,6 @@ describe("@/components/organisms/TasksList", () => {
 		const oneTaskItemTeacher = wrapper.findComponent(TaskItemTeacher);
 		oneTaskItemTeacher.vm.$emit("copy-task", payload);
 
-		expect(wrapper.emitted()["copy-task"]?.[0]).toEqual(
-			expect.arrayContaining([payload])
-		);
+		expect(wrapper.emitted()["copy-task"]?.[0]).toEqual(expect.arrayContaining([payload]));
 	});
 });

@@ -54,10 +54,7 @@
 						</LineClamp>
 					</template>
 					<template #description>
-						<div
-							class="description text-body-2"
-							data-testid="media-element-description"
-						>
+						<div class="description text-body-2" data-testid="media-element-description">
 							{{ element.description }}
 						</div>
 					</template>
@@ -69,11 +66,11 @@
 </template>
 
 <script setup lang="ts">
+import { MediaElementDisplay } from "./data";
 import { ContentElementBar } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
 import { useElementHover } from "@vueuse/core";
 import { PropType, ref } from "vue";
-import { MediaElementDisplay } from "./data";
 
 defineProps({
 	element: {

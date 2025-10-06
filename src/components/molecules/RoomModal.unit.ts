@@ -1,14 +1,11 @@
+import RoomModal from "./RoomModal.vue";
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import RoomModal from "./RoomModal.vue";
 
 describe("RoomModal", () => {
 	const getWrapper = (props: { isOpen: boolean }) => {
@@ -116,12 +113,8 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi
-						.spyOn(courseRoomListModule, "update")
-						.mockImplementation(vi.fn());
-					const titleInput = wrapper
-						.findComponent({ name: "v-text-field" })
-						.find("input");
+					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update").mockImplementation(vi.fn());
+					const titleInput = wrapper.findComponent({ name: "v-text-field" }).find("input");
 
 					const newTitle = "changed title";
 					await titleInput.setValue(newTitle);
@@ -154,12 +147,8 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi
-						.spyOn(courseRoomListModule, "update")
-						.mockImplementation(vi.fn());
-					const titleInput = wrapper
-						.findComponent({ name: "v-text-field" })
-						.find("input");
+					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update").mockImplementation(vi.fn());
+					const titleInput = wrapper.findComponent({ name: "v-text-field" }).find("input");
 
 					const newTitle = "<changed title";
 					await titleInput.setValue(newTitle);
@@ -182,12 +171,8 @@ describe("RoomModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = vi
-					.spyOn(courseRoomListModule, "update")
-					.mockImplementation(vi.fn());
-				const titleInput = wrapper
-					.findComponent({ name: "v-text-field" })
-					.find("input");
+				const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update").mockImplementation(vi.fn());
+				const titleInput = wrapper.findComponent({ name: "v-text-field" }).find("input");
 
 				const newTitle = "changed title";
 				await titleInput.setValue(newTitle);
@@ -227,12 +212,8 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi
-						.spyOn(courseRoomListModule, "update")
-						.mockImplementation(vi.fn());
-					const titleInput = wrapper
-						.findComponent({ name: "v-text-field" })
-						.find("input");
+					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update").mockImplementation(vi.fn());
+					const titleInput = wrapper.findComponent({ name: "v-text-field" }).find("input");
 					const newTitle = "changed title";
 					await titleInput.setValue(newTitle);
 
@@ -263,12 +244,8 @@ describe("RoomModal", () => {
 				const setup = async () => {
 					const { wrapper } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi
-						.spyOn(courseRoomListModule, "update")
-						.mockImplementation(vi.fn());
-					const titleInput = wrapper
-						.findComponent({ name: "v-text-field" })
-						.find("input");
+					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update").mockImplementation(vi.fn());
+					const titleInput = wrapper.findComponent({ name: "v-text-field" }).find("input");
 					const newTitle = "<changed title";
 					await titleInput.setValue(newTitle);
 
@@ -321,9 +298,7 @@ describe("RoomModal", () => {
 
 				await input.setValue("<abc123");
 
-				expect(textField.text()).toContain(
-					"common.validation.containsOpeningTag"
-				);
+				expect(textField.text()).toContain("common.validation.containsOpeningTag");
 			});
 		});
 	});

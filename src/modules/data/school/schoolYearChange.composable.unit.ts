@@ -1,3 +1,5 @@
+import { useSchoolApi } from "./schoolApi.composable";
+import { useSchoolYearChange } from "./schoolYearChange.composable";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,
@@ -8,10 +10,8 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useSchoolApi } from "./schoolApi.composable";
-import { useSchoolYearChange } from "./schoolYearChange.composable";
-import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("@data-school/schoolApi.composable");
 
@@ -46,9 +46,7 @@ describe("SchoolYearChange.composable", () => {
 		describe("when fetching the current school year status", () => {
 			const setup = () => {
 				const maintenanceStatus = maintenanceStatusFactory.build();
-				useSchoolApiMock.fetchMaintenanceStatus.mockResolvedValue(
-					maintenanceStatus
-				);
+				useSchoolApiMock.fetchMaintenanceStatus.mockResolvedValue(maintenanceStatus);
 
 				const { composable } = setupComposable();
 
@@ -63,9 +61,7 @@ describe("SchoolYearChange.composable", () => {
 
 				await composable.fetchSchoolYearStatus("id");
 
-				expect(useSchoolApiMock.fetchMaintenanceStatus).toHaveBeenCalledWith(
-					"id"
-				);
+				expect(useSchoolApiMock.fetchMaintenanceStatus).toHaveBeenCalledWith("id");
 			});
 
 			it("should set maintenance status", async () => {
@@ -73,9 +69,7 @@ describe("SchoolYearChange.composable", () => {
 
 				await composable.fetchSchoolYearStatus("id");
 
-				expect(composable.maintenanceStatus.value).toStrictEqual(
-					maintenanceStatus
-				);
+				expect(composable.maintenanceStatus.value).toStrictEqual(maintenanceStatus);
 			});
 
 			it("should set isLoading to false", async () => {
@@ -91,9 +85,7 @@ describe("SchoolYearChange.composable", () => {
 			const setup = () => {
 				const errorResponse = axiosErrorFactory.build();
 
-				useSchoolApiMock.fetchMaintenanceStatus.mockRejectedValueOnce(
-					errorResponse
-				);
+				useSchoolApiMock.fetchMaintenanceStatus.mockRejectedValueOnce(errorResponse);
 
 				const { composable } = setupComposable();
 
@@ -152,10 +144,7 @@ describe("SchoolYearChange.composable", () => {
 
 				await composable.setMaintenanceMode("id", true);
 
-				expect(useSchoolApiMock.setMaintenance).toHaveBeenCalledWith(
-					"id",
-					true
-				);
+				expect(useSchoolApiMock.setMaintenance).toHaveBeenCalledWith("id", true);
 			});
 
 			it("should set maintenance status", async () => {
@@ -163,9 +152,7 @@ describe("SchoolYearChange.composable", () => {
 
 				await composable.setMaintenanceMode("id", true);
 
-				expect(composable.maintenanceStatus.value).toStrictEqual(
-					maintenanceStatus
-				);
+				expect(composable.maintenanceStatus.value).toStrictEqual(maintenanceStatus);
 			});
 
 			it("should show success message for starting transfer phase", async () => {

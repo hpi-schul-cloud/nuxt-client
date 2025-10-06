@@ -28,9 +28,9 @@
 
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { notifyError, notifySuccess } from "@data-app";
 import { useCourseApi } from "@data-room";
 import { useI18n } from "vue-i18n";
-import { notifyError, notifySuccess } from "@data-app";
 
 const { t } = useI18n();
 

@@ -16,14 +16,14 @@
 </template>
 
 <script setup lang="ts">
+import { mdiClockOutline } from "@icons/material";
+import { timeInputMask as vTimeInputMask } from "@util-input-masks";
+import { isValidTimeFormat } from "@util-validators";
+import { ErrorObject, useVuelidate } from "@vuelidate/core";
+import { helpers, requiredIf } from "@vuelidate/validators";
 import { computedAsync, useDebounceFn } from "@vueuse/core";
 import { computed, ref, unref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
-import { ErrorObject, useVuelidate } from "@vuelidate/core";
-import { helpers, requiredIf } from "@vuelidate/validators";
-import { timeInputMask as vTimeInputMask } from "@util-input-masks";
-import { isValidTimeFormat } from "@util-validators";
-import { mdiClockOutline } from "@icons/material";
 
 const props = defineProps({
 	time: { type: String, required: true },
@@ -42,27 +42,17 @@ watchEffect(() => {
 
 const rules = computed(() => ({
 	timeValue: {
-		requiredIfProp: helpers.withMessage(
-			t("components.timePicker.validation.required"),
-			requiredIf(props.required)
-		),
-		validDateFormat: helpers.withMessage(
-			t("components.timePicker.validation.format"),
-			isValidTimeFormat
-		),
+		requiredIfProp: helpers.withMessage(t("components.timePicker.validation.required"), requiredIf(props.required)),
+		validDateFormat: helpers.withMessage(t("components.timePicker.validation.format"), isValidTimeFormat),
 	},
 }));
 
 const v$ = useVuelidate(rules, { timeValue }, { $lazy: true });
 
-const errorMessages = computedAsync(async () => {
-	return await getErrorMessages(v$.value.timeValue.$errors);
-}, null);
+const errorMessages = computedAsync(async () => await getErrorMessages(v$.value.timeValue.$errors), null);
 
 const getErrorMessages = useDebounceFn((errors: ErrorObject[] | undefined) => {
-	const messages = errors?.map((e: ErrorObject) => {
-		return unref(e.$message);
-	});
+	const messages = errors?.map((e: ErrorObject) => unref(e.$message));
 	return messages;
 }, 700);
 

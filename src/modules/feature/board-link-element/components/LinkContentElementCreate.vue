@@ -33,10 +33,10 @@
 </template>
 
 <script lang="ts">
+import { mdiCheck } from "@icons/material";
+import { isRequired, isValidUrl } from "@util-validators";
 import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { isRequired, isValidUrl } from "@util-validators";
-import { mdiCheck } from "@icons/material";
 
 type VuetifyFormApi = {
 	validate: () => { valid: boolean };
@@ -52,10 +52,7 @@ export default defineComponent({
 		const url = ref<string>("");
 		const form = ref<VuetifyFormApi | null>(null);
 
-		const rules = [
-			isRequired(t("common.validation.required2")),
-			isValidUrl(t("util-validators-invalid-url")),
-		];
+		const rules = [isRequired(t("common.validation.required2")), isValidUrl(t("util-validators-invalid-url"))];
 
 		const onSubmit = async () => {
 			if (form?.value) {

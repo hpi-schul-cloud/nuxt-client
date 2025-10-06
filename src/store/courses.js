@@ -5,16 +5,13 @@ const base = serviceTemplate("courses");
 
 const coursesModule = mergeDeep(base, {
 	getters: {
-		getCoursesOptions: (state) => {
-			return state.list
+		getCoursesOptions: (state) =>
+			state.list
 				.filter((course) => course.isArchived === false)
-				.map((course) => {
-					return {
-						_id: course._id,
-						name: course.name,
-					};
-				});
-		},
+				.map((course) => ({
+					_id: course._id,
+					name: course.name,
+				})),
 	},
 });
 

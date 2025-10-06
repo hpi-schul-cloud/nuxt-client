@@ -1,11 +1,8 @@
+import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 describe("RichTextContentElementEdit", () => {
 	const setup = ({ autofocus = true }: { autofocus: boolean }) => {

@@ -1,28 +1,16 @@
 import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { useNotificationStore } from "@data-app";
 import { logger } from "@util-logger";
 import { useI18n } from "vue-i18n";
-import { useNotificationStore } from "@data-app";
 
-export type ErrorType =
-	| "notCreated"
-	| "notLoaded"
-	| "notUpdated"
-	| "notDeleted"
-	| "notMoved";
+export type ErrorType = "notCreated" | "notLoaded" | "notUpdated" | "notDeleted" | "notMoved";
 
-export type BoardObjectType =
-	| "board"
-	| "boardColumn"
-	| "boardRow"
-	| "boardCard"
-	| "boardElement";
+export type BoardObjectType = "board" | "boardColumn" | "boardRow" | "boardCard" | "boardElement";
 
 type ErrorStatus = "success" | "error" | "warning" | "info";
 
-export type ApiErrorHandler = (
-	error?: ApiResponseError | ApiValidationError
-) => Promise<void> | void;
+export type ApiErrorHandler = (error?: ApiResponseError | ApiValidationError) => Promise<void> | void;
 
 export type ApiErrorHandlerFactory = (
 	errorType: ErrorType,
@@ -36,10 +24,7 @@ export type ErrorMap = Record<number, ApiErrorHandler>;
 export const useErrorHandler = () => {
 	const { t } = useI18n();
 
-	const generateErrorText = (
-		errorType: ErrorType,
-		boardObjectType?: BoardObjectType
-	) => {
+	const generateErrorText = (errorType: ErrorType, boardObjectType?: BoardObjectType) => {
 		let errorKey = `components.board.notifications.errors.${errorType}`;
 		if (!t(errorKey)) {
 			errorKey = "error.generic";

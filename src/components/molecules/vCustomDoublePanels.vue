@@ -65,8 +65,7 @@ export default {
 		},
 		status: {
 			required: true,
-			validator: (val) =>
-				[null, "", "pending", "completed", "error"].includes(val),
+			validator: (val) => [null, "", "pending", "completed", "error"].includes(val),
 		},
 		isEmpty: {
 			type: Boolean,

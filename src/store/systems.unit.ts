@@ -87,9 +87,7 @@ describe("SystemsModule", () => {
 					}),
 				};
 
-				vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.SystemsApiInterface
-				);
+				vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(mockApi as unknown as serverApi.SystemsApiInterface);
 
 				return {
 					apiMock: mockApi,
