@@ -18,9 +18,6 @@ import { DataTable } from "@ui-data-table";
 import { setActivePinia } from "pinia";
 import { ChangeRole } from "@feature-room";
 
-// vi.mock("@util-board/BoardNotifier.composable");
-// const boardNotifier = vi.mocked(useBoardNotifier);
-
 describe("RoomAdminMembersTable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
