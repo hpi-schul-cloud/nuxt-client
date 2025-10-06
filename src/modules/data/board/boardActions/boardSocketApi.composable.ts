@@ -22,6 +22,7 @@ import {
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
+	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
 
@@ -34,10 +35,12 @@ export const useBoardSocketApi = () => {
 		notifyDeleteColumnSuccess,
 		notifyMoveCardSuccess,
 		notifyMoveColumnSuccess,
+		notifySetBoardAsEditableForAllUsersSuccess,
+		notifySetBoardAsNotEditableForAllUsersSuccess,
+		notifyUpdateBoardLayoutSuccess,
 		notifyUpdateBoardTitleSuccess,
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateColumnTitleSuccess,
-		notifyUpdateBoardLayoutSuccess,
 	} = useBoardAriaNotification();
 	const { t } = useI18n();
 
@@ -69,6 +72,10 @@ export const useBoardSocketApi = () => {
 				BoardActions.updateBoardLayoutSuccess,
 				boardStore.updateBoardLayoutSuccess
 			),
+			on(
+				BoardActions.updateReaderCanEditSuccess,
+				boardStore.updateReaderCanEditSuccess
+			),
 		];
 
 		const failureActions = [
@@ -83,6 +90,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateBoardTitleFailure, reloadBoard),
 			on(BoardActions.updateBoardVisibilityFailure, reloadBoard),
 			on(BoardActions.updateBoardLayoutFailure, reloadBoard),
+			on(BoardActions.updateReaderCanEditFailure, reloadBoard),
 		];
 
 		const ariaLiveNotifications = [
@@ -99,6 +107,14 @@ export const useBoardSocketApi = () => {
 			),
 			on(BoardActions.updateColumnTitleSuccess, notifyUpdateColumnTitleSuccess),
 			on(BoardActions.updateBoardLayoutSuccess, notifyUpdateBoardLayoutSuccess),
+			on(
+				BoardActions.updateReaderCanEditSuccess,
+				notifySetBoardAsEditableForAllUsersSuccess
+			),
+			on(
+				BoardActions.updateReaderCanEditSuccess,
+				notifySetBoardAsNotEditableForAllUsersSuccess
+			),
 		];
 
 		handle(
@@ -187,6 +203,12 @@ export const useBoardSocketApi = () => {
 		emitOnSocket("update-board-visibility-request", payload);
 	};
 
+	const updateReaderCanEditRequest = (
+		payload: UpdateReaderCanEditRequestPayload
+	) => {
+		emitOnSocket("update-readers-can-edit-request", payload);
+	};
+
 	const updateBoardLayoutRequest = (
 		payload: UpdateBoardLayoutRequestPayload
 	) => {
@@ -239,5 +261,6 @@ export const useBoardSocketApi = () => {
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,
 		updateBoardLayoutRequest,
+		updateReaderCanEditRequest,
 	};
 };

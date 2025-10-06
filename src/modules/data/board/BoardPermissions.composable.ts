@@ -38,6 +38,14 @@ const boardPermissions = (): BoardPermissionChecks => {
 		checkPermission(Permission.ContextToolAdmin)
 	);
 
+	const hasManageBoardPermission = computed(() =>
+		checkPermission(Permission.BoardManage)
+	);
+
+	const hasManageReadersCanEditPermission = computed(() =>
+		checkPermission(Permission.BoardManageReadersCanEdit)
+	);
+
 	const hasManageVideoConferencePermission = computed(() =>
 		checkPermission(Permission.BoardManageVideoconference)
 	);
@@ -54,6 +62,8 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasCreateToolPermission,
 		hasEditPermission,
 		hasDeletePermission,
+		hasManageBoardPermission,
+		hasManageReadersCanEditPermission,
 		hasManageVideoConferencePermission,
 		hasShareBoardPermission,
 		isTeacher,

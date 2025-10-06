@@ -621,6 +621,69 @@ describe("BoardStore", () => {
 		});
 	});
 
+	describe("@updateReaderCanEditSuccess", () => {
+		const payload = {
+			boardId: "boardId",
+			readersCanEdit: true,
+		};
+
+		it("should not update readersCanEdit when board value is undefined", () => {
+			const { boardStore } = setup({ createBoard: false });
+			boardStore.updateReaderCanEditSuccess({ ...payload, isOwnAction: true });
+			expect(boardStore.board).toBe(undefined);
+		});
+
+		describe("when socket connection is not established", () => {
+			it("should update readersCanEdit", () => {
+				const { boardStore } = setup({ socketFlag: false });
+				boardStore.updateReaderCanEditSuccess({
+					...payload,
+					isOwnAction: true,
+				});
+				expect(boardStore.board?.readersCanEdit).toBe(true);
+				expect(
+					mockedBoardRestApiActions.fetchBoardRequest
+				).not.toHaveBeenCalled();
+			});
+
+			describe("when isOwnAction is false", () => {
+				it("should fetch board", () => {
+					const { boardStore } = setup({ socketFlag: false });
+					boardStore.updateReaderCanEditSuccess({
+						...payload,
+						isOwnAction: false,
+					});
+					expect(
+						mockedBoardRestApiActions.fetchBoardRequest
+					).toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("when socket connection is established", () => {
+			it("should update readersCanEdit", () => {
+				const { boardStore } = setup({ socketFlag: true });
+				boardStore.updateReaderCanEditSuccess({
+					...payload,
+					isOwnAction: true,
+				});
+				expect(boardStore.board?.readersCanEdit).toBe(true);
+				expect(mockedSocketApiActions.fetchBoardRequest).not.toHaveBeenCalled();
+			});
+
+			describe("when isOwnAction is false", () => {
+				it("should fetch board", () => {
+					const { boardStore } = setup({ socketFlag: true });
+					boardStore.updateReaderCanEditSuccess({
+						...payload,
+						isOwnAction: false,
+					});
+					expect(mockedSocketApiActions.fetchBoardRequest).toHaveBeenCalled();
+				});
+			});
+		});
+	});
+
 	describe("updateBoardLayoutSuccess", () => {
 		describe("when board value is undefined", () => {
 			it("should not update the board layout", () => {
@@ -1022,6 +1085,28 @@ describe("BoardStore", () => {
 
 				expect(
 					mockedBoardRestApiActions.updateBoardVisibilityRequest
+				).toHaveBeenCalledWith(payload);
+			});
+		});
+
+		describe("@updateReadersRequest", () => {
+			const payload = { boardId: "boardId", readersCanEdit: true };
+			it("should call socketApi.updateReaderCanEditRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.updateReaderCanEditRequest(payload);
+
+				expect(
+					mockedSocketApiActions.updateReaderCanEditRequest
+				).toHaveBeenCalledWith(payload);
+			});
+			it("should call restApi.updateReaderCanEditRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.updateReaderCanEditRequest(payload);
+
+				expect(
+					mockedBoardRestApiActions.updateReaderCanEditRequest
 				).toHaveBeenCalledWith(payload);
 			});
 		});
