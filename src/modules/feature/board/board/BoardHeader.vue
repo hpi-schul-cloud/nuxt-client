@@ -26,60 +26,46 @@
 		<div class="d-flex mt-4">
 			<BoardDraftChip v-if="isDraft" />
 			<BoardEditableChip v-if="isEditableChipVisible" />
-			<BoardMenu
-				v-if="hasManageBoardPermission"
-				:scope="BoardMenuScope.BOARD"
-				data-testid="board-menu-btn"
-			>
+			<BoardMenu v-if="hasManageBoardPermission" :scope="BoardMenuScope.BOARD" data-testid="board-menu-btn">
 				<KebabMenuActionRename @click="onStartEditMode" />
 				<KebabMenuActionCopy @click="onCopyBoard" />
-				<KebabMenuActionShare
-					v-if="isShareEnabled && hasShareBoardPermission"
-					@click="onShareBoard"
-				/>
+				<KebabMenuActionShare v-if="isShareEnabled && hasShareBoardPermission" @click="onShareBoard" />
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-				<KebabMenuActionEditingSettings
-					v-if="hasReadersEditPermission"
-					@click="onEditBoardSettings"
-				/>
+				<KebabMenuActionEditingSettings v-if="hasReadersEditPermission" @click="onEditBoardSettings" />
 				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
-				<KebabMenuActionDelete
-					:name="title"
-					scope-language-key="common.words.board"
-					@click="onDeleteBoard"
-				/>
+				<KebabMenuActionDelete :name="title" scope-language-key="common.words.board" @click="onDeleteBoard" />
 			</BoardMenu>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
-import { BoardMenuScope } from "@ui-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-import {
-	KebabMenuActionCopy,
-	KebabMenuActionDelete,
-	KebabMenuActionRename,
-	KebabMenuActionPublish,
-	KebabMenuActionRevert,
-	KebabMenuActionShare,
-	KebabMenuActionChangeLayout,
-} from "@ui-kebab-menu";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { useDebounceFn } from "@vueuse/core";
-import { computed, onMounted, ref, toRef, watchEffect } from "vue";
-import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardDraftChip from "./BoardDraftChip.vue";
 import BoardEditableChip from "./BoardEditableChip.vue";
-import { upperCaseFirstChar } from "@/utils/textFormatting";
-import { useEnvConfig } from "@data-env";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
+import { upperCaseFirstChar } from "@/utils/textFormatting";
+import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { useEnvConfig } from "@data-env";
+import { BoardMenuScope } from "@ui-board";
+import {
+	KebabMenuActionChangeLayout,
+	KebabMenuActionCopy,
+	KebabMenuActionDelete,
+	KebabMenuActionPublish,
+	KebabMenuActionRename,
+	KebabMenuActionRevert,
+	KebabMenuActionShare,
+} from "@ui-kebab-menu";
+import { useDebounceFn } from "@vueuse/core";
+import { computed, onMounted, ref, toRef, watchEffect } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	boardId: {
@@ -115,13 +101,10 @@ const emit = defineEmits([
 
 const { t } = useI18n();
 const boardId = toRef(props, "boardId");
-const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
-	boardId.value
-);
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(boardId.value);
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
-const { hasEditPermission, hasManageBoardPermission, hasShareBoardPermission } =
-	useBoardPermissions();
+const { hasEditPermission, hasManageBoardPermission, hasShareBoardPermission } = useBoardPermissions();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
@@ -200,8 +183,7 @@ const emitTitle = useDebounceFn((newTitle: string) => {
 
 const calculateWidth = () => {
 	if (!inputWidthCalcSpan.value) return;
-	const title =
-		boardTitle.value || t("components.cardElement.titleElement.placeholder");
+	const title = boardTitle.value || t("components.cardElement.titleElement.placeholder");
 
 	inputWidthCalcSpan.value.innerHTML = title.replace(/\s/g, "&nbsp;");
 
@@ -211,9 +193,7 @@ const calculateWidth = () => {
 	fieldWidth.value = `${width + 1}px`;
 };
 
-const isShareEnabled = computed(
-	() => useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE
-);
+const isShareEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE);
 
 watchEffect(() => {
 	boardTitle.value = props.title;

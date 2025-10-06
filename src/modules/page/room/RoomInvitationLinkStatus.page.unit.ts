@@ -1,29 +1,20 @@
-import { createTestingPinia } from "@pinia/testing";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import {
-	RoomInvitationLinkValidationError,
-	UseLinkResult,
-	useRoomInvitationLinkStore,
-} from "@data-room";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { useRouter } from "vue-router";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import RoomInvitationLinkStatusPage from "./RoomInvitationLinkStatus.page.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
-import { setActivePinia } from "pinia";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomInvitationLinkValidationError, UseLinkResult, useRoomInvitationLinkStore } from "@data-room";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
+import { useRouter } from "vue-router";
 
-vi.mock("vue-router", () => {
-	return {
-		useRouter: vi.fn().mockReturnValue({
-			push: vi.fn(),
-		}),
-	};
-});
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn().mockReturnValue({
+		push: vi.fn(),
+	}),
+}));
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
@@ -56,9 +47,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 			},
 		});
 
-		const roomInvitationLinkStore = mockedPiniaStoreTyping(
-			useRoomInvitationLinkStore
-		);
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(useRoomInvitationLinkStore);
 
 		roomInvitationLinkStore.useLink.mockResolvedValueOnce(useLinkResult);
 
@@ -123,9 +112,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 		});
 		const wireframe = wrapper.findComponent(DefaultWireframe);
 
-		expect(wireframe.props("breadcrumbs")).toEqual(
-			roomInvitationLinkBreadcrumb
-		);
+		expect(wireframe.props("breadcrumbs")).toEqual(roomInvitationLinkBreadcrumb);
 	});
 
 	it("should set the page title", async () => {
@@ -135,9 +122,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 			schoolName: "",
 		});
 		const pageTitle = wrapper.find("[data-testid=page-title]");
-		expect(pageTitle.text()).toContain(
-			"pages.rooms.invitationLinkStatus.title"
-		);
+		expect(pageTitle.text()).toContain("pages.rooms.invitationLinkStatus.title");
 	});
 
 	describe("when link store returns a roomId", () => {
@@ -157,10 +142,8 @@ describe("RoomInvitationLinkStatusPage", () => {
 	describe("when link store returns a message", () => {
 		const testCases = [
 			{
-				message:
-					RoomInvitationLinkValidationError.CantInviteStudentsFromOtherSchool,
-				expectedMessage:
-					"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool",
+				message: RoomInvitationLinkValidationError.CantInviteStudentsFromOtherSchool,
+				expectedMessage: "pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool",
 			},
 			{
 				message: RoomInvitationLinkValidationError.Expired,
@@ -172,8 +155,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 			},
 			{
 				message: RoomInvitationLinkValidationError.RestrictedToCreatorSchool,
-				expectedMessage:
-					"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool",
+				expectedMessage: "pages.rooms.invitationLinkStatus.restrictedToCreatorSchool",
 			},
 			{
 				message: RoomInvitationLinkValidationError.InvalidLink,

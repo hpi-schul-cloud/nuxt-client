@@ -15,8 +15,11 @@ export enum ErrorType {
 
 const collaborativeTextEditorApi = () => {
 	const { t } = useI18n();
-	const collaborativeTextEditorApi: CollaborativeTextEditorApiInterface =
-		CollaborativeTextEditorApiFactory(undefined, "/v3", $axios);
+	const collaborativeTextEditorApi: CollaborativeTextEditorApiInterface = CollaborativeTextEditorApiFactory(
+		undefined,
+		"/v3",
+		$axios
+	);
 
 	const getUrl = async (
 		parentId: string,
@@ -59,6 +62,4 @@ const collaborativeTextEditorApi = () => {
 	};
 };
 
-export const useCollaborativeTextEditorApi = createTestableGlobaleState(
-	collaborativeTextEditorApi
-);
+export const useCollaborativeTextEditorApi = createTestableGlobaleState(collaborativeTextEditorApi);

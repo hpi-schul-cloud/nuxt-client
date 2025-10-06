@@ -1,12 +1,9 @@
+import FileStatistic from "./FileStatistic.vue";
 import { parentStatisticFactory } from "@@/tests/test-utils/factory/parentStatisticFactory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
-import FileStatistic from "./FileStatistic.vue";
 
 describe("FileStatistic", () => {
 	afterEach(() => {
@@ -21,15 +18,11 @@ describe("FileStatistic", () => {
 			});
 			const getStatisticByParentId = vi.fn(() => statistic);
 			const tryGetParentStatisticFromApi = vi.fn(() => Promise.resolve());
-			const fileStorageApiMock = createMock<
-				ReturnType<typeof FileStorageApi.useFileStorageApi>
-			>({
+			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>({
 				getStatisticByParentId,
 				tryGetParentStatisticFromApi,
 			});
-			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(
-				fileStorageApiMock
-			);
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(fileStorageApiMock);
 
 			const wrapper = mount(FileStatistic, {
 				props: { elementId: "test-folder-id" },
@@ -60,15 +53,11 @@ describe("FileStatistic", () => {
 			});
 			const getStatisticByParentId = vi.fn(() => statistic);
 			const tryGetParentStatisticFromApi = vi.fn(() => Promise.resolve());
-			const fileStorageApiMock = createMock<
-				ReturnType<typeof FileStorageApi.useFileStorageApi>
-			>({
+			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>({
 				getStatisticByParentId,
 				tryGetParentStatisticFromApi,
 			});
-			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(
-				fileStorageApiMock
-			);
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(fileStorageApiMock);
 
 			const wrapper = mount(FileStatistic, {
 				props: { elementId: "test-folder-id" },
@@ -94,15 +83,11 @@ describe("FileStatistic", () => {
 		const setup = () => {
 			const getStatisticByParentId = vi.fn(() => undefined);
 			const tryGetParentStatisticFromApi = vi.fn(() => Promise.resolve());
-			const fileStorageApiMock = createMock<
-				ReturnType<typeof FileStorageApi.useFileStorageApi>
-			>({
+			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>({
 				getStatisticByParentId,
 				tryGetParentStatisticFromApi,
 			});
-			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(
-				fileStorageApiMock
-			);
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(fileStorageApiMock);
 
 			const wrapper = mount(FileStatistic, {
 				props: { elementId: "test-folder-id" },

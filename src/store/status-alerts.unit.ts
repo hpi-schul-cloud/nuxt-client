@@ -1,8 +1,8 @@
 import StatusAlertsModule from "./status-alerts";
 import { StatusAlert } from "./types/status-alert";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import * as serverApi from "@/serverApi/v3/api";
+import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 describe("status alerts module", () => {
 	describe("actions", () => {
@@ -18,19 +18,11 @@ describe("status alerts module", () => {
 						},
 					})),
 				};
-				vi.spyOn(serverApi, "AlertApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.AlertApiInterface
-				);
+				vi.spyOn(serverApi, "AlertApiFactory").mockReturnValue(mockApi as unknown as serverApi.AlertApiInterface);
 				const statusAlertsModule = new StatusAlertsModule({});
-				const setStatusAlertsSpy = vi.spyOn(
-					statusAlertsModule,
-					"setStatusAlerts"
-				);
+				const setStatusAlertsSpy = vi.spyOn(statusAlertsModule, "setStatusAlerts");
 				const setStatusSpy = vi.spyOn(statusAlertsModule, "setStatus");
-				const resetBusinessErrorSpy = vi.spyOn(
-					statusAlertsModule,
-					"resetBusinessError"
-				);
+				const resetBusinessErrorSpy = vi.spyOn(statusAlertsModule, "resetBusinessError");
 				await statusAlertsModule.fetchStatusAlerts();
 
 				expect(resetBusinessErrorSpy).toHaveBeenCalled();
@@ -43,14 +35,9 @@ describe("status alerts module", () => {
 				const mockApi = {
 					alertControllerFind: vi.fn(() => Promise.reject({ ...error })),
 				};
-				vi.spyOn(serverApi, "AlertApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.AlertApiInterface
-				);
+				vi.spyOn(serverApi, "AlertApiFactory").mockReturnValue(mockApi as unknown as serverApi.AlertApiInterface);
 				const statusAlertsModule = new StatusAlertsModule({});
-				const setBusinessErrorSpy = vi.spyOn(
-					statusAlertsModule,
-					"setBusinessError"
-				);
+				const setBusinessErrorSpy = vi.spyOn(statusAlertsModule, "setBusinessError");
 				await statusAlertsModule.fetchStatusAlerts();
 				expect(setBusinessErrorSpy).toHaveBeenCalled();
 			});

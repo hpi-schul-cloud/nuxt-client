@@ -1,8 +1,5 @@
 import ImportModal from "@/components/share/ImportModal.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 
 describe("@components/share/ImportModal", () => {
@@ -95,9 +92,7 @@ describe("@components/share/ImportModal", () => {
 			});
 			await nameInput.find("input").setValue("TestParentName<test");
 
-			expect(nameInput.text()).toContain(
-				"common.validation.containsOpeningTag"
-			);
+			expect(nameInput.text()).toContain("common.validation.containsOpeningTag");
 		});
 	});
 
@@ -108,9 +103,7 @@ describe("@components/share/ImportModal", () => {
 			const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
 			const cardText = dialog.findComponent({ name: "v-card-text" });
 
-			const infoText = cardText.get(
-				`[data-testid="import-modal-external-tools-info"]`
-			);
+			const infoText = cardText.get(`[data-testid="import-modal-external-tools-info"]`);
 
 			expect(infoText.isVisible()).toBe(true);
 		});
@@ -121,13 +114,9 @@ describe("@components/share/ImportModal", () => {
 			const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
 			const cardText = dialog.findComponent({ name: "v-card-text" });
 
-			const infoText = cardText.get(
-				`[data-testid="import-modal-external-tools-info"]`
-			);
+			const infoText = cardText.get(`[data-testid="import-modal-external-tools-info"]`);
 
-			expect(infoText.text()).toEqual(
-				"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
-			);
+			expect(infoText.text()).toEqual("components.molecules.shareImport.options.ctlTools.infoText.unavailable");
 		});
 		it("should also show course file info", () => {
 			const { wrapper } = setup();
@@ -135,9 +124,7 @@ describe("@components/share/ImportModal", () => {
 			const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
 			const cardText = dialog.findComponent({ name: "v-card-text" });
 
-			const infoText = cardText.find(
-				`[data-testid="import-modal-coursefiles-info"]`
-			);
+			const infoText = cardText.find(`[data-testid="import-modal-coursefiles-info"]`);
 
 			expect(infoText.exists()).toBe(true);
 		});

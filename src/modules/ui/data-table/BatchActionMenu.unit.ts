@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import BatchActionMenu from "./BatchActionMenu.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuList } from "@ui-kebab-menu";
 import { nextTick } from "vue";
-import BatchActionMenu from "./BatchActionMenu.vue";
 
 describe("BatchActionMenu", () => {
 	const setup = (canAddRoomMembers = false) => {
@@ -43,9 +40,7 @@ describe("BatchActionMenu", () => {
 		it("should emit 'reset:selected' event", async () => {
 			const { wrapper } = setup();
 
-			const resetButton = wrapper.find(
-				'[aria-label="ui.actionMenu.select.none"]'
-			);
+			const resetButton = wrapper.find('[aria-label="ui.actionMenu.select.none"]');
 			resetButton.trigger("click");
 
 			expect(wrapper.emitted()).toHaveProperty("reset:selected");
@@ -56,9 +51,7 @@ describe("BatchActionMenu", () => {
 		it("should render default slot", async () => {
 			const { wrapper, defaultSlotElement } = setup();
 
-			const actionMenuButton = wrapper.find(
-				'[data-testid="action-menu-button"]'
-			);
+			const actionMenuButton = wrapper.find('[data-testid="action-menu-button"]');
 			actionMenuButton.trigger("click");
 
 			await nextTick();

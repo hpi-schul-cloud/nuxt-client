@@ -1,18 +1,7 @@
 <template>
 	<div class="text-centered mt-8">
-		<error-content
-			:status-code="appErrorStatusCode"
-			:error-text="translatedErrorMessage"
-			data-testid="error-content"
-		/>
-		<v-btn
-			ref="btn-back"
-			class="mt-4"
-			color="primary"
-			variant="flat"
-			data-testid="btn-back"
-			@click="onBackClick"
-		>
+		<error-content :status-code="appErrorStatusCode" :error-text="translatedErrorMessage" data-testid="error-content" />
+		<v-btn ref="btn-back" class="mt-4" color="primary" variant="flat" data-testid="btn-back" @click="onBackClick">
 			{{ $t("error.action.back") }}
 		</v-btn>
 	</div>
@@ -41,8 +30,7 @@ export default defineComponent({
 		];
 		const { t } = useI18n();
 		const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
-		const performanceNavigation =
-			window.performance.getEntriesByType("navigation")[0];
+		const performanceNavigation = window.performance.getEntriesByType("navigation")[0];
 
 		const getError = () => {
 			const [statusCode, translationKey, isTldrawError] = storage.getMultiple([
@@ -76,15 +64,9 @@ export default defineComponent({
 			if (event.persisted) return;
 
 			if (applicationErrorModule.getStatusCode) {
-				storage.set(
-					"applicationErrorStatusCode",
-					JSON.stringify(applicationErrorModule.getStatusCode)
-				);
+				storage.set("applicationErrorStatusCode", JSON.stringify(applicationErrorModule.getStatusCode));
 
-				storage.set(
-					"applicationErrorTranslationKey",
-					applicationErrorModule.getTranslationKey
-				);
+				storage.set("applicationErrorTranslationKey", applicationErrorModule.getTranslationKey);
 			}
 		});
 
@@ -94,32 +76,19 @@ export default defineComponent({
 			window.location.assign("/dashboard");
 		};
 
-		const appErrorTranslationKey = computed(() => {
-			return getError().translationKey;
-		});
-		const appErrorStatusCode = computed(() => {
-			return getError().statusCode;
-		});
+		const appErrorTranslationKey = computed(() => getError().translationKey);
+		const appErrorStatusCode = computed(() => getError().statusCode);
 
-		const isPermissionError = computed(() => {
-			return permissionErrors.includes(Number(appErrorStatusCode.value));
-		});
+		const isPermissionError = computed(() => permissionErrors.includes(Number(appErrorStatusCode.value)));
 
-		const isGenericError = computed(() => {
-			return (
-				appErrorStatusCode.value === 500 || appErrorStatusCode.value === null
-			);
-		});
+		const isGenericError = computed(() => appErrorStatusCode.value === 500 || appErrorStatusCode.value === null);
 
 		const translatedErrorMessage = computed(() => {
 			const translationKey = appErrorTranslationKey.value || "";
 
 			const translatedError = t(translationKey);
 
-			const result =
-				translatedError !== translationKey
-					? translatedError
-					: t("error.generic");
+			const result = translatedError !== translationKey ? translatedError : t("error.generic");
 			return result;
 		});
 

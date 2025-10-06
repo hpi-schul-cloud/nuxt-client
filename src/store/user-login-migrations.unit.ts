@@ -1,3 +1,7 @@
+import { BusinessError } from "./types/commons";
+import { HttpStatusCode } from "./types/http-status-code.enum";
+import { UserLoginMigration } from "./user-login-migration";
+import UserLoginMigrationModule from "./user-login-migrations";
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	UserLoginMigrationApiInterface,
@@ -18,10 +22,6 @@ import {
 	userLoginMigrationResponseFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { BusinessError } from "./types/commons";
-import { HttpStatusCode } from "./types/http-status-code.enum";
-import { UserLoginMigration } from "./user-login-migration";
-import UserLoginMigrationModule from "./user-login-migrations";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 
@@ -36,9 +36,7 @@ describe("UserLoginMigrationModule", () => {
 
 		apiMock = createMock<UserLoginMigrationApiInterface>();
 
-		vi.spyOn(serverApi, "UserLoginMigrationApiFactory").mockReturnValue(
-			apiMock
-		);
+		vi.spyOn(serverApi, "UserLoginMigrationApiFactory").mockReturnValue(apiMock);
 	});
 
 	afterEach(() => {
@@ -132,9 +130,7 @@ describe("UserLoginMigrationModule", () => {
 
 					await module.fetchLatestUserLoginMigrationForCurrentUser();
 
-					expect(
-						apiMock.userLoginMigrationControllerGetMigrations
-					).not.toHaveBeenCalled();
+					expect(apiMock.userLoginMigrationControllerGetMigrations).not.toHaveBeenCalled();
 				});
 			});
 
@@ -170,13 +166,9 @@ describe("UserLoginMigrationModule", () => {
 					const setup = () => {
 						createTestAppStoreWithUser("userId");
 
-						const axiosError = axiosErrorFactory
-							.withStatusCode(HttpStatusCode.BadRequest)
-							.build();
+						const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.BadRequest).build();
 
-						apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValueOnce(
-							axiosError
-						);
+						apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValueOnce(axiosError);
 
 						vi.spyOn(module, "setUserLoginMigration");
 					};
@@ -184,9 +176,7 @@ describe("UserLoginMigrationModule", () => {
 					it("should not set user login migration", async () => {
 						setup();
 
-						await expect(
-							module.fetchLatestUserLoginMigrationForCurrentUser()
-						).rejects.toThrow();
+						await expect(module.fetchLatestUserLoginMigrationForCurrentUser()).rejects.toThrow();
 
 						expect(module.setUserLoginMigration).not.toHaveBeenCalled();
 					});
@@ -194,12 +184,9 @@ describe("UserLoginMigrationModule", () => {
 					it("should throw an error", async () => {
 						setup();
 
-						const func = () =>
-							module.fetchLatestUserLoginMigrationForCurrentUser();
+						const func = () => module.fetchLatestUserLoginMigrationForCurrentUser();
 
-						await expect(func()).rejects.toEqual(
-							createApplicationError(HttpStatusCode.BadRequest)
-						);
+						await expect(func()).rejects.toEqual(createApplicationError(HttpStatusCode.BadRequest));
 					});
 				});
 
@@ -207,15 +194,14 @@ describe("UserLoginMigrationModule", () => {
 					const setup = () => {
 						createTestAppStoreWithUser("userId");
 
-						const userLoginMigrationResponse: UserLoginMigrationResponse =
-							userLoginMigrationResponseFactory.build({
-								sourceSystemId: "sourceSystemId",
-								targetSystemId: "targetSystemId",
-								startedAt: new Date(2000, 1, 1, 0, 0).toString(),
-								closedAt: new Date(2000, 1, 1, 0, 0).toString(),
-								finishedAt: new Date(2000, 1, 14, 0, 0).toString(),
-								mandatorySince: new Date(2000, 1, 1, 0, 0).toString(),
-							});
+						const userLoginMigrationResponse: UserLoginMigrationResponse = userLoginMigrationResponseFactory.build({
+							sourceSystemId: "sourceSystemId",
+							targetSystemId: "targetSystemId",
+							startedAt: new Date(2000, 1, 1, 0, 0).toString(),
+							closedAt: new Date(2000, 1, 1, 0, 0).toString(),
+							finishedAt: new Date(2000, 1, 14, 0, 0).toString(),
+							mandatorySince: new Date(2000, 1, 1, 0, 0).toString(),
+						});
 
 						const userLoginMigration: UserLoginMigration = {
 							sourceSystemId: "sourceSystemId",
@@ -248,9 +234,7 @@ describe("UserLoginMigrationModule", () => {
 
 						await module.fetchLatestUserLoginMigrationForCurrentUser();
 
-						expect(
-							apiMock.userLoginMigrationControllerGetMigrations
-						).toHaveBeenCalled();
+						expect(apiMock.userLoginMigrationControllerGetMigrations).toHaveBeenCalled();
 					});
 
 					it("should set the UserLoginMigration", async () => {
@@ -267,14 +251,10 @@ describe("UserLoginMigrationModule", () => {
 				const setup = () => {
 					createTestAppStoreWithUser("userId");
 
-					const error = axiosErrorFactory
-						.withStatusCode(HttpStatusCode.BadRequest)
-						.build();
+					const error = axiosErrorFactory.withStatusCode(HttpStatusCode.BadRequest).build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValue(
-						error
-					);
+					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -284,9 +264,7 @@ describe("UserLoginMigrationModule", () => {
 				it("should set the businessError", async () => {
 					const { apiError } = setup();
 
-					await expect(
-						module.fetchLatestUserLoginMigrationForCurrentUser()
-					).rejects.toThrow();
+					await expect(module.fetchLatestUserLoginMigrationForCurrentUser()).rejects.toThrow();
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
@@ -298,12 +276,9 @@ describe("UserLoginMigrationModule", () => {
 				it("should throw application error", async () => {
 					setup();
 
-					const func = () =>
-						module.fetchLatestUserLoginMigrationForCurrentUser();
+					const func = () => module.fetchLatestUserLoginMigrationForCurrentUser();
 
-					await expect(func()).rejects.toEqual(
-						createApplicationError(HttpStatusCode.BadRequest)
-					);
+					await expect(func()).rejects.toEqual(createApplicationError(HttpStatusCode.BadRequest));
 				});
 			});
 
@@ -311,24 +286,17 @@ describe("UserLoginMigrationModule", () => {
 				const setup = () => {
 					createTestAppStoreWithUser("userId");
 
-					const axiosError = axiosErrorFactory
-						.withStatusCode(HttpStatusCode.BadRequest)
-						.build();
+					const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.BadRequest).build();
 
-					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValueOnce(
-						axiosError
-					);
+					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValueOnce(axiosError);
 				};
 
 				it("should throw an error with status code BadRequest when an ApplicationError is thrown", async () => {
 					setup();
 
-					const func = () =>
-						module.fetchLatestUserLoginMigrationForCurrentUser();
+					const func = () => module.fetchLatestUserLoginMigrationForCurrentUser();
 
-					await expect(func()).rejects.toEqual(
-						createApplicationError(HttpStatusCode.BadRequest)
-					);
+					await expect(func()).rejects.toEqual(createApplicationError(HttpStatusCode.BadRequest));
 				});
 			});
 		});
@@ -344,9 +312,7 @@ describe("UserLoginMigrationModule", () => {
 
 					await module.fetchLatestUserLoginMigrationForSchool();
 
-					expect(
-						apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool
-					).not.toHaveBeenCalled();
+					expect(apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool).not.toHaveBeenCalled();
 				});
 			});
 
@@ -363,9 +329,7 @@ describe("UserLoginMigrationModule", () => {
 							},
 						});
 
-						apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockRejectedValue(
-							error
-						);
+						apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockRejectedValue(error);
 					};
 
 					it("should set the user login migration to undefined", async () => {
@@ -381,15 +345,14 @@ describe("UserLoginMigrationModule", () => {
 					const setup = () => {
 						createTestAppStore();
 
-						const userLoginMigrationResponse: UserLoginMigrationResponse =
-							userLoginMigrationResponseFactory.build({
-								sourceSystemId: "sourceSystemId",
-								targetSystemId: "targetSystemId",
-								startedAt: new Date(2000, 1, 1, 0, 0).toString(),
-								closedAt: new Date(2000, 1, 1, 0, 0).toString(),
-								finishedAt: new Date(2000, 1, 14, 0, 0).toString(),
-								mandatorySince: new Date(2000, 1, 1, 0, 0).toString(),
-							});
+						const userLoginMigrationResponse: UserLoginMigrationResponse = userLoginMigrationResponseFactory.build({
+							sourceSystemId: "sourceSystemId",
+							targetSystemId: "targetSystemId",
+							startedAt: new Date(2000, 1, 1, 0, 0).toString(),
+							closedAt: new Date(2000, 1, 1, 0, 0).toString(),
+							finishedAt: new Date(2000, 1, 14, 0, 0).toString(),
+							mandatorySince: new Date(2000, 1, 1, 0, 0).toString(),
+						});
 
 						const userLoginMigration: UserLoginMigration = {
 							sourceSystemId: "sourceSystemId",
@@ -415,9 +378,7 @@ describe("UserLoginMigrationModule", () => {
 
 						await module.fetchLatestUserLoginMigrationForSchool();
 
-						expect(
-							apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool
-						).toHaveBeenCalled();
+						expect(apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool).toHaveBeenCalled();
 					});
 
 					it("should set the UserLoginMigration", async () => {
@@ -434,14 +395,10 @@ describe("UserLoginMigrationModule", () => {
 				const setup = () => {
 					createTestAppStore();
 
-					const error = axiosErrorFactory
-						.withStatusCode(HttpStatusCode.BadRequest)
-						.build();
+					const error = axiosErrorFactory.withStatusCode(HttpStatusCode.BadRequest).build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockRejectedValue(
-						error
-					);
+					apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -451,9 +408,7 @@ describe("UserLoginMigrationModule", () => {
 				it("should set the businessError", async () => {
 					const { apiError } = setup();
 
-					await expect(
-						module.fetchLatestUserLoginMigrationForSchool()
-					).rejects.toThrow();
+					await expect(module.fetchLatestUserLoginMigrationForSchool()).rejects.toThrow();
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
@@ -467,9 +422,7 @@ describe("UserLoginMigrationModule", () => {
 
 					const func = () => module.fetchLatestUserLoginMigrationForSchool();
 
-					await expect(func()).rejects.toEqual(
-						createApplicationError(HttpStatusCode.BadRequest)
-					);
+					await expect(func()).rejects.toEqual(createApplicationError(HttpStatusCode.BadRequest));
 				});
 			});
 		});
@@ -477,8 +430,7 @@ describe("UserLoginMigrationModule", () => {
 		describe("startUserLoginMigration", () => {
 			describe("when it successfully calls the api", () => {
 				const setup = () => {
-					const userLoginMigrationResponse: UserLoginMigrationResponse =
-						userLoginMigrationResponseFactory.build({});
+					const userLoginMigrationResponse: UserLoginMigrationResponse = userLoginMigrationResponseFactory.build({});
 					apiMock.userLoginMigrationControllerStartMigration.mockResolvedValue(
 						mockApiResponse({ data: userLoginMigrationResponse })
 					);
@@ -503,9 +455,7 @@ describe("UserLoginMigrationModule", () => {
 
 					await module.startUserLoginMigration();
 
-					expect(
-						apiMock.userLoginMigrationControllerStartMigration
-					).toHaveBeenCalled();
+					expect(apiMock.userLoginMigrationControllerStartMigration).toHaveBeenCalled();
 				});
 
 				it("should set loading", async () => {
@@ -522,9 +472,7 @@ describe("UserLoginMigrationModule", () => {
 
 					await module.startUserLoginMigration();
 
-					expect(module.getUserLoginMigration).toStrictEqual(
-						userLoginMigration
-					);
+					expect(module.getUserLoginMigration).toStrictEqual(userLoginMigration);
 					expect(module.getUserLoginMigration).toEqual(userLoginMigration);
 				});
 			});
@@ -534,9 +482,7 @@ describe("UserLoginMigrationModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.userLoginMigrationControllerStartMigration.mockRejectedValue(
-						error
-					);
+					apiMock.userLoginMigrationControllerStartMigration.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -560,9 +506,7 @@ describe("UserLoginMigrationModule", () => {
 
 					const func = () => module.startUserLoginMigration();
 
-					await expect(func()).rejects.toEqual(
-						createApplicationError(apiError.code)
-					);
+					await expect(func()).rejects.toEqual(createApplicationError(apiError.code));
 				});
 			});
 		});
@@ -570,11 +514,10 @@ describe("UserLoginMigrationModule", () => {
 		describe("setUserLoginMigrationMandatory", () => {
 			describe("when it successfully calls the api", () => {
 				const setup = () => {
-					const userLoginMigrationResponse: UserLoginMigrationResponse =
-						userLoginMigrationResponseFactory.build({
-							startedAt: new Date(2000, 1, 1, 0, 0).toString(),
-							mandatorySince: new Date(2000, 1, 1).toString(),
-						});
+					const userLoginMigrationResponse: UserLoginMigrationResponse = userLoginMigrationResponseFactory.build({
+						startedAt: new Date(2000, 1, 1, 0, 0).toString(),
+						mandatorySince: new Date(2000, 1, 1).toString(),
+					});
 
 					const userLoginMigration = userLoginMigrationFactory.build({
 						startedAt: new Date(2000, 1, 1, 0, 0),
@@ -595,9 +538,7 @@ describe("UserLoginMigrationModule", () => {
 
 					await module.setUserLoginMigrationMandatory(true);
 
-					expect(
-						apiMock.userLoginMigrationControllerSetMigrationMandatory
-					).toHaveBeenCalledWith({ mandatory: true });
+					expect(apiMock.userLoginMigrationControllerSetMigrationMandatory).toHaveBeenCalledWith({ mandatory: true });
 				});
 
 				it("should set loading", async () => {
@@ -623,9 +564,7 @@ describe("UserLoginMigrationModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.userLoginMigrationControllerSetMigrationMandatory.mockRejectedValue(
-						error
-					);
+					apiMock.userLoginMigrationControllerSetMigrationMandatory.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -635,9 +574,7 @@ describe("UserLoginMigrationModule", () => {
 				it("should set the businessError", async () => {
 					const { apiError } = setup();
 
-					await expect(
-						module.setUserLoginMigrationMandatory(true)
-					).rejects.toThrow();
+					await expect(module.setUserLoginMigrationMandatory(true)).rejects.toThrow();
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
@@ -651,9 +588,7 @@ describe("UserLoginMigrationModule", () => {
 
 					const func = () => module.setUserLoginMigrationMandatory(false);
 
-					await expect(func()).rejects.toEqual(
-						createApplicationError(apiError.code)
-					);
+					await expect(func()).rejects.toEqual(createApplicationError(apiError.code));
 				});
 			});
 		});
@@ -661,10 +596,9 @@ describe("UserLoginMigrationModule", () => {
 		describe("restartUserLoginMigration", () => {
 			describe("when it successfully calls the api", () => {
 				const setup = () => {
-					const userLoginMigrationResponse: UserLoginMigrationResponse =
-						userLoginMigrationResponseFactory.build({
-							startedAt: new Date(2000, 1, 1, 0, 0).toString(),
-						});
+					const userLoginMigrationResponse: UserLoginMigrationResponse = userLoginMigrationResponseFactory.build({
+						startedAt: new Date(2000, 1, 1, 0, 0).toString(),
+					});
 
 					const userLoginMigration = userLoginMigrationFactory.build({
 						startedAt: new Date(2000, 1, 1, 0, 0),
@@ -685,9 +619,7 @@ describe("UserLoginMigrationModule", () => {
 
 					await module.restartUserLoginMigration();
 
-					expect(
-						apiMock.userLoginMigrationControllerRestartMigration
-					).toHaveBeenCalled();
+					expect(apiMock.userLoginMigrationControllerRestartMigration).toHaveBeenCalled();
 				});
 
 				it("should set loading", async () => {
@@ -713,9 +645,7 @@ describe("UserLoginMigrationModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.userLoginMigrationControllerRestartMigration.mockRejectedValue(
-						error
-					);
+					apiMock.userLoginMigrationControllerRestartMigration.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -739,9 +669,7 @@ describe("UserLoginMigrationModule", () => {
 
 					const func = () => module.restartUserLoginMigration();
 
-					await expect(func()).rejects.toEqual(
-						createApplicationError(apiError.code)
-					);
+					await expect(func()).rejects.toEqual(createApplicationError(apiError.code));
 				});
 			});
 		});
@@ -749,11 +677,10 @@ describe("UserLoginMigrationModule", () => {
 		describe("closeUserLoginMigration", () => {
 			describe("when it successfully calls the api", () => {
 				const setup = () => {
-					const userLoginMigrationResponse: UserLoginMigrationResponse =
-						userLoginMigrationResponseFactory.build({
-							closedAt: new Date(2000, 1, 2).toString(),
-							finishedAt: new Date(2000, 1, 14).toString(),
-						});
+					const userLoginMigrationResponse: UserLoginMigrationResponse = userLoginMigrationResponseFactory.build({
+						closedAt: new Date(2000, 1, 2).toString(),
+						finishedAt: new Date(2000, 1, 14).toString(),
+					});
 
 					const userLoginMigration = userLoginMigrationFactory.build({
 						closedAt: new Date(2000, 1, 2),
@@ -775,9 +702,7 @@ describe("UserLoginMigrationModule", () => {
 
 					await module.closeUserLoginMigration();
 
-					expect(
-						apiMock.userLoginMigrationControllerCloseMigration
-					).toHaveBeenCalled();
+					expect(apiMock.userLoginMigrationControllerCloseMigration).toHaveBeenCalled();
 				});
 
 				it("should set loading", async () => {
@@ -803,9 +728,7 @@ describe("UserLoginMigrationModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.userLoginMigrationControllerCloseMigration.mockRejectedValue(
-						error
-					);
+					apiMock.userLoginMigrationControllerCloseMigration.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -829,9 +752,7 @@ describe("UserLoginMigrationModule", () => {
 
 					const func = () => module.closeUserLoginMigration();
 
-					await expect(func()).rejects.toEqual(
-						createApplicationError(apiError.code)
-					);
+					await expect(func()).rejects.toEqual(createApplicationError(apiError.code));
 				});
 			});
 		});

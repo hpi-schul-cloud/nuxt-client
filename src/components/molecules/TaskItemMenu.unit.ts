@@ -1,3 +1,4 @@
+import TaskItemMenu from "./TaskItemMenu.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
@@ -5,19 +6,15 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import TasksModule from "@/store/tasks";
 import { COPY_MODULE_KEY } from "@/utils/inject";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
-import { VBtn } from "vuetify/lib/components/index";
-import TaskItemMenu from "./TaskItemMenu.vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
-import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { VBtn } from "vuetify/lib/components/index";
 
 const { tasksTeacher } = mocks;
 
@@ -114,9 +111,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				userRole: "teacher",
 			});
 
-			expect(wrapper.vm.copyLink).toStrictEqual(
-				`/homework/${task.id}/copy?returnUrl=/tasks`
-			);
+			expect(wrapper.vm.copyLink).toStrictEqual(`/homework/${task.id}/copy?returnUrl=/tasks`);
 		});
 
 		it("should set isTeacher correctly", () => {
@@ -174,9 +169,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 
 	describe("when restoring a task", () => {
 		it("should call restoreTask of FinishedTasksModule", async () => {
-			const restoreTaskMock = vi
-				.spyOn(finishedTasksModule, "restoreTask")
-				.mockImplementation(vi.fn());
+			const restoreTaskMock = vi.spyOn(finishedTasksModule, "restoreTask").mockImplementation(vi.fn());
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,

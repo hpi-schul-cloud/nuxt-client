@@ -1,9 +1,5 @@
 <template>
-	<div
-		ref="linkContentElementDisplay"
-		data-testid="board-link-element"
-		tabindex="-1"
-	>
+	<div ref="linkContentElementDisplay" data-testid="board-link-element" tabindex="-1">
 		<ContentElementBar
 			:has-grey-background="true"
 			:icon="mdiLink"
@@ -31,12 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import { ComputedRef, computed, ref } from "vue";
+import { injectStrict } from "@/utils/inject";
 import { mdiLink } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
-import { injectStrict } from "@/utils/inject";
-import { useDisplay } from "vuetify";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { computed, ComputedRef, ref } from "vue";
+import { useDisplay } from "vuetify";
 
 const props = defineProps({
 	url: {
@@ -68,9 +64,7 @@ const linkContentElementDisplay = ref(null);
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = computed(() => {
-	return smAndUp.value && isListLayout.value;
-});
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
 </script>
 
 <style scoped>

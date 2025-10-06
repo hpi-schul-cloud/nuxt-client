@@ -17,16 +17,8 @@
 				<div v-if="step === 0 && isExportModalOpen">
 					<div class="">
 						<v-radio-group v-model="radios">
-							<v-radio
-								id="1.1.0"
-								:label="$t('pages.room.modal.course.export.version1.1')"
-								value="1.1.0"
-							/>
-							<v-radio
-								id="1.3.0"
-								:label="$t('pages.room.modal.course.export.version1.3')"
-								value="1.3.0"
-							/>
+							<v-radio id="1.1.0" :label="$t('pages.room.modal.course.export.version1.1')" value="1.1.0" />
+							<v-radio id="1.3.0" :label="$t('pages.room.modal.course.export.version1.3')" value="1.3.0" />
 						</v-radio-group>
 					</div>
 				</div>
@@ -102,33 +94,16 @@
 			</template>
 			<template #actions>
 				<div class="mb-2">
-					<v-btn
-						v-if="step === 1"
-						data-testid="dialog-back-btn"
-						class="ml-2"
-						depressed
-						@click="onBack"
-					>
+					<v-btn v-if="step === 1" data-testid="dialog-back-btn" class="ml-2" depressed @click="onBack">
 						{{ $t("common.actions.back") }}
 					</v-btn>
 				</div>
 				<v-spacer />
 				<div class="mb-2">
-					<v-btn
-						v-if="step === 1"
-						data-testid="dialog-cancel-btn"
-						class="ml-2"
-						depressed
-						@click="onCloseDialog"
-					>
+					<v-btn v-if="step === 1" data-testid="dialog-cancel-btn" class="ml-2" depressed @click="onCloseDialog">
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
-					<v-btn
-						v-if="step === 0"
-						data-testid="dialog-cancel-btn"
-						depressed
-						@click="onCloseDialog"
-					>
+					<v-btn v-if="step === 0" data-testid="dialog-cancel-btn" depressed @click="onCloseDialog">
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
@@ -165,15 +140,11 @@ import {
 	BoardLesson,
 	BoardTask,
 } from "@/types/course-room/CourseRoom";
-import {
-	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	injectStrict,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-} from "@/utils/inject";
+import { COMMON_CARTRIDGE_EXPORT_MODULE_KEY, COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { notifyError, notifySuccess } from "@data-app";
 import { mdiInformation } from "@icons/material";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { notifyError, notifySuccess } from "@data-app";
 
 type Selection = {
 	isSelected: boolean;
@@ -182,26 +153,15 @@ type Selection = {
 };
 
 const { t } = useI18n();
-const commonCartridgeExportModule = injectStrict(
-	COMMON_CARTRIDGE_EXPORT_MODULE_KEY
-);
+const commonCartridgeExportModule = injectStrict(COMMON_CARTRIDGE_EXPORT_MODULE_KEY);
 const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
 
-const emit = defineEmits([
-	"update:isExportModalOpen",
-	"dialog-closed",
-	"dialog-confirmed",
-	"next",
-	"back",
-]);
+const emit = defineEmits(["update:isExportModalOpen", "dialog-closed", "dialog-confirmed", "next", "back"]);
 
 const isExportModalOpen = computed({
 	get: () => commonCartridgeExportModule.getIsExportModalOpen,
 	set: (value: boolean) => {
-		emit(
-			"update:isExportModalOpen",
-			commonCartridgeExportModule.setIsExportModalOpen(value)
-		);
+		emit("update:isExportModalOpen", commonCartridgeExportModule.setIsExportModalOpen(value));
 	},
 });
 
@@ -209,19 +169,13 @@ const radios = ref("1.1.0");
 const step = ref(0);
 
 const allTopics = ref<Array<Selection>>([]);
-const allTopicsSelected = computed(() => {
-	return allTopics.value.every((topic) => topic.isSelected);
-});
+const allTopicsSelected = computed(() => allTopics.value.every((topic) => topic.isSelected));
 
 const allTasks = ref<Array<Selection>>([]);
-const allTasksSelected = computed(() => {
-	return allTasks.value.every((task) => task.isSelected);
-});
+const allTasksSelected = computed(() => allTasks.value.every((task) => task.isSelected));
 
 const allColumnBoards = ref<Array<Selection>>([]);
-const allColumnBoardsSelected = computed(() => {
-	return allColumnBoards.value.every((columnBoard) => columnBoard.isSelected);
-});
+const allColumnBoardsSelected = computed(() => allColumnBoards.value.every((columnBoard) => columnBoard.isSelected));
 
 watch(
 	() => courseRoomDetailsModule.getRoomData.elements,
@@ -258,31 +212,19 @@ watch(
 	}
 );
 
-const title = computed(() => {
-	return step.value === 0
-		? t("pages.room.modal.course.export.header")
-		: t("pages.room.modal.course.export.options.header");
-});
+const title = computed(() =>
+	step.value === 0 ? t("pages.room.modal.course.export.header") : t("pages.room.modal.course.export.options.header")
+);
 
-const someTopicsSelected = computed(() => {
-	return (
-		allTopics.value.some((topic) => topic.isSelected) &&
-		!allTopicsSelected.value
-	);
-});
+const someTopicsSelected = computed(
+	() => allTopics.value.some((topic) => topic.isSelected) && !allTopicsSelected.value
+);
 
-const someTasksSelected = computed(() => {
-	return (
-		allTasks.value.some((task) => task.isSelected) && !allTasksSelected.value
-	);
-});
+const someTasksSelected = computed(() => allTasks.value.some((task) => task.isSelected) && !allTasksSelected.value);
 
-const someColumnBoardsSelected = computed(() => {
-	return (
-		allColumnBoards.value.some((columnBoard) => columnBoard.isSelected) &&
-		!allColumnBoardsSelected.value
-	);
-});
+const someColumnBoardsSelected = computed(
+	() => allColumnBoards.value.some((columnBoard) => columnBoard.isSelected) && !allColumnBoardsSelected.value
+);
 
 function onCloseDialog(): void {
 	closeDialog();
@@ -318,12 +260,8 @@ async function onExport(): Promise<void> {
 	emit("dialog-confirmed", false);
 	notifySuccess(t("common.words.export"));
 
-	const topicIds: string[] = allTopics.value
-		.filter((topic) => topic.isSelected)
-		.map((topic) => topic.id);
-	const taskIds = allTasks.value
-		.filter((task) => task.isSelected)
-		.map((task) => task.id);
+	const topicIds: string[] = allTopics.value.filter((topic) => topic.isSelected).map((topic) => topic.id);
+	const taskIds = allTasks.value.filter((task) => task.isSelected).map((task) => task.id);
 	const columnBoardIds = allColumnBoards.value
 		.filter((columnBoard) => columnBoard.isSelected)
 		.map((columnBoard) => columnBoard.id);

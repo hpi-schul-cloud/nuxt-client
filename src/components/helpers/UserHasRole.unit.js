@@ -1,7 +1,7 @@
 import UserHasRole from "./UserHasRole";
 import { createTestAppStore } from "@@/tests/test-utils";
-import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 /**
  * @param  { String } expectedRole used as prop

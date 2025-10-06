@@ -1,19 +1,9 @@
-import {
-	RoomBoardItem,
-	RoomDetails,
-	RoomUpdateParams,
-} from "@/types/room/Room";
-import { ref } from "vue";
-import { defineStore } from "pinia";
-import {
-	BoardApiFactory,
-	BoardLayout,
-	BoardParentType,
-	CreateBoardBodyParams,
-	RoomApiFactory,
-} from "@/serverApi/v3";
+import { BoardApiFactory, BoardLayout, BoardParentType, CreateBoardBodyParams, RoomApiFactory } from "@/serverApi/v3";
+import { RoomBoardItem, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export enum RoomVariant {
 	ROOM = "room",
@@ -34,18 +24,13 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		try {
 			roomVariant.value = RoomVariant.ROOM;
 			room.value = (await roomApi.roomControllerGetRoomDetails(id)).data;
-			roomBoards.value = (
-				await roomApi.roomControllerGetRoomBoards(id)
-			).data.data;
+			roomBoards.value = (await roomApi.roomControllerGetRoomBoards(id)).data.data;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
 			if (responseError.code === 404) {
 				roomVariant.value = RoomVariant.COURSE_ROOM;
-			} else if (
-				responseError.code === 403 &&
-				responseError.type === "LOCKED_ROOM"
-			) {
+			} else if (responseError.code === 403 && responseError.type === "LOCKED_ROOM") {
 				lockedRoomName.value = responseError.message;
 			} else {
 				throw createApplicationError(responseError.code);
@@ -55,11 +40,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		}
 	};
 
-	const createBoard = async (
-		roomId: string,
-		layout: BoardLayout,
-		title: string
-	) => {
+	const createBoard = async (roomId: string, layout: BoardLayout, title: string) => {
 		const params: CreateBoardBodyParams = {
 			title: title,
 			parentId: roomId,
@@ -74,10 +55,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	/**
 	 * @throws ApiResponseError | ApiValidationError
 	 */
-	const updateRoom = async (
-		id: string,
-		params: RoomUpdateParams
-	): Promise<void> => {
+	const updateRoom = async (id: string, params: RoomUpdateParams): Promise<void> => {
 		isLoading.value = true;
 		try {
 			await roomApi.roomControllerUpdateRoom(id, params);

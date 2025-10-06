@@ -1,4 +1,3 @@
-import { createI18n } from "vue-i18n";
 // It looks like we have to use default exports and no additional imports in the language files. Otherwise resource pre-compilation will fail.
 // https://github.com/intlify/bundle-tools/blob/b245313be48c089db3f325f9bc96ad37ab2011b8/packages/bundle-utils/src/js.ts#L83C1-L109C6
 // Pre-compilation is needed in order to make CSP work
@@ -8,12 +7,13 @@ import enGB from "../locales/en";
 import esES from "../locales/es";
 import ukUA from "../locales/uk";
 import { MessageSchema } from "@/locales/schema";
+import { useAppStore } from "@data-app";
+import { useEnvStore } from "@data-env";
+import { createI18n } from "vue-i18n";
 import { default as deVuetify } from "vuetify/lib/locale/de";
 import { default as enVuetify } from "vuetify/lib/locale/en";
 import { default as esVuetify } from "vuetify/lib/locale/es";
 import { default as ukVuetify } from "vuetify/lib/locale/uk";
-import { useEnvStore } from "@data-env";
-import { useAppStore } from "@data-app";
 
 declare type SupportedLanguages = "en" | "de" | "es" | "uk";
 

@@ -21,13 +21,13 @@ import datetime, {
 	setDefaultFormats,
 	setDefaultTimezone,
 } from "@/plugins/datetime";
+import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
-import { createTestAppStore } from "@@/tests/test-utils";
-import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 
 dayjs.extend(customParseFormat);
@@ -87,12 +87,8 @@ describe("@/plugins/datetime", () => {
 
 	const dateUTCString = dateUTC.format("DD.MM.YYYY");
 	const dateLocalString = dateLocal.format("DD.MM.YYYY");
-	const dateLocalStringYY = dateUTC
-		.tz(TEST_DATETIME_TIMEZONE)
-		.format("DD.MM.YY");
-	const dateTimeLocalStringYY = dateUTC
-		.tz(TEST_DATETIME_TIMEZONE)
-		.format("DD.MM.YY HH:mm");
+	const dateLocalStringYY = dateUTC.tz(TEST_DATETIME_TIMEZONE).format("DD.MM.YY");
+	const dateTimeLocalStringYY = dateUTC.tz(TEST_DATETIME_TIMEZONE).format("DD.MM.YY HH:mm");
 
 	const dateLocalFromUTCString = dateLocalFromUTC.format("YYYY-MM-DD");
 	const timeLocalFromUTCString = dateLocalFromUTC.format("HH:mm");
@@ -207,9 +203,7 @@ describe("@/plugins/datetime", () => {
 		const hours = date.getHours().toString().padStart(2, "0");
 		const minutes = date.getMinutes().toString().padStart(2, "0");
 
-		expect(getTimeFromISOString(ISOString)).toStrictEqual(
-			`${hours}:${minutes}`
-		);
+		expect(getTimeFromISOString(ISOString)).toStrictEqual(`${hours}:${minutes}`);
 	});
 
 	const mockApp = {
@@ -275,11 +269,7 @@ describe("@/plugins/datetime", () => {
 	});
 
 	it("setDefaultFormats", () => {
-		expect(setDefaultFormats(mockApp)).toStrictEqual(
-			localizedFormats[TEST_CURRENT_LOCALE]
-		);
-		expect(setDefaultFormats({ ...mockApp, i18n: null })).toStrictEqual(
-			localizedFormats[TEST_CURRENT_LOCALE]
-		);
+		expect(setDefaultFormats(mockApp)).toStrictEqual(localizedFormats[TEST_CURRENT_LOCALE]);
+		expect(setDefaultFormats({ ...mockApp, i18n: null })).toStrictEqual(localizedFormats[TEST_CURRENT_LOCALE]);
 	});
 });

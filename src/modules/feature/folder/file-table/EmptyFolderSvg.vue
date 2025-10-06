@@ -24,22 +24,8 @@
 			d="M289.421 10.8L295.787 25.798C296.463 27.3907 295.743 29.2258 294.179 29.9396L294.1 29.9744L279.104 36.3396L289.421 10.8Z"
 			fill="#B4BDC3"
 		/>
-		<ellipse
-			opacity="0.606515"
-			cx="117.78"
-			cy="197.245"
-			rx="52"
-			ry="10"
-			fill="#ECEEF0"
-		/>
-		<ellipse
-			opacity="0.606515"
-			cx="250.78"
-			cy="199.745"
-			rx="52"
-			ry="10.5"
-			fill="#ECEEF0"
-		/>
+		<ellipse opacity="0.606515" cx="117.78" cy="197.245" rx="52" ry="10" fill="#ECEEF0" />
+		<ellipse opacity="0.606515" cx="250.78" cy="199.745" rx="52" ry="10.5" fill="#ECEEF0" />
 		<g clip-path="url(#clip0_269_25661)">
 			<path
 				fill-rule="evenodd"
@@ -303,12 +289,7 @@
 		</g>
 		<defs>
 			<clipPath id="clip0_269_25661">
-				<rect
-					width="260"
-					height="195"
-					fill="white"
-					transform="translate(54.1833 8.78244) rotate(1)"
-				/>
+				<rect width="260" height="195" fill="white" transform="translate(54.1833 8.78244) rotate(1)" />
 			</clipPath>
 		</defs>
 	</svg>

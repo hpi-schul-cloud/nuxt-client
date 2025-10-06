@@ -1,10 +1,7 @@
+import { useCourseBoardEditMode, useMediaBoardEditMode } from "./editMode.composable";
 import { BoardPermissionChecks } from "@/types/board/Permissions";
 import { useBoardPermissions } from "@data-board";
-import {
-	useCourseBoardEditMode,
-	useMediaBoardEditMode,
-} from "./editMode.composable";
-import { ref, Ref } from "vue";
+import { Ref, ref } from "vue";
 
 vi.mock("@data-board");
 const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
@@ -41,8 +38,7 @@ describe("editMode.composable", () => {
 
 	describe("when using edit mode for course boards", () => {
 		it("should set edit mode", () => {
-			const { isEditMode, startEditMode, stopEditMode } =
-				useMediaBoardEditMode("testId");
+			const { isEditMode, startEditMode, stopEditMode } = useMediaBoardEditMode("testId");
 
 			expect(isEditMode.value).toBe(false);
 			startEditMode();

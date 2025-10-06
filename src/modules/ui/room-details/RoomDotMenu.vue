@@ -1,9 +1,5 @@
 <template>
-	<KebabMenu
-		v-if="menuItems.length > 0"
-		v-bind.attr="$attrs"
-		class="three-dot-button"
-	>
+	<KebabMenu v-if="menuItems.length > 0" v-bind.attr="$attrs" class="three-dot-button">
 		<v-list-item
 			v-for="(item, i) in menuItems"
 			:key="i"
@@ -22,9 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
 import { MenuItem } from "./types";
 import { KebabMenu } from "@ui-kebab-menu";
+import { PropType } from "vue";
 
 defineOptions({
 	inheritAttrs: false,

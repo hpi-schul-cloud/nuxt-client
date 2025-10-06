@@ -1,19 +1,13 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { KebabMenuAction } from "@ui-kebab-menu";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { KebabMenuAction } from "@ui-kebab-menu";
 
 describe("KebabMenuActionDownloadFiles", () => {
 	beforeEach(() => {
 		vi.resetAllMocks();
 	});
 
-	const setupWrapper = (props: {
-		selectedIds: string[];
-		disabled: boolean;
-	}) => {
+	const setupWrapper = (props: { selectedIds: string[]; disabled: boolean }) => {
 		const wrapper = mount(KebabMenuActionDownloadFiles, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],

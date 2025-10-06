@@ -1,9 +1,9 @@
-import { ref, Ref } from "vue";
-import { Group, useGroupApi } from "@data-group";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { BusinessError } from "@/store/types/commons";
-import { useI18n } from "vue-i18n";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError } from "@data-app";
+import { Group, useGroupApi } from "@data-group";
+import { Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export const useGroupState = () => {
 	const { getGroup } = useGroupApi();

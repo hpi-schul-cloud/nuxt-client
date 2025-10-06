@@ -19,9 +19,7 @@ const programmaticFocus = (element: HTMLElement) => {
 };
 
 const skipToMainContent = () => {
-	const mainContentElement = window.document.querySelector(
-		"#main-content"
-	) as HTMLElement;
+	const mainContentElement = window.document.querySelector("#main-content") as HTMLElement;
 
 	if (mainContentElement) {
 		programmaticFocus(mainContentElement);

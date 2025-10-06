@@ -1,9 +1,9 @@
+import { SessionStatus } from "./types";
+import { $axios } from "@/utils/api";
+import { AlertPayload, useAppStore, useNotificationStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { computed, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { $axios } from "@/utils/api";
-import { SessionStatus } from "./types";
-import { useEnvConfig } from "@data-env";
-import { AlertPayload, useAppStore, useNotificationStore } from "@data-app";
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();
@@ -16,19 +16,15 @@ export const useAutoLogout = () => {
 	let ttlTimeoutPolling: ReturnType<typeof setTimeout> | null = null;
 	let retry = 0;
 
-	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
-		useEnvConfig().value;
+	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } = useEnvConfig().value;
 
 	const defaultRemainingTime = JWT_TIMEOUT_SECONDS || 2 * 60 * 60;
-	const DEFAULT_SHOW_WARNING_TIME =
-		JWT_SHOW_TIMEOUT_WARNING_SECONDS || 1 * 60 * 60;
+	const DEFAULT_SHOW_WARNING_TIME = JWT_SHOW_TIMEOUT_WARNING_SECONDS || 1 * 60 * 60;
 
 	let remainingTimeInSeconds = defaultRemainingTime;
 	let ttlCount = 0;
 
-	const remainingTimeInMinutes = computed(() =>
-		Math.max(Math.floor(remainingTimeInSeconds / 60), 0)
-	);
+	const remainingTimeInMinutes = computed(() => Math.max(Math.floor(remainingTimeInSeconds / 60), 0));
 
 	const clearPollings = () => {
 		if (remainingTimePolling) {

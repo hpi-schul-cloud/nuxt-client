@@ -1,13 +1,10 @@
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRoomCreateState } from "@data-room";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { RoomCreatePage } from "@page-room";
-import { useRouter } from "vue-router";
 import { RoomForm } from "@feature-room";
+import { RoomCreatePage } from "@page-room";
 import { flushPromises } from "@vue/test-utils";
+import { useRouter } from "vue-router";
 
 vi.mock("vue-router", () => ({
 	useRouter: vi.fn().mockReturnValue({

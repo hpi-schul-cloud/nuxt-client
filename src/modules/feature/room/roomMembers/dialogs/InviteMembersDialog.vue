@@ -29,12 +29,8 @@
 							v-model="formData.title"
 							class="mb-2"
 							:rules="validationRules"
-							:label="
-								t('pages.rooms.members.inviteMember.form.description.label')
-							"
-							:hint="
-								t('pages.rooms.members.inviteMember.form.description.hint')
-							"
+							:label="t('pages.rooms.members.inviteMember.form.description.label')"
+							:hint="t('pages.rooms.members.inviteMember.form.description.hint')"
 							persistent-hint
 							data-testid="invite-participant-description-input"
 						/>
@@ -46,11 +42,7 @@
 						>
 							<template #label>
 								<div class="mt-6">
-									{{
-										t(
-											"pages.rooms.members.inviteMember.form.onlySchoolMembers.label"
-										)
-									}}
+									{{ t("pages.rooms.members.inviteMember.form.onlySchoolMembers.label") }}
 									<span class="d-inline-block">
 										{{ schoolName }}
 									</span>
@@ -61,11 +53,7 @@
 						<v-checkbox
 							v-model="formData.isValidForStudents"
 							:disabled="!formData.restrictedToCreatorSchool"
-							:label="
-								t(
-									'pages.rooms.members.inviteMember.form.validForStudents.label'
-								)
-							"
+							:label="t('pages.rooms.members.inviteMember.form.validForStudents.label')"
 							hide-details
 							data-testid="input-invite-participants-valid-for-students"
 						/>
@@ -73,9 +61,7 @@
 						<div class="d-flex align-center justify-start my-n4 pr-0">
 							<v-checkbox
 								v-model="formData.activeUntilChecked"
-								:label="
-									t('pages.rooms.members.inviteMember.form.linkExpires.label')
-								"
+								:label="t('pages.rooms.members.inviteMember.form.linkExpires.label')"
 								hide-details
 								class="mr-2"
 								data-testid="input-invite-participants-link-expires"
@@ -103,10 +89,7 @@
 						>
 							<template #label>
 								<div class="mt-6">
-									<i18n-t
-										keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label"
-										scope="global"
-									>
+									<i18n-t keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label" scope="global">
 										<a :href="informationLink!" target="_blank" rel="noopener">
 											{{ t("pages.rooms.members.infoText.moreInformation") }}
 										</a>
@@ -117,12 +100,7 @@
 					</div>
 				</template>
 				<template v-else>
-					<ShareModalResult
-						:share-url="sharedUrl"
-						type="roomMemberInvitation"
-						@copied="onCopyLink"
-						@done="onClose"
-					/>
+					<ShareModalResult :share-url="sharedUrl" type="roomMemberInvitation" @copied="onCopyLink" @done="onClose" />
 				</template>
 			</template>
 
@@ -164,26 +142,26 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { computed, ref, useTemplateRef, watch } from "vue";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import type { VCard } from "vuetify/components";
-import { InfoAlert } from "@ui-alert";
-import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import { useDisplay } from "vuetify";
+import { useOpeningTagValidator } from "@/utils/validation";
+import { notifySuccess } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import {
 	CreateRoomInvitationLinkDto,
 	InvitationStep,
+	RoomInvitationFormData,
 	UpdateRoomInvitationLinkDto,
 	useRoomInvitationLinkStore,
-	RoomInvitationFormData,
 } from "@data-room";
-import { storeToRefs } from "pinia";
+import { InfoAlert } from "@ui-alert";
+import { DatePicker } from "@ui-date-time-picker";
 import { isNonEmptyString, isOfMaxLength } from "@util-validators";
-import { useOpeningTagValidator } from "@/utils/validation";
-import { useEnvConfig } from "@data-env";
-import { notifySuccess } from "@data-app";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { storeToRefs } from "pinia";
+import { computed, ref, useTemplateRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
+import type { VCard } from "vuetify/components";
 
 defineProps({
 	schoolName: {
@@ -202,8 +180,7 @@ const emit = defineEmits<{
 }>();
 
 const { createLink, updateLink } = useRoomInvitationLinkStore();
-const { invitationStep, sharedUrl, editedLink, DEFAULT_EXPIRED_DATE } =
-	storeToRefs(useRoomInvitationLinkStore());
+const { invitationStep, sharedUrl, editedLink, DEFAULT_EXPIRED_DATE } = storeToRefs(useRoomInvitationLinkStore());
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
@@ -230,21 +207,13 @@ const validationRules = [
 
 const isDatePickerDisabled = computed(() => !formData.value.activeUntilChecked);
 
-const isSubmitDisabled = computed(
-	() => formData.value.activeUntilChecked && !formData.value.activeUntil
-);
+const isSubmitDisabled = computed(() => formData.value.activeUntilChecked && !formData.value.activeUntil);
 
 const modalTitle = computed(() => {
 	const titleMap = {
-		[InvitationStep.EDIT]: t(
-			"pages.rooms.members.inviteMember.step.edit.title"
-		),
-		[InvitationStep.SHARE]: t(
-			"pages.rooms.members.inviteMember.step.share.title"
-		),
-		[InvitationStep.PREPARE]: t(
-			"pages.rooms.members.inviteMember.step.prepare.title"
-		),
+		[InvitationStep.EDIT]: t("pages.rooms.members.inviteMember.step.edit.title"),
+		[InvitationStep.SHARE]: t("pages.rooms.members.inviteMember.step.share.title"),
+		[InvitationStep.PREPARE]: t("pages.rooms.members.inviteMember.step.prepare.title"),
 	};
 
 	return titleMap[invitationStep.value];
@@ -253,12 +222,8 @@ const modalTitle = computed(() => {
 const subTitle = computed(() => {
 	if (invitationStep.value === InvitationStep.SHARE) return null;
 	const subTitleMap = {
-		[InvitationStep.EDIT]: t(
-			"pages.rooms.members.inviteMember.editStep.subTitle"
-		),
-		[InvitationStep.PREPARE]: t(
-			"pages.rooms.members.inviteMember.firstStep.subTitle"
-		),
+		[InvitationStep.EDIT]: t("pages.rooms.members.inviteMember.editStep.subTitle"),
+		[InvitationStep.PREPARE]: t("pages.rooms.members.inviteMember.firstStep.subTitle"),
 	};
 
 	return subTitleMap[invitationStep.value];
@@ -297,18 +262,12 @@ const onContinue = async () => {
 		requiresConfirmation: formData.value.requiresConfirmation,
 	};
 
-	const createOrUpdateLinkBodyParams:
-		| UpdateRoomInvitationLinkDto
-		| CreateRoomInvitationLinkDto =
-		invitationStep.value === InvitationStep.EDIT
-			? { ...baseParams, id: formData.value.id }
-			: baseParams;
+	const createOrUpdateLinkBodyParams: UpdateRoomInvitationLinkDto | CreateRoomInvitationLinkDto =
+		invitationStep.value === InvitationStep.EDIT ? { ...baseParams, id: formData.value.id } : baseParams;
 
 	const endpointMap = {
-		[InvitationStep.PREPARE]: () =>
-			createLink(createOrUpdateLinkBodyParams as CreateRoomInvitationLinkDto),
-		[InvitationStep.EDIT]: () =>
-			updateLink(createOrUpdateLinkBodyParams as UpdateRoomInvitationLinkDto),
+		[InvitationStep.PREPARE]: () => createLink(createOrUpdateLinkBodyParams as CreateRoomInvitationLinkDto),
+		[InvitationStep.EDIT]: () => updateLink(createOrUpdateLinkBodyParams as UpdateRoomInvitationLinkDto),
 	};
 
 	await endpointMap[invitationStep.value]();
@@ -320,9 +279,7 @@ const onCopyLink = () => {
 };
 
 const datePickerDate = computed(() =>
-	formData.value.activeUntilChecked && !!formData.value.activeUntil
-		? formData.value.activeUntil.toString()
-		: ""
+	formData.value.activeUntilChecked && !!formData.value.activeUntil ? formData.value.activeUntil.toString() : ""
 );
 
 const inviteMembersContent = ref<VCard>();
@@ -345,13 +302,10 @@ watch(
 		if (newVal) {
 			formData.value.id = newVal.id;
 			formData.value.title = newVal.title;
-			formData.value.restrictedToCreatorSchool =
-				newVal.restrictedToCreatorSchool;
+			formData.value.restrictedToCreatorSchool = newVal.restrictedToCreatorSchool;
 			formData.value.isValidForStudents = !newVal.isOnlyForTeachers;
 			formData.value.activeUntilChecked = newVal.activeUntil !== undefined;
-			formData.value.activeUntil = newVal.activeUntil
-				? new Date(newVal.activeUntil)
-				: undefined;
+			formData.value.activeUntil = newVal.activeUntil ? new Date(newVal.activeUntil) : undefined;
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
 		}
 	}
@@ -366,7 +320,5 @@ watch(
 	}
 );
 
-const informationLink = computed(
-	() => useEnvConfig().value.ROOM_MEMBER_INFO_URL
-);
+const informationLink = computed(() => useEnvConfig().value.ROOM_MEMBER_INFO_URL);
 </script>

@@ -1,23 +1,16 @@
 import AdministrationRoomDetailPage from "./AdministrationRoomDetails.page.vue";
-import {
-	createTestEnvStore,
-	mockedPiniaStoreTyping,
-	schoolFactory,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { useAdministrationRoomStore } from "@data-room";
-import { createTestingPinia } from "@pinia/testing";
-import { createMock } from "@golevelup/ts-vitest";
-import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
+import { createTestEnvStore, mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { Mock } from "vitest";
-import { Router, useRoute } from "vue-router";
-import { nextTick } from "vue";
+import { useAdministrationRoomStore } from "@data-room";
+import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
+import { nextTick } from "vue";
+import { Router, useRoute } from "vue-router";
 
 vi.mock("vue-router");
 const useRouteMock = <Mock>useRoute;
@@ -51,10 +44,7 @@ describe("AdministrationRoomDetails.page", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: {
-		isEmptyList?: boolean;
-		featureFlag?: boolean;
-	}) => {
+	const setup = (options?: { isEmptyList?: boolean; featureFlag?: boolean }) => {
 		createTestEnvStore({
 			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,
 		});
@@ -125,9 +115,7 @@ describe("AdministrationRoomDetails.page", () => {
 		it("should display the correct page title", () => {
 			setup();
 
-			expect(document.title).toContain(
-				"pages.rooms.administration.roomDetail.header.text"
-			);
+			expect(document.title).toContain("pages.rooms.administration.roomDetail.header.text");
 		});
 
 		it("should display the correct page header", () => {
@@ -136,9 +124,7 @@ describe("AdministrationRoomDetails.page", () => {
 			const header = wrapper.find("[data-testid='admin-room-detail-title']");
 
 			expect(header.exists()).toBe(true);
-			expect(header.text()).toBe(
-				"pages.rooms.administration.roomDetail.header.text"
-			);
+			expect(header.text()).toBe("pages.rooms.administration.roomDetail.header.text");
 		});
 
 		it("should set 'selectedRoom' value to null when unMounted", () => {

@@ -1,6 +1,6 @@
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { Ref, ref } from "vue";
-import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 
 describe("BoardFocusHandler composable", () => {
 	const columnId = "testColumnId";
@@ -24,9 +24,7 @@ describe("BoardFocusHandler composable", () => {
 	});
 
 	it("should extract 'setFocus' and 'focusedId' if only 'id' is passed", async () => {
-		const { setFocus, focusedId } = mountComposable(() =>
-			useBoardFocusHandler(columnId)
-		);
+		const { setFocus, focusedId } = mountComposable(() => useBoardFocusHandler(columnId));
 
 		expect(setFocus).toBeDefined();
 		expect(focusedId).toBeDefined();
@@ -63,9 +61,7 @@ describe("BoardFocusHandler composable", () => {
 	});
 
 	it("should focusable values be 'false' as default", async () => {
-		const { isFocusWithin, isFocusContained } = mountComposable(() =>
-			useBoardFocusHandler(columnId, target)
-		);
+		const { isFocusWithin, isFocusContained } = mountComposable(() => useBoardFocusHandler(columnId, target));
 
 		expect(isFocusWithin.value).toBe(false);
 		expect(isFocusContained.value).toBe(false);

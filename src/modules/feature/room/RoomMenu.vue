@@ -1,23 +1,13 @@
 <template>
-	<KebabMenu
-		class="mx-2"
-		:aria-label="t('pages.roomDetails.ariaLabels.menu')"
-		data-testid="room-menu"
-	>
+	<KebabMenu class="mx-2" :aria-label="t('pages.roomDetails.ariaLabels.menu')" data-testid="room-menu">
 		<KebabMenuActionEdit v-if="canEditRoom" @click="() => $emit('room:edit')" />
 		<KebabMenuActionRoomMembers
 			v-if="canViewRoom"
 			:members-info-text="membersInfoText"
 			@click="() => $emit('room:manage-members')"
 		/>
-		<KebabMenuActionRoomCopy
-			v-if="isRoomCopyFeatureEnabled && canCopyRoom"
-			@click="() => $emit('room:copy')"
-		/>
-		<KebabMenuActionShare
-			v-if="isRoomShareFeatureEnabled && canShareRoom"
-			@click="() => $emit('room:share')"
-		/>
+		<KebabMenuActionRoomCopy v-if="isRoomCopyFeatureEnabled && canCopyRoom" @click="() => $emit('room:copy')" />
+		<KebabMenuActionShare v-if="isRoomShareFeatureEnabled && canShareRoom" @click="() => $emit('room:share')" />
 		<KebabMenuActionDelete
 			v-if="canDeleteRoom"
 			scope-language-key="common.labels.room"
@@ -29,55 +19,36 @@
 </template>
 
 <script setup lang="ts">
+import { useEnvConfig } from "@data-env";
+import { useRoomAuthorization } from "@data-room";
 import {
 	KebabMenu,
 	KebabMenuActionDelete,
-	KebabMenuActionRoomCopy,
-	KebabMenuActionShare,
 	KebabMenuActionEdit,
-	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,
+	KebabMenuActionRoomCopy,
+	KebabMenuActionRoomMembers,
+	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { useRoomAuthorization } from "@data-room";
-import { useI18n } from "vue-i18n";
 import { computed } from "vue";
-import { useEnvConfig } from "@data-env";
+import { useI18n } from "vue-i18n";
 
 defineProps({
 	roomName: { type: String, required: false, default: undefined },
 });
 
-const emit = defineEmits([
-	"room:edit",
-	"room:manage-members",
-	"room:delete",
-	"room:copy",
-	"room:share",
-	"room:leave",
-]);
+const emit = defineEmits(["room:edit", "room:manage-members", "room:delete", "room:copy", "room:share", "room:leave"]);
 
 const { t } = useI18n();
 
-const isRoomCopyFeatureEnabled = computed(
-	() => useEnvConfig().value.FEATURE_ROOM_COPY_ENABLED
-);
-const isRoomShareFeatureEnabled = computed(
-	() => useEnvConfig().value.FEATURE_ROOM_SHARE
-);
+const isRoomCopyFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_COPY_ENABLED);
+const isRoomShareFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_SHARE);
 
-const {
-	canAddRoomMembers,
-	canCopyRoom,
-	canShareRoom,
-	canEditRoom,
-	canDeleteRoom,
-	canViewRoom,
-} = useRoomAuthorization();
+const { canAddRoomMembers, canCopyRoom, canShareRoom, canEditRoom, canDeleteRoom, canViewRoom } =
+	useRoomAuthorization();
 
 const membersInfoText = computed(() =>
-	canAddRoomMembers.value
-		? t("pages.rooms.members.manage")
-		: t("pages.rooms.members.view")
+	canAddRoomMembers.value ? t("pages.rooms.members.manage") : t("pages.rooms.members.view")
 );
 
 const onDeleteRoom = async (confirmation: Promise<boolean>) => {

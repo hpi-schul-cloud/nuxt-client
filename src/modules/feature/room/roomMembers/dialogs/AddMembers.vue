@@ -48,9 +48,7 @@
 			</div>
 
 			<InfoAlert
-				v-if="
-					determineStudentAlertType === StudentAlertTypeEnum.StudentVisibility
-				"
+				v-if="determineStudentAlertType === StudentAlertTypeEnum.StudentVisibility"
 				data-testid="student-visibility-info-alert"
 			>
 				{{ t("pages.rooms.members.add.students.forbidden") }}
@@ -111,15 +109,15 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref } from "vue";
 import { RoleName } from "@/serverApi/v3";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import type { VAutocomplete, VCard, VSelect } from "vuetify/components";
-import { InfoAlert, WarningAlert } from "@ui-alert";
-import { storeToRefs } from "pinia";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { InfoAlert, WarningAlert } from "@ui-alert";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { storeToRefs } from "pinia";
+import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import type { VAutocomplete, VCard, VSelect } from "vuetify/components";
 
 interface SchoolRoleItem {
 	id: RoleName;
@@ -139,10 +137,8 @@ const emit = defineEmits<{
 const { t } = useI18n();
 
 const roomMembersStore = useRoomMembersStore();
-const { isCurrentUserStudent, potentialRoomMembers, schools } =
-	storeToRefs(roomMembersStore);
-const { addMembers, getPotentialMembers, resetPotentialMembers } =
-	roomMembersStore;
+const { isCurrentUserStudent, potentialRoomMembers, schools } = storeToRefs(roomMembersStore);
+const { addMembers, getPotentialMembers, resetPotentialMembers } = roomMembersStore;
 
 const { canAddAllStudents } = useRoomAuthorization();
 
@@ -196,22 +192,15 @@ const isStudentSelectionDisabled = computed(() => {
 });
 
 const isRestrictedStudentVisibilityCase = computed(
-	() =>
-		selectedSchoolRole.value === RoleName.Student && !canAddAllStudents.value
+	() => selectedSchoolRole.value === RoleName.Student && !canAddAllStudents.value
 );
 
 const determineStudentAlertType = computed<StudentAlertTypeEnum | null>(() => {
-	if (
-		selectedSchoolRole.value === RoleName.Student &&
-		isCurrentUserStudent.value
-	) {
+	if (selectedSchoolRole.value === RoleName.Student && isCurrentUserStudent.value) {
 		return StudentAlertTypeEnum.StudentAdmin;
 	}
 
-	if (
-		isRestrictedStudentVisibilityCase.value &&
-		!isStudentSelectionDisabled.value
-	) {
+	if (isRestrictedStudentVisibilityCase.value && !isStudentSelectionDisabled.value) {
 		return StudentAlertTypeEnum.StudentVisibility;
 	}
 

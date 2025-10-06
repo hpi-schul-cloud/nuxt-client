@@ -9,9 +9,7 @@
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionDeleteMemberInvitation
-				@click="onDeleteLinks(selectedIds)"
-			/>
+			<KebabMenuActionDeleteMemberInvitation @click="onDeleteLinks(selectedIds)" />
 		</template>
 
 		<template #[`item.actions`]="{ item }">
@@ -37,10 +35,7 @@
 						})
 					"
 				>
-					<KebabMenuActionEdit
-						:data-testid="`menu-edit-button-${item.id}`"
-						@click="onEdit(item.id)"
-					/>
+					<KebabMenuActionEdit :data-testid="`menu-edit-button-${item.id}`" @click="onEdit(item.id)" />
 					<KebabMenuActionShare
 						:text="t('common.actions.share')"
 						:data-testid="`menu-share-button-${item.id}`"
@@ -59,19 +54,19 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { DataTable } from "@ui-data-table";
 import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
+import { mdiShareVariantOutline } from "@icons/material";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { DataTable } from "@ui-data-table";
 import {
 	KebabMenu,
-	KebabMenuActionShare,
-	KebabMenuActionEdit,
 	KebabMenuActionDelete,
 	KebabMenuActionDeleteMemberInvitation,
+	KebabMenuActionEdit,
+	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { mdiShareVariantOutline } from "@icons/material";
 import { storeToRefs } from "pinia";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
@@ -102,15 +97,12 @@ const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
 
-const prepareRemovalMessage = (linkIds: string[]) => {
-	return linkIds.length > 1
+const prepareRemovalMessage = (linkIds: string[]) =>
+	linkIds.length > 1
 		? t("pages.rooms.members.invitationTable.multipleDelete.confirmation")
 		: t("pages.rooms.members.invitationTable.delete.confirmation", {
-				invitation: invitationTableData.value.find(
-					(link) => link.id === linkIds[0]
-				)?.title,
+				invitation: invitationTableData.value.find((link) => link.id === linkIds[0])?.title,
 			});
-};
 
 const confirmDeletion = async (linkIds: string[]) => {
 	const shouldDelete = await askConfirmation({
@@ -129,8 +121,7 @@ const onDeleteLinks = async (linkIds: string[]) => {
 };
 
 const onEdit = async (linkId: string) => {
-	editedLink.value =
-		roomInvitationLinks.value.find((link) => link.id === linkId) || null;
+	editedLink.value = roomInvitationLinks.value.find((link) => link.id === linkId) || null;
 	invitationStep.value = InvitationStep.EDIT;
 	isInvitationDialogOpen.value = true;
 };

@@ -4,11 +4,7 @@ import LoggedInLayout from "./LoggedIn.layout.vue";
 import LoggdOutLayout from "./loggedOut.layout.vue";
 import { Layouts } from "./types";
 
-type AnyLayout =
-	| typeof LoggedInLayout
-	| typeof LoggdOutLayout
-	| typeof LernStoreLayout
-	| typeof BorderlessLayout;
+type AnyLayout = typeof LoggedInLayout | typeof LoggdOutLayout | typeof LernStoreLayout | typeof BorderlessLayout;
 
 type LayoutComponents = Record<Layouts, AnyLayout>;
 
@@ -19,15 +15,6 @@ const availableLayouts: LayoutComponents = {
 	[Layouts.BORDERLESS]: BorderlessLayout,
 };
 
-const isLayout = (name: string): name is Layouts => {
-	return Object.keys(availableLayouts).includes(name as Layouts);
-};
+const isLayout = (name: string): name is Layouts => Object.keys(availableLayouts).includes(name as Layouts);
 
-export {
-	LoggedInLayout,
-	LoggdOutLayout,
-	LernStoreLayout,
-	BorderlessLayout,
-	availableLayouts,
-	isLayout,
-};
+export { availableLayouts, BorderlessLayout, isLayout, LernStoreLayout, LoggdOutLayout, LoggedInLayout };

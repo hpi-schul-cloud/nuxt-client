@@ -1,13 +1,12 @@
+import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import BoardHeader from "./BoardHeader.vue";
+import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 import { ConfigResponse } from "@/serverApi/v3";
-import {
-	BoardPermissionChecks,
-	defaultPermissions,
-} from "@/types/board/Permissions";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionChangeLayout,
 	KebabMenuActionCopy,
@@ -19,13 +18,8 @@ import {
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
-import { computed, ref } from "vue";
-import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import BoardHeader from "./BoardHeader.vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
 import { setActivePinia } from "pinia";
-import { createTestingPinia } from "@pinia/testing";
-import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
+import { computed, ref } from "vue";
 
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = vi.mocked(useBoardPermissions);
@@ -291,9 +285,7 @@ describe("BoardHeader", () => {
 		it("should emit 'change-layout'", async () => {
 			const { wrapper } = setup();
 
-			const changeLayoutButton = wrapper.findComponent(
-				KebabMenuActionChangeLayout
-			);
+			const changeLayoutButton = wrapper.findComponent(KebabMenuActionChangeLayout);
 			await changeLayoutButton.trigger("click");
 
 			expect(wrapper.emitted("change-layout")).toHaveLength(1);
@@ -304,9 +296,7 @@ describe("BoardHeader", () => {
 		it("should emit 'update:editable'", async () => {
 			const { wrapper } = setup({}, { hasReadersEditPermission: true });
 
-			const editableSwitch = wrapper.findComponent(
-				KebabMenuActionEditingSettings
-			);
+			const editableSwitch = wrapper.findComponent(KebabMenuActionEditingSettings);
 
 			await editableSwitch.trigger("click");
 
@@ -318,9 +308,7 @@ describe("BoardHeader", () => {
 		it("should display draft label", () => {
 			const { wrapper } = setup({}, { isDraft: true });
 
-			expect(wrapper.findComponent({ name: "BoardDraftChip" }).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent({ name: "BoardDraftChip" }).exists()).toBe(true);
 		});
 
 		it("should display 'publish' button instead of 'revert' button in menu", () => {

@@ -1,16 +1,10 @@
-import {
-	SchoolExternalToolMediumResponse,
-	ToolContextType,
-} from "@/serverApi/v3";
+import { SchoolExternalToolItem } from "./school-external-tool-item";
+import { SchoolExternalToolMediumResponse, ToolContextType } from "@/serverApi/v3";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { DataTableHeader } from "vuetify";
-import { SchoolExternalToolItem } from "./school-external-tool-item";
 
-export function useExternalToolsSectionUtils(
-	t: (key: string) => string = () => "",
-	mediaLicenseEnabled = false
-) {
+export function useExternalToolsSectionUtils(t: (key: string) => string = () => "", mediaLicenseEnabled = false) {
 	const getHeaders: DataTableHeader<SchoolExternalToolItem>[] = [
 		{
 			title: t("common.labels.name"),
@@ -18,16 +12,12 @@ export function useExternalToolsSectionUtils(
 			key: "name",
 		},
 		{
-			title: t(
-				"components.administration.externalToolsSection.table.header.status"
-			),
+			title: t("components.administration.externalToolsSection.table.header.status"),
 			value: "statusText",
 			key: "statusText",
 		},
 		{
-			title: t(
-				"components.administration.externalToolsSection.table.header.restrictedTo"
-			),
+			title: t("components.administration.externalToolsSection.table.header.restrictedTo"),
 			value: "restrictToContexts",
 			key: "restrictToContexts",
 		},
@@ -40,10 +30,7 @@ export function useExternalToolsSectionUtils(
 		},
 	];
 
-	const mediumSortFn = (
-		a?: SchoolExternalToolMediumResponse,
-		b?: SchoolExternalToolMediumResponse
-	): number => {
+	const mediumSortFn = (a?: SchoolExternalToolMediumResponse, b?: SchoolExternalToolMediumResponse): number => {
 		if (a === undefined) return 1;
 		if (b === undefined) return -1;
 		if (a.mediaSourceName === undefined) return 1;
@@ -53,20 +40,15 @@ export function useExternalToolsSectionUtils(
 
 	if (mediaLicenseEnabled) {
 		getHeaders.splice(2, 0, {
-			title: t(
-				"components.administration.externalToolsSection.table.header.medium"
-			),
+			title: t("components.administration.externalToolsSection.table.header.medium"),
 			value: "medium",
 			key: "medium",
 			sort: mediumSortFn,
 		});
 	}
 
-	const getItems = (
-		schoolExternalToolsModule: SchoolExternalToolsModule
-	): SchoolExternalToolItem[] => {
-		const schoolExternalTools: SchoolExternalTool[] =
-			schoolExternalToolsModule.getSchoolExternalTools;
+	const getItems = (schoolExternalToolsModule: SchoolExternalToolsModule): SchoolExternalToolItem[] => {
+		const schoolExternalTools: SchoolExternalTool[] = schoolExternalToolsModule.getSchoolExternalTools;
 		return schoolExternalTools.map((tool: SchoolExternalTool) => {
 			let statusTranslationKey = "components.externalTools.status.latest";
 			if (tool.isDeactivated || tool.status.isGloballyDeactivated) {

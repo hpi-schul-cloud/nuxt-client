@@ -12,13 +12,7 @@
 			fill="rgba(var(--v-theme-primary))"
 			data-testid="img-notfound"
 		/>
-		<img
-			v-else
-			:alt="errorText"
-			src="@/assets/img/pc_repair.png"
-			class="repair-image"
-			data-testid="img-generic"
-		/>
+		<img v-else :alt="errorText" src="@/assets/img/pc_repair.png" class="repair-image" data-testid="img-generic" />
 		<h1 class="text-h2 px-4" data-testid="err-text">
 			{{ errorText }}
 		</h1>
@@ -26,12 +20,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import NotFoundSvg from "@/assets/img/NotFoundSvg.vue";
+import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useTitle } from "@vueuse/core";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
@@ -49,18 +43,11 @@ const { t } = useI18n();
 const pageTitle = buildPageTitle(t("error.generic"));
 useTitle(pageTitle);
 
-const permissionErrorStatusCodes: HttpStatusCode[] = [
-	HttpStatusCode.Unauthorized,
-	HttpStatusCode.Forbidden,
-];
+const permissionErrorStatusCodes: HttpStatusCode[] = [HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden];
 
-const isPermissionError = computed(() =>
-	permissionErrorStatusCodes.includes(props.statusCode)
-);
+const isPermissionError = computed(() => permissionErrorStatusCodes.includes(props.statusCode));
 
-const isNotFoundError = computed(
-	() => props.statusCode === HttpStatusCode.NotFound
-);
+const isNotFoundError = computed(() => props.statusCode === HttpStatusCode.NotFound);
 </script>
 
 <style lang="scss" scoped>

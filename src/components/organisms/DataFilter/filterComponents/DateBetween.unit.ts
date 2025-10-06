@@ -1,9 +1,6 @@
-import { ComponentMountingOptions, shallowMount } from "@vue/test-utils";
 import DateBetween from "./DateBetween.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
 const mockProps = {
@@ -13,16 +10,13 @@ const mockProps = {
 	},
 };
 
-const mountComponent = (
-	options: ComponentMountingOptions<typeof DateBetween> = {}
-) => {
-	return shallowMount(DateBetween, {
+const mountComponent = (options: ComponentMountingOptions<typeof DateBetween> = {}) =>
+	shallowMount(DateBetween, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
 		...options,
 	});
-};
 
 describe("@components/DataFilter/filterComponents/DateBetween.vue", () => {
 	describe("should render the component", () => {
@@ -38,17 +32,11 @@ describe("@components/DataFilter/filterComponents/DateBetween.vue", () => {
 			});
 
 			expect(datePickerFromComponent).toHaveLength(2);
-			expect(datePickerFromComponent[0].props("date")).toStrictEqual(
-				testDate.toISOString()
-			);
-			expect(datePickerFromComponent[0].props("label")).toStrictEqual(
-				"utils.adminFilter.date.label.from"
-			);
+			expect(datePickerFromComponent[0].props("date")).toStrictEqual(testDate.toISOString());
+			expect(datePickerFromComponent[0].props("label")).toStrictEqual("utils.adminFilter.date.label.from");
 
 			expect(datePickerFromComponent[1].props("date")).toStrictEqual("");
-			expect(datePickerFromComponent[1].props("label")).toStrictEqual(
-				"utils.adminFilter.date.label.until"
-			);
+			expect(datePickerFromComponent[1].props("label")).toStrictEqual("utils.adminFilter.date.label.until");
 		});
 
 		it("should render the date picker components with the selected date", async () => {
@@ -62,19 +50,11 @@ describe("@components/DataFilter/filterComponents/DateBetween.vue", () => {
 			});
 
 			expect(datePickerFromComponent).toHaveLength(2);
-			expect(datePickerFromComponent[0].props("date")).toStrictEqual(
-				mockProps.selectedDate.$gte
-			);
-			expect(datePickerFromComponent[0].props("label")).toStrictEqual(
-				"utils.adminFilter.date.label.from"
-			);
+			expect(datePickerFromComponent[0].props("date")).toStrictEqual(mockProps.selectedDate.$gte);
+			expect(datePickerFromComponent[0].props("label")).toStrictEqual("utils.adminFilter.date.label.from");
 
-			expect(datePickerFromComponent[1].props("date")).toStrictEqual(
-				mockProps.selectedDate.$lte
-			);
-			expect(datePickerFromComponent[1].props("label")).toStrictEqual(
-				"utils.adminFilter.date.label.until"
-			);
+			expect(datePickerFromComponent[1].props("date")).toStrictEqual(mockProps.selectedDate.$lte);
+			expect(datePickerFromComponent[1].props("label")).toStrictEqual("utils.adminFilter.date.label.until");
 		});
 
 		it("should render the filter action buttons component", async () => {

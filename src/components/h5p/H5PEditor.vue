@@ -1,10 +1,6 @@
 <template>
 	<div>
-		<h5p-editor
-			ref="h5pEditorRef"
-			:content-id="contentId"
-			@validation-error="onValidationError"
-		/>
+		<h5p-editor ref="h5pEditorRef" :content-id="contentId" @validation-error="onValidationError" />
 	</div>
 </template>
 
@@ -17,10 +13,7 @@ import {
 	PostH5PContentCreateParams,
 } from "@/h5pEditorApi/v3";
 import { $axios } from "@/utils/api";
-import {
-	defineElements,
-	H5PEditorComponent,
-} from "@lumieducation/h5p-webcomponents";
+import { defineElements, H5PEditorComponent } from "@lumieducation/h5p-webcomponents";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -73,10 +66,7 @@ const saveContent = async (
 	};
 
 	const { data } = contentId
-		? await h5pEditorApi.h5PEditorControllerSaveH5pContent(
-				contentId,
-				createParams
-			)
+		? await h5pEditorApi.h5PEditorControllerSaveH5pContent(contentId, createParams)
 		: await h5pEditorApi.h5PEditorControllerCreateH5pContent(createParams);
 
 	return data;

@@ -1,19 +1,15 @@
+import { useExternalToolUrlInsertion } from "./external-tool-url-insertion.composable";
+import { ToolParameterLocation } from "@/store/external-tool";
 import {
 	mountComposable,
 	schoolExternalToolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils";
-import { useExternalToolUrlInsertion } from "./external-tool-url-insertion.composable";
-import { ToolParameterLocation } from "@/store/external-tool";
 
 describe("useExternalToolUrlInsertion", () => {
 	const setup = () => {
-		const {
-			isValidUrl,
-			findMatchingTemplate,
-			extractPathParameters,
-			extractQueryParameters,
-		} = mountComposable(useExternalToolUrlInsertion);
+		const { isValidUrl, findMatchingTemplate, extractPathParameters, extractQueryParameters } =
+			mountComposable(useExternalToolUrlInsertion);
 
 		return {
 			isValidUrl,
@@ -48,12 +44,7 @@ describe("useExternalToolUrlInsertion", () => {
 
 		describe("when the provided text is an invalid", () => {
 			const setupUrls = () => {
-				const testUrls = [
-					"google.de",
-					"M https://google.de",
-					"My Tool",
-					"Google",
-				];
+				const testUrls = ["google.de", "M https://google.de", "My Tool", "Google"];
 				return testUrls;
 			};
 
@@ -94,9 +85,7 @@ describe("useExternalToolUrlInsertion", () => {
 					const matchedTemplate = findMatchingTemplate(matchingUrl, templates);
 
 					expect(matchedTemplate).toBeDefined();
-					expect(matchedTemplate?.externalToolId).toEqual(
-						expectedMatch.externalToolId
-					);
+					expect(matchedTemplate?.externalToolId).toEqual(expectedMatch.externalToolId);
 				});
 			});
 
@@ -120,10 +109,7 @@ describe("useExternalToolUrlInsertion", () => {
 					const { findMatchingTemplate } = setup();
 					const { templates, nonMatchingUrl } = setupTemplates();
 
-					const matchedTemplate = findMatchingTemplate(
-						nonMatchingUrl,
-						templates
-					);
+					const matchedTemplate = findMatchingTemplate(nonMatchingUrl, templates);
 
 					expect(matchedTemplate).toBeUndefined();
 				});
@@ -131,8 +117,7 @@ describe("useExternalToolUrlInsertion", () => {
 
 			describe("when the provided url is not a valid url", () => {
 				const setupTemplates = () => {
-					const templates =
-						schoolExternalToolConfigurationTemplateFactory.buildList(2);
+					const templates = schoolExternalToolConfigurationTemplateFactory.buildList(2);
 					return { templates };
 				};
 
@@ -175,8 +160,7 @@ describe("useExternalToolUrlInsertion", () => {
 						}),
 					];
 
-					const matchingUrl =
-						"https://test-1.com/test-param-1/spacer/test-param-2";
+					const matchingUrl = "https://test-1.com/test-param-1/spacer/test-param-2";
 
 					const expectedMatch = templates[0];
 
@@ -190,9 +174,7 @@ describe("useExternalToolUrlInsertion", () => {
 					const matchedTemplate = findMatchingTemplate(matchingUrl, templates);
 
 					expect(matchedTemplate).toBeDefined();
-					expect(matchedTemplate?.externalToolId).toEqual(
-						expectedMatch.externalToolId
-					);
+					expect(matchedTemplate?.externalToolId).toEqual(expectedMatch.externalToolId);
 				});
 			});
 
@@ -231,10 +213,7 @@ describe("useExternalToolUrlInsertion", () => {
 					const { findMatchingTemplate } = setup();
 					const { templates, nonMatchingUrl } = setupTemplates();
 
-					const matchedTemplate = findMatchingTemplate(
-						nonMatchingUrl,
-						templates
-					);
+					const matchedTemplate = findMatchingTemplate(nonMatchingUrl, templates);
 
 					expect(matchedTemplate).toBeUndefined();
 				});
@@ -266,8 +245,7 @@ describe("useExternalToolUrlInsertion", () => {
 						}),
 					];
 
-					const matchingUrl =
-						"https://test-1.com?parameter-1=test-1&parameter-2=test2";
+					const matchingUrl = "https://test-1.com?parameter-1=test-1&parameter-2=test2";
 
 					const expectedMatch = templates[0];
 
@@ -281,9 +259,7 @@ describe("useExternalToolUrlInsertion", () => {
 					const matchedTemplate = findMatchingTemplate(matchingUrl, templates);
 
 					expect(matchedTemplate).toBeDefined();
-					expect(matchedTemplate?.externalToolId).toEqual(
-						expectedMatch.externalToolId
-					);
+					expect(matchedTemplate?.externalToolId).toEqual(expectedMatch.externalToolId);
 				});
 			});
 		});
@@ -319,8 +295,7 @@ describe("useExternalToolUrlInsertion", () => {
 			const setupParameters = () => {
 				const baseUrl = "https://test-1.com/:parameter-1/spacer/:parameter-2";
 
-				const testUrl =
-					"https://test-1.com/test-param-1/spacer/test-param-2?parameter-3=test-param-3";
+				const testUrl = "https://test-1.com/test-param-1/spacer/test-param-2?parameter-3=test-param-3";
 
 				const testPathParameters = new Map<string, string>();
 				testPathParameters.set("parameter-1", "test-param-1");
@@ -345,8 +320,7 @@ describe("useExternalToolUrlInsertion", () => {
 	describe("extractQueryParameters is called with a valid url", () => {
 		describe("when a valid url with query parameters is given", () => {
 			const setupParameters = () => {
-				const testUrl =
-					"https://test-1.com?parameter-1=test-param-1&parameter-2=test-param-2";
+				const testUrl = "https://test-1.com?parameter-1=test-param-1&parameter-2=test-param-2";
 
 				const testQueryParameters = new Map<string, string>();
 				testQueryParameters.set("parameter-1", "test-param-1");
@@ -369,8 +343,7 @@ describe("useExternalToolUrlInsertion", () => {
 
 		describe("when a valid url with path and query parameters is given", () => {
 			const setupParameters = () => {
-				const testUrl =
-					"https://test-1.com/test-param-3/spacer?parameter-1=test-param-1&parameter-2=test-param-2";
+				const testUrl = "https://test-1.com/test-param-3/spacer?parameter-1=test-param-1&parameter-2=test-param-2";
 
 				const testQueryParameters = new Map<string, string>();
 				testQueryParameters.set("parameter-1", "test-param-1");

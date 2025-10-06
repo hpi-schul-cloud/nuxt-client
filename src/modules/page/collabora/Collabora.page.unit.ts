@@ -1,3 +1,4 @@
+import CollaboraPage from "./Collabora.page.vue";
 import { EditorMode } from "@/types/file/File";
 import {
 	authorizedCollaboraDocumentUrlResponseFactory,
@@ -5,18 +6,14 @@ import {
 	expectNotification,
 	ObjectIdMock,
 } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useAppStore } from "@data-app";
 import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
-import { flushPromises } from "@vue/test-utils";
-import CollaboraPage from "./Collabora.page.vue";
-import { useAppStore } from "@data-app";
-import { beforeEach } from "vitest";
-import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
+import { flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 describe("Collabora.page", () => {
 	beforeEach(() => {
@@ -27,16 +24,12 @@ describe("Collabora.page", () => {
 	const setup = () => {
 		const fileRecordId = ObjectIdMock();
 		const editorMode = EditorMode.EDIT;
-		const authorizedCollaboraDocumentUrlResponse =
-			authorizedCollaboraDocumentUrlResponseFactory.build();
+		const authorizedCollaboraDocumentUrlResponse = authorizedCollaboraDocumentUrlResponseFactory.build();
 
 		const { mockedMe } = createTestAppStoreWithUser("user-id");
 
-		const fileStorageApiMock =
-			createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-		vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
-			fileStorageApiMock
-		);
+		const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+		vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 		fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
 			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl
 		);
@@ -64,9 +57,7 @@ describe("Collabora.page", () => {
 	it("should call getAuthorizedCollaboraDocumentUrl with correct parameters", () => {
 		const { fileStorageApiMock, fileRecordId, editorMode, mockedMe } = setup();
 
-		expect(
-			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl
-		).toHaveBeenCalledWith(
+		expect(fileStorageApiMock.getAuthorizedCollaboraDocumentUrl).toHaveBeenCalledWith(
 			fileRecordId,
 			editorMode,
 			`${mockedMe.user.firstName} ${mockedMe.user.lastName}`
@@ -80,8 +71,7 @@ describe("Collabora.page", () => {
 
 		expect(wrapper.find("iframe").exists()).toBe(true);
 		expect(wrapper.find("iframe").attributes("src")).toEqual(
-			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl +
-				`?lang=${useAppStore().locale}`
+			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl + `?lang=${useAppStore().locale}`
 		);
 	});
 

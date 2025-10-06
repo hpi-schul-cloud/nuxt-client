@@ -1,15 +1,11 @@
-import { useCurrentElement, useElementBounding } from "@vueuse/core";
-import { inject, onMounted, ref, Ref, watch } from "vue";
 import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
+import { useCurrentElement, useElementBounding } from "@vueuse/core";
+import { inject, onMounted, Ref, ref, watch } from "vue";
 
 export const useInlineEditInteractionHandler = (
-	onFocusCallback: (interactionBoundary: {
-		x: number;
-		y: number;
-	}) => Promise<void>
+	onFocusCallback: (interactionBoundary: { x: number; y: number }) => Promise<void>
 ) => {
-	let interactionEvent: Ref<{ x: number; y: number } | undefined> | undefined =
-		undefined;
+	let interactionEvent: Ref<{ x: number; y: number } | undefined> | undefined = undefined;
 
 	interactionEvent = inject<Ref<{ x: number; y: number } | undefined>>(
 		InlineEditInteractionEvent,
@@ -57,11 +53,8 @@ const isInteractionWithinElementBoundary = (
 		right: number;
 	},
 	interactionBoundary: { x: number; y: number }
-) => {
-	return (
-		elementBoundary.top <= interactionBoundary.y &&
-		interactionBoundary.y <= elementBoundary.bottom &&
-		elementBoundary.left <= interactionBoundary.x &&
-		interactionBoundary.x <= elementBoundary.right
-	);
-};
+) =>
+	elementBoundary.top <= interactionBoundary.y &&
+	interactionBoundary.y <= elementBoundary.bottom &&
+	elementBoundary.left <= interactionBoundary.x &&
+	interactionBoundary.x <= elementBoundary.right;

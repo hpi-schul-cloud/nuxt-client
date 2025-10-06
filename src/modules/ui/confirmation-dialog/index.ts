@@ -1,9 +1,5 @@
-import ConfirmationDialog from "./ConfirmationDialog.vue";
 import { useConfirmationDialog } from "./Confirmation.composable";
+import ConfirmationDialog from "./ConfirmationDialog.vue";
 import { useDeleteConfirmationDialog } from "./DeleteConfirmation.composable";
 
-export {
-	useConfirmationDialog,
-	useDeleteConfirmationDialog,
-	ConfirmationDialog,
-};
+export { ConfirmationDialog, useConfirmationDialog, useDeleteConfirmationDialog };

@@ -22,9 +22,7 @@ defineProps<Props>();
 const { t } = useI18n();
 const imageSrc = image;
 
-const ariaLabel = computed(() => {
-	return `${t("components.cardElement.fileElement.collaboraFile")}, ${t(
-		"common.ariaLabel.newTab"
-	)}`;
-});
+const ariaLabel = computed(
+	() => `${t("components.cardElement.fileElement.collaboraFile")}, ${t("common.ariaLabel.newTab")}`
+);
 </script>

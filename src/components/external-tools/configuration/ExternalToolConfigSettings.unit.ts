@@ -1,11 +1,8 @@
-import {
-	schoolExternalToolConfigurationTemplateFactory,
-	toolParameterFactory,
-} from "@@/tests/test-utils";
+import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
+import { schoolExternalToolConfigurationTemplateFactory, toolParameterFactory } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { ExternalToolConfigurationTemplate } from "@data-external-tool";
 import { shallowMount } from "@vue/test-utils";
-import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 
 describe("ExternalToolConfigSettings", () => {
 	const getWrapper = (
@@ -33,9 +30,7 @@ describe("ExternalToolConfigSettings", () => {
 		it("should render component", () => {
 			const { wrapper } = getWrapper();
 
-			expect(wrapper.findComponent(ExternalToolConfigSettings).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent(ExternalToolConfigSettings).exists()).toBe(true);
 		});
 	});
 
@@ -59,9 +54,7 @@ describe("ExternalToolConfigSettings", () => {
 		it("should render given toolParameters", () => {
 			const { wrapper, template } = setup();
 
-			expect(
-				wrapper.findAll("external-tool-config-parameter-stub").length
-			).toEqual(template.parameters.length);
+			expect(wrapper.findAll("external-tool-config-parameter-stub").length).toEqual(template.parameters.length);
 		});
 	});
 });

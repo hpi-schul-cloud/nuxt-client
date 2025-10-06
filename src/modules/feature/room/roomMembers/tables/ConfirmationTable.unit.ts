@@ -1,20 +1,13 @@
-import { createTestingPinia } from "@pinia/testing";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import ConfirmationTable from "./ConfirmationTable.vue";
-import {
-	mockedPiniaStoreTyping,
-	roomMemberFactory,
-	schoolFactory,
-} from "@@/tests/test-utils";
-import { RoomMember, useRoomMembersStore } from "@data-room";
-import { useI18n } from "vue-i18n";
 import { RoleName } from "@/serverApi/v3";
-import SchoolsModule from "@/store/schools";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
+import { mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { RoomMember, useRoomMembersStore } from "@data-room";
+import { createTestingPinia } from "@pinia/testing";
+import { useI18n } from "vue-i18n";
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
@@ -73,10 +66,7 @@ describe("ConfirmationTable", () => {
 					createTestingPinia({
 						initialState: {
 							roomMembersStore: {
-								roomMembers: [
-									...roomMembersWithoutApplicants,
-									...roomApplicants,
-								],
+								roomMembers: [...roomMembersWithoutApplicants, ...roomApplicants],
 								isRoomOwner: vi.fn(),
 							},
 						},
@@ -92,10 +82,7 @@ describe("ConfirmationTable", () => {
 		});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		roomMembersStore.roomMembers = [
-			...roomMembersWithoutApplicants,
-			...roomApplicants,
-		];
+		roomMembersStore.roomMembers = [...roomMembersWithoutApplicants, ...roomApplicants];
 
 		return {
 			wrapper,
@@ -125,11 +112,7 @@ describe("ConfirmationTable", () => {
 			const { wrapper } = setup();
 			const dataTable = wrapper.getComponent({ name: "DataTable" });
 
-			expect(
-				dataTable
-					.props("tableHeaders")!
-					.map((header: { title: string }) => header.title)
-			).toEqual(headers);
+			expect(dataTable.props("tableHeaders")!.map((header: { title: string }) => header.title)).toEqual(headers);
 			headers.forEach((header) => {
 				expect(mockI18n.t).toHaveBeenCalledWith(header);
 			});
@@ -154,19 +137,13 @@ describe("ConfirmationTable", () => {
 					const applicantId = roomMembersStore.roomApplicants[0].userId;
 					const dataTable = wrapper.findComponent({ name: "DataTable" });
 
-					const kebabMenu = dataTable.findComponent(
-						`[data-testid="kebab-menu-${applicantId}"]`
-					);
+					const kebabMenu = dataTable.findComponent(`[data-testid="kebab-menu-${applicantId}"]`);
 					await kebabMenu.trigger("click");
 
-					const confirmButton = wrapper.findComponent(
-						`[data-testid="kebab-menu-confirm-${applicantId}"]`
-					);
+					const confirmButton = wrapper.findComponent(`[data-testid="kebab-menu-confirm-${applicantId}"]`);
 					await confirmButton.trigger("click");
 
-					expect(roomMembersStore.confirmInvitations).toHaveBeenCalledWith([
-						applicantId,
-					]);
+					expect(roomMembersStore.confirmInvitations).toHaveBeenCalledWith([applicantId]);
 				});
 			});
 
@@ -177,19 +154,13 @@ describe("ConfirmationTable", () => {
 					const applicantId = roomMembersStore.roomApplicants[0].userId;
 					const dataTable = wrapper.findComponent({ name: "DataTable" });
 
-					const kebabMenu = dataTable.findComponent(
-						`[data-testid="kebab-menu-${applicantId}"]`
-					);
+					const kebabMenu = dataTable.findComponent(`[data-testid="kebab-menu-${applicantId}"]`);
 					await kebabMenu.trigger("click");
 
-					const rejectButton = wrapper.findComponent(
-						`[data-testid="kebab-menu-reject-${applicantId}"]`
-					);
+					const rejectButton = wrapper.findComponent(`[data-testid="kebab-menu-reject-${applicantId}"]`);
 					await rejectButton.trigger("click");
 
-					expect(roomMembersStore.rejectInvitations).toHaveBeenCalledWith([
-						applicantId,
-					]);
+					expect(roomMembersStore.rejectInvitations).toHaveBeenCalledWith([applicantId]);
 				});
 			});
 		});

@@ -25,18 +25,10 @@
 							</span>
 							<div class="content__img-background-gradient" />
 
-							<img
-								:src="thumbnail()"
-								class="content__img-thumbnail"
-								alt=""
-								role="img"
-							/>
+							<img :src="thumbnail()" class="content__img-thumbnail" alt="" role="img" />
 							<div v-show="isCollection()" class="card-tag">
 								<span>{{ $t("pages.content.card.collection") }}</span>
-								<v-icon
-									class="custom-icon content__text-icon"
-									icon="$ic_collection"
-								/>
+								<v-icon class="custom-icon content__text-icon" icon="$ic_collection" />
 							</div>
 						</div>
 					</div>
@@ -50,12 +42,7 @@
 					<div class="footer__separator" />
 					<div class="footer__content">
 						<div class="footer__icon-container">
-							<add-content-button
-								:resource="resource"
-								:client="provider()"
-								round
-								:multiple="false"
-							/>
+							<add-content-button :resource="resource" :client="provider()" round :multiple="false" />
 						</div>
 					</div>
 				</div>
@@ -65,11 +52,11 @@
 </template>
 
 <script>
-import { contentModule } from "@/store";
 import BaseLink from "@/components/base/BaseLink";
-import AddContentButton from "@/components/lern-store/AddContentButton";
 import UserHasRole from "@/components/helpers/UserHasRole";
+import AddContentButton from "@/components/lern-store/AddContentButton";
 import contentMeta from "@/mixins/contentMeta";
+import { contentModule } from "@/store";
 import { getProvider, isCollectionHelper } from "@/utils/helpers";
 
 export default {
@@ -112,9 +99,7 @@ export default {
 	},
 	methods: {
 		isNotStudent(roles) {
-			return this.role === ""
-				? roles.some((role) => !role.startsWith("student"))
-				: this.role;
+			return this.role === "" ? roles.some((role) => !role.startsWith("student")) : this.role;
 		},
 		isCollection() {
 			return isCollectionHelper(this.resource.properties);
@@ -219,11 +204,7 @@ export default {
 			z-index: 2;
 			width: 100%;
 			height: 100%;
-			background: linear-gradient(
-				180deg,
-				rgba(0, 0, 0, 0.9) 0%,
-				rgba(0, 0, 0, 0) 50%
-			);
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 50%);
 			border-radius: 8px 8px 0 0;
 			opacity: 0.8;
 		}
@@ -234,22 +215,14 @@ export default {
 		margin: 8px 12px;
 		color: rgba(var(--v-theme-on-surface));
 
-		@include excerpt(
-			$font-size: var(--heading-4),
-			$line-height: var(--line-height-sm),
-			$lines-to-show: 3
-		);
+		@include excerpt($font-size: var(--heading-4), $line-height: var(--line-height-sm), $lines-to-show: 3);
 	}
 
 	&__description {
 		padding: 0 8px;
 		margin-bottom: 8px;
 
-		@include excerpt(
-			$font-size: var(--text-sm),
-			$lines-to-show: 3,
-			$line-height: 1.2rem
-		);
+		@include excerpt($font-size: var(--text-sm), $lines-to-show: 3, $line-height: 1.2rem);
 	}
 }
 

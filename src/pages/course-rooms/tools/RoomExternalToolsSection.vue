@@ -54,11 +54,11 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 import RoomExternalToolsErrorDialog from "@/pages/course-rooms/tools/RoomExternalToolsErrorDialog.vue";
 import { Permission, ToolContextType } from "@/serverApi/v3";
+import { useAppStore } from "@data-app";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useAppStore } from "@data-app";
 
 const props = defineProps({
 	tools: {

@@ -13,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+import { FileRecordItem } from "../types/filerecord-item";
 import {
 	convertDownloadToPreviewUrl,
 	isAudioMimeType,
@@ -23,7 +24,6 @@ import {
 import { LightBoxContentType, useLightBox } from "@ui-light-box";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import { FileRecordItem } from "../types/filerecord-item";
 
 const { fileRecordItem } = defineProps({
 	fileRecordItem: {

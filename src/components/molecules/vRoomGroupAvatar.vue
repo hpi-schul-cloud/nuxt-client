@@ -137,11 +137,7 @@ export default {
 	text-align: center;
 	overflow-wrap: break-word;
 
-	@include excerpt(
-		$font-size: 16px,
-		$line-height: var(--line-height-md),
-		$lines-to-show: 2
-	);
+	@include excerpt($font-size: 16px, $line-height: var(--line-height-md), $lines-to-show: 2);
 }
 
 @media #{map.get($display-breakpoints, 'xs')} {

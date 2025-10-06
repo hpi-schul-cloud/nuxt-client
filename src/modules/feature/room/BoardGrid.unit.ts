@@ -1,8 +1,8 @@
+import BoardGrid from "./BoardGrid.vue";
+import BoardTile from "./BoardTile.vue";
+import { roomBoardTileListFactory } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import BoardGrid from "./BoardGrid.vue";
-import { roomBoardTileListFactory } from "@@/tests/test-utils";
-import BoardTile from "./BoardTile.vue";
 
 describe("@feature-room/BoardGrid", () => {
 	const setup = () => {

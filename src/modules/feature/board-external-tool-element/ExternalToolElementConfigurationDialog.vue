@@ -1,9 +1,5 @@
 <template>
-	<v-custom-dialog
-		:is-open="isOpen"
-		:has-buttons="false"
-		@dialog-closed="onCancel"
-	>
+	<v-custom-dialog :is-open="isOpen" :has-buttons="false" @dialog-closed="onCancel">
 		<template #title>
 			<h2 class="my-2">
 				{{ t("feature-board-external-tool-element.dialog.title") }}
@@ -28,10 +24,10 @@
 import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ToolContextType } from "@/serverApi/v3";
-import { ContextExternalTool } from "@data-external-tool";
-import { nextTick, onMounted, PropType, ref, Ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
 import { notifySuccess } from "@data-app";
+import { ContextExternalTool } from "@data-external-tool";
+import { nextTick, onMounted, PropType, Ref, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	isOpen: {
@@ -59,9 +55,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const contextExternalToolConfigurator: Ref<InstanceType<
-	typeof ContextExternalToolConfigurator
-> | null> = ref(null);
+const contextExternalToolConfigurator: Ref<InstanceType<typeof ContextExternalToolConfigurator> | null> = ref(null);
 
 const closeDialog = () => {
 	contextExternalToolConfigurator.value?.clearData();

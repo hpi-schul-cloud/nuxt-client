@@ -1,11 +1,11 @@
+import { useShareBoardLink } from "./shareBoardLink.composable";
 import { expectNotification, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
-import { BoardMenuScope } from "@ui-board";
-import { useShareBoardLink } from "./shareBoardLink.composable";
-import { beforeEach } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { BoardMenuScope } from "@ui-board";
 import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 describe("useShareBoardLink", () => {
 	beforeEach(() => {
@@ -70,9 +70,7 @@ describe("useShareBoardLink", () => {
 
 				await composable.copyShareLink("123", BoardMenuScope.CARD);
 
-				expect(clipboardMock.writeText).toHaveBeenCalledWith(
-					`${origin}${pathname}#card-123`
-				);
+				expect(clipboardMock.writeText).toHaveBeenCalledWith(`${origin}${pathname}#card-123`);
 			});
 
 			it("should show a success message", async () => {

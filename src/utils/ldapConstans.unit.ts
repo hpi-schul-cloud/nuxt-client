@@ -1,8 +1,4 @@
-import {
-	ldapPathRegexValidator,
-	ldapURLRegexValidator,
-	ldapSecuredURLRegexValidator,
-} from "./ldapConstants";
+import { ldapPathRegexValidator, ldapSecuredURLRegexValidator, ldapURLRegexValidator } from "./ldapConstants";
 
 const ldapURLDomainWithPort = "ldap://asdf.de:123";
 const ldapURLDomainWithoutPort = "ldap://asdf.de";
@@ -24,9 +20,7 @@ describe("ldapConstant", () => {
 		});
 
 		it("should accept typical LDAP path", () => {
-			expect(ldapPathRegexValidator("o=school0,dc=de,dc=example,dc=org")).toBe(
-				true
-			);
+			expect(ldapPathRegexValidator("o=school0,dc=de,dc=example,dc=org")).toBe(true);
 		});
 
 		it("should reject some random domain", () => {
@@ -90,9 +84,7 @@ describe("ldapConstant", () => {
 
 	describe("ldapSecuredURLRegexValidator", () => {
 		it("should accept URL with ldaps:// protocol and domain without port", () => {
-			expect(ldapSecuredURLRegexValidator(ldapsURLDomainWithoutPort)).toBe(
-				true
-			);
+			expect(ldapSecuredURLRegexValidator(ldapsURLDomainWithoutPort)).toBe(true);
 		});
 
 		it("should accept URL with ldaps:// protocol and domain with port", () => {
@@ -108,9 +100,7 @@ describe("ldapConstant", () => {
 		});
 
 		it("should reject URL with ldap:// protocol and domain without port", () => {
-			expect(ldapSecuredURLRegexValidator(ldapURLDomainWithoutPort)).toBe(
-				false
-			);
+			expect(ldapSecuredURLRegexValidator(ldapURLDomainWithoutPort)).toBe(false);
 		});
 
 		it("should reject URL with ldap:// protocol and domain with port", () => {

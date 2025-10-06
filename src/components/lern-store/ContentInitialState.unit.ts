@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import ContentInitialState from "./ContentInitialState.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ContentInitialSvg, EmptyState } from "@ui-empty-state";
+import { mount } from "@vue/test-utils";
 
 describe("@/components/molecules/ContentInitialState", () => {
 	const wrapper = mount(ContentInitialState, {
@@ -14,9 +11,7 @@ describe("@/components/molecules/ContentInitialState", () => {
 	});
 
 	it("Provides proper title", () => {
-		expect(wrapper.findComponent(EmptyState).props("title")).toBe(
-			"pages.content.initState.title"
-		);
+		expect(wrapper.findComponent(EmptyState).props("title")).toBe("pages.content.initState.title");
 	});
 
 	it("Provides svg", () => {

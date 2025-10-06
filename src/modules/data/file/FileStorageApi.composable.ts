@@ -1,9 +1,6 @@
-import {
-	FileApiFactory,
-	FileApiInterface,
-	WopiApiFactory,
-	WopiApiInterface,
-} from "@/fileStorageApi/v3";
+import { useFileRecordsStore } from "./FileRecords.state";
+import { useParentStatisticsStore } from "./ParentStatistics.state";
+import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@/fileStorageApi/v3";
 import {
 	EditorMode,
 	FileRecord,
@@ -13,12 +10,10 @@ import {
 	StorageLocation,
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { useFileRecordsStore } from "./FileRecords.state";
-import { useParentStatisticsStore } from "./ParentStatistics.state";
-import { notifyError, useAppStore } from "@data-app";
-import { useI18n } from "vue-i18n";
 import { formatFileSize } from "@/utils/fileHelper";
+import { notifyError, useAppStore } from "@data-app";
 import { useEnvFileConfig } from "@data-env";
+import { useI18n } from "vue-i18n";
 
 export enum ErrorType {
 	FILE_IS_BLOCKED = "FILE_IS_BLOCKED",
@@ -36,24 +31,14 @@ export const useFileStorageApi = () => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const wopiApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
 
-	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords } =
-		useFileRecordsStore();
+	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords } = useFileRecordsStore();
 
-	const { getStatisticByParentId, setStatisticForParent } =
-		useParentStatisticsStore();
+	const { getStatisticByParentId, setStatisticForParent } = useParentStatisticsStore();
 
-	const fetchFiles = async (
-		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+	const fetchFiles = async (parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
 			const schoolId = useAppStore().school?.id as string;
-			const response = await fileApi.list(
-				schoolId,
-				StorageLocation.SCHOOL,
-				parentId,
-				parentType
-			);
+			const response = await fileApi.list(schoolId, StorageLocation.SCHOOL, parentId, parentType);
 
 			upsertFileRecords(response.data.data);
 		} catch (error) {
@@ -62,20 +47,10 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const upload = async (
-		file: File,
-		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+	const upload = async (file: File, parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
 			const schoolId = useAppStore().school?.id as string;
-			const response = await fileApi.upload(
-				schoolId,
-				StorageLocation.SCHOOL,
-				parentId,
-				parentType,
-				file
-			);
+			const response = await fileApi.upload(schoolId, StorageLocation.SCHOOL, parentId, parentType, file);
 			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
@@ -83,11 +58,7 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const uploadFromUrl = async (
-		imageUrl: string,
-		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+	const uploadFromUrl = async (imageUrl: string, parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
 			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
@@ -111,10 +82,7 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const rename = async (
-		fileRecordId: FileRecord["id"],
-		params: RenameFileParams
-	): Promise<void> => {
+	const rename = async (fileRecordId: FileRecord["id"], params: RenameFileParams): Promise<void> => {
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
@@ -144,10 +112,7 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const fetchFileStatistic = async (
-		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+	const fetchFileStatistic = async (parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
 			const response = await fileApi.getParentStatistic(parentId, parentType);
 			const newStatistic = response.data;
@@ -165,11 +130,7 @@ export const useFileStorageApi = () => {
 		userDisplayName: string
 	): Promise<string> => {
 		try {
-			const response = await wopiApi.getAuthorizedCollaboraDocumentUrl(
-				fileRecordId,
-				editorMode,
-				userDisplayName
-			);
+			const response = await wopiApi.getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName);
 			const url = response.data.authorizedCollaboraDocumentUrl;
 
 			return url;
@@ -182,9 +143,7 @@ export const useFileStorageApi = () => {
 	const showMessageByType = (message: ErrorType | string) => {
 		switch (message) {
 			case ErrorType.FILE_TOO_BIG: {
-				const maxFileSizeWithUnit = formatFileSize(
-					useEnvFileConfig().value.MAX_FILE_SIZE
-				);
+				const maxFileSizeWithUnit = formatFileSize(useEnvFileConfig().value.MAX_FILE_SIZE);
 
 				notifyError(
 					t("components.board.notifications.errors.fileToBig", {
@@ -203,9 +162,7 @@ export const useFileStorageApi = () => {
 				notifyError(t("error.403"));
 				break;
 			default:
-				notifyError(
-					t("components.board.notifications.errors.fileServiceNotAvailable")
-				);
+				notifyError(t("components.board.notifications.errors.fileServiceNotAvailable"));
 				break;
 		}
 	};

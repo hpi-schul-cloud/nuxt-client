@@ -13,15 +13,15 @@ import { useSharedLastCreatedElement } from "./LastCreatedElement.composable";
 import { useShareBoardLink } from "./shareBoardLink.composable";
 
 export {
-	useSharedLastCreatedElement,
-	extractDataAttribute,
 	BOARD_IS_LIST_LAYOUT,
-	useSharedEditMode,
-	useCourseBoardEditMode,
-	useMediaBoardEditMode,
-	useDragAndDrop,
-	useInlineEditInteractionHandler,
 	EditModePermissions,
-	useShareBoardLink,
+	extractDataAttribute,
+	useCourseBoardEditMode,
+	useDragAndDrop,
 	useElementFocus,
+	useInlineEditInteractionHandler,
+	useMediaBoardEditMode,
+	useShareBoardLink,
+	useSharedEditMode,
+	useSharedLastCreatedElement,
 };

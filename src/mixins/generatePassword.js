@@ -30,8 +30,5 @@ export default function generatePassword() {
 		"trommel",
 		"wolke",
 	];
-	return (
-		words[Math.floor(Math.random() * words.length)] +
-		Math.floor(Math.random() * 9998 + 1).toString()
-	);
+	return words[Math.floor(Math.random() * words.length)] + Math.floor(Math.random() * 9998 + 1).toString();
 }

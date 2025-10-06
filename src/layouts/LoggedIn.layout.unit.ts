@@ -1,23 +1,16 @@
+import LoggedInLayout from "./LoggedIn.layout.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import FilePathsModule from "@/store/filePaths";
-import {
-	FILE_PATHS_MODULE_KEY,
-	STATUS_ALERTS_MODULE_KEY,
-	THEME_KEY,
-} from "@/utils/inject";
+import StatusAlertsModule from "@/store/status-alerts";
+import { FILE_PATHS_MODULE_KEY, STATUS_ALERTS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { Sidebar, Topbar } from "@ui-layout";
+import { SkipLink } from "@ui-skip-link";
 import { mount } from "@vue/test-utils";
 import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index";
-import LoggedInLayout from "./LoggedIn.layout.vue";
-import { Topbar, Sidebar } from "@ui-layout";
-import { createTestingPinia } from "@pinia/testing";
-import { SkipLink } from "@ui-skip-link";
-import StatusAlertsModule from "@/store/status-alerts";
 
 vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
@@ -42,11 +35,7 @@ const setup = () => {
 			default: h(LoggedInLayout),
 		},
 		global: {
-			plugins: [
-				createTestingVuetify(),
-				createTestingI18n(),
-				createTestingPinia(),
-			],
+			plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 			provide: {
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
 				[THEME_KEY.valueOf()]: {
@@ -151,9 +140,7 @@ describe("LoggedIn.layout.vue", () => {
 					const { wrapper } = setup();
 
 					const sidebar = wrapper.getComponent(Sidebar);
-					const sidebarToggle = wrapper.getComponent(
-						"[data-testid='sidebar-toggle-close']"
-					);
+					const sidebarToggle = wrapper.getComponent("[data-testid='sidebar-toggle-close']");
 					await sidebarToggle.trigger("click");
 					const nav = sidebar.get("nav");
 
@@ -234,10 +221,7 @@ describe("LoggedIn.layout.vue", () => {
 
 		await sidebar.trigger("click");
 
-		expect(mockSetLocalStorage).toHaveBeenCalledWith(
-			"sidebarExpanded",
-			"false"
-		);
+		expect(mockSetLocalStorage).toHaveBeenCalledWith("sidebarExpanded", "false");
 	});
 
 	it("should set localStorage key 'sidebarExpanded' to 'true' on topbar click", async () => {

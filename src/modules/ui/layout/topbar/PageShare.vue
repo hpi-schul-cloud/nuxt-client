@@ -14,13 +14,7 @@
 			>
 				{{ $t("global.topbar.MenuQrCode.print") }}
 			</VBtn>
-			<VBtn
-				variant="outlined"
-				:prepend-icon="mdiContentCopy"
-				class="ml-2"
-				data-testid="qr-code-copy"
-				@click="onCopy"
-			>
+			<VBtn variant="outlined" :prepend-icon="mdiContentCopy" class="ml-2" data-testid="qr-code-copy" @click="onCopy">
 				{{ $t("common.actions.shareLink") }}
 			</VBtn>
 		</div>

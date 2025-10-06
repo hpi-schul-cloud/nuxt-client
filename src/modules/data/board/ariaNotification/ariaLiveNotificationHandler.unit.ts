@@ -1,23 +1,12 @@
+import { CreateCardSuccessPayload, CreateColumnSuccessPayload } from "../boardActions/boardActionPayload.types";
+import { SR_I18N_KEYS_MAP, useBoardAriaNotification } from "./ariaLiveNotificationHandler";
 import { BoardLayout, ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import {
-	cardResponseFactory,
-	columnResponseFactory,
-} from "@@/tests/test-utils";
-import {
-	CreateCardSuccessPayload,
-	CreateColumnSuccessPayload,
-} from "../boardActions/boardActionPayload.types";
-import {
-	SR_I18N_KEYS_MAP,
-	useBoardAriaNotification,
-} from "./ariaLiveNotificationHandler";
+import { cardResponseFactory, columnResponseFactory } from "@@/tests/test-utils";
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
+}));
 
 vi.mock("../Board.store", () => ({
 	useBoardStore: vi.fn().mockReturnValue({
@@ -50,8 +39,7 @@ describe("useBoardAriaNotification", () => {
 
 	const mockNotifyOnScreenReader = vi.fn();
 	vi.mock("@/composables/ariaLiveNotifier", async (importOriginal) => {
-		const actual =
-			await importOriginal<typeof import("@/composables/ariaLiveNotifier")>();
+		const actual = await importOriginal<typeof import("@/composables/ariaLiveNotifier")>();
 		return {
 			...actual,
 
@@ -91,9 +79,7 @@ describe("useBoardAriaNotification", () => {
 
 		notifyCreateColumnSuccess(payload);
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS);
 	});
 
 	it("should notify on cardDelete", () => {
@@ -115,9 +101,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS);
 	});
 
 	it("should notify on cardMove", () => {
@@ -136,9 +120,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.CARD_MOVED_IN_SAME_COLUMN_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_MOVED_IN_SAME_COLUMN_SUCCESS);
 	});
 
 	it("should notify on cardMove to another column", () => {
@@ -157,9 +139,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS);
 	});
 
 	it("should notify on columnMove", () => {
@@ -191,9 +171,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS);
 	});
 
 	describe("should notify on boardVisibilityUpdate", () => {
@@ -207,9 +185,7 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			vi.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toContain(
-				SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS
-			);
+			expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS);
 		});
 
 		it("should notify on boardUnpublished", () => {
@@ -222,17 +198,14 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			vi.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toContain(
-				SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS
-			);
+			expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS);
 		});
 	});
 
 	describe("@boardSetAsEditableForAllUsers", () => {
 		describe("when board is set as editable", () => {
 			it("should notify on boardSetAsEditableForAllUsers", () => {
-				const { notifySetBoardAsEditableForAllUsersSuccess } =
-					useBoardAriaNotification();
+				const { notifySetBoardAsEditableForAllUsersSuccess } = useBoardAriaNotification();
 				const element = document.getElementById("notify-screen-reader-polite");
 				notifySetBoardAsEditableForAllUsersSuccess({
 					boardId: "boardId",
@@ -240,14 +213,11 @@ describe("useBoardAriaNotification", () => {
 					isOwnAction: false,
 				});
 				vi.advanceTimersByTime(3000);
-				expect(element?.innerHTML).toContain(
-					SR_I18N_KEYS_MAP.BOARD_SET_AS_EDITABLE_FOR_ALL_USERS_SUCCESS
-				);
+				expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_SET_AS_EDITABLE_FOR_ALL_USERS_SUCCESS);
 			});
 
 			it("should not notify if the action is own", () => {
-				const { notifySetBoardAsEditableForAllUsersSuccess } =
-					useBoardAriaNotification();
+				const { notifySetBoardAsEditableForAllUsersSuccess } = useBoardAriaNotification();
 				const element = document.getElementById("notify-screen-reader-polite");
 				notifySetBoardAsEditableForAllUsersSuccess({
 					boardId: "boardId",
@@ -261,8 +231,7 @@ describe("useBoardAriaNotification", () => {
 
 		describe("when board is not set as editable", () => {
 			it("should notify on boardSetAsNotEditableForAllUsers", () => {
-				const { notifySetBoardAsNotEditableForAllUsersSuccess } =
-					useBoardAriaNotification();
+				const { notifySetBoardAsNotEditableForAllUsersSuccess } = useBoardAriaNotification();
 				const element = document.getElementById("notify-screen-reader-polite");
 				notifySetBoardAsNotEditableForAllUsersSuccess({
 					boardId: "boardId",
@@ -270,14 +239,11 @@ describe("useBoardAriaNotification", () => {
 					isOwnAction: false,
 				});
 				vi.advanceTimersByTime(3000);
-				expect(element?.innerHTML).toContain(
-					SR_I18N_KEYS_MAP.BOARD_SET_AS_NOT_EDITABLE_FOR_ALL_USERS_SUCCESS
-				);
+				expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_SET_AS_NOT_EDITABLE_FOR_ALL_USERS_SUCCESS);
 			});
 
 			it("should not notify if the action is own", () => {
-				const { notifySetBoardAsNotEditableForAllUsersSuccess } =
-					useBoardAriaNotification();
+				const { notifySetBoardAsNotEditableForAllUsersSuccess } = useBoardAriaNotification();
 				const element = document.getElementById("notify-screen-reader-polite");
 				notifySetBoardAsNotEditableForAllUsersSuccess({
 					boardId: "boardId",
@@ -301,9 +267,7 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			vi.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toContain(
-				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
-			);
+			expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS);
 		});
 
 		it("should notify on boardLayoutUpdate to list", () => {
@@ -316,9 +280,7 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			vi.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toContain(
-				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
-			);
+			expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS);
 		});
 
 		it("should notify on boardLayoutUpdate to unknown", () => {
@@ -331,9 +293,7 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			vi.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toContain(
-				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
-			);
+			expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS);
 		});
 	});
 
@@ -348,9 +308,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.COLUMN_TITLE_UPDATED_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_TITLE_UPDATED_SUCCESS);
 	});
 
 	it("should notify on cardTitleUpdate", () => {
@@ -364,9 +322,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toContain(
-			SR_I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS
-		);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS);
 	});
 
 	it("should notify on elementUpdate", () => {

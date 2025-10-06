@@ -1,20 +1,16 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
-import KebabMenuActionEdit from "./KebabMenuActionEdit.vue";
 import KebabMenuAction from "./KebabMenuAction.vue";
+import KebabMenuActionEdit from "./KebabMenuActionEdit.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("KebabMenuActionEdit Component", () => {
-	const setup = (props = {}) => {
-		return mount(KebabMenuActionEdit, {
+	const setup = (props = {}) =>
+		mount(KebabMenuActionEdit, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props,
 		});
-	};
 
 	describe("when component is mounted", () => {
 		it("should render", () => {

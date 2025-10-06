@@ -1,18 +1,7 @@
 <template>
-	<div
-		class="wireframe-container"
-		:class="{ 'wireframe-container-flex': isFlexContainer }"
-	>
-		<div
-			id="notify-screen-reader-polite"
-			aria-live="polite"
-			class="d-sr-only"
-		/>
-		<div
-			id="notify-screen-reader-assertive"
-			aria-live="assertive"
-			class="d-sr-only"
-		/>
+	<div class="wireframe-container" :class="{ 'wireframe-container-flex': isFlexContainer }">
+		<div id="notify-screen-reader-polite" aria-live="polite" class="d-sr-only" />
+		<div id="notify-screen-reader-assertive" aria-live="assertive" class="d-sr-only" />
 		<div class="wireframe-header sticky">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
@@ -39,10 +28,7 @@
 					>
 						{{ fabItems.title }}
 						<template #actions>
-							<template
-								v-for="(action, index) in fabItems.actions"
-								:key="index"
-							>
+							<template v-for="(action, index) in fabItems.actions" :key="index">
 								<speed-dial-menu-action
 									:data-test-id="action.dataTestId"
 									:icon="action.icon"
@@ -76,10 +62,10 @@
 </template>
 
 <script setup lang="ts">
+import { Breadcrumb, Fab } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { computed, PropType, useSlots } from "vue";
-import { Fab, Breadcrumb } from "./default-wireframe.types";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
@@ -135,9 +121,7 @@ const slots = useSlots();
 
 const { mdAndDown, smAndUp, lgAndUp } = useDisplay();
 
-const showDivider = computed(() => {
-	return !props.hideBorder && !!(props.headline || slots.header);
-});
+const showDivider = computed(() => !props.hideBorder && !!(props.headline || slots.header));
 </script>
 
 <style lang="scss" scoped>
