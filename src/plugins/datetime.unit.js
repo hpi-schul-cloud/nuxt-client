@@ -27,6 +27,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -73,6 +75,7 @@ setDefaultTimezone(TEST_DATETIME_TIMEZONE);
 
 describe("@/plugins/datetime", () => {
 	beforeAll(() => {
+		setActivePinia(createTestingPinia());
 		createTestAppStore();
 	});
 

@@ -66,13 +66,13 @@ import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
 import {
 	injectStrict,
-	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
 import { computed, ComputedRef, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { notifySuccess } from "@data-app";
 
 type Props = {
 	isOpen: boolean;
@@ -84,7 +84,6 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 const policyForm: Ref<File[]> = ref([]);
@@ -135,12 +134,7 @@ const submit = async () => {
 		emit("close");
 		await privacyPolicyModule.createPrivacyPolicy(newConsentVersion);
 
-		notifierModule.show({
-			text: t("pages.administration.school.index.schoolPolicy.success"),
-			status: "success",
-			timeout: 5000,
-		});
-
+		notifySuccess(t("pages.administration.school.index.schoolPolicy.success"));
 		resetForm();
 	}
 };

@@ -16,12 +16,15 @@ import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosError } from "axios";
 import SchoolsModule from "./schools";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("schools module", () => {
 	let schoolApi: DeepMocked<serverApi.SchoolApiInterface>;
 	let systemsApi: DeepMocked<SystemsApiInterface>;
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		schoolApi = createMock<serverApi.SchoolApiInterface>();
 		systemsApi = createMock<SystemsApiInterface>();
 
@@ -263,9 +266,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const spy = vi.spyOn(serverApi, "UserImportApiFactory");
 				const mockApi = {
-					importUserControllerEndSchoolInMaintenance: vi.fn(() => {
-						return {};
-					}),
+					importUserControllerEndSchoolInMaintenance: vi.fn(() => ({})),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -358,9 +359,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const spy = vi.spyOn(serverApi, "UserImportApiFactory");
 				const mockApi = {
-					importUserControllerStartSchoolInUserMigration: vi.fn(() => {
-						return {};
-					}),
+					importUserControllerStartSchoolInUserMigration: vi.fn(() => ({})),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface

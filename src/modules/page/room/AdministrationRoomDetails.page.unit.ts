@@ -10,17 +10,14 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useAdministrationRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { Mock } from "vitest";
 import { Router, useRoute } from "vue-router";
 import { nextTick } from "vue";
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+import { setActivePinia } from "pinia";
 
 vi.mock("vue-router");
 const useRouteMock = <Mock>useRoute;
@@ -34,7 +31,6 @@ vi.mock(
 );
 
 describe("AdministrationRoomDetails.page", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
@@ -42,10 +38,7 @@ describe("AdministrationRoomDetails.page", () => {
 	const router = createMock<Router>();
 
 	beforeEach(() => {
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
+		setActivePinia(createTestingPinia());
 		useRouteMock.mockReturnValue(router);
 
 		setupStores({
@@ -98,7 +91,7 @@ describe("AdministrationRoomDetails.page", () => {
 	};
 
 	describe("rendering", () => {
-		it("should render the page and Table component ", async () => {
+		it("should render the page and Table component ", () => {
 			const { wrapper } = setup();
 			const roomAdminTable = wrapper.findComponent({
 				name: "RoomAdminMembersTable",

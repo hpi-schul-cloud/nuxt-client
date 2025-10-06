@@ -23,6 +23,8 @@ import { computed, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 
 vi.mock("@data-board/BoardPermissions.composable");
@@ -58,6 +60,7 @@ describe("BoardHeader", () => {
 			isFocusContained: undefined,
 		});
 
+		setActivePinia(createTestingPinia());
 		createTestEnvStore(options?.envs);
 
 		const wrapper = shallowMount(BoardHeader, {

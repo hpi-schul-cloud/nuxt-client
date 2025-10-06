@@ -1,11 +1,9 @@
 import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
-import setupStores from "@@/tests/test-utils/setupStores";
-import NotifierModule from "@/store/notifier";
 import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { nextTick } from "vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -66,24 +64,13 @@ describe("useAutoLogout", () => {
 		vi.clearAllTimers();
 	});
 
-	setupStores({
-		notifierModule: NotifierModule,
-	});
-
+	setActivePinia(createTestingPinia());
 	createTestEnvStore({
 		JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
 		JWT_TIMEOUT_SECONDS: jwtTimerResponse.timeout,
 	});
-	const notifierModuleMock = createModuleMocks(NotifierModule);
-
 	const setup = (options?: { remainingTimeInSeconds?: number }) => {
-		const composable = mountComposable(() => useAutoLogout(), {
-			global: {
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-				},
-			},
-		});
+		const composable = mountComposable(() => useAutoLogout());
 
 		composable.remainingTimeInSeconds = options?.remainingTimeInSeconds ?? 0;
 

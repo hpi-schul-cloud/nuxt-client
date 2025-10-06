@@ -5,15 +5,16 @@ import {
 	mountComposable,
 } from "@@/tests/test-utils";
 import { useContextExternalToolConfigurationStatus } from "./ContextExternalToolConfigurationStatus.composable";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
+}));
 
 describe("ToolConfigurationStatus.composable", () => {
 	const getComposable = (userRole = RoleName.Teacher) => {
+		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(userRole);
 
 		const composable = mountComposable(() =>

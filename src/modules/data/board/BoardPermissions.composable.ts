@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useBoardStore } from "./Board.store";
 import { useAppStoreRefs } from "@data-app";
-import { createSharedComposable } from "@vueuse/core";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 
 const boardPermissions = (): BoardPermissionChecks => {
 	const boardPermissions = computed(() => board.value?.permissions ?? []);
@@ -71,4 +71,5 @@ const boardPermissions = (): BoardPermissionChecks => {
 	};
 };
 
-export const useBoardPermissions = createSharedComposable(boardPermissions);
+export const useBoardPermissions =
+	createTestableSharedComposable(boardPermissions);

@@ -22,6 +22,8 @@ import { ref } from "vue";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import { EmptyState } from "@ui-empty-state";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@data-external-tool");
 
@@ -36,6 +38,7 @@ describe("RoomExternalToolOverview", () => {
 		});
 
 		const refreshTime = 299000;
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ CTL_TOOLS_RELOAD_TIME_MS: refreshTime });
 
 		courseRoomDetailsModule.fetchCourse.mockResolvedValue(null);

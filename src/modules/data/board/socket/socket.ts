@@ -2,7 +2,6 @@ import { io, type Socket } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
 import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
-import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useTimeoutFn } from "@vueuse/shared";
 import { ref } from "vue";
@@ -10,6 +9,7 @@ import { logger } from "@util-logger";
 import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useEnvConfig } from "@data-env";
+import { notifyError, notifySuccess } from "@data-app";
 
 const isInitialConnection = ref(true);
 let instance: Socket | null = null;
@@ -22,7 +22,6 @@ export const useSocketConnection = (
 ) => {
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
-	const { showFailure, showSuccess } = useBoardNotifier();
 	const { t } = useI18n();
 
 	const boardErrorReportApi = BoardErrorReportApiFactory(
@@ -58,7 +57,7 @@ export const useSocketConnection = (
 				timeoutFn.stop();
 				return;
 			}
-			showSuccess(t("common.notification.connection.restored"));
+			notifySuccess(t("common.notification.connection.restored"));
 
 			if (!(boardStore.board && cardStore.cards)) return;
 			await boardStore.reloadBoard();
@@ -72,7 +71,7 @@ export const useSocketConnection = (
 			logger.log(reason, details);
 			isInitialConnection.value = false;
 			timeoutFn = useTimeoutFn(() => {
-				showFailure(t("error.4500"));
+				notifyError(t("error.4500"));
 			}, 1000);
 		});
 
@@ -86,7 +85,7 @@ export const useSocketConnection = (
 
 			if (retryCount > 20) {
 				reportBoardError("connect_error", "Max reconnection attempts reached");
-				showFailure(t("error.4500"));
+				notifyError(t("error.4500"));
 				retryCount = 0;
 				return;
 			}

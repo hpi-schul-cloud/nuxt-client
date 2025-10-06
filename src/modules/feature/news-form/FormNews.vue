@@ -89,7 +89,7 @@
 
 <script lang="ts">
 import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
-import { newsModule, notifierModule } from "@/store";
+import { newsModule } from "@/store";
 import { useOpeningTagValidator } from "@/utils/validation/openingTagValidator";
 import { ClassicEditor } from "@feature-editor";
 import { mdiAlert, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
@@ -97,6 +97,7 @@ import { defineComponent, PropType } from "vue";
 import FormActions from "./FormActions.vue";
 import { News } from "@/store/types/news";
 import { Dayjs } from "dayjs";
+import { notifyError } from "@data-app";
 
 export default defineComponent({
 	components: {
@@ -220,11 +221,7 @@ export default defineComponent({
 		save() {
 			const errors = Object.values(this.errors).filter((a) => a);
 			if (errors.length && errors[0]) {
-				notifierModule.show({
-					text: String(errors[0]),
-					status: "error",
-					timeout: 5000,
-				});
+				notifyError(String(errors[0]));
 				return errors[0];
 			}
 			this.$emit("save", { ...this.data, displayAt: this.displayAt });

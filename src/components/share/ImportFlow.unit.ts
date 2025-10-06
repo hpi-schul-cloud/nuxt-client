@@ -14,15 +14,11 @@ import { courseRoomListModule } from "@/store";
 import CopyModule from "@/store/copy";
 import CourseRoomListModule from "@/store/course-room-list";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
-import {
-	COPY_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { COPY_MODULE_KEY, LOADING_STATE_MODULE_KEY } from "@/utils/inject";
 import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
+	expectNotification,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
@@ -34,12 +30,13 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("@components/share/ImportFlow", () => {
 	let copyModuleMock: CopyModule;
 	let loadingStateModuleMock: LoadingStateModule;
 	let copyResultResponse: CopyApiResponse | undefined = undefined;
-	const notifierModule = createModuleMocks(NotifierModule);
 
 	const token = "ACoolToken";
 	const course = {
@@ -61,7 +58,6 @@ describe("@components/share/ImportFlow", () => {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[LOADING_STATE_MODULE_KEY]: loadingStateModuleMock,
 					loadingStateModule: loadingStateModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 			props: {
@@ -77,6 +73,8 @@ describe("@components/share/ImportFlow", () => {
 	};
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+
 		copyModuleMock = createModuleMocks(CopyModule, {
 			getIsResultModalOpen: false,
 			getCopyResult: copyResultResponse,
@@ -115,11 +113,7 @@ describe("@components/share/ImportFlow", () => {
 				setup();
 				await flushPromises();
 
-				expect(notifierModule.show).toHaveBeenCalledWith(
-					expect.objectContaining({
-						text: "components.molecules.import.options.failure.invalidToken",
-					})
-				);
+				expectNotification("error");
 			});
 
 			it("is shown for insufficient permissions", async () => {
@@ -137,11 +131,7 @@ describe("@components/share/ImportFlow", () => {
 				setup();
 				await flushPromises();
 
-				expect(notifierModule.show).toHaveBeenCalledWith(
-					expect.objectContaining({
-						text: "components.molecules.import.options.failure.permissionError",
-					})
-				);
+				expectNotification("error");
 			});
 		});
 
@@ -327,11 +317,9 @@ describe("@components/share/ImportFlow", () => {
 					const dialog = wrapper
 						.findComponent(ImportModal)
 						.findComponent(vCustomDialog);
-					dialog.vm.$emit("dialog-confirmed");
+					await dialog.vm.$emit("dialog-confirmed");
 
-					expect(notifierModule.show).toHaveBeenCalledWith(
-						expect.objectContaining({ status: "error" })
-					);
+					expectNotification("error");
 				});
 
 				describe("for partial or successful copy", () => {
@@ -539,11 +527,9 @@ describe("@components/share/ImportFlow", () => {
 					const dialog = wrapper
 						.findComponent(ImportModal)
 						.findComponent(vCustomDialog);
-					dialog.vm.$emit("dialog-confirmed");
+					await dialog.vm.$emit("dialog-confirmed");
 
-					expect(notifierModule.show).toHaveBeenCalledWith(
-						expect.objectContaining({ status: "error" })
-					);
+					expectNotification("error");
 				});
 
 				describe("for partial or successful copy", () => {

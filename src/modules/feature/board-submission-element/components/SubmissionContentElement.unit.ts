@@ -1,8 +1,5 @@
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -55,7 +52,6 @@ mockedUseSubmissionContentElementState.mockReturnValue(
 );
 
 describe("SubmissionContentElement", () => {
-	const notifierModule = createModuleMocks(NotifierModule);
 	const getWrapper = (props: {
 		element: SubmissionContainerElementResponse;
 		isEditMode: boolean;
@@ -66,9 +62,6 @@ describe("SubmissionContentElement", () => {
 		const wrapper = shallowMount(SubmissionContentElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			props,
 		});
@@ -112,14 +105,14 @@ describe("SubmissionContentElement", () => {
 			expect(component.exists()).toBe(true);
 		});
 
-		it("should render SubmissionContentElementDisplay component", async () => {
+		it("should render SubmissionContentElementDisplay component", () => {
 			const { wrapper } = setup();
 
 			const component = wrapper.findComponent(SubmissionContentElementDisplay);
 			expect(component.exists()).toBe(true);
 		});
 
-		it("should hand over dueDate to SubmissionContentElementDisplay", async () => {
+		it("should hand over dueDate to SubmissionContentElementDisplay", () => {
 			const { wrapper, element } = setup();
 
 			const dueDate = wrapper
@@ -128,7 +121,7 @@ describe("SubmissionContentElement", () => {
 			expect(dueDate).toBe(element.content.dueDate);
 		});
 
-		it("should hand over submissionItems to SubmissionContentElementDisplay", async () => {
+		it("should hand over submissionItems to SubmissionContentElementDisplay", () => {
 			const { wrapper } = setup();
 
 			const completed = wrapper
@@ -140,7 +133,7 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should hand over loading state to SubmissionContentElementDisplay", async () => {
+		it("should hand over loading state to SubmissionContentElementDisplay", () => {
 			const { wrapper } = setup();
 
 			const loading = wrapper
@@ -152,7 +145,7 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should hand over isOverdue state to SubmissionContentElementDisplay", async () => {
+		it("should hand over isOverdue state to SubmissionContentElementDisplay", () => {
 			const { wrapper } = setup();
 
 			const isOverdue = wrapper
@@ -164,7 +157,7 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should update completed state when it receives 'update:completed' event from child", async () => {
+		it("should update completed state when it receives 'update:completed' event from child", () => {
 			const { wrapper } = setup();
 
 			const component = wrapper.findComponent(SubmissionContentElementDisplay);
@@ -212,14 +205,14 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should render SubmissionContentElementEdit component", async () => {
+		it("should render SubmissionContentElementEdit component", () => {
 			const { wrapper } = setup();
 
 			const component = wrapper.findComponent(SubmissionContentElementEdit);
 			expect(component.exists()).toBe(true);
 		});
 
-		it("should hand over dueDate to SubmissionContentElementEdit", async () => {
+		it("should hand over dueDate to SubmissionContentElementEdit", () => {
 			const { wrapper, element } = setup();
 
 			const dueDate = wrapper
@@ -229,7 +222,7 @@ describe("SubmissionContentElement", () => {
 			expect(dueDate).toBe(element.content.dueDate);
 		});
 
-		it("should hand over submissionItems to SubmissionContentElementEdit", async () => {
+		it("should hand over submissionItems to SubmissionContentElementEdit", () => {
 			const { wrapper } = setup();
 
 			const completed = wrapper
@@ -241,7 +234,7 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should hand over loading state to SubmissionContentElementEdit", async () => {
+		it("should hand over loading state to SubmissionContentElementEdit", () => {
 			const { wrapper } = setup();
 
 			const loading = wrapper
@@ -253,7 +246,7 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should hand over isOverdue state to SubmissionContentElementEdit", async () => {
+		it("should hand over isOverdue state to SubmissionContentElementEdit", () => {
 			const { wrapper } = setup();
 
 			const isOverdue = wrapper
@@ -265,7 +258,7 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should emit 'move-keyboard:edit' when arrow key down is pressed", async () => {
+		it("should emit 'move-keyboard:edit' when arrow key down is pressed", () => {
 			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({ ref: "submissionContentElement" });
@@ -280,7 +273,7 @@ describe("SubmissionContentElement", () => {
 			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
 		});
 
-		it("should emit 'move-keyboard:edit' when arrow key up is pressed", async () => {
+		it("should emit 'move-keyboard:edit' when arrow key up is pressed", () => {
 			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({ ref: "submissionContentElement" });

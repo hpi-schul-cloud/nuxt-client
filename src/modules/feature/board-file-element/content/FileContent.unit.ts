@@ -13,6 +13,8 @@ import FileDisplay from "./display/FileDisplay.vue";
 import FileDescription from "./display/file-description/FileDescription.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("FileContent", () => {
 	beforeEach(() => {
@@ -68,6 +70,7 @@ describe("FileContent", () => {
 		};
 		const alerts = [FileAlert.AWAITING_SCAN_STATUS];
 
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_COLUMN_BOARD_COLLABORA_ENABLED:
 				options?.isCollaboraEnabled ?? false,

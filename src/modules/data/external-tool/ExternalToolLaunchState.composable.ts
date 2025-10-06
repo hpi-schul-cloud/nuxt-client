@@ -6,7 +6,7 @@ import {
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { uniqueId } from "lodash";
+import { uniqueId } from "lodash-es";
 import { onUnmounted, ref, Ref } from "vue";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 

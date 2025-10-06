@@ -28,7 +28,6 @@ import {
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
 import {
-	useBoardNotifier,
 	useCourseBoardEditMode,
 	useShareBoardLink,
 	useSharedEditMode,
@@ -43,7 +42,6 @@ import ContentElementList from "./ContentElementList.vue";
 vi.mock("vue-router");
 
 vi.mock("@util-board");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 const mockedEditMode = vi.mocked(useCourseBoardEditMode);
 const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
@@ -62,7 +60,6 @@ const mockedUseDeleteConfirmationDialog = vi.mocked(
 );
 
 describe("CardHost", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardPermissionsHandler: DeepMocked<
 		ReturnType<typeof useBoardPermissions>
 	>;
@@ -73,10 +70,6 @@ describe("CardHost", () => {
 	let useShareBoardLinkMock: DeepMocked<ReturnType<typeof useShareBoardLink>>;
 
 	beforeEach(() => {
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
 			setEditModeId: vi.fn(),
@@ -102,7 +95,7 @@ describe("CardHost", () => {
 		});
 
 		setupAddElementDialogMock();
-		const askDeleteConfirmationMock = async () => await Promise.resolve(true);
+		const askDeleteConfirmationMock = () => Promise.resolve(true);
 		setupDeleteConfirmationComposableMock({
 			askDeleteConfirmationMock,
 		});

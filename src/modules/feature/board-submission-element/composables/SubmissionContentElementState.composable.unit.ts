@@ -1,16 +1,13 @@
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ref } from "vue";
-import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { SubmissionsResponse } from "@/serverApi/v3";
 import { submissionsResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-
-const notifierModule = createModuleMocks(NotifierModule);
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 const mockedSubmissionsResponse = submissionsResponseFactory.build();
 
@@ -23,6 +20,7 @@ describe("SubmissionContentElementState.composable", () => {
 	>;
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		mockedUseSubmissionItemApiCalls =
 			createMock<ReturnType<typeof useSubmissionItemApi>>();
 		mockedUseSubmissionItemApi.mockReturnValue(mockedUseSubmissionItemApiCalls);
@@ -35,21 +33,17 @@ describe("SubmissionContentElementState.composable", () => {
 	const setup = (
 		contentElementId = "123123",
 		dueDate = ref({ dueDate: "2100-12-31T00:00:00.000Z" })
-	) => {
-		return mountComposable(
+	) =>
+		mountComposable(
 			() => useSubmissionContentElementState(contentElementId, dueDate),
 			{
 				global: {
 					plugins: [createTestingI18n()],
-					provide: {
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					},
 				},
 			}
 		);
-	};
 
-	it("should fetch submission items on mount", async () => {
+	it("should fetch submission items on mount", () => {
 		const contentElementId = "123124";
 
 		setup(contentElementId);
@@ -60,7 +54,7 @@ describe("SubmissionContentElementState.composable", () => {
 	});
 
 	describe("isOverdue state", () => {
-		it("should be true if dueDate is in past", async () => {
+		it("should be true if dueDate is in past", () => {
 			const contentElementId = "123124";
 			const dueDateInPast = ref({ dueDate: "2000-12-31T00:00:00.000Z" });
 
@@ -69,7 +63,7 @@ describe("SubmissionContentElementState.composable", () => {
 			expect(isOverdue.value).toBe(true);
 		});
 
-		it("should be false if dueDate is in future", async () => {
+		it("should be false if dueDate is in future", () => {
 			const contentElementId = "123124";
 			const dueDateInFuture = ref({ dueDate: "2100-12-31T00:00:00.000Z" });
 

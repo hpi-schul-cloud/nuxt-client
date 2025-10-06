@@ -4,7 +4,6 @@ import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
 import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
@@ -19,6 +18,8 @@ import StudentPage from "./StudentOverview.page.vue";
 import { RouterLinkStub } from "@vue/test-utils";
 import { mdiCheckAll, mdiClose } from "@icons/material";
 import { createTestEnvStore, createTestAppStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const mockData = [
 	{
@@ -59,15 +60,11 @@ const createMockStore = () => {
 			classes: {
 				namespaced: true,
 				actions: {
-					find: () => {
-						return { data: [] };
-					},
+					find: () => ({ data: [] }),
 				},
-				state: () => {
-					return {
-						list: [],
-					};
-				},
+				state: () => ({
+					list: [],
+				}),
 			},
 			schools: {
 				namespaced: true,
@@ -85,14 +82,12 @@ const createMockStore = () => {
 				},
 				getters: {
 					getList: () => mockData,
-					getPagination: () => {
-						return {
-							limit: 25,
-							skip: 0,
-							total: 2,
-							query: "",
-						};
-					},
+					getPagination: () => ({
+						limit: 25,
+						skip: 0,
+						total: 2,
+						query: "",
+					}),
 					getActive: () => false,
 					getPercent: () => 0,
 					getQrLinks: () => [],
@@ -102,9 +97,7 @@ const createMockStore = () => {
 			uiState: {
 				namespaced: true,
 				getters: {
-					get: () => () => {
-						return { page: 1 };
-					},
+					get: () => () => ({ page: 1 }),
 				},
 				mutations: {
 					set: vi.fn(),
@@ -123,11 +116,9 @@ const createMockStore = () => {
 describe("students/index", () => {
 	const OLD_ENV = process.env;
 
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
 		vi.useFakeTimers();
 
 		vi.resetModules(); // reset module registry to avoid conflicts
@@ -135,7 +126,6 @@ describe("students/index", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			notifierModule: NotifierModule,
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
@@ -154,9 +144,7 @@ describe("students/index", () => {
 			};
 			return state[key];
 		},
-		set: () => {
-			return {};
-		},
+		set: () => ({}),
 	};
 
 	const setup = (permissions, roleName) => {

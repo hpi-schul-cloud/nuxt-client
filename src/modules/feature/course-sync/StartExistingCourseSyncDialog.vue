@@ -47,15 +47,13 @@
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useCourseApi } from "@data-room";
 import { WarningAlert } from "@ui-alert";
 import { computed, ModelRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
-import { useAppStore } from "@data-app";
+import { notifyError, notifySuccess, useAppStore } from "@data-app";
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
 const props = defineProps({
@@ -122,11 +120,7 @@ const isUserInGroup = computed(() => {
 
 const onConfirmWarning = async () => {
 	if (!selectedGroup.value || !props.courseId) {
-		notifierModule.show({
-			text: t("common.notification.error"),
-			status: "error",
-		});
-
+		notifyError(t("common.notification.error"));
 		return;
 	}
 
@@ -135,18 +129,12 @@ const onConfirmWarning = async () => {
 
 		closeDialog();
 
-		notifierModule.show({
-			text: t("feature-course-sync.StartExistingCourseSyncDialog.success"),
-			status: "success",
-		});
-
+		notifySuccess(
+			t("feature-course-sync.StartExistingCourseSyncDialog.success")
+		);
 		emit("success");
 	} catch {
-		notifierModule.show({
-			text: t("common.notification.error"),
-			status: "error",
-		});
-
+		notifyError(t("common.notification.error"));
 		return;
 	}
 

@@ -15,14 +15,12 @@ import {
 	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
-vi.mock("vue-router", () => {
-	return {
-		useRoute: () => {
-			return { path: "rooms/courses-list" };
-		},
-	};
-});
+vi.mock("vue-router", () => ({
+	useRoute: () => ({ path: "rooms/courses-list" }),
+}));
 
 vi.mock("./SidebarSelection.composable");
 const mockedUseSidebarSelection = vi.mocked(useSidebarSelection);
@@ -38,6 +36,7 @@ const setup = (
 		isTeamsEnabled?: boolean;
 	} = { permissions: [], sidebarExpanded: true, isTeamsEnabled: false }
 ) => {
+	setActivePinia(createTestingPinia());
 	createTestAppStoreWithPermissions(permissions ?? []);
 	createTestEnvStore({
 		SC_THEME: SchulcloudTheme.Brb,

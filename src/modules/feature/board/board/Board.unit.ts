@@ -13,7 +13,6 @@ import ApplicationErrorModule from "@/store/application-error";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -25,7 +24,6 @@ import {
 import {
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
@@ -56,7 +54,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import {
 	extractDataAttribute,
-	useBoardNotifier,
 	useCourseBoardEditMode,
 	useSharedEditMode,
 	useSharedLastCreatedElement,
@@ -68,9 +65,8 @@ import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { Mock } from "vitest";
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+import { useNotificationStore } from "@data-app";
+import { setActivePinia } from "pinia";
 
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
@@ -112,7 +108,6 @@ vi.mock("@/composables/application-error.composable");
 const mockedCreateApplicationError = vi.mocked(useApplicationError);
 
 describe("Board", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
 	let mockedBoardPermissionsHandler: DeepMocked<
 		ReturnType<typeof useBoardPermissions>
@@ -130,9 +125,6 @@ describe("Board", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
 		vi.clearAllMocks();
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		mockedCopyCalls = createMock<ReturnType<typeof useCopy>>();
 		mockUseCopy.mockReturnValue(mockedCopyCalls);
@@ -215,8 +207,6 @@ describe("Board", () => {
 	};
 
 	const setupProvideModules = () => {
-		const notifierModule = createModuleMocks(NotifierModule);
-
 		setupStores({
 			applicationErrorModule: ApplicationErrorModule,
 		});
@@ -239,7 +229,6 @@ describe("Board", () => {
 			SchoolExternalToolsModule
 		);
 		return {
-			notifierModule,
 			copyModule,
 			loadingStateModule,
 			shareModule,
@@ -256,7 +245,6 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 	}) => {
 		const {
-			notifierModule,
 			copyModule,
 			loadingStateModule,
 			shareModule,
@@ -265,6 +253,7 @@ describe("Board", () => {
 			schoolExternalToolsModule,
 		} = setupProvideModules();
 
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
@@ -295,7 +284,6 @@ describe("Board", () => {
 					createTestingVuetify(),
 				],
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					loadingStateModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
@@ -366,7 +354,7 @@ describe("Board", () => {
 				expect(wrapper.findComponent(BoardHeader).exists()).toBeTruthy();
 			});
 
-			it("should fetch board from store and render board header with title", async () => {
+			it("should fetch board from store and render board header with title", () => {
 				const { wrapper, board } = setup();
 
 				const boardHeaderComponent = wrapper.findComponent(BoardHeader);
@@ -441,7 +429,7 @@ describe("Board", () => {
 	});
 
 	describe("BoardColumn component", () => {
-		it("should fetch board from store and render it", async () => {
+		it("should fetch board from store and render it", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.findComponent(BoardColumn).exists()).toBeTruthy();
@@ -453,7 +441,7 @@ describe("Board", () => {
 			expect(wrapper.findAllComponents(BoardColumn)).toHaveLength(1);
 		});
 
-		it("should fetch board from store and render two columns", async () => {
+		it("should fetch board from store and render two columns", () => {
 			const { wrapper } = setup({ numberOfColumns: 2 });
 
 			expect(wrapper.findAllComponents(BoardColumn)).toHaveLength(2);
@@ -526,10 +514,8 @@ describe("Board", () => {
 	describe("when component is unmounted", () => {
 		it("should call reset board notifier", () => {
 			const { wrapper } = setup();
-
 			wrapper.unmount();
-
-			expect(mockedBoardNotifierCalls.resetNotifierModule).toHaveBeenCalled();
+			expect(useNotificationStore().clearAll).toHaveBeenCalled();
 		});
 	});
 
@@ -1100,7 +1086,7 @@ describe("Board", () => {
 				openDeleteBoardDialogMock = vi.fn();
 			});
 
-			it("should call openDeleteBoardDialog method when board should be deleted", async () => {
+			it("should call openDeleteBoardDialog method when board should be deleted", () => {
 				mockedBoardPermissions.hasDeletePermission = ref(true);
 				const { wrapper, board, wrapperVM } = setup();
 

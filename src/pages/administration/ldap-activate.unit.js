@@ -10,6 +10,8 @@ import { createStore } from "vuex";
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
 import { SchulcloudTheme } from "../../serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const mockResponseData = {
 	ok: true,
@@ -95,6 +97,7 @@ describe("ldap/activate", () => {
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: false });
 	});
 

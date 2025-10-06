@@ -4,6 +4,8 @@ import {
 } from "@@/tests/test-utils/setup";
 import PrivacySettings from "./PrivacySettings";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const generateProps = () => ({
 	permissions: {
@@ -28,16 +30,19 @@ const searchStrings = {
 	aiTutor: "toggle_ai_tutor",
 };
 
-const getWrapper = (props = generateProps()) => {
-	return mount(PrivacySettings, {
+const getWrapper = (props = generateProps()) =>
+	mount(PrivacySettings, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
 		props,
 	});
-};
 
 describe("PrivacySettings", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	describe("env config", () => {
 		describe("when env var for visibility is true", () => {
 			it("should render visibility switch", () => {

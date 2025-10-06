@@ -132,7 +132,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { notifierModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@/components/molecules/AdminTableLegend";
@@ -158,7 +158,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 import { useEnvConfig } from "@data-env";
-import { useAppStore } from "@data-app";
+import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { Permission } from "@/serverApi/v3";
 
 export default {
@@ -553,27 +553,18 @@ export default {
 					selectionType,
 				});
 				if (this.registrationLinks.totalMailsSend === rowIds.length) {
-					notifierModule.show({
-						text: this.$t(
-							"pages.administration.sendMail.success",
-							rowIds.length
-						),
-						status: "success",
-						timeout: 5000,
-					});
+					notifySuccess(
+						this.$t("pages.administration.sendMail.success", rowIds.length)
+					);
 				} else {
-					notifierModule.show({
-						text: this.$t("pages.administration.sendMail.alreadyRegistered"),
-						status: "info",
-						timeout: 5000,
-					});
+					notifyInfo(
+						this.$t("pages.administration.sendMail.alreadyRegistered")
+					);
 				}
 			} catch {
-				notifierModule.show({
-					text: this.$t("pages.administration.sendMail.error", rowIds.length),
-					status: "error",
-					timeout: 5000,
-				});
+				notifyError(
+					this.$t("pages.administration.sendMail.error", rowIds.length)
+				);
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
@@ -586,18 +577,12 @@ export default {
 				if (this.qrLinks.length) {
 					this.$_printQRs(this.qrLinks);
 				} else {
-					notifierModule.show({
-						text: this.$t("pages.administration.printQr.emptyUser"),
-						status: "info",
-						timeout: 5000,
-					});
+					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 				}
 			} catch {
-				notifierModule.show({
-					text: this.$t("pages.administration.printQr.error", rowIds.length),
-					status: "error",
-					timeout: 5000,
-				});
+				notifyError(
+					this.$t("pages.administration.printQr.error", rowIds.length)
+				);
 			}
 		},
 		handleBulkDelete(rowIds, selectionType) {
@@ -607,18 +592,10 @@ export default {
 						ids: rowIds,
 						userType: "student",
 					});
-					notifierModule.show({
-						text: this.$t("pages.administration.remove.success"),
-						status: "success",
-						timeout: 5000,
-					});
+					notifySuccess(this.$t("pages.administration.remove.success"));
 					this.find();
 				} catch {
-					notifierModule.show({
-						text: this.$t("pages.administration.remove.error"),
-						status: "error",
-						timeout: 5000,
-					});
+					notifyError(this.$t("pages.administration.remove.error"));
 				}
 			};
 			const onCancel = () => {

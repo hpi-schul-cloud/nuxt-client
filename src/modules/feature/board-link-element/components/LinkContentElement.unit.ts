@@ -1,10 +1,7 @@
 import { LinkElementContent, LinkElementResponse } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
 
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -87,13 +84,9 @@ describe("LinkContentElement", () => {
 		rowIndex: number;
 		elementIndex: number;
 	}) => {
-		const notifierModule = createModuleMocks(NotifierModule);
 		const wrapper = shallowMount(LinkContentElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
-			provide: {
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
 			props: { ...props },
 		});
@@ -130,15 +123,15 @@ describe("LinkContentElement", () => {
 			computedElement: computed(() => element),
 		});
 
-		useMetaTagExtractorApiMock.getMetaTags.mockImplementation(
-			(url: string) => ({
+		useMetaTagExtractorApiMock.getMetaTags.mockImplementation((url: string) => {
+			return {
 				url,
 				title: "Super duper mega page title",
 				description: "This page is sooo cool!",
 				originalImageUrl: "https://imagestock.com/great-image.jpg",
 				imageUrl: "https://imagestock.com/great-image.jpg",
-			})
-		);
+			};
+		});
 
 		usePreviewGeneratorMock.createPreviewImage.mockResolvedValue(
 			"https://some.schulcloud.de/my-upload-preview-image.jpg"
