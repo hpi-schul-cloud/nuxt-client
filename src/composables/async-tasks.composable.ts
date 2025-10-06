@@ -1,42 +1,51 @@
 import { Status } from "@/store/types/commons";
-import { ref } from "vue";
+import { computed, readonly, ref } from "vue";
 import { useTryCatch } from "@/utils/try-catch.utils";
 import { AsyncFunction } from "@/types/async.types";
 
-export const useAsyncTasks = () => {
+type TaskResult<T> =
+	| { success: true; result: T }
+	| { success: false; result: undefined };
+
+export const useSafeTask = () => {
 	const error = ref<Error>();
 	const status = ref<Status>("");
-	const isLoading = ref(false);
+	const isRunning = computed(() => status.value === "pending");
 
-	const execute = async <T>(fn: AsyncFunction<T>): Promise<T | undefined> => {
+	const execute = async <T>(fn: AsyncFunction<T>): Promise<TaskResult<T>> => {
 		error.value = undefined;
 		status.value = "pending";
-		isLoading.value = true;
 
-		const [err, response] = await useTryCatch(fn);
-		isLoading.value = false;
+		const [err, result] = await useTryCatch(fn);
 
 		if (err) {
 			error.value = err;
 			status.value = "error";
-			return undefined;
+			return { success: false, result: undefined };
 		}
 
 		status.value = "completed";
-		return response;
+
+		return { success: true, result };
 	};
 
 	const reset = () => {
 		error.value = undefined;
 		status.value = "";
-		isLoading.value = false;
 	};
 
 	return {
-		error,
-		status,
-		isLoading,
+		error: readonly(error),
+		status: readonly(status),
+		isRunning,
 		execute,
 		reset,
 	};
+};
+
+export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>) => {
+	const { error, status, isRunning, execute, reset } = useSafeTask();
+
+	const run = () => execute(fn);
+	return { error, status, isRunning, run, reset };
 };
