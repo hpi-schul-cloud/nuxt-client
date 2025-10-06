@@ -5,7 +5,7 @@ import {
 import { VueWrapper } from "@vue/test-utils";
 import RoomMenu from "./RoomMenu.vue";
 import { RouterLink } from "vue-router";
-import { ref } from "vue";
+import { computed } from "vue";
 import { useRoomAuthorization } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import {
@@ -21,6 +21,7 @@ import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composabl
 import { ConfigResponse } from "@/serverApi/v3";
 import { Mock } from "vitest";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
@@ -34,21 +35,22 @@ describe("@feature-room/RoomMenu", () => {
 
 	beforeEach(() => {
 		roomPermissions = {
-			canAddRoomMembers: ref(false),
-			canCreateRoom: ref(false),
-			canChangeOwner: ref(false),
-			canViewRoom: ref(false),
-			canEditRoom: ref(false),
-			canDeleteRoom: ref(false),
-			canCopyRoom: ref(false),
-			canLeaveRoom: ref(false),
-			canRemoveRoomMembers: ref(false),
-			canEditRoomContent: ref(false),
-			canSeeAllStudents: ref(false),
-			canShareRoom: ref(false),
-			canListDrafts: ref(false),
-			canManageRoomInvitationLinks: ref(false),
-			canManageVideoconferences: ref(false),
+			canAddRoomMembers: computed(() => false),
+			canCreateRoom: computed(() => false),
+			canChangeOwner: computed(() => false),
+			canViewRoom: computed(() => false),
+			canAddAllStudents: computed(() => false),
+			canEditRoom: computed(() => false),
+			canDeleteRoom: computed(() => false),
+			canCopyRoom: computed(() => false),
+			canLeaveRoom: computed(() => false),
+			canRemoveRoomMembers: computed(() => false),
+			canEditRoomContent: computed(() => false),
+			canSeeAllStudents: computed(() => false),
+			canShareRoom: computed(() => false),
+			canListDrafts: computed(() => false),
+			canManageRoomInvitationLinks: computed(() => false),
+			canManageVideoconferences: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 
@@ -59,6 +61,7 @@ describe("@feature-room/RoomMenu", () => {
 	});
 
 	const setup = (envs: Partial<ConfigResponse> = {}) => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_ROOM_COPY_ENABLED: true,
 			FEATURE_ROOM_SHARE: true,
@@ -105,7 +108,7 @@ describe("@feature-room/RoomMenu", () => {
 		};
 	};
 
-	it("should render menu", async () => {
+	it("should render menu", () => {
 		const { menuBtn } = setup();
 
 		expect(menuBtn.exists()).toBe(true);
@@ -113,7 +116,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user only has edit permission", () => {
 		it("should contain edit menu and leave items", async () => {
-			roomPermissions.canEditRoom.value = true;
+			roomPermissions.canEditRoom = computed(() => true);
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
@@ -134,7 +137,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user only has delete permission", () => {
 		it("should only contain delete and leave menu items", async () => {
-			roomPermissions.canDeleteRoom.value = true;
+			roomPermissions.canDeleteRoom = computed(() => true);
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
@@ -155,8 +158,8 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user only has view members permission", () => {
 		it("should contain room members menu item with correct membersInfoText and leave menu item", async () => {
-			roomPermissions.canViewRoom.value = true;
-			roomPermissions.canAddRoomMembers.value = false;
+			roomPermissions.canViewRoom = computed(() => true);
+			roomPermissions.canAddRoomMembers = computed(() => false);
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
@@ -180,9 +183,9 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user has view room, edit, delete and leave permissions", () => {
 		it("should show all menu items", async () => {
-			roomPermissions.canViewRoom.value = true;
-			roomPermissions.canEditRoom.value = true;
-			roomPermissions.canDeleteRoom.value = true;
+			roomPermissions.canViewRoom = computed(() => true);
+			roomPermissions.canEditRoom = computed(() => true);
+			roomPermissions.canDeleteRoom = computed(() => true);
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
@@ -204,7 +207,7 @@ describe("@feature-room/RoomMenu", () => {
 	describe("when user can copy room", () => {
 		describe("and copy feature is enabled", () => {
 			it("should show copy menu item", async () => {
-				roomPermissions.canCopyRoom.value = true;
+				roomPermissions.canCopyRoom = computed(() => true);
 
 				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_COPY_ENABLED: true });
 				await menuBtn.trigger("click");
@@ -217,7 +220,7 @@ describe("@feature-room/RoomMenu", () => {
 
 		describe("and copy feature is NOT enabled", () => {
 			it("should NOT show copy menu item", async () => {
-				roomPermissions.canCopyRoom.value = true;
+				roomPermissions.canCopyRoom = computed(() => true);
 
 				const { wrapper, menuBtn } = setup({
 					FEATURE_ROOM_COPY_ENABLED: false,
@@ -234,7 +237,7 @@ describe("@feature-room/RoomMenu", () => {
 	describe("when user can NOT copy room", () => {
 		describe("and copy feature is enabled", () => {
 			it("should NOT show copy menu item", async () => {
-				roomPermissions.canCopyRoom.value = false;
+				roomPermissions.canCopyRoom = computed(() => false);
 
 				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_COPY_ENABLED: true });
 				await menuBtn.trigger("click");
@@ -249,7 +252,7 @@ describe("@feature-room/RoomMenu", () => {
 	describe("when user can share room", () => {
 		describe("and share feature is enabled", () => {
 			it("should show share menu item", async () => {
-				roomPermissions.canShareRoom.value = true;
+				roomPermissions.canShareRoom = computed(() => true);
 
 				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: true });
 				await menuBtn.trigger("click");
@@ -262,7 +265,7 @@ describe("@feature-room/RoomMenu", () => {
 
 		describe("and share feature is NOT enabled", () => {
 			it("should NOT show share menu item", async () => {
-				roomPermissions.canShareRoom.value = true;
+				roomPermissions.canShareRoom = computed(() => true);
 
 				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: false });
 				await menuBtn.trigger("click");
@@ -277,7 +280,7 @@ describe("@feature-room/RoomMenu", () => {
 	describe("when user can NOT share room", () => {
 		describe("and share feature is enabled", () => {
 			it("should NOT show share menu item", async () => {
-				roomPermissions.canShareRoom.value = false;
+				roomPermissions.canShareRoom = computed(() => false);
 
 				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: true });
 				await menuBtn.trigger("click");
@@ -291,8 +294,8 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user can add room members", () => {
 		it("should show the correct membersInfoText", async () => {
-			roomPermissions.canViewRoom.value = true;
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canViewRoom = computed(() => true);
+			roomPermissions.canAddRoomMembers = computed(() => true);
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
@@ -308,9 +311,9 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when clicking on menu button", () => {
 		beforeEach(() => {
-			roomPermissions.canViewRoom.value = true;
-			roomPermissions.canEditRoom.value = true;
-			roomPermissions.canDeleteRoom.value = true;
+			roomPermissions.canViewRoom = computed(() => true);
+			roomPermissions.canEditRoom = computed(() => true);
+			roomPermissions.canDeleteRoom = computed(() => true);
 		});
 
 		describe("and clicking on edit menu item", () => {
@@ -363,7 +366,7 @@ describe("@feature-room/RoomMenu", () => {
 
 		describe("and clicking on leave button", () => {
 			it("should emit 'room:leave' event", async () => {
-				roomPermissions.canLeaveRoom.value = true;
+				roomPermissions.canLeaveRoom = computed(() => true);
 				const { wrapper, menuBtn } = setup();
 				await menuBtn.trigger("click");
 

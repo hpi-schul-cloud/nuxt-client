@@ -1,10 +1,7 @@
-import { VideoConferenceElementContent } from "@/serverApi/v3/api";
-import AuthModule from "@/store/auth";
+import { RoleName, VideoConferenceElementContent } from "@/serverApi/v3/api";
 import { VideoConferenceState } from "@/store/types/video-conference";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -31,6 +28,9 @@ import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { Mock } from "vitest";
+import { createTestAppStoreWithRole } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@data-board/ContentElementState.composable");
 vi.mock("@data-board/BoardFocusHandler.composable");
@@ -43,11 +43,9 @@ const useRouteMock = <Mock>useRoute;
 useRouteMock.mockReturnValue({ params: { id: "room-id" } });
 
 vi.mock("@data-board/BoardFeatures.composable");
-vi.mocked(useBoardFeatures).mockImplementation(() => {
-	return {
-		isFeatureEnabled: vi.fn().mockReturnValue(true),
-	};
-});
+vi.mocked(useBoardFeatures).mockImplementation(() => ({
+	isFeatureEnabled: vi.fn().mockReturnValue(true),
+}));
 
 const mockedUseContentElementState = vi.mocked(useContentElementState);
 
@@ -90,7 +88,7 @@ describe("VideoConferenceContentElement", () => {
 			isEditMode: boolean;
 			isNotFirstElement?: boolean;
 			isNotLastElement?: boolean;
-			role?: "teacher" | "student";
+			role?: RoleName;
 			columnIndex?: number;
 			rowIndex?: number;
 			elementIndex?: number;
@@ -100,7 +98,7 @@ describe("VideoConferenceContentElement", () => {
 		} = {
 			content: undefined,
 			isEditMode: true,
-			role: "teacher",
+			role: RoleName.Teacher,
 			columnIndex: 0,
 			rowIndex: 1,
 			elementIndex: 2,
@@ -112,7 +110,7 @@ describe("VideoConferenceContentElement", () => {
 			isEditMode,
 			isNotFirstElement,
 			isNotLastElement,
-			role = "teacher",
+			role = RoleName.Teacher,
 			columnIndex = 0,
 			rowIndex = 1,
 			elementIndex = 2,
@@ -155,9 +153,8 @@ describe("VideoConferenceContentElement", () => {
 		useVideoConferenceMock.isRunning = computed(() => isRunning);
 		useVideoConferenceMock.error = ref(error);
 
-		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: [role],
-		});
+		setActivePinia(createTestingPinia());
+		createTestAppStoreWithRole(role);
 
 		useBoardPermissionsMock = createMock<
 			ReturnType<typeof useBoardPermissions>
@@ -175,7 +172,6 @@ describe("VideoConferenceContentElement", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[BOARD_IS_LIST_LAYOUT as symbol]: false,
 				},
 				stubs: {
@@ -264,20 +260,17 @@ describe("VideoConferenceContentElement", () => {
 					options: {
 						content?: VideoConferenceElementContent;
 						isEditMode: boolean;
-						role: "teacher" | "student";
+						role: RoleName;
 						hasManageVideoConferencePermission: boolean;
 					} = {
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
-						role: "teacher",
+						role: RoleName.Teacher,
 						hasManageVideoConferencePermission: true,
 					}
-				) => {
-					return setupWrapper({
-						...options,
-					});
-				};
-				it("should have the permission to join the conference", async () => {
+				) => setupWrapper(options);
+
+				it("should have the permission to join the conference", () => {
 					const { wrapper } = localSetup();
 
 					const videoConferenceElement = wrapper.getComponent(
@@ -289,7 +282,7 @@ describe("VideoConferenceContentElement", () => {
 					).toEqual(true);
 				});
 
-				it("should have the permission to start the conference", async () => {
+				it("should have the permission to start the conference", () => {
 					const { wrapper } = localSetup();
 
 					const videoConferenceElement = wrapper.getComponent(
@@ -310,11 +303,11 @@ describe("VideoConferenceContentElement", () => {
 			});
 
 			describe("when the user does not have manage video conference permission", () => {
-				it("should have the permission to join the conference", async () => {
+				it("should have the permission to join the conference", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
-						role: "student",
+						role: RoleName.Student,
 						hasManageVideoConferencePermission: false,
 					});
 
@@ -331,7 +324,7 @@ describe("VideoConferenceContentElement", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
-						role: "student",
+						role: RoleName.Student,
 						hasManageVideoConferencePermission: false,
 					});
 
@@ -346,7 +339,7 @@ describe("VideoConferenceContentElement", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
-						role: "student",
+						role: RoleName.Student,
 						isRunning: false,
 						hasManageVideoConferencePermission: false,
 					});
@@ -363,7 +356,7 @@ describe("VideoConferenceContentElement", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
-						role: "student",
+						role: RoleName.Student,
 						isRunning: true,
 						hasManageVideoConferencePermission: false,
 					});

@@ -1,34 +1,24 @@
 import { RoleName } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	contextExternalToolConfigurationStatusFactory,
+	createTestAppStoreWithRole,
 	mountComposable,
 } from "@@/tests/test-utils";
 import { useContextExternalToolConfigurationStatus } from "./ContextExternalToolConfigurationStatus.composable";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
+}));
 
 describe("ToolConfigurationStatus.composable", () => {
-	const getComposable = (userRole: string = RoleName.Teacher) => {
-		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: [userRole],
-		});
+	const getComposable = (userRole = RoleName.Teacher) => {
+		setActivePinia(createTestingPinia());
+		createTestAppStoreWithRole(userRole);
 
-		const composable = mountComposable(
-			() => useContextExternalToolConfigurationStatus(),
-			{
-				global: {
-					provide: {
-						[AUTH_MODULE_KEY.valueOf()]: authModule,
-					},
-				},
-			}
+		const composable = mountComposable(() =>
+			useContextExternalToolConfigurationStatus()
 		);
 
 		return {

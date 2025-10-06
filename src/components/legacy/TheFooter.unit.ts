@@ -3,10 +3,13 @@ import { createTestingI18n } from "@@/tests/test-utils/setup";
 import TheFooter from "./TheFooter.vue";
 import { THEME_KEY } from "@/utils/inject";
 import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("@/components/legacy/TheFooter.vue", () => {
 	const dummyUrl = "dummy-url.org";
 	beforeAll(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ ALERT_STATUS_URL: dummyUrl });
 	});
 

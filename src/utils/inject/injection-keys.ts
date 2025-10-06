@@ -1,5 +1,4 @@
 import ApplicationErrorModule from "@/store/application-error";
-import AuthModule from "@/store/auth";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import ContentModule from "@/store/content";
@@ -8,7 +7,6 @@ import FilePathsModule from "@/store/filePaths";
 import GroupModule from "@/store/group";
 import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
-import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import CourseRoomListModule from "@/store/course-room-list";
@@ -26,9 +24,6 @@ import FinishedTasksModule from "@/store/finished-tasks";
 
 export const FILE_PATHS_MODULE_KEY: InjectionKey<FilePathsModule> =
 	Symbol("filePathsModule");
-export const NOTIFIER_MODULE_KEY: InjectionKey<NotifierModule> =
-	Symbol("notifierModule");
-export const AUTH_MODULE_KEY: InjectionKey<AuthModule> = Symbol("authModule");
 export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsModule> =
 	Symbol("schoolExternalToolsModule");
 export const APPLICATION_ERROR_KEY: InjectionKey<ApplicationErrorModule> =

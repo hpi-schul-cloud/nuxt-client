@@ -1,6 +1,6 @@
 import {
+	createTestAppStoreWithUser,
 	createTestEnvStore,
-	meResponseFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
@@ -12,17 +12,13 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { Members, MembersTable } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
 import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
-import { authModule, schoolsModule } from "@/store";
-import { Ref, ref } from "vue";
-import { beforeAll } from "vitest";
-
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
+import { schoolsModule } from "@/store";
+import { computed, Ref } from "vue";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
@@ -36,19 +32,14 @@ type RoomAuthorizationRefs = Partial<
 >;
 
 describe("Members", () => {
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore();
 	});
 
 	beforeEach(() => {
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
-
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -67,10 +58,7 @@ describe("Members", () => {
 		}> = {}
 	) => {
 		const currentUser = roomMemberFactory.build();
-		const mockMe = meResponseFactory.build({
-			user: { id: currentUser.userId },
-		});
-		authModule.setMe(mockMe);
+		createTestAppStoreWithUser(currentUser.userId);
 
 		const roomMembers = [];
 		if (options?.isCurrentUser) {
@@ -83,8 +71,8 @@ describe("Members", () => {
 		for (const [key, value] of Object.entries(
 			options.roomAuthorization ?? {}
 		)) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
-				value ?? false
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(
+				() => value ?? false
 			);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);

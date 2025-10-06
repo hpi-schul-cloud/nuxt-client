@@ -1,21 +1,21 @@
 import * as serverApi from "@/serverApi/v3/api";
 import {
+	ChangeRoomRoleBodyParamsRoleNameEnum,
 	RoleName,
 	SchoolUserListResponse,
-	ChangeRoomRoleBodyParamsRoleNameEnum,
 } from "@/serverApi/v3/api";
-import { authModule, schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
+import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
-	meResponseFactory,
+	createTestAppStore,
+	expectNotification,
 	mockApiResponse,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	roomMemberFactory,
-	roomMemberSchoolResponseFactory,
 	roomMemberSchoolListResponseFactory,
+	roomMemberSchoolResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -25,34 +25,38 @@ import {
 	useRoomMembersStore,
 } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
-import { createPinia, setActivePinia } from "pinia";
 import { Mock, MockInstance } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("useRoomMembers", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
 	let consoleErrorSpy: MockInstance;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
 	};
 
-	beforeEach(() => {
-		setActivePinia(createPinia());
+	const createAuthTestUser = (userId: string, roleName: RoleName) => {
+		createTestAppStore({
+			me: {
+				roles: [{ id: userId, name: roleName }],
+				user: { id: userId },
+			},
+		});
+	};
 
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
@@ -62,19 +66,11 @@ describe("useRoomMembers", () => {
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
 		initializeAxios(axiosMock);
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
-
-		const mockMe = meResponseFactory.build();
-		authModule.setMe(mockMe);
 	});
 
 	const setup = (members: RoomMember[] = []) => {
@@ -94,12 +90,8 @@ describe("useRoomMembers", () => {
 
 	it("should throw an error if the roomId is undefined", async () => {
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-
 		await roomMembersStore.fetchMembers();
-
-		expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-			"pages.rooms.members.error.load"
-		);
+		expectNotification("error");
 	});
 
 	describe("fetchMembers", () => {
@@ -220,10 +212,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerGetMembers.mockRejectedValue(error);
 
 			await roomMembersStore.fetchMembers();
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.load"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -345,20 +334,15 @@ describe("useRoomMembers", () => {
 			schoolApiMock.schoolControllerGetTeachers.mockRejectedValue(error);
 
 			await roomMembersStore.getPotentialMembers(RoleName.Teacher);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.load"
-			);
+			expectNotification("error");
 		});
 	});
 
 	describe("isCurrentUserStudent", () => {
 		describe("when the current user is a student", () => {
 			it("should return true", () => {
-				const currentUser = meResponseFactory.build({
-					roles: [{ id: "student-id", name: RoleName.Student }],
-				});
-				authModule.setMe(currentUser);
+				const userId = "student-id";
+				createAuthTestUser(userId, RoleName.Student);
 
 				const { roomMembersStore } = setup();
 
@@ -367,7 +351,7 @@ describe("useRoomMembers", () => {
 				});
 
 				roomMembers[0].schoolRoleNames = [RoleName.Student];
-				roomMembers[0].userId = currentUser.user.id;
+				roomMembers[0].userId = userId;
 				roomMembersStore.roomMembers = [...roomMembers];
 
 				expect(roomMembersStore.isCurrentUserStudent).toBe(true);
@@ -375,10 +359,8 @@ describe("useRoomMembers", () => {
 		});
 		describe("when the current user is not a student", () => {
 			it("should return false", () => {
-				const currentUser = meResponseFactory.build({
-					roles: [{ id: "teacher-id", name: RoleName.Teacher }],
-				});
-				authModule.setMe(currentUser);
+				const userId = "teacher-id";
+				createAuthTestUser(userId, RoleName.Teacher);
 
 				const { roomMembersStore } = setup();
 
@@ -387,7 +369,7 @@ describe("useRoomMembers", () => {
 				});
 
 				roomMembers[0].schoolRoleNames = [RoleName.Teacher];
-				roomMembers[0].userId = currentUser.user.id;
+				roomMembers[0].userId = userId;
 				roomMembersStore.roomMembers = [...roomMembers];
 
 				expect(roomMembersStore.isCurrentUserStudent).toBe(false);
@@ -457,10 +439,9 @@ describe("useRoomMembers", () => {
 
 		describe("when the current user is a student", () => {
 			it("should not fetch the school list", async () => {
-				const currentUser = meResponseFactory.build({
-					roles: [{ id: "student-id", name: RoleName.Student }],
-				});
-				authModule.setMe(currentUser);
+				const userId = "student-id";
+				createAuthTestUser(userId, RoleName.Student);
+
 				const { roomMembersStore } = setup();
 
 				const roomMembers = roomMemberFactory.buildList(2, {
@@ -468,7 +449,7 @@ describe("useRoomMembers", () => {
 				});
 
 				roomMembers[0].schoolRoleNames = [RoleName.Student];
-				roomMembers[0].userId = currentUser.user.id;
+				roomMembers[0].userId = userId;
 				roomMembersStore.roomMembers = [...roomMembers];
 
 				await roomMembersStore.loadSchoolList();
@@ -552,10 +533,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerAddMembers.mockRejectedValue(error);
 
 			await roomMembersStore.addMembers(["id"]);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.add"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -591,10 +569,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerRemoveMembers.mockRejectedValue(error);
 
 			await roomMembersStore.removeMembers(["id"]);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.remove"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -620,10 +595,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerLeaveRoom.mockRejectedValue(error);
 
 			await roomMembersStore.leaveRoom();
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.remove"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -702,10 +674,7 @@ describe("useRoomMembers", () => {
 			await roomMembersStore.updateMembersRole(
 				ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin
 			);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.updateRole"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -769,10 +738,7 @@ describe("useRoomMembers", () => {
 			}
 
 			await roomMembersStore.changeRoomOwner(futureRoomOwner?.userId ?? "");
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.updateRole"
-			);
+			expectNotification("error");
 		});
 
 		it("should throw an error if the API call fails", async () => {
@@ -782,10 +748,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerChangeRoomOwner.mockRejectedValue(error);
 
 			await roomMembersStore.changeRoomOwner("test-id");
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.updateRole"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -837,10 +800,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerChangeRolesOfMembers.mockRejectedValue(error);
 
 			await roomMembersStore.confirmInvitations(["id"]);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.updateRole"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -885,10 +845,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerRemoveMembers.mockRejectedValue(error);
 
 			await roomMembersStore.rejectInvitations(["id"]);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.remove"
-			);
+			expectNotification("error");
 		});
 	});
 
@@ -904,10 +861,7 @@ describe("useRoomMembers", () => {
 					roomMembersStore.roomMembers = membersMock;
 
 					await roomMembersStore.confirmInvitations([membersMock[0].userId]);
-
-					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
-						"pages.rooms.members.confirmationTable.notification.confirm"
-					);
+					expectNotification("success");
 				});
 			});
 			describe("with multiple actions", () => {
@@ -922,10 +876,7 @@ describe("useRoomMembers", () => {
 					await roomMembersStore.confirmInvitations(
 						membersMock.map((member) => member.userId)
 					);
-
-					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
-						"pages.rooms.members.confirmationTable.notification.confirm.multiple"
-					);
+					expectNotification("success");
 				});
 			});
 		});
@@ -941,10 +892,7 @@ describe("useRoomMembers", () => {
 					roomMembersStore.roomMembers = membersMock;
 
 					await roomMembersStore.rejectInvitations([membersMock[0].userId]);
-
-					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
-						"pages.rooms.members.confirmationTable.notification.reject"
-					);
+					expectNotification("success");
 				});
 			});
 			describe("with multiple actions", () => {
@@ -959,10 +907,7 @@ describe("useRoomMembers", () => {
 					await roomMembersStore.rejectInvitations(
 						membersMock.map((member) => member.userId)
 					);
-
-					expect(mockedBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
-						"pages.rooms.members.confirmationTable.notification.reject.multiple"
-					);
+					expectNotification("success");
 				});
 			});
 		});

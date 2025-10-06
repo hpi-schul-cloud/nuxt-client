@@ -5,36 +5,40 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	AUTH_MODULE_KEY,
-	STATUS_ALERTS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
-import AuthModule from "@/store/auth";
+import { STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 import StatusAlertsModule from "@/store/status-alerts";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index";
-import { SchulcloudTheme } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { RoleName, SchulcloudTheme } from "@/serverApi/v3";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("@ui-layout/Topbar", () => {
 	const setup = async (windowWidth = 1300, isSidebarExpanded?: boolean) => {
-		const authModule = createModuleMocks(AuthModule, {
-			getSchool: {
-				id: "234",
-				name: "School",
-				logo: {
-					url: "url",
+		setActivePinia(createTestingPinia());
+		createTestAppStore({
+			me: {
+				school: {
+					id: "234",
+					name: "School",
+					logo: {
+						url: "url",
+					},
 				},
+				user: {
+					id: "123",
+					firstName: "Arthur",
+					lastName: "Dent",
+				},
+				roles: [
+					{
+						id: RoleName.Administrator,
+						name: RoleName.Administrator,
+					},
+				],
 			},
-			getUser: {
-				id: "123",
-				firstName: "Arthur",
-				lastName: "Dent",
-			},
-			getUserRoles: ["administrator"],
 		});
 
 		createTestEnvStore({
@@ -44,7 +48,6 @@ describe("@ui-layout/Topbar", () => {
 		const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
 			getStatusAlerts: mockStatusAlerts,
 		});
-		const notifierModule = createModuleMocks(NotifierModule);
 
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,
@@ -56,9 +59,7 @@ describe("@ui-layout/Topbar", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 			slots: {

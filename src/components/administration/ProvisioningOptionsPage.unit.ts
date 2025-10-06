@@ -21,6 +21,8 @@ import { ComponentProps } from "vue-component-type-helpers";
 import { Router, useRouter } from "vue-router";
 import { VCheckboxBtn } from "vuetify/lib/components/index";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("@data-provisioning-options");
 
@@ -56,6 +58,7 @@ describe("ProvisioningOptionsPage", () => {
 	) => {
 		useRouterMock.mockReturnValue(router);
 
+		setActivePinia(createTestingPinia());
 		createTestEnvStore(envConfig);
 
 		const wrapper = mount(ProvisioningOptionsPage, {

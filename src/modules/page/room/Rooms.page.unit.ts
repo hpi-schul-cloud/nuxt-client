@@ -1,20 +1,14 @@
 import CopyModule from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
-import {
-	COPY_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { COPY_MODULE_KEY, LOADING_STATE_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomsState, useRoomAuthorization } from "@data-room";
 import { createMock } from "@golevelup/ts-vitest";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { RouteLocation, Router, useRoute, useRouter } from "vue-router";
 import RoomsPage from "./Rooms.page.vue";
 import { mdiPlus } from "@icons/material";
@@ -24,9 +18,8 @@ import ImportFlow from "@/components/share/ImportFlow.vue";
 import { InfoAlert } from "@ui-alert";
 import { Mock } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
-import AuthModule from "@/store/auth";
 import { RoomItem } from "@/types/room/Room";
-import { roomItemFactory } from "@@/tests/test-utils";
+import { expectNotification, roomItemFactory } from "@@/tests/test-utils";
 
 vi.mock("vue-router");
 const useRouteMock = useRoute as Mock;
@@ -42,26 +35,23 @@ describe("RoomsPage", () => {
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 
 	beforeEach(() => {
-		setupStores({
-			authModule: AuthModule,
-		});
-
 		roomPermissions = {
-			canAddRoomMembers: ref(true),
-			canCreateRoom: ref(false),
-			canChangeOwner: ref(false),
-			canCopyRoom: ref(false),
-			canViewRoom: ref(false),
-			canEditRoom: ref(false),
-			canDeleteRoom: ref(false),
-			canLeaveRoom: ref(false),
-			canRemoveRoomMembers: ref(false),
-			canEditRoomContent: ref(false),
-			canSeeAllStudents: ref(false),
-			canShareRoom: ref(false),
-			canListDrafts: ref(false),
-			canManageRoomInvitationLinks: ref(false),
-			canManageVideoconferences: ref(false),
+			canAddRoomMembers: computed(() => true),
+			canAddAllStudents: computed(() => false),
+			canCreateRoom: computed(() => false),
+			canChangeOwner: computed(() => false),
+			canCopyRoom: computed(() => false),
+			canViewRoom: computed(() => false),
+			canEditRoom: computed(() => false),
+			canDeleteRoom: computed(() => false),
+			canLeaveRoom: computed(() => false),
+			canRemoveRoomMembers: computed(() => false),
+			canEditRoomContent: computed(() => false),
+			canSeeAllStudents: computed(() => false),
+			canShareRoom: computed(() => false),
+			canListDrafts: computed(() => false),
+			canManageRoomInvitationLinks: computed(() => false),
+			canManageVideoconferences: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
@@ -69,7 +59,6 @@ describe("RoomsPage", () => {
 	const setup = (routeQuery: RouteLocation["query"] = {}) => {
 		const copyModule = createModuleMocks(CopyModule);
 		const loadingState = createModuleMocks(LoadingStateModule);
-		const notifierModuleMock = createModuleMocks(NotifierModule);
 
 		const route = createMock<RouteLocation>({
 			query: routeQuery,
@@ -102,7 +91,6 @@ describe("RoomsPage", () => {
 				provide: {
 					[COPY_MODULE_KEY]: copyModule,
 					[LOADING_STATE_MODULE_KEY]: loadingState,
-					[NOTIFIER_MODULE_KEY]: notifierModuleMock,
 				},
 				stubs: { ImportFlow: true },
 			},
@@ -110,7 +98,6 @@ describe("RoomsPage", () => {
 
 		return {
 			wrapper,
-			notifierModuleMock,
 			router,
 		};
 	};
@@ -150,12 +137,11 @@ describe("RoomsPage", () => {
 	describe("when the page is in import mode", () => {
 		const setupImportMode = () => {
 			const token = "6S6s-CWVVxEG";
-			const { wrapper, notifierModuleMock, router } = setup({ import: token });
+			const { wrapper, router } = setup({ import: token });
 
 			return {
 				wrapper,
 				token,
-				notifierModuleMock,
 				router,
 			};
 		};
@@ -193,17 +179,12 @@ describe("RoomsPage", () => {
 
 		describe("when the import flow succeeded", () => {
 			it("should notify about successful import", () => {
-				const { wrapper, notifierModuleMock } = setupImportMode();
+				const { wrapper } = setupImportMode();
 				const importFlow = wrapper.getComponent(ImportFlow);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 
-				expect(notifierModuleMock.show).toHaveBeenCalledWith(
-					expect.objectContaining({
-						text: "components.molecules.import.options.success",
-						status: "success",
-					})
-				);
+				expectNotification("success");
 			});
 
 			it("should go to the room details page", () => {
@@ -232,7 +213,8 @@ describe("RoomsPage", () => {
 			});
 
 			it("should have the correct props", () => {
-				roomPermissions.canCreateRoom.value = true;
+				roomPermissions.canCreateRoom = computed(() => true);
+
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
 

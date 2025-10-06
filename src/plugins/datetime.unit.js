@@ -21,15 +21,14 @@ import datetime, {
 	setDefaultFormats,
 	setDefaultTimezone,
 } from "@/plugins/datetime";
-import AuthModule from "@/store/auth";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
-import setupStores from "../../tests/test-utils/setupStores";
-import { setActivePinia } from "pinia";
+import { createTestAppStore } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -77,6 +76,7 @@ setDefaultTimezone(TEST_DATETIME_TIMEZONE);
 describe("@/plugins/datetime", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
+		createTestAppStore();
 	});
 
 	const dateString = "2019-01-25T02:00:00.000Z";
@@ -98,10 +98,6 @@ describe("@/plugins/datetime", () => {
 	const timeLocalFromUTCString = dateLocalFromUTC.format("HH:mm");
 	const dateFormat = dateLocal.format("YYYY-MM-DD");
 	const timeLocalString = dateLocal.format("HH:mm");
-
-	beforeEach(() => {
-		setupStores({ authModule: AuthModule });
-	});
 
 	it("getUtcOffset", () => {
 		const result = getUtcOffset();
@@ -234,11 +230,6 @@ describe("@/plugins/datetime", () => {
 
 	const mockStore = {
 		state: { schools: { school: { timezone: TEST_DATETIME_TIMEZONE } } },
-		getters: {
-			"auth/getLocale": () => {
-				return TEST_CURRENT_LOCALE;
-			},
-		},
 	};
 
 	it("init", () => {

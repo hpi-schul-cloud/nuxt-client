@@ -135,14 +135,11 @@ import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue"
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { ShareOptions } from "@/store/share";
-import {
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { notifySuccess } from "@data-app";
 
 type VDialogButtonActions =
 	| "back"
@@ -160,7 +157,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 const shareModule = injectStrict(SHARE_MODULE_KEY);
 const isOpen = computed({
 	get: () =>
@@ -190,9 +186,9 @@ const modalOptions: Record<
 
 const shareUrl = computed(() => shareModule.getShareUrl ?? "");
 
-const actionButtons = computed(() => {
-	return modalOptions[step.value].actionButtons ?? [];
-});
+const actionButtons = computed(
+	() => modalOptions[step.value].actionButtons ?? []
+);
 
 const shareOptions = ref<ShareOptions>();
 
@@ -213,35 +209,30 @@ const onDone = () => {
 	shareModule.resetShareFlow();
 };
 const onCopy = () => {
-	notifier.show({
-		text: t("common.words.copiedToClipboard"),
-		status: "success",
-		timeout: 5000,
-	});
+	notifySuccess(t("common.words.copiedToClipboard"));
 };
 
-const showAlertInfo = computed(() => {
-	return (
+const showAlertInfo = computed(
+	() =>
 		props.type === ShareTokenBodyParamsParentTypeEnum.Courses ||
 		props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
 		props.type === ShareTokenBodyParamsParentTypeEnum.Lessons ||
 		props.type === ShareTokenBodyParamsParentTypeEnum.Room
-	);
-});
+);
 
-const showCourseInfo = computed(() => {
-	return props.type === ShareTokenBodyParamsParentTypeEnum.Courses;
-});
+const showCourseInfo = computed(
+	() => props.type === ShareTokenBodyParamsParentTypeEnum.Courses
+);
 
-const showBoardInfo = computed(() => {
-	return props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard;
-});
+const showBoardInfo = computed(
+	() => props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard
+);
 
-const showLessonInfo = computed(() => {
-	return props.type === ShareTokenBodyParamsParentTypeEnum.Lessons;
-});
+const showLessonInfo = computed(
+	() => props.type === ShareTokenBodyParamsParentTypeEnum.Lessons
+);
 
-const showRoomInfo = computed(() => {
-	return props.type === ShareTokenBodyParamsParentTypeEnum.Room;
-});
+const showRoomInfo = computed(
+	() => props.type === ShareTokenBodyParamsParentTypeEnum.Room
+);
 </script>

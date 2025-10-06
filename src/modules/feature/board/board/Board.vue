@@ -14,12 +14,15 @@
 						:board-id="board.id"
 						:title="board.title"
 						:is-draft="!isBoardVisible"
+						:is-editable-chip-visible="isEditableChipVisible"
+						:has-readers-edit-permission="hasReadersEditPermission"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
 						@share:board="onShareBoard"
 						@delete:board="openDeleteBoardDialog(boardId)"
 						@change-layout="onUpdateBoardLayout"
+						@edit:settings="onEditBoardSettings"
 					/>
 				</template>
 				<div :class="boardClasses" :style="boardStyle">
@@ -95,6 +98,13 @@
 					:current-layout="board.layout"
 					@select="onSelectBoardLayout"
 				/>
+				<EditSettingsDialog
+					:model-value="isEditSettingsDialogOpen"
+					:is-draft-mode="!isBoardVisible"
+					:is-editable-selected="isEditableChipVisible"
+					@save="onSaveEditBoardSettings"
+					@close="onEditBoardSettingsClose"
+				/>
 			</DefaultWireframe>
 		</template>
 	</div>
@@ -136,7 +146,6 @@ import { SelectBoardLayoutDialog } from "@ui-room-details";
 import {
 	BOARD_IS_LIST_LAYOUT,
 	extractDataAttribute,
-	useBoardNotifier,
 	useElementFocus,
 } from "@util-board";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
@@ -155,11 +164,13 @@ import {
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
+import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { useEnvConfig } from "@data-env";
+import { useNotificationStore } from "@data-app";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -167,7 +178,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { resetNotifierModule } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
@@ -177,6 +187,7 @@ const { createPageInformation, contextType, roomId, resetPageInformation } =
 	useSharedBoardPageInformation();
 const { createApplicationError } = useApplicationError();
 const isDragging = ref(false);
+const isEditSettingsDialogOpen = ref(false);
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -204,10 +215,15 @@ const {
 	hasCreateToolPermission,
 	hasDeletePermission,
 	hasEditPermission,
+	hasManageReadersCanEditPermission,
 	arePermissionsLoaded,
 } = useBoardPermissions();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
+const isEditableChipVisible = computed(
+	() => board.value?.readersCanEdit ?? false
+);
+const hasReadersEditPermission = ref(false);
 
 const onCreateCard = async (columnId: string) => {
 	if (hasCreateCardPermission.value) boardStore.createCardRequest({ columnId });
@@ -288,6 +304,13 @@ const onUpdateBoardVisibility = async (isVisible: boolean) => {
 		boardId: props.boardId,
 		isVisible,
 	});
+
+	if (board.value?.readersCanEdit) {
+		boardStore.updateReaderCanEditRequest({
+			boardId: props.boardId,
+			readersCanEdit: false,
+		});
+	}
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
@@ -322,7 +345,7 @@ onUnmounted(() => {
 	boardStore.disconnectSocketRequest();
 	boardStore.setBoard(undefined);
 	cardStore.resetState();
-	resetNotifierModule();
+	useNotificationStore().clearAll();
 });
 
 watch(
@@ -331,19 +354,28 @@ watch(
 	{ immediate: true }
 );
 
-watch([isBoardVisible, arePermissionsLoaded], () => {
-	const canAccessBoard = isBoardVisible.value || hasEditPermission.value;
+watch(
+	[isBoardVisible, arePermissionsLoaded],
+	() => {
+		const canAccessBoard = isBoardVisible.value || hasEditPermission.value;
 
-	if (arePermissionsLoaded?.value && !canAccessBoard) {
-		router.replace({ name: "room-details", params: { id: roomId.value } });
-		applicationErrorModule.setError(
-			createApplicationError(
-				HttpStatusCode.Forbidden,
-				t("components.board.error.403")
-			)
-		);
-	}
-});
+		if (arePermissionsLoaded?.value && !canAccessBoard) {
+			router.replace({ name: "room-details", params: { id: roomId.value } });
+			applicationErrorModule.setError(
+				createApplicationError(
+					HttpStatusCode.Forbidden,
+					t("components.board.error.403")
+				)
+			);
+		}
+
+		hasReadersEditPermission.value =
+			arePermissionsLoaded?.value &&
+			hasManageReadersCanEditPermission?.value &&
+			useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE;
+	},
+	{ immediate: true }
+);
 
 const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.copyResult.title.loading")
@@ -442,6 +474,23 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 		boardId: props.boardId,
 		layout,
 	});
+};
+
+const onEditBoardSettings = () => {
+	isEditSettingsDialogOpen.value = true;
+};
+
+const onEditBoardSettingsClose = () => {
+	isEditSettingsDialogOpen.value = false;
+};
+
+const onSaveEditBoardSettings = async (isEditableForEveryone: boolean) => {
+	await boardStore.updateReaderCanEditRequest({
+		boardId: props.boardId,
+		readersCanEdit: isEditableForEveryone,
+	});
+
+	isEditSettingsDialogOpen.value = false;
 };
 </script>
 

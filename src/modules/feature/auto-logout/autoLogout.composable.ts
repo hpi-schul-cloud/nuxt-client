@@ -1,10 +1,9 @@
-import { AlertPayload } from "@/store/types/alert-payload";
 import { computed, Ref, ref, watch } from "vue";
-import { authModule, notifierModule } from "@/store";
 import { useI18n } from "vue-i18n";
 import { $axios } from "@/utils/api";
 import { SessionStatus } from "./types";
 import { useEnvConfig } from "@data-env";
+import { AlertPayload, useAppStore, useNotificationStore } from "@data-app";
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();
@@ -42,8 +41,8 @@ export const useAutoLogout = () => {
 		}
 	};
 
-	const startTimeout = () => {
-		return setTimeout(
+	const startTimeout = () =>
+		setTimeout(
 			async () => {
 				retry++;
 				try {
@@ -69,7 +68,6 @@ export const useAutoLogout = () => {
 			},
 			2 ** retry * 1000
 		);
-	};
 
 	const checkTTL = async () => {
 		if (ttlTimeoutPolling) return ttlCount;
@@ -107,7 +105,7 @@ export const useAutoLogout = () => {
 		clearPollings();
 
 		if (sessionStatus.value === SessionStatus.Ended) {
-			authModule.logout();
+			useAppStore().logout();
 			return;
 		}
 
@@ -134,12 +132,10 @@ export const useAutoLogout = () => {
 		[SessionStatus.Continued]: {
 			text: t("feature-autoLogout.message.success"),
 			status: "success",
-			timeout: 5000,
 		},
 		[SessionStatus.Error]: {
 			text: t("feature-autoLogout.message.error"),
 			status: "error",
-			timeout: 5000,
 		},
 		[SessionStatus.Ended]: {
 			text: t("feature-autoLogout.message.error.401"),
@@ -152,7 +148,7 @@ export const useAutoLogout = () => {
 		() => sessionStatus.value,
 		(newValue) => {
 			if (newValue === null) return;
-			notifierModule.show(notificationMap[newValue]);
+			useNotificationStore().notify(notificationMap[newValue]);
 		}
 	);
 

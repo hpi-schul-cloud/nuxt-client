@@ -1,14 +1,11 @@
 import RoomModal from "@/components/molecules/RoomModal";
-import { authModule, courseRoomListModule } from "@/store";
-import AuthModule from "@/store/auth";
+import { courseRoomListModule } from "@/store";
 import CopyModule from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
 import CourseRoomListModule from "@/store/course-room-list";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import {
 	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
@@ -22,7 +19,9 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, createTestAppStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("vue-router");
 
@@ -88,39 +87,35 @@ const mockCourseData = [
 	},
 ];
 
-const mockAuthStoreData = {
-	_id: "asdf",
-	id: "asdf",
-	firstName: "Arthur",
-	lastName: "Dent",
-	email: "arthur.dent@hitchhiker.org",
-	roles: [{ name: "student", displayName: "Student" }],
-	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
-};
-
 setupStores({
-	authModule: AuthModule,
 	courseRoomListModule: CourseRoomListModule,
 });
 
 const spyMocks = {
 	storeRoomAlignMock: vi
 		.spyOn(courseRoomListModule, "align")
-		.mockImplementation(async () => ({})),
+		.mockImplementation(() => {
+			return {};
+		}),
 	storeModuleFetchMock: vi
 		.spyOn(courseRoomListModule, "fetch")
-		.mockImplementation(async () => ({})),
+		.mockImplementation(() => {
+			return {};
+		}),
 	storeModuleFetchAllMock: vi
 		.spyOn(courseRoomListModule, "fetchAllElements")
-		.mockImplementation(async () => ({})),
+		.mockImplementation(() => {
+			return {};
+		}),
 	storeModuleUpdateMock: vi
 		.spyOn(courseRoomListModule, "update")
-		.mockImplementation(async () => ({})),
+		.mockImplementation(() => {
+			return {};
+		}),
 };
 
 let copyModuleMock;
 let loadingStateModuleMock;
-let notifierModuleMock;
 
 const defaultMocks = {
 	$route: { query: {} },
@@ -132,7 +127,6 @@ const getWrapper = () => {
 		getIsResultModalOpen: false,
 	});
 	loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-	notifierModuleMock = createModuleMocks(NotifierModule);
 	const courseRoomListModuleMock = createModuleMocks(courseRoomListModule);
 	return mount(CourseRoomOverviewPage, {
 		global: {
@@ -140,7 +134,6 @@ const getWrapper = () => {
 			provide: {
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
-				[NOTIFIER_MODULE_KEY]: notifierModuleMock,
 				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
 					CommonCartridgeImportModule
 				),
@@ -153,14 +146,12 @@ const getWrapper = () => {
 };
 
 describe("@/pages/CourseRoomOverview.page", () => {
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStore();
+		createTestEnvStore();
 		courseRoomListModule.setRoomData(mockRoomStoreData);
 		courseRoomListModule.setAllElements(mockCourseData);
-		authModule.setMe(mockAuthStoreData);
 	});
 
 	afterEach(() => {

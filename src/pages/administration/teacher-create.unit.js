@@ -1,38 +1,26 @@
-import { notifierModule } from "@/store";
-import AuthModule from "@/store/auth";
-import NotifierModule from "@/store/notifier";
-import { meResponseFactory } from "@@/tests/test-utils";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
 import { default as NewTeacher } from "./TeacherCreate.page.vue";
 import { flushPromises } from "@vue/test-utils";
-
-vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+import { createTestAppStore, expectNotification } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 const createMockStore = (createTeacherStub) => {
 	const mockStore = createStore({
 		modules: {
-			auth: {
-				namespaced: true,
-				getters: {
-					getUser: () => ({
-						permissions: ["TEACHER_CREATE"],
-					}),
-				},
-			},
 			users: {
 				namespaced: true,
 				actions: {
 					createTeacher: createTeacherStub,
 				},
-				state: () => ({}),
+				state: () => {
+					return {};
+				},
 			},
 		},
 	});
@@ -41,19 +29,18 @@ const createMockStore = (createTeacherStub) => {
 
 describe("teachers/new", () => {
 	beforeEach(() => {
-		setupStores({ authModule: AuthModule, notifierModule: NotifierModule });
+		setActivePinia(createTestingPinia());
+		createTestAppStore();
 	});
 
 	it("should call 'createTeacher' action", async () => {
 		const createTeacherStub = vi.fn();
 		const mockStore = createMockStore(createTeacherStub);
-		const mockMe = meResponseFactory.build();
 
 		const wrapper = mount(NewTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
-					$me: mockMe,
 					$store: mockStore,
 				},
 			},
@@ -86,14 +73,11 @@ describe("teachers/new", () => {
 	it("should call notifier successful", async () => {
 		const createTeacherStub = vi.fn();
 		const mockStore = createMockStore(createTeacherStub);
-		const mockMe = meResponseFactory.build();
 
-		const notifierModuleMock = vi.spyOn(notifierModule, "show");
 		const wrapper = mount(NewTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
-					$me: mockMe,
 					$store: mockStore,
 				},
 			},
@@ -119,25 +103,25 @@ describe("teachers/new", () => {
 		// we need to wait until everything is settled
 		await flushPromises();
 
-		expect(notifierModuleMock).toHaveBeenCalled();
+		expectNotification("success");
 	});
 
 	it("should show error", async () => {
 		const failingCreateAction = vi.fn(() => Promise.reject());
 		const mockStore = createMockStore(failingCreateAction);
-		const mockMe = meResponseFactory.build();
 
 		mockStore.users = {
 			actions: {
 				createTeacher: failingCreateAction,
 			},
-			state: () => ({}),
+			state: () => {
+				return {};
+			},
 		};
 		const wrapper = mount(NewTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
-					$me: mockMe,
 					$store: mockStore,
 				},
 			},

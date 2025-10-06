@@ -10,11 +10,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import {
-	useBoardNotifier,
-	useSharedEditMode,
-	useSharedLastCreatedElement,
-} from "@util-board";
+import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { createPinia, setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
@@ -32,7 +28,6 @@ const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 
 vi.mock("@util-board");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
@@ -60,7 +55,6 @@ vi.mock("vue-i18n", () => {
 type BoardSetup = Record<string, Array<string>>;
 
 describe("BoardStore - moveCardSuccess", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedSocketConnectionHandler: DeepMocked<
 		ReturnType<typeof useSocketConnection>
@@ -82,10 +76,6 @@ describe("BoardStore - moveCardSuccess", () => {
 		setupStores({
 			applicationErrorModule: ApplicationErrorModule,
 		});
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);

@@ -24,6 +24,8 @@ import { nextTick, reactive } from "vue";
 import { useRoute } from "vue-router";
 import SchoolSettings from "./SchoolSettings.page.vue";
 import type { Mock, Mocked } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-router");
 
@@ -45,6 +47,7 @@ describe("SchoolSettingsPage", () => {
 	>;
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		useSharedSchoolYearChangeApiMock =
 			createMock<ReturnType<typeof useSharedSchoolYearChange>>();
 

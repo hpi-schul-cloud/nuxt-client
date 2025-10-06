@@ -18,6 +18,8 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import type { Mocked } from "vitest";
 import { useEnvConfig } from "@data-env";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
@@ -56,6 +58,7 @@ describe("AdminMigrationSection", () => {
 			...schoolGetters,
 		});
 
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			ACCESSIBILITY_REPORT_EMAIL: "ticketsystem@niedersachsen.support",
 			SC_CONTACT_EMAIL: "ticketsystem@niedersachsen.support",

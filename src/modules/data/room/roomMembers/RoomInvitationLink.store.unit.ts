@@ -1,10 +1,9 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { authModule, schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
+import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
-	meResponseFactory,
+	expectNotification,
 	mockApiResponse,
 	mockedPiniaStoreTyping,
 	roomFactory,
@@ -13,31 +12,27 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useBoardNotifier } from "@util-board";
 import { AxiosInstance, AxiosPromise } from "axios";
-import { createPinia, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
 import { InvitationStep, RoomInvitationLink } from "./types";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createAxiosError } from "@util-axios-error";
 import { RoomIdResponse } from "@/serverApi/v3/api";
 import { Mock } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 describe("useRoomInvitationLinkStore", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let roomInvitationLinkApiMock: DeepMocked<serverApi.RoomInvitationLinkApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
-		setActivePinia(createPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
 		roomInvitationLinkApiMock =
@@ -52,13 +47,8 @@ describe("useRoomInvitationLinkStore", () => {
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
 		initializeAxios(axiosMock);
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -67,9 +57,6 @@ describe("useRoomInvitationLinkStore", () => {
 				name: "Paul-Gerhardt-Gymnasium",
 			})
 		);
-
-		const mockMe = meResponseFactory.build();
-		authModule.setMe(mockMe);
 	});
 
 	const setup = (roomInvitationLinks: RoomInvitationLink[] = []) => {
@@ -109,10 +96,7 @@ describe("useRoomInvitationLinkStore", () => {
 					);
 
 					await roomInvitationLinkStore.fetchLinks();
-
-					expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-						"pages.rooms.invitationlinks.error.load"
-					);
+					expectNotification("error");
 				});
 			});
 		});
@@ -190,9 +174,7 @@ describe("useRoomInvitationLinkStore", () => {
 
 				await roomInvitationLinkStore.createLink(link);
 
-				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.invitationlinks.error.create"
-				);
+				expectNotification("error");
 				expect(roomInvitationLinkStore.invitationStep).not.toStrictEqual(
 					InvitationStep.SHARE
 				);
@@ -266,9 +248,7 @@ describe("useRoomInvitationLinkStore", () => {
 
 				await roomInvitationLinkStore.updateLink(firstLink);
 
-				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.invitationlinks.error.update"
-				);
+				expectNotification("error");
 				expect(roomInvitationLinkStore.invitationStep).not.toStrictEqual(
 					InvitationStep.SHARE
 				);
@@ -302,10 +282,7 @@ describe("useRoomInvitationLinkStore", () => {
 				const firstLink = links[0];
 
 				await roomInvitationLinkStore.deleteLinks(firstLink.id);
-
-				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.invitationlinks.error.delete"
-				);
+				expectNotification("error");
 			});
 		});
 	});

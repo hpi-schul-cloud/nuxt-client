@@ -1,25 +1,20 @@
-import type { Mock } from "vitest";
+import { expect, Mock } from "vitest";
 import {
 	ConfigResponse,
 	ExternalToolMediumStatus,
 	MediaSourceLicenseType,
 } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
-import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import {
-	AUTH_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-} from "@/utils/inject";
-import {
+	createTestAppStoreWithSchool,
 	createTestEnvStore,
+	expectNotification,
 	mockedPiniaStoreTyping,
 	MockedStore,
 } from "@@/tests/test-utils";
 import {
-	meResponseFactory,
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
 	schoolToolConfigurationStatusFactory,
@@ -41,6 +36,7 @@ import { Router, useRouter } from "vue-router";
 import { VCardText } from "vuetify/lib/components/index";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
+import { useNotificationStore } from "@data-app";
 
 vi.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
 const mockedSchoolExternalToolUsage = vi.mocked(useSchoolExternalToolUsage);
@@ -49,6 +45,7 @@ vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
 describe("ExternalToolSection", () => {
+	const schoolId = "schoolId";
 	let el: HTMLDivElement;
 
 	let useSchoolExternalToolUsageMock: DeepMocked<
@@ -56,9 +53,8 @@ describe("ExternalToolSection", () => {
 	>;
 	let schoolLicenseStore: MockedStore<typeof useSchoolLicenseStore>;
 
-	beforeAll(() => {
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-
 		schoolLicenseStore = mockedPiniaStoreTyping(useSchoolLicenseStore);
 	});
 
@@ -80,13 +76,7 @@ describe("ExternalToolSection", () => {
 			}
 		);
 
-		const notifierModule = createModuleMocks(NotifierModule);
-
-		const mockMe = meResponseFactory.build({ school: { id: "schoolId" } });
-		const authModule = createModuleMocks(AuthModule, {
-			getSchool: mockMe.school,
-		});
-
+		createTestAppStoreWithSchool(schoolId);
 		createTestEnvStore(envs);
 
 		const router = createMock<Router>();
@@ -98,8 +88,6 @@ describe("ExternalToolSection", () => {
 				provide: {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			},
 			stubs: {
@@ -110,7 +98,6 @@ describe("ExternalToolSection", () => {
 		return {
 			wrapper,
 			schoolExternalToolsModule,
-			notifierModule,
 		};
 	};
 
@@ -145,7 +132,7 @@ describe("ExternalToolSection", () => {
 
 				expect(
 					schoolExternalToolsModule.loadSchoolExternalTools
-				).toHaveBeenCalledWith("schoolId");
+				).toHaveBeenCalledWith(schoolId);
 			});
 
 			it("should load the school licenses", () => {
@@ -163,7 +150,7 @@ describe("ExternalToolSection", () => {
 			const schoolExternalTool = schoolExternalToolFactory.build({
 				id: "testId",
 				toolId: "toolId",
-				schoolId: "schoolId",
+				schoolId,
 				parameters: [],
 				name: firstToolName,
 				status: schoolToolConfigurationStatusFactory.build(),
@@ -186,7 +173,7 @@ describe("ExternalToolSection", () => {
 						{
 							id: "testId2",
 							toolId: "toolId",
-							schoolId: "schoolId",
+							schoolId,
 							parameters: [],
 							name: secondToolName,
 							status: schoolToolConfigurationStatusFactory.build({
@@ -204,7 +191,7 @@ describe("ExternalToolSection", () => {
 						{
 							id: "testId3",
 							toolId: "toolId",
-							schoolId: "schoolId",
+							schoolId,
 							parameters: [],
 							name: "Test3",
 							status: schoolToolConfigurationStatusFactory.build({
@@ -396,7 +383,7 @@ describe("ExternalToolSection", () => {
 								{
 									id: "testId",
 									toolId: "toolId",
-									schoolId: "schoolId",
+									schoolId,
 									parameters: [],
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),
@@ -422,13 +409,13 @@ describe("ExternalToolSection", () => {
 						).toHaveBeenCalled();
 					});
 
-					it("should call notifierModule.show", async () => {
-						const { wrapper, notifierModule } = getWrapper({
+					it("should call notifySuccess", async () => {
+						const { wrapper } = getWrapper({
 							getSchoolExternalTools: [
 								{
 									id: "testId",
 									toolId: "toolId",
-									schoolId: "schoolId",
+									schoolId,
 									parameters: [],
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),
@@ -448,8 +435,7 @@ describe("ExternalToolSection", () => {
 							"[data-testId='delete-dialog-confirm']"
 						);
 						await confirmButton.trigger("click");
-
-						expect(notifierModule.show).toHaveBeenCalled();
+						expect(useNotificationStore().notify).toHaveBeenCalled();
 					});
 				});
 			});
@@ -505,7 +491,7 @@ describe("ExternalToolSection", () => {
 					schoolExternalToolMetadata
 				);
 
-				const { wrapper, notifierModule } = getWrapper({
+				const { wrapper } = getWrapper({
 					getSchoolExternalTools: [
 						schoolExternalToolFactory.build(),
 						schoolExternalToolFactory.build(),
@@ -514,7 +500,6 @@ describe("ExternalToolSection", () => {
 
 				return {
 					wrapper,
-					notifierModule,
 					schoolExternalToolMetadata,
 				};
 			};
@@ -615,14 +600,14 @@ describe("ExternalToolSection", () => {
 			});
 
 			it("should not display notification", async () => {
-				const { wrapper, notifierModule } = setup();
+				const { wrapper } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
 				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
 				await deleteButton.trigger("click");
 
-				expect(notifierModule.show).not.toHaveBeenCalled();
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
 			});
 		});
 
@@ -838,7 +823,7 @@ describe("ExternalToolSection", () => {
 			const setup = () => {
 				useSchoolExternalToolUsageMock.metadata = ref(undefined);
 
-				const { wrapper, notifierModule } = getWrapper({
+				const { wrapper } = getWrapper({
 					getSchoolExternalTools: [
 						schoolExternalToolFactory.build({}),
 						schoolExternalToolFactory.build(),
@@ -847,7 +832,6 @@ describe("ExternalToolSection", () => {
 
 				return {
 					wrapper,
-					notifierModule,
 				};
 			};
 
@@ -865,17 +849,14 @@ describe("ExternalToolSection", () => {
 			});
 
 			it("should display notification", async () => {
-				const { wrapper, notifierModule } = setup();
+				const { wrapper } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
 				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
 				await deleteButton.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					status: "error",
-					text: "components.administration.externalToolsSection.dialog.content.metadata.error",
-				});
+				expectNotification("error");
 			});
 		});
 	});

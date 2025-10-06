@@ -7,9 +7,12 @@ import { shallowMount } from "@vue/test-utils";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
 import FileAlerts from "./FileAlerts.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("FileAlerts", () => {
 	const setup = (alerts: FileAlert[]) => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({}, { COLLABORA_MAX_FILE_SIZE_IN_BYTES: 10 });
 
 		const wrapper = shallowMount(FileAlerts, {

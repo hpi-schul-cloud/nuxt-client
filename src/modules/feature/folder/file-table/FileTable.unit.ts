@@ -1,10 +1,10 @@
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { RoleName } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
 import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { fileRecordFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import {
+	createTestAppStoreWithRole,
+	fileRecordFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -15,8 +15,16 @@ import { VSkeletonLoader } from "vuetify/lib/components/index";
 import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
+import { beforeEach } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("FileTable", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestAppStoreWithRole(RoleName.Teacher);
+	});
+
 	const setupWrapper = (props: {
 		isLoading: boolean;
 		isEmpty: boolean;
@@ -26,15 +34,9 @@ describe("FileTable", () => {
 			total: number;
 		};
 	}) => {
-		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: [RoleName.Teacher],
-		});
 		const wrapper = mount(FileTable, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 			},
 			props: {
 				isLoading: props.isLoading,

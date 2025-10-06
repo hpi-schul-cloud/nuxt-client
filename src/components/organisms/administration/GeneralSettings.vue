@@ -168,26 +168,25 @@
 </template>
 
 <script setup lang="ts">
-import { authModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import { toBase64 } from "@/utils/fileHelper";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { useOpeningTagValidator } from "@/utils/validation";
 import PrivacySettings from "./PrivacySettings.vue";
 import {
 	LanguageType,
+	Permission,
 	SchoolFeature,
 	SchoolUpdateBodyParams,
 } from "@/serverApi/v3";
 import { School } from "@/store/types/schools";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
+import { notifySuccess, useAppStore } from "@data-app";
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { t } = useI18n();
-
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const localSchool = ref<School>();
 
@@ -208,9 +207,9 @@ const languages = computed(() => {
 	});
 });
 
-const hasSchoolEditPermission = computed(() => {
-	return authModule.getUserPermissions.includes("school_edit");
-});
+const hasSchoolEditPermission = useAppStore().hasPermission(
+	Permission.SchoolEdit
+);
 
 const convertDataUrlToFile = (dataURL: string, fileName: string) => {
 	const dataUrlParts = dataURL.split(",");
@@ -320,11 +319,9 @@ const save = async () => {
 		props: updatedSchool,
 	});
 
-	notifierModule.show({
-		text: t("pages.administration.school.index.generalSettings.save.success"),
-		status: "success",
-		timeout: 5000,
-	});
+	notifySuccess(
+		"pages.administration.school.index.generalSettings.save.success"
+	);
 
 	if (updatedSchool.logo) {
 		schoolsModule.setSchoolLogo({

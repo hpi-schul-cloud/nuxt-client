@@ -1,14 +1,11 @@
 import { ToolContextType } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { AlertPayload } from "@/store/types/alert-payload";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	businessErrorFactory,
 	createTestEnvStore,
+	expectNotification,
 	mediaAvailableLineElementResponseFactory,
 	mediaBoardResponseFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useExternalToolLaunchState } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -19,6 +16,8 @@ import { ComponentProps } from "vue-component-type-helpers";
 import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@data-external-tool");
 vi.mock("./data");
@@ -36,10 +35,10 @@ describe("MediaBoardAvailableElement", () => {
 		props: ComponentProps<typeof MediaBoardAvailableElement>
 	) => {
 		const refreshTime = 299000;
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			CTL_TOOLS_RELOAD_TIME_MS: refreshTime,
 		});
-		const notifierModule = createModuleMocks(NotifierModule);
 
 		const mediaBoard = mediaBoardResponseFactory.build();
 		useSharedMediaBoardStateMock.mediaBoard.value = mediaBoard;
@@ -47,16 +46,12 @@ describe("MediaBoardAvailableElement", () => {
 		const wrapper = shallowMount(MediaBoardAvailableElement, {
 			global: {
 				plugins: [createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			props,
 		});
 
 		return {
 			wrapper,
-			notifierModule,
 			refreshTime,
 			mediaBoard,
 		};
@@ -238,7 +233,7 @@ describe("MediaBoardAvailableElement", () => {
 			const setup = () => {
 				const availableLineElement =
 					mediaAvailableLineElementResponseFactory.build();
-				const { wrapper, notifierModule } = getWrapper({
+				const { wrapper } = getWrapper({
 					element: availableLineElement,
 				});
 
@@ -248,19 +243,15 @@ describe("MediaBoardAvailableElement", () => {
 				return {
 					wrapper,
 					availableLineElement,
-					notifierModule,
 				};
 			};
 
 			it("should show an error notification", async () => {
-				const { wrapper, notifierModule } = setup();
+				const { wrapper } = setup();
 
 				await wrapper.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalledWith<[AlertPayload]>({
-					status: "error",
-					text: "error.generic",
-				});
+				expectNotification("error");
 			});
 		});
 	});

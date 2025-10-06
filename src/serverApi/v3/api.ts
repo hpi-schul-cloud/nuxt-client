@@ -295,6 +295,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     BoardShareBoard = 'BOARD_SHARE_BOARD',
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
+    BoardManage = 'BOARD_MANAGE',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -5827,10 +5828,10 @@ export interface MeResponse {
     roles: Array<MeRoleResponse>;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<Permission>}
      * @memberof MeResponse
      */
-    permissions: Array<string>;
+    permissions: Array<Permission>;
     /**
      * 
      * @type {LanguageType}
@@ -7740,6 +7741,7 @@ export enum Permission {
     BoardShareBoard = 'BOARD_SHARE_BOARD',
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
+    BoardManage = 'BOARD_MANAGE',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',

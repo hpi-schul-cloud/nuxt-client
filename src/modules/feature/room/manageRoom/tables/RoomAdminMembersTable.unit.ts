@@ -1,37 +1,28 @@
 import { nextTick } from "vue";
 import {
-	meResponseFactory,
+	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
 import RoomAdminMembersTable from "./RoomAdminMembersTable.vue";
-import { authModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import { createTestingVuetify } from "@@/tests/test-utils/setup/createTestingVuetify";
 import { createTestingI18n } from "@@/tests/test-utils/setup/createTestingI18n";
 import { createTestingPinia } from "@pinia/testing";
 import { RoleName } from "@/serverApi/v3";
 import { useRoomMembersStore } from "@data-room";
 import setupStores from "@@/tests/test-utils/setupStores";
-import AuthModule from "@/store/auth";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import SchoolsModule from "@/store/schools";
 import { DataTable } from "@ui-data-table";
-
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
+import { setActivePinia } from "pinia";
 
 describe("RoomAdminMembersTable", () => {
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-
 	beforeEach(() => {
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
+		setActivePinia(createTestingPinia());
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -48,10 +39,7 @@ describe("RoomAdminMembersTable", () => {
 
 	const setup = () => {
 		const currentUser = roomMemberFactory.build({});
-		const mockMe = meResponseFactory.build({
-			user: { id: currentUser.userId },
-		});
-		authModule.setMe(mockMe);
+		createTestAppStoreWithUser(currentUser.userId);
 
 		const members = [
 			...roomMemberFactory.buildList(3, {
@@ -127,7 +115,7 @@ describe("RoomAdminMembersTable", () => {
 	});
 
 	describe("Anonymization", () => {
-		it("should not render kebab menu for anonymized members", async () => {
+		it("should not render kebab menu for anonymized members", () => {
 			const { wrapper, roomMembersForAdmins } = setup();
 
 			const anonymizedMembers = roomMembersForAdmins.filter(
@@ -151,7 +139,7 @@ describe("RoomAdminMembersTable", () => {
 			});
 		});
 
-		it("should not render kebab menu for the other school members but room owners", async () => {
+		it("should not render kebab menu for the other school members but room owners", () => {
 			const { wrapper, roomMembersForAdmins } = setup();
 
 			const otherSchoolMembers = roomMembersForAdmins.filter(

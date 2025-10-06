@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import MembersTable from "./MembersTable.vue";
-import { nextTick, Ref, ref } from "vue";
+import { computed, nextTick, Ref, ref } from "vue";
 import {
 	mdiMenuDown,
 	mdiMenuUp,
@@ -12,7 +12,7 @@ import {
 	mdiAccountSchoolOutline,
 } from "@icons/material";
 import {
-	meResponseFactory,
+	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
@@ -32,26 +32,21 @@ import {
 	useRoomMembersStore,
 	useRoomAuthorization,
 } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import ActionMenu from "./ActionMenu.vue";
 import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
-import { authModule, schoolsModule } from "@/store";
+import { schoolsModule } from "@/store";
 import { ChangeRole } from "@feature-room";
 import { Mock } from "vitest";
 
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
-
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("@vueuse/integrations/useFocusTrap");
 
@@ -68,7 +63,6 @@ type RoomAuthorizationRefs = RefPropertiesOnly<
 
 describe("MembersTable", () => {
 	let askConfirmationMock: Mock;
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
 		askConfirmationMock = vi.fn();
@@ -80,12 +74,8 @@ describe("MembersTable", () => {
 			isDialogOpen: ref(false),
 		});
 
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
-
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -136,17 +126,13 @@ describe("MembersTable", () => {
 			createMock<ReturnType<typeof useRoomAuthorization>>();
 
 		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
-				value ?? false
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(
+				() => value ?? false
 			);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
 		const currentUser = roomMemberFactory.build({});
-		const mockMe = meResponseFactory.build({
-			user: { id: options?.currentUserId ?? currentUser.userId },
-		});
-		authModule.setMe(mockMe);
 
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,
@@ -154,21 +140,20 @@ describe("MembersTable", () => {
 			value: windowWidth,
 		});
 
+		createTestingPinia({
+			initialState: {
+				roomMembersStore: {
+					roomMembers: [...members, currentUser],
+					isRoomOwner: vi.fn(),
+				},
+			},
+		});
+		createTestAppStoreWithUser(options?.currentUserId ?? currentUser.userId);
+
 		const wrapper = mount(MembersTable, {
 			attachTo: document.body,
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomMembersStore: {
-								roomMembers: [...members, currentUser],
-								isRoomOwner: vi.fn(),
-							},
-						},
-					}),
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
 
@@ -209,7 +194,7 @@ describe("MembersTable", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should have column style for extra small display sizes", async () => {
+	it("should have column style for extra small display sizes", () => {
 		const { wrapper } = setup({ windowWidth: 599 });
 
 		const dataTable = wrapper.get(".table-title-header");
@@ -217,7 +202,7 @@ describe("MembersTable", () => {
 		expect(dataTable.classes()).toContain("flex-column");
 	});
 
-	it("should not have column style when display size is over 599px", async () => {
+	it("should not have column style when display size is over 599px", () => {
 		const { wrapper } = setup({ windowWidth: 800 });
 
 		const dataTable = wrapper.get(".table-title-header");
@@ -279,7 +264,7 @@ describe("MembersTable", () => {
 		});
 	});
 
-	it("should render checkboxes if user can add members", async () => {
+	it("should render checkboxes if user can add members", () => {
 		const { wrapper, roomMembers } = setup({
 			customRoomAuthorization: { canAddRoomMembers: true },
 		});
@@ -290,7 +275,7 @@ describe("MembersTable", () => {
 		expect(checkboxes.length).toEqual(roomMembers.length + 1); // all checkboxes including header checkbox
 	});
 
-	it("should not render checkboxes if user can not add members", async () => {
+	it("should not render checkboxes if user can not add members", () => {
 		const { wrapper } = setup({
 			customRoomAuthorization: { canAddRoomMembers: false },
 		});
@@ -300,7 +285,7 @@ describe("MembersTable", () => {
 		expect(checkboxes.length).toEqual(0);
 	});
 
-	it("non-selectable members should have their checkboxes disabled", async () => {
+	it("non-selectable members should have their checkboxes disabled", () => {
 		const nonSelectableMembers = roomMemberFactory.buildList(3, {
 			isSelectable: false,
 		});
@@ -316,7 +301,7 @@ describe("MembersTable", () => {
 		expect(checkboxes.length).toEqual(nonSelectableMembers.length);
 	});
 
-	it("should not show room applicants", async () => {
+	it("should not show room applicants", () => {
 		const roomAdmins = roomMemberFactory.buildList(3, {
 			roomRoleName: RoleName.Roomadmin,
 			displayRoomRole: RoleName.Roomadmin,
@@ -365,7 +350,7 @@ describe("MembersTable", () => {
 	});
 
 	describe("when no members are selected", () => {
-		it("should not render action menu when no members are selected", async () => {
+		it("should not render action menu when no members are selected", () => {
 			const { wrapper } = setup();
 			const actionMenu = wrapper.findComponent(ActionMenu);
 
@@ -446,7 +431,7 @@ describe("MembersTable", () => {
 			expect(search.props("prependInnerIcon")).toEqual(mdiMagnify);
 		});
 
-		it("should render search component with flex order 1 for extra small display sizes", async () => {
+		it("should render search component with flex order 1 for extra small display sizes", () => {
 			const { wrapper } = setup({
 				windowWidth: 599,
 			});
@@ -456,7 +441,7 @@ describe("MembersTable", () => {
 			expect(search.classes()).toContain("order-1");
 		});
 
-		it("should not render search component with flex order 1 for display sizes greater than 599px", async () => {
+		it("should not render search component with flex order 1 for display sizes greater than 599px", () => {
 			const { wrapper } = setup({
 				windowWidth: 800,
 			});

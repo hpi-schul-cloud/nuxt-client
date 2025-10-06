@@ -1,22 +1,22 @@
 import { mount } from "@vue/test-utils";
-import { h, nextTick, ref } from "vue";
+import { h, ref } from "vue";
 import { VApp } from "vuetify/lib/components/index";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import {
-	AUTH_MODULE_KEY,
-	FILE_PATHS_MODULE_KEY,
-	THEME_KEY,
-} from "@/utils/inject";
+import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
 import Sidebar from "./Sidebar.vue";
-import AuthModule from "@/store/auth";
 import FilePathsModule from "@/store/filePaths";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { Permission, SchulcloudTheme } from "@/serverApi/v3";
 import { useSidebarSelection } from "./SidebarSelection.composable";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import {
+	createTestAppStoreWithPermissions,
+	createTestEnvStore,
+} from "@@/tests/test-utils";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
@@ -29,16 +29,19 @@ const setup = (
 	{
 		permissions,
 		sidebarExpanded,
+		isTeamsEnabled,
 	}: {
-		permissions?: string[];
+		permissions?: Permission[];
 		sidebarExpanded?: boolean;
-	} = { permissions: [], sidebarExpanded: true }
+		isTeamsEnabled?: boolean;
+	} = { permissions: [], sidebarExpanded: true, isTeamsEnabled: false }
 ) => {
-	const authModule = createModuleMocks(AuthModule, {
-		getUserPermissions: permissions,
+	setActivePinia(createTestingPinia());
+	createTestAppStoreWithPermissions(permissions ?? []);
+	createTestEnvStore({
+		SC_THEME: SchulcloudTheme.Brb,
+		FEATURE_TEAMS_ENABLED: isTeamsEnabled,
 	});
-
-	createTestEnvStore({ SC_THEME: SchulcloudTheme.Brb });
 
 	const filePathsModule = createModuleMocks(FilePathsModule, {
 		getSpecificFiles: {
@@ -48,14 +51,12 @@ const setup = (
 			analogConsent: "",
 		},
 	});
-
 	mockedUseSidebarSelection.mockReturnValue({ isActive: ref(false) });
 
 	const wrapper = mount(VApp, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				[AUTH_MODULE_KEY.valueOf()]: authModule,
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
 				[THEME_KEY.valueOf()]: {
 					name: SchulcloudTheme.Default,
@@ -123,10 +124,8 @@ describe("@ui-layout/Sidebar", () => {
 	describe("when user does have needed permission", () => {
 		it("should display items correctly ", async () => {
 			const { wrapper } = setup({
-				permissions: ["TEAMS_ENABLED".toLowerCase()],
+				isTeamsEnabled: true,
 			});
-			await nextTick();
-			await nextTick();
 
 			expect(wrapper.find("[data-testid='sidebar-teams']").exists()).toBe(true);
 		});
@@ -136,8 +135,6 @@ describe("@ui-layout/Sidebar", () => {
 		describe("when user does not have needed permission", () => {
 			it("should filter items correctly", async () => {
 				const { wrapper } = setup({ permissions: [] });
-				await nextTick();
-				await nextTick();
 
 				expect(wrapper.find("[data-testid='Aufgaben']").exists()).toBe(false);
 			});
@@ -146,10 +143,8 @@ describe("@ui-layout/Sidebar", () => {
 		describe("when user does have one of the needed permissions", () => {
 			it("should display items correctly ", async () => {
 				const { wrapper } = setup({
-					permissions: ["TASK_DASHBOARD_VIEW_V3".toLowerCase()],
+					permissions: [Permission.TaskDashboardViewV3],
 				});
-				await nextTick();
-				await nextTick();
 
 				expect(wrapper.find("[data-testid='sidebar-tasks']").exists()).toBe(
 					true

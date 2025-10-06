@@ -2,10 +2,8 @@ import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
-import { SchulcloudTheme } from "@/serverApi/v3";
-import { authModule, schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
-import NotifierModule from "@/store/notifier";
+import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import mock$objects from "@@/tests/test-utils/pageStubs";
@@ -18,7 +16,9 @@ import { nextTick } from "vue";
 import { createStore } from "vuex";
 import TeacherPage from "./TeacherOverview.page.vue";
 import { RouterLinkStub } from "@vue/test-utils";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, createTestAppStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 const mockData = [
 	{
@@ -71,9 +71,11 @@ const createMockStore = () => {
 						return { data: [] };
 					},
 				},
-				state: () => ({
-					list: [],
-				}),
+				state: () => {
+					return {
+						list: [],
+					};
+				},
 			},
 			users: {
 				namespaced: true,
@@ -85,12 +87,14 @@ const createMockStore = () => {
 				},
 				getters: {
 					getList: () => mockData,
-					getPagination: () => ({
-						limit: 25,
-						skip: 0,
-						total: 2,
-						query: "",
-					}),
+					getPagination: () => {
+						return {
+							limit: 25,
+							skip: 0,
+							total: 2,
+							query: "",
+						};
+					},
 					getActive: () => false,
 					getPercent: () => 0,
 					getQrLinks: () => [],
@@ -99,7 +103,9 @@ const createMockStore = () => {
 			uiState: {
 				namespaced: true,
 				getters: {
-					get: () => () => ({ page: 1 }),
+					get: () => () => {
+						return { page: 1 };
+					},
 				},
 				mutations: {
 					set: vi.fn(),
@@ -118,30 +124,26 @@ const createMockStore = () => {
 describe("teachers/index", () => {
 	const OLD_ENV = process.env;
 
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
 		vi.useFakeTimers();
 
 		vi.resetModules(); // reset module registry to avoid conflicts
 		process.env = { ...OLD_ENV }; // make a copy
 
 		setupStores({
-			authModule: AuthModule,
 			schoolsModule: SchoolsModule,
-			notifierModule: NotifierModule,
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
-		authModule.setMe({
-			roles: [
-				{
-					name: "administrator",
-				},
-			],
-			permissions: ["TEACHER_CREATE", "TEACHER_DELETE"],
+
+		createTestAppStore({
+			me: {
+				school: mockSchool,
+				roles: [{ name: RoleName.Administrator }],
+				permissions: [Permission.TeacherCreate, Permission.TeacherDelete],
+			},
 		});
 	});
 
@@ -159,7 +161,9 @@ describe("teachers/index", () => {
 			return state[key];
 		},
 
-		set: () => ({}),
+		set: () => {
+			return {};
+		},
 	};
 
 	const setup = () => {

@@ -4,7 +4,6 @@ import {
 	WopiApiFactory,
 	WopiApiInterface,
 } from "@/fileStorageApi/v3";
-import { authModule } from "@/store/store-accessor";
 import {
 	EditorMode,
 	FileRecord,
@@ -15,8 +14,11 @@ import {
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { useFileRecordsStore } from "./FileRecords.state";
-import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 import { useParentStatisticsStore } from "./ParentStatistics.state";
+import { notifyError, useAppStore } from "@data-app";
+import { useI18n } from "vue-i18n";
+import { formatFileSize } from "@/utils/fileHelper";
+import { useEnvFileConfig } from "@data-env";
 
 export enum ErrorType {
 	FILE_IS_BLOCKED = "FILE_IS_BLOCKED",
@@ -30,17 +32,9 @@ export enum ErrorType {
 }
 
 export const useFileStorageApi = () => {
+	const { t } = useI18n();
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const wopiApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
-
-	const {
-		showFileTooBigError,
-		showForbiddenError,
-		showUnauthorizedError,
-		showInternalServerError,
-		showFileNotDeletedError,
-		showFileExistsError,
-	} = useFileStorageNotifier();
 
 	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords } =
 		useFileRecordsStore();
@@ -53,7 +47,7 @@ export const useFileStorageApi = () => {
 		parentType: FileRecordParent
 	): Promise<void> => {
 		try {
-			const schoolId = authModule.getSchool?.id as string;
+			const schoolId = useAppStore().school?.id as string;
 			const response = await fileApi.list(
 				schoolId,
 				StorageLocation.SCHOOL,
@@ -74,7 +68,7 @@ export const useFileStorageApi = () => {
 		parentType: FileRecordParent
 	): Promise<void> => {
 		try {
-			const schoolId = authModule.getSchool?.id as string;
+			const schoolId = useAppStore().school?.id as string;
 			const response = await fileApi.upload(
 				schoolId,
 				StorageLocation.SCHOOL,
@@ -97,7 +91,7 @@ export const useFileStorageApi = () => {
 		try {
 			const { pathname } = new URL(imageUrl);
 			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
-			const schoolId = authModule.getSchool?.id as string;
+			const schoolId = useAppStore().school?.id as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
 				fileName,
@@ -146,7 +140,7 @@ export const useFileStorageApi = () => {
 		} catch (error) {
 			upsertFileRecords(fileRecords);
 			showError(error);
-			showFileNotDeletedError();
+			notifyError(t("components.board.notifications.errors.fileNotDeleted"));
 		}
 	};
 
@@ -187,20 +181,31 @@ export const useFileStorageApi = () => {
 
 	const showMessageByType = (message: ErrorType | string) => {
 		switch (message) {
-			case ErrorType.FILE_TOO_BIG:
-				showFileTooBigError();
+			case ErrorType.FILE_TOO_BIG: {
+				const maxFileSizeWithUnit = formatFileSize(
+					useEnvFileConfig().value.MAX_FILE_SIZE
+				);
+
+				notifyError(
+					t("components.board.notifications.errors.fileToBig", {
+						maxFileSizeWithUnit,
+					})
+				);
 				break;
+			}
 			case ErrorType.FILE_NAME_EXISTS:
-				showFileExistsError();
+				notifyError(t("components.board.notifications.errors.fileNameExists"));
 				break;
 			case ErrorType.Unauthorized:
-				showUnauthorizedError();
+				notifyError(t("error.401"));
 				break;
 			case ErrorType.Forbidden:
-				showForbiddenError();
+				notifyError(t("error.403"));
 				break;
 			default:
-				showInternalServerError();
+				notifyError(
+					t("components.board.notifications.errors.fileServiceNotAvailable")
+				);
 				break;
 		}
 	};

@@ -3,17 +3,16 @@ import { computed, ref } from "vue";
 import { RoomApiFactory, RoomStatsItemResponse } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
-import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { schoolsModule } from "@/store/store-accessor";
 import { useRoomMembersStore } from "@data-room";
+import { notifyError } from "@data-app";
 
 export const useAdministrationRoomStore = defineStore(
 	"administrationRoomStore",
 	() => {
 		const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 		const { t } = useI18n();
-		const { showFailure } = useBoardNotifier();
 		const isLoading = ref(true);
 		const roomList = ref<RoomStatsItemResponse[]>([]);
 		const isEmptyList = ref(false);
@@ -64,7 +63,7 @@ export const useAdministrationRoomStore = defineStore(
 				isEmptyList.value = false;
 				roomList.value = sortAndFormatList(data);
 			} catch {
-				showFailure(t("pages.rooms.administration.error.load"));
+				notifyError(t("pages.rooms.administration.error.load"));
 				isEmptyList.value = true;
 			} finally {
 				isLoading.value = false;
@@ -97,7 +96,7 @@ export const useAdministrationRoomStore = defineStore(
 					(room) => room.roomId !== roomId
 				);
 			} catch {
-				showFailure(t("pages.rooms.administration.error.delete"));
+				notifyError(t("pages.rooms.administration.error.delete"));
 			} finally {
 				isLoading.value = false;
 			}

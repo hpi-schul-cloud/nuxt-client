@@ -4,7 +4,6 @@ import {
 	UserLoginMigrationResponse,
 	UserLoginMigrationSearchListResponse,
 } from "@/serverApi/v3";
-import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { AxiosResponse, HttpStatusCode } from "axios";
@@ -14,6 +13,7 @@ import {
 	UserLoginMigration,
 	UserLoginMigrationMapper,
 } from "./user-login-migration";
+import { useAppStore } from "@data-app";
 
 @Module({
 	name: "userLoginMigrationModule",
@@ -77,11 +77,11 @@ export default class UserLoginMigrationModule extends VuexModule {
 
 		this.resetBusinessError();
 
-		if (authModule.getUser?.id) {
+		if (useAppStore().user?.id) {
 			try {
 				const response: AxiosResponse<UserLoginMigrationSearchListResponse> =
 					await this.userLoginMigrationApi.userLoginMigrationControllerGetMigrations(
-						authModule.getUser?.id
+						useAppStore().user?.id
 					);
 
 				if (response.data.total > 1) {
@@ -121,11 +121,12 @@ export default class UserLoginMigrationModule extends VuexModule {
 
 		this.resetBusinessError();
 
-		if (authModule.getSchool?.id) {
+		const schoolId = useAppStore().school?.id;
+		if (schoolId) {
 			try {
 				const response: AxiosResponse<UserLoginMigrationResponse> =
 					await this.userLoginMigrationApi.userLoginMigrationControllerFindUserLoginMigrationBySchool(
-						authModule.getSchool?.id
+						schoolId
 					);
 
 				const userLoginMigration: UserLoginMigration =

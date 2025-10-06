@@ -1,11 +1,8 @@
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
 import {
+	createTestAppStoreWithSchool,
 	createTestEnvStore,
 	maintenanceStatusFactory,
-	meResponseFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -16,32 +13,28 @@ import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { VBtn, VCheckbox } from "vuetify/lib/components/index";
 import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("@data-school");
 
 describe("SchoolYearChangeSection", () => {
+	const schoolId = "schoolId";
 	let useSharedSchoolYearChangeApiMock: DeepMocked<
 		ReturnType<typeof useSharedSchoolYearChange>
 	>;
 
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore();
-	});
-
-	const schoolId = "schoolId";
-	const mockMe = meResponseFactory.build({ school: { id: schoolId } });
-	const authModule = createModuleMocks(AuthModule, {
-		getSchool: mockMe.school,
+		createTestAppStoreWithSchool(schoolId);
 	});
 
 	const getWrapper = () => {
 		const wrapper = mount(SchoolYearChangeSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 			},
 		});
 

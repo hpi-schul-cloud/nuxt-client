@@ -1,9 +1,7 @@
-import AuthModule from "@/store/auth";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	courseInfoDataResponseFactory,
+	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 } from "@@/tests/test-utils";
 import {
@@ -25,13 +23,18 @@ import { Mock } from "vitest";
 import {
 	ConfigResponse,
 	CourseInfoDataResponse,
+	Permission,
 	SchulcloudTheme,
 } from "@/serverApi/v3";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
+vi.mock("vue-router", () => {
+	return {
+		useRoute: vi.fn(),
+		useRouter: vi.fn(),
+	};
+});
 
 vi.mock("@data-room", () => {
 	return {
@@ -76,9 +79,8 @@ describe("RoomsOverview", () => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
-		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: ["COURSE_ADMINISTRATION".toLowerCase()],
-		});
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStoreWithPermissions([Permission.CourseAdministration]);
 
 		createTestEnvStore({
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
@@ -99,17 +101,13 @@ describe("RoomsOverview", () => {
 		const wrapper = mount(RoomsOverview, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 				stubs: {
 					StartExistingCourseSyncDialog: true,
 					EndCourseSyncDialog: true,
 				},
 				mocks: {
-					t: (key: string, placeholders: Record<string, string> = {}) => {
-						return `${key}|${Object.values(placeholders || {}).join("|")}`;
-					},
+					t: (key: string, placeholders: Record<string, string> = {}) =>
+						`${key}|${Object.values(placeholders || {}).join("|")}`,
 				},
 			},
 			props: {
@@ -125,11 +123,10 @@ describe("RoomsOverview", () => {
 		};
 	};
 
-	const findTableComponent = (wrapper: VueWrapper) => {
-		return wrapper.findComponent<typeof VDataTableServer>(
+	const findTableComponent = (wrapper: VueWrapper) =>
+		wrapper.findComponent<typeof VDataTableServer>(
 			'[data-testid="admin-rooms-table"]'
 		);
-	};
 
 	beforeEach(() => {
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>({

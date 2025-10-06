@@ -124,11 +124,9 @@ import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
 import { useI18n } from "vue-i18n";
 import {
-	AUTH_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { downloadFile } from "@/utils/fileHelper";
@@ -138,13 +136,12 @@ import {
 	mdiTrashCanOutline,
 	mdiTrayArrowUp,
 } from "@icons/material";
+import { notifySuccess, useAppStore } from "@data-app";
+import { Permission } from "@/serverApi/v3";
 
 const { t } = useI18n();
-const authModule = injectStrict(AUTH_MODULE_KEY);
 const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-
 const isSchoolPolicyFormDialogOpen: Ref<boolean> = ref(false);
 const isDeletePolicyDialogOpen: Ref<boolean> = ref(false);
 
@@ -157,9 +154,10 @@ watch(
 	{ immediate: true }
 );
 
-const hasSchoolEditPermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("school_edit")
+const hasSchoolEditPermission = useAppStore().hasPermission(
+	Permission.SchoolEdit
 );
+
 const privacyPolicy: ComputedRef<ConsentVersion | null> = computed(
 	() => privacyPolicyModule.getPrivacyPolicy
 );
@@ -181,11 +179,9 @@ const downloadPolicy = () => {
 const deleteFile = async () => {
 	await privacyPolicyModule.deletePrivacyPolicy();
 
-	notifierModule.show({
-		text: t("pages.administration.school.index.schoolPolicy.delete.success"),
-		status: "success",
-		timeout: 5000,
-	});
+	notifySuccess(
+		t("pages.administration.school.index.schoolPolicy.delete.success")
+	);
 };
 
 const closeDialog = () => {

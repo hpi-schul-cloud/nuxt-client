@@ -6,15 +6,16 @@ import { RoomEditPage } from "@page-room";
 import { useRoute, useRouter } from "vue-router";
 import { RoomUpdateParams, RoomColor } from "@/types/room/Room";
 import { RoomForm } from "@feature-room";
-import { nextTick, ref } from "vue";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
+import { computed, nextTick } from "vue";
 import { Mock } from "vitest";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
+import {
+	expectNotification,
+	mockedPiniaStoreTyping,
+	roomFactory,
+} from "@@/tests/test-utils";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ApplicationError } from "@/store/types/application-error";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
@@ -25,10 +26,6 @@ const useRouteMock = useRoute as Mock;
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
-
-vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
-}));
 
 const roomParams: RoomUpdateParams = {
 	name: "test",
@@ -60,15 +57,16 @@ describe("@pages/RoomEdit.page.vue", () => {
 		}>
 	) => {
 		const { isRoomDefined } = { isRoomDefined: true, ...options };
-		const notifierModule = createModuleMocks(NotifierModule);
 		const room = isRoomDefined ? roomFactory.build() : undefined;
 		const roomId = room ? room.id : "test-room-id";
 
-		useRouteMock.mockImplementation(() => ({
-			params: {
-				id: roomId,
-			},
-		}));
+		useRouteMock.mockImplementation(() => {
+			return {
+				params: {
+					id: roomId,
+				},
+			};
+		});
 
 		const wrapper = mount(RoomEditPage, {
 			global: {
@@ -84,9 +82,6 @@ describe("@pages/RoomEdit.page.vue", () => {
 						},
 					}),
 				],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 		});
 
@@ -101,7 +96,6 @@ describe("@pages/RoomEdit.page.vue", () => {
 			fetchRoom,
 			room,
 			roomId,
-			notifierModule,
 		};
 	};
 
@@ -131,7 +125,8 @@ describe("@pages/RoomEdit.page.vue", () => {
 	describe("loading is done", () => {
 		describe("when user has no edit room permissions", () => {
 			it("should not render DefaultWireframe", () => {
-				roomPermissions.canEditRoom = ref(false);
+				roomPermissions.canEditRoom = computed(() => false);
+
 				const { wrapper } = setup({ isLoading: false });
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 
@@ -139,7 +134,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			});
 
 			it("should navigate to room details page", async () => {
-				roomPermissions.canEditRoom = ref(false);
+				roomPermissions.canEditRoom = computed(() => false);
 
 				const { roomId } = setup({ isLoading: false });
 				await nextTick();
@@ -153,7 +148,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 		describe("when user has edit room permissions ", () => {
 			beforeEach(() => {
-				roomPermissions.canEditRoom = ref(true);
+				roomPermissions.canEditRoom = computed(() => true);
 			});
 			it("should render DefaultWireframe", () => {
 				const { wrapper } = setup();
@@ -223,7 +218,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 				});
 
 				it("should show error notification on invalid request error", async () => {
-					const { notifierModule, updateRoom, wrapper } = setup();
+					const { updateRoom, wrapper } = setup();
 					await nextTick();
 
 					const apiError = {
@@ -236,10 +231,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 					roomFormComponent.vm.$emit("save", { room: roomParams });
 					await nextTick();
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						status: "error",
-						text: "components.roomForm.validation.generalSaveError",
-					});
+					expectNotification("error");
 				});
 
 				it("should throw application error if not due to invalid request", async () => {

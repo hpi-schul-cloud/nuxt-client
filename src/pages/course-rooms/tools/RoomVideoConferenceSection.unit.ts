@@ -1,10 +1,8 @@
-import { VideoConferenceScope } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
+import { Permission, RoleName, VideoConferenceScope } from "@/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import {
-	AUTH_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
@@ -18,13 +16,16 @@ import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { nextTick } from "vue";
+import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("RoomVideoConferenceSection", () => {
 	const mockUrl = "https://mock.com";
 
 	const getWrapper = (
 		props: { roomId: string },
-		userPermissions: ("join_meeting" | "start_meeting")[],
+		userPermissions: (Permission.JoinMeeting | Permission.StartMeeting)[],
 		isExpert: boolean,
 		videoConferenceModuleGetter?: Partial<VideoConferenceModule>
 	) => {
@@ -35,9 +36,12 @@ describe("RoomVideoConferenceSection", () => {
 			writable: true, // possibility to override
 		});
 
-		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: userPermissions,
-			getUserRoles: isExpert ? ["expert"] : [],
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStore({
+			me: {
+				permissions: userPermissions,
+				roles: isExpert ? [{ id: "expert", name: RoleName.Expert }] : [],
+			},
 		});
 
 		const videoConferenceModule = createModuleMocks(VideoConferenceModule, {
@@ -68,7 +72,6 @@ describe("RoomVideoConferenceSection", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
@@ -81,7 +84,6 @@ describe("RoomVideoConferenceSection", () => {
 
 		return {
 			wrapper,
-			authModule,
 			videoConferenceModule,
 			courseRoomDetailsModule,
 		};
@@ -97,7 +99,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -131,7 +133,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -165,7 +167,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -200,7 +202,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				true,
 				{
 					getVideoConferenceInfo: {
@@ -235,7 +237,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				true,
 				{
 					getVideoConferenceInfo: {
@@ -270,7 +272,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -305,7 +307,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["start_meeting"],
+				[Permission.StartMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -419,7 +421,7 @@ describe("RoomVideoConferenceSection", () => {
 					{
 						roomId: "roomId",
 					},
-					["join_meeting"],
+					[Permission.JoinMeeting],
 					false,
 					{
 						getVideoConferenceInfo: {
@@ -460,7 +462,7 @@ describe("RoomVideoConferenceSection", () => {
 					{
 						roomId: "roomId",
 					},
-					["start_meeting"],
+					[Permission.StartMeeting],
 					false,
 					{
 						getVideoConferenceInfo: {
@@ -503,7 +505,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId,
 				},
-				["start_meeting"],
+				[Permission.StartMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -585,7 +587,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["start_meeting"],
+				[Permission.StartMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -636,7 +638,7 @@ describe("RoomVideoConferenceSection", () => {
 					{
 						roomId: "roomId",
 					},
-					["join_meeting"],
+					[Permission.JoinMeeting],
 					false,
 					{
 						getVideoConferenceInfo: {
@@ -676,7 +678,7 @@ describe("RoomVideoConferenceSection", () => {
 					{
 						roomId: "roomId",
 					},
-					["join_meeting"],
+					[Permission.JoinMeeting],
 					false,
 					{
 						getVideoConferenceInfo: {

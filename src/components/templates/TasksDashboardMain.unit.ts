@@ -1,19 +1,15 @@
-import { authModule } from "@/store";
-import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import {
 	COPY_MODULE_KEY,
 	FINISHED_TASKS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 	TASKS_MODULE_KEY,
 } from "@/utils/inject";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -26,6 +22,10 @@ import { VAutocomplete } from "vuetify/lib/components/index";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
+import { Permission } from "@/serverApi/v3";
+import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 
 const $route = {
 	query: {
@@ -58,12 +58,11 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	let copyModuleMock: CopyModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let loadingStateModuleMock: LoadingStateModule;
-	let notifierModuleMock: NotifierModule;
 	let shareModuleMock: ShareModule;
 	let wrapper: VueWrapper;
 
-	const mountComponent = (options = {}) => {
-		return mount(TasksDashboardMain, {
+	const mountComponent = (options = {}) =>
+		mount(TasksDashboardMain, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -73,7 +72,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					[TASKS_MODULE_KEY]: tasksModuleMock,
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
 				mocks: {
@@ -83,7 +81,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			},
 			...options,
 		});
-	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	describe("when mounting the component", () => {
 		it("should receive valid role props", () => {
@@ -115,10 +116,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getTasks: [],
 				tasksIsEmpty: false,
-			});
-
-			setupStores({
-				authModule: AuthModule,
 			});
 
 			wrapper = mountComponent({
@@ -192,7 +189,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				getIsResultModalOpen: false,
 			});
 			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-			notifierModuleMock = createModuleMocks(NotifierModule);
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: false,
 			});
@@ -204,13 +200,9 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 			setupStores({
 				copyModule: CopyModule,
-				authModule: AuthModule,
 			});
+			createTestAppStoreWithPermissions([Permission.HomeworkCreate]);
 
-			const mockMe = meResponseFactory.build({
-				permissions: ["HOMEWORK_CREATE"],
-			});
-			authModule.setMe(mockMe);
 			wrapper = mountComponent({
 				props: {
 					role: "teacher",

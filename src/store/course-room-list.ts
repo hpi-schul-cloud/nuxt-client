@@ -17,7 +17,6 @@ import {
 	RoomsData,
 	SharingCourseObject,
 } from "./types/rooms";
-import { AlertPayload } from "./types/alert-payload";
 
 @Module({
 	name: "courseRoomListModule",
@@ -42,10 +41,6 @@ export default class CourseRoomListModule extends VuexModule {
 		statusCode: "",
 		message: "",
 		error: {},
-	};
-
-	alertData: AlertPayload = {
-		status: "info",
 	};
 
 	@Mutation
@@ -155,11 +150,6 @@ export default class CourseRoomListModule extends VuexModule {
 		};
 	}
 
-	@Mutation
-	setAlertData(payload: AlertPayload): void {
-		this.alertData = payload;
-	}
-
 	get getRoomsData(): Array<RoomsData> {
 		return this.roomsData;
 	}
@@ -198,10 +188,6 @@ export default class CourseRoomListModule extends VuexModule {
 
 	get hasCurrentRooms(): boolean {
 		return this.roomsData.length > 0;
-	}
-
-	get getAlertData(): AlertPayload {
-		return this.alertData;
 	}
 
 	private get dashboardApi(): DashboardApiInterface {
