@@ -1,11 +1,9 @@
 import { Status } from "@/store/types/commons";
-import { computed, readonly, ref } from "vue";
-import { useTryCatch } from "@/utils/try-catch.utils";
 import { AsyncFunction } from "@/types/async.types";
+import { useTryCatch } from "@/utils/try-catch.utils";
+import { computed, readonly, ref } from "vue";
 
-type TaskResult<T> =
-	| { success: true; result: T }
-	| { success: false; result: undefined };
+type TaskResult<T> = { success: true; result: T } | { success: false; result: undefined };
 
 export const useSafeTask = () => {
 	const error = ref<Error>();

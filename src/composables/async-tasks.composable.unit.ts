@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from "vitest";
 import { useSafeTask, useSafeTaskRunner } from "./async-tasks.composable";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("useSafeTask", () => {
 	let task: ReturnType<typeof useSafeTask>;
@@ -45,9 +45,7 @@ describe("useSafeTask", () => {
 		});
 
 		it("should return success=false on error", async () => {
-			const result = await task.execute(() =>
-				Promise.reject(new Error("Failed"))
-			);
+			const result = await task.execute(() => Promise.reject(new Error("Failed")));
 
 			expect(result.success).toBe(false);
 			expect(result.result).toBeUndefined();
@@ -115,9 +113,7 @@ describe("useSafeSingleTask", () => {
 	it("should maintain error state across runs", async () => {
 		let shouldFail = true;
 		const task = useSafeTaskRunner(() =>
-			shouldFail
-				? Promise.reject(new Error("Failed"))
-				: Promise.resolve("success")
+			shouldFail ? Promise.reject(new Error("Failed")) : Promise.resolve("success")
 		);
 
 		await task.run();
