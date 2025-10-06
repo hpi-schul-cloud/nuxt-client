@@ -2,7 +2,7 @@
 	<VDialog
 		v-model="isOpen"
 		:width="xs ? 'auto' : 480"
-		data-testid="dialog-invite-participants"
+		data-testid="dialog-change-role-participants"
 		max-width="480"
 		@keydown.esc="onClose"
 		@click:outside="onClose"
