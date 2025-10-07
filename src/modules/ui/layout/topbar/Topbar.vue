@@ -1,5 +1,5 @@
 <template>
-	<VAppBar flat :height="appBarHeight" scroll-behavior="hide" scroll-threshold="20">
+	<VToolbar flat :height="appBarHeight">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template #prepend>
 			<VAppBarNavIcon
@@ -47,20 +47,20 @@
 			data-testid="school-logo"
 		/>
 		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mr-3" />
-	</VAppBar>
+	</VToolbar>
 </template>
 
 <script setup lang="ts">
+import CloudLogo from "../CloudLogo.vue";
+import CloudStatusMessages from "./CloudStatusMessages.vue";
+import PageShare from "./PageShare.vue";
+import TopbarItem from "./TopbarItem.vue";
+import UserMenu from "./UserMenu.vue";
+import { injectStrict, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
+import { useAppStoreRefs } from "@data-app";
+import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
 import { computed, onMounted } from "vue";
 import { useDisplay } from "vuetify";
-import { STATUS_ALERTS_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { mdiMenu, mdiAlert, mdiQrcode } from "@icons/material";
-import TopbarItem from "./TopbarItem.vue";
-import PageShare from "./PageShare.vue";
-import CloudStatusMessages from "./CloudStatusMessages.vue";
-import UserMenu from "./UserMenu.vue";
-import CloudLogo from "../CloudLogo.vue";
-import { useAppStoreRefs } from "@data-app";
 
 defineProps({
 	sidebarExpanded: {
@@ -122,5 +122,9 @@ const appBarHeight = computed(() => {
 .school-logo {
 	max-height: 40px;
 	max-width: 160px;
+}
+
+.v-toolbar {
+	background-color: #fff !important;
 }
 </style>

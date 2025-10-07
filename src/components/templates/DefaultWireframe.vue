@@ -58,8 +58,8 @@
 					</speed-dial-menu>
 				</slot>
 			</div>
-			<v-divider class="mx-n6" role="presentation" />
 		</div>
+		<v-divider v-if="showDivider" class="mx-n6" role="presentation" />
 		<v-container
 			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
@@ -76,10 +76,10 @@
 </template>
 
 <script setup lang="ts">
+import { Breadcrumb, Fab } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { computed, PropType, useSlots } from "vue";
-import { Fab, Breadcrumb } from "./default-wireframe.types";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
@@ -135,15 +135,12 @@ const slots = useSlots();
 
 const { mdAndDown, smAndUp, lgAndUp } = useDisplay();
 
-const showDivider = computed(() => {
-	return !props.hideBorder && !!(props.headline || slots.header);
-});
+const showDivider = computed(
+	() => !props.hideBorder && !!(props.headline || slots.header)
+);
 </script>
 
 <style lang="scss" scoped>
-:global(:root) {
-	--v-layout-top: 0px !important;
-}
 @use "@/styles/settings.scss" as *;
 
 .wireframe-container-flex {
@@ -161,9 +158,11 @@ const showDivider = computed(() => {
 }
 
 .wireframe-header {
-	padding: 1.5rem  1.5rem 0;
+	padding: 0 24px;
 	display: flex;
 	flex-direction: column;
+	background-color: rgb(var(--v-theme-white));
+	z-index: 20;
 }
 
 :deep(.v-application__wrap) {
