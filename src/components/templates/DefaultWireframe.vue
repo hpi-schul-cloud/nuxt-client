@@ -59,7 +59,7 @@
 				</slot>
 			</div>
 		</div>
-		<v-divider v-if="showDivider" class="mx-n6" role="presentation" />
+		<v-divider v-if="showDivider" role="presentation" />
 		<v-container
 			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
@@ -183,12 +183,6 @@ const showDivider = computed(
 	margin: 0;
 }
 
-.v-divider {
-	z-index: -1;
-	margin-right: -1.5rem;
-	margin-left: -1.5rem;
-}
-
 .breadcrumbs-placeholder {
 	height: 22px;
 }
@@ -222,6 +216,7 @@ $fab-wrapper-height: 80px;
 	height: $fab-wrapper-height;
 	margin-top: -#{$fab-wrapper-height};
 	pointer-events: none;
+	z-index: 100;
 
 	* {
 		pointer-events: auto;
