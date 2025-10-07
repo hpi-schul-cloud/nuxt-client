@@ -13,7 +13,7 @@ export const useShareBoardLink = () => {
 
 		try {
 			await navigator.clipboard.writeText(shareLink.toString());
-			notifySuccess("common.words.copyLinkToClipboard.success");
+			notifySuccess(t("common.words.copyLinkToClipboard.success"));
 		} catch {
 			notifyError(t("common.words.copyLinkToClipboard.failure"));
 		}
