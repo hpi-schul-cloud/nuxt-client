@@ -23,12 +23,13 @@ const route = useRoute();
 
 const roomDetailsStore = useRoomDetailsStore();
 const { isLoading, roomVariant, room, lockedRoomName } = storeToRefs(roomDetailsStore);
-const { fetchRoom, resetState } = roomDetailsStore;
+
+const { fetchRoomAndBoards, resetState } = roomDetailsStore;
 
 watch(
 	() => route.params.id,
 	async () => {
-		await fetchRoom(route.params.id as string);
+		await fetchRoomAndBoards(route.params.id as string);
 	},
 	{ immediate: true }
 );

@@ -1681,9 +1681,9 @@ export default {
 	"pages.rooms.members.roleChange.handOverBtn.text": "Передача власності",
 	"pages.rooms.members.handOverAlert.label": "Дозволи цієї кімнати передаються {memberFullName}.",
 	"pages.rooms.members.handOverAlert.label.subText":
-		"{currentUserFullName} втрачає права «Власник» і отримує права «Адміністратор».",
+		"{roomOwner} втрачає права «Власник» і отримує права «Адміністратор».",
 	"pages.rooms.members.handOverAlert.confirm.label":
-		"Якщо цей дозвіл буде передано {memberFullName}, {currentUserFullName} втратить право видаляти кімнату.",
+		"Якщо цей дозвіл буде передано {memberFullName}, {roomOwner} втратить право видаляти кімнату.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText": "Ця дія може бути скасована лише {memberFullName}.",
 	"pages.rooms.members.inviteMember.step.prepare.title": "Створити посилання для запрошення",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":

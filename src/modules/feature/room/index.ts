@@ -4,7 +4,7 @@ import RoomAdminTable from "./manageRoom/tables/RoomAdminTable.vue";
 import RoomCopyFlow from "./RoomCopyFlow.vue";
 import RoomForm from "./RoomForm.vue";
 import RoomGrid from "./RoomGrid.vue";
-import AddMembers from "./roomMembers/dialogs/AddMembers.vue";
+import AddMembersDialog from "./roomMembers/dialogs/AddMembersDialog.vue";
 import ChangeRole from "./roomMembers/dialogs/ChangeRole.vue";
 import InviteMembersDialog from "./roomMembers/dialogs/InviteMembersDialog.vue";
 import ConfirmationTable from "./roomMembers/tables/ConfirmationTable.vue";
@@ -17,7 +17,7 @@ import RoomMenu from "./RoomMenu.vue";
 import RoomsWelcomeInfo from "./RoomsWelcomeInfo.vue";
 
 export {
-	AddMembers,
+	AddMembersDialog,
 	BoardGrid,
 	ChangeRole,
 	Confirmations,

@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction">
+	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction" @fab:clicked="onFabClick">
 		<template #header>
 			<div ref="header" class="d-flex align-items-center">
 				<h1 data-testid="admin-room-detail-title">
@@ -10,49 +10,55 @@
 		<div class="mt-12">
 			{{ t("pages.rooms.administration.roomDetail.infoText") }}
 		</div>
-		<RoomAdminMembersTable
-			:header-bottom="headerBottom"
-			:show-select="false"
-			:members-info-text="t('pages.rooms.administration.table.membersInfoText')"
-		/>
+		<RoomAdminMembersTable :header-bottom="headerBottom" :show-select="false" />
+		<AddMembersDialog v-model="isMembersDialogOpen" :is-admin-mode="true" @close="onDialogClose" />
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
-import { useAdministrationRoomStore } from "@data-room";
-import { RoomAdminMembersTable } from "@feature-room";
+import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
+import { AddMembersDialog, RoomAdminMembersTable } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, ComputedRef, onUnmounted, ref, watch } from "vue";
+import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+const { fetchRoom } = useRoomDetailsStore();
+const { room } = storeToRefs(useRoomDetailsStore());
 
 const { t } = useI18n();
 const route = useRoute();
+const isMembersDialogOpen = ref(false);
 
-const adminRoomStore = useAdministrationRoomStore();
-const { selectRoomAndLoadMembers } = adminRoomStore;
-const { selectedRoom } = storeToRefs(adminRoomStore);
+const roomMembersStore = useRoomMembersStore();
+const { fetchMembers, loadSchoolList, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 
 const headerText = computed(() =>
 	t("pages.rooms.administration.roomDetail.header.text", {
-		roomName: selectedRoom.value?.roomName || "",
+		roomName: room.value?.name || "",
 	})
 );
 
 const pageTitle = computed(() => buildPageTitle(headerText.value));
 useTitle(pageTitle);
 
+onMounted(async () => {
+	const roomId = route.params.roomId?.toString();
+	await fetchRoom(roomId);
+	await fetchMembers();
+});
+
 onUnmounted(() => {
-	selectedRoom.value = null;
+	resetStore();
 });
 
 watch(
@@ -62,10 +68,7 @@ watch(
 
 		if (!isFeatureEnabled) {
 			window.location.replace("/dashboard");
-			return;
 		}
-
-		await selectRoomAndLoadMembers(route.params.roomId as string);
 	},
 	{ immediate: true }
 );
@@ -78,20 +81,34 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 
 	{
 		title: t("pages.rooms.administration.roomDetail.breadcrumb", {
-			roomName: selectedRoom.value?.roomName,
+			roomName: room.value?.name,
 		}),
 		disabled: true,
 	},
 ]);
 
-const fabAction = computed(() => {
-	{
-		return {
-			icon: mdiPlus,
-			title: t("pages.rooms.members.add"),
-			ariaLabel: t("pages.rooms.members.add"),
-			dataTestId: "fab-add-members",
-		};
+const adminSchoolId = computed(() => schoolsModule.getSchool.id);
+const isOwnSchool = computed(() => room.value?.schoolId === adminSchoolId.value);
+
+const fabAction = computed(() =>
+	isOwnSchool.value
+		? {
+				icon: mdiPlus,
+				title: t("pages.rooms.members.add"),
+				ariaLabel: t("pages.rooms.members.add"),
+				dataTestId: "fab-add-members",
+			}
+		: undefined
+);
+
+const onFabClick = async () => {
+	if (isOwnSchool.value) {
+		loadSchoolList();
+		isMembersDialogOpen.value = true;
 	}
-});
+};
+
+const onDialogClose = () => {
+	isMembersDialogOpen.value = false;
+};
 </script>
