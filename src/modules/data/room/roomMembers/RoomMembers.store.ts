@@ -292,7 +292,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 
 		const memberToBeOwner = roomMembers.value.find((member) => member.userId === userId);
-		if (!currentOwner || !memberToBeOwner) {
+		if (!memberToBeOwner) {
 			notifyError(t("pages.rooms.members.error.updateRole"));
 			return;
 		}
