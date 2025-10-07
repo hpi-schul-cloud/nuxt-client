@@ -12,14 +12,17 @@
 </template>
 
 <script setup lang="ts">
-import { advancedFormattingToolbar, advancedPlugins, compactHeadings } from "./config";
-import { useEditorConfig } from "./EditorConfig.composable";
-import { Editor } from "@ckeditor/ckeditor5-core";
-import CKEditor from "@ckeditor/ckeditor5-vue";
-import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
 import { useVModel } from "@vueuse/core";
-import katex from "katex";
 import { computed, ref } from "vue";
+import CKEditor from "@ckeditor/ckeditor5-vue";
+import { Editor } from "@ckeditor/ckeditor5-core";
+import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
+import { useEditorConfig } from "./EditorConfig.composable";
+import {
+	advancedPlugins,
+	advancedFormattingToolbar,
+} from "./config";
+import katex from "katex";
 (window as Window).katex = katex;
 
 const props = defineProps({
@@ -40,7 +43,13 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["ready", "focus", "update:value", "blur", "keyboard:delete"]);
+const emit = defineEmits([
+	"ready",
+	"focus",
+	"update:value",
+	"blur",
+	"keyboard:delete",
+]);
 
 const CKEditorVue = CKEditor.component;
 const { generalConfig, registerDeletionHandler } = useEditorConfig();
@@ -48,20 +57,21 @@ const { generalConfig, registerDeletionHandler } = useEditorConfig();
 const modelValue = useVModel(props, "value", emit);
 const ck = ref(null);
 
-const config = computed(() => ({
-	...generalConfig,
-	toolbar: {
-		items: advancedFormattingToolbar,
-	},
-	plugins: advancedPlugins,
-	heading: compactHeadings,
-	placeholder: props.placeholder,
-	ui: {
-		viewportOffset: {
-			top: props.viewportOffsetTop,
+const config = computed(() => {
+	return {
+		...generalConfig,
+		toolbar: {
+			items: advancedFormattingToolbar,
 		},
-	},
-}));
+		plugins: advancedPlugins,
+		placeholder: props.placeholder,
+		ui: {
+			viewportOffset: {
+				top: props.viewportOffsetTop,
+			},
+		},
+	};
+});
 
 const handleFocus = () => emit("focus");
 const handleBlur = () => emit("blur");

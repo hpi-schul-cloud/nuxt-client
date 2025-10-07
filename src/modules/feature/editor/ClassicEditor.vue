@@ -1,26 +1,34 @@
 <template>
-	<CKEditorVue
-		ref="ck"
-		v-model="modelValue"
-		:editor="ClassicEditor"
-		:config="config"
-		data-testid="ckeditor"
-		@blur="handleBlur"
-		@focus="handleFocus"
-		@ready="handleReady"
-	/>
+	<CKEditorVue v-model="model" :editor="ClassicEditor" :config="config" @ready="handleReady" />
 </template>
 
 <script setup lang="ts">
-import { corePlugins, mediaFormattingToolbar, prominentHeadings } from "./config";
+import { mediaFormattingToolbar } from "./config";
 import { useEditorConfig } from "./EditorConfig.composable";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import { Editor, EditorConfig } from "@ckeditor/ckeditor5-core";
 import CKEditor from "@ckeditor/ckeditor5-vue";
-import { ClassicEditor } from "@hpi-schul-cloud/ckeditor";
-import { useVModel } from "@vueuse/core";
-import { computed, ref } from "vue";
+import { Math } from "@isaul32/ckeditor5-math";
+import {
+	Autoformat,
+	Bold,
+	ClassicEditor,
+	Essentials,
+	FontBackgroundColor,
+	FontColor,
+	Heading,
+	Italic,
+	List,
+	Paragraph,
+	RemoveFormat,
+	Strikethrough,
+} from "ckeditor5";
+import { computed, PropType } from "vue";
 
 const props = defineProps({
+	type: {
+		type: String as PropType<"classic" | "inline">,
+		default: "classic",
+	},
 	value: {
 		type: String,
 		default: "",
@@ -34,27 +42,38 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["ready", "focus", "update:value", "blur", "keyboard:delete"]);
+const emit = defineEmits<{
+	(e: "ready"): void;
+	(e: "keyboard:delete"): void;
+}>();
 
 const CKEditorVue = CKEditor.component;
 const { generalConfig, registerDeletionHandler } = useEditorConfig();
 
-const ck = ref(null);
-const modelValue = useVModel(props, "value", emit);
+const model = defineModel<string>("value");
 
-const config = computed(() => ({
-	...generalConfig,
+const config = computed<EditorConfig>(() => ({
+	// ...generalConfig,
 	toolbar: {
 		items: mediaFormattingToolbar,
 	},
-	plugins: corePlugins,
-	heading: prominentHeadings,
+	plugins: [
+		Autoformat,
+		Bold,
+		Essentials,
+		FontBackgroundColor,
+		FontColor,
+		Heading,
+		Italic,
+		List,
+		Math,
+		Paragraph,
+		RemoveFormat,
+		Strikethrough,
+	],
+	// heading: prominentHeadings,
 	placeholder: props.placeholder,
 }));
-
-const handleFocus = () => emit("focus");
-const handleBlur = () => emit("blur");
-const handleDelete = () => emit("keyboard:delete");
 
 const handleReady = (editor: Editor) => {
 	emit("ready");
@@ -63,7 +82,7 @@ const handleReady = (editor: Editor) => {
 		editor.editing.view.focus();
 	}
 
-	registerDeletionHandler(editor, handleDelete);
+	registerDeletionHandler(editor, () => emit("keyboard:delete"));
 };
 </script>
 

@@ -1,8 +1,8 @@
-import { fontBackgroundColors, fontColors } from "./config";
-import { Editor } from "@ckeditor/ckeditor5-core";
-import { useEnvStore } from "@data-env";
+import { Editor, EditorConfig } from "@ckeditor/ckeditor5-core";
 import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
+import { fontColors, fontBackgroundColors } from "./config";
+import { useEnvStore } from "@data-env";
 
 type CKEditorKeystrokeInfo = {
 	keyCode: number;
@@ -41,7 +41,7 @@ export const useEditorConfig = () => {
 	const { t, locale } = useI18n();
 	const DEFAULT_PROTOCOL = "//";
 
-	const generalConfig = reactive<GeneralConfig>({
+	const generalConfig = reactive<EditorConfig>({
 		language: locale.value || useEnvStore().fallBackLanguage,
 		link: {
 			defaultProtocol: DEFAULT_PROTOCOL,
@@ -51,21 +51,29 @@ export const useEditorConfig = () => {
 		fontBackgroundColor: fontBackgroundColors(t),
 	});
 
-	const containsListElement = (sourceElement: HTMLElement | undefined): boolean => {
+	const containsListElement = (
+		sourceElement: HTMLElement | undefined
+	): boolean => {
 		if (!sourceElement) return false;
 		return !!sourceElement.querySelector("ul,ol");
 	};
 
-	const containsFormulaElement = (tempDiv: HTMLDivElement | undefined): boolean => {
+	const containsFormulaElement = (
+		tempDiv: HTMLDivElement | undefined
+	): boolean => {
 		if (!tempDiv) return false;
 		return !!tempDiv.querySelector("*:not(.math-tex):not(.katex)");
 	};
 
-	const containsTextContentElement = (textContent: string | null | undefined): boolean => {
+	const containsTextContentElement = (
+		textContent: string | null | undefined
+	): boolean => {
 		if (!textContent) return false;
 		return !!textContent.trim();
 	};
-	const createTempDivFromHtml = (editor: EditorWithSourceElement): HTMLDivElement | undefined => {
+	const createTempDivFromHtml = (
+		editor: EditorWithSourceElement
+	): HTMLDivElement | undefined => {
 		const tempDiv = document.createElement("div");
 		if (!editor.getData) {
 			return;
@@ -97,7 +105,9 @@ export const useEditorConfig = () => {
 	};
 
 	const registerDeletionHandler = (editor: Editor, onDelete: () => void) => {
-		editor.editing.view.document.on("keydown", (evt, data) => deletionHandler(evt, data, editor, onDelete));
+		editor.editing.view.document.on("keydown", (evt, data) =>
+			deletionHandler(evt, data, editor, onDelete)
+		);
 	};
 
 	return {
