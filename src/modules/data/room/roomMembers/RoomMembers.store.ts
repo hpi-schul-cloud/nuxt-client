@@ -105,6 +105,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			}));
 		} catch {
 			notifyError(t("pages.rooms.members.error.load"));
+		} finally {
 			isLoading.value = false;
 		}
 	};
