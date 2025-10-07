@@ -39,9 +39,7 @@ describe("useSafeTask", () => {
 			const result = await task.execute(() => Promise.resolve("data"));
 
 			expect(result.success).toBe(true);
-			if (result.success) {
-				expect(result.result).toBe("data");
-			}
+			expect(result.result).toBe("data");
 		});
 
 		it("should return success=false on error", async () => {
@@ -54,13 +52,12 @@ describe("useSafeTask", () => {
 
 	describe("State management", () => {
 		it("should set status to pending while running", async () => {
-			const promise = task.execute(() => {
+			await task.execute(() => {
 				expect(task.status.value).toBe("pending");
 				expect(task.isRunning.value).toBe(true);
 				return Promise.resolve(true);
 			});
 
-			await promise;
 			expect(task.status.value).toBe("completed");
 			expect(task.isRunning.value).toBe(false);
 		});
