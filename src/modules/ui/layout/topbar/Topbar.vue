@@ -1,5 +1,5 @@
 <template>
-	<VToolbar flat :height="appBarHeight">
+	<VToolbar flat :height="appBarHeight" :class="{ 'topbar--fixed': isFixed }">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template #prepend>
 			<VAppBarNavIcon
@@ -48,6 +48,7 @@
 		/>
 		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mr-3" />
 	</VToolbar>
+	<div v-if="isFixed" aria-hidden="true" style="height: 50px" />
 </template>
 
 <script setup lang="ts">
@@ -59,8 +60,33 @@ import UserMenu from "./UserMenu.vue";
 import { injectStrict, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 import { useAppStoreRefs } from "@data-app";
 import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useDisplay } from "vuetify";
+import { onUnmounted } from "vue";
+
+const isFixed = ref(false);
+let lastScrollY = window.scrollY;
+
+const handleScroll = () => {
+	const currentScrollY = window.scrollY;
+	if (currentScrollY <= 0) {
+		isFixed.value = false;
+	} else if (currentScrollY < lastScrollY && currentScrollY > 64) {
+		isFixed.value = true;
+	} else if (currentScrollY > lastScrollY && currentScrollY > 64) {
+		isFixed.value = false;
+	}
+
+	lastScrollY = currentScrollY;
+};
+
+onMounted(() => {
+	window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+	window.removeEventListener("scroll", handleScroll);
+});
 
 defineProps({
 	sidebarExpanded: {
@@ -126,5 +152,13 @@ const appBarHeight = computed(() => {
 
 .v-toolbar {
 	background-color: #fff !important;
+}
+.topbar--fixed {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+	border-bottom: 1px solid rgba(128, 128, 128, 0.25);
 }
 </style>
