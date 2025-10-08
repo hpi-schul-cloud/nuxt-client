@@ -52,6 +52,8 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useDisplay } from "vuetify";
 import CloudLogo from "../CloudLogo.vue";
 import CloudStatusMessages from "./CloudStatusMessages.vue";
 import PageShare from "./PageShare.vue";
@@ -60,9 +62,6 @@ import UserMenu from "./UserMenu.vue";
 import { injectStrict, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 import { useAppStoreRefs } from "@data-app";
 import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
-import { computed, onMounted, ref } from "vue";
-import { useDisplay } from "vuetify";
-import { onUnmounted } from "vue";
 
 const isFixed = ref(false);
 let lastScrollY = window.scrollY;
