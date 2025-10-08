@@ -394,6 +394,14 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		},
 	},
 	{
+		path: "/registration-external-members",
+		component: () => import("@/pages/registration-external-members/RegistrationExternalMembers.page.vue"),
+		name: "registration-external-members",
+		meta: {
+			isPublic: true,
+		},
+	},
+	{
 		path: "/",
 		component: () => import("@/pages/Home.page.vue"),
 		name: "home",
