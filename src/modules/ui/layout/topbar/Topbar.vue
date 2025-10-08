@@ -1,5 +1,5 @@
 <template>
-	<VToolbar flat :height="appBarHeight" :class="isFixed ? 'toolbar--fixed' : ''">
+	<VToolbar flat :height="appBarHeight" :class="!props.sidebarExpanded && isFixed ? 'toolbar--fixed' : ''">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template #prepend>
 			<VAppBarNavIcon
@@ -44,7 +44,12 @@
 		/>
 		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mr-3" />
 	</VToolbar>
-	<div v-if="isFixed" aria-hidden="true" class="toolbar-placeholder" :style="{ height: appBarHeight + 'px' }" />
+	<div
+		v-if="!props.sidebarExpanded && isFixed"
+		aria-hidden="true"
+		class="toolbar-placeholder"
+		:style="{ height: appBarHeight + 'px' }"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -65,6 +70,11 @@ const isFixed = ref(false);
 let lastScrollY = window.scrollY;
 
 const handleScroll = () => {
+	if (props.sidebarExpanded) {
+		isFixed.value = false;
+		lastScrollY = window.scrollY;
+		return;
+	}
 	const currentScrollY = window.scrollY;
 	const scrollDistance = Math.abs(currentScrollY - lastScrollY);
 
@@ -86,7 +96,7 @@ onUnmounted(() => {
 	window.removeEventListener("scroll", handleScroll);
 });
 
-defineProps({
+const props = defineProps({
 	sidebarExpanded: {
 		type: Boolean,
 		required: true,
