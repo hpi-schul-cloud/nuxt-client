@@ -7,7 +7,7 @@
 		@keydown.esc="onClose"
 		@click:outside="onClose"
 	>
-		<v-card ref="inviteMembersContent">
+		<VCard ref="inviteMembersContent">
 			<template #title>
 				<h2 class="mt-2">
 					{{ modalTitle }}
@@ -24,7 +24,7 @@
 					</InfoAlert>
 
 					<div class="mt-5">
-						<v-text-field
+						<VTextField
 							ref="descriptionField"
 							v-model="formData.title"
 							class="mb-2"
@@ -35,7 +35,7 @@
 							data-testid="invite-participant-description-input"
 						/>
 
-						<v-checkbox
+						<VCheckbox
 							v-model="formData.restrictedToCreatorSchool"
 							hide-details
 							data-testid="input-invite-participants-restricted-to-creator-school"
@@ -48,9 +48,9 @@
 									</span>
 								</div>
 							</template>
-						</v-checkbox>
+						</VCheckbox>
 
-						<v-checkbox
+						<VCheckbox
 							v-model="formData.isValidForStudents"
 							:disabled="!formData.restrictedToCreatorSchool"
 							:label="t('pages.rooms.members.inviteMember.form.validForStudents.label')"
@@ -58,8 +58,16 @@
 							data-testid="input-invite-participants-valid-for-students"
 						/>
 
+						<VCheckbox
+							v-if="isInviteExternalPersonsFeatureEnabled"
+							v-model="formData.isValidForExternalExperts"
+							:label="t('pages.rooms.members.inviteMember.form.validForExternalExperts.label')"
+							hide-details
+							data-testid="input-invite-participants-valid-for-external-experts"
+						/>
+
 						<div class="d-flex align-center justify-start my-n4 pr-0">
-							<v-checkbox
+							<VCheckbox
 								v-model="formData.activeUntilChecked"
 								:label="t('pages.rooms.members.inviteMember.form.linkExpires.label')"
 								hide-details
@@ -81,7 +89,7 @@
 							/>
 						</div>
 
-						<v-checkbox
+						<VCheckbox
 							v-model="formData.requiresConfirmation"
 							hide-details
 							class="my-n6"
@@ -96,7 +104,7 @@
 									</i18n-t>
 								</div>
 							</template>
-						</v-checkbox>
+						</VCheckbox>
 					</div>
 				</template>
 				<template v-else>
@@ -105,16 +113,16 @@
 			</template>
 
 			<template #actions>
-				<v-spacer />
+				<VSpacer />
 				<div v-if="invitationStep !== InvitationStep.SHARE" class="mr-4 mb-3">
-					<v-btn
+					<VBtn
 						ref="cancelButton"
 						class="ms-auto mr-2"
 						:text="t('common.actions.cancel')"
 						data-testid="invite-participant-cancel-btn"
 						@click="onClose"
 					/>
-					<v-btn
+					<VBtn
 						ref="continueButton"
 						class="ms-auto"
 						color="primary"
@@ -127,7 +135,7 @@
 				</div>
 
 				<div v-else class="mr-4 mb-3">
-					<v-btn
+					<VBtn
 						ref="closeButton"
 						class="ms-auto"
 						variant="outlined"
@@ -137,7 +145,7 @@
 					/>
 				</div>
 			</template>
-		</v-card>
+		</VCard>
 	</VDialog>
 </template>
 
@@ -161,7 +169,7 @@ import { storeToRefs } from "pinia";
 import { computed, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-import type { VCard } from "vuetify/components";
+import { VBtn, type VCard, VSpacer, VTextField } from "vuetify/components";
 
 defineProps({
 	schoolName: {
@@ -186,10 +194,15 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 const { t } = useI18n();
 const { xs } = useDisplay();
 
+const isInviteExternalPersonsFeatureEnabled = computed(
+	() => useEnvConfig().value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED
+);
+
 const defaultFormData: RoomInvitationFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
 	isValidForStudents: false,
+	isValidForExternalPersons: false,
 	activeUntilChecked: false,
 	activeUntil: undefined,
 	requiresConfirmation: true,
@@ -258,6 +271,7 @@ const onContinue = async () => {
 				? formData.value.activeUntil.toString()
 				: DEFAULT_EXPIRED_DATE.value,
 		isOnlyForTeachers: !formData.value.isValidForStudents,
+		isValidForExternalPersons: formData.value.isValidForExternalPersons,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
 	};
