@@ -1,9 +1,6 @@
+import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3/api";
 import { $axios } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import {
-	CommonCartridgeApiFactory,
-	CommonCartridgeApiInterface,
-} from "@/commonCartridgeApi/v3/api";
 
 @Module({
 	name: "commonCartridgeImportModule",

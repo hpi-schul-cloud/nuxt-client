@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
-import NotificationModal from "./NotificationModal.vue";
-import { mdiAlertCircle, mdiCheckCircle } from "@icons/material";
 import ModalBodyInfo from "../molecules/ModalBodyInfo.vue";
+import NotificationModal from "./NotificationModal.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mdiAlertCircle, mdiCheckCircle } from "@icons/material";
+import { mount } from "@vue/test-utils";
 import { VIcon } from "vuetify/components";
 
 const testProps = {
@@ -16,8 +13,8 @@ const testProps = {
 };
 
 describe("@/components/molecules/NotificationModal", () => {
-	const setup = (isSuccess: boolean) => {
-		return mount(NotificationModal, {
+	const setup = (isSuccess: boolean) =>
+		mount(NotificationModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -26,7 +23,6 @@ describe("@/components/molecules/NotificationModal", () => {
 				isSuccess,
 			},
 		});
-	};
 
 	it("should render the component", () => {
 		const wrapper = setup(true);
@@ -47,9 +43,7 @@ describe("@/components/molecules/NotificationModal", () => {
 		it("should render success icon", () => {
 			const wrapper = setup(true);
 
-			const successIcon = wrapper
-				.findComponent(ModalBodyInfo)
-				.findComponent(VIcon);
+			const successIcon = wrapper.findComponent(ModalBodyInfo).findComponent(VIcon);
 
 			expect(successIcon.exists()).toBe(true);
 			expect(successIcon.props("icon")).toBe(mdiCheckCircle);
@@ -69,9 +63,7 @@ describe("@/components/molecules/NotificationModal", () => {
 		it("should render error icon", () => {
 			const wrapper = setup(false);
 
-			const errorIcon = wrapper
-				.findComponent(ModalBodyInfo)
-				.findComponent(VIcon);
+			const errorIcon = wrapper.findComponent(ModalBodyInfo).findComponent(VIcon);
 
 			expect(errorIcon.exists()).toBe(true);
 			expect(errorIcon.props("icon")).toBe(mdiAlertCircle);
@@ -81,9 +73,7 @@ describe("@/components/molecules/NotificationModal", () => {
 	it("executes close action after close", async () => {
 		const wrapper = setup(false);
 
-		const dialogCard = wrapper
-			.findComponent({ name: "v-dialog" })
-			.findComponent({ name: "v-card" });
+		const dialogCard = wrapper.findComponent({ name: "v-dialog" }).findComponent({ name: "v-card" });
 
 		const button = dialogCard.get(".btn-confirm");
 		await button.trigger("click");

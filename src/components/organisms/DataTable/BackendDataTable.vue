@@ -25,10 +25,7 @@
 							:show-external-text="showExternalText"
 							@update:sort="onUpdateSort"
 						>
-							<template
-								v-for="(cmp, name) in dataHeadSlots"
-								#[name]="columnProps"
-							>
+							<template v-for="(cmp, name) in dataHeadSlots" #[name]="columnProps">
 								<slot :name="name" v-bind="columnProps" />
 							</template>
 						</component>
@@ -46,10 +43,7 @@
 							data-testid="table-data-row"
 							@update:selected="setRowSelection(row, $event)"
 						>
-							<template
-								v-for="(cmp, name) in dataRowSlots"
-								#[name]="columnProps"
-							>
+							<template v-for="(cmp, name) in dataRowSlots" #[name]="columnProps">
 								<slot :name="name" v-bind="columnProps" />
 							</template>
 						</component>
@@ -71,14 +65,12 @@
 </template>
 
 <script>
-import { getValueByPath } from "@/utils/helpers";
-
+import RowSelectionBar from "./RowSelectionBar.vue";
 import TableDataRow from "./TableDataRow.vue";
 import TableHeadRow from "./TableHeadRow.vue";
 import Pagination from "@/components/organisms/Pagination.vue";
-import RowSelectionBar from "./RowSelectionBar.vue";
-
 import controllableData from "@/mixins/controllableData";
+import { getValueByPath } from "@/utils/helpers";
 
 export default {
 	components: {
@@ -94,8 +86,7 @@ export default {
 		columns: {
 			type: Array,
 			default: () => [],
-			validator: (columns) =>
-				columns.every((column) => typeof column.label === "string"),
+			validator: (columns) => columns.every((column) => typeof column.label === "string"),
 		},
 		/**
 		 * Array of objects
@@ -223,35 +214,22 @@ export default {
 			return this.columns.map((e) => e.field);
 		},
 		dataRowSlots() {
-			return Object.fromEntries(
-				Object.entries(this.$slots).filter(([name]) =>
-					name.startsWith("datacolumn")
-				)
-			);
+			return Object.fromEntries(Object.entries(this.$slots).filter(([name]) => name.startsWith("datacolumn")));
 		},
 		dataHeadSlots() {
-			return Object.fromEntries(
-				Object.entries(this.$slots).filter(([name]) =>
-					name.startsWith("headcolumn")
-				)
-			);
+			return Object.fromEntries(Object.entries(this.$slots).filter(([name]) => name.startsWith("headcolumn")));
 		},
 
 		numberOfSelectedItems() {
 			// TODO think about moving selections outside this method
 			const selections = Object.keys(this.selectionKeys);
-			return this.$_controllableDataSelectionType === "inclusive"
-				? selections.length
-				: this.total - selections.length;
+			return this.$_controllableDataSelectionType === "inclusive" ? selections.length : this.total - selections.length;
 		},
 		allRowsOfAllPagesSelected: {
 			get() {
 				// TODO think about moving selections outside this method
 				const selections = Object.keys(this.selectionKeys);
-				return (
-					this.$_controllableDataSelectionType === "exclusive" &&
-					selections.length === 0
-				);
+				return this.$_controllableDataSelectionType === "exclusive" && selections.length === 0;
 			},
 			set(state) {
 				if (state) {
@@ -263,8 +241,7 @@ export default {
 		},
 		currentPageSelectionState: {
 			get() {
-				const isInSelection = (row) =>
-					this.selectionKeys[getValueByPath(row, this.trackBy)];
+				const isInSelection = (row) => this.selectionKeys[getValueByPath(row, this.trackBy)];
 
 				const allSelected =
 					this.$_controllableDataSelectionType === "inclusive"
@@ -319,11 +296,7 @@ export default {
 				 * Inclusive means all items in the passed array are selected.
 				 * Exclusive means all items not in the passed array are selected.
 				 */
-				this.$emit(
-					"update:selection",
-					Object.keys(to),
-					this.$_controllableDataSelectionType
-				);
+				this.$emit("update:selection", Object.keys(to), this.$_controllableDataSelectionType);
 				/**
 				 * helper event for the selectedRowIds .sync modifier
 				 */
@@ -333,8 +306,7 @@ export default {
 		},
 		selectedRowIds: {
 			handler(to) {
-				const isArrayIdentical = (a, b) =>
-					a.length === b.length && a.every((c, i) => c === b[i]);
+				const isArrayIdentical = (a, b) => a.length === b.length && a.every((c, i) => c === b[i]);
 				if (isArrayIdentical(to, Object.keys(this.selectionKeys))) {
 					// nothing to change
 					return;
@@ -364,8 +336,7 @@ export default {
 			this.$_controllableDataSelectionType = "inclusive";
 		},
 		setRowSelection(row, state) {
-			const newState =
-				this.$_controllableDataSelectionType === "inclusive" ? state : !state;
+			const newState = this.$_controllableDataSelectionType === "inclusive" ? state : !state;
 
 			if (newState) {
 				this.selectionKeys = {
@@ -379,9 +350,7 @@ export default {
 		isRowSelected(row) {
 			const rowId = getValueByPath(row, this.trackBy);
 			return Boolean(
-				this.$_controllableDataSelectionType === "inclusive"
-					? this.selectionKeys[rowId]
-					: !this.selectionKeys[rowId]
+				this.$_controllableDataSelectionType === "inclusive" ? this.selectionKeys[rowId] : !this.selectionKeys[rowId]
 			);
 		},
 		onUpdateSort(sortBy, sortOrder) {

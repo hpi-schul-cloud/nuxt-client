@@ -1,6 +1,6 @@
-import { mount } from "@vue/test-utils";
 import VideoDisplay from "./VideoDisplay.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("VideoDisplay", () => {
 	const setup = (options?: { showMenu?: boolean }) => {

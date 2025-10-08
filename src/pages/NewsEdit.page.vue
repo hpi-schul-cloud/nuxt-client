@@ -19,13 +19,7 @@
 			max-width="short"
 		>
 			<div>
-				<form-news
-					v-if="news"
-					:news="news"
-					@save="onSave"
-					@delete="onDelete"
-					@cancel="onCancel"
-				/>
+				<form-news v-if="news" :news="news" @save="onSave" @delete="onDelete" @cancel="onCancel" />
 			</div>
 		</default-wireframe>
 	</div>
@@ -33,14 +27,10 @@
 
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { AlertStatus } from "@/store/types/alert-payload";
 import { News, PatchNewsPayload } from "@/store/types/news";
-import {
-	injectStrict,
-	NEWS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, NEWS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { AlertStatus, useNotificationStore } from "@data-app";
 import { FormNews } from "@feature-news-form";
 import { useTitle } from "@vueuse/core";
 import { ref } from "vue";
@@ -50,7 +40,6 @@ import { useRoute, useRouter } from "vue-router";
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const newsModule = injectStrict(NEWS_MODULE_KEY);
 const news = ref<News | null>();
 
@@ -110,15 +99,14 @@ const onDelete = async () => {
 	}
 };
 
-const onCancel = async () => {
+const onCancel = () => {
 	router.go(-1);
 };
 
-const showNotifier = (type: AlertStatus, method: "remove" | "patch") => {
-	notifierModule.show({
-		text: t(`components.organisms.FormNews.${type}.${method}`),
-		status: type,
-		timeout: 5000,
+const showNotifier = (status: AlertStatus, method: "remove" | "patch") => {
+	useNotificationStore().notify({
+		text: t(`components.organisms.FormNews.${status}.${method}`),
+		status,
 	});
 };
 </script>

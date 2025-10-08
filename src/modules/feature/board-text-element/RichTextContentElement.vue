@@ -20,12 +20,12 @@
 </template>
 
 <script setup lang="ts">
-import { RichTextElementResponse } from "@/serverApi/v3";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { computed, PropType, ref, toRef } from "vue";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
+import { RichTextElementResponse } from "@/serverApi/v3";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { computed, PropType, ref, toRef } from "vue";
 
 const props = defineProps({
 	element: {
@@ -129,9 +129,7 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	}
 }
 
-:deep(
-	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around
-) {
+:deep(.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around) {
 	> .ck-widget__type-around__button_before {
 		top: 8px;
 		left: 8px;

@@ -13,12 +13,7 @@ import { FunctionDirective } from "vue";
  *  @see https://beholdr.github.io/maska/#/?id=maskinput-options
  */
 export const createInputMask = (options: MaskInputOptions) => {
-	const bindMaska: FunctionDirective<HTMLElement> = (
-		el,
-		binding,
-		vNode,
-		oldVnode
-	) => {
+	const bindMaska: FunctionDirective<HTMLElement> = (el, binding, vNode, oldVnode) => {
 		const newBinding = { ...binding, arg: options as string };
 		(vMaska as FunctionDirective<HTMLElement>)(el, newBinding, vNode, oldVnode);
 	};

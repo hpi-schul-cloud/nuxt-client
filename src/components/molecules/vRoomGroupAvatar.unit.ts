@@ -1,12 +1,9 @@
+import vRoomGroupAvatar from "./vRoomGroupAvatar.vue";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { VBadge, VCard } from "vuetify/lib/components/index";
-import vRoomGroupAvatar from "./vRoomGroupAvatar.vue";
 
 vi.mock("vue-router");
 
@@ -79,15 +76,14 @@ const getWrapper = (
 		draggable?: boolean;
 	} = propsData,
 	options?: object
-) => {
-	return mount(vRoomGroupAvatar, {
+) =>
+	mount(vRoomGroupAvatar, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
 		props,
 		...options,
 	});
-};
 
 describe("vRoomGroupAvatar", () => {
 	it("should display the title", () => {

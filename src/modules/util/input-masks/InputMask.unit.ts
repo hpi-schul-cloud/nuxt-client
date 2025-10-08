@@ -1,6 +1,6 @@
 import { createInputMask } from "./InputMask.factory";
+import { MaskInputOptions, vMaska } from "maska";
 import { DirectiveBinding, FunctionDirective, VNode } from "vue";
-import { vMaska, MaskInputOptions } from "maska";
 
 vi.mock("maska");
 

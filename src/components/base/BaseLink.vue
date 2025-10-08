@@ -14,12 +14,7 @@
 		<slot />
 	</a>
 	<!-- TODO use RouterLink if used outside nuxt -->
-	<router-link
-		v-else
-		:class="{ link: !noStyles, 'text-only': noStyles }"
-		:to="routerLinkTo"
-		v-bind="$attrs"
-	>
+	<router-link v-else :class="{ link: !noStyles, 'text-only': noStyles }" :to="routerLinkTo" v-bind="$attrs">
 		<slot />
 	</router-link>
 </template>
@@ -98,10 +93,7 @@ export default {
 
 			if (this.href) {
 				// Check for insecure URL in href.
-				if (
-					!this.allowInsecure &&
-					!/^(https:|mailto:|tel:|\/)/.test(this.href)
-				) {
+				if (!this.allowInsecure && !/^(https:|mailto:|tel:|\/)/.test(this.href)) {
 					return logger.warn(
 						`Insecure href <base-link>: ${this.href}.\nWhen linking to external sites, always prefer https URLs. If this site does not offer SSL, explicitly add the allow-insecure attribute on <base-link>.`
 					);

@@ -1,8 +1,5 @@
 import VCustomChipTimeRemaining from "./VCustomChipTimeRemaining.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 
 describe("@/components/atoms/vCustomChipTimeRemaining", () => {
@@ -35,10 +32,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-			)}${HOURS_UNTIL_DUE} ${wrapper.vm.$t(
-				"components.atoms.VCustomChipTimeRemaining.hintHours",
-				HOURS_UNTIL_DUE
-			)}`;
+			)}${HOURS_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.VCustomChipTimeRemaining.hintHours", HOURS_UNTIL_DUE)}`;
 
 			expect(wrapper.element.textContent).toContain(expectedResult);
 		});
@@ -48,9 +42,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-			)}${HOURS_UNTIL_DUE} ${wrapper.vm.$t(
-				"components.atoms.VCustomChipTimeRemaining.hintHoursShort"
-			)}`;
+			)}${HOURS_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.VCustomChipTimeRemaining.hintHoursShort")}`;
 			expect(wrapper.element.textContent).toContain(expectedResult);
 		});
 	});
@@ -82,9 +74,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-			)}${MINUTES_UNTIL_DUE} ${wrapper.vm.$t(
-				"components.atoms.VCustomChipTimeRemaining.hintMinShort"
-			)}`;
+			)}${MINUTES_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.VCustomChipTimeRemaining.hintMinShort")}`;
 
 			expect(wrapper.element.textContent).toContain(expectedResult);
 		});
@@ -102,10 +92,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 	});
 
 	it("accepts valid dueDate props", () => {
-		const validDueDates = [
-			"2021-06-11T14:00:00.000Z",
-			"2021-06-07T09:30:00.000Z",
-		];
+		const validDueDates = ["2021-06-11T14:00:00.000Z", "2021-06-07T09:30:00.000Z"];
 		const { validator } = VCustomChipTimeRemaining.props.dueDate;
 
 		validDueDates.forEach((dueDate) => {

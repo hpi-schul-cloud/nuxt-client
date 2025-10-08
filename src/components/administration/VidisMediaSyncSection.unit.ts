@@ -1,35 +1,34 @@
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { axiosErrorFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { axiosErrorFactory, expectNotification } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useSchoolLicenseApi } from "@data-license";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
-import { HttpStatusCode } from "../../store/types/http-status-code.enum";
-import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import type { Mocked } from "vitest";
+import { setActivePinia } from "pinia";
+import { beforeEach, expect } from "vitest";
 
 vi.mock("@data-license");
 
 describe("VidisMediaSyncSection", () => {
-	let useSchoolLicenseApiMock: DeepMocked<
-		ReturnType<typeof useSchoolLicenseApi>
-	>;
+	let useSchoolLicenseApiMock: DeepMocked<ReturnType<typeof useSchoolLicenseApi>>;
 
-	const notifierModule: Mocked<NotifierModule> =
-		createModuleMocks(NotifierModule);
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+
+		useSchoolLicenseApiMock = createMock<ReturnType<typeof useSchoolLicenseApi>>();
+		vi.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
+	});
+
+	afterEach(() => {
+		vi.resetAllMocks();
+	});
 
 	const getWrapper = () => {
 		const wrapper = mount(VidisMediaSyncSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 		});
 
@@ -37,17 +36,6 @@ describe("VidisMediaSyncSection", () => {
 			wrapper,
 		};
 	};
-
-	beforeEach(() => {
-		useSchoolLicenseApiMock =
-			createMock<ReturnType<typeof useSchoolLicenseApi>>();
-
-		vi.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
-	});
-
-	afterEach(() => {
-		vi.resetAllMocks();
-	});
 
 	describe("Sync button", () => {
 		describe("when the request is successful", () => {
@@ -74,10 +62,7 @@ describe("VidisMediaSyncSection", () => {
 				const button = wrapper.find('[data-testid="sync-vidis-media-button"]');
 				await button.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					status: "success",
-					text: "components.administration.externalToolsSection.vidis.notification.success",
-				});
+				expectNotification("success");
 			});
 		});
 
@@ -86,9 +71,7 @@ describe("VidisMediaSyncSection", () => {
 				const { wrapper } = getWrapper();
 
 				useSchoolLicenseApiMock.updateSchoolLicenses.mockRejectedValueOnce(
-					axiosErrorFactory
-						.withStatusCode(HttpStatusCode.RequestTimeout)
-						.build()
+					axiosErrorFactory.withStatusCode(HttpStatusCode.RequestTimeout).build()
 				);
 
 				return {
@@ -102,10 +85,7 @@ describe("VidisMediaSyncSection", () => {
 				const button = wrapper.find('[data-testid="sync-vidis-media-button"]');
 				await button.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					status: "info",
-					text: "components.administration.externalToolsSection.vidis.notification.timeout",
-				});
+				expectNotification("info");
 			});
 		});
 
@@ -113,9 +93,7 @@ describe("VidisMediaSyncSection", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper();
 
-				useSchoolLicenseApiMock.updateSchoolLicenses.mockRejectedValueOnce(
-					new Error()
-				);
+				useSchoolLicenseApiMock.updateSchoolLicenses.mockRejectedValueOnce(new Error());
 
 				return {
 					wrapper,
@@ -128,10 +106,7 @@ describe("VidisMediaSyncSection", () => {
 				const button = wrapper.find('[data-testid="sync-vidis-media-button"]');
 				await button.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					status: "error",
-					text: "common.notification.error",
-				});
+				expectNotification("error");
 			});
 		});
 	});

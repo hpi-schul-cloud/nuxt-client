@@ -1,7 +1,7 @@
-import * as materialAliases from "@/components/icons/material";
-import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
-import { type ThemeDefinition } from "vuetify";
 import { customAliases } from "@/components/icons/custom";
+import * as materialAliases from "@/components/icons/material";
+import { type ThemeDefinition } from "vuetify";
+import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
 
 declare global {
 	interface Window {

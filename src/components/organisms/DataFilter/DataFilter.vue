@@ -10,27 +10,15 @@
 
 		<v-list>
 			<v-list-item v-for="(item, index) in filterMenuItems" :key="index">
-				<v-list-item-title
-					class="menu-text"
-					hover
-					@click="onFilterClick(item.value as FilterOptionsType)"
-				>
+				<v-list-item-title class="menu-text" hover @click="onFilterClick(item.value as FilterOptionsType)">
 					<span class="filter-menu-item">{{ item.label }}</span>
 				</v-list-item-title>
 			</v-list-item>
 		</v-list>
 	</v-menu>
-	<FilterChips
-		:filters="filterChipTitles"
-		@remove:filter="onRemoveChipFilter"
-		@click:filter="onFilterClick"
-	/>
+	<FilterChips :filters="filterChipTitles" @remove:filter="onRemoveChipFilter" @click:filter="onFilterClick" />
 
-	<FilterDialog
-		:is-open="dialogOpen"
-		@dialog-closed="onCloseDialog"
-		@remove:filter="onRemoveFilter"
-	>
+	<FilterDialog :is-open="dialogOpen" @dialog-closed="onCloseDialog" @remove:filter="onRemoveFilter">
 		<template #title> {{ modalTitle }} </template>
 		<template #content>
 			<ListSelection
@@ -53,19 +41,13 @@
 </template>
 
 <script setup lang="ts">
-import FilterDialog from "./FilterDialog.vue";
-import { DateBetween, FilterChips, ListSelection } from "./filterComponents";
-import {
-	DateSelection,
-	FilterOption,
-	SelectOptionsType,
-	FilterOptionsType,
-	User,
-} from "./types";
-import { ref, computed, PropType } from "vue";
 import { useDataTableFilter } from "./composables/filter.composable";
-import { useI18n } from "vue-i18n";
+import { DateBetween, FilterChips, ListSelection } from "./filterComponents";
+import FilterDialog from "./FilterDialog.vue";
+import { DateSelection, FilterOption, FilterOptionsType, SelectOptionsType, User } from "./types";
 import { mdiMenuDown, mdiTune } from "@icons/material";
+import { computed, PropType, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	filterFor: {
@@ -99,22 +81,16 @@ const {
 } = useDataTableFilter(userType.value);
 
 const modalTitle = computed(
-	() =>
-		defaultFilterMenuItems.find(
-			(item: SelectOptionsType) => item.value == selectedFilterType.value
-		)?.label
+	() => defaultFilterMenuItems.find((item: SelectOptionsType) => item.value == selectedFilterType.value)?.label
 );
 
-const selectionProps = computed(() => {
-	return selectedFilterType.value == FilterOption.CLASSES
-		? props.classNames
-		: registrationOptions[userType.value as User];
-});
+const selectionProps = computed(() =>
+	selectedFilterType.value == FilterOption.CLASSES ? props.classNames : registrationOptions[userType.value as User]
+);
 
 const filteredValues = computed(() => {
 	if (!selectedFilterType.value) return;
-	return filterQuery.value[selectedFilterType.value] as string[] &
-		DateSelection;
+	return filterQuery.value[selectedFilterType.value] as string[] & DateSelection;
 });
 
 const onCloseDialog = () => {

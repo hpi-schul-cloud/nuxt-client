@@ -4,9 +4,7 @@ export const ldapErrorHandler = (error = [], ctx) => {
 	error.forEach((err) => {
 		switch (err.type) {
 			case "WRONG_CREDENTIALS":
-				errorMessages.push(
-					ctx.$t("pages.administration.ldap.errors.credentials")
-				);
+				errorMessages.push(ctx.$t("pages.administration.ldap.errors.credentials"));
 				break;
 			case "CONNECTION_ERROR":
 				errorMessages.push(err.message);
@@ -15,9 +13,7 @@ export const ldapErrorHandler = (error = [], ctx) => {
 				errorMessages.push(ctx.$t("pages.administration.ldap.errors.path"));
 				break;
 			case "INVALID_CONFIGURATION_OBJECT":
-				errorMessages.push(
-					ctx.$t("pages.administration.ldap.errors.configuration")
-				);
+				errorMessages.push(ctx.$t("pages.administration.ldap.errors.configuration"));
 				break;
 			default:
 				return;

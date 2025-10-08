@@ -1,13 +1,12 @@
-import { shallowMount } from "@vue/test-utils";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
-import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { createTestAppStoreWithRole } from "@@/tests/test-utils";
+import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import { RoleName } from "@/serverApi/v3";
+import { createTestAppStoreWithRole } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 
 describe("SubmissionContentElementDisplay", () => {
 	const setup = (role = RoleName.Teacher) => {
@@ -18,6 +17,7 @@ describe("SubmissionContentElementDisplay", () => {
 			loading: false,
 			isOverdue: false,
 		};
+		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(role);
 
 		const wrapper = shallowMount(SubmissionContentElementDisplay, {

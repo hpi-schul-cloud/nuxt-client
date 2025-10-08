@@ -1,36 +1,15 @@
-import { notifierModule } from "@/store";
-import {
-	BoardPermissionChecks,
-	defaultPermissions,
-} from "@/types/board/Permissions";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestEnvStore,
-	mockedPiniaStoreTyping,
-} from "@@/tests/test-utils";
-import {
-	cardSkeletonResponseFactory,
-	columnResponseFactory,
-} from "@@/tests/test-utils/factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import {
-	useBoardPermissions,
-	useBoardStore,
-	useForceRender,
-} from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { createTestingPinia } from "@pinia/testing";
-import {
-	useBoardNotifier,
-	useDragAndDrop,
-	useSharedLastCreatedElement,
-} from "@util-board";
-import { computed, nextTick, ref } from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
+import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
+import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { useBoardPermissions, useBoardStore, useForceRender } from "@data-board";
+import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { useDragAndDrop, useSharedLastCreatedElement } from "@util-board";
+import { setActivePinia } from "pinia";
+import { computed, nextTick, ref } from "vue";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 
@@ -39,9 +18,7 @@ vi.mock("vue-router");
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = vi.mocked(useBoardPermissions);
 
-vi.mock("@util-board/BoardNotifier.composable");
 vi.mock("@util-board/LastCreatedElement.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 vi.mock("@data-board/fixSamePositionDnD.composable");
@@ -53,29 +30,19 @@ mockUseSharedLastCreatedElement.mockReturnValue({
 });
 
 describe("BoardColumn", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
 
 	beforeEach(() => {
 		setupStores({});
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false });
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
-		mockedUseForceRenderHandler =
-			createMock<ReturnType<typeof useForceRender>>();
+		mockedUseForceRenderHandler = createMock<ReturnType<typeof useForceRender>>();
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
 	});
 
-	const setup = (options?: {
-		permissions?: Partial<BoardPermissionChecks>;
-		cardsCount?: number;
-	}) => {
-		const cards = cardSkeletonResponseFactory.buildList(
-			options?.cardsCount ?? 3
-		);
+	const setup = (options?: { permissions?: Partial<BoardPermissionChecks>; cardsCount?: number }) => {
+		const cards = cardSkeletonResponseFactory.buildList(options?.cardsCount ?? 3);
 		const column = columnResponseFactory.build({
 			cards,
 		});
@@ -87,14 +54,7 @@ describe("BoardColumn", () => {
 
 		const wrapper = mount(BoardColumnVue, {
 			global: {
-				plugins: [
-					createTestingI18n(),
-					createTestingVuetify(),
-					createTestingPinia(),
-				],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
+				plugins: [createTestingI18n(), createTestingVuetify(), createTestingPinia()],
 			},
 			props: {
 				column,
@@ -122,7 +82,7 @@ describe("BoardColumn", () => {
 	});
 
 	describe("when a card moved ", () => {
-		it("should call 'moveCardRequest' method", async () => {
+		it("should call 'moveCardRequest' method", () => {
 			const { wrapper, store } = setup();
 
 			const emitObject = {
@@ -152,7 +112,7 @@ describe("BoardColumn", () => {
 		});
 
 		describe("when a card is moved to its column and the same position", () => {
-			it("should not call 'moveCardRequest' method", async () => {
+			it("should not call 'moveCardRequest' method", () => {
 				const { wrapper, store } = setup({ cardsCount: 1 });
 
 				const emitObject = {
@@ -182,7 +142,7 @@ describe("BoardColumn", () => {
 
 		describe("when a card is moved by keyboard", () => {
 			describe("when ArrowDown key is pressed for first card", () => {
-				it("should call 'moveCardRequest' method", async () => {
+				it("should call 'moveCardRequest' method", () => {
 					const { wrapper, store } = setup({ cardsCount: 3 });
 
 					const cardHostComponents = wrapper.findAllComponents({
@@ -196,7 +156,7 @@ describe("BoardColumn", () => {
 			});
 
 			describe("when ArrowDown key is pressed for last card", () => {
-				it("should call 'moveCardRequest' method", async () => {
+				it("should call 'moveCardRequest' method", () => {
 					const { wrapper, store } = setup({ cardsCount: 3 });
 
 					const cardHostComponents = wrapper.findAllComponents({

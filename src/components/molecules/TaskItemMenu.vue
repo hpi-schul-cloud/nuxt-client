@@ -113,6 +113,7 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { finishedTasksModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import { useEnvConfig } from "@data-env";
 import {
 	mdiArchiveOutline,
 	mdiContentCopy,
@@ -121,9 +122,8 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@icons/material";
-import { defineComponent } from "vue";
 import { KebabMenu } from "@ui-kebab-menu";
-import { useEnvConfig } from "@data-env";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	components: { vCustomDialog, KebabMenu },

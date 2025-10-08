@@ -1,10 +1,7 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { $axios } from "@/utils/api";
-import {
-	ConsentVersion,
-	CreateConsentVersionPayload,
-} from "@/store/types/consent-version";
 import { BusinessError, Status } from "@/store/types/commons";
+import { ConsentVersion, CreateConsentVersionPayload } from "@/store/types/consent-version";
+import { $axios } from "@/utils/api";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
 	name: "termsOfUseModule",
@@ -70,8 +67,7 @@ export default class TermsOfUseModule extends VuexModule {
 					publishedAt: -1,
 				},
 			};
-			const response = (await $axios.get("/v1/consentVersions", { params }))
-				.data;
+			const response = (await $axios.get("/v1/consentVersions", { params })).data;
 
 			this.setTermsOfUse(response.data.length ? response.data[0] : null);
 			this.setStatus("completed");

@@ -3,23 +3,13 @@
 		<template #body>
 			<modal-body-info :title="title" :description="description">
 				<template #icon>
-					<v-progress-circular
-						indeterminate
-						width="2"
-						:color="color"
-						size="60"
-						class="mb-6"
-					/>
+					<v-progress-circular indeterminate width="2" :color="color" size="60" class="mb-6" />
 				</template>
 			</modal-body-info>
 		</template>
 		<template #footer>
 			<div class="d-flex justify-center align-items mb-4">
-				<v-btn
-					color="primary"
-					variant="flat"
-					@click="emit('update:active', false)"
-				>
+				<v-btn color="primary" variant="flat" @click="emit('update:active', false)">
 					{{ $t(btnText) }}
 				</v-btn>
 			</div>

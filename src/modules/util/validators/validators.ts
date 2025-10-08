@@ -1,23 +1,19 @@
-export type FormValidatorFn<T> = (
-	errMsg: string
-) => (value: T) => string | true;
+export type FormValidatorFn<T> = (errMsg: string) => (value: T) => string | true;
 
 /**
  * Checks if given value is not a nullish value
  */
-export const isRequired: FormValidatorFn<unknown> = (errMsg) => (value) =>
-	!!value || errMsg;
+export const isRequired: FormValidatorFn<unknown> = (errMsg) => (value) => !!value || errMsg;
 
 /**
  * Checks if the input is a non-empty string containing at least one non-whitespace character
  */
-export const isNonEmptyString: FormValidatorFn<unknown> =
-	(errMsg) => (value) => {
-		if (typeof value !== "string" || value.trim() === "") {
-			return errMsg;
-		}
-		return true;
-	};
+export const isNonEmptyString: FormValidatorFn<unknown> = (errMsg) => (value) => {
+	if (typeof value !== "string" || value.trim() === "") {
+		return errMsg;
+	}
+	return true;
+};
 
 /**
  * Checks if given value is a valid URL
@@ -30,9 +26,7 @@ export const isValidUrl: FormValidatorFn<string> = (errMsg) => (value) => {
 		if (!["http:", "https:"].includes(urlObject.protocol)) {
 			throw new Error("Wrong protocol");
 		}
-		if (
-			!(urlObject.hostname.includes(".") || urlObject.hostname === "localhost")
-		) {
+		if (!(urlObject.hostname.includes(".") || urlObject.hostname === "localhost")) {
 			throw new Error("TopLevelDomain missing");
 		}
 		if (/(^-)|(--)|(-$)/.test(urlObject.hostname)) {

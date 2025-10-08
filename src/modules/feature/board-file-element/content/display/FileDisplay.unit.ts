@@ -1,27 +1,24 @@
-import { PreviewStatus } from "@/fileStorageApi/v3";
-import {
-	createTestEnvStore,
-	fileElementResponseFactory,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { shallowMount } from "@vue/test-utils";
 import AudioDisplay from "./audio-display/AudioDisplay.vue";
 import CollaboraDisplay from "./collabora-display/CollaboraDisplay.vue";
 import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
-import { beforeAll } from "vitest";
+import { PreviewStatus } from "@/fileStorageApi/v3";
+import { createTestEnvStore, fileElementResponseFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 describe("FileDisplay", () => {
-	describe("when previewUrl is defined", () => {
-		beforeAll(() => {
-			createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
-		});
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
+	});
 
+	describe("when previewUrl is defined", () => {
 		describe("when mimeType is not a video type", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
@@ -340,8 +337,7 @@ describe("FileDisplay", () => {
 						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 						isDownloadAllowed: true,
 						element,
-						mimeType:
-							"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+						mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 						isCollaboraEditable: true,
 					},
 					isEditMode: true,
@@ -383,8 +379,7 @@ describe("FileDisplay", () => {
 						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 						isDownloadAllowed: true,
 						element,
-						mimeType:
-							"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+						mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 						isCollaboraEditable: true,
 					},
 					isEditMode: true,

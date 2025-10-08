@@ -1,9 +1,6 @@
 import BaseInput from "./BaseInput";
 import BaseInputDefault, { supportedTypes } from "./BaseInputDefault";
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 function createWrapper(type, props = {}) {
 	return mount(BaseInput, {
@@ -88,8 +85,7 @@ describe("@/components/base/BaseInputDefault", () => {
 	it("shows its label when no placeholder is provided", () => {
 		supportedTypes.forEach((type) => {
 			const wrapperWithoutPlaceholder = createWrapper(type);
-			const baseInputDefaultWithoutPlaceholder =
-				wrapperWithoutPlaceholder.findComponent(BaseInputDefault);
+			const baseInputDefaultWithoutPlaceholder = wrapperWithoutPlaceholder.findComponent(BaseInputDefault);
 			expect(baseInputDefaultWithoutPlaceholder.vm.showLabel).toBe(true);
 			expect(wrapperWithoutPlaceholder.find(".label").exists()).toBe(true);
 		});
@@ -102,19 +98,14 @@ describe("@/components/base/BaseInputDefault", () => {
 				const wrapperWithPlaceHolder = createWrapper(type, {
 					placeholder: "placeholder",
 				});
-				const baseInputDefaultWithPlaceholder =
-					wrapperWithPlaceHolder.findComponent(BaseInputDefault);
+				const baseInputDefaultWithPlaceholder = wrapperWithPlaceHolder.findComponent(BaseInputDefault);
 
 				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(false);
-				expect(
-					wrapperWithPlaceHolder.find(".label").element.style.display
-				).toBe("none");
+				expect(wrapperWithPlaceHolder.find(".label").element.style.display).toBe("none");
 
 				await wrapperWithPlaceHolder.setProps({ modelValue: testInput });
 
-				expect(
-					wrapperWithPlaceHolder.find(".label").element.style.display
-				).toBe("");
+				expect(wrapperWithPlaceHolder.find(".label").element.style.display).toBe("");
 				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(true);
 			})
 		);

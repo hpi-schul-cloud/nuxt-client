@@ -1,19 +1,13 @@
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import LicenseListPage from "./LicenseList.page.vue";
+import { createTestEnvStore, expectNotification } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import axios from "axios";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 import { nextTick } from "vue";
-import {
-	VExpansionPanelText,
-	VExpansionPanelTitle,
-} from "vuetify/lib/components/index";
-import LicenseListPage from "./LicenseList.page.vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { VExpansionPanelText, VExpansionPanelTitle } from "vuetify/lib/components/index";
 
 vi.mock("axios");
 const mockAxios = vi.mocked(axios, true);
@@ -31,8 +25,11 @@ mockAxios.get.mockResolvedValue({
 });
 
 describe("LicenseList Page", () => {
-	const notifierModule = createModuleMocks(NotifierModule);
 	const LICENSE_SUMMARY_URL = "https://license-summary-url";
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	const setup = () => {
 		createTestEnvStore({ LICENSE_SUMMARY_URL });
@@ -40,9 +37,6 @@ describe("LicenseList Page", () => {
 		const wrapper = mount(LicenseListPage, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 		});
 
@@ -54,11 +48,9 @@ describe("LicenseList Page", () => {
 		await flushPromises();
 
 		expect(wrapper.exists()).toBe(true);
-		["MIT-License", "Apache-2.0", "pages.licenseList.title"].forEach(
-			(license) => {
-				expect(wrapper.text()).toContain(license);
-			}
-		);
+		["MIT-License", "Apache-2.0", "pages.licenseList.title"].forEach((license) => {
+			expect(wrapper.text()).toContain(license);
+		});
 	});
 
 	it("should call the license summary url", () => {
@@ -71,7 +63,7 @@ describe("LicenseList Page", () => {
 		setup();
 		await flushPromises();
 
-		expect(notifierModule.show).toHaveBeenCalled();
+		expectNotification("error");
 	});
 
 	describe("when the license item is clicked", () => {

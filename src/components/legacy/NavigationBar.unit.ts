@@ -1,10 +1,10 @@
+import NavigationBar from "./NavigationBar.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import NavigationBar from "./NavigationBar.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 describe("@/components/legacy/NavigationBar", () => {
 	const navbarLinks = [
@@ -21,6 +21,10 @@ describe("@/components/legacy/NavigationBar", () => {
 			href: "https://blog.hpi-schul-cloud.de/faqs",
 		},
 	];
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	const getWrapper = () => {
 		const img = "@/assets/img/logo/logo-dBildungscloud.svg";
@@ -41,7 +45,6 @@ describe("@/components/legacy/NavigationBar", () => {
 
 	it("renders logo, links and buttons for default theme", () => {
 		createTestEnvStore({ SC_THEME: SchulcloudTheme.Default });
-
 		const { wrapper, img } = getWrapper();
 
 		const wrapperVm = wrapper.vm as unknown as typeof NavigationBar;
@@ -60,7 +63,6 @@ describe("@/components/legacy/NavigationBar", () => {
 		"does render logo but not links and Buttons for %s theme",
 		(theme) => {
 			createTestEnvStore({ SC_THEME: theme });
-
 			const { wrapper, img } = getWrapper();
 			const wrapperVm = wrapper.vm as unknown as typeof NavigationBar;
 

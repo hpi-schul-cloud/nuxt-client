@@ -1,6 +1,6 @@
 export * from "./apiResponseErrorFactory";
 export * from "./apiValidationResponseErrorFactory";
-export * from "./applicationFactory";
+export * from "./application-test.utils";
 export * from "./authorizedCollaboraDocumentUrlResponseFactory";
 export * from "./axiosErrorFactory";
 export * from "./axiosResponseFactory";
@@ -28,7 +28,7 @@ export * from "./courseMetadataResponseFactory";
 export * from "./customParameterResponseFactory";
 export * from "./deletedElementResponseFactory";
 export * from "./drawingElementResponseFactory";
-export * from "./envsFactory";
+export * from "./env-test.utils";
 export * from "./externalToolDisplayDataFactory";
 export * from "./externalToolElementResponseFactory";
 export * from "./fileElementContentFactory";

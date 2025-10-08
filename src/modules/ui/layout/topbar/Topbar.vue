@@ -32,11 +32,7 @@
 		>
 			<PageShare />
 		</TopbarItem>
-		<div
-			v-if="school && isTabletOrBigger"
-			class="mr-3 mr-lg-4 school-name"
-			data-testid="school-name"
-		>
+		<div v-if="school && isTabletOrBigger" class="mr-3 mr-lg-4 school-name" data-testid="school-name">
 			{{ school.name }}
 		</div>
 		<img
@@ -116,9 +112,7 @@ const statusAlerts = computed(() => statusAlertsModule.getStatusAlerts);
 const showStatusAlertIcon = computed(() => statusAlerts.value.length !== 0);
 
 const statusAlertColor = computed(() => {
-	const statusAlertsIncludeDanger =
-		statusAlerts.value.filter((alert) => alert.status === "danger").length !==
-		0;
+	const statusAlertsIncludeDanger = statusAlerts.value.filter((alert) => alert.status === "danger").length !== 0;
 
 	return statusAlertsIncludeDanger ? "error" : "info";
 });
@@ -128,9 +122,7 @@ const { user, school, userRoles: roleNames } = useAppStoreRefs();
 const hasLogo = computed(() => !!school.value?.logo?.url);
 
 const appBarHeight = computed(() => {
-	const height = window
-		.getComputedStyle(document.documentElement)
-		.getPropertyValue("--topbar-height");
+	const height = window.getComputedStyle(document.documentElement).getPropertyValue("--topbar-height");
 	const heightWithoutUnit = parseInt(height);
 
 	return heightWithoutUnit;

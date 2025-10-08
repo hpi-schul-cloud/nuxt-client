@@ -1,10 +1,5 @@
 <template>
-	<DefaultWireframe
-		max-width="full"
-		:breadcrumbs="breadcrumbs"
-		:fab-items="fabAction"
-		@fab:clicked="onFabClick"
-	>
+	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction" @fab:clicked="onFabClick">
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-center">
@@ -48,91 +43,42 @@
 			<VSkeletonLoader type="table" class="mt-6" />
 		</VContainer>
 
-		<VTabsWindow
-			v-else
-			v-model="activeTab"
-			class="room-members-tabs-window"
-			:class="{ 'mt-12': canAddRoomMembers }"
-		>
-			<VTabsWindowItem
-				v-for="tabItem in tabs"
-				:key="tabItem.value"
-				:value="tabItem.value"
-			>
-				<component
-					:is="tabItem.component"
-					v-if="tabItem.isVisible"
-					:header-bottom="headerBottom"
-				/>
+		<VTabsWindow v-else v-model="activeTab" class="room-members-tabs-window" :class="{ 'mt-12': canAddRoomMembers }">
+			<VTabsWindowItem v-for="tabItem in tabs" :key="tabItem.value" :value="tabItem.value">
+				<component :is="tabItem.component" v-if="tabItem.isVisible" :header-bottom="headerBottom" />
 			</VTabsWindowItem>
 		</VTabsWindow>
-		<VDialog
-			v-model="isMembersDialogOpen"
-			:width="xs ? 'auto' : 480"
-			data-testid="dialog-add-participants"
-			max-width="480"
-			persistent
-			@keydown.esc="onDialogClose"
-		>
-			<AddMembers @close="onDialogClose" />
-		</VDialog>
 	</DefaultWireframe>
+	<AddMembersDialog v-model="isMembersDialogOpen" @close="onDialogClose" />
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	<ConfirmationDialog />
-	<InviteMembersDialog
-		v-model="isInvitationDialogOpen"
-		:school-name="currentUserSchoolName"
-		@close="onDialogClose"
-	/>
+	<InviteMembersDialog v-model="isInvitationDialogOpen" :school-name="currentUserSchoolName" @close="onDialogClose" />
 </template>
 
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { Tab } from "@/types/room/RoomMembers";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useTitle, useElementBounding } from "@vueuse/core";
-import {
-	type Component,
-	computed,
-	ComputedRef,
-	onMounted,
-	onUnmounted,
-	PropType,
-	ref,
-	watchEffect,
-} from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { useAppStoreRefs } from "@data-app";
 import {
 	InvitationStep,
-	useRoomDetailsStore,
-	useRoomMembersStore,
 	useRoomAuthorization,
+	useRoomDetailsStore,
 	useRoomInvitationLinkStore,
+	useRoomMembersStore,
 } from "@data-room";
-import { storeToRefs } from "pinia";
-import {
-	mdiPlus,
-	mdiAccountMultipleOutline,
-	mdiLink,
-	mdiAccountQuestionOutline,
-} from "@icons/material";
-import {
-	AddMembers,
-	Confirmations,
-	Invitations,
-	InviteMembersDialog,
-	Members,
-} from "@feature-room";
-import { useDisplay } from "vuetify";
+import { AddMembersDialog, Confirmations, Invitations, InviteMembersDialog, Members } from "@feature-room";
+import { mdiAccountMultipleOutline, mdiAccountQuestionOutline, mdiLink, mdiPlus } from "@icons/material";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
-import {
-	useConfirmationDialog,
-	ConfirmationDialog,
-} from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
-import { Tab } from "@/types/room/RoomMembers";
-import { useAppStoreRefs } from "@data-app";
+import { useElementBounding, useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
+import { type Component, computed, ComputedRef, onMounted, onUnmounted, PropType, ref, watchEffect } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
+import { useDisplay } from "vuetify";
 
 const props = defineProps({
 	tab: {
@@ -154,18 +100,14 @@ const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
-const { fetchMembers, loadSchoolList, leaveRoom, resetStore } =
-	roomMembersStore;
+const { fetchMembers, loadSchoolList, leaveRoom, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
-const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks } =
-	useRoomAuthorization();
+const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks } = useRoomAuthorization();
 
-const { isInvitationDialogOpen, invitationStep } = storeToRefs(
-	useRoomInvitationLinkStore()
-);
+const { isInvitationDialogOpen, invitationStep } = storeToRefs(useRoomInvitationLinkStore());
 
 const activeTab = computed<Tab>({
 	get() {
@@ -188,23 +130,16 @@ watchEffect(() => {
 	if (room.value?.permissions) {
 		const permissionRestrictedTabs = [Tab.Invitations, Tab.Confirmations];
 
-		if (
-			permissionRestrictedTabs.includes(activeTab.value) &&
-			!canManageRoomInvitationLinks.value
-		) {
+		if (permissionRestrictedTabs.includes(activeTab.value) && !canManageRoomInvitationLinks.value) {
 			activeTab.value = Tab.Members;
 		}
 	}
 });
 
-const pageTitle = computed(() =>
-	buildPageTitle(`${room.value?.name} - ${membersInfoText.value}`)
-);
+const pageTitle = computed(() => buildPageTitle(`${room.value?.name} - ${membersInfoText.value}`));
 useTitle(pageTitle);
 
-const isVisibleTabNavigation = computed(
-	() => canManageRoomInvitationLinks.value
-);
+const isVisibleTabNavigation = computed(() => canManageRoomInvitationLinks.value);
 
 const tabs: Array<{
 	title: string;
@@ -288,15 +223,12 @@ const onLeaveRoom = async () => {
 };
 
 onMounted(async () => {
-	activeTab.value = Object.values(Tab).includes(props.tab)
-		? props.tab
-		: Tab.Members;
+	activeTab.value = Object.values(Tab).includes(props.tab) ? props.tab : Tab.Members;
 
+	const roomId = route.params.id.toString();
 	if (room.value === undefined) {
-		const roomId = route.params.id.toString();
 		await fetchRoom(roomId);
 	}
-
 	await fetchMembers();
 });
 

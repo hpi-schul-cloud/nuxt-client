@@ -1,9 +1,9 @@
+import { useDeleteConfirmationDialog } from "./DeleteConfirmation.composable";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { useDeleteConfirmationDialog } from "./DeleteConfirmation.composable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { useI18n } from "vue-i18n";
 import { Mock } from "vitest";
+import { useI18n } from "vue-i18n";
 vi.mock("./Confirmation.composable");
 
 vi.mock("vue-i18n", async (importOriginal) => {
@@ -20,9 +20,7 @@ describe("DeleteConfirmation composable", () => {
 		const setup = (isConfirmed: boolean) => {
 			const title = "title";
 			const titleString = ` "${title}"`;
-			const typeLanguageKey:
-				| "components.boardCard"
-				| "components.boardElement" = "components.boardElement";
+			const typeLanguageKey: "components.boardCard" | "components.boardElement" = "components.boardElement";
 			const titleTranslationKey = "ui-confirmation-dialog.ask-delete";
 			const confirmActionLangKey = "common.actions.delete";
 			const data = {
@@ -37,19 +35,15 @@ describe("DeleteConfirmation composable", () => {
 			const translateMock = vi
 				.fn()
 				.mockImplementation(
-					(key: string, dynamic?: object): string =>
-						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
+					(key: string, dynamic?: object): string => key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
 				);
 			useI18nMock.mockReturnValue({
 				t: translateMock,
 			});
 
-			const { askDeleteConfirmation } = mountComposable(
-				() => useDeleteConfirmationDialog(),
-				{
-					global: { plugins: [createTestingI18n()] },
-				}
-			);
+			const { askDeleteConfirmation } = mountComposable(() => useDeleteConfirmationDialog(), {
+				global: { plugins: [createTestingI18n()] },
+			});
 
 			return {
 				askDeleteConfirmation,
@@ -70,14 +64,8 @@ describe("DeleteConfirmation composable", () => {
 
 		describe("when title is defined", () => {
 			it("should call translate functions", async () => {
-				const {
-					askDeleteConfirmation,
-					translateMock,
-					typeLanguageKey,
-					title,
-					titleString,
-					titleTranslationKey,
-				} = setup(true);
+				const { askDeleteConfirmation, translateMock, typeLanguageKey, title, titleString, titleTranslationKey } =
+					setup(true);
 
 				await askDeleteConfirmation(title, typeLanguageKey);
 
@@ -117,12 +105,7 @@ describe("DeleteConfirmation composable", () => {
 
 		describe("when title is undefined", () => {
 			it("should call translate functions", async () => {
-				const {
-					askDeleteConfirmation,
-					translateMock,
-					typeLanguageKey,
-					titleTranslationKey,
-				} = setup(true);
+				const { askDeleteConfirmation, translateMock, typeLanguageKey, titleTranslationKey } = setup(true);
 
 				await askDeleteConfirmation("", typeLanguageKey);
 
@@ -134,13 +117,8 @@ describe("DeleteConfirmation composable", () => {
 			});
 
 			it("should call askConfirmation", async () => {
-				const {
-					askDeleteConfirmation,
-					askConfirmation,
-					confirmActionLangKey,
-					typeLanguageKey,
-					titleTranslationKey,
-				} = setup(true);
+				const { askDeleteConfirmation, askConfirmation, confirmActionLangKey, typeLanguageKey, titleTranslationKey } =
+					setup(true);
 
 				await askDeleteConfirmation("", typeLanguageKey);
 

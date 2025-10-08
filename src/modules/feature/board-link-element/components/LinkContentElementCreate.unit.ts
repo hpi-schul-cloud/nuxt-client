@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import LinkContentElementCreate from "./LinkContentElementCreate.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 
 const VALID_URL = "https://www.abc.de/my-article";
 const INVALID_URL = "my-article";
@@ -41,9 +38,7 @@ describe("LinkContentElementCreate", () => {
 				const { wrapper } = setup();
 
 				await wrapper.findComponent({ name: "v-textarea" }).setValue(VALID_URL);
-				await wrapper
-					.findComponent({ name: "v-textarea" })
-					.trigger("keydown.enter");
+				await wrapper.findComponent({ name: "v-textarea" }).trigger("keydown.enter");
 				await nextTick();
 
 				expect(wrapper.emitted("create:url")).toEqual([[VALID_URL]]);

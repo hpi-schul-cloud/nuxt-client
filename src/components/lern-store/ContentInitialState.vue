@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { EmptyState, ContentInitialSvg } from "@ui-empty-state";
+import { ContentInitialSvg, EmptyState } from "@ui-empty-state";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();

@@ -1,19 +1,14 @@
-import { mount, VueWrapper } from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { useBoardFeatures } from "@data-board";
 import { BoardContextType } from "@/types/board/BoardContext";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useBoardFeatures } from "@data-board";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { mount, VueWrapper } from "@vue/test-utils";
 
 vi.mock("@data-board/BoardFeatures.composable");
-vi.mocked(useBoardFeatures).mockImplementation(() => {
-	return {
-		isFeatureEnabled: vi.fn().mockReturnValue(true),
-	};
-});
+vi.mocked(useBoardFeatures).mockImplementation(() => ({
+	isFeatureEnabled: vi.fn().mockReturnValue(true),
+}));
 
 const setupWrapper = ({
 	propsData = {},
@@ -60,9 +55,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				},
 			});
 
-			const titleElement = wrapper.find(
-				'[data-testid="content-element-title-slot"]'
-			);
+			const titleElement = wrapper.find('[data-testid="content-element-title-slot"]');
 			expect(titleElement.text()).toEqual(title);
 		});
 	});
@@ -82,13 +75,9 @@ describe("VideoConferenceContentElementDisplay", () => {
 						},
 					});
 
-					const alert = wrapper.findComponent(
-						'[data-testid="vc-info-box-no-feature"]'
-					);
+					const alert = wrapper.findComponent('[data-testid="vc-info-box-no-feature"]');
 
-					expect(alert.text()).toEqual(
-						"pages.videoConference.info.courseParent.notEnabledTeacher"
-					);
+					expect(alert.text()).toEqual("pages.videoConference.info.courseParent.notEnabledTeacher");
 				});
 			});
 
@@ -105,13 +94,9 @@ describe("VideoConferenceContentElementDisplay", () => {
 						},
 					});
 
-					const alert = wrapper.findComponent(
-						'[data-testid="vc-info-box-no-feature"]'
-					);
+					const alert = wrapper.findComponent('[data-testid="vc-info-box-no-feature"]');
 
-					expect(alert.text()).toEqual(
-						"pages.videoConference.info.roomParent.notEnabledTeacher"
-					);
+					expect(alert.text()).toEqual("pages.videoConference.info.roomParent.notEnabledTeacher");
 				});
 			});
 
@@ -127,13 +112,9 @@ describe("VideoConferenceContentElementDisplay", () => {
 						},
 					});
 
-					const alert = wrapper.findComponent(
-						'[data-testid="vc-info-box-no-feature"]'
-					);
+					const alert = wrapper.findComponent('[data-testid="vc-info-box-no-feature"]');
 
-					expect(alert.text()).toEqual(
-						"pages.videoConference.info.roomParent.notEnabledTeacher"
-					);
+					expect(alert.text()).toEqual("pages.videoConference.info.roomParent.notEnabledTeacher");
 				});
 			});
 		});
@@ -197,9 +178,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 					},
 				});
 
-				const alert = wrapper.findComponent(
-					'[data-testid="vc-info-box-no-permission"]'
-				);
+				const alert = wrapper.findComponent('[data-testid="vc-info-box-no-permission"]');
 				expect(alert.text()).toEqual("pages.videoConference.info.noPermission");
 			});
 
@@ -222,9 +201,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 
 	describe("Events", () => {
 		const triggerClick = async (wrapper: VueWrapper) => {
-			const element = wrapper.find(
-				'[data-testid="board-video-conference-element"]'
-			);
+			const element = wrapper.find('[data-testid="board-video-conference-element"]');
 			await element.trigger("click");
 		};
 

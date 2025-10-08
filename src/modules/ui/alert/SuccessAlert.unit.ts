@@ -1,7 +1,7 @@
-import { mdiCheckCircle } from "@icons/material";
-import { shallowMount } from "@vue/test-utils";
 import BaseAlert from "./BaseAlert.vue";
 import SuccessAlert from "./SuccessAlert.vue";
+import { mdiCheckCircle } from "@icons/material";
+import { shallowMount } from "@vue/test-utils";
 
 describe("SuccessAlert", () => {
 	const setup = () => {

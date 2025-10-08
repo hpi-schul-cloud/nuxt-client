@@ -1,9 +1,6 @@
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInput";
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { logger } from "@util-logger";
 
 function createWrapper(props = {}) {
@@ -62,12 +59,8 @@ describe("@/components/base/BaseInput", () => {
 	});
 
 	it("writes an error to the console on unsupported types", () => {
-		const consoleErrorSpy = vi
-			.spyOn(console, "error")
-			.mockImplementation(vi.fn());
-		const consoleWarnSpy = vi
-			.spyOn(console, "warn")
-			.mockImplementation(vi.fn());
+		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+		const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(vi.fn());
 
 		vi.spyOn(logger, "error");
 		createWrapper({

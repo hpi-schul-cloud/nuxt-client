@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import AddMembers from "./AddMembers.vue";
+import AddMembersDialog from "./AddMembersDialog.vue";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
 import {
 	createTestAppStoreWithRole,
 	mockedPiniaStoreTyping,
@@ -12,24 +9,21 @@ import {
 	roomMemberSchoolResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import { VueWrapper } from "@vue/test-utils";
-import { VAutocomplete, VIcon } from "vuetify/lib/components/index";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { createTestingPinia } from "@pinia/testing";
-import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
-import { WarningAlert } from "@ui-alert";
-import { computed, Ref } from "vue";
+import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
+import { createMock } from "@golevelup/ts-vitest";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { createTestingPinia } from "@pinia/testing";
+import { WarningAlert } from "@ui-alert";
+import { VueWrapper } from "@vue/test-utils";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
+import { computed, Ref } from "vue";
+import { VAutocomplete, VIcon } from "vuetify/lib/components/index";
 
 vi.mock("@vueuse/integrations/useFocusTrap");
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
@@ -38,15 +32,12 @@ type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
 };
 
-type RoomAuthorizationRefs = Partial<
-	RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>
->;
+type RoomAuthorizationRefs = Partial<RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>>;
 
-describe("AddMembers", () => {
-	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
+describe("AddMembersDialog", () => {
+	let wrapper: VueWrapper<InstanceType<typeof AddMembersDialog>>;
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
 		pauseMock = vi.fn();
@@ -54,11 +45,8 @@ describe("AddMembers", () => {
 		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
 			unpause: unpauseMock,
+			deactivate: vi.fn(),
 		});
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -75,6 +63,7 @@ describe("AddMembers", () => {
 	const setup = (options?: {
 		customRoomAuthorization?: RoomAuthorizationRefs;
 		schoolRole?: RoleName.Teacher | RoleName.Student;
+		isOpen?: boolean;
 	}) => {
 		const configDefaults = {
 			canAddRoomMembers: true,
@@ -90,26 +79,24 @@ describe("AddMembers", () => {
 			roomRoleName: RoleName.Roomadmin,
 		});
 
-		const { mockedMe } = createTestAppStoreWithRole(
-			options?.schoolRole ?? RoleName.Teacher,
-			false
-		);
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		const { mockedMe } = createTestAppStoreWithRole(options?.schoolRole ?? RoleName.Teacher);
 
 		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.Teacher];
 		roomMembers[0].userId = mockedMe.user.id;
 		roomMembersSchools[0].id = mockedMe.school.id;
 
-		const authorizationPermissions =
-			createMock<ReturnType<typeof useRoomAuthorization>>();
+		const authorizationPermissions = createMock<ReturnType<typeof useRoomAuthorization>>();
 
 		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(
-				() => value ?? false
-			);
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(() => value ?? false);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
-		wrapper = mount(AddMembers, {
+		wrapper = mount(AddMembersDialog, {
+			props: {
+				modelValue: options?.isOpen ?? true,
+			},
 			attachTo: document.body,
 			global: {
 				plugins: [
@@ -153,8 +140,10 @@ describe("AddMembers", () => {
 			expect(wrapper.exists()).toBe(true);
 		});
 
-		it("should call getPotentialMembers", () => {
-			const { roomMembersStore } = setup();
+		it("should call getPotentialMembers when Dialog is open", async () => {
+			const { roomMembersStore } = setup({ isOpen: false });
+
+			await wrapper.setProps({ modelValue: true });
 
 			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
 		});
@@ -177,12 +166,8 @@ describe("AddMembers", () => {
 					ref: "autoCompleteSchool",
 				});
 
-				expect(schoolComponent.props("items")).toStrictEqual(
-					roomMembersSchools
-				);
-				expect(schoolComponent.props("modelValue")).toBe(
-					roomMembersSchools[0].id
-				);
+				expect(schoolComponent.props("items")).toStrictEqual(roomMembersSchools);
+				expect(schoolComponent.props("modelValue")).toBe(roomMembersSchools[0].id);
 			});
 
 			it("should offer all roles for selectRole component", () => {
@@ -215,9 +200,7 @@ describe("AddMembers", () => {
 					ref: "autoCompleteUsers",
 				});
 
-				expect(userComponent.props("items")).toStrictEqual(
-					potentialRoomMembers
-				);
+				expect(userComponent.props("items")).toStrictEqual(potentialRoomMembers);
 				expect(userComponent.props("modelValue")).toHaveLength(0);
 			});
 		});
@@ -264,11 +247,8 @@ describe("AddMembers", () => {
 
 			await schoolComponent.setValue(selectedSchool);
 
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
-				selectedRole,
-				selectedSchool
-			);
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, selectedSchool);
 		});
 	});
 
@@ -310,11 +290,8 @@ describe("AddMembers", () => {
 
 				await roleComponent.setValue(selectedRole);
 
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
-					selectedRole,
-					roomMembersSchools[0].id
-				);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, roomMembersSchools[0].id);
 			});
 
 			it("should render an icon with text for student role", async () => {
@@ -342,11 +319,8 @@ describe("AddMembers", () => {
 
 				await roleComponent.setValue(selectedRole);
 
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
-					selectedRole,
-					roomMembersSchools[0].id
-				);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, roomMembersSchools[0].id);
 			});
 
 			it("should render an icon with text for teacher role", async () => {
@@ -372,10 +346,7 @@ describe("AddMembers", () => {
 				ref: "autoCompleteUsers",
 			});
 
-			await userComponent.setValue([
-				potentialRoomMembers[0].userId,
-				potentialRoomMembers[1].userId,
-			]);
+			await userComponent.setValue([potentialRoomMembers[0].userId, potentialRoomMembers[1].userId]);
 
 			expect(userComponent.props("modelValue")).toHaveLength(2);
 			expect(userComponent.props("modelValue")).toStrictEqual([
@@ -397,10 +368,7 @@ describe("AddMembers", () => {
 				ref: "autoCompleteUsers",
 			});
 
-			await userComponent.setValue([
-				potentialRoomMembers[0].userId,
-				potentialRoomMembers[1].userId,
-			]);
+			await userComponent.setValue([potentialRoomMembers[0].userId, potentialRoomMembers[1].userId]);
 
 			expect(schoolComponent.props("disabled")).toBe(true);
 			expect(roleComponent.props("disabled")).toBe(true);
@@ -418,10 +386,7 @@ describe("AddMembers", () => {
 				ref: "autoCompleteUsers",
 			});
 
-			await userComponent.setValue([
-				potentialRoomMembers[0].userId,
-				potentialRoomMembers[1].userId,
-			]);
+			await userComponent.setValue([potentialRoomMembers[0].userId, potentialRoomMembers[1].userId]);
 			expect(schoolComponent.props("disabled")).toBe(true);
 			expect(roleComponent.props("disabled")).toBe(true);
 
@@ -438,15 +403,13 @@ describe("AddMembers", () => {
 				ref: "autoCompleteUsers",
 			});
 
-			const selectedUsers = [
-				potentialRoomMembers[0].userId,
-				potentialRoomMembers[1].userId,
-			];
-			userComponent.setValue(selectedUsers);
+			const selectedUsers = [potentialRoomMembers[0].userId, potentialRoomMembers[1].userId];
+			await userComponent.setValue(selectedUsers);
 
 			const addButton = wrapper.getComponent({
 				ref: "addButton",
 			});
+
 			await addButton.trigger("click");
 
 			expect(roomMembersStore.addMembers).toHaveBeenCalledTimes(1);
@@ -459,11 +422,8 @@ describe("AddMembers", () => {
 				ref: "autoCompleteUsers",
 			});
 
-			const selectedUsers = [
-				potentialRoomMembers[0].userId,
-				potentialRoomMembers[1].userId,
-			];
-			userComponent.setValue(selectedUsers);
+			const selectedUsers = [potentialRoomMembers[0].userId, potentialRoomMembers[1].userId];
+			await userComponent.setValue(selectedUsers);
 
 			const addButton = wrapper.getComponent({
 				ref: "addButton",
@@ -567,9 +527,7 @@ describe("AddMembers", () => {
 			await schoolComponent.setValue("external-school-id");
 			await roleComponent.setValue(RoleName.Student);
 
-			expect(wrapper.getComponent(WarningAlert).text()).toBe(
-				"pages.rooms.members.add.warningText"
-			);
+			expect(wrapper.getComponent(WarningAlert).text()).toBe("pages.rooms.members.add.warningText");
 		});
 	});
 
@@ -586,12 +544,8 @@ describe("AddMembers", () => {
 
 				await roleComponent.setValue(RoleName.Student);
 
-				const infoAlert = wrapper.getComponent(
-					'[data-testid="student-visibility-info-alert"]'
-				);
-				expect(infoAlert.text()).toBe(
-					"pages.rooms.members.add.students.forbidden"
-				);
+				const infoAlert = wrapper.getComponent('[data-testid="student-visibility-info-alert"]');
+				expect(infoAlert.text()).toBe("pages.rooms.members.add.students.forbidden");
 			});
 		});
 		describe("and the role is set to teacher", () => {
@@ -606,9 +560,7 @@ describe("AddMembers", () => {
 
 				await roleComponent.setValue(RoleName.Teacher);
 
-				const infoAlert = wrapper.findComponent(
-					'[data-testid="student-visibility-info-alert"]'
-				);
+				const infoAlert = wrapper.findComponent('[data-testid="student-visibility-info-alert"]');
 				expect(infoAlert.exists()).toEqual(false);
 			});
 		});
@@ -628,9 +580,7 @@ describe("AddMembers", () => {
 				await schoolComponent.setValue("external-school-id");
 				await roleComponent.setValue(RoleName.Student);
 
-				const infoAlert = wrapper.findComponent(
-					'[data-testid="student-visibility-info-alert"]'
-				);
+				const infoAlert = wrapper.findComponent('[data-testid="student-visibility-info-alert"]');
 				expect(infoAlert.exists()).toEqual(false);
 			});
 		});
@@ -647,9 +597,7 @@ describe("AddMembers", () => {
 
 				await roleComponent.setValue(RoleName.Student);
 
-				const infoAlert = wrapper.findComponent(
-					'[data-testid="student-visibility-info-alert"]'
-				);
+				const infoAlert = wrapper.findComponent('[data-testid="student-visibility-info-alert"]');
 				expect(infoAlert.exists()).toEqual(false);
 			});
 
@@ -665,12 +613,8 @@ describe("AddMembers", () => {
 
 				await roleComponent.setValue(RoleName.Student);
 
-				const infoAlert = wrapper.findComponent(
-					'[data-testid="student-admin-info-alert"]'
-				);
-				expect(infoAlert.text()).toBe(
-					"pages.rooms.members.add.students.studentAdmins"
-				);
+				const infoAlert = wrapper.findComponent('[data-testid="student-admin-info-alert"]');
+				expect(infoAlert.text()).toBe("pages.rooms.members.add.students.studentAdmins");
 			});
 		});
 	});
@@ -697,12 +641,8 @@ describe("AddMembers", () => {
 
 			await roleComponent.setValue(RoleName.Student);
 
-			const infoAlert = wrapper.findComponent(
-				'[data-testid="student-admin-info-alert"]'
-			);
-			expect(infoAlert.text()).toBe(
-				"pages.rooms.members.add.students.studentAdmins"
-			);
+			const infoAlert = wrapper.findComponent('[data-testid="student-admin-info-alert"]');
+			expect(infoAlert.text()).toBe("pages.rooms.members.add.students.studentAdmins");
 		});
 	});
 });

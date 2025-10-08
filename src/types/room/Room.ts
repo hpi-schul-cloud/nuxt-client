@@ -1,10 +1,10 @@
 import {
 	CreateRoomBodyParams,
 	RoomBoardItemResponse,
+	RoomColor,
 	RoomDetailsResponse,
 	RoomItemResponse,
 	UpdateRoomBodyParams,
-	RoomColor,
 } from "@/serverApi/v3";
 
 export type RoomItem = RoomItemResponse;

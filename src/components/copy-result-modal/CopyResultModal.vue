@@ -65,10 +65,7 @@ const emit = defineEmits<{
 	(e: "copy-dialog-closed"): void;
 }>();
 
-const hasElementOfType = (
-	items: CopyResultItem[],
-	types: CopyApiResponseTypeEnum
-) => {
+const hasElementOfType = (items: CopyResultItem[], types: CopyApiResponseTypeEnum) => {
 	let found = false;
 	items.forEach((item) => {
 		if (found) return;
@@ -82,83 +79,58 @@ const onDialogClosed = () => {
 };
 
 const items = computed(() => props.copyResultItems);
-const copyResultWarnings = computed(() => {
-	return [
-		{
-			isShow: hasGeogebraElement.value,
-			text: t("components.molecules.copyResult.geogebraCopy.info"),
-		},
-		{
-			isShow: hasEtherpadElement.value,
-			text: t("components.molecules.copyResult.etherpadCopy.info"),
-		},
-		{
-			isShow: hasDrawingElement.value,
-			text: t("components.molecules.copyResult.tldrawCopy.info"),
-		},
-		{
-			isShow: isCourse.value,
-			text: t("components.molecules.copyResult.courseFiles.info"),
-		},
-		{
-			isShow: hasExternalTool.value || hasExternalToolElement.value,
-			text: externalToolsInfoText.value,
-		},
-		{
-			isShow: hasCourseGroup.value,
-			text: t("components.molecules.copyResult.courseGroupCopy.info"),
-		},
-	];
-});
+const copyResultWarnings = computed(() => [
+	{
+		isShow: hasGeogebraElement.value,
+		text: t("components.molecules.copyResult.geogebraCopy.info"),
+	},
+	{
+		isShow: hasEtherpadElement.value,
+		text: t("components.molecules.copyResult.etherpadCopy.info"),
+	},
+	{
+		isShow: hasDrawingElement.value,
+		text: t("components.molecules.copyResult.tldrawCopy.info"),
+	},
+	{
+		isShow: isCourse.value,
+		text: t("components.molecules.copyResult.courseFiles.info"),
+	},
+	{
+		isShow: hasExternalTool.value || hasExternalToolElement.value,
+		text: externalToolsInfoText.value,
+	},
+	{
+		isShow: hasCourseGroup.value,
+		text: t("components.molecules.copyResult.courseGroupCopy.info"),
+	},
+]);
 
-const hasGeogebraElement = computed(() => {
-	return hasElementOfType(
-		items.value,
-		CopyApiResponseTypeEnum.LessonContentGeogebra
-	);
-});
+const hasGeogebraElement = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.LessonContentGeogebra));
 
-const hasEtherpadElement = computed(() => {
-	return (
-		hasElementOfType(
-			items.value,
-			CopyApiResponseTypeEnum.CollaborativeTextEditorElement
-		) ||
+const hasEtherpadElement = computed(
+	() =>
+		hasElementOfType(items.value, CopyApiResponseTypeEnum.CollaborativeTextEditorElement) ||
 		hasElementOfType(items.value, CopyApiResponseTypeEnum.LessonContentEtherpad)
-	);
-});
+);
 
-const hasDrawingElement = computed(() => {
-	return hasElementOfType(items.value, CopyApiResponseTypeEnum.DrawingElement);
-});
+const hasDrawingElement = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.DrawingElement));
 
-const hasCourseGroup = computed(() => {
-	return hasElementOfType(
-		items.value,
-		CopyApiResponseTypeEnum.CoursegroupGroup
-	);
-});
+const hasCourseGroup = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.CoursegroupGroup));
 
-const isCourse = computed(() => {
-	return props.copyResultRootItemType === CopyApiResponseTypeEnum.Course;
-});
+const isCourse = computed(() => props.copyResultRootItemType === CopyApiResponseTypeEnum.Course);
 
-const externalToolsInfoText = computed(() => {
-	return useEnvConfig().value.FEATURE_CTL_TOOLS_COPY_ENABLED
+const externalToolsInfoText = computed(() =>
+	useEnvConfig().value.FEATURE_CTL_TOOLS_COPY_ENABLED
 		? t("components.molecules.copyResult.ctlTools.withFeature.info")
-		: t("components.molecules.copyResult.ctlTools.info");
-});
+		: t("components.molecules.copyResult.ctlTools.info")
+);
 
-const hasExternalTool = computed(() => {
-	return hasElementOfType(items.value, CopyApiResponseTypeEnum.ExternalTool);
-});
+const hasExternalTool = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.ExternalTool));
 
-const hasExternalToolElement = computed(() => {
-	return hasElementOfType(
-		items.value,
-		CopyApiResponseTypeEnum.ExternalToolElement
-	);
-});
+const hasExternalToolElement = computed(() =>
+	hasElementOfType(items.value, CopyApiResponseTypeEnum.ExternalToolElement)
+);
 </script>
 
 <style scoped lang="scss">

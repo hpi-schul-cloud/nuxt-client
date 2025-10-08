@@ -1,4 +1,7 @@
+import { useBoardApi } from "../BoardApi.composable";
+import { useBoardRestApi } from "./boardRestApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { BoardLayout } from "@/serverApi/v3/api";
 import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import CourseRoomDetailsModule from "@/store/course-room-details";
@@ -16,14 +19,11 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier, useSharedEditMode } from "@util-board";
+import { useSharedEditMode } from "@util-board";
 import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
 import { computed, ref } from "vue";
 import { Router, useRouter } from "vue-router";
-import { BoardLayout } from "@/serverApi/v3/api";
-import { useBoardApi } from "../BoardApi.composable";
-import { useBoardRestApi } from "./boardRestApi.composable";
-import { Mock } from "vitest";
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
@@ -34,40 +34,29 @@ const mockedUseBoardApi = vi.mocked(useBoardApi);
 vi.mock("@util-board/editMode.composable");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: () => {
-			return {
-				t: (key: string) => key,
-			};
-		},
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: () => ({
+		t: (key: string) => key,
+	}),
+}));
 
 describe("boardRestApi", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
-	let mockedSocketConnectionHandler: DeepMocked<
-		ReturnType<typeof useSocketConnection>
-	>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
 	let setEditModeId: Mock;
 	const setErrorMock = vi.fn();
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 
-		mockedSocketConnectionHandler =
-			createMock<ReturnType<typeof useSocketConnection>>();
+		mockedSocketConnectionHandler = createMock<ReturnType<typeof useSocketConnection>>();
 		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
@@ -75,10 +64,6 @@ describe("boardRestApi", () => {
 
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
-
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		setEditModeId = vi.fn();
 		mockedSharedEditMode.mockReturnValue({
@@ -189,17 +174,10 @@ describe("boardRestApi", () => {
 			await fetchBoardRequest({ boardId: boardStore.board!.id });
 
 			expect(setErrorMock).toHaveBeenCalledWith(
-				createApplicationError(
-					HttpStatusCode.NotFound,
-					"components.board.error.404"
-				)
+				createApplicationError(HttpStatusCode.NotFound, "components.board.error.404")
 			);
-			expect(setErrorMock.mock.lastCall![0].statusCode).toStrictEqual(
-				HttpStatusCode.NotFound
-			);
-			expect(setErrorMock.mock.lastCall![0].translationKey).toStrictEqual(
-				"components.board.error.404"
-			);
+			expect(setErrorMock.mock.lastCall![0].statusCode).toStrictEqual(HttpStatusCode.NotFound);
+			expect(setErrorMock.mock.lastCall![0].translationKey).toStrictEqual("components.board.error.404");
 		});
 	});
 
@@ -700,6 +678,41 @@ describe("boardRestApi", () => {
 		});
 	});
 
+	describe("@updateReadersCanEditRequest", () => {
+		it("should not call updateReadersCanEditSuccess action when board value is undefined", async () => {
+			const payload = { boardId: "boardId", readersCanEdit: true };
+			const { boardStore } = setup(false);
+			const { updateReaderCanEditRequest } = useBoardRestApi();
+			await updateReaderCanEditRequest(payload);
+
+			expect(boardStore.updateReaderCanEditSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call updateReadersCanEditSuccess action if the API call is successful", async () => {
+			const payload = { boardId: "boardId", readersCanEdit: true };
+			const { boardStore } = setup();
+			const { updateReaderCanEditRequest } = useBoardRestApi();
+			await updateReaderCanEditRequest(payload);
+
+			expect(boardStore.updateReaderCanEditSuccess).toHaveBeenCalledWith({
+				...payload,
+				isOwnAction: true,
+			});
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const payload = { boardId: "boardId", readersCanEdit: true };
+			setup();
+			const { updateReaderCanEditRequest } = useBoardRestApi();
+
+			mockedBoardApiCalls.updateReadersCanEditCall.mockRejectedValue({});
+
+			await updateReaderCanEditRequest(payload);
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
 	describe("updateBoardLayoutRequest", () => {
 		it("should not call updateBoardLayoutSuccess action when board value is undefined", async () => {
 			const { boardStore } = setup(false);
@@ -782,10 +795,7 @@ describe("boardRestApi", () => {
 			});
 
 			executeErrorHandler();
-			expect(mockedErrorHandler.notifyWithTemplate).toHaveBeenCalledWith(
-				"notUpdated",
-				"board"
-			);
+			expect(mockedErrorHandler.notifyWithTemplate).toHaveBeenCalledWith("notUpdated", "board");
 
 			expect(setEditModeId).toHaveBeenCalledWith(undefined);
 		});
@@ -807,9 +817,7 @@ describe("boardRestApi", () => {
 
 			await reloadBoard();
 
-			expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalledWith(
-				boardStore.board!.id
-			);
+			expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalledWith(boardStore.board!.id);
 		});
 	});
 });

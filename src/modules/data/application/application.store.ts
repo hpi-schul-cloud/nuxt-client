@@ -1,16 +1,9 @@
-import { defineStore, storeToRefs } from "pinia";
-import { computed, ref } from "vue";
-import {
-	LanguageType,
-	MeApiFactory,
-	MeResponse,
-	Permission,
-	RoleName,
-	UserApiFactory,
-} from "@/serverApi/v3";
+import { LanguageType, MeApiFactory, MeResponse, Permission, RoleName, UserApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
+import { defineStore, storeToRefs } from "pinia";
+import { computed, ref } from "vue";
 
 // use of vueuse "useCookies" ?
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
@@ -32,16 +25,12 @@ export const useAppStore = defineStore("applicationStore", () => {
 	const school = computed(() => meResponse.value?.school);
 	const user = computed(() => meResponse.value?.user);
 
-	const userRoles = computed(
-		() => meResponse.value?.roles.map((r) => r.name) ?? []
-	);
+	const userRoles = computed(() => meResponse.value?.roles.map((r) => r.name) ?? []);
 
 	const locale = computed(
 		() =>
 			// TODO: Why is it not directly using useEnvStore().fallBackLanguage and if it is, why is here default preferred before fallBack ?!
-			userLocale.value ??
-			useEnvConfig().value.I18N__DEFAULT_LANGUAGE ??
-			LanguageType.De
+			userLocale.value ?? useEnvConfig().value.I18N__DEFAULT_LANGUAGE ?? LanguageType.De
 	);
 	const userPermissions = computed(() => meResponse.value?.permissions ?? []);
 	const systemId = computed(() => meResponse.value?.systemId);

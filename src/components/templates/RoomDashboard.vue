@@ -28,12 +28,7 @@
 								courseName: roomData.title,
 								courseId: roomData.roomId,
 							}"
-							:aria-label="
-								$t(
-									'pages.room.cards.aria',
-									boardLayoutAriaLabel(item.content.layout)
-								)
-							"
+							:aria-label="$t('pages.room.cards.aria', boardLayoutAriaLabel(item.content.layout))"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
@@ -154,11 +149,7 @@
 				/>
 			</div>
 		</div>
-		<EmptyState
-			v-if="roomIsEmpty"
-			data-testid="empty-state-item"
-			:title="$t(`pages.room.learningContent.emptyState`)"
-		>
+		<EmptyState v-if="roomIsEmpty" data-testid="empty-state-item" :title="$t(`pages.room.learningContent.emptyState`)">
 			<template #media>
 				<LearningContentEmptyStateSvg />
 			</template>
@@ -176,12 +167,7 @@
 		>
 			<template #title>
 				<h2 class="my-2">
-					{{
-						deleteDialogTitle(
-							itemDelete.itemType,
-							itemDelete.itemData.name || itemDelete.itemData.title
-						)
-					}}
+					{{ deleteDialogTitle(itemDelete.itemType, itemDelete.itemData.name || itemDelete.itemData.title) }}
 				</h2>
 			</template>
 		</v-custom-dialog>
@@ -201,10 +187,10 @@ import {
 import { courseRoomDetailsModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
+import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import draggable from "vuedraggable";
-import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
-import { useEnvConfig } from "@data-env";
 
 export default {
 	components: {
@@ -275,27 +261,20 @@ export default {
 		},
 		async onSort(items) {
 			const idList = {};
-			idList.elements = items.map((item) => {
-				return item.content.id;
-			});
+			idList.elements = items.map((item) => item.content.id);
 
 			await courseRoomDetailsModule.sortElements(idList);
 		},
 		async moveByKeyboard(e) {
 			if (this.role === this.Roles.Student) return;
-			const items = this.roomData.elements.map((item) => {
-				return item.content.id;
-			});
+			const items = this.roomData.elements.map((item) => item.content.id);
 			const itemIndex = items.findIndex((item) => item === e.id);
 			const position = itemIndex + e.moveIndex;
 			if (position < 0 || position > items.length - 1) {
 				return;
 			}
 
-			[items[itemIndex], items[itemIndex + e.moveIndex]] = [
-				items[itemIndex + e.moveIndex],
-				items[itemIndex],
-			];
+			[items[itemIndex], items[itemIndex + e.moveIndex]] = [items[itemIndex + e.moveIndex], items[itemIndex]];
 
 			await courseRoomDetailsModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`].$el.focus();
@@ -353,9 +332,7 @@ export default {
 			} else if (this.itemDelete.itemType === this.cardTypes.Lesson) {
 				await courseRoomDetailsModule.deleteLesson(this.itemDelete.itemData.id);
 			} else if (this.itemDelete.itemType === this.cardTypes.ColumnBoard) {
-				await courseRoomDetailsModule.deleteBoard(
-					this.itemDelete.itemData.columnBoardId
-				);
+				await courseRoomDetailsModule.deleteBoard(this.itemDelete.itemData.columnBoardId);
 			} else {
 				return;
 			}

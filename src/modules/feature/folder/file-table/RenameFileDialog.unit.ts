@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import RenameFileDialog from "./RenameFileDialog.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { VCard, VDialog, VTextField } from "vuetify/lib/components/index";
-import RenameFileDialog from "./RenameFileDialog.vue";
 
 describe("RenameFileDialog", () => {
 	describe("when the dialog isDialogOpen is true", () => {
@@ -48,10 +45,7 @@ describe("RenameFileDialog", () => {
 		it("should render input with name", () => {
 			const { wrapper, name } = setup();
 
-			const input = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.find("input[type='text']");
+			const input = wrapper.findComponent(VDialog).findComponent(VCard).find("input[type='text']");
 			expect(input.exists()).toBe(true);
 			expect(input.attributes("value")).toBe(name);
 		});
@@ -83,10 +77,7 @@ describe("RenameFileDialog", () => {
 				const { wrapper } = setup();
 				const dialog = wrapper.findComponent(Dialog);
 
-				const input = wrapper
-					.findComponent(VDialog)
-					.findComponent(VCard)
-					.find("input[type='text']");
+				const input = wrapper.findComponent(VDialog).findComponent(VCard).find("input[type='text']");
 				await input.setValue("new name");
 				await input.trigger("input");
 
@@ -101,10 +92,7 @@ describe("RenameFileDialog", () => {
 			it("should still show the latest valid name", async () => {
 				const { name, wrapper } = setup();
 
-				const input = wrapper
-					.findComponent(VDialog)
-					.findComponent(VCard)
-					.find("input[type='text']");
+				const input = wrapper.findComponent(VDialog).findComponent(VCard).find("input[type='text']");
 
 				expect(input.exists()).toBe(true);
 				expect(input.attributes("value")).toBe(name);
@@ -165,9 +153,7 @@ describe("RenameFileDialog", () => {
 			await input.setValue("<string");
 			await input.trigger("input");
 
-			expect(textField.text()).toContain(
-				"common.validation.containsOpeningTag"
-			);
+			expect(textField.text()).toContain("common.validation.containsOpeningTag");
 		});
 	});
 });

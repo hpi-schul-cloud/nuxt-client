@@ -50,9 +50,7 @@ describe("@/components/base/BaseDialog", () => {
 				// We can not test if the style gets applied because
 				// the BaseIcon is not rendered (solvable)
 				// and css custom properties get ignored by vue-test-utils
-				expect(wrapper.vm.currentIconColor).toBe(
-					"rgba(var(--v-theme-primary))"
-				);
+				expect(wrapper.vm.currentIconColor).toBe("rgba(var(--v-theme-primary))");
 			};
 			designs.map(testWithDesign);
 		});
@@ -91,9 +89,7 @@ describe("@/components/base/BaseDialog", () => {
 					onConfirm: callbackStub,
 				},
 			});
-			const confirmBtn = wrapper.findComponent(
-				`[data-testid="btn-dialog-confirm"]`
-			);
+			const confirmBtn = wrapper.findComponent(`[data-testid="btn-dialog-confirm"]`);
 			await confirmBtn.trigger("click");
 			expect(callbackStub.mock.calls).toHaveLength(1);
 		});
@@ -106,9 +102,7 @@ describe("@/components/base/BaseDialog", () => {
 					onCancel: callbackStub,
 				},
 			});
-			const confirmBtn = wrapper.findComponent(
-				`[data-testid="btn-dialog-cancel"]`
-			);
+			const confirmBtn = wrapper.findComponent(`[data-testid="btn-dialog-cancel"]`);
 			await confirmBtn.trigger("click");
 			expect(callbackStub.mock.calls).toHaveLength(1);
 		});

@@ -1,5 +1,5 @@
-import { EditorMode } from "@/types/file/File";
 import { mapEditBoardPermissionToEditorMode } from "./collabora-editor-mode.mapper";
+import { EditorMode } from "@/types/file/File";
 
 describe("mapEditBoardPermissionToEditorMode", () => {
 	it("returns EDIT when hasEditPermission is true", () => {

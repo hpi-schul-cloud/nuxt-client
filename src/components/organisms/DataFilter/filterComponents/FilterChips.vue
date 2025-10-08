@@ -17,8 +17,8 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { mdiCloseCircle } from "@icons/material";
 import { ChipTitle } from "@/components/organisms/DataFilter/types";
+import { mdiCloseCircle } from "@icons/material";
 
 defineProps({
 	filters: {
