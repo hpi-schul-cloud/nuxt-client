@@ -3,7 +3,3 @@
 @use "@/styles/settings.scss" as *;
 @use "vuetify" as *;
 @use "./scrollbar.scss" as *;
-
-body {
-	overscroll-behavior: none;
-}
