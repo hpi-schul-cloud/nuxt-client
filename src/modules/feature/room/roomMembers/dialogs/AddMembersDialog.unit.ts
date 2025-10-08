@@ -1,4 +1,4 @@
-import AddMembers from "./AddMembers.vue";
+import AddMembersDialog from "./AddMembersDialog.vue";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
@@ -34,8 +34,8 @@ type RefPropertiesOnly<T> = {
 
 type RoomAuthorizationRefs = Partial<RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>>;
 
-describe("AddMembers", () => {
-	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
+describe("AddMembersDialog", () => {
+	let wrapper: VueWrapper<InstanceType<typeof AddMembersDialog>>;
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
 
@@ -45,6 +45,7 @@ describe("AddMembers", () => {
 		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
 			unpause: unpauseMock,
+			deactivate: vi.fn(),
 		});
 
 		setupStores({
@@ -62,6 +63,7 @@ describe("AddMembers", () => {
 	const setup = (options?: {
 		customRoomAuthorization?: RoomAuthorizationRefs;
 		schoolRole?: RoleName.Teacher | RoleName.Student;
+		isOpen?: boolean;
 	}) => {
 		const configDefaults = {
 			canAddRoomMembers: true,
@@ -91,7 +93,10 @@ describe("AddMembers", () => {
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
-		wrapper = mount(AddMembers, {
+		wrapper = mount(AddMembersDialog, {
+			props: {
+				modelValue: options?.isOpen ?? true,
+			},
 			attachTo: document.body,
 			global: {
 				plugins: [
@@ -135,8 +140,10 @@ describe("AddMembers", () => {
 			expect(wrapper.exists()).toBe(true);
 		});
 
-		it("should call getPotentialMembers", () => {
-			const { roomMembersStore } = setup();
+		it("should call getPotentialMembers when Dialog is open", async () => {
+			const { roomMembersStore } = setup({ isOpen: false });
+
+			await wrapper.setProps({ modelValue: true });
 
 			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
 		});
@@ -240,7 +247,7 @@ describe("AddMembers", () => {
 
 			await schoolComponent.setValue(selectedSchool);
 
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
 			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, selectedSchool);
 		});
 	});
@@ -283,7 +290,7 @@ describe("AddMembers", () => {
 
 				await roleComponent.setValue(selectedRole);
 
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
 				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, roomMembersSchools[0].id);
 			});
 
@@ -312,7 +319,7 @@ describe("AddMembers", () => {
 
 				await roleComponent.setValue(selectedRole);
 
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(2);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
 				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, roomMembersSchools[0].id);
 			});
 
@@ -397,11 +404,12 @@ describe("AddMembers", () => {
 			});
 
 			const selectedUsers = [potentialRoomMembers[0].userId, potentialRoomMembers[1].userId];
-			userComponent.setValue(selectedUsers);
+			await userComponent.setValue(selectedUsers);
 
 			const addButton = wrapper.getComponent({
 				ref: "addButton",
 			});
+
 			await addButton.trigger("click");
 
 			expect(roomMembersStore.addMembers).toHaveBeenCalledTimes(1);
@@ -415,7 +423,7 @@ describe("AddMembers", () => {
 			});
 
 			const selectedUsers = [potentialRoomMembers[0].userId, potentialRoomMembers[1].userId];
-			userComponent.setValue(selectedUsers);
+			await userComponent.setValue(selectedUsers);
 
 			const addButton = wrapper.getComponent({
 				ref: "addButton",
