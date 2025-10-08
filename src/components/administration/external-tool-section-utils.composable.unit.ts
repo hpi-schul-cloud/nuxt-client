@@ -1,3 +1,5 @@
+import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
+import { SchoolExternalToolItem } from "./school-external-tool-item";
 import {
 	ExternalToolMediumStatus,
 	SchoolExternalToolMediumResponse,
@@ -7,13 +9,8 @@ import {
 } from "@/serverApi/v3";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import {
-	schoolExternalToolFactory,
-	schoolExternalToolResponseFactory,
-} from "@@/tests/test-utils";
+import { schoolExternalToolFactory, schoolExternalToolResponseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
-import { SchoolExternalToolItem } from "./school-external-tool-item";
 
 describe("useSchoolExternalToolUtils", () => {
 	const setup = (schoolExternalTool: SchoolExternalTool) => {
@@ -22,15 +19,11 @@ describe("useSchoolExternalToolUtils", () => {
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(tMock, true);
 
-		const schoolExternalToolsModule = createModuleMocks(
-			SchoolExternalToolsModule,
-			{
-				getSchoolExternalTools: [schoolExternalTool],
-			}
-		);
+		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule, {
+			getSchoolExternalTools: [schoolExternalTool],
+		});
 
-		const toolResponse: SchoolExternalToolResponse =
-			schoolExternalToolResponseFactory.build();
+		const toolResponse: SchoolExternalToolResponse = schoolExternalToolResponseFactory.build();
 		const listResponse: SchoolExternalToolSearchListResponse = {
 			data: [toolResponse],
 		};
@@ -76,18 +69,14 @@ describe("useSchoolExternalToolUtils", () => {
 				const { tool } = setupTool();
 				const { tMock } = setup(tool);
 
-				expect(tMock).toHaveBeenCalledWith(
-					"components.administration.externalToolsSection.table.header.status"
-				);
+				expect(tMock).toHaveBeenCalledWith("components.administration.externalToolsSection.table.header.status");
 			});
 
 			it("should call the translation function for restrictToContexts", () => {
 				const { tool } = setupTool();
 				const { tMock } = setup(tool);
 
-				expect(tMock).toHaveBeenCalledWith(
-					"components.administration.externalToolsSection.table.header.restrictedTo"
-				);
+				expect(tMock).toHaveBeenCalledWith("components.administration.externalToolsSection.table.header.restrictedTo");
 			});
 		});
 
@@ -266,16 +255,9 @@ describe("useSchoolExternalToolUtils", () => {
 			it("should return schoolExternalToolItems", () => {
 				const { tool } = setupTool();
 
-				const {
-					getItems,
-					expectedTranslation,
-					schoolExternalToolsModule,
-					schoolExternalTool,
-				} = setup(tool);
+				const { getItems, expectedTranslation, schoolExternalToolsModule, schoolExternalTool } = setup(tool);
 
-				const items: SchoolExternalToolItem[] = getItems(
-					schoolExternalToolsModule
-				);
+				const items: SchoolExternalToolItem[] = getItems(schoolExternalToolsModule);
 
 				expect(items).toEqual<SchoolExternalToolItem[]>([
 					{
@@ -294,11 +276,7 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when translating tool context type", () => {
 			const setupTool = () => {
 				const tool = schoolExternalToolFactory.build({
-					restrictToContexts: [
-						ToolContextType.MediaBoard,
-						ToolContextType.BoardElement,
-						ToolContextType.Course,
-					],
+					restrictToContexts: [ToolContextType.MediaBoard, ToolContextType.BoardElement, ToolContextType.Course],
 				});
 
 				return { tool };
@@ -310,9 +288,7 @@ describe("useSchoolExternalToolUtils", () => {
 
 				getItems(schoolExternalToolsModule);
 
-				expect(tMock).toHaveBeenCalledWith(
-					"common.tool.context.type.mediaShelves"
-				);
+				expect(tMock).toHaveBeenCalledWith("common.tool.context.type.mediaShelves");
 			});
 
 			it("should call the translation function for tool context type course", () => {
@@ -330,9 +306,7 @@ describe("useSchoolExternalToolUtils", () => {
 
 				getItems(schoolExternalToolsModule);
 
-				expect(tMock).toHaveBeenCalledWith(
-					"common.tool.context.type.boardElements"
-				);
+				expect(tMock).toHaveBeenCalledWith("common.tool.context.type.boardElements");
 			});
 		});
 
@@ -349,9 +323,7 @@ describe("useSchoolExternalToolUtils", () => {
 
 				getItems(schoolExternalToolsModule);
 
-				expect(tMock).toHaveBeenCalledWith(
-					"components.externalTools.status.latest"
-				);
+				expect(tMock).toHaveBeenCalledWith("components.externalTools.status.latest");
 			});
 		});
 
@@ -370,9 +342,7 @@ describe("useSchoolExternalToolUtils", () => {
 
 				getItems(schoolExternalToolsModule);
 
-				expect(tMock).toHaveBeenCalledWith(
-					"components.externalTools.status.deactivated"
-				);
+				expect(tMock).toHaveBeenCalledWith("components.externalTools.status.deactivated");
 			});
 		});
 
@@ -394,9 +364,7 @@ describe("useSchoolExternalToolUtils", () => {
 
 				getItems(schoolExternalToolsModule);
 
-				expect(tMock).toHaveBeenCalledWith(
-					"components.externalTools.status.outdated"
-				);
+				expect(tMock).toHaveBeenCalledWith("components.externalTools.status.outdated");
 			});
 		});
 	});

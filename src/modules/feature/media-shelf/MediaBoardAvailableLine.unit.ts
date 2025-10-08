@@ -1,12 +1,9 @@
+import { availableMediaLineId, ElementCreate } from "./data";
+import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
+import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { BoardLayout } from "@/serverApi/v3";
-import {
-	mediaAvailableLineElementResponseFactory,
-	mediaAvailableLineResponseFactory,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { mediaAvailableLineElementResponseFactory, mediaAvailableLineResponseFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { useDragAndDrop } from "@util-board";
 import { mount } from "@vue/test-utils";
@@ -14,9 +11,6 @@ import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { availableMediaLineId, ElementCreate } from "./data";
-import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
-import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 
 describe("MediaBoardAvailableLine", () => {
 	const getWrapper = (

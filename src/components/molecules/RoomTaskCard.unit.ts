@@ -1,15 +1,13 @@
+import RoomTaskCard from "./RoomTaskCard.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-
 import { Task } from "@/store/types/room";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
-import RoomTaskCard from "./RoomTaskCard.vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 const testTask = {
 	id: "123",
@@ -199,11 +197,7 @@ const getWrapper = (
 
 	return mount(RoomTaskCard, {
 		global: {
-			plugins: [
-				createTestingVuetify(),
-				createTestingI18n(),
-				vueDompurifyHTMLPlugin,
-			],
+			plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
 			mocks: {
 				$router: mockRouter,
 			},
@@ -224,11 +218,9 @@ const getWrapper = (
 };
 
 describe("@/components/molecules/RoomTaskCard", () => {
-	beforeAll(() => {
-		createTestEnvStore();
-	});
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
 		window.location.pathname = "";
 	});
 
@@ -269,36 +261,28 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			const wrapper = getWrapper({ task: testTask, userRole });
 			const tagline = wrapper.find("[data-testid='task-card-title-0']");
 
-			expect(tagline.element.textContent).toContain(
-				"common.words.task – pages.room.taskCard.label.due 28.09.00"
-			);
+			expect(tagline.element.textContent).toContain("common.words.task – pages.room.taskCard.label.due 28.09.00");
 		});
 
 		it("should have correct combined title for published task with no due date ", () => {
 			const wrapper = getWrapper({ task: noDueTestTask, userRole });
 			const tagline = wrapper.find("[data-testid='task-card-title-0']");
 
-			expect(tagline.element.textContent).toContain(
-				"common.words.task – pages.room.taskCard.label.noDueDate"
-			);
+			expect(tagline.element.textContent).toContain("common.words.task – pages.room.taskCard.label.noDueDate");
 		});
 
 		it("should have correct combined title for planned task", () => {
 			const wrapper = getWrapper({ task: plannedTestTask, userRole });
 			const tagline = wrapper.find("[data-testid='task-card-title-0']");
 
-			expect(tagline.element.textContent).toContain(
-				"common.words.task – pages.tasks.labels.planned 01.09.00"
-			);
+			expect(tagline.element.textContent).toContain("common.words.task – pages.tasks.labels.planned 01.09.00");
 		});
 
 		it("should have correct combined title for draft", () => {
 			const wrapper = getWrapper({ task: draftTestTask, userRole });
 			const tagline = wrapper.find("[data-testid='task-card-title-0']");
 
-			expect(tagline.element.textContent).toContain(
-				"common.words.task – common.words.draft"
-			);
+			expect(tagline.element.textContent).toContain("common.words.task – common.words.draft");
 		});
 
 		it("should show or hide description area", async () => {
@@ -382,9 +366,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const actionButtons = wrapper.findAllComponents(".action-button");
 
 				expect(actionButtons).toHaveLength(1);
-				expect(actionButtons[0].element.textContent).toContain(
-					"pages.room.taskCard.label.done"
-				);
+				expect(actionButtons[0].element.textContent).toContain("pages.room.taskCard.label.done");
 			});
 
 			it("should have one 'post' action button if task is a draft", () => {
@@ -392,9 +374,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const actionButtons = wrapper.findAllComponents(".action-button");
 
 				expect(actionButtons).toHaveLength(1);
-				expect(actionButtons[0].element.textContent).toContain(
-					"common.action.publish"
-				);
+				expect(actionButtons[0].element.textContent).toContain("common.action.publish");
 			});
 
 			it("should have one 'post' action button if task is planned", () => {
@@ -402,9 +382,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const actionButtons = wrapper.findAllComponents(".action-button");
 
 				expect(actionButtons).toHaveLength(1);
-				expect(actionButtons[0].element.textContent).toContain(
-					"common.action.publish"
-				);
+				expect(actionButtons[0].element.textContent).toContain("common.action.publish");
 			});
 
 			it("should have no action button if task is finished", () => {
@@ -420,14 +398,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findComponent(
-					`[data-testid="room-task-card-menu-edit-0"]`
-				);
+				const moreActionButton = wrapper.findComponent(`[data-testid="room-task-card-menu-edit-0"]`);
 				await moreActionButton.trigger("click");
 
-				expect(window.location.assign).toHaveBeenCalledWith(
-					"/homework/123/edit?returnUrl=rooms/456"
-				);
+				expect(window.location.assign).toHaveBeenCalledWith("/homework/123/edit?returnUrl=rooms/456");
 			});
 
 			it("should trigger the 'unPublishCard' method when 'more action' unpublish button is clicked", async () => {
@@ -436,9 +410,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findComponent(
-					`[data-testid="room-task-card-menu-revert-0"]`
-				);
+				const moreActionButton = wrapper.findComponent(`[data-testid="room-task-card-menu-revert-0"]`);
 				await moreActionButton.trigger("click");
 
 				const emitted = wrapper.emitted("update-visibility");
@@ -450,15 +422,12 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
 				const restoreCardMock = vi.fn();
 				const wrapper = getWrapper({ task: finishedTestTask, userRole });
-				(wrapper.vm as unknown as typeof RoomTaskCard).restoreCard =
-					restoreCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).restoreCard = restoreCardMock;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findComponent(
-					`[data-testid="room-task-card-menu-restore-0"]`
-				);
+				const moreActionButton = wrapper.findComponent(`[data-testid="room-task-card-menu-restore-0"]`);
 				await moreActionButton.trigger("click");
 
 				expect(wrapper.emitted("restore-task")).toBeDefined();
@@ -469,9 +438,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findComponent(
-					`[data-testid="room-task-card-menu-remove-0"]`
-				);
+				const moreActionButton = wrapper.findComponent(`[data-testid="room-task-card-menu-remove-0"]`);
 				await moreActionButton.trigger("click");
 
 				const emitted = wrapper.emitted("delete-task");
@@ -481,12 +448,9 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should trigger the 'publishCard' method when 'Publish' button is clicked on a draft", async () => {
 				const publishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: draftTestTask, userRole });
-				(wrapper.vm as unknown as typeof RoomTaskCard).publishCard =
-					publishCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).publishCard = publishCardMock;
 
-				const actionButton = wrapper.findComponent(
-					`[data-testid="task-card-action-publish-0"]`
-				);
+				const actionButton = wrapper.findComponent(`[data-testid="task-card-action-publish-0"]`);
 				await actionButton.trigger("click");
 
 				const emitted = wrapper.emitted("update-visibility");
@@ -497,12 +461,9 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should trigger the 'publishCard' method when 'Publish' button is clicked on a planned task", async () => {
 				const publishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: plannedTestTask, userRole });
-				(wrapper.vm as unknown as typeof RoomTaskCard).publishCard =
-					publishCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).publishCard = publishCardMock;
 
-				const actionButton = wrapper.find(
-					`[data-testid="task-card-action-publish-0"]`
-				);
+				const actionButton = wrapper.find(`[data-testid="task-card-action-publish-0"]`);
 				await actionButton.trigger("click");
 
 				const emitted = wrapper.emitted("update-visibility");
@@ -513,9 +474,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should trigger the 'finishCard' method when 'Finish' button is clicked", async () => {
 				const wrapper = getWrapper({ task: testTask, userRole });
 
-				const actionButton = wrapper.find(
-					`[data-testid="task-card-action-done-0"]`
-				);
+				const actionButton = wrapper.find(`[data-testid="task-card-action-done-0"]`);
 				await actionButton.trigger("click");
 
 				expect(wrapper.emitted("finish-task")).toBeDefined();
@@ -524,9 +483,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should overdue chip is visible if the task overdued", async () => {
 				const wrapper = getWrapper({ task: overdueTestTask, userRole });
 				const overrdueElement = wrapper.find(".overdue");
-				expect(overrdueElement.element.innerHTML).toContain(
-					"pages.room.taskCard.teacher.label.overdue"
-				);
+				expect(overrdueElement.element.innerHTML).toContain("pages.room.taskCard.teacher.label.overdue");
 			});
 
 			it("should return false value after calculated isPlanned() method", () => {
@@ -555,9 +512,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				};
 				const wrapper = getWrapper({ ...localProps, userRole });
 
-				expect((wrapper.vm as unknown as typeof RoomTaskCard).isPlanned).toBe(
-					false
-				);
+				expect((wrapper.vm as unknown as typeof RoomTaskCard).isPlanned).toBe(false);
 			});
 
 			it("should return true value after calculated isPlanned() method", () => {
@@ -587,9 +542,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				};
 				const wrapper = getWrapper({ ...localProps, userRole });
 
-				expect((wrapper.vm as unknown as typeof RoomTaskCard).isPlanned).toBe(
-					true
-				);
+				expect((wrapper.vm as unknown as typeof RoomTaskCard).isPlanned).toBe(true);
 			});
 
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
@@ -605,9 +558,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						const threeDotButton = wrapper.find(".three-dot-button");
 						await threeDotButton.trigger("click");
 
-						const moreActionButton = wrapper.findComponent(
-							`[data-testid="room-task-card-menu-copy-0"]`
-						);
+						const moreActionButton = wrapper.findComponent(`[data-testid="room-task-card-menu-copy-0"]`);
 						await moreActionButton.trigger("click");
 						await nextTick();
 						expect(wrapper.emitted("copy-task")).toBeDefined();
@@ -624,9 +575,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						const threeDotButton = wrapper.find(".three-dot-button");
 						await threeDotButton.trigger("click");
 
-						const moreActionButton = wrapper.findAll(
-							`[data-testid="room-task-card-menu-copy-0"]`
-						);
+						const moreActionButton = wrapper.findAll(`[data-testid="room-task-card-menu-copy-0"]`);
 
 						expect(moreActionButton).toHaveLength(0);
 					});
@@ -649,15 +598,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should have finish button if task is not marked as finished", async () => {
 				const finishCardMock = vi.fn();
 				const wrapper = getWrapper({ task: studentTestTask, userRole });
-				(wrapper.vm as unknown as typeof RoomTaskCard).finishCard =
-					finishCardMock;
-				const actionButton = wrapper.findComponent(
-					`[data-testid="task-card-action-done-0"]`
-				);
+				(wrapper.vm as unknown as typeof RoomTaskCard).finishCard = finishCardMock;
+				const actionButton = wrapper.findComponent(`[data-testid="task-card-action-done-0"]`);
 
-				expect(actionButton.element.textContent).toContain(
-					"pages.room.taskCard.label.done"
-				);
+				expect(actionButton.element.textContent).toContain("pages.room.taskCard.label.done");
 
 				await actionButton.trigger("click");
 				expect(wrapper.emitted("finish-task")).toBeDefined();
@@ -666,15 +610,12 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
 				const restoreCardMock = vi.fn();
 				const wrapper = getWrapper({ task: studentFinishedTestTask, userRole });
-				(wrapper.vm as unknown as typeof RoomTaskCard).restoreCard =
-					restoreCardMock;
+				(wrapper.vm as unknown as typeof RoomTaskCard).restoreCard = restoreCardMock;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findComponent(
-					`[data-testid="room-task-card-menu-restore-0"]`
-				);
+				const moreActionButton = wrapper.findComponent(`[data-testid="room-task-card-menu-restore-0"]`);
 				await moreActionButton.trigger("click");
 
 				expect(wrapper.emitted("restore-task")).toBeDefined();
@@ -708,9 +649,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				};
 				const wrapper = getWrapper({ ...localProps, userRole });
 
-				expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(
-					true
-				);
+				expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(true);
 			});
 
 			it("should have missed chip if task has due date, is expired and not submitted", () => {
@@ -739,9 +678,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const wrapper = getWrapper({ ...localProps, userRole });
 				const chips = wrapper.find(".overdue");
 
-				expect(chips.element.textContent).toContain(
-					"pages.room.taskCard.student.label.overdue"
-				);
+				expect(chips.element.textContent).toContain("pages.room.taskCard.student.label.overdue");
 			});
 
 			it("should have submitted chip if task is submitted", () => {
@@ -770,9 +707,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const wrapper = getWrapper({ ...localProps, userRole });
 				const chips = wrapper.find(".submitted");
 
-				expect(chips.element.textContent).toContain(
-					"pages.room.taskCard.student.label.submitted"
-				);
+				expect(chips.element.textContent).toContain("pages.room.taskCard.student.label.submitted");
 			});
 
 			it("should have graded chip if task is graded", () => {
@@ -801,9 +736,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const wrapper = getWrapper({ ...localProps, userRole });
 				const chips = wrapper.find(".graded");
 
-				expect(chips.element.textContent).toContain(
-					"pages.room.taskCard.label.graded"
-				);
+				expect(chips.element.textContent).toContain("pages.room.taskCard.label.graded");
 			});
 
 			it("should have no chips if task is finished", () => {
@@ -815,9 +748,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 				expect(chips).toHaveLength(0);
 
-				expect(
-					finishedWrapper.find("[data-test-id='dueDateHintLabel']").exists()
-				).toBe(false);
+				expect(finishedWrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(false);
 			});
 		});
 	});

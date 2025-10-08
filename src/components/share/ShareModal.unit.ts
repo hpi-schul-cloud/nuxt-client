@@ -1,23 +1,26 @@
+import ShareModal from "./ShareModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
-import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
+import { SHARE_MODULE_KEY } from "@/utils/inject";
+import { expectNotification } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
-import ShareModal from "./ShareModal.vue";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 describe("@/components/share/ShareModal", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	describe("when course is shared", () => {
 		let shareModuleMock: ShareModule;
-		let notifierModuleMock: NotifierModule;
 
 		const setup = () => {
 			const wrapper = mount(ShareModal, {
@@ -25,7 +28,6 @@ describe("@/components/share/ShareModal", () => {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					},
 				},
 				props: {
@@ -45,8 +47,6 @@ describe("@/components/share/ShareModal", () => {
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
-
-			notifierModuleMock = createModuleMocks(NotifierModule);
 		});
 
 		it("should start with step 1", () => {
@@ -61,9 +61,7 @@ describe("@/components/share/ShareModal", () => {
 			const { wrapper } = setup();
 			const title = wrapper.findComponent({ name: "v-card-title" });
 
-			expect(title.text()).toContain(
-				"components.molecules.share.options.title"
-			);
+			expect(title.text()).toContain("components.molecules.share.options.title");
 		});
 
 		it("should call 'createShareUrl' store method when next button clicked", () => {
@@ -105,12 +103,10 @@ describe("@/components/share/ShareModal", () => {
 
 			form.vm.$emit("share-options-change", payload);
 
-			expect(
-				(wrapper.vm as unknown as typeof ShareModal).shareOptions
-			).toStrictEqual(payload);
+			expect((wrapper.vm as unknown as typeof ShareModal).shareOptions).toStrictEqual(payload);
 		});
 
-		it("should call 'onCopy' method when sub component emits 'copied'", async () => {
+		it("should call 'onCopy' method when sub component emits 'copied'", () => {
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
 				getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
@@ -120,16 +116,14 @@ describe("@/components/share/ShareModal", () => {
 			const form = wrapper.findComponent(ShareModalResult);
 
 			form.vm.$emit("copied");
-			expect(notifierModuleMock.show).toHaveBeenCalled();
+			expectNotification("success");
 		});
 
 		it("should show copyright and privacy info alert", () => {
 			const { wrapper } = setup();
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"components.molecules.share.checkPrivacyAndCopyright"
-			);
+			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
 		});
 
 		describe("ctl tool info", () => {
@@ -139,14 +133,10 @@ describe("@/components/share/ShareModal", () => {
 				const dialog = wrapper.findComponent(vCustomDialog);
 				const cardText = dialog.findComponent({ name: "v-card-text" });
 
-				const infotext = cardText.find(
-					`[data-testid="share-modal-external-tools-info"]`
-				);
+				const infotext = cardText.find(`[data-testid="share-modal-external-tools-info"]`);
 
 				expect(infotext.isVisible()).toBe(true);
-				expect(infotext.text()).toEqual(
-					"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
-				);
+				expect(infotext.text()).toEqual("components.molecules.shareImport.options.ctlTools.infoText.unavailable");
 			});
 		});
 	});
@@ -159,14 +149,12 @@ describe("@/components/share/ShareModal", () => {
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
-			const notifierModuleMock = createModuleMocks(NotifierModule);
 
 			const wrapper = mount(ShareModal, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					},
 				},
 				props: {
@@ -183,9 +171,7 @@ describe("@/components/share/ShareModal", () => {
 			const { wrapper } = setup();
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"components.molecules.share.checkPrivacyAndCopyright"
-			);
+			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
 		});
 
 		it("should show warning alert", () => {
@@ -204,14 +190,12 @@ describe("@/components/share/ShareModal", () => {
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
-			const notifierModuleMock = createModuleMocks(NotifierModule);
 
 			const wrapper = mount(ShareModal, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					},
 				},
 				props: {
@@ -228,9 +212,7 @@ describe("@/components/share/ShareModal", () => {
 			const { wrapper } = setup();
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"components.molecules.share.checkPrivacyAndCopyright"
-			);
+			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
 		});
 
 		it("should show warning alert", () => {
@@ -249,14 +231,12 @@ describe("@/components/share/ShareModal", () => {
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
-			const notifierModuleMock = createModuleMocks(NotifierModule);
 
 			const wrapper = mount(ShareModal, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					},
 				},
 				props: {
@@ -273,9 +253,7 @@ describe("@/components/share/ShareModal", () => {
 			const { wrapper } = setup();
 			const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe(
-				"components.molecules.share.checkPrivacyAndCopyright"
-			);
+			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
 		});
 
 		it("should show warning alert", () => {
@@ -294,14 +272,12 @@ describe("@/components/share/ShareModal", () => {
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
-			const notifierModuleMock = createModuleMocks(NotifierModule);
 
 			const wrapper = mount(ShareModal, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					},
 				},
 				props: {

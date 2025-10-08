@@ -1,8 +1,5 @@
 <template>
-	<MediaBoardElementDisplay
-		:element="elementDisplayData"
-		:is-unavailable="true"
-	>
+	<MediaBoardElementDisplay :element="elementDisplayData" :is-unavailable="true">
 		<template #imageOverlay>
 			<div class="d-flex ga-1 flex-column pa-3">
 				<WarningChip data-testid="warning-chip-no-longer-available">
@@ -17,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import { DeletedElementResponse } from "@/serverApi/v3";
-import { WarningChip } from "@ui-chip";
-import { computed, PropType, Ref } from "vue";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
+import { DeletedElementResponse } from "@/serverApi/v3";
+import { WarningChip } from "@ui-chip";
+import { computed, PropType, Ref } from "vue";
 
 const props = defineProps({
 	element: {
@@ -39,12 +36,10 @@ const onDelete = async () => {
 	emit("delete:element", props.element.id);
 };
 
-const elementDisplayData: Ref<MediaElementDisplay> = computed(() => {
-	return {
-		title: props.element?.content.title,
-		description: props.element?.content.description,
-		thumbnail: undefined,
-		domain: "",
-	};
-});
+const elementDisplayData: Ref<MediaElementDisplay> = computed(() => ({
+	title: props.element?.content.title,
+	description: props.element?.content.description,
+	thumbnail: undefined,
+	domain: "",
+}));
 </script>

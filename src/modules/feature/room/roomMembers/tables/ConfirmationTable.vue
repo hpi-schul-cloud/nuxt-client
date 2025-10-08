@@ -11,25 +11,18 @@
 	>
 		<template #[`action-menu-items`]>
 			<KebabMenuActionConfirmRequest
-				:aria-label="
-					t('pages.rooms.members.confirmationTable.menus.confirm.label')
-				"
+				:aria-label="t('pages.rooms.members.confirmationTable.menus.confirm.label')"
 				@click="onConfirm(confirmationSelectedIds)"
 			/>
 			<KebabMenuActionRejectRequest
-				:aria-label="
-					t('pages.rooms.members.confirmationTable.menus.reject.label')
-				"
+				:aria-label="t('pages.rooms.members.confirmationTable.menus.reject.label')"
 				@click="onReject(confirmationSelectedIds)"
 			/>
 		</template>
 
 		<template #[`item.actions`]="{ item }">
 			<div class="d-flex align-center">
-				<KebabMenu
-					:data-testid="`kebab-menu-${item.userId}`"
-					:aria-label="getAriaLabel(item)"
-				>
+				<KebabMenu :data-testid="`kebab-menu-${item.userId}`" :aria-label="getAriaLabel(item)">
 					<KebabMenuActionConfirmRequest
 						:data-testid="`kebab-menu-confirm-${item.userId}`"
 						:aria-label="getAriaLabel(item, 'confirm')"
@@ -48,16 +41,13 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { DataTable } from "@ui-data-table";
+import { KebabMenuActionConfirmRequest, KebabMenuActionRejectRequest } from "../menus";
 import { useRoomMembersStore } from "@data-room";
+import { DataTable } from "@ui-data-table";
 import { KebabMenu } from "@ui-kebab-menu";
-import {
-	KebabMenuActionConfirmRequest,
-	KebabMenuActionRejectRequest,
-} from "../menus";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 defineProps({
 	headerBottom: {
@@ -72,12 +62,9 @@ defineProps({
 
 const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
-const { roomApplicants: rawRoomApplicants, confirmationSelectedIds } =
-	storeToRefs(roomMembersStore);
+const { roomApplicants: rawRoomApplicants, confirmationSelectedIds } = storeToRefs(roomMembersStore);
 const { confirmInvitations, rejectInvitations } = roomMembersStore;
-const roomApplicants = computed(() =>
-	rawRoomApplicants.value.map((applicant) => ({ ...applicant }))
-);
+const roomApplicants = computed(() => rawRoomApplicants.value.map((applicant) => ({ ...applicant })));
 
 const onUpdateSelectedIds = (ids: string[]) => {
 	confirmationSelectedIds.value = ids;
@@ -91,21 +78,14 @@ const onReject = async (ids: string[]) => {
 	await rejectInvitations(ids);
 };
 
-const getAriaLabel = (
-	item: { fullName: string },
-	actionFor?: "confirm" | "reject"
-) => {
-	return actionFor
-		? t(
-				`pages.rooms.members.confirmationTable.actionMenu.${actionFor}.ariaLabel`,
-				{
-					fullName: item.fullName,
-				}
-			)
+const getAriaLabel = (item: { fullName: string }, actionFor?: "confirm" | "reject") =>
+	actionFor
+		? t(`pages.rooms.members.confirmationTable.actionMenu.${actionFor}.ariaLabel`, {
+				fullName: item.fullName,
+			})
 		: t("pages.rooms.members.confirmationTable.actionMenu.ariaLabel", {
 				fullName: item.fullName,
 			});
-};
 
 const tableHeaders = [
 	{

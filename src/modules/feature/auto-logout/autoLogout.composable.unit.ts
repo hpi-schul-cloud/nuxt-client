@@ -1,11 +1,9 @@
-import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
-import setupStores from "@@/tests/test-utils/setupStores";
-import NotifierModule from "@/store/notifier";
 import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { nextTick } from "vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { nextTick } from "vue";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -66,24 +64,13 @@ describe("useAutoLogout", () => {
 		vi.clearAllTimers();
 	});
 
-	setupStores({
-		notifierModule: NotifierModule,
-	});
-
+	setActivePinia(createTestingPinia());
 	createTestEnvStore({
 		JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
 		JWT_TIMEOUT_SECONDS: jwtTimerResponse.timeout,
 	});
-	const notifierModuleMock = createModuleMocks(NotifierModule);
-
 	const setup = (options?: { remainingTimeInSeconds?: number }) => {
-		const composable = mountComposable(() => useAutoLogout(), {
-			global: {
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-				},
-			},
-		});
+		const composable = mountComposable(() => useAutoLogout());
 
 		composable.remainingTimeInSeconds = options?.remainingTimeInSeconds ?? 0;
 
@@ -104,9 +91,7 @@ describe("useAutoLogout", () => {
 		describe("when the timer is below the warning time", () => {
 			it("should set 'showDialog' true", async () => {
 				jwtTimerResponse.ttl = jwtTimerResponse.showTimeoutValue - 10;
-				const timeToAdvance =
-					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) *
-					1000;
+				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) * 1000;
 				const { showDialog } = setup();
 
 				vi.advanceTimersByTime(timeToAdvance);
@@ -125,9 +110,7 @@ describe("useAutoLogout", () => {
 
 			it("should be true when the session is extended", async () => {
 				jwtTimerResponse.ttl = 100;
-				const timeToAdvance =
-					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) *
-					1000;
+				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) * 1000;
 				const { isTTLUpdated } = setup();
 				vi.advanceTimersByTime(timeToAdvance);
 				await nextTick();
@@ -139,9 +122,7 @@ describe("useAutoLogout", () => {
 		describe("when the timer is above the warning time", () => {
 			it("should set 'showDialog' to false", async () => {
 				jwtTimerResponse.ttl = jwtTimerResponse.showTimeoutValue + 10;
-				const timeToAdvance =
-					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue - 10) *
-					1000;
+				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue - 10) * 1000;
 				const { showDialog } = setup();
 
 				vi.advanceTimersByTime(timeToAdvance);

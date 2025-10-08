@@ -1,22 +1,17 @@
-import {
-	CourseInfoDataResponse,
-	CourseSortProps,
-	CourseStatus,
-} from "@/serverApi/v3";
-import { BusinessError, Pagination } from "@/store/types/commons";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { ref, Ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { useCourseApi } from "./courseApi.composable";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
+import { CourseInfoDataResponse, CourseSortProps, CourseStatus } from "@/serverApi/v3";
+import { BusinessError, Pagination } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { notifyError } from "@data-app";
+import { Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export const useCourseList = () => {
 	const { deleteCourseById } = useCourseApi();
 	const { loadCoursesForSchool } = useCourseInfoApi();
 
 	const { t } = useI18n();
-	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 	const courses: Ref<CourseInfoDataResponse[]> = ref([]);
 	const pagination: Ref<Pagination> = ref({ total: 0, limit: 10, skip: 0 });
@@ -44,9 +39,7 @@ export const useCourseList = () => {
 		pagination.value = paginationData;
 	};
 
-	const fetchCourses = async (
-		courseStatusQueryType: CourseStatus
-	): Promise<void> => {
+	const fetchCourses = async (courseStatusQueryType: CourseStatus): Promise<void> => {
 		isLoading.value = true;
 
 		try {
@@ -94,10 +87,7 @@ export const useCourseList = () => {
 			message: apiError.message,
 		};
 
-		notifierModule.show({
-			text: t("error.load"),
-			status: "error",
-		});
+		notifyError(t("error.load"));
 	};
 
 	return {

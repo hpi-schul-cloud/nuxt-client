@@ -10,12 +10,7 @@
 					:parent-id="parentId"
 					@load-error="loadError"
 				/>
-				<v-btn
-					class="mt-4"
-					color="primary"
-					data-testid="editor-save-button"
-					@click="save"
-				>
+				<v-btn class="mt-4" color="primary" data-testid="editor-save-button" @click="save">
 					{{ t("common.actions.save") }}
 				</v-btn>
 			</div>
@@ -24,21 +19,17 @@
 </template>
 
 <script setup lang="ts">
+import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
+import { H5pEditorHooks } from "./types/h5pEditorHooks";
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { H5PContentParentType, H5PSaveResponse } from "@/h5pEditorApi/v3";
 import type ApplicationErrorModule from "@/store/application-error";
-import type NotifierModule from "@/store/notifier";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import {
-	APPLICATION_ERROR_KEY,
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
+import { notifyError, notifySuccess } from "@data-app";
 import { onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
-import { H5pEditorHooks } from "./types/h5pEditorHooks";
 
 const props = defineProps<{
 	parentType: H5PContentParentType;
@@ -46,10 +37,7 @@ const props = defineProps<{
 	contentId?: string;
 }>();
 
-const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const applicationErrorModule: ApplicationErrorModule = injectStrict(
-	APPLICATION_ERROR_KEY
-);
+const applicationErrorModule: ApplicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
 
 const { t } = useI18n();
 
@@ -92,11 +80,7 @@ const save = async () => {
 				await hooks.afterSave(data.contentId);
 			}
 
-			notifierModule.show({
-				text: t("pages.h5p.api.success.save"),
-				status: "success",
-				timeout: 5000,
-			});
+			notifySuccess(t("pages.h5p.api.success.save"));
 
 			notifyParent(
 				new CustomEvent("save-content", {
@@ -108,11 +92,7 @@ const save = async () => {
 				})
 			);
 		} catch {
-			notifierModule.show({
-				text: t("common.validation.invalid"),
-				status: "error",
-				timeout: 5000,
-			});
+			notifyError(t("common.validation.invalid"));
 		}
 	}
 };

@@ -1,37 +1,26 @@
+import { ElementCreate, ElementMove, lineLimit, LineMove, useSharedMediaBoardState } from "./data";
+import MediaBoard from "./MediaBoard.vue";
+import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
+import MediaBoardLine from "./MediaBoardLine.vue";
+import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
 import { MediaBoardColors } from "@/serverApi/v3";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
 	mediaLineResponseFactory,
 } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { shallowMount } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import {
-	ElementCreate,
-	ElementMove,
-	lineLimit,
-	LineMove,
-	useSharedMediaBoardState,
-} from "./data";
-import MediaBoard from "./MediaBoard.vue";
-import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
-import MediaBoardLine from "./MediaBoardLine.vue";
-import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
 
 vi.mock("./data/mediaBoardState.composable");
 
 describe("MediaBoard", () => {
-	let useSharedMediaBoardStateMock: DeepMocked<
-		ReturnType<typeof useSharedMediaBoardState>
-	>;
+	let useSharedMediaBoardStateMock: DeepMocked<ReturnType<typeof useSharedMediaBoardState>>;
 
 	const getWrapper = (
 		props: ComponentProps<typeof MediaBoard> = {
@@ -55,12 +44,9 @@ describe("MediaBoard", () => {
 	};
 
 	beforeEach(() => {
-		useSharedMediaBoardStateMock =
-			createMock<ReturnType<typeof useSharedMediaBoardState>>();
+		useSharedMediaBoardStateMock = createMock<ReturnType<typeof useSharedMediaBoardState>>();
 
-		vi.mocked(useSharedMediaBoardState).mockReturnValue(
-			useSharedMediaBoardStateMock
-		);
+		vi.mocked(useSharedMediaBoardState).mockReturnValue(useSharedMediaBoardStateMock);
 	});
 
 	afterEach(() => {
@@ -92,9 +78,7 @@ describe("MediaBoard", () => {
 			availableLine.vm.$emit("create:element", createOptions);
 			await nextTick();
 
-			expect(useSharedMediaBoardStateMock.createElement).toHaveBeenCalledWith(
-				createOptions
-			);
+			expect(useSharedMediaBoardStateMock.createElement).toHaveBeenCalledWith(createOptions);
 		});
 	});
 
@@ -104,15 +88,12 @@ describe("MediaBoard", () => {
 
 			const availableLine = wrapper.findComponent(MediaBoardAvailableLine);
 
-			availableLine.vm.$emit(
-				"update:line-background-color",
-				MediaBoardColors.Red
-			);
+			availableLine.vm.$emit("update:line-background-color", MediaBoardColors.Red);
 			await nextTick();
 
-			expect(
-				useSharedMediaBoardStateMock.updateAvailableLineBackgroundColor
-			).toHaveBeenCalledWith(MediaBoardColors.Red);
+			expect(useSharedMediaBoardStateMock.updateAvailableLineBackgroundColor).toHaveBeenCalledWith(
+				MediaBoardColors.Red
+			);
 		});
 	});
 
@@ -125,9 +106,7 @@ describe("MediaBoard", () => {
 			availableLine.vm.$emit("update:line-collapsed", true);
 			await nextTick();
 
-			expect(
-				useSharedMediaBoardStateMock.updateAvailableLineCollapsed
-			).toHaveBeenCalledWith(true);
+			expect(useSharedMediaBoardStateMock.updateAvailableLineCollapsed).toHaveBeenCalledWith(true);
 		});
 	});
 
@@ -169,10 +148,7 @@ describe("MediaBoard", () => {
 			mediaLine.vm.$emit("update:line-title", "newTitle");
 			await nextTick();
 
-			expect(useSharedMediaBoardStateMock.updateLineTitle).toHaveBeenCalledWith(
-				expect.any(String),
-				"newTitle"
-			);
+			expect(useSharedMediaBoardStateMock.updateLineTitle).toHaveBeenCalledWith(expect.any(String), "newTitle");
 		});
 	});
 
@@ -185,9 +161,10 @@ describe("MediaBoard", () => {
 			mediaLine.vm.$emit("update:line-background-color", MediaBoardColors.Red);
 			await nextTick();
 
-			expect(
-				useSharedMediaBoardStateMock.updateLineBackgroundColor
-			).toHaveBeenCalledWith(expect.any(String), MediaBoardColors.Red);
+			expect(useSharedMediaBoardStateMock.updateLineBackgroundColor).toHaveBeenCalledWith(
+				expect.any(String),
+				MediaBoardColors.Red
+			);
 		});
 	});
 
@@ -200,9 +177,7 @@ describe("MediaBoard", () => {
 			mediaLine.vm.$emit("update:line-collapsed", true);
 			await nextTick();
 
-			expect(
-				useSharedMediaBoardStateMock.updateLineCollapsed
-			).toHaveBeenCalledWith(expect.any(String), true);
+			expect(useSharedMediaBoardStateMock.updateLineCollapsed).toHaveBeenCalledWith(expect.any(String), true);
 		});
 	});
 
@@ -232,9 +207,7 @@ describe("MediaBoard", () => {
 			mediaLine.vm.$emit("update:element-position", moveOptions);
 			await nextTick();
 
-			expect(useSharedMediaBoardStateMock.moveElement).toHaveBeenCalledWith(
-				moveOptions
-			);
+			expect(useSharedMediaBoardStateMock.moveElement).toHaveBeenCalledWith(moveOptions);
 		});
 	});
 
@@ -255,9 +228,7 @@ describe("MediaBoard", () => {
 			mediaLine.vm.$emit("delete:line", "lineId");
 			await nextTick();
 
-			expect(useSharedMediaBoardStateMock.deleteLine).toHaveBeenCalledWith(
-				"lineId"
-			);
+			expect(useSharedMediaBoardStateMock.deleteLine).toHaveBeenCalledWith("lineId");
 		});
 	});
 
@@ -278,9 +249,7 @@ describe("MediaBoard", () => {
 			mediaLine.vm.$emit("delete:element", "elementId");
 			await nextTick();
 
-			expect(useSharedMediaBoardStateMock.deleteElement).toHaveBeenCalledWith(
-				"elementId"
-			);
+			expect(useSharedMediaBoardStateMock.deleteElement).toHaveBeenCalledWith("elementId");
 		});
 	});
 
@@ -314,9 +283,7 @@ describe("MediaBoard", () => {
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();
 
-			expect(useSharedMediaBoardStateMock.moveLine).toHaveBeenCalledWith<
-				[LineMove]
-			>({
+			expect(useSharedMediaBoardStateMock.moveLine).toHaveBeenCalledWith<[LineMove]>({
 				lineId,
 				oldLineIndex: 0,
 				newLineIndex: 1,

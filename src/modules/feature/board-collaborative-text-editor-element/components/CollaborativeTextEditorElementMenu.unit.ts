@@ -1,24 +1,15 @@
+import CollaborativeTextEditorElementMenu from "./CollaborativeTextEditorElementMenu.vue";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import CollaborativeTextEditorElementMenu from "./CollaborativeTextEditorElementMenu.vue";
 
 // Mocks
 vi.mock("@ui-confirmation-dialog");
 
-const mockedUseDeleteConfirmationDialog = vi.mocked(
-	useDeleteConfirmationDialog
-);
+const mockedUseDeleteConfirmationDialog = vi.mocked(useDeleteConfirmationDialog);
 
 describe("CollaborativeTextEditorElementMenu", () => {
 	const getWrapper = (propsData: {

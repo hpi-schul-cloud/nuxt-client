@@ -7,10 +7,7 @@
 			<p>{{ t("pages.licenseList.introduction") }}</p>
 
 			<v-expansion-panels multiple class="w-100 pb-9">
-				<v-expansion-panel
-					v-for="[name, item] in Object.entries(licenseData)"
-					:key="name"
-				>
+				<v-expansion-panel v-for="[name, item] in Object.entries(licenseData)" :key="name">
 					<v-expansion-panel-title>
 						<div class="text-h2">{{ name }}</div>
 						<template #actions="{ expanded }">
@@ -23,12 +20,7 @@
 							{{ t("pages.licenseList.packageIntroduction") }}
 						</p>
 						<div class="ga-2">
-							<v-chip
-								v-for="componentName in item.components"
-								:key="componentName"
-								label
-								class="ma-1"
-							>
+							<v-chip v-for="componentName in item.components" :key="componentName" label class="ma-1">
 								{{ componentName }}
 							</v-chip>
 						</div>
@@ -40,14 +32,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import axios from "axios";
-import { useI18n } from "vue-i18n";
-import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { mdiMinus, mdiPlus } from "@icons/material";
+import { notifyError } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { mdiMinus, mdiPlus } from "@icons/material";
+import axios from "axios";
+import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
 type LicenseDetails = {
@@ -61,9 +52,7 @@ const licenseData = ref<LicenseData>({});
 const removeVersionNumbers = (data: LicenseData): LicenseData => {
 	const result: LicenseData = {};
 	for (const [licenseName, licenseDetails] of Object.entries(data)) {
-		const components = licenseDetails.components.map((component) => {
-			return component.replace(/@[\d.]+$/, "");
-		});
+		const components = licenseDetails.components.map((component) => component.replace(/@[\d.]+$/, ""));
 
 		result[licenseName] = {
 			components: [...new Set(components)],
@@ -78,18 +67,13 @@ const fetchLicenseData = async () => {
 		const licensesUrl = useEnvConfig().value.LICENSE_SUMMARY_URL;
 		if (!licensesUrl) throw new Error("License summary URL is not defined");
 
-		licenseData.value = removeVersionNumbers(
-			(await axios.get(licensesUrl as string)).data
-		);
+		licenseData.value = removeVersionNumbers((await axios.get(licensesUrl as string)).data);
 	} catch {
-		notifierModule.show({
-			text: t("error.load"),
-			status: "error",
-		});
+		notifyError(t("error.load"));
 	}
 };
 
-onMounted(async () => {
+onMounted(() => {
 	fetchLicenseData();
 });
 </script>

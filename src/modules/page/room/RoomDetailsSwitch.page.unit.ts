@@ -1,15 +1,12 @@
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { createMock } from "@golevelup/ts-vitest";
 import { RoomDetailsSwitchPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
-import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
-import { Router, useRoute, useRouter } from "vue-router";
-import { createMock } from "@golevelup/ts-vitest";
 import { Mock } from "vitest";
+import { Router, useRoute, useRouter } from "vue-router";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
@@ -81,10 +78,10 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 			expect(loadingState.exists()).toBe(true);
 		});
 
-		it("should fetch room", () => {
+		it("should fetch room and boards", () => {
 			const { roomDetailsStore } = setup({ isLoading: true });
 
-			expect(roomDetailsStore.fetchRoom).toHaveBeenCalled();
+			expect(roomDetailsStore.fetchRoomAndBoards).toHaveBeenCalled();
 		});
 	});
 
@@ -105,9 +102,7 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 						lockedRoomName: "Locked Room",
 					});
 
-					expect(wrapper.html()).toBe(
-						'<room-locked.page-stub title="Locked Room"></room-locked.page-stub>'
-					);
+					expect(wrapper.html()).toBe('<room-locked.page-stub title="Locked Room"></room-locked.page-stub>');
 				});
 			});
 
@@ -118,9 +113,7 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 						roomVariant: RoomVariant.ROOM,
 					});
 
-					expect(wrapper.html()).toBe(
-						'<room-details.page-stub room="[object Object]"></room-details.page-stub>'
-					);
+					expect(wrapper.html()).toBe('<room-details.page-stub room="[object Object]"></room-details.page-stub>');
 				});
 			});
 		});
@@ -132,9 +125,7 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 					roomVariant: RoomVariant.COURSE_ROOM,
 				});
 
-				expect(wrapper.html()).toBe(
-					"<course-room-details-page-stub></course-room-details-page-stub>"
-				);
+				expect(wrapper.html()).toBe("<course-room-details-page-stub></course-room-details-page-stub>");
 			});
 		});
 	});

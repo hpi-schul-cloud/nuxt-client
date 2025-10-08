@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
 import { ConfirmationTable } from "@feature-room";
+import { useI18n } from "vue-i18n";
 
 defineProps({
 	headerBottom: {

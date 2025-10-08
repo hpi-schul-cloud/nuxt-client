@@ -6,10 +6,4 @@ import type {
 } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum as BoardElementType } from "@/serverApi/v3";
 
-export {
-	BoardColumnBoard,
-	BoardElement,
-	BoardLesson,
-	BoardTask,
-	BoardElementType,
-};
+export { BoardColumnBoard, BoardElement, BoardElementType, BoardLesson, BoardTask };

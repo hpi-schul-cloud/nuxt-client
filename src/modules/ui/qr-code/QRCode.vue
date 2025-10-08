@@ -3,10 +3,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 // @ts-expect-error not a typescript package
 // TODO - replace with package that supports ts (e.g. qrcode-vue, vue-qrcode,..)
 import kjua from "kjua";
+import { onMounted, ref } from "vue";
 
 const props = defineProps({
 	url: {

@@ -1,10 +1,5 @@
 <template>
-	<svg
-		width="56"
-		height="56"
-		viewBox="0 0 56 56"
-		xmlns="http://www.w3.org/2000/svg"
-	>
+	<svg width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
 		<path
 			d="M28 0c15.464 0 28 12.536 28 28S43.464 56 28 56 0 43.464 0 28 12.536 0 28 0zm3 13H19a3 3 0 00-3 3v24c0 1.665 1.335 3 3 3h18c1.665 0 3-1.335 3-3V22l-9-9zm-1.5 3v7.5H37V40H19V16h10.5zm-7.275 9h-2.25l3.3 13.5h2.1l2.7-10.185 2.7 10.185h2.1l3.15-13.5h-2.25l-2.1 10.215L28.975 25h-1.95l-2.7 10.215L22.225 25z"
 			fill-rule="evenodd"

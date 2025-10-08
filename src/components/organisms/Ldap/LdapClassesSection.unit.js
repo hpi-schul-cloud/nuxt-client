@@ -1,10 +1,7 @@
-import { mount } from "@vue/test-utils";
 import LdapClassesSection from "./LdapClassesSection";
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("@/components/organisms/LdapClassesSection", () => {
 	const setup = (props = {}) => {
@@ -30,17 +27,9 @@ describe("@/components/organisms/LdapClassesSection", () => {
 	it("has correct child components", () => {
 		const { wrapper } = setup();
 
-		expect(wrapper.find("[data-testid=ldapDataClassesPath]").exists()).toBe(
-			true
-		);
-		expect(
-			wrapper.find("[data-testid=ldapDataClassesNameAttribute]").exists()
-		).toBe(true);
-		expect(
-			wrapper
-				.find("[data-testid=ldapDataClassesNameparticipantAttribute]")
-				.exists()
-		).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataClassesPath]").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataClassesNameAttribute]").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataClassesNameparticipantAttribute]").exists()).toBe(true);
 	});
 
 	it("loads the validator", async () => {
@@ -93,9 +82,7 @@ describe("@/components/organisms/LdapClassesSection", () => {
 				'[data-testid="ldapDataClassesPath"] .base-input-info.base-input-error'
 			);
 
-			expect(errorMessageComponent.text()).toEqual(
-				"common.validation.required"
-			);
+			expect(errorMessageComponent.text()).toEqual("common.validation.required");
 		});
 	});
 
@@ -137,8 +124,6 @@ describe("@/components/organisms/LdapClassesSection", () => {
 			'[data-testid="ldapDataClassesPath"] .base-input-info.base-input-error'
 		);
 
-		expect(errorMessageComponentAfter.text()).toEqual(
-			"pages.administration.ldapEdit.validation.path"
-		);
+		expect(errorMessageComponentAfter.text()).toEqual("pages.administration.ldapEdit.validation.path");
 	});
 });

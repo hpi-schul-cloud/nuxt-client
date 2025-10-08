@@ -1,17 +1,13 @@
-// Unit tests
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { mountComposable } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { CollaboraEvents, useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
+import { expectNotification, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { describe, expect, it, vi } from "vitest";
-import {
-	CollaboraEvents,
-	useCollaboraPostMessageApi,
-} from "./CollaboraPostMessageApi.composable";
 
 describe("useCollaboraMessage", () => {
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		vi.useFakeTimers();
 	});
 
@@ -19,29 +15,19 @@ describe("useCollaboraMessage", () => {
 		vi.useRealTimers();
 	});
 
-	const notifierModuleMock = createModuleMocks(NotifierModule);
-
-	const setupMountComposable = () => {
-		return mountComposable(() => useCollaboraPostMessageApi(), {
+	const setupMountComposable = () =>
+		mountComposable(() => useCollaboraPostMessageApi(), {
 			global: {
 				plugins: [createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
-				},
 			},
 		});
-	};
 
 	it("should show error if message is invalid JSON", () => {
 		setupMountComposable();
 		const invalidMsg = "not a json";
 		window.dispatchEvent(new MessageEvent("message", { data: invalidMsg }));
 
-		expect(notifierModuleMock.show).toHaveBeenCalledWith({
-			text: "pages.collabora.jsonError",
-			status: "error",
-			timeout: 5000,
-		});
+		expectNotification("error");
 	});
 
 	it("should show error if messageId is missing", () => {
@@ -52,11 +38,7 @@ describe("useCollaboraMessage", () => {
 		});
 		window.dispatchEvent(new MessageEvent("message", { data: invalidMsg }));
 
-		expect(notifierModuleMock.show).toHaveBeenCalledWith({
-			text: "pages.collabora.messageError",
-			status: "error",
-			timeout: 5000,
-		});
+		expectNotification("error");
 	});
 
 	it("should show error if messageId is not a string", () => {
@@ -68,11 +50,7 @@ describe("useCollaboraMessage", () => {
 		});
 		window.dispatchEvent(new MessageEvent("message", { data: invalidMsg }));
 
-		expect(notifierModuleMock.show).toHaveBeenCalledWith({
-			text: "pages.collabora.messageError",
-			status: "error",
-			timeout: 5000,
-		});
+		expectNotification("error");
 	});
 
 	it("should show error if values is missing", () => {
@@ -83,33 +61,21 @@ describe("useCollaboraMessage", () => {
 		});
 		window.dispatchEvent(new MessageEvent("message", { data: invalidMsg }));
 
-		expect(notifierModuleMock.show).toHaveBeenCalledWith({
-			text: "pages.collabora.messageError",
-			status: "error",
-			timeout: 5000,
-		});
+		expectNotification("error");
 	});
 
 	describe("handleLoadingStatusUpdate", () => {
-		const notifierModuleMock = createModuleMocks(NotifierModule);
-
 		const setupMountComposable = () => {
 			const targetOrigin = "https://collabora.example.com";
 
 			const iframe = document.createElement("iframe");
 			document.body.appendChild(iframe);
 
-			const { setupPostMessageAPI } = mountComposable(
-				() => useCollaboraPostMessageApi(),
-				{
-					global: {
-						plugins: [createTestingI18n()],
-						provide: {
-							[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
-						},
-					},
-				}
-			);
+			const { setupPostMessageAPI } = mountComposable(() => useCollaboraPostMessageApi(), {
+				global: {
+					plugins: [createTestingI18n()],
+				},
+			});
 
 			setupPostMessageAPI(iframe, targetOrigin);
 

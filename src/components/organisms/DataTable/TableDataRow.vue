@@ -65,9 +65,7 @@ export default {
 				return this.data;
 			}
 			if (this.columnKeys.length === 0) {
-				throw new Error(
-					"the prop columnKeys is required if the passed in data is an object."
-				);
+				throw new Error("the prop columnKeys is required if the passed in data is an object.");
 			}
 			return this.columnKeys.map((key) => getValueByPath(this.data, key));
 		},

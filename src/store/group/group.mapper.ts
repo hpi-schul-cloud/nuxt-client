@@ -1,14 +1,7 @@
-import {
-	ClassInfoResponse,
-	ClassInfoResponseTypeEnum,
-	CourseInfoResponse,
-} from "@/serverApi/v3";
 import { ClassInfo, ClassRootType, CourseInfo } from "../types/class-info";
+import { ClassInfoResponse, ClassInfoResponseTypeEnum, CourseInfoResponse } from "@/serverApi/v3";
 
-export const ClassRootTypeMapping: Record<
-	ClassInfoResponseTypeEnum,
-	ClassRootType
-> = {
+export const ClassRootTypeMapping: Record<ClassInfoResponseTypeEnum, ClassRootType> = {
 	[ClassInfoResponseTypeEnum.Class]: ClassRootType.Class,
 	[ClassInfoResponseTypeEnum.Group]: ClassRootType.Group,
 };

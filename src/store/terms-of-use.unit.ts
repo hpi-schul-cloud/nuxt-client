@@ -1,11 +1,8 @@
+import TermsOfUseModule from "./terms-of-use";
+import { BusinessError } from "@/store/types/commons";
+import { ConsentVersion, CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { initializeAxios } from "@/utils/api";
 import { AxiosHeaders, AxiosInstance, AxiosResponse } from "axios";
-import TermsOfUseModule from "./terms-of-use";
-import {
-	ConsentVersion,
-	CreateConsentVersionPayload,
-} from "@/store/types/consent-version";
-import { BusinessError } from "@/store/types/commons";
 
 let receivedRequests: { path: string }[] = [];
 const mockApiResponse: AxiosResponse = {
@@ -88,9 +85,7 @@ describe("terms of use module", () => {
 				expect(receivedRequests[0].path).toBe("/v1/consentVersions");
 				expect(setStatusSpy).toHaveBeenCalledWith("pending");
 				expect(setStatusSpy).toHaveBeenCalledWith("completed");
-				expect(setTermsOfUseSpy).toHaveBeenCalledWith(
-					mockApiResponse.data.data[0]
-				);
+				expect(setTermsOfUseSpy).toHaveBeenCalledWith(mockApiResponse.data.data[0]);
 				expect(termsOfUseModule.termsOfUse).toBe(mockApiResponse.data.data[0]);
 			});
 		});

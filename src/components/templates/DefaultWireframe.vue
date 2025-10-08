@@ -39,10 +39,7 @@
 					>
 						{{ fabItems.title }}
 						<template #actions>
-							<template
-								v-for="(action, index) in fabItems.actions"
-								:key="index"
-							>
+							<template v-for="(action, index) in fabItems.actions" :key="index">
 								<speed-dial-menu-action
 									:data-test-id="action.dataTestId"
 									:icon="action.icon"

@@ -1,9 +1,5 @@
 <template>
-	<v-menu
-		v-model="showDateDialog"
-		transition="scale-transition"
-		:close-on-content-click="false"
-	>
+	<v-menu v-model="showDateDialog" transition="scale-transition" :close-on-content-click="false">
 		<template #activator="{ props: menuProps }">
 			<v-text-field
 				ref="date-text-field"
@@ -40,24 +36,16 @@
 </template>
 
 <script setup lang="ts">
-import {
-	computed,
-	ref,
-	watchEffect,
-	unref,
-	PropType,
-	toRef,
-	useTemplateRef,
-} from "vue";
-import dayjs from "dayjs";
-import { useI18n } from "vue-i18n";
-import { useVuelidate, ErrorObject } from "@vuelidate/core";
-import { helpers, requiredIf } from "@vuelidate/validators";
-import { dateInputMask as vDateInputMask } from "@util-input-masks";
-import { isValidDateFormat } from "@util-validators";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { mdiCalendar } from "@icons/material";
+import { dateInputMask as vDateInputMask } from "@util-input-masks";
+import { isValidDateFormat } from "@util-validators";
+import { ErrorObject, useVuelidate } from "@vuelidate/core";
+import { helpers, requiredIf } from "@vuelidate/validators";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
+import dayjs from "dayjs";
+import { computed, PropType, ref, toRef, unref, useTemplateRef, watchEffect } from "vue";
+import { useI18n } from "vue-i18n";
 
 defineOptions({
 	inheritAttrs: false,
@@ -82,17 +70,13 @@ const externalErrors = toRef(props, "errors");
 
 watchEffect(() => {
 	if (dateString.value === undefined)
-		dateString.value = props.date
-			? dayjs(props.date).format(DATETIME_FORMAT.date)
-			: undefined;
+		dateString.value = props.date ? dayjs(props.date).format(DATETIME_FORMAT.date) : undefined;
 });
 
 const dateObject = computed({
 	get() {
 		if (isValid.value) {
-			return dateString.value
-				? dayjs(dateString.value, DATETIME_FORMAT.date).toDate()
-				: undefined;
+			return dateString.value ? dayjs(dateString.value, DATETIME_FORMAT.date).toDate() : undefined;
 		}
 
 		return props.date ? new Date(props.date) : undefined;
@@ -104,26 +88,16 @@ const dateObject = computed({
 
 const rules = computed(() => ({
 	dateString: {
-		requiredIfProp: helpers.withMessage(
-			t("components.datePicker.validation.required"),
-			requiredIf(props.required)
-		),
-		validDateFormat: helpers.withMessage(
-			t("components.datePicker.validation.format"),
-			isValidDateFormat
-		),
+		requiredIfProp: helpers.withMessage(t("components.datePicker.validation.required"), requiredIf(props.required)),
+		validDateFormat: helpers.withMessage(t("components.datePicker.validation.format"), isValidDateFormat),
 	},
 }));
 
 const v$ = useVuelidate(rules, { dateString }, { $lazy: true });
 
-const isValid = computed(() => {
-	return !v$.value.dateString.$invalid;
-});
+const isValid = computed(() => !v$.value.dateString.$invalid);
 
-const combinedErrors = computed(() => {
-	return v$.value.dateString.$errors.concat(externalErrors.value);
-});
+const combinedErrors = computed(() => v$.value.dateString.$errors.concat(externalErrors.value));
 
 const errorMessages = computed(() => {
 	const messages = getErrorMessages(combinedErrors.value);
@@ -131,9 +105,7 @@ const errorMessages = computed(() => {
 });
 
 const getErrorMessages = (errors: ErrorObject[] | undefined) => {
-	const messages = errors?.map((e: ErrorObject) => {
-		return unref(e.$message);
-	});
+	const messages = errors?.map((e: ErrorObject) => unref(e.$message));
 
 	return messages;
 };
@@ -150,9 +122,7 @@ const onUpdateTextfield = async () => {
 };
 
 const onPickDate = async () => {
-	dateString.value = dateObject.value
-		? dayjs(dateObject.value).format(DATETIME_FORMAT.date)
-		: undefined;
+	dateString.value = dateObject.value ? dayjs(dateObject.value).format(DATETIME_FORMAT.date) : undefined;
 	await emitDate();
 	showDateDialog.value = false;
 	dateTextField.value?.focus();
@@ -162,9 +132,7 @@ const emitDate = async () => {
 	v$.value.dateString.$touch();
 	const isValid = await v$.value.$validate();
 	if (isValid) {
-		const formattedDate = dateString.value
-			? dayjs(dateString.value, DATETIME_FORMAT.date).toISOString()
-			: null;
+		const formattedDate = dateString.value ? dayjs(dateString.value, DATETIME_FORMAT.date).toISOString() : null;
 
 		emit("update:date", formattedDate);
 	} else {

@@ -14,9 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
 	columnWidth: "15rem",
 });
 
-const col = computed(() => {
-	return `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`;
-});
+const col = computed(() => `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`);
 </script>
 
 <style lang="scss" scoped>

@@ -12,12 +12,7 @@
 					:expanded-default="1"
 				>
 					<template #panelOne>
-						<tasks-list
-							:tasks="noDueDateTasks"
-							user-role="teacher"
-							@copy-task="onCopyTask"
-							@share-task="onShareTask"
-						/>
+						<tasks-list :tasks="noDueDateTasks" user-role="teacher" @copy-task="onCopyTask" @share-task="onShareTask" />
 					</template>
 					<template #panelTwo>
 						<tasks-list
@@ -37,26 +32,15 @@
 					</template>
 				</v-custom-double-panels>
 				<VContainer>
-					<EmptyState
-						v-if="openTasksForTeacherIsEmpty"
-						:title="t('pages.tasks.teacher.open.emptyState.title')"
-					>
+					<EmptyState v-if="openTasksForTeacherIsEmpty" :title="t('pages.tasks.teacher.open.emptyState.title')">
 						<template #media> <TasksEmptyStateSvg /></template>
 					</EmptyState>
 				</VContainer>
 			</v-window-item>
 			<v-window-item :value="tabRoutes[1]" class="padding-bottom">
-				<tasks-list
-					:tasks="draftTasks"
-					user-role="teacher"
-					@copy-task="onCopyTask"
-					@share-task="onShareTask"
-				/>
+				<tasks-list :tasks="draftTasks" user-role="teacher" @copy-task="onCopyTask" @share-task="onShareTask" />
 				<VContainer>
-					<EmptyState
-						v-if="draftsForTeacherIsEmpty"
-						:title="t('pages.tasks.teacher.drafts.emptyState.title')"
-					>
+					<EmptyState v-if="draftsForTeacherIsEmpty" :title="t('pages.tasks.teacher.drafts.emptyState.title')">
 						<template #media> <TasksEmptyStateSvg /></template>
 					</EmptyState>
 				</VContainer>
@@ -71,10 +55,7 @@
 					@share-task="onShareTask"
 				/>
 				<VContainer>
-					<EmptyState
-						v-if="finishedTasksIsEmpty"
-						:title="t('pages.tasks.finished.emptyState.title')"
-					>
+					<EmptyState v-if="finishedTasksIsEmpty" :title="t('pages.tasks.finished.emptyState.title')">
 						<template #media> <TasksEmptyStateSvg /></template>
 					</EmptyState>
 				</VContainer>
@@ -85,31 +66,24 @@
 </template>
 
 <script setup lang="ts">
+import { useCopy } from "../../composables/copy";
+import { useLoadingState } from "../../composables/loadingState";
+import VCustomDoublePanels from "@/components/molecules/vCustomDoublePanels.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import { useCopy } from "../../composables/copy";
-import { useLoadingState } from "../../composables/loadingState";
-import { useI18n } from "vue-i18n";
-import {
-	TASKS_MODULE_KEY,
-	FINISHED_TASKS_MODULE_KEY,
-	injectStrict,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { CopyParams } from "@/store/copy";
+import FinishedTasksModule from "@/store/finished-tasks";
+import ShareModule from "@/store/share";
+import TasksModule from "@/store/tasks";
+import { FINISHED_TASKS_MODULE_KEY, injectStrict, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 import { computed } from "vue";
-import TasksModule from "@/store/tasks";
-import ShareModule from "@/store/share";
-import FinishedTasksModule from "@/store/finished-tasks";
-import { CopyParams } from "@/store/copy";
-import { useEnvConfig } from "@data-env";
-import VCustomDoublePanels from "@/components/molecules/vCustomDoublePanels.vue";
+import { useI18n } from "vue-i18n";
 
 const tasksModule: TasksModule = injectStrict(TASKS_MODULE_KEY);
-const finishedTasksModule: FinishedTasksModule = injectStrict(
-	FINISHED_TASKS_MODULE_KEY
-);
+const finishedTasksModule: FinishedTasksModule = injectStrict(FINISHED_TASKS_MODULE_KEY);
 const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
 defineProps({
 	tabRoutes: {
@@ -119,9 +93,7 @@ defineProps({
 });
 
 const { t } = useI18n();
-const { isLoadingDialogOpen } = useLoadingState(
-	t("components.molecules.copyResult.title.loading")
-);
+const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.copyResult.title.loading"));
 
 const { copy } = useCopy(isLoadingDialogOpen);
 
@@ -134,12 +106,8 @@ const withDueDateTasks = computed(() => openTasks.value.withDueDate);
 
 const status = computed(() => tasksModule.getStatus);
 
-const openTasksForTeacherIsEmpty = computed(
-	() => tasksModule.openTasksForTeacherIsEmpty
-);
-const draftsForTeacherIsEmpty = computed(
-	() => tasksModule.draftsForTeacherIsEmpty
-);
+const openTasksForTeacherIsEmpty = computed(() => tasksModule.openTasksForTeacherIsEmpty);
+const draftsForTeacherIsEmpty = computed(() => tasksModule.draftsForTeacherIsEmpty);
 const finishedTasksIsEmpty = computed(() => finishedTasksModule.tasksIsEmpty);
 
 const tab = computed({

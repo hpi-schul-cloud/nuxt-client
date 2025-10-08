@@ -13,8 +13,8 @@
 
 <script setup lang="ts">
 import { fromNowToFuture } from "@/plugins/datetime";
-import dayjs from "dayjs";
 import { mdiTimerSandComplete } from "@icons/material";
+import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
 
 defineProps({
@@ -44,16 +44,12 @@ const hintDueDate = (dueDate: string, shorten = false) => {
 			? t("components.atoms.VCustomChipTimeRemaining.hintMinShort")
 			: t("components.atoms.VCustomChipTimeRemaining.hintMinutes", diffMins);
 
-		return `${t(
-			"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-		)}${diffMins} ${label}`;
+		return `${t("components.atoms.VCustomChipTimeRemaining.hintDueTime")}${diffMins} ${label}`;
 	} else {
 		const label = shorten
 			? t("components.atoms.VCustomChipTimeRemaining.hintHoursShort")
 			: t("components.atoms.VCustomChipTimeRemaining.hintHours", diffHrs);
-		return `${t(
-			"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-		)}${diffHrs} ${label}`;
+		return `${t("components.atoms.VCustomChipTimeRemaining.hintDueTime")}${diffHrs} ${label}`;
 	}
 };
 </script>

@@ -11,12 +11,7 @@
 					}}
 				</VToolbarTitle>
 				<VToolbarItems>
-					<VBtn
-						v-if="isDialog"
-						:aria-label="$t('common.labels.close')"
-						:icon="mdiClose"
-						@click="closeEdit"
-					/>
+					<VBtn v-if="isDialog" :aria-label="$t('common.labels.close')" :icon="mdiClose" @click="closeEdit" />
 				</VToolbarItems>
 			</VToolbar>
 
@@ -46,23 +41,11 @@
 									{{ mapRoleNames(editedItem.roleNames) }}
 									{{ isNbc ? externalRoleText : "" }}
 								</VListItemSubtitle>
-								<VListItemSubtitle
-									v-if="editedItem.classNames && editedItem.classNames.length"
-								>
-									{{
-										`${$t(
-											"components.organisms.importUsers.tableClasses"
-										)}: ${editedItem.classNames.join(", ")}`
-									}}
+								<VListItemSubtitle v-if="editedItem.classNames && editedItem.classNames.length">
+									{{ `${$t("components.organisms.importUsers.tableClasses")}: ${editedItem.classNames.join(", ")}` }}
 								</VListItemSubtitle>
-								<VListItemSubtitle
-									v-if="!isNbc"
-									data-testid="edited-item-username"
-									>{{
-										`${$t("components.organisms.importUsers.tableUserName")}: ${
-											editedItem.loginName
-										}`
-									}}
+								<VListItemSubtitle v-if="!isNbc" data-testid="edited-item-username"
+									>{{ `${$t("components.organisms.importUsers.tableUserName")}: ${editedItem.loginName}` }}
 								</VListItemSubtitle>
 							</div>
 						</VListItem>
@@ -78,28 +61,18 @@
 									{{ mapRoleNames(selectedItem.roleNames) }}
 								</VListItemSubtitle>
 								<VListItemSubtitle v-if="!isNbc">
-									{{
-										`${$t("components.organisms.importUsers.tableUserName")}: ${
-											selectedItem.loginName
-										}`
-									}}
+									{{ `${$t("components.organisms.importUsers.tableUserName")}: ${selectedItem.loginName}` }}
 								</VListItemSubtitle>
 							</div>
 							<div v-else-if="editedItem.match">
 								<VListItemTitle>
-									{{
-										`${editedItem.match.firstName} ${editedItem.match.lastName}`
-									}}
+									{{ `${editedItem.match.firstName} ${editedItem.match.lastName}` }}
 								</VListItemTitle>
 								<VListItemSubtitle>
 									{{ mapRoleNames(editedItem.match.roleNames) }}
 								</VListItemSubtitle>
 								<VListItemSubtitle v-if="!isNbc">
-									{{
-										`${$t("components.organisms.importUsers.tableUserName")}: ${
-											editedItem.match.loginName
-										}`
-									}}
+									{{ `${$t("components.organisms.importUsers.tableUserName")}: ${editedItem.match.loginName}` }}
 								</VListItemSubtitle>
 							</div>
 							<div v-else>
@@ -107,9 +80,7 @@
 									{{ $t("components.molecules.importUsersMatch.unMatched") }}
 								</template>
 								<template v-else>
-									{{
-										$t("components.molecules.importUsersMatch.unMatched.nbc")
-									}}
+									{{ $t("components.molecules.importUsersMatch.unMatched.nbc") }}
 								</template>
 							</div>
 						</VListItem>
@@ -129,9 +100,7 @@
 							:label="$t('components.molecules.importUsersMatch.search')"
 							:placeholder="$t('components.molecules.importUsersMatch.write')"
 							persistent-hint
-							:no-data-text="
-								$t('components.molecules.importUsersMatch.notFound')
-							"
+							:no-data-text="$t('components.molecules.importUsersMatch.notFound')"
 							no-filter
 							variant="solo"
 							rounded
@@ -142,11 +111,7 @@
 										{{ mapRoleNames(item.raw.roleNames) }}
 									</VListItemSubtitle>
 									<VListItemSubtitle v-if="!isNbc">
-										{{
-											`${$t(
-												"components.organisms.importUsers.tableUserName"
-											)}: ${item.raw.loginName}`
-										}}
+										{{ `${$t("components.organisms.importUsers.tableUserName")}: ${item.raw.loginName}` }}
 									</VListItemSubtitle>
 								</VListItem>
 							</template>
@@ -185,13 +150,7 @@
 						<VIcon size="small">{{ mdiContentSave }}</VIcon>
 						{{ $t("components.molecules.importUsersMatch.saveMatch") }}
 					</VBtn>
-					<VBtn
-						variant="text"
-						class="m-2"
-						:disabled="!canDelete"
-						data-testid="delete-match-btn"
-						@click="deleteMatch"
-					>
+					<VBtn variant="text" class="m-2" :disabled="!canDelete" data-testid="delete-match-btn" @click="deleteMatch">
 						<VIcon size="small">{{ mdiDelete }}</VIcon>
 						{{ $t("components.molecules.importUsersMatch.deleteMatch") }}
 					</VBtn>
@@ -205,24 +164,9 @@
 import { ImportUserResponse, UserMatchResponse } from "@/serverApi/v3";
 import { importUsersModule } from "@/store";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
-import {
-	mdiAccountSearch,
-	mdiClose,
-	mdiContentSave,
-	mdiDelete,
-	mdiFlag,
-	mdiFlagOutline,
-} from "@icons/material";
+import { mdiAccountSearch, mdiClose, mdiContentSave, mdiDelete, mdiFlag, mdiFlagOutline } from "@icons/material";
 import { useDebounceFn } from "@vueuse/core";
-import {
-	computed,
-	ComputedRef,
-	onMounted,
-	PropType,
-	Ref,
-	ref,
-	watch,
-} from "vue";
+import { computed, ComputedRef, onMounted, PropType, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -295,18 +239,10 @@ const limit: Ref<number> = ref(10);
 const skip: Ref<number> = ref(0);
 
 const schulconnexExternalRoleNamesMapping: Record<string, string> = {
-	Lehr: t(
-		"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher"
-	),
-	Lern: t(
-		"components.molecules.importUsersMatch.externalRoleName.schulconnex.student"
-	),
-	Leit: t(
-		"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager"
-	),
-	OrgAdmin: t(
-		"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin"
-	),
+	Lehr: t("components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher"),
+	Lern: t("components.molecules.importUsersMatch.externalRoleName.schulconnex.student"),
+	Leit: t("components.molecules.importUsersMatch.externalRoleName.schulconnex.manager"),
+	OrgAdmin: t("components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin"),
 };
 
 const canSave: ComputedRef<boolean> = computed(() => {
@@ -314,19 +250,16 @@ const canSave: ComputedRef<boolean> = computed(() => {
 		return false;
 	}
 
-	if (
-		props.editedItem.match &&
-		props.editedItem.match.userId === selectedItem.value?.userId
-	) {
+	if (props.editedItem.match && props.editedItem.match.userId === selectedItem.value?.userId) {
 		return false;
 	}
 
 	return true;
 });
 
-const canDelete: ComputedRef<boolean | undefined> = computed(() => {
-	return props.editedItem.match && selectedItem.value === null;
-});
+const canDelete: ComputedRef<boolean | undefined> = computed(
+	() => props.editedItem.match && selectedItem.value === null
+);
 
 const externalRoleText: ComputedRef<string> = computed(() => {
 	let role = t("components.molecules.importUsersMatch.externalRoleName.none");
@@ -405,9 +338,7 @@ const deleteMatch = async () => {
 	if (!props.editedItem.match || !props.editedItem.match.userId) {
 		return false;
 	}
-	const importUser = await importUsersModule.deleteMatch(
-		props.editedItem.importUserId
-	);
+	const importUser = await importUsersModule.deleteMatch(props.editedItem.importUserId);
 	if (!importUsersModule.getBusinessError && importUser?.match === undefined) {
 		emit("deleted-match");
 		closeEdit();
@@ -420,10 +351,7 @@ const saveFlag = async () => {
 		flagged: !flagged.value,
 	});
 
-	if (
-		!importUsersModule.getBusinessError &&
-		importUser?.flagged === !flagged.value
-	) {
+	if (!importUsersModule.getBusinessError && importUser?.flagged === !flagged.value) {
 		flagged.value = !flagged.value;
 		emit("saved-flag");
 	}
@@ -453,8 +381,8 @@ const mapRoleNames = (roleNames: unknown[]) => {
 		.join(", ");
 };
 
-const mapExternalRoleNames = (externalRoleNames: string[]) => {
-	return externalRoleNames
+const mapExternalRoleNames = (externalRoleNames: string[]) =>
+	externalRoleNames
 		.map((role) => {
 			if (props.isNbc) {
 				const userFriendlyRoleName = schulconnexExternalRoleNamesMapping[role];
@@ -466,7 +394,6 @@ const mapExternalRoleNames = (externalRoleNames: string[]) => {
 			return role;
 		})
 		.join(", ");
-};
 
 onMounted(async () => {
 	flagged.value = props.editedItem.flagged;

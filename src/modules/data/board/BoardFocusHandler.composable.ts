@@ -2,19 +2,10 @@ import { BoardColumn } from "@/types/board/Board";
 import { BoardCard } from "@/types/board/Card";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { useInlineEditInteractionHandler } from "@util-board";
-import {
-	createSharedComposable,
-	MaybeRefOrGetter,
-	useEventListener,
-	useFocus,
-	useFocusWithin,
-} from "@vueuse/core";
-import { computed, nextTick, onMounted, onUnmounted, ref, Ref } from "vue";
+import { createSharedComposable, MaybeRefOrGetter, useEventListener, useFocus, useFocusWithin } from "@vueuse/core";
+import { computed, nextTick, onMounted, onUnmounted, Ref, ref } from "vue";
 
-declare type FocusableId =
-	| BoardColumn["id"]
-	| BoardCard["id"]
-	| AnyContentElement["id"];
+declare type FocusableId = BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"];
 
 declare type FocusHandler = {
 	isFocused: Ref<boolean>;
@@ -30,10 +21,7 @@ declare type FocusHandler = {
 /**
  * Use this composable to force focus on a focusable element on the Board.
  */
-export function useBoardFocusHandler(): Pick<
-	FocusHandler,
-	"isAnythingFocused" | "setFocus" | "forceFocus"
->;
+export function useBoardFocusHandler(): Pick<FocusHandler, "isAnythingFocused" | "setFocus" | "forceFocus">;
 /**
  * Keeps track of focused elements on the Board to retain focus state across Board changes.
  * Also keeps track of focus of child-elements. The Composable associates the given ID to the given element
@@ -60,22 +48,11 @@ export function useBoardFocusHandler(
 	id: MaybeRefOrGetter<FocusableId>,
 	element: Ref<HTMLElement | null>,
 	onFocusReceived?: () => void
-): Pick<
-	FocusHandler,
-	| "isFocusContained"
-	| "isFocusWithin"
-	| "isFocused"
-	| "isFocusedById"
-	| "focusedId"
->;
+): Pick<FocusHandler, "isFocusContained" | "isFocusWithin" | "isFocused" | "isFocusedById" | "focusedId">;
 /**
  * Internal type to enable mocking of overloads
  */
-export function useBoardFocusHandler(
-	id?: string,
-	element?: never,
-	onFocusReceived?: never
-): Partial<FocusHandler>;
+export function useBoardFocusHandler(id?: string, element?: never, onFocusReceived?: never): Partial<FocusHandler>;
 export function useBoardFocusHandler(
 	id?: MaybeRefOrGetter<FocusableId> | string,
 	element?: Ref<HTMLElement | null>,
@@ -109,13 +86,9 @@ export function useBoardFocusHandler(
 	const { focused: isFocused } = useFocus(element);
 	const { focused: isFocusWithin } = useFocusWithin(element);
 
-	const isFocusContained = computed(
-		() => isFocused.value || isFocusWithin.value
-	);
+	const isFocusContained = computed(() => isFocused.value || isFocusWithin.value);
 
-	const isFocusedById = computed(() => {
-		return id.valueOf() === focusedId.value;
-	});
+	const isFocusedById = computed(() => id.valueOf() === focusedId.value);
 
 	onMounted(() => {
 		if (id !== focusedId.value) {
@@ -138,16 +111,12 @@ export function useBoardFocusHandler(
 	 * Listening to 'focusin' event allows to also register focus events contained within the observed elements.
 	 * This way we can keep track of focus events of child-elements.
 	 */
-	const cleanupFocusListener = useEventListener(
-		element,
-		"focusin",
-		(event: FocusEvent) => {
-			if (id?.valueOf()) {
-				event.stopPropagation();
-				setFocus(id);
-			}
+	const cleanupFocusListener = useEventListener(element, "focusin", (event: FocusEvent) => {
+		if (id?.valueOf()) {
+			event.stopPropagation();
+			setFocus(id);
 		}
-	);
+	});
 
 	/**
 	 * If an InlineEditInteraction is fired within the element boundary, force focus on this element

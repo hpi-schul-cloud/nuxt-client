@@ -1,14 +1,14 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Folder } from "@feature-folder";
 import { FolderPage } from "@page-folder";
-import { beforeAll } from "vitest";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 describe("FolderPage", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ SC_TITLE: "Test Title" });
 	});
 
@@ -39,9 +39,7 @@ describe("FolderPage", () => {
 
 			folderComponent.vm.$emit("update:folder-name", "Updated Folder");
 
-			expect(document.title).toBe(
-				"Updated Folder - pages.folder.title - Test Title"
-			);
+			expect(document.title).toBe("Updated Folder - pages.folder.title - Test Title");
 		});
 	});
 });

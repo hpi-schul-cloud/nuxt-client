@@ -4,8 +4,8 @@ const ATTEMPTS_LIMIT = 10;
 const TIMEOUT_BETWEEN_ATTEMPTS = 100;
 
 export const useElementFocus = () => {
-	const scrollToNodeAndFocus = (scrollTargetId: string): Promise<void> => {
-		return new Promise((resolve, reject) => {
+	const scrollToNodeAndFocus = (scrollTargetId: string): Promise<void> =>
+		new Promise((resolve, reject) => {
 			let attempts = 0;
 			const tryFocus = () => {
 				if (attempts >= ATTEMPTS_LIMIT) {
@@ -13,9 +13,7 @@ export const useElementFocus = () => {
 					return;
 				}
 
-				const targetElement = document.querySelector<HTMLElement>(
-					`[data-scroll-target="${scrollTargetId}"]`
-				);
+				const targetElement = document.querySelector<HTMLElement>(`[data-scroll-target="${scrollTargetId}"]`);
 
 				if (!targetElement) {
 					attempts++;
@@ -30,7 +28,6 @@ export const useElementFocus = () => {
 
 			tryFocus();
 		});
-	};
 
 	const focusNodeFromHash = async () => {
 		if (!window.location.hash) return;

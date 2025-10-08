@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import PageShare from "./PageShare.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
+import { mount } from "@vue/test-utils";
 
 describe("@ui-layout/PageShare", () => {
 	const setup = (attrs = {}) => {

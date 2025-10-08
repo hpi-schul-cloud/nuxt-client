@@ -10,9 +10,7 @@
 				@dblclick.stop="() => {}"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon>
-				<span class="d-sr-only"
-					>{{ $t("components.elementTypeSelection.dialog.title") }}
-				</span>
+				<span class="d-sr-only">{{ $t("components.elementTypeSelection.dialog.title") }} </span>
 			</VBtn>
 		</div>
 	</VCardText>

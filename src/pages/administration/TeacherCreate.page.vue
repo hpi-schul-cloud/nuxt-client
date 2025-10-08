@@ -14,24 +14,19 @@
 				/>
 			</template>
 			<template #errors>
-				<info-message
-					v-if="error"
-					:message="$t('pages.administration.teachers.new.error')"
-					type="bc-error"
-				/>
+				<info-message v-if="error" :message="$t('pages.administration.teachers.new.error')" type="bc-error" />
 			</template>
 		</form-create-user>
 	</default-wireframe>
 </template>
 
 <script>
-import FormCreateUser from "@/components/organisms/FormCreateUser";
 import InfoMessage from "@/components/atoms/InfoMessage";
+import FormCreateUser from "@/components/organisms/FormCreateUser";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { notifierModule } from "@/store";
-import { buildPageTitle } from "@/utils/pageTitle";
 import { RoleName } from "@/serverApi/v3";
-import { useAppStore } from "@data-app";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { notifySuccess, useAppStore } from "@data-app";
 
 export default {
 	components: {
@@ -60,9 +55,7 @@ export default {
 		};
 	},
 	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.administration.teachers.new.title")
-		);
+		document.title = buildPageTitle(this.$t("pages.administration.teachers.new.title"));
 	},
 	methods: {
 		createTeacher(teacherData) {
@@ -78,11 +71,7 @@ export default {
 					generateRegistrationLink: true,
 				})
 				.then(() => {
-					notifierModule.show({
-						text: this.$t("pages.administration.teachers.new.success"),
-						status: "success",
-						timeout: 5000,
-					});
+					notifySuccess(this.$t("pages.administration.teachers.new.success"));
 					this.$router.push({
 						path: `/administration/teachers`,
 					});

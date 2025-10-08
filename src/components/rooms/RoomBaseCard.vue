@@ -1,11 +1,5 @@
 <template>
-	<v-card
-		class="card d-flex align-center"
-		:aria-label="title"
-		hover
-		:data-testId="testId"
-		@click="onClick"
-	>
+	<v-card class="card d-flex align-center" :aria-label="title" hover :data-testId="testId" @click="onClick">
 		<div class="w-100">
 			<div class="d-flex align-content align-center">
 				<div v-if="logoUrl" class="logo-container my-auto mr-4">
@@ -22,11 +16,7 @@
 						<h2 class="text-h4 my-auto">
 							{{ title }}
 						</h2>
-						<v-icon
-							v-if="openInNewTab"
-							class="ml-1 my-auto text-no-wrap"
-							data-testId="card-new-tab-icon"
-						>
+						<v-icon v-if="openInNewTab" class="ml-1 my-auto text-no-wrap" data-testId="card-new-tab-icon">
 							{{ mdiOpenInNew }}
 						</v-icon>
 						<div class="mx-auto" />

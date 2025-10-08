@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from "vue-router";
 import { routes } from "./routes";
-import { legacyCompatibilityGuard } from "@/router/guards/legacy-route-compatibility.guard";
 import { isAuthenticatedGuard } from "@/router/guards/is-authenticated.guard";
+import { legacyCompatibilityGuard } from "@/router/guards/legacy-route-compatibility.guard";
+import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
 	history: createWebHistory("/"),

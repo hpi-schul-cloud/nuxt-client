@@ -1,10 +1,10 @@
+import { useBoardApi } from "./BoardApi.composable";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { computed, ref, unref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useBoardApi } from "./BoardApi.composable";
 
 const useBoardPageInformation = () => {
 	const { t } = useI18n();
@@ -22,14 +22,10 @@ const useBoardPageInformation = () => {
 		const type = unref(boardContext)?.type;
 
 		if (type === BoardContextType.Course) {
-			return buildPageTitle(
-				`${t("pages.room.boardCard.label.courseBoard")}${roomNameForPageTitle}`
-			);
+			return buildPageTitle(`${t("pages.room.boardCard.label.courseBoard")}${roomNameForPageTitle}`);
 		}
 		if (type === BoardContextType.Room) {
-			return buildPageTitle(
-				`${t("pages.roomDetails.board.defaultName")}${roomNameForPageTitle}`
-			);
+			return buildPageTitle(`${t("pages.roomDetails.board.defaultName")}${roomNameForPageTitle}`);
 		}
 		return "";
 	});
@@ -92,6 +88,4 @@ const useBoardPageInformation = () => {
 	};
 };
 
-export const useSharedBoardPageInformation = createTestableSharedComposable(
-	useBoardPageInformation
-);
+export const useSharedBoardPageInformation = createTestableSharedComposable(useBoardPageInformation);

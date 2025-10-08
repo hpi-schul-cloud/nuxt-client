@@ -1,14 +1,11 @@
-import NotifierModule from "@/store/notifier";
-import mock$objects from "@@/tests/test-utils/pageStubs";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { nextTick } from "vue";
-import { createStore } from "vuex";
 import NewStudent from "./StudentCreate.page.vue";
 import { createTestAppStore } from "@@/tests/test-utils";
+import mock$objects from "@@/tests/test-utils/pageStubs";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { nextTick } from "vue";
+import { createStore } from "vuex";
 
 const createMockStore = () => {
 	const createStudentStub = vi.fn();
@@ -26,11 +23,9 @@ const createMockStore = () => {
 				mutations: {
 					resetBusinessError: vi.fn(),
 				},
-				state: () => {
-					return {
-						businessError: "null",
-					};
-				},
+				state: () => ({
+					businessError: "null",
+				}),
 			},
 		},
 	});
@@ -39,11 +34,9 @@ const createMockStore = () => {
 };
 
 describe("students/new", () => {
-	beforeAll(() => {
-		createTestAppStore();
-	});
 	beforeEach(() => {
-		setupStores({ notifierModule: NotifierModule });
+		setActivePinia(createTestingPinia());
+		createTestAppStore();
 	});
 
 	const setup = () => {
@@ -66,22 +59,14 @@ describe("students/new", () => {
 	it("should call 'createStudent' action", async () => {
 		const { wrapper, createStudentStub } = setup();
 
-		const inputFirstName = wrapper
-			.find('[data-testid="input_create-user_firstname"]')
-			.get("input");
-		const inputLastName = wrapper
-			.find('[data-testid="input_create-user_lastname"]')
-			.get("input");
-		const inputEmail = wrapper
-			.find('[data-testid="input_create-user_email"]')
-			.get("input");
+		const inputFirstName = wrapper.find('[data-testid="input_create-user_firstname"]').get("input");
+		const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"]').get("input");
+		const inputEmail = wrapper.find('[data-testid="input_create-user_email"]').get("input");
 
 		inputFirstName.setValue("Klara");
 		inputLastName.setValue("Fall");
 		inputEmail.setValue("klara.fall@mail.de");
-		const submitButton = wrapper.find(
-			'button[data-testid="button_create-user_submit"]'
-		);
+		const submitButton = wrapper.find('button[data-testid="button_create-user_submit"]');
 		await submitButton.trigger("click");
 
 		await nextTick();

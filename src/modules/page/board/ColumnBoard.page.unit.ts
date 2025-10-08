@@ -1,9 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { shallowMount } from "@vue/test-utils";
 import ColumnBoardPage from "./ColumnBoard.page.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 
 vi.mock(
 	"@/utils/pageTitle",

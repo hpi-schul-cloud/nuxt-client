@@ -1,10 +1,8 @@
+import AddContentModal from "./AddContentModal.vue";
 import { contentModule } from "@/store";
 import ContentModule from "@/store/content";
 import { initializeAxios } from "@/utils/api";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
@@ -12,7 +10,6 @@ import { AxiosInstance } from "axios";
 import { nextTick } from "vue";
 import { VBtn, VSelect } from "vuetify/lib/components/index";
 import { createStore } from "vuex";
-import AddContentModal from "./AddContentModal.vue";
 
 const testProps = {
 	showCopyModal: true,
@@ -142,9 +139,7 @@ describe("@/components/molecules/AddContentModal", () => {
 	describe("Component Initialization", () => {
 		it("nothing selected submit should be disabled", async () => {
 			const { wrapper } = setup(testProps);
-			const submitBtn = wrapper.findComponent(
-				'[data-testid="modal_submit_btn"]'
-			);
+			const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
 
 			expect(wrapper.vm.isSendEnabled).toBe(false);
 			expect(submitBtn.exists()).toBe(true);
@@ -159,9 +154,7 @@ describe("@/components/molecules/AddContentModal", () => {
 				selectedLesson: lessonsMock[0],
 			});
 			await nextTick();
-			const submitBtn = wrapper.findComponent(
-				'[data-testid="modal_submit_btn"]'
-			);
+			const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
 
 			expect(wrapper.vm.isSendEnabled).toBe(true);
 			expect(submitBtn.attributes().disabled).toBeUndefined();
@@ -177,8 +170,7 @@ describe("@/components/molecules/AddContentModal", () => {
 		it("create lessonsOptions", async () => {
 			const { wrapper } = setup(testProps);
 			contentModule.setLessons(lessons);
-			const lo = (wrapper.vm as unknown as typeof AddContentModal)
-				.lessonsOptions;
+			const lo = (wrapper.vm as unknown as typeof AddContentModal).lessonsOptions;
 
 			expect(lo).toHaveLength(1);
 			expect(lo[0]._id).toBe(lessonsMock[0]._id);
@@ -194,9 +186,7 @@ describe("@/components/molecules/AddContentModal", () => {
 			expect(wrapper.vm.isSendEnabled).toBe(true);
 
 			await nextTick();
-			const submitBtn = wrapper.findComponent(
-				'[data-testid="modal_submit_btn"]'
-			);
+			const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
 			await submitBtn.trigger("click");
 
 			expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
@@ -212,9 +202,7 @@ describe("@/components/molecules/AddContentModal", () => {
 			expect(wrapper.vm.isSendEnabled).toBe(true);
 
 			await nextTick();
-			const submitBtn = wrapper.findComponent(
-				'[data-testid="modal_submit_btn"]'
-			);
+			const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
 			await submitBtn.trigger("click");
 
 			expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);

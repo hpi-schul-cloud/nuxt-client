@@ -6,11 +6,7 @@ import {
 	UserImportApiInterface,
 	UserMatchListResponse,
 } from "@/serverApi/v3";
-import {
-	ApiResponseError,
-	ApiValidationError,
-	BusinessError,
-} from "@/store/types/commons";
+import { ApiResponseError, ApiValidationError, BusinessError } from "@/store/types/commons";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
@@ -39,11 +35,7 @@ export default class ImportUsersModule extends VuexModule {
 	private loginName = "";
 	private role: ImportUserResponseRoleNamesEnum | "" = "";
 	private classes = "";
-	private match: Array<MatchedBy> = [
-		MatchedBy.Admin,
-		MatchedBy.Auto,
-		MatchedBy.None,
-	];
+	private match: Array<MatchedBy> = [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None];
 	private flagged = false;
 	private limit = 25;
 	private skip = 0;
@@ -97,9 +89,7 @@ export default class ImportUsersModule extends VuexModule {
 
 	@Mutation
 	deleteMatchMutation(importUserId: string): void {
-		const editedUser = this.importUserList.data.find(
-			(importUser) => importUser.importUserId === importUserId
-		);
+		const editedUser = this.importUserList.data.find((importUser) => importUser.importUserId === importUserId);
 		if (editedUser) {
 			editedUser.match = undefined;
 			this.importUserList = { ...this.importUserList };
@@ -113,9 +103,7 @@ export default class ImportUsersModule extends VuexModule {
 
 	@Mutation
 	setUserFlagged(payload: { importUserId: string; flagged: boolean }) {
-		const editedUser = this.importUserList.data.find(
-			(importUser) => importUser.importUserId === payload.importUserId
-		);
+		const editedUser = this.importUserList.data.find((importUser) => importUser.importUserId === payload.importUserId);
 		if (editedUser) {
 			editedUser.flagged = payload.flagged;
 			this.importUserList = { ...this.importUserList };
@@ -219,25 +207,21 @@ export default class ImportUsersModule extends VuexModule {
 	async fetchAllImportUsers(): Promise<void> {
 		try {
 			// TODO fix type
-			const sortBy =
-				this.sortBy === "firstName" || this.sortBy === "lastName"
-					? this.sortBy
-					: undefined;
+			const sortBy = this.sortBy === "firstName" || this.sortBy === "lastName" ? this.sortBy : undefined;
 
-			const response =
-				await this.importUserApi.importUserControllerFindAllImportUsers(
-					this.firstName || undefined,
-					this.lastName || undefined,
-					this.loginName || undefined,
-					this.match || undefined,
-					this.flagged ? true : undefined,
-					this.classes || undefined,
-					this.role || undefined,
-					this.sortBy ? this.sortOrder : undefined,
-					sortBy,
-					this.skip,
-					this.limit
-				);
+			const response = await this.importUserApi.importUserControllerFindAllImportUsers(
+				this.firstName || undefined,
+				this.lastName || undefined,
+				this.loginName || undefined,
+				this.match || undefined,
+				this.flagged ? true : undefined,
+				this.classes || undefined,
+				this.role || undefined,
+				this.sortBy ? this.sortOrder : undefined,
+				sortBy,
+				this.skip,
+				this.limit
+			);
 			this.setImportUsersList(response.data);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
@@ -253,12 +237,11 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async fetchAllUsers(): Promise<void> {
 		try {
-			const response =
-				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
-					this.userSearch || undefined,
-					this.usersSkip,
-					this.usersLimit
-				);
+			const response = await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
+				this.userSearch || undefined,
+				this.usersSkip,
+				this.usersLimit
+			);
 			this.setUsersList(response.data);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
@@ -272,16 +255,12 @@ export default class ImportUsersModule extends VuexModule {
 	}
 
 	@Action
-	async saveFlag(payload: {
-		importUserId: string;
-		flagged: boolean;
-	}): Promise<ImportUserResponse | void> {
+	async saveFlag(payload: { importUserId: string; flagged: boolean }): Promise<ImportUserResponse | void> {
 		try {
 			this.setUserFlagged(payload);
-			const response = await this.importUserApi.importUserControllerUpdateFlag(
-				payload.importUserId,
-				{ flagged: payload.flagged }
-			);
+			const response = await this.importUserApi.importUserControllerUpdateFlag(payload.importUserId, {
+				flagged: payload.flagged,
+			});
 			return response.data;
 		} catch (error: unknown) {
 			this.setUserFlagged({
@@ -300,15 +279,11 @@ export default class ImportUsersModule extends VuexModule {
 	}
 
 	@Action
-	async saveMatch(payload: {
-		importUserId: string;
-		userId: string;
-	}): Promise<ImportUserResponse | void> {
+	async saveMatch(payload: { importUserId: string; userId: string }): Promise<ImportUserResponse | void> {
 		try {
-			const response = await this.importUserApi.importUserControllerSetMatch(
-				payload.importUserId,
-				{ userId: payload.userId }
-			);
+			const response = await this.importUserApi.importUserControllerSetMatch(payload.importUserId, {
+				userId: payload.userId,
+			});
 			return response.data;
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
@@ -324,8 +299,7 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async deleteMatch(importUserId: string): Promise<ImportUserResponse | void> {
 		try {
-			const response =
-				await this.importUserApi.importUserControllerRemoveMatch(importUserId);
+			const response = await this.importUserApi.importUserControllerRemoveMatch(importUserId);
 			this.deleteMatchMutation(importUserId);
 			return response.data;
 		} catch (error: unknown) {
@@ -342,20 +316,19 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async fetchTotal(): Promise<void> {
 		try {
-			const response =
-				await this.importUserApi.importUserControllerFindAllImportUsers(
-					undefined,
-					undefined,
-					undefined,
-					undefined,
-					undefined,
-					undefined,
-					undefined,
-					undefined,
-					undefined,
-					0,
-					1
-				);
+			const response = await this.importUserApi.importUserControllerFindAllImportUsers(
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				0,
+				1
+			);
 			this.setTotal(response.data.total);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
@@ -371,20 +344,19 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async fetchTotalMatched(): Promise<void> {
 		try {
-			const response =
-				await this.importUserApi.importUserControllerFindAllImportUsers(
-					undefined,
-					undefined,
-					undefined,
-					["admin", "auto"],
-					undefined,
-					undefined,
-					undefined,
-					undefined,
-					undefined,
-					0,
-					1
-				);
+			const response = await this.importUserApi.importUserControllerFindAllImportUsers(
+				undefined,
+				undefined,
+				undefined,
+				["admin", "auto"],
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				0,
+				1
+			);
 			this.setTotalMatched(response.data.total);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
@@ -400,12 +372,7 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async fetchTotalUnmatched(): Promise<void> {
 		try {
-			const response =
-				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
-					undefined,
-					0,
-					1
-				);
+			const response = await this.importUserApi.importUserControllerFindAllUnmatchedUsers(undefined, 0, 1);
 			this.setTotalUnmatched(response.data.total);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
@@ -434,16 +401,11 @@ export default class ImportUsersModule extends VuexModule {
 	}
 
 	@Action
-	async populateImportUsersFromExternalSystem(
-		matchByPreferredName = false
-	): Promise<void> {
+	async populateImportUsersFromExternalSystem(matchByPreferredName = false): Promise<void> {
 		try {
-			await this.importUserApi.importUserControllerPopulateImportUsers(
-				matchByPreferredName
-			);
+			await this.importUserApi.importUserControllerPopulateImportUsers(matchByPreferredName);
 		} catch (error: unknown) {
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError: ApiResponseError | ApiValidationError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
 				error: apiError,
@@ -465,8 +427,7 @@ export default class ImportUsersModule extends VuexModule {
 			});
 			this.setTotal(0);
 		} catch (error: unknown) {
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError: ApiResponseError | ApiValidationError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
 				error: apiError,
@@ -481,8 +442,7 @@ export default class ImportUsersModule extends VuexModule {
 		try {
 			await this.importUserApi.importUserControllerClearAllAutoMatches();
 		} catch (error: unknown) {
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError: ApiResponseError | ApiValidationError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
 				error: apiError,

@@ -1,10 +1,7 @@
-import { createStore } from "vuex";
 import FormCreateUser from "./FormCreateUser";
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
+import { createStore } from "vuex";
 
 const validRole = {
 	data: ["student"],
@@ -50,18 +47,10 @@ describe("@/components/organisms/FormCreateUser", () => {
 		it("emits create-user event on form submit", async () => {
 			const { wrapper } = setup(getMockActionsErrorCreate());
 
-			const inputFirstName = wrapper.find(
-				'[data-testid="input_create-user_firstname"] input'
-			);
-			const inputLastName = wrapper.find(
-				'[data-testid="input_create-user_lastname"] input'
-			);
-			const inputEmail = wrapper.find(
-				'[data-testid="input_create-user_email"] input'
-			);
-			const submitButton = wrapper.find(
-				'button[data-testid="button_create-user_submit"]'
-			);
+			const inputFirstName = wrapper.find('[data-testid="input_create-user_firstname"] input');
+			const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"] input');
+			const inputEmail = wrapper.find('[data-testid="input_create-user_email"] input');
+			const submitButton = wrapper.find('button[data-testid="button_create-user_submit"]');
 			expect(inputFirstName.exists()).toBe(true);
 			inputFirstName.setValue("Klara");
 
@@ -87,9 +76,7 @@ describe("@/components/organisms/FormCreateUser", () => {
 		it("does not emit create-user event if form is invalid", async () => {
 			const { wrapper } = setup(getMockActionsErrorCreate());
 
-			const submitButton = wrapper.find(
-				'button[data-testid="button_create-user_submit"]'
-			);
+			const submitButton = wrapper.find('button[data-testid="button_create-user_submit"]');
 
 			await submitButton.trigger("click");
 

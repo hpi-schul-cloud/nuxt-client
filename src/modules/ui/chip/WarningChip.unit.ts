@@ -1,10 +1,7 @@
-import { mount } from "@vue/test-utils";
-import { mdiAlert } from "@icons/material";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import WarningChip from "./WarningChip.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mdiAlert } from "@icons/material";
+import { mount } from "@vue/test-utils";
 import { VChip, VIcon } from "vuetify/lib/components/index";
 
 describe("WarningChip", () => {

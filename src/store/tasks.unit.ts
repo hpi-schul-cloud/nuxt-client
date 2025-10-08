@@ -1,12 +1,12 @@
-import setupStores from "@@/tests/test-utils/setupStores";
 import * as serverApi from "../serverApi/v3/api";
 import FinishedTasksModule from "./finished-tasks";
 import { TaskFilter } from "./task.filter";
 import { taskFactory } from "./task.filter.unit";
 import TasksModule from "./tasks";
 import { Task } from "./types/tasks";
-import { AxiosInstance } from "axios";
 import { initializeAxios } from "@/utils/api";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { AxiosInstance } from "axios";
 
 type FunctionPropertyNames<T> = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,13 +22,8 @@ type FunctionPropertyNames<T> = {
  * @param result the result of the task filter
  * @returns
  */
-function mockTaskFilter(
-	method: FunctionPropertyNames<Required<TaskFilter>>,
-	result: Task[]
-) {
-	return vi
-		.spyOn(TaskFilter.prototype, method)
-		.mockReturnValue(new TaskFilter(result));
+function mockTaskFilter(method: FunctionPropertyNames<Required<TaskFilter>>, result: Task[]) {
+	return vi.spyOn(TaskFilter.prototype, method).mockReturnValue(new TaskFilter(result));
 }
 
 initializeAxios({} as AxiosInstance);
@@ -99,9 +94,7 @@ describe("task store", () => {
 							}),
 					};
 
-					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
-						mockApi as unknown as serverApi.TaskApiInterface
-					);
+					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 					const tasksModule = new TasksModule({});
 
 					tasksModule.fetchAllTasks().then(() => {
@@ -123,9 +116,7 @@ describe("task store", () => {
 					const mockApi = {
 						taskControllerFindAll: vi.fn(() => Promise.reject({ ...error })),
 					};
-					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
-						mockApi as unknown as serverApi.TaskApiInterface
-					);
+					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 					const tasksModule = new TasksModule({});
 
 					tasksModule.fetchAllTasks().then(() => {
@@ -162,9 +153,7 @@ describe("task store", () => {
 
 					tasksModule.revertPublishedTask(tasks[0].id).then(() => {
 						expect(tasksModule.getStatus).toBe("completed");
-						expect(mockApi.taskControllerRevertPublished).toHaveBeenCalledTimes(
-							1
-						);
+						expect(mockApi.taskControllerRevertPublished).toHaveBeenCalledTimes(1);
 						expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
 						done();
 					});
@@ -186,9 +175,7 @@ describe("task store", () => {
 						taskControllerFinish: vi.fn(() => Promise.reject({ ...error })),
 					};
 
-					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
-						mockApi as unknown as serverApi.TaskApiInterface
-					);
+					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 					const tasksModule = new TasksModule({});
 
 					tasksModule.finishTask(task.id).then(() => {
@@ -269,9 +256,7 @@ describe("task store", () => {
 				expect(tasksModule.isSubstituteFilterEnabled).toBe(false);
 			});
 
-			it.todo(
-				"should remove substitute course(s) from course filter when disabled"
-			);
+			it.todo("should remove substitute course(s) from course filter when disabled");
 		});
 
 		describe("setStatus", () => {
@@ -1010,10 +995,7 @@ describe("task store", () => {
 
 			const result = tasksModule.getDraftTasksForTeacher;
 
-			expect(
-				new Date(result[0].createdAt).getTime() >
-					new Date(result[1].createdAt).getTime()
-			).toEqual(true);
+			expect(new Date(result[0].createdAt).getTime() > new Date(result[1].createdAt).getTime()).toEqual(true);
 			spy1.mockRestore();
 			spy2.mockRestore();
 			spy3.mockRestore();

@@ -17,4 +17,4 @@ enum Registration {
 	MISSING = "missing",
 }
 
-export { FilterOption, User, Registration };
+export { FilterOption, Registration, User };

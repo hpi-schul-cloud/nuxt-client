@@ -1,11 +1,8 @@
+import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
 import { ToolParameter, ToolParameterType } from "@/store/external-tool";
 import { toolParameterFactory } from "@@/tests/test-utils/factory";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 
 describe("ExternalToolConfigParameter", () => {
 	const getWrapper = (
@@ -48,9 +45,7 @@ describe("ExternalToolConfigParameter", () => {
 		it("should render a tri state select", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.findComponent({ name: "v-select" }).exists()).toEqual(
-				true
-			);
+			expect(wrapper.findComponent({ name: "v-select" }).exists()).toEqual(true);
 		});
 
 		it("should use default selectItem when parameter value is undefined", async () => {
@@ -58,17 +53,13 @@ describe("ExternalToolConfigParameter", () => {
 
 			await wrapper.find(`[data-testId=${parameter.name}]`).trigger("click");
 
-			expect(wrapper.find(".v-select__selection").text()).toEqual(
-				"common.words.noChoice"
-			);
+			expect(wrapper.find(".v-select__selection").text()).toEqual("common.words.noChoice");
 		});
 
 		it("should watch selectItem and emit event when select input value changes", async () => {
 			const { wrapper, parameter } = setup();
 
-			await wrapper
-				.findComponent(`[data-testId=${parameter.name}]`)
-				.setValue(true);
+			await wrapper.findComponent(`[data-testId=${parameter.name}]`).setValue(true);
 
 			expect(wrapper.emitted("update:modelValue")).toEqual([[true]]);
 		});
@@ -93,17 +84,13 @@ describe("ExternalToolConfigParameter", () => {
 		it("should render a text-field", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.findComponent({ name: "v-text-field" }).exists()).toEqual(
-				true
-			);
+			expect(wrapper.findComponent({ name: "v-text-field" }).exists()).toEqual(true);
 		});
 
 		it("should emit event when parameter value changes", async () => {
 			const { wrapper, parameter } = setup();
 
-			await wrapper
-				.findComponent(`[data-testId=${parameter.name}]`)
-				.setValue("newValue");
+			await wrapper.findComponent(`[data-testId=${parameter.name}]`).setValue("newValue");
 
 			expect(wrapper.emitted("update:modelValue")).toEqual([["newValue"]]);
 		});
@@ -128,24 +115,17 @@ describe("ExternalToolConfigParameter", () => {
 		it("should render a text-field with type number", () => {
 			const { wrapper, parameter } = setup();
 
-			expect(wrapper.findComponent({ name: "v-text-field" }).exists()).toEqual(
-				true
-			);
+			expect(wrapper.findComponent({ name: "v-text-field" }).exists()).toEqual(true);
 
-			expect(
-				wrapper
-					.findComponent(`[data-testId=${parameter.name}]`)
-					.get("input")
-					.attributes("type")
-			).toEqual("number");
+			expect(wrapper.findComponent(`[data-testId=${parameter.name}]`).get("input").attributes("type")).toEqual(
+				"number"
+			);
 		});
 
 		it("should emit event when parameter value changes", async () => {
 			const { wrapper, parameter } = setup();
 
-			await wrapper
-				.findComponent(`[data-testId=${parameter.name}]`)
-				.setValue("1234");
+			await wrapper.findComponent(`[data-testId=${parameter.name}]`).setValue("1234");
 
 			expect(wrapper.emitted("update:modelValue")).toEqual([["1234"]]);
 		});

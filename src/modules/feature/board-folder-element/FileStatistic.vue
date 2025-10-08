@@ -1,8 +1,6 @@
 <template>
 	<span v-if="fileStatistics" class="text-caption" data-testid="file-statistic">
-		{{
-			`${fileStatistics?.fileCount} ${fileTranslation} ⋅ ${humanReadableFileSize}`
-		}}
+		{{ `${fileStatistics?.fileCount} ${fileTranslation} ⋅ ${humanReadableFileSize}` }}
 	</span>
 </template>
 
@@ -19,8 +17,7 @@ interface FileStatisticProps {
 
 const props = defineProps<FileStatisticProps>();
 
-const { tryGetParentStatisticFromApi, getStatisticByParentId } =
-	useFileStorageApi();
+const { tryGetParentStatisticFromApi, getStatisticByParentId } = useFileStorageApi();
 
 const fileStatistics = computed(() => {
 	const statistics = getStatisticByParentId(props.elementId);
@@ -31,9 +28,7 @@ const fileStatistics = computed(() => {
 const { t } = useI18n();
 
 const humanReadableFileSize = computed(() => {
-	const localizedString = formatFileSize(
-		fileStatistics.value?.totalSizeInBytes || 0
-	);
+	const localizedString = formatFileSize(fileStatistics.value?.totalSizeInBytes || 0);
 
 	return localizedString;
 });
@@ -49,9 +44,6 @@ const fileTranslation = computed(() => {
 });
 
 onMounted(async () => {
-	await tryGetParentStatisticFromApi(
-		props.elementId,
-		FileRecordParent.BOARDNODES
-	);
+	await tryGetParentStatisticFromApi(props.elementId, FileRecordParent.BOARDNODES);
 });
 </script>

@@ -1,48 +1,42 @@
-import NotifierModule from "@/store/notifier";
+import CollaboraPage from "./Collabora.page.vue";
 import { EditorMode } from "@/types/file/File";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	authorizedCollaboraDocumentUrlResponseFactory,
 	createTestAppStoreWithUser,
+	expectNotification,
 	ObjectIdMock,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useAppStore } from "@data-app";
 import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
-import CollaboraPage from "./Collabora.page.vue";
-import { useAppStore } from "@data-app";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 describe("Collabora.page", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		vi.resetAllMocks();
+	});
+
 	const setup = () => {
 		const fileRecordId = ObjectIdMock();
 		const editorMode = EditorMode.EDIT;
-		const authorizedCollaboraDocumentUrlResponse =
-			authorizedCollaboraDocumentUrlResponseFactory.build();
+		const authorizedCollaboraDocumentUrlResponse = authorizedCollaboraDocumentUrlResponseFactory.build();
 
 		const { mockedMe } = createTestAppStoreWithUser("user-id");
 
-		const fileStorageApiMock =
-			createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-		vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
-			fileStorageApiMock
-		);
+		const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+		vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 		fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
 			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl
 		);
 
-		const notifierModule = createModuleMocks(NotifierModule);
-
 		const wrapper = mount(CollaboraPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			propsData: {
 				fileRecordId,
@@ -57,20 +51,13 @@ describe("Collabora.page", () => {
 			fileStorageApiMock,
 			fileRecordId,
 			mockedMe,
-			notifierModule,
 		};
 	};
-
-	beforeEach(() => {
-		vi.resetAllMocks();
-	});
 
 	it("should call getAuthorizedCollaboraDocumentUrl with correct parameters", () => {
 		const { fileStorageApiMock, fileRecordId, editorMode, mockedMe } = setup();
 
-		expect(
-			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl
-		).toHaveBeenCalledWith(
+		expect(fileStorageApiMock.getAuthorizedCollaboraDocumentUrl).toHaveBeenCalledWith(
 			fileRecordId,
 			editorMode,
 			`${mockedMe.user.firstName} ${mockedMe.user.lastName}`
@@ -84,8 +71,7 @@ describe("Collabora.page", () => {
 
 		expect(wrapper.find("iframe").exists()).toBe(true);
 		expect(wrapper.find("iframe").attributes("src")).toEqual(
-			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl +
-				`?lang=${useAppStore().locale}`
+			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl + `?lang=${useAppStore().locale}`
 		);
 	});
 
@@ -93,7 +79,7 @@ describe("Collabora.page", () => {
 		describe("when message is not a collabora message", () => {
 			describe("when MessageId is missing", () => {
 				it("should show notification", () => {
-					const { notifierModule } = setup();
+					setup();
 
 					const message = `{
 					"SendTime": 1755591627240,
@@ -104,17 +90,13 @@ describe("Collabora.page", () => {
 					});
 					window.dispatchEvent(messageEvent);
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						text: "pages.collabora.messageError",
-						status: "error",
-						timeout: 5000,
-					});
+					expectNotification("error");
 				});
 			});
 
 			describe("when MessageId is not string", () => {
 				it("should show notification", () => {
-					const { notifierModule } = setup();
+					setup();
 
 					const message = `{
 						"MessageId": 1,
@@ -126,17 +108,13 @@ describe("Collabora.page", () => {
 					});
 					window.dispatchEvent(messageEvent);
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						text: "pages.collabora.messageError",
-						status: "error",
-						timeout: 5000,
-					});
+					expectNotification("error");
 				});
 			});
 
 			describe("when Values is missing", () => {
 				it("should show notification", () => {
-					const { notifierModule } = setup();
+					setup();
 
 					const message = `{
 						"MessageId": "Some_Other_Message",
@@ -147,18 +125,14 @@ describe("Collabora.page", () => {
 					});
 					window.dispatchEvent(messageEvent);
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						text: "pages.collabora.messageError",
-						status: "error",
-						timeout: 5000,
-					});
+					expectNotification("error");
 				});
 			});
 		});
 
 		describe("when message is not valid json", () => {
 			it("should show notification ", () => {
-				const { notifierModule } = setup();
+				setup();
 
 				const modifiedMessage = `{
 					sdf
@@ -168,11 +142,7 @@ describe("Collabora.page", () => {
 				});
 				window.dispatchEvent(messageEvent);
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "pages.collabora.jsonError",
-					status: "error",
-					timeout: 5000,
-				});
+				expectNotification("error");
 			});
 		});
 	});

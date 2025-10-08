@@ -1,3 +1,6 @@
+import { SchoolExternalTool, ToolParameterLocation, ToolParameterScope, ToolParameterType } from "./external-tool";
+import SchoolExternalToolsModule from "./school-external-tools";
+import { BusinessError } from "./types/commons";
 import {
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolPostParams,
@@ -20,14 +23,6 @@ import {
 } from "@@/tests/test-utils";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import {
-	SchoolExternalTool,
-	ToolParameterLocation,
-	ToolParameterScope,
-	ToolParameterType,
-} from "./external-tool";
-import SchoolExternalToolsModule from "./school-external-tools";
-import { BusinessError } from "./types/commons";
 
 describe("SchoolExternalToolsModule", () => {
 	let module: SchoolExternalToolsModule;
@@ -65,11 +60,8 @@ describe("SchoolExternalToolsModule", () => {
 
 		describe("getContextExternalToolConfigurationTemplate", () => {
 			const setup = () => {
-				const contextExternalToolConfigurationTemplate =
-					contextExternalToolConfigurationTemplateFactory.build();
-				module.setContextExternalToolConfigurationTemplate(
-					contextExternalToolConfigurationTemplate
-				);
+				const contextExternalToolConfigurationTemplate = contextExternalToolConfigurationTemplateFactory.build();
+				module.setContextExternalToolConfigurationTemplate(contextExternalToolConfigurationTemplate);
 
 				return {
 					contextExternalToolConfigurationTemplate,
@@ -78,9 +70,7 @@ describe("SchoolExternalToolsModule", () => {
 			it("should return template", () => {
 				const { contextExternalToolConfigurationTemplate } = setup();
 
-				expect(module.getContextExternalToolConfigurationTemplate).toEqual(
-					contextExternalToolConfigurationTemplate
-				);
+				expect(module.getContextExternalToolConfigurationTemplate).toEqual(contextExternalToolConfigurationTemplate);
 			});
 		});
 	});
@@ -89,10 +79,9 @@ describe("SchoolExternalToolsModule", () => {
 		describe("loadSchoolExternalTools is called", () => {
 			describe("when it successfully calls the api", () => {
 				const setup = () => {
-					const schoolExternalToolResponse =
-						schoolExternalToolResponseFactory.build({
-							parameters: [{ name: "param1", value: "value1" }],
-						});
+					const schoolExternalToolResponse = schoolExternalToolResponseFactory.build({
+						parameters: [{ name: "param1", value: "value1" }],
+					});
 
 					const schoolExternalTools: SchoolExternalToolSearchListResponse = {
 						data: [schoolExternalToolResponse],
@@ -112,9 +101,7 @@ describe("SchoolExternalToolsModule", () => {
 
 					await module.loadSchoolExternalTools("schoolId");
 
-					expect(
-						apiMock.toolSchoolControllerGetSchoolExternalTools
-					).toHaveBeenCalledWith("schoolId");
+					expect(apiMock.toolSchoolControllerGetSchoolExternalTools).toHaveBeenCalledWith("schoolId");
 				});
 
 				it("should set the state", async () => {
@@ -134,8 +121,7 @@ describe("SchoolExternalToolsModule", () => {
 									value: schoolExternalToolResponse.parameters[0].value,
 								},
 							],
-							status:
-								schoolExternalToolConfigurationStatusResponseFactory.build(),
+							status: schoolExternalToolConfigurationStatusResponseFactory.build(),
 							isDeactivated: false,
 						},
 					]);
@@ -147,9 +133,7 @@ describe("SchoolExternalToolsModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.toolSchoolControllerGetSchoolExternalTools.mockRejectedValue(
-						error
-					);
+					apiMock.toolSchoolControllerGetSchoolExternalTools.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -189,25 +173,20 @@ describe("SchoolExternalToolsModule", () => {
 
 					await module.loadSchoolExternalTool("schoolExternalToolId");
 
-					expect(
-						apiMock.toolSchoolControllerGetSchoolExternalTool
-					).toHaveBeenCalledWith("schoolExternalToolId");
+					expect(apiMock.toolSchoolControllerGetSchoolExternalTool).toHaveBeenCalledWith("schoolExternalToolId");
 				});
 
 				it("should return the school external tool", async () => {
 					const { schoolExternalTool } = setup();
 
-					const result = await module.loadSchoolExternalTool(
-						"schoolExternalToolId"
-					);
+					const result = await module.loadSchoolExternalTool("schoolExternalToolId");
 
 					expect(result).toEqual<SchoolExternalTool>({
 						id: schoolExternalTool.id,
 						toolId: schoolExternalTool.toolId,
 						schoolId: schoolExternalTool.schoolId,
 						parameters: [],
-						status:
-							schoolExternalToolConfigurationStatusResponseFactory.build(),
+						status: schoolExternalToolConfigurationStatusResponseFactory.build(),
 						name: schoolExternalTool.name,
 						isDeactivated: false,
 					});
@@ -219,9 +198,7 @@ describe("SchoolExternalToolsModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.toolSchoolControllerGetSchoolExternalTool.mockRejectedValue(
-						error
-					);
+					apiMock.toolSchoolControllerGetSchoolExternalTool.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -259,9 +236,7 @@ describe("SchoolExternalToolsModule", () => {
 
 					await module.deleteSchoolExternalTool(schoolExternalTool.id);
 
-					expect(
-						apiMock.toolSchoolControllerDeleteSchoolExternalTool
-					).toHaveBeenCalledWith(schoolExternalTool.id);
+					expect(apiMock.toolSchoolControllerDeleteSchoolExternalTool).toHaveBeenCalledWith(schoolExternalTool.id);
 				});
 
 				it("should remove the tool from the state", async () => {
@@ -269,9 +244,7 @@ describe("SchoolExternalToolsModule", () => {
 
 					await module.deleteSchoolExternalTool(schoolExternalTool.id);
 
-					expect(module.getSchoolExternalTools).not.toContain(
-						schoolExternalTool
-					);
+					expect(module.getSchoolExternalTools).not.toContain(schoolExternalTool);
 				});
 			});
 
@@ -280,9 +253,7 @@ describe("SchoolExternalToolsModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.toolSchoolControllerDeleteSchoolExternalTool.mockRejectedValue(
-						error
-					);
+					apiMock.toolSchoolControllerDeleteSchoolExternalTool.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -306,19 +277,17 @@ describe("SchoolExternalToolsModule", () => {
 		describe("loadAvailableToolsForSchool is called", () => {
 			describe("when it successfully calls the api", () => {
 				const setup = () => {
-					const toolConfigurationTemplate =
-						schoolExternalToolConfigurationTemplateResponseFactory.build({
-							logoUrl: "logoUrl",
-							parameters: customParameterResponseFactory.buildList(1, {
-								defaultValue: "defaultValue",
-								description: "description",
-								regex: "regex",
-								regexComment: "regexComment",
-							}),
-						});
+					const toolConfigurationTemplate = schoolExternalToolConfigurationTemplateResponseFactory.build({
+						logoUrl: "logoUrl",
+						parameters: customParameterResponseFactory.buildList(1, {
+							defaultValue: "defaultValue",
+							description: "description",
+							regex: "regex",
+							regexComment: "regexComment",
+						}),
+					});
 
-					const response: SchoolExternalToolConfigurationTemplateListResponse =
-						{ data: [toolConfigurationTemplate] };
+					const response: SchoolExternalToolConfigurationTemplateListResponse = { data: [toolConfigurationTemplate] };
 
 					apiMock.toolConfigurationControllerGetAvailableToolsForSchool.mockResolvedValue(
 						mockApiResponse({ data: response })
@@ -334,9 +303,7 @@ describe("SchoolExternalToolsModule", () => {
 
 					await module.loadAvailableToolsForSchool("schoolId");
 
-					expect(
-						apiMock.toolConfigurationControllerGetAvailableToolsForSchool
-					).toHaveBeenCalledWith("schoolId");
+					expect(apiMock.toolConfigurationControllerGetAvailableToolsForSchool).toHaveBeenCalledWith("schoolId");
 				});
 
 				it("should set the state", async () => {
@@ -344,38 +311,32 @@ describe("SchoolExternalToolsModule", () => {
 
 					await module.loadAvailableToolsForSchool("schoolId");
 
-					expect(module.getSchoolExternalToolConfigurationTemplates).toEqual<
-						SchoolExternalToolConfigurationTemplate[]
-					>([
-						{
-							externalToolId: toolConfigurationTemplate.externalToolId,
-							name: toolConfigurationTemplate.name,
-							baseUrl: toolConfigurationTemplate.baseUrl,
-							parameters: [
-								{
-									name: toolConfigurationTemplate.parameters[0].name,
-									displayName:
-										toolConfigurationTemplate.parameters[0].displayName,
-									scope: ToolParameterScope.Context,
-									type: ToolParameterType.String,
-									location: ToolParameterLocation.BODY,
-									defaultValue:
-										toolConfigurationTemplate.parameters[0].defaultValue,
-									description:
-										toolConfigurationTemplate.parameters[0].description,
-									isOptional:
-										toolConfigurationTemplate.parameters[0].isOptional,
-									isProtected:
-										toolConfigurationTemplate.parameters[0].isProtected,
-									regex: toolConfigurationTemplate.parameters[0].regex,
-									regexComment:
-										toolConfigurationTemplate.parameters[0].regexComment,
-								},
-							],
-							logoUrl: toolConfigurationTemplate.logoUrl,
-							isDeactivated: false,
-						},
-					]);
+					expect(module.getSchoolExternalToolConfigurationTemplates).toEqual<SchoolExternalToolConfigurationTemplate[]>(
+						[
+							{
+								externalToolId: toolConfigurationTemplate.externalToolId,
+								name: toolConfigurationTemplate.name,
+								baseUrl: toolConfigurationTemplate.baseUrl,
+								parameters: [
+									{
+										name: toolConfigurationTemplate.parameters[0].name,
+										displayName: toolConfigurationTemplate.parameters[0].displayName,
+										scope: ToolParameterScope.Context,
+										type: ToolParameterType.String,
+										location: ToolParameterLocation.BODY,
+										defaultValue: toolConfigurationTemplate.parameters[0].defaultValue,
+										description: toolConfigurationTemplate.parameters[0].description,
+										isOptional: toolConfigurationTemplate.parameters[0].isOptional,
+										isProtected: toolConfigurationTemplate.parameters[0].isProtected,
+										regex: toolConfigurationTemplate.parameters[0].regex,
+										regexComment: toolConfigurationTemplate.parameters[0].regexComment,
+									},
+								],
+								logoUrl: toolConfigurationTemplate.logoUrl,
+								isDeactivated: false,
+							},
+						]
+					);
 				});
 			});
 
@@ -384,9 +345,7 @@ describe("SchoolExternalToolsModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.toolConfigurationControllerGetAvailableToolsForSchool.mockRejectedValue(
-						error
-					);
+					apiMock.toolConfigurationControllerGetAvailableToolsForSchool.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -410,16 +369,15 @@ describe("SchoolExternalToolsModule", () => {
 		describe("loadConfigurationTemplateForSchoolExternalTool is called", () => {
 			describe("when it successfully calls the api", () => {
 				const setup = () => {
-					const toolConfigurationTemplate =
-						schoolExternalToolConfigurationTemplateResponseFactory.build({
-							logoUrl: "logoUrl",
-							parameters: customParameterResponseFactory.buildList(1, {
-								defaultValue: "defaultValue",
-								description: "description",
-								regex: "regex",
-								regexComment: "regexComment",
-							}),
-						});
+					const toolConfigurationTemplate = schoolExternalToolConfigurationTemplateResponseFactory.build({
+						logoUrl: "logoUrl",
+						parameters: customParameterResponseFactory.buildList(1, {
+							defaultValue: "defaultValue",
+							description: "description",
+							regex: "regex",
+							regexComment: "regexComment",
+						}),
+					});
 
 					apiMock.toolConfigurationControllerGetConfigurationTemplateForSchool.mockResolvedValue(
 						mockApiResponse({ data: toolConfigurationTemplate })
@@ -433,54 +391,44 @@ describe("SchoolExternalToolsModule", () => {
 				it("should call the toolApi.toolConfigurationControllerGetAvailableToolsForSchool", async () => {
 					setup();
 
-					await module.loadConfigurationTemplateForSchoolExternalTool(
+					await module.loadConfigurationTemplateForSchoolExternalTool("schoolExternalToolId");
+
+					expect(apiMock.toolConfigurationControllerGetConfigurationTemplateForSchool).toHaveBeenCalledWith(
 						"schoolExternalToolId"
 					);
-
-					expect(
-						apiMock.toolConfigurationControllerGetConfigurationTemplateForSchool
-					).toHaveBeenCalledWith("schoolExternalToolId");
 				});
 
 				it("should set the state", async () => {
 					const { toolConfigurationTemplate } = setup();
 
-					await module.loadConfigurationTemplateForSchoolExternalTool(
-						"schoolExternalToolId"
-					);
+					await module.loadConfigurationTemplateForSchoolExternalTool("schoolExternalToolId");
 
-					expect(module.getSchoolExternalToolConfigurationTemplates).toEqual<
-						SchoolExternalToolConfigurationTemplate[]
-					>([
-						{
-							externalToolId: toolConfigurationTemplate.externalToolId,
-							name: toolConfigurationTemplate.name,
-							baseUrl: toolConfigurationTemplate.baseUrl,
-							parameters: [
-								{
-									name: toolConfigurationTemplate.parameters[0].name,
-									displayName:
-										toolConfigurationTemplate.parameters[0].displayName,
-									scope: ToolParameterScope.Context,
-									type: ToolParameterType.String,
-									location: ToolParameterLocation.BODY,
-									defaultValue:
-										toolConfigurationTemplate.parameters[0].defaultValue,
-									description:
-										toolConfigurationTemplate.parameters[0].description,
-									isOptional:
-										toolConfigurationTemplate.parameters[0].isOptional,
-									isProtected:
-										toolConfigurationTemplate.parameters[0].isProtected,
-									regex: toolConfigurationTemplate.parameters[0].regex,
-									regexComment:
-										toolConfigurationTemplate.parameters[0].regexComment,
-								},
-							],
-							logoUrl: toolConfigurationTemplate.logoUrl,
-							isDeactivated: false,
-						},
-					]);
+					expect(module.getSchoolExternalToolConfigurationTemplates).toEqual<SchoolExternalToolConfigurationTemplate[]>(
+						[
+							{
+								externalToolId: toolConfigurationTemplate.externalToolId,
+								name: toolConfigurationTemplate.name,
+								baseUrl: toolConfigurationTemplate.baseUrl,
+								parameters: [
+									{
+										name: toolConfigurationTemplate.parameters[0].name,
+										displayName: toolConfigurationTemplate.parameters[0].displayName,
+										scope: ToolParameterScope.Context,
+										type: ToolParameterType.String,
+										location: ToolParameterLocation.BODY,
+										defaultValue: toolConfigurationTemplate.parameters[0].defaultValue,
+										description: toolConfigurationTemplate.parameters[0].description,
+										isOptional: toolConfigurationTemplate.parameters[0].isOptional,
+										isProtected: toolConfigurationTemplate.parameters[0].isProtected,
+										regex: toolConfigurationTemplate.parameters[0].regex,
+										regexComment: toolConfigurationTemplate.parameters[0].regexComment,
+									},
+								],
+								logoUrl: toolConfigurationTemplate.logoUrl,
+								isDeactivated: false,
+							},
+						]
+					);
 				});
 			});
 
@@ -489,9 +437,7 @@ describe("SchoolExternalToolsModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.toolConfigurationControllerGetConfigurationTemplateForSchool.mockRejectedValue(
-						error
-					);
+					apiMock.toolConfigurationControllerGetConfigurationTemplateForSchool.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -501,9 +447,7 @@ describe("SchoolExternalToolsModule", () => {
 				it("should set the businessError", async () => {
 					const { apiError } = setup();
 
-					await module.loadConfigurationTemplateForSchoolExternalTool(
-						"schoolExternalToolId"
-					);
+					await module.loadConfigurationTemplateForSchoolExternalTool("schoolExternalToolId");
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
@@ -531,9 +475,9 @@ describe("SchoolExternalToolsModule", () => {
 
 					await module.createSchoolExternalTool(schoolExternalTool);
 
-					expect(
-						apiMock.toolSchoolControllerCreateSchoolExternalTool
-					).toHaveBeenCalledWith<[SchoolExternalToolPostParams]>({
+					expect(apiMock.toolSchoolControllerCreateSchoolExternalTool).toHaveBeenCalledWith<
+						[SchoolExternalToolPostParams]
+					>({
 						toolId: schoolExternalTool.toolId,
 						schoolId: schoolExternalTool.schoolId,
 						parameters: [
@@ -552,9 +496,7 @@ describe("SchoolExternalToolsModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.toolSchoolControllerCreateSchoolExternalTool.mockRejectedValue(
-						error
-					);
+					apiMock.toolSchoolControllerCreateSchoolExternalTool.mockRejectedValue(error);
 
 					return {
 						apiError,
@@ -564,9 +506,7 @@ describe("SchoolExternalToolsModule", () => {
 				it("should set the businessError", async () => {
 					const { apiError } = setup();
 
-					await module.createSchoolExternalTool(
-						schoolExternalToolSaveFactory.build()
-					);
+					await module.createSchoolExternalTool(schoolExternalToolSaveFactory.build());
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
@@ -595,17 +535,14 @@ describe("SchoolExternalToolsModule", () => {
 						schoolExternalTool: schoolExternalTool,
 					});
 
-					expect(
-						apiMock.toolSchoolControllerUpdateSchoolExternalTool
-					).toHaveBeenCalledWith<[string, SchoolExternalToolPostParams]>(
-						"schoolExternalToolId",
-						{
-							toolId: schoolExternalTool.toolId,
-							schoolId: schoolExternalTool.schoolId,
-							parameters: [],
-							isDeactivated: false,
-						}
-					);
+					expect(apiMock.toolSchoolControllerUpdateSchoolExternalTool).toHaveBeenCalledWith<
+						[string, SchoolExternalToolPostParams]
+					>("schoolExternalToolId", {
+						toolId: schoolExternalTool.toolId,
+						schoolId: schoolExternalTool.schoolId,
+						parameters: [],
+						isDeactivated: false,
+					});
 				});
 			});
 
@@ -614,9 +551,7 @@ describe("SchoolExternalToolsModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.toolSchoolControllerUpdateSchoolExternalTool.mockRejectedValue(
-						error
-					);
+					apiMock.toolSchoolControllerUpdateSchoolExternalTool.mockRejectedValue(error);
 
 					return {
 						apiError,

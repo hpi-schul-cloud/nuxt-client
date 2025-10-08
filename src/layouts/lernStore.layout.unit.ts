@@ -1,13 +1,10 @@
-import type { Mock } from "vitest";
-import ContentModule from "@/store/content";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { shallowMount } from "@vue/test-utils";
 import lernStoreLayout from "./lernStore.layout.vue";
+import ContentModule from "@/store/content";
 import { CONTENT_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
+import type { Mock } from "vitest";
 import { useRoute } from "vue-router";
 
 const params = {
