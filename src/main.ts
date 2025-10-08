@@ -1,13 +1,11 @@
 import "@/plugins/polyfills";
 import App from "./App.vue";
-import { handleApplicationError } from "./plugins/application-error-handler";
 import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
 import createVuetify from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
 import {
-	APPLICATION_ERROR_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	CONTENT_MODULE_KEY,
@@ -31,7 +29,6 @@ import {
 } from "./utils/inject";
 import { mountBaseComponents } from "@/components/base/components";
 import {
-	applicationErrorModule,
 	commonCartridgeExportModule,
 	commonCartridgeImportModule,
 	contentModule,
@@ -55,6 +52,8 @@ import {
 	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
+import { ApplicationError } from "@/store/types/application-error";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import themeConfig from "@/theme.config";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
@@ -74,7 +73,9 @@ mountBaseComponents(app);
 
 // app.config.productionTip = false;
 
-app.config.errorHandler = handleApplicationError;
+app.config.errorHandler = (err: unknown) => {
+	useAppStore().handleUnknownError(err);
+};
 
 app.config.globalProperties.$theme = themeConfig;
 
@@ -110,7 +111,6 @@ app.use(VueDOMPurifyHTML, {
 	app.use(router).use(store).use(vuetify).use(i18n);
 
 	// NUXT_REMOVAL get rid of store DI
-	app.provide(APPLICATION_ERROR_KEY.valueOf(), applicationErrorModule);
 	app.provide(CONTENT_MODULE_KEY, contentModule);
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide("filePathsModule", filePathsModule);

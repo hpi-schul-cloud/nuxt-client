@@ -9,17 +9,14 @@ import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout } from "@/serverApi/v3/api";
-import { applicationErrorModule } from "@/store";
-import ApplicationErrorModule from "@/store/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	boardResponseFactory,
 	cardResponseFactory,
 	columnResponseFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { useAppStore } from "@data-app";
 import { useBoardStore, useForceRender, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -59,9 +56,6 @@ describe("useBoardSocketApi", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		setupStores({
-			applicationErrorModule: ApplicationErrorModule,
-		});
 
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
@@ -273,16 +267,14 @@ describe("useBoardSocketApi", () => {
 		});
 
 		describe("failure actions", () => {
-			it("should call applicationErrorModule.setError for fetchBoardFailure action", () => {
-				const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
+			it("should call handleApplicationError for fetchBoardFailure action", () => {
 				const { dispatch } = useBoardSocketApi();
 				dispatch(BoardActions.fetchBoardFailure({ boardId: "test" }));
 
-				expect(setErrorSpy).toHaveBeenCalledWith(
-					createApplicationError(HttpStatusCode.NotFound, "components.board.error.404")
+				expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(
+					HttpStatusCode.NotFound,
+					"components.board.error.404"
 				);
-				expect(setErrorSpy.mock.calls[0][0].statusCode).toStrictEqual(HttpStatusCode.NotFound);
-				expect(setErrorSpy.mock.calls[0][0].translationKey).toStrictEqual("components.board.error.404");
 			});
 
 			it("should reload the board for createCardFailure action", () => {

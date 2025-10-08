@@ -1,10 +1,8 @@
 import loggedOut from "./loggedOut.layout.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import ApplicationErrorModule from "@/store/application-error";
 import FilePathsModule from "@/store/filePaths";
-import { APPLICATION_ERROR_KEY, THEME_KEY } from "@/utils/inject";
+import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
@@ -29,8 +27,6 @@ describe("loggedOutLayout", () => {
 			SC_THEME: SchulcloudTheme.Default,
 		});
 
-		const applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule);
-
 		const $route = { path: "home" };
 		const $router = {
 			push: vi.fn(),
@@ -44,7 +40,6 @@ describe("loggedOutLayout", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModuleMock,
 					[THEME_KEY.valueOf()]: {
 						name: "instance name",
 					},

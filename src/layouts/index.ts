@@ -6,9 +6,7 @@ import { Layouts } from "./types";
 
 type AnyLayout = typeof LoggedInLayout | typeof LoggdOutLayout | typeof LernStoreLayout | typeof BorderlessLayout;
 
-type LayoutComponents = Record<Layouts, AnyLayout>;
-
-const availableLayouts: LayoutComponents = {
+const availableLayouts: Record<Layouts, AnyLayout> = {
 	[Layouts.LOGGED_IN]: LoggedInLayout,
 	[Layouts.LOGGED_OUT]: LoggdOutLayout,
 	[Layouts.LERN_STORE]: LernStoreLayout,
@@ -17,4 +15,4 @@ const availableLayouts: LayoutComponents = {
 
 const isLayout = (name: string): name is Layouts => Object.keys(availableLayouts).includes(name as Layouts);
 
-export { availableLayouts, BorderlessLayout, isLayout, LernStoreLayout, LoggdOutLayout, LoggedInLayout };
+export { availableLayouts, isLayout };

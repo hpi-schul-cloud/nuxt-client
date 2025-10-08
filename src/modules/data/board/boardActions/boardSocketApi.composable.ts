@@ -20,10 +20,9 @@ import {
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
 import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useAppStore } from "@data-app";
 import { useI18n } from "vue-i18n";
 
 export const useBoardSocketApi = () => {
@@ -181,7 +180,7 @@ export const useBoardSocketApi = () => {
 	};
 
 	const fetchBoardFailure = () => {
-		applicationErrorModule.setError(createApplicationError(HttpStatusCode.NotFound, t("components.board.error.404")));
+		useAppStore().handleApplicationError(HttpStatusCode.NotFound, "components.board.error.404");
 	};
 
 	const reloadBoard = () => {

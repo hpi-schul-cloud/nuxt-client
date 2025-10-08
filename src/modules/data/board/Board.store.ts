@@ -30,10 +30,9 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardStore } from "./Card.store";
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload.types";
 import { ColumnResponse } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSharedEditMode } from "@util-board";
 import { defineStore } from "pinia";
@@ -336,7 +335,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 			});
 			return;
 		}
-		applicationErrorModule.setError(createApplicationError(HttpStatusCode.NotFound, t("components.board.error.404")));
+		useAppStore().handleApplicationError(HttpStatusCode.NotFound, "components.board.error.404");
 	};
 
 	const reloadBoard = async () => {

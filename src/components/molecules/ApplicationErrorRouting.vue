@@ -3,17 +3,15 @@
 </template>
 
 <script setup lang="ts">
-import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
+import { useAppStoreRefs } from "@data-app";
 import { watch } from "vue";
 import { useRouter } from "vue-router";
 
 /**
- * This component handles the routing to "/error" whenever a global Error is set in ApplicationErrorModule
+ * This component handles the routing to "/error" whenever a global Error is set
  */
 
 const router = useRouter();
-
-const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
 
 const routeToErrorPage = () => {
 	// prevent NavigationDuplicated error: "navigationduplicated avoided redundant navigation to current location"
@@ -22,10 +20,12 @@ const routeToErrorPage = () => {
 	}
 };
 
+const { applicationError } = useAppStoreRefs();
+
 watch(
-	() => applicationErrorModule.getStatusCode,
+	() => applicationError.value?.status,
 	(to) => {
-		if (to !== null) {
+		if (to !== undefined) {
 			routeToErrorPage();
 		}
 	},

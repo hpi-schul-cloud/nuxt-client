@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<permission-error-svg
+		<PermissionErrorSvg
 			v-if="isPermissionError"
 			:svg-width="$vuetify.display.xs ? 200 : undefined"
 			fill="rgba(var(--v-theme-primary))"
 			data-testid="img-permission"
 		/>
-		<not-found-svg
+		<NotFoundSvg
 			v-else-if="isNotFoundError"
 			:svg-width="$vuetify.display.xs ? 200 : undefined"
 			fill="rgba(var(--v-theme-primary))"
@@ -43,7 +43,7 @@ const { t } = useI18n();
 const pageTitle = buildPageTitle(t("error.generic"));
 useTitle(pageTitle);
 
-const permissionErrorStatusCodes: HttpStatusCode[] = [HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden];
+const permissionErrorStatusCodes = [HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden];
 
 const isPermissionError = computed(() => permissionErrorStatusCodes.includes(props.statusCode));
 

@@ -4,10 +4,9 @@
 		<Sidebar v-model="sidebarExpanded" />
 		<Topbar :sidebar-expanded="sidebarExpanded" @sidebar-toggled="onToggleSidebar" />
 		<v-main id="main-content" :class="{ 'position-fixed w-100': !isDesktop && sidebarExpanded }">
-			<application-error-wrapper>
-				<AlertContainer />
+			<ApplicationError>
 				<router-view />
-			</application-error-wrapper>
+			</ApplicationError>
 		</v-main>
 		<loading-state-dialog />
 		<keep-alive>
@@ -17,8 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
+import ApplicationError from "@/components/molecules/ApplicationError.vue";
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { Sidebar, Topbar } from "@ui-layout";
 import { LoadingStateDialog } from "@ui-loading-state-dialog";

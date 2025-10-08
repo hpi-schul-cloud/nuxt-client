@@ -2,12 +2,10 @@ import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout } from "@/serverApi/v3/api";
-import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
-import ApplicationErrorModule from "@/store/application-error";
+import { courseRoomDetailsModule } from "@/store";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
@@ -16,6 +14,7 @@ import {
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { useAppStore } from "@data-app";
 import { useBoardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -51,7 +50,6 @@ describe("boardRestApi", () => {
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
 	let setEditModeId: Mock;
-	const setErrorMock = vi.fn();
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -78,10 +76,8 @@ describe("boardRestApi", () => {
 
 	const setup = (createBoard = true) => {
 		setupStores({
-			applicationErrorModule: ApplicationErrorModule,
 			courseRoomDetailsModule: CourseRoomDetailsModule,
 		});
-		applicationErrorModule.setError = setErrorMock;
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		if (createBoard) {
@@ -165,7 +161,7 @@ describe("boardRestApi", () => {
 			expect(boardStore.setLoading).toHaveBeenLastCalledWith(false);
 		});
 
-		it("should call applicationErrorModule if the fetch fails", async () => {
+		it("should call handleApplicationError if the fetch fails", async () => {
 			const { boardStore } = setup();
 			const { fetchBoardRequest } = useBoardRestApi();
 
@@ -173,11 +169,10 @@ describe("boardRestApi", () => {
 
 			await fetchBoardRequest({ boardId: boardStore.board!.id });
 
-			expect(setErrorMock).toHaveBeenCalledWith(
-				createApplicationError(HttpStatusCode.NotFound, "components.board.error.404")
+			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(
+				HttpStatusCode.NotFound,
+				"components.board.error.404"
 			);
-			expect(setErrorMock.mock.lastCall![0].statusCode).toStrictEqual(HttpStatusCode.NotFound);
-			expect(setErrorMock.mock.lastCall![0].translationKey).toStrictEqual("components.board.error.404");
 		});
 	});
 
