@@ -1,5 +1,5 @@
 <template>
-	<VToolbar flat :height="appBarHeight" :class="{ 'topbar--fixed': isFixed }">
+	<VToolbar flat :height="appBarHeight" :class="toolbarClasses">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template #prepend>
 			<VAppBarNavIcon
@@ -44,7 +44,7 @@
 		/>
 		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mr-3" />
 	</VToolbar>
-	<div v-if="isFixed" aria-hidden="true" style="height: 50px" />
+	<div v-if="isFixed && isVisible" aria-hidden="true" class="toolbar-placeholder" />
 </template>
 
 <script setup lang="ts">
@@ -59,21 +59,34 @@ import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useDisplay } from "vuetify";
 
+const SCROLL_THRESHOLD = 100;
+const SCROLL_DISTANCE = 10;
 const isFixed = ref(false);
+const isVisible = ref(false);
 let lastScrollY = window.scrollY;
 
 const handleScroll = () => {
 	const currentScrollY = window.scrollY;
+	const scrollDistance = Math.abs(currentScrollY - lastScrollY);
+
 	if (currentScrollY <= 0) {
 		isFixed.value = false;
-	} else if (currentScrollY < lastScrollY && currentScrollY > 64) {
+		isVisible.value = false;
+	} else if (currentScrollY < lastScrollY && currentScrollY > SCROLL_THRESHOLD && scrollDistance > SCROLL_DISTANCE) {
 		isFixed.value = true;
-	} else if (currentScrollY > lastScrollY && currentScrollY > 64) {
-		isFixed.value = false;
+		isVisible.value = true;
+	} else if (currentScrollY > lastScrollY && currentScrollY > SCROLL_THRESHOLD && scrollDistance > SCROLL_DISTANCE) {
+		isFixed.value = true;
+		isVisible.value = false;
 	}
-
 	lastScrollY = currentScrollY;
 };
+
+const toolbarClasses = computed(() => [
+	isFixed.value ? "toolbar--fixed" : "",
+	isFixed.value && isVisible.value ? "toolbar--visible" : "",
+	isFixed.value && !isVisible.value ? "toolbar--hidden" : "",
+]);
 
 onMounted(() => {
 	window.addEventListener("scroll", handleScroll);
@@ -144,12 +157,29 @@ const appBarHeight = computed(() => {
 .v-toolbar {
 	background-color: #fff !important;
 }
-.topbar--fixed {
+
+.toolbar-placeholder {
+	height: 50px;
+}
+
+.toolbar--hidden {
+	transform: translateY(-100%);
+	transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	opacity: 0;
+}
+
+.toolbar--visible {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	z-index: 1000;
+	opacity: 1;
+}
+
+.toolbar--fixed.toolbar--visible {
+	transform: translateY(0);
+	opacity: 1;
 	border-bottom: 1px solid rgba(128, 128, 128, 0.25);
 }
 </style>
