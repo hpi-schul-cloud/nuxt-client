@@ -159,6 +159,9 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 			id: link.id,
 			title: link.title,
 			isValidForStudents: link.isOnlyForTeachers ? commonTranslationsMap.NO : commonTranslationsMap.YES,
+			// TODO will have additional property only if feature is enabled
+			...(link.isValidForExternalPersons !== undefined && {
+				isValidForExternalPersons: link.isValidForExternalPersons,
 			activeUntil: link.activeUntil ? printFromStringUtcToFullDate(link.activeUntil) : commonTranslationsMap.NO,
 			isExpired: isExpired(link.activeUntil!),
 			status: isExpired(link.activeUntil!) ? commonTranslationsMap.EXPIRED : commonTranslationsMap.ACTIVE,
