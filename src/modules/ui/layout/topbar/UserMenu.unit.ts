@@ -1,16 +1,15 @@
-import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { System, useSystemApi } from "@data-system";
-import { useOAuthApi } from "@data-oauth";
-import { DeepMocked, createMock } from "@golevelup/ts-vitest";
+import UserMenu from "./UserMenu.vue";
 import { LanguageType } from "@/serverApi/v3";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useOAuthApi } from "@data-oauth";
+import { System, useSystemApi } from "@data-system";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
-import UserMenu from "./UserMenu.vue";
 
 vi.mock("@data-system");
 vi.mock("@data-oauth");
@@ -19,11 +18,8 @@ describe("@ui-layout/UserMenu", () => {
 	let useSystemApiMock: DeepMocked<ReturnType<typeof useSystemApi>>;
 	let useOAuthApiMock: DeepMocked<ReturnType<typeof useOAuthApi>>;
 
-	const setupWrapper = (
-		isExternalFeatureEnabled = false,
-		mockedSystem?: System,
-		mockedTokenExpiration?: Date
-	) => {
+	const setupWrapper = (isExternalFeatureEnabled = false, mockedSystem?: System, mockedTokenExpiration?: Date) => {
+		setActivePinia(createTestingPinia());
 		const { appStore } = createTestAppStore({
 			me: { systemId: mockedSystem?.id },
 		});
@@ -40,9 +36,7 @@ describe("@ui-layout/UserMenu", () => {
 		vi.mocked(useOAuthApi).mockReturnValue(useOAuthApiMock);
 
 		useSystemApiMock.getSystem.mockResolvedValue(mockedSystem);
-		useOAuthApiMock.getSessionTokenExpiration.mockResolvedValue(
-			mockedTokenExpiration
-		);
+		useOAuthApiMock.getSessionTokenExpiration.mockResolvedValue(mockedTokenExpiration);
 
 		const wrapper = mount(UserMenu, {
 			global: {
@@ -79,9 +73,7 @@ describe("@ui-layout/UserMenu", () => {
 		await menuBtn.trigger("click");
 
 		const userName = wrapper.findComponent("[data-testid=active-user]");
-		expect(userName.html()).toMatch(
-			"Arthur Dent (common.roleName.administrator)"
-		);
+		expect(userName.html()).toMatch("Arthur Dent (common.roleName.administrator)");
 	});
 
 	it("should trigger logout function on logout item click", async () => {
@@ -117,14 +109,10 @@ describe("@ui-layout/UserMenu", () => {
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const externalLogoutBtn = wrapper.findComponent(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(true);
-				expect(externalLogoutBtn.text()).toEqual(
-					`common.labels.logout Bildungscloud & ${mockedSystem.displayName}`
-				);
+				expect(externalLogoutBtn.text()).toEqual(`common.labels.logout Bildungscloud & ${mockedSystem.displayName}`);
 			});
 
 			it("should trigger external logout function on logout item click", async () => {
@@ -133,9 +121,7 @@ describe("@ui-layout/UserMenu", () => {
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const externalLogoutBtn = wrapper.findComponent(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(true);
 				await externalLogoutBtn.trigger("click");
@@ -175,9 +161,7 @@ describe("@ui-layout/UserMenu", () => {
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const externalLogoutBtn = wrapper.findComponent(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(false);
 			});
@@ -214,9 +198,7 @@ describe("@ui-layout/UserMenu", () => {
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const externalLogoutBtn = wrapper.findComponent(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(false);
 			});
@@ -243,11 +225,7 @@ describe("@ui-layout/UserMenu", () => {
 				};
 				const mockedTokenExpiration = new Date(Date.now() + 3 * 3600 * 1000);
 
-				const { wrapper } = setupWrapper(
-					true,
-					mockedSystem,
-					mockedTokenExpiration
-				);
+				const { wrapper } = setupWrapper(true, mockedSystem, mockedTokenExpiration);
 
 				return { wrapper };
 			};
@@ -260,9 +238,7 @@ describe("@ui-layout/UserMenu", () => {
 
 				await nextTick();
 
-				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(true);
 				expect(externalLogoutBtn.props().disabled).toBe(false);
@@ -278,11 +254,7 @@ describe("@ui-layout/UserMenu", () => {
 				};
 				const mockedTokenExpiration = new Date(Date.now() - 3 * 3600 * 1000);
 
-				const { wrapper } = setupWrapper(
-					true,
-					mockedSystem,
-					mockedTokenExpiration
-				);
+				const { wrapper } = setupWrapper(true, mockedSystem, mockedTokenExpiration);
 
 				return { wrapper };
 			};
@@ -295,9 +267,7 @@ describe("@ui-layout/UserMenu", () => {
 
 				await nextTick();
 
-				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(true);
 				expect(externalLogoutBtn.props().disabled).toBe(true);
@@ -325,9 +295,7 @@ describe("@ui-layout/UserMenu", () => {
 
 				await nextTick();
 
-				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(true);
 				expect(externalLogoutBtn.props().disabled).toBe(true);

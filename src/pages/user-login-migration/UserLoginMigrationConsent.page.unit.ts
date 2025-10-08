@@ -1,19 +1,13 @@
 import UserLoginMigrationConsent from "@/pages/user-login-migration/UserLoginMigrationConsent.page.vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
-import {
-	SYSTEMS_MODULE_KEY,
-	USER_LOGIN_MIGRATION_MODULE_KEY,
-} from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { shallowMount } from "@vue/test-utils";
 import { UserLoginMigration } from "@/store/user-login-migration";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
+import { SYSTEMS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 import type { Mocked } from "vitest";
 
 vi.mock(
@@ -43,8 +37,7 @@ describe("UserLoginMigrationConsent", () => {
 		systemsModule = createModuleMocks(SystemsModule, {
 			getSystems: systemsMock,
 		});
-		const userLoginMigrationMock: UserLoginMigration =
-			userLoginMigrationFactory.build({ ...userLoginMigration });
+		const userLoginMigrationMock: UserLoginMigration = userLoginMigrationFactory.build({ ...userLoginMigration });
 		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
 			getUserLoginMigration: userLoginMigrationMock,
 		});
@@ -57,8 +50,7 @@ describe("UserLoginMigrationConsent", () => {
 					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 				},
 				mocks: {
-					$t: (key: string, dynamic?: object): string =>
-						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+					$t: (key: string, dynamic?: object): string => key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 				},
 			},
 		});
@@ -74,9 +66,7 @@ describe("UserLoginMigrationConsent", () => {
 			it("should render the component", async () => {
 				const { wrapper } = await setup();
 
-				const result: boolean = wrapper
-					.findComponent(UserLoginMigrationConsent)
-					.exists();
+				const result: boolean = wrapper.findComponent(UserLoginMigrationConsent).exists();
 
 				expect(result).toEqual(true);
 			});
@@ -104,12 +94,8 @@ describe("UserLoginMigrationConsent", () => {
 
 				const button = wrapper.find("[data-testId=btn-proceed]");
 
-				expect(button.text()).toEqual(
-					"pages.userMigration.button.startMigration"
-				);
-				expect(button.attributes().href).toEqual(
-					"/login/oauth2/targetSystemId?migration=true"
-				);
+				expect(button.text()).toEqual("pages.userMigration.button.startMigration");
+				expect(button.attributes().href).toEqual("/login/oauth2/targetSystemId?migration=true");
 			});
 
 			it("should show the skip migration button", async () => {

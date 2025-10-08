@@ -1,23 +1,15 @@
-import {
-	SchoolApiFactory,
-	SchulConneXProvisioningOptionsResponse,
-} from "@/serverApi/v3";
+import { ProvisioningOptions } from "./type/ProvisioningOptions";
+import { SchoolApiFactory, SchulConneXProvisioningOptionsResponse } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
-import { ProvisioningOptions } from "./type/ProvisioningOptions";
 
 export const useProvisioningOptionsApi = () => {
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
 
-	const getProvisioningOptions = async (
-		systemId: string
-	): Promise<ProvisioningOptions> => {
+	const getProvisioningOptions = async (systemId: string): Promise<ProvisioningOptions> => {
 		const response: AxiosResponse<SchulConneXProvisioningOptionsResponse> =
-			await schoolApi.schoolControllerGetProvisioningOptions(
-				schoolsModule.getSchool.id,
-				systemId
-			);
+			await schoolApi.schoolControllerGetProvisioningOptions(schoolsModule.getSchool.id, systemId);
 
 		const provisioningOptions: ProvisioningOptions = {
 			class: response.data.groupProvisioningClassesEnabled,
@@ -34,17 +26,12 @@ export const useProvisioningOptionsApi = () => {
 		provisioningOptions: ProvisioningOptions
 	): Promise<ProvisioningOptions> => {
 		const response: AxiosResponse<SchulConneXProvisioningOptionsResponse> =
-			await schoolApi.schoolControllerSetProvisioningOptions(
-				schoolsModule.getSchool.id,
-				systemId,
-				{
-					groupProvisioningClassesEnabled: provisioningOptions.class,
-					groupProvisioningCoursesEnabled: provisioningOptions.course,
-					groupProvisioningOtherEnabled: provisioningOptions.others,
-					schoolExternalToolProvisioningEnabled:
-						provisioningOptions.schoolExternalTools,
-				}
-			);
+			await schoolApi.schoolControllerSetProvisioningOptions(schoolsModule.getSchool.id, systemId, {
+				groupProvisioningClassesEnabled: provisioningOptions.class,
+				groupProvisioningCoursesEnabled: provisioningOptions.course,
+				groupProvisioningOtherEnabled: provisioningOptions.others,
+				schoolExternalToolProvisioningEnabled: provisioningOptions.schoolExternalTools,
+			});
 
 		const savedOptions: ProvisioningOptions = {
 			class: response.data.groupProvisioningClassesEnabled,

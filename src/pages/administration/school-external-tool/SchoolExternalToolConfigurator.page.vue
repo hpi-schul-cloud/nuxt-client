@@ -7,26 +7,12 @@
 	>
 		<div data-testId="tool-configuration-infotext">
 			<p>
-				{{
-					t(
-						"components.administration.externalToolsSection.description.firstParagraph"
-					)
-				}}
+				{{ t("components.administration.externalToolsSection.description.firstParagraph") }}
 			</p>
 			<p>
-				<i18n-t
-					keypath="components.administration.externalToolsSection.description.secondParagraph"
-					scope="global"
-				>
-					<a
-						href="https://docs.dbildungscloud.de/x/uoKqDg"
-						target="_blank"
-						rel="noopener"
-						>{{
-							t(
-								"components.administration.externalToolsSection.description.secondParagraph.link"
-							)
-						}}
+				<i18n-t keypath="components.administration.externalToolsSection.description.secondParagraph" scope="global">
+					<a href="https://docs.dbildungscloud.de/x/uoKqDg" target="_blank" rel="noopener"
+						>{{ t("components.administration.externalToolsSection.description.secondParagraph.link") }}
 					</a>
 				</i18n-t>
 			</p>
@@ -63,27 +49,18 @@ import ExternalToolConfigurator from "@/components/external-tools/configuration/
 import ExternalToolMediumDetails from "@/components/external-tools/configuration/ExternalToolMediumDetails.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import {
-	SchoolExternalTool,
-	SchoolExternalToolSave,
-	ToolParameterEntry,
-} from "@/store/external-tool";
+import { SchoolExternalTool, SchoolExternalToolSave, ToolParameterEntry } from "@/store/external-tool";
 import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
-import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { BusinessError } from "@/store/types/commons";
-import {
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { notifySuccess, useAppStoreRefs } from "@data-app";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useAppStoreRefs } from "@data-app";
 
 const props = defineProps<{
 	configId?: string;
@@ -91,11 +68,7 @@ const props = defineProps<{
 
 const { school } = useAppStoreRefs();
 
-const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
-);
-const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-
+const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY);
 const { t } = useI18n();
 
 const pageTitle = buildPageTitle(t("pages.tool.title"));
@@ -103,36 +76,28 @@ useTitle(pageTitle);
 
 const schoolSettingPath = "/administration/school-settings";
 
-const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	return [
-		{
-			title: t("pages.administration.school.index.title"),
-			to: schoolSettingPath,
-		},
-		{
-			title: t("pages.tool.title"),
-			disabled: true,
-		},
-	];
-});
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
+	{
+		title: t("pages.administration.school.index.title"),
+		to: schoolSettingPath,
+	},
+	{
+		title: t("pages.tool.title"),
+		disabled: true,
+	},
+]);
 
 const hasData: Ref<boolean> = ref(false);
-const loading: ComputedRef<boolean> = computed(
-	() => !hasData.value || schoolExternalToolsModule.getLoading
-);
+const loading: ComputedRef<boolean> = computed(() => !hasData.value || schoolExternalToolsModule.getLoading);
 
-const configurationTemplates: ComputedRef<
-	SchoolExternalToolConfigurationTemplate[]
-> = computed(
+const configurationTemplates: ComputedRef<SchoolExternalToolConfigurationTemplate[]> = computed(
 	() => schoolExternalToolsModule.getSchoolExternalToolConfigurationTemplates
 );
 
 const configuration: Ref<SchoolExternalTool | undefined> = ref();
 
 const apiError: ComputedRef<BusinessError | undefined> = computed(() =>
-	schoolExternalToolsModule.getBusinessError.message
-		? schoolExternalToolsModule.getBusinessError
-		: undefined
+	schoolExternalToolsModule.getBusinessError.message ? schoolExternalToolsModule.getBusinessError : undefined
 );
 
 const router = useRouter();
@@ -147,13 +112,12 @@ const onSave = async (
 	configuredParameterValues: ToolParameterEntry[]
 ) => {
 	if (school.value) {
-		const schoolExternalTool: SchoolExternalToolSave =
-			SchoolExternalToolMapper.mapTemplateToSchoolExternalToolSave(
-				template,
-				configuredParameterValues,
-				school.value.id,
-				isDeactivated.value
-			);
+		const schoolExternalTool: SchoolExternalToolSave = SchoolExternalToolMapper.mapTemplateToSchoolExternalToolSave(
+			template,
+			configuredParameterValues,
+			school.value.id,
+			isDeactivated.value
+		);
 
 		if (props.configId) {
 			await schoolExternalToolsModule.updateSchoolExternalTool({
@@ -161,23 +125,16 @@ const onSave = async (
 				schoolExternalTool,
 			});
 		} else {
-			await schoolExternalToolsModule.createSchoolExternalTool(
-				schoolExternalTool
-			);
+			await schoolExternalToolsModule.createSchoolExternalTool(schoolExternalTool);
 		}
 	}
 
 	if (!apiError.value) {
 		const message = props.configId
 			? t("components.administration.externalToolsSection.notification.updated")
-			: t(
-					"components.administration.externalToolsSection.notification.created"
-				);
+			: t("components.administration.externalToolsSection.notification.created");
 
-		notifierModule.show({
-			text: message,
-			status: "success",
-		});
+		notifySuccess(message);
 
 		await router.push({
 			path: schoolSettingPath,
@@ -189,18 +146,13 @@ const onSave = async (
 onMounted(async () => {
 	if (props.configId) {
 		// Loading order is important
-		await schoolExternalToolsModule.loadConfigurationTemplateForSchoolExternalTool(
-			props.configId
-		);
+		await schoolExternalToolsModule.loadConfigurationTemplateForSchoolExternalTool(props.configId);
 
-		configuration.value =
-			await schoolExternalToolsModule.loadSchoolExternalTool(props.configId);
+		configuration.value = await schoolExternalToolsModule.loadSchoolExternalTool(props.configId);
 
 		isDeactivated.value = configuration.value?.isDeactivated ?? false;
 	} else if (school.value) {
-		await schoolExternalToolsModule.loadAvailableToolsForSchool(
-			school.value.id
-		);
+		await schoolExternalToolsModule.loadAvailableToolsForSchool(school.value.id);
 	}
 
 	hasData.value = true;

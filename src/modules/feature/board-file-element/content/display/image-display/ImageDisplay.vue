@@ -11,11 +11,7 @@
 				@keydown.enter.space="openLightBox"
 			>
 				<div class="w-100 h-100 image-container">
-					<PreviewImage
-						:src="previewSrc"
-						:alt="alternativeText"
-						:max-height="336"
-					/>
+					<PreviewImage :src="previewSrc" :alt="alternativeText" :max-height="336" />
 				</div>
 			</div>
 		</template>
@@ -29,11 +25,7 @@
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { ContentElementBar } from "@ui-board";
-import {
-	LightBoxContentType,
-	LightBoxOptions,
-	useLightBox,
-} from "@ui-light-box";
+import { LightBoxContentType, LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PreviewImage } from "@ui-preview-image";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";

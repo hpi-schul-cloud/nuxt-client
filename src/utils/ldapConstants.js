@@ -17,9 +17,7 @@ export const ldapPathRegexValidator = helpers.regex(
 // Regex-based validator for the LDAP URL (possibly unsecured).
 // Allows both ldap:// and ldaps:// protocols.
 // Not recommended for use in production environment.
-export const ldapURLRegexValidator = helpers.regex(
-	/^ldaps?:\/\/(([\w.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/
-);
+export const ldapURLRegexValidator = helpers.regex(/^ldaps?:\/\/(([\w.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/);
 
 // Regex-based validator for the secured LDAP URL.
 // Allows only the ldaps:// protocol.

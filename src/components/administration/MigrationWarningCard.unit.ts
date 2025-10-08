@@ -1,9 +1,6 @@
-import { mount } from "@vue/test-utils";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 
 describe("MigrationWarningCard", () => {
@@ -47,22 +44,12 @@ describe("MigrationWarningCard", () => {
 			it("should have the right text elements ", () => {
 				const { wrapper } = setup();
 
-				const infoText = wrapper.find(
-					'[data-testid="migration-warning-card-info-text"'
-				);
+				const infoText = wrapper.find('[data-testid="migration-warning-card-info-text"');
 
-				expect(wrapper.html()).toContain(
-					"components.administration.adminMigrationSection.startWarningCard.title"
-				);
-				expect(infoText.text()).toContain(
-					"components.administration.adminMigrationSection.startWarningCard.text"
-				);
-				expect(wrapper.text()).toContain(
-					"components.administration.adminMigrationSection.startWarningCard.agree"
-				);
-				expect(wrapper.text()).toContain(
-					"components.administration.adminMigrationSection.startWarningCard.disagree"
-				);
+				expect(wrapper.html()).toContain("components.administration.adminMigrationSection.startWarningCard.title");
+				expect(infoText.text()).toContain("components.administration.adminMigrationSection.startWarningCard.text");
+				expect(wrapper.text()).toContain("components.administration.adminMigrationSection.startWarningCard.agree");
+				expect(wrapper.text()).toContain("components.administration.adminMigrationSection.startWarningCard.disagree");
 			});
 		});
 
@@ -102,22 +89,12 @@ describe("MigrationWarningCard", () => {
 			it("should have the right text elements ", () => {
 				const { wrapper } = setup("end");
 
-				const infoText = wrapper.find(
-					'[data-testid="migration-warning-card-info-text"'
-				);
+				const infoText = wrapper.find('[data-testid="migration-warning-card-info-text"');
 
-				expect(wrapper.text()).toContain(
-					"components.administration.adminMigrationSection.endWarningCard.title"
-				);
-				expect(infoText.text()).toContain(
-					"components.administration.adminMigrationSection.endWarningCard.text"
-				);
-				expect(wrapper.text()).toContain(
-					"components.administration.adminMigrationSection.endWarningCard.agree"
-				);
-				expect(wrapper.text()).toContain(
-					"components.administration.adminMigrationSection.endWarningCard.disagree"
-				);
+				expect(wrapper.text()).toContain("components.administration.adminMigrationSection.endWarningCard.title");
+				expect(infoText.text()).toContain("components.administration.adminMigrationSection.endWarningCard.text");
+				expect(wrapper.text()).toContain("components.administration.adminMigrationSection.endWarningCard.agree");
+				expect(wrapper.text()).toContain("components.administration.adminMigrationSection.endWarningCard.disagree");
 			});
 		});
 

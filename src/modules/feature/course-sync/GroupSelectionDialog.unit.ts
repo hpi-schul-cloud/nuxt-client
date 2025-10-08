@@ -1,22 +1,17 @@
+import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import { RoleName } from "@/serverApi/v3";
 import { groupResponseFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { GroupListFilter, useGroupListState } from "@data-group";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 import { VAutocomplete } from "vuetify/lib/components/index";
-import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
-vi.mock("@data-group", () => {
-	return {
-		useGroupListState: vi.fn(),
-	};
-});
+vi.mock("@data-group", () => ({
+	useGroupListState: vi.fn(),
+}));
 
 describe("GroupSelectionDialog", () => {
 	let useGroupListStateMock: DeepMocked<ReturnType<typeof useGroupListState>>;
@@ -61,9 +56,7 @@ describe("GroupSelectionDialog", () => {
 
 			await wrapper.setProps({ isOpen: true });
 
-			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<
-				[GroupListFilter, { append: boolean }?]
-			>(
+			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<[GroupListFilter, { append: boolean }?]>(
 				{
 					name: "",
 					availableForSynchronization: true,
@@ -92,9 +85,7 @@ describe("GroupSelectionDialog", () => {
 			await autocomplete.setValue("testGroup", "search");
 			vi.runAllTimers();
 
-			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<
-				[GroupListFilter, { append: boolean }?]
-			>(
+			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<[GroupListFilter, { append: boolean }?]>(
 				{
 					name: "testGroup",
 					availableForSynchronization: true,
@@ -170,8 +161,7 @@ describe("GroupSelectionDialog", () => {
 
 			useGroupListStateMock.groups.value = [group];
 
-			(wrapper.vm as unknown as typeof GroupSelectionDialog).selectedGroup =
-				group;
+			(wrapper.vm as unknown as typeof GroupSelectionDialog).selectedGroup = group;
 			await nextTick();
 
 			return {

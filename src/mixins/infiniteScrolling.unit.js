@@ -35,45 +35,25 @@ describe("@/mixins/infiniteScrolling", () => {
 	])(
 		"calculates bottom intersection correctly for scrollY %p, viewportHeight %p and pageHeight %p",
 		(scrollY, clientHeight, scrollHeight, result) => {
-			vi.spyOn(
-				document.documentElement,
-				"clientHeight",
-				"get"
-			).mockImplementation(() => clientHeight);
-			vi.spyOn(
-				document.documentElement,
-				"scrollHeight",
-				"get"
-			).mockImplementation(() => scrollHeight);
+			vi.spyOn(document.documentElement, "clientHeight", "get").mockImplementation(() => clientHeight);
+			vi.spyOn(document.documentElement, "scrollHeight", "get").mockImplementation(() => scrollHeight);
 			window.scrollY = scrollY;
 			const wrapper = getInstance();
 			expect(wrapper.vm.$_isBottomReached()).toBe(result);
 		}
 	);
 	it("removes window event listeners on destroy", () => {
-		vi.spyOn(window, "removeEventListener")
-			.mockImplementation()
-			.mockImplementation();
+		vi.spyOn(window, "removeEventListener").mockImplementation().mockImplementation();
 		const wrapper = getInstance();
 		wrapper.unmount();
 		expect(window.removeEventListener.mock.calls[0]).toContain("scroll");
 	});
 	it("updates data on scroll event", () => {
-		vi.spyOn(
-			document.documentElement,
-			"clientHeight",
-			"get"
-		).mockImplementation(() => 500);
-		vi.spyOn(
-			document.documentElement,
-			"scrollHeight",
-			"get"
-		).mockImplementation(() => 200);
+		vi.spyOn(document.documentElement, "clientHeight", "get").mockImplementation(() => 500);
+		vi.spyOn(document.documentElement, "scrollHeight", "get").mockImplementation(() => 200);
 		window.scrollY = scrollY;
 
-		vi.spyOn(window, "addEventListener").mockImplementation((event, cb) =>
-			cb()
-		);
+		vi.spyOn(window, "addEventListener").mockImplementation((event, cb) => cb());
 		const wrapper = getInstance();
 
 		expect(wrapper.vm.bottom).toBe(true);

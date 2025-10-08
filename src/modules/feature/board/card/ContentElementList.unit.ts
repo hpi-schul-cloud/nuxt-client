@@ -1,9 +1,8 @@
+import ContentElementList from "./ContentElementList.vue";
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
@@ -15,14 +14,15 @@ import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
+import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
-import ContentElementList from "./ContentElementList.vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
-import { beforeAll } from "vitest";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 describe("ContentElementList", () => {
 	describe("when feature flags are true", () => {
-		beforeAll(() => {
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
 			createTestEnvStore({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
@@ -36,11 +36,7 @@ describe("ContentElementList", () => {
 			});
 		});
 
-		const setup = (props: {
-			elements: AnyContentElement[];
-			isEditMode: boolean;
-			isDetailView: boolean;
-		}) => {
+		const setup = (props: { elements: AnyContentElement[]; isEditMode: boolean; isDetailView: boolean }) => {
 			document.body.setAttribute("data-app", "true");
 
 			const wrapper = shallowMount(ContentElementList, {
@@ -110,17 +106,14 @@ describe("ContentElementList", () => {
 				},
 			];
 
-			it.each(elementComponents)(
-				"should render $elementType-elements",
-				({ elementType, component }) => {
-					const { wrapper } = setup({
-						elements: [{ type: elementType } as AnyContentElement],
-						isEditMode: false,
-						isDetailView: false,
-					});
-					expect(wrapper.findComponent(component).exists()).toBe(true);
-				}
-			);
+			it.each(elementComponents)("should render $elementType-elements", ({ elementType, component }) => {
+				const { wrapper } = setup({
+					elements: [{ type: elementType } as AnyContentElement],
+					isEditMode: false,
+					isDetailView: false,
+				});
+				expect(wrapper.findComponent(component).exists()).toBe(true);
+			});
 
 			it.each(elementComponents)(
 				"should propagate isEditMode to children of $elementType-elements",
@@ -143,7 +136,8 @@ describe("ContentElementList", () => {
 	});
 
 	describe("when FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED is false", () => {
-		beforeAll(() => {
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
 			createTestEnvStore({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
@@ -153,11 +147,7 @@ describe("ContentElementList", () => {
 			});
 		});
 
-		const setup = (props: {
-			elements: AnyContentElement[];
-			isEditMode: boolean;
-			isDetailView: boolean;
-		}) => {
+		const setup = (props: { elements: AnyContentElement[]; isEditMode: boolean; isDetailView: boolean }) => {
 			document.body.setAttribute("data-app", "true");
 
 			const wrapper = shallowMount(ContentElementList, {
@@ -172,9 +162,7 @@ describe("ContentElementList", () => {
 
 		it("should not render FolderContentElement", () => {
 			const { wrapper } = setup({
-				elements: [
-					{ type: ContentElementType.FileFolder } as AnyContentElement,
-				],
+				elements: [{ type: ContentElementType.FileFolder } as AnyContentElement],
 				isEditMode: false,
 				isDetailView: false,
 			});

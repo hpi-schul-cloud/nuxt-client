@@ -1,34 +1,28 @@
+import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
+import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { CourseFeatures } from "@/store/types/room";
 import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	businessErrorFactory,
 	courseFactory,
 	createTestEnvStore,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils/factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import {
-	ExternalToolDisplayData,
-	useExternalToolDisplayListState,
-} from "@data-external-tool";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ExternalToolDisplayData, useExternalToolDisplayListState } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { flushPromises, shallowMount } from "@vue/test-utils";
-import { ref } from "vue";
-import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
-import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
+import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
+import { flushPromises, shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { ref } from "vue";
 
 vi.mock("@data-external-tool");
 
 describe("RoomExternalToolOverview", () => {
-	let useExternalToolDisplayListStateMock: DeepMocked<
-		ReturnType<typeof useExternalToolDisplayListState>
-	>;
+	let useExternalToolDisplayListStateMock: DeepMocked<ReturnType<typeof useExternalToolDisplayListState>>;
 
 	const getWrapper = () => {
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
@@ -36,6 +30,7 @@ describe("RoomExternalToolOverview", () => {
 		});
 
 		const refreshTime = 299000;
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({ CTL_TOOLS_RELOAD_TIME_MS: refreshTime });
 
 		courseRoomDetailsModule.fetchCourse.mockResolvedValue(null);
@@ -60,17 +55,13 @@ describe("RoomExternalToolOverview", () => {
 	};
 
 	beforeEach(() => {
-		useExternalToolDisplayListStateMock = createMock<
-			ReturnType<typeof useExternalToolDisplayListState>
-		>({
+		useExternalToolDisplayListStateMock = createMock<ReturnType<typeof useExternalToolDisplayListState>>({
 			error: ref(),
 			isLoading: ref(),
 			displayData: ref([]),
 		});
 
-		vi.mocked(useExternalToolDisplayListState).mockReturnValue(
-			useExternalToolDisplayListStateMock
-		);
+		vi.mocked(useExternalToolDisplayListState).mockReturnValue(useExternalToolDisplayListStateMock);
 	});
 
 	afterEach(() => {
@@ -117,8 +108,7 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when an error occurred", () => {
 		const setup = () => {
-			useExternalToolDisplayListStateMock.error.value =
-				businessErrorFactory.build();
+			useExternalToolDisplayListStateMock.error.value = businessErrorFactory.build();
 
 			const { wrapper } = getWrapper();
 
@@ -198,22 +188,17 @@ describe("RoomExternalToolOverview", () => {
 		it("should call tool reference endpoint again", () => {
 			const { refreshTime } = setup();
 
-			expect(
-				useExternalToolDisplayListStateMock.fetchDisplayData
-			).toHaveBeenCalledTimes(1);
+			expect(useExternalToolDisplayListStateMock.fetchDisplayData).toHaveBeenCalledTimes(1);
 
 			vi.advanceTimersByTime(refreshTime + 1000);
 
-			expect(
-				useExternalToolDisplayListStateMock.fetchDisplayData
-			).toHaveBeenCalledTimes(2);
+			expect(useExternalToolDisplayListStateMock.fetchDisplayData).toHaveBeenCalledTimes(2);
 		});
 	});
 
 	describe("when deleting a tool", () => {
 		const setup = () => {
-			const displayData: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+			const displayData: ExternalToolDisplayData = externalToolDisplayDataFactory.build();
 
 			const { wrapper } = getWrapper();
 
@@ -229,9 +214,9 @@ describe("RoomExternalToolOverview", () => {
 			const section = wrapper.findComponent(RoomExternalToolsSection);
 			section.vm.$emit("delete", displayData);
 
-			expect(
-				useExternalToolDisplayListStateMock.deleteContextExternalTool
-			).toHaveBeenCalledWith(displayData.contextExternalToolId);
+			expect(useExternalToolDisplayListStateMock.deleteContextExternalTool).toHaveBeenCalledWith(
+				displayData.contextExternalToolId
+			);
 		});
 	});
 
@@ -250,9 +235,7 @@ describe("RoomExternalToolOverview", () => {
 			const section = wrapper.findComponent(RoomExternalToolsSection);
 			section.vm.$emit("refresh");
 
-			expect(
-				useExternalToolDisplayListStateMock.fetchDisplayData
-			).toHaveBeenCalledTimes(2);
+			expect(useExternalToolDisplayListStateMock.fetchDisplayData).toHaveBeenCalledTimes(2);
 		});
 	});
 });

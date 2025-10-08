@@ -1,8 +1,8 @@
+import { useBoardApi } from "./BoardApi.composable";
+import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useBoardApi } from "./BoardApi.composable";
-import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 
 vi.mock("./BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(useBoardApi);
@@ -15,11 +15,9 @@ vi.mock(
 		}) as typeof import("@/utils/create-shared-composable")
 );
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
+}));
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -49,13 +47,9 @@ describe("BoardPageInformation.composable", () => {
 					name: "Course #1",
 				});
 
-				const {
-					createPageInformation,
-					breadcrumbs,
-					contextType,
-					pageTitle,
-					roomId,
-				} = mountComposable(() => useSharedBoardPageInformation());
+				const { createPageInformation, breadcrumbs, contextType, pageTitle, roomId } = mountComposable(() =>
+					useSharedBoardPageInformation()
+				);
 
 				return {
 					createPageInformation,
@@ -115,13 +109,9 @@ describe("BoardPageInformation.composable", () => {
 					name: "Room #1",
 				});
 
-				const {
-					createPageInformation,
-					breadcrumbs,
-					contextType,
-					pageTitle,
-					roomId,
-				} = mountComposable(() => useSharedBoardPageInformation());
+				const { createPageInformation, breadcrumbs, contextType, pageTitle, roomId } = mountComposable(() =>
+					useSharedBoardPageInformation()
+				);
 
 				return {
 					createPageInformation,
@@ -178,9 +168,7 @@ describe("BoardPageInformation.composable", () => {
 		const setup = () => {
 			mockedBoardApiCalls.getContextInfo.mockResolvedValue(undefined);
 
-			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(
-				() => useSharedBoardPageInformation()
-			);
+			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(() => useSharedBoardPageInformation());
 
 			return { createPageInformation, breadcrumbs, pageTitle };
 		};

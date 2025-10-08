@@ -1,8 +1,5 @@
 <template>
-	<div
-		ref="ghostColumnRef"
-		:class="{ 'h-100 pl-4 pr-6 d-flex flex-column': !isListBoard }"
-	>
+	<div ref="ghostColumnRef" :class="{ 'h-100 pl-4 pr-6 d-flex flex-column': !isListBoard }">
 		<BoardSectionCreationHeader
 			:label="title"
 			:is-column-active="isColumnHovered"
@@ -57,9 +54,7 @@ const emit = defineEmits(["create:column", "update:card-position"]);
 
 const isColumnHovered = useElementHover(ghostColumnRef);
 const { isDragging } = useDragAndDrop();
-const colWidth = computed<number>(() =>
-	isColumnHovered.value && isDragging.value ? 340 : 200
-);
+const colWidth = computed<number>(() => (isColumnHovered.value && isDragging.value ? 340 : 200));
 
 const onAddColumn = () => emit("create:column");
 

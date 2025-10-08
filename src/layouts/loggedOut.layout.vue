@@ -12,14 +12,14 @@
 </template>
 
 <script setup lang="ts">
+import Logo from "@/assets/img/logo/logo-image-mono.svg";
 import NavigationBar from "@/components/legacy/NavigationBar.vue";
 import TheFooter from "@/components/legacy/TheFooter.vue";
 import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting.vue";
-import Logo from "@/assets/img/logo/logo-image-mono.svg";
+import { useEnvConfig } from "@data-env";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-import { useEnvConfig } from "@data-env";
 
 const { t } = useI18n();
 const { xs } = useDisplay();
@@ -44,9 +44,7 @@ const navbarItems = computed(() => [
 	},
 ]);
 
-const isMobile = computed(() => {
-	return xs.value;
-});
+const isMobile = computed(() => xs.value);
 </script>
 
 <style lang="scss" scoped>

@@ -5,12 +5,7 @@
 				{{ $t("pages.courseRooms.index.courses.all") }}
 			</h1>
 			<div class="header-actions-section mb-5">
-				<v-btn
-					variant="outlined"
-					size="small"
-					to="/rooms/courses-overview"
-					data-testid="go-to-active-courses"
-				>
+				<v-btn variant="outlined" size="small" to="/rooms/courses-overview" data-testid="go-to-active-courses">
 					{{ $t("pages.courseRooms.index.courses.active") }}
 				</v-btn>
 			</div>
@@ -43,12 +38,7 @@
 							md="3"
 							sm="3"
 						>
-							<vRoomAvatar
-								:ref="`${room.id}-avatar`"
-								class="room-avatar"
-								:item="room"
-								size="5em"
-							/>
+							<vRoomAvatar :ref="`${room.id}-avatar`" class="room-avatar" :item="room" size="5em" />
 						</v-col>
 					</v-row>
 				</v-container>
@@ -58,12 +48,12 @@
 </template>
 
 <script lang="ts">
-import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
-import { mdiMagnify } from "@icons/material";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { mdiMagnify } from "@icons/material";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -79,12 +69,8 @@ export default defineComponent({
 	},
 	computed: {
 		rooms(): Array<ListItemsObject> {
-			return JSON.parse(
-				JSON.stringify(courseRoomListModule.getAllElements)
-			).filter((room: ListItemsObject) =>
-				room.searchText
-					?.toLowerCase()
-					.includes(this.$data.searchText.toLowerCase())
+			return JSON.parse(JSON.stringify(courseRoomListModule.getAllElements)).filter((room: ListItemsObject) =>
+				room.searchText?.toLowerCase().includes(this.$data.searchText.toLowerCase())
 			);
 		},
 		hasRooms(): boolean {
@@ -92,9 +78,7 @@ export default defineComponent({
 		},
 	},
 	async mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.courseRooms.index.courses.all").toString()
-		);
+		document.title = buildPageTitle(this.$t("pages.courseRooms.index.courses.all").toString());
 		await courseRoomListModule.fetchAllElements();
 	},
 });

@@ -1,28 +1,20 @@
-import type { Mock } from "vitest";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import ApplicationErrorModule from "@/store/application-error";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import {
-	boardResponseFactory,
-	cardSkeletonResponseFactory,
-	columnResponseFactory,
-} from "@@/tests/test-utils/factory";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { useCardStore, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import {
-	useBoardNotifier,
-	useSharedEditMode,
-	useSharedLastCreatedElement,
-} from "@util-board";
-import { createPinia, setActivePinia } from "pinia";
-import { computed, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
 import { useBoardStore } from "../Board.store";
 import { useBoardRestApi } from "../boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "../boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
 import { useCardSocketApi } from "../cardActions/cardSocketApi.composable";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import ApplicationErrorModule from "@/store/application-error";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { useCardStore, useSocketConnection } from "@data-board";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
+import { createPinia, setActivePinia } from "pinia";
+import type { Mock } from "vitest";
+import { computed, ref } from "vue";
+import { Router, useRoute, useRouter } from "vue-router";
 
 vi.mock("../boardActions/boardSocketApi.composable");
 const mockedUseBoardSocketApi = vi.mocked(useBoardSocketApi);
@@ -32,7 +24,6 @@ const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 
 vi.mock("@util-board");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
@@ -51,29 +42,20 @@ vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 const useRouteMock = <Mock>useRoute;
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
+}));
 
 type BoardSetup = Record<string, Array<string>>;
 
 describe("BoardStore - moveCardSuccess", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedSocketConnectionHandler: DeepMocked<
-		ReturnType<typeof useSocketConnection>
-	>;
+	let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
 	let mockedSocketApiActions: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
 	let mockedBoardRestApiActions: DeepMocked<ReturnType<typeof useBoardRestApi>>;
-	let mockedCardSocketApiActions: DeepMocked<
-		ReturnType<typeof useCardSocketApi>
-	>;
+	let mockedCardSocketApiActions: DeepMocked<ReturnType<typeof useCardSocketApi>>;
 	let setEditModeId: Mock;
-	let mockedBoardFocusCalls: DeepMocked<
-		ReturnType<typeof useBoardFocusHandler>
-	>;
+	let mockedBoardFocusCalls: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 
@@ -83,27 +65,19 @@ describe("BoardStore - moveCardSuccess", () => {
 			applicationErrorModule: ApplicationErrorModule,
 		});
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
 		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
 
-		mockedSocketConnectionHandler =
-			createMock<ReturnType<typeof useSocketConnection>>();
+		mockedSocketConnectionHandler = createMock<ReturnType<typeof useSocketConnection>>();
 		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 		mockedSocketApiActions = createMock<ReturnType<typeof useBoardSocketApi>>();
 		mockedUseBoardSocketApi.mockReturnValue(mockedSocketApiActions);
 
-		mockedBoardRestApiActions =
-			createMock<ReturnType<typeof useBoardRestApi>>();
+		mockedBoardRestApiActions = createMock<ReturnType<typeof useBoardRestApi>>();
 		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiActions);
 
-		mockedCardSocketApiActions = createMock<
-			ReturnType<typeof useCardSocketApi>
-		>({
+		mockedCardSocketApiActions = createMock<ReturnType<typeof useCardSocketApi>>({
 			dispatch: vi.fn().mockResolvedValue(undefined),
 			fetchCardRequest: vi.fn(),
 			createElementRequest: vi.fn(),
@@ -129,8 +103,7 @@ describe("BoardStore - moveCardSuccess", () => {
 			resetLastCreatedElementId: vi.fn(),
 		});
 
-		mockedBoardFocusCalls =
-			createMock<ReturnType<typeof useBoardFocusHandler>>();
+		mockedBoardFocusCalls = createMock<ReturnType<typeof useBoardFocusHandler>>();
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
 
 		route = createMock<ReturnType<typeof useRoute>>();
@@ -144,14 +117,10 @@ describe("BoardStore - moveCardSuccess", () => {
 		vi.resetAllMocks();
 	});
 
-	const encodeCardPositions = (
-		board: ReturnType<typeof useBoardStore>["board"]
-	) => {
+	const encodeCardPositions = (board: ReturnType<typeof useBoardStore>["board"]) => {
 		if (board === undefined) return;
 		const columnsAfter = board.columns ?? [];
-		const columnsWithCardIds = columnsAfter.map((col) =>
-			col.cards.map((c) => c.cardId)
-		);
+		const columnsWithCardIds = columnsAfter.map((col) => col.cards.map((c) => c.cardId));
 		return columnsWithCardIds;
 	};
 
@@ -165,9 +134,7 @@ describe("BoardStore - moveCardSuccess", () => {
 		const columns = Object.entries(boardSetup).map(([columnId, cardIds]) => {
 			const column = columnResponseFactory.build({
 				id: columnId,
-				cards: cardIds.map((cardId: string) =>
-					cardSkeletonResponseFactory.build({ cardId })
-				),
+				cards: cardIds.map((cardId: string) => cardSkeletonResponseFactory.build({ cardId })),
 			});
 			return column;
 		});
@@ -175,12 +142,7 @@ describe("BoardStore - moveCardSuccess", () => {
 		return board;
 	};
 
-	const setup = (
-		cardId: string,
-		toColumnId: string,
-		newIndex: number,
-		boardSetup: BoardSetup
-	) => {
+	const setup = (cardId: string, toColumnId: string, newIndex: number, boardSetup: BoardSetup) => {
 		const boardStore = useBoardStore();
 		boardStore.board = createBoardResponse(boardSetup);
 
@@ -189,10 +151,7 @@ describe("BoardStore - moveCardSuccess", () => {
 			columnIndex: 0,
 			cardIndex: 0,
 		};
-		const toColumnIndex =
-			boardStore.board?.columns.findIndex(
-				(column) => column.id === toColumnId
-			) ?? 0;
+		const toColumnIndex = boardStore.board?.columns.findIndex((column) => column.id === toColumnId) ?? 0;
 		const payload = {
 			cardId,
 			oldIndex: location?.cardIndex,

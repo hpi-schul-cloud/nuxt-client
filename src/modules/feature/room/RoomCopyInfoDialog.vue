@@ -1,10 +1,7 @@
 <template>
 	<v-dialog v-model="isOpen" max-width="520">
 		<v-card data-testid="copy-info-dialog">
-			<v-card-title
-				class="text-h2 text-break px-6 pt-4"
-				data-testid="copy-info-dialog-title"
-			>
+			<v-card-title class="text-h2 text-break px-6 pt-4" data-testid="copy-info-dialog-title">
 				{{ $t("feature-room.CopyInfoDialog.title") }}
 			</v-card-title>
 
@@ -21,9 +18,7 @@
 					</p>
 					<ul class="ml-6">
 						<li>
-							{{
-								t("feature-room.CopyInfoDialog.text.alert.membersPermissions")
-							}}
+							{{ t("feature-room.CopyInfoDialog.text.alert.membersPermissions") }}
 						</li>
 						<li>
 							{{ t("feature-room.CopyInfoDialog.text.alert.Etherpad") }}
@@ -32,28 +27,17 @@
 							{{ t("feature-room.CopyInfoDialog.text.alert.whiteboard") }}
 						</li>
 						<li>
-							{{
-								t("feature-room.CopyInfoDialog.text.alert.protectedSettings")
-							}}
+							{{ t("feature-room.CopyInfoDialog.text.alert.protectedSettings") }}
 						</li>
 					</ul>
 				</WarningAlert>
 			</v-card-text>
 			<v-card-actions class="px-6 pb-4">
 				<v-spacer />
-				<v-btn
-					variant="text"
-					data-testid="copy-info-dialog-cancel"
-					@click="$emit('copy:cancel')"
-				>
+				<v-btn variant="text" data-testid="copy-info-dialog-cancel" @click="$emit('copy:cancel')">
 					{{ $t("common.actions.cancel") }}
 				</v-btn>
-				<v-btn
-					variant="flat"
-					color="primary"
-					data-testid="copy-info-dialog-confirm"
-					@click="$emit('copy:confirm')"
-				>
+				<v-btn variant="flat" color="primary" data-testid="copy-info-dialog-confirm" @click="$emit('copy:confirm')">
 					{{ $t("common.actions.duplicate") }}
 				</v-btn>
 			</v-card-actions>

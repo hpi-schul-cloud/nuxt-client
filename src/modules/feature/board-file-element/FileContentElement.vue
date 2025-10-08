@@ -47,46 +47,31 @@
 			<BoardMenu :scope="BoardMenuScope.FILE_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete
-					scope-language-key="components.cardElement.fileElement"
-					@click="onDelete"
-				/>
+				<KebabMenuActionDelete scope-language-key="components.cardElement.fileElement" @click="onDelete" />
 			</BoardMenu>
 		</FileUpload>
 	</v-card>
 </template>
 
 <script setup lang="ts">
-import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
-import { FileElementResponse } from "@/serverApi/v3";
-import {
-	convertDownloadToPreviewUrl,
-	isPreviewPossible,
-	isScanStatusBlocked,
-} from "@/utils/fileHelper";
-import {
-	useBoardFocusHandler,
-	useBoardPermissions,
-	useContentElementState,
-} from "@data-board";
-import { useFileStorageApi } from "@data-file";
-import { BoardMenuScope } from "@ui-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
-import { computed, onMounted, ref, toRef, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { mapEditBoardPermissionToEditorMode } from "./mapper";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
+import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
+import { FileElementResponse } from "@/serverApi/v3";
+import { convertDownloadToPreviewUrl, isPreviewPossible, isScanStatusBlocked } from "@/utils/fileHelper";
+import { useBoardFocusHandler, useBoardPermissions, useContentElementState } from "@data-board";
 import { useEnvConfig } from "@data-env";
+import { useFileStorageApi } from "@data-file";
+import { BoardMenuScope } from "@ui-board";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { computed, onMounted, ref, toRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 type Props = {
 	element: FileElementResponse;
@@ -120,15 +105,11 @@ const { modelValue } = useContentElementState(props);
 const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
 const { hasEditPermission } = useBoardPermissions();
 
-const fileRecord = computed(
-	() => getFileRecordsByParentId(element.value.id)[0]
-);
+const fileRecord = computed(() => getFileRecordsByParentId(element.value.id)[0]);
 
 const { alerts, addAlert } = useFileAlerts(fileRecord);
 
-const isUploading = computed(() => {
-	return fileRecord.value?.isUploading;
-});
+const isUploading = computed(() => fileRecord.value?.isUploading);
 
 const fileProperties = computed(() => {
 	if (fileRecord.value === undefined) {
@@ -145,9 +126,7 @@ const fileProperties = computed(() => {
 		url: fileRecord.value.url,
 		previewUrl,
 		previewStatus: fileRecord.value.previewStatus,
-		isDownloadAllowed: isScanStatusBlocked(
-			fileRecord.value.securityCheckStatus
-		),
+		isDownloadAllowed: isScanStatusBlocked(fileRecord.value.securityCheckStatus),
 		mimeType: fileRecord.value.mimeType,
 		element: props.element,
 		isCollaboraEditable: fileRecord.value.isCollaboraEditable,
@@ -156,8 +135,7 @@ const fileProperties = computed(() => {
 
 const isOutlined = computed(() => {
 	const { isEditMode } = props;
-	const isUploadingInViewMode =
-		fileRecord.value?.id !== undefined && !isEditMode && !isUploading.value;
+	const isUploadingInViewMode = fileRecord.value?.id !== undefined && !isEditMode && !isUploading.value;
 
 	return isUploadingInViewMode || isEditMode;
 });
@@ -221,9 +199,7 @@ const isCollaboraEditable = computed(() => {
 	return fileRecord.value.isCollaboraEditable;
 });
 
-const isCollaboraEnabled = computed(
-	() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED
-);
+const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
 const cardAriaLabel = computed(() => {
 	if (isCollaboraEnabled.value && isCollaboraEditable.value) {
 		return t("components.cardElement.fileElement.openOfficeDocument");
@@ -234,9 +210,7 @@ const onCardInteraction = () => {
 	if (isCollaboraEnabled.value && isCollaboraEditable.value) openCollabora();
 };
 const openCollabora = () => {
-	const editorMode = mapEditBoardPermissionToEditorMode(
-		hasEditPermission.value
-	);
+	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission.value);
 
 	const url = router.resolve({
 		name: "collabora",

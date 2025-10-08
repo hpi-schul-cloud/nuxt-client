@@ -1,23 +1,13 @@
+import { SidebarSingleItem } from "../types";
 import { BoardExternalReferenceType } from "@/serverApi/v3";
 import { useSharedBoardPageInformation } from "@data-board";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
-import {
-	ComputedRef,
-	MaybeRefOrGetter,
-	ref,
-	ShallowRef,
-	toValue,
-	watchEffect,
-} from "vue";
+import { ComputedRef, MaybeRefOrGetter, ref, ShallowRef, toValue, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import { SidebarSingleItem } from "../types";
 
 export const useSidebarSelection = (
-	sidebarItem:
-		| ComputedRef<SidebarSingleItem>
-		| MaybeRefOrGetter<SidebarSingleItem>
-		| ShallowRef<SidebarSingleItem>
+	sidebarItem: ComputedRef<SidebarSingleItem> | MaybeRefOrGetter<SidebarSingleItem> | ShallowRef<SidebarSingleItem>
 ) => {
 	const route = useRoute();
 	const { roomVariant } = storeToRefs(useRoomDetailsStore());
@@ -43,20 +33,15 @@ export const useSidebarSelection = (
 		}
 
 		// Courses
-		if (
-			route.name === "course-room-list" ||
-			route.name === "course-room-overview"
-		) {
+		if (route.name === "course-room-list" || route.name === "course-room-overview") {
 			return item.to === "/rooms/courses-overview";
 		}
 
 		// Board
 		if (route.name === "boards-id") {
 			return (
-				(item.to === "/rooms/courses-overview" &&
-					contextType.value === BoardExternalReferenceType.Course) ||
-				(item.to === "/rooms" &&
-					contextType.value === BoardExternalReferenceType.Room)
+				(item.to === "/rooms/courses-overview" && contextType.value === BoardExternalReferenceType.Course) ||
+				(item.to === "/rooms" && contextType.value === BoardExternalReferenceType.Room)
 			);
 		}
 
@@ -65,21 +50,15 @@ export const useSidebarSelection = (
 			const itemLinksToCourseOverview = item.to === "/rooms/courses-overview";
 			const itemLinksToRoomsOverview = item.to === "/rooms";
 
-			const contextOfFolderIsCourse =
-				contextType.value === BoardExternalReferenceType.Course;
-			const contextOfFolderIsRoom =
-				contextType.value === BoardExternalReferenceType.Room;
+			const contextOfFolderIsCourse = contextType.value === BoardExternalReferenceType.Course;
+			const contextOfFolderIsRoom = contextType.value === BoardExternalReferenceType.Room;
 
 			return (
-				(itemLinksToCourseOverview && contextOfFolderIsCourse) ||
-				(itemLinksToRoomsOverview && contextOfFolderIsRoom)
+				(itemLinksToCourseOverview && contextOfFolderIsCourse) || (itemLinksToRoomsOverview && contextOfFolderIsRoom)
 			);
 		}
 
-		return (
-			route.path.startsWith(item.to as string) ||
-			route.path.startsWith(item.href as string)
-		);
+		return route.path.startsWith(item.to as string) || route.path.startsWith(item.href as string);
 	};
 
 	watchEffect(() => {

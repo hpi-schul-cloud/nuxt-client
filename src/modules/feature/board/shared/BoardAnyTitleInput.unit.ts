@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
-import { VTextarea } from "vuetify/lib/components/index";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { VTextarea } from "vuetify/lib/components/index";
 
 vi.mock("@util-board");
 
@@ -108,9 +105,7 @@ describe("BoardAnyTitleInput", () => {
 			await wrapper.setProps({ value: newValue });
 			await nextTick();
 
-			expect(
-				(wrapper.vm as unknown as typeof BoardAnyTitleInput).modelValue
-			).toBe(newValue);
+			expect((wrapper.vm as unknown as typeof BoardAnyTitleInput).modelValue).toBe(newValue);
 		});
 	});
 
@@ -181,9 +176,7 @@ describe("BoardAnyTitleInput", () => {
 				const textAreaComponent = wrapper.findComponent(VTextarea);
 				await textAreaComponent.setValue("<abc123");
 
-				expect(wrapper.text()).toContain(
-					"common.validation.containsOpeningTag"
-				);
+				expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
 				expect(textAreaComponent.classes()).toContain("error-message-width");
 			});
 
@@ -205,9 +198,7 @@ describe("BoardAnyTitleInput", () => {
 				const textAreaComponent = wrapper.findComponent(VTextarea);
 				await textAreaComponent.setValue("<abc123");
 
-				expect(wrapper.text()).toContain(
-					"common.validation.containsOpeningTag"
-				);
+				expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
 				expect(textAreaComponent.classes()).toContain("error-message-width");
 			});
 
@@ -229,9 +220,7 @@ describe("BoardAnyTitleInput", () => {
 				const textAreaComponent = wrapper.findComponent(VTextarea);
 				await textAreaComponent.setValue("<abc123");
 
-				expect(wrapper.text()).toContain(
-					"common.validation.containsOpeningTag"
-				);
+				expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
 				expect(textAreaComponent.classes()).toContain("error-message-width");
 			});
 

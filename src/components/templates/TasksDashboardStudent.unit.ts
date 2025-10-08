@@ -1,25 +1,19 @@
+import TasksList from "@/components/organisms/TasksList.vue";
+import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
 import FinishedTasksModule from "@/store/finished-tasks";
-import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { OpenTasksForStudent } from "@/store/types/tasks";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import TasksList from "@/components/organisms/TasksList.vue";
-import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
-import { shallowMount } from "@vue/test-utils";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { EmptyState } from "@ui-empty-state";
+import { shallowMount } from "@vue/test-utils";
 
 const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 
 describe("@/components/templates/TasksDashboardStudent", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
-	let notifierModuleMock: NotifierModule;
 
 	const mountComponent = (options = {}) => {
 		const wrapper = shallowMount(TasksDashboardStudent, {
@@ -28,7 +22,6 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 				provide: {
 					tasksModule: tasksModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				},
 			},
 			...options,
@@ -55,7 +48,6 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
-		notifierModuleMock = createModuleMocks(NotifierModule);
 
 		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 			getTasks: [],

@@ -1,12 +1,5 @@
 <template>
-	<svg
-		width="200"
-		height="273"
-		viewBox="0 0 200 273"
-		fill="none"
-		xmlns="http://www.w3.org/2000/svg"
-		aria-hidden="true"
-	>
+	<svg width="200" height="273" viewBox="0 0 200 273" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 		<path
 			fill-rule="evenodd"
 			clip-rule="evenodd"

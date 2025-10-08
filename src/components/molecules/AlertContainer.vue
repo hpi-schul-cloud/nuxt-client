@@ -6,40 +6,45 @@
 		}"
 	>
 		<transition-group :name="transition">
-			<Alert
-				v-for="(notification, index) in notifierItems"
-				:key="index"
-				:notification="notification"
-				@remove:notification="onRemoveNotification"
-			/>
+			<v-alert
+				v-for="notification in notifierItems"
+				:key="notification.id"
+				:type="notification.status"
+				:icon="statusIcons[notification.status]"
+				class="alert"
+				closable
+				max-width="400"
+				min-width="200"
+				border="start"
+				@click:close="removeNotifier(notification.id)"
+			>
+				<div class="alert-text mr-2" data-testId="alert-text">
+					{{ notification.text }}
+				</div>
+			</v-alert>
 		</transition-group>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { AlertStatus, useNotificationStore } from "@data-app";
+import { mdiAlert, mdiAlertCircle, mdiCheckCircle, mdiInformation } from "@icons/material";
+import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useDisplay } from "vuetify";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import Alert from "./Alert.vue";
-import { AlertPayload } from "@/store/types/alert-payload";
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const { xs } = useDisplay();
+const { notifierItems } = storeToRefs(useNotificationStore());
+const { removeNotifier } = useNotificationStore();
 
-const isMobile = computed(() => {
-	return xs.value;
-});
+const { xs: isMobile } = useDisplay();
 
-const transition = computed(() => {
-	return isMobile.value ? "scale-transition" : "scroll-x-reverse-transition";
-});
+const transition = computed(() => (isMobile.value ? "scale-transition" : "scroll-x-reverse-transition"));
 
-const notifierItems = computed(() => {
-	return notifierModule.getNotifierItems;
-});
-
-const onRemoveNotification = (notification: AlertPayload) => {
-	notifierModule.removeNotifier(notification);
+const statusIcons: { [status in AlertStatus]: string } = {
+	success: mdiCheckCircle,
+	warning: mdiAlert,
+	error: mdiAlertCircle,
+	info: mdiInformation,
 };
 </script>
 
@@ -58,5 +63,16 @@ const onRemoveNotification = (notification: AlertPayload) => {
 	left: 0;
 	z-index: 50;
 	overflow: visible;
+}
+
+.alert {
+	margin: 0 12px 12px 0;
+	overflow: hidden;
+	background-color: rgba(var(--v-theme-white)) !important;
+}
+
+:deep(.v-btn__content .v-icon),
+.alert-text {
+	color: rgba(var(--v-theme-on-background)) !important;
 }
 </style>

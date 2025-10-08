@@ -20,9 +20,9 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
-import { mdiChevronRight } from "@icons/material";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { mdiChevronRight } from "@icons/material";
+import { PropType } from "vue";
 
 defineProps({
 	breadcrumbs: {

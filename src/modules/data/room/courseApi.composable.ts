@@ -8,10 +8,7 @@ export const useCourseApi = () => {
 		await courseApi.courseControllerStopSynchronization(courseId);
 	};
 
-	const startSynchronization = async (
-		courseId: string,
-		groupId: string
-	): Promise<void> => {
+	const startSynchronization = async (courseId: string, groupId: string): Promise<void> => {
 		await courseApi.courseControllerStartSynchronization(courseId, { groupId });
 	};
 

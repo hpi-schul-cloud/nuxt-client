@@ -1,34 +1,24 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { RoomEditPage } from "@page-room";
-import { useRoute, useRouter } from "vue-router";
-import { RoomUpdateParams, RoomColor } from "@/types/room/Room";
-import { RoomForm } from "@feature-room";
-import { nextTick, computed } from "vue";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { Mock } from "vitest";
-import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { createTestingPinia } from "@pinia/testing";
-import { mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ApplicationError } from "@/store/types/application-error";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { RoomColor, RoomUpdateParams } from "@/types/room/Room";
+import { expectNotification, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
+import { RoomForm } from "@feature-room";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { RoomEditPage } from "@page-room";
+import { createTestingPinia } from "@pinia/testing";
+import { Mock } from "vitest";
+import { computed, nextTick } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 vi.mock("vue-router");
 const useRouteMock = useRoute as Mock;
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
-
-vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
-}));
 
 const roomParams: RoomUpdateParams = {
 	name: "test",
@@ -60,7 +50,6 @@ describe("@pages/RoomEdit.page.vue", () => {
 		}>
 	) => {
 		const { isRoomDefined } = { isRoomDefined: true, ...options };
-		const notifierModule = createModuleMocks(NotifierModule);
 		const room = isRoomDefined ? roomFactory.build() : undefined;
 		const roomId = room ? room.id : "test-room-id";
 
@@ -84,14 +73,10 @@ describe("@pages/RoomEdit.page.vue", () => {
 						},
 					}),
 				],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 		});
 
-		const { isLoading, updateRoom, fetchRoom } =
-			mockedPiniaStoreTyping(useRoomDetailsStore);
+		const { isLoading, updateRoom, fetchRoom } = mockedPiniaStoreTyping(useRoomDetailsStore);
 
 		return {
 			wrapper,
@@ -101,7 +86,6 @@ describe("@pages/RoomEdit.page.vue", () => {
 			fetchRoom,
 			room,
 			roomId,
-			notifierModule,
 		};
 	};
 
@@ -189,11 +173,8 @@ describe("@pages/RoomEdit.page.vue", () => {
 				const defaultWireframe = wrapper.findComponent({
 					name: "DefaultWireframe",
 				});
-				const breadcrumbsProp: Breadcrumb[] =
-					defaultWireframe.props().breadcrumbs;
-				const breadcrumb = breadcrumbsProp.find(
-					(breadcrumb: Breadcrumb) => breadcrumb.title === room?.name
-				);
+				const breadcrumbsProp: Breadcrumb[] = defaultWireframe.props().breadcrumbs;
+				const breadcrumb = breadcrumbsProp.find((breadcrumb: Breadcrumb) => breadcrumb.title === room?.name);
 
 				expect(breadcrumb?.to).toContain(roomId);
 			});
@@ -224,7 +205,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 				});
 
 				it("should show error notification on invalid request error", async () => {
-					const { notifierModule, updateRoom, wrapper } = setup();
+					const { updateRoom, wrapper } = setup();
 					await nextTick();
 
 					const apiError = {
@@ -237,10 +218,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 					roomFormComponent.vm.$emit("save", { room: roomParams });
 					await nextTick();
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						status: "error",
-						text: "components.roomForm.validation.generalSaveError",
-					});
+					expectNotification("error");
 				});
 
 				it("should throw application error if not due to invalid request", async () => {
@@ -251,9 +229,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 						(wrapper.vm as unknown as typeof RoomEditPage).onSave({
 							room: roomParams,
 						})
-					).rejects.toThrow(
-						new ApplicationError(HttpStatusCode.Unauthorized, "error.401")
-					);
+					).rejects.toThrow(new ApplicationError(HttpStatusCode.Unauthorized, "error.401"));
 				});
 			});
 

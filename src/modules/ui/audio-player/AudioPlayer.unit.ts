@@ -1,19 +1,14 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import AudioPlayer from "./AudioPlayer.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { mdiPause, mdiPlay } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { useMediaControls } from "@vueuse/core";
 import { nextTick, ref } from "vue";
-import AudioPlayer from "./AudioPlayer.vue";
 
-vi.mock("@vueuse/core", () => {
-	return {
-		useMediaControls: vi.fn(),
-	};
-});
+vi.mock("@vueuse/core", () => ({
+	useMediaControls: vi.fn(),
+}));
 
 describe("AudioPlayer", () => {
 	describe("when audio is not playing", () => {
@@ -27,9 +22,7 @@ describe("AudioPlayer", () => {
 			const playingRef = ref(false);
 			const onSourceErrorMock = vi.fn();
 
-			const useMediaControlsMock = createMock<
-				ReturnType<typeof useMediaControls>
-			>({
+			const useMediaControlsMock = createMock<ReturnType<typeof useMediaControls>>({
 				playing: playingRef,
 				currentTime: currentTimeRef,
 				duration: durationRef,
@@ -95,9 +88,7 @@ describe("AudioPlayer", () => {
 			const playButton = wrapper.findComponent({ name: "v-btn" });
 			const playIcon = wrapper.findComponent({ name: "v-icon" });
 
-			expect(playButton.attributes("aria-label")).toBe(
-				"components.audioPlayer.play"
-			);
+			expect(playButton.attributes("aria-label")).toBe("components.audioPlayer.play");
 			expect(playIcon.html()).toContain(mdiPlay);
 		});
 
@@ -168,9 +159,7 @@ describe("AudioPlayer", () => {
 			const rateRef = ref(1);
 			const playingRef = ref(true);
 
-			const useMediaControlsMock = createMock<
-				ReturnType<typeof useMediaControls>
-			>({
+			const useMediaControlsMock = createMock<ReturnType<typeof useMediaControls>>({
 				playing: playingRef,
 				currentTime: currentTimeRef,
 				duration: durationRef,
@@ -206,9 +195,7 @@ describe("AudioPlayer", () => {
 			const playButton = wrapper.findComponent({ name: "v-btn" });
 			const playIcon = wrapper.findComponent({ name: "v-icon" });
 
-			expect(playButton.attributes("aria-label")).toBe(
-				"components.audioPlayer.pause"
-			);
+			expect(playButton.attributes("aria-label")).toBe("components.audioPlayer.pause");
 			expect(playIcon.html()).toContain(mdiPause);
 		});
 

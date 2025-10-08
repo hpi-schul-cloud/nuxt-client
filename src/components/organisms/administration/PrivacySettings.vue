@@ -5,33 +5,18 @@
 				<v-switch
 					:disabled="!isTeacherStudentVisibilityConfigurable"
 					:model-value="studentVisibility"
-					:label="
-						$t(
-							'pages.administration.school.index.privacySettings.labels.studentVisibility'
-						)
-					"
-					:aria-label="
-						$t(
-							'pages.administration.school.index.privacySettings.labels.studentVisibility'
-						)
-					"
+					:label="$t('pages.administration.school.index.privacySettings.labels.studentVisibility')"
+					:aria-label="$t('pages.administration.school.index.privacySettings.labels.studentVisibility')"
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="admin-school-toggle-student-visibility"
-					@update:model-value="
-						($event) =>
-							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
-					"
+					@update:model-value="($event) => $emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')"
 				/>
 				<p v-if="isTeacherStudentVisibilityConfigurable" class="switch-hint">
 					{{ $t(studentVisibilityTextKey) }}
 				</p>
 				<p v-else class="switch-hint">
-					{{
-						$t(
-							"pages.administration.school.index.privacySettings.longText.configurabilityInfoText"
-						)
-					}}
+					{{ $t("pages.administration.school.index.privacySettings.longText.configurabilityInfoText") }}
 				</p>
 			</v-col>
 		</v-row>
@@ -39,30 +24,15 @@
 			<v-col>
 				<v-switch
 					:model-value="lernStoreVisibility"
-					:label="
-						$t(
-							'pages.administration.school.index.privacySettings.labels.lernStore'
-						)
-					"
-					:aria-label="
-						$t(
-							'pages.administration.school.index.privacySettings.labels.lernStore'
-						)
-					"
+					:label="$t('pages.administration.school.index.privacySettings.labels.lernStore')"
+					:aria-label="$t('pages.administration.school.index.privacySettings.labels.lernStore')"
 					class="ml-1 mt-0"
 					data-testid="admin-school-toggle-learning-store"
 					:true-icon="mdiCheck"
-					@update:model-value="
-						($event) =>
-							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
-					"
+					@update:model-value="($event) => $emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')"
 				/>
 				<p class="switch-hint">
-					{{
-						$t(
-							"pages.administration.school.index.privacySettings.longText.lernStore"
-						)
-					}}
+					{{ $t("pages.administration.school.index.privacySettings.longText.lernStore") }}
 				</p>
 			</v-col>
 		</v-row>
@@ -70,29 +40,15 @@
 			<v-col>
 				<v-switch
 					:model-value="features.rocketChat"
-					:label="
-						$t(
-							'pages.administration.school.index.privacySettings.labels.chatFunction'
-						)
-					"
-					:aria-label="
-						$t(
-							'pages.administration.school.index.privacySettings.labels.chatFunction'
-						)
-					"
+					:label="$t('pages.administration.school.index.privacySettings.labels.chatFunction')"
+					:aria-label="$t('pages.administration.school.index.privacySettings.labels.chatFunction')"
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_chat"
-					@update:model-value="
-						($event) => $emit('update-feature-settings', $event, 'rocketChat')
-					"
+					@update:model-value="($event) => $emit('update-feature-settings', $event, 'rocketChat')"
 				/>
 				<p class="switch-hint">
-					{{
-						$t(
-							"pages.administration.school.index.privacySettings.longText.chatFunction"
-						)
-					}}
+					{{ $t("pages.administration.school.index.privacySettings.longText.chatFunction") }}
 				</p>
 			</v-col>
 		</v-row>
@@ -100,30 +56,15 @@
 			<v-col>
 				<v-switch
 					:model-value="features.videoconference"
-					:label="
-						$t(
-							'pages.administration.school.index.privacySettings.labels.videoConference'
-						)
-					"
-					:aria-label="
-						$t(
-							'pages.administration.school.index.privacySettings.labels.videoConference'
-						)
-					"
+					:label="$t('pages.administration.school.index.privacySettings.labels.videoConference')"
+					:aria-label="$t('pages.administration.school.index.privacySettings.labels.videoConference')"
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_video_conference"
-					@update:model-value="
-						($event) =>
-							$emit('update-feature-settings', $event, 'videoconference')
-					"
+					@update:model-value="($event) => $emit('update-feature-settings', $event, 'videoconference')"
 				/>
 				<p class="switch-hint">
-					{{
-						$t(
-							"pages.administration.school.index.privacySettings.longText.videoConference"
-						)
-					}}
+					{{ $t("pages.administration.school.index.privacySettings.longText.videoConference") }}
 				</p>
 			</v-col>
 		</v-row>
@@ -131,29 +72,15 @@
 			<v-col>
 				<v-switch
 					:model-value="features.aiTutor"
-					:label="
-						$t(
-							'pages.administration.school.index.privacySettings.labels.aiTutor'
-						)
-					"
-					:aria-label="
-						$t(
-							'pages.administration.school.index.privacySettings.labels.aiTutor'
-						)
-					"
+					:label="$t('pages.administration.school.index.privacySettings.labels.aiTutor')"
+					:aria-label="$t('pages.administration.school.index.privacySettings.labels.aiTutor')"
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_ai_tutor"
-					@update:model-value="
-						($event) => $emit('update-feature-settings', $event, 'aiTutor')
-					"
+					@update:model-value="($event) => $emit('update-feature-settings', $event, 'aiTutor')"
 				/>
 				<p class="switch-hint">
-					{{
-						$t(
-							"pages.administration.school.index.privacySettings.longText.aiTutor"
-						)
-					}}
+					{{ $t("pages.administration.school.index.privacySettings.longText.aiTutor") }}
 				</p>
 			</v-col>
 		</v-row>
@@ -162,9 +89,9 @@
 
 <script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
+import { useEnvConfig } from "@data-env";
 import { mdiCheck } from "@icons/material";
 import { computed } from "vue";
-import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	permissions: {
@@ -189,27 +116,19 @@ const isTeacherStudentVisibilityConfigurable = computed(
 	() => envConfig.value.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE
 );
 
-const isTeacherStudentVisibilityVisible = computed(
-	() => envConfig.value.TEACHER_STUDENT_VISIBILITY__IS_VISIBLE
-);
+const isTeacherStudentVisibilityVisible = computed(() => envConfig.value.TEACHER_STUDENT_VISIBILITY__IS_VISIBLE);
 
-const videoConferenceEnabled = computed(
-	() => envConfig.value.FEATURE_VIDEOCONFERENCE_ENABLED
-);
+const videoConferenceEnabled = computed(() => envConfig.value.FEATURE_VIDEOCONFERENCE_ENABLED);
 
 const aiTutorEnabled = computed(() => envConfig.value.FEATURE_AI_TUTOR_ENABLED);
 
-const rocketChatEnabled = computed(
-	() => envConfig.value.ROCKETCHAT_SERVICE_ENABLED
-);
+const rocketChatEnabled = computed(() => envConfig.value.ROCKETCHAT_SERVICE_ENABLED);
 
 const theme = computed(() => envConfig.value.SC_THEME);
 
 const studentVisibility = computed(() => {
 	if (isTeacherStudentVisibilityConfigurable.value) {
-		return props.permissions?.teacher
-			? props.permissions.teacher.STUDENT_LIST
-			: false;
+		return props.permissions?.teacher ? props.permissions.teacher.STUDENT_LIST : false;
 	} else {
 		return envConfig.value.TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT;
 	}
@@ -226,11 +145,9 @@ const studentVisibilityTextKey = computed(() => {
 	}
 });
 
-const lernStoreVisibility = computed(() => {
-	return props.permissions.student
-		? props.permissions.student.LERNSTORE_VIEW
-		: true;
-});
+const lernStoreVisibility = computed(() =>
+	props.permissions.student ? props.permissions.student.LERNSTORE_VIEW : true
+);
 </script>
 
 <style lang="scss" scoped>

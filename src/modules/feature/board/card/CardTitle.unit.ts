@@ -1,9 +1,6 @@
-import { shallowMount } from "@vue/test-utils";
 import CardTitle from "./CardTitle.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 
 const componentProps = {
 	value: "props value",

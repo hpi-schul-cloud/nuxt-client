@@ -10,19 +10,10 @@
 	>
 		<template #header>
 			<div class="d-flex mt-3">
-				<h1
-					class="pb-2 ma-0 course-title"
-					:class="{ 'pr-5': roomData.isArchived }"
-					data-testid="courses-course-title"
-				>
+				<h1 class="pb-2 ma-0 course-title" :class="{ 'pr-5': roomData.isArchived }" data-testid="courses-course-title">
 					{{ roomData.title }}
 				</h1>
-				<VChip
-					v-if="roomData.isSynchronized"
-					size="small"
-					class="mt-1 ml-2"
-					data-testid="synced-course-chip"
-				>
+				<VChip v-if="roomData.isSynchronized" size="small" class="mt-1 ml-2" data-testid="synced-course-chip">
 					{{ $t("pages.courseRooms.headerSection.synchronized") }}
 				</VChip>
 				<VChip v-if="roomData.isArchived" size="small" class="mt-1 ml-2">
@@ -50,22 +41,11 @@
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs
-					v-model="tabIndex"
-					:class="{ 'tabs-max-width': mdAndUp }"
-					grow
-					mandatory
-				>
+				<v-tabs v-model="tabIndex" :class="{ 'tabs-max-width': mdAndUp }" grow mandatory>
 					<template v-for="tabItem in tabItems" :key="tabItem.name">
-						<v-tab
-							:data-testid="tabItem.dataTestId"
-							:href="tabItem.href"
-							class="no-active"
-						>
+						<v-tab :data-testid="tabItem.dataTestId" :href="tabItem.href" class="no-active">
 							<template #default>
-								<v-icon size="large" class="mr-sm-3">
-									{{ tabItem.icon }}</v-icon
-								>
+								<v-icon size="large" class="mr-sm-3"> {{ tabItem.icon }}</v-icon>
 								<span class="d-none d-sm-inline">
 									{{ tabItem.label }}
 								</span>
@@ -105,21 +85,17 @@
 			:course-id="roomData.roomId"
 			@success="refreshRoom"
 		/>
-		<SelectBoardLayoutDialog
-			v-if="boardLayoutsEnabled"
-			v-model="boardLayoutDialogIsOpen"
-			@select="onLayoutSelected"
-		/>
+		<SelectBoardLayoutDialog v-if="boardLayoutsEnabled" v-model="boardLayoutDialogIsOpen" @select="onLayoutSelected" />
 	</default-wireframe>
 </template>
 
 <script>
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
-import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
-import ShareModal from "@/components/share/ShareModal.vue";
+import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@/components/templates/RoomDashboard.vue";
 import { useCopy } from "@/composables/copy";
@@ -132,11 +108,17 @@ import {
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import { buildPageTitle } from "@/utils/pageTitle";
 import {
-	EndCourseSyncDialog,
-	StartExistingCourseSyncDialog,
-} from "@feature-course-sync";
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
+	COPY_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
+	SHARE_MODULE_KEY,
+} from "@/utils/inject";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
+import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
@@ -154,20 +136,11 @@ import {
 	mdiViewGridPlusOutline,
 	mdiViewListOutline,
 } from "@icons/material";
+import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
+import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
-import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import {
-	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
-import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { storeToRefs } from "pinia";
 import { useDisplay } from "vuetify";
-import { useEnvConfig } from "@data-env";
-import { useAppStore } from "@data-app";
 
 export default defineComponent({
 	components: {
@@ -192,12 +165,9 @@ export default defineComponent({
 	setup() {
 		const { t } = useI18n();
 		const { mdAndUp } = useDisplay();
-		const { isLoadingDialogOpen } = useLoadingState(
-			t("components.molecules.copyResult.title.loading")
-		);
+		const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.copyResult.title.loading"));
 
-		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } =
-			useCopy(isLoadingDialogOpen);
+		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } = useCopy(isLoadingDialogOpen);
 
 		const { roomVariant } = storeToRefs(useRoomDetailsStore());
 
@@ -325,10 +295,7 @@ export default defineComponent({
 				});
 			}
 
-			if (
-				useAppStore().userPermissions.includes(Permission.CourseEdit) &&
-				useAppStore().isTeacher
-			) {
+			if (useAppStore().userPermissions.includes(Permission.CourseEdit) && useAppStore().isTeacher) {
 				if (this.boardLayoutsEnabled) {
 					actions.push({
 						label: this.$t("pages.courseRoomDetails.fab.add.board"),
@@ -374,21 +341,15 @@ export default defineComponent({
 			return undefined;
 		},
 		canEditTools() {
-			return !!useAppStore().userPermissions?.includes(
-				Permission.ContextToolAdmin
-			);
+			return !!useAppStore().userPermissions?.includes(Permission.ContextToolAdmin);
 		},
 		headlineMenuItems() {
 			if (!this.scopedPermissions.includes("COURSE_EDIT")) return [];
 			const items = [
 				{
 					icon: this.icons.mdiPencilOutline,
-					action: () =>
-						(window.location.href = `/courses/${this.courseId}/edit`),
-					name:
-						this.$t("common.actions.edit") +
-						"/" +
-						this.$t("common.actions.delete"),
+					action: () => (window.location.href = `/courses/${this.courseId}/edit`),
+					name: this.$t("common.actions.edit") + "/" + this.$t("common.actions.delete"),
 					dataTestId: "room-menu-edit-delete",
 				},
 			];
@@ -431,10 +392,7 @@ export default defineComponent({
 				});
 			}
 
-			if (
-				useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED &&
-				!this.roomData.isSynchronized
-			) {
+			if (useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED && !this.roomData.isSynchronized) {
 				items.push({
 					icon: this.icons.mdiSync,
 					action: () => {
@@ -524,9 +482,7 @@ export default defineComponent({
 			}
 		},
 		setActiveTab(tabName) {
-			const index = this.tabItems.findIndex(
-				(tabItem) => tabItem.name === tabName
-			);
+			const index = this.tabItems.findIndex((tabItem) => tabItem.name === tabName);
 
 			this.tabIndex = index >= 0 ? index : 0;
 		},

@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import ContextMenu from "./ContextMenu.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { DOMWrapper, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import ContextMenu from "./ContextMenu.vue";
 
 const actions = [
 	{ event: "event1", text: "testText1" },
@@ -12,12 +9,10 @@ const actions = [
 	{ event: "event3", text: "testText3" },
 ];
 
-const hasWrapperFocus = (wrapper?: DOMWrapper<Element>) => {
-	return wrapper?.element === document.activeElement;
-};
+const hasWrapperFocus = (wrapper?: DOMWrapper<Element>) => wrapper?.element === document.activeElement;
 
-const getWrapper = ({ options = {}, additionalProps = {} } = {}) => {
-	return mount(ContextMenu, {
+const getWrapper = ({ options = {}, additionalProps = {} } = {}) =>
+	mount(ContextMenu, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		props: {
 			show: true,
@@ -26,7 +21,6 @@ const getWrapper = ({ options = {}, additionalProps = {} } = {}) => {
 		},
 		...options,
 	});
-};
 
 const getAttachToOptions = () => {
 	const div = document.createElement("div");
@@ -38,23 +32,17 @@ describe("@/components/molecules/ContextMenu", () => {
 	it("Renders all action buttons", () => {
 		const wrapper = getWrapper();
 
-		expect(
-			wrapper.findAll(".context-menu__button:not(.context-menu__button-close)")
-		).toHaveLength(actions.length);
+		expect(wrapper.findAll(".context-menu__button:not(.context-menu__button-close)")).toHaveLength(actions.length);
 	});
 
 	it("Emits defined event when clicked", () => {
 		// avoid vue warn that test events are not declared
-		const consoleWarnSpy = vi
-			.spyOn(console, "warn")
-			.mockImplementation(vi.fn());
+		const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(vi.fn());
 
 		const wrapper = getWrapper();
 
 		expect.assertions(2 * actions.length);
-		const buttons = wrapper.findAll(
-			".context-menu__button:not(.context-menu__button-close)"
-		);
+		const buttons = wrapper.findAll(".context-menu__button:not(.context-menu__button-close)");
 
 		for (let i = 0; i < buttons.length; i += 1) {
 			const button = buttons.at(i);
@@ -69,9 +57,7 @@ describe("@/components/molecules/ContextMenu", () => {
 
 	it("emits (update:show false) event when button gets clicked", async () => {
 		// avoid vue warn that test event is not declared
-		const consoleWarnSpy = vi
-			.spyOn(console, "warn")
-			.mockImplementation(vi.fn());
+		const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(vi.fn());
 
 		vi.useFakeTimers();
 		const wrapper = getWrapper();
@@ -89,9 +75,7 @@ describe("@/components/molecules/ContextMenu", () => {
 	it("emits (update:show false) event when ESC Keys gets pressed", async () => {
 		const wrapper = getWrapper(getAttachToOptions());
 		expect(wrapper.emitted("update:show")).toBeUndefined();
-		window.dispatchEvent(
-			new KeyboardEvent("keydown", { key: "Escape", keyCode: 27 })
-		);
+		window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", keyCode: 27 }));
 		expect(wrapper.emitted("update:show")).toHaveLength(1);
 		expect(wrapper.emitted("update:show")).toStrictEqual([[false]]);
 	});
@@ -163,26 +147,21 @@ describe("@/components/molecules/ContextMenu", () => {
 			["top-left", "0px", "", "0px", ""],
 			["top-right", "0px", "", "", "0px"],
 			["bottom-right", "", "0px", "", "0px"],
-		])(
-			"menu gets positioned correctly by anchor attribute %s",
-			async (anchor, top, bottom, left, right) => {
-				const wrapper = getWrapper({
-					additionalProps: { anchor },
-				});
-				const menuElement = wrapper.find(".context-menu").element;
-				const menuStyles = window.getComputedStyle(menuElement);
+		])("menu gets positioned correctly by anchor attribute %s", async (anchor, top, bottom, left, right) => {
+			const wrapper = getWrapper({
+				additionalProps: { anchor },
+			});
+			const menuElement = wrapper.find(".context-menu").element;
+			const menuStyles = window.getComputedStyle(menuElement);
 
-				expect(menuStyles.top).toContain(top);
-				expect(menuStyles.bottom).toContain(bottom);
-				expect(menuStyles.left).toContain(left);
-				expect(menuStyles.right).toContain(right);
-			}
-		);
+			expect(menuStyles.top).toContain(top);
+			expect(menuStyles.bottom).toContain(bottom);
+			expect(menuStyles.left).toContain(left);
+			expect(menuStyles.right).toContain(right);
+		});
 
 		it("should throw an error for invalid anchor positions", async () => {
-			const consoleWarnSpy = vi
-				.spyOn(console, "warn")
-				.mockImplementation(vi.fn());
+			const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(vi.fn());
 
 			expect(() => {
 				getWrapper({

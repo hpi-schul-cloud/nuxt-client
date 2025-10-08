@@ -16,26 +16,14 @@
 		</template>
 		<template #[`item.displaySchoolRole`]="{ item }">
 			<span class="text-no-wrap">
-				<VIcon
-					v-if="getSchoolRoleIcon(item.schoolRoleNames)"
-					:icon="getSchoolRoleIcon(item.schoolRoleNames)"
-				/>
+				<VIcon v-if="getSchoolRoleIcon(item.schoolRoleNames)" :icon="getSchoolRoleIcon(item.schoolRoleNames)" />
 				{{ item.displaySchoolRole }}
 			</span>
 		</template>
 		<template #[`item.actions`]="{ item }">
-			<KebabMenu
-				v-if="item.isSelectable"
-				:data-testid="`kebab-menu-${item.userId}`"
-				:aria-label="getAriaLabel(item)"
-			>
-				<KebabMenuActionChangePermission
-					:aria-label="getAriaLabel(item, 'changeRole')"
-				/>
-				<KebabMenuActionRemoveMember
-					v-if="!isRoomOwner(item.userId)"
-					:aria-label="getAriaLabel(item, 'remove')"
-				/>
+			<KebabMenu v-if="item.isSelectable" :data-testid="`kebab-menu-${item.userId}`" :aria-label="getAriaLabel(item)">
+				<KebabMenuActionChangePermission :aria-label="getAriaLabel(item, 'changeRole')" />
+				<KebabMenuActionRemoveMember v-if="!isRoomOwner(item.userId)" :aria-label="getAriaLabel(item, 'remove')" />
 			</KebabMenu>
 		</template>
 	</DataTable>
@@ -43,14 +31,10 @@
 
 <script setup lang="ts">
 import { RoleName } from "@/serverApi/v3";
-import {
-	KebabMenu,
-	KebabMenuActionChangePermission,
-	KebabMenuActionRemoveMember,
-} from "@ui-kebab-menu";
 import { RoomMember, useRoomMembersStore } from "@data-room";
-import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
+import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
+import { KebabMenu, KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -67,22 +51,16 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersForAdmins, selectedIds, baseTableHeaders } =
-	storeToRefs(roomMembersStore);
+const { roomMembersForAdmins, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
 const { isRoomOwner } = roomMembersStore;
 
-const tableData = computed(
-	() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]
-);
+const tableData = computed(() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]);
 
 const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
 
-const getAriaLabel = (
-	member: RoomMember,
-	actionFor: "remove" | "changeRole" | "" = ""
-) => {
+const getAriaLabel = (member: RoomMember, actionFor: "remove" | "changeRole" | "" = "") => {
 	const memberFullName = member.fullName;
 	const mapActionToConst = {
 		remove: "pages.rooms.members.remove.ariaLabel",
@@ -93,17 +71,15 @@ const getAriaLabel = (
 	return t(languageKey, { memberFullName });
 };
 
-const tableHeaders = computed(() => {
-	return [
-		...baseTableHeaders.value,
-		{
-			title: t("pages.rooms.members.tableHeader.actions"),
-			key: "actions",
-			sortable: false,
-			width: 50,
-		},
-	];
-});
+const tableHeaders = computed(() => [
+	...baseTableHeaders.value,
+	{
+		title: t("pages.rooms.members.tableHeader.actions"),
+		key: "actions",
+		sortable: false,
+		width: 50,
+	},
+]);
 
 const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	if (schoolRoleNames.includes(RoleName.Teacher)) {

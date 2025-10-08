@@ -1,52 +1,32 @@
 import * as serverApi from "@/serverApi/v3/api";
-import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
-
-import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestAppStore,
-	createTestEnvStore,
-	mockedPiniaStoreTyping,
-} from "@@/tests/test-utils";
+import { SHARE_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStore, createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import {
-	roomBoardTileListFactory,
-	roomFactory,
-} from "@@/tests/test-utils/factory/room";
+import { roomBoardTileListFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import {
-	RoomVariant,
-	useRoomAuthorization,
-	useRoomDetailsStore,
-	useRoomsState,
-} from "@data-room";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomVariant, useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomMenu } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDetailsPage } from "@page-room";
+import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState } from "@ui-empty-state";
-import {
-	LeaveRoomProhibitedDialog,
-	SelectBoardLayoutDialog,
-} from "@ui-room-details";
+import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { ref, computed } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
-vi.mock("vue-router", () => {
-	return {
-		useRouter: vi.fn().mockReturnValue({
-			push: vi.fn(),
-		}),
-	};
-});
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn().mockReturnValue({
+		push: vi.fn(),
+	}),
+}));
 
 vi.mock("@data-room/Rooms.state");
 
@@ -112,7 +92,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			...options,
 		};
 
-		const notifierModule = createModuleMocks(NotifierModule);
 		const shareModule = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: false,
 			getParentType: serverApi.ShareTokenBodyParamsParentTypeEnum.Room,
@@ -120,6 +99,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		const room = roomFactory.build({});
 
+		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_BOARD_LAYOUT_ENABLED: true,
 			...envs,
@@ -139,7 +119,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { LeaveRoomProhibitedDialog: true, UseFocusTrap: true },
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				},
 			},
@@ -163,9 +142,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		it("should set the page title", () => {
 			const { room } = setup();
 
-			expect(document.title).toContain(
-				`${room.name} - ${"pages.roomDetails.title"}`
-			);
+			expect(document.title).toContain(`${room.name} - ${"pages.roomDetails.title"}`);
 		});
 
 		it("should render DefaultWireframe", () => {
@@ -295,9 +272,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 					const menu = wrapper.getComponent(RoomMenu);
 					await menu.vm.$emit("room:leave");
-					const leaveRoomProhibitedDialog = wrapper.getComponent(
-						LeaveRoomProhibitedDialog
-					);
+					const leaveRoomProhibitedDialog = wrapper.getComponent(LeaveRoomProhibitedDialog);
 
 					expect(leaveRoomProhibitedDialog.isVisible()).toBe(true);
 					expect(leaveRoomProhibitedDialog.props("modelValue")).toEqual(true);
@@ -319,9 +294,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				roomPermissions.canEditRoomContent = computed(() => false);
 				const { wrapper } = setup();
 
-				const fabButton = wrapper.findComponent(
-					"[data-testid='add-content-button']"
-				);
+				const fabButton = wrapper.findComponent("[data-testid='add-content-button']");
 
 				expect(fabButton.exists()).toBe(false);
 			});
@@ -335,9 +308,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			const openDialog = async (wrapper: VueWrapper) => {
 				await openSpeedDialMenu(wrapper);
 
-				const boardCreateDialogBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_board']"
-				);
+				const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
 				await boardCreateDialogBtn.trigger("click");
 			};
 
@@ -348,9 +319,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const actions = wrapper.findAllComponents({
 					name: "SpeedDialMenuAction",
 				});
-				const boardCreateDialogBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_board']"
-				);
+				const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
 
 				expect(actions).toHaveLength(1);
 				expect(boardCreateDialogBtn.exists()).toBe(true);
@@ -429,9 +398,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const actions = wrapper.findAllComponents({
 					name: "SpeedDialMenuAction",
 				});
-				const boardCreateBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_column_board']"
-				);
+				const boardCreateBtn = wrapper.findComponent("[data-testid='fab_button_add_column_board']");
 
 				expect(actions).toHaveLength(1);
 				expect(boardCreateBtn.exists()).toBe(true);
@@ -443,9 +410,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				});
 				await openSpeedDialMenu(wrapper);
 
-				const boardCreateBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_column_board']"
-				);
+				const boardCreateBtn = wrapper.findComponent("[data-testid='fab_button_add_column_board']");
 
 				await boardCreateBtn.trigger("click");
 
@@ -477,8 +442,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			describe("when some boards are in draft mode", () => {
 				const setupWithBoards = (totalCount = 3, inDraftMode = 1) => {
 					const visibleCount = totalCount - inDraftMode;
-					const visibleBoards =
-						roomBoardTileListFactory.buildList(visibleCount);
+					const visibleBoards = roomBoardTileListFactory.buildList(visibleCount);
 					const draftBoards = roomBoardTileListFactory.buildList(inDraftMode, {
 						isVisible: false,
 					});

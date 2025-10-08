@@ -1,25 +1,11 @@
 <template>
-	<room-base-card
-		:title="t('pages.videoConference.title')"
-		:logo-url="logoUrl"
-		test-id="vc-card"
-		@click="onClick"
-	>
+	<room-base-card :title="t('pages.videoConference.title')" :logo-url="logoUrl" test-id="vc-card" @click="onClick">
 		<template #right>
 			<div v-if="isRunning && hasPermission" class="pulsating-dot my-auto" />
 		</template>
 		<template #footer>
-			<div
-				v-show="!isRunning && !canStart"
-				class="mt-2"
-				data-testId="vc-info-box-show"
-			>
-				<v-alert
-					density="compact"
-					class="ma-0"
-					type="info"
-					data-testId="vc-info-box"
-				>
+			<div v-show="!isRunning && !canStart" class="mt-2" data-testId="vc-info-box-show">
+				<v-alert density="compact" class="ma-0" type="info" data-testId="vc-info-box">
 					<div class="d-flex flex-wrap gap-4">
 						<span class="flex-1 my-auto">
 							{{
@@ -47,12 +33,12 @@
 </template>
 
 <script setup lang="ts">
-import noPermissionImg from "@/assets/img/bbb/no_permission.png";
+import RoomBaseCard from "./RoomBaseCard.vue";
 import availableImg from "@/assets/img/bbb/available.png";
+import noPermissionImg from "@/assets/img/bbb/no_permission.png";
 import notStartedImg from "@/assets/img/bbb/not_started.png";
 import { mdiReload } from "@icons/material";
 import { computed, ComputedRef } from "vue";
-import RoomBaseCard from "./RoomBaseCard.vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {

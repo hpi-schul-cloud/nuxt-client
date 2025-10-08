@@ -19,9 +19,7 @@ defineProps<{
 	contentId: string;
 }>();
 
-const applicationErrorModule: ApplicationErrorModule = injectStrict(
-	APPLICATION_ERROR_KEY
-);
+const applicationErrorModule: ApplicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
 
 const { createApplicationError } = useApplicationError();
 

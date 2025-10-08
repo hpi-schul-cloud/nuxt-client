@@ -1,26 +1,20 @@
-import {
-	BoardPermissionChecks,
-	defaultPermissions,
-} from "@/types/board/Permissions";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import BoardColumnHeader from "./BoardColumnHeader.vue";
+import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { BoardColumnInteractionHandler } from "@feature-board";
 import {
+	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
 	KebabMenuActionMoveLeft,
 	KebabMenuActionMoveRight,
-	KebabMenuActionDelete,
+	KebabMenuActionMoveUp,
 	KebabMenuActionRename,
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed, nextTick, ref } from "vue";
-import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import BoardColumnHeader from "./BoardColumnHeader.vue";
-import { BoardColumnInteractionHandler } from "@feature-board";
 
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = vi.mocked(useBoardPermissions);
@@ -109,10 +103,7 @@ describe("BoardColumnHeader", () => {
 		describe("when the column should be moved down", () => {
 			describe("when the column is the last column", () => {
 				it("should hide move:column-down menut item", async () => {
-					const wrapper = setup(
-						{},
-						{ isListBoard: true, isNotLastColumn: false }
-					);
+					const wrapper = setup({}, { isListBoard: true, isNotLastColumn: false });
 
 					const moveDownButton = wrapper.findComponent(KebabMenuActionMoveDown);
 
@@ -122,10 +113,7 @@ describe("BoardColumnHeader", () => {
 
 			describe("when the column is not the last column", () => {
 				it("should emit move:column-down", async () => {
-					const wrapper = setup(
-						{},
-						{ isListBoard: true, isNotLastColumn: true }
-					);
+					const wrapper = setup({}, { isListBoard: true, isNotLastColumn: true });
 
 					const moveDownButton = wrapper.findComponent(KebabMenuActionMoveDown);
 					moveDownButton.vm.$emit("click");
@@ -139,10 +127,7 @@ describe("BoardColumnHeader", () => {
 		describe("when the column should be moved up", () => {
 			describe("when the column is the first column", () => {
 				it("should hide move:column-up menu item", async () => {
-					const wrapper = setup(
-						{},
-						{ isListBoard: true, isNotFirstColumn: false }
-					);
+					const wrapper = setup({}, { isListBoard: true, isNotFirstColumn: false });
 
 					const moveUpButton = wrapper.findComponent(KebabMenuActionMoveUp);
 
@@ -152,10 +137,7 @@ describe("BoardColumnHeader", () => {
 
 			describe("when the column is not the first column", () => {
 				it("should emit move:column-up", async () => {
-					const wrapper = setup(
-						{},
-						{ isListBoard: true, isNotFirstColumn: true }
-					);
+					const wrapper = setup({}, { isListBoard: true, isNotFirstColumn: true });
 
 					const moveUpButton = wrapper.findComponent(KebabMenuActionMoveUp);
 					moveUpButton.vm.$emit("click");
@@ -169,14 +151,9 @@ describe("BoardColumnHeader", () => {
 		describe("when move-column-keyboard-event is received", () => {
 			describe("when arrow-up-key is received", () => {
 				it("should emit move:column-left", () => {
-					const wrapper = setup(
-						{ permissions: { hasDeletePermission: ref(true) } },
-						{ isListBoard: true }
-					);
+					const wrapper = setup({ permissions: { hasDeletePermission: ref(true) } }, { isListBoard: true });
 
-					const interactionHandler = wrapper.findComponent(
-						BoardColumnInteractionHandler
-					);
+					const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
 					interactionHandler.vm.$emit("move:column-keyboard", {
 						code: "ArrowUp",
 					});
@@ -188,14 +165,9 @@ describe("BoardColumnHeader", () => {
 
 			describe("when arrow-right-key is received", () => {
 				it("should emit move:column-left", () => {
-					const wrapper = setup(
-						{ permissions: { hasDeletePermission: ref(true) } },
-						{ isListBoard: true }
-					);
+					const wrapper = setup({ permissions: { hasDeletePermission: ref(true) } }, { isListBoard: true });
 
-					const interactionHandler = wrapper.findComponent(
-						BoardColumnInteractionHandler
-					);
+					const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
 					interactionHandler.vm.$emit("move:column-keyboard", {
 						code: "ArrowDown",
 					});
@@ -220,10 +192,7 @@ describe("BoardColumnHeader", () => {
 		describe("when the column should be moved to the left", () => {
 			describe("when the column is the first column", () => {
 				it("should hide move:column-left menuitem", async () => {
-					const wrapper = setup(
-						{},
-						{ isListBoard: false, isNotFirstColumn: false }
-					);
+					const wrapper = setup({}, { isListBoard: false, isNotFirstColumn: false });
 
 					const moveLeftButton = wrapper.findComponent(KebabMenuActionMoveLeft);
 
@@ -233,10 +202,7 @@ describe("BoardColumnHeader", () => {
 
 			describe("when the column is not the first column", () => {
 				it("should emit move:column-left", async () => {
-					const wrapper = setup(
-						{},
-						{ isListBoard: false, isNotFirstColumn: true }
-					);
+					const wrapper = setup({}, { isListBoard: false, isNotFirstColumn: true });
 
 					const moveLeftButton = wrapper.findComponent(KebabMenuActionMoveLeft);
 					moveLeftButton.vm.$emit("click");
@@ -250,14 +216,9 @@ describe("BoardColumnHeader", () => {
 		describe("when the column should be moved to the right", () => {
 			describe("when the column is the last column", () => {
 				it("should hide move:column-right menu item", async () => {
-					const wrapper = setup(
-						{},
-						{ isListBoard: false, isNotLastColumn: false }
-					);
+					const wrapper = setup({}, { isListBoard: false, isNotLastColumn: false });
 
-					const moveRightButton = wrapper.findComponent(
-						KebabMenuActionMoveRight
-					);
+					const moveRightButton = wrapper.findComponent(KebabMenuActionMoveRight);
 
 					expect(moveRightButton.exists()).toBe(false);
 				});
@@ -265,14 +226,9 @@ describe("BoardColumnHeader", () => {
 
 			describe("when the column is not the last column", () => {
 				it("should emit move:column-right", async () => {
-					const wrapper = setup(
-						{},
-						{ isListBoard: false, isNotLastColumn: true }
-					);
+					const wrapper = setup({}, { isListBoard: false, isNotLastColumn: true });
 
-					const moveRightButton = wrapper.findComponent(
-						KebabMenuActionMoveRight
-					);
+					const moveRightButton = wrapper.findComponent(KebabMenuActionMoveRight);
 					moveRightButton.vm.$emit("click");
 
 					const emitted = wrapper.emitted();
@@ -289,9 +245,7 @@ describe("BoardColumnHeader", () => {
 						permissions: { hasDeletePermission: ref(true) },
 					});
 
-					const interactionHandler = wrapper.findComponent(
-						BoardColumnInteractionHandler
-					);
+					const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
 					interactionHandler.vm.$emit("move:column-keyboard", {
 						code: "ArrowLeft",
 					});
@@ -308,9 +262,7 @@ describe("BoardColumnHeader", () => {
 						permissions: { hasDeletePermission: ref(true) },
 					});
 
-					const interactionHandler = wrapper.findComponent(
-						BoardColumnInteractionHandler
-					);
+					const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
 					interactionHandler.vm.$emit("move:column-keyboard", {
 						code: "ArrowRight",
 					});
@@ -343,9 +295,7 @@ describe("BoardColumnHeader", () => {
 				permissions: { hasDeletePermission: ref(true) },
 			});
 
-			const interactionHandler = wrapper.findComponent(
-				BoardColumnInteractionHandler
-			);
+			const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
 			interactionHandler.vm.$emit("end-edit-mode");
 
 			expect(mockedStopEditMode).toHaveBeenCalled();

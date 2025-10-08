@@ -14,11 +14,7 @@
 				flat
 				:aria-label="$t('common.labels.name.new')"
 				:label="t('common.labels.name.new')"
-				:rules="[
-					rules.required,
-					rules.validateOnOpeningTag,
-					rules.checkDuplicatedNames,
-				]"
+				:rules="[rules.required, rules.validateOnOpeningTag, rules.checkDuplicatedNames]"
 			/>
 		</template>
 	</Dialog>
@@ -66,28 +62,24 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
-	validateOnOpeningTag: (value: string) => {
-		return validateOnOpeningTag(value);
-	},
+	validateOnOpeningTag: (value: string) => validateOnOpeningTag(value),
 	checkDuplicatedNames: (value: string) => {
 		const fileExtension = getFileExtension(name);
 		const nameWithExtension = `${value}.${fileExtension}`;
 
 		return (
-			!fileRecords.find(
-				(item) => item.name === nameWithExtension && item.name !== name
-			) || t("pages.folder.rename-file-dialog.validation.duplicate-file-name")
+			!fileRecords.find((item) => item.name === nameWithExtension && item.name !== name) ||
+			t("pages.folder.rename-file-dialog.validation.duplicate-file-name")
 		);
 	},
 });
 
-const isNameValid = computed(() => {
-	return (
+const isNameValid = computed(
+	() =>
 		rules.required(nameRef.value) === true &&
 		rules.validateOnOpeningTag(nameRef.value) === true &&
 		rules.checkDuplicatedNames(nameRef.value) === true
-	);
-});
+);
 
 const onCancel = () => {
 	emit("cancel");

@@ -1,10 +1,7 @@
-import { mount } from "@vue/test-utils";
 import ShareModalOptionsForm from "./ShareModalOptionsForm.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("@/components/share/ShareModalOptionsForm", () => {
 	const setup = () => {
@@ -28,9 +25,7 @@ describe("@/components/share/ShareModalOptionsForm", () => {
 	it("should emit event on changes of isSchoolInternal checkbox", async () => {
 		const { wrapper } = setup();
 
-		const checkboxIsSchoolInternal = wrapper.findComponent(
-			'[data-testid="isSchoolInternal"]'
-		);
+		const checkboxIsSchoolInternal = wrapper.findComponent('[data-testid="isSchoolInternal"]');
 
 		await checkboxIsSchoolInternal.setValue(false);
 
@@ -40,9 +35,7 @@ describe("@/components/share/ShareModalOptionsForm", () => {
 	it("should emit event on changes of hasExpiryDate checkbox", async () => {
 		const { wrapper } = setup();
 
-		const checkboxHasExpiryDate = wrapper.findComponent(
-			'[data-testid="hasExpiryDate"]'
-		);
+		const checkboxHasExpiryDate = wrapper.findComponent('[data-testid="hasExpiryDate"]');
 		await checkboxHasExpiryDate.setValue(false);
 
 		expect(wrapper.emitted("share-options-change")).toHaveLength(2);

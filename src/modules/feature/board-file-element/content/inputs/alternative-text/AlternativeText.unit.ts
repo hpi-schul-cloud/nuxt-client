@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import AlternativeText from "./AlternativeText.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import AlternativeText from "./AlternativeText.vue";
 import { VTextarea } from "vuetify/components";
 
 describe("AlternativeText", () => {

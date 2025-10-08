@@ -1,5 +1,7 @@
 import UserHasRole from "./UserHasRole";
 import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 /**
  * @param  { String } expectedRole used as prop
@@ -37,6 +39,10 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 };
 
 describe("@/components/helpers/UserHasRole", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	it("view true-slot if user has role", () => {
 		createTestAppStore({ me: { roles: [{ id: "admin1", name: "admin" }] } });
 		checkCorrectView("ADMIN", ["admin"], true);
