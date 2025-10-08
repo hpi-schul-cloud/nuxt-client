@@ -1,18 +1,7 @@
 <template>
-	<div
-		class="wireframe-container"
-		:class="{ 'wireframe-container-flex': isFlexContainer }"
-	>
-		<div
-			id="notify-screen-reader-polite"
-			aria-live="polite"
-			class="d-sr-only"
-		/>
-		<div
-			id="notify-screen-reader-assertive"
-			aria-live="assertive"
-			class="d-sr-only"
-		/>
+	<div class="wireframe-container" :class="{ 'wireframe-container-flex': isFlexContainer }">
+		<div id="notify-screen-reader-polite" aria-live="polite" class="d-sr-only" />
+		<div id="notify-screen-reader-assertive" aria-live="assertive" class="d-sr-only" />
 		<div class="wireframe-header">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
@@ -132,9 +121,7 @@ const slots = useSlots();
 
 const { mdAndDown, smAndUp, lgAndUp } = useDisplay();
 
-const showDivider = computed(
-	() => !props.hideBorder && !!(props.headline || slots.header)
-);
+const showDivider = computed(() => !props.hideBorder && !!(props.headline || slots.header));
 </script>
 
 <style lang="scss" scoped>
