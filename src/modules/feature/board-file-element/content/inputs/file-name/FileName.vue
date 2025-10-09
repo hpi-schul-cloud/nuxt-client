@@ -16,7 +16,7 @@ import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
 import { useOpeningTagValidator } from "@/utils/validation";
 import { InputWrapperWithCheckmark } from "@ui-input";
 import { isRequired } from "@util-validators";
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
@@ -34,8 +34,6 @@ const emit = defineEmits<{
 	(e: "update:name", name: string): void;
 }>();
 
-const modelValue = ref("");
-
 const { t } = useI18n();
 
 const nameRef = ref<string>("");
@@ -49,12 +47,6 @@ watch(
 	},
 	{ immediate: true }
 );
-
-onMounted(() => {
-	if (props.name !== undefined) {
-		modelValue.value = props.name;
-	}
-});
 
 const rules = {
 	validateOnOpeningTag: (value: string) => {
