@@ -1,25 +1,39 @@
-import loggedOut from "./loggedOut.layout.vue";
+import LoggedOutLayout from "./LoggedOut.layout.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import FilePathsModule from "@/store/filePaths";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { useAppStore } from "@data-app";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import type { Mock } from "vitest";
-import { useRouter } from "vue-router";
+import { beforeEach } from "vitest";
+import { ref } from "vue";
+import { Router, useRouter } from "vue-router";
 
 vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
+const router = vi.mocked(useRouter);
 
 describe("loggedOutLayout", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
+
+		router.mockReturnValue(
+			createMock<Router>({
+				currentRoute: ref({ path: "/" }),
+				replace: vi.fn(),
+			})
+		);
+	});
+
 	const mountComponent = () => {
 		setupStores({
 			filePathsModule: FilePathsModule,
 		});
-		setActivePinia(createTestingPinia());
 
 		createTestEnvStore({
 			GHOST_BASE_URL: "https://works-like-charm.com",
@@ -27,16 +41,7 @@ describe("loggedOutLayout", () => {
 			SC_THEME: SchulcloudTheme.Default,
 		});
 
-		const $route = { path: "home" };
-		const $router = {
-			push: vi.fn(),
-			currentRoute: { value: $route },
-			replace: vi.fn(),
-			afterEach: vi.fn(),
-		};
-		useRouterMock.mockReturnValue($router);
-
-		const wrapper = mount(loggedOut, {
+		const wrapper = mount(LoggedOutLayout, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -62,5 +67,16 @@ describe("loggedOutLayout", () => {
 		expect(new URL(links[0].href).host).toEqual("works-like-charm.com");
 		expect(new URL(links[1].href).host).toEqual("works-like-charm.com");
 		expect(new URL(links[2].href).host).toEqual("works-like-charm.com");
+	});
+
+	it("should routeToErrorPage has not been called when no error in the store", () => {
+		mountComponent();
+		expect(useRouter().replace).not.toHaveBeenCalledWith("/error");
+	});
+
+	it("should routeToErrorPage has been called when an error set in the store", () => {
+		useAppStore().handleApplicationError(HttpStatusCode.Unauthorized, "error.401");
+		mountComponent();
+		expect(useRouter().replace).toHaveBeenCalledWith("/error");
 	});
 });

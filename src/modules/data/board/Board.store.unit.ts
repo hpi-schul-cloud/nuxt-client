@@ -16,7 +16,7 @@ import { useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
-import { createPinia, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
 import type { Mock } from "vitest";
 import { computed, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
@@ -46,10 +46,6 @@ const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 const useRouteMock = <Mock>useRoute;
-
-vi.mock("vue-i18n", () => ({
-	useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
-}));
 
 describe("BoardStore", () => {
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;

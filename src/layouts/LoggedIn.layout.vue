@@ -5,6 +5,7 @@
 		<Topbar :sidebar-expanded="sidebarExpanded" @sidebar-toggled="onToggleSidebar" />
 		<v-main id="main-content" :class="{ 'position-fixed w-100': !isDesktop && sidebarExpanded }">
 			<ApplicationError>
+				<AlertContainer />
 				<router-view />
 			</ApplicationError>
 		</v-main>
@@ -16,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+import AlertContainer from "@/components/molecules/AlertContainer.vue";
 import ApplicationError from "@/components/molecules/ApplicationError.vue";
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { Sidebar, Topbar } from "@ui-layout";

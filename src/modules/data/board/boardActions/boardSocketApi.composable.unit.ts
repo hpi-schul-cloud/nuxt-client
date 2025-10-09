@@ -23,7 +23,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
 
 vi.mock("../socket/socket");
@@ -34,9 +33,6 @@ const mockedUseForceRender = vi.mocked(useForceRender);
 
 vi.mock("./boardRestApi.composable");
 const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
-
-vi.mock("vue-i18n");
-(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);

@@ -25,6 +25,7 @@ const error = computed(() => {
 	const [statusCode, translationKey, isTldrawError] = storage.getMultiple([
 		"applicationErrorStatusCode",
 		"applicationErrorTranslationKey",
+		"applicationErrorTldraw",
 	]);
 
 	if (
@@ -39,6 +40,7 @@ const error = computed(() => {
 
 	storage.remove("applicationErrorStatusCode");
 	storage.remove("applicationErrorTranslationKey");
+	storage.remove("applicationErrorTldraw");
 
 	return {
 		statusCode: Number(applicationError.value?.status),
@@ -47,6 +49,7 @@ const error = computed(() => {
 });
 
 addEventListener("pagehide", (event) => {
+	storage.remove("applicationErrorTldraw");
 	if (event.persisted) return;
 
 	if (applicationError.value?.status) {

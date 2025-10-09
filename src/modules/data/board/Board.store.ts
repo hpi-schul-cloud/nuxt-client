@@ -37,7 +37,6 @@ import { useEnvConfig } from "@data-env";
 import { useSharedEditMode } from "@util-board";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 export const useBoardStore = defineStore("boardStore", () => {
@@ -51,8 +50,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
-
-	const { t } = useI18n();
 
 	const { setEditModeId } = useSharedEditMode();
 	const router = useRouter();

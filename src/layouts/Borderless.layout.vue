@@ -3,6 +3,7 @@
 		<SkipLink />
 		<VMain id="main-content">
 			<ApplicationError>
+				<AlertContainer />
 				<RouterView />
 			</ApplicationError>
 		</VMain>
@@ -14,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+import AlertContainer from "@/components/molecules/AlertContainer.vue";
 import ApplicationError from "@/components/molecules/ApplicationError.vue";
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { LoadingStateDialog } from "@ui-loading-state-dialog";

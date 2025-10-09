@@ -68,7 +68,6 @@ describe("@pages/Error.page.vue", () => {
 		});
 	};
 	describe("@/components/error-handling/ErrorPage.vue", () => {
-
 		it("should assign 'window.location' when back button is clicked", async () => {
 			const wrapper = mountComponent();
 			const btnElement = wrapper.findComponent({ ref: "btn-back" });
@@ -84,6 +83,5 @@ describe("@pages/Error.page.vue", () => {
 			expect(errorComponent.props("statusCode")).toBe(401);
 			expect(errorComponent.props("errorText")).toBe("translated_error.401");
 		});
-
 	});
 });

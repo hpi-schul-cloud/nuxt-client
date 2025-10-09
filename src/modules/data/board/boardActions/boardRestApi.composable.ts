@@ -19,7 +19,6 @@ import { courseRoomDetailsModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useAppStore } from "@data-app";
 import { useSharedEditMode } from "@util-board";
-import { useI18n } from "vue-i18n";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -38,8 +37,6 @@ export const useBoardRestApi = () => {
 		updateBoardLayoutCall,
 		updateReadersCanEditCall,
 	} = useBoardApi();
-
-	const { t } = useI18n();
 
 	const { setEditModeId } = useSharedEditMode();
 

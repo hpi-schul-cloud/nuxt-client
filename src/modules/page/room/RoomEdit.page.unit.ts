@@ -1,6 +1,5 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { RoomColor, RoomUpdateParams } from "@/types/room/Room";
 import { expectNotification, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";

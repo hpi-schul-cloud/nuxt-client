@@ -1,11 +1,11 @@
 <template>
-	<error-page :error="error">
+	<ErrorPage :error="error">
 		<template #action>
 			<v-btn color="primary" variant="flat" @click="retryPageload">
 				{{ t("error.proxy.action") }}
 			</v-btn>
 		</template>
-	</error-page>
+	</ErrorPage>
 </template>
 
 <script setup lang="ts">

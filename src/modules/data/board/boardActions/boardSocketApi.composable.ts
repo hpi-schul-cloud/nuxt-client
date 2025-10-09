@@ -23,7 +23,6 @@ import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
 import { useAppStore } from "@data-app";
-import { useI18n } from "vue-i18n";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
@@ -41,7 +40,6 @@ export const useBoardSocketApi = () => {
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateColumnTitleSuccess,
 	} = useBoardAriaNotification();
-	const { t } = useI18n();
 
 	const dispatch = (action: PermittedStoreActions<typeof BoardActions & typeof CardActions>) => {
 		const successActions = [

@@ -52,8 +52,6 @@ import {
 	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
-import { ApplicationError } from "@/store/types/application-error";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import themeConfig from "@/theme.config";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
