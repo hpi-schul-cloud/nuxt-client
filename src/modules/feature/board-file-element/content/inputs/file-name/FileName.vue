@@ -1,6 +1,6 @@
 <template>
 	<InputWrapperWithCheckmark @confirm="onConfirm">
-		<v-text-field
+		<VTextField
 			v-model="nameRef"
 			data-testid="file-name-input"
 			:label="t('common.labels.fileName')"

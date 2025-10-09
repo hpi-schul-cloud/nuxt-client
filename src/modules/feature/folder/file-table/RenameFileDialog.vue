@@ -7,7 +7,7 @@
 		@confirm="onConfirm"
 	>
 		<template #content>
-			<v-text-field
+			<VTextField
 				v-model="nameRef"
 				data-testid="rename-dialog-input"
 				density="compact"

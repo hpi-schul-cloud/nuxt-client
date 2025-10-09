@@ -1,6 +1,6 @@
 <template>
 	<InputWrapperWithCheckmark @confirm="onConfirm">
-		<v-textarea
+		<VTextarea
 			v-model="modelValue"
 			data-testid="file-caption-input"
 			rows="1"

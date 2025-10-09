@@ -3,7 +3,7 @@
 		<slot />
 		<div class="align-self-center pl-2">
 			<button data-testid="save-input" @click.prevent.stop="onConfirm">
-				<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
+				<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>
 				<span class="d-sr-only">{{ t("common.actions.save") }}</span>
 			</button>
 		</div>

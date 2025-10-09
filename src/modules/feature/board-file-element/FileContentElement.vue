@@ -1,5 +1,5 @@
 <template>
-	<v-card
+	<VCard
 		ref="fileContentElement"
 		class="board-file-element-card mb-4"
 		data-testid="board-file-element"
@@ -51,7 +51,7 @@
 				<KebabMenuActionDelete scope-language-key="components.cardElement.fileElement" @click="onDelete" />
 			</BoardMenu>
 		</FileUpload>
-	</v-card>
+	</VCard>
 </template>
 
 <script setup lang="ts">
