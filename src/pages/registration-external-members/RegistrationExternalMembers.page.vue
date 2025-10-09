@@ -1,3 +1,7 @@
 <template>
-	<div>RegistrationExternalMembers</div>
+	<Registration />
 </template>
+
+<script setup lang="ts">
+import { Registration } from "@feature-room";
+</script>

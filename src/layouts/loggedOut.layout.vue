@@ -105,7 +105,6 @@ const isMobile = computed(() => xs.value);
 
 @media (min-width: 1200px) {
 	.wrapper {
-		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		width: 1140px;
