@@ -27,12 +27,6 @@ export interface CopyFileParams {
      * @memberof CopyFileParams
      */
     target: FileRecordParams;
-    /**
-     * 
-     * @type {string}
-     * @memberof CopyFileParams
-     */
-    fileNamePrefix: string;
 }
 
 

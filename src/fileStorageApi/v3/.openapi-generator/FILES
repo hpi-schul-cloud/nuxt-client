@@ -16,7 +16,6 @@ models/authorized-collabora-document-url-response.ts
 models/copy-file-list-response.ts
 models/copy-file-params.ts
 models/copy-file-response.ts
-models/copy-files-of-parent-params.ts
 models/delete-by-storage-location-response.ts
 models/editor-mode.ts
 models/file-record-list-response.ts

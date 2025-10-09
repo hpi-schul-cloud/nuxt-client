@@ -29,8 +29,6 @@ import { CopyFileListResponse } from '../models';
 // @ts-ignore
 import { CopyFileParams } from '../models';
 // @ts-ignore
-import { CopyFilesOfParentParams } from '../models';
-// @ts-ignore
 import { FileRecordListResponse } from '../models';
 // @ts-ignore
 import { FileRecordParentType } from '../models';
@@ -63,11 +61,11 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
-         * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
+         * @param {CopyFileParams} copyFileParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        copy: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options: any = {}): Promise<RequestArgs> => {
+        copy: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFileParams: CopyFileParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'storageLocationId' is not null or undefined
             assertParamExists('copy', 'storageLocationId', storageLocationId)
             // verify required parameter 'storageLocation' is not null or undefined
@@ -76,8 +74,8 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('copy', 'parentId', parentId)
             // verify required parameter 'parentType' is not null or undefined
             assertParamExists('copy', 'parentType', parentType)
-            // verify required parameter 'copyFilesOfParentParams' is not null or undefined
-            assertParamExists('copy', 'copyFilesOfParentParams', copyFilesOfParentParams)
+            // verify required parameter 'copyFileParams' is not null or undefined
+            assertParamExists('copy', 'copyFileParams', copyFileParams)
             const localVarPath = `/file/copy/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
                 .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
                 .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)))
@@ -105,7 +103,7 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(copyFilesOfParentParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(copyFileParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -811,12 +809,12 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
-         * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
+         * @param {CopyFileParams} copyFileParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyFileListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.copy(storageLocationId, storageLocation, parentId, parentType, copyFilesOfParentParams, options);
+        async copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFileParams: CopyFileParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyFileListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.copy(storageLocationId, storageLocation, parentId, parentType, copyFileParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1021,12 +1019,12 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
-         * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
+         * @param {CopyFileParams} copyFileParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): AxiosPromise<CopyFileListResponse> {
-            return localVarFp.copy(storageLocationId, storageLocation, parentId, parentType, copyFilesOfParentParams, options).then((request) => request(axios, basePath));
+        copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFileParams: CopyFileParams, options?: any): AxiosPromise<CopyFileListResponse> {
+            return localVarFp.copy(storageLocationId, storageLocation, parentId, parentType, copyFileParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1215,12 +1213,12 @@ export interface FileApiInterface {
      * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
-     * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
+     * @param {CopyFileParams} copyFileParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): AxiosPromise<CopyFileListResponse>;
+    copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFileParams: CopyFileParams, options?: any): AxiosPromise<CopyFileListResponse>;
 
     /**
      * 
@@ -1409,13 +1407,13 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
-     * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
+     * @param {CopyFileParams} copyFileParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any) {
-        return FileApiFp(this.configuration).copy(storageLocationId, storageLocation, parentId, parentType, copyFilesOfParentParams, options).then((request) => request(this.axios, this.basePath));
+    public copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFileParams: CopyFileParams, options?: any) {
+        return FileApiFp(this.configuration).copy(storageLocationId, storageLocation, parentId, parentType, copyFileParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
