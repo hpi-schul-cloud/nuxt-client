@@ -6,6 +6,7 @@
 			:label="t('common.labels.fileName')"
 			:rules="[rules.required, rules.validateOnOpeningTag]"
 			@click.stop
+			@keydown.enter.stop="onConfirm"
 		/>
 	</InputWrapperWithCheckmark>
 </template>

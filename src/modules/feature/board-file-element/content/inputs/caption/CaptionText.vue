@@ -8,6 +8,7 @@
 			:label="t('components.cardElement.fileElement.caption')"
 			:rules="[rules.validateOnOpeningTag]"
 			@click.stop
+			@keydown.enter.stop
 		/>
 	</InputWrapperWithCheckmark>
 </template>
@@ -48,7 +49,6 @@ const rules = reactive({
 
 const onConfirm = () => {
 	const isNameValid = rules.validateOnOpeningTag(modelValue.value) === true;
-
 	if (isNameValid) {
 		emit("update:caption", modelValue.value);
 	}

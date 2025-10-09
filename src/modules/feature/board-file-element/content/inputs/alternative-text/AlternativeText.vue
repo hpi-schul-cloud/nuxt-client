@@ -7,6 +7,8 @@
 			:hint="t('components.cardElement.fileElement.altDescription')"
 			:label="t('components.cardElement.fileElement.alternativeText')"
 			:rules="[rules.validateOnOpeningTag]"
+			@click.stop
+			@keydown.enter.stop="onConfirm"
 		/>
 	</InputWrapperWithCheckmark>
 </template>
