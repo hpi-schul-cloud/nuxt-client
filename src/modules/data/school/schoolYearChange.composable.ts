@@ -52,7 +52,7 @@ export const useSchoolYearChange = () => {
 					maintenanceStatus.value.currentYear = maintenanceStatus.value.nextYear;
 				}
 			} else {
-				notifyError("error.generic");
+				notifyError(t("error.generic"));
 			}
 		}
 
