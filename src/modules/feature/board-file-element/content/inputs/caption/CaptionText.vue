@@ -6,7 +6,7 @@
 			rows="1"
 			auto-grow
 			:label="t('components.cardElement.fileElement.caption')"
-			:rules="[rules.validateOnOpeningTag]"
+			:rules="rules"
 			@click.stop
 			@keydown.enter.stop
 		/>
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { useOpeningTagValidator } from "@/utils/validation";
 import { InputWrapperWithCheckmark } from "@ui-input";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
@@ -43,13 +43,12 @@ onMounted(() => {
 	}
 });
 
-const rules = reactive({
-	validateOnOpeningTag: (value: string) => validateOnOpeningTag(value),
-});
+const rules = [(value: string) => validateOnOpeningTag(value)];
 
 const onConfirm = () => {
-	const isNameValid = rules.validateOnOpeningTag(modelValue.value) === true;
-	if (isNameValid) {
+	const isValid = rules.every((rule) => rule(modelValue.value) === true);
+
+	if (isValid) {
 		emit("update:caption", modelValue.value);
 	}
 };
