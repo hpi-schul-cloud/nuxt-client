@@ -1,22 +1,24 @@
-import { printDateFromStringUTC } from "@/plugins/datetime";
-import { RoleName } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { fileRecordFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { DataTable } from "@ui-data-table";
-import { EmptyState } from "@ui-empty-state";
-import { VSkeletonLoader } from "vuetify/lib/components/index";
 import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
+import { printDateFromStringUTC } from "@/plugins/datetime";
+import { RoleName } from "@/serverApi/v3";
+import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
+import { createTestAppStoreWithRole, fileRecordFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { DataTable } from "@ui-data-table";
+import { EmptyState } from "@ui-empty-state";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
+import { VSkeletonLoader } from "vuetify/lib/components/index";
 
 describe("FileTable", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestAppStoreWithRole(RoleName.Teacher);
+	});
+
 	const setupWrapper = (props: {
 		isLoading: boolean;
 		isEmpty: boolean;
@@ -26,15 +28,9 @@ describe("FileTable", () => {
 			total: number;
 		};
 	}) => {
-		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: [RoleName.Teacher],
-		});
 		const wrapper = mount(FileTable, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 			},
 			props: {
 				isLoading: props.isLoading,
@@ -58,9 +54,7 @@ describe("FileTable", () => {
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
 
-			expect(wrapper.findComponent({ name: "VSkeletonLoader" }).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent({ name: "VSkeletonLoader" }).exists()).toBe(true);
 			expect(wrapper.findComponent(EmptyState).exists()).toBe(false);
 			expect(wrapper.findComponent(DataTable).exists()).toBe(false);
 		});
@@ -131,9 +125,7 @@ describe("FileTable", () => {
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
 
-			const createdAt = wrapper.find(
-				`[data-testid='created-at-${fileRecord.name}']`
-			);
+			const createdAt = wrapper.find(`[data-testid='created-at-${fileRecord.name}']`);
 
 			const date = printDateFromStringUTC(fileRecord.createdAt);
 			expect(createdAt.text()).toContain(date);
@@ -193,29 +185,19 @@ describe("FileTable", () => {
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
 
-			const checkbox = wrapper.find(
-				`[data-testid='select-checkbox-${fileRecord.name}']`
-			);
+			const checkbox = wrapper.find(`[data-testid='select-checkbox-${fileRecord.name}']`);
 			expect(checkbox.classes()).toContain("v-selection-control--disabled");
 
-			const previewColumn = wrapper.find(
-				`[data-testid='file-preview-${fileRecord.name}']`
-			);
+			const previewColumn = wrapper.find(`[data-testid='file-preview-${fileRecord.name}']`);
 			expect(previewColumn.classes()).toContain("text-disabled");
 
-			const nameColumn = wrapper.find(
-				`[data-testid='name-${fileRecord.name}']`
-			);
+			const nameColumn = wrapper.find(`[data-testid='name-${fileRecord.name}']`);
 			expect(nameColumn.classes()).toContain("text-disabled");
 
-			const createdAtColumn = wrapper.find(
-				`[data-testid='created-at-${fileRecord.name}']`
-			);
+			const createdAtColumn = wrapper.find(`[data-testid='created-at-${fileRecord.name}']`);
 			expect(createdAtColumn.classes()).toContain("text-disabled");
 
-			const sizeColumn = wrapper.find(
-				`[data-testid='size-${fileRecord.name}']`
-			);
+			const sizeColumn = wrapper.find(`[data-testid='size-${fileRecord.name}']`);
 			expect(sizeColumn.classes()).toContain("text-disabled");
 		});
 
@@ -228,29 +210,19 @@ describe("FileTable", () => {
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
 
-			const checkbox = wrapper.find(
-				`[data-testid='select-checkbox-${fileRecord.name}']`
-			);
+			const checkbox = wrapper.find(`[data-testid='select-checkbox-${fileRecord.name}']`);
 			expect(checkbox.classes()).not.toContain("v-selection-control--disabled");
 
-			const previewColumn = wrapper.find(
-				`[data-testid='file-preview-${fileRecord.name}']`
-			);
+			const previewColumn = wrapper.find(`[data-testid='file-preview-${fileRecord.name}']`);
 			expect(previewColumn.classes()).not.toContain("text-disabled");
 
-			const nameColumn = wrapper.find(
-				`[data-testid='name-${fileRecord.name}']`
-			);
+			const nameColumn = wrapper.find(`[data-testid='name-${fileRecord.name}']`);
 			expect(nameColumn.classes()).not.toContain("text-disabled");
 
-			const createdAtColumn = wrapper.find(
-				`[data-testid='created-at-${fileRecord.name}']`
-			);
+			const createdAtColumn = wrapper.find(`[data-testid='created-at-${fileRecord.name}']`);
 			expect(createdAtColumn.classes()).not.toContain("text-disabled");
 
-			const sizeColumn = wrapper.find(
-				`[data-testid='size-${fileRecord.name}']`
-			);
+			const sizeColumn = wrapper.find(`[data-testid='size-${fileRecord.name}']`);
 			expect(sizeColumn.classes()).not.toContain("text-disabled");
 		});
 	});

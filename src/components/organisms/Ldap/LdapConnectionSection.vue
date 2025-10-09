@@ -1,8 +1,8 @@
 <template>
 	<div class="connection-container">
-		<h3 class="title-class">
+		<h2 class="title-class">
 			{{ $t("pages.administration.ldap.connection.title") }}
-		</h3>
+		</h2>
 
 		<base-input
 			data-testid="ldapDataConnectionUrl"
@@ -14,9 +14,7 @@
 			:info="$t('pages.administration.ldap.connection.server.info')"
 			:validation-model="v$.modelValue.url"
 			:validation-messages="urlValidationMessages"
-			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, url: $event })
-			"
+			@update:model-value="$emit('update:modelValue', { ...modelValue, url: $event })"
 		>
 			<template #icon>
 				<v-icon :icon="mdiDnsOutline" />
@@ -32,9 +30,7 @@
 			:info="$t('pages.administration.ldap.connection.basis.path.info')"
 			:validation-model="v$.modelValue.basisPath"
 			:validation-messages="pathSearchValidationMessages"
-			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, basisPath: $event })
-			"
+			@update:model-value="$emit('update:modelValue', { ...modelValue, basisPath: $event })"
 		>
 			<template #icon>
 				<v-icon :icon="mdiFileTreeOutline" />
@@ -50,9 +46,7 @@
 			:info="$t('pages.administration.ldap.connection.search.user.info')"
 			:validation-model="v$.modelValue.searchUser"
 			:validation-messages="pathSearchValidationMessages"
-			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, searchUser: $event })
-			"
+			@update:model-value="$emit('update:modelValue', { ...modelValue, searchUser: $event })"
 		>
 			<template #icon>
 				<v-icon :icon="mdiAccountCircleOutline" />
@@ -64,9 +58,7 @@
 			type="password"
 			class="mt-8"
 			:label="$t('pages.administration.ldap.connection.search.user.password')"
-			:placeholder="
-				$t('pages.administration.ldap.connection.search.user.password')
-			"
+			:placeholder="$t('pages.administration.ldap.connection.search.user.password')"
 			:validation-model="v$.modelValue.searchUserPassword"
 			:validation-messages="passwordValidationMessages"
 			@update:model-value="
@@ -84,21 +76,12 @@
 </template>
 
 <script>
-import { envConfigModule } from "@/store";
-import { required } from "@vuelidate/validators";
-import {
-	ldapPathRegexValidator,
-	ldapURLRegexValidator,
-	ldapSecuredURLRegexValidator,
-} from "@/utils/ldapConstants";
-import { defineComponent } from "vue";
+import { ldapPathRegexValidator, ldapSecuredURLRegexValidator, ldapURLRegexValidator } from "@/utils/ldapConstants";
+import { useEnvConfig } from "@data-env";
+import { mdiAccountCircleOutline, mdiDnsOutline, mdiFileTreeOutline, mdiLockOutline } from "@icons/material";
 import useVuelidate from "@vuelidate/core";
-import {
-	mdiAccountCircleOutline,
-	mdiDnsOutline,
-	mdiFileTreeOutline,
-	mdiLockOutline,
-} from "@icons/material";
+import { required } from "@vuelidate/validators";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	props: {
@@ -136,14 +119,11 @@ export default defineComponent({
 					message: this.$t("pages.administration.ldapEdit.validation.url"),
 				},
 			],
-			passwordValidationMessages: [
-				{ key: "required", message: this.$t("common.validation.required") },
-			],
+			passwordValidationMessages: [{ key: "required", message: this.$t("common.validation.required") }],
 		};
 	},
 	computed: {
-		insecureLDAPURLAllowed: () =>
-			envConfigModule?.getEnv.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED,
+		insecureLDAPURLAllowed: () => useEnvConfig().value?.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED,
 	},
 	watch: {
 		validate: function () {
@@ -156,9 +136,7 @@ export default defineComponent({
 			modelValue: {
 				url: {
 					required,
-					ldapURLValidator: this.insecureLDAPURLAllowed
-						? ldapURLRegexValidator
-						: ldapSecuredURLRegexValidator,
+					ldapURLValidator: this.insecureLDAPURLAllowed ? ldapURLRegexValidator : ldapSecuredURLRegexValidator,
 				},
 				basisPath: { required, ldapPathRegexValidator },
 				searchUser: { required, ldapPathRegexValidator },

@@ -1,9 +1,8 @@
+import { fontBackgroundColors, fontColors } from "./config";
 import { Editor } from "@ckeditor/ckeditor5-core";
+import { useEnvStore } from "@data-env";
 import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
-import { fontColors, fontBackgroundColors } from "./config";
-import { injectStrict } from "@/utils/inject/inject-strict";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject/injection-keys";
 
 type CKEditorKeystrokeInfo = {
 	keyCode: number;
@@ -35,16 +34,15 @@ interface GeneralConfig {
 }
 interface EditorWithSourceElement extends Editor {
 	sourceElement?: HTMLElement;
-	getData?: () => string;
+	getData: () => string;
 }
 
 export const useEditorConfig = () => {
 	const { t, locale } = useI18n();
-	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const DEFAULT_PROTOCOL = "//";
 
 	const generalConfig = reactive<GeneralConfig>({
-		language: locale.value || envConfigModule.getFallbackLanguage,
+		language: locale.value || useEnvStore().fallBackLanguage,
 		link: {
 			defaultProtocol: DEFAULT_PROTOCOL,
 			addTargetToExternalLinks: true,
@@ -53,29 +51,21 @@ export const useEditorConfig = () => {
 		fontBackgroundColor: fontBackgroundColors(t),
 	});
 
-	const containsListElement = (
-		sourceElement: HTMLElement | undefined
-	): boolean => {
+	const containsListElement = (sourceElement: HTMLElement | undefined): boolean => {
 		if (!sourceElement) return false;
 		return !!sourceElement.querySelector("ul,ol");
 	};
 
-	const containsFormulaElement = (
-		tempDiv: HTMLDivElement | undefined
-	): boolean => {
+	const containsFormulaElement = (tempDiv: HTMLDivElement | undefined): boolean => {
 		if (!tempDiv) return false;
 		return !!tempDiv.querySelector("*:not(.math-tex):not(.katex)");
 	};
 
-	const containsTextContentElement = (
-		textContent: string | null | undefined
-	): boolean => {
+	const containsTextContentElement = (textContent: string | null | undefined): boolean => {
 		if (!textContent) return false;
 		return !!textContent.trim();
 	};
-	const createTempDivFromHtml = (
-		editor: EditorWithSourceElement
-	): HTMLDivElement | undefined => {
+	const createTempDivFromHtml = (editor: EditorWithSourceElement): HTMLDivElement | undefined => {
 		const tempDiv = document.createElement("div");
 		if (!editor.getData) {
 			return;
@@ -100,16 +90,14 @@ export const useEditorConfig = () => {
 		onDelete: () => void
 	) => {
 		if (data.domEvent.key === "Backspace" || data.domEvent.key === "Delete") {
-			if (isEditorEmpty(editor)) {
+			if (isEditorEmpty(editor as EditorWithSourceElement)) {
 				onDelete();
 			}
 		}
 	};
 
 	const registerDeletionHandler = (editor: Editor, onDelete: () => void) => {
-		editor.editing.view.document.on("keydown", (evt, data) =>
-			deletionHandler(evt, data, editor, onDelete)
-		);
+		editor.editing.view.document.on("keydown", (evt, data) => deletionHandler(evt, data, editor, onDelete));
 	};
 
 	return {

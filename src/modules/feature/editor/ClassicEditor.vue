@@ -12,17 +12,13 @@
 </template>
 
 <script setup lang="ts">
+import { corePlugins, mediaFormattingToolbar, prominentHeadings } from "./config";
+import { useEditorConfig } from "./EditorConfig.composable";
+import { Editor } from "@ckeditor/ckeditor5-core";
+import CKEditor from "@ckeditor/ckeditor5-vue";
+import { ClassicEditor } from "@hpi-schul-cloud/ckeditor";
 import { useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
-import CKEditor from "@ckeditor/ckeditor5-vue";
-import { Editor } from "@ckeditor/ckeditor5-core";
-import { ClassicEditor } from "@hpi-schul-cloud/ckeditor";
-import { useEditorConfig } from "./EditorConfig.composable";
-import {
-	corePlugins,
-	mediaFormattingToolbar,
-	prominentHeadings,
-} from "./config";
 
 const props = defineProps({
 	value: {
@@ -38,13 +34,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits([
-	"ready",
-	"focus",
-	"update:value",
-	"blur",
-	"keyboard:delete",
-]);
+const emit = defineEmits(["ready", "focus", "update:value", "blur", "keyboard:delete"]);
 
 const CKEditorVue = CKEditor.component;
 const { generalConfig, registerDeletionHandler } = useEditorConfig();
@@ -52,17 +42,15 @@ const { generalConfig, registerDeletionHandler } = useEditorConfig();
 const ck = ref(null);
 const modelValue = useVModel(props, "value", emit);
 
-const config = computed(() => {
-	return {
-		...generalConfig,
-		toolbar: {
-			items: mediaFormattingToolbar,
-		},
-		plugins: corePlugins,
-		heading: prominentHeadings,
-		placeholder: props.placeholder,
-	};
-});
+const config = computed(() => ({
+	...generalConfig,
+	toolbar: {
+		items: mediaFormattingToolbar,
+	},
+	plugins: corePlugins,
+	heading: prominentHeadings,
+	placeholder: props.placeholder,
+}));
 
 const handleFocus = () => emit("focus");
 const handleBlur = () => emit("blur");
@@ -101,7 +89,8 @@ const handleReady = (editor: Editor) => {
 // TODO - remove important when CKEditor 5 is updated or adjusted to a version that supports custom styles with vite
 // https://github.com/ckeditor/ckeditor5/issues/13709
 // https://ckeditor.com/docs/ckeditor5/latest/getting-started/legacy/advanced/alternative-setups/integrating-from-source-vite.html
-.ck.ck-toolbar {
+.ck.ck-toolbar,
+.ck.ck-sticky-panel__content {
 	border: none !important;
 }
 </style>

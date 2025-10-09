@@ -19,17 +19,13 @@
 		>
 			<VCard :ripple="false">
 				<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
-					<h2 class="text-h4 my-2 text-break-word">
+					<h2 class="my-2 text-break-word">
 						{{ t("error.generic") }}
 					</h2>
 				</VCardTitle>
 				<VCardActions class="action-buttons px-6">
 					<div class="button-section button-right">
-						<VBtn
-							data-testid="dialog-close"
-							variant="outlined"
-							@click="onCloseErrorDialog"
-						>
+						<VBtn data-testid="dialog-close" variant="outlined" @click="onCloseErrorDialog">
 							{{ t("common.labels.close") }}
 						</VBtn>
 					</div>
@@ -47,25 +43,13 @@
 
 <script setup lang="ts">
 import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
-
-import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
-import {
-	VideoConferenceJoinResponse,
-	VideoConferenceScope,
-} from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import {
-	VideoConferenceInfo,
-	VideoConferenceOptions,
-	VideoConferenceState,
-} from "@/store/types/video-conference";
+import { Permission, VideoConferenceJoinResponse, VideoConferenceScope } from "@/serverApi/v3";
+import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
-import {
-	AUTH_MODULE_KEY,
-	injectStrict,
-	VIDEO_CONFERENCE_MODULE_KEY,
-} from "@/utils/inject";
-import { computed, ComputedRef, onMounted, ref, Ref } from "vue";
+import { injectStrict, VIDEO_CONFERENCE_MODULE_KEY } from "@/utils/inject";
+import { useAppStore, useAppStoreRefs } from "@data-app";
+import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
+import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -76,51 +60,30 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const { hasPermission: hasAuthPermission } = useAppStore();
+const { isExpert, userRoles } = useAppStoreRefs();
 
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-const videoConferenceModule: VideoConferenceModule = injectStrict(
-	VIDEO_CONFERENCE_MODULE_KEY
+const videoConferenceModule: VideoConferenceModule = injectStrict(VIDEO_CONFERENCE_MODULE_KEY);
+
+const videoConferenceInfo = computed(() => videoConferenceModule.getVideoConferenceInfo);
+
+const isWaitingRoomActive = computed(() => videoConferenceInfo.value.options.moderatorMustApproveJoinRequests);
+
+const isRunning = computed(() => videoConferenceInfo.value.state === VideoConferenceState.RUNNING);
+
+const isRefreshing = computed(() => videoConferenceModule.getLoading);
+
+const canJoinMeeting = hasAuthPermission(Permission.JoinMeeting);
+const canStart = hasAuthPermission(Permission.StartMeeting);
+const canJoin = computed(
+	() => canJoinMeeting.value && (!isExpert.value || userRoles.value.length > 1 || isWaitingRoomActive.value)
 );
 
-const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
-	() => videoConferenceModule.getVideoConferenceInfo
-);
-
-const isWaitingRoomActive: ComputedRef<boolean> = computed(
-	() => videoConferenceInfo.value.options.moderatorMustApproveJoinRequests
-);
-
-const isRunning: ComputedRef<boolean> = computed(
-	() => videoConferenceInfo.value.state === VideoConferenceState.RUNNING
-);
-
-const isRefreshing: ComputedRef<boolean> = computed(
-	() => videoConferenceModule.getLoading
-);
-
-const canJoin: ComputedRef<boolean> = computed(
-	() =>
-		authModule.getUserPermissions.includes("join_meeting") &&
-		(!authModule.getUserRoles.includes("expert") ||
-			authModule.getUserRoles.length > 1 ||
-			isWaitingRoomActive.value)
-);
-
-const canStart: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("start_meeting")
-);
-
-const hasPermission: ComputedRef<boolean> = computed(() => {
-	return canJoin.value || canStart.value;
-});
+const hasPermission = computed(() => canJoin.value || canStart.value);
 
 const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 
-const videoConferenceOptions: ComputedRef<VideoConferenceOptions> = computed(
-	() => {
-		return videoConferenceModule.getVideoConferenceInfo.options;
-	}
-);
+const videoConferenceOptions = computed(() => videoConferenceModule.getVideoConferenceInfo.options);
 
 onMounted(async () => {
 	await videoConferenceModule.fetchVideoConferenceInfo({
@@ -141,17 +104,11 @@ const onRefresh = async () => {
 };
 
 const onClick = async () => {
-	if (
-		videoConferenceInfo.value.state === VideoConferenceState.NOT_STARTED &&
-		canStart.value
-	) {
+	if (videoConferenceInfo.value.state === VideoConferenceState.NOT_STARTED && canStart.value) {
 		openConfigurationDiaolog();
 	}
 
-	if (
-		videoConferenceInfo.value.state === VideoConferenceState.RUNNING &&
-		canJoin.value
-	) {
+	if (videoConferenceInfo.value.state === VideoConferenceState.RUNNING && canJoin.value) {
 		await joinVideoConference();
 	}
 };
@@ -167,10 +124,7 @@ const onCloseConfigurationDialog = () => {
 const startVideoConference = async () => {
 	onCloseConfigurationDialog();
 
-	const logoutUrl: URL = new URL(
-		`/rooms/${props.roomId}`,
-		window.location.origin
-	);
+	const logoutUrl: URL = new URL(`/rooms/${props.roomId}`, window.location.origin);
 	logoutUrl.searchParams.append("tab", "tools");
 
 	await videoConferenceModule.startVideoConference({
@@ -184,20 +138,17 @@ const startVideoConference = async () => {
 };
 
 const joinVideoConference = async () => {
-	const videoConferenceUrl: VideoConferenceJoinResponse | undefined =
-		await videoConferenceModule.joinVideoConference({
-			scope: VideoConferenceScope.Course,
-			scopeId: props.roomId,
-		});
+	const videoConferenceUrl: VideoConferenceJoinResponse | undefined = await videoConferenceModule.joinVideoConference({
+		scope: VideoConferenceScope.Course,
+		scopeId: props.roomId,
+	});
 
 	if (videoConferenceUrl) {
 		window.open(videoConferenceUrl.url, "_self");
 	}
 };
 
-const isErrorDialogOpen: ComputedRef<boolean> = computed(
-	() => videoConferenceModule.getError !== null
-);
+const isErrorDialogOpen: ComputedRef<boolean> = computed(() => videoConferenceModule.getError !== null);
 
 const onCloseErrorDialog = () => {
 	videoConferenceModule.resetError();

@@ -7,11 +7,7 @@
 	>
 		<v-card class="modal-container">
 			<slot>
-				<h2
-					v-if="$slots.header"
-					:id="`modal-${uid}-title`"
-					class="h4 modal-header"
-				>
+				<h2 v-if="$slots.header" :id="`modal-${uid}-title`" class="modal-header">
 					<slot name="header" />
 				</h2>
 				<div :id="`modal-${uid}-body`" class="modal-body">
@@ -35,8 +31,8 @@
 
 <script setup lang="ts">
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import { computed } from "vue";
 import { useUid } from "@/utils/uid";
+import { computed } from "vue";
 
 type Props = {
 	active?: boolean;
@@ -71,7 +67,7 @@ const isDialogOpen = computed({
 	margin: 0 auto;
 	overflow: hidden;
 	background-color: rgba(var(--v-theme-white));
-	border-radius: var(--radius-md);
+	border-radius: 8px;
 	transition: all 0.3s ease;
 
 	&.white {

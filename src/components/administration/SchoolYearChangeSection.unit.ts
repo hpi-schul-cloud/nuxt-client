@@ -1,48 +1,31 @@
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import {
-	envsFactory,
-	maintenanceStatusFactory,
-	meResponseFactory,
-} from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
+import { createTestAppStoreWithSchool, createTestEnvStore, maintenanceStatusFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useSharedSchoolYearChange } from "@data-school";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 import { nextTick, ref } from "vue";
 import { VBtn, VCheckbox } from "vuetify/lib/components/index";
-import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
 
 vi.mock("@data-school");
 
 describe("SchoolYearChangeSection", () => {
-	let useSharedSchoolYearChangeApiMock: DeepMocked<
-		ReturnType<typeof useSharedSchoolYearChange>
-	>;
-
-	const envConfigModule = createModuleMocks(EnvConfigModule, {
-		getEnv: envsFactory.build(),
-	});
-
 	const schoolId = "schoolId";
-	const mockMe = meResponseFactory.build({ school: { id: schoolId } });
-	const authModule = createModuleMocks(AuthModule, {
-		getSchool: mockMe.school,
+	let useSharedSchoolYearChangeApiMock: DeepMocked<ReturnType<typeof useSharedSchoolYearChange>>;
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
+		createTestAppStoreWithSchool(schoolId);
 	});
 
 	const getWrapper = () => {
 		const wrapper = mount(SchoolYearChangeSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-				},
 			},
 		});
 
@@ -52,13 +35,11 @@ describe("SchoolYearChangeSection", () => {
 	};
 
 	beforeEach(() => {
-		useSharedSchoolYearChangeApiMock = createMock<
-			ReturnType<typeof useSharedSchoolYearChange>
-		>({ maintenanceStatus: ref() });
+		useSharedSchoolYearChangeApiMock = createMock<ReturnType<typeof useSharedSchoolYearChange>>({
+			maintenanceStatus: ref(),
+		});
 
-		vi.mocked(useSharedSchoolYearChange).mockReturnValue(
-			useSharedSchoolYearChangeApiMock
-		);
+		vi.mocked(useSharedSchoolYearChange).mockReturnValue(useSharedSchoolYearChangeApiMock);
 	});
 
 	afterEach(() => {
@@ -71,8 +52,7 @@ describe("SchoolYearChangeSection", () => {
 				vi.useFakeTimers();
 				vi.setSystemTime(new Date(1999, 0, 1));
 
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build();
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build();
 				const { wrapper } = getWrapper();
 
 				return {
@@ -83,21 +63,11 @@ describe("SchoolYearChangeSection", () => {
 			it("should show all buttons disabled", () => {
 				const { wrapper } = setup();
 
-				const transferStartButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="start-transfer-button"]'
-				);
-				const transferStartedButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="started-transfer-button"]'
-				);
-				const ldapButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="ldap-data-button"]'
-				);
-				const checkBox = wrapper.findComponent<typeof VCheckbox>(
-					'[data-testid="checkbox-update-data"]'
-				);
-				const transferFinishButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="finish-transfer-button"]'
-				);
+				const transferStartButton = wrapper.findComponent<typeof VBtn>('[data-testid="start-transfer-button"]');
+				const transferStartedButton = wrapper.findComponent<typeof VBtn>('[data-testid="started-transfer-button"]');
+				const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
+				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
+				const transferFinishButton = wrapper.findComponent<typeof VBtn>('[data-testid="finish-transfer-button"]');
 
 				expect(transferStartButton.isVisible()).toBeTruthy();
 				expect(transferStartButton.props().disabled).toBeTruthy();
@@ -118,8 +88,7 @@ describe("SchoolYearChangeSection", () => {
 				vi.useFakeTimers();
 				vi.setSystemTime(new Date(2000, 11, 31));
 
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build();
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build();
 				const { wrapper } = getWrapper();
 
 				return {
@@ -130,21 +99,11 @@ describe("SchoolYearChangeSection", () => {
 			it("should show transferStartButton button enabled", () => {
 				const { wrapper } = setup();
 
-				const transferStartButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="start-transfer-button"]'
-				);
-				const transferStartedButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="started-transfer-button"]'
-				);
-				const ldapButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="ldap-data-button"]'
-				);
-				const checkBox = wrapper.findComponent<typeof VCheckbox>(
-					'[data-testid="checkbox-update-data"]'
-				);
-				const transferFinishButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="finish-transfer-button"]'
-				);
+				const transferStartButton = wrapper.findComponent<typeof VBtn>('[data-testid="start-transfer-button"]');
+				const transferStartedButton = wrapper.findComponent<typeof VBtn>('[data-testid="started-transfer-button"]');
+				const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
+				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
+				const transferFinishButton = wrapper.findComponent<typeof VBtn>('[data-testid="finish-transfer-button"]');
 
 				expect(transferStartButton.isVisible()).toBeTruthy();
 				expect(transferStartButton.props().disabled).toBeFalsy();
@@ -167,8 +126,7 @@ describe("SchoolYearChangeSection", () => {
 				vi.useFakeTimers();
 				vi.setSystemTime(new Date(2000, 11, 31));
 
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build();
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build();
 				const { wrapper } = getWrapper();
 
 				return {
@@ -183,12 +141,8 @@ describe("SchoolYearChangeSection", () => {
 				await button.trigger("click");
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent(
-					'[data-testid="dialog-cancel"]'
-				);
-				const confirmBtn = wrapper.findComponent(
-					'[data-testid="dialog-confirm"]'
-				);
+				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
+				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 
 				expect(title.isVisible()).toBeTruthy();
 				expect(cancelBtn.isVisible()).toBeTruthy();
@@ -202,21 +156,17 @@ describe("SchoolYearChangeSection", () => {
 			vi.useFakeTimers();
 			vi.setSystemTime(new Date(2000, 11, 31));
 
-			useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-				maintenanceStatusFactory.build();
+			useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build();
 
-			useSharedSchoolYearChangeApiMock.setMaintenanceMode.mockImplementation(
-				() => {
-					useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-						maintenanceStatusFactory.build({
-							maintenance: {
-								active: true,
-								startDate: new Date(2000, 11, 31).toString(),
-							},
-						});
-					return Promise.resolve();
-				}
-			);
+			useSharedSchoolYearChangeApiMock.setMaintenanceMode.mockImplementation(() => {
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
+					maintenance: {
+						active: true,
+						startDate: new Date(2000, 11, 31).toString(),
+					},
+				});
+				return Promise.resolve();
+			});
 			const { wrapper } = getWrapper();
 
 			return {
@@ -231,13 +181,9 @@ describe("SchoolYearChangeSection", () => {
 				const button = wrapper.find('[data-testid="start-transfer-button"]');
 				await button.trigger("click");
 
-				const cancelBtn = wrapper.findComponent(
-					'[data-testid="dialog-cancel"]'
-				);
+				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
 				await cancelBtn.trigger("click");
-				expect(
-					useSharedSchoolYearChangeApiMock.setMaintenanceMode
-				).not.toHaveBeenCalled();
+				expect(useSharedSchoolYearChangeApiMock.setMaintenanceMode).not.toHaveBeenCalled();
 			});
 
 			it("should not show the dialog", async () => {
@@ -247,9 +193,7 @@ describe("SchoolYearChangeSection", () => {
 				await button.trigger("click");
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent(
-					'[data-testid="dialog-cancel"]'
-				);
+				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
 				await cancelBtn.trigger("click");
 
 				expect(title.isVisible()).toBeFalsy();
@@ -272,9 +216,7 @@ describe("SchoolYearChangeSection", () => {
 				await button.trigger("click");
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const confirmBtn = wrapper.findComponent(
-					'[data-testid="dialog-confirm"]'
-				);
+				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 				await confirmBtn.trigger("click");
 
 				expect(title.isVisible()).toBeFalsy();
@@ -286,14 +228,10 @@ describe("SchoolYearChangeSection", () => {
 				const button = wrapper.find('[data-testid="start-transfer-button"]');
 				await button.trigger("click");
 
-				const confirmBtn = wrapper.findComponent(
-					'[data-testid="dialog-confirm"]'
-				);
+				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 				await confirmBtn.trigger("click");
 
-				expect(
-					useSharedSchoolYearChangeApiMock.setMaintenanceMode
-				).toHaveBeenCalledWith("schoolId", true);
+				expect(useSharedSchoolYearChangeApiMock.setMaintenanceMode).toHaveBeenCalledWith("schoolId", true);
 			});
 
 			it("should enable the get ldap data button", async () => {
@@ -302,14 +240,10 @@ describe("SchoolYearChangeSection", () => {
 				const button = wrapper.find('[data-testid="start-transfer-button"]');
 				await button.trigger("click");
 
-				const confirmBtn = wrapper.findComponent(
-					'[data-testid="dialog-confirm"]'
-				);
+				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 				await confirmBtn.trigger("click");
 
-				const ldapButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="ldap-data-button"]'
-				);
+				const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
 
 				expect(ldapButton.isVisible()).toBeTruthy();
 				expect(ldapButton.props().disabled).toBeFalsy();
@@ -321,14 +255,10 @@ describe("SchoolYearChangeSection", () => {
 				const button = wrapper.find('[data-testid="start-transfer-button"]');
 				await button.trigger("click");
 
-				const confirmBtn = wrapper.findComponent(
-					'[data-testid="dialog-confirm"]'
-				);
+				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 				await confirmBtn.trigger("click");
 
-				const transferStartedButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="started-transfer-button"]'
-				);
+				const transferStartedButton = wrapper.findComponent<typeof VBtn>('[data-testid="started-transfer-button"]');
 
 				expect(transferStartedButton.isVisible()).toBeTruthy();
 				expect(transferStartedButton.props().disabled).toBeTruthy();
@@ -342,13 +272,12 @@ describe("SchoolYearChangeSection", () => {
 				vi.useFakeTimers();
 				vi.setSystemTime(new Date(2000, 11, 31));
 
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build({
-						maintenance: {
-							active: true,
-							startDate: new Date(2000, 11, 31).toString(),
-						},
-					});
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
+					maintenance: {
+						active: true,
+						startDate: new Date(2000, 11, 31).toString(),
+					},
+				});
 				const { wrapper } = getWrapper();
 
 				return {
@@ -361,23 +290,17 @@ describe("SchoolYearChangeSection", () => {
 
 				const ldapButton = wrapper.find('[data-testid="ldap-data-button"]');
 
-				expect(ldapButton.attributes().href).toEqual(
-					"/administration/startldapschoolyear"
-				);
+				expect(ldapButton.attributes().href).toEqual("/administration/startldapschoolyear");
 				expect(ldapButton.attributes().target).toEqual("_blank");
 			});
 
 			it("should enable checkbox", async () => {
 				const { wrapper } = setup();
 
-				const ldapButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="ldap-data-button"]'
-				);
+				const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
 				await ldapButton.trigger("click");
 
-				const checkBox = wrapper.findComponent<typeof VCheckbox>(
-					'[data-testid="checkbox-update-data"]'
-				);
+				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 
 				expect(checkBox.isVisible()).toBeTruthy();
 				expect(checkBox.props().disabled).toBeFalsy();
@@ -392,18 +315,15 @@ describe("SchoolYearChangeSection", () => {
 				vi.useFakeTimers();
 				vi.setSystemTime(new Date(2000, 11, 31));
 
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build({
-						maintenance: {
-							active: true,
-							startDate: new Date(2000, 11, 31).toString(),
-						},
-					});
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
+					maintenance: {
+						active: true,
+						startDate: new Date(2000, 11, 31).toString(),
+					},
+				});
 				const { wrapper } = getWrapper();
 
-				const ldapButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="ldap-data-button"]'
-				);
+				const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
 				await ldapButton.trigger("click");
 
 				return {
@@ -415,9 +335,7 @@ describe("SchoolYearChangeSection", () => {
 			it("should disable ldap button", async () => {
 				const { wrapper, ldapButton } = await setup();
 
-				const checkBox = wrapper.findComponent<typeof VCheckbox>(
-					'[data-testid="checkbox-update-data"]'
-				);
+				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 				checkBox.vm.$emit("update:modelValue", true);
 				await nextTick();
 
@@ -427,15 +345,11 @@ describe("SchoolYearChangeSection", () => {
 			it("should enable transfer finish button", async () => {
 				const { wrapper } = await setup();
 
-				const checkBox = wrapper.findComponent<typeof VCheckbox>(
-					'[data-testid="checkbox-update-data"]'
-				);
+				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 				checkBox.vm.$emit("update:modelValue", true);
 				await nextTick();
 
-				const transferFinishButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="finish-transfer-button"]'
-				);
+				const transferFinishButton = wrapper.findComponent<typeof VBtn>('[data-testid="finish-transfer-button"]');
 
 				expect(transferFinishButton.props().disabled).toBeFalsy();
 			});
@@ -446,23 +360,18 @@ describe("SchoolYearChangeSection", () => {
 				vi.useFakeTimers();
 				vi.setSystemTime(new Date(2000, 11, 31));
 
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build({
-						maintenance: {
-							active: true,
-							startDate: new Date(2000, 11, 31).toString(),
-						},
-					});
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
+					maintenance: {
+						active: true,
+						startDate: new Date(2000, 11, 31).toString(),
+					},
+				});
 				const { wrapper } = getWrapper();
 
-				const ldapButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="ldap-data-button"]'
-				);
+				const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
 				await ldapButton.trigger("click");
 
-				const checkBox = wrapper.findComponent<typeof VCheckbox>(
-					'[data-testid="checkbox-update-data"]'
-				);
+				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 				checkBox.vm.$emit("update:modelValue", true);
 				await nextTick();
 
@@ -475,9 +384,7 @@ describe("SchoolYearChangeSection", () => {
 			it("should enable ldap button", async () => {
 				const { wrapper, ldapButton } = await setup();
 
-				const checkBox = wrapper.findComponent<typeof VCheckbox>(
-					'[data-testid="checkbox-update-data"]'
-				);
+				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 				checkBox.vm.$emit("update:modelValue", false);
 				await nextTick();
 
@@ -487,15 +394,11 @@ describe("SchoolYearChangeSection", () => {
 			it("should disable transfer finish button", async () => {
 				const { wrapper } = await setup();
 
-				const checkBox = wrapper.findComponent<typeof VCheckbox>(
-					'[data-testid="checkbox-update-data"]'
-				);
+				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 				checkBox.vm.$emit("update:modelValue", false);
 				await nextTick();
 
-				const transferFinishButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="finish-transfer-button"]'
-				);
+				const transferFinishButton = wrapper.findComponent<typeof VBtn>('[data-testid="finish-transfer-button"]');
 
 				expect(transferFinishButton.props().disabled).toBeTruthy();
 			});
@@ -508,24 +411,19 @@ describe("SchoolYearChangeSection", () => {
 				vi.useFakeTimers();
 				vi.setSystemTime(new Date(2000, 11, 31));
 
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build({
-						maintenance: {
-							active: true,
-							startDate: new Date(2000, 11, 31).toString(),
-						},
-					});
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
+					maintenance: {
+						active: true,
+						startDate: new Date(2000, 11, 31).toString(),
+					},
+				});
 
 				const { wrapper } = getWrapper();
 
-				const ldapButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="ldap-data-button"]'
-				);
+				const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
 				await ldapButton.trigger("click");
 
-				const checkBox = wrapper.findComponent<typeof VCheckbox>(
-					'[data-testid="checkbox-update-data"]'
-				);
+				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 				checkBox.vm.$emit("update:modelValue", true);
 				await nextTick();
 
@@ -541,12 +439,8 @@ describe("SchoolYearChangeSection", () => {
 				await button.trigger("click");
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent(
-					'[data-testid="dialog-cancel"]'
-				);
-				const confirmBtn = wrapper.findComponent(
-					'[data-testid="dialog-confirm"]'
-				);
+				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
+				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 
 				expect(title.isVisible()).toBeTruthy();
 				expect(cancelBtn.isVisible()).toBeTruthy();
@@ -560,34 +454,26 @@ describe("SchoolYearChangeSection", () => {
 			vi.useFakeTimers();
 			vi.setSystemTime(new Date(2000, 11, 31));
 
-			useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-				maintenanceStatusFactory.build({
-					maintenance: {
-						active: true,
-						startDate: new Date(2000, 11, 31).toString(),
-					},
-				});
+			useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
+				maintenance: {
+					active: true,
+					startDate: new Date(2000, 11, 31).toString(),
+				},
+			});
 
-			useSharedSchoolYearChangeApiMock.setMaintenanceMode.mockImplementation(
-				() => {
-					useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-						maintenanceStatusFactory.build({
-							maintenance: { active: false, startDate: undefined },
-						});
-					return Promise.resolve();
-				}
-			);
+			useSharedSchoolYearChangeApiMock.setMaintenanceMode.mockImplementation(() => {
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
+					maintenance: { active: false, startDate: undefined },
+				});
+				return Promise.resolve();
+			});
 
 			const { wrapper } = getWrapper();
 
-			const ldapButton = wrapper.findComponent<typeof VBtn>(
-				'[data-testid="ldap-data-button"]'
-			);
+			const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
 			await ldapButton.trigger("click");
 
-			const checkBox = wrapper.findComponent<typeof VCheckbox>(
-				'[data-testid="checkbox-update-data"]'
-			);
+			const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 			checkBox.vm.$emit("update:modelValue", true);
 			await nextTick();
 
@@ -603,13 +489,9 @@ describe("SchoolYearChangeSection", () => {
 				const button = wrapper.find('[data-testid="finish-transfer-button"]');
 				await button.trigger("click");
 
-				const cancelBtn = wrapper.findComponent(
-					'[data-testid="dialog-cancel"]'
-				);
+				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
 				await cancelBtn.trigger("click");
-				expect(
-					useSharedSchoolYearChangeApiMock.setMaintenanceMode
-				).not.toHaveBeenCalled();
+				expect(useSharedSchoolYearChangeApiMock.setMaintenanceMode).not.toHaveBeenCalled();
 			});
 
 			it("should not show the dialog", async () => {
@@ -619,9 +501,7 @@ describe("SchoolYearChangeSection", () => {
 				await button.trigger("click");
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent(
-					'[data-testid="dialog-cancel"]'
-				);
+				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
 				await cancelBtn.trigger("click");
 
 				expect(title.isVisible()).toBeFalsy();
@@ -644,9 +524,7 @@ describe("SchoolYearChangeSection", () => {
 				await button.trigger("click");
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const confirmBtn = wrapper.findComponent(
-					'[data-testid="dialog-confirm"]'
-				);
+				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 				await confirmBtn.trigger("click");
 
 				expect(title.isVisible()).toBeFalsy();
@@ -658,42 +536,26 @@ describe("SchoolYearChangeSection", () => {
 				const button = wrapper.find('[data-testid="finish-transfer-button"]');
 				await button.trigger("click");
 
-				const confirmBtn = wrapper.findComponent(
-					'[data-testid="dialog-confirm"]'
-				);
+				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 				await confirmBtn.trigger("click");
 
-				expect(
-					useSharedSchoolYearChangeApiMock.setMaintenanceMode
-				).toHaveBeenCalledWith("schoolId", false);
+				expect(useSharedSchoolYearChangeApiMock.setMaintenanceMode).toHaveBeenCalledWith("schoolId", false);
 			});
 
 			it("should show all buttons disabled, but checkbox enabled", async () => {
 				const { wrapper } = await setup();
 
-				const transferStartButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="start-transfer-button"]'
-				);
-				const transferStartedButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="started-transfer-button"]'
-				);
-				const ldapButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="ldap-data-button"]'
-				);
-				const checkBox = wrapper.findComponent<typeof VCheckbox>(
-					'[data-testid="checkbox-update-data"]'
-				);
+				const transferStartButton = wrapper.findComponent<typeof VBtn>('[data-testid="start-transfer-button"]');
+				const transferStartedButton = wrapper.findComponent<typeof VBtn>('[data-testid="started-transfer-button"]');
+				const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
+				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 
-				const transferFinishButton = wrapper.findComponent<typeof VBtn>(
-					'[data-testid="finish-transfer-button"]'
-				);
+				const transferFinishButton = wrapper.findComponent<typeof VBtn>('[data-testid="finish-transfer-button"]');
 
 				const button = wrapper.find('[data-testid="finish-transfer-button"]');
 				await button.trigger("click");
 
-				const confirmBtn = wrapper.findComponent(
-					'[data-testid="dialog-confirm"]'
-				);
+				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 				await confirmBtn.trigger("click");
 
 				expect(transferStartButton.exists()).toBeFalsy();

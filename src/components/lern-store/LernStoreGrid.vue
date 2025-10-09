@@ -14,9 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
 	columnWidth: "15rem",
 });
 
-const col = computed(() => {
-	return `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`;
-});
+const col = computed(() => `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`);
 </script>
 
 <style lang="scss" scoped>
@@ -29,7 +27,7 @@ const col = computed(() => {
 	width: 100%;
 
 	@media #{map.get($display-breakpoints, 'sm')} {
-		grid-gap: calc(9 * var(--border-width-bold)); /* 18px */
+		grid-gap: 18px;
 	}
 
 	@media #{map.get($display-breakpoints, 'md-and-up')} {

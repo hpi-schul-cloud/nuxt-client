@@ -1,9 +1,6 @@
-import { mount } from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("RoomVideoConferenceCard", () => {
 	const getWrapper = (propsData: {

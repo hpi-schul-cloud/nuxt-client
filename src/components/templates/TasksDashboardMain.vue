@@ -1,21 +1,13 @@
 <template>
-	<default-wireframe
-		:headline="$t('common.words.tasks')"
-		max-width="short"
-		:fab-items="fabItems"
-	>
+	<DefaultWireframe :headline="$t('common.words.tasks')" max-width="short" :fab-items="fabItems">
 		<template #header>
-			<h1 class="text-h3 mb-4">{{ $t("common.words.tasks") }}</h1>
+			<h1>{{ $t("common.words.tasks") }}</h1>
 			<div v-if="isTeacher">
 				<v-switch
 					v-if="showSubstituteFilter"
 					v-model="isSubstituteFilterEnabled"
-					:label="
-						$t('components.organisms.TasksDashboardMain.filter.substitute')
-					"
-					:aria-label="
-						$t('components.organisms.TasksDashboardMain.filter.substitute')
-					"
+					:label="$t('components.organisms.TasksDashboardMain.filter.substitute')"
+					:aria-label="$t('components.organisms.TasksDashboardMain.filter.substitute')"
 					:true-icon="mdiCheck"
 				/>
 				<div v-else class="substitute-filter-placeholder" />
@@ -34,10 +26,7 @@
 						<v-icon size="large" class="tab-icon mr-sm-3">
 							{{ tabTwoHeader.icon }}
 						</v-icon>
-						<span
-							class="d-none d-sm-inline"
-							:data-testid="tabTwoHeader.dataTestId"
-						>
+						<span class="d-none d-sm-inline" :data-testid="tabTwoHeader.dataTestId">
 							{{ tabTwoHeader.title }}
 						</span>
 					</v-tab>
@@ -84,14 +73,17 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script>
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { authModule } from "@/store";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import TasksDashboardStudent from "./TasksDashboardStudent";
+import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { Permission, RoleName } from "@/serverApi/v3";
+import { COPY_MODULE_KEY } from "@/utils/inject";
+import { useAppStore } from "@data-app";
 import {
 	mdiArchiveOutline,
 	mdiCheck,
@@ -101,13 +93,9 @@ import {
 	mdiPlus,
 } from "@icons/material";
 
-import TasksDashboardStudent from "./TasksDashboardStudent";
-import TasksDashboardTeacher from "./TasksDashboardTeacher";
-import { COPY_MODULE_KEY } from "@/utils/inject";
-
 const roleBasedRoutes = {
-	[Roles.Teacher]: ["current", "drafts", "finished"],
-	[Roles.Student]: ["open", "completed", "finished"],
+	[RoleName.Teacher]: ["current", "drafts", "finished"],
+	[RoleName.Student]: ["open", "completed", "finished"],
 };
 
 export default {
@@ -187,10 +175,10 @@ export default {
 		},
 		// TODO: split teacher and student sides
 		isStudent() {
-			return this.role === Roles.Student;
+			return this.role === RoleName.Student;
 		},
 		isTeacher() {
-			return this.role === Roles.Teacher;
+			return this.role === RoleName.Teacher;
 		},
 		showCourseFilter() {
 			if (this.tab === this.tabRoutes[2]) return false;
@@ -201,14 +189,10 @@ export default {
 			return this.isTeacher && this.tab !== this.tabRoutes[2];
 		},
 		tabOneIsEmpty() {
-			return this.isStudent
-				? this.openTasksForStudentIsEmpty
-				: this.openTasksForTeacherIsEmpty;
+			return this.isStudent ? this.openTasksForStudentIsEmpty : this.openTasksForTeacherIsEmpty;
 		},
 		tabTwoIsEmpty() {
-			return this.isStudent
-				? this.completedTasksForStudentIsEmpty
-				: this.draftsForTeacherIsEmpty;
+			return this.isStudent ? this.completedTasksForStudentIsEmpty : this.draftsForTeacherIsEmpty;
 		},
 		isCourseFilterDisabled() {
 			if (this.selectedCourseFilters.length > 0) return false;
@@ -226,9 +210,7 @@ export default {
 			const filters = this.courseFilters.map((filter) => {
 				const count = this.getTaskCount(filter.value);
 				const name = filter.value || this.$t("pages.tasks.labels.noCourse");
-				const substitution = filter.isSubstitution
-					? `${this.$t("common.words.substitute")} `
-					: "";
+				const substitution = filter.isSubstitution ? `${this.$t("common.words.substitute")} ` : "";
 				filter.text = `${substitution}${name} (${count})`;
 				return filter;
 			});
@@ -265,10 +247,7 @@ export default {
 			};
 		},
 		fabItems() {
-			if (
-				!this.isStudent &&
-				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
-			) {
+			if (!this.isStudent && useAppStore().userPermissions.includes(Permission.HomeworkCreate)) {
 				return {
 					icon: mdiPlus,
 					title: this.$t("common.actions.create"),
@@ -305,9 +284,7 @@ export default {
 	methods: {
 		getTaskCount(courseName) {
 			if (this.tab === this.tabRoutes[0]) {
-				return this.isStudent
-					? this.tasksCountStudent.open[courseName]
-					: this.tasksCountTeacher.open[courseName];
+				return this.isStudent ? this.tasksCountStudent.open[courseName] : this.tasksCountTeacher.open[courseName];
 			}
 			if (this.tab === this.tabRoutes[1]) {
 				return this.isStudent
@@ -357,10 +334,7 @@ export default {
 }
 
 // remove background color from expansion panel title
-:deep(
-	.v-expansion-panel-title[aria-haspopup="menu"][aria-expanded="true"]
-		> .v-expansion-panel-title__overlay
-) {
+:deep(.v-expansion-panel-title[aria-haspopup="menu"][aria-expanded="true"] > .v-expansion-panel-title__overlay) {
 	opacity: 0;
 }
 

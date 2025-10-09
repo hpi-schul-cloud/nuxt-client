@@ -1,7 +1,7 @@
 <template>
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/move.svg" alt="" />
-		<h1 class="pl-4 pr-4">
+		<h1 class="px-4">
 			{{ t("pages.userMigration.title") }}
 		</h1>
 		<div>
@@ -9,9 +9,7 @@
 				<p>
 					{{ t("pages.userMigration.description.firstParagraph.hello") }}
 					<span class="d-block">
-						{{
-							t("pages.userMigration.description.firstParagraph.changeSource")
-						}}
+						{{ t("pages.userMigration.description.firstParagraph.changeSource") }}
 					</span>
 					<span class="d-block">{{ t(migrationDescription) }}</span>
 					<span class="d-block">
@@ -31,23 +29,14 @@
 					}}
 				</p>
 			</div>
-			<div
-				v-if="userLoginMigration"
-				class="d-flex flex-wrap justify-center mt-8"
-			>
+			<div v-if="userLoginMigration" class="d-flex flex-wrap justify-center mt-8">
 				<v-btn
 					class="mx-8 mb-8"
 					variant="flat"
 					data-testId="btn-cancel"
 					:to="canSkipMigration ? '/dashboard' : '/logout'"
 				>
-					{{
-						$t(
-							canSkipMigration
-								? "pages.userMigration.button.skip"
-								: "common.actions.logout"
-						)
-					}}
+					{{ $t(canSkipMigration ? "pages.userMigration.button.skip" : "common.actions.logout") }}
 				</v-btn>
 				<v-btn
 					class="mx-8 mb-8"
@@ -66,58 +55,40 @@
 <script lang="ts">
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
+import { UserLoginMigration } from "@/store/user-login-migration";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
-import {
-	injectStrict,
-	SYSTEMS_MODULE_KEY,
-	USER_LOGIN_MIGRATION_MODULE_KEY,
-} from "@/utils/inject";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	Ref,
-	ref,
-} from "vue";
+import { injectStrict, SYSTEMS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
+import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { UserLoginMigration } from "@/store/user-login-migration";
 
 export default defineComponent({
 	name: "UserLoginMigrationConsent",
 	layout: "loggedOut",
 	setup() {
 		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
-		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(
-			USER_LOGIN_MIGRATION_MODULE_KEY
-		);
+		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(USER_LOGIN_MIGRATION_MODULE_KEY);
 		const { t } = useI18n();
 
 		const pageTitle = buildPageTitle(t("pages.userMigration.title"));
 		useTitle(pageTitle);
 
-		const getSystemName = (): string => {
-			return (
-				systemsModule?.getSystems.find(
-					(system: System): boolean =>
-						system.id === userLoginMigration.value?.targetSystemId
-				)?.name ?? ""
-			);
-		};
-		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
-			computed(() => userLoginMigrationModule.getUserLoginMigration);
+		const getSystemName = (): string =>
+			systemsModule?.getSystems.find(
+				(system: System): boolean => system.id === userLoginMigration.value?.targetSystemId
+			)?.name ?? "";
+		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> = computed(
+			() => userLoginMigrationModule.getUserLoginMigration
+		);
 
-		const migrationDescription: ComputedRef<string> = computed(() => {
-			return userLoginMigration.value?.mandatorySince
+		const migrationDescription: ComputedRef<string> = computed(() =>
+			userLoginMigration.value?.mandatorySince
 				? "pages.userMigration.description.firstParagraph.fromSourceMandatory"
-				: "pages.userMigration.description.firstParagraph.fromSource";
-		});
+				: "pages.userMigration.description.firstParagraph.fromSource"
+		);
 
-		const canSkipMigration: ComputedRef<boolean> = computed(() => {
-			return !userLoginMigration.value?.mandatorySince;
-		});
+		const canSkipMigration: ComputedRef<boolean> = computed(() => !userLoginMigration.value?.mandatorySince);
 
 		const isLoading: Ref<boolean> = ref(true);
 

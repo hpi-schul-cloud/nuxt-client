@@ -1,9 +1,5 @@
 <template>
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		xmlns:xlink="http://www.w3.org/1999/xlink"
-		viewBox="0 0 160 160"
-	>
+	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 160 160">
 		<defs>
 			<path id="c" d="M0 .119h65.7V41.73H0z" />
 			<path id="e" d="M.026 1.626h12.355v14.661H.026z" />
@@ -18,23 +14,14 @@
 			<filter id="a" x="-5.3%" y="-4.7%" width="110.7%" height="110.7%">
 				<feOffset dy="1" in="SourceAlpha" />
 				<feGaussianBlur stdDeviation="2.5" />
-				<feColorMatrix
-					values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
-					result="C"
-				/>
+				<feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" result="C" />
 				<feMorphology radius="1" in="SourceAlpha" />
 				<feOffset dy="3" />
 				<feGaussianBlur stdDeviation=".5" />
-				<feColorMatrix
-					values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0"
-					result="G"
-				/>
+				<feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0" result="G" />
 				<feOffset dy="2" in="SourceAlpha" />
 				<feGaussianBlur stdDeviation="1" />
-				<feColorMatrix
-					values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.14 0"
-					result="J"
-				/>
+				<feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.14 0" result="J" />
 				<feMerge>
 					<feMergeNode in="C" />
 					<feMergeNode in="G" />

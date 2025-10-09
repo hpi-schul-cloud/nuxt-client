@@ -1,12 +1,9 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
-import { VCard, VDialog } from "vuetify/lib/components/index";
-import { VueWrapper } from "@vue/test-utils";
-import { LeaveRoomProhibitedDialog } from "@ui-room-details";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { WarningAlert } from "@ui-alert";
+import { ConfirmationDialog } from "@ui-confirmation-dialog";
+import { LeaveRoomProhibitedDialog } from "@ui-room-details";
+import { VueWrapper } from "@vue/test-utils";
+import { VCard, VDialog } from "vuetify/lib/components/index";
 
 describe("ConfirmationDialog", () => {
 	let wrapper: VueWrapper<InstanceType<typeof ConfirmationDialog>>;
@@ -33,10 +30,7 @@ describe("ConfirmationDialog", () => {
 		it("should render dialog title", async () => {
 			const { wrapper } = setup();
 
-			const dialogTitle = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.find('[data-testid="dialog-title"]');
+			const dialogTitle = wrapper.findComponent(VDialog).findComponent(VCard).find('[data-testid="dialog-title"]');
 
 			expect(dialogTitle.text()).toContain("pages.rooms.leaveRoom.menu");
 		});
@@ -44,14 +38,9 @@ describe("ConfirmationDialog", () => {
 		it("should render warning alert", async () => {
 			const { wrapper } = setup();
 
-			const warningAlert = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.findComponent(WarningAlert);
+			const warningAlert = wrapper.findComponent(VDialog).findComponent(VCard).findComponent(WarningAlert);
 
-			expect(warningAlert.text()).toBe(
-				"pages.rooms.leaveRoom.RoomOwner.warning"
-			);
+			expect(warningAlert.text()).toBe("pages.rooms.leaveRoom.RoomOwner.warning");
 		});
 	});
 
@@ -61,9 +50,7 @@ describe("ConfirmationDialog", () => {
 
 			const dialog = wrapper.findComponent(VDialog);
 
-			const closeButton = dialog
-				.findComponent(VCard)
-				.find("[data-testid='dialog-close']");
+			const closeButton = dialog.findComponent(VCard).find("[data-testid='dialog-close']");
 
 			await closeButton.trigger("click");
 

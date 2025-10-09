@@ -1,8 +1,8 @@
 <template>
 	<div class="impressum-container">
 		<div class="impressum-max-width">
-			<h1 class="h3">Impressum</h1>
-			<h2 class="h6">
+			<h1>Impressum</h1>
+			<h2>
 				Dataport Bildungscloud | dBildungscloud
 				<br />
 				Dataport AöR
@@ -20,10 +20,7 @@
 				<br />
 				De-Mail: poststelle[at]dataport.de-mail.de
 			</p>
-			<h2 class="h6">
-				Dataport ist eine Anstalt des öffentlichen Rechts. Sie wird vertreten
-				durch den Vorstand:
-			</h2>
+			<h2>Dataport ist eine Anstalt des öffentlichen Rechts. Sie wird vertreten durch den Vorstand:</h2>
 			<p>
 				Dr. Johann Bizer (Vorsitzender)
 				<br />

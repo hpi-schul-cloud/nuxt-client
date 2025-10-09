@@ -18,16 +18,11 @@
 </template>
 
 <script setup lang="ts">
-import { mdiCogOutline } from "@icons/material";
-import { BoardMenuScope } from "@ui-board";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-import {
-	KebabMenuAction,
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
+import { mdiCogOutline } from "@icons/material";
+import { BoardMenuScope } from "@ui-board";
+import { KebabMenuAction, KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
@@ -43,12 +38,7 @@ defineProps({
 	elementIndex: { type: Number, required: true },
 });
 
-const emit = defineEmits([
-	"edit:element",
-	"delete:element",
-	"move-down:element",
-	"move-up:element",
-]);
+const emit = defineEmits(["edit:element", "delete:element", "move-down:element", "move-up:element"]);
 const onEdit = () => emit("edit:element");
 
 const onDelete = async (confirmation: Promise<boolean>) => {

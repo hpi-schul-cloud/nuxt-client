@@ -1,15 +1,10 @@
-import ContentModule from "./content";
 import { initializeAxios } from "../utils/api";
+import ContentModule from "./content";
+import { Elements, Lessons, Resource, ResourceProperties, Resources } from "./types/content";
+import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
-import {
-	Elements,
-	Lessons,
-	Resource,
-	ResourceProperties,
-	Resources,
-} from "./types/content";
-import setupStores from "@@/tests/test-utils/setupStores";
-import EnvConfigModule from "./env-config";
+import { setActivePinia } from "pinia";
+import { beforeAll } from "vitest";
 
 const ESPath = "/v1/edu-sharing";
 const lessonsPath = "/v3/lessons/course";
@@ -87,6 +82,9 @@ const axiosInitializer = () => {
 };
 
 describe("content module", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 	beforeEach(() => {
 		requestPath = "";
 	});
@@ -394,8 +392,6 @@ describe("content module", () => {
 			expect(requestPath).toBe(`/v1/edu-sharing/${mockId}`);
 		});
 		it("init action calls initMutation mutation", () => {
-			setupStores({ envConfigModule: EnvConfigModule });
-
 			const contentModule = new ContentModule({});
 			const initSpy = vi.fn();
 
@@ -415,9 +411,7 @@ describe("content module", () => {
 				total: 0,
 				limit: 0,
 				skip: 0,
-				data: [
-					{ ...mockResource, ref: { id: "mockId" }, stateSelected: false },
-				],
+				data: [{ ...mockResource, ref: { id: "mockId" }, stateSelected: false }],
 				pagination: undefined,
 			};
 			contentModule.elements = mockElements;

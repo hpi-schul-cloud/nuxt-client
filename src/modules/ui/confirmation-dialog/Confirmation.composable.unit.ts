@@ -1,16 +1,13 @@
-import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useConfirmationDialog } from "./Confirmation.composable";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 describe("Confirmation composable", () => {
 	describe("askConfirmation", () => {
 		const setup = () => {
-			const { askConfirmation, isDialogOpen } = mountComposable(
-				() => useConfirmationDialog(),
-				{
-					global: { plugins: [createTestingI18n()] },
-				}
-			);
+			const { askConfirmation, isDialogOpen } = mountComposable(() => useConfirmationDialog(), {
+				global: { plugins: [createTestingI18n()] },
+			});
 
 			return {
 				askConfirmation,

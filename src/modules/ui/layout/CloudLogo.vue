@@ -5,11 +5,10 @@
 </template>
 
 <script setup lang="ts">
+import { useEnvConfig } from "@data-env";
 import { useI18n } from "vue-i18n";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 const { t } = useI18n();
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
-const altText = envConfigModule.getEnv.SC_TITLE + " " + t("global.cloudLogo");
+const altText = useEnvConfig().value.SC_TITLE + " " + t("global.cloudLogo");
 </script>

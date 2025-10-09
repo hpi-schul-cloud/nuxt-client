@@ -1,16 +1,13 @@
-import type { Mock } from "vitest";
+import ApplicationErrorRouting from "./ApplicationErrorRouting.vue";
 import ApplicationErrorModule from "@/store/application-error";
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
+import type { Mock } from "vitest";
 import { ref } from "vue";
 import { Router, useRouter } from "vue-router";
-import ApplicationErrorRouting from "./ApplicationErrorRouting.vue";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
@@ -26,8 +23,8 @@ describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
 	useRouterMock.mockReturnValue(router);
 	let applicationErrorModuleMock: ApplicationErrorModule;
 
-	const mountComponent = () => {
-		return mount(ApplicationErrorRouting, {
+	const mountComponent = () =>
+		mount(ApplicationErrorRouting, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -36,7 +33,6 @@ describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
 			},
 			router,
 		});
-	};
 
 	it("should routeToErrorPage has not been called when no error in the store", () => {
 		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {

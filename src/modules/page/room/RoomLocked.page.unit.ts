@@ -1,7 +1,4 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomLockedPage } from "@page-room";
 import { mount } from "@vue/test-utils";
 

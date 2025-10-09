@@ -1,22 +1,20 @@
+import { SidebarSingleItem } from "../types";
+import { useSidebarSelection } from "./SidebarSelection.composable";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { useSharedBoardPageInformation } from "@data-board";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia, storeToRefs } from "pinia";
+import { Mock } from "vitest";
 import { computed } from "vue";
 import { RouteLocationNormalized, useRoute } from "vue-router";
-import { SidebarSingleItem } from "../types";
-import { useSidebarSelection } from "./SidebarSelection.composable";
-import { Mock } from "vitest";
 
 vi.mock("vue-router");
 const useRouteMock = <Mock>useRoute;
 
 vi.mock("@data-board/BoardPageInformation.composable");
-const mockedUseSharedBoardPageInformation = vi.mocked(
-	useSharedBoardPageInformation
-);
+const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformation);
 
 describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 	beforeEach(() => {
@@ -43,9 +41,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 	});
 
 	const setup = (routeProps: { path: string; name: string }) => {
-		useRouteMock.mockReturnValue(
-			createMock<RouteLocationNormalized>(routeProps)
-		);
+		useRouteMock.mockReturnValue(createMock<RouteLocationNormalized>(routeProps));
 		const coursesItem: SidebarSingleItem = {
 			title: "courses",
 			testId: "courses-item",
@@ -69,12 +65,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 
 	describe("general matching", () => {
 		describe("when route path is different from item.to", () => {
-			const setupDifferentPath = () => {
-				return setup({
+			const setupDifferentPath = () =>
+				setup({
 					path: "/rooms",
 					name: "rooms",
 				});
-			};
 
 			it("should not be active", () => {
 				const { tasksItem } = setupDifferentPath();
@@ -85,12 +80,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when route path is equal to item.to", () => {
-			const setupEqualPath = () => {
-				return setup({
+			const setupEqualPath = () =>
+				setup({
 					path: "/tasks",
 					name: "tasks",
 				});
-			};
 
 			it("should be active", () => {
 				const { tasksItem } = setupEqualPath();
@@ -101,12 +95,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when route path starts with item.to", () => {
-			const setupEqualPath = () => {
-				return setup({
+			const setupEqualPath = () =>
+				setup({
 					path: "/tasks/0000dcfbfb5c7a3f00bf21ba",
 					name: "task-id",
 				});
-			};
 
 			it("should be active", () => {
 				const { tasksItem } = setupEqualPath();
@@ -119,12 +112,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 
 	describe("rooms item", () => {
 		describe("when rooms route is matched", () => {
-			const setupRoomsRoute = () => {
-				return setup({
+			const setupRoomsRoute = () =>
+				setup({
 					path: "/rooms",
 					name: "rooms",
 				});
-			};
 
 			it("should be active", () => {
 				const { roomsItem } = setupRoomsRoute();
@@ -135,12 +127,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when room details route is matched", () => {
-			const setupRoomDetailsRoute = () => {
-				return setup({
+			const setupRoomDetailsRoute = () =>
+				setup({
 					path: "/rooms/0000dcfbfb5c7a3f00bf21ab",
 					name: "room-details",
 				});
-			};
 
 			describe("and resource is a room", () => {
 				const setupIsRoom = () => {
@@ -176,12 +167,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when board details path is matched", () => {
-			const setupBoardDetailsRoute = () => {
-				return setup({
+			const setupBoardDetailsRoute = () =>
+				setup({
 					path: "/boards/0000dcfbfb5c7a3f00bf21ac",
 					name: "boards-id",
 				});
-			};
 
 			describe("and board context is a room", () => {
 				const setupIsRoom = () => {
@@ -226,12 +216,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when folder details path is matched", () => {
-			const setupFolderDetailsRoute = () => {
-				return setup({
+			const setupFolderDetailsRoute = () =>
+				setup({
 					path: "/folder/123",
 					name: "folder-id",
 				});
-			};
 
 			describe("and folder context is a room", () => {
 				const setupIsRoom = () => {
@@ -282,12 +271,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 
 	describe("courses item", () => {
 		describe("when course-room-overview route is matched", () => {
-			const setupOverviewRoute = () => {
-				return setup({
+			const setupOverviewRoute = () =>
+				setup({
 					path: "/rooms/courses-overview",
 					name: "course-room-list",
 				});
-			};
 
 			it("should be active", () => {
 				const { coursesItem } = setupOverviewRoute();
@@ -298,12 +286,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when course-room-list route is matched", () => {
-			const setupListRoute = () => {
-				return setup({
+			const setupListRoute = () =>
+				setup({
 					path: "/rooms/courses-list",
 					name: "course-room-list",
 				});
-			};
 
 			it("should be active", () => {
 				const { coursesItem } = setupListRoute();
@@ -314,12 +301,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when room details route is matched", () => {
-			const setupRoomDetailsRoute = () => {
-				return setup({
+			const setupRoomDetailsRoute = () =>
+				setup({
 					path: "/rooms/0000dcfbfb5c7a3f00bf21ab",
 					name: "room-details",
 				});
-			};
 
 			describe("and resource is a course room", () => {
 				const setupIsCourseRoom = () => {
@@ -355,12 +341,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when board details path is matched", () => {
-			const setupBoardDetailsRoute = () => {
-				return setup({
+			const setupBoardDetailsRoute = () =>
+				setup({
 					path: "/boards/0000dcfbfb5c7a3f00bf21ac",
 					name: "boards-id",
 				});
-			};
 
 			describe("and board context is a course", () => {
 				const setupCourseContext = () => {
@@ -414,12 +399,11 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when folder details path is matched", () => {
-			const setupFolderDetailsRoute = () => {
-				return setup({
+			const setupFolderDetailsRoute = () =>
+				setup({
 					path: "/folder/123",
 					name: "folder-id",
 				});
-			};
 
 			describe("and folder context is a course", () => {
 				const setupCourseContext = () => {

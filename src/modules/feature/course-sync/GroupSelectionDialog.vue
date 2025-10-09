@@ -8,7 +8,7 @@
 		@dialog-canceled="$emit('cancel')"
 	>
 		<template #title>
-			<div class="text-h4 my-2 text-break">
+			<div class="text-h2 my-2 text-break">
 				{{ $t("feature-course-sync.GroupSelectionDialog.title") }}
 			</div>
 		</template>
@@ -33,21 +33,12 @@
 				data-testid="group-selection"
 			>
 				<template #append-item>
-					<div
-						v-intersect="onGroupListIntersect"
-						data-testid="group-selection-item"
-					/>
+					<div v-intersect="onGroupListIntersect" data-testid="group-selection-item" />
 				</template>
 			</VAutocomplete>
-			<WarningAlert
-				v-if="selectedGroup && !hasTeacher(selectedGroup)"
-				data-testid="no-teacher-warning"
-			>
+			<WarningAlert v-if="selectedGroup && !hasTeacher(selectedGroup)" data-testid="no-teacher-warning">
 				<span data-testid="no-teacher-warning-text">
-					<i18n-t
-						keypath="feature-course-sync.GroupSelectionDialog.noTeacher"
-						scope="global"
-					>
+					<i18n-t keypath="feature-course-sync.GroupSelectionDialog.noTeacher" scope="global">
 						<template #groupName>
 							{{ selectedGroup.name }}
 						</template>
@@ -102,14 +93,10 @@ const onConfirm = async () => {
 	}
 };
 
-const { groups, total, skip, limit, isLoading, fetchGroups } =
-	useGroupListState();
+const { groups, total, skip, limit, isLoading, fetchGroups } = useGroupListState();
 
-const hasTeacher = (group: GroupResponse): boolean => {
-	return group.users.some(
-		(user: GroupUserResponse) => user.role === RoleName.Teacher
-	);
-};
+const hasTeacher = (group: GroupResponse): boolean =>
+	group.users.some((user: GroupUserResponse) => user.role === RoleName.Teacher);
 
 const onGroupListIntersect = async (isIntersecting: boolean) => {
 	if (isIntersecting && total.value > groups.value.length) {

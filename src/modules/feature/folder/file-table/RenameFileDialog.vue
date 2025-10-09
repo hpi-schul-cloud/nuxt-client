@@ -10,16 +10,11 @@
 			<v-text-field
 				v-model="nameRef"
 				data-testid="rename-dialog-input"
-				class="mt-8"
 				density="compact"
 				flat
 				:aria-label="$t('common.labels.name.new')"
 				:label="t('common.labels.name.new')"
-				:rules="[
-					rules.required,
-					rules.validateOnOpeningTag,
-					rules.checkDuplicatedNames,
-				]"
+				:rules="[rules.required, rules.validateOnOpeningTag, rules.checkDuplicatedNames]"
 			/>
 		</template>
 	</Dialog>
@@ -78,20 +73,18 @@ const rules = reactive({
 		const nameWithExtension = `${value}.${fileExtension}`;
 
 		return (
-			!fileRecords.find(
-				(item) => item.name === nameWithExtension && item.name !== name
-			) || t("pages.folder.rename-file-dialog.validation.duplicate-file-name")
+			!fileRecords.find((item) => item.name === nameWithExtension && item.name !== name) ||
+			t("pages.folder.rename-file-dialog.validation.duplicate-file-name")
 		);
 	},
 });
 
-const isNameValid = computed(() => {
-	return (
+const isNameValid = computed(
+	() =>
 		rules.required(nameRef.value) === true &&
 		rules.validateOnOpeningTag(nameRef.value) === true &&
 		rules.checkDuplicatedNames(nameRef.value) === true
-	);
-});
+);
 
 const onCancel = () => {
 	emit("cancel");

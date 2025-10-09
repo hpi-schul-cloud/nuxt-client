@@ -1,28 +1,23 @@
+import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
 import RoomModal from "@/components/molecules/RoomModal";
-import { authModule, courseRoomListModule } from "@/store";
-import AuthModule from "@/store/auth";
-import CopyModule from "@/store/copy";
-import EnvConfigModule from "@/store/env-config";
-import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
-import CourseRoomListModule from "@/store/course-room-list";
+import { courseRoomListModule } from "@/store";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
+import CopyModule from "@/store/copy";
+import CourseRoomListModule from "@/store/course-room-list";
+import LoadingStateModule from "@/store/loading-state";
 import {
-	ENV_CONFIG_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	COURSE_ROOM_LIST_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
+	COURSE_ROOM_LIST_MODULE_KEY,
+	LOADING_STATE_MODULE_KEY,
 } from "@/utils/inject";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
-import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 
 vi.mock("vue-router");
@@ -85,43 +80,23 @@ const mockCourseData = [
 		title: "Mathe",
 		shortTitle: "Ma",
 		displayColor: "#54616e",
+		isLocked: false,
 	},
 ];
 
-const mockAuthStoreData = {
-	_id: "asdf",
-	id: "asdf",
-	firstName: "Arthur",
-	lastName: "Dent",
-	email: "arthur.dent@hitchhiker.org",
-	roles: [{ name: "student", displayName: "Student" }],
-	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
-};
-
 setupStores({
-	authModule: AuthModule,
-	envConfigModule: EnvConfigModule,
 	courseRoomListModule: CourseRoomListModule,
 });
 
 const spyMocks = {
-	storeRoomAlignMock: vi
-		.spyOn(courseRoomListModule, "align")
-		.mockImplementation(async () => ({})),
-	storeModuleFetchMock: vi
-		.spyOn(courseRoomListModule, "fetch")
-		.mockImplementation(async () => ({})),
-	storeModuleFetchAllMock: vi
-		.spyOn(courseRoomListModule, "fetchAllElements")
-		.mockImplementation(async () => ({})),
-	storeModuleUpdateMock: vi
-		.spyOn(courseRoomListModule, "update")
-		.mockImplementation(async () => ({})),
+	storeRoomAlignMock: vi.spyOn(courseRoomListModule, "align").mockImplementation(() => ({})),
+	storeModuleFetchMock: vi.spyOn(courseRoomListModule, "fetch").mockImplementation(() => ({})),
+	storeModuleFetchAllMock: vi.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation(() => ({})),
+	storeModuleUpdateMock: vi.spyOn(courseRoomListModule, "update").mockImplementation(() => ({})),
 };
 
 let copyModuleMock;
 let loadingStateModuleMock;
-let notifierModuleMock;
 
 const defaultMocks = {
 	$route: { query: {} },
@@ -133,10 +108,6 @@ const getWrapper = () => {
 		getIsResultModalOpen: false,
 	});
 	loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-	notifierModuleMock = createModuleMocks(NotifierModule);
-	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-		getCtlToolsTabEnabled: false,
-	});
 	const courseRoomListModuleMock = createModuleMocks(courseRoomListModule);
 	return mount(CourseRoomOverviewPage, {
 		global: {
@@ -144,11 +115,7 @@ const getWrapper = () => {
 			provide: {
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
-				[NOTIFIER_MODULE_KEY]: notifierModuleMock,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
-					CommonCartridgeImportModule
-				),
+				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(CommonCartridgeImportModule),
 				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: courseRoomListModuleMock,
 				[LOADING_STATE_MODULE_KEY.valueOf()]: loadingStateModuleMock,
 			},
@@ -159,9 +126,11 @@ const getWrapper = () => {
 
 describe("@/pages/CourseRoomOverview.page", () => {
 	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStore();
+		createTestEnvStore();
 		courseRoomListModule.setRoomData(mockRoomStoreData);
 		courseRoomListModule.setAllElements(mockCourseData);
-		authModule.setMe(mockAuthStoreData);
 	});
 
 	afterEach(() => {
@@ -193,6 +162,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 			{
 				id: "1234",
 				name: "Mathe",
+				isLocked: false,
 			},
 		];
 
@@ -244,31 +214,21 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		const wrapper = getWrapper();
 		await nextTick();
 		await nextTick();
-		expect(
-			wrapper
-				.findComponent('[data-test-position="1-1"]')
-				.attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
-		expect(
-			wrapper
-				.findComponent('[data-test-position="2-2"]')
-				.attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
-		expect(
-			wrapper
-				.findComponent('[data-test-position="0-0"]')
-				.attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
-		expect(
-			wrapper
-				.findComponent('[data-test-position="3-2"]')
-				.attributes("data-avatar-type")
-		).toStrictEqual("vRoomGroupAvatar");
-		expect(
-			wrapper
-				.findComponent('[data-test-position="3-3"]')
-				.attributes("data-avatar-type")
-		).toStrictEqual("vRoomEmptyAvatar");
+		expect(wrapper.findComponent('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual(
+			"vRoomAvatar"
+		);
+		expect(wrapper.findComponent('[data-test-position="2-2"]').attributes("data-avatar-type")).toStrictEqual(
+			"vRoomAvatar"
+		);
+		expect(wrapper.findComponent('[data-test-position="0-0"]').attributes("data-avatar-type")).toStrictEqual(
+			"vRoomAvatar"
+		);
+		expect(wrapper.findComponent('[data-test-position="3-2"]').attributes("data-avatar-type")).toStrictEqual(
+			"vRoomGroupAvatar"
+		);
+		expect(wrapper.findComponent('[data-test-position="3-3"]').attributes("data-avatar-type")).toStrictEqual(
+			"vRoomEmptyAvatar"
+		);
 	});
 
 	it("should set the column count 4", async () => {
@@ -305,14 +265,10 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		const avatarComponent = wrapper.findComponent('[data-test-position="0-0"]');
 		await avatarComponent.trigger("dragstart");
 
-		const emptyAvatarComponent = wrapper.findComponent(
-			'[data-test-position="2-3"]'
-		);
+		const emptyAvatarComponent = wrapper.findComponent('[data-test-position="2-3"]');
 		await emptyAvatarComponent.trigger("drop");
 
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
-			expectedPayload
-		);
+		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(expectedPayload);
 	});
 
 	it("should call 'addGroupElements' method for grouping after avatar-to-groupAvatar drag&drop", async () => {
@@ -339,19 +295,13 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		await nextTick();
 		await nextTick();
 
-		const fromAvatarComponent = wrapper.findComponent(
-			'[data-test-position="1-1"]'
-		);
+		const fromAvatarComponent = wrapper.findComponent('[data-test-position="1-1"]');
 		await fromAvatarComponent.trigger("dragstart");
 
-		const toAvatarComponent = wrapper.findComponent(
-			'[data-test-position="3-2"]'
-		);
+		const toAvatarComponent = wrapper.findComponent('[data-test-position="3-2"]');
 		await toAvatarComponent.trigger("drop");
 
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
-			expectedPayload
-		);
+		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(expectedPayload);
 	});
 
 	it("should call 'setDropElement' method for grouping after ungroup action", async () => {
@@ -407,37 +357,24 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		});
 
 		const roomModal = wrapper.findComponent(RoomModal);
-		roomModal.vm.$emit(
-			"drag-from-group",
-			wrapper.vm.groupDialog.groupData.groupElements[0]
-		);
+		roomModal.vm.$emit("drag-from-group", wrapper.vm.groupDialog.groupData.groupElements[0]);
 
-		const emptyAvatarComponent = wrapper.findComponent(
-			'[data-test-position="2-1"]'
-		);
+		const emptyAvatarComponent = wrapper.findComponent('[data-test-position="2-1"]');
 		await emptyAvatarComponent.trigger("drop");
 
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
-			expectedPayload
-		);
+		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(expectedPayload);
 	});
 
 	it("should search elements on dashboard", async () => {
 		const wrapper = getWrapper();
 
-		expect(
-			wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
 
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "thi");
 
-		expect(
-			wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomEmptyAvatar");
-		expect(
-			wrapper.find('[data-test-position="0-0"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomEmptyAvatar");
+		expect(wrapper.find('[data-test-position="0-0"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
 
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(1);
@@ -448,9 +385,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 
 		await wrapper.setData({ allowDragging: true });
 
-		expect(
-			wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
 
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "thi");
@@ -489,27 +424,17 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		};
 		await nextTick();
 		await nextTick();
-		expect(
-			wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
-		expect(
-			wrapper.find('[data-test-position="2-2"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="2-2"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
 
-		const fromAvatarComponent = wrapper.findComponent(
-			'[data-test-position="1-1"]'
-		);
+		const fromAvatarComponent = wrapper.findComponent('[data-test-position="1-1"]');
 		await fromAvatarComponent.trigger("dragstart");
 
-		const toAvatarComponent = wrapper.findComponent(
-			'[data-test-position="2-2"]'
-		);
+		const toAvatarComponent = wrapper.findComponent('[data-test-position="2-2"]');
 		await toAvatarComponent.trigger("drop");
 
 		await nextTick();
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
-			expectedPayload
-		);
+		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(expectedPayload);
 	});
 
 	it("should set rowCount while loading", async () => {
@@ -546,9 +471,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 
 		courseRoomListModule.setRoomData(roomData);
 		const wrapper = getWrapper();
-		expect(wrapper.findComponent('[data-test-position="8-0"]').exists()).toBe(
-			false
-		);
+		expect(wrapper.findComponent('[data-test-position="8-0"]').exists()).toBe(false);
 		await nextTick();
 		await nextTick();
 		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);

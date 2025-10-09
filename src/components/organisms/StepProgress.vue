@@ -5,14 +5,11 @@
 				v-for="(s, index) in steps"
 				:key="index"
 				:style="{ width: stepWidth }"
-				:class="[
-					index === currentStep ? 'active' : '',
-					index < currentStep ? 'done' : '',
-				]"
+				:class="[index === currentStep ? 'active' : '', index < currentStep ? 'done' : '']"
 			>
 				<span class="description">{{ s.name }} </span>
 				<span v-show="index < currentStep">
-					<v-icon class="material-icon" :icon="mdiCheck" />
+					<v-icon :icon="mdiCheck" />
 				</span>
 			</li>
 		</ul>
@@ -28,13 +25,7 @@ export default {
 	props: {
 		steps: {
 			type: Array,
-			default: () => [
-				{ name: "One" },
-				{ name: "Two" },
-				{ name: "Three" },
-				{ name: "Four" },
-				{ name: "Five" },
-			],
+			default: () => [{ name: "One" }, { name: "Two" }, { name: "Three" }, { name: "Four" }, { name: "Five" }],
 			validator: function (value) {
 				const isValid = value.length <= 7;
 				if (!isValid) {
@@ -97,24 +88,22 @@ ul.progressbar {
 		height: 50px;
 		margin: 0 auto;
 		margin-bottom: 8px;
-		font-weight: var(--font-weight-bold);
+		font-weight: bold;
 		content: counter(step);
 		counter-increment: step;
 		background: rgba(var(--v-theme-white));
 		border-color: map.get($grey, darken-3);
 		border-style: dotted;
-		border-radius: var(--radius-round);
+		border-radius: 100vmax;
 	}
 
 	&::after {
 		position: absolute;
 		top: 25px;
-		left: -50%;
-		z-index: var(--layer-behind);
-		width: 100%;
-		height: calc(3 * var(--border-width));
+		left: -30%;
+		width: 60%;
+		height: 1px;
 		content: "";
-		background: map.get($grey, base);
 	}
 }
 
@@ -122,7 +111,6 @@ ul.progressbar {
 	&::after {
 		background: map.get($grey, base);
 	}
-
 	&::before {
 		color: map.get($grey, base);
 		text-decoration: underline;
@@ -138,7 +126,7 @@ ul.progressbar {
 		background: rgba(var(--v-theme-success));
 		border-color: rgba(var(--v-theme-success));
 		border-style: solid;
-		border-radius: var(--radius-round);
+		border-radius: 100vmax;
 	}
 
 	&::after {

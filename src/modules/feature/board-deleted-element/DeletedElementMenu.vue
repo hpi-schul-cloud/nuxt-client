@@ -4,17 +4,14 @@
 		has-background
 		:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 	>
-		<KebabMenuActionDelete
-			scope-language-key="components.cardElement.deletedElement"
-			@click="onDelete"
-		/>
+		<KebabMenuActionDelete scope-language-key="components.cardElement.deletedElement" @click="onDelete" />
 	</BoardMenu>
 </template>
 
 <script setup lang="ts">
-import { BoardMenuScope } from "@ui-board";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
+import { BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete } from "@ui-kebab-menu";
 
 defineProps({

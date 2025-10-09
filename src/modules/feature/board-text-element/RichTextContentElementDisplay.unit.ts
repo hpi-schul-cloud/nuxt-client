@@ -1,7 +1,7 @@
+import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import { RenderHTML } from "@feature-render-html";
 import { mount } from "@vue/test-utils";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 
 describe("RichTextContentElementDisplay", () => {
 	const setup = (options: { value: string }) => {

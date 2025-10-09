@@ -1,22 +1,15 @@
+import FolderContentElement from "./FolderContentElement.vue";
 import { ContentElementType } from "@/serverApi/v3";
 import { FileFolderElement } from "@/types/board/ContentElement";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useContentElementState } from "@data-board";
 import { createMock } from "@golevelup/ts-vitest";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { flushPromises, mount } from "@vue/test-utils";
-import { Router, useRouter } from "vue-router";
-import FolderContentElement from "./FolderContentElement.vue";
 import { Mock } from "vitest";
+import { Router, useRouter } from "vue-router";
 
 vi.mock("@data-board", () => ({
 	useBoardFocusHandler: vi.fn(),
@@ -105,9 +98,7 @@ describe("FolderContentElement", () => {
 				});
 				const title = wrapper.find("[data-testid='board-folder-element']");
 
-				expect(title.text()).toBe(
-					"components.cardElement.folderElement.untitled"
-				);
+				expect(title.text()).toBe("components.cardElement.folderElement.untitled");
 			});
 		});
 
@@ -136,9 +127,7 @@ describe("FolderContentElement", () => {
 					isEditMode: false,
 				});
 
-				const folderElemet = wrapper.findComponent(
-					'[data-testid="board-folder-element"]'
-				);
+				const folderElemet = wrapper.findComponent('[data-testid="board-folder-element"]');
 
 				await folderElemet.trigger(`keydown.${key}`);
 
@@ -191,9 +180,7 @@ describe("FolderContentElement", () => {
 					isNotLastElement: true,
 				});
 
-				const menuButton = wrapper
-					.findComponent({ name: "BoardMenu" })
-					.findComponent({ name: "VBtn" });
+				const menuButton = wrapper.findComponent({ name: "BoardMenu" }).findComponent({ name: "VBtn" });
 				await menuButton.trigger("click");
 
 				const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
@@ -208,9 +195,7 @@ describe("FolderContentElement", () => {
 					isNotFirstElement: true,
 				});
 
-				const menuButton = wrapper
-					.findComponent({ name: "BoardMenu" })
-					.findComponent({ name: "VBtn" });
+				const menuButton = wrapper.findComponent({ name: "BoardMenu" }).findComponent({ name: "VBtn" });
 				await menuButton.trigger("click");
 
 				const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
@@ -224,9 +209,7 @@ describe("FolderContentElement", () => {
 					isEditMode: true,
 				});
 
-				const menuButton = wrapper
-					.findComponent({ name: "BoardMenu" })
-					.findComponent({ name: "VBtn" });
+				const menuButton = wrapper.findComponent({ name: "BoardMenu" }).findComponent({ name: "VBtn" });
 				await menuButton.trigger("click");
 
 				const menuItem = wrapper.findComponent(KebabMenuActionDelete);
@@ -237,23 +220,18 @@ describe("FolderContentElement", () => {
 			});
 		});
 
-		it.each(["up", "down"])(
-			"should 'emit move-keyboard:edit' when arrow key %s is pressed",
-			async (key) => {
-				const { wrapper } = setupWrapper({
-					isEditMode: true,
-					isNotFirstElement: true,
-					isNotLastElement: true,
-				});
+		it.each(["up", "down"])("should 'emit move-keyboard:edit' when arrow key %s is pressed", async (key) => {
+			const { wrapper } = setupWrapper({
+				isEditMode: true,
+				isNotFirstElement: true,
+				isNotLastElement: true,
+			});
 
-				const linkElement = wrapper.findComponent(
-					'[data-testid="board-folder-element"]'
-				);
+			const linkElement = wrapper.findComponent('[data-testid="board-folder-element"]');
 
-				await linkElement.trigger(`keydown.${key}`);
+			await linkElement.trigger(`keydown.${key}`);
 
-				expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
-			}
-		);
+			expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
+		});
 	});
 });

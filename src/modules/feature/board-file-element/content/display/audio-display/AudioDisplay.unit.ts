@@ -1,9 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import AudioDisplay from "./AudioDisplay.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("AudioDisplay", () => {
 	const setup = (options?: { showMenu?: boolean }) => {

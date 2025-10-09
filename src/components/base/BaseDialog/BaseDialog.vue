@@ -4,31 +4,15 @@
 			<template #body>
 				<modal-body-info :title="message">
 					<template #icon>
-						<v-icon
-							v-if="icon"
-							:color="currentIconColor"
-							class="pb-6"
-							size="85"
-							>{{ icon }}</v-icon
-						>
+						<v-icon v-if="icon" :color="currentIconColor" class="pb-6" size="85">{{ icon }}</v-icon>
 					</template>
 				</modal-body-info>
 			</template>
 			<template #footerRight>
-				<v-btn
-					variant="text"
-					data-testid="btn-dialog-cancel"
-					class="mr-3"
-					@click="cancel"
-				>
+				<v-btn variant="text" data-testid="btn-dialog-cancel" class="mr-3" @click="cancel">
 					{{ cancelText }}
 				</v-btn>
-				<v-btn
-					variant="flat"
-					color="primary"
-					data-testid="btn-dialog-confirm"
-					@click="confirm"
-				>
+				<v-btn variant="flat" color="primary" data-testid="btn-dialog-confirm" @click="confirm">
 					{{ confirmText }}
 				</v-btn>
 			</template>
@@ -133,7 +117,7 @@ export default {
 .base-dialog .icon {
 	margin-bottom: 24px;
 	.v-icon.v-icon {
-		font-size: var(--sidebar-item-height);
+		font-size: 60px;
 
 		svg {
 			width: 1em;

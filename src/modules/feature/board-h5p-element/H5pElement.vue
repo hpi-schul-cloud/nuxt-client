@@ -14,11 +14,7 @@
 		@keyup.enter="onClickElement"
 		@click="onClickElement"
 	>
-		<ContentElementBar
-			:has-grey-background="true"
-			icon="$h5pOutline"
-			:has-row-style="isSmallOrLargerListBoard"
-		>
+		<ContentElementBar :has-grey-background="true" icon="$h5pOutline" :has-row-style="isSmallOrLargerListBoard">
 			<template #display>
 				<v-img
 					v-if="hasLinkedContent"
@@ -28,11 +24,7 @@
 				/>
 			</template>
 			<template #title>
-				{{
-					hasLinkedContent
-						? contentTitle
-						: t("components.cardElement.h5pElement.create")
-				}}
+				{{ hasLinkedContent ? contentTitle : t("components.cardElement.h5pElement.create") }}
 			</template>
 			<template #menu>
 				<H5pElementMenu
@@ -54,19 +46,19 @@
 </template>
 
 <script setup lang="ts">
+import H5pElementMenu from "./H5pElementMenu.vue";
 import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { H5pElementResponse } from "@/serverApi/v3";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar } from "@ui-board";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { computed, onMounted, Ref, ref, toRef, watch } from "vue";
-import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import H5pElementMenu from "./H5pElementMenu.vue";
+import { useDisplay } from "vuetify";
 
 const props = defineProps<{
 	element: H5pElementResponse;
@@ -101,9 +93,7 @@ const editorWindow: Ref<Window | null> = ref(null);
 
 const isListLayout: Ref<boolean> = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 
-const isSmallOrLargerListBoard = computed(() => {
-	return smAndUp.value && isListLayout.value;
-});
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
 
 const contentTitle = ref<string>(t("components.cardElement.h5pElement"));
 

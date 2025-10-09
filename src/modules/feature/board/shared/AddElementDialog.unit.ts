@@ -1,40 +1,16 @@
-import { ConfigResponse } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { envsFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
+import AddElementDialog from "./AddElementDialog.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { ComponentPublicInstance, nextTick } from "vue";
-import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
-import AddElementDialog from "./AddElementDialog.vue";
-import type { Mocked } from "vitest";
 
 vi.mock("./SharedElementTypeSelection.composable");
 
 describe("ElementTypeSelection", () => {
-	const envConfigModule: Mocked<EnvConfigModule> = createModuleMocks(
-		EnvConfigModule,
-		{
-			getEnv: envsFactory.build({
-				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-			}) as unknown as ConfigResponse,
-		}
-	);
-
 	const setupMocks = () => {
-		const {
-			closeDialog,
-			isDialogOpen,
-			isDialogLoading,
-			staticElementTypeOptions,
-			dynamicElementTypeOptions,
-		} = setupSharedElementTypeSelectionMock();
+		const { closeDialog, isDialogOpen, isDialogLoading, staticElementTypeOptions, dynamicElementTypeOptions } =
+			setupSharedElementTypeSelectionMock();
 
 		const createTextElement = vi.fn();
 		const createFileElement = vi.fn();
@@ -72,9 +48,6 @@ describe("ElementTypeSelection", () => {
 			const wrapper = mount(AddElementDialog, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: {
-						[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					},
 				},
 			});
 
@@ -92,16 +65,11 @@ describe("ElementTypeSelection", () => {
 		const setup = async () => {
 			document.body.setAttribute("data-app", "true");
 
-			const { isDialogOpen, staticElementTypeOptions, closeDialog } =
-				setupMocks();
+			const { isDialogOpen, staticElementTypeOptions, closeDialog } = setupMocks();
 
 			const wrapper = mount(AddElementDialog, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
-
-					provide: {
-						[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					},
 				},
 			});
 
@@ -121,9 +89,7 @@ describe("ElementTypeSelection", () => {
 			const { staticElementTypeOptions, wrapper } = await setup();
 
 			for (const elementTypeOption of staticElementTypeOptions.value) {
-				const button = wrapper.findComponent(
-					`[data-testid=${elementTypeOption.testId}]`
-				);
+				const button = wrapper.findComponent(`[data-testid=${elementTypeOption.testId}]`);
 				await button.trigger("click");
 				await nextTick();
 
@@ -150,19 +116,14 @@ describe("ElementTypeSelection", () => {
 			const { isDialogOpen, dynamicElementTypeOptions } = setupMocks();
 
 			type AddElementDialogWrapper<T> = VueWrapper<ComponentPublicInstance & T>;
-			const wrapper: AddElementDialogWrapper<Partial<{ dialogWidth: number }>> =
-				mount(AddElementDialog, {
-					attrs: {
-						width: 320,
-					},
-					global: {
-						plugins: [createTestingVuetify(), createTestingI18n()],
-
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-						},
-					},
-				});
+			const wrapper: AddElementDialogWrapper<Partial<{ dialogWidth: number }>> = mount(AddElementDialog, {
+				attrs: {
+					width: 320,
+				},
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+			});
 
 			isDialogOpen.value = true;
 			await nextTick();
@@ -184,9 +145,7 @@ describe("ElementTypeSelection", () => {
 			];
 			await flushPromises();
 
-			const option = wrapper.findComponent<typeof ExtendedIconBtn>(
-				`[data-testid="${testId}"]`
-			);
+			const option = wrapper.findComponent<typeof ExtendedIconBtn>(`[data-testid="${testId}"]`);
 
 			expect(option.isVisible()).toBe(true);
 		});

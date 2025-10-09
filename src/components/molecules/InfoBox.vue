@@ -1,7 +1,7 @@
 <template>
 	<div v-if="active" class="wrapper">
 		<div class="content">
-			<h4>
+			<h4 class="text-h2">
 				<slot name="header" />
 			</h4>
 			<p class="body">
@@ -41,7 +41,7 @@ const close = () => {
 .wrapper {
 	color: rgba(var(--v-theme-white));
 	background-color: rgba(var(--v-theme-info));
-	border-radius: var(--radius-lg);
+	border-radius: 16px;
 
 	h4 {
 		color: rgba(var(--v-theme-white));

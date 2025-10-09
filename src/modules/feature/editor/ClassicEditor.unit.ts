@@ -1,9 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { useEditorConfig } from "./EditorConfig.composable";
 import ClassicEditor from "./ClassicEditor.vue";
+import { useEditorConfig } from "./EditorConfig.composable";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Mock } from "vitest";
 
 type CkEditorProps = {
@@ -79,10 +76,7 @@ describe("@feature-editor/ClassicEditor", () => {
 
 			await ck.vm.$emit("ready", editorMock);
 
-			expect(useEditorConfig().registerDeletionHandler).toHaveBeenCalledWith(
-				editorMock,
-				expect.any(Function)
-			);
+			expect(useEditorConfig().registerDeletionHandler).toHaveBeenCalledWith(editorMock, expect.any(Function));
 
 			expect(wrapper.emitted("ready")).toHaveLength(1);
 		});

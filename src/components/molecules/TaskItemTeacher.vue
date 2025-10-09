@@ -14,11 +14,7 @@
 		<!-- item avatar -->
 		<template #prepend>
 			<v-avatar>
-				<v-icon
-					class="fill"
-					:class="hasUnpublishedLesson ? 'opacity-0-5' : ''"
-					:color="iconColor"
-				>
+				<v-icon class="fill" :class="hasUnpublishedLesson ? 'opacity-0-5' : ''" :color="iconColor">
 					{{ avatarIcon }}
 				</v-icon>
 			</v-avatar>
@@ -39,22 +35,12 @@
 				<v-list-item-title data-testid="taskTitle">
 					{{ task.name }}
 				</v-list-item-title>
-				<v-list-item-subtitle
-					v-if="topic && currentBreakpoint !== 'xs'"
-					data-testid="task-topic"
-					class="d-inline-flex"
-				>
+				<v-list-item-subtitle v-if="topic && currentBreakpoint !== 'xs'" data-testid="task-topic" class="d-inline-flex">
 					<span class="text-truncate">{{ topic }}</span>
 				</v-list-item-subtitle>
 				<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
-					<v-chip
-						v-if="hasUnpublishedLesson"
-						size="x-small"
-						data-testid="task-lesson-chip-small"
-					>
-						{{
-							$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
-						}}
+					<v-chip v-if="hasUnpublishedLesson" size="x-small" data-testid="task-lesson-chip-small">
+						{{ $t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
 					</v-chip>
 					<i18n-t
 						v-else
@@ -79,11 +65,7 @@
 					{{ $t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
 				</v-chip>
 			</section>
-			<section
-				v-else-if="showTaskStatus"
-				data-testid="task-status"
-				class="mr-4 d-flex align-self-center"
-			>
+			<section v-else-if="showTaskStatus" data-testid="task-status" class="mr-4 d-flex align-self-center">
 				<div class="hidden-xs px-4 mr-4 text-center task-stats">
 					<v-list-item-subtitle>
 						{{ $t("components.molecules.TaskItemTeacher.submitted") }}
@@ -124,11 +106,7 @@
 
 <script>
 import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
-import {
-	isToday,
-	printDateFromStringUTC as dateFromUTC,
-	printTimeFromStringUTC,
-} from "@/plugins/datetime";
+import { isToday, printDateFromStringUTC as dateFromUTC, printTimeFromStringUTC } from "@/plugins/datetime";
 import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
@@ -143,11 +121,10 @@ export default {
 		task: {
 			type: Object,
 			required: true,
-			validator: (task) => {
-				return task.status.isFinished
+			validator: (task) =>
+				task.status.isFinished
 					? finishedTaskRequiredKeys.every((key) => key in task)
-					: taskRequiredKeys.every((key) => key in task);
-			},
+					: taskRequiredKeys.every((key) => key in task),
 		},
 	},
 	emits: ["copy-task", "share-task"],
@@ -181,48 +158,33 @@ export default {
 			if (this.isDraft) {
 				if (isToday(createdAt)) {
 					return labelText.concat(
-						` - ${this.$t(
-							"components.molecules.TaskItemMenu.labels.createdAt"
-						)} ${printTimeFromStringUTC(createdAt)}`
+						` - ${this.$t("components.molecules.TaskItemMenu.labels.createdAt")} ${printTimeFromStringUTC(createdAt)}`
 					);
 				}
 
 				return labelText.concat(
-					` - ${this.$t(
-						"components.molecules.TaskItemMenu.labels.createdAt"
-					)} ${dateFromUTC(createdAt)}`
+					` - ${this.$t("components.molecules.TaskItemMenu.labels.createdAt")} ${dateFromUTC(createdAt)}`
 				);
 			}
 
 			if (this.isPlanned) {
-				return labelText.concat(
-					` - ${this.$t("pages.tasks.labels.planned")} ${dateFromUTC(
-						availableDate
-					)}`
-				);
+				return labelText.concat(` - ${this.$t("pages.tasks.labels.planned")} ${dateFromUTC(availableDate)}`);
 			}
 
 			if (dueDate) {
-				return labelText.concat(
-					` - ${this.$t("pages.tasks.labels.due")} ${dateFromUTC(dueDate)}`
-				);
+				return labelText.concat(` - ${this.$t("pages.tasks.labels.due")} ${dateFromUTC(dueDate)}`);
 			}
 
 			return labelText;
 		},
 		courseName() {
 			const { isSubstitutionTeacher } = this.task.status;
-			const baseName =
-				this.task.courseName || this.$t("pages.tasks.labels.noCourse");
+			const baseName = this.task.courseName || this.$t("pages.tasks.labels.noCourse");
 
-			return isSubstitutionTeacher
-				? `${this.$t("common.words.substitute")} ${baseName}`
-				: baseName;
+			return isSubstitutionTeacher ? `${this.$t("common.words.substitute")} ${baseName}` : baseName;
 		},
 		topic() {
-			return this.task.lessonName
-				? `${this.$t("common.words.topic")} ${this.task.lessonName}`
-				: "";
+			return this.task.lessonName ? `${this.$t("common.words.topic")} ${this.task.lessonName}` : "";
 		},
 		hasUnpublishedLesson() {
 			return this.task.lessonHidden && !this.isDraft;

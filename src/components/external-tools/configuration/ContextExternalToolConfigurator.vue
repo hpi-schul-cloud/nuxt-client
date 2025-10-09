@@ -88,16 +88,11 @@ const loading: ComputedRef<boolean> = computed(
 
 const displayName: Ref<string | undefined> = ref<string | undefined>();
 
-const apiError: ComputedRef<BusinessError | undefined> = computed(
-	() => configError.value || templateError.value
-);
+const apiError: ComputedRef<BusinessError | undefined> = computed(() => configError.value || templateError.value);
 
-const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
-);
+const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY);
 
-const preferredTool =
-	schoolExternalToolsModule.getContextExternalToolConfigurationTemplate;
+const preferredTool = schoolExternalToolsModule.getContextExternalToolConfigurationTemplate;
 
 const isPreferredTool: Ref<boolean> = ref(false);
 
@@ -113,21 +108,17 @@ const onSave = async (
 	template: ContextExternalToolConfigurationTemplate,
 	configuredParameterValues: ToolParameterEntry[]
 ) => {
-	const contextExternalTool: ContextExternalToolSave =
-		ContextExternalToolMapper.mapTemplateToContextExternalToolSave(
-			template,
-			configuredParameterValues,
-			props.contextId,
-			props.contextType,
-			displayName.value
-		);
+	const contextExternalTool: ContextExternalToolSave = ContextExternalToolMapper.mapTemplateToContextExternalToolSave(
+		template,
+		configuredParameterValues,
+		props.contextId,
+		props.contextType,
+		displayName.value
+	);
 
 	let savedTool: ContextExternalTool | undefined;
 	if (props.configId) {
-		savedTool = await updateContextExternalTool(
-			props.configId,
-			contextExternalTool
-		);
+		savedTool = await updateContextExternalTool(props.configId, contextExternalTool);
 	} else {
 		savedTool = await createContextExternalTool(contextExternalTool);
 	}
@@ -147,14 +138,9 @@ const fetchData = async () => {
 	} else if (preferredTool) {
 		availableTools.value = [preferredTool];
 		isPreferredTool.value = true;
-		schoolExternalToolsModule.setContextExternalToolConfigurationTemplate(
-			undefined
-		);
+		schoolExternalToolsModule.setContextExternalToolConfigurationTemplate(undefined);
 	} else {
-		await fetchAvailableToolConfigurationsForContext(
-			props.contextId,
-			props.contextType
-		);
+		await fetchAvailableToolConfigurationsForContext(props.contextId, props.contextType);
 	}
 
 	hasData.value = true;

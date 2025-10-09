@@ -10,17 +10,11 @@
 			data-testid="share-course-result-url"
 		/>
 
-		<div
-			v-if="isShowQrCode"
-			class="d-flex justify-content-center overflow-hidden mt-4"
-		>
+		<div v-if="isShowQrCode" class="d-flex justify-center overflow-hidden mt-4">
 			<QRCode :url="shareUrl" data-testid="qrCode" />
 		</div>
 
-		<div
-			v-else
-			class="d-flex flex-row flex-wrap align-items-center justify-space-around"
-		>
+		<div v-else class="d-flex flex-row flex-wrap align-center justify-space-around">
 			<ExtendedIconBtn
 				v-if="isExtraSmallDisplay"
 				data-testid="mobilePlatformAction"
@@ -56,14 +50,9 @@
 </template>
 
 <script setup lang="ts">
-import { QRCode } from "@ui-qr-code";
+import { mdiContentCopy, mdiEmailOutline, mdiQrcode, mdiShareVariantOutline } from "@icons/material";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
-import {
-	mdiContentCopy,
-	mdiEmailOutline,
-	mdiQrcode,
-	mdiShareVariantOutline,
-} from "@icons/material";
+import { QRCode } from "@ui-qr-code";
 import { nextTick, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
@@ -83,12 +72,8 @@ const { t } = useI18n();
 const { xs: isExtraSmallDisplay } = useDisplay();
 
 const onMailShareUrl = () => {
-	const subject = encodeURIComponent(
-		t(`components.molecules.share.${props.type}.mail.subject`)
-	);
-	const body = encodeURIComponent(
-		t(`components.molecules.share.${props.type}.mail.body`) + props.shareUrl
-	);
+	const subject = encodeURIComponent(t(`components.molecules.share.${props.type}.mail.subject`));
+	const body = encodeURIComponent(t(`components.molecules.share.${props.type}.mail.body`) + props.shareUrl);
 	window.location.assign(`mailto:?subject=${subject}&body=${body}`);
 	emit("done");
 };

@@ -19,9 +19,7 @@ const programmaticFocus = (element: HTMLElement) => {
 };
 
 const skipToMainContent = () => {
-	const mainContentElement = window.document.querySelector(
-		"#main-content"
-	) as HTMLElement;
+	const mainContentElement = window.document.querySelector("#main-content") as HTMLElement;
 
 	if (mainContentElement) {
 		programmaticFocus(mainContentElement);
@@ -38,7 +36,7 @@ const skipToMainContent = () => {
 	color: rgba(var(--v-theme-primary));
 	background-color: white;
 	border: 1px solid #555;
-	border-radius: var(--radius-xs);
+	border-radius: 2px;
 	transform: translate(-50%, 0);
 	z-index: 1005;
 }

@@ -1,3 +1,7 @@
+import { ToolParameterType } from "../tool-parameter.enum";
+import { ToolParameterEntry } from "../tool-parameter-entry";
+import { ToolParameterLocation } from "../tool-parameter-location.enum";
+import { ToolParameterScope } from "../tool-parameter-scope.enum";
 import {
 	ContextExternalToolConfigurationStatusResponse,
 	CustomParameterEntryParam,
@@ -9,60 +13,40 @@ import {
 } from "@/serverApi/v3";
 import { ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { ContextExternalToolConfigurationStatus } from "@data-external-tool";
-import { ToolParameterEntry } from "../tool-parameter-entry";
-import { ToolParameterLocation } from "../tool-parameter-location.enum";
-import { ToolParameterScope } from "../tool-parameter-scope.enum";
-import { ToolParameterType } from "../tool-parameter.enum";
 
-export const ToolParamLocationMapping: Record<
-	CustomParameterLocationParams,
-	ToolParameterLocation
-> = {
+export const ToolParamLocationMapping: Record<CustomParameterLocationParams, ToolParameterLocation> = {
 	[CustomParameterLocationParams.Path]: ToolParameterLocation.PATH,
 	[CustomParameterLocationParams.Query]: ToolParameterLocation.QUERY,
 	[CustomParameterLocationParams.Body]: ToolParameterLocation.BODY,
 	[CustomParameterLocationParams.Fragment]: ToolParameterLocation.FRAGMENT,
 };
 
-export const ToolParamTypeMapping: Record<
-	CustomParameterTypeParams,
-	ToolParameterType
-> = {
+export const ToolParamTypeMapping: Record<CustomParameterTypeParams, ToolParameterType> = {
 	[CustomParameterTypeParams.String]: ToolParameterType.String,
 	[CustomParameterTypeParams.Boolean]: ToolParameterType.Boolean,
 	[CustomParameterTypeParams.Number]: ToolParameterType.Number,
 	[CustomParameterTypeParams.AutoContextid]: ToolParameterType.AutoContextid,
-	[CustomParameterTypeParams.AutoContextname]:
-		ToolParameterType.AutoContextname,
+	[CustomParameterTypeParams.AutoContextname]: ToolParameterType.AutoContextname,
 	[CustomParameterTypeParams.AutoSchoolid]: ToolParameterType.AutoSchoolid,
-	[CustomParameterTypeParams.AutoSchoolnumber]:
-		ToolParameterType.AutoSchoolnumber,
+	[CustomParameterTypeParams.AutoSchoolnumber]: ToolParameterType.AutoSchoolnumber,
 	[CustomParameterTypeParams.AutoMediumid]: ToolParameterType.AutoMediumid,
-	[CustomParameterTypeParams.AutoGroupExternaluuid]:
-		ToolParameterType.AutoGroupExternaluuid,
+	[CustomParameterTypeParams.AutoGroupExternaluuid]: ToolParameterType.AutoGroupExternaluuid,
+	[CustomParameterTypeParams.AutoPublisher]: ToolParameterType.AutoPublisher,
 };
 
-export const ToolParamScopeMapping: Record<
-	CustomParameterScopeTypeParams,
-	ToolParameterScope
-> = {
+export const ToolParamScopeMapping: Record<CustomParameterScopeTypeParams, ToolParameterScope> = {
 	[CustomParameterScopeTypeParams.Context]: ToolParameterScope.Context,
 	[CustomParameterScopeTypeParams.Global]: ToolParameterScope.Global,
 	[CustomParameterScopeTypeParams.School]: ToolParameterScope.School,
 };
 
-export const ToolLaunchRequestMethodMapping: Record<
-	LaunchRequestMethod,
-	ToolLaunchRequestMethodEnum
-> = {
+export const ToolLaunchRequestMethodMapping: Record<LaunchRequestMethod, ToolLaunchRequestMethodEnum> = {
 	[LaunchRequestMethod.Get]: ToolLaunchRequestMethodEnum.Get,
 	[LaunchRequestMethod.Post]: ToolLaunchRequestMethodEnum.Post,
 };
 
 export class CommonToolMapper {
-	static mapToCustomParameterEntryParam(
-		parameter: ToolParameterEntry
-	): CustomParameterEntryParam {
+	static mapToCustomParameterEntryParam(parameter: ToolParameterEntry): CustomParameterEntryParam {
 		const mapped: CustomParameterEntryParam = {
 			name: parameter.name,
 			value: parameter.value,
@@ -71,9 +55,7 @@ export class CommonToolMapper {
 		return mapped;
 	}
 
-	static mapToToolParameterEntry(
-		response: CustomParameterEntryResponse
-	): ToolParameterEntry {
+	static mapToToolParameterEntry(response: CustomParameterEntryResponse): ToolParameterEntry {
 		const mapped: ToolParameterEntry = {
 			name: response.name,
 			value: response.value,
@@ -89,8 +71,7 @@ export class CommonToolMapper {
 			isOutdatedOnScopeSchool: status.isOutdatedOnScopeSchool,
 			isOutdatedOnScopeContext: status.isOutdatedOnScopeContext,
 			isIncompleteOnScopeContext: status.isIncompleteOnScopeContext,
-			isIncompleteOperationalOnScopeContext:
-				status.isIncompleteOperationalOnScopeContext,
+			isIncompleteOperationalOnScopeContext: status.isIncompleteOperationalOnScopeContext,
 			isDeactivated: status.isDeactivated,
 			isNotLicensed: status.isNotLicensed,
 		};

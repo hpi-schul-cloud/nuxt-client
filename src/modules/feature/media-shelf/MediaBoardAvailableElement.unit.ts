@@ -1,46 +1,38 @@
-import { ToolContextType } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
-import NotifierModule from "@/store/notifier";
-import { AlertPayload } from "@/store/types/alert-payload";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import {
-	businessErrorFactory,
-	envsFactory,
-	mediaAvailableLineElementResponseFactory,
-	mediaBoardResponseFactory,
-} from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { useExternalToolLaunchState } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useDragAndDrop } from "@util-board";
-import { flushPromises, shallowMount } from "@vue/test-utils";
-import { nextTick, ref } from "vue";
-import { ComponentProps } from "vue-component-type-helpers";
 import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
+import { ToolContextType } from "@/serverApi/v3";
+import {
+	businessErrorFactory,
+	createTestEnvStore,
+	expectNotification,
+	mediaAvailableLineElementResponseFactory,
+	mediaBoardResponseFactory,
+} from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { useExternalToolLaunchState } from "@data-external-tool";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { useDragAndDrop } from "@util-board";
+import { flushPromises, shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { nextTick, ref } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 
 vi.mock("@data-external-tool");
 vi.mock("./data");
 
 describe("MediaBoardAvailableElement", () => {
-	let useExternalToolLaunchStateMock: DeepMocked<
-		ReturnType<typeof useExternalToolLaunchState>
-	>;
+	let useExternalToolLaunchStateMock: DeepMocked<ReturnType<typeof useExternalToolLaunchState>>;
 
-	let useSharedMediaBoardStateMock: DeepMocked<
-		ReturnType<typeof useSharedMediaBoardState>
-	>;
+	let useSharedMediaBoardStateMock: DeepMocked<ReturnType<typeof useSharedMediaBoardState>>;
 
-	const getWrapper = (
-		props: ComponentProps<typeof MediaBoardAvailableElement>
-	) => {
+	const getWrapper = (props: ComponentProps<typeof MediaBoardAvailableElement>) => {
 		const refreshTime = 299000;
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envsFactory.build({ CTL_TOOLS_RELOAD_TIME_MS: refreshTime }),
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({
+			CTL_TOOLS_RELOAD_TIME_MS: refreshTime,
 		});
-		const notifierModule = createModuleMocks(NotifierModule);
 
 		const mediaBoard = mediaBoardResponseFactory.build();
 		useSharedMediaBoardStateMock.mediaBoard.value = mediaBoard;
@@ -48,42 +40,29 @@ describe("MediaBoardAvailableElement", () => {
 		const wrapper = shallowMount(MediaBoardAvailableElement, {
 			global: {
 				plugins: [createTestingI18n()],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			props,
 		});
 
 		return {
 			wrapper,
-			notifierModule,
 			refreshTime,
 			mediaBoard,
 		};
 	};
 
 	beforeEach(() => {
-		useExternalToolLaunchStateMock = createMock<
-			ReturnType<typeof useExternalToolLaunchState>
-		>({
+		useExternalToolLaunchStateMock = createMock<ReturnType<typeof useExternalToolLaunchState>>({
 			error: ref(),
 		});
 
-		useSharedMediaBoardStateMock = createMock<
-			ReturnType<typeof useSharedMediaBoardState>
-		>({
+		useSharedMediaBoardStateMock = createMock<ReturnType<typeof useSharedMediaBoardState>>({
 			mediaBoard: ref(),
 		});
 
-		vi.mocked(useExternalToolLaunchState).mockReturnValue(
-			useExternalToolLaunchStateMock
-		);
+		vi.mocked(useExternalToolLaunchState).mockReturnValue(useExternalToolLaunchStateMock);
 
-		vi.mocked(useSharedMediaBoardState).mockReturnValue(
-			useSharedMediaBoardStateMock
-		);
+		vi.mocked(useSharedMediaBoardState).mockReturnValue(useSharedMediaBoardStateMock);
 
 		vi.useFakeTimers();
 	});
@@ -95,12 +74,11 @@ describe("MediaBoardAvailableElement", () => {
 	describe("when loading external tool data", () => {
 		describe("when the api returns data", () => {
 			const setup = async () => {
-				const availableLineElement =
-					mediaAvailableLineElementResponseFactory.build({
-						name: "title",
-						description: "description",
-						logoUrl: "logoUrl",
-					});
+				const availableLineElement = mediaAvailableLineElementResponseFactory.build({
+					name: "title",
+					description: "description",
+					logoUrl: "logoUrl",
+				});
 
 				const { wrapper, mediaBoard } = getWrapper({
 					element: availableLineElement,
@@ -118,20 +96,19 @@ describe("MediaBoardAvailableElement", () => {
 			it("should call the state to load the launch request", async () => {
 				const { availableLineElement, mediaBoard } = await setup();
 
-				expect(
-					useExternalToolLaunchStateMock.fetchSchoolLaunchRequest
-				).toHaveBeenCalledWith(availableLineElement.schoolExternalToolId, {
-					contextId: mediaBoard.id,
-					contextType: ToolContextType.MediaBoard,
-				});
+				expect(useExternalToolLaunchStateMock.fetchSchoolLaunchRequest).toHaveBeenCalledWith(
+					availableLineElement.schoolExternalToolId,
+					{
+						contextId: mediaBoard.id,
+						contextType: ToolContextType.MediaBoard,
+					}
+				);
 			});
 
 			it("should map the props", async () => {
 				const { wrapper, availableLineElement } = await setup();
 
-				const displayComponent = wrapper.findComponent(
-					MediaBoardElementDisplay
-				);
+				const displayComponent = wrapper.findComponent(MediaBoardElementDisplay);
 
 				expect(displayComponent.props().element).toEqual<MediaElementDisplay>({
 					title: availableLineElement.name,
@@ -159,24 +136,19 @@ describe("MediaBoardAvailableElement", () => {
 			const { refreshTime } = setup();
 			await nextTick();
 
-			expect(
-				useExternalToolLaunchStateMock.fetchSchoolLaunchRequest
-			).toHaveBeenCalledTimes(1);
+			expect(useExternalToolLaunchStateMock.fetchSchoolLaunchRequest).toHaveBeenCalledTimes(1);
 
 			vi.advanceTimersByTime(refreshTime + 1000);
 			await nextTick();
 
-			expect(
-				useExternalToolLaunchStateMock.fetchSchoolLaunchRequest
-			).toHaveBeenCalledTimes(2);
+			expect(useExternalToolLaunchStateMock.fetchSchoolLaunchRequest).toHaveBeenCalledTimes(2);
 		});
 	});
 
 	describe("when clicking the element", () => {
 		describe("when a launch request is available", () => {
 			const setup = () => {
-				const availableLineElement =
-					mediaAvailableLineElementResponseFactory.build();
+				const availableLineElement = mediaAvailableLineElementResponseFactory.build();
 				const { wrapper } = getWrapper({
 					element: availableLineElement,
 				});
@@ -200,19 +172,19 @@ describe("MediaBoardAvailableElement", () => {
 
 				await wrapper.trigger("click");
 
-				expect(
-					useExternalToolLaunchStateMock.fetchSchoolLaunchRequest
-				).toHaveBeenCalledWith(availableLineElement.schoolExternalToolId, {
-					contextId: expect.any(String),
-					contextType: ToolContextType.MediaBoard,
-				});
+				expect(useExternalToolLaunchStateMock.fetchSchoolLaunchRequest).toHaveBeenCalledWith(
+					availableLineElement.schoolExternalToolId,
+					{
+						contextId: expect.any(String),
+						contextType: ToolContextType.MediaBoard,
+					}
+				);
 			});
 		});
 
 		describe("when dragging", () => {
 			const setup = () => {
-				const availableLineElement =
-					mediaAvailableLineElementResponseFactory.build();
+				const availableLineElement = mediaAvailableLineElementResponseFactory.build();
 				const { wrapper } = getWrapper({
 					element: availableLineElement,
 				});
@@ -230,39 +202,31 @@ describe("MediaBoardAvailableElement", () => {
 
 				await wrapper.trigger("click");
 
-				expect(
-					useExternalToolLaunchStateMock.launchTool
-				).not.toHaveBeenCalled();
+				expect(useExternalToolLaunchStateMock.launchTool).not.toHaveBeenCalled();
 			});
 		});
 
 		describe("when loading the launch request failed", () => {
 			const setup = () => {
-				const availableLineElement =
-					mediaAvailableLineElementResponseFactory.build();
-				const { wrapper, notifierModule } = getWrapper({
+				const availableLineElement = mediaAvailableLineElementResponseFactory.build();
+				const { wrapper } = getWrapper({
 					element: availableLineElement,
 				});
 
-				useExternalToolLaunchStateMock.error.value =
-					businessErrorFactory.build();
+				useExternalToolLaunchStateMock.error.value = businessErrorFactory.build();
 
 				return {
 					wrapper,
 					availableLineElement,
-					notifierModule,
 				};
 			};
 
 			it("should show an error notification", async () => {
-				const { wrapper, notifierModule } = setup();
+				const { wrapper } = setup();
 
 				await wrapper.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalledWith<[AlertPayload]>({
-					status: "error",
-					text: "error.generic",
-				});
+				expectNotification("error");
 			});
 		});
 	});

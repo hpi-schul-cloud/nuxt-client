@@ -1,25 +1,23 @@
-import { computed, onMounted, ref } from "vue";
-
 import {
+	ChipTitle,
+	FilterItem,
 	FilterOption,
 	FilterOptionsType,
 	FilterQuery,
 	Registration,
 	SelectOptionsType,
+	UpdateFilterParamType,
 	User,
 	UserBasedRegistrationOptions,
-	ChipTitle,
-	FilterItem,
-	UpdateFilterParamType,
 } from "../types";
-import { useI18n } from "vue-i18n";
 import { useFilterLocalStorage } from "./localStorage.composable";
 import { printDate } from "@/plugins/datetime";
+import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export const useDataTableFilter = (userType: string) => {
 	const { t } = useI18n();
-	const { setFilterState, getFilterStorage, initializeUserType } =
-		useFilterLocalStorage();
+	const { setFilterState, getFilterStorage, initializeUserType } = useFilterLocalStorage();
 	initializeUserType(userType);
 
 	const filterQuery = ref<FilterQuery>({});
@@ -77,20 +75,16 @@ export const useDataTableFilter = (userType: string) => {
 
 	const selectedFilterType = ref<FilterOptionsType>();
 
-	const isDateFiltering = computed(() => {
-		return (
+	const isDateFiltering = computed(
+		() =>
 			selectedFilterType.value == FilterOption.CREATION_DATE ||
 			selectedFilterType.value == FilterOption.LAST_MIGRATION_ON ||
 			selectedFilterType.value == FilterOption.OBSOLOTE_SINCE
-		);
-	});
+	);
 
-	const isSelectFiltering = computed(() => {
-		return (
-			selectedFilterType.value == FilterOption.CLASSES ||
-			selectedFilterType.value == FilterOption.REGISTRATION
-		);
-	});
+	const isSelectFiltering = computed(
+		() => selectedFilterType.value == FilterOption.CLASSES || selectedFilterType.value == FilterOption.REGISTRATION
+	);
 
 	const filterMenuItems = ref<SelectOptionsType[]>([]);
 
@@ -111,8 +105,7 @@ export const useDataTableFilter = (userType: string) => {
 	};
 
 	const removeFilter = () => {
-		if (selectedFilterType.value)
-			delete filterQuery.value[selectedFilterType.value];
+		if (selectedFilterType.value) delete filterQuery.value[selectedFilterType.value];
 
 		setFilterChipTitles();
 		setFilterState(filterQuery.value);
@@ -135,25 +128,16 @@ export const useDataTableFilter = (userType: string) => {
 	const prepareChipTitles = (chipItem: FilterItem) => {
 		if (chipItem[0] == FilterOption.REGISTRATION) {
 			const statusKeyMap = {
-				[Registration.COMPLETE]: t(
-					"pages.administration.students.legend.icon.success"
-				),
+				[Registration.COMPLETE]: t("pages.administration.students.legend.icon.success"),
 				[Registration.MISSING]: t("utils.adminFilter.consent.label.missing"),
-				[Registration.PARENT_AGREED]: t(
-					"utils.adminFilter.consent.label.parentsAgreementMissing"
-				),
+				[Registration.PARENT_AGREED]: t("utils.adminFilter.consent.label.parentsAgreementMissing"),
 			};
-			const status = chipItem[1].map((val) => {
-				return statusKeyMap[val as Registration];
-			});
+			const status = chipItem[1].map((val) => statusKeyMap[val as Registration]);
 
 			return status.join(` ${t("common.words.and")} `);
 		}
 
-		if (chipItem[0] == FilterOption.CLASSES)
-			return `${t("utils.adminFilter.class.title")} = ${chipItem[1].join(
-				", "
-			)}`;
+		if (chipItem[0] == FilterOption.CLASSES) return `${t("utils.adminFilter.class.title")} = ${chipItem[1].join(", ")}`;
 
 		if (chipItem[0] == FilterOption.CREATION_DATE)
 			return `${t("utils.adminFilter.date.created")} ${printDate(
@@ -174,12 +158,11 @@ export const useDataTableFilter = (userType: string) => {
 
 	const setFilterChipTitles = () => {
 		const items = Object.entries(filterQuery.value).reduce(
-			(acc: Array<object>, item) => {
-				return acc.concat({
+			(acc: Array<object>, item) =>
+				acc.concat({
 					item: item[0],
 					title: prepareChipTitles(item as FilterItem),
-				});
-			},
+				}),
 			[]
 		);
 		filterChipTitles.value = (items as ChipTitle[]) || [];

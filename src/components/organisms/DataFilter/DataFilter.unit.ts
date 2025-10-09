@@ -1,10 +1,7 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import DataFilter from "./DataFilter.vue";
 import { useDataTableFilter } from "./composables/filter.composable";
+import DataFilter from "./DataFilter.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { computed, ref } from "vue";
 
 vi.mock("./composables/filter.composable");
@@ -120,9 +117,7 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 
 			const filterTitleElement = wrapper.find('[data-testid="filter-title"]');
 
-			expect(filterTitleElement.text()).toContain(
-				"components.organisms.DataFilter.add"
-			);
+			expect(filterTitleElement.text()).toContain("components.organisms.DataFilter.add");
 		});
 	});
 });

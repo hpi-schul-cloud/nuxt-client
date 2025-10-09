@@ -1,30 +1,20 @@
 <template>
-	<VDialog
-		v-model="isDialogOpen"
-		data-testid="dialog"
-		:max-width="480"
-		:aria-labelledby="`modal-${uid}-title`"
-		:aria-describedby="`modal-${uid}-body`"
-	>
+	<VDialog v-model="isDialogOpen" data-testid="dialog" :max-width="480" :aria-labelledby="`modal-${uid}-title`">
 		<UseFocusTrap>
 			<VCard>
-				<div class="mx-4">
-					<h2
-						:id="`modal-${uid}-title`"
-						class="text-h4 ma-2 dialog-title"
-						data-testid="dialog-title"
-					>
+				<template #title>
+					<h2 :id="`modal-${uid}-title`" class="ma-0 dialog-title" data-testid="dialog-title">
 						{{ message }}
 					</h2>
-
+				</template>
+				<template #text>
 					<div :id="`modal-${uid}-body`">
 						<slot name="content" />
 					</div>
-				</div>
-
+				</template>
 				<template #actions>
 					<VSpacer />
-					<div class="d-flex mb-2 gap-2 mx-4">
+					<div class="d-flex ga-2">
 						<VBtn
 							data-testid="dialog-cancel"
 							:aria-label="t('common.actions.cancel')"
@@ -91,5 +81,15 @@ const onConfirm = () => {
 	hyphens: none;
 	word-break: break-word;
 	line-height: var(--line-height-lg);
+}
+.v-card :deep(.v-card-item) {
+	padding: 1.25rem 1.5rem;
+}
+.v-card :deep(.v-card-text) {
+	padding: 0 1.5rem;
+	margin-bottom: 1rem;
+}
+.v-card :deep(.v-card-actions) {
+	padding: 0 1.5rem 1.5rem;
 }
 </style>

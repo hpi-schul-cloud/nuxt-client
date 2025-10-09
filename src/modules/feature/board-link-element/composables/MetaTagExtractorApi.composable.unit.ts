@@ -1,12 +1,9 @@
+import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
 import * as serverApi from "@/serverApi/v3/api";
-import {
-	MetaDataEntityType,
-	MetaTagExtractorResponse,
-} from "@/serverApi/v3/api";
+import { MetaDataEntityType, MetaTagExtractorResponse } from "@/serverApi/v3/api";
 import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
 
 describe("useMetaTagExtractorApi", () => {
 	let api: DeepMocked<serverApi.MetaTagExtractorApi>;
@@ -36,9 +33,7 @@ describe("useMetaTagExtractorApi", () => {
 						parentType: MetaDataEntityType.Unknown,
 					};
 
-					api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
-						mockApiResponse({ data: mockedResponse })
-					);
+					api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(mockApiResponse({ data: mockedResponse }));
 
 					const composable = mountComposable(() => useMetaTagExtractorApi(), {
 						global: { plugins: [createTestingI18n()] },
@@ -80,9 +75,7 @@ describe("useMetaTagExtractorApi", () => {
 							parentType: MetaDataEntityType.Course,
 						};
 
-						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
-							mockApiResponse({ data: mockedResponse })
-						);
+						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(mockApiResponse({ data: mockedResponse }));
 
 						const composable = mountComposable(() => useMetaTagExtractorApi(), {
 							global: { plugins: [createTestingI18n()] },
@@ -106,9 +99,7 @@ describe("useMetaTagExtractorApi", () => {
 						const url = "https://test.de/my-article";
 						const data = await composable?.getMetaTags(url);
 
-						expect(data.title).toEqual(
-							"common.words.board: Shakespear (English)"
-						);
+						expect(data.title).toEqual("common.words.board: Shakespear (English)");
 					});
 				});
 
@@ -125,9 +116,7 @@ describe("useMetaTagExtractorApi", () => {
 							parentType: MetaDataEntityType.Course,
 						};
 
-						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
-							mockApiResponse({ data: mockedResponse })
-						);
+						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(mockApiResponse({ data: mockedResponse }));
 
 						const composable = mountComposable(() => useMetaTagExtractorApi(), {
 							global: { plugins: [createTestingI18n()] },
@@ -145,9 +134,7 @@ describe("useMetaTagExtractorApi", () => {
 						const url = "https://test.de/my-article";
 						const data = await composable?.getMetaTags(url);
 
-						expect(data.title).toEqual(
-							"common.words.board: pages.room.boardCard.label.courseBoard (English)"
-						);
+						expect(data.title).toEqual("common.words.board: pages.room.boardCard.label.courseBoard (English)");
 					});
 				});
 			});

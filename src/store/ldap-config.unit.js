@@ -1,4 +1,4 @@
-import { mutations, actions } from "../../src/store/ldap-config";
+import { actions, mutations } from "../../src/store/ldap-config";
 import { unchangedPassword } from "../utils/ldapConstants";
 import { initializeAxios } from "@/utils/api";
 
@@ -144,10 +144,7 @@ describe("store/ldap-config", () => {
 				});
 
 				const spyCommit = vi.fn();
-				await actions.verifyExisting(
-					{ commit: spyCommit },
-					{ systemId: "systemId", systemData: clientMockData }
-				);
+				await actions.verifyExisting({ commit: spyCommit }, { systemId: "systemId", systemData: clientMockData });
 				expect(receivedUrl).toBe("/v1/ldap-config/systemId?verifyOnly=true");
 				expect(spyCommit.mock.calls).toHaveLength(4);
 				expect(spyCommit.mock.calls[1][0]).toBe("setTemp");
@@ -164,10 +161,7 @@ describe("store/ldap-config", () => {
 				});
 
 				const spyCommit = vi.fn();
-				await actions.verifyExisting(
-					{ commit: spyCommit },
-					{ systemId: "systemId", systemData: clientMockData }
-				);
+				await actions.verifyExisting({ commit: spyCommit }, { systemId: "systemId", systemData: clientMockData });
 				expect(receivedUrl).toBe("/v1/ldap-config/systemId?verifyOnly=true");
 				expect(spyCommit.mock.calls).toHaveLength(4);
 				expect(spyCommit.mock.calls[2][0]).toBe("setVerified");
@@ -185,9 +179,7 @@ describe("store/ldap-config", () => {
 				});
 				const spyCommit = vi.fn();
 				await actions.submitData({ commit: spyCommit }, clientMockData);
-				expect(receivedUrl).toBe(
-					"/v1/ldap-config?verifyOnly=false&activate=true"
-				);
+				expect(receivedUrl).toBe("/v1/ldap-config?verifyOnly=false&activate=true");
 				expect(spyCommit.mock.calls).toHaveLength(3);
 				expect(spyCommit.mock.calls[1][0]).toBe("setSubmitted");
 				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
@@ -203,13 +195,8 @@ describe("store/ldap-config", () => {
 					},
 				});
 				const spyCommit = vi.fn();
-				await actions.patchData(
-					{ commit: spyCommit },
-					{ systemId: "systemId", systemData: clientMockData }
-				);
-				expect(receivedUrl).toBe(
-					"/v1/ldap-config/systemId?verifyOnly=false&activate=true"
-				);
+				await actions.patchData({ commit: spyCommit }, { systemId: "systemId", systemData: clientMockData });
+				expect(receivedUrl).toBe("/v1/ldap-config/systemId?verifyOnly=false&activate=true");
 				expect(spyCommit.mock.calls).toHaveLength(3);
 				expect(spyCommit.mock.calls[1][0]).toBe("setSubmitted");
 				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);

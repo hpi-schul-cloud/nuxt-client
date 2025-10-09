@@ -7,7 +7,7 @@
 			:checked="isChecked"
 			:value="value"
 			type="checkbox"
-			class="visually-hidden"
+			class="d-sr-only"
 			@change="updateVModel"
 			@blur="$emit('blur', $event)"
 			@focus="$emit('focus', $event)"
@@ -21,11 +21,7 @@
 	</label>
 </template>
 <script>
-import {
-	mdiCheckboxBlankOutline,
-	mdiCheckboxIntermediate,
-	mdiCheckboxOutline,
-} from "@icons/material";
+import { mdiCheckboxBlankOutline, mdiCheckboxIntermediate, mdiCheckboxOutline } from "@icons/material";
 export const supportedTypes = ["checkbox"];
 
 export default {
@@ -41,9 +37,7 @@ export default {
 		type: {
 			type: String,
 			required: true,
-			validator: (type) => {
-				return supportedTypes.includes(type);
-			},
+			validator: (type) => supportedTypes.includes(type),
 		},
 		color: {
 			type: String,
@@ -63,17 +57,13 @@ export default {
 	},
 	computed: {
 		isChecked() {
-			return Array.isArray(this.modelValue)
-				? this.modelValue.includes(this.value)
-				: Boolean(this.modelValue);
+			return Array.isArray(this.modelValue) ? this.modelValue.includes(this.value) : Boolean(this.modelValue);
 		},
 		visibleIcon() {
 			if (this.showUndefinedState && this.modelValue === undefined) {
 				return { name: mdiCheckboxIntermediate };
 			}
-			return this.isChecked
-				? { name: mdiCheckboxOutline }
-				: { name: mdiCheckboxBlankOutline };
+			return this.isChecked ? { name: mdiCheckboxOutline } : { name: mdiCheckboxBlankOutline };
 		},
 	},
 	created() {
@@ -87,24 +77,17 @@ export default {
 
 			if (this.showUndefinedState) {
 				if (this.type !== "checkbox") {
-					throw new Error(
-						"showUndefinedState is only allowed on type=checkbox."
-					);
+					throw new Error("showUndefinedState is only allowed on type=checkbox.");
 				}
 				if (Array.isArray(this.modelValue)) {
-					throw new Error(
-						"showUndefinedState is not allowed if v-model is of type Array."
-					);
+					throw new Error("showUndefinedState is not allowed if v-model is of type Array.");
 				}
 			}
 		},
 		updateVModel() {
 			let newModel = this.modelValue;
 			const isChecked = this.$refs.hiddenInput.checked;
-			if (
-				typeof this.modelValue === "boolean" ||
-				(this.showUndefinedState && this.modelValue === undefined)
-			) {
+			if (typeof this.modelValue === "boolean" || (this.showUndefinedState && this.modelValue === undefined)) {
 				newModel = isChecked;
 			} else if (isChecked && !newModel.includes(this.value)) {
 				newModel.push(this.value);
@@ -136,10 +119,13 @@ label {
 .icon-wrapper {
 	display: inline-block;
 	user-select: none;
+}
 
-	svg {
-		border-radius: var(--radius-xs);
-	}
+.icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	vertical-align: baseline;
 }
 
 input:focus + .icon-wrapper svg {

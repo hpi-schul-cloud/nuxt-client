@@ -1,28 +1,12 @@
-import { ConfigResponse } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 
 describe("DefaultWireframe", () => {
-	const setup = (
-		options: ComponentMountingOptions<typeof DefaultWireframe> = {}
-	) => {
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: {} as ConfigResponse,
-		});
-
+	const setup = (options: ComponentMountingOptions<typeof DefaultWireframe> = {}) => {
 		const wrapper = mount(DefaultWireframe, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-				},
 			},
 			...options,
 		});
@@ -112,10 +96,7 @@ describe("DefaultWireframe", () => {
 		const wrapper = setup({
 			props: { headline: "property title", fullWidth: false, maxWidth: "full" },
 			slots: {
-				header: [
-					"<h1>slot title</h1>",
-					"<div class='menu'>a custom menu or searchbar</div>",
-				],
+				header: ["<h1>slot title</h1>", "<div class='menu'>a custom menu or searchbar</div>"],
 			},
 		});
 

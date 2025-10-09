@@ -1,9 +1,6 @@
 <template>
 	<div>
-		<ContentElementBar
-			:has-grey-background="!isEditMode"
-			:icon="mdiFileDocumentOutline"
-		>
+		<ContentElementBar :has-grey-background="true" :icon="mdiFileDocumentOutline">
 			<template v-if="showTitle" #title>
 				<a v-if="src" :href="src" target="_blank" :aria-label="ariaLabel">
 					{{ name }}
@@ -37,9 +34,7 @@ const props = defineProps({
 
 const { t } = useI18n();
 
-const ariaLabel = computed(() => {
-	return `${props.name}, ${t("common.ariaLabel.newTab")}`;
-});
+const ariaLabel = computed(() => `${props.name}, ${t("common.ariaLabel.newTab")}`);
 </script>
 
 <style scoped>

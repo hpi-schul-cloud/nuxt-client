@@ -3,12 +3,12 @@
 		<div class="icon">
 			<slot name="icon" />
 		</div>
-		<h1 class="h4 modal-title">
+		<h1 class="text-h2 ma-0">
 			<slot name="title">
 				{{ title }}
 			</slot>
 		</h1>
-		<p class="modal-description">
+		<p class="mt-4">
 			<slot name="description">
 				{{ description }}
 			</slot>
@@ -30,7 +30,11 @@ withDefaults(defineProps<Props>(), {
 
 <style lang="scss" scoped>
 .icon {
-	font-size: var(--sidebar-item-height);
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	vertical-align: baseline;
+	font-size: 60px;
 	margin-bottom: 16px;
 }
 
@@ -41,13 +45,5 @@ withDefaults(defineProps<Props>(), {
 	justify-content: center;
 	min-height: 220px;
 	text-align: center;
-
-	.modal-title {
-		margin: 0;
-	}
-
-	.modal-description {
-		margin-top: 16px;
-	}
 }
 </style>

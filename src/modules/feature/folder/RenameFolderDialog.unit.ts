@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import RenameFolderDialog from "./RenameFolderDialog.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { VCard, VDialog, VTextField } from "vuetify/lib/components/index";
-import RenameFolderDialog from "./RenameFolderDialog.vue";
 
 describe("RenameFolderDialog", () => {
 	describe("when the dialog isDialogOpen is true", () => {
@@ -32,9 +29,7 @@ describe("RenameFolderDialog", () => {
 
 			const dialog = wrapper.findComponent(VCard);
 
-			expect(dialog.text()).toContain(
-				"pages.folder.ariaLabels.menu.action.edit"
-			);
+			expect(dialog.text()).toContain("pages.folder.ariaLabels.menu.action.edit");
 		});
 
 		it("should render input with name", () => {
@@ -73,10 +68,7 @@ describe("RenameFolderDialog", () => {
 				const { wrapper } = setup();
 				const dialog = wrapper.findComponent(Dialog);
 
-				const input = wrapper
-					.findComponent(VDialog)
-					.findComponent(VCard)
-					.find("input[type='text']");
+				const input = wrapper.findComponent(VDialog).findComponent(VCard).find("input[type='text']");
 				await input.setValue("new name");
 				await input.trigger("input");
 
@@ -135,9 +127,7 @@ describe("RenameFolderDialog", () => {
 			await input.setValue("<string");
 			await input.trigger("input");
 
-			expect(textField.text()).toContain(
-				"common.validation.containsOpeningTag"
-			);
+			expect(textField.text()).toContain("common.validation.containsOpeningTag");
 		});
 	});
 });

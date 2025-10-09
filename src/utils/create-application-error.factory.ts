@@ -9,9 +9,7 @@ declare type HandledApplicationErrors =
 	| HttpStatusCode.RequestTimeout
 	| HttpStatusCode.InternalServerError;
 
-export function createApplicationError(
-	statusCode: HandledApplicationErrors
-): ApplicationError;
+export function createApplicationError(statusCode: HandledApplicationErrors): ApplicationError;
 export function createApplicationError(
 	statusCode: HttpStatusCode,
 	translationKey?: string,

@@ -1,11 +1,5 @@
 <template>
-	<VList
-		data-testid="status-alerts"
-		min-width="250"
-		max-height="400"
-		class="alerts pa-0 rounded"
-		lines="three"
-	>
+	<VList data-testid="status-alerts" min-width="250" max-height="400" class="alerts pa-0 rounded" lines="three">
 		<template v-for="(item, index) in statusAlerts" :key="index">
 			<VListItem :data-test-id="`alert-item-${index}`" class="alert-item">
 				<template #prepend>
@@ -13,16 +7,10 @@
 						{{ getIcon(item.status).icon }}
 					</VIcon>
 				</template>
-				<VListItemTitle
-					:data-testid="`alert-title-${index}`"
-					class="item-title ma-0"
-				>
+				<VListItemTitle :data-testid="`alert-title-${index}`" class="item-title ma-0">
 					{{ item.title }}
 				</VListItemTitle>
-				<VListItemSubtitle
-					:data-testid="`alert-text-${index}`"
-					class="item-subtitle ma-0 mt-1"
-				>
+				<VListItemSubtitle :data-testid="`alert-text-${index}`" class="item-subtitle ma-0 mt-1">
 					{{ item.text }}
 				</VListItemSubtitle>
 				<VListItemSubtitle
@@ -42,10 +30,10 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
 import { formatDateForAlerts } from "@/plugins/datetime";
-import { mdiAlertCircle, mdiInformation } from "@icons/material";
 import { StatusAlert } from "@/store/types/status-alert";
+import { mdiAlertCircle, mdiInformation } from "@icons/material";
+import { PropType } from "vue";
 
 defineProps({
 	statusAlerts: {
@@ -54,15 +42,10 @@ defineProps({
 	},
 });
 
-const getIcon = (status: string) => {
-	return status === "danger"
-		? { icon: mdiAlertCircle, color: "error" }
-		: { icon: mdiInformation, color: "info" };
-};
+const getIcon = (status: string) =>
+	status === "danger" ? { icon: mdiAlertCircle, color: "error" } : { icon: mdiInformation, color: "info" };
 
-const formatDate = (dateTime: string) => {
-	return formatDateForAlerts(dateTime, true);
-};
+const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
 </script>
 
 <style lang="scss" scoped>

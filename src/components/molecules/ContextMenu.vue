@@ -23,9 +23,7 @@
 				@keydown.down.prevent="focusNext(index)"
 			>
 				<span class="context-menu__button-icon">
-					<v-icon v-if="action.icon" class="material-icon">{{
-						action.icon
-					}}</v-icon>
+					<v-icon v-if="action.icon" class="material-icon">{{ action.icon }}</v-icon>
 				</span>
 				<div
 					:class="{
@@ -69,13 +67,7 @@ export default {
 			type: String,
 			default: "bottom-right",
 			validator: (value) =>
-				[
-					"bottom-left",
-					"bottom-right",
-					"top-left",
-					"top-right",
-					"top-right-bottom-placed",
-				].includes(value),
+				["bottom-left", "bottom-right", "top-left", "top-right", "top-right-bottom-placed"].includes(value),
 		},
 		/**
 		 * defines the text, icon and event for each menu item
@@ -215,19 +207,18 @@ export default {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 
 .context-menu {
 	--transition-duration: 0.15s;
 
 	position: absolute;
-	z-index: var(--layer-dropdown);
+	z-index: 30;
 	display: flex;
 	flex-direction: column;
 	min-width: 150px;
 	max-width: 350px;
 	background-color: rgba(var(--v-theme-white));
-	border-radius: var(--radius-sm);
+	border-radius: 4px;
 
 	> :hover {
 		background-color: map.get($grey, lighten-3);
@@ -256,10 +247,6 @@ export default {
 				margin: 16px;
 			}
 		}
-
-		&-close:not(:focus) {
-			@include visually-hidden;
-		}
 	}
 }
 
@@ -270,8 +257,7 @@ export default {
 
 	> * {
 		opacity: 1;
-		transition: opacity calc(0.5 * var(--transition-duration)) ease-in-out
-			calc(0.5 * var(--transition-duration));
+		transition: opacity calc(0.5 * var(--transition-duration)) ease-in-out calc(0.5 * var(--transition-duration));
 	}
 }
 
@@ -289,8 +275,13 @@ export default {
 }
 
 .v-btn {
-	font-weight: var(--font-weight-normal) !important;
+	font-weight: normal !important;
 	font-family: var(--font-accent);
+}
+
+.material-icon {
+	width: 24px;
+	height: 24px;
 }
 </style>
 

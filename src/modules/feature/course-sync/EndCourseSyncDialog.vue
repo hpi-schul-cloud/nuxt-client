@@ -9,7 +9,7 @@
 		@dialog-canceled="closeDialog"
 	>
 		<template #title>
-			<h2 class="text-h4 my-2 text-break-word">
+			<h2 class="my-2 text-break-word">
 				{{ $t("feature-course-sync.EndCourseSyncDialog.title") }}
 			</h2>
 		</template>
@@ -28,11 +28,10 @@
 
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { notifyError, notifySuccess } from "@data-app";
 import { useCourseApi } from "@data-room";
 import { useI18n } from "vue-i18n";
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
 const isOpen = defineModel("isOpen", {
@@ -74,19 +73,11 @@ const onConfirm = async () => {
 		await stopSynchronization(props.courseId);
 
 		closeDialog();
-
-		notifierModule.show({
-			text: t("feature-course-sync.EndCourseSyncDialog.success"),
-			status: "success",
-		});
+		notifySuccess(t("feature-course-sync.EndCourseSyncDialog.success"));
 
 		emit("success");
 	} catch {
-		notifierModule.show({
-			text: t("common.notification.error"),
-			status: "error",
-		});
-
+		notifyError(t("common.notification.error"));
 		return;
 	}
 };

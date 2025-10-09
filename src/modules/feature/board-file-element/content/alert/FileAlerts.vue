@@ -21,6 +21,14 @@
 			{{ t("common.file.scanWontCheck") }}
 		</InfoAlert>
 
+		<InfoAlert v-if="alerts.includes(FileAlert.EXCEEDS_COLLABORA_EDITABLE_FILE_SIZE)">
+			{{
+				t("common.file.exceedsCollaboraEditableFileSize", {
+					sizeInMb: maxCollaboraFileSizeWithUnit,
+				})
+			}}
+		</InfoAlert>
+
 		<ErrorAlert v-if="alerts.includes(FileAlert.SCAN_STATUS_BLOCKED)">
 			{{ t("common.file.virusDetected") }}
 		</ErrorAlert>
@@ -32,9 +40,11 @@
 </template>
 
 <script setup lang="ts">
+import { FileAlert } from "../../shared/types/FileAlert.enum";
+import { formatFileSize } from "@/utils/fileHelper";
+import { useEnvFileConfig } from "@data-env";
 import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
 import { useI18n } from "vue-i18n";
-import { FileAlert } from "../../shared/types/FileAlert.enum";
 
 type Props = {
 	alerts: FileAlert[];
@@ -47,6 +57,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const maxCollaboraFileSizeWithUnit = formatFileSize(useEnvFileConfig().value?.COLLABORA_MAX_FILE_SIZE_IN_BYTES);
 
 const onStatusReload = () => {
 	emit("on-status-reload");

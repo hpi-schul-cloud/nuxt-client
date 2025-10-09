@@ -1,10 +1,5 @@
 <template>
-	<RouterLink
-		:to="roomPath"
-		class="room-link"
-		:aria-label="avatarAriaLabel"
-		draggable="false"
-	>
+	<RouterLink :to="roomPath" class="room-link" :aria-label="avatarAriaLabel" draggable="false">
 		<VBadge
 			class="tile-badge"
 			bordered
@@ -13,7 +8,7 @@
 			data-testid="room-badge-lock"
 		>
 			<div class="tile-icon" :class="avatarColor">
-				<span class="text-h3 text-white" data-testid="room-short-title">
+				<span class="text-h1 text-white" data-testid="room-short-title">
 					{{ roomShortName }}
 				</span>
 			</div>
@@ -25,10 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType } from "vue";
-import { useI18n } from "vue-i18n";
 import { RoomItem } from "@/types/room/Room";
 import { mdiLock } from "@icons/material";
+import { computed, PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	room: {
@@ -42,18 +37,14 @@ const roomPath = computed(() => `/rooms/${props.room.id}`);
 
 const roomShortName = computed(() => {
 	if (props.room) {
-		return props.room.name.length > 2
-			? props.room.name.slice(0, 2)
-			: props.room.name;
+		return props.room.name.length > 2 ? props.room.name.slice(0, 2) : props.room.name;
 	}
 	return "";
 });
 
 const avatarColor = computed(() => `room-color--${props.room.color}`);
 
-const avatarAriaLabel = computed(() => {
-	return `${t("common.labels.room")} ${props.room.name}`;
-});
+const avatarAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.name}`);
 </script>
 
 <style lang="scss" scoped>

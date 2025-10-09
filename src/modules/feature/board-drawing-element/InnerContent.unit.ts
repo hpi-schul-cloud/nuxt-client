@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import InnerContent from "./InnerContent.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { mount } from "@vue/test-utils";
 
 describe("InnerContent", () => {
 	const propsData = {
@@ -67,19 +64,14 @@ describe("InnerContent", () => {
 			${"small"}  | ${600}
 			${"medium"} | ${960}
 			${"large"}  | ${1280}
-		`(
-			"content should have row style for $screenSize display sizes",
-			({ px: windowWidth }) => {
-				const { wrapper } = setup({
-					isListBoard: true,
-					windowWidth,
-				});
+		`("content should have row style for $screenSize display sizes", ({ px: windowWidth }) => {
+			const { wrapper } = setup({
+				isListBoard: true,
+				windowWidth,
+			});
 
-				expect(wrapper.find(".content-element-bar").classes()).toContain(
-					"flex-row"
-				);
-			}
-		);
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-row");
+		});
 
 		it("content should have column style when display size is smaller than 600px", () => {
 			const { wrapper } = setup({
@@ -87,9 +79,7 @@ describe("InnerContent", () => {
 				windowWidth: 599,
 			});
 
-			expect(wrapper.find(".content-element-bar").classes()).toContain(
-				"flex-column"
-			);
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
 		});
 	});
 
@@ -100,18 +90,13 @@ describe("InnerContent", () => {
 			${"small"}  | ${600}
 			${"medium"} | ${960}
 			${"large"}  | ${1280}
-		`(
-			"content should have column style for $screenSize display sizes",
-			({ px: windowWidth }) => {
-				const { wrapper } = setup({
-					isListBoard: false,
-					windowWidth,
-				});
+		`("content should have column style for $screenSize display sizes", ({ px: windowWidth }) => {
+			const { wrapper } = setup({
+				isListBoard: false,
+				windowWidth,
+			});
 
-				expect(wrapper.find(".content-element-bar").classes()).toContain(
-					"flex-column"
-				);
-			}
-		);
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
+		});
 	});
 });

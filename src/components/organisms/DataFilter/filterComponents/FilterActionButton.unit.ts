@@ -1,26 +1,18 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import FilterActionButtons from "./FilterActionButtons.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 
 describe("@components/DataFilter/filterComponents/FilterActionButtons.vue", () => {
-	const mountComponent = (
-		options: ComponentMountingOptions<typeof FilterActionButtons> = {}
-	) => {
-		return mount(FilterActionButtons, {
+	const mountComponent = (options: ComponentMountingOptions<typeof FilterActionButtons> = {}) =>
+		mount(FilterActionButtons, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			...options,
 		});
-	};
 	it('should emit "remove:filter" event when onRemoveFilter is called', async () => {
 		const wrapper = mountComponent();
-		const removeButton = wrapper.getComponent(
-			'[data-testid="remove-filter-button"]'
-		);
+		const removeButton = wrapper.getComponent('[data-testid="remove-filter-button"]');
 
 		await removeButton.trigger("click");
 		expect(wrapper.emitted()).toHaveProperty("remove:filter");
@@ -28,9 +20,7 @@ describe("@components/DataFilter/filterComponents/FilterActionButtons.vue", () =
 
 	it('should emit "dialog-closed" event when onCancel is called', async () => {
 		const wrapper = mountComponent();
-		const cancelButton = wrapper.getComponent(
-			'[data-testid="cancel-filter-button"]'
-		);
+		const cancelButton = wrapper.getComponent('[data-testid="cancel-filter-button"]');
 
 		await cancelButton.trigger("click");
 		expect(wrapper.emitted()).toHaveProperty("dialog-closed");

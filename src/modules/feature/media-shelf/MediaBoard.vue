@@ -38,9 +38,7 @@
 						:index="index"
 						:line="element"
 						:layout="board.layout"
-						@update:line-background-color="
-							updateLineBackgroundColor(element.id, $event)
-						"
+						@update:line-background-color="updateLineBackgroundColor(element.id, $event)"
 						@update:line-collapsed="updateLineCollapsed(element.id, $event)"
 						@update:line-title="updateLineTitle(element.id, $event)"
 						@update:element-position="moveElement"
@@ -49,28 +47,25 @@
 					/>
 				</template>
 			</Sortable>
-			<MediaBoardLineGhost
-				v-if="board.lines.length < lineLimit"
-				@create:line="createLine"
-			/>
+			<MediaBoardLineGhost v-if="board.lines.length < lineLimit" @create:line="createLine" />
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { MediaAvailableLineResponse, MediaBoardResponse } from "@/serverApi/v3";
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { extractDataAttribute } from "@util-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { useMediaQuery } from "@vueuse/core";
-import { SortableEvent } from "sortablejs";
-import { Sortable } from "sortablejs-vue3";
-import { PropType } from "vue";
 import { lineLimit, LineMove, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
+import { MediaAvailableLineResponse, MediaBoardResponse } from "@/serverApi/v3";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+import { extractDataAttribute } from "@util-board";
+import { useMediaQuery } from "@vueuse/core";
+import { SortableEvent } from "sortablejs";
+import { Sortable } from "sortablejs-vue3";
+import { PropType } from "vue";
 
 defineProps({
 	board: {
@@ -106,8 +101,7 @@ const onLineDragEnd = async (event: SortableEvent) => {
 
 	const lineId: string | undefined = extractDataAttribute(item, "lineId");
 
-	const isOutOfBounds =
-		lineId !== undefined && newIndex !== undefined && oldIndex !== undefined;
+	const isOutOfBounds = lineId !== undefined && newIndex !== undefined && oldIndex !== undefined;
 
 	if (isOutOfBounds) {
 		const lineMove: LineMove = {

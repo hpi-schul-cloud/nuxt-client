@@ -20,10 +20,7 @@
 				<slot />
 			</FileDisplay>
 		</div>
-		<div
-			class="d-flex flex-column"
-			:class="{ 'file-information': hasRowStyle }"
-		>
+		<div class="d-flex flex-column" :class="{ 'file-information': hasRowStyle }">
 			<FileDescription
 				:name="fileProperties.name"
 				:caption="fileProperties.element.content.caption"
@@ -48,15 +45,6 @@
 </template>
 
 <script setup lang="ts">
-import {
-	isAudioMimeType,
-	isPdfMimeType,
-	isVideoMimeType,
-} from "@/utils/fileHelper";
-import { injectStrict } from "@/utils/inject";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { computed, PropType, ref } from "vue";
-import { useDisplay } from "vuetify";
 import FileDisplay from "../content/display/FileDisplay.vue";
 import { FileProperties } from "../shared/types/file-properties";
 import { FileAlert } from "../shared/types/FileAlert.enum";
@@ -64,6 +52,12 @@ import FileInputs from "././inputs/FileInputs.vue";
 import FileAlerts from "./alert/FileAlerts.vue";
 import FileDescription from "./display/file-description/FileDescription.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
+import { isAudioMimeType, isPdfMimeType, isVideoMimeType } from "@/utils/fileHelper";
+import { injectStrict } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { computed, PropType, ref } from "vue";
+import { useDisplay } from "vuetify";
 
 const props = defineProps({
 	fileProperties: {
@@ -74,13 +68,7 @@ const props = defineProps({
 	alerts: { type: Array as PropType<FileAlert[]>, required: true },
 });
 
-const emit = defineEmits([
-	"fetch:file",
-	"update:alternativeText",
-	"update:caption",
-	"update:name",
-	"add:alert",
-]);
+const emit = defineEmits(["fetch:file", "update:alternativeText", "update:caption", "update:name", "add:alert"]);
 
 const onFetchFile = () => {
 	emit("fetch:file");
@@ -101,55 +89,42 @@ const onAddAlert = (alert: FileAlert) => {
 	emit("add:alert", alert);
 };
 
-const hasVideoMimeType = computed(() => {
-	return isVideoMimeType(props.fileProperties.mimeType);
-});
+const hasVideoMimeType = computed(() => isVideoMimeType(props.fileProperties.mimeType));
 
-const hasPdfMimeType = computed(() =>
-	isPdfMimeType(props.fileProperties.mimeType)
+const hasCollaboraType = computed(() => props.fileProperties.isCollaboraEditable);
+
+const hasPdfMimeType = computed(() => isPdfMimeType(props.fileProperties.mimeType));
+
+const hasAudioMimeType = computed(() => isAudioMimeType(props.fileProperties.mimeType));
+
+const fileDescriptionSrc = computed(() => (hasPdfMimeType.value ? props.fileProperties.url : undefined));
+
+const showTitle = computed(
+	() => hasPdfMimeType.value || (!props.fileProperties.previewUrl && !hasVideoMimeType.value && !hasAudioMimeType.value)
 );
-
-const hasAudioMimeType = computed(() => {
-	return isAudioMimeType(props.fileProperties.mimeType);
-});
-
-const fileDescriptionSrc = computed(() => {
-	return hasPdfMimeType.value ? props.fileProperties.url : undefined;
-});
-
-const showTitle = computed(() => {
-	return (
-		hasPdfMimeType.value ||
-		(!props.fileProperties.previewUrl &&
-			!hasVideoMimeType.value &&
-			!hasAudioMimeType.value)
-	);
-});
 
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = computed(() => {
-	return smAndUp.value && isListLayout.value;
-});
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
 
-const hasRowStyle = computed(
+const hasRowStyle = computed(() => isSmallOrLargerListBoard.value && hasSmallPreview.value);
+
+const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
+
+const hasSmallPreview = computed(
 	() =>
-		isSmallOrLargerListBoard.value &&
-		hasPdfMimeType.value &&
-		props.fileProperties.previewUrl
+		(hasPdfMimeType.value && props.fileProperties.previewUrl) || (hasCollaboraType.value && isCollaboraEnabled.value)
 );
 
 const isMenuShownOnFileDisplay = computed(() => {
 	const isFileDisplayRendered =
 		!!props.fileProperties.previewUrl ||
 		hasVideoMimeType.value ||
-		hasAudioMimeType.value;
+		hasAudioMimeType.value ||
+		(hasCollaboraType.value && isCollaboraEnabled.value);
 
-	const isPdfOnSmallOrLargerListBoard =
-		isSmallOrLargerListBoard.value && hasPdfMimeType.value;
-
-	return isFileDisplayRendered && !isPdfOnSmallOrLargerListBoard;
+	return isFileDisplayRendered && !hasRowStyle.value;
 });
 </script>
 

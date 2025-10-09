@@ -2,18 +2,10 @@
 	<div v-if="!isGracePeriodExpired" data-testId="migration-control-section">
 		<div data-testid="text-description">
 			<p class="mb-0">
-				{{
-					t(
-						"components.administration.adminMigrationSection.description.firstPart"
-					)
-				}}
+				{{ t("components.administration.adminMigrationSection.description.firstPart") }}
 			</p>
 			<p>
-				{{
-					t(
-						"components.administration.adminMigrationSection.description.secondPart"
-					)
-				}}
+				{{ t("components.administration.adminMigrationSection.description.secondPart") }}
 			</p>
 			<i18n-t
 				keypath="components.administrationSection.description.support"
@@ -25,40 +17,24 @@
 					{{ t("components.administrationSection.description.support.link") }}
 				</a>
 			</i18n-t>
-			<i18n-t
-				keypath="components.administrationSection.description.moreInformation"
-				scope="global"
-				tag="p"
-			>
+			<i18n-t keypath="components.administrationSection.description.moreInformation" scope="global" tag="p">
 				<a
 					data-testid="migration-blog-link"
 					href="https://blog.niedersachsen.cloud/umzug"
 					target="_blank"
 					rel="noopener"
 				>
-					{{
-						t(
-							"components.administrationSection.description.moreInformation.link"
-						)
-					}}
+					{{ t("components.administrationSection.description.moreInformation.link") }}
 				</a>
 			</i18n-t>
 		</div>
 		<div v-if="isStartButtonVisible">
 			<InfoAlert data-testid="migration-info-text">
 				<p>
-					{{
-						t(
-							"components.administration.adminMigrationSection.infoText.firstParagraph"
-						)
-					}}
+					{{ t("components.administration.adminMigrationSection.infoText.firstParagraph") }}
 				</p>
 				<p>
-					{{
-						t(
-							"components.administration.adminMigrationSection.infoText.secondParagraph"
-						)
-					}}
+					{{ t("components.administration.adminMigrationSection.infoText.secondParagraph") }}
 				</p>
 				<i18n-t
 					keypath="components.administration.adminMigrationSection.infoText.thirdParagraph"
@@ -70,19 +46,13 @@
 					</a>
 				</i18n-t>
 				<p class="text-red">
-					{{
-						t(
-							"components.administration.adminMigrationSection.infoText.fourthParagraph"
-						)
-					}}
+					{{ t("components.administration.adminMigrationSection.infoText.fourthParagraph") }}
 				</p>
 			</InfoAlert>
 		</div>
 		<div v-else-if="isMigrationActive">
 			<InfoAlert data-testid="migration-active-status">
-				{{
-					t("components.administration.adminMigrationSection.migrationActive")
-				}}
+				{{ t("components.administration.adminMigrationSection.migrationActive") }}
 			</InfoAlert>
 		</div>
 		<v-btn
@@ -94,11 +64,7 @@
 			data-testid="migration-start-button"
 			@click="onToggleShowStartWarning"
 		>
-			{{
-				t(
-					"components.administration.adminMigrationSection.migrationEnableButton.label"
-				)
-			}}
+			{{ t("components.administration.adminMigrationSection.migrationEnableButton.label") }}
 		</v-btn>
 		<v-btn
 			v-if="isEndButtonVisible"
@@ -109,18 +75,9 @@
 			data-testid="migration-end-button"
 			@click="onToggleShowEndWarning"
 		>
-			{{
-				t(
-					"components.administration.adminMigrationSection.migrationEndButton.label"
-				)
-			}}
+			{{ t("components.administration.adminMigrationSection.migrationEndButton.label") }}
 		</v-btn>
-		<v-alert
-			v-if="error && error.message"
-			type="error"
-			:icon="mdiAlertCircle"
-			data-testid="error-alert"
-		>
+		<v-alert v-if="error && error.message" type="error" :icon="mdiAlertCircle" data-testid="error-alert">
 			<div class="alert-text">
 				<span data-testid="migration-error-text">
 					{{ t(getBusinessErrorTranslationKey(error)!) }}
@@ -129,11 +86,7 @@
 		</v-alert>
 		<v-switch
 			v-show="isShowMandatorySwitch"
-			:label="
-				t(
-					'components.administration.adminMigrationSection.mandatorySwitch.label'
-				)
-			"
+			:label="t('components.administration.adminMigrationSection.mandatorySwitch.label')"
 			:disabled="!isMigrationActive"
 			:true-value="true"
 			:false-value="false"
@@ -162,23 +115,16 @@
 	/>
 
 	<div
-		v-if="
-			userLoginMigration &&
-			userLoginMigration.closedAt &&
-			userLoginMigration.finishedAt
-		"
+		v-if="userLoginMigration && userLoginMigration.closedAt && userLoginMigration.finishedAt"
 		class="migration-completion-date"
 		data-testid="migration-finished-timestamp"
 	>
 		<p class="mb-0">
 			{{
-				t(
-					"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph",
-					{
-						date: dayjs(userLoginMigration.closedAt).format("DD.MM.YYYY"),
-						time: dayjs(userLoginMigration.closedAt).format("HH:mm"),
-					}
-				)
+				t("components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph", {
+					date: dayjs(userLoginMigration.closedAt).format("DD.MM.YYYY"),
+					time: dayjs(userLoginMigration.closedAt).format("HH:mm"),
+				})
 			}}
 		</p>
 		<p>
@@ -194,11 +140,7 @@
 	<v-switch
 		v-if="!isGracePeriodExpired && globalFeatureEnableLdapSyncDuringMigration"
 		v-model="school.featureObject.enableLdapSyncDuringMigration"
-		:label="
-			t(
-				'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
-			)
-		"
+		:label="t('components.administration.adminMigrationSection.enableSyncDuringMigration.label')"
 		:disabled="!isMigrationActive"
 		class="ml-1"
 		:true-icon="mdiCheck"
@@ -215,72 +157,42 @@
 			data-testid="migration-wizard-button"
 			:to="{ name: 'administration-migration' }"
 		>
-			{{
-				t(
-					"components.administration.adminMigrationSection.migrationWizardButton.label"
-				)
-			}}
+			{{ t("components.administration.adminMigrationSection.migrationWizardButton.label") }}
 		</v-btn>
 		<p>
-			{{
-				t(
-					"components.administration.adminMigrationSection.migrationWizardButton.description"
-				)
-			}}
+			{{ t("components.administration.adminMigrationSection.migrationWizardButton.description") }}
 		</p>
 	</template>
 
 	<v-switch
 		v-if="globalFeatureShowOutdatedUsers"
 		v-model="school.featureObject.showOutdatedUsers"
-		:label="
-			t(
-				'components.administration.adminMigrationSection.showOutdatedUsers.label'
-			)
-		"
+		:label="t('components.administration.adminMigrationSection.showOutdatedUsers.label')"
 		class="ml-1"
 		:true-icon="mdiCheck"
 		data-testid="show-outdated-users-switch"
 		@update:model-value="setSchoolFeatures"
 	/>
-	<p
-		v-if="globalFeatureShowOutdatedUsers"
-		data-testid="show-outdated-users-description"
-	>
-		{{
-			t(
-				"components.administration.adminMigrationSection.showOutdatedUsers.description"
-			)
-		}}
+	<p v-if="globalFeatureShowOutdatedUsers" data-testid="show-outdated-users-description">
+		{{ t("components.administration.adminMigrationSection.showOutdatedUsers.description") }}
 	</p>
 </template>
 
 <script lang="ts">
-import { mdiAlertCircle, mdiCheck } from "@icons/material";
+import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { useUserLoginMigrationMappings } from "@/composables/user-login-migration-mappings.composable";
 import { BusinessError } from "@/store/types/commons";
 import { School } from "@/store/types/schools";
 import { UserLoginMigration } from "@/store/user-login-migration";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-	SCHOOLS_MODULE_KEY,
-	USER_LOGIN_MIGRATION_MODULE_KEY,
-} from "@/utils/inject";
+import { injectStrict, SCHOOLS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
-import dayjs from "dayjs";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	ref,
-	Ref,
-} from "vue";
-import { useI18n } from "vue-i18n";
-import MigrationWarningCard from "./MigrationWarningCard.vue";
-import { InfoAlert } from "@ui-alert";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import { useEnvConfig } from "@data-env";
+import { mdiAlertCircle, mdiCheck } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
+import dayjs from "dayjs";
+import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -290,33 +202,25 @@ export default defineComponent({
 	},
 	setup() {
 		const { t } = useI18n();
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-		const userLoginMigrationModule = injectStrict(
-			USER_LOGIN_MIGRATION_MODULE_KEY
-		);
+		const userLoginMigrationModule = injectStrict(USER_LOGIN_MIGRATION_MODULE_KEY);
 
 		onMounted(async () => {
 			await userLoginMigrationModule.fetchLatestUserLoginMigrationForSchool();
 		});
 
-		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
-			computed(() => userLoginMigrationModule.getUserLoginMigration);
+		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> = computed(
+			() => userLoginMigrationModule.getUserLoginMigration
+		);
 
 		const isMigrationActive: ComputedRef<boolean> = computed(
-			() =>
-				!!userLoginMigration.value?.startedAt &&
-				!userLoginMigration.value.closedAt
+			() => !!userLoginMigration.value?.startedAt && !userLoginMigration.value.closedAt
 		);
 
-		const isMigrationMandatory: ComputedRef<boolean> = computed(
-			() => !!userLoginMigration.value?.mandatorySince
-		);
+		const isMigrationMandatory: ComputedRef<boolean> = computed(() => !!userLoginMigration.value?.mandatorySince);
 
 		const error: ComputedRef<BusinessError | undefined> = computed(() =>
-			userLoginMigrationModule.getBusinessError.message
-				? userLoginMigrationModule.getBusinessError
-				: undefined
+			userLoginMigrationModule.getBusinessError.message ? userLoginMigrationModule.getBusinessError : undefined
 		);
 
 		const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
@@ -352,17 +256,11 @@ export default defineComponent({
 		};
 
 		const isEndButtonVisible: ComputedRef<boolean> = computed(
-			() =>
-				isMigrationActive.value &&
-				!isEndWarningVisible.value &&
-				!isStartWarningVisible.value
+			() => isMigrationActive.value && !isEndWarningVisible.value && !isStartWarningVisible.value
 		);
 
 		const isStartButtonVisible: ComputedRef<boolean> = computed(
-			() =>
-				!isEndButtonVisible.value &&
-				!isEndWarningVisible.value &&
-				!isStartWarningVisible.value
+			() => !isEndButtonVisible.value && !isEndWarningVisible.value && !isStartWarningVisible.value
 		);
 
 		const isShowMandatorySwitch: ComputedRef<boolean> = computed(
@@ -371,9 +269,7 @@ export default defineComponent({
 
 		const isGracePeriodExpired: ComputedRef<boolean> = computed(() => {
 			if (userLoginMigration.value?.finishedAt) {
-				return (
-					Date.now() >= new Date(userLoginMigration.value.finishedAt).getTime()
-				);
+				return Date.now() >= new Date(userLoginMigration.value.finishedAt).getTime();
 			}
 
 			return false;
@@ -401,39 +297,29 @@ export default defineComponent({
 			return subject;
 		};
 
-		const supportLink: ComputedRef<string> = computed(
-			() =>
-				`mailto:${
-					envConfigModule.getAccessibilityReportEmail
-				}?subject=${getSubject()}`
+		const supportLink = computed(
+			() => `mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${getSubject()}`
 		);
 
-		const globalFeatureEnableLdapSyncDuringMigration: ComputedRef<boolean> =
-			computed(() => envConfigModule.getEnableLdapSyncDuringMigration);
-
-		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
-			() => envConfigModule.getShowOutdatedUsers
+		const globalFeatureEnableLdapSyncDuringMigration = computed(
+			() => useEnvConfig().value.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION
 		);
 
-		const isSchoolMigrated: ComputedRef<boolean> = computed(() => {
+		const globalFeatureShowOutdatedUsers = computed(() => useEnvConfig().value.FEATURE_SHOW_OUTDATED_USERS);
+
+		const isSchoolMigrated = computed(() => {
 			let hasTargetSystem = false;
 
 			if (userLoginMigration.value?.targetSystemId) {
-				hasTargetSystem = schoolsModule.getSchool.systemIds.includes(
-					userLoginMigration.value.targetSystemId
-				);
+				hasTargetSystem = schoolsModule.getSchool.systemIds.includes(userLoginMigration.value.targetSystemId);
 			}
 
 			return hasTargetSystem;
 		});
 
-		const showMigrationWizard: ComputedRef<boolean> = computed(
-			() => !!envConfigModule.getEnv.FEATURE_SHOW_MIGRATION_WIZARD
-		);
+		const showMigrationWizard = computed(() => !!useEnvConfig().value.FEATURE_SHOW_MIGRATION_WIZARD);
 
-		const isMigrationFinished: ComputedRef<boolean> = computed(
-			() => !!userLoginMigration.value?.finishedAt
-		);
+		const isMigrationFinished = computed(() => !!userLoginMigration.value?.finishedAt);
 
 		const setSchoolFeatures = async () => {
 			await schoolsModule.update({
@@ -445,9 +331,7 @@ export default defineComponent({
 		};
 
 		const contactEmailLink: ComputedRef<string> = computed(() =>
-			sanitizeUrl(
-				`mailto:${envConfigModule.getContactEmail}}?subject=Schulnummer nicht korrekt`
-			)
+			sanitizeUrl(`mailto:${useEnvConfig().value.SC_CONTACT_EMAIL}}?subject=Schulnummer nicht korrekt`)
 		);
 
 		return {

@@ -1,13 +1,16 @@
+import { BusinessError } from "./types/commons";
+import { HttpStatusCode } from "./types/http-status-code.enum";
+import { Course } from "./types/room";
 import {
 	BoardApiFactory,
+	CourseRoomsApiFactory,
+	CourseRoomsApiInterface,
 	CreateBoardBodyParams,
 	CreateBoardResponse,
 	LessonApiFactory,
 	LessonApiInterface,
 	PatchOrderParams,
 	PatchVisibilityParams,
-	CourseRoomsApiFactory,
-	CourseRoomsApiInterface,
 	SingleColumnBoardResponse,
 	TaskApiFactory,
 	TaskApiInterface,
@@ -15,15 +18,8 @@ import {
 import { applicationErrorModule } from "@/store";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { BusinessError } from "./types/commons";
-import { HttpStatusCode } from "./types/http-status-code.enum";
-import { Course } from "./types/room";
-import {
-	CommonCartridgeApiFactory,
-	CommonCartridgeApiInterface,
-} from "@/commonCartridgeApi/v3";
 import { isAxiosError } from "axios";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
 	name: "courseRoomDetailsModule",
@@ -58,10 +54,6 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		return LessonApiFactory(undefined, "/v3", $axios);
 	}
 
-	public get commonCartridgeApi(): CommonCartridgeApiInterface {
-		return CommonCartridgeApiFactory(undefined, "/v3", $axios);
-	}
-
 	@Action
 	async fetchCourse(courseId: string): Promise<Course | null> {
 		this.setLoading(true);
@@ -85,8 +77,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	async fetchContent(id: string) {
 		this.setLoading(true);
 		try {
-			const { data } =
-				await this.roomsApi.courseRoomsControllerGetRoomBoard(id);
+			const { data } = await this.roomsApi.courseRoomsControllerGetRoomBoard(id);
 			this.setRoomData(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
@@ -107,10 +98,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async publishCard(payload: {
-		elementId: string;
-		visibility: boolean;
-	}): Promise<void> {
+	async publishCard(payload: { elementId: string; visibility: boolean }): Promise<void> {
 		this.setLoading(true);
 		const visibilityParam: PatchVisibilityParams = {
 			visibility: payload.visibility,
@@ -134,10 +122,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	async sortElements(payload: PatchOrderParams): Promise<void> {
 		this.setLoading(true);
 		try {
-			await this.roomsApi.courseRoomsControllerPatchOrderingOfElements(
-				this.roomData.roomId,
-				payload
-			);
+			await this.roomsApi.courseRoomsControllerPatchOrderingOfElements(this.roomData.roomId, payload);
 			await this.fetchContent(this.roomData.roomId);
 			this.setLoading(false);
 		} catch (error: unknown) {
@@ -202,9 +187,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async createBoard(
-		prams: CreateBoardBodyParams
-	): Promise<CreateBoardResponse | undefined> {
+	async createBoard(prams: CreateBoardBodyParams): Promise<CreateBoardResponse | undefined> {
 		this.resetBusinessError();
 		try {
 			const { data } = await this.boardApi.boardControllerCreateBoard(prams);
@@ -228,47 +211,37 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		tasks: string[];
 		columnBoards: string[];
 	}): Promise<void> {
-		this.resetBusinessError();
-		try {
-			const response =
-				await this.commonCartridgeApi.commonCartridgeControllerExportCourse(
-					this.roomData.roomId,
-					exportSettings.version,
-					{
-						topics: exportSettings.topics,
-						tasks: exportSettings.tasks,
-						columnBoards: exportSettings.columnBoards,
-					},
-					{
-						responseType: "blob",
-					}
-				);
+		const form = document.createElement("form");
+		form.method = "POST";
+		form.action = `/api/v3/common-cartridge/export/${this.roomData.roomId}?version=${exportSettings.version}`;
+		form.enctype = "application/json";
+		form.target = "_blank";
 
-			const link = document.createElement("a");
-			link.href = URL.createObjectURL(
-				new Blob([response.data as unknown as Blob])
-			);
-			link.download = `${
-				this.roomData.title
-			}-${new Date().toISOString()}.imscc`;
-			link.click();
-			URL.revokeObjectURL(link.href);
-		} catch (error: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
+		const topicIdsInput = document.createElement("input");
+		topicIdsInput.type = "hidden";
+		topicIdsInput.name = "topics";
+		topicIdsInput.value = JSON.stringify(exportSettings.topics);
+		form.appendChild(topicIdsInput);
 
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-		}
+		const taskIdsInput = document.createElement("input");
+		taskIdsInput.type = "hidden";
+		taskIdsInput.name = "tasks";
+		taskIdsInput.value = JSON.stringify(exportSettings.tasks);
+		form.appendChild(taskIdsInput);
+
+		const columnBoardIdsInput = document.createElement("input");
+		columnBoardIdsInput.type = "hidden";
+		columnBoardIdsInput.name = "columnBoards";
+		columnBoardIdsInput.value = JSON.stringify(exportSettings.columnBoards);
+		form.appendChild(columnBoardIdsInput);
+
+		document.body.appendChild(form);
+		form.submit();
+		document.body.removeChild(form);
 	}
 
 	@Action
-	async finishTask(payload: {
-		itemId: string;
-		action: "finish" | "restore";
-	}): Promise<void> {
+	async finishTask(payload: { itemId: string; action: "finish" | "restore" }): Promise<void> {
 		this.resetBusinessError();
 		try {
 			if (payload.action === "finish") {
@@ -289,10 +262,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async fetchScopePermission(payload: {
-		courseId: string;
-		userId: string;
-	}): Promise<void> {
+	async fetchScopePermission(payload: { courseId: string; userId: string }): Promise<void> {
 		const requestUrl = `/v3/courses/${payload.courseId}/user-permissions`;
 		try {
 			const ret_val = (await $axios.get(requestUrl)).data;

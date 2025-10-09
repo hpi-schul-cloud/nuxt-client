@@ -1,8 +1,8 @@
 <template>
 	<div class="users-container">
-		<h3 class="title-class">
+		<h2 class="title-class">
 			{{ $t("pages.administration.ldap.users.title") }}
-		</h3>
+		</h2>
 		<p>
 			{{ $t("pages.administration.ldap.users.title.info") }}
 		</p>
@@ -18,9 +18,7 @@
 			:validation-model="v$.modelValue.userPath"
 			:validation-messages="userPathValidationMessage"
 			datatest-id="ldapDataUsersUserPath"
-			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, userPath: $event })
-			"
+			@update:model-value="$emit('update:modelValue', { ...modelValue, userPath: $event })"
 		>
 			<template #icon>
 				<v-icon :icon="mdiFileTreeOutline" />
@@ -38,9 +36,7 @@
 			:validation-model="v$.modelValue.firstName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFirstName"
-			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, firstName: $event })
-			"
+			@update:model-value="$emit('update:modelValue', { ...modelValue, firstName: $event })"
 		>
 			<template #icon>
 				<v-icon :icon="mdiAccountCircleOutline" />
@@ -55,9 +51,7 @@
 			:validation-model="v$.modelValue.familyName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFamilyName"
-			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, familyName: $event })
-			"
+			@update:model-value="$emit('update:modelValue', { ...modelValue, familyName: $event })"
 		>
 			<template #icon>
 				<v-icon :icon="mdiAccountCircleOutline" />
@@ -72,9 +66,7 @@
 			:validation-model="v$.modelValue.email"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersEmail"
-			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, email: $event })
-			"
+			@update:model-value="$emit('update:modelValue', { ...modelValue, email: $event })"
 		>
 			<template #icon>
 				<v-icon :icon="mdiEmailOutline" />
@@ -90,9 +82,7 @@
 			:validation-model="v$.modelValue.uid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUid"
-			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, uid: $event })
-			"
+			@update:model-value="$emit('update:modelValue', { ...modelValue, uid: $event })"
 		>
 			<template #icon>
 				<v-icon :icon="mdiCardAccountDetailsOutline" />
@@ -108,9 +98,7 @@
 			:validation-model="v$.modelValue.uuid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUuid"
-			@update:model-value="
-				$emit('update:modelValue', { ...modelValue, uuid: $event })
-			"
+			@update:model-value="$emit('update:modelValue', { ...modelValue, uuid: $event })"
 		>
 			<template #icon>
 				<v-icon :icon="mdiAccountBoxOutline" />
@@ -120,10 +108,7 @@
 </template>
 
 <script>
-import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
-import { defineComponent } from "vue";
-import useVuelidate from "@vuelidate/core";
 import {
 	mdiAccountBoxOutline,
 	mdiAccountCircleOutline,
@@ -131,6 +116,9 @@ import {
 	mdiEmailOutline,
 	mdiFileTreeOutline,
 } from "@icons/material";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	props: {
@@ -155,9 +143,7 @@ export default defineComponent({
 			mdiCardAccountDetailsOutline,
 			mdiEmailOutline,
 			mdiFileTreeOutline,
-			usersValidationMessage: [
-				{ key: "required", message: this.$t("common.validation.required") },
-			],
+			usersValidationMessage: [{ key: "required", message: this.$t("common.validation.required") }],
 			userPathValidationMessage: [
 				{
 					key: "ldapPathRegexValidator",

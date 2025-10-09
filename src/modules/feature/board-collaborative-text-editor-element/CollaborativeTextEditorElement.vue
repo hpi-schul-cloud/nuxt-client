@@ -42,20 +42,17 @@
 </template>
 
 <script setup lang="ts">
+import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
+import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 import image from "@/assets/img/collaborativeEditor.svg";
-import {
-	CollaborativeTextEditorElementResponse,
-	CollaborativeTextEditorParentType,
-} from "@/serverApi/v3";
+import { CollaborativeTextEditorElementResponse, CollaborativeTextEditorParentType } from "@/serverApi/v3";
+import { injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler } from "@data-board";
 import { mdiTextBoxEditOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
-import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { injectStrict } from "@/utils/inject";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
@@ -71,12 +68,7 @@ const props = defineProps({
 	elementIndex: { type: Number, required: true },
 });
 
-const emit = defineEmits([
-	"delete:element",
-	"move-down:edit",
-	"move-up:edit",
-	"move-keyboard:edit",
-]);
+const emit = defineEmits(["delete:element", "move-down:edit", "move-up:edit", "move-keyboard:edit"]);
 
 const { t } = useI18n();
 
@@ -89,21 +81,16 @@ const { getUrl } = useCollaborativeTextEditorApi();
 const redirectToEditorUrl = async () => {
 	const windowReference = window.open();
 
-	getUrl(
-		element.value.id,
-		CollaborativeTextEditorParentType.ContentElement
-	).then((url) => {
+	getUrl(element.value.id, CollaborativeTextEditorParentType.ContentElement).then((url) => {
 		if (url && windowReference) {
 			windowReference.location = url;
 		}
 	});
 };
 
-const ariaLabel = computed(() => {
-	return `${t("components.cardElement.collaborativeTextEditorElement")}, ${t(
-		"common.ariaLabel.newTab"
-	)}`;
-});
+const ariaLabel = computed(
+	() => `${t("components.cardElement.collaborativeTextEditorElement")}, ${t("common.ariaLabel.newTab")}`
+);
 
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (props.isEditMode) {
@@ -119,9 +106,7 @@ const onMoveDown = () => emit("move-down:edit");
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = computed(() => {
-	return smAndUp.value && isListLayout.value;
-});
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
 </script>
 
 <style scoped lang="scss">

@@ -11,17 +11,12 @@
 			active
 			@update:model-value="setPagination"
 		/>
-		<div v-if="perPage > 0" class="d-flex align-items-center">
+		<div v-if="perPage > 0" class="d-flex align-center">
 			<p class="total">
 				{{
 					$t("components.organisms.Pagination.currentPage", {
 						start: total > 0 ? currentPage * perPage - perPage + 1 : 0,
-						end:
-							perPage > total
-								? total
-								: currentPage * perPage > total
-									? total
-									: currentPage * perPage,
+						end: perPage > total ? total : currentPage * perPage > total ? total : currentPage * perPage,
 						total,
 					})
 				}}
@@ -152,10 +147,6 @@ const nextPage = () => {
 .total {
 	margin-right: 12px;
 	margin-bottom: 0;
-}
-
-:deep(.v-input__icon .v-icon) {
-	font-size: var(--text-base-size);
 }
 
 .select-input-width {

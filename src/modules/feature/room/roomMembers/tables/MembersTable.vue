@@ -11,18 +11,12 @@
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionChangePermission
-				v-if="canAddRoomMembers"
-				@click="onChangePermission(selectedIds)"
-			/>
+			<KebabMenuActionChangePermission v-if="canAddRoomMembers" @click="onChangePermission(selectedIds)" />
 			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
 		</template>
 		<template #[`item.displaySchoolRole`]="{ item }">
 			<span class="text-no-wrap">
-				<VIcon
-					v-if="getSchoolRoleIcon(item.schoolRoleNames)"
-					:icon="getSchoolRoleIcon(item.schoolRoleNames)"
-				/>
+				<VIcon v-if="getSchoolRoleIcon(item.schoolRoleNames)" :icon="getSchoolRoleIcon(item.schoolRoleNames)" />
 				{{ item.displaySchoolRole }}
 			</span>
 		</template>
@@ -44,42 +38,22 @@
 			</KebabMenu>
 		</template>
 	</DataTable>
-	<VDialog
-		v-model="isChangeRoleDialogOpen"
-		:width="isExtraSmallDisplay ? 'auto' : 480"
-		data-testid="dialog-change-role-participants"
-		max-width="480"
-		@keydown.esc="onDialogClose"
-	>
-		<ChangeRole :members="membersToChangeRole" @close="onDialogClose" />
-	</VDialog>
+	<ChangeRole v-model="isChangeRoleDialogOpen" :members="membersToChangeRole" @close="onDialogClose" />
 	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
-import { DataTable } from "@ui-data-table";
-import {
-	KebabMenu,
-	KebabMenuActionChangePermission,
-	KebabMenuActionRemoveMember,
-} from "@ui-kebab-menu";
-import { ref, computed } from "vue";
-import { useI18n } from "vue-i18n";
-import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
-import {
-	ConfirmationDialog,
-	useConfirmationDialog,
-} from "@ui-confirmation-dialog";
-import {
-	RoomMember,
-	useRoomAuthorization,
-	useRoomMembersStore,
-} from "@data-room";
-import { useDisplay } from "vuetify";
-import { storeToRefs } from "pinia";
-import { ChangeRole } from "@feature-room";
-import { authModule } from "@/store/store-accessor";
 import { RoleName } from "@/serverApi/v3";
+import { useAppStore } from "@data-app";
+import { RoomMember, useRoomAuthorization, useRoomMembersStore } from "@data-room";
+import { ChangeRole } from "@feature-room";
+import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { DataTable } from "@ui-data-table";
+import { KebabMenu, KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
+import { storeToRefs } from "pinia";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 type Props = {
 	headerBottom?: number;
@@ -92,29 +66,26 @@ withDefaults(defineProps<Props>(), {
 });
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay } = useDisplay();
 const { canAddRoomMembers } = useRoomAuthorization();
 
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } =
-	storeToRefs(roomMembersStore);
+const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
+
 const { isRoomOwner, removeMembers } = roomMembersStore;
 const { askConfirmation } = useConfirmationDialog();
 
-const tableData = computed(
-	() =>
-		roomMembersWithoutApplicants.value as unknown as Record<string, unknown>[]
-);
+const tableData = computed(() => roomMembersWithoutApplicants.value as unknown as Record<string, unknown>[]);
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 
 const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
-	const isNotCurrentUser = userId !== authModule.getUser?.id;
+	const isNotCurrentUser = userId !== useAppStore().user?.id;
 	const isNotRoomOwner = !isRoomOwner(userId);
 	return isNotCurrentUser && isNotRoomOwner;
 };
 
 const onDialogClose = () => {
+	membersToChangeRole.value = [];
 	isChangeRoleDialogOpen.value = false;
 };
 
@@ -137,9 +108,7 @@ const confirmRemoval = async (userIds: string[]) => {
 };
 
 const onChangePermission = (userIds: string[]) => {
-	membersToChangeRole.value = roomMembersWithoutApplicants.value.filter(
-		(member) => userIds.includes(member.userId)
-	);
+	membersToChangeRole.value = roomMembersWithoutApplicants.value.filter((member) => userIds.includes(member.userId));
 
 	isChangeRoleDialogOpen.value = true;
 };
@@ -148,10 +117,7 @@ const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
 
-const getAriaLabel = (
-	member: RoomMember,
-	actionFor: "remove" | "changeRole" | "" = ""
-) => {
+const getAriaLabel = (member: RoomMember, actionFor: "remove" | "changeRole" | "" = "") => {
 	const memberFullName = member.fullName;
 	const mapActionToConst = {
 		remove: "pages.rooms.members.remove.ariaLabel",
@@ -162,19 +128,15 @@ const getAriaLabel = (
 	return t(languageKey, { memberFullName });
 };
 
-const tableHeader = computed(() => {
-	return [
-		...baseTableHeaders.value,
-		{
-			title: canAddRoomMembers.value
-				? t("pages.rooms.members.tableHeader.actions")
-				: "",
-			key: "actions",
-			sortable: false,
-			width: 50,
-		},
-	];
-});
+const tableHeader = computed(() => [
+	...baseTableHeaders.value,
+	{
+		title: canAddRoomMembers.value ? t("pages.rooms.members.tableHeader.actions") : "",
+		key: "actions",
+		sortable: false,
+		width: 50,
+	},
+]);
 
 const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	if (schoolRoleNames.includes(RoleName.Teacher)) {

@@ -8,48 +8,36 @@
 		@dialog-closed="onDialogClosed"
 	>
 		<template #title>
-			<div ref="textTitle" class="text-h4 my-2 wordbreak-normal">
+			<h2 class="mt-2 wordbreak-normal">
 				{{ $t("components.molecules.copyResult.title.partial") }}
-			</div>
+			</h2>
 		</template>
 		<template #content>
-			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
-				<div class="d-flex flex-row pa-2 mb-4 rounded bg-orange-lighten-5">
-					<div class="mx-2">
-						<v-icon color="warning">{{ mdiAlert }}</v-icon>
-					</div>
-					<div>
-						<template v-for="(warning, index) in copyResultWarnings">
-							<p
-								v-if="warning.isShow"
-								:key="index"
-								class="mb-0 aligned-with-icon"
-								data-testid="warning-title"
-							>
-								<strong>{{ warning.title }}</strong>
-								&middot;
-								{{ warning.text }}
-							</p>
-						</template>
-					</div>
-				</div>
-			</div>
-			<template v-if="hasErrors && isCourse">
-				<div>
-					<p>{{ $t("components.molecules.copyResult.information") }}</p>
-				</div>
-				<copy-result-modal-list :items="items" />
-			</template>
+			<InfoAlert class="mb-4">
+				{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
+			</InfoAlert>
+			<WarningAlert data-testid="copy-result-notifications">
+				{{ t("components.molecules.copyResult.followingNotCopied") }}
+				<ul class="ml-6">
+					<li v-if="isCourse">
+						{{ t("components.molecules.copyResult.membersAndPermissions") }}
+					</li>
+					<template v-for="(warning, index) in copyResultWarnings">
+						<li v-if="warning.isShow" :key="index" data-testid="warning-title">
+							{{ warning.text }}
+						</li>
+					</template>
+				</ul>
+			</WarningAlert>
 		</template>
 	</v-custom-dialog>
 </template>
 
 <script setup lang="ts">
-import CopyResultModalList from "./CopyResultModalList.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import { mdiAlert } from "@icons/material";
+import { useEnvConfig } from "@data-env";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -77,10 +65,7 @@ const emit = defineEmits<{
 	(e: "copy-dialog-closed"): void;
 }>();
 
-const hasElementOfType = (
-	items: CopyResultItem[],
-	types: CopyApiResponseTypeEnum
-) => {
+const hasElementOfType = (items: CopyResultItem[], types: CopyApiResponseTypeEnum) => {
 	let found = false;
 	items.forEach((item) => {
 		if (found) return;
@@ -94,107 +79,58 @@ const onDialogClosed = () => {
 };
 
 const items = computed(() => props.copyResultItems);
-const copyResultWarnings = computed(() => {
-	return [
-		{
-			isShow: hasGeogebraElement.value,
-			text: t("components.molecules.copyResult.geogebraCopy.info"),
-			title: t("components.molecules.copyResult.label.geogebra"),
-		},
-		{
-			isShow: hasEtherpadElement.value,
-			text: t("components.molecules.copyResult.etherpadCopy.info"),
-			title: t("components.molecules.copyResult.label.etherpad"),
-		},
-		{
-			isShow: hasDrawingElement.value,
-			text: t("components.molecules.copyResult.tldrawCopy.info"),
-			title: t("components.molecules.copyResult.label.tldraw"),
-		},
-		{
-			isShow: hasFileElement.value || isCourse.value,
-			text: filesInfoText.value,
-			title: t("components.molecules.copyResult.label.files"),
-		},
-		{
-			isShow: hasExternalTool.value || hasExternalToolElement.value,
-			text: externalToolsInfoText.value,
-			title: t("components.molecules.copyResult.label.externalTools"),
-		},
-		{
-			isShow: hasCourseGroup.value,
-			text: t("components.molecules.copyResult.courseGroupCopy.info"),
-			title: t("common.words.courseGroups"),
-		},
-	];
-});
+const copyResultWarnings = computed(() => [
+	{
+		isShow: hasGeogebraElement.value,
+		text: t("components.molecules.copyResult.geogebraCopy.info"),
+	},
+	{
+		isShow: hasEtherpadElement.value,
+		text: t("components.molecules.copyResult.etherpadCopy.info"),
+	},
+	{
+		isShow: hasDrawingElement.value,
+		text: t("components.molecules.copyResult.tldrawCopy.info"),
+	},
+	{
+		isShow: isCourse.value,
+		text: t("components.molecules.copyResult.courseFiles.info"),
+	},
+	{
+		isShow: hasExternalTool.value || hasExternalToolElement.value,
+		text: externalToolsInfoText.value,
+	},
+	{
+		isShow: hasCourseGroup.value,
+		text: t("components.molecules.copyResult.courseGroupCopy.info"),
+	},
+]);
 
-const hasGeogebraElement = computed(() => {
-	return hasElementOfType(
-		items.value,
-		CopyApiResponseTypeEnum.LessonContentGeogebra
-	);
-});
+const hasGeogebraElement = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.LessonContentGeogebra));
 
-const hasEtherpadElement = computed(() => {
-	return (
-		hasElementOfType(
-			items.value,
-			CopyApiResponseTypeEnum.CollaborativeTextEditorElement
-		) ||
+const hasEtherpadElement = computed(
+	() =>
+		hasElementOfType(items.value, CopyApiResponseTypeEnum.CollaborativeTextEditorElement) ||
 		hasElementOfType(items.value, CopyApiResponseTypeEnum.LessonContentEtherpad)
-	);
-});
+);
 
-const hasDrawingElement = computed(() => {
-	return hasElementOfType(items.value, CopyApiResponseTypeEnum.DrawingElement);
-});
+const hasDrawingElement = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.DrawingElement));
 
-const hasFileElement = computed(() => {
-	return hasElementOfType(items.value, CopyApiResponseTypeEnum.File);
-});
+const hasCourseGroup = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.CoursegroupGroup));
 
-const hasCourseGroup = computed(() => {
-	return hasElementOfType(
-		items.value,
-		CopyApiResponseTypeEnum.CoursegroupGroup
-	);
-});
+const isCourse = computed(() => props.copyResultRootItemType === CopyApiResponseTypeEnum.Course);
 
-const hasErrors = computed(() => {
-	return items.value.length > 0;
-});
-
-const isCourse = computed(() => {
-	return props.copyResultRootItemType === CopyApiResponseTypeEnum.Course;
-});
-
-const filesInfoText = computed(() => {
-	const courseFilesText = isCourse.value
-		? t("components.molecules.copyResult.courseFiles.info")
-		: "";
-	const fileErrorText = hasFileElement.value
-		? t("components.molecules.copyResult.fileCopy.error")
-		: "";
-	return `${courseFilesText} ${fileErrorText}`.trim();
-});
-
-const externalToolsInfoText = computed(() => {
-	return envConfigModule.getEnv.FEATURE_CTL_TOOLS_COPY_ENABLED
+const externalToolsInfoText = computed(() =>
+	useEnvConfig().value.FEATURE_CTL_TOOLS_COPY_ENABLED
 		? t("components.molecules.copyResult.ctlTools.withFeature.info")
-		: t("components.molecules.copyResult.ctlTools.info");
-});
+		: t("components.molecules.copyResult.ctlTools.info")
+);
 
-const hasExternalTool = computed(() => {
-	return hasElementOfType(items.value, CopyApiResponseTypeEnum.ExternalTool);
-});
+const hasExternalTool = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.ExternalTool));
 
-const hasExternalToolElement = computed(() => {
-	return hasElementOfType(
-		items.value,
-		CopyApiResponseTypeEnum.ExternalToolElement
-	);
-});
+const hasExternalToolElement = computed(() =>
+	hasElementOfType(items.value, CopyApiResponseTypeEnum.ExternalToolElement)
+);
 </script>
 
 <style scoped lang="scss">

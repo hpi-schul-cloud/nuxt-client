@@ -1,3 +1,4 @@
+import { usePreviewGenerator } from "./PreviewGenerator.composable";
 import { FileRecordParentType, PreviewStatus } from "@/fileStorageApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { fileRecordFactory } from "@@/tests/test-utils";
@@ -5,7 +6,6 @@ import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { defineComponent } from "vue";
-import { usePreviewGenerator } from "./PreviewGenerator.composable";
 
 vi.mock("@feature-board-file-element");
 
@@ -37,14 +37,9 @@ describe("usePreviewGenerator", () => {
 						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 					});
 
-					const fileStorageApiMock =
-						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
-						fileStorageApiMock
-					);
-					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
-						fileRecord,
-					]);
+					const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord]);
 
 					const { wrapper, composable } = getWrapper(elementId);
 
@@ -82,12 +77,8 @@ describe("usePreviewGenerator", () => {
 					const externalImageUrl = "https://test.de/my-article/image.jpg";
 					const result = await composable?.createPreviewImage(externalImageUrl);
 
-					const expectedPreviewImageUrl = convertDownloadToPreviewUrl(
-						fileRecord.url
-					);
-					expect(result).toEqual(
-						expect.stringContaining(expectedPreviewImageUrl)
-					);
+					const expectedPreviewImageUrl = convertDownloadToPreviewUrl(fileRecord.url);
+					expect(result).toEqual(expect.stringContaining(expectedPreviewImageUrl));
 				});
 			});
 
@@ -97,11 +88,8 @@ describe("usePreviewGenerator", () => {
 					const elementId = "my-custom-mocked-id";
 					const error = new Error("upload failed");
 
-					const fileStorageApiMock =
-						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
-						fileStorageApiMock
-					);
+					const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 					fileStorageApiMock.uploadFromUrl.mockRejectedValueOnce(error);
 
 					const { wrapper, composable } = getWrapper(elementId);
@@ -119,9 +107,7 @@ describe("usePreviewGenerator", () => {
 				it("should pass error", async () => {
 					const { composable, externalImageUrl, error } = setup();
 
-					await expect(
-						composable?.createPreviewImage(externalImageUrl)
-					).rejects.toThrowError(error);
+					await expect(composable?.createPreviewImage(externalImageUrl)).rejects.toThrowError(error);
 				});
 			});
 
@@ -130,11 +116,8 @@ describe("usePreviewGenerator", () => {
 					const externalImageUrl = "https://test.de/my-article/image.jpg";
 					const elementId = "my-custom-mocked-id";
 
-					const fileStorageApiMock =
-						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
-						fileStorageApiMock
-					);
+					const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const { wrapper, composable } = getWrapper(elementId);

@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe ref="main" max-width="full">
 		<div class="ml-1 d-flex">
-			<h1 aria-level="1" class="text-h3 mt-0 me-auto" data-testid="page-title">
+			<h1 aria-level="1" class="mt-0 me-auto" data-testid="page-title">
 				{{ $t("feature.media-shelf.title") }}
 			</h1>
 			<VBtnToggle
@@ -44,10 +44,7 @@
 			</VContainer>
 		</template>
 		<template v-else-if="isEmptyState">
-			<EmptyState
-				:title="t('feature.media-shelf.emptyState')"
-				data-testid="empty-state"
-			>
+			<EmptyState :title="t('feature.media-shelf.emptyState')" data-testid="empty-state">
 				<template #media>
 					<MediaShelfEmptyStateSvg />
 				</template>
@@ -64,12 +61,12 @@
 </template>
 
 <script setup lang="ts">
-import { EmptyState, MediaShelfEmptyStateSvg } from "@ui-empty-state";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardLayout } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
 import { mdiViewGridOutline } from "@icons/material";
+import { EmptyState, MediaShelfEmptyStateSvg } from "@ui-empty-state";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
@@ -89,18 +86,11 @@ const {
 } = useSharedMediaBoardState();
 
 const isEmptyState: ComputedRef<boolean> = computed(() => {
-	const isMediaBoardEmpty =
-		!mediaBoard.value ||
-		mediaBoard.value.lines.every((line) => line.elements.length === 0);
+	const isMediaBoardEmpty = !mediaBoard.value || mediaBoard.value.lines.every((line) => line.elements.length === 0);
 
 	const isAvailableMediaLineEmpty = !availableMediaLine.value?.elements.length;
 
-	return (
-		isMediaBoardEmpty &&
-		isAvailableMediaLineEmpty &&
-		!isLoading.value &&
-		!isBoardOperationLoading.value
-	);
+	return isMediaBoardEmpty && isAvailableMediaLineEmpty && !isLoading.value && !isBoardOperationLoading.value;
 });
 
 onMounted(async () => {

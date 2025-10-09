@@ -8,9 +8,7 @@
 			@update:active="buttonHandler"
 		>
 			<template #icon>
-				<v-icon class="material-icon">{{
-					activated ? mdiEmailCheckOutline : mdiEmailRemoveOutline
-				}}</v-icon>
+				<v-icon>{{ activated ? mdiEmailCheckOutline : mdiEmailRemoveOutline }}</v-icon>
 			</template>
 		</info-modal-full-width>
 	</section>
@@ -18,10 +16,10 @@
 
 <script>
 import InfoModalFullWidth from "@/components/molecules/InfoModalFullWidth.vue";
-import { mapGetters } from "vuex";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiEmailCheckOutline, mdiEmailRemoveOutline } from "@icons/material";
 import { logger } from "@util-logger";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -46,9 +44,7 @@ export default {
 			if (this.activated) {
 				switch (this.keyword) {
 					case "eMailAddress":
-						title = this.$t(
-							"pages.activation._activationCode.index.success.email"
-						);
+						title = this.$t("pages.activation._activationCode.index.success.email");
 						break;
 
 					default:
@@ -57,9 +53,7 @@ export default {
 			} else {
 				switch (this.keyword) {
 					default:
-						title = this.$t(
-							"pages.activation._activationCode.index.error.title"
-						);
+						title = this.$t("pages.activation._activationCode.index.error.title");
 						break;
 				}
 			}
@@ -68,9 +62,7 @@ export default {
 		getDescription() {
 			let description = "";
 			if (!this.activated) {
-				description = this.$t(
-					"pages.activation._activationCode.index.error.description"
-				);
+				description = this.$t("pages.activation._activationCode.index.error.description");
 			}
 			return description;
 		},

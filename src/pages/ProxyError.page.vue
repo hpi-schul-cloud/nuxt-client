@@ -9,10 +9,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { useI18n } from "vue-i18n";
 import ErrorPage from "@/pages/Error.page.vue";
+import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 
 const error = ref({
 	statusCode: 500,
