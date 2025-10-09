@@ -74,9 +74,7 @@ const addFileExtension = (name: string) => {
 const onConfirm = () => {
 	const nameWithExtension = addFileExtension(nameRef.value);
 
-	const isNameValid =
-		rules.validateOnOpeningTag(nameWithExtension) === true &&
-		rules.required(nameRef.value) === true;
+	const isNameValid = rules.validateOnOpeningTag(nameWithExtension) === true && rules.required(nameRef.value) === true;
 
 	if (isNameValid) {
 		emit("update:name", nameWithExtension);

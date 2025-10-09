@@ -103,8 +103,7 @@ const element = toRef(props, "element");
 useBoardFocusHandler(element.value.id, fileContentElement);
 
 const { modelValue } = useContentElementState(props);
-const { fetchFiles, upload, getFileRecordsByParentId, rename } =
-	useFileStorageApi();
+const { fetchFiles, upload, getFileRecordsByParentId, rename } = useFileStorageApi();
 const { hasEditPermission } = useBoardPermissions();
 
 const fileRecord = computed(() => getFileRecordsByParentId(element.value.id)[0]);

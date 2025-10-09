@@ -43,9 +43,7 @@ onMounted(() => {
 });
 
 const rules = reactive({
-	validateOnOpeningTag: (value: string) => {
-		return validateOnOpeningTag(value);
-	},
+	validateOnOpeningTag: (value: string) => validateOnOpeningTag(value),
 });
 
 const onConfirm = () => {
