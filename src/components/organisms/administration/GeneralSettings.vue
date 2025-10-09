@@ -261,7 +261,7 @@ const save = async () => {
 		props: updatedSchool,
 	});
 
-	notifySuccess("pages.administration.school.index.generalSettings.save.success");
+	notifySuccess(t("pages.administration.school.index.generalSettings.save.success"));
 
 	if (updatedSchool.logo) {
 		schoolsModule.setSchoolLogo({
