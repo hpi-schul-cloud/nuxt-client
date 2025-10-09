@@ -15,13 +15,8 @@ export const useSharedElementTypeSelection = createSharedComposable(() => {
 	const dynamicElementTypeOptions = ref<Array<ElementTypeSelectionOptions>>([]);
 
 	const elementTypeOptions = computed(() => {
-		const combined = [
-			...staticElementTypeOptions.value,
-			...dynamicElementTypeOptions.value,
-		];
-		const alphabeticalSorted = combined.sort((a, b) =>
-			a.label.localeCompare(b.label)
-		);
+		const combined = [...staticElementTypeOptions.value, ...dynamicElementTypeOptions.value];
+		const alphabeticalSorted = combined.sort((a, b) => a.label.localeCompare(b.label));
 
 		return alphabeticalSorted;
 	});
